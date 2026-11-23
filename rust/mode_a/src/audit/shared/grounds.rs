@@ -491,7 +491,7 @@ pub const SHRINE_TREE_FT: f64 = 15.0;
 /// [`SHRINE_TREE_FT`] of the hall (the shrine's largest rect).
 ///
 /// Research:
-///     a tree beside the compound shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: the compound's shrine stands beside a tree, where a household kept its god at an old tree; the reach carries a claim of its own.
+///     a tree beside the compound shrine - GUESS research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html#shrine-tree: the compound's shrine stands beside a tree, where a household kept its god at an old tree; the reach carries a claim of its own.
 ///
 /// # Errors
 /// The sheet's marks refused.

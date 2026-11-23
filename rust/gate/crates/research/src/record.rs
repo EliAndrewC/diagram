@@ -7,6 +7,7 @@ pub mod blocked;
 pub mod confusables;
 pub mod contents;
 pub mod fragments;
+pub mod items;
 pub mod money;
 pub mod notes;
 pub mod originals;

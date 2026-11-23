@@ -198,7 +198,7 @@ pub fn board(p: &Program, l: &mut Layout, out: &mut Seated) {
 /// No face of the shrine with room for its tree.
 ///
 /// Research:
-///     compound shrine tree - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: every compound shrine in a corner of its grounds beside one tree, no grove or garden round it
+///     compound shrine tree - GUESS research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html#shrine-tree: every compound shrine in a corner of its grounds beside one tree, no grove or garden round it
 ///     the tree's side - GUESS: the hall's end toward the court's middle first, where the shrine's seat held the tree's ground, then its court face, then its other end
 pub fn tree(p: &Program, l: &mut Layout, out: &mut Seated) -> Result<(), Error> {
     let Some((s, sb)) = of_kind(p, l, "compound shrine") else {

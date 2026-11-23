@@ -914,13 +914,13 @@
    "declared": "round-arbiter"
   },
   "### T184 (observed 2026-11-23: the 0009 and 0059 cuts under the 20,000-byte prose cap in cce80ca436 dropped content, measured by a word-level diff of each page against `git show cce80ca436^:<page>`; the GM 2026-11-23, request.md \"the convergence talk\": \"no edit to maintain entry size should ever be substantive\")": {
-   "sha256": "bac09afb0575d192532deb3018bf8f3d727fd01f94029bac0f18a12b8d4d084d",
+   "sha256": "9fbbb3b75298921981c36940b8ebd8602409975c1e24ec81a1db55a4f4e35196",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
   },
   "### T184 Approach (checklist part A)": {
-   "sha256": "03574aa588c2f1567c55059cf8fba6128710e2116be8528291a01a0a04d1f3c7",
+   "sha256": "a892efd2d3678e6d064f8cf0821d48ca116ab43307c79fb827d5f25c9c7861a0",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
@@ -969,6 +969,24 @@
   },
   "### T186 Approach (checklist part A)": {
    "sha256": "088d243d25745329287ef88a20a7e64ffd83dc023d7b2b3b1ec29bf06e1ee532",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T187 (the GM 2026-11-23, request.md 'the convergence talk': \"Shouldn't attested versus guess be something that cascades mechanically rather than requiring a review, though?\"; 12 of the 18 page-caused pop-up corrections the blind re-classification caught carried a label change, reclassify.md, measured 2026-11-23)": {
+   "sha256": "9b121f2084f975caeb4578668e29804282fc21186c41e915584a78897e5935d4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T187 Approach (checklist part A)": {
+   "sha256": "f31689b77d6ecd1ef9688dc75237980bf03cecfb47e532dec471d5fef9af1496",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T187 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "1955ab226ec8886ee6a630748aadbbf609fc98ef6b362da3a768f1f83ef73b1a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
@@ -16132,6 +16150,125 @@
      "why": "The GM approved 'the garden-pond sentence fixed in its three places'; these are the three. Owing the two pop-ups' own checks directly adds review."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T184 (observed 2026-11-23: the 0009 and 0059 cuts under the 20,000-byte prose cap in cce80ca436 dropped content, measured by a word-level diff of each page against `git show cce80ca436^:<page>`; the GM 2026-11-23, request.md \"the convergence talk\": \"no edit to maintain entry size should ever be substantive\")",
+    "### T184 Approach (checklist part A)",
+    "### T184 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T184-repair",
+     "summary": "Restore every loss of the cce80ca436 cuts into the current 0009 and 0059 text, keeping 449 T371's corrections, and split each page along its topics (0332, 0333) with a one-sentence pointer where the section stood; notes move with their sentences.",
+     "class": "within",
+     "why": "The GM approved 'the 0009/0059 repair' and named splitting into multiple entries as the way to preserve every detail ('a split is a move'). Keeping the three earlier corrections (division works, the Chinese articles clause, 'large rivers' removed) is keeping corrections, not leaving a loss."
+    },
+    {
+     "id": "T184-guard",
+     "summary": "l7r-gate check question-size refuses a size edit (page over its limit at the base, or the removed words putting it back over) that drops a claim-bearing token not found on the page or a page it links to; token classes miss plain-word claims, which step 7 states in the docs.",
+     "class": "within",
+     "why": "Enforcement of the approved rule 'a size edit never changes a claim' / 'no edit to maintain entry size should ever be substantive': delete that rule and the guard has nothing to check. Counting a token kept when it stands on a linked page is the GM's 'a split is a move'. The guard's blind spots do not narrow the rule - the plan states them and does not treat a guard pass as compliance ('a restore is checked like any other edit')."
+    },
+    {
+     "id": "T184-escape",
+     "summary": "SIZE_EDIT_OK=\"<why>\" lets a correction to an over-limit page through the guard, printed with the run; 0097's restated, corrected sentences are its case.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own words: the rule covers 'an edit to maintain entry size', and a correction is not one - it is a claim-changing edit that the approved rules route to review instead. The guard's mechanical trigger (page over its limit at the base) cannot tell a correction from a trim, so without the escape it would refuse good work. The escape is named for corrections only and recorded, so it does not reopen lossy trims."
+    },
+    {
+     "id": "T184-limit",
+     "summary": "A page's own limit lives in research/size-limits.json and is honored only with the size-exception agent's INDIVISIBLE verdict, its date and a ledger row; the 20,000 cap is otherwise unchanged.",
+     "class": "within",
+     "why": "The GM asked for 'an audit-based process that permits us to go past the size limit when an adversarial subagent check confirms' there is no good way to edit that keeps the information, 'so that we record a new limit for this specific entry'. A split is such an edit, so 'cannot be split without loss' is the GM's test, not a narrower one; leaving the global cap alone matches the per-entry limit he described."
+    },
+    {
+     "id": "T184-no-cascade",
+     "summary": "Pop-ups whose Entry: names 0009 or 0059 for content now on 0332/0333 are not edited; 0009's heading keeps 'and after the harvest', the pointer carrying the reader on.",
+     "class": "within",
+     "why": "The GM's words verbatim: 'as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs'. A heading whose reader is carried on by the pointer is not a wrong outcome (constitution XIV's defect test)."
+    },
+    {
+     "id": "T184-0097",
+     "summary": "0097's two dropped qualifiers on cce80ca436 are left as they are: both claims stand restated (0331 and 0097), one corrected to the range the source names, observed by grep 2026-11-23.",
+     "class": "within",
+     "why": "Not a loss: the claims stand, observed with a method, one a correction. Nothing the GM asked for is left undone."
+    },
+    {
+     "id": "T184-followups",
+     "summary": "Registry entry hrr-agagawa-dento's 'large rivers' and the glossary term 'true leaf' drafted from general botany are fixed in this task by page session.",
+     "class": "within",
+     "why": "Defects found by this task's checks fixed in the task, as the fix-as-we-go rule requires; nothing deferred."
+    },
+    {
+     "id": "T184-order-and-perf",
+     "summary": "Page sessions first, then the guard run over their pages as the green fixture; the task is classed performance work (lossy trims no longer cascade into restorations).",
+     "class": "within",
+     "why": "Order is inside the task. The GM asked to fix the cascade 'before we do literally anything else', so the priority the performance class gives agrees with his instruction rather than stretching it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T187 (the GM 2026-11-23, request.md 'the convergence talk': \"Shouldn't attested versus guess be something that cascades mechanically rather than requiring a review, though?\"; 12 of the 18 page-caused pop-up corrections the blind re-classification caught carried a label change, reclassify.md, measured 2026-11-23)",
+    "### T187 Approach (checklist part A)",
+    "### T187 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T187-tag",
+     "summary": "A label becomes data on the page: an empty <span class=item data-item data-label data-guess> inside the item's block (not on its <li>, which style.rs and triage/change.rs match bare), the block's own words held to the tag by items::faults.",
+     "class": "within",
+     "why": "This is the GM's approved rule 'labels are data and propagate by regeneration', answering 'Shouldn't attested versus guess be something that cascades mechanically rather than requiring a review'. Where the span sits and the fact that it is empty are design choices inside that rule, and items::faults enforces it."
+    },
+    {
+     "id": "T187-reference-bullet",
+     "summary": "A pop-up's Guesses bullet becomes a reference {NNNN#<id>} that the build fills from the tag and drops while the item is not a GUESS, hooked into about::feature and choices::modal so the page writer, registry dump, Mode A and the modal bundle all read the filled text.",
+     "class": "within",
+     "why": "This is the propagation by regeneration the GM approved. A relabel is one edit on the page, and the pop-ups follow it with no review."
+    },
+    {
+     "id": "T187-claim-check",
+     "summary": "An engine claim may name ...html#<id>, and its class is checked against the tag. For such a claim alone the fingerprint leaves out the class word and the anchors, so a relabel flip owes no impl-drift. An unanchored claim keeps its class in its fingerprint. label_free stops the stale-figure check from reading the flip as a changed constant.",
+     "class": "within",
+     "why": "Claims are hand-written comments, so they are checked and told which class to write rather than regenerated. The cascade stays mechanical and owes no review, which is the purpose of the GM's question. The fingerprint exemption reaches only the case the request names, a claim held to a tag. label_free fixes, red first, a false flag the pilot found (TREE_ROOM)."
+    },
+    {
+     "id": "T187-about-check",
+     "summary": "A registry real-tree test names any pop-up whose About states a GUESS-tagged item of a page it cites without calling it a guess.",
+     "class": "within",
+     "why": "Prose in an About section cannot be regenerated, so this test makes sure a label reaches the place regeneration does not. It only fails when the requested label cascade is missing, so it enforces the request and adds no new behavior (GM 2026-09-20)."
+    },
+    {
+     "id": "T187-pilot-scope",
+     "summary": "Tooling plus a pilot on page 0218, sheet/compound-shrine.md and the 4 shrine-tree claims. The remaining untagged record keeps the old review path, and T192 tags it.",
+     "class": "within",
+     "why": "This sequences the approved rule across tasks of the same feature and drops nothing: the bulk tagging is filed as T192. Nothing is wrongly cleared in the meantime, because an untagged item is treated as unknown and keeps the review it owes today (constitution XII)."
+    },
+    {
+     "id": "T187-claims-restated",
+     "summary": "The 4 shrine-tree claims that cited 0218 as attested are restated as GUESS ...#shrine-tree. The code and the drawing are unchanged.",
+     "class": "within",
+     "why": "The label was wrong and the behavior was fine, so the claim is restated, as constitution XIV v2.36.0 directs. This is the uncascaded label the GM asked about, found and fixed."
+    },
+    {
+     "id": "T187-building-programs-deferred",
+     "summary": "docs/building-programs.md's 'shrine in a corner beside a tree' cites 0218 as attested for a GUESS. The fix goes to T192, which lands before T22, because T186's uncommitted edit of that file is in this clone.",
+     "class": "within",
+     "why": "The defect is not dropped. It is filed, with a reason and an order (FR-009's form), and it is fixed inside this feature before T22. The GM's fix-as-we-go rule bounds known defects by the next step ('fix all known bugs in each step before moving on to porting the next step'), not by the task that found them. Keeping a hunk out of another builder's uncommitted file is about the order of landings and does not narrow the request."
+    },
+    {
+     "id": "T187-order",
+     "summary": "Lands after T186 (the triage's first filter, which clears a referenced relabel) and T185 (whose modal.rs this task edits in guesses() only), and before T192.",
+     "class": "within",
+     "why": "Sequencing. Nothing the request asks for is narrowed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -25476,57 +25613,58 @@
    "verdict": "CLEAR"
   },
   "T184": {
-   "section_sha256": "b68dabe0bae02bd0e9a17c4f01b512fae5e7c9a1b269e26e9e56c283bc2809c6",
+   "section_sha256": "ff6d6aeed7030d71db96ec4cc810c9495572e76109056f5d087a99fa08ae1bee",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "T184-repair",
-     "summary": "Restore every claim the cce80ca436 trims dropped from 0009 and 0059 into the current text (keeping 449 T371's corrections in the same commit) and split each page along its topics onto new 0332/0333, leaving a one-sentence pointer where the section stood; notes move with their sentences, none duplicated.",
+     "summary": "Restore every loss of the cce80ca436 cuts into the current 0009 and 0059 text, keeping 449 T371's corrections, and split each page along its topics (0332, 0333) with a one-sentence pointer where the section stood; notes move with their sentences.",
      "class": "within",
-     "why": "The GM's convergence talk approved 'the 0009/0059 repair' and names splitting into multiple entries so 'all details and the fidelity of information ... is preserved'; 'a split is a move' is one of the approved seven rules. Keeping 449 T371's corrections drops nothing the GM asked to keep."
+     "why": "The GM approved 'the 0009/0059 repair' and named splitting into multiple entries as the way to preserve every detail ('a split is a move'). Keeping the three earlier corrections (division works, the Chinese articles clause, 'large rivers' removed) is keeping corrections, not leaving a loss."
     },
     {
      "id": "T184-guard",
-     "summary": "l7r-gate check question-size (make quick) refuses a SIZE EDIT (page over its limit at the base, or the removed words would put it back over) that drops a claim-bearing token (number, label, quoted passage, proper name not on the page or a page it links to; a negation or qualifier not in its own block), naming the split.",
+     "summary": "l7r-gate check question-size refuses a size edit (page over its limit at the base, or the removed words putting it back over) that drops a claim-bearing token not found on the page or a page it links to; token classes miss plain-word claims, which step 7 states in the docs.",
      "class": "within",
-     "why": "Enforcement of the GM's 'no edit to maintain entry size should ever be substantive' and the approved rule 'a size edit never changes a claim': delete that rule and the check has nothing to check. It refuses only the thing the GM ruled out, and names the split, which is his own remedy."
+     "why": "Enforcement of the approved rule 'a size edit never changes a claim' / 'no edit to maintain entry size should ever be substantive': delete that rule and the guard has nothing to check. Counting a token kept when it stands on a linked page is the GM's 'a split is a move'. The guard's blind spots do not narrow the rule - the plan states them and does not treat a guard pass as compliance ('a restore is checked like any other edit')."
     },
     {
      "id": "T184-escape",
-     "summary": "SIZE_EDIT_OK=\"<why>\" passes the guard for a correction, printed with the run; 0097 (section moved to 0331 and rewritten from new research) is the escape's case.",
-     "class": "within",
-     "why": "A correction is a claim-changing edit made for factual reasons, not 'an edit to maintain entry size', so the escape does not carve anything out of the GM's rule; it is the project's standard recorded escape for a guard. The 0097 rewrite from new research is a correction, not a size edit."
+     "summary": "SIZE_EDIT_OK=\"<why>\" lets a correction to an over-limit page through the guard, printed with the run; 0097's restated, corrected sentences are its case.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own words: the rule covers 'an edit to maintain entry size', and a correction is not one - it is a claim-changing edit that the approved rules route to review instead. The guard's mechanical trigger (page over its limit at the base) cannot tell a correction from a trim, so without the escape it would refuse good work. The escape is named for corrections only and recorded, so it does not reopen lossy trims."
     },
     {
-     "id": "T184-token-gaps",
-     "summary": "The token classes miss a scope word outside their classes ('large-river works') and a changed term ('diversion' to 'division'); the gap is stated in the docs rather than tuned in. Tokens found on any linked page count as kept.",
+     "id": "T184-limit",
+     "summary": "A page's own limit lives in research/size-limits.json and is honored only with the size-exception agent's INDIVISIBLE verdict, its date and a ledger row; the 20,000 cap is otherwise unchanged.",
      "class": "within",
-     "why": "The rule itself is not narrowed: nothing in the plan permits a size edit that drops a scope word or changes a term, and the restored 0059 text carries both. The GM asked for the rule, not for a mechanical guard for it, so the guard is backstop enforcement the session added, and the limits of its reach take nothing away from what was asked. Catching every dropped modifier would refuse ordinary lossless trims."
+     "why": "The GM asked for 'an audit-based process that permits us to go past the size limit when an adversarial subagent check confirms' there is no good way to edit that keeps the information, 'so that we record a new limit for this specific entry'. A split is such an edit, so 'cannot be split without loss' is the GM's test, not a narrower one; leaving the global cap alone matches the per-entry limit he described."
     },
     {
-     "id": "T184-exception",
-     "summary": "A page's own limit in research/size-limits.json, honored only with the size-exception agent's INDIVISIBLE verdict, its date and ledger row; the 20,000 cap otherwise unchanged.",
+     "id": "T184-no-cascade",
+     "summary": "Pop-ups whose Entry: names 0009 or 0059 for content now on 0332/0333 are not edited; 0009's heading keeps 'and after the harvest', the pointer carrying the reader on.",
      "class": "within",
-     "why": "The GM's own option: 'an audit-based process that permits us to go past the size limit when an adversarial subagent check confirms that there don't seem to be a lot of good ways to do edits that would allow us to maintain the current amount of useful information ... record a new limit for this specific entry'. A split is such an edit, so requiring that no split serves is that test. Raising the global cap was only floated as a possibility, the approved rules do not include it, and the per-entry route is the one the GM described in detail."
+     "why": "The GM's words verbatim: 'as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs'. A heading whose reader is carried on by the pointer is not a wrong outcome (constitution XIV's defect test)."
     },
     {
-     "id": "T184-no-popup-cascade",
-     "summary": "Pop-ups whose Entry: names 0009 or 0059 for content now on 0332/0333 are not edited; the source page's pointer carries the reader on.",
+     "id": "T184-0097",
+     "summary": "0097's two dropped qualifiers on cce80ca436 are left as they are: both claims stand restated (0331 and 0097), one corrected to the range the source names, observed by grep 2026-11-23.",
      "class": "within",
-     "why": "The GM's own words: 'as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs.'"
+     "why": "Not a loss: the claims stand, observed with a method, one a correction. Nothing the GM asked for is left undone."
     },
     {
-     "id": "T184-order",
-     "summary": "Page sessions (queued first) run before the guard is built; the guard is then run over their pages as its green fixture, and over cce80ca436 as red.",
+     "id": "T184-followups",
+     "summary": "Registry entry hrr-agagawa-dento's 'large rivers' and the glossary term 'true leaf' drafted from general botany are fixed in this task by page session.",
      "class": "within",
-     "why": "Sequencing inside the task that the request leaves open; both repair and guard are delivered."
+     "why": "Defects found by this task's checks fixed in the task, as the fix-as-we-go rule requires; nothing deferred."
     },
     {
-     "id": "T184-performance",
-     "summary": "The task is classed as performance work (FR-013 scheduling): a lossy trim refused at make quick removes the restoration cascade.",
+     "id": "T184-order-and-perf",
+     "summary": "Page sessions first, then the guard run over their pages as the green fixture; the task is classed performance work (lossy trims no longer cascade into restorations).",
      "class": "within",
-     "why": "The GM called these cascades 'very time consuming' and said 'we have to fix that before we move forward', so putting the task first matches his order. FR-013 counts work that saves process time, and the cost is measured (two page sessions)."
+     "why": "Order is inside the task. The GM asked to fix the cascade 'before we do literally anything else', so the priority the performance class gives agrees with his instruction rather than stretching it."
     }
    ],
    "verdict": "CLEAR"
@@ -25700,6 +25838,62 @@
      "summary": "The 'pond is taken as the office's form' sentence is restated in sheet/garden-pond.md, sheet/garden.md and docs/building-programs.md's inner_garden row (via make building-programs), to a garden's water being a knob; modal-form and modal-research owed on the two pop-ups through make record-owed.",
      "class": "within",
      "why": "The GM approved 'the garden-pond sentence fixed in its three places'; these are the three. Owing the two pop-ups' own checks directly adds review."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T187": {
+   "section_sha256": "37f1d5ecb7ea4fffeaa93b9bc4c301cf45885d9f85c2dd81cf86ad383335388c",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T187-tag",
+     "summary": "A label becomes data on the page: an empty <span class=item data-item data-label data-guess> inside the item's block (not on its <li>, which style.rs and triage/change.rs match bare), the block's own words held to the tag by items::faults.",
+     "class": "within",
+     "why": "This is the GM's approved rule 'labels are data and propagate by regeneration', answering 'Shouldn't attested versus guess be something that cascades mechanically rather than requiring a review'. Where the span sits and the fact that it is empty are design choices inside that rule, and items::faults enforces it."
+    },
+    {
+     "id": "T187-reference-bullet",
+     "summary": "A pop-up's Guesses bullet becomes a reference {NNNN#<id>} that the build fills from the tag and drops while the item is not a GUESS, hooked into about::feature and choices::modal so the page writer, registry dump, Mode A and the modal bundle all read the filled text.",
+     "class": "within",
+     "why": "This is the propagation by regeneration the GM approved. A relabel is one edit on the page, and the pop-ups follow it with no review."
+    },
+    {
+     "id": "T187-claim-check",
+     "summary": "An engine claim may name ...html#<id>, and its class is checked against the tag. For such a claim alone the fingerprint leaves out the class word and the anchors, so a relabel flip owes no impl-drift. An unanchored claim keeps its class in its fingerprint. label_free stops the stale-figure check from reading the flip as a changed constant.",
+     "class": "within",
+     "why": "Claims are hand-written comments, so they are checked and told which class to write rather than regenerated. The cascade stays mechanical and owes no review, which is the purpose of the GM's question. The fingerprint exemption reaches only the case the request names, a claim held to a tag. label_free fixes, red first, a false flag the pilot found (TREE_ROOM)."
+    },
+    {
+     "id": "T187-about-check",
+     "summary": "A registry real-tree test names any pop-up whose About states a GUESS-tagged item of a page it cites without calling it a guess.",
+     "class": "within",
+     "why": "Prose in an About section cannot be regenerated, so this test makes sure a label reaches the place regeneration does not. It only fails when the requested label cascade is missing, so it enforces the request and adds no new behavior (GM 2026-09-20)."
+    },
+    {
+     "id": "T187-pilot-scope",
+     "summary": "Tooling plus a pilot on page 0218, sheet/compound-shrine.md and the 4 shrine-tree claims. The remaining untagged record keeps the old review path, and T192 tags it.",
+     "class": "within",
+     "why": "This sequences the approved rule across tasks of the same feature and drops nothing: the bulk tagging is filed as T192. Nothing is wrongly cleared in the meantime, because an untagged item is treated as unknown and keeps the review it owes today (constitution XII)."
+    },
+    {
+     "id": "T187-claims-restated",
+     "summary": "The 4 shrine-tree claims that cited 0218 as attested are restated as GUESS ...#shrine-tree. The code and the drawing are unchanged.",
+     "class": "within",
+     "why": "The label was wrong and the behavior was fine, so the claim is restated, as constitution XIV v2.36.0 directs. This is the uncascaded label the GM asked about, found and fixed."
+    },
+    {
+     "id": "T187-building-programs-deferred",
+     "summary": "docs/building-programs.md's 'shrine in a corner beside a tree' cites 0218 as attested for a GUESS. The fix goes to T192, which lands before T22, because T186's uncommitted edit of that file is in this clone.",
+     "class": "within",
+     "why": "The defect is not dropped. It is filed, with a reason and an order (FR-009's form), and it is fixed inside this feature before T22. The GM's fix-as-we-go rule bounds known defects by the next step ('fix all known bugs in each step before moving on to porting the next step'), not by the task that found them. Keeping a hunk out of another builder's uncommitted file is about the order of landings and does not narrow the request."
+    },
+    {
+     "id": "T187-order",
+     "summary": "Lands after T186 (the triage's first filter, which clears a referenced relabel) and T185 (whose modal.rs this task edits in guesses() only), and before T192.",
+     "class": "within",
+     "why": "Sequencing. Nothing the request asks for is narrowed."
     }
    ],
    "verdict": "CLEAR"

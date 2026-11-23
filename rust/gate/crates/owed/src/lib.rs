@@ -15,3 +15,6 @@ pub mod record {
 }
 
 use l7r_gate_core::{checks, checks_door, logs, Reply};
+
+#[cfg(test)]
+mod item_relabel;

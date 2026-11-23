@@ -15,6 +15,7 @@ pub mod choices;
 pub mod cli;
 pub mod conditions;
 pub mod headings;
+pub mod items;
 pub mod kinds;
 pub mod open_questions;
 #[cfg(any(test, feature = "testkit"))]

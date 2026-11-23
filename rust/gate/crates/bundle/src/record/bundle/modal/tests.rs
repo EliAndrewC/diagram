@@ -567,3 +567,44 @@ fn an_answered_check_holds_nothing() {
     crate::record::owed::write_answer(&s, &form.slug, &form.fingerprint, "clean", None).unwrap();
     assert!(order_hold(&s, &m, "modal-research", &rows).is_empty());
 }
+
+/// Feature 451 T187: a Guesses reference reaches the agent as the reader meets it, filled from its item's tag; one no tag answers
+/// fails the bundle with its fix.
+#[test]
+fn a_guesses_reference_is_filled_from_its_tag() {
+    let root = wells("modal-bundle-items");
+    put(
+        &root,
+        "research/questions/0096-wells.drawing.html",
+        r#"<li>Its depth is a GUESS.<span class="item" data-item="depth" data-label="GUESS" data-guess="The well's depth: no page gives it"></span></li>"#,
+    );
+    put(&root, WELL, "Name: Well\nAbout: A well.\n\nGuesses:\n- {0096#depth}\n\nCovers: `well`\nSources: not recorded\nEntry: research/questions/0096-wells.html\n");
+    let o = root.join("out").to_string_lossy().into_owned();
+    let mut run = run_on(&root);
+    assert_eq!(
+        bundle(
+            &mut run,
+            &root,
+            "hamlet/well",
+            &ask("modal-form", &format!("{o}/f"), "a backfill asked", "")
+        )
+        .unwrap(),
+        0
+    );
+    let text = std::fs::read_to_string(root.join("out/f/modal.md")).unwrap();
+    assert!(text.contains("## Guesses\n\n- The well's depth: no page gives it\n"),);
+    put(&root, WELL, "Name: Well\nAbout: A well.\n\nGuesses:\n- {0096#gone}\n\nCovers: `well`\nSources: not recorded\nEntry: research/questions/0096-wells.html\n");
+    let e = bundle(
+        &mut run,
+        &root,
+        "hamlet/well",
+        &ask("modal-form", &format!("{o}/g"), "a backfill asked", ""),
+    )
+    .unwrap_err();
+    assert!(e.contains("{0096#gone} names no item"), "{e}");
+    let r = root.to_string_lossy().into_owned();
+    assert_eq!(
+        cli(&args(&["hamlet/well", "--prepass", "--root", &r])).code,
+        0,
+    );
+}

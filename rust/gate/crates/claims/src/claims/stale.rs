@@ -4,6 +4,8 @@
 //! track the Rust engine before S7 ports it), so a research number changed in `rust/phases` - or in a crate the engine's slices add -
 //! names the pages still stating its old figure at the edit, as T10's dike-pond inset would have been (`ask:t10-findings-at-landing`).
 //!
+//! A doc edit that only relabels a claim on a tagged item, or names the item, is no change (`grammar::label_free`, feature 451 T187).
+//!
 //! THE RUST RULE, `claims_stale.stale`'s on a Rust item: a `const` or `static` (an `impl`'s associated one too, as the claims walk keys
 //! it) whose own `///` doc holds `Research:` and whose value's tokens or doc differ between the merge base with origin/main and the
 //! working tree is CHANGED; its old figures are the number literals of its base value written as Python writes the value's numbers
@@ -107,7 +109,8 @@ pub fn rust_stale(path: &str, old: &str, head: &str, pages: &[Page]) -> Vec<Stri
             continue;
         };
         let both = format!("{doc}{now_doc}");
-        if (tokens(&value), &doc) == (tokens(now_value), now_doc) || !both.contains("Research:") {
+        let same_doc = super::grammar::label_free(&doc) == super::grammar::label_free(now_doc);
+        if (tokens(&value) == tokens(now_value) && same_doc) || !both.contains("Research:") {
             continue;
         }
         let cited: BTreeSet<String> = CITED

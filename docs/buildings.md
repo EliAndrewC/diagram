@@ -311,7 +311,7 @@ A **rear service strip** organizes all of this: the residence's formal garden si
 ### Sacred features
 
 <!-- Research: modest compound shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.html: small wooden hall -->
-<!-- Research: compound shrine tree - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: every compound shrine in a corner of its grounds beside one tree, no grove or garden round it; the county draft's placer holds the tree's ground and seats it, and the three hand sheets draw theirs (feature 374 wave 130) -->
+<!-- Research: compound shrine tree - GUESS research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html#shrine-tree: every compound shrine in a corner of its grounds beside one tree, no grove or garden round it; the county draft's placer holds the tree's ground and seats it, and the three hand sheets draw theirs (feature 374 wave 130) -->
 <!-- Research: shrine tree's crown and seat - GUESS: one 20 ft crown, its trunk within 15 ft of the hall; no source sizes a household god's tree or says how near it stood -->
 <!-- Research: compound shrine arch - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: the arch optional, a compound shrine may have none; two shrines on one ground share one arch or have one each, a knob rolled per map; each sheet's notes record its form -->
 <!-- Research: hall shrine ceiling - GUESS: research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html takes a provincial shrine's worship hall as 3 to 5 ken across, itself a guess with no figure found, so a hall shrine is drawn at most ~30 ft -->

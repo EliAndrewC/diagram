@@ -91,7 +91,11 @@ pub fn modal(tree: &Path, entry: &Value, value: &str) -> Result<Option<FeatureCl
         .file_name()
         .map_or_else(String::new, |n| n.to_string_lossy().into_owned());
     let parts = parse_explanation(Some(&body), &name)?;
-    about_feature(&name, &modal_key(entry, value), &parts).map(Some)
+    crate::items::resolve(
+        tree,
+        about_feature(&name, &modal_key(entry, value), &parts)?,
+    )
+    .map(Some)
 }
 
 /// The value a map records for a choice, where it records one that is not null.

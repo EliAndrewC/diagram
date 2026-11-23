@@ -14,14 +14,11 @@ rural shrine's worship hall among them, ran from about 13 ft square to about 32 
 about 6 ft square at one rural shrine.
 
 Guesses:
-- That a compound's shrine serves Inari unless its plan says otherwise: an Inari shrine was among the Jōge post's, the one
-  Japanese office whose shrines are known, and that from a drawing alone, since the dig on the site found none.
+- {0218#inari-default}
 - That the shrine hall is kept smaller than the residence: no size of an office's shrine was found, and no account ranks a
   shrine among a compound's buildings.
-- A garden around the shrine, wherever a plan draws one: no account describes a garden around a household's or an office's
-  shrine.
-- The tree beside the shrine: a household's god was kept at a small shrine or at an old tree or a stone, and no account
-  gives a household's or an office's shrine a tree beside it as the custom.
+- {0218#shrine-garden}
+- {0218#shrine-tree}
 
 Depiction: The plan draws one shrine inside every compound, since what the offices known had in common was a shrine, not
 how many each kept. It stands in a corner of the grounds, where a household kept its god, beside a tree: a household might keep its god at an old

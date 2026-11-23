@@ -393,10 +393,13 @@ pub fn modal_text(tree: &Path, registry: &Registry, key: &str) -> Result<Option<
 /// One kind's [`FeatureClass`] (`Kind.feature()`).
 ///
 /// # Errors
-/// What [`parse_explanation`] and [`about_feature`] refuse, or an unreadable file.
+/// What [`parse_explanation`] and [`about_feature`] refuse, an unreadable file, or a Guesses reference no tag answers (`items`).
 pub fn feature(tree: &Path, registry: &Registry, class: &str, key: &str) -> Result<FeatureClass> {
     let text = modal_text(tree, registry, key)?;
-    about_feature(class, key, &parse_explanation(text.as_deref(), class)?)
+    crate::items::resolve(
+        tree,
+        about_feature(class, key, &parse_explanation(text.as_deref(), class)?)?,
+    )
 }
 
 /// The registry by key, each sibling pair's text installed both ways (`install_siblings`); a pair naming no kind is the Python's `KeyError`.

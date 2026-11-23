@@ -761,6 +761,7 @@ name = "l7r_gate_checks"
 version = "0.1.0"
 dependencies = [
  "fancy-regex",
+ "l7r_gate_claims",
  "l7r_gate_core",
  "l7r_gate_downloads",
  "l7r_gate_registry",
@@ -791,6 +792,7 @@ dependencies = [
  "l7r_gate_core",
  "l7r_gate_owed",
  "l7r_gate_plan",
+ "l7r_gate_research",
  "l7r_gate_reviews",
  "l7r_gate_tree",
  "l7r_shared",

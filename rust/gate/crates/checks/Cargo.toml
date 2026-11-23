@@ -20,6 +20,7 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 
 [dev-dependencies]
+l7r_gate_claims = { path = "../claims" }
 l7r_gate_core = { path = "../core", features = ["testkit"] }
 
 [lints]

@@ -132,3 +132,20 @@ fn a_page_that_cannot_be_read_fails_the_check_saying_which() {
     let got = super::drawing_pages(&root).unwrap_err();
     assert!(got.starts_with("0009-dir.drawing.html: "), "{got}");
 }
+
+/// Feature 451 T187: a doc edit that only relabels a claim on a tagged item, or anchors it, changes no constant; a class flip on an
+/// unanchored claim still does.
+#[test]
+fn a_relabel_of_a_claim_on_an_item_is_no_change() {
+    let ptr = format!("{Q}0022-inset.drawing.html");
+    let pages = [page(
+        "0022-inset.drawing.html",
+        "<p>The pond stands 23 ft in.</p>",
+    )];
+    let old = source("23.0", &ptr);
+    let anchored = source("23.0", &format!("GUESS {ptr}#inset"));
+    assert!(rust_stale("x.rs", &old, &anchored, &pages).is_empty());
+    let flipped = source("23.0", &format!("GUESS {ptr}"));
+    let want = [line("0022-inset.drawing.html", "x.rs")];
+    assert_eq!(rust_stale("x.rs", &old, &flipped, &pages), want);
+}

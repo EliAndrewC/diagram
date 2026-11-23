@@ -261,12 +261,14 @@ fn paragraphs(text: &str) -> Vec<&str> {
         .collect()
 }
 
-fn guesses(m: &Modal) -> Vec<String> {
-    py_lines(m.tag("Guesses"))
+/// The Guesses tab as the reader meets it: a reference to a tagged item filled from its tag (feature 451 T187), as the page writes it.
+fn guesses(root: &Path, m: &Modal) -> Result<Vec<String>, Fail> {
+    let raw: Vec<String> = py_lines(m.tag("Guesses"))
         .into_iter()
         .filter(|g| !strip(g).is_empty())
         .map(|g| g.chars().skip(2).collect())
-        .collect()
+        .collect();
+    l7r_gate_registry::items::bullets(root, &m.key, raw).map_err(|e| fail(&e.message))
 }
 
 /// The modal as its reader meets it: the heading, each tab's text, and the questions the References tab lists.
@@ -287,7 +289,7 @@ fn render(root: &Path, m: &Modal) -> Result<String, Fail> {
     ];
     lines.extend(paragraphs(m.tag("About")).iter().map(|p| format!("{p}\n")));
     lines.push("(The page adds the generated sibling line - 'Not to be confused with ...' - at the foot of About.)\n".to_owned());
-    let g = guesses(m);
+    let g = guesses(root, m)?;
     lines.extend(["## Guesses".to_owned(), String::new()]);
     if g.is_empty() {
         lines.push("(no Guesses tab - nothing guessed)".to_owned());
@@ -354,7 +356,7 @@ pub fn prepass(root: &Path, m: &Modal) -> String {
             ));
         }
     }
-    for g in guesses(m) {
+    for g in guesses(root, m).unwrap_or_default() {
         if findall(&SENTENCE, &g, 0).len() > 2 {
             out.push(format!(
                 "- a guess past two sentences (M3): {}...",

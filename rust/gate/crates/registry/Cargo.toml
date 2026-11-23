@@ -10,9 +10,10 @@ edition = "2021"
 publish = false
 
 # What the tests read of the tree at run time (feature 449 T93): the registry's equality with the Python classes it mirrors, and every
-# kind's modal file present and parsed, are tests over the real tree.
+# kind's modal file present and parsed, are tests over the real tree; since 451 T187 a modal's Guesses references read their item tags
+# from the record's pages, and the label test holds every reference and About to them.
 [package.metadata.l7r]
-reads = ["l7r/diagram/interactive/assets/"]
+reads = ["l7r/diagram/interactive/assets/", "research/questions/"]
 
 [dependencies]
 fancy-regex = { workspace = true }

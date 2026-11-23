@@ -68,7 +68,7 @@ pub const GENKAN: (f64, f64) = (12.0, 9.0);
 /// The ground a compound shrine holds past its far end along its wall for its tree: the tree's crown and its clearance off the hall
 /// (feet).
 ///
-/// Research: compound shrine tree - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: every compound shrine in a corner of its grounds beside one tree; its ground held as the shrine is seated, the crown's 20 ft and its 3.5 ft off the hall (the tree's GUESSES, `fixtures::TREE`)
+/// Research: compound shrine tree - GUESS research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html#shrine-tree: every compound shrine in a corner of its grounds beside one tree; its ground held as the shrine is seated, the crown's 20 ft and its 3.5 ft off the hall (the tree's GUESSES, `fixtures::TREE`)
 pub const TREE_ROOM: f64 = 2.0 * super::fixtures::TREE.0 + super::fixtures::TREE.1;
 
 /// A door seated: its building, face, block and step.

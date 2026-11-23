@@ -21,6 +21,7 @@ mod flight;
 mod grammar;
 pub mod impl_check;
 mod index;
+pub mod item_labels;
 mod labels;
 mod pager;
 mod ports;

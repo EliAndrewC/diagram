@@ -19,16 +19,43 @@ pub const CLASSES: [&str; 6] = [
 ];
 
 /// What every refusal prints, so the fix is in the message (the project's guard doctrine).
-pub const GRAMMAR: &str = "a claim is one line of a `Research:` docstring section: `<label> - <backing>[: <what the code does>]`, the backing being question files (`research/questions/NNNN-<id>.html` or `.drawing.html`, comma-separated), `GUESS [<drawing page>]` (searched, silent; the `.drawing.html` that records the guess), `UNRESEARCHED` (not yet searched), `CONVENTION`, `DEVIATION <question file>`, `CANON` (the GM's setting canon or ruling), or `NONE` (no physical decision); one claim may sit on the header line (`Research: <label> - <backing>`); a constant's claim is a string literal directly after its assignment; a module's claims are inherited by its units that carry none";
+pub const GRAMMAR: &str = "a claim is one line of a `Research:` docstring section: `<label> - <backing>[: <what the code does>]`, the backing being question files (`research/questions/NNNN-<id>.html` or `.drawing.html`, comma-separated), `GUESS [<drawing page>]` (searched, silent; the `.drawing.html` that records the guess), `UNRESEARCHED` (not yet searched), `CONVENTION`, `DEVIATION <question file>`, `CANON` (the GM's setting canon or ruling), or `NONE` (no physical decision); a question file may name the item it rests on, `...html#<item id>`, whose tag on the page then holds the claim's class (`GUESS`, `CONVENTION <file>#<id>`, `DEVIATION`, or a plain pointer for ATTESTED - feature 451 T187); one claim may sit on the header line (`Research: <label> - <backing>`); a constant's claim is a string literal directly after its assignment; a module's claims are inherited by its units that carry none";
 
 /// A question file, as a claim names it (feature 303's flat directory).
 pub static POINTER: LazyLock<Regex> =
     LazyLock::new(|| re(r"research/questions/(\d{4})-([a-z0-9-]+?)(\.drawing)?\.html"));
-static POINTER_WHOLE: LazyLock<Regex> =
-    LazyLock::new(|| re(r"\A(?:research/questions/(\d{4})-([a-z0-9-]+?)(\.drawing)?\.html)\z"));
+static POINTER_WHOLE: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r"\A(?:research/questions/(\d{4})-([a-z0-9-]+?)(\.drawing)?\.html)(?:#[a-z0-9][a-z0-9-]*)?\z",
+    )
+});
+/// An item anchor after a question file (feature 451 T187).
+static ANCHOR: LazyLock<Regex> = LazyLock::new(|| re(r"(?<=\.html)#[a-z0-9][a-z0-9-]*"));
+/// The class word a claim on tagged items carries, which its tags hold, not its fingerprint.
+static ITEM_CLASS: LazyLock<Regex> = LazyLock::new(|| re(r" - (?:GUESS|CONVENTION|DEVIATION) "));
+/// A class word before an anchored question file, in any text (a doc comment's claim lines).
+static ITEM_BACKING: LazyLock<Regex> = LazyLock::new(|| {
+    re(r" - (?:GUESS|CONVENTION|DEVIATION) (research/questions/[a-z0-9.-]+\.html#)")
+});
+
+/// `text` with the label of every claim on a tagged item left out - each class word before an anchored question file and each
+/// anchor - so an edit that only flips such a label, or names the item, reads as no edit (feature 451 T187: the stale-figure check
+/// read `TREE_ROOM`'s relabel as a changed constant). A claim on no item keeps its class.
+#[must_use]
+pub fn label_free(text: &str) -> String {
+    let bare = ITEM_BACKING.replace_all(text, " - $1");
+    ANCHOR.replace_all(&bare, "").into_owned()
+}
 static SECTION_HEAD: LazyLock<Regex> = LazyLock::new(|| re(r"\AResearch:(.*)\z"));
 /// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
-pub(super) static WARM: [&LazyLock<Regex>; 3] = [&POINTER, &POINTER_WHOLE, &SECTION_HEAD];
+pub(super) static WARM: [&LazyLock<Regex>; 6] = [
+    &POINTER,
+    &POINTER_WHOLE,
+    &SECTION_HEAD,
+    &ANCHOR,
+    &ITEM_CLASS,
+    &ITEM_BACKING,
+];
 
 /// One claim: what is decided, what backs it, and an optional account of what the code does.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -37,15 +64,27 @@ pub struct Claim {
     /// One of [`CLASSES`], or `POINTER`.
     pub backing: String,
     pub pointers: Vec<String>,
+    /// (question file, item id) of each pointer naming an item (feature 451 T187); its pointer above is the file alone.
+    pub items: Vec<(String, String)>,
     pub account: String,
     pub line: String,
 }
 
 impl Claim {
     /// The claim line as it enters a fingerprint: whitespace collapsed, each pointer reduced to its heading id.
+    ///
+    /// A claim on tagged items (feature 451 T187) leaves its anchors and its class word out: the tag holds its label, so a relabel's
+    /// class flip, which the label check asks for, moves no fingerprint and owes no impl-drift.
     pub fn normalized(&self) -> String {
+        let line = collapse(&self.line);
+        let line = if self.items.is_empty() {
+            line
+        } else {
+            let bare = ANCHOR.replace_all(&line, "").into_owned();
+            ITEM_CLASS.replace(&bare, " - ").into_owned()
+        };
         POINTER
-            .replace_all(&collapse(&self.line), |c: &Captures| {
+            .replace_all(&line, |c: &Captures| {
                 format!("{}{}", &c[2], c.get(3).map_or("", |m| m.as_str()))
             })
             .into_owned()
@@ -76,10 +115,18 @@ pub fn parse_claim(line: &str) -> Result<Claim, String> {
     let (backing, _, account) = partition(rest, ": ");
     let backing = strip(backing);
     let head = backing.split(' ').next().unwrap_or_default();
-    let claim = |backing: &str, pointers: Vec<String>| Claim {
+    let claim = |backing: &str, parts: Vec<String>| Claim {
         label: strip(label).to_owned(),
         backing: backing.to_owned(),
-        pointers,
+        items: parts
+            .iter()
+            .filter_map(|p| p.split_once('#'))
+            .map(|(f, i)| (f.to_owned(), i.to_owned()))
+            .collect(),
+        pointers: parts
+            .iter()
+            .map(|p| p.split('#').next().unwrap_or_default().to_owned())
+            .collect(),
         account: strip(account).to_owned(),
         line: text.clone(),
     };
@@ -92,6 +139,16 @@ pub fn parse_claim(line: &str) -> Result<Claim, String> {
             return Err(format!("`{text}`: `GUESS` names the drawing page that records it (`...drawing.html`), or nothing"));
         }
         return Ok(claim("GUESS", parts));
+    }
+    if head == "CONVENTION" && backing != head {
+        let parts: Vec<String> = backing["CONVENTION".len()..]
+            .split(',')
+            .map(|p| strip(p).to_owned())
+            .collect();
+        if !parts.iter().all(|p| whole(p).is_some() && p.contains('#')) {
+            return Err(format!("`{text}`: `CONVENTION` takes no pointer, or only items (`...html#<item id>`) whose tags say so"));
+        }
+        return Ok(claim("CONVENTION", parts));
     }
     if CLASSES.contains(&head) && head != "DEVIATION" {
         if backing != head {
