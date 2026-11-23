@@ -62,3 +62,7 @@ The GM: "okay, we should also make the hook suites measure their time so they wo
 ## The GM, 2026-11-22, on the disk and build caches (T155, T158)
 
 The GM: "Okay, that sounds good. So I guess proceed with whatever it is that is going to make sure that we clean up after ourselves in terms of the file system to not have 30 gigs of stuff suddenly get eaten without us realizing it. But your points about reusing the same build cache and whatnot are well taken. Like, it does seem like you have correctly understood my intention."
+
+## The GM, 2026-11-23, on hook output length
+
+The GM: "A lot of our hooks have somewhat long output ... That amount of output consumes tokens, so could we accomplish the same thing with no loss of fidelity and fewer tokens?  If so then should that be a general project guideline about hooks?  Maybe even something mechanically enforced, where each hook must contain a comment explaining how many words it uses and mentioning the subagent check that reviewed it for brevity and fidelity?  What do you think?"

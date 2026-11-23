@@ -2408,14 +2408,48 @@ its own files; not engine speed, so no performance-checklist answers.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T167 (<why: the finding or measurement that files it>)
+### T167 (observed 2026-11-23: 449 T330's page sessions' event-log lines were booked to the clone's mark, T312 and then T328, and a 451 landing of T160 and T161 was refused "review passes with no ledger row" on a T330 page-session pass that 451 T157's `whose.rs` should have left to T330)
+
+- **Approach**: two changes, each with a test that is red on HEAD.
+  - **The event log** (`event_log_hooks/filed.rs`). A line is a page session's when its environment names `L7R_PAGE_SESSION`, as before, or when the clone's `page-sessions/index.txt` lists the line's own `session_id` (new). The new check is `set_down_hooks::page_session_listed`, split out of the shared `page_session_brief` reader so there is still one copy. The line is booked to the task its brief names. A listed session whose brief names no task carries no task, and never the mark's. The index is read only for a line that no earlier link has booked, and at most once per line.
+  - **The ledger's left reading** (`ledger_passes/left/whose.rs`). A source that names a task gives way to the next source when that task was never started in its feature: the subject, then the meta file's description, the builder, and the page session's brief. Before this change, the first source that named any task won. The bundle `q-0123-quote-check-t330a` carries its page session's letter, and `BUNDLE` read it as `T330a`. No task T330a was ever started, so the pass refused and the page session's brief (T330) was never read.
+- **How each was traced**, measured 2026-11-23:
+  - **The event log** (method: the 449 log's lines of the four T330 session ids from `index.txt`, counted by `task` and `by`). Session 7e3b (t330a-checks) had 1,254 lines, all booked to T312 or T328 but 7, measured 2026-11-23 (the 449 log's lines of its id, counted by task). Session 2647 (t330b-write) had 141 of 144 on T328, measured 2026-11-23 (the same count). Session f1d2 (t330b-checks) had 216 of 296 on T328, measured 2026-11-23 (the same count).
+  - **Why the T161 binary did not catch them** (method: the mtime of `~/.cache/l7r-cargo-target/diagram/l7r-guard.good` against the T161 commits and the transcripts' timestamps). The sessions ran from 02:23Z to 03:38Z on 2026-11-23. T161 reached main at 03:18Z, and the mirror's guard binary was rebuilt at 03:38Z. So the hook that booked them predated T161's `L7R_PAGE_SESSION` link. The session id is in every payload, so the new link does not depend on the environment or on which binary is running.
+  - **The ledger** (method: `l7r-gate reviews ledger-owed --refuse --landing 451-time-retro-and-efficiency --tasks "T160 T161"`, run against a detached worktree at the landing's tree, af418b90c5, with the pass log cut to the passes whose transcripts ended by 02:33:40Z, the time of the refusal). The only T330 pass it kept was the `-t330a` quote-check; every other T330 pass was left to T330 already. The "29 passes" in the filing were the "29 pass(es) not traced to it" line of the `make ledger-owed WRITE=` run before the landing. That is the write path's tracing, not the left reading.
+
+### T167 Approach (checklist part A)
+
+1. **The goal, in the world.** A page session's work is booked to its brief's task. That covers its edits, its reads and its check passes, whatever the clone's mark names and whatever the session's environment says. A landing of another task then neither snapshots its pages as someone else's nor refuses on its passes.
+2. **The constraints.** 451 T161: a line belongs to its editor, and the mark is only for the main session's own lines. 451 T157: a pass is left only to a STARTED, open task that the landing does not land. A pass naming nothing, a ticked task, a task never started with no other source, or one of the landing's own tasks still refuses. The writer and `make events-refile` share their readers (451 T56).
+3. **Where each comes from.** O: the three traces above. O: the coordinator's filing (tasks.md T167). O: the 449 brief files' first lines: `t330a-checks.md` reads "feature 449 T330 and T333.5", and `t330b-checks.md` reads "feature 449 T333 and the 0116 pointer".
+4. **Do they describe the world here?** Yes. The fixtures copy this clone's shapes: a brief named `t05a-checks.md` whose first line names T05 while the mark names T09, and a bundle suffix `-t2a` and `-t2b` whose briefs name T2 and T4.
+5. **The order.** After T161, whose shared reader it reuses, and T157, whose reading it corrects.
+6. **The exits.** Green: the two new tests, the crates' suites and coverage, lint, format and the hook suites all green, and MODE 4 CLEAR. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST (2026-11-23, at HEAD with only the test files changed, `make rust-test`):
+   - `CRATE=rust/guard/shared`: `a_page_sessions_line_is_booked_by_its_session_id` failed, `left: ("451-a", Some("T09"))` against `right: Some("T05")`, with 444 others passing.
+   - `CRATE=rust/gate/crates/reviews`: `a_page_session_pass_naming_its_session_letter_is_left_to_its_briefs_task` failed, `left: (1, [true, true, true])` against `right: (1, [false, false, true])`, with 181 others passing.
+   - GREEN (2026-11-23, after the fix): `make rust-test CRATE=rust/guard/shared` passes 445, and `CRATE=rust/gate/crates/reviews` passes 182. `l7r-gate.sh rust format`, `lint` and `cover` run on both crates, and `make closing-checks T=T167 F=451` runs.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** These are wrong outcomes. Another task's landing snapshotted a task's pages as not its own, and a landing that owed nothing was refused.
+
+**Found and left?**
+- The 449 log's lines already booked to T312 and T328 for T330's sessions stay as filed. `make events-refile` moves lines across features, and does not re-task them within one. These lines are inside 449's own log, and 449's two bundles are being landed from it now. Effect: `make where-time` credits those minutes to T312 and T328, not to T330. Not fixed here: it would mean rewriting a log another landing is reading, with a rule the re-file does not have. Filed as T168 (a `[perf]` task, the same measurement rule); lands before T22.
+
+**Performance work?** yes, for the event-log half, which is `[perf]` for scheduling under the GM's measurement rule (2026-11-20, while T08 was being built: "I would also like for this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first ... even if the task itself doesn't improve performance"). That half exists so that `make where-time` credits each task its own minutes. The ledger half (`whose.rs`) is not performance work: it corrects a landing's refusal. No before-and-after timing is owed, because neither half makes any step faster.
+
+
+### T168 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T167 Approach (checklist part A)
+### T168 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -2433,4 +2467,118 @@ its own files; not engine speed, so no performance-checklist answers.
 **Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T169 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T169 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T169 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
+2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
+   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
+3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
+4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
+5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
+   time with the host's load - evidence, not a pass>
+6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+
+
+### T170 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T170 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T170 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
+2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
+   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
+3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
+4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
+5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
+   time with the host's load - evidence, not a pass>
+6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+
+
+### T171 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T171 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T171 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
+2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
+   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
+3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
+4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
+5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
+   time with the host's load - evidence, not a pass>
+6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 
