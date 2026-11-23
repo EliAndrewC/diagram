@@ -76,3 +76,31 @@ Shown a Stop block that fired while the session correctly waited ("still: BLOCKE
 Told that 23 of the session's turns since 14:42 were spent only answering such blocks, and offered: Stop hooks block only for what the session must do before stopping; a periodic check, silent while the session is active or waiting on a tracked agent, speaks only when it is idle with actionable work and respects binding rulings and set-downs; the findings guard fires only for reviews the main session dispatched, once - the GM said:
 
 > Yes, please go ahead and implement that. Thank you. That seems worth doing before we do our stop and talking more about things. Thanks.
+
+## 2026-11-23, the convergence talk: cascades that change nothing, size trims, labels, oscillation
+
+On the cascade (told that a page edit re-owes checks on every pop-up citing it):
+
+> The problem is when we do a cascading set of reviews that triggers a cascading set of changes that is mostly not finding actual problems and is just making changes that are very time consuming to make, but are not fixing any real flaws. So let's talk about that before we do literally anything else, because we have to fix that before we move forward.
+
+> I want to figure out what the difference is between the ones that might plausibly have required that and the ones that were just straightforward adjustments that never could have plausibly needed this kind of cascade.
+
+On size trims (told the 0009 and 0059 trims dropped content):
+
+> if those size limitations are causing us to cut details that could cascade, then I think that actually a good rule of thumb is that we should literally never do that. ... One possibility is that we could split something into multiple entries, so that all details and the fidelity of information that we have captured is preserved. Another option is that we could raise the size limit. ... an audit-based process that permits us to go past the size limit when an adversarial subagent check confirms that there don't seem to be a lot of good ways to do edits that would allow us to maintain the current amount of useful information ... so that we record a new limit for this specific entry. ... no edit to maintain entry size should ever be substantive.
+
+On splits:
+
+> as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs.
+
+On labels:
+
+> Shouldn't attested versus guess be something that cascades mechanically rather than requiring a review, though?
+
+On oscillation and review scope:
+
+> it seems possible that we should not run full re-reviews and make only the smallest possible changes perhaps with some kind of adversarial subagent review process. ... style edits are just a different category of thing than factual inaccuracies. And it might be that when we are cascading, we are only interested in factual inaccuracies.
+
+Approving the session's seven rules (a size edit never changes a claim; a split is a move; only a claim-changing edit triggers review; labels are data and propagate by regeneration; only factual findings cascade; re-reviews scoped to the change; settled choices stay settled), the re-classification test and the 0009/0059 repair:
+
+> Sounds good. Please do all of that, and then we will talk more about what other changes might need to be made before moving forward with additional rounds of implementation.
