@@ -10176,3 +10176,139 @@ The session's BASELINE wordings: 879,048 characters before, 768,522 after.
 6. **Did any map move, and does it still keep the research?** No map moved: the tooling only.
 
 
+<!-- plan-archive: archived 2026-11-23 -->
+### T174 (observed 2026-11-23, 451 T170's census: 17 of the 58 corpus files of `make hooks-test HOOKS_ALL=1` empty, repo-safety's, shell-check's and source-block's among them; 451 T177's ranking: guard-file's notice on a Read of a guard file rendered by no suite)
+
+- **Approach**: bring each guard message no suite rendered to the budget check, price each by what a session pays for it, review the one family whose review repays (T177's break-even, one review 31,680 characters a key, measured 2026-11-23) and record the rest BASELINE with its figure.
+
+**WHAT REACHES THE RECORD NOW, measured 2026-11-23** (each changed suite run into a private corpus, `L7R_MESSAGE_CORPUS=/tmp/t174/c<n>`, then `l7r-guard messages check` over it and the record - the same check `make hooks-test` runs - so the clone's shared corpus held no unrecorded key while builders land from it):
+
+| suite | rendered before | why it rendered none | the fix | new wordings |
+|---|---|---|---|---|
+| repo-safety, shell-check, source-block, and house-style's table | none of their tables' messages | each runs `tests/hooks/guard-cases.sh`, the guard crate's case tests, whose environment is the test thread's own (`shared::env`, 451 T32), so the `L7R_MESSAGE_CORPUS` that `hookrun.sh` exports never reached `protocol::keep` | `case_tables::drive` names the process's corpus in the thread's (`kept`), so each case goes `cli` -> `protocol::run` -> `keep`, the hook path | 28: repo-safety 3, shell-check 12, source-block 2, house-style 11 |
+| guard-file | the root Makefile's and the roster's Read notices | its "another guard's Read keeps the generic context" case read the root Makefile, which takes its own notice | the case reads a guard script, `scripts/hooks/make-only-hooks.sh` | 1, the generic Read notice |
+| set-down | its builder-slot, parked-stage and next-task blocks | the next-task block's two other forms were in no fixture | section 4b: a `[perf]` task named first; every task waiting, none named | 2 |
+| finished-run | its Stop refusal and two failed-run prompt notices | a green run was surfaced only at a Stop | section 4: a green run at a prompt | 1 |
+
+Two runs of the tables gave the same 28 keys (`/tmp/t174/keys1`, `keys1b`, a `diff` empty), measured 2026-11-23.
+
+**THE CORPUS FILES STILL EMPTY, measured 2026-11-23** (`find .git/hooks-test/messages -empty` after the closing checks' `make hooks-test`, read against `.claude/settings.json`'s hooks and each guard's `decide`): T170's census less the 3 suites filled above leaves 14; today's corpus holds 61 files, 15 of them empty, and none of the 15 is a message a guard says to a session:
+- 13 are suites of scripts no hook runs: claims-gate, closing-checks, cohort-gate, entry-gate, l7r-gate (3 parts), land-tooling, plan-gate, review-gate and sync-with-main, and parts (2 parts, `tests/hooks/parts.sh`, the suites' parallel runner). The one hook command in `.claude/settings.json` is `scripts/hooks/l7r-hook`, which calls none of them. Their output reaches a model as a command's result, which the check, held at `protocol::keep`, does not read; sync-with-main's reaches a session only through clone-sync's notice, which its own suite renders (`clone-sync-hooks.sh.jsonl`, 14,783 bytes, measured 2026-11-23 (`find -printf '%s'`)).
+- 2 are guards that never answer: event-log's `decide` records its line and returns no answer, and stall-watchdog's starts its loop and says nothing (neither file builds an `Answer`).
+
+**THE TASK LINE'S PREMISE, RESTATED** (measured 2026-11-23): finished-run's and set-down's Stop blocks do not bypass `protocol::run`. Each suite drives `"$HOOK" stop`, which `guard-shim.sh` runs as `l7r-guard --only <guard> Stop`, through `decide` and `protocol::run`, and both guards answer `Answer::Refuse`; their corpus files were not among the empty (`.git/hooks-test/messages/`, the 08:12 run: finished-run 11 lines, set-down 20), and the record held 5 finished-run refusals (PASS, 451 T177) and 6 set-down blocks before T174, measured 2026-11-23 (the corpus files' lines and the record's rows by guard). The `--finished-run` modes print no hook message. What those two suites missed were three FORMS of their messages, the rows above, measured 2026-11-23 (`/tmp/t174/check2.out`). A Stop's printed line (finished-run's "do not end a turn", its "is still going ... Nothing more to arm", the dead-producer waiter) reaches no model (451 T170's request blobs), so it is not held.
+
+**THE PRICE, measured 2026-11-23** (`/tmp/t174/scripts/extract.py` over the coordinator's transcript `c6fd72d1-....jsonl` and its 1,743 subagent transcripts, 2026-11-17 to 23: 6,605 hook texts that reach a model - a call's `hook_additional_context`, a prompt's or SessionStart's `hook_success`, a Stop's `hookErrors`, a tool result's `PreToolUse:<tool> hook error` - each record once by its uuid; `count.py` counts each family's fixed words and prices an occurrence at its suite's rendering, the set-down and finished-run forms at their sessions' mean length, 337 and 81; the table `/tmp/t174/pricing.tsv`). A family is the wordings one cut re-keys together.
+
+| family | keys | shown a session (coordinator + builders) | characters a session | break-even (keys x 31,680) |
+|---|---|---|---|---|
+| guard-file's generic Read notice | 1 | 0 + 185 | 69,375 | 31,680 - REVIEWED |
+| finished-run's green prompt notice | 1 | 128 + 0 | 10,368 | 31,680 |
+| house-style's both-spellings notice | 2 | 3 + 17 | 8,300 | 63,360 |
+| set-down's performance-first block | 1 | 21 + 0 | 7,077 | 31,680 |
+| shell-check's backtick refusal | 2 | 1 + 6 | 6,944 | 63,360 |
+| shell-check's parse refusal | 4 | 0 + 5 | 5,650 | 126,720 |
+| house-style's command notice | 2 | 2 + 20 | 4,686 | 63,360 |
+| shell-check's -m newline refusal | 1 | 3 + 2 | 4,455 | 31,680 |
+| house-style's edit notice | 6 | 0 + 10 | 4,220 | 190,080 |
+| shell-check's -m moved notice | 1 | 16 + 5 | 2,205 | 31,680 |
+| repo-safety's three, shell-check's no-reason, co-author and -m pieces refusals, source-block's two, house-style's GM-words refusal (REVIEWED for fidelity, THE HOUSE-STYLE FIX below), set-down's none-can-start block | 11 | 0 | 0 | - |
+| **total** | **32** | | **123,280** | |
+
+Only guard-file's notice clears the break-even; of the other 31 keys, 30 are recorded BASELINE, each row's `by` naming its family's figure (`/tmp/t174/baselines.tsv`; `grep -c "451 T174, measured" dev/guard-messages.tsv` = 30, measured 2026-11-23), and house-style's GM-words refusal is REVIEWED, a defect's fix and not a saving. Every new wording is within its budget.
+
+**THE BASELINE DOOR** (the task's "record the rest BASELINE with the figure" had none: T170's `baseline` verb writes only an empty record, and `verdict` took PASS, FAIL or BREVITY): `make guard-messages KEY=<key> VERDICT=BASELINE BY="<its measured characters a session>"` (`suite_tools/messages.rs` `baselined`) records a wording no row holds, its `by` `unreviewed - <why>`; it refuses a key a row holds (a verdict is never undone this way), a wording past its budget (cut or ruled needed), and a why with no number in it, each naming the form. Red first: `a_newly_rendered_wording_is_baselined_with_its_figure_and_a_reviewed_or_long_one_is_not` over the unfixed code, 491 passed, 1 failed (the usage reply), measured 2026-11-23 (`/tmp/t174/red-baseline.log`).
+
+**THE REVIEW** (the typed `message-check` agent, one unit a dispatch): round 1 (ad346be4b7b040828) on the generic Read notice, 375 characters: FIDELITY PASS, BREVITY FAIL on "(that last one is what the rule exists to catch)", the rule's why, and "Say which you are doing" -> "Say which"; both taken (the history in the code's comment), 312 characters. Round 2 (ae5a9576430ef5e51), the text it replaced appended to its bundle: PASS. The superseded FAIL row (6e7263b598f53a2f, rendered by nothing now) is deleted from the record by key, as T177 deleted its own. The root Makefile's notice ends on the same clause but stays BASELINE: 64 x 436 = 27,904 characters a session (T177's ranking, measured 2026-11-23), under the break-even.
+
+**THE HOUSE-STYLE FIX, found here** (observed 2026-11-23): the push's house-style delta check (`make quick`; `l7r-gate check house-style-delta .`, exit 1, `/tmp/t174/hsdelta.log`) refused the record itself at `dev/guard-messages.tsv:135`: house-style's GM-words refusal, key 6f0cbc1c6afb7bf0, quoted its case's word bare in its head (`colour`), so its BASELINE row put a British spelling into a file the rule holds. `house_style_hooks.rs` now sets each word it reports in a code span, which the rule leaves alone, and leaves a dash named in words (`(U+...)`) bare. Red first: `the_gms_own_words_are_only_reported`, extended for the dash, over the unfixed code, 460 passed, 1 failed (`/tmp/t174/red-hs.log`). The changed refusal went to `message-check`: round 1 (acae655332fe5aa6c) FAILED it on FIDELITY, since it named no way to keep a quotation and its closing "a bug in this hook" line pointed its reader away from the quotation the guard leaves alone, and on BREVITY; rewritten 977 -> 477 characters (the history in the fn's doc comment); round 2 (a51c66292386230a1) PASS, key d3fe49eefe1d84a7. The superseded rows (6f0cbc1c6afb7bf0 BASELINE, 14a99211518626c5 FAIL) are deleted by key. The refusal is shown 0 times a session (the price above), so this is a fidelity fix, not a saving. After it, `l7r-gate check house-style-delta .` is clean (exit 0, `/tmp/t174/hsdelta2.log`).
+
+**Per session, before and after**, measured 2026-11-23 (the price above): of these wordings the check held 0 characters a session before and 123,280 after; the cut takes guard-file's notice from 69,375 to 57,720 (63 characters x 185), 11,655 a session fewer, against two reviews' 63,360 - repaid in about 5.4 sessions like the one measured.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the suites rendering, the BASELINE door, the cut | the guard crate's tests and the suites, red first | n/a (no engine stage) | none (no map input) | n/a |
+| house-style's refusal, its words in code spans and reviewed | `the_gms_own_words_are_only_reported`, red first | n/a (no engine stage) | none (no map input) | n/a |
+
+<!-- plan-archive: archived 2026-11-23 -->
+### T174 Approach (checklist part A)
+
+1. **The goal, in the world.** Every message a guard says to a session reaches the budget check through its suite, so none is read unreviewed past its budget, and the costliest newly held one is cut where a review repays.
+2. **The constraints.** T170's record and check (`make guard-messages`, `dev/guard-messages.tsv`, `protocol::keep`); T177's break-even (a review's 31,680 characters a key) and its BREVITY rule; `message-check`'s rubric (FIDELITY first, a fix command and escape never cut); new Rust code at 100% line coverage; FR-013.
+3. **Where each comes from.** O: T170's census (17 empty corpus files) and T177's ranking (guard-file's Read notice); O: the private corpora and the price above (`/tmp/t174/`, 2026-11-23); G: the GM 2026-11-23 on hook output length (request.md).
+4. **Do they describe the world here?** Yes: measured 2026-11-23 (the private corpora and `/tmp/t174/scripts/extract.py`, the tables above) on today's suites and on the coordinator's session and builders of 2026-11-17 to 23, the sessions that pay.
+5. **The order.** After T170 and T177 (the record, the check, the break-even and the BREVITY rule). Before T173, which measures `tests/hooks/test-finished-run-hooks.sh` as T174 leaves it, and before T22.
+6. **The exits.** Green: `make guard-messages` says every wording reviewed or baselined with the new suites' renderings; the guard crates and `make hooks-test HOOKS_ALL=1` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, 2026-11-23: the check over the changed suites' private corpora named each newly rendered message owed - 28 from the tables (`/tmp/t174/check1.out`, "28 of 29 wordings owe a review or a cut") and 4 from the guard-file, set-down and finished-run suites (`/tmp/t174/check2.out`, "4 of 26"); the BASELINE door's test over the unfixed code, 491 passed, 1 failed; house-style's refusal test over the unfixed code, 460 passed, 1 failed (`/tmp/t174/red-hs.log`). GREEN, measured 2026-11-23:
+   - The corpus re-censused: 15 of 61 files empty, none a guard's message to a session, measured 2026-11-23 (THE CORPUS FILES STILL EMPTY).
+   - `make guard-messages`: "324 wordings, each reviewed or baselined and within its budget" (`/tmp/t174/gm1.log`), the same line as `make hooks-test HOOKS_ALL=1` printed (`/tmp/t174/hooks1.log`).
+   - `make crate-checks CRATE="rust/guard rust/guard/shared"` (`/tmp/t174/crate6.log`): rust/guard/shared's tests 461 passed, 0 failed, and its cover clean; rust/guard's tests 492 passed, 1 failed, and its cover "lines no test reaches: 0". T174's lint is clean: rust/guard's over T174's last rust/guard edit (`/tmp/t174/crate3.log`); rust/guard/shared's after its doc comment, which clippy read as an unindented list, was reflowed (`/tmp/t174/crate5.log` named it, crate6 does not).
+   - `make closing-checks T=T174 F=451`, twice, the second after the reflow (`/tmp/t174/closing1.log`, `closing2.log`): hooks-test GREEN, quick GREEN; static RED only in other builders' files, 451 T179's `checks/arbiter.rs` ("nothing of yours was judged there") and, in the second, a new untracked `rust/gate/crates/reviews/src/reviews/closing/landing.rs`, a file T174 never touched.
+   - Every red left is 451 T179's uncommitted work, none in T174's files:
+     - rust/guard/shared's lint at `checks/arbiter.rs:648`;
+     - its format in `checks/arbiter/tests.rs`;
+     - rust/guard's one failing test, `pair_hooks::tests::past_two_rounds_the_round_arbiter_is_owed_its_ruling`, which finds no `.git/arbiter-owed.json`: T179's `checks/arbiter.rs` now files no trigger whose feature does not resolve, and that test's fixture names none;
+     - `make hooks-test HOOKS_ALL=1`'s one red, l7r-gate.sh.1 "print-fresh: the build failed", the gate workspace's build from other builders' rust/gate edits.
+10. **Before moving a constant.** n/a: the budgets and the break-even stand.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** One defect, a wrong outcome: house-style's refusal put a bare British word into the record, which the push's delta check then refused (THE HOUSE-STYLE FIX); the code is fixed, red first, and its review passed. The rest is no defect: a message no suite renders is a gap in the check, and the cut is performance work; a session reads guard-file's notice 63 characters shorter, its fix command and escape whole; nothing on a map changes.
+
+**Found and left?**
+- house-style's and shell-check's wordings are keyed with the words a case quotes (`colour` -> `color`, a parse error's text), so house-style's edit notice is 6 keys and a word a session meets that no case quotes is a wording no suite renders (observed 2026-11-23, method: the 28 table keys by family, `/tmp/t174/check1.out`). Not a defect: the check holds each form at its suite's words, as set-down's rows hold a task's title, and one cut re-keys a family together; no reader sees anything wrong.
+- the case tables' corpus test, `a_suites_corpus_keeps_what_a_table_renders`, fails if a suite names it under `guard-cases.sh` (the process's corpus wins over the test's own, by design); no suite names it, measured 2026-11-23 (`/tmp/t174/tables1.log`). Not a defect: `make rust-test` runs it with no corpus exported.
+- house-style's refusal quoted its case's word bare (`colour`), so the push's delta check refused the record at `dev/guard-messages.tsv:135` (observed 2026-11-23, method: `l7r-gate check house-style-delta .` over the clone, exit 1, `/tmp/t174/hsdelta.log`). A defect, the refusal T170's code-span rule missed: fixed here and pinned (`the_gms_own_words_are_only_reported`), THE HOUSE-STYLE FIX above.
+
+**Performance work?** Yes (a `[perf]` task, 451 FR-013: the builders' loop reads fewer characters a call, and every message they read is now held to the budget).
+
+### T174 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In the context guard messages add, each read as input by the next model call: the 32 newly held wordings cost 123,280 characters a session, guard-file's Read notice 69,375 of it (185 Reads over the builders), measured 2026-11-23 (the price above).
+2. **Removes work, or only moves it?** Removes it: the cut's characters are never sent; the rule's history is in the code's comment. The rest removes nothing: it holds the other 53,905 characters a session to the budget, which no check held before.
+3. **What do you expect it to save, and why?** 11,655 characters a session (63 x 185), about 5,300 tokens; the two reviews cost about 29k tokens once, repaid in about 5.4 sessions like the one measured, measured 2026-11-23 (THE PRICE above, `/tmp/t174/pricing.tsv`).
+4. **How does the work grow with the settlement?** It does not: it grows with the guards fired, not with a map.
+5. **What did the before and after show, and under what conditions?** The occurrences in one coordinator session's transcripts, priced at the old and the new suite lengths (375 and 312 characters), measured 2026-11-23. This is evidence, not a pass.
+6. **Did any map move, and does it still keep the research?** No map moved: the tooling only.
+
+
+<!-- plan-archive: archived 2026-11-23 -->
+### T182 (observed 2026-11-23, 451 T177 and `ask:guard-wordings-sleep-and-slot`: a round-arbiter tooling fix built in Rust inside the task being landed could not be settled - `make arbiter-fix-done` wanted its test on main, `LAND=` goes through `make land-tooling`, which rightly refuses `rust/`, and the task's own `make land` was refused by `fix_hold` until the fix was settled)
+
+- **Approach**: `make arbiter-fix-done ID= NOTE= TEST= LANDING=<task> FILES="<the fix's files>" [F=<feature>]` checks that the fix is done with its test, that its files and test are committed in the clone as they stand, and that the task is an open task of F (by default the fix's own feature). It then writes no done row. It keeps the fix pending in the clone's git directory (`arbiter-fix-landing.json`, the reviews crate's `closing/landing.rs`), which both the arbiter and the task and land crates build on. The land's first pass reads its tasks' hold with the fixes pending on them left out (`fix_hold_landing`, through the tick's `Ask.landing`). `make land` writes each pending fix's done row into its home's `arbiter.jsonl` BEFORE the ticks, adds those logs to the tick commit, and forgets the entries once the push lands. DECISION: before the ticks, not after (the order the handoff drafted): the closing check at a feature's last tick reads the open fixes too, so rows written after would refuse a landing that closes its feature. A refused tick puts the logs back (`Settled::undo`), and a failed push's revert takes the rows out; the fix stays pending either way. A plain `make tick` is still held. `ENGINE=1` settled a fix committed here at once, so its done row reached main ahead of its code while the landing was still refused; `LANDING=` replaces it. `fix_hold`'s message and the on-main refusal name the route.
+
+| step | figure | what it says |
+|---|---|---|
+| before | T177's fix reached main in another landing's push (`efcf9c44b7`, 449's), was settled by hand in a commit of its own (`4c52cd244e`), and T177 ticked in a third (`545a462773`), its landing refused until the settling; on HEAD's code the new tests: the task crate 86 passed, 1 failed (the first pass held by the fix its landing carries), the land crate 90 passed, 4 failed (each landing refused at its first pass), the arbiter crate 34 passed, 1 failed (no `LANDING=`), measured 2026-11-23, method: a detached worktree at HEAD with the new tests copied in, `make rust-test` per crate | no route carries a Rust fix and its task's tick together |
+| after | one push: the land's tests show the fix's done row in the tick commit, in its home's log (this feature's or another's), a landing that closes its feature carrying its fix, and a refused tick or failed push settling nothing, measured 2026-11-23, method: `make crate-checks` over the reviews, task, land and arbiter crates | fix and tick reach main in one push, or neither does |
+
+### T182 Approach (checklist part A)
+
+1. **The goal, in the world.** A round-arbiter tooling fix made in Rust inside its task lands with that task's `make land`, with no hand-settled second push.
+2. **The constraints.** Feature 379 (a fix is made with its test, and holds the tick until settled). `make land-tooling` refuses `rust/` (it skips the full gate). 405 T51 (one push carries work and ticks). The append-only arbiter log.
+3. **Where each comes from.** O: the T177 incident (`4c52cd244e`, `efcf9c44b7`). O: the before/after table above.
+4. **Do they describe the world here?** Yes: the sequence is the one T177's builder hit, reproduced in the land crate's fixture.
+5. **The order.** After T179 (the same arbiter crate); lands beside it.
+6. **The exits.** Green: `make crate-checks` over the reviews, task, land and arbiter crates green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** `make crate-checks` green with T179's (item 9 there), cover at 100%, measured 2026-11-23 (its own report). RED FIRST, 2026-11-23, on HEAD's code: the task crate 86/1, the land crate 90/4 and the arbiter crate 34/1 (the before row).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: a fix the feature must make had no route to settle with its own landing, so the landing was refused or the fix settled ahead of its code. That is a wrong outcome; no map changes.
+
+**Found and left?** none.
+
+**Performance work?** yes. It takes a push, a hand commit and a refused landing out of every round-arbiter fix that is built in Rust.
+
+### T182 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In the hand route: a refused `make land`, the fix carried by another landing or by hand, and a settling commit of its own.
+2. **Removes work, or only moves it?** It removes work: the done row rides the tick commit the landing already makes. The land's added cost is one read of a small JSON file and one append per pending fix.
+3. **What do you expect it to save, and why?** A hand settling commit and a refused landing per Rust fix. T177's fix took three commits (`efcf9c44b7`, `4c52cd244e`, `545a462773`) where its own landing's one would do, observed 2026-11-23, method: `git log` of main.
+4. **How does the work grow with the settlement?** It does not: the work grows with the pending fixes, one row each.
+5. **What did the before and after show, and under what conditions?** Three commits before, observed 2026-11-23, method: `git log` of main. One tick commit after, measured 2026-11-23 (the land crate's fixture, `a_fix_landing_with_its_task_goes_out_in_the_tick_commit`). This is evidence, not a pass: no live landing has carried a fix yet.
+6. **Did any map move, and does it still keep the research?** No map moved: the tooling only.
+
+<!-- plan-archive: T177 to T170 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+<!-- plan-archive: T177 to T177 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
