@@ -10312,3 +10312,76 @@ Only guard-file's notice clears the break-even; of the other 31 keys, 30 are rec
 
 <!-- plan-archive: T177 to T170 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T177 to T177 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-23 -->
+### T165, T166, T172 (bundle)
+
+Three tooling follow-ups of 451 T164's review tree and 449 T004's guard wrapper, worked as a bundle (451 T141).
+
+- **Approach**: T165 is withdrawn, done by T175; T166 and T172 are each pinned by a test red on the unfixed code.
+  - T165 (withdrawn, measured 2026-11-23): its ask is T175's (d82ee10048) exactly. A review has a review-tree snapshot exactly when its
+    prompt has the `Review tree:` line T175 reads: `reviews snapshot` writes `tree.json` and that line under the same condition, a
+    non-empty `--commit` (`rust/gate/crates/reviews/src/reviews/snapshot.rs`, `where_text` and the write beside `dispatch_text`). So
+    T175's rule - a review naming a tree holds only edits inside it, one naming none and a roll in the clone hold the clone - is T165's
+    "narrow it to reviews with no review-tree snapshot (and the rolls)". Its measurement, a review running beside an engine edit that
+    keeps its verdict: 449 T383's two building-reviews read the review tree at d80ff6a0dd (14:02:46Z-14:11:47Z) while five `rust/` files
+    were edited in the clone (`rust/gate/crates/plan/src/plan.rs`, `plan/record.rs`, `plan/record/tests/accept.rs`,
+    `arbiter/src/arbiter/home.rs`, `arbiter/tests/home.rs`, by mtime), and both were recorded PASS at the review tree's key c362b608a839
+    (measured 2026-11-23 (`.git/review-verdicts/`, the files' mtimes)); the guard log holds no engine-freeze firing since T175 landed at 10:57Z, against 20 that day before it
+    (`make guard-log GUARD=engine-freeze SINCE=2026-11-23`). A clone edit cannot move a snapshot's verdict by construction too: T164's
+    `prereq/tree/tests.rs` `a_verdict_is_judged_by_its_snapshots_gate_not_the_clones` (the clone's stamp red, the verdict at the
+    snapshot's key and its content key the snapshot's copy). `tests/hooks/test-engine-freeze-hooks.sh` 41 passed, 0 failed on today's
+    code. Nothing is left to build.
+  - T166 (as filed, restated by its measurement): the review tree DOES read the clone's mark - it is a worktree, and `speckit::active_task`
+    reads `active-task` in the git common directory, the clone's `.git`. On a scratch clone of the clone at 449 T328's review commit
+    36fa41f4cc and a worktree of it, `reviews owed --check-declared` answered alike in both: refused "no task of an active feature is
+    started" with the mark absent or naming 451, answered with it naming 449 T328 (measured 2026-11-23, /tmp/t166). The warning came
+    from the ONE shared mark: at T328's 03:12Z run a 449 set-down by another session (03:02:52Z, `make set-down` T330) had removed it
+    (`set_down.rs` `clear_mark`), and at its 03:24Z run it named 451 T90 (started 03:19:07Z, `.git/task-starts.jsonl`). The fix:
+    `scripts/gates/review-tree.sh` carries its bundle into the check, `L7R_VERIFY_STARTED="$F $T"`, by the environment so a review
+    tree's gate built before this reads the mark as before (a new flag there would fail as an unrecognized argument with empty output,
+    silencing the warning, the `--state` failure T328 met). `reviews owed` (`owed/cli.rs`) reads it into `declared::Started` - the
+    feature a number, a directory or `specs/<dir>`, the tasks split at commas or spaces - and `check_declared_as` reads it in place of
+    the mark: its feature active as the pointer's is (the review tree has no `.specify/feature.json`, gitignored), its FIRST task the
+    started one, as `make task-start` marks a bundle and the landing's holding box reads, so verify and the landing judge one rule (a
+    CONVENTION, the algorithmically easier route: one task, not any of the bundle's); a feature naming no directory, or no task given,
+    leaves the mark's rule. Red: `owed/tests/declared.rs` `verify_judges_its_own_bundle_not_the_clones_shared_mark` failed on the
+    unfixed code (the mark naming 451, the bundle `449 T236` still refused, /tmp/t166/red-unfixed.log) and passes fixed, with the
+    negatives (the bundle's second task alone named refused, a task ticked at the base refused, an unknown feature the mark's rule); the
+    shell suite's new case, `test-review-tree.sh` "the occasions check is carried the bundle", failed on HEAD's script (24 passed, 1
+    failed, /tmp/t166/red/suite.log) and passes (25 passed).
+  - T172: `tests/hooks/test-l7r-guard.sh`'s locked case times the call's own work first - the no-binary path, a failed build stamped so
+    nothing is built and the lock is never asked, three runs - and holds the locked call to three times the slowest, never under the 1 s
+    it was (a CONVENTION, l7r/diagram/CLAUDE.md's calibration loop for a time bound in a test, as 449 T391's diff-run timeout). Red: case
+    0 of the suite (cut at "# 1. none ever built", /tmp/t172/case0-*.sh) pinned to one core beside 48 busy loops failed 10 in 10 unfixed
+    ("wanted [fast], got [waited]") and passed 10 in 10 fixed, the bound calibrated to 3.27 s loaded and 1 s idle (measured 2026-11-23,
+    /tmp/t172/pinned.sh, red-unfixed.out, green-fixed.out). The bound still catches a wait: the harness's copied wrapper changed to
+    `flock -w 5` failed the case idle (bound 1 s, measured 2026-11-23 (/tmp/t172/mutant.out)); the clone's own wrapper, every session's live hook, untouched.
+    The full suite 58 passed, 0 failed.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| T165 | withdrawn: T175's suite and the verdicts kept, measured | n/a | none | n/a |
+| T166 | the crate test and the suite case, red unfixed and green fixed | n/a | none | a gate built before reads the mark as before |
+| T172 | the pinned-load harness, red unfixed and green fixed, and the waiting mutant | n/a | none | n/a |
+
+### T165, T166, T172 Approach (checklist part A)
+
+1. **The goal, in the world.** A builder's engine edit in the clone waits on no review that reads its own tree (T175, kept); `make verify` warns of undeclared occasions only when the bundle it verifies declares none, whatever another builder's task-start or set-down did to the clone's mark; the guard wrapper's suite fails only when a call waits on another's build.
+2. **The constraints.** FR-013 (the builders' loop faster). 449 T238 round 2's rule (a line naming the started task as its own answers). T164's review tree and its prompt line; T175's freeze rule. l7r/diagram/CLAUDE.md's calibration loop. The other builders' files left (T179, T182, T174, 449's defects bundle).
+3. **Where each comes from.** O: the measurements above, dated. G: none new.
+4. **Do they describe the world here?** Yes: T166 on 449 T328's own review commit, T165 on the T383 bundle's live reviews and the day's guard log, T172 under a pinned load (the measurements above).
+5. **The order.** T165's measurement first (a withdrawal builds nothing); T166 and T172 apart; one `make closing-checks`.
+6. **The exits.** Green: the red tests green, `make closing-checks T=T165,T166,T172 F=451` green on this bundle's files. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One, T166: the line's own mechanism (no mark in the worktree) was not the cause; measured before building.
+8. **The budget.** One landing.
+9. **Done, measured.** T165: the engine-freeze suite 41 passed, 0 failed, no firing since T175. T166: `make rust-test CRATE=rust/gate/crates/reviews` 198 passed; `test-review-tree.sh` 25 passed. T172: `test-l7r-guard.sh` 58 passed; pinned 10 of 10 fixed, 0 of 10 unfixed (measured 2026-11-23).
+10. **Before moving a constant.** T172's 1 s, a CONVENTION, kept as the floor of the calibrated bound.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** T166: a builder told its bundle declares nothing when it does, and sent to declare it again. T172: a red suite on a loaded machine with nothing wrong. T165: nothing - withdrawn.
+
+**Found and left?**
+- `reviews owed`'s listing in the review tree (`declared`, the units a declared line owes) reads the active features without the carried bundle, so a bundle whose delta leaves its feature's `tasks.md` untouched would owe no declared unit there: no wrong outcome measured - every verify record of 449 and 451 carries its feature's `tasks.md` (observed 2026-11-23, method: `git show --stat` of the review commits 36fa41f4cc, 48103d14e6 and d80ff6a0dd), and the clone's pointer names one feature for all its builders anyway.
+
+**Performance work?** no.
+
+
