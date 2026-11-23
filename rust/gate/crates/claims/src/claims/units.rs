@@ -60,10 +60,20 @@ impl Unit {
 
     /// The code fingerprint of one claim: the core plus the normalized claim line, or a line-keyed claim's own line alone.
     pub fn code(&self, claim: &Claim) -> String {
+        self.code_of(&claim.normalized())
+    }
+
+    /// The code fingerprint `claim` had before it named its items, its class word kept ([`Claim::unanchored`]): a row recorded then
+    /// matches it while naming the items is the claim's one edit (feature 451 T204).
+    pub fn code_unanchored(&self, claim: &Claim) -> String {
+        self.code_of(&claim.unanchored())
+    }
+
+    fn code_of(&self, claim: &str) -> String {
         if self.line_keyed() {
-            return sha(&format!("section-claim\x1f{}", claim.normalized()));
+            return sha(&format!("section-claim\x1f{claim}"));
         }
-        sha(&format!("{}\x1f{}", self.core, claim.normalized()))
+        sha(&format!("{}\x1f{claim}", self.core))
     }
 }
 

@@ -350,3 +350,127 @@ fn an_edit_of_a_page_a_claim_cites_only_in_its_account_owes_the_claim() {
     let why: Vec<&str> = due.iter().map(|(_, w)| w.as_str()).collect();
     assert_eq!(why, ["rests changed"]);
 }
+
+const MAG: &str = "research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html";
+const WELLS: &str = "research/questions/0196-communal-wells-ido.drawing.html";
+/// The 12 claims 451 T192's sample named: label, class, drawing page, the item named.
+const SAMPLE: [(&str, &str, &str, &str); 12] = [
+    (
+        "divider gate on the axis",
+        "GUESS",
+        MAG,
+        "middle-gate-behind-hall",
+    ),
+    (
+        "well curb size about 4 ft",
+        "GUESS",
+        WELLS,
+        "curb-s-exact-size",
+    ),
+    (
+        "well gear about three in four by the water's depth",
+        "GUESS",
+        WELLS,
+        "about-three-wells-four",
+    ),
+    (
+        "well depth by the ground",
+        "GUESS",
+        WELLS,
+        "valley-shallow-upland-deep",
+    ),
+    (
+        "an indoor well hangs its pulley from the beams",
+        "GUESS",
+        WELLS,
+        "well-indoors-kitchen-s",
+    ),
+    (
+        "a roof over about one well in three",
+        "GUESS",
+        WELLS,
+        "roof-one-well-in-three",
+    ),
+    (
+        "posting wealth knob",
+        "GUESS",
+        MAG,
+        "poor-office-drawn-poor",
+    ),
+    (
+        "no well at a hilltop shrine",
+        "GUESS",
+        WELLS,
+        "hilltop-shrine-no-well",
+    ),
+    (
+        "water depth from the landform",
+        "GUESS",
+        WELLS,
+        "valley-shallow-upland-deep",
+    ),
+    (
+        "an indoor well's gear",
+        "GUESS",
+        WELLS,
+        "well-indoors-kitchen-s",
+    ),
+    (
+        "the middle gate beside the office hall",
+        "DEVIATION",
+        MAG,
+        "middle-gate-beside-hall",
+    ),
+    (
+        "water depth from the landform",
+        "GUESS",
+        WELLS,
+        "valley-shallow-upland-deep",
+    ),
+];
+
+/// Feature 451 T204: the 12 claims 451 T192's sample named (10 doc sections, 2 Rust items; GUESS or DEVIATION on the drawing pages of
+/// 0090 and 0196), each recorded before it named its item, so the stored claim holds its class word: naming the item, the class kept,
+/// owes nothing, where all 12 owed `code changed`; the class changed with the naming, or the account, still owes.
+#[test]
+fn naming_the_item_of_a_classed_claim_owes_nothing() {
+    let root = fixture("claims-index-relabel");
+    let q = root.join("research/questions");
+    let u = unit("rust/phases/src/lib.rs", "GAP", "constant", (10, 10), &[]);
+    let body = body_of(&root, &u).unwrap();
+    let key = "rust/phases/src/lib.rs::GAP#gap";
+    let was_of = |line: &str| json!({"code": "old", "body": body, "claim": parse_claim(line).unwrap().normalized(), "verdict": "IN-STEP", "research": ""});
+    let owes = |claim_row: &Row, was: &Value| {
+        let mut cur = Cur::default();
+        cur.insert(claim_row.clone());
+        owed(&cur, &obj(&json!({key: was.clone()})), Some(&q), None).unwrap()
+    };
+    // a doc section's claim (10 of the 12) stores no body and no claim: its code is the claim alone
+    let section = unit("docs/buildings.md", "Wells", "section", (1, 1), &[]);
+    let section_was =
+        |line: &str| json!({"code": section.code(&parse_claim(line).unwrap()), "research": ""});
+    for (label, class, page, id) in SAMPLE {
+        let before = format!("{label} - {class} {page}: as drawn");
+        let named = format!("{label} - {class} {page}#{id}: as drawn");
+        let was = was_of(&before);
+        let named_row = row(key, u.clone(), &named, "");
+        assert!(relabeled_only(&was, &named_row, &root).unwrap(), "{label}");
+        assert!(owes(&named_row, &was).is_empty(), "{label}");
+        let doc = row(key, section.clone(), &named, "");
+        assert!(owes(&doc, &section_was(&before)).is_empty(), "{label}");
+    }
+    let before = format!("gear - GUESS {WELLS}: as drawn");
+    let was = was_of(&before);
+    for changed in [
+        format!("gear - DEVIATION {WELLS}#x: as drawn"),
+        format!("gear - {WELLS}#x: as drawn"),
+        format!("gear - GUESS {WELLS}#x: drawn otherwise"),
+    ] {
+        let named_row = row(key, u.clone(), &changed, "");
+        let relabel = relabeled_only(&was, &named_row, &root).unwrap();
+        assert!(!relabel, "{changed}");
+        assert_eq!(owes(&named_row, &was).len(), 1, "{changed}");
+        let doc = row(key, section.clone(), &changed, "");
+        assert_eq!(owes(&doc, &section_was(&before)).len(), 1, "{changed}");
+    }
+}

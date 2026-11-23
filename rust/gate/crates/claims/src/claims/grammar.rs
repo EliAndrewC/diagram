@@ -46,6 +46,20 @@ pub fn label_free(text: &str) -> String {
     let bare = ITEM_BACKING.replace_all(text, " - $1");
     ANCHOR.replace_all(&bare, "").into_owned()
 }
+
+/// `text` with its item anchors left out and its class words kept: what a claim read before it named its items.
+#[must_use]
+pub fn anchors_free(text: &str) -> String {
+    ANCHOR.replace_all(text, "").into_owned()
+}
+
+/// Does `now` differ from `was` only in the labels of claims on tagged items ([`label_free`]) or in naming the items of claims
+/// that keep their class word (feature 451 T204: `GUESS <page>` to `GUESS <page>#id`, which T187's [`label_free`] read as an edit,
+/// since it drops the class only before an anchor)? A class changed with the naming is an edit.
+#[must_use]
+pub fn same_but_items(was: &str, now: &str) -> bool {
+    label_free(was) == label_free(now) || anchors_free(now) == was
+}
 static SECTION_HEAD: LazyLock<Regex> = LazyLock::new(|| re(r"\AResearch:(.*)\z"));
 /// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
 pub(super) static WARM: [&LazyLock<Regex>; 6] = [
@@ -83,12 +97,23 @@ impl Claim {
             let bare = ANCHOR.replace_all(&line, "").into_owned();
             ITEM_CLASS.replace(&bare, " - ").into_owned()
         };
-        POINTER
-            .replace_all(&line, |c: &Captures| {
-                format!("{}{}", &c[2], c.get(3).map_or("", |m| m.as_str()))
-            })
-            .into_owned()
+        short_pointers(&line)
     }
+
+    /// [`Self::normalized`] with the anchors left out but the class word kept: the claim as it was stored before it named its items, so
+    /// naming them, the class kept, reads as no edit (feature 451 T204).
+    pub fn unanchored(&self) -> String {
+        short_pointers(&anchors_free(&collapse(&self.line)))
+    }
+}
+
+/// Each question file of `line` reduced to its heading id.
+fn short_pointers(line: &str) -> String {
+    POINTER
+        .replace_all(line, |c: &Captures| {
+            format!("{}{}", &c[2], c.get(3).map_or("", |m| m.as_str()))
+        })
+        .into_owned()
 }
 
 /// `str.partition(sep)`: (before, whether found, after).

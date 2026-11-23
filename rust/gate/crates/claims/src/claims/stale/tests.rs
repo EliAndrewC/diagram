@@ -149,3 +149,26 @@ fn a_relabel_of_a_claim_on_an_item_is_no_change() {
     let want = [line("0022-inset.drawing.html", "x.rs")];
     assert_eq!(rust_stale("x.rs", &old, &flipped, &pages), want);
 }
+
+/// Feature 451 T204: naming the item of a claim that already carries its class (`GUESS <page>` to `GUESS <page>#id`) changes no
+/// constant, as T192's sample of 12 named claims would have flagged its figures; the class changed with the naming still does.
+#[test]
+fn naming_the_item_of_a_classed_claim_is_no_change() {
+    let ptr = format!("{Q}0022-inset.drawing.html");
+    let pages = [page(
+        "0022-inset.drawing.html",
+        "<p>The pond stands 23 ft in.</p>",
+    )];
+    let want = [line("0022-inset.drawing.html", "x.rs")];
+    for class in ["GUESS", "DEVIATION", "CONVENTION"] {
+        let old = source("23.0", &format!("{class} {ptr}"));
+        let named = source("23.0", &format!("{class} {ptr}#inset"));
+        let flagged = rust_stale("x.rs", &old, &named, &pages);
+        assert!(flagged.is_empty(), "{class}");
+    }
+    let old = source("23.0", &format!("GUESS {ptr}"));
+    let reclassed = source("23.0", &format!("DEVIATION {ptr}#inset"));
+    assert_eq!(rust_stale("x.rs", &old, &reclassed, &pages), want);
+    let plain = source("23.0", &format!("{ptr}#inset"));
+    assert_eq!(rust_stale("x.rs", &old, &plain, &pages), want);
+}
