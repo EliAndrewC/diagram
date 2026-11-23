@@ -22,7 +22,8 @@ use crate::tool::ask;
 /// The guard.
 pub const GUARD: Guard = Guard {
     name: "set-down-hooks",
-    events: &["Stop"],
+    // SessionStart: a compaction forgets what was said in one line (451 T171, `once::forget`)
+    events: &["Stop", "SessionStart"],
     matcher: "*",
     decide,
 };
@@ -235,13 +236,41 @@ fn running(path: &Path) -> std::io::Result<HashSet<String>> {
 
 /// Whether one agent still runs by [`running`]'s reading of the session's transcript, for `finished_run_hooks` (451 T85: a run a
 /// still-running builder started is the builder's to wait on): launched or resumed since its last final notice, or its last word an
-/// interim notice and its own transcript [`awake`]. An id the transcript never names is not running.
+/// interim notice and its own transcript [`awake`]. An id the transcript never names runs by its dispatcher's reading ([`alive`]).
 ///
 /// # Errors
-/// The transcript, or the agent's own, cannot be read.
+/// The transcript, or an agent's own, cannot be read.
 pub fn still_running(path: &Path, id: &str) -> std::io::Result<bool> {
     let read = read_in_order(path, "")?;
-    runs(&read, &subagents(path), id, &mut HashMap::new())
+    alive(&read, &subagents(path), id, &mut HashMap::new(), HOPS)
+}
+
+/// How far up its dispatchers an agent is followed (a CONVENTION: the session's builders dispatch checks, which dispatch none, so
+/// two hops is every agent seen; four leaves room).
+const HOPS: usize = 4;
+
+/// A BUILDER'S OWN SUB-AGENT RUNS WHILE ITS DISPATCHER DOES (451 T171): an id the session's transcript never names - it was launched
+/// from an agent's own transcript - runs while the agent that dispatched it (its meta's `parentAgentId`) runs and that agent's own
+/// transcript reads it as running, by [`runs`]' rule. WHY: a run a builder's sub-agent started was read as a stopped builder's and the
+/// coordinator's turn refused over it (T85's rule asked the session's transcript alone, which names no sub-agent's launch).
+fn alive(
+    read: &Read,
+    dir: &Path,
+    id: &str,
+    known: &mut HashMap<String, bool>,
+    hops: usize,
+) -> std::io::Result<bool> {
+    if read.ids.contains_key(id) {
+        return runs(read, dir, id, known);
+    }
+    let Some(parent) = builders::parent_of(dir, id) else {
+        return Ok(false);
+    };
+    let own = dir.join(format!("agent-{parent}.jsonl"));
+    if hops == 0 || !own.is_file() || !alive(read, dir, &parent, known, hops - 1)? {
+        return Ok(false);
+    }
+    runs(&read_in_order(&own, &parent)?, dir, id, known)
 }
 
 /// [`still_running`]'s rule for one id over a reading already made: launched or resumed, or interim and [`awake`].
@@ -567,10 +596,14 @@ fn free_slot(
     let knob = crate::env::opt("L7R_BUILDERS")
         .and_then(|v| v.trim().parse().ok())
         .unwrap_or(BUILDERS);
-    let (running, landing) = builders(path).map_err(|e| e.to_string())?;
+    let builders::Running {
+        named: running,
+        unnamed,
+        landing,
+    } = builders(path).map_err(|e| e.to_string())?;
     // A LANDING IN FLIGHT HOLDS THE SLOTS (451 T156; the round arbiter's ask:set-down-449-mid-landing): no task-start named mid-landing
     let proc = crate::env::opt("L7R_PROC_ROOT").unwrap_or_else(|| "/proc".to_owned());
-    if landing || running.len() >= knob || landing_process(root, Path::new(&proc)) {
+    if landing || running.len() + unnamed >= knob || landing_process(root, Path::new(&proc)) {
         return Ok(None);
     }
     let busy = busy_files(root, &running)?;
@@ -598,14 +631,16 @@ fn free_slot(
         ),
         _ => String::new(),
     };
+    // a builder no brief names holds its slot under its own words (451 T171)
     let who: Vec<String> = running
         .iter()
         .map(|(f, t)| format!("{f} {}", t.join("+")))
+        .chain((0..unnamed).map(|_| "a builder (no task named)".to_owned()))
         .collect();
     let short: String = next.title.chars().take(80).collect();
     Ok(Some(format!(
         "BLOCKED: a builder slot is free - {} of {knob} builders running ({}) - start the next independent open task, one touching none of their files ({} {short}): {later}make task-start F={number} T={}, then dispatch its builder (feature 451 T88, L7R_BUILDERS={knob}); or set the feature down: make set-down F={} WHY=\"<why it stops here>\"",
-        running.len(),
+        running.len() + unnamed,
         if who.is_empty() { "none".to_owned() } else { who.join(", ") },
         next.id,
         next.id,
@@ -874,7 +909,19 @@ pub(crate) fn judge(event: &Event, session: &Session, seam: Option<String>) -> V
     let Some(root) = root_of(event, session, seam) else {
         return Vec::new();
     };
-    match verdict(&root, field(&event.input, "transcript_path")) {
+    // AN UNCHANGED REFUSAL IS SAID ONCE (451 T171): in full, then in one line until it changes or a Stop passes without it
+    let said = crate::once::file(&super::event_log_hooks::common_git_dir(&root), &event.input);
+    // A COMPACTION FORGETS WHAT WAS SAID (451 T171): a SessionStart refuses nothing; after a compaction, a clear or a resume, the next
+    // Stop says the block in full
+    if event.name == "SessionStart" {
+        crate::once::forget(said.as_deref(), field(&event.input, "source"));
+        return Vec::new();
+    }
+    let got = verdict(&root, field(&event.input, "transcript_path"));
+    if !matches!(got, Ok(Some(_))) {
+        crate::once::clear(said.as_deref(), "set-down");
+    }
+    match got {
         Ok(None) => Vec::new(),
         Err(why) => {
             let _ = log::write(&Entry {
@@ -889,15 +936,21 @@ pub(crate) fn judge(event: &Event, session: &Session, seam: Option<String>) -> V
             Vec::new()
         }
         Ok(Some(text)) => {
+            let words = crate::once::say(said.as_deref(), "set-down", &text, now() / 1_000_000);
+            let detail = if words == text {
+                "stop"
+            } else {
+                "stop, unchanged: said in one line"
+            };
             log::fire(
                 "set-down",
                 "blocked",
-                "stop",
+                detail,
                 "not-set-down",
                 &event.input,
                 session,
             );
-            vec![Answer::Refuse(text)]
+            vec![Answer::Refuse(words)]
         }
     }
 }

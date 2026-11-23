@@ -109,26 +109,41 @@ pub fn page_session_brief(root: &Path, sid: &str) -> Option<(String, String)> {
 /// the event log's booking of a line whose agent's own description names no task).
 #[must_use]
 pub fn agent_builder(dir: &Path, id: &str) -> Option<(String, Vec<String>)> {
-    builder_brief(dir, id).or_else(|| {
-        let meta: Value = serde_json::from_str(
-            &std::fs::read_to_string(dir.join(format!("agent-{id}.meta.json"))).ok()?,
-        )
-        .ok()?;
-        let parent = meta.get("parentAgentId")?.as_str()?;
-        builder_brief(dir, parent)
-    })
+    builder_brief(dir, id).or_else(|| builder_brief(dir, &parent_of(dir, id)?))
+}
+
+/// Agent `id`'s meta file in the session's `subagents` directory `dir`, read.
+fn meta(dir: &Path, id: &str) -> Option<Value> {
+    serde_json::from_str(&std::fs::read_to_string(dir.join(format!("agent-{id}.meta.json"))).ok()?)
+        .ok()
+}
+
+/// The agent that dispatched agent `id` (its meta's `parentAgentId`): None for one the session dispatched, or one with no meta.
+pub(super) fn parent_of(dir: &Path, id: &str) -> Option<String> {
+    Some(meta(dir, id)?.get("parentAgentId")?.as_str()?.to_owned())
 }
 
 /// The description of agent `id`, one the session dispatched (its meta's `spawnDepth` 1); None for any other.
 fn dispatched(dir: &Path, id: &str) -> Option<String> {
-    let meta: Value = serde_json::from_str(
-        &std::fs::read_to_string(dir.join(format!("agent-{id}.meta.json"))).ok()?,
-    )
-    .ok()?;
+    let meta = meta(dir, id)?;
     if meta.get("spawnDepth").and_then(Value::as_u64) != Some(1) {
         return None;
     }
     Some(meta.get("description")?.as_str()?.to_owned())
+}
+
+/// A builder whose brief names no task (451 T171): an agent the session dispatched (`spawnDepth` 1) of the harness's own working type,
+/// `general-purpose`, that [`builder_brief`] does not read as a builder - `449: finish T330, combined verify, five reviews, land both`
+/// names its task past the colon, `T224: the work-budget review holds budgets` no feature. A check the session dispatched is of a type
+/// the project defines (`spec-fidelity`, `round-arbiter`) and is no builder, as 451 T88 ruled. WHY: on the coordinator's 69 slot
+/// refusals since 2026-11-22 00:00 UTC, the running agents of the session's own dispatch that no brief named were 37 times a
+/// general-purpose agent (a finisher, a landing, a bundle) and 11 times a round arbiter (measured 2026-11-23, each agent's span from
+/// its own transcript against each refusal's time); the narrowest rule that counts the first and not the second is the type.
+fn unnamed_builder(dir: &Path, id: &str) -> bool {
+    meta(dir, id).is_some_and(|m| {
+        m.get("spawnDepth").and_then(Value::as_u64) == Some(1)
+            && m.get("agentType").and_then(Value::as_str) == Some("general-purpose")
+    })
 }
 
 /// A range's widest span read member by member (451 T156): a CONVENTION past every bundle seen (T289-T300, twelve); a longer one, or
@@ -209,26 +224,40 @@ fn prompt_head(transcript: &Path) -> String {
 /// A running builder: its feature number and the tasks it builds (one, or a bundle's).
 pub(super) type Builder = (String, Vec<String>);
 
-/// The builders still running, each by [`still_running`]'s rule over ONE reading of the transcript (a transcript reached 206 MB): its
-/// (feature number, tasks), sorted - one a builder, a bundle's builder one however many tasks it holds - and whether a running agent
-/// runs a landing ([`lander`], 451 T156). [`running`] alone would not do - it leaves out an interim agent whenever another plainly runs.
-pub(super) fn builders(path: &Path) -> std::io::Result<(Vec<Builder>, bool)> {
+/// The builders running: those whose brief names their tasks, how many more no brief names ([`unnamed_builder`], 451 T171), and
+/// whether one runs a landing.
+pub(super) struct Running {
+    pub named: Vec<Builder>,
+    pub unnamed: usize,
+    pub landing: bool,
+}
+
+/// The builders still running, each by [`still_running`]'s rule over ONE reading of the transcript (a transcript reached 206 MB): each
+/// named one's (feature number, tasks), sorted - one a builder, a bundle's builder one however many tasks it holds - the count of the
+/// [`unnamed_builder`]s, each its own slot (two of them are never one), and whether a running agent runs a landing ([`lander`], 451
+/// T156). [`running`] alone would not do - it leaves out an interim agent whenever another plainly runs.
+pub(super) fn builders(path: &Path) -> std::io::Result<Running> {
     let read = read_in_order(path, "")?;
     let dir = subagents(path);
     let mut known = HashMap::new();
-    let mut out = Vec::new();
-    let mut landing = false;
+    let mut out = Running {
+        named: Vec::new(),
+        unnamed: 0,
+        landing: false,
+    };
     for id in read.ids.keys() {
         let built = builder_brief(&dir, id);
         let lands = lander(&dir, id);
-        if (built.is_some() || lands) && runs(&read, &dir, id, &mut known)? {
-            out.extend(built);
-            landing |= lands;
+        let unnamed = built.is_none() && unnamed_builder(&dir, id);
+        if (built.is_some() || lands || unnamed) && runs(&read, &dir, id, &mut known)? {
+            out.named.extend(built);
+            out.unnamed += usize::from(unnamed);
+            out.landing |= lands;
         }
     }
-    out.sort();
-    out.dedup();
-    Ok((out, landing))
+    out.named.sort();
+    out.named.dedup();
+    Ok(out)
 }
 
 /// Does a landing run in this clone (451 T156): a process under `proc` (`/proc`) whose working directory is the clone `root`, or its

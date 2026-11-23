@@ -304,6 +304,34 @@ RULES3=$(jq -rs 'map(.event + "/" + (.rule // "None")) | join(" ")' "$GUARD_LOG_
 check "the builder's run let through is recorded with its own rule" yes "$(has "$RULES3" "permitted/builder-running")"
 for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; pkill -f "$TO" 2>/dev/null; settle '[ -z "$("$HOOK" live "$LV")" ]'
 
+echo "--- 11. a run is its starter's to wait on: another session's, a builder's own sub-agent's; an unchanged refusal said once (451 T171) ---"
+# GUARD_EDIT_OK: 451 T171 - new cases, nothing existing loosened. A launch line whose sid is another session's is that session's run;
+# one a builder's own sub-agent made waits on the sub-agent while it runs (its meta's parentAgentId, its dispatcher's own transcript);
+# and the same refusal again is said in one line.
+rm -f "$LV/.git/live-run.told"
+( exec -a "claude bg-spare" "$T/v/2.1.325" -c "bash -c 'cd $LV && make sleeper; :' > $TO 2>&1; :" </dev/null >/dev/null 2>&1 & )
+settle '"$HOOK" live "$LV" | grep -q sleeper'
+: > "$TR"
+printf '{"t":"T","sid":"page","ev":"PostToolUse","tool":"Bash","id":"u","by":"apage","ms":4,"bg":"bt85"}\n' > "$T/ev/451-x.jsonl"
+OUT=$(vstop); RC=$?
+check "another session's run lets this session's turn close" 0 "$RC"
+check "...naming that session" yes "$(has "$OUT" 'session page started it')"
+printf '{"t":"T","sid":"t","ev":"PostToolUse","tool":"Bash","id":"u","by":"asub","ms":4,"bg":"bt85"}\n' > "$T/ev/451-x.jsonl"
+printf '{"toolUseResult": {"agentId": "abuild"}}\n' > "$TR"
+SUB="$T/session/subagents"; mkdir -p "$SUB"
+printf '{"agentId":"abuild","toolUseResult":{"agentId":"asub"}}\n' > "$SUB/agent-abuild.jsonl"
+printf '{"spawnDepth": 2, "parentAgentId": "abuild"}\n' > "$SUB/agent-asub.meta.json"
+OUT=$(vstop); RC=$?
+check "a run a builder's own sub-agent started lets the turn close while it runs" 0 "$RC"
+check "...naming the sub-agent" yes "$(has "$OUT" 'its builder asub is still running')"
+printf '%s\n' '{"type":"user","message":{"role":"user","content":"<task-notification>\n<task-id>asub</task-id>\n<summary>Agent \"review\" completed</summary>\n</task-notification>"}}' >> "$SUB/agent-abuild.jsonl"
+vstop >/dev/null; check "...and once it has stopped, the run is refused" 2 "$?"
+check "...in full" yes "$(has "$(cat "$T/fr.err")" "output in $TO")"
+rm -f "$LV/.git/live-run.told"
+vstop >/dev/null; check "the same refusal again (told cleared) is still a refusal" 2 "$?"
+check "...said in one line" yes "$(grep -qx 'still: A MAKE RUN THIS SESSION STARTED IS STILL - unchanged since [0-2][0-9]:[0-5][0-9]' "$T/fr.err" && echo yes)"
+for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; pkill -f "$TO" 2>/dev/null; settle '[ -z "$("$HOOK" live "$LV")" ]'
+
 echo "-----"
 printf 'test-finished-run-hooks: passed %s, failed %s\n' "$PASS" "$FAIL"
 [ "$FAIL" = 0 ] || exit 1

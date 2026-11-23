@@ -84,6 +84,9 @@ pub(crate) enum Status {
     /// Held by the harness and started by a builder still running (451 T85): the run wakes the builder, the builder's notice the
     /// session. The builder's id, and the run's output.
     Builder(String, String),
+    /// Held by another session's harness, or launched by another session (451 T171): that session's run, which its own Stop names.
+    /// The session's id, and the run's output.
+    Session(String, String),
     Watched(u32, String),
     Unwatched(String),
 }
@@ -95,6 +98,8 @@ pub(crate) enum Starter {
     Harness,
     /// A builder still running, its id.
     Builder(String),
+    /// Another session, its id (451 T171).
+    Session(String),
     /// A builder that has stopped: only a waiter will wake the session for its run.
     Stopped,
 }
@@ -111,7 +116,10 @@ impl Root {
     /// What follows the target on its line: the log, or the waiter and its file.
     pub(crate) fn detail(&self) -> String {
         match &self.status {
-            Status::Tracked(d) | Status::Unwatched(d) | Status::Builder(_, d) => d.clone(),
+            Status::Tracked(d)
+            | Status::Unwatched(d)
+            | Status::Builder(_, d)
+            | Status::Session(_, d) => d.clone(),
             Status::Watched(pid, file) => format!("{pid} {file}"),
         }
     }
@@ -121,6 +129,7 @@ impl Root {
         let word = match self.status {
             Status::Tracked(_) => "tracked",
             Status::Builder(..) => "builder",
+            Status::Session(..) => "session",
             Status::Watched(..) => "watched",
             Status::Unwatched(_) => "unwatched",
         };
@@ -173,6 +182,15 @@ impl Procs {
                 .split(['\0', ' '])
                 .next()
                 .is_some_and(|a| Path::new(a).file_name().is_some_and(|n| n == "claude"))
+    }
+
+    /// A RUN THAT ENDED WHILE IT WAS READ IS NO RUN (451 T171): its `stat` gone, or a zombie's (`Z`). Asked after its status, since a
+    /// run gone before its ancestors are read has none, reads as a root with no output and was refused as unwatched - `make quick` and
+    /// its `make _quick`, both listed `output in (no file)` at 05:45:17 on 2026-11-23, 3 s after quick's Phase line ended (05:45:14.5).
+    fn gone(&self, pid: u32) -> bool {
+        let stat = self.read(pid, "stat");
+        stat.rsplit_once(") ")
+            .is_none_or(|(_, rest)| rest.starts_with('Z'))
     }
 
     fn ppid(&self, pid: u32) -> u32 {
@@ -272,6 +290,9 @@ impl Procs {
                 continue; // a phase child: its root speaks for it
             }
             let status = self.status(pid, &anc, &loops, starter);
+            if self.gone(pid) {
+                continue;
+            }
             out.push(Root {
                 pid,
                 target: target.clone(),
@@ -295,6 +316,7 @@ impl Procs {
             match starter(&out) {
                 Starter::Harness => return Status::Tracked(out),
                 Starter::Builder(agent) => return Status::Builder(agent, out),
+                Starter::Session(sid) => return Status::Session(sid, out),
                 Starter::Stopped => {} // nothing wakes the session for it but a waiter
             }
         }

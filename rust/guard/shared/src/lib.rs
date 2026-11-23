@@ -16,6 +16,7 @@ pub mod iso;
 pub mod ledger;
 pub mod log;
 pub mod make;
+pub mod once;
 pub mod parked;
 pub mod plan_text;
 pub mod protocol;

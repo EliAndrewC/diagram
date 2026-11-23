@@ -106,6 +106,12 @@ fn a_phase_child_speaks_through_its_root_and_each_status_has_its_line() {
         .line(),
         "1 t builder o"
     );
+    let session = Root {
+        pid: 1,
+        target: "t".to_owned(),
+        status: Status::Session("s1".to_owned(), "o".to_owned()),
+    };
+    assert_eq!(session.line(), "1 t session o");
 }
 
 #[test]

@@ -1362,6 +1362,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T171 (observed 2026-11-23: the coordinator's Stops were refused again and again in the same words - 268 make-run refusals (\"A MAKE RUN THIS SESSION STARTED IS STILL GOING\") in its session, each stored twice in its transcript, which the task line counted as about 550, and 134 set-down refusals since 2026-11-20, measured 2026-11-23 (the session transcript's `stop_hook_summary` records of `l7r-guard`, `/tmp/t171/stops.py`); most named a builder's own gate or a builder the slot count did not see)": {
+   "sha256": "98e0280efd695045398aba1fb17acf3dc72d4cd0ca2c6713f7367b91642025f6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "round-arbiter"
+  },
+  "### T171 Approach (checklist part A)": {
+   "sha256": "85a26ce1e1c72c582f09ce7cb5240961606f0121468d548627ec53403ca47798",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "round-arbiter"
+  },
+  "### T171 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "bbd61007419b3aece0d01a41634f3a591055519924eac641884a1c9b1c42db10",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -15066,6 +15084,140 @@
      "why": "The block claims a token saving, not a speed-up. That rests on request.md: the GM framed this amendment as a token cost (2026-11-23, 'That amount of output consumes tokens'), and the approved 2026-11-19 improvement 1 ties a builder's context size to its model calls' speed, so fewer stored characters per hook message serves the builders' loop FR-013 names. The scheduling label decides nothing the request left open."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T171 (observed 2026-11-23: the coordinator's Stops were refused again and again in the same words - 268 make-run refusals (\"A MAKE RUN THIS SESSION STARTED IS STILL GOING\") in its session, each stored twice in its transcript, which the task line counted as about 550, and 134 set-down refusals since 2026-11-20, measured 2026-11-23 (the session transcript's `stop_hook_summary` records of `l7r-guard`, `/tmp/t171/stops.py`); most named a builder's own gate or a builder the slot count did not see)",
+    "### T171 Approach (checklist part A)",
+    "### T171 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "fix1-session",
+     "summary": "A run whose launch line names another session is Status::Session: this session's turn closes and the context line names that session.",
+     "class": "within",
+     "why": "The finished-run guard's subject is a run THIS session started and must watch (GM 2026-09-12); a run another session launched is that session's to watch, and its own Stop hook holds its turn while the run lives. Refusing this session over it was a wrong outcome (the task line's observation), so the fix is a defect fix under fix-as-we-go, not a carve-out from the 2026-09-12 rule."
+    },
+    {
+     "id": "fix1-hops",
+     "summary": "still_running follows an agent the transcript never names up its meta's parentAgentId, at most HOPS 4 (a CONVENTION): waited on while that sub-agent runs, judged as a detached run once it stopped.",
+     "class": "within",
+     "why": "Extends T85's reading of a builder's run (its launch line's by) to a builder's own sub-agent; a live starter still holds the wait and a stopped one falls back to the existing detached-run judgment, so nothing the guard protects is dropped. The hop bound is a labeled convention."
+    },
+    {
+     "id": "fix1-gone",
+     "summary": "Procs::gone drops a pid whose stat is gone or a zombie's, asked after its status.",
+     "class": "within",
+     "why": "A run that ended while /proc was read is no run; the 05:45:17 refusal over an ended make quick was a wrong outcome (a check refusing good work). A defect fix."
+    },
+    {
+     "id": "fix2-unnamed",
+     "summary": "builders() returns named, unnamed and landing; a session-dispatched (spawnDepth 1) general-purpose agent whose brief does not read as a builder's holds its own slot, listed as 'a builder (no task named)'.",
+     "class": "within",
+     "why": "This is the task line's own rule (an agent whose description names no task still counts as a builder); 7 of 69 slot refusals read a slot free with three builders running, a wrong outcome. Serves FR-013's builders' loop."
+    },
+    {
+     "id": "D1",
+     "summary": "No time-window matcher ties a detached run to a builder; detached runs stay judged as today.",
+     "class": "within",
+     "why": "It preserves the GM 2026-09-12 rule that a run nothing watches is never abandoned instead of guessing; the refusals the matcher would have removed (a builder's detached verify gate) are a class T164 removed (verify gates run in <clone>-review, which live_runs(clone) does not own) and no_poll refuses the rest. The outcome the task asked for - no refusal over a builder's own gate - is reached without it."
+    },
+    {
+     "id": "D2",
+     "summary": "The unnamed-builder slot rule is narrowed to general-purpose agents at spawnDepth 1, so a typed check agent (round-arbiter, spec-fidelity) takes no slot.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The accepted spec already draws this line: FR-006 defines a builder as 'an agent dispatched with a task's brief, not a defined review agent', so the narrowing is of the task line's wording, not of the spec or the request. Applied literally, the task line would count a running round arbiter as a builder and read three builders with a slot truly free, letting the turn end with the empty slot T88 exists to fill - the literal rule defeats its own purpose, concretely. Seam checked by class: the mechanism excludes every non-general-purpose type, broader than 'a type the project defines', but the measured population of unnamed depth-1 agents is only general-purpose (37) and round-arbiter (11), and nothing in the bundle shows a builder dispatched under any other type."
+    },
+    {
+     "id": "fix3-once",
+     "summary": "An unchanged refusal of the set-down and finished-run guards is said in full once, then as one line 'still: <first 8 words> - unchanged since HH:MM', still exit 2; a changed text, a block back after a passing Stop, a missing session id or an unreadable record says it in full.",
+     "class": "within",
+     "why": "Answers the GM 2026-11-23 ask, 'accomplish the same thing with no loss of fidelity and fewer tokens'. Fidelity held on the block's rules: the one line is emitted only when an identical full text (equal SHA-256) was said earlier in the same unbroken run of refusals, the refusal itself is unchanged (exit 2), and every failure path falls back to the full text. Limiting it to the two guards measured as repeaters is within: the GM asked a question about hook output, not for every guard to be changed in this task. The 8 words, the UTC stamp and the record path are labeled conventions."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T171 (observed 2026-11-23: the coordinator's Stops were refused again and again in the same words - 268 make-run refusals (\"A MAKE RUN THIS SESSION STARTED IS STILL GOING\") in its session, each stored twice in its transcript, which the task line counted as about 550, and 134 set-down refusals since 2026-11-20, measured 2026-11-23 (the session transcript's `stop_hook_summary` records of `l7r-guard`, `/tmp/t171/stops.py`); most named a builder's own gate or a builder the slot count did not see)",
+    "### T171 Approach (checklist part A)",
+    "### T171 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "No time-window matcher ties a detached run (no harness ancestor, no launch line) to a builder; such a run still refuses the Stop.",
+     "class": "within",
+     "why": "Nothing in request.md or the spec asks for detached runs to be attributed by timing. A run with no pid ancestry and no launch line cannot be tied to a builder except by a guess. The class the matcher would serve was measured as gone: 8 detached verify-gate refusals before T164, none after, and 1 refusal since T164, which was the race fix 1 fixes (dated and with its method). FR-008 (spec-index) refuses any other backgrounded make or cargo run. Leaving these runs refused keeps the guard's existing behavior and narrows nothing the GM asked for."
+    },
+    {
+     "id": "D2-type",
+     "summary": "An unnamed depth-1 agent holds a builder slot only if its type is general-purpose; typed check agents (round-arbiter, spec-fidelity) take no slot.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the task line's words ('an agent whose description names no task still counts as a builder'). The exception is already implied by the accepted spec: FR-006 defines a builder as 'an agent dispatched with a task's brief, not a defined review agent'. The block should have cited FR-006; it cites only T88. The purpose test also holds. Fix 2 exists so the slot count sees the builders it missed. Counting a round arbiter as a builder would read three builders running while a builder slot was free, and let the turn end over the empty slot that T88's rolling dispatch exists to fill. The rule's reach past the two types named (every other non-general-purpose type) rests on the measurement: on the 69 slot refusals, the unnamed running depth-1 agents were general-purpose 37 times and round-arbiter 11 times, and no other type appeared (dated, /tmp/t171/slots.py)."
+    },
+    {
+     "id": "D2-depth",
+     "summary": "Only agents at spawnDepth 1 (dispatched by the session itself) are counted as unnamed builders; a builder's own sub-agents take no slot.",
+     "class": "within",
+     "why": "A builder is an agent the session dispatched: FR-006's 'an agent dispatched with a task's brief', and the block's T88 reading. A depth-2 agent works inside its builder's slot. Counting it separately would overcount and refuse nothing wrongly removed. This narrows nothing in the request or the spec."
+    },
+    {
+     "id": "fix1-session",
+     "summary": "A run whose launch line names another session is Status::Session; this session's turn closes and the context line names the owning session.",
+     "class": "within",
+     "why": "The guard's job is that a session does not end its turn over a run it started. A refusal over another session's run is a wrong outcome (block item 12), and fixing it serves FR-013's faster builders' loop. The run is still named in the context line, and nothing in request.md or the spec asks that a session be held over another's run."
+    },
+    {
+     "id": "fix1-hops",
+     "summary": "still_running follows an unnamed agent up parentAgentId at most HOPS=4, a labeled CONVENTION; a sub-agent's run is waited on while it runs and judged detached once it stops.",
+     "class": "within",
+     "why": "This is a bound on an implementation walk, labeled a CONVENTION with its reason. It decides nothing the request or the spec settles."
+    },
+    {
+     "id": "fix1-gone",
+     "summary": "Procs::gone drops a pid whose stat is gone or a zombie's, so a run that ended while /proc was read is no run.",
+     "class": "within",
+     "why": "This fixes a measured defect: 2 refusals with 'output in (no file)', dated, with their method. A wrong refusal is removed and no watched run is released."
+    },
+    {
+     "id": "fix3-once",
+     "summary": "An unchanged refusal is said in full once, then as one line 'still: <first 8 words> - unchanged since HH:MM' that is still exit 2. It is said in full again on a changed text, on a block back after a passing Stop, with no session id, or when the record cannot be read or written.",
+     "class": "within",
+     "why": "This serves the GM's 2026-11-23 ask: 'could we accomplish the same thing with no loss of fidelity and fewer tokens?' The repeat is still a refusal, so it does the same thing. The text appears in full whenever it differs from what this session was last told, and on every failure path. The repeat stands only while that same full text was already said to this session in this block, and the block measures a 32% cut in the Stop blocks' characters. On what the block states, no fidelity is lost."
+    },
+    {
+     "id": "fix3-8words",
+     "summary": "The one-line repeat carries the refusal's first 8 words, a labeled CONVENTION.",
+     "class": "within",
+     "why": "This is the form of the summary line, labeled with its reason. It narrows nothing the request or the spec asks for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T171 (observed 2026-11-23: the coordinator's Stops were refused again and again in the same words - 268 make-run refusals (\"A MAKE RUN THIS SESSION STARTED IS STILL GOING\") in its session, each stored twice in its transcript, which the task line counted as about 550, and 134 set-down refusals since 2026-11-20, measured 2026-11-23 (the session transcript's `stop_hook_summary` records of `l7r-guard`, `/tmp/t171/stops.py`); most named a builder's own gate or a builder the slot count did not see)",
+    "### T171 Approach (checklist part A)",
+    "### T171 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T171-third-plan-round",
+     "class": "within",
+     "summary": "the round arbiter accepted T171's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T171"
+   ]
   }
  ],
  "tasks": {
@@ -23215,6 +23367,76 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T171": {
+   "section_sha256": "759418bb3f7bf358b94adf4c97eee1199a8e2d3f9fc97a3d4b4b8b7e3055089d",
+   "reviewed": "2026-11-23",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T171-third-plan-round",
+     "class": "within",
+     "summary": "the round arbiter accepted T171's section as it stands"
+    }
+   ],
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "f24c3b5cfab4ef0b69b485ac2c424348a834220b71a0d1a5dd964dcebf27d38e",
+    "reviewed": "2026-11-23",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "D1",
+      "summary": "No time-window matcher ties a detached run (no harness ancestor, no launch line) to a builder; such a run still refuses the Stop.",
+      "class": "within",
+      "why": "Nothing in request.md or the spec asks for detached runs to be attributed by timing. A run with no pid ancestry and no launch line cannot be tied to a builder except by a guess. The class the matcher would serve was measured as gone: 8 detached verify-gate refusals before T164, none after, and 1 refusal since T164, which was the race fix 1 fixes (dated and with its method). FR-008 (spec-index) refuses any other backgrounded make or cargo run. Leaving these runs refused keeps the guard's existing behavior and narrows nothing the GM asked for."
+     },
+     {
+      "id": "D2-type",
+      "summary": "An unnamed depth-1 agent holds a builder slot only if its type is general-purpose; typed check agents (round-arbiter, spec-fidelity) take no slot.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "This narrows the task line's words ('an agent whose description names no task still counts as a builder'). The exception is already implied by the accepted spec: FR-006 defines a builder as 'an agent dispatched with a task's brief, not a defined review agent'. The block should have cited FR-006; it cites only T88. The purpose test also holds. Fix 2 exists so the slot count sees the builders it missed. Counting a round arbiter as a builder would read three builders running while a builder slot was free, and let the turn end over the empty slot that T88's rolling dispatch exists to fill. The rule's reach past the two types named (every other non-general-purpose type) rests on the measurement: on the 69 slot refusals, the unnamed running depth-1 agents were general-purpose 37 times and round-arbiter 11 times, and no other type appeared (dated, /tmp/t171/slots.py)."
+     },
+     {
+      "id": "D2-depth",
+      "summary": "Only agents at spawnDepth 1 (dispatched by the session itself) are counted as unnamed builders; a builder's own sub-agents take no slot.",
+      "class": "within",
+      "why": "A builder is an agent the session dispatched: FR-006's 'an agent dispatched with a task's brief', and the block's T88 reading. A depth-2 agent works inside its builder's slot. Counting it separately would overcount and refuse nothing wrongly removed. This narrows nothing in the request or the spec."
+     },
+     {
+      "id": "fix1-session",
+      "summary": "A run whose launch line names another session is Status::Session; this session's turn closes and the context line names the owning session.",
+      "class": "within",
+      "why": "The guard's job is that a session does not end its turn over a run it started. A refusal over another session's run is a wrong outcome (block item 12), and fixing it serves FR-013's faster builders' loop. The run is still named in the context line, and nothing in request.md or the spec asks that a session be held over another's run."
+     },
+     {
+      "id": "fix1-hops",
+      "summary": "still_running follows an unnamed agent up parentAgentId at most HOPS=4, a labeled CONVENTION; a sub-agent's run is waited on while it runs and judged detached once it stops.",
+      "class": "within",
+      "why": "This is a bound on an implementation walk, labeled a CONVENTION with its reason. It decides nothing the request or the spec settles."
+     },
+     {
+      "id": "fix1-gone",
+      "summary": "Procs::gone drops a pid whose stat is gone or a zombie's, so a run that ended while /proc was read is no run.",
+      "class": "within",
+      "why": "This fixes a measured defect: 2 refusals with 'output in (no file)', dated, with their method. A wrong refusal is removed and no watched run is released."
+     },
+     {
+      "id": "fix3-once",
+      "summary": "An unchanged refusal is said in full once, then as one line 'still: <first 8 words> - unchanged since HH:MM' that is still exit 2. It is said in full again on a changed text, on a block back after a passing Stop, with no session id, or when the record cannot be read or written.",
+      "class": "within",
+      "why": "This serves the GM's 2026-11-23 ask: 'could we accomplish the same thing with no loss of fidelity and fewer tokens?' The repeat is still a refusal, so it does the same thing. The text appears in full whenever it differs from what this session was last told, and on every failure path. The repeat stands only while that same full text was already said to this session in this block, and the block measures a 32% cut in the Stop blocks' characters. On what the block states, no fidelity is lost."
+     },
+     {
+      "id": "fix3-8words",
+      "summary": "The one-line repeat carries the refusal's first 8 words, a labeled CONVENTION.",
+      "class": "within",
+      "why": "This is the form of the summary line, labeled with its reason. It narrows nothing the request or the spec asks for."
+     }
+    ],
+    "verdict": "CLEAR"
+   }
   }
  }
 }

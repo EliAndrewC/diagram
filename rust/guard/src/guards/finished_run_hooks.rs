@@ -24,7 +24,8 @@ use runs::{Procs, Root, Starter, Status};
 /// The guard.
 pub const GUARD: Guard = Guard {
     name: "finished-run-hooks",
-    events: &["UserPromptSubmit", "Stop"],
+    // SessionStart: a compaction forgets what was said in one line (451 T171, `once::forget`)
+    events: &["UserPromptSubmit", "Stop", "SessionStart"],
     matcher: "*",
     decide,
 };
@@ -142,6 +143,14 @@ pub(crate) fn judge(event: &Event, session: &Session, c: &Ctx) -> Vec<Answer> {
     let Some(clone) = clone_of(&cwd) else {
         return Vec::new();
     };
+    // A COMPACTION FORGETS WHAT WAS SAID (451 T171): a SessionStart reports nothing; after a compaction, a clear or a resume, the next
+    // Stop says the refusal in full
+    if event.name == "SessionStart" {
+        let git_dir = crate::guards::event_log_hooks::common_git_dir(&clone);
+        let said = crate::shared::once::file(&git_dir, &event.input);
+        crate::shared::once::forget(said.as_deref(), field(&event.input, "source"));
+        return Vec::new();
+    }
     let stop = event.name == "Stop";
     let fire = |kind: &str, detail: &str, rule: &str| {
         log::fire("finished-run", kind, detail, rule, &event.input, session);
@@ -159,9 +168,17 @@ pub(crate) fn judge(event: &Event, session: &Session, c: &Ctx) -> Vec<Answer> {
     }
     if stop {
         let transcript = Path::new(field(&event.input, "transcript_path"));
-        if let Some(refusal) = hold(&clone, c, transcript, &mut lines, &fire) {
-            return vec![Answer::Refuse(refusal)];
+        let me = field(&event.input, "session_id");
+        // AN UNCHANGED REFUSAL IS SAID ONCE (451 T171): in full, then in one line until it changes or a Stop passes without it
+        let said = crate::shared::once::file(
+            &crate::guards::event_log_hooks::common_git_dir(&clone),
+            &event.input,
+        );
+        if let Some(refusal) = hold(&clone, c, (transcript, me), &mut lines, &fire) {
+            let words = crate::shared::once::say(said.as_deref(), "finished-run", &refusal, c.now);
+            return vec![Answer::Refuse(words)];
         }
+        crate::shared::once::clear(said.as_deref(), "finished-run");
     }
     if lines.is_empty() {
         Vec::new()
@@ -182,8 +199,8 @@ fn task_id(output: &str) -> Option<&str> {
 /// The agent whose call launched a background task, from the event log's line for its launch (451 T85): `event_log_hooks` writes a
 /// backgrounded call's `PostToolUse` with the task's id as `bg` and, for a subagent's call, the hook payload's own `agent_id` as
 /// `by` (none for the session's own call). The clone's logs are read newest first, a line at a time, and only a line naming the id
-/// is parsed: the agent's id, or None for the session's own call or a launch no log names.
-fn launched_by(logs: &Path, id: &str) -> Option<String> {
+/// is parsed: the line's `by` (None for a session's own call) and its `sid`, or None for a launch no log names.
+fn launch_of(logs: &Path, id: &str) -> Option<(Option<String>, String)> {
     use std::io::BufRead as _;
     let needle = format!("\"bg\":\"{id}\"");
     let mut files: Vec<(std::time::SystemTime, PathBuf)> = std::fs::read_dir(logs)
@@ -212,7 +229,8 @@ fn launched_by(logs: &Path, id: &str) -> Option<String> {
             .map(|l| serde_json::from_str::<Value>(&l).unwrap_or(Value::Null))
             .find(|row| row.get("ev").and_then(Value::as_str) == Some("PostToolUse"))
     })?;
-    row.get("by").and_then(Value::as_str).map(str::to_owned)
+    let by = row.get("by").and_then(Value::as_str).map(str::to_owned);
+    Some((by, field(&row, "sid").to_owned()))
 }
 
 /// WHO STARTED A RUN THE HARNESS HOLDS (451 T85), by its output: the session itself - or a call no launch line names, which an agent
@@ -221,13 +239,23 @@ fn launched_by(logs: &Path, id: &str) -> Option<String> {
 /// (T65: launched or resumed, or interim with its own work going) is the builder's, whose own notice wakes the session; any other
 /// builder has stopped, or the transcript cannot say, and its run is judged as a detached one. `known` holds each builder's answer, so
 /// a transcript is read once a turn's end however many of a builder's runs are live.
+///
+/// A RUN IS ITS STARTER'S TO WAIT ON (451 T171): a launch line whose `sid` is another session's - a page session's, in the same clone -
+/// is that session's run, which its own Stop names; and an agent the session's transcript never names, a builder's own sub-agent, runs
+/// while its dispatcher does (`set_down_hooks::still_running`). `me` is the Stop's own session id, "" where the payload names none.
 fn starter(
     logs: &Path,
     transcript: &Path,
-    output: &str,
+    (me, output): (&str, &str),
     known: &std::cell::RefCell<std::collections::HashMap<String, bool>>,
 ) -> Starter {
-    let Some(agent) = task_id(output).and_then(|id| launched_by(logs, id)) else {
+    let Some((by, sid)) = task_id(output).and_then(|id| launch_of(logs, id)) else {
+        return Starter::Harness;
+    };
+    if !me.is_empty() && !sid.is_empty() && sid != me {
+        return Starter::Session(sid);
+    }
+    let Some(agent) = by else {
         return Starter::Harness;
     };
     let running = *known.borrow_mut().entry(agent.clone()).or_insert_with(|| {
@@ -245,7 +273,7 @@ fn starter(
 fn hold(
     clone: &Path,
     c: &Ctx,
-    transcript: &Path,
+    (transcript, me): (&Path, &str),
     lines: &mut Vec<String>,
     fire: &dyn Fn(&str, &str, &str),
 ) -> Option<String> {
@@ -270,7 +298,7 @@ fn hold(
     let known = std::cell::RefCell::default();
     let roots = c
         .procs
-        .judge_runs_by(clone, &|out| starter(logs, transcript, out, &known));
+        .judge_runs_by(clone, &|out| starter(logs, transcript, (me, out), &known));
     let unwatched: Vec<&Root> = roots
         .iter()
         .filter(|r| matches!(r.status, Status::Unwatched(_)))
@@ -302,6 +330,8 @@ fn woken(r: &Root, lines: &mut Vec<String>, fire: &dyn Fn(&str, &str, &str)) {
         (format!("finished-run: `make {target}` (pid {pid}) is still going; a waiter (pid {waiter}) is watching {file} and will wake this session. Nothing more to arm."), "waiter-armed")
     } else if let Status::Builder(agent, out) = &r.status {
         (format!("finished-run: `make {target}` (pid {pid}) is still going; its builder {agent} is still running, which the run will wake, and the builder's own notice will wake this session (its output: {out}). Nothing more to arm."), "builder-running")
+    } else if let Status::Session(sid, out) = &r.status {
+        (format!("finished-run: `make {target}` (pid {pid}) is still going; session {sid} started it, and that session's own Stop names it, not this one's (its output: {out}). Nothing more to arm."), "another-session")
     } else {
         (format!("finished-run: `make {target}` (pid {pid}) is still going; the harness will wake this session when it finishes (its output: {}). Nothing more to arm.", r.detail()), "tracked-run")
     };

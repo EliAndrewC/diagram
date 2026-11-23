@@ -287,11 +287,16 @@ impl World {
 
     /// The event log's line for a background launch, as `event_log_hooks` writes it: `bg` the task, `by` the calling agent.
     fn launched(&self, task: &str, by: Option<&str>) {
+        self.launched_in("t", task, by);
+    }
+
+    /// [`Self::launched`] by session `sid`.
+    fn launched_in(&self, sid: &str, task: &str, by: Option<&str>) {
         let dir = self.clone.join(".git/l7r-events");
         std::fs::create_dir_all(&dir).unwrap();
         let by = by.map_or_else(String::new, |a| format!(r#","by":"{a}""#));
         let line = format!(
-            r#"{{"t":"T","sid":"t","ev":"PostToolUse","tool":"Bash","id":"u"{by},"ms":4,"bg":"{task}"}}"#
+            r#"{{"t":"T","sid":"{sid}","ev":"PostToolUse","tool":"Bash","id":"u"{by},"ms":4,"bg":"{task}"}}"#
         );
         let log = dir.join("451-x.jsonl");
         let had = std::fs::read_to_string(&log).unwrap_or_default();
@@ -304,6 +309,18 @@ impl World {
         let s = Session::from_input(&input);
         let e = Event {
             name: "Stop".to_owned(),
+            input,
+        };
+        judge(&e, &s, &self.ctx())
+    }
+
+    /// A `SessionStart` of `source` (451 T171): `compact` after a compaction.
+    fn start_in(&self, source: &str) -> Vec<Answer> {
+        let input =
+            json!({"session_id": "t", "cwd": self.clone.to_string_lossy(), "source": source});
+        let s = Session::from_input(&input);
+        let e = Event {
+            name: "SessionStart".to_owned(),
             input,
         };
         judge(&e, &s, &self.ctx())
@@ -408,8 +425,92 @@ fn a_stopped_or_unknown_builder_s_run_refuses_and_an_unlogged_one_stays_tracked(
     let empty = nested.transcript(&[]);
     assert!(refused(&nested.stop_in(&empty)).contains("pid 100 `make static`"));
     std::fs::remove_file(nested.clone.join(".git/live-run.told")).unwrap();
-    // no transcript
-    assert!(refused(&nested.run("Stop")).contains("pid 100 `make static`"));
+    // no transcript: refused all the same - and, the block unchanged, in one line (451 T171)
+    assert_eq!(
+        refused(&nested.run("Stop")),
+        "still: A MAKE RUN THIS SESSION STARTED IS STILL - unchanged since 01:46"
+    );
+}
+
+/// 451 T171: A RUN THAT ENDED WHILE IT WAS READ IS NO RUN. At 05:45:17 on 2026-11-23 the coordinator's turn was refused over `make
+/// quick` and its `make _quick`, both `output in (no file)`, 3 s after quick's Phase line ended: a run gone before its ancestors are
+/// read has none, so it read as a root with no output. A zombie's run has ended too.
+#[test]
+fn a_run_that_ends_while_it_is_read_is_no_run() {
+    let w = world("gone");
+    w.add(100, "make", 1, &w.clone, &["make", "quick"], None);
+    std::fs::remove_file(w.proc.join("100/stat")).unwrap();
+    assert!(w.run("Stop").is_empty());
+    std::fs::write(w.proc.join("100/stat"), "100 (make) Z 1 0 0").unwrap();
+    assert!(w.run("Stop").is_empty());
+    std::fs::write(w.proc.join("100/stat"), "100 (make) S 1 0 0").unwrap();
+    assert!(refused(&w.run("Stop")).contains("pid 100 `make quick`, output in (no file)"));
+}
+
+/// 451 T171: A RUN IS ITS STARTER'S TO WAIT ON. A launch line whose `sid` is another session's - a page session's in the same clone - is
+/// that session's run, its own Stop's to name; one a builder's own sub-agent made (`by` an agent the session's transcript never names,
+/// its meta's `parentAgentId` a running builder whose own transcript launched it) waits on the sub-agent while it runs, and is refused
+/// once it has stopped - in full, then, unchanged, in one line, and in full again after a Stop that passed without it.
+#[test]
+fn another_session_s_run_or_a_builder_s_sub_agent_s_is_left_to_its_starter() {
+    let w = world("starter");
+    w.versioned_harness(50);
+    let out = w.held_run(50, "bpage", "lines");
+    w.launched_in("page", "bpage", Some("apage"));
+    let tr = w.transcript(&[]);
+    let said = printed(&w.stop_in(&tr));
+    assert!(said.contains(
+        "`make lines` (pid 100) is still going; session page started it, and that session's own Stop names it"
+    ) && said.contains(&out.to_string_lossy().into_owned()));
+    let args = vec!["judge".to_owned(), w.clone.to_string_lossy().into_owned()];
+    assert!(with(&args, &w.ctx()).stdout.contains(" lines tracked "));
+    let sub = world("sub-agent");
+    sub.versioned_harness(50);
+    sub.held_run(50, "bsub", "rust-test");
+    sub.launched("bsub", Some("asub"));
+    let tr = sub.transcript(&[r#"{"toolUseResult": {"agentId": "abuild"}}"#.to_owned()]);
+    let own = tr.with_extension("").join("subagents");
+    std::fs::create_dir_all(&own).unwrap();
+    let meta = json!({"spawnDepth": 2, "parentAgentId": "abuild"}).to_string();
+    std::fs::write(own.join("agent-asub.meta.json"), meta).unwrap();
+    let launch = "{\"agentId\":\"abuild\",\"toolUseResult\":{\"agentId\":\"asub\"}}\n";
+    std::fs::write(own.join("agent-abuild.jsonl"), launch).unwrap();
+    let said = printed(&sub.stop_in(&tr));
+    let waits = "`make rust-test` (pid 100) is still going; its builder asub is still running";
+    assert!(said.contains(waits), "{said}");
+    // the sub-agent has stopped: refused in full, and again in one line
+    let ended = notice("asub", r#"Agent \"review\" completed"#);
+    std::fs::write(own.join("agent-abuild.jsonl"), format!("{launch}{ended}\n")).unwrap();
+    assert!(refused(&sub.stop_in(&tr)).contains("pid 100 `make rust-test`, output in"));
+    std::fs::remove_file(sub.clone.join(".git/live-run.told")).unwrap();
+    assert!(refused(&sub.stop_in(&tr)).starts_with("still: A MAKE RUN THIS SESSION"));
+    // a Stop that passes without the block - a waiter on the run's output - and its return is said in full
+    std::fs::remove_file(sub.clone.join(".git/live-run.told")).unwrap();
+    let out = sub.root.join("tmp/-diagram/s/tasks/bsub.output");
+    let wait = format!("until grep -q X {}; do sleep 3; done", out.display());
+    sub.add(200, "bash", 1, Path::new("/"), &["bash", "-c", &wait], None);
+    assert!(printed(&sub.stop_in(&tr)).contains("a waiter (pid 200) is watching"));
+    std::fs::remove_dir_all(sub.proc.join("200")).unwrap();
+    assert!(refused(&sub.stop_in(&tr)).contains("pid 100 `make rust-test`, output in"));
+}
+
+/// 451 T171: A COMPACTION FORGETS WHAT WAS SAID (the GM's "no loss of fidelity"): a run refused in full, then in one line, is refused
+/// in full again after a `SessionStart` whose source is `compact`, its command with it; the `SessionStart` itself says nothing.
+#[test]
+fn after_a_compaction_the_run_refusal_is_said_in_full_again() {
+    let w = world("forget");
+    w.versioned_harness(50);
+    w.held_run(50, "bgone", "rust-test");
+    w.launched("bgone", Some("agone"));
+    let tr = w.transcript(&[]);
+    let first = refused(&w.stop_in(&tr));
+    let named = first.contains("pid 100 `make rust-test`, output in");
+    assert!(named, "{first}");
+    std::fs::remove_file(w.clone.join(".git/live-run.told")).unwrap();
+    assert!(refused(&w.stop_in(&tr)).starts_with("still: A MAKE RUN THIS SESSION"));
+    assert!(w.start_in("compact").is_empty());
+    std::fs::remove_file(w.clone.join(".git/live-run.told")).unwrap();
+    assert_eq!(refused(&w.stop_in(&tr)), first);
 }
 
 #[test]

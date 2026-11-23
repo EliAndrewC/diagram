@@ -154,5 +154,39 @@ for _ in 1 2 3 4 5 6 7 8 9 10; do [ "$(readlink "/proc/$lp/cwd" 2>/dev/null)" = 
 kill "$lp" 2>/dev/null; wait "$lp" 2>/dev/null
 [ "$(stopL)" = 2 ] && ok "it ended: the free slot named again" || no "landing process ended"
 
+echo "12. a general-purpose agent no brief names holds a slot; an unchanged refusal is said once, then in one line (451 T171, 2026-11-23)"
+typed() { launch agentId "Async agent launched successfully. agentId: $1 (internal ID)" "$1" >/dev/null
+  jq -nc '{"spawnDepth": 1, "agentType": $ARGS.positional[1], "description": $ARGS.positional[0]}' --args -- "$2" "$3" > "$T/trL/subagents/agent-$1.meta.json"; }
+stopS() { printf '{"session_id": "s12", "cwd": "%s", "transcript_path": "%s"}' "$L" "$T/trL.jsonl" | SET_DOWN_ROOT="$L" "$HOOK" stop 2>"$T/err"; echo $?; }
+typed ar1 "round-arbiter: set 449 down mid-landing" round-arbiter
+rc=$(stopL)
+[ "$rc" = 2 ] && grep -q "2 of 3 builders running (449 T259+T277, 449 T289" "$T/err" && ok "a check the session dispatched holds no slot" || no "a check counted" "rc=$rc $(cat "$T/err")"
+typed ag1 "449: finish T330, combined verify, five reviews, land both" general-purpose
+[ "$(stopL)" = 0 ] && ok "a finisher whose brief names its task past the colon fills the third slot" || no "unnamed builder" "$(cat "$T/err")"
+export L7R_BUILDERS=4
+rc=$(stopS)
+[ "$rc" = 2 ] && grep -q "3 of 4 builders running (449 T259+T277, 449 T289+.*+T300, a builder (no task named)) - " "$T/err" && grep -q "make task-start F=449 T=T301," "$T/err" && ok "...counted and named as a builder with no task, the block in full" || no "unnamed named" "rc=$rc $(cat "$T/err")"
+rc=$(stopS)
+[ "$rc" = 2 ] && grep -qx "still: BLOCKED: a builder slot is free - 3 - unchanged since [0-2][0-9]:[0-5][0-9]" "$T/err" && ok "the same block again: refused in one line" || no "one line" "rc=$rc $(cat "$T/err")"
+# A COMPACTION FORGETS WHAT WAS SAID (451 T171, the GM's "no loss of fidelity"): the context may have lost the full block, so after a
+# SessionStart whose source is "compact" the next Stop says it in full, its command with it.
+startS() { printf '{"session_id": "s12", "cwd": "%s", "source": "%s"}' "$L" "$1" | SET_DOWN_ROOT="$L" "$HOOK" SessionStart 2>"$T/err"; echo $?; }
+rc=$(startS compact)
+[ "$rc" = 0 ] && [ ! -s "$T/err" ] && ok "a SessionStart after a compaction says nothing" || no "session start" "rc=$rc $(cat "$T/err")"
+rc=$(stopS)
+[ "$rc" = 2 ] && grep -q "make task-start F=449 T=T301," "$T/err" && ok "...and the next Stop says the block in full, its command with it" || no "after a compaction" "rc=$rc $(cat "$T/err")"
+rc=$(stopS)
+[ "$rc" = 2 ] && grep -q "^still: BLOCKED: a builder slot is free" "$T/err" && ok "...then in one line again" || no "one line after" "rc=$rc $(cat "$T/err")"
+[ "$(stopL)" = 2 ] && grep -q "make task-start F=449 T=T301," "$T/err" && ok "a payload with no session id: in full" || no "no session" "$(cat "$T/err")"
+jq -nc '{"type": "user", "message": {"content": "<task-notification><task-id>ag1</task-id><status>completed</status></task-notification>"}}' >> "$T/trL.jsonl"
+rc=$(stopS)
+[ "$rc" = 2 ] && grep -q "2 of 4 builders running" "$T/err" && grep -q "make set-down F=449" "$T/err" && ok "changed: in full again" || no "changed" "rc=$rc $(cat "$T/err")"
+export L7R_BUILDERS=2
+[ "$(stopS)" = 0 ] && ok "every slot full: the turn ends" || no "full" "$(cat "$T/err")"
+export L7R_BUILDERS=4
+rc=$(stopS)
+[ "$rc" = 2 ] && grep -q "make task-start F=449 T=T301," "$T/err" && ok "after a Stop that passed, the block's return is said in full" || no "return" "rc=$rc $(cat "$T/err")"
+unset L7R_BUILDERS
+
 echo "set-down-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]
