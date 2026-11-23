@@ -1194,6 +1194,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
+  },
+  "### T160, T161 (bundle)": {
+   "sha256": "a0b3d5f2648c9780b91b9a9f465b03b9122a9b15d667f86dc6bf69468d995aed",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T160, T161 Approach (checklist part A)": {
+   "sha256": "01a3d4367e9be24f9cef33b75f381186da7d01398732bc77125b9b0523cab6ce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -14154,6 +14166,162 @@
      "why": "Ordering inside the feature's own task list; narrows nothing the GM asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T160, T161 (bundle)",
+    "### T160, T161 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T160-install",
+     "summary": "T160: every test that writes an executable in process and then runs it writes it by install (l7r_gate_core::write_executable / the guard's write_executable); pool takes core's testkit as a dev-dependency",
+     "class": "within",
+     "why": "The fix of T160's own defect (ETXTBSY under load, a wrong outcome: a crate's tests fail at random) by the mechanism 449 already used in the other crates; tests only, no map or behavior change; the dev-dependency is an implementation choice with its no-cycle reasoning stated."
+    },
+    {
+     "id": "T160-census",
+     "summary": "T160: the class 'every test that writes an executable it runs' enumerated by a stated search space - set_permissions/from_mode(0o7/set_mode(/chmod +x, widened to OpenOptionsExt/.mode(0o..), fs::copy(, chmod in every mode word and Command::new(\"chmod\") with its arguments apart, each hit read - finding seven files, the rest classed as creating no executable",
+     "class": "within",
+     "why": "The earlier round's census finding is answered: the enumeration now names its commands and covers the forms a file becomes executable in process (permission set, created with a mode, copied with its bits, chmod by a child), labeled as an observation with its date and method (FR-009). Its reach is the class the fix names; no instance found is dropped without a reason."
+    },
+    {
+     "id": "T160-not-run",
+     "summary": "T160: pages' research_claims/tests.rs and the guard's finished_run_hooks/runs/tests.rs left, their executables never executed",
+     "class": "within",
+     "why": "The race needs an execve of the written file; a file only tested for its execute bit, or named by a fake /proc entry, is outside the class. Not a defect."
+    },
+    {
+     "id": "T160-red-by-reading",
+     "summary": "T160: the failure not reproduced in 426 runs, so the race is proved by reading (a write descriptor inherited by a forked sibling until its exec; execve of a file open for writing fails ETXTBSY)",
+     "class": "within",
+     "why": "The observed failure is recorded with its commit, load and method; the measurements of the failed reproductions are labeled; the fix is the one whose mechanism removes the cause. Settles how the defect is shown, narrows nothing."
+    },
+    {
+     "id": "T160-prereq-left",
+     "summary": "T160: reviews' prereq/tests.rs:472, an instance of the same race, left to T162 (lands before T159) because the file is the 449 sheet bundle's, mid-edit",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the plan's own class by one instance, but editing a file another builder holds mid-edit in the same shared clone is the very collision T161 exists to stop (one builder's landing claiming or refusing another's files); the defect is not dropped but filed with its id, its reason and its order ahead of T159 (FR-009). No GM words ask for this instance to land in this task, and the request's purpose (bundled small fixes that land without tripping each other, T141) is served, not gutted, by the deferral."
+    },
+    {
+     "id": "T161-builder-reading",
+     "summary": "T161: filed.rs' task chain gains, after the brief's own words, the agent's builder reading (builder_brief: description head, else the prompt's first line, a bundle's every member, else the parentAgentId builder), then a page session's brief (page_session_brief moved to set_down_hooks, one reader); renumbered's briefed reads the builder reading too",
+     "class": "within",
+     "why": "Extends where a line's task is found so each agent's line is booked to the task its own dispatch names - FR-004's 'its task where its dispatch names one' and the per-task breakdown the GM asked for (2026-11-19). The move to one reader is a refactor."
+    },
+    {
+     "id": "T161-D2-amended",
+     "summary": "T161: D2's last rung (a line naming no task takes the feature's task-start in force) read for the main session's own lines alone; an agent's or page session's line naming no task carries none (land-alone's and closing checks' splits leave it unnamed, context_cap_hooks names the handoff <agent>.md)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the accepted spec's D2, which gives every line the clone's task-start in force. Applied literally D2 defeats the request's own purpose, concretely: the GM asked for 'for each task ... a breakdown of where our time went on that task', and D2's last rung booked a sheet-bundle builder's four edits to T317, another builder's task, and so refused a CLEAR, committed bundle at its landing (measured 2026-11-22 from the real log line and meta file). The spec's own FR-004 already limits an agent's line to 'its task where its dispatch names one'; a line with no task is honest where D2's would be wrong. The main session keeps the rung, where the mark is its own."
+    },
+    {
+     "id": "T161-T317-history-left",
+     "summary": "T161: the four lines already booked to T317 in 449's log are not re-tasked; filed as T163, lands before T159",
+     "class": "narrowing",
+     "why": "It leaves a wrong booking already written (four T317 lines that are another builder's), so it narrows the fix to the writer. Legitimate: re-tasking past lines within a log is outside what events-refile does by its recorded rule and needs a tool of its own; the defect is filed as T163 with its reason and its order ahead of T159 (FR-009), not dropped; and it ends of itself when the sheet bundle commits those files. The GM's request is served by right booking going forward (SC-002: 'for work done after this feature lands'), which this bundle delivers.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T161-cover-rs",
+     "summary": "cover.rs's in-process coverage wrapper left: production code in a single-threaded run, not the race",
+     "class": "within",
+     "why": "With no other thread forking while its descriptor is open the ETXTBSY race cannot occur; not a defect, so nothing is left unfixed."
+    },
+    {
+     "id": "T160-T161-exits",
+     "summary": "Order (T160 tests, T161 red tests, the chain), exits (crate tests, lint, format, cover, hook suites, closing-checks), done measured by two booked tests red on HEAD and green after",
+     "class": "within",
+     "why": "Procedure and verification of the two fixes themselves; enforcement of what is fixed, no new behavior."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T160, T161 (bundle)",
+    "### T160, T161 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T160-install",
+     "summary": "T160: every test that writes an executable in process and then runs it writes it by install (l7r_gate_core::write_executable, the guard's crate::guards::write_executable)",
+     "class": "within",
+     "why": "The fix of the filed defect (ETXTBSY under load), by the mechanism 449 already used in the other crates' tests; tests only, no map changes."
+    },
+    {
+     "id": "T160-census",
+     "summary": "T160: the class 'tests that write and run an executable' found by two greps of rust/ (set_permissions/from_mode(0o7/set_mode(/chmod +x, then OpenOptionsExt/.mode(0o..)/fs::copy(/chmod in any mode word/Command::new(\"chmod\")), each hit read; seven files fixed",
+     "class": "within",
+     "why": "Fixes every instance found, with the search space and method stated as FR-009 asks of a class-wide fix; nothing in the class is narrowed out."
+    },
+    {
+     "id": "T160-pool-devdep",
+     "summary": "T160: pool takes core's testkit as a dev-dependency",
+     "class": "within",
+     "why": "Implementation detail of the fix; reaches no production build."
+    },
+    {
+     "id": "T160-not-run-left",
+     "summary": "T160: pages' research_claims/tests.rs and the guard's finished_run_hooks/runs/tests.rs left, since neither runs the file it writes",
+     "class": "within",
+     "why": "Outside the class: no exec, so no ETXTBSY, so no defect is left."
+    },
+    {
+     "id": "T160-cover-rs-left",
+     "summary": "T160: rustc/cover.rs's coverage wrapper (production, written in process and run by cargo) left as not the race",
+     "class": "within",
+     "why": "Production code in a single-threaded run, which is outside the filed class (tests in a multi-threaded test binary). The plan states it was read; the caveat is in the report."
+    },
+    {
+     "id": "T160-red-by-reading",
+     "summary": "T160: the red not reproduced (426 runs), so the race is shown by reading std::fs::write's open descriptor against a concurrent fork and execve's ETXTBSY",
+     "class": "within",
+     "why": "No requirement asks for a red-first test of a test-only race fix (FR-012 covers the refusals of FR-006 to FR-013); the attempt and its failure are measured and recorded."
+    },
+    {
+     "id": "T160-T162-folded",
+     "summary": "reviews' prereq/tests.rs:472, the same race, filed first as T162 while the sheet bundle held the file, now fixed in this bundle and landed with it (T=T160,T161,T162)",
+     "class": "within",
+     "why": "Widens the fix to one more instance of the same class, which the GM's bundling ruling (T141) allows; nothing is narrowed."
+    },
+    {
+     "id": "T161-D2-amended",
+     "summary": "T161: D2's last rung (the feature's task-start mark) now applies only to the main session's own lines; an agent's or page session's line that names no task carries no task",
+     "class": "within",
+     "why": "The accepted spec already carries this amendment (D2 AMENDED by T161). Measured against the request, it serves the purpose of a per-task breakdown: with several builders in one clone the mark booked one builder's edits to another task and refused a CLEAR landing, and a line left unbooked is honest where a wrong booking corrupts both the breakdown and land-alone's split. Two new rungs (the builder reading and the page-session brief) keep correct bookings coming in, so the request's per-task attribution is not narrowed."
+    },
+    {
+     "id": "T161-chain-rungs",
+     "summary": "T161: filed.rs's chain gains the agent's builder reading (description head, else prompt first line, else parentAgentId's builder) and the page session's brief; page_session_brief moved to set_down_hooks so own.rs calls one reader",
+     "class": "within",
+     "why": "The mechanism of the amended D2; one reader instead of two is a refactor inside the fix."
+    },
+    {
+     "id": "T161-consumers",
+     "summary": "T161: land-alone's and closing checks' splits leave a taskless agent line's files unnamed; context_cap_hooks names the handoff <agent>.md; renumbered's briefed reads the builder reading; land-alone's split unchanged but its comment",
+     "class": "within",
+     "why": "The consequences of the amended D2 for the existing consumers; no new behavior beyond it."
+    },
+    {
+     "id": "T161-red-tests",
+     "summary": "T161: tests/booked.rs and alone/tests/booked.rs red on HEAD, green after",
+     "class": "within",
+     "why": "Enforcement of the fix itself."
+    },
+    {
+     "id": "T161-history-left-T163",
+     "summary": "T161: the four T317 lines already in 449's log stay booked to T317 (events-refile moves lines between features, never re-tasks within a log); re-tasking history filed as T163, lands before T159",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves the history of the incident T161 was filed on unfixed, so it is a narrowing. It is legitimate because it is a deferral that meets FR-009 (reason, filed task id, order), not a drop. It needs a different mechanism (a re-tasking tool) from this bundle's writer fix. The symptom that refused the landing has also gone: the sheet bundle committed those files at 82e6b38326, as the plan's own T162 note records. The plan's clause 'until those files are committed by the sheet bundle' is stale on that point, which is a wording note and not a ruling."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -21697,6 +21865,168 @@
      "summary": "The task is classed 'Performance work? no' (disk hygiene); the gate's cost is one df.",
      "class": "within",
      "why": "The GM's words on T158 ask for cleanup and do not call it performance or measurement work. Classing it this way narrows nothing T158 was asked to do."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T160": {
+   "section_sha256": "8f987ca84ec20dd6441c940120eebcf3597776af05fe1c6cab63f252ce184151",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T160-install",
+     "summary": "T160: every test that writes an executable in process and then runs it writes it by install (l7r_gate_core::write_executable, the guard's crate::guards::write_executable)",
+     "class": "within",
+     "why": "The fix of the filed defect (ETXTBSY under load), by the mechanism 449 already used in the other crates' tests; tests only, no map changes."
+    },
+    {
+     "id": "T160-census",
+     "summary": "T160: the class 'tests that write and run an executable' found by two greps of rust/ (set_permissions/from_mode(0o7/set_mode(/chmod +x, then OpenOptionsExt/.mode(0o..)/fs::copy(/chmod in any mode word/Command::new(\"chmod\")), each hit read; seven files fixed",
+     "class": "within",
+     "why": "Fixes every instance found, with the search space and method stated as FR-009 asks of a class-wide fix; nothing in the class is narrowed out."
+    },
+    {
+     "id": "T160-pool-devdep",
+     "summary": "T160: pool takes core's testkit as a dev-dependency",
+     "class": "within",
+     "why": "Implementation detail of the fix; reaches no production build."
+    },
+    {
+     "id": "T160-not-run-left",
+     "summary": "T160: pages' research_claims/tests.rs and the guard's finished_run_hooks/runs/tests.rs left, since neither runs the file it writes",
+     "class": "within",
+     "why": "Outside the class: no exec, so no ETXTBSY, so no defect is left."
+    },
+    {
+     "id": "T160-cover-rs-left",
+     "summary": "T160: rustc/cover.rs's coverage wrapper (production, written in process and run by cargo) left as not the race",
+     "class": "within",
+     "why": "Production code in a single-threaded run, which is outside the filed class (tests in a multi-threaded test binary). The plan states it was read; the caveat is in the report."
+    },
+    {
+     "id": "T160-red-by-reading",
+     "summary": "T160: the red not reproduced (426 runs), so the race is shown by reading std::fs::write's open descriptor against a concurrent fork and execve's ETXTBSY",
+     "class": "within",
+     "why": "No requirement asks for a red-first test of a test-only race fix (FR-012 covers the refusals of FR-006 to FR-013); the attempt and its failure are measured and recorded."
+    },
+    {
+     "id": "T160-T162-folded",
+     "summary": "reviews' prereq/tests.rs:472, the same race, filed first as T162 while the sheet bundle held the file, now fixed in this bundle and landed with it (T=T160,T161,T162)",
+     "class": "within",
+     "why": "Widens the fix to one more instance of the same class, which the GM's bundling ruling (T141) allows; nothing is narrowed."
+    },
+    {
+     "id": "T161-D2-amended",
+     "summary": "T161: D2's last rung (the feature's task-start mark) now applies only to the main session's own lines; an agent's or page session's line that names no task carries no task",
+     "class": "within",
+     "why": "The accepted spec already carries this amendment (D2 AMENDED by T161). Measured against the request, it serves the purpose of a per-task breakdown: with several builders in one clone the mark booked one builder's edits to another task and refused a CLEAR landing, and a line left unbooked is honest where a wrong booking corrupts both the breakdown and land-alone's split. Two new rungs (the builder reading and the page-session brief) keep correct bookings coming in, so the request's per-task attribution is not narrowed."
+    },
+    {
+     "id": "T161-chain-rungs",
+     "summary": "T161: filed.rs's chain gains the agent's builder reading (description head, else prompt first line, else parentAgentId's builder) and the page session's brief; page_session_brief moved to set_down_hooks so own.rs calls one reader",
+     "class": "within",
+     "why": "The mechanism of the amended D2; one reader instead of two is a refactor inside the fix."
+    },
+    {
+     "id": "T161-consumers",
+     "summary": "T161: land-alone's and closing checks' splits leave a taskless agent line's files unnamed; context_cap_hooks names the handoff <agent>.md; renumbered's briefed reads the builder reading; land-alone's split unchanged but its comment",
+     "class": "within",
+     "why": "The consequences of the amended D2 for the existing consumers; no new behavior beyond it."
+    },
+    {
+     "id": "T161-red-tests",
+     "summary": "T161: tests/booked.rs and alone/tests/booked.rs red on HEAD, green after",
+     "class": "within",
+     "why": "Enforcement of the fix itself."
+    },
+    {
+     "id": "T161-history-left-T163",
+     "summary": "T161: the four T317 lines already in 449's log stay booked to T317 (events-refile moves lines between features, never re-tasks within a log); re-tasking history filed as T163, lands before T159",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves the history of the incident T161 was filed on unfixed, so it is a narrowing. It is legitimate because it is a deferral that meets FR-009 (reason, filed task id, order), not a drop. It needs a different mechanism (a re-tasking tool) from this bundle's writer fix. The symptom that refused the landing has also gone: the sheet bundle committed those files at 82e6b38326, as the plan's own T162 note records. The plan's clause 'until those files are committed by the sheet bundle' is stale on that point, which is a wording note and not a ruling."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T161": {
+   "section_sha256": "8f987ca84ec20dd6441c940120eebcf3597776af05fe1c6cab63f252ce184151",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T160-install",
+     "summary": "T160: every test that writes an executable in process and then runs it writes it by install (l7r_gate_core::write_executable, the guard's crate::guards::write_executable)",
+     "class": "within",
+     "why": "The fix of the filed defect (ETXTBSY under load), by the mechanism 449 already used in the other crates' tests; tests only, no map changes."
+    },
+    {
+     "id": "T160-census",
+     "summary": "T160: the class 'tests that write and run an executable' found by two greps of rust/ (set_permissions/from_mode(0o7/set_mode(/chmod +x, then OpenOptionsExt/.mode(0o..)/fs::copy(/chmod in any mode word/Command::new(\"chmod\")), each hit read; seven files fixed",
+     "class": "within",
+     "why": "Fixes every instance found, with the search space and method stated as FR-009 asks of a class-wide fix; nothing in the class is narrowed out."
+    },
+    {
+     "id": "T160-pool-devdep",
+     "summary": "T160: pool takes core's testkit as a dev-dependency",
+     "class": "within",
+     "why": "Implementation detail of the fix; reaches no production build."
+    },
+    {
+     "id": "T160-not-run-left",
+     "summary": "T160: pages' research_claims/tests.rs and the guard's finished_run_hooks/runs/tests.rs left, since neither runs the file it writes",
+     "class": "within",
+     "why": "Outside the class: no exec, so no ETXTBSY, so no defect is left."
+    },
+    {
+     "id": "T160-cover-rs-left",
+     "summary": "T160: rustc/cover.rs's coverage wrapper (production, written in process and run by cargo) left as not the race",
+     "class": "within",
+     "why": "Production code in a single-threaded run, which is outside the filed class (tests in a multi-threaded test binary). The plan states it was read; the caveat is in the report."
+    },
+    {
+     "id": "T160-red-by-reading",
+     "summary": "T160: the red not reproduced (426 runs), so the race is shown by reading std::fs::write's open descriptor against a concurrent fork and execve's ETXTBSY",
+     "class": "within",
+     "why": "No requirement asks for a red-first test of a test-only race fix (FR-012 covers the refusals of FR-006 to FR-013); the attempt and its failure are measured and recorded."
+    },
+    {
+     "id": "T160-T162-folded",
+     "summary": "reviews' prereq/tests.rs:472, the same race, filed first as T162 while the sheet bundle held the file, now fixed in this bundle and landed with it (T=T160,T161,T162)",
+     "class": "within",
+     "why": "Widens the fix to one more instance of the same class, which the GM's bundling ruling (T141) allows; nothing is narrowed."
+    },
+    {
+     "id": "T161-D2-amended",
+     "summary": "T161: D2's last rung (the feature's task-start mark) now applies only to the main session's own lines; an agent's or page session's line that names no task carries no task",
+     "class": "within",
+     "why": "The accepted spec already carries this amendment (D2 AMENDED by T161). Measured against the request, it serves the purpose of a per-task breakdown: with several builders in one clone the mark booked one builder's edits to another task and refused a CLEAR landing, and a line left unbooked is honest where a wrong booking corrupts both the breakdown and land-alone's split. Two new rungs (the builder reading and the page-session brief) keep correct bookings coming in, so the request's per-task attribution is not narrowed."
+    },
+    {
+     "id": "T161-chain-rungs",
+     "summary": "T161: filed.rs's chain gains the agent's builder reading (description head, else prompt first line, else parentAgentId's builder) and the page session's brief; page_session_brief moved to set_down_hooks so own.rs calls one reader",
+     "class": "within",
+     "why": "The mechanism of the amended D2; one reader instead of two is a refactor inside the fix."
+    },
+    {
+     "id": "T161-consumers",
+     "summary": "T161: land-alone's and closing checks' splits leave a taskless agent line's files unnamed; context_cap_hooks names the handoff <agent>.md; renumbered's briefed reads the builder reading; land-alone's split unchanged but its comment",
+     "class": "within",
+     "why": "The consequences of the amended D2 for the existing consumers; no new behavior beyond it."
+    },
+    {
+     "id": "T161-red-tests",
+     "summary": "T161: tests/booked.rs and alone/tests/booked.rs red on HEAD, green after",
+     "class": "within",
+     "why": "Enforcement of the fix itself."
+    },
+    {
+     "id": "T161-history-left-T163",
+     "summary": "T161: the four T317 lines already in 449's log stay booked to T317 (events-refile moves lines between features, never re-tasks within a log); re-tasking history filed as T163, lands before T159",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves the history of the incident T161 was filed on unfixed, so it is a narrowing. It is legitimate because it is a deferral that meets FR-009 (reason, filed task id, order), not a drop. It needs a different mechanism (a re-tasking tool) from this bundle's writer fix. The symptom that refused the landing has also gone: the sheet bundle committed those files at 82e6b38326, as the plan's own T162 note records. The plan's clause 'until those files are committed by the sheet bundle' is stale on that point, which is a wording note and not a ruling."
     }
    ],
    "verdict": "CLEAR"
