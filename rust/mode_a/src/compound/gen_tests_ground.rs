@@ -146,3 +146,134 @@ fn a_granary_stands_on_the_offices_side_of_the_divider() {
     assert!(!household.contains("behind the office hall"), "{household}");
     assert!(office.is_empty(), "{office}");
 }
+
+/// A granary's or stable's door on an end along its row opens on a lane a cart passes beside the door's tub (449 T388: the county example's
+/// stables, entered at the west gable, put their tub in the 6 ft fire gap and left a cart 2.7 ft): on each pool sheet the program draws,
+/// the ground between the tub and the nearest building across the lane is at least `CART_FT`.
+#[test]
+fn a_cart_route_door_on_an_end_keeps_a_carts_width_past_its_tub() {
+    use super::ground::{CART_FT, CART_KINDS};
+    use super::parts::TUB_R;
+    use super::spec::Face;
+    let tree = super::gen_tests_seat::tree();
+    let mut lanes = 0;
+    for name in ["county-magistracy-example", "ochiba-roundtrip-test"] {
+        let spec = tree.join(format!("pool/magistracies/{name}/{name}.compound.json"));
+        let (p, bands) = super::cli::load(&tree, &spec.to_string_lossy()).unwrap();
+        let (l, s) = super::generate(&p, &bands).unwrap();
+        for d in &l.doors {
+            let b = &p.buildings[d.b];
+            let along_x = matches!(
+                b.wall,
+                super::spec::Wall::Side(Face::N | Face::S) | super::spec::Wall::Divider
+            );
+            let on_end = matches!(
+                (along_x, d.face),
+                (true, Face::W | Face::E) | (false, Face::N | Face::S)
+            );
+            if !CART_KINDS.contains(&b.kind.as_str()) || !on_end {
+                continue;
+            }
+            let (dx, dy) = d.mid();
+            let tub = s
+                .tubs
+                .iter()
+                .copied()
+                .min_by(|a, c| {
+                    (a.0 - dx)
+                        .hypot(a.1 - dy)
+                        .total_cmp(&(c.0 - dx).hypot(c.1 - dy))
+                })
+                .unwrap();
+            // the tub's far edge from the door's face, and the nearest building across the lane over the tub's own span
+            // read in the lane's own frame: `a` across the lane (outward from the door's face, `out`), `c` along it
+            let x_lane = matches!(d.face, Face::W | Face::E);
+            let sw = |p: (f64, f64)| if x_lane { p } else { (p.1, p.0) };
+            let (ta, tc) = sw(tub);
+            let out = if matches!(d.face, Face::W | Face::N) {
+                -1.0
+            } else {
+                1.0
+            };
+            let (far, lo, hi) = (ta + out * TUB_R, tc - TUB_R, tc + TUB_R);
+            let clear = l
+                .seats
+                .iter()
+                .enumerate()
+                .filter_map(|(j, a)| a.filter(|_| j != d.b))
+                .filter_map(|a| {
+                    let ((a0, c0), (a1, c1)) = (sw((a.0, a.1)), sw((a.2, a.3)));
+                    let across = c0 < hi && c1 > lo;
+                    match d.face {
+                        Face::W | Face::N => (across && a1 <= far).then_some(far - a1),
+                        Face::E | Face::S => (across && a0 >= far).then_some(a0 - far),
+                    }
+                })
+                .fold(f64::INFINITY, f64::min);
+            lanes += 1;
+            let (fits, at) = (clear >= CART_FT - 1e-9, &b.name);
+            assert!(fits, "{name}: {at} tub leaves a cart {clear:.2} ft");
+        }
+    }
+    assert_eq!(lanes, 2, "the county's and the round trip's stables");
+}
+
+#[test]
+fn a_cart_route_door_at_its_rows_end_keeps_a_carts_lane_to_the_wall() {
+    use super::layout::{court_range, CART_LANE, CLEAR, WALL_HALF};
+    // a stables alone on its row, seated at the end its door is on: the S wall's west end (its default west gable), the same stables
+    // near the east end with its door declared east, and one on the W wall at the divider's end (its default north gable)
+    let gable = r#", "interior": "stables""#;
+    let east = r#", "interior": "stables", "near": 100, "doors": [{"face": "E", "at": 0.5}]"#;
+    let cases = [
+        (
+            b(
+                "stables",
+                "stables",
+                "service",
+                (18.0, 24.0),
+                "outer",
+                "S",
+                gable,
+            ),
+            'W',
+        ),
+        (
+            b(
+                "stables",
+                "stables",
+                "service",
+                (18.0, 24.0),
+                "outer",
+                "S",
+                east,
+            ),
+            'E',
+        ),
+        (
+            b(
+                "stables",
+                "stables",
+                "service",
+                (24.0, 18.0),
+                "outer",
+                "W",
+                gable,
+            ),
+            'N',
+        ),
+    ];
+    for (spec, face) in cases {
+        let p = with(&[spec], "");
+        let l = seated(&p).unwrap();
+        let (x0, y0, x1, _) = l.seats[0].unwrap();
+        let lo = court_range(&p, super::spec::Court::Outer).0;
+        let lane = match face {
+            'W' => x0 - WALL_HALF,
+            'E' => p.w - WALL_HALF - x1,
+            _ => y0 - (lo - CLEAR),
+        };
+        let fits = lane >= CART_LANE - 1e-9;
+        assert!(fits, "{face}: {lane:.2} ft to the row's end");
+    }
+}

@@ -353,14 +353,16 @@ fn garden_well(p: &Program, l: &mut Layout) -> Result<Bx, Error> {
         .ok_or_else(|| refuse("no room for the garden's well in the garden".to_owned()))
 }
 
-/// Research: stables well - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); just outside the stables for watering, before its court face
+/// Research:
+///     stables well - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); just outside the stables for watering, before its court face and within that face's own span, its ground never past the building's ends (449 T384: seated from 4 ft past the face's west end, the county example's stables' well stood over the lane's mouth beside them)
+///     the well at its face's low end - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); seated at the first free place from the court face's west (or north) end (`seat_in` from `a0`), so it stands at the end a default gable door opens on
 fn stables_well(p: &Program, l: &mut Layout) -> Result<Bx, Error> {
     let (s, sb) = of_kind(p, l, "stables")
         .ok_or_else(|| refuse("a stables well with no stables".to_owned()))?;
     let face = court_face(&p.buildings[s]);
     let (a0, a1) = along(sb, face);
     let rule = part_rule(p, Some(s), None, 0.5, 0.5);
-    let strip = face_strip(sb, face, 1.0, WELL_KEEP, a0 - 4.0, a1 + 4.0);
+    let strip = face_strip(sb, face, 1.0, WELL_KEEP, a0, a1);
 
     seat_in(&mut l.grid, strip, WELL_KEEP, &rule, a0, "compound_well")
         .ok_or_else(|| refuse("no room for the stables' well before the stables".to_owned()))

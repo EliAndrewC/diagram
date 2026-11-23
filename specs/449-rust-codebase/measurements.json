@@ -2020,5 +2020,27 @@
     "command": "make map MAP=pool/magistracies/county-magistracy-example",
     "method": "svg read: the genkan groups draw a rect and a door and no bar lines; the cell draws bar lines at x 411 and 435 beside its door, so the lattice, the mark F2 said settles it with F1, separates the cell from a genkan porch as well as its fill",
     "value": 2
+  },
+  "t383-ochiba-n1": {
+    "quantity": "pack-audit's aligned-gap lines on Ochiba at svg(256,554), the practice ground between the tax archive and the senior retainers' quarters read as a gap, count",
+    "observed": "2026-11-23",
+    "verifies": "N1",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "41f26913b19c",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "command": "make -C /diagram/.clones/diagram-backlog-review pack-audit ARGS=/diagram/.clones/diagram-backlog/.git/review-snapshot/building-review--ochiba-magistracy/clone/ochiba-magistracy.svg",
+    "method": "pack-audit's report read in the review tree at 54f0a91961, whose walls.rs is the T383 fix (cmp equal to the clone's): no gap line at svg(256,554), where the review's run listed '29.3 ft V at svg(256,554) LOOSE (kura gap >10 ft)'; the one 29.3 ft line left is H at svg(612,726), another gap",
+    "value": 0
+  },
+  "t388-county-e1": {
+    "quantity": "the county stables' edges to their earth passage drawn dashed (open), the grooms' room's and the stalls', count",
+    "observed": "2026-11-23",
+    "verifies": "E1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "f6b852c2277b",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make map MAP=pool/magistracies/county-magistracy-example",
+    "method": "svg read: the grooms' room's edge to the passage, the line at y 591 from x 201.8 to 255.8, now carries stroke-dasharray 3 2 at width 0.8 as the stalls' edge at y 609 does, where the reviewed drawing drew it solid at width 1; the svg differs from the reviewed snapshot's in that line alone (emit.rs stables, 449 T388's E1 fix; red test a_stables_grooms_room_opens_onto_its_passage)",
+    "value": 2
   }
 }

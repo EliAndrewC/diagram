@@ -343,6 +343,32 @@ mod tests {
         );
     }
 
+    /// A drawn practice ground is laid-out ground, not slack (449 T383: Ochiba's audit listed the practice ground between its tax archive
+    /// and the senior retainers' quarters as a loose 29.3 ft kura gap): the gap between two stacked buildings is read with a practice
+    /// ground standing in it as with a third building there, and without one it is listed.
+    #[test]
+    fn a_practice_ground_in_a_gap_is_not_unbuilt_ground() {
+        let sheet = |ground: &str| {
+            format!(
+                r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+<rect id="precinct" x="20" y="20" width="360" height="260" fill="url(#court-earth)"/>
+<rect x="60" y="40" width="120" height="40" fill="#C9A57A" data-kind="tax archive"/>
+<rect x="60" y="140" width="120" height="40" fill="#DDB87A" data-kind="retainers' quarters"/>
+{ground}</svg>
+"##
+            )
+        };
+        let gaps = |text: &str| crate::audit::checks::aligned_gaps(&parse_svg(text).unwrap());
+        let bare = gaps(&sheet(""));
+        assert_eq!(bare.len(), 1, "{bare:?}");
+        assert!((bare[0].ft - 20.0).abs() < 1e-9);
+        let drill = r#"<g data-kind="practice ground"><rect x="70" y="90" width="80" height="40" fill="url(#keiko-earth)"/></g>"#;
+        assert_eq!(gaps(&sheet(drill)), Vec::new());
+        // the same swept earth tagged as something else is not the practice ground
+        let other = r#"<g data-kind="rear yard"><rect x="70" y="90" width="80" height="40" fill="url(#keiko-earth)"/></g>"#;
+        assert_eq!(gaps(&sheet(other)).len(), 1);
+    }
+
     #[test]
     fn a_kura_gap_under_the_six_foot_floor_is_tight() {
         let gap = |ft: f64, kura: bool| Gap {

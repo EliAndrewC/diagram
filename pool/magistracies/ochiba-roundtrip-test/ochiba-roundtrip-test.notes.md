@@ -139,3 +139,8 @@ before the dais; the generator now seats them on the dais's axis, and on the cou
 0099's drawing page). The CINNABAR WORKSHOP drawn as the hand sheet's open shed - a colonnade-hatched roof on six posts, no door,
 not the compound shrine's paint (T359, glyph-check NEEDS-WORK: it was drawn with the shrine's exact fill and stroke and a door);
 with no door it takes no fire-water tub. `make pack-audit`: every check OK.
+
+2026-11-23 (feature 449 T383 bundle: T384, T388): the STABLE WELL 4 ft east, within the span of the stables' court face (its seats
+had run past the face's west end); the stables' GROOMS' ROOM opens onto the passage, its edge to it drawn dashed as the stalls' is
+(the county's building-review of 2026-11-23, E1: drawn solid, the room had no way in; a GUESS, no wall between them,
+research/questions/0108 silent on what stood between the tozamurai and the earth passage).

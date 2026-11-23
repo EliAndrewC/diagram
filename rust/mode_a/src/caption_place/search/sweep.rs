@@ -7,7 +7,7 @@
 use super::super::captions::Caption;
 use super::super::geom::{bbox, grow, length_inside, ring, turn, Pt, EPS};
 use super::super::index::{band, near, Own, Stance, Weight};
-use super::super::leader::leader;
+use super::super::leader::{leader, Slide};
 use super::interval;
 use super::{mid, seat_center};
 use super::{Frame, Placer, CHUNK_PX, LEADER_PAST_GAPS, RANKS, SWEEP_REACH_GAPS, SWEEP_START_GAPS};
@@ -34,6 +34,25 @@ struct Sweep {
     lead: f64,
 }
 
+/// Is an index entry another feature's ink a leader in `lb` could meet: a building or fixture's ink near the leader, not its own feature,
+/// nor ink its caption stands to as `Stance::Skip` (`Own::stance`), nor a caption (a leader past another name's
+/// letters was tried and sent a pool sheet's "Fox Clan lands" across the border it names, onto the far side's road), ground, a way or a
+/// named area.
+///
+/// Research: the ink a leader is kept off - CONVENTION: a building's or fixture's ink alone (an index entry of `Weight::Block`), never the caption's own feature, ink the caption stands to as `Stance::Skip` (the cases `Own::stance` lists), another caption's letters, ground, a way or a named area (every weight but `Block`) - the rule `Placer::leader_crosses` states, which the slide (`Placer::led`) shares
+fn other_ink(
+    lb: super::super::geom::Bx,
+    e: &super::super::index::Entry,
+    ix: &super::super::index::Index,
+    own: &Own<'_>,
+) -> bool {
+    // its own feature, outline and all, is where the leader ends
+    near(lb, e)
+        && !e.shape.is_some_and(|p| own.parts.contains(&p))
+        && own.stance(ix, e) != Stance::Skip
+        && e.weight == Weight::Block
+}
+
 impl Placer<'_> {
     /// Would a leader from `a` to `b` cross another feature: run through a building or fixture's ink past a clipped corner's allowance
     /// ([`CLIP_ALLOWED_GAPS`]), or along its drawn edge ([`ALONG_MIN_PX`]) - not another caption, open ground, a way, a named area drawn
@@ -45,16 +64,7 @@ impl Placer<'_> {
         let lb = grow(bbox(&[a, b]), (2.0 * self.ix.widest_edge).max(ALONG_MIN_PX));
         for id in self.ix.query(lb, "leader_cross") {
             let e = &self.ix.entries[id as usize];
-            // its own feature, outline and all, is where the leader ends
-            if !near(lb, e)
-                || e.shape.is_some_and(|p| own.parts.contains(&p))
-                || own.stance(&self.ix, e) == Stance::Skip
-            {
-                continue;
-            }
-            // a building or fixture's ink alone: not a caption (a leader past another name's letters was tried and sent a pool
-            // sheet's "Fox Clan lands" across the border it names, onto the far side's road), nor ground, a way or a named area
-            if e.weight != Weight::Block {
+            if !other_ink(lb, e, &self.ix, own) {
                 continue;
             }
             let poly: &[Pt] = &e.poly;
@@ -71,6 +81,82 @@ impl Placer<'_> {
             }
         }
         false
+    }
+
+    /// The leader drawn for a seated caption's tie: where it ends at a shared span's middle and another feature's ink stands on that line,
+    /// slid along the span, a pixel at a time, to the line meeting the least other ink - the middle of that run of lines nearest the
+    /// span's middle (the lower offset on a tie) - unless that line crosses a feature (`leader_crosses`) the middle's does not; else the
+    /// tie as drawn. The sweep asks its seats with the middle's line, so the slide moves no caption, only its leader.
+    ///
+    /// Research: a leader slid along its shared span - CONVENTION: 0330 leaves open which of a span's equally near points a leader ends at; the span's middle is taken (`leader::block_pair`) unless another feature's ink stands on that line, when the lines within the span a pixel apart are weighed by the ink each runs through or along and the middle of the run of least-ink lines nearest the span's middle is drawn, kept at the middle instead where that line crosses a feature (`Placer::leader_crosses`) the middle's does not (449 T384: at its middle the Ubame sheet's wood-kami altar's leader ran 1 px from a fire-water tub's center, where from the span's end it had passed the tub); the seat itself is chosen on the middle's line, the algorithmically easier route (a slide asked of every swept seat moved the Ochiba sheet's latrine name to a 164 px leader 1.75 px under the retainers' quarters' wall, observed 2026-11-23)
+    pub(super) fn led(
+        &mut self,
+        (a, b, slide): (Pt, Pt, Slide),
+        gap: f64,
+        own: &Own<'_>,
+    ) -> (Pt, Pt) {
+        let Some((u, half)) = slide else {
+            return (a, b);
+        };
+        let at = |k: i32| {
+            let o = (f64::from(k) * u.0, f64::from(k) * u.1);
+            ((a.0 + o.0, a.1 + o.1), (b.0 + o.0, b.1 + o.1))
+        };
+        if self.ink_met(at(0), own) <= EPS {
+            return (a, b);
+        }
+        #[expect(
+            clippy::cast_possible_truncation,
+            reason = "half a span on the sheet, a few hundred pixels at most"
+        )]
+        let n = half.floor() as i32;
+        let met: Vec<f64> = (-n..=n).map(|k| self.ink_met(at(k), own)).collect();
+        let least = met.iter().copied().fold(f64::INFINITY, f64::min);
+        let best = |k: i32| met[usize::try_from(k + n).unwrap_or_default()] <= least + EPS;
+        // the best line nearest the middle, the lower offset on a tie (`least` is one of `met`, so one is found), and the run of
+        // best lines it stands in
+        let k0 = (0..=n)
+            .flat_map(|d| [-d, d])
+            .find(|&k| best(k))
+            .unwrap_or_default();
+        let (mut lo, mut hi) = (k0, k0);
+        while lo > -n && best(lo - 1) {
+            lo -= 1;
+        }
+        while hi < n && best(hi + 1) {
+            hi += 1;
+        }
+        let k = f64::from(lo + hi) / 2.0;
+        let o = (k * u.0, k * u.1);
+        let slid = ((a.0 + o.0, a.1 + o.1), (b.0 + o.0, b.1 + o.1));
+        if self.leader_crosses(slid, gap, own) && !self.leader_crosses((a, b), gap, own) {
+            return (a, b);
+        }
+        slid
+    }
+
+    /// How much of another building's or fixture's ink a leader meets: its length through each, and along within a stroke's width of
+    /// each drawn edge - the two tests `leader_crosses` makes, summed.
+    ///
+    /// Research: the slide's measure - CONVENTION: the ink a line meets, through and along, summed over the features `other_ink` names;
+    /// `Placer::led` draws the line along the span that meets the least
+    fn ink_met(&mut self, (a, b): (Pt, Pt), own: &Own<'_>) -> f64 {
+        let lb = grow(bbox(&[a, b]), (2.0 * self.ix.widest_edge).max(ALONG_MIN_PX));
+        let mut met = 0.0;
+        for id in self.ix.query(lb, "leader_slide") {
+            let e = &self.ix.entries[id as usize];
+            if !other_ink(lb, e, &self.ix, own) {
+                continue;
+            }
+            let poly: &[Pt] = &e.poly;
+            let near_edge = (2.0 * e.edge).max(ALONG_MIN_PX);
+            count("exact_test@leader_slide", 2 * poly.len() as u64);
+            met += length_inside(a, b, poly);
+            met += ring(poly)
+                .map(|(c, d)| length_inside(a, b, &band(c, d, near_edge)))
+                .sum::<f64>();
+        }
+        met
     }
 
     /// The offsets along `r` from `c0` at which the block stays wholly on the sheet.
@@ -281,19 +367,7 @@ mod tests {
             ix,
         };
         let met = Met::default();
-        let own = Own {
-            parts: &[],
-            fbox_sheet: None,
-            ground: false,
-            at: 0,
-            clear_own_lines: false,
-            under: None,
-            region: false,
-            met: &met,
-            subtree: None,
-            stack: 0.0,
-            on_outline: false,
-        };
+        let own = bare(&met);
         assert!(placer.leader_crosses(((130.0, 80.0), (130.0, 120.0)), 4.0, &own));
         // past the corner (140, 100): at x = 140 the line stands at y = 90
         assert!(!placer.leader_crosses(((130.0, 80.0), (160.0, 110.0)), 4.0, &own));
@@ -303,6 +377,63 @@ mod tests {
         assert!(placer.leader_crosses(((140.5, 100.0), (140.5, 140.0)), 4.0, &own));
         // and 6 px off it, a clear line beside it
         assert!(!placer.leader_crosses(((146.0, 100.0), (146.0, 140.0)), 4.0, &own));
+    }
+
+    /// A caption that owns no drawn part, its leader asked of every other feature's ink.
+    fn bare(met: &Met) -> Own<'_> {
+        Own {
+            parts: &[],
+            fbox_sheet: None,
+            ground: false,
+            at: 0,
+            clear_own_lines: false,
+            under: None,
+            region: false,
+            met,
+            subtree: None,
+            stack: 0.0,
+            on_outline: false,
+        }
+    }
+
+    /// A slide is not kept where its line crosses a feature the middle's line does not (449 T384): the middle meets two small
+    /// sheds, 7 px through each (under twice the 4 px gap) and across their ends, while every other line within its 3 px of span
+    /// runs along a drawn edge for more than the gap (a 7 x 6 px store's face 3 px each side, the sheds' own sides 1.5 px off) - less
+    /// ink, but a crossing; so the middle's line is drawn.
+    #[test]
+    fn a_slide_onto_a_crossing_keeps_the_middle() {
+        let rect = |x: f64, y: f64, w: f64, h: f64| {
+            format!(
+                r##"<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1" data-kind="storehouse"/>"##
+            )
+        };
+        let body = [
+            rect(98.5, 10.0, 3.0, 7.0),
+            rect(98.5, 30.0, 3.0, 7.0),
+            rect(90.0, 60.0, 7.0, 6.0),
+            rect(103.0, 60.0, 7.0, 6.0),
+        ]
+        .concat();
+        let src = format!(
+            r#"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">{body}</svg>"#
+        );
+        let (shapes, view) = read_sheet(&src).unwrap();
+        let ix = Index::build(&shapes, view, vec![0; shapes.len()], usize::MAX);
+        let mut placer = Placer {
+            shapes: &shapes,
+            ix,
+        };
+        let met = Met::default();
+        let own = bare(&met);
+        let mid = ((100.0, 0.0), (100.0, 100.0));
+        let side = ((97.0, 0.0), (97.0, 100.0));
+        let (crossed, side_crossed) = (
+            placer.leader_crosses(mid, 4.0, &own),
+            placer.leader_crosses(side, 4.0, &own),
+        );
+        assert!(!crossed && side_crossed, "{crossed} {side_crossed}");
+        let got = placer.led((mid.0, mid.1, Some(((1.0, 0.0), 3.0))), 4.0, &own);
+        assert_eq!(got, mid);
     }
 
     /// The nearest free seat first, a tie to the higher rank even after a nearer seat is taken out of the list.

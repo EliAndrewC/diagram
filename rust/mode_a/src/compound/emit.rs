@@ -439,7 +439,7 @@ pub fn building(s: &mut Svg, b: &Building, at: Bx) {
         s.line(a, c, &format!(r#"stroke="{stroke}" stroke-width="1""#));
     }
     match b.interior.as_deref() {
-        Some("stables") => stables(s, b, at),
+        Some(STABLES) => stables(s, b, at),
         Some("cell") => cell(s, b, at),
         Some(OPEN_SHED) => shed_posts(s, at),
         _ => {}
@@ -563,11 +563,23 @@ fn from_court(at: Bx, court: Face, d: (f64, f64), a: (f64, f64)) -> Bx {
     }
 }
 
+/// The stable's grooms' room's depth from its court face, and the earth passage's depth behind it (feet).
+///
+/// Research: the stable's depths - GUESS: the grooms' room 9 ft and the passage 6 ft deep from the court face, the stalls the rest; 0108's drawing page is silent on both depths (it draws the grooms' quarters and the earth-floored passage before the stalls)
+pub const STABLE_DEPTHS: (f64, f64) = (9.0, 6.0);
+
+/// The interior that draws a building as a stable: the grooms' room, the passage and the stalls (`layout::door_specs` enters it at a
+/// gable into the passage).
+///
+/// Research: the stables' interior - NONE: the name a program gives a stable's interior, deciding nothing about the place
+pub const STABLES: &str = "stables";
+
 /// The stable's interior: the grooms' room on the court side, the earth passage before the stalls, the stalls one ken wide at the back.
 ///
 /// Research:
 ///     stables - research/questions/0108-stables-umaya.html, research/questions/0108-stables-umaya.drawing.html: a warrior's small stable three bays long, its one-bay stalls on board floors, the earth passage (kusa-no-ma) before them running its length, the grooms' room (tozamurai) across the passage; the depths GUESSES
 ///     stable stall width - research/questions/0108-stables-umaya.drawing.html: a stall one bay, one ken (~6 ft) wide, by convention
+///     grooms' room open to the passage - GUESS: the matted tozamurai opens onto the earth passage (kusa-no-ma), no wall between them, its edge drawn dashed as the passage's edge to the stalls is, the sheet's mark of an edge a body crosses where a solid interior line is a wall; 0108 puts the tozamurai across the kusa-no-ma from the stalls and is silent on what stood between them, and the stable is entered at its gable into the passage (449 T388; building-review 2026-11-23 E1: drawn solid, the grooms' room had no way in; impl-drift 2026-11-23 MISLABELED as a CONVENTION, a choice between built forms)
 fn stables(s: &mut Svg, b: &Building, at: Bx) {
     let court = back_face(b).opposite();
     let (len, deep) = if court.along_x() {
@@ -575,7 +587,7 @@ fn stables(s: &mut Svg, b: &Building, at: Bx) {
     } else {
         (b.h, b.w)
     };
-    let (grooms, passage) = (9.0, 6.0);
+    let (grooms, passage) = STABLE_DEPTHS;
     let edge = |s: &mut Svg, d: f64, attrs: &str| {
         let r = from_court(at, court, (d, d), (0.0, len));
         s.line((r.0, r.1), (r.2, r.3), attrs);
@@ -601,12 +613,9 @@ fn stables(s: &mut Svg, b: &Building, at: Bx) {
         );
         x += 6.0;
     }
-    edge(s, grooms, r##"stroke="#6B4F2A" stroke-width="1""##);
-    edge(
-        s,
-        grooms + passage,
-        r##"stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="3 2""##,
-    );
+    let open = r##"stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="3 2""##;
+    edge(s, grooms, open);
+    edge(s, grooms + passage, open);
 }
 
 /// The cell's lattice: short bars across its court face, linework at visible stroke width, and a bar beside its door wherever the

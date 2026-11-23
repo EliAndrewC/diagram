@@ -51,7 +51,7 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   and docs/buildings.md's scale doctrine no longer calls those wings validated. The mass the house gave up went to the
   lodgings, stores and office (as drawn since feature 374 wave 128: the office hall 113 x 38 (127 x 38 since feature 449 T265's armory bay, 118.5 x 38 since T336 stacked the writing and binding rooms in one 20 ft bay), the tax archive 18 x 24 (its size research 0100's records-store ceiling since feature 372 wave 105, its proportions a GUESS), the granary 50 x 26 (the registry's band, inside 0098's drawing page's 43-50 by 25-36 ft; 27 deep until feature 449 T309, 36 until T364), the barracks
   22 x 60 (five dwellings of 12 ft since feature 449 T309; 23 x 70 before), the staff long-house 22 x 60 (the karo's bay of 24 ft and two dwellings of 18 ft since feature 449 T329; 24 x 50 with three dwellings of 12 ft from T309; 24 x 82 before), the servants' row 48 x 19 (60 x 15 until feature 449 T336, 60 x 19 until T351), the stables 18 x 24, two storehouses 16 x 19 and
-  12 x 18 (unequal, as the Yokota pair), the gatehouse 40 x 12 and the guest house 40 x 42 (42 since wave 134, every building a foot or two clear of the wall's face)), which holds coverage in the jin'ya band without shrinking the envelope; each of those
+  12 x 18 (unequal, as the Yokota pair), the gatehouse 37.5 x 12 (40 x 12 until feature 449 T388) and the guest house 40 x 42 (42 since wave 134, every building a foot or two clear of the wall's face)), which holds coverage in the jin'ya band without shrinking the envelope; each of those
   sizes is a GUESS in its band.
 - **R07 approach**: a GENKAN on the office hall (feature 449 T291): the formal entrance form is a knob between 0104's two forms, rolled from the map's seed - exactly `random.Random(zlib.crc32(b"county-magistracy-example:formal entrance form")).choice(["a genkan on the office hall", "the roji, no genkan"])` = a genkan on the office hall - so the hall draws a porch of about 12 x 9 ft (0104's one shikidai measured) built out from its south face at its east end, east of the hearing court, onto the outer court the forecourt opens into; the guest's way runs on through the office (0104's drawing page), and the roji to the reception's shoe stone (the Koseki form, drawn until T291) is not drawn. The household's own doors: the kitchen's
   one outside door on its WEST face, onto the rear yard, which runs south into the kitchen yard (pass
@@ -64,9 +64,9 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   0098's drawing page's ~43-50 x 25-36 ft county granary (its size a GUESS) and the registry's 30-60 by 14-36 ft band
   (types.json), its 1,300 sq ft below the residence's house block of 1,344 as 0116's drawing page keeps a staging store's
   granary below the residence (feature 449 T364; 50 x 36 ft from T309, 50 x 27 ft since feature 374 wave 128, and 60 x 30 before).
-- **R19 guardroom**: a freestanding gatehouse BESIDE the gate (Takayama's form), ~40 x 12 ft as 0093's drawing page draws a
-  gatehouse of its own (its length a GUESS; 2 ken deep, measured), flush west of the gate's post (146 to 186 ft, the post 186
-  to 188; seated there again by feature 449 T353 after T329's gate move left it 40 ft west) - the gatekeepers' place
+- **R19 guardroom**: a freestanding gatehouse BESIDE the gate (Takayama's form), ~37.5 x 12 ft as 0093's drawing page draws a
+  gatehouse of its own (its length a GUESS; 2 ken deep, measured), flush west of the gate's post (148.5 to 186 ft, the post 186
+  to 188; seated there again by feature 449 T353 after T329's gate move left it 40 ft west; 40 ft long from 146 until 449 T388 trimmed 2.5 ft to give the stables' cart lane its room) - the gatekeepers' place
   follows from the one-bay gate, which has no range to hold a guardroom (feature 374 wave 128; it was 18 x 12 ft).
 - **R26 main gate**: 0093's form knob, rolled exactly `random.Random(zlib.crc32(b"county-magistracy-example:main gate form")).choice(["one-bay
   gate", "gate range"])` = one-bay gate: a yakuimon with an 8 ft frontage (research 0093: 6-8.5 ft, its 間口 read as the pillar-center span), its passage 7 ft between its posts - the frontage less one ~1 ft pillar, a GUESS (feature 374 wave 132; it was an 8 ft passage). Its posts are drawn about 2 ft square OUTSIDE that passage, a map drawing convention (wave 133), so the drawn posts' centers stand about 9 ft apart, wider than the real frontage.
@@ -103,7 +103,7 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   20-30 koku retainer 3 ken against the foot soldier's 2 (T320 Q5 above, outside the record), and the Sakai town
   magistracy gave each doshin a dwelling of his own of 2 by 3 ken, about 216 sq ft (research-pass 2026-11-23, not yet on a
   page). The men to a dwelling are a GUESS, 0097's few (its one case is three retainers sharing in 1860; eleven Sakai
-  dwellings would run 132 ft where the wall leaves 59). Until the building-review of 2026-11-23 (E1) the rowhouse was 36 x
+  dwellings would run 132 ft where the wall leaves about 58). Until the building-review of 2026-11-23 (E1) the rowhouse was 36 x
   18 ft in three dwellings of 12 x 18 ft, three or four men to each, about 59 sq ft a man - the samurai lodged below the
   ashigaru. Its seat a GUESS: at Sakai and the Sayama domain jin'ya the
   officials' rowhouses stood inside the grounds in the side or rear parts, apart from the gate (research-pass 2026-11-23),
@@ -150,10 +150,10 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   genkan's line), labeled, not moved: a small gate beside a magistrate's main gate is drawn at Joge in 1869 (0093: a main
   gate, a small gate, a gatekeepers' room and stone steps together at its east wall), with no distance given, so 21 ft
   is a GUESS (research-pass 2026-11-22, 449 T356).
-- **Cell**: on the south wall below the hearing court, 10 x 12 ft, joined to the junior retainers' quarters' east end (129
-  to 139 ft, 47 ft west of the main gate's west post) - 0096: a magistracy's temporary cell stood in the quarter that held its
-  court rooms (Edo's town magistracy); joined to the lodging because its own seat and a fire gap would not fit in the 59
-  ft of wall the stables and the gatehouse leave beside the rowhouse's 48 (47 beside its 36 until 449 T351), a GUESS (research-pass 2026-11-23: no source says whether a cell stood
+- **Cell**: on the south wall below the hearing court, 10 x 12 ft, joined to the junior retainers' quarters' east end (132.3
+  to 142.3 ft, about 44 ft west of the main gate's west post; 129 to 139 ft until 449 T388's stables' lane moved it 3.3 ft east) - 0096: a magistracy's temporary cell stood in the quarter that held its
+  court rooms (Edo's town magistracy); joined to the lodging because its own seat and a fire gap would not fit in the about 58
+  ft of wall the stables and the gatehouse leave beside the rowhouse's 48 (59 until 449 T388's cart lane, 47 beside its 36 until 449 T351), a GUESS (research-pass 2026-11-23: no source says whether a cell stood
   joined to a guardroom, a rowhouse or the gatehouse, or alone; Naruto's domain jin'ya kept its jail on the west side,
   its gate on the south). The seat matches 0096's Chinese case most closely: the Neixiang county yamen set its prison on
   the west side of its first courtyard, in the south-west, inside the main gate with the runners' quarters, short of the
@@ -557,3 +557,27 @@ Supersedes the entry above's hall at 58.5 to 185.5 ft, archive at 34.5 to 52.5 f
   `ask:cell-lattice-hidden-449-T351`; the Knob settings' lattice bullet); the cell is unmoved. The cell's tub bullet
   restated: the rowhouse's tub stands about 43 ft west of the cell's door, where it said 30 (building-review 2026-11-23
   N1). `make pack-audit`: every check OK, coverage 31%.
+- **2026-11-23 (feature 449 T383 bundle: T388, T384)**: **the stables entered at the gable, with a cart's lane before it**. The
+  stables declare no door, so the generator now opens a stable on its WEST gable at the passage's middle, 12 ft from its court
+  face (the grooms' room 9 ft, the passage 6; research/questions/0108's warrior's stable is entered at its gable into the
+  passage; which gable is a GUESS) - before this its only door opened into the grooms' room. That gable fronts the lane
+  between the servants' row and the stables, and the door's fire-water tub stands 3.27 ft off the gable, which left a cart
+  2.73 ft of the 6 ft lane. Measured before drawing: the south row west of the main gate held 1 ft spare, and the lane a cart
+  route needs past a door's tub is the cart's 6 ft and the tub's 3.27, about 9.3 ft (the generator's cart lane, a GUESS).
+  Trials (the generator and make pack-audit on trial specs, 2026-11-23): the row as it stood refused the cell its seat; the
+  gatehouse at 37.5 or 36 ft fit with nothing else moved, coverage 31%; the envelope 3 ft wider fit too, but widened the
+  outer court's west column, the sheet's largest vacancy, from 29 to 31 x 107 ft. So the GATEHOUSE is 37.5 x 12 ft (its 40
+  a GUESS), 148.5 to 186 ft, and the stables, the junior retainers' quarters and the cell stand 3.3 ft east (the stables 60.3
+  to 78.3 ft, the rowhouse 84.3 to 132.3, the cell 132.3 to 142.3), the lane 9.3 ft. The STABLE WELL now stands within the
+  span of the stables' court face (its seats ran 4 ft past each end of the face, and it stood past the west end, over the lane's mouth). The caption placer meets
+  a privy and its building at the middle of the span they share, and slides a leader along that span past other ink, so
+  both privies' leaders run clear: the servants' privy's down the lane 8 px off the servants' row, 18 off the stables and 9 off the tub, the
+  stables' privy's midway between the stables and the rowhouse, 8 px off each (superseding the two filed leaders of the T351 entry). `make pack-audit`:
+  every check OK, coverage 31%; it lists the lane among the aligned gaps (9.3 ft, LOOSE against the 8 ft wooden fire gap),
+  a listing, not a check. The shared gatehouse pop-up and docs/building-programs.md still say about 40 ft, which 37.5 is. Figures
+  above this entry that it supersedes: the stables at 57 to 75 ft, the rowhouse at 81 to 129, the cell at 129 to 139 and the
+  gatehouse 40 ft long at 146 to 186 (the T351 entry), and the 59 ft of wall beside the rowhouse.
+  The building-review of 2026-11-23 found the GROOMS' ROOM then sealed (E1): with the door at the gable, its edge to the
+  passage was still drawn solid, a wall on this sheet, so the room had no way in. Both of the passage's edges, the grooms' room's
+  and the stalls', are now drawn dashed, open (a GUESS, no wall between the room and the passage: research/questions/0108 puts
+  the matted tozamurai across the earth passage from the stalls and is silent on what stood between them).

@@ -137,6 +137,31 @@ fn each_well_by_its_use_and_its_gear_rolled() {
         .contains("no room for the stables' well"));
 }
 
+/// The stables' well stands before their court face within the face's own span (449 T384: seated from 4 ft past the face's west end, the
+/// county example's stables' well stood over the lane's mouth beside them, so a leader down the lane to the servants' privy met it); a
+/// stable entered at its gable, its court face clear.
+#[test]
+fn the_stables_well_stands_within_its_court_face() {
+    let stables = b(
+        "stables",
+        "stables",
+        "service",
+        (18.0, 24.0),
+        "outer",
+        "S",
+        r#", "interior": "stables""#,
+    );
+    let p = with(&[stables], r#", "parts": {"wells": ["stables"]}"#);
+    let (mut l, mut s) = (laid(&p), Seated::default());
+    wells(&p, &mut l, &mut s).unwrap();
+    let sb = l.seats[0].unwrap();
+    let curb = s.wells[0].bx;
+    let within = curb.0 >= sb.0 && curb.2 <= sb.2;
+    assert!(within, "the curb {curb:?} past the face {sb:?}");
+    let before = curb.3 < sb.1;
+    assert!(before, "the curb {curb:?} before the north face {sb:?}");
+}
+
 #[test]
 fn a_tub_stands_beside_a_door_or_round_the_nearer_corner() {
     let closed = r#", "zones": [{"kind": "practice ground", "x": 0, "y": 13, "w": 100, "h": 30}]"#;

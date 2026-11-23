@@ -119,7 +119,7 @@ fn reader(pipe: Option<impl Read + Send + 'static>) -> std::thread::JoinHandle<V
 #[cfg(not(test))]
 const SECOND: Duration = Duration::from_secs(1);
 #[cfg(test)]
-const SECOND: Duration = Duration::from_millis(50);
+pub(crate) const SECOND: Duration = Duration::from_millis(50);
 
 /// A timeout of `n` of the cases file's seconds.
 fn seconds(n: u64) -> Duration {

@@ -22,7 +22,7 @@
 use super::captions::{drawn_half, Caption, PITCH_EM};
 use super::geom::{bbox, block, grow, holds, quad_gap, turn, Bx, Pt, EPS};
 use super::index::{band, covers, near, Index, Met, Own, Stance, Weight};
-use super::leader::leader;
+use super::leader::leader_span;
 use super::wrap::cut;
 use super::Shape;
 use crate::work_counts::count;
@@ -541,12 +541,13 @@ impl Placer<'_> {
         let mut seat = self.search(cap, &fr, &own);
         if let How::Swept(d, _) = seat.how {
             if d > LEADER_PAST_GAPS * cap.gap {
-                seat.leader = leader(
+                seat.leader = leader_span(
                     seat.center,
                     (seat.w, seat.h, seat.angle),
                     self.shapes,
                     &cap.parts,
-                );
+                )
+                .map(|t| self.led(t, cap.gap, &own));
             }
         }
         count("write@seat", 6);

@@ -4286,170 +4286,140 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#archery bank": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "archery bank - drill-grounds-archery-ranges-and-riding-grounds-jiaochang-yaba-baba: a samurai's yaba is about 250 x 8 ft (33 bow-lengths by one), the azuchi at its end",
   "code": "c42c13d16be2e01f",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0164-drill-grounds-archery-ranges-and-riding-grounds-jiaochang-yaba-baba.html": "6690901d517f62f4"
   },
   "research": "2a6aa575cd1e6d92",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#barracks": {
-  "body": "7f2d3d0136950875",
+  "body": "2fc070a65f766f49",
   "claim": "barracks - staff-rowhouses-and-barracks-nagaya, staff-rowhouses-and-barracks-nagaya.drawing: an on-grounds rowhouse divided into dwellings of a few men each, never the servants' common room, no bunks; a long, narrow building 12 to 24 ft deep, never square or squat, up to ~145 ft long; the county example's range 24 x 67 ft",
   "code": "1e1d9038d338a62c",
-  "core": "a539979e1f81b8a5",
+  "core": "7fa29140318d8931",
   "date": "2026-11-23",
-  "note": "long, narrow, 12-24 ft deep, bays 12-18 ft, up to ~145 ft, divided into dwellings with earth-floored entries, no bunks, servants apart",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "00e9e07782d55568",
    "0097-staff-rowhouses-and-barracks-nagaya.html": "50ee4a47658ecdd5"
   },
   "research": "fdb151ba37c6995c",
-  "rests": [
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:40d18dac4b203306",
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:5af10000ff095a2e",
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:6d20e14e8c281ff8",
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:89d8ed3a585ca83b",
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:921e9524e0a5f213",
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:e642c0c29724ff19",
-   "0097-staff-rowhouses-and-barracks-nagaya.html:23ec574c774f6bed",
-   "0097-staff-rowhouses-and-barracks-nagaya.html:61dd49787a4e79c2",
-   "0097-staff-rowhouses-and-barracks-nagaya.html:6d3c8454a171bb85"
-  ],
-  "section": "a539979e1f81b8a5",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#barracks watch of ~10-20 men": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "barracks watch of ~10-20 men - GUESS: ten to twenty men, this project's figure for a small office's guard, round the setting's ~15 samurai of a county town (CANON); the-size-of-a-compound-and-the-rank-of-its-buildings records the figure as this project's guess, its sources silent on a guard's number",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "904f000121599f4f",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "0116 gives \"a barracks for ten to twenty men, this project's figure for a small office's guard\" and names the barracks' strength as a GUESS; the ~15 samurai is the staffing CANON",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html": "cabe03303ad641cc"
   },
   "research": "7effcb6ab942d400",
-  "rests": [
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:8a9c6454630327b1"
-  ],
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#cart yard as a charcoal fire gap": {
-  "body": "5845026ab1346c05",
+  "body": "2fc070a65f766f49",
   "claim": "cart yard as a charcoal fire gap - charcoal-yards-and-charcoal-stores.drawing, the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: no fire gap is drawn round a charcoal store - its plaster kura wall is its protection; Ubame's cart yard between the tally range and the store is a loading apron, 15 ft, inside the 15-20 ft band",
   "code": "e8e5e5e5ea395f5e",
-  "core": "168f471b895b7bff",
+  "core": "7fa29140318d8931",
   "date": "2026-11-23",
-  "note": "a plastered store at the ordinary spacing with no set fire gap; the 15 ft apron is inside 15-20 ft",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "ad3a24813bc8cf44",
    "0197-charcoal-yards-and-charcoal-stores.drawing.html": "fba749a9a3f24a9c"
   },
   "research": "6d6a831a0e76d2d7",
-  "rests": [
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:a911be254a00f660",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:d5771190473dcae4",
-   "0197-charcoal-yards-and-charcoal-stores.drawing.html:0ad7edfc766bacb6",
-   "0197-charcoal-yards-and-charcoal-stores.drawing.html:7a657acf6f84c329"
-  ],
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#cell": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "cell - holding-cells-agariya-and-roya: ~12 x 10 ft remand cell, small end of the 6-18 mat span, shared by several prisoners",
   "code": "030a176fdd2fdabc",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0096-holding-cells-agariya-and-roya.html": "4fc28379c7ed7e0c"
   },
   "research": "2d6f6f525cd81227",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#cell kept well under the barracks": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "cell kept well under the barracks - holding-cells-agariya-and-roya: the cell rooms measured are 6 to 18 mats, and 0097's office rowhouses run far longer; no magistracy's own cell is measured; the cell drawn smaller than the barracks; no page ranks them",
   "code": "854bfcb7725b6877",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0096-holding-cells-agariya-and-roya.html": "4fc28379c7ed7e0c"
   },
   "research": "2d6f6f525cd81227",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#charcoal bales": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "charcoal bales - straw-bales-of-rice-and-charcoal-tawara.drawing: a bale drawn about 4 ft long by convention (a charcoal bale ~2 x 1.3 ft); Ubame's sheet draws each 4 x 2.7 ft",
   "code": "5aa539b80f39b0bc",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html": "c4e837038c94b2f6"
   },
   "research": "7e00071421669e15",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#charcoal weighing floor": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "charcoal weighing floor - charcoal-yards-and-charcoal-stores.drawing: a weighing floor of 16 x 14 ft; Ubame's sheet draws it so, at the cart yard's edge",
   "code": "bfa5869d5ea145c3",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0197-charcoal-yards-and-charcoal-stores.drawing.html": "fba749a9a3f24a9c"
   },
   "research": "7a250f14854ed763",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#clerk positions at the dais": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "clerk positions at the dais - DEVIATION the-hearing-court-shirasu.drawing: two clerk positions flanking the dais in the front band, level with it, not in a room of their own before it as at Edo",
   "code": "e964791622519625",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0099-the-hearing-court-shirasu.drawing.html": "dd0862ad66c3d9b5"
   },
   "research": "c4cd106ab182559c",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#forecourt": {
-  "body": "434b0b5c9f81d0c0",
+  "body": "2fc070a65f766f49",
   "claim": "forecourt - the-size-of-a-compound-and-the-rank-of-its-buildings, the-formal-entrance-and-a-guests-arrival-genkan, the-formal-entrance-and-a-guests-arrival-genkan.drawing, the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: the forecourt is the open ground just inside the main gate, the ground the office hall's entrance faces; every sheet labels it there (Hayakawa's label moved from the strip behind the office hall in feature 374 wave 125), and the county draft's forecourt zone stands inside the gate",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "3da4d0435f93d1ac",
-  "core": "168f471b895b7bff",
-  "date": "2026-11-22",
-  "note": "the open ground just inside the main gate, with the entrance facing it, is the Joge drawing's arrangement, and the forecourt is held open",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "cfeda035702c9f99",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "17fc301f61dfc5af",
@@ -4457,474 +4427,421 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html": "cabe03303ad641cc"
   },
   "research": "acd35ba8fd749f3a",
-  "rests": [
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:096177a66b97c551",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:a7771290ebe77a35",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a03546f09ade6617",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:294ade5001734dd1"
-  ],
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#granary forms": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "granary forms - storehouses-for-the-tax-rice: raised on posts or earth-walled kura",
   "code": "7ee5d49dbb695fcd",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0098-storehouses-for-the-tax-rice.html": "70dd57b7a75f0728"
   },
   "research": "df12d42de406aacb",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#granary kept under a residence block": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "granary kept under a residence block - GUESS the-size-of-a-compound-and-the-rank-of-its-buildings.drawing, storehouses-for-the-tax-rice.drawing: the ceiling tied to the granary-weight knob - a staging store's granary held below the residence, a terminal store's allowed to be the largest building, as Takayama's rice store was; the tie to the rice held a guess from the one office measured",
   "code": "9963b94a98d960ba",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0098-storehouses-for-the-tax-rice.drawing.html": "e896fcb23a277618",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "ad3a24813bc8cf44"
   },
   "research": "348a4d20a9311413",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#granary label": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "granary label - storehouses-for-the-tax-rice: labeled `granary`, not `rice granary` - not all that a tax store held was rice: a reserve kept rice and other grain",
   "code": "7f22958faf5cd395",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0098-storehouses-for-the-tax-rice.html": "70dd57b7a75f0728"
   },
   "research": "df12d42de406aacb",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#granary size": {
-  "body": "16d71fb80afd19ea",
+  "body": "2fc070a65f766f49",
   "claim": "granary size - GUESS storehouses-for-the-tax-rice.drawing: ~43-50 x 25-36 ft (about 1,100 to 1,800 sq ft; the county example 50 x 26, below its residence's house block, feature 449 T364), no page gives a county office granary's size or count",
   "code": "2e51184d0e667c56",
-  "core": "a539979e1f81b8a5",
+  "core": "7fa29140318d8931",
   "date": "2026-11-23",
-  "note": "43-50 x 25-36 ft as the page's GUESS; the county example's 50 x 26 is inside it",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0098-storehouses-for-the-tax-rice.drawing.html": "e896fcb23a277618"
   },
   "research": "f5bdb48cfc27fd6a",
-  "rests": [
-   "0098-storehouses-for-the-tax-rice.drawing.html:88a82624394e0adc"
-  ],
-  "section": "a539979e1f81b8a5",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing cart slot": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "hearing cart slot - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); a cart-passable ~8-10 ft slot south of the hearing court",
   "code": "e64c1ae215e23fa4",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {},
   "research": "",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing court": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "hearing court - the-hearing-court-shirasu: roofed, white gravel or river cobbles, south of the dais, size a guess",
   "code": "99c82eb56e42afaf",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0099-the-hearing-court-shirasu.html": "d119ed51c6757d44"
   },
   "research": "1afb662cf7afb7b5",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing court posts": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "hearing court posts - the-hearing-court-shirasu.drawing: posts along the roofed court's open side, two ken (~12 ft) apart and 1 ft square, their size and spacing a GUESS",
   "code": "ffcdee1bff26c0fa",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0099-the-hearing-court-shirasu.drawing.html": "dd0862ad66c3d9b5"
   },
   "research": "c4cd106ab182559c",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing mat size": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "hearing mat size - GUESS the-hearing-court-shirasu.drawing: the accused's mat ~6x3 ft, the project's own guess; the 3 by 6 ft of a farm threshing mat is a borrowed figure",
   "code": "172d9c58c23708d3",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0099-the-hearing-court-shirasu.drawing.html": "dd0862ad66c3d9b5"
   },
   "research": "c4cd106ab182559c",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing mats": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "hearing mats - the-hearing-court-shirasu: accused at the center, plaintiff and village officials behind",
   "code": "fb93a0b37e155471",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0099-the-hearing-court-shirasu.html": "d119ed51c6757d44"
   },
   "research": "1afb662cf7afb7b5",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#kura granary door on the apron": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "kura granary door on the apron - GUESS: searched, the record silent (feature 417 T36 pass P8, 2026-10-25); the plastered granary's door set on the loading apron, where the carts stand",
   "code": "38563962a887501e",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {},
   "research": "",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#office hall": {
-  "body": "7f2d3d0136950875",
+  "body": "2fc070a65f766f49",
   "claim": "office hall - the-office-hall-and-its-clerks-goyakusho.drawing, the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen: ~112-120 x 28 ft block (Ochiba's 112 since 449 T336; Hayakawa 113 x 28, Ubame 110 x 28; the generated county example 118.5 x 38 since T336, 127 before, 113 before its armory bay), inside the 80-150 by 20-45 ft band whose proportions are a GUESS; backing the divider, the clerks' room, day office and study behind (the writing and binding rooms a GUESS), dais band in front, courtroom a room of it; the official study at the back row's end away from the armory, beside the day office (the east end where the armory rolls the west end bay, the west where it rolls the east), a GUESS: 0113's drawing page records only the east seat, with the armory at the west end, and the mirror rests on 0123's finding that the armory's side varied (449 T334, T367); which room backs the dais a GUESS: the 449 T337 research pass (2026-11-22) found a jin'ya silent; the drawing page reads the North Town Magistracy's plan of 1841 and the South's of 1842, the North's with a room named shirabe no ma behind the saikyosho, whose use no page we read states (only its name suggests examiners), so the order west to east is kept and the clerks' room behind the dais band is a GUESS",
   "code": "c8d863d6cbb9c04f",
-  "core": "a539979e1f81b8a5",
+  "core": "7fa29140318d8931",
   "date": "2026-11-23",
-  "note": "the claim says \"0113's drawing page records only the east seat, with the armory at the west end\", but §234 now records Hayakawa's mirrored row (study west, armory east). The sizes, the band, the clerks' room behind the dais as a GUESS and the mirror resting on 0123 all hold; fix: claim; effect: none",
+  "note": "the claim says \"0113's drawing page records only the east seat, with the armory at the west end\", but §234 now records Hayakawa's mirrored row (study west, armory east). The sizes, the band, the clerks' room behind the dais as a GUESS and the mirror resting on 0123 all hold; fix: claim; effect: none; a known drift accepted by the round arbiter (ask:449-T383-docs-section-claims) to land as filed",
   "pages": {
    "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html": "9697f011d4a0aab6",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0c02e855b599232a"
   },
   "research": "624224867e825fa0",
-  "rests": [
-   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:8b951ac5f09380b7",
-   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:dd1082c27eb94aa1",
-   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:ea89a5119ff04cd6",
-   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:eb3660db491073e6",
-   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:ec14809f1baa9b10",
-   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:fc3004618d50ce19",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:e338e2ef521deb03",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:ede1f2e7a1ea672c"
-  ],
-  "section": "a539979e1f81b8a5",
+  "section": "7fa29140318d8931",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#office hall room sizes": {
-  "body": "7f2d3d0136950875",
+  "body": "2fc070a65f766f49",
   "claim": "office hall room sizes - GUESS the-office-hall-and-its-clerks-goyakusho.drawing: the page places the day office and the study and sizes neither; the day office at most about 490 sq ft (a province's ceiling: the room where Takayama's officials sent from the shogunate worked, 26-28 mats on the size-audit's secondhand reading of 2026-11-22; 0113 gives no room's mats and names the whole ~8,124 sq ft office block the goyakusho) and the official study 8-12 mats, 16-20 with its anteroom (the size-audit's Kochi residences anchor, 2026-11-22), the registry's bands (types.json, docs/building-programs.md)",
   "code": "21f9262c69d223ef",
-  "core": "a539979e1f81b8a5",
+  "core": "7fa29140318d8931",
   "date": "2026-11-23",
-  "note": "the page places the day office and study and sizes neither; the goyakusho is ~8,124 sq ft",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html": "9697f011d4a0aab6"
   },
   "research": "92887c40cd374870",
-  "rests": [
-   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:ea89a5119ff04cd6",
-   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:eb3660db491073e6"
-  ],
-  "section": "a539979e1f81b8a5",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#one storehouse at the office": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "one storehouse at the office - storehouses-for-the-tax-rice.drawing: one storehouse at a county office, any row at the town's river landing",
   "code": "b80cbcfe1151e36c",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0098-storehouses-for-the-tax-rice.drawing.html": "e896fcb23a277618"
   },
   "research": "f5bdb48cfc27fd6a",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "practice ground - martial-training-grounds-and-dojo.drawing: swept patch with a weapon rack and striking posts, no hall",
   "code": "a11c3c4365b7ecf6",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
   "research": "8b27404bc31588ce",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground area": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "practice ground area - GUESS martial-training-grounds-and-dojo.drawing: ~90-135 sq ft per drilling samurai",
   "code": "f697ec77c5137368",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
   "research": "8b27404bc31588ce",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground placement": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "practice ground placement - martial-training-grounds-and-dojo.drawing: a practice ground beside the guards' quarters",
   "code": "21e859b50404fa43",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
   "research": "8b27404bc31588ce",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground shared with cart staging or muster": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "practice ground shared with cart staging or muster - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); the open ground serves also as cart staging or muster",
   "code": "10fa6083d6ba4c64",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {},
   "research": "",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground striking posts": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "practice ground striking posts - GUESS martial-training-grounds-and-dojo.drawing: 1-2 posts, ~1 ft across, drawn as small markers; the page records the number drawn as a guess and the marker as a convention",
   "code": "5d27333c8240d5a0",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
   "research": "8b27404bc31588ce",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground weapon rack": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "practice ground weapon rack - GUESS martial-training-grounds-and-dojo.drawing: ~8x2 ft rack flush against the adjacent wall",
   "code": "df014302595b55f5",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
   "research": "8b27404bc31588ce",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#stable below barracks": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "stable below barracks - GUESS the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: stable drawn smaller than the barracks; no page says where a stable ranked among an office's buildings",
   "code": "01629f632784cf2b",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "ad3a24813bc8cf44"
   },
   "research": "be56f0f2dddd8a88",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#stable passage and grooms' quarters": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "stable passage and grooms' quarters - stables-umaya.drawing: an earth-floored passage before the stalls and the grooms' room in the stable, on every sheet",
   "code": "6ab1dc7d5b295079",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95"
   },
   "research": "96ea0c83b210c787",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#stable stall width": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "stable stall width - stables-umaya.drawing: a stall one bay, one ken (~6 ft) wide, by convention; `stall_width` holds it",
   "code": "00593a70b1207d81",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95"
   },
   "research": "96ea0c83b210c787",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#stables": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "stables - stables-umaya, stables-umaya.drawing: a warrior's small stable three bays long, its one-bay stalls on board floors, the earth passage (kusa-no-ma) before them running its length, the grooms' room (tozamurai) across the passage; ~18 x 24 ft, the depths and the 2-4 horses GUESSES",
   "code": "019996e611134755",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95",
    "0108-stables-umaya.html": "e28bb721c804f4bf"
   },
   "research": "c31147aaa37b5dd2",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#tax archive drawn with white-plaster fill, heavy stroke and dark door mark": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "tax archive drawn with white-plaster fill, heavy stroke and dark door mark - CONVENTION: the sealed kura shown plastered, distinct from the post-raised granary's vented slats; where the granary rolls an earth-walled kura it is drawn plastered too, and the two are told apart by their labels",
   "code": "d11ab3d69052ff16",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {},
   "research": "",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#tax archive size": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "tax archive size - fire-and-the-fireproof-storehouses-dozo.drawing: a records kura of no more than ~450 sq ft, drawn 24 x 18 ft (its shape a GUESS)",
   "code": "991414e92d8b8e29",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc"
   },
   "research": "9fd73eb86394c59a",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#tax archive strongroom role": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "tax archive strongroom role - fire-and-the-fireproof-storehouses-dozo: the Takayama book storehouse held records only, and 0123 has Pingyao keep its money, grain tax and arms inside the great hall, its granary behind the offices - one kura is drawn for ledgers, coin and valuables, a departure the code keeps until feature 417 T33; ledgers plus coin and in-kind valuables in one kura",
   "code": "72fb98f908a010a0",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "known (417 T33): one kura is drawn for ledgers, coin and in-kind valuables, where Takayama's book storehouse held documents and Pingyao kept money and grain in the hall's east end bay; fix: code; effect: the tax archive reads as the county's strongroom, which neither office attests; a known drift accepted by the round arbiter (ask:t312-claims-accept) to land as filed",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "known (417 T33): one kura is drawn for ledgers, coin and in-kind valuables, where Takayama's book storehouse held documents and Pingyao kept money and grain in the hall's east end bay; fix: code; effect: the tax archive reads as the county's strongroom, which neither office attests; a known drift accepted by the round arbiter (ask:t312-claims-accept) to land as filed; a known drift accepted by the round arbiter (ask:449-T383-docs-section-claims) to land as filed",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.html": "3c749344c62e4cb3"
   },
   "research": "03f4b949586797ba",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#the granary behind the offices": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "the granary behind the offices - the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen: Pingyao's granary north of the office buildings behind its war, justice and works offices, on the office side and not in the residence's court",
   "code": "a00ec5e10ea9adb8",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0c02e855b599232a"
   },
   "research": "8704c82f4702d7f1",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#the granary below a barracks": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "the granary below a barracks - GUESS the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing: where a barracks takes the head of the office court's flank column, the granary stands below it in the same column, still on the office side and outside the household's court (Ochiba's round trip, a room-first choice its notes record: no room on its wall for the barracks with the orders swapped, a /tmp trial 2026-11-22), the seat the page records",
   "code": "e24ae6ad550d95d7",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html": "e6af4547032e86b0"
   },
   "research": "fec546b26ae12ab1",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#the granary's seat in the office court": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "the granary's seat in the office court - GUESS the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing: at a magistracy it stands at the head of one of the office court's flank columns, its north face on the divider, beside the office hall's end, the plan having no side-wing offices for Pingyao's seat north of them (the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen) to be drawn against (the room priced: docs/building-programs.md, the granary at the head of an office-court column); refused in the household's inner court (feature 449 T274)",
   "code": "3b6720b3eaa66ee1",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html": "e6af4547032e86b0",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0c02e855b599232a"
   },
   "research": "be197fba4db86608",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#the kura granary's vents not drawn": {
-  "body": "d5a65102b0f65128",
+  "body": "2fc070a65f766f49",
   "claim": "the kura granary's vents not drawn - CONVENTION: a plan shows a wall's footprint, not the ventilation gaps in its face",
   "code": "6fdd0e263d336a4e",
-  "core": "8fee1b726a8dc621",
-  "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "core": "7fa29140318d8931",
+  "date": "2026-11-23",
+  "note": "accepted by the round arbiter (ask:449-T383-docs-section-claims), binding",
   "pages": {},
   "research": "",
-  "section": "a539979e1f81b8a5",
-  "triaged": "2026-11-23",
+  "section": "7fa29140318d8931",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Period defaults: Edo for the civil, Sengoku for the military#L5R divergences kept": {
@@ -7407,6 +7324,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/audit/checks/walls.rs::PRACTICE_GROUND#the practice ground's tag": {
+  "body": "ddd36645aaf4b15e",
+  "claim": "the practice ground's tag - NONE: the name a sheet tags its practice ground with, deciding nothing about the place",
+  "code": "b931b55d4e24c716",
+  "core": "c78ed3f97ac677bd",
+  "date": "2026-11-23",
+  "note": "a tag string only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/audit/checks/walls.rs::PassageBlocker#the wall's checks": {
   "body": "0074ba279b49ea73",
   "claim": "the wall's checks - NONE: a parsed sheet's walls and buildings measured against the thresholds whose claims stand on each, deciding nothing more",
@@ -7472,51 +7401,66 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/checks/walls.rs::aligned_gaps#its reported gap": {
-  "body": "72578f913363b909",
-  "claim": "its reported gap - NONE: they decide nothing about the place - 90 (upper bound on the reported gap, a report window)",
-  "code": "c2fc9144981c62ba",
-  "core": "7f5c8aa542823f70",
-  "date": "2026-11-17",
-  "note": "90 is the upper bound of the same range `(15.0..=90.0)` (5-30 ft) whose 15 and 30 the sibling claim labels a GUESS reporting window; 90 decides that buildings more than 30 ft apart are not judged for spacing. It should be GUESS, folded into the window claim",
-  "outside": true,
+ "rust/mode_a/src/audit/checks/walls.rs::aligned_gaps#a practice ground in the gap": {
+  "body": "937b17dd42f01df5",
+  "claim": "a practice ground in the gap - CONVENTION: a drawn practice ground (its rects tagged `practice ground`, 0165's drawing page's swept patch of open ground kept for daily keiko) standing in the corridor is ground laid out for a use, read as a third building there is, not the unbuilt slack the report lists (449 T383: Ochiba's practice ground between its tax archive and the senior retainers' quarters was listed as a loose 29.3 ft kura gap)",
+  "code": "5124a9a9ceb41582",
+  "core": "fb149ebd135353e8",
+  "date": "2026-11-23",
+  "note": "fills tagged practice ground block the corridor through `blocked`, as the claim says",
   "pages": {},
-  "reads": "7fb9c300fd0245ef",
+  "reads": "e8e73a6a6378de21",
   "research": "",
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/checks/walls.rs::aligned_gaps#its reported gap": {
+  "body": "937b17dd42f01df5",
+  "claim": "its reported gap - GUESS: no source could speak to it, a value of ours, the top of the reporting window above - 90 (upper bound on the reported gap, 30 ft: buildings farther apart are not judged for spacing)",
+  "code": "8d4e35b7feb6a61d",
+  "core": "fb149ebd135353e8",
+  "date": "2026-11-23",
+  "note": "90 px / FTPX 3 = 30 ft upper bound",
+  "pages": {},
+  "reads": "e8e73a6a6378de21",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/checks/walls.rs::aligned_gaps#its salts, guards and sentinels": {
   "body": "72578f913363b909",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 15 (dedupe radius)",
-  "code": "b728805022193239",
-  "core": "7f5c8aa542823f70",
+  "code": "0e6389c4946e0810",
+  "core": "fb149ebd135353e8",
   "date": "2026-11-17",
   "note": "15 px dedupe radius is plumbing",
   "pages": {},
-  "reads": "7fb9c300fd0245ef",
+  "reads": "e8e73a6a6378de21",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/checks/walls.rs::aligned_gaps#its search steps and tolerances": {
   "body": "72578f913363b909",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N13, 2026-10-25) - 30 (reporting window: 10 ft shared edge, gaps from 5 ft)",
-  "code": "8fba3827ac914939",
-  "core": "7f5c8aa542823f70",
+  "code": "a99ddf893c4eeb42",
+  "core": "fb149ebd135353e8",
   "date": "2026-11-17",
   "note": "reporting window is a guess, no page gives one",
   "pages": {},
-  "reads": "7fb9c300fd0245ef",
+  "reads": "e8e73a6a6378de21",
   "research": "",
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/checks/walls.rs::blocked#the wall's checks": {
-  "body": "ce77d230e40aafb4",
+  "body": "ab43452e2c2c8d8c",
   "claim": "the wall's checks - NONE: a parsed sheet's walls and buildings measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "ba8b964f1ec6ab68",
-  "core": "4216b31c9b11f0b2",
-  "date": "2026-11-17",
-  "note": "geometry",
+  "code": "d1668e8babad2bc1",
+  "core": "227911a7ccbef252",
+  "date": "2026-11-23",
+  "note": "an overlap test against other buildings and grounds; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -13439,18 +13383,34 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/leader.rs::End#the leader's end": {
-  "body": "b9cb6b3c5ba85f82",
+  "body": "ff8289acc59c36aa",
   "claim": "the leader's end - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a leader ends at the nearest drawn point of its feature's own parts, on the ink as drawn, never in a dash's gap",
-  "code": "ca980e8121c44653",
-  "core": "c496b17daae4a9ba",
-  "date": "2026-11-19",
-  "note": "a tuple holding distance and the tie-order fields; it decides nothing itself",
+  "code": "999768da7eb80434",
+  "core": "5d3f5bb9caf61414",
+  "date": "2026-11-23",
+  "note": "holds the end and the tie-order fields, decides nothing itself",
   "pages": {
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
   "research": "8934043f3fa21e6c",
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:094a571aefe85254",
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:64021411c0f9e4ba"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/leader.rs::Pair#the leader's end": {
+  "body": "cf458f82b18350b4",
+  "claim": "the leader's end - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a leader ends at the nearest drawn point of its feature's own parts, on the ink as drawn, never in a dash's gap",
+  "code": "75086a9a6ac90ddc",
+  "core": "0c76a278c4ac2f2f",
+  "date": "2026-11-23",
+  "note": "holds the pair of ends and the slide",
+  "pages": {
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
+  },
+  "research": "8934043f3fa21e6c",
+  "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:64021411c0f9e4ba"
   ],
   "verdict": "IN-STEP"
@@ -13464,6 +13424,22 @@
   "note": "a flattening tolerance on the sheet, not a fact about the place; it measures \"a curve as its curve\" closely enough",
   "pages": {},
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/leader.rs::Slide#the leader's end": {
+  "body": "3fd06d126b89ca6a",
+  "claim": "the leader's end - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a leader ends at the nearest drawn point of its feature's own parts, on the ink as drawn, never in a dash's gap",
+  "code": "bbe2457021a1ce2b",
+  "core": "920291f33f7570f6",
+  "date": "2026-11-23",
+  "note": "holds the span's direction and half-length",
+  "pages": {
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
+  },
+  "research": "8934043f3fa21e6c",
+  "rests": [
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:64021411c0f9e4ba"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/leader.rs::at_length#the leader's end": {
@@ -13499,27 +13475,22 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/caption_place/leader.rs::block_pair#the leader's end": {
-  "body": "9c5e89bb8d2ae947",
-  "claim": "the leader's end - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a leader ends at the nearest drawn point of its feature's own parts, on the ink as drawn, never in a dash's gap",
-  "code": "b5db0a829b969029",
-  "core": "6deb2698918c322c",
-  "date": "2026-11-19",
-  "note": "finds the nearest pair of points between the caption block and a segment; geometry",
-  "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
-  },
-  "research": "8934043f3fa21e6c",
-  "rests": [
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:64021411c0f9e4ba"
-  ],
+ "rust/mode_a/src/caption_place/leader.rs::block_pair#a shared span's middle": {
+  "body": "840189499db8e812",
+  "claim": "a shared span's middle - CONVENTION: 0330 ends a leader at the nearest drawn point and leaves open which, where a whole span of the ink stands equally near the block; the span's middle is taken, so a leader from a name set over a narrow lane runs down the lane's middle, not along the next building's edge (449 T384: from the span's end, the county example's stables' privy's leader ran 0.5 px off the stables' stroke and read as the stables' own wall)",
+  "code": "89f40c31e2da7f40",
+  "core": "c2e2a6931957f8c7",
+  "date": "2026-11-23",
+  "note": "every point of a parallel span is equally near, so taking the middle is a drawing choice the page leaves open",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/leader.rs::dash_gap#dashes": {
   "body": "9a649458af715b2b",
   "claim": "dashes - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a dashed line is measured as its dashes alone, since a gap holds no ink; the dash list read as SVG reads it, an odd one repeated to an even length",
-  "code": "fe06684b6c6b7ec4",
-  "core": "b1036af5a279f672",
+  "code": "b213440f9bc5f013",
+  "core": "7d0cfadb3c010f0f",
   "date": "2026-11-19",
   "note": "an odd list is doubled; returns the gap only on odd indices",
   "pages": {
@@ -13529,15 +13500,16 @@
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:2df3dc7b0c949406"
   ],
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/caption_place/leader.rs::leader#a butt end": {
-  "body": "a1572c4afa849c4e",
-  "claim": "a butt end - how-a-leader-line-ties-a-caption-to-its-feature.drawing: its ends flat, squared off or round as drawn; a butt end is flat, a square or round one read as round (CONVENTION of this placer: a square cap's corner is within half a stroke of its round reading)",
-  "code": "7c568563697f6048",
-  "core": "23b2b551dc6c3615",
-  "date": "2026-11-19",
-  "note": "stroke_end clamps only the cross-line part of the step at a butt end to half the width; square and round caps are read round, as the claim states",
+ "rust/mode_a/src/caption_place/leader.rs::dash_part#the leader's end": {
+  "body": "17aee157002bce21",
+  "claim": "the leader's end - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a leader ends at the nearest drawn point of its feature's own parts, on the ink as drawn, never in a dash's gap",
+  "code": "a8cf6d89236ab485",
+  "core": "a2db9eaa87fb0ccd",
+  "date": "2026-11-23",
+  "note": "an odd dash list is doubled as the sheet draws it, the offset is applied, and the dash or gap holding s is returned with its bounds; this is what keeping the end out of a gap needs",
   "pages": {
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
@@ -13547,29 +13519,59 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/caption_place/leader.rs::leader#the nearest drawn point": {
-  "body": "a1572c4afa849c4e",
-  "claim": "the nearest drawn point - how-a-leader-line-ties-a-caption-to-its-feature.drawing: it ends at the nearest drawn point, not a box that may hold bare ground",
-  "code": "430eb744e90c23cf",
-  "core": "23b2b551dc6c3615",
-  "date": "2026-11-19",
-  "note": "takes the minimum over each part's drawn geometry (disc curve, stroke edge, outline), never a bounding box",
+ "rust/mode_a/src/caption_place/leader.rs::leader#the leader alone": {
+  "body": "4c295d625f3e52c8",
+  "claim": "the leader alone - NONE: [`leader_span`]'s two ends",
+  "code": "bbbede635870a1cb",
+  "core": "7270c4f187264d37",
+  "date": "2026-11-23",
+  "note": "passes through leader_span's two ends",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/leader.rs::leader_span#a butt end": {
+  "body": "f279c5569ce20d0f",
+  "claim": "a butt end - how-a-leader-line-ties-a-caption-to-its-feature.drawing: its ends flat, squared off or round as drawn; a butt end is flat, a square or round one read as round (CONVENTION of this placer: a square cap's corner is within half a stroke of its round reading)",
+  "code": "2e304cb0e8fdf6b3",
+  "core": "3bbe96801b28df19",
+  "date": "2026-11-23",
+  "note": "stroke_end ends a butt cap flat and other caps round, within half a stroke",
   "pages": {
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
   "research": "8934043f3fa21e6c",
   "rests": [
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:2df3dc7b0c949406"
+  ],
+  "triaged": "2026-11-23",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/leader.rs::leader_span#the nearest drawn point": {
+  "body": "c093b0b2cc9140af",
+  "claim": "the nearest drawn point - how-a-leader-line-ties-a-caption-to-its-feature.drawing: it ends at the nearest drawn point, not a box that may hold bare ground",
+  "code": "86295cb55f857832",
+  "core": "3bbe96801b28df19",
+  "date": "2026-11-23",
+  "note": "it passes on the nearest part's end, with that end's slide, from the stroke and outline ends",
+  "pages": {
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
+  },
+  "research": "8934043f3fa21e6c",
+  "rests": [
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:094a571aefe85254",
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:64021411c0f9e4ba"
   ],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/caption_place/leader.rs::leader#the tie order": {
-  "body": "a1572c4afa849c4e",
+ "rust/mode_a/src/caption_place/leader.rs::leader_span#the tie order": {
+  "body": "f279c5569ce20d0f",
   "claim": "the tie order - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a closed outline before a stroke, the wider of two strokes, the one drawn first",
-  "code": "c528a9edea5dbdb0",
-  "core": "23b2b551dc6c3615",
-  "date": "2026-11-19",
-  "note": "ties are ranked as (line flag, minus half-width, part order) through better: outline first, wider stroke, first drawn",
+  "code": "b8b56072f1147359",
+  "core": "3bbe96801b28df19",
+  "date": "2026-11-23",
+  "note": "better() ranks an outline before a stroke, then the wider stroke, then the one drawn first",
   "pages": {
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
@@ -13577,15 +13579,33 @@
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:094a571aefe85254"
   ],
+  "triaged": "2026-11-23",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/leader.rs::nearer#the leader's end": {
+  "body": "0f11accfdcbfe0aa",
+  "claim": "the leader's end - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a leader ends at the nearest drawn point of its feature's own parts, on the ink as drawn, never in a dash's gap",
+  "code": "dc2162b43b50e886",
+  "core": "ce467dead681092e",
+  "date": "2026-11-23",
+  "note": "nearest within EPS; preferring a span at a tie is block_pair's span-middle choice",
+  "pages": {
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
+  },
+  "reads": "c6e4f4dd5672cea4",
+  "research": "8934043f3fa21e6c",
+  "rests": [
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:64021411c0f9e4ba"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/leader.rs::outline_end#the leader's end": {
-  "body": "a904fab87853e6c4",
+  "body": "830d48ea98a51a6d",
   "claim": "the leader's end - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a leader ends at the nearest drawn point of its feature's own parts, on the ink as drawn, never in a dash's gap",
-  "code": "59a41c4b7d07bc73",
-  "core": "898d755e7995a0b8",
-  "date": "2026-11-19",
-  "note": "an exact circle, an ellipse sampled within the sag, or the polygon ring, each moved out by the edge half-width onto the ink",
+  "code": "5c894dddc76a85e0",
+  "core": "be6a19c82f340b97",
+  "date": "2026-11-23",
+  "note": "nearest edge pair, set in by the drawn edge, with the slide passed on",
   "pages": {
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
@@ -13597,13 +13617,45 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/caption_place/leader.rs::stroke_end#the leader's end": {
-  "body": "a9882e2bfccba416",
+ "rust/mode_a/src/caption_place/leader.rs::segment_at#the leader's end": {
+  "body": "ff3a1f13a8e13bd6",
   "claim": "the leader's end - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a leader ends at the nearest drawn point of its feature's own parts, on the ink as drawn, never in a dash's gap",
-  "code": "91d3ab9e7a3a357b",
-  "core": "fd41f83ceadc35bc",
-  "date": "2026-11-19",
-  "note": "nearest centerline point, moved to the nearer gap end when it lands in a dash gap, then out by half the width (flat at a butt end)",
+  "code": "5601c3faa05907f2",
+  "core": "afed99ab4fa1e127",
+  "date": "2026-11-23",
+  "note": "finds the segment that the end's arc length stands on, so a flat end is squared to the ink as drawn",
+  "pages": {
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
+  },
+  "research": "8934043f3fa21e6c",
+  "rests": [
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:2df3dc7b0c949406"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/leader.rs::span_middle#the leader's end": {
+  "body": "433c220351b95af3",
+  "claim": "the leader's end - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a leader ends at the nearest drawn point of its feature's own parts, on the ink as drawn, never in a dash's gap",
+  "code": "623176429331df35",
+  "core": "b604fce8c81eee86",
+  "date": "2026-11-23",
+  "note": "the middle of the overlap of a parallel edge and segment, which is on the ink and as near as any point",
+  "pages": {
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
+  },
+  "research": "8934043f3fa21e6c",
+  "rests": [
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:64021411c0f9e4ba"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/leader.rs::stroke_end#the leader's end": {
+  "body": "dab1519f1b9acbde",
+  "claim": "the leader's end - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a leader ends at the nearest drawn point of its feature's own parts, on the ink as drawn, never in a dash's gap",
+  "code": "734b52b65bd2d513",
+  "core": "3d94223165137c87",
+  "date": "2026-11-23",
+  "note": "when the nearest centerline point falls in the gap that ends a dashed line, its candidates `[g0.max(0.0), g1.min(walked)]` clamp g1 to `walked`, the line's own end, which is still inside that gap (likewise `g0.max(0.0)` = 0 when the line starts in a gap); where that end is nearer the block it is taken, and `q = at_length(&s.poly, at)` stands on bare paper, against \"never in a dashed line's gap\" and \"a dashed line as its dashes alone\" - a clamped candidate that falls inside the gap should be dropped, leaving the gap's other end, which is a dash end; fix: code; effect: a caption's leader to a dashed line whose last (or first) stretch is a gap ends short of the ink by up to a gap's length (2 px on a \"3 2\" line), at the paper beyond the last dash",
   "pages": {
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
@@ -13613,7 +13665,7 @@
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:2df3dc7b0c949406",
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:64021411c0f9e4ba"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "rust/mode_a/src/caption_place/leader.rs::toward#the leader's end": {
   "body": "e7b0f4e1a5e30608",
@@ -14094,22 +14146,23 @@
  "rust/mode_a/src/caption_place/search.rs::Placer.seat#a leader filed": {
   "body": "2bf1c9175e2057b3",
   "claim": "a leader filed - CONVENTION: a drawn leader is filed as a thin band at a caption's weight, so no later caption is set across it while any other choice exists - a name lying across a leader blurs which name the leader ties to its feature",
-  "code": "758381dec7cf3b15",
-  "core": "5d4812dde1ace11c",
+  "code": "d34b510782d61657",
+  "core": "ba606a96f21529a5",
   "date": "2026-11-19",
   "note": "a thin band at Text weight",
   "pages": {},
   "reads": "bfda78924bf0825b",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/search.rs::Placer.seat#air between captions": {
   "body": "2bf1c9175e2057b3",
   "claim": "air between captions - GUESS labels-on-maps-cartographic-label-placement.drawing: a seated caption is filed with its usual gap (half its letter height) of air on every side, so no later caption touches it - two captions edge to edge read as one name (observed 2026-11-19 on a pool sheet: \"INNER COURT\" and \"RESIDENCE\" run together); the page fixes the gap only off a caption's own feature",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "668634f111d4b246",
-  "core": "5d4812dde1ace11c",
+  "code": "cd249a52c1598534",
+  "core": "ba606a96f21529a5",
   "date": "2026-11-19",
   "note": "the page fixes the gap only off a caption's own feature; it is silent on space between captions",
   "pages": {
@@ -14121,15 +14174,15 @@
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:029c96e91be555c3",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98"
   ],
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/search.rs::Placer.seat#cover least, highest ranked": {
   "body": "2bf1c9175e2057b3",
   "claim": "cover least, highest ranked - labels-on-maps-cartographic-label-placement.drawing: failing empty ground, the place that covers the least and lies highest in the order, a road or stream counting half a building",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "3923fc825c0f628f",
-  "core": "5d4812dde1ace11c",
+  "code": "6c986e7af341ec33",
+  "core": "ba606a96f21529a5",
   "date": "2026-11-19",
   "note": "smallest cover, then highest rank; the half-building weight is read from Weight::of",
   "pages": {
@@ -14143,28 +14196,29 @@
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c7e607a17faa64df",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00a270a965f4531"
   ],
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/search.rs::Placer.seat#its writes": {
   "body": "2bf1c9175e2057b3",
   "claim": "its writes - NONE: six fields a caption written (center x and y, anchor, angle, lines, leader), the derivation's `write`",
-  "code": "933e47f8ce5b9c3e",
-  "core": "5d4812dde1ace11c",
+  "code": "85a5d730ffc73bd6",
+  "core": "ba606a96f21529a5",
   "date": "2026-11-19",
   "note": "instrumentation",
   "pages": {},
   "reads": "bfda78924bf0825b",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/search.rs::Placer.seat#never left off": {
   "body": "2bf1c9175e2057b3",
   "claim": "never left off - labels-on-maps-cartographic-label-placement.drawing: a caption the map calls for is never left off; on a sheet with no free ground it goes where it covers the least",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "e6862cce1e45ba01",
-  "core": "5d4812dde1ace11c",
+  "code": "c38f6fc2b2ff09f2",
+  "core": "ba606a96f21529a5",
   "date": "2026-11-19",
   "note": "search always returns a seat",
   "pages": {
@@ -14175,15 +14229,15 @@
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:aa4e29df260bd640"
   ],
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/search.rs::Placer.seat#the wrapped block's center": {
   "body": "2bf1c9175e2057b3",
   "claim": "the wrapped block's center - DEVIATION labels-on-maps-cartographic-label-placement.drawing: the page has a wrapped caption keep the single line's center; here it keeps the single line's ranked place and angle and stands, at its own size, its near edge the usual gap off the feature's edge, so its center moves - the single line had no free place to keep, and a block taller than the line kept on that line's center above or below its feature would reach into the feature",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "25ef528df34acc20",
-  "core": "5d4812dde1ace11c",
+  "code": "e90be11ba8e8f4cf",
+  "core": "ba606a96f21529a5",
   "date": "2026-11-19",
   "note": "near edge at the gap, a DEVIATION now recorded",
   "pages": {
@@ -14195,15 +14249,15 @@
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a6a3936d772e0313",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d143d86cfabc0055"
   ],
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/search.rs::Placer.seat#wrap where it clears": {
   "body": "2bf1c9175e2057b3",
   "claim": "wrap where it clears - labels-on-maps-cartographic-label-placement.drawing: one line if that clears, else the first of two then three that does, else back to one; the wrapped block takes the single line's ranked place and its angle, its near edge at the usual gap off the feature's edge (its center: the next claim) - tried at the usual gap where one line clears none of its places (DEVIATION from the derivation's reading A, which tried cuts only at the last resort: a pool sheet's weighing floor, its one line too wide for any place by its crowded floor, was swept 211 px onto another court)",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "d5aac0d7b2dbe16d",
-  "core": "5d4812dde1ace11c",
+  "code": "7645a45b89ef6d6b",
+  "core": "ba606a96f21529a5",
   "date": "2026-11-19",
   "note": "one line at the gap, then 2 and 3 lines at the ranked places, else one line",
   "pages": {
@@ -14217,7 +14271,7 @@
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a6a3936d772e0313",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d529c47037844a9e"
   ],
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/search.rs::RANKS#the ranked places": {
@@ -14420,6 +14474,19 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/caption_place/search/sweep.rs::Placer.ink_met#the slide's measure": {
+  "body": "fc3bd88534917738",
+  "claim": "the slide's measure - CONVENTION: the ink a line meets, through and along, summed over the features `other_ink` names; `Placer::led` draws the line along the span that meets the least",
+  "code": "89ec8ef692a12e66",
+  "core": "59bc9049feac42cc",
+  "date": "2026-11-23",
+  "note": "adds up the length through and along the ink that other_ink names",
+  "pages": {},
+  "reads": "893e096eae4ba83f",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/caption_place/search/sweep.rs::Placer.intervals#a wall ahead": {
   "body": "9401ed58452ebfa2",
   "claim": "a wall ahead - CONVENTION: no swept place lies past a wall standing between the feature and it, unless the wall runs through the feature's middle (a gate in the wall, which has a side each way); 0242 and 0330 say nothing of walls, and a caption beyond one names the wrong court",
@@ -14433,14 +14500,26 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/search/sweep.rs::Placer.leader_crosses#a leader kept off other features": {
-  "body": "48d2b8a74cd4eba2",
+  "body": "a4d193b7ccccc9dd",
   "claim": "a leader kept off other features - CONVENTION: 0330 fixes where a leader ends and says nothing of what it crosses; a leader run across another building reads as tying the name to that one (observed 2026-11-19 on a pool sheet: with T209's fix the bounty board's name was swept beside the notice board, its leader across the notice board's roof), so a swept seat whose leader would cross one is refused while a seat whose leader crosses none is within reach; ground, ways and named areas are crossed as a caption may lie on them, and another caption's letters too (refusing a leader across them sent a pool sheet's \"Fox Clan lands\" across the border it names)",
-  "code": "046c37ee7e13f3f3",
-  "core": "5cd1bb2ec0f1cbc3",
-  "date": "2026-11-19",
-  "note": "it checks buildings only (weight Block): a run through one longer than the clipped-corner allowance, or along its drawn edge for more than a gap; ground, ways, named areas and captions are passed",
+  "code": "66c59d7179fef1a8",
+  "core": "c667c8964d0911f7",
+  "date": "2026-11-23",
+  "note": "only the call moved to other_ink; it still refuses only building and fixture ink",
   "pages": {},
   "reads": "cfe233496c45e80b",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/search/sweep.rs::Placer.led#a leader slid along its shared span": {
+  "body": "788c1c9c4927b846",
+  "claim": "a leader slid along its shared span - CONVENTION: 0330 leaves open which of a span's equally near points a leader ends at; the span's middle is taken (`leader::block_pair`) unless another feature's ink stands on that line, when the lines within the span a pixel apart are weighed by the ink each runs through or along and the middle of the run of least-ink lines nearest the span's middle is drawn, kept at the middle instead where that line crosses a feature (`Placer::leader_crosses`) the middle's does not (449 T384: at its middle the Ubame sheet's wood-kami altar's leader ran 1 px from a fire-water tub's center, where from the span's end it had passed the tub); the seat itself is chosen on the middle's line, the algorithmically easier route (a slide asked of every swept seat moved the Ochiba sheet's latrine name to a 164 px leader 1.75 px under the retainers' quarters' wall, observed 2026-11-23)",
+  "code": "52b7b4d6b9e9e5f0",
+  "core": "05896f67b7d39fa7",
+  "date": "2026-11-23",
+  "note": "the middle is kept when no other ink is on its line; otherwise the lines 1 px apart within the span are weighed by ink met, the middle of the least-ink run nearest the middle is taken, and the code falls back to the middle where the slid line crosses a feature the middle's line does not; how a leader is shown, which 0330 leaves open",
+  "pages": {},
+  "reads": "c6e4f4dd5672cea4",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -14509,6 +14588,18 @@
   "note": "picks the least offset, lower index on ties; it implements the order claimed elsewhere",
   "pages": {},
   "reads": "c6e4f4dd5672cea4",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/search/sweep.rs::other_ink#the ink a leader is kept off": {
+  "body": "0a54af0c78af61bb",
+  "claim": "the ink a leader is kept off - CONVENTION: a building's or fixture's ink alone (an index entry of `Weight::Block`), never the caption's own feature, ink the caption stands to as `Stance::Skip` (the cases `Own::stance` lists), another caption's letters, ground, a way or a named area (every weight but `Block`) - the rule `Placer::leader_crosses` states, which the slide (`Placer::led`) shares",
+  "code": "1013fee2605936e2",
+  "core": "0dc8bf984812db90",
+  "date": "2026-11-23",
+  "note": "it counts only `Weight::Block` ink that is not the feature's own and is not a `Stance::Skip` case. `leader_crosses` and `ink_met` both use it",
+  "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -15348,6 +15439,30 @@
   "core": "69c282b844e75a09",
   "date": "2026-11-19",
   "note": "a test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/tests/leader_cross.rs::a_leader_down_a_lane_runs_its_middle_clear_of_both_walls#the leader-crossing tests": {
+  "body": "f183b22fd36f81af",
+  "claim": "the leader-crossing tests - NONE: tests of the leader rule claimed where the placer decides it, deciding nothing themselves",
+  "code": "439890a23abfedfe",
+  "core": "2c34ec10a01ce9a2",
+  "date": "2026-11-23",
+  "note": "a test, decides nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/tests/leader_cross.rs::a_leader_slides_along_its_span_past_a_post_on_its_middle#the leader-crossing tests": {
+  "body": "4a816beea763f338",
+  "claim": "the leader-crossing tests - NONE: tests of the leader rule claimed where the placer decides it, deciding nothing themselves",
+  "code": "72715d59eca5dce2",
+  "core": "c697920daabaeffb",
+  "date": "2026-11-23",
+  "note": "a test, decides nothing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -17490,6 +17605,29 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/compound/emit.rs::STABLES#the stables' interior": {
+  "body": "043ff26dc2065040",
+  "claim": "the stables' interior - NONE: the name a program gives a stable's interior, deciding nothing about the place",
+  "code": "97316051ec56b22e",
+  "core": "962e1ed136bf43f9",
+  "date": "2026-11-23",
+  "note": "a tag string only; it decides nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/compound/emit.rs::STABLE_DEPTHS#the stable's depths": {
+  "body": "e7047c966818986c",
+  "claim": "the stable's depths - GUESS: the grooms' room 9 ft and the passage 6 ft deep from the court face, the stalls the rest; 0108's drawing page is silent on both depths (it draws the grooms' quarters and the earth-floored passage before the stalls)",
+  "code": "980e801225caf49a",
+  "core": "3496a94d3f90783a",
+  "date": "2026-11-23",
+  "note": "9 ft and 6 ft are true guesses: no page gives these depths, and the stall depth is a guess by §39",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/compound/emit.rs::Svg#the sheet's plumbing": {
   "body": "f55856383ab39bf0",
   "claim": "the sheet's plumbing - NONE: text, ids, numbers and box geometry; each drawn rule claimed on its unit (the plan scale on each unit that maps feet to pixels)",
@@ -17623,50 +17761,44 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::building#dwelling walls across the long side": {
-  "body": "490d505cf312423b",
+  "body": "f065a575afa22277",
   "claim": "dwelling walls across the long side - staff-rowhouses-and-barracks-nagaya.drawing: a rowhouse divided into dwellings along its length, each wall across its long side",
-  "code": "89d9ea6838e99ab6",
-  "core": "cddb75b521295dbe",
-  "date": "2026-11-23",
-  "note": "the bay lines run across the building's short span at offsets along its long axis (along_x = w >= h), which divides a rowhouse into dwellings along its length",
+  "code": "5d8c05a2a5963bce",
+  "core": "9b20c1b11ebbdaf6",
+  "date": "2026-11-19",
+  "note": "the bay lines cross the long axis",
   "pages": {
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "00e9e07782d55568"
   },
-  "reads": "9c25a9e9eef7f06c",
+  "reads": "1e00ade375761dbb",
   "research": "d61f5d52ce332ce7",
   "rests": [
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:40d18dac4b203306",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:6d20e14e8c281ff8",
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:921e9524e0a5f213",
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:f7d2dbe31bdd173e"
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:921e9524e0a5f213"
   ],
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::building#the plan scale": {
-  "body": "490d505cf312423b",
+  "body": "f065a575afa22277",
   "claim": "the plan scale - magistrates-compounds-jinya-and-yamen.drawing: 3 px = 1 ft, set so drawn compounds fall between Joge and Takayama",
-  "code": "ba9cd3ac11a7f957",
-  "core": "cddb75b521295dbe",
-  "date": "2026-11-23",
-  "note": "the building is drawn in feet through the sheet's 3 px to the foot scale, which is what the page states and justifies",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
+  "code": "fb880fb24441d892",
+  "core": "9b20c1b11ebbdaf6",
+  "date": "2026-11-22",
+  "note": "footprint drawn at the scale; the rest is how it is drawn",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "0ca8ec5d92f0bdea"
   },
-  "reads": "9c25a9e9eef7f06c",
+  "reads": "1e00ade375761dbb",
   "research": "61e8f7ae35b7e908",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b7aa78898c6ee5bb",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:c859cd34a60be9c0"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
- },
- "rust/mode_a/src/compound/emit.rs::buildings#a genkan (entrance porch) drawn and captioned at an office hall's door, built out from the wall in the hall's own paint. This is a choice of building form that the drawing page never mentions, so it should be claimed as UNRESEARCHED or GUESS, or cite a page that records the genkan.": {
-  "code": "4e986f1ab2728f39",
-  "core": "4e986f1ab2728f39",
-  "date": "2026-11-22",
-  "note": "a genkan (entrance porch) drawn and captioned at an office hall's door, built out from the wall in the hall's own paint. This is a choice of building form that the drawing page never mentions, so it should be claimed as UNRESEARCHED or GUESS, or cite a page that records the genkan.",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "rust/mode_a/src/compound/emit.rs::buildings#the genkan porch": {
   "body": "9d9ae7105b082d0c",
@@ -18041,38 +18173,52 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/compound/emit.rs::stables#grooms' room open to the passage": {
+  "body": "c0a9f994089043e3",
+  "claim": "grooms' room open to the passage - CONVENTION: its edge to the earth passage drawn dashed, as the passage's edge to the stalls is, the sheet's mark of an edge a body crosses where a solid interior line is a wall; 0108 puts the matted tozamurai across the kusa-no-ma from the stalls and is silent on what stood between them, and the stable is entered at its gable into the passage (449 T388; building-review 2026-11-23 E1: drawn solid, the grooms' room had no way in)",
+  "code": "75c82b90c6d9bd6b",
+  "core": "3c57d3d7d77e2801",
+  "date": "2026-11-23",
+  "note": "the dash is a convention, but by the claim's own wording a dashed edge is \"an edge a body crosses where a solid interior line is a wall\", so the code decides that the matted tozamurai has no wall to the kusa-no-ma, which is a choice between built forms (wall or open edge); the claim itself says 0108 is silent on it, and the drawing page records no such choice; the label should be GUESS (the room opening onto the earth passage), with the dashed stroke as the sheet's mark of it",
+  "pages": {},
+  "reads": "9bb5dec07869b738",
+  "research": "",
+  "verdict": "MISLABELED"
+ },
  "rust/mode_a/src/compound/emit.rs::stables#stable stall width": {
   "body": "b0ccc6f080b050ba",
   "claim": "stable stall width - stables-umaya.drawing: a stall one bay, one ken (~6 ft) wide, by convention",
-  "code": "d722e4e5da6daa59",
-  "core": "e7f4975e7d270229",
+  "code": "1504d7bbde4791aa",
+  "core": "3c57d3d7d77e2801",
   "date": "2026-11-19",
   "note": "stall lines every 6 ft",
   "pages": {
    "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95"
   },
+  "reads": "9bb5dec07869b738",
   "research": "96ea0c83b210c787",
   "rests": [
    "0108-stables-umaya.drawing.html:219e638987c06796"
   ],
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::stables#stables": {
-  "body": "b0ccc6f080b050ba",
+  "body": "c0a9f994089043e3",
   "claim": "stables - stables-umaya, stables-umaya.drawing: a warrior's small stable three bays long, its one-bay stalls on board floors, the earth passage (kusa-no-ma) before them running its length, the grooms' room (tozamurai) across the passage; the depths GUESSES",
-  "code": "069fdf4a58f49d5a",
-  "core": "e7f4975e7d270229",
-  "date": "2026-11-19",
-  "note": "stall partitions every 6 ft (one ken), the earth passage band between the grooms' room (court side) and the stalls runs the full length, the 9 ft and 6 ft depths are guesses as claimed",
+  "code": "258b65364eb4fae5",
+  "core": "3c57d3d7d77e2801",
+  "date": "2026-11-23",
+  "note": "stalls divided every 6 ft (one ken) along the full length, an earth passage running the length before them, the grooms' room across the passage from them, depths from STABLE_DEPTHS as guesses; the length is the footprint's and is not decided here",
   "pages": {
    "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95",
    "0108-stables-umaya.html": "e28bb721c804f4bf"
   },
+  "reads": "9bb5dec07869b738",
   "research": "c31147aaa37b5dd2",
   "rests": [
    "0108-stables-umaya.drawing.html:219e638987c06796",
    "0108-stables-umaya.drawing.html:af3e2dedf1edb040",
-   "0108-stables-umaya.drawing.html:bfffc30811fc7968",
    "0108-stables-umaya.html:12a3224dd5a29b03",
    "0108-stables-umaya.html:41dd4a78c52512c9",
    "0108-stables-umaya.html:593523e7ce195b4d",
@@ -18779,6 +18925,30 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/compound/gen_tests_draw.rs::a_stable_is_entered_at_its_gable_into_the_passage#the generator's drawing tests": {
+  "body": "946fdb077ce825f4",
+  "claim": "the generator's drawing tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "2c75915280aa82f8",
+  "core": "4f71f60a709f6e5b",
+  "date": "2026-11-23",
+  "note": "fixtures and assertions only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/compound/gen_tests_draw.rs::a_stables_grooms_room_opens_onto_its_passage#the generator's drawing tests": {
+  "body": "e3da8e8213db2499",
+  "claim": "the generator's drawing tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "014bcd8096199ed9",
+  "core": "52fb4fd84a0822f3",
+  "date": "2026-11-23",
+  "note": "a test's fixture and its count of dashed strokes, deciding nothing about a building",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/compound/gen_tests_draw.rs::an_open_shed_is_a_hatched_roof_on_six_posts_with_no_door#the generator's drawing tests": {
   "body": "13243b7184301f1e",
   "claim": "the generator's drawing tests - NONE: fixtures and assertions, deciding nothing about a building",
@@ -18806,11 +18976,38 @@
  "rust/mode_a/src/compound/gen_tests_draw.rs::the_interiors_and_the_gate_posts_draw_on_any_wall#the generator's drawing tests": {
   "body": "f46b431bed1895de",
   "claim": "the generator's drawing tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "1a739a7f42bfacdf",
-  "core": "48d680d6c62e1cb1",
+  "code": "7eee83a03a60e87a",
+  "core": "b42a675e01ec78d2",
   "date": "2026-11-23",
   "note": "test fixtures and assertions, decides nothing",
   "pages": {},
+  "research": "",
+  "rests": [],
+  "triaged": "2026-11-23",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/compound/gen_tests_ground.rs::a_cart_route_door_at_its_rows_end_keeps_a_carts_lane_to_the_wall#the generator's open-ground tests": {
+  "body": "5006314133df20ca",
+  "claim": "the generator's open-ground tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "f9710d041bbfe0ac",
+  "core": "cabe644dfbb55a74",
+  "date": "2026-11-23",
+  "note": "test fixtures and assertions; decides nothing",
+  "pages": {},
+  "reads": "91da8d89f9a73147",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/compound/gen_tests_ground.rs::a_cart_route_door_on_an_end_keeps_a_carts_width_past_its_tub#the generator's open-ground tests": {
+  "body": "baff3bd112738f3e",
+  "claim": "the generator's open-ground tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "a46d1b319d266f02",
+  "core": "f8e44e4750d33da1",
+  "date": "2026-11-23",
+  "note": "a test fixture and its assertions",
+  "pages": {},
+  "reads": "e472ff882d46ee03",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -19101,6 +19298,18 @@
   "core": "be5c2720ddbd6e87",
   "date": "2026-11-19",
   "note": "test fixtures and assertions; decides nothing drawn",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/compound/gen_tests_parts.rs::the_stables_well_stands_within_its_court_face#the generator's parts tests": {
+  "body": "8b1310cbbfed3bef",
+  "claim": "the generator's parts tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "774bab55c56bba72",
+  "core": "eafc2691d20f69a1",
+  "date": "2026-11-23",
+  "note": "fixtures and assertions only",
   "pages": {},
   "research": "",
   "rests": [],
@@ -19572,6 +19781,34 @@
   ],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/compound/ground.rs::CART_KINDS#the granary among the cart's kinds": {
+  "body": "b9aa7930db61e89a",
+  "claim": "the granary among the cart's kinds - moving-goods-carts-packhorses-and-river-landings-kashi.drawing: a compound that ships or receives bulk goods keeps a cart lane, so the granary's doors get a cart route and a held lane",
+  "code": "ea3f64cd3ae8f935",
+  "core": "ea69c4cf05fc0c57",
+  "date": "2026-11-23",
+  "note": "a granary ships and receives bulk goods; the page gives such a compound a cart lane",
+  "pages": {
+   "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html": "d54a93efb4435822"
+  },
+  "research": "939e46d831a50452",
+  "rests": [
+   "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html:0358140771a70ed0",
+   "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html:cae772605b4340ee"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/compound/ground.rs::CART_KINDS#the stables among the cart's kinds": {
+  "body": "b9aa7930db61e89a",
+  "claim": "the stables among the cart's kinds - GUESS: the stables get a cart route and a held lane too (feature 417 T36 pass P4: no source could speak to it)",
+  "code": "6eed4cdd434c78e6",
+  "core": "ea69c4cf05fc0c57",
+  "date": "2026-11-23",
+  "note": "nothing on the page covers stables; GUESS is the right label",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/compound/ground.rs::Ground#the open ground": {
   "body": "17f67e1fd8b8682c",
   "claim": "the open ground - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: every rule claimed where it is asked",
@@ -19643,70 +19880,66 @@
  "rust/mode_a/src/compound/ground.rs::cart_route#the granary on the offices' side": {
   "body": "e01c12c81185dc6d",
   "claim": "the granary on the offices' side - the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen: Pingyao built its granary north of the official quarters behind the war, justice and works offices, on the office side and not in the residence's court, so a granary seated in the household's court is refused; each building's cart route is walked in its own court, from the gates on that court's side of the divider, never through the middle gate",
-  "code": "77d340f783b0f4f0",
-  "core": "1196cd2e08994064",
+  "code": "cc04e96d21af4ee2",
+  "core": "2524f66c3b34b4e6",
   "date": "2026-11-23",
   "note": "a granary in the inner court is refused, after Pingyao's granary north of the offices",
   "pages": {
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0c02e855b599232a"
   },
-  "reads": "1477b9203e7bad94",
+  "reads": "78016fcb5964835c",
   "research": "8704c82f4702d7f1",
   "rests": [
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:8a88d28610f53e87"
   ],
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/ground.rs::cart_route#the granary's cart route": {
-  "body": "d7a8e6ec66c87049",
+  "body": "88749fa942066699",
   "claim": "the granary's cart route - moving-goods-carts-packhorses-and-river-landings-kashi.drawing: the granary's door reached by cart from a gate",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "e16c165343e23752",
-  "core": "1196cd2e08994064",
-  "date": "2026-11-22",
-  "note": "",
+  "code": "da436a8b5162af0f",
+  "core": "2524f66c3b34b4e6",
+  "date": "2026-11-23",
+  "note": "the granary's doors must be reachable from a gate in its court; this is the bulk-goods compound's cart lane",
   "pages": {
    "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html": "d54a93efb4435822"
   },
-  "reads": "1477b9203e7bad94",
+  "reads": "78016fcb5964835c",
   "research": "939e46d831a50452",
   "rests": [
-   "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html:59bf78a352966db8",
    "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html:cae772605b4340ee"
   ],
-  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/ground.rs::cart_route#the seat the refusal names": {
   "body": "e01c12c81185dc6d",
   "claim": "the seat the refusal names - GUESS the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing: on the manor's own map the granary takes one of the office court's flanking columns beside the office hall, at the column's head against the wall between the two courts or just below a building that heads it, never the household's inner court; behind the office hall lies the household's court, so the refusal sends the author to the flanking column (449 T366)",
-  "code": "f2c81e88e97e2074",
-  "core": "1196cd2e08994064",
+  "code": "e2cb9ce1fa72461a",
+  "core": "2524f66c3b34b4e6",
   "date": "2026-11-23",
-  "note": "the refusal sends the author to an office-court flanking column beside the hall, at the column's head against the divider or below the building that heads it, and never to the household's court; the drawing page records that seat as a guess",
+  "note": "names the flank column's head against the divider, or below the building that heads it, as the page's GUESS",
   "pages": {
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html": "e6af4547032e86b0"
   },
-  "reads": "1477b9203e7bad94",
+  "reads": "78016fcb5964835c",
   "research": "fec546b26ae12ab1",
   "rests": [
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:60b831c18bb05408",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:b4b1aaff93b05d61"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:4534f8a25269426e"
   ],
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/ground.rs::cart_route#the stables' cart route": {
-  "body": "d7a8e6ec66c87049",
+  "body": "88749fa942066699",
   "claim": "the stables' cart route - GUESS: the stables' door reached by cart too (feature 417 T36 pass P4: no source could speak to it)",
-  "code": "a51435073b59ac96",
-  "core": "1196cd2e08994064",
-  "date": "2026-11-22",
-  "note": "",
+  "code": "a6139a02930bcf28",
+  "core": "2524f66c3b34b4e6",
+  "date": "2026-11-23",
+  "note": "the page names only bulk goods (rice bales, charcoal) and says nothing of stables, so GUESS holds",
   "pages": {},
-  "reads": "1477b9203e7bad94",
+  "reads": "78016fcb5964835c",
   "research": "",
-  "rests": [],
-  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/ground.rs::components#the open ground": {
@@ -19849,6 +20082,19 @@
   "date": "2026-11-19",
   "note": "12 ft held approach; the bundle's pages are silent on it",
   "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/compound/layout.rs::CART_LANE#a cart's lane past a door's tub": {
+  "body": "df7d92cc72fdd652",
+  "claim": "a cart's lane past a door's tub - GUESS: 0082's drawing page's cart lane (`ground::CART_FT`, a guess there) kept clear past the fire-water tub beside the door, the tub's standoff and breadth (`parts::TUB_OFF`, `parts::TUB_R`) this project's allowance, no page's: 6 + 0.73 + 2.53 ft, about 9.3 ft, wider than the 6-8 ft fire gap (449 T388: in a 6 ft fire gap the county example's stables' tub left a cart 2.7 ft)",
+  "code": "e208ebd9b603f53c",
+  "core": "42d78049e1ca37b9",
+  "date": "2026-11-23",
+  "note": "6 + 0.733 + 2.533 = 9.27 ft, about 9.3 as claimed; nothing in the bundle's cited material answers it",
+  "pages": {},
+  "reads": "7e3b63330c2a5249",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -20142,105 +20388,119 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/compound/layout.rs::Layout.seat_one#a cart's lane past a door's tub": {
+  "body": "1847fa51ecad0ff4",
+  "claim": "a cart's lane past a door's tub - GUESS moving-goods-carts-packhorses-and-river-landings-kashi.drawing: a granary or stable whose door is on its end along its row is seated with `CART_LANE` of ground on that end, held as it is seated, so a neighbor seated before or after it, or the wall or divider ending its row, stands a cart's width past the door's tub (449 T388)",
+  "code": "60341f2c2fd64c01",
+  "core": "84937959258e170e",
+  "date": "2026-11-23",
+  "note": "on the door's end, the span's extra (CART_LANE - FIRE_GAP) plus the FIRE_GAP - CLEAR end_off plus the strip's CLEAR adds up to CART_LANE to the wall or divider. A neighbor seated before is held off by extra + FIRE_GAP. The ground held for later neighbors is CART_LANE - CLEAR. The 6 ft lane is a guess the page records",
+  "pages": {
+   "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html": "d54a93efb4435822"
+  },
+  "reads": "e5da0d35484bdc5e",
+  "research": "939e46d831a50452",
+  "rests": [
+   "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html:0358140771a70ed0"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/compound/layout.rs::Layout.seat_one#gatehouse beside the gate": {
-  "body": "ba9290d0f8aa567a",
+  "body": "1847fa51ecad0ff4",
   "claim": "gatehouse beside the gate - the-main-gate-and-its-gatekeepers-nagaya-mon: the gatekeepers in a gatehouse of their own beside a one-bay gate, seated nearest the main gate",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "6479674f5720472c",
-  "core": "0e3523f77f30fd62",
-  "date": "2026-11-19",
-  "note": "",
+  "code": "f2562688906028d6",
+  "core": "84937959258e170e",
+  "date": "2026-11-23",
+  "note": "the code always seats the gatehouse along the gate's wall, nearest the gate. The page attests two spots for a gatehouse of its own: \"now stands against the side of the temple's gate, but a plan of 1841 draws it inside, behind the gate\". So one form is fixed where two are attested, and the dated Edo plan has the other one. fix: code (roll beside or behind per settlement, or seat it behind and restate the claim); effect: every compound draws its gatehouse beside the gate, never in the spot the one Edo-period plan shows",
+  "outside": true,
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "cbc63bec8d863f2d"
   },
-  "reads": "cb31fdab198e24b3",
+  "reads": "e5da0d35484bdc5e",
   "research": "3a5eabb628c03628",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:2d7726f48cf3e499",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:73f43c24a22be5fc",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:cd57d3fd287dbd8e"
   ],
-  "triaged": "2026-11-23",
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "rust/mode_a/src/compound/layout.rs::Layout.seat_one#packed from the wall's low end": {
-  "body": "ba9290d0f8aa567a",
+  "body": "1847fa51ecad0ff4",
   "claim": "packed from the wall's low end - GUESS: a row or column seats each building at the first free span from its wall's low end, so the north and south rows own the corners (docs/buildings.md, Composition, a value of the project's)",
-  "code": "7673642058c9075a",
-  "core": "0e3523f77f30fd62",
-  "date": "2026-11-19",
-  "note": "",
+  "code": "714bbee77a014c49",
+  "core": "84937959258e170e",
+  "date": "2026-11-23",
+  "note": "walk from strip.lo; nothing in the bundle answers it",
   "pages": {},
-  "reads": "cb31fdab198e24b3",
+  "reads": "e5da0d35484bdc5e",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::Layout.seat_one#second rank": {
-  "body": "ba9290d0f8aa567a",
+  "body": "1847fa51ecad0ff4",
   "claim": "second rank - servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing, samurai-residences-and-their-rooms-buke-yashiki.drawing: the rear rank holds stores, set behind its wall's rank-1 row by a fire gap; servants lodge on the street edge, never in a rear rank",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "788ecb5ba76c991d",
-  "core": "0e3523f77f30fd62",
-  "date": "2026-11-19",
-  "note": "rank 2 refused to all but kura and takakura",
+  "code": "63bef00793678124",
+  "core": "84937959258e170e",
+  "date": "2026-11-23",
+  "note": "only kura or takakura may take rank 2, set the rank-1 row's depth + FIRE_GAP behind; servants stay on the street edge",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "e05b441543039933",
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "48271e1f50314e63"
   },
-  "reads": "cb31fdab198e24b3",
+  "reads": "e5da0d35484bdc5e",
   "research": "e02aa0076df0d371",
   "rests": [
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:20e2f5e87070706a",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:30589ae873214073",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:49cd9dd3d26f1477",
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html:65a5b482f4ad0634"
   ],
-  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::Layout.seat_one#the divider's first building centered": {
-  "body": "ba9290d0f8aa567a",
+  "body": "1847fa51ecad0ff4",
   "claim": "the divider's first building centered - GUESS: centered in the free ground holding the wall's middle (docs/buildings.md: the divider hall flows centered between the columns)",
-  "code": "fb277310de875e64",
-  "core": "0e3523f77f30fd62",
-  "date": "2026-11-19",
-  "note": "",
+  "code": "971de1b8edd7e1b3",
+  "core": "84937959258e170e",
+  "date": "2026-11-23",
+  "note": "centered on the strip's middle, falling back to the nearest span to it; nothing in the bundle answers it",
   "pages": {},
-  "reads": "cb31fdab198e24b3",
+  "reads": "e5da0d35484bdc5e",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::Layout.seat_one#the program's start": {
-  "body": "ba9290d0f8aa567a",
+  "body": "1847fa51ecad0ff4",
   "claim": "the program's start - GUESS: a building the program starts at a point along its wall takes the free span nearest it, the derivation's start-end knob",
-  "code": "ec356d0625aa0de4",
-  "core": "0e3523f77f30fd62",
-  "date": "2026-11-19",
-  "note": "",
+  "code": "ffb55fc8bfcf0360",
+  "core": "84937959258e170e",
+  "date": "2026-11-23",
+  "note": "nearest free span to `near`; nothing in the bundle answers it",
   "pages": {},
-  "reads": "cb31fdab198e24b3",
+  "reads": "e5da0d35484bdc5e",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::Layout.seat_one#the shrine in its corner": {
-  "body": "ba9290d0f8aa567a",
+  "body": "1847fa51ecad0ff4",
   "claim": "the shrine in its corner - the-compounds-own-shrine-yashikigami.drawing: a compound shrine in a corner of its grounds beside one tree, the tree's ground held past the shrine's far end",
-  "code": "5522a0a6e3e71696",
-  "core": "0e3523f77f30fd62",
+  "code": "1f3e7fad45fab82b",
+  "core": "84937959258e170e",
   "date": "2026-11-23",
-  "note": "the corner is the finding, but the tree whose ground is held is a GUESS on the page, and the claim presents it as a finding; fix: claim (label the tree half GUESS on 0218's drawing page); effect: none on the map",
+  "note": "walked from the wall's low end into the corner, with the tree's TREE_ROOM held past its far end",
   "pages": {
    "0218-the-compounds-own-shrine-yashikigami.drawing.html": "b136590cd5b120ce"
   },
-  "reads": "cb31fdab198e24b3",
+  "reads": "e5da0d35484bdc5e",
   "research": "1e43591f0e846358",
   "rests": [
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:4b3a8c1080e747d8",
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:975bec7f678f69df"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::Layout.spine_apart#named court spine": {
   "body": "d1d5f9ebf9fb69df",
@@ -20430,49 +20690,97 @@
   ],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/compound/layout.rs::door_lane#a cart's lane past a door's tub": {
+  "body": "aeca8ab17a873f59",
+  "claim": "a cart's lane past a door's tub - GUESS moving-goods-carts-packhorses-and-river-landings-kashi.drawing: the lane for the cart route's doors (`ground::CART_KINDS`), the cart's width past the tub (`CART_LANE`); a door on the court or rear face opens on open ground and holds none",
+  "code": "4c2cacfc92ef1822",
+  "core": "1ef2a50162c7c1b6",
+  "date": "2026-11-23",
+  "note": "CART_KINDS with a door on an end along the row get CART_LANE - FIRE_GAP extra; doors on the court or rear face hold none",
+  "pages": {
+   "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html": "d54a93efb4435822"
+  },
+  "reads": "d3c75c9988f3b43f",
+  "research": "939e46d831a50452",
+  "rests": [
+   "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html:0358140771a70ed0"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/compound/layout.rs::door_specs#a door at each dwelling's middle": {
-  "body": "be61382a215bad2d",
+  "body": "a66889d9ee3e0c7a",
   "claim": "a door at each dwelling's middle - GUESS: no page seats a dwelling's door along its face (feature 449 T187); a building's one door at its face's middle",
-  "code": "d147908002ec78fd",
-  "core": "a17932145527c784",
-  "date": "2026-11-19",
-  "note": "",
+  "code": "0c2539b68318bb39",
+  "core": "ea1ddd0ae5ce2d4f",
+  "date": "2026-11-23",
+  "note": "one door at the face's middle, or one per bay at each bay's middle; no page seats it",
   "pages": {},
-  "reads": "4d0d4a3f3eee1b90",
+  "reads": "b5f84525ff12f70e",
   "research": "",
   "rests": [],
-  "triaged": "2026-11-23",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/compound/layout.rs::door_specs#a stable entered at its gable": {
+  "body": "a66889d9ee3e0c7a",
+  "claim": "a stable entered at its gable - stables-umaya: the Shomei's three-bay warrior's stable, the most formal of its day, is gable-entered, and its earth passage (kusa-no-ma) runs the building's length before the stalls, the grooms' room across it - so a stable the program gives no door opens at a gable end into the passage, its door's middle at the passage's middle (449 T388: on its court face it opened into the grooms' room)",
+  "code": "e12a08dfb20614cb",
+  "core": "ea1ddd0ae5ce2d4f",
+  "date": "2026-11-23",
+  "note": "the door is on the end face across the passage's run, centered on the passage at (9+3)/deep from the court face; this matches gable entry and the passage running the length",
+  "pages": {
+   "0108-stables-umaya.html": "e28bb721c804f4bf"
+  },
+  "reads": "b5f84525ff12f70e",
+  "research": "f6f01652a6a060e2",
+  "rests": [
+   "0108-stables-umaya.html:77be2a6a5f39b548",
+   "0108-stables-umaya.html:d73c9c4b1277ae17"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::door_specs#an open shed doorless": {
   "body": "b4bcabcac1290a4d",
   "claim": "an open shed doorless - CONVENTION: an open-sided workshop under a roof on posts is entered between its posts, so it is drawn with no door, as the hand sheet's cinnabar workshop is (ochiba-magistracy.svg; 449 T359)",
-  "code": "63e36a12d34d01d6",
-  "core": "a17932145527c784",
+  "code": "97131c7b354fd9b9",
+  "core": "ea1ddd0ae5ce2d4f",
   "date": "2026-11-23",
   "note": "no door glyph on an open-sided shed is how its openness is shown",
   "pages": {},
-  "reads": "4d0d4a3f3eee1b90",
+  "reads": "b5f84525ff12f70e",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::door_specs#the default door on the court face": {
-  "body": "b4bcabcac1290a4d",
+  "body": "a66889d9ee3e0c7a",
   "claim": "the default door on the court face - the-formal-entrance-and-a-guests-arrival-genkan: guest doors feed courts and service doors work space; a building the program gives no door opens through the face toward its court",
-  "code": "6b1d2a82aaf6d8bb",
-  "core": "a17932145527c784",
+  "code": "2cb7847084170916",
+  "core": "ea1ddd0ae5ce2d4f",
   "date": "2026-11-23",
-  "note": "the default door opens onto the court's open ground",
+  "note": "a building with no door and none of the special kinds opens through its court face",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "17fc301f61dfc5af"
   },
-  "reads": "4d0d4a3f3eee1b90",
+  "reads": "b5f84525ff12f70e",
   "research": "04a348a3fa4d7b9e",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:95160ff513e325fa",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a03546f09ade6617"
   ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/compound/layout.rs::door_specs#which gable": {
+  "body": "a66889d9ee3e0c7a",
+  "claim": "which gable - GUESS: the record does not say which end a stable was entered at; the west gable (the north one where the court face runs north-south), the algorithmically easier route of the two, as the county example's stables kept theirs (feature 374 wave 128); a program names the other end by declaring the door (the round-trip test's east)",
+  "code": "ec265500c8a8da59",
+  "core": "ea1ddd0ae5ce2d4f",
+  "date": "2026-11-23",
+  "note": "a north or south court face gets the west gable, a west or east one the north gable, and a declared door overrides both; the page does not say which end",
+  "pages": {},
+  "reads": "b5f84525ff12f70e",
+  "research": "",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::ell_box#the ell flush with its host": {
@@ -20929,12 +21237,25 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/parts.rs::stables_well#stables well": {
-  "body": "54e4ae04175fe3b5",
-  "claim": "stables well - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); just outside the stables for watering, before its court face",
-  "code": "0a74925d832630ec",
-  "core": "2567f30580ebc47d",
-  "date": "2026-11-19",
-  "note": "before the stables' court face; record silent",
+  "body": "f9761878e35e8509",
+  "claim": "stables well - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); just outside the stables for watering, before its court face and within that face's own span, its ground never past the building's ends (449 T384: seated from 4 ft past the face's west end, the county example's stables' well stood over the lane's mouth beside them)",
+  "code": "34eb6b7308615d53",
+  "core": "e4f9a9627ecc8de6",
+  "date": "2026-11-23",
+  "note": "the strip starts 1 ft off the court face and spans only a0..a1, the building's own span; the record is silent",
+  "pages": {},
+  "reads": "11de37127683e5d4",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/compound/parts.rs::stables_well#the well at its face's low end": {
+  "body": "f9761878e35e8509",
+  "claim": "the well at its face's low end - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); seated at the first free place from the court face's west (or north) end (`seat_in` from `a0`), so it stands at the end a default gable door opens on",
+  "code": "dfc40bdb54245b1d",
+  "core": "e4f9a9627ecc8de6",
+  "date": "2026-11-23",
+  "note": "seat_in from a0 in a strip clamped to [a0, a1], so the well takes the first free place from the face's west or north end; nothing in the bundle answers it",
   "pages": {},
   "reads": "11de37127683e5d4",
   "research": "",

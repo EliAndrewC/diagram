@@ -5,7 +5,9 @@
 //! Research: the generator's drawing tests - NONE: fixtures and assertions, deciding nothing about a building
 
 use super::gen_tests_seat::{b, seated, with};
+use super::layout::door_specs;
 use super::parts::Seated;
+use super::spec::Face;
 
 /// The interiors drawn on any wall - a stable's stalls and a cell's bars measured from their court face - and gate posts on every wall.
 #[test]
@@ -50,7 +52,67 @@ fn the_interiors_and_the_gate_posts_draw_on_any_wall() {
     let l = seated(&p).unwrap();
     let text = super::sheet(&p, &l, &Seated::default());
     assert_eq!(text.matches(r#"data-kind="side gate""#).count(), 2);
-    assert_eq!(text.matches("stroke-dasharray=\"3 2\"").count(), 2);
+    // two stables, each with its grooms' and its stalls' edges to the passage dashed (449 T388's E1)
+    assert_eq!(text.matches("stroke-dasharray=\"3 2\"").count(), 4);
+}
+
+/// A stable the program gives no door is entered at a gable into its earth passage, never through the grooms' room on its court face (449
+/// T388: the county example's stables opened only into the grooms' room, so its horses were led through the grooms' lodging): the door on
+/// its west gable (its north one where the court face runs north-south), its middle at the passage's middle, the grooms' 9 ft and half
+/// the passage's 6 ft from the court face, whichever face that is; a declared door is kept.
+#[test]
+fn a_stable_is_entered_at_its_gable_into_the_passage() {
+    let stable = |wall: &str, wh: (f64, f64), more: &str| {
+        let p = with(
+            &[b(
+                "stables",
+                "stables",
+                "service",
+                wh,
+                "outer",
+                wall,
+                &format!(r#", "interior": "stables"{more}"#),
+            )],
+            "",
+        );
+        door_specs(&p.buildings[0])
+            .iter()
+            .map(|d| (d.face, (d.at * 1000.0).round() / 1000.0))
+            .collect::<Vec<_>>()
+    };
+    // 30 ft deep: the passage's middle 12 ft from the court face, 0.4 of the gable from that side
+    assert_eq!(stable("S", (18.0, 30.0), ""), [(Face::W, 0.4)]);
+    assert_eq!(stable("N", (18.0, 30.0), ""), [(Face::W, 0.6)]);
+    assert_eq!(stable("E", (30.0, 18.0), ""), [(Face::N, 0.4)]);
+    assert_eq!(stable("W", (30.0, 18.0), ""), [(Face::N, 0.6)]);
+    let declared = r#", "doors": [{"face": "E", "at": 0.5}]"#;
+    assert_eq!(stable("S", (18.0, 24.0), declared), [(Face::E, 0.5)]);
+}
+
+/// A stable's grooms' room opens onto the earth passage it is entered from, its edge to the passage dashed as the passage's edge to the
+/// stalls is (449 T388, building-review 2026-11-23 of county-magistracy-example E1: with the door moved to the gable into the passage,
+/// the grooms' room's solid edge sealed it, a room with no way in), whichever way its court face runs.
+#[test]
+fn a_stables_grooms_room_opens_onto_its_passage() {
+    // the court face along x (the inner court's north wall) and along y (the outer court's west wall)
+    for (court, wall, wh) in [("inner", "N", (24.0, 18.0)), ("outer", "W", (18.0, 24.0))] {
+        let p = with(
+            &[b(
+                "stables",
+                "stables",
+                "service",
+                wh,
+                court,
+                wall,
+                r#", "interior": "stables""#,
+            )],
+            "",
+        );
+        let l = seated(&p).unwrap();
+        let text = super::sheet(&p, &l, &Seated::default());
+        let dashed = text.matches("stroke-dasharray=\"3 2\"").count();
+        assert_eq!(dashed, 2, "the stable on the {wall} wall: the grooms' and the stalls' edges to the passage, both dashed");
+    }
 }
 
 /// An open-sided workshop is drawn as the hand sheet draws it: a hatched roof over open sides on six posts, with no door and not the

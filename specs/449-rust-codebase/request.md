@@ -158,3 +158,9 @@ The GM: "I'm not sure why you keep calling out " 449#4 and 449#5 are overtaken b
 ## 2026-11-22, the talk waits for every follow-up
 
 The session offered the map-generation talk with the follow-ups filed and sorted by constitution XIV. The GM: "yes i would rather wait until everytihng is actually ready so please finish the remaining fixes- it sounds like there's still 23 remaining?"
+
+## 2026-11-23, fix the defects, then stop and talk about convergence
+
+Told that 449's follow-ups do not converge (52 landed since midnight, 23 open, each review round filing about as many as it closes), with 11 map or tool defects (T375, T383, T384, T388, T391, T392, T395, T397, T398, T401, T402) and 12 record and research rows, and the recommendation to finish the defects and hold the talk with the record rows worked alongside, the GM said:
+
+> 52 follow-ups is a lot!  yes let's do as you suggest.  Fix the defects then stop and talk about what to do about the fact we're not converging.

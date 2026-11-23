@@ -10,7 +10,7 @@
     reason = "geometry's points, boxes and sizes as the derivation names them: a, b, c, d, p, q, w, h"
 )]
 
-use super::geom::{block, dist, nearest_on, path, ring, seg_pair, Pt};
+use super::geom::{block, dist, nearest_on, path, ring, seg_pair, Pt, EPS};
 use super::Shape;
 use crate::labels::hand_sheet::Cap;
 use crate::work_counts::count;
@@ -26,8 +26,12 @@ pub const DISC_MIN_SAMPLES: usize = 16;
 pub const SAG_PX: f64 = 0.05;
 
 /// One candidate end: how far it stands, whether it is a stroke (a closed outline wins a tie), the stroke's half-width (the wider wins),
-/// the part's order (the first drawn wins), the end on the ink and the start on the block.
-type End = (f64, bool, f64, usize, Pt, Pt);
+/// the part's order (the first drawn wins), the end on the ink and the start on the block, and its slide.
+type End = (f64, bool, f64, usize, Pt, Pt, Slide);
+
+/// How far a leader ending at a shared span's middle may slide along that span either way: the span's direction, a unit vector, and
+/// half its length (px), held on a dashed stroke to the dash it ends on; `None` where the end is no span's middle.
+pub type Slide = Option<(Pt, f64)>;
 
 /// Two ends compared as 0330 orders them: the nearer, then a closed outline before a stroke, then the wider stroke, then the first drawn.
 fn better(a: &End, b: &End) -> bool {
@@ -38,12 +42,52 @@ fn better(a: &End, b: &End) -> bool {
     (a.1, -a.2, a.3) < (b.1, -b.2, b.3)
 }
 
-/// The block's nearest point to the segment `cd`, and the segment's nearest point to it.
-fn block_pair(quad: &[Pt; 4], c: Pt, d: Pt) -> (Pt, Pt) {
-    ring(quad)
-        .map(|(a, b)| seg_pair(a, b, c, d))
-        .min_by(|x, y| dist(x.0, x.1).total_cmp(&dist(y.0, y.1)))
-        .unwrap_or((c, c))
+/// The block's nearest point to the segment `cd`, and the segment's nearest point to it: where an edge of the block runs parallel to `cd`
+/// and the two share a span, every point of it equally near, the span's middle.
+///
+/// Research: a shared span's middle - CONVENTION: 0330 ends a leader at the nearest drawn point and leaves open which, where a whole span of the ink stands equally near the block; the span's middle is taken, so a leader from a name set over a narrow lane runs down the lane's middle, not along the next building's edge (449 T384: from the span's end, the county example's stables' privy's leader ran 0.5 px off the stables' stroke and read as the stables' own wall)
+fn block_pair(quad: &[Pt; 4], c: Pt, d: Pt) -> Pair {
+    let mut best: Pair = (c, c, None);
+    let mut near = f64::INFINITY;
+    for (a, b) in ring(quad) {
+        let (p, q, slide) = span_middle(a, b, c, d).unwrap_or_else(|| {
+            let (p, q) = seg_pair(a, b, c, d);
+            (p, q, None)
+        });
+        if nearer(dist(p, q), slide.is_some(), (near, best.2.is_some())) {
+            (best, near) = ((p, q, slide), dist(p, q));
+        }
+    }
+    best
+}
+
+/// A nearest pair: its point on the block, its point on the ink, and its slide where it is a shared span's middle.
+type Pair = (Pt, Pt, Slide);
+
+/// Is a pair `d` apart nearer than the best so far: nearer by more than a hair, or as near and a shared span's middle where the best is
+/// not one.
+fn nearer(d: f64, span: bool, (best, best_span): (f64, bool)) -> bool {
+    d < best - EPS || (d <= best + EPS && span && !best_span)
+}
+
+/// Where segments `ab` and `cd` run parallel and share a span along `ab`, that span's middle on `ab`, its nearest point on `cd`, and the
+/// span's slide.
+fn span_middle(a: Pt, b: Pt, c: Pt, d: Pt) -> Option<Pair> {
+    let (u, v) = ((b.0 - a.0, b.1 - a.1), (d.0 - c.0, d.1 - c.1));
+    let (lu, lv) = (u.0.hypot(u.1), v.0.hypot(v.1));
+    if lu <= 0.0 || lv <= 0.0 || (u.0 * v.1 - u.1 * v.0).abs() > 1e-9 * lu * lv {
+        return None;
+    }
+    let along = |p: Pt| ((p.0 - a.0) * u.0 + (p.1 - a.1) * u.1) / (lu * lu);
+    let (tc, td) = (along(c), along(d));
+    let (lo, hi) = (tc.min(td).max(0.0), tc.max(td).min(1.0));
+    if hi <= lo {
+        return None;
+    }
+    let t = f64::midpoint(lo, hi);
+    let p = (a.0 + t * u.0, a.1 + t * u.1);
+    let slide = ((u.0 / lu, u.1 / lu), (hi - lo) * lu / 2.0);
+    Some((p, nearest_on(p, c, d).0, Some(slide)))
 }
 
 /// `q` moved `by` toward `p`, not past it.
@@ -75,6 +119,14 @@ fn at_length(poly: &[Pt], s: f64) -> Pt {
 /// Research: dashes - research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: a dashed line is measured as its dashes alone, since a gap holds no ink; the dash list read as SVG reads it, an odd one repeated to an even length
 #[must_use]
 pub fn dash_gap(s: f64, dash: &[f64], offset: f64) -> Option<(f64, f64)> {
+    dash_part(s, dash, offset)
+        .filter(|&(i, _, _)| i % 2 == 1)
+        .map(|(_, g0, g1)| (g0, g1))
+}
+
+/// The part of a dash pattern an arc length falls in: its index (a dash even, a gap odd) and its bounds as arc lengths, the list read
+/// as [`dash_gap`] reads it; `None` for a solid line.
+fn dash_part(s: f64, dash: &[f64], offset: f64) -> Option<(usize, f64, f64)> {
     let doubled;
     let dash = if dash.len() % 2 == 1 {
         doubled = [dash, dash].concat();
@@ -94,46 +146,50 @@ pub fn dash_gap(s: f64, dash: &[f64], offset: f64) -> Option<(f64, f64)> {
         at += dash[i];
         i += 1;
     }
-    (i % 2 == 1).then_some((start + at, start + at + dash[i]))
+    Some((i, start + at, start + at + dash[i]))
 }
 
 /// The nearest end on a stroke: its segments' nearest point (`shape_distance`, one a segment), moved off a dash's gap to the nearer
-/// dash end, then out to the band's edge - flat at a butt end, as the sheet draws it.
-fn stroke_end(quad: &[Pt; 4], s: &Shape) -> (f64, Pt, Pt) {
+/// dash end, then out to the band's edge - flat at a butt end, the line's own or a dash's, as the sheet draws it - and its slide where it
+/// is still a shared span's middle, held to the dash it ends on.
+fn stroke_end(quad: &[Pt; 4], s: &Shape) -> (f64, Pt, Pt, Slide) {
     let half = s.half.max(super::index::MIN_HALF_PX);
-    // (centerline distance, on block, on line, arc length): a stroke has a segment, so the first replaces this
-    let mut best: (f64, Pt, Pt, f64) = (f64::INFINITY, (0.0, 0.0), (0.0, 0.0), 0.0);
+    // (centerline distance, on block, on line, arc length, a span's slide): a stroke has a segment, so the first replaces this
+    let mut best: (f64, Pt, Pt, f64, Slide) = (f64::INFINITY, (0.0, 0.0), (0.0, 0.0), 0.0, None);
     let mut walked = 0.0;
     for (a, b) in path(&s.poly) {
         count("shape_distance@leader", 1);
-        let (p, q) = block_pair(quad, a, b);
+        let (p, q, slide) = block_pair(quad, a, b);
         let d = dist(p, q);
         let (_, t) = nearest_on(q, a, b);
-        if d < best.0 {
-            best = (d, p, q, walked + t * dist(a, b));
+        if nearer(d, slide.is_some(), (best.0, best.4.is_some())) {
+            best = (d, p, q, walked + t * dist(a, b), slide);
         }
         walked += dist(a, b);
     }
-    let (_, mut p, mut q, s_at) = best;
-    if let Some((g0, g1)) = dash_gap(s_at, &s.dash, s.offset) {
-        let ends = [
-            at_length(&s.poly, g0.max(0.0)),
-            at_length(&s.poly, g1.min(walked)),
-        ];
-        q = ends
-            .into_iter()
-            .min_by(|x, y| dist(p, *x).total_cmp(&dist(p, *y)))
-            .unwrap_or(q);
-        p = block_pair(quad, q, q).0;
+    let (_, mut p, mut q, s_at, mut slide) = best;
+    // a slide stays on the dash its span's middle is on; an end moved off a gap stands at a dash's end, flat there as a line's own end
+    // is, and slides nowhere
+    let (mut at, mut dash_end) = (s_at, false);
+    match dash_part(s_at, &s.dash, s.offset) {
+        Some((i, d0, d1)) if i % 2 == 0 => {
+            slide = slide.map(|(u, by)| (u, by.min(s_at - d0).min(d1 - s_at)));
+        }
+        Some((_, g0, g1)) => {
+            let near = |g: f64| dist(p, at_length(&s.poly, g));
+            at = [g0.max(0.0), g1.min(walked)]
+                .into_iter()
+                .min_by(|x, y| near(*x).total_cmp(&near(*y)))
+                .unwrap_or(s_at);
+            (slide, dash_end, q) = (None, true, at_length(&s.poly, at));
+            p = block_pair(quad, q, q).0;
+        }
+        None => {}
     }
-    let ended = s_at <= 1e-9 || s_at >= walked - 1e-9;
+    let ended = dash_end || at <= 1e-9 || at >= walked - 1e-9;
     let end = if ended && matches!(s.cap, Cap::Butt) {
         // the flat end: only the part of the step to the block across the line reaches ink
-        let (a, b) = if s_at <= 1e-9 {
-            (s.poly[0], s.poly[1])
-        } else {
-            (s.poly[s.poly.len() - 1], s.poly[s.poly.len() - 2])
-        };
+        let (a, b) = segment_at(&s.poly, at);
         let l = dist(a, b).max(1e-12);
         let (ux, uy) = ((b.0 - a.0) / l, (b.1 - a.1) / l);
         let (vx, vy) = (p.0 - q.0, p.1 - q.1);
@@ -148,11 +204,24 @@ fn stroke_end(quad: &[Pt; 4], s: &Shape) -> (f64, Pt, Pt) {
     } else {
         toward(q, p, half)
     };
-    (dist(p, end), block_pair(quad, end, end).0, end)
+    (dist(p, end), block_pair(quad, end, end).0, end, slide)
 }
 
-/// The nearest end on a closed outline: its drawn edge (a disc's curve), out by the stroke drawn on it.
-fn outline_end(quad: &[Pt; 4], s: &Shape) -> (f64, Pt, Pt) {
+/// The segment of a path that arc length `at` falls on, the last where it runs to the end.
+fn segment_at(poly: &[Pt], at: f64) -> (Pt, Pt) {
+    let mut left = at;
+    path(poly)
+        .find(|&(a, b)| {
+            let l = dist(a, b);
+            left -= l;
+            left <= 0.0
+        })
+        .unwrap_or((poly[poly.len() - 2], poly[poly.len() - 1]))
+}
+
+/// The nearest end on a closed outline: its drawn edge (a disc's curve), out by the stroke drawn on it, and its slide where it is a shared
+/// span's middle.
+fn outline_end(quad: &[Pt; 4], s: &Shape) -> (f64, Pt, Pt, Slide) {
     let disc = (s.tag == "circle" || s.tag == "ellipse") && s.poly.len() == 4;
     let pts: Vec<Pt> = if disc {
         let (p0, p1, p3) = (s.poly[0], s.poly[1], s.poly[3]);
@@ -171,7 +240,7 @@ fn outline_end(quad: &[Pt; 4], s: &Shape) -> (f64, Pt, Pt) {
             let p = block_pair(quad, c, c).0;
             let q = toward(c, p, ru);
             let end = toward(q, p, s.edge);
-            return (dist(p, end), p, end);
+            return (dist(p, end), p, end, None);
         }
         let r = ru.max(rv);
         #[expect(
@@ -196,33 +265,42 @@ fn outline_end(quad: &[Pt; 4], s: &Shape) -> (f64, Pt, Pt) {
         s.poly.clone()
     };
     // an outline has an edge, so the first replaces this
-    let mut best: (f64, Pt, Pt) = (f64::INFINITY, (0.0, 0.0), (0.0, 0.0));
+    let mut best: (f64, Pt, Pt, Slide) = (f64::INFINITY, (0.0, 0.0), (0.0, 0.0), None);
     for (a, b) in ring(&pts) {
         count("shape_distance@leader", 1);
-        let (p, q) = block_pair(quad, a, b);
-        if dist(p, q) < best.0 {
-            best = (dist(p, q), p, q);
+        let (p, q, slide) = block_pair(quad, a, b);
+        if nearer(dist(p, q), slide.is_some(), (best.0, best.3.is_some())) {
+            best = (dist(p, q), p, q, slide);
         }
     }
-    let (_, p, q) = best;
+    let (_, p, q, slide) = best;
     let end = toward(q, p, s.edge);
-    (dist(p, end), p, end)
+    (dist(p, end), p, end, slide)
+}
+
+/// The leader [`leader_span`] draws, without its slide.
+///
+/// Research: the leader alone - NONE: [`leader_span`]'s two ends
+#[must_use]
+pub fn leader(c: Pt, wh: (f64, f64, f64), shapes: &[Shape], parts: &[usize]) -> Option<(Pt, Pt)> {
+    leader_span(c, wh, shapes, parts).map(|(a, b, _)| (a, b))
 }
 
 /// The leader from a block (`c`, `w` x `h` at `deg`) to the nearest drawn point of its feature's parts: `(start on the block, end on the
-/// ink)`, or `None` where the parts draw nothing.
+/// ink, its slide)`, or `None` where the parts draw nothing; the slide where it ends at a shared span's middle, of a closed outline or a
+/// stroke (a dashed stroke's held to the dash it ends on; an end moved off a dash's gap slides nowhere).
 ///
 /// Research:
 ///     the nearest drawn point - research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: it ends at the nearest drawn point, not a box that may hold bare ground
 ///     the tie order - research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: a closed outline before a stroke, the wider of two strokes, the one drawn first
 ///     a butt end - research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: its ends flat, squared off or round as drawn; a butt end is flat, a square or round one read as round (CONVENTION of this placer: a square cap's corner is within half a stroke of its round reading)
 #[must_use]
-pub fn leader(
+pub fn leader_span(
     c: Pt,
     (w, h, deg): (f64, f64, f64),
     shapes: &[Shape],
     parts: &[usize],
-) -> Option<(Pt, Pt)> {
+) -> Option<(Pt, Pt, Slide)> {
     let quad = block(c, w, h, deg);
     let mut best: Option<End> = None;
     for (order, &i) in parts.iter().enumerate() {
@@ -231,25 +309,25 @@ pub fn leader(
             if s.poly.len() < 2 {
                 continue;
             }
-            let (d, p, q) = stroke_end(&quad, s);
-            (d, true, s.half, order, q, p)
+            let (d, p, q, slide) = stroke_end(&quad, s);
+            (d, true, s.half, order, q, p, slide)
         } else {
             if s.poly.len() < 3 {
                 continue;
             }
-            let (d, p, q) = outline_end(&quad, s);
-            (d, false, 0.0, order, q, p)
+            let (d, p, q, slide) = outline_end(&quad, s);
+            (d, false, 0.0, order, q, p, slide)
         };
         if best.as_ref().is_none_or(|b| better(&found, b)) {
             best = Some(found);
         }
     }
-    best.map(|e| (e.5, e.4))
+    best.map(|e| (e.5, e.4, e.6))
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{dash_gap, leader};
+    use super::{dash_gap, leader, leader_span};
     use crate::caption_place::Shape;
     use crate::labels::hand_sheet::Cap;
 
@@ -308,6 +386,19 @@ mod tests {
         s.dash = vec![4.0, 4.0];
         let (_, end) = leader((6.0, 20.0), (2.0, 2.0, 0.0), &[s], &[0]).unwrap();
         assert!((end.0 - 4.0).abs() < 0.1 || (end.0 - 8.0).abs() < 0.1);
+    }
+
+    /// 0330: a leader to a butt-capped dashed line ends on a dash's flat end, never past it into the gap.
+    #[test]
+    fn a_leader_stops_at_a_butt_dashs_flat_end() {
+        // dashes of 4 and gaps of 4 from x = 0, 2 px wide and flat-ended: the block's nearest span (x 5 to 7) lies in the gap 4..8, so
+        // the leader ends at a dash's end, out across the line from it and no further along
+        let mut s = stroke(vec![(0.0, 0.0), (40.0, 0.0)], 1.0);
+        s.dash = vec![4.0, 4.0];
+        s.cap = Cap::Butt;
+        let (_, end) = leader((6.0, 3.0), (2.0, 2.0, 0.0), &[s], &[0]).unwrap();
+        let on_dash = end.0 <= 4.0 + 1e-9 || end.0 >= 8.0 - 1e-9;
+        assert!(on_dash, "{end:?}");
     }
 
     /// 0330: equally near, a closed outline is taken before a stroke, and the wider stroke before the thinner.
@@ -382,6 +473,49 @@ mod tests {
         let far = stroke(vec![(0.0, 50.0), (10.0, 50.0)], 0.5);
         let (_, end) = leader((20.0, 8.0), (4.0, 2.0, 0.0), &[bent, far], &[0, 1]).unwrap();
         assert!((end.0 - 10.5).abs() < 0.1);
+    }
+
+    /// Where the block and the outline's nearest edge share a span, every point of it equally near, the leader ends at the span's middle
+    /// (449 T384: from the span's end it ran along the next building's edge); a stroke's too, and a block wider than the edge's span
+    /// meets the whole edge, its middle taken.
+    #[test]
+    fn a_shared_span_is_met_at_its_middle() {
+        let privy = outline(
+            "rect",
+            vec![
+                (247.5, 621.0),
+                (262.5, 621.0),
+                (262.5, 636.0),
+                (247.5, 636.0),
+            ],
+            0.4,
+        );
+        let (a, b) = leader((255.0, 558.975), (27.0, 8.0, 0.0), &[privy], &[0]).unwrap();
+        let on = (a.0 - 255.0).abs() < 1e-9 && (b.0 - 255.0).abs() < 1e-9;
+        assert!(on, "{a:?} {b:?}");
+        assert!((b.1 - 620.6).abs() < 1e-9 && (a.1 - 562.975).abs() < 1e-9);
+        // a narrow block over a long stroke: the block's own span, its middle under the block's middle
+        let line = stroke(vec![(0.0, 10.0), (100.0, 10.0)], 0.5);
+        let (a, b) = leader((30.0, -10.0), (8.0, 4.0, 0.0), &[line], &[0]).unwrap();
+        let on = (a.0 - 30.0).abs() < 1e-9 && (b.0 - 30.0).abs() < 1e-9;
+        assert!(on, "{a:?} {b:?}");
+    }
+
+    /// A stroke's shared span slides as a closed outline's does (`Placer::led`), a dashed stroke's only along the dash it ends on.
+    #[test]
+    fn a_strokes_shared_span_slides_within_its_dash() {
+        // the narrow block over a long solid stroke: its whole width of 8 px shared, so a slide of 4 either way along the stroke
+        let line = stroke(vec![(0.0, 10.0), (100.0, 10.0)], 0.5);
+        let (_, _, slide) = leader_span((30.0, -10.0), (8.0, 4.0, 0.0), &[line], &[0]).unwrap();
+        let ((ux, uy), half) = slide.expect("a solid stroke's span slides");
+        let along = ux.abs() > 1.0 - 1e-9 && uy.abs() < 1e-9;
+        assert!(along && (half - 4.0).abs() < 1e-9, "{slide:?}");
+        // dashes of 5 and gaps of 2 from x = 0: the span's middle (x = 30) on the dash 28..33, so the slide is held to 2
+        let mut dashed = stroke(vec![(0.0, 10.0), (100.0, 10.0)], 0.5);
+        dashed.dash = vec![5.0, 2.0];
+        let (_, _, slide) = leader_span((30.0, -10.0), (8.0, 4.0, 0.0), &[dashed], &[0]).unwrap();
+        let (_, half) = slide.expect("a dashed stroke's span slides on its dash");
+        assert!((half - 2.0).abs() < 1e-9, "{slide:?}");
     }
 
     /// Parts that draw nothing give no leader.

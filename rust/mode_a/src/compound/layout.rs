@@ -38,6 +38,12 @@ pub const CLEAR: f64 = 1.5;
 ///
 /// Research: fire gap along a wall - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: 6 ft, the low end of the page's 6-8 ft between wooden buildings and 6-10 ft at a kura, both guesses there; a knob
 pub const FIRE_GAP: f64 = 6.0;
+/// The lane a granary's or stable's door opens on where it stands on the building's end along its row: a cart's width clear past the
+/// fire-water tub beside the door (feet), about 9.3.
+///
+/// Research: a cart's lane past a door's tub - GUESS: 0082's drawing page's cart lane (`ground::CART_FT`, a guess there) kept clear past the fire-water tub beside the door, the tub's standoff and breadth (`parts::TUB_OFF`, `parts::TUB_R`) this project's allowance, no page's: 6 + 0.73 + 2.53 ft, about 9.3 ft, wider than the 6-8 ft fire gap (449 T388: in a 6 ft fire gap the county example's stables' tub left a cart 2.7 ft)
+pub const CART_LANE: f64 =
+    super::ground::CART_FT + super::parts::TUB_OFF + 2.0 * super::parts::TUB_R;
 /// A gate's held approach, inside the wall (feet).
 ///
 /// Research: a gate's held approach - GUESS: 12 ft, about the passage's own scale (the derivation's assumption 6); nothing stands in a gateway (docs/buildings.md checklist, itself a GUESS of the project)
@@ -345,6 +351,7 @@ impl Layout {
     ///     the program's start - GUESS: a building the program starts at a point along its wall takes the free span nearest it, the derivation's start-end knob
     ///     second rank - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the rear rank holds stores, set behind its wall's rank-1 row by a fire gap; servants lodge on the street edge, never in a rear rank
     ///     the shrine in its corner - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: a compound shrine in a corner of its grounds beside one tree, the tree's ground held past the shrine's far end
+    ///     a cart's lane past a door's tub - GUESS research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html: a granary or stable whose door is on its end along its row is seated with `CART_LANE` of ground on that end, held as it is seated, so a neighbor seated before or after it, or the wall or divider ending its row, stands a cart's width past the door's tub (449 T388)
     fn seat_one(&mut self, p: &Program, i: usize, divider_first: bool) -> Result<Bx, Error> {
         let b = &p.buildings[i];
         let key = row_key(b);
@@ -360,9 +367,24 @@ impl Layout {
             b.inset
         };
         let (strip, len) = band(p, b, inset);
+        // a cart-route door on an end along the row: the span sought holds the lane's extra ground on that end, and is kept
+        // FIRE_GAP - CLEAR off the row's end there, so the wall or divider past the strip's CLEAR stands as far off as a neighbor's fire
+        // gap would - a whole lane at a row's end too, whichever way the building is seated
+        let lane = door_lane(p, i, strip.along_x);
+        let end_off = FIRE_GAP - CLEAR;
         let ask = Ask {
-            strip,
-            len,
+            strip: match lane {
+                Some((_, true)) => Strip {
+                    hi: strip.hi - end_off,
+                    ..strip
+                },
+                Some((_, false)) => Strip {
+                    lo: strip.lo + end_off,
+                    ..strip
+                },
+                None => strip,
+            },
+            len: len + lane.map_or(0.0, |l| l.0),
             rule: &building_rule,
             reach: FIRE_GAP,
             f: "compound_building",
@@ -375,28 +397,30 @@ impl Layout {
         let mid = f64::midpoint(strip.lo, strip.hi);
         let at = if b.beside_gate {
             let g = &p.gates[0];
-            nearest(&mut self.grid, &ask, g.at - len / 2.0)
+            nearest(&mut self.grid, &ask, g.at - ask.len / 2.0)
         } else if let Some(near) = b.near {
             nearest(&mut self.grid, &ask, near)
         } else if b.kind == "compound shrine" {
             // the shrine's tree's ground held past its far end as it is seated, so the tree beside it has room
             let room = Ask {
-                len: len + TREE_ROOM,
+                len: ask.len + TREE_ROOM,
                 ..ask
             };
             let s = walk(&mut self.grid, &room, &row, strip.lo, 1.0);
             if let Some(s) = s {
-                self.grid
-                    .file(strip.bx(s + len, s + len + TREE_ROOM, 0.0), What::Held(i));
+                self.grid.file(
+                    strip.bx(s + ask.len, s + ask.len + TREE_ROOM, 0.0),
+                    What::Held(i),
+                );
             }
             s
         } else if b.wall == Wall::Divider && divider_first {
             match centered(&mut self.grid, &ask, mid) {
                 Some(s) => Some(s),
-                None => nearest(&mut self.grid, &ask, mid - len / 2.0),
+                None => nearest(&mut self.grid, &ask, mid - ask.len / 2.0),
             }
         } else if b.wall == Wall::Divider {
-            nearest(&mut self.grid, &ask, mid - len / 2.0)
+            nearest(&mut self.grid, &ask, mid - ask.len / 2.0)
         } else {
             walk(&mut self.grid, &ask, &row, strip.lo, 1.0)
         };
@@ -406,7 +430,24 @@ impl Layout {
                 b.name, b.w, b.h
             )));
         };
-        Ok(strip.bx(s, s + len, 0.0))
+        let Some((extra, high)) = lane else {
+            return Ok(strip.bx(s, s + len, 0.0));
+        };
+        // the building at the span's far end from its door, and the lane held from its door's end, so a neighbor seated later keeps its
+        // CLEAR past the held ground and stands the whole lane off
+        let (b0, b1) = if high {
+            (s, s + len)
+        } else {
+            (s + extra, s + extra + len)
+        };
+        let hold = CART_LANE - CLEAR;
+        let (h0, h1) = if high {
+            (b1, b1 + hold)
+        } else {
+            (b0 - hold, b0)
+        };
+        self.grid.file(strip.bx(h0, h1, 0.0), What::Held(i));
+        Ok(strip.bx(b0, b1, 0.0))
     }
 
     /// The ell at one of its host's ends, the program's end or the one toward the middle of the wall first, one query each.
@@ -630,10 +671,30 @@ pub fn ell_box(hb: Bx, back: Face, end: Face, w: f64, h: f64) -> Bx {
     }
 }
 
-/// The doors a building opens by: the program's, or none for an open shed, or one at each dwelling's middle on its court face, or one at
-/// its court face's middle.
+/// The ground a building holds along its row past its fire gap for the lane its door opens on, and whether that end is the row's high
+/// one: a granary or stable that takes a tub, its door on an end of the building along the row (the first such door), so the door's tub
+/// stands in the gap between it and its neighbor.
+///
+/// Research: a cart's lane past a door's tub - GUESS research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html: the lane for the cart route's doors (`ground::CART_KINDS`), the cart's width past the tub (`CART_LANE`); a door on the court or rear face opens on open ground and holds none
+fn door_lane(p: &Program, i: usize, along_x: bool) -> Option<(f64, bool)> {
+    let b = &p.buildings[i];
+    if !super::ground::CART_KINDS.contains(&b.kind.as_str()) || super::parts::tubs_owed(p, i) == 0 {
+        return None;
+    }
+    let extra = (CART_LANE - FIRE_GAP).max(0.0);
+    door_specs(b).iter().find_map(|d| match (along_x, d.face) {
+        (true, Face::W) | (false, Face::N) => Some((extra, false)),
+        (true, Face::E) | (false, Face::S) => Some((extra, true)),
+        _ => None,
+    })
+}
+
+/// The doors a building opens by: the program's, or none for an open shed, or one on a stable's gable into its passage, or one at each
+/// dwelling's middle on its court face, or one at its court face's middle.
 ///
 /// Research:
+///     a stable entered at its gable - research/questions/0108-stables-umaya.html: the Shomei's three-bay warrior's stable, the most formal of its day, is gable-entered, and its earth passage (kusa-no-ma) runs the building's length before the stalls, the grooms' room across it - so a stable the program gives no door opens at a gable end into the passage, its door's middle at the passage's middle (449 T388: on its court face it opened into the grooms' room)
+///     which gable - GUESS: the record does not say which end a stable was entered at; the west gable (the north one where the court face runs north-south), the algorithmically easier route of the two, as the county example's stables kept theirs (feature 374 wave 128); a program names the other end by declaring the door (the round-trip test's east)
 ///     an open shed doorless - CONVENTION: an open-sided workshop under a roof on posts is entered between its posts, so it is drawn with no door, as the hand sheet's cinnabar workshop is (ochiba-magistracy.svg; 449 T359)
 ///     a door at each dwelling's middle - GUESS: no page seats a dwelling's door along its face (feature 449 T187); a building's one door at its face's middle
 ///     the default door on the court face - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: guest doors feed courts and service doors work space; a building the program gives no door opens through the face toward its court
@@ -647,6 +708,23 @@ pub fn door_specs(b: &Building) -> Vec<super::spec::DoorSpec> {
         return Vec::new();
     }
     let face = court_face(b);
+    if b.interior.as_deref() == Some(super::emit::STABLES) {
+        // gable-entered, into the earth passage behind the grooms' room (449 T388): its middle measured from the court face
+        let (grooms, passage) = super::emit::STABLE_DEPTHS;
+        let deep = if face.along_x() { b.h } else { b.w };
+        let from_court = (grooms + passage / 2.0) / deep;
+        let (gable, at) = match face {
+            Face::N => (Face::W, from_court),
+            Face::S => (Face::W, 1.0 - from_court),
+            Face::W => (Face::N, from_court),
+            Face::E => (Face::N, 1.0 - from_court),
+        };
+        return vec![super::spec::DoorSpec {
+            face: gable,
+            at,
+            genkan: false,
+        }];
+    }
     let len = if face.along_x() { b.w } else { b.h };
     if b.bays.is_empty() {
         return vec![super::spec::DoorSpec {

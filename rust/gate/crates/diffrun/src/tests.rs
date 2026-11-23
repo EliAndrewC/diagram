@@ -486,20 +486,50 @@ fn a_side_that_fails_to_run_is_reported_and_kept_nowhere() {
 /// 449 T167, FR-008's tenth of a second: both sides waiting out three took 321 ms): the old side's `sleep` is a stand-in that returns at
 /// once, and the only other commands under the timeout are `true` and the step's own start - at two seconds a two-command `sh` setup
 /// outran it once under a load of other tests (2026-11-17), so the setup is `true` and there is no build.
+///
+/// THE WINDOW CALIBRATED (feature 449 T391): the one-second timeout's `true` setup itself timed out under the cover build at a load of
+/// about nineteen on twenty-two cores (449 T351's second paired run, 2026-11-23), and again, 37 runs in 40, with the test pinned to one
+/// core beside 48 busy loops (2026-11-23, `taskset -c 3`), where it passed 40 in 40 after. So the timeout is no hard-coded figure: a
+/// calibration loop runs `true` five times through the runner's own `run::command` just before the case, and the timeout is ten of the
+/// slowest of those starts, in the test build's seconds, at least one - a quiet machine keeps the one second (50 ms); a loaded one
+/// widens it as its starts slow (l7r/diagram/CLAUDE.md: a CPU-time bound in a test is scaled by a calibration loop). The real `sleep`
+/// the new side runs outlasts the window by a second.
 #[test]
 fn a_side_that_outruns_its_timeout_is_stopped_and_named() {
     let fx = Fx::new();
     std::fs::create_dir_all(fx.root().join("quick")).unwrap();
     l7r_gate_core::write_executable(&fx.root().join("quick/sleep"), "#!/bin/sh\n");
-    let mut v = Fx::base(&json!([{"name": "slow", "steps": [["sleep", "5"]]}]));
-    v["world"]["timeout_s"] = json!(1);
+    let env = [("PATH".to_owned(), "/usr/bin:/bin".to_owned())];
+    let slowest = (0..5)
+        .map(|_| {
+            let t = std::time::Instant::now();
+            crate::run::command(
+                &["true".to_owned()],
+                fx.root(),
+                &env,
+                std::time::Duration::from_secs(60),
+            )
+            .unwrap();
+            t.elapsed()
+        })
+        .max()
+        .unwrap();
+    let timeout = (10 * slowest.as_micros())
+        .div_ceil(crate::run::SECOND.as_micros())
+        .max(1);
+    let sleep = (u128::from(u32::try_from(timeout).unwrap()) * crate::run::SECOND.as_millis())
+        .div_ceil(1000)
+        + 1;
+    let mut v = Fx::base(&json!([{"name": "slow", "steps": [["sleep", sleep.to_string()]]}]));
+    v["world"]["timeout_s"] = json!(u64::try_from(timeout).unwrap());
     v["world"]["setup"] = json!([["true"]]);
     v["sides"]["old"].as_object_mut().unwrap().remove("build");
     v["sides"]["old"]["env"]["PATH"] = json!("{ROOT}/quick:/usr/bin:/bin");
     let (r, rep) = fx.run(&v, &[]);
     assert_eq!(r.code, 1);
     let said = rep["cases"][0]["errors"][0].as_str().unwrap_or_default();
-    assert!(said.contains("sleep 5: timed out after 1 s"), "{said}");
+    let want = format!("sleep {sleep}: timed out after {timeout} s");
+    assert!(said.contains(&want), "{said}");
 }
 
 #[test]

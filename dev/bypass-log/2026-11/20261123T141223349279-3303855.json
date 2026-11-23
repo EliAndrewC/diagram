@@ -1,0 +1,7 @@
+{
+  "utc": "2026-11-23T14:12:23Z",
+  "target": "review-accept",
+  "commit": "8e5b571fef",
+  "outcome": "permitted",
+  "why": "review-accept building-review--ochiba-roundtrip-test C7: confirmation, nothing to act on"
+}

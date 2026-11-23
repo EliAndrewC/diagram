@@ -249,13 +249,27 @@ pub fn structures_on_walls(plan: &ParsedPlan, min_px: f64) -> Vec<StructureOnWal
     out
 }
 
-/// Does a third building stand in the corridor between buildings `i` and `j`, its x-interval `(lo, hi)` and y-interval `(near, far)`?
-fn blocked(buildings: &[Rect], i: usize, j: usize, x: (f64, f64), y: (f64, f64)) -> bool {
+/// Does a third building, or a drawn practice ground, stand in the corridor between buildings `i` and `j`, its x-interval `(lo, hi)` and
+/// y-interval `(near, far)`?
+fn blocked(
+    (buildings, grounds): (&[Rect], &[&Rect]),
+    i: usize,
+    j: usize,
+    x: (f64, f64),
+    y: (f64, f64),
+) -> bool {
+    let within = |r: &Rect| r.x < x.1 && r.x2() > x.0 && r.y < y.1 && r.y2() > y.0;
     buildings
         .iter()
         .enumerate()
-        .any(|(k, r)| k != i && k != j && r.x < x.1 && r.x2() > x.0 && r.y < y.1 && r.y2() > y.0)
+        .any(|(k, r)| k != i && k != j && within(r))
+        || grounds.iter().any(|r| within(r))
 }
+
+/// The kind a drawn practice ground is tagged with.
+///
+/// Research: the practice ground's tag - NONE: the name a sheet tags its practice ground with, deciding nothing about the place
+pub const PRACTICE_GROUND: &str = "practice ground";
 
 /// Empty gaps (5-30 ft) between buildings stacked on a shared edge, largest first, one within 15 px of a larger kept.
 ///
@@ -263,9 +277,16 @@ fn blocked(buildings: &[Rect], i: usize, j: usize, x: (f64, f64), y: (f64, f64))
 ///     its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N13, 2026-10-25) - 30 (reporting window: 10 ft shared edge, gaps from 5 ft)
 ///     its salts, guards and sentinels - NONE: they decide nothing about the place - 15 (dedupe radius)
 ///     its reported gap - GUESS: no source could speak to it, a value of ours, the top of the reporting window above - 90 (upper bound on the reported gap, 30 ft: buildings farther apart are not judged for spacing)
+///     a practice ground in the gap - CONVENTION: a drawn practice ground (its rects tagged `practice ground`, 0165's drawing page's swept patch of open ground kept for daily keiko) standing in the corridor is ground laid out for a use, read as a third building there is, not the unbuilt slack the report lists (449 T383: Ochiba's practice ground between its tax archive and the senior retainers' quarters was listed as a loose 29.3 ft kura gap)
 #[must_use]
 pub fn aligned_gaps(plan: &ParsedPlan) -> Vec<Gap> {
     let b = &plan.buildings;
+    let grounds: Vec<&Rect> = plan
+        .fills
+        .iter()
+        .filter(|r| plan.label_kinds.get(&r.pos).map(String::as_str) == Some(PRACTICE_GROUND))
+        .collect();
+    let laid = (b.as_slice(), grounds.as_slice());
     let mut raw = Vec::new();
     for (i, a) in b.iter().enumerate() {
         for (j, c) in b.iter().enumerate() {
@@ -275,7 +296,7 @@ pub fn aligned_gaps(plan: &ParsedPlan) -> Vec<Gap> {
             let ox = min(a.x2(), c.x2()) - max(a.x, c.x);
             if ox >= 30.0 && c.y >= a.y2() && (15.0..=90.0).contains(&(c.y - a.y2())) {
                 let (xl, xr) = (max(a.x, c.x), min(a.x2(), c.x2()));
-                if !blocked(b, i, j, (xl, xr), (a.y2(), c.y)) {
+                if !blocked(laid, i, j, (xl, xr), (a.y2(), c.y)) {
                     raw.push(Gap {
                         ft: (c.y - a.y2()) / FTPX,
                         orient: "V",
@@ -288,7 +309,7 @@ pub fn aligned_gaps(plan: &ParsedPlan) -> Vec<Gap> {
             let oy = min(a.y2(), c.y2()) - max(a.y, c.y);
             if oy >= 30.0 && c.x >= a.x2() && (15.0..=90.0).contains(&(c.x - a.x2())) {
                 let (yl, yr) = (max(a.y, c.y), min(a.y2(), c.y2()));
-                if !blocked(b, i, j, (a.x2(), c.x), (yl, yr)) {
+                if !blocked(laid, i, j, (a.x2(), c.x), (yl, yr)) {
                     raw.push(Gap {
                         ft: (c.x - a.x2()) / FTPX,
                         orient: "H",

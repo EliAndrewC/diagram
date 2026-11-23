@@ -32,6 +32,13 @@ pub const PERIMETER_FT: f64 = 25.0;
 ///
 /// Research: cart lane - GUESS research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html: about 6 ft where carts use it
 pub const CART_FT: f64 = 6.0;
+/// The buildings whose doors a cart reaches, the granary and the stables (`cart_route`), and whose door on an end along its row opens on
+/// a cart's lane (`layout::CART_LANE`).
+///
+/// Research:
+///     the granary among the cart's kinds - research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html: a compound that ships or receives bulk goods keeps a cart lane, so the granary's doors get a cart route and a held lane
+///     the stables among the cart's kinds - GUESS: the stables get a cart route and a held lane too (feature 417 T36 pass P4: no source could speak to it)
+pub const CART_KINDS: [&str; 2] = ["granary", "stables"];
 
 /// The free rectangles of one court and their adjacency.
 pub struct Ground {
@@ -290,7 +297,7 @@ fn cart_route(p: &Program, l: &Layout, court: Court, g: &Ground) -> Result<(), E
             ));
         }
     }
-    for kind in ["granary", "stables"] {
+    for kind in CART_KINDS {
         let Some(i) = p
             .buildings
             .iter()

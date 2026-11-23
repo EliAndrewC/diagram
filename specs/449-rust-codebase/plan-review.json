@@ -1748,16 +1748,16 @@
    "declared": "spec-fidelity"
   },
   "### T383, T384, T388, T391 (bundle)": {
-   "sha256": "1fcb1233b89a259b9de954ad68f43acdcc53b0f52248bcea833e5bf180b8802f",
+   "sha256": "ea997b6047c9ca0ad9a8962b70272438a793b5a03475c904eca9fbcc3e0caa4c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T383, T384, T388, T391 Approach (checklist part A)": {
-   "sha256": "ec3d9fb3fd47b061b1ab009372a731ecef6f34eab8bd73afd3c1c0680f50b5bf",
+   "sha256": "c11d4c2d3636309c6a295dddbd084d8c0438c3d6dae8912a892585b520eb4deb",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T371, T372, T373, T376, T381, T382, T385 (bundle)": {
    "sha256": "465f8e29fc67368d4853b833ae2e4111406d346cdf55bd182f945c6b76aa215c",
@@ -24858,6 +24858,28 @@
      "class": "within",
      "why": "Each is a difference or a citation gap, not a wrong outcome (XIV v2.36.0). garden.md's line states the default form, and the plan says its Depiction covers Ubame's departure. The study's 'away from the armory', by contrast, was a false statement about every plan. 'About fifteen' correctly keeps the GM's ~15 (the town's whole samurai) apart from the barracks' lodgers."
     }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T383, T384, T388, T391 (bundle)",
+    "### T383, T384, T388, T391 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:449-T383-T384-T388-T391-plan-scope",
+     "class": "within",
+     "summary": "the round arbiter accepted T383 and T384 and T388 and T391's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T383",
+    "T384",
+    "T388",
+    "T391"
    ]
   }
  ],
@@ -49540,428 +49562,480 @@
    "verdict": "CLEAR"
   },
   "T383": {
-   "section_sha256": "d7b5899b88ec0cf1ad11f5263a7dcb52d81cb9ab6db054685cf992a7ad6cee5a",
+   "section_sha256": "ae3480444f5cfdd373f7a751035c8e25b419770df7db7a3a4e01f9dd33473d2c",
    "reviewed": "2026-11-23",
-   "declared": "spec-fidelity",
+   "declared": "round-arbiter",
    "decisions": [
     {
-     "id": "T383-practice-ground",
-     "summary": "T383: aligned_gaps' blocked set counts a drawn practice ground (plan.fills rect of kind PRACTICE_GROUND) as laid-out ground, so the pack audit stops listing it as a vacancy; only report.rs calls it, no sheet moves.",
+     "id": "ask:449-T383-T384-T388-T391-plan-scope",
      "class": "within",
-     "why": "Fixes a listing that named a vacancy where ground is drawn (a check answering wrongly, a defect under XIV); the GM's 2026-11-18 'fix all known bugs in each step' and 2026-11-22 'please finish the remaining fixes'. Pinned by a red test."
-    },
-    {
-     "id": "T384-span-middle",
-     "summary": "T384: block_pair meets a shared span at its middle (span_middle, nearer()) instead of the first candidate, a CONVENTION where 0330 leaves the end open; leader_span returns the span's Slide.",
-     "class": "within",
-     "why": "Fixes the county's privy leader running from the privy's corner along the stables' wall (a leader that reads as wall, a wrong outcome). Inside the fixes the GM asked be finished; the convention fills a point research leaves open."
-    },
-    {
-     "id": "T384-slide-drawn-leader-only",
-     "summary": "T384: Placer::led keeps the middle unless it meets other ink, else draws the middle of the least-ink run along the span; the slide is applied only to the drawn leader in seat(), not inside the sweep, because inside the sweep it moved Ochiba's latrine caption under a wall.",
-     "class": "within",
-     "why": "A choice of mechanism measured on the pool (Ubame's altar leader clears the post with it; the in-sweep variant produced a worse map). Narrows nothing the GM asked; the goal (leaders read clear) is served."
-    },
-    {
-     "id": "T384-stroke-and-dash-end",
-     "summary": "T384: stroke_end carries its span's slide, held on a dashed stroke to its dash (dash_part); a dash's end takes the butt flat-end rule (segment_at), fixing an end up to half a stroke into the gap on main since T202.",
-     "class": "within",
-     "why": "Fixes impl-drift's rounds 1 and 2 code findings with red tests; the arbiter (ask:449-t383-claims-round3) accepted the bundle on exactly this code. Fixing a pre-existing defect found on the way is the GM's fix-as-we-go."
-    },
-    {
-     "id": "T384-stables-well",
-     "summary": "T384: stables_well is seated within its court face's span, its GUESS claim restated; a court-door stable whose face leaves no room for the well is refused its well aloud (no pool sheet draws one).",
-     "class": "within",
-     "why": "Fixes a well standing off its stable (wrong outcome). The loud refusal replaces a wrong drawing on a case no pool sheet reaches (constitution: fail loudly rather than draw wrong); not a defect left, so no ruling."
-    },
-    {
-     "id": "T384-last-resort",
-     "summary": "T384 table: a leader no slide clears keeps the middle and is filed.",
-     "class": "within",
-     "why": "A fallback that files rather than hides any leader the rules cannot clear; consistent with fixing every known defect in the step through a filed task."
-    },
-    {
-     "id": "T388-gable-door",
-     "summary": "T388: a stables interior with no declared door opens on its west gable (north where the court face runs north-south) at the passage's middle, per 0108's gable-entered warrior's stable; which gable and the depths are GUESSES.",
-     "class": "within",
-     "why": "Fixes horses led through the grooms' lodging (a map that reads wrong); research-grounded, guesses labeled as knobs."
-    },
-    {
-     "id": "T388-room-first-gatehouse",
-     "summary": "T388: room for the lane made by drawing the guessed gatehouse 37.5 ft (inside its kind's band; spec's sizes line, notes and a dated entry restated) after trials; a 3 ft wider envelope priced and refused for growing the outer court's west-column vacancy.",
-     "class": "within",
-     "why": "Constitution XII room-before-packing, a GUESS constant moved inside its band with its source restated; the docs/pop-up 'about 40 ft' still describes it. No narrowing of what was asked."
-    },
-    {
-     "id": "T388-cart-lane",
-     "summary": "T388: CART_LANE (a GUESS on 0082's cart lane past the tub) and door_lane seat a granary or stable whose door is on an end with the lane on that end; seat_one keeps FIRE_GAP - CLEAR off the row's end on the door's side in every branch; CART_KINDS names granary (0082) and stables (GUESS).",
-     "class": "within",
-     "why": "Fixes a tub leaving a cart 2.73 ft of a 6 ft lane, and the row-end case impl-drift round 1 found, each pinned by red tests; the arbiter ruled the lane widened to fit the cart, not packed."
-    },
-    {
-     "id": "T391-timeout-calibration",
-     "summary": "T391: the diffrun timeout test calibrates its window from a loop of `true` runs just before the case (never under the old timeout), per CLAUDE.md's calibration convention; run.rs SECOND made pub(crate).",
-     "class": "within",
-     "why": "Fixes a gate test that goes red on a loaded machine with nothing wrong (a check refusing good work); measured red unfixed and green fixed under pinned load."
-    },
-    {
-     "id": "left-T397-both-end-doors",
-     "summary": "Left: a granary or stables with doors declared on both ends holds a cart lane at one end only (door_lane's find_map); no pool sheet declares one; filed as T397, landing before T158.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "A real but unreached defect (visible effect stated). The arbiter's ruling asks it fixed 'in this step', and the GM's rule is to fix known bugs in each step before porting the next; filing it as T397 to land before T158 keeps it inside the step, so the bundle defers it without carrying it past the step. Legitimate only on that ordering."
-    },
-    {
-     "id": "left-T398-gatehouse-behind-gate",
-     "summary": "Left: seat_one seats a gatehouse beside its gate only, where 0093 attests one behind the gate too; filed as T398 (roll the form or restate the claim), landing before T158.",
-     "class": "within",
-     "why": "The arbiter ruled it a choice of form, not a defect; under constitution XIV (T196) a difference that reads fine is not a defect, so leaving it is within and needs no ruling."
-    },
-    {
-     "id": "left-T395-ochiba-latrine-leader",
-     "summary": "Left: Ochiba's 'latrine' leader runs 68.7 px through the stables, the same on main, a hand sheet's crossing fallback no T384 rule moves; filed as T395, landing before T158.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "A defect (a reader takes the latrine's name for the stables') carved out of T384's goal 'every caption's leader reads clear'. Not introduced by this bundle and needs a different mechanism from the tie-break T384 fixed; filed with its visible effect to land before T158, i.e. within the step, as the GM's fix-all-known-bugs-before-the-next-step allows. Legitimate only on that ordering."
-    },
-    {
-     "id": "left-lane-listed-loose",
-     "summary": "Left: make pack-audit lists the new 9.3 ft cart lane as a LOOSE aligned gap; every check OK.",
-     "class": "within",
-     "why": "A true measurement of deliberate unbuilt ground, not a check failing; no wrong outcome under XIV."
-    },
-    {
-     "id": "left-gatehouse-40ft-wording",
-     "summary": "Left: the gatehouse pop-up and docs/building-programs.md say 'about 40 ft' (a GUESS) while the county draws 37.5 ft; other builders' files left.",
-     "class": "within",
-     "why": "37.5 ft is about 40 ft and the round trip still draws 40; a difference from wording, not a defect (XIV)."
-    },
-    {
-     "id": "claims-round-closed",
-     "summary": "Claims round closed after round 2 by the arbiter's accept (ask:449-t383-claims-round3); the record bundle's page-edit claims left to that bundle; occasions: layout-revised building-review on county, round trip, Ochiba, Ubame, none for T383 and T391.",
-     "class": "within",
-     "why": "Follows the arbiter's recorded ruling verbatim (both round-2 out-of-change findings filed as T397 and T398); review scope matches the sheets the change moves."
+     "summary": "the round arbiter accepted T383 and T384 and T388 and T391's section as it stands"
     }
    ],
-   "verdict": "CLEAR"
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "d7b5899b88ec0cf1ad11f5263a7dcb52d81cb9ab6db054685cf992a7ad6cee5a",
+    "reviewed": "2026-11-23",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "T383-practice-ground",
+      "summary": "T383: aligned_gaps' blocked set counts a drawn practice ground (plan.fills rect of kind PRACTICE_GROUND) as laid-out ground, so the pack audit stops listing it as a vacancy; only report.rs calls it, no sheet moves.",
+      "class": "within",
+      "why": "Fixes a listing that named a vacancy where ground is drawn (a check answering wrongly, a defect under XIV); the GM's 2026-11-18 'fix all known bugs in each step' and 2026-11-22 'please finish the remaining fixes'. Pinned by a red test."
+     },
+     {
+      "id": "T384-span-middle",
+      "summary": "T384: block_pair meets a shared span at its middle (span_middle, nearer()) instead of the first candidate, a CONVENTION where 0330 leaves the end open; leader_span returns the span's Slide.",
+      "class": "within",
+      "why": "Fixes the county's privy leader running from the privy's corner along the stables' wall (a leader that reads as wall, a wrong outcome). Inside the fixes the GM asked be finished; the convention fills a point research leaves open."
+     },
+     {
+      "id": "T384-slide-drawn-leader-only",
+      "summary": "T384: Placer::led keeps the middle unless it meets other ink, else draws the middle of the least-ink run along the span; the slide is applied only to the drawn leader in seat(), not inside the sweep, because inside the sweep it moved Ochiba's latrine caption under a wall.",
+      "class": "within",
+      "why": "A choice of mechanism measured on the pool (Ubame's altar leader clears the post with it; the in-sweep variant produced a worse map). Narrows nothing the GM asked; the goal (leaders read clear) is served."
+     },
+     {
+      "id": "T384-stroke-and-dash-end",
+      "summary": "T384: stroke_end carries its span's slide, held on a dashed stroke to its dash (dash_part); a dash's end takes the butt flat-end rule (segment_at), fixing an end up to half a stroke into the gap on main since T202.",
+      "class": "within",
+      "why": "Fixes impl-drift's rounds 1 and 2 code findings with red tests; the arbiter (ask:449-t383-claims-round3) accepted the bundle on exactly this code. Fixing a pre-existing defect found on the way is the GM's fix-as-we-go."
+     },
+     {
+      "id": "T384-stables-well",
+      "summary": "T384: stables_well is seated within its court face's span, its GUESS claim restated; a court-door stable whose face leaves no room for the well is refused its well aloud (no pool sheet draws one).",
+      "class": "within",
+      "why": "Fixes a well standing off its stable (wrong outcome). The loud refusal replaces a wrong drawing on a case no pool sheet reaches (constitution: fail loudly rather than draw wrong); not a defect left, so no ruling."
+     },
+     {
+      "id": "T384-last-resort",
+      "summary": "T384 table: a leader no slide clears keeps the middle and is filed.",
+      "class": "within",
+      "why": "A fallback that files rather than hides any leader the rules cannot clear; consistent with fixing every known defect in the step through a filed task."
+     },
+     {
+      "id": "T388-gable-door",
+      "summary": "T388: a stables interior with no declared door opens on its west gable (north where the court face runs north-south) at the passage's middle, per 0108's gable-entered warrior's stable; which gable and the depths are GUESSES.",
+      "class": "within",
+      "why": "Fixes horses led through the grooms' lodging (a map that reads wrong); research-grounded, guesses labeled as knobs."
+     },
+     {
+      "id": "T388-room-first-gatehouse",
+      "summary": "T388: room for the lane made by drawing the guessed gatehouse 37.5 ft (inside its kind's band; spec's sizes line, notes and a dated entry restated) after trials; a 3 ft wider envelope priced and refused for growing the outer court's west-column vacancy.",
+      "class": "within",
+      "why": "Constitution XII room-before-packing, a GUESS constant moved inside its band with its source restated; the docs/pop-up 'about 40 ft' still describes it. No narrowing of what was asked."
+     },
+     {
+      "id": "T388-cart-lane",
+      "summary": "T388: CART_LANE (a GUESS on 0082's cart lane past the tub) and door_lane seat a granary or stable whose door is on an end with the lane on that end; seat_one keeps FIRE_GAP - CLEAR off the row's end on the door's side in every branch; CART_KINDS names granary (0082) and stables (GUESS).",
+      "class": "within",
+      "why": "Fixes a tub leaving a cart 2.73 ft of a 6 ft lane, and the row-end case impl-drift round 1 found, each pinned by red tests; the arbiter ruled the lane widened to fit the cart, not packed."
+     },
+     {
+      "id": "T391-timeout-calibration",
+      "summary": "T391: the diffrun timeout test calibrates its window from a loop of `true` runs just before the case (never under the old timeout), per CLAUDE.md's calibration convention; run.rs SECOND made pub(crate).",
+      "class": "within",
+      "why": "Fixes a gate test that goes red on a loaded machine with nothing wrong (a check refusing good work); measured red unfixed and green fixed under pinned load."
+     },
+     {
+      "id": "left-T397-both-end-doors",
+      "summary": "Left: a granary or stables with doors declared on both ends holds a cart lane at one end only (door_lane's find_map); no pool sheet declares one; filed as T397, landing before T158.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "A real but unreached defect (visible effect stated). The arbiter's ruling asks it fixed 'in this step', and the GM's rule is to fix known bugs in each step before porting the next; filing it as T397 to land before T158 keeps it inside the step, so the bundle defers it without carrying it past the step. Legitimate only on that ordering."
+     },
+     {
+      "id": "left-T398-gatehouse-behind-gate",
+      "summary": "Left: seat_one seats a gatehouse beside its gate only, where 0093 attests one behind the gate too; filed as T398 (roll the form or restate the claim), landing before T158.",
+      "class": "within",
+      "why": "The arbiter ruled it a choice of form, not a defect; under constitution XIV (T196) a difference that reads fine is not a defect, so leaving it is within and needs no ruling."
+     },
+     {
+      "id": "left-T395-ochiba-latrine-leader",
+      "summary": "Left: Ochiba's 'latrine' leader runs 68.7 px through the stables, the same on main, a hand sheet's crossing fallback no T384 rule moves; filed as T395, landing before T158.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "A defect (a reader takes the latrine's name for the stables') carved out of T384's goal 'every caption's leader reads clear'. Not introduced by this bundle and needs a different mechanism from the tie-break T384 fixed; filed with its visible effect to land before T158, i.e. within the step, as the GM's fix-all-known-bugs-before-the-next-step allows. Legitimate only on that ordering."
+     },
+     {
+      "id": "left-lane-listed-loose",
+      "summary": "Left: make pack-audit lists the new 9.3 ft cart lane as a LOOSE aligned gap; every check OK.",
+      "class": "within",
+      "why": "A true measurement of deliberate unbuilt ground, not a check failing; no wrong outcome under XIV."
+     },
+     {
+      "id": "left-gatehouse-40ft-wording",
+      "summary": "Left: the gatehouse pop-up and docs/building-programs.md say 'about 40 ft' (a GUESS) while the county draws 37.5 ft; other builders' files left.",
+      "class": "within",
+      "why": "37.5 ft is about 40 ft and the round trip still draws 40; a difference from wording, not a defect (XIV)."
+     },
+     {
+      "id": "claims-round-closed",
+      "summary": "Claims round closed after round 2 by the arbiter's accept (ask:449-t383-claims-round3); the record bundle's page-edit claims left to that bundle; occasions: layout-revised building-review on county, round trip, Ochiba, Ubame, none for T383 and T391.",
+      "class": "within",
+      "why": "Follows the arbiter's recorded ruling verbatim (both round-2 out-of-change findings filed as T397 and T398); review scope matches the sheets the change moves."
+     }
+    ],
+    "verdict": "CLEAR"
+   }
   },
   "T384": {
-   "section_sha256": "d7b5899b88ec0cf1ad11f5263a7dcb52d81cb9ab6db054685cf992a7ad6cee5a",
+   "section_sha256": "ae3480444f5cfdd373f7a751035c8e25b419770df7db7a3a4e01f9dd33473d2c",
    "reviewed": "2026-11-23",
-   "declared": "spec-fidelity",
+   "declared": "round-arbiter",
    "decisions": [
     {
-     "id": "T383-practice-ground",
-     "summary": "T383: aligned_gaps' blocked set counts a drawn practice ground (plan.fills rect of kind PRACTICE_GROUND) as laid-out ground, so the pack audit stops listing it as a vacancy; only report.rs calls it, no sheet moves.",
+     "id": "ask:449-T383-T384-T388-T391-plan-scope",
      "class": "within",
-     "why": "Fixes a listing that named a vacancy where ground is drawn (a check answering wrongly, a defect under XIV); the GM's 2026-11-18 'fix all known bugs in each step' and 2026-11-22 'please finish the remaining fixes'. Pinned by a red test."
-    },
-    {
-     "id": "T384-span-middle",
-     "summary": "T384: block_pair meets a shared span at its middle (span_middle, nearer()) instead of the first candidate, a CONVENTION where 0330 leaves the end open; leader_span returns the span's Slide.",
-     "class": "within",
-     "why": "Fixes the county's privy leader running from the privy's corner along the stables' wall (a leader that reads as wall, a wrong outcome). Inside the fixes the GM asked be finished; the convention fills a point research leaves open."
-    },
-    {
-     "id": "T384-slide-drawn-leader-only",
-     "summary": "T384: Placer::led keeps the middle unless it meets other ink, else draws the middle of the least-ink run along the span; the slide is applied only to the drawn leader in seat(), not inside the sweep, because inside the sweep it moved Ochiba's latrine caption under a wall.",
-     "class": "within",
-     "why": "A choice of mechanism measured on the pool (Ubame's altar leader clears the post with it; the in-sweep variant produced a worse map). Narrows nothing the GM asked; the goal (leaders read clear) is served."
-    },
-    {
-     "id": "T384-stroke-and-dash-end",
-     "summary": "T384: stroke_end carries its span's slide, held on a dashed stroke to its dash (dash_part); a dash's end takes the butt flat-end rule (segment_at), fixing an end up to half a stroke into the gap on main since T202.",
-     "class": "within",
-     "why": "Fixes impl-drift's rounds 1 and 2 code findings with red tests; the arbiter (ask:449-t383-claims-round3) accepted the bundle on exactly this code. Fixing a pre-existing defect found on the way is the GM's fix-as-we-go."
-    },
-    {
-     "id": "T384-stables-well",
-     "summary": "T384: stables_well is seated within its court face's span, its GUESS claim restated; a court-door stable whose face leaves no room for the well is refused its well aloud (no pool sheet draws one).",
-     "class": "within",
-     "why": "Fixes a well standing off its stable (wrong outcome). The loud refusal replaces a wrong drawing on a case no pool sheet reaches (constitution: fail loudly rather than draw wrong); not a defect left, so no ruling."
-    },
-    {
-     "id": "T384-last-resort",
-     "summary": "T384 table: a leader no slide clears keeps the middle and is filed.",
-     "class": "within",
-     "why": "A fallback that files rather than hides any leader the rules cannot clear; consistent with fixing every known defect in the step through a filed task."
-    },
-    {
-     "id": "T388-gable-door",
-     "summary": "T388: a stables interior with no declared door opens on its west gable (north where the court face runs north-south) at the passage's middle, per 0108's gable-entered warrior's stable; which gable and the depths are GUESSES.",
-     "class": "within",
-     "why": "Fixes horses led through the grooms' lodging (a map that reads wrong); research-grounded, guesses labeled as knobs."
-    },
-    {
-     "id": "T388-room-first-gatehouse",
-     "summary": "T388: room for the lane made by drawing the guessed gatehouse 37.5 ft (inside its kind's band; spec's sizes line, notes and a dated entry restated) after trials; a 3 ft wider envelope priced and refused for growing the outer court's west-column vacancy.",
-     "class": "within",
-     "why": "Constitution XII room-before-packing, a GUESS constant moved inside its band with its source restated; the docs/pop-up 'about 40 ft' still describes it. No narrowing of what was asked."
-    },
-    {
-     "id": "T388-cart-lane",
-     "summary": "T388: CART_LANE (a GUESS on 0082's cart lane past the tub) and door_lane seat a granary or stable whose door is on an end with the lane on that end; seat_one keeps FIRE_GAP - CLEAR off the row's end on the door's side in every branch; CART_KINDS names granary (0082) and stables (GUESS).",
-     "class": "within",
-     "why": "Fixes a tub leaving a cart 2.73 ft of a 6 ft lane, and the row-end case impl-drift round 1 found, each pinned by red tests; the arbiter ruled the lane widened to fit the cart, not packed."
-    },
-    {
-     "id": "T391-timeout-calibration",
-     "summary": "T391: the diffrun timeout test calibrates its window from a loop of `true` runs just before the case (never under the old timeout), per CLAUDE.md's calibration convention; run.rs SECOND made pub(crate).",
-     "class": "within",
-     "why": "Fixes a gate test that goes red on a loaded machine with nothing wrong (a check refusing good work); measured red unfixed and green fixed under pinned load."
-    },
-    {
-     "id": "left-T397-both-end-doors",
-     "summary": "Left: a granary or stables with doors declared on both ends holds a cart lane at one end only (door_lane's find_map); no pool sheet declares one; filed as T397, landing before T158.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "A real but unreached defect (visible effect stated). The arbiter's ruling asks it fixed 'in this step', and the GM's rule is to fix known bugs in each step before porting the next; filing it as T397 to land before T158 keeps it inside the step, so the bundle defers it without carrying it past the step. Legitimate only on that ordering."
-    },
-    {
-     "id": "left-T398-gatehouse-behind-gate",
-     "summary": "Left: seat_one seats a gatehouse beside its gate only, where 0093 attests one behind the gate too; filed as T398 (roll the form or restate the claim), landing before T158.",
-     "class": "within",
-     "why": "The arbiter ruled it a choice of form, not a defect; under constitution XIV (T196) a difference that reads fine is not a defect, so leaving it is within and needs no ruling."
-    },
-    {
-     "id": "left-T395-ochiba-latrine-leader",
-     "summary": "Left: Ochiba's 'latrine' leader runs 68.7 px through the stables, the same on main, a hand sheet's crossing fallback no T384 rule moves; filed as T395, landing before T158.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "A defect (a reader takes the latrine's name for the stables') carved out of T384's goal 'every caption's leader reads clear'. Not introduced by this bundle and needs a different mechanism from the tie-break T384 fixed; filed with its visible effect to land before T158, i.e. within the step, as the GM's fix-all-known-bugs-before-the-next-step allows. Legitimate only on that ordering."
-    },
-    {
-     "id": "left-lane-listed-loose",
-     "summary": "Left: make pack-audit lists the new 9.3 ft cart lane as a LOOSE aligned gap; every check OK.",
-     "class": "within",
-     "why": "A true measurement of deliberate unbuilt ground, not a check failing; no wrong outcome under XIV."
-    },
-    {
-     "id": "left-gatehouse-40ft-wording",
-     "summary": "Left: the gatehouse pop-up and docs/building-programs.md say 'about 40 ft' (a GUESS) while the county draws 37.5 ft; other builders' files left.",
-     "class": "within",
-     "why": "37.5 ft is about 40 ft and the round trip still draws 40; a difference from wording, not a defect (XIV)."
-    },
-    {
-     "id": "claims-round-closed",
-     "summary": "Claims round closed after round 2 by the arbiter's accept (ask:449-t383-claims-round3); the record bundle's page-edit claims left to that bundle; occasions: layout-revised building-review on county, round trip, Ochiba, Ubame, none for T383 and T391.",
-     "class": "within",
-     "why": "Follows the arbiter's recorded ruling verbatim (both round-2 out-of-change findings filed as T397 and T398); review scope matches the sheets the change moves."
+     "summary": "the round arbiter accepted T383 and T384 and T388 and T391's section as it stands"
     }
    ],
-   "verdict": "CLEAR"
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "d7b5899b88ec0cf1ad11f5263a7dcb52d81cb9ab6db054685cf992a7ad6cee5a",
+    "reviewed": "2026-11-23",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "T383-practice-ground",
+      "summary": "T383: aligned_gaps' blocked set counts a drawn practice ground (plan.fills rect of kind PRACTICE_GROUND) as laid-out ground, so the pack audit stops listing it as a vacancy; only report.rs calls it, no sheet moves.",
+      "class": "within",
+      "why": "Fixes a listing that named a vacancy where ground is drawn (a check answering wrongly, a defect under XIV); the GM's 2026-11-18 'fix all known bugs in each step' and 2026-11-22 'please finish the remaining fixes'. Pinned by a red test."
+     },
+     {
+      "id": "T384-span-middle",
+      "summary": "T384: block_pair meets a shared span at its middle (span_middle, nearer()) instead of the first candidate, a CONVENTION where 0330 leaves the end open; leader_span returns the span's Slide.",
+      "class": "within",
+      "why": "Fixes the county's privy leader running from the privy's corner along the stables' wall (a leader that reads as wall, a wrong outcome). Inside the fixes the GM asked be finished; the convention fills a point research leaves open."
+     },
+     {
+      "id": "T384-slide-drawn-leader-only",
+      "summary": "T384: Placer::led keeps the middle unless it meets other ink, else draws the middle of the least-ink run along the span; the slide is applied only to the drawn leader in seat(), not inside the sweep, because inside the sweep it moved Ochiba's latrine caption under a wall.",
+      "class": "within",
+      "why": "A choice of mechanism measured on the pool (Ubame's altar leader clears the post with it; the in-sweep variant produced a worse map). Narrows nothing the GM asked; the goal (leaders read clear) is served."
+     },
+     {
+      "id": "T384-stroke-and-dash-end",
+      "summary": "T384: stroke_end carries its span's slide, held on a dashed stroke to its dash (dash_part); a dash's end takes the butt flat-end rule (segment_at), fixing an end up to half a stroke into the gap on main since T202.",
+      "class": "within",
+      "why": "Fixes impl-drift's rounds 1 and 2 code findings with red tests; the arbiter (ask:449-t383-claims-round3) accepted the bundle on exactly this code. Fixing a pre-existing defect found on the way is the GM's fix-as-we-go."
+     },
+     {
+      "id": "T384-stables-well",
+      "summary": "T384: stables_well is seated within its court face's span, its GUESS claim restated; a court-door stable whose face leaves no room for the well is refused its well aloud (no pool sheet draws one).",
+      "class": "within",
+      "why": "Fixes a well standing off its stable (wrong outcome). The loud refusal replaces a wrong drawing on a case no pool sheet reaches (constitution: fail loudly rather than draw wrong); not a defect left, so no ruling."
+     },
+     {
+      "id": "T384-last-resort",
+      "summary": "T384 table: a leader no slide clears keeps the middle and is filed.",
+      "class": "within",
+      "why": "A fallback that files rather than hides any leader the rules cannot clear; consistent with fixing every known defect in the step through a filed task."
+     },
+     {
+      "id": "T388-gable-door",
+      "summary": "T388: a stables interior with no declared door opens on its west gable (north where the court face runs north-south) at the passage's middle, per 0108's gable-entered warrior's stable; which gable and the depths are GUESSES.",
+      "class": "within",
+      "why": "Fixes horses led through the grooms' lodging (a map that reads wrong); research-grounded, guesses labeled as knobs."
+     },
+     {
+      "id": "T388-room-first-gatehouse",
+      "summary": "T388: room for the lane made by drawing the guessed gatehouse 37.5 ft (inside its kind's band; spec's sizes line, notes and a dated entry restated) after trials; a 3 ft wider envelope priced and refused for growing the outer court's west-column vacancy.",
+      "class": "within",
+      "why": "Constitution XII room-before-packing, a GUESS constant moved inside its band with its source restated; the docs/pop-up 'about 40 ft' still describes it. No narrowing of what was asked."
+     },
+     {
+      "id": "T388-cart-lane",
+      "summary": "T388: CART_LANE (a GUESS on 0082's cart lane past the tub) and door_lane seat a granary or stable whose door is on an end with the lane on that end; seat_one keeps FIRE_GAP - CLEAR off the row's end on the door's side in every branch; CART_KINDS names granary (0082) and stables (GUESS).",
+      "class": "within",
+      "why": "Fixes a tub leaving a cart 2.73 ft of a 6 ft lane, and the row-end case impl-drift round 1 found, each pinned by red tests; the arbiter ruled the lane widened to fit the cart, not packed."
+     },
+     {
+      "id": "T391-timeout-calibration",
+      "summary": "T391: the diffrun timeout test calibrates its window from a loop of `true` runs just before the case (never under the old timeout), per CLAUDE.md's calibration convention; run.rs SECOND made pub(crate).",
+      "class": "within",
+      "why": "Fixes a gate test that goes red on a loaded machine with nothing wrong (a check refusing good work); measured red unfixed and green fixed under pinned load."
+     },
+     {
+      "id": "left-T397-both-end-doors",
+      "summary": "Left: a granary or stables with doors declared on both ends holds a cart lane at one end only (door_lane's find_map); no pool sheet declares one; filed as T397, landing before T158.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "A real but unreached defect (visible effect stated). The arbiter's ruling asks it fixed 'in this step', and the GM's rule is to fix known bugs in each step before porting the next; filing it as T397 to land before T158 keeps it inside the step, so the bundle defers it without carrying it past the step. Legitimate only on that ordering."
+     },
+     {
+      "id": "left-T398-gatehouse-behind-gate",
+      "summary": "Left: seat_one seats a gatehouse beside its gate only, where 0093 attests one behind the gate too; filed as T398 (roll the form or restate the claim), landing before T158.",
+      "class": "within",
+      "why": "The arbiter ruled it a choice of form, not a defect; under constitution XIV (T196) a difference that reads fine is not a defect, so leaving it is within and needs no ruling."
+     },
+     {
+      "id": "left-T395-ochiba-latrine-leader",
+      "summary": "Left: Ochiba's 'latrine' leader runs 68.7 px through the stables, the same on main, a hand sheet's crossing fallback no T384 rule moves; filed as T395, landing before T158.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "A defect (a reader takes the latrine's name for the stables') carved out of T384's goal 'every caption's leader reads clear'. Not introduced by this bundle and needs a different mechanism from the tie-break T384 fixed; filed with its visible effect to land before T158, i.e. within the step, as the GM's fix-all-known-bugs-before-the-next-step allows. Legitimate only on that ordering."
+     },
+     {
+      "id": "left-lane-listed-loose",
+      "summary": "Left: make pack-audit lists the new 9.3 ft cart lane as a LOOSE aligned gap; every check OK.",
+      "class": "within",
+      "why": "A true measurement of deliberate unbuilt ground, not a check failing; no wrong outcome under XIV."
+     },
+     {
+      "id": "left-gatehouse-40ft-wording",
+      "summary": "Left: the gatehouse pop-up and docs/building-programs.md say 'about 40 ft' (a GUESS) while the county draws 37.5 ft; other builders' files left.",
+      "class": "within",
+      "why": "37.5 ft is about 40 ft and the round trip still draws 40; a difference from wording, not a defect (XIV)."
+     },
+     {
+      "id": "claims-round-closed",
+      "summary": "Claims round closed after round 2 by the arbiter's accept (ask:449-t383-claims-round3); the record bundle's page-edit claims left to that bundle; occasions: layout-revised building-review on county, round trip, Ochiba, Ubame, none for T383 and T391.",
+      "class": "within",
+      "why": "Follows the arbiter's recorded ruling verbatim (both round-2 out-of-change findings filed as T397 and T398); review scope matches the sheets the change moves."
+     }
+    ],
+    "verdict": "CLEAR"
+   }
   },
   "T388": {
-   "section_sha256": "d7b5899b88ec0cf1ad11f5263a7dcb52d81cb9ab6db054685cf992a7ad6cee5a",
+   "section_sha256": "ae3480444f5cfdd373f7a751035c8e25b419770df7db7a3a4e01f9dd33473d2c",
    "reviewed": "2026-11-23",
-   "declared": "spec-fidelity",
+   "declared": "round-arbiter",
    "decisions": [
     {
-     "id": "T383-practice-ground",
-     "summary": "T383: aligned_gaps' blocked set counts a drawn practice ground (plan.fills rect of kind PRACTICE_GROUND) as laid-out ground, so the pack audit stops listing it as a vacancy; only report.rs calls it, no sheet moves.",
+     "id": "ask:449-T383-T384-T388-T391-plan-scope",
      "class": "within",
-     "why": "Fixes a listing that named a vacancy where ground is drawn (a check answering wrongly, a defect under XIV); the GM's 2026-11-18 'fix all known bugs in each step' and 2026-11-22 'please finish the remaining fixes'. Pinned by a red test."
-    },
-    {
-     "id": "T384-span-middle",
-     "summary": "T384: block_pair meets a shared span at its middle (span_middle, nearer()) instead of the first candidate, a CONVENTION where 0330 leaves the end open; leader_span returns the span's Slide.",
-     "class": "within",
-     "why": "Fixes the county's privy leader running from the privy's corner along the stables' wall (a leader that reads as wall, a wrong outcome). Inside the fixes the GM asked be finished; the convention fills a point research leaves open."
-    },
-    {
-     "id": "T384-slide-drawn-leader-only",
-     "summary": "T384: Placer::led keeps the middle unless it meets other ink, else draws the middle of the least-ink run along the span; the slide is applied only to the drawn leader in seat(), not inside the sweep, because inside the sweep it moved Ochiba's latrine caption under a wall.",
-     "class": "within",
-     "why": "A choice of mechanism measured on the pool (Ubame's altar leader clears the post with it; the in-sweep variant produced a worse map). Narrows nothing the GM asked; the goal (leaders read clear) is served."
-    },
-    {
-     "id": "T384-stroke-and-dash-end",
-     "summary": "T384: stroke_end carries its span's slide, held on a dashed stroke to its dash (dash_part); a dash's end takes the butt flat-end rule (segment_at), fixing an end up to half a stroke into the gap on main since T202.",
-     "class": "within",
-     "why": "Fixes impl-drift's rounds 1 and 2 code findings with red tests; the arbiter (ask:449-t383-claims-round3) accepted the bundle on exactly this code. Fixing a pre-existing defect found on the way is the GM's fix-as-we-go."
-    },
-    {
-     "id": "T384-stables-well",
-     "summary": "T384: stables_well is seated within its court face's span, its GUESS claim restated; a court-door stable whose face leaves no room for the well is refused its well aloud (no pool sheet draws one).",
-     "class": "within",
-     "why": "Fixes a well standing off its stable (wrong outcome). The loud refusal replaces a wrong drawing on a case no pool sheet reaches (constitution: fail loudly rather than draw wrong); not a defect left, so no ruling."
-    },
-    {
-     "id": "T384-last-resort",
-     "summary": "T384 table: a leader no slide clears keeps the middle and is filed.",
-     "class": "within",
-     "why": "A fallback that files rather than hides any leader the rules cannot clear; consistent with fixing every known defect in the step through a filed task."
-    },
-    {
-     "id": "T388-gable-door",
-     "summary": "T388: a stables interior with no declared door opens on its west gable (north where the court face runs north-south) at the passage's middle, per 0108's gable-entered warrior's stable; which gable and the depths are GUESSES.",
-     "class": "within",
-     "why": "Fixes horses led through the grooms' lodging (a map that reads wrong); research-grounded, guesses labeled as knobs."
-    },
-    {
-     "id": "T388-room-first-gatehouse",
-     "summary": "T388: room for the lane made by drawing the guessed gatehouse 37.5 ft (inside its kind's band; spec's sizes line, notes and a dated entry restated) after trials; a 3 ft wider envelope priced and refused for growing the outer court's west-column vacancy.",
-     "class": "within",
-     "why": "Constitution XII room-before-packing, a GUESS constant moved inside its band with its source restated; the docs/pop-up 'about 40 ft' still describes it. No narrowing of what was asked."
-    },
-    {
-     "id": "T388-cart-lane",
-     "summary": "T388: CART_LANE (a GUESS on 0082's cart lane past the tub) and door_lane seat a granary or stable whose door is on an end with the lane on that end; seat_one keeps FIRE_GAP - CLEAR off the row's end on the door's side in every branch; CART_KINDS names granary (0082) and stables (GUESS).",
-     "class": "within",
-     "why": "Fixes a tub leaving a cart 2.73 ft of a 6 ft lane, and the row-end case impl-drift round 1 found, each pinned by red tests; the arbiter ruled the lane widened to fit the cart, not packed."
-    },
-    {
-     "id": "T391-timeout-calibration",
-     "summary": "T391: the diffrun timeout test calibrates its window from a loop of `true` runs just before the case (never under the old timeout), per CLAUDE.md's calibration convention; run.rs SECOND made pub(crate).",
-     "class": "within",
-     "why": "Fixes a gate test that goes red on a loaded machine with nothing wrong (a check refusing good work); measured red unfixed and green fixed under pinned load."
-    },
-    {
-     "id": "left-T397-both-end-doors",
-     "summary": "Left: a granary or stables with doors declared on both ends holds a cart lane at one end only (door_lane's find_map); no pool sheet declares one; filed as T397, landing before T158.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "A real but unreached defect (visible effect stated). The arbiter's ruling asks it fixed 'in this step', and the GM's rule is to fix known bugs in each step before porting the next; filing it as T397 to land before T158 keeps it inside the step, so the bundle defers it without carrying it past the step. Legitimate only on that ordering."
-    },
-    {
-     "id": "left-T398-gatehouse-behind-gate",
-     "summary": "Left: seat_one seats a gatehouse beside its gate only, where 0093 attests one behind the gate too; filed as T398 (roll the form or restate the claim), landing before T158.",
-     "class": "within",
-     "why": "The arbiter ruled it a choice of form, not a defect; under constitution XIV (T196) a difference that reads fine is not a defect, so leaving it is within and needs no ruling."
-    },
-    {
-     "id": "left-T395-ochiba-latrine-leader",
-     "summary": "Left: Ochiba's 'latrine' leader runs 68.7 px through the stables, the same on main, a hand sheet's crossing fallback no T384 rule moves; filed as T395, landing before T158.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "A defect (a reader takes the latrine's name for the stables') carved out of T384's goal 'every caption's leader reads clear'. Not introduced by this bundle and needs a different mechanism from the tie-break T384 fixed; filed with its visible effect to land before T158, i.e. within the step, as the GM's fix-all-known-bugs-before-the-next-step allows. Legitimate only on that ordering."
-    },
-    {
-     "id": "left-lane-listed-loose",
-     "summary": "Left: make pack-audit lists the new 9.3 ft cart lane as a LOOSE aligned gap; every check OK.",
-     "class": "within",
-     "why": "A true measurement of deliberate unbuilt ground, not a check failing; no wrong outcome under XIV."
-    },
-    {
-     "id": "left-gatehouse-40ft-wording",
-     "summary": "Left: the gatehouse pop-up and docs/building-programs.md say 'about 40 ft' (a GUESS) while the county draws 37.5 ft; other builders' files left.",
-     "class": "within",
-     "why": "37.5 ft is about 40 ft and the round trip still draws 40; a difference from wording, not a defect (XIV)."
-    },
-    {
-     "id": "claims-round-closed",
-     "summary": "Claims round closed after round 2 by the arbiter's accept (ask:449-t383-claims-round3); the record bundle's page-edit claims left to that bundle; occasions: layout-revised building-review on county, round trip, Ochiba, Ubame, none for T383 and T391.",
-     "class": "within",
-     "why": "Follows the arbiter's recorded ruling verbatim (both round-2 out-of-change findings filed as T397 and T398); review scope matches the sheets the change moves."
+     "summary": "the round arbiter accepted T383 and T384 and T388 and T391's section as it stands"
     }
    ],
-   "verdict": "CLEAR"
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "d7b5899b88ec0cf1ad11f5263a7dcb52d81cb9ab6db054685cf992a7ad6cee5a",
+    "reviewed": "2026-11-23",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "T383-practice-ground",
+      "summary": "T383: aligned_gaps' blocked set counts a drawn practice ground (plan.fills rect of kind PRACTICE_GROUND) as laid-out ground, so the pack audit stops listing it as a vacancy; only report.rs calls it, no sheet moves.",
+      "class": "within",
+      "why": "Fixes a listing that named a vacancy where ground is drawn (a check answering wrongly, a defect under XIV); the GM's 2026-11-18 'fix all known bugs in each step' and 2026-11-22 'please finish the remaining fixes'. Pinned by a red test."
+     },
+     {
+      "id": "T384-span-middle",
+      "summary": "T384: block_pair meets a shared span at its middle (span_middle, nearer()) instead of the first candidate, a CONVENTION where 0330 leaves the end open; leader_span returns the span's Slide.",
+      "class": "within",
+      "why": "Fixes the county's privy leader running from the privy's corner along the stables' wall (a leader that reads as wall, a wrong outcome). Inside the fixes the GM asked be finished; the convention fills a point research leaves open."
+     },
+     {
+      "id": "T384-slide-drawn-leader-only",
+      "summary": "T384: Placer::led keeps the middle unless it meets other ink, else draws the middle of the least-ink run along the span; the slide is applied only to the drawn leader in seat(), not inside the sweep, because inside the sweep it moved Ochiba's latrine caption under a wall.",
+      "class": "within",
+      "why": "A choice of mechanism measured on the pool (Ubame's altar leader clears the post with it; the in-sweep variant produced a worse map). Narrows nothing the GM asked; the goal (leaders read clear) is served."
+     },
+     {
+      "id": "T384-stroke-and-dash-end",
+      "summary": "T384: stroke_end carries its span's slide, held on a dashed stroke to its dash (dash_part); a dash's end takes the butt flat-end rule (segment_at), fixing an end up to half a stroke into the gap on main since T202.",
+      "class": "within",
+      "why": "Fixes impl-drift's rounds 1 and 2 code findings with red tests; the arbiter (ask:449-t383-claims-round3) accepted the bundle on exactly this code. Fixing a pre-existing defect found on the way is the GM's fix-as-we-go."
+     },
+     {
+      "id": "T384-stables-well",
+      "summary": "T384: stables_well is seated within its court face's span, its GUESS claim restated; a court-door stable whose face leaves no room for the well is refused its well aloud (no pool sheet draws one).",
+      "class": "within",
+      "why": "Fixes a well standing off its stable (wrong outcome). The loud refusal replaces a wrong drawing on a case no pool sheet reaches (constitution: fail loudly rather than draw wrong); not a defect left, so no ruling."
+     },
+     {
+      "id": "T384-last-resort",
+      "summary": "T384 table: a leader no slide clears keeps the middle and is filed.",
+      "class": "within",
+      "why": "A fallback that files rather than hides any leader the rules cannot clear; consistent with fixing every known defect in the step through a filed task."
+     },
+     {
+      "id": "T388-gable-door",
+      "summary": "T388: a stables interior with no declared door opens on its west gable (north where the court face runs north-south) at the passage's middle, per 0108's gable-entered warrior's stable; which gable and the depths are GUESSES.",
+      "class": "within",
+      "why": "Fixes horses led through the grooms' lodging (a map that reads wrong); research-grounded, guesses labeled as knobs."
+     },
+     {
+      "id": "T388-room-first-gatehouse",
+      "summary": "T388: room for the lane made by drawing the guessed gatehouse 37.5 ft (inside its kind's band; spec's sizes line, notes and a dated entry restated) after trials; a 3 ft wider envelope priced and refused for growing the outer court's west-column vacancy.",
+      "class": "within",
+      "why": "Constitution XII room-before-packing, a GUESS constant moved inside its band with its source restated; the docs/pop-up 'about 40 ft' still describes it. No narrowing of what was asked."
+     },
+     {
+      "id": "T388-cart-lane",
+      "summary": "T388: CART_LANE (a GUESS on 0082's cart lane past the tub) and door_lane seat a granary or stable whose door is on an end with the lane on that end; seat_one keeps FIRE_GAP - CLEAR off the row's end on the door's side in every branch; CART_KINDS names granary (0082) and stables (GUESS).",
+      "class": "within",
+      "why": "Fixes a tub leaving a cart 2.73 ft of a 6 ft lane, and the row-end case impl-drift round 1 found, each pinned by red tests; the arbiter ruled the lane widened to fit the cart, not packed."
+     },
+     {
+      "id": "T391-timeout-calibration",
+      "summary": "T391: the diffrun timeout test calibrates its window from a loop of `true` runs just before the case (never under the old timeout), per CLAUDE.md's calibration convention; run.rs SECOND made pub(crate).",
+      "class": "within",
+      "why": "Fixes a gate test that goes red on a loaded machine with nothing wrong (a check refusing good work); measured red unfixed and green fixed under pinned load."
+     },
+     {
+      "id": "left-T397-both-end-doors",
+      "summary": "Left: a granary or stables with doors declared on both ends holds a cart lane at one end only (door_lane's find_map); no pool sheet declares one; filed as T397, landing before T158.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "A real but unreached defect (visible effect stated). The arbiter's ruling asks it fixed 'in this step', and the GM's rule is to fix known bugs in each step before porting the next; filing it as T397 to land before T158 keeps it inside the step, so the bundle defers it without carrying it past the step. Legitimate only on that ordering."
+     },
+     {
+      "id": "left-T398-gatehouse-behind-gate",
+      "summary": "Left: seat_one seats a gatehouse beside its gate only, where 0093 attests one behind the gate too; filed as T398 (roll the form or restate the claim), landing before T158.",
+      "class": "within",
+      "why": "The arbiter ruled it a choice of form, not a defect; under constitution XIV (T196) a difference that reads fine is not a defect, so leaving it is within and needs no ruling."
+     },
+     {
+      "id": "left-T395-ochiba-latrine-leader",
+      "summary": "Left: Ochiba's 'latrine' leader runs 68.7 px through the stables, the same on main, a hand sheet's crossing fallback no T384 rule moves; filed as T395, landing before T158.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "A defect (a reader takes the latrine's name for the stables') carved out of T384's goal 'every caption's leader reads clear'. Not introduced by this bundle and needs a different mechanism from the tie-break T384 fixed; filed with its visible effect to land before T158, i.e. within the step, as the GM's fix-all-known-bugs-before-the-next-step allows. Legitimate only on that ordering."
+     },
+     {
+      "id": "left-lane-listed-loose",
+      "summary": "Left: make pack-audit lists the new 9.3 ft cart lane as a LOOSE aligned gap; every check OK.",
+      "class": "within",
+      "why": "A true measurement of deliberate unbuilt ground, not a check failing; no wrong outcome under XIV."
+     },
+     {
+      "id": "left-gatehouse-40ft-wording",
+      "summary": "Left: the gatehouse pop-up and docs/building-programs.md say 'about 40 ft' (a GUESS) while the county draws 37.5 ft; other builders' files left.",
+      "class": "within",
+      "why": "37.5 ft is about 40 ft and the round trip still draws 40; a difference from wording, not a defect (XIV)."
+     },
+     {
+      "id": "claims-round-closed",
+      "summary": "Claims round closed after round 2 by the arbiter's accept (ask:449-t383-claims-round3); the record bundle's page-edit claims left to that bundle; occasions: layout-revised building-review on county, round trip, Ochiba, Ubame, none for T383 and T391.",
+      "class": "within",
+      "why": "Follows the arbiter's recorded ruling verbatim (both round-2 out-of-change findings filed as T397 and T398); review scope matches the sheets the change moves."
+     }
+    ],
+    "verdict": "CLEAR"
+   }
   },
   "T391": {
-   "section_sha256": "d7b5899b88ec0cf1ad11f5263a7dcb52d81cb9ab6db054685cf992a7ad6cee5a",
+   "section_sha256": "ae3480444f5cfdd373f7a751035c8e25b419770df7db7a3a4e01f9dd33473d2c",
    "reviewed": "2026-11-23",
-   "declared": "spec-fidelity",
+   "declared": "round-arbiter",
    "decisions": [
     {
-     "id": "T383-practice-ground",
-     "summary": "T383: aligned_gaps' blocked set counts a drawn practice ground (plan.fills rect of kind PRACTICE_GROUND) as laid-out ground, so the pack audit stops listing it as a vacancy; only report.rs calls it, no sheet moves.",
+     "id": "ask:449-T383-T384-T388-T391-plan-scope",
      "class": "within",
-     "why": "Fixes a listing that named a vacancy where ground is drawn (a check answering wrongly, a defect under XIV); the GM's 2026-11-18 'fix all known bugs in each step' and 2026-11-22 'please finish the remaining fixes'. Pinned by a red test."
-    },
-    {
-     "id": "T384-span-middle",
-     "summary": "T384: block_pair meets a shared span at its middle (span_middle, nearer()) instead of the first candidate, a CONVENTION where 0330 leaves the end open; leader_span returns the span's Slide.",
-     "class": "within",
-     "why": "Fixes the county's privy leader running from the privy's corner along the stables' wall (a leader that reads as wall, a wrong outcome). Inside the fixes the GM asked be finished; the convention fills a point research leaves open."
-    },
-    {
-     "id": "T384-slide-drawn-leader-only",
-     "summary": "T384: Placer::led keeps the middle unless it meets other ink, else draws the middle of the least-ink run along the span; the slide is applied only to the drawn leader in seat(), not inside the sweep, because inside the sweep it moved Ochiba's latrine caption under a wall.",
-     "class": "within",
-     "why": "A choice of mechanism measured on the pool (Ubame's altar leader clears the post with it; the in-sweep variant produced a worse map). Narrows nothing the GM asked; the goal (leaders read clear) is served."
-    },
-    {
-     "id": "T384-stroke-and-dash-end",
-     "summary": "T384: stroke_end carries its span's slide, held on a dashed stroke to its dash (dash_part); a dash's end takes the butt flat-end rule (segment_at), fixing an end up to half a stroke into the gap on main since T202.",
-     "class": "within",
-     "why": "Fixes impl-drift's rounds 1 and 2 code findings with red tests; the arbiter (ask:449-t383-claims-round3) accepted the bundle on exactly this code. Fixing a pre-existing defect found on the way is the GM's fix-as-we-go."
-    },
-    {
-     "id": "T384-stables-well",
-     "summary": "T384: stables_well is seated within its court face's span, its GUESS claim restated; a court-door stable whose face leaves no room for the well is refused its well aloud (no pool sheet draws one).",
-     "class": "within",
-     "why": "Fixes a well standing off its stable (wrong outcome). The loud refusal replaces a wrong drawing on a case no pool sheet reaches (constitution: fail loudly rather than draw wrong); not a defect left, so no ruling."
-    },
-    {
-     "id": "T384-last-resort",
-     "summary": "T384 table: a leader no slide clears keeps the middle and is filed.",
-     "class": "within",
-     "why": "A fallback that files rather than hides any leader the rules cannot clear; consistent with fixing every known defect in the step through a filed task."
-    },
-    {
-     "id": "T388-gable-door",
-     "summary": "T388: a stables interior with no declared door opens on its west gable (north where the court face runs north-south) at the passage's middle, per 0108's gable-entered warrior's stable; which gable and the depths are GUESSES.",
-     "class": "within",
-     "why": "Fixes horses led through the grooms' lodging (a map that reads wrong); research-grounded, guesses labeled as knobs."
-    },
-    {
-     "id": "T388-room-first-gatehouse",
-     "summary": "T388: room for the lane made by drawing the guessed gatehouse 37.5 ft (inside its kind's band; spec's sizes line, notes and a dated entry restated) after trials; a 3 ft wider envelope priced and refused for growing the outer court's west-column vacancy.",
-     "class": "within",
-     "why": "Constitution XII room-before-packing, a GUESS constant moved inside its band with its source restated; the docs/pop-up 'about 40 ft' still describes it. No narrowing of what was asked."
-    },
-    {
-     "id": "T388-cart-lane",
-     "summary": "T388: CART_LANE (a GUESS on 0082's cart lane past the tub) and door_lane seat a granary or stable whose door is on an end with the lane on that end; seat_one keeps FIRE_GAP - CLEAR off the row's end on the door's side in every branch; CART_KINDS names granary (0082) and stables (GUESS).",
-     "class": "within",
-     "why": "Fixes a tub leaving a cart 2.73 ft of a 6 ft lane, and the row-end case impl-drift round 1 found, each pinned by red tests; the arbiter ruled the lane widened to fit the cart, not packed."
-    },
-    {
-     "id": "T391-timeout-calibration",
-     "summary": "T391: the diffrun timeout test calibrates its window from a loop of `true` runs just before the case (never under the old timeout), per CLAUDE.md's calibration convention; run.rs SECOND made pub(crate).",
-     "class": "within",
-     "why": "Fixes a gate test that goes red on a loaded machine with nothing wrong (a check refusing good work); measured red unfixed and green fixed under pinned load."
-    },
-    {
-     "id": "left-T397-both-end-doors",
-     "summary": "Left: a granary or stables with doors declared on both ends holds a cart lane at one end only (door_lane's find_map); no pool sheet declares one; filed as T397, landing before T158.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "A real but unreached defect (visible effect stated). The arbiter's ruling asks it fixed 'in this step', and the GM's rule is to fix known bugs in each step before porting the next; filing it as T397 to land before T158 keeps it inside the step, so the bundle defers it without carrying it past the step. Legitimate only on that ordering."
-    },
-    {
-     "id": "left-T398-gatehouse-behind-gate",
-     "summary": "Left: seat_one seats a gatehouse beside its gate only, where 0093 attests one behind the gate too; filed as T398 (roll the form or restate the claim), landing before T158.",
-     "class": "within",
-     "why": "The arbiter ruled it a choice of form, not a defect; under constitution XIV (T196) a difference that reads fine is not a defect, so leaving it is within and needs no ruling."
-    },
-    {
-     "id": "left-T395-ochiba-latrine-leader",
-     "summary": "Left: Ochiba's 'latrine' leader runs 68.7 px through the stables, the same on main, a hand sheet's crossing fallback no T384 rule moves; filed as T395, landing before T158.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "A defect (a reader takes the latrine's name for the stables') carved out of T384's goal 'every caption's leader reads clear'. Not introduced by this bundle and needs a different mechanism from the tie-break T384 fixed; filed with its visible effect to land before T158, i.e. within the step, as the GM's fix-all-known-bugs-before-the-next-step allows. Legitimate only on that ordering."
-    },
-    {
-     "id": "left-lane-listed-loose",
-     "summary": "Left: make pack-audit lists the new 9.3 ft cart lane as a LOOSE aligned gap; every check OK.",
-     "class": "within",
-     "why": "A true measurement of deliberate unbuilt ground, not a check failing; no wrong outcome under XIV."
-    },
-    {
-     "id": "left-gatehouse-40ft-wording",
-     "summary": "Left: the gatehouse pop-up and docs/building-programs.md say 'about 40 ft' (a GUESS) while the county draws 37.5 ft; other builders' files left.",
-     "class": "within",
-     "why": "37.5 ft is about 40 ft and the round trip still draws 40; a difference from wording, not a defect (XIV)."
-    },
-    {
-     "id": "claims-round-closed",
-     "summary": "Claims round closed after round 2 by the arbiter's accept (ask:449-t383-claims-round3); the record bundle's page-edit claims left to that bundle; occasions: layout-revised building-review on county, round trip, Ochiba, Ubame, none for T383 and T391.",
-     "class": "within",
-     "why": "Follows the arbiter's recorded ruling verbatim (both round-2 out-of-change findings filed as T397 and T398); review scope matches the sheets the change moves."
+     "summary": "the round arbiter accepted T383 and T384 and T388 and T391's section as it stands"
     }
    ],
-   "verdict": "CLEAR"
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "d7b5899b88ec0cf1ad11f5263a7dcb52d81cb9ab6db054685cf992a7ad6cee5a",
+    "reviewed": "2026-11-23",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "T383-practice-ground",
+      "summary": "T383: aligned_gaps' blocked set counts a drawn practice ground (plan.fills rect of kind PRACTICE_GROUND) as laid-out ground, so the pack audit stops listing it as a vacancy; only report.rs calls it, no sheet moves.",
+      "class": "within",
+      "why": "Fixes a listing that named a vacancy where ground is drawn (a check answering wrongly, a defect under XIV); the GM's 2026-11-18 'fix all known bugs in each step' and 2026-11-22 'please finish the remaining fixes'. Pinned by a red test."
+     },
+     {
+      "id": "T384-span-middle",
+      "summary": "T384: block_pair meets a shared span at its middle (span_middle, nearer()) instead of the first candidate, a CONVENTION where 0330 leaves the end open; leader_span returns the span's Slide.",
+      "class": "within",
+      "why": "Fixes the county's privy leader running from the privy's corner along the stables' wall (a leader that reads as wall, a wrong outcome). Inside the fixes the GM asked be finished; the convention fills a point research leaves open."
+     },
+     {
+      "id": "T384-slide-drawn-leader-only",
+      "summary": "T384: Placer::led keeps the middle unless it meets other ink, else draws the middle of the least-ink run along the span; the slide is applied only to the drawn leader in seat(), not inside the sweep, because inside the sweep it moved Ochiba's latrine caption under a wall.",
+      "class": "within",
+      "why": "A choice of mechanism measured on the pool (Ubame's altar leader clears the post with it; the in-sweep variant produced a worse map). Narrows nothing the GM asked; the goal (leaders read clear) is served."
+     },
+     {
+      "id": "T384-stroke-and-dash-end",
+      "summary": "T384: stroke_end carries its span's slide, held on a dashed stroke to its dash (dash_part); a dash's end takes the butt flat-end rule (segment_at), fixing an end up to half a stroke into the gap on main since T202.",
+      "class": "within",
+      "why": "Fixes impl-drift's rounds 1 and 2 code findings with red tests; the arbiter (ask:449-t383-claims-round3) accepted the bundle on exactly this code. Fixing a pre-existing defect found on the way is the GM's fix-as-we-go."
+     },
+     {
+      "id": "T384-stables-well",
+      "summary": "T384: stables_well is seated within its court face's span, its GUESS claim restated; a court-door stable whose face leaves no room for the well is refused its well aloud (no pool sheet draws one).",
+      "class": "within",
+      "why": "Fixes a well standing off its stable (wrong outcome). The loud refusal replaces a wrong drawing on a case no pool sheet reaches (constitution: fail loudly rather than draw wrong); not a defect left, so no ruling."
+     },
+     {
+      "id": "T384-last-resort",
+      "summary": "T384 table: a leader no slide clears keeps the middle and is filed.",
+      "class": "within",
+      "why": "A fallback that files rather than hides any leader the rules cannot clear; consistent with fixing every known defect in the step through a filed task."
+     },
+     {
+      "id": "T388-gable-door",
+      "summary": "T388: a stables interior with no declared door opens on its west gable (north where the court face runs north-south) at the passage's middle, per 0108's gable-entered warrior's stable; which gable and the depths are GUESSES.",
+      "class": "within",
+      "why": "Fixes horses led through the grooms' lodging (a map that reads wrong); research-grounded, guesses labeled as knobs."
+     },
+     {
+      "id": "T388-room-first-gatehouse",
+      "summary": "T388: room for the lane made by drawing the guessed gatehouse 37.5 ft (inside its kind's band; spec's sizes line, notes and a dated entry restated) after trials; a 3 ft wider envelope priced and refused for growing the outer court's west-column vacancy.",
+      "class": "within",
+      "why": "Constitution XII room-before-packing, a GUESS constant moved inside its band with its source restated; the docs/pop-up 'about 40 ft' still describes it. No narrowing of what was asked."
+     },
+     {
+      "id": "T388-cart-lane",
+      "summary": "T388: CART_LANE (a GUESS on 0082's cart lane past the tub) and door_lane seat a granary or stable whose door is on an end with the lane on that end; seat_one keeps FIRE_GAP - CLEAR off the row's end on the door's side in every branch; CART_KINDS names granary (0082) and stables (GUESS).",
+      "class": "within",
+      "why": "Fixes a tub leaving a cart 2.73 ft of a 6 ft lane, and the row-end case impl-drift round 1 found, each pinned by red tests; the arbiter ruled the lane widened to fit the cart, not packed."
+     },
+     {
+      "id": "T391-timeout-calibration",
+      "summary": "T391: the diffrun timeout test calibrates its window from a loop of `true` runs just before the case (never under the old timeout), per CLAUDE.md's calibration convention; run.rs SECOND made pub(crate).",
+      "class": "within",
+      "why": "Fixes a gate test that goes red on a loaded machine with nothing wrong (a check refusing good work); measured red unfixed and green fixed under pinned load."
+     },
+     {
+      "id": "left-T397-both-end-doors",
+      "summary": "Left: a granary or stables with doors declared on both ends holds a cart lane at one end only (door_lane's find_map); no pool sheet declares one; filed as T397, landing before T158.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "A real but unreached defect (visible effect stated). The arbiter's ruling asks it fixed 'in this step', and the GM's rule is to fix known bugs in each step before porting the next; filing it as T397 to land before T158 keeps it inside the step, so the bundle defers it without carrying it past the step. Legitimate only on that ordering."
+     },
+     {
+      "id": "left-T398-gatehouse-behind-gate",
+      "summary": "Left: seat_one seats a gatehouse beside its gate only, where 0093 attests one behind the gate too; filed as T398 (roll the form or restate the claim), landing before T158.",
+      "class": "within",
+      "why": "The arbiter ruled it a choice of form, not a defect; under constitution XIV (T196) a difference that reads fine is not a defect, so leaving it is within and needs no ruling."
+     },
+     {
+      "id": "left-T395-ochiba-latrine-leader",
+      "summary": "Left: Ochiba's 'latrine' leader runs 68.7 px through the stables, the same on main, a hand sheet's crossing fallback no T384 rule moves; filed as T395, landing before T158.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "A defect (a reader takes the latrine's name for the stables') carved out of T384's goal 'every caption's leader reads clear'. Not introduced by this bundle and needs a different mechanism from the tie-break T384 fixed; filed with its visible effect to land before T158, i.e. within the step, as the GM's fix-all-known-bugs-before-the-next-step allows. Legitimate only on that ordering."
+     },
+     {
+      "id": "left-lane-listed-loose",
+      "summary": "Left: make pack-audit lists the new 9.3 ft cart lane as a LOOSE aligned gap; every check OK.",
+      "class": "within",
+      "why": "A true measurement of deliberate unbuilt ground, not a check failing; no wrong outcome under XIV."
+     },
+     {
+      "id": "left-gatehouse-40ft-wording",
+      "summary": "Left: the gatehouse pop-up and docs/building-programs.md say 'about 40 ft' (a GUESS) while the county draws 37.5 ft; other builders' files left.",
+      "class": "within",
+      "why": "37.5 ft is about 40 ft and the round trip still draws 40; a difference from wording, not a defect (XIV)."
+     },
+     {
+      "id": "claims-round-closed",
+      "summary": "Claims round closed after round 2 by the arbiter's accept (ask:449-t383-claims-round3); the record bundle's page-edit claims left to that bundle; occasions: layout-revised building-review on county, round trip, Ochiba, Ubame, none for T383 and T391.",
+      "class": "within",
+      "why": "Follows the arbiter's recorded ruling verbatim (both round-2 out-of-change findings filed as T397 and T398); review scope matches the sheets the change moves."
+     }
+    ],
+    "verdict": "CLEAR"
+   }
   },
   "T371": {
    "section_sha256": "b186dbca9ad17d21215c82ea03563e5967edb42fe8761c44474befe466983e9e",
