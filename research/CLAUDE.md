@@ -83,8 +83,12 @@ A question's PROSE stays under 20,000 bytes (`l7r-gate check question-size`; `ma
 change touched; `make question-sizes` lists all). Its notes and originals are not counted: they are bounded where they
 are read (`make check-bundle ... FOR=quote-check` splits them into bundles of at most 12,000 bytes, one agent each). One
 over it is split along its topics: a finding stays with the decision it drove; each part is its own question with its
-heading and notes; the joins POINT at each other, never restate each other's evidence. A split that would strip a finding
-of what it needs is not made - it is raised instead.
+heading and notes; the joins POINT at each other, never restate each other's evidence; the source page keeps a sentence
+pointing to where the moved section lives, in the one form the triage follows: `<a class="moved" href="NNNN-<slug>.html">`
+(a plain link makes the moved blocks owed as removed, and `check question-size` refuses it). Never trim a claim to fit (451 T184, the GM 2026-11-23: *"no edit to maintain
+entry size should ever be substantive"*): a size edit that drops a number, label, qualifier, quoted passage or name the
+page no longer holds is refused. A page that is one indivisible topic gets its own limit in `research/size-limits.json`,
+only with the `size-exception` check's INDIVISIBLE verdict.
 
 ## How a section reads (GM 2026-09-29, feature 292)
 

@@ -19664,5 +19664,12 @@
   "variants": [
    "bittern"
   ]
+ },
+ "true leaf": {
+  "def": "A leaf of a young seedling, counted to tell when it is ready to be set out: rapeseed seedlings sown in autumn were set out in the field once they had five or six.",
+  "variants": [
+   "true leaf",
+   "true leaves"
+  ]
  }
 }

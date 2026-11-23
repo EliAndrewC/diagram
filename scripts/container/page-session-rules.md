@@ -56,6 +56,9 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
   question in hand, write the items you have not reached to `$L7R_CONTINUE` as a brief of the same shape (the same
   header, a `## Your items` list of just those items, the same handoff path), commit and stop; the runner starts it
   next in a fresh session.
+- **A page over its size cap is split, never trimmed** (451 T184): the moved section becomes its own question, and the
+  source page keeps a sentence pointing to it as `<a class="moved" href="NNNN-<slug>.html">` - the one pointer the triage
+  and `check question-size` follow; a plain link leaves every moved block owed as removed.
 
 ## Working in the clone
 

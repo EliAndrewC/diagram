@@ -583,7 +583,7 @@ cap; the prose-only number is to be tuned from what the restyle produces.
 **Applied to what a change touches** at `make quick`, and to every question at `make static` (`l7r-gate check
 question-size --all`, 449 T385: 0059 at 20,065 bytes and 0009 at 20,044 stood over the cap while no change touched them,
 measured 2026-11-23 by `make question-sizes`): a question over the cap is split by the session working its page, which has
-read it, and one no change touched is cut or split by a page session of its own. **How to split without losing context** - the GM's concern, a reader
+read it, and one no change touched is split by a page session of its own. **How to split without losing context** - the GM's concern, a reader
 must not be stranded and a later check must not meet a claim it cannot verify:
 
 - split along TOPICS, never along the entry's own parts: a finding stays with the decision it drove and the
@@ -594,6 +594,41 @@ must not be stranded and a later check must not meet a claim it cannot verify:
   other part's evidence: a restatement is an unfootnoted claim to a check that reads one part alone (the first split
   wrote two such bridges and was corrected before it landed);
 - a split that would strip a finding of what it needs to be understood is not made; the session says so instead.
+- the source page keeps a POINTER where the moved section stood - a sentence and a link to the page that now holds it
+  (the GM 2026-11-23: *"as long as the original page being linked to directs a reader to the other page where the full
+  information can be found, then nothing needs to cascade simply because a split occurs"*).
+
+**Never trim a claim to fit; split** (feature 451 T184, the GM 2026-11-23, told the 0009 and 0059 cuts of that day had
+dropped content: *"if those size limitations are causing us to cut details that could cascade, then I think that actually
+a good rule of thumb is that we should literally never do that ... no edit to maintain entry size should ever be
+substantive"*). The cuts (cce80ca436) took 0009's "So every depth above is modern extension guidance.", 0059's
+restatement of the lecture that intake works before the end of the Sengoku period "were mostly small, of timber frames
+packed with stone", and a run of qualifiers and glosses; both pages were restored and split (0332, 0333). The same
+commit also carried earlier checks' corrections (the canal sentence's "division works", an absence note's clause, the
+Edo weirs' "large rivers", which their source does not state): the restore brought those back and the record checks
+took them out again - a restore is checked like any other edit. `l7r-gate check question-size` (at `make quick`) treats a change as a SIZE EDIT when the page
+was over its limit at the base or the words the change removed would put it back over (so a session's add-then-trim is
+caught, where "the page shrank" would miss it), and refuses one that drops a claim-bearing token: a number, a label
+(GUESS, attested, CONVENTION ...), a quoted passage or a proper name the page and the pages its split pointers name no longer
+hold (a split's pointer is the one form the pop-up and claims triage follow, `<a class="moved" href="NNNN-<slug>.html">`;
+a token behind a plain link counts as dropped, since the triage would owe its block as removed), or a negation or qualifier (not, only, mostly, every, about ...) its own block no longer holds - page-wide, those
+words stand somewhere on every page. Its refusal names the split. A change near the cap that is a correction, not a fit,
+passes with `SIZE_EDIT_OK="<why>"`, printed with the run. Measured on cce80ca436 (`--base cce80ca436^`): it refuses 0009
+(already, often, every, about) and 0059 (the 1902 treatise's quoted passage, mostly); it also names 0097, whose section
+moved to 0331 and was rewritten there from new research - the escape's case. It does not see a claim carried only in plain
+words ("the transplanting period was long": of the cuts' fourteen losses it named six tokens), a scope word outside its
+classes ("large rivers") or a changed term ("diversion" to "division"): telling a lossless trim from a lossy one takes a
+reader, so those stay the page session's and the record checks' to catch - the rule binds every author either way.
+
+**The one exception: a page's own limit.** A page that is one indivisible topic - every split along its topics strands a
+finding from what it needs - may carry a limit of its own above the cap (the GM: *"an audit-based process that permits
+us to go past the size limit when an adversarial subagent check confirms that there don't seem to be a lot of good ways
+to do edits that would allow us to maintain the current amount of useful information ... so that we record a new limit
+for this specific entry"*). The session runs the `size-exception` agent (`.claude/agents/size-exception.md`) on the page
+and its case; on INDIVISIBLE it records the page in `research/size-limits.json` - `limit`, `date`, `verdict`
+(`INDIVISIBLE - <why>`) and the `ledger` row of the pass - which the size check reads in place of the cap for that page
+alone. An entry without that verdict, or with a limit not above the cap, is refused. SPLITTABLE names the split, and the
+page is split.
 
 ## The record is organized by tags, in one flat directory (feature 303, GM 2026-10-01)
 

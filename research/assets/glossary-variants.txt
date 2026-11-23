@@ -4876,6 +4876,8 @@ troy ounce	troy ounce
 troy ounces	troy ounce
 troy oz	troy ounce
 true duty	water duty
+true leaf	true leaf
+true leaves	true leaf
 trunk streets	trunk street
 tsinan	Tsinan
 tsinan's	Tsinan

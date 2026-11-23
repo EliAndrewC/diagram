@@ -185,7 +185,10 @@ tab; the presumption is GM 2026-08-29)
 **M14. References are exactly what the write-up covers.** The References tab lists the research questions a statement in About
 or a guess bullet rests on - every one of them, and no other. A question the modal does not draw on is not listed, however
 close its subject; the reader finds it through the research site's navigation and cross-links. A drawing page ("How our maps
-draw ...") is never listed here: it is the Depiction tab's (D5). The question the modal draws on most is listed first. (GM: *"link specifically to the things which relate to what we decided to cover in the write-up, and then simply
+draw ...") is never listed here: it is the Depiction tab's (D5). The question the modal draws on most is listed first. A split is a move:
+a listed question whose split pointer (`<a class="moved">`) leads to the question a statement now rests on counts as that question
+listed, so the pop-up's Entry is not edited for a split (451 T184, the GM 2026-11-23: *"nothing needs to cascade simply because a
+split occurs"*). (GM: *"link specifically to the things which relate to what we decided to cover in the write-up, and then simply
 not link to things which are not covered"*)
 
 **M15. The record is searched for what the modal leaves open.** A standard question (M5-M7) answered "not recorded" or by a

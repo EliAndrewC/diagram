@@ -1,0 +1,4 @@
+{
+  "why": "A question's own prose limit above the 20,000-byte cap, for a page that is one indivisible topic (feature 451 T184, the GM 2026-11-23). Each entry: limit, date, the size-exception check's verdict (INDIVISIBLE - <why>) and its review-ledger row. Read by `l7r-gate check question-size`; an entry with no such verdict is refused. Split first: docs/research-record-rules.md, 'A question has a size'.",
+  "pages": {}
+}

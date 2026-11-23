@@ -40017,19 +40017,22 @@
  "rust/phases/src/field/brook.rs::brook#the intake's siting": {
   "body": "8daecff58dbaa716",
   "claim": "the intake's siting - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki: an offtake in a straight reach, or else on the outside of a bend, a mouth on the concave side - the `intake_siting` knob: at a bend's apex on the fields' side, or where the wave crosses its line on a straight reach",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "405713dcdf66a91d",
   "core": "01471e7ac089ae4f",
   "date": "2026-11-23",
   "note": "two attested sitings rolled evenly: at a bend, the trough at the intake (the apex bowing toward the fields); on a straight reach, the midline crossing leaning away, the race angle read off that lean",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html": "896fc062896cee08"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html": "94b9fa95825b0fe0",
+   "0333-how-a-village-weir-was-built-stakes-cribs-frames-and-gabions.html": "304a62e11aae3035"
   },
   "reads": "6a7b5aa1abe03b2d",
-  "research": "cb960f53e2051e03",
+  "research": "89282c966a268569",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html:11d3e3427f4eb9fa",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html:cf1f9c34eb70e42d"
   ],
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#the meander outward": {
@@ -40085,10 +40088,11 @@
   "date": "2026-11-01",
   "note": "the intake stands on the fields' side of the brook (the meander only adds outward), the one-bank rule the lecture gives",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html": "896fc062896cee08"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html": "94b9fa95825b0fe0",
+   "0333-how-a-village-weir-was-built-stakes-cribs-frames-and-gabions.html": "304a62e11aae3035"
   },
   "reads": "6a7b5aa1abe03b2d",
-  "research": "cb960f53e2051e03",
+  "research": "89282c966a268569",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html:ba02ca4b015c8cac"
   ],
@@ -40631,22 +40635,25 @@
  "rust/phases/src/field/build.rs::one#the intake's place and siting": {
   "body": "4410a04d49576ac7",
   "claim": "the intake's place and siting - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the intake at the left, the center or the right of the fan's head, and (where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki) in a straight reach or on the outside of a bend - the `intake_place` knob rolling the head's middle or a shoulder, the shoulder the one on the brook's side (`brook_side`, the plan's), and the `intake_siting` knob, read here for the brook",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "cd32436a939722c0",
   "core": "e3271ddc0f60d691",
   "date": "2026-11-23",
   "note": "shoulder or center rolled evenly, with the shoulder on the brook's side, gives the page's 1:2:1 left/center/right; siting rolled bend or straight",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html": "896fc062896cee08"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html": "94b9fa95825b0fe0",
+   "0333-how-a-village-weir-was-built-stakes-cribs-frames-and-gabions.html": "304a62e11aae3035"
   },
   "reads": "a0424262a19b95f1",
-  "research": "4efb0ca4151ec8a3",
+  "research": "f7180630579b579c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:41b10ab472dcebe7",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html:cf1f9c34eb70e42d"
   ],
+  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#the lattice's form": {

@@ -1,7 +1,7 @@
 //! A question's prose, and the questions a change touches.
 
 use super::super::tests::{based, commit, put, repo};
-use super::{changed, cli, every, is_question, question_of, size, CAP};
+use super::{changed, cli, cli_with, every, is_question, question_of, size, CAP};
 
 const Q: &str = "research/questions/0001-a-question.html";
 
@@ -109,4 +109,142 @@ fn every_question_page_of_the_record_is_found_and_the_cap_admits_the_first_split
         .find(|q| q.contains("/0115-servants-in-a-samurai-household"))
         .unwrap();
     assert!(size(&real().join(split)) <= CAP);
+}
+
+/// A page near the cap, its padding a block with no claim-bearing token, and a block that carries "mostly".
+fn near_cap(body: &str) -> String {
+    let pad = format!("<p>{}</p>\n", "word ".repeat((CAP - 120) / 5));
+    format!("<h2 id=\"q\">Q</h2>\n{pad}{body}\n")
+}
+
+const KEPT: &str = "<li><strong>Old weirs.</strong><br>The intake works up to 1590 were mostly small, of timber frames packed with stone.</li>";
+const CUT: &str = "<li><strong>Old weirs.</strong><br>The intake works up to 1590 were small.</li>";
+
+/// 451 T184: a size edit that drops a claim-bearing token is refused, naming the split; the escape stands aside on a reason.
+#[test]
+fn a_size_edit_that_drops_a_claim_is_refused_and_names_the_split() {
+    let dir = repo("size-edit");
+    put(&dir, Q, &near_cap(KEPT));
+    commit(&dir);
+    based(&dir);
+    put(&dir, Q, &near_cap(CUT));
+    let refused = cli_with(&[], &dir, None);
+    assert_eq!(refused.code, 1);
+    assert!(
+        refused.stderr.contains("is a SIZE EDIT") && refused.stderr.contains("qualifier `mostly`")
+    );
+    assert!(
+        refused.stderr.contains("make reserve KIND=question")
+            && refused.stderr.contains("size-limits.json")
+    );
+    assert_eq!(cli_with(&[], &dir, Some("ok")).code, 1);
+    let stood = cli_with(&[], &dir, Some("a restated source correction"));
+    assert_eq!(stood.code, 0);
+    assert!(stood
+        .stdout
+        .contains("SIZE_EDIT_OK: a restated source correction"));
+    assert_eq!(cli(&["--all".to_owned()], &dir).code, 0);
+}
+
+#[test]
+fn a_split_whose_section_stands_on_the_moved_pointer_s_page_passes_a_plain_link_does_not_and_a_small_page_is_no_size_edit(
+) {
+    let dir = repo("split");
+    put(&dir, Q, &near_cap(KEPT));
+    put(&dir, "research/questions/0002-small.html", KEPT);
+    commit(&dir);
+    based(&dir);
+    put(
+        &dir,
+        Q,
+        &near_cap("<p>The old weirs are <a href=\"0003-old-weirs.html\">their own page</a>.</p>"),
+    );
+    assert_eq!(cli_with(&[], &dir, None).code, 1);
+    put(
+        &dir,
+        "research/questions/0003-old-weirs.html",
+        &format!("<h2 id=\"w\">W</h2>\n{KEPT}\n"),
+    );
+    let plain = cli_with(&[], &dir, None);
+    // A plain link is no split's pointer: the triage would owe the moved block as removed.
+    assert_eq!(plain.code, 1);
+    assert!(plain
+        .stderr
+        .contains(r#"<a class="moved" href="NNNN-<slug>.html">"#));
+    put(
+        &dir,
+        Q,
+        &near_cap(
+            "<p>The old weirs are <a class=\"moved\" href=\"0003-old-weirs.html\">their own page</a>.</p>",
+        ),
+    );
+    assert_eq!(cli_with(&[], &dir, None).code, 0);
+    put(&dir, "research/questions/0002-small.html", CUT);
+    assert_eq!(cli_with(&[], &dir, None).code, 0);
+}
+
+#[test]
+fn base_names_the_revision_a_delta_run_diffs_against() {
+    let dir = repo("base");
+    put(&dir, Q, &near_cap(KEPT));
+    commit(&dir);
+    put(&dir, Q, &near_cap(CUT));
+    commit(&dir);
+    based(&dir);
+    assert_eq!(cli_with(&[], &dir, None).code, 0);
+    let args = ["--base".to_owned(), "HEAD~1".to_owned()];
+    assert_eq!(cli_with(&args, &dir, None).code, 1);
+}
+
+/// 451 T184: a page's own limit is read only with the size-exception check's verdict, and only above the cap.
+#[test]
+fn a_page_limit_needs_its_verdict_and_raises_the_cap_for_that_page_alone() {
+    let dir = repo("limits");
+    let big = "x".repeat(CAP + 10);
+    put(&dir, Q, &big);
+    commit(&dir);
+    based(&dir);
+    let all = ["--all".to_owned()];
+    assert!(cli(&all, &dir).stderr.contains("over the 20,000 cap"));
+    let entry = |limit: usize, verdict: &str| {
+        format!("{{\"pages\": {{\"{Q}\": {{\"limit\": {limit}, \"date\": \"2026-11-23\", \"verdict\": \"{verdict}\", \"ledger\": \"dev/review-ledger.md row\"}}}}}}")
+    };
+    put(
+        &dir,
+        "research/size-limits.json",
+        &entry(CAP + 100, "SPLITTABLE"),
+    );
+    assert!(cli(&all, &dir)
+        .stderr
+        .contains("carries no size-exception verdict"));
+    put(
+        &dir,
+        "research/size-limits.json",
+        &entry(CAP, "INDIVISIBLE - one argument"),
+    );
+    assert!(cli(&all, &dir)
+        .stderr
+        .contains("is not above the 20000 cap"));
+    put(&dir, "research/size-limits.json", "{");
+    assert!(cli(&all, &dir).stderr.contains("does not parse"));
+    put(
+        &dir,
+        "research/size-limits.json",
+        &entry(CAP + 5, "INDIVISIBLE - one argument"),
+    );
+    assert!(cli(&all, &dir)
+        .stderr
+        .contains("over the 20,005 limit recorded for it"));
+    assert!(cli(&["--report".to_owned()], &dir)
+        .stdout
+        .contains(" 20,010  "));
+    put(
+        &dir,
+        "research/size-limits.json",
+        &entry(CAP + 100, "INDIVISIBLE - one argument"),
+    );
+    assert_eq!(cli(&all, &dir).code, 0);
+    assert!(cli(&["--report".to_owned()], &dir)
+        .stdout
+        .starts_with("0 question(s)"));
 }

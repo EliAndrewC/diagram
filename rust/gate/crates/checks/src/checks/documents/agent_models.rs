@@ -31,7 +31,7 @@ const MODELS: [&str; 2] = ["opus", "sonnet"];
 const EFFORTS: [&str; 5] = ["low", "medium", "high", "xhigh", "max"];
 
 /// agent, model, effort.
-const TIERS: [(&str, &str, &str); 28] = [
+const TIERS: [(&str, &str, &str); 29] = [
     ("record-format", "opus", "medium"), // Sonnet missed at medium (R5) and at high (R7); opus/medium hit everything
     ("source-reader", "opus", "high"),   // Sonnet tried and missed: research R5
     ("quote-check", "opus", "medium"),
@@ -60,6 +60,7 @@ const TIERS: [(&str, &str, &str); 28] = [
     ("source-filter", "opus", "medium"), // feature 312: judges a source with no question in hand; calibrated three runs a leg (R2)
     ("work-budget", "opus", "high"), // feature 443 T05 (FR-008): judges a budget's arithmetic and the landed code against it
     ("message-check", "sonnet", "medium"), // 451 T170: one short guard message against a fixed rubric (the brief: "pin it to the sonnet tier")
+    ("size-exception", "opus", "high"), // 451 T184: adversarial judgment that no split keeps a page's content (the GM 2026-11-23)
 ];
 
 /// agent -> why it KEEPS the CLAUDE.md files. An entry here is a MEASURED case the GM approved, never a session's convenience: the
