@@ -51,6 +51,66 @@ pub fn builder_brief(dir: &Path, id: &str) -> Option<(String, Vec<String>)> {
     (!tasks.is_empty()).then_some((number, tasks))
 }
 
+/// A task id, and the feature number before it where one stands there (`check_bundle_hooks/own.rs`'s and `left/whose.rs`'s reading).
+static NAMED: LazyLock<Regex> = LazyLock::new(|| re(r"(?:\b(\d{3})\s+)?\b(T\d+[a-z]?)\b"));
+/// A page-session brief's file name: `t197-g2-checks.md`.
+static BRIEF_FILE: LazyLock<Regex> = LazyLock::new(|| re(r"^t(\d+[a-z]?)-"));
+
+/// The (feature directory, task) page session `sid`'s brief names, the clone at `root` holding its `page-sessions/index.txt` (`<sid>
+/// <brief path>`, the runner's `L7R_PAGE_SESSION` its first column, its last line for `sid` read): the feature its `specs/<feature>/`
+/// path names, the task its first line names (`# Brief - feature 449 task T197, ...`), else its file name's (`t197-g2-checks.md`). None
+/// where any of those is missing. The one reader, which a check's own task (449 T258, `check_bundle_hooks/own.rs`) and the event log's
+/// booking of a page session's lines (451 T161, `event_log_hooks/filed.rs`) share.
+#[must_use]
+pub fn page_session_brief(root: &Path, sid: &str) -> Option<(String, String)> {
+    let index = std::fs::read_to_string(
+        crate::guards::event_log_hooks::common_git_dir(root).join("page-sessions/index.txt"),
+    )
+    .ok()?;
+    let brief = index.lines().rev().find_map(|l| {
+        l.split_once(' ')
+            .filter(|(id, _)| *id == sid)
+            .map(|(_, path)| PathBuf::from(path.trim()))
+    })?;
+    let parts: Vec<String> = brief
+        .components()
+        .map(|c| c.as_os_str().to_string_lossy().into_owned())
+        .collect();
+    let at = parts.iter().rposition(|p| p == "specs")?;
+    let feature = parts.get(at + 1)?.clone();
+    let first = std::fs::read_to_string(&brief).unwrap_or_default();
+    let line = first.lines().next().unwrap_or_default();
+    let task = NAMED
+        .captures(line)
+        .ok()
+        .flatten()
+        .map(|c| c[2].to_owned())
+        .or_else(|| {
+            let name = brief.file_name()?.to_string_lossy().into_owned();
+            BRIEF_FILE
+                .captures(&name)
+                .ok()
+                .flatten()
+                .map(|c| format!("T{}", &c[1]))
+        })?;
+    Some((feature, task))
+}
+
+/// The tasks agent `id` builds by its builder's reading ([`builder_brief`]), else by the builder that dispatched it (its meta's
+/// `parentAgentId`, a review a builder launched), in the session's `subagents` directory `dir`: the feature number and tasks (451 T161,
+/// the event log's booking of a line whose agent's own description names no task).
+#[must_use]
+pub fn agent_builder(dir: &Path, id: &str) -> Option<(String, Vec<String>)> {
+    builder_brief(dir, id).or_else(|| {
+        let meta: Value = serde_json::from_str(
+            &std::fs::read_to_string(dir.join(format!("agent-{id}.meta.json"))).ok()?,
+        )
+        .ok()?;
+        let parent = meta.get("parentAgentId")?.as_str()?;
+        builder_brief(dir, parent)
+    })
+}
+
 /// The description of agent `id`, one the session dispatched (its meta's `spawnDepth` 1); None for any other.
 fn dispatched(dir: &Path, id: &str) -> Option<String> {
     let meta: Value = serde_json::from_str(

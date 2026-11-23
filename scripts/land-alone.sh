@@ -312,7 +312,9 @@ def split(root, events, feature, tasks):
     # step 3: the landing tasks' own files - those a line filed under one of them names, by the closing checks' attribution
     # (`scripts/gates/closing-checks.sh`, 451 T86, T93; read here since 451 T96): an edit tool's end its path, a Bash call's end
     # (`PostToolUse` or `PostToolUseFailure`) a file of its `writes` - the exact path, never a directory's files; not a fallback line; not
-    # one older than the file's last commit or than its own task's last landing (`<feature>: T.. ticked (make land)`)
+    # one older than the file's last commit or than its own task's last landing (`<feature>: T.. ticked (make land)`). A line's task is
+    # its editor's - the task the editing agent's brief names, its builder's or its page session's, the clone's mark only for the main
+    # session's own lines (451 T161, `event_log_hooks/filed.rs`) - so another builder's edit made under this landing's mark is not its own
     dirty = dirty_of(root)
     since, last, landed, at = time.time() - 7 * 86400, {}, {}, 0
     for l in git(root, 'log', '--since=7.days', '--format=@%ct %s', '--name-only').stdout.decode().splitlines():

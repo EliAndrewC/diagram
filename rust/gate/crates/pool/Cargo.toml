@@ -1,7 +1,7 @@
 # The pool walk (feature 449 T220, phase `pipeline`, rebuilt from `specs/449-rust-codebase/derivations/T219-pipeline.md`): every map
 # folder of the two pool trees listed once and classified once, and `pool/index.html` written from it; and (T221) the generation cache
 # and `make map`'s one driver, which run the engines as programs (never depending on them). One crate the gate's crates and
-# the Mode A engine (`rust/mode_a`) both depend on by path: it names no crate but `serde_json` and the guard, so neither pulls the other's
+# the Mode A engine (`rust/mode_a`) both depend on by path: it names no crate but `serde_json` and the guard (its tests `core`'s testkit too), so neither pulls the other's
 # dependencies through it.
 [package]
 name = "l7r_gate_pool"
@@ -27,6 +27,11 @@ serde_json = { workspace = true }
 # the generation cache's digests (`l7r_shared::sha256`) and its lock (`l7r_shared::tool::flock_within`), feature 449 T221: the guard's shared
 # crate is the base every gate crate and the Mode A engine already build on (451 T58), so naming it pulls nothing new into either
 l7r_shared = { path = "../../../guard/shared" }
+
+# the tests' fake engines and gate scripts written by `write_executable` (451 T160: one written in process failed "Text file busy" under
+# load); `core` builds on nothing of the pool, and a dev-dependency reaches no consumer's build
+[dev-dependencies]
+l7r_gate_core = { path = "../core", features = ["testkit"] }
 
 # the counting run's program (`l7r-gate.sh rust hamlet --crate rust/gate/crates/pool` with `HAMLET_BIN=l7r-pool`), and the walk,
 # index and map as commands; the gate reaches the same commands in process as `l7r-gate pool ...`

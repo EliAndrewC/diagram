@@ -9,7 +9,8 @@
 //! `PreToolUse`, `PostToolUse`, `SubagentStart`, `SubagentStop`, `UserPromptSubmit` and Stop payload, to `<git common dir>/l7r-events/<feature
 //! dir>.jsonl` (`_unassigned.jsonl` with no feature) of the session's clone, else of the tree the call's cwd stands in (451 T74, `tree_of`). Fields: `t` (UTC), `sid`, `ev`, and where they apply `tool`, `id` (`tool_use_id`),
 //! `cat` (`category`; a Bash call's by the category table, `BUCKETS`, feature 451 D2), `make` (a Bash call's first make target), `makes` (every target, where it runs more than one - 451 T14) and `task`
-//! (the task a tick, task-start, decide or land names, else the dispatch's brief's, else its feature's start in force - 451 D2), `fallback`
+//! (the task a tick, task-start, decide or land names, else the dispatch's brief's, its builder's or its page session's, else - the main
+//! session's own line alone - its feature's start in force; 451 D2, T161), `fallback`
 //! (the line's feature was only the session's or feature.json's, nothing on the line naming one - 451 T26, `filed.rs`, which also says
 //! which feature's log a line goes to), `path`, `old`/`new`
 //! (digests of an Edit's strings - the reversal wire) and `heading`, `agent`/`aid`/`manifest`/`unit`/`waiver` (an agent's type, id, the

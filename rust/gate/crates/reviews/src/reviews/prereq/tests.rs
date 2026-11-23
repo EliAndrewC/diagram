@@ -468,7 +468,11 @@ fn the_figure_pattern_is_the_spec_lints() {
     assert!(re.is_match("12 px").unwrap() && !re.is_match("12 pxs").unwrap());
     let none = super::super::tests::dir("nopattern");
     assert!(figure_pattern(&none).is_err());
-    put(&none, "scripts/gates/l7r-gate.sh", "#!/bin/sh\necho '('\n");
-    super::super::tests::sh(&none, "chmod +x scripts/gates/l7r-gate.sh");
+    // written by `install`, never this process: a script it wrote itself can be "Text file busy" when run (451 T160)
+    std::fs::create_dir_all(none.join("scripts/gates")).unwrap();
+    l7r_gate_core::write_executable(
+        &none.join("scripts/gates/l7r-gate.sh"),
+        "#!/bin/sh\necho '('\n",
+    );
     assert!(figure_pattern(&none).is_err());
 }

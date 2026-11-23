@@ -11,6 +11,7 @@ use serde_json::Value;
 use super::super::tests::{fx, has, Fx, NOTE};
 use super::{INNER, REFUSED_FIRST, SCRIPT};
 
+mod booked;
 mod take;
 
 /// The landing's `end` lines in the tree's event logs.
@@ -124,12 +125,12 @@ fn world(tag: &str) -> (l7r_shared::tempdir::TempDir, std::path::PathBuf) {
     sh(&c, "git add src/t1.rs && git commit -qm 'T1 work'");
     put(&c, ".git/rust-checks/lint-land", "a kept result\n");
     put(&c, ".git/review-verdicts/building-review--x.json", "{}\n");
-    put(
-        &dir,
-        "make",
+    // the stub `make` written by `install`, never this process: one it wrote itself can be "Text file busy" when run (451 T160)
+    l7r_gate_core::write_executable(
+        &dir.join("make"),
         "#!/bin/bash\nprintf '%s|%s\\n' \"$L7R_LAND_ALONE\" \"$*\" >> \"$STUB_LOG\"\n[ -e src/other.rs ] && echo 'saw another task' >> \"$STUB_LOG\"\n[ -n \"$STUB_MID\" ] && bash -c \"$STUB_MID\"\n[ \"${STUB_RC:-0}\" = 0 ] || exit \"$STUB_RC\"\nsed -i 's/^### T1 the section the tick moves$/### T1 ticked/' specs/451-x/plan.md\nsed -i 's/^- \\[ \\] T1 one$/- [x] T1 one/' specs/451-x/tasks.md\ngit -c user.name=t -c user.email=t@t commit -qam 'T1 ticked' && git push -q origin HEAD:main 2>/dev/null\n",
     );
-    sh(&dir, "chmod +x make && mkdir -p events");
+    sh(&dir, "mkdir -p events");
     (dir, c)
 }
 

@@ -46,8 +46,8 @@ fn base(tag: &str) -> crate::shared::tempdir::TempDir {
 
 fn exe(path: &Path, body: &str) -> String {
     std::fs::create_dir_all(path.parent().unwrap()).unwrap();
-    std::fs::write(path, format!("#!/bin/bash\n{body}\n")).unwrap();
-    Command::new("chmod").arg("+x").arg(path).status().unwrap();
+    // written by `install`, never this process: a fake it wrote itself can be "Text file busy" when run (451 T160)
+    crate::guards::write_executable(path, &format!("#!/bin/bash\n{body}\n"));
     path.to_string_lossy().into_owned()
 }
 

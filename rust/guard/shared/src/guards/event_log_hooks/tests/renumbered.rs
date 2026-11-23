@@ -172,7 +172,8 @@ fn a_message_that_only_names_a_task_corrects_nothing() {
     let _ = send(&b, "../a06", "Your task is T07, not T06", "");
     let _ = send(&b, "anometa", "Your task is T07, not T06", "");
     assert_eq!(task_of(&b, "a06"), json!("T06"));
-    assert_eq!(task_of(&b, "anometa"), json!("T236"));
+    // an agent whose brief names no task carries none, never the clone's mark (451 T161)
+    assert_eq!(task_of(&b, "anometa"), Value::Null);
     // a builder's own message to another agent (the coordinator is the main session), and one with no input at all, correct nothing
     let theirs = call(
         &b,

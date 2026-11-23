@@ -26,8 +26,8 @@ fn world(tag: &str) -> (crate::shared::tempdir::TempDir, PathBuf, PathBuf) {
 }
 
 fn script(at: &Path, body: &str) -> String {
-    std::fs::write(at, format!("#!/bin/bash\n{body}\n")).unwrap();
-    Command::new("chmod").arg("+x").arg(at).status().unwrap();
+    // written by `install`, never this process: a script it wrote itself can be "Text file busy" when run (451 T160)
+    crate::guards::write_executable(at, &format!("#!/bin/bash\n{body}\n"));
     at.to_string_lossy().into_owned()
 }
 

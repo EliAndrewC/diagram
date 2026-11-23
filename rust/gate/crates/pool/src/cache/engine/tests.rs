@@ -102,16 +102,11 @@ fn the_launcher_names_a_fresh_binary_or_says_why_not() {
     let gates = root.join("scripts/gates");
     std::fs::create_dir_all(&gates).unwrap();
     let launcher = gates.join("l7r-gate.sh");
-    std::fs::write(
+    // written by `install`, never this process: a script it wrote itself can be "Text file busy" when run (451 T160)
+    l7r_gate_core::write_executable(
         &launcher,
         "#!/bin/sh\n[ -n \"$L7R_GATE_STALE_OK\" ] && exit 1\n[ \"$1\" = hamlet ] && { echo 'it failed' >&2; exit 1; }\necho \"/bin/$1-$L7R_GATE_PRINT_FRESH\"\n",
-    )
-    .unwrap();
-    std::fs::set_permissions(
-        &launcher,
-        std::os::unix::fs::PermissionsExt::from_mode(0o755),
-    )
-    .unwrap();
+    );
     let mut built = Launcher {
         root: root.to_path_buf(),
         build: true,

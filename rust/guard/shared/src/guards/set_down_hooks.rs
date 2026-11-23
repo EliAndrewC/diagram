@@ -908,7 +908,7 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
 }
 
 mod builders;
-pub use builders::builder_brief;
+pub use builders::{agent_builder, builder_brief, page_session_brief};
 use builders::{asks_the_gm, builders, landing_process, Builder};
 
 #[cfg(test)]

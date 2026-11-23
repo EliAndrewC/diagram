@@ -83,6 +83,18 @@ impl Fixture {
         std::fs::write(d.join(format!("agent-{aid}.jsonl")), text).unwrap();
     }
 
+    /// The builder's meta file, its description naming `task`: a builder's line carries the task its brief names, never the clone's
+    /// mark (451 T161).
+    fn briefed(&self, task: &str) {
+        let d = self.dir.join("proj/sess/subagents");
+        std::fs::create_dir_all(&d).unwrap();
+        std::fs::write(
+            d.join(format!("agent-{AID}.meta.json")),
+            format!(r#"{{"description":"451 {task}: the builder","spawnDepth":1}}"#),
+        )
+        .unwrap();
+    }
+
     fn handoffs(&self) -> PathBuf {
         self.clone().join(".git/l7r-handoffs")
     }
@@ -269,6 +281,7 @@ fn a_builder_just_past_an_advisor_call_is_judged_on_its_own_context() {
 #[test]
 fn the_handoff_is_named_for_the_task_the_calls_line_carries() {
     let f = Fixture::new("task", &[call(400_000)], Some("T12"));
+    f.briefed("T12");
     let handoff = f.handoffs().join(format!("T12-{AID}.md"));
     assert!(matches!(
         verdict(&f.bash("builder", "ls")),
@@ -781,6 +794,7 @@ impl Fixture {
 fn a_call_from_the_mirror_names_the_handoff_in_the_sessions_clone() {
     crate::shared::log::quiet();
     let f = Fixture::new("mirror", &[call(310_000)], Some("T60"));
+    f.briefed("T60");
     let mirror = f.mirror(Some(&f.clone()));
     let from = |mut input: Value| {
         input["cwd"] = json!(mirror);

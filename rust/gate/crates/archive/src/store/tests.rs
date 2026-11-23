@@ -24,16 +24,11 @@ fn the_pat_goes_as_a_header_and_the_token_is_the_gates() {
     );
     let w = World::new("store-token");
     let gate = w.dir.path().join("gate.sh");
-    std::fs::write(
+    // written by `install`, never this process: a script it wrote itself can be "Text file busy" when run (451 T160)
+    l7r_gate_core::write_executable(
         &gate,
         "#!/bin/sh\necho \"  secret-$1 in $(basename \"$PWD\")  \"\n",
-    )
-    .unwrap();
-    std::process::Command::new("chmod")
-        .arg("+x")
-        .arg(&gate)
-        .status()
-        .unwrap();
+    );
     // the gate's `github-token`, run in the mirror, its words stripped; none where the gate cannot run
     assert_eq!(
         token_from(&gate, &w.dir.path().join("m")),

@@ -236,15 +236,13 @@ fn the_command_line() {
 #[test]
 fn the_launcher_runs_the_gate_script() {
     let root = fixture("maps-launcher");
-    put(
-        &root,
-        "scripts/gates/l7r-gate.sh",
+    // written by `install`, never this process: a script it wrote itself failed "Text file busy" under load (451 T160)
+    let script = root.join("scripts/gates/l7r-gate.sh");
+    std::fs::create_dir_all(script.parent().unwrap()).unwrap();
+    l7r_gate_core::write_executable(
+        &script,
         "#!/bin/sh\necho \"said $*\"; echo err >&2; [ \"$1\" = ok ]\n",
     );
-    let script = root.join("scripts/gates/l7r-gate.sh");
-    let mut perms = std::fs::metadata(&script).unwrap().permissions();
-    std::os::unix::fs::PermissionsExt::set_mode(&mut perms, 0o755);
-    std::fs::set_permissions(&script, perms).unwrap();
     let mut l = Launcher {
         root: root.to_path_buf(),
     };

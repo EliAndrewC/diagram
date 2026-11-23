@@ -21,8 +21,8 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use serde_json::Value;
 
-use crate::guards::event_log_hooks::{common_git_dir, started, starts};
-use crate::guards::set_down_hooks::builder_brief;
+use crate::guards::event_log_hooks::{started, starts};
+use crate::guards::set_down_hooks::{builder_brief, page_session_brief};
 use crate::shared::state::field;
 
 /// The task a check serves: its feature (a number or a `specs/` directory name, as `plan decided` resolves either) and its tasks (a
@@ -39,8 +39,6 @@ fn re(pattern: &str) -> Regex {
 
 /// A task id, and the feature number before it where one stands there.
 static NAMED: LazyLock<Regex> = LazyLock::new(|| re(r"(?:\b(\d{3})\s+)?\b(T\d+[a-z]?)\b"));
-/// A page-session brief's file name: `t197-g2-checks.md`.
-static BRIEF_FILE: LazyLock<Regex> = LazyLock::new(|| re(r"^t(\d+[a-z]?)-"));
 
 /// The task the dispatch in `input` serves, in the clone at `root`; None where nothing names one.
 pub(super) fn own_task(input: &Value, root: &Path) -> Option<Own> {
@@ -89,40 +87,13 @@ fn builder(input: &Value) -> Option<Own> {
     Some(Own { feature, tasks })
 }
 
-/// The page session's brief's (feature, task), where the hook runs in one.
+/// The page session's brief's (feature, task), where the hook runs in one (`set_down_hooks::page_session_brief`, the one reader).
 fn page_session(root: &Path) -> Option<Own> {
     let sid = crate::shared::env::var("L7R_PAGE_SESSION");
     if sid.is_empty() {
         return None;
     }
-    let index =
-        std::fs::read_to_string(common_git_dir(root).join("page-sessions/index.txt")).ok()?;
-    let brief = index.lines().rev().find_map(|l| {
-        l.split_once(' ')
-            .filter(|(id, _)| *id == sid)
-            .map(|(_, path)| PathBuf::from(path.trim()))
-    })?;
-    let parts: Vec<String> = brief
-        .components()
-        .map(|c| c.as_os_str().to_string_lossy().into_owned())
-        .collect();
-    let at = parts.iter().rposition(|p| p == "specs")?;
-    let feature = parts.get(at + 1)?.clone();
-    let first = std::fs::read_to_string(&brief).unwrap_or_default();
-    let line = first.lines().next().unwrap_or_default();
-    let task = NAMED
-        .captures(line)
-        .ok()
-        .flatten()
-        .map(|c| c[2].to_owned())
-        .or_else(|| {
-            let name = brief.file_name()?.to_string_lossy().into_owned();
-            BRIEF_FILE
-                .captures(&name)
-                .ok()
-                .flatten()
-                .map(|c| format!("T{}", &c[1]))
-        })?;
+    let (feature, task) = page_session_brief(root, &sid)?;
     Some(Own {
         feature,
         tasks: vec![task],

@@ -12,8 +12,11 @@
 //!   FALLBACK, `feature_of` (the session's environment, then feature.json), and the line is marked `"fallback": true` unless the session's environment declared that feature;
 //! - the TASK: a `tick`, `task-start`, `decide` or `land` command's `T=` (`line`), or a `closing-checks` one's (451 T106); else, for an
 //!   Agent call, the `T<n>` its own description names; else the agent's CORRECTION (451 T106, [`renumbered`]); else the `T<n>` the
-//!   brief names; else, for an Agent call, its prompt's first line's (451 T07); else the task-start in force for the line's feature (D2's
-//!   last entry, now of the line's own feature, not of feature.json's).
+//!   brief names; else, for an Agent call, its prompt's first line's (451 T07); else, for an agent's line, its builder's reading - its
+//!   description's head, else its own prompt's first line, else its dispatching builder's (451 T161, `set_down_hooks::agent_builder`);
+//!   else a page session's brief's (`L7R_PAGE_SESSION`, `set_down_hooks::page_session_brief`); else, for the main session's own line
+//!   alone, the task-start in force for the line's feature (D2's last entry, now of the line's own feature, not of feature.json's) - an
+//!   agent's or page session's line naming no task carries none, never the clone's mark (451 T161).
 //!
 //! THE CORRECTION (451 T106): a builder the coordinator re-numbers keeps the task the correction names on every later line, its feature
 //! still the brief's. What says it, earliest first - the night's 136 builders, measured 2026-11-21 (a Python read of the session
@@ -46,6 +49,7 @@ use super::{
     common_git_dir, dispatches, feature_of, first_group, log_path_in, make_target, re, text_of,
     TASK, TASK_NAMED,
 };
+use crate::guards::set_down_hooks::{agent_builder, page_session_brief};
 use crate::shape::strip_heredocs;
 
 /// How old a task start may be and still name a brief's bare task's feature (451 T53). WHY: `T47 plan review`, from a 451 T47 builder
@@ -171,6 +175,15 @@ fn meta_brief(payload: &Value, aid: &str) -> Option<String> {
         .map(|m| text_of(m.get("description")))
 }
 
+/// The (feature number, tasks) agent `aid` builds by its builder's reading - its description's head, else its own prompt's first line,
+/// else the builder that dispatched it (`set_down_hooks::agent_builder`, 449 T268's and 451 T157's reading) - in the session the
+/// payload's `transcript_path` names; None where none is readable (451 T161).
+fn builder_named(payload: &Value, aid: &str) -> Option<(String, Vec<String>)> {
+    let transcript = Some(text_of(payload.get("transcript_path"))).filter(|t| !t.is_empty())?;
+    let session = transcript.strip_suffix(".jsonl").unwrap_or(&transcript);
+    agent_builder(&Path::new(session).join("subagents"), aid)
+}
+
 /// Whether `word` is a task id: `T`, digits, at most one lowercase letter (`T07`, `T7a`).
 pub(super) fn is_task(word: &str) -> bool {
     let Some(rest) = word.strip_prefix('T') else {
@@ -196,6 +209,7 @@ fn own_step(command: &str) -> Option<String> {
 fn current(events: &Path, payload: &Value, sid: &str, aid: &str) -> Option<String> {
     dispatches::corrected(events, sid, aid)
         .or_else(|| meta_brief(payload, aid).and_then(|b| first_group(&TASK_NAMED, &b)))
+        .or_else(|| builder_named(payload, aid).and_then(|(_, tasks)| tasks.into_iter().next()))
 }
 
 /// The agent a payload re-numbers and its new task, which `dispatches::record` keeps for the agent's later lines (451 T106): the main
@@ -230,10 +244,12 @@ pub(super) fn renumbered(payload: &Value, events: &Path) -> Option<(String, Stri
             // the 64 lines after it to T29, 6 of them writes T28's closing checks would then set apart, measured 2026-11-21 (the
             // rule replayed over the night's 31,888 builder lines, its own steps read from their transcripts)
             let brief = meta_brief(payload, &by).unwrap_or_default();
+            // and so is a bundle member its brief names only by its prompt's first line (451 T161: `449 sheet bundle (fresh 3)`)
             let briefed = TASK_NAMED
                 .captures_iter(&brief)
                 .map_while(Result::ok)
-                .any(|c| c.get(1).is_some_and(|m| m.as_str() == task));
+                .any(|c| c.get(1).is_some_and(|m| m.as_str() == task))
+                || builder_named(payload, &by).is_some_and(|(_, tasks)| tasks.contains(&task));
             if briefed || current(events, payload, &sid, &by).as_deref() == Some(task.as_str()) {
                 return None;
             }
@@ -397,6 +413,27 @@ pub(super) fn filed(
         })
         .or(briefed_task)
         .or_else(head);
+    // A LINE IS ITS EDITOR'S (451 T161): an agent whose own description names no task is booked by its builder's reading - a bundle's
+    // `449 sheet bundle (fresh 3): ...` by its prompt's first line, `449 bundle T312, T313, ...`; a review it launched by it - and a page
+    // session's line by its brief; the clone's mark (below) only for the main session's own. WHY: the sheet bundle's four files were
+    // booked to the mark's T317, the record bundle's, and refused that bundle's landing at land-alone's own-edits step (observed
+    // 2026-11-22, method: the 449 log's edit lines of `reviews/owed.rs` and `gen_tests_seat.rs`, `by` a6ed2241ba6a59166, read against
+    // its meta file and transcript).
+    let aid = text_of(payload.get("agent_id"));
+    let page = env("L7R_PAGE_SESSION").filter(|s| !s.trim().is_empty());
+    let mut theirs = None;
+    let task = task.or_else(|| {
+        let (feature, task) = Some(&aid)
+            .filter(|a| !a.is_empty())
+            .and_then(|a| builder_named(payload, a))
+            .and_then(|(n, tasks)| Some((specs.named(&n), tasks.into_iter().next()?)))
+            .or_else(|| {
+                let (f, t) = page_session_brief(root, page.as_deref()?)?;
+                Some((Some(f), t))
+            })?;
+        theirs = feature;
+        Some(task)
+    });
     // a builder's `make task-add F=449` is the builder's own time: its `F=` names where the call writes, not whose task it serves, and
     // filed by it the line took 449 from the `F=` and T36 from 451's brief (451 T53). The brief wins unless the command carries its own
     // `T=` - the re-file's rule (`make events-refile`, BY BRIEF), so the writer and the re-file agree
@@ -405,6 +442,7 @@ pub(super) fn filed(
     } else {
         briefed.or(said)
     }
+    .or(theirs)
     .or_else(|| {
         task.as_deref()
             .and_then(|t| started(&starts, t, crate::iso::parse(now)))
@@ -416,7 +454,7 @@ pub(super) fn filed(
         None => (feature_of(root, env), !declared(root, env)),
     };
     let task = task.or_else(|| {
-        if feature.is_empty() {
+        if feature.is_empty() || !aid.is_empty() || page.is_some() {
             None
         } else {
             in_force(&starts, &feature)

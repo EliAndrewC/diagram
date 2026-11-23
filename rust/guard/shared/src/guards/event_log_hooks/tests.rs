@@ -538,8 +538,9 @@ fn a_line_with_no_t_carries_the_agents_task_else_the_clones() {
     .unwrap();
     assert_eq!(task(&call(None)), Some(json!("T03")));
     assert_eq!(task(&call(Some("ab1"))), Some(json!("T07")));
+    // an agent whose brief names no task carries none, never the clone's mark (451 T161: the mark is the main session's own)
     for aid in ["nodesc", "bad", "missing"] {
-        assert_eq!(task(&call(Some(aid))), Some(json!("T03")), "{aid}");
+        assert_eq!(task(&call(Some(aid))), None, "{aid}");
     }
     // a subagent's own stop is its line too (D10 reads an agent's first line)
     let stop = json!({"hook_event_name": "SubagentStop", "cwd": cwd, "transcript_path": transcript, "agent_id": "ab1", "agent_type": "general-purpose"});
@@ -548,10 +549,10 @@ fn a_line_with_no_t_carries_the_agents_task_else_the_clones() {
     let mut land = call(Some("ab1"));
     land["tool_input"]["command"] = json!("make land F=999 T=T09");
     assert_eq!(task(&land), Some(json!("T09")));
-    // no transcript path: the clone's
+    // no transcript path: no brief, and an agent's line takes no mark (451 T161)
     let mut bare = call(Some("ab1"));
     bare.as_object_mut().unwrap().remove("transcript_path");
-    assert_eq!(task(&bare), Some(json!("T03")));
+    assert_eq!(task(&bare), None);
     // no feature: no task-starts entry is the log's
     std::fs::remove_file(d.join(".specify/feature.json")).unwrap();
     assert_eq!(task(&call(None)), None);
@@ -649,10 +650,10 @@ fn two_features_builders_in_one_clone_each_line_in_its_own_log() {
         b.filed(&b.bash(Some("anum"), "ls", "PostToolUse")),
         want("449-b", "T226", false)
     );
-    // a brief naming a feature and no task: that feature's task-start in force
+    // a brief naming a feature and no task: that feature's log, no task - the mark is the main session's alone (451 T161)
     assert_eq!(
         b.filed(&b.bash(Some("afeat"), "ls", "PostToolUse")),
-        want("451-a", "T26", false)
+        ("451-a".to_owned(), None, false)
     );
     // the main session's landing and task start: the command's F=, both halves of the call
     for ev in ["PreToolUse", "PostToolUse"] {
@@ -701,14 +702,15 @@ fn a_line_nothing_names_is_filed_by_feature_json_and_marked() {
         b.filed(&b.bash(None, "make static", "PreToolUse")),
         want("449-b", "T236", true)
     );
+    // an agent's line takes no mark (451 T161)
     assert_eq!(
         b.filed(&b.bash(Some("anone"), "ls", "PreToolUse")),
-        want("449-b", "T236", true)
+        ("449-b".to_owned(), None, true)
     );
     // a brief's counts and hyphenated ids name no feature: 451 only inside `FR-451`, 450 a feature this clone never started
     assert_eq!(
         b.filed(&b.bash(Some("acount"), "ls", "PreToolUse")),
-        want("449-b", "T236", true)
+        ("449-b".to_owned(), None, true)
     );
     // an F= naming no single feature directory says nothing
     assert_eq!(
@@ -734,6 +736,7 @@ fn a_line_nothing_names_is_filed_by_feature_json_and_marked() {
 }
 
 mod background;
+mod booked;
 mod cost;
 mod misfiled;
 mod renumbered;

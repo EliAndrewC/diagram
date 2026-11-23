@@ -77,14 +77,13 @@ pub(crate) fn fixture(tag: &str) -> Fixture {
         ("pool/magistracies/u/stray.txt", "x"),
         ("assets/page.css", "css"),
         ("fonts/a.ttf", "font"),
-        ("engines/mode-a", MODE_A),
-        ("engines/hamlet", HAMLET),
     ] {
         put(&root, rel, text);
     }
-    for e in ["mode-a", "hamlet"] {
-        let p = root.join("engines").join(e);
-        std::fs::set_permissions(&p, std::os::unix::fs::PermissionsExt::from_mode(0o755)).unwrap();
+    // the fake engines written by `install`, never this process: one it wrote itself can be "Text file busy" when run (451 T160)
+    std::fs::create_dir_all(root.join("engines")).unwrap();
+    for (e, text) in [("mode-a", MODE_A), ("hamlet", HAMLET)] {
+        l7r_gate_core::write_executable(&root.join("engines").join(e), text);
     }
     put(
         &root,
@@ -316,7 +315,11 @@ fn a_touched_file_is_rehashed_and_served_and_a_spec_edit_regenerates() {
 fn the_engine_and_the_picture_switch_key_the_map() {
     let mut f = fixture("engine");
     f.run(&["s"], false);
-    f.edit("engines/mode-a", &format!("{MODE_A}# rebuilt\n"));
+    l7r_gate_core::write_executable(
+        &f.root.join("engines/mode-a"),
+        &format!("{MODE_A}# rebuilt\n"),
+    );
+    tick(&f.root);
     assert!(!f.current("s"));
     assert_eq!(why(&f.verdicts(&["s"])[0]), "its engine (mode-a) changed");
     put(&f.root, "skip", "");

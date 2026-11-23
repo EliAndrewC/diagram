@@ -133,7 +133,7 @@ fn a_subagent_start_before_its_meta_file_is_filed_by_its_dispatch() {
             &b.start("anew3", "general-purpose"),
             "2026-11-20T11:47:10.500Z"
         ),
-        want("449-b", "T236", true)
+        ("449-b".to_owned(), None, true) // an agent's line takes no mark (451 T161)
     );
 }
 
@@ -184,7 +184,7 @@ fn a_start_is_filed_only_by_a_call_of_its_type_inside_the_window() {
             &b.start("anew5", "round-arbiter"),
             "2026-11-20T12:30:00.000Z"
         ),
-        want("449-b", "T236", true)
+        ("449-b".to_owned(), None, true) // an agent's line takes no mark (451 T161)
     );
     // a resumed agent's meta is on disk: its brief, as before
     assert_eq!(
