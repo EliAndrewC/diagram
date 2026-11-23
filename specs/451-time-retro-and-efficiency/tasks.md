@@ -135,3 +135,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T172 tests/hooks/test-l7r-guard.sh's case 'locked: no wait on another call's build' holds the call to a hard-coded 1 s of wall time (449 T004, f4d3d53c12); it failed once at load average about 22 (got waited) and passed alone (48/0), reported by the T341 builder 2026-11-23: scale the bound by a calibration loop, as l7r/diagram/CLAUDE.md asks of a CPU-time bound, never a hard-coded figure
       research: rendering
+- [ ] T173 tests/hooks/test-finished-run-hooks.sh section 6's five refusal cases failed twice when the suite ran chained after the rust/guard crate builds at load ~15 (once on HEAD 164bb36981, once on T171's fix), and passed alone and under make hooks-test: the cause unmeasured - measure it (the suite's own timing, a stale waiter, a shared .git state file) before any fix (observed 2026-11-23, 451 T171's finisher)
+      research: rendering
