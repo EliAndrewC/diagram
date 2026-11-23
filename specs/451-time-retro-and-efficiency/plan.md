@@ -2442,69 +2442,110 @@ its own files; not engine speed, so no performance-checklist answers.
 **Performance work?** yes, for the event-log half, which is `[perf]` for scheduling under the GM's measurement rule (2026-11-20, while T08 was being built: "I would also like for this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first ... even if the task itself doesn't improve performance"). That half exists so that `make where-time` credits each task its own minutes. The ledger half (`whose.rs`) is not performance work: it corrects a landing's refusal. No before-and-after timing is owed, because neither half makes any step faster.
 
 
-### T168 (<why: the finding or measurement that files it>)
+### T168 (observed 2026-11-23, 451 T167's plan section: 449 T330's page sessions' lines sat under T312 and T328 in the 449 log, and `make events-refile` moves lines across features but never re-tasks one within a feature)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: `make events-refile RETASK="<session id> ..."` (`--retask <sid>`, repeatable) is a new mode of the existing refile command (`rust/gate/crates/measure/src/measure/event_log/refile/retask.rs`, called from `refile::cli_in`; the Makefile target passes `RETASK`).
+  - Each named session's lines in its brief's feature log are set to the task its brief names. The feature and task are the shared reader's (`set_down_hooks::page_session_brief`, 451 T161), so the tool and the writer cannot disagree about what a brief names.
+  - Idempotent: a line already on the brief's task is not rewritten, so a second run re-books 0. `DRY=1` counts and writes nothing. The log is rewritten through the refile's own `write_back`, which carries over a line a live hook appends meanwhile. A session the index does not list, or whose brief names no task, is reported and left.
+- **Measured**, 2026-11-23, `make events-refile RETASK=... ` on the 449 log, backed up first to `.git/l7r-events/449-rust-codebase.jsonl.pre-t168` (lines of each session, by task):
+  - 7e3b (t330a-checks, brief names T330): before T312 475, T328 778, T330 7; after T330 1260; 1253 re-booked.
+  - 2647 (t330b-write, brief names T333): before T328 140, T333 3; after T333 143; 140 re-booked.
+  - f1d2 (t330b-checks, brief names T333): before T328 215, T333 80; after T333 295; 215 re-booked.
+  - A second run re-booked 0 for all three. The briefs of 2647 and f1d2 name T333 on their first line ("feature 449 T333 and the 0116 pointer"), not T330, so those lines book to T333.
+  - `make where-time F=449 SINCE=2026-11-23T02:00 UNTIL=2026-11-23T04:00`: the agents table now has T330 at 180 agents, 76.2 agent minutes, and T333 at 78 agents, 6.8 minutes, measured 2026-11-23 (that command's second table). The first table's T330 row stays 0 because it books the main session's own wall time, not its subagents'.
 
 ### T168 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A page session's minutes are credited to the task its brief names, in the log as in the writer's new lines (T167).
+2. **The constraints.** The log is append-mostly and live: the rewrite uses the refile's `write_back`. A re-run must change nothing. The brief reader is T161's, not a copy (451 T56's rule).
+3. **Where each comes from.** O: the 449 log counts above. O: T167's plan section. O: the briefs' first lines.
+4. **Do they describe the world here?** Yes, measured on the real log, dry run first.
+5. **The order.** After T167, whose hook books new lines right. Before any landing that reads 449's per-task time.
+6. **The exits.** Green: the new tests, the crate's suite, format, lint and cover (100% of the new file) clean, the real run's counts above, a second run re-booking 0, measured 2026-11-23 (the runs above). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The tests were written with the code, not before it, so no red run was recorded; each asserts the re-booked counts, the untouched other session and junk line, the second run's 0, the dry run's unchanged bytes, the unlisted and task-less sessions, and a missing log's exit 1. GREEN, measured 2026-11-23 (`make rust-test CRATE=rust/gate/crates/measure`): 215 passed; format, lint and cover clean.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome: T330's page-session minutes were credited to T312 and T328.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes, `[perf]` for the record it corrects (the time retro's per-task booking); it is not an engine-speed task, so it carries no checklist.
 
 
-### T169 (<why: the finding or measurement that files it>)
+### T169 (observed 2026-11-23: the harness prints a hook entry's command with every block or notice it emits, and the coordinator's transcript, `~/.claude/projects/-diagram/c6fd72d1-....jsonl`, holds the dispatcher's 239-253 character command in 6,665 stored occurrences, 1,659,603 characters as stored, measured 2026-11-23 (a `grep -o` of the command's stored form, counted and summed by `awk`))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: each of the nine hook entries of `.claude/settings.json` becomes `"$CLAUDE_PROJECT_DIR"/scripts/hooks/l7r-hook <event>`, or `... setup` for the container's setup entry. Timeouts and the status message are unchanged.
+  - **The launcher** (`scripts/hooks/l7r-hook`, new, POSIX sh) does what the commands did. It runs the mirror's `l7r-guard.sh` if that file is executable, else the copy beside itself. `setup` runs the mirror's `setup-dev-env.sh --ensure` by bash if that file exists, else the tree's. Its header holds the reasons the commands carried: the timeout above the wrapper's 45 s build limit (449 T005, `L7R_GUARD_BUILD_SECS`'s default in `l7r-guard.sh`, a knob), and the setup hook's 2026-10-04 ruling. `CLONE_MAIN` is its test seam for the mirror, as in `sync-with-main.sh`.
+  - **The escape marker.** Each command carried an escape marker because the guard-file guard lets a settings edit through only when the edited text holds one. Its supported form is `make guard-edit FILE=.claude/settings.json WHY=...`, which this task used. The reason goes in the guard log and the commit message, not in a command every hook message repeats.
+  - **The launcher is held as a guard file** on both routes, because it now decides what the settings' commands decided. `guard_file_hooks.rs` holds it through `GUARD_SOURCE`, beside `l7r-guard.sh`. `make_only_hooks.rs` holds it through `GUARD_FILE` and the `SOURCE_NAMES` screen. Its name is `l7r-hook`, not `run`: make-only screens a command by substring before walking it, and `run` would have sent most commands through the walk.
+  - **The wave replay** (`workflow_hooks.rs`) now runs a tree's settings commands with `CLAUDE_PROJECT_DIR` set to that tree. The new command reads that variable. The old one read it only when the mirror had no dispatcher. Without the change, a session whose project directory lacked the launcher would replay every command as exit 127, and the unit would go through unguarded.
+- **Before and after, in characters per occurrence** (the decoded command, measured 2026-11-23 by `jq` over the settings):
+  - Stop: 239 before, 49 after.
+  - PreToolUse: 245 before, 55 after.
+  - UserPromptSubmit: 251 before, 61 after.
+  - PostToolUseFailure, the longest: 253 before, 63 after.
+  - The setup entry: 330 before, 50 after.
+  - The same 6,665 stored occurrences (4,165 Stop, 1,944 UserPromptSubmit, 542 PreToolUse, 14 PostToolUse): 1,659,603 characters before, 366,593 after. That is 1.29M characters fewer in that one transcript, 78%, measured 2026-11-23 (one pass over a copy of the transcript, to the line where the total reached 6,665: each occurrence's stored length, against its event at the new command's stored length, 2 + 45 + the event's name).
+  - These are occurrences, not hook messages: the transcript stores a message's command more than once. In the second live session below, 2 Stop blocks stored the command 6 times (4 in the block texts, 2 in the Stop summary's hook list), the PreToolUse block 2 times and the UserPromptSubmit notice once.
 
 ### T169 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Every hook message carries a command of at most 64 characters, and every hook fires as before: the same dispatcher, chosen the same way, on the same events, with the same timeouts.
+2. **The constraints.** No loss of behavior (the GM 2026-11-23). The mirror's copy runs first (449 research R6). Each timeout stays above the wrapper's 45 s build limit (449 T005, `L7R_GUARD_BUILD_SECS`'s default, a knob). A settings edit is deliberate (the guard-file guard, feature 127). The settings change is live for every session that loads this clone's settings, so each command is tested by hand before it is written.
+3. **Where each comes from.** G: request.md "on hook output length" ("could we accomplish the same thing with no loss of fidelity and fewer tokens?"). O: the transcript count above. O: `l7r-guard.sh`'s `L7R_GUARD_BUILD_SECS:-45`. O: page sessions run `claude -p` from the clone's root (`pages/src/runner.rs`, `current_dir(root)`), so their project directory is the clone and holds the launcher.
+4. **Do they describe the world here?** Yes. `/tmp/t169/hand.sh` ran each old and each new command, as `sh -c` with `CLAUDE_PROJECT_DIR` set to the clone, against the real dispatcher with one payload per event and a working directory outside any tree. All nine gave the same stdout, stderr and exit code, measured 2026-11-23. UserPromptSubmit's clone-sync notice comes once per session, so whichever command ran first printed it; this was rerun with the new command first on a fresh session id.
+5. **The order.** The red suite first. Then `make guard-edit` for the settings and the guard sources. The launcher was created, made executable and run by hand before the first settings write. Each settings write was validated in scratch (`jq`, the commands run) and written whole with the Write tool, then compared byte for byte with the scratch copy. The superseded launcher name was deleted only after the settings stopped naming it.
+6. **The exits.** Green: the suites, the guard crate's tests, a live session firing the new commands, and MODE 4 CLEAR. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST (2026-11-23, on today's settings, `tests/hooks/test-l7r-guard.sh`, log `/tmp/t169/red.log`): 49 passed and 9 failed. The length case listed all nine commands at 239-330 characters. The entry case named each command as "not the launcher". The seven launcher cases failed with no launcher present. The timeout case passed, since today's timeouts are 60, 600 and 900 s, measured 2026-11-23 (`jq` over the settings). `make rust-test CRATE=rust/guard` failed 4 of 469 (`/tmp/t169/rt-red2.log`), run with the test files changed and `guard_file_hooks.rs` already holding the launcher, so it is no red for the guard-file case:
+   - make-only's write-forms test, on 50 forms of writing `scripts/hooks/l7r-hook`;
+   - make-only's guard-sources case, on the same file;
+   - the left-alone case, on a Python write of `tests/hooks/test-l7r-guard.sh`;
+   - the wave-unit test, which got "UNIT a / not this tree" instead of WAVE-PASSED.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+   The guard-file case's red came earlier, from `make guard-edit` itself. While `guard_file_hooks.rs` named only the launcher's first name, `run`, `make guard-edit FILE=scripts/hooks/l7r-hook` answered "is not a guard file, so its edits need no permit" (2026-11-23 05:28:54Z, the first builder's transcript). Once it named `l7r-hook`, the same command answered "may be edited until 01:47" (2026-11-23, for this section's header fix).
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+   GREEN (2026-11-23): the suite passes 58 of 58 and the guard crate passes 469 of 469. `make closing-checks T=T169 F=451` runs `make static`, `make hooks-test` and `make quick`.
+
+   LIVE (2026-11-23): a `claude -p` session on haiku, started in the clone after the settings were written (`da688d32`, transcript under `~/.claude/projects/-diagram--clones-diagram-backlog/`), recorded these messages and lines:
+   - a PreToolUse refusal of its `cargo build`, stored as `["$CLAUDE_PROJECT_DIR"/scripts/hooks/run PreToolUse]: BLOCKED: cargo run outside make`;
+   - 10 Stop blocks (20 stored block texts) and a UserPromptSubmit notice through the new command;
+   - event-log lines for UserPromptSubmit, PreToolUse (3), PostToolUse (2), SubagentStart, SubagentStop and Stop (10).
+
+   That session ran under the launcher's first name, `run`. The rename to `l7r-hook` was proved by the hand comparison again (all nine the same) and by the suite.
+
+   A second session ran on the final settings (`fc0259db`, haiku, `--max-turns 3`, Agent and Task disallowed, 2026-11-23). Three events fired live under the final name:
+   - its `cargo build` refused, stored 2 times as `["$CLAUDE_PROJECT_DIR"/scripts/hooks/l7r-hook PreToolUse]: BLOCKED: cargo run outside make`;
+   - 2 Stop blocks, the command stored 6 times;
+   - the UserPromptSubmit clone-sync notice, stored once.
+
+   It left 4 event-log lines (UserPromptSubmit, PreToolUse, Stop twice) and no review pass, so no ledger row (`make ledger-owed`). PostToolUse, SubagentStart and SubagentStop were seen live only under `run`, in the first session. Under the final name they are covered by the hand comparison and by the suite's entry case. SessionStart, the setup entry and PostToolUseFailure print nothing on a healthy call and log no event line, so their live firing is not observable. They are covered by the hand comparison and by the suite's entry case.
+10. **Before moving a constant.** The budget, `HOOK_COMMAND_BUDGET`, is 64: the longest event's command (63) and one to spare. It is a knob, GUESS.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Two are wrong outcomes:
+    - make-only's `GUARD_FILE` read the dispatcher's suite, `tests/hooks/test-l7r-guard.sh`, as the dispatcher. That refused this task's own suite edit.
+    - Once the command read `CLAUDE_PROJECT_DIR`, the wave replay could let a unit through unguarded.
+
+    The rest is no defect: the same behavior with a shorter command in every hook message.
+
+**Found and left?**
+- make-only's `GUARD_FILE` alternative `l7r-guard\.sh` matched any name ending so, so a Python write of `tests/hooks/test-l7r-guard.sh` was refused as a guard-file write. Fixed here: the dispatcher's and the launcher's names are whole names (`(?<![\w-])`). Pinned by the left-alone case, with the hooks suite's scratch directory `l7r-hooks-suite-*` beside it. Observed 2026-11-23, method: the refusal of this task's own edit, then every other alternative of the pattern read for the same shape. The others are suffixes on purpose (`-hooks.sh`) or carry their directory.
+- The wave replay's dependence on the session's project directory. Fixed here, as in the Approach.
+- The live probe left 18 lines in 449's event log, booked to T341 by the clone's mark (`fallback`), measured 2026-11-23 (a `grep` of its session id over `.git/l7r-events/`). That is about a minute of `make where-time` credited to T341. Its one escalation-check pass has its ledger row, written by hand, so no landing refuses on it. The second live session left 4 lines in 451's event log, booked to T168 by the clone's mark (`fallback`), measured 2026-11-23 the same way. Their timestamps span 8 seconds, and there is no review pass. Not a defect: it is the cost of a live test.
+
+**Performance work?** yes, in tokens, not time (451 FR-013: the builders' loop): every stored occurrence of a hook entry's command is 190 characters shorter. The launcher adds one `sh` start per hook call, about 0.4 ms as dash where a bash launcher added about 3 ms, measured 2026-11-23 (`/tmp/t169/time.sh`: 100 calls into a stub, best of 3, load 4.9). The whole command was 6.8-8.3 ms a call before and 8.3-8.5 ms after, inside the noise, measured 2026-11-23 (`/tmp/t169/time.sh`: 100 `--version` calls, best of 3).
 
 ### T169 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+1. **Where does the time go?** Into tokens, not CPU: the harness prints each hook entry's command with every message it emits, 6,665 stored occurrences in the coordinator's transcript.
+2. **Removes work, or only moves it?** Removes it: about 190 characters of every stored occurrence of the command. The logic moved into a file the harness never prints.
+3. **What do you expect it to save, and why?** About 78% of those occurrences' characters, 1.29M characters in a transcript like the coordinator's, measured 2026-11-23 (the count in T169's Approach).
+4. **How does the work grow with the settlement?** It grows with the hook messages, not with the settlement. The change takes a fixed share of each one.
+5. **What did the before and after show, and under what conditions?** Per occurrence, 239-330 characters before and 49-63 after, as decoded. Wall time per call is unchanged within noise, 6.8-8.3 ms before and 8.3-8.5 ms after at load 4.9, measured 2026-11-23 (`/tmp/t169/time.sh`).
+6. **Did any map move, and does it still keep the research?** No map: no engine code changed.
 
 
 ### T170 (<why: the finding or measurement that files it>)
