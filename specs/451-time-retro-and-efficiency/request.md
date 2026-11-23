@@ -108,3 +108,7 @@ Approving the session's seven rules (a size edit never changes a claim; a split 
 On the narrowest check (told: of 30 pop-up edits, 20 corrected something wrong, 16 of them page-caused, 6 only completed, 3 wording, 1 made worse; the mechanical echo check catches every page-caused correction with no agent and fires on 55 of 119 pairs, the agent triage sent 35 of 121 on; the plan: the echo check as T186's first filter, the agent triage after it, the gap-fill clause dropped, the garden-pond sentence fixed in its three places):
 
 > Okay, that seems reasonable, thanks. Please finish that implementation and let me know when you're done so that we can move forward on figuring out good next steps for resuming our port and making sure that we are capable of resuming that port.
+
+On T192 (told: tagging the rest of the record's labels is 670 GUESS items over 241 drawing pages and 613 Guesses bullets over 284 pop-ups, on the order of 60 or more page sessions, unmeasured; untagged labels keep the old review path):
+
+> Yes please tag the rest of the record before resuming our port, thanks.

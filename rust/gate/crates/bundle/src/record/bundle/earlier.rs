@@ -195,16 +195,33 @@ fn keep_seen(
 
 /// The pairs of what changed in `files` since `was` (each file's text as the last round was bundled): every run of lines that differs,
 /// whoever changed it - an EDIT or a hand edit (451 T189).
+///
+/// A file the last round was not bundled - a split's target (451 T196) - is diffed against the pages whose pointers reach it as they
+/// were then: a line moved verbatim is no change, a line moved with an edit pairs with its old self, and what left those pages is
+/// theirs to show, so no deletion is shown here.
 fn pairs_since(root: &Path, was: &serde_json::Map<String, Value>, files: &[String]) -> Vec<String> {
+    let read = |f: &str| std::fs::read_to_string(root.join(f)).unwrap_or_default();
     let mut out = Vec::new();
     for f in files {
-        let then = was.get(f).and_then(Value::as_str).unwrap_or("");
-        let now = std::fs::read_to_string(root.join(f)).unwrap_or_default();
+        let (then, arrived) = match was.get(f).and_then(Value::as_str) {
+            Some(t) => (t.to_owned(), false),
+            None => (
+                files
+                    .iter()
+                    .filter(|s| {
+                        l7r_gate_owed::record::triage::change::pointer_targets(&read(s)).contains(f)
+                    })
+                    .filter_map(|s| was.get(s).and_then(Value::as_str))
+                    .collect::<Vec<_>>()
+                    .join("\n"),
+                true,
+            ),
+        };
+        let now = read(f);
         let (a, b): (Vec<&str>, Vec<&str>) = (then.lines().collect(), now.lines().collect());
-        for op in crate::difflib::opcodes(&a, &b)
-            .into_iter()
-            .filter(|op| op.0 != crate::difflib::Tag::Equal)
-        {
+        for op in crate::difflib::opcodes(&a, &b).into_iter().filter(|op| {
+            op.0 != crate::difflib::Tag::Equal && !(arrived && op.0 == crate::difflib::Tag::Delete)
+        }) {
             out.push(format!(
                 "- `{f}`, before:\n```\n{}\n```\nafter:\n```\n{}\n```",
                 a[op.1..op.2].join("\n"),

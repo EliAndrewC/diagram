@@ -80,6 +80,54 @@ pub fn pointer_targets(html: &str) -> Vec<String> {
     out
 }
 
+/// `files`, then every page a split's pointers reach from them, each once (feature 451 T185, T196): `read` gives a file's text, `place`
+/// turns a pointer's repository path into the caller's form - a pop-up's repository path, a claim's page name under its `qdir`. A
+/// target's own split is followed too (the size rule may split a split's target again), each page read once, so a cycle ends.
+#[must_use]
+pub fn follow(
+    files: &[String],
+    read: impl Fn(&str) -> String,
+    place: impl Fn(&str) -> String,
+) -> Vec<String> {
+    let mut out = files.to_vec();
+    let mut i = 0;
+    while i < out.len() {
+        for t in pointer_targets(&read(&out[i])) {
+            let t = place(&t);
+            if !out.contains(&t) {
+                out.push(t);
+            }
+        }
+        i += 1;
+    }
+    out
+}
+
+/// A change's blocks moved with an edit, as a MANIFEST shows them (feature 451 T194, shared with the claims' by T196): each its old self,
+/// its new self on the page `reach` names, and their word diff.
+#[must_use]
+pub fn moved_edited_lines(c: &Change, reach: &str) -> Vec<String> {
+    c.moved_edited
+        .iter()
+        .map(|(old, new)| {
+            format!(
+                "Moved with edits (to {reach}):\n  OLD: {old}\n  NEW: {new}\n  WORD DIFF: {}\n",
+                word_diff(old, new)
+            )
+        })
+        .collect()
+}
+
+/// A change's removed blocks less those it moved with an edit, which [`moved_edited_lines`] shows.
+#[must_use]
+pub fn removed_unmoved(c: &Change) -> Vec<String> {
+    c.removed
+        .iter()
+        .filter(|w| !c.moved_edited.iter().any(|(o, _)| o == *w))
+        .cloned()
+        .collect()
+}
+
 /// The words of each pointer's link text on a page.
 #[must_use]
 pub fn pointer_texts(html: &str) -> Vec<String> {

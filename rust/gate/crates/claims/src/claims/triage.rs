@@ -12,7 +12,7 @@ use l7r_shared::checks::pages::read_page;
 use l7r_shared::pyjson::{dumps, sorted};
 use serde_json::{json, Map, Value};
 
-use super::bundle::cited_pages;
+use super::bundle::read_pages;
 use super::index::{
     field, findings_of, page_blocks, Cur, Index, PageMemo, Store, INDEX, QUESTIONS,
 };
@@ -241,8 +241,9 @@ impl Moved {
             .or_else(|| change::echo_rewritten(&self.change, claim))
     }
 
-    /// Its blocks for the MANIFEST: (new or changed, removed or changed from).
-    fn shown(&self) -> (Vec<String>, Vec<String>) {
+    /// Its blocks for the MANIFEST: (new or changed, removed or changed from, moved with an edit as shown); a block moved with an
+    /// edit to a page the pointers reach is shown as moved, with its diff, never as removed (451 T196, T194's for the pop-ups).
+    fn shown(&self) -> (Vec<String>, Vec<String>, Vec<String>) {
         let c = &self.change;
         (
             c.pairs
@@ -253,8 +254,9 @@ impl Moved {
             c.pairs
                 .iter()
                 .map(|p| p.0.clone())
-                .chain(c.removed.iter().cloned())
+                .chain(change::removed_unmoved(c))
                 .collect(),
+            change::moved_edited_lines(c, "a page its pointers reach"),
         )
     }
 }
@@ -559,7 +561,7 @@ fn manifest(g: &Gathered, cur: &Cur, index: &Index) -> String {
         "For the `claims-triage` agent: rule on each claim below as your contract says, and reply in its form.\n".to_owned(),
     ];
     for (place, (m, ks)) in &g.sections {
-        let (fresh, lost) = m.shown();
+        let (fresh, lost, moved) = m.shown();
         let place = place.rsplit_once('|').map_or(place.as_str(), |p| p.0);
         parts.push(format!("## {place} (a procedure section; the claims' own lines did not change)\n\nNew or changed blocks:\n"));
         let shown = quoted(&fresh);
@@ -572,6 +574,7 @@ fn manifest(g: &Gathered, cur: &Cur, index: &Index) -> String {
             parts.push("Removed blocks (no longer in the section):\n".to_owned());
             parts.extend(quoted(&lost));
         }
+        parts.extend(moved);
         parts.push("Claims in it:\n".to_owned());
         claims_list(&mut parts, cur, index, ks);
     }
@@ -590,7 +593,7 @@ fn manifest(g: &Gathered, cur: &Cur, index: &Index) -> String {
         let tag = format!("{name}|{old}");
         let short: String = old.chars().take(12).collect();
         parts.push(format!("## {QUESTIONS}/{name}\n\n(against the version these claims were last checked at, {short})\n\nNew or changed blocks:\n"));
-        let (fresh, gone) = g.pages[&tag].shown();
+        let (fresh, gone, moved) = g.pages[&tag].shown();
         let shown = quoted(&fresh);
         parts.extend(if shown.is_empty() {
             vec!["(none)\n".to_owned()]
@@ -601,6 +604,7 @@ fn manifest(g: &Gathered, cur: &Cur, index: &Index) -> String {
             parts.push("Removed blocks (no longer on the page):\n".to_owned());
             parts.extend(quoted(&gone));
         }
+        parts.extend(moved);
         parts.push("Claims citing it:\n".to_owned());
         claims_list(&mut parts, cur, index, ks);
     }
@@ -660,7 +664,7 @@ pub fn triage_bundle(
         let mut u = Map::new();
         u.insert("research".into(), json!(row.research));
         let mut pages = Map::new();
-        for name in cited_pages(&row.claim) {
+        for name in read_pages(&row.claim, qdir) {
             let fp = json!(page_blocks(&name, qdir, &mut memo)?.0);
             pages.insert(name, fp);
         }
@@ -789,7 +793,7 @@ pub fn clear_page_moves(
     for k in keys {
         let row = cur.get(k).unwrap_or_else(|| unreachable!());
         let mut pages = Map::new();
-        for name in cited_pages(&row.claim) {
+        for name in read_pages(&row.claim, qdir) {
             let fp = json!(page_blocks(&name, qdir, &mut memo)?.0);
             pages.insert(name, fp);
         }

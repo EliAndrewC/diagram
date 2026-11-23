@@ -216,8 +216,8 @@ pub fn citing(root: &Path) -> Result<Cites, String> {
         .collect();
     let mut by_q: BTreeMap<String, Vec<String>> = BTreeMap::new();
     for row in cur.iter() {
-        // every page the claim cites, its account's too (449 T249)
-        for name in super::bundle::cited_pages(&row.claim) {
+        // every page the claim cites, its account's too (449 T249), and the pages their pointers reach (451 T196)
+        for name in super::bundle::read_pages(&row.claim, &root.join(QUESTIONS)) {
             if let Ok(Some(c)) = CITED.captures(&format!("{QUESTIONS}/{name}")) {
                 by_q.entry(c[1].to_owned())
                     .or_default()

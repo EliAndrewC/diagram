@@ -211,16 +211,11 @@ fn unique_paths(text: &str) -> Vec<String> {
 /// page is read there, so a later edit of it re-owes its readers), each once.
 #[must_use]
 pub fn followed(root: &Path, files: &[String]) -> Vec<String> {
-    let mut out = files.to_vec();
-    for f in files {
-        let text = std::fs::read_to_string(root.join(f)).unwrap_or_default();
-        for t in super::triage::change::pointer_targets(&text) {
-            if !out.contains(&t) {
-                out.push(t);
-            }
-        }
-    }
-    out
+    super::triage::change::follow(
+        files,
+        |f| std::fs::read_to_string(root.join(f)).unwrap_or_default(),
+        str::to_owned,
+    )
 }
 
 /// The file stem of a repository-relative path.

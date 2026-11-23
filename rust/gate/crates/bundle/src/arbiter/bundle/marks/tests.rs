@@ -162,3 +162,42 @@ fn a_wave_round_reads_its_agent_s_reply_over_a_wrong_kept_copy() {
         "[Truncated: PARTIAL view - MANIFEST.md"
     );
 }
+
+/// 451 T196: a subject's files reach the pages its pages' split pointers name, a question's with its notes and originals, a pop-up's
+/// the page as its Entry: names pages (`modals::followed`).
+#[test]
+fn a_subject_s_files_follow_its_pages_pointers() {
+    let root = crate::checks::scratch("marks-follow");
+    put(
+        &root,
+        "research/questions/0059-intake.html",
+        "<p>Now at <a class=\"moved\" href=\"0333-weir.html\">the weir</a>.</p>\n",
+    );
+    put(&root, "research/questions/0059-intake.notes.html", "n");
+    put(&root, "research/questions/0333-weir.html", "<p>w</p>\n");
+    put(&root, "research/questions/0333-weir.notes.html", "wn");
+    put(&root, "research/questions/0333-weir.originals.html", "wo");
+    assert_eq!(
+        subject_files(&root, "q:0059"),
+        vec![
+            "research/questions/0059-intake.html",
+            "research/questions/0059-intake.notes.html",
+            "research/questions/0333-weir.html",
+            "research/questions/0333-weir.notes.html",
+            "research/questions/0333-weir.originals.html",
+        ]
+    );
+    put(
+        &root,
+        "l7r/diagram/interactive/assets/modals/hamlet/i.md",
+        "Entry: research/questions/0059-intake.html\n",
+    );
+    assert_eq!(
+        subject_files(&root, "modal:hamlet/i"),
+        vec![
+            "l7r/diagram/interactive/assets/modals/hamlet/i.md",
+            "research/questions/0059-intake.html",
+            "research/questions/0333-weir.html",
+        ]
+    );
+}

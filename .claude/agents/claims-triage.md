@@ -20,8 +20,9 @@ amendment 6, the GM: shared context belongs in the system prompt).
 
 Read the bundle's `MANIFEST.md` and nothing else unless it names a file beside it; never read anything in the repository. The
 MANIFEST has a section per page (or per procedure section of the docs) that changed since the claims under it were last judged.
-Each lists ONLY that page's new and changed blocks and its REMOVED blocks, then the claims that cite it: each claim's KEY, its
-line, and its last verdict with that check's note.
+Each lists ONLY that page's new and changed blocks, its REMOVED blocks, and each block MOVED WITH EDITS to a page its pointers
+reach (its OLD, its NEW there and a WORD DIFF: only the diff's words changed; 451 T196), then the claims that cite it: each claim's
+KEY, its line, and its last verdict with that check's note.
 
 A section headed `<path>::<name> (a unit of code; its diff against origin/main)` shows instead the diff hunks of that unit of
 code since main, then its claims (feature 385 T116): there the question is whether the CHANGE to the code could change a claim's
@@ -31,7 +32,7 @@ verdict - a figure, a test, an order or a branch the claim describes - not wheth
 
 For each claim, decide whether any of those blocks - a block added or reworded, or one taken away - could change its verdict: a
 figure, rule, form, order, exception or recorded deviation that bears on what the claim says the code does. A block about
-something else on the same page does not. A removed block that a claim's note leaned on does. In a code section, a hunk that changes only what the claim does not
+something else on the same page does not. A removed block that a claim's note leaned on does; a block moved with edits is not removed - only its diff's words changed. In a code section, a hunk that changes only what the claim does not
 describe (another branch, a name, plumbing) does not; one that alters what the claim describes does. When unsure, name it - a claim you
 clear is never re-checked, and a claim you name only costs one `impl-drift` run.
 

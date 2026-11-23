@@ -13,7 +13,7 @@ use l7r_shared::pyjson::{dumps, sorted};
 use l7r_shared::sha256;
 use serde_json::{Map, Value};
 
-use super::bundle::cited_pages;
+use super::bundle::{cited_pages, follow_names, read_pages};
 use super::grammar::Claim;
 use super::scope::all_units;
 use super::units::{lstripped, Unit};
@@ -239,7 +239,7 @@ pub fn rows_of(pairs: Vec<super::units::Pair>, qdir: &Path) -> Result<Cur, Fail>
                 claim: claim.clone(),
                 code: unit.code(claim),
                 // every page the claim cites, its account's too, as its bundle reads them: an edit of one owes the claim (449 T249)
-                research: research_fp(&cited_pages(claim), qdir, &mut memo)?,
+                research: research_fp(&read_pages(claim, qdir), qdir, &mut memo)?,
             });
         }
     }
@@ -486,17 +486,26 @@ pub fn research_why(
     let unsnapped = pages
         .values()
         .any(|d| d.as_str().is_none_or(|d| !store.contains_key(d)));
-    let cited = cited_pages(&row.claim);
-    let unread = cited.iter().any(|p| !pages.contains_key(p.as_str()));
+    // a page only a split's pointer reaches, never read by the claim's check, owes no full round: the split shows on the cited page,
+    // its moved blocks as moved (451 T196)
+    let unread = cited_pages(&row.claim)
+        .iter()
+        .any(|p| !pages.contains_key(p.as_str()));
     if unsnapped || unread {
         return Ok("research changed".to_owned());
     }
     if let Some(rests) = was.get("rests").and_then(Value::as_array) {
-        let now = standing(&cited, qdir, memo)?;
-        if !rests
-            .iter()
-            .all(|r| r.as_str().is_some_and(|r| now.contains(r)))
-        {
+        let now = standing(&read_pages(&row.claim, qdir), qdir, memo)?;
+        // a rest stands where its page left it, or verbatim on a page that page's pointers reach: moved by a split (451 T196)
+        let stands = |r: &str| {
+            now.contains(r)
+                || r.split_once(':').is_some_and(|(p, d)| {
+                    follow_names(&[p.to_owned()], qdir)
+                        .iter()
+                        .any(|t| now.contains(&format!("{t}:{d}")))
+                })
+        };
+        if !rests.iter().all(|r| r.as_str().is_some_and(stands)) {
             return Ok("rests changed".to_owned());
         }
     }

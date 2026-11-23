@@ -298,6 +298,22 @@ pub(crate) fn cited_pages(c: &Claim) -> Vec<String> {
     )
 }
 
+/// Every page a claim's check reads: its cited pages, then the pages their split pointers reach (feature 451 T196, T185's pointers: a
+/// block moved to another page is read there, so an edit of it re-owes the claim and impl-drift reads where its support now stands).
+/// A page with no pointer reads as [`cited_pages`] alone, so no unsplit claim's fingerprint moves.
+pub(crate) fn read_pages(c: &Claim, qdir: &Path) -> Vec<String> {
+    follow_names(&cited_pages(c), qdir)
+}
+
+/// `names` (pages under `qdir`) and the pages their pointers reach, by name ([`change::follow`], the pop-ups' own).
+pub(crate) fn follow_names(names: &[String], qdir: &Path) -> Vec<String> {
+    crate::record::triage::change::follow(
+        names,
+        |n| std::fs::read_to_string(qdir.join(n)).unwrap_or_default(),
+        |t| page_name(t).to_owned(),
+    )
+}
+
 /// Writes the bundle for `keys` (rows of `cur`) under `out`; the MANIFEST's path.
 pub fn bundle(
     root: &Path,
@@ -344,6 +360,12 @@ pub fn bundle(
                     cited.push(name);
                 }
             }
+            // a pointer's target read too (451 T196); a dangling one is the record's to refuse, not this claim's
+            for name in read_pages(c, &qdir) {
+                if !cited.contains(&name) && qdir.join(&name).is_file() {
+                    cited.push(name);
+                }
+            }
         }
     }
     context_part(root, &gather.refs, &index, &mut parts)?;
@@ -367,7 +389,7 @@ pub fn bundle(
         let row = cur.get(k).unwrap_or_else(|| unreachable!());
         let mut pages = Map::new();
         // every page the claim cites, not its backing's alone: `claims-checked` drops a reply's rests on a page not here (449 T241)
-        for name in cited_pages(&row.claim) {
+        for name in read_pages(&row.claim, &qdir) {
             let fp = json!(page_blocks(&name, &qdir, &mut memo)?.0);
             pages.insert(name, fp);
         }

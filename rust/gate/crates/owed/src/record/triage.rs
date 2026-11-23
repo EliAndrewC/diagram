@@ -188,16 +188,10 @@ fn change_lines(c: &Change, parts: &mut Vec<String>) {
         ));
     }
     parts.extend(c.added.iter().map(|w| format!("New:\n  NEW: {w}\n")));
-    for (old, new) in &c.moved_edited {
-        parts.push(format!(
-            "Moved with edits (to a page these pop-ups reach):\n  OLD: {old}\n  NEW: {new}\n  WORD DIFF: {}\n",
-            change::word_diff(old, new)
-        ));
-    }
+    parts.extend(change::moved_edited_lines(c, "a page these pop-ups reach"));
     parts.extend(
-        c.removed
+        change::removed_unmoved(c)
             .iter()
-            .filter(|w| !c.moved_edited.iter().any(|(o, _)| o == *w))
             .map(|w| format!("Removed (no longer on the page):\n  OLD: {w}\n")),
     );
     if !c.keys_gone.is_empty() {

@@ -3,7 +3,7 @@
 use std::collections::HashSet;
 
 use super::{
-    block_words, blocks_change, claim_words, echo_rewritten, md_words, page_change,
+    block_words, blocks_change, claim_words, echo_rewritten, follow, md_words, page_change,
     pointer_targets, word_diff, Change,
 };
 
@@ -335,4 +335,20 @@ fn a_block_moved_with_an_edit_is_paired_with_its_moved_self() {
     let marked: HashSet<String> = [format!("{moved} [^k]")].into();
     let c = page_change(old, fresh, &marked, &none(), &[]);
     assert!(c.is_clear() && c.moved == 1, "{c:?}");
+}
+
+/// 451 T196: a split's target split again is followed, each page once, a cycle ending.
+#[test]
+fn a_split_s_target_split_again_is_followed_each_page_once() {
+    let page = |to: &str| format!("<p>Now at <a class=\"moved\" href=\"{to}\">it</a>.</p>");
+    let read = |f: &str| match f {
+        "0001-a.html" => page("0002-b.html"),
+        "0002-b.html" => page("0003-c.html"),
+        _ => page("0001-a.html"),
+    };
+    let name = |t: &str| t.rsplit('/').next().unwrap_or(t).to_owned();
+    assert_eq!(
+        follow(&["0001-a.html".to_owned()], read, name),
+        ["0001-a.html", "0002-b.html", "0003-c.html"]
+    );
 }

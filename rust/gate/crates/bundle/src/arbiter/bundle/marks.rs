@@ -312,9 +312,32 @@ pub fn reply_in(v: &Value, base: &Path) -> String {
 static LINKED: LazyLock<Regex> = LazyLock::new(|| pyre(r"research/questions/[^\s,;]+?\.html"));
 static KEYED_LINE: LazyLock<Regex> = LazyLock::new(|| pyre(r"(?m)^(?:Entry|Drawing):(.*)$"));
 
-/// The files a subject's checks read: a question's pages, or a pop-up's file with the pages its Entry: and Drawing: name.
+/// The files a subject's checks read: a question's pages, or a pop-up's file with the pages its Entry: and Drawing: name; then each
+/// page a split's pointer on them reaches (`modals::followed`, the pop-ups' readers' own), a question's with that page's notes and
+/// originals, as its own are read (451 T196: a later round's change section pairs an edit there too).
 #[must_use]
 pub fn subject_files(root: &Path, subject: &str) -> Vec<String> {
+    let own = own_files(root, subject);
+    let mut out = own.clone();
+    for t in l7r_gate_owed::record::modals::followed(root, &own).split_off(own.len()) {
+        let stem = l7r_gate_owed::record::modals::stem(&t);
+        let q = stem.split_once('-').map_or(stem.as_str(), |p| p.0);
+        let found = if subject.starts_with("q:") {
+            own_files(root, &format!("q:{q}"))
+        } else {
+            vec![t]
+        };
+        for f in found {
+            if !out.contains(&f) && root.join(&f).is_file() {
+                out.push(f);
+            }
+        }
+    }
+    out
+}
+
+/// A subject's own files, before the pointers are followed.
+fn own_files(root: &Path, subject: &str) -> Vec<String> {
     if let Some(q) = subject.strip_prefix("q:") {
         let dir = root.join("research").join("questions");
         let prefix = format!("{q}-");

@@ -127,7 +127,7 @@ fn backfill(cur: &Cur, index: &mut Index, qdir: &Path, store: &mut Store) -> Res
             continue;
         }
         let mut pages = Map::new();
-        for name in super::bundle::cited_pages(&row.claim) {
+        for name in super::bundle::read_pages(&row.claim, qdir) {
             let (fp, blocks) = page_blocks(&name, qdir, &mut memo)?;
             pages.insert(name.clone(), json!(fp));
             store.insert(

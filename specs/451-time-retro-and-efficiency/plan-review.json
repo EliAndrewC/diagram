@@ -1026,6 +1026,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T196 (the gap audit 2026-11-23, items 5, 6 and 7, `/home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md`: claims and later scoped rounds read only the page cited, not where T185's pointers moved its text; live case brook.rs's intake claims citing 0059, split by T184 to 0333)": {
+   "sha256": "c8a600469267a8fa4eff384625b2bc1127f4e5a5fe3b0d4ce9f6322716ade533",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T196 Approach (checklist part A)": {
+   "sha256": "b9f5c31898db96f1880d4a7ec4d731a3d898dc0dc9f6fa216fa9173b76f382b1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T196 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "16b894e1f9e04919f7089bf5df32113ec690d58525c552f19a0a6936df0cf31d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T193 (the GM 2026-11-23, the task line; observed 2026-11-23: 451 T184's builder `a676c53072fd7258b` waited from 20:27:39Z to 21:35 on a watch that had ended, and the idle check said nothing)": {
+   "sha256": "e0e524ddfb7fec307814a21a5ee0a0a000591cc2dd071898c11df976c3d69e22",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T193 Approach (checklist part A)": {
+   "sha256": "671f32169fe4596ce7f0d36201b248d7ac6f07259ba728e3efd9fdb60c8c7f56",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T193 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "8d90992fd2c65961c7e8e6cb6e4cb231e61c1681ff20874f9f238a8e42ec7b68",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -16542,6 +16578,188 @@
      "why": "The GM framed the cascade as time cost ('very time consuming to make') and said to fix it 'before we do literally anything else'; FR-013 and the GM's 2026-11-20 words on prioritizing performance work cover it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T196 (the gap audit 2026-11-23, items 5, 6 and 7, `/home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md`: claims and later scoped rounds read only the page cited, not where T185's pointers moved its text; live case brook.rs's intake claims citing 0059, split by T184 to 0333)",
+    "### T196 Approach (checklist part A)",
+    "### T196 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T196-follower",
+     "summary": "One shared follower change::follow (modals::followed now calls it), following a split's target split again, each page once; claims reach it through bundle::follow_names and bundle::read_pages",
+     "class": "within",
+     "why": "The GM 2026-11-23: a split is a move and the original page directs the reader to where the text now stands; following every level is what makes the moved text read where it stands. Reuse rather than a copy is implementation shape."
+    },
+    {
+     "id": "T196-claims-read-pages",
+     "summary": "read_pages (cited pages plus their pointers' targets) used wherever a claim's research is fingerprinted or snapshotted (index::current, report base comparison, record, triage page maps, bundle units.json and cited questions, impl_check); cited_pages alone kept for the two 'names no question file' refusals; a page with no pointer reads as itself so no unsplit claim moves",
+     "class": "within",
+     "why": "Serves 'a split is a move' and 're-reviews scoped to the change': a claim is judged against the text where it stands, so an edit on the target re-owes it. The refusals keep checking the citation as written, which is what they refuse on."
+    },
+    {
+     "id": "T196-pure-split-cleared",
+     "summary": "research_why reads a rest standing verbatim on a pointer-reached page as standing, so a pure split is owed triage that claims triage clears mechanically with no dispatch (feature 432's clear_page_moves), recording the target; only a claim-bearing edit left after the tool's clears reaches an agent",
+     "class": "within",
+     "why": "Directly the GM's 'nothing needs to cascade simply because a split occurs' and the approved rule 'only a claim-changing edit triggers review'."
+    },
+    {
+     "id": "T196-manifest-moved-with-edits",
+     "summary": "Moved::shown lists moved_edited blocks under 'Moved with edits' with OLD, NEW and word diff instead of as removed, rendering shared with the pop-ups'; claims-triage contract names the kind",
+     "class": "within",
+     "why": "A split is a move: a moved block shown as removed sent claims to impl-drift; showing it as a move with its edit scopes the review to the change, as approved."
+    },
+    {
+     "id": "T196-scoped-rounds-follow",
+     "summary": "marks::subject_files follows its files' pointers (a q: subject takes the target's notes and originals); earlier::pairs_since diffs a newly bundled target against the then-text of the pages pointing to it, no deletions shown, so a verbatim move is no change and a restatement pairs with its old self",
+     "class": "within",
+     "why": "The approved rule 're-reviews scoped to the change' and 'a split is a move': a later round sees only what changed on the page where it now stands."
+    },
+    {
+     "id": "T196-found-left-prefollow-row",
+     "summary": "Left: a claim whose index row predates the following, cited page unchanged, is forced through one triage/impl-drift run when a target it never snapshotted changes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It leaves a path where a non-claim edit can owe a review, against 'only a claim-changing edit triggers review'. But it is not a defect (no wrong outcome: a conservative extra review, nothing passed or refused wrongly), the case is closed - rows recorded from now on carry the followed pages - and measured empty on the live tree (make claims-owed 2026-11-23, 'no claim is owed', which a pre-following fingerprint on a pointed page would have tripped). Only a defect left is NOT LEGITIMATE."
+    },
+    {
+     "id": "T196-untouched-files",
+     "summary": "T184's and T193's files left untouched; ordered after T185, T191, T194 and beside T184",
+     "class": "within",
+     "why": "Coordination among the feature's own tasks; narrows nothing the GM asked."
+    },
+    {
+     "id": "T196-performance-work",
+     "summary": "Classed as performance work",
+     "class": "within",
+     "why": "The convergence work exists to stop reviews that change nothing (the GM 2026-11-23) and FR-013 puts performance work first; removing an impl-drift dispatch per pure split is that."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T193 (the GM 2026-11-23, the task line; observed 2026-11-23: 451 T184's builder `a676c53072fd7258b` waited from 20:27:39Z to 21:35 on a watch that had ended, and the idle check said nothing)",
+    "### T193 Approach (checklist part A)",
+    "### T193 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "stall-rule",
+     "summary": "A builder of a still-open task that the session reads as running is STALLED when it has no live work (listed in the Stop's background_tasks, a run or sub-agent its transcript launched, a sub-agent of its own writing within the bound) and its transcript (mtime) has not moved within STALL_SECS.",
+     "class": "within",
+     "why": "Anchored in the 2026-11-23 request: a check that is silent while the session is active or waiting on a tracked agent, and speaks only when it is idle with actionable work. A builder with no live work and a silent transcript is not a tracked wait, and it is actionable. The task line and brief the block cites are not in the bundle, so this is not checked against them."
+    },
+    {
+     "id": "builder-definition",
+     "summary": "A builder is the session's own dispatch whose description opens with a feature number.",
+     "class": "within",
+     "why": "FR-006's builder is an agent dispatched with a task's brief, not a defined review agent; this is that definition made readable."
+    },
+    {
+     "id": "every-stop-wait",
+     "summary": "idle_check waits on every main-session Stop, not only one with an empty list, and names stalled builders when the session did not turn.",
+     "class": "within",
+     "why": "T184's builder went unnamed because every Stop listed a run except one, which returned at the hold. Waiting on every Stop is what lets the 2026-11-23 check speak when the session is idle with actionable work. It stays silent when the session turns, as T183 does."
+    },
+    {
+     "id": "ahead-of-hold",
+     "summary": "Stalled builders are named ahead of the hold and the open-task block; a hold holds new tasks, not a started builder's wake.",
+     "class": "within",
+     "why": "Two cases, ruled separately. (a) A hold on new tasks: the arbiter's ruling says '451 starts no new task', and waking a builder already started on an open task starts none, so the check still respects the binding ruling the 2026-11-23 request names. (b) A set-down of the builder's own task: the block decides nothing to override one. It names only a builder the session reads as still running, with no final notice and its task open in tasks.md, and it gives the wake command as information, not a block that compels it. The block has no explicit exclusion of a set-down task's builder, so that edge is flagged to the caller, not ruled as a narrowing the plan makes."
+    },
+    {
+     "id": "said-once",
+     "summary": "Each stalled builder is named once while its last line is unchanged (once key 'stalled <id>').",
+     "class": "within",
+     "why": "T183's said-once rule and the GM's 2026-11-23 aim that the check add nothing to the context it need not."
+    },
+    {
+     "id": "no-list-names-none",
+     "summary": "With no background_tasks list (a harness from before the field), no builder is named.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Without the list the check cannot tell whether a run the builder launched is still live. Naming would break the goal 'one at work is never named' and the GM's silent-while-waiting-on-a-tracked-agent rule, so the general rule is impossible here, not just awkward. It also covers only a harness that lacks the field, not today's case."
+    },
+    {
+     "id": "monitor-launch",
+     "summary": "LAUNCHED reads a Monitor's launch result ({taskId, timeoutMs}).",
+     "class": "within",
+     "why": "A defect fix in the reading the stall rule depends on: an agent waiting on its own watch was read as having no work (214 results measured)."
+    },
+    {
+     "id": "reread-and-liveness",
+     "summary": "The Stop's list is re-read after the wait and at each look. A shell entry is live while a process holds its output file on fd 1 or 2, or while a live process's command line holds its command (its longest quote-free run of at least 12 characters, a CONVENTION) for Monitors, whose stream is a pipe.",
+     "class": "within",
+     "why": "The re-read closes the gap where a watch ends after the Stop (the D12 counterfactual) and serves the task's goal directly. The Monitor reading keeps a working builder from being named."
+    },
+    {
+     "id": "kept-as-listed",
+     "summary": "A shell whose command is too short to tell, a subagent entry, and any entry where /proc cannot be read are kept as listed (live), failing toward silence.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken one at a time. A subagent's turn ends with a notice to the session, which wakes it, so that case cannot become T184's unheard stall. With /proc unreadable, liveness cannot be read at all. A command too short to match cannot be told from other processes, and guessing either way would name working builders, which the goal forbids. In each case the rule cannot be applied, not merely applied awkwardly."
+    },
+    {
+     "id": "dead-producer-waiter",
+     "summary": "A listed shell whose writer waits on a dead producer (finished_run_hooks' stale_waiters) is no live work and is named with its pid, file and TaskStop <id>.",
+     "class": "within",
+     "why": "A defect fix (the gap audit's item 1): a waiter that will never finish is exactly a watch that will never wake its agent, so it is the task's own case."
+    },
+    {
+     "id": "looks-again",
+     "summary": "The check looks again when a quiet builder crosses the bound, or every RECHECK_SECS (GUESS 60 s) while live work runs, until WAIT_SECS (= STALL_SECS, 600 s). The Idle hook timeout is raised 420 -> 960 s (a CONVENTION pinned by a test).",
+     "class": "within",
+     "why": "Needed to name within about ten minutes a builder that goes quiet after the Stop with no Stop after (the gap audit's item 2). The knobs are labeled GUESS or CONVENTION."
+    },
+    {
+     "id": "capped-builder",
+     "summary": "A builder past the context cap is named for a fresh dispatch from its handoff, not a SendMessage; CAP_TOKENS moves to shared::context.",
+     "class": "within",
+     "why": "FR-006 refuses a SendMessage that resumes a builder past the threshold, so a notice naming that command would contradict the spec."
+    },
+    {
+     "id": "status-probe",
+     "summary": "make builder-status [TRANSCRIPT=] says each builder of an open task working or stalled, and each dead-producer waiter, by the idle check's own reading of the last Stop's kept list, re-read now.",
+     "class": "within",
+     "why": "An addition. Its only source is the block's quotation of the task line ('the coordinator's status of a builder comes from that probe'), and that line is not in the bundle's request.md. It reads the same state as the idle check and changes no behavior. It narrows nothing, so it carries no ruling, but it is not verified against the GM's words."
+    },
+    {
+     "id": "stall-bound",
+     "summary": "STALL_SECS (L7R_STALL_SECS) is a GUESS of 600 s, about twice the longest measured silence of an agent at work (280.6 s).",
+     "class": "within",
+     "why": "A knob labeled GUESS and derived from measured gaps (280.6 s longest), so that a working agent is never named, which the 2026-11-23 request's silent-while-waiting rule requires. The brief the block cites for the GUESS is not in the bundle."
+    },
+    {
+     "id": "done-builders-named-once",
+     "summary": "Two builders that had reported done, with an interim notice never followed by a final one, are named once each; telling them apart is left.",
+     "class": "within",
+     "why": "Not a defect: neither was working, so the goal 'one at work is never named' holds. Each is named once with its own last line saying it stopped, and an open task whose builder has stopped is something the session can act on. No wrong outcome is left."
+    },
+    {
+     "id": "message-corpus-gap",
+     "summary": "The idle check's words do not reach make guard-messages' corpus. They were judged by message-check on a hand-built bundle and its cuts applied; wiring the corpus is left.",
+     "class": "within",
+     "why": "The words the GM asked to have reviewed for brevity and fidelity were reviewed by that same check, so no unjudged output ships. The remaining gap is only that a later edit would not be caught automatically. Under constitution XIV v2.36.0 that is a check's reach with no wrong outcome today, not a defect, and leaving it changes nothing the request asked for."
+    },
+    {
+     "id": "outlasting-wait-deferred",
+     "summary": "A builder whose live work outlasts WAIT_SECS, with the session silent and no later Stop, is not named. Filed as T201, to land before T200.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a deferred defect, and it meets FR-009's terms: it states why it is not fixed here, its filed task id and its order. The reason is real, not a matter of cost. The idle check can wake the session only by exiting under the hook entry's timeout, and Claude Code's cap on that timeout is unmeasured. Building a longer wait on a guessed cap risks the hook being killed and losing the case this task does cover. The project's rule is to measure such a number, not assume it. T184's own case, a watch ending within minutes of the Stop, is fixed here."
+    },
+    {
+     "id": "verification-and-scope",
+     "summary": "Red-first tests in today's shape, the replay against today's real Stops, T184's files untouched, one landing.",
+     "class": "within",
+     "why": "Enforces and measures the task's own goal; nothing outside it."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -26338,6 +26556,182 @@
      "summary": "Lands after T185, T186 and T191 and before T184; green when the T184 re-run owes the 9 pop-ups the rules give, red recorded and ruled through make arbiter-ask",
      "class": "within",
      "why": "This is the GM's 'we have to fix that before we move forward' on the cascade, applied to the split that tests the rules first."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T193": {
+   "section_sha256": "7755c677bb20f8cd3c98d29cc4a1eb39185a680b4c8c22d5eeb847d25300518a",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "stall-rule",
+     "summary": "A builder of a still-open task that the session reads as running is STALLED when it has no live work (listed in the Stop's background_tasks, a run or sub-agent its transcript launched, a sub-agent of its own writing within the bound) and its transcript (mtime) has not moved within STALL_SECS.",
+     "class": "within",
+     "why": "Anchored in the 2026-11-23 request: a check that is silent while the session is active or waiting on a tracked agent, and speaks only when it is idle with actionable work. A builder with no live work and a silent transcript is not a tracked wait, and it is actionable. The task line and brief the block cites are not in the bundle, so this is not checked against them."
+    },
+    {
+     "id": "builder-definition",
+     "summary": "A builder is the session's own dispatch whose description opens with a feature number.",
+     "class": "within",
+     "why": "FR-006's builder is an agent dispatched with a task's brief, not a defined review agent; this is that definition made readable."
+    },
+    {
+     "id": "every-stop-wait",
+     "summary": "idle_check waits on every main-session Stop, not only one with an empty list, and names stalled builders when the session did not turn.",
+     "class": "within",
+     "why": "T184's builder went unnamed because every Stop listed a run except one, which returned at the hold. Waiting on every Stop is what lets the 2026-11-23 check speak when the session is idle with actionable work. It stays silent when the session turns, as T183 does."
+    },
+    {
+     "id": "ahead-of-hold",
+     "summary": "Stalled builders are named ahead of the hold and the open-task block; a hold holds new tasks, not a started builder's wake.",
+     "class": "within",
+     "why": "Two cases, ruled separately. (a) A hold on new tasks: the arbiter's ruling says '451 starts no new task', and waking a builder already started on an open task starts none, so the check still respects the binding ruling the 2026-11-23 request names. (b) A set-down of the builder's own task: the block decides nothing to override one. It names only a builder the session reads as still running, with no final notice and its task open in tasks.md, and it gives the wake command as information, not a block that compels it. The block has no explicit exclusion of a set-down task's builder, so that edge is flagged to the caller, not ruled as a narrowing the plan makes."
+    },
+    {
+     "id": "said-once",
+     "summary": "Each stalled builder is named once while its last line is unchanged (once key 'stalled <id>').",
+     "class": "within",
+     "why": "T183's said-once rule and the GM's 2026-11-23 aim that the check add nothing to the context it need not."
+    },
+    {
+     "id": "no-list-names-none",
+     "summary": "With no background_tasks list (a harness from before the field), no builder is named.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Without the list the check cannot tell whether a run the builder launched is still live. Naming would break the goal 'one at work is never named' and the GM's silent-while-waiting-on-a-tracked-agent rule, so the general rule is impossible here, not just awkward. It also covers only a harness that lacks the field, not today's case."
+    },
+    {
+     "id": "monitor-launch",
+     "summary": "LAUNCHED reads a Monitor's launch result ({taskId, timeoutMs}).",
+     "class": "within",
+     "why": "A defect fix in the reading the stall rule depends on: an agent waiting on its own watch was read as having no work (214 results measured)."
+    },
+    {
+     "id": "reread-and-liveness",
+     "summary": "The Stop's list is re-read after the wait and at each look. A shell entry is live while a process holds its output file on fd 1 or 2, or while a live process's command line holds its command (its longest quote-free run of at least 12 characters, a CONVENTION) for Monitors, whose stream is a pipe.",
+     "class": "within",
+     "why": "The re-read closes the gap where a watch ends after the Stop (the D12 counterfactual) and serves the task's goal directly. The Monitor reading keeps a working builder from being named."
+    },
+    {
+     "id": "kept-as-listed",
+     "summary": "A shell whose command is too short to tell, a subagent entry, and any entry where /proc cannot be read are kept as listed (live), failing toward silence.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken one at a time. A subagent's turn ends with a notice to the session, which wakes it, so that case cannot become T184's unheard stall. With /proc unreadable, liveness cannot be read at all. A command too short to match cannot be told from other processes, and guessing either way would name working builders, which the goal forbids. In each case the rule cannot be applied, not merely applied awkwardly."
+    },
+    {
+     "id": "dead-producer-waiter",
+     "summary": "A listed shell whose writer waits on a dead producer (finished_run_hooks' stale_waiters) is no live work and is named with its pid, file and TaskStop <id>.",
+     "class": "within",
+     "why": "A defect fix (the gap audit's item 1): a waiter that will never finish is exactly a watch that will never wake its agent, so it is the task's own case."
+    },
+    {
+     "id": "looks-again",
+     "summary": "The check looks again when a quiet builder crosses the bound, or every RECHECK_SECS (GUESS 60 s) while live work runs, until WAIT_SECS (= STALL_SECS, 600 s). The Idle hook timeout is raised 420 -> 960 s (a CONVENTION pinned by a test).",
+     "class": "within",
+     "why": "Needed to name within about ten minutes a builder that goes quiet after the Stop with no Stop after (the gap audit's item 2). The knobs are labeled GUESS or CONVENTION."
+    },
+    {
+     "id": "capped-builder",
+     "summary": "A builder past the context cap is named for a fresh dispatch from its handoff, not a SendMessage; CAP_TOKENS moves to shared::context.",
+     "class": "within",
+     "why": "FR-006 refuses a SendMessage that resumes a builder past the threshold, so a notice naming that command would contradict the spec."
+    },
+    {
+     "id": "status-probe",
+     "summary": "make builder-status [TRANSCRIPT=] says each builder of an open task working or stalled, and each dead-producer waiter, by the idle check's own reading of the last Stop's kept list, re-read now.",
+     "class": "within",
+     "why": "An addition. Its only source is the block's quotation of the task line ('the coordinator's status of a builder comes from that probe'), and that line is not in the bundle's request.md. It reads the same state as the idle check and changes no behavior. It narrows nothing, so it carries no ruling, but it is not verified against the GM's words."
+    },
+    {
+     "id": "stall-bound",
+     "summary": "STALL_SECS (L7R_STALL_SECS) is a GUESS of 600 s, about twice the longest measured silence of an agent at work (280.6 s).",
+     "class": "within",
+     "why": "A knob labeled GUESS and derived from measured gaps (280.6 s longest), so that a working agent is never named, which the 2026-11-23 request's silent-while-waiting rule requires. The brief the block cites for the GUESS is not in the bundle."
+    },
+    {
+     "id": "done-builders-named-once",
+     "summary": "Two builders that had reported done, with an interim notice never followed by a final one, are named once each; telling them apart is left.",
+     "class": "within",
+     "why": "Not a defect: neither was working, so the goal 'one at work is never named' holds. Each is named once with its own last line saying it stopped, and an open task whose builder has stopped is something the session can act on. No wrong outcome is left."
+    },
+    {
+     "id": "message-corpus-gap",
+     "summary": "The idle check's words do not reach make guard-messages' corpus. They were judged by message-check on a hand-built bundle and its cuts applied; wiring the corpus is left.",
+     "class": "within",
+     "why": "The words the GM asked to have reviewed for brevity and fidelity were reviewed by that same check, so no unjudged output ships. The remaining gap is only that a later edit would not be caught automatically. Under constitution XIV v2.36.0 that is a check's reach with no wrong outcome today, not a defect, and leaving it changes nothing the request asked for."
+    },
+    {
+     "id": "outlasting-wait-deferred",
+     "summary": "A builder whose live work outlasts WAIT_SECS, with the session silent and no later Stop, is not named. Filed as T201, to land before T200.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a deferred defect, and it meets FR-009's terms: it states why it is not fixed here, its filed task id and its order. The reason is real, not a matter of cost. The idle check can wake the session only by exiting under the hook entry's timeout, and Claude Code's cap on that timeout is unmeasured. Building a longer wait on a guessed cap risks the hook being killed and losing the case this task does cover. The project's rule is to measure such a number, not assume it. T184's own case, a watch ending within minutes of the Stop, is fixed here."
+    },
+    {
+     "id": "verification-and-scope",
+     "summary": "Red-first tests in today's shape, the replay against today's real Stops, T184's files untouched, one landing.",
+     "class": "within",
+     "why": "Enforces and measures the task's own goal; nothing outside it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T196": {
+   "section_sha256": "d45b5817d7a78935cd0f4605f45c46784dcd446110c70b129799a4e061ed3744",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T196-follower",
+     "summary": "One shared follower change::follow (modals::followed now calls it), following a split's target split again, each page once; claims reach it through bundle::follow_names and bundle::read_pages",
+     "class": "within",
+     "why": "The GM 2026-11-23: a split is a move and the original page directs the reader to where the text now stands; following every level is what makes the moved text read where it stands. Reuse rather than a copy is implementation shape."
+    },
+    {
+     "id": "T196-claims-read-pages",
+     "summary": "read_pages (cited pages plus their pointers' targets) used wherever a claim's research is fingerprinted or snapshotted (index::current, report base comparison, record, triage page maps, bundle units.json and cited questions, impl_check); cited_pages alone kept for the two 'names no question file' refusals; a page with no pointer reads as itself so no unsplit claim moves",
+     "class": "within",
+     "why": "Serves 'a split is a move' and 're-reviews scoped to the change': a claim is judged against the text where it stands, so an edit on the target re-owes it. The refusals keep checking the citation as written, which is what they refuse on."
+    },
+    {
+     "id": "T196-pure-split-cleared",
+     "summary": "research_why reads a rest standing verbatim on a pointer-reached page as standing, so a pure split is owed triage that claims triage clears mechanically with no dispatch (feature 432's clear_page_moves), recording the target; only a claim-bearing edit left after the tool's clears reaches an agent",
+     "class": "within",
+     "why": "Directly the GM's 'nothing needs to cascade simply because a split occurs' and the approved rule 'only a claim-changing edit triggers review'."
+    },
+    {
+     "id": "T196-manifest-moved-with-edits",
+     "summary": "Moved::shown lists moved_edited blocks under 'Moved with edits' with OLD, NEW and word diff instead of as removed, rendering shared with the pop-ups'; claims-triage contract names the kind",
+     "class": "within",
+     "why": "A split is a move: a moved block shown as removed sent claims to impl-drift; showing it as a move with its edit scopes the review to the change, as approved."
+    },
+    {
+     "id": "T196-scoped-rounds-follow",
+     "summary": "marks::subject_files follows its files' pointers (a q: subject takes the target's notes and originals); earlier::pairs_since diffs a newly bundled target against the then-text of the pages pointing to it, no deletions shown, so a verbatim move is no change and a restatement pairs with its old self",
+     "class": "within",
+     "why": "The approved rule 're-reviews scoped to the change' and 'a split is a move': a later round sees only what changed on the page where it now stands."
+    },
+    {
+     "id": "T196-found-left-prefollow-row",
+     "summary": "Left: a claim whose index row predates the following, cited page unchanged, is forced through one triage/impl-drift run when a target it never snapshotted changes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It leaves a path where a non-claim edit can owe a review, against 'only a claim-changing edit triggers review'. But it is not a defect (no wrong outcome: a conservative extra review, nothing passed or refused wrongly), the case is closed - rows recorded from now on carry the followed pages - and measured empty on the live tree (make claims-owed 2026-11-23, 'no claim is owed', which a pre-following fingerprint on a pointed page would have tripped). Only a defect left is NOT LEGITIMATE."
+    },
+    {
+     "id": "T196-untouched-files",
+     "summary": "T184's and T193's files left untouched; ordered after T185, T191, T194 and beside T184",
+     "class": "within",
+     "why": "Coordination among the feature's own tasks; narrows nothing the GM asked."
+    },
+    {
+     "id": "T196-performance-work",
+     "summary": "Classed as performance work",
+     "class": "within",
+     "why": "The convergence work exists to stop reviews that change nothing (the GM 2026-11-23) and FR-013 puts performance work first; removing an impl-drift dispatch per pure split is that."
     }
    ],
    "verdict": "CLEAR"

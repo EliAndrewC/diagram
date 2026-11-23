@@ -197,3 +197,49 @@ fn a_later_round_is_handed_every_change_since_what_the_last_round_was_bundled_a_
     let calm = section(&root, &out, manifest).unwrap();
     assert!(calm.contains("**Round 2**") && !calm.contains("The change since round"));
 }
+
+/// 451 T196, T184's split of 0059 to 0333 in small: a later round pairs a change on a page the subject's pointer now reaches, the target
+/// diffed against the page it left, so a line moved verbatim is no change and one restated as it moved is paired with its old self.
+#[test]
+fn a_later_round_pairs_a_change_on_a_split_s_target_page() {
+    let root = scratch("bundle-earlier-split");
+    let out = root.join("out");
+    put(&root, "specs/500-f/spec.md", "spec");
+    commit(&root, "the feature");
+    put(
+        &root,
+        ".specify/feature.json",
+        "{\"feature_directory\": \"specs/500-f\"}",
+    );
+    let page = "research/questions/0059-intake.html";
+    put(
+        &root,
+        page,
+        "<p>The intake.</p>\n<p>Weirs were staked.</p>\n<p>An official handbook says so.</p>\n",
+    );
+    let manifest = "owed-checks: quote-check\nunit: quote-check:0059#k fp\n";
+    state(&root, &json!({"dispatches": {}}));
+    assert_eq!(section(&root, &out, manifest).unwrap(), "");
+    let one = root.join("one.md");
+    put(&root, "one.md", "quote-check: 0059 - 0 findings\n");
+    state(
+        &root,
+        &json!({"dispatches": {
+            "a": {"check": "quote-check", "subjects": ["q:0059"], "t": 9_999_999_999.0, "state": "returned", "reply": one.to_string_lossy()}
+        }}),
+    );
+    put(&root, page, "<p>The intake.</p>\n<p>Now at <a class=\"moved\" href=\"0333-weir.html\">the weir</a>.</p>\n");
+    let target = "research/questions/0333-weir.html";
+    put(
+        &root,
+        target,
+        "<p>Weirs were staked.</p>\n<p>A Japanese encyclopedia says so.</p>\n",
+    );
+    let text = section(&root, &out, manifest).unwrap();
+    let paired = format!("- `{target}`, before:\n```\n<p>An official handbook says so.</p>\n```\nafter:\n```\n<p>A Japanese encyclopedia says so.</p>\n```");
+    let (has_pair, has_moved) = (
+        text.contains(&paired),
+        text.contains("after:\n```\n<p>Weirs were staked."),
+    );
+    assert!(has_pair && !has_moved, "{text}");
+}

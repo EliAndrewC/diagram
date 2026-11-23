@@ -15,7 +15,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use serde_json::Value;
 
-use super::bundle::cited_pages;
+use super::bundle::{cited_pages, read_pages};
 use super::grammar::GRAMMAR;
 use super::index::{
     field, is, live_rows, load_map, owed, research_fp, Cur, Index, Store, QUESTIONS,
@@ -382,7 +382,9 @@ pub fn classify(cur: &Cur, index: &Index, base: &Base) -> Result<Judged, Fail> {
             continue;
         }
         let research_changed = match row {
-            Some(r) => research_fp(&cited_pages(&r.claim), base.qdir, &mut memo)? != r.research,
+            Some(r) => {
+                research_fp(&read_pages(&r.claim, base.qdir), base.qdir, &mut memo)? != r.research
+            }
             None => false,
         };
         let same_core = base.cores.get(uid).is_some_and(|c| c == core);

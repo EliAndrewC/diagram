@@ -486,3 +486,104 @@ fn a_claim_the_tool_cleared_is_recorded_cleared() {
         json!({"verdict": "IN-STEP", "research": "r", "pages": {"p": "f"}, "triaged": "d", "section": "s", "cleared": super::TOOL_CLEARED})
     );
 }
+
+/// 451 T196, the fixtures T184's split of 0059 to 0333 is shaped like: `0001-gap.html`'s rested-on block moved to `0003-moved.html`,
+/// a pointer left in its place, with `moved` as the block on the target (verbatim, or edited).
+fn split(root: &std::path::Path, moved: &str) {
+    put(root, "research/questions/0001-gap.html", "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>\n<p>A second block.</p>\n<p>Now at <a class=\"moved\" href=\"0003-moved.html\">Moved</a>.</p>\n");
+    put(
+        root,
+        "research/questions/0003-moved.html",
+        &format!("<h2 id=\"moved\">Moved</h2>\n<p>{moved}</p>\n"),
+    );
+}
+
+fn owed_now(root: &std::path::Path) -> Vec<(String, String)> {
+    let q = root.join("research/questions");
+    let cur = current(root, &q).unwrap();
+    let ix = load_map(&root.join("dev/claims-index.json")).unwrap();
+    let store = load_map(&root.join("dev/claims-pages.json")).unwrap();
+    crate::claims::index::owed(&cur, &ix, Some(&q), Some(&store)).unwrap()
+}
+
+/// 451 T196: a claim reads the pages its cited page's pointers reach. A pure split owes it a triage, not a full round (its rest stands
+/// verbatim on the target; the target is new to it); its bundle reads the target; once checked there, an edit of the target re-owes it.
+#[test]
+fn a_claim_follows_its_page_s_pointers() {
+    let root = fixture("claims-follow");
+    record_all(&root);
+    let gap = "rust/phases/src/lib.rs::GAP#gap";
+    split(&root, "The gap is 12 ft.");
+    let due = owed_now(&root);
+    let why = due.iter().find(|(k, _)| k == gap).map(|(_, w)| w.as_str());
+    assert_eq!(why, Some("triage"), "{due:?}");
+    let out = root.join("b-split");
+    let cur = current(&root, &root.join("research/questions")).unwrap();
+    super::super::bundle::bundle(&root, &cur, &[gap.to_owned()], &out, &[], &[]).unwrap();
+    assert!(out.join("questions/0003-moved.html.txt").is_file());
+    let units = std::fs::read_to_string(out.join("units.json")).unwrap();
+    assert!(units.contains("\"0003-moved.html\""), "{units}");
+    put(
+        &root,
+        "reply-split.txt",
+        &format!("VERDICT {gap} IN-STEP - fine [§1]"),
+    );
+    let got = crate::claims::tests::claims(
+        &root,
+        &[
+            "record",
+            "--bundle",
+            &out.to_string_lossy(),
+            "--reply",
+            &root.join("reply-split.txt").to_string_lossy(),
+        ],
+    );
+    assert_eq!(got.code, 0, "{}{}", got.stdout, got.stderr);
+    assert!(owed_now(&root).iter().all(|(k, _)| k != gap));
+    put(
+        &root,
+        "research/questions/0003-moved.html",
+        "<h2 id=\"moved\">Moved</h2>\n<p>The gap is 14 ft.</p>\n",
+    );
+    assert!(owed_now(&root).iter().any(|(k, _)| k == gap));
+    // a page with no pointer reads as itself alone: no unsplit claim's fingerprint moves
+    let q = root.join("research/questions");
+    let names = vec!["0002-other.drawing.html".to_owned()];
+    assert_eq!(super::super::bundle::follow_names(&names, &q), names);
+}
+
+/// 451 T196, T194's for the claims: a block moved with an edit to a page the pointers reach is shown as moved, with its diff, never
+/// as removed.
+#[test]
+fn a_block_moved_with_an_edit_is_shown_moved_with_its_diff() {
+    let root = crate::claims::tests::fixture_with("claims-moved-edited", &|r| {
+        put(r, "research/questions/0001-gap.html", "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>\n<p>The gap is kept 12 ft.</p>\n<p>A second block.</p>\n");
+    });
+    record_all(&root);
+    let ix = load_map(&root.join("dev/claims-index.json")).unwrap();
+    let store = load_map(&root.join("dev/claims-pages.json")).unwrap();
+    split(&root, "The gap is kept 14 ft.");
+    let text = manifest_of(&root, &ix, &store, &["rust/phases/src/lib.rs::GAP#gap"]);
+    let moved = text.contains("Moved with edits (to a page its pointers reach):\n  OLD: The gap is kept 12 ft.\n  NEW: The gap is kept 14 ft.\n  WORD DIFF: ");
+    assert!(moved && !text.contains("Removed blocks"), "{text}");
+}
+
+/// 451 T196: a pure split owes no dispatch - its claims, every rest standing verbatim on the page the pointer reaches, are cleared by
+/// `claims triage` mechanically (feature 432) and recorded reading the target.
+#[test]
+fn a_pure_split_is_cleared_without_a_dispatch() {
+    let root = fixture("claims-pure-split");
+    record_all(&root);
+    split(&root, "The gap is 12 ft.");
+    let out = root.join("t-split");
+    let got = crate::claims::tests::claims(&root, &["triage", "--out", &out.to_string_lossy()]);
+    let said = format!("{}{}", got.stdout, got.stderr);
+    let cleared = said.contains("claim(s) cleared without a triage");
+    let dispatched = out.join("MANIFEST.md").exists();
+    assert!(cleared && !dispatched, "{said}");
+    assert!(owed_now(&root).is_empty());
+    let ix = load_map(&root.join("dev/claims-index.json")).unwrap();
+    assert!(ix["rust/phases/src/lib.rs::GAP#gap"]["pages"]
+        .get("0003-moved.html")
+        .is_some());
+}
