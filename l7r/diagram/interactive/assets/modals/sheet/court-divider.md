@@ -6,16 +6,16 @@ the ancient order of court in front, sleeping quarters behind: the office in fro
 At the yamen at Neixiang the gate through that wall was the inner residence gate, the last of its five gates. Official
 business stayed before it, and the household lived beyond it.
 
-In Japan no such front-and-rear order is recorded. At Takayama, the one intendant's office that survives, the residence
-stood on the lot to the west, beside the office rather than behind it. What a dividing wall was built of, how high it
+In Japan no rule setting such an order is recorded, but at Takayama, the one intendant's office that survives, the residence
+stood at the back of the office, on the lot to the west. What a dividing wall was built of, how high it
 stood and how thick it was are not recorded.
 
 Guesses:
 - Its thickness, about 2 ft: no wall between a compound's courts is measured.
 
 Depiction: Every plan draws two courts, the office in front and the residence behind, divided by this wall, which is drawn
-thinner than the compound's outer wall, in the same dark, nearly black ink so it stands apart from the courts on either side; the dark is the drawing's, not the wall's color. For a Japanese compound that order is a deliberate simplification, since a
-residence might stand beside its office, as at Takayama.
+thinner than the compound's outer wall, in the same dark, nearly black ink so it stands apart from the courts on either side; the dark is the drawing's, not the wall's color. For a Japanese compound that order follows a single case, the intendant's office at Takayama, where the
+residence stood at the back of the office.
 
 Name: court divider
 Covers: the internal wall's strokes

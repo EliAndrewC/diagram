@@ -60,6 +60,26 @@ fn only_a_changed_question_over_the_cap_refuses_and_a_moved_one_changed_nothing(
     assert!(changed(&dir).iter().any(|q| q == Q));
 }
 
+/// 449 T385: `make static` runs `--all`, so a question over the cap is caught whoever touched it, where the delta check
+/// passed 0059 and 0009 over the cap because no change of the day touched them.
+#[test]
+fn every_question_over_the_cap_refuses_with_all_though_no_change_touched_it() {
+    let dir = repo("all");
+    put(&dir, Q, &"x".repeat(CAP + 1));
+    put(&dir, "research/questions/0002-b.drawing.html", "y");
+    commit(&dir);
+    based(&dir);
+    assert_eq!(cli(&[], &dir).code, 0);
+    let refused = cli(&["--all".to_owned()], &dir);
+    assert_eq!(refused.code, 1);
+    assert!(refused
+        .stderr
+        .contains("0001-a-question.html is 20,001 bytes of prose, over the 20,000 cap"));
+    assert!(refused.stderr.contains("make question-sizes"));
+    put(&dir, Q, "x");
+    assert_eq!(cli(&["--all".to_owned()], &dir).code, 0);
+}
+
 #[test]
 fn the_report_is_largest_first_and_every_question_is_found() {
     let dir = repo("report");

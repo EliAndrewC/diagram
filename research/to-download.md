@@ -4248,3 +4248,39 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [a Google search for the page](https://www.google.com/search?q=%E5%B9%B3%E9%81%A5%E5%8E%BF%E8%A1%99+%E7%99%BE%E5%BA%A6%E7%99%BE%E7%A7%91)
 - **Rests on it:** research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html and research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html - the pingyao-yamen notes are read today only from the archived copy of 2026-10-02 (quote-check on 0093, 2026-11-22).
 - Blocked by: baike.baidu.com returns 403 to the container (2026-11-22); the archived copy reads verbatim, but a fresh copy keeps the citation readable.
+
+### 335. [diagram] A page on the Uraga magistracy's plan (「中島家御役所絵図」), said to show a jail beside its main gate
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+- **[lovefumiyo.hp-ez.com, page17/48](https://lovefumiyo.hp-ez.com/page17/48)** - a personal history site; the container gets an empty page (HTTP 202, no body; HTTP 403 to an earlier pass). A search summary of 2026-11-23 said it gives the Uraga magistracy's 「中島家御役所絵図」 a jail of about half a tsubo beside the main gate. Wanted: the page saved whole (or a PDF print of it), so its words on the jail can be read and quoted.
+- Fallback: [Google: 中島家御役所絵図 浦賀奉行所 牢屋](https://www.google.com/search?q=%E4%B8%AD%E5%B3%B6%E5%AE%B6%E5%BE%A1%E5%BD%B9%E6%89%80%E7%B5%B5%E5%9B%B3+%E6%B5%A6%E8%B3%80%E5%A5%89%E8%A1%8C%E6%89%80+%E7%89%A2%E5%B1%8B)
+- **Rests on it:** `research/questions/0096-holding-cells-agariya-and-roya.html` (where a magistracy's cell stood, and whether it was joined to the gate)
+- Blocked by: the site serves the container an empty page (HTTP 202 / 403)
+
+### 336. [diagram] International Commission on Irrigation and Drainage (ICID), technical term list, "Diversion Weirs", the glossary page
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[icid-ciid.org, Diversion Weirs](https://icid-ciid.org/Knowledge/basic_term/0/Diversion%20Weirs/2247)** - the ICID's multilingual technical glossary; the container gets HTTP 403. The record quotes its definition, "A low dam or wall across a stream for the purpose of diverting part or all the water from a stream into a canal", read by an earlier session. Wanted: the page saved whole (or a PDF print of it), so the definition can be read again and archived.
+- Fallback: [Google: ICID "Diversion Weirs" basic term](https://www.google.com/search?q=ICID+%22Diversion+Weirs%22+basic+term)
+- **Rests on it:** `research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html` (a diversion weir may take part or all of a stream's water)
+- Blocked by: the site answers the container with HTTP 403
+
+### 337. [diagram] Nara National Research Institute for Cultural Properties, Comprehensive Database of Archaeological Site Reports (全国文化財総覧), article 127894, a report on the samurai houses of Kakunodate (Akita), the PDF
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[sitereports.nabunken.go.jp, article 127894](https://sitereports.nabunken.go.jp/ja/article/127894/pdf_page)** - a survey report of Kakunodate's samurai houses; the container gets HTTP 429 (2026-11-23, twice). Wanted: the report's PDF, so its descriptions of the houses' kitchens (daidokoro) - their walls, roof, smoke vent and door - can be read and quoted.
+- Fallback: [Google: 角館 武家屋敷 調査報告書 台所](https://www.google.com/search?q=%E8%A7%92%E9%A4%A8+%E6%AD%A6%E5%AE%B6%E5%B1%8B%E6%95%B7+%E8%AA%BF%E6%9F%BB%E5%A0%B1%E5%91%8A%E6%9B%B8+%E5%8F%B0%E6%89%80)
+- **Rests on it:** `research/questions/0107-kitchens-daidokoro.html` (what a samurai kitchen's walls were made of, recorded today as an absence)
+- Blocked by: the site answers the container with HTTP 429

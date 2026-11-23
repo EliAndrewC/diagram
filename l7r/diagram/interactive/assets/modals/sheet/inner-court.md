@@ -1,8 +1,8 @@
 About: The inner court was the private half of a magistrate's compound: the magistrate's residence and
 household, the garden its formal rooms looked onto, the household's shrine in a corner of its ground, and the kitchen and
 service ground that kept the household running. The office was also a home, and this was the home. In a Chinese county office it stood behind the office, by regulation, and the last of its gates, the
-inner residence gate, divided it from the office; in Japan a town magistrate's residence stood inside the magistracy too, though
-at the intendant's office at Takayama the residence stood beside the office rather than behind it.
+inner residence gate, divided it from the office; in Japan a town magistrate's residence stood inside the magistracy too, and
+at the intendant's office at Takayama the residence stood at the back of the office.
 
 What lay underfoot in the court is not recorded, nor what the wall between it and the office was built of. Samurai
 houses at Kanazawa kept gardens of four kinds: a forecourt, a kitchen yard, a viewing garden and a rear plot of fruit trees and vegetables, and
@@ -23,7 +23,7 @@ Guesses:
 - That the court's open ground was bare earth: no page we read says what lay underfoot in the residence court of a magistrate's compound.
 
 Depiction: The plan always sets the inner court behind the office hall; for a
-Japanese office that is a simplification, since at Takayama the residence stood beside the office. A gate in the wall between the two courts leads into it. Its ground is kept
+Japanese office it follows a single case, the intendant's office at Takayama, where the residence stood at the back of the office. A gate in the wall between the two courts leads into it. Its ground is kept
 open, its earth showing through unfilled, and the service ground behind the house is drawn as a service strip or a narrow alley, never a wide empty band. Its buildings stand a little further apart than in a real compound, so each reads on its own.
 
 Name: inner court

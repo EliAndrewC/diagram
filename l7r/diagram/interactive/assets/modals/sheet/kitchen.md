@@ -4,6 +4,11 @@ room. It had its own door from outside, the katteguchi; the family came and went
 entrance of its own, and guests by the formal one. Who cooked in it, the household or its servants, and whether anyone
 slept there, are not recorded.
 
+The kitchen sat under the house's own roof, as one of its rooms or a wing of it roofed as the house was: thatch at a
+Matsushiro house of 1794, pantiles at the Hagi house. In the great mansions the kitchen might be a building of its
+own, with a smoke louvre in its roof; whether an ordinary samurai kitchen had one is not recorded. Its walls are not recorded, nor
+what closed its outside door, nor whether that door was barred at night.
+
 A samurai house was matted in nearly every room, but its kitchen was board-floored, with an earth-floored part, the doma,
 smaller than a farmhouse's. The kamado as a rule stood on the doma, though perhaps at times on the boards of a samurai
 kitchen whose doma was small; a district magistrate's house of 1794, its kitchen altered by about 1868, has a kitchen all
@@ -13,8 +18,8 @@ At the one house whose kitchen is measured, the Hagi house, its wing of board fl
 sixth of the house by one of its two official measures.
 
 Guesses:
-- That the kitchen has one door to the outside, on its doma where it has one: the kitchen door is recorded, but not how many a kitchen had or
-  where it stood.
+- That the kitchen has one door to the outside, on its doma where it has one: the kitchen door is recorded, often at the rear of the house and in the great mansions onto the service kitchen's doma, but not how many a kitchen had or
+  whether an ordinary kitchen's door opened on its doma.
 - A second outside door, or a way of its own to carry food to the rooms, wherever a plan draws one: no source shows either.
 - The kitchen's size on the plan: one kitchen is measured, by one of two measures that disagree.
 - That the kitchen and its service ground stand to the side and rear of the house, away from the gate: the kitchen is
@@ -27,6 +32,6 @@ drawn at about the size of the Hagi house's kitchen wing, about 24 by 18 ft or a
 
 Name: kitchen
 Covers: the kitchen and pantries building and its label
-Sources: liq-takayasu-daidokoro, touken-bukeyashiki-madori, kotobank-katteguchi, kotobank-uchigenkan, boso-no-mura-takei, nagano-shishi-yokota, irori-jawiki, yamaguchi-kuchiba, cleanup-edo-hettsui
+Sources: liq-takayasu-daidokoro, touken-bukeyashiki-madori, kotobank-katteguchi, kotobank-uchigenkan, boso-no-mura-takei, nagano-shishi-yokota, irori-jawiki, yamaguchi-kuchiba, cleanup-edo-hettsui, jaanus-daidokoro, jaanus-shimodaidokoro
 Entry: research/questions/0107-kitchens-daidokoro.html, research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html
 Drawing: research/questions/0107-kitchens-daidokoro.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.drawing.html, research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html

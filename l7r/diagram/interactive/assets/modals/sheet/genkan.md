@@ -22,7 +22,7 @@ roofed with cypress bark. What a genkan's walls and roof were otherwise built of
 How large an ordinary house's genkan was is not recorded; at the council hall a small domain built at its Sayama seat in 1775, the genkan was 8 mats and its shikidai probably about 12 by 9 ft, and at Kawagoe's castle palace, a great lord's, the great entrance and carriage porch ran 19 by 5 ken, about 113 by 30 ft.
 
 Guesses:
-- Its size on the plans, about 10 to 11 ft across and 4 to 6 ft deep, with a step 4 to 5 ft wide: no account read gives the
+- Its size on the plans, about 10 by 6 ft to 12 by 9 ft, with a door block 5 to 6 ft wide: no account read gives the
   size of a samurai house's or an intendant's office's genkan; the one shikidai found measured, at the council hall the Sayama domain built at its jin'ya in 1775, was 2 ken and 6 mats, probably about 12 by 9 ft, and the castle palaces' are far larger.
 - The genkan room's size where a plan draws one, about 12 by 38 ft, some 25 mats: no account read gives a genkan room's
   size at an office; the only mat counts found, the Sayama council hall's genkan of 8 mats, shikidai of 6 and next room of
@@ -37,7 +37,7 @@ Depiction: Where the office and the residence share a compound, the plan draws t
 the residence runs on through the office; where the residence stands alone, the genkan is on the residence. The genkan's door
 opens onto open ground a palanquin can cross, never onto the street or against the side of a building. A plan whose
 house brings its guests in by a garden path draws no genkan. Where a plan draws the room behind the step, the genkan room, it
-is a room at the office hall's end, between the porch and the working rooms. The small dark block on the porch's outer edge is the genkan's door, drawn as every door on the plans is; it is not the step, which was a low, broad board platform across the whole entrance.
+is a room at the office hall's end, between the porch and the working rooms. The small dark block on the porch's outer edge is the genkan's door, drawn as every door on the plans is; it is not the step, which was a low, broad board platform across the whole entrance. Where a plan draws the porch in a fill darker than its hall's, that is a drawing convention so the porch reads apart from the hall, not the color of the step's timber boards.
 
 Name: genkan
 Covers: the entry porch at the formal entrance, and the genkan room behind it where a plan draws one

@@ -297,6 +297,7 @@ bingo	Bingo
 bishamon	Bishamon
 bishamonten	Bishamon
 bitchu	Bitchu
+bittern	bittern
 bituminous coke	coke
 biwa	Lake Biwa
 bizen	Bizen
@@ -606,6 +607,7 @@ chō	cho
 chōgin	chogin
 chōtsuke	chōtsuke
 chōzuya	temizuya
+chūmon style	chumon-zukuri
 circuit	wall circuit
 circuit's length	wall circuit
 circular divider	cylinder divider
@@ -939,6 +941,10 @@ district shrine	gōsha
 district shrines	gōsha
 ditai	mamian
 dituan	dituan
+diversion dam	diversion weir
+diversion dams	diversion weir
+diversion weir	diversion weir
+diversion weirs	diversion weir
 divided-residence retirement	divided-residence retirement
 division flume	division flume
 division flumes	division flume
@@ -1023,6 +1029,9 @@ dry runs	wet run
 dry-field	hatake
 dry-field conditions	kanden
 dry-field conversion	kanden
+dry-laid	dry-laid
+dry-laid stone	dry-laid
+dry-laid stone walling	dry-laid
 drying yard	drying yard
 drying yards	drying yard
 ds/m	dS/m
@@ -1132,6 +1141,8 @@ enpō era	Enpo era
 enshrinement	enshrinement
 enshrinement's	enshrinement
 enshrinements	enshrinement
+enshu lantern	Enshū lantern
+enshū lantern	Enshū lantern
 equipage	equipage
 era name	era name
 esculent	esculent
@@ -2283,7 +2294,7 @@ kabuki	kabuki
 kabuki gate	kabuki gate
 kabuki-mon	kabuki gate
 kabukimon	kabuki gate
-kachi	doshin
+kachi	kachi
 kadoya	kadoya
 kaei	Kaei
 kaerumata	frog-leg strut
@@ -2323,6 +2334,7 @@ kamakura quay	Kamakura quay
 kame	kame
 kami	kami
 kami-yashiki	kami-yashiki
+kamidaidokoro	kamidaidokoro
 kamidana	kamidana
 kamigata	Kamigata
 kaminarimon	Kaminarimon
@@ -2380,6 +2392,8 @@ kashi	kashi
 kaso-dera	kaso-dera
 kaso-zu	kaso-zu
 kasoba	kasoba
+kasuga lantern	Kasuga lantern
+kasuga lanterns	Kasuga lantern
 kasuga-style	Kasuga-style
 kasuga-zukuri	Kasuga-style
 kasumi dike	open-ended dike
@@ -2427,6 +2441,7 @@ keijo	keijo
 keiko	keiko
 keio	Keio
 keio era	Keio
+kemuridashi	kemuridashi
 ken	ken
 kenchi-cho	kenchicho
 kenchicho	kenchicho
@@ -2549,6 +2564,7 @@ kosatsuba	kosatsuba
 koshiate	koshiate-mori
 koshiate forest	koshiate-mori
 koshiate-mori	koshiate-mori
+koshikake	koshikake
 koshin	Kōshin
 koshin tower	koshin tower
 koshin towers	koshin tower
@@ -2784,6 +2800,7 @@ low-trunk	low-trunk mulberry
 low-trunk mulberry	low-trunk mulberry
 lower break	break of slope
 lower break of slope	break of slope
+lower kitchen	shimodaidokoro
 lower mansion	lower mansion
 lower mansions	lower mansion
 lower privies	upper privy
@@ -3306,6 +3323,7 @@ ocr	OCR
 odamaki	odamaki
 odamaki-mushi	odamaki
 odo	ōdo
+odoguchi	odoguchi
 odoi	Odoi
 odoko	odoko
 oei	Oei
@@ -3370,6 +3388,8 @@ openwork transom	openwork transom
 openwork transoms	openwork transom
 ordination platform	ordination platform
 ordination platforms	ordination platform
+oribe lantern	Oribe lantern
+oribe lanterns	Oribe lantern
 origake	origake
 oroshi	oroshi
 oshi	oshi
@@ -3982,6 +4002,8 @@ scullery maid	scullion
 scullery-maid	scullion
 scullion	scullion
 scullions	scullion
+scuttle	scuttle
+scuttles	scuttle
 se	se
 se-machi	se-machi
 seam	seam
@@ -4051,6 +4073,8 @@ seral stage	seral
 seral stages	seral
 seri	seri
 sericulture	sericulture
+service kitchen	shimodaidokoro
+service kitchens	shimodaidokoro
 servitude	servitude
 servitudes	servitude
 ses	SES
@@ -4142,6 +4166,7 @@ shimabatake	island field
 shimazu	Shimazu
 shimenawa	shimenawa
 shimo-yashiki	lower mansion
+shimodaidokoro	shimodaidokoro
 shimogoe	night soil
 shimoyashiki	lower mansion
 shin sect	Jodo Shinshu
@@ -4279,6 +4304,8 @@ sluice shares	sluice share
 sluices	sluice
 small rent	topsoil owner
 smashings	smashings
+smoke louvre	kemuridashi
+smoke louvres	kemuridashi
 snow-viewing lantern	yukimi
 so village	so village
 so villages	so village
@@ -4446,6 +4473,8 @@ sueki	Sue ware
 sugi	sugi
 sugoya	sugoya
 sugumagi	sugumagi
+suhama	suhama
+suhama form	suhama
 sui	Sui dynasty
 sui channel	sui channel
 sui dynasty	Sui dynasty
@@ -4565,6 +4594,7 @@ tamagawa	Tamagawa aqueduct
 tamagawa aqueduct	Tamagawa aqueduct
 tamahagane	tamahagane
 tamajari	tamajari
+tamari	tamari
 tameie	Fujiwara no Tameie
 tameike	tameike
 tamenari	Fujiwara no Tamenari
@@ -4592,6 +4622,7 @@ tarama	Tarama
 taro	taro
 tartary	Tartary
 tarudai	tarudai
+tataki	tataki
 tatami	tatami
 tatara	tatara
 tateba	tateba
@@ -4971,6 +5002,8 @@ upper break	break of slope
 upper break of slope	break of slope
 upper estate	kami-yashiki
 upper estates	kami-yashiki
+upper kitchen	kamidaidokoro
+upper kitchens	kamidaidokoro
 upper privies	upper privy
 upper privy	upper privy
 upper residence	kami-yashiki
@@ -5388,6 +5421,7 @@ zushi-nikai	half-story
 zōkibayashi	zokibayashi
 ō-aza	ō-aza
 ōdo	ōdo
+ōdoguchi	odoguchi
 ōdoko	odoko
 ōei	Oei
 ōgashoya	ogashoya

@@ -631,86 +631,52 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 <!-- plan-archive: T342 to T349 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T351 to T368 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T358 to T370 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
-### T371 (<why: the finding or measurement that files it>)
+### T371, T372, T373, T376, T381, T382, T385 (bundle)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+Filed by impl-drift and modal-depiction of 2026-11-23 on the T328/T330 and T351 landings' leftovers (T371, T373), the T351 bundle's research passes for T356 that reached no page (T372), modal-form on the T358 bundle's round (T376), the building-reviews of 2026-11-23 of ochiba-roundtrip-test and county-magistracy-example (T381, T382) and `make question-sizes` (T385); seven record follow-ups worked by one bundle as page sessions (451 T141).
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T371 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
-### T372 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: four research passes first (research-pass, 2026-11-23: KEY t381-study-seat, t382-koshikake, t376-pond-banks, t376-kitchen-fabric), T372's two passes of 2026-11-22 and 2026-11-23 recovered from their agents' transcripts (no new pass); then record edits in page-session pairs (write, then check-and-apply), under the cap of four questions a write: brief A (0104, 0123, 0090, 0009: T371, T373, T385), brief B (0097 split into the new 0331, 0096: T372), brief C (0113, 0099, 0059: T373, T381, T382, T385), brief D (0103, 0107: T376), brief E (0103's two excavated banks the pass added late, 0009's two notes the A checks flagged OUTSIDE THE CHANGE), brief F (C's checks' items on 0059, 0099, 0113 and registries 37140, 4280), brief G (B's checks' items on 0097, 0096 and registry 37350), brief H (E's checks' items outside the change: 0009's horikawa citation, 0103's kotobank-ishidoro join, 0107's knob wording and Kakunodate to the download list, registry 37320), brief I (0106's staff-lodging line restated to jinya-kotobank, 0113's mapple-takayama-jinya-2 join, registries 9731 and 0660), brief J (0090's Takayama residence, which said 'beside the office rather than behind it' against the viewing guide 0113 quotes, restated: the official residence stood at the back of the office, the lot to the west being that residence); the garden-pond and kitchen pop-ups edited by the builder from D's and E's pages, then their checks in order (form, research, depiction); the claims round the moved pages owe (claims-triage, then impl-drift); and T385's tooling, `l7r-gate check question-size --all` in `make static`.
+  - T371: 0104's drawing page restated to what each plan draws: the county example's porch in its hall's own fill, about 12 by 9 ft, its door 6 ft, measured 2026-11-23 (SVG rects by data-kind at 3 px a ft); Ochiba's hand sheet a smaller porch, about 10 by 6 ft, in a darker fill (the size a GUESS, the fill a map drawing convention); Hayakawa, Ubame and the round-trip test plan the no-genkan form, no porch, measured 2026-11-23 (SVG rects by data-kind at 3 px a ft). No sheet redrawn: the restatement is the task's first option.
+  - T372: 0097 split at the cap: where an office's staff lodged moved to the new 0331-where-an-offices-staff-lived (Sakai about 1728, its retainers' rowhouses inside the grounds in three places, rowhouse A beside the magistrate's residence; Sayama's middle and lower retainers along the East Gate street and side lanes; the intendancy's junior officials' quarters among its parts; Sano 1739 the counterexample, its staff in the town), and the dwelling sizes stayed on 0097 beside the decision they serve (Sakai's doshin dwelling 2 by 3 ken, one to a man; Sayama's 2.5 ken deep, 4 to 6 ken long by rank); 0097's drawing page says the county plan's junior retainers' quarters, a rowhouse of four dwellings on the outer court's south wall, is seated by a GUESS on the grounds the record attests. 0096 takes the Naruto jin'ya's jail on the west side, its gate on the south, and the Aizu domain's Iwaito jin'ya (the brief's "Maruyama office") with a jail and rowhouses besides its office; its drawing page seats the county cell joined to the junior rowhouse's east end, the join a GUESS on the record's silence (absence how-our-maps-draw-holding-cells). Uraga's plan unreadable to us: on the download list (entry 335). The county sheet's own research strings and notes re-cited to these pages: pool/magistracies is the defects bundle's live files, filed as T393.
+  - T373: 0113's back row restated to the three measured orders (the county example and Ochiba west to east armory, writing rooms, clerks', day office, study; Hayakawa and the round-trip test plan mirrored; Ubame with its armory a building of its own and the writing rooms at the west end); 0123's county granary about 50 by 26 ft (150 x 78 px), measured 2026-11-23 (SVG rects at 3 px a ft); 0090's halls (about 110 to 119 ft: the county example 118.5 by 38 ft, Hayakawa about 113, Ochiba and the round trip 112, Ubame 110, these four each 28 ft deep) and cells (12 by 10 ft on the hand sheets, 10 by 12 on the county example, 18 by 15 on the round trip), measured 2026-11-23 (SVG rects at 3 px a ft).
+  - T376: the passes (t376-pond-banks, t376-kitchen-fabric) found 0103's banks: the great pond gardens edged their water with set stones and pebble beaches over a clay-lined bed, fewer and smaller stones from the mid-17th century; at Obata the surviving samurai-house ponds made to be looked at are ringed by large stones or planting and the working ponds parted from their channel by dry-laid stone (undated survivals, modern surveys); two excavated gardens, Shunjuen (a hatamoto family's lower-residence stroll garden: laid stone walls and edging stones, the banks undated) and Nagoya Castle's Ninomaru (a castle garden of the Bunsei years: a tataki revetment and floor), each that one garden; a small residence's or an office's bank is not recorded, and the drawing page says the drawn line is where the water ends (a map drawing convention). 0107: the samurai kitchen under the house's own roof as a room or wing (thatch at Matsushiro 1794 and Kaminoyama c.1804, pantile at Hagi c.1800, shingle for Kaga foot soldiers), a great mansion's kitchen sometimes a building of its own with a smoke louvre, none named for an ordinary samurai kitchen; the kitchen door at the rear; its leaf, its night barring and the walls not recorded; the drawing page's door bullet cites the rear placement and keeps the door on a small house's doma a GUESS. The garden-pond pop-up tells the banks (the great gardens, Obata, the two excavated gardens, the small residence's silence) and the kitchen pop-up its roof, door and silence; both then checked form, research and depiction, each recorded.
+  - T381: the pass found the magistrate's own working room ATTESTED at the household's side (the Edo North Town Magistracy's plan of 1841 and the South's of 1842 put the yobeya at the join of office and residence; at Takayama the intendant worked in the residence's ima, entered by the naka-no-kuchi); 0113's findings carry it, and its drawing page says our plans seat the study at a back row's end beside the day office, a GUESS that departs from the record where it stands far from the household's door, as on the round-trip test plan (about 90 ft). The re-seat itself is drawing work in the sheet bundle's live files: filed as T392. The official study pop-up's Depiction and Guesses said the study stood at the row's end 'away from the armory', false on Ubame's plan, whose armory is a building of its own (modal-depiction 2026-11-23); both now say 'at an end of the row', and the pop-up's form and research checks were re-run on the Guesses edit, clean.
+  - T382: the pass found the koshikake ATTESTED ONLY FOR the shogunate's Edo courts (the town magistracies and the Hyojosho, from at least 1694; 94 tsubo before the gate) and SILENT for a jin'ya (whose summoned parties lodged at the inns, gojuku); 0099's findings carry it, and its drawing page rules it not carried to a county seat, the ground before the court the court's open front, a GUESS. No program item, so docs/building-programs.md's prose is not touched.
+  - T385: `l7r-gate check question-size --all` (rust/gate/crates/checks/src/checks/question_size.rs) refuses any question over the cap whether a change touched it or not, pinned by `every_question_over_the_cap_refuses_with_all_though_no_change_touched_it` (red first as an assertion, code 0 for 1, `.git/l7r-handoffs/T371-t385-red.log`; green after, the crate 147 passing); `make static` runs it after file-scale; docs/research-record-rules.md says so. 0059 cut from 20,065 to 19,796 bytes and 0009 from 20,044 to 19,704, measured 2026-11-23 (`make question-sizes`) (words only, no finding, footnote, figure or label dropped); the live tree red on `--all` naming both before the cuts (`.git/l7r-handoffs/T371-t385-live-all.log`), clean after.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| T371, T373 0104, 0123, 0090, 0113 | the record checks recorded (`make record-checked`), `make record-owed` naming none of the units | n/a | none | the page restated to the plans as drawn |
+| T372 0097, 0331, 0096 | the same | n/a | none | a fact no readable page carries is cut |
+| T381, T382 0113, 0099 | the same | n/a | none | the plans' seat kept a labeled GUESS on the record's bound |
+| T376 0103, 0107 and two pop-ups | the record checks; modal-form, modal-research, modal-depiction in order, each recorded | n/a | none | an 'is not recorded' clause |
+| T385 0059, 0009 and `--all` | `every_question_over_the_cap_refuses_with_all_though_no_change_touched_it` red first (assertion, code 0 for 1), green after; the live tree red on --all before the cuts, clean after | n/a | none | n/a |
 
-### T372 Approach (checklist part A)
+### T371, T372, T373, T376, T381, T382, T385 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The record says what each plan draws and what its sources carry: the porch on each plan (0104), the hall, court, cell and granary sizes as drawn (0090, 0123), the back row's three orders (0113); where an office's staff lodged and how big a junior retainer's dwelling was (0331, 0097), where the county cell stands and that its join is unrecorded (0096); where the magistrate's own working room stood against the household (0113) and whether a seat kept a waiting shed before its court (0099); what a garden pond's banks and a kitchen's roof, walls and door were, or that they are not recorded (0103, 0107), and the garden-pond and kitchen pop-ups tell it; and no question stands over the size cap unnoticed (`make static`).
+2. **The constraints.** Constitution XII, XIV (a defect is a wrong outcome: restate the record line) and XVI; the research record's CLAUDE.md (verbatim passages, translations marked, the date of the evidence deciding what it attests); the page-session rules (at most four questions and ten new registry keys a write); the pop-up check order (form, research, depiction); the defects bundle's files (T383, T384, T388, T391: rust/mode_a, pool/magistracies, rust/gate/crates/diffrun, docs/buildings.md, docs/building-programs.md) and 451's (rust/guard, tests/hooks/test-pair-hooks.sh) left, but for docs/building-programs.md's generated required-items table, which renders from this bundle's pop-ups' Guesses: re-rendered by `make building-programs` (hooks-test's real-page check red on the stale table, observed 2026-11-23, method: `make closing-checks`), its prose untouched.
+3. **Where each comes from.** R: the four passes of 2026-11-23 (KEY t381-study-seat, t382-koshikake, t376-pond-banks, t376-kitchen-fabric) and T372's two of 2026-11-22/23 (KEY t356 junior lodging and cell seat), the pages the briefs cite; O: the five plans' porches, halls, courts, cells, granary and back rows measured 2026-11-23 (SVG rects by data-kind at 3 px a ft); the round-trip test plan's study 90 ft from the household door, observed 2026-11-23, method: the building-review of ochiba-roundtrip-test; M: `make question-sizes` and `l7r-gate check question-size --all` (2026-11-23).
+4. **Do they describe the world here?** Every size and order was read from the plans as drawn on 2026-11-23 (the five sheets' SVG); the passes' findings are said for the places and dates they attest (Edo's town magistracies 1841-42, Takayama, Sakai 1728, Sayama, Shunjuen 1756-65/c.1804-28, Nagoya's Ninomaru 1818-30), and a county seat's form beyond them is a labeled GUESS.
+5. **The order.** The passes first; briefs A-D in parallel (each write, then its checks); E to J on the checks' findings outside the change and the pop-up checks' findings on the pages; the pop-up edits; the pop-up checks (form, research, depiction, each a batched agent); the claims round (claims-triage, then impl-drift); the `make static` line last, after 0059 and 0009 were under the cap; the required-items table re-rendered after the last pop-up edit, and the claims it re-owed triaged; `make closing-checks` after the last edit. Each deferral below lands before T158, Phase 4's S13, the deletion close that ends the phase (its task line in tasks.md), so each defect is fixed before the next step's port, as the GM's 2026-11-18 rule asks ('fix all known bugs in each step before moving on to porting the next step').
+6. **The exits.** Green: every record check recorded, `make record-owed` naming none of this bundle's units, `make record CHECK=1` and `make question-sizes` clean, the claims round's verdicts recorded. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: named pages, named lines and one check mode.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make record-owed` owes nothing of these units; `make record CHECK=1` clean; `l7r-gate check question-size --all` exits 0 and `make static` runs it; the checks crate green (147 tests, 2026-11-23); the pop-up checks and the claims round recorded.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** T371: a reader of 0104 is told a porch size and fill one sheet does not draw. T372: the county sheet's junior rowhouse and cell rest on passes no page holds. T373: three drawing pages give sizes and an order the plans no longer draw. T376: a reader of the garden-pond or kitchen pop-up is not told what the thing was built of, nor that the record is silent. T381: a reader cannot tell the plans' study seat from the record's. T382: a reader cannot tell whether the open ground before the court is the record's or ours. T385: 0059 and 0009 over the cap, measured 2026-11-23 (`l7r-gate check question-size --all` on the live tree), and nothing that catches a question no change touched.
+**Performance work?** no.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
-### T373 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T373 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Found and left?**
+- The official study's seat: the record now places the magistrate's working room at the household's side, our plans in the back row (a labeled GUESS). Not fixed here: the re-seat is drawing work in pool/magistracies, the T383 bundle's live files. Filed as T392, which lands before T158.
+- The county example's junior retainers' quarters and cell still cite the passes, not 0331 and 0096 (T372's last clause). Not fixed here: pool/magistracies is the T383 bundle's. Filed as T393, which lands before T158.
+- A reader of the barracks and retainers' quarters pop-ups is not told what a rowhouse was built of (modal-form FIX M5). Not fixed here: it needs a research pass and a page session first. Filed as T394, which lands before T158.
+- Three claims in docs/building-programs.md and docs/buildings.md tell a reader that 0113 and 0097 record less than they now do (impl-drift 2026-11-23: two DRIFTED, one MISLABELED, a claims fix with no map effect; the Knobs 5 prose's option (c) to be checked against 0331). Not fixed here: those two docs are the T383 bundle's live files. Filed as T396, which lands before T158.
+- Three claims and a docs bullet (docs/building-programs.md, docs/buildings.md, rust/mode_a/src/audit/shared.rs) still call the office-front, residence-rear order a deliberate simplification because Takayama's residence 'stood beside the office', the opposite of 0090 as brief J restated it (impl-drift 2026-11-23: three DRIFTED, a claims fix with no map or check effect); and rust/mode_a/src/compound/emit.rs 'grounds#office front, residence rear' labels that order a DEVIATION, which 0090 now records as followed (impl-drift 2026-11-23 on the claims brief J re-owed: MISLABELED, the code right). Not fixed here: the T383 bundle's live files. Filed as T400, which lands before T158.
+- 0090's note takayama-jinya-jawiki-2 joins two passages with ' and ' for the record's '; ' (quote-check, OUTSIDE THE CHANGE, its words older than this work): a reader takes two passages for one quotation. Not fixed here: the repair re-reads the jawiki page and rejoins the note's English and its originals pair, a page session of its own with its quote-check and translation-check, and the join is older than this work and moves no figure, order or seat of the plans or pop-ups. Filed as T399, which lands before T158.
+- The T383 bundle's own code-changed or new claims (rust/mode_a caption_place and compound: leader.rs's segment_at and stroke_end, the latter sent on by this bundle's triage of the re-rendered table, sweep.rs, layout.rs's CART_LANE, measured 2026-11-23 (`make claims-owed`)) owe impl-drift on that bundle's diff. Not a defect: an owed check on another bundle's live code, no wrong outcome; the T383 bundle's builder runs it before that bundle lands.
+- No wrong outcome, left: G's READER count of the county barracks (a misreading: the compound.json has a five-bay barracks besides the junior quarters, observed 2026-11-23, method: the county compound.json's research string 'the barracks in five dwellings of 12 ft'); servants--quarters' two NOTEs and garden-pond's M6/M2 paragraph-order NOTE (form only); the hearing-court pop-up's interrogation clause, which rests on 0096's drawing page (on its Drawing line) as the setting's stated rule; garden.md's 'the pond is the office's form' beside Ubame's dry garden (a default its Depiction covers); the barracks pop-up's 'about fifteen ... this project's own' (impl-drift 2026-11-23, outside the change: the GM's ~15 are a county town's whole samurai, magistrate and karo among them, in l7r.md and budgets.md, not the barracks' lodgers, so the lodging count stays the project's); the kitchen row's 'often at the rear', which rests on 0107 (the late Edo middle-ranking warriors' kitchen door 'often tucked away at the rear'), a page the docs section does not cite. The re-rendered table's official-study claim drifted as T396 already files ('#the official study's seat').
 
 ### T374 (<why: the finding or measurement that files it>)
 
@@ -747,33 +713,6 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 |---|---|---|---|---|
 
 ### T375 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
-### T376 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T376 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -851,60 +790,6 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T381 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T381 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
-### T382 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T382 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
 ### T383 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -940,33 +825,6 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 |---|---|---|---|---|
 
 ### T384 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
-### T385 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T385 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -1129,6 +987,168 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 |---|---|---|---|---|
 
 ### T391 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T392 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T392 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T393 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T393 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T394 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T394 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T396 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T396 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T399 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T399 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T400 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T400 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

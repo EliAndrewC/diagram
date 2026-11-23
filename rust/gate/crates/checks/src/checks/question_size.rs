@@ -109,12 +109,14 @@ fn report(root: &Path) -> Outcome {
     Outcome::out(out)
 }
 
-/// `l7r-gate check question-size [--report]`.
+/// `l7r-gate check question-size [--report | --all]`: the questions a change touched (`make quick`), or with `--all` every
+/// question of the record (`make static`, 449 T385: 0059 and 0009 stood over the cap while no change touched them).
 pub(super) fn cli(args: &[String], root: &Path) -> Outcome {
     if args.iter().any(|a| a == "--report") {
         return report(root);
     }
-    let over: Vec<(usize, String)> = changed(root)
+    let all = args.iter().any(|a| a == "--all");
+    let over: Vec<(usize, String)> = if all { every(root) } else { changed(root) }
         .into_iter()
         .map(|q| (size(&root.join(&q)), q))
         .filter(|(n, _)| *n > CAP)
@@ -125,6 +127,9 @@ pub(super) fn cli(args: &[String], root: &Path) -> Outcome {
     let mut err = String::new();
     for (n, q) in &over {
         let _ = writeln!(err, "question-size: {q} is {} bytes of prose, over the {} cap - split it along its topics (a finding stays with its decision; each part its own question and heading; the joins point, they do not restate). Why and how: docs/research-record-rules.md, 'A question has a size'.", with_commas(*n), with_commas(CAP));
+    }
+    if all {
+        let _ = writeln!(err, "question-size: every question is held to the cap, whoever touched it last - `make question-sizes` lists them largest first; cut or split each by page session (make page-session).");
     }
     Outcome::refuse(err)
 }

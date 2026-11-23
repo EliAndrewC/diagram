@@ -801,7 +801,7 @@ style-prepass: ## [project] the style guide's mechanical half for one question -
 	@if [ -z "$$Q" ]; then printf 'make style-prepass: Q=<question number> is required - e.g. make style-prepass Q=0041\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record style-prepass --root "$$(git rev-parse --show-toplevel)" "$$Q"
 
-question-sizes: ## [project] every research question over the size cap (question + notes, feature 250 D14), largest first - make quick fails on one a change touched
+question-sizes: ## [project] every research question over the size cap (question + notes, feature 250 D14), largest first - make quick fails on one a change touched, make static on any (449 T385)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check question-size --report
 
 open-questions: ## [project] every guess and every unfound source, read from the record and the tracked files now - the research still owed, with the map features each touches (feature 285)
@@ -1100,6 +1100,7 @@ static:        ## [static] the static checks: file-scale, the Rust crates' check
 	$(FRESH_ESCAPE)
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale --selftest
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale .
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check question-size --all
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" coverage --rust
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust lint
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust format --check

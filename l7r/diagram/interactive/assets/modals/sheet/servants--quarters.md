@@ -1,7 +1,7 @@
 About: The servants' quarters lodged the household's domestic servants, who did its odd jobs. They were not
 samurai but of peasant or townsman stock, most of them younger sons of peasants, hired for wages by the year or the half
 year, some through a broker; they changed households on two fixed days a year.
-How many a household had to keep was fixed by its assessed rice yield. They lived in, inside their master's walls; no
+How many a household had to keep was fixed by its assessed rice yield. They lived in, inside their master's grounds; no
 servant is known to have had a house of their own in the samurai quarter.
 
 Where they slept followed the size of the house. At a large house the buildings along the street were long

@@ -580,8 +580,10 @@ checks that judge prose (`record-style`, `entry-drift`) are not handed the notes
 carry the notes their findings need. On 2026-09-29, with the notes uncounted, no question in the record was over the
 cap; the prose-only number is to be tuned from what the restyle produces.
 
-**Applied to what a change touches**, not to the whole record at once: a question over the cap is split by the
-session working its page, which has read it. **How to split without losing context** - the GM's concern, a reader
+**Applied to what a change touches** at `make quick`, and to every question at `make static` (`l7r-gate check
+question-size --all`, 449 T385: 0059 at 20,065 bytes and 0009 at 20,044 stood over the cap while no change touched them,
+measured 2026-11-23 by `make question-sizes`): a question over the cap is split by the session working its page, which has
+read it, and one no change touched is cut or split by a page session of its own. **How to split without losing context** - the GM's concern, a reader
 must not be stranded and a later check must not meet a claim it cannot verify:
 
 - split along TOPICS, never along the entry's own parts: a finding stays with the decision it drove and the

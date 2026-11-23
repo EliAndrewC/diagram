@@ -19,6 +19,8 @@ Guesses:
   hearing.
 - Its size on the plan, about 12 by 10 ft: no account gives a magistracy's temporary cell, so it is set at the small end
   of the single cell rooms measured.
+- That the cell is built on to the end of the junior retainers' long-house, where a plan joins it to one: no account says
+  whether a temporary cell stood alone or was joined to a guardroom, a long-house or the gatehouse.
 
 Depiction: The plan draws the cell as a small building with bars across its front, in the office's outer court. It may
 stand on any side of the compound: a Chinese county office set its jail to the south by rule, and Rokugan keeps no such
@@ -28,5 +30,5 @@ business.
 Name: cell
 Covers: the barred holding cell and its label
 Sources: tenmacho-jawiki, roya-kotobank, edo-ashigaru-bugyosho, jinya-kotobank, takayama-jinya-official, agariya-jawiki
-Entry: research/questions/0096-holding-cells-agariya-and-roya.html
+Entry: research/questions/0096-holding-cells-agariya-and-roya.html, research/questions/0168-the-city-jail-roya.html
 Drawing: research/questions/0096-holding-cells-agariya-and-roya.drawing.html

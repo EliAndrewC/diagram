@@ -1,0 +1,16 @@
+{
+ "captured": "2026-11-23T10:37:24+00:00",
+ "final_url": "https://web.archive.org/web/20240918044926id_/https://soar-ir.repo.nii.ac.jp/record/18449/files/24560743seika.pdf",
+ "first": "2b/2b2ed42ce208/20261123T103722Z",
+ "gm_copies": [],
+ "keys": [
+  "kaken-matsushiro-sensui"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "2b/2b2ed42ce208/20261123T103722Z",
+ "reason": "HTTP 406",
+ "revision": "",
+ "sha256": "0cd9425ed90ce2c154c8123ceca22dbe5b133adfa1e17f2a2c2c9074579ce3a6",
+ "url": "https://soar-ir.repo.nii.ac.jp/record/18449/files/24560743seika.pdf"
+}

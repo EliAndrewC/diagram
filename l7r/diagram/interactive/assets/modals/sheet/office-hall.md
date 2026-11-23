@@ -1,11 +1,11 @@
 About: The office hall was the working building of a magistrate's compound, where the office's public business was done
 and its cases heard. At Takayama, the one intendant's office that survives of more than fifty, the entrance hall,
 examination room, working office and great hall were rebuilt together in the Edo period, most likely as one block, with the roofed
-hearing court against it. The intendant's household lived in a residence of its own, beside the office on the lot to the west.
+hearing court against it. The intendant's household lived in a residence of its own, at the back of the office, on the lot to the west.
 
-An intendant governed with about ten retainers sent by the shogunate and a few clerks hired from the district; at
+An intendant governed with about ten retainers sent by the shogunate and a few clerks hired from the district. At
 Takayama the clerks worked in a room partitioned from the officials', and an intendant's junior officials lived in huts and rowhouses on the
-grounds. In Rokugan a county magistrate's clerks are three or four scribes from the county town, who live there and come
+grounds; the intendant ordinarily worked not in the hall but in the residence, coming out to the hall when needed. In Rokugan a county magistrate's clerks are three or four scribes from the county town, who live there and come
 in each day.
 
 Takayama's office was a single-story timber hall roofed with wooden shingles, its examination room paved with cobbles like the court, and built with great formality to show the
@@ -25,8 +25,8 @@ Guesses:
 Depiction: The plan draws the office hall as one long building in the outer court, its front band the magistrate's dais
 over the roofed hearing court, and behind the dais the day office and the official study, with the clerks' room beside
 the day office, each its own feature. It is drawn larger than the residence, as Takayama's office was, except on a plan that draws a wealthier magistrate's house larger on purpose. The plan puts the office in
-front and the residence behind it, the Chinese county office's order, a simplification for the Japanese form: at Takayama
-the residence stood beside the office, on the lot to the west. Its buildings stand a little further apart than a real
+front and the residence behind it, the Chinese county office's order; at Takayama too
+the residence stood at the back of the office, on the lot to the west. Its buildings stand a little further apart than a real
 office's did, so each reads on its own. No clerks' housing is drawn at the office, since the clerks live in town.
 
 Name: office hall

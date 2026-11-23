@@ -1746,6 +1746,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T383, T384, T388, T391 (bundle)": {
+   "sha256": "1fcb1233b89a259b9de954ad68f43acdcc53b0f52248bcea833e5bf180b8802f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T383, T384, T388, T391 Approach (checklist part A)": {
+   "sha256": "ec3d9fb3fd47b061b1ab009372a731ecef6f34eab8bd73afd3c1c0680f50b5bf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T371, T372, T373, T376, T381, T382, T385 (bundle)": {
+   "sha256": "465f8e29fc67368d4853b833ae2e4111406d346cdf55bd182f945c6b76aa215c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T371, T372, T373, T376, T381, T382, T385 Approach (checklist part A)": {
+   "sha256": "ba6ad732accc06b6b9e53559677073a345d2d732b0acbdc103351cb95c894da4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -24524,6 +24548,315 @@
      "summary": "A make target review-discharge was added (Makefile block after review-verdict, row in docs/make-targets.html) so a landing reaches the verb without calling the gate binary directly.",
      "class": "within",
      "why": "It serves FR-005 (make the one entry point) and only exposes the route the ruling asked for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T383, T384, T388, T391 (bundle)",
+    "### T383, T384, T388, T391 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T383-practice-ground",
+     "summary": "T383: aligned_gaps' blocked counts a drawn practice ground (plan.fills PRACTICE_GROUND) as laid-out ground, a CONVENTION from 0165; a listing only, no sheet moves",
+     "class": "within",
+     "why": "Fixes a wrong outcome the review found (the audit lists a vacancy where a practice ground is drawn); the GM's 2026-11-22 'please finish the remaining fixes' and 2026-11-18 'fix all known bugs'. Red test pinned."
+    },
+    {
+     "id": "T384-span-middle",
+     "summary": "T384: block_pair meets a shared span at its middle (span_middle, nearer()), a CONVENTION where 0330 leaves the end open",
+     "class": "within",
+     "why": "Fixes the county's privy leader running from the privy's corner along the stables' wall (a leader read as part of a wall); a remaining follow-up fix, pinned by red tests, leaders sampled on every pool magistracy sheet."
+    },
+    {
+     "id": "T384-slide-drawn-only",
+     "summary": "T384: Placer::led keeps the middle unless it meets other ink, else draws the middle of the least-ink run along the span; used only for the drawn leader in seat(), not inside the sweep",
+     "class": "within",
+     "why": "A design choice measured on the pool: the slide inside the sweep moved Ochiba's latrine caption under a wall (a new wrong outcome), the drawn-leader slide clears Ubame's altar leader off the post. The goal (leaders read clear) is reached on the sheets measured; nothing asked for is narrowed."
+    },
+    {
+     "id": "T384-last-resort",
+     "summary": "T384: a leader no slide clears keeps its middle, and is filed",
+     "class": "within",
+     "why": "A runtime fallback for a case no pool sheet hits (all sampled leaders but Ochiba's latrine, a different path, run clear); it leaves no known defect, and one that appears is filed as a fix, not accepted."
+    },
+    {
+     "id": "T384-stables-well",
+     "summary": "T384: the stable well is seated within its court face's span, its GUESS claim restated; a court-door stable whose face has no room for the well beside the door is refused its well aloud",
+     "class": "within",
+     "why": "Fixes the well standing off its stable; the refusal is a loud failure on a case no pool sheet draws (the county's and round trip's stables are gable-entered), so no wrong outcome is left - a refusal, not a wrong drawing."
+    },
+    {
+     "id": "T388-gable-door",
+     "summary": "T388: a stables interior with no declared door opens on its west gable (north where its court face runs N-S) into the passage, per 0108, which gable a GUESS",
+     "class": "within",
+     "why": "Fixes the horses being led through the grooms' room (the O1 finding), grounded in 0108's gable-entered stable; the unresearched choice is labeled a GUESS."
+    },
+    {
+     "id": "T388-cart-lane",
+     "summary": "T388: CART_LANE (GUESS) and door_lane() seat a granary or stable whose end door fronts a lane with a cart's width past its tub; ground.rs CART_KINDS names the route's kinds",
+     "class": "within",
+     "why": "Fixes the 2.73 ft of a 6 ft lane left past the door's tub; red-tested; the knob is labeled a GUESS per constitution XII."
+    },
+    {
+     "id": "T388-gatehouse-length",
+     "summary": "T388: room made first by drawing the county gatehouse 37.5 x 12 ft (a GUESS inside its kind's band), the spec's sizes line and notes restated; the 3 ft wider envelope priced and refused because it grew the sheet's largest vacancy",
+     "class": "within",
+     "why": "Moving a GUESS constant inside its band to make room before packing, with the alternative priced on trial specs, is constitution XII's room-first rule; the GM's rule that maps may change so long as they work and hold research covers the moved gatehouse. The docs' 'about 40 ft' stays true of 37.5 ft, no wrong outcome."
+    },
+    {
+     "id": "T388-lane-listed-loose",
+     "summary": "Found and left: pack-audit lists the new 9.3 ft lane among aligned gaps as LOOSE (wooden >8 ft)",
+     "class": "within",
+     "why": "Not a defect under XIV v2.36.0: the lane is unbuilt ground wider than a fire gap on purpose, the listing a true measurement, every check OK. Leaving a difference that is not a wrong outcome needs no ruling."
+    },
+    {
+     "id": "T391-calibrated-timeout",
+     "summary": "T391: the diffrun timeout test calibrates its window from a loop of true runs through run::command, scaled from the slowest start and never under the old one (a CONVENTION from CLAUDE.md's calibration loop); run.rs SECOND pub(crate)",
+     "class": "within",
+     "why": "Fixes a gate test failing on a loaded machine with nothing wrong (a check refusing good work); measured red 37/40 unfixed and green 40/40 fixed under a pinned load. Still fails when the runner fails to stop the side."
+    },
+    {
+     "id": "process-lint-and-claims",
+     "summary": "Lint judged at the closing check because another builder's rust/guard edit did not compile; claims owed only by the record bundle's page edits (T371-T385) left to that bundle; occasions named per task",
+     "class": "within",
+     "why": "Process ordering and division of review work between bundles; nothing the GM asked for is dropped - the lint and those claims are still run, at the closing check and by the bundle that owns them."
+    },
+    {
+     "id": "T384-ochiba-latrine-left",
+     "summary": "Found and left: Ochiba's 'latrine' leader runs 68.7 px through the stables (same on main), a hand sheet's crossing fallback no T384 rule moves; not fixed here, filed as T395 to land before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a DEFECT (a reader takes the latrine's name for the stables'), so leaving it is a narrowing of 'fix all known bugs in each step before moving on to porting the next step' and 'please finish the remaining fixes'. It is legitimate only because it is not left: it is filed as its own follow-up, T395, ordered to land before T158, so the defect is not carried past the step or into the talk; the GM's words require the fix before moving on, not that it ride in this bundle. Its mechanism (the sweep's crossing fallback on a hand sheet's declared seat) is outside what T384's span-middle and slide rules reach. The ruling holds only so long as T395 does land before the next step and the talk; were it dropped or ordered after them, it would be NOT LEGITIMATE."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T383, T384, T388, T391 (bundle)",
+    "### T383, T384, T388, T391 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T383-practice-ground",
+     "summary": "T383: aligned_gaps' blocked set counts a drawn practice ground (plan.fills rect of kind PRACTICE_GROUND) as laid-out ground, so the pack audit stops listing it as a vacancy; only report.rs calls it, no sheet moves.",
+     "class": "within",
+     "why": "Fixes a listing that named a vacancy where ground is drawn (a check answering wrongly, a defect under XIV); the GM's 2026-11-18 'fix all known bugs in each step' and 2026-11-22 'please finish the remaining fixes'. Pinned by a red test."
+    },
+    {
+     "id": "T384-span-middle",
+     "summary": "T384: block_pair meets a shared span at its middle (span_middle, nearer()) instead of the first candidate, a CONVENTION where 0330 leaves the end open; leader_span returns the span's Slide.",
+     "class": "within",
+     "why": "Fixes the county's privy leader running from the privy's corner along the stables' wall (a leader that reads as wall, a wrong outcome). Inside the fixes the GM asked be finished; the convention fills a point research leaves open."
+    },
+    {
+     "id": "T384-slide-drawn-leader-only",
+     "summary": "T384: Placer::led keeps the middle unless it meets other ink, else draws the middle of the least-ink run along the span; the slide is applied only to the drawn leader in seat(), not inside the sweep, because inside the sweep it moved Ochiba's latrine caption under a wall.",
+     "class": "within",
+     "why": "A choice of mechanism measured on the pool (Ubame's altar leader clears the post with it; the in-sweep variant produced a worse map). Narrows nothing the GM asked; the goal (leaders read clear) is served."
+    },
+    {
+     "id": "T384-stroke-and-dash-end",
+     "summary": "T384: stroke_end carries its span's slide, held on a dashed stroke to its dash (dash_part); a dash's end takes the butt flat-end rule (segment_at), fixing an end up to half a stroke into the gap on main since T202.",
+     "class": "within",
+     "why": "Fixes impl-drift's rounds 1 and 2 code findings with red tests; the arbiter (ask:449-t383-claims-round3) accepted the bundle on exactly this code. Fixing a pre-existing defect found on the way is the GM's fix-as-we-go."
+    },
+    {
+     "id": "T384-stables-well",
+     "summary": "T384: stables_well is seated within its court face's span, its GUESS claim restated; a court-door stable whose face leaves no room for the well is refused its well aloud (no pool sheet draws one).",
+     "class": "within",
+     "why": "Fixes a well standing off its stable (wrong outcome). The loud refusal replaces a wrong drawing on a case no pool sheet reaches (constitution: fail loudly rather than draw wrong); not a defect left, so no ruling."
+    },
+    {
+     "id": "T384-last-resort",
+     "summary": "T384 table: a leader no slide clears keeps the middle and is filed.",
+     "class": "within",
+     "why": "A fallback that files rather than hides any leader the rules cannot clear; consistent with fixing every known defect in the step through a filed task."
+    },
+    {
+     "id": "T388-gable-door",
+     "summary": "T388: a stables interior with no declared door opens on its west gable (north where the court face runs north-south) at the passage's middle, per 0108's gable-entered warrior's stable; which gable and the depths are GUESSES.",
+     "class": "within",
+     "why": "Fixes horses led through the grooms' lodging (a map that reads wrong); research-grounded, guesses labeled as knobs."
+    },
+    {
+     "id": "T388-room-first-gatehouse",
+     "summary": "T388: room for the lane made by drawing the guessed gatehouse 37.5 ft (inside its kind's band; spec's sizes line, notes and a dated entry restated) after trials; a 3 ft wider envelope priced and refused for growing the outer court's west-column vacancy.",
+     "class": "within",
+     "why": "Constitution XII room-before-packing, a GUESS constant moved inside its band with its source restated; the docs/pop-up 'about 40 ft' still describes it. No narrowing of what was asked."
+    },
+    {
+     "id": "T388-cart-lane",
+     "summary": "T388: CART_LANE (a GUESS on 0082's cart lane past the tub) and door_lane seat a granary or stable whose door is on an end with the lane on that end; seat_one keeps FIRE_GAP - CLEAR off the row's end on the door's side in every branch; CART_KINDS names granary (0082) and stables (GUESS).",
+     "class": "within",
+     "why": "Fixes a tub leaving a cart 2.73 ft of a 6 ft lane, and the row-end case impl-drift round 1 found, each pinned by red tests; the arbiter ruled the lane widened to fit the cart, not packed."
+    },
+    {
+     "id": "T391-timeout-calibration",
+     "summary": "T391: the diffrun timeout test calibrates its window from a loop of `true` runs just before the case (never under the old timeout), per CLAUDE.md's calibration convention; run.rs SECOND made pub(crate).",
+     "class": "within",
+     "why": "Fixes a gate test that goes red on a loaded machine with nothing wrong (a check refusing good work); measured red unfixed and green fixed under pinned load."
+    },
+    {
+     "id": "left-T397-both-end-doors",
+     "summary": "Left: a granary or stables with doors declared on both ends holds a cart lane at one end only (door_lane's find_map); no pool sheet declares one; filed as T397, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real but unreached defect (visible effect stated). The arbiter's ruling asks it fixed 'in this step', and the GM's rule is to fix known bugs in each step before porting the next; filing it as T397 to land before T158 keeps it inside the step, so the bundle defers it without carrying it past the step. Legitimate only on that ordering."
+    },
+    {
+     "id": "left-T398-gatehouse-behind-gate",
+     "summary": "Left: seat_one seats a gatehouse beside its gate only, where 0093 attests one behind the gate too; filed as T398 (roll the form or restate the claim), landing before T158.",
+     "class": "within",
+     "why": "The arbiter ruled it a choice of form, not a defect; under constitution XIV (T196) a difference that reads fine is not a defect, so leaving it is within and needs no ruling."
+    },
+    {
+     "id": "left-T395-ochiba-latrine-leader",
+     "summary": "Left: Ochiba's 'latrine' leader runs 68.7 px through the stables, the same on main, a hand sheet's crossing fallback no T384 rule moves; filed as T395, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect (a reader takes the latrine's name for the stables') carved out of T384's goal 'every caption's leader reads clear'. Not introduced by this bundle and needs a different mechanism from the tie-break T384 fixed; filed with its visible effect to land before T158, i.e. within the step, as the GM's fix-all-known-bugs-before-the-next-step allows. Legitimate only on that ordering."
+    },
+    {
+     "id": "left-lane-listed-loose",
+     "summary": "Left: make pack-audit lists the new 9.3 ft cart lane as a LOOSE aligned gap; every check OK.",
+     "class": "within",
+     "why": "A true measurement of deliberate unbuilt ground, not a check failing; no wrong outcome under XIV."
+    },
+    {
+     "id": "left-gatehouse-40ft-wording",
+     "summary": "Left: the gatehouse pop-up and docs/building-programs.md say 'about 40 ft' (a GUESS) while the county draws 37.5 ft; other builders' files left.",
+     "class": "within",
+     "why": "37.5 ft is about 40 ft and the round trip still draws 40; a difference from wording, not a defect (XIV)."
+    },
+    {
+     "id": "claims-round-closed",
+     "summary": "Claims round closed after round 2 by the arbiter's accept (ask:449-t383-claims-round3); the record bundle's page-edit claims left to that bundle; occasions: layout-revised building-review on county, round trip, Ochiba, Ubame, none for T383 and T391.",
+     "class": "within",
+     "why": "Follows the arbiter's recorded ruling verbatim (both round-2 out-of-change findings filed as T397 and T398); review scope matches the sheets the change moves."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T371, T372, T373, T376, T381, T382, T385 (bundle)",
+    "### T371, T372, T373, T376, T381, T382, T385 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T371-restate-0104",
+     "summary": "0104's drawing page restated to the porches the five plans draw; no sheet redrawn",
+     "class": "within",
+     "why": "A claim the drawing does not match, where the drawing is fine, is fixed by restating the claim (GM 2026-11-19; constitution XIV). Figures are labeled with the 2026-11-23 SVG measurement."
+    },
+    {
+     "id": "T372-split-0097-0331-0096",
+     "summary": "0097 split at the size cap into the new 0331; 0096 takes Naruto and Iwaito; the county cell's join and the junior rowhouse's seat kept a labeled GUESS; Uraga goes on the download list",
+     "class": "within",
+     "why": "This records what the passes found and labels the plans' choices. Nothing the task asks for is narrowed except the re-citation below."
+    },
+    {
+     "id": "T372-recite-deferred-T393",
+     "summary": "The county sheet's research strings re-cited to 0331/0096 is not done here (pool/magistracies is the T383 bundle's live files); filed as T393, landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's 2026-11-18 rule sets the deadline at the next step: 'fix all known bugs in each step before moving on to porting the next step'. It does not require the fix in this task, and T393 lands before T158, Phase 4's close. This ruling rests on the plan's statement, read with the GM's 2026-11-21/22 words, that no port step begins before T158."
+    },
+    {
+     "id": "T373-restate-0113-0123-0090",
+     "summary": "The back row's three measured orders, the granary, halls and cells restated to the plans as drawn",
+     "class": "within",
+     "why": "The claim is restated, not the code (XIV). Every size carries the 2026-11-23 SVG label, and the halls now say which plans are 28 ft deep."
+    },
+    {
+     "id": "T373-0090-takayama-residence-brief-J",
+     "summary": "0090's 'beside the office' restated: the residence stood at the back of the office, per the viewing guide 0113 quotes",
+     "class": "within",
+     "why": "This fixes a record line that contradicted its own cited source."
+    },
+    {
+     "id": "T376-banks-and-kitchen",
+     "summary": "0103's banks and 0107's kitchen recorded for the places and dates attested, the silence recorded; pop-ups edited and checked form, research, depiction in order",
+     "class": "within",
+     "why": "The task is carried. 'Is not recorded' and a labeled drawing convention say what the record says; they do not narrow it."
+    },
+    {
+     "id": "T381-study-seat-recorded",
+     "summary": "The magistrate's working room recorded at the household's side; the drawing page labels the plans' back-row seat a GUESS that departs from the record; the study pop-up's 'away from the armory' fixed to 'at an end of the row' and re-checked",
+     "class": "within",
+     "why": "The research is carried and the false pop-up line (false on Ubame) is fixed in this bundle."
+    },
+    {
+     "id": "T381-reseat-deferred-T392",
+     "summary": "Re-seating the study on the plans is filed as T392 (drawing work in the T383 bundle's live files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect (a drawn seat against an attested finding). Under the GM's 2026-11-18 rule its deadline is the next step's port, and T392 lands before T158. It rests on the same premise as T393."
+    },
+    {
+     "id": "T382-koshikake",
+     "summary": "The koshikake recorded as attested only for the Edo courts and silent for a jin'ya; not carried to a county seat (a GUESS); building-programs prose untouched because no program item exists",
+     "class": "within",
+     "why": "The task is carried, and the attestation bound is stated."
+    },
+    {
+     "id": "T385-question-size-all",
+     "summary": "`l7r-gate check question-size --all` added to make static and pinned red-then-green; 0059 and 0009 cut under the cap (words only)",
+     "class": "within",
+     "why": "This enforces an existing cap and narrows nothing. The cuts drop no finding, footnote, figure or label."
+    },
+    {
+     "id": "bundle-constraint-file-ownership",
+     "summary": "The defects bundle's and 451's files are left alone, except the generated required-items table in docs/building-programs.md, which is re-rendered because this bundle's pop-ups feed it",
+     "class": "within",
+     "why": "This coordinates file ownership. The re-render keeps a generated table in step with this bundle's own edits."
+    },
+    {
+     "id": "left-T394-rowhouse-fabric",
+     "summary": "The barracks and retainers' quarters pop-ups do not say what a rowhouse was built of; filed as T394 (needs a research pass and page session), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is an omission, not a contradiction, and it is filed with a deadline before the next step under the GM's 2026-11-18 rule. Same premise on T158."
+    },
+    {
+     "id": "left-T396-docs-claims",
+     "summary": "Three claims in building-programs.md and buildings.md under-state 0113 and 0097; filed as T396 (the T383 bundle's files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a claims fix with no map effect, deferred only as far as the step boundary the GM set. Same premise on T158."
+    },
+    {
+     "id": "left-T400-office-order-claims",
+     "summary": "The claims and emit.rs label calling office-front/residence-rear a simplification or DEVIATION, against 0090 as restated, are filed as T400 (the T383 bundle's files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The claims are wrong and the code is right. The fix restates the claims (XIV) before the step boundary. Same premise on T158."
+    },
+    {
+     "id": "left-T399-quote-join",
+     "summary": "0090's note takayama-jinya-jawiki-2 joins two passages with ' and ' for '; '; filed as T399 (its own page session with quote- and translation-check), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect, because verbatim quotation is still held exact. File ownership is no cover for it, since this bundle edits 0090. Its cover is the GM's own deadline: it lands before the next step's port (T158). It rests on the same premise."
+    },
+    {
+     "id": "left-T383-claims-owed",
+     "summary": "The T383 bundle's own code-changed claims owe impl-drift on that bundle's diff",
+     "class": "within",
+     "why": "This is an owed check on another bundle's live code, run before that bundle lands. No wrong outcome is left."
+    },
+    {
+     "id": "left-no-wrong-outcome",
+     "summary": "Left without a task: the misread barracks count; form-only NOTEs; the hearing-court clause resting on 0096; garden.md's 'the pond is the office's form' beside Ubame's dry garden; the barracks' 'about fifteen', the project's own; the kitchen row's 'often at the rear', resting on uncited 0107",
+     "class": "within",
+     "why": "Each is a difference or a citation gap, not a wrong outcome (XIV v2.36.0). garden.md's line states the default form, and the plan says its Depiction covers Ubame's departure. The study's 'away from the armory', by contrast, was a false statement about every plan. 'About fifteen' correctly keeps the GM's ~15 (the town's whole samurai) apart from the barracks' lodgers."
     }
    ]
   }
@@ -49202,6 +49535,1242 @@
      "summary": "A make target review-discharge was added (Makefile block after review-verdict, row in docs/make-targets.html) so a landing reaches the verb without calling the gate binary directly.",
      "class": "within",
      "why": "It serves FR-005 (make the one entry point) and only exposes the route the ruling asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T383": {
+   "section_sha256": "d7b5899b88ec0cf1ad11f5263a7dcb52d81cb9ab6db054685cf992a7ad6cee5a",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T383-practice-ground",
+     "summary": "T383: aligned_gaps' blocked set counts a drawn practice ground (plan.fills rect of kind PRACTICE_GROUND) as laid-out ground, so the pack audit stops listing it as a vacancy; only report.rs calls it, no sheet moves.",
+     "class": "within",
+     "why": "Fixes a listing that named a vacancy where ground is drawn (a check answering wrongly, a defect under XIV); the GM's 2026-11-18 'fix all known bugs in each step' and 2026-11-22 'please finish the remaining fixes'. Pinned by a red test."
+    },
+    {
+     "id": "T384-span-middle",
+     "summary": "T384: block_pair meets a shared span at its middle (span_middle, nearer()) instead of the first candidate, a CONVENTION where 0330 leaves the end open; leader_span returns the span's Slide.",
+     "class": "within",
+     "why": "Fixes the county's privy leader running from the privy's corner along the stables' wall (a leader that reads as wall, a wrong outcome). Inside the fixes the GM asked be finished; the convention fills a point research leaves open."
+    },
+    {
+     "id": "T384-slide-drawn-leader-only",
+     "summary": "T384: Placer::led keeps the middle unless it meets other ink, else draws the middle of the least-ink run along the span; the slide is applied only to the drawn leader in seat(), not inside the sweep, because inside the sweep it moved Ochiba's latrine caption under a wall.",
+     "class": "within",
+     "why": "A choice of mechanism measured on the pool (Ubame's altar leader clears the post with it; the in-sweep variant produced a worse map). Narrows nothing the GM asked; the goal (leaders read clear) is served."
+    },
+    {
+     "id": "T384-stroke-and-dash-end",
+     "summary": "T384: stroke_end carries its span's slide, held on a dashed stroke to its dash (dash_part); a dash's end takes the butt flat-end rule (segment_at), fixing an end up to half a stroke into the gap on main since T202.",
+     "class": "within",
+     "why": "Fixes impl-drift's rounds 1 and 2 code findings with red tests; the arbiter (ask:449-t383-claims-round3) accepted the bundle on exactly this code. Fixing a pre-existing defect found on the way is the GM's fix-as-we-go."
+    },
+    {
+     "id": "T384-stables-well",
+     "summary": "T384: stables_well is seated within its court face's span, its GUESS claim restated; a court-door stable whose face leaves no room for the well is refused its well aloud (no pool sheet draws one).",
+     "class": "within",
+     "why": "Fixes a well standing off its stable (wrong outcome). The loud refusal replaces a wrong drawing on a case no pool sheet reaches (constitution: fail loudly rather than draw wrong); not a defect left, so no ruling."
+    },
+    {
+     "id": "T384-last-resort",
+     "summary": "T384 table: a leader no slide clears keeps the middle and is filed.",
+     "class": "within",
+     "why": "A fallback that files rather than hides any leader the rules cannot clear; consistent with fixing every known defect in the step through a filed task."
+    },
+    {
+     "id": "T388-gable-door",
+     "summary": "T388: a stables interior with no declared door opens on its west gable (north where the court face runs north-south) at the passage's middle, per 0108's gable-entered warrior's stable; which gable and the depths are GUESSES.",
+     "class": "within",
+     "why": "Fixes horses led through the grooms' lodging (a map that reads wrong); research-grounded, guesses labeled as knobs."
+    },
+    {
+     "id": "T388-room-first-gatehouse",
+     "summary": "T388: room for the lane made by drawing the guessed gatehouse 37.5 ft (inside its kind's band; spec's sizes line, notes and a dated entry restated) after trials; a 3 ft wider envelope priced and refused for growing the outer court's west-column vacancy.",
+     "class": "within",
+     "why": "Constitution XII room-before-packing, a GUESS constant moved inside its band with its source restated; the docs/pop-up 'about 40 ft' still describes it. No narrowing of what was asked."
+    },
+    {
+     "id": "T388-cart-lane",
+     "summary": "T388: CART_LANE (a GUESS on 0082's cart lane past the tub) and door_lane seat a granary or stable whose door is on an end with the lane on that end; seat_one keeps FIRE_GAP - CLEAR off the row's end on the door's side in every branch; CART_KINDS names granary (0082) and stables (GUESS).",
+     "class": "within",
+     "why": "Fixes a tub leaving a cart 2.73 ft of a 6 ft lane, and the row-end case impl-drift round 1 found, each pinned by red tests; the arbiter ruled the lane widened to fit the cart, not packed."
+    },
+    {
+     "id": "T391-timeout-calibration",
+     "summary": "T391: the diffrun timeout test calibrates its window from a loop of `true` runs just before the case (never under the old timeout), per CLAUDE.md's calibration convention; run.rs SECOND made pub(crate).",
+     "class": "within",
+     "why": "Fixes a gate test that goes red on a loaded machine with nothing wrong (a check refusing good work); measured red unfixed and green fixed under pinned load."
+    },
+    {
+     "id": "left-T397-both-end-doors",
+     "summary": "Left: a granary or stables with doors declared on both ends holds a cart lane at one end only (door_lane's find_map); no pool sheet declares one; filed as T397, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real but unreached defect (visible effect stated). The arbiter's ruling asks it fixed 'in this step', and the GM's rule is to fix known bugs in each step before porting the next; filing it as T397 to land before T158 keeps it inside the step, so the bundle defers it without carrying it past the step. Legitimate only on that ordering."
+    },
+    {
+     "id": "left-T398-gatehouse-behind-gate",
+     "summary": "Left: seat_one seats a gatehouse beside its gate only, where 0093 attests one behind the gate too; filed as T398 (roll the form or restate the claim), landing before T158.",
+     "class": "within",
+     "why": "The arbiter ruled it a choice of form, not a defect; under constitution XIV (T196) a difference that reads fine is not a defect, so leaving it is within and needs no ruling."
+    },
+    {
+     "id": "left-T395-ochiba-latrine-leader",
+     "summary": "Left: Ochiba's 'latrine' leader runs 68.7 px through the stables, the same on main, a hand sheet's crossing fallback no T384 rule moves; filed as T395, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect (a reader takes the latrine's name for the stables') carved out of T384's goal 'every caption's leader reads clear'. Not introduced by this bundle and needs a different mechanism from the tie-break T384 fixed; filed with its visible effect to land before T158, i.e. within the step, as the GM's fix-all-known-bugs-before-the-next-step allows. Legitimate only on that ordering."
+    },
+    {
+     "id": "left-lane-listed-loose",
+     "summary": "Left: make pack-audit lists the new 9.3 ft cart lane as a LOOSE aligned gap; every check OK.",
+     "class": "within",
+     "why": "A true measurement of deliberate unbuilt ground, not a check failing; no wrong outcome under XIV."
+    },
+    {
+     "id": "left-gatehouse-40ft-wording",
+     "summary": "Left: the gatehouse pop-up and docs/building-programs.md say 'about 40 ft' (a GUESS) while the county draws 37.5 ft; other builders' files left.",
+     "class": "within",
+     "why": "37.5 ft is about 40 ft and the round trip still draws 40; a difference from wording, not a defect (XIV)."
+    },
+    {
+     "id": "claims-round-closed",
+     "summary": "Claims round closed after round 2 by the arbiter's accept (ask:449-t383-claims-round3); the record bundle's page-edit claims left to that bundle; occasions: layout-revised building-review on county, round trip, Ochiba, Ubame, none for T383 and T391.",
+     "class": "within",
+     "why": "Follows the arbiter's recorded ruling verbatim (both round-2 out-of-change findings filed as T397 and T398); review scope matches the sheets the change moves."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T384": {
+   "section_sha256": "d7b5899b88ec0cf1ad11f5263a7dcb52d81cb9ab6db054685cf992a7ad6cee5a",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T383-practice-ground",
+     "summary": "T383: aligned_gaps' blocked set counts a drawn practice ground (plan.fills rect of kind PRACTICE_GROUND) as laid-out ground, so the pack audit stops listing it as a vacancy; only report.rs calls it, no sheet moves.",
+     "class": "within",
+     "why": "Fixes a listing that named a vacancy where ground is drawn (a check answering wrongly, a defect under XIV); the GM's 2026-11-18 'fix all known bugs in each step' and 2026-11-22 'please finish the remaining fixes'. Pinned by a red test."
+    },
+    {
+     "id": "T384-span-middle",
+     "summary": "T384: block_pair meets a shared span at its middle (span_middle, nearer()) instead of the first candidate, a CONVENTION where 0330 leaves the end open; leader_span returns the span's Slide.",
+     "class": "within",
+     "why": "Fixes the county's privy leader running from the privy's corner along the stables' wall (a leader that reads as wall, a wrong outcome). Inside the fixes the GM asked be finished; the convention fills a point research leaves open."
+    },
+    {
+     "id": "T384-slide-drawn-leader-only",
+     "summary": "T384: Placer::led keeps the middle unless it meets other ink, else draws the middle of the least-ink run along the span; the slide is applied only to the drawn leader in seat(), not inside the sweep, because inside the sweep it moved Ochiba's latrine caption under a wall.",
+     "class": "within",
+     "why": "A choice of mechanism measured on the pool (Ubame's altar leader clears the post with it; the in-sweep variant produced a worse map). Narrows nothing the GM asked; the goal (leaders read clear) is served."
+    },
+    {
+     "id": "T384-stroke-and-dash-end",
+     "summary": "T384: stroke_end carries its span's slide, held on a dashed stroke to its dash (dash_part); a dash's end takes the butt flat-end rule (segment_at), fixing an end up to half a stroke into the gap on main since T202.",
+     "class": "within",
+     "why": "Fixes impl-drift's rounds 1 and 2 code findings with red tests; the arbiter (ask:449-t383-claims-round3) accepted the bundle on exactly this code. Fixing a pre-existing defect found on the way is the GM's fix-as-we-go."
+    },
+    {
+     "id": "T384-stables-well",
+     "summary": "T384: stables_well is seated within its court face's span, its GUESS claim restated; a court-door stable whose face leaves no room for the well is refused its well aloud (no pool sheet draws one).",
+     "class": "within",
+     "why": "Fixes a well standing off its stable (wrong outcome). The loud refusal replaces a wrong drawing on a case no pool sheet reaches (constitution: fail loudly rather than draw wrong); not a defect left, so no ruling."
+    },
+    {
+     "id": "T384-last-resort",
+     "summary": "T384 table: a leader no slide clears keeps the middle and is filed.",
+     "class": "within",
+     "why": "A fallback that files rather than hides any leader the rules cannot clear; consistent with fixing every known defect in the step through a filed task."
+    },
+    {
+     "id": "T388-gable-door",
+     "summary": "T388: a stables interior with no declared door opens on its west gable (north where the court face runs north-south) at the passage's middle, per 0108's gable-entered warrior's stable; which gable and the depths are GUESSES.",
+     "class": "within",
+     "why": "Fixes horses led through the grooms' lodging (a map that reads wrong); research-grounded, guesses labeled as knobs."
+    },
+    {
+     "id": "T388-room-first-gatehouse",
+     "summary": "T388: room for the lane made by drawing the guessed gatehouse 37.5 ft (inside its kind's band; spec's sizes line, notes and a dated entry restated) after trials; a 3 ft wider envelope priced and refused for growing the outer court's west-column vacancy.",
+     "class": "within",
+     "why": "Constitution XII room-before-packing, a GUESS constant moved inside its band with its source restated; the docs/pop-up 'about 40 ft' still describes it. No narrowing of what was asked."
+    },
+    {
+     "id": "T388-cart-lane",
+     "summary": "T388: CART_LANE (a GUESS on 0082's cart lane past the tub) and door_lane seat a granary or stable whose door is on an end with the lane on that end; seat_one keeps FIRE_GAP - CLEAR off the row's end on the door's side in every branch; CART_KINDS names granary (0082) and stables (GUESS).",
+     "class": "within",
+     "why": "Fixes a tub leaving a cart 2.73 ft of a 6 ft lane, and the row-end case impl-drift round 1 found, each pinned by red tests; the arbiter ruled the lane widened to fit the cart, not packed."
+    },
+    {
+     "id": "T391-timeout-calibration",
+     "summary": "T391: the diffrun timeout test calibrates its window from a loop of `true` runs just before the case (never under the old timeout), per CLAUDE.md's calibration convention; run.rs SECOND made pub(crate).",
+     "class": "within",
+     "why": "Fixes a gate test that goes red on a loaded machine with nothing wrong (a check refusing good work); measured red unfixed and green fixed under pinned load."
+    },
+    {
+     "id": "left-T397-both-end-doors",
+     "summary": "Left: a granary or stables with doors declared on both ends holds a cart lane at one end only (door_lane's find_map); no pool sheet declares one; filed as T397, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real but unreached defect (visible effect stated). The arbiter's ruling asks it fixed 'in this step', and the GM's rule is to fix known bugs in each step before porting the next; filing it as T397 to land before T158 keeps it inside the step, so the bundle defers it without carrying it past the step. Legitimate only on that ordering."
+    },
+    {
+     "id": "left-T398-gatehouse-behind-gate",
+     "summary": "Left: seat_one seats a gatehouse beside its gate only, where 0093 attests one behind the gate too; filed as T398 (roll the form or restate the claim), landing before T158.",
+     "class": "within",
+     "why": "The arbiter ruled it a choice of form, not a defect; under constitution XIV (T196) a difference that reads fine is not a defect, so leaving it is within and needs no ruling."
+    },
+    {
+     "id": "left-T395-ochiba-latrine-leader",
+     "summary": "Left: Ochiba's 'latrine' leader runs 68.7 px through the stables, the same on main, a hand sheet's crossing fallback no T384 rule moves; filed as T395, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect (a reader takes the latrine's name for the stables') carved out of T384's goal 'every caption's leader reads clear'. Not introduced by this bundle and needs a different mechanism from the tie-break T384 fixed; filed with its visible effect to land before T158, i.e. within the step, as the GM's fix-all-known-bugs-before-the-next-step allows. Legitimate only on that ordering."
+    },
+    {
+     "id": "left-lane-listed-loose",
+     "summary": "Left: make pack-audit lists the new 9.3 ft cart lane as a LOOSE aligned gap; every check OK.",
+     "class": "within",
+     "why": "A true measurement of deliberate unbuilt ground, not a check failing; no wrong outcome under XIV."
+    },
+    {
+     "id": "left-gatehouse-40ft-wording",
+     "summary": "Left: the gatehouse pop-up and docs/building-programs.md say 'about 40 ft' (a GUESS) while the county draws 37.5 ft; other builders' files left.",
+     "class": "within",
+     "why": "37.5 ft is about 40 ft and the round trip still draws 40; a difference from wording, not a defect (XIV)."
+    },
+    {
+     "id": "claims-round-closed",
+     "summary": "Claims round closed after round 2 by the arbiter's accept (ask:449-t383-claims-round3); the record bundle's page-edit claims left to that bundle; occasions: layout-revised building-review on county, round trip, Ochiba, Ubame, none for T383 and T391.",
+     "class": "within",
+     "why": "Follows the arbiter's recorded ruling verbatim (both round-2 out-of-change findings filed as T397 and T398); review scope matches the sheets the change moves."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T388": {
+   "section_sha256": "d7b5899b88ec0cf1ad11f5263a7dcb52d81cb9ab6db054685cf992a7ad6cee5a",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T383-practice-ground",
+     "summary": "T383: aligned_gaps' blocked set counts a drawn practice ground (plan.fills rect of kind PRACTICE_GROUND) as laid-out ground, so the pack audit stops listing it as a vacancy; only report.rs calls it, no sheet moves.",
+     "class": "within",
+     "why": "Fixes a listing that named a vacancy where ground is drawn (a check answering wrongly, a defect under XIV); the GM's 2026-11-18 'fix all known bugs in each step' and 2026-11-22 'please finish the remaining fixes'. Pinned by a red test."
+    },
+    {
+     "id": "T384-span-middle",
+     "summary": "T384: block_pair meets a shared span at its middle (span_middle, nearer()) instead of the first candidate, a CONVENTION where 0330 leaves the end open; leader_span returns the span's Slide.",
+     "class": "within",
+     "why": "Fixes the county's privy leader running from the privy's corner along the stables' wall (a leader that reads as wall, a wrong outcome). Inside the fixes the GM asked be finished; the convention fills a point research leaves open."
+    },
+    {
+     "id": "T384-slide-drawn-leader-only",
+     "summary": "T384: Placer::led keeps the middle unless it meets other ink, else draws the middle of the least-ink run along the span; the slide is applied only to the drawn leader in seat(), not inside the sweep, because inside the sweep it moved Ochiba's latrine caption under a wall.",
+     "class": "within",
+     "why": "A choice of mechanism measured on the pool (Ubame's altar leader clears the post with it; the in-sweep variant produced a worse map). Narrows nothing the GM asked; the goal (leaders read clear) is served."
+    },
+    {
+     "id": "T384-stroke-and-dash-end",
+     "summary": "T384: stroke_end carries its span's slide, held on a dashed stroke to its dash (dash_part); a dash's end takes the butt flat-end rule (segment_at), fixing an end up to half a stroke into the gap on main since T202.",
+     "class": "within",
+     "why": "Fixes impl-drift's rounds 1 and 2 code findings with red tests; the arbiter (ask:449-t383-claims-round3) accepted the bundle on exactly this code. Fixing a pre-existing defect found on the way is the GM's fix-as-we-go."
+    },
+    {
+     "id": "T384-stables-well",
+     "summary": "T384: stables_well is seated within its court face's span, its GUESS claim restated; a court-door stable whose face leaves no room for the well is refused its well aloud (no pool sheet draws one).",
+     "class": "within",
+     "why": "Fixes a well standing off its stable (wrong outcome). The loud refusal replaces a wrong drawing on a case no pool sheet reaches (constitution: fail loudly rather than draw wrong); not a defect left, so no ruling."
+    },
+    {
+     "id": "T384-last-resort",
+     "summary": "T384 table: a leader no slide clears keeps the middle and is filed.",
+     "class": "within",
+     "why": "A fallback that files rather than hides any leader the rules cannot clear; consistent with fixing every known defect in the step through a filed task."
+    },
+    {
+     "id": "T388-gable-door",
+     "summary": "T388: a stables interior with no declared door opens on its west gable (north where the court face runs north-south) at the passage's middle, per 0108's gable-entered warrior's stable; which gable and the depths are GUESSES.",
+     "class": "within",
+     "why": "Fixes horses led through the grooms' lodging (a map that reads wrong); research-grounded, guesses labeled as knobs."
+    },
+    {
+     "id": "T388-room-first-gatehouse",
+     "summary": "T388: room for the lane made by drawing the guessed gatehouse 37.5 ft (inside its kind's band; spec's sizes line, notes and a dated entry restated) after trials; a 3 ft wider envelope priced and refused for growing the outer court's west-column vacancy.",
+     "class": "within",
+     "why": "Constitution XII room-before-packing, a GUESS constant moved inside its band with its source restated; the docs/pop-up 'about 40 ft' still describes it. No narrowing of what was asked."
+    },
+    {
+     "id": "T388-cart-lane",
+     "summary": "T388: CART_LANE (a GUESS on 0082's cart lane past the tub) and door_lane seat a granary or stable whose door is on an end with the lane on that end; seat_one keeps FIRE_GAP - CLEAR off the row's end on the door's side in every branch; CART_KINDS names granary (0082) and stables (GUESS).",
+     "class": "within",
+     "why": "Fixes a tub leaving a cart 2.73 ft of a 6 ft lane, and the row-end case impl-drift round 1 found, each pinned by red tests; the arbiter ruled the lane widened to fit the cart, not packed."
+    },
+    {
+     "id": "T391-timeout-calibration",
+     "summary": "T391: the diffrun timeout test calibrates its window from a loop of `true` runs just before the case (never under the old timeout), per CLAUDE.md's calibration convention; run.rs SECOND made pub(crate).",
+     "class": "within",
+     "why": "Fixes a gate test that goes red on a loaded machine with nothing wrong (a check refusing good work); measured red unfixed and green fixed under pinned load."
+    },
+    {
+     "id": "left-T397-both-end-doors",
+     "summary": "Left: a granary or stables with doors declared on both ends holds a cart lane at one end only (door_lane's find_map); no pool sheet declares one; filed as T397, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real but unreached defect (visible effect stated). The arbiter's ruling asks it fixed 'in this step', and the GM's rule is to fix known bugs in each step before porting the next; filing it as T397 to land before T158 keeps it inside the step, so the bundle defers it without carrying it past the step. Legitimate only on that ordering."
+    },
+    {
+     "id": "left-T398-gatehouse-behind-gate",
+     "summary": "Left: seat_one seats a gatehouse beside its gate only, where 0093 attests one behind the gate too; filed as T398 (roll the form or restate the claim), landing before T158.",
+     "class": "within",
+     "why": "The arbiter ruled it a choice of form, not a defect; under constitution XIV (T196) a difference that reads fine is not a defect, so leaving it is within and needs no ruling."
+    },
+    {
+     "id": "left-T395-ochiba-latrine-leader",
+     "summary": "Left: Ochiba's 'latrine' leader runs 68.7 px through the stables, the same on main, a hand sheet's crossing fallback no T384 rule moves; filed as T395, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect (a reader takes the latrine's name for the stables') carved out of T384's goal 'every caption's leader reads clear'. Not introduced by this bundle and needs a different mechanism from the tie-break T384 fixed; filed with its visible effect to land before T158, i.e. within the step, as the GM's fix-all-known-bugs-before-the-next-step allows. Legitimate only on that ordering."
+    },
+    {
+     "id": "left-lane-listed-loose",
+     "summary": "Left: make pack-audit lists the new 9.3 ft cart lane as a LOOSE aligned gap; every check OK.",
+     "class": "within",
+     "why": "A true measurement of deliberate unbuilt ground, not a check failing; no wrong outcome under XIV."
+    },
+    {
+     "id": "left-gatehouse-40ft-wording",
+     "summary": "Left: the gatehouse pop-up and docs/building-programs.md say 'about 40 ft' (a GUESS) while the county draws 37.5 ft; other builders' files left.",
+     "class": "within",
+     "why": "37.5 ft is about 40 ft and the round trip still draws 40; a difference from wording, not a defect (XIV)."
+    },
+    {
+     "id": "claims-round-closed",
+     "summary": "Claims round closed after round 2 by the arbiter's accept (ask:449-t383-claims-round3); the record bundle's page-edit claims left to that bundle; occasions: layout-revised building-review on county, round trip, Ochiba, Ubame, none for T383 and T391.",
+     "class": "within",
+     "why": "Follows the arbiter's recorded ruling verbatim (both round-2 out-of-change findings filed as T397 and T398); review scope matches the sheets the change moves."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T391": {
+   "section_sha256": "d7b5899b88ec0cf1ad11f5263a7dcb52d81cb9ab6db054685cf992a7ad6cee5a",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T383-practice-ground",
+     "summary": "T383: aligned_gaps' blocked set counts a drawn practice ground (plan.fills rect of kind PRACTICE_GROUND) as laid-out ground, so the pack audit stops listing it as a vacancy; only report.rs calls it, no sheet moves.",
+     "class": "within",
+     "why": "Fixes a listing that named a vacancy where ground is drawn (a check answering wrongly, a defect under XIV); the GM's 2026-11-18 'fix all known bugs in each step' and 2026-11-22 'please finish the remaining fixes'. Pinned by a red test."
+    },
+    {
+     "id": "T384-span-middle",
+     "summary": "T384: block_pair meets a shared span at its middle (span_middle, nearer()) instead of the first candidate, a CONVENTION where 0330 leaves the end open; leader_span returns the span's Slide.",
+     "class": "within",
+     "why": "Fixes the county's privy leader running from the privy's corner along the stables' wall (a leader that reads as wall, a wrong outcome). Inside the fixes the GM asked be finished; the convention fills a point research leaves open."
+    },
+    {
+     "id": "T384-slide-drawn-leader-only",
+     "summary": "T384: Placer::led keeps the middle unless it meets other ink, else draws the middle of the least-ink run along the span; the slide is applied only to the drawn leader in seat(), not inside the sweep, because inside the sweep it moved Ochiba's latrine caption under a wall.",
+     "class": "within",
+     "why": "A choice of mechanism measured on the pool (Ubame's altar leader clears the post with it; the in-sweep variant produced a worse map). Narrows nothing the GM asked; the goal (leaders read clear) is served."
+    },
+    {
+     "id": "T384-stroke-and-dash-end",
+     "summary": "T384: stroke_end carries its span's slide, held on a dashed stroke to its dash (dash_part); a dash's end takes the butt flat-end rule (segment_at), fixing an end up to half a stroke into the gap on main since T202.",
+     "class": "within",
+     "why": "Fixes impl-drift's rounds 1 and 2 code findings with red tests; the arbiter (ask:449-t383-claims-round3) accepted the bundle on exactly this code. Fixing a pre-existing defect found on the way is the GM's fix-as-we-go."
+    },
+    {
+     "id": "T384-stables-well",
+     "summary": "T384: stables_well is seated within its court face's span, its GUESS claim restated; a court-door stable whose face leaves no room for the well is refused its well aloud (no pool sheet draws one).",
+     "class": "within",
+     "why": "Fixes a well standing off its stable (wrong outcome). The loud refusal replaces a wrong drawing on a case no pool sheet reaches (constitution: fail loudly rather than draw wrong); not a defect left, so no ruling."
+    },
+    {
+     "id": "T384-last-resort",
+     "summary": "T384 table: a leader no slide clears keeps the middle and is filed.",
+     "class": "within",
+     "why": "A fallback that files rather than hides any leader the rules cannot clear; consistent with fixing every known defect in the step through a filed task."
+    },
+    {
+     "id": "T388-gable-door",
+     "summary": "T388: a stables interior with no declared door opens on its west gable (north where the court face runs north-south) at the passage's middle, per 0108's gable-entered warrior's stable; which gable and the depths are GUESSES.",
+     "class": "within",
+     "why": "Fixes horses led through the grooms' lodging (a map that reads wrong); research-grounded, guesses labeled as knobs."
+    },
+    {
+     "id": "T388-room-first-gatehouse",
+     "summary": "T388: room for the lane made by drawing the guessed gatehouse 37.5 ft (inside its kind's band; spec's sizes line, notes and a dated entry restated) after trials; a 3 ft wider envelope priced and refused for growing the outer court's west-column vacancy.",
+     "class": "within",
+     "why": "Constitution XII room-before-packing, a GUESS constant moved inside its band with its source restated; the docs/pop-up 'about 40 ft' still describes it. No narrowing of what was asked."
+    },
+    {
+     "id": "T388-cart-lane",
+     "summary": "T388: CART_LANE (a GUESS on 0082's cart lane past the tub) and door_lane seat a granary or stable whose door is on an end with the lane on that end; seat_one keeps FIRE_GAP - CLEAR off the row's end on the door's side in every branch; CART_KINDS names granary (0082) and stables (GUESS).",
+     "class": "within",
+     "why": "Fixes a tub leaving a cart 2.73 ft of a 6 ft lane, and the row-end case impl-drift round 1 found, each pinned by red tests; the arbiter ruled the lane widened to fit the cart, not packed."
+    },
+    {
+     "id": "T391-timeout-calibration",
+     "summary": "T391: the diffrun timeout test calibrates its window from a loop of `true` runs just before the case (never under the old timeout), per CLAUDE.md's calibration convention; run.rs SECOND made pub(crate).",
+     "class": "within",
+     "why": "Fixes a gate test that goes red on a loaded machine with nothing wrong (a check refusing good work); measured red unfixed and green fixed under pinned load."
+    },
+    {
+     "id": "left-T397-both-end-doors",
+     "summary": "Left: a granary or stables with doors declared on both ends holds a cart lane at one end only (door_lane's find_map); no pool sheet declares one; filed as T397, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real but unreached defect (visible effect stated). The arbiter's ruling asks it fixed 'in this step', and the GM's rule is to fix known bugs in each step before porting the next; filing it as T397 to land before T158 keeps it inside the step, so the bundle defers it without carrying it past the step. Legitimate only on that ordering."
+    },
+    {
+     "id": "left-T398-gatehouse-behind-gate",
+     "summary": "Left: seat_one seats a gatehouse beside its gate only, where 0093 attests one behind the gate too; filed as T398 (roll the form or restate the claim), landing before T158.",
+     "class": "within",
+     "why": "The arbiter ruled it a choice of form, not a defect; under constitution XIV (T196) a difference that reads fine is not a defect, so leaving it is within and needs no ruling."
+    },
+    {
+     "id": "left-T395-ochiba-latrine-leader",
+     "summary": "Left: Ochiba's 'latrine' leader runs 68.7 px through the stables, the same on main, a hand sheet's crossing fallback no T384 rule moves; filed as T395, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect (a reader takes the latrine's name for the stables') carved out of T384's goal 'every caption's leader reads clear'. Not introduced by this bundle and needs a different mechanism from the tie-break T384 fixed; filed with its visible effect to land before T158, i.e. within the step, as the GM's fix-all-known-bugs-before-the-next-step allows. Legitimate only on that ordering."
+    },
+    {
+     "id": "left-lane-listed-loose",
+     "summary": "Left: make pack-audit lists the new 9.3 ft cart lane as a LOOSE aligned gap; every check OK.",
+     "class": "within",
+     "why": "A true measurement of deliberate unbuilt ground, not a check failing; no wrong outcome under XIV."
+    },
+    {
+     "id": "left-gatehouse-40ft-wording",
+     "summary": "Left: the gatehouse pop-up and docs/building-programs.md say 'about 40 ft' (a GUESS) while the county draws 37.5 ft; other builders' files left.",
+     "class": "within",
+     "why": "37.5 ft is about 40 ft and the round trip still draws 40; a difference from wording, not a defect (XIV)."
+    },
+    {
+     "id": "claims-round-closed",
+     "summary": "Claims round closed after round 2 by the arbiter's accept (ask:449-t383-claims-round3); the record bundle's page-edit claims left to that bundle; occasions: layout-revised building-review on county, round trip, Ochiba, Ubame, none for T383 and T391.",
+     "class": "within",
+     "why": "Follows the arbiter's recorded ruling verbatim (both round-2 out-of-change findings filed as T397 and T398); review scope matches the sheets the change moves."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T371": {
+   "section_sha256": "b186dbca9ad17d21215c82ea03563e5967edb42fe8761c44474befe466983e9e",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T371-restate-0104",
+     "summary": "0104's drawing page restated to the porches the five plans draw; no sheet redrawn",
+     "class": "within",
+     "why": "A claim the drawing does not match, where the drawing is fine, is fixed by restating the claim (GM 2026-11-19; constitution XIV). Figures are labeled with the 2026-11-23 SVG measurement."
+    },
+    {
+     "id": "T372-split-0097-0331-0096",
+     "summary": "0097 split at the size cap into the new 0331; 0096 takes Naruto and Iwaito; the county cell's join and the junior rowhouse's seat kept a labeled GUESS; Uraga goes on the download list",
+     "class": "within",
+     "why": "This records what the passes found and labels the plans' choices. Nothing the task asks for is narrowed except the re-citation below."
+    },
+    {
+     "id": "T372-recite-deferred-T393",
+     "summary": "The county sheet's research strings re-cited to 0331/0096 is not done here (pool/magistracies is the T383 bundle's live files); filed as T393, landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's 2026-11-18 rule sets the deadline at the next step: 'fix all known bugs in each step before moving on to porting the next step'. It does not require the fix in this task, and T393 lands before T158, Phase 4's close. This ruling rests on the plan's statement, read with the GM's 2026-11-21/22 words, that no port step begins before T158."
+    },
+    {
+     "id": "T373-restate-0113-0123-0090",
+     "summary": "The back row's three measured orders, the granary, halls and cells restated to the plans as drawn",
+     "class": "within",
+     "why": "The claim is restated, not the code (XIV). Every size carries the 2026-11-23 SVG label, and the halls now say which plans are 28 ft deep."
+    },
+    {
+     "id": "T373-0090-takayama-residence-brief-J",
+     "summary": "0090's 'beside the office' restated: the residence stood at the back of the office, per the viewing guide 0113 quotes",
+     "class": "within",
+     "why": "This fixes a record line that contradicted its own cited source."
+    },
+    {
+     "id": "T376-banks-and-kitchen",
+     "summary": "0103's banks and 0107's kitchen recorded for the places and dates attested, the silence recorded; pop-ups edited and checked form, research, depiction in order",
+     "class": "within",
+     "why": "The task is carried. 'Is not recorded' and a labeled drawing convention say what the record says; they do not narrow it."
+    },
+    {
+     "id": "T381-study-seat-recorded",
+     "summary": "The magistrate's working room recorded at the household's side; the drawing page labels the plans' back-row seat a GUESS that departs from the record; the study pop-up's 'away from the armory' fixed to 'at an end of the row' and re-checked",
+     "class": "within",
+     "why": "The research is carried and the false pop-up line (false on Ubame) is fixed in this bundle."
+    },
+    {
+     "id": "T381-reseat-deferred-T392",
+     "summary": "Re-seating the study on the plans is filed as T392 (drawing work in the T383 bundle's live files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect (a drawn seat against an attested finding). Under the GM's 2026-11-18 rule its deadline is the next step's port, and T392 lands before T158. It rests on the same premise as T393."
+    },
+    {
+     "id": "T382-koshikake",
+     "summary": "The koshikake recorded as attested only for the Edo courts and silent for a jin'ya; not carried to a county seat (a GUESS); building-programs prose untouched because no program item exists",
+     "class": "within",
+     "why": "The task is carried, and the attestation bound is stated."
+    },
+    {
+     "id": "T385-question-size-all",
+     "summary": "`l7r-gate check question-size --all` added to make static and pinned red-then-green; 0059 and 0009 cut under the cap (words only)",
+     "class": "within",
+     "why": "This enforces an existing cap and narrows nothing. The cuts drop no finding, footnote, figure or label."
+    },
+    {
+     "id": "bundle-constraint-file-ownership",
+     "summary": "The defects bundle's and 451's files are left alone, except the generated required-items table in docs/building-programs.md, which is re-rendered because this bundle's pop-ups feed it",
+     "class": "within",
+     "why": "This coordinates file ownership. The re-render keeps a generated table in step with this bundle's own edits."
+    },
+    {
+     "id": "left-T394-rowhouse-fabric",
+     "summary": "The barracks and retainers' quarters pop-ups do not say what a rowhouse was built of; filed as T394 (needs a research pass and page session), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is an omission, not a contradiction, and it is filed with a deadline before the next step under the GM's 2026-11-18 rule. Same premise on T158."
+    },
+    {
+     "id": "left-T396-docs-claims",
+     "summary": "Three claims in building-programs.md and buildings.md under-state 0113 and 0097; filed as T396 (the T383 bundle's files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a claims fix with no map effect, deferred only as far as the step boundary the GM set. Same premise on T158."
+    },
+    {
+     "id": "left-T400-office-order-claims",
+     "summary": "The claims and emit.rs label calling office-front/residence-rear a simplification or DEVIATION, against 0090 as restated, are filed as T400 (the T383 bundle's files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The claims are wrong and the code is right. The fix restates the claims (XIV) before the step boundary. Same premise on T158."
+    },
+    {
+     "id": "left-T399-quote-join",
+     "summary": "0090's note takayama-jinya-jawiki-2 joins two passages with ' and ' for '; '; filed as T399 (its own page session with quote- and translation-check), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect, because verbatim quotation is still held exact. File ownership is no cover for it, since this bundle edits 0090. Its cover is the GM's own deadline: it lands before the next step's port (T158). It rests on the same premise."
+    },
+    {
+     "id": "left-T383-claims-owed",
+     "summary": "The T383 bundle's own code-changed claims owe impl-drift on that bundle's diff",
+     "class": "within",
+     "why": "This is an owed check on another bundle's live code, run before that bundle lands. No wrong outcome is left."
+    },
+    {
+     "id": "left-no-wrong-outcome",
+     "summary": "Left without a task: the misread barracks count; form-only NOTEs; the hearing-court clause resting on 0096; garden.md's 'the pond is the office's form' beside Ubame's dry garden; the barracks' 'about fifteen', the project's own; the kitchen row's 'often at the rear', resting on uncited 0107",
+     "class": "within",
+     "why": "Each is a difference or a citation gap, not a wrong outcome (XIV v2.36.0). garden.md's line states the default form, and the plan says its Depiction covers Ubame's departure. The study's 'away from the armory', by contrast, was a false statement about every plan. 'About fifteen' correctly keeps the GM's ~15 (the town's whole samurai) apart from the barracks' lodgers."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T372": {
+   "section_sha256": "b186dbca9ad17d21215c82ea03563e5967edb42fe8761c44474befe466983e9e",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T371-restate-0104",
+     "summary": "0104's drawing page restated to the porches the five plans draw; no sheet redrawn",
+     "class": "within",
+     "why": "A claim the drawing does not match, where the drawing is fine, is fixed by restating the claim (GM 2026-11-19; constitution XIV). Figures are labeled with the 2026-11-23 SVG measurement."
+    },
+    {
+     "id": "T372-split-0097-0331-0096",
+     "summary": "0097 split at the size cap into the new 0331; 0096 takes Naruto and Iwaito; the county cell's join and the junior rowhouse's seat kept a labeled GUESS; Uraga goes on the download list",
+     "class": "within",
+     "why": "This records what the passes found and labels the plans' choices. Nothing the task asks for is narrowed except the re-citation below."
+    },
+    {
+     "id": "T372-recite-deferred-T393",
+     "summary": "The county sheet's research strings re-cited to 0331/0096 is not done here (pool/magistracies is the T383 bundle's live files); filed as T393, landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's 2026-11-18 rule sets the deadline at the next step: 'fix all known bugs in each step before moving on to porting the next step'. It does not require the fix in this task, and T393 lands before T158, Phase 4's close. This ruling rests on the plan's statement, read with the GM's 2026-11-21/22 words, that no port step begins before T158."
+    },
+    {
+     "id": "T373-restate-0113-0123-0090",
+     "summary": "The back row's three measured orders, the granary, halls and cells restated to the plans as drawn",
+     "class": "within",
+     "why": "The claim is restated, not the code (XIV). Every size carries the 2026-11-23 SVG label, and the halls now say which plans are 28 ft deep."
+    },
+    {
+     "id": "T373-0090-takayama-residence-brief-J",
+     "summary": "0090's 'beside the office' restated: the residence stood at the back of the office, per the viewing guide 0113 quotes",
+     "class": "within",
+     "why": "This fixes a record line that contradicted its own cited source."
+    },
+    {
+     "id": "T376-banks-and-kitchen",
+     "summary": "0103's banks and 0107's kitchen recorded for the places and dates attested, the silence recorded; pop-ups edited and checked form, research, depiction in order",
+     "class": "within",
+     "why": "The task is carried. 'Is not recorded' and a labeled drawing convention say what the record says; they do not narrow it."
+    },
+    {
+     "id": "T381-study-seat-recorded",
+     "summary": "The magistrate's working room recorded at the household's side; the drawing page labels the plans' back-row seat a GUESS that departs from the record; the study pop-up's 'away from the armory' fixed to 'at an end of the row' and re-checked",
+     "class": "within",
+     "why": "The research is carried and the false pop-up line (false on Ubame) is fixed in this bundle."
+    },
+    {
+     "id": "T381-reseat-deferred-T392",
+     "summary": "Re-seating the study on the plans is filed as T392 (drawing work in the T383 bundle's live files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect (a drawn seat against an attested finding). Under the GM's 2026-11-18 rule its deadline is the next step's port, and T392 lands before T158. It rests on the same premise as T393."
+    },
+    {
+     "id": "T382-koshikake",
+     "summary": "The koshikake recorded as attested only for the Edo courts and silent for a jin'ya; not carried to a county seat (a GUESS); building-programs prose untouched because no program item exists",
+     "class": "within",
+     "why": "The task is carried, and the attestation bound is stated."
+    },
+    {
+     "id": "T385-question-size-all",
+     "summary": "`l7r-gate check question-size --all` added to make static and pinned red-then-green; 0059 and 0009 cut under the cap (words only)",
+     "class": "within",
+     "why": "This enforces an existing cap and narrows nothing. The cuts drop no finding, footnote, figure or label."
+    },
+    {
+     "id": "bundle-constraint-file-ownership",
+     "summary": "The defects bundle's and 451's files are left alone, except the generated required-items table in docs/building-programs.md, which is re-rendered because this bundle's pop-ups feed it",
+     "class": "within",
+     "why": "This coordinates file ownership. The re-render keeps a generated table in step with this bundle's own edits."
+    },
+    {
+     "id": "left-T394-rowhouse-fabric",
+     "summary": "The barracks and retainers' quarters pop-ups do not say what a rowhouse was built of; filed as T394 (needs a research pass and page session), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is an omission, not a contradiction, and it is filed with a deadline before the next step under the GM's 2026-11-18 rule. Same premise on T158."
+    },
+    {
+     "id": "left-T396-docs-claims",
+     "summary": "Three claims in building-programs.md and buildings.md under-state 0113 and 0097; filed as T396 (the T383 bundle's files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a claims fix with no map effect, deferred only as far as the step boundary the GM set. Same premise on T158."
+    },
+    {
+     "id": "left-T400-office-order-claims",
+     "summary": "The claims and emit.rs label calling office-front/residence-rear a simplification or DEVIATION, against 0090 as restated, are filed as T400 (the T383 bundle's files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The claims are wrong and the code is right. The fix restates the claims (XIV) before the step boundary. Same premise on T158."
+    },
+    {
+     "id": "left-T399-quote-join",
+     "summary": "0090's note takayama-jinya-jawiki-2 joins two passages with ' and ' for '; '; filed as T399 (its own page session with quote- and translation-check), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect, because verbatim quotation is still held exact. File ownership is no cover for it, since this bundle edits 0090. Its cover is the GM's own deadline: it lands before the next step's port (T158). It rests on the same premise."
+    },
+    {
+     "id": "left-T383-claims-owed",
+     "summary": "The T383 bundle's own code-changed claims owe impl-drift on that bundle's diff",
+     "class": "within",
+     "why": "This is an owed check on another bundle's live code, run before that bundle lands. No wrong outcome is left."
+    },
+    {
+     "id": "left-no-wrong-outcome",
+     "summary": "Left without a task: the misread barracks count; form-only NOTEs; the hearing-court clause resting on 0096; garden.md's 'the pond is the office's form' beside Ubame's dry garden; the barracks' 'about fifteen', the project's own; the kitchen row's 'often at the rear', resting on uncited 0107",
+     "class": "within",
+     "why": "Each is a difference or a citation gap, not a wrong outcome (XIV v2.36.0). garden.md's line states the default form, and the plan says its Depiction covers Ubame's departure. The study's 'away from the armory', by contrast, was a false statement about every plan. 'About fifteen' correctly keeps the GM's ~15 (the town's whole samurai) apart from the barracks' lodgers."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T373": {
+   "section_sha256": "b186dbca9ad17d21215c82ea03563e5967edb42fe8761c44474befe466983e9e",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T371-restate-0104",
+     "summary": "0104's drawing page restated to the porches the five plans draw; no sheet redrawn",
+     "class": "within",
+     "why": "A claim the drawing does not match, where the drawing is fine, is fixed by restating the claim (GM 2026-11-19; constitution XIV). Figures are labeled with the 2026-11-23 SVG measurement."
+    },
+    {
+     "id": "T372-split-0097-0331-0096",
+     "summary": "0097 split at the size cap into the new 0331; 0096 takes Naruto and Iwaito; the county cell's join and the junior rowhouse's seat kept a labeled GUESS; Uraga goes on the download list",
+     "class": "within",
+     "why": "This records what the passes found and labels the plans' choices. Nothing the task asks for is narrowed except the re-citation below."
+    },
+    {
+     "id": "T372-recite-deferred-T393",
+     "summary": "The county sheet's research strings re-cited to 0331/0096 is not done here (pool/magistracies is the T383 bundle's live files); filed as T393, landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's 2026-11-18 rule sets the deadline at the next step: 'fix all known bugs in each step before moving on to porting the next step'. It does not require the fix in this task, and T393 lands before T158, Phase 4's close. This ruling rests on the plan's statement, read with the GM's 2026-11-21/22 words, that no port step begins before T158."
+    },
+    {
+     "id": "T373-restate-0113-0123-0090",
+     "summary": "The back row's three measured orders, the granary, halls and cells restated to the plans as drawn",
+     "class": "within",
+     "why": "The claim is restated, not the code (XIV). Every size carries the 2026-11-23 SVG label, and the halls now say which plans are 28 ft deep."
+    },
+    {
+     "id": "T373-0090-takayama-residence-brief-J",
+     "summary": "0090's 'beside the office' restated: the residence stood at the back of the office, per the viewing guide 0113 quotes",
+     "class": "within",
+     "why": "This fixes a record line that contradicted its own cited source."
+    },
+    {
+     "id": "T376-banks-and-kitchen",
+     "summary": "0103's banks and 0107's kitchen recorded for the places and dates attested, the silence recorded; pop-ups edited and checked form, research, depiction in order",
+     "class": "within",
+     "why": "The task is carried. 'Is not recorded' and a labeled drawing convention say what the record says; they do not narrow it."
+    },
+    {
+     "id": "T381-study-seat-recorded",
+     "summary": "The magistrate's working room recorded at the household's side; the drawing page labels the plans' back-row seat a GUESS that departs from the record; the study pop-up's 'away from the armory' fixed to 'at an end of the row' and re-checked",
+     "class": "within",
+     "why": "The research is carried and the false pop-up line (false on Ubame) is fixed in this bundle."
+    },
+    {
+     "id": "T381-reseat-deferred-T392",
+     "summary": "Re-seating the study on the plans is filed as T392 (drawing work in the T383 bundle's live files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect (a drawn seat against an attested finding). Under the GM's 2026-11-18 rule its deadline is the next step's port, and T392 lands before T158. It rests on the same premise as T393."
+    },
+    {
+     "id": "T382-koshikake",
+     "summary": "The koshikake recorded as attested only for the Edo courts and silent for a jin'ya; not carried to a county seat (a GUESS); building-programs prose untouched because no program item exists",
+     "class": "within",
+     "why": "The task is carried, and the attestation bound is stated."
+    },
+    {
+     "id": "T385-question-size-all",
+     "summary": "`l7r-gate check question-size --all` added to make static and pinned red-then-green; 0059 and 0009 cut under the cap (words only)",
+     "class": "within",
+     "why": "This enforces an existing cap and narrows nothing. The cuts drop no finding, footnote, figure or label."
+    },
+    {
+     "id": "bundle-constraint-file-ownership",
+     "summary": "The defects bundle's and 451's files are left alone, except the generated required-items table in docs/building-programs.md, which is re-rendered because this bundle's pop-ups feed it",
+     "class": "within",
+     "why": "This coordinates file ownership. The re-render keeps a generated table in step with this bundle's own edits."
+    },
+    {
+     "id": "left-T394-rowhouse-fabric",
+     "summary": "The barracks and retainers' quarters pop-ups do not say what a rowhouse was built of; filed as T394 (needs a research pass and page session), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is an omission, not a contradiction, and it is filed with a deadline before the next step under the GM's 2026-11-18 rule. Same premise on T158."
+    },
+    {
+     "id": "left-T396-docs-claims",
+     "summary": "Three claims in building-programs.md and buildings.md under-state 0113 and 0097; filed as T396 (the T383 bundle's files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a claims fix with no map effect, deferred only as far as the step boundary the GM set. Same premise on T158."
+    },
+    {
+     "id": "left-T400-office-order-claims",
+     "summary": "The claims and emit.rs label calling office-front/residence-rear a simplification or DEVIATION, against 0090 as restated, are filed as T400 (the T383 bundle's files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The claims are wrong and the code is right. The fix restates the claims (XIV) before the step boundary. Same premise on T158."
+    },
+    {
+     "id": "left-T399-quote-join",
+     "summary": "0090's note takayama-jinya-jawiki-2 joins two passages with ' and ' for '; '; filed as T399 (its own page session with quote- and translation-check), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect, because verbatim quotation is still held exact. File ownership is no cover for it, since this bundle edits 0090. Its cover is the GM's own deadline: it lands before the next step's port (T158). It rests on the same premise."
+    },
+    {
+     "id": "left-T383-claims-owed",
+     "summary": "The T383 bundle's own code-changed claims owe impl-drift on that bundle's diff",
+     "class": "within",
+     "why": "This is an owed check on another bundle's live code, run before that bundle lands. No wrong outcome is left."
+    },
+    {
+     "id": "left-no-wrong-outcome",
+     "summary": "Left without a task: the misread barracks count; form-only NOTEs; the hearing-court clause resting on 0096; garden.md's 'the pond is the office's form' beside Ubame's dry garden; the barracks' 'about fifteen', the project's own; the kitchen row's 'often at the rear', resting on uncited 0107",
+     "class": "within",
+     "why": "Each is a difference or a citation gap, not a wrong outcome (XIV v2.36.0). garden.md's line states the default form, and the plan says its Depiction covers Ubame's departure. The study's 'away from the armory', by contrast, was a false statement about every plan. 'About fifteen' correctly keeps the GM's ~15 (the town's whole samurai) apart from the barracks' lodgers."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T376": {
+   "section_sha256": "b186dbca9ad17d21215c82ea03563e5967edb42fe8761c44474befe466983e9e",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T371-restate-0104",
+     "summary": "0104's drawing page restated to the porches the five plans draw; no sheet redrawn",
+     "class": "within",
+     "why": "A claim the drawing does not match, where the drawing is fine, is fixed by restating the claim (GM 2026-11-19; constitution XIV). Figures are labeled with the 2026-11-23 SVG measurement."
+    },
+    {
+     "id": "T372-split-0097-0331-0096",
+     "summary": "0097 split at the size cap into the new 0331; 0096 takes Naruto and Iwaito; the county cell's join and the junior rowhouse's seat kept a labeled GUESS; Uraga goes on the download list",
+     "class": "within",
+     "why": "This records what the passes found and labels the plans' choices. Nothing the task asks for is narrowed except the re-citation below."
+    },
+    {
+     "id": "T372-recite-deferred-T393",
+     "summary": "The county sheet's research strings re-cited to 0331/0096 is not done here (pool/magistracies is the T383 bundle's live files); filed as T393, landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's 2026-11-18 rule sets the deadline at the next step: 'fix all known bugs in each step before moving on to porting the next step'. It does not require the fix in this task, and T393 lands before T158, Phase 4's close. This ruling rests on the plan's statement, read with the GM's 2026-11-21/22 words, that no port step begins before T158."
+    },
+    {
+     "id": "T373-restate-0113-0123-0090",
+     "summary": "The back row's three measured orders, the granary, halls and cells restated to the plans as drawn",
+     "class": "within",
+     "why": "The claim is restated, not the code (XIV). Every size carries the 2026-11-23 SVG label, and the halls now say which plans are 28 ft deep."
+    },
+    {
+     "id": "T373-0090-takayama-residence-brief-J",
+     "summary": "0090's 'beside the office' restated: the residence stood at the back of the office, per the viewing guide 0113 quotes",
+     "class": "within",
+     "why": "This fixes a record line that contradicted its own cited source."
+    },
+    {
+     "id": "T376-banks-and-kitchen",
+     "summary": "0103's banks and 0107's kitchen recorded for the places and dates attested, the silence recorded; pop-ups edited and checked form, research, depiction in order",
+     "class": "within",
+     "why": "The task is carried. 'Is not recorded' and a labeled drawing convention say what the record says; they do not narrow it."
+    },
+    {
+     "id": "T381-study-seat-recorded",
+     "summary": "The magistrate's working room recorded at the household's side; the drawing page labels the plans' back-row seat a GUESS that departs from the record; the study pop-up's 'away from the armory' fixed to 'at an end of the row' and re-checked",
+     "class": "within",
+     "why": "The research is carried and the false pop-up line (false on Ubame) is fixed in this bundle."
+    },
+    {
+     "id": "T381-reseat-deferred-T392",
+     "summary": "Re-seating the study on the plans is filed as T392 (drawing work in the T383 bundle's live files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect (a drawn seat against an attested finding). Under the GM's 2026-11-18 rule its deadline is the next step's port, and T392 lands before T158. It rests on the same premise as T393."
+    },
+    {
+     "id": "T382-koshikake",
+     "summary": "The koshikake recorded as attested only for the Edo courts and silent for a jin'ya; not carried to a county seat (a GUESS); building-programs prose untouched because no program item exists",
+     "class": "within",
+     "why": "The task is carried, and the attestation bound is stated."
+    },
+    {
+     "id": "T385-question-size-all",
+     "summary": "`l7r-gate check question-size --all` added to make static and pinned red-then-green; 0059 and 0009 cut under the cap (words only)",
+     "class": "within",
+     "why": "This enforces an existing cap and narrows nothing. The cuts drop no finding, footnote, figure or label."
+    },
+    {
+     "id": "bundle-constraint-file-ownership",
+     "summary": "The defects bundle's and 451's files are left alone, except the generated required-items table in docs/building-programs.md, which is re-rendered because this bundle's pop-ups feed it",
+     "class": "within",
+     "why": "This coordinates file ownership. The re-render keeps a generated table in step with this bundle's own edits."
+    },
+    {
+     "id": "left-T394-rowhouse-fabric",
+     "summary": "The barracks and retainers' quarters pop-ups do not say what a rowhouse was built of; filed as T394 (needs a research pass and page session), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is an omission, not a contradiction, and it is filed with a deadline before the next step under the GM's 2026-11-18 rule. Same premise on T158."
+    },
+    {
+     "id": "left-T396-docs-claims",
+     "summary": "Three claims in building-programs.md and buildings.md under-state 0113 and 0097; filed as T396 (the T383 bundle's files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a claims fix with no map effect, deferred only as far as the step boundary the GM set. Same premise on T158."
+    },
+    {
+     "id": "left-T400-office-order-claims",
+     "summary": "The claims and emit.rs label calling office-front/residence-rear a simplification or DEVIATION, against 0090 as restated, are filed as T400 (the T383 bundle's files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The claims are wrong and the code is right. The fix restates the claims (XIV) before the step boundary. Same premise on T158."
+    },
+    {
+     "id": "left-T399-quote-join",
+     "summary": "0090's note takayama-jinya-jawiki-2 joins two passages with ' and ' for '; '; filed as T399 (its own page session with quote- and translation-check), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect, because verbatim quotation is still held exact. File ownership is no cover for it, since this bundle edits 0090. Its cover is the GM's own deadline: it lands before the next step's port (T158). It rests on the same premise."
+    },
+    {
+     "id": "left-T383-claims-owed",
+     "summary": "The T383 bundle's own code-changed claims owe impl-drift on that bundle's diff",
+     "class": "within",
+     "why": "This is an owed check on another bundle's live code, run before that bundle lands. No wrong outcome is left."
+    },
+    {
+     "id": "left-no-wrong-outcome",
+     "summary": "Left without a task: the misread barracks count; form-only NOTEs; the hearing-court clause resting on 0096; garden.md's 'the pond is the office's form' beside Ubame's dry garden; the barracks' 'about fifteen', the project's own; the kitchen row's 'often at the rear', resting on uncited 0107",
+     "class": "within",
+     "why": "Each is a difference or a citation gap, not a wrong outcome (XIV v2.36.0). garden.md's line states the default form, and the plan says its Depiction covers Ubame's departure. The study's 'away from the armory', by contrast, was a false statement about every plan. 'About fifteen' correctly keeps the GM's ~15 (the town's whole samurai) apart from the barracks' lodgers."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T381": {
+   "section_sha256": "b186dbca9ad17d21215c82ea03563e5967edb42fe8761c44474befe466983e9e",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T371-restate-0104",
+     "summary": "0104's drawing page restated to the porches the five plans draw; no sheet redrawn",
+     "class": "within",
+     "why": "A claim the drawing does not match, where the drawing is fine, is fixed by restating the claim (GM 2026-11-19; constitution XIV). Figures are labeled with the 2026-11-23 SVG measurement."
+    },
+    {
+     "id": "T372-split-0097-0331-0096",
+     "summary": "0097 split at the size cap into the new 0331; 0096 takes Naruto and Iwaito; the county cell's join and the junior rowhouse's seat kept a labeled GUESS; Uraga goes on the download list",
+     "class": "within",
+     "why": "This records what the passes found and labels the plans' choices. Nothing the task asks for is narrowed except the re-citation below."
+    },
+    {
+     "id": "T372-recite-deferred-T393",
+     "summary": "The county sheet's research strings re-cited to 0331/0096 is not done here (pool/magistracies is the T383 bundle's live files); filed as T393, landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's 2026-11-18 rule sets the deadline at the next step: 'fix all known bugs in each step before moving on to porting the next step'. It does not require the fix in this task, and T393 lands before T158, Phase 4's close. This ruling rests on the plan's statement, read with the GM's 2026-11-21/22 words, that no port step begins before T158."
+    },
+    {
+     "id": "T373-restate-0113-0123-0090",
+     "summary": "The back row's three measured orders, the granary, halls and cells restated to the plans as drawn",
+     "class": "within",
+     "why": "The claim is restated, not the code (XIV). Every size carries the 2026-11-23 SVG label, and the halls now say which plans are 28 ft deep."
+    },
+    {
+     "id": "T373-0090-takayama-residence-brief-J",
+     "summary": "0090's 'beside the office' restated: the residence stood at the back of the office, per the viewing guide 0113 quotes",
+     "class": "within",
+     "why": "This fixes a record line that contradicted its own cited source."
+    },
+    {
+     "id": "T376-banks-and-kitchen",
+     "summary": "0103's banks and 0107's kitchen recorded for the places and dates attested, the silence recorded; pop-ups edited and checked form, research, depiction in order",
+     "class": "within",
+     "why": "The task is carried. 'Is not recorded' and a labeled drawing convention say what the record says; they do not narrow it."
+    },
+    {
+     "id": "T381-study-seat-recorded",
+     "summary": "The magistrate's working room recorded at the household's side; the drawing page labels the plans' back-row seat a GUESS that departs from the record; the study pop-up's 'away from the armory' fixed to 'at an end of the row' and re-checked",
+     "class": "within",
+     "why": "The research is carried and the false pop-up line (false on Ubame) is fixed in this bundle."
+    },
+    {
+     "id": "T381-reseat-deferred-T392",
+     "summary": "Re-seating the study on the plans is filed as T392 (drawing work in the T383 bundle's live files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect (a drawn seat against an attested finding). Under the GM's 2026-11-18 rule its deadline is the next step's port, and T392 lands before T158. It rests on the same premise as T393."
+    },
+    {
+     "id": "T382-koshikake",
+     "summary": "The koshikake recorded as attested only for the Edo courts and silent for a jin'ya; not carried to a county seat (a GUESS); building-programs prose untouched because no program item exists",
+     "class": "within",
+     "why": "The task is carried, and the attestation bound is stated."
+    },
+    {
+     "id": "T385-question-size-all",
+     "summary": "`l7r-gate check question-size --all` added to make static and pinned red-then-green; 0059 and 0009 cut under the cap (words only)",
+     "class": "within",
+     "why": "This enforces an existing cap and narrows nothing. The cuts drop no finding, footnote, figure or label."
+    },
+    {
+     "id": "bundle-constraint-file-ownership",
+     "summary": "The defects bundle's and 451's files are left alone, except the generated required-items table in docs/building-programs.md, which is re-rendered because this bundle's pop-ups feed it",
+     "class": "within",
+     "why": "This coordinates file ownership. The re-render keeps a generated table in step with this bundle's own edits."
+    },
+    {
+     "id": "left-T394-rowhouse-fabric",
+     "summary": "The barracks and retainers' quarters pop-ups do not say what a rowhouse was built of; filed as T394 (needs a research pass and page session), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is an omission, not a contradiction, and it is filed with a deadline before the next step under the GM's 2026-11-18 rule. Same premise on T158."
+    },
+    {
+     "id": "left-T396-docs-claims",
+     "summary": "Three claims in building-programs.md and buildings.md under-state 0113 and 0097; filed as T396 (the T383 bundle's files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a claims fix with no map effect, deferred only as far as the step boundary the GM set. Same premise on T158."
+    },
+    {
+     "id": "left-T400-office-order-claims",
+     "summary": "The claims and emit.rs label calling office-front/residence-rear a simplification or DEVIATION, against 0090 as restated, are filed as T400 (the T383 bundle's files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The claims are wrong and the code is right. The fix restates the claims (XIV) before the step boundary. Same premise on T158."
+    },
+    {
+     "id": "left-T399-quote-join",
+     "summary": "0090's note takayama-jinya-jawiki-2 joins two passages with ' and ' for '; '; filed as T399 (its own page session with quote- and translation-check), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect, because verbatim quotation is still held exact. File ownership is no cover for it, since this bundle edits 0090. Its cover is the GM's own deadline: it lands before the next step's port (T158). It rests on the same premise."
+    },
+    {
+     "id": "left-T383-claims-owed",
+     "summary": "The T383 bundle's own code-changed claims owe impl-drift on that bundle's diff",
+     "class": "within",
+     "why": "This is an owed check on another bundle's live code, run before that bundle lands. No wrong outcome is left."
+    },
+    {
+     "id": "left-no-wrong-outcome",
+     "summary": "Left without a task: the misread barracks count; form-only NOTEs; the hearing-court clause resting on 0096; garden.md's 'the pond is the office's form' beside Ubame's dry garden; the barracks' 'about fifteen', the project's own; the kitchen row's 'often at the rear', resting on uncited 0107",
+     "class": "within",
+     "why": "Each is a difference or a citation gap, not a wrong outcome (XIV v2.36.0). garden.md's line states the default form, and the plan says its Depiction covers Ubame's departure. The study's 'away from the armory', by contrast, was a false statement about every plan. 'About fifteen' correctly keeps the GM's ~15 (the town's whole samurai) apart from the barracks' lodgers."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T382": {
+   "section_sha256": "b186dbca9ad17d21215c82ea03563e5967edb42fe8761c44474befe466983e9e",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T371-restate-0104",
+     "summary": "0104's drawing page restated to the porches the five plans draw; no sheet redrawn",
+     "class": "within",
+     "why": "A claim the drawing does not match, where the drawing is fine, is fixed by restating the claim (GM 2026-11-19; constitution XIV). Figures are labeled with the 2026-11-23 SVG measurement."
+    },
+    {
+     "id": "T372-split-0097-0331-0096",
+     "summary": "0097 split at the size cap into the new 0331; 0096 takes Naruto and Iwaito; the county cell's join and the junior rowhouse's seat kept a labeled GUESS; Uraga goes on the download list",
+     "class": "within",
+     "why": "This records what the passes found and labels the plans' choices. Nothing the task asks for is narrowed except the re-citation below."
+    },
+    {
+     "id": "T372-recite-deferred-T393",
+     "summary": "The county sheet's research strings re-cited to 0331/0096 is not done here (pool/magistracies is the T383 bundle's live files); filed as T393, landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's 2026-11-18 rule sets the deadline at the next step: 'fix all known bugs in each step before moving on to porting the next step'. It does not require the fix in this task, and T393 lands before T158, Phase 4's close. This ruling rests on the plan's statement, read with the GM's 2026-11-21/22 words, that no port step begins before T158."
+    },
+    {
+     "id": "T373-restate-0113-0123-0090",
+     "summary": "The back row's three measured orders, the granary, halls and cells restated to the plans as drawn",
+     "class": "within",
+     "why": "The claim is restated, not the code (XIV). Every size carries the 2026-11-23 SVG label, and the halls now say which plans are 28 ft deep."
+    },
+    {
+     "id": "T373-0090-takayama-residence-brief-J",
+     "summary": "0090's 'beside the office' restated: the residence stood at the back of the office, per the viewing guide 0113 quotes",
+     "class": "within",
+     "why": "This fixes a record line that contradicted its own cited source."
+    },
+    {
+     "id": "T376-banks-and-kitchen",
+     "summary": "0103's banks and 0107's kitchen recorded for the places and dates attested, the silence recorded; pop-ups edited and checked form, research, depiction in order",
+     "class": "within",
+     "why": "The task is carried. 'Is not recorded' and a labeled drawing convention say what the record says; they do not narrow it."
+    },
+    {
+     "id": "T381-study-seat-recorded",
+     "summary": "The magistrate's working room recorded at the household's side; the drawing page labels the plans' back-row seat a GUESS that departs from the record; the study pop-up's 'away from the armory' fixed to 'at an end of the row' and re-checked",
+     "class": "within",
+     "why": "The research is carried and the false pop-up line (false on Ubame) is fixed in this bundle."
+    },
+    {
+     "id": "T381-reseat-deferred-T392",
+     "summary": "Re-seating the study on the plans is filed as T392 (drawing work in the T383 bundle's live files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect (a drawn seat against an attested finding). Under the GM's 2026-11-18 rule its deadline is the next step's port, and T392 lands before T158. It rests on the same premise as T393."
+    },
+    {
+     "id": "T382-koshikake",
+     "summary": "The koshikake recorded as attested only for the Edo courts and silent for a jin'ya; not carried to a county seat (a GUESS); building-programs prose untouched because no program item exists",
+     "class": "within",
+     "why": "The task is carried, and the attestation bound is stated."
+    },
+    {
+     "id": "T385-question-size-all",
+     "summary": "`l7r-gate check question-size --all` added to make static and pinned red-then-green; 0059 and 0009 cut under the cap (words only)",
+     "class": "within",
+     "why": "This enforces an existing cap and narrows nothing. The cuts drop no finding, footnote, figure or label."
+    },
+    {
+     "id": "bundle-constraint-file-ownership",
+     "summary": "The defects bundle's and 451's files are left alone, except the generated required-items table in docs/building-programs.md, which is re-rendered because this bundle's pop-ups feed it",
+     "class": "within",
+     "why": "This coordinates file ownership. The re-render keeps a generated table in step with this bundle's own edits."
+    },
+    {
+     "id": "left-T394-rowhouse-fabric",
+     "summary": "The barracks and retainers' quarters pop-ups do not say what a rowhouse was built of; filed as T394 (needs a research pass and page session), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is an omission, not a contradiction, and it is filed with a deadline before the next step under the GM's 2026-11-18 rule. Same premise on T158."
+    },
+    {
+     "id": "left-T396-docs-claims",
+     "summary": "Three claims in building-programs.md and buildings.md under-state 0113 and 0097; filed as T396 (the T383 bundle's files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a claims fix with no map effect, deferred only as far as the step boundary the GM set. Same premise on T158."
+    },
+    {
+     "id": "left-T400-office-order-claims",
+     "summary": "The claims and emit.rs label calling office-front/residence-rear a simplification or DEVIATION, against 0090 as restated, are filed as T400 (the T383 bundle's files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The claims are wrong and the code is right. The fix restates the claims (XIV) before the step boundary. Same premise on T158."
+    },
+    {
+     "id": "left-T399-quote-join",
+     "summary": "0090's note takayama-jinya-jawiki-2 joins two passages with ' and ' for '; '; filed as T399 (its own page session with quote- and translation-check), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect, because verbatim quotation is still held exact. File ownership is no cover for it, since this bundle edits 0090. Its cover is the GM's own deadline: it lands before the next step's port (T158). It rests on the same premise."
+    },
+    {
+     "id": "left-T383-claims-owed",
+     "summary": "The T383 bundle's own code-changed claims owe impl-drift on that bundle's diff",
+     "class": "within",
+     "why": "This is an owed check on another bundle's live code, run before that bundle lands. No wrong outcome is left."
+    },
+    {
+     "id": "left-no-wrong-outcome",
+     "summary": "Left without a task: the misread barracks count; form-only NOTEs; the hearing-court clause resting on 0096; garden.md's 'the pond is the office's form' beside Ubame's dry garden; the barracks' 'about fifteen', the project's own; the kitchen row's 'often at the rear', resting on uncited 0107",
+     "class": "within",
+     "why": "Each is a difference or a citation gap, not a wrong outcome (XIV v2.36.0). garden.md's line states the default form, and the plan says its Depiction covers Ubame's departure. The study's 'away from the armory', by contrast, was a false statement about every plan. 'About fifteen' correctly keeps the GM's ~15 (the town's whole samurai) apart from the barracks' lodgers."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T385": {
+   "section_sha256": "b186dbca9ad17d21215c82ea03563e5967edb42fe8761c44474befe466983e9e",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T371-restate-0104",
+     "summary": "0104's drawing page restated to the porches the five plans draw; no sheet redrawn",
+     "class": "within",
+     "why": "A claim the drawing does not match, where the drawing is fine, is fixed by restating the claim (GM 2026-11-19; constitution XIV). Figures are labeled with the 2026-11-23 SVG measurement."
+    },
+    {
+     "id": "T372-split-0097-0331-0096",
+     "summary": "0097 split at the size cap into the new 0331; 0096 takes Naruto and Iwaito; the county cell's join and the junior rowhouse's seat kept a labeled GUESS; Uraga goes on the download list",
+     "class": "within",
+     "why": "This records what the passes found and labels the plans' choices. Nothing the task asks for is narrowed except the re-citation below."
+    },
+    {
+     "id": "T372-recite-deferred-T393",
+     "summary": "The county sheet's research strings re-cited to 0331/0096 is not done here (pool/magistracies is the T383 bundle's live files); filed as T393, landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's 2026-11-18 rule sets the deadline at the next step: 'fix all known bugs in each step before moving on to porting the next step'. It does not require the fix in this task, and T393 lands before T158, Phase 4's close. This ruling rests on the plan's statement, read with the GM's 2026-11-21/22 words, that no port step begins before T158."
+    },
+    {
+     "id": "T373-restate-0113-0123-0090",
+     "summary": "The back row's three measured orders, the granary, halls and cells restated to the plans as drawn",
+     "class": "within",
+     "why": "The claim is restated, not the code (XIV). Every size carries the 2026-11-23 SVG label, and the halls now say which plans are 28 ft deep."
+    },
+    {
+     "id": "T373-0090-takayama-residence-brief-J",
+     "summary": "0090's 'beside the office' restated: the residence stood at the back of the office, per the viewing guide 0113 quotes",
+     "class": "within",
+     "why": "This fixes a record line that contradicted its own cited source."
+    },
+    {
+     "id": "T376-banks-and-kitchen",
+     "summary": "0103's banks and 0107's kitchen recorded for the places and dates attested, the silence recorded; pop-ups edited and checked form, research, depiction in order",
+     "class": "within",
+     "why": "The task is carried. 'Is not recorded' and a labeled drawing convention say what the record says; they do not narrow it."
+    },
+    {
+     "id": "T381-study-seat-recorded",
+     "summary": "The magistrate's working room recorded at the household's side; the drawing page labels the plans' back-row seat a GUESS that departs from the record; the study pop-up's 'away from the armory' fixed to 'at an end of the row' and re-checked",
+     "class": "within",
+     "why": "The research is carried and the false pop-up line (false on Ubame) is fixed in this bundle."
+    },
+    {
+     "id": "T381-reseat-deferred-T392",
+     "summary": "Re-seating the study on the plans is filed as T392 (drawing work in the T383 bundle's live files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect (a drawn seat against an attested finding). Under the GM's 2026-11-18 rule its deadline is the next step's port, and T392 lands before T158. It rests on the same premise as T393."
+    },
+    {
+     "id": "T382-koshikake",
+     "summary": "The koshikake recorded as attested only for the Edo courts and silent for a jin'ya; not carried to a county seat (a GUESS); building-programs prose untouched because no program item exists",
+     "class": "within",
+     "why": "The task is carried, and the attestation bound is stated."
+    },
+    {
+     "id": "T385-question-size-all",
+     "summary": "`l7r-gate check question-size --all` added to make static and pinned red-then-green; 0059 and 0009 cut under the cap (words only)",
+     "class": "within",
+     "why": "This enforces an existing cap and narrows nothing. The cuts drop no finding, footnote, figure or label."
+    },
+    {
+     "id": "bundle-constraint-file-ownership",
+     "summary": "The defects bundle's and 451's files are left alone, except the generated required-items table in docs/building-programs.md, which is re-rendered because this bundle's pop-ups feed it",
+     "class": "within",
+     "why": "This coordinates file ownership. The re-render keeps a generated table in step with this bundle's own edits."
+    },
+    {
+     "id": "left-T394-rowhouse-fabric",
+     "summary": "The barracks and retainers' quarters pop-ups do not say what a rowhouse was built of; filed as T394 (needs a research pass and page session), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is an omission, not a contradiction, and it is filed with a deadline before the next step under the GM's 2026-11-18 rule. Same premise on T158."
+    },
+    {
+     "id": "left-T396-docs-claims",
+     "summary": "Three claims in building-programs.md and buildings.md under-state 0113 and 0097; filed as T396 (the T383 bundle's files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a claims fix with no map effect, deferred only as far as the step boundary the GM set. Same premise on T158."
+    },
+    {
+     "id": "left-T400-office-order-claims",
+     "summary": "The claims and emit.rs label calling office-front/residence-rear a simplification or DEVIATION, against 0090 as restated, are filed as T400 (the T383 bundle's files), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The claims are wrong and the code is right. The fix restates the claims (XIV) before the step boundary. Same premise on T158."
+    },
+    {
+     "id": "left-T399-quote-join",
+     "summary": "0090's note takayama-jinya-jawiki-2 joins two passages with ' and ' for '; '; filed as T399 (its own page session with quote- and translation-check), landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect, because verbatim quotation is still held exact. File ownership is no cover for it, since this bundle edits 0090. Its cover is the GM's own deadline: it lands before the next step's port (T158). It rests on the same premise."
+    },
+    {
+     "id": "left-T383-claims-owed",
+     "summary": "The T383 bundle's own code-changed claims owe impl-drift on that bundle's diff",
+     "class": "within",
+     "why": "This is an owed check on another bundle's live code, run before that bundle lands. No wrong outcome is left."
+    },
+    {
+     "id": "left-no-wrong-outcome",
+     "summary": "Left without a task: the misread barracks count; form-only NOTEs; the hearing-court clause resting on 0096; garden.md's 'the pond is the office's form' beside Ubame's dry garden; the barracks' 'about fifteen', the project's own; the kitchen row's 'often at the rear', resting on uncited 0107",
+     "class": "within",
+     "why": "Each is a difference or a citation gap, not a wrong outcome (XIV v2.36.0). garden.md's line states the default form, and the plan says its Depiction covers Ubame's departure. The study's 'away from the armory', by contrast, was a false statement about every plan. 'About fifteen' correctly keeps the GM's ~15 (the town's whole samurai) apart from the barracks' lodgers."
     }
    ],
    "verdict": "CLEAR"

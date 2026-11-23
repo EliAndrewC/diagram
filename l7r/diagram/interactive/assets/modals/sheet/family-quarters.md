@@ -1,6 +1,6 @@
 About: A magistrate's household lived inside the working compound, in Japan as in China, so the office was also a home. In a
 Chinese county office the home stood behind the office, by regulation; at the intendant's office at Takayama the residence
-stood beside it.
+stood at the back of the office.
 
 In a lord's palace the family's rooms lay farthest from the front. The palace ran from the omote, where retainers and envoys were
 received, through the lord's own rooms, to the oku, which held the lord's private rooms and the quarters of the lord's wife;
@@ -21,8 +21,8 @@ Guesses:
   measurement.
 
 Depiction: The plan draws the family's rooms as one labeled bay standing for several rooms, beyond the master's rooms toward
-the private end of the residence. The residence stands behind the office in every compound, the Chinese order, though at
-Takayama it stood beside it.
+the private end of the residence. The residence stands behind the office in every compound, the Chinese order, as at
+Takayama.
 
 Name: family quarters
 Covers: the family's bay of the residence, its floor and its labels

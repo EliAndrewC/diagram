@@ -11,7 +11,7 @@ water.
 known by the 8th century.
 
 [weir_form=frame] This one is a frame, like a Kofun-period weir about 14 ft across dug up at Kodera: slanting stakes,
-logs laid along them, the joints tied with wisteria vine and the gaps packed with clay and gravel.
+logs laid along them, some joints tied with wisteria vine and the gaps packed with clay and gravel.
 
 [weir_form=crib] This one is a crib of timber packed with stone, the form of most intake works until the late 16th
 century.

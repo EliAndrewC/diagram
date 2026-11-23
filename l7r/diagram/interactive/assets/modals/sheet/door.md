@@ -2,7 +2,7 @@ About: Every building had its ways in. A samurai house of standing kept a formal
 household and honored guests; the family and those of the house came and went by an inner entrance; and the kitchen had
 its own door from outside, the katteguchi. A middle-rank house could do without the formal entrance and bring its guests
 in through a garden. A farmhouse had its everyday door at the front of its earth floor and a second at the back, for
-cooking. Who used a samurai kitchen's door is not recorded.
+cooking. Who used a small samurai house's kitchen door is not recorded; in the great mansions it was the tradesmen's entry.
 
 A guest of rank came through the gate across open ground, and the palanquin was brought alongside the entrance step. At
 one old farmhouse the big door ran on wheels: it stood open by day, and at night and in wind and rain it was shut and
@@ -14,7 +14,7 @@ An ordinary door was probably no wider than about 3 ft, half a ken, and a farmho
 width of a kitchen door, a guest entrance or a storehouse's opening is not recorded.
 
 Guesses:
-- That a kitchen has one door to the outside, on its earth floor: the kitchen door is recorded, and at one middle-rank house the gate led to it, but not that it opened on the earth floor or
+- That a kitchen has one door to the outside, on its earth floor: the kitchen door is recorded, and at one middle-rank house the gate led to it, and in the great mansions it led onto the service kitchen's earth floor, but not that an ordinary kitchen's door did, or
   whether a kitchen had two.
 - A way by which food reached the rooms, where a plan draws one: no account shows one.
 - A storehouse leaf about 3.5 ft wide: the one width found is a standard of today.

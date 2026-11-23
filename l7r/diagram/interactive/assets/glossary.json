@@ -1258,8 +1258,7 @@
  "doshin": {
   "def": "Low-ranking foot samurai and constables, serving under a magistrate's officers and housed with the foot soldiers at the town's edge.",
   "variants": [
-   "doshin",
-   "kachi"
+   "doshin"
   ]
  },
  "dosojin": {
@@ -7820,7 +7819,8 @@
  "chumon-zukuri": {
   "def": "A farmhouse of northern Japan (Yamagata, Akita, Fukushima) whose front wing, projecting from the main house, holds the entrance and often the stable - an L-shaped plan like the magariya.",
   "variants": [
-   "chumon-zukuri"
+   "chumon-zukuri",
+   "chūmon style"
   ]
  },
  "bunto house": {
@@ -12314,12 +12314,11 @@
   ]
  },
  "Seki": {
-  "def": "A post town on the Tokaido whose street of Edo-period houses is preserved today as a preservation district.",
+  "def": "A post town on the Tokaido whose street of Edo-period houses is preserved today as a preservation district. (Written seki, the same romanization is also the Japanese word for a weir: a low dam placed across a stream to hold it back and raise its level, so water can be taken off into an irrigation ditch.)",
   "variants": [
    "Seki",
    "Seki-juku"
-  ],
-  "cased": true
+  ]
  },
  "Leping": {
   "def": "A county seat in Jiangxi, China, whose walled town and street grid a planning article describes.",
@@ -19549,6 +19548,121 @@
   "def": "A Korean magistrate of Dongnae who, after Yi Gwang-ryeo's own trials failed, had some success growing the sweet potato there and wrote Korea's first book on the plant.",
   "variants": [
    "Kang Pil-li"
+  ]
+ },
+ "suhama": {
+  "def": "In a Japanese garden, a pond's shore laid out in gentle curves that copy a coastline; the Heian-period pond was outlined this way.",
+  "variants": [
+   "suhama",
+   "suhama form"
+  ]
+ },
+ "dry-laid": {
+  "def": "Of stonework: stones fitted and stacked without mortar, held by their own weight.",
+  "variants": [
+   "dry-laid",
+   "dry-laid stone",
+   "dry-laid stone walling"
+  ]
+ },
+ "shimodaidokoro": {
+  "def": "The lower kitchen of a great warrior or aristocratic mansion: the outermost part of its kitchen, a service area whose kitchen door led onto an earth-floored doma and served as the tradesmen's way in.",
+  "variants": [
+   "shimodaidokoro",
+   "lower kitchen",
+   "service kitchen",
+   "service kitchens"
+  ]
+ },
+ "kamidaidokoro": {
+  "def": "The upper kitchen of a great warrior or aristocratic mansion: the part of its kitchen beyond the lower, service kitchen, in the same building or, in large compounds, in a separate building beside it.",
+  "variants": [
+   "kamidaidokoro",
+   "upper kitchen",
+   "upper kitchens"
+  ]
+ },
+ "kemuridashi": {
+  "def": "A smoke louvre: an opening in a roof that lets out the smoke of the fire below, as in the roof of a great mansion's kitchen building.",
+  "variants": [
+   "kemuridashi",
+   "smoke louvre",
+   "smoke louvres"
+  ]
+ },
+ "scuttle": {
+  "def": "A small opening in a roof through which smoke escaped; Morse saw one over the kitchen of the common Japanese city house.",
+  "variants": [
+   "scuttle",
+   "scuttles"
+  ]
+ },
+ "odoguchi": {
+  "def": "The big front doorway of a farmhouse, open by day and shut and barred at night; also a name for the main doorway of a great mansion's service kitchen.",
+  "variants": [
+   "odoguchi",
+   "ōdoguchi"
+  ]
+ },
+ "diversion weir": {
+  "def": "A low dam or wall built across a stream to turn part or all of its water into a canal.",
+  "variants": [
+   "diversion weir",
+   "diversion weirs",
+   "diversion dam",
+   "diversion dams"
+  ]
+ },
+ "koshikake": {
+  "def": "A waiting shed for the parties to suits at the shogunate's courts in Edo - the Hyojosho and the town magistracies - standing within a court's grounds or before its gate, where summoned parties waited to be called into the hearing court.",
+  "variants": [
+   "koshikake"
+  ]
+ },
+ "tamari": {
+  "def": "A waiting place or waiting room; at the Edo courts, the room or strip beside the gravel court where the parties to suits waited (the kujinin-damari, the parties' waiting place).",
+  "variants": [
+   "tamari"
+  ]
+ },
+ "kachi": {
+  "def": "Foot samurai: one of the lower samurai ranks among a lord's retainers, serving on foot.",
+  "variants": [
+   "kachi"
+  ]
+ },
+ "Kasuga lantern": {
+  "def": "One of the named kinds of stone lantern, told apart by its use.",
+  "variants": [
+   "Kasuga lantern",
+   "Kasuga lanterns"
+  ]
+ },
+ "Enshū lantern": {
+  "def": "One of the named kinds of stone lantern, told apart by its use.",
+  "variants": [
+   "Enshū lantern",
+   "Enshu lantern"
+  ]
+ },
+ "Oribe lantern": {
+  "def": "One of the named kinds of stone lantern, told apart by its use.",
+  "variants": [
+   "Oribe lantern",
+   "Oribe lanterns"
+  ]
+ },
+ "tataki": {
+  "def": "A hard surface of red earth, gravel and the like mixed with slaked lime and bittern, kneaded, spread and beaten hard.",
+  "cased": true,
+  "variants": [
+   "tataki"
+  ]
+ },
+ "bittern": {
+  "def": "The bitter liquid left after salt crystallizes out of seawater (nigari in Japanese); mixed into tataki with slaked lime to help it set hard.",
+  "variants": [
+   "bittern"
   ]
  }
 }
