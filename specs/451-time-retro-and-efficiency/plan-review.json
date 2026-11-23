@@ -792,6 +792,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T177 (observed 2026-11-23, 451 T170's census: 255 guard wordings stood BASELINE, unreviewed, in `dev/guard-messages.tsv`; ranked by measured cost a session, `/tmp/t177/scripts/rank3.py`, the run of 2026-11-23T11:06:39Z)": {
+   "sha256": "2737e45e55d02eea476b117ceca7df5195830420805b986e806207afae86db4f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "round-arbiter"
+  },
+  "### T177 Approach (checklist part A)": {
+   "sha256": "75bb62f7afc630bb5ffcdeb0671d408363ea5f7cf63e1691634a1a361e80d48f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "round-arbiter"
+  },
+  "### T177 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "35d56952dd01d1f3810691def2ffea84030386d92fdef3b5cee1eeed67ef5780",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -15095,6 +15113,26 @@
      "why": "Sequencing that follows FR-013's performance-first rule. Nothing the request asked for is removed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T177 (observed 2026-11-23, 451 T170's census: 255 guard wordings stood BASELINE, unreviewed, in `dev/guard-messages.tsv`; ranked by measured cost a session, `/tmp/t177/scripts/rank3.py`, the run of 2026-11-23T11:06:39Z)",
+    "### T177 Approach (checklist part A)",
+    "### T177 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T177-third-plan-round",
+     "class": "within",
+     "summary": "the round arbiter accepted T177's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T177"
+   ]
   }
  ],
  "tasks": {
@@ -23585,6 +23623,132 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T177": {
+   "section_sha256": "ea1aa881765fc5195ffa963e9a70e2c97ebca3296d4b07c4f097a90edf72fdcd",
+   "reviewed": "2026-11-23",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T177-third-plan-round",
+     "class": "within",
+     "summary": "the round arbiter accepted T177's section as it stands"
+    }
+   ],
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "08d29353b4680ed36875071e91c93f2bd2c5b600a25b416323598570943505b9",
+    "reviewed": "2026-11-23",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "D1-ranking-and-order",
+      "summary": "Rank the BASELINE wordings by measured cost a session (rank3.py over the coordinator session and its 1,658 builder transcripts) and review them in that order through message-check, one wording an agent, at most three at once.",
+      "class": "within",
+      "why": "The GM 2026-11-23 asked whether hook output could say the same with fewer tokens and no loss of fidelity. Reviewing the costliest first is how that gets answered; it narrows nothing."
+     },
+     {
+      "id": "D2-pricing-conventions",
+      "summary": "R = 14.4k tokens a review, rho = 2.2 characters a token, cached input counted in full, re-reads not counted, Sonnet and Opus priced alike.",
+      "class": "within",
+      "why": "A measurement method, each part labeled with its date and method; the conventions err against the saving, so they do not inflate the case for the work."
+     },
+     {
+      "id": "D3-no-makefile-change",
+      "summary": "A round's units are make guard-messages BUNDLE=1's MANIFEST split at ## KEY with the replaced text appended, by /tmp scripts, no Makefile change.",
+      "class": "within",
+      "why": "A tooling choice that narrows nothing asked for."
+     },
+     {
+      "id": "D4a-stop-never-shown",
+      "summary": "The stop leaves at BASELINE the 113 families of the other 161 never shown in the measured session.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "It narrows the task's literal 'the 255'. The GM's purpose is 'the same thing with no loss of fidelity and fewer tokens'; a wording shown zero times saves nothing when cut while each review costs at least 2 x 31,680 characters (every first review failed), so reviewing these defeats the stated purpose. A long message that works is no defect (XIV v2.36.0), the GM's entry is a question, and BASELINE is T170's standing, still enforced by T170's check. Unchanged from round 1."
+     },
+     {
+      "id": "D4b-stop-shown-tail",
+      "summary": "The stop leaves at BASELINE the 48 shown families below the cut (family 6, 9, 10 and the rest), restated as a chosen horizon, not a break-even.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "These are seen, so ruled apart from D4a. The block now states its line as a horizon choice with no source in the GM's words or a ruling, and gives family 6 at about 14 sessions, inside the 1.3-55 band of the cuts made, as round 1 asked. Still legitimate: a wording that works but is long is no defect (XIV v2.36.0: NOT LEGITIMATE is only for a defect left), the request asks a question rather than ordering all 255, and the wordings keep T170's BASELINE, which T170's check enforces. Round 1's reach correction landed: 161 = 168 - 7 = 113 + 48; 292,663 = 879,048 - 586,385."
+     },
+     {
+      "id": "D5-delete-superseded-rows",
+      "summary": "Rows of replaced wordings and their FAIL rows, rendered by nothing now, are deleted from dev/guard-messages.tsv by key; each cut's history is kept in a code comment.",
+      "class": "within",
+      "why": "Every wording still rendered keeps its review row; the deleted rows describe text that no longer exists."
+     },
+     {
+      "id": "D6a-brevity-pass-ruled-units",
+      "summary": "Record PASS, the text standing, for the units the two rulings name (07c0, 5080, 6920, 6a85 under the first; a32d, 219e, a4e8, fa35 under the second), each naming its ruling.",
+      "class": "within",
+      "why": "The round arbiter, who stands where the GM was asked on rounds (feature 379), ordered exactly this."
+     },
+     {
+      "id": "D6b-verdict-brevity-standing-rule",
+      "summary": "make guard-messages KEY= VERDICT=BREVITY records a second review failing on brevity alone, FIDELITY passing, as PASS with the text standing, its by cell naming ask:guard-wordings-sleep-and-slot; the FAILED tip names it.",
+      "class": "within",
+      "why": "Round 1's ground ('neither ruling orders a tool') was read off a bundle missing tooling_fix and is withdrawn. rulings.md now carries the second ruling's tooling_fix verbatim: 'make the earlier ruling's cap ... the standing rule: when a unit's second review FAILs on BREVITY alone and FIDELITY passes, the text as reviewed stands and its PASS is recorded automatically, with no arbiter ask.' The arbiter ordered the standing rule; its merit is not this review's to weigh. A caller-typed verdict delivers 'recorded automatically'; 'brevity alone, FIDELITY passing' is the caller's reading of the reply, as every recorded verdict is, so it is no weaker enforcement than the record already has; the by cell names the ruling. The reach of its 'second' test is ruled separately, D6c."
+     },
+     {
+      "id": "D6c-second-review-test-by-guard-and-kind",
+      "summary": "The tool counts a review as a SECOND when 'a FAIL of the same guard and kind must stand in the record, its wording superseded'; otherwise it refuses it as a first review's.",
+      "class": "narrowing",
+      "ruling": "NOT LEGITIMATE",
+      "why": "The ruling's standing rule is for 'a unit's second review'. Guard and kind do not identify a unit: the block's own ranking puts family 1 (cut after a FAIL) and family 10 (never reviewed) both under make_only_hooks refuse, finished_run_hooks refuse holds 4 keys and set_down_hooks refuse 2. On the block's words, while any superseded FAIL of a guard and kind stands, a FIRST review of a sibling wording of that guard and kind that fails on brevity is recorded PASS, the text standing - a rewrite of a reviewer's FAIL into a PASS that no ruling ordered, reaching past the ordered rule (a guard that rewrites work is in scope only for exactly what was ordered). The deletion of superseded rows at T177's end narrows the window but does not close it: any future round that cuts one wording of a guard and kind and reviews a sibling before cleanup falls in it, and the block's method reviews wordings in parallel. None of the three grounds holds: tying the test to the unit is not impossible (each unit already carries the full text it replaced, and the by cell already names 'the first: <agent>'), the ruling does not imply the wider test, and the literal rule defeats nothing. Ruled on the block's text without reading the code. CURE: tie the prior FAIL to the wording this text replaced - e.g. the caller names the superseded key, and the tool checks that key's row is a FAIL of the same guard and kind, superseded by this one, recording that key in the by cell - and say so in the block. If the code already ties it so, restate the block's sentence to say so and this decision is within."
+     },
+     {
+      "id": "D7-blocked-fetch-legend",
+      "summary": "blocked-fetch's attempts notice grows (104 -> 149 characters, -16,560 a session) to fix a fidelity failure.",
+      "class": "within",
+      "why": "The GM asked for fewer tokens WITH NO LOSS OF FIDELITY; fixing a cryptic line at a cost in length honors that constraint."
+     },
+     {
+      "id": "D8-two-defects-fixed",
+      "summary": "finished-run's run with no output file is waited on by its pid (while kill -0), held in the worst case; builder-stop's gate fixture quoting fixed.",
+      "class": "within",
+      "why": "Wrong outcomes (a wait that never ends; a fixture that ate a command) fixed in the task that found them, as the standing rule asks."
+     },
+     {
+      "id": "D9-order",
+      "summary": "After T170, before T174.",
+      "class": "within",
+      "why": "Ordering only."
+     },
+     {
+      "id": "D10-perf-classing",
+      "summary": "T177 classed as performance work under FR-013.",
+      "class": "within",
+      "why": "Fewer characters read by every model call speeds the builders' loop, FR-013's sense, and is the GM's 2026-11-23 purpose."
+     },
+     {
+      "id": "D11-left-guard-file-read-notice",
+      "summary": "guard-file's Read notice (about 57,375 a session, rendered by no suite) left to T174, which lands before T22.",
+      "class": "within",
+      "why": "A deferral with its filed task, reason and order, as FR-009 asks."
+     },
+     {
+      "id": "D12-left-builder-stop-deferral-variant",
+      "summary": "builder-stop's deferral-only block, rendered by no suite, said as the gate gives it; judged not a defect.",
+      "class": "within",
+      "why": "The variable part is the gate's own why, which names its make task-add; nothing is a wrong outcome."
+     },
+     {
+      "id": "D13-bundle-rulings-carry-tooling-fix",
+      "summary": "rust/gate/crates/plan bundle/rulings.rs FIELDS carries a cited ruling's tooling_fix, the MANIFEST saying so, red first.",
+      "class": "within",
+      "why": "A defect found by this task's own review (a MODE 4 bundle that left out the field a block decides under, so round 1 ruled on a partial ruling), fixed in the task that found it. It adds a verbatim field and narrows nothing."
+     },
+     {
+      "id": "D14-hooks-test-red-attributed-to-449",
+      "summary": "Done, measured leaves one make hooks-test red, l7r-gate.sh.1's 'mode-a building-programs --check: the real page', attributed to 449's mode_a bundle, not T177.",
+      "class": "within",
+      "why": "No T177 change in THE CHANGES touches mode-a or building-programs, so leaving another feature's red to that feature narrows nothing T177 was asked to do; it is not a defect T177 found and defers but one owned by 449's open work. The attribution, though, is stated with no method or observation label; the block should label it (e.g. the same red on main without T177's changes, or the failing fixture's owner), so a later round can check it. A correction to the prose, not a block."
+     }
+    ],
+    "verdict": "BLOCKED"
+   }
   }
  }
 }

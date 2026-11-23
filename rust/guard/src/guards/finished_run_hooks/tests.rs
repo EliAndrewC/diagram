@@ -187,9 +187,10 @@ fn an_unwatched_run_refuses_the_turn_once_per_root() {
     w.add(101, "make", 100, &w.clone, &["make", "child"], Some(&log));
     let first = refused(&w.run("Stop"));
     assert!(
-        first.contains("IS STILL GOING, DETACHED")
+        // 451 T177 (message-check): the wait names the output, so the run line says it once
+        first.contains("IS STILL RUNNING; NOTHING WILL WAKE THIS SESSION FOR IT:")
             && first.contains(&format!(
-                "pid 100 `make sleeper`, output in {}",
+                "pid 100 `make sleeper`: wait on it in the background: until grep -qE \"gate green|GATE NOT GREEN|GATE FAILED\" {}; do sleep 20; done",
                 log.display()
             ))
             && first.contains("GATE FAILED")
@@ -391,7 +392,10 @@ fn a_run_its_still_running_builder_started_lets_the_turn_close_until_the_builder
         notice("abuild", r#"Agent \"T85\" completed"#),
     ]);
     let text = refused(&w.stop_in(&tr));
-    let named = format!("pid 100 `make rust-test`, output in {}", out.display());
+    let named = format!(
+        "pid 100 `make rust-test`: wait on it in the background: until grep -qE \"gate green|GATE NOT GREEN|GATE FAILED\" {}; do sleep 20; done",
+        out.display()
+    );
     assert!(text.contains(&named));
     assert!(w.stop_in(&tr).is_empty(), "once per root run");
     std::fs::remove_file(w.clone.join(".git/live-run.told")).unwrap();
@@ -444,7 +448,9 @@ fn a_run_that_ends_while_it_is_read_is_no_run() {
     std::fs::write(w.proc.join("100/stat"), "100 (make) Z 1 0 0").unwrap();
     assert!(w.run("Stop").is_empty());
     std::fs::write(w.proc.join("100/stat"), "100 (make) S 1 0 0").unwrap();
-    assert!(refused(&w.run("Stop")).contains("pid 100 `make quick`, output in (no file)"));
+    assert!(refused(&w.run("Stop")).contains(
+        "pid 100 `make quick`, no output file: wait on it in the background: while kill -0 100 2>/dev/null; do sleep 20; done"
+    ));
 }
 
 /// 451 T171: A RUN IS ITS STARTER'S TO WAIT ON. A launch line whose `sid` is another session's - a page session's in the same clone - is
@@ -481,7 +487,8 @@ fn another_session_s_run_or_a_builder_s_sub_agent_s_is_left_to_its_starter() {
     // the sub-agent has stopped: refused in full, and again in one line
     let ended = notice("asub", r#"Agent \"review\" completed"#);
     std::fs::write(own.join("agent-abuild.jsonl"), format!("{launch}{ended}\n")).unwrap();
-    assert!(refused(&sub.stop_in(&tr)).contains("pid 100 `make rust-test`, output in"));
+    assert!(refused(&sub.stop_in(&tr))
+        .contains("pid 100 `make rust-test`: wait on it in the background"));
     std::fs::remove_file(sub.clone.join(".git/live-run.told")).unwrap();
     assert!(refused(&sub.stop_in(&tr)).starts_with("still: A MAKE RUN THIS SESSION"));
     // a Stop that passes without the block - a waiter on the run's output - and its return is said in full
@@ -491,7 +498,8 @@ fn another_session_s_run_or_a_builder_s_sub_agent_s_is_left_to_its_starter() {
     sub.add(200, "bash", 1, Path::new("/"), &["bash", "-c", &wait], None);
     assert!(printed(&sub.stop_in(&tr)).contains("a waiter (pid 200) is watching"));
     std::fs::remove_dir_all(sub.proc.join("200")).unwrap();
-    assert!(refused(&sub.stop_in(&tr)).contains("pid 100 `make rust-test`, output in"));
+    assert!(refused(&sub.stop_in(&tr))
+        .contains("pid 100 `make rust-test`: wait on it in the background"));
 }
 
 /// 451 T171: A COMPACTION FORGETS WHAT WAS SAID (the GM's "no loss of fidelity"): a run refused in full, then in one line, is refused
@@ -504,7 +512,7 @@ fn after_a_compaction_the_run_refusal_is_said_in_full_again() {
     w.launched("bgone", Some("agone"));
     let tr = w.transcript(&[]);
     let first = refused(&w.stop_in(&tr));
-    let named = first.contains("pid 100 `make rust-test`, output in");
+    let named = first.contains("pid 100 `make rust-test`: wait on it in the background");
     assert!(named, "{first}");
     std::fs::remove_file(w.clone.join(".git/live-run.told")).unwrap();
     assert!(refused(&w.stop_in(&tr)).starts_with("still: A MAKE RUN THIS SESSION"));

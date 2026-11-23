@@ -523,17 +523,17 @@ fn is_handoff(file: &str, dir: &Path, agent: &str) -> bool {
         && p.parent().is_some_and(|d| real(d) == real(dir))
 }
 
-/// The refusal: the context against the cap, the handoff file, the next step, the escape.
+/// The refusal: the context against the cap, the handoff file, the next step, the escape. 451 T177 (message-check): the why is one
+/// clause; its figures (10 s per 1,000 output tokens under 200k, 23 s over 700k) and its spec line (451 FR-006) are this module's.
 fn refusal(tokens: u64, handoff: &Path) -> String {
     let path = handoff.display();
     format!(
-        "\n\u{1b}[1mBLOCKED: this builder's context is {tokens} tokens, past the cap of {CONTEXT_CAP_TOKENS} (feature 451 FR-006).\u{1b}[0m\n\n\
-A builder's model calls slow as its context grows (10 s per 1,000 output tokens under 200k, 23 s over 700k), so a long task\n\
-goes on in a fresh builder. The next step:\n\n\
+        "\n\u{1b}[1mBLOCKED: this builder's context is {tokens} tokens, past the cap of {CONTEXT_CAP_TOKENS}.\u{1b}[0m\n\n\
+Long contexts slow model calls, so the task goes on in a fresh builder:\n\n\
   1. Write the handoff file - what is done, what is left, the files touched and the next command - with the Write tool,\n\
      the one call this guard lets through:\n\n       {path}\n\n\
-  2. Stop, and reply with that path. The main session dispatches a fresh builder with the file as its brief.\n\n\
-Escape: {TOKEN}=\"<reason>\" in a Bash command, recorded in the guard log.\n"
+  2. Stop, and reply with that path; the main session dispatches a fresh builder from it.\n\n\
+Escape: {TOKEN}=\"<reason>\" (two words or more) in a Bash command, recorded in the guard log.\n"
     )
 }
 

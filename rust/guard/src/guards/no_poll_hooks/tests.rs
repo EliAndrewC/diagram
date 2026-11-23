@@ -70,6 +70,23 @@ fn a_busy_wait_and_a_disguised_sleep_are_refused() {
     assert!(run("git status").is_empty());
     assert!(run("sleep 1; for p in x; do echo; done").is_empty());
     assert!(rewritten(&[]).1.is_empty() && refused(&[]).is_empty());
+    // 451 T177 (message-check): the fix names the Bash parameter and the escape its form; the busy-wait takes no why (its second
+    // round), and the disguised sleep keeps its first line, its why cut (the round arbiter's ask:guard-wordings-sleep-and-slot)
+    let busy = refused(&run("while true; do echo; sleep 5; done"));
+    for kept in [
+        "BLOCKED (no-poll): this is a busy-wait loop (a loop containing `sleep`).\n\nDo this instead: ",
+        "run the work as a Bash call with run_in_background: true and act on its completion notification.",
+        "put POLL_OK=\"<what you are waiting for, two words or more>\" in the command.",
+    ] {
+        assert!(busy.contains(kept), "{kept}: {busy}");
+    }
+    let why = ["burns wall-clock", "re-invokes you", "notifies you"];
+    let cut = why.iter().all(|w| !busy.contains(w));
+    assert!(cut, "{busy}");
+    let disguised = refused(&run("command sleep 5"));
+    let head = "BLOCKED (no-poll): `sleep` was invoked in a form that evades the harness's foreground-sleep block.\n\nDo this instead: ";
+    let why_cut = !disguised.contains("wearing a hat") && !disguised.contains("better signal");
+    assert!(disguised.starts_with(head) && why_cut, "{disguised}");
 }
 
 #[test]

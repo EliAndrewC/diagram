@@ -11,7 +11,9 @@
 //! ```text
 //! l7r-guard messages check <corpus dir> <record>            exit 1 naming each message unreviewed or over its budget, with the fix
 //! l7r-guard messages owed <corpus dir> <record> <bundle>    the unreviewed messages, one unit each, written for message-check
-//! l7r-guard messages verdict <corpus dir> <record> <key> <PASS|FAIL> <by> [<over>]   a review's verdict recorded by its key
+//! l7r-guard messages verdict <corpus dir> <record> <key> <PASS|FAIL|BREVITY:<failed key>> <by> [<over>]   a review's verdict by its key
+//!                                         (BREVITY:<failed key>: a second review failing on brevity alone, <failed key> the failed wording
+//!                                         this text replaced - the text stands, 451 T177)
 //! l7r-guard messages baseline <corpus dir> <record> <why>   the first record: every message rendered, BASELINE, unreviewed
 //! l7r-guard messages rehead <corpus dir> <record>           every stored head written again, its paths masked; no other column moves
 //! ```
@@ -226,6 +228,27 @@ fn head(masks: &Masks, text: &str) -> String {
 const CUT: &str = "shorten it - keep its fix command and escape in full; a list gives its first few items and `and N more: \
 <the command that prints them all>` (shared::listed)";
 
+/// Whether a review of `m` is a SECOND on its subject: `first`, the key of the wording `m` replaced, is a FAIL of the same guard and
+/// kind that nothing renders now and no other second review has named; that FAIL's `by` where it is. 451 T177, the round arbiter's
+/// tooling fix on ask:guard-wordings-sleep-and-slot: a second review failing on BREVITY alone, its FIDELITY passing, leaves the text
+/// as reviewed and passes it (`VERDICT=BREVITY:<first>`), the cap ask:guard-wordings-third-round set - two asks in 15 minutes had
+/// ruled the same loop of reviewer taste. A FIDELITY failure is still a FAIL, fixed. WHY the key is named: guard and kind alone hold
+/// several wordings (make-only's refusals, finished-run's four), so a FAIL of the kind matched a sibling's first review too (MODE 4 on
+/// T177's plan, round 2, D6c); one FAIL is the first of one second review.
+fn second_review(
+    found: &BTreeMap<String, Message>,
+    rows: &BTreeMap<String, Row>,
+    m: &Message,
+    first: &str,
+) -> Option<String> {
+    let named = format!("key {first})");
+    let spent = rows.values().any(|r| r.by.ends_with(&named));
+    rows.get(first)
+        .filter(|r| r.verdict == "FAIL" && r.guard == m.guard && r.kind == m.kind)
+        .filter(|_| !found.contains_key(first) && !spent)
+        .map(|r| r.by.clone())
+}
+
 /// What a message owes: None where its row passes it, else the failure's text with its fix.
 fn owes(key: &str, m: &Message, row: Option<&Row>) -> Option<String> {
     let budget = m.budget();
@@ -245,7 +268,7 @@ fn owes(key: &str, m: &Message, row: Option<&Row>) -> Option<String> {
         Some(("BASELINE", _)) => None,
         Some(("PASS", no_reason)) if !over || !no_reason => None,
         Some(("PASS", _)) => said("OVER BUDGET", &format!("{CUT} - and have it reviewed again; or, where message-check ruled every word NEEDED: make guard-messages KEY={key} VERDICT=PASS BY=\"<the agent's id>\" OVER=\"<its reason>\"")),
-        Some(_) => said("FAILED ITS REVIEW", &format!("fix the wording message-check faulted, then {fix}")),
+        Some(_) => said("FAILED ITS REVIEW", &format!("fix the wording message-check faulted, then {fix} (its second review failing on BREVITY alone, FIDELITY passing: VERDICT=BREVITY:{key} - the text stands)")),
         None if over => said("NEW OR CHANGED AND OVER BUDGET", &format!("{CUT} - then {fix} (OVER=\"<its NEEDED reason>\" past the budget)")),
         None => said("NEW OR CHANGED, NOT REVIEWED", &fix),
     }
@@ -389,7 +412,9 @@ pub fn cli(args: &[String]) -> Reply {
     match (*verb, &a[3..]) {
         ("check", []) => check(&found, &rows),
         ("owed", [bundle]) => owed(&found, &rows, Path::new(bundle)),
-        ("verdict", [k, v @ ("PASS" | "FAIL"), by, over @ ..]) if over.len() <= 1 => {
+        ("verdict", [k, v, by, over @ ..])
+            if over.len() <= 1 && (matches!(*v, "PASS" | "FAIL") || v.starts_with("BREVITY")) =>
+        {
             let Some(m) = found.get(*k) else {
                 return reply(String::new(), format!("guard-messages: no message rendered has key {k} - make guard-messages lists them\n"), 1);
             };
@@ -401,9 +426,18 @@ pub fn cli(args: &[String]) -> Reply {
                     1,
                 );
             }
+            let (v, by) = if let Some(first) = v.strip_prefix("BREVITY") {
+                let first = first.strip_prefix(':').unwrap_or_default();
+                match second_review(&found, &rows, m, first) {
+                    Some(by_then) => ("PASS", format!("{by} (a second review failing on BREVITY alone - the text stands, the round arbiter's standing rule, ask:guard-wordings-sleep-and-slot; the first: {by_then}, key {first})")),
+                    None => return reply(String::new(), format!("guard-messages: a SECOND review failing on brevity alone is VERDICT=BREVITY:<the key of the failed wording this text replaced> - a {} {} FAIL no suite renders now and no other second review named; \"{first}\" is not one, and a first review's failure is recorded: make guard-messages KEY={k} VERDICT=FAIL BY=\"{by}\"\n", m.guard, m.kind), 1),
+                }
+            } else {
+                (*v, (*by).to_owned())
+            };
             rows.insert(
                 (*k).to_owned(),
-                row(&Masks::new(), m, v, by, over.first().unwrap_or(&"")),
+                row(&Masks::new(), m, v, &by, over.first().unwrap_or(&"")),
             );
             written(path, &rows, &format!("guard-messages: {k} recorded {v}\n"))
         }

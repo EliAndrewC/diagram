@@ -9,8 +9,10 @@ key	verdict	chars	guard	kind	by	over	head
 053435ccbd7b71ae	BASELINE	1043	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has
 06e260431ffb3863	BASELINE	863	static-runs-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (static-runs, the closing step's order - feature N TN): `make closing-checks`
 06ea664b2d1be8fd	BASELINE	767	phase-source-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: <path> is the old code of `field`, and N-x TN rebuilds
+07c09cf379e52548	PASS	149	blocked-fetch-hooks	notice	round-arbiter afeb4afdca86f6f88 (ask:guard-wordings-third-round: stands as it is)		attempts: https:/<path> - N earlier attempt(s) (date Q question: outcome - what
 093b07b06f498dc2	PASS	743	review-round-hooks	refuse	ace1afc5bc6430da1		BLOCKED: round N of TN's plan review - a check's third round
 09c62b02e033fef4	BASELINE	1006	phase-source-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a write moving `homesteads` into <path> - a parked hamlet stage
+0a89672a09ec2361	PASS	423	finished-run-hooks	refuse	message-check a347177710ecb2617		A MAKE RUN THIS SESSION STARTED IS STILL RUNNING; NOTHING WILL WAKE
 0b21df0655302424	BASELINE	578	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this settlement-review asks for N units in ONE agent - one
 0bf0024f8845da13	BASELINE	319	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an engine entry point run outside make - no make target
 0c8a046522163c6c	BASELINE	207	new-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a new registry file takes a RESERVED prefix, so parallel queues
@@ -26,6 +28,7 @@ key	verdict	chars	guard	kind	by	over	head
 12e7cf0aa14c9098	PASS	129	no-poll-hooks	notice	ad-hoc sonnet message-check aa702292a2fe849ce (round 1), 2026-11-23		The process-match pattern was bracketed for you: a literal pattern finds the
 12ed1fd328b1fd50	BASELINE	167	clone-sync-hooks	notice	unreviewed - stood before 451 T170		clone-sync: auto sync-in FAILED in <path> - resolve before modifying the repo:
 148a016bbf6544b8	PASS	445	discard-hooks	refuse	ace1afc5bc6430da1		BLOCKED (discard): this command would throw away UNCOMMITTED work in: dirty.py A
+158df11509828c1e	PASS	428	finished-run-hooks	refuse	message-check aa1b39d9c15293f13		A MAKE RUN THIS SESSION STARTED IS STILL RUNNING; NOTHING WILL WAKE
 15c98b67cf04200a	BASELINE	874	conflict-marker-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would stage a file that still carries a merge conflict.
 1670f8d9f61dc023	BASELINE	447	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: cargo run outside make. The Rust phases are linted, formatted and
 16cb9bcd94f715ec	BASELINE	485	static-runs-hooks	notice	unreviewed - stood before 451 T170		TN order (feature N): your last code edit not landed (<path>, N-N-NTN:N:N.NZ)
@@ -38,21 +41,19 @@ key	verdict	chars	guard	kind	by	over	head
 1bbdb3bd070fd9ac	BASELINE	1034	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: check-wave unit uN - a guard of its type refused it:
 1c70323f117c6dae	BASELINE	581	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `intro-check` dispatch points the agent at files IN the repository.
 1cdb56c82869a023	BASELINE	618	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (no-poll): a make or cargo job is disowned: it leaves the
-1d0ac13081313b11	BASELINE	410	set-down-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a builder slot is free - N of N builders running
 1d356dcea1e0e93b	BASELINE	642	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has
-1f4aacfd9b079648	BASELINE	834	finished-run-hooks	refuse	unreviewed - stood before 451 T170		A MAKE RUN THIS SESSION STARTED IS STILL GOING, DETACHED, AND NOTHING
 201066fbdcce67e5	BASELINE	575	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (no-poll): a periodic report kept as a backgrounded watcher loses its
 20b8790b521b178b	BASELINE	1777	measure-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: that is the second EXPENSIVE measurement in a row with no
 216b351a82af90c6	PASS	1199	pair-hooks	refuse	ae5329252c169f895		BLOCKED: this glyph-check would spend its round on work that has not
+219ef64072096361	PASS	349	set-down-hooks	refuse	round-arbiter aad643ace8004667b (ask:guard-wordings-sleep-and-slot: stands as it is)		BLOCKED: a builder slot is free - N of N builders running
 21bfd051af88e144	BASELINE	911	main-tree-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this command names a path inside the mirror and writes to
 21ccee81a12b09cc	BASELINE	642	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has
 26b127bc3fa8f46e	BASELINE	747	phase-source-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this search over lNr prints lines of <path> - the old
 26d741c632ced2dd	BASELINE	778	phase-source-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this search over <path> prints lines of <path> - the old
-2792b48d2ceff796	PASS	661	blocked-fetch-hooks	notice	ae5329252c169f895		attempts: https:/<path> - N earlier attempt(s): filter verdict: KEEP (the record's threshold
 2a0e76789d84a9f6	BASELINE	337	batching-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (batching): N of your last N turns were one quick call
 2a1a90675db0715e	BASELINE	599	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `record-style` dispatch points the agent at files IN the repository.
-2a5cbed74600f4d1	BASELINE	435	finished-run-hooks	refuse	unreviewed - stood before 451 T170		A MAKE RUN THIS SESSION STARTED IS STILL GOING, DETACHED, AND NOTHING
 2ac25214d070dc67	BASELINE	771	clone-sync-hooks	notice	unreviewed - stood before 451 T170		clone-sync: <path> is TRACKED again in <path> - it must stay gitignored.
+2b3a07f55ee07a6e	PASS	451	finished-run-hooks	refuse	message-check affbe78b423ae7cbc		A MAKE RUN THIS SESSION STARTED IS STILL RUNNING; NOTHING WILL WAKE
 2bc0273b230d794a	BASELINE	390	budget-change-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a work budget changes only with the GM's own words (feature
 2e6f92c730ddcb30	BASELINE	242	workflow-hooks	notice	unreviewed - stood before 451 T170		check-wave: every unit passed the Agent guards. When this run finishes,
 2efaa0516998e7dc	BASELINE	562	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (no-poll): the process pattern [m]izN.log matches this command's own text -
@@ -85,7 +86,6 @@ key	verdict	chars	guard	kind	by	over	head
 47559d07daa05c57	BASELINE	329	record-edit-hooks	notice	unreviewed - stood before 451 T170		<path> is assembled from <path> and is never hand-edited, so this edit
 47792da72a670863	BASELINE	285	clone-sync-hooks	notice	unreviewed - stood before 451 T170		clone-sync: <path> is behind main, but a make runs in it -
 47a0eb4e06fc6945	BASELINE	661	guard-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this edit puts a COMMAND SUBSTITUTION inside a recipe comment of
-48adb0c31ea6a62d	BASELINE	383	set-down-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a builder slot is free - N of N builders running
 4bd89a7e45c8662f	BASELINE	1036	context-cap-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: resuming builder N: its context is N tokens, past the cap
 4c1474e8a0b0167a	BASELINE	743	phase-source-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this search over <path> prints lines of <path> - the old
 4d2d2ad728c095cd	BASELINE	385	gate-write-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (gate-write): a shell write of . (`git apply <path>`) while this
@@ -94,19 +94,19 @@ key	verdict	chars	guard	kind	by	over	head
 4f92fb478504cae2	BASELINE	331	guard-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this edit adds a GUARD_EDIT_OK comment to the root Makefile, which
 5095c5b061c660df	BASELINE	1016	agent-model-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `general-purpose` agent names no model, so it would run on
 51d381c38dbde546	BASELINE	388	budget-change-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a work budget changes only with the GM's own words (feature
+526aff7b07d65070	PASS	331	no-poll-hooks	refuse	message-check ad4efe4ad7dc44b1f		BLOCKED (no-poll): this is a busy-wait loop (a loop containing `sleep`). Do
 545fe34f09454cb7	PASS	459	discard-hooks	refuse	ace1afc5bc6430da1		BLOCKED (discard): this command would throw away UNCOMMITTED work in: dirty.py <path>
 54be9a64a0d04039	BASELINE	419	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this glyph-check would spend its round on work that has not
 554d3dcff1bcf1ff	BASELINE	253	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: check-wave unit z - a guard of its type refused it:
 565f3f4c3b47539d	BASELINE	480	guard-file-hooks	notice	unreviewed - stood before 451 T170		This is the ROSTER OF ROLLED HAMLETS, and it is a GUARD
+58788f1c009dc664	PASS	1628	check-bundle-hooks	refuse	message-check a83c6cc7fb5c17b95		BLOCKED: N pop-ups owe modal-depiction together - send ONE agent on them
 593c109ea9d37431	BASELINE	479	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a glyph-check with no green gate for this content. A review
 5a67f27dbbccd7f3	BASELINE	559	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: `quote-check` runs through the check-wave workflow, not a script of its
 5aaf6a4514f40b0b	BASELINE	434	review-round-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: STALE_TERMS_OK with no reason given. An escape is a workaround, and
 5b025fe3c8f4391e	BASELINE	934	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has
 5e7dc13c66131f61	BASELINE	380	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this settlement-review would spend its round on work that has not
 5fe2b4f2b330c7dc	BASELINE	546	download-copy-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: DOWNLOAD_COPY_OK with no reason given. An escape is a workaround, and
-6044678010d1c39d	PASS	972	finished-run-hooks	refuse	ae5329252c169f895		A MAKE RUN THIS SESSION STARTED IS STILL GOING, DETACHED, AND NOTHING
 65fecf80488e61d5	BASELINE	583	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `record-format` dispatch points the agent at files IN the repository.
-667a995b8bc73463	BASELINE	821	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a GUARD FILE written from a shell command. Layer N only
 66cdd2ffdf3f7a88	BASELINE	798	claims-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: the research claims sheet is not opened by hand (Read). Ask
 69bc4a02c5753daa	BASELINE	752	phase-source-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this search over lNr prints lines of <path> - the old
 69e3abdefeb7568d	PASS	53	clone-sync-hooks	notice	ad-hoc sonnet message-check a47c24f9aada2922f (round 2), 2026-11-23		clone-sync: still mid-task since N:N, merge skipped
@@ -133,6 +133,7 @@ key	verdict	chars	guard	kind	by	over	head
 7a36087a36a8e361	BASELINE	208	new-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a new question file takes a RESERVED prefix, so parallel queues
 7b3557f0f52d2c78	BASELINE	967	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has
 7c0d5d62024a1dae	BASELINE	507	review-round-hooks	notice	unreviewed - stood before 451 T170		review-round: this dispatch was rewritten into MODE N round N of <path>
+7d05da583094338a	PASS	706	blocked-fetch-hooks	notice	message-check a02a48f6090388186		attempts: https:/<path> - N earlier attempt(s) (date Q question: outcome - what
 7d9bd0b5ed61a5ce	PASS	1227	review-round-hooks	refuse	ace1afc5bc6430da1		BLOCKED: <path> still carries the OLD value of something this change moved
 7dea326f0e784fb9	BASELINE	184	clone-sync-hooks	notice	unreviewed - stood before 451 T170		clone-sync: <path> has uncommitted work (mid-task) - clone merge skipped; mirror refresh
 7e51fc38a8b4398c	BASELINE	1318	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has
@@ -148,13 +149,13 @@ key	verdict	chars	guard	kind	by	over	head
 8651270283b39d9f	BASELINE	609	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `translation-check` dispatch points the agent at files IN the repository.
 86e790018bda63ed	BASELINE	268	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an engine entry point run outside make - `make switches` cannot
 87b4b16fac2e6518	BASELINE	124	blocked-fetch-hooks	notice	unreviewed - stood before 451 T170		archive: a copy of https:/<path> is archived - read it with
-88542d0e257ef174	BASELINE	582	finished-run-hooks	refuse	unreviewed - stood before 451 T170		A MAKE RUN THIS SESSION STARTED IS STILL GOING, DETACHED, AND NOTHING
 8a49f17b4b67dd64	PASS	353	no-poll-hooks	notice	ad-hoc sonnet message-check a47c24f9aada2922f (round 2), 2026-11-23		POLL_OK permitted this wait, and its process-match pattern was bracketed for you:
 8b65be9059e56665	BASELINE	200	new-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a new glossary file takes a RESERVED prefix, so parallel queues
 8c4967333aea2af5	BASELINE	756	agent-prefix-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a Nth `spec-fidelity` launch within seconds - a wave goes through
 8d75a0702db866bf	BASELINE	525	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: `quote-check` is not owed on this bundle. Its MANIFEST (<path>) owes:
 8d972b2fab4e475f	BASELINE	399	clone-sync-hooks	notice	unreviewed - stood before 451 T170		clone-sync: <path> was a clean clone BEHIND main (main moved during this
 8dd6b5cddd276dc2	BASELINE	183	set-down-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: feature N-x has N open task(s) and nothing is running -
+8e32a146cf4fd856	PASS	357	no-poll-hooks	refuse	round-arbiter aad643ace8004667b (ask:guard-wordings-sleep-and-slot: the original first line, no further review)		BLOCKED (no-poll): `sleep` was invoked in a form that evades the harness's
 8f52fca7ecc207d5	BASELINE	416	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: record-format on <path>: decide first, then check (feature N FR-Na) -
 901ed7703834409b	BASELINE	393	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this settlement-review would spend its round on work that has not
 92394bca63807c7a	BASELINE	1108	main-tree-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: your shell is standing in <path>, inside <path> - the MIRROR
@@ -164,13 +165,13 @@ key	verdict	chars	guard	kind	by	over	head
 961314661bba5511	BASELINE	439	gate-write-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (gate-write): a git commit or add of a change the gate
 974f9a8422813f72	BASELINE	598	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `source-applicability` dispatch points the agent at files IN the repository.
 97b5f076ac22fe50	BASELINE	820	agent-prefix-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: N characters of this prompt repeat an earlier `modal-form` dispatch's, from
-98f02b5ad5d73f34	BASELINE	514	builder-stop-hooks	block	unreviewed - stood before 451 T170		builder-stop: N-x TN: its plan section carries no current CLEAR verdict A
 99e961bdba354607	BASELINE	193	clone-sync-hooks	notice	unreviewed - stood before 451 T170		clone-sync: <path> has a make run going (a gate or a roll)
 9b88f0df15ae7ca1	BASELINE	577	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (no-poll): a periodic report kept as a backgrounded watcher loses its
 9bf843d0b4680c84	BASELINE	798	claims-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: the research claims sheet is not opened by hand (Edit). Ask
 9c311cb22d92082c	BASELINE	1209	guard-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: <path> is a GUARD, not ordinary source. The guards are what
 9c6a42d4b1fe8377	BASELINE	260	make-only-hooks	notice	unreviewed - stood before 451 T170		`pythonN -m lNr.diagram.switches` was rewritten to `make switches`, the target that wraps
 9c78a84cd7f285cd	BASELINE	326	gate-hooks	notice	unreviewed - stood before 451 T170		`make quick` was dropped from this command and `make done` runs alone:
+9e2e372849b9273e	PASS	629	context-cap-hooks	refuse	message-check aa08dbd20e04e5641		BLOCKED: this builder's context is N tokens, past the cap of N.
 9f75bd8c83aa6891	BASELINE	567	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (no-poll): the process pattern [r]esvg --width matches this command's own text
 a06738e311e2e4cb	PASS	725	pair-hooks	block	ace1afc5bc6430da1		BLOCKED: N dispatch(es) a guard refused this turn were neither sent again
 a097cfe0889f2c0a	BASELINE	474	static-runs-hooks	notice	unreviewed - stood before 451 T170		TN order (feature N): your last code edit not landed (Makefile, N-N-NTN:N:N.NZ)
@@ -180,6 +181,8 @@ a2a15416db3dcfab	BASELINE	617	pair-hooks	refuse	unreviewed - stood before 451 T1
 a2b2e03a22787179	BASELINE	517	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this settlement-review would spend its round on work that has not
 a2e9e5c146e655bf	BASELINE	581	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `entry-drift` dispatch points the agent at files IN the repository.
 a3a77719478f0198	BASELINE	719	phase-source-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this search over <path> prints lines of <path> - the old
+a42fc44e26d0ee36	PASS	638	finished-run-hooks	refuse	message-check a020dd8baee5397e8		A MAKE RUN THIS SESSION STARTED IS STILL RUNNING; NOTHING WILL WAKE
+a4e8b33d776c3911	PASS	376	set-down-hooks	refuse	message-check a8e44cf51fbc35f55		BLOCKED: a builder slot is free - N of N builders running
 a524f50e9bcbba0d	BASELINE	603	phase-source-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: <path> is the old code of `field`, and N-x TN rebuilds
 a72468bfa1246183	BASELINE	239	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: check-wave unit N - a guard of its type refused it:
 a7aa69317acfb08c	BASELINE	394	record-edit-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: <path> is ASSEMBLED from <path>, and the text this edit replaces
@@ -190,10 +193,10 @@ a9fca65929742849	PASS	202	no-poll-hooks	notice	ad-hoc sonnet message-check aa702
 aa086f67589361c8	PASS	448	discard-hooks	refuse	ace1afc5bc6430da1		BLOCKED (discard): this command would throw away UNCOMMITTED work in: <path> A
 aa3386be61fd00db	BASELINE	309	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an engine entry point run outside make - no make target
 aa351e44197ce05e	BASELINE	370	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: glyph-check--kiln--glyphmap is owed but not yet due - due at N:N
+aac02b07c0b22175	PASS	651	finished-run-hooks	refuse	message-check a6ff2fc0f7f9545cd		A MAKE RUN THIS SESSION STARTED IS STILL RUNNING; NOTHING WILL WAKE
 ab6158ccff04f17f	BASELINE	616	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (no-poll): a periodic report kept as a backgrounded watcher loses its
 abe19e7484342f12	PASS	196	house-style-hooks	notice	ad-hoc sonnet message-check a6b3eebea2a8587d9 (round 3), 2026-11-23		House style was applied to this command for you (`centre` -> `center`).
 ac22a7a46ec69b9e	BASELINE	1331	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has
-aca16ddd58e1fef1	BASELINE	104	blocked-fetch-hooks	notice	unreviewed - stood before 451 T170		attempts: https:/<path> - N earlier attempt(s): N-N-N Q unknown: unknown - the
 acb2a805eef1d0b1	BASELINE	466	review-round-hooks	notice	unreviewed - stood before 451 T170		review-round: <path> already records a review round, but the tooling holds no
 ad76e4890d7a9252	BASELINE	1133	clone-sync-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: the mirror <path> is carrying a commit GitHub main does not
 adf50a4bc1524316	BASELINE	497	escalation-hooks	refuse	unreviewed - stood before 451 T170		FINDINGS UNFILTERED: settlement-review returned and no escalation-check has read what you are
@@ -218,6 +221,7 @@ bd7ca924db8c7ff6	BASELINE	183	workflow-hooks	refuse	unreviewed - stood before 45
 be750a5c35cfd37c	BASELINE	524	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an agent() call with no agentType: agent('summarize the file', {label: 'a',
 bec909c39f0408a1	BASELINE	622	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `source-reader` dispatch points the agent at files IN the repository.
 bf0b09dc207d4e69	BASELINE	649	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (no-poll): a make or cargo job is put in the background
+bf5cd7dc8b244c07	PASS	450	builder-stop-hooks	block	message-check a91ac500286d36459		builder-stop: N-x TN: its plan section carries no current CLEAR verdict -
 bf998fd21dbce8b1	BASELINE	593	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this settlement-review asks for N units in ONE agent - one
 bfe448bc343d9134	BASELINE	378	gate-write-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (gate-write): make tick (it writes a tracked record) while this tree's
 c0c7c2d282122d71	BASELINE	1127	clone-sync-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this session's clone is <path> (resolved from its session name); the
@@ -237,7 +241,6 @@ ce34fe125942135e	BASELINE	330	clone-sync-hooks	refuse	unreviewed - stood before 
 ce80c5112e13be26	PASS	266	record-edit-hooks	refuse	a321d8220347ee8b7		BLOCKED: q:N's checks have returned, and this edit is none of the
 cf2b8bf2b62d3c5e	BASELINE	472	engine-freeze-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an engine edit while a map review is still running -
 cf70b6da25710e2b	BASELINE	798	claims-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: the research claims sheet is not opened by hand (Bash). Ask
-cfab84607e3d6f42	BASELINE	744	context-cap-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this builder's context is N tokens, past the cap of N
 cfe6299d6c81be85	BASELINE	582	ledger-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: the review ledger's measured table has a row short of a
 d023d10bbfc9fa21	BASELINE	818	agent-prefix-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: N characters of this prompt repeat an earlier `record-format` dispatch's, from
 d1be8ccadffc4cb1	BASELINE	507	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an agent() call with no agentType: agent('summarize the file', {label: 'a'})
@@ -260,7 +263,6 @@ dafb0239f4ca40cd	BASELINE	169	workflow-hooks	refuse	unreviewed - stood before 45
 dc71d96f906bba4d	BASELINE	343	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: source-reader on its prompt: decide first, then check (feature N FR-Na)
 de0932ca609ad194	BASELINE	272	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: check-wave unit N / source-reader - a guard of its type
 deb6db8f2bef4d33	BASELINE	181	clone-sync-hooks	notice	unreviewed - stood before 451 T170		clone-sync: <path> holds a running gate's lock - clone merge skipped; mirror
-df30874e61feeb54	BASELINE	639	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (no-poll): `sleep` was invoked in a form that evades the harness's
 e09f17b92e1ea58c	BASELINE	797	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a settlement-review with no green gate for this content. A review
 e683b508f5ea6ebb	BASELINE	305	wakeup-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: ScheduleWakeup, and this guard could not establish that the session is
 e6845fff5c1b8c74	BASELINE	356	gate-write-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (gate-write): an Edit of a.txt while this tree's `make done` runs.
@@ -277,15 +279,15 @@ f333d6a8130f98e2	BASELINE	262	pair-hooks	refuse	unreviewed - stood before 451 T1
 f341249640267810	BASELINE	388	gate-write-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (gate-write): make record-checked (it writes a tracked record) while this tree's
 f487f6ae99b8af5e	BASELINE	231	idle-tests-hooks	notice	unreviewed - stood before 451 T170		idle-tests: ran NTNZ in Ns on N (<path>; suspends N, deferrals N):
 f4a4ac3da3e2be10	BASELINE	381	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: `escalation-check` is not an authorized wave job (source-applicability, quote-check, settlement-review, entry-drift,
-f4e77910f28e7ff3	BASELINE	496	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (no-poll): this is a busy-wait loop (a loop containing `sleep`). Waiting
 f6d9c81916c57b42	BASELINE	319	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an engine entry point run outside make - no make target
 f7143cf6276fb8d0	BASELINE	534	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: SLOW_POLL_OK with no reason given. An escape is a workaround, and
 f962727b916d40ed	BASELINE	367	gate-write-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (gate-write): an Edit of <path> while this tree's `make done` runs.
+fa3547ae95515863	PASS	692	set-down-hooks	refuse	round-arbiter aad643ace8004667b (ask:guard-wordings-sleep-and-slot: stands as it is)		BLOCKED: a builder slot is free - N of N builders running
 faa322bcca2c4524	BASELINE	750	phase-source-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this search over . prints lines of <path> - the old
 fafdd3c9ba386d2f	PASS	234	clone-sync-hooks	notice	ad-hoc sonnet message-check a47c24f9aada2922f (round 2), 2026-11-23		clone-sync: <path> has uncommitted work (mid-task) - clone merge skipped; mirror refreshed
 fb2299f555d6a925	BASELINE	525	readme-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: README_OK with no reason given. An escape is a workaround, and
 fd40cd8e085acc60	BASELINE	640	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has
 fd6f4400a52f2c2a	PASS	602	discard-hooks	refuse	ace1afc5bc6430da1		BLOCKED (discard): this command would throw away UNCOMMITTED work in: <path> <path>
+fdee832cb5ab9ead	PASS	550	make-only-hooks	refuse	message-check a92df90484ef842d4		BLOCKED: a GUARD FILE written from a shell command. Layer N only
 fe30d702c11d5eaa	BASELINE	125	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: REVIEW_PREREQ_OK needs a REASON (two words, eight characters, in quotes) -
-fee695f8120bb96f	BASELINE	537	finished-run-hooks	refuse	unreviewed - stood before 451 T170		A MAKE RUN THIS SESSION STARTED IS STILL GOING, DETACHED, AND NOTHING
 ff0eedda411337c1	BASELINE	640	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has

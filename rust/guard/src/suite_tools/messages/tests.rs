@@ -188,6 +188,100 @@ fn an_unreviewed_change_fires_and_a_reviewed_or_baselined_wording_passes() {
     );
 }
 
+/// 451 T177, the round arbiter's tooling fix (ask:guard-wordings-sleep-and-slot): a SECOND review failing on brevity alone - a failed
+/// wording of the same guard and kind superseded in the record - leaves the text as reviewed and passes it; a first review's is refused.
+#[test]
+fn a_second_review_failing_on_brevity_alone_passes_and_a_first_is_refused() {
+    let d = TempDir::new("messages-brevity");
+    let (c, rec) = (d.join("c"), d.join("guard-messages.tsv"));
+    let (cs, rs) = (
+        c.to_string_lossy().into_owned(),
+        rec.to_string_lossy().into_owned(),
+    );
+    let one = |text: &str| put(&c, "s.jsonl", &[("g-hooks", "refuse", text.to_owned())]);
+    let key = || {
+        let owed = run(&["owed", &cs, &rs, &d.join("b.md").to_string_lossy()]);
+        owed.stdout
+            .split(['\n', ' '])
+            .find_map(|w| w.strip_prefix("message-check:"))
+            .unwrap()
+            .to_owned()
+    };
+    one("BLOCKED: no, since the rule says so at length. Fix: make x");
+    let k1 = key();
+    let first = run(&["verdict", &cs, &rs, &k1, "BREVITY", "agent-1"]);
+    assert!(
+        first.code == 1
+            && first
+                .stderr
+                .contains("a first review's failure is recorded: make guard-messages KEY=")
+            && first.stderr.contains("VERDICT=FAIL BY=\"agent-1\""),
+        "{}",
+        first.stderr
+    );
+    assert_eq!(run(&["verdict", &cs, &rs, &k1, "FAIL", "agent-1"]).code, 0);
+    // the FAILED tip names the form with the failed key the fixed wording's second review will name
+    let tip = format!("VERDICT=BREVITY:{k1} - the text stands");
+    assert!(run(&["check", &cs, &rs]).stderr.contains(&tip));
+    one("BLOCKED: no. Fix: make x");
+    let k2 = key();
+    // a bare BREVITY names no failed wording, so no second review: refused with the form (MODE 4 on T177's plan, round 2, D6c)
+    let bare = run(&["verdict", &cs, &rs, &k2, "BREVITY", "agent-2"]);
+    let form = "VERDICT=BREVITY:<the key of the failed wording this text replaced>";
+    assert!(
+        bare.code == 1 && bare.stderr.contains(form),
+        "{}",
+        bare.stderr
+    );
+    let brevity = format!("BREVITY:{k1}");
+    let second = run(&["verdict", &cs, &rs, &k2, &brevity, "agent-2"]);
+    let passed = second.code == 0 && second.stdout.contains("recorded PASS");
+    assert!(passed, "{}", second.stderr);
+    let rows = record(&rec);
+    let by = &rows[&k2].by;
+    let first = format!("the first: agent-1, key {k1})");
+    assert!(
+        rows[&k2].verdict == "PASS"
+            && by.starts_with("agent-2 (a second review")
+            && by.ends_with(&first)
+    );
+    // the row names the ruling that set the rule, as the rows it ruled by hand do (MODE 4 on T177's plan, round 1, D6b)
+    assert!(by.contains("the round arbiter's standing rule, ask:guard-wordings-sleep-and-slot"));
+    assert_eq!(run(&["check", &cs, &rs]).code, 0);
+    // a sibling wording of the same guard and kind is no second review of k1: its first FAIL was another's, now spent (D6c)
+    put(
+        &c,
+        "s.jsonl",
+        &[
+            ("g-hooks", "refuse", "BLOCKED: no. Fix: make x".to_owned()),
+            (
+                "g-hooks",
+                "refuse",
+                "BLOCKED: also no, at length. Fix: make y".to_owned(),
+            ),
+        ],
+    );
+    let k3 = key();
+    let spent = run(&["verdict", &cs, &rs, &k3, &brevity, "agent-3"]);
+    assert!(
+        spent.code == 1 && spent.stderr.contains(form),
+        "{}",
+        spent.stderr
+    );
+    // nor is a key whose row passed, or one a suite still renders
+    for not_failed in [&k2, &k3] {
+        let other = run(&[
+            "verdict",
+            &cs,
+            &rs,
+            &k3,
+            &format!("BREVITY:{not_failed}"),
+            "agent-3",
+        ]);
+        assert_eq!(other.code, 1, "{}", other.stderr);
+    }
+}
+
 #[test]
 fn past_its_budget_a_wording_passes_only_on_a_review_that_ruled_every_word_needed() {
     let d = TempDir::new("messages-budget");
@@ -253,7 +347,7 @@ fn every_list_growing_message_at_its_worst_case_is_within_its_budget() {
         .map(|i| format!("rust/gate/crates/crate_{i:02}"))
         .collect();
     let said = super::worst::worst(&crates, &d);
-    assert_eq!(said.len(), 8);
+    assert_eq!(said.len(), 10);
     for (m, keyed) in &said {
         let budget = if m.kind == "notice" {
             NOTICE_BUDGET
@@ -266,8 +360,37 @@ fn every_list_growing_message_at_its_worst_case_is_within_its_budget() {
         if m.guard == "static-runs-hooks" {
             assert!(m.text.contains("crate_40\"\n") && m.text.contains("STATIC_OK"));
             assert!(keyed.contains("CRATE=\"rust/a rust/b rust/c\""));
+        } else if m.guard == "check-bundle-hooks" {
+            // 451 T177: the pop-ups' batch refusal names every pop-up, its list its fix command's argument
+            assert!(
+                m.text.contains("common40\" FOR=modal-depiction, batched")
+                    && m.text.contains("BATCH_OK="),
+                "{}",
+                m.text
+            );
+            assert_eq!(&m.text, keyed);
+        } else if m.guard == "set-down-hooks" {
+            // 451 T177: the builder-slot block names its running builders, at most the knob's 3 less the free one, a bundle past
+            // the cap as its first tasks and the file holding them all (message-check's first review), no feature cited
+            assert!(
+                m.text.contains("(449-rust-codebase T301+T302 and 38 more: `cat ")
+                    && m.text.contains("`, 451-time-retro-and-efficiency T301+T302 and 38 more: `cat ")
+                    && m.text.contains("then dispatch its builder; or set the feature down: make set-down F=451 WHY=")
+                    && !m.text.contains("T88"),
+                "{}",
+                m.text
+            );
+            assert_eq!(&m.text, keyed);
         } else {
             assert!(m.text.contains(" more: `"), "{}", m.text);
+            // 451 T177 (the round arbiter's ask:guard-wordings-third-round): a run with no output file is held here, waited on by
+            // its pid, a line no suite renders
+            assert!(
+                m.guard != "finished-run-hooks"
+                    || m.text.contains("  pid 950002 `make static`, no output file: wait on it in the background: while kill -0 950002"),
+                "{}",
+                m.text
+            );
             assert_eq!(&m.text, keyed);
         }
     }
@@ -302,7 +425,7 @@ fn the_worst_cases_are_checked_in_the_tree_holding_the_record() {
     assert_eq!(first.code, 1);
     assert!(
         first.stderr.contains("make crate-checks CRATE=\"rust/x\"")
-            && first.stderr.contains("8 of 8 wordings"),
+            && first.stderr.contains("10 of 10 wordings"),
         "{}",
         first.stderr
     );

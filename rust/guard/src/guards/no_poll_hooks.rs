@@ -245,7 +245,6 @@ pub(crate) fn judge(cx: &Ctx) -> Vec<Answer> {
         return block(
             cx,
             "this is a busy-wait loop (a loop containing `sleep`).",
-            BUSY_WAIT,
             "busy-wait-loop",
         );
     }
@@ -253,7 +252,6 @@ pub(crate) fn judge(cx: &Ctx) -> Vec<Answer> {
         return block(
             cx,
             "`sleep` was invoked in a form that evades the harness's foreground-sleep block.",
-            DISGUISED_WHY,
             "disguised-sleep",
         );
     }
@@ -729,13 +727,14 @@ fn file_wait(cx: &Ctx, ti: &Value) -> Vec<Answer> {
     cx.rewrite(ceil.as_deref().or(proof.as_deref()), true, &said.join(" "))
 }
 
-/// A refusal naming what to do instead.
-fn block(cx: &Ctx, reason: &str, alternative: &str, rule: &str) -> Vec<Answer> {
+/// A refusal naming what to do instead. 451 T177 (message-check): the fix names the Bash parameter and the escape its form, a reason
+/// of two words or more (`shared::escape`); the why each caller passed is cut, so none takes one.
+fn block(cx: &Ctx, reason: &str, rule: &str) -> Vec<Answer> {
     cx.log("blocked", rule);
     vec![Answer::Refuse(format!(
-        "BLOCKED (no-poll): {reason}\n{alternative}\n\nDo this instead: run the work with run_in_background and act on the completion \
-notification; the harness\nre-invokes you. For EXTERNAL state the harness cannot see (a port, a remote queue), put POLL_OK and what \
-you\nare waiting for in the command."
+        "BLOCKED (no-poll): {reason}\n\nDo this instead: run the work as a Bash call with run_in_background: true and act \
+on its completion notification.\nFor EXTERNAL state the harness cannot see (a port, a remote queue), put POLL_OK=\"<what you are \
+waiting for, two words or more>\" in the command."
     ))]
 }
 
@@ -792,11 +791,13 @@ CRON_OK=\"<reason>\".\n"
     )
 }
 
-const BUSY_WAIT: &str = "Waiting in a loop burns wall-clock at full model-turn cost and, for anything the harness tracks, it
-is pure waste: a backgrounded Bash command notifies you the moment it exits.";
-const DISGUISED_WHY: &str = "The harness blocks foreground `sleep` on purpose; `command sleep`, `/bin/sleep` and `env sleep`
-are the same thing wearing a hat. Whatever you were about to wait for, there is a better signal for
-it - a completion notification for harness-tracked work, or POLL_OK for genuinely external state.";
+// 451 T177 (message-check; its second round, ruled by the round arbiter's ask:guard-wordings-third-round): the busy-wait refusal
+// takes no why, since the fix line says to act on the completion notification. Cut from the text, kept here: a wait in a loop burns
+// wall-clock at full model-turn cost, and for anything the harness tracks it is pure waste - a backgrounded Bash command notifies
+// the session when it exits.
+// 451 T177 (message-check, the disguised-sleep refusal's two reviews, ruled by the round arbiter's ask:guard-wordings-sleep-and-slot):
+// its first line stands as it was and its why is gone from the text, kept here: `command sleep`, `/bin/sleep` and `env sleep` are the foreground `sleep` the harness blocks on purpose, and
+// whatever a session waits for has a better signal - a completion notification for harness-tracked work, POLL_OK for external state.
 // THE REWRITE NOTICES SAY WHAT WAS DONE AND WHAT TO DO (451 T170): a builder's file wait carried BACKGROUNDED, PROOF and CEILING
 // together, 1,071 characters 201 times over the coordinator's subagents, measured 2026-11-23. The history each rewrite rests on is
 // the code's, kept here: a literal pattern looped an escaped waiter on a detached page-check for hours on a gate that finished in

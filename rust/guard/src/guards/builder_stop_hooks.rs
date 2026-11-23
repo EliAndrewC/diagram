@@ -272,9 +272,22 @@ fn review_in_flight(own: &Path) -> Option<String> {
         .find(|id| !text.contains(&format!("<task-id>{id}</task-id>")))
 }
 
-fn refusal(why: &str, feature: &str, task: &str) -> String {
+/// The tail of the gate's no-CLEAR why (`task::task_refusal`): the review to dispatch and the fix, which the block says once, with
+/// the review's type, its wake and the deferrals.
+const NO_CLEAR_TAIL: &str =
+    " and dispatch the MODE 4 review it prints yourself, then fix what it finds";
+
+/// The block: the gate's why, which names the decide, the review to dispatch and the fix, then what it does not. 451 T177
+/// (message-check): the block had said the decide and the review twice; "A builder ends ready to land (feature 451 T84)" and
+/// "(recorded)" were cut - the feature is this module's, the record the guard log's. Its second round (the round arbiter's
+/// ask:guard-wordings-third-round) put "its notification wakes you" back, since without it a builder may poll or end its turn, and
+/// merged the why's review into one sentence; a why without that tail (a deferral alone, which names its own `make task-add`) owes
+/// no review, so it is said as the gate gave it.
+fn refusal(why: &str, feature: &str, _task: &str) -> String {
+    let review = format!(", then dispatch the MODE 4 review it prints (subagent_type spec-fidelity, in the background; its notification wakes you), fix its findings, and file each deferral with `make task-add F={feature} TITLE=\"...\"`");
+    let said = why.replacen(NO_CLEAR_TAIL, &review, 1);
     format!(
-        "builder-stop: {why}\nA builder ends ready to land (feature 451 T84): `make decide F={feature} T={task}`, then dispatch the MODE 4 review it prints yourself (subagent_type spec-fidelity, in the background - its notification wakes you), fix its findings, and file each deferral with `make task-add F={feature} TITLE=\"...\"`. A builder that cannot finish ends its final message with {TOKEN}=\"<reason>\" (recorded); past the context cap it needs none - write the handoff and stop.\n"
+        "builder-stop: {said}\nA builder that cannot finish ends its final message with {TOKEN}=\"<reason>\"; past the context cap it needs none - write the handoff and stop.\n"
     )
 }
 

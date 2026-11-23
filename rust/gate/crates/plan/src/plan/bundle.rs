@@ -741,7 +741,7 @@ pub(super) fn build(
         .filter(|(i, _)| !cited.contains(*i))
         .map(|(_, p)| format!("{}\n", lead(p.as_str().unwrap_or(""))))
         .collect();
-    // every ruling a block cites, its record's ruling, why and what (feature 449 T169): the reviewer reads nothing in the repository
+    // every ruling a block cites, its record's ruling, why, what and tooling fix (feature 449 T169, 451 T177): the reviewer reads nothing in the repository
     write("rulings.md", rulings::rulings(spec_dir, &bodies));
     write(
         "spec-index.md",
@@ -798,7 +798,7 @@ pub(super) fn build(
         format!("# Each changed block's text when last judged, with that verdict\n\n{before}"),
     );
     let manifest = out.join("MANIFEST.md");
-    let _ = std::fs::write(&manifest, format!("# Plan review bundle - {feature}, {name}\n\nA MODE 4 plan review of the blocks in `blocks.md` and nothing else of the plan (feature 375 amendment 11). Read the files beside\nthis MANIFEST and nothing in the repository: `request.md` is the GM's words verbatim - the original request and every amendment\nfrom the one these blocks answer on, the earlier ones indexed in `request-index.md`; `spec-cited.md` holds every requirement,\ndecision and `m:` measurement the blocks name, in full; `rulings.md` the round arbiter's ruling, why and what, verbatim, for every `ask:`\nruling the blocks cite; `spec-index.md` every other requirement's first sentence on one line, a long one cut and marked `[...]` - grep it for one the blocks\nshould have named; `earlier.md` what a changed block said when last judged, and the verdict it got.\n\nFind each decision in the blocks, class it `within` or `narrowing`, and rule on each narrowing (LEGITIMATE / NOT LEGITIMATE).\n\n{how}\n"));
+    let _ = std::fs::write(&manifest, format!("# Plan review bundle - {feature}, {name}\n\nA MODE 4 plan review of the blocks in `blocks.md` and nothing else of the plan (feature 375 amendment 11). Read the files beside\nthis MANIFEST and nothing in the repository: `request.md` is the GM's words verbatim - the original request and every amendment\nfrom the one these blocks answer on, the earlier ones indexed in `request-index.md`; `spec-cited.md` holds every requirement,\ndecision and `m:` measurement the blocks name, in full; `rulings.md` the round arbiter's ruling, why, what and tooling fix, verbatim, for every `ask:`\nruling the blocks cite; `spec-index.md` every other requirement's first sentence on one line, a long one cut and marked `[...]` - grep it for one the blocks\nshould have named; `earlier.md` what a changed block said when last judged, and the verdict it got.\n\nFind each decision in the blocks, class it `within` or `narrowing`, and rule on each narrowing (LEGITIMATE / NOT LEGITIMATE).\n\n{how}\n"));
     Ok(manifest)
 }
 

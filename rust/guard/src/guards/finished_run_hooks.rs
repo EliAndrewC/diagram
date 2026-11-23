@@ -349,21 +349,24 @@ fn refusal(unwatched: &[&Root], git_dir: &Path) -> String {
     refusal_of(&runs, git_dir)
 }
 
-/// One run left unwatched: its pid, target and output, and the wait on it.
+/// One run left unwatched: its pid, target and output, and the wait on it. 451 T177 (message-check): where the wait greps the
+/// output it names it, so the run line does not name it again (about 100 characters a run, the coordinator's 269 blocks of
+/// 2026-11-17 to 23); a run with no output file is waited on by its pid, since a grep of `(no file)` would never end.
 pub(crate) fn run_said(pid: u32, target: &str, detail: &str) -> String {
-    let wait = if detail.contains("/verify-gate") {
-        "  wait on it: `make verify-wait`, run_in_background - it ends when the gate does"
-            .to_owned()
-    } else {
-        format!("  wait on it in the background: until grep -qE \"gate green|GATE NOT GREEN|GATE FAILED\" {detail}; do sleep 20; done")
-    };
-    format!("  pid {pid} `make {target}`, output in {detail}\n{wait}")
+    if detail.contains("/verify-gate") {
+        return format!("  pid {pid} `make {target}`, output in {detail}\n  wait on it: `make verify-wait`, run_in_background - it ends when the gate does");
+    }
+    if detail == "(no file)" {
+        return format!("  pid {pid} `make {target}`, no output file: wait on it in the background: while kill -0 {pid} 2>/dev/null; do sleep 20; done");
+    }
+    format!("  pid {pid} `make {target}`: wait on it in the background: until grep -qE \"gate green|GATE NOT GREEN|GATE FAILED\" {detail}; do sleep 20; done")
 }
 
-/// The block over the runs said: the first few and the file holding them all (451 T170: the list grows two lines a run).
+/// The block over the runs said: the first few and the file holding them all (451 T170: the list grows two lines a run). Its first
+/// eight words stand, since `shared::once`'s one-line repeat is made of them.
 pub(crate) fn refusal_of(runs: &[String], git_dir: &Path) -> String {
     format!(
-        "A MAKE RUN THIS SESSION STARTED IS STILL GOING, DETACHED, AND NOTHING WILL WAKE THIS SESSION FOR IT:\n{}\n\
+        "A MAKE RUN THIS SESSION STARTED IS STILL RUNNING; NOTHING WILL WAKE THIS SESSION FOR IT:\n{}\n\
 Then REPORT WHAT IT SAID. (A run started with run_in_background needs NO loop.) Ending the turn on purpose: end it again.",
         crate::shared::listed::capped_kept(runs, "  ", git_dir)
     )

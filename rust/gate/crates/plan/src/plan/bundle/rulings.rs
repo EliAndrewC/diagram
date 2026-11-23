@@ -1,4 +1,5 @@
-//! The round arbiter's rulings a plan review's blocks cite, each one's ruling, why and what (feature 449 T169): the bundle's `rulings.md`.
+//! The round arbiter's rulings a plan review's blocks cite, each one's ruling, why, what and tooling fix (feature 449 T169, 451 T177): the
+//! bundle's `rulings.md`.
 //!
 //! WHY: a plan block decides under a ruling it names (`ask:449-engine-order`), and the bundle carried only the rulings the spec's own
 //! text quotes, so plan reviews kept saying a ruling the block named was not in the bundle - T168's first review came back
@@ -17,7 +18,10 @@ use super::super::sections::re;
 /// The fields a ruling's record carries into the bundle, in this order: when it was ruled, the ruling, its why and its what - the brief's
 /// "its why and what, verbatim" (feature 449 T169). The question asked and the rest stay in the log: on T168's bundle `asked` alone was
 /// 12.6 KB of the 33.6 KB the records' fields took (observed 2026-11-17, method: the bytes of each field's lines in `rulings.md`).
-const FIELDS: [&str; 4] = ["utc", "ruling", "why", "what"];
+/// Its tooling fix rides too (451 T177): a block that makes a tool a ruling ordered decides under that field, and MODE 4's first round
+/// on T177, its bundle carrying no `tooling_fix`, ruled the tool unordered (observed 2026-11-23, method: that bundle's `rulings.md`
+/// beside `arbiter.jsonl`). The `fix` field, the tooling fix's state (`open`), stays in the log.
+const FIELDS: [&str; 5] = ["utc", "ruling", "why", "what", "tooling_fix"];
 
 /// A ruling's key as the plans cite it - `ask:` and its name (`ask:449-engine-order`, `ask:set-down-449-efficiency-round-2`), a trailing
 /// `'s` or punctuation left out - or a sibling cited in short form after one: `` `ask:449-T182-room-sizes`, `-room-layout`, `-room-scope` `` - the short form
@@ -90,7 +94,7 @@ fn shown(m: &Map<String, Value>, file: &str) -> String {
 /// whichever other feature's log holds it - or a line saying no log does, so the reviewer can tell "not recorded" from "not cited".
 pub(super) fn rulings(spec_dir: &Path, bodies: &[&str]) -> String {
     let keys = cited(bodies);
-    let head = "# The round arbiter's rulings the blocks cite, their ruling, why and what from `arbiter.jsonl`, verbatim\n\n";
+    let head = "# The round arbiter's rulings the blocks cite, their ruling, why, what and tooling fix from `arbiter.jsonl`, verbatim\n\n";
     if keys.is_empty() {
         return format!("{head}(none - the blocks cite no `ask:` ruling)\n");
     }

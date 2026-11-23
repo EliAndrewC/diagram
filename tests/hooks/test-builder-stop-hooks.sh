@@ -20,8 +20,9 @@ printf -- '- [ ] T84 the stop\n' > "$C/specs/451-x/tasks.md"
 printf '{"feature": "451-x", "task": "T84"}\n' > "$C/.git/task-starts.jsonl"
 : > "$S"; : > "$OWN"
 printf '{"agentType":"general-purpose","description":"451 T84: the stop","spawnDepth":1}\n' > "${OWN%.jsonl}.meta.json"
-gate() {  # gate <exit> <text>: the stand-in gate's answer
-  printf 'printf "%%s\\n" "%s"\nexit %s\n' "$2" "$1" > "$C/scripts/gates/l7r-gate.sh"
+gate() {  # gate <exit> <text>: the stand-in gate's answer, its text kept in a file so its backticks are never run
+  printf '%s\n' "$2" > "$C/gate-said"
+  printf 'cat "%s"\nexit %s\n' "$C/gate-said" "$1" > "$C/scripts/gates/l7r-gate.sh"
 }
 stop() {  # stop <agent_type> <final message> [main]: OUT and RC
   local p; p=$(jq -nc --arg c "$C" --arg s "$S" --arg t "$1" --arg m "$2" \
@@ -31,9 +32,12 @@ stop() {  # stop <agent_type> <final message> [main]: OUT and RC
 }
 
 echo "== a builder whose section is not decided is held"
-gate 1 "451-x T84: its plan section carries no current CLEAR verdict"
+# the gate's why as l7r-gate plan decided words it (rust/gate/crates/plan/src/plan/task.rs), so the block renders as sessions read it
+gate 1 '451-x T84: its plan section carries no current CLEAR verdict - run `make decide F=451 T=T84` and dispatch the MODE 4 review it prints yourself, then fix what it finds'
 stop general-purpose "done"
 if grep -q '"decision"' <<<"$OUT" && grep -q 'block' <<<"$OUT" && grep -q 'make decide F=451 T=T84' <<<"$OUT"; then ok "held, told the decide and the review"; else no "held" "rc=$RC $OUT"; fi
+# 451 T177 (message-check): the why carries the decide and the review, so the block says them once
+[ "$(grep -o 'make decide' <<<"$OUT" | wc -l)" = 1 ] && ok "...said once" || no "...said once" "$OUT"
 grep -q '"blocked"' "$GUARD_LOG_DIR"/* 2>/dev/null && ok "the hold recorded" || no "the hold recorded"
 
 echo "== the stops that pass"

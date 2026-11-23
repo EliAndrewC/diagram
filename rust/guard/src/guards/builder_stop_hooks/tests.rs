@@ -83,9 +83,14 @@ fn a_builder_whose_section_is_not_decided_is_held_and_told_the_review() {
     let w = World::new("held");
     let said = w.judged(&w.input("done"), 1, NOT_DECIDED);
     assert!(matches!(&said, Said::Held(reason, detail)
-            if reason.starts_with("builder-stop: 451-x T84: its plan section carries no current CLEAR verdict")
-            && reason.contains("`make decide F=451 T=T84`, then dispatch the MODE 4 review it prints yourself (subagent_type spec-fidelity")
-            && reason.contains("STOP_OK=\"<reason>\"")
+            if reason.starts_with("builder-stop: 451-x T84: its plan section carries no current CLEAR verdict - run `make decide F=451 T=T84`")
+            // 451 T177 (message-check, the round arbiter's ask:guard-wordings-third-round): the gate's why carries the decide and
+            // the review, so the block says them once, in one sentence with the review's type and its wake
+            && reason.matches("make decide").count() == 1
+            && reason.matches("MODE 4 review").count() == 1
+            && reason.contains("- run `make decide F=451 T=T84`, then dispatch the MODE 4 review it prints (subagent_type spec-fidelity, in the background; its notification wakes you), fix its findings, and file each deferral with `make task-add F=451 TITLE=\"...\"`\nA builder that cannot finish")
+            && reason.contains("STOP_OK=\"<reason>\"; past the context cap it needs none - write the handoff and stop.")
+            && !reason.contains("(recorded)")
             && detail.starts_with("451 T84: 451-x T84: its plan section")));
     assert_eq!(w.judged(&w.input("done"), 0, ""), Said::Quiet);
     assert_eq!(
@@ -214,9 +219,13 @@ fn the_escape_the_cap_and_a_review_in_flight_pass() {
 #[test]
 fn the_hook_blocks_the_stop_through_the_gate_script() {
     let w = World::new("hook");
+    // the gate's words kept in a file, so their backticks reach the block as the gate prints them (451 T177: quoted into the script,
+    // the why lost its `make decide`, which the block's own body had said again)
+    let said_file = w.tree.join("scripts/gates/said");
+    put(&said_file, NOT_DECIDED);
     put(
         &w.tree.join("scripts/gates/l7r-gate.sh"),
-        &format!("printf '%s' '{}'\nexit 1\n", NOT_DECIDED.replace('`', "'")),
+        &format!("cat '{}'\nexit 1\n", said_file.display()),
     );
     let mut e = Event {
         name: "SubagentStop".to_owned(),

@@ -86,7 +86,7 @@ check "a live make in the clone is found, with its target" yes "$(has "$("$HOOK"
 
 lstop() { printf '{"session_id":"t","cwd":"%s"%s}' "$LV" "${1:-}" | "$HOOK" stop >/dev/null 2>"$T/fr.err"; }
 lstop; check "stop refuses a turn that would close over a live run" 2 "$?"
-check "...and says so" yes "$(has "$(cat "$T/fr.err")" 'IS STILL GOING, DETACHED')"
+check "...and says so" yes "$(has "$(cat "$T/fr.err")" 'IS STILL RUNNING; NOTHING WILL WAKE')"
 check "...and what to do about it" yes "$(has "$(cat "$T/fr.err")" 'REPORT WHAT IT SAID')"
 lstop; check "ONCE per run, never a loop" 0 "$?"
 
@@ -299,7 +299,7 @@ check "a run its still-running builder started lets the turn close" 0 "$RC"
 check "...naming the builder" yes "$(has "$OUT" 'its builder abuild is still running')"
 printf '%s\n' '{"type":"user","message":{"role":"user","content":"<task-notification>\n<task-id>abuild</task-id>\n<summary>Agent \"T85\" completed</summary>\n</task-notification>"}}' >> "$TR"
 vstop >/dev/null; check "...and once its builder has stopped, the run is refused" 2 "$?"
-check "...naming its output" yes "$(has "$(cat "$T/fr.err")" "output in $TO")"
+check "...naming its output" yes "$(has "$(cat "$T/fr.err")" "$TO; do sleep 20; done")"
 RULES3=$(jq -rs 'map(.event + "/" + (.rule // "None")) | join(" ")' "$GUARD_LOG_DIR"/*.json 2>/dev/null)
 check "the builder's run let through is recorded with its own rule" yes "$(has "$RULES3" "permitted/builder-running")"
 for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; pkill -f "$TO" 2>/dev/null; settle '[ -z "$("$HOOK" live "$LV")" ]'
@@ -326,7 +326,7 @@ check "a run a builder's own sub-agent started lets the turn close while it runs
 check "...naming the sub-agent" yes "$(has "$OUT" 'its builder asub is still running')"
 printf '%s\n' '{"type":"user","message":{"role":"user","content":"<task-notification>\n<task-id>asub</task-id>\n<summary>Agent \"review\" completed</summary>\n</task-notification>"}}' >> "$SUB/agent-abuild.jsonl"
 vstop >/dev/null; check "...and once it has stopped, the run is refused" 2 "$?"
-check "...in full" yes "$(has "$(cat "$T/fr.err")" "output in $TO")"
+check "...in full" yes "$(has "$(cat "$T/fr.err")" "$TO; do sleep 20; done")"
 rm -f "$LV/.git/live-run.told"
 vstop >/dev/null; check "the same refusal again (told cleared) is still a refusal" 2 "$?"
 check "...said in one line" yes "$(grep -qx 'still: A MAKE RUN THIS SESSION STARTED IS STILL - unchanged since [0-2][0-9]:[0-5][0-9]' "$T/fr.err" && echo yes)"

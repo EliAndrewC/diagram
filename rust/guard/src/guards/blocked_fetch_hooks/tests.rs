@@ -124,7 +124,7 @@ fn a_fetch_is_recorded_and_its_earlier_attempts_come_back() {
     let (d, at) = world("seen", &format!("{before}\n"));
     let got = web(&d, "https://a.org/1", &at);
     assert!(
-        matches!(&got[..], [Answer::Notice(t)] if t == "attempts: https://a.org/1 - 1 earlier attempt(s):\n  2026-10-01 Q 0012: not-found - the dike")
+        matches!(&got[..], [Answer::Notice(t)] if t == "attempts: https://a.org/1 - 1 earlier attempt(s) (date Q question: outcome - what was sought):\n  2026-10-01 Q 0012: not-found - the dike")
     );
     let said = logged(&d);
     assert_eq!(said.len(), 2);
@@ -246,10 +246,15 @@ fn a_url_tried_many_times_says_its_first_attempt_and_the_command_for_the_rest() 
         "https://a.org/1",
         &[vec![head.clone(), verdict.clone()], tried.clone()].concat(),
     );
+    // 451 T177 (message-check): the notice's head says what an attempt's line holds
+    let shown = head.replace(
+        " earlier attempt(s):",
+        " earlier attempt(s) (date Q question: outcome - what was sought):",
+    );
     assert_eq!(
         said,
         [
-            head.clone(),
+            shown.clone(),
             verdict,
             tried[0].clone(),
             "  and 39 more: `make attempts URL='https://a.org/1'`".to_owned()
@@ -257,7 +262,7 @@ fn a_url_tried_many_times_says_its_first_attempt_and_the_command_for_the_rest() 
         .join("\n")
     );
     let one = super::attempts_said("https://a.org/1", &[head.clone(), tried[0].clone()]);
-    assert_eq!(one, [head, tried[0].clone()].join("\n"));
+    assert_eq!(one, [shown, tried[0].clone()].join("\n"));
     assert_eq!(super::attempts_said("https://a.org/1", &[]), "");
 }
 
@@ -277,11 +282,11 @@ fn several_urls_tried_before_say_the_first_and_keep_the_rest() {
             .nth(1)
             .unwrap_or_default()
             .trim_end_matches('`');
-        t.starts_with("attempts: https://a.org/1 - 1 earlier attempt(s):")
+        t.starts_with("attempts: https://a.org/1 - 1 earlier attempt(s) (date Q question: outcome - what was sought):")
             && !t.contains("a.org/2 -")
             && std::fs::read_to_string(kept)
                 .unwrap_or_default()
-                .contains("attempts: https://a.org/2 - 1 earlier attempt(s):")
+                .contains("attempts: https://a.org/2 - 1 earlier attempt(s) (date Q question: outcome - what was sought):")
     };
     let said = matches!(&got[..], [Answer::Notice(t)] if first_and_kept(t));
     assert!(said, "{got:?}");
@@ -297,7 +302,7 @@ fn a_url_tried_before_and_archived_says_its_attempts_then_the_archive() {
     std::fs::create_dir_all(&dir).unwrap();
     std::fs::write(dir.join(format!("{}.json", &uid[..12])), "{}").unwrap();
     let got = web(&d, "https://held.org/q", &at);
-    let said = matches!(&got[..], [Answer::Notice(t)] if t.starts_with("attempts: https://held.org/q - 1 earlier attempt(s):")
+    let said = matches!(&got[..], [Answer::Notice(t)] if t.starts_with("attempts: https://held.org/q - 1 earlier attempt(s) (date Q question: outcome - what was sought):")
         && t.contains("\narchive: a copy of https://held.org/q is archived"));
     assert!(said, "{got:?}");
 }

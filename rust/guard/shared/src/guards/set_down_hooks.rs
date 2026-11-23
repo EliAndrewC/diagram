@@ -634,17 +634,18 @@ fn free_slot(
     // a builder no brief names holds its slot under its own words (451 T171)
     let who: Vec<String> = running
         .iter()
-        .map(|(f, t)| format!("{f} {}", t.join("+")))
+        .map(|(f, t)| builder_said(f, t, git_dir))
         .chain((0..unnamed).map(|_| "a builder (no task named)".to_owned()))
         .collect();
     let short: String = next.title.chars().take(80).collect();
-    Ok(Some(format!(
-        "BLOCKED: a builder slot is free - {} of {knob} builders running ({}) - start the next independent open task, one touching none of their files ({} {short}): {later}make task-start F={number} T={}, then dispatch its builder (feature 451 T88, L7R_BUILDERS={knob}); or set the feature down: make set-down F={} WHY=\"<why it stops here>\"",
+    Ok(Some(slot_said(
         running.len() + unnamed,
-        if who.is_empty() { "none".to_owned() } else { who.join(", ") },
-        next.id,
-        next.id,
-        number_of(feature)
+        knob,
+        &who,
+        (&next.id, &short),
+        &later,
+        &number,
+        number_of(feature),
     )))
 }
 
@@ -961,8 +962,10 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
 }
 
 mod builders;
+mod said;
 pub use builders::{agent_builder, builder_brief, page_session_brief, page_session_listed};
 use builders::{asks_the_gm, builders, landing_process, Builder};
+pub use said::{builder_said, slot_said};
 
 #[cfg(test)]
 mod tests;

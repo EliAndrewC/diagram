@@ -380,6 +380,18 @@ fn the_answers_and_their_records() {
     assert!(
         text.contains("Stop, and reply with that path") && text.contains("CONTEXT_OK=\"<reason>\"")
     );
+    // 451 T177 (message-check): the why is one clause, its figures and its feature the code's
+    assert!(text.contains("Long contexts slow model calls, so the task goes on in a fresh builder:\n\n1. Write the handoff file"), "{text}");
+    let kept = [
+        "Stop, and reply with that path; the main session dispatches a fresh builder from it.",
+        "Escape: CONTEXT_OK=\"<reason>\" (two words or more) in a Bash command",
+    ];
+    let missing: Vec<&str> = kept.into_iter().filter(|k| !text.contains(k)).collect();
+    assert_eq!(missing, Vec::<&str>::new(), "{text}");
+    let cut = ["FR-006", "700k", "The next step"]
+        .iter()
+        .all(|w| !text.contains(w));
+    assert!(cut, "{text}");
     let write = f.input(
         "builder",
         "Write",

@@ -288,6 +288,14 @@ pub(crate) fn attempts_said(url: &str, said: &[String]) -> String {
     );
     let (head, tried) = said.split_at(heads.min(said.len()));
     let mut out = head.to_vec();
+    // 451 T177 (message-check): the head says what an attempt's line holds, since a line read bare (`Q unknown: unknown`) is cryptic
+    if let Some(first) = out.first_mut() {
+        *first = first.replacen(
+            " earlier attempt(s):",
+            " earlier attempt(s) (date Q question: outcome - what was sought):",
+            1,
+        );
+    }
     if !tried.is_empty() {
         out.push(listed::capped_n(
             tried,

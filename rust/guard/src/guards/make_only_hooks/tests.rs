@@ -227,6 +227,32 @@ fn each_refusal_names_what_to_run() {
     assert!(run("ls", &d).is_empty());
 }
 
+/// 451 T177 (message-check): the guard-file refusal says its route and its escape once - no history, and no trailer repeating the
+/// trailing comment its route already gives.
+#[test]
+fn the_guard_file_refusal_says_its_route_once() {
+    let d = world("guard-write-words");
+    let got = run("sed -i s/a/b/ Makefile", &d);
+    for kept in [
+        "BLOCKED: a GUARD FILE written from a shell command.",
+        "make guard-edit FILE=<the guard file> WHY=\"<reason>\", then the Edit tool",
+        "<command>  # GUARD_EDIT_OK: <reason>",
+        "a marker INSIDE the text written does not count",
+        "`make budget-change PHASE=<stage> TO=<ops> WORDS=\"<the GM's words>\"` (a first budget: `make budget-set`)",
+    ] {
+        assert!(refused(&got, kept), "{kept}: {got:?}");
+    }
+    // each kept line above holds the answer to one refusal, so a gone line's absence is the refusal's own
+    for gone in [
+        "ungated-sibling",
+        "hour:383@4",
+        "already holds old ones",
+        "If this fired on correct work",
+    ] {
+        assert!(!refused(&got, gone), "{gone}: {got:?}");
+    }
+}
+
 /// A write is resolved from where the command starts: the event's `cwd`, else the guard's own directory (T227).
 #[test]
 fn a_relative_write_is_resolved_from_where_the_command_starts() {

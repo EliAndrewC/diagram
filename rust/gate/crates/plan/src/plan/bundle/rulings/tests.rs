@@ -3,7 +3,7 @@
 use super::{cited, rulings};
 use crate::checks::scratch;
 
-const OWN: &str = r#"{"trigger": "ask:999-order", "kind": "ask", "unit": "", "asked": "Which first?", "ruling": "continue", "why": "The why, verbatim.", "what": "The what.", "utc": "2026-11-17T10:00:00Z"}
+const OWN: &str = r#"{"trigger": "ask:999-order", "kind": "ask", "unit": "", "asked": "Which first?", "ruling": "continue", "why": "The why, verbatim.", "what": "The what.", "tooling_fix": "Make the cap the standing rule.", "fix": "open", "utc": "2026-11-17T10:00:00Z"}
 {"fix_of": "x", "note": "a row with no trigger", "status": "done", "test": "t", "utc": "2026-11-17T11:00:00Z"}
 not json
 {"trigger": "ask:999-order", "kind": "ask", "ruling": "accept", "why": "Asked again.", "what": ["Then this."], "for_gm": {"q": 1}, "utc": "2026-11-18T10:00:00Z"}
@@ -60,16 +60,17 @@ fn each_cited_ruling_rides_whole_from_the_feature_s_log_or_another_s_or_is_named
         &["Under ask:999-order, as ask:405-cut has it, and ask:999-gone."],
     );
     assert!(text.starts_with(
-        "# The round arbiter's rulings the blocks cite, their ruling, why and what from `arbiter.jsonl`, verbatim\n\n## ask:999-order\n\nRecorded in `specs/999-x/arbiter.jsonl`:\n\n- **utc**: 2026-11-17T10:00:00Z\n- **ruling**: continue\n- **why**: The why, verbatim.\n- **what**: The what.\n\n"
+        "# The round arbiter's rulings the blocks cite, their ruling, why, what and tooling fix from `arbiter.jsonl`, verbatim\n\n## ask:999-order\n\nRecorded in `specs/999-x/arbiter.jsonl`:\n\n- **utc**: 2026-11-17T10:00:00Z\n- **ruling**: continue\n- **why**: The why, verbatim.\n- **what**: The what.\n- **tooling_fix**: Make the cap the standing rule.\n\n"
     ), "{text}");
     // every record of the key, in the log's order, a field that is no string shown as its JSON; an empty field left out
     assert!(text.contains("- **why**: Asked again.\n- **what**: [\"Then this.\"]\n\n"));
-    // the question asked, the kind and the rest stay in the log; only when, the ruling, its why and its what ride
+    // the question asked, the kind, the fix's state and the rest stay in the log; only when, the ruling, its why, its what and its tooling fix ride
     assert!(
         !text.contains("never shown")
             && !text.contains("Which first?")
             && !text.contains("- **kind**")
             && !text.contains("for_gm")
+            && !text.contains("- **fix**")
     );
     assert!(text.contains("## ask:405-cut\n\nRecorded in `specs/405-y/arbiter.jsonl`:\n\n- **ruling**: continue\n- **why**: Another feature's.\n\n"));
     assert!(text.contains("## ask:999-gone\n\n(no record - no `arbiter.jsonl` under `specs/` holds a ruling whose trigger is `ask:999-gone`)"));

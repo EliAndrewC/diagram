@@ -844,7 +844,14 @@ pub(crate) fn judge(event: &Event, session: &Session, ctx: &Ctx) -> Vec<Answer> 
             Err(why) => refuse(&verdict, &format!("an engine entry point run outside make - {why}."), "make <target>   (make help lists the operations)"),
         },
         "inline-override" => refuse(&verdict, "an override supplied on the command line, which skips the prompt whose default answer is CANCEL. That prompt is the whole mechanism: it exists to be answered, not pre-empted.", "make <target>   without the override, and answer the prompt if it appears"),
-        "guard-write" => refuse(&verdict, "a GUARD FILE written from a shell command. Layer 3 only sees the Edit and Write tools, so this route slips past it - the same ungated-sibling shape this feature exists to close.", "make guard-edit FILE=<the guard file> WHY=\"<reason>\", then the Edit tool; or the same command ending in a trailing comment:  <command>  # GUARD_EDIT_OK: <reason>  - a marker INSIDE the text written does not count, since a guard file's text already holds old ones (GUARD_EDIT_OK: the round arbiter's fix on hour:383@4). dev/work-budget.json takes neither: `make guard-edit` refuses it, and it is written by `make budget-change PHASE=<stage> TO=<ops> WORDS=\"<the GM's words>\"` (a first budget: `make budget-set`)"),
+        // THE GUARD-FILE REFUSAL (451 T177, message-check): its route ends in the trailing comment, so it takes no "If this fired"
+        // trailer, which would say the escape twice. Cut from the text, kept here: the route is the same ungated-sibling shape the
+        // guard-file feature exists to close, and a marker inside the text written does not count since a guard file's text already
+        // holds old ones (the round arbiter's fix on hour:383@4).
+        "guard-write" => {
+            fire("blocked", &verdict);
+            vec![Answer::Refuse(String::from("BLOCKED: a GUARD FILE written from a shell command. Layer 3 only sees the Edit and Write tools, so this route slips past it.\n\nRun this instead:  make guard-edit FILE=<the guard file> WHY=\"<reason>\", then the Edit tool; or the same command ending in a trailing comment:  <command>  # GUARD_EDIT_OK: <reason>  - a marker INSIDE the text written does not count. dev/work-budget.json takes neither: `make guard-edit` refuses it, and it is written by `make budget-change PHASE=<stage> TO=<ops> WORDS=\"<the GM's words>\"` (a first budget: `make budget-set`)"))]
+        }
         _ => Vec::new(),
     }
 }

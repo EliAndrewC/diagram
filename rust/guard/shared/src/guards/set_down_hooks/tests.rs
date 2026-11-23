@@ -956,5 +956,36 @@ fn a_task_an_open_gm_question_names_is_never_the_next() {
     assert!(fourth, "{text}");
 }
 
+/// 451 T177 (message-check): a running builder's bundle is said whole while that is the shorter, else as its first few tasks, how
+/// many more and the `cat` of the file holding them all - and whole again where that file cannot be written. The slot block cites
+/// no feature.
+#[test]
+fn a_builders_bundle_is_capped_only_where_that_shortens_it() {
+    let d = crate::tempdir::TempDir::new("guard-setdown-bundle");
+    let git_dir = d.path().join(".git");
+    let few: Vec<String> = ["T1", "T2", "T3", "T4"].map(str::to_owned).to_vec();
+    assert_eq!(
+        super::builder_said("451-x", &few, &git_dir),
+        "451-x T1+T2+T3+T4"
+    );
+    let many: Vec<String> = (1..=40).map(|i| format!("T{}", 300 + i)).collect();
+    let said = super::builder_said("451-x", &many, &git_dir);
+    let kept = std::fs::read_dir(git_dir.join("l7r-lists"))
+        .map(Iterator::count)
+        .unwrap_or(0);
+    let listed = said.starts_with("451-x T301+T302 and 38 more: `cat ") && kept == 1;
+    assert!(listed, "{said}");
+    let blocked = d.path().join("a-file");
+    std::fs::write(&blocked, "").unwrap();
+    assert_eq!(
+        super::builder_said("451-x", &many, &blocked),
+        format!("451-x {}", many.join("+"))
+    );
+    let block = super::slot_said(1, 3, &[said], ("T9", "a task"), "", "451", "451");
+    let dispatch = block.contains("then dispatch its builder; or set the feature down");
+    let cut = !block.contains("feature 451 T88");
+    assert!(dispatch && cut, "{block}");
+}
+
 mod briefs;
 mod repeats;

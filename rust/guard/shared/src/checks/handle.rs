@@ -457,11 +457,19 @@ fn batch_refusal(root: Option<&Path>, check: &str, body: &str, t: f64) -> Option
     {
         return None;
     }
-    Some(format!(
-        "{} pop-ups owe {check} together - send ONE agent on them all: make modal-bundle KIND=\"{}\" FOR={check} (feature 385 T81), batched",
+    Some(batch_said(check, &kinds))
+}
+
+/// The batch refusal's words over its pop-ups (feature 385 T81: one agent on them all). Its list is its fix command's argument, so it
+/// is never capped (`shared::listed`); 451 T177 holds it at its worst case in `suite_tools/messages/worst.rs` instead. `, batched`
+/// ends it, since [`escape_for`] reads its escape, `BATCH_OK`, from that.
+#[must_use]
+pub fn batch_said(check: &str, kinds: &[String]) -> String {
+    format!(
+        "{} pop-ups owe {check} together - send ONE agent on them all: make modal-bundle KIND=\"{}\" FOR={check}, batched",
         kinds.len(),
         kinds.join(" ")
-    ))
+    )
 }
 
 fn edit_mode(state: &Value, payload: &Value, ti: &Value, tool: &str, t: f64) -> String {
