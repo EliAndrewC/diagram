@@ -2405,6 +2405,20 @@ Owed by red-gate@2026-11-23T01:08:38Z, ruled continue by the round arbiter (`arb
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
+### T154, T155 part B (2026-11-23T03:16Z)
+
+One answer for both trials the red-gate@2026-11-23T01:08:38Z tripwire charged (the round arbiter ruled continue on it, 2026-11-23): that red gate was another builder's run in the clone (449's sheet bundle's verify), nothing in either trial's work, which ran in worktrees of their own and edited no clone file.
+
+1. **What exactly is refusing?** Nothing of T154's or T155's: the red gate was the clone's `make done` under 449's sheet bundle, red on that bundle's then-unfinished files (its verify log, 2026-11-23).
+2. **A3 again, for that rule.** O: the gate's own checks; nothing of the research or the GM's words.
+3. **A4 again.** Yes for that bundle's files; the trials changed no clone file, so nothing of theirs was red.
+4. **Is the next fix moving something placed earlier to suit something placed later?** No: no fix is owed by either trial.
+5. **Tuning or changing?** Neither: both trials measured and built nothing.
+6. **The one-sentence test.** "Another builder's gate went red while two measurement trials ran in their own worktrees" - no question to answer first.
+7. **The next step is a measurement.** Already taken: each trial's figures are in its section, measured in its own worktree.
+8. **Before offering routes.** No routes: both trials concluded nothing to build.
+9. **After a ruling.** The ruling (continue) names the next step, landing the trials' records, and that is the step taken.
+
 ### T160, T161 (bundle)
 
 Filed 2026-11-22: T160 by 451 T155's trial (pool's `maps::tests::the_launcher_runs_the_gate_script` failed "Text file busy (os error 26)" in both scratch worktrees' coverage runs at 61e8b7b20f, host load 44-50 on 22 cores, observed 2026-11-22, method: T155's trial logs); T161 by 449's record bundle T317-T327, CLEAR and committed, refused at land-alone's own-edits step on four files the sheet bundle T312-T326's builder had written. Two small fixes of the builders' shared clone, one bundle (451 T141).
