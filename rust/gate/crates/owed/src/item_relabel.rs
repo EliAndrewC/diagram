@@ -22,8 +22,8 @@ fn page(label: &str, says: &str) -> String {
     )
 }
 
-const BY_REFERENCE: &str = "About: A shrine in a corner of the grounds.\n\nGuesses:\n- {0218#tree}\n\nName: Shrine\nCovers: `shrine`\nSources: not recorded\nEntry: research/questions/0218-shrine.html\nDrawing: research/questions/0218-shrine.drawing.html\n";
-const IN_ITS_WORDS: &str = "About: A shrine in a corner of the grounds.\n\nGuesses:\n- Our maps set the compound's shrine where a household's stood, and give it the tree as well.\n\nName: Shrine\nCovers: `shrine`\nSources: not recorded\nEntry: research/questions/0218-shrine.html\n";
+const BY_REFERENCE: &str = "About: A shrine in a corner of the grounds.\n\nGuesses:\n- {0218#tree}\n\nName: Shrine\nCovers: `shrine`\nSources: not recorded\nEntry: research/questions/0218-the-compounds-own-shrine-yashikigami.html\nDrawing: research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html\n";
+const IN_ITS_WORDS: &str = "About: A shrine in a corner of the grounds.\n\nGuesses:\n- Our maps set the compound's shrine where a household's stood, and give it the tree as well.\n\nName: Shrine\nCovers: `shrine`\nSources: not recorded\nEntry: research/questions/0218-the-compounds-own-shrine-yashikigami.html\n";
 
 fn popup(modal: &str) -> String {
     let parts = parse_explanation(Some(modal), "Shrine").unwrap();
@@ -61,10 +61,10 @@ fn a_relabel_regenerates_the_bullet_and_owes_no_check() {
         )
         .unwrap()
     };
-    put(&root, "research/questions/0218-shrine.drawing.html", &old);
+    put(&root, "research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html", &old);
     // attested: no bullet
     assert!(resolve(&root, fc()).unwrap().guesses.is_empty());
-    put(&root, "research/questions/0218-shrine.drawing.html", &fresh);
+    put(&root, "research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html", &fresh);
     // a GUESS: the bullet is the tag's
     let tree = "The tree beside the shrine: no account gives a household's shrine a tree beside it as the custom";
     assert_eq!(resolve(&root, fc()).unwrap().guesses, [tree]);

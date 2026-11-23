@@ -8,7 +8,7 @@ use l7r_gate_core::record::testkit::put;
 use super::{resolve, restated, Pages};
 use crate::about::{about_feature, parse_explanation, FeatureClass};
 
-const PAGE: &str = "research/questions/0218-the-shrine.drawing.html";
+const PAGE: &str = "research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html";
 
 fn page(label: &str, word: &str) -> String {
     format!(
@@ -16,7 +16,7 @@ fn page(label: &str, word: &str) -> String {
     )
 }
 
-const MODAL: &str = "About: A shrine in a corner.\n\nGuesses:\n- [layout=row] {0218#tree}\n- A garden: no account.\n\nName: Shrine\nCovers: `shrine`\nSources: not recorded\nEntry: research/questions/0218-the-shrine.html\nDrawing: research/questions/0218-the-shrine.drawing.html\n";
+const MODAL: &str = "About: A shrine in a corner.\n\nGuesses:\n- [layout=row] {0218#tree}\n- A garden: no account.\n\nName: Shrine\nCovers: `shrine`\nSources: not recorded\nEntry: research/questions/0218-the-compounds-own-shrine-yashikigami.html\nDrawing: research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html\n";
 
 fn class(text: &str) -> FeatureClass {
     about_feature(
@@ -36,12 +36,12 @@ fn a_relabel_on_the_page_regenerates_the_bullet_and_the_pop_up_is_unchanged() {
     let root = scratch("registry-items");
     put(
         &root,
-        "research/questions/0218-the-shrine.html",
+        "research/questions/0218-the-compounds-own-shrine-yashikigami.html",
         "<p>The shrine.</p>",
     );
     put(
         &root,
-        "research/questions/0218-the-shrine.notes.html",
+        "research/questions/0218-the-compounds-own-shrine-yashikigami.notes.html",
         r#"<span class="item" data-item="tree" data-label="ATTESTED"></span>"#,
     );
     put(&root, PAGE, &page("GUESS", "a GUESS"));
