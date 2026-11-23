@@ -765,112 +765,51 @@ Filed by 449 T340's size-audit (T341) and the T330 bundle's checks of 2026-11-22
 **Performance work?** no.
 
 
-### T342 (<why: the finding or measurement that files it>)
+### T342, T343, T344, T349 (bundle)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+Filed by the T328 bundle (T342, T343: its builder's notes and impl-drift of 2026-11-22, OUTSIDE THE CHANGE) and the T330 bundle's page and pop-up checks (T344: quote-check, source-reader, source-applicability, record-format; T349: modal-depiction), 2026-11-22; four record follow-ups and one check-tool defect worked by one builder as page sessions (451 T141).
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T342 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
-### T343 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: record edits in two page-session pairs (write, then check-and-apply), under the page-session cap: brief A (0116, 0101, 0093, 0123: T343's fire gap and attached privy, T344's 0101, 0116 and 0123 items, T349's gate posts), brief B (0113 and registry 9971: T344's 1842 plan and the pamphlet's two facts); brief C (0093, 0116, registries 5220 and 14050: the same-subject findings briefs A and B's checks met outside their change - 0093's findings page giving the one-bay gate as 6 to 9 ft where its drawing page now says 8.5 (observed 2026-11-22, method: quote-check on 0093's drawing page), the fire gap's own absence note stating what unread, unlinked articles give, registry 5220's "one range" and its dropped storehouse rows, registry 14050's officials "sent from the intendant's seat"); then the record checks, the pop-up checks and the claims round the moved pages owe.
+  - T342: no edit owed. Observed 2026-11-22, method: t330b-handoff.md read by line and the 0088 files grepped - the T330 bundle's brief B (item B8) restated 0088's drawing page to the flat road and the Hagi 1742 line ("a horizontal line drawn in partway along the road where there is a steep slope"), its Evidence comment and its trailing comment, checked clean (quote-check, record-format, translation-check, t330b-handoff.md), and the road pop-up's TRUTH EDIT applied; landed with f62250f89f. `grep -n -i -E "band|dash" research/questions/0088-*.html` on 2026-11-22 finds only the flat-tone bullet.
+  - T343: the T331 research pass (KEY t331-privy-storehouse, 2026-11-22, its report recovered from the subagent transcript to `.git/l7r-handoffs/T331-pass-privy-storehouse.md`) is SILENT: no plan, inventory or rule puts a privy and a storehouse together with a distance or a reason, and the one premodern text naming both (the Zhaijing) puts them in the same lucky sector. So the claim, not the privy, follows (the record silent: the algorithmically easier route, the sheets unchanged): 0116's fire gap restated to a kura and the buildings round it, not binding a privy built onto a building's end, a GUESS with an absence note; 0101's drawing page says the same from the privy's side (docs/buildings.md's "privies beside stores" cites it).
+  - T349 (record): 0093's drawing page records the drawn gate posts as measured on the sheets 2026-11-22 (3 px = 1 ft): hand sheets' main-gate posts 6 by 6 px (2 ft square); generated sheets' posts 6 by 13 px (2 ft along the wall, about 4.3 ft across, emit.rs's CONVENTION); side-gate posts 12 by 8 px on the hand sheets (4 ft across the wall, 2.7 ft along it) and 13 by 6 px on the generated ones (about 4.3 ft across, 2 ft along), a map drawing convention (CONVENTION, measured 2026-11-22 (the SVG rects read by grep, each rect's extent across and along its wall)). The page's "about 2 ft square" for the main gate was true of the hand sheets only (measured 2026-11-22 (the SVG rects read by grep)), so it is restated in the same edit (same subject).
+  - T349 (tool): the task line put the fault in modal-bundle's earlier-round copy; measured, the copy did read the recorded reply, and the recorded reply was wrong. A check-wave agent answers through a `StructuredOutput` call with no text block, and `rust/guard/shared/src/checks/reply.rs` `last_text_of` read every transcript line's text, so the reverse scan took the `api-request-blob` line before the call (a truncated manifest view, or the MCP instructions) as the reply: 334 of the 341 wave replies kept in `.git/check-replies/` (counted 2026-11-22 by their first line). Fixed at the source: a line is the agent's only when it is an assistant line, and a `StructuredOutput` call's `text` is its reply. And the earlier-round copy (`rust/gate/crates/bundle/src/arbiter/bundle/marks.rs` `reply_in`) reads the agent's own transcript first, the kept copy only when the transcript gives nothing, and `transcript_of` finds a wave agent's transcript under `subagents/workflows/<run>/` - so a wrong copy kept beside a live transcript never reaches a next round. And the copies already kept are repaired once, so none reaches a next round after its transcript is gone: every one of the 341 kept wave replies was rewritten from its agent's transcript by the fixed rule (measured 2026-11-22 (`/tmp/t342/repair/rewrite_wave_replies.py`, the old copies kept in `/tmp/t342/replies-backup/`): rewritten 341, already right 0, no reply in its transcript 0 - the 7 that were not a request blob were an interim assistant text, not the final reply); the inner-court round's copy now opens "modal-depiction: grounds.InnerCourt - COVERAGE 0 findings; TRUTH 0; LINKS 0". The source fix keeps new copies right, so no copy can go wrong again.
+    - Red first: `a_wave_agent_s_reply_is_its_structured_output_never_a_request_blob` (guard shared: left "[Truncated: PARTIAL view - MANIFEST.md") and `a_wave_round_reads_its_agent_s_reply_over_a_wrong_kept_copy` (bundle: the same) failed, 2026-11-22; green: shared 446 passed, bundle 79 passed (`make rust-test CRATE=...`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| T343 0116/0101 | the record checks recorded (`make record-checked`), `make record-owed` naming none of the units | n/a | none | the relation labeled a GUESS on the record's silence |
+| T344 0101/0116/0123/0113/9971 | the same | n/a | none | a fact no readable page carries is cut; an unreadable source goes on `research/to-download.md` |
+| T349 0093 | the same; the side-gate pop-up's Depiction checked after the page moved | n/a | none | n/a |
+| T349 reply reading | the reply tests (`a_wave_agent_s_reply_is_its_structured_output_never_a_request_blob`, `a_wave_round_reads_its_agent_s_reply_over_a_wrong_kept_copy`) | n/a: tooling | none | a reply with no transcript keeps its kept copy, every kept wave copy rewritten from its transcript first (all 341, measured 2026-11-22 (the repair script's count)) |
+| pop-ups the moved pages owe | modal-triage, then form, research, depiction on what it names | n/a | none | a fix in another bundle's pop-up filed, not applied |
 
-### T343 Approach (checklist part A)
+### T342, T343, T344, T349 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The record says what the sheets draw and what its sources carry: the road's flat tone (0088), a kura's fire gap that does not bind an attached privy (0116, 0101), a collectors' heading no wider than its one case (0101), an earlier-plans sentence with its grounds (0116), a named encyclopedia linked (0123), a registry entry stating only what a source gives (9971), the 1842 plan cited where readable (0113), the gate posts as drawn (0093); and a check's next round sees its earlier rounds' real replies.
+2. **The constraints.** Constitution XII and XIV (a defect is a wrong outcome: restate the record line); the research record's CLAUDE.md (verbatim passages, translations marked, a GM-only source on the download list); the page-session rules (at most four questions a write, claims first, coordination files by line); the pop-up check order; new Rust lines covered by their own tests.
+3. **Where each comes from.** R: the T331 pass of 2026-11-22, the T337 pass (the 1842 plan), the pages the briefs cite; O: the sheets' post rects measured 2026-11-22, the 341 kept wave replies counted 2026-11-22, the checks that filed the four tasks.
+4. **Do they describe the world here?** The posts were measured on the five magistracy sheets' SVGs and emit.rs; the privy relation was read on the county sheet (its garrison privy 0.5 ft off the granary's south face, measured 2026-11-22 (the T331 task line's building-review figure, svg d88)); the junk replies were read whole for one case (the inner-court round) and by first line for all.
+5. **The order.** Brief A write, A checks, brief B write, B checks (one queue, run-16354139), then brief C write and checks (run-81602788); the reply fix while it ran; then `make record-owed`, the modal triage and the pop-up checks the moved pages owe; the claims round (claims-triage, then impl-drift); one `make closing-checks` after the last edit.
+6. **The exits.** Green: every record check recorded, `make record-owed` naming none of this bundle's units, `make record CHECK=1` clean, the guard's shared crate's and the bundle crate's tests. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: named units and named lines.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make record-owed` and the pop-up checks owe nothing of these units; `make record CHECK=1` clean; the inner-court round's reply read through `reply_in` is its StructuredOutput text.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** T342: a reader met a convention for bands no map draws (fixed by T330 B8). T343: the record's fire gap and the county sheet disagreed for a reader. T344: an overgeneral heading, an unlinked name, two unsupported registry facts, an unfootnoted sentence, a second plan uncited. T349: an unlabeled drawn convention, and a check that could not see its own earlier round.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Outcomes, measured 2026-11-22.** Queue run-16354139, four page sessions, each rc=0 (handoffs `specs/449-rust-codebase/briefs/t342a-handoff.md`, `t342b-handoff.md`).
+- T343: 0116's drawing page keeps a kura about 6-10 ft from the buildings round it, the gap not binding a privy built onto a building's end, a GUESS with the absence note `privy-storehouse-absence` (the T331 pass's searches in its comment, the Zhaijing named, not cited: unread by the session); 0101's drawing page has the bullet "A privy built onto a building's end may back a storehouse or a granary - a GUESS", the same note. The note's 0101 copy reads "house-siting plans (kaso-zu)" (record-format's VOCABULARY on 0101), its 0116 copy "house-siting plans" (record-format on 0116 found it plain English): one search, one account, a gloss apart - left so, as re-owing 0116's checks for a gloss buys nothing a reader needs.
+- T344: 0101's heading is now "A local farmer came regularly with a cart to buy up a communal toilet's night soil."; 0116's sentence is "Our maps do not scatter separate labeled buildings with loose ground between them: they close up that loose ground and leave the rest open." (record-format's HISTORY on the first restating), with a grounds comment, and `takayama-jinya-jawiki-6`'s passage #2 dropped from both notes and originals files; 0123's first "imperial encyclopedia" links its zh.wikisource volume and names the Gujin tushu jicheng (古今圖書集成); registry 9971 no longer credits the pamphlet with "1717" or "Iwami Ōmori" (neither rendered page nor the text layer carries 1717, 享保, 大森 or 石見), the facts sourced to Fuchū city's page `fuchu-joge-daikansho-ato` (registry 25200, moved from the uncited works by `make cite-uncited`); 0113's drawing page cites the South Town Magistracy's 1842 plan beside the 1841 North plan (new key `edo-ashigaru-minami-plan`, registry 37190, archived), the room order "the plan shows".
+- T349 (record): 0093's drawing page gives the hand-drawn main-gate posts about 2 ft square, the generated plans' 2 ft along the wall and about 4.3 ft across it, and a side gate's posts dark blocks about 2 to 2.7 ft along the wall and about 4 ft across it, drawn large so they read at the plan's scale (quote-check's wording), a map drawing convention (CONVENTION, the sizes measured 2026-11-22 (the SVG rects read by grep)).
+- Record checks recorded (observed 2026-11-22, method: the handoffs' CHECKED lines): quote-check (0093, 0101, 0113, 0116, 0123), record-format (0093 two rounds, 0101, 0113 two rounds, 0116, 0123), source-reader (0116, 0113), translation-check (0113 two rounds, 13 FAITHFUL), source-applicability (37190, 25200 with two EDITs applied, 9971), modal-triage (three runs).
+- (brief C, the pop-up checks and the claims round: filled at the end)
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Found and left?**
+- 0101's note `tajima-2007-night-soil` names the Kôka Shunjû (耕稼春秋) in a quoted passage with no glossary term (record-format 2026-11-22 on 0101, OUTSIDE THE CHANGE); the check's draft definition came from its own knowledge, so the term needs a source. Not fixed here: a glossary term needs its own source read, a new subject. Filed as T362; lands before T158.
 
-
-### T344 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T344 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
-### T349 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T349 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T351 (<why: the finding or measurement that files it>)

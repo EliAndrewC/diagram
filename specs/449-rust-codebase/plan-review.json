@@ -1674,6 +1674,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T342, T343, T344, T349 (bundle)": {
+   "sha256": "3c7fda17a36087e310bb521a4435b4fee37012f97a5aa14fb556852611f2b7ec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T342, T343, T344, T349 Approach (checklist part A)": {
+   "sha256": "d5bfed6d638dd0b03110fa983a655087ff8d4c15b05075d7d8520ccf16faf9e0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -23599,6 +23611,76 @@
      "why": "The GM's 2026-11-18 rule is per step: fix all known bugs in each step before moving on to porting the next one. The 2026-11-22 words ('finish the remaining fixes' before the talk) are met as long as these land before T158 and before the talk, which every item states. So this is sequencing inside the step, not a narrowing. Record pages are left to their own page sessions, and research-first items get their pass first. If any of these slipped past T158, that would be the finding."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T342, T343, T344, T349 (bundle)",
+    "### T342, T343, T344, T349 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T342-no-edit",
+     "summary": "T342 owes no edit: T330 bundle B8 already restated 0088 to the flat road and the Hagi 1742 line, checked clean, landed f62250f89f; the grep finds only the flat-tone bullet.",
+     "class": "within",
+     "why": "The defect T342 names was fixed and checked by another landed bundle (observed 2026-11-22, method stated); recording that is the task done, not narrowed."
+    },
+    {
+     "id": "T343-claim-follows",
+     "summary": "T331 pass is silent on a privy beside a storehouse, so 0116's fire gap is restated (a kura and the buildings round it, not binding a privy built onto a building's end) as a GUESS with an absence note, 0101 says the same; the sheets are unchanged.",
+     "class": "within",
+     "why": "Not a carve-out from a research finding: the T331 pass found no plan, inventory or rule separating a privy from a storehouse, and the one text naming both puts them in the same sector, so nothing in the record says the drawn privy 0.5 ft off the granary is wrong. The earlier fire-gap line claimed more than its sources carry for an attached privy; restating it to the evidence, labeled a GUESS with its searches and an absence note, is the XIV correction (a claim the behavior does not literally match, the behavior fine, is fixed by restating the claim). The plan's 'algorithmically easier route' carries no weight here: moving privies on no evidence would be the unsupported change."
+    },
+    {
+     "id": "T343-gloss-apart",
+     "summary": "The absence note's 0101 copy carries '(kaso-zu)', its 0116 copy plain 'house-siting plans'; left so.",
+     "class": "within",
+     "why": "A difference no reader is misled by is not a defect (XIV v2.36.0); each copy passed record-format on its own page."
+    },
+    {
+     "id": "T344-items",
+     "summary": "0101's heading narrowed to its one case; 0116's earlier-plans sentence restated with its grounds and an unsupported passage dropped; 0123's encyclopedia linked and named; registry 9971's '1717' and 'Iwami Omori' moved to a source that carries them; 0113 cites the 1842 South plan.",
+     "class": "within",
+     "why": "Each is the check finding that filed T344, fixed in the record; the last resorts (an unsupported fact cut, an unreadable source to to-download.md) are the research record's own rules."
+    },
+    {
+     "id": "T349-record-gate-posts",
+     "summary": "0093 records the drawn gate posts as measured on the SVGs (hand main 2 ft square; generated main 2 ft along by about 4.3 ft across; side posts 4 ft across by 2.7 ft along on hand sheets, about 4.3 across by 2 along on generated) as a CONVENTION, and restates the hand-only 'about 2 ft square'.",
+     "class": "within",
+     "why": "The task's finding was an unlabeled drawn convention; the page now states what both sheet forms draw, orientation given across and along the wall as round 1 asked, each figure carrying its date and method. The sheets are not changed, correctly, since the posts read fine."
+    },
+    {
+     "id": "T349-tool-fix",
+     "summary": "reply.rs last_text_of takes only assistant lines and a StructuredOutput call's text as the reply; marks.rs reply_in reads the agent's transcript first (transcript_of finding wave agents under subagents/workflows/<run>/) and the kept copy only when the transcript gives nothing; red-first tests on both crates.",
+     "class": "within",
+     "why": "Fixes the check-tool defect T349 names at its source (the recorded reply was wrong, not the copy step), with tests that fail when the defect returns."
+    },
+    {
+     "id": "T349-last-resort-kept-copy",
+     "summary": "A reply with no transcript keeps its kept copy; every one of the 341 kept wave copies was first rewritten from its transcript by the fixed rule (rewritten 341, already right 0, none without a reply; measured 2026-11-22 by the repair script, old copies backed up).",
+     "class": "within",
+     "why": "Round 1's block is answered: the known-bad kept copies are repaired (341 rewritten from their transcripts by the fixed rule, measured 2026-11-22 by the repair script), and the source fix that writes new copies is pinned by red-first tests on both crates, so the no-transcript fallback reaches a copy written by the fixed rule, not a known-bad one."
+    },
+    {
+     "id": "brief-C-same-subject",
+     "summary": "Brief C fixes the same-subject findings briefs A and B's checks met outside their change (0093 findings page's 6-9 ft gate vs 8.5, the fire gap's absence note overstating unread articles, registry 5220's 'one range' and dropped rows, registry 14050's 'sent from the intendant's seat').",
+     "class": "within",
+     "why": "The GM 2026-11-18 and 2026-11-22: fix known bugs as found, finish every remaining fix; these are wrong statements in the record met by this bundle's checks."
+    },
+    {
+     "id": "found-and-left-T362",
+     "summary": "0101's note names the Koka Shunju with no glossary term; filed as T362, landing before T158, because a term needs its own source read.",
+     "class": "within",
+     "why": "Not left: filed and ordered ahead of the next step, as the fix-as-we-go rule and the GM's 2026-11-22 'finish the remaining fixes' require; inventing the definition from the check's own knowledge would break the record's sourcing rule."
+    },
+    {
+     "id": "popups-owed",
+     "summary": "Modal triage then form, research and depiction checks on what the moved pages name; a fix in another bundle's pop-up filed, not applied.",
+     "class": "within",
+     "why": "The pop-up check order the project already runs; filing another bundle's fix keeps it owned and fixed, not dropped."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -45142,6 +45224,278 @@
      "summary": "The building-reviews' findings on the frozen review tree (including defects this bundle caused: T353 gatehouse, T354 mats and court claim, T355 Ochiba's band, plus T351, T352, T357), the record-page edits (T342, T343), and the research-first items (T341, T356, T358) are filed as tasks, each landing before T158, Phase 4's deletion close, instead of being fixed in this landing.",
      "class": "within",
      "why": "The GM's 2026-11-18 rule is per step: fix all known bugs in each step before moving on to porting the next one. The 2026-11-22 words ('finish the remaining fixes' before the talk) are met as long as these land before T158 and before the talk, which every item states. So this is sequencing inside the step, not a narrowing. Record pages are left to their own page sessions, and research-first items get their pass first. If any of these slipped past T158, that would be the finding."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T342": {
+   "section_sha256": "b30844f88aec8d8e0ba9d7727186084428449afd3028d77696f478108ab91495",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T342-no-edit",
+     "summary": "T342 owes no edit: T330 bundle B8 already restated 0088 to the flat road and the Hagi 1742 line, checked clean, landed f62250f89f; the grep finds only the flat-tone bullet.",
+     "class": "within",
+     "why": "The defect T342 names was fixed and checked by another landed bundle (observed 2026-11-22, method stated); recording that is the task done, not narrowed."
+    },
+    {
+     "id": "T343-claim-follows",
+     "summary": "T331 pass is silent on a privy beside a storehouse, so 0116's fire gap is restated (a kura and the buildings round it, not binding a privy built onto a building's end) as a GUESS with an absence note, 0101 says the same; the sheets are unchanged.",
+     "class": "within",
+     "why": "Not a carve-out from a research finding: the T331 pass found no plan, inventory or rule separating a privy from a storehouse, and the one text naming both puts them in the same sector, so nothing in the record says the drawn privy 0.5 ft off the granary is wrong. The earlier fire-gap line claimed more than its sources carry for an attached privy; restating it to the evidence, labeled a GUESS with its searches and an absence note, is the XIV correction (a claim the behavior does not literally match, the behavior fine, is fixed by restating the claim). The plan's 'algorithmically easier route' carries no weight here: moving privies on no evidence would be the unsupported change."
+    },
+    {
+     "id": "T343-gloss-apart",
+     "summary": "The absence note's 0101 copy carries '(kaso-zu)', its 0116 copy plain 'house-siting plans'; left so.",
+     "class": "within",
+     "why": "A difference no reader is misled by is not a defect (XIV v2.36.0); each copy passed record-format on its own page."
+    },
+    {
+     "id": "T344-items",
+     "summary": "0101's heading narrowed to its one case; 0116's earlier-plans sentence restated with its grounds and an unsupported passage dropped; 0123's encyclopedia linked and named; registry 9971's '1717' and 'Iwami Omori' moved to a source that carries them; 0113 cites the 1842 South plan.",
+     "class": "within",
+     "why": "Each is the check finding that filed T344, fixed in the record; the last resorts (an unsupported fact cut, an unreadable source to to-download.md) are the research record's own rules."
+    },
+    {
+     "id": "T349-record-gate-posts",
+     "summary": "0093 records the drawn gate posts as measured on the SVGs (hand main 2 ft square; generated main 2 ft along by about 4.3 ft across; side posts 4 ft across by 2.7 ft along on hand sheets, about 4.3 across by 2 along on generated) as a CONVENTION, and restates the hand-only 'about 2 ft square'.",
+     "class": "within",
+     "why": "The task's finding was an unlabeled drawn convention; the page now states what both sheet forms draw, orientation given across and along the wall as round 1 asked, each figure carrying its date and method. The sheets are not changed, correctly, since the posts read fine."
+    },
+    {
+     "id": "T349-tool-fix",
+     "summary": "reply.rs last_text_of takes only assistant lines and a StructuredOutput call's text as the reply; marks.rs reply_in reads the agent's transcript first (transcript_of finding wave agents under subagents/workflows/<run>/) and the kept copy only when the transcript gives nothing; red-first tests on both crates.",
+     "class": "within",
+     "why": "Fixes the check-tool defect T349 names at its source (the recorded reply was wrong, not the copy step), with tests that fail when the defect returns."
+    },
+    {
+     "id": "T349-last-resort-kept-copy",
+     "summary": "A reply with no transcript keeps its kept copy; every one of the 341 kept wave copies was first rewritten from its transcript by the fixed rule (rewritten 341, already right 0, none without a reply; measured 2026-11-22 by the repair script, old copies backed up).",
+     "class": "within",
+     "why": "Round 1's block is answered: the known-bad kept copies are repaired (341 rewritten from their transcripts by the fixed rule, measured 2026-11-22 by the repair script), and the source fix that writes new copies is pinned by red-first tests on both crates, so the no-transcript fallback reaches a copy written by the fixed rule, not a known-bad one."
+    },
+    {
+     "id": "brief-C-same-subject",
+     "summary": "Brief C fixes the same-subject findings briefs A and B's checks met outside their change (0093 findings page's 6-9 ft gate vs 8.5, the fire gap's absence note overstating unread articles, registry 5220's 'one range' and dropped rows, registry 14050's 'sent from the intendant's seat').",
+     "class": "within",
+     "why": "The GM 2026-11-18 and 2026-11-22: fix known bugs as found, finish every remaining fix; these are wrong statements in the record met by this bundle's checks."
+    },
+    {
+     "id": "found-and-left-T362",
+     "summary": "0101's note names the Koka Shunju with no glossary term; filed as T362, landing before T158, because a term needs its own source read.",
+     "class": "within",
+     "why": "Not left: filed and ordered ahead of the next step, as the fix-as-we-go rule and the GM's 2026-11-22 'finish the remaining fixes' require; inventing the definition from the check's own knowledge would break the record's sourcing rule."
+    },
+    {
+     "id": "popups-owed",
+     "summary": "Modal triage then form, research and depiction checks on what the moved pages name; a fix in another bundle's pop-up filed, not applied.",
+     "class": "within",
+     "why": "The pop-up check order the project already runs; filing another bundle's fix keeps it owned and fixed, not dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T343": {
+   "section_sha256": "b30844f88aec8d8e0ba9d7727186084428449afd3028d77696f478108ab91495",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T342-no-edit",
+     "summary": "T342 owes no edit: T330 bundle B8 already restated 0088 to the flat road and the Hagi 1742 line, checked clean, landed f62250f89f; the grep finds only the flat-tone bullet.",
+     "class": "within",
+     "why": "The defect T342 names was fixed and checked by another landed bundle (observed 2026-11-22, method stated); recording that is the task done, not narrowed."
+    },
+    {
+     "id": "T343-claim-follows",
+     "summary": "T331 pass is silent on a privy beside a storehouse, so 0116's fire gap is restated (a kura and the buildings round it, not binding a privy built onto a building's end) as a GUESS with an absence note, 0101 says the same; the sheets are unchanged.",
+     "class": "within",
+     "why": "Not a carve-out from a research finding: the T331 pass found no plan, inventory or rule separating a privy from a storehouse, and the one text naming both puts them in the same sector, so nothing in the record says the drawn privy 0.5 ft off the granary is wrong. The earlier fire-gap line claimed more than its sources carry for an attached privy; restating it to the evidence, labeled a GUESS with its searches and an absence note, is the XIV correction (a claim the behavior does not literally match, the behavior fine, is fixed by restating the claim). The plan's 'algorithmically easier route' carries no weight here: moving privies on no evidence would be the unsupported change."
+    },
+    {
+     "id": "T343-gloss-apart",
+     "summary": "The absence note's 0101 copy carries '(kaso-zu)', its 0116 copy plain 'house-siting plans'; left so.",
+     "class": "within",
+     "why": "A difference no reader is misled by is not a defect (XIV v2.36.0); each copy passed record-format on its own page."
+    },
+    {
+     "id": "T344-items",
+     "summary": "0101's heading narrowed to its one case; 0116's earlier-plans sentence restated with its grounds and an unsupported passage dropped; 0123's encyclopedia linked and named; registry 9971's '1717' and 'Iwami Omori' moved to a source that carries them; 0113 cites the 1842 South plan.",
+     "class": "within",
+     "why": "Each is the check finding that filed T344, fixed in the record; the last resorts (an unsupported fact cut, an unreadable source to to-download.md) are the research record's own rules."
+    },
+    {
+     "id": "T349-record-gate-posts",
+     "summary": "0093 records the drawn gate posts as measured on the SVGs (hand main 2 ft square; generated main 2 ft along by about 4.3 ft across; side posts 4 ft across by 2.7 ft along on hand sheets, about 4.3 across by 2 along on generated) as a CONVENTION, and restates the hand-only 'about 2 ft square'.",
+     "class": "within",
+     "why": "The task's finding was an unlabeled drawn convention; the page now states what both sheet forms draw, orientation given across and along the wall as round 1 asked, each figure carrying its date and method. The sheets are not changed, correctly, since the posts read fine."
+    },
+    {
+     "id": "T349-tool-fix",
+     "summary": "reply.rs last_text_of takes only assistant lines and a StructuredOutput call's text as the reply; marks.rs reply_in reads the agent's transcript first (transcript_of finding wave agents under subagents/workflows/<run>/) and the kept copy only when the transcript gives nothing; red-first tests on both crates.",
+     "class": "within",
+     "why": "Fixes the check-tool defect T349 names at its source (the recorded reply was wrong, not the copy step), with tests that fail when the defect returns."
+    },
+    {
+     "id": "T349-last-resort-kept-copy",
+     "summary": "A reply with no transcript keeps its kept copy; every one of the 341 kept wave copies was first rewritten from its transcript by the fixed rule (rewritten 341, already right 0, none without a reply; measured 2026-11-22 by the repair script, old copies backed up).",
+     "class": "within",
+     "why": "Round 1's block is answered: the known-bad kept copies are repaired (341 rewritten from their transcripts by the fixed rule, measured 2026-11-22 by the repair script), and the source fix that writes new copies is pinned by red-first tests on both crates, so the no-transcript fallback reaches a copy written by the fixed rule, not a known-bad one."
+    },
+    {
+     "id": "brief-C-same-subject",
+     "summary": "Brief C fixes the same-subject findings briefs A and B's checks met outside their change (0093 findings page's 6-9 ft gate vs 8.5, the fire gap's absence note overstating unread articles, registry 5220's 'one range' and dropped rows, registry 14050's 'sent from the intendant's seat').",
+     "class": "within",
+     "why": "The GM 2026-11-18 and 2026-11-22: fix known bugs as found, finish every remaining fix; these are wrong statements in the record met by this bundle's checks."
+    },
+    {
+     "id": "found-and-left-T362",
+     "summary": "0101's note names the Koka Shunju with no glossary term; filed as T362, landing before T158, because a term needs its own source read.",
+     "class": "within",
+     "why": "Not left: filed and ordered ahead of the next step, as the fix-as-we-go rule and the GM's 2026-11-22 'finish the remaining fixes' require; inventing the definition from the check's own knowledge would break the record's sourcing rule."
+    },
+    {
+     "id": "popups-owed",
+     "summary": "Modal triage then form, research and depiction checks on what the moved pages name; a fix in another bundle's pop-up filed, not applied.",
+     "class": "within",
+     "why": "The pop-up check order the project already runs; filing another bundle's fix keeps it owned and fixed, not dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T344": {
+   "section_sha256": "b30844f88aec8d8e0ba9d7727186084428449afd3028d77696f478108ab91495",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T342-no-edit",
+     "summary": "T342 owes no edit: T330 bundle B8 already restated 0088 to the flat road and the Hagi 1742 line, checked clean, landed f62250f89f; the grep finds only the flat-tone bullet.",
+     "class": "within",
+     "why": "The defect T342 names was fixed and checked by another landed bundle (observed 2026-11-22, method stated); recording that is the task done, not narrowed."
+    },
+    {
+     "id": "T343-claim-follows",
+     "summary": "T331 pass is silent on a privy beside a storehouse, so 0116's fire gap is restated (a kura and the buildings round it, not binding a privy built onto a building's end) as a GUESS with an absence note, 0101 says the same; the sheets are unchanged.",
+     "class": "within",
+     "why": "Not a carve-out from a research finding: the T331 pass found no plan, inventory or rule separating a privy from a storehouse, and the one text naming both puts them in the same sector, so nothing in the record says the drawn privy 0.5 ft off the granary is wrong. The earlier fire-gap line claimed more than its sources carry for an attached privy; restating it to the evidence, labeled a GUESS with its searches and an absence note, is the XIV correction (a claim the behavior does not literally match, the behavior fine, is fixed by restating the claim). The plan's 'algorithmically easier route' carries no weight here: moving privies on no evidence would be the unsupported change."
+    },
+    {
+     "id": "T343-gloss-apart",
+     "summary": "The absence note's 0101 copy carries '(kaso-zu)', its 0116 copy plain 'house-siting plans'; left so.",
+     "class": "within",
+     "why": "A difference no reader is misled by is not a defect (XIV v2.36.0); each copy passed record-format on its own page."
+    },
+    {
+     "id": "T344-items",
+     "summary": "0101's heading narrowed to its one case; 0116's earlier-plans sentence restated with its grounds and an unsupported passage dropped; 0123's encyclopedia linked and named; registry 9971's '1717' and 'Iwami Omori' moved to a source that carries them; 0113 cites the 1842 South plan.",
+     "class": "within",
+     "why": "Each is the check finding that filed T344, fixed in the record; the last resorts (an unsupported fact cut, an unreadable source to to-download.md) are the research record's own rules."
+    },
+    {
+     "id": "T349-record-gate-posts",
+     "summary": "0093 records the drawn gate posts as measured on the SVGs (hand main 2 ft square; generated main 2 ft along by about 4.3 ft across; side posts 4 ft across by 2.7 ft along on hand sheets, about 4.3 across by 2 along on generated) as a CONVENTION, and restates the hand-only 'about 2 ft square'.",
+     "class": "within",
+     "why": "The task's finding was an unlabeled drawn convention; the page now states what both sheet forms draw, orientation given across and along the wall as round 1 asked, each figure carrying its date and method. The sheets are not changed, correctly, since the posts read fine."
+    },
+    {
+     "id": "T349-tool-fix",
+     "summary": "reply.rs last_text_of takes only assistant lines and a StructuredOutput call's text as the reply; marks.rs reply_in reads the agent's transcript first (transcript_of finding wave agents under subagents/workflows/<run>/) and the kept copy only when the transcript gives nothing; red-first tests on both crates.",
+     "class": "within",
+     "why": "Fixes the check-tool defect T349 names at its source (the recorded reply was wrong, not the copy step), with tests that fail when the defect returns."
+    },
+    {
+     "id": "T349-last-resort-kept-copy",
+     "summary": "A reply with no transcript keeps its kept copy; every one of the 341 kept wave copies was first rewritten from its transcript by the fixed rule (rewritten 341, already right 0, none without a reply; measured 2026-11-22 by the repair script, old copies backed up).",
+     "class": "within",
+     "why": "Round 1's block is answered: the known-bad kept copies are repaired (341 rewritten from their transcripts by the fixed rule, measured 2026-11-22 by the repair script), and the source fix that writes new copies is pinned by red-first tests on both crates, so the no-transcript fallback reaches a copy written by the fixed rule, not a known-bad one."
+    },
+    {
+     "id": "brief-C-same-subject",
+     "summary": "Brief C fixes the same-subject findings briefs A and B's checks met outside their change (0093 findings page's 6-9 ft gate vs 8.5, the fire gap's absence note overstating unread articles, registry 5220's 'one range' and dropped rows, registry 14050's 'sent from the intendant's seat').",
+     "class": "within",
+     "why": "The GM 2026-11-18 and 2026-11-22: fix known bugs as found, finish every remaining fix; these are wrong statements in the record met by this bundle's checks."
+    },
+    {
+     "id": "found-and-left-T362",
+     "summary": "0101's note names the Koka Shunju with no glossary term; filed as T362, landing before T158, because a term needs its own source read.",
+     "class": "within",
+     "why": "Not left: filed and ordered ahead of the next step, as the fix-as-we-go rule and the GM's 2026-11-22 'finish the remaining fixes' require; inventing the definition from the check's own knowledge would break the record's sourcing rule."
+    },
+    {
+     "id": "popups-owed",
+     "summary": "Modal triage then form, research and depiction checks on what the moved pages name; a fix in another bundle's pop-up filed, not applied.",
+     "class": "within",
+     "why": "The pop-up check order the project already runs; filing another bundle's fix keeps it owned and fixed, not dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T349": {
+   "section_sha256": "b30844f88aec8d8e0ba9d7727186084428449afd3028d77696f478108ab91495",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T342-no-edit",
+     "summary": "T342 owes no edit: T330 bundle B8 already restated 0088 to the flat road and the Hagi 1742 line, checked clean, landed f62250f89f; the grep finds only the flat-tone bullet.",
+     "class": "within",
+     "why": "The defect T342 names was fixed and checked by another landed bundle (observed 2026-11-22, method stated); recording that is the task done, not narrowed."
+    },
+    {
+     "id": "T343-claim-follows",
+     "summary": "T331 pass is silent on a privy beside a storehouse, so 0116's fire gap is restated (a kura and the buildings round it, not binding a privy built onto a building's end) as a GUESS with an absence note, 0101 says the same; the sheets are unchanged.",
+     "class": "within",
+     "why": "Not a carve-out from a research finding: the T331 pass found no plan, inventory or rule separating a privy from a storehouse, and the one text naming both puts them in the same sector, so nothing in the record says the drawn privy 0.5 ft off the granary is wrong. The earlier fire-gap line claimed more than its sources carry for an attached privy; restating it to the evidence, labeled a GUESS with its searches and an absence note, is the XIV correction (a claim the behavior does not literally match, the behavior fine, is fixed by restating the claim). The plan's 'algorithmically easier route' carries no weight here: moving privies on no evidence would be the unsupported change."
+    },
+    {
+     "id": "T343-gloss-apart",
+     "summary": "The absence note's 0101 copy carries '(kaso-zu)', its 0116 copy plain 'house-siting plans'; left so.",
+     "class": "within",
+     "why": "A difference no reader is misled by is not a defect (XIV v2.36.0); each copy passed record-format on its own page."
+    },
+    {
+     "id": "T344-items",
+     "summary": "0101's heading narrowed to its one case; 0116's earlier-plans sentence restated with its grounds and an unsupported passage dropped; 0123's encyclopedia linked and named; registry 9971's '1717' and 'Iwami Omori' moved to a source that carries them; 0113 cites the 1842 South plan.",
+     "class": "within",
+     "why": "Each is the check finding that filed T344, fixed in the record; the last resorts (an unsupported fact cut, an unreadable source to to-download.md) are the research record's own rules."
+    },
+    {
+     "id": "T349-record-gate-posts",
+     "summary": "0093 records the drawn gate posts as measured on the SVGs (hand main 2 ft square; generated main 2 ft along by about 4.3 ft across; side posts 4 ft across by 2.7 ft along on hand sheets, about 4.3 across by 2 along on generated) as a CONVENTION, and restates the hand-only 'about 2 ft square'.",
+     "class": "within",
+     "why": "The task's finding was an unlabeled drawn convention; the page now states what both sheet forms draw, orientation given across and along the wall as round 1 asked, each figure carrying its date and method. The sheets are not changed, correctly, since the posts read fine."
+    },
+    {
+     "id": "T349-tool-fix",
+     "summary": "reply.rs last_text_of takes only assistant lines and a StructuredOutput call's text as the reply; marks.rs reply_in reads the agent's transcript first (transcript_of finding wave agents under subagents/workflows/<run>/) and the kept copy only when the transcript gives nothing; red-first tests on both crates.",
+     "class": "within",
+     "why": "Fixes the check-tool defect T349 names at its source (the recorded reply was wrong, not the copy step), with tests that fail when the defect returns."
+    },
+    {
+     "id": "T349-last-resort-kept-copy",
+     "summary": "A reply with no transcript keeps its kept copy; every one of the 341 kept wave copies was first rewritten from its transcript by the fixed rule (rewritten 341, already right 0, none without a reply; measured 2026-11-22 by the repair script, old copies backed up).",
+     "class": "within",
+     "why": "Round 1's block is answered: the known-bad kept copies are repaired (341 rewritten from their transcripts by the fixed rule, measured 2026-11-22 by the repair script), and the source fix that writes new copies is pinned by red-first tests on both crates, so the no-transcript fallback reaches a copy written by the fixed rule, not a known-bad one."
+    },
+    {
+     "id": "brief-C-same-subject",
+     "summary": "Brief C fixes the same-subject findings briefs A and B's checks met outside their change (0093 findings page's 6-9 ft gate vs 8.5, the fire gap's absence note overstating unread articles, registry 5220's 'one range' and dropped rows, registry 14050's 'sent from the intendant's seat').",
+     "class": "within",
+     "why": "The GM 2026-11-18 and 2026-11-22: fix known bugs as found, finish every remaining fix; these are wrong statements in the record met by this bundle's checks."
+    },
+    {
+     "id": "found-and-left-T362",
+     "summary": "0101's note names the Koka Shunju with no glossary term; filed as T362, landing before T158, because a term needs its own source read.",
+     "class": "within",
+     "why": "Not left: filed and ordered ahead of the next step, as the fix-as-we-go rule and the GM's 2026-11-22 'finish the remaining fixes' require; inventing the definition from the check's own knowledge would break the record's sourcing rule."
+    },
+    {
+     "id": "popups-owed",
+     "summary": "Modal triage then form, research and depiction checks on what the moved pages name; a fix in another bundle's pop-up filed, not applied.",
+     "class": "within",
+     "why": "The pop-up check order the project already runs; filing another bundle's fix keeps it owned and fixed, not dropped."
     }
    ],
    "verdict": "CLEAR"
