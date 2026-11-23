@@ -916,6 +916,7 @@ dependencies = [
 name = "l7r_gate_pool"
 version = "0.1.0"
 dependencies = [
+ "l7r_gate_core",
  "l7r_shared",
  "serde_json",
 ]
