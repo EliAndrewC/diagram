@@ -774,8 +774,14 @@ pub(super) fn touched_code(root: &Path, base: &str) -> Vec<String> {
 /// is read from its words and the pool's folder names.
 #[must_use]
 pub fn check_declared(root: &Path) -> Option<String> {
+    check_declared_as(root, None)
+}
+
+/// [`check_declared`] with the bundle `make verify` carries in read in place of the clone's started-task mark (451 T166).
+#[must_use]
+pub fn check_declared_as(root: &Path, started: Option<&Started>) -> Option<String> {
     let (base, _) = base_of(root);
-    let forms = declared::forms(root, &base);
+    let forms = declared::forms(root, &base, started);
     let mut out: Vec<String> = Vec::new();
     if !forms.misformed.is_empty() {
         out.push(format!(
@@ -844,7 +850,7 @@ mod marks;
 mod redrawn;
 #[cfg(test)]
 pub use declared::occasions_section;
-pub use declared::{check_drawn, declared};
+pub use declared::{check_drawn, declared, Started};
 
 #[cfg(test)]
 mod tests;

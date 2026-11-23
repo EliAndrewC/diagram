@@ -4,12 +4,13 @@
 //! Research: plumbing - NONE: parses and dispatches the owed tool's modes, deciding nothing about a map
 
 use std::fmt::Write as _;
-use std::path::Path;
 
 use l7r_shared::env::Rooted;
 
 use super::super::{git, glyph, py_path, reply};
-use super::{check_declared, check_drawn, folders, owed_discharged, ruling, undrawn, Unit};
+use super::{
+    check_declared_as, check_drawn, folders, owed_discharged, ruling, undrawn, Started, Unit,
+};
 use crate::record::args::{parse, Spec};
 use crate::record::bundle::py_repr;
 use crate::Reply;
@@ -96,15 +97,19 @@ pub fn cli_in(args: &[String], base: &Rooted) -> Reply {
 }
 
 fn run(root: &Rooted, p: &crate::record::args::Parsed, mark: &str) -> Reply {
+    // `make verify`'s bundle (451 T166), by the environment so a review tree's gate built before this reads as before
+    let started = root
+        .opt("L7R_VERIFY_STARTED")
+        .and_then(|t| Started::read(root, &t));
     let check = if p.on("--check-declared") {
-        Some(check_declared as fn(&Path) -> Option<String>)
+        Some(check_declared_as(root, started.as_ref()))
     } else if p.on("--check-drawn") {
-        Some(check_drawn as fn(&Path) -> Option<String>)
+        Some(check_drawn(root))
     } else {
         None
     };
-    if let Some(check) = check {
-        return check(root).map_or_else(
+    if let Some(found) = check {
+        return found.map_or_else(
             || reply(String::new(), String::new(), 0),
             |r| reply(r + "\n", String::new(), 1),
         );

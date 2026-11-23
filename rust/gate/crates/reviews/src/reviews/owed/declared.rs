@@ -45,10 +45,58 @@ fn read_strict(path: &Path) -> String {
         .unwrap_or_default()
 }
 
-/// The feature directories this delta is the work of: the open feature the pointer names, and every `specs/NNN-*/` with a
-/// `tasks.md` the delta touches that had not landed at the base.
-fn active_features(root: &Path, base: &str, shown: &mut Shown) -> Vec<String> {
+/// The bundle `make verify` judges (451 T166): its feature's directory under `specs/` and the task it starts, carried in by
+/// `L7R_VERIFY_STARTED` in place of the clone's one started-task mark, which another builder's `make task-start` or `make set-down`
+/// moves while the bundle runs (measured 2026-11-23: 449 T328's two verify runs met the mark cleared by a 449 set-down and naming 451
+/// T90, and each read "no task of an active feature is started" over lines naming T328).
+pub struct Started {
+    dir: String,
+    task: String,
+}
+
+impl Started {
+    /// `<feature> <task>[,<task> ...]` as `make verify` passes its `F=` and `T=`: the feature a number, a directory name or
+    /// `specs/<dir>`, the tasks split at commas or spaces, the first the started one, as `make task-start` marks a bundle. None where
+    /// the feature names no directory of `root`'s `specs/` or no task is given: the mark's rule then stands.
+    #[must_use]
+    pub fn read(root: &Path, text: &str) -> Option<Self> {
+        let mut words = text.split([' ', ',']).filter(|w| !w.is_empty());
+        let feature = words
+            .next()?
+            .trim_start_matches("specs/")
+            .trim_end_matches('/');
+        let task = words.next()?.to_owned();
+        let dir = std::fs::read_dir(root.join("specs"))
+            .ok()?
+            .filter_map(|e| e.ok()?.file_name().into_string().ok())
+            .filter(|d| {
+                d == feature
+                    || d.strip_prefix(feature)
+                        .is_some_and(|rest| rest.starts_with('-'))
+            })
+            .min()?;
+        Some(Self {
+            dir: format!("specs/{dir}"),
+            task,
+        })
+    }
+}
+
+/// The feature directories this delta is the work of: the open feature the pointer names (or the bundle `make verify` carries in, the
+/// review tree having no pointer of its own, 451 T166), and every `specs/NNN-*/` with a `tasks.md` the delta touches that had not
+/// landed at the base.
+fn active_features(
+    root: &Path,
+    base: &str,
+    shown: &mut Shown,
+    started: Option<&Started>,
+) -> Vec<String> {
     let mut found: BTreeSet<String> = BTreeSet::new();
+    if let Some(s) = started {
+        if found_box(&read_strict(&root.join(&s.dir).join("tasks.md"))) {
+            found.insert(s.dir.clone());
+        }
+    }
     let pointer = std::fs::read_to_string(root.join(".specify/feature.json"))
         .ok()
         .and_then(|t| serde_json::from_str::<Value>(&t).ok())
@@ -529,10 +577,20 @@ fn joined_entries(text: &str) -> Lines {
 /// landing's holding box reads, `speckit::active_task`) of an active feature, not ticked at the base, named by a line of that feature's
 /// `## Occasions` - the section as it stands, a line already on main included (a declaration pushed with the spec, before the code,
 /// names the task all the same). Else why not, and the started task's id where there is one. Before, ANY section answered: one whose
-/// every line had landed, another feature's (T236's commit, replayed with its own line taken out, was refused nothing).
-fn started_answers(root: &Path, features: &[String], shown: &mut Shown) -> (bool, String, String) {
+/// every line had landed, another feature's (T236's commit, replayed with its own line taken out, was refused nothing). The bundle
+/// `make verify` carries in is read in place of the mark (451 T166): its feature's task alone, every other feature's none.
+fn started_answers(
+    root: &Path,
+    features: &[String],
+    shown: &mut Shown,
+    started: Option<&Started>,
+) -> (bool, String, String) {
     for f in features {
-        let task = l7r_shared::speckit::active_task(&root.join(f)).unwrap_or_default();
+        let task = match started {
+            Some(s) if *f == s.dir => s.task.clone(),
+            Some(_) => continue,
+            None => l7r_shared::speckit::active_task(&root.join(f)).unwrap_or_default(),
+        };
         if task.is_empty() {
             continue;
         }
@@ -586,17 +644,17 @@ pub(super) struct Forms {
     pub misformed: Vec<String>,
 }
 
-pub(super) fn forms(root: &Path, base: &str) -> Forms {
+pub(super) fn forms(root: &Path, base: &str, started: Option<&Started>) -> Forms {
     let mut shown = Shown {
         root,
         base,
         seen: BTreeMap::new(),
     };
-    let features = active_features(root, base, &mut shown);
+    let features = active_features(root, base, &mut shown, started);
     let sources = sources(root, base, &features, &mut shown);
     let mut pool = Pool { root, names: None };
     let misformed = misformed(&sources, &mut pool);
-    let (answered, why, task) = started_answers(root, &features, &mut shown);
+    let (answered, why, task) = started_answers(root, &features, &mut shown, started);
     // a commit line answers only as one owing a review someone can run (449 T238 round 2: `Occasion: bogus: x` answered, as a section
     // did); its form is never refused, but a later commit can carry a line that answers
     let tweak = sources
@@ -639,7 +697,7 @@ pub fn declared(tree: &Tree, base: &str) -> Declared {
         base,
         seen: BTreeMap::new(),
     };
-    let features = active_features(tree.root, base, &mut shown);
+    let features = active_features(tree.root, base, &mut shown, None);
     let sources = sources(tree.root, base, &features, &mut shown);
     let mut pool = Pool {
         root: tree.root,
@@ -707,7 +765,7 @@ pub fn check_drawn(root: &Path) -> Option<String> {
             d.undrawn.join("; ")
         ));
     }
-    let forms = forms(root, &base);
+    let forms = forms(root, &base, None);
     if !forms.answered
         && !forms.tweak.is_empty()
         && !forms

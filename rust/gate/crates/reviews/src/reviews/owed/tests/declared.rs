@@ -622,3 +622,83 @@ fn a_commit_line_naming_no_map_is_decided_by_every_legend() {
     sh(&r, "git commit -q --allow-empty -m tweak -m 'Occasion: placement-changed: sluice gate - the gap'");
     assert_eq!(check_drawn(&r), None);
 }
+
+/// RED FIRST (451 T166): `make verify` judges the occasions in the review tree, whose `.specify/feature.json` is gitignored and so absent,
+/// by the clone's ONE started-task mark - which another builder's `make task-start` or `make set-down` moves (measured 2026-11-23: 449
+/// T328's two verify runs met it cleared by a 449 set-down at 03:02:52Z and naming 451 T90 at 03:24Z, and each printed "no task of an
+/// active feature is started" over lines naming T328). Verify carries its bundle in, `L7R_VERIFY_STARTED="<feature> <tasks>"`, read in
+/// place of the mark: its feature (a number, a directory or `specs/<dir>`) is active as the pointer's is, and its first task - the one
+/// `make task-start` marks and the landing's holding box reads - is the started one. A feature naming no directory leaves the mark's rule.
+#[test]
+fn verify_judges_its_own_bundle_not_the_clones_shared_mark() {
+    let r = repo("verify-started");
+    hamlet(&r, "kuwabata", &["marsh", "sluice gate"]);
+    put(&r, "rust/phases/src/seat.rs", SEAT);
+    feature(&r, "449-r", "- [ ] T236 the strip\n- [ ] T239 the seat\n");
+    std::fs::remove_file(r.join(".specify/feature.json")).unwrap();
+    commit(&r, "base");
+    sh(&r, "git update-ref refs/remotes/origin/main HEAD");
+    swap(&r, "rust/phases/src/seat.rs", "7.0", "8.0");
+    put(
+        &r,
+        "specs/449-r/tasks.md",
+        "- [ ] T236 the strip\n- [ ] T239 the seat\n\n## Occasions\n\n- none: T236 - the strip's gap\n",
+    );
+    let verify = |bundle: &str| {
+        let env = Rooted::with(&*r, &[("L7R_VERIFY_STARTED", bundle)]);
+        let args = [
+            "--root".to_owned(),
+            r.display().to_string(),
+            "--check-declared".to_owned(),
+        ];
+        let said = crate::reviews::owed::cli_in(&args, &env);
+        (said.code, said.stdout)
+    };
+    let none = "no task of an active feature is started";
+    // the shared mark names another feature's task (03:24Z), or none (03:12Z): refused without the bundle, answered with it
+    started(&r, "451-t", "T90");
+    assert!(verify("").1.contains(none));
+    for bundle in ["449 T236", "449-r T236,T239", "specs/449-r/ T236 T239"] {
+        assert_eq!(verify(bundle), (0, String::new()), "{bundle}");
+    }
+    std::fs::remove_file(r.join(".git/active-task")).unwrap();
+    assert!(verify("").1.contains(none));
+    assert_eq!(verify("449 T236"), (0, String::new()));
+    // another active feature's tasks, the mark's or not, are passed over for the bundle's
+    put(&r, "specs/300-o/tasks.md", "- [ ] T1 another builder's\n");
+    sh(&r, "git add -N specs/300-o");
+    started(&r, "300-o", "T1");
+    assert!(verify("").1.contains("the started task, specs/300-o T1"));
+    assert_eq!(verify("449 T236"), (0, String::new()));
+    sh(
+        &r,
+        "git rm -q --cached specs/300-o/tasks.md && rm -r specs/300-o",
+    );
+    // the bundle's first task is the started one, as the mark's is: a line naming only another of its tasks answers nothing
+    let (code, said) = verify("449 T239,T236");
+    assert_eq!(code, 1);
+    assert!(
+        said.contains(
+            "the started task, specs/449-r T239 (`make task-start`), is named by no line"
+        ),
+        "{said}"
+    );
+    // a feature naming no directory, or no task, leaves the mark's rule
+    started(&r, "449-r", "T236");
+    assert_eq!(verify("999 T1"), (0, String::new()));
+    assert_eq!(verify("449"), (0, String::new()));
+    started(&r, "451-t", "T90");
+    assert!(verify("999 T1").1.contains(none));
+    // a task ticked at the base is refused as the mark's is
+    put(
+        &r,
+        "specs/449-r/tasks.md",
+        "- [x] T236 the strip\n- [ ] T239 the seat\n",
+    );
+    commit(&r, "ticked");
+    sh(&r, "git update-ref refs/remotes/origin/main HEAD");
+    swap(&r, "rust/phases/src/seat.rs", "8.0", "9.0");
+    assert!(verify("449 T236")
+        .1
+        .contains("the started task, specs/449-r T236, was ticked on main already"));
+}

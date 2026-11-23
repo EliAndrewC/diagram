@@ -158,7 +158,10 @@ say "kept results seeded ($(lap) s)"
 cd "$WT" || exit 2
 # the review tree's own launcher: its tools are built from the snapshot's sources, never a builder's half-done edit in the clone
 GATE=${REVIEW_TREE_GATE:-$WT/scripts/gates/l7r-gate.sh}
-undeclared=$("$GATE" reviews owed --root "$WT" --check-declared)
+# the bundle's own started task, carried in (451 T166): the clone's one mark is any builder's last `make task-start` or `make set-down`,
+# and read here it named another feature's task, or none, under 449 T328's two runs (measured 2026-11-23); a gate built before reads
+# the mark as before
+undeclared=$(L7R_VERIFY_STARTED="$F $T" "$GATE" reviews owed --root "$WT" --check-declared)
 [ -z "$undeclared" ] || printf '\n\033[1mOCCASIONS NOT DECLARED\033[0m: %s\n' "$undeclared"
 for at in $("$GATE" reviews owed --root "$WT" --undrawn | cut -f2); do
   say "drawing $at (the generation cache does not serve it as it stands)"

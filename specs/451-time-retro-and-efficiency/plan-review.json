@@ -882,6 +882,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T165, T166, T172 (bundle)": {
+   "sha256": "afdc8e2cbeabf4df1129e0f56e5adfd44f1555e3839d921ef89dba74a2811a73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T165, T166, T172 Approach (checklist part A)": {
+   "sha256": "1026424ea99cff3f9971cfff65f783c8f1087d5ee23cb5166f7c3cce950403bd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -15540,6 +15552,46 @@
      "why": "The section classes the task as a fix of a wrong outcome (blocks recorded CLEAR that no review read, a ruled trigger refusing dispatches) and gives that reason. The label removes nothing the GM asked for from the fix. FR-013's text is cut in the bundle's index, so this ruling does not judge the label against it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T165, T166, T172 (bundle)",
+    "### T165, T166, T172 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T165-withdraw",
+     "summary": "T165 withdrawn as done by T175: a review naming a review tree holds only edits inside it, one naming none and the rolls hold the clone; nothing built.",
+     "class": "within",
+     "why": "T165's ask, as the block quotes it, is to narrow the engine freeze to reviews with no review-tree snapshot (and the rolls). The block shows the snapshot and the prompt line T175 keys on are written under one condition (a non-empty --commit), so T175's rule is that ask; it is backed by a measured live case (449 T383's two reviews kept PASS at the tree's key while five rust/ files were edited, no engine-freeze firing since T175 landed against 20 before it, 2026-11-23) and the engine-freeze suite green. Withdrawing a task whose ask is already met drops nothing that was asked."
+    },
+    {
+     "id": "T166-carry-bundle",
+     "summary": "review-tree.sh carries its bundle to reviews owed --check-declared by L7R_VERIFY_STARTED, read in place of the clone's shared active-task mark; a gate built before reads the mark as before; no feature dir or no task falls back to the mark's rule.",
+     "class": "within",
+     "why": "The measurement restates T166's cause (the shared mark moved by another session's set-down or task-start, not a worktree lacking the mark) and the fix targets that cause, so verify judges the bundle it verifies. The environment-variable route and the fallbacks preserve existing behavior for old gates and undeclared cases; nothing the task asked for is dropped. Pinned red-first by a crate test and a suite case."
+    },
+    {
+     "id": "T166-first-task",
+     "summary": "Of the carried bundle, only the FIRST task counts as the started one (a CONVENTION); a declared line naming only the bundle's second task is refused.",
+     "class": "within",
+     "why": "The first-task rule already exists: make task-start marks a bundle by its first task, 449 T238 round 2 answers a line naming the started task, and the landing's holding box reads the same. T166 changes WHERE the started task is read from (the carried bundle, not the shared mark), not WHICH task counts; neither request.md nor FR-013 says which of a bundle's tasks answers. The block's 'algorithmically easier' remark is not the ground for this class - the ground is that verify and the landing keep one rule, so verify does not pass what the landing then refuses."
+    },
+    {
+     "id": "T166-found-and-left-owed-listing",
+     "summary": "reviews owed's listing in the review tree reads the active features without the carried bundle; left unfixed.",
+     "class": "within",
+     "why": "No wrong outcome is measured: the three review commits observed (36fa41f4cc, 48103d14e6, d80ff6a0dd, git show --stat, 2026-11-23) each carry their feature's tasks.md, and the pointer names one feature for all builders. A hypothetical gap with no wrong outcome is not a defect (constitution XIV v2.36.0), so leaving it is not a narrowing and FR-009's defect-deferral form does not reach it."
+    },
+    {
+     "id": "T172-calibrated-bound",
+     "summary": "test-l7r-guard.sh's locked case times the no-binary path three times and bounds the locked call at three times the slowest, never under the old 1 s (a CONVENTION from CLAUDE.md's calibration loop); the live wrapper untouched.",
+     "class": "within",
+     "why": "The goal is a suite that fails only when a call waits on another's build. The bound keeps the 1 s as its floor, so it is no looser idle, and the waiting mutant (flock -w 5) still fails it idle; red 10/10 unfixed and green 10/10 fixed under a pinned load (measured 2026-11-23). The check still catches what it is for; nothing asked is dropped."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -24353,6 +24405,120 @@
      "summary": "Performance work? no - classed as a fix of a wrong outcome in the arbiter's record.",
      "class": "within",
      "why": "The section classes the task as a fix of a wrong outcome (blocks recorded CLEAR that no review read, a ruled trigger refusing dispatches) and gives that reason. The label removes nothing the GM asked for from the fix. FR-013's text is cut in the bundle's index, so this ruling does not judge the label against it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T165": {
+   "section_sha256": "1656c4a408e950d182d38a0a20133f2e50748cf3ca492dbd4cb4891cb8a11c94",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T165-withdraw",
+     "summary": "T165 withdrawn as done by T175: a review naming a review tree holds only edits inside it, one naming none and the rolls hold the clone; nothing built.",
+     "class": "within",
+     "why": "T165's ask, as the block quotes it, is to narrow the engine freeze to reviews with no review-tree snapshot (and the rolls). The block shows the snapshot and the prompt line T175 keys on are written under one condition (a non-empty --commit), so T175's rule is that ask; it is backed by a measured live case (449 T383's two reviews kept PASS at the tree's key while five rust/ files were edited, no engine-freeze firing since T175 landed against 20 before it, 2026-11-23) and the engine-freeze suite green. Withdrawing a task whose ask is already met drops nothing that was asked."
+    },
+    {
+     "id": "T166-carry-bundle",
+     "summary": "review-tree.sh carries its bundle to reviews owed --check-declared by L7R_VERIFY_STARTED, read in place of the clone's shared active-task mark; a gate built before reads the mark as before; no feature dir or no task falls back to the mark's rule.",
+     "class": "within",
+     "why": "The measurement restates T166's cause (the shared mark moved by another session's set-down or task-start, not a worktree lacking the mark) and the fix targets that cause, so verify judges the bundle it verifies. The environment-variable route and the fallbacks preserve existing behavior for old gates and undeclared cases; nothing the task asked for is dropped. Pinned red-first by a crate test and a suite case."
+    },
+    {
+     "id": "T166-first-task",
+     "summary": "Of the carried bundle, only the FIRST task counts as the started one (a CONVENTION); a declared line naming only the bundle's second task is refused.",
+     "class": "within",
+     "why": "The first-task rule already exists: make task-start marks a bundle by its first task, 449 T238 round 2 answers a line naming the started task, and the landing's holding box reads the same. T166 changes WHERE the started task is read from (the carried bundle, not the shared mark), not WHICH task counts; neither request.md nor FR-013 says which of a bundle's tasks answers. The block's 'algorithmically easier' remark is not the ground for this class - the ground is that verify and the landing keep one rule, so verify does not pass what the landing then refuses."
+    },
+    {
+     "id": "T166-found-and-left-owed-listing",
+     "summary": "reviews owed's listing in the review tree reads the active features without the carried bundle; left unfixed.",
+     "class": "within",
+     "why": "No wrong outcome is measured: the three review commits observed (36fa41f4cc, 48103d14e6, d80ff6a0dd, git show --stat, 2026-11-23) each carry their feature's tasks.md, and the pointer names one feature for all builders. A hypothetical gap with no wrong outcome is not a defect (constitution XIV v2.36.0), so leaving it is not a narrowing and FR-009's defect-deferral form does not reach it."
+    },
+    {
+     "id": "T172-calibrated-bound",
+     "summary": "test-l7r-guard.sh's locked case times the no-binary path three times and bounds the locked call at three times the slowest, never under the old 1 s (a CONVENTION from CLAUDE.md's calibration loop); the live wrapper untouched.",
+     "class": "within",
+     "why": "The goal is a suite that fails only when a call waits on another's build. The bound keeps the 1 s as its floor, so it is no looser idle, and the waiting mutant (flock -w 5) still fails it idle; red 10/10 unfixed and green 10/10 fixed under a pinned load (measured 2026-11-23). The check still catches what it is for; nothing asked is dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T166": {
+   "section_sha256": "1656c4a408e950d182d38a0a20133f2e50748cf3ca492dbd4cb4891cb8a11c94",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T165-withdraw",
+     "summary": "T165 withdrawn as done by T175: a review naming a review tree holds only edits inside it, one naming none and the rolls hold the clone; nothing built.",
+     "class": "within",
+     "why": "T165's ask, as the block quotes it, is to narrow the engine freeze to reviews with no review-tree snapshot (and the rolls). The block shows the snapshot and the prompt line T175 keys on are written under one condition (a non-empty --commit), so T175's rule is that ask; it is backed by a measured live case (449 T383's two reviews kept PASS at the tree's key while five rust/ files were edited, no engine-freeze firing since T175 landed against 20 before it, 2026-11-23) and the engine-freeze suite green. Withdrawing a task whose ask is already met drops nothing that was asked."
+    },
+    {
+     "id": "T166-carry-bundle",
+     "summary": "review-tree.sh carries its bundle to reviews owed --check-declared by L7R_VERIFY_STARTED, read in place of the clone's shared active-task mark; a gate built before reads the mark as before; no feature dir or no task falls back to the mark's rule.",
+     "class": "within",
+     "why": "The measurement restates T166's cause (the shared mark moved by another session's set-down or task-start, not a worktree lacking the mark) and the fix targets that cause, so verify judges the bundle it verifies. The environment-variable route and the fallbacks preserve existing behavior for old gates and undeclared cases; nothing the task asked for is dropped. Pinned red-first by a crate test and a suite case."
+    },
+    {
+     "id": "T166-first-task",
+     "summary": "Of the carried bundle, only the FIRST task counts as the started one (a CONVENTION); a declared line naming only the bundle's second task is refused.",
+     "class": "within",
+     "why": "The first-task rule already exists: make task-start marks a bundle by its first task, 449 T238 round 2 answers a line naming the started task, and the landing's holding box reads the same. T166 changes WHERE the started task is read from (the carried bundle, not the shared mark), not WHICH task counts; neither request.md nor FR-013 says which of a bundle's tasks answers. The block's 'algorithmically easier' remark is not the ground for this class - the ground is that verify and the landing keep one rule, so verify does not pass what the landing then refuses."
+    },
+    {
+     "id": "T166-found-and-left-owed-listing",
+     "summary": "reviews owed's listing in the review tree reads the active features without the carried bundle; left unfixed.",
+     "class": "within",
+     "why": "No wrong outcome is measured: the three review commits observed (36fa41f4cc, 48103d14e6, d80ff6a0dd, git show --stat, 2026-11-23) each carry their feature's tasks.md, and the pointer names one feature for all builders. A hypothetical gap with no wrong outcome is not a defect (constitution XIV v2.36.0), so leaving it is not a narrowing and FR-009's defect-deferral form does not reach it."
+    },
+    {
+     "id": "T172-calibrated-bound",
+     "summary": "test-l7r-guard.sh's locked case times the no-binary path three times and bounds the locked call at three times the slowest, never under the old 1 s (a CONVENTION from CLAUDE.md's calibration loop); the live wrapper untouched.",
+     "class": "within",
+     "why": "The goal is a suite that fails only when a call waits on another's build. The bound keeps the 1 s as its floor, so it is no looser idle, and the waiting mutant (flock -w 5) still fails it idle; red 10/10 unfixed and green 10/10 fixed under a pinned load (measured 2026-11-23). The check still catches what it is for; nothing asked is dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T172": {
+   "section_sha256": "1656c4a408e950d182d38a0a20133f2e50748cf3ca492dbd4cb4891cb8a11c94",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T165-withdraw",
+     "summary": "T165 withdrawn as done by T175: a review naming a review tree holds only edits inside it, one naming none and the rolls hold the clone; nothing built.",
+     "class": "within",
+     "why": "T165's ask, as the block quotes it, is to narrow the engine freeze to reviews with no review-tree snapshot (and the rolls). The block shows the snapshot and the prompt line T175 keys on are written under one condition (a non-empty --commit), so T175's rule is that ask; it is backed by a measured live case (449 T383's two reviews kept PASS at the tree's key while five rust/ files were edited, no engine-freeze firing since T175 landed against 20 before it, 2026-11-23) and the engine-freeze suite green. Withdrawing a task whose ask is already met drops nothing that was asked."
+    },
+    {
+     "id": "T166-carry-bundle",
+     "summary": "review-tree.sh carries its bundle to reviews owed --check-declared by L7R_VERIFY_STARTED, read in place of the clone's shared active-task mark; a gate built before reads the mark as before; no feature dir or no task falls back to the mark's rule.",
+     "class": "within",
+     "why": "The measurement restates T166's cause (the shared mark moved by another session's set-down or task-start, not a worktree lacking the mark) and the fix targets that cause, so verify judges the bundle it verifies. The environment-variable route and the fallbacks preserve existing behavior for old gates and undeclared cases; nothing the task asked for is dropped. Pinned red-first by a crate test and a suite case."
+    },
+    {
+     "id": "T166-first-task",
+     "summary": "Of the carried bundle, only the FIRST task counts as the started one (a CONVENTION); a declared line naming only the bundle's second task is refused.",
+     "class": "within",
+     "why": "The first-task rule already exists: make task-start marks a bundle by its first task, 449 T238 round 2 answers a line naming the started task, and the landing's holding box reads the same. T166 changes WHERE the started task is read from (the carried bundle, not the shared mark), not WHICH task counts; neither request.md nor FR-013 says which of a bundle's tasks answers. The block's 'algorithmically easier' remark is not the ground for this class - the ground is that verify and the landing keep one rule, so verify does not pass what the landing then refuses."
+    },
+    {
+     "id": "T166-found-and-left-owed-listing",
+     "summary": "reviews owed's listing in the review tree reads the active features without the carried bundle; left unfixed.",
+     "class": "within",
+     "why": "No wrong outcome is measured: the three review commits observed (36fa41f4cc, 48103d14e6, d80ff6a0dd, git show --stat, 2026-11-23) each carry their feature's tasks.md, and the pointer names one feature for all builders. A hypothetical gap with no wrong outcome is not a defect (constitution XIV v2.36.0), so leaving it is not a narrowing and FR-009's defect-deferral form does not reach it."
+    },
+    {
+     "id": "T172-calibrated-bound",
+     "summary": "test-l7r-guard.sh's locked case times the no-binary path three times and bounds the locked call at three times the slowest, never under the old 1 s (a CONVENTION from CLAUDE.md's calibration loop); the live wrapper untouched.",
+     "class": "within",
+     "why": "The goal is a suite that fails only when a call waits on another's build. The bound keeps the 1 s as its floor, so it is no looser idle, and the waiting mutant (flock -w 5) still fails it idle; red 10/10 unfixed and green 10/10 fixed under a pinned load (measured 2026-11-23). The check still catches what it is for; nothing asked is dropped."
     }
    ],
    "verdict": "CLEAR"

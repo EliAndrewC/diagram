@@ -26,7 +26,7 @@ d=$STUB
 case "$1 $2" in
   "reviews owed")
     case "${5:-}${4:-}" in
-      --check-declared*) exit 0 ;;
+      --check-declared*) printf '%s\n' "${L7R_VERIFY_STARTED-unset}" > "$d/started"; exit 0 ;;
       --undrawn*) cat "$d/undrawn" 2>/dev/null; exit 0 ;;
       --why*) cat "$d/why" 2>/dev/null || echo "why"; exit 0 ;;
     esac
@@ -97,6 +97,10 @@ git -C "$C" cat-file -e "$commit:c.txt" 2>/dev/null && no "the bundle's removal 
 grep -q -- "--state $C --commit $commit --key K1" "$S/snapshot-args" 2>/dev/null && grep -q "building-review--c" "$S/snapshot-args" \
   && ok "the snapshot is read in the review tree and kept in the clone" || no "the snapshot's arguments" "$(cat "$S/snapshot-args" 2>/dev/null)"
 grep -q "other uncommitted files left out" "$T/out" && ok "what it left out is said" || no "no word of what it left out"
+# 451 T166: the occasions check is told the bundle's own feature and tasks, never left to the clone's one mark (another builder's last
+# task-start or set-down, which named 451 T90, or nothing, under 449 T328's two verify runs, measured 2026-11-23)
+[ "$(cat "$S/started" 2>/dev/null)" = "900-x T1" ] && ok "the occasions check is carried the bundle (451 T166)" \
+  || no "the occasions check was not carried the bundle" "$(cat "$S/started" 2>/dev/null)"
 
 echo "2. the gate's record: running, then green at the review tree's key; the log is verify-wait's"
 wait_state "$commit"

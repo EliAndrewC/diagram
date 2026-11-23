@@ -52,10 +52,21 @@ case "$out" in *"went through unguarded"*) ok ;; *) bad "slow: notice [$out]" ;;
 grep -q "passed its 0.3 s limit" "$W/target/build.log" && ok || bad "slow: the limit said in build.log [$(cat "$W/target/build.log")]"
 [ ! -e "$W/target/guard.failed" ] && ok || bad "slow: a build cut by its limit is not stamped failed"
 check "slow: one build tried" "$(calls)" 1
+# THE BOUND IS CALIBRATED (451 T172): the locked call's own work - its notice and the real gate's guard-log entry - timed on the same
+# path with no lock to meet (a failed build stamped, so nothing is built and the lock is never asked), the slowest of three, the bound
+# three times that and never under the 1 s it was. The hard-coded 1 s failed at load average about 22 (2026-11-23) where nothing waited
+# (l7r/diagram/CLAUDE.md: a time bound in a test is scaled by a calibration loop, as 449 T391's diff-run timeout).
+touch "$W/target/guard.failed"; slowest=0
+for _ in 1 2 3; do
+  c0=${EPOCHREALTIME/,/.}; run ok v0 > /dev/null 2>&1
+  slowest=$(awk -v a="$c0" -v b="${EPOCHREALTIME/,/.}" -v s="$slowest" 'BEGIN { d = b - a; print (d > s) ? d : s }')
+done
+rm -f "$W/target/guard.failed" "$W"/log/*.json
+bound=$(awk -v s="$slowest" 'BEGIN { b = 3 * s; print (b > 1) ? b : 1 }')
 exec 8> "$W/target/guard.lock"; flock 8  # this shell holds the build lock, as a call mid-build would
 t0=${EPOCHREALTIME/,/.}; out=$(run ok v0 2>/dev/null)
-gone=$(awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { print (b - a < 1) ? "fast" : "waited" }')
-check "locked: no wait on another call's build" "$gone" fast
+gone=$(awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" -v n="$bound" 'BEGIN { print (b - a < n) ? "fast" : "waited" }')
+check "locked: no wait on another call's build (bound $bound s)" "$gone" fast
 check "locked: no second build" "$(calls)" 1
 case "$out" in *"went through unguarded"*) ok ;; *) bad "locked: notice [$out]" ;; esac
 grep -q "passed its 0.3 s limit" "$W/target/build.log" && ok || bad "locked: the running build's log left alone"
