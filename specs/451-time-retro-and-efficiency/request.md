@@ -104,3 +104,7 @@ On oscillation and review scope:
 Approving the session's seven rules (a size edit never changes a claim; a split is a move; only a claim-changing edit triggers review; labels are data and propagate by regeneration; only factual findings cascade; re-reviews scoped to the change; settled choices stay settled), the re-classification test and the 0009/0059 repair:
 
 > Sounds good. Please do all of that, and then we will talk more about what other changes might need to be made before moving forward with additional rounds of implementation.
+
+On the narrowest check (told: of 30 pop-up edits, 20 corrected something wrong, 16 of them page-caused, 6 only completed, 3 wording, 1 made worse; the mechanical echo check catches every page-caused correction with no agent and fires on 55 of 119 pairs, the agent triage sent 35 of 121 on; the plan: the echo check as T186's first filter, the agent triage after it, the gap-fill clause dropped, the garden-pond sentence fixed in its three places):
+
+> Okay, that seems reasonable, thanks. Please finish that implementation and let me know when you're done so that we can move forward on figuring out good next steps for resuming our port and making sure that we are capable of resuming that port.

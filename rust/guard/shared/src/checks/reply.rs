@@ -8,7 +8,7 @@ use serde_json::Value;
 
 static EDIT: LazyLock<Regex> = LazyLock::new(|| {
     crate::regex::build(
-        r"(?sm)^(?P<ind>[ \t]*)EDIT[ \t]+`?(?P<path>[^\n`]+?)`?[ \t]*\n\k<ind><<<\n(?P<old>.*?)\n\k<ind>===\n(?P<new>.*?)\n?\k<ind>>>>[ \t]*$",
+        r"(?sm)^(?P<ind>[ \t]*)EDIT[ \t]+(?:\((?P<cat>[A-Za-z][A-Za-z -]*)\)[ \t]+)?`?(?P<path>[^\n`]+?)`?[ \t]*\n\k<ind><<<\n(?P<old>.*?)\n\k<ind>===\n(?P<new>.*?)\n?\k<ind>>>>[ \t]*$",
     )
     .unwrap_or_else(|e| unreachable!("{e}"))
 });
@@ -115,17 +115,48 @@ fn undent(t: &str, ind: &str) -> String {
 /// `(path, old, new)` of every EDIT block of `reply`.
 #[must_use]
 pub fn blocks(reply: &str) -> Vec<(String, String, String)> {
+    categorized(reply)
+        .into_iter()
+        .map(|(p, o, n, _)| (p, o, n))
+        .collect()
+}
+
+/// `(path, old, new, category)` of every EDIT block of `reply`: the category the header names in brackets, `EDIT (LINKS) <path>`,
+/// else "" (451 T188).
+#[must_use]
+pub fn categorized(reply: &str) -> Vec<(String, String, String, String)> {
     EDIT.captures_iter(reply)
         .map_while(Result::ok)
         .map(|m| {
-            let ind = m.name("ind").map_or("", |g| g.as_str());
+            let g = |k: &str| m.name(k).map_or("", |x| x.as_str());
+            let ind = g("ind");
             (
-                m.name("path").map_or("", |g| g.as_str()).trim().to_owned(),
-                undent(m.name("old").map_or("", |g| g.as_str()), ind),
-                undent(m.name("new").map_or("", |g| g.as_str()), ind),
+                g("path").trim().to_owned(),
+                undent(g("old"), ind),
+                undent(g("new"), ind),
+                g("cat").trim().to_uppercase(),
             )
         })
         .collect()
+}
+
+/// The checks whose every finding is one of form or wording, never of fact (451 T188, the GM 2026-11-23: "style edits are just a
+/// different category of thing than factual inaccuracies"): modal-form's replacement "only rewords" (its contract), record-format's
+/// VOCABULARY, SESSION NOTE and HISTORY are how a reader meets the words, record-style is presentation, intro-check a question's opening.
+pub const WORDING_CHECKS: [&str; 4] =
+    ["modal-form", "record-format", "record-style", "intro-check"];
+/// (check, category) of the other checks' wording findings: modal-depiction's LINKS fixes a pointer to a drawing page and states no fact.
+const WORDING_CATEGORIES: [(&str, &str); 1] = [("modal-depiction", "LINKS")];
+
+/// Whether an EDIT of `check`'s, of `category`, fixes a fact (and so may re-owe a round and what depends on it) rather than wording
+/// (applied once, owing nothing): a category no table names, or none told, is factual, so a mislabel never skips a review (451 T188).
+#[must_use]
+pub fn factual(check: &str, category: &str) -> bool {
+    let cat = category.trim().to_uppercase();
+    !(WORDING_CHECKS.contains(&check)
+        || WORDING_CATEGORIES
+            .iter()
+            .any(|(c, k)| *c == check && *k == cat))
 }
 
 /// The reply `make apply-edits FROM=` reads: an agent's transcript (`.jsonl` / `.output`, its last text) or a saved reply.
@@ -160,7 +191,7 @@ pub fn response_text(resp: &Value) -> String {
 mod tests {
     use serde_json::json;
 
-    use super::{blocks, reply_file, reply_of, response_text};
+    use super::{blocks, categorized, factual, reply_file, reply_of, response_text};
     use crate::checks::testkit::dir;
 
     #[test]
@@ -263,5 +294,37 @@ mod tests {
             "a\nb"
         );
         assert_eq!(response_text(&json!({"content": 1})), "");
+    }
+
+    #[test]
+    fn an_edit_s_category_is_read_off_its_header_and_its_path_stays_whole() {
+        let reply =
+            "EDIT (LINKS) `l7r/m.md`\n<<<\na\n===\nb\n>>>\nEDIT l7r/n.md\n<<<\nc\n===\nd\n>>>\n";
+        let got = categorized(reply);
+        assert_eq!(got[0].0, "l7r/m.md");
+        assert_eq!(got[0].3, "LINKS");
+        assert_eq!(got[1].3, "");
+        assert_eq!(blocks(reply)[0].0, "l7r/m.md");
+    }
+
+    #[test]
+    fn only_a_wording_finding_is_not_factual_and_an_untold_one_is() {
+        for check in ["modal-form", "record-format", "record-style", "intro-check"] {
+            assert!(!factual(check, ""), "{check}");
+        }
+        assert!(!factual("modal-depiction", "LINKS"));
+        assert!(!factual("modal-depiction", "links"));
+        for (check, cat) in [
+            ("modal-depiction", ""),
+            ("modal-depiction", "TRUTH"),
+            ("modal-depiction", "COVERAGE"),
+            ("modal-accuracy", "LINKS"),
+            ("quote-check", ""),
+            ("source-reader", ""),
+            ("translation-check", ""),
+            ("", ""),
+        ] {
+            assert!(factual(check, cat), "{check} {cat}");
+        }
     }
 }

@@ -35,7 +35,7 @@ const TERMS: &str = "l7r/diagram/interactive/assets/glossary/";
 
 static EDIT: LazyLock<Regex> = LazyLock::new(|| {
     l7r_shared::regex::build(
-        r"(?sm)^(?P<ind>[ \t]*)EDIT[ \t]+`?(?P<path>[^\n`]+?)`?[ \t]*\n\k<ind><<<\n(?P<old>.*?)\n\k<ind>===\n(?:(?P<new>.*?)\n)??\k<ind>>>>[ \t]*$",
+        r"(?sm)^(?P<ind>[ \t]*)EDIT[ \t]+(?:\((?P<cat>[A-Za-z][A-Za-z -]*)\)[ \t]+)?`?(?P<path>[^\n`]+?)`?[ \t]*\n\k<ind><<<\n(?P<old>.*?)\n\k<ind>===\n(?:(?P<new>.*?)\n)??\k<ind>>>>[ \t]*$",
     )
     .unwrap_or_else(|e| unreachable!("{e}"))
 });
@@ -48,8 +48,9 @@ static QUESTION: LazyLock<Regex> =
     LazyLock::new(|| py(r"(?:^|/)research/questions/(\d{4})-[^/]*\.html$"));
 static MODAL: LazyLock<Regex> = LazyLock::new(|| py(r"modals/(\w+)/([^/]+)\.md$"));
 
-/// An EDIT block: its file, its old and new text, whether its new text is a lone empty line (a paragraph break), and the new text in
-/// the house style.
+/// An EDIT block: its file, its old and new text, whether its new text is a lone empty line (a paragraph break), the new text in
+/// the house style, the category its header names (`EDIT (LINKS) <path>`, "" for none, 451 T188) and its finding - the reply's text
+/// since the block before it (451 T190: a reversal's `REVERSES round <n>:` and evidence are read there).
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Edit {
     pub n: usize,
@@ -58,6 +59,8 @@ pub struct Edit {
     pub new: String,
     pub brk: bool,
     pub styled: String,
+    pub category: String,
+    pub finding: String,
 }
 
 /// A GLOSSARY block: the term, its variants and its definition.
@@ -77,7 +80,7 @@ pub enum Block {
 }
 
 impl Block {
-    fn n(&self) -> usize {
+    pub(super) fn n(&self) -> usize {
         match self {
             Self::Edit(e) => e.n,
             Self::Glossary(t) => t.n,
@@ -115,12 +118,16 @@ fn dedent(text: &str, indent: &str) -> String {
 #[must_use]
 pub fn blocks(report: &str) -> Vec<Block> {
     let mut found: Vec<(usize, Block)> = Vec::new();
+    let mut since = 0;
     for m in EDIT.captures_iter(report).map_while(Result::ok) {
         let g = |k: &str| m.name(k).map_or("", |x| x.as_str());
         let ind = g("ind");
         let new = m.name("new").map(|x| x.as_str());
+        let (start, end) = m.get(0).map_or((0, 0), |x| (x.start(), x.end()));
+        let finding = report.get(since..start).unwrap_or("").to_owned();
+        since = end;
         found.push((
-            m.get(0).map_or(0, |x| x.start()),
+            start,
             Block::Edit(Edit {
                 n: 0,
                 path: strip(g("path")).to_owned(),
@@ -128,6 +135,8 @@ pub fn blocks(report: &str) -> Vec<Block> {
                 new: dedent(new.unwrap_or(""), ind),
                 brk: new == Some(""),
                 styled: String::new(),
+                category: g("cat").trim().to_uppercase(),
+                finding,
             }),
         ));
     }
@@ -359,6 +368,7 @@ fn is_repo(root: &Path) -> bool {
 }
 
 mod round;
+mod settled;
 
 fn usage(e: &str) -> Reply {
     Reply {
@@ -455,17 +465,33 @@ struct Tally {
     edited: usize,
 }
 
+impl Tally {
+    /// Two passes' tallies together (a mixed round, 451 T188).
+    fn plus(&self, other: &Self) -> Self {
+        Self {
+            refused: self.refused + other.refused,
+            terms: self.terms + other.terms,
+            edited: self.edited + other.edited,
+        }
+    }
+}
+
 /// `apply`: every block not skipped, each said on its own line.
 fn apply(
     root: &Path,
     found: &[Block],
-    skip: &HashSet<usize>,
+    (skip, refused, held): (&HashSet<usize>, &BTreeMap<usize, String>, &HashSet<usize>),
     dry: bool,
     form: bool,
     said: &mut String,
 ) -> Result<Tally, String> {
     let mut t = Tally::default();
-    for b in found {
+    for b in found.iter().filter(|b| !held.contains(&b.n())) {
+        if let (Some(why), Block::Edit(e)) = (refused.get(&b.n()), b) {
+            t.refused += 1;
+            let _ = writeln!(said, "  {}. {why}   ({})", b.n(), e.path);
+            continue;
+        }
         if skip.contains(&b.n()) {
             let _ = writeln!(said, "  {}. skipped (--skip)", b.n());
             continue;

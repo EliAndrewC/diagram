@@ -1,4 +1,4 @@
-//! The EARLIER ROUNDS of a record or pop-up check, handed to its next round in the bundle (from `earlier_rounds.py`, feature 393, the GM 2026-10-18: "give each reviewer the earlier rounds' verdicts and reasons to prevent reviewer loops"). Reads the check state and the rulings and never writes them.
+//! The EARLIER ROUNDS of a record or pop-up check, handed to its next round in the bundle (from `earlier_rounds.py`, feature 393, the GM 2026-10-18: "give each reviewer the earlier rounds' verdicts and reasons to prevent reviewer loops"). Reads the check state and the rulings and never writes them; it keeps what each round was bundled, so the next round is handed the change since (451 T189).
 
 use std::fmt::Write as _;
 use std::path::Path;
@@ -144,6 +144,93 @@ fn ruling_lines(
         .collect()
 }
 
+const CHANGE_INTRO: &str = "This is a later round: judge ONLY whether this change made something wrong. Each pair is a run of lines changed since that round was bundled - by an EDIT or by hand - its text before and after; the whole unit is in the bundle for context. Re-open nothing the change did not touch - a finding on other text goes under OUTSIDE THE CHANGE - and raise no wording preference against words a round settled (451 T189, a rule the GM approved 2026-11-23).";
+
+/// Where what each round of `check` on `subject` was bundled is kept (451 T189): `<git dir>/record-checks/seen/<check>-<subject>.json`,
+/// `{"<round>": {"<file>": "<text>"}}`, the bundle for round `n` written under `n`, a regeneration before its dispatch overwriting
+/// it, and the rounds before the last kept dropped.
+fn seen_path(root: &Path, check: &str, subject: &str) -> std::path::PathBuf {
+    // `section_in` reads the check state first, so its git directory is there whenever this is asked
+    let state = state_path(&root.to_string_lossy()).unwrap_or_default();
+    let name = dash_runs(&format!("{check}-{subject}"), char::is_ascii_alphanumeric);
+    state
+        .with_file_name("record-checks")
+        .join("seen")
+        .join(format!("{name}.json"))
+}
+
+/// Each file's text as round `n` was bundled, where it was kept.
+fn seen_at(
+    root: &Path,
+    check: &str,
+    subject: &str,
+    n: usize,
+) -> Option<serde_json::Map<String, Value>> {
+    let kept = load(&seen_path(root, check, subject));
+    kept.get(n.to_string()).and_then(Value::as_object).cloned()
+}
+
+/// Keep `files` as the bundle for round `n` now writes them, dropping every round before `n - 1`.
+fn keep_seen(
+    root: &Path,
+    check: &str,
+    subject: &str,
+    n: usize,
+    files: &[String],
+) -> Result<(), Fail> {
+    let path = seen_path(root, check, subject);
+    let mut kept = load(&path).as_object().cloned().unwrap_or_default();
+    kept.retain(|k, _| k.parse::<usize>().is_ok_and(|r| r + 1 >= n));
+    let now: serde_json::Map<String, Value> = files
+        .iter()
+        .filter_map(|f| {
+            std::fs::read_to_string(root.join(f))
+                .ok()
+                .map(|t| (f.clone(), Value::from(t)))
+        })
+        .collect();
+    kept.insert(n.to_string(), Value::Object(now));
+    write(&path, &Value::Object(kept).to_string())
+}
+
+/// The pairs of what changed in `files` since `was` (each file's text as the last round was bundled): every run of lines that differs,
+/// whoever changed it - an EDIT or a hand edit (451 T189).
+fn pairs_since(root: &Path, was: &serde_json::Map<String, Value>, files: &[String]) -> Vec<String> {
+    let mut out = Vec::new();
+    for f in files {
+        let then = was.get(f).and_then(Value::as_str).unwrap_or("");
+        let now = std::fs::read_to_string(root.join(f)).unwrap_or_default();
+        let (a, b): (Vec<&str>, Vec<&str>) = (then.lines().collect(), now.lines().collect());
+        for op in crate::difflib::opcodes(&a, &b)
+            .into_iter()
+            .filter(|op| op.0 != crate::difflib::Tag::Equal)
+        {
+            out.push(format!(
+                "- `{f}`, before:\n```\n{}\n```\nafter:\n```\n{}\n```",
+                a[op.1..op.2].join("\n"),
+                b[op.3..op.4].join("\n")
+            ));
+        }
+    }
+    out
+}
+
+/// The change section for round `n`'s successor, none where nothing changed.
+fn change_lines(n: usize, pairs: Vec<String>) -> Vec<String> {
+    if pairs.is_empty() {
+        return Vec::new();
+    }
+    let mut lines = vec![
+        format!("### The change since round {n} (451 T189)"),
+        String::new(),
+        CHANGE_INTRO.to_owned(),
+        String::new(),
+    ];
+    lines.extend(pairs);
+    lines.push(String::new());
+    lines
+}
+
 /// The lines for one check on one subject, its replies written beside the MANIFEST; none with no earlier round or ruling.
 #[expect(clippy::too_many_arguments, reason = "the Python's own parameters")]
 fn unit_section(
@@ -203,6 +290,12 @@ fn unit_section(
         }
         lines.push(String::new());
     }
+    // what the last round was bundled, where it was kept, against the files now: every change since it, by an EDIT or by hand; a
+    // subject whose last round was bundled before the keeping gets none, and its round reads the whole unit, unscoped as before
+    let n = mine.len();
+    if let Some(was) = seen_at(root, check, subject, n) {
+        lines.extend(change_lines(n, pairs_since(root, &was, &files)));
+    }
     if !ruled.is_empty() {
         lines.push("Rulings:".to_owned());
         lines.extend(ruled);
@@ -258,6 +351,9 @@ pub fn section_in(root: &Rooted, out: &Path, manifest: &str) -> Result<String, F
             body.extend(unit_section(
                 root, out, &state, &rulings, c, s, since, &notes,
             )?);
+            // this bundle is the next round's: what it was bundled is kept for the round after (451 T189)
+            let n = rounds(&state, c, s, since, &notes).len() + 1;
+            keep_seen(root, c, s, n, &subject_files(root, s))?;
         }
     }
     Ok(if body.is_empty() {

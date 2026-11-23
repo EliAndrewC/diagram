@@ -912,6 +912,54 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "round-arbiter"
+  },
+  "### T184 (observed 2026-11-23: the 0009 and 0059 cuts under the 20,000-byte prose cap in cce80ca436 dropped content, measured by a word-level diff of each page against `git show cce80ca436^:<page>`; the GM 2026-11-23, request.md \"the convergence talk\": \"no edit to maintain entry size should ever be substantive\")": {
+   "sha256": "bac09afb0575d192532deb3018bf8f3d727fd01f94029bac0f18a12b8d4d084d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T184 Approach (checklist part A)": {
+   "sha256": "03574aa588c2f1567c55059cf8fba6128710e2116be8528291a01a0a04d1f3c7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T184 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "e972e762d0ad5d101729ee3e1ec2bc870d7e0667f766ebbd3dcec8852e48331b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T188, T189, T190 (bundle) (the GM 2026-11-23, request.md \"the convergence talk\": review rounds that change things but fix nothing - a wording fix re-owing every check on what it touched, a later round re-judging the whole unit, and a settled wording put back)": {
+   "sha256": "cd823c260d668d23c096e8246c0a7c3846d58b2b2f98310050d915cbc4c8f671",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T188, T189, T190 Approach (checklist part A)": {
+   "sha256": "132a5bb0892d6552fd709e2d899cc3d9304259fde362c487836143f08f54bd76",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T188, T189, T190 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "010d95741eed0ed0925f0337db33cc8202b4a0b01fdde2a5926e73d8cfb5f384",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T185 (the GM 2026-11-23, request.md 'the convergence talk': \"as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs\")": {
+   "sha256": "f7b9e313312898871249ee64ea247e1f5db68e4574c4afa8d7dc2b8fdf1e1cf2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T185 Approach (checklist part A)": {
+   "sha256": "4b93d7a56d8fe9e9734ca1efc0afe0936c380ab45f4f0d0943de237bd12db498",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -15630,6 +15678,259 @@
    "tasks": [
     "T183"
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T184 (observed 2026-11-23: the 0009 and 0059 cuts under the 20,000-byte prose cap in cce80ca436 dropped content, measured by a word-level diff of each page against `git show cce80ca436^:<page>`; the GM 2026-11-23, request.md \"the convergence talk\": \"no edit to maintain entry size should ever be substantive\")",
+    "### T184 Approach (checklist part A)",
+    "### T184 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T184-repair",
+     "summary": "Restore every claim the cce80ca436 trims dropped from 0009 and 0059 into the current text (keeping 449 T371's corrections in the same commit) and split each page along its topics onto new 0332/0333, leaving a one-sentence pointer where the section stood; notes move with their sentences, none duplicated.",
+     "class": "within",
+     "why": "The GM's convergence talk approved 'the 0009/0059 repair' and names splitting into multiple entries so 'all details and the fidelity of information ... is preserved'; 'a split is a move' is one of the approved seven rules. Keeping 449 T371's corrections drops nothing the GM asked to keep."
+    },
+    {
+     "id": "T184-guard",
+     "summary": "l7r-gate check question-size (make quick) refuses a SIZE EDIT (page over its limit at the base, or the removed words would put it back over) that drops a claim-bearing token (number, label, quoted passage, proper name not on the page or a page it links to; a negation or qualifier not in its own block), naming the split.",
+     "class": "within",
+     "why": "Enforcement of the GM's 'no edit to maintain entry size should ever be substantive' and the approved rule 'a size edit never changes a claim': delete that rule and the check has nothing to check. It refuses only the thing the GM ruled out, and names the split, which is his own remedy."
+    },
+    {
+     "id": "T184-escape",
+     "summary": "SIZE_EDIT_OK=\"<why>\" passes the guard for a correction, printed with the run; 0097 (section moved to 0331 and rewritten from new research) is the escape's case.",
+     "class": "within",
+     "why": "A correction is a claim-changing edit made for factual reasons, not 'an edit to maintain entry size', so the escape does not carve anything out of the GM's rule; it is the project's standard recorded escape for a guard. The 0097 rewrite from new research is a correction, not a size edit."
+    },
+    {
+     "id": "T184-token-gaps",
+     "summary": "The token classes miss a scope word outside their classes ('large-river works') and a changed term ('diversion' to 'division'); the gap is stated in the docs rather than tuned in. Tokens found on any linked page count as kept.",
+     "class": "within",
+     "why": "The rule itself is not narrowed: nothing in the plan permits a size edit that drops a scope word or changes a term, and the restored 0059 text carries both. The GM asked for the rule, not for a mechanical guard for it, so the guard is backstop enforcement the session added, and the limits of its reach take nothing away from what was asked. Catching every dropped modifier would refuse ordinary lossless trims."
+    },
+    {
+     "id": "T184-exception",
+     "summary": "A page's own limit in research/size-limits.json, honored only with the size-exception agent's INDIVISIBLE verdict, its date and ledger row; the 20,000 cap otherwise unchanged.",
+     "class": "within",
+     "why": "The GM's own option: 'an audit-based process that permits us to go past the size limit when an adversarial subagent check confirms that there don't seem to be a lot of good ways to do edits that would allow us to maintain the current amount of useful information ... record a new limit for this specific entry'. A split is such an edit, so requiring that no split serves is that test. Raising the global cap was only floated as a possibility, the approved rules do not include it, and the per-entry route is the one the GM described in detail."
+    },
+    {
+     "id": "T184-no-popup-cascade",
+     "summary": "Pop-ups whose Entry: names 0009 or 0059 for content now on 0332/0333 are not edited; the source page's pointer carries the reader on.",
+     "class": "within",
+     "why": "The GM's own words: 'as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs.'"
+    },
+    {
+     "id": "T184-order",
+     "summary": "Page sessions (queued first) run before the guard is built; the guard is then run over their pages as its green fixture, and over cce80ca436 as red.",
+     "class": "within",
+     "why": "Sequencing inside the task that the request leaves open; both repair and guard are delivered."
+    },
+    {
+     "id": "T184-performance",
+     "summary": "The task is classed as performance work (FR-013 scheduling): a lossy trim refused at make quick removes the restoration cascade.",
+     "class": "within",
+     "why": "The GM called these cascades 'very time consuming' and said 'we have to fix that before we move forward', so putting the task first matches his order. FR-013 counts work that saves process time, and the cost is measured (two page sessions)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T188, T189, T190 (bundle) (the GM 2026-11-23, request.md \"the convergence talk\": review rounds that change things but fix nothing - a wording fix re-owing every check on what it touched, a later round re-judging the whole unit, and a settled wording put back)",
+    "### T188, T189, T190 Approach (checklist part A)",
+    "### T188, T189, T190 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "ALL-replay",
+     "summary": "T188/T189/T190: measure first (the replay over the clone's check state, replies and event logs) before the rules",
+     "class": "within",
+     "why": "Measurement before a rule is how the GM asked for this work to go (the convergence talk opens 'let's talk about that before we do literally anything else'). The replay's arithmetic holds (115+103+499+829=1546; 35+34+31+11+2+2=115; 17+8=25; 115-31=84), and it is labeled as a floor with its date and method."
+    },
+    {
+     "id": "T188-per-edit",
+     "summary": "T188: the category rule applies per EDIT, not per reply. In a mixed round the wording EDITs (and GLOSSARY) go first, fingerprints are read (mid), then the factual ones. Only a unit that wording alone moved settles",
+     "class": "within",
+     "why": "This carries 'only factual findings cascade' as stated: a unit that a factual EDIT moved still re-owes. A per-reply rule would either skip factual changes or re-owe wording, and both would break the GM's rule."
+    },
+    {
+     "id": "T188-untold-factual",
+     "summary": "T188: an EDIT whose check or category is not given is factual, and a reply naming no check settles as before",
+     "class": "within",
+     "why": "A fail-safe default: a mislabel costs a round and never skips a factual review, which keeps what the GM's rule protects (factual inaccuracies still cascade)."
+    },
+    {
+     "id": "T188-wording-table",
+     "summary": "T188: the wording classes (never re-owe): modal-form, record-format (VOCABULARY, SESSION NOTE, HISTORY), record-style, intro-check",
+     "class": "within",
+     "why": "These are the GM's 'style edits are just a different category of thing than factual inaccuracies'. modal-form's contract already says a replacement only rewords, and the others are presentation or the order of words. A claim that one of them changes is not part of this table: it is factual by the untold/factual side, and each check's own contract binds it."
+    },
+    {
+     "id": "T188-links",
+     "summary": "T188: a modal-depiction LINKS EDIT (a pointer to a drawing page) is wording and does not cascade",
+     "class": "within",
+     "why": "Judged on its own, apart from the style checks. The GM's own words on splits cover it: 'as long as the original page being linked to directs a reader to the other page ... nothing needs to cascade'. A pointer to a drawing states no fact. What a statement rests on (REFERENCES) and what a drawing shows (COVERAGE, TRUTH) stay factual, so the seam is drawn on the fact line."
+    },
+    {
+     "id": "T188-factual-table",
+     "summary": "T188: factual (may cascade): modal-research ACCURACY/REFERENCES/GAPS, modal-depiction COVERAGE/TRUTH, quote-check, source-reader, translation-check, entry-drift",
+     "class": "within",
+     "why": "These are the 'factual inaccuracies' the GM said cascading is for. Putting GAPS (a statement added) on the factual side is conservative."
+    },
+    {
+     "id": "T188-quote-check",
+     "summary": "T188: quote-check's units stay on settle_quotes, which re-owes a unit whose quoted words changed, whoever changed them (a wording EDIT included)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A wording EDIT can still re-owe quote-check here, so this is a carve-out from 'wording never re-owes'. It is implied by the GM's own approved sibling rule 'only a claim-changing edit triggers review': changed quoted words change the claim about what a source says, which is a factual matter. A unit whose quoted words and claim held is already settled, so the GM's purpose (no rounds that fix nothing) is kept."
+    },
+    {
+     "id": "T188-building-review-impl-drift",
+     "summary": "T188: no change for building-review (error/questionable/nitpick/outside) or impl-drift (IN-STEP/DRIFTED/MISLABELED)",
+     "class": "within",
+     "why": "Taken one check at a time. Neither applies EDITs through make apply-edits. building-review is re-owed by the sheet's own fingerprint, and impl-drift by the code's and claims' fingerprints. A record or pop-up wording EDIT, the cascade the GM described ('a page edit re-owes checks on every pop-up citing it'), moves neither fingerprint, so the rule has nothing there to act on. The plan does not narrow the rule here: the cascade it targets does not pass through these checks."
+    },
+    {
+     "id": "T188-modal-depiction-contract",
+     "summary": "T188: only modal-depiction's contract gains a category in its EDIT header; every other check is one class throughout",
+     "class": "within",
+     "why": "This is the mechanism for telling modal-depiction's mixed classes apart. For every other check, the check's name already says its class."
+    },
+    {
+     "id": "T189-change-section",
+     "summary": "T189: a later round's bundle gains 'The change since round <n>', which pairs every changed run of lines since what the last round was bundled (EDITs and hand edits alike). The instruction is to judge only whether the change made something wrong, and the whole unit stays for context",
+     "class": "within",
+     "why": "This is 're-reviews scoped to the change'. Including hand edits makes the pairing complete rather than narrow. The scope reaches the reviewer as an instruction: what a reviewer judges cannot be enforced mechanically, and the 11-19 'real enforcement' approval was about the six improvements' guards. The mechanical part, the paired change in the bundle, is built."
+    },
+    {
+     "id": "T189-no-kept-bundle",
+     "summary": "T189: a subject whose last round was bundled before the keeping gets no change section and reads the whole unit unscoped, as before",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A transitional carve-out from 'scoped to the change'. What such a round was handed was never kept (the plan's premise: the bundle is overwritten on regeneration, and uncommitted EDITs and hand edits are not in git), so 'every change since the last round' cannot be paired for it. Telling a reviewer to judge ONLY a pairing that might miss a change would let an unpaired claim change through unreviewed, which defeats the GM's sibling rule 'only a claim-changing edit triggers review'. The carve-out ends by itself: that round writes the kept bundle, so each subject is scoped from its next round on."
+    },
+    {
+     "id": "T190-apply-edits-refusal",
+     "summary": "T190: apply_edits/settled.rs refuses, before applying anything, an EDIT whose new text is an earlier round's EDIT's old text and whose old text is that EDIT's new text",
+     "class": "within",
+     "why": "This is 'settled choices stay settled' for the review rounds' oscillation that the GM raised under 'On oscillation and review scope'. It is a real refusal with a red-first test (the refusal off: failed)."
+    },
+    {
+     "id": "T190-exact-not-near",
+     "summary": "T190: the refusal uses the exact put-back test; the looser near_reversal (two content words back) stays a mark",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured on 2026-11-23 over 1,670 EDITs: 3 were exact put-backs, and the loose test named 17 more that read as factual rounds widening a sentence. Refusing on the loose test would block factual corrections, which defeats the purpose the GM gave ('we are only interested in factual inaccuracies'). The near cases remain visible as marks."
+    },
+    {
+     "id": "T190-factual-escape",
+     "summary": "T190: a put-back is let through only when its finding carries 'REVERSES round <n>:' and an 'evidence:' quoting the words or naming the page, and its check's category is factual. A wording put-back has no way through",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An exception to 'settled choices stay settled', taken on its own. Refusing every put-back of a settled fact would lock in a factual error that an earlier round introduced, which defeats the GM's stated purpose (fixing real flaws, factual inaccuracies). Requiring the stated error and its evidence keeps settled wording settled and allows no escape for style. FR-012's escape requirement covers the refusals of FR-006 to FR-009, FR-011 and FR-013, not this one, so leaving wording without an escape conflicts with no requirement."
+    },
+    {
+     "id": "T190-no-edit-tool-refusal",
+     "summary": "T190 (found and left): no refusal on the Edit tool for hand put-backs",
+     "class": "within",
+     "why": "Judged on the replay alone, case by case, not on the cited reversal:<file> rulings, which the bundle does not carry. In 24 of the 25 measured Edit-tool A->B->A put-backs a builder was revising its own code with no round between: nothing was settled. In the 1 (no_poll_hooks.rs) spec-fidelity replies came between, but no check's EDIT was involved: a spec review settles no code wording. The GM's rule sits under 'oscillation and review scope', that is, rounds undoing rounds, and that is refused at apply-edits. A hand edit of a record page is not a round's choice, and T189 still hands it to the next round as a paired change to judge."
+    },
+    {
+     "id": "ALL-perf",
+     "summary": "T188/T189/T190: filed as [perf] tasks; the saving is stated as a floor of 84 of 115 wording-only later rounds, and the rest is a GUESS to be measured after landing",
+     "class": "within",
+     "why": "FR-013 counts the builders' loop and review rounds as performance work. The figures carry their date and method, and the unmeasured part is labeled GUESS."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T185 (the GM 2026-11-23, request.md 'the convergence talk': \"as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs\")",
+    "### T185 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T185-a pointer form",
+     "summary": "A split's pointer is one marked form, <a class=\"moved\" href=\"NNNN-<slug>[.drawing].html\">, which builds as any question link; only that form is followed and lets a removal count as a move.",
+     "class": "within",
+     "why": "The GM's condition is that the source page directs a reader to the new page; the marked link does exactly that (it renders as an ordinary link) and adds only a machine-readable mark so the tool can tell which link is the split's. How the condition is detected is left open by the request."
+    },
+    {
+     "id": "T185-b plain link not a pointer",
+     "summary": "A split whose source carries a plain <a href> to the new page (which does direct a reader) is still counted as a removal and still re-owes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrower than the GM's words, so ruled. Treating every plain link as a split pointer would put every page a pop-up's Entry page links to into that pop-up's reach and fingerprint, so an edit of any linked page would re-owe it - a wider cascade than today, defeating the request's own purpose (stop cascades that fix no real flaw). And no real split is left cascading: the 0009/0059 splits are marked before their re-owed checks run, 0097's checks already ran, and the MANIFEST tells every future splitter the form at no cost to them."
+    },
+    {
+     "id": "T185-c no link stays a removal",
+     "summary": "A move with no pointer at all stays a removal and re-owes.",
+     "class": "within",
+     "why": "This is the GM's own 'as long as the original page ... directs a reader to the other page' condition, applied literally."
+    },
+    {
+     "id": "T185-d follow pointers",
+     "summary": "A pop-up's checks read the pages its pointers name (fingerprints, owed rows, triage pages, research and depiction bundles), so a later edit of a moved block on its new page re-owes the pop-up.",
+     "class": "within",
+     "why": "The approved rule is 'a split is a move', not 'moved text is exempt'; a later claim-changing edit of the moved text still triggers review under 'only a claim-changing edit triggers review'. Keeps the cascade where it can matter."
+    },
+    {
+     "id": "T185-e verbatim only",
+     "summary": "A removed block counts as moved only if it stands verbatim on a reached page; a moved block that was also edited is a removal plus a new block.",
+     "class": "within",
+     "why": "The GM's exemption is for what cascades 'simply because a split occurs'; text changed in the move is more than a split. Whether a non-verbatim edit changes a claim is other rules' scope (re-classification, size edits), not narrowed here."
+    },
+    {
+     "id": "T185-f pointer-only block, POINTER_WORDS",
+     "summary": "A block carrying only the pointer (no note mark, no figure, at most POINTER_WORDS=25 words beside the link, a GUESS knob) counts as no claim; a longer one is reviewed as a claim.",
+     "class": "within",
+     "why": "The pointer block is what the GM's condition requires and is not a claim, so it owes nothing; the cap only stops new prose riding in under a pointer, and new prose is not something the split rule exempts. The 25 is labeled a GUESS knob."
+    },
+    {
+     "id": "T185-g claims triage",
+     "summary": "The claims triage drops the same moves and pointer blocks.",
+     "class": "within",
+     "why": "The GM: 'nothing needs to cascade' covers claim checks as well as pop-up checks."
+    },
+    {
+     "id": "T185-h record checks unchanged",
+     "summary": "Record checks need no change: units.rs indexes blocks and notes across every page, so a verbatim move already owes none (observed on the fixture).",
+     "class": "within",
+     "why": "No change needed to satisfy the rule; the premise is stated as an observation on the fixture and the plan's test pins the outcome."
+    },
+    {
+     "id": "T185-i new page's own checks",
+     "summary": "The new page's new heading and intro owe intro-check and record-format on the new page; not suppressed.",
+     "class": "within",
+     "why": "Scoped to the new page's new prose, not a re-owe of any pop-up or claim citing the source page; the split rule exempts the moved text, not new writing."
+    },
+    {
+     "id": "T185-j 0009/0059 repair",
+     "summary": "T184's 0009 and 0059 splits, linked plainly today, are marked class=\"moved\" before any check they re-owed runs (by T184's builder via the handoff if T184 lands second, by T185's own landing otherwise), confirmed by make modal-triage clearing the citing pop-ups.",
+     "class": "within",
+     "why": "The GM approved 'the 0009/0059 repair' in the same words; this is that repair, ordered so no needless cascade runs."
+    },
+    {
+     "id": "T185-k 0097 left plain",
+     "summary": "0097's earlier move to 0331 (plain link) is left unmarked; its re-owed checks have already run.",
+     "class": "within",
+     "why": "Nothing it re-owed is open, so no cascade is pending. A later edit of the moved text on 0331 will not be followed from 0097, but that is the state before T185 for every page link, not a wrong outcome T185 leaves or causes, and the request asked to retrofit only 0009/0059. Noted as an aside."
+    },
+    {
+     "id": "T185-l order and priority",
+     "summary": "Lands after T186's change computation, which it extends; marked performance work.",
+     "class": "within",
+     "why": "Sequencing; FR-013 and the GM's 2026-11-20 words put performance work first, and a split no longer re-owing every citing pop-up is performance work."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -24648,6 +24949,562 @@
     ],
     "verdict": "BLOCKED"
    }
+  },
+  "T188": {
+   "section_sha256": "29e8840a1c56093b3e81f80856cf3a12893b3815f8380610c04e0b03da41e54d",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "ALL-replay",
+     "summary": "T188/T189/T190: measure first (the replay over the clone's check state, replies and event logs) before the rules",
+     "class": "within",
+     "why": "Measurement before a rule is how the GM asked for this work to go (the convergence talk opens 'let's talk about that before we do literally anything else'). The replay's arithmetic holds (115+103+499+829=1546; 35+34+31+11+2+2=115; 17+8=25; 115-31=84), and it is labeled as a floor with its date and method."
+    },
+    {
+     "id": "T188-per-edit",
+     "summary": "T188: the category rule applies per EDIT, not per reply. In a mixed round the wording EDITs (and GLOSSARY) go first, fingerprints are read (mid), then the factual ones. Only a unit that wording alone moved settles",
+     "class": "within",
+     "why": "This carries 'only factual findings cascade' as stated: a unit that a factual EDIT moved still re-owes. A per-reply rule would either skip factual changes or re-owe wording, and both would break the GM's rule."
+    },
+    {
+     "id": "T188-untold-factual",
+     "summary": "T188: an EDIT whose check or category is not given is factual, and a reply naming no check settles as before",
+     "class": "within",
+     "why": "A fail-safe default: a mislabel costs a round and never skips a factual review, which keeps what the GM's rule protects (factual inaccuracies still cascade)."
+    },
+    {
+     "id": "T188-wording-table",
+     "summary": "T188: the wording classes (never re-owe): modal-form, record-format (VOCABULARY, SESSION NOTE, HISTORY), record-style, intro-check",
+     "class": "within",
+     "why": "These are the GM's 'style edits are just a different category of thing than factual inaccuracies'. modal-form's contract already says a replacement only rewords, and the others are presentation or the order of words. A claim that one of them changes is not part of this table: it is factual by the untold/factual side, and each check's own contract binds it."
+    },
+    {
+     "id": "T188-links",
+     "summary": "T188: a modal-depiction LINKS EDIT (a pointer to a drawing page) is wording and does not cascade",
+     "class": "within",
+     "why": "Judged on its own, apart from the style checks. The GM's own words on splits cover it: 'as long as the original page being linked to directs a reader to the other page ... nothing needs to cascade'. A pointer to a drawing states no fact. What a statement rests on (REFERENCES) and what a drawing shows (COVERAGE, TRUTH) stay factual, so the seam is drawn on the fact line."
+    },
+    {
+     "id": "T188-factual-table",
+     "summary": "T188: factual (may cascade): modal-research ACCURACY/REFERENCES/GAPS, modal-depiction COVERAGE/TRUTH, quote-check, source-reader, translation-check, entry-drift",
+     "class": "within",
+     "why": "These are the 'factual inaccuracies' the GM said cascading is for. Putting GAPS (a statement added) on the factual side is conservative."
+    },
+    {
+     "id": "T188-quote-check",
+     "summary": "T188: quote-check's units stay on settle_quotes, which re-owes a unit whose quoted words changed, whoever changed them (a wording EDIT included)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A wording EDIT can still re-owe quote-check here, so this is a carve-out from 'wording never re-owes'. It is implied by the GM's own approved sibling rule 'only a claim-changing edit triggers review': changed quoted words change the claim about what a source says, which is a factual matter. A unit whose quoted words and claim held is already settled, so the GM's purpose (no rounds that fix nothing) is kept."
+    },
+    {
+     "id": "T188-building-review-impl-drift",
+     "summary": "T188: no change for building-review (error/questionable/nitpick/outside) or impl-drift (IN-STEP/DRIFTED/MISLABELED)",
+     "class": "within",
+     "why": "Taken one check at a time. Neither applies EDITs through make apply-edits. building-review is re-owed by the sheet's own fingerprint, and impl-drift by the code's and claims' fingerprints. A record or pop-up wording EDIT, the cascade the GM described ('a page edit re-owes checks on every pop-up citing it'), moves neither fingerprint, so the rule has nothing there to act on. The plan does not narrow the rule here: the cascade it targets does not pass through these checks."
+    },
+    {
+     "id": "T188-modal-depiction-contract",
+     "summary": "T188: only modal-depiction's contract gains a category in its EDIT header; every other check is one class throughout",
+     "class": "within",
+     "why": "This is the mechanism for telling modal-depiction's mixed classes apart. For every other check, the check's name already says its class."
+    },
+    {
+     "id": "T189-change-section",
+     "summary": "T189: a later round's bundle gains 'The change since round <n>', which pairs every changed run of lines since what the last round was bundled (EDITs and hand edits alike). The instruction is to judge only whether the change made something wrong, and the whole unit stays for context",
+     "class": "within",
+     "why": "This is 're-reviews scoped to the change'. Including hand edits makes the pairing complete rather than narrow. The scope reaches the reviewer as an instruction: what a reviewer judges cannot be enforced mechanically, and the 11-19 'real enforcement' approval was about the six improvements' guards. The mechanical part, the paired change in the bundle, is built."
+    },
+    {
+     "id": "T189-no-kept-bundle",
+     "summary": "T189: a subject whose last round was bundled before the keeping gets no change section and reads the whole unit unscoped, as before",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A transitional carve-out from 'scoped to the change'. What such a round was handed was never kept (the plan's premise: the bundle is overwritten on regeneration, and uncommitted EDITs and hand edits are not in git), so 'every change since the last round' cannot be paired for it. Telling a reviewer to judge ONLY a pairing that might miss a change would let an unpaired claim change through unreviewed, which defeats the GM's sibling rule 'only a claim-changing edit triggers review'. The carve-out ends by itself: that round writes the kept bundle, so each subject is scoped from its next round on."
+    },
+    {
+     "id": "T190-apply-edits-refusal",
+     "summary": "T190: apply_edits/settled.rs refuses, before applying anything, an EDIT whose new text is an earlier round's EDIT's old text and whose old text is that EDIT's new text",
+     "class": "within",
+     "why": "This is 'settled choices stay settled' for the review rounds' oscillation that the GM raised under 'On oscillation and review scope'. It is a real refusal with a red-first test (the refusal off: failed)."
+    },
+    {
+     "id": "T190-exact-not-near",
+     "summary": "T190: the refusal uses the exact put-back test; the looser near_reversal (two content words back) stays a mark",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured on 2026-11-23 over 1,670 EDITs: 3 were exact put-backs, and the loose test named 17 more that read as factual rounds widening a sentence. Refusing on the loose test would block factual corrections, which defeats the purpose the GM gave ('we are only interested in factual inaccuracies'). The near cases remain visible as marks."
+    },
+    {
+     "id": "T190-factual-escape",
+     "summary": "T190: a put-back is let through only when its finding carries 'REVERSES round <n>:' and an 'evidence:' quoting the words or naming the page, and its check's category is factual. A wording put-back has no way through",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An exception to 'settled choices stay settled', taken on its own. Refusing every put-back of a settled fact would lock in a factual error that an earlier round introduced, which defeats the GM's stated purpose (fixing real flaws, factual inaccuracies). Requiring the stated error and its evidence keeps settled wording settled and allows no escape for style. FR-012's escape requirement covers the refusals of FR-006 to FR-009, FR-011 and FR-013, not this one, so leaving wording without an escape conflicts with no requirement."
+    },
+    {
+     "id": "T190-no-edit-tool-refusal",
+     "summary": "T190 (found and left): no refusal on the Edit tool for hand put-backs",
+     "class": "within",
+     "why": "Judged on the replay alone, case by case, not on the cited reversal:<file> rulings, which the bundle does not carry. In 24 of the 25 measured Edit-tool A->B->A put-backs a builder was revising its own code with no round between: nothing was settled. In the 1 (no_poll_hooks.rs) spec-fidelity replies came between, but no check's EDIT was involved: a spec review settles no code wording. The GM's rule sits under 'oscillation and review scope', that is, rounds undoing rounds, and that is refused at apply-edits. A hand edit of a record page is not a round's choice, and T189 still hands it to the next round as a paired change to judge."
+    },
+    {
+     "id": "ALL-perf",
+     "summary": "T188/T189/T190: filed as [perf] tasks; the saving is stated as a floor of 84 of 115 wording-only later rounds, and the rest is a GUESS to be measured after landing",
+     "class": "within",
+     "why": "FR-013 counts the builders' loop and review rounds as performance work. The figures carry their date and method, and the unmeasured part is labeled GUESS."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T189": {
+   "section_sha256": "29e8840a1c56093b3e81f80856cf3a12893b3815f8380610c04e0b03da41e54d",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "ALL-replay",
+     "summary": "T188/T189/T190: measure first (the replay over the clone's check state, replies and event logs) before the rules",
+     "class": "within",
+     "why": "Measurement before a rule is how the GM asked for this work to go (the convergence talk opens 'let's talk about that before we do literally anything else'). The replay's arithmetic holds (115+103+499+829=1546; 35+34+31+11+2+2=115; 17+8=25; 115-31=84), and it is labeled as a floor with its date and method."
+    },
+    {
+     "id": "T188-per-edit",
+     "summary": "T188: the category rule applies per EDIT, not per reply. In a mixed round the wording EDITs (and GLOSSARY) go first, fingerprints are read (mid), then the factual ones. Only a unit that wording alone moved settles",
+     "class": "within",
+     "why": "This carries 'only factual findings cascade' as stated: a unit that a factual EDIT moved still re-owes. A per-reply rule would either skip factual changes or re-owe wording, and both would break the GM's rule."
+    },
+    {
+     "id": "T188-untold-factual",
+     "summary": "T188: an EDIT whose check or category is not given is factual, and a reply naming no check settles as before",
+     "class": "within",
+     "why": "A fail-safe default: a mislabel costs a round and never skips a factual review, which keeps what the GM's rule protects (factual inaccuracies still cascade)."
+    },
+    {
+     "id": "T188-wording-table",
+     "summary": "T188: the wording classes (never re-owe): modal-form, record-format (VOCABULARY, SESSION NOTE, HISTORY), record-style, intro-check",
+     "class": "within",
+     "why": "These are the GM's 'style edits are just a different category of thing than factual inaccuracies'. modal-form's contract already says a replacement only rewords, and the others are presentation or the order of words. A claim that one of them changes is not part of this table: it is factual by the untold/factual side, and each check's own contract binds it."
+    },
+    {
+     "id": "T188-links",
+     "summary": "T188: a modal-depiction LINKS EDIT (a pointer to a drawing page) is wording and does not cascade",
+     "class": "within",
+     "why": "Judged on its own, apart from the style checks. The GM's own words on splits cover it: 'as long as the original page being linked to directs a reader to the other page ... nothing needs to cascade'. A pointer to a drawing states no fact. What a statement rests on (REFERENCES) and what a drawing shows (COVERAGE, TRUTH) stay factual, so the seam is drawn on the fact line."
+    },
+    {
+     "id": "T188-factual-table",
+     "summary": "T188: factual (may cascade): modal-research ACCURACY/REFERENCES/GAPS, modal-depiction COVERAGE/TRUTH, quote-check, source-reader, translation-check, entry-drift",
+     "class": "within",
+     "why": "These are the 'factual inaccuracies' the GM said cascading is for. Putting GAPS (a statement added) on the factual side is conservative."
+    },
+    {
+     "id": "T188-quote-check",
+     "summary": "T188: quote-check's units stay on settle_quotes, which re-owes a unit whose quoted words changed, whoever changed them (a wording EDIT included)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A wording EDIT can still re-owe quote-check here, so this is a carve-out from 'wording never re-owes'. It is implied by the GM's own approved sibling rule 'only a claim-changing edit triggers review': changed quoted words change the claim about what a source says, which is a factual matter. A unit whose quoted words and claim held is already settled, so the GM's purpose (no rounds that fix nothing) is kept."
+    },
+    {
+     "id": "T188-building-review-impl-drift",
+     "summary": "T188: no change for building-review (error/questionable/nitpick/outside) or impl-drift (IN-STEP/DRIFTED/MISLABELED)",
+     "class": "within",
+     "why": "Taken one check at a time. Neither applies EDITs through make apply-edits. building-review is re-owed by the sheet's own fingerprint, and impl-drift by the code's and claims' fingerprints. A record or pop-up wording EDIT, the cascade the GM described ('a page edit re-owes checks on every pop-up citing it'), moves neither fingerprint, so the rule has nothing there to act on. The plan does not narrow the rule here: the cascade it targets does not pass through these checks."
+    },
+    {
+     "id": "T188-modal-depiction-contract",
+     "summary": "T188: only modal-depiction's contract gains a category in its EDIT header; every other check is one class throughout",
+     "class": "within",
+     "why": "This is the mechanism for telling modal-depiction's mixed classes apart. For every other check, the check's name already says its class."
+    },
+    {
+     "id": "T189-change-section",
+     "summary": "T189: a later round's bundle gains 'The change since round <n>', which pairs every changed run of lines since what the last round was bundled (EDITs and hand edits alike). The instruction is to judge only whether the change made something wrong, and the whole unit stays for context",
+     "class": "within",
+     "why": "This is 're-reviews scoped to the change'. Including hand edits makes the pairing complete rather than narrow. The scope reaches the reviewer as an instruction: what a reviewer judges cannot be enforced mechanically, and the 11-19 'real enforcement' approval was about the six improvements' guards. The mechanical part, the paired change in the bundle, is built."
+    },
+    {
+     "id": "T189-no-kept-bundle",
+     "summary": "T189: a subject whose last round was bundled before the keeping gets no change section and reads the whole unit unscoped, as before",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A transitional carve-out from 'scoped to the change'. What such a round was handed was never kept (the plan's premise: the bundle is overwritten on regeneration, and uncommitted EDITs and hand edits are not in git), so 'every change since the last round' cannot be paired for it. Telling a reviewer to judge ONLY a pairing that might miss a change would let an unpaired claim change through unreviewed, which defeats the GM's sibling rule 'only a claim-changing edit triggers review'. The carve-out ends by itself: that round writes the kept bundle, so each subject is scoped from its next round on."
+    },
+    {
+     "id": "T190-apply-edits-refusal",
+     "summary": "T190: apply_edits/settled.rs refuses, before applying anything, an EDIT whose new text is an earlier round's EDIT's old text and whose old text is that EDIT's new text",
+     "class": "within",
+     "why": "This is 'settled choices stay settled' for the review rounds' oscillation that the GM raised under 'On oscillation and review scope'. It is a real refusal with a red-first test (the refusal off: failed)."
+    },
+    {
+     "id": "T190-exact-not-near",
+     "summary": "T190: the refusal uses the exact put-back test; the looser near_reversal (two content words back) stays a mark",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured on 2026-11-23 over 1,670 EDITs: 3 were exact put-backs, and the loose test named 17 more that read as factual rounds widening a sentence. Refusing on the loose test would block factual corrections, which defeats the purpose the GM gave ('we are only interested in factual inaccuracies'). The near cases remain visible as marks."
+    },
+    {
+     "id": "T190-factual-escape",
+     "summary": "T190: a put-back is let through only when its finding carries 'REVERSES round <n>:' and an 'evidence:' quoting the words or naming the page, and its check's category is factual. A wording put-back has no way through",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An exception to 'settled choices stay settled', taken on its own. Refusing every put-back of a settled fact would lock in a factual error that an earlier round introduced, which defeats the GM's stated purpose (fixing real flaws, factual inaccuracies). Requiring the stated error and its evidence keeps settled wording settled and allows no escape for style. FR-012's escape requirement covers the refusals of FR-006 to FR-009, FR-011 and FR-013, not this one, so leaving wording without an escape conflicts with no requirement."
+    },
+    {
+     "id": "T190-no-edit-tool-refusal",
+     "summary": "T190 (found and left): no refusal on the Edit tool for hand put-backs",
+     "class": "within",
+     "why": "Judged on the replay alone, case by case, not on the cited reversal:<file> rulings, which the bundle does not carry. In 24 of the 25 measured Edit-tool A->B->A put-backs a builder was revising its own code with no round between: nothing was settled. In the 1 (no_poll_hooks.rs) spec-fidelity replies came between, but no check's EDIT was involved: a spec review settles no code wording. The GM's rule sits under 'oscillation and review scope', that is, rounds undoing rounds, and that is refused at apply-edits. A hand edit of a record page is not a round's choice, and T189 still hands it to the next round as a paired change to judge."
+    },
+    {
+     "id": "ALL-perf",
+     "summary": "T188/T189/T190: filed as [perf] tasks; the saving is stated as a floor of 84 of 115 wording-only later rounds, and the rest is a GUESS to be measured after landing",
+     "class": "within",
+     "why": "FR-013 counts the builders' loop and review rounds as performance work. The figures carry their date and method, and the unmeasured part is labeled GUESS."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T190": {
+   "section_sha256": "29e8840a1c56093b3e81f80856cf3a12893b3815f8380610c04e0b03da41e54d",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "ALL-replay",
+     "summary": "T188/T189/T190: measure first (the replay over the clone's check state, replies and event logs) before the rules",
+     "class": "within",
+     "why": "Measurement before a rule is how the GM asked for this work to go (the convergence talk opens 'let's talk about that before we do literally anything else'). The replay's arithmetic holds (115+103+499+829=1546; 35+34+31+11+2+2=115; 17+8=25; 115-31=84), and it is labeled as a floor with its date and method."
+    },
+    {
+     "id": "T188-per-edit",
+     "summary": "T188: the category rule applies per EDIT, not per reply. In a mixed round the wording EDITs (and GLOSSARY) go first, fingerprints are read (mid), then the factual ones. Only a unit that wording alone moved settles",
+     "class": "within",
+     "why": "This carries 'only factual findings cascade' as stated: a unit that a factual EDIT moved still re-owes. A per-reply rule would either skip factual changes or re-owe wording, and both would break the GM's rule."
+    },
+    {
+     "id": "T188-untold-factual",
+     "summary": "T188: an EDIT whose check or category is not given is factual, and a reply naming no check settles as before",
+     "class": "within",
+     "why": "A fail-safe default: a mislabel costs a round and never skips a factual review, which keeps what the GM's rule protects (factual inaccuracies still cascade)."
+    },
+    {
+     "id": "T188-wording-table",
+     "summary": "T188: the wording classes (never re-owe): modal-form, record-format (VOCABULARY, SESSION NOTE, HISTORY), record-style, intro-check",
+     "class": "within",
+     "why": "These are the GM's 'style edits are just a different category of thing than factual inaccuracies'. modal-form's contract already says a replacement only rewords, and the others are presentation or the order of words. A claim that one of them changes is not part of this table: it is factual by the untold/factual side, and each check's own contract binds it."
+    },
+    {
+     "id": "T188-links",
+     "summary": "T188: a modal-depiction LINKS EDIT (a pointer to a drawing page) is wording and does not cascade",
+     "class": "within",
+     "why": "Judged on its own, apart from the style checks. The GM's own words on splits cover it: 'as long as the original page being linked to directs a reader to the other page ... nothing needs to cascade'. A pointer to a drawing states no fact. What a statement rests on (REFERENCES) and what a drawing shows (COVERAGE, TRUTH) stay factual, so the seam is drawn on the fact line."
+    },
+    {
+     "id": "T188-factual-table",
+     "summary": "T188: factual (may cascade): modal-research ACCURACY/REFERENCES/GAPS, modal-depiction COVERAGE/TRUTH, quote-check, source-reader, translation-check, entry-drift",
+     "class": "within",
+     "why": "These are the 'factual inaccuracies' the GM said cascading is for. Putting GAPS (a statement added) on the factual side is conservative."
+    },
+    {
+     "id": "T188-quote-check",
+     "summary": "T188: quote-check's units stay on settle_quotes, which re-owes a unit whose quoted words changed, whoever changed them (a wording EDIT included)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A wording EDIT can still re-owe quote-check here, so this is a carve-out from 'wording never re-owes'. It is implied by the GM's own approved sibling rule 'only a claim-changing edit triggers review': changed quoted words change the claim about what a source says, which is a factual matter. A unit whose quoted words and claim held is already settled, so the GM's purpose (no rounds that fix nothing) is kept."
+    },
+    {
+     "id": "T188-building-review-impl-drift",
+     "summary": "T188: no change for building-review (error/questionable/nitpick/outside) or impl-drift (IN-STEP/DRIFTED/MISLABELED)",
+     "class": "within",
+     "why": "Taken one check at a time. Neither applies EDITs through make apply-edits. building-review is re-owed by the sheet's own fingerprint, and impl-drift by the code's and claims' fingerprints. A record or pop-up wording EDIT, the cascade the GM described ('a page edit re-owes checks on every pop-up citing it'), moves neither fingerprint, so the rule has nothing there to act on. The plan does not narrow the rule here: the cascade it targets does not pass through these checks."
+    },
+    {
+     "id": "T188-modal-depiction-contract",
+     "summary": "T188: only modal-depiction's contract gains a category in its EDIT header; every other check is one class throughout",
+     "class": "within",
+     "why": "This is the mechanism for telling modal-depiction's mixed classes apart. For every other check, the check's name already says its class."
+    },
+    {
+     "id": "T189-change-section",
+     "summary": "T189: a later round's bundle gains 'The change since round <n>', which pairs every changed run of lines since what the last round was bundled (EDITs and hand edits alike). The instruction is to judge only whether the change made something wrong, and the whole unit stays for context",
+     "class": "within",
+     "why": "This is 're-reviews scoped to the change'. Including hand edits makes the pairing complete rather than narrow. The scope reaches the reviewer as an instruction: what a reviewer judges cannot be enforced mechanically, and the 11-19 'real enforcement' approval was about the six improvements' guards. The mechanical part, the paired change in the bundle, is built."
+    },
+    {
+     "id": "T189-no-kept-bundle",
+     "summary": "T189: a subject whose last round was bundled before the keeping gets no change section and reads the whole unit unscoped, as before",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A transitional carve-out from 'scoped to the change'. What such a round was handed was never kept (the plan's premise: the bundle is overwritten on regeneration, and uncommitted EDITs and hand edits are not in git), so 'every change since the last round' cannot be paired for it. Telling a reviewer to judge ONLY a pairing that might miss a change would let an unpaired claim change through unreviewed, which defeats the GM's sibling rule 'only a claim-changing edit triggers review'. The carve-out ends by itself: that round writes the kept bundle, so each subject is scoped from its next round on."
+    },
+    {
+     "id": "T190-apply-edits-refusal",
+     "summary": "T190: apply_edits/settled.rs refuses, before applying anything, an EDIT whose new text is an earlier round's EDIT's old text and whose old text is that EDIT's new text",
+     "class": "within",
+     "why": "This is 'settled choices stay settled' for the review rounds' oscillation that the GM raised under 'On oscillation and review scope'. It is a real refusal with a red-first test (the refusal off: failed)."
+    },
+    {
+     "id": "T190-exact-not-near",
+     "summary": "T190: the refusal uses the exact put-back test; the looser near_reversal (two content words back) stays a mark",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured on 2026-11-23 over 1,670 EDITs: 3 were exact put-backs, and the loose test named 17 more that read as factual rounds widening a sentence. Refusing on the loose test would block factual corrections, which defeats the purpose the GM gave ('we are only interested in factual inaccuracies'). The near cases remain visible as marks."
+    },
+    {
+     "id": "T190-factual-escape",
+     "summary": "T190: a put-back is let through only when its finding carries 'REVERSES round <n>:' and an 'evidence:' quoting the words or naming the page, and its check's category is factual. A wording put-back has no way through",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An exception to 'settled choices stay settled', taken on its own. Refusing every put-back of a settled fact would lock in a factual error that an earlier round introduced, which defeats the GM's stated purpose (fixing real flaws, factual inaccuracies). Requiring the stated error and its evidence keeps settled wording settled and allows no escape for style. FR-012's escape requirement covers the refusals of FR-006 to FR-009, FR-011 and FR-013, not this one, so leaving wording without an escape conflicts with no requirement."
+    },
+    {
+     "id": "T190-no-edit-tool-refusal",
+     "summary": "T190 (found and left): no refusal on the Edit tool for hand put-backs",
+     "class": "within",
+     "why": "Judged on the replay alone, case by case, not on the cited reversal:<file> rulings, which the bundle does not carry. In 24 of the 25 measured Edit-tool A->B->A put-backs a builder was revising its own code with no round between: nothing was settled. In the 1 (no_poll_hooks.rs) spec-fidelity replies came between, but no check's EDIT was involved: a spec review settles no code wording. The GM's rule sits under 'oscillation and review scope', that is, rounds undoing rounds, and that is refused at apply-edits. A hand edit of a record page is not a round's choice, and T189 still hands it to the next round as a paired change to judge."
+    },
+    {
+     "id": "ALL-perf",
+     "summary": "T188/T189/T190: filed as [perf] tasks; the saving is stated as a floor of 84 of 115 wording-only later rounds, and the rest is a GUESS to be measured after landing",
+     "class": "within",
+     "why": "FR-013 counts the builders' loop and review rounds as performance work. The figures carry their date and method, and the unmeasured part is labeled GUESS."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T184": {
+   "section_sha256": "b68dabe0bae02bd0e9a17c4f01b512fae5e7c9a1b269e26e9e56c283bc2809c6",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T184-repair",
+     "summary": "Restore every claim the cce80ca436 trims dropped from 0009 and 0059 into the current text (keeping 449 T371's corrections in the same commit) and split each page along its topics onto new 0332/0333, leaving a one-sentence pointer where the section stood; notes move with their sentences, none duplicated.",
+     "class": "within",
+     "why": "The GM's convergence talk approved 'the 0009/0059 repair' and names splitting into multiple entries so 'all details and the fidelity of information ... is preserved'; 'a split is a move' is one of the approved seven rules. Keeping 449 T371's corrections drops nothing the GM asked to keep."
+    },
+    {
+     "id": "T184-guard",
+     "summary": "l7r-gate check question-size (make quick) refuses a SIZE EDIT (page over its limit at the base, or the removed words would put it back over) that drops a claim-bearing token (number, label, quoted passage, proper name not on the page or a page it links to; a negation or qualifier not in its own block), naming the split.",
+     "class": "within",
+     "why": "Enforcement of the GM's 'no edit to maintain entry size should ever be substantive' and the approved rule 'a size edit never changes a claim': delete that rule and the check has nothing to check. It refuses only the thing the GM ruled out, and names the split, which is his own remedy."
+    },
+    {
+     "id": "T184-escape",
+     "summary": "SIZE_EDIT_OK=\"<why>\" passes the guard for a correction, printed with the run; 0097 (section moved to 0331 and rewritten from new research) is the escape's case.",
+     "class": "within",
+     "why": "A correction is a claim-changing edit made for factual reasons, not 'an edit to maintain entry size', so the escape does not carve anything out of the GM's rule; it is the project's standard recorded escape for a guard. The 0097 rewrite from new research is a correction, not a size edit."
+    },
+    {
+     "id": "T184-token-gaps",
+     "summary": "The token classes miss a scope word outside their classes ('large-river works') and a changed term ('diversion' to 'division'); the gap is stated in the docs rather than tuned in. Tokens found on any linked page count as kept.",
+     "class": "within",
+     "why": "The rule itself is not narrowed: nothing in the plan permits a size edit that drops a scope word or changes a term, and the restored 0059 text carries both. The GM asked for the rule, not for a mechanical guard for it, so the guard is backstop enforcement the session added, and the limits of its reach take nothing away from what was asked. Catching every dropped modifier would refuse ordinary lossless trims."
+    },
+    {
+     "id": "T184-exception",
+     "summary": "A page's own limit in research/size-limits.json, honored only with the size-exception agent's INDIVISIBLE verdict, its date and ledger row; the 20,000 cap otherwise unchanged.",
+     "class": "within",
+     "why": "The GM's own option: 'an audit-based process that permits us to go past the size limit when an adversarial subagent check confirms that there don't seem to be a lot of good ways to do edits that would allow us to maintain the current amount of useful information ... record a new limit for this specific entry'. A split is such an edit, so requiring that no split serves is that test. Raising the global cap was only floated as a possibility, the approved rules do not include it, and the per-entry route is the one the GM described in detail."
+    },
+    {
+     "id": "T184-no-popup-cascade",
+     "summary": "Pop-ups whose Entry: names 0009 or 0059 for content now on 0332/0333 are not edited; the source page's pointer carries the reader on.",
+     "class": "within",
+     "why": "The GM's own words: 'as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs.'"
+    },
+    {
+     "id": "T184-order",
+     "summary": "Page sessions (queued first) run before the guard is built; the guard is then run over their pages as its green fixture, and over cce80ca436 as red.",
+     "class": "within",
+     "why": "Sequencing inside the task that the request leaves open; both repair and guard are delivered."
+    },
+    {
+     "id": "T184-performance",
+     "summary": "The task is classed as performance work (FR-013 scheduling): a lossy trim refused at make quick removes the restoration cascade.",
+     "class": "within",
+     "why": "The GM called these cascades 'very time consuming' and said 'we have to fix that before we move forward', so putting the task first matches his order. FR-013 counts work that saves process time, and the cost is measured (two page sessions)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T185": {
+   "section_sha256": "97f279b49890ce958bba0ea4b298aa2d0f4310069e77ea219120a139b452e5bd",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T185-a pointer form",
+     "summary": "A split's pointer is one marked form, <a class=\"moved\" href=\"NNNN-<slug>[.drawing].html\">, which builds as any question link; only that form is followed and lets a removal count as a move.",
+     "class": "within",
+     "why": "The GM's condition is that the source page directs a reader to the new page; the marked link does exactly that (it renders as an ordinary link) and adds only a machine-readable mark so the tool can tell which link is the split's. How the condition is detected is left open by the request."
+    },
+    {
+     "id": "T185-b plain link not a pointer",
+     "summary": "A split whose source carries a plain <a href> to the new page (which does direct a reader) is still counted as a removal and still re-owes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrower than the GM's words, so ruled. Treating every plain link as a split pointer would put every page a pop-up's Entry page links to into that pop-up's reach and fingerprint, so an edit of any linked page would re-owe it - a wider cascade than today, defeating the request's own purpose (stop cascades that fix no real flaw). And no real split is left cascading: the 0009/0059 splits are marked before their re-owed checks run, 0097's checks already ran, and the MANIFEST tells every future splitter the form at no cost to them."
+    },
+    {
+     "id": "T185-c no link stays a removal",
+     "summary": "A move with no pointer at all stays a removal and re-owes.",
+     "class": "within",
+     "why": "This is the GM's own 'as long as the original page ... directs a reader to the other page' condition, applied literally."
+    },
+    {
+     "id": "T185-d follow pointers",
+     "summary": "A pop-up's checks read the pages its pointers name (fingerprints, owed rows, triage pages, research and depiction bundles), so a later edit of a moved block on its new page re-owes the pop-up.",
+     "class": "within",
+     "why": "The approved rule is 'a split is a move', not 'moved text is exempt'; a later claim-changing edit of the moved text still triggers review under 'only a claim-changing edit triggers review'. Keeps the cascade where it can matter."
+    },
+    {
+     "id": "T185-e verbatim only",
+     "summary": "A removed block counts as moved only if it stands verbatim on a reached page; a moved block that was also edited is a removal plus a new block.",
+     "class": "within",
+     "why": "The GM's exemption is for what cascades 'simply because a split occurs'; text changed in the move is more than a split. Whether a non-verbatim edit changes a claim is other rules' scope (re-classification, size edits), not narrowed here."
+    },
+    {
+     "id": "T185-f pointer-only block, POINTER_WORDS",
+     "summary": "A block carrying only the pointer (no note mark, no figure, at most POINTER_WORDS=25 words beside the link, a GUESS knob) counts as no claim; a longer one is reviewed as a claim.",
+     "class": "within",
+     "why": "The pointer block is what the GM's condition requires and is not a claim, so it owes nothing; the cap only stops new prose riding in under a pointer, and new prose is not something the split rule exempts. The 25 is labeled a GUESS knob."
+    },
+    {
+     "id": "T185-g claims triage",
+     "summary": "The claims triage drops the same moves and pointer blocks.",
+     "class": "within",
+     "why": "The GM: 'nothing needs to cascade' covers claim checks as well as pop-up checks."
+    },
+    {
+     "id": "T185-h record checks unchanged",
+     "summary": "Record checks need no change: units.rs indexes blocks and notes across every page, so a verbatim move already owes none (observed on the fixture).",
+     "class": "within",
+     "why": "No change needed to satisfy the rule; the premise is stated as an observation on the fixture and the plan's test pins the outcome."
+    },
+    {
+     "id": "T185-i new page's own checks",
+     "summary": "The new page's new heading and intro owe intro-check and record-format on the new page; not suppressed.",
+     "class": "within",
+     "why": "Scoped to the new page's new prose, not a re-owe of any pop-up or claim citing the source page; the split rule exempts the moved text, not new writing."
+    },
+    {
+     "id": "T185-j 0009/0059 repair",
+     "summary": "T184's 0009 and 0059 splits, linked plainly today, are marked class=\"moved\" before any check they re-owed runs (by T184's builder via the handoff if T184 lands second, by T185's own landing otherwise), confirmed by make modal-triage clearing the citing pop-ups.",
+     "class": "within",
+     "why": "The GM approved 'the 0009/0059 repair' in the same words; this is that repair, ordered so no needless cascade runs."
+    },
+    {
+     "id": "T185-k 0097 left plain",
+     "summary": "0097's earlier move to 0331 (plain link) is left unmarked; its re-owed checks have already run.",
+     "class": "within",
+     "why": "Nothing it re-owed is open, so no cascade is pending. A later edit of the moved text on 0331 will not be followed from 0097, but that is the state before T185 for every page link, not a wrong outcome T185 leaves or causes, and the request asked to retrofit only 0009/0059. Noted as an aside."
+    },
+    {
+     "id": "T185-l order and priority",
+     "summary": "Lands after T186's change computation, which it extends; marked performance work.",
+     "class": "within",
+     "why": "Sequencing; FR-013 and the GM's 2026-11-20 words put performance work first, and a split no longer re-owing every citing pop-up is performance work."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T186": {
+   "section_sha256": "7ed7168c6ae09b590c4a933587c683ac937a192d47b20dd80237f16a502f2bb5",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1-pairing",
+     "summary": "A page's blocks are paired old with new: exact matches dropped, then the tool's clears, then pairs at difflib ratio 0.6 or more (PAIR_RATIO taken from the blind test).",
+     "class": "within",
+     "why": "Mechanism for showing the triage what changed. It decides nothing about which edits trigger review."
+    },
+    {
+     "id": "D2a-markup",
+     "summary": "Markup is taken out of a block's claim words. Comments, tags, links and glossary marks are already out (pages::words).",
+     "class": "within",
+     "why": "Markup carries no claim, so an edit to it alone is the kind the GM said 'never could have plausibly needed this kind of cascade'. That is the rule 'only a claim-changing edit triggers review' applied as written."
+    },
+    {
+     "id": "D2b-footnote-marker",
+     "summary": "A footnote marker is taken out of a block's claim words. Rule C still sends a note key that is gone from the page when the pop-up's Sources: names it exactly.",
+     "class": "within",
+     "why": "A marker states no claim. Rule C covers the case where it matters to a pop-up: a source it names disappears. A marker that moves while its key stays on the page changes no claim the pop-up makes, and the GM limited cascades to factual inaccuracies."
+    },
+    {
+     "id": "D2c-cjk-quotation",
+     "summary": "An original-language quotation in 「」 or 『』 is taken out of a block's claim words, so an edit only to the quoted original text is cleared by the tool with no agent.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM's rule is that only a claim-changing edit triggers review, and the line he drew is edits that 'might plausibly have required' a cascade against those that 'never could have plausibly needed' one. A correction to the quoted wording of a source changes what the page says the source says. That is evidence, and plausibly a factual inaccuracy if repeated elsewhere, which is the class the GM said cascades. The bundle has no sentence or measurement showing such a quotation cannot carry a claim. Item 9's replay does not show it either: there the tool alone cleared no pop-up, so '0 of 24 missed' measures the frozen judging calls, not this clear, and its '3 marker, link or quotation edits' is not broken down by kind. Applying the rule literally is possible, does not defeat the request's purpose (the triage agent judges such an edit under (A)-(D)), and nothing in the GM's words implies this exception. To clear it: send such edits to the triage, or measure that no pop-up can carry or depend on the quoted original text and record that as the premise."
+    },
+    {
+     "id": "D2d-cjk-run",
+     "summary": "Any run of CJK script, quoted or not, is taken out of a block's claim words, so an edit only to CJK characters (a name, a term, a date) is cleared by the tool with no agent.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is not a quotation, though the plan files it under one. A bare CJK run is a name, a term or a written date stated as fact on the page. Correcting it, for example to a different character with the same reading, leaves the romanized words unchanged and still changes a fact. That is the factual-inaccuracy class the GM said cascades, and an edit that 'might plausibly have required' review. The bundle shows no measurement that such an edit cannot change a claim (see D2c on what the replay does and does not measure). The exception is neither impossible to avoid, implied by the GM's words, nor needed by the request's purpose. To clear it: drop the bare-CJK-run strip, or measure the premise and record it."
+    },
+    {
+     "id": "D2e-empty-claim-words",
+     "summary": "A block whose claim words are empty after stripping is cleared by the tool whatever changed in it.",
+     "class": "within",
+     "why": "Only markup and markers count as stripped once D2c and D2d are corrected, and a block made of nothing else carries no claim. As written, the clause also clears a block made wholly of CJK text, which inherits D2c and D2d's ruling. It needs no separate ruling."
+    },
+    {
+     "id": "D3-unit-cleared",
+     "summary": "A unit every page of which is cleared is answered 'triage: cleared by the tool' with its pages kept, and no agent runs.",
+     "class": "within",
+     "why": "This is the GM's 'only a claim-changing edit triggers review' carried out at the unit level. Its reach depends only on what counts as a clear (D2)."
+    },
+    {
+     "id": "D4-manifest-form",
+     "summary": "The MANIFEST shows each changed block as OLD, NEW and WORD DIFF, plus the new and removed blocks, and each pop-up whole once (never cut at 400 characters).",
+     "class": "within",
+     "why": "It gives the triage what it needs to tell a claim-changing edit from an adjustment. Nothing is narrowed."
+    },
+    {
+     "id": "D5-drop-when-unsure",
+     "summary": "modal-triage.md states rules (A)-(D) once, the code states none of them, and the default 'when unsure, name it' is dropped.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Dropping a conservative default narrows what reaches review. Applied literally, though, the default defeats the request's stated purpose: bundle 2's triage sent 79 of 114 on (t371h, a figure read from the bundle and not re-run). That is the cascade 'mostly not finding actual problems' the GM said must be fixed before anything else. The GM approved the rule 'only a claim-changing edit triggers review' and the re-classification test that (A)-(D) come from. The text of (A)-(D) is not in this bundle and was NOT judged by this verdict, so this ruling does not cover their content."
+    },
+    {
+     "id": "D6-originals-and-notes",
+     "summary": ".notes.html and .originals.html never reached a pop-up's checks (modals::fingerprints reads only the Entry: and Drawing: pages). This is pinned by the replay's first class.",
+     "class": "within",
+     "why": "It records and pins HEAD's existing behavior and changes nothing."
+    },
+    {
+     "id": "D7-replay-command",
+     "summary": "'record modal-triage replay --edits F' replays the tool's half over recorded edits.",
+     "class": "within",
+     "why": "It verifies that the requested change cuts the cascade without missing needed pop-ups. It enforces the request."
+    },
+    {
+     "id": "D8-order",
+     "summary": "Lands before T185, which extends its change computation.",
+     "class": "within",
+     "why": "Scheduling only."
+    },
+    {
+     "id": "D9-left-comment-labels",
+     "summary": "Found and left: a label change inside an Evidence or Grounds comment is cleared by the tool. It never re-owed a pop-up on HEAD, and T187 (labels are data) makes labels propagate.",
+     "class": "within",
+     "why": "HEAD already behaves this way, and the GM's own words send labels by mechanism rather than review ('Shouldn't attested versus guess be something that cascades mechanically rather than requiring a review'), which is T187's rule. The bundle shows no wrong outcome."
+    },
+    {
+     "id": "D10-left-claims-triage",
+     "summary": "Found and left: the claims triage gets T185's moves but not T186's tool clears and pairing. This is said in the report.",
+     "class": "within",
+     "why": "Nothing goes wrong as a result: the claims triage's agent still sees every changed block. It leaves a saving for later and does not narrow the request."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

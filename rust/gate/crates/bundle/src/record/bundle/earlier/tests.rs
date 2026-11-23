@@ -100,3 +100,100 @@ fn a_ruling_with_no_word_and_a_unit_with_no_round() {
     .unwrap();
     assert!(text.contains("**?** - (no reason recorded)"));
 }
+
+#[test]
+fn a_later_round_whose_last_bundle_was_not_kept_gets_no_change_section_and_reads_unscoped() {
+    let root = scratch("bundle-earlier-change");
+    let out = root.join("out");
+    put(&root, "specs/500-f/spec.md", "spec");
+    commit(&root, "the feature");
+    put(
+        &root,
+        ".specify/feature.json",
+        "{\"feature_directory\": \"specs/500-f\"}",
+    );
+    put(
+        &root,
+        "research/questions/0094-trade.html",
+        "<p>new words here</p>\n",
+    );
+    let one = root.join("one.md");
+    put(&root, "one.md", "quote-check: 0094 - 1\nEDIT research/questions/0094-trade.html\n<<<\nold words here\n===\nnew words here\n>>>\n");
+    state(
+        &root,
+        &json!({"dispatches": {
+            "a": {"check": "quote-check", "subjects": ["q:0094"], "t": 9_999_999_999.0, "state": "returned", "reply": one.to_string_lossy()}
+        }}),
+    );
+    let text = section(
+        &root,
+        &out,
+        "owed-checks: quote-check\nunit: quote-check:0094#k fp\n",
+    )
+    .unwrap();
+    assert!(text.contains("**Round 1**") && !text.contains("The change since round"));
+}
+
+#[test]
+fn a_later_round_is_handed_every_change_since_what_the_last_round_was_bundled_a_hand_edit_too() {
+    let root = scratch("bundle-earlier-seen");
+    let out = root.join("out");
+    put(&root, "specs/500-f/spec.md", "spec");
+    commit(&root, "the feature");
+    put(
+        &root,
+        ".specify/feature.json",
+        "{\"feature_directory\": \"specs/500-f\"}",
+    );
+    let page = "research/questions/0094-trade.html";
+    put(
+        &root,
+        page,
+        "<p>One line.</p>\n<p>A line a hand will change.</p>\n<p>The last.</p>\n",
+    );
+    let manifest = "owed-checks: quote-check\nunit: quote-check:0094#k fp\n";
+    // round 1's bundle: no earlier round, and what it was bundled kept (a regeneration before its dispatch keeps the later text)
+    put(
+        &root,
+        page,
+        "<p>One line.</p>\n<p>A line a hand will change.</p>\n<p>The last.</p>\n",
+    );
+    state(&root, &json!({"dispatches": {}}));
+    assert_eq!(section(&root, &out, manifest).unwrap(), "");
+    assert_eq!(section(&root, &out, manifest).unwrap(), "");
+    let one = root.join("one.md");
+    put(&root, "one.md", "quote-check: 0094 - 0 findings\n");
+    state(
+        &root,
+        &json!({"dispatches": {
+            "a": {"check": "quote-check", "subjects": ["q:0094"], "t": 9_999_999_999.0, "state": "returned", "reply": one.to_string_lossy()}
+        }}),
+    );
+    put(
+        &root,
+        page,
+        "<p>One line.</p>\n<p>A line the hand changed.</p>\n<p>The last.</p>\n",
+    );
+    let text = section(&root, &out, manifest).unwrap();
+    assert!(text.contains("### The change since round 1 (451 T189)"));
+    assert!(text.contains("judge ONLY whether this change made something wrong"));
+    assert!(text.contains(&format!(
+        "- `{page}`, before:\n```\n<p>A line a hand will change.</p>\n```\nafter:\n```\n<p>A line the hand changed.</p>\n```"
+    )));
+    assert!(!text.contains("before:\n```\n<p>One line."));
+    // what rounds 1 and 2 were bundled is kept
+    let kept =
+        std::fs::read_to_string(root.join(".git/record-checks/seen/quote-check-q-0094.json"))
+            .unwrap();
+    assert!(kept.contains("\"1\"") && kept.contains("\"2\""));
+    // round 2 went out on that bundle and nothing changed since: no change section
+    state(
+        &root,
+        &json!({"dispatches": {
+            "a": {"check": "quote-check", "subjects": ["q:0094"], "t": 9_999_999_999.0, "state": "returned", "reply": one.to_string_lossy()},
+            "b": {"check": "quote-check", "subjects": ["q:0094"], "t": 9_999_999_999.5, "state": "returned", "reply": one.to_string_lossy()}
+        }}),
+    );
+    let calm = section(&root, &out, manifest).unwrap();
+    assert!(calm.contains("**Round 2**") && !calm.contains("The change since round"));
+}

@@ -9,6 +9,7 @@ use super::{blocks, Block};
 
 mod rare;
 mod rounds;
+mod settled;
 
 const ONCE: &str = "<p>A short way apart.<sup class=\"fn\" data-note=\"k\"></sup> More here.</p>";
 

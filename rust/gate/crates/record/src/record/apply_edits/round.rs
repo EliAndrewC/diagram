@@ -10,6 +10,8 @@ use std::path::Path;
 
 use l7r_shared::env::Rooted;
 
+use l7r_shared::checks::reply::factual;
+
 use super::{apply, text, touched_questions, unapply_by_hand, words_of, Block};
 use crate::record::owed::answers;
 use crate::record::{modals, owed, units};
@@ -23,6 +25,39 @@ struct Round {
     words: BTreeMap<String, HashSet<String>>,
     quotes: BTreeMap<String, (String, String)>,
     quote_owed: HashSet<String>,
+    /// The round has a wording EDIT (451 T188): the units of every check are read, and one that only its wording EDITs moved and that
+    /// was answered before them settles, so a wording finding re-owes nothing and cascades to nothing, whatever else the reply holds.
+    wide: bool,
+    /// Its factual EDITs, applied after the wording ones where it has both, so `mid` (every fingerprint between the two passes) tells a
+    /// unit only wording moved (`mid` = after) from one a factual EDIT moved.
+    factual: HashSet<usize>,
+    mid: Option<BTreeMap<String, String>>,
+}
+
+/// The numbers of `found`'s EDITs not held back that fix a fact by the reply's checks (451 T188): with no check named, every one, as
+/// an untold category is.
+fn factual_blocks(checks: &[String], found: &[Block], skip: &HashSet<usize>) -> HashSet<usize> {
+    found
+        .iter()
+        .filter_map(|b| {
+            if let Block::Edit(e) = b {
+                Some(e)
+            } else {
+                None
+            }
+        })
+        .filter(|e| !skip.contains(&e.n))
+        .filter(|e| checks.is_empty() || checks.iter().any(|c| factual(c, &e.category)))
+        .map(|e| e.n)
+        .collect()
+}
+
+/// Every owed unit's fingerprint, whatever its check (a wide round, 451 T188).
+fn every_fingerprint(root: &Path) -> Result<BTreeMap<String, String>, String> {
+    Ok(owed::units(root, None, None, &owed::FAMILIES, "")?
+        .into_iter()
+        .map(|u| (u.slug, u.fingerprint))
+        .collect())
 }
 
 fn fingerprints(root: &Path, checks: &[String]) -> Result<BTreeMap<String, String>, String> {
@@ -53,8 +88,18 @@ fn quote_notes(
 }
 
 impl Round {
-    fn read(root: &Path, report: &str, found: &[Block]) -> Result<Self, String> {
+    fn read(
+        root: &Path,
+        report: &str,
+        found: &[Block],
+        skip: &HashSet<usize>,
+    ) -> Result<Self, String> {
         let checks = owed::reply_checks(report);
+        let factual = factual_blocks(&checks, found, skip);
+        let wide = !checks.is_empty()
+            && found.iter().any(
+                |b| matches!(b, Block::Edit(e) if !skip.contains(&e.n) && !factual.contains(&e.n)),
+            );
         let earlier = if checks.is_empty() {
             Vec::new()
         } else {
@@ -70,6 +115,8 @@ impl Round {
         }
         let mut owed_now = if checks.is_empty() {
             BTreeMap::new()
+        } else if wide {
+            every_fingerprint(root)?
         } else {
             fingerprints(root, &asked)?
         };
@@ -77,7 +124,7 @@ impl Round {
         let check_of = |slug: &str| slug.split_once(':').map_or(slug, |p| p.0).to_owned();
         let before: BTreeMap<String, String> = owed_now
             .iter()
-            .filter(|(slug, _)| all.contains(&check_of(slug)))
+            .filter(|(slug, _)| wide || all.contains(&check_of(slug)))
             .map(|(k, v)| (k.clone(), v.clone()))
             .collect();
         owed_now.retain(|slug, _| check_of(slug) == "quote-check");
@@ -106,6 +153,9 @@ impl Round {
             words,
             quotes,
             quote_owed,
+            wide,
+            factual,
+            mid: None,
         })
     }
 
@@ -160,7 +210,11 @@ impl Round {
     fn settle(&self, root: &Rooted) -> Result<Vec<String>, String> {
         let all: Vec<String> = self.checks.iter().chain(&self.earlier).cloned().collect();
         // run only for a round that names its checks (`run`), so the Python's `if self.checks else {}` has no other side here
-        let after = fingerprints(root, &all)?;
+        let after = if self.wide {
+            every_fingerprint(root)?
+        } else {
+            fingerprints(root, &all)?
+        };
         let store = answers::store_in(root);
         let mut out = Vec::new();
         for (slug, fp) in &after {
@@ -169,6 +223,19 @@ impl Round {
                 continue;
             }
             let (check, q) = slug.split_once(':').unwrap_or((slug, ""));
+            if !all.iter().any(|c| c == check) {
+                // another check's unit, read only by a wording round: settled where it was answered (quote-check's are the
+                // quotation's, ruled by `settle_quotes`)
+                let only_wording = self.mid.as_ref().is_none_or(|m| m.get(slug) == Some(fp));
+                if check != "quote-check"
+                    && only_wording
+                    && answers::answered(&store, slug, &before, "")
+                {
+                    answers::settle(&store, slug, &before, fp)?;
+                    out.push(format!("  {slug}: settled with its answer - a wording round's EDITs alone moved it, no fact changed (451 T188)"));
+                }
+                continue;
+            }
             if self.earlier.iter().any(|e| e == check) {
                 if answers::answered(&store, slug, &before, "") {
                     answers::settle(&store, slug, &before, fp)?;
@@ -219,6 +286,37 @@ pub(super) fn named(e: &str) -> String {
     }
 }
 
+/// The blocks applied for a round: in one pass, or for a mixed round its wording EDITs (and GLOSSARY blocks) first, every fingerprint
+/// read into `mid`, then its factual ones (451 T188).
+fn apply_round(
+    root: &Rooted,
+    found: &[Block],
+    (skip, refused): (&HashSet<usize>, &BTreeMap<usize, String>),
+    rnd: Option<&mut Round>,
+    (dry, form): (bool, bool),
+    said: &mut String,
+) -> Result<super::Tally, String> {
+    let Some(r) = rnd.filter(|r| r.wide && !r.factual.is_empty()) else {
+        return apply(
+            root,
+            found,
+            (skip, refused, &HashSet::new()),
+            dry,
+            form,
+            said,
+        );
+    };
+    let wording: HashSet<usize> = found
+        .iter()
+        .map(super::Block::n)
+        .filter(|n| !r.factual.contains(n))
+        .collect();
+    let a = apply(root, found, (skip, refused, &r.factual), dry, form, said)?;
+    r.mid = every_fingerprint(root).ok();
+    let b = apply(root, found, (skip, refused, &wording), dry, form, said)?;
+    Ok(a.plus(&b))
+}
+
 /// `main` from the blocks on: the hand-applied pass, the blocks applied inside the settling, the tally.
 pub(super) fn run(
     root: &Rooted,
@@ -234,6 +332,10 @@ pub(super) fn run(
         stderr: e + "\n",
         code: 1,
     };
+    // an EDIT putting back what an earlier round replaced is refused before anything is applied (451 T190), and is no block of the round
+    let refused = super::settled::refusals(root, report, found, skip);
+    let held: HashSet<usize> = skip.iter().chain(refused.keys()).copied().collect();
+    let skip = &held;
     if !dry {
         if let Err(e) = unapply_by_hand(root, found, skip, &mut said) {
             return fail(said, e);
@@ -241,10 +343,17 @@ pub(super) fn run(
     }
     let edits = found.iter().any(|b| matches!(b, Block::Edit(_)));
     let tally = if dry || !edits {
-        apply(root, found, skip, dry, form, &mut said)
+        apply(
+            root,
+            found,
+            (skip, &refused, &HashSet::new()),
+            dry,
+            form,
+            &mut said,
+        )
     } else {
-        let rnd = if super::is_repo(root) {
-            match Round::read(root, report, found) {
+        let mut rnd = if super::is_repo(root) {
+            match Round::read(root, report, found, skip) {
                 Ok(r) => Some(r),
                 Err(e) => {
                     let _ = writeln!(
@@ -258,7 +367,14 @@ pub(super) fn run(
         } else {
             None
         };
-        let tally = apply(root, found, skip, dry, form, &mut said);
+        let tally = apply_round(
+            root,
+            found,
+            (skip, &refused),
+            rnd.as_mut(),
+            (dry, form),
+            &mut said,
+        );
         if let (Ok(t), Some(rnd)) = (&tally, &rnd) {
             if !rnd.checks.is_empty() && t.edited > 0 {
                 let lines = rnd.settle(root).unwrap_or_else(|e| {
