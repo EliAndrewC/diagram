@@ -37,10 +37,10 @@ Depiction: Where the office and the residence share a compound, the plan draws t
 the residence runs on through the office; where the residence stands alone, the genkan is on the residence. The genkan's door
 opens onto open ground a palanquin can cross, never onto the street or against the side of a building. A plan whose
 house brings its guests in by a garden path draws no genkan. Where a plan draws the room behind the step, the genkan room, it
-is a room at the office hall's end, between the porch and the working rooms.
+is a room at the office hall's end, between the porch and the working rooms. The small dark block on the porch's outer edge is the genkan's door, drawn as every door on the plans is; it is not the step, which was a low, broad board platform across the whole entrance.
 
 Name: genkan
 Covers: the entry porch at the formal entrance, and the genkan room behind it where a plan draws one
 Sources: jaanus-uchigenkan, kotobank-katteguchi, genkan-jawiki, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, shirobito-1717-takayama, bukeyashiki-wiki, shiroishi-koseki, kotobank-nanushi, kakegawajo-goten, kawagoe-castle-jawiki, takayama-jinya-viewing-guide, jta-kanazawa-genkan-no-ma, jaanus-shikidai, kaibara-jinya-tamba
 Entry: research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.html, research/questions/0143-inside-the-castle-the-lords-palace-the-council-and-the-baileys-goten-honmaru.html, research/questions/0099-the-hearing-court-shirasu.html
-Drawing: research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html
+Drawing: research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0117-doorways-and-doors-to.drawing.html

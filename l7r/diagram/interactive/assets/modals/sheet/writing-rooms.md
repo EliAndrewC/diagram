@@ -18,7 +18,7 @@ Guesses:
 
 
 Depiction: The plan draws the writing room and the binding room as two rooms of the office hall's back row, west of the
-clerks' room, side by side or one behind the other, their floors drawn in the hall's own color.
+clerks' room, side by side between it and the armory, their floors drawn in the hall's own color.
 
 Name: writing rooms
 Covers: the writing room's and the binding room's floors and their labels
