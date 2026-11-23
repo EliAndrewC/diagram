@@ -10621,3 +10621,88 @@ engine speed, so the checklist below answers in its terms.
 
 **Performance work?** yes: an edit that cannot change what a pop-up states costs no agent, and the triage judges paired blocks against whole pop-ups by three rules, naming a pop-up when unsure (bundle 2's agent triage sent 79 of its 114 pop-ups on, as the t371h round's reply records; the filter sends 56 of 114 to the agent, measured 2026-11-23 above, a count of pop-ups, not of (pop-up, page) pairs).
 
+<!-- plan-archive: archived 2026-11-23 -->
+### T187 (the GM 2026-11-23, request.md 'the convergence talk': "Shouldn't attested versus guess be something that cascades mechanically rather than requiring a review, though?"; 12 of the 18 page-caused pop-up corrections the blind re-classification caught carried a label change, reclassify.md, measured 2026-11-23)
+
+- **Approach**: measured first, 2026-11-23, by grep: the 241 drawing pages hold 2921 `<li>` tags, 2895 items when paired to their `</li>` (a nested list's items read inside their parent's), 670 mentioning GUESS, 207 convention, 79 deviation, 187 attested or accurate, 1830 none of these; every `<li>` tag bare, with no attribute, and 240 pages carry a free-text `<!-- Evidence: accurate (...); guess (...) -->` comment no tool reads; the 284 pop-ups' Guesses tabs hold 613 hand-written bullets; the engine and Mode A claims are 3529, 415 `GUESS`, 242 `CONVENTION`, 24 `DEVIATION`, about 779 plain pointers (`dev/claims-index.json`); `docs/building-programs.md` is generated from `buildings/types.json`, not from pop-ups' Guesses, its claims hand-written comments. A label lived in three hand-written copies. Now it is DATA on the page: an empty token in the item's block, `<span class="item" data-item="<id>" data-label="ATTESTED|GUESS|CONVENTION|DEVIATION" data-guess="<the bullet>"></span>` (`research/src/record/items.rs`; inside the block, never on its `<li>`, because `style.rs` and `triage/change.rs` match a bare `<li>\s*<strong>`; empty, so no page check's words move), the block's own words held to the tag's label (`items::faults`). A pop-up's Guesses bullet `- {NNNN#<id>}` is filled from the tag at build, dropped while it is no GUESS (`registry/src/items.rs`, hooked into `about::feature` and `choices::modal`, so the page writer, `registry dump` and Mode A's guesses all read it, and the modal bundle's agent sees the filled text, `bundle/.../modal.rs`). An engine claim may name `...html#<id>` and its class is held to the tag (`claims/item_labels.rs`, a real-tree test in `checks/documents/item_labels.rs`); its fingerprint leaves the class word and the anchors out ONLY for such a claim, one whose pointer names an item and so is held to a tag (`grammar::Claim::normalized`, where `items` is empty the line is kept whole), so the flip a relabel asks for owes no impl-drift while an unanchored claim's class is still its own fingerprint (`item_labels::tests`, the `assert_ne!` on a GUESS and a plain pointer with no anchor); and the stale-figure check reads such a flip as no change to a constant (`grammar::label_free`, `stale::tests::a_relabel_of_a_claim_on_an_item_is_no_change`, red before: it flagged TREE_ROOM). A pop-up whose About states a GUESS-tagged item of a page it cites without calling it a guess (the bullet's head in an About sentence with no "guess") is named by the registry's real-tree test. Pilot: page 0218 (6 items tagged), `sheet/compound-shrine.md` (3 of its 4 bullets now references, their text unchanged) and the 4 claims on the shrine's tree (`compound/layout.rs` TREE_ROOM, `compound/fixtures.rs` tree, `audit/shared/grounds.rs` shrine_tree, `docs/buildings.md` "compound shrine tree"), which cited 0218 as attested since 085f4598c3 made the tree a GUESS - the uncascaded label the GM asked about, found by the check.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the tag and its faults | `items::tests::*` (red: no reader of the tag on HEAD) | none: record tooling | none | n/a |
+| the reference bullet | `registry::items::tests::a_relabel_on_the_page_regenerates_the_bullet_and_the_pop_up_is_unchanged`, `owed::item_relabel::a_relabel_regenerates_the_bullet_and_owes_no_check` (the relabel cleared by the triage's first filter; the same guess in the pop-up's words sent on), `bundle ... a_guesses_reference_is_filled_from_its_tag` | none | none | n/a |
+| the About check and the claim check | `registry::items::tests::an_about_that_states_a_tagged_guess_as_a_fact_is_named`, `claims::item_labels::tests::*`, the two real-tree tests (proved red 2026-11-23 by flipping 0218's tree tag to ATTESTED: the page fault and all 4 claims named) | none | none | n/a |
+
+### T187 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A relabel is one edit on its page; the pop-ups' Guesses tabs that reference the item follow by regeneration, the claims that name it are told the class to write, and neither owes a review for it.
+2. **The constraints.** The task line; the GM's words above; the coordinator's brief (the tag, the reference bullet, the claim read from or checked against the tag, red first, the About check); constitution XII (an unlabeled guess the one failure; untagged is unknown, never attested); FR-012 (red first); the other builders' files (T184's 0009 and 0059, T185 and T186's triage and the garden pop-ups, `docs/building-programs.md`).
+3. **Where each comes from.** G: the GM's words. O: the counts above and reclassify.md, measured 2026-11-23. R: page 0218 (the tree a GUESS since 085f4598c3).
+4. **Do they describe the world here?** Yes: the pilot is one of the two bundles' own label changes (compound-shrine, B1), replayed on its page.
+5. **The order.** After T186 (the triage's first filter, which clears a referenced relabel) and T185, whose `bundle/.../modal.rs` this edits in `guesses()` alone; before T192.
+6. **The exits.** Green: the tests above and the real-tree checks on the pilot. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** 2026-11-23: the 4 shrine-tree claims flipped to `GUESS ...#shrine-tree` and `make claims-owed` names none of them (their fingerprints unmoved); `make record-owed` owes the 6 pop-ups citing 0218 only its Drawing: page's move, and `make modal-triage` clears all 6 by the tool (24 cleared, 0218 absent from the bundle); compound-shrine owes its form and research checks once, for the reference form; `make building-programs CHECK=1` and `make record CHECK=1` clean.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The 4 claims are restated, not the code (constitution XIV): the tree's drawing is unchanged, its label was wrong.
+
+**Found and left?**
+- `docs/building-programs.md`'s "the shrine in a corner beside a tree" cites 0218 as attested for the tree, which 0218 labels a GUESS: a claim's label wrong. Not fixed here: T186's uncommitted edit of the file is in this clone, and a hunk of mine in it would ride T186's landing or block it (T187 lands after T186, but is written before it lands). Filed as T192; lands before T22.
+- `make claims-owed` flagged TREE_ROOM's relabel as a changed constant ("stale figure ... states 2"), its value unchanged: fixed here, the stale check compares a constant's doc with the labels of claims on tagged items left out (`grammar::label_free`), red first.
+- The rest of the record untagged (the counts above): not a defect, since an untagged item keeps the old review path; T192 tags it.
+
+**Performance work?** yes: a relabel no longer costs a pop-up review for each pop-up that references the item, nor an impl-drift for each claim that names it - the label changes were 12 of the 18 page-caused pop-up corrections the two 2026-11-23 bundles needed (reclassify.md).
+
+### T187 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In the pop-up reviews and impl-drift checks a label change re-owed: 12 of 18 page-caused pop-up corrections in the 2026-11-23 bundles carried one (reclassify.md).
+2. **Removes work, or only moves it?** Removes it for a referenced item and a claim naming its item: regeneration and a mechanical check replace the review.
+3. **What do you expect it to save, and why?** Once T192 tags the record, a relabel's pop-up checks and claim re-checks; on the pilot, the compound-shrine relabel of B1 would have owed nothing.
+4. **How does the work grow with the settlement?** It does not: record tooling; the checks read each question's pages once.
+5. **What did the before and after show, and under what conditions?** Before: the B1 relabel needed a hand edit of compound-shrine and left 4 claims mislabeled. After: the fixture relabel regenerates the bullet and the triage clears it; flipping 0218's tag names every claim to flip. Evidence, not a pass.
+
+
+<!-- plan-archive: T188 to T190 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-23 -->
+### T191 (the GM 2026-11-23, the convergence talk; observed 2026-11-23 by 451 T186's builder: regenerating docs/building-programs.md for the garden-pond fix re-owed 73 of its claims a triage, though only the `inner_garden` row's Guesses text changed)
+
+- **Approach**: the claims triage (`rust/gate/crates/claims/src/claims/triage.rs`) takes T186's filter, shared rather than copied. T186's `page_change` is split in `triage/change.rs`: its block-list half, `blocks_change`, pairs old and new block words after the tool's clears (markers, markup, links, comments, glossary marks, a split's moves and pointers) and is what the claims triage calls; `md_words` reads a procedure section's Markdown block as a page's words (a link's text kept, ticks and emphasis dropped, a `snake_case` name kept), so a markup edit of `docs/buildings.md` or `docs/building-programs.md` pairs equal. Each changed page and section is gathered once (`Moved`), then judged per claim by `change::fires` with the claim's label and account (its question paths left out) as the reader: the echo rule over a rewritten or removed sentence, and the new-finding arm where the claim states a single case (`ABSENCE`); no note key is a claim's, so the keys-gone arm never fires. One addition, `change::echo_rewritten`: the echo read from a rewrite's new side too, since a page that relabels a claim's fact rewrites it in words the claim repeats ("That they give it a tree beside it as well is a GUESS") - without it the replay below missed one DRIFTED claim. A claim every edit of whose text is cleared, with no code hunk and nothing forced, is recorded cleared at once (`record_cleared`, `cleared: by the tool ...`), its section and page snapshots stored, before the skip, the all-forced and the dispatch paths run on what is left; a generated doc's claims are touched only by the rows whose text changed in words they repeat. The MANIFEST keeps its form (the `claims-triage` contract is unchanged) and shows only the blocks left after the clears. `claims triage-replay --out DIR` is the triage read only, each owed claim's fate.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the shared clears and the per-claim filter | `triage::tests::a_markup_link_tick_or_marker_edit_is_cleared_by_the_tool`, `a_rewrite_goes_to_the_agent_only_for_the_claim_repeating_its_changed_words`, `a_change_that_only_adds_is_cleared_by_the_tool`, `commands::tests::a_triage_the_tool_clears_whole_dispatches_nothing` and six more, red with the filter disabled (10 of 167 failed, 2026-11-23); `change::tests::a_section_s_markdown_reads_as_a_page_s_words`, `the_echo_fires_on_words_a_rewrite_gained_that_the_claim_repeats` | none: record tooling | none | n/a |
+| the replay | `commands::tests::the_triage_replay_names_each_claim_s_fate_and_writes_nothing` | none: record tooling | none | n/a |
+
+<!-- plan-archive: archived 2026-11-23 -->
+### T191 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A claim is re-owed only where the text it rests on changed in a claim-bearing way, by the rule the pop-ups use; the rest cost no agent.
+2. **The constraints.** The task line; the coordinator's brief (the same rule for claims; a generated doc's rows; T186's code shared; red first with a replay, 0 misses on today's DRIFTED claims; 100% coverage); T186's rule and spec-fidelity's ruling on quotations (an original-language edit is never cleared); FR-012 (red first); T184's and T187's files untouched.
+3. **Where each comes from.** G: the GM's convergence talk, through T186's rule. O: the replays below, measured 2026-11-23. R: none, tooling.
+4. **Do they describe the world here?** Yes: the replays are the real code path over today's landings, each at its commit with its parent's claims index and store.
+5. **The order.** After T185 and T186 (whose change computation it shares) and T187 (which landed first; its claims grammar untouched here).
+6. **The exits.** Green: the garden landing's 73 cleared but what the echo names, and 0 misses of the DRIFTED claims whose drift lay in the text they rest on. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The replay, 2026-11-23 (`/tmp/t191/replay.sh <commit>`: a `--shared` clone at the commit, its parent's `dev/claims-index.json` and `dev/claims-pages.json`, then `l7r-gate claims triage-replay`). The garden landing 604541c046: 73 owed a section triage (HEAD's count reproduced), 71 cleared by the tool and 2 sent (`walled enclosure` and `the granary at the head of an office-court column`, on function-word trigrams the rule counts, "one of the"); its agent had cleared all 73. Today's other landings: d4da911203 133 owed, 59 cleared by the tool, 53 by feature 432, 21 sent; 085f4598c3 158, 91, 38, 1 forced, 28 sent; cce80ca436 127, 68, 44, 15 sent; d8c7ee6978 73, 40, 33 sent; b75443dd85 24, all forced. The DRIFTED claims of those landings (`/tmp/t191/py/score.py`, every row turned DRIFTED on 2026-11-23): 19, of which 12 were owed for their code, as new or in full (no filter between), 4 sent (`the shrine in a corner beside a tree` by the new-side echo, `two-court zoning`, and two code triages), 1 forced, and 2 cleared: `tax archive strongroom role` (d8c7ee6978), a known drift since 417 T33 re-found, whose DRIFTED row the clear keeps; and `main gate posts` (d4da911203), a CONVENTION claim citing no page, whose drift was 0093's drawing page restating the drafts' posts (2 by 4.3 ft), a page it does not rest on, reached only because an unrelated cart-gate edit of its section owed it. So 0 misses: each of the 5 DRIFTED claims a triage met and whose drift an edit of its own text carried was sent on or forced; the known drift's verdict stands, and the one found by coincidence is named below.
+10. **Before moving a constant.** n/a: `PAIR_RATIO` and `ABSENCE` are T186's, unmoved.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect fix: no claim's outcome was wrong; the work it removes is an agent's.
+
+**Found and left?**
+- `main gate posts` (docs/buildings.md, Walls and gates) rests on 0093's drawing page in fact but cites none, so no change to that page owes it; already restated at d4da911203 (fix: claim), its effect none: not a defect of a wrong outcome now, and the class (a CONVENTION claim whose figure a page states) is the claims grammar's, not the triage's.
+- `rust/gate/crates/owed/src/item_relabel.rs` (T187's test, its 0270a98d77 fix-up) failed `rustfmt --check` on two long `put` lines, so the owed crate's `make static` was red for any task touching it: fixed here (`make format FILE=`), formatting only.
+
+**Performance work?** yes: the claims triage's agent sees only the claims an edit still bears on, and none at all when the tool clears every one.
+
+### T191 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In the claims round's `claims-triage` agent (one dispatch a landing that moves a cited page or a procedure section) and the `impl-drift` claims it sends on; not an engine stage.
+2. **Removes work, or only moves it?** Removes it: a screen before the agent, T186's clears and echo, and the dispatch skipped where nothing is left.
+3. **What do you expect it to save, and why?** The garden landing's whole triage dispatch would have carried 2 claims, not 73; across today's five landings, 258 of the 515 owed claims cleared by the tool before any agent, beyond the 135 feature 432 already cleared.
+4. **How does the work grow with the settlement?** It does not: record tooling; each changed page or section is paired once, then a trigram test per claim citing it.
+5. **What did the before and after show, and under what conditions?** Before (HEAD): 73 claims to the agent at 604541c046. After: 2. The replay's commands are in item 9; counts, not wall time.
+6. **Did any map move, and does it still keep the research?** No: no engine code.
+
+
