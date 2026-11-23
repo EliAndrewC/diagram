@@ -1,11 +1,11 @@
 About: A privy, the kawaya or setchin, was in a samurai house part of the house: a urinal and a privy built as a pair,
 attached to its principal buildings and in time set in a corner of the corridor, not a hut in the yard. A house might keep
 two, an upper one for the head of the household and the men and a lower one for the women; a district magistrate's house,
-built in 1794 and added to later, counts two. In townhouses and farmhouses a guest parlor had a privy at its rear, and one
+built in the Edo period and added to later, had two. In townhouses and farmhouses a guest parlor had a privy at its rear, and one
 domain's council hall had two upper privies, each with a board veranda. The row houses inside a compound had none each: a urinal and several privies were
 gathered in a small building nearby.
 
-What collected beneath a privy had a price. Night soil was the farmer's fertilizer, bought from a household by the year -
+What collected beneath a privy had a price. Night soil was the farmer's fertilizer, bought from town households -
 around Kanazawa a household of seven to ten sold its year's night soil for about 24 gallons (90 liters) of rice - and carted away by
 collectors from outside; around Edo, farmers supplied firewood and charcoal to the castle and the daimyo estates for the
 right to empty their privies.
@@ -13,12 +13,12 @@ right to empty their privies.
 What a samurai house's privy was built of, and how big it was, is not recorded. A farm's privy, counted in one village in 1885, ran from 5 ft square to about 27 by 15 ft, most of them 18 by 12 ft or smaller.
 
 Guesses:
-- That the family's privy stood apart from the guests', toward the family's rooms: no source places a family privy in a
+- That the family's privy stood apart from the guests', toward the family's rooms: no source places a family privy near the family's rooms in a
   samurai house before 1868, so this follows later town houses and a daimyo's retainers' row houses.
-- About one privy to each part of the compound, three or four at a county office: no source counts them.
+- About one privy to each part of the compound, three or four at a county office: no source counts a whole compound's privies, though a district magistrate's house had two.
 - Its size, 5 ft square for one seat: no source gives a samurai house's privy's size, so it takes the smallest farm privy counted.
 - A hatch through the wall behind a privy that stands against the compound wall, for the collector: none is recorded.
-- That a privy stands at least 15 ft from any well: no separation distance is recorded.
+- That a privy stands at least 15 ft from any well: no separation distance from before modern times is recorded.
 - A privy at a village shrine's dwelling for its country monk: no source names one at a village shrine, so it follows the
   farmhouse the dwelling is drawn as.
 

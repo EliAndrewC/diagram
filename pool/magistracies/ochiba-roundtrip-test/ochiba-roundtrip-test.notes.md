@@ -12,9 +12,12 @@ Regenerate: `make map MAP=pool/magistracies/ochiba-roundtrip-test`. The program 
 in [`ochiba-roundtrip-test.compound.json`](ochiba-roundtrip-test.compound.json) (it was `ochiba_program()` in the gen until
 feature 449 T152), its research claims with it.
 
-Garden pavilions and point features (bath, wells, latrines, porch, privy, fire-tubs) are NOT
-massed perimeter buildings - they are hand-placed in the final map regardless - so they are
-omitted here; the placer only arranges the wall-ranging masses.
+The generator's parts draw the bath, the three wells, the latrines and the fire-water tubs
+(`parts` in the spec); garden pavilions are not drawn. The formal entrance is the roji form's bare
+door, no genkan porch (docs/building-programs.md allows the one genkan on the office hall or none):
+a door at the office hall's front band's east end, where the hand sheet's genkan stands, facing
+open ground inside the main gate (449 T335; a DEVIATION from the hand sheet, which draws the genkan
+porch there).
 
 ## What the test found (and drove)
 
@@ -105,10 +108,10 @@ Takayama's; that a county office kept them, and their size, a GUESS), the day of
 deep, where the day office and the study were the row's remainder split two ways (53 ft each); the magistrate's dais 18 x 10 ft, the
 hall's forecourt door moved off it to the front band's east end (0.92, where the hand sheet's genkan stands; E1), and a rear door at
 the hall's east end toward the nakamon (O2). The ground the clerks' room left before the senior retainers' doors, 46 x 15 ft, named
-outer court, as the county example names its own (the engine's open-void check: 1,705 sq ft unnamed). A rear wicket on the north
-wall onto the rear yard, so the night-soil collector reaches the house's privies without crossing the public court (O3, 6 ft; a GUESS:
-the 449 T326 research pass found the fujomon, a rear wicket of a samurai residence for night soil, in dictionaries not yet in the
-record). The armory keeps the hand sheet's west end (Q1): the research pass of 2026-11-22 found the county halls' arms at either end
+outer court, as the county example names its own (the engine's open-void check: 1,705 sq ft unnamed). A rear gate on the north
+wall onto the rear yard, so the night-soil collector reaches the house's privies without crossing the public court (O3; 0101's
+fujomon, a samurai residence's rear wicket or gate for night soil, the dead and criminals, from three dictionaries that give no size;
+drawn as a 6 ft one-bay gate inside the side gate's 5-8 ft band, not a wicket, 449 T340; its seat a GUESS). The armory keeps the hand sheet's west end (Q1): the research pass of 2026-11-22 found the county halls' arms at either end
 or both (Pingyao and Wuyang west, Jiexiu east after 1677, both end bays in 1591) and nothing that set the side, so the end is a GUESS,
 and from the west door the arms reach this sheet's east-side garrison along the hall's front or round the forecourt.
 2026-11-22 (feature 449 T312 bundle): the back row's order (impl-drift 2026-11-22 on the writing and binding rooms' claim, DRIFTED): west to east the armory, the writing room, the binding room, the clerks' room and the day office, so the clerks' room adjoins the day office as research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html places it at Takayama; where the two new rooms stand is a GUESS (Takayama attests them, not their place).

@@ -884,3 +884,27 @@ fn the_interiors_and_the_gate_posts_draw_on_any_wall() {
     assert_eq!(text.matches(r#"data-kind="side gate""#).count(), 2);
     assert_eq!(text.matches("stroke-dasharray=\"3 2\"").count(), 2);
 }
+
+/// A dais's caption reads wherever the placer seats it: the hand sheets' dark ink at 7 px, never the light ink that read only on the
+/// dais (449 T338: the county example's white caption sat wholly off its 18 ft dais on the hall's light floor, about 1.8:1).
+#[test]
+fn a_dais_caption_is_dark_ink_that_reads_on_or_off_the_dais() {
+    let dais = r#", "rooms": [{"kind": "q", "caption": "dais", "x": 11, "y": 10, "w": 18, "h": 10, "style": "dais"}]"#;
+    let p = with(
+        &[b(
+            "hall",
+            "k",
+            "lord",
+            (40.0, 20.0),
+            "outer",
+            "divider",
+            dais,
+        )],
+        "",
+    );
+    let text = super::sheet(&p, &seated(&p).unwrap(), &Seated::default());
+    assert!(text.contains(
+        r##"<text font-size="7" font-weight="bold" fill="#3A2E1C" data-kind="q" data-names="##
+    ));
+    assert!(!text.contains("#FFFAE6"));
+}

@@ -1,0 +1,93 @@
+# T330a handoff - session 1 (write)
+
+- SECTION=0101 0104 0113 0123
+
+## Items
+
+- A1 DONE - 0101 now adds the fujomon (imimon): three Japanese dictionaries on Kotobank (Daijisen, Nikkoku, Nipponica) define a wicket or gate at the rear of a samurai residence, castle or the like for carrying out night soil, the dead and criminals; caveat on the page: modern definitions of an Edo-period thing, no residence named, no size, no place along the rear, Nikkoku's earliest quoted use a kabuki play of 1875; Nipponica's one concrete case is Edo Castle's side gate (night soil by boat to Kasai), and its "simple wooden gate beside the rear gate" is said of criminals and the dead (note -2). New registry key `kotobank-fujomon`. Drawing page: the "near a gate" bullet now cites the fujomon instead of "no page names such a gate at a samurai house"; a new bullet labels the round-trip sheet's 6 ft north-wall side gate (rear wicket) - the rear wicket for night soil attested in general terms, its 6 ft width and its seat in the north wall a GUESS.
+- A2 DONE - 0104 findings add: (a) the genkan straight ahead of the main gate with the shirasu to one side at both Edo town magistracies (wheatbaku, kazusa, edo-ashigaru-kitamachi 1841), Iwama (kasama page - caveat: the page does not say where the layout detail comes from; the 1827 picture map is cited only for the site) and Joge (1869 drawing, "the drawing shows"); China's great hall on the gate's axis (qing-yamen-tushuo); an absence note for a Japanese genkan off the gate's line. (b) the room between the step and the working rooms at Joge (lower step, step, genkan, 6, 8 mats; key 「＊数字は畳数」) and Takayama (genkan room rebuilt 1816, 2.5-ken alcove, low step for envoys); Sayama's genkan 8 / shikidai 6 / next room 8 with its caveats (a list, its shikidai a room, a domain council hall). (c) what the genkan room was for: official greetings - Takayama's official guide (`takayama-jinya-viewing-guide`, item 02: a matted room a step up from the shikidai, newly arrived intendants entered through it, the intendant met the shogunate's envoys there, "the space of the highest formality for official greetings"); a Kaga foot soldier's house (JTA sign of 2018: greeting guests, receiving messages, brief visits); the receiving rooms near it at Takayama (envoys' room, item 18; guest room, en-tour), Kaibara (envoys' rooms south of the step, used for ceremonies meeting the lord) and Kochi's Edo upper residence (shogun's envoys' room south of the front entrance). No absence note for the use. What a genkan was built of: the shikidai a low timber step, boards along the approach, 40 cm-2 m deep (JAANUS); Takayama's genkan room matted; Kaibara's front-entrance cusped gable roofed in cypress bark; absence note for its walls and roof (the archive terms, the hits actually opened, and one web search listed in its comment). (d) drawing page: the genkan room behind the step at the hall's end (county example 12 x 38 ft, full depth, east end) - its seat, depth and 12 ft a GUESS, with the attested room and Sayama's figures exactly; the porch's dark block is the door glyph (6 x ~1.3 ft, #4A3318, on the porch's outer edge, `layout::DOOR`/`genkan_at`, `emit::buildings`), labeled a map drawing convention, linked to 0117's drawing page. New registry keys `jaanus-shikidai`, `jta-kanazawa-genkan-no-ma`.
+- A3 DONE - 0113 findings add: Takayama's official guide on the chotojiba (draws up and binds documents and ledgers, kept in the adjoining ledger storehouse, now remains; no size); who worked in the writing room - the guide's shoyaku (officials' sons such as tedai's, as apprentices) beside tedai-jawiki's kakiyaku (village and town officials' children), each reading beside its source; the Iijima museum (apprentices on night duty) against a visitor's blog (local hires); how many - absence note; no period source gives a small office either room (absence note), Joge's drawing marks none, a writing room at a small office only in Iijima's 1993 rebuild (first in from the entrance, beside the court room), a binding room only at Takayama. Drawing page: the back row west to east armory, writing room, binding room, clerks' room, day office, official study; the clerks' room adjoins the day office as at Takayama; the two new rooms' seats and the study's at the east end each a GUESS. New keys `takayama-jinya-viewing-guide`, `iijima-jinya-kakiyaku-beya`, `iijima-jinya-kujiba`, `fun-old-japan-iijima`, `kojo-iijima-jinya`. Suibara (1995 rebuild) was not cited: it names no writing room. The Iijima officials post (2024-05-02/095820) was read for "how many" and recorded nothing-found.
+- A4 DONE - 0123 adds a bullet "Across county offices, the armory's side varied": Neixiang 1666 weapons room left of the ceremonial gate, Wuyang 1652 arms store with the money store right of the hall, Zhenping both end bays stores (contents unnamed), Dengzhou regalia store on the west (juan 451); Fenzhou prefecture's silver on the west (juan 338); left = east marked as this project's reading; modern pages apply 左文右武 to the six offices (pingyao-yamen-3, neixiang-xianya-zhwiki); absence note that no page ties the armory's side to that rule or the war office. `gujin-tushu-nanyang-wikisource` was in the uncited works: moved with `make cite-uncited` (a DELETE of `040-uncited-works/30430-...` and a new `010-works-cited/30430-...`; NOT staged - the orchestrator must `git add -A` both paths).
+- A5 DONE - `kaibara-jinya-tamba` (14040) `Used for` now names the front hall's form and the rooms round its formal entrance (the envoys' rooms) and the cypress-bark gable, beside the rowhouse gate.
+
+Glossary: new terms `fujomon` (variant imimon, 28300) and `shoyaku` (28310); `kakiyaku` (26590) widened to cover the jin'ya writing clerk beside the Edo ward clerk.
+
+Registry keys reserved this session: 8 (kotobank-fujomon, jaanus-shikidai, jta-kanazawa-genkan-no-ma, takayama-jinya-viewing-guide, iijima-jinya-kakiyaku-beya, iijima-jinya-kujiba, fun-old-japan-iijima, kojo-iijima-jinya), plus one cite-uncited move.
+
+## Files
+
+- research/questions/0101-privies-setchin.html, .notes.html, .originals.html, .drawing.html, .drawing.notes.html, .drawing.originals.html
+- research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, .notes.html, .originals.html, .drawing.html, .drawing.notes.html, .drawing.originals.html
+- research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html, .notes.html, .originals.html, .drawing.html, .drawing.notes.html, .drawing.originals.html
+- research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html, .notes.html, .originals.html
+- research/sources/010-works-cited/ new: 37110-kotobank-fujomon.html, 37120-jaanus-shikidai.html, 37130-jta-kanazawa-genkan-no-ma.html, 37140-takayama-jinya-viewing-guide.html, 37150-iijima-jinya-kakiyaku-beya.html, 37160-iijima-jinya-kujiba.html, 37170-fun-old-japan-iijima.html, 37180-kojo-iijima-jinya.html
+- research/sources/010-works-cited/30430-gujin-tushu-nanyang-wikisource.html (moved from research/sources/040-uncited-works/30430-gujin-tushu-nanyang-wikisource.html, deleted there; Used for written)
+- research/sources/010-works-cited/ edited Used for lines: 14040-kaibara-jinya-tamba.html, 14620-qing-yamen-tushuo.html, 14700-edo-ashigaru-kitamachi.html, 15980-kazusa-bugyosho.html, 18330-kasama-iwama-jinya.html, 20250-kochi-hantei-jstage.html, 30600-gujin-tushu-jicheng-juan338-zhwikisource.html, 32280-wheatbaku-machibugyosho-yashiki.html, 32670-takayama-jinya-en-tour.html, 5210-takayama-jinya-city.html, 9971-fuchu-joge-pamphlet.html
+- research/archive/ new: 47/4794c7ca22eb.json, bd/bdad309a71de.json, be/be3346c624e7.json, c0/c076499c72ba.json, db/db7f5a98c295.json, e0/e0e1b8087b98.json, ea/ea9b1ec4c794.json, f5/f558a0ed4cfb.json (written by `make reserve`'s archive step)
+- specs/449-rust-codebase/briefs/t330a-handoff.md (this file)
+- research/source-attempts.jsonl (ledger lines from source-pages / source-outcome; the file was already modified by others)
+- l7r/diagram/interactive/assets/glossary/28300-fujomon.json (new), 28310-shoyaku.json (new), 26590-kakiyaku.json (definition widened)
+- `make glossary` was run; l7r/diagram/interactive/assets/glossary.json and research/assets/glossary-variants.txt were already modified before this session, so any change there from this run is mixed with others'
+
+## Left open
+
+- The pool notes and the pop-up's genkan-room size (26 mats from Sayama's three) are for the other builder to reconcile against 0104's page, which now gives Sayama's three figures exactly and labels the drawn room's seat and size a GUESS.
+- The round-trip sheet's compound.json and notes still say the fujomon is "not yet in the record (filed)"; that is a `pool/` file, not edited here.
+- `docs/building-programs.md` line 85's inner-court/kitchen postern for night soil still has no source (the nightsoil pass's reading); not this task's.
+- The JAANUS compiler's name was left out of the `jaanus-shikidai` write-up: the house-style hook rewrites the British spelling of her middle name.
+- Leads not followed (from the passes): the detailed Edo North/South plans linked from edo.ashigaru (room mats behind the genkan); Takayama's 1830 plan and 1996 restoration report; the original Joge plan in the 2003 town history; Iijima's floor plan; Suibara's plan.
+- Checks not run (the next session runs them fresh): record-owed will name quote-check, source-reader, record-format, source-applicability (8 new write-ups, the moved Nanyang entry and the edited Used for lines), translation-check and possibly intro-check, and the code's `Research:` claims citing 0104/0113/0123 for impl-drift (`layout::GENKAN`, `genkan_at`, the compound's office-hall rooms).
+## Checks (session 2, 2026-11-22)
+CHECKED modal-triage 0101/0104/0113/0123 pop-ups - round 1: 59 of 92 units TOUCHES, the rest untouched; round 2: 64 of 92 TOUCHES - recorded (modal-triaged); the touched pop-ups are OPEN below
+CHECKED quote-check 0101 - r1: 4 SUPPORTS, 3 PARTIAL; r2: 5 SUPPORTS, 3 PARTIAL - applied (Tajima fertilizer passage and Kanazawa scope; fujomon placement reworded on page, drawing page and registry; kotobank-fujomon-2 note added to the drawing notes; the 1875 kabuki line quoted in kotobank-fujomon)
+CHECKED quote-check 0104 - r1: 12 SUPPORTS, 8 PARTIAL; r2: 18 SUPPORTS, 2 PARTIAL - applied (Kaibara 1820 cited, Takayama alcove beside the room, Qing heading 'great hall of business', Kaibara ceremony sentence scoped to the front hall, Kochi plan date dropped, Sayama 1775 passage and the viewing guide's item 02 added to the drawing notes); the repeated fuchu-joge-pamphlet-10 PARTIAL (a reading of the drawing) accepted by the round arbiter, ask:t330a-round3
+CHECKED quote-check 0113 - r1: 13 SUPPORTS, 3 PARTIAL, 1 flag; r2: 18 SUPPORTS, 0 PARTIAL - applied (Joge 'redrawing' wording, 書役 gloss on tedai-jawiki-2, 'office of a whole province' cut from the absence note, kojo-iijima-jinya cited on the drawing page, footnotes on 'no size' and 'binding room nowhere but Takayama', drawing back-row sentence notes the binding room next to the writing room)
+CHECKED quote-check 0123 - r1: 6 SUPPORTS, 2 PARTIAL, 1 flag; r2: 8 SUPPORTS, 0 PARTIAL - applied (Wuyang 'repaired from 1652', the six-offices sentence split between Neixiang and Pingyao, armory-side-absence clause)
+CHECKED translation-check 0101/0104/0113/0123 - r1: FAITHFUL 7/19/10/8; r2: FAITHFUL 8/19/10/8; 0 LOOSE, 0 WRONG - nothing
+CHECKED record-format 0101/0104/0113/0123 - r1: 0/1/1/2 VOCABULARY (+1 contradiction, 1 stray space on 0104); r2: 0 findings on all four - applied (glossary terms 'mat' and 'six offices'; 'cusped gable' added as a kara-hafu variant; 0104 drawing's Joge seat contradiction resolved: the room's seat at the hall's end now attested on Joge's one drawing, its depth and 12 ft still GUESS; 御場所 glossed as gobasho; 重修 glossed); r3 on 0101 and 0113 accepted by the round arbiter, ask:t330a-round3
+CHECKED source-reader 22 keys (r1) + 6 (r2) - all READ, kotobank-fujomon 1 CONTRADICTED in part in r1 (fixed) - applied (fujomon placement; Joge 'lower step' made hedged, the 下 label illegible; image-only label comments corrected; Kaibara ceremony scope; fun-old-japan and kojo-iijima registry wording)
+CHECKED source-applicability 20 keys (r1) + 4 (r2) - all APPLICABLE or APPLICABLE-WITH-LIMITS, none NOT-APPLICABLE - applied (limits added or corrected on juan338, nanyang, iijima-kakiyaku-beya, iijima-kujiba, fun-old-japan, kojo (tag period=present-day), jta-kanazawa, kochi-hantei, kaibara-jinya-tamba (14040: the front hall's 1820 date, what survives, the 2005-2006 re-roof), kazusa, takayama-en-tour, takayama-viewing-guide, takayama-city (owner and manager corrected; the 1996/1830 sentence replaced by the page's 1970-1983 restoration and fiscal 1992-1995 residence rebuild), qing-yamen-tushuo, kotobank-fujomon); r3 on kotobank-fujomon accepted by the round arbiter, ask:t330a-round3
+CHECKED round-arbiter ask:t330a-round3 - accept: no third round for record-format:0101, record-format:0113, source-applicability:kotobank-fujomon, translation-check:0113.drawing#iijima-jinya-kakiyaku-beya (answered with REASON=), and the fuchu-joge-pamphlet-10 PARTIAL stands as recorded
+CHANGED research/questions/0101-privies-setchin.html
+CHANGED research/questions/0101-privies-setchin.notes.html
+CHANGED research/questions/0101-privies-setchin.originals.html
+CHANGED research/questions/0101-privies-setchin.drawing.html
+CHANGED research/questions/0101-privies-setchin.drawing.notes.html
+CHANGED research/questions/0101-privies-setchin.drawing.originals.html
+CHANGED research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html
+CHANGED research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.notes.html
+CHANGED research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html
+CHANGED research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.notes.html
+CHANGED research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.originals.html
+CHANGED research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html
+CHANGED research/questions/0113-the-office-hall-and-its-clerks-goyakusho.notes.html
+CHANGED research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html
+CHANGED research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.notes.html
+CHANGED research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.originals.html
+CHANGED research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html
+CHANGED research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.notes.html
+CHANGED research/sources/010-works-cited/37110-kotobank-fujomon.html
+CHANGED research/sources/010-works-cited/37130-jta-kanazawa-genkan-no-ma.html
+CHANGED research/sources/010-works-cited/37140-takayama-jinya-viewing-guide.html
+CHANGED research/sources/010-works-cited/37150-iijima-jinya-kakiyaku-beya.html
+CHANGED research/sources/010-works-cited/37160-iijima-jinya-kujiba.html
+CHANGED research/sources/010-works-cited/37170-fun-old-japan-iijima.html
+CHANGED research/sources/010-works-cited/37180-kojo-iijima-jinya.html
+CHANGED research/sources/010-works-cited/30430-gujin-tushu-nanyang-wikisource.html
+CHANGED research/sources/010-works-cited/30600-gujin-tushu-jicheng-juan338-zhwikisource.html
+CHANGED research/sources/010-works-cited/14040-kaibara-jinya-tamba.html
+CHANGED research/sources/010-works-cited/14620-qing-yamen-tushuo.html
+CHANGED research/sources/010-works-cited/15980-kazusa-bugyosho.html
+CHANGED research/sources/010-works-cited/20250-kochi-hantei-jstage.html
+CHANGED research/sources/010-works-cited/32670-takayama-jinya-en-tour.html
+CHANGED research/sources/010-works-cited/5210-takayama-jinya-city.html
+CHANGED l7r/diagram/interactive/assets/glossary/28320-mat.json (new), 28330-six offices.json (new), 15420-kara-hafu.json (variant 'cusped gable')
+CHANGED l7r/diagram/interactive/assets/glossary.json, research/assets/glossary-variants.txt (make glossary; already modified by others before this session)
+CHANGED the review ledger and owed-check records the make targets write (record-checked, modal-triaged, apply-edits, arbiter-ask / arbiter-ruled ask:t330a-round3, research-claim done)
+OPEN pop-ups (another builder's): the triage named these as touched, so their checks are owed - modal-accuracy/gaps/references on sheet/armory, border-court, clerks--room, day-office, genkan, guest-quarters, inner-court, latrine, main-gate, nakamon, office-hall, outer-court, reception-room, residence, side-gate, writing-rooms and choice/town_nearness--near/--far; modal-depiction on sheet/clerks--room, day-office, door, genkan, guest-quarters, inner-court, latrine, magistrate-s-dais, office-hall, official-study, residence, side-gate, writing-rooms; modal-form on sheet/genkan and sheet/writing-rooms (their About changed - predates this session). record-owed batches them: modal-research for 12 pop-ups, modal-depiction for 5, modal-form for 2
+OPEN the pop-ups' wording should follow these page changes: 0104's drawing page now calls the genkan room's seat at the hall's end attested on Joge's one drawing (only its depth and 12 ft a GUESS); 0101's fujomon placement is now 'beside the rear gate of a castle or a lord's mansion, said of the gate for the dead and criminals, also the night-soil outlet'; the Joge 'lower step' is now a hedged reading
+OPEN OUTSIDE THE CHANGE: 0101 'The collectors were farmers, who came with carts.' - quote-check twice PARTIAL: the heading makes one Guernica instance the general rule
+OPEN OUTSIDE THE CHANGE: 0123 Pingyao bullet 'The oldest account, the imperial encyclopedia' - the Gujin tushu jicheng described but not linked at its first mention (possible UNLINKED-NAME), quote-check twice
+OPEN OUTSIDE THE CHANGE: registry 9971-fuchu-joge-pamphlet says 'from 1717' and 'Iwami Omori intendant's office', which neither page of the pamphlet carries (source-reader and source-applicability); its legend names a first Joge intendant of its own - needs a source or removal
+OPEN: the page cache for journals.openedition.org/eue/1039 (tajima-2007-night-soil) holds an Anubis bot-check page, so quote-verbatim reports NOT-ON-PAGE on every Tajima passage; the archived capture of 2026-10-02 carries them verbatim - a re-fetch (REFRESH=1) or a cache fix is owed
+OPEN: two questions over 20,000 bytes are not this session's (0059 at 20,065, 0009 at 20,044); none of 0101/0104/0113/0123 is over

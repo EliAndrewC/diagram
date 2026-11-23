@@ -59,8 +59,9 @@
     <!-- feature 372 wave 103: the Imperial road runs past the gate at the road's own 30 ft (90 px), 0088's drawing page
          (it was an 8 ft lane drawn into the gate); the gate opens straight onto it, no wider ground before the gate (0088),
          the threshold stones at its near edge and the notice board across it; which way the road runs here is a GUESS -->
+    <!-- one flat earth tone (449 T328): period plans drew a road a flat color, and the one cross-line on a road (Hagi, 1742)
+         marks a slope (0088's drawing page), so the dashed overlay's bands, read as a slope or steps, are gone - map drawing convention -->
     <path d="M 180 799.5 L 1020 799.5" stroke="#B89060" stroke-width="90" stroke-linecap="butt" opacity="0.55"/>
-    <path d="M 180 799.5 L 1020 799.5" stroke="#9C7448" stroke-width="90" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
   </g>
 
   <!-- Title block (just above the compound; no redundant summary line - the
@@ -208,35 +209,44 @@
        county's tax base, so they get fireproof walls -->
   <!-- feature 372 wave 105: the records storehouse 24 x 18 ft (72 x 54 px), 432 sq ft, under the ~450 sq ft that the one
        measured records store (Takayama's book storehouse) sets (research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html;
-       its shape a GUESS); it was 32 x 26-28 ft. Its door face kept where it stood. -->
+       its shape a GUESS); it was 32 x 26-28 ft. Its door face kept where it stood.
+       449 T332: backed into the court's NW corner against the west wall and the divider, 2 ft off each (it stood 14 ft off the
+       west wall with a bare pocket behind it): the 449 T332 research pass (2026-11-22) found storehouses set at the back or corner
+       of a lot, on its boundary, as a firebreak in Kyoto and Osaka and a windbreak on the Kochi plain, and nothing for a jin'ya
+       either way, so a jin'ya's records store against its wall is a GUESS on that town and farm practice -->
   <g data-kind="tax archive">
-    <rect x="244" y="515" width="72" height="54" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
-    <rect x="308" y="535" width="8" height="14" fill="#4A3318" data-kind="door"/>
+    <rect x="209" y="456" width="72" height="54" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
+    <rect x="273" y="476" width="8" height="14" fill="#4A3318" data-kind="door"/>
     <text font-size="13" font-weight="bold" fill="#3A2E1C"><tspan>tax</tspan><tspan>archive</tspan></text>
   </g>
 
   <!-- West to east the writing and binding rooms stand before the clerks' room, so the clerks' room adjoins the day office as 0113
        places it at Takayama (impl-drift 2026-11-22; the writing rooms' place a GUESS: Takayama attests them, not where they stood). -->
-  <!-- The hall's back row (feature 449 T313, T315; size-audits 2026-11-22): the armory 14 ft, the clerks' room 26 ft, the writing room
-       and the binding room 16 ft each (0113: Takayama's kakiyaku-beya, where documents were drawn up, and the room beside it where they
-       were bound; that a county office kept them, and their size, a GUESS), the day office 28 ft (at most ~490 sq ft, Takayama's
-       goyakusho room of 26-28 mats, a province's ceiling) and the official study 20 ft (the study with its anteroom, 16-20 mats; the
-       Kochi domain residences' day rooms), all 16.7 ft deep: the rooms at their sizes, not the row's remainder split two ways. -->
-  <!-- Office hall: the working block. Rear day rooms (day office + official
-       study), front dais band overlooking the sand - the courtroom is a room
-       OF the office hall, not a freestanding stage. -->
+  <!-- The hall's back row (feature 449 T313, T315, T336; size-audits 2026-11-22): the armory 14 ft, the writing room 12 ft and the
+       binding room 10 ft (200 and 167 sq ft, inside the audit's 6-12 mats; the binding room 10 ft, not 8, so its caption reads
+       inside it) (0113: Takayama's kakiyaku-beya, where documents were drawn up, and the room beside it where they were bound;
+       that a county office kept them a GUESS; their size the size-audit's band, 6-12 mats each, an ESTIMATE ranked below Takayama's
+       26-28 mat goyakusho for a province - they were 16 ft each, together about Takayama's whole goyoba), the clerks' room 26 ft, the
+       day office 29 ft (at most ~490 sq ft, Takayama's goyakusho room of 26-28 mats, a province's ceiling) and the official study
+       21 ft (the study with its anteroom, 16-20 mats; the Kochi domain residences' day rooms), all 16.7 ft deep: the rooms at their
+       sizes, the day office and study given 2 ft of the freed width inside their bands and the hall shortened 8 ft at its west end
+       (120 -> 112 ft), its east end, genkan and rear door kept. -->
+  <!-- Office hall: the working block. Rear rooms west to east (armory, writing and binding rooms, clerks' room, day office,
+       official study), front dais band overlooking the sand - the courtroom is a room OF the office hall, not a freestanding
+       stage. The clerks' room stands behind the centered dais: which room backed the seat at a jin'ya is unrecorded, a GUESS
+       (449 T337 research pass, 2026-11-22: Edo's town magistracies put an examiners' working room there). -->
   <g data-kind="office hall">
     <!-- EACH ROOM IS ITS OWN FLOOR (feature 264): the hall's fill, then one fill per room in the same color, then
          the outline on top - so a room lights across its floor and the picture is the one rect's (0 px differ,
          measured). -->
-    <rect x="420" y="478" width="360" height="84" fill="#DDB87A"/>
-    <!-- the ARMORY, the hall's west end in its back row (feature 449 T276): the program keeps one at every seat, in the office hall's west end bay where the main gate is one bay, as Pingyao, with no standing barracks, kept its armory at its great hall's west end (research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html); 14 x 16.7 ft, cut from the clerks' room's west end; its size and the back row (no source gives the depth of Pingyao's) a GUESS -->
-    <rect data-id="armory-1" x="420" y="478" width="42" height="50" fill="#DDB87A" data-kind="armory"/>
-    <rect data-id="clerks-room-1" x="558" y="478" width="78" height="50" fill="#DDB87A" data-kind="clerks' room"/>
-    <rect data-id="day-office-1" x="636" y="478" width="84" height="50" fill="#DDB87A" data-kind="day office"/>
-    <rect data-id="official-study-1" x="720" y="478" width="60" height="50" fill="#DDB87A" data-kind="official study"/>
-    <rect data-id="writing-rooms-1" x="462" y="478" width="48" height="50" fill="#DDB87A" data-kind="writing rooms"/>
-    <rect data-id="writing-rooms-2" x="510" y="478" width="48" height="50" fill="#DDB87A" data-kind="writing rooms"/>
+    <rect x="444" y="478" width="336" height="84" fill="#DDB87A"/>
+    <!-- the ARMORY, the hall's west end in its back row (feature 449 T276): the program keeps one at every seat, in the office hall's west end bay where the main gate is one bay, as Pingyao, with no standing barracks, kept its armory at its great hall's west end (research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html); 14 x 16.7 ft, the back row's west end; its size and the back row (no source gives the depth of Pingyao's) a GUESS -->
+    <rect data-id="armory-1" x="444" y="478" width="42" height="50" fill="#DDB87A" data-kind="armory"/>
+    <rect data-id="clerks-room-1" x="552" y="478" width="78" height="50" fill="#DDB87A" data-kind="clerks' room"/>
+    <rect data-id="day-office-1" x="630" y="478" width="87" height="50" fill="#DDB87A" data-kind="day office"/>
+    <rect data-id="official-study-1" x="717" y="478" width="63" height="50" fill="#DDB87A" data-kind="official study"/>
+    <rect data-id="writing-rooms-1" x="486" y="478" width="36" height="50" fill="#DDB87A" data-kind="writing rooms"/>
+    <rect data-id="writing-rooms-2" x="522" y="478" width="30" height="50" fill="#DDB87A" data-kind="writing rooms"/>
     <!-- The genkan is on the OFFICE HALL, where a guest of rank comes up from the forecourt: where office and
          residence share a compound the visitors' way runs through the office (feature 267 R07, 0104:
          Takayama). Pass 3 seats it ON THE FORECOURT: a porch at the hall's SE corner, 10 x 6 ft (30 x 18 px),
@@ -247,53 +257,61 @@
     <rect data-id="genkan-2" x="750" y="562" width="30" height="18" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1.2" data-kind="genkan"/>
     <rect data-id="genkan-1" x="757" y="578" width="16" height="4" fill="#4A3318" data-kind="genkan"/>
     <text font-size="7.5" font-style="italic" fill="#5C4830" data-kind="genkan" data-names="genkan-1 genkan-2">genkan</text>
+    <text font-size="6.5" font-weight="bold" fill="#3A2E1C" data-names="genkan-3"><tspan>genkan</tspan><tspan>room</tspan></text>
+    <!-- the genkan room behind the step (449 T339; T314 Q4 on the county example): the front band's east end, 12 x 11 ft,
+         about Sayama's genkan room of 8 mats behind its shikidai (0104), so the porch opens into a room for the guest and not
+         straight into the band of the dais; its seat at the hall's end, between the porch and the working rooms, a GUESS -->
+    <rect data-id="genkan-3" x="744" y="528" width="36" height="34" fill="#DDB87A" data-kind="genkan"/>
+    <line x1="744" y1="528" x2="744" y2="562" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
 
     <!-- feature 267 pass 2: the hall's rear (north) door toward the nakamon - the visitors' way runs on through the
          office to the house (0104) -->
-    <rect x="420" y="478" width="360" height="84" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
+    <rect x="444" y="478" width="336" height="84" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
     <rect x="590" y="478" width="20" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <!-- the hall's WEST door (feature 449 T299; building-review 2026-11-22 Q1): in the front band, below the armory, onto the open
          ground before the practice ground, so arms leave by the hall's west end, not across the clerks' seats and the dais. A GUESS:
          no source states an armory's or a hall end bay's doors (449 T289/T299 research pass, 2026-11-22: silent) -->
-    <rect x="420" y="536" width="6" height="24" fill="#4A3318" data-kind="door"/>
-    <line x1="420" y1="528" x2="780" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="462" y1="478" x2="462" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="510" y1="478" x2="510" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="558" y1="478" x2="558" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="636" y1="478" x2="636" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="720" y1="478" x2="720" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <rect x="444" y="536" width="6" height="24" fill="#4A3318" data-kind="door"/>
+    <line x1="444" y1="528" x2="780" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <line x1="486" y1="478" x2="486" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <line x1="522" y1="478" x2="522" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <line x1="552" y1="478" x2="552" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <line x1="630" y1="478" x2="630" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <line x1="717" y1="478" x2="717" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <text font-size="8" font-weight="bold" fill="#3A2E1C" data-kind="armory" data-names="armory-1">armory</text>
-    <text font-size="11" font-weight="bold" fill="#3A2E1C" data-kind="clerks' room" data-names="clerks-room-1">clerks' room</text>
+    <text font-size="10" font-weight="bold" fill="#3A2E1C" data-kind="clerks' room" data-names="clerks-room-1"><tspan>clerks'</tspan><tspan>room</tspan></text>
     <text font-size="11" font-weight="bold" fill="#3A2E1C" data-kind="day office" data-names="day-office-1">day office</text>
     <text font-size="9" font-weight="bold" fill="#3A2E1C" data-kind="official study" data-names="official-study-1"><tspan>official</tspan><tspan>study</tspan></text>
-    <text font-size="8" font-weight="bold" fill="#3A2E1C" data-kind="writing rooms" data-names="writing-rooms-1"><tspan>writing</tspan><tspan>room</tspan></text>
-    <text font-size="8" font-weight="bold" fill="#3A2E1C" data-kind="writing rooms" data-names="writing-rooms-2"><tspan>binding</tspan><tspan>room</tspan></text>
-    <!-- The magistrate's tatami dais (centered, on the court face): 18 x 10 ft (feature 449 T316; size-audit 2026-11-22: about the frontage of an 8-12 mat magistrate's room, 12-20 ft wide, an ESTIMATE from the 1810 South Town Magistracy kujiba layout and Kaibara jin'ya's 8-mat 2-ken rooms; its label wrapped and set at 7 px rather than the room widened to fit it) -->
+    <text font-size="7" font-weight="bold" fill="#3A2E1C" data-kind="writing rooms" data-names="writing-rooms-1"><tspan>writing</tspan><tspan>room</tspan></text>
+    <text font-size="6" font-weight="bold" fill="#3A2E1C" data-kind="writing rooms" data-names="writing-rooms-2"><tspan>binding</tspan><tspan>room</tspan></text>
+    <!-- The magistrate's tatami dais (on the hearing court's mats' axis, on the court face): 18 x 10 ft (feature 449 T316; size-audit 2026-11-22: about the frontage of an 8-12 mat magistrate's room, 12-20 ft wide, an ESTIMATE from the 1810 South Town Magistracy kujiba layout and Kaibara jin'ya's 8-mat 2-ken rooms; its label wrapped and set at 7 px rather than the room widened to fit it) -->
     <rect data-id="magistrate-s-dais-1" x="573" y="530" width="54" height="30" fill="#8C6F3E" stroke="#4A3318" stroke-width="1" data-kind="magistrate's dais"/>
     <text font-size="7" font-weight="bold" fill="#3A2E1C" data-kind="magistrate's dais" data-names="magistrate-s-dais-1"><tspan>magistrate's</tspan><tspan>dais</tspan></text>
-    <!-- Clerks' positions flanking the dais -->
+    <!-- Clerks' positions flanking the dais, 2 ft off its ends (449 T335 N3's fold-in: they stood 12.7 ft off; 0099's drawing page,
+         the clerks seated either side of the magistrate, level with the dais, a DEVIATION); the dais stays on the court's mats' axis
+         (x 600) though the hall was shortened at its west end -->
     <g data-kind="clerks' seats">
-      <rect data-id="clerks-seats-1" x="455" y="533" width="80" height="21" fill="#B89868" stroke="#5C4830" stroke-width="0.5"/>
+      <rect data-id="clerks-seats-1" x="487" y="533" width="80" height="21" fill="#B89868" stroke="#5C4830" stroke-width="0.5"/>
       <text font-size="9" fill="#3A2E1C" data-names="clerks-seats-1">clerk</text>
-      <rect data-id="clerks-seats-2" x="665" y="533" width="80" height="21" fill="#B89868" stroke="#5C4830" stroke-width="0.5"/>
+      <rect data-id="clerks-seats-2" x="633" y="533" width="80" height="21" fill="#B89868" stroke="#5C4830" stroke-width="0.5"/>
       <text font-size="9" fill="#3A2E1C" data-names="clerks-seats-2">clerk</text>
     </g>
   </g>
 
-  <!-- feature 267 pass 3: the court is 306 x 105 px (102 x 35 ft), cut 18 ft at its EAST end so the office hall's
-       genkan opens onto the forecourt (the court's size is a disclosed guess); its posts respaced, its labels
-       recentered on it; the mats stay before the dais. -->
+  <!-- feature 267 pass 3: the court cut 18 ft at its EAST end so the office hall's genkan opens onto the forecourt (the
+       court's size is a disclosed guess); 449 T336: its west end follows the hall's, 282 x 105 px (94 x 35 ft); its posts
+       respaced, its labels recentered on it; the mats stay before the dais. -->
   <!-- Hearing court (oshirasu): ROOFED, a white-gravel floor under the roof (feature 267 R22, buildings 450: a
        magistracy's court was roofed; the open white court is the period-drama image). The solid outline and the
        posts along its open south side draw the roof. Straw mats on the gravel (R23, buildings 440): the accused
        at the center, the plaintiff behind to one side, the village officials behind to the other. -->
   <g data-kind="hearing court">
-    <rect data-id="hearing-court-1" x="420" y="567" width="306" height="105" fill="url(#oshirasu-sand)" stroke="#5A3F1E" stroke-width="2"/>
+    <rect data-id="hearing-court-1" x="444" y="567" width="282" height="105" fill="url(#oshirasu-sand)" stroke="#5A3F1E" stroke-width="2"/>
     <g fill="#5A3F1E">
-      <rect x="418" y="668" width="5" height="5"/>
-      <rect x="494" y="668" width="5" height="5"/>
-      <rect x="571" y="668" width="5" height="5"/>
-      <rect x="647" y="668" width="5" height="5"/>
+      <rect x="442" y="668" width="5" height="5"/>
+      <rect x="512" y="668" width="5" height="5"/>
+      <rect x="583" y="668" width="5" height="5"/>
+      <rect x="653" y="668" width="5" height="5"/>
       <rect x="723" y="668" width="5" height="5"/>
     </g>
     <text font-size="14" font-weight="bold" letter-spacing="1" fill="#5C4318" data-names="hearing-court-1">HEARING COURT</text>
@@ -569,11 +587,12 @@
        yard. Not the vegetable bed: 0109's drawing page rules the west out here, in the shade of the kitchen and the residence, and
        seats the bed south. That a samurai house's grounds were named by kind is attested at Kanazawa (the front court, the katte or
        little back yard before the kitchen, the viewing garden, the back ground; a secondhand summary of Shimamura's study, 449 T297's
-       research pass, 2026-11-22); what this yard held beyond the privy and the tub, and its extent, are a GUESS -->
-  <g data-kind="inner court">
-    <polygon points="205,212 338,212 338,306 205,306" fill="none"/>
-    <text font-size="9" font-style="italic" fill="#7A6A4A">back yard</text>
-  </g>
+       research pass, 2026-11-22); what this yard held beyond the privy and the tub, and its extent, are a GUESS.
+       449 T332 (building-review 2026-11-22 N1): it is no longer named apart. Kanazawa's little back yard (katte, ko-sedo) lay
+       before the kitchen, and this kitchen's one door opens south onto the service yard, so this ground behind the house is of
+       the sedo's kind, the ground behind the lot (0118): it is drawn as the rear yard's west arm, below, with the 10 x 18 ft
+       corner that lay in neither -->
+
   <!-- feature 267 pass 2: the ground south of the kitchen ell is named for what it is - the postern's yard, the
        kitchen's door and the bath on it (the review found an unnamed ~47 x 25 ft patch in the inner court) -->
   <g data-kind="inner court">
@@ -717,7 +736,7 @@
        under the storehouses' fronts, over the ground the servants' range left when it moved to the street front, and east
        past the karo's house to the shrine hall's west door (feature 374 batch 5, building-review N1). -->
   <g data-kind="rear yard">
-    <polygon points="235,156 480,156 480,200 616,200 616,156 890,156 890,250 802,250 802,210 235,210" fill="none"/>
+    <polygon points="205,156 480,156 480,200 616,200 616,156 890,156 890,250 802,250 802,210 338,210 338,306 205,306" fill="none"/>
     <text font-size="9" font-style="italic" fill="#7A6A4A">rear yard</text>
   </g>
   <!-- Household storehouses (dozo), two as the Matsushiro retainer's house kept (feature 283: the shady rear the

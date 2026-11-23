@@ -15,10 +15,11 @@ a few local hires; what the working rooms looked like inside, how large they wer
 recorded.
 
 Guesses:
-- That the day office stood behind the dais, in the same hall: no account places such a room behind the court; it is
-  reckoned from what a working office had to hold.
+- That the day office stood in the back row behind the dais band, in the same hall: no account places such a room behind
+  the court, and which room stood directly behind the magistrate's seat at an intendant's office is not recorded (at Edo's
+  town magistracies it was a working room of the examiners); it is reckoned from what a working office had to hold.
 
-Depiction: The plan draws the day office as a room of the office hall behind the dais, between the clerks' room and the
+Depiction: The plan draws the day office as a room of the office hall's back row, behind the dais band, between the clerks' room and the
 official study, its floor drawn in the hall's own color.
 
 Name: day office

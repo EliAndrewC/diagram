@@ -8,9 +8,9 @@ The formal garden lay on the sunny south side, before the reception rooms; at Ta
 great hall of the office and the intendant's own room looked onto one garden. The house itself was one block under one
 roof, with its guest rooms inside it.
 
-What stood behind the house varied: at one samurai
+What stood around the house varied: at one samurai
 house at Matsushiro the storehouse stood beyond open ground behind the main house. At one samurai house at Matsue the
-servants lived in the range the front gate was built into. The family privy was built onto the house itself, and the wells whose place is known stood at the front, at the side or
+servants lived in the range the front gate was built into. A samurai house's privies were built into the house itself, and the wells whose place is known stood at the front, at the side or
 indoors, on the earth floor.
 
 Its size went with the house it held: at Takayama the intendant's residence, as restored, covers about 6,400 sq ft, a little smaller than the office hall; a district magistrate's own house at Matsushiro, built in the Edo period, covered about 1,700 sq ft,

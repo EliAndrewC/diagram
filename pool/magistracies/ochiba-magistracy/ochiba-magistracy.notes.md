@@ -57,6 +57,22 @@
 
 ## Review log
 
+- **2026-11-22 (feature 449 T328, T332, T336, T337, T338, T339 bundle)**: the road one flat earth tone, its dashed overlay gone
+  (its bands across the width read as a slope or steps; 0088's drawing page: period plans drew a road a flat color, a cross-line
+  marking a slope). The writing room 12 ft and the binding room 10 ft (they were 16 ft each, together about Takayama's whole goyoba;
+  the size-audit's 6-12 mats each, an ESTIMATE), the day office 29 ft and the official study 21 ft inside their bands, and the
+  office hall shortened 8 ft at its west end (120 -> 112 ft), the hearing court's west end with it (94 x 35 ft), the
+  armory, west door and posts moved east; the hall's east end, genkan, rear door and the dais on the mats' axis kept. The clerks'
+  seats 2 ft off the dais's ends (they stood 12.7 ft off; 0099's DEVIATION, either side of the magistrate). The clerks' room
+  stands behind the dais: which room backed the seat at a jin'ya is unrecorded (449 T337 research pass: only Edo's town
+  magistracies attested, an examiners' working room there), a GUESS. A genkan room behind the porch's step, the front band's east
+  end, 12 x 11 ft (about Sayama's 8 mats, 0104), its seat a GUESS. The tax archive backed into the outer court's NW corner, a foot
+  and a half clear of the west wall's face (the structures-on-walls check's foot) and 2 ft off the divider (it stood 14 ft off the wall, a bare pocket behind it): storehouses stood at the back or corner
+  of a lot, on its boundary, as a firebreak in Kyoto and Osaka (449 T332 research pass); nothing for a jin'ya either way, a GUESS.
+  The ground north of the kitchen ell, the family's door and privy on it, is the rear yard's west arm (it was named apart as the
+  back yard, after Kanazawa's ko-sedo before the kitchen, but this kitchen's door opens on the service yard), with the 10 x 18 ft
+  corner that lay in neither. The clerks' room's caption wrapped to two lines so it reads inside the room.
+
 - **2026-11-22 (feature 449 T313, T315, T316; size-audits 2026-11-22)**: the office hall's back row at its rooms' sizes, not the day office and the official study at what the row left, split two ways: the armory 14 ft, the clerks' room 26 ft, the writing room and the binding room 16 ft each, the day office 28 ft and the official study 20 ft, all 16.7 ft deep (the day office at most about 490 sq ft, Takayama's goyakusho room of 26-28 mats, a province's ceiling; the study the study with its anteroom, 16-20 mats; the writing room and the binding room 0113's, Takayama's kakiyaku-beya, where documents were drawn up, and the room beside it where they were bound, which no smaller office was found to keep - a GUESS, as their sizes are). The magistrate's dais 18 x 10 ft (about an 8-12 mat room's frontage, an ESTIMATE), centered where the 30 ft dais was, its label set at 7 px rather than the room widened to fit it. The hall's length and every door unchanged.
 - **2026-11-22 (feature 449 T312 bundle)**: the back row's order (impl-drift 2026-11-22 on the writing and binding rooms' claim, DRIFTED): west to east the armory, the writing room, the binding room, the clerks' room and the day office, so the clerks' room adjoins the day office as research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html places it at Takayama; where the two new rooms stand is a GUESS (Takayama attests them, not their place).
 - **2026-11-22 (feature 449 T297, T299)**: the ground west of the house, north of the kitchen ell (about 45 x 33 ft, building-review 2026-10-12 E1), named the BACK YARD - the family's informal door, the family privy and a rain tub on it; not the vegetable bed, which 0109's drawing page rules out of the west here (the shade of the kitchen and the residence) and seats south, the hand sheet taking the one site left (0109's drawing page: a hand-drawn plan takes one), so no roll; that a samurai house's grounds were named by kind is Kanazawa's (a secondhand summary, T297's research pass), the yard's extent and use a GUESS. The office hall's WEST door drawn in its front band below the armory (x 420, y 536-560 px), onto the open ground before the practice ground, so the arms leave by the hall's west end, not past the clerks' seats and the dais (building-review 2026-11-22 Q1); a GUESS: no source states an armory's doors (T299's research pass: silent).

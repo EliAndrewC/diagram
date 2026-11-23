@@ -63,6 +63,16 @@
         "optional": true
       },
       {
+        "id": "writing_rooms",
+        "kind": "writing rooms",
+        "band_ft": {
+          "w": [6, 13],
+          "h": [10, 20],
+          "area": [100, 210]
+        },
+        "optional": true
+      },
+      {
         "id": "day_office",
         "kind": "day office",
         "band_ft": {

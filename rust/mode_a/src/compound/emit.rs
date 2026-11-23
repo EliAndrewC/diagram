@@ -323,7 +323,9 @@ fn room(s: &mut Svg, b: &Building, at: Bx, r: &Room, fill: &str) {
         }
         "dais" => {
             s.rect(bx, &format!(r##"fill="#8C6F3E" stroke="#4A3318" stroke-width="1" data-kind="{k}" data-id="{id}""##));
-            (r##"font-size="8" font-weight="bold" fill="#FFFAE6""##, None)
+            // the hand sheets' dark ink at 7 px, which reads on the dais and off it where the placer seats it (449 T338: a light
+            // caption seated off the dais read at about 1.8:1 on the hall's floor)
+            (r##"font-size="7" font-weight="bold" fill="#3A2E1C""##, None)
         }
         "seat" => {
             s.put(&format!(r#"<g data-kind="{k}">"#));

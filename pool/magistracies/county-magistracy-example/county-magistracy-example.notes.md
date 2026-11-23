@@ -49,8 +49,8 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   (Pass 5 wrote "~2,400 sq ft" for a house of 1,980 + 480 + 120 = 2,580 sq ft, ~72 tsubo; pass 4 drew ~4,700.) The
   residence kind entry's "about 180 to 200 ft" was corrected at its source (`interactive/compound_kinds/household.py`)
   and docs/buildings.md's scale doctrine no longer calls those wings validated. The mass the house gave up went to the
-  lodgings, stores and office (as drawn since feature 374 wave 128: the office hall 113 x 38 (127 x 38 since feature 449 T265's armory bay), the tax archive 18 x 24 (its size research 0100's records-store ceiling since feature 372 wave 105, its proportions a GUESS), the granary 50 x 36 (the registry's band, inside 0098's drawing page's 43-50 by 25-36 ft; 27 deep until feature 449 T309), the barracks
-  22 x 60 (five dwellings of 12 ft since feature 449 T309; 23 x 70 before), the staff long-house 24 x 50 (the karo's bay and three dwellings of 12 ft since feature 449 T309; 24 x 82 before), the servants' row 60 x 15, the stables 18 x 24, two storehouses 16 x 19 and
+  lodgings, stores and office (as drawn since feature 374 wave 128: the office hall 113 x 38 (127 x 38 since feature 449 T265's armory bay, 118.5 x 38 since T336 stacked the writing and binding rooms in one 20 ft bay), the tax archive 18 x 24 (its size research 0100's records-store ceiling since feature 372 wave 105, its proportions a GUESS), the granary 50 x 36 (the registry's band, inside 0098's drawing page's 43-50 by 25-36 ft; 27 deep until feature 449 T309), the barracks
+  22 x 60 (five dwellings of 12 ft since feature 449 T309; 23 x 70 before), the staff long-house 22 x 60 (the karo's bay of 24 ft and two dwellings of 18 ft since feature 449 T329; 24 x 50 with three dwellings of 12 ft from T309; 24 x 82 before), the servants' row 60 x 19 (60 x 15 until feature 449 T336), the stables 18 x 24, two storehouses 16 x 19 and
   12 x 18 (unequal, as the Yokota pair), the gatehouse 40 x 12 and the guest house 40 x 42 (42 since wave 134, every building a foot or two clear of the wall's face)), which holds coverage in the jin'ya band without shrinking the envelope; each of those
   sizes is a GUESS in its band.
 - **R07 approach**: a GENKAN on the office hall (feature 449 T291): the formal entrance form is a knob between 0104's two forms, rolled from the map's seed - exactly `random.Random(zlib.crc32(b"county-magistracy-example:formal entrance form")).choice(["a genkan on the office hall", "the roji, no genkan"])` = a genkan on the office hall - so the hall draws a porch of about 12 x 9 ft (0104's one shikidai measured) built out from its south face at its east end, east of the hearing court, onto the outer court the forecourt opens into; the guest's way runs on through the office (0104's drawing page), and the roji to the reception's shoe stone (the Koseki form, drawn until T291) is not drawn. The household's own doors: the kitchen's
@@ -115,7 +115,7 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   research 0099 drawing) - the roofed court keeps its white-gravel fill.
 - **Middle gate**: beside the office hall's east end, not behind it (docs/building-programs.md puts it customarily on the
   main axis behind the hall, the hall as the privacy baffle). Here the hall backs the divider at 1.5 ft with no alley
-  behind it, and its center stands west of the main axis (the hall spans 70.5-197.5 ft of the 270 ft compound, the tax archive and then the staff long-house west of it since feature 449 T274, the hall 12 ft east since T280), so the placer opens the gate at
+  behind it, and its center stands off the main axis (the hall spans 79-197.5 ft of the 270 ft compound, the tax archive and then the staff long-house west of it since feature 449 T274, the hall 12 ft east since T280, 8.5 ft shorter at its west end since T336), so the placer opens the gate at
   the first stretch of divider no building backs (`compound_parts._middle_gate`); the hall still screens the house
   from the hearing court. A deliberate DEVIATION from the customary seat, recorded.
 - **Lesser gates**: the kitchen postern in the west wall (6 ft) and the outer court's service gate in the south wall
@@ -126,7 +126,7 @@ Guesses the draft carries beyond those: a **detached guest house** (R10, researc
 in the main house; a guest house apart was not found). (The karo's house of its own, a GUESS through pass 5, is now
 a bay of the staff long-house - R11's attested form.) The kitchen postern's, the service gate's and the middle gate's 6 ft (narrower than the main
 gate), the door width (a map drawing convention, research 0117), the hearing
-court's 80 x 26 ft (32 until feature 374 batch 5, cut 6 ft to open the way west past the stable well), the garden's 124 x 46 ft, the collection hatches, the dais's 30 x 10 ft, the cart yard's 37 x 20 ft, the 5 ft privies and
+court's 80 x 26 ft (32 until feature 374 batch 5, cut 6 ft to open the way west past the stable well), the garden's 124 x 46 ft, the collection hatches, the dais's 18 x 10 ft (30 x 10 until feature 449 T313), the cart yard's 37 x 20 ft, the 5 ft privies and
 their 15 ft from any well are guesses too. The forecourt, the `outer court` ground beside the hearing court and the
 cart yard are drawn as bare ground with no edge: an outlined forecourt read as a fenced one, a GUESS the record does
 not support (research 0104).
@@ -207,7 +207,7 @@ Coverage 35%, perimeter-hugging 78%, nothing overflows; every registered check p
   of a well); the garrison's at the barracks' south end by the cell (it stood inside the practice ground - no latrine
   stands on a spine court, nor in the divider's ink).
 - **Service gate** in the south wall by the cell with a **cart yard** before it (the bare SE ground named).
-- **Office hall**: the magistrate's dais, 30 x 10 ft on its south face over the hearing court, 7 ft east of the hall's center since the armory bay lengthened its west end (feature 449 T265); a door on its
+- **Office hall**: the magistrate's dais, 18 x 10 ft on its south face over the hearing court (30 x 10 until feature 449 T313), 2.75 ft east of the hall's center (132-150 ft of the hall's 79-197.5), backed 11 ft by the clerks' room and 7 by the day office (feature 449 T337: the record is silent on which room backed the seat, a GUESS); a door on its
   east face, by the middle gate.
 - **Shrine** shrunk 36 x 30 -> 18 x 14 ft, a modest shrine (Knob settings).
 - **Residence** massed in two rows (Knob settings), 8 ft off the north wall; its name seated in its rear alley, naming
@@ -448,3 +448,22 @@ Supersedes the entry above's hall at 58.5 to 185.5 ft, archive at 34.5 to 52.5 f
   15 working samurai (the magistrate, the karo and the senior retainers among them) the staffing anchor counts (building-programs.md;
   T320 N2).
 - **2026-11-22 (feature 449 T312 bundle)**: the back row's order (impl-drift 2026-11-22 on the writing and binding rooms' claim, DRIFTED): west to east the armory, the writing room, the binding room, the clerks' room and the day office, so the clerks' room adjoins the day office as research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html places it at Takayama; where the two new rooms stand is a GUESS (Takayama attests them, not their place).
+- **2026-11-22 (feature 449 T328 bundle: T329, T331, T334, T336, T337, T338)**: the re-composition T314 Q2 and T320 filed. The MAIN
+  GATE moved to 191.5 ft, on the genkan door's line, so the guest walks straight from the gate to the step with the hearing court to
+  the west (0104: at the offices whose layout places both, the entrance faced the gate and the shirasu lay to one side; the Q2
+  DEVIATION above is withdrawn). The WRITING and BINDING ROOMS cut to 20 x 10 ft each (about 12 mats; size-audit 2026-11-22's
+  6-12 mat ESTIMATE, from Takayama's 26-28 mat goyakusho for a province's career officials, the kakiyaku apprentices), stacked in
+  one 20 ft bay so each caption fits; the hall 118.5 ft (79 to 197.5), the freed width given to the day office (24.5 ft) and the
+  study (18 ft) and the rest cut from the west end; the dais (18 x 10) and its two clerks' seats 2 ft off its ends, the dais caption
+  dark ink on two lines inside its box (T338). The room behind the dais is the clerks' room, mostly: the T337 pass found no jin'ya
+  plan saying which room backed the magistrate's seat (the Edo town magistracies put the examiners' room behind the judgment room),
+  so the order is a GUESS. The SENIOR RETAINERS' long-house is 22 x 60 ft, the karo's bay 24 ft (4 ken) and two dwellings of 18 ft
+  (3 ken) (T320 Q5's 3-6 ken, outside the record, a GUESS), 1,320 sq ft under the house block's 1,344; it reaches 10 ft further
+  south, so the dead corner below it (T320 E2, 39 ft deep) is 22 x 25.5 ft of court before the servants' doors, open east (the
+  servants' row 4 ft deeper, 60 x 19, to hold coverage at the jin'ya band's 30% floor once the hall was shortened 8.5 ft) - the
+  stables were refused a seat on the west wall for room, and the long-house cannot grow, so the rest is left bare and labeled a
+  GUESS. The GENKAN ROOM's size is restated against 0104: its 12 x 38 ft, about 25 mats, is a GUESS - 0104 gives no genkan room's
+  size at an office (Sayama's council hall's genkan of 8, shikidai of 6 and next room of 8 mats is a list from a domain's hall, not a
+  plan), and the earlier '26 mats, a GUESS from Sayama's three' is withdrawn. The GARRISON PRIVY 0.5 ft off the granary's south face
+  (T331) is labeled, not moved: the T331 pass found no rule keeping a privy off a store's wall (docs/buildings.md, privies beside
+  stores).

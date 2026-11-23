@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-23T03:01:21Z",
+  "target": "record-checked",
+  "commit": "af418b90c5",
+  "why": "record-format on record-format:0113: round arbiter ask:t330a-round3 ruled accept: no third round - moved only by other rounds' verbatim EDITs after a clean round 2"
+}

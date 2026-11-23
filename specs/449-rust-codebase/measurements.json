@@ -1494,5 +1494,278 @@
     "value": {
       "stale_tail": false
     }
+  },
+  "t328-county-n1": {
+    "quantity": "the dais caption's seat and ink against the 18 ft dais",
+    "observed": "2026-11-22",
+    "verifies": "N1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "2f15737c58aa",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make map MAP=pool/magistracies/county-magistracy-example",
+    "method": "the drawn svg's dais rect (x 417-471) and its caption text read: the two-line caption at x 444.0, the dais's center, in #3A2E1C (T338)",
+    "value": {
+      "caption_x": 444.0,
+      "on_dais": true,
+      "ink": "#3A2E1C"
+    }
+  },
+  "t328-county-n2": {
+    "quantity": "the notes' standing guesses dais size against the drawn dais",
+    "observed": "2026-11-22",
+    "verifies": "N2",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "2f15737c58aa",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "command": "make map MAP=pool/magistracies/county-magistracy-example",
+    "method": "notes L129 read: 'the dais's 18 x 10 ft (30 x 10 until ...)', the drawn dais 54 x 30 px",
+    "value": {
+      "notes_dais": "18 x 10",
+      "drawn_dais": "18 x 10"
+    }
+  },
+  "t328-county-n3": {
+    "quantity": "what the record says stands behind the dais",
+    "observed": "2026-11-22",
+    "verifies": "N3",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "2f15737c58aa",
+    "source": "docs/building-programs.md",
+    "command": "make map MAP=pool/magistracies/county-magistracy-example",
+    "method": "docs/building-programs.md L33/L110/L112 and 0113's drawing page read (T337): the day office and study 'behind the dais band', and which room backed the seat 'is not recorded' - the page no longer says the seat",
+    "value": {
+      "says_band": true
+    }
+  },
+  "t328-hayakawa-q1": {
+    "quantity": "what the record says stands behind the dais",
+    "observed": "2026-11-22",
+    "verifies": "Q1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "2f15737c58aa",
+    "source": "docs/building-programs.md",
+    "command": "make map MAP=pool/magistracies/hayakawa-magistracy",
+    "method": "as t328-county-n3 (T337): the claims say the dais band; which room backed the seat a GUESS, unrecorded; the drawn clerks' room behind the dais is inside that",
+    "value": {
+      "says_band": true
+    }
+  },
+  "t328-hayakawa-n1": {
+    "quantity": "the office hall's SVG comments against the drawn back row",
+    "observed": "2026-11-22",
+    "verifies": "N1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "2f15737c58aa",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make map MAP=pool/magistracies/hayakawa-magistracy",
+    "method": "svg read: 'Rear day rooms (day office + official study)' and the armory's 'cut from the clerks' room's west end' gone (0 hits); L630 heads the back row by its rooms (T338)",
+    "value": {
+      "stale_comments": 0
+    }
+  },
+  "t328-ochiba-q1": {
+    "quantity": "what the record says stands behind the dais",
+    "observed": "2026-11-22",
+    "verifies": "Q1",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "2f15737c58aa",
+    "source": "docs/building-programs.md",
+    "command": "make map MAP=pool/magistracies/ochiba-magistracy",
+    "method": "as t328-county-n3 (T337)",
+    "value": {
+      "says_band": true
+    }
+  },
+  "t328-ochiba-o1": {
+    "quantity": "a genkan room behind Ochiba's porch",
+    "observed": "2026-11-22",
+    "verifies": "O1",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "2f15737c58aa",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "command": "make map MAP=pool/magistracies/ochiba-magistracy",
+    "method": "svg read: the genkan room (data-names genkan-3) at the front band's east end, 12 x 11 ft, behind the porch (x 750-780), its comment citing 0104 (T339)",
+    "value": {
+      "genkan_room": true
+    }
+  },
+  "t328-ochiba-o2": {
+    "quantity": "the clerks' room caption's seat",
+    "observed": "2026-11-22",
+    "verifies": "O2",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "2f15737c58aa",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.html",
+    "command": "make map MAP=pool/magistracies/ochiba-magistracy",
+    "method": "the page's placed caption read: 'clerks' room' at (591.0, 500.0), inside the clerks' room rect x 552-630, y 478-528 (T338)",
+    "value": {
+      "caption_x": 591.0,
+      "inside": true
+    }
+  },
+  "t328-rt-e4": {
+    "quantity": "the north door's seat against open ground and the nakamon",
+    "observed": "2026-11-22",
+    "verifies": "E4",
+    "subject": "building-review--ochiba-roundtrip-test",
+    "answers": "2f15737c58aa",
+    "source": "pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.svg",
+    "command": "make map MAP=pool/magistracies/ochiba-roundtrip-test",
+    "method": "svg read: the door d74 (x 587-591, y 368.7-386.7) on the official study's east face, the hall's east end x 591, opening east onto the ground before the nakamon (x 601.5), not into the slot under the divider (T335)",
+    "value": {
+      "door_face": "east",
+      "slot": false
+    }
+  },
+  "t328-rt-e5": {
+    "quantity": "the formal door against the hearing court",
+    "observed": "2026-11-22",
+    "verifies": "E5",
+    "subject": "building-review--ochiba-roundtrip-test",
+    "answers": "2f15737c58aa",
+    "source": "pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.svg",
+    "command": "make map MAP=pool/magistracies/ochiba-roundtrip-test",
+    "method": "svg read: the hearing court cut to x 255-537 (was 240-600); the formal door d72 at x 566.9-584.9 on the front band, 10 ft east of the court's end, onto the entrance ground (T335)",
+    "value": {
+      "court_east_px": 537,
+      "door_x_px": 566.88
+    }
+  },
+  "t328-rt-n3": {
+    "quantity": "the clerks' seats' gap to the dais's ends",
+    "observed": "2026-11-22",
+    "verifies": "N3",
+    "subject": "building-review--ochiba-roundtrip-test",
+    "answers": "2f15737c58aa",
+    "source": "pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.svg",
+    "command": "make map MAP=pool/magistracies/ochiba-roundtrip-test",
+    "method": "svg read: dais d50 x 393-447; seats d52 x 363-387 and d53 x 453-477: 6 px (2 ft) each side (T335)",
+    "value": {
+      "gap_ft": 2
+    }
+  },
+  "t328-rt-o4": {
+    "quantity": "the notes' omitted-parts lines",
+    "observed": "2026-11-22",
+    "verifies": "O4",
+    "subject": "building-review--ochiba-roundtrip-test",
+    "answers": "2f15737c58aa",
+    "source": "pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.notes.md",
+    "command": "make map MAP=pool/magistracies/ochiba-roundtrip-test",
+    "method": "notes L14-20 read: the parts drawn (bath, wells, latrines, fire-water tubs) named, the entrance's form named (the roji form's bare door, a DEVIATION), 'omitted here' gone (T335)",
+    "value": {
+      "omitted_here": 0
+    }
+  },
+  "t328-ubame-n1": {
+    "quantity": "the office hall's SVG comment against the drawn back row",
+    "observed": "2026-11-22",
+    "verifies": "N1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "2f15737c58aa",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make map MAP=pool/magistracies/ubame-magistracy",
+    "method": "svg read: L244 'Office hall: five rear rooms west to east (writing room, binding room, clerks', day office, official study ...' (T338)",
+    "value": {
+      "rooms_named": 5
+    }
+  },
+  "t328-ubame-q1": {
+    "quantity": "what the record says stands behind the dais",
+    "observed": "2026-11-22",
+    "verifies": "Q1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "2f15737c58aa",
+    "source": "docs/building-programs.md",
+    "command": "make map MAP=pool/magistracies/ubame-magistracy",
+    "method": "as t328-county-n3 (T337); the svg comment L246-248 labels the clerks' room behind the dais a GUESS (Edo's town magistracies put an examiners' working room there)",
+    "value": {
+      "says_band": true
+    }
+  },
+  "t328-ubame-o1": {
+    "quantity": "a door of the hall across the alley from the household door",
+    "observed": "2026-11-22",
+    "verifies": "O1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "2f15737c58aa",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make map MAP=pool/magistracies/ubame-magistracy",
+    "method": "svg read: a door rect x 516-534 at y 478 on the hall's back wall, across the 9 ft alley from the household door (x 516-534, y 450) (T339)",
+    "value": {
+      "back_door": true
+    }
+  },
+  "t328-county-gate-at": {
+    "quantity": "the main gate's center along the south wall, ft",
+    "observed": "2026-11-22",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make map MAP=pool/magistracies/county-magistracy-example",
+    "method": "the spec's main gate 'at' 191.5 and the drawn posts' center x 595.5 px, the genkan door's center 595.4 px (3 px a ft, the wall from x 21)",
+    "value": 191.5
+  },
+  "t328-county-longhouse-len": {
+    "quantity": "the senior retainers' long-house's length, ft",
+    "observed": "2026-11-22",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make map MAP=pool/magistracies/county-magistracy-example",
+    "method": "the retainers' quarters rect 66 x 180 px at 3 px a ft: 22 x 60 ft",
+    "value": 60
+  },
+  "t328-county-karo-bay": {
+    "quantity": "the karo's bay of the long-house, ft",
+    "observed": "2026-11-22",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make map MAP=pool/magistracies/county-magistracy-example",
+    "method": "the karo's house rect 72 px long at 3 px a ft",
+    "value": 24
+  },
+  "t328-county-hall-len": {
+    "quantity": "the office hall's length, ft",
+    "observed": "2026-11-22",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make map MAP=pool/magistracies/county-magistracy-example",
+    "method": "the office hall rect 355.5 px wide at 3 px a ft",
+    "value": 118.5
+  },
+  "t328-county-writing-depth": {
+    "quantity": "the writing and binding rooms' depth, ft",
+    "observed": "2026-11-22",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make map MAP=pool/magistracies/county-magistracy-example",
+    "method": "the two writing-rooms rects 60 x 30 px, stacked, at 3 px a ft: 20 x 10 ft",
+    "value": 10
+  },
+  "t328-county-servants-depth": {
+    "quantity": "the servants' row's depth, ft",
+    "observed": "2026-11-22",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make map MAP=pool/magistracies/county-magistracy-example",
+    "method": "the servants' quarters rect 57 px deep at 3 px a ft",
+    "value": 19
+  },
+  "t328-hayakawa-clerks-len": {
+    "quantity": "the clerks' room's length, ft",
+    "observed": "2026-11-22",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make map MAP=pool/magistracies/hayakawa-magistracy",
+    "method": "the clerks' room rect 82 px at 3 px a ft: 27.33",
+    "value": 27.3
+  },
+  "t328-rt-seat-gap": {
+    "quantity": "the clerks' seats' gap to the dais, ft",
+    "observed": "2026-11-22",
+    "source": "pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.svg",
+    "command": "make map MAP=pool/magistracies/ochiba-roundtrip-test",
+    "method": "seats end x 387 and start x 453 against the dais x 393-447: 6 px at 3 px a ft",
+    "value": 2
+  },
+  "t328-rt-binding-len": {
+    "quantity": "the binding room's length, ft",
+    "observed": "2026-11-22",
+    "source": "pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.svg",
+    "command": "make map MAP=pool/magistracies/ochiba-roundtrip-test",
+    "method": "the binding room rect 37.5 px at 3 px a ft",
+    "value": 12.5
   }
 }

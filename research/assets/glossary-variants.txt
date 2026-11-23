@@ -793,6 +793,7 @@ curfew wards	lifang
 curtain	curtain
 curtain wall	curtain
 curtains	curtain
+cusped gable	kara-hafu
 cutbank	cutbank
 cutbanks	cutbank
 cwt	hundredweight
@@ -1399,6 +1400,7 @@ fujiwara no tameie	Fujiwara no Tameie
 fujiwara no tamenari	Fujiwara no Tamenari
 fujiwara-kyo	Fujiwara-kyo
 fujiwara-kyo's	Fujiwara-kyo
+fujomon	fujomon
 fukada	fukada
 fuki	fuki
 fukien	Fujian
@@ -2036,6 +2038,7 @@ ima	ima
 imado ware	Imado ware
 imado-yaki	Imado ware
 imidas	imidas
+imimon	fujomon
 imjin war	Imjin War
 imo	imo
 imperial household department	Imperial Household Department
@@ -2868,11 +2871,14 @@ master mountain	master-mountain
 master xuanhu	Xuanhu
 master-mountain	master-mountain
 masugata	masugata
+mat	mat
+mat count	mat
 matebajii	matebajii
 materia medica	materia medica
 material index	material index
 matoi	matoi
 matou	gangi
+mats	mat
 matsu	matsu
 matsudaira tadaaki	Matsudaira Tadaaki
 mature harappan	Harappan
@@ -4193,6 +4199,7 @@ shotoku era	Shotoku era
 shoucheng lu	Shoucheng Lu
 showa	Showa
 shoya	shoya
+shoyaku	shoyaku
 shu	shu
 shubiki	shubiki
 shugen	shugen
@@ -4246,6 +4253,7 @@ site coefficients	site coefficient
 six chambers	Six Chambers
 six fang	Six Chambers
 six ministries	Six Ministries
+six offices	six offices
 six-day market	rokusai-ichi
 six-day markets	rokusai-ichi
 sized	sizing

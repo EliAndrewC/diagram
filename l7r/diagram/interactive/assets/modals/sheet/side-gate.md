@@ -3,9 +3,9 @@ branch office of three officials, at the end of the shogunate, had a small gate 
 was kept for the head of the household and honored guests, the family came and went by an inner entrance, and the
 kitchen had its own door from outside, the katteguchi.
 
-Night soil was a good with a price. Farmers bought a town household's night soil by the year and came with carts to
+Night soil was a good with a price. Farmers bought a town household's night soil - around Kanazawa by the year - and came with carts to
 collect it, and a merchant house on a back street kept a back gate for them. At Edo, farmers paid in firewood, charcoal and seedlings
-for the right to empty the privies of the daimyo estates; by which gate they came in is not recorded. In Rokugan the night soil is handled by the owaiya, a trade of the burakumin, the setting's outcasts.
+for the right to empty the privies of the daimyo estates. A samurai residence had a wicket at its rear, the fujomon, for carrying out night soil, the dead and criminals, though by which gate the estates' farmers came in is not recorded. In Rokugan the night soil is handled by the owaiya, a trade of the burakumin, the setting's outcasts.
 
 In Rokugan wagons and carts travel the roads between towns, a charcoal merchant's cartload among them, so a compound's
 goods can come to its gate by cart. Edo Japan kept its carts to the towns and barred them from its highways to the
@@ -22,7 +22,7 @@ Guesses:
   retainer's house puts a garden between its gate and its formal entrance, though a middle-rank house's walled garden path is recorded.
 - That a side gate is a pair of posts, narrower than the main gate: no account gives a side gate's width or how it was
   built.
-- That night-soil collectors came in by a service gate near the privies: no account names such a gate at a samurai house.
+- That night-soil collectors came in by a service gate near the privies: a samurai residence's rear wicket for carrying out night soil is known, but no account places it near the privies.
 
 Depiction: The plan draws each side gate as a pair of posts in the compound wall, narrower than the main gate: a kitchen
 postern, a service gate by the stables or the stores, a gate to a river landing (opening onto the bank street, with the
@@ -34,4 +34,4 @@ Name: side gate
 Covers: the posts of the posterns, service gates, landing gate, cart gate and guests' door
 Sources: jaanus-uchigenkan, kotobank-katteguchi, tajima-2007-night-soil, guernica-night-soil, l7r-wagons, toyama-1988-road-undevelopment, kominkai-genkan, fuchu-joge-pamphlet, gangi-hiroshima-jawiki, l7r-castes
 Entry: research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0101-privies-setchin.html, research/questions/0131-a-towns-privies-and-the-night-soil-trade-setchin-shimogoe.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.html, research/questions/0081-village-lanes.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html, research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html
-Drawing: research/questions/0101-privies-setchin.drawing.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html, research/questions/0088-highways-and-what-lines-them-kaido.drawing.html
+Drawing: research/questions/0101-privies-setchin.drawing.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html, research/questions/0088-highways-and-what-lines-them-kaido.drawing.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html

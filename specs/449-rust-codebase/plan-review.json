@@ -1501,248 +1501,14 @@
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   },
-  "### T252 (<why: the finding or measurement that files it>)": {
-   "sha256": "6e50aa57504bf8a394ed841b73f0740f8b524dbf68bc0cf18ddecba1007f6cc4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
   "### T252 Approach (checklist part A)": {
    "sha256": "ff719d1842d78ac4506a4c767f69da681ce110e477b958125f794785d62a66e0",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   },
-  "### T259 (<why: the finding or measurement that files it>)": {
-   "sha256": "107dfb0918acc22f8ea2e251c143e4f08dd78ef46d2992cba2409afcbb3dca2b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T259 Approach (checklist part A)": {
-   "sha256": "7909398c916ad43a15e2df631cbd556756a433e8850e58012275128ea20672b9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T260 (<why: the finding or measurement that files it>)": {
-   "sha256": "c1e4b0b1f1e3a2b34e62e92787a0f735ace0a89769813f05e2745b631a4e084b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T260 Approach (checklist part A)": {
-   "sha256": "430ff294f2e596a3a76559a2b2aae8e7e194bc3dea34292a45136f6c4515bfe0",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T275 (<why: the finding or measurement that files it>)": {
-   "sha256": "fd1a6e24a799e493443e1d88d9680bb92377de75bd7b11b8a3e844b1731e0dfd",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T275 Approach (checklist part A)": {
-   "sha256": "afc2b3cb6e6f8f156f9a715e4267d3a611fec742fb22b48ddc19fbc34d94722e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T276 (<why: the finding or measurement that files it>)": {
-   "sha256": "f4dbfa4123c56ba0e85a4de7baee5ae75ba9760edc66b6b4ff4e6977269ba6c6",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T276 Approach (checklist part A)": {
-   "sha256": "5e09a0051fed2ba05d42c3ca16ee9daa99995eb0e728a3920cfc82b1d6b40ef8",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T277 (<why: the finding or measurement that files it>)": {
-   "sha256": "b2010ad7e223503a0c946b35c0b909444e1b09a8095ef68b0ad651400939cd42",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T277 Approach (checklist part A)": {
-   "sha256": "052ba7e0ddd5213f7296fa3049a01e77f6b9d766c56ecbc9e3977016df56016d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T278 (<why: the finding or measurement that files it>)": {
-   "sha256": "4aa432d82d7035bbedb8aa4471972d8d733add6aa3ccb991adc7258f22d25069",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T278 Approach (checklist part A)": {
-   "sha256": "9acf55913541bd96727823e5528174f1d7d92050b6ad862716b4d37935b728f3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T279 (<why: the finding or measurement that files it>)": {
-   "sha256": "6046bed4a56ac51f7f4345a73454d73a75a5bbe31b7f193b0f3b02a003db2f45",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T279 Approach (checklist part A)": {
-   "sha256": "83ef4ef9ad93299d7e107f293a9f2864236b6a930190a50a659361ce0a5c5e53",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T280 (<why: the finding or measurement that files it>)": {
-   "sha256": "b9faba65e8c265334ca09ce18a79908639e07ac7b9d140c94b0daf6120375f38",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T280 Approach (checklist part A)": {
-   "sha256": "677dda173ae0c3167ebb9a02991750acc85f7c218408c005000a31167c95ec38",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T281 (<why: the finding or measurement that files it>)": {
-   "sha256": "2cfaab8d00b8dbdae29f2fd7185deacdda93336dc3f5333d05f9930d9d04dd22",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T281 Approach (checklist part A)": {
-   "sha256": "6566b0cecbea99522b95bdae565a0f51f83a25ead1fbae174b4c423d4734676c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T282 (<why: the finding or measurement that files it>)": {
-   "sha256": "a9bcfdc693e095693085bdc128fc093b714d9efa52624d601e4e73f6c530b3f4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T282 Approach (checklist part A)": {
-   "sha256": "b7668c913696e4db82aa770d5e8016431ed57340c250f59d2ecae5748f2e93d3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T283 (<why: the finding or measurement that files it>)": {
-   "sha256": "640eee4c880b0cfc7c8f8eb3187c6a9e6ccc0d1ea3f5c7e3473235ebb3ecaea2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T283 Approach (checklist part A)": {
-   "sha256": "7cd1f3d210672d6f434f97ce9e35337ad8ccab8daae602426fb47d8200a1a297",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T284 (<why: the finding or measurement that files it>)": {
-   "sha256": "7fd1e15baedb6a28ec826e6a50ae1d33023c45429ebd5fc23e7ae451ab5bbce3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T284 Approach (checklist part A)": {
-   "sha256": "9b9cb3b4ba6a5b04eaa9d921b4db3d94e9619e167bbb7eaa30c8238340709d0d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T285 (<why: the finding or measurement that files it>)": {
-   "sha256": "fd540cc6743a574a6c9cd290f6ce6987761019062386e2e820146161d55a35c3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T285 Approach (checklist part A)": {
-   "sha256": "7fc8af4764ae36b0db9f688d875187b15d4af25965236b1272d00fff523fc6e4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T286 (<why: the finding or measurement that files it>)": {
-   "sha256": "30b511c7e7516f224d03d5b9fcf31cbe307ec86109a75d21a4b9870df71415c5",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T286 Approach (checklist part A)": {
-   "sha256": "3b756d45dc9623b1a4b82dd4c1b922e3fe41aa13aff9a3f287c352f1dc9fe19b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T287 (<why: the finding or measurement that files it>)": {
-   "sha256": "1b982b029164cfb7d1ff29bffa40f00a0339600d50ba8b706f8c4d29ab248e67",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T287 Approach (checklist part A)": {
-   "sha256": "f6fbb5bb148713ef981f3c6c65ed49726c5424f0a9dd47fcb927beabf0d33d81",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
   "### T158, T197, T203, T216, T228, T235, T240, T241, T243, T244, T246, T247, T248, T249, T250, T251, T253, T254, T255, T256, T257, T258, T261, T262, T263, T264, T265, T266, T267, T268, T269, T270, T271, T272, T273, T274 part B (2026-11-22T13:33Z)": {
    "sha256": "bafa11e81238c0b5f9a6e2b9e898a6977714294b04e650481da23ede6db0b61b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T288 (<why: the finding or measurement that files it>)": {
-   "sha256": "af0ca0d1b3bab4e194d7a4d1feba145dc7b1b8b23c197125451fdaf952af1642",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T288 Approach (checklist part A)": {
-   "sha256": "8286b665b028c0bae934c182f36b4bf2393eda2a7364fcc7630e45ef05b8fa46",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T289 (<why: the finding or measurement that files it>)": {
-   "sha256": "06fad1e187b2740c3b7824a19fef7cbb629a9374d27d475e282ac874b3d3f12f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T289 Approach (checklist part A)": {
-   "sha256": "4fd1d78cd8af760e9787b382a567ed6d37036390116e489eb513967dad9383b6",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T290 (<why: the finding or measurement that files it>)": {
-   "sha256": "c9d0b1bdcb1b45c3644f3957173ee80995bb5b5e2d3f2afbf42d1d07866e3416",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T290 Approach (checklist part A)": {
-   "sha256": "00666f4678ce056cb86e51ae25e2fa3d27304c1e95d97d96645cfe43d987008c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T291 (<why: the finding or measurement that files it>)": {
-   "sha256": "2d95f5cc3b5b40f169b86475a4075abe37778d0b7f7e111634105f36dd56c07b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T291 Approach (checklist part A)": {
-   "sha256": "3c61d5485a65cb75ec9759234e35954ad31fe0c97cecd4f12dacdf182c388d60",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -1850,13 +1616,61 @@
    "declared": "spec-fidelity"
   },
   "### T330, T333 (bundle)": {
-   "sha256": "c02a3c12586b82c1905e7071490e4c692e080d10ff0e48ae809e35001123de95",
+   "sha256": "3f6cc1608ad7856940917d80efc99830dbb822dcc4933be6b1991a7d9d6bb961",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
   },
   "### T330, T333 Approach (checklist part A)": {
-   "sha256": "d02f4626526b64546ef30000a1be369f827a40e2863307d0d2edf0218d4a0efc",
+   "sha256": "0bdf2bef5005e29e6749afa4c5665e511d8427ae2a1061e03bd27b3619842471",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T328, T329, T331, T332, T334, T335, T336, T337, T338, T339, T340 (bundle)": {
+   "sha256": "a16611177821357caa8f86bf4528fd4f83b31f69a3d4d6fe1d31176dc93824d4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T328, T329, T331, T332, T334, T335, T336, T337, T338, T339, T340 Approach (checklist part A)": {
+   "sha256": "e17a8e4704e7115afedce12ef7af70489269c29280974ee67ae1df36ea0d98b6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T341 (<why: the finding or measurement that files it>)": {
+   "sha256": "f195eb56857d019b423167e1f49445910865c3cd5f48db6428f1216ad920936e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T341 Approach (checklist part A)": {
+   "sha256": "42ac2203bdbeed06da942724c3051197b94845428f9f919f6f336c878a977660",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T342 (<why: the finding or measurement that files it>)": {
+   "sha256": "9029210bb5e1c5e6c682054c9cc3e4e11845c4fc54d58efd0ebf3b1cd7d08fbd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T342 Approach (checklist part A)": {
+   "sha256": "86e776751e83c308545be0e8fab54ac01aab48a3dab6e086901a183f103bac36",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T343 (<why: the finding or measurement that files it>)": {
+   "sha256": "a57fbefdaa6411993e9edf8a3848aa9c10336a540afc2772269a638526936dcf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T343 Approach (checklist part A)": {
+   "sha256": "071837ad018dc73c7d0a2ef77482890d2b6c375458c1dda434e6455ab36eca60",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
@@ -22999,6 +22813,792 @@
      "why": "Measured completion of the fixes asked for; the red exit routes a refusal to the arbiter rather than quietly dropping work."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T328, T329, T331, T332, T334, T335, T336, T337, T338, T339, T340 (bundle)",
+    "### T328, T329, T331, T332, T334, T335, T336, T337, T338, T339, T340 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T328-flat-road",
+     "summary": "The dashed overlay over the road's earth removed on ochiba, hayakawa and ubame, the road one flat earth tone; docs/buildings.md's road-to-gate claim restated.",
+     "class": "within",
+     "why": "A reader saw slope bands across a level road (0088's drawing page: the 1742 Hagi map's cross-lines mark a slope), a map reading wrong; fixing it is one of the remaining fixes the GM asked finished (2026-11-22) within the step (2026-11-18)."
+    },
+    {
+     "id": "T329-gate-and-long-house",
+     "summary": "The county main gate moved 140 -> 191.5 ft onto the genkan door's line; the senior retainers' long-house 24 x 50 -> 22 x 60 ft with a karo's bay and two dwellings (a GUESS from T320 Q5).",
+     "class": "within",
+     "why": "Fixes the building-review's defects (the gate leading onto the hearing court with the genkan off its line, against 0104; foot soldiers' bays for senior retainers); the sizes are GUESS-labeled where the record is silent."
+    },
+    {
+     "id": "T329-dead-ground-left",
+     "summary": "22 x 25.5 ft of open ground left before the servants' doors (39 ft before), labeled a GUESS in the spec's research and notes, not filled further.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The plan leaves part of a reported finding unfixed, so it is ruled. Legitimate on two grounds: room was given first and measured - the long-house is at the residence's cap and the stables were refused on the west wall for room - so filling it further is not possible by the moves tried; and what remains is a dooryard before a row of doors, not a wrong outcome under constitution XIV's defect test (the GM, 2026-11-19: do not fix what is not actually wrong). The defect the review named (a deep dead corner) is cut by a third and the rest labeled."
+    },
+    {
+     "id": "T336-writing-rooms-band",
+     "summary": "A writing-rooms band in types.json (w 6-13, h 10-20, 100-210 sq ft, a GUESS from the size-audit's 6-12 mat ESTIMATE) with its docs row; the county's writing and binding rooms 20 x 10 ft stacked, the hall 127 -> 118.5 ft, the day office and study at their bands' tops; the round trip's binding room 12.5 ft (its caption seats inside), the day office 29 -> 26.5.",
+     "class": "within",
+     "why": "Fixes writing rooms of 16-18 mats the size-audit found oversized; the band is enforced by size_bands (red at w 12, green at 13), which is enforcement of the fix, not unrequested scope. The round trip's binding room differing from the hand sheet's 10 ft is a difference, not a defect, and needs no ruling (2026-11-18)."
+    },
+    {
+     "id": "T336-coverage-servants-row",
+     "summary": "Coverage fell under the 30% floor after the shorter hall; the county servants' row deepened 15 -> 19 ft (a GUESS) so coverage passes.",
+     "class": "within",
+     "why": "Keeps the sheet passing its checks (0116's coverage band) by a building inside its band rather than by moving a wall or relaxing the check; GUESS-labeled where no page sizes it."
+    },
+    {
+     "id": "T337-back-row-order",
+     "summary": "No jin'ya plan names the room behind the magistrate's seat, so the back row's order is kept, the clerks' room behind the dais labeled a GUESS, and docs/building-programs.md and docs/buildings.md reworded to 'behind the dais band'.",
+     "class": "within",
+     "why": "The record is silent, so no research finding is contradicted; a claim the drawing does not literally match where the drawing is fine is fixed by restating the claim (constitution XIV, the GM 2026-11-19)."
+    },
+    {
+     "id": "T338-dais-ink",
+     "summary": "The dais caption in dark ink at 7 px on two lines in emit.rs (a CONVENTION, the hand sheets' ink), pinned red-then-green by a_dais_caption_is_dark_ink_that_reads_on_or_off_the_dais; the hand sheets' captions, SVG comments and the county notes' dais (30 x 10 -> 18 x 10 ft, as drawn) restated.",
+     "class": "within",
+     "why": "Fixes a caption unreadable off the dais (a map reading wrong); the test only fails when the fix is absent, so it enforces the request; the notes are corrected to the drawn dais."
+    },
+    {
+     "id": "T331-privy-labeled",
+     "summary": "The research pass was silent on keeping a privy off a store's wall, so the county garrison privy 0.5 ft off the granary's south face is labeled (spec research, notes, docs/buildings.md), not re-seated.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It declines a re-seat, so it is ruled. Legitimate because the exception is implied by the GM's own words: with the record silent no research finding is contradicted and the privy reads as a privy beside a store, so under the 2026-11-19 rule ('don't spend a lot of time fixing things which are not actually wrong') the fix is the labeled claim, which the plan makes in all three places."
+    },
+    {
+     "id": "T332-archive-seat",
+     "summary": "Ochiba's tax archive backed into the NW corner 1.5 ft clear of the wall's face (storehouses on the lot boundary as a firebreak in Kyoto and Osaka, a GUESS for a jin'ya), after a first seat failed structures_on_walls; the 'back yard' merged into the rear yard.",
+     "class": "within",
+     "why": "Fixes a floating archive (a reader-visible defect); the seat passes the wall check and its basis is GUESS-labeled."
+    },
+    {
+     "id": "T335-round-trip",
+     "summary": "The round trip's north door on the study's east face, the hearing court cut short of the formal door, an entrance ground of its own, the seats 2 ft off the dais; the notes' omitted-parts lines rewritten.",
+     "class": "within",
+     "why": "Fixes doors onto nothing and the court overrunning the formal door - reader-visible defects - and restates the notes to what is drawn."
+    },
+    {
+     "id": "T339-doors",
+     "summary": "Ubame's hall gains a back door to the household's alley; ochiba's genkan porch opens into a genkan room.",
+     "class": "within",
+     "why": "Fixes doors onto nothing (a map reading wrong), the genkan room on 0104."
+    },
+    {
+     "id": "T334-popups",
+     "summary": "The genkan and writing-rooms pop-ups' About given what 0104 and 0113 now say; '26 mats from Sayama's three' restated as about 25 mats, a GUESS; docs/buildings.md's study at the back row's east end a GUESS.",
+     "class": "within",
+     "why": "Restates the record's sheet-side half to what the record says, each guess labeled (constitution XIV)."
+    },
+    {
+     "id": "T340-side-gate-band",
+     "summary": "The side gate's band, 5-8 ft clear, a GUESS from the size-audit's bunka.go.jp anchors, in docs/buildings.md; the round trip's 'rear wicket' restated as a rear gate pointing at 0101's fujomon.",
+     "class": "within",
+     "why": "A labeled claim and a wording fix to what the record says; no behavior beyond the recorded band."
+    },
+    {
+     "id": "left-T342-0088-page",
+     "summary": "0088's drawing page still describes the road bands as a drawing convention after T328 drew the road flat; not fixed here (a record page owes a page session, and 0088 is T330/T333's page set), filed as T342, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A known contradiction is deferred, so it is ruled. Legitimate because it is not carried past the step: T342 lands before T158, Phase 4's deletion close, which is what the GM's 2026-11-18 rule ('fix all known bugs in each step before moving on to porting the next step') requires; and the page is another task's open set, read and not edited here."
+    },
+    {
+     "id": "left-T341-cart-gates",
+     "summary": "Ubame's (~10.7 ft) and hayakawa's (8-10 ft) cart gates fall outside the 5-8 ft side-gate band T340 recorded; not fixed here (a cart gate needs its own research pass, kind and band in T333's glossary file), filed as T341, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Deferred within the same step, landing before T158, so no known defect is carried into the next step's port; and a cart gate is a different class from the side gate the band was set for, so the band does not by itself make them wrong - the missing kind and band is the work T341 holds."
+    },
+    {
+     "id": "order-and-exits",
+     "summary": "Edits, make map, pack-audit and mode_a tests; then the decision; then claims and map reviews after make verify with no engine edit while one runs; all before T158; exits green on pack-audit, mode_a, claims IN-STEP, reviews' NEEDS-WORK filed or fixed.",
+     "class": "within",
+     "why": "Process for finishing the remaining fixes within the step, as the GM asked (2026-11-18, 2026-11-22); no narrowing of what is fixed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T328, T329, T331, T332, T334, T335, T336, T337, T338, T339, T340 Approach (checklist part A)",
+    "### T341 (<why: the finding or measurement that files it>)",
+    "### T341 Approach (checklist part A)",
+    "### T342 (<why: the finding or measurement that files it>)",
+    "### T342 Approach (checklist part A)",
+    "### T343 (<why: the finding or measurement that files it>)",
+    "### T343 Approach (checklist part A)",
+    "(removed) ### T252 (<why: the finding or measurement that files it>)",
+    "(removed) ### T259 (<why: the finding or measurement that files it>)",
+    "(removed) ### T259 Approach (checklist part A)",
+    "(removed) ### T260 (<why: the finding or measurement that files it>)",
+    "(removed) ### T260 Approach (checklist part A)",
+    "(removed) ### T275 (<why: the finding or measurement that files it>)",
+    "(removed) ### T275 Approach (checklist part A)",
+    "(removed) ### T276 (<why: the finding or measurement that files it>)",
+    "(removed) ### T276 Approach (checklist part A)",
+    "(removed) ### T277 (<why: the finding or measurement that files it>)",
+    "(removed) ### T277 Approach (checklist part A)",
+    "(removed) ### T278 (<why: the finding or measurement that files it>)",
+    "(removed) ### T278 Approach (checklist part A)",
+    "(removed) ### T279 (<why: the finding or measurement that files it>)",
+    "(removed) ### T279 Approach (checklist part A)",
+    "(removed) ### T280 (<why: the finding or measurement that files it>)",
+    "(removed) ### T280 Approach (checklist part A)",
+    "(removed) ### T281 (<why: the finding or measurement that files it>)",
+    "(removed) ### T281 Approach (checklist part A)",
+    "(removed) ### T282 (<why: the finding or measurement that files it>)",
+    "(removed) ### T282 Approach (checklist part A)",
+    "(removed) ### T283 (<why: the finding or measurement that files it>)",
+    "(removed) ### T283 Approach (checklist part A)",
+    "(removed) ### T284 (<why: the finding or measurement that files it>)",
+    "(removed) ### T284 Approach (checklist part A)",
+    "(removed) ### T285 (<why: the finding or measurement that files it>)",
+    "(removed) ### T285 Approach (checklist part A)",
+    "(removed) ### T286 (<why: the finding or measurement that files it>)",
+    "(removed) ### T286 Approach (checklist part A)",
+    "(removed) ### T287 (<why: the finding or measurement that files it>)",
+    "(removed) ### T287 Approach (checklist part A)",
+    "(removed) ### T288 (<why: the finding or measurement that files it>)",
+    "(removed) ### T288 Approach (checklist part A)",
+    "(removed) ### T289 (<why: the finding or measurement that files it>)",
+    "(removed) ### T289 Approach (checklist part A)",
+    "(removed) ### T290 (<why: the finding or measurement that files it>)",
+    "(removed) ### T290 Approach (checklist part A)",
+    "(removed) ### T291 (<why: the finding or measurement that files it>)",
+    "(removed) ### T291 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T328-group: T343 deferral (new in this revision)",
+     "summary": "0116's drawing page keeps a plaster kura 6-10 ft from neighbors as a fire gap (a GUESS on the page) and is silent on an attached privy, while T331's label lets the garrison privy back the granary; not fixed in this task (a record page owes a page session, 0116 is T330's page set), filed as T343, landing before T158.",
+     "class": "within",
+     "why": "A defect found by impl-drift is filed as an open task that lands before T158, Phase 4's deletion close, so it is fixed within the step it was found in - what the GM's 2026-11-18 rule asks ('fix all known bugs in each step before moving on to porting the next step') and his 2026-11-22 'please finish the remaining fixes'. Nothing is excused or left unfixed; only the task that carries the fix changes."
+    },
+    {
+     "id": "T328-group: T341 and T342 deferrals (unchanged, earlier CLEAR)",
+     "summary": "The cart gates outside the side gate's 5-8 ft band (T341, a research pass and its own kind and band) and 0088's drawing page still describing bands across the road (T342, a page session) filed as open tasks landing before T158.",
+     "class": "within",
+     "why": "Same as the T343 deferral: each known defect is carried by an open task that lands within the step, before T158; nothing left unfixed."
+    },
+    {
+     "id": "T328-group: constants moved and the dead ground (unchanged, earlier CLEAR)",
+     "summary": "County hall, writing rooms, day office and study moved to their size-audit bands (measured); long-house, servants' row and binding room moved as labeled GUESSes with their claims restated; the 22 x 25.5 ft dead ground reduced as far as room allows (stables refused for room, long-house at its cap) and labeled a GUESS.",
+     "class": "within",
+     "why": "Fixes of defects a reader saw (T329, T336, T338 and the rest) to the research record and the size bands, each claim restated (constitution XIV); the remaining dead ground was reduced as far as room allows and labeled a GUESS, and nothing in the request or the spec is narrowed. Unchanged since its CLEAR verdict."
+    },
+    {
+     "id": "T341, T342, T343 blocks",
+     "summary": "New plan sections for the three filed tasks, the checklist template left unfilled.",
+     "class": "within",
+     "why": "An unfilled template decides nothing; the approach of each is written and reviewed when the task starts."
+    },
+    {
+     "id": "removed blocks T252, T259-T260, T275-T291",
+     "summary": "Twenty-nine plan sections deleted, each the unfilled checklist template (verified line by line against earlier.md: placeholders only).",
+     "class": "within",
+     "why": "Their earlier text holds no decision, so removing them takes nothing out of what was asked or of the spec."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T330, T333 (bundle)",
+    "### T330, T333 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T330-brief-A",
+     "summary": "T330: record edits only, in page sessions under the cap, brief A (0101, 0104, 0113, 0123, registry 14040's Used-for), each passage re-read from its page before citing, the passes' caveats carried onto the pages.",
+     "class": "within",
+     "why": "Unchanged since the CLEAR verdict. This is the record half of the fixes the GM asked to have finished before the talk (2026-11-22, 'please finish the remaining fixes'), done under XII's rules."
+    },
+    {
+     "id": "T333-brief-B",
+     "summary": "T333: brief B (0098, 0088, 0116's notes, registry 37100) fixes the T317 bundle's page-check findings: an unreadable citation, unlinked names, an unconfirmed romanization, macrons, a Used-for line.",
+     "class": "within",
+     "why": "Unchanged since CLEAR. Each item is a check finding on a record unit, and a wrong outcome (a citation a reader cannot follow) gets fixed. That is the 'remaining fixes' the GM asked for."
+    },
+    {
+     "id": "T330-T333-sheet-bundle-notes",
+     "summary": "New: brief B also carries three record notes the sheet bundle sent on 2026-11-22: 0113's writing room attested at Takayama and the rebuilt Iijima, 0113's drawing page's clerks' room labeled from the T337 pass, and 0088's road comment restated to T328's flat tone.",
+     "class": "within",
+     "why": "These are record edits of the same kind on units this bundle already writes (0113, 0088). They come from finished follow-ups and widen no scope beyond fixing what was found. The 0088 restatement changes the wording of a record claim and leaves the behavior alone, as XIV v2.36.0 allows."
+    },
+    {
+     "id": "T330-record-half-T334",
+     "summary": "T330 is narrowed to the record half. The genkan and writing-rooms pop-ups, the county and round-trip notes and docs/buildings.md are the sheet bundle's files, so those edits are filed as T334, after the pages, landing before T158.",
+     "class": "within",
+     "why": "Unchanged since CLEAR. No fix is dropped. It moves to a filed sibling task that lands before T158, so all of it is still done before the talk as the GM asked. Ordering it after the pages it depends on is sequencing, not a narrowing."
+    },
+    {
+     "id": "T330-T333-arbiter-round3",
+     "summary": "Outcomes: four units (record-format:0101, :0113, source-applicability:kotobank-fujomon, translation-check:0113.drawing#iijima-jinya-kakiyaku-beya) accepted without a third round under ask:t330a-round3; the fuchu-joge-pamphlet-10 PARTIAL stands as recorded.",
+     "class": "within",
+     "why": "The ruling (rulings.md, verbatim) finds no wrong outcome left: the edits were the checks' own verbatim EDITs, and the PARTIAL's gloss already says it is a reading of a drawing. Settling a repeated non-defect finding without another round is what the GM's 2026-11-19 rule says to do. No record content is narrowed."
+    },
+    {
+     "id": "T330-T333-onkura-stands",
+     "summary": "T333 outcome: the onkura citation stands on the archive's copy (all four passages verbatim), and nothing goes on the download list.",
+     "class": "within",
+     "why": "The plan's last resort (the download list) applies only to an unreadable source. This one was measured as readable from the archive, so the finding is resolved, not narrowed."
+    },
+    {
+     "id": "T330-T333-T344",
+     "summary": "New Found and left: record follow-ups outside the change (0101's collectors heading, 0123's unlinked name, registry 9971's two unsupported facts, 0116's unfootnoted sentence and passage #2, 0113's unarchived 1842 plan) are filed as T344, landing before T158.",
+     "class": "within",
+     "why": "Found by this bundle's checks on text outside its change. They are filed, not dropped, as a task that lands before T158, so the GM's 'finish the remaining fixes' before the talk still holds. The unsupported facts are real defects, and the plan keeps them in scope."
+    },
+    {
+     "id": "T330-T333-T345",
+     "summary": "New Found and left: two record-tool defects (quote-verbatim misreading the Tajima page's cached bot-check page; translation-owed printing an empty source language) are filed as T345, landing before T158.",
+     "class": "within",
+     "why": "A tool that answers wrongly is a defect under XIV. It is filed as a task that lands before T158, not left unfixed. Tooling is outside a record bundle's files, and nothing the GM asked for is dropped."
+    },
+    {
+     "id": "T330-T333-T346",
+     "summary": "New Found and left: docs/building-programs.md line 85's unsourced inner-court night-soil postern is filed as T346, landing before T158.",
+     "class": "within",
+     "why": "This is the sheet bundle's file, the same split as T334. It is filed and lands before T158, so the fix is kept."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T330, T333 (bundle)",
+    "### T330, T333 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T330/T333 approach",
+     "summary": "Record edits only, in page sessions under the page-session cap: brief A (0101, 0104, 0113, 0123, registry 14040) and brief B (0098, 0088, 0116, registry 37100, plus the sheet bundle's three record notes). Each passage is re-read from its page before it is cited, and the passes' caveats are carried onto the pages.",
+     "class": "within",
+     "why": "This is how the follow-up fixes the GM asked to have finished (2026-11-22, 'please finish the remaining fixes') get done, under constitution XII. It drops none of the findings that filed T330 or T333."
+    },
+    {
+     "id": "T330 split to T334",
+     "summary": "T330 is narrowed to the record half. The genkan and writing-rooms pop-ups, the county and round-trip notes and docs/buildings.md are the sheet bundle's files, so their edits are filed as T334, after the pages, landing before T158.",
+     "class": "within",
+     "why": "'Narrowed' here refers to the task's scope, not to the request. No clause of request.md and no FR loses reach: the edits are filed as T334 with a lands-before-T158 ordering (the block's own words) and depend on the pages this bundle writes. This is re-sequencing, not a fix left undone."
+    },
+    {
+     "id": "T344 deferral",
+     "summary": "Record follow-ups that the page checks found outside the change are filed as T344, landing before T158: 0101's heading, 0123's unlinked name, registry 9971's two facts, 0116's unfootnoted sentence, and 0113's unarchived plan.",
+     "class": "within",
+     "why": "These are outside this bundle's change and each needs its own read. They are filed and ordered, not dropped."
+    },
+    {
+     "id": "T345 deferral",
+     "summary": "Two record-tool defects are filed as T345, landing before T158: quote-verbatim reports the Tajima page's passages missing because a bot-check page is cached, and translation-owed prints an empty source language.",
+     "class": "within",
+     "why": "These are real defects by the constitution XIV definition: a check refuses good work and a tool answers wrongly. They are not left unfixed: they are filed with a lands-before ordering, and this record bundle is not a port step, so the fix-as-we-go rule's 'before porting the next step' is not breached."
+    },
+    {
+     "id": "T346 deferral",
+     "summary": "docs/building-programs.md line 85's unsourced night-soil postern is filed as T346, landing before T158.",
+     "class": "within",
+     "why": "The file is held by the sheet bundle. The fix is filed and ordered, not dropped."
+    },
+    {
+     "id": "T347 deferral",
+     "summary": "Three DRIFTED docs/building-programs.md claims (fix: claim), an UNCLAIMED shrine rule and the optional study and day office rows are filed as T347, landing before T158. Two of the five DRIFTED results are 417 T33's known items.",
+     "class": "within",
+     "why": "The file is held by the T328 bundle. The fixes are filed and ordered, and restating a claim is the remedy the constitution XIV v2.36.0 rule names."
+    },
+    {
+     "id": "Citation discipline",
+     "summary": "A passage the page does not carry is not cited, and the finding is stated as the pass's lead. An unreadable source goes on research/to-download.md and is never cited. GUESS labels mark the drawing pages where the record is silent.",
+     "class": "within",
+     "why": "These rules come straight from constitution XII and the research record's rules. They narrow nothing that was asked."
+    },
+    {
+     "id": "T333 citation findings",
+     "summary": "The onkura citation stands, because the archived copy carries all four passages verbatim. 0098's names are linked. 0088's romanization is marked as the project's reading and its 横線 is restated to what the passage says. 37100's macrons are dropped to the record's style. 14040's Used-for line names 0113's uses. The ledger's raw Kotobank URL is used instead of the pass's mis-encoded one.",
+     "class": "within",
+     "why": "Each item fixes a T333 page-check finding as the finding asks, and each was measured (2026-11-22)."
+    },
+    {
+     "id": "Arbiter ruling ask:t330a-round3",
+     "summary": "Four units are accepted without a third round, and the fuchu-joge-pamphlet-10 PARTIAL stands as recorded.",
+     "class": "within",
+     "why": "This is the arbiter's ruling, followed as written. The modal units it leaves running are covered by the block's 'make modal-bundle owes nothing' exit."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T330, T333 (bundle)",
+    "### T330, T333 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T330-approach",
+     "summary": "T330: brief A record edits (0101, 0104, 0113, 0123, registry 14040's Used-for) in page sessions, write then check-and-apply; each passage re-read from its page before it is cited; the passes' caveats carried onto the pages; the ledger's raw Kotobank URL used, not the report's mis-encoded one",
+     "class": "within",
+     "why": "The follow-ups the GM asked to have finished before the talk (2026-11-22, 'please finish the remaining fixes'), done under the record's own rules. Re-reading each source and carrying its limits narrows nothing."
+    },
+    {
+     "id": "T330-record-half-T334",
+     "summary": "T330 narrowed to the record half: the genkan and writing-rooms pop-ups, the county and round-trip notes and docs/buildings.md go to T334 after the pages",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Nothing is dropped, only moved: the edits wait on pages this bundle writes, the files are held by another bundle's builder, and T334 is filed with a stated landing order (before T158). The GM's 'finish the remaining fixes' before the talk still holds on the block's own commitment. The bundle does not define T158, so this ruling rests on that commitment and claims nothing more."
+    },
+    {
+     "id": "T330-guess-labels",
+     "summary": "T330: where the record is silent, the drawing pages label the rear wicket, the genkan room's depth and the clerks' room as GUESSes bounded by the sources",
+     "class": "within",
+     "why": "This says what the record does and does not carry, which is the record's rule (Constitution XII). It narrows nothing."
+    },
+    {
+     "id": "T330-round3-ruling",
+     "summary": "T330: no third round for record-format:0101, record-format:0113, source-applicability:kotobank-fujomon or translation-check:0113.drawing#iijima-jinya-kakiyaku-beya, and the Joge PARTIAL stands, per ask:t330a-round3",
+     "class": "within",
+     "why": "This is a review-process question settled by the round arbiter, whose ruling is quoted verbatim in rulings.md. It finds no new or reversing change and no wrong outcome left. It narrows nothing the GM asked for, and the ruling reaches only these named units."
+    },
+    {
+     "id": "T330-popups-to-T328",
+     "summary": "T330: of the pop-ups the moved pages owe, the four whose own text the T328 bundle changed (day-office, genkan, official-study, writing-rooms) are left to that bundle; the other 14 are checked here in order (form, research, depiction)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "These are not defects left. Their text belongs to and is being changed by another bundle, and checking it here would check text that bundle then rewrites. The block carries no 'filed as / lands before' line for these four: its ground is that they are that bundle's to check, and that bundle carries them. The ask:t330a-round3 ruling does not reach these four and is not relied on."
+    },
+    {
+     "id": "T330-residence-0095",
+     "summary": "T330: modal-research's 0095 roof finding on the residence pop-up ruled not applicable (a medieval Kanto reconstruction, not an Edo magistrate's house)",
+     "class": "within",
+     "why": "This is a source-applicability judgment inside the pop-up check, and its historical merit is the research ladder's to judge, not fidelity's. No ask: ruling is cited for it and none is relied on. It narrows nothing asked."
+    },
+    {
+     "id": "T330-drift-417T33",
+     "summary": "T330: of impl-drift's 5 DRIFTED, two are left as 417 T33's known",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "These are claim restatements ('fix: claim'), not wrong outcomes: under Constitution XIV a claim the work does not literally match is fixed by restating it. They are already tracked under an existing task, so nothing is left with no home. The block gives no landing order for 417 T33, and that gap is noted here, but it is not a defect left unfixed."
+    },
+    {
+     "id": "T330-T347",
+     "summary": "T330: three building-programs.md DRIFTED claims, an UNCLAIMED shrine rule and the optional study and day office rows filed as T347 (the T328 bundle's file)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is rehomed, not dropped: the file is held by another bundle, and T347 is filed with a stated landing order (before T158)."
+    },
+    {
+     "id": "T330-T344",
+     "summary": "T330/T333: record follow-ups the page checks found outside the change (0101's collectors heading, 0123's unlinked encyclopedia name, registry 9971's two facts, 0116's unfootnoted sentence and passage #2, 0113's unarchived 1842 plan) filed as T344",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "These are this bundle's own pages, so 'another builder's file' is not the ground. The ground is that each finding lies outside the passages changed and needs its own source read, which would be a new research pass. It is filed with a landing order (before T158), so the GM's 'finish the remaining fixes' before the talk is kept."
+    },
+    {
+     "id": "T330-T345",
+     "summary": "T330: two record-tool defects (quote-verbatim misreporting the Tajima page's passages missing from a cached bot-check page; translation-owed printing an empty source language) filed as T345",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect (a check that refuses good work), so the ruling rests on its being rehomed, not on its being harmless. It is tooling outside a record bundle's scope, filed with a landing order (before T158), so it is fixed before the talk the GM is holding for every remaining fix."
+    },
+    {
+     "id": "T330-T346",
+     "summary": "T330: building-programs.md line 85's unsourced inner-court night-soil postern filed as T346",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is rehomed: the file is the sheet bundle's, and T346 is filed with a landing order (before T158)."
+    },
+    {
+     "id": "T330-T348",
+     "summary": "T330: sheet/inner-court's About silent on the court's ground and walls (modal-form FIX with no EDIT) filed as T348",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is rehomed: it needs a research pass outside this bundle's pages before any text can be written, and it is filed with a landing order (before T158)."
+    },
+    {
+     "id": "T333-approach",
+     "summary": "T333: brief B record edits (0098, 0088, 0116's notes, registry 37100) plus the three record notes the sheet bundle sent (0113's writing room at Takayama and Iijima, the clerks' room label, 0088's road comment restated flat)",
+     "class": "within",
+     "why": "These are the OUTSIDE THE CHANGE and NOTE findings T333 was filed for, worked as follow-ups the GM asked to have finished. Nothing is narrowed."
+    },
+    {
+     "id": "T333-onkura",
+     "summary": "T333: the onkura citation stands on the archive's copy (the Japan Heritage portal serves a maintenance notice, measured 2026-11-22 by curl), and nothing goes on the download list",
+     "class": "within",
+     "why": "The finding was 'an unreadable citation'. The archived copy carries all four passages verbatim, so a reader can follow the citation, and the download-list fallback in the step table is not needed."
+    },
+    {
+     "id": "T333-romanization-macrons-usedfor",
+     "summary": "T333: 0088's title romanization marked the project's reading and its 横線 restated to the passage; 0098's names linked; 37100's macrons dropped; 37100 and 14040 Used-for lines completed",
+     "class": "within",
+     "why": "Each fixes the T317 bundle's finding as stated. Marking an unconfirmed romanization as the project's reading tells the reader exactly what it is, so no wrong outcome is left."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T330, T333 (bundle)",
+    "### T330, T333 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 (T330 and T333) approach",
+     "summary": "T330 and T333 are done as record edits only, in page sessions under the page-session cap: brief A (0101, 0104, 0113, 0123, registry 14040's Used-for) and brief B (0098, 0088, 0116's notes, registry 37100, plus three record notes the sheet bundle sent).",
+     "class": "within",
+     "why": "Both tasks were filed as record follow-ups (T312's passes not yet in the record; T317's page-check findings). Doing them as record edits under the record's own session rules is how that work is done. It neither adds to the work nor takes any away."
+    },
+    {
+     "id": "D2 (T330 and T333) sources",
+     "summary": "The passes' reports were recovered verbatim from the agents' transcripts. Each passage is re-read from its page before it is cited, and each report's caveats (modern definitions, drawing-read labels, modern rebuilds, the pass's own readings, shoyaku against kakiyaku) are carried onto the pages.",
+     "class": "within",
+     "why": "This is Constitution XII and the record's rules (verbatim passages, translations marked). It does what the findings asked, which is to put the passes' findings in the record with each source's limits."
+    },
+    {
+     "id": "D3 (T330) Kotobank URL",
+     "summary": "The pass report's mis-encoded Kotobank URL is replaced by the ledger's raw URL, which was measured as correct on 2026-11-22.",
+     "class": "within",
+     "why": "This corrects a wrong citation target. It is part of making the citation open and followable, which is T333's own goal."
+    },
+    {
+     "id": "D4 (T333) onkura citation",
+     "summary": "The Japan Heritage portal still serves its maintenance notice (measured by curl, 2026-11-22). The archived copy carries all four passages verbatim, so the citation stands and nothing goes on the download list.",
+     "class": "within",
+     "why": "T333's finding was an unreadable citation. It is resolved by a readable archived copy that holds the passages, and the fallback (the download list, never cited) follows the record's rule."
+    },
+    {
+     "id": "D5 (T333; 14040 is T330 brief A) 0088 romanization and 横線; 37100 macrons; 14040 and 37100 Used-for",
+     "summary": "0088's unconfirmed title romanization is marked as the project's reading, and its 横線 is restated to what the passage says. 37100's macrons are dropped to the record's style. The Used-for lines are completed.",
+     "class": "within",
+     "why": "Each item is one of T333's named findings (item 12), fixed in the record. Marking an unconfirmed reading as the project's own is an honest fix of the reported problem, not a way around it."
+    },
+    {
+     "id": "D6 (T330 and T333) last resorts",
+     "summary": "A passage the page does not carry is not cited and is stated as the pass's lead in a session comment. An unreadable source goes on research/to-download.md, never cited.",
+     "class": "within",
+     "why": "These are the research record's standing rules (Constitution XII, the record's CLAUDE.md). They narrow nothing the GM asked."
+    },
+    {
+     "id": "D7 (T330) narrowed to the record half (to T334)",
+     "summary": "The edits the passes owe to the genkan and writing-rooms pop-ups, the county notes, the round trip's rear-wicket pointer and docs/buildings.md move to T334. Those files belong to the sheet bundle (T312-T326's builder), and the fixes land after the pages. A sheet-bundle pop-up fix found here is filed into T334, not applied.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows T330 as filed. Its filing includes the modal and impl-drift findings that wait on the passes, and the edits to these sheet-bundle files are moved out. Against the request, the GM asks that the remaining fixes be finished and known defects fixed before moving on. He does not say which task does them, and none of these is dropped: each is named and filed as T334. The reason is concrete. The block says the files are the sheet bundle's ('T312-T326's builder holds them') and that the fixes depend on the pages this bundle writes, so the edits follow the pages. That is ordering, not a carve-out, and the purpose (every fix made) survives. Every item is the same kind (a sheet-bundle file downstream of these pages), so one ruling covers them. The plan commits each to 'lands before T158'. The bundle does not say what T158 is, so the ruling is on that commitment as written: the item is filed, gated and not dropped, and that serves the GM's 2026-11-22 'please finish the remaining fixes' and FIX AS WE GO."
+    },
+    {
+     "id": "D8 (T330) the four T328-changed pop-ups checks left to T328",
+     "summary": "day-office, genkan, official-study and writing-rooms are not checked here. They are checked by the T328 bundle on its own text, the two bundles being verified and landed together (the coordinator, 2026-11-22). This is filed as T334.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows T330's pop-up checks. The block says these four pop-ups hold the T328 bundle's uncommitted edits, so checking them here would check text that is being replaced, and the verdict would be on the wrong text. The checks are still owed on the final text and are filed (T334), with the two bundles verified and landed together. No check is waived. The plan commits each to 'lands before T158'. The bundle does not say what T158 is, so the ruling is on that commitment as written: the item is filed, gated and not dropped, and that serves the GM's 2026-11-22 'please finish the remaining fixes' and FIX AS WE GO."
+    },
+    {
+     "id": "D9 (T330 and T333) pop-up check order",
+     "summary": "The pop-ups the moved pages owe get modal triage first, then modal-form, modal-research and modal-depiction on what the triage names. Edits are applied, and modal-form re-runs on the edited pop-ups.",
+     "class": "within",
+     "why": "This is the project's pop-up check order, applied to what the record edits moved. It enforces the filed findings and is not new scope."
+    },
+    {
+     "id": "D10 (T330) applicability rulings inside the checks",
+     "summary": "The residence pop-up's 0095 roof is ruled not applicable (a medieval Kanto reconstruction), 0096's holding-cell privy is ruled not a house's, and the latrine's two reasons are narrowed to what the sources carry.",
+     "class": "within",
+     "why": "These are research-applicability outcomes that keep each pop-up to what its sources support (Constitution XII). They leave no requested fix undone and no wrong outcome in place."
+    },
+    {
+     "id": "D11 (T330 and T333) ask:t330a-round3",
+     "summary": "Following the round arbiter's ruling, four units are accepted without a third round, and the fuchu-joge-pamphlet-10 PARTIAL stands with its gloss.",
+     "class": "within",
+     "why": "The ruling records that nothing in those units was new or reversed and that the reader is told what is quoted and what is read. No defect is left. The plan follows the ruling as written and every other owed unit still runs."
+    },
+    {
+     "id": "D12 (T330 and T333) T344 record follow-ups outside the change",
+     "summary": "New findings the page checks raised outside this change are filed as T344, landing before T158: 0101's heading, 0123's unlinked name, registry 9971's two facts, 0116's sentence and passage #2, and 0113's unarchived 1842 plan.",
+     "class": "narrowing",
+     "why": "This bundle's page checks found these, and the plan moves them out. On T330's pages: 0101's heading, 0123's unlinked name and 0113's unarchived 1842 plan. On T333's: 0116's sentence and passage #2, and registry 9971's two facts. None is among T330's filed findings or T333's named ones (item 12): they lie outside the edits the tasks were filed for, and each needs its own read of a source. They are filed together as T344, not dropped. The plan commits each to 'lands before T158'. The bundle does not say what T158 is, so the ruling is on that commitment as written: the item is filed, gated and not dropped, and that serves the GM's 2026-11-22 'please finish the remaining fixes' and FIX AS WE GO.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D13 (T330 and T333) T345 record-tool defects",
+     "summary": "quote-verbatim misreads the Tajima page's cached bot-check page, and translation-owed prints an empty source language. Both are filed as T345.",
+     "class": "narrowing",
+     "why": "Two tooling defects found during this bundle's checks are moved out: quote-verbatim misreads the Tajima page's cached bot-check page, and translation-owed prints an empty source language. Both tasks are record-only, so a tool change is a different kind of work. The outcomes show every record check was still recorded, so the defects did not leave a record unit unchecked. They are filed as T345. The plan commits each to 'lands before T158'. The bundle does not say what T158 is, so the ruling is on that commitment as written: the item is filed, gated and not dropped, and that serves the GM's 2026-11-22 'please finish the remaining fixes' and FIX AS WE GO.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D14 (T330) T346 building-programs.md line 85",
+     "summary": "The night-soil pass found that the inner-court night-soil postern claim has no source. It is the sheet bundle's file, so the fix is filed as T346.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a finding of T330's own night-soil pass, so moving it narrows T330 as filed. The block calls the file the sheet bundle's here and calls the same file the T328 bundle's under T347. Either way it is a file another bundle holds, outside this record-only bundle, which is the reason given in D7. The fix is filed as T346, not dropped. The plan commits each to 'lands before T158'. The bundle does not say what T158 is, so the ruling is on that commitment as written: the item is filed, gated and not dropped, and that serves the GM's 2026-11-22 'please finish the remaining fixes' and FIX AS WE GO."
+    },
+    {
+     "id": "D15 (T330) T347 DRIFTED claims",
+     "summary": "Three docs/building-programs.md claims are DRIFTED with fix: claim, plus an UNCLAIMED shrine rule and the optional study and day-office rows. They are the T328 bundle's file and are filed as T347.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "impl-drift findings are part of T330's filing, so moving them narrows the task. The block gives the reason as 'the T328 bundle's file'. The fixes are claim restatements in a docs file another bundle holds, and they are filed as T347, not dropped. The plan commits each to 'lands before T158'. The bundle does not say what T158 is, so the ruling is on that commitment as written: the item is filed, gated and not dropped, and that serves the GM's 2026-11-22 'please finish the remaining fixes' and FIX AS WE GO."
+    },
+    {
+     "id": "D16 (T330) T348 inner-court About",
+     "summary": "modal-form returned FIX with no EDIT on sheet/inner-court's silence about the court's ground and walls. The fix needs a research pass first and is filed as T348.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A modal-form FIX found by this bundle's pop-up checks is moved out. The pop-up would have to say something about a subject (the court's ground and walls) that no source this bundle read covers. Constitution XII forbids an unsourced statement, so research has to come first. The fix is filed as T348, not dropped. The plan commits each to 'lands before T158'. The bundle does not say what T158 is, so the ruling is on that commitment as written: the item is filed, gated and not dropped, and that serves the GM's 2026-11-22 'please finish the remaining fixes' and FIX AS WE GO."
+    },
+    {
+     "id": "D17a (T330) T349 side-gate posts: the 0093 drawing-page edit",
+     "summary": "The side gate's drawn posts are a convention no drawing page records. Recording it needs an edit to 0093's drawing page, which is outside this bundle's pages. It is filed as T349.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the thinnest justification in the section. 0093 is a record page and this is a record-only bundle, but what the bundle touched was side-gate's link to 0093, not 0093's drawing page. That page's own edit, and what it should say about the posts, is a new unit with its own read and checks, outside the named units the plan's 'search smell' bounds the bundle to. The fix is filed, not dropped. The plan commits each to 'lands before T158'. The bundle does not say what T158 is, so the ruling is on that commitment as written: the item is filed, gated and not dropped, and that serves the GM's 2026-11-22 'please finish the remaining fixes' and FIX AS WE GO."
+    },
+    {
+     "id": "D17b (T330) T349 the depiction bundle tooling defect",
+     "summary": "The depiction bundle's earlier-round copy held another bundle's text, a tooling defect. It is filed as T349.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the same kind as D13: a tooling defect outside a record-only bundle, found during its checks, and filed, not dropped. The plan commits each to 'lands before T158'. The bundle does not say what T158 is, so the ruling is on that commitment as written: the item is filed, gated and not dropped, and that serves the GM's 2026-11-22 'please finish the remaining fixes' and FIX AS WE GO."
+    },
+    {
+     "id": "D18 (T330) T350 417 T33 known code defects",
+     "summary": "Two DRIFTED claims are code defects that 417 T33 already carries (the justice-front furniture knob and the separate prisoners' gate). They are filed as T350.",
+     "class": "narrowing",
+     "why": "Two of the five DRIFTED claims from T330's impl-drift run are moved out, so this narrows T330 as filed. They are engine code defects that 417 T33 already carries (the justice-front furniture knob and the separate prisoners' gate). They are not record edits, so they lie outside a record bundle. They are filed as T350, not dropped. The plan commits each to 'lands before T158'. The bundle does not say what T158 is, so the ruling is on that commitment as written: the item is filed, gated and not dropped, and that serves the GM's 2026-11-22 'please finish the remaining fixes' and FIX AS WE GO.",
+     "ruling": "LEGITIMATE"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T330, T333 (bundle)",
+    "### T330, T333 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 approach (T330, T333)",
+     "summary": "Record edits only, in page sessions (write, then check-and-apply) under the page-session cap, brief A (0101, 0104, 0113, 0123, registry 14040) and brief B (0098, 0088, 0116, registry 37100, and three T328-sent notes), one queue, one closing-checks after the last edit.",
+     "class": "within",
+     "why": "The GM's 2026-11-22 words are 'please finish the remaining fixes'; these are the record fixes the T312 and T317 bundles filed, done by the record's own procedure. How the sessions are batched is method, not scope."
+    },
+    {
+     "id": "D2 sources re-read, caveats carried (T330)",
+     "summary": "The passes' reports recovered verbatim from transcripts; every passage re-read from its page before it is cited; each source's limits (modern definitions, drawing readings, modern rebuilds, the pass's reading of 左, shoyaku vs kakiyaku) carried onto the pages; a passage the page does not carry is not cited.",
+     "class": "within",
+     "why": "Constitution XII and the record's verbatim-passage rule; it narrows nothing the record was to say, it only keeps it to what the sources carry."
+    },
+    {
+     "id": "D3 Kotobank URL and the heritage portal (T330, T333)",
+     "summary": "Measured 2026-11-22: the pass's Kotobank URL is mis-encoded, so the ledger's raw URL is used; the Japan Heritage portal serves a maintenance notice, so the archive's onkura copy is read; the onkura citation stands with nothing for the download list.",
+     "class": "within",
+     "why": "A measured fact about which copy of a source is readable decides which copy is cited; no requested citation is dropped."
+    },
+    {
+     "id": "D4 T330 narrowed to the record half -> T334",
+     "summary": "The genkan and writing-rooms pop-ups, the county and round-trip notes and docs/buildings.md are not edited here: they are the T328 bundle's files held by another builder, so their edits are filed as T334 after the pages, landing before T158; a fix found in a sheet-bundle pop-up is filed into T334, not applied.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Editing files another live builder holds uncommitted would collide with that bundle's edits; the work is not dropped but sequenced after the pages it depends on, in a named task bounded before T158 (the last step before the GM's stop). The GM's purpose - every follow-up finished before the talk - is kept."
+    },
+    {
+     "id": "D5 the four T328-changed pop-ups' checks -> T334",
+     "summary": "day-office, genkan, official-study and writing-rooms owe their modal checks on text the T328 bundle is changing; they are checked by that bundle, the two bundles verified and landed together.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated separately from D4: checking text that another bundle is mid-edit would check text that will not land; the checks are owed on the final text, by the bundle that writes it, landing together and before T158. Nothing the GM asked to be checked goes unchecked."
+    },
+    {
+     "id": "D6 ask:t330a-round3 (T330)",
+     "summary": "No third round for record-format:0101/0113, source-applicability:kotobank-fujomon and translation-check:0113.drawing#iijima-jinya-kakiyaku-beya; fuchu-joge-pamphlet-10's repeated PARTIAL stands with no edit.",
+     "class": "within",
+     "why": "The arbiter's ruling (rulings.md) finds nothing new or reversed and no wrong outcome: the note says what is quoted and what is read from the drawing. Under constitution XIV a repeated PARTIAL that leaves no wrong outcome is not a defect, so leaving it is not a narrowing."
+    },
+    {
+     "id": "D7 applicability rulings on pop-up research (T330)",
+     "summary": "residence's 0095 roof ruled not applicable (a medieval Kanto reconstruction, not an Edo magistrate's house); 0096's holding-cell privy ruled not a house's; latrine's second-round reasons narrowed.",
+     "class": "within",
+     "why": "These are check outcomes on whether a source applies, i.e. the research checks doing their job; they keep the pop-ups to what the sources support rather than narrowing what was asked."
+    },
+    {
+     "id": "D8 pop-up text fixes (T330)",
+     "summary": "The door pop-up's lodging-door clause cut (true only of generated plans), the road's bands restated to T328's flat tone, latrine's tense fixed, side-gate's 0093 link added, the 7 modal-research EDITs applied.",
+     "class": "within",
+     "why": "Fixes of wrong or unsupported text found by the checks, in this bundle's own pop-ups: the remaining fixes the GM asked to be finished."
+    },
+    {
+     "id": "D9 record style fixes (T333)",
+     "summary": "0098's names linked; 0088's title romanization marked the project's reading and its 横線 restated to what the passage says; 37100's macrons dropped to the record's style; 14040's and 37100's Used-for lines completed.",
+     "class": "within",
+     "why": "The T317 bundle's page-check findings (an unreadable/unfollowable citation, an unconfirmed romanization, a Used-for short of its uses); the 横線 restatement fixes a claim to its source. Dropping macrons follows the record's stated style; it is a filed finding, not new scope."
+    },
+    {
+     "id": "D10 GUESS labels on drawing pages (T330)",
+     "summary": "The drawing pages label the rear wicket's size and place, the genkan room's depth and the clerks' room behind the dais band as GUESSes where the record is silent.",
+     "class": "within",
+     "why": "The record's own rule for depicting what no source fixes; it states the limit rather than claiming more than the sources carry."
+    },
+    {
+     "id": "D11 T344 record follow-ups outside the change",
+     "summary": "0101's overgeneral collectors heading, 0123's unlinked encyclopedia name, registry 9971's two unsupported facts, 0116's unfootnoted sentence and passage #2, 0113's unarchived 1842 plan: filed as T344, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Found by the page checks outside the units this bundle changed, each needing its own source read; they are not left unfixed but filed in a named task bounded before T158 and the talk, so the GM's 'finish the remaining fixes' is kept and FIX AS WE GO's bound (no known defect carried past the step) is held by that bound."
+    },
+    {
+     "id": "D12 T345 record-tool defects",
+     "summary": "quote-verbatim misreading the Tajima page's cached bot-check page, translation-owed printing an empty source language: filed as T345, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Tool code outside a record-edit bundle, fixed in its own task before T158; deferring it does not let a wrong record outcome through, since the affected citations are checked by hand here."
+    },
+    {
+     "id": "D13 T346 building-programs.md night-soil postern",
+     "summary": "An unsourced claim in the T328 bundle's file: filed as T346, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same ground as D4: another live bundle's file; filed and bounded, not dropped."
+    },
+    {
+     "id": "D14 T347 DRIFTED claims restated",
+     "summary": "Three building-programs.md claims DRIFTED with fix: claim, an UNCLAIMED shrine rule, the optional study and day-office rows: filed as T347, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The T328 bundle's file; the fix is a claim restatement (the GM's 2026-11-19 rule), filed and bounded before T158."
+    },
+    {
+     "id": "D15 T348 inner-court About",
+     "summary": "sheet/inner-court's About says nothing of the court's ground or walls nor that they are unrecorded; filed as T348, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Needs a research pass outside this bundle's pages before the text can be written truthfully; filed and bounded before T158."
+    },
+    {
+     "id": "D16 T349 side-gate posts and depiction-bundle copy",
+     "summary": "The side gate's drawn posts are a convention no drawing page records; the depiction bundle's earlier-round copy held another bundle's text; filed as T349, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A 0093 drawing-page edit outside this bundle's pages and a tooling defect; filed and bounded before T158."
+    },
+    {
+     "id": "D17 T350 code defects 417 T33 carries",
+     "summary": "The justice-front furniture knob and the separate prisoners' gate: filed as T350, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Engine code outside a record bundle, already known to 417 T33; filed in its own task bounded before T158, so not carried past the stop."
+    },
+    {
+     "id": "D18 exits and done (T330, T333)",
+     "summary": "Green: every record check recorded, record-owed and modal-bundle owing nothing of these units, make record CHECK=1 clean; red: the failure recorded and a cannot-be-done claim ruled via make arbiter-ask; an unreadable source goes on the download list, never cited.",
+     "class": "within",
+     "why": "Measured completion and the record's own GM-only-source rule; nothing narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T328, T329, T331, T332, T334, T335, T336, T337, T338, T339, T340 (bundle)",
+    "### T328, T329, T331, T332, T334, T335, T336, T337, T338, T339, T340 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T328-flat-road",
+     "summary": "The dashed overlay across the road's earth removed on ochiba, hayakawa and ubame; the road drawn as one flat earth tone; docs/buildings.md's road-to-gate claim restated; no glyph-check added.",
+     "class": "within",
+     "why": "A reader saw bands across a level road, and 0088's drawing page reads the Hagi 1742 cross-lines as marking a slope: a wrong outcome fixed in its own step, as the GM's 2026-11-18 rule asks. The stale wording on 0088's own drawing page is filed as T342 to land before T158, not carried past the step."
+    },
+    {
+     "id": "T329-county-gate-and-long-house",
+     "summary": "County main gate moved 140 -> 191.5 ft onto the genkan door's line (0104); senior retainers' long-house 24 x 50 -> 22 x 60 ft in karo-rank bays (a GUESS, T320 Q5).",
+     "class": "within",
+     "why": "Fixes the building-review's findings (gate leading onto the hearing court with the genkan off its line, foot-soldier bays for senior retainers) against 0104's reading; the long-house size is GUESS-labeled. The gatehouse this left 40 ft west of the gate is filed as T353 to land before T158."
+    },
+    {
+     "id": "T329-dead-ground-left",
+     "summary": "22 x 25.5 ft of dead ground left before the servants' doors (39 ft before), labeled a GUESS, not filled further.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops short of removing the dead ground, so this is a narrowing of 'fix the known defect'. It is legitimate because going further cannot be done inside the bands: the plan says the long-house is at the residence's cap and the stables were refused the west wall for room. Filling the ground would break a size band, and so contradict research. The remainder is a labeled bare yard, not a wrong outcome."
+    },
+    {
+     "id": "T336-writing-rooms-band",
+     "summary": "Writing rooms banded in types.json (w 6-13, h 10-20, 100-210 sq ft, a GUESS from the size-audit's 6-12 mat estimate, optional, row in docs/building-programs.md); county writing and binding rooms 20 x 10 ft stacked, hall 127 -> 118.5 ft, day office 24.5 and study 18 ft at their bands' tops; round trip's binding room 10 -> 12.5 ft so its caption seats inside, day office 29 -> 26.5.",
+     "class": "within",
+     "why": "Rooms of 16-18 mats against a 6-12 mat estimate is a size-audit failure (a research anchor contradicted), fixed with a labeled band and a red/green size_bands pin. The round trip's binding room differing from the hand sheet's 10 ft is a difference the GM's no-exactness rule allows, not a defect."
+    },
+    {
+     "id": "T336-servants-row-coverage",
+     "summary": "The county servants' row deepened 15 -> 19 ft, a GUESS inside its band, to restore the 30% coverage floor the shorter hall lost.",
+     "class": "within",
+     "why": "It keeps a check (coverage_band, 0116) passing on the fixed sheet by a building in its band rather than by moving a wall. This is the fix-as-we-go rule applied, and the guess is labeled."
+    },
+    {
+     "id": "T337-back-row-order-kept",
+     "summary": "No jin'ya plan names the room behind the magistrate's seat, so the back row's order is kept, the clerks' room behind the dais labeled a GUESS, and docs reworded to 'behind the dais band'.",
+     "class": "within",
+     "why": "No defect: the record is silent, so the claim is restated to match the drawing. The GM's 2026-11-19 rule says a claim the code does not literally match is fixed by restating the claim, not by changing the drawing."
+    },
+    {
+     "id": "T338-dais-caption-ink",
+     "summary": "Dais caption drawn in dark ink at 7 px on two lines in emit.rs (a CONVENTION, the hand sheets' ink), red-then-green test; hand sheets' captions and the county notes' dais (30 x 10 -> 18 x 10 ft) restated.",
+     "class": "within",
+     "why": "A caption unreadable off the dais is a wrong outcome for a reader. The fix is pinned by a test that fails without it, and the notes are restated to match what is drawn."
+    },
+    {
+     "id": "T331-privy-labeled-not-reseated",
+     "summary": "The county garrison privy 0.5 ft off the granary's south face labeled ('privies beside stores') rather than re-seated, the research pass being silent.",
+     "class": "within",
+     "why": "With the record silent this is not a contradicted finding, so labeling it is the constitution XIV treatment. 0116's drawing page has a 6-10 ft kura fire gap, itself a GUESS that says nothing on attached privies. That tension is filed as T343 to land before T158, so it is resolved within the step rather than carried past it."
+    },
+    {
+     "id": "T332-tax-archive-seat",
+     "summary": "Ochiba's tax archive backed into the NW corner 1.5 ft clear of the wall's face (GUESSes: firebreak reading, the nearest seat structures_on_walls passes), the 'back yard' merged into the rear yard.",
+     "class": "within",
+     "why": "It fixes a floating archive and the structures_on_walls failure of the first seat, with each guess labeled. The unnamed band south of it is filed as T355 to land before T158."
+    },
+    {
+     "id": "T335-round-trip-doors-and-court",
+     "summary": "Round trip's north door on the study's east face, the hearing court cut short of the formal door, an entrance ground of its own, seats 2 ft off the dais; omitted-parts lines rewritten.",
+     "class": "within",
+     "why": "It fixes doors that open onto nothing. The mats left off the dais axis and the 102 vs 94 ft court claim are filed as T354 to land before T158."
+    },
+    {
+     "id": "T339-back-door-and-genkan-room",
+     "summary": "Ubame's hall gains a back door to the household's alley; Ochiba's genkan porch opens into a genkan room.",
+     "class": "within",
+     "why": "It fixes doors onto nothing, and 0104 gives the genkan room."
+    },
+    {
+     "id": "T334-popups-restated",
+     "summary": "Genkan and writing-rooms pop-ups given what 0104 and 0113 say; the genkan room restated as about 25 mats (GUESS); docs/buildings.md's study at the back row's east end a GUESS.",
+     "class": "within",
+     "why": "Claims and pop-ups are restated to say what the record says, with each guess labeled, which is constitution XIV's restatement."
+    },
+    {
+     "id": "T340-side-gate-band",
+     "summary": "The side gate's band 5-8 ft clear, a GUESS from the size-audit's bunka.go.jp anchors, recorded in docs/buildings.md; the round trip's 'rear wicket' restated as a rear gate pointing at 0101's fujomon.",
+     "class": "within",
+     "why": "A labeled band and a restated name. The cart gates outside the band are a different kind and are filed as T341, with their own research pass, to land before T158."
+    },
+    {
+     "id": "bundle-follow-ups-filed-before-T158",
+     "summary": "The building-reviews' findings on the frozen review tree (including defects this bundle caused: T353 gatehouse, T354 mats and court claim, T355 Ochiba's band, plus T351, T352, T357), the record-page edits (T342, T343), and the research-first items (T341, T356, T358) are filed as tasks, each landing before T158, Phase 4's deletion close, instead of being fixed in this landing.",
+     "class": "within",
+     "why": "The GM's 2026-11-18 rule is per step: fix all known bugs in each step before moving on to porting the next one. The 2026-11-22 words ('finish the remaining fixes' before the talk) are met as long as these land before T158 and before the talk, which every item states. So this is sequencing inside the step, not a narrowing. Record pages are left to their own page sessions, and research-first items get their pass first. If any of these slipped past T158, that would be the finding."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -43274,127 +43874,1274 @@
    "verdict": "CLEAR"
   },
   "T330": {
-   "section_sha256": "968d7bb9d9a287976ea28a5146b6122a2dd58806ae91dd79bc4cd16617c16832",
+   "section_sha256": "f06b2c767846972d07c2edd4f54813601c64a8eda953f6a1390f9fb59a220e95",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T330/T333 approach: page sessions, two briefs",
-     "summary": "Record edits only, in page sessions under the cap: brief A (0101, 0104, 0113, 0123, registry 14040's Used-for line) for T330, brief B (0098, 0088, 0116's notes, registry 37100) for T333; one queue, A write/check then B write/check, record-owed, modal triage, one closing-checks.",
+     "id": "D1 approach (T330, T333)",
+     "summary": "Record edits only, in page sessions (write, then check-and-apply) under the page-session cap, brief A (0101, 0104, 0113, 0123, registry 14040) and brief B (0098, 0088, 0116, registry 37100, and three T328-sent notes), one queue, one closing-checks after the last edit.",
      "class": "within",
-     "why": "How the filed follow-ups are worked; the GM's 2026-11-22 'please finish the remaining fixes' asks for exactly these fixes, and the order settles nothing the request left open."
+     "why": "The GM's 2026-11-22 words are 'please finish the remaining fixes'; these are the record fixes the T312 and T317 bundles filed, done by the record's own procedure. How the sessions are batched is method, not scope."
     },
     {
-     "id": "T330: passes' reports recovered, passages re-read from the page",
-     "summary": "The four 2026-11-22 passes' reports recovered verbatim from transcripts; each passage re-read from its page (archive copy or make source-pages) before it is cited; the reports' caveats (Kotobank modern definitions, Joge's drawn labels, Sayama's list, Iijima/Suibara rebuilds, Neixiang's reading of 左, Takayama's 書役 reading) carried onto the pages.",
+     "id": "D2 sources re-read, caveats carried (T330)",
+     "summary": "The passes' reports recovered verbatim from transcripts; every passage re-read from its page before it is cited; each source's limits (modern definitions, drawing readings, modern rebuilds, the pass's reading of 左, shoyaku vs kakiyaku) carried onto the pages; a passage the page does not carry is not cited.",
      "class": "within",
-     "why": "The record's own verbatim-source rule applied to the fix; carrying each source's limits is what step 1 says the record must say. Nothing asked is dropped."
+     "why": "Constitution XII and the record's verbatim-passage rule; it narrows nothing the record was to say, it only keeps it to what the sources carry."
     },
     {
-     "id": "T330: Kotobank URL and Japan Heritage portal",
-     "summary": "Use the ledger's raw Kotobank URL, not the pass report's mis-encoded one; the portal still serves a maintenance notice, so the archive's onkura copy is read.",
+     "id": "D3 Kotobank URL and the heritage portal (T330, T333)",
+     "summary": "Measured 2026-11-22: the pass's Kotobank URL is mis-encoded, so the ledger's raw URL is used; the Japan Heritage portal serves a maintenance notice, so the archive's onkura copy is read; the onkura citation stands with nothing for the download list.",
      "class": "within",
-     "why": "A measured fact about which copy of a source can be opened; it serves the request's fix (a citation a reader can open) and narrows nothing."
+     "why": "A measured fact about which copy of a source is readable decides which copy is cited; no requested citation is dropped."
     },
     {
-     "id": "T330/T333: the pop-up, county-note, round-trip and docs/buildings.md edits split to T334",
-     "summary": "T330 is narrowed to the record half; the genkan and writing-rooms pop-ups' About gaps, the county notes' genkan-room size, the round trip's rear-wicket pointer and docs/buildings.md's study claim are filed as T334, after the pages, landing before T158; a fix found in a sheet-bundle pop-up is filed into T334, not applied.",
+     "id": "D4 T330 narrowed to the record half -> T334",
+     "summary": "The genkan and writing-rooms pop-ups, the county and round-trip notes and docs/buildings.md are not edited here: they are the T328 bundle's files held by another builder, so their edits are filed as T334 after the pages, landing before T158; a fix found in a sheet-bundle pop-up is filed into T334, not applied.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "Each case adjudicated: the pop-ups' About text, the county notes' room size, the round-trip pointer and the buildings.md claim all state what the pages this bundle writes will say, so they cannot be written correctly before those pages exist (physically ordered, not merely awkward), and those files are held by the live T312-T326 sheet bundle, so editing them here would collide with another session's work. The request's purpose (2026-11-22: finish every remaining fix before the talk; 2026-11-18: fix known bugs before moving on) is kept because no defect is dropped: each is named, filed as T334 and ordered before T158. Nothing is carried past a step unfixed; it is moved one task later behind its own dependency."
+     "why": "Editing files another live builder holds uncommitted would collide with that bundle's edits; the work is not dropped but sequenced after the pages it depends on, in a named task bounded before T158 (the last step before the GM's stop). The GM's purpose - every follow-up finished before the talk - is kept."
     },
     {
-     "id": "T330 last resort: a passage the page does not carry",
-     "summary": "Not cited; the finding is stated as the pass's lead in a session comment.",
-     "class": "within",
-     "why": "The research record's rule that only a verbatim passage is cited; refusing to cite an unread passage is a constraint on how the fix is made, not a narrowing of it, and the lead is kept rather than lost."
+     "id": "D5 the four T328-changed pop-ups' checks -> T334",
+     "summary": "day-office, genkan, official-study and writing-rooms owe their modal checks on text the T328 bundle is changing; they are checked by that bundle, the two bundles verified and landed together.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated separately from D4: checking text that another bundle is mid-edit would check text that will not land; the checks are owed on the final text, by the bundle that writes it, landing together and before T158. Nothing the GM asked to be checked goes unchecked."
     },
     {
-     "id": "T333 last resort: an unreadable source",
-     "summary": "Put on research/to-download.md via make download-add, never cited.",
+     "id": "D6 ask:t330a-round3 (T330)",
+     "summary": "No third round for record-format:0101/0113, source-applicability:kotobank-fujomon and translation-check:0113.drawing#iijima-jinya-kakiyaku-beya; fuchu-joge-pamphlet-10's repeated PARTIAL stands with no edit.",
      "class": "within",
-     "why": "The record's GM-only-source rule (step 2's constraint), applied as written."
+     "why": "The arbiter's ruling (rulings.md) finds nothing new or reversed and no wrong outcome: the note says what is quoted and what is read from the drawing. Under constitution XIV a repeated PARTIAL that leaves no wrong outcome is not a defect, so leaving it is not a narrowing."
     },
     {
-     "id": "T333 scope: the T317 page checks' findings",
-     "summary": "Fix an unreadable citation, unlinked page names, an unconfirmed romanization, macrons against the record's style and registry 37100/14040 Used-for lines short of their uses.",
+     "id": "D7 applicability rulings on pop-up research (T330)",
+     "summary": "residence's 0095 roof ruled not applicable (a medieval Kanto reconstruction, not an Edo magistrate's house); 0096's holding-cell privy ruled not a house's; latrine's second-round reasons narrowed.",
      "class": "within",
-     "why": "Exactly the OUTSIDE THE CHANGE and NOTE findings T317's checks filed; the GM asked that the remaining filed fixes be finished. Nothing filed is left out."
+     "why": "These are check outcomes on whether a source applies, i.e. the research checks doing their job; they keep the pop-ups to what the sources support rather than narrowing what was asked."
     },
     {
-     "id": "T330/T333: drawing pages' labels as GUESSes",
-     "summary": "Where a sheet draws beyond the record (rear wicket, genkan room, writing and binding rooms, the study's place) the drawing pages' labels say so as GUESSes on the record's silence.",
+     "id": "D8 pop-up text fixes (T330)",
+     "summary": "The door pop-up's lodging-door clause cut (true only of generated plans), the road's bands restated to T328's flat tone, latrine's tense fixed, side-gate's 0093 link added, the 7 modal-research EDITs applied.",
      "class": "within",
-     "why": "Describes the record honestly where its sources are silent; adds no requirement and narrows none."
+     "why": "Fixes of wrong or unsupported text found by the checks, in this bundle's own pop-ups: the remaining fixes the GM asked to be finished."
     },
     {
-     "id": "T330/T333 exits and done",
-     "summary": "Green: every record check recorded, record-owed and modal-bundle owing none of these units, make record CHECK=1 clean; red: the failure recorded and a cannot-be-done claim ruled through make arbiter-ask; one landing.",
+     "id": "D9 record style fixes (T333)",
+     "summary": "0098's names linked; 0088's title romanization marked the project's reading and its 横線 restated to what the passage says; 37100's macrons dropped to the record's style; 14040's and 37100's Used-for lines completed.",
      "class": "within",
-     "why": "Measured completion of the fixes asked for; the red exit routes a refusal to the arbiter rather than quietly dropping work."
+     "why": "The T317 bundle's page-check findings (an unreadable/unfollowable citation, an unconfirmed romanization, a Used-for short of its uses); the 横線 restatement fixes a claim to its source. Dropping macrons follows the record's stated style; it is a filed finding, not new scope."
+    },
+    {
+     "id": "D10 GUESS labels on drawing pages (T330)",
+     "summary": "The drawing pages label the rear wicket's size and place, the genkan room's depth and the clerks' room behind the dais band as GUESSes where the record is silent.",
+     "class": "within",
+     "why": "The record's own rule for depicting what no source fixes; it states the limit rather than claiming more than the sources carry."
+    },
+    {
+     "id": "D11 T344 record follow-ups outside the change",
+     "summary": "0101's overgeneral collectors heading, 0123's unlinked encyclopedia name, registry 9971's two unsupported facts, 0116's unfootnoted sentence and passage #2, 0113's unarchived 1842 plan: filed as T344, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Found by the page checks outside the units this bundle changed, each needing its own source read; they are not left unfixed but filed in a named task bounded before T158 and the talk, so the GM's 'finish the remaining fixes' is kept and FIX AS WE GO's bound (no known defect carried past the step) is held by that bound."
+    },
+    {
+     "id": "D12 T345 record-tool defects",
+     "summary": "quote-verbatim misreading the Tajima page's cached bot-check page, translation-owed printing an empty source language: filed as T345, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Tool code outside a record-edit bundle, fixed in its own task before T158; deferring it does not let a wrong record outcome through, since the affected citations are checked by hand here."
+    },
+    {
+     "id": "D13 T346 building-programs.md night-soil postern",
+     "summary": "An unsourced claim in the T328 bundle's file: filed as T346, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same ground as D4: another live bundle's file; filed and bounded, not dropped."
+    },
+    {
+     "id": "D14 T347 DRIFTED claims restated",
+     "summary": "Three building-programs.md claims DRIFTED with fix: claim, an UNCLAIMED shrine rule, the optional study and day-office rows: filed as T347, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The T328 bundle's file; the fix is a claim restatement (the GM's 2026-11-19 rule), filed and bounded before T158."
+    },
+    {
+     "id": "D15 T348 inner-court About",
+     "summary": "sheet/inner-court's About says nothing of the court's ground or walls nor that they are unrecorded; filed as T348, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Needs a research pass outside this bundle's pages before the text can be written truthfully; filed and bounded before T158."
+    },
+    {
+     "id": "D16 T349 side-gate posts and depiction-bundle copy",
+     "summary": "The side gate's drawn posts are a convention no drawing page records; the depiction bundle's earlier-round copy held another bundle's text; filed as T349, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A 0093 drawing-page edit outside this bundle's pages and a tooling defect; filed and bounded before T158."
+    },
+    {
+     "id": "D17 T350 code defects 417 T33 carries",
+     "summary": "The justice-front furniture knob and the separate prisoners' gate: filed as T350, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Engine code outside a record bundle, already known to 417 T33; filed in its own task bounded before T158, so not carried past the stop."
+    },
+    {
+     "id": "D18 exits and done (T330, T333)",
+     "summary": "Green: every record check recorded, record-owed and modal-bundle owing nothing of these units, make record CHECK=1 clean; red: the failure recorded and a cannot-be-done claim ruled via make arbiter-ask; an unreadable source goes on the download list, never cited.",
+     "class": "within",
+     "why": "Measured completion and the record's own GM-only-source rule; nothing narrowed."
     }
    ],
    "verdict": "CLEAR"
   },
   "T333": {
-   "section_sha256": "968d7bb9d9a287976ea28a5146b6122a2dd58806ae91dd79bc4cd16617c16832",
+   "section_sha256": "f06b2c767846972d07c2edd4f54813601c64a8eda953f6a1390f9fb59a220e95",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T330/T333 approach: page sessions, two briefs",
-     "summary": "Record edits only, in page sessions under the cap: brief A (0101, 0104, 0113, 0123, registry 14040's Used-for line) for T330, brief B (0098, 0088, 0116's notes, registry 37100) for T333; one queue, A write/check then B write/check, record-owed, modal triage, one closing-checks.",
+     "id": "D1 approach (T330, T333)",
+     "summary": "Record edits only, in page sessions (write, then check-and-apply) under the page-session cap, brief A (0101, 0104, 0113, 0123, registry 14040) and brief B (0098, 0088, 0116, registry 37100, and three T328-sent notes), one queue, one closing-checks after the last edit.",
      "class": "within",
-     "why": "How the filed follow-ups are worked; the GM's 2026-11-22 'please finish the remaining fixes' asks for exactly these fixes, and the order settles nothing the request left open."
+     "why": "The GM's 2026-11-22 words are 'please finish the remaining fixes'; these are the record fixes the T312 and T317 bundles filed, done by the record's own procedure. How the sessions are batched is method, not scope."
     },
     {
-     "id": "T330: passes' reports recovered, passages re-read from the page",
-     "summary": "The four 2026-11-22 passes' reports recovered verbatim from transcripts; each passage re-read from its page (archive copy or make source-pages) before it is cited; the reports' caveats (Kotobank modern definitions, Joge's drawn labels, Sayama's list, Iijima/Suibara rebuilds, Neixiang's reading of 左, Takayama's 書役 reading) carried onto the pages.",
+     "id": "D2 sources re-read, caveats carried (T330)",
+     "summary": "The passes' reports recovered verbatim from transcripts; every passage re-read from its page before it is cited; each source's limits (modern definitions, drawing readings, modern rebuilds, the pass's reading of 左, shoyaku vs kakiyaku) carried onto the pages; a passage the page does not carry is not cited.",
      "class": "within",
-     "why": "The record's own verbatim-source rule applied to the fix; carrying each source's limits is what step 1 says the record must say. Nothing asked is dropped."
+     "why": "Constitution XII and the record's verbatim-passage rule; it narrows nothing the record was to say, it only keeps it to what the sources carry."
     },
     {
-     "id": "T330: Kotobank URL and Japan Heritage portal",
-     "summary": "Use the ledger's raw Kotobank URL, not the pass report's mis-encoded one; the portal still serves a maintenance notice, so the archive's onkura copy is read.",
+     "id": "D3 Kotobank URL and the heritage portal (T330, T333)",
+     "summary": "Measured 2026-11-22: the pass's Kotobank URL is mis-encoded, so the ledger's raw URL is used; the Japan Heritage portal serves a maintenance notice, so the archive's onkura copy is read; the onkura citation stands with nothing for the download list.",
      "class": "within",
-     "why": "A measured fact about which copy of a source can be opened; it serves the request's fix (a citation a reader can open) and narrows nothing."
+     "why": "A measured fact about which copy of a source is readable decides which copy is cited; no requested citation is dropped."
     },
     {
-     "id": "T330/T333: the pop-up, county-note, round-trip and docs/buildings.md edits split to T334",
-     "summary": "T330 is narrowed to the record half; the genkan and writing-rooms pop-ups' About gaps, the county notes' genkan-room size, the round trip's rear-wicket pointer and docs/buildings.md's study claim are filed as T334, after the pages, landing before T158; a fix found in a sheet-bundle pop-up is filed into T334, not applied.",
+     "id": "D4 T330 narrowed to the record half -> T334",
+     "summary": "The genkan and writing-rooms pop-ups, the county and round-trip notes and docs/buildings.md are not edited here: they are the T328 bundle's files held by another builder, so their edits are filed as T334 after the pages, landing before T158; a fix found in a sheet-bundle pop-up is filed into T334, not applied.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "Each case adjudicated: the pop-ups' About text, the county notes' room size, the round-trip pointer and the buildings.md claim all state what the pages this bundle writes will say, so they cannot be written correctly before those pages exist (physically ordered, not merely awkward), and those files are held by the live T312-T326 sheet bundle, so editing them here would collide with another session's work. The request's purpose (2026-11-22: finish every remaining fix before the talk; 2026-11-18: fix known bugs before moving on) is kept because no defect is dropped: each is named, filed as T334 and ordered before T158. Nothing is carried past a step unfixed; it is moved one task later behind its own dependency."
+     "why": "Editing files another live builder holds uncommitted would collide with that bundle's edits; the work is not dropped but sequenced after the pages it depends on, in a named task bounded before T158 (the last step before the GM's stop). The GM's purpose - every follow-up finished before the talk - is kept."
     },
     {
-     "id": "T330 last resort: a passage the page does not carry",
-     "summary": "Not cited; the finding is stated as the pass's lead in a session comment.",
-     "class": "within",
-     "why": "The research record's rule that only a verbatim passage is cited; refusing to cite an unread passage is a constraint on how the fix is made, not a narrowing of it, and the lead is kept rather than lost."
+     "id": "D5 the four T328-changed pop-ups' checks -> T334",
+     "summary": "day-office, genkan, official-study and writing-rooms owe their modal checks on text the T328 bundle is changing; they are checked by that bundle, the two bundles verified and landed together.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated separately from D4: checking text that another bundle is mid-edit would check text that will not land; the checks are owed on the final text, by the bundle that writes it, landing together and before T158. Nothing the GM asked to be checked goes unchecked."
     },
     {
-     "id": "T333 last resort: an unreadable source",
-     "summary": "Put on research/to-download.md via make download-add, never cited.",
+     "id": "D6 ask:t330a-round3 (T330)",
+     "summary": "No third round for record-format:0101/0113, source-applicability:kotobank-fujomon and translation-check:0113.drawing#iijima-jinya-kakiyaku-beya; fuchu-joge-pamphlet-10's repeated PARTIAL stands with no edit.",
      "class": "within",
-     "why": "The record's GM-only-source rule (step 2's constraint), applied as written."
+     "why": "The arbiter's ruling (rulings.md) finds nothing new or reversed and no wrong outcome: the note says what is quoted and what is read from the drawing. Under constitution XIV a repeated PARTIAL that leaves no wrong outcome is not a defect, so leaving it is not a narrowing."
     },
     {
-     "id": "T333 scope: the T317 page checks' findings",
-     "summary": "Fix an unreadable citation, unlinked page names, an unconfirmed romanization, macrons against the record's style and registry 37100/14040 Used-for lines short of their uses.",
+     "id": "D7 applicability rulings on pop-up research (T330)",
+     "summary": "residence's 0095 roof ruled not applicable (a medieval Kanto reconstruction, not an Edo magistrate's house); 0096's holding-cell privy ruled not a house's; latrine's second-round reasons narrowed.",
      "class": "within",
-     "why": "Exactly the OUTSIDE THE CHANGE and NOTE findings T317's checks filed; the GM asked that the remaining filed fixes be finished. Nothing filed is left out."
+     "why": "These are check outcomes on whether a source applies, i.e. the research checks doing their job; they keep the pop-ups to what the sources support rather than narrowing what was asked."
     },
     {
-     "id": "T330/T333: drawing pages' labels as GUESSes",
-     "summary": "Where a sheet draws beyond the record (rear wicket, genkan room, writing and binding rooms, the study's place) the drawing pages' labels say so as GUESSes on the record's silence.",
+     "id": "D8 pop-up text fixes (T330)",
+     "summary": "The door pop-up's lodging-door clause cut (true only of generated plans), the road's bands restated to T328's flat tone, latrine's tense fixed, side-gate's 0093 link added, the 7 modal-research EDITs applied.",
      "class": "within",
-     "why": "Describes the record honestly where its sources are silent; adds no requirement and narrows none."
+     "why": "Fixes of wrong or unsupported text found by the checks, in this bundle's own pop-ups: the remaining fixes the GM asked to be finished."
     },
     {
-     "id": "T330/T333 exits and done",
-     "summary": "Green: every record check recorded, record-owed and modal-bundle owing none of these units, make record CHECK=1 clean; red: the failure recorded and a cannot-be-done claim ruled through make arbiter-ask; one landing.",
+     "id": "D9 record style fixes (T333)",
+     "summary": "0098's names linked; 0088's title romanization marked the project's reading and its 横線 restated to what the passage says; 37100's macrons dropped to the record's style; 14040's and 37100's Used-for lines completed.",
      "class": "within",
-     "why": "Measured completion of the fixes asked for; the red exit routes a refusal to the arbiter rather than quietly dropping work."
+     "why": "The T317 bundle's page-check findings (an unreadable/unfollowable citation, an unconfirmed romanization, a Used-for short of its uses); the 横線 restatement fixes a claim to its source. Dropping macrons follows the record's stated style; it is a filed finding, not new scope."
+    },
+    {
+     "id": "D10 GUESS labels on drawing pages (T330)",
+     "summary": "The drawing pages label the rear wicket's size and place, the genkan room's depth and the clerks' room behind the dais band as GUESSes where the record is silent.",
+     "class": "within",
+     "why": "The record's own rule for depicting what no source fixes; it states the limit rather than claiming more than the sources carry."
+    },
+    {
+     "id": "D11 T344 record follow-ups outside the change",
+     "summary": "0101's overgeneral collectors heading, 0123's unlinked encyclopedia name, registry 9971's two unsupported facts, 0116's unfootnoted sentence and passage #2, 0113's unarchived 1842 plan: filed as T344, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Found by the page checks outside the units this bundle changed, each needing its own source read; they are not left unfixed but filed in a named task bounded before T158 and the talk, so the GM's 'finish the remaining fixes' is kept and FIX AS WE GO's bound (no known defect carried past the step) is held by that bound."
+    },
+    {
+     "id": "D12 T345 record-tool defects",
+     "summary": "quote-verbatim misreading the Tajima page's cached bot-check page, translation-owed printing an empty source language: filed as T345, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Tool code outside a record-edit bundle, fixed in its own task before T158; deferring it does not let a wrong record outcome through, since the affected citations are checked by hand here."
+    },
+    {
+     "id": "D13 T346 building-programs.md night-soil postern",
+     "summary": "An unsourced claim in the T328 bundle's file: filed as T346, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same ground as D4: another live bundle's file; filed and bounded, not dropped."
+    },
+    {
+     "id": "D14 T347 DRIFTED claims restated",
+     "summary": "Three building-programs.md claims DRIFTED with fix: claim, an UNCLAIMED shrine rule, the optional study and day-office rows: filed as T347, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The T328 bundle's file; the fix is a claim restatement (the GM's 2026-11-19 rule), filed and bounded before T158."
+    },
+    {
+     "id": "D15 T348 inner-court About",
+     "summary": "sheet/inner-court's About says nothing of the court's ground or walls nor that they are unrecorded; filed as T348, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Needs a research pass outside this bundle's pages before the text can be written truthfully; filed and bounded before T158."
+    },
+    {
+     "id": "D16 T349 side-gate posts and depiction-bundle copy",
+     "summary": "The side gate's drawn posts are a convention no drawing page records; the depiction bundle's earlier-round copy held another bundle's text; filed as T349, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A 0093 drawing-page edit outside this bundle's pages and a tooling defect; filed and bounded before T158."
+    },
+    {
+     "id": "D17 T350 code defects 417 T33 carries",
+     "summary": "The justice-front furniture knob and the separate prisoners' gate: filed as T350, before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Engine code outside a record bundle, already known to 417 T33; filed in its own task bounded before T158, so not carried past the stop."
+    },
+    {
+     "id": "D18 exits and done (T330, T333)",
+     "summary": "Green: every record check recorded, record-owed and modal-bundle owing nothing of these units, make record CHECK=1 clean; red: the failure recorded and a cannot-be-done claim ruled via make arbiter-ask; an unreadable source goes on the download list, never cited.",
+     "class": "within",
+     "why": "Measured completion and the record's own GM-only-source rule; nothing narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T328": {
+   "section_sha256": "00769b232a95553ada1621996159e03deace2650669fde0eaae13102bf92c536",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T328-flat-road",
+     "summary": "The dashed overlay across the road's earth removed on ochiba, hayakawa and ubame; the road drawn as one flat earth tone; docs/buildings.md's road-to-gate claim restated; no glyph-check added.",
+     "class": "within",
+     "why": "A reader saw bands across a level road, and 0088's drawing page reads the Hagi 1742 cross-lines as marking a slope: a wrong outcome fixed in its own step, as the GM's 2026-11-18 rule asks. The stale wording on 0088's own drawing page is filed as T342 to land before T158, not carried past the step."
+    },
+    {
+     "id": "T329-county-gate-and-long-house",
+     "summary": "County main gate moved 140 -> 191.5 ft onto the genkan door's line (0104); senior retainers' long-house 24 x 50 -> 22 x 60 ft in karo-rank bays (a GUESS, T320 Q5).",
+     "class": "within",
+     "why": "Fixes the building-review's findings (gate leading onto the hearing court with the genkan off its line, foot-soldier bays for senior retainers) against 0104's reading; the long-house size is GUESS-labeled. The gatehouse this left 40 ft west of the gate is filed as T353 to land before T158."
+    },
+    {
+     "id": "T329-dead-ground-left",
+     "summary": "22 x 25.5 ft of dead ground left before the servants' doors (39 ft before), labeled a GUESS, not filled further.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops short of removing the dead ground, so this is a narrowing of 'fix the known defect'. It is legitimate because going further cannot be done inside the bands: the plan says the long-house is at the residence's cap and the stables were refused the west wall for room. Filling the ground would break a size band, and so contradict research. The remainder is a labeled bare yard, not a wrong outcome."
+    },
+    {
+     "id": "T336-writing-rooms-band",
+     "summary": "Writing rooms banded in types.json (w 6-13, h 10-20, 100-210 sq ft, a GUESS from the size-audit's 6-12 mat estimate, optional, row in docs/building-programs.md); county writing and binding rooms 20 x 10 ft stacked, hall 127 -> 118.5 ft, day office 24.5 and study 18 ft at their bands' tops; round trip's binding room 10 -> 12.5 ft so its caption seats inside, day office 29 -> 26.5.",
+     "class": "within",
+     "why": "Rooms of 16-18 mats against a 6-12 mat estimate is a size-audit failure (a research anchor contradicted), fixed with a labeled band and a red/green size_bands pin. The round trip's binding room differing from the hand sheet's 10 ft is a difference the GM's no-exactness rule allows, not a defect."
+    },
+    {
+     "id": "T336-servants-row-coverage",
+     "summary": "The county servants' row deepened 15 -> 19 ft, a GUESS inside its band, to restore the 30% coverage floor the shorter hall lost.",
+     "class": "within",
+     "why": "It keeps a check (coverage_band, 0116) passing on the fixed sheet by a building in its band rather than by moving a wall. This is the fix-as-we-go rule applied, and the guess is labeled."
+    },
+    {
+     "id": "T337-back-row-order-kept",
+     "summary": "No jin'ya plan names the room behind the magistrate's seat, so the back row's order is kept, the clerks' room behind the dais labeled a GUESS, and docs reworded to 'behind the dais band'.",
+     "class": "within",
+     "why": "No defect: the record is silent, so the claim is restated to match the drawing. The GM's 2026-11-19 rule says a claim the code does not literally match is fixed by restating the claim, not by changing the drawing."
+    },
+    {
+     "id": "T338-dais-caption-ink",
+     "summary": "Dais caption drawn in dark ink at 7 px on two lines in emit.rs (a CONVENTION, the hand sheets' ink), red-then-green test; hand sheets' captions and the county notes' dais (30 x 10 -> 18 x 10 ft) restated.",
+     "class": "within",
+     "why": "A caption unreadable off the dais is a wrong outcome for a reader. The fix is pinned by a test that fails without it, and the notes are restated to match what is drawn."
+    },
+    {
+     "id": "T331-privy-labeled-not-reseated",
+     "summary": "The county garrison privy 0.5 ft off the granary's south face labeled ('privies beside stores') rather than re-seated, the research pass being silent.",
+     "class": "within",
+     "why": "With the record silent this is not a contradicted finding, so labeling it is the constitution XIV treatment. 0116's drawing page has a 6-10 ft kura fire gap, itself a GUESS that says nothing on attached privies. That tension is filed as T343 to land before T158, so it is resolved within the step rather than carried past it."
+    },
+    {
+     "id": "T332-tax-archive-seat",
+     "summary": "Ochiba's tax archive backed into the NW corner 1.5 ft clear of the wall's face (GUESSes: firebreak reading, the nearest seat structures_on_walls passes), the 'back yard' merged into the rear yard.",
+     "class": "within",
+     "why": "It fixes a floating archive and the structures_on_walls failure of the first seat, with each guess labeled. The unnamed band south of it is filed as T355 to land before T158."
+    },
+    {
+     "id": "T335-round-trip-doors-and-court",
+     "summary": "Round trip's north door on the study's east face, the hearing court cut short of the formal door, an entrance ground of its own, seats 2 ft off the dais; omitted-parts lines rewritten.",
+     "class": "within",
+     "why": "It fixes doors that open onto nothing. The mats left off the dais axis and the 102 vs 94 ft court claim are filed as T354 to land before T158."
+    },
+    {
+     "id": "T339-back-door-and-genkan-room",
+     "summary": "Ubame's hall gains a back door to the household's alley; Ochiba's genkan porch opens into a genkan room.",
+     "class": "within",
+     "why": "It fixes doors onto nothing, and 0104 gives the genkan room."
+    },
+    {
+     "id": "T334-popups-restated",
+     "summary": "Genkan and writing-rooms pop-ups given what 0104 and 0113 say; the genkan room restated as about 25 mats (GUESS); docs/buildings.md's study at the back row's east end a GUESS.",
+     "class": "within",
+     "why": "Claims and pop-ups are restated to say what the record says, with each guess labeled, which is constitution XIV's restatement."
+    },
+    {
+     "id": "T340-side-gate-band",
+     "summary": "The side gate's band 5-8 ft clear, a GUESS from the size-audit's bunka.go.jp anchors, recorded in docs/buildings.md; the round trip's 'rear wicket' restated as a rear gate pointing at 0101's fujomon.",
+     "class": "within",
+     "why": "A labeled band and a restated name. The cart gates outside the band are a different kind and are filed as T341, with their own research pass, to land before T158."
+    },
+    {
+     "id": "bundle-follow-ups-filed-before-T158",
+     "summary": "The building-reviews' findings on the frozen review tree (including defects this bundle caused: T353 gatehouse, T354 mats and court claim, T355 Ochiba's band, plus T351, T352, T357), the record-page edits (T342, T343), and the research-first items (T341, T356, T358) are filed as tasks, each landing before T158, Phase 4's deletion close, instead of being fixed in this landing.",
+     "class": "within",
+     "why": "The GM's 2026-11-18 rule is per step: fix all known bugs in each step before moving on to porting the next one. The 2026-11-22 words ('finish the remaining fixes' before the talk) are met as long as these land before T158 and before the talk, which every item states. So this is sequencing inside the step, not a narrowing. Record pages are left to their own page sessions, and research-first items get their pass first. If any of these slipped past T158, that would be the finding."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T329": {
+   "section_sha256": "00769b232a95553ada1621996159e03deace2650669fde0eaae13102bf92c536",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T328-flat-road",
+     "summary": "The dashed overlay across the road's earth removed on ochiba, hayakawa and ubame; the road drawn as one flat earth tone; docs/buildings.md's road-to-gate claim restated; no glyph-check added.",
+     "class": "within",
+     "why": "A reader saw bands across a level road, and 0088's drawing page reads the Hagi 1742 cross-lines as marking a slope: a wrong outcome fixed in its own step, as the GM's 2026-11-18 rule asks. The stale wording on 0088's own drawing page is filed as T342 to land before T158, not carried past the step."
+    },
+    {
+     "id": "T329-county-gate-and-long-house",
+     "summary": "County main gate moved 140 -> 191.5 ft onto the genkan door's line (0104); senior retainers' long-house 24 x 50 -> 22 x 60 ft in karo-rank bays (a GUESS, T320 Q5).",
+     "class": "within",
+     "why": "Fixes the building-review's findings (gate leading onto the hearing court with the genkan off its line, foot-soldier bays for senior retainers) against 0104's reading; the long-house size is GUESS-labeled. The gatehouse this left 40 ft west of the gate is filed as T353 to land before T158."
+    },
+    {
+     "id": "T329-dead-ground-left",
+     "summary": "22 x 25.5 ft of dead ground left before the servants' doors (39 ft before), labeled a GUESS, not filled further.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops short of removing the dead ground, so this is a narrowing of 'fix the known defect'. It is legitimate because going further cannot be done inside the bands: the plan says the long-house is at the residence's cap and the stables were refused the west wall for room. Filling the ground would break a size band, and so contradict research. The remainder is a labeled bare yard, not a wrong outcome."
+    },
+    {
+     "id": "T336-writing-rooms-band",
+     "summary": "Writing rooms banded in types.json (w 6-13, h 10-20, 100-210 sq ft, a GUESS from the size-audit's 6-12 mat estimate, optional, row in docs/building-programs.md); county writing and binding rooms 20 x 10 ft stacked, hall 127 -> 118.5 ft, day office 24.5 and study 18 ft at their bands' tops; round trip's binding room 10 -> 12.5 ft so its caption seats inside, day office 29 -> 26.5.",
+     "class": "within",
+     "why": "Rooms of 16-18 mats against a 6-12 mat estimate is a size-audit failure (a research anchor contradicted), fixed with a labeled band and a red/green size_bands pin. The round trip's binding room differing from the hand sheet's 10 ft is a difference the GM's no-exactness rule allows, not a defect."
+    },
+    {
+     "id": "T336-servants-row-coverage",
+     "summary": "The county servants' row deepened 15 -> 19 ft, a GUESS inside its band, to restore the 30% coverage floor the shorter hall lost.",
+     "class": "within",
+     "why": "It keeps a check (coverage_band, 0116) passing on the fixed sheet by a building in its band rather than by moving a wall. This is the fix-as-we-go rule applied, and the guess is labeled."
+    },
+    {
+     "id": "T337-back-row-order-kept",
+     "summary": "No jin'ya plan names the room behind the magistrate's seat, so the back row's order is kept, the clerks' room behind the dais labeled a GUESS, and docs reworded to 'behind the dais band'.",
+     "class": "within",
+     "why": "No defect: the record is silent, so the claim is restated to match the drawing. The GM's 2026-11-19 rule says a claim the code does not literally match is fixed by restating the claim, not by changing the drawing."
+    },
+    {
+     "id": "T338-dais-caption-ink",
+     "summary": "Dais caption drawn in dark ink at 7 px on two lines in emit.rs (a CONVENTION, the hand sheets' ink), red-then-green test; hand sheets' captions and the county notes' dais (30 x 10 -> 18 x 10 ft) restated.",
+     "class": "within",
+     "why": "A caption unreadable off the dais is a wrong outcome for a reader. The fix is pinned by a test that fails without it, and the notes are restated to match what is drawn."
+    },
+    {
+     "id": "T331-privy-labeled-not-reseated",
+     "summary": "The county garrison privy 0.5 ft off the granary's south face labeled ('privies beside stores') rather than re-seated, the research pass being silent.",
+     "class": "within",
+     "why": "With the record silent this is not a contradicted finding, so labeling it is the constitution XIV treatment. 0116's drawing page has a 6-10 ft kura fire gap, itself a GUESS that says nothing on attached privies. That tension is filed as T343 to land before T158, so it is resolved within the step rather than carried past it."
+    },
+    {
+     "id": "T332-tax-archive-seat",
+     "summary": "Ochiba's tax archive backed into the NW corner 1.5 ft clear of the wall's face (GUESSes: firebreak reading, the nearest seat structures_on_walls passes), the 'back yard' merged into the rear yard.",
+     "class": "within",
+     "why": "It fixes a floating archive and the structures_on_walls failure of the first seat, with each guess labeled. The unnamed band south of it is filed as T355 to land before T158."
+    },
+    {
+     "id": "T335-round-trip-doors-and-court",
+     "summary": "Round trip's north door on the study's east face, the hearing court cut short of the formal door, an entrance ground of its own, seats 2 ft off the dais; omitted-parts lines rewritten.",
+     "class": "within",
+     "why": "It fixes doors that open onto nothing. The mats left off the dais axis and the 102 vs 94 ft court claim are filed as T354 to land before T158."
+    },
+    {
+     "id": "T339-back-door-and-genkan-room",
+     "summary": "Ubame's hall gains a back door to the household's alley; Ochiba's genkan porch opens into a genkan room.",
+     "class": "within",
+     "why": "It fixes doors onto nothing, and 0104 gives the genkan room."
+    },
+    {
+     "id": "T334-popups-restated",
+     "summary": "Genkan and writing-rooms pop-ups given what 0104 and 0113 say; the genkan room restated as about 25 mats (GUESS); docs/buildings.md's study at the back row's east end a GUESS.",
+     "class": "within",
+     "why": "Claims and pop-ups are restated to say what the record says, with each guess labeled, which is constitution XIV's restatement."
+    },
+    {
+     "id": "T340-side-gate-band",
+     "summary": "The side gate's band 5-8 ft clear, a GUESS from the size-audit's bunka.go.jp anchors, recorded in docs/buildings.md; the round trip's 'rear wicket' restated as a rear gate pointing at 0101's fujomon.",
+     "class": "within",
+     "why": "A labeled band and a restated name. The cart gates outside the band are a different kind and are filed as T341, with their own research pass, to land before T158."
+    },
+    {
+     "id": "bundle-follow-ups-filed-before-T158",
+     "summary": "The building-reviews' findings on the frozen review tree (including defects this bundle caused: T353 gatehouse, T354 mats and court claim, T355 Ochiba's band, plus T351, T352, T357), the record-page edits (T342, T343), and the research-first items (T341, T356, T358) are filed as tasks, each landing before T158, Phase 4's deletion close, instead of being fixed in this landing.",
+     "class": "within",
+     "why": "The GM's 2026-11-18 rule is per step: fix all known bugs in each step before moving on to porting the next one. The 2026-11-22 words ('finish the remaining fixes' before the talk) are met as long as these land before T158 and before the talk, which every item states. So this is sequencing inside the step, not a narrowing. Record pages are left to their own page sessions, and research-first items get their pass first. If any of these slipped past T158, that would be the finding."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T331": {
+   "section_sha256": "00769b232a95553ada1621996159e03deace2650669fde0eaae13102bf92c536",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T328-flat-road",
+     "summary": "The dashed overlay across the road's earth removed on ochiba, hayakawa and ubame; the road drawn as one flat earth tone; docs/buildings.md's road-to-gate claim restated; no glyph-check added.",
+     "class": "within",
+     "why": "A reader saw bands across a level road, and 0088's drawing page reads the Hagi 1742 cross-lines as marking a slope: a wrong outcome fixed in its own step, as the GM's 2026-11-18 rule asks. The stale wording on 0088's own drawing page is filed as T342 to land before T158, not carried past the step."
+    },
+    {
+     "id": "T329-county-gate-and-long-house",
+     "summary": "County main gate moved 140 -> 191.5 ft onto the genkan door's line (0104); senior retainers' long-house 24 x 50 -> 22 x 60 ft in karo-rank bays (a GUESS, T320 Q5).",
+     "class": "within",
+     "why": "Fixes the building-review's findings (gate leading onto the hearing court with the genkan off its line, foot-soldier bays for senior retainers) against 0104's reading; the long-house size is GUESS-labeled. The gatehouse this left 40 ft west of the gate is filed as T353 to land before T158."
+    },
+    {
+     "id": "T329-dead-ground-left",
+     "summary": "22 x 25.5 ft of dead ground left before the servants' doors (39 ft before), labeled a GUESS, not filled further.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops short of removing the dead ground, so this is a narrowing of 'fix the known defect'. It is legitimate because going further cannot be done inside the bands: the plan says the long-house is at the residence's cap and the stables were refused the west wall for room. Filling the ground would break a size band, and so contradict research. The remainder is a labeled bare yard, not a wrong outcome."
+    },
+    {
+     "id": "T336-writing-rooms-band",
+     "summary": "Writing rooms banded in types.json (w 6-13, h 10-20, 100-210 sq ft, a GUESS from the size-audit's 6-12 mat estimate, optional, row in docs/building-programs.md); county writing and binding rooms 20 x 10 ft stacked, hall 127 -> 118.5 ft, day office 24.5 and study 18 ft at their bands' tops; round trip's binding room 10 -> 12.5 ft so its caption seats inside, day office 29 -> 26.5.",
+     "class": "within",
+     "why": "Rooms of 16-18 mats against a 6-12 mat estimate is a size-audit failure (a research anchor contradicted), fixed with a labeled band and a red/green size_bands pin. The round trip's binding room differing from the hand sheet's 10 ft is a difference the GM's no-exactness rule allows, not a defect."
+    },
+    {
+     "id": "T336-servants-row-coverage",
+     "summary": "The county servants' row deepened 15 -> 19 ft, a GUESS inside its band, to restore the 30% coverage floor the shorter hall lost.",
+     "class": "within",
+     "why": "It keeps a check (coverage_band, 0116) passing on the fixed sheet by a building in its band rather than by moving a wall. This is the fix-as-we-go rule applied, and the guess is labeled."
+    },
+    {
+     "id": "T337-back-row-order-kept",
+     "summary": "No jin'ya plan names the room behind the magistrate's seat, so the back row's order is kept, the clerks' room behind the dais labeled a GUESS, and docs reworded to 'behind the dais band'.",
+     "class": "within",
+     "why": "No defect: the record is silent, so the claim is restated to match the drawing. The GM's 2026-11-19 rule says a claim the code does not literally match is fixed by restating the claim, not by changing the drawing."
+    },
+    {
+     "id": "T338-dais-caption-ink",
+     "summary": "Dais caption drawn in dark ink at 7 px on two lines in emit.rs (a CONVENTION, the hand sheets' ink), red-then-green test; hand sheets' captions and the county notes' dais (30 x 10 -> 18 x 10 ft) restated.",
+     "class": "within",
+     "why": "A caption unreadable off the dais is a wrong outcome for a reader. The fix is pinned by a test that fails without it, and the notes are restated to match what is drawn."
+    },
+    {
+     "id": "T331-privy-labeled-not-reseated",
+     "summary": "The county garrison privy 0.5 ft off the granary's south face labeled ('privies beside stores') rather than re-seated, the research pass being silent.",
+     "class": "within",
+     "why": "With the record silent this is not a contradicted finding, so labeling it is the constitution XIV treatment. 0116's drawing page has a 6-10 ft kura fire gap, itself a GUESS that says nothing on attached privies. That tension is filed as T343 to land before T158, so it is resolved within the step rather than carried past it."
+    },
+    {
+     "id": "T332-tax-archive-seat",
+     "summary": "Ochiba's tax archive backed into the NW corner 1.5 ft clear of the wall's face (GUESSes: firebreak reading, the nearest seat structures_on_walls passes), the 'back yard' merged into the rear yard.",
+     "class": "within",
+     "why": "It fixes a floating archive and the structures_on_walls failure of the first seat, with each guess labeled. The unnamed band south of it is filed as T355 to land before T158."
+    },
+    {
+     "id": "T335-round-trip-doors-and-court",
+     "summary": "Round trip's north door on the study's east face, the hearing court cut short of the formal door, an entrance ground of its own, seats 2 ft off the dais; omitted-parts lines rewritten.",
+     "class": "within",
+     "why": "It fixes doors that open onto nothing. The mats left off the dais axis and the 102 vs 94 ft court claim are filed as T354 to land before T158."
+    },
+    {
+     "id": "T339-back-door-and-genkan-room",
+     "summary": "Ubame's hall gains a back door to the household's alley; Ochiba's genkan porch opens into a genkan room.",
+     "class": "within",
+     "why": "It fixes doors onto nothing, and 0104 gives the genkan room."
+    },
+    {
+     "id": "T334-popups-restated",
+     "summary": "Genkan and writing-rooms pop-ups given what 0104 and 0113 say; the genkan room restated as about 25 mats (GUESS); docs/buildings.md's study at the back row's east end a GUESS.",
+     "class": "within",
+     "why": "Claims and pop-ups are restated to say what the record says, with each guess labeled, which is constitution XIV's restatement."
+    },
+    {
+     "id": "T340-side-gate-band",
+     "summary": "The side gate's band 5-8 ft clear, a GUESS from the size-audit's bunka.go.jp anchors, recorded in docs/buildings.md; the round trip's 'rear wicket' restated as a rear gate pointing at 0101's fujomon.",
+     "class": "within",
+     "why": "A labeled band and a restated name. The cart gates outside the band are a different kind and are filed as T341, with their own research pass, to land before T158."
+    },
+    {
+     "id": "bundle-follow-ups-filed-before-T158",
+     "summary": "The building-reviews' findings on the frozen review tree (including defects this bundle caused: T353 gatehouse, T354 mats and court claim, T355 Ochiba's band, plus T351, T352, T357), the record-page edits (T342, T343), and the research-first items (T341, T356, T358) are filed as tasks, each landing before T158, Phase 4's deletion close, instead of being fixed in this landing.",
+     "class": "within",
+     "why": "The GM's 2026-11-18 rule is per step: fix all known bugs in each step before moving on to porting the next one. The 2026-11-22 words ('finish the remaining fixes' before the talk) are met as long as these land before T158 and before the talk, which every item states. So this is sequencing inside the step, not a narrowing. Record pages are left to their own page sessions, and research-first items get their pass first. If any of these slipped past T158, that would be the finding."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T332": {
+   "section_sha256": "00769b232a95553ada1621996159e03deace2650669fde0eaae13102bf92c536",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T328-flat-road",
+     "summary": "The dashed overlay across the road's earth removed on ochiba, hayakawa and ubame; the road drawn as one flat earth tone; docs/buildings.md's road-to-gate claim restated; no glyph-check added.",
+     "class": "within",
+     "why": "A reader saw bands across a level road, and 0088's drawing page reads the Hagi 1742 cross-lines as marking a slope: a wrong outcome fixed in its own step, as the GM's 2026-11-18 rule asks. The stale wording on 0088's own drawing page is filed as T342 to land before T158, not carried past the step."
+    },
+    {
+     "id": "T329-county-gate-and-long-house",
+     "summary": "County main gate moved 140 -> 191.5 ft onto the genkan door's line (0104); senior retainers' long-house 24 x 50 -> 22 x 60 ft in karo-rank bays (a GUESS, T320 Q5).",
+     "class": "within",
+     "why": "Fixes the building-review's findings (gate leading onto the hearing court with the genkan off its line, foot-soldier bays for senior retainers) against 0104's reading; the long-house size is GUESS-labeled. The gatehouse this left 40 ft west of the gate is filed as T353 to land before T158."
+    },
+    {
+     "id": "T329-dead-ground-left",
+     "summary": "22 x 25.5 ft of dead ground left before the servants' doors (39 ft before), labeled a GUESS, not filled further.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops short of removing the dead ground, so this is a narrowing of 'fix the known defect'. It is legitimate because going further cannot be done inside the bands: the plan says the long-house is at the residence's cap and the stables were refused the west wall for room. Filling the ground would break a size band, and so contradict research. The remainder is a labeled bare yard, not a wrong outcome."
+    },
+    {
+     "id": "T336-writing-rooms-band",
+     "summary": "Writing rooms banded in types.json (w 6-13, h 10-20, 100-210 sq ft, a GUESS from the size-audit's 6-12 mat estimate, optional, row in docs/building-programs.md); county writing and binding rooms 20 x 10 ft stacked, hall 127 -> 118.5 ft, day office 24.5 and study 18 ft at their bands' tops; round trip's binding room 10 -> 12.5 ft so its caption seats inside, day office 29 -> 26.5.",
+     "class": "within",
+     "why": "Rooms of 16-18 mats against a 6-12 mat estimate is a size-audit failure (a research anchor contradicted), fixed with a labeled band and a red/green size_bands pin. The round trip's binding room differing from the hand sheet's 10 ft is a difference the GM's no-exactness rule allows, not a defect."
+    },
+    {
+     "id": "T336-servants-row-coverage",
+     "summary": "The county servants' row deepened 15 -> 19 ft, a GUESS inside its band, to restore the 30% coverage floor the shorter hall lost.",
+     "class": "within",
+     "why": "It keeps a check (coverage_band, 0116) passing on the fixed sheet by a building in its band rather than by moving a wall. This is the fix-as-we-go rule applied, and the guess is labeled."
+    },
+    {
+     "id": "T337-back-row-order-kept",
+     "summary": "No jin'ya plan names the room behind the magistrate's seat, so the back row's order is kept, the clerks' room behind the dais labeled a GUESS, and docs reworded to 'behind the dais band'.",
+     "class": "within",
+     "why": "No defect: the record is silent, so the claim is restated to match the drawing. The GM's 2026-11-19 rule says a claim the code does not literally match is fixed by restating the claim, not by changing the drawing."
+    },
+    {
+     "id": "T338-dais-caption-ink",
+     "summary": "Dais caption drawn in dark ink at 7 px on two lines in emit.rs (a CONVENTION, the hand sheets' ink), red-then-green test; hand sheets' captions and the county notes' dais (30 x 10 -> 18 x 10 ft) restated.",
+     "class": "within",
+     "why": "A caption unreadable off the dais is a wrong outcome for a reader. The fix is pinned by a test that fails without it, and the notes are restated to match what is drawn."
+    },
+    {
+     "id": "T331-privy-labeled-not-reseated",
+     "summary": "The county garrison privy 0.5 ft off the granary's south face labeled ('privies beside stores') rather than re-seated, the research pass being silent.",
+     "class": "within",
+     "why": "With the record silent this is not a contradicted finding, so labeling it is the constitution XIV treatment. 0116's drawing page has a 6-10 ft kura fire gap, itself a GUESS that says nothing on attached privies. That tension is filed as T343 to land before T158, so it is resolved within the step rather than carried past it."
+    },
+    {
+     "id": "T332-tax-archive-seat",
+     "summary": "Ochiba's tax archive backed into the NW corner 1.5 ft clear of the wall's face (GUESSes: firebreak reading, the nearest seat structures_on_walls passes), the 'back yard' merged into the rear yard.",
+     "class": "within",
+     "why": "It fixes a floating archive and the structures_on_walls failure of the first seat, with each guess labeled. The unnamed band south of it is filed as T355 to land before T158."
+    },
+    {
+     "id": "T335-round-trip-doors-and-court",
+     "summary": "Round trip's north door on the study's east face, the hearing court cut short of the formal door, an entrance ground of its own, seats 2 ft off the dais; omitted-parts lines rewritten.",
+     "class": "within",
+     "why": "It fixes doors that open onto nothing. The mats left off the dais axis and the 102 vs 94 ft court claim are filed as T354 to land before T158."
+    },
+    {
+     "id": "T339-back-door-and-genkan-room",
+     "summary": "Ubame's hall gains a back door to the household's alley; Ochiba's genkan porch opens into a genkan room.",
+     "class": "within",
+     "why": "It fixes doors onto nothing, and 0104 gives the genkan room."
+    },
+    {
+     "id": "T334-popups-restated",
+     "summary": "Genkan and writing-rooms pop-ups given what 0104 and 0113 say; the genkan room restated as about 25 mats (GUESS); docs/buildings.md's study at the back row's east end a GUESS.",
+     "class": "within",
+     "why": "Claims and pop-ups are restated to say what the record says, with each guess labeled, which is constitution XIV's restatement."
+    },
+    {
+     "id": "T340-side-gate-band",
+     "summary": "The side gate's band 5-8 ft clear, a GUESS from the size-audit's bunka.go.jp anchors, recorded in docs/buildings.md; the round trip's 'rear wicket' restated as a rear gate pointing at 0101's fujomon.",
+     "class": "within",
+     "why": "A labeled band and a restated name. The cart gates outside the band are a different kind and are filed as T341, with their own research pass, to land before T158."
+    },
+    {
+     "id": "bundle-follow-ups-filed-before-T158",
+     "summary": "The building-reviews' findings on the frozen review tree (including defects this bundle caused: T353 gatehouse, T354 mats and court claim, T355 Ochiba's band, plus T351, T352, T357), the record-page edits (T342, T343), and the research-first items (T341, T356, T358) are filed as tasks, each landing before T158, Phase 4's deletion close, instead of being fixed in this landing.",
+     "class": "within",
+     "why": "The GM's 2026-11-18 rule is per step: fix all known bugs in each step before moving on to porting the next one. The 2026-11-22 words ('finish the remaining fixes' before the talk) are met as long as these land before T158 and before the talk, which every item states. So this is sequencing inside the step, not a narrowing. Record pages are left to their own page sessions, and research-first items get their pass first. If any of these slipped past T158, that would be the finding."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T334": {
+   "section_sha256": "00769b232a95553ada1621996159e03deace2650669fde0eaae13102bf92c536",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T328-flat-road",
+     "summary": "The dashed overlay across the road's earth removed on ochiba, hayakawa and ubame; the road drawn as one flat earth tone; docs/buildings.md's road-to-gate claim restated; no glyph-check added.",
+     "class": "within",
+     "why": "A reader saw bands across a level road, and 0088's drawing page reads the Hagi 1742 cross-lines as marking a slope: a wrong outcome fixed in its own step, as the GM's 2026-11-18 rule asks. The stale wording on 0088's own drawing page is filed as T342 to land before T158, not carried past the step."
+    },
+    {
+     "id": "T329-county-gate-and-long-house",
+     "summary": "County main gate moved 140 -> 191.5 ft onto the genkan door's line (0104); senior retainers' long-house 24 x 50 -> 22 x 60 ft in karo-rank bays (a GUESS, T320 Q5).",
+     "class": "within",
+     "why": "Fixes the building-review's findings (gate leading onto the hearing court with the genkan off its line, foot-soldier bays for senior retainers) against 0104's reading; the long-house size is GUESS-labeled. The gatehouse this left 40 ft west of the gate is filed as T353 to land before T158."
+    },
+    {
+     "id": "T329-dead-ground-left",
+     "summary": "22 x 25.5 ft of dead ground left before the servants' doors (39 ft before), labeled a GUESS, not filled further.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops short of removing the dead ground, so this is a narrowing of 'fix the known defect'. It is legitimate because going further cannot be done inside the bands: the plan says the long-house is at the residence's cap and the stables were refused the west wall for room. Filling the ground would break a size band, and so contradict research. The remainder is a labeled bare yard, not a wrong outcome."
+    },
+    {
+     "id": "T336-writing-rooms-band",
+     "summary": "Writing rooms banded in types.json (w 6-13, h 10-20, 100-210 sq ft, a GUESS from the size-audit's 6-12 mat estimate, optional, row in docs/building-programs.md); county writing and binding rooms 20 x 10 ft stacked, hall 127 -> 118.5 ft, day office 24.5 and study 18 ft at their bands' tops; round trip's binding room 10 -> 12.5 ft so its caption seats inside, day office 29 -> 26.5.",
+     "class": "within",
+     "why": "Rooms of 16-18 mats against a 6-12 mat estimate is a size-audit failure (a research anchor contradicted), fixed with a labeled band and a red/green size_bands pin. The round trip's binding room differing from the hand sheet's 10 ft is a difference the GM's no-exactness rule allows, not a defect."
+    },
+    {
+     "id": "T336-servants-row-coverage",
+     "summary": "The county servants' row deepened 15 -> 19 ft, a GUESS inside its band, to restore the 30% coverage floor the shorter hall lost.",
+     "class": "within",
+     "why": "It keeps a check (coverage_band, 0116) passing on the fixed sheet by a building in its band rather than by moving a wall. This is the fix-as-we-go rule applied, and the guess is labeled."
+    },
+    {
+     "id": "T337-back-row-order-kept",
+     "summary": "No jin'ya plan names the room behind the magistrate's seat, so the back row's order is kept, the clerks' room behind the dais labeled a GUESS, and docs reworded to 'behind the dais band'.",
+     "class": "within",
+     "why": "No defect: the record is silent, so the claim is restated to match the drawing. The GM's 2026-11-19 rule says a claim the code does not literally match is fixed by restating the claim, not by changing the drawing."
+    },
+    {
+     "id": "T338-dais-caption-ink",
+     "summary": "Dais caption drawn in dark ink at 7 px on two lines in emit.rs (a CONVENTION, the hand sheets' ink), red-then-green test; hand sheets' captions and the county notes' dais (30 x 10 -> 18 x 10 ft) restated.",
+     "class": "within",
+     "why": "A caption unreadable off the dais is a wrong outcome for a reader. The fix is pinned by a test that fails without it, and the notes are restated to match what is drawn."
+    },
+    {
+     "id": "T331-privy-labeled-not-reseated",
+     "summary": "The county garrison privy 0.5 ft off the granary's south face labeled ('privies beside stores') rather than re-seated, the research pass being silent.",
+     "class": "within",
+     "why": "With the record silent this is not a contradicted finding, so labeling it is the constitution XIV treatment. 0116's drawing page has a 6-10 ft kura fire gap, itself a GUESS that says nothing on attached privies. That tension is filed as T343 to land before T158, so it is resolved within the step rather than carried past it."
+    },
+    {
+     "id": "T332-tax-archive-seat",
+     "summary": "Ochiba's tax archive backed into the NW corner 1.5 ft clear of the wall's face (GUESSes: firebreak reading, the nearest seat structures_on_walls passes), the 'back yard' merged into the rear yard.",
+     "class": "within",
+     "why": "It fixes a floating archive and the structures_on_walls failure of the first seat, with each guess labeled. The unnamed band south of it is filed as T355 to land before T158."
+    },
+    {
+     "id": "T335-round-trip-doors-and-court",
+     "summary": "Round trip's north door on the study's east face, the hearing court cut short of the formal door, an entrance ground of its own, seats 2 ft off the dais; omitted-parts lines rewritten.",
+     "class": "within",
+     "why": "It fixes doors that open onto nothing. The mats left off the dais axis and the 102 vs 94 ft court claim are filed as T354 to land before T158."
+    },
+    {
+     "id": "T339-back-door-and-genkan-room",
+     "summary": "Ubame's hall gains a back door to the household's alley; Ochiba's genkan porch opens into a genkan room.",
+     "class": "within",
+     "why": "It fixes doors onto nothing, and 0104 gives the genkan room."
+    },
+    {
+     "id": "T334-popups-restated",
+     "summary": "Genkan and writing-rooms pop-ups given what 0104 and 0113 say; the genkan room restated as about 25 mats (GUESS); docs/buildings.md's study at the back row's east end a GUESS.",
+     "class": "within",
+     "why": "Claims and pop-ups are restated to say what the record says, with each guess labeled, which is constitution XIV's restatement."
+    },
+    {
+     "id": "T340-side-gate-band",
+     "summary": "The side gate's band 5-8 ft clear, a GUESS from the size-audit's bunka.go.jp anchors, recorded in docs/buildings.md; the round trip's 'rear wicket' restated as a rear gate pointing at 0101's fujomon.",
+     "class": "within",
+     "why": "A labeled band and a restated name. The cart gates outside the band are a different kind and are filed as T341, with their own research pass, to land before T158."
+    },
+    {
+     "id": "bundle-follow-ups-filed-before-T158",
+     "summary": "The building-reviews' findings on the frozen review tree (including defects this bundle caused: T353 gatehouse, T354 mats and court claim, T355 Ochiba's band, plus T351, T352, T357), the record-page edits (T342, T343), and the research-first items (T341, T356, T358) are filed as tasks, each landing before T158, Phase 4's deletion close, instead of being fixed in this landing.",
+     "class": "within",
+     "why": "The GM's 2026-11-18 rule is per step: fix all known bugs in each step before moving on to porting the next one. The 2026-11-22 words ('finish the remaining fixes' before the talk) are met as long as these land before T158 and before the talk, which every item states. So this is sequencing inside the step, not a narrowing. Record pages are left to their own page sessions, and research-first items get their pass first. If any of these slipped past T158, that would be the finding."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T335": {
+   "section_sha256": "00769b232a95553ada1621996159e03deace2650669fde0eaae13102bf92c536",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T328-flat-road",
+     "summary": "The dashed overlay across the road's earth removed on ochiba, hayakawa and ubame; the road drawn as one flat earth tone; docs/buildings.md's road-to-gate claim restated; no glyph-check added.",
+     "class": "within",
+     "why": "A reader saw bands across a level road, and 0088's drawing page reads the Hagi 1742 cross-lines as marking a slope: a wrong outcome fixed in its own step, as the GM's 2026-11-18 rule asks. The stale wording on 0088's own drawing page is filed as T342 to land before T158, not carried past the step."
+    },
+    {
+     "id": "T329-county-gate-and-long-house",
+     "summary": "County main gate moved 140 -> 191.5 ft onto the genkan door's line (0104); senior retainers' long-house 24 x 50 -> 22 x 60 ft in karo-rank bays (a GUESS, T320 Q5).",
+     "class": "within",
+     "why": "Fixes the building-review's findings (gate leading onto the hearing court with the genkan off its line, foot-soldier bays for senior retainers) against 0104's reading; the long-house size is GUESS-labeled. The gatehouse this left 40 ft west of the gate is filed as T353 to land before T158."
+    },
+    {
+     "id": "T329-dead-ground-left",
+     "summary": "22 x 25.5 ft of dead ground left before the servants' doors (39 ft before), labeled a GUESS, not filled further.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops short of removing the dead ground, so this is a narrowing of 'fix the known defect'. It is legitimate because going further cannot be done inside the bands: the plan says the long-house is at the residence's cap and the stables were refused the west wall for room. Filling the ground would break a size band, and so contradict research. The remainder is a labeled bare yard, not a wrong outcome."
+    },
+    {
+     "id": "T336-writing-rooms-band",
+     "summary": "Writing rooms banded in types.json (w 6-13, h 10-20, 100-210 sq ft, a GUESS from the size-audit's 6-12 mat estimate, optional, row in docs/building-programs.md); county writing and binding rooms 20 x 10 ft stacked, hall 127 -> 118.5 ft, day office 24.5 and study 18 ft at their bands' tops; round trip's binding room 10 -> 12.5 ft so its caption seats inside, day office 29 -> 26.5.",
+     "class": "within",
+     "why": "Rooms of 16-18 mats against a 6-12 mat estimate is a size-audit failure (a research anchor contradicted), fixed with a labeled band and a red/green size_bands pin. The round trip's binding room differing from the hand sheet's 10 ft is a difference the GM's no-exactness rule allows, not a defect."
+    },
+    {
+     "id": "T336-servants-row-coverage",
+     "summary": "The county servants' row deepened 15 -> 19 ft, a GUESS inside its band, to restore the 30% coverage floor the shorter hall lost.",
+     "class": "within",
+     "why": "It keeps a check (coverage_band, 0116) passing on the fixed sheet by a building in its band rather than by moving a wall. This is the fix-as-we-go rule applied, and the guess is labeled."
+    },
+    {
+     "id": "T337-back-row-order-kept",
+     "summary": "No jin'ya plan names the room behind the magistrate's seat, so the back row's order is kept, the clerks' room behind the dais labeled a GUESS, and docs reworded to 'behind the dais band'.",
+     "class": "within",
+     "why": "No defect: the record is silent, so the claim is restated to match the drawing. The GM's 2026-11-19 rule says a claim the code does not literally match is fixed by restating the claim, not by changing the drawing."
+    },
+    {
+     "id": "T338-dais-caption-ink",
+     "summary": "Dais caption drawn in dark ink at 7 px on two lines in emit.rs (a CONVENTION, the hand sheets' ink), red-then-green test; hand sheets' captions and the county notes' dais (30 x 10 -> 18 x 10 ft) restated.",
+     "class": "within",
+     "why": "A caption unreadable off the dais is a wrong outcome for a reader. The fix is pinned by a test that fails without it, and the notes are restated to match what is drawn."
+    },
+    {
+     "id": "T331-privy-labeled-not-reseated",
+     "summary": "The county garrison privy 0.5 ft off the granary's south face labeled ('privies beside stores') rather than re-seated, the research pass being silent.",
+     "class": "within",
+     "why": "With the record silent this is not a contradicted finding, so labeling it is the constitution XIV treatment. 0116's drawing page has a 6-10 ft kura fire gap, itself a GUESS that says nothing on attached privies. That tension is filed as T343 to land before T158, so it is resolved within the step rather than carried past it."
+    },
+    {
+     "id": "T332-tax-archive-seat",
+     "summary": "Ochiba's tax archive backed into the NW corner 1.5 ft clear of the wall's face (GUESSes: firebreak reading, the nearest seat structures_on_walls passes), the 'back yard' merged into the rear yard.",
+     "class": "within",
+     "why": "It fixes a floating archive and the structures_on_walls failure of the first seat, with each guess labeled. The unnamed band south of it is filed as T355 to land before T158."
+    },
+    {
+     "id": "T335-round-trip-doors-and-court",
+     "summary": "Round trip's north door on the study's east face, the hearing court cut short of the formal door, an entrance ground of its own, seats 2 ft off the dais; omitted-parts lines rewritten.",
+     "class": "within",
+     "why": "It fixes doors that open onto nothing. The mats left off the dais axis and the 102 vs 94 ft court claim are filed as T354 to land before T158."
+    },
+    {
+     "id": "T339-back-door-and-genkan-room",
+     "summary": "Ubame's hall gains a back door to the household's alley; Ochiba's genkan porch opens into a genkan room.",
+     "class": "within",
+     "why": "It fixes doors onto nothing, and 0104 gives the genkan room."
+    },
+    {
+     "id": "T334-popups-restated",
+     "summary": "Genkan and writing-rooms pop-ups given what 0104 and 0113 say; the genkan room restated as about 25 mats (GUESS); docs/buildings.md's study at the back row's east end a GUESS.",
+     "class": "within",
+     "why": "Claims and pop-ups are restated to say what the record says, with each guess labeled, which is constitution XIV's restatement."
+    },
+    {
+     "id": "T340-side-gate-band",
+     "summary": "The side gate's band 5-8 ft clear, a GUESS from the size-audit's bunka.go.jp anchors, recorded in docs/buildings.md; the round trip's 'rear wicket' restated as a rear gate pointing at 0101's fujomon.",
+     "class": "within",
+     "why": "A labeled band and a restated name. The cart gates outside the band are a different kind and are filed as T341, with their own research pass, to land before T158."
+    },
+    {
+     "id": "bundle-follow-ups-filed-before-T158",
+     "summary": "The building-reviews' findings on the frozen review tree (including defects this bundle caused: T353 gatehouse, T354 mats and court claim, T355 Ochiba's band, plus T351, T352, T357), the record-page edits (T342, T343), and the research-first items (T341, T356, T358) are filed as tasks, each landing before T158, Phase 4's deletion close, instead of being fixed in this landing.",
+     "class": "within",
+     "why": "The GM's 2026-11-18 rule is per step: fix all known bugs in each step before moving on to porting the next one. The 2026-11-22 words ('finish the remaining fixes' before the talk) are met as long as these land before T158 and before the talk, which every item states. So this is sequencing inside the step, not a narrowing. Record pages are left to their own page sessions, and research-first items get their pass first. If any of these slipped past T158, that would be the finding."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T336": {
+   "section_sha256": "00769b232a95553ada1621996159e03deace2650669fde0eaae13102bf92c536",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T328-flat-road",
+     "summary": "The dashed overlay across the road's earth removed on ochiba, hayakawa and ubame; the road drawn as one flat earth tone; docs/buildings.md's road-to-gate claim restated; no glyph-check added.",
+     "class": "within",
+     "why": "A reader saw bands across a level road, and 0088's drawing page reads the Hagi 1742 cross-lines as marking a slope: a wrong outcome fixed in its own step, as the GM's 2026-11-18 rule asks. The stale wording on 0088's own drawing page is filed as T342 to land before T158, not carried past the step."
+    },
+    {
+     "id": "T329-county-gate-and-long-house",
+     "summary": "County main gate moved 140 -> 191.5 ft onto the genkan door's line (0104); senior retainers' long-house 24 x 50 -> 22 x 60 ft in karo-rank bays (a GUESS, T320 Q5).",
+     "class": "within",
+     "why": "Fixes the building-review's findings (gate leading onto the hearing court with the genkan off its line, foot-soldier bays for senior retainers) against 0104's reading; the long-house size is GUESS-labeled. The gatehouse this left 40 ft west of the gate is filed as T353 to land before T158."
+    },
+    {
+     "id": "T329-dead-ground-left",
+     "summary": "22 x 25.5 ft of dead ground left before the servants' doors (39 ft before), labeled a GUESS, not filled further.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops short of removing the dead ground, so this is a narrowing of 'fix the known defect'. It is legitimate because going further cannot be done inside the bands: the plan says the long-house is at the residence's cap and the stables were refused the west wall for room. Filling the ground would break a size band, and so contradict research. The remainder is a labeled bare yard, not a wrong outcome."
+    },
+    {
+     "id": "T336-writing-rooms-band",
+     "summary": "Writing rooms banded in types.json (w 6-13, h 10-20, 100-210 sq ft, a GUESS from the size-audit's 6-12 mat estimate, optional, row in docs/building-programs.md); county writing and binding rooms 20 x 10 ft stacked, hall 127 -> 118.5 ft, day office 24.5 and study 18 ft at their bands' tops; round trip's binding room 10 -> 12.5 ft so its caption seats inside, day office 29 -> 26.5.",
+     "class": "within",
+     "why": "Rooms of 16-18 mats against a 6-12 mat estimate is a size-audit failure (a research anchor contradicted), fixed with a labeled band and a red/green size_bands pin. The round trip's binding room differing from the hand sheet's 10 ft is a difference the GM's no-exactness rule allows, not a defect."
+    },
+    {
+     "id": "T336-servants-row-coverage",
+     "summary": "The county servants' row deepened 15 -> 19 ft, a GUESS inside its band, to restore the 30% coverage floor the shorter hall lost.",
+     "class": "within",
+     "why": "It keeps a check (coverage_band, 0116) passing on the fixed sheet by a building in its band rather than by moving a wall. This is the fix-as-we-go rule applied, and the guess is labeled."
+    },
+    {
+     "id": "T337-back-row-order-kept",
+     "summary": "No jin'ya plan names the room behind the magistrate's seat, so the back row's order is kept, the clerks' room behind the dais labeled a GUESS, and docs reworded to 'behind the dais band'.",
+     "class": "within",
+     "why": "No defect: the record is silent, so the claim is restated to match the drawing. The GM's 2026-11-19 rule says a claim the code does not literally match is fixed by restating the claim, not by changing the drawing."
+    },
+    {
+     "id": "T338-dais-caption-ink",
+     "summary": "Dais caption drawn in dark ink at 7 px on two lines in emit.rs (a CONVENTION, the hand sheets' ink), red-then-green test; hand sheets' captions and the county notes' dais (30 x 10 -> 18 x 10 ft) restated.",
+     "class": "within",
+     "why": "A caption unreadable off the dais is a wrong outcome for a reader. The fix is pinned by a test that fails without it, and the notes are restated to match what is drawn."
+    },
+    {
+     "id": "T331-privy-labeled-not-reseated",
+     "summary": "The county garrison privy 0.5 ft off the granary's south face labeled ('privies beside stores') rather than re-seated, the research pass being silent.",
+     "class": "within",
+     "why": "With the record silent this is not a contradicted finding, so labeling it is the constitution XIV treatment. 0116's drawing page has a 6-10 ft kura fire gap, itself a GUESS that says nothing on attached privies. That tension is filed as T343 to land before T158, so it is resolved within the step rather than carried past it."
+    },
+    {
+     "id": "T332-tax-archive-seat",
+     "summary": "Ochiba's tax archive backed into the NW corner 1.5 ft clear of the wall's face (GUESSes: firebreak reading, the nearest seat structures_on_walls passes), the 'back yard' merged into the rear yard.",
+     "class": "within",
+     "why": "It fixes a floating archive and the structures_on_walls failure of the first seat, with each guess labeled. The unnamed band south of it is filed as T355 to land before T158."
+    },
+    {
+     "id": "T335-round-trip-doors-and-court",
+     "summary": "Round trip's north door on the study's east face, the hearing court cut short of the formal door, an entrance ground of its own, seats 2 ft off the dais; omitted-parts lines rewritten.",
+     "class": "within",
+     "why": "It fixes doors that open onto nothing. The mats left off the dais axis and the 102 vs 94 ft court claim are filed as T354 to land before T158."
+    },
+    {
+     "id": "T339-back-door-and-genkan-room",
+     "summary": "Ubame's hall gains a back door to the household's alley; Ochiba's genkan porch opens into a genkan room.",
+     "class": "within",
+     "why": "It fixes doors onto nothing, and 0104 gives the genkan room."
+    },
+    {
+     "id": "T334-popups-restated",
+     "summary": "Genkan and writing-rooms pop-ups given what 0104 and 0113 say; the genkan room restated as about 25 mats (GUESS); docs/buildings.md's study at the back row's east end a GUESS.",
+     "class": "within",
+     "why": "Claims and pop-ups are restated to say what the record says, with each guess labeled, which is constitution XIV's restatement."
+    },
+    {
+     "id": "T340-side-gate-band",
+     "summary": "The side gate's band 5-8 ft clear, a GUESS from the size-audit's bunka.go.jp anchors, recorded in docs/buildings.md; the round trip's 'rear wicket' restated as a rear gate pointing at 0101's fujomon.",
+     "class": "within",
+     "why": "A labeled band and a restated name. The cart gates outside the band are a different kind and are filed as T341, with their own research pass, to land before T158."
+    },
+    {
+     "id": "bundle-follow-ups-filed-before-T158",
+     "summary": "The building-reviews' findings on the frozen review tree (including defects this bundle caused: T353 gatehouse, T354 mats and court claim, T355 Ochiba's band, plus T351, T352, T357), the record-page edits (T342, T343), and the research-first items (T341, T356, T358) are filed as tasks, each landing before T158, Phase 4's deletion close, instead of being fixed in this landing.",
+     "class": "within",
+     "why": "The GM's 2026-11-18 rule is per step: fix all known bugs in each step before moving on to porting the next one. The 2026-11-22 words ('finish the remaining fixes' before the talk) are met as long as these land before T158 and before the talk, which every item states. So this is sequencing inside the step, not a narrowing. Record pages are left to their own page sessions, and research-first items get their pass first. If any of these slipped past T158, that would be the finding."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T337": {
+   "section_sha256": "00769b232a95553ada1621996159e03deace2650669fde0eaae13102bf92c536",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T328-flat-road",
+     "summary": "The dashed overlay across the road's earth removed on ochiba, hayakawa and ubame; the road drawn as one flat earth tone; docs/buildings.md's road-to-gate claim restated; no glyph-check added.",
+     "class": "within",
+     "why": "A reader saw bands across a level road, and 0088's drawing page reads the Hagi 1742 cross-lines as marking a slope: a wrong outcome fixed in its own step, as the GM's 2026-11-18 rule asks. The stale wording on 0088's own drawing page is filed as T342 to land before T158, not carried past the step."
+    },
+    {
+     "id": "T329-county-gate-and-long-house",
+     "summary": "County main gate moved 140 -> 191.5 ft onto the genkan door's line (0104); senior retainers' long-house 24 x 50 -> 22 x 60 ft in karo-rank bays (a GUESS, T320 Q5).",
+     "class": "within",
+     "why": "Fixes the building-review's findings (gate leading onto the hearing court with the genkan off its line, foot-soldier bays for senior retainers) against 0104's reading; the long-house size is GUESS-labeled. The gatehouse this left 40 ft west of the gate is filed as T353 to land before T158."
+    },
+    {
+     "id": "T329-dead-ground-left",
+     "summary": "22 x 25.5 ft of dead ground left before the servants' doors (39 ft before), labeled a GUESS, not filled further.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops short of removing the dead ground, so this is a narrowing of 'fix the known defect'. It is legitimate because going further cannot be done inside the bands: the plan says the long-house is at the residence's cap and the stables were refused the west wall for room. Filling the ground would break a size band, and so contradict research. The remainder is a labeled bare yard, not a wrong outcome."
+    },
+    {
+     "id": "T336-writing-rooms-band",
+     "summary": "Writing rooms banded in types.json (w 6-13, h 10-20, 100-210 sq ft, a GUESS from the size-audit's 6-12 mat estimate, optional, row in docs/building-programs.md); county writing and binding rooms 20 x 10 ft stacked, hall 127 -> 118.5 ft, day office 24.5 and study 18 ft at their bands' tops; round trip's binding room 10 -> 12.5 ft so its caption seats inside, day office 29 -> 26.5.",
+     "class": "within",
+     "why": "Rooms of 16-18 mats against a 6-12 mat estimate is a size-audit failure (a research anchor contradicted), fixed with a labeled band and a red/green size_bands pin. The round trip's binding room differing from the hand sheet's 10 ft is a difference the GM's no-exactness rule allows, not a defect."
+    },
+    {
+     "id": "T336-servants-row-coverage",
+     "summary": "The county servants' row deepened 15 -> 19 ft, a GUESS inside its band, to restore the 30% coverage floor the shorter hall lost.",
+     "class": "within",
+     "why": "It keeps a check (coverage_band, 0116) passing on the fixed sheet by a building in its band rather than by moving a wall. This is the fix-as-we-go rule applied, and the guess is labeled."
+    },
+    {
+     "id": "T337-back-row-order-kept",
+     "summary": "No jin'ya plan names the room behind the magistrate's seat, so the back row's order is kept, the clerks' room behind the dais labeled a GUESS, and docs reworded to 'behind the dais band'.",
+     "class": "within",
+     "why": "No defect: the record is silent, so the claim is restated to match the drawing. The GM's 2026-11-19 rule says a claim the code does not literally match is fixed by restating the claim, not by changing the drawing."
+    },
+    {
+     "id": "T338-dais-caption-ink",
+     "summary": "Dais caption drawn in dark ink at 7 px on two lines in emit.rs (a CONVENTION, the hand sheets' ink), red-then-green test; hand sheets' captions and the county notes' dais (30 x 10 -> 18 x 10 ft) restated.",
+     "class": "within",
+     "why": "A caption unreadable off the dais is a wrong outcome for a reader. The fix is pinned by a test that fails without it, and the notes are restated to match what is drawn."
+    },
+    {
+     "id": "T331-privy-labeled-not-reseated",
+     "summary": "The county garrison privy 0.5 ft off the granary's south face labeled ('privies beside stores') rather than re-seated, the research pass being silent.",
+     "class": "within",
+     "why": "With the record silent this is not a contradicted finding, so labeling it is the constitution XIV treatment. 0116's drawing page has a 6-10 ft kura fire gap, itself a GUESS that says nothing on attached privies. That tension is filed as T343 to land before T158, so it is resolved within the step rather than carried past it."
+    },
+    {
+     "id": "T332-tax-archive-seat",
+     "summary": "Ochiba's tax archive backed into the NW corner 1.5 ft clear of the wall's face (GUESSes: firebreak reading, the nearest seat structures_on_walls passes), the 'back yard' merged into the rear yard.",
+     "class": "within",
+     "why": "It fixes a floating archive and the structures_on_walls failure of the first seat, with each guess labeled. The unnamed band south of it is filed as T355 to land before T158."
+    },
+    {
+     "id": "T335-round-trip-doors-and-court",
+     "summary": "Round trip's north door on the study's east face, the hearing court cut short of the formal door, an entrance ground of its own, seats 2 ft off the dais; omitted-parts lines rewritten.",
+     "class": "within",
+     "why": "It fixes doors that open onto nothing. The mats left off the dais axis and the 102 vs 94 ft court claim are filed as T354 to land before T158."
+    },
+    {
+     "id": "T339-back-door-and-genkan-room",
+     "summary": "Ubame's hall gains a back door to the household's alley; Ochiba's genkan porch opens into a genkan room.",
+     "class": "within",
+     "why": "It fixes doors onto nothing, and 0104 gives the genkan room."
+    },
+    {
+     "id": "T334-popups-restated",
+     "summary": "Genkan and writing-rooms pop-ups given what 0104 and 0113 say; the genkan room restated as about 25 mats (GUESS); docs/buildings.md's study at the back row's east end a GUESS.",
+     "class": "within",
+     "why": "Claims and pop-ups are restated to say what the record says, with each guess labeled, which is constitution XIV's restatement."
+    },
+    {
+     "id": "T340-side-gate-band",
+     "summary": "The side gate's band 5-8 ft clear, a GUESS from the size-audit's bunka.go.jp anchors, recorded in docs/buildings.md; the round trip's 'rear wicket' restated as a rear gate pointing at 0101's fujomon.",
+     "class": "within",
+     "why": "A labeled band and a restated name. The cart gates outside the band are a different kind and are filed as T341, with their own research pass, to land before T158."
+    },
+    {
+     "id": "bundle-follow-ups-filed-before-T158",
+     "summary": "The building-reviews' findings on the frozen review tree (including defects this bundle caused: T353 gatehouse, T354 mats and court claim, T355 Ochiba's band, plus T351, T352, T357), the record-page edits (T342, T343), and the research-first items (T341, T356, T358) are filed as tasks, each landing before T158, Phase 4's deletion close, instead of being fixed in this landing.",
+     "class": "within",
+     "why": "The GM's 2026-11-18 rule is per step: fix all known bugs in each step before moving on to porting the next one. The 2026-11-22 words ('finish the remaining fixes' before the talk) are met as long as these land before T158 and before the talk, which every item states. So this is sequencing inside the step, not a narrowing. Record pages are left to their own page sessions, and research-first items get their pass first. If any of these slipped past T158, that would be the finding."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T338": {
+   "section_sha256": "00769b232a95553ada1621996159e03deace2650669fde0eaae13102bf92c536",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T328-flat-road",
+     "summary": "The dashed overlay across the road's earth removed on ochiba, hayakawa and ubame; the road drawn as one flat earth tone; docs/buildings.md's road-to-gate claim restated; no glyph-check added.",
+     "class": "within",
+     "why": "A reader saw bands across a level road, and 0088's drawing page reads the Hagi 1742 cross-lines as marking a slope: a wrong outcome fixed in its own step, as the GM's 2026-11-18 rule asks. The stale wording on 0088's own drawing page is filed as T342 to land before T158, not carried past the step."
+    },
+    {
+     "id": "T329-county-gate-and-long-house",
+     "summary": "County main gate moved 140 -> 191.5 ft onto the genkan door's line (0104); senior retainers' long-house 24 x 50 -> 22 x 60 ft in karo-rank bays (a GUESS, T320 Q5).",
+     "class": "within",
+     "why": "Fixes the building-review's findings (gate leading onto the hearing court with the genkan off its line, foot-soldier bays for senior retainers) against 0104's reading; the long-house size is GUESS-labeled. The gatehouse this left 40 ft west of the gate is filed as T353 to land before T158."
+    },
+    {
+     "id": "T329-dead-ground-left",
+     "summary": "22 x 25.5 ft of dead ground left before the servants' doors (39 ft before), labeled a GUESS, not filled further.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops short of removing the dead ground, so this is a narrowing of 'fix the known defect'. It is legitimate because going further cannot be done inside the bands: the plan says the long-house is at the residence's cap and the stables were refused the west wall for room. Filling the ground would break a size band, and so contradict research. The remainder is a labeled bare yard, not a wrong outcome."
+    },
+    {
+     "id": "T336-writing-rooms-band",
+     "summary": "Writing rooms banded in types.json (w 6-13, h 10-20, 100-210 sq ft, a GUESS from the size-audit's 6-12 mat estimate, optional, row in docs/building-programs.md); county writing and binding rooms 20 x 10 ft stacked, hall 127 -> 118.5 ft, day office 24.5 and study 18 ft at their bands' tops; round trip's binding room 10 -> 12.5 ft so its caption seats inside, day office 29 -> 26.5.",
+     "class": "within",
+     "why": "Rooms of 16-18 mats against a 6-12 mat estimate is a size-audit failure (a research anchor contradicted), fixed with a labeled band and a red/green size_bands pin. The round trip's binding room differing from the hand sheet's 10 ft is a difference the GM's no-exactness rule allows, not a defect."
+    },
+    {
+     "id": "T336-servants-row-coverage",
+     "summary": "The county servants' row deepened 15 -> 19 ft, a GUESS inside its band, to restore the 30% coverage floor the shorter hall lost.",
+     "class": "within",
+     "why": "It keeps a check (coverage_band, 0116) passing on the fixed sheet by a building in its band rather than by moving a wall. This is the fix-as-we-go rule applied, and the guess is labeled."
+    },
+    {
+     "id": "T337-back-row-order-kept",
+     "summary": "No jin'ya plan names the room behind the magistrate's seat, so the back row's order is kept, the clerks' room behind the dais labeled a GUESS, and docs reworded to 'behind the dais band'.",
+     "class": "within",
+     "why": "No defect: the record is silent, so the claim is restated to match the drawing. The GM's 2026-11-19 rule says a claim the code does not literally match is fixed by restating the claim, not by changing the drawing."
+    },
+    {
+     "id": "T338-dais-caption-ink",
+     "summary": "Dais caption drawn in dark ink at 7 px on two lines in emit.rs (a CONVENTION, the hand sheets' ink), red-then-green test; hand sheets' captions and the county notes' dais (30 x 10 -> 18 x 10 ft) restated.",
+     "class": "within",
+     "why": "A caption unreadable off the dais is a wrong outcome for a reader. The fix is pinned by a test that fails without it, and the notes are restated to match what is drawn."
+    },
+    {
+     "id": "T331-privy-labeled-not-reseated",
+     "summary": "The county garrison privy 0.5 ft off the granary's south face labeled ('privies beside stores') rather than re-seated, the research pass being silent.",
+     "class": "within",
+     "why": "With the record silent this is not a contradicted finding, so labeling it is the constitution XIV treatment. 0116's drawing page has a 6-10 ft kura fire gap, itself a GUESS that says nothing on attached privies. That tension is filed as T343 to land before T158, so it is resolved within the step rather than carried past it."
+    },
+    {
+     "id": "T332-tax-archive-seat",
+     "summary": "Ochiba's tax archive backed into the NW corner 1.5 ft clear of the wall's face (GUESSes: firebreak reading, the nearest seat structures_on_walls passes), the 'back yard' merged into the rear yard.",
+     "class": "within",
+     "why": "It fixes a floating archive and the structures_on_walls failure of the first seat, with each guess labeled. The unnamed band south of it is filed as T355 to land before T158."
+    },
+    {
+     "id": "T335-round-trip-doors-and-court",
+     "summary": "Round trip's north door on the study's east face, the hearing court cut short of the formal door, an entrance ground of its own, seats 2 ft off the dais; omitted-parts lines rewritten.",
+     "class": "within",
+     "why": "It fixes doors that open onto nothing. The mats left off the dais axis and the 102 vs 94 ft court claim are filed as T354 to land before T158."
+    },
+    {
+     "id": "T339-back-door-and-genkan-room",
+     "summary": "Ubame's hall gains a back door to the household's alley; Ochiba's genkan porch opens into a genkan room.",
+     "class": "within",
+     "why": "It fixes doors onto nothing, and 0104 gives the genkan room."
+    },
+    {
+     "id": "T334-popups-restated",
+     "summary": "Genkan and writing-rooms pop-ups given what 0104 and 0113 say; the genkan room restated as about 25 mats (GUESS); docs/buildings.md's study at the back row's east end a GUESS.",
+     "class": "within",
+     "why": "Claims and pop-ups are restated to say what the record says, with each guess labeled, which is constitution XIV's restatement."
+    },
+    {
+     "id": "T340-side-gate-band",
+     "summary": "The side gate's band 5-8 ft clear, a GUESS from the size-audit's bunka.go.jp anchors, recorded in docs/buildings.md; the round trip's 'rear wicket' restated as a rear gate pointing at 0101's fujomon.",
+     "class": "within",
+     "why": "A labeled band and a restated name. The cart gates outside the band are a different kind and are filed as T341, with their own research pass, to land before T158."
+    },
+    {
+     "id": "bundle-follow-ups-filed-before-T158",
+     "summary": "The building-reviews' findings on the frozen review tree (including defects this bundle caused: T353 gatehouse, T354 mats and court claim, T355 Ochiba's band, plus T351, T352, T357), the record-page edits (T342, T343), and the research-first items (T341, T356, T358) are filed as tasks, each landing before T158, Phase 4's deletion close, instead of being fixed in this landing.",
+     "class": "within",
+     "why": "The GM's 2026-11-18 rule is per step: fix all known bugs in each step before moving on to porting the next one. The 2026-11-22 words ('finish the remaining fixes' before the talk) are met as long as these land before T158 and before the talk, which every item states. So this is sequencing inside the step, not a narrowing. Record pages are left to their own page sessions, and research-first items get their pass first. If any of these slipped past T158, that would be the finding."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T339": {
+   "section_sha256": "00769b232a95553ada1621996159e03deace2650669fde0eaae13102bf92c536",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T328-flat-road",
+     "summary": "The dashed overlay across the road's earth removed on ochiba, hayakawa and ubame; the road drawn as one flat earth tone; docs/buildings.md's road-to-gate claim restated; no glyph-check added.",
+     "class": "within",
+     "why": "A reader saw bands across a level road, and 0088's drawing page reads the Hagi 1742 cross-lines as marking a slope: a wrong outcome fixed in its own step, as the GM's 2026-11-18 rule asks. The stale wording on 0088's own drawing page is filed as T342 to land before T158, not carried past the step."
+    },
+    {
+     "id": "T329-county-gate-and-long-house",
+     "summary": "County main gate moved 140 -> 191.5 ft onto the genkan door's line (0104); senior retainers' long-house 24 x 50 -> 22 x 60 ft in karo-rank bays (a GUESS, T320 Q5).",
+     "class": "within",
+     "why": "Fixes the building-review's findings (gate leading onto the hearing court with the genkan off its line, foot-soldier bays for senior retainers) against 0104's reading; the long-house size is GUESS-labeled. The gatehouse this left 40 ft west of the gate is filed as T353 to land before T158."
+    },
+    {
+     "id": "T329-dead-ground-left",
+     "summary": "22 x 25.5 ft of dead ground left before the servants' doors (39 ft before), labeled a GUESS, not filled further.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops short of removing the dead ground, so this is a narrowing of 'fix the known defect'. It is legitimate because going further cannot be done inside the bands: the plan says the long-house is at the residence's cap and the stables were refused the west wall for room. Filling the ground would break a size band, and so contradict research. The remainder is a labeled bare yard, not a wrong outcome."
+    },
+    {
+     "id": "T336-writing-rooms-band",
+     "summary": "Writing rooms banded in types.json (w 6-13, h 10-20, 100-210 sq ft, a GUESS from the size-audit's 6-12 mat estimate, optional, row in docs/building-programs.md); county writing and binding rooms 20 x 10 ft stacked, hall 127 -> 118.5 ft, day office 24.5 and study 18 ft at their bands' tops; round trip's binding room 10 -> 12.5 ft so its caption seats inside, day office 29 -> 26.5.",
+     "class": "within",
+     "why": "Rooms of 16-18 mats against a 6-12 mat estimate is a size-audit failure (a research anchor contradicted), fixed with a labeled band and a red/green size_bands pin. The round trip's binding room differing from the hand sheet's 10 ft is a difference the GM's no-exactness rule allows, not a defect."
+    },
+    {
+     "id": "T336-servants-row-coverage",
+     "summary": "The county servants' row deepened 15 -> 19 ft, a GUESS inside its band, to restore the 30% coverage floor the shorter hall lost.",
+     "class": "within",
+     "why": "It keeps a check (coverage_band, 0116) passing on the fixed sheet by a building in its band rather than by moving a wall. This is the fix-as-we-go rule applied, and the guess is labeled."
+    },
+    {
+     "id": "T337-back-row-order-kept",
+     "summary": "No jin'ya plan names the room behind the magistrate's seat, so the back row's order is kept, the clerks' room behind the dais labeled a GUESS, and docs reworded to 'behind the dais band'.",
+     "class": "within",
+     "why": "No defect: the record is silent, so the claim is restated to match the drawing. The GM's 2026-11-19 rule says a claim the code does not literally match is fixed by restating the claim, not by changing the drawing."
+    },
+    {
+     "id": "T338-dais-caption-ink",
+     "summary": "Dais caption drawn in dark ink at 7 px on two lines in emit.rs (a CONVENTION, the hand sheets' ink), red-then-green test; hand sheets' captions and the county notes' dais (30 x 10 -> 18 x 10 ft) restated.",
+     "class": "within",
+     "why": "A caption unreadable off the dais is a wrong outcome for a reader. The fix is pinned by a test that fails without it, and the notes are restated to match what is drawn."
+    },
+    {
+     "id": "T331-privy-labeled-not-reseated",
+     "summary": "The county garrison privy 0.5 ft off the granary's south face labeled ('privies beside stores') rather than re-seated, the research pass being silent.",
+     "class": "within",
+     "why": "With the record silent this is not a contradicted finding, so labeling it is the constitution XIV treatment. 0116's drawing page has a 6-10 ft kura fire gap, itself a GUESS that says nothing on attached privies. That tension is filed as T343 to land before T158, so it is resolved within the step rather than carried past it."
+    },
+    {
+     "id": "T332-tax-archive-seat",
+     "summary": "Ochiba's tax archive backed into the NW corner 1.5 ft clear of the wall's face (GUESSes: firebreak reading, the nearest seat structures_on_walls passes), the 'back yard' merged into the rear yard.",
+     "class": "within",
+     "why": "It fixes a floating archive and the structures_on_walls failure of the first seat, with each guess labeled. The unnamed band south of it is filed as T355 to land before T158."
+    },
+    {
+     "id": "T335-round-trip-doors-and-court",
+     "summary": "Round trip's north door on the study's east face, the hearing court cut short of the formal door, an entrance ground of its own, seats 2 ft off the dais; omitted-parts lines rewritten.",
+     "class": "within",
+     "why": "It fixes doors that open onto nothing. The mats left off the dais axis and the 102 vs 94 ft court claim are filed as T354 to land before T158."
+    },
+    {
+     "id": "T339-back-door-and-genkan-room",
+     "summary": "Ubame's hall gains a back door to the household's alley; Ochiba's genkan porch opens into a genkan room.",
+     "class": "within",
+     "why": "It fixes doors onto nothing, and 0104 gives the genkan room."
+    },
+    {
+     "id": "T334-popups-restated",
+     "summary": "Genkan and writing-rooms pop-ups given what 0104 and 0113 say; the genkan room restated as about 25 mats (GUESS); docs/buildings.md's study at the back row's east end a GUESS.",
+     "class": "within",
+     "why": "Claims and pop-ups are restated to say what the record says, with each guess labeled, which is constitution XIV's restatement."
+    },
+    {
+     "id": "T340-side-gate-band",
+     "summary": "The side gate's band 5-8 ft clear, a GUESS from the size-audit's bunka.go.jp anchors, recorded in docs/buildings.md; the round trip's 'rear wicket' restated as a rear gate pointing at 0101's fujomon.",
+     "class": "within",
+     "why": "A labeled band and a restated name. The cart gates outside the band are a different kind and are filed as T341, with their own research pass, to land before T158."
+    },
+    {
+     "id": "bundle-follow-ups-filed-before-T158",
+     "summary": "The building-reviews' findings on the frozen review tree (including defects this bundle caused: T353 gatehouse, T354 mats and court claim, T355 Ochiba's band, plus T351, T352, T357), the record-page edits (T342, T343), and the research-first items (T341, T356, T358) are filed as tasks, each landing before T158, Phase 4's deletion close, instead of being fixed in this landing.",
+     "class": "within",
+     "why": "The GM's 2026-11-18 rule is per step: fix all known bugs in each step before moving on to porting the next one. The 2026-11-22 words ('finish the remaining fixes' before the talk) are met as long as these land before T158 and before the talk, which every item states. So this is sequencing inside the step, not a narrowing. Record pages are left to their own page sessions, and research-first items get their pass first. If any of these slipped past T158, that would be the finding."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T340": {
+   "section_sha256": "00769b232a95553ada1621996159e03deace2650669fde0eaae13102bf92c536",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T328-flat-road",
+     "summary": "The dashed overlay across the road's earth removed on ochiba, hayakawa and ubame; the road drawn as one flat earth tone; docs/buildings.md's road-to-gate claim restated; no glyph-check added.",
+     "class": "within",
+     "why": "A reader saw bands across a level road, and 0088's drawing page reads the Hagi 1742 cross-lines as marking a slope: a wrong outcome fixed in its own step, as the GM's 2026-11-18 rule asks. The stale wording on 0088's own drawing page is filed as T342 to land before T158, not carried past the step."
+    },
+    {
+     "id": "T329-county-gate-and-long-house",
+     "summary": "County main gate moved 140 -> 191.5 ft onto the genkan door's line (0104); senior retainers' long-house 24 x 50 -> 22 x 60 ft in karo-rank bays (a GUESS, T320 Q5).",
+     "class": "within",
+     "why": "Fixes the building-review's findings (gate leading onto the hearing court with the genkan off its line, foot-soldier bays for senior retainers) against 0104's reading; the long-house size is GUESS-labeled. The gatehouse this left 40 ft west of the gate is filed as T353 to land before T158."
+    },
+    {
+     "id": "T329-dead-ground-left",
+     "summary": "22 x 25.5 ft of dead ground left before the servants' doors (39 ft before), labeled a GUESS, not filled further.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops short of removing the dead ground, so this is a narrowing of 'fix the known defect'. It is legitimate because going further cannot be done inside the bands: the plan says the long-house is at the residence's cap and the stables were refused the west wall for room. Filling the ground would break a size band, and so contradict research. The remainder is a labeled bare yard, not a wrong outcome."
+    },
+    {
+     "id": "T336-writing-rooms-band",
+     "summary": "Writing rooms banded in types.json (w 6-13, h 10-20, 100-210 sq ft, a GUESS from the size-audit's 6-12 mat estimate, optional, row in docs/building-programs.md); county writing and binding rooms 20 x 10 ft stacked, hall 127 -> 118.5 ft, day office 24.5 and study 18 ft at their bands' tops; round trip's binding room 10 -> 12.5 ft so its caption seats inside, day office 29 -> 26.5.",
+     "class": "within",
+     "why": "Rooms of 16-18 mats against a 6-12 mat estimate is a size-audit failure (a research anchor contradicted), fixed with a labeled band and a red/green size_bands pin. The round trip's binding room differing from the hand sheet's 10 ft is a difference the GM's no-exactness rule allows, not a defect."
+    },
+    {
+     "id": "T336-servants-row-coverage",
+     "summary": "The county servants' row deepened 15 -> 19 ft, a GUESS inside its band, to restore the 30% coverage floor the shorter hall lost.",
+     "class": "within",
+     "why": "It keeps a check (coverage_band, 0116) passing on the fixed sheet by a building in its band rather than by moving a wall. This is the fix-as-we-go rule applied, and the guess is labeled."
+    },
+    {
+     "id": "T337-back-row-order-kept",
+     "summary": "No jin'ya plan names the room behind the magistrate's seat, so the back row's order is kept, the clerks' room behind the dais labeled a GUESS, and docs reworded to 'behind the dais band'.",
+     "class": "within",
+     "why": "No defect: the record is silent, so the claim is restated to match the drawing. The GM's 2026-11-19 rule says a claim the code does not literally match is fixed by restating the claim, not by changing the drawing."
+    },
+    {
+     "id": "T338-dais-caption-ink",
+     "summary": "Dais caption drawn in dark ink at 7 px on two lines in emit.rs (a CONVENTION, the hand sheets' ink), red-then-green test; hand sheets' captions and the county notes' dais (30 x 10 -> 18 x 10 ft) restated.",
+     "class": "within",
+     "why": "A caption unreadable off the dais is a wrong outcome for a reader. The fix is pinned by a test that fails without it, and the notes are restated to match what is drawn."
+    },
+    {
+     "id": "T331-privy-labeled-not-reseated",
+     "summary": "The county garrison privy 0.5 ft off the granary's south face labeled ('privies beside stores') rather than re-seated, the research pass being silent.",
+     "class": "within",
+     "why": "With the record silent this is not a contradicted finding, so labeling it is the constitution XIV treatment. 0116's drawing page has a 6-10 ft kura fire gap, itself a GUESS that says nothing on attached privies. That tension is filed as T343 to land before T158, so it is resolved within the step rather than carried past it."
+    },
+    {
+     "id": "T332-tax-archive-seat",
+     "summary": "Ochiba's tax archive backed into the NW corner 1.5 ft clear of the wall's face (GUESSes: firebreak reading, the nearest seat structures_on_walls passes), the 'back yard' merged into the rear yard.",
+     "class": "within",
+     "why": "It fixes a floating archive and the structures_on_walls failure of the first seat, with each guess labeled. The unnamed band south of it is filed as T355 to land before T158."
+    },
+    {
+     "id": "T335-round-trip-doors-and-court",
+     "summary": "Round trip's north door on the study's east face, the hearing court cut short of the formal door, an entrance ground of its own, seats 2 ft off the dais; omitted-parts lines rewritten.",
+     "class": "within",
+     "why": "It fixes doors that open onto nothing. The mats left off the dais axis and the 102 vs 94 ft court claim are filed as T354 to land before T158."
+    },
+    {
+     "id": "T339-back-door-and-genkan-room",
+     "summary": "Ubame's hall gains a back door to the household's alley; Ochiba's genkan porch opens into a genkan room.",
+     "class": "within",
+     "why": "It fixes doors onto nothing, and 0104 gives the genkan room."
+    },
+    {
+     "id": "T334-popups-restated",
+     "summary": "Genkan and writing-rooms pop-ups given what 0104 and 0113 say; the genkan room restated as about 25 mats (GUESS); docs/buildings.md's study at the back row's east end a GUESS.",
+     "class": "within",
+     "why": "Claims and pop-ups are restated to say what the record says, with each guess labeled, which is constitution XIV's restatement."
+    },
+    {
+     "id": "T340-side-gate-band",
+     "summary": "The side gate's band 5-8 ft clear, a GUESS from the size-audit's bunka.go.jp anchors, recorded in docs/buildings.md; the round trip's 'rear wicket' restated as a rear gate pointing at 0101's fujomon.",
+     "class": "within",
+     "why": "A labeled band and a restated name. The cart gates outside the band are a different kind and are filed as T341, with their own research pass, to land before T158."
+    },
+    {
+     "id": "bundle-follow-ups-filed-before-T158",
+     "summary": "The building-reviews' findings on the frozen review tree (including defects this bundle caused: T353 gatehouse, T354 mats and court claim, T355 Ochiba's band, plus T351, T352, T357), the record-page edits (T342, T343), and the research-first items (T341, T356, T358) are filed as tasks, each landing before T158, Phase 4's deletion close, instead of being fixed in this landing.",
+     "class": "within",
+     "why": "The GM's 2026-11-18 rule is per step: fix all known bugs in each step before moving on to porting the next one. The 2026-11-22 words ('finish the remaining fixes' before the talk) are met as long as these land before T158 and before the talk, which every item states. So this is sequencing inside the step, not a narrowing. Record pages are left to their own page sessions, and research-first items get their pass first. If any of these slipped past T158, that would be the finding."
     }
    ],
    "verdict": "CLEAR"

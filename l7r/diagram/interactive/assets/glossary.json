@@ -10880,7 +10880,8 @@
   "def": "a Japanese gable whose edge rises in a curve to a peak at its center, built over the gates and entrances of houses of rank.",
   "variants": [
    "kara-hafu",
-   "kara-hafu-gabled"
+   "kara-hafu-gabled",
+   "cusped gable"
   ]
  },
  "program item": {
@@ -18390,7 +18391,7 @@
   ]
  },
  "kakiyaku": {
-  "def": "A clerk hired by an Edo town ward from 1721 to keep its accounts and do its duties at the watch house, paid a wage by the ward.",
+  "def": "A scribe or writing clerk. At an intendant's office, the post most tedai were first hired to, mostly the children of village and town officials; in an Edo town ward from 1721, a clerk the ward hired and paid to keep its accounts and do its duties at the watch house.",
   "variants": [
    "kakiyaku"
   ]
@@ -19504,6 +19505,33 @@
   "def": "The old Japanese name for the northern lands beyond Honshu, chiefly the island now called Hokkaido. Late in the Edo period the shogunate decided to have six northern domains clear and guard it as a defense for the north.",
   "variants": [
    "Ezo"
+  ]
+ },
+ "fujomon": {
+  "def": "The \"unclean gate\", also called imimon: a wicket or gate at the rear of a samurai residence, a castle or the like, by which night soil, the dead and criminals were carried out.",
+  "variants": [
+   "fujomon",
+   "imimon"
+  ]
+ },
+ "shoyaku": {
+  "def": "The reading the Takayama Jin'ya's guide gives the officials of its writing room, who drew up documents for the shogunate and the records of examinations; mostly officials' sons taken on as apprentices. Other pages read the same word kakiyaku.",
+  "variants": [
+   "shoyaku"
+  ]
+ },
+ "mat": {
+  "def": "A tatami mat used as a measure of floor area: a room \"of 8 mats\" is floored with eight tatami. Two mats make one tsubo, a square ken about 6 ft on a side, so a mat is about 6 by 3 ft.",
+  "variants": [
+   "mat",
+   "mats",
+   "mat count"
+  ]
+ },
+ "six offices": {
+  "def": "The six clerks' offices of a Chinese county yamen: personnel, revenue, rites, war, justice and works. At Pingyao the first three stood on the east under the county assistant, and the last three on the west under the jail warden.",
+  "variants": [
+   "six offices"
   ]
  }
 }

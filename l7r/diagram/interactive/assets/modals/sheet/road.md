@@ -18,8 +18,8 @@ Guesses:
 
 Depiction: The plan draws the road the compound stands on as a band of bare ground coming in from the sheet's edge, its main gate opening onto it, and narrower
 lanes to the lesser gates. A highway is drawn in the same earth tone as a lesser road: its dressing of sand and gravel was
-earth-colored at a plan's scale. The light and dark bands across the road are a map drawing convention, a texture that
-marks the ground as road; they stand for no ruts, paving or steps, since the road itself was earth.
+earth-colored at a plan's scale. The tone is flat, a map drawing convention that
+marks the ground as road, and nothing is drawn on its bed - no ruts, paving or steps - since the road itself was earth trodden hard.
 
 Name: road
 Covers: the approach road or town street, the lanes to the lesser doors, and a road across a border
