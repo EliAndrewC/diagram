@@ -293,3 +293,69 @@ fn another_started_task_s_record_passes_are_its_own_and_the_landing_s_own_still_
     let mine = ["q1", "q2", "q4", "q9"].map(|q| own.stderr.contains(&format!("pass-{q} ")));
     assert_eq!((own.code, mine), (1, [true; 4]));
 }
+
+/// 451 T167: a page session's bundle carries its session's letter (`q-0123-quote-check-t330a`), read as a task never started (T330a),
+/// and the reading stopped there - so 449 T330's quote-check refused a 451 landing (replayed 2026-11-23 on the landing's tree at
+/// af418b90c5 and the pass log as it stood at 02:33Z: T330's one pass not left). A source naming no started task gives way to the next:
+/// the page session's brief (`t2a-checks.md`, "feature 449 T2 and T4"), and the brief's own task where it names another than its file
+/// (`t2b-checks.md`, its first line naming T4, as `t330b-checks.md` named T333). A pass naming T5, never started, with no page session,
+/// still refuses.
+#[test]
+fn a_page_session_pass_naming_its_session_letter_is_left_to_its_briefs_task() {
+    let log = [
+        pass("quote-check", "s1", "pass-s1 Run your check on the bundle: /tmp/l7r-check/q-0123-quote-check-t2a/MANIFEST.md", &json!({})),
+        pass("quote-check", "s2", "pass-s2 Run your check on the bundle: /tmp/l7r-check/q-0116-quote-check-t2b/MANIFEST.md", &json!({})),
+        pass("quote-check", "s3", "pass-s3 Run your check on the bundle: /tmp/l7r-check/q-0116-quote-check-t5/MANIFEST.md", &json!({})),
+    ];
+    let metas = [
+        (
+            "psa",
+            "s1",
+            json!({"description": "quote-check 0123", "spawnDepth": 1}),
+        ),
+        (
+            "psb",
+            "s2",
+            json!({"description": "quote-check 0116", "spawnDepth": 1}),
+        ),
+        (
+            "main",
+            "s3",
+            json!({"description": "quote-check 0116", "spawnDepth": 1}),
+        ),
+    ];
+    let (_d, env) = record_world("left-letter", &log, &metas);
+    for (name, head) in [
+        (
+            "t2a-checks.md",
+            "# Brief - feature 449 T2 and T4.5 (0123), session 2: check and apply\n",
+        ),
+        (
+            "t2b-checks.md",
+            "# Brief - feature 449 T4 and the 0116 pointer, session 2: check and apply\n",
+        ),
+    ] {
+        put(&env.cwd, &format!("specs/449-x/briefs/{name}"), head);
+    }
+    let index = env.cwd.join(".git/page-sessions/index.txt");
+    let more: String = [("psa", "t2a-checks.md"), ("psb", "t2b-checks.md")]
+        .map(|(sid, name)| {
+            let brief = env.cwd.join("specs/449-x/briefs").join(name);
+            format!("{sid} {}\n", brief.display())
+        })
+        .concat();
+    let text = std::fs::read_to_string(&index).unwrap() + &more;
+    std::fs::write(&index, text).unwrap();
+    let got = cli(
+        &args(&[&L[..], &["--refuse", "--landing", "451-y", "--tasks", "T9"]].concat()),
+        &env,
+    );
+    let owed = ["s1", "s2", "s3"].map(|q| got.stderr.contains(&format!("pass-{q} ")));
+    assert_eq!((got.code, owed), (1, [false, false, true]));
+    assert!(
+        got.stdout
+            .contains("which write their rows: 449-x T2, 449-x T4"),
+        "{}",
+        got.stdout
+    );
+}

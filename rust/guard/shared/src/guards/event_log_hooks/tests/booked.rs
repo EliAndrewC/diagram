@@ -155,6 +155,40 @@ fn a_page_sessions_edit_is_booked_to_its_brief() {
     );
 }
 
+/// 451 T167: a page session's line is booked by its SESSION ID in the index, its environment naming no `L7R_PAGE_SESSION`, while the
+/// mark names T09 - T330's page sessions' lines went to the mark's T328 (observed 2026-11-23). Its brief's first line names its task
+/// (`t05a-checks.md`, "feature 451 T05 and T07"); a listed session whose brief names none carries none, never the mark; a session the
+/// index does not list is the main session, the mark's.
+#[test]
+fn a_page_sessions_line_is_booked_by_its_session_id() {
+    let w = World::new("booked-sid");
+    let briefs = w.d.join("specs/451-a/briefs");
+    std::fs::create_dir_all(&briefs).unwrap();
+    std::fs::write(
+        briefs.join("t05a-checks.md"),
+        "# Brief - feature 451 T05 and T07.5 (0101, 0104), session 2: check and apply\n",
+    )
+    .unwrap();
+    std::fs::write(briefs.join("notes.md"), "# Brief - the checks\n").unwrap();
+    std::fs::create_dir_all(w.d.join(".git/page-sessions")).unwrap();
+    let index = |brief: &str| {
+        std::fs::write(
+            w.d.join(".git/page-sessions/index.txt"),
+            format!("other {0}/notes.md\ns1 {0}/{brief}\n", briefs.display()),
+        )
+        .unwrap();
+    };
+    let env = |k: &str| (k == "SPECIFY_FEATURE").then(|| "451-a".to_owned());
+    index("t05a-checks.md");
+    assert_eq!(w.booked(&w.edit(None), &env), at(Some("T05")));
+    // its own agent naming none: its session's
+    assert_eq!(w.booked(&w.edit(Some("aloose")), &env), at(Some("T05")));
+    index("notes.md");
+    assert_eq!(w.booked(&w.edit(None), &env), at(None));
+    std::fs::write(w.d.join(".git/page-sessions/index.txt"), "other x\n").unwrap();
+    assert_eq!(w.booked(&w.edit(None), &env), at(Some("T09")));
+}
+
 /// The page-session reader's every refusal: no index, no `specs/` in the path, nothing after it, no task in the line or the name.
 #[test]
 fn a_page_session_brief_names_its_feature_and_task_or_nothing() {

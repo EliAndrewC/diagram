@@ -14,7 +14,8 @@
 //!   Agent call, the `T<n>` its own description names; else the agent's CORRECTION (451 T106, [`renumbered`]); else the `T<n>` the
 //!   brief names; else, for an Agent call, its prompt's first line's (451 T07); else, for an agent's line, its builder's reading - its
 //!   description's head, else its own prompt's first line, else its dispatching builder's (451 T161, `set_down_hooks::agent_builder`);
-//!   else a page session's brief's (`L7R_PAGE_SESSION`, `set_down_hooks::page_session_brief`); else, for the main session's own line
+//!   else a page session's brief's (`L7R_PAGE_SESSION`, else the line's `session_id` listed in `page-sessions/index.txt`, 451 T167;
+//!   `set_down_hooks::page_session_brief`); else, for the main session's own line
 //!   alone, the task-start in force for the line's feature (D2's last entry, now of the line's own feature, not of feature.json's) - an
 //!   agent's or page session's line naming no task carries none, never the clone's mark (451 T161).
 //!
@@ -49,7 +50,7 @@ use super::{
     common_git_dir, dispatches, feature_of, first_group, log_path_in, make_target, re, text_of,
     TASK, TASK_NAMED,
 };
-use crate::guards::set_down_hooks::{agent_builder, page_session_brief};
+use crate::guards::set_down_hooks::{agent_builder, page_session_brief, page_session_listed};
 use crate::shape::strip_heredocs;
 
 /// How old a task start may be and still name a brief's bare task's feature (451 T53). WHY: `T47 plan review`, from a 451 T47 builder
@@ -335,6 +336,23 @@ pub fn started(starts: &[Start], task: &str, now: Option<f64>) -> Option<String>
         .map(|(f, _, _)| f.clone())
 }
 
+/// The page session a line is of (451 T167): its environment's `L7R_PAGE_SESSION`, else the line's own `session_id` where the clone's
+/// `page-sessions/index.txt` lists it; None for any other session. WHY: 449 T330's page sessions' lines were booked to the mark's T312
+/// and T328 (1,254 of 7e3b's lines, 141 of 2647's, 216 of f1d2's), observed 2026-11-23 (method: the 449 log's lines of the index's
+/// four T330 ids, counted by task) - the hook that wrote them predated T161's environment read; the session id is in every payload.
+fn page_session(
+    payload: &Value,
+    root: &Path,
+    env: &dyn Fn(&str) -> Option<String>,
+) -> Option<String> {
+    env("L7R_PAGE_SESSION")
+        .filter(|s| !s.trim().is_empty())
+        .or_else(|| {
+            let own = text_of(payload.get("session_id"));
+            page_session_listed(root, &own).map(|_| own)
+        })
+}
+
 /// Does the hook's environment name the session's feature (`feature_of`'s first two sources)?
 fn declared(root: &Path, env: &dyn Fn(&str) -> Option<String>) -> bool {
     let own = env("L7R_FEATURE_DIRECTORY").unwrap_or_default();
@@ -420,7 +438,13 @@ pub(super) fn filed(
     // 2026-11-22, method: the 449 log's edit lines of `reviews/owed.rs` and `gen_tests_seat.rs`, `by` a6ed2241ba6a59166, read against
     // its meta file and transcript).
     let aid = text_of(payload.get("agent_id"));
-    let page = env("L7R_PAGE_SESSION").filter(|s| !s.trim().is_empty());
+    // the page session, read once a line and only where no link before it asks (451 T167, [`page_session`])
+    let listed = OnceCell::new();
+    let page = || {
+        listed
+            .get_or_init(|| page_session(payload, root, env))
+            .clone()
+    };
     let mut theirs = None;
     let task = task.or_else(|| {
         let (feature, task) = Some(&aid)
@@ -428,7 +452,7 @@ pub(super) fn filed(
             .and_then(|a| builder_named(payload, a))
             .and_then(|(n, tasks)| Some((specs.named(&n), tasks.into_iter().next()?)))
             .or_else(|| {
-                let (f, t) = page_session_brief(root, page.as_deref()?)?;
+                let (f, t) = page_session_brief(root, &page()?)?;
                 Some((Some(f), t))
             })?;
         theirs = feature;
@@ -454,7 +478,7 @@ pub(super) fn filed(
         None => (feature_of(root, env), !declared(root, env)),
     };
     let task = task.or_else(|| {
-        if feature.is_empty() || !aid.is_empty() || page.is_some() {
+        if feature.is_empty() || !aid.is_empty() || page().is_some() {
             None
         } else {
             in_force(&starts, &feature)

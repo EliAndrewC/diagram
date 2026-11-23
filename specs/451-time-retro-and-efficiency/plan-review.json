@@ -1314,6 +1314,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T167 (observed 2026-11-23: 449 T330's page sessions' event-log lines were booked to the clone's mark, T312 and then T328, and a 451 landing of T160 and T161 was refused \"review passes with no ledger row\" on a T330 page-session pass that 451 T157's `whose.rs` should have left to T330)": {
+   "sha256": "7577ecef875a26bd9e1f9f625f28f6197ecafd4d687a07bcff81d0f87a4ea2ec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T167 Approach (checklist part A)": {
+   "sha256": "813ded397fc525435c2ecf487b13a869618878477f7c284fa530b63fc04e0942",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -14759,6 +14771,59 @@
      "why": "The earlier text was an empty template, so deleting it removes no decision and no commitment to the request."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T167 (observed 2026-11-23: 449 T330's page sessions' event-log lines were booked to the clone's mark, T312 and then T328, and a 451 landing of T160 and T161 was refused \"review passes with no ledger row\" on a T330 page-session pass that 451 T157's `whose.rs` should have left to T330)",
+    "### T167 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T167-A1",
+     "summary": "Event log: a line is a page session's when its env names L7R_PAGE_SESSION or the clone's page-sessions/index.txt lists its session_id; it is booked to its brief's task, a listed session whose brief names no task carries no task and never the mark's.",
+     "class": "within",
+     "why": "Corrects a wrong outcome in the per-task time breakdown the GM asked for (2026-11-19 retrospective: 'for each task ... a breakdown of where our time went'; FR-001/FR-005 readers): minutes of T330's page sessions were credited to T312/T328. Keeps 451 T161's rule that the mark is only for the main session's own lines."
+    },
+    {
+     "id": "T167-A2",
+     "summary": "The new check set_down_hooks::page_session_listed is split out of the shared page_session_brief reader so the writer and make events-refile keep one copy (451 T56).",
+     "class": "within",
+     "why": "Implementation structure inside the fix; narrows nothing asked."
+    },
+    {
+     "id": "T167-A3",
+     "summary": "The index is read only for a line no earlier link has booked, and at most once per line.",
+     "class": "within",
+     "why": "Cost bound on the new link; changes no outcome the request or spec settles."
+    },
+    {
+     "id": "T167-B1",
+     "summary": "Ledger left reading (whose.rs): a source that names a task never started in its feature gives way to the next source (subject, meta description, builder, page session brief) instead of the first naming source winning; a pass naming nothing, a ticked task, a never-started task with no other source, or the landing's own task still refuses.",
+     "class": "within",
+     "why": "Fixes a check that refused good work (a landing owing nothing refused because a bundle suffix '-t330a' was read as task T330a). The refusal is not weakened: a pass is still left only to a started, open task the landing does not land, per 451 T157, so the GM's 'real enforcement' (2026-11-19 approval) holds."
+    },
+    {
+     "id": "T167-L1",
+     "summary": "Found and left: the 449 log's lines already booked to T312/T328 for T330's sessions stay as filed; make where-time credits those minutes to T312/T328 until T168 (a [perf] task, filed) re-tasks them, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect left (where-time answers wrongly for those minutes), so it narrows T167. It is legitimate: the lines sit in 449's own log, which 449's two bundles are landing from now, so rewriting it in this task would change a file an in-flight landing reads; and the re-tasking needs a rule make events-refile does not have (it moves lines across features only). The defect is not dropped from the feature: it is filed as T168 with its order stated (lands before T22) and classed [perf] so it is scheduled first under the GM's 2026-11-20 measurement rule, meeting FR-009's deferral form. The request's purpose, accurate per-task time, is still carried."
+    },
+    {
+     "id": "T167-P1",
+     "summary": "The event-log half is [perf] for scheduling under the GM's 2026-11-20 measurement rule; the whose.rs half is not performance work; no before-and-after timing is owed because neither half makes a step faster.",
+     "class": "within",
+     "why": "Applies the GM's words verbatim ('this kind of measurement task to be counted as a performance task for the purpose of scheduling ... even if the task itself doesn't improve performance') and FR-013; owes no timing since neither half claims a speed-up."
+    },
+    {
+     "id": "T167-X1",
+     "summary": "Order after T161 and T157; exits (two red-first tests, crate suites, coverage, lint, format, hook suites, MODE 4 CLEAR); fixtures copying this clone's shapes (t05a-checks.md naming T05 under mark T09; -t2a/-t2b bundles naming T2 and T4).",
+     "class": "within",
+     "why": "Sequencing and verification of the fix itself; tests that fail only when the requested booking is absent are enforcement of the request, not added scope."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -22724,6 +22789,57 @@
      "summary": "The 120-character constant is not moved; head takes the same cut after the prefixes.",
      "class": "within",
      "why": "Keeps an existing constant; the defect is fixed without it, so nothing defective is left."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T167": {
+   "section_sha256": "a684faf3013c417e668273dc5523907f42af8db599247cc9567f13773d7b6619",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T167-A1",
+     "summary": "Event log: a line is a page session's when its env names L7R_PAGE_SESSION or the clone's page-sessions/index.txt lists its session_id; it is booked to its brief's task, a listed session whose brief names no task carries no task and never the mark's.",
+     "class": "within",
+     "why": "Corrects a wrong outcome in the per-task time breakdown the GM asked for (2026-11-19 retrospective: 'for each task ... a breakdown of where our time went'; FR-001/FR-005 readers): minutes of T330's page sessions were credited to T312/T328. Keeps 451 T161's rule that the mark is only for the main session's own lines."
+    },
+    {
+     "id": "T167-A2",
+     "summary": "The new check set_down_hooks::page_session_listed is split out of the shared page_session_brief reader so the writer and make events-refile keep one copy (451 T56).",
+     "class": "within",
+     "why": "Implementation structure inside the fix; narrows nothing asked."
+    },
+    {
+     "id": "T167-A3",
+     "summary": "The index is read only for a line no earlier link has booked, and at most once per line.",
+     "class": "within",
+     "why": "Cost bound on the new link; changes no outcome the request or spec settles."
+    },
+    {
+     "id": "T167-B1",
+     "summary": "Ledger left reading (whose.rs): a source that names a task never started in its feature gives way to the next source (subject, meta description, builder, page session brief) instead of the first naming source winning; a pass naming nothing, a ticked task, a never-started task with no other source, or the landing's own task still refuses.",
+     "class": "within",
+     "why": "Fixes a check that refused good work (a landing owing nothing refused because a bundle suffix '-t330a' was read as task T330a). The refusal is not weakened: a pass is still left only to a started, open task the landing does not land, per 451 T157, so the GM's 'real enforcement' (2026-11-19 approval) holds."
+    },
+    {
+     "id": "T167-L1",
+     "summary": "Found and left: the 449 log's lines already booked to T312/T328 for T330's sessions stay as filed; make where-time credits those minutes to T312/T328 until T168 (a [perf] task, filed) re-tasks them, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect left (where-time answers wrongly for those minutes), so it narrows T167. It is legitimate: the lines sit in 449's own log, which 449's two bundles are landing from now, so rewriting it in this task would change a file an in-flight landing reads; and the re-tasking needs a rule make events-refile does not have (it moves lines across features only). The defect is not dropped from the feature: it is filed as T168 with its order stated (lands before T22) and classed [perf] so it is scheduled first under the GM's 2026-11-20 measurement rule, meeting FR-009's deferral form. The request's purpose, accurate per-task time, is still carried."
+    },
+    {
+     "id": "T167-P1",
+     "summary": "The event-log half is [perf] for scheduling under the GM's 2026-11-20 measurement rule; the whose.rs half is not performance work; no before-and-after timing is owed because neither half makes a step faster.",
+     "class": "within",
+     "why": "Applies the GM's words verbatim ('this kind of measurement task to be counted as a performance task for the purpose of scheduling ... even if the task itself doesn't improve performance') and FR-013; owes no timing since neither half claims a speed-up."
+    },
+    {
+     "id": "T167-X1",
+     "summary": "Order after T161 and T157; exits (two red-first tests, crate suites, coverage, lint, format, hook suites, MODE 4 CLEAR); fixtures copying this clone's shapes (t05a-checks.md naming T05 under mark T09; -t2a/-t2b bundles naming T2 and T4).",
+     "class": "within",
+     "why": "Sequencing and verification of the fix itself; tests that fail only when the requested booking is absent are enforcement of the request, not added scope."
     }
    ],
    "verdict": "CLEAR"

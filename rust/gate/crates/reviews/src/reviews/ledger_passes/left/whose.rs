@@ -17,6 +17,10 @@
 //! - its PAGE SESSION: its transcript's session directory looked up in the clone's `page-sessions/index.txt`, the brief's
 //!   `specs/<feature>/` path and its first line's task, else its file name's (`t283-checks.md`).
 //!
+//! A source naming only a task never started in its feature gives way to the next (451 T167): a page session's bundle carries its
+//! session's letter (`q-0123-quote-check-t330a`, read as T330a), and the reading stopped there, short of the brief's T330 - a 451
+//! landing refused on it (replayed 2026-11-23 on the landing's tree af418b90c5 and the pass log as it stood at 02:33Z).
+//!
 //! A task named without its feature takes the feature that started it (`event_log_hooks::started`). The pass is left only where that
 //! task is STARTED (`task-starts.jsonl`) and ticked in neither of its feature's task files, and none of the tasks named is one this
 //! landing lands; a pass naming nothing, a task never started, a ticked one, or one of the landing's own still refuses here.
@@ -69,12 +73,7 @@ impl<'a> Clues<'a> {
 
     /// The started, open task (`<feature> <task>`) whose own landing or session owes this pass's row; None where it is owed here.
     pub(super) fn left_to(&mut self, p: &Pass, landing: &Landing) -> Option<String> {
-        let named = self.named(p)?;
-        let first = named.tasks.first()?;
-        let feature = match &named.feature {
-            Some(f) => self.feature_dir(f)?,
-            None => started(&self.starts, first, None)?,
-        };
+        let (feature, named) = self.named(p)?;
         if landing.feature == feature
             && named
                 .tasks
@@ -94,10 +93,26 @@ impl<'a> Clues<'a> {
             .map(|t| format!("{feature} {t}"))
     }
 
-    /// The first source that names a task: the subject, the meta's description, the builder, the page session's brief.
-    fn named(&mut self, p: &Pass) -> Option<Named> {
-        if let Some(n) = words(text(p, "subject")) {
-            return Some(n);
+    /// The feature a source's tasks are served in - its number's specs directory, else the feature that started its first task - where
+    /// one of them was started there; None for a source naming no task started (451 T167).
+    fn served(&self, n: Named) -> Option<(String, Named)> {
+        let feature = match &n.feature {
+            Some(f) => self.feature_dir(f)?,
+            None => started(&self.starts, n.tasks.first()?, None)?,
+        };
+        let begun = n
+            .tasks
+            .iter()
+            .any(|t| self.starts.iter().any(|(f, s, _)| *f == feature && s == t));
+        begun.then_some((feature, n))
+    }
+
+    /// The first source that names a STARTED task, with its feature: the subject, the meta's description, the builder, the page
+    /// session's brief. A source naming only a task never started gives way to the next (451 T167): the bundle
+    /// `q-0123-quote-check-t330a` carries its page session's letter, read as T330a, and stopped the reading short of its brief's T330.
+    fn named(&mut self, p: &Pass) -> Option<(String, Named)> {
+        if let Some(hit) = words(text(p, "subject")).and_then(|n| self.served(n)) {
+            return Some(hit);
         }
         let transcript = self.transcripts.find(text(p, "agent"))?;
         let meta = meta_of(&transcript);
@@ -112,13 +127,16 @@ impl<'a> Clues<'a> {
             .map(Path::to_path_buf)
             .unwrap_or_default();
         words(&field("description"))
+            .and_then(|n| self.served(n))
             .or_else(|| {
-                builder_brief(&dir, &field("parentAgentId")).map(|(feature, tasks)| Named {
-                    feature: Some(feature),
-                    tasks,
+                builder_brief(&dir, &field("parentAgentId")).and_then(|(feature, tasks)| {
+                    self.served(Named {
+                        feature: Some(feature),
+                        tasks,
+                    })
                 })
             })
-            .or_else(|| self.page_session(&dir))
+            .or_else(|| self.page_session(&dir).and_then(|n| self.served(n)))
     }
 
     /// A feature number or directory name as this repository's specs directory.

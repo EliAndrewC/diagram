@@ -56,6 +56,22 @@ static NAMED: LazyLock<Regex> = LazyLock::new(|| re(r"(?:\b(\d{3})\s+)?\b(T\d+[a
 /// A page-session brief's file name: `t197-g2-checks.md`.
 static BRIEF_FILE: LazyLock<Regex> = LazyLock::new(|| re(r"^t(\d+[a-z]?)-"));
 
+/// The brief the clone at `root`'s `page-sessions/index.txt` lists for session `sid` (its last line for `sid`), None where it lists
+/// none: whether a line's session is a page session at all (451 T167, `event_log_hooks/filed.rs`), apart from whether its brief names a
+/// task.
+#[must_use]
+pub fn page_session_listed(root: &Path, sid: &str) -> Option<PathBuf> {
+    let index = std::fs::read_to_string(
+        crate::guards::event_log_hooks::common_git_dir(root).join("page-sessions/index.txt"),
+    )
+    .ok()?;
+    index.lines().rev().find_map(|l| {
+        l.split_once(' ')
+            .filter(|(id, _)| *id == sid)
+            .map(|(_, path)| PathBuf::from(path.trim()))
+    })
+}
+
 /// The (feature directory, task) page session `sid`'s brief names, the clone at `root` holding its `page-sessions/index.txt` (`<sid>
 /// <brief path>`, the runner's `L7R_PAGE_SESSION` its first column, its last line for `sid` read): the feature its `specs/<feature>/`
 /// path names, the task its first line names (`# Brief - feature 449 task T197, ...`), else its file name's (`t197-g2-checks.md`). None
@@ -63,15 +79,7 @@ static BRIEF_FILE: LazyLock<Regex> = LazyLock::new(|| re(r"^t(\d+[a-z]?)-"));
 /// booking of a page session's lines (451 T161, `event_log_hooks/filed.rs`) share.
 #[must_use]
 pub fn page_session_brief(root: &Path, sid: &str) -> Option<(String, String)> {
-    let index = std::fs::read_to_string(
-        crate::guards::event_log_hooks::common_git_dir(root).join("page-sessions/index.txt"),
-    )
-    .ok()?;
-    let brief = index.lines().rev().find_map(|l| {
-        l.split_once(' ')
-            .filter(|(id, _)| *id == sid)
-            .map(|(_, path)| PathBuf::from(path.trim()))
-    })?;
+    let brief = page_session_listed(root, sid)?;
     let parts: Vec<String> = brief
         .components()
         .map(|c| c.as_os_str().to_string_lossy().into_owned())
