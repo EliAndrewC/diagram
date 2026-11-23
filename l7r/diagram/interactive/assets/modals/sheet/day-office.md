@@ -17,7 +17,7 @@ recorded.
 Guesses:
 - That the day office stood in the back row behind the dais band, in the same hall: no account places such a room behind
   the court, and which room stood directly behind the magistrate's seat at an intendant's office is not recorded (at Edo's
-  town magistracies it was a working room of the examiners); it is reckoned from what a working office had to hold.
+  North Town Magistracy, on a plan of 1841, it was a room whose name marks it as the examiners' working room, though no account states its use); it is reckoned from what a working office had to hold.
 
 Depiction: The plan draws the day office as a room of the office hall's back row, behind the dais band, between the clerks' room and the
 official study, its floor drawn in the hall's own color.

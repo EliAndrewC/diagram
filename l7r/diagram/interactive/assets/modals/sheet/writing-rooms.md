@@ -13,9 +13,9 @@ shingles. What the two rooms looked like inside, and how large they were, is not
 
 Guesses:
 - That a county office kept a writing room and a binding room of its own: the offices found with them are Takayama's,
-  which governed a whole province, and Iijima's modern reconstruction; a county office's hall is far smaller.
-- Their size on the plan, about 10 to 12.5 ft wide by 17 to 20 ft deep each and at most about 210 sq ft, some 6 to 12 mats: no measured writing room was found,
-  and the two together are drawn well under the one 26 to 28 mat room where Takayama's officials worked.
+  which governed a whole province, and, with a writing room only, Iijima's modern reconstruction; a county office's hall is far smaller.
+- Their size on the plan, each room about 6 to 13 ft wide by 10 to 20 ft deep and 100 to 210 sq ft, some 6 to 12 tatami mats at about 18 sq ft a mat: no measured writing room was found.
+
 
 Depiction: The plan draws the writing room and the binding room as two rooms of the office hall's back row, west of the
 clerks' room, side by side or one behind the other, their floors drawn in the hall's own color.

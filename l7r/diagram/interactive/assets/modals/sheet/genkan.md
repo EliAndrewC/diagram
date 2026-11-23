@@ -30,7 +30,7 @@ Guesses:
 - The genkan room drawn at the office hall's end, between the porch and the working rooms: Jōge's drawing and Takayama's
   surviving room show a room behind the step, not where it stood in a county office's hall.
 - That where the office and the residence share a compound, the way to the residence runs on through the office: whether a
-  guest went on from the genkan to the residence indoors is not recorded, and it is drawn as the visitor's route runs at the
+  guest went on from the genkan to the residence indoors is not recorded, and it is drawn as today's visitors' route runs over the restored compound at the
   Takayama jin'ya.
 
 Depiction: Where the office and the residence share a compound, the plan draws the genkan on the office hall, and the way to
