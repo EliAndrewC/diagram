@@ -248,8 +248,33 @@ fn handle_locked(mode: &str, payload: &Value, path: &Path, t: f64) -> String {
     }
     if out.is_empty() {
         let _ = save(path, &state);
+    } else {
+        keep_trips(path, &state);
     }
     out
+}
+
+/// A REFUSED dispatch saves nothing of what it counted - but the footnote hold's own record must outlive its refusal: the trigger
+/// it tripped (`flag_trips`) and the flags a ruling reset (`flags`), written onto the state as it stands on disk. WHY (feature 454's
+/// check session, 2026-11-24, ruling `ask:454-c1b-fixloop-retrip`): the trip was written into a state never saved, so a ruled
+/// trigger was never matched to its footnote and the same footnote tripped a new round number at every dispatch - three trips and
+/// three arbiter dispatches with no round run. `GUARD_EDIT_OK`: fixing a guard that fires on correct work.
+fn keep_trips(path: &Path, state: &Value) {
+    let Some(trips) = state.get("flag_trips").filter(|v| v.is_object()) else {
+        return;
+    };
+    let mut kept = load(path);
+    if !kept.is_object() {
+        return;
+    }
+    if kept.get("flag_trips") == Some(trips) && kept.get("flags") == state.get("flags") {
+        return;
+    }
+    kept["flag_trips"] = trips.clone();
+    if let Some(flags) = state.get("flags") {
+        kept["flags"] = flags.clone();
+    }
+    let _ = save(path, &kept);
 }
 
 /// What the `dispatch` branch decided.
