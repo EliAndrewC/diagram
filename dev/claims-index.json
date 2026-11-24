@@ -37380,30 +37380,33 @@
   "claim": "the brook's course - GUESS: which-way-water-flows-and-how-channels-bend-and-join.drawing silent on a brook's run, slew, skirt and wander (it covers a channel's bends, offtakes and junctions); these are the deleted `consts_water.py`'s, each its own GUESS there",
   "code": "844a3d9c2e01ca42",
   "core": "55f8d94090586f40",
-  "date": "2026-11-22",
-  "note": "the 0054 drawing page covers only a channel's bends, its 35-degree offtake and its junctions; it gives no length for a brook's run, so GUESS is the right label",
+  "date": "2026-11-24",
+  "note": "the 70 ft is exactly the figure the 0059 drawing page §7 records as a GUESS (\"About 70 ft ... holds the intake's line that far\"). The claim points instead to 0054's drawing page and to the deleted `consts_water.py`, and it lists slew, skirt and wander, which this constant does not set. The label should be GUESS research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html (the tap's stride, ~70 ft) [0059 drawing §7; 0054 drawing §]",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
   "research": "68e3dc87e83ea403",
-  "rests": [],
-  "verdict": "IN-STEP"
+  "said": "the brook's course - GUESS: which-way-water-flows-and-how-channels-bend-and-join.drawing silent on a brook's run, slew, skirt and wander (it covers a channel's bends, offtakes and junctions); these are the deleted `consts_water.py`'s, each its own GUESS there",
+  "siblings": "8c910216113a0178",
+  "verdict": "MISLABELED"
  },
  "rust/phases/src/driver.rs::BROOK_W#the brook's width": {
   "body": "3b2097eb6cd2a509",
   "claim": "the brook's width - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: a village creek at roughly three and a half times the 1.5 ft floor, 5.25 ft",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "2a81780f8592e481",
   "core": "91ea9f99b0be0996",
   "date": "2026-11-08",
   "note": "5.25 ft = 3.5 x the 1.5 ft floor, the village creek rung",
   "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
   },
-  "research": "65ae107a7028a36f",
+  "research": "36e3a982de000a83",
   "rests": [
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:0c50dfc54e196c68",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7d2ddc0969f9e213"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::BROOK_WANDER#the brook's course": {
@@ -37510,19 +37513,21 @@
  "rust/phases/src/driver.rs::FIELD_KNOBS#the intake's place and siting": {
   "body": "e849d5e0854a5b74",
   "claim": "the intake's place and siting - GUESS where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the intake at the left, the center or the right of the fan's head at odds of 1:2:1, a GUESS there - the shoulder or the center at even odds here, the shoulder's side the brook's (`brook_side`, itself even); on a bend or a straight reach, the two equally likely",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "2ac1bfb5ca3dc77f",
   "core": "9c33e1a1dd3a5d1f",
   "date": "2026-11-24",
   "note": "shoulder or center at even odds, with the shoulder's side the brook's and brook_side itself even, gives the page's 1:2:1; bend or straight at even odds, a GUESS there",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:41b10ab472dcebe7",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::FIELD_KNOBS#the planned grid on no hamlet": {
@@ -37557,14 +37562,15 @@
  "rust/phases/src/driver.rs::FIELD_KNOBS#the weir's forms": {
   "body": "e849d5e0854a5b74",
   "claim": "the weir's forms - GUESS where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: a weir built in one of four ways, chosen at random with even odds, the even odds a GUESS there",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "3489f0fb4741c4d6",
   "core": "9c33e1a1dd3a5d1f",
   "date": "2026-11-24",
   "note": "fence, gabion, frame and crib at even odds, the four forms the page attests, the odds a GUESS there",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:300438cba3f2bc8d",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:4ae905f5520be209",
@@ -37573,6 +37579,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:79deddd4ec0f4b3d",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a0772093759304da"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::FIELD_KNOBS#the winter crop's odds off the table": {
@@ -37814,15 +37821,15 @@
   "date": "2026-11-07",
   "note": "30 deg, the oblique weirs' average, drawn across the whole brook",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:5fcdeacb667b42dd",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:bd4acd9d984b8217",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fb25778e65e5d8bd"
   ],
-  "triaged": "2026-11-23",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::cohort_spec#the cohort's households": {
@@ -38008,34 +38015,37 @@
  "rust/phases/src/driver.rs::field_in#the weir across the brook": {
   "body": "531872b104a954e7",
   "claim": "the weir across the brook - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: a weir drawn across the whole brook, so its half-length spans the brook on its skew, with its key into each bank",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8b167adc868d11b7",
   "core": "a3439dfb1339a11e",
   "date": "2026-11-24",
   "note": "the half-length is BROOK_W/2 over cos(skew) plus the key, so the weir is a full closure drawn as a convention",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
   "reads": "59acc62cfd089c2e",
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:5fcdeacb667b42dd",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:bd4acd9d984b8217",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fb25778e65e5d8bd"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::field_in#the weir's thickness by form": {
   "body": "531872b104a954e7",
   "claim": "the weir's thickness by form - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: four forms, 1.5 to 5 ft thick",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "167a2ad487702636",
   "core": "a3439dfb1339a11e",
   "date": "2026-11-24",
   "note": "fence 1.5, gabion 2, frame 5, crib 5, as the rule gives",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
   "reads": "59acc62cfd089c2e",
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:300438cba3f2bc8d",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:4ae905f5520be209",
@@ -38044,6 +38054,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:79deddd4ec0f4b3d",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a0772093759304da"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::field_refused#the driver": {
@@ -38878,20 +38889,22 @@
  "rust/phases/src/driver/plan.rs::KNOBS#the intake and the brook's side": {
   "body": "adaf0910cc556575",
   "claim": "the intake and the brook's side - GUESS where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: whether a hamlet has a weir or a bare mouth chosen at random with even odds (`intake`), a GUESS there; and which side of the fan the brook runs down (`brook_side`), the left or the right at even odds as the page's 1:2:1 has its two sides - the side alone is rolled here, whether the intake stands on that shoulder or at the center of the head being the field stage's `intake_place` (`driver.rs` `FIELD_KNOBS`, shoulder or center at even odds), the two together the page's left, center and right at 1:2:1",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "58caa8df135f451c",
   "core": "3a50375d75cd3753",
   "date": "2026-11-24",
   "note": "the weir-or-bare-mouth roll at even odds (`intake`) and the left-or-right brook side at even odds, combined with `intake_place` (shoulder or center at even odds), give left, center and right at 1:2:1, the odds the page records as GUESSes",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:ff4f3cb5d5a3a8fa"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the knobs' tables": {
@@ -39333,14 +39346,15 @@
  "rust/phases/src/driver/polder.rs::FEEDER_W#the feeder's width": {
   "body": "3467c3edc57a3a07",
   "claim": "the feeder's width - GUESS: a line 3 ft wide, the deleted ink's, carried as it stood; no page sizes a polder's feeder - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing's ladder puts a pond feeder at roughly twice its 1.5 ft floor and the head race carrying a whole fan's water at 6.0 ft, and says neither is this channel",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "c316ed1d0724b84f",
   "core": "8bce39cf9dfe3ec8",
   "date": "2026-11-22",
   "note": "3.0 ft is not sized by any page; it sits on the ladder at twice the 1.5 ft floor, below the 6.0 ft head race; GUESS holds",
   "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
   },
-  "research": "65ae107a7028a36f",
+  "research": "36e3a982de000a83",
   "rests": [
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:0c50dfc54e196c68",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7d2ddc0969f9e213",
@@ -39348,6 +39362,7 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b3d0c7e9f522e493",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:f73d5c518c731c59"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::HEDGE#the polder's paint": {
@@ -41505,14 +41520,13 @@
   "claim": "toe band edge - marshes-and-wetlands-shitchi.drawing: 90 ft above the local lowest field",
   "code": "8f2d986648c85b08",
   "core": "2e0a108008029e92",
-  "date": "2026-11-07",
-  "note": "90 ft matches \"set 90 ft above the lowest field near that point\"",
+  "date": "2026-11-24",
+  "note": "90.0 ft, as 0057 sets the marsh's upper edge 90 ft above the lowest field near each point; the edited, uncited 0058 page agrees, putting the marsh about 90 ft up from the foot of the fields",
   "pages": {
    "0057-marshes-and-wetlands-shitchi.drawing.html": "eb21ed576dd48fd6"
   },
   "research": "d85a68dc96fcb1d6",
   "rests": [
-   "0057-marshes-and-wetlands-shitchi.drawing.html:54ca08b790a43ab3",
    "0057-marshes-and-wetlands-shitchi.drawing.html:76b35a1a6c579d94"
   ],
   "verdict": "IN-STEP"
@@ -42004,16 +42018,16 @@
   "date": "2026-11-22",
   "note": "GUESS true: the page says only that the brook runs on down a flank and nowhere gives its course past a middle intake; 45 degrees is wider than the 35-degree race angle",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:8e97e1a3baf26730",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
-  "triaged": "2026-11-23",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::MAX_STATIONS#the bound": {
@@ -42083,35 +42097,33 @@
   "date": "2026-11-01",
   "note": "the upstream run comes from off the map down the fall along the intake's line x_i, past one shoulder or into the middle",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
   "reads": "6a7b5aa1abe03b2d",
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e"
   ],
-  "triaged": "2026-11-23",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#on past the intake": {
   "body": "8daecff58dbaa716",
   "claim": "on past the intake - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the brook runs on past the intake - down the fall, meandering as everywhere",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "f4006d600bcf72cb",
   "core": "01471e7ac089ae4f",
-  "date": "2026-11-01",
-  "note": "the downstream loop carries the brook on past the intake, down the flank, until it leaves the map; the brook is never taken whole",
+  "date": "2026-11-24",
+  "note": "the downstream loop carries the meandering course on past the fan's foot until it leaves the map, and the brook is never taken whole",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
   "reads": "6a7b5aa1abe03b2d",
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a931ae1edb39839c",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
-  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#outside the crop": {
@@ -42135,15 +42147,15 @@
   "date": "2026-11-01",
   "note": "the `center` flag and `side` give the left, center or right of the fan's head as the page's knob does; the 1:2:1 odds are rolled upstream of this function",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
   "reads": "6a7b5aa1abe03b2d",
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e"
   ],
-  "triaged": "2026-11-23",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#the intake's siting": {
@@ -42201,14 +42213,14 @@
   "date": "2026-11-01",
   "note": "the race runs from the intake down to the fork; its length, max(lead, reach/tan), is a short run chosen per map, and the page records that figure as a guess",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
   "reads": "6a7b5aa1abe03b2d",
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a581b2bc02500546"
   ],
-  "triaged": "2026-11-23",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#the race turns away from the brook": {
@@ -42234,43 +42246,41 @@
  "rust/phases/src/field/brook.rs::brook#the shoulder intake": {
   "body": "8daecff58dbaa716",
   "claim": "the shoulder intake - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the head race leaves the intake at an acute angle pointing downstream and runs to the fork - the race from the head's corner turned `offtake_deg` off the brook's own line (on a straight reach the brook leans out by the wave's slope, so the race that much less off the fall), the brook's line `lead` up it, the intake on the race where the brook crosses it - on a straight reach half the wave's swing farther up",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "f3195f7f23345a4d",
   "core": "01471e7ac089ae4f",
-  "date": "2026-11-01",
-  "note": "the race leaves the head's corner at offtake_deg, less swing_deg on a straight reach (the wave's slope at its midline); the brook's line is lead up the race, and the intake is swing/2 farther up the race on a straight reach, on the race itself, at an acute angle pointing downstream",
+  "date": "2026-11-24",
+  "note": "the race leaves the corner at `offtake_deg` off the brook's line, less the wave's lean on a straight reach. The intake sits on the race where the brook crosses its midline (since `(run-lead)*sin = swing/2`), and the race runs on down to the fork",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
   "reads": "6a7b5aa1abe03b2d",
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:41b10ab472dcebe7",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:8e97e1a3baf26730",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a581b2bc02500546"
   ],
-  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#the tap's stride": {
   "body": "8daecff58dbaa716",
   "claim": "the tap's stride - GUESS: where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing silent on how far below a shoulder intake the brook keeps its line; the plan's tap stride, holding the intake's line across",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "dbbf0ad23c1de5e7",
   "core": "01471e7ac089ae4f",
-  "date": "2026-11-22",
-  "note": "the page says the brook runs on past the intake but gives no length for keeping its line; the code holds the line across inward for `tap_run` below a shoulder intake.",
+  "date": "2026-11-24",
+  "note": "the code holds the intake's line for `b.tap_run` (70 ft from `BROOK_TAP_RUN`), and the cited drawing page now records that figure (\"About 70 ft on the maps ... The figure is a GUESS, ours for the drawing\"), so it is no longer \"silent\"; fix: claim (GUESS: 0059 drawing page §7 records the ~70 ft hold below a shoulder intake as our guess; no source gives the distance); effect: none",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
   "reads": "6a7b5aa1abe03b2d",
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:bde2fb3797d70fc0"
   ],
-  "triaged": "2026-11-23",
-  "verdict": "IN-STEP"
+  "said": "the tap's stride - GUESS: where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing silent on how far below a shoulder intake the brook keeps its line; the plan's tap stride, holding the intake's line across",
+  "siblings": "9bd8ee08962a48f0",
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/brook.rs::clearance#the clearance": {
   "body": "ba64997e67239dc8",
@@ -42337,14 +42347,15 @@
  "rust/phases/src/field/brook.rs::weir#the weir": {
   "body": "a075f110b5f8a727",
   "claim": "the weir - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: across the whole brook, diagonally upstream at 30 degrees, 1.5 to 5 ft thick by form - its half-length the caller's, across the drawn brook at the skew (`field_stage.WEIR_HALF`)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "db8b0aaf373f63bc",
   "core": "4506c2500b723015",
   "date": "2026-11-23",
   "note": "drawn across the whole brook (a convention), centered on the intake, slanting 30 degrees with its far end upstream, thickness by form",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:300438cba3f2bc8d",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
@@ -42352,6 +42363,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:bd4acd9d984b8217",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fb25778e65e5d8bd"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::Field#a field's record": {
@@ -42505,9 +42517,9 @@
   "date": "2026-11-01",
   "note": "1.5 ft is the fence's drawn thickness, the thinnest of the four",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:4ae905f5520be209",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
@@ -42515,7 +42527,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:79deddd4ec0f4b3d",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a0772093759304da"
   ],
-  "triaged": "2026-11-23",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::WINTER_CROP#the knob's name": {
@@ -43056,19 +43068,19 @@
   "date": "2026-11-23",
   "note": "shoulder or center rolled evenly, with the shoulder on the brook's side, gives the page's 1:2:1 left/center/right; siting rolled bend or straight",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html": "94b9fa95825b0fe0",
    "0333-how-a-village-weir-was-built-stakes-cribs-frames-and-gabions.html": "304a62e11aae3035"
   },
   "reads": "a0424262a19b95f1",
-  "research": "f7180630579b579c",
+  "research": "d8eed554473bf7f4",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:41b10ab472dcebe7",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html:cf1f9c34eb70e42d"
   ],
-  "triaged": "2026-11-23",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#the lattice's form": {
@@ -43086,21 +43098,23 @@
  "rust/phases/src/field/build.rs::one#the weir": {
   "body": "4410a04d49576ac7",
   "claim": "the weir - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: a weir hamlet's weir in one of four forms, each its own thickness - drawn only where the `intake` knob is a weir, a form missing from the table at the thinnest, the fence's 1.5 ft",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "c46325a8d1f9ba88",
   "core": "e3271ddc0f60d691",
   "date": "2026-11-23",
   "note": "drawn only on a weir hamlet; the form's thickness comes from the table, with the fence's 1.5 ft as the fallback",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
   "reads": "a0424262a19b95f1",
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:300438cba3f2bc8d",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:4ae905f5520be209",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:ff4f3cb5d5a3a8fa"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::plot_figures#the plots' figures": {
@@ -43173,13 +43187,13 @@
   "date": "2026-11-01",
   "note": "an outline point closer to the brook than its skirt refuses the field",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
-  "triaged": "2026-11-23",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::water#the water filed": {
@@ -43227,48 +43241,53 @@
  "rust/phases/src/field/channels.rs::DELIVERY_CAP#the delivery's cap": {
   "body": "7a23d62533166714",
   "claim": "the delivery's cap - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: a delivery ditch's head is capped at 0.8 of its canal's local width where it leaves it",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "542422fce453f13d",
   "core": "3f778cf49036695a",
   "date": "2026-11-01",
   "note": "0.8 of the local width, as the page says",
   "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
   },
-  "research": "65ae107a7028a36f",
+  "research": "36e3a982de000a83",
   "rests": [
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:73d0646a39f8d7dd"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::DELIVERY_W#delivery ditch": {
   "body": "fb24e729c4a2b2bf",
   "claim": "delivery ditch - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: 2.5 -> 1.2",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "56fb97e091d58b89",
   "core": "fec07e4471806602",
   "date": "2026-11-01",
   "note": "2.5 -> 1.2, matches the table",
   "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
   },
-  "research": "65ae107a7028a36f",
+  "research": "36e3a982de000a83",
   "rests": [
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:0006beb3ce58a10a",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:a201b452f1a78418",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bbb209fa136275b3"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::DRAIN_W#drain": {
   "body": "1c6e139806dd472f",
   "claim": "drain - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: 1.2 -> 5.5, a field ditch gathering to a branch drain",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "313202b06aa499c0",
   "core": "0bc6e1e13de25617",
   "date": "2026-11-01",
   "note": "1.2 -> 5.5, matches the table",
   "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
   },
-  "research": "65ae107a7028a36f",
+  "research": "36e3a982de000a83",
   "rests": [
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:510345478efc1edf",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:603250935c007233",
@@ -43276,19 +43295,21 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:ce923017c9efa2ce",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:f480baa549c2f610"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::HEAD_W#head race": {
   "body": "f9064db37a0adc24",
   "claim": "head race - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: 6.0 ft, the small end of the main-canal rung",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "82b384e9199a74b0",
   "core": "7e23f6c5f3d24bdf",
   "date": "2026-11-01",
   "note": "6.0, the small end of the main-canal rung",
   "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
   },
-  "research": "65ae107a7028a36f",
+  "research": "36e3a982de000a83",
   "rests": [
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:069362cce1d1c250",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:8ab31b5afaea5611",
@@ -43296,6 +43317,7 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e79a72c285e6838c",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:f51c19a1bbe70e11"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::SUPPLY_W#supply canals": {
@@ -43304,19 +43326,20 @@
   "code": "f06d41bfdad84af9",
   "core": "58254f4dc3569bf9",
   "date": "2026-11-24",
-  "note": "4.5 ft for the upper-edge canal (A) and 4.0 ft for the other (B), matching the table and the Inashiro measurements",
+  "note": "(4.5, 4.0) matches the page. Canal A, the upper edge's, is 4.5 -> 1.5 and canal B, down the brook's flank, is 4.0 -> 1.5. But the claim still quotes the page as \"4.0 -> 1.5 along the far edge\" and adds a note that \"the page's 'far edge' is the brook's flank here\". The page now says \"supply canal down the brook's flank\", so the claim misquotes it. fix: claim (restate as \"4.0 -> 1.5 down the brook's flank\" and drop the note); effect: none",
   "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
   },
-  "research": "65ae107a7028a36f",
+  "research": "36e3a982de000a83",
   "rests": [
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:4fb1798b8b989581",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:73d0646a39f8d7dd",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7b0f35d3fa44094c",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:90f1dc0a95de4951",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:a2bbc3411bf2a387",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bb9359b7865aa39b"
   ],
-  "verdict": "IN-STEP"
+  "said": "supply canals - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: 4.5 -> 1.5 along the upper edge, 4.0 -> 1.5 along the far edge - the 4.5 ft canal A's, along the head and down the far flank; the 4.0 ft canal B's, down the brook's flank (the page's \"far edge\" is the brook's flank here)",
+  "siblings": "16bc9d4e626b4bd3",
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/channels.rs::SWEEP_LIMITS#the sweep's limits": {
   "body": "ae79df53dcd20339",
@@ -43423,21 +43446,22 @@
  "rust/phases/src/field/channels.rs::channels#the canal's steps": {
   "body": "2c615b6d30395123",
   "claim": "the canal's steps - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: a canal narrows in equal steps from its head to 1.5 ft at its last offtake - an equal step a leg from its head's width to the thread there, the leg a canal runs on past it to the crop's edge flat at the thread",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "cfe54917fad533ec",
   "core": "6a117e02244d4e9e",
   "date": "2026-11-01",
   "note": "n = the offtake count, so the legs step down evenly to THREAD_W at the last offtake and the leg that runs on stays flat; this reproduces Inashiro's 4.5/3.5/2.5/1.5",
   "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
   },
   "reads": "c6533bf6badbb5a2",
-  "research": "65ae107a7028a36f",
+  "research": "36e3a982de000a83",
   "rests": [
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:4fb1798b8b989581",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:73d0646a39f8d7dd",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bb9359b7865aa39b"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the canals taper": {
@@ -43459,12 +43483,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the canals' courses": {
-  "body": "2c615b6d30395123",
+  "body": "573a2e5c3b419359",
   "claim": "the canals' courses - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: supply canals along the high margins - canal A along the head to the far corner, swept, then down the far flank; canal B down the brook's flank from a corner fork, or swept along the head to its own corner from a middle one",
   "code": "1b1929b2dd4bb4b3",
   "core": "6a117e02244d4e9e",
-  "date": "2026-11-01",
-  "note": "side 0 (-brook_side) is swept along the head to its corner and then down; side 1 runs down the brook's flank from the fork, or is swept to its own corner when center is true; supply on the high margins",
+  "date": "2026-11-24",
+  "note": "canal A on the far flank, swept along the head to its corner (`side == 0 || center`), canal B down the brook's flank from a corner fork or swept to its own corner from a middle one; this matches the two edge canals of the fork, and the uncited 0068 drawing page's table names them the same way (upper edge, brook's flank)",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "4f97258a4c0b1ef8"
   },
@@ -43472,10 +43496,8 @@
   "research": "714621da4d4f5268",
   "rests": [
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:56868c4083858740",
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e105c2f647566aa0"
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad"
   ],
-  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the comb": {
@@ -43483,8 +43505,8 @@
   "claim": "the comb - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: supply canals along the high margins, delivery ditches leaving them nearly at right angles, one drain gathering the water along the lowest line - each delivery along its row's bund, leaning downstream as the bund does (which-way-water-flows-and-how-channels-bend-and-join.drawing: a delivery ditch in the comb follows its row's bund; `offtake_lines`)",
   "code": "86bbd02a7dd4d288",
   "core": "6a117e02244d4e9e",
-  "date": "2026-11-22",
-  "note": "the canals run along both flanks, each delivery follows its row's bund (lines.u(r, q)) on a leaning row picked by offtake_lines, and one drain runs down the low middle from fan.at(0,0) to the foot",
+  "date": "2026-11-24",
+  "note": "deliveries run from the flank to the middle along the row's line `lines.u(r, q)`, only on rows whose bund leans downstream (`offtake_lines`), and the one drain runs down the middle to the foot; the uncited 0068 page's equal steps to 1.5 ft at the last offtake also match the code's legs",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "4f97258a4c0b1ef8",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
@@ -43493,31 +43515,28 @@
   "research": "a538d253dd6216f5",
   "rests": [
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:56868c4083858740",
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e105c2f647566aa0",
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e551e0e1e0a35b13",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:034c86e8a450290d",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:d49baf606307eaac"
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e105c2f647566aa0"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the delivery's head": {
   "body": "2c615b6d30395123",
   "claim": "the delivery's head - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: capped at 0.8 of its canal's local width where it leaves it (`DELIVERY_CAP`), biting wherever the canal is under about 3.1 ft - low in the net, and at every offtake of a canal with only one or two - its tail no wider than its head; at the canal's last offtake, narrowed to 1.5 ft, that last delivery leaves at 1.2 ft and runs flat",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "dd576f18d4f307e2",
   "core": "6a117e02244d4e9e",
   "date": "2026-11-01",
   "note": "the head is min(2.5, 0.8 * local), with local taken at the tail of the leg the junction ends; the tail is min(1.2, head), so the last delivery leaves at 1.2 and runs flat",
   "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
   },
   "reads": "c6533bf6badbb5a2",
-  "research": "65ae107a7028a36f",
+  "research": "36e3a982de000a83",
   "rests": [
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:2529c3b2fdacdb66",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:73d0646a39f8d7dd"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the first canal with no offtake": {
@@ -43541,21 +43560,22 @@
  "rust/phases/src/field/channels.rs::channels#the head race": {
   "body": "2c615b6d30395123",
   "claim": "the head race - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: the head race 6.0 ft, the whole fan's above the fork - at that width throughout",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "640c68ae8295826a",
   "core": "6a117e02244d4e9e",
   "date": "2026-11-01",
   "note": "HEAD_W for both w and w_tail, 6.0 ft throughout",
   "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
   },
   "reads": "c6533bf6badbb5a2",
-  "research": "65ae107a7028a36f",
+  "research": "36e3a982de000a83",
   "rests": [
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:8ab31b5afaea5611",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b3d0c7e9f522e493",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e79a72c285e6838c"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the head race's course": {
@@ -43567,16 +43587,16 @@
   "date": "2026-11-01",
   "note": "pts [intake, fork], from the intake down to the fork; the page derives the shape from the two points",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
   "reads": "c6533bf6badbb5a2",
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:8e97e1a3baf26730",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a581b2bc02500546"
   ],
-  "triaged": "2026-11-23",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the second canal partway": {
@@ -43619,23 +43639,23 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the widths by role": {
-  "body": "2c615b6d30395123",
+  "body": "573a2e5c3b419359",
   "claim": "the widths by role - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: the head race 6.0, supply 4.5 to 1.5 along the upper edge and 4.0 to 1.5 along the other, delivery 2.5 to 1.2, drain 1.2 to 5.5 ft - canal A the upper edge's, along the head and down the far flank, canal B the other edge's, down the brook's flank (`HEAD_W`, `SUPPLY_W`, `DELIVERY_W`, `DRAIN_W`)",
   "code": "057e50a3ecc424de",
   "core": "6a117e02244d4e9e",
-  "date": "2026-11-01",
-  "note": "SUPPLY_W.0 4.5 goes to canal A (along the head), .1 4.0 to canal B; HEAD_W 6.0, DELIVERY_W 2.5 to 1.2 and DRAIN_W 1.2 to 5.5 match the table",
+  "date": "2026-11-24",
+  "note": "head race 6.0, supply canals 4.5 and 4.0 to the 1.5 thread, delivery 2.5 to 1.2, drain 1.2 to 5.5; canal A on the upper edge, canal B down the brook's flank, as the page has them",
   "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
   },
   "reads": "c6533bf6badbb5a2",
-  "research": "65ae107a7028a36f",
+  "research": "36e3a982de000a83",
   "rests": [
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:4fb1798b8b989581",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:510345478efc1edf",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:73d0646a39f8d7dd",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7b0f35d3fa44094c",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:8ab31b5afaea5611",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:90f1dc0a95de4951",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:a201b452f1a78418",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:a2bbc3411bf2a387",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b60a8b29980e1035",
@@ -43643,7 +43663,6 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bbb209fa136275b3",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e79a72c285e6838c"
   ],
-  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::division#the fork": {
@@ -43652,16 +43671,19 @@
   "code": "699f991c83b44946",
   "core": "b3a6703e5a4fc982",
   "date": "2026-11-24",
-  "note": "the head race forks at the head of the fan into the two supply canals, one on each flank",
+  "note": "the fork code is right: the head race splits into two supply canals at the head of the fan. But the claim quotes the page's split as \"one along the far edge\" and calls canal B \"the page's far-edge canal\". The page now names that canal \"supply canal down the brook's flank\". fix: claim (restate as \"a supply canal along the upper edge and one down the brook's flank\" and drop \"the page's far-edge canal\"); effect: none",
   "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
   },
-  "research": "65ae107a7028a36f",
+  "research": "36e3a982de000a83",
   "rests": [
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7b0f35d3fa44094c",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:a2bbc3411bf2a387"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:90f1dc0a95de4951",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:a2bbc3411bf2a387",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b3d0c7e9f522e493"
   ],
-  "verdict": "IN-STEP"
+  "said": "the fork - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: the head race splits into a supply canal along the upper edge and one along the far edge - canal A along the head and down the far flank, canal B (the page's far-edge canal, the 4.0 ft one) down the brook's flank",
+  "siblings": "e224e7fc13b8b826",
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/channels.rs::division#the fork's place": {
   "body": "70d99dbd9deb939f",
@@ -43672,14 +43694,14 @@
   "date": "2026-11-01",
   "note": "the fork is at the head, at the intake's place: brook-side corner or the middle",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "7ef441d126aa131d"
   },
-  "research": "c348232a05978400",
+  "research": "f716fc2b940abb9c",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a581b2bc02500546"
   ],
-  "triaged": "2026-11-23",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::offtake_lines#the lean": {
@@ -47183,25 +47205,17 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::ditches#the far flank": {
-  "body": "d30beb47d7c41309",
+  "body": "738ba89c042f6c1d",
   "claim": "the far flank - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: the supply canal dwindling to a lateral - the head arm's 1.5 ft tail held down the far flank, a lateral at that width flat from the head's far corner to the tail's",
   "code": "74983ed8fe01fe3f",
   "core": "de09fec937a30de0",
-  "date": "2026-11-01",
-  "note": "the w_toe lateral flat at 1.5 ft is the head arm's lateral tail held at the hamlet floor, inside the ladder's lateral rung; the page has no offtake or taper rule for a flank with no deliveries that this contradicts",
+  "date": "2026-11-24",
+  "note": "the feeder runs 4.5 to 1.5 across the head, and `w_toe` runs from canal[0] to canal[3] flat at 1.5, which is the floor and the thread a canal holds when it runs on past its last offtake [0068 §49, §63, §64, §83; 0053 §12; 0019 §128, §129]",
   "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
   },
   "reads": "ce1969726ee48761",
-  "research": "65ae107a7028a36f",
-  "rests": [
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:0c50dfc54e196c68",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:1a82ab45b2612fc6",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7d2ddc0969f9e213",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bb9359b7865aa39b",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:f73d5c518c731c59"
-  ],
-  "triaged": "2026-11-24",
+  "research": "36e3a982de000a83",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::ditches#the field ditches": {
@@ -47244,6 +47258,7 @@
  "rust/phases/src/field/polder.rs::ditches#the ring canal on a dike-pond block": {
   "body": "738ba89c042f6c1d",
   "claim": "the ring canal on a dike-pond block - GUESS: dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing and polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing give a dike-pond block's ring canal no width of its own, and how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing's ladder is a rice field's; its four trunks keep the rice polder's rungs, 1.5 to 5.5 ft, the route that moves nothing else, so a creek of 6 to 8 ft opens on a ring canal narrower than itself",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d918e979af0adc06",
   "core": "de09fec937a30de0",
   "date": "2026-11-24",
@@ -47251,10 +47266,10 @@
   "pages": {
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
   },
   "reads": "ce1969726ee48761",
-  "research": "d8bf0848acfebabb",
+  "research": "219cc3c2a373f305",
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:98af9cb0c036de90",
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:ce56c3841e33c8c5",
@@ -47266,21 +47281,23 @@
   ],
   "said": "the ring canal on a dike-pond block - GUESS: dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing and polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing give a dike-pond block's ring canal no width of its own, and how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing's ladder is a rice field's; its four trunks keep the rice polder's rungs, 1.5 to 5.5 ft, the route that moves nothing else, so a creek of 6 to 8 ft opens on a ring canal narrower than itself",
   "siblings": "d3d3b1121c4bbf84",
+  "triaged": "2026-11-24",
   "verdict": "DRIFTED"
  },
  "rust/phases/src/field/polder.rs::ditches#the widths": {
   "body": "738ba89c042f6c1d",
   "claim": "the widths - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: a rice polder's and the ring canal's on either form - from the inlet's corner the supply's two arms, 4.5 to 1.5 across the head and 4.0 to 1.5 down the inlet's flank, as a fan's canals A and B; on a rice polder a delivery 2.5 to 1.2 down each column, its head capped at 0.8 of the head canal's width where it leaves; the drain 1.2 to 5.5 ft across the tail to the outfall's corner. A dike-pond block's column channels take no rung of this ladder: they are the waterways its ponds lie among, not field ditches (dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing), at the creeks' width (the next claim)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "2067f94dc19b571b",
   "core": "de09fec937a30de0",
   "date": "2026-11-24",
   "note": "head 4.5 to 1.5, inlet flank 4.0 to 1.5, drain 1.2 to 5.5, rice deliveries 2.5 to 1.2 with the head capped at 0.8 of the local width, and the dike-pond column channels off the ladder at the creek width.",
   "pages": {
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
   },
   "reads": "ce1969726ee48761",
-  "research": "77e2bfac03b76df9",
+  "research": "9a6019887e800b39",
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:98af9cb0c036de90",
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:ce56c3841e33c8c5",
@@ -47290,6 +47307,7 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b60a8b29980e1035",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bb9359b7865aa39b"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::fringe#the fringe's ring": {
@@ -50010,96 +50028,50 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#no drain rule at the seat": {
-  "body": "285c51de3ab5fcc0",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
+  "body": "c613a2b6d5428e57",
   "claim": "no drain rule at the seat - ground-too-wet-to-build-on.drawing: the ground below a drain kept only from dispersed farmsteads, not a nucleated cluster",
   "code": "3f188c2bd83338e6",
   "core": "ed5efbe364a61ca2",
-  "date": "2026-11-04",
-  "note": "no below-the-drain refusal for the nucleated cluster",
+  "date": "2026-11-24",
+  "note": "`ranked` has no test below the drain; the edited 0058 page still scopes that rule to dispersed farmsteads, not to a cluster placed as one block [0058 §216, §219, §220, §222]",
   "pages": {
-   "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
+   "0058-ground-too-wet-to-build-on.drawing.html": "f91787095acd06d1"
   },
   "reads": "6288a6585a296fd3",
-  "research": "b2af2942f0a54e5d",
-  "rests": [
-   "0058-ground-too-wet-to-build-on.drawing.html:32fa9821335681fb",
-   "0058-ground-too-wet-to-build-on.drawing.html:b9283c4db442e8c6"
-  ],
-  "triaged": "2026-11-24",
+  "research": "8a406c56299151e7",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#not in the reed fringe": {
-  "body": "285c51de3ab5fcc0",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
+  "body": "c613a2b6d5428e57",
   "claim": "not in the reed fringe - CANON: the GM's ruling of 2026-08-28, refused centered in a pond's reed fringe, scored down at an end; it departs from ground-too-wet-to-build-on.drawing, which does not count the fringe as marsh",
   "code": "2157e85f37f8957a",
   "core": "ed5efbe364a61ca2",
-  "date": "2026-11-22",
-  "note": "the code refuses a center inside a reed fringe and scores down the band's wet share (WEIGHTS.reeds); a CANON claim that names the GM's 2026-08-28 ruling, and it states correctly that it departs from 0058's rule that the fringe is not marsh",
+  "date": "2026-11-24",
+  "note": "CANON naming the GM's ruling of 2026-08-28; the code refuses a center inside a fringe (`stopped[4]`) and scores the band's wet share down (`WEIGHTS.reeds * wet`); the edited 0058 page still does not count the fringe as marsh, so the departure the claim states is true [0058 §212, §221]",
   "pages": {
-   "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
+   "0058-ground-too-wet-to-build-on.drawing.html": "f91787095acd06d1"
   },
   "reads": "6288a6585a296fd3",
-  "research": "b2af2942f0a54e5d",
-  "rests": [
-   "0058-ground-too-wet-to-build-on.drawing.html:0a7edc2c78add98c",
-   "0058-ground-too-wet-to-build-on.drawing.html:b1d674ad9da16c31"
-  ],
-  "triaged": "2026-11-24",
+  "research": "8a406c56299151e7",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#not on the wet toe": {
-  "body": "285c51de3ab5fcc0",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
+  "body": "c613a2b6d5428e57",
   "claim": "not on the wet toe - ground-too-wet-to-build-on.drawing: seat and anchor off the marsh below the fields",
   "code": "ba5c9af6e0731335",
   "core": "ed5efbe364a61ca2",
-  "date": "2026-11-04",
-  "note": "a center or anchor inside the toe is refused",
+  "date": "2026-11-24",
+  "note": "a margin is refused when the seat center or its anchor falls inside the marsh polygon below the fields, so the houses keep off the drawn marsh as the page requires",
   "pages": {
-   "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
+   "0058-ground-too-wet-to-build-on.drawing.html": "f91787095acd06d1"
   },
   "reads": "6288a6585a296fd3",
-  "research": "b2af2942f0a54e5d",
+  "research": "8a406c56299151e7",
   "rests": [
-   "0058-ground-too-wet-to-build-on.drawing.html:b4a87b781a7d121a",
+   "0058-ground-too-wet-to-build-on.drawing.html:1d31d2fd1a85bbbe",
+   "0058-ground-too-wet-to-build-on.drawing.html:ec62bb270114545e",
    "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
   ],
-  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#seat on the field's margin": {
