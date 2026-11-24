@@ -208,18 +208,17 @@ fn the_echo_rule_fires_only_on_changed_words_the_pop_up_repeats() {
     assert!(super::echo(&grown, &[], &none, "were tied with rope").is_some());
 }
 
+/// A new finding's headline is read (the claims' triage passes it), and a cited key gone from the page sends; a single-case phrase in the
+/// reader sends nothing by itself (451 T212: the addition rule reads what the new block says).
 #[test]
-fn a_new_finding_fires_where_the_pop_up_states_a_single_case() {
+fn a_new_finding_is_read_and_a_key_gone_sends() {
     let old = "<li><strong>Old.</strong> x</li>";
     let fresh = "<li><strong>Old.</strong> x</li><li> <strong>New finding.</strong> y</li>";
     let found = super::new_findings(old, fresh);
     assert_eq!(found, vec!["New finding.".to_owned()]);
     let c = change("", "<p>A new block of words.</p>");
     let none = none();
-    let why = super::fires(&c, &[], &none, "It rests on the one case found.", &found).unwrap();
-    assert!(why.starts_with("a new finding (\"New finding.\")"));
-    assert!(super::fires(&c, &[], &none, "Its walls are not recorded.", &found).is_none());
-    assert!(super::fires(&c, &[], &none, "It rests on the one case found.", &[]).is_none());
+    assert!(super::fires(&c, &[], &none, "It rests on the one case found.", &found).is_none());
     let gone = Change {
         keys_gone: vec!["k".to_owned()],
         ..Change::default()
@@ -227,7 +226,6 @@ fn a_new_finding_fires_where_the_pop_up_states_a_single_case() {
     assert!(super::fires(&gone, &[], &none, "", &[])
         .unwrap()
         .contains("Sources key k"));
-    assert!(super::says_absence("Every plan draws it."));
 }
 
 /// Feature 451 T191: a procedure section's Markdown read as a page's words - a link's text kept, ticks and emphasis dropped, a
@@ -351,4 +349,75 @@ fn a_split_s_target_split_again_is_followed_each_page_once() {
         follow(&["0001-a.html".to_owned()], read, name),
         ["0001-a.html", "0002-b.html", "0003-c.html"]
     );
+}
+
+/// 0108.drawing before the cascade test's T403 write (2026-11-23), its stall items abridged.
+const STABLE_PAGE: &str = "<p>An official's compound on our maps keeps its horses in a small stable of its own, a few bays long, \
+with quarters in it for the grooms and an earth-floored passage before the stalls.</p>\n<ul>\n<li><strong>The stalls are drawn about one \
+ken (~6 ft) wide, on board floors.</strong><br>A warrior's stall was one bay wide, on a raised timber floor.</li>\n";
+/// The block T403 added, a pure addition (the cascade test's stables Depiction miss).
+const ONE_DOOR: &str = "<li><strong>Our plans draw the passage with one door, at one gable end, and that is our own guess.</strong><br>A \
+dictionary of Japanese architecture gives the classic warrior stable of the sixteenth and seventeenth centuries, three, five or seven \
+bays long, large sliding doors at each gable end of its passage, and a Japanese encyclopedia calls the most formal stable of its time \
+gable-entered. No page we read says whether a small provincial stable kept a door at both ends, so the two doors are attested only for \
+the classic stable, and the one door is a GUESS.</li>\n";
+
+fn added_to(page: &str, block: &str) -> (Change, Vec<String>) {
+    let (old, fresh) = (format!("{page}</ul>"), format!("{page}{block}</ul>"));
+    let c = change(&old, &fresh);
+    let now = l7r_shared::checks::pages::read_page(&fresh)
+        .blocks
+        .into_iter()
+        .map(|b| b.words)
+        .collect();
+    (c, now)
+}
+
+/// 451 T209 (the cascade test, 2026-11-24): a block new outright that bears on what a pop-up states is sent on - stables' Depiction ("the
+/// door at its end") and the new one-gable-door GUESS - while one that shares no subject with it is still cleared.
+#[test]
+fn a_pure_addition_that_bears_on_a_pop_up_s_statement_is_sent() {
+    let (c, now) = added_to(STABLE_PAGE, ONE_DOOR);
+    assert_eq!((c.pairs.len(), c.removed.len(), c.added.len()), (0, 0, 1));
+    let stables = "The classic warrior stables of the 16th and 17th centuries were three, five or seven bays long, the most formal of \
+them three bays and entered at the gable end.\nThe plan draws the stable as a warrior's small stable, a few bays long: a row of stalls \
+one ken (about 6 ft) wide at the back, the earth-floored passage before them running its length with the door at its end.";
+    let why =
+        super::fires(&c, &now, &none(), stables, &[]).expect("the one-gable-door addition sent");
+    assert_eq!(
+        (
+            why.contains("new on the page"),
+            why.contains("\"classic warrior stable\"")
+        ),
+        (true, true)
+    );
+    let drum = "Every plan's gate keeps a grievance drum under its roof, as the Chinese county offices at Pingyao and Neixiang did.";
+    assert_eq!(super::fires(&c, &now, &none(), drum, &[]), None);
+}
+
+/// The 0097 finding T394 added (abridged), a pure addition.
+const ROWHOUSE_FABRIC: &str = "<li><strong>What was a staff rowhouse built of?</strong><br>A country jin'ya's staff rows could be \
+thatched. The Shibata row of 1842 has a hipped thatched roof. Of the four rows' pages, only Obata's gives its walls, earth walls in \
+their present state.</li>\n";
+/// A block 0097 added in cce80ca436 (abridged): it answers what retainers' quarters says no source says (needed.md's arm (c)).
+const WHO_LIVED: &str = "<li><strong>Who lived inside a rural office?</strong><br>The sources name the junior officials' quarters \
+and a storehouse keepers' rowhouse, but not who else lived inside.</li>\n";
+
+/// 451 T212 (the cascade test, 2026-11-24): a pop-up's single-case phrase sends nothing on a new finding that shares no subject with it
+/// (main-gate's "Every plan's gate", servants' quarters' "the one case recorded"), while a new block that answers what a pop-up says is
+/// not recorded is still sent, whatever words the pop-up uses for its absence.
+#[test]
+fn a_single_case_phrase_alone_sends_nothing_and_a_broken_absence_still_sends() {
+    let (c, now) = added_to(STABLE_PAGE, ROWHOUSE_FABRIC);
+    let found = ["What was a staff rowhouse built of?".to_owned()];
+    let drum = "Every plan's gate keeps a grievance drum under its roof.";
+    assert_eq!(super::fires(&c, &now, &none(), drum, &found), None);
+    let miwa = "That a small household's few servants slept under the main roof: the one case recorded, the Miwa house, kept its \
+chugen in a hut by the kitchen.";
+    assert_eq!(super::fires(&c, &now, &none(), miwa, &found), None);
+    let (c, now) = added_to(STABLE_PAGE, WHO_LIVED);
+    let retainers = "An intendant governed with about ten retainers of the shogunate and a few local hires, but no source says who \
+else lived inside.";
+    let why = super::fires(&c, &now, &none(), retainers, &[]).expect("the answered absence sent");
+    assert!(why.contains("\"else lived inside\""), "{why}");
 }

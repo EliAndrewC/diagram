@@ -177,6 +177,9 @@ pub struct Change {
     /// Removed blocks that moved with an edit (feature 451 T194): (the old block, its version new on a page the reader reaches, paired
     /// at [`PAIR_RATIO`]). Each stays in `removed`, owed as the echo rule reads it, and the MANIFEST shows it as moved, with its diff.
     pub moved_edited: Vec<(String, String)>,
+    /// Blocks of `added` that arrived with an edit from a page the reader reached at its last check (451 T209): paired at
+    /// [`PAIR_RATIO`] with a block gone from there, so their edit is the source page's echo to read, and they are no addition.
+    pub arrived_edited: Vec<String>,
 }
 
 impl Change {
@@ -315,7 +318,31 @@ pub fn blocks_change<S: std::hash::BuildHasher>(
     }
     change.removed = olds;
     moved_with_edits(&mut change, reached_now, reached_before);
+    change.arrived_edited = arrived_with_edits(&change.added, reached_now, reached_before);
     change
+}
+
+/// The blocks of `added` that pair at [`PAIR_RATIO`] with a block the reader reached before and reaches no more: a block moved here with
+/// an edit (451 T209).
+fn arrived_with_edits<S: std::hash::BuildHasher>(
+    added: &[String],
+    reached_now: &HashSet<String, S>,
+    reached_before: &HashSet<String, S>,
+) -> Vec<String> {
+    let left: Vec<Vec<&str>> = reached_before
+        .iter()
+        .filter(|w| !reached_now.contains(*w))
+        .map(|w| w.split(' ').collect())
+        .collect();
+    added
+        .iter()
+        .filter(|a| {
+            let aw: Vec<&str> = a.split(' ').collect();
+            left.iter()
+                .any(|lw| l7r_gate_core::difflib::ratio(lw, &aw) >= PAIR_RATIO)
+        })
+        .cloned()
+        .collect()
 }
 
 /// Which of a change's removed blocks moved with an edit (feature 451 T194, T184's split): each paired with its closest block new on a
@@ -404,11 +431,22 @@ pub fn block_words(text: &str) -> HashSet<String> {
 static SENTENCE: LazyLock<Regex> = LazyLock::new(|| re(r"(?<=[.;:?!])\s+"));
 static WORD: LazyLock<Regex> = LazyLock::new(|| re(r"[a-z0-9']+"));
 
-/// The pop-up phrases that state a single case, which a new finding on a page it reads can falsify (the GM's rule of 2026-11-23,
-/// needed.md's arm (c)). A knob, measured 2026-11-23 on the landings 085f4598c3 and cce80ca436 (`record modal-triage replay
-/// --landing`): with "not recorded" and "no source" in it, the arm fired on 104 of 114 pop-ups, since most Guesses tabs say "not
-/// recorded"; with these three, 56 of 114 and none of the 17 page-caused corrections missed.
-pub const ABSENCE: [&str; 3] = ["the one case", "only one case", "every plan"];
+/// THE ADDITION RULE's phrase (451 T209, T212; the cascade test, 2026-11-24): how many of a word trigram's three words must name a thing
+/// ([`NOT_SUBJECT`] none of them) for a sentence new on a page that repeats it to be sent on. A KNOB, measured 2026-11-24 by the landing
+/// replay of 085f4598c3, cce80ca436 and 7fc9f06512 (the plan's T209 section): at 3, 18 of the 167 (pop-up, page) pairs the tool cleared
+/// before are sent, the stables Depiction's miss among them, and none of the 17 page-caused corrections is missed; at 2 ("the main
+/// gate", "a samurai house"), 65, most of them a page's own topic repeated.
+pub const SUBJECT_WORDS: usize = 3;
+/// Words that name no subject: function words, and the record's own words for its sources and its plans, which every page and pop-up
+/// repeats ("no page we read", "our plans draw", "is a GUESS").
+const NOT_SUBJECT: [&str; 75] = [
+    "a", "about", "all", "also", "an", "and", "any", "are", "as", "at", "be", "been", "both",
+    "but", "by", "can", "could", "did", "do", "draw", "drawn", "each", "every", "few", "for",
+    "from", "gives", "given", "guess", "had", "has", "have", "how", "if", "in", "into", "is", "it",
+    "its", "map", "may", "more", "most", "no", "none", "nor", "not", "of", "on", "one", "only",
+    "or", "our", "own", "page", "plan", "read", "recorded", "say", "so", "some", "source", "than",
+    "that", "the", "their", "them", "there", "they", "this", "to", "was", "we", "were", "what",
+];
 /// A finding's headline: a list item opening in bold, as the record writes a finding.
 static FINDING: LazyLock<Regex> = LazyLock::new(|| re(r"(?s)<li>\s*<strong>(.*?)</strong>"));
 
@@ -532,23 +570,64 @@ pub fn echo_rewritten(c: &Change, reader: &str) -> Option<String> {
     echo(&new, &old, &HashSet::<String>::new(), reader)
 }
 
-/// Whether the pop-up states a single case ([`ABSENCE`]).
+/// A text's words, lower-cased, each with a possessive's `'s` and a plural's `s` taken off.
+fn stems(text: &str) -> Vec<String> {
+    word_list(text)
+        .into_iter()
+        .map(|w| {
+            let w = w.trim_end_matches("'s").trim_end_matches('\'');
+            match w.strip_suffix('s') {
+                Some(stem) if stem.len() > 2 && !stem.ends_with('s') => stem.to_owned(),
+                _ => w.to_owned(),
+            }
+        })
+        .filter(|w| !w.is_empty())
+        .collect()
+}
+
+/// Whether a word names a thing: not one of [`NOT_SUBJECT`], read as stemmed.
+fn names_a_thing(w: &str) -> bool {
+    !NOT_SUBJECT.contains(&w) && !NOT_SUBJECT.contains(&format!("{w}s").as_str())
+}
+
+/// A text's word trigrams that hold [`SUBJECT_WORDS`] words naming a thing.
+fn subject_trigrams(text: &str) -> HashSet<String> {
+    stems(text)
+        .windows(3)
+        .filter(|t| t.iter().filter(|w| names_a_thing(w)).count() >= SUBJECT_WORDS)
+        .map(|t| t.join(" "))
+        .collect()
+}
+
+/// THE ADDITION RULE (451 T209, T212; the cascade test, 2026-11-24): a sentence of a block new outright on the page that repeats a
+/// phrase of what `reader` states - a word trigram holding [`SUBJECT_WORDS`] words naming a thing - so that it says something new of the
+/// reader's own subject, whether it adds to it, narrows it or falsifies an absence or a single case it states; (the new sentence, the
+/// phrase), or None. Only blocks new outright are read: a rewritten block is the echo's, and a block moved from a page the reader
+/// reached, with an edit or none, is no addition.
 #[must_use]
-pub fn says_absence(popup: &str) -> bool {
-    let text = popup.to_lowercase();
-    ABSENCE.iter().any(|a| text.contains(a))
+pub fn addition(c: &Change, reader: &str) -> Option<(String, String)> {
+    let said = subject_trigrams(reader);
+    let new = c.added.iter().filter(|a| !c.arrived_edited.contains(a));
+    sentences(new).into_iter().find_map(|s| {
+        let mut shared: Vec<String> = subject_trigrams(&s).intersection(&said).cloned().collect();
+        shared.sort();
+        shared.into_iter().next().map(|t| (s, t))
+    })
 }
 
 /// Why a page's change, left after the tool's clears, still owes a pop-up reading `popup` its triage, or None (the GM's first filter,
-/// 2026-11-23): a note key its Sources names gone from the page (rule C kept reachable), an echo, or a new finding (`found`, from
-/// [`new_findings`]) where it states a single case.
+/// 2026-11-23): a note key its Sources names gone from the page (rule C kept reachable), an echo, or an addition ([`addition`], 451
+/// T209: a sentence new on the page that shares a subject with one the pop-up states). `_found`, the new findings' headlines, is read no
+/// more: the three fixed phrases it was read with ("the one case", "only one case", "every plan") sent a pop-up stating one on any new
+/// finding, related or not, and the addition rule reads every new block against what the pop-up states (451 T212); the parameter stays
+/// while the claims crate's caller passes it.
 #[must_use]
 pub fn fires<S: std::hash::BuildHasher>(
     c: &Change,
     page_now: &[String],
     reached_now: &HashSet<String, S>,
     popup: &str,
-    found: &[String],
+    _found: &[String],
 ) -> Option<String> {
     if let Some(k) = c.keys_gone.first() {
         return Some(format!("its Sources key {k} is gone from the page"));
@@ -562,12 +641,8 @@ pub fn fires<S: std::hash::BuildHasher>(
     if let Some(s) = echo(&old, page_now, reached_now, popup) {
         return Some(format!("it repeats words changed in \"{s}\""));
     }
-    (!found.is_empty() && says_absence(popup)).then(|| {
-        format!(
-            "a new finding (\"{}\"), where it states a single case",
-            found[0]
-        )
-    })
+    addition(c, popup)
+        .map(|(s, t)| format!("a sentence new on the page, \"{s}\", repeats its phrase \"{t}\""))
 }
 
 /// The tool's half of the triage replayed over recorded edits (feature 451 T186's replay): a JSON list of `{id, file, oldraw,

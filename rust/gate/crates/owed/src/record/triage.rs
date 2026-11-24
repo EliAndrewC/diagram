@@ -400,13 +400,7 @@ fn judged(
         .into_iter()
         .map(|b| b.words)
         .collect();
-    let why = change::fires(
-        &c,
-        &page_now,
-        reached_now,
-        popup,
-        &change::new_findings(old, fresh),
-    );
+    let why = change::fires(&c, &page_now, reached_now, popup, &[]);
     (c, why)
 }
 
