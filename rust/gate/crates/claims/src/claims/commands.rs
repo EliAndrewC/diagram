@@ -7,7 +7,7 @@
     reason = "Python's `str.endswith`, which this port keeps, is case-sensitive"
 )]
 
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fmt::Write as _;
 use std::io::Write as _;
 use std::path::{Path, PathBuf};
@@ -141,12 +141,32 @@ fn codes(pairs: &[Pair]) -> HashMap<String, (String, String)> {
     out
 }
 
+/// The claims a landing alone read at an earlier answer, each with the uncommitted files the withdrawn answer's build held
+/// ([`super::landing::Read::mixed`]).
+type Mixed = BTreeMap<String, Vec<String>>;
+
+/// What a landing says of the owed claims whose last answer a mixed build gave (feature 451 T223): how many, the files, and that
+/// each is owed only what this build finds since the answer before.
+fn mixed_lines(cmd: &str, mixed: &Mixed, due: &[&str]) -> Vec<String> {
+    let of: Vec<&Vec<String>> = due.iter().filter_map(|k| mixed.get(*k)).collect();
+    if of.is_empty() {
+        return Vec::new();
+    }
+    let files: BTreeSet<&str> = of
+        .iter()
+        .flat_map(|p| p.iter().map(String::as_str))
+        .collect();
+    let files: Vec<&str> = files.into_iter().collect();
+    vec![format!("{cmd}: {} of the owed claims were last answered by an l7r-gate built with other builders' uncommitted code ({}), not this landing's: that answer is withdrawn and each is owed what this build finds since its answer before it - `L7R_LAND_ALONE=1 make claims-triage` clears again what the tool can and bundles the rest for the `claims-triage` agent (451 T223)", of.len(), files.join(", "))]
+}
+
 fn owed_cmd(
     root: &Path,
     pairs: &[Pair],
     cur: &Cur,
     index: &Index,
     store: &Store,
+    mixed: &Mixed,
     o: &mut Out,
 ) -> Result<i32, Fail> {
     for x in coverage(pairs, &question_names(root)) {
@@ -181,6 +201,10 @@ fn owed_cmd(
     }
     if !full.is_empty() {
         o.say(&format!("claims-owed: {} claim(s) in {} file(s) owe impl-drift; bundle per file with `make claims-bundle MODULE=<path>`, or OWED=1 for all", full.len(), mods.len()));
+    }
+    let owed_keys: Vec<&str> = due.iter().map(|(k, _)| k.as_str()).collect();
+    for x in mixed_lines("claims-owed", mixed, &owed_keys) {
+        o.say(&x);
     }
     if due.len() > full.len() {
         o.say(&format!("claims-owed: {} claim(s) owe only a TRIAGE of what changed on their pages or in their code - `make claims-triage` first; it sends on only the claims a change bears on", due.len() - full.len()));
@@ -445,11 +469,18 @@ fn triage_cmd(
     cur: &Cur,
     index: Index,
     store: &Store,
+    mixed: &Mixed,
     p: &Parsed,
     o: &mut Out,
 ) -> Result<i32, Fail> {
     let qdir = root.join(QUESTIONS);
     let today = crate::record::bundle::today();
+    if !mixed.is_empty() {
+        // the withdrawal is written before anything is cleared or bundled, so the reply is recorded onto the rows it was asked of
+        save_index(&root.join(INDEX), &live_rows(cur, &index))?;
+        save_store(&root.join(STORE), store)?;
+        o.say(&format!("claims-triage: {} claim(s) were last answered by an l7r-gate built with other builders' uncommitted code: each is read at its answer before that one and triaged again by this build (451 T223)", mixed.len()));
+    }
     let due = owed(cur, &index, Some(&qdir), Some(store))?;
     let pages: Vec<String> = due
         .iter()
@@ -758,15 +789,16 @@ fn reading(root: &Path) -> Result<Reading, Fail> {
     let pairs = all_units(root, true)?;
     Ok(Reading {
         cur: rows_of(pairs, &root.join(QUESTIONS))?,
-        index: load_map(&root.join(INDEX))?,
+        index: super::landing::read(root)?.index,
     })
 }
 
 fn gate_cmd(root: &Path, o: &mut Out) -> Result<i32, Fail> {
     let pairs = all_units(root, true)?;
+    let read = super::landing::read(root)?;
     let at = Reading {
         cur: rows_of(pairs.clone(), &root.join(QUESTIONS))?,
-        index: load_map(&root.join(INDEX))?,
+        index: read.index,
     };
     let (mut refuse, warn) = carry_gate(root, &at)?;
     refuse.extend(delta_form_problems(root, &pairs));
@@ -775,6 +807,16 @@ fn gate_cmd(root: &Path, o: &mut Out) -> Result<i32, Fail> {
     }
     for x in &refuse {
         o.say(&format!("claims-gate: REFUSED {x}"));
+    }
+    // a refused claim a mixed build last answered is told its route: the landing's own triage (feature 451 T223)
+    let withdrawn: Vec<&str> = read
+        .mixed
+        .keys()
+        .map(String::as_str)
+        .filter(|k| refuse.iter().any(|x| x.ends_with(&format!("): {k}"))))
+        .collect();
+    for x in mixed_lines("claims-gate", &read.mixed, &withdrawn) {
+        o.say(&x);
     }
     Ok(i32::from(!refuse.is_empty()))
 }
@@ -852,9 +894,11 @@ pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail>
     }
     let pairs = all_units(root, true)?;
     let cur = rows_of(pairs.clone(), &root.join(QUESTIONS))?;
-    let index = load_map(&root.join(INDEX))?;
-    let index = super::counters::counters_clear(root, &cur, index, cmd, o)?;
-    let (qdir, store) = (root.join(QUESTIONS), load_map(&root.join(STORE))?);
+    // a landing alone reads each row a mixed build answered at its last clean answer (feature 451 T223)
+    let read = super::landing::read(root)?;
+    let mixed = read.mixed;
+    let index = super::counters::counters_clear(root, &cur, read.index, cmd, o)?;
+    let (qdir, store) = (root.join(QUESTIONS), read.store);
     match cmd {
         "refingerprint" => {
             let mut index = index;
@@ -888,8 +932,14 @@ pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail>
                 || !ported.dropped.is_empty()
                 || !ported.retired.is_empty()
                 || !ported.rebuilt.is_empty()
+                || !mixed.is_empty()
             {
                 save_index(&root.join(INDEX), &index)?;
+            }
+            // a landing's first pass runs this and commits the index: the mixed answers' withdrawal is written with it, so a claim
+            // it leaves owed nothing does not keep a mixed stamp past the reach of the walk (feature 451 T223)
+            if !mixed.is_empty() {
+                o.say(&format!("claims-rekey: {} claim row(s) a mixed build last answered written at their answer before it (451 T223)", mixed.len()));
             }
             o.say(&format!(
                 "claims-rekey: {n} claim row(s) carried to the file their unit moved to"
@@ -897,7 +947,7 @@ pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail>
             Ok(super::ports::say(&ported, o))
         }
         "accept" => accept_cmd(root, &cur, &index, p, o),
-        "owed" => owed_cmd(root, &pairs, &cur, &index, &store, o),
+        "owed" => owed_cmd(root, &pairs, &cur, &index, &store, &mixed, o),
         "backfill-sections" | "backfill" => backfill_cmd(cmd, root, &cur, index, store, o),
         "triage-owed" => {
             let n = owed(&cur, &index, Some(&qdir), Some(&store))?
@@ -907,7 +957,7 @@ pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail>
             o.say(&n.to_string());
             Ok(0)
         }
-        "triage" => triage_cmd(root, &cur, index, &store, p, o),
+        "triage" => triage_cmd(root, &cur, index, &store, &mixed, p, o),
         "triage-replay" => replay_cmd(root, &cur, &index, &store, p, o),
         "triaged" => triaged_cmd(root, &cur, &index, &store, p, o),
         "report" => {

@@ -2736,40 +2736,60 @@ engine speed, so no checklist.
 
 **Performance work?** no: it removes findings that name nothing wrong; filed with the restatement audit's five.
 
-### T223 (<why: the finding or measurement that files it>)
+### T223 (the round arbiter's process-fault, `ask:mixed-build-241-claims`, 2026-11-24: a green landing of 449 T423 T424 T418 T422 was refused at the push because T197's rule owed its unchanged doc claims a full impl-drift, the only route offered)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: A landing alone reads each row a mixed build's triage answered at the answer before it, and owes the claim what its own build finds since. The refused landing took 920 s and listed 241 claims, measured 2026-11-24 (`/home/agent/.claude/jobs/c6fd72d1/tmp/arbiter-mixed-build.md`).
+  - **Why the row cannot be triaged again as it stands.** A triage clear overwrites the row's `research`, `pages`, `section`, `code` and `core` with the tree it judged. The mixed row holds no "before", so a re-triage of it sees no change.
+  - **Where the before is.** In the repository: `dev/claims-index.json`'s own history holds the row as the last clean build left it. `rust/gate/crates/claims/src/claims/landing.rs` (`read`) walks the index's history from HEAD as far as `checked_at` does, and takes the newest row whose build is not mixed. That is 60 commits, observed 2026-11-24, method: `WALK` in `landing.rs`.
+  - **What is withdrawn.** Only the fields a triage writes: `research`, `pages`, `section`, `code`, `core`, `reads`, `triaged`, `cleared`, `triage`, `build`. The verdict, note, date, claim and rests stay.
+  - **What each mixed answer owes at a landing.**
+    - A tool's clear (`cleared`) or an agent's (`triaged`): what `claims-owed`'s ordinary rules find between the answer before and the tree. That is nothing where the tree is back where that answer judged it; a triage where a section, page or code moved; a full check where the change is one no triage judges (a rewritten claim, a lost rest).
+    - A mixed answer with no clean answer in the walk, or whose claim has no row in a commit of the walk: impl-drift, the files named. It fails closed.
+    - A full impl-drift verdict: never re-owed. `reply.rs`'s `verdict_row` builds a fresh row with no `build`, by T197's design, and the ruling keeps the 14 edited claims' verdicts: the judgment is the agent's reading, not the gate's code.
+    - The one exception fails closed: a verdict recorded and then cleared again by a mixed build before the index was next committed. The row carries the build, the walk's row is the one before that verdict, and the claim is owed in full. That is the barracks row below, 1 of the 242, observed 2026-11-24, method: each mixed row's verdict, note and claim compared with its row in the walk.
+  - **The route.** The landing's first pass writes the withdrawal into the index it commits (`claims rekey`), so the claims it leaves owed are owed in any run after it. Before that commit, `L7R_LAND_ALONE=1 make claims-triage` writes the withdrawal itself, clears again what the tool can, and bundles the rest for the `claims-triage` agent; what the agent names TOUCHES goes on to impl-drift. No command is added (`ask:t197-rejudge-verb` stands). `claims-owed` and the push's gate each say the count, the files and that command.
+  - **Outside a landing** the index is read as it stands.
+  - **What is retained for the re-triage, measured 2026-11-24 on the clone's HEAD `fd7aa5d6dd`** (a detached worktree, `claims triage-replay`, nothing recorded):
+    - the row before: in the index's history, for all 242 mixed rows;
+    - the page and section snapshots: `dev/claims-pages.json` is never pruned, and all 6 base sections were in it; the base commit's store is read beside it all the same;
+    - the section words: `dev/claims-section-words.jsonl` is pruned to today's index, and 8 of the 100 base blocks were gone from it. All 8 were found in the documents' history, and none was forced. `section_words` now reads the kept words' own history too, for words that reached no commit of their document;
+    - a page's kept text (`.git/claims-page-blobs.json`) is the clone's own, as before; a page's history holds it otherwise.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+| the 235 mixed doc rows (docs/building-programs.md 143, docs/buildings.md 92) | count |
+|---|---|
+| owe nothing: the section is back where the last clean verdict judged it | 73 |
+| cleared again by the tool | 147 |
+| in the agent's bundle | 14 |
+| owe impl-drift (`code changed`: the barracks claim, rewritten) | 1 |
+
+  The task line's 241 was 143 and 98, and 6 rows of docs/buildings.md were recorded again since, observed 2026-11-24, method: the index's rows carrying a mixed `build` at `fd7aa5d6dd`. 7 more mixed rows are `rust/phases/src/field/dry.rs`'s, all in the agent's bundle (21 sent in all). Before: 242 owed impl-drift.
 
 ### T223 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A landing judges a mixed build's clears again with its own build, and a claim nothing changed for owes nothing.
+2. **The constraints.**
+   - T197: a landing alone never trusts an answer judged with code that is not its own.
+   - `ask:t197-rejudge-verb`: no withdrawal verb.
+   - T210, T215: a section's removed words are shown from the kept words, never forced where they can be found.
+   - T196: a moved pointer's blocks are read as moved; the ordinary owed rules run unchanged on the withdrawn row.
+   - The request's convergence rule: only a claim-changing edit re-owes a check.
+3. **Where each comes from.**
+   - O: the measurement, `/home/agent/.claude/jobs/c6fd72d1/tmp/arbiter-mixed-build.md`.
+   - R: the round arbiter, `ask:mixed-build-241-claims`, process-fault, its `tooling_fix`.
+4. **Do they describe the world here?** Yes: the replay above, on the rows that refused the landing.
+5. **The order.** Before the landing of 449 T423 T424 T418 T422 is run again. The coordinating session commits this, then re-judges.
+6. **The exits.** Green: `make closing-checks T=T223 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, 2026-11-24: the three tests of `commands/tests/landing.rs` failed on HEAD's code in a detached worktree (`/tmp/t223/red-first.log`, 191 passed, 3 failed: a mixed clear listed with T197's full reason, not `section triage`). After: 196 passed (`/tmp/t223/test5.log`), with two more tests: the kept words' history, and the page-move clear's stamp.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: the gate answered wrongly. It owed a full check to claims whose text, pages and code stood as last judged, and refused a green landing on them. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A withdrawn row that owed nothing kept its mixed stamp in the index, since only a landing's triage wrote the withdrawal and nothing prompted one. Effect: past the walk's reach the unchanged claim would owe a full check. Fixed here: `claims rekey`, which a landing's first pass runs and whose index it commits (`land/cheap.rs`), writes the withdrawal in a landing alone. A deferral of it was ruled NOT LEGITIMATE by the plan delta's MODE 4, observed 2026-11-24, method: the verdict recorded in `plan-review.json`; the task filed for it was taken out before any commit.
+- The page-move clear (`clear_page_moves`, feature 432) never stamped its build: a mixed build's clear went unmarked, and a clean build's clear of a row already marked stayed marked. Effect: the landing's check answers wrongly either way. Fixed here (`stamp_build`).
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: it corrects what a landing owes; the landing's saved impl-drift rounds are its effect, not a speed change of any tool.
 
-### T223 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
-
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 

@@ -639,6 +639,16 @@ pub fn refused(reply: &str, units: &Map<String, Value>) -> Option<String> {
     })
 }
 
+/// A cleared row told the build that cleared it, kept only where it held uncommitted code, so the tracked index moves only then
+/// (feature 451 T197); every clear stamps it, the page-move clear too (T223: it kept the build of the answer before, so a mixed
+/// build's clear went unmarked and a clean build's stayed marked mixed).
+fn stamp_build(row: &mut Map<String, Value>) {
+    match l7r_gate_core::build::current().filter(|b| !l7r_gate_core::build::dirty(b).is_empty()) {
+        Some(b) => row.insert("build".into(), b),
+        None => row.shift_remove("build"),
+    };
+}
+
 /// The index with a triage reply applied: a named or forced claim owed `impl-drift`, every other one cleared at the pages as they stand.
 pub fn record_triage(
     index: &Index,
@@ -685,13 +695,7 @@ pub fn record_triage(
             }
             super::reads::stamp(&mut row, fp.get("reads").and_then(Value::as_str));
             row.shift_remove("triage");
-            // the build that cleared it, kept only where it held uncommitted code, so the tracked index moves only then (451 T197)
-            match l7r_gate_core::build::current()
-                .filter(|b| !l7r_gate_core::build::dirty(b).is_empty())
-            {
-                Some(b) => row.insert("build".into(), b),
-                None => row.shift_remove("build"),
-            };
+            stamp_build(&mut row);
         }
         out.insert(key.clone(), Value::Object(row));
     }
@@ -737,6 +741,7 @@ pub fn clear_page_moves(
         r.insert("triaged".into(), json!(today));
         r.insert("cleared".into(), json!(CLEARED));
         r.shift_remove("triage");
+        stamp_build(&mut r);
         out.insert(k.clone(), Value::Object(r));
     }
     Ok((out, memo.snapshots()))

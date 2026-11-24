@@ -9,7 +9,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use serde_json::{json, Map, Value};
 
-use super::index::{field, is, live_rows, load_map, owed, Cur, Index, INDEX, STORE};
+use super::index::{field, is, live_rows, owed, Cur, Index, INDEX};
 use super::report::{base_tree, classify, load_deferred, open_findings, Base};
 use crate::record::repo::{fail, git, read_text, Fail};
 use crate::record::units::re;
@@ -422,7 +422,7 @@ pub struct Reading {
 
 /// (owed refusals, introduced, pre-existing, carried) at `root` against its merge base with origin/main.
 pub fn classified(root: &Path, at: &Reading) -> Result<Classified, Fail> {
-    let store = load_map(&root.join(STORE))?;
+    let store = super::landing::store(root)?;
     let due = owed(
         &at.cur,
         &at.index,

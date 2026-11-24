@@ -834,3 +834,26 @@ fn the_section_words_are_pruned_to_the_named_snapshots_one_line_a_block() {
     super::keep_sections(root, &json!({}), &ix("new"), &store).unwrap();
     assert_eq!(std::fs::read_to_string(&path).unwrap(), second);
 }
+
+/// Feature 451 T223: a block the kept words were pruned of, in no commit of its document, is found in the kept words' own history - a
+/// landing reads a row at an earlier answer, and that answer's snapshot was named, and its words kept, when it was recorded.
+#[test]
+fn a_pruned_block_s_words_are_found_in_the_kept_words_history() {
+    use crate::record::units::digest;
+    let root = fixture("claims-section-words-history");
+    let (a, b) = ("A row never committed.", "B row never committed.");
+    let line = |w: &str| format!("{{\"block\": \"{}\", \"words\": \"{w}\"}}\n", digest(&[w]));
+    put(&root, super::kept::SECTION_WORDS, &(line(a) + &line(b)));
+    commit(&root, "the kept words");
+    put(&root, super::kept::SECTION_WORDS, "");
+    commit(&root, "pruned");
+    let want: HashSet<String> = [digest(&[a]), digest(&[b]), digest(&["never kept"])].into();
+    let got = super::section_words(&root, "docs/buildings.md", "Walls", &want);
+    assert_eq!(got.values().collect::<Vec<_>>().len(), 2);
+    assert_eq!(got[&digest(&[a])], a);
+    let one: HashSet<String> = [digest(&[b])].into();
+    assert_eq!(
+        super::section_words(&root, "docs/buildings.md", "Walls", &one)[&digest(&[b])],
+        b
+    );
+}

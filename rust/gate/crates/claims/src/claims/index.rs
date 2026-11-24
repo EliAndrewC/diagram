@@ -606,24 +606,31 @@ pub fn owed(
 }
 
 /// A landing alone's reading of the builds its clears were made by (feature 451 T197): a clear by a build holding uncommitted code
-/// other than the landing's own is owed again; outside a landing, and with no tree to read the landing's blobs from, none is.
-struct Landing<'a> {
+/// other than the landing's own is not the landing's answer; outside a landing, and with no tree to read the landing's blobs from,
+/// every clear stands. The index a landing reads has each such row at its last clean answer ([`super::landing::read`], T223), so the
+/// one this still finds mixed has none, and is owed in full.
+pub(super) struct Landing<'a> {
     root: &'a Path,
     blobs: BTreeMap<String, String>,
 }
 
 impl<'a> Landing<'a> {
     fn of(qdir: Option<&'a Path>) -> Option<Self> {
-        let root = qdir.and_then(Path::parent).and_then(Path::parent)?;
+        Self::at(qdir.and_then(Path::parent).and_then(Path::parent)?)
+    }
+
+    /// The landing at `root`, or `None` outside a landing alone.
+    pub(super) fn at(root: &'a Path) -> Option<Self> {
         l7r_gate_core::build::landing().then(|| Self {
             root,
             blobs: BTreeMap::new(),
         })
     }
 
-    fn mixed(&mut self, was: &Value) -> Option<String> {
+    /// The uncommitted files the build that answered `was` held that are not the landing's own; none for a clean or unrecorded build.
+    pub(super) fn paths(&mut self, was: &Value) -> Vec<String> {
         let (root, blobs) = (self.root, &mut self.blobs);
-        let paths = l7r_gate_core::build::mixed(was.get("build"), &mut |p: &str| {
+        l7r_gate_core::build::mixed(was.get("build"), &mut |p: &str| {
             blobs
                 .entry(p.to_owned())
                 .or_insert_with(|| {
@@ -639,10 +646,14 @@ impl<'a> Landing<'a> {
                     }
                 })
                 .clone()
-        });
+        })
+    }
+
+    fn mixed(&mut self, was: &Value) -> Option<String> {
+        let paths = self.paths(was);
         (!paths.is_empty()).then(|| {
             format!(
-                "triaged by an l7r-gate built with other builders' uncommitted code ({}), not this landing's: re-judge it here (451 T197)",
+                "triaged by an l7r-gate built with other builders' uncommitted code ({}), not this landing's, and the index's history holds no earlier answer of it by a clean build to triage again from: re-judge it here (451 T197, T223)",
                 paths.join(", ")
             )
         })
