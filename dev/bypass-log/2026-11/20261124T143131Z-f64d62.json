@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-24T14:31:31Z",
+  "target": "plan-gate push",
+  "commit": "34c756b66b",
+  "why": "451's stale block is T203's withdrawn heading, a heading with no decision; 449's are T415 and T416's unfilled template sections, filed and in progress with their builder"
+}
