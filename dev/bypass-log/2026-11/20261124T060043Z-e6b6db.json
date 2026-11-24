@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-24T06:00:43Z",
+  "target": "plan-gate push",
+  "commit": "529dfdb36b",
+  "why": "451's changed block is T203's heading alone, a one-line withdrawn note with no decision; its substance was reviewed CLEAR as T199's section (MODE 4 round 4, the T198-T200 bundle)"
+}
