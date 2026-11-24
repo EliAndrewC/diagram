@@ -19677,5 +19677,13 @@
   "variants": [
    "JAANUS"
   ]
+ },
+ "tamon turret": {
+  "def": "A long, single-story defensive building on a castle wall.",
+  "variants": [
+   "tamon turret",
+   "tamon turrets",
+   "tamon"
+  ]
  }
 }

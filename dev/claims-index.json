@@ -5352,16 +5352,18 @@
  "docs/building-programs.md::Magistrate's manor (county magistracy)#staff housing knob": {
   "body": "f465b08f242c9bab",
   "claim": "staff housing knob - where-an-offices-staff-lived, staff-rowhouses-and-barracks-nagaya: the knob's three forms from 0331 - all on the grounds (the rowhouses inside the grounds at Sakai and Sayama), or the duty watch only with the staff in town (Sano's stipended men in its four towns, Omori's official in a house of his own) - and plus family rowhouses for married men, a GUESS (0097 counts a row's dwellings as households, a count that fits a single man to a dwelling as well as a family); Ubame's family rowhouse stands inside the walls",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "13bde448f9f60333",
   "core": "07c8247a9dc0470d",
   "date": "2026-11-24",
   "note": "Knob 5 offers forms (a) and (c), the two that 0331 attests: staff living on the grounds (Sakai's and Sayama's rowhouses) and staff living in town (Sano's stipended men in its four towns, Omori's official in his own house). Each plan takes one, so the code chooses between attested forms rather than fixing one. Form (b), family rowhouses for married men, is correctly a GUESS: 0097 counts a row's dwellings as households, which \"fits a single man to a dwelling as well as a family\", so the page neither attests (b) nor rules it out.",
   "pages": {
-   "0097-staff-rowhouses-and-barracks-nagaya.html": "48c9011c3419f718",
+   "0097-staff-rowhouses-and-barracks-nagaya.html": "9198464d5cf73e0b",
    "0331-where-an-offices-staff-lived.html": "64759cf7a8f6a99b",
-   "0334-how-a-rowhouses-dwellings-were-entered.html": "f09f4a224b82dd5b"
+   "0334-how-a-rowhouses-dwellings-were-entered.html": "f09f4a224b82dd5b",
+   "0338-what-a-staff-rowhouse-was-built-of.html": "b39b41eafe9829e5"
   },
-  "research": "bb0e7ec16f940792",
+  "research": "d3677feee120278d",
   "rests": [
    "0097-staff-rowhouses-and-barracks-nagaya.html:3bb7eabd5e3b7f28",
    "0331-where-an-offices-staff-lived.html:314708c938873281",
@@ -5373,6 +5375,7 @@
    "0331-where-an-offices-staff-lived.html:f20bf8b0955845c9"
   ],
   "section": "07c8247a9dc0470d",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#staff in town at a wealthy or long-settled magistracy": {
@@ -14826,16 +14829,16 @@
   "date": "2026-11-18",
   "note": "same constant as the Python",
   "pages": {
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "00e9e07782d55568"
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "f4245c6d058788a5"
   },
-  "research": "d61f5d52ce332ce7",
+  "research": "ae5d53e2f6907695",
   "rests": [
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:06766b70728caeae",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:40d18dac4b203306",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:6d20e14e8c281ff8",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:cc913a3b926b0d35"
   ],
-  "triaged": "2026-11-23",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/program_rules.rs::COMPASS_TEXT#the program rules": {
@@ -15094,20 +15097,22 @@
  "rust/mode_a/src/audit/program_rules.rs::ROW_KINDS#the row-form lodgings": {
   "body": "d534f699671b35e1",
   "claim": "the row-form lodgings - staff-rowhouses-and-barracks-nagaya.drawing, the-chief-retainers-house-karo-yashiki.drawing: a barracks and a retainers' long-house are divided into dwellings, each with a door of its own (0097, 0106), and a servants' quarters takes one of 0097's two forms, a row of dwellings each with its door or a common room behind one door, so these three kinds are the ones a dwelling wall can divide.",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d6b2a79067839e52",
   "core": "32527485aa8e7bdf",
   "date": "2026-11-23",
   "note": "the barracks and the karo's long-house are divided into dwellings, and the servants' quarters takes one of the two attested forms",
   "pages": {
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "00e9e07782d55568",
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "f4245c6d058788a5",
    "0106-the-chief-retainers-house-karo-yashiki.drawing.html": "870c1e408ea8b04b"
   },
-  "research": "a6218ae01c320a5a",
+  "research": "f83f4b7082af67b3",
   "rests": [
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:06766b70728caeae",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:6d20e14e8c281ff8",
    "0106-the-chief-retainers-house-karo-yashiki.drawing.html:f288e6d075e34e97"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/program_rules.rs::TUB_KINDS#which wooden buildings carry a tub": {
@@ -15243,16 +15248,17 @@
  "rust/mode_a/src/audit/program_rules.rs::lodging_entrances#a door to each dwelling of a row": {
   "body": "1905c7a98a386c5b",
   "claim": "a door to each dwelling of a row - staff-rowhouses-and-barracks-nagaya.drawing, the-chief-retainers-house-karo-yashiki.drawing: a barracks, a retainers' long-house and a servants' quarters in the row form are divided into dwellings, each with a door of its own, and a row of bays walled off from one another behind one shared door is never drawn, so each dwelling a solid wall divides off is held to its own door; a servants' quarters undivided, or divided only by dashed sliding partitions, is 0097's common room behind one door, the one row kind 0097 lets stand undivided.",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "e195eed4176da3f6",
   "core": "6af1c4a94d1cba8d",
   "date": "2026-11-23",
   "note": "each solid-walled dwelling is held to its own door; dashed partitions or an undivided room are allowed only in servants' quarters; a walled-off row behind one shared door is refused",
   "pages": {
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "00e9e07782d55568",
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "f4245c6d058788a5",
    "0106-the-chief-retainers-house-karo-yashiki.drawing.html": "870c1e408ea8b04b"
   },
   "reads": "dc36e07e4dcaa412",
-  "research": "a6218ae01c320a5a",
+  "research": "f83f4b7082af67b3",
   "rests": [
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:06766b70728caeae",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:1ec88e027f7feeec",
@@ -15260,22 +15266,24 @@
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:cc913a3b926b0d35",
    "0106-the-chief-retainers-house-karo-yashiki.drawing.html:f288e6d075e34e97"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/program_rules.rs::lodging_entrances#a lodging entered from the ground": {
   "body": "1905c7a98a386c5b",
   "claim": "a lodging entered from the ground - staff-rowhouses-and-barracks-nagaya.drawing, the-formal-entrance-and-a-guests-arrival-genkan.drawing, the-chief-retainers-house-karo-yashiki.drawing: each barracks dwelling has its earth-floored entry and a servants' quarters is entered by its door or by a door to each dwelling (0097); the residence is entered by its genkan where it stands alone and the household by its own kitchen door (0104); the retainers' long-house, where the karo lodges, gives each dwelling a door of its own on the court (0106).",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "6b891166fbd990a4",
   "core": "6af1c4a94d1cba8d",
   "date": "2026-11-23",
   "note": "earth-floored dwelling entries, servants by one door or one door per dwelling, a genkan on a residence that stands alone, a kitchen door, each long-house dwelling with its own door on the court",
   "pages": {
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "00e9e07782d55568",
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "f4245c6d058788a5",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "cfeda035702c9f99",
    "0106-the-chief-retainers-house-karo-yashiki.drawing.html": "870c1e408ea8b04b"
   },
   "reads": "dc36e07e4dcaa412",
-  "research": "081909a6dae5b484",
+  "research": "bc6a3341a935902f",
   "rests": [
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:06766b70728caeae",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:6d20e14e8c281ff8",
@@ -15284,6 +15292,7 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:3bd3b9974993d277",
    "0106-the-chief-retainers-house-karo-yashiki.drawing.html:f288e6d075e34e97"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/program_rules.rs::lodging_entrances#every other lodging entered from the ground": {

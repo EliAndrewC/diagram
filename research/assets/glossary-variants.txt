@@ -4599,6 +4599,9 @@ tamari	tamari
 tameie	Fujiwara no Tameie
 tameike	tameike
 tamenari	Fujiwara no Tamenari
+tamon	tamon turret
+tamon turret	tamon turret
+tamon turrets	tamon turret
 tamonten	Bishamon
 tan	tan
 tan-bu	tan
