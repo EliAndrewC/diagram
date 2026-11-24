@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-24T13:51:31Z",
+  "target": "plan-gate tick 451-time-retro-and-efficiency",
+  "commit": "d66a927dff",
+  "why": "451's stale blocks are T203's withdrawn heading and T216's unfilled template section (filed, not started); neither holds a decision"
+}
