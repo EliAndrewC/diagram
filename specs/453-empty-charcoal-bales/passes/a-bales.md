@@ -237,5 +237,5 @@ https://zh.wikisource.org/wiki/明㑹典_(四庫全書本)/卷136 (archived 63/6
 - 地方凡例録 vol. 9 (NDL 1365507): the OCR is unreadable (recorded unreadable).
 - http://www.simoyokote.sakura.ne.jp/mingu/tawaraamiki/tawaraamiki.html: certificate error, unfetchable (the "8 rice bales a day" snippet).
 - http://www.uragozu.jp/blog/2010/12/3_2.html: connection refused (recorded unreadable).
-- The Kyushu catalogue PDF (api.lib.kyushu-u.ac.jp/opac_download_md/4060494/p067.pdf) did not download as a PDF.
+- The Kyushu catalog PDF (api.lib.kyushu-u.ac.jp/opac_download_md/4060494/p067.pdf) did not download as a PDF.
 - The Tokyo 東京市史稿 guides 0601ooedo04/07/08/13 were downloaded and grepped with curl: nothing on bales (recorded nothing-found). 0601ooedo03 is recorded rejected.

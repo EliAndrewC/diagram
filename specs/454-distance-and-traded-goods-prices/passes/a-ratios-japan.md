@@ -4,7 +4,7 @@ QUESTION=none for the ledger.
 
 **Archive.** `make research-search` was run under the keys p454a-tea, p454a-sugar, p454a-silk and p454a-iron (three batches each, 60 of 72-93 sources per key) and p454a-neighbors (one batch). The later batches were drifting to unrelated sources. The archive held one both-ends pair, for RICE only (Kusano 1996, under Neighbors), plus one-ended material: the 1842 Edo sencha return and the Arai iron:rice ratios already in record 0306. Records 0304, 0280 and 0306 were checked; none holds a producer/city pair for these goods.
 
-**Conversions.** 1 kin (斤) = 160 monme = 600 g, except where a source says otherwise; the 1842 Edo tea list uses a kin of 200 me = 750 g. 1 kan (貫) = 3.75 kg. Silver 1 monme = 3.75 g, so **a price in monme of silver per kan of goods is numerically equal to grams of silver per kg**. Gold is turned into silver at the legal 60 monme to the ryo; the market rate was about 63-65 in the 1830s. Every conversion is this pass's arithmetic and is labelled.
+**Conversions.** 1 kin (斤) = 160 monme = 600 g, except where a source says otherwise; the 1842 Edo tea list uses a kin of 200 me = 750 g. 1 kan (貫) = 3.75 kg. Silver 1 monme = 3.75 g, so **a price in monme of silver per kan of goods is numerically equal to grams of silver per kg**. Gold is turned into silver at the legal 60 monme to the ryo; the market rate was about 63-65 in the 1830s. Every conversion is this pass's arithmetic and is labeled.
 
 ---
 

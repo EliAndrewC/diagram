@@ -290,7 +290,7 @@ Build cost of a sand junk:
 - note 144: 「大号沙船、造価盈万、中号亦需数千、而載豆一次、豆価総値銀五六千両」
 - (translation) "A large sand junk costs over 10,000 to build and a middle one several thousand; a single load of beans is worth 5,000-6,000 taels in all."
 
-Draught:
+Draft (depth of water drawn):
 - note 137: 「小鳥船亦吃水丈余、沙船大者十吃水四五尺」 (十 [sic] in the PDF, presumably for 亦)
 - (translation) "Even a small bird-ship draws over a zhang of water; a large sand junk draws 4 or 5 chi."
 
