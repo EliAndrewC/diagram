@@ -160,3 +160,21 @@ quotations beside the history. Anything for the GM goes through `escalation-chec
 9. **Done, measured.** SC-001, SC-002.
 10. **Before moving a constant.** n/a
 11. **Before fitting things into room.** n/a
+
+### T01 part B (2026-11-24T18:05Z)
+
+The trigger `red-gate@2` was two red gates on feature 453's landing of its T01, in this clone; `make arbiter-ruled` filed it under this
+feature because `.specify/feature.json` pointed here (the last number claimed). It is answered here because the tool asks it here.
+
+1. **What exactly is refusing?** Nothing now. Red one was the house-style check on British spellings in the saved search-pass reports;
+   red two was clippy's doc lint on a test comment in `rust/guard/shared/src/checks/reply.rs`. Not the same rule twice.
+2. **A3 again, for that rule, freshly checked.** Both are the project's own standing rules (house style; the lint set), from `CLAUDE.md`.
+3. **A4 again.** Yes: each named a real fault in what was written.
+4. **Is the next fix moving something placed earlier to suit something placed later?** No.
+5. **Tuning or changing?** Neither: two one-line corrections, each made once.
+6. **The one-sentence test.** No such question arises.
+7. **The next step is a measurement.** `make quick` after the first fix and `make static` after the second, each run before another gate:
+   both clean, observed 2026-11-24, method: the two make runs in this clone; the landing that followed was green.
+8. **Before offering routes.** No route was offered; the arbiter was asked only whether the next landing may run.
+9. **After a ruling.** The ruling was accept, naming the next `make land F=453 T=T01`; that was the step taken, and it landed.
+   For this feature's own tasks: a search-pass report is run through `make quick` when it is saved, before any landing.
