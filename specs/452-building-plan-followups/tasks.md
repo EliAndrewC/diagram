@@ -8,7 +8,17 @@ with its pointer); a claim, doc or note restated to a page the record already ho
 ## Occasions
 
 - none: filed 2026-11-24, nothing drawn yet; a task that redraws a sheet adds its own occasion line, naming itself, when it lands
-- none: T007 T008 T009 T010 T011 T012 T013 T014 T015 T21 T23 - doc claims, a doc procedure bullet, pop-up Guesses text and sheet notes restated to their pages and sheets; no sheet's drawing, placement or glyph changes, and no research page (spec-fidelity 2026-11-24: T012 and T013 are restatements).
+- none: T007 - doc claims, a doc procedure bullet, pop-up Guesses text and sheet notes restated to their pages and sheets; no sheet's drawing, placement or glyph changes, and no research page (spec-fidelity 2026-11-24: T012 and T013 are restatements).
+- none: T008 - doc claims, a doc procedure bullet, pop-up Guesses text and sheet notes restated to their pages and sheets; no sheet's drawing, placement or glyph changes, and no research page (spec-fidelity 2026-11-24: T012 and T013 are restatements).
+- none: T009 - doc claims, a doc procedure bullet, pop-up Guesses text and sheet notes restated to their pages and sheets; no sheet's drawing, placement or glyph changes, and no research page (spec-fidelity 2026-11-24: T012 and T013 are restatements).
+- none: T010 - doc claims, a doc procedure bullet, pop-up Guesses text and sheet notes restated to their pages and sheets; no sheet's drawing, placement or glyph changes, and no research page (spec-fidelity 2026-11-24: T012 and T013 are restatements).
+- none: T011 - doc claims, a doc procedure bullet, pop-up Guesses text and sheet notes restated to their pages and sheets; no sheet's drawing, placement or glyph changes, and no research page (spec-fidelity 2026-11-24: T012 and T013 are restatements).
+- none: T012 - doc claims, a doc procedure bullet, pop-up Guesses text and sheet notes restated to their pages and sheets; no sheet's drawing, placement or glyph changes, and no research page (spec-fidelity 2026-11-24: T012 and T013 are restatements).
+- none: T013 - doc claims, a doc procedure bullet, pop-up Guesses text and sheet notes restated to their pages and sheets; no sheet's drawing, placement or glyph changes, and no research page (spec-fidelity 2026-11-24: T012 and T013 are restatements).
+- none: T014 - doc claims, a doc procedure bullet, pop-up Guesses text and sheet notes restated to their pages and sheets; no sheet's drawing, placement or glyph changes, and no research page (spec-fidelity 2026-11-24: T012 and T013 are restatements).
+- none: T015 - doc claims, a doc procedure bullet, pop-up Guesses text and sheet notes restated to their pages and sheets; no sheet's drawing, placement or glyph changes, and no research page (spec-fidelity 2026-11-24: T012 and T013 are restatements).
+- none: T21 - doc claims, a doc procedure bullet, pop-up Guesses text and sheet notes restated to their pages and sheets; no sheet's drawing, placement or glyph changes, and no research page (spec-fidelity 2026-11-24: T012 and T013 are restatements).
+- none: T23 - doc claims, a doc procedure bullet, pop-up Guesses text and sheet notes restated to their pages and sheets; no sheet's drawing, placement or glyph changes, and no research page (spec-fidelity 2026-11-24: T012 and T013 are restatements).
 
 ## Tasks
 
