@@ -699,12 +699,12 @@ fn a_section_snapshot_s_uncommitted_words_are_kept_so_putting_them_back_forces_n
     assert_eq!(cleared_of(&root), keys);
 }
 
-/// Feature 451 T210: where no kept words hold a section's snapshot (one recorded before T210 kept them, or in another clone), its
-/// removed words are found in its history, so an edit of committed words is shown as a pair and forces nothing.
+/// Feature 451 T210: where no kept words hold a section's snapshot (one recorded before T210 kept them), its removed words are found
+/// in its history, so an edit of committed words is shown as a pair and forces nothing.
 #[test]
 fn with_no_kept_words_a_section_s_removed_block_is_found_in_its_history() {
     let (root, ix, store) = recorded();
-    std::fs::remove_file(root.join(".git").join(super::BLOBS)).unwrap();
+    std::fs::remove_file(root.join(super::kept::SECTION_WORDS)).unwrap();
     let b = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
     std::fs::write(
         root.join("docs/buildings.md"),
@@ -716,4 +716,121 @@ fn with_no_kept_words_a_section_s_removed_block_is_found_in_its_history() {
         serde_json::from_str(&std::fs::read_to_string(root.join("t/triage.json")).unwrap())
             .unwrap();
     assert_eq!(data["forced"], json!([]), "{text}");
+}
+
+/// Feature 451 T215: the T210 case triaged in another clone - the snapshot's words recorded, then the clone's own `.git` blob map gone
+/// (a fresh clone holds none). The words live in the repository beside the index (`dev/claims-section-words.jsonl`), so putting the
+/// hand edit back still forces nothing; with them kept only in the clone, both claims were forced.
+#[test]
+fn a_section_snapshot_s_words_live_in_the_repository_so_another_clone_forces_nothing() {
+    let (root, _, _) = recorded();
+    let committed = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
+    std::fs::write(
+        root.join("docs/buildings.md"),
+        committed.replace("Walls stand.\n", "Walls stand, as a hand edit had it.\n"),
+    )
+    .unwrap();
+    let keys = [
+        "docs/buildings.md::Walls#walls",
+        "docs/buildings.md::Walls#wall height",
+    ];
+    let o = root.join("b-hand");
+    let o = o.to_string_lossy();
+    let args = [
+        "bundle",
+        "--units",
+        &keys.join(","),
+        "--out",
+        &o,
+        "--reason",
+        "a re check",
+    ];
+    let got = crate::claims::tests::claims(&root, &args);
+    assert_eq!(got.code, 0, "{}{}", got.stdout, got.stderr);
+    let reply = root.join("reply-hand.txt");
+    let text = keys
+        .map(|k| format!("VERDICT {k} IN-STEP - fine [§1]\n"))
+        .concat();
+    std::fs::write(&reply, text).unwrap();
+    let args = [
+        "record",
+        "--bundle",
+        &o,
+        "--reply",
+        &reply.to_string_lossy(),
+    ];
+    let got = crate::claims::tests::claims(&root, &args);
+    assert_eq!(got.code, 0, "{}{}", got.stdout, got.stderr);
+    std::fs::write(root.join("docs/buildings.md"), &committed).unwrap();
+    // another clone: no blob map of its own
+    let _ = std::fs::remove_file(root.join(".git").join(super::BLOBS));
+    let (ix, store) = (
+        load_map(&root.join("dev/claims-index.json")).unwrap(),
+        load_map(&root.join("dev/claims-pages.json")).unwrap(),
+    );
+    manifest_of(&root, &ix, &store, &keys);
+    let data: Value =
+        serde_json::from_str(&std::fs::read_to_string(root.join("t/triage.json")).unwrap())
+            .unwrap();
+    assert_eq!(data["forced"], json!([]), "{data}");
+    assert_eq!(cleared_of(&root), keys);
+}
+
+/// Feature 451 T215: the repository's section words hold the blocks of the snapshots the index names and no more - a regenerated block
+/// adds one line and its replaced block's line goes once no named snapshot holds it - written only when they change; a line that does
+/// not parse, or whose words do not hash to its digest, is not read.
+#[test]
+fn the_section_words_are_pruned_to_the_named_snapshots_one_line_a_block() {
+    use crate::record::units::digest;
+    let dir = l7r_shared::tempdir::TempDir::new("claims-section-words");
+    let root = dir.path();
+    std::fs::create_dir_all(root.join("dev")).unwrap();
+    let (a, b, c) = ("A row.", "B row.", "B row, regenerated.");
+    let (da, db, dc) = (digest(&[a]), digest(&[b]), digest(&[c]));
+    let ix = |core: &str| {
+        json!({"k#x": {"section": core}, "k#y": {"pages": {}}})
+            .as_object()
+            .unwrap()
+            .clone()
+    };
+    let store = json!({"old": [da, db], "new": [da, dc]})
+        .as_object()
+        .unwrap()
+        .clone();
+    let texts = |core: &str, w: &[&str]| json!({super::SECTION_TEXTS: {core: w}});
+    assert_eq!(
+        super::keep_sections(root, &texts("old", &[a, b]), &ix("old"), &store).unwrap(),
+        2
+    );
+    let path = root.join(super::kept::SECTION_WORDS);
+    let first = std::fs::read_to_string(&path).unwrap();
+    assert_eq!(first.lines().count(), 2);
+    // nothing new: the file is not written again
+    std::fs::write(&path, &first).unwrap();
+    let stamp = std::fs::metadata(&path).unwrap().modified().unwrap();
+    assert_eq!(
+        super::keep_sections(root, &json!({}), &ix("old"), &store).unwrap(),
+        2
+    );
+    assert_eq!(std::fs::metadata(&path).unwrap().modified().unwrap(), stamp);
+    // the row regenerated and re-checked: its new block in, its old one out
+    assert_eq!(
+        super::keep_sections(root, &texts("new", &[a, c]), &ix("new"), &store).unwrap(),
+        2
+    );
+    let second = std::fs::read_to_string(&path).unwrap();
+    let lines = |t: &str| t.lines().map(str::to_owned).collect::<HashSet<_>>();
+    assert_eq!(lines(&first).difference(&lines(&second)).count(), 1);
+    assert_eq!(lines(&second).difference(&lines(&first)).count(), 1);
+    assert!(second.contains(c) && !second.contains(b));
+    // a hand-edited line, a broken one and a line of another key are not read; the next write drops them
+    let bad = format!(
+        "{second}{{\"block\": \"{db}\", \"words\": \"not B\"}}\nnot json\n{{\"words\": 3}}\n"
+    );
+    std::fs::write(&path, bad).unwrap();
+    let want: HashSet<String> = [db.clone(), dc.clone()].into();
+    let got = super::section_words(root, "docs/x.md", "X", &want);
+    assert_eq!(got.keys().collect::<Vec<_>>(), [&dc]);
+    super::keep_sections(root, &json!({}), &ix("new"), &store).unwrap();
+    assert_eq!(std::fs::read_to_string(&path).unwrap(), second);
 }

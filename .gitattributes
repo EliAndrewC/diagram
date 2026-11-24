@@ -9,3 +9,6 @@ research/not-kept.jsonl merge=union
 dev/review-ledger.md merge=union
 # the review gate's record of the hamlet reviews it sets aside at rust-only (449 T232): every clone appends, so union keeps both sides' rows
 dev/deferred-reviews.jsonl merge=union
+# a procedure section's kept words (451 T215): one line a block, its digest and words, so a line is its block's alone; every clone
+# that records a section check rewrites the file sorted and pruned, so union keeps both sides' lines and the next write re-sorts
+dev/claims-section-words.jsonl merge=union

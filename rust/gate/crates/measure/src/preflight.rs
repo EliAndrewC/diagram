@@ -23,9 +23,11 @@ const DERIVED: [&str; 3] = ["docs", "building-programs", "glossary"];
 /// Tracked files the gate itself writes, measured on a gate run (feature 375 T23): the known-failing seeds `make seeds` rewrites at rust-only.
 const GATE_WRITES: [&str; 1] = ["dev/known-seeds.txt"];
 /// The records the claims round writes, which no phase of the gate reads (405 T41, D15), beside the active feature's own.
-const RECORDS: [&str; 3] = [
+const RECORDS: [&str; 4] = [
     "dev/claims-index.json",
     "dev/claims-pages.json",
+    // a procedure section's kept words, beside its snapshot (451 T215)
+    "dev/claims-section-words.jsonl",
     "dev/review-ledger.md",
 ];
 const FEATURE_RECORDS: [&str; 4] = [

@@ -228,7 +228,7 @@ fn gather_section(
     store: &Store,
     key: &str,
     root: &Path,
-) -> Result<(), Fail> {
+) {
     let row = cur.get(key).unwrap_or_else(|| unreachable!());
     let unit = &row.unit;
     let section = index.get(key).and_then(|r| r.get("section"));
@@ -236,7 +236,7 @@ fn gather_section(
         || section.is_none_or(Value::is_null)
         || section.and_then(Value::as_str) == Some(&unit.core)
     {
-        return Ok(());
+        return;
     }
     let snapshot = section.and_then(Value::as_str).unwrap_or_default();
     let place = format!("{}::{}|{snapshot}", unit.path, unit.qualname);
@@ -261,7 +261,7 @@ fn gather_section(
         let words = if missing.is_empty() {
             BTreeMap::new()
         } else {
-            section_words(root, &unit.path, &unit.qualname, &missing, snapshot)?
+            section_words(root, &unit.path, &unit.qualname, &missing)
         };
         // a section's Markdown read as a page's words, so a link, markup or code-tick edit is cleared by the tool (feature 451 T191)
         let md = |w: &String| change::md_words(w);
@@ -294,7 +294,6 @@ fn gather_section(
     }
     let got = g.sections.get_mut(&place).unwrap_or_else(|| unreachable!());
     got.1.push(key.to_owned());
-    Ok(())
 }
 
 fn gather_pages(
@@ -524,7 +523,7 @@ pub fn triage_bundle(
             g.forced.insert(key.clone());
         }
         gather_code(&mut g, cur, index, key, &root, &mut seen, &mut log);
-        gather_section(&mut g, cur, index, store, key, &root)?;
+        gather_section(&mut g, cur, index, store, key, &root);
         gather_pages(&mut g, index, store, key, qdir, &mut memo)?;
     }
     let cleared = filter(&mut g, cur, index);

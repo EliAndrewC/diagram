@@ -1,6 +1,6 @@
-//! The texts a triage shows a claim's removed blocks from (feature 375 T04; a procedure section's, feature 451 T210): each page and
-//! section a recorded snapshot was taken of kept as a git blob in the clone, and the words of a block that no longer stands found in
-//! the kept text, then the history.
+//! The texts a triage shows a claim's removed blocks from (feature 375 T04; a procedure section's, feature 451 T210, T215): each page a
+//! recorded snapshot was taken of kept as a git blob in the clone (git's history holds a page's), each section's words in the
+//! repository ([`SECTION_WORDS`]), and the words of a block that no longer stands found in the kept text, then the history.
 
 use std::collections::{BTreeMap, HashSet};
 use std::path::Path;
@@ -9,7 +9,7 @@ use l7r_shared::checks::pages::read_page;
 use l7r_shared::pyjson::{dumps, sorted};
 use serde_json::{json, Map, Value};
 
-use super::super::index::{field, findings_of, Cur};
+use super::super::index::{field, findings_of, Cur, Index, Store};
 use super::super::units::doc_units;
 use super::BLOBS;
 use crate::record::repo::{fail, git, Fail};
@@ -95,26 +95,65 @@ pub fn section_texts(cur: &Cur, keys: &[String]) -> Map<String, Value> {
     out
 }
 
-/// Each procedure section a recorded snapshot was taken of kept as a git blob of its words, as the bundle read them (feature 451 T210:
-/// a snapshot of words that never reached a commit - a generated row edited by hand, then regenerated - left the triage no removed
-/// block to show, and it forced every claim of the section); `data` a bundle's `blocks.json` or `triage.json`. How many.
-pub fn keep_sections(root: &Path, data: &Value) -> Result<usize, Fail> {
-    let Some(texts) = data.get(SECTION_TEXTS).and_then(Value::as_object) else {
-        return Ok(0);
-    };
-    keep_blobs(root, &mut |blobs| {
-        Ok(texts
-            .iter()
-            .map(|(core, words)| (format!("section:{core}"), dumps(words, None, true)))
-            .filter(|(key, _)| !blobs.contains_key(key))
-            .collect())
-    })
+/// The repository's record of the procedure sections' kept words (feature 451 T215): one line a block, `{"block": its digest, "words":
+/// its words}`, sorted by digest, holding every block of every section snapshot the index names. In the repository, not the clone's
+/// `.git` (T210 kept them there): they can be the only copy of what was judged - a snapshot of words that never reached a commit - so
+/// another clone, or a fresh one, found none and forced the section's claims. One line a block: a regenerated row adds its new block's
+/// line and drops its old one, and two clones' lines never conflict (`merge=union` in `.gitattributes`; a line is its block's alone).
+pub const SECTION_WORDS: &str = "dev/claims-section-words.jsonl";
+
+/// The kept words of each block [`SECTION_WORDS`] holds, by digest; a line that does not parse, or whose words do not hash to its
+/// digest (a hand edit), is not read, so its words are sought in the history.
+fn section_blocks(root: &Path) -> BTreeMap<String, String> {
+    let text = std::fs::read_to_string(root.join(SECTION_WORDS)).unwrap_or_default();
+    text.lines()
+        .filter_map(|line| serde_json::from_str::<Value>(line).ok())
+        .filter_map(|v| {
+            let words = v.get("words")?.as_str()?.to_owned();
+            (v.get("block")?.as_str()? == digest(&[&words])).then(|| (digest(&[&words]), words))
+        })
+        .collect()
 }
 
-/// The blocks of the procedure section snapshot `core`, from the clone's kept blobs, or none.
-fn kept_section(root: &Path, core: &str) -> Result<Vec<String>, Fail> {
-    let text = kept_text(root, &format!("section:{core}"))?;
-    Ok(serde_json::from_str(&text).unwrap_or_default())
+/// Each procedure section a recorded snapshot was taken of kept by its words, as the bundle read them, in [`SECTION_WORDS`] (feature
+/// 451 T210, T215: a snapshot of words that never reached a commit - a generated row edited by hand, then regenerated - left the triage
+/// no removed block to show, and it forced every claim of the section); `data` a bundle's `blocks.json` or `triage.json`, `index` and
+/// `store` the rows and snapshots as recorded, whose named section snapshots the file is pruned to. How many blocks it holds.
+pub fn keep_sections(
+    root: &Path,
+    data: &Value,
+    index: &Index,
+    store: &Store,
+) -> Result<usize, Fail> {
+    let mut blocks = section_blocks(root);
+    for words in data
+        .get(SECTION_TEXTS)
+        .and_then(Value::as_object)
+        .into_iter()
+        .flat_map(|m| m.values())
+        .filter_map(Value::as_array)
+        .flatten()
+        .filter_map(Value::as_str)
+    {
+        blocks.insert(digest(&[words]), words.to_owned());
+    }
+    let named: HashSet<&str> = index
+        .values()
+        .filter_map(|r| r.get("section").and_then(Value::as_str))
+        .filter_map(|core| store.get(core).and_then(Value::as_array))
+        .flatten()
+        .filter_map(Value::as_str)
+        .collect();
+    blocks.retain(|d, _| named.contains(d.as_str()));
+    let text: String = blocks
+        .iter()
+        .map(|(d, w)| dumps(&json!({"block": d, "words": w}), None, false) + "\n")
+        .collect();
+    let path = root.join(SECTION_WORDS);
+    if std::fs::read_to_string(&path).ok().as_deref() != Some(text.as_str()) {
+        std::fs::write(&path, text).map_err(fail)?;
+    }
+    Ok(blocks.len())
 }
 
 /// The text of the page snapshot `fp`, from the clone's kept blobs, or "".
@@ -161,24 +200,20 @@ pub fn removed_words(
     Ok(found)
 }
 
-/// The words of the blocks `digests` of the procedure section `title` of `path` that no longer stand: the snapshot `core`'s kept words
-/// (feature 451 T210), then its history.
+/// The words of the blocks `digests` of the procedure section `title` of `path` that no longer stand: the repository's kept words
+/// ([`SECTION_WORDS`], feature 451 T210, T215), then its history.
 pub fn section_words(
     root: &Path,
     path: &str,
     title: &str,
     digests: &HashSet<String>,
-    core: &str,
-) -> Result<BTreeMap<String, String>, Fail> {
-    let mut found = BTreeMap::new();
-    for b in kept_section(root, core)? {
-        let d = digest(&[&b]);
-        if digests.contains(&d) {
-            found.entry(d).or_insert(b);
-        }
-    }
+) -> BTreeMap<String, String> {
+    let mut found: BTreeMap<String, String> = section_blocks(root)
+        .into_iter()
+        .filter(|(d, _)| digests.contains(d))
+        .collect();
     if found.len() == digests.len() {
-        return Ok(found);
+        return found;
     }
     for sha in git(root, &["log", "--format=%H", "-60", "--", path]).split_whitespace() {
         let text = git(root, &["show", &format!("{sha}:{path}")]);
@@ -195,5 +230,5 @@ pub fn section_words(
             break;
         }
     }
-    Ok(found)
+    found
 }

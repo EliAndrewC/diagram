@@ -1254,6 +1254,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
+  },
+  "### T215 (the GM's question 2026-11-24: T210's kept section words lived in each clone's .git, so another clone forced its sections)": {
+   "sha256": "11702e69586c79e60650680c5ac3bebc7e3faf38a359cf8695cece1d22d01cbc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T215 Approach (checklist part A)": {
+   "sha256": "2ec65b39068a530ed547a47d6a58a2f993951e9a6199dc93d1797263e75f89bc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T215 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "0a4ae21f67f6a0d91b8c1d262030d6707e137028f43f8cff6e3825294ed5903e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -18110,6 +18128,147 @@
      "why": "Scheduling inside the GM's instruction to fix all six before the port resumes."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T215 (the GM's question 2026-11-24: T210's kept section words lived in each clone's .git, so another clone forced its sections)",
+    "### T215 Approach (checklist part A)",
+    "### T215 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T215-D1",
+     "summary": "Kept section words move from the clone's .git blob map to a committed file, dev/claims-section-words.jsonl, read in any clone",
+     "class": "within",
+     "why": "The GM asked 'should it live in the clone rather than in the repo?' about T210's kept section words; the session answered 'in the repository' and escalation-check ruled it the session's to build under 'Yes let's fix all 6 of those before we resume.' The move is the fix of T210's wrong outcome (147 claims forced in a fresh clone), which the GM approved fixing."
+    },
+    {
+     "id": "T215-D2",
+     "summary": "One line a block keyed by block digest, sorted by digest, pruned to the blocks of the snapshots the saved index names, written only on change",
+     "class": "within",
+     "why": "Format and pruning are how the file is kept; they bound its size (measured: a regenerated row adds one line and drops one) and keep it diff-friendly. Nothing the request asked is dropped."
+    },
+    {
+     "id": "T215-D3",
+     "summary": "Every section-snapshot writer (claims-checked, the tool's clear, the all-forced record, claims-triaged, claims backfill-sections) writes through one path, save_recorded; the two page-only save_store writers are left as they are",
+     "class": "within",
+     "why": "Makes the fix reach every writer of a section snapshot, with the search space stated (rg 'save_store\\(|\"section\"' over the crate) per the enumeration rule; the two left out record page snapshots only, which carry no section words."
+    },
+    {
+     "id": "T215-D4",
+     "summary": "The reader reads the file then the history; a line that does not parse or whose words do not hash to its digest is not read",
+     "class": "within",
+     "why": "Integrity check on what the fix stores; it serves the request (the words read are the words judged) and narrows nothing."
+    },
+    {
+     "id": "T215-D5",
+     "summary": "The per-clone section path is deleted (kept_section, the section: keys); a stale section: key is ignored",
+     "class": "within",
+     "why": "The GM's question was whether the words should live in the clone or the repo, answered 'the repo'; removing the clone copy follows. The plan states the case it checked (the file resolves all 257 blocks of the 20 named snapshots), so nothing that worked is lost."
+    },
+    {
+     "id": "T215-D6",
+     "summary": "Page texts stay per clone",
+     "class": "within",
+     "why": "The GM's question and the defect concern T210's kept SECTION words; the session's answer put to the GM already said page texts stay per clone because git history holds a page's text, so no other clone is left forcing claims. Not a defect left, and outside the question's subject."
+    },
+    {
+     "id": "T215-D7",
+     "summary": "The file merges by merge=union; a union may keep a pruned line or leave the order unsorted, tolerated by the reader and repaired at the next write",
+     "class": "within",
+     "why": "Keeps the committed file from conflicting across clones (measured: conflict without, clean with); the temporary extra lines are not a wrong outcome."
+    },
+    {
+     "id": "T215-D8",
+     "summary": "The file is registered beside dev/claims-pages.json: judged by the push's claims gate (cohort push::judges) and counted a claims record by the gate's preflight (measure preflight::RECORDS)",
+     "class": "within",
+     "why": "Registration so the existing gates treat the new record like its siblings; enforcement of the fix, not new behavior beyond it."
+    },
+    {
+     "id": "T215-D9",
+     "summary": "section_words and gather_section return plainly after clippy's unnecessary_wraps",
+     "class": "within",
+     "why": "A consequence of the change (they no longer fail); no scope."
+    },
+    {
+     "id": "T215-D10",
+     "summary": "Exits and order: green when the fresh clone's replay forces none of the 147; after T210, before the port resumes; one landing",
+     "class": "within",
+     "why": "Matches 'fix all 6 of those before we resume' and the defect as measured."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T215 (the GM's question 2026-11-24: T210's kept section words lived in each clone's .git, so another clone forced its sections)",
+    "### T215 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T215-D1",
+     "summary": "A section snapshot's words move from the clone's .git blob map into a committed file, dev/claims-section-words.jsonl, read in any clone.",
+     "class": "within",
+     "why": "The GM's 2026-11-24 question ('should it live in the clone rather than in the repo?') was about T210's kept section words, and his 'Yes let's fix all 6 of those before we resume.' covers T210's wrong outcome: 147 claims forced in another clone. Keeping the words in the repository removes that outcome, measured by the replay (fresh clone 147 forced unfixed, 0 fixed)."
+    },
+    {
+     "id": "T215-D2",
+     "summary": "The file holds one line per block, keyed by block digest, sorted, and pruned to the blocks of the snapshots the index's rows name. It is written only when it changes.",
+     "class": "within",
+     "why": "This is a choice of storage format for the same goal and narrows nothing. The prune keeps every block of every snapshot a row still names, so no word the triage needs is dropped."
+    },
+    {
+     "id": "T215-D3",
+     "summary": "Every writer that records a section snapshot writes its words through one path, save_recorded, plus claims backfill-sections. The class census is stated with its method (rg over save_store( and \"section\").",
+     "class": "within",
+     "why": "Making every writer write the words is what makes the fix whole. The census carries its search space and method, as FR-009 asks of a fix that names a class of writers."
+    },
+    {
+     "id": "T215-D4",
+     "summary": "Page texts stay per clone and are not moved into the repository.",
+     "class": "within",
+     "why": "The GM's question and the defect T215 fixes (T210's) name section words only, so page texts lie outside what was asked rather than being cut from it. Ruled on that scope, not on the block's unmeasured premise that git history holds every page's text."
+    },
+    {
+     "id": "T215-D5",
+     "summary": "The per-clone section path (kept_section, the section: keys) is deleted, and a stale section: key in a clone's blob map is ignored.",
+     "class": "within",
+     "why": "Purpose test: another clone forces nothing. The backfilled file resolves all 257 blocks of the 20 snapshots the committed index names, measured 2026-11-24. That measurement does not reach a clone holding a snapshot recorded but not yet landed. The worst case there is a one-time force, which is the pre-fix behavior and not a new wrong outcome, and the bundle shows no such clone exists. So the deletion does not gut the fix."
+    },
+    {
+     "id": "T215-D6",
+     "summary": "The one force left: a removed block whose words are in neither the file nor history owes in full. A line that does not parse, or whose words do not hash to its digest, is not read.",
+     "class": "within",
+     "why": "No path the block describes loses the words of a named snapshot. The prune keeps them, a union merge only adds lines, and every record writes them. So this is the fallback for lost or corrupt data, not a case carved out of the fix."
+    },
+    {
+     "id": "T215-D7",
+     "summary": "The file merges with merge=union. A union may keep a pruned line or leave the file unsorted, which the reader tolerates and the next write repairs.",
+     "class": "within",
+     "why": "This keeps two clones' records from conflicting, measured by the merge test (a conflict without the attribute, clean with it). It is a mechanism serving the same goal."
+    },
+    {
+     "id": "T215-D8",
+     "summary": "The file is registered wherever dev/claims-pages.json is: the push's claims gate (cohort, push::judges) and the gate preflight's RECORDS.",
+     "class": "within",
+     "why": "This treats the new record the way the existing claims records are treated so the gate judges it. It is consistency and enforcement of the fix, not new scope."
+    },
+    {
+     "id": "T215-D9",
+     "summary": "section_words and gather_section no longer return a Result, after clippy's unnecessary_wraps.",
+     "class": "within",
+     "why": "An incidental signature change forced by the static checks once the functions can no longer fail. It is not a scope decision."
+    },
+    {
+     "id": "T215-D10",
+     "summary": "Not performance work, with no [perf] tag. Found and left: none.",
+     "class": "within",
+     "why": "It fixes a wrong outcome (a full impl-drift owed for text already checked) under 'fix all 6'. No defect is deferred."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -29166,6 +29325,74 @@
      "summary": "T210 runs after T191 and T204, lands beside T211 and T213 in one landing, and is tagged [perf].",
      "class": "within",
      "why": "The task depends on T191's filter. The [perf] tag follows FR-013 and the GM's 2026-11-20 rule on scheduling performance work first."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T215": {
+   "section_sha256": "8016f4ab8ad1e03d53dd9969a5991dc6e470d70a9a467eb87299042a8dd03bf9",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T215-D1",
+     "summary": "A section snapshot's words move from the clone's .git blob map into a committed file, dev/claims-section-words.jsonl, read in any clone.",
+     "class": "within",
+     "why": "The GM's 2026-11-24 question ('should it live in the clone rather than in the repo?') was about T210's kept section words, and his 'Yes let's fix all 6 of those before we resume.' covers T210's wrong outcome: 147 claims forced in another clone. Keeping the words in the repository removes that outcome, measured by the replay (fresh clone 147 forced unfixed, 0 fixed)."
+    },
+    {
+     "id": "T215-D2",
+     "summary": "The file holds one line per block, keyed by block digest, sorted, and pruned to the blocks of the snapshots the index's rows name. It is written only when it changes.",
+     "class": "within",
+     "why": "This is a choice of storage format for the same goal and narrows nothing. The prune keeps every block of every snapshot a row still names, so no word the triage needs is dropped."
+    },
+    {
+     "id": "T215-D3",
+     "summary": "Every writer that records a section snapshot writes its words through one path, save_recorded, plus claims backfill-sections. The class census is stated with its method (rg over save_store( and \"section\").",
+     "class": "within",
+     "why": "Making every writer write the words is what makes the fix whole. The census carries its search space and method, as FR-009 asks of a fix that names a class of writers."
+    },
+    {
+     "id": "T215-D4",
+     "summary": "Page texts stay per clone and are not moved into the repository.",
+     "class": "within",
+     "why": "The GM's question and the defect T215 fixes (T210's) name section words only, so page texts lie outside what was asked rather than being cut from it. Ruled on that scope, not on the block's unmeasured premise that git history holds every page's text."
+    },
+    {
+     "id": "T215-D5",
+     "summary": "The per-clone section path (kept_section, the section: keys) is deleted, and a stale section: key in a clone's blob map is ignored.",
+     "class": "within",
+     "why": "Purpose test: another clone forces nothing. The backfilled file resolves all 257 blocks of the 20 snapshots the committed index names, measured 2026-11-24. That measurement does not reach a clone holding a snapshot recorded but not yet landed. The worst case there is a one-time force, which is the pre-fix behavior and not a new wrong outcome, and the bundle shows no such clone exists. So the deletion does not gut the fix."
+    },
+    {
+     "id": "T215-D6",
+     "summary": "The one force left: a removed block whose words are in neither the file nor history owes in full. A line that does not parse, or whose words do not hash to its digest, is not read.",
+     "class": "within",
+     "why": "No path the block describes loses the words of a named snapshot. The prune keeps them, a union merge only adds lines, and every record writes them. So this is the fallback for lost or corrupt data, not a case carved out of the fix."
+    },
+    {
+     "id": "T215-D7",
+     "summary": "The file merges with merge=union. A union may keep a pruned line or leave the file unsorted, which the reader tolerates and the next write repairs.",
+     "class": "within",
+     "why": "This keeps two clones' records from conflicting, measured by the merge test (a conflict without the attribute, clean with it). It is a mechanism serving the same goal."
+    },
+    {
+     "id": "T215-D8",
+     "summary": "The file is registered wherever dev/claims-pages.json is: the push's claims gate (cohort, push::judges) and the gate preflight's RECORDS.",
+     "class": "within",
+     "why": "This treats the new record the way the existing claims records are treated so the gate judges it. It is consistency and enforcement of the fix, not new scope."
+    },
+    {
+     "id": "T215-D9",
+     "summary": "section_words and gather_section no longer return a Result, after clippy's unnecessary_wraps.",
+     "class": "within",
+     "why": "An incidental signature change forced by the static checks once the functions can no longer fail. It is not a scope decision."
+    },
+    {
+     "id": "T215-D10",
+     "summary": "Not performance work, with no [perf] tag. Found and left: none.",
+     "class": "within",
+     "why": "It fixes a wrong outcome (a full impl-drift owed for text already checked) under 'fix all 6'. No defect is deferred."
     }
    ],
    "verdict": "CLEAR"

@@ -260,15 +260,20 @@ pub const RECORDED: &str = r#"{
 /// The page and section snapshots [`record_all`] keeps for [`RECORDED`] (`dev/claims-pages.json`).
 pub const RECORDED_PAGES: &str = r#"{"5a446aed967da80f": ["7d5a07ee41496c5d", "25080c5fca325e96", "9769715ae09a3066"], "d8de3199da52b188": ["920c9aa4904322d0", "3c34bf75e966571a"]}"#;
 
-/// The kept blobs [`record_all`] writes into the common git directory: the fixture's question page, committed with it, and the Walls
-/// section's words (feature 451 T210), [`RECORDED_SECTION`].
-pub const RECORDED_BLOBS: &str = r#"{"d8de3199da52b188": "3b949ddad95e20557cee0f406ee7ff635fd4b75d", "section:5a446aed967da80f": "1a2fb38bc38f10a694c6a907725d5341582d9478"}"#;
+/// The kept blob [`record_all`] writes into the common git directory: the fixture's question page, committed with it.
+pub const RECORDED_BLOBS: &str =
+    r#"{"d8de3199da52b188": "3b949ddad95e20557cee0f406ee7ff635fd4b75d"}"#;
 
-/// The Walls section's words as [`record_all`] keeps them (feature 451 T210), written as the blob [`RECORDED_BLOBS`] names.
-const RECORDED_SECTION: &str = r#"["Walls stand.", "- a list item continued", "| a | table |"]"#;
+/// The Walls section's words as [`record_all`] keeps them in the repository (feature 451 T210, T215: `dev/claims-section-words.jsonl`),
+/// one line a block, sorted by digest.
+pub const RECORDED_SECTION: &str = concat!(
+    "{\"block\": \"25080c5fca325e96\", \"words\": \"- a list item continued\"}\n",
+    "{\"block\": \"7d5a07ee41496c5d\", \"words\": \"Walls stand.\"}\n",
+    "{\"block\": \"9769715ae09a3066\", \"words\": \"| a | table |\"}\n",
+);
 
 /// What [`record_all`] leaves, written by hand: [`RECORDED`] and `units`, each dated today as the record dates them, and the
-/// snapshots - [`RECORDED_PAGES`] and `pages` - and the kept blob.
+/// snapshots - [`RECORDED_PAGES`] and `pages` - the kept blob and the section's kept words.
 pub fn write_recorded(root: &Path, units: &str, pages: &str) {
     let today = crate::record::bundle::today();
     let mut index: serde_json::Map<String, serde_json::Value> =
@@ -293,19 +298,22 @@ pub fn write_recorded(root: &Path, units: &str, pages: &str) {
         &serde_json::Value::Object(store).to_string(),
     );
     put(root, ".git/claims-page-blobs.json", RECORDED_BLOBS);
-    assert!(super::stdin_git(root, &["hash-object", "-w", "--stdin"], RECORDED_SECTION).is_some());
+    put(root, "dev/claims-section-words.jsonl", RECORDED_SECTION);
 }
 
-/// The three files [`write_recorded`] writes, as parsed values.
+/// The four files [`write_recorded`] writes: three as parsed values, the section words as written.
 fn recorded_files(root: &Path) -> Vec<serde_json::Value> {
-    [
+    let mut files: Vec<serde_json::Value> = [
         "dev/claims-index.json",
         "dev/claims-pages.json",
         ".git/claims-page-blobs.json",
     ]
     .iter()
     .map(|f| serde_json::from_str(&std::fs::read_to_string(root.join(f)).unwrap()).unwrap())
-    .collect()
+    .collect();
+    let words = std::fs::read_to_string(root.join("dev/claims-section-words.jsonl")).unwrap();
+    files.push(serde_json::json!(words));
+    files
 }
 
 /// [`write_recorded`] writes what a run of [`record_all`] writes: the hand-written state is pinned to the commands, so a change to what

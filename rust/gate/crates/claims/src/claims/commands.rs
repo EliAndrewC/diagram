@@ -297,6 +297,24 @@ fn bundle_cmd(
     Ok(0)
 }
 
+/// The one write of a recorded check (feature 451 T215): the index's live rows, the snapshots with the bundle's `data`'s, and the
+/// sections' kept words ([`keep_sections`], pruned to the snapshots those rows name), so no record of a snapshot skips its words.
+fn save_recorded(
+    root: &Path,
+    cur: &Cur,
+    index: &Index,
+    store: &Store,
+    data: &Value,
+) -> Result<(), Fail> {
+    let rows = live_rows(cur, index);
+    save_index(&root.join(INDEX), &rows)?;
+    let mut merged = store.clone();
+    merged.extend(data["snapshots"].as_object().cloned().unwrap_or_default());
+    save_store(&root.join(STORE), &merged)?;
+    keep_sections(root, data, &rows, &merged)?;
+    Ok(())
+}
+
 fn record_cmd(
     root: &Path,
     cur: &Cur,
@@ -354,12 +372,8 @@ fn record_cmd(
         &crate::record::bundle::today(),
         &numbered,
     );
-    save_index(&root.join(INDEX), &live_rows(cur, &new))?;
-    let mut merged = store.clone();
-    merged.extend(blocks["snapshots"].as_object().cloned().unwrap_or_default());
-    save_store(&root.join(STORE), &merged)?;
+    save_recorded(root, cur, &new, store, &blocks)?;
     keep_texts(&root.join(QUESTIONS), &units)?;
-    keep_sections(root, &blocks)?;
     for m in &msgs {
         o.say(&format!("claims-checked: {m}"));
     }
@@ -464,12 +478,8 @@ fn triage_cmd(
     let tool = data["cleared"].as_object().cloned().unwrap_or_default();
     if !tool.is_empty() {
         index = record_cleared(&index, &tool, &today);
-        save_index(&root.join(INDEX), &live_rows(cur, &index))?;
-        let mut merged = store.clone();
-        merged.extend(data["snapshots"].as_object().cloned().unwrap_or_default());
-        save_store(&root.join(STORE), &merged)?;
+        save_recorded(root, cur, &index, store, &data)?;
         keep_texts(&qdir, &tool)?;
-        keep_sections(root, &data)?;
         o.say(&format!("claims-triage: {} claim(s) cleared by the tool - no edit of the text each rests on is claim-bearing (feature 451 T191: comments, markup, links, marks and moves; a rewritten or removed sentence only where the claim repeats its changed words)", tool.len()));
     }
     let keys: Vec<String> = keys.into_iter().filter(|k| !tool.contains_key(k)).collect();
@@ -488,12 +498,8 @@ fn triage_cmd(
     let units = data["units"].as_object().cloned().unwrap_or_default();
     if keys.iter().all(|k| forced.contains(k)) {
         let (new, _msgs) = record_triage(&index, &units, "", &today, &forced);
-        save_index(&root.join(INDEX), &live_rows(cur, &new))?;
-        let mut merged = store.clone();
-        merged.extend(data["snapshots"].as_object().cloned().unwrap_or_default());
-        save_store(&root.join(STORE), &merged)?;
+        save_recorded(root, cur, &new, store, &data)?;
         keep_texts(&qdir, &units)?;
-        keep_sections(root, &data)?;
         o.say(&format!("claims-triage: all {} claim(s) are cx.owed in full (no diff or removed block to show) - no triage to dispatch; they go straight to impl-drift: `make claims-bundle OWED=1`, then `make claims-checked BUNDLE=<dir> REPLY=<file>`", keys.len()));
         return Ok(0);
     }
@@ -598,12 +604,8 @@ fn triaged_cmd(
         &crate::record::bundle::today(),
         &forced,
     );
-    save_index(&root.join(INDEX), &live_rows(cur, &new))?;
-    let mut merged = store.clone();
-    merged.extend(data["snapshots"].as_object().cloned().unwrap_or_default());
-    save_store(&root.join(STORE), &merged)?;
+    save_recorded(root, cur, &new, store, &data)?;
     keep_texts(&root.join(QUESTIONS), &units)?;
-    keep_sections(root, &data)?;
     for m in &msgs {
         o.say(&format!("claims-triaged: {m}"));
     }

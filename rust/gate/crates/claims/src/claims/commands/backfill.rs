@@ -91,14 +91,17 @@ pub(super) fn backfill_cmd(
     let n = if cmd == "backfill" {
         backfill(cur, &mut index, &qdir, &mut store)?
     } else {
-        let n = backfill_sections(cur, &mut index, &mut store);
-        // the snapshots it took kept with their words, as a bundle's are (451 T210)
-        let keys: Vec<String> = cur.iter().map(|r| r.key.clone()).collect();
-        keep_sections(root, &json!({SECTION_TEXTS: section_texts(cur, &keys)}))?;
-        n
+        backfill_sections(cur, &mut index, &mut store)
     };
-    save_index(&root.join(INDEX), &live_rows(cur, &index))?;
+    let rows = live_rows(cur, &index);
+    save_index(&root.join(INDEX), &rows)?;
     save_store(&root.join(STORE), &store)?;
+    if cmd != "backfill" {
+        // the snapshots it took kept with their words, as a bundle's are (451 T210), in the repository (T215)
+        let keys: Vec<String> = cur.iter().map(|r| r.key.clone()).collect();
+        let texts = json!({SECTION_TEXTS: section_texts(cur, &keys)});
+        keep_sections(root, &texts, &rows, &store)?;
+    }
     o.say(&if cmd == "backfill" {
         format!("claims-backfill: {n} row(s) given the pages they were checked at")
     } else {

@@ -34,6 +34,8 @@ pub fn judges(gate: &str) -> Option<(&'static [&'static str], &'static str)> {
                 "dev/claims-index.json",
                 "dev/claims-deferred.json",
                 "dev/claims-pages.json",
+                // a procedure section's kept words, which the triage reads (451 T215)
+                "dev/claims-section-words.jsonl",
                 // the port map a slice's cut declares, which carries its claims to the Rust (feature 449 T166)
                 "dev/claims-ports.json",
                 "specs/",
