@@ -300,12 +300,17 @@ fn a_day_passes_between_sweeps_and_one_sweep_holds_the_lock() {
     assert!(start(&e2, &c, now()), "a session's first prompt");
     assert!(!start(&e2, &c, now()), "its second, within the day");
     let mark = c.state.join("seen/sid2");
-    File::options()
-        .write(true)
-        .open(&mark)
+    // its time set by path, with no descriptor of it open in this process (451 T207): a child another test forks copies every open
+    // descriptor until it execs, and the plan, reading `/proc`, keeps a file a live process holds - red 3 times in 280 loaded runs
+    let old = (now() - Duration::from_secs(40 * DAY))
+        .duration_since(SystemTime::UNIX_EPOCH)
         .unwrap()
-        .set_modified(now() - Duration::from_secs(40 * DAY))
-        .unwrap();
+        .as_secs();
+    let touched = Command::new("touch")
+        .args(["-m", "-d", &format!("@{old}")])
+        .arg(&mark)
+        .status();
+    assert!(touched.unwrap().success());
     c.root = base.join("empty-root");
     std::fs::create_dir_all(&c.root).unwrap();
     assert!(plan(&c, now()).iter().any(|i| i.path == mark));

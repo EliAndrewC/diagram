@@ -323,18 +323,22 @@ fn the_makefile_is_the_trees_the_command_runs_in() {
 #[test]
 fn an_escape_is_recorded_with_its_reason() {
     let d = world("recorded");
-    let why = "it fired on correct work, unique to this firing record test";
+    // its own guard log (451 T207): the crate's shared one was emptied under it by a hang pin's child run of this binary
+    let log = crate::shared::tempdir::TempDir::new("escape-log");
+    crate::shared::env::set("GUARD_LOG_DIR", &*log);
+    let why = "it fired on correct work";
     assert!(run(
         &format!("sed -i s/a/b/ Makefile # GUARD_EDIT_OK: {why}"),
         &d
     )
     .is_empty());
-    let dir = std::env::var("GUARD_LOG_DIR").unwrap();
-    let recorded = std::fs::read_dir(dir).unwrap().flatten().any(|f| {
-        let text = std::fs::read_to_string(f.path()).unwrap_or_default();
-        text.contains(why) && text.contains("guard-edit-ok")
-    });
-    assert!(recorded);
+    let texts: Vec<String> = std::fs::read_dir(&*log)
+        .unwrap()
+        .flatten()
+        .map(|f| std::fs::read_to_string(f.path()).unwrap())
+        .collect();
+    assert_eq!(texts.len(), 1);
+    assert!(texts[0].contains(why) && texts[0].contains("guard-edit-ok"));
 }
 
 #[test]

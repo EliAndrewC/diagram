@@ -146,3 +146,38 @@ fn a_byte_utf8_cannot_take_is_written_as_pythons_surrogate() {
         "\"\\\\udbff\\udf80\\udbff\\udf7f\\n\""
     );
 }
+
+/// 451 T207: a hang pin runs this test binary again as its child (`passes_in_time`), and the child's `quiet()` emptied the log its
+/// parent's tests were still reading - `an_escape_is_recorded_with_its_reason` red under load, its record written and then deleted.
+#[test]
+fn a_child_run_of_the_tests_keeps_its_parents_log() {
+    const CHILD: &str = "L7R_LOG_QUIET_CHILD";
+    super::quiet();
+    if std::env::var_os(CHILD).is_some() {
+        return;
+    }
+    let kept = super::dir().join("a-parents-record.json");
+    std::fs::write(&kept, "{}").unwrap();
+    let ran = std::process::Command::new(std::env::current_exe().unwrap())
+        .args([
+            "--exact",
+            "log::tests::a_child_run_of_the_tests_keeps_its_parents_log",
+        ])
+        .env(CHILD, "1")
+        .output()
+        .unwrap();
+    assert!(ran.status.success(), "{ran:?}");
+    assert!(kept.exists(), "the child emptied its parent's log");
+    std::fs::remove_file(&kept).unwrap();
+}
+
+/// 451 T207: a test owns its log - the directory it names in its own thread's environment, read before the process's.
+#[test]
+fn a_test_names_its_own_log() {
+    super::quiet();
+    let own = crate::tempdir::TempDir::new("own-log");
+    crate::env::set("GUARD_LOG_DIR", &*own);
+    assert_eq!(super::dir(), own.to_path_buf());
+    crate::env::unset("GUARD_LOG_DIR");
+    assert_ne!(super::dir(), own.to_path_buf());
+}

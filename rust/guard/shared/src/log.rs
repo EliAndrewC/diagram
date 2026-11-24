@@ -25,11 +25,12 @@ pub struct Entry<'a> {
     pub session_name: &'a str,
 }
 
-/// The log's directory: `GUARD_LOG_DIR`, else `~/.claude/guard-log`.
+/// The log's directory: `GUARD_LOG_DIR`, else `~/.claude/guard-log`. A test build reads the test thread's own first (`env::opt`), so a
+/// test that reads back its records owns its log (451 T207), and the process's after it, the crate's shared log (`quiet`).
 #[must_use]
 pub fn dir() -> PathBuf {
     dir_from(
-        std::env::var("GUARD_LOG_DIR").ok(),
+        crate::env::opt("GUARD_LOG_DIR").or_else(|| std::env::var("GUARD_LOG_DIR").ok()),
         &std::env::var("HOME").unwrap_or_default(),
     )
 }
@@ -215,10 +216,19 @@ pub fn quiet() {
     // the process's shared directory (`beside_binary`): nothing set once for the whole process is dropped to remove it, so it lives in the
     // run's own temp directory, which `make rust-test` removes whole when the run ends (feature 449 T101)
     ONCE.call_once(|| {
-        std::env::set_var(
-            "GUARD_LOG_DIR",
-            crate::tempdir::beside_binary("guard-tests-log"),
-        );
+        // a hang pin's child run of this binary (`passes_in_time`) inherits its parent's log, still being read: emptying it again
+        // deleted the parent's records under load (451 T207). Only this run's own path is kept so; any other inherited value, a
+        // session's real log among them, is replaced.
+        let own = std::env::temp_dir()
+            .join(crate::tempdir::SHARED)
+            .join("guard-tests-log");
+        let inherited = std::env::var_os("GUARD_LOG_DIR").is_some_and(|d| Path::new(&d) == own);
+        if !(inherited && own.is_dir()) {
+            std::env::set_var(
+                "GUARD_LOG_DIR",
+                crate::tempdir::beside_binary("guard-tests-log"),
+            );
+        }
     });
 }
 

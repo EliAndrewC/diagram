@@ -1134,6 +1134,36 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T202 (observed 2026-11-23: three landings refused on plan.md and arbiter.jsonl conflicts, each resolved by hand; T195+T197's landing refused on T198's Makefile lines)": {
+   "sha256": "e0ab70020942e5696829ba2a06cde013ef4dd5900c2c2c664627dd0932e16b03",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T202 Approach (checklist part A)": {
+   "sha256": "8bbdc7a6a9396cac89c8783523c5b8e0d113b69d06be82320573c85697cc778f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T202 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "41a86795d07395b514adb35f5367b9b6093047c7157da0774981f0afdb2aada1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T207 (`make_only_hooks::tests::an_escape_is_recorded_with_its_reason` red under the coverage run and green alone, three times on 2026-11-23; the last `landbig2.log` line 143)": {
+   "sha256": "f6c9462fdf4c301279497c6ef646effccfa7a24cea09d5d601ca4c7c861bb6f5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T207 Approach (checklist part A)": {
+   "sha256": "0a3923c123ee0588ccd0ac77da841ac79d92874b94762a738603f1542094883a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -17295,6 +17325,165 @@
      "why": "Places the fix ahead of the T192 tagging the GM asked for before the port resumes; nothing the request settles is changed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T202 (observed 2026-11-23: three landings refused on plan.md and arbiter.jsonl conflicts, each resolved by hand; T195+T197's landing refused on T198's Makefile lines)",
+    "### T202 Approach (checklist part A)",
+    "### T202 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T202-blank-lines",
+     "summary": "A piece the clone changed only in its blank lines counts as no change of the clone's (merge_pieces, unblank), so the take takes main's rewritten archive mark.",
+     "class": "within",
+     "why": "Fixes the measured cause of both exit-4 takes (land191b.log, land196.log) so the clone holds main's tick: the task line's goal and a defect fix, the whole class (every sectioned file's pieces) covered."
+    },
+    {
+     "id": "T202-append-only-union",
+     "summary": "An append-only .jsonl appended on both sides keeps both sides' new lines (merge3 union); a line rewritten on both sides still conflicts, named.",
+     "class": "within",
+     "why": "Fixes the arbiter.jsonl conflict measured in the same hand merges; it drops no line, and a real two-sided rewrite is still refused, so nothing the task line asks for is narrowed."
+    },
+    {
+     "id": "T202-take-is-the-merge-back",
+     "summary": "Main comes back at the take (land-alone step 7), the existing merge that leaves uncommitted files untouched or merged; no second merge is added after it.",
+     "class": "within",
+     "why": "The task line asks that main be merged back at a landing's end with uncommitted work untouched; the take is that merge, and its giving up on these two shapes was the measured reason the clone fell behind. Fixing it meets the goal (the clone holds main's tick) and does not narrow it."
+    },
+    {
+     "id": "T202-net-zero-edits",
+     "summary": "Step 3 counts a file as the task's own only where some hunk of its uncommitted diff holds a line one of the task's Edits wrote or removed (leaves_change, Edit calls read by tool-use id); a file whose task edits are all put back is listed putback, left uncommitted, not refused.",
+     "class": "within",
+     "why": "Is the task line's 'the own-edit list counts only a change of the task's own', fixing the measured refusal of T195+T197's landing on T198's Makefile lines."
+    },
+    {
+     "id": "T202-replace-all",
+     "summary": "A replace_all Edit's flag is read with its strings; a line of another task's holding its repeated string is not counted as its, only a replacement put back on the hunk's other side.",
+     "class": "within",
+     "why": "Closes the same defect for replace_all edits (a landing refused for another task's lines), red first; inside the task line."
+    },
+    {
+     "id": "T202-unreadable-counts-own",
+     "summary": "A Write, a Bash call's write, or an Edit whose call cannot be read counts as the task's own, so a put-back of one of these is still refused.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows 'counts only a change of the task's own' for three kinds of write, judged one by one. A Bash write and an Edit whose call cannot be read leave no string to look for, so no one can tell whether the change was put back. A Write's string is the whole file, so the hunk test would match common lines ('}', blank lines) from any task and could not separate the task's lines from another task's. In each case, counting the file as own is the only reading that keeps the goal's other half: a landing must never go out missing the task's edit. Treating the file as not own would defeat the task line's purpose, while counting it as own only refuses a landing, and the refusal names the file. No instance of these three was observed, so this leaves no known defect in place."
+    },
+    {
+     "id": "T202-tests-and-exits",
+     "summary": "Red-first tests from the real sides cut to the region (take, append-only log, put-back edit, replace_all put-back), the replay on both real shapes as Done, an arbiter ask on a claim it cannot be done.",
+     "class": "within",
+     "why": "Checks that enforce exactly what the task line asks, red first as it requires; they add no behavior."
+    },
+    {
+     "id": "T202-order",
+     "summary": "Lands after T193's landing (a4e2bf4f0b).",
+     "class": "within",
+     "why": "Scheduling, which narrows nothing that was asked."
+    },
+    {
+     "id": "T202-performance-class",
+     "summary": "The task is classed as performance work (the landings' loop: hand merges and refused-landing reruns).",
+     "class": "within",
+     "why": "The GM asked to prioritize performance improvements (2026-11-20) and the approved six improvements include landing fixes (item 6). Removing measured hand merges and reruns falls under that."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T207 (`make_only_hooks::tests::an_escape_is_recorded_with_its_reason` red under the coverage run and green alone, three times on 2026-11-23; the last `landbig2.log` line 143)",
+    "### T207 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T207-cause",
+     "summary": "The cause is taken from measurement, not from the lock-timeout lead: a hang pin's child run calls log::quiet(), and tempdir::beside_binary empties the log directory it inherited while the parent's tests still read it.",
+     "class": "within",
+     "why": "The plan measures the cause before fixing it (reproduced at 26 of 280 loaded runs, the record caught written, an inotify trace of the deletion). This is defect diagnosis inside the task and narrows nothing the GM asked."
+    },
+    {
+     "id": "T207-fix-1",
+     "summary": "log.rs quiet(): a process that inherits this run's own test log path as GUARD_LOG_DIR keeps it. Any other inherited value, a session's real log included, is replaced as before. beside_binary is unchanged.",
+     "class": "within",
+     "why": "Fixes the measured defect at its source: a child run deleted its parent's log. The 'beside_binary unchanged' choice changes nothing else, and leaves no defect behind on the plan's own account (no hang pin's child reaches another shared fixture)."
+    },
+    {
+     "id": "T207-fix-2",
+     "summary": "log::dir() reads the test thread's own GUARD_LOG_DIR first, then the process's. The escape test names its own TempDir log and asserts its one record. In a normal build env::opt is the process variable, so nothing changes there.",
+     "class": "within",
+     "why": "The test owning its state is one of the task's own constraints. Production behavior is stated to be unchanged."
+    },
+    {
+     "id": "T207-fix-3",
+     "summary": "scratch_sweep_hooks' pace test, found red 3 times in the same loaded runs, now sets its mark's time by path instead of through an open descriptor.",
+     "class": "within",
+     "why": "A defect found during the task and fixed in it, which is what fix-as-we-go asks for. Nothing is deferred."
+    },
+    {
+     "id": "T207-silent-write",
+     "summary": "Declines the brief's ask that a record never be dropped silently (wait or fail closed). log.rs's rule stands: a failed write is silent and never costs the guard its answer. Making fire refuse on a failed write was considered and rejected.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The ask comes from the session's brief, not from the GM's words. Its premise was the lock lead, and measurement refuted that lead: place() takes no lock, so there is nothing to wait on, and no write failed in any measured run. The drop was test-only: quiet() and beside_binary are built only under test or test-env, and the plan says a grep of every Cargo.toml confirms it. So no real escape record was ever lost this way, and FR-012's 'recorded' escape is not undercut by this task. Failing closed is the one remaining branch of the ask, and it would make a guard refuse correct work over a log fault. Constitution XIV names a check that refuses good work as a defect, so applying the ask literally would create a defect in order to cure an unobserved one. The plan states the cost plainly: a disk-full or permission failure loses a record with no word."
+    },
+    {
+     "id": "T207-found-and-left",
+     "summary": "The other tests that set a time through an open descriptor (put(.., true)) are left as they are, because they mark files that are kept either way, so their outcome cannot flip.",
+     "class": "within",
+     "why": "On the plan's account there is no wrong outcome, so under XIV this is a difference and not a defect, and leaving it narrows nothing. Aside: the line does not give the search that produced that set of callers (FR-009's how-every-instance-was-found line, which make decide checks mechanically)."
+    },
+    {
+     "id": "T207-exits-and-proof",
+     "summary": "Green exit: the two red-first tests pass and 100 or more loaded runs are green (104 of 104 recorded), plus closing-checks. Red exit: the failure is recorded, the task is set down, and any claim that it cannot be done goes to make arbiter-ask.",
+     "class": "within",
+     "why": "These match the brief's stated constraints (red first, 100 loaded runs green) and the project's set-down and arbiter route. Nothing is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T207 (`make_only_hooks::tests::an_escape_is_recorded_with_its_reason` red under the coverage run and green alone, three times on 2026-11-23; the last `landbig2.log` line 143)",
+    "### T207 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T207-fix1",
+     "summary": "log.rs quiet(): a process that inherits this run's own test log path (<temp>/l7r-test-scratch/guard-tests-log) as GUARD_LOG_DIR, with the directory present, keeps it; any other inherited value is replaced as before; beside_binary unchanged",
+     "class": "within",
+     "why": "Fixes a measured defect (a hang pin's child run emptying its parent's log; 26 of 280 loaded runs red, inotify trace) in test-only code; it changes nothing the request or spec asked for, and leaving beside_binary as it is keeps a non-defect as it is."
+    },
+    {
+     "id": "T207-fix2",
+     "summary": "log::dir() reads the test thread's own GUARD_LOG_DIR first (env::opt), then the process's; the escape test names its own TempDir log; a normal build's answer is unchanged",
+     "class": "within",
+     "why": "Makes FR-012's own red-first escape test (an escape is recorded) own its state and pass under load; enforcement of what was asked, no behavior change in a normal build."
+    },
+    {
+     "id": "T207-fix3",
+     "summary": "scratch_sweep_hooks pace test sets the 40-day mark's mtime by path (touch -m -d) rather than through an open descriptor; the other put(.., true) uses left because their outcome cannot flip",
+     "class": "within",
+     "why": "A found defect (3 red of the same 280 loaded runs) fixed in this task, per the fix-as-we-go rule; the tests left mark files kept either way, observed by grep, so nothing defective is left."
+    },
+    {
+     "id": "T207-silent-write",
+     "summary": "A failed log write stays silent (log.rs's recorded rule kept); the brief's ask that a record never drop silently (wait or fail closed) is not done, and fire is not made to refuse on a failed write",
+     "class": "within",
+     "why": "Neither the GM's request nor the spec asks how a log write that fails on I/O behaves: FR-012 asks that an escape be recorded, and the guard does record it; the brief's premise (a lock wait dropping records) was measured false, no write failed in any run, and the drop was test-only code. A disk-full loss is a hypothetical, not a measured wrong outcome, so keeping existing behavior narrows nothing the GM asked for and needs no ruling. Making fire refuse would add refusal behavior the GM did not ask for."
+    },
+    {
+     "id": "T207-order-budget-exits",
+     "summary": "After T201/T202's files; one landing; green exit is the two red tests passing and 100 loaded runs green (104 of 104 shown); red exit set down, an impossibility claim through make arbiter-ask",
+     "class": "within",
+     "why": "Scheduling and proof choices inside the task; no requirement narrowed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -27864,6 +28053,107 @@
      "summary": "Order (after T187/T197, before T192's claims pass and T22), exits (red recorded and set down, impossibility ruled through make arbiter-ask), budget one landing",
      "class": "within",
      "why": "Places the fix ahead of the T192 tagging the GM asked for before the port resumes; nothing the request settles is changed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T202": {
+   "section_sha256": "baa109ad52ad4f260c4902e64dfb592a532db078cb1a9c879ee6bd4f303e9d05",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T202-blank-lines",
+     "summary": "A piece the clone changed only in its blank lines counts as no change of the clone's (merge_pieces, unblank), so the take takes main's rewritten archive mark.",
+     "class": "within",
+     "why": "Fixes the measured cause of both exit-4 takes (land191b.log, land196.log) so the clone holds main's tick: the task line's goal and a defect fix, the whole class (every sectioned file's pieces) covered."
+    },
+    {
+     "id": "T202-append-only-union",
+     "summary": "An append-only .jsonl appended on both sides keeps both sides' new lines (merge3 union); a line rewritten on both sides still conflicts, named.",
+     "class": "within",
+     "why": "Fixes the arbiter.jsonl conflict measured in the same hand merges; it drops no line, and a real two-sided rewrite is still refused, so nothing the task line asks for is narrowed."
+    },
+    {
+     "id": "T202-take-is-the-merge-back",
+     "summary": "Main comes back at the take (land-alone step 7), the existing merge that leaves uncommitted files untouched or merged; no second merge is added after it.",
+     "class": "within",
+     "why": "The task line asks that main be merged back at a landing's end with uncommitted work untouched; the take is that merge, and its giving up on these two shapes was the measured reason the clone fell behind. Fixing it meets the goal (the clone holds main's tick) and does not narrow it."
+    },
+    {
+     "id": "T202-net-zero-edits",
+     "summary": "Step 3 counts a file as the task's own only where some hunk of its uncommitted diff holds a line one of the task's Edits wrote or removed (leaves_change, Edit calls read by tool-use id); a file whose task edits are all put back is listed putback, left uncommitted, not refused.",
+     "class": "within",
+     "why": "Is the task line's 'the own-edit list counts only a change of the task's own', fixing the measured refusal of T195+T197's landing on T198's Makefile lines."
+    },
+    {
+     "id": "T202-replace-all",
+     "summary": "A replace_all Edit's flag is read with its strings; a line of another task's holding its repeated string is not counted as its, only a replacement put back on the hunk's other side.",
+     "class": "within",
+     "why": "Closes the same defect for replace_all edits (a landing refused for another task's lines), red first; inside the task line."
+    },
+    {
+     "id": "T202-unreadable-counts-own",
+     "summary": "A Write, a Bash call's write, or an Edit whose call cannot be read counts as the task's own, so a put-back of one of these is still refused.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows 'counts only a change of the task's own' for three kinds of write, judged one by one. A Bash write and an Edit whose call cannot be read leave no string to look for, so no one can tell whether the change was put back. A Write's string is the whole file, so the hunk test would match common lines ('}', blank lines) from any task and could not separate the task's lines from another task's. In each case, counting the file as own is the only reading that keeps the goal's other half: a landing must never go out missing the task's edit. Treating the file as not own would defeat the task line's purpose, while counting it as own only refuses a landing, and the refusal names the file. No instance of these three was observed, so this leaves no known defect in place."
+    },
+    {
+     "id": "T202-tests-and-exits",
+     "summary": "Red-first tests from the real sides cut to the region (take, append-only log, put-back edit, replace_all put-back), the replay on both real shapes as Done, an arbiter ask on a claim it cannot be done.",
+     "class": "within",
+     "why": "Checks that enforce exactly what the task line asks, red first as it requires; they add no behavior."
+    },
+    {
+     "id": "T202-order",
+     "summary": "Lands after T193's landing (a4e2bf4f0b).",
+     "class": "within",
+     "why": "Scheduling, which narrows nothing that was asked."
+    },
+    {
+     "id": "T202-performance-class",
+     "summary": "The task is classed as performance work (the landings' loop: hand merges and refused-landing reruns).",
+     "class": "within",
+     "why": "The GM asked to prioritize performance improvements (2026-11-20) and the approved six improvements include landing fixes (item 6). Removing measured hand merges and reruns falls under that."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T207": {
+   "section_sha256": "6e41a00582a83383da786584178f742fdc6b7052175a00180c5522f8addbb964",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T207-fix1",
+     "summary": "log.rs quiet(): a process that inherits this run's own test log path (<temp>/l7r-test-scratch/guard-tests-log) as GUARD_LOG_DIR, with the directory present, keeps it; any other inherited value is replaced as before; beside_binary unchanged",
+     "class": "within",
+     "why": "Fixes a measured defect (a hang pin's child run emptying its parent's log; 26 of 280 loaded runs red, inotify trace) in test-only code; it changes nothing the request or spec asked for, and leaving beside_binary as it is keeps a non-defect as it is."
+    },
+    {
+     "id": "T207-fix2",
+     "summary": "log::dir() reads the test thread's own GUARD_LOG_DIR first (env::opt), then the process's; the escape test names its own TempDir log; a normal build's answer is unchanged",
+     "class": "within",
+     "why": "Makes FR-012's own red-first escape test (an escape is recorded) own its state and pass under load; enforcement of what was asked, no behavior change in a normal build."
+    },
+    {
+     "id": "T207-fix3",
+     "summary": "scratch_sweep_hooks pace test sets the 40-day mark's mtime by path (touch -m -d) rather than through an open descriptor; the other put(.., true) uses left because their outcome cannot flip",
+     "class": "within",
+     "why": "A found defect (3 red of the same 280 loaded runs) fixed in this task, per the fix-as-we-go rule; the tests left mark files kept either way, observed by grep, so nothing defective is left."
+    },
+    {
+     "id": "T207-silent-write",
+     "summary": "A failed log write stays silent (log.rs's recorded rule kept); the brief's ask that a record never drop silently (wait or fail closed) is not done, and fire is not made to refuse on a failed write",
+     "class": "within",
+     "why": "Neither the GM's request nor the spec asks how a log write that fails on I/O behaves: FR-012 asks that an escape be recorded, and the guard does record it; the brief's premise (a lock wait dropping records) was measured false, no write failed in any run, and the drop was test-only code. A disk-full loss is a hypothetical, not a measured wrong outcome, so keeping existing behavior narrows nothing the GM asked for and needs no ruling. Making fire refuse would add refusal behavior the GM did not ask for."
+    },
+    {
+     "id": "T207-order-budget-exits",
+     "summary": "After T201/T202's files; one landing; green exit is the two red tests passing and 100 loaded runs green (104 of 104 shown); red exit set down, an impossibility claim through make arbiter-ask",
+     "class": "within",
+     "why": "Scheduling and proof choices inside the task; no requirement narrowed."
     }
    ],
    "verdict": "CLEAR"

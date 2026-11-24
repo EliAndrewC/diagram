@@ -2,7 +2,8 @@
 //! reads the test thread's own map, empty until the test names a variable - so a session's exports (a page session's
 //! `L7R_FEATURE_DIRECTORY`, a `make land`'s `L7R_LAND_TICKS`) never reach a test, and a test that names one never races another
 //! (T24's defect in the guard's own tests: 17 tests turned red with `L7R_FEATURE_DIRECTORY` exported, observed 2026-11-20). `HOME`
-//! and the guard log's `GUARD_LOG_DIR` stay the process's: a test's world is built under the real temp directory and home.
+//! stays the process's: a test's world is built under the real temp directory and home. The guard log's `GUARD_LOG_DIR` is the
+//! test's own where it names one, else the process's, the crate's shared log (`log::dir`, 451 T207).
 
 #[cfg(any(test, feature = "test-env"))]
 thread_local! {
