@@ -130,3 +130,9 @@ Told that T210's kept section words live in each clone's `.git`, so another clon
 > should it live in the clone rather than in the repo?
 
 The session's answer: in the repository, beside `dev/claims-index.json` (20 sections, 136 KB), because they can be the only copy of what was judged; page texts (5.6 MB) stay per clone, since git history holds them. Escalation-check (2026-11-24) ruled it the session's to build under "Yes let's fix all 6 of those before we resume.": the per-clone limit is T210's own wrong outcome. Filed as T215.
+
+## 2026-11-24, an ad-hoc agent that judges or builds runs on the session's model
+
+The GM, with the session on Fable 5.2 and its builders dispatched as `general-purpose` with `model: opus` (the agent-model guard refuses an ad-hoc dispatch that names no model; the GM 2026-09-19):
+
+> Thanks, and quick question for you. Do the general purpose subagents that you're firing off share the model of the parent subagent? For example, we are currently using Fable 5.2 and I would like for it to be the case that the general purpose subagents that you are firing off to do stuff use whatever model it is that I have selected. So in this case it would be 5.2 of Fable, but if I switch back to Opus 5.5, then I would want them to use that. Do they inherit in this way? Is that how that works?
