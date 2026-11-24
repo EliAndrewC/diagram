@@ -114,7 +114,8 @@ const BANK_STEP_FT: f64 = 2.0;
 /// conversion (`field::staged::polder_stage`), each knob it reads rolled as the deleted polder stage rolled it.
 ///
 /// Research:
-///     the polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies
+///     the polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies - this stage only hands the plan's figures on; the order is built in `field::staged::polder_stage`, whose `field::polder::polder` lays the plots, the ditches between their columns and the ring canal `RING_FT` out from the plots, and whose `field::dike::dike` lays the dike's inner face on that envelope and its outer face beyond
+///     the block on the canvas's middle - CONVENTION: the block laid about the canvas's center, the sheet's framing and no place in the world - the drawing is cropped to what is drawn (`Svg::finish`), and the page's landward shore is the flank the village takes (`landward`), named after the block is laid, not a side of the canvas
 ///     the dike-pond's split - GUESS: the share of a parcel a pond takes, rolled from 0.3 to 0.7 (the registry's `dikepond_split`)
 ///     the paddy's rest - GUESS: settled 0.8 and unsettled 0.2, a knob between the two forms (the registry's `paddy_rest`)
 fn stage_polder(p: &Plan) -> PolderStage {
@@ -324,7 +325,7 @@ fn draw_polder(svg: &mut Svg, s: &PolderStage) {
 ///
 /// Research:
 ///     the sluices drawn - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: each a frame across the channel that crosses the dike at its point, at that channel's drawn width; none drawn where no channel is known, the gap named rather than guessed
-///     on top - CONVENTION: the frame drawn above the water and the reeds, as the deleted `sluice_gate` drew it (its top layer)
+///     on top - CONVENTION: the frame drawn above the water and the reeds, as the deleted `sluice_gate` drew it (its top layer) - `Svg` writes its marks in the order they are drawn, and `roll_polder` draws the sluices after the polder (`draw_polder`: its water, dike and fringe), the waterside strips and the bank bands, only the settlement's ground mark after them
 ///     the board's place - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the board a few steps down the blocked channel from the junction, so that it plainly crosses the channel it blocks, not the one it branches from; a polder's sluice point stands 8.5 ft out from the ring canal's corner or its drain trunk's end (`RING_FT`, 6 ft each way, measured on Kuwabata 2026-11-22, feature 449 T249), joined to that junction by a drawn reach (`field::polder::joins`, 449 T263) and no other channel through it, so the board is drawn on the point, 8.5 ft down the blocked channel from the junction
 fn draw_sluices(svg: &mut Svg, s: &PolderStage, missing: &mut Vec<String>) {
     svg.kind("sluice gate");

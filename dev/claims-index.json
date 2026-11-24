@@ -35243,28 +35243,83 @@
   ],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver.rs::FIELD_KNOBS#a town's nearness": {
+  "body": "e849d5e0854a5b74",
+  "claim": "a town's nearness - GUESS: near or far at even odds; no hamlet's spec records the distance to its market town (the deleted `TOWN_NEARNESS`)",
+  "code": "b8b656598df329ea",
+  "core": "9c33e1a1dd3a5d1f",
+  "date": "2026-11-24",
+  "note": "the page gives no distance to a market town, and the even odds are a guess",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver.rs::FIELD_KNOBS#the fan's middle": {
+  "body": "e849d5e0854a5b74",
+  "claim": "the fan's middle - GUESS dry-fields-and-their-crops-hatake.drawing: left wild on three maps in four, a GUESS there (0.75 and 0.25)",
+  "code": "46b19d5b52b468fd",
+  "core": "9c33e1a1dd3a5d1f",
+  "date": "2026-11-24",
+  "note": "wild or cleared at 0.75 and 0.25, the page's three maps in four, recorded as a GUESS",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
+  },
+  "research": "99a077469bb67bf5",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:78e339c5e0d9be52",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:fe49530da0a21b10"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver.rs::FIELD_KNOBS#the field's knobs": {
-  "body": "c67449863d8ce82e",
-  "claim": "the field's knobs - the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing: each rolled per settlement from its table and weights (`knobs.json`), a spec's pin standing",
-  "code": "71546aa6a37b0e5c",
-  "core": "c85e87d88d50e8ad",
-  "date": "2026-11-07",
-  "note": "winter_crop is a fixed 0.5/0.5 while the page has drainage and town nearness set its odds; need the field build to see whether town_nearness conditions that roll",
+  "body": "e849d5e0854a5b74",
+  "claim": "the field's knobs - the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing: each rolled per settlement from its table and weights (`knobs.json`), a spec's pin standing - but for the winter crop's weights, which the site sets (the claim after next)",
+  "code": "e60779e648f25688",
+  "core": "9c33e1a1dd3a5d1f",
+  "date": "2026-11-24",
+  "note": "knobs are rolled per settlement and a pin stands; the winter crop's weights are left to the site",
   "pages": {
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
   },
   "research": "7b19741c5250f0fe",
   "rests": [
-   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:1707d1c770884a9d",
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:d90b5fa1bec814fe"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver.rs::FIELD_KNOBS#the intake's place and siting": {
+  "body": "e849d5e0854a5b74",
+  "claim": "the intake's place and siting - GUESS where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the intake at the left, the center or the right of the fan's head at odds of 1:2:1, a GUESS there - the shoulder or the center at even odds here, the shoulder's side the brook's (`brook_side`, itself even); on a bend or a straight reach, the two equally likely",
+  "code": "2ac1bfb5ca3dc77f",
+  "core": "9c33e1a1dd3a5d1f",
+  "date": "2026-11-24",
+  "note": "shoulder or center at even odds, with the shoulder's side the brook's and brook_side itself even, gives the page's 1:2:1; bend or straight at even odds, a GUESS there",
+  "pages": {
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+  },
+  "research": "c348232a05978400",
+  "rests": [
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:41b10ab472dcebe7",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::FIELD_KNOBS#the planned grid on no hamlet": {
   "body": "c67449863d8ce82e",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "the planned grid on no hamlet - rice-paddies-and-their-plots-suiden.drawing: a hamlet's basins organic, \"never as the tidy grid\"; the grid a planned field's",
-  "code": "4d03ab3feee0cb1f",
-  "core": "c85e87d88d50e8ad",
+  "code": "44295c397e4b315d",
+  "core": "9c33e1a1dd3a5d1f",
   "date": "2026-11-07",
   "note": "plot_regularity is organic only",
   "pages": {
@@ -35275,6 +35330,45 @@
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:218358b82a0824e2",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:914c46003720293e"
+  ],
+  "triaged": "2026-11-24",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver.rs::FIELD_KNOBS#the weir's forms": {
+  "body": "e849d5e0854a5b74",
+  "claim": "the weir's forms - GUESS where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: a weir built in one of four ways, chosen at random with even odds, the even odds a GUESS there",
+  "code": "3489f0fb4741c4d6",
+  "core": "9c33e1a1dd3a5d1f",
+  "date": "2026-11-24",
+  "note": "fence, gabion, frame and crib at even odds, the four forms the page attests, the odds a GUESS there",
+  "pages": {
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+  },
+  "research": "c348232a05978400",
+  "rests": [
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:300438cba3f2bc8d",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:4ae905f5520be209",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:640b5a761e2e1e28",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:79deddd4ec0f4b3d",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a0772093759304da"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver.rs::FIELD_KNOBS#the winter crop's odds off the table": {
+  "body": "e849d5e0854a5b74",
+  "claim": "the winter crop's odds off the table - the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing: a settlement's drainage and the nearness of a town set the odds, so the table names the winter crop's forms alone and the field stage rolls it once its fields are built (`field::build::winter_crop`), from the drained share of the paddy and the town nearness rolled here",
+  "code": "f388a909c6886810",
+  "core": "9c33e1a1dd3a5d1f",
+  "date": "2026-11-24",
+  "note": "the table names only barley/none; `rolled` skips the winter crop unless it is pinned, and `build` rolls it after the fields from the drained share and town_nearness",
+  "pages": {
+   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
+  },
+  "research": "7b19741c5250f0fe",
+  "rests": [
+   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:1707d1c770884a9d",
+   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:d90b5fa1bec814fe"
   ],
   "verdict": "IN-STEP"
  },
@@ -35675,18 +35769,18 @@
  "rust/phases/src/driver.rs::field_in#a basin's cell": {
   "body": "531872b104a954e7",
   "claim": "a basin's cell - rice-paddies-and-their-plots-suiden.drawing: the cell the row's spacing times the share along the canal (`CELL_SHARE`'s)",
-  "code": "bb22c356fd47bddc",
-  "core": "671dc79175d64edd",
-  "date": "2026-11-08",
-  "note": "row_ft x 31 ft gives about 48 x 31 = 1,488 sq ft, the page's cell, and 31 ft lies within 26-36 ft along the canal",
+  "code": "2ad1f45a9f40952f",
+  "core": "a3439dfb1339a11e",
+  "date": "2026-11-24",
+  "note": "row_ft times CELL_SHARE 31 gives about 48 x 31 = 1,488 sq ft, the page's cell",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
-  "reads": "daaa76733f9472bc",
+  "reads": "59acc62cfd089c2e",
   "research": "69aa78ae06a3c11d",
   "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:2065f2aeadcf896b",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221"
   ],
   "verdict": "IN-STEP"
@@ -35694,35 +35788,33 @@
  "rust/phases/src/driver.rs::field_in#the weir across the brook": {
   "body": "531872b104a954e7",
   "claim": "the weir across the brook - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: a weir drawn across the whole brook, so its half-length spans the brook on its skew, with its key into each bank",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "0ce036b98dc34a94",
-  "core": "671dc79175d64edd",
-  "date": "2026-11-08",
-  "note": "the half-length is BROOK_W/2/cos(30 deg) + key, so the weir spans the whole brook on its 30-degree skew",
+  "code": "8b167adc868d11b7",
+  "core": "a3439dfb1339a11e",
+  "date": "2026-11-24",
+  "note": "the half-length is BROOK_W/2 over cos(skew) plus the key, so the weir is a full closure drawn as a convention",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
   },
-  "reads": "daaa76733f9472bc",
+  "reads": "59acc62cfd089c2e",
   "research": "c348232a05978400",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:5fcdeacb667b42dd",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:bd4acd9d984b8217",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fb25778e65e5d8bd"
   ],
-  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::field_in#the weir's thickness by form": {
   "body": "531872b104a954e7",
   "claim": "the weir's thickness by form - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: four forms, 1.5 to 5 ft thick",
-  "code": "2ac6d63337c74f8d",
-  "core": "671dc79175d64edd",
-  "date": "2026-11-23",
-  "note": "fence 1.5, gabion 2, frame 5, crib 5 ft, as the page's rule gives",
+  "code": "167a2ad487702636",
+  "core": "a3439dfb1339a11e",
+  "date": "2026-11-24",
+  "note": "fence 1.5, gabion 2, frame 5, crib 5, as the rule gives",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
   },
-  "reads": "daaa76733f9472bc",
+  "reads": "59acc62cfd089c2e",
   "research": "c348232a05978400",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:300438cba3f2bc8d",
@@ -36412,6 +36504,44 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/plan.rs::KNOBS#a hamlet's plot size rolled": {
+  "body": "adaf0910cc556575",
+  "claim": "a hamlet's plot size rolled - clustered-and-scattered-villages-shuson-sanson.drawing: a hamlet chooses its plot size by chance from a table of its own, its plots never laid out in even rows (`plot_size`; the table's sizes and weights the GUESS above)",
+  "code": "d41eadbe96874738",
+  "core": "3a50375d75cd3753",
+  "date": "2026-11-24",
+  "note": "the hamlet rolls plot_size from a table of its own, and no form in it is even rows",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
+  },
+  "research": "430afdccc4c0e546",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:8e7dc25140e55c18",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b63de3757149f3e3"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/plan.rs::KNOBS#a row's line, sides and wells": {
+  "body": "adaf0910cc556575",
+  "claim": "a row's line, sides and wells - GUESS row-villages-resson.drawing: a row along a street laid out first or along the paddy's dry edge (`row_line`), its farms on one side of the street or on both (`row_sides`), a well at every farm or wells shared along the street (`row_water`), each rolled per settlement at even odds, the even odds a GUESS there",
+  "code": "c2752356236ece10",
+  "core": "3a50375d75cd3753",
+  "date": "2026-11-24",
+  "note": "row_line, row_sides and row_water are each rolled per linear settlement at even odds, the forms attested and the odds a GUESS there",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
+  },
+  "research": "37ada2a33aa587d2",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:0a23ce156774ee9f",
+   "0033-row-villages-resson.drawing.html:459fcd7a830232ff",
+   "0033-row-villages-resson.drawing.html:4783bb7b8054d5c1",
+   "0033-row-villages-resson.drawing.html:4f85f319664ea57f",
+   "0033-row-villages-resson.drawing.html:a7932fb02488f76e"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/plan.rs::KNOBS#the cluster's shape": {
   "body": "adaf0910cc556575",
   "claim": "the cluster's shape - clustered-and-scattered-villages-shuson-sanson.drawing: the lump and the line along a levee or a road are the attested forms (round, elongated); the crescent a GUESS there",
@@ -36468,16 +36598,35 @@
   "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/plan.rs::KNOBS#the knobs' tables": {
+ "rust/phases/src/driver/plan.rs::KNOBS#the intake and the brook's side": {
   "body": "adaf0910cc556575",
-  "claim": "the knobs' tables - GUESS: rolled per hamlet from their tables, carried from the deleted `hamletgen/consts*.py` (feature 444 T19); where the page records a table it is cited below",
-  "code": "49a8d71cb77544ae",
+  "claim": "the intake and the brook's side - GUESS where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: whether a hamlet has a weir or a bare mouth chosen at random with even odds (`intake`), a GUESS there; and which side of the fan the brook runs down (`brook_side`), the left or the right at even odds as the page's 1:2:1 has its two sides - the side alone is rolled here, whether the intake stands on that shoulder or at the center of the head being the field stage's `intake_place` (`driver.rs` `FIELD_KNOBS`, shoulder or center at even odds), the two together the page's left, center and right at 1:2:1",
+  "code": "58caa8df135f451c",
   "core": "3a50375d75cd3753",
   "date": "2026-11-24",
-  "note": "this one GUESS covers every table the five cited claims leave out, row_shelter included, but the page answers row_shelter: \"a scattered or a row settlement draws a grove at each farm\", and a belt is drawn only for a clustered village. A linear hamlet that rolls \"sheltered\" (half the time) therefore either goes against §8 or needs a deviation the page does not record. The label should be a claim citing 0031.drawing §8 for row_shelter. The page's §5 also governs lane_web's not_dispersed condition (that agrees with the code) and is not cited; the other uncited tables (water_sink, bamboo, grove_sides and grove_flank, the row_line/sides/water tables, well_siting, manure_form, copse and kosatsuba siting, plot_size, intake, brook_side) are ones the page is silent on, so GUESS holds for them",
+  "note": "the weir-or-bare-mouth roll at even odds (`intake`) and the left-or-right brook side at even odds, combined with `intake_place` (shoulder or center at even odds), give left, center and right at 1:2:1, the odds the page records as GUESSes",
+  "pages": {
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "309831ae8fe65bb5"
+  },
+  "research": "c348232a05978400",
+  "rests": [
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:ff4f3cb5d5a3a8fa"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/plan.rs::KNOBS#the knobs' tables": {
+  "body": "adaf0910cc556575",
+  "claim": "the knobs' tables - GUESS: the tables no page cited here speaks to (`water_sink`, `bamboo`, `grove_sides`, `grove_flank`, `well_siting`, `manure_form`, the copse's and the notice board's siting, `plot_size`'s three sizes and their weights, and `lane_web`'s two forms at even odds), rolled per hamlet as the deleted `hamletgen/consts*.py` held them (feature 444 T19); a table a page records is cited below",
+  "code": "2c11f5166a5f2d15",
+  "core": "3a50375d75cd3753",
+  "date": "2026-11-24",
+  "note": "none of the cited pages speaks to `water_sink`, `bamboo`, `grove_sides`/`grove_flank` shares, lane-or-cluster `well_siting`, `manure_form`, the single-entry copse and notice-board sitings, `plot_size`'s sizes and weights, or `lane_web`'s alleys/back lane, so GUESS is right. 0033 §7 names groves on three or four sides only as frame widths and gives no shares. 0031 §53 gives division forms, not a hamlet's size weights",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the lane forms": {
   "body": "adaf0910cc556575",
@@ -36496,6 +36645,40 @@
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea"
   ],
   "triaged": "2026-11-22",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/plan.rs::KNOBS#the lane web on no scattered settlement": {
+  "body": "adaf0910cc556575",
+  "claim": "the lane web on no scattered settlement - clustered-and-scattered-villages-shuson-sanson.drawing: a scattered settlement draws no lanes among its farms, so `lane_web` is rolled only for a clustered or a row settlement (`not_dispersed`)",
+  "code": "8d3d9cde5b04b73e",
+  "core": "3a50375d75cd3753",
+  "date": "2026-11-24",
+  "note": "`lane_web` is rolled only on \"not_dispersed\"",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
+  },
+  "research": "430afdccc4c0e546",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/plan.rs::KNOBS#the row's leeward groves": {
+  "body": "adaf0910cc556575",
+  "claim": "the row's leeward groves - row-villages-resson.drawing, clustered-and-scattered-villages-shuson-sanson.drawing: `row_shelter` is a row village's roll, at even odds, between its leeward row drawn with full groves like the row across the street (`own_grove`) and drawn after the farm the row across already shelters, its windward grove thin (`sheltered`) - both forms on 0033's page, the even odds a GUESS there; neither is a village shelter belt, every row farm keeping a grove of its own and no belt drawn for a row or a scattered settlement (0031)",
+  "code": "96c561ca561564f2",
+  "core": "3a50375d75cd3753",
+  "date": "2026-11-24",
+  "note": "`row_shelter` is a linear-only roll at even odds between the two forms 0033 records, and no village belt is drawn for a row",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330",
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
+  },
+  "research": "d8a3f63f6587dae1",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66",
+   "0033-row-villages-resson.drawing.html:514e71a741d206f3"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the settlement form's shares": {
@@ -36688,6 +36871,24 @@
   "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/plan.rs::plan#a declared bearing off a rolled fall": {
+  "body": "60bf74156f126d98",
+  "claim": "a declared bearing off a rolled fall - GUESS: which-way-water-flows-and-how-channels-bend-and-join.drawing silent on which yields when a hamlet declares its bearing, leaves its fall to the roll, and the roll lands 90 degrees or more off it; the bearing yields and the water runs down the rolled fall, so the page's bound holds (no water with a net uphill run) and the hamlet is still drawn - the easier route, taken over rolling a fall to fit (a polder under a northwest wind admits two falls, east and north, and a bearing to the southwest fits neither, so a second rule would still be owed) and over refusing a spec for what its seed rolled; no pool spec declares a bearing and all five declare their fall, so the case meets no map (measured 2026-11-24, feature 449 T416)",
+  "code": "2a3eb7b3c5a128e9",
+  "core": "938073f82ef5b7f4",
+  "date": "2026-11-24",
+  "note": "0054 does not say which one yields; `.filter(follows).unwrap_or(down_deg)` keeps the strict 90-degree bound",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
+  },
+  "reads": "ef98c6245b68085e",
+  "research": "68e3dc87e83ea403",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/plan.rs::plan#no brook knobs on a polder": {
   "body": "9b5e4221af4c0298",
   "claim": "no brook knobs on a polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a polder diked out of standing water has no brook, so no intake or brook side is rolled",
@@ -36764,12 +36965,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#water flow follows the fall": {
-  "body": "9b5e4221af4c0298",
-  "claim": "water flow follows the fall - DEVIATION which-way-water-flows-and-how-channels-bend-and-join.drawing: a hamlet's bearing taken from its land's fall unless the hamlet declares one (`Spec::water_flow`)",
-  "code": "7f37e6c64562acd2",
+  "body": "60bf74156f126d98",
+  "claim": "water flow follows the fall - DEVIATION which-way-water-flows-and-how-channels-bend-and-join.drawing: a hamlet's bearing taken from its land's fall unless the hamlet declares one (`Spec::water_flow`), a declared one standing only within the page's strict 90 degrees of the fall (`spec::follows`); against a declared fall the spec is refused (`spec::parse`), against a rolled one see the next claim",
+  "code": "65160ad94084838b",
   "core": "938073f82ef5b7f4",
-  "date": "2026-11-09",
-  "note": "the claim and the page say the bearing is the fall's \"unless the hamlet declares one\", but `.filter(|w| follows(*w, down_deg)).unwrap_or(down_deg)` replaces a declared bearing with the fall when the fall was rolled and lies 90 degrees or more off it, since `parse` only checks a declared pair and the roll ignores `water_flow`; the page does not say which yields, so the claim must state this fallback, or the code must roll a fall that fits or refuse the spec",
+  "date": "2026-11-24",
+  "note": "the bearing is taken from the fall unless declared, which the page records as a deviation; strict under 90; `parse` refuses a declared pair that breaks it",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
@@ -36780,7 +36981,7 @@
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:875dbf8076221ba9",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::seat_room#the seat's room": {
   "body": "37fc05ea770999d4",
@@ -37125,16 +37326,15 @@
  },
  "rust/phases/src/driver/polder.rs::draw_sluices#on top": {
   "body": "fc877f78ad61615a",
-  "claim": "on top - CONVENTION: the frame drawn above the water and the reeds, as the deleted `sluice_gate` drew it (its top layer)",
-  "code": "ffc09c1273c8b8c3",
+  "claim": "on top - CONVENTION: the frame drawn above the water and the reeds, as the deleted `sluice_gate` drew it (its top layer) - `Svg` writes its marks in the order they are drawn, and `roll_polder` draws the sluices after the polder (`draw_polder`: its water, dike and fringe), the waterside strips and the bank bands, only the settlement's ground mark after them",
+  "code": "16432a6bd354db36",
   "core": "9369cadd57809e1b",
-  "date": "2026-11-20",
-  "note": "nothing inside draw_sluices sets the layer; the claim is true only if its caller runs it after draw_polder (reeds, water, dike) and after any later water or marsh layer. I need the caller's code (the stage that calls draw_polder and draw_sluices)",
+  "date": "2026-11-24",
+  "note": "pure draw order: `roll_polder` draws the sluices after the water, the strips and the bank bands, so the frame sits above the water",
   "pages": {},
   "reads": "cc568008dd481174",
   "research": "",
-  "rests": [],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_sluices#the board's place": {
   "body": "fc877f78ad61615a",
@@ -37456,6 +37656,17 @@
   ],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/polder.rs::stage_polder#the block on the canvas's middle": {
+  "body": "61328f60f47d75cd",
+  "claim": "the block on the canvas's middle - CONVENTION: the block laid about the canvas's center, the sheet's framing and no place in the world - the drawing is cropped to what is drawn (`Svg::finish`), and the page's landward shore is the flank the village takes (`landward`), named after the block is laid, not a side of the canvas",
+  "code": "067ff09fdf9fd527",
+  "core": "c7c3158d71c12048",
+  "date": "2026-11-24",
+  "note": "the canvas center is framing only; the drawing is cropped to what is drawn and the landward flank is derived afterwards",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/polder.rs::stage_polder#the dike-pond's split": {
   "body": "61328f60f47d75cd",
   "claim": "the dike-pond's split - GUESS: the share of a parcel a pond takes, rolled from 0.3 to 0.7 (the registry's `dikepond_split`)",
@@ -37482,22 +37693,20 @@
  },
  "rust/phases/src/driver/polder.rs::stage_polder#the polder": {
   "body": "61328f60f47d75cd",
-  "claim": "the polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "4df91b7441c16d18",
+  "claim": "the polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies - this stage only hands the plan's figures on; the order is built in `field::staged::polder_stage`, whose `field::polder::polder` lays the plots, the ditches between their columns and the ring canal `RING_FT` out from the plots, and whose `field::dike::dike` lays the dike's inner face on that envelope and its outer face beyond",
+  "code": "deb59625a01e6e19",
   "core": "c7c3158d71c12048",
-  "date": "2026-11-07",
-  "note": "the dike, ring canal, ditches and paddies order is built in polder_stage, which the bundle does not show; need its body to judge the outside-in order and whether the polder sits against the landward shore rather than centered at (w/2, h/2)",
+  "date": "2026-11-24",
+  "note": "this stage only passes figures to `polder_stage`. Outward from the plots: plots, ditches, ring canal at `RING_FT.0`, dike on the `RING_FT.1` envelope",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
   },
   "research": "b63ead8f04154e18",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
-  "triaged": "2026-11-22",
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::stage_waterward#the channels they stop at": {
   "body": "4c4fd8c7b30d49f8",
@@ -37842,6 +38051,19 @@
   "research": "",
   "rests": [],
   "triaged": "2026-11-22",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder/tests.rs::the_sluices_are_drawn_after_the_water_and_the_reeds#the polder's tests": {
+  "body": "7eb2d629b51c778d",
+  "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "236ea94b8def65fe",
+  "core": "c75abde0666b3025",
+  "date": "2026-11-24",
+  "note": "fixtures and assertions only",
+  "pages": {},
+  "reads": "f670f223d27dd1d3",
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder/tests.rs::the_waterside_strips_hold_their_points#the polder's tests": {
@@ -39599,6 +39821,22 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/build.rs::TOWN_FAR_FACTOR#a far town's weight": {
+  "body": "c86971014e65ecda",
+  "claim": "a far town's weight - GUESS the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing: drainage and a town's nearness set the odds, how the two weigh against each other a GUESS there; half a near town's, the manure a second crop needed being dearer to bring, the deleted `TOWN_FAR_FACTOR`",
+  "code": "29ab77483c1bb7bc",
+  "core": "ac0bd37d8bcf0d51",
+  "date": "2026-11-24",
+  "note": "0009 leaves how drainage and nearness weigh against each other as a GUESS; 0.5 is one choice within that",
+  "pages": {
+   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
+  },
+  "research": "7b19741c5250f0fe",
+  "rests": [
+   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:d90b5fa1bec814fe"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/field/build.rs::WEIR_THIN_FT#the fallback": {
   "body": "1b792f1940ccc20e",
   "claim": "the fallback - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: four forms 1.5 to 5 ft thick; the fence's 1.5",
@@ -39621,124 +39859,184 @@
   "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/build.rs::build#barley on the drained paddy": {
-  "body": "ec1b26362f453ec9",
-  "claim": "barley on the drained paddy - where-a-farming-hamlet-grew-its-coarse-grain.drawing: barley followed the rice on a paddy that drained, never on a wet one, and a drained paddy's winter barley is counted acre for acre against the dry field it spares",
-  "code": "ce1331d0c2750bba",
-  "core": "f6cd3849bf7fbdc1",
-  "date": "2026-11-01",
-  "note": "when the winter crop is barley, dry_need = (need - drained).max(0), the drained area counted acre for acre",
+ "rust/phases/src/field/build.rs::WINTER_CROP#the knob's name": {
+  "body": "c75ee4f8102b5e36",
+  "claim": "the knob's name - NONE: the registry's name for the winter crop's knob",
+  "code": "b7ebd7fe778b5f57",
+  "core": "29cc2b95431a10f9",
+  "date": "2026-11-24",
+  "note": "a registry name only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/build.rs::barley_odds#the winter crop's odds": {
+  "body": "f4d21c5b6e42370b",
+  "claim": "the winter crop's odds - the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing: a settlement's drainage and the nearness of a town, whose manure a second crop needed, set the odds; how the two weigh against each other a GUESS there - the drained share of the paddy beside a town and half of it far from one, the deleted `WinterCropKnob.weights_for`",
+  "code": "ad4977b37776760d",
+  "core": "aebfa112179ead8e",
+  "date": "2026-11-24",
+  "note": "the drained share of the paddy, halved when the town is far; zero when there is no paddy",
+  "pages": {
+   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
+  },
+  "reads": "c00fb1f218744079",
+  "research": "7b19741c5250f0fe",
+  "rests": [
+   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:d90b5fa1bec814fe"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/build.rs::build#barley on a cleared middle": {
+  "body": "921a6e68de7fc0e2",
+  "claim": "barley on a cleared middle - where-a-farming-hamlet-grew-its-coarse-grain.drawing: on a fan whose middle is already cleared, the cleared ground is drawn only as the hem along the whole canal, which cannot hold the whole need, so such a hamlet is always drawn growing its barley on its paddy - an unpinned winter crop on a cleared middle is barley whatever the draw",
+  "code": "c654cc38e740ff3e",
+  "core": "130be1e295c0422b",
+  "date": "2026-11-24",
+  "note": "on a cleared fan_middle the odds are 1.0, so an unpinned roll is always barley",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
-  "reads": "5778726b5f1fc569",
+  "reads": "917c9cf77e4b8c08",
+  "research": "8159982a6874674a",
+  "rests": [
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/build.rs::build#barley on the drained paddy": {
+  "body": "921a6e68de7fc0e2",
+  "claim": "barley on the drained paddy - where-a-farming-hamlet-grew-its-coarse-grain.drawing: barley followed the rice on a paddy that drained, never on a wet one, and a drained paddy's winter barley is counted acre for acre against the dry field it spares",
+  "code": "7e70cd4c6c75a657",
+  "core": "130be1e295c0422b",
+  "date": "2026-11-24",
+  "note": "only the drained area (wet low-row and rested plots excluded) is taken from the need, acre for acre, when the crop is barley",
+  "pages": {
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
+  },
+  "reads": "917c9cf77e4b8c08",
   "research": "8159982a6874674a",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:973ce82b528d1f80"
   ],
-  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#fields side by side": {
-  "body": "ec1b26362f453ec9",
+  "body": "921a6e68de7fc0e2",
   "claim": "fields side by side - GUESS: the record silent on where a settlement's tracts stood to each other; across the fall, each fan's half-breadths apart with the brook between them, its width and twice its skirt and wander",
-  "code": "96b4e14f3904bca2",
-  "core": "f6cd3849bf7fbdc1",
-  "date": "2026-11-01",
-  "note": "step = half_head + half_foot + 2*(skirt + wander) + brook.w across the fall; the pages are silent on how tracts stand to each other",
+  "code": "69818050b87d5a31",
+  "core": "130be1e295c0422b",
+  "date": "2026-11-24",
+  "note": "fields step across the fall by the half-breadths plus the brook's width, skirt and wander; the record is silent on where tracts stood",
   "pages": {},
-  "reads": "5778726b5f1fc569",
+  "reads": "917c9cf77e4b8c08",
   "research": "",
-  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the brook's flank unhemmed": {
-  "body": "b690a35d7187bf3d",
+  "body": "921a6e68de7fc0e2",
   "claim": "the brook's flank unhemmed - GUESS: where-a-farming-hamlet-grew-its-coarse-grain.drawing silent on dry plots between canal B and the brook; that flank left to the brook's skirt, the hem the high margin's",
-  "code": "111295d93b10dcf2",
-  "core": "f6cd3849bf7fbdc1",
-  "date": "2026-11-22",
-  "note": "the hem line is laid only on the far flank (`-inp.brook_side`). The drawing page names the toe, the climb into the wild middle and the hem along the canal, and says nothing about dry plots between canal B and the brook",
+  "code": "946c635c84a91858",
+  "core": "130be1e295c0422b",
+  "date": "2026-11-24",
+  "note": "the hem line runs the far flank (-brook_side) and, where cleared, across the head, never down the brook's flank; the page does not place dry plots there",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
-  "reads": "5778726b5f1fc569",
+  "reads": "917c9cf77e4b8c08",
   "research": "8159982a6874674a",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:348cf5c8d3c7cc78",
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:8f4e868ad49f5555",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the fields under the cap": {
-  "body": "ec1b26362f453ec9",
+  "body": "921a6e68de7fc0e2",
   "claim": "the fields under the cap - how-much-farmland-a-settlement-works-and-in-what-tracts: a settlement with more farmland had several tracts - the paddy shared evenly among them, a GUESS (no page gives how a settlement's tracts compare)",
-  "code": "dd055783ba8ab371",
-  "core": "f6cd3849bf7fbdc1",
-  "date": "2026-11-01",
-  "note": "n = fields_for(paddy, cap), area = paddy / n, several tracts when the paddy exceeds one, the even share a stated GUESS",
+  "code": "f82bca9093a884ad",
+  "core": "130be1e295c0422b",
+  "date": "2026-11-24",
+  "note": "several tracts when the paddy exceeds the cap, the paddy split evenly among them; the even split is a GUESS",
   "pages": {
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html": "e7ac9b403c0f1fdd"
   },
-  "reads": "5778726b5f1fc569",
+  "reads": "917c9cf77e4b8c08",
   "research": "47696314c55f9345",
   "rests": [
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:7316d44de7260de8",
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:744a350ef9d49115"
   ],
-  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the grain owed": {
-  "body": "b690a35d7187bf3d",
+  "body": "921a6e68de7fc0e2",
   "claim": "the grain owed - where-a-farming-hamlet-grew-its-coarse-grain.drawing: about 0.85 acre a household (`GRAIN_ACRES_PER_HOUSEHOLD`), the need handed on to the hem stage, which reports the grain drawn and the room left (T28)",
-  "code": "037dc42d519e7cc6",
-  "core": "f6cd3849bf7fbdc1",
-  "date": "2026-11-04",
-  "note": "need = households x 0.85 ac, less drained barley acre for acre; handed on in HemIn.bounds",
+  "code": "0044406650511611",
+  "core": "130be1e295c0422b",
+  "date": "2026-11-24",
+  "note": "households × 0.85 acre, handed on to the hem stage",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
-  "reads": "5778726b5f1fc569",
+  "reads": "917c9cf77e4b8c08",
   "research": "8159982a6874674a",
   "rests": [
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:973ce82b528d1f80",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:cf41fc04e040d5c8"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the hem on the first field": {
-  "body": "b690a35d7187bf3d",
+  "body": "921a6e68de7fc0e2",
   "claim": "the hem on the first field - GUESS: the record silent on which of several fields a hamlet's dry hem fringes; the first, on its flank away from the brook, its inputs handed on (`Field.hem`)",
-  "code": "ce82f6fe3fb8a84a",
-  "core": "f6cd3849bf7fbdc1",
-  "date": "2026-11-04",
-  "note": "fields[0], far = -brook_side; the record does not say which field",
+  "code": "6cac496a2135cca0",
+  "core": "130be1e295c0422b",
+  "date": "2026-11-24",
+  "note": "fields[0], on the flank away from the brook, its inputs set in Field.hem; the record is silent on which field",
   "pages": {},
-  "reads": "5778726b5f1fc569",
+  "reads": "917c9cf77e4b8c08",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the hem's line": {
-  "body": "b690a35d7187bf3d",
+  "body": "921a6e68de7fc0e2",
   "claim": "the hem's line - where-a-farming-hamlet-grew-its-coarse-grain.drawing: where the middle is left wild the dry plots climb from the toe into the middle, as far as `hem_bounds` lets them; on a fan whose middle is cleared, the cleared ground is drawn only as the hem along the whole canal, one band of its tracts whatever the grain asks - canal A's, the first field's far flank up from its foot, and across its head where cleared; the line and its bounds handed on to the hem stage, which lays the hem after the seat (T28)",
-  "code": "19481fbb1111c19b",
-  "core": "f6cd3849bf7fbdc1",
-  "date": "2026-11-04",
-  "note": "far flank from the foot up, extended across the head unless wild; line, out, down, bounds and seed handed on to the hem stage",
+  "code": "16c1e036e21fa0bb",
+  "core": "130be1e295c0422b",
+  "date": "2026-11-24",
+  "note": "a wild middle climbs from the toe only as far as the need allows (MAX_BANDS when the winter is bare, one band under barley); a cleared middle gets one band along the whole canal and across the head, whatever the need",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
-  "reads": "5778726b5f1fc569",
+  "reads": "917c9cf77e4b8c08",
   "research": "8159982a6874674a",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:348cf5c8d3c7cc78",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:8f4e868ad49f5555",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/build.rs::build#the winter crop after the fields": {
+  "body": "921a6e68de7fc0e2",
+  "claim": "the winter crop after the fields - the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing: a settlement's drainage and the nearness of a town set the winter crop's odds - an unpinned winter crop rolled once the fields are laid (`winter_crop`), at the drained share of the laid paddy, halved far from a town (`barley_odds`); a spec's pin stands",
+  "code": "3a82a78c50d25a26",
+  "core": "130be1e295c0422b",
+  "date": "2026-11-24",
+  "note": "an unpinned winter_crop is rolled after the fields are laid, at the drained share of the laid paddy times the town-nearness factor; a pin stands, and how the two weigh is a GUESS there",
+  "pages": {
+   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
+  },
+  "reads": "917c9cf77e4b8c08",
+  "research": "7b19741c5250f0fe",
+  "rests": [
+   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:1707d1c770884a9d",
+   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:d90b5fa1bec814fe"
   ],
   "verdict": "IN-STEP"
  },
@@ -39993,22 +40291,21 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::rolled#knobs rolled from the seed": {
-  "body": "104bf3c8bb5399c0",
+  "body": "19dc567d54d7327c",
   "claim": "knobs rolled from the seed - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "0ae2059c22ad198e",
-  "core": "ed878889b80c3e81",
-  "date": "2026-11-22",
-  "note": "each knob is rolled from the seed unless a map pins it, as the page allows",
+  "code": "37534c79f38e8754",
+  "core": "19f435cc44a18716",
+  "date": "2026-11-24",
+  "note": "an unpinned winter_crop is now held back and rolled from the same seed in build, and a pin still stands",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
+  "reads": "e024ff33ad69c1f9",
   "research": "430afdccc4c0e546",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::rows_held#the basins' rules where decided": {
@@ -40058,6 +40355,24 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/build.rs::winter_crop#the winter crop rolled from the site": {
+  "body": "4c34b0821beaa88f",
+  "claim": "the winter crop rolled from the site - the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing: both forms attested, so the choice is made at random, settlement by settlement, a settlement's drainage and the nearness of a town setting the odds - rolled after the fields, when the drained plots are known, since nothing the fields draw reads it (a summer map draws neither winter crop; it shapes only the dry hem laid after)",
+  "code": "9767e73504131962",
+  "core": "557963f75eab96eb",
+  "date": "2026-11-24",
+  "note": "both forms are rolled per settlement, weighted barley=odds and none=1-odds, after the fields; on a summer map it only shapes the dry hem",
+  "pages": {
+   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
+  },
+  "reads": "e024ff33ad69c1f9",
+  "research": "7b19741c5250f0fe",
+  "rests": [
+   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:1707d1c770884a9d",
+   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:d90b5fa1bec814fe"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::Channel#a channel's record": {

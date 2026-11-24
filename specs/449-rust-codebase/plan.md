@@ -1111,14 +1111,83 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 **Performance work?** no.
 
 
-### T415 (<why: the finding or measurement that files it>)
+### T415 (impl-drift 2026-11-24 read `row_shelter`'s `sheltered` form as a village shelter belt on a row settlement; the record says it is not one)
+
+- **Approach**: no engine code changes; the claim is restated (constitution XIV: a wrong outcome, not a difference). `row_shelter`'s two forms are both groves, never a belt: `research/questions/0033-row-villages-resson.drawing.html` has each row village choose at even odds whether its leeward row, on a street with farms on both sides that runs across the wind, is drawn with full groves like the row across (`own_grove`) or after the farm the row across already shelters, its windward grove thin (`sheltered`), and labels the even odds a GUESS. That is the table as it stands (`rust/phases/src/driver/plan.rs` KNOBS), and its one consumer (`rust/parked/src/homesteads/row_seat.rs`, "the leeward row marked sheltered", parked until T158) seats that farm as a full grove farm and marks it. `research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html` (the block "Where farms carry their own groves, no village shelter belt is drawn", the task's section 8) is therefore kept, not broken: every row farm keeps a grove in either form. The finding came from the form's name alone, the claim it sat under being one GUESS over every table. Changed: KNOBS' claims in `plan.rs` - `the row's leeward groves` citing 0033.drawing and 0031.drawing, `the lane web on no scattered settlement` citing 0031.drawing (the block "A scattered settlement draws no lanes among its farms", the task's section 5), and `the knobs' tables` GUESS narrowed to the tables it names, those no page speaks to; and, on impl-drift's first reading of the restated claim (MISLABELED 2026-11-24: 0033.drawing records `row_line`, `row_sides` and `row_water`, 0031.drawing a hamlet's plot size rolled), `a row's line, sides and wells` citing 0033.drawing as its GUESS and `a hamlet's plot size rolled` citing 0031.drawing. Measured 2026-11-24: `grep -rn row_shelter rust/` finds the table and the parked consumer only, so no live stage reads the roll; the five pool specs pin nothing of it and no tracked pool file moves (`git status --short pool` empty after the edit).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the claims restated | n/a: comments only, no roll changes | n/a: no engine behavior changes | none | n/a |
+
+### T415 Approach (checklist part A)
+
+1. **The goal, in the world.** A row village's farms each stand in their own grove and no village belt is drawn for a row or a scattered settlement; the code's claims say which page each rolled table follows.
+2. **The constraints.** `research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html` (no belt where farms carry their own groves; no lanes among a scattered settlement's farms); `research/questions/0033-row-villages-resson.drawing.html` (the leeward row's two forms at even odds); constitution XIV (a defect is a wrong outcome); the task line's own alternative, "the roll follows the page or the page records the deviation".
+3. **Where each comes from.** G: the GM 2026-11-24, request.md, "if there are real defects, then I do want to find them and fix them". R: 0031.drawing and 0033.drawing as quoted in the approach. O: the grep and the pool status above, 2026-11-24.
+4. **Do they describe the world here?** Yes: the roll already follows 0033.drawing, read against the table and its parked consumer on 2026-11-24; the page records the form, so no deviation is owed.
+5. **The order.** Before T158; beside T416, which shares `plan.rs`.
+6. **The exits.** Green: impl-drift rules the restated KNOBS claims with 0033.drawing in its bundle and `make closing-checks` is green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the grep and the pages named in the approach settled it.
+8. **The budget.** One landing; no stage's counted work moves (no code).
+9. **Done, measured.** `make claims-report` no longer lists `KNOBS#the knobs' tables` MISLABELED.
+10. **Before moving a constant.** n/a: no constant moves; the even odds stay 0033.drawing's own GUESS.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader of the map would see differently and no finding broken: not a defect, the claim restated (constitution XIV).
+
+**Found and left?**
+
+- The live seat stage keeps a clustered village's belt ground on every settlement form: `driver.rs` `settlement_ground` and `plan.rs` `seat_room` never read `settlement_form` (observed 2026-11-24, method: `grep -rn 'settlement_form\|"linear"\|"dispersed"' rust/phases/src` finds the plan, the spec and the water frame alone). Its visible effect: the pool's row hamlets, Kashikawa and Mizuguchi (`"settlement_form": "linear"` in their driver records, read 2026-11-24), are seated as a band with a belt's ground kept and their dry hem held a belt's depth off, where 0031.drawing draws a grove at each farm and no village belt for a row or a scattered settlement. Not fixed here: the seat is one band for every form until the row and grove seating parked in `rust/parked/src/homesteads/` returns, a rebuild of the seat stage and not a claim's restatement. Filed as T417; lands before T158.
+
+**Performance work?** no.
+
+
+### T416 (make claims-report 2026-11-24: one DRIFTED and three CANNOT-TELL hamlet claims, each judged with the code its bundle lacked)
+
+- **Approach**: four claims, each ruled defect or restatement by what the code does (constitution XIV), all measured 2026-11-24.
+  - **(a) `plan#water flow follows the fall`, restated.** `research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html` is silent on which yields when a hamlet declares its bearing, leaves its fall to the roll, and the roll lands 90 degrees or more off it. The code already lets the bearing yield to the fall, a behavior the existing test pinned loosely. Kept, and stated: the page's bound holds (no water with a net uphill run) and the hamlet is still drawn. It is the easier route of the three the task names: rolling a fall to fit is not a whole rule (a polder under a northwest wind admits two falls, east and north, by `water_frame::admitted`, and a southwest bearing fits neither) and would move the water frame's candidate count; refusing would refuse a spec for what its seed rolled. Measured: 0 of the 5 pool specs declare `water_flow`, all 5 declare `down_deg`, and the work-budget reference spec (`rust/phases/src/bin/hamlet.rs`) declares no bearing, so the case meets no map. Recorded as a GUESS claim on `plan` and a comment at the filter; the test now pins both sides exactly (a bearing 30 degrees off the rolled fall stands, one 180 degrees off yields).
+  - **(b1) `FIELD_KNOBS#the field's knobs`, a defect, fixed in code.** `research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html`: "A settlement's drainage and the nearness of a town, whose manure a second crop needed, set the odds, and how the two weigh against each other is a GUESS." The conditioning was done nowhere: `town_nearness` was rolled and read by nothing (`grep -rn town_nearness rust/phases/src` found the table alone) and the winter crop rolled at a fixed 0.5/0.5. The Python had it - `WinterCropKnob.weights_for` in `l7r/diagram/settlement/fields/grain.py` (feature 328 wave 51; read at `ea5638968e^`): barley's odds the drained share of the paddy, times `TOWN_FAR_FACTOR` 0.5 where the town is far - and the Rust field stage rolls its knobs before a field exists, so the rule fell out of the port. A wrong outcome: the record states a rule of the maps that no map followed, and a hamlet's recorded winter crop and its coarse-grain need came out at odds the page does not give. Fixed in `rust/phases/src/field/build.rs`: an unpinned winter crop is rolled after the fields are built, from its own stream, at `barley_odds` (drained area over the fields' area, halved far from a town; a spec's pin stands); nothing the fields draw reads the knob, only the dry hem's bounds and the grain need after. The weights are the deleted Python's, labeled GUESS as the page labels them. The drained area is now read on every roll (the low row and the rested plots only, `candidate@drained`). `driver.rs` FIELD_KNOBS names the forms alone and carries the claims, and takes the three GUESS claims impl-drift found unclaimed there (the fan's middle, 0006.drawing; the weir's forms and the intake's place and siting, 0059.drawing). A hamlet on a cleared middle always rolls barley (0011.drawing; see found and left).
+  - **(b2) `draw_sluices#on top`, restated and pinned.** `roll_polder` draws the polder (`draw_polder`), the waterside strips, the bank bands, then the sluices, with only the settlement's ground mark after, and `Svg` writes marks in the order drawn (`finish` emits the body as built): the claim is true and now says where the order is decided. A test holds it (`the_sluices_are_drawn_after_the_water_and_the_reeds`), shown to fire by moving the call before the strips (red), then restored.
+  - **(b3) `stage_polder#the polder`, restated.** The outside-in order is built in `field::staged::polder_stage`: `field::polder::polder` lays the plots, the column ditches and the ring canal `RING_FT` out from the plots, `field::dike::dike` the dike's inner face on that envelope and its outer face beyond - each already claimed there against `research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html`. The claim on `stage_polder` now names them. Centering the block on the canvas is the sheet's framing (the drawing is cropped to what is drawn), and the page's landward shore is the flank `landward` hands the seat, tested by `the_seat_stands_on_the_landward_shore`; a CONVENTION claim says so.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the winter crop's odds from the site | red first: `the_winter_crop_s_odds_are_the_drained_share_halved_far_from_a_town` failed on HEAD's roll ("near a town": left "none", right "barley"), green after | n/a: a roll's odds restored, no repair step deleted | no tracked pool file; Kashikawa's driver record alone (below) | n/a |
+| the three claims restated, the sluice order pinned | the order test red with the call moved, green restored | n/a: no engine behavior changes | none | n/a |
+
+Maps, measured 2026-11-24 by regenerating each pool hamlet's driver record and comparing it with the mirror's (`/diagram/pool/hamlets/*/*.driver.{svg,json}`): Kashikawa (near a town, a cleared middle) moves from a bare winter to barley and its recorded coarse-grain need from 17.0 acres to 0.0; its drawing is the same to the byte (a cleared middle draws the one hem band whatever the grain asks). Inashiro (far, none), Mizuguchi (near, barley), Sawada (far, barley) and Kuwabata (a polder, no winter crop knob) do not move. Work budget, measured 2026-11-24 (`make work-budget` against the record `dev/work-budget.md`, the counts at 40 households): the field stage 44,290 operations against 44,261 recorded (budget 118,739, accepted 182,062, 0.4x), the hem 18,147 against 17,591 recorded (budget 29,549, accepted 28,716, 0.6x), the reference hamlet's winter crop moving at some sizes, both inside their accepted counts.
+
+### T416 Approach (checklist part A)
+
+1. **The goal, in the world.** A hamlet whose paddy drains and stands near a town is likelier to carry winter barley than one far from a town or mostly wet, and its dry fields are sized by that; a polder's sluice frames stand over its water and reeds; every hamlet's water runs within a right angle of its fall.
+2. **The constraints.** `research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html` (drainage and a town's nearness set the winter crop's odds, the weighing a GUESS); `research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html` (a hamlet's bearing from its fall unless declared; under 90 degrees); `research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html` (the polder's outside-in order, the landward shore); `research/questions/0179-water-gates-and-sluices-shuimen.drawing.html` (the sluice's frame); constitution XIV; the root CLAUDE.md, "where the record is silent on a choice, take a knob or the algorithmically easier route and say which".
+3. **Where each comes from.** G: the GM 2026-11-24, request.md, "if there are real defects, then I do want to find them and fix them". R: the pages above, 0009.drawing quoted in the approach. O: the greps, the deleted Python at `ea5638968e^`, the pool specs and the regenerated driver records, all 2026-11-24.
+4. **Do they describe the world here?** Yes for the winter crop: the Python rolled it this way from feature 328 wave 51 and the page still states it. The far town's half and the drained share as the odds are GUESS values, knobs, carried and labeled, not defended.
+5. **The order.** Before T158; beside T415, which shares `plan.rs`.
+6. **The exits.** Green: the red-first test green, `make closing-checks` green, impl-drift's verdict on each of the four claims recorded with `make claims-checked`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing. The field stage's count moves by the drained read on every roll (+29 at 40 households), inside its accepted count; no budget changes.
+9. **Done, measured.** `make claims-report` lists none of the four under DRIFTED or CANNOT-TELL.
+10. **Before moving a constant.** The winter crop's fixed 0.5/0.5 leaves `FIELD_KNOBS` (its claim restated there); `TOWN_FAR_FACTOR` 0.5 returns with its GUESS claim. No researched number moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The winter crop: a reader of a hamlet's record sees its winter crop and its coarse-grain need rolled at odds the page does not give, and on a wild-middle hamlet the dry hem's climb with them - 0009.drawing's rule broken, a defect. The other three: nothing a reader would see differently, the claims restated (constitution XIV).
+
+**Found and left?**
+
+- A cleared-middle hamlet could roll a bare winter, where `research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html` has it "always drawn growing its barley on its paddy" (impl-drift's UNCLAIMED finding on the first fix, 2026-11-24); Kashikawa, a cleared middle, was drawn so on HEAD, its record a bare winter with 17.0 acres of grain owed to a hem of the one band. fixed here: an unpinned winter crop on a cleared middle is barley (`build`, its claim `barley on a cleared middle`), red first in the same test (left "none", right "barley").
+- A wild-middle hamlet's bare winter is rolled without asking whether the toe and the whole wild middle can hold the grain need, which the same page requires and the deleted Python's `_grows_on_this_ground` asked. Not fixed here: the room is known only when the hem is laid, after the seat, two stages past the roll, and how many rolls draw the hem short is not yet measured. Filed as T418; lands before T158.
+- `research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html` says no channel runs outside the dike, and a polder draws a feeder from the wild pond and an outfall run past the tail sluice (impl-drift, outside the change, 2026-11-24). not a defect (constitution XIV), and not filed: `field::polder::polder` already claims the feeder as a GUESS, the wild water's own reach to the inlet, and the outfall cites 0060.drawing's drain run off the map.
+
+**Performance work?** no.
+
+
+### T417 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T415 Approach (checklist part A)
+### T417 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -1138,14 +1207,14 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T416 (<why: the finding or measurement that files it>)
+### T418 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T416 Approach (checklist part A)
+### T418 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

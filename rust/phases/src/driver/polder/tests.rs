@@ -387,6 +387,31 @@ fn the_settlement_stands_off_the_dike_and_the_head_canal() {
     assert_eq!(got, want);
 }
 
+/// THE SLUICES ON TOP (449 T416): on a rolled polder no reeds and no water are drawn after the first sluice mark, so nothing
+/// the frame stands over is painted across it - only the settlement's ground mark follows.
+#[test]
+fn the_sluices_are_drawn_after_the_water_and_the_reeds() {
+    for spec in [
+        r#"{"name": "R", "seed": 5, "households": 12, "down_deg": 30, "field_archetype": "polder_grid"}"#,
+        r#"{"name": "Kuwabata", "seed": 21, "households": 16, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond", "pond_layout": "mosaic", "dike_crop": "mulberry"}"#,
+    ] {
+        let r = roll(&parse(spec).unwrap()).unwrap();
+        let body = r.svg.split_once("</defs>").unwrap().1;
+        let first = body.find(super::SLUICE.0).unwrap();
+        let (before, after) = body.split_at(first);
+        assert!(before.contains("url(#reed-ticks)") && before.contains("url(#reed-bank)"));
+        for ink in [
+            "url(#reed",
+            super::super::svg::ink::SUPPLY,
+            super::super::svg::ink::DRAIN,
+            super::super::svg::ink::POND_WATER,
+            super::super::svg::ink::FLOODED,
+        ] {
+            assert!(!after.contains(ink), "{ink} drawn over a sluice");
+        }
+    }
+}
+
 /// A sluice whose channel is not known is not drawn: the gap is named, not guessed.
 #[test]
 fn a_sluice_with_no_channel_is_named_not_drawn() {
