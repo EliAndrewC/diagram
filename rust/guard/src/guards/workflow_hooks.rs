@@ -1,6 +1,6 @@
 //! `workflow-hooks` (feature 383 amendment 7, FR-045; ported from the shell of the same name and `lib/hm_workflow.py`, feature 449 T040): A WORKFLOW CALL IS
 //! HELD TO THE GUARDS ITS AGENTS WOULD MEET AS AGENT CALLS, because no Agent hook fires for an agent a workflow spawns (research R20). An untyped `agent(` is
-//! refused (`GP_OK` with a reason is the escape, its model decided as an ad-hoc Agent call's is: a reading tier named, or none and `SESSION_MODEL:` in the call, 451 T216); a defined agent of this project runs through the saved `check-wave` workflow; and each unit of
+//! refused (`GP_OK` with a reason is the escape, its model decided as an ad-hoc Agent call's is: a reading tier named - an untyped stage may only read; a typed ad-hoc call the same, or no model and `SESSION_MODEL:` in the call where its type is measured to inherit, 451 T216, T217); a defined agent of this project runs through the saved `check-wave` workflow; and each unit of
 //! `check-wave` is put through every `PreToolUse` hook an Agent call meets, the first refusal refusing the whole run.
 
 use std::path::{Path, PathBuf};
@@ -9,7 +9,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use serde_json::{json, Value};
 
-use crate::guards::agent_model_hooks::{decided, READING};
+use crate::guards::agent_model_hooks::{decided, inheriting, INHERITS, READING};
 use crate::guards::finished_run_hooks::runs::realpath;
 use crate::protocol::{Answer, Event, Guard};
 use crate::shared::log;
@@ -183,15 +183,27 @@ fn script_verdict(script: &str, root: &Path) -> String {
             return format!("UNTYPED {}", short(&call));
         }
         used = used || kind.is_none();
-        if let Some(k) = kind.filter(|k| k == "?" || ours.contains(k)) {
+        if let Some(k) = kind.as_ref().filter(|k| *k == "?" || ours.contains(k)) {
             return format!("GUARDED {k}");
         }
-        // An ad-hoc call's model, by `agent_model_hooks`' rule (451 T216): a reading tier named, or none and the marker.
-        match model_of(&call) {
-            Some(m) if READING.contains(&m.as_str()) => {}
-            Some(m) => return format!("NAMED {m} {}", short(&call)),
-            None if session_marked(&call) => marked = true,
-            None => return format!("MODEL {}", short(&call)),
+        // An ad-hoc call's model, by `agent_model_hooks`' rule (451 T216): a reading tier named, or none and the marker - the marker only on a
+        // type measured to inherit (`INHERITS`, 451 T217). `agentType` is "resolved from the same registry as the Agent tool" (the
+        // workflow-authoring reference, read 2026-11-24), so a typed call's definition can set its model as an Agent dispatch's does. A call with
+        // NO type (`-` here) is "the default workflow subagent", not `general-purpose`: the reference says its omitted model "inherits the
+        // main-loop model", but nobody probed it as the listed types were, so it is held as any unmeasured type is (spec-fidelity, 451 T217:
+        // one standard for the unprobed) - it reads, on a named tier, or the call names `general-purpose`.
+        let pinned = kind.map_or_else(
+            || Some("-".to_owned()),
+            |k| Some(k).filter(|k| !INHERITS.contains(&k.as_str())),
+        );
+        match (model_of(&call), pinned) {
+            (Some(m), _) if READING.contains(&m.as_str()) => {}
+            (_, Some(k)) => return format!("PINNED {k} {}", short(&call)),
+            (m, None) => match m {
+                Some(m) => return format!("NAMED {m} {}", short(&call)),
+                None if session_marked(&call) => marked = true,
+                None => return format!("MODEL {}", short(&call)),
+            },
         }
     }
     match (used, marked) {
@@ -411,8 +423,10 @@ pub(crate) fn verdict(event: &Event, ctx: &Ctx) -> String {
 const TRAILER: &str = "(rust/guard/src/guards/workflow_hooks.rs; feature 383 amendment 7)";
 const PASSED: &str = "check-wave: every unit passed the Agent guards. When this run finishes, `make wave-report` measures it - each agent's first-request cache read and write, and the main session's wakes - against the last hand-launched wave (feature 383 FR-046).";
 
-/// An ad-hoc call's two compliant forms, as `agent_model_hooks` holds an ad-hoc Agent call to them (451 T216).
-const MODEL_RULE: &str = "An ad-hoc call's model (agent_model_hooks.rs): model: \"sonnet\" to read, fetch, translate or extract; for anything that\njudges or builds, NO model and `SESSION_MODEL: <what it judges or builds, two words or more>` inside the call - in its\nprompt or a comment - so it runs on the session's model.\n";
+/// An ad-hoc call's two compliant forms, as `agent_model_hooks` holds an ad-hoc Agent call to them (451 T216). Printed only for a call whose type
+/// is in `INHERITS` (any other is `PINNED`), so it names no types; and no file
+/// (message-check, 451 T217). It ends unstopped: `MODEL` adds whose model the call then runs on, which `NAMED`'s own why line already says.
+const MODEL_RULE: &str = "Read, fetch, translate or extract: model: \"sonnet\". Judge or build: NO model and\n`SESSION_MODEL: <what it judges or builds, two words or more>` inside the call (prompt or comment)";
 
 fn bold(line: &str) -> String {
     format!("\n\u{1b}[1mBLOCKED: {line}\u{1b}[0m\n")
@@ -422,8 +436,8 @@ fn refusal(got: &str) -> String {
     let (kind, rest) = got.split_once(' ').unwrap_or((got, ""));
     let body = match kind {
         // The ~35k: the default subagent loads every CLAUDE.md and every tool, a typed agent whose file omits them ~4k (feature 383 research R20).
-        "UNTYPED" => format!("{}A default subagent costs ~35k tokens, a typed one ~4k. Pass agentType: \"<its .claude/agents/ name>\"\non every agent() call. A deliberate general-purpose stage: GP_OK: <reason, two words or more> in the script, its model decided as below.\n{MODEL_RULE}", bold(&format!("an agent() call with no agentType: {rest}"))),
-        "MODEL" => format!("{}{MODEL_RULE}", bold(&format!("an ad-hoc agent() call names no model and carries no SESSION_MODEL: {rest}"))),
+        "UNTYPED" => format!("{}A default subagent costs ~35k tokens, a typed one ~4k. Pass agentType: \"<its .claude/agents/ name>\"\non every agent() call. A deliberate untyped stage, which may only read: GP_OK: <reason, two words or more> in the script and\nmodel: \"sonnet\" in the call.\n", bold(&format!("an agent() call with no agentType: {rest}"))),
+        "MODEL" => format!("{}{MODEL_RULE}, so it runs on the\nsession's model.\n", bold(&format!("an ad-hoc agent() call names no model and carries no SESSION_MODEL: {rest}"))),
         "NAMED" => {
             let (model, call) = rest.split_once(' ').unwrap_or((rest, ""));
             let why = if model == "?" {
@@ -431,7 +445,16 @@ fn refusal(got: &str) -> String {
             } else {
                 "A named model would not follow the session's when the GM switches it.\n"
             };
-            format!("{}{why}{MODEL_RULE}", bold(&format!("an ad-hoc agent() call names the model `{model}`: {call}")))
+            format!("{}{why}{MODEL_RULE}.\n", bold(&format!("an ad-hoc agent() call names the model `{model}`: {call}")))
+        }
+        "PINNED" => {
+            let (typ, call) = rest.split_once(' ').unwrap_or((rest, ""));
+            let head = if typ == "-" {
+                format!("an agent() call with no agentType is not measured to run on the session's model: {call}")
+            } else {
+                format!("an agent() call of type `{typ}` would not run on the session's model: {call}")
+            };
+            format!("{}Only {} inherit it. To read, fetch, translate or extract, name model: \"sonnet\"; for anything that judges or\nbuilds, agentType: \"general-purpose\" with NO model and `SESSION_MODEL: <what it judges or builds, two words or more>`\ninside the call - in its prompt or a comment.\n", bold(&head), inheriting())
         }
         "GUARDED" => format!("{}No Agent hook fires inside a workflow, so a defined check is held to its guards (bundle, owed, freeze, round caps,\ndecide-first) only when its units are known before the run - as check-wave's args are:\n  Workflow({{name: \"check-wave\", args: {{agentType: \"<job>\", units: [{{label: \"<unit>\", prompt: \"<its prompt>\"}}, ...]}}}})\nAn agentType computed at run time is refused the same way: name it literally.\n", bold(&format!("`{rest}` runs through the check-wave workflow, not a script of its own."))),
         "UNIT" => {
@@ -441,7 +464,7 @@ fn refusal(got: &str) -> String {
         _ => bold(rest),
     };
     // The model rule's refusals name no source: message-check (451 T216) ruled the trailer a word their reader can spare.
-    if matches!(kind, "UNTYPED" | "MODEL" | "NAMED") {
+    if matches!(kind, "UNTYPED" | "MODEL" | "NAMED" | "PINNED") {
         return body.trim_end().to_owned();
     }
     format!("{body}{TRAILER}")

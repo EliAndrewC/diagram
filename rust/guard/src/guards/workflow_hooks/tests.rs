@@ -59,7 +59,10 @@ fn a_scripts_agent_calls_are_held_to_the_rules() {
         ),
         "ESCAPED"
     );
-    assert!(script("// GP_OK: a deliberate stage\nagent('x', {})", &d, &ctx).starts_with("MODEL "));
+    assert!(
+        script("// GP_OK: a deliberate stage\nagent('x', {})", &d, &ctx)
+            .starts_with("PINNED - agent('x'")
+    );
     assert!(script("// GP_OK\nagent('x', {model: 'sonnet'})", &d, &ctx).starts_with("UNTYPED"));
     assert_eq!(
         script("agent('x', {agentType: 'quote-check'})", &d, &ctx),
@@ -67,18 +70,18 @@ fn a_scripts_agent_calls_are_held_to_the_rules() {
     );
     assert_eq!(script("agent('x', {agentType: t})", &d, &ctx), "GUARDED ?");
     assert_eq!(
-        script("agent('x', {agentType: 'own', model: 'haiku'})", &d, &ctx),
+        script("agent('x', {agentType: 'Plan', model: 'haiku'})", &d, &ctx),
         ""
     );
     // 451 T216: an ad-hoc call names a reading tier, or no model and its SESSION_MODEL reason; any other model is refused.
     assert!(
-        script("agent('x', {agentType: 'own', model: 'opus'})", &d, &ctx)
+        script("agent('x', {agentType: 'Plan', model: 'opus'})", &d, &ctx)
             .starts_with("NAMED opus agent('x'")
     );
-    assert!(script("agent('x', {agentType: 'own', model: m})", &d, &ctx).starts_with("NAMED ? "));
+    assert!(script("agent('x', {agentType: 'Plan', model: m})", &d, &ctx).starts_with("NAMED ? "));
     assert_eq!(
         script(
-            "agent(p, {agentType: 'own' /* SESSION_MODEL: judges the plan */})",
+            "agent(p, {agentType: 'Plan' /* SESSION_MODEL: judges the plan */})",
             &d,
             &ctx
         ),
@@ -86,41 +89,41 @@ fn a_scripts_agent_calls_are_held_to_the_rules() {
     );
     assert_eq!(
         script(
-            "// GP_OK: a deliberate stage\nagent(`SESSION_MODEL: builds the stage\n${p}`, {})",
+            "// GP_OK: a deliberate stage\nagent(p, {model: 'haiku'})\nagent(`SESSION_MODEL: builds the stage\n${p}`, {agentType: 'claude'})",
             &d,
             &ctx
         ),
         "ESCAPED MARKED"
     );
     assert!(script(
-        "// SESSION_MODEL: judges the plan\nagent('x', {agentType: 'own'})",
+        "// SESSION_MODEL: judges the plan\nagent('x', {agentType: 'Plan'})",
         &d,
         &ctx
     )
     .starts_with("MODEL "));
     assert!(script(
-        "agent('SESSION_MODEL: judges', {agentType: 'own'})",
+        "agent('SESSION_MODEL: judges', {agentType: 'Plan'})",
         &d,
         &ctx
     )
     .starts_with("MODEL "));
     // The refusal's own placeholder pasted back decides nothing; a prompt that says `model: opus` names no model.
     assert!(script(
-        "agent('SESSION_MODEL: <what it judges or builds, two words or more>', {agentType: 'own'})",
+        "agent('SESSION_MODEL: <what it judges or builds, two words or more>', {agentType: 'Plan'})",
         &d,
         &ctx
     )
     .starts_with("MODEL "));
     assert_eq!(
         script(
-            "agent('compare the model: opus run, \\'quoted\\'', {agentType: 'own', model: \"sonnet\"})",
+            "agent('compare the model: opus run, \\'quoted\\'', {agentType: 'Plan', model: \"sonnet\"})",
             &d,
             &ctx
         ),
         ""
     );
     assert!(script(
-        "agent(\"the model: opus run\", {agentType: 'own'})",
+        "agent(\"the model: opus run\", {agentType: 'Plan'})",
         &d,
         &ctx
     )
@@ -225,6 +228,82 @@ fn the_call_scanner_balances_and_skips_strings() {
     assert_eq!(agent_type("{}"), None);
 }
 
+/// 451 T217: the marker passes only on a type measured to inherit; any other ad-hoc call, an untyped one included, reads or is refused.
+#[test]
+fn the_marker_passes_only_on_a_type_measured_to_inherit() {
+    let (d, ctx) = world("inherits", "exit 0");
+    // 451 T217: the marker passes only on a type measured to inherit; any other ad-hoc type reads, on sonnet or haiku, or is refused.
+    for (call, passes) in [
+        (
+            "agent('SESSION_MODEL: judges the plan', {agentType: 'general-purpose'})",
+            true,
+        ),
+        (
+            "agent('SESSION_MODEL: judges the plan', {agentType: 'claude'})",
+            true,
+        ),
+        (
+            "agent('SESSION_MODEL: judges the plan', {agentType: 'Explore'})",
+            false,
+        ),
+        ("agent('x', {agentType: 'Explore'})", false),
+        ("agent('x', {agentType: 'Explore', model: 'opus'})", false),
+        ("agent('x', {agentType: 'own', model: m})", false),
+    ] {
+        let got = script(call, &d, &ctx);
+        assert_eq!(got == "MARKED", passes, "{call}: {got}");
+        assert!(passes || got.starts_with("PINNED "), "{call}: {got}");
+    }
+    assert_eq!(
+        script(
+            "agent('x', {agentType: 'Explore', model: 'sonnet'})",
+            &d,
+            &ctx
+        ),
+        ""
+    );
+    let run = |input: &Value| {
+        let e = workflow(input, &d);
+        judge(&e, &Session::from_input(&e.input), &ctx)
+    };
+    let refused =
+        |got: &[Answer], words: &str| matches!(got, [Answer::Refuse(t)] if t.contains(words));
+    // 451 T217: nobody probed the default workflow subagent, so an untyped stage reads, on a named tier, or is refused - marked or not.
+    for untyped in [
+        "agent('SESSION_MODEL: builds the stage', {})",
+        "agent('x', {model: 'opus'})",
+    ] {
+        let got = run(&json!({"script": format!("// GP_OK: one deliberate\n{untyped}")}));
+        assert!(refused(
+            &got,
+            "with no agentType is not measured to run on the session's model: agent('"
+        ));
+        assert!(refused(
+            &got,
+            "agentType: \"general-purpose\" with NO model"
+        ));
+    }
+    let bare = run(&json!({"script": "agent('x', {})"}));
+    assert!(refused(&bare, "which may only read: GP_OK: <reason"));
+    assert!(!refused(&bare, "SESSION_MODEL"));
+    let pinned =
+        run(&json!({"script": "agent('SESSION_MODEL: judges the plan', {agentType: 'Explore'})"}));
+    assert!(refused(
+        &pinned,
+        "of type `Explore` would not run on the session's model: agent('SESSION_MODEL"
+    ));
+    assert!(refused(
+        &pinned,
+        "Only `general-purpose`, `Plan` and `claude` inherit it."
+    ));
+    assert!(refused(&pinned, "model: \"sonnet\""));
+    assert!(refused(
+        &pinned,
+        "agentType: \"general-purpose\" with NO model"
+    ));
+    assert!(!refused(&pinned, "workflow_hooks.rs"));
+}
+
 #[test]
 fn the_answers() {
     let (d, ctx) = world("answers", "exit 0");
@@ -239,28 +318,28 @@ fn the_answers() {
         "no agentType"
     ));
     assert!(refused(
-        &run(&json!({"script": "// GP_OK: one deliberate\nagent('x', {})"})),
+        &run(&json!({"script": "agent('x', {agentType: 'Plan'})"})),
         "names no model"
     ));
     assert!(refused(
         &run(&json!({"script": "agent('x', {agentType: 'quote-check'})"})),
         "name: \"check-wave\""
     ));
-    let named = run(&json!({"script": "agent('x', {agentType: 'own', model: 'fable'})"}));
+    let named = run(&json!({"script": "agent('x', {agentType: 'Plan', model: 'fable'})"}));
     assert!(refused(&named, "names the model `fable`: agent('x'"));
     assert!(refused(&named, "SESSION_MODEL: <what it judges or builds"));
     assert!(refused(&named, "would not follow the session's"));
     assert!(refused(
-        &run(&json!({"script": "agent('x', {agentType: 'own', model: m})"})),
-        "names the model `?`: agent('x', {agentType: 'own', model: m})\u{1b}[0m\n`?` is a model computed at run time"
+        &run(&json!({"script": "agent('x', {agentType: 'Plan', model: m})"})),
+        "names the model `?`: agent('x', {agentType: 'Plan', model: m})\u{1b}[0m\n`?` is a model computed at run time"
     ));
     assert!(refused(
-        &run(&json!({"script": "// GP_OK: one deliberate\nagent('x', {})"})),
-        "NO model and `SESSION_MODEL: <"
+        &run(&json!({"script": "agent('x', {agentType: 'Plan'})"})),
+        "NO model and\n`SESSION_MODEL: <"
     ));
     for passes in [
-        "agent('x', {agentType: 'own' /* SESSION_MODEL: judges the plan */})",
-        "// GP_OK: one deliberate\nagent('SESSION_MODEL: builds the stage', {})",
+        "agent('x', {agentType: 'Plan' /* SESSION_MODEL: judges the plan */})",
+        "// GP_OK: one deliberate\nagent('x', {model: 'haiku'})\nagent('SESSION_MODEL: builds the stage', {agentType: 'claude'})",
     ] {
         assert!(run(&json!({"script": passes})).is_empty());
     }

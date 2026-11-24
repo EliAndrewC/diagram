@@ -1284,6 +1284,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
+  },
+  "### T217 (probed 2026-11-24: a built-in type's own definition sets its model, so a marked `Explore` was recorded `session-model` and ran Opus)": {
+   "sha256": "23a9cdb8d8ff5664d2a72da707fdf5aa2a7c2dd5fa2fb4a62dc8cd60e4d6c258",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T217 Approach (checklist part A)": {
+   "sha256": "fdcc9631d8bea5db1ea0ca62c348090598b57efd1b9e7330dc8c8f3689ea8dca",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -18351,6 +18363,46 @@
      "why": "These make the rule's written text match the rule the GM set. The search space is stated: grep for the rule's two phrases over the tree outside .git, observed 2026-11-24. Leaving history unedited narrows nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T217 (probed 2026-11-24: a built-in type's own definition sets its model, so a marked `Explore` was recorded `session-model` and ran Opus)",
+    "### T217 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Approach (INHERITS list)",
+     "summary": "The SESSION_MODEL line passes only on general-purpose, Plan and claude, the types measured 2026-11-24 to run on the session's model; any other ad-hoc type without a named sonnet/haiku is refused with one message naming the two routes; defined types and sonnet/haiku dispatches unchanged.",
+     "class": "within",
+     "why": "The GM 2026-11-24: 'instead of Opus for anything that judges, I'd like it to be inheriting the parent session model for anything that judges'. The probe showed a marked Explore ran Opus 5.5 under a Fable 5.2 session and was logged session-model, which is the opposite of the request. Accepting the line only where the type is measured to inherit is what makes the rule true. The reading route (sonnet) is untouched."
+    },
+    {
+     "id": "Decision (a)",
+     "summary": "The list holds types measured to inherit, not types found pinned, so the unprobed built-ins (web-fetch, claude-code-guide, statusline-setup) and any type added later are refused for judging until probed.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior. The GM asked that judging run on his selected model, not that every built-in type be usable for judging. general-purpose has every tool those types have, so no judging work is lost. Letting an unprobed type through would assume an inheritance nobody measured. That is the gap T217 exists to close, and the earlier MODE 4 round ruled passing web-fetch a narrowing."
+    },
+    {
+     "id": "Decision (b)",
+     "summary": "Every refusal of an unlisted type (marked, unmarked, or naming another model) prints the new two-route message instead of the rule text's 'Re-send the SAME dispatch', and the rule text is unchanged.",
+     "class": "within",
+     "why": "Wording of the refusal only. It refuses nothing that T216 and Decision (a) do not already refuse. It stops the old message from pointing the caller into a second refusal, so it serves the request and the project's refusal-names-the-compliant-command convention."
+    },
+    {
+     "id": "Decision (c)",
+     "summary": "A workflow agent() call that names no agentType is treated as an unmeasured type. It passes only if it names sonnet or haiku to read, and is otherwise refused (PINNED), with the route agentType 'general-purpose' plus the line. A GP_OK untyped stage may only read.",
+     "class": "within",
+     "why": "The untyped call is the default workflow subagent, not general-purpose, and nobody has probed what model it runs on. The reference's sentence that it inherits is a document, not a measurement, and this project's standing rule is measured, never assumed. Refusing it applies Decision (a)'s standard to a route the request covers ('anything that judges'). A judging stage keeps a working route (agentType general-purpose, which already passed without GP_OK), so nothing the GM asked for is lost. The refusal reaches only judging dispatches on an unmeasured path, which is exactly what the GM asked to have enforced."
+    },
+    {
+     "id": "Restated / left alone",
+     "summary": "The docs, rules page, index line, doc comments and suites that carry SESSION_MODEL are restated. The list comes from a stated grep over the tree outside specs/ and .git. The root CLAUDE.md's two clauses are left unchanged, and the guard's message carries the type list.",
+     "class": "within",
+     "why": "Documentation follows the guard. The census states its search space. The root clause's two routes (sonnet to read; no model plus the line to judge or build) are still true and are not narrowed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -29543,6 +29595,44 @@
      "summary": "The rule is restated in the root CLAUDE.md and its suite check, docs/guards.md, docs/spec-kit-and-reviews.md, docs/research-doctrine.md, page-session-rules.md and rust/guard/CLAUDE.md. Spec directories 252 and 293 are left alone as history.",
      "class": "within",
      "why": "These make the rule's written text match the rule the GM set. The search space is stated: grep for the rule's two phrases over the tree outside .git, observed 2026-11-24. Leaving history unedited narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T217": {
+   "section_sha256": "96817ce1a0c8564c43d3cca1cc57f0be8058377c6abfb00f19e2735282abd8e7",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach (INHERITS list)",
+     "summary": "The SESSION_MODEL line passes only on general-purpose, Plan and claude, the types measured 2026-11-24 to run on the session's model; any other ad-hoc type without a named sonnet/haiku is refused with one message naming the two routes; defined types and sonnet/haiku dispatches unchanged.",
+     "class": "within",
+     "why": "The GM 2026-11-24: 'instead of Opus for anything that judges, I'd like it to be inheriting the parent session model for anything that judges'. The probe showed a marked Explore ran Opus 5.5 under a Fable 5.2 session and was logged session-model, which is the opposite of the request. Accepting the line only where the type is measured to inherit is what makes the rule true. The reading route (sonnet) is untouched."
+    },
+    {
+     "id": "Decision (a)",
+     "summary": "The list holds types measured to inherit, not types found pinned, so the unprobed built-ins (web-fetch, claude-code-guide, statusline-setup) and any type added later are refused for judging until probed.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior. The GM asked that judging run on his selected model, not that every built-in type be usable for judging. general-purpose has every tool those types have, so no judging work is lost. Letting an unprobed type through would assume an inheritance nobody measured. That is the gap T217 exists to close, and the earlier MODE 4 round ruled passing web-fetch a narrowing."
+    },
+    {
+     "id": "Decision (b)",
+     "summary": "Every refusal of an unlisted type (marked, unmarked, or naming another model) prints the new two-route message instead of the rule text's 'Re-send the SAME dispatch', and the rule text is unchanged.",
+     "class": "within",
+     "why": "Wording of the refusal only. It refuses nothing that T216 and Decision (a) do not already refuse. It stops the old message from pointing the caller into a second refusal, so it serves the request and the project's refusal-names-the-compliant-command convention."
+    },
+    {
+     "id": "Decision (c)",
+     "summary": "A workflow agent() call that names no agentType is treated as an unmeasured type. It passes only if it names sonnet or haiku to read, and is otherwise refused (PINNED), with the route agentType 'general-purpose' plus the line. A GP_OK untyped stage may only read.",
+     "class": "within",
+     "why": "The untyped call is the default workflow subagent, not general-purpose, and nobody has probed what model it runs on. The reference's sentence that it inherits is a document, not a measurement, and this project's standing rule is measured, never assumed. Refusing it applies Decision (a)'s standard to a route the request covers ('anything that judges'). A judging stage keeps a working route (agentType general-purpose, which already passed without GP_OK), so nothing the GM asked for is lost. The refusal reaches only judging dispatches on an unmeasured path, which is exactly what the GM asked to have enforced."
+    },
+    {
+     "id": "Restated / left alone",
+     "summary": "The docs, rules page, index line, doc comments and suites that carry SESSION_MODEL are restated. The list comes from a stated grep over the tree outside specs/ and .git. The root CLAUDE.md's two clauses are left unchanged, and the guard's message carries the type list.",
+     "class": "within",
+     "why": "Documentation follows the guard. The census states its search space. The root clause's two routes (sonnet to read; no model plus the line to judge or build) are still true and are not narrowed."
     }
    ],
    "verdict": "CLEAR"

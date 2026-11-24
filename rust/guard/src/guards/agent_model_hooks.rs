@@ -16,6 +16,13 @@
 //! table exactly as an opus reader had, haiku misread its columns - the message keeps only the rule that follows from it, and names
 //! neither this file nor the rulings' dates (message-check, 451 T216: a reader of the refusal acts on none of them). A DEFINED type passes whatever it names: its file pins its tier, and it is
 //! judged before the model is read.
+//!
+//! THE LINE PASSES ONLY ON A TYPE MEASURED TO INHERIT (feature 451 T217): a built-in type's own definition can set a model, and the harness then
+//! runs that one whatever the prompt says - so a marked `Explore` was recorded `session-model` while it ran Opus under a Fable session. The types
+//! are a list of what was measured (`INHERITS`), not a deny list of what was found pinned: a built-in nobody probed (`web-fetch`,
+//! `claude-code-guide`, `statusline-setup`) and one the harness adds later are refused until someone measures them. Any refusal of an unlisted
+//! type prints its own message with the two routes that work for it - name `sonnet` to read, dispatch `general-purpose` to judge or build - and
+//! never the rule's "re-send the SAME dispatch" with the line, which would be refused a second time.
 
 use std::path::{Path, PathBuf};
 
@@ -43,6 +50,18 @@ const RULE: &str = include_str!("agent_model_rule.txt");
 
 /// The models an ad-hoc dispatch may NAME: the reading tiers. Anything else named is refused (see the module's WHY).
 pub(crate) const READING: [&str; 2] = ["sonnet", "haiku"];
+
+/// The ad-hoc types whose model-less dispatch runs on the SESSION's model - the only ones the `SESSION_MODEL:` line passes on. MEASURED 2026-11-24
+/// on a Fable 5.2 session (feature 451 T217's task line), each probe agent asked to state its own model: `general-purpose`, `Plan` and `claude`
+/// with no `model` ran Fable 5.2; `Explore` with no `model` ran Opus 5.5 (its built-in definition's) and with `model: sonnet` ran Sonnet 5.5, so
+/// it is not here. Matched exactly, as the harness names them. A type joins this list by the same probe, its date beside it.
+pub(crate) const INHERITS: [&str; 3] = ["general-purpose", "Plan", "claude"];
+
+/// `INHERITS` as a refusal says it: `` `general-purpose`, `Plan` and `claude` ``.
+pub(crate) fn inheriting() -> String {
+    let [head @ .., last] = INHERITS;
+    format!("`{}` and `{last}`", head.join("`, `"))
+}
 
 /// The marker's token (`workflow_hooks` reads the same token in a script's `agent()` call).
 const MARKER: &str = "SESSION_MODEL";
@@ -126,6 +145,34 @@ pub(crate) fn judge(event: &Event, session: &Session, tree: &Path) -> Vec<Answer
     if READING.contains(&model) {
         note(&format!("{kind} on {model}"), "model-named");
         return Vec::new();
+    }
+    if !INHERITS.contains(&kind) {
+        // Its own definition may set its model (451 T217): the line, and an omitted model, decide nothing here.
+        let (detail, rule) = if !model.is_empty() {
+            (format!("{kind} on {model}"), "judging-model-named")
+        } else if session_model(given("prompt")).is_some() {
+            (
+                format!("{kind} marked {MARKER}, a type not measured to inherit"),
+                "type-not-inheriting",
+            )
+        } else {
+            (
+                format!("{kind} dispatched with no model and no {MARKER} line"),
+                "no-model",
+            )
+        };
+        log::fire(
+            "agent-model",
+            "blocked",
+            &detail,
+            rule,
+            &event.input,
+            session,
+        );
+        return vec![Answer::Refuse(format!(
+            "\n\u{1b}[1mBLOCKED: this `{kind}` agent would not run on the session's model - only {} inherit it.\u{1b}[0m\n  - to read, fetch, translate or extract, re-send it with\n        model: \"sonnet\"\n  - for anything that judges or builds, dispatch `general-purpose` instead, with NO `model` and a prompt\n    line of its own (not the first):\n        {MARKER}: <what it judges or builds, two words or more>\n",
+            inheriting()
+        ))];
     }
     let (detail, rule, head) = if model.is_empty() {
         if let Some(why) = session_model(given("prompt")) {

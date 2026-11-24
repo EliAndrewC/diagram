@@ -94,4 +94,5 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
   amendment 3: run together, each check's edits re-owed the others, and pop-ups reached the round cap).
 - An ad-hoc agent always states its model: `model: sonnet` to read, fetch, translate or extract; for anything that
   judges or builds, no `model` and a line of the prompt `SESSION_MODEL: <what it judges or builds>` - it runs on the
-  session's model (the GM 2026-11-24).
+  session's model (the GM 2026-11-24). The line works on `general-purpose`, `Plan` and `claude` only: an `Explore` names
+  `sonnet`.

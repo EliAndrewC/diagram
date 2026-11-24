@@ -242,7 +242,9 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   it misread a table's columns where sonnet did not); for anything that judges or builds, no `model` and a line of the
   prompt `SESSION_MODEL: <what it judges or builds, two words or more>`, so it runs on the session's model and follows the
   GM when they switch it (feature 451 T216, the GM 2026-11-24: *"instead of Opus for anything that judges, I'd like it to be
-  inheriting the parent session model for anything that judges"*). `agent_model_hooks.rs` refuses a dispatch with neither -
+  inheriting the parent session model for anything that judges"*). The line passes only on a type measured to inherit -
+  `general-purpose`, `Plan` or `claude`; an `Explore` runs its own definition's model, so it reads, on `sonnet`, or the work
+  goes to `general-purpose` (feature 451 T217, measured 2026-11-24). `agent_model_hooks.rs` refuses a dispatch with neither -
   reading work must not land on the session's model by omission - and one that names any other model (`opus`, `fable`),
   which would not follow the switch; a Workflow script's ad-hoc `agent()` call is held to the same rule (`workflow_hooks.rs`). A DEFINED agent launches without this file, the nested `CLAUDE.md` files and the memory index
   (`omitClaudeMd: true`, feature 256, GM 2026-09-19: *"If there's something that a subagent should know, it should be in

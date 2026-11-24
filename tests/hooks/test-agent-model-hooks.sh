@@ -1,6 +1,7 @@
 #!/bin/bash
 # Tests for the agent-model guard (rust/guard, replayed through its link) - an ad-hoc agent dispatch states its model, or is refused (feature 252):
-# sonnet or haiku named for reading work, the session's model - no `model`, a SESSION_MODEL line in the prompt - for judging or building (451 T216).
+# sonnet or haiku named for reading work, the session's model - no `model`, a SESSION_MODEL line in the prompt - for judging or building (451 T216),
+# and that line only on a type measured to inherit it (451 T217).
 # Run: tests/hooks/test-agent-model-hooks.sh   (exit 0 = all green)
 # GUARD_EDIT_OK: feature 252 - a NEW guard's companion suite.
 #
@@ -52,7 +53,24 @@ dispatch '{"subagent_type":"general-purpose","prompt":"451 T216: review it\nSESS
 dispatch '{"subagent_type":"general-purpose","prompt":"the guard reads a SESSION_MODEL: line of the prompt, as the docs say","description":"x"}'
 [ "$(rc)" -eq 2 ] && ok "a MENTION of the marker inside a line is not the line" || no "a mention passed" "(rc=$(rc))"
 
+dispatch '{"subagent_type":"Explore","prompt":"451 T217: judge it\nSESSION_MODEL: judges the plan section\n","description":"x"}'
+[ "$(rc)" -eq 2 ] && ok "a MARKED Explore is refused: it runs its own definition's model, not the session's (451 T217)" || no "a marked Explore passed" "(rc=$(rc))"
+grep -q 'model: "sonnet"' "$T/err" && grep -q 'dispatch `general-purpose`' "$T/err" && ok "...the message names the two routes: sonnet to read, general-purpose to judge or build" || no "the message does not name the two routes"
+grep -q 'only `general-purpose`, `Plan` and `claude` inherit' "$T/err" && ok "...and the types that do inherit" || no "the message does not name the inheriting types"
+grep -qi 're-send the same' "$T/err" && no "the message tells an Explore to re-send the same dispatch with the line" || ok "...and does not offer the line on the same type"
+logged type-not-inheriting && ok "...recorded blocked/type-not-inheriting" || no "type-not-inheriting not recorded"
+dispatch '{"subagent_type":"web-fetch","prompt":"SESSION_MODEL: judges the page read\nread it","description":"x"}'
+[ "$(rc)" -eq 2 ] && ok "a marked type nobody probed (web-fetch) is refused: the list is what was measured" || no "a marked web-fetch passed" "(rc=$(rc))"
+dispatch '{"subagent_type":"Explore","prompt":"find the callers","description":"x"}'
+grep -q 'SESSION_MODEL: <' "$T/err" && grep -q 'dispatch `general-purpose`' "$T/err" && ok "an unmarked Explore is offered the line only on general-purpose" || no "an unmarked Explore is offered a line that would be refused"
+
 echo "2. what passes"
+for kind in Plan claude; do
+  dispatch '{"subagent_type":"'$kind'","prompt":"451 T217: judge it\nSESSION_MODEL: judges the plan section\n","description":"x"}'
+  [ "$(rc)" -eq 0 ] && ok "a marked $kind passes: measured to inherit the session's model (451 T217)" || no "a marked $kind was refused" "(rc=$(rc))"
+done
+dispatch '{"subagent_type":"Explore","model":"sonnet","prompt":"find the callers","description":"x"}'
+[ "$(rc)" -eq 0 ] && ok "an Explore naming sonnet passes: the named model is what it runs" || no "Explore on sonnet was refused" "(rc=$(rc))"
 dispatch '{"subagent_type":"general-purpose","model":"sonnet","prompt":"read three pages","description":"x"}'
 [ "$(rc)" -eq 0 ] && [ ! -s "$T/err" ] && ok "the same dispatch WITH a model passes, silently" || no "a named model was refused" "(rc=$(rc))"
 logged model-named && ok "...recorded permitted/model-named" || no "model-named not recorded"

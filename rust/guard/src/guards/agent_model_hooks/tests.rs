@@ -40,8 +40,8 @@ fn refused(got: &[Answer], words: &str) -> bool {
 #[test]
 fn a_dispatch_with_no_model_and_no_file_is_refused_with_the_rule() {
     let at = world("refuse");
-    let got = run("Agent", &json!({"subagent_type": "Explore"}), &at);
-    assert!(refused(&got, "this `Explore` agent names no model"));
+    let got = run("Agent", &json!({"subagent_type": "general-purpose"}), &at);
+    assert!(refused(&got, "this `general-purpose` agent names no model"));
     assert!(refused(&got, "for anything that judges or builds"));
     assert!(refused(&got, "\n        SESSION_MODEL: <"));
     assert!(refused(&run("Agent", &json!({}), &at), "`general-purpose`"));
@@ -98,6 +98,53 @@ fn the_sessions_model_is_asked_for_by_the_prompts_line_never_by_name() {
         &at
     )
     .is_empty());
+}
+
+/// 451 T217: the line passes only on a type measured to run on the session's model; any other ad-hoc type is refused with the two routes.
+#[test]
+fn the_line_passes_only_on_a_type_measured_to_inherit() {
+    let at = world("inherits");
+    let send = |kind: &str, model: &str, prompt: &str| {
+        run(
+            "Agent",
+            &json!({"subagent_type": kind, "model": model, "prompt": prompt}),
+            &at,
+        )
+    };
+    let marked = "451 T217: judge it\nSESSION_MODEL: judges the plan section";
+    for kind in super::INHERITS {
+        assert!(send(kind, "", marked).is_empty(), "{kind}");
+    }
+    assert_eq!(
+        super::inheriting(),
+        "`general-purpose`, `Plan` and `claude`"
+    );
+    // Marked, unmarked or naming a judging model: an unlisted type gets the routes that work for it, never the line on itself.
+    for (kind, model, prompt) in [
+        ("Explore", "", marked),
+        ("web-fetch", "", marked),
+        ("plan", "", marked),
+        ("Explore", "", "find the callers"),
+        ("Explore", "opus", marked),
+    ] {
+        let got = send(kind, model, prompt);
+        assert!(refused(
+            &got,
+            &format!("this `{kind}` agent would not run on the session's model - only `general-purpose`, `Plan` and `claude` inherit it.")
+        ));
+        assert!(refused(&got, "re-send it with\n        model: \"sonnet\""));
+        assert!(refused(
+            &got,
+            "dispatch `general-purpose` instead, with NO `model`"
+        ));
+        assert!(refused(
+            &got,
+            "\n        SESSION_MODEL: <what it judges or builds"
+        ));
+        assert!(!refused(&got, "Re-send the SAME dispatch"));
+    }
+    assert!(send("Explore", "sonnet", marked).is_empty());
+    assert!(send("Explore", "haiku", "describe the page").is_empty());
 }
 
 #[test]
