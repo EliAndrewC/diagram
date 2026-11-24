@@ -14,7 +14,8 @@ pub mod fords;
 pub mod index;
 pub mod margins;
 
-/// Why no margin seats the settlement, even backed to the hill off the wind: refused by name (S4).
+/// Why no margin seats the settlement, even backed to the hill off the wind or asked for its way out from its band's ends: refused
+/// by name (S4), and the roll with it - no map is drawn of a hamlet with no seat (`driver::whole`, 449 T426).
 #[derive(Debug, PartialEq, Eq)]
 pub struct SeatRefused(pub String);
 
@@ -98,16 +99,45 @@ pub struct Seated {
 
 pub use crate::counts::tally;
 
+/// Where along its band a walled-in seat is asked for its way out once no margin is left, in half-lengths either side of its center.
+///
+/// Research:
+///     the way out from the band's ends - GUESS research/questions/0081-village-lanes.drawing.html: lanes keep to dry ground and the page is silent on which point of a cluster its way out leaves from; 0.6 of the half-length either side of the center, the stations the band's ground is sampled at (`margins::SAMPLE_ALONG`)
+pub const BAND_EXITS: [f64; 2] = [-0.6, 0.6];
+
+/// The walled-in seats that have a dry way out from a station of their band (`BAND_EXITS`), in the order the ranking held them.
+///
+/// Research:
+///     a seat astride the brook leaves by its open bank - GUESS research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: "Where the site that faces the fields and has its back to the winter wind is crossed by the brook, the houses are built on both banks" - so a band whose center falls in the pocket between the brook, the intake's feeder and the field's corner, the rest of it on open ground, is no walled-in site; the record does not say where a cluster's way out starts (research/questions/0081-village-lanes.drawing.html keeps lanes on dry ground), so it is asked of the band's two stations, and only once no margin is left, each refused or walled in at its center and the hill-backed seat asked where a fall runs into the wind - 4 of 35,000 valley rolls, each falling square across its wind with its windward flank on the wet toe, the one seat kept at the head's windward corner over the intake (measured 2026-11-24: 20,000 cohort seeds at five starts and seeds 1 to 1,500 at ten sizes and falls; none refused after, none with a map check broken, the four bands 0.03 to 0.05 percent on the paddy)
+fn open_at_an_end(
+    shut: Vec<Frame>,
+    way: &mut exit::Exit,
+    counts: &mut HashMap<String, u64>,
+) -> Vec<Frame> {
+    shut.into_iter()
+        .filter(|f| {
+            BAND_EXITS.iter().any(|t| {
+                let at = (
+                    f.center.0 + f.along.0 * f.band.0 * t,
+                    f.center.1 + f.along.1 * f.band.0 * t,
+                );
+                way.has_exit(at, counts)
+            })
+        })
+        .collect()
+}
+
 /// The seat: the fords opened first, every later way gapped at them; the candidate margins refused and ranked; the head given a
-/// dry way out of the frame, the next margin taken where it has none.
+/// dry way out of the frame, the next margin taken where it has none; where none is left, the walled-in seats asked again from
+/// their bands' ends (`open_at_an_end`).
 ///
 /// # Errors
 /// `SeatRefused` where no margin keeps every rule.
 ///
 /// Research:
-///     a walled-in head gives way - research/questions/0081-village-lanes.drawing.html: lanes keep to dry ground, so a margin whose seat has no dry way out of the frame is dropped and the next in the ranking taken
+///     a walled-in head gives way - research/questions/0081-village-lanes.drawing.html: lanes keep to dry ground, so a margin whose seat has no dry way out of the frame from its center is dropped and the next in the ranking taken; once none is left the dropped seats are asked again from their bands' ends (`open_at_an_end`), and one with a way out there is kept
 ///     the fords before the seat - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses the brook only at a crossing place, so the seat's way out is asked of the brook gapped at them
-///     the back to the hill where the wind cannot be backed - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: where a map declares a fall toward the wind, no margin is both high and windward, so the cluster takes the high, dry one, its back to the hill and off the wind - once no margin facing the wind is left, each refused or its seat walled in, the margins are ranked again with the high side as the wind's, each seat recorded off the wind; its belt still on the windward side, between the houses and the paddy (`margins::ranked`)
+///     the back to the hill where the wind cannot be backed - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: where a map declares a fall toward the wind, no margin is both high and windward, so the cluster takes the high, dry one, its back to the hill and off the wind - once no margin facing the wind is left, each refused or its seat walled in, the margins are ranked again (a fall square across the wind, to its floating point's slack, is not one toward it) with the high side as the wind's, each seat recorded off the wind; its belt still on the windward side, between the houses and the paddy (`margins::ranked`); where the hill-backed ranking leaves none either, the seats walled in at their centers, of both rankings, are asked from their bands' ends, the wind-facing ones first (`open_at_an_end`)
 pub fn seat(inp: &SeatIn) -> Result<Seated, SeatRefused> {
     let mut counts = HashMap::new();
     let (spacing, half, bend) = inp.ford;
@@ -119,8 +149,10 @@ pub fn seat(inp: &SeatIn) -> Result<Seated, SeatRefused> {
     // down from the high side, each seat recorded off the wind
     // only a fall toward the wind: a rolled fall runs away from it or square across it, and a map whose margins facing the
     // wind are all refused is refused by name, never seated off the wind (449 T261, its impl-drift's OUTSIDE THE CHANGE)
-    let mut hill = inp.fall.0 * inp.wind.0 + inp.fall.1 * inp.wind.1 > 0.0;
-    let mut walled = 0;
+    // ...and a fall square across it is no fall toward it, whichever way its dot with the wind rounds (449 T426: the driver's 315
+    // degrees came out a hair above nothing, 135 a hair below, so 3 of 20,000 cohort combs backed the hill; `margins::SQUARE_EPS`)
+    let mut hill = inp.fall.0 * inp.wind.0 + inp.fall.1 * inp.wind.1 > margins::SQUARE_EPS;
+    let mut shut: Vec<Frame> = Vec::new();
     let mut lines = inp.lines.clone();
     lines.extend(stream_segs.iter().copied());
     let mut way = exit::Exit::new(&inp.walls, &lines, inp.canvas, &mut counts);
@@ -129,8 +161,7 @@ pub fn seat(inp: &SeatIn) -> Result<Seated, SeatRefused> {
             if way.has_exit(head.center, &mut counts) {
                 break;
             }
-            ranked.remove(0);
-            walled += 1;
+            shut.push(ranked.remove(0));
         }
         // ...ASKED ONCE NO MARGIN FACING THE WIND IS LEFT, WALLED IN OR REFUSED (449 T423): before it the hill was asked only
         // when the ranking kept none, so a site whose one kept margin had no dry way out was refused with its high margin
@@ -149,6 +180,14 @@ pub fn seat(inp: &SeatIn) -> Result<Seated, SeatRefused> {
             .into_iter()
             .map(|f| Frame { offwind: true, ..f })
             .collect();
+    }
+    let mut walled = shut.len();
+    if ranked.is_empty() {
+        // THE WAY OUT ASKED OF THE BAND'S ENDS, ONCE NOTHING IS LEFT (449 T426): seeds 941239097 (a cohort comb) and 508 (20
+        // households falling at 135 degrees) kept one seat, at the head's windward corner, whose center stood in the pocket between
+        // the brook, the feeder and the field while its band lay on open ground either side
+        ranked = open_at_an_end(shut, &mut way, &mut counts);
+        walled -= ranked.len();
     }
     if ranked.is_empty() {
         let [frame, belt, toe, field, reeds, back] = stopped;

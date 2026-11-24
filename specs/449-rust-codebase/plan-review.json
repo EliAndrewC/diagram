@@ -1902,6 +1902,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
+  },
+  "### T426 (seed 508 written as a map with no settlement, and `make seeds`' fresh comb seed 941239097 refused by the seat, 2026-11-24: why each has no seat, the seat found for them, and a refused roll made no map)": {
+   "sha256": "379c77b07336988fda8beed521c0114ebefcd35c5494cc76294673afcfcfd62f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T426 Approach (checklist part A)": {
+   "sha256": "ad3dcae7aa73eceef8ad54bc05e0365b51bd60c395fa8a1f36af4d2106d9ffcf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -26248,6 +26260,110 @@
      "summary": "polder.rs is split into creeks.rs and tests.rs with claim keys held. No researched constant moves (CREEK_FT and EASE_STEPS are new knobs, labeled GUESS). No budget changes.",
      "class": "within",
      "why": "These are housekeeping and record entries inside the task. They change no scope the GM set."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T426 (seed 508 written as a map with no settlement, and `make seeds`' fresh comb seed 941239097 refused by the seat, 2026-11-24: why each has no seat, the seat found for them, and a refused roll made no map)",
+    "### T426 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T426-build-band-exits",
+     "summary": "Seat the four refused rolls (fall at 135 degrees, windward flank wet) by asking the way out from the band's ends (seat::BAND_EXITS, 0.6 of the half-length, a GUESS and a knob) when the head's windward-corner seat is walled in at its center",
+     "class": "within",
+     "why": "Fixes a measured wrong outcome (a valley with no settlement; seed 508 a hamlet with no ground, bare winter, no dry field) under the GM 2026-11-24 'if there are real defects, then I do want to find them and fix them'; the seat taken is the one 0035/0031.drawing give (both banks, back to the wind); the unresearched station is a knob per constitution XII."
+    },
+    {
+     "id": "T426-only-once-no-margin-left",
+     "summary": "The band's-ends question is asked only once every margin is refused or walled in, so no roll that seated before seats differently",
+     "class": "within",
+     "why": "A scope choice of the fix's reach, not a carve-out from anything the GM asked: the request is to fix defects, and no roll that already seated is measured as a defect; maps that work are left alone per the 2026-11-19 'don't spend time fixing things which are not actually wrong'."
+    },
+    {
+     "id": "T426-hill-backed-not-built",
+     "summary": "The hill-backed seat for a fall across the wind, which also reaches zero refusals, is not built",
+     "class": "within",
+     "why": "Choosing one of two candidates that both fix the defect; the rejected one would contradict 0031.drawing and T261's ruling (a rolled fall keeps its back to the wind). Design choice, not a narrowing."
+    },
+    {
+     "id": "T426-refused-roll-no-map",
+     "summary": "driver::whole refuses a roll that kept any stage's refusal (comb seat, polder seat, sluices): make hamlet writes nothing and exits 1; make seeds, make cohort and hamlet --check count it failed; the record's refusals key stays, always empty",
+     "class": "within",
+     "why": "Writing a map of a hamlet with no seat is itself a wrong outcome (seed 508's record); refusing it serves the same defect fix and the seeds gate's existing rule that a refused seed is a failing seed. Every keeper of a refusal is censused with its search space (grep -n 'kept(' rust/phases/src)."
+    },
+    {
+     "id": "T426-read-not-filed",
+     "summary": "Three research-page silences (0057's toe on a tapering flank, 0031's wet-windward-flank case, 0081's way-out point) are noted and not filed",
+     "class": "within",
+     "why": "None is a wrong outcome on any measured roll (0 of 41,000 refused after, no map check broken, after-map reads right); under constitution XIV's definition (GM 2026-11-19) a page's silence or a difference from expectation is not a defect, so leaving them is not leaving a known bug."
+    },
+    {
+     "id": "T426-order-and-budget",
+     "summary": "Before T158, after T423 and T418; no work-budget step owed since the new question is asked only on rolls that were refused, which no budget seed is",
+     "class": "within",
+     "why": "Sequencing and a measured budget reading (work-budget unchanged, 2026-11-24); inside the GM's 2026-11-24 close-out list, which names T426."
+    },
+    {
+     "id": "T426-seeds-pool",
+     "summary": "Seed 941239097 dropped from dev/known-seeds.txt once it rolls clean; pool empty",
+     "class": "within",
+     "why": "The seeds gate's existing rule, applied."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T426 (seed 508 written as a map with no settlement, and `make seeds`' fresh comb seed 941239097 refused by the seat, 2026-11-24: why each has no seat, the seat found for them, and a refused roll made no map)",
+    "### T426 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T426-band-ends",
+     "summary": "Seat a walled-in or wholly refused comb by asking the way out from the band's ends (seat::BAND_EXITS, 0.6 of the half-length, a GUESS and a knob), asked only once no margin is left, so no roll that seated before changes",
+     "class": "within",
+     "why": "Fixes a measured defect (seed 941239097 refused, seed 508 written with no settlement), which the GM's 2026-11-24 words ask for: 'if there are real defects, then I do want to find them and fix them'. No rule eased; the kept seat keeps its back to the wind per 0031 and straddles the brook per 0035; the unresearched station is a declared knob per constitution XII."
+    },
+    {
+     "id": "T426-hill-backed-not-built",
+     "summary": "The alternative (hill-backed seat for any fall once no margin is left) also reached zero refusals but was not built, because it seats four hamlets off the wind against 0031.drawing and T261's ruling",
+     "class": "within",
+     "why": "A choice between candidates that each fix the defect; the one chosen holds the research as it stands. It narrows nothing asked."
+    },
+    {
+     "id": "T426-square-eps",
+     "summary": "A fall square across the wind to floating-point slack (margins::SQUARE_EPS) is no fall toward it, so the 315-degree rolls stop backing the hill and seat with their back to the wind",
+     "class": "within",
+     "why": "A wrong outcome (seats off the wind where 0031.drawing keeps a rolled fall's back to the wind, 4 measured rolls) found during the task and fixed in it, as the GM's fix-as-we-go rule (2026-11-18) and 2026-11-24 words ask."
+    },
+    {
+     "id": "T426-refused-roll-no-map",
+     "summary": "driver::whole refuses a roll that kept any stage's refusal (comb seat, polder seat, sluices): make hamlet writes nothing and exits 1, seeds/cohort/--check count it failed; the record's refusals key kept, always empty",
+     "class": "within",
+     "why": "Fixes a defect (a map written of a seatless hamlet, with a bare winter and no dry field against 0011.drawing); the seeds gate's rule that a refused seed is a failing seed. Keeping the key so no pool record changes shape is an implementation detail inside the fix."
+    },
+    {
+     "id": "T426-band-on-toe-tip",
+     "summary": "The new seats' bands cross the toe's tip (1.4 and 2.4 percent) and are kept, since center and margin midpoint are off the toe as the seat rule asks of every seat; where houses stand is the house stage's",
+     "class": "within",
+     "why": "Applies the existing toe rule unchanged to the new seats (no rule eased); no map check broken across 22,000 cohort seeds. Not a narrowing of the request: nothing the GM asked is left undone, and no wrong outcome on a measured roll is reported."
+    },
+    {
+     "id": "T426-page-questions-not-filed",
+     "summary": "Three page questions (0057's toe on a tapering flank, 0031's fall across the wind with a wet windward flank, 0081's start of a way out) read and not filed",
+     "class": "within",
+     "why": "Each is stated as a research page's silence with no wrong outcome on any measured roll; under constitution XIV's definition of a defect, a difference or gap that is not a wrong outcome is not one, so leaving it is not a defect left."
+    },
+    {
+     "id": "T426-order-budget-exits",
+     "summary": "Order before T158 after T423/T418; no work-budget step owed since the new question is asked only on previously refused rolls; exits and done-measures as listed",
+     "class": "within",
+     "why": "T426 is named in the GM's 2026-11-24 close-out list before the port resumes; the budget and exit choices settle nothing the request or spec left otherwise."
     }
    ]
   }
@@ -54173,6 +54289,56 @@
      "summary": "polder.rs is split into creeks.rs and tests.rs with claim keys held. No researched constant moves (CREEK_FT and EASE_STEPS are new knobs, labeled GUESS). No budget changes.",
      "class": "within",
      "why": "These are housekeeping and record entries inside the task. They change no scope the GM set."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T426": {
+   "section_sha256": "f6f3a03665ed1d01d52b7c4929c7c7a0248c4cad7b44a1103e2ad95ce4a91869",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T426-band-ends",
+     "summary": "Seat a walled-in or wholly refused comb by asking the way out from the band's ends (seat::BAND_EXITS, 0.6 of the half-length, a GUESS and a knob), asked only once no margin is left, so no roll that seated before changes",
+     "class": "within",
+     "why": "Fixes a measured defect (seed 941239097 refused, seed 508 written with no settlement), which the GM's 2026-11-24 words ask for: 'if there are real defects, then I do want to find them and fix them'. No rule eased; the kept seat keeps its back to the wind per 0031 and straddles the brook per 0035; the unresearched station is a declared knob per constitution XII."
+    },
+    {
+     "id": "T426-hill-backed-not-built",
+     "summary": "The alternative (hill-backed seat for any fall once no margin is left) also reached zero refusals but was not built, because it seats four hamlets off the wind against 0031.drawing and T261's ruling",
+     "class": "within",
+     "why": "A choice between candidates that each fix the defect; the one chosen holds the research as it stands. It narrows nothing asked."
+    },
+    {
+     "id": "T426-square-eps",
+     "summary": "A fall square across the wind to floating-point slack (margins::SQUARE_EPS) is no fall toward it, so the 315-degree rolls stop backing the hill and seat with their back to the wind",
+     "class": "within",
+     "why": "A wrong outcome (seats off the wind where 0031.drawing keeps a rolled fall's back to the wind, 4 measured rolls) found during the task and fixed in it, as the GM's fix-as-we-go rule (2026-11-18) and 2026-11-24 words ask."
+    },
+    {
+     "id": "T426-refused-roll-no-map",
+     "summary": "driver::whole refuses a roll that kept any stage's refusal (comb seat, polder seat, sluices): make hamlet writes nothing and exits 1, seeds/cohort/--check count it failed; the record's refusals key kept, always empty",
+     "class": "within",
+     "why": "Fixes a defect (a map written of a seatless hamlet, with a bare winter and no dry field against 0011.drawing); the seeds gate's rule that a refused seed is a failing seed. Keeping the key so no pool record changes shape is an implementation detail inside the fix."
+    },
+    {
+     "id": "T426-band-on-toe-tip",
+     "summary": "The new seats' bands cross the toe's tip (1.4 and 2.4 percent) and are kept, since center and margin midpoint are off the toe as the seat rule asks of every seat; where houses stand is the house stage's",
+     "class": "within",
+     "why": "Applies the existing toe rule unchanged to the new seats (no rule eased); no map check broken across 22,000 cohort seeds. Not a narrowing of the request: nothing the GM asked is left undone, and no wrong outcome on a measured roll is reported."
+    },
+    {
+     "id": "T426-page-questions-not-filed",
+     "summary": "Three page questions (0057's toe on a tapering flank, 0031's fall across the wind with a wet windward flank, 0081's start of a way out) read and not filed",
+     "class": "within",
+     "why": "Each is stated as a research page's silence with no wrong outcome on any measured roll; under constitution XIV's definition of a defect, a difference or gap that is not a wrong outcome is not one, so leaving it is not a defect left."
+    },
+    {
+     "id": "T426-order-budget-exits",
+     "summary": "Order before T158 after T423/T418; no work-budget step owed since the new question is asked only on previously refused rolls; exits and done-measures as listed",
+     "class": "within",
+     "why": "T426 is named in the GM's 2026-11-24 close-out list before the port resumes; the budget and exit choices settle nothing the request or spec left otherwise."
     }
    ],
    "verdict": "CLEAR"

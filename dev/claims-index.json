@@ -38115,8 +38115,8 @@
  "rust/phases/src/driver.rs::roll#the stages in order": {
   "body": "97c0c68cf3a0666b",
   "claim": "the stages in order - which-way-water-flows-and-how-channels-bend-and-join.drawing: the fall and the water decided before anything is placed, the field laid from them",
-  "code": "bd26671f510b345f",
-  "core": "924015f6d903df23",
+  "code": "f5dc3c6b9a18cafe",
+  "core": "4babf75c52451ab2",
   "date": "2026-11-24",
   "note": "plan() fixes the fall and the water's bearing (down_deg, water_flow) before anything is placed; the field is built from them through field_in, and the sink, the seat and the hem follow in that order. The page says these declared figures are the only terrain, and that a hamlet takes its water's bearing from its fall and draws one field on one slope",
   "pages": {
@@ -38128,6 +38128,7 @@
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:a8aa562e10d530f1"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::seat_refused#the driver": {
@@ -38326,6 +38327,22 @@
   "rests": [
    "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
    "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver.rs::whole#no map of a refused hamlet": {
+  "body": "4ab6eb64722813a4",
+  "claim": "no map of a refused hamlet - where-a-farming-hamlet-grew-its-coarse-grain.drawing: a bare winter paddy is drawn only where the dry ground holds the hamlet's grain need - a roll whose seat was refused laid no dry hem, and was still written as a map with a bare winter, a 17-acre grain need and no dry field (seed 508 of 20 households falling at 135 degrees, found 2026-11-24, 449 T418); so a kept refusal refuses the whole roll, nothing is written, and `make seeds` and `make cohort` count the seed failed",
+  "code": "c880681254d43b02",
+  "core": "32bf579f93a23c8d",
+  "date": "2026-11-24",
+  "note": "any refusal a stage kept now refuses the whole roll, so no map with a bare winter and no dry field is written, as the page's rule requires",
+  "pages": {
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
+  },
+  "research": "8159982a6874674a",
+  "rests": [
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
   "verdict": "IN-STEP"
  },
@@ -41391,6 +41408,18 @@
   "core": "3b92904c2e712b94",
   "date": "2026-11-24",
   "note": "fixtures and assertions.",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/tests.rs::a_fall_square_across_the_wind_seats_at_the_heads_windward_corner_astride_its_intake#the driver's tests": {
+  "body": "b3fbed6a542cb01d",
+  "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "20110dedeb356ac6",
+  "core": "fb3924f016142be7",
+  "date": "2026-11-24",
+  "note": "fixtures and assertions only",
   "pages": {},
   "research": "",
   "rests": [],
@@ -48887,6 +48916,23 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/seat.rs::BAND_EXITS#the way out from the band's ends": {
+  "body": "ce12f3e0ce7a3770",
+  "claim": "the way out from the band's ends - GUESS village-lanes.drawing: lanes keep to dry ground and the page is silent on which point of a cluster its way out leaves from; 0.6 of the half-length either side of the center, the stations the band's ground is sampled at (`margins::SAMPLE_ALONG`)",
+  "code": "d9a0e1fed6b4c465",
+  "core": "b92d604ef35ce136",
+  "date": "2026-11-24",
+  "note": "the cited page keeps lanes on dry ground and does not say which point of a cluster its way out leaves from, so the 0.6 stations are rightly a GUESS",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:48cdd569d493520c",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/seat.rs::Frame#the seat": {
   "body": "2518e7f0e72478eb",
   "claim": "the seat - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
@@ -48960,33 +49006,57 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/seat.rs::seat#a walled-in head gives way": {
-  "body": "007fc0a9fa1c43b4",
-  "claim": "a walled-in head gives way - village-lanes.drawing: lanes keep to dry ground, so a margin whose seat has no dry way out of the frame is dropped and the next in the ranking taken",
-  "code": "06c288df936280db",
-  "core": "8d389cad32d21403",
+ "rust/phases/src/seat.rs::open_at_an_end#a seat astride the brook leaves by its open bank": {
+  "body": "4aecb8a9c634cec7",
+  "claim": "a seat astride the brook leaves by its open bank - GUESS villages-beside-their-stream-one-bank-or-both.drawing: \"Where the site that faces the fields and has its back to the winter wind is crossed by the brook, the houses are built on both banks\" - so a band whose center falls in the pocket between the brook, the intake's feeder and the field's corner, the rest of it on open ground, is no walled-in site; the record does not say where a cluster's way out starts (village-lanes.drawing keeps lanes on dry ground), so it is asked of the band's two stations, and only once no margin is left, each refused or walled in at its center and the hill-backed seat asked where a fall runs into the wind - 4 of 35,000 valley rolls, each falling square across its wind with its windward flank on the wet toe, the one seat kept at the head's windward corner over the intake (measured 2026-11-24: 20,000 cohort seeds at five starts and seeds 1 to 1,500 at ten sizes and falls; none refused after, none with a map check broken, the four bands 0.03 to 0.05 percent on the paddy)",
+  "code": "b988e450814b4f97",
+  "core": "bfed7d84fa309078",
   "date": "2026-11-24",
-  "note": "a margin whose seat has no dry way out is dropped and the next taken",
+  "note": "a site the brook crosses is allowed (both banks) and is asked only after every site it does not cross, matching the quote and the preference for such sites; where the way out starts is unanswered on the cited pages, so GUESS is right",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20",
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "reads": "a5e456d20b42eb04",
+  "research": "31f3e4e351e63089",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:09b499b11d9ab875",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542",
+   "0081-village-lanes.drawing.html:48cdd569d493520c",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/seat.rs::seat#a walled-in head gives way": {
+  "body": "dd9d810ade1db13f",
+  "claim": "a walled-in head gives way - village-lanes.drawing: lanes keep to dry ground, so a margin whose seat has no dry way out of the frame from its center is dropped and the next in the ranking taken; once none is left the dropped seats are asked again from their bands' ends (`open_at_an_end`), and one with a way out there is kept",
+  "code": "37f1005151972485",
+  "core": "696510769bddff3a",
+  "date": "2026-11-24",
+  "note": "a head with no dry way out is moved to `shut` and the next margin is tried; once none is left, `open_at_an_end` asks the shut seats of both rankings from their band ends and keeps any that has a way out; this follows the page's dry-ground lanes and the track running off the map",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
+  "reads": "8c6b60283fac636b",
   "research": "348d3cab06271e76",
   "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:48cdd569d493520c",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat.rs::seat#the back to the hill where the wind cannot be backed": {
-  "body": "007fc0a9fa1c43b4",
-  "claim": "the back to the hill where the wind cannot be backed - GUESS clustered-and-scattered-villages-shuson-sanson.drawing: where a map declares a fall toward the wind, no margin is both high and windward, so the cluster takes the high, dry one, its back to the hill and off the wind - once no margin facing the wind is left, each refused or its seat walled in, the margins are ranked again with the high side as the wind's, each seat recorded off the wind; its belt still on the windward side, between the houses and the paddy (`margins::ranked`)",
-  "code": "4aa14f0bd586f40c",
-  "core": "8d389cad32d21403",
+  "body": "dd9d810ade1db13f",
+  "claim": "the back to the hill where the wind cannot be backed - GUESS clustered-and-scattered-villages-shuson-sanson.drawing: where a map declares a fall toward the wind, no margin is both high and windward, so the cluster takes the high, dry one, its back to the hill and off the wind - once no margin facing the wind is left, each refused or its seat walled in, the margins are ranked again (a fall square across the wind, to its floating point's slack, is not one toward it) with the high side as the wind's, each seat recorded off the wind; its belt still on the windward side, between the houses and the paddy (`margins::ranked`); where the hill-backed ranking leaves none either, the seats walled in at their centers, of both rankings, are asked from their bands' ends, the wind-facing ones first (`open_at_an_end`)",
+  "code": "2d3383aee388ad72",
+  "core": "696510769bddff3a",
   "date": "2026-11-24",
-  "note": "only a fall toward the wind triggers it, asked once no windward margin is left; seats are marked off the wind and the belt stays against the map's own wind; 0031's drawing page records this as a GUESS",
+  "note": "the hill ranking is asked only for a fall toward the wind (`dot > SQUARE_EPS`, so a fall square across the wind is level, not toward it), and only once no wind-facing margin is left. Its seats are flagged off the wind and the belt stays against the map's wind. Seats walled in under both rankings are asked from their band ends in the order they were dropped, wind-facing ones first. This matches the GUESS the drawing page records (\"its back to the hill, its belt to windward, a GUESS\").",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
+  "reads": "8c6b60283fac636b",
   "research": "430afdccc4c0e546",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a"
@@ -48994,33 +49064,21 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat.rs::seat#the fords before the seat": {
-  "body": "73a06dafe9276094",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
+  "body": "dd9d810ade1db13f",
   "claim": "the fords before the seat - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses the brook only at a crossing place, so the seat's way out is asked of the brook gapped at them",
-  "code": "5657204b1000d99e",
-  "core": "8d389cad32d21403",
-  "date": "2026-11-07",
-  "note": "the streams are gapped at the fords before the way-out test, as \"A way crosses the water only at one of them\"",
+  "code": "5a0ab5603879db54",
+  "core": "696510769bddff3a",
+  "date": "2026-11-24",
+  "note": "the fords are set along the brook first, and the streams are gapped at them and added to the lines the way-out check runs against, so a way crosses only at a crossing place",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
+  "reads": "8c6b60283fac636b",
   "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
-  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/exit.rs::BEARINGS#the straight runs": {
@@ -49670,12 +49728,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::SQUARE_EPS#the square end in": {
-  "body": "eaf620b80f8f3b48",
+  "body": "0a9f1a35c29aae79",
   "claim": "the square end in - GUESS: tier 1 takes \"a margin 45 to 90 degrees off the wind\" with both ends in, as the falls are admitted (square to the wind or away, `water_frame.rs` `admitted`): a fall square to the wind leaves the head square to it, and with the end out the Rust gate's seed 901280 (its windward flank, parallel to the fall, all on the wet toe) had no seat",
-  "code": "082012c8ad640b89",
-  "core": "c912d72abdb60179",
-  "date": "2026-11-07",
-  "note": "`dot &gt; -SQUARE_EPS` admits a margin exactly square to the wind into tier 1; the record gives no tolerance",
+  "code": "11bd84de499500b8",
+  "core": "6d3de5a041e37c25",
+  "date": "2026-11-24",
+  "note": "this is floating-point slack, so a fall exactly square to the wind counts as admitted and not as falling toward it; that matches the page's falls \"away from the wind or across it\", and the margin band's included 90-degree end is otherwise unattested, as a GUESS should be",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -50204,6 +50262,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/seat/tests.rs::a_fall_square_across_the_wind_from_either_side_never_backs_the_hill#the seat's tests": {
+  "body": "ded9e59c45ef75c4",
+  "claim": "the seat's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "65c9936b2298d8ce",
+  "core": "3a8a982b1a069f07",
+  "date": "2026-11-24",
+  "note": "a test fixture and assertions only; it decides nothing about the place.",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/seat/tests.rs::a_flank_turns_its_back_and_a_notch_or_a_cramped_belt_is_refused#the seat's tests": {
   "body": "a39db3c581d94784",
   "claim": "the seat's tests - NONE: fixtures and assertions, deciding nothing about the place",
@@ -50224,6 +50294,18 @@
   "core": "8b601048353d2a9d",
   "date": "2026-11-04",
   "note": "fixtures and assertions on refusals and error text; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/seat/tests.rs::a_seat_walled_in_at_its_center_leaves_by_its_bands_end_once_no_margin_is_left#the seat's tests": {
+  "body": "5e9644c0d6899a5d",
+  "claim": "the seat's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "fc7e90af13dbce58",
+  "core": "331f4cf62af1af89",
+  "date": "2026-11-24",
+  "note": "fixtures and assertions only",
   "pages": {},
   "research": "",
   "rests": [],

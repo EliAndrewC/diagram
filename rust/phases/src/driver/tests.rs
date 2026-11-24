@@ -311,3 +311,30 @@ fn a_dike_ponds_channels_are_pond_canals_drawn_at_the_creeks_width() {
     let rice = roll(&parse(r#"{"name": "R", "seed": 5, "households": 12, "down_deg": 30, "field_archetype": "polder_grid"}"#).unwrap()).unwrap();
     assert!(rice.ink.contains_key("irrigation ditch") && !rice.ink.contains_key("pond canal"));
 }
+
+#[test]
+fn a_fall_square_across_the_wind_seats_at_the_heads_windward_corner_astride_its_intake() {
+    // 449 T426: `make seeds`' fresh comb seed 941239097 and seed 508 at 20 households falling at 135 degrees were refused by the seat
+    // ("1 walled in"), and 508 was still written as a map with no settlement, a bare winter and no dry fields
+    let fresh = roll(&super::cohort_spec(941_239_097, None)).unwrap();
+    let declared = roll(
+        &parse(r#"{"name": "S508", "seed": 508, "households": 20, "down_deg": 135}"#).unwrap(),
+    )
+    .unwrap();
+    for r in [&fresh, &declared] {
+        assert_eq!(
+            r.stages,
+            vec!["water_frame", "field", "sink", "seat", "hem"]
+        );
+        // its back to the wind still, and no rule of the finished map broken
+        assert!(r.seated.as_ref().is_some_and(|s| !s.frames[0].offwind));
+        assert_eq!(super::check::check(r), Vec::<String>::new());
+    }
+    // a roll that kept a stage's refusal is refused whole: no map is handed back to be written
+    let mut kept = declared;
+    kept.refusals.push("the seat refused: x".into());
+    assert_eq!(
+        super::whole(kept).unwrap_err().0,
+        "the seat refused: x - no map is drawn of a hamlet a stage refused"
+    );
+}
