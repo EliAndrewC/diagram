@@ -9,7 +9,7 @@ door of its own: an earth-floored entry for leaving shoes, then a raised plank f
 and a gate rowhouse tiled; one row has earth walls as it stands today, and what an office's staff row was walled and framed with is not recorded. A standard dwelling was about 9 by 12 ft. No bed or bunk is known in one before modern times.
 The servants below the foot soldiers lived instead in large common rooms.
 
-The rowhouses measured ran about 80 to 145 ft long and 12 to 24 ft deep: that row of 1842 held eight households, and a
+The rowhouses measured ran about 80 to 300 ft long, and the gate and foot soldiers' rows 12 to 24 ft deep: that row of 1842 held eight households, and a
 foot soldier's dwelling in another was about 12 by 21 ft. Takayama's has a floor of about 3,700 sq ft. At Sakai's town magistracy each constable had a dwelling of their own, about 12 by 18 ft, while three
 retainers on duty in Edo shared one dwelling of their domain's rowhouse; how many unmarried men usually shared one is not
 recorded.
