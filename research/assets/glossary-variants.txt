@@ -36,6 +36,7 @@ adze	adze
 adzes	adze
 afcd	AFCD
 agariya	agariya
+agarwood	aloeswood
 ai-no-shuku	ai-no-shuku
 aiden	aidono
 aidono	aidono
@@ -61,10 +62,15 @@ alluvial fan	alluvial fan
 alluvial fans	alluvial fan
 alluvium	alluvial
 alnus	Alnus
+aloeswood	aloeswood
 along the contour	contour
 along the ridge	ridge span
 alternate attendance	alternate attendance
 amado	amado
+amami	Amami islands
+amami islands	Amami islands
+amami oshima	Amami Oshima
+amami's	Amami islands
 amaterasu	Amaterasu
 amida	Amida
 amida buddha	Amida
@@ -215,6 +221,7 @@ banta	banta
 banyuechi	banyuechi
 banyuetang	banyuechi
 baoqing siming	Siming
+bar iron	bar iron
 barbican	barbican
 barbicans	barbican
 bare hill	bald hill
@@ -277,6 +284,7 @@ berenjaws	brinjal
 berm	berm
 berms	berm
 betel palm	areca
+betsugi	betsugi
 betto	bettō
 bettō	bettō
 bettō-ji	bettō
@@ -303,6 +311,7 @@ biwa	Lake Biwa
 bizen	Bizen
 bizen province	Bizen
 black charcoal	black charcoal
+black sugar	black sugar
 black-charcoal	black charcoal
 black-seal	shuinchi
 black-seal land	shuinchi
@@ -1132,6 +1141,8 @@ engawa	engawa
 engishiki	Engishiki
 english factor	English factor
 english factory	English Factory
+enkyo	Enkyo
+enkyō	Enkyo
 enoki	enoki
 enokida	Enokida
 enoshima	Enoshima
@@ -1307,6 +1318,9 @@ five-household group	five-household group
 five-household groups	five-household group
 five-ring pagoda	five-ring pagoda
 five-ring pagodas	five-ring pagoda
+fixed courier	fixed courier house
+fixed courier house	fixed courier house
+fixed courier houses	fixed courier house
 fixed rate	fixed-rate
 fixed-rate	fixed-rate
 fletched	fletcher
@@ -1566,8 +1580,10 @@ gohei	paper wand
 gokaido	Five Highways
 gokan	gokan
 gokenin	gokenin
+gokujo	gokujo
 gokumon	gokumon
 gokura	gogura
+gokusoroi	gokusoroi
 gold paper	gold paper
 gold-back	gold-back
 gold-back cash	gold-back
@@ -1737,6 +1753,7 @@ harakata-shu	harakata-shu
 harappan	Harappan
 hardiness zone	hardiness zone
 hari-ma	hari-ma
+harima	Harima
 hasa	hazakake
 hasagi	hazakake
 hashi	hashi
@@ -2157,6 +2174,7 @@ itabashi	itabashi
 itami	Itami
 itami sake	Itami
 iwakura	rock seat
+iwami	Iwami
 iwami-no-kami	no-kami
 iyo	Iyo
 iyo-no-kami	no-kami
@@ -2240,6 +2258,7 @@ jizō	jizo
 jizō-bon	Jizo-bon
 jiégāo	jiegao
 jo	jo
+jo-gokusoroi	gokusoroi
 jobikeshi	jobikeshi
 jobo	jobo
 jobo system	jobo
@@ -2263,6 +2282,7 @@ joruri	joruri
 joseon	Joseon
 joseon dynasty	Joseon
 joseon's	Joseon
+joshu	Joshu
 josui	josui
 josui ido	josui-ido
 josui-ido	josui-ido
@@ -2527,6 +2547,7 @@ koike	koike
 koishikawa yojosho	Yojosho
 koji	koji
 kojiki	Kojiki
+koka	Kōka
 koka shunju	Kōka shunjū
 koke	koke
 kokera	kokera
@@ -2658,6 +2679,7 @@ kō	kō
 kō group	kō
 kōeki kokusan kō	Koeki Kokusanko
 kōhai	worship porch
+kōka	Kōka
 kōka shunjū	Kōka shunjū
 kōri	kori
 kōsatsu	kosatsuba
@@ -2785,6 +2807,7 @@ living sale	live sale
 loess	loess
 log boom	boom
 lognormal	lognormal
+long bar	bar iron
 long willow	long willow
 long-range spotting	spotting
 longan	longan
@@ -3124,6 +3147,7 @@ muster perimeter	muster perimeter
 muster perimeters	muster perimeter
 mutsu	Mutsu
 mutsu province	Mutsu
+mutsu-buki	mutsu-buki
 myoden	myoden
 myoden landlord	myoden
 myoden landlords	myoden
@@ -3402,6 +3426,7 @@ origake	origake
 oroshi	oroshi
 oshi	oshi
 oshirasu	oshirasu
+oshu	Oshu
 ossuaries	ossuary
 ossuary	ossuary
 osuzu	Osuzu corridor
@@ -4160,6 +4185,7 @@ shichiri ferry	Shichiri ferry
 shichiya	shichiya
 shide	shide
 shifting cultivation	shifting cultivation
+shigaraki	Shigaraki
 shigarami	shigarami
 shigyo-hachimon	shigyo-hachimon
 shigyo-hachimon system	shigyo-hachimon
@@ -4294,6 +4320,8 @@ six chambers	Six Chambers
 six fang	Six Chambers
 six ministries	Six Ministries
 six offices	six offices
+six-blow	mutsu-buki
+six-blow working	mutsu-buki
 six-day market	rokusai-ichi
 six-day markets	rokusai-ichi
 sized	sizing
@@ -4354,6 +4382,8 @@ southern song	Song dynasty
 sovereign temple	sovereign temple
 sovereign temples	sovereign temple
 sozu	sōzu
+sparrow	Sparrow
+sparrow clan	Sparrow
 sparse rafter	sparse rafters
 sparse rafters	sparse rafters
 spate	spate
@@ -4370,6 +4400,8 @@ splayed brick walls	splayed walls
 splayed gate walls	splayed walls
 splayed wall	splayed walls
 splayed walls	splayed walls
+split bar	bar iron
+split bar iron	bar iron
 spoil bank	spoil bank
 spoil banks	spoil bank
 spot fire	spotting
@@ -4586,6 +4618,8 @@ tairō	tairo
 taiseiden	Taiseiden
 taisho	Taisho
 taishō	Taisho
+taiyuin	Taiyuin
+taiyūin	Taiyuin
 taizu	Taizu
 takakura	takakura
 takasebune	takasebune
@@ -4806,6 +4840,7 @@ tokugawa hidetada	Hidetada
 tokugawa ieyasu	Ieyasu
 tokugawa tsunayoshi	Tsunayoshi
 tokugawa yoshimune	Yoshimune
+tokunoshima	Tokunoshima
 tomb hill	tomb hill
 tomb hills	tomb hill
 ton'ya	ton'ya
@@ -4968,6 +5003,8 @@ udegi	udegi gate
 udegi gate	udegi gate
 udegimon	udegi gate
 udon	udon
+uji	Uji
+uji's	Uji
 ujibito	ujibito
 ujidera	bodaiji
 ujigami	ujigami
@@ -5112,6 +5149,8 @@ ward gate	kido
 ward gates	kido
 ward-and-market	ward-and-market system
 ward-and-market system	ward-and-market system
+warehouse-residence	kurayashiki
+wari	wari
 wari-tetsu	wari-tetsu
 warichi	warichi
 warp	warp
