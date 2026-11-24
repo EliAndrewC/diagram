@@ -184,3 +184,9 @@ They are feature 452 (`specs/452-building-plan-followups/`), each keeping its te
 The GM, while the session audited which of Friday-to-Monday's tasks were process-made:
 
 > Sounds good, and like I said, to be clear, if there are real defects, then I do want to find them and fix them, and I don't want to change our project guidelines around fixing defects before moving forward with writing new code. In fact, if we have any reason to believe that our existing Hamlet generation up until this point is riddled with defects, then I would like to fix those before we move forward. I have no reason to think that this is true other than the fact that we were finding defects before when we were making edits and looking and such.
+
+## 2026-11-24, the deletion close is not listed as an open item
+
+The GM, on reports of what is still open:
+
+> Gotcha. Can we stop listing the deletion close as like an open item because it's like not really a separate thing from just the rest of the port? I mean, I'm not saying close the task. I'm just saying that when I ask for what's still open, then you're not listing each and every unported stage of the scripted Hamlet map generation, because that would be silly, and so this is kind of the same thing as that.
