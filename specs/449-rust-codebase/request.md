@@ -190,3 +190,9 @@ The GM, while the session audited which of Friday-to-Monday's tasks were process
 The GM, on reports of what is still open:
 
 > Gotcha. Can we stop listing the deletion close as like an open item because it's like not really a separate thing from just the rest of the port? I mean, I'm not saying close the task. I'm just saying that when I ask for what's still open, then you're not listing each and every unported stage of the scripted Hamlet map generation, because that would be silly, and so this is kind of the same thing as that.
+
+## 2026-11-24, the open tasks closed out before the port resumes, then a talk
+
+The GM, told which open tasks can be done before the port resumes (all but T417):
+
+> Sounds great. So I guess I would like for you to close out all of these open tasks so that it makes sense to close out prior to us resuming our porting work, at which point I will want to talk over that process with you before we actually do resume the porting, just to make sure that our process is solid and such.
