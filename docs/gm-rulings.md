@@ -92,3 +92,7 @@ the samurai country estates around it."* So the city place card's claim (`rust/m
 written; research page 0001's "counts only those living within the walls" is the sentence restated (its drawing page already counts
 "the samurai estates outside a city's wall" as city households). `l7r.md` and `budgets.md` are the GM's notes and are not edited
 from here; their two sentences now differ from this ruling until he changes them.
+
+## NOT a ruling: dry plots as rectangles against the canal (2026-11-24)
+
+Page 0006's drawing page carried the comment "the GM's ruling, 2026-07: dry plots are rectangles laid out against the canal". The GM, 2026-11-24: *"I never made a ruling that dry plots are rectangles laid out against the canal. That was never at any point something that I said was true about these maps. That is what a session told me the research showed. But if that is not what the research shows, then we shouldn't do it."* The rule is the record's own (a reconstruction on that page), to be held to what the research shows; no session cites it as his. A comment in the record that names a ruling of the GM's is checked against his recorded words (a `request.md`, this file) before anything is built on it.

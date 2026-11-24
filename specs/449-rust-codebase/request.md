@@ -204,3 +204,11 @@ The GM, told that nine page sessions remained before the talk, among them featur
 > I thought that we had agreed to move the stuff related to hand-drawn maps into a different feature, such that we were only fixing the outstanding tasks that related to scripted map generation before resuming.
 
 So the close-out before the port is 449's hamlet items alone: T420 (the dike-pond channels, its page session and code), T425's hamlet pages, T426. Feature 452's page sessions and tasks, and T425's three building-plan pages (0038, 0090, 0001), are not part of it; they stay in 452 for later.
+
+## 2026-11-24, the GM never ruled that dry plots are rectangles
+
+Told that page 0006's drawing page carries, in a comment, "the GM's ruling, 2026-07: dry plots are rectangles laid out against the canal", and that the session had filed 449 T428 treating the code's tapered plots at a canal's bend as at odds with that ruling, the GM said:
+
+> I never made a ruling that dry plots are rectangles laid out against the canal. That was never at any point something that I said was true about these maps. That is what a session told me the research showed. But if that is not what the research shows, then we shouldn't do it.
+
+So the comment misattributes: the rule is the record's (0006 labels "strips square to a canal" a reconstruction, from the line of the Edo Musashino villages along their canals), not a ruling. What the research shows of a dry plot's shape, and of a strip at a canal's bend, is a research question, and the drawing follows its answer.
