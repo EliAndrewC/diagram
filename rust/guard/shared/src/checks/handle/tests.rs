@@ -552,15 +552,26 @@ fn a_refused_dispatch_keeps_the_footnote_holds_trip() {
     let ask = |tid: &str| {
         handle(
             "dispatch",
-            &agent(&root, "quote-check", &format!("Read {}", manifest.display()), tid),
+            &agent(
+                &root,
+                "quote-check",
+                &format!("Read {}", manifest.display()),
+                tid,
+            ),
             Some(1.0),
         )
     };
     let first = ask("q1");
     assert!(first.contains("round:quote-check|q:0105@3"), "{first}");
-    assert_eq!(state(&root)["flag_trips"]["0105#bath"], json!("round:quote-check|q:0105@3"));
+    assert_eq!(
+        state(&root)["flag_trips"]["0105#bath"],
+        json!("round:quote-check|q:0105@3")
+    );
     let second = ask("q2");
-    assert!(second.contains("round:quote-check|q:0105@3") && !second.contains("@4"), "{second}");
+    assert!(
+        second.contains("round:quote-check|q:0105@3") && !second.contains("@4"),
+        "{second}"
+    );
     std::fs::write(
         root.join("specs/999-x/arbiter.jsonl"),
         "{\"trigger\": \"round:quote-check|q:0105@3\", \"ruling\": \"continue\"}\n",
