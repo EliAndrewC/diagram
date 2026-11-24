@@ -1,5 +1,7 @@
 # Tasks - feature 453, what an empty charcoal bale cost
 
+Ticked tasks are archived in `tasks-done.md` (feature 449 T142): `make tick` moves each ticked task there with its lines; this file holds the open ones.
+
 The question task is `research: physical` with its five boxes; the rest are `research: rendering`.
 
 ## Occasions
@@ -8,14 +10,6 @@ The question task is `research: physical` with its five boxes; the rest are `res
 
 ## Tasks
 
-- [ ] T01 S1+C1: the empty bale (D1; FR-001, FR-002, FR-005, FR-006, FR-007)
-      research: physical
-      - [x] research pass
-      - [x] source-reader confirmed
-      - [x] recorded and cited
-      - [x] quote-check confirmed
-      - [x] source-applicability confirmed
-      verify: `make record-owed` names no unit of the new question or of 0279; `make record CHECK=1` passes
 - [ ] T02 The implementation check, the reply on #23 and the report (D2; FR-001, FR-003, FR-004)
       research: rendering
       verify: `make impl-check F=453` reports nothing missing; the reply is on diagram#23
