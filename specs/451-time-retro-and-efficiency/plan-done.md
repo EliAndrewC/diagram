@@ -10900,3 +10900,206 @@ engine speed, so the checklist below answers in its terms.
 
 
 
+<!-- plan-archive: archived 2026-11-24 -->
+### T195 (the gap audit of 2026-11-23, items 3 and 12a, `/home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md`: both triage reply parsers and the EDIT parser read only the lines that matched them, so an unread line's pop-up was answered `triage: untouched`, its claim cleared, or its EDIT dropped, with no word said)
+
+- **Approach**: Each of the three readers now refuses a reply holding a line it cannot read. The refusal names the line and the expected form, and nothing is recorded or applied.
+  - **The pop-up triage** (`rust/gate/crates/owed/src/record/triage.rs`, `read_reply`): the reply is read whole before `record` writes anything. It refuses any of these: a non-blank line that is neither `NONE` nor in the form; a uid that is not of this triage (before this, that was a message and exit 0, with the rest cleared); an empty reply; `NONE` beside a TOUCHES line.
+  - **The claims triage** (`rust/gate/crates/claims/src/claims/triage.rs`, `refused`): the same rules, called by `claims triaged` before `record_triage`, so `save_index` never runs on a refused reply. `record_triage` itself is unchanged for its callers that pass `""` (the tool's clear and the forced claims), observed 2026-11-23, method: `grep -rn "record_triage("` over the crate. Its unknown-key message is unreachable now and was removed. A claim key may hold spaces, so a non-ASCII dash with a later ` - ` reads as an unknown key and is refused.
+  - **EDIT** (`rust/guard/shared/src/checks/reply.rs`, `unread_edits` and `EDIT_FORM`): finds each line shaped as an EDIT header, or as a `<<<` fence, that stands in no block the parser reads. A header is a line whose first word, past any bullet, quote or bold, is `EDIT` (not `EDITS`). `record apply-edits` refuses on such a line before any block is applied or settled. The guard's own readers, the round state (`rounds.rs:856`, `freeze.rs:88`) and the bundles' displays, keep the parse. The refusal sits at the one reader that writes, observed 2026-11-23, method: `grep -rn "reply::blocks\|categorized("` over `rust/`, each caller read; the others are the round state and the arbiter and check bundles' displays, and only `record apply-edits` (`apply_edits.rs:417`, `apply_edits/settled.rs:59`) applies or settles a block.
+  - **The agent files.** `modal-triage.md` now asks for `NONE` when nothing is touched; before, it asked for an empty reply, which is now refused. `claims-triage.md` says a line outside the form is refused.
+
+| step | figure | what it says |
+|---|---|---|
+| before | a `- TOUCHES` bullet reply: `claims-triaged: 0 of 4 sent on to impl-drift ... the rest cleared`, exit 0, measured 2026-11-23 (`/tmp/t195/red-claims.saved.log`) | the fail-open path, live |
+| real replies | 0 lines of the 7 kept triage replies under `/tmp/l7r-check` fall outside the form, measured 2026-11-23 (each file's lines matched against the two forms with grep) | no kept reply holds a line outside the form; an empty reply is now refused, and the agent file's switch to `NONE` covers that case |
+| after | every red shape refused with its line named and the store, index or page unchanged; `NONE` records | the crates' tests, below |
+
+### T195 Approach (checklist part A)
+
+1. **The goal, in the world.** What the triage and apply tools record is what the agent's reply said. A reply they cannot read records nothing and says which line to fix.
+2. **The constraints.** FR-013 (the checks and the landings faster). The agent files' own form (`modal-triage.md`, `claims-triage.md`: "no other lines").
+3. **Where each comes from.** S: the session's task line (tasks.md's T195 line, filed from the session's 2026-11-23 request to look for other gaps like T194's; the words are not in request.md). O: the gap audit, items 3 and 12a. O: the replay of kept replies in the table above.
+4. **Do they describe the world here?** Yes. All 7 kept replies read under the rule, measured 2026-11-23 (grep of `/tmp/l7r-check`'s kept triage replies against the two forms), and each red shape reproduced the fail-open path on HEAD's code, measured 2026-11-23 (the red runs in item 9).
+5. **The order.** Before T197's REJUDGE runs on T184's pop-ups: a re-triage must not fail open again. It is independent of T198-T200 and T192.
+6. **The exits.** Green: `make closing-checks T=T195,T197 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, 2026-11-23, each red on HEAD's code before its fix:
+   - `record::triage::tests::a_triage_reply_the_parser_cannot_read_is_refused_and_records_nothing` failed: the bullet reply returned `Ok([])` (`/tmp/t195/red-owed.saved.log`, 114 passed, 1 failed).
+   - `claims::commands::tests::a_triage_reply_the_parser_cannot_read_is_refused_and_clears_nothing` failed: exit 0, 4 cleared (`/tmp/t195/red-claims.saved.log`, 170 passed, 1 failed).
+   - `checks::reply::tests::an_edit_line_the_parser_cannot_read_is_named` failed on a stub, `[]` for `` EDIT `p` (TRUTH) `` (`/tmp/t195/red-edit.saved.log`, 471 passed, 1 failed).
+   - `record::apply_edits::tests::a_reply_with_an_unread_edit_is_refused_and_applies_nothing` failed: one block applied, the unread one dropped, exit 0 (`/tmp/t195/red-apply.saved.log`, 97 passed, 1 failed).
+
+   After: all green in `make crate-checks` on core, shared, owed, claims and record, the task's lines covered in full, measured 2026-11-23 (`/tmp/t195/cc6.log`, `/tmp/t195/cc8.log`).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: a check owed by a page edit was skipped durably, and an EDIT finding was lost, with no one told. That is a wrong outcome; no map changes.
+
+**Found and left?**
+- An empty pop-up triage reply cleared every unit (the audit's "only on the claims side"): fixed here. It is refused, and the agent file now asks for `NONE`.
+- An unknown uid or claim key exited 0 and cleared the rest: fixed here, refused whole. Observed 2026-11-23, method: every reader of a triage reply, `TOUCHES.captures` and `record_triage`'s callers, read for its unmatched-line path.
+
+**Performance work?** no. It changes what the readers refuse, not how long anything takes; nothing timed changes.
+
+
+
+<!-- plan-archive: archived 2026-11-24 -->
+### T197 (the gap audit of 2026-11-23, item 9: `scripts/gates/l7r-gate.sh` builds from the clone's working tree, so triage and apply-edits answers were judged with other builders' uncommitted code and landed with no build id, T184's first two triage runs on T185/T186's unlanded code; the 81 stale TOUCHES marks on T184's 21 pop-ups stand under `ask:t184-stale-triage-marks`, and no withdrawal verb is built, `ask:t197-rejudge-verb`)
+
+- **Approach**: Three parts.
+  - **(1) The build's id.** After each build, the launcher writes `$BIN.build.json` beside the binary: `{"commit": <HEAD>, "dirty": {<path>: <blob id or "deleted">}}`. The dirty set is the uncommitted files the binary builds from: its `SOURCES`, `rust/guard`, the Cargo files and `.cargo/config.toml`, untracked files included. Scoped that way, a clean build in a busy clone is not marked dirty by unrelated edits. The id is written at build time and not on each run, because a binary run under `L7R_GATE_STALE_OK` or `L7R_GATE_FRESH` does not match the tree. Every run exports it as `L7R_GATE_BUILD`, empty for a binary built before T197. `rust/gate/crates/core/src/build.rs` reads it (`current`, `landing`, `mixed`, `same`).
+  - **(2) Answers carry their build.**
+    - `owed`'s `write_answer`, the one writer of the triage, `record-checked` and `apply-edits` answers, keeps `builds: {fingerprint: build}`.
+    - A settled answer keeps its judge's build, not the settling run's, since nothing judged it again. A pending settle takes its answer's build, and an adopted sibling answer brings its build along.
+    - A claims-triage clear (`record_triage`) records `build` only where the build was dirty, so the tracked `dev/claims-index.json` moves only then. A clean build removes it.
+  - **(3) A landing alone re-owes a mixed answer.** Under `L7R_LAND_ALONE`, `unanswered_in` and the claims `owed` owe again an answer whose build held an uncommitted file whose blob is not the landing's `HEAD:<path>`, naming the files. That is the other builders' code, or the builder's own older edit. A file deleted then and absent now counts as landed. An answer with no build, recorded before T197, stands as it always did. Refusing those would refuse every landing in every clone.
+
+| step | figure | what it says |
+|---|---|---|
+| before | an answer's record holds no `builds`, measured 2026-11-23 (`/tmp/t195/red-build.saved.log`, "no entry found for key") | the answer cannot say what judged it |
+| after | the launcher's sidecar matches the binary's `L7R_GATE_BUILD`, and every uncommitted source is at its `git hash-object` blob, measured 2026-11-23 (`tests/hooks/test-l7r-gate.1.sh`, the "build id" cases, run on this clone with the other builders' files dirty) | the id names exactly the uncommitted code built |
+
+<!-- plan-archive: archived 2026-11-24 -->
+### T197 Approach (checklist part A)
+
+1. **The goal, in the world.** An answer says which code judged it. A landing alone never trusts one judged with code that is not the landing's.
+2. **The constraints.**
+   - 451 T88: land-alone isolates the landing's code.
+   - FR-013: the landings faster.
+   - The claims index is tracked, hence the dirty-only stamp.
+   - Other builders' files are left alone: `modals.rs` and the registry are not touched.
+3. **Where each comes from.**
+   - S: the session's task line (tasks.md's T197 line, filed from the session's 2026-11-23 request to look for other gaps like T194's; the words are not in request.md).
+   - O: gap audit item 9.
+   - R: the round arbiter, `ask:t197-rejudge-verb`: no withdrawal verb; the 81 stale marks stand under `ask:t184-stale-triage-marks`.
+4. **Do they describe the world here?** Yes. This clone builds with other builders' uncommitted crates, and the launcher test lists each at its blob, measured 2026-11-23 (`tests/hooks/test-l7r-gate.1.sh`, the "build id" cases).
+5. **The order.** After T195 in the same landing.
+6. **The exits.** Green: `make closing-checks T=T195,T197 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, 2026-11-23:
+   - `record::owed::tests::an_answer_records_its_build_and_a_landing_alone_re_owes_a_mixed_one` failed on HEAD's `write_answer` (`/tmp/t195/red-build.saved.log`, 118 passed, 1 failed).
+   - `claims::commands::tests::a_triage_clear_by_a_mixed_build_is_owed_again_in_a_landing_alone` failed, with no `build` on the row (`/tmp/t195/red-claims-build.saved.log`, 172 passed, 1 failed).
+   - `tests/hooks/test-l7r-gate.1.sh`'s "build id" cases failed on HEAD's launcher, with the binary handed nothing.
+
+   After: all green, the task's lines covered in full, measured 2026-11-23 (`/tmp/t195/cc6.log`, `/tmp/t195/sh1.log`).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: a landing trusted answers judged by code it did not land. That is a wrong outcome; no map changes.
+
+**Found and left?**
+- A settled answer took the settling run's build as its judge: fixed here, it carries the judge's. Observed 2026-11-23, method: every `write_answer` caller read (`settle`, `adopt`, the apply round, `record-checked`, the triage).
+
+**Performance work?** no. It changes which answers a landing alone trusts, not how long anything takes; nothing timed changes.
+
+
+
+<!-- plan-archive: archived 2026-11-24 -->
+### T198, T199, T200 (bundle) (the GM's request of 2026-11-23, relayed by the task lines, to look for other gaps of this kind; the gap audit /home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md items 10, 11 and 12b-d)
+
+- **Approach**: four gaps closed and one shown already closed, each red first:
+  - T198, THE DERIVED FILES AT QUICK: `make quick`'s `_quick:` recipe gains `make-docs . --check`, `mode-a building-programs --check`
+    and `record check glossary`, the three derived files `make done`'s preflight regenerates (`measure/src/preflight.rs`'s `DERIVED`),
+    so the closing checks, which run quick counted whole (`closing-checks.sh`'s header, 451 T86), fail on a stale one. Each check's
+    stale message already names its regenerate command, pinned in its own crate (`mode_a`'s `programs/tests.rs` "is STALE - run `make
+    building-programs`", `research`'s `tools/glossary/tests.rs` "run `make glossary`", `cohort`'s `make_docs` tests "run `make docs`").
+    `checks/documents/derived_quick.rs` pins the recipe to preflight's `DERIVED`: a derived target quick does not check, or a new one
+    the table does not know, is red naming the line to add. Measured 2026-11-23 (`date +%s%N` around each command, the clone):
+    0.05, 0.12 and 0.06 s warm; `mode-a building-programs --check` 2.4 s cold after a `rust/mode_a` edit rebuilds the binary, once,
+    measured 2026-11-23 (`date +%s%N` around the command, after the `reads.rs` edit).
+    It fired on its first day: the clone's `docs/make-targets.html` is stale by another task's `modal-triage` `##` line (the handoff).
+  - T199, A STANDING VERDICT IS NO ROUND: measured first, 2026-11-23, over the 66 building-review rounds the session transcripts hold
+    (`~/.claude/projects/**/subagents/*.jsonl` naming `UNIT=building-review--`, their findings files and `review-verdict` lines,
+    `/tmp/t199/extract.py`): 60 later rounds, 12 after a round whose open findings were only nitpick or outside. Of the 7 whose two
+    prompts name review-tree commits, `git diff` of the sheet between them: 3 moved, each for a new task's layout change (T352/T367,
+    T392), and 4 were byte-identical (ochiba-magistracy 13:26 and 16:09, ubame-magistracy 13:26, hayakawa-magistracy 16:05) - their
+    verdicts carried (T176), yet `make verify` told the builder to dispatch every owed unit; 5 unattributable (a prompt names no review tree).
+    0 of the 7 attributable were owed by a nitpick fixed on the sheet alone, and 5 of the 12 are unknown. So the measured waste is at the dispatch: `reviews prereq standing` (`prereq/stands.rs`) names a
+    unit whose last PASS or NEEDS-WORK is carried to its sheet as just snapshotted and whose every open finding (not left by `make
+    review-accept`) is nitpick, outside or confirmation; `review-tree.sh` prints it `answered: ...` and leaves it out of the dispatch
+    count. A fixed error or questionable finding owes its round even on an unchanged sheet (ochiba-roundtrip-test's E1, fixed in the
+    docs), and a finding of no or an unknown severity owes one too, failing closed as T188 does.
+  - T199, A NITPICK FIXED ON THE SHEET OWES A ROUND OF ITS EDIT ALONE (the clause MODE 4 round 2 ruled could not be deferred; the
+    GM's route, request.md: "make only the smallest possible changes perhaps with some kind of adversarial subagent review process"):
+    the rule is the GM's, not a measured saving (0 of 7 attributable, 5 of 12 unknown, above). `write_verdict` keeps the sheet the
+    review read (`.git/review-verdicts/<unit>.reviewed/`, since the snapshot is replaced by the next `make verify`). After the edit
+    and `make verify`, `make review-fixed UNIT= FINDING="<ids>"` (`prereq/scoped.rs`' `declare`) is refused unless each named id is a
+    `nitpick` of the last PASS or NEEDS-WORK, every other open finding is minor or left by `make review-accept` (an error or
+    questionable one owes the full round), the kept sheet hashes to the verdict's `content_key` (else, a verdict before T199, the full
+    round) and the sheet moved; it writes the change-scoped prompt, the edit's runs before and after in T189's pairs, the pairing
+    lifted from `bundle::earlier` into `core::difflib::paired` so both call one copy. One building-review on it judges, adversarially,
+    only whether the edit did more than the named fixes, left one unfixed, or made anything wrong (`building-review.md`'s
+    change-scoped paragraph); its `make review-verdict ... SCOPE=change` (`record`) writes `scoped` into the verdict record, clean
+    only where PASS, every finding minor and its gate not red. `carried` accepts a clean `scoped` whose `from` is the verdict's
+    content key and `to` the sheet now, so `answered`, `standing`, the checkpoint and the push's review gate (its content-key branch
+    now `reviews prereq answered`, one copy of the rule) carry the verdict; a later edit moves `now` and owes again, a new full
+    verdict drops it. `make verify` names the route (`review-tree.sh`).
+  - T200 item 12b, AN ITEM'S PAGE NUMBER IS ITS HOME, NOT A BOND: `registry::items::Pages::locate` finds `{NNNN#id}` on question NNNN's
+    pages, else on the one other question whose pages tag `id`; two such questions are refused naming both. The claims' `item_labels`
+    FOLLOWS a claim whose item moved where the cited page's split pointers (`triage::change::follow`, T196's, the claims bundle's own
+    `read_pages`) reach the one page that now tags it: the claim owes no edit - the GM's "a split is a move" and "as long as the
+    original page being linked to directs a reader to the other page ... nothing needs to cascade simply because a split occurs" -
+    and is held to that tag's class (a mismatch names the flip, which owes no impl-drift); two reached pages tagging it are refused
+    naming the case. Only where no pointer directs the reader to it is the claim named with the pointer to write (`... is tagged on
+    <page> now - write its backing ...`): the GM's condition, the old page leading on, does not hold there. (MODE 4 round 3 BLOCKED
+    the rewrite-only form, 2026-11-23.)
+  - T200 item 12c, ALREADY DONE: `owed::record::modals::followed` calls `triage::change::follow`, which walks pointer targets to a
+    fixpoint since 451 T196, pinned by `change/tests.rs`' `a_split_s_target_split_again_is_followed_each_page_once`. Nothing changed.
+  - T200 item 12d, THE CACHE TOLD OF A REFERENCE'S PAGES: a Guesses reference is filled from its question's pages in the registry crate,
+    past `rust/mode_a`'s read log; `items.rs` logs every page it reads (`take_read`) and `l7r_mode_a::reads::take` drains it with its
+    own, so a relabel regenerates a cached sheet. Measured 2026-11-23 (grep of the modal files): 16 modals carry references, every
+    reference's question also in its Entry: or Drawing: line, so none was stale today; a moved item or a reference outside those
+    lines would have been. A page only named in About prose is never read, so it owes the cache nothing.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| T198 the derived lines | `derived_quick.rs`' `make_quick_checks_every_derived_file_preflight_regenerates` (red before the Makefile edit, each missing line named) | n/a - no engine code | none | n/a |
+| T199 the predicate | `stands/tests.rs`' `a_carried_verdict_with_only_minor_findings_stands_and_a_fixed_error_owes_its_round` (red with the severity rule off) | n/a | none | n/a |
+| T199 the dispatch count | `test-review-tree.sh` case 4b (the standing unit answered, one dispatched; the review-fixed route named) | n/a | none | n/a |
+| T199 the nitpick fixed on the sheet | `scoped/tests.rs`' `a_nitpick_fixed_on_the_sheet_is_carried_by_a_clean_change_scoped_round` (red with `carried`'s scoped arm off: tests.rs:69, the clean round not answered) and `an_error_fix_or_an_unclean_scoped_round_owes_the_full_round`; `test-review-gate.sh` case 3's "a clean change-scoped round of the edit ships it" (red on HEAD's review-gate.sh: expected ok, rc=1) | n/a | none | n/a |
+| T200 12b the move | `items/tests.rs`' `a_moved_item_is_found_on_the_one_other_question_that_tags_it`, `item_labels/tests.rs`' `a_moved_item_is_named_with_its_new_pointer` (each red on HEAD's "names no item"), `a_moved_item_the_cited_page_points_to_is_followed_and_owes_no_edit` (red with the follow off: tests.rs:109) | n/a | none | n/a |
+| T200 12d the reads | `reads.rs`' `a_page_a_guesses_reference_read_is_taken_with_the_writer_s_reads` (red with the drain off), `items/tests.rs`' `the_pages_a_reference_reads_are_told_to_the_cache` | `rust/mode_a/src/reads.rs` is engine code: a read added to the cache's key, no drawing changed | none (sheets' cache keys gain their reference pages, already read as Entry/Drawing pages) | n/a |
+
+### T198, T199, T200 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A stale derived file fails a builder's closing check naming its fix; `make verify`
+   dispatches no review whose verdict stands; a tagged item moved between questions still fills its pop-up's Guesses and names its
+   claims' new pointer; a relabel on a reference's page regenerates the cached sheet.
+2. **The constraints.** The three task lines; the GM's words above; T188's rule (only factual findings cascade); T176's carry; FR-012
+   (red first); FR-013 (performance first); T192's tagging and T195/T197's files (owed, claims commands and triage, record) left alone.
+3. **Where each comes from.** G: the GM's words. O: the timings, the transcript replay and the modal grep above. R: none - tooling.
+4. **Do they describe the world here?** Yes: the replay is this project's own review rounds of 2026-11-22/23; the grep is the tree.
+5. **The order.** Independent of T192, T195 and T197; T192's `modals::refs` should resolve through `Pages::locate` (the handoff).
+6. **The exits.** Green: the new tests and every existing test of `checks`, `registry`, `claims`, `reviews`, `mode_a` and the review
+   tree's suite. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the carry's readers found by grep of `content_key` (prereq, checkpoint, arbiter, review-gate.sh).
+8. **The budget.** One landing.
+9. **Done, measured.** `make closing-checks T=T198,T199,T200 F=451` green; the next `make verify` with a standing unit prints it
+   answered.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** 12d is a defect fix in the safe direction (a cached sheet could go stale on a relabel); 12b turns a refusal
+    into a resolution; the rest are new rules.
+
+**Found and left?**
+- Fixed here: a building-review nitpick fixed ON THE SHEET still moved its content key and owed a full round, which T199's line forbids
+  (the change-scoped round above; T203, filed for it by round 1's deferral, withdrawn as built in T199). That the edit was only
+  the nitpick is judged by the adversarial scoped round, not mechanically: the sample's nitpicks include geometry (a privy standing
+  a few feet off a house, observed 2026-11-23, method: the transcript replay's findings).
+
+**Performance work?** yes - T198 and T199 are `[perf]` tasks (451 FR-013): fewer red `make done` runs and fewer review rounds. Not
+engine speed, so the checklist below answers in its terms.
+
+### T198, T199, T200 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** T198: a red `make done` on a stale derived file, about an hour each (a GUESS, the gap audit's item 10 estimate; 372 wave
+   106 met building-programs.md stale twice). T199: 4 of 60 later building-review rounds, 152-336 s and 0.5-1.3M tokens each, measured 2026-11-23 (the replay above; the ledger's rows).
+2. **Removes work, or only moves it?** T198 moves the checks' fraction of a second (measured 2026-11-23, above) earlier to save a gate run; T199 removes a dispatch, and turns a nitpick-only sheet fix's full round into a round of its edit (a saving not measured: 0 of 7 attributable, 5 of 12 unknown).
+3. **What do you expect it to save, and why?** T198: each stale-derived red `make done`; T199: about 4 rounds a day at the wave's rate,
+   a GUESS from one day's replay.
+4. **How does the work grow with the settlement?** n/a - not the engine; `standing` reads one verdict and one content key per unit.
+5. **What did the before and after show, and under what conditions?** Before: the replay above. After: not yet measured on real waves.
+6. **Did any map move, and does it still keep the research?** No map moves.
+
+
