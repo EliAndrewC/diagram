@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-24T15:25:45Z",
+  "target": "plan-gate push",
+  "commit": "9e390a0e4d",
+  "why": "449's stale blocks are the unfilled template sections of T417, T418, T420, T422 and T423 (filed, not started) and T415's section short one late claim; 451's is T203's withdrawn heading"
+}
