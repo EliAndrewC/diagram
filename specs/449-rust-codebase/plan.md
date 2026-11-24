@@ -1250,31 +1250,41 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T424 (<why: the finding or measurement that files it>)
+### T424 (the 2026-11-24 wording and restatement audits: nine claims and comments in the hamlet and Mode A code that say something untrue, and one count the audits could not make)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: no behavior changes; claims, comments and one printed citation are restated (constitution XIV: a defect is a wrong outcome, not a difference). Each audit item was read against the code and its cited page on 2026-11-24 before its edit; every one held.
+  - **`rust/phases/src/field/channels.rs` `SUPPLY_W` and `division`, "far edge".** The page's words stay (`research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html` line 25: "supply canal along the far edge", 4.0 -> 1.5) and the code's half now says which canal that is: `channels` gives `SUPPLY_W.1`, the 4.0 ft, to side 1, whose flank is `brook_side` - canal B, down the brook's flank - while this file's "far flank" is canal A's. The page's own wording is T425's.
+  - **`channels` "the second canal with none", relabeled GUESS.** The claim cited `research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html` for "half way"; the page says the second canal feeds at least one delivery ditch on every hamlet map and nothing of one with none. The `fan.length / 2.0` of the `(None, _, 1)` arm is ours.
+  - **The count rows 220 and 308 needed (O).** Measured 2026-11-24 on a `git archive HEAD` copy in `/tmp`, one `eprintln!` after `offtake_lines` in `channels` (the count after the leaning-row rule, which can drop a fraction, not the ladder's): `hamlet --cohort 1 2000` and `hamlet --cohort 500000001 4000`, 6,000 seeds, every one a forked comb (`valley_paddy`), none refused; and the pool's four comb hamlets by their specs (Inashiro, Kashikawa, Mizuguchi, Sawada; Kuwabata is a polder and draws no comb). Canal B kept its one offtake on 6,000 of 6,000 seeds and 4 of 4 pool hamlets; canal A kept 2 or 3 on every one. No second canal without a delivery ditch was found, so the page's sentence holds as measured and nothing goes to the page session for it; the arm is a guard for a case no seed has rolled, and the claim says so.
+  - **`rust/phases/src/field/brook.rs` module claim "the brook bends".** `research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html` has no 22 ft figure (its one "22" is a removed tilt of 22 degrees in a comment); it gives only that every ditch turns on a sweep, no watercourse a mitered corner. The claim is now a GUESS saying so; the 22 ft is the driver's `BROOK_SLEW`, already a GUESS at its constant.
+  - **`rust/phases/src/driver/plan.rs` `DIKE_CROPS`.** `research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html` line 8: "Half the hamlets plant mulberry, a third fruit and a sixth tea, a GUESS". The claim cites it, in the form `POND_LAYOUTS` beside it uses for a page that records its own guess.
+  - **`rust/mode_a/src/audit/sun.rs`.** "homesteads 044" is an id with no entry in `research/moved-303.json`; the four comments and the `garden_sun` message now name research 0038's drawing page, in the form the other Mode A messages use ("research 0117's drawing page"). No test, fixture or message check pins the message (`grep -rn 'research homesteads' rust tests scripts`, 2026-11-24, finds `sun.rs` alone; `make guard-messages` reviews hook messages, which this is not). `SMALL_BUILDING_FT` and `SMALL_BUILDING_SQFT` drop "a departure the code keeps until feature 417 T33" for a GUESS that says what the page gives (a building at the farmhouse ridge's 20 ft, no smaller class): casting a privy or a hokora from 6 ft is the right outcome, and 417 T33 is an open task of a Draft feature whose Python is deleted, so nothing carried the "fix". The page's GUESS bullet for small roofed things is T425's. The `#[expect(clippy::doc_markdown)]` on `SMALL_BUILDING_FT`, whose reason was "the claim is the Python's, word for word", goes with the rewording.
+  - **`rust/mode_a/src/compound.rs` `NOTICE_BOARD_MAX_FT`.** The same filed departure, relabeled GUESS: `research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html` line 33 has the board "within about 15 ft of a gate in the wall", a figure of this project's with no footnote; the 40 ft, a GUESS of this project's, is feature 372 wave 104's, so a board beside the road can face its gate, and a board allowed that far is the outcome wanted.
+  - **`rust/phases/src/field/dry.rs` `MAX_BANDS`.** 64 bands of two strips of 71.5 ft (`TRACT_STRIPS.0`, `PLOT_FT.1`) are 9,152 ft, 1.73 miles, measured 2026-11-24 (64 x 2 x 71.5 / 5,280): "over a mile and a half".
+  - **`rust/phases/src/field/states.rs` `states`.** "(`field_stage._polder`)", a deleted Python name, becomes "(`polder_states`)", the function at line 77 that does it.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the claims and comments restated | n/a: comments and one message's citation, no roll changes | n/a: no engine behavior changes | none | n/a |
 
 ### T424 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** A reader of a claim, a comment or the garden-sun message is told what the code does and what its page says, and is sent to a page that exists; no map or sheet changes.
+2. **The constraints.** The task line's items and no others; constitution XIV (restate the claim where the outcome is right); the claim forms of `research/CLAUDE.md` and the label rule of `rust/gate/crates/claims/src/claims/labels.rs`; the research pages are T425's page sessions, not edited here.
+3. **Where each comes from.** G: the GM 2026-11-19, "don't spent a lot of time 'fixing' things which are not actually wrong". R: 0068, 0053, 0054, 0026, 0038 and 0090's drawing pages as quoted in the approach. O: the 6,000-seed and four-hamlet count, the greps and the miles' arithmetic above, 2026-11-24.
+4. **Do they describe the world here?** Yes: each item read against the working tree and its page on 2026-11-24; none was already fixed and none of the audits' readings was wrong.
+5. **The order.** Before T158; before T425, whose page sessions restate 0068's "far edge" and add 0038's small-roofed-thing bullet.
+6. **The exits.** Green: every touched claim carries an impl-drift verdict in `dev/claims-index.json` and `make closing-checks T=T424` is green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing; no stage's counted work moves (no code path changes).
+9. **Done, measured.** `make claims-owed` names no claim of `rust/phases/` or `rust/mode_a/`, and `grep -rn 'homesteads 044' rust/` finds nothing.
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader of a map or a sheet would see differently: not a defect, the claims restated (constitution XIV). The one printed change is the citation inside the garden-sun message, which named an id no reader could look up.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - what else was read is wording with no visible effect and no finding broken, so not filed: "research homesteads 044" also stands in `pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.notes.md` line 43 (a pool note, feature 452's files); `rust/phases/src/field/brook.rs` line 3 and `rust/phases/src/driver.rs` line 42 name the deleted `consts_water.py`, and `rust/phases/src/field/staged.rs` line 71 the deleted `field_stage._dikeponds`, each as history; 0090's drawing page still says "about 15 ft" (lines 33 and 43, observed 2026-11-24, method: `grep -n '15 ft'` on the page), which no task's line names.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T425 (<why: the finding or measurement that files it>)

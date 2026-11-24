@@ -1842,6 +1842,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
+  },
+  "### T424 (the 2026-11-24 wording and restatement audits: nine claims and comments in the hamlet and Mode A code that say something untrue, and one count the audits could not make)": {
+   "sha256": "67309a986320d3096598f74a98cc94ebc152c89b997124d286642ffce50b2442",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T424 Approach (checklist part A)": {
+   "sha256": "66c9ff95913263b09add8895aa52a5f27f5d29e1b458e95cf2ccd7d590c8d61d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -25613,6 +25625,88 @@
      "summary": "Ordering after T419, before T420 and T158; the hem's counted work rises only on wild-middle barley hamlets, reported against the stage's accepted count by make work-budget.",
      "class": "within",
      "why": "Sequencing and the budget report follow from the fix-before-new-code request; nothing asked for is excluded."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T424 (the 2026-11-24 wording and restatement audits: nine claims and comments in the hamlet and Mode A code that say something untrue, and one count the audits could not make)",
+    "### T424 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "approach",
+     "summary": "No behavior changes; claims, comments and one printed citation restated rather than code changed (constitution XIV).",
+     "class": "within",
+     "why": "The GM 2026-11-19: do not 'fix' things that are not wrong; a claim the code does not literally match where behavior is fine is restated. No item is argued to be a wrong outcome."
+    },
+    {
+     "id": "channels-far-edge",
+     "summary": "SUPPLY_W/division comment says which canal the page's 'far edge' 4.0 ft is (canal B, brook side); the page's own wording goes to T425.",
+     "class": "within",
+     "why": "Restates the code's half to match what it does; the page correction is routed to an existing task, not dropped."
+    },
+    {
+     "id": "channels-second-canal-guess",
+     "summary": "The 'second canal with none' half-way arm relabeled GUESS; 0053 does not say it.",
+     "class": "within",
+     "why": "Restating an unsupported citation as the project's own guess is exactly the restatement XIV asks for."
+    },
+    {
+     "id": "channels-count-O",
+     "summary": "Measured on 6,000 seeds and the four comb pool hamlets: canal B always keeps its offtake, so the page's sentence holds and nothing goes to the page session; the arm is labeled a guard for an unrolled case.",
+     "class": "within",
+     "why": "A measured observation with date and method; it finds no wrong outcome, so nothing is owed to fix."
+    },
+    {
+     "id": "brook-bends-guess",
+     "summary": "Brook module claim relabeled GUESS: 0054 has no 22 ft; the 22 ft is BROOK_SLEW, already a GUESS.",
+     "class": "within",
+     "why": "Claim restated to what the page gives; no map change."
+    },
+    {
+     "id": "dike-crops-cite",
+     "summary": "DIKE_CROPS cites 0026's own recorded guess in the POND_LAYOUTS form.",
+     "class": "within",
+     "why": "Citation correction only."
+    },
+    {
+     "id": "sun-citation-and-small-building",
+     "summary": "garden_sun message and comments name research 0038's drawing page instead of the unresolvable 'homesteads 044'; SMALL_BUILDING_FT/SQFT drop the 417 T33 'departure' for a GUESS stating what the page gives; the obsolete clippy expect goes; the page's small-roofed bullet is T425's.",
+     "class": "within",
+     "why": "A citation no reader could follow is corrected; casting a privy or hokora from 6 ft rather than 20 ft is the right outcome, so it is not a defect and the claim is restated (XIV). The page gap is routed to T425."
+    },
+    {
+     "id": "notice-board-guess",
+     "summary": "NOTICE_BOARD_MAX_FT relabeled GUESS: the code's 40 ft (feature 372 wave 104) kept against 0090's unfootnoted 'about 15 ft'.",
+     "class": "within",
+     "why": "The 15 ft is itself a project figure with no source, and a board allowed 40 ft from its gate draws correctly; per XIV the claim is restated, never the code. Leaving the page's 15 ft is wording, not a wrong outcome."
+    },
+    {
+     "id": "max-bands-arith",
+     "summary": "MAX_BANDS comment: 64 x 2 x 71.5 ft = 9,152 ft = 1.73 mi, 'over a mile and a half'.",
+     "class": "within",
+     "why": "Arithmetic checked: 9152/5280 = 1.733. Comment correction only."
+    },
+    {
+     "id": "states-name",
+     "summary": "Deleted Python name field_stage._polder replaced by polder_states.",
+     "class": "within",
+     "why": "Comment correction only."
+    },
+    {
+     "id": "order-and-exits",
+     "summary": "Lands before T158 and T425; green on impl-drift verdicts and closing-checks, red ruled via arbiter-ask; done measured by claims-owed and a grep of rust/.",
+     "class": "within",
+     "why": "Sequencing and exits add no scope and drop none; the GM 2026-11-24 asked for the open tasks closed out before the port resumes."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "Not filed: 'homesteads 044' in a pool note (feature 452's files), history mentions of deleted Python names in brook.rs, driver.rs and staged.rs, and 0090's page still saying 'about 15 ft'.",
+     "class": "within",
+     "why": "None is a wrong outcome (XIV v2.36.0): no map, sheet, check or tool misbehaves; the pool note belongs to feature 452, which the GM split off on 2026-11-24. Leaving a difference that is not a defect is within, not a narrowing."
     }
    ]
   }
@@ -53196,6 +53290,86 @@
      "summary": "Ordering after T419, before T420 and T158; the hem's counted work rises only on wild-middle barley hamlets, reported against the stage's accepted count by make work-budget.",
      "class": "within",
      "why": "Sequencing and the budget report follow from the fix-before-new-code request; nothing asked for is excluded."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T424": {
+   "section_sha256": "68922c323f655b95557fa177fcf599a0a836b0fbf8324cbfcbd59b2e8e4ab8a7",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "approach",
+     "summary": "No behavior changes; claims, comments and one printed citation restated rather than code changed (constitution XIV).",
+     "class": "within",
+     "why": "The GM 2026-11-19: do not 'fix' things that are not wrong; a claim the code does not literally match where behavior is fine is restated. No item is argued to be a wrong outcome."
+    },
+    {
+     "id": "channels-far-edge",
+     "summary": "SUPPLY_W/division comment says which canal the page's 'far edge' 4.0 ft is (canal B, brook side); the page's own wording goes to T425.",
+     "class": "within",
+     "why": "Restates the code's half to match what it does; the page correction is routed to an existing task, not dropped."
+    },
+    {
+     "id": "channels-second-canal-guess",
+     "summary": "The 'second canal with none' half-way arm relabeled GUESS; 0053 does not say it.",
+     "class": "within",
+     "why": "Restating an unsupported citation as the project's own guess is exactly the restatement XIV asks for."
+    },
+    {
+     "id": "channels-count-O",
+     "summary": "Measured on 6,000 seeds and the four comb pool hamlets: canal B always keeps its offtake, so the page's sentence holds and nothing goes to the page session; the arm is labeled a guard for an unrolled case.",
+     "class": "within",
+     "why": "A measured observation with date and method; it finds no wrong outcome, so nothing is owed to fix."
+    },
+    {
+     "id": "brook-bends-guess",
+     "summary": "Brook module claim relabeled GUESS: 0054 has no 22 ft; the 22 ft is BROOK_SLEW, already a GUESS.",
+     "class": "within",
+     "why": "Claim restated to what the page gives; no map change."
+    },
+    {
+     "id": "dike-crops-cite",
+     "summary": "DIKE_CROPS cites 0026's own recorded guess in the POND_LAYOUTS form.",
+     "class": "within",
+     "why": "Citation correction only."
+    },
+    {
+     "id": "sun-citation-and-small-building",
+     "summary": "garden_sun message and comments name research 0038's drawing page instead of the unresolvable 'homesteads 044'; SMALL_BUILDING_FT/SQFT drop the 417 T33 'departure' for a GUESS stating what the page gives; the obsolete clippy expect goes; the page's small-roofed bullet is T425's.",
+     "class": "within",
+     "why": "A citation no reader could follow is corrected; casting a privy or hokora from 6 ft rather than 20 ft is the right outcome, so it is not a defect and the claim is restated (XIV). The page gap is routed to T425."
+    },
+    {
+     "id": "notice-board-guess",
+     "summary": "NOTICE_BOARD_MAX_FT relabeled GUESS: the code's 40 ft (feature 372 wave 104) kept against 0090's unfootnoted 'about 15 ft'.",
+     "class": "within",
+     "why": "The 15 ft is itself a project figure with no source, and a board allowed 40 ft from its gate draws correctly; per XIV the claim is restated, never the code. Leaving the page's 15 ft is wording, not a wrong outcome."
+    },
+    {
+     "id": "max-bands-arith",
+     "summary": "MAX_BANDS comment: 64 x 2 x 71.5 ft = 9,152 ft = 1.73 mi, 'over a mile and a half'.",
+     "class": "within",
+     "why": "Arithmetic checked: 9152/5280 = 1.733. Comment correction only."
+    },
+    {
+     "id": "states-name",
+     "summary": "Deleted Python name field_stage._polder replaced by polder_states.",
+     "class": "within",
+     "why": "Comment correction only."
+    },
+    {
+     "id": "order-and-exits",
+     "summary": "Lands before T158 and T425; green on impl-drift verdicts and closing-checks, red ruled via arbiter-ask; done measured by claims-owed and a grep of rust/.",
+     "class": "within",
+     "why": "Sequencing and exits add no scope and drop none; the GM 2026-11-24 asked for the open tasks closed out before the port resumes."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "Not filed: 'homesteads 044' in a pool note (feature 452's files), history mentions of deleted Python names in brook.rs, driver.rs and staged.rs, and 0090's page still saying 'about 15 ft'.",
+     "class": "within",
+     "why": "None is a wrong outcome (XIV v2.36.0): no map, sheet, check or tool misbehaves; the pool note belongs to feature 452, which the GM split off on 2026-11-24. Leaving a difference that is not a defect is within, not a narrowing."
     }
    ],
    "verdict": "CLEAR"
