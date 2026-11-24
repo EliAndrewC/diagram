@@ -4382,8 +4382,7 @@ southern song	Song dynasty
 sovereign temple	sovereign temple
 sovereign temples	sovereign temple
 sozu	sōzu
-sparrow	Sparrow
-sparrow clan	Sparrow
+sparrow clan	Sparrow Clan
 sparse rafter	sparse rafters
 sparse rafters	sparse rafters
 spate	spate
@@ -4762,6 +4761,7 @@ thatch field	thatch field
 thatch fields	thatch field
 the pool	the pool
 the reform and opening-up	reform and opening-up
+the sparrow's	Sparrow Clan
 thin out	thinning
 thinned	thinning
 thinned out	thinning
