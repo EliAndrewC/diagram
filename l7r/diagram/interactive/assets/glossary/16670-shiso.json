@@ -1,7 +1,8 @@
 {
  "term": "shiso",
- "def": "Perilla, a leaf herb of the mint family grown for its fragrant leaves; it grows even in shade. As a place name, Shiso is a district of Harima province, today a city, whose Chigusa valley held ironworks.",
+ "def": "Perilla, a leaf herb of the mint family grown for its fragrant leaves; it grows even in shade.",
  "variants": [
   "shiso"
- ]
+ ],
+ "cased": true
 }
