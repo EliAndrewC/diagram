@@ -48,7 +48,7 @@ pub const TRACT_APART_DEG: f64 = 20.0;
 /// A bound on the bands the hem climbs: the climb itself ends where the grain is held or a whole band finds no ground.
 ///
 /// Research:
-///     the bound - NONE: a guard far past any canvas (64 bands, over two miles); research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html has the plots climb out as far from the canal as the ground runs, until they hold the grain
+///     the bound - NONE: a guard far past any canvas (64 bands, over a mile and a half); research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html has the plots climb out as far from the canal as the ground runs, until they hold the grain
 pub const MAX_BANDS: u32 = 64;
 /// How far a candidate's corners are pulled toward its middle before the lap test (feet): plots laid side by side share their
 /// corners and edges exactly, which is no lap.

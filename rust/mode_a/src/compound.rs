@@ -197,7 +197,7 @@ pub const TUB_DOOR_MAX_FT: f64 = 10.5;
 /// `notice_board_adrift` registers. 40 ft since feature 372 wave 104 (it was 20, set while boards stood against the wall).
 ///
 /// Research:
-///     board by the gate - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: the notice board stands within about 15 ft of a gate in the wall - it is allowed 40 ft, a departure the code keeps until feature 417 T33; within 40 ft of the opening, this project's figure, so a board beside the road (0190) can face its gate across the Imperial road's 30 ft (0088)
+///     board by the gate - GUESS: research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html has the notice board within about 15 ft of a gate in the wall, a figure of this project's that no source gives, and does not give one for a board across the road; a board is allowed 40 ft of the opening (feature 372 wave 104), a figure that is ours too, so a board beside the road (0190) can face its gate across the Imperial road's 30 ft (0088)
 pub const NOTICE_BOARD_MAX_FT: f64 = 40.0;
 
 /// The Mode A palette: a role, and its (fill, stroke), in the declaration's order (`compound_model.KINDS`; SKILL.md's Palette table).
