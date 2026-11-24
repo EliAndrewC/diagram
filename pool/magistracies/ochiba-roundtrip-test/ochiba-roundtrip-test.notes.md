@@ -42,7 +42,8 @@ hand-authored map: the residence owns the N corners, the kitchen flows below the
 the servants rank behind the residence, the karo backs the divider, the Inari shrine +
 cinnabar workshop hug the E wall, and in the outer court the office hall sits centered behind
 the oshirasu with the tax-archive column on the W wall and the granary/barracks/cell column on
-the E wall. Coverage 36%, perimeter-hugging 61%.
+the E wall. Coverage 36%, perimeter-hugging 61% as measured then; 33% and 66% as the sheet stands since the
+2026-11-22 and 2026-11-23 entries below (`make pack-audit`, 2026-11-24).
 
 ## Verdict
 

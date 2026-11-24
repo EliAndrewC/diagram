@@ -1,7 +1,7 @@
 # Tasks - feature 452, the building-plan follow-ups
 
 The 17 building-plan (Mode A) follow-ups moved out of feature 449 at the GM's request of 2026-11-24 (`request.md`), so 449 can
-close on its port. Each keeps its full text and evidence from `specs/449-rust-codebase/tasks.md` and names its 449 number. A task
+close on its port. Each of T001-T017 keeps its full text and evidence from `specs/449-rust-codebase/tasks.md` and names its 449 task; T18-T22 name their 449 found row and T23 the audit that found it. A task
 about how a place was built or lived in is `research: physical` with its five boxes (a box the record already answers is ticked
 with its pointer); a claim, doc or note restated to a page the record already holds is `research: rendering`.
 
@@ -74,16 +74,16 @@ with its pointer); a claim, doc or note restated to a page the record already ho
       research: rendering
 - [ ] T011 from 449 T411: docs/buildings.md 'Sacred features#grave markers' claim MISLABELED (impl-drift 2026-11-23 on the T399 bundle's round 2, outside the change): it cites 0235's drawing page for 'rows of ~2x1 ft markers', where the page calls the rows a map drawing convention and gives no marker size - fix: claim, CONVENTION for the rows and GUESS for the size; visible effect: none on the map, the procedure gives a guessed size as the page's
       research: rendering
-- [ ] T012 from 449 T412: a compound's modest shrine is always drawn a wooden hall (impl-drift 2026-11-23 on the T399 bundle's round 2, MISLABELED docs/buildings.md 'Sacred features#modest compound shrine'): 0218 attests a small shrine but not its material, and 0220 gives household shrines 'of stone or wood' - two attested forms, so a knob rolled per sheet (or the wooden form recorded as a DEVIATION), the claim citing 0220; visible effect: no compound shrine is ever stone
+- [ ] T012 from 449 T412: a compound's modest shrine is always drawn a wooden hall (impl-drift 2026-11-23 on the T399 bundle's round 2, MISLABELED docs/buildings.md 'Sacred features#modest compound shrine'): 0218 attests a small shrine but not its material, and 0220 gives household shrines 'of stone or wood' - two attested forms, so a knob rolled per sheet (or the wooden form recorded as a DEVIATION), the claim citing 0220; visible effect: no compound shrine is ever stone; ruled 2026-11-24 (spec-fidelity, spec.md Decisions Recorded and FR-004): a claim restatement, no sheet changes - every sheet's compound shrine is the hall form, 0220's 'of stone or wood' is the small shrine's and the record gives a hall no material, so the wooden hall is labeled a GUESS in docs/buildings.md's claim and its 'Modest shrine' bullet; a knob and a redraw only if the task's source-applicability check rules that 0220's two materials apply to the drawn shrine
       research: physical
-      - [ ] research pass
+      - [ ] research pass - answered by the record: research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html and research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html
       - [ ] source-reader confirmed
       - [ ] recorded and cited
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
-- [ ] T013 from 449 T413: a country shrine's burial ground is drawn as rows of small markers only (impl-drift 2026-11-23 on the T399 bundle's round 2, OUTSIDE THE CHANGE on docs/buildings.md 'Sacred features', Grave markers): 0235's drawing page puts a taller memorial stone or two among the rows and six stone jizo in a row at the entrance of every village burial ground - visible effect: the burial ground reads without its jizo or memorial stones
+- [ ] T013 from 449 T413: a country shrine's burial ground is drawn as rows of small markers only (impl-drift 2026-11-23 on the T399 bundle's round 2, OUTSIDE THE CHANGE on docs/buildings.md 'Sacred features', Grave markers): 0235's drawing page puts a taller memorial stone or two among the rows and six stone jizo in a row at the entrance of every village burial ground - visible effect: the burial ground reads without its jizo or memorial stones; ruled 2026-11-24 (spec-fidelity, spec.md Decisions Recorded and FR-004): the drawing PROCEDURE changes and no sheet is redrawn - no Mode A sheet or generator draws a burial ground today, so docs/buildings.md's 'Grave markers' bullet and its claim carry the memorial stones and the six jizo for every sheet that draws one
       research: physical
-      - [ ] research pass
+      - [ ] research pass - answered by the record: research/questions/0235-village-burial-grounds-bochi.drawing.html
       - [ ] source-reader confirmed
       - [ ] recorded and cited
       - [ ] quote-check confirmed
@@ -114,3 +114,8 @@ with its pointer); a claim, doc or note restated to a page the record already ho
       research: rendering
 - [ ] T22 docs/building-programs.md line 130 kitchen row says the door is recorded often at the rear of the house, a frequency its cited pages do not give; cite what they say or drop the frequency (449 found row 210; found by the triage of 2026-11-24, found-triage.md)
       research: rendering
+- [ ] T23 docs/buildings.md's three claims that still name a departure 'the code keeps until feature 417 T33' restated to what is drawn (the restatement audit of 2026-11-24, /home/agent/.claude/jobs/c6fd72d1/tmp/restatement-audit.md): genkan porch size (the generator draws 12 by 9 ft, layout.rs GENKAN, as 0104's drawing page says; Ochiba's 10 by 6 ft the page's GUESS), tax archive strongroom role (no page puts coin in a records storehouse; a GUESS, or the clause cut), kitchen garden at the dwelling (Hoshigaoka's bed moved to sunny ground by feature 283); visible effect: none on a map, the procedure tells a reader of departures no sheet or code holds
+      research: rendering
+- [ ] T24 a compound's shrine is always drawn as a hall, never as the small shrine of stone or wood that 0220 says most household shrines were (impl-drift 2026-11-24 on docs/buildings.md 'Sacred features#modest compound shrine', DRIFTED after T012's restatement; spec-fidelity's aside of the same day: a separate question from T012's material): rule whether the small-shrine form applies to an office's shrine (0218 gives an office's shrine no form; 0220's source is of households, an analog) and, if it does, roll the form per sheet from the map's seed, room first; visible effect: every compound's shrine reads as a building of 77 sq ft or more, never as a small stone or wooden shrine
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited

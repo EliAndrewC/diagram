@@ -18,8 +18,8 @@ How large a guest room was is not recorded.
 Guesses:
 - {0091#guest-house-building-own}
 - {0104#garden-between-gate-guest}
-- The size the plan gives the guest quarters: how large a guest room was is not recorded, so a generated plan gives it the
-  front row's room left beside the reception, with no band of its own, and a hand-drawn plan the size its notes record.
+- The size the plan gives the guest quarters: how large a guest room was is not recorded, so each plan draws the size its own room list or
+  notes give: a room of the residence's front row beside the reception on one plan, a guest house of 40 by 42 ft on another.
 
 Depiction: The plan draws the guest quarters as one labeled room, though the real guest space was the zashiki and the rooms beside it. It stands for the guest room of the residence, by the reception, or on some plans for a guest house of
 its own. A guest's door opens onto the ground inside the gate - an open court a palanquin could cross, or on some plans a garden - never straight from the street or against the side

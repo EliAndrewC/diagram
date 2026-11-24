@@ -46,7 +46,7 @@ cite it.
 ### User Story 2 - the sheets drawn to what the record holds (Priority: P1)
 
 A reader who knows the forms finds the stables' stalls with their rear doors and the grooms' room at the depth the source gives,
-the compound shrine and the burial ground in their attested forms, and Ubame's household able to reach its door without walking
+any burial ground a sheet draws in its attested form, and Ubame's household able to reach its door without walking
 round the writing pavilion.
 
 **Independent Test**: The sheets each such task names, redrawn, pass their checks and the review their occasion owes.
@@ -54,7 +54,7 @@ round the writing pavilion.
 ### User Story 3 - the claims, docs and notes say what the pages and drawings say (Priority: P2)
 
 A reader of `docs/buildings.md`, `docs/building-programs.md`, a drawing page or a sheet's notes is told what the record and the
-drawing hold - no cart gate no source has, no guessed size given as a page's, no citation of a pass no reader can open, no stale
+drawing hold - the compound shrine's material labeled as the record holds it, no cart gate no source has, no guessed size given as a page's, no citation of a pass no reader can open, no stale
 log line.
 
 **Independent Test**: `make claims-report` lists no open finding on the claims these tasks restate; each restated note or page
@@ -78,25 +78,37 @@ matches its sheet as drawn.
   rooms to its door is not forced round the writing pavilion.
 - **FR-004** (claims and docs restated to their pages; T007-T014, from 449 T374, T390, T393, T396, T411, T412, T413, T414): each
   claim in `docs/buildings.md`, `docs/building-programs.md` and the county sheet's research strings is restated to the page it
-  cites, labeled as the record labels it. Two of them change the drawing as well as the docs: the compound shrine's material
-  (T012) becomes a knob rolled per sheet from 0220's two attested forms, or a recorded DEVIATION, and the claim says which; the
-  country shrine's burial ground (T013) is drawn with the taller memorial stones and the row of six stone jizo at its entrance that
-  0235's drawing page gives.
+  cites, labeled as the record labels it. T012 restates the compound shrine's material: 0218 gives none, and 0220's 'stone or
+  wood' is the small shrine's, not the hall the sheets draw, so the wooden hall is labeled a GUESS (the record silent; the easier
+  route kept) in `docs/buildings.md`'s claim and its 'Modest shrine' bullet. Should T012's source-applicability check rule that
+  0220's two materials apply to the drawn shrine, the material becomes a knob rolled per sheet and the sheets are redrawn. T013
+  restates the burial ground's drawing procedure (`docs/buildings.md`, 'Grave markers', and its claim) to carry the taller memorial
+  stone or two and the row of six stone jizo at the entrance that 0235's drawing page gives, so every sheet that draws a burial
+  ground in its frame carries them; no Mode A sheet draws one today, so none is redrawn.
 - **FR-005** (record and notes brought to their drawings; T015-T017, from 449 T380, T406, T410): each sheet's notes and comments,
   and each drawing page, say what the drawing does; the record's untranslated term gets its gloss once a source gives it.
-- **FR-006**: Every task keeps its full text and evidence from 449's line and names its 449 number, its research class corrected
-  to the standing rule (Decisions Recorded); nothing here changes a scripted settlement map (Mode B).
+- **FR-006**: Each of T001-T017 keeps its full text and evidence from 449's line and names its 449 task, and each of T18-T22 names
+  its 449 found row; each research class is corrected to the standing rule (Decisions Recorded); nothing here changes a scripted
+  settlement map (Mode B).
+- **FR-007** (Mode A follow-ups carried from 449's found rows at the 2026-11-24 triage; T18-T22, not among the GM's 17): the armory,
+  bath-rank and arch-distance audits (T18-T20) each refuse the misplaced or oversized form their line names;
+  `docs/building-programs.md` says what the county example draws and what its cited pages give (T21, T22).
+- **FR-008** (a claim found untrue while this feature's restatements were read; T23, the restatement audit of 2026-11-24): the three
+  claims of `docs/buildings.md` that name a departure "the code keeps until feature 417 T33" - the genkan porch's size, the tax
+  archive's strongroom role, the kitchen garden at a country shrine's dwelling - say what the sheets and the generator draw today.
 
 ## Success Criteria *(mandatory)*
 
 - **SC-001** (FR-001): Each of the three questions has its finding or its absence on a page of the record, checked by
   `source-reader`, `quote-check` and `source-applicability`, and the county sheet cites that page.
-- **SC-002** (FR-002, FR-003, FR-004): The sheets FR-002 and FR-003 change, and the sheets T012 and T013 redraw under FR-004,
+- **SC-002** (FR-002, FR-003, FR-004): The sheets FR-002 and FR-003 change, and any sheet T012 redraws, should its knob be ruled,
   are redrawn, pass their checks, and carry their occasion's review.
 - **SC-003** (FR-004, FR-005): `make claims-report` lists no open finding on the claims these tasks restate, and no note, comment
   or drawing page they name contradicts its sheet as drawn.
-- **SC-004** (FR-006): Every task line names its 449 number, each `research: physical` task closes with its five boxes ticked, and
+- **SC-004** (FR-006): Each of T001-T017 names its 449 task and each of T18-T22 its 449 found row, each `research: physical` task closes with its five boxes ticked, and
   no pool map of Mode B moves at any of this feature's landings.
+- **SC-005** (FR-007, FR-008): each of T18-T20 has a fixture of the bad form its audit refuses while every pool sheet still passes,
+  and `make claims-report` lists no open finding on T21's, T22's and T23's statements.
 
 ## Decisions Recorded
 
@@ -105,8 +117,18 @@ matches its sheet as drawn.
 - The research class is corrected in the move to the standing rule (root CLAUDE.md, Development workflow: every task is
   `research: rendering` or `research: physical`; `docs/spec-kit-and-reviews.md`): 449 classed all 17 `research: rendering` as
   tooling, but T001-T006, T012, T013 and T017 are about how a place was built or lived in, so each is `research: physical` with its
-  five boxes. Where the record already answers a box - T012's from 0220, T013's from 0235 - it is ticked with its pointer to that
-  page, not researched again.
+  five boxes. Where the record already answers a task's research-pass box, the box is answered by its pointer - T012's to 0218
+  and 0220, T013's to 0235's drawing page - not researched again, and it is ticked with the other four when the task lands (the
+  landing's tooling ticks; a builder ticks nothing).
+- T18-T22 were filed here at the found-row triage of 2026-11-24, and T23 by the restatement audit of the same day, under the
+  standing rule that a defect found is fixed where it is found (constitution XIV), as Mode A building-plan items; none is among
+  the GM's 17.
+- T012 and T013 ruled against the record (spec-fidelity, 2026-11-24, on two reviewers' disagreement). T012 is a claim
+  restatement and no sheet changes: every sheet's compound shrine is the hall form (each a building with a door, altars and an
+  arch, observed 2026-11-24, method: the five sheets' svgs and specs; the sizes in plan.md's section), 0220's "of stone or wood" is the small shrine's, and the record gives a
+  hall no material - one attested form of the thing drawn, so no knob, and no DEVIATION where the record is silent; the wooden
+  hall is a GUESS, the easier route kept (the root CLAUDE.md's research rules; constitution XIV). T013 changes the drawing
+  PROCEDURE, and no sheet is redrawn: no Mode A sheet or generator draws a burial ground today (Hoshigaoka's lies west of its frame, outside it, as its notes record), and the procedure's bullet is what every later sheet follows.
 - The tasks are grouped and numbered by kind, in the order of the GM's request: research questions, stable details, the layout
   item, claims and docs, record and notes.
 
@@ -121,3 +143,7 @@ matches its sheet as drawn.
   Decisions Recorded and FR-006, T012's and T013's boxes ticked from their pages; FR-004 and SC-002 cover the drawing T012 and
   T013 change.
 - 2026-11-24, round 2 (spec-fidelity-verify, MODE 3): FAITHFUL - round 1's two items resolved.
+- 2026-11-24, a new pass, round 1 (spec-fidelity-verify, MODE 3, with the T012 and T013 question put to it): CHANGES REQUIRED, 5
+  items - T18-T22 given FR-007 and SC-005 (T23 FR-008), FR-006 and SC-004 scoped; FR-004's T012 and T013 sentences, SC-002 and User
+  Stories 2 and 3 restated to the ruling in Decisions Recorded; the research-pass boxes' wording made true.
+- 2026-11-24, the new pass, round 2 (spec-fidelity-verify, MODE 3): FAITHFUL - the five items resolved; T23 and FR-008 pass.
