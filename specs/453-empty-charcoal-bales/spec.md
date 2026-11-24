@@ -41,7 +41,8 @@ laborer-hours to make one, and what share of a full bale's price the bale was.
    SILENT). A figure for a neighboring good, place or century is not an answer to the figure asked: that figure is SILENT, the nearest named.
 2. Each price stands beside the same place and period's day wage where a source or the record gives one, and says where the wage comes from;
    a wage of another place or decade is named as that.
-3. What the record already holds (0279, read first as the issue asks; 0312, 0332, 0283) is named by file, not repeated.
+3. What the record already holds (0279, read first as the issue asks; 0199 and 0197 on the charcoal bale itself; 0312, 0332, 0283), from
+   `grep -lIiE '俵|tawara|charcoal bale|straw bale|炭俵|明俵' research/questions/*.html`, is named by file, not repeated.
 4. Japan comes first, then Ming and Qing China as comparison, as the issue orders.
 
 ### Edge Cases
@@ -61,14 +62,16 @@ laborer-hours to make one, and what share of a full bale's price the bale was.
 - **Who made them**: ATTESTED ONLY FOR Nippara village in the Tama hills, 1814 (the women wove the bales from the village's kaya grass while
   the men burned, a gazetteer quoted in a local-history article). Village straw-workers weaving charcoal bales in winter as by-employment, for
   sale: an undated 20th-century memoir from Tosayama only, so SILENT for the Edo period. Men twisting rope and weaving mats between farm work
-  is in a Musashi village account the record already cites.
+  is in a Musashi village account the record already cites. The Nippara passage bears on 0197's GUESS that charcoal was baled at the kiln,
+  and the new question says so.
 - **Material**: kaya grass for the body in 1814, ATTESTED ONLY FOR that village; straw-rope ties, brushwood end caps and a 2.5 kg tare in a
-  1935 Tokyo standard, modern. Straw and reed bodies, which the issue also names: SILENT in the pass.
+  1935 Tokyo standard, modern. Straw bodies: the record holds 0199's straw bale and Iburi's charcoal rolled in straw mats (undated), named by
+  file. Reed bodies: SILENT in the pass.
 - **How long one took**: SILENT for the Edo period. The nearest are 20th-century: 14-15 woven pieces (not finished bales) in a short winter
   day in Okutama folklore, and under an hour a bale at Tosayama. Laborer-hours per bale is therefore SILENT, those two named.
-- **Traded as a separate good**: ATTESTED ONLY FOR empty bales of other or unstated kinds in Edo - bought by the hundreds and thousands
-  1802-1808; 5,000 empty rice bales to be bought from the city's rice dealers in 1859; the Kodenmacho jail selling its empty bran bales in the
-  1840s-60s. Charcoal bales sold empty to makers or dealers, by the hundred: SILENT for the Edo period (the Tosayama memoir the nearest).
+- **Traded as a separate good**: SILENT for charcoal bales in the Edo period (the Tosayama memoir, 20th century, the nearest). The nearest Edo
+  figures: empty bales of unstated kind bought by the hundreds and thousands 1802-1808; 5,000 empty rice bales to be bought from the city's
+  rice dealers in 1859; the Kodenmacho jail selling its empty bran bales in the 1840s-60s, ATTESTED ONLY FOR those kinds.
 - **Share of a full bale's price**: SILENT for the Edo period. The nearest: packing at 4.6-6.5% of the white-charcoal price, Japan, 1914-26,
   and 10-13% of production cost in 1933 (ministry surveys, the first a division by this project); the Beijing basket below.
 - **Neighbors**: straw mats 25 mon each in a Mino village in 1765 beside a farm laborer's 60 mon a day, about 29-30 mon in Edo in 1806 and
@@ -102,6 +105,10 @@ laborer-hours to make one, and what share of a full bale's price the bale was.
   reports nothing missing.
 - **SC-003** (FR-006, FR-007): no fragment states a Rokugani price, and every price that has a wage beside it names where the wage comes from,
   as the check rounds read them.
+
+## Review history
+
+- spec-fidelity round 1 (2026-11-24, MODE 2): CHANGES REQUIRED - 0199 and 0197 missing from what the record holds, and the list's search unnamed; the separate-trade verdict taken from a neighboring good. Both applied.
 
 ## Assumptions
 

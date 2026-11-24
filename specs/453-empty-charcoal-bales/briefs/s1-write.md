@@ -1,0 +1,30 @@
+<!-- page-load: kind=assertions -->
+# Brief - feature 453, the empty charcoal bale. Session S1: write
+
+You are a FRESH session for the record edits of one feature. This brief is the whole of what you need; do not read the feature's spec or plan. Work in this clone (`/diagram/.clones/diagram-research`). The research record's `CLAUDE.md` applies to you above all, along with `research/money-requests.md`.
+
+**What is asked.** gm-assistant's words on EliAndrewC/diagram#23 (verbatim in `specs/453-empty-charcoal-bales/request.md`: read it first). Every part of its question and every figure it needs gets a verdict - ATTESTED, ATTESTED ONLY FOR <the case>, NOT ATTESTED or SILENT (with its search) - with place and date. A figure for a neighboring good, place or century is not an answer to the figure asked: that figure is SILENT, the nearest named. Each price stands beside the same place and period's day wage where a source or the record (0250, 0275, 0279) gives one, the wage's source said; a wage of another place or decade is named as that. Two sources that disagree are both given. Any division of one source's figure by another's is this project's arithmetic, labeled, with both dates and places. In analytical prose it is "commoners", "villagers" or "the population", never "people".
+
+**History only.** No fragment says what a bale costs in Rokugan. Nothing edits the canon.
+
+**Your pass:** `specs/453-empty-charcoal-bales/passes/a-bales.md` - leads, not citations: read each passage on its page before citing it; where a page does not read as the pass says, write what it says, or SILENT. **Its reading is the pass's, not yours: test it.**
+
+The Edo ward records (NDL 2548494, 2587102, 2547651, 2587455, 2547702, 2548603) were read through the NDL's machine reading of handwritten manuscripts; only 2548494 frame 72 and 2587102 frame 54 were checked against the scans. Cite a passage only once you have read it on its page image, and give it to the checks with `IMAGES=`. An empty bale whose kind the source does not state (明俵) is that, never a charcoal bale. The Hamura volume's date (1868-69) is the pass's inference: date it from the document or leave it out. A 20th-century figure (the Tosayama memoir, Okutama folklore, the ministry surveys of 1914-33, the 1935 Tokyo standard) is given with its date and carries no Edo-period verdict. Try once the leads the pass did not read: 地方凡例録 vol. 9's standard allowances for 明俵 and 縄 (NDL 1365507, on the scan), 牧民金鑑 [13] (NDL 2547281), 守貞謾稿 on 明俵 and the empty-bale buying trade, a farm manual's work rate for rope, mats or bales (農家益, 百姓伝記, 農業全書), and the prefecture rows of the 1931 ministry survey's table 4; a page still unreadable stays out and is named in the handoff as open.
+
+**Already in the record - name by file, do not repeat:** 0199 (straw bales of rice and charcoal: a tawara is woven straw; Iburi charcoal rolled in straw mats) and 0197 (charcoal yards and stores: its GUESS that charcoal was baled at the kiln, which the Nippara 1814 passage bears on - say so in the new question), 0279 (charcoal prices, bale weights, kiln costs), 0312 (unpaid household straw work), 0332 (straw after the harvest), 0283 (Tosa and Kumano charcoal far from home).
+
+## Your items
+
+1. **The empty bale**, a NEW money question (`make reserve KIND=question`), its title asking what an empty charcoal bale cost and who wove it; `subject=money` first. Japan first: the price of an empty charcoal bale bought on its own (and the Edo empty bales of other or unstated kind beside their day wages, as what they are); who made charcoal bales (the burners' own households, or village straw-workers in winter as by-employment) and of what (straw, reed, kaya; the end caps; the ropes); how long one took to weave; whether they were traded as a separate good, by the hundred, to charcoal makers or dealers; what share of a full bale's price the bale was; the neighbors the request names (rice bales, straw mats, sandals, rope), each price with its wage where found. Then China: the basket or matting charcoal was packed in, and its price, Ming and Qing. The three figures the request needs each get their own stated verdict: sen, mon or laborer-days per empty bale; laborer-hours to make one; the bale's share of a full bale's price.
+2. A one-line pointer to item 1 from `research/questions/0279-what-did-charcoal-cost.html`, where it speaks of bales.
+
+**New registry keys**: the pass names about fourteen sources not yet in the registry; the cap is ten a session. Take the best-evidenced first; `make reserve`'s eleventh key writes a continuation brief - follow it, so that no finding is dropped for the cap.
+
+## The procedure (session S1: write)
+
+1. `make archive-inbox` (leave the GM's waiting and refused downloads as they are). Then `make research-claim Q="0279" FEATURE=453`. Claim the new question's number (`make reserve`).
+2. For each page or file you cite, `make archive-find`, then `make source-pages`, then `source-reader` from a bundle (`make check-bundle KEY=<k> WHOLE=1`; page images with `IMAGES=`), dispatched in the FOREGROUND. A new source takes `make reserve KIND=registry KEY=<k> URL=<u> TAGS="..."` and its two write-ups.
+3. Write the fragments, then `make record CHECK=1`, `make record`, `make glossary` and `make question-sizes` (the new question not listed). `make money-candidates CHECK=1` must exit 0. Commit with messages opening `453: `.
+4. Write `specs/453-empty-charcoal-bales/implementation-check.md`: one line per touched question, `- NNNN: no code implements it - consumed by gm-assistant's money skill; searched: grep -rnIi -E '<terms>' l7r pool rust` (run the search; if it finds code that decides a bale's price, say so in the handoff instead).
+5. Append to `specs/453-empty-charcoal-bales/briefs/handoff.md` (with `make append`; create it if absent) a `## Session S1` section: `- SECTION=<NNNN>/<id>` per section changed; per part and figure asked, its verdict and fragment file; searches; new keys; leads not followed.
+6. Release the claims (`STATUS=done`). Do not push. Your last message is one paragraph.

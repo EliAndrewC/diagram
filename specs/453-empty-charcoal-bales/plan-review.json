@@ -1,0 +1,114 @@
+{
+ "feature": "453-empty-charcoal-bales",
+ "blocks": {
+  "preamble": {
+   "sha256": "80bbb18661db185c9fa21e6351132028058b432776af83dba85f6f6adf2020ec",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "1e3b0d3db7422232634398a4578313954e4930acd2fa844d3577d224d4a27faa",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "61eeda0f84cdb6d3903aa6632a4854c4e053fdd6024836e67511725e79a5a4bf",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "e116895cc6f388a0be1bb5b3c1e802485d2c37ed4af2f0cc5950eb3a1acc4c83",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the empty bale (FR-001, FR-002, FR-005, FR-006, FR-007)": {
+   "sha256": "e315a98e684bba093be7604c2b2f0dd9705a36e354fc23c0c0f811ae7ea95bee",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the implementation check, the reply and the report (FR-001, FR-003, FR-004)": {
+   "sha256": "0e07776596c6815f65ff8971c29bf2e7138ae8a5f3fb89859f3e850d0d43dd8b",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the empty bale (FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "## D2 - the implementation check, the reply and the report (FR-001, FR-003, FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary/TC: one write session, at most ten new registry keys, best-evidenced first",
+     "summary": "The whole answer is written in ONE write session capped at ten new registry keys, the best-evidenced sources first, with no continuation for the rest.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The sources behind passes/a-bales.md sections 1-7 include at least 14 that are not in research/sources (URL and NDL-pid grep, 2026-11-24: NDL 1077861, 1178389, 2547651, 2547702, 2548494, 2548603, 2587102, 2587455, 2587751, 920967, ghosts.xrea.jp yore-092, scrapbox chouroudaigaku, seiryo-u.ac.jp, the Shizuoka sumi.pdf). Ten keys, best-evidenced first, in one session therefore drops findings FR-001/FR-002 require written, and the request asked for each part. Not physically impossible: the project's own rule (research/CLAUDE.md, CLAUDE.md 'Research') sends the eleventh key to a continuation brief. Fix: 'at most ten new registry keys a write session; the eleventh sends the rest to a continuation write session (make reserve), and no finding is dropped for the cap' and Summary 'one write session (and its continuations under the key cap)'."
+    },
+    {
+     "id": "Summary: no code, map or canon change",
+     "summary": "Research record only.",
+     "class": "within",
+     "why": "Spec 'This feature records only the history'; money-requests.md: nothing here edits the canon."
+    },
+    {
+     "id": "TC: pass is leads, every passage read on its page before citing",
+     "summary": "Citations only after reading the page via archive-find/source-pages.",
+     "class": "within",
+     "why": "Spec findings heading 'leads until read on the page'; FR-002 citation rules."
+    },
+    {
+     "id": "TC: machine-read manuscripts cited only once read on the page image, IMAGES= to the checks",
+     "summary": "OCR-only passages not cited.",
+     "class": "within",
+     "why": "Spec edge case 2."
+    },
+    {
+     "id": "Performance bookends N/A; Constitution Check",
+     "summary": "No generator change; research: physical task; record CHECK=1 green.",
+     "class": "within",
+     "why": "Affects: research record; procedural."
+    },
+    {
+     "id": "D1: one new money question, Japan first then China, parts in the issue's order, 0279 pointer",
+     "summary": "The question's structure: price, makers and material, time, trade, share, neighbors, then Beijing 1736 and Ming silence; pointer from 0279.",
+     "class": "within",
+     "why": "Request clause by clause; FR-002; AS-4. The named record files (0279, 0312, 0332, 0283) follow the accepted spec; when the spec adds 0199 and 0197 (MODE 2 finding) this block must add them too."
+    },
+    {
+     "id": "D1: neighbors '(mats, matting, rope, earth bags)'",
+     "summary": "The neighbors written into the question are only the ones with figures found; the request's rice bales and sandals are not listed.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request names rice bales first, then straw mats, sandals and rope, as the neighbors; the spec gives rice bales' price and sandals SILENT verdicts that FR-001/FR-005 require carried with what is still open. A list of only the found neighbors drops two named parts. Fix: '(mats, matting, rope, earth bags; empty rice bales - the 1859 order without a price - and sandals SILENT, named with what is still open)'."
+    },
+    {
+     "id": "D2: implementation-check line, reply part by part, escalation-check for anything for the GM",
+     "summary": "Close-out and reply.",
+     "class": "within",
+     "why": "FR-001, FR-003, FR-004; money-requests.md."
+    }
+   ]
+  }
+ ]
+}
