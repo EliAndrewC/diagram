@@ -4812,6 +4812,8 @@ tiao	tiao
 tiaos	tiao
 ticket salt	ticket salt
 ticket-salt	ticket salt
+tide gate	tide gate
+tide gates	tide gate
 tie-rail	tie-rail
 tie-rails	tie-rail
 tier	tier
@@ -5302,6 +5304,7 @@ xiang seven, li three	Lingqu
 xiang-gan	Xiang-Gan
 xiangcang	shecang
 xingqing	Western Xia
+xining	Xining
 xinyou	xinyou
 xiongnu	Xiongnu
 xu	xu

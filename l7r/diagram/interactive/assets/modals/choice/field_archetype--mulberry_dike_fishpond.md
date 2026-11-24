@@ -7,11 +7,11 @@ part of a village's rice land, but in the 18th century, at Longshan, "outside th
 
 Across the delta the ponds lay as a mosaic among winding rivers, and in 1678 one township's pond land was likened to a chessboard, its lines the dikes and its squares the ponds; most were narrow rectangles side by side, with squares and odd shapes pressed in to fit the ground.
 They lay among the creeks and canals of the polder around them, watered and drained through sluice gates in the polder's own
-dike. In the delta in modern times most ponds are about 1 to 1.5 acres (0.4 to 0.6 ha) and 7 to 10 ft deep, their dikes from under 16 ft to about 33 ft wide, standing 2 to 3 ft above the water. In Guangzhou's villages in the 17th century the ponds were drained at the year's end and sown with rice seedlings in spring; in modern times they are drained two or three times a year, their mud dredged onto the dikes.
+dike. In Guangzhou's villages in the 17th century the ponds were drained at the year's end and sown with rice seedlings in spring; in modern times they are drained two or three times a year, their mud dredged onto the dikes.
 
 In 1678, early in the Qing, the fish took half of one delta township's
 land, and its ponds eight tenths. Water and dike were kept in proportion, so the mulberry could feed the
-fish beside it: in modern times about six parts water to four of dike, or the reverse.
+fish beside it: in modern times about six parts water to four of dike, or the reverse. In the delta in modern times most ponds are about 1 to 1.5 acres (0.4 to 0.6 ha) and 7 to 10 ft deep, their dikes usually about 20 to 33 ft wide, standing 2 to 3 ft above the water.
 
 Guesses:
 - {0018#village-takes-five-recorded}
@@ -20,10 +20,10 @@ Guesses:
 - [dike_crop=mulberry] {0026#mulberry-bush-about-4}
 
 Depiction: The map draws the block as a polder converted nearly or wholly wall to wall into ponds. The ponds
-are four-sided, set out for each settlement either as a mosaic, the lattice of canals bent out of line so the ponds skew to uneven shapes, or as a straight chessboard of ponds.
+are four-sided, set out for each settlement either as a mosaic, the lattice of canals bent out of line so the ponds skew to uneven shapes, or as a straight chessboard of ponds; the title card says which.
 Each pond is ringed by a bank of mottled earth planted with one crop for the whole
 settlement, mulberry, fruit trees or tea; the title card says which. A village's dikes could carry these crops side by side, but the map gives each settlement one, so it reads as one kind of dike-pond village. The sluices drawn are the polder's own, in its outer dike, not one in every pond,
-and that outer dike is drawn as any polder's is. Its rows of willow and mulberry are set on its faces, so they read as its own planting, where a Ming river manual set such rows on the ground off its foot. A single canal runs round the inside of its foot: canals ran inside a polder's dike, but the one ring at its foot, and the gentle waver of the canals' line, are the map's convention. Where a village rears its own fry, its fry ponds are drawn in grayer, muddier water than the ponds where the fish are grown on, as the fry water was turbid and the grown fish's clear; the exact shade is the map's.
+and that outer dike is drawn as any polder's is. Its rows of willow and mulberry are set on its faces, so they read as its own planting, where in the Ming such rows were to be set on the ground off its foot. A single canal runs round the inside of its foot, straight along it and square at the corners: canals ran inside a polder's dike, but the one ring at its foot and its line are the map's convention. Where a village rears its own fry, its fry ponds are drawn in grayer, muddier water than the ponds where the fish are grown on, as the fry water was turbid and the grown fish's clear; the exact shade is the map's.
 
 Name: Fishponds ringed by mulberry dikes
 Covers: `meta.field_archetype = mulberry_dike_fishpond`

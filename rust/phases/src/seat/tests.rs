@@ -443,3 +443,37 @@ fn a_fall_into_the_wind_backs_the_hill_when_its_one_windward_margin_is_walled_in
     let named = refused.contains("walled in") && !refused.contains(" 0 walled in");
     assert!(named, "{refused}");
 }
+
+#[test]
+fn a_seat_walled_in_at_its_center_leaves_by_its_bands_end_once_no_margin_is_left() {
+    // the land falling north-east, square across the north-west wind; the north margin's seat on the toe, the west margin's kept
+    let s = 0.5f64.sqrt();
+    let mut i = inp();
+    i.fall = (s, -s);
+    i.toe = square(2000.0, 2100.0, 4000.0, 2400.0);
+    // a ring of water round the west seat's center alone, its band's ends on open ground: before 449 T426 the site was refused
+    // "1 walled in" (seeds 941239097 and 508: the center in the pocket between the brook, the feeder and the field's corner)
+    let (cx, cy) = (2338.0, 3000.0);
+    i.lines = vec![
+        ((cx - 120.0, cy - 120.0), (cx + 120.0, cy - 120.0)),
+        ((cx + 120.0, cy - 120.0), (cx + 120.0, cy + 120.0)),
+        ((cx + 120.0, cy + 120.0), (cx - 120.0, cy + 120.0)),
+        ((cx - 120.0, cy + 120.0), (cx - 120.0, cy - 120.0)),
+    ];
+    let seated = seat(&i).unwrap();
+    // the west margin, its back still to the wind
+    assert!(seated.frames.len() == 1 && seated.frames[0].out.0 < -0.5 && !seated.frames[0].offwind);
+}
+
+#[test]
+fn a_fall_square_across_the_wind_from_either_side_never_backs_the_hill() {
+    // the driver's fall of 315 degrees against the north-west wind: square across it, its dot with the wind a rounding hair above
+    // nothing where 135 degrees' is a hair below - before 449 T426 the hair asked the hill-backed seat (3 of 20,000 cohort combs)
+    let mut i = inp();
+    let rad = 315.0f64.to_radians();
+    i.fall = (rad.cos(), rad.sin());
+    assert!(i.fall.0 * i.wind.0 + i.fall.1 * i.wind.1 > 0.0);
+    i.toe = square(2000.0, 2100.0, 4000.0, 2400.0);
+    i.reeds = vec![square(2000.0, 2600.0, 2400.0, 3400.0)];
+    assert!(seat(&i).is_err());
+}

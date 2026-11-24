@@ -24,12 +24,12 @@ bush to 24 sq ft: the late-Qing spacing, the one density dated before modern tim
 stretches with earth showing between, where the far denser root-cut planting would fuse into one band of green. No
 berries are drawn: a mulberry's fruit would be smaller than the map can show, and whether a bush stripped for its leaves
 bore fruit is not recorded. A bush always stands on the bank, though its crown may lean over the canal at the bank's foot.
-Each settlement's ponds are drawn at one of five splits of water to bank: six parts to four either way, seven of water to three of bank, one to one, or
-three of water to seven of bank; the title card says which split this one takes. The bank is drawn as a ring round the water, so pointing at a dike lights the bank and not the pond inside it. Every dike
+Each settlement's ponds are drawn at one split of water to bank;
+the title card says which split this one takes. The bank is drawn as a ring round the water, so pointing at a dike lights the bank and not the pond inside it. Every dike
 of a hamlet carries the same crop, so each hamlet reads as one kind of dike-pond village; the title card says which.
 
 Name: mulberry dike
 Covers: the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it
 Sources: sdlib-shunde-jitang, pwsannong-zhusanjiao-nongyeshi, pwsannong-sangji-yutang, kuwa-jawiki, morus-enwiki, isis-dykepond, pwsannong-gudai-zaisang, chi-2024-dike-pond-commons, guangdong-xinyu-22
 Entry: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html, research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.html
-Drawing: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html, research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html
+Drawing: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html, research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html, research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html

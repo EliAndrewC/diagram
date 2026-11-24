@@ -1,5 +1,5 @@
 About: In the Pearl River delta each dike-pond was dug out of a low hollow that flooded, its mud heaped round it as its bank,
-and a district's ponds lay as a mosaic among its winding creeks rather than in planned rows. The ponds arose there in the early
+and across the delta the ponds lay as a mosaic among its winding creeks, though in 1678 one township's pond land was likened to a chessboard, its lines the dikes and its squares the ponds. The ponds arose there in the early
 Ming and reached their height at the end of the Qing.
 
 From above, a mosaic of ponds was mostly narrow rectangles set side by side, with shorter rectangles, squares and odd shapes
@@ -7,14 +7,14 @@ pressed in to fit the ground, among meandering natural streams, so that where th
 hard to tell. The ponds lay among the creeks and canals of their polder, watered and drained through the sluice gates in its
 outer dike.
 
-Most ponds today are about 1 to 1.5 acres (0.4 to 0.6 ha) and 7 to 10 ft (2 to 3 m) deep. Before modern times only the largest
-are measured: in 1678 the bigger ponds below the planted dikes of Guangzhou's villages reached several tens of mu, several
+Most ponds today are about 1 to 1.5 acres (0.4 to 0.6 ha) and 7 to 10 ft (2 to 3 m) deep.
+In 1678 the bigger ponds below the planted dikes of Guangzhou's villages reached several tens of mu, several
 acres each.
 
-Depiction: The map lays the block out on a lattice of ditches and bends it out of line with a smooth drift that fades to
-nothing at the block's edge, so the interior ditches meander like creeks and the parcels skew to trapezoids while every pond
+Depiction: The map lays the block out on a lattice of canals and bends it out of line with a smooth drift that fades to
+nothing at the block's edge, so the canals between the ponds meander like creeks and the parcels skew to trapezoids while every pond
 stays four-sided, as most real ones were. How strongly the lattice bends is set by eye. Not every dike-pond hamlet is drawn so: some lay their ponds out as a chessboard instead, and the title card says which
-this one has. Each pond is drawn smaller than most ponds today: its parcel is about 1.2 acres, and only part of that is water.
+this one has. Each pond is drawn smaller than most ponds today: most stand in a parcel of about 1.2 acres, and only part of that is water.
 
 Name: Ponds laid out as a mosaic
 Covers: `meta.pond_layout = mosaic`

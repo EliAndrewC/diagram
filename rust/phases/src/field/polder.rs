@@ -1,6 +1,6 @@
 //! The polder (feature 444 T16 D8): the block of modules the households' paddy fills, its lattice bowed and nudged (the rice
 //! polder) or drifted (the dike-pond mosaic), its plots - strips on the rice polder, ponds' parcels on the dike-pond - the ring
-//! canal at the dike's inside foot, a field ditch in each column corridor, the two sluices and the wild pond that feeds it.
+//! canal at the dike's inside foot, a channel in each column corridor (a field ditch, or a dike-pond's creek), the two sluices and the wild pond that feeds it.
 //! Written from `phases/polder_greenfield.derivation.md` and `phases/field.md`'s "The polder's design, next"; the old code unread.
 //! The dike and its trees are `dike.rs`'s, the dike-pond's ponds `landuse.rs`'s; the thin Python draws them and fills the reed
 //! fringe (`marsh`).
@@ -9,6 +9,7 @@
 //!     the rice polder's grid - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a rice polder is drawn on a surveyed grid
 //!     the modules - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: square modules about 190 ft on a side; a dike-pond block a smaller module, about 160 ft, most merged in pairs
 
+use self::creeks::{creek_width, eased, stations, Lattice};
 use super::fan::{heading, Pt};
 use crate::pyrand::knob_rng;
 
@@ -41,7 +42,7 @@ pub const BOW_NUDGE_FT: (f64, f64) = (6.0, 3.0);
 /// (`MOSAIC_WAVES`), fading to nothing at the block's edge.
 ///
 /// Research:
-///     the mosaic's drift - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a smooth drift that fades to nothing at the fixed outer edge; how strongly is a calibrated liberty, set on the Kuwabata map - 0.48 of a module, the strength at which Kuwabata's parcels skew as main drew them (measured 2026-11-02 on the four extreme corners of each parcel: median corner deviation 14.5 deg against main's 13.9, p90 20.1 against 23.8); the port's single weak wave at 0.15 drew 4.6 deg, a chessboard (the glyph check, feature 444 T16)
+///     the mosaic's drift - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a smooth drift that fades to nothing at the fixed outer edge; how strongly is a calibrated liberty, set on the Kuwabata map - 0.48 of a module, the strength at which Kuwabata's parcels skew as main drew them (measured 2026-11-02 on the four extreme corners of each parcel: median corner deviation 14.5 deg against main's 13.9, p90 20.1 against 23.8); the port's single weak wave at 0.15 drew 4.6 deg, a chessboard (the glyph check, feature 444 T16); a block whose corridors that strength would pinch under its creek's width keeps a lesser share of it (`eased`, 449 T420)
 pub const DRIFT_SHARE: f64 = 0.48;
 /// The mosaic's two waves on each axis, as (weight, cycles across the block) pairs: down the fall from the fall and from across, and
 /// across from across and from the fall.
@@ -116,6 +117,10 @@ pub struct Polder {
     pub fringe: Vec<Pt>,
     pub feeder: Vec<Pt>,
     pub shape: (usize, usize),
+    /// The share of the lattice's deformation the block keeps: 1 but on a mosaic eased to give its creeks room (`eased`).
+    pub ease: f64,
+    /// The distances `eased` measured across the block's corridors, for the counters.
+    pub corridor_tests: u64,
 }
 
 /// The block's rows and columns of modules: the shape whose row count is nearest the square root of the modules times `aspect`
@@ -152,6 +157,22 @@ struct Frame {
 }
 
 impl Frame {
+    /// The frame of a block `size` (down the fall, across) whose middle is `center`, `down` the fall's unit vector.
+    ///
+    /// Research:
+    ///     the frame - NONE: a coordinate transform
+    fn about(center: Pt, down: Pt, size: Pt) -> Self {
+        let across = (-down.1, down.0);
+        Self {
+            origin: (
+                center.0 - down.0 * size.0 / 2.0 - across.0 * size.1 / 2.0,
+                center.1 - down.1 * size.0 / 2.0 - across.1 * size.1 / 2.0,
+            ),
+            down,
+            across,
+        }
+    }
+
     /// The map point `u` down the fall and `x` across from the frame's origin.
     ///
     /// Research:
@@ -296,11 +317,11 @@ impl Warp {
 ///
 /// Research:
 ///     the polder's acreage - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: 1.3 acres gross a household, in whole modules of research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html at or above it
-///     never uniform rectangles - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: our maps never draw the parcels as a grid of uniform rectangles - the rice polder bowed and nudged, the dike-pond mosaic drifted; the dike-pond's chessboard the one exception, attested on its own (the next claim)
+///     never uniform rectangles - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: our maps never draw a rice polder's parcels as a grid of uniform rectangles - the rice polder's lattice bowed and nudged; the exception a block of dike-ponds, whose ponds some maps draw as a chessboard, a layout recorded on its own (the next claim)
 ///     the chessboard - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a dike-pond's grid of ponds, the chessboard, attested beside the mosaic, its dikes the black lines and its ponds the squares - drawn straight, its modules never paired, the `pond_layout` knob's other form
 ///     the least polder - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: a field enclosed on the map is never drawn under about 8 acres - the block's modules hold at least that
 ///     two sluices - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: water crosses the dike only at gated sluices, an inlet at the head and an outfall at the tail - the inlet at the head corner beside the wild pond, the outfall at the tail corner the drain widens to (research/questions/0060-field-drains-akusuiro.drawing.html: a drain reaches its full width at the outfall)
-///     the feeder - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: no channel runs outside the dike (the ring canal's rule), and the wild pond feeds the polder at its head; the feeder is read as the wild water's own reach to the inlet sluice, not a channel outside the dike, and the page is silent on its course - straight from the wild pond to the inlet
+///     the feeder - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html#feeder-course: the feeder drawn straight from the wild pond to the inlet sluice, a reach of the wild water itself by the shortest line, no page giving the course of a channel feeding a polder's inlet - from the wild pond's middle through its near shore to the inlet's point
 ///     the wild pond's place - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the wild pond feeds the polder at its head, where its inlet is - up the fall from the inlet's corner, `POND_FT.2` out, in line with the inlet's flank (the page's "northwest" is its one pool polder's compass, the head read from the fall here, as every map's)
 ///     the pond's reeds - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent on reeds at the wild pond; a fringe round it (`FRINGE_FT`)
 ///     the grid's bearing - GUESS: research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html silent on which way the grid lies to the fall; the walking-bund rows across the fall, the ditch-corridor columns along it, the water running down the columns
@@ -338,23 +359,12 @@ pub fn polder(
         cols as f64 * (module + col_gap) - col_gap,
     );
     let (dx, dy) = heading(down_deg);
-    let across = (-dy, dx);
-    let origin = (
-        center.0 - dx * size.0 / 2.0 - across.0 * size.1 / 2.0,
-        center.1 - dy * size.0 / 2.0 - across.1 * size.1 / 2.0,
-    );
-    let frame = Frame {
-        origin,
-        down: (dx, dy),
-        across,
-    };
+    let frame = Frame::about(center, (dx, dy), size);
     // the dike-pond's mosaic drifts; its grid (the chessboard) stands straight; the rice polder bows and nudges
-    let form = if !dikepond {
-        "polder"
-    } else if layout == "mosaic" {
-        "mosaic"
-    } else {
-        "chessboard"
+    let form = match (dikepond, layout) {
+        (false, _) => "polder",
+        (true, "mosaic") => "mosaic",
+        _ => "chessboard",
     };
     let warp = Warp::new(
         seed,
@@ -363,17 +373,28 @@ pub fn polder(
         (module, (module + row_gap, module + col_gap)),
         (rows, cols),
     );
-    let put = |u: f64, x: f64| {
+    let put_at = |ease: f64, u: f64, x: f64| {
         let (du, dxx) = warp.at(u, x);
-        frame.at(u + du, x + dxx)
+        frame.at(u + ease * du, x + ease * dxx)
     };
-    let plots = plots(
-        &put,
+    let lay = |ease: f64| {
+        plots(
+            &|u, x| put_at(ease, u, x),
+            (rows, cols),
+            (module, row_gap, col_gap),
+            (dikepond, form == "chessboard"),
+            seed,
+        )
+    };
+    let creek = dikepond.then(|| creek_width(seed));
+    let (ease, corridor_tests, plots) = eased(
+        &put_at,
+        &lay,
+        (module, (row_gap, col_gap)),
         (rows, cols),
-        (module, row_gap, col_gap),
-        (dikepond, form == "chessboard"),
-        seed,
+        creek,
     );
+    let put = |u: f64, x: f64| put_at(ease, u, x);
     let ring = |o: f64| {
         vec![
             frame.at(-o, -o),
@@ -391,18 +412,19 @@ pub fn polder(
         frame.at(-RING_FT.1 - POND_FT.1, size.1 + RING_FT.1),
         inlet,
     ];
-    let mut ditches = ditches(&put, &canal, size, (cols, module, col_gap), (rows, row_gap));
-    let joins = joins([inlet, outfall], &ditches);
-    ditches.extend(joins);
-    if dikepond {
-        ditches.extend(row_ditches(
-            &put,
-            size,
-            (cols, module, col_gap),
-            (rows, row_gap),
-            &plots,
-        ));
-    }
+    let lattice = Lattice {
+        put: &put,
+        plots: &plots,
+        module,
+        gaps: (row_gap, col_gap),
+    };
+    let ditches = channels(
+        &lattice,
+        &canal,
+        size,
+        (rows, cols),
+        ([inlet, outfall], creek),
+    );
     Polder {
         outline: ring(0.0),
         inner_env: env,
@@ -413,7 +435,31 @@ pub fn polder(
         fringe: fringe(pond_at, (POND_FT.0, POND_FT.1)),
         feeder,
         shape: (rows, cols),
+        ease,
+        corridor_tests,
     }
+}
+
+/// Every channel of the block: the ring canal's trunks and the column channels (`ditches`), the two sluices' joins (`joins`)
+/// and, on a dike-pond block (`water.1` its creek's width), the creeks across the rows (`row_ditches`).
+///
+/// Research:
+///     the channels gathered - NONE: plumbing, each channel's rule claimed where it is laid
+fn channels(
+    lattice: &Lattice,
+    canal: &[Pt],
+    size: (f64, f64),
+    grid: (usize, usize),
+    water: ([Pt; 2], Option<f64>),
+) -> Vec<Ditch> {
+    let (sluices, creek) = water;
+    let mut out = ditches(lattice, canal, size, grid.1, (grid.0, creek));
+    let joins = joins(sluices, &out);
+    out.extend(joins);
+    if let Some(w) = creek {
+        out.extend(row_ditches(lattice, size, grid, w));
+    }
+    out
 }
 
 /// The reed fringe's ring round a pond at `at` of radii `r`: the ellipse `FRINGE_FT.0` past its water, at `FRINGE_FT.1` points.
@@ -516,24 +562,28 @@ fn plots(
 }
 
 /// The polder's channels: the ring canal in its four trunks (the feeder across the head from the inlet, the two flanks, the
-/// drain across the tail to the outfall) and a field ditch down each column corridor from the head's trunk to the tail's.
+/// drain across the tail to the outfall) and a channel down each column corridor from the head's trunk to the tail's - a rice
+/// polder's field ditch, or a dike-pond block's creek at the width `rows.1` gives.
 ///
 /// Research:
 ///     the ring canal - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a ring canal round the inside foot of the dike, on the field side
 ///     the field ditches - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: between one column of modules and the next, a ditch corridor of about 8 ft
-///     the widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: from the inlet's corner the supply's two arms, 4.5 to 1.5 across the head and 4.0 to 1.5 down the inlet's flank, as a fan's canals A and B; a delivery 2.5 to 1.2 down each column, its head capped at 0.8 of the head canal's width where it leaves; the drain 1.2 to 5.5 ft across the tail to the outfall's corner
+///     the widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: a rice polder's and the ring canal's on either form - from the inlet's corner the supply's two arms, 4.5 to 1.5 across the head and 4.0 to 1.5 down the inlet's flank, as a fan's canals A and B; on a rice polder a delivery 2.5 to 1.2 down each column, its head capped at 0.8 of the head canal's width where it leaves; the drain 1.2 to 5.5 ft across the tail to the outfall's corner. A dike-pond block's column channels take no rung of this ladder: they are the waterways its ponds lie among, not field ditches (research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html), at the creeks' width (the next claim)
+///     the creeks' width - GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#creek-width-between-ponds: a canal between ponds drawn about 6 to 8 ft wide - each column channel of a dike-pond block at the block's one creek width from head to tail (`creek_width`), no taper
+///     the ring canal on a dike-pond block - GUESS: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html and research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html give a dike-pond block's ring canal no width of its own, and research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html's ladder is a rice field's; its four trunks keep the rice polder's rungs, 1.5 to 5.5 ft, the route that moves nothing else, so a creek of 6 to 8 ft opens on a ring canal narrower than itself
+///     a creek's mouth on the ring canal - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent on how a channel between ponds meets the ring canal; each creek's course stops half its width short of the ring canal's middle line, so its rounded end reaches that line and no farther - drawn through to the line, the end of an 8 ft creek stood 4 ft past it, across a 1.5 ft trunk and onto the dike's foot (4 of some 2,700 ends over 80 rolled blocks reached the dike's inner face, measured 2026-11-24, feature 449 T420)
 ///     the deliveries' places - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: between one column of modules and the next, a ditch corridor - one delivery on the middle of each gap between columns, from ring to ring, `cols - 1` of them
 ///     the far flank - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the supply canal dwindling to a lateral - the head arm's 1.5 ft tail held down the far flank, a lateral at that width flat from the head's far corner to the tail's
-///     ditches on the warped lattice - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: each column line takes its own bow, so a column's ditch runs down its corridor through the same warp as the plots beside it
-///     the dike-pond's interior ditches - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic's lattice of ditches - a column ditch in the dike between each column of ponds, through the same warp; the ditches across the rows are `row_ditches`'
+///     ditches on the warped lattice - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: each column line takes its own bow, so a column's channel runs down its corridor through the same warp as the plots beside it - at every station midway between the two sides it runs between (`Lattice::midway`)
+///     the dike-pond's channels down its columns - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html#channel-every-pond-edge: a channel is drawn along every pond's edge, each pond in a ring of bank of its own - a creek in the gap between each column of ponds and the next, through the same drift, so the channels between the ponds meander as creeks do; the creeks across the rows are `row_ditches`'
 fn ditches(
-    put: &dyn Fn(f64, f64) -> Pt,
+    lattice: &Lattice,
     canal: &[Pt],
     size: (f64, f64),
-    cols: (usize, f64, f64),
-    rows: (usize, f64),
+    n: usize,
+    rows: (usize, Option<f64>),
 ) -> Vec<Ditch> {
-    let (n, module, gap) = cols;
+    let (module, (row_gap, gap)) = (lattice.module, lattice.gaps);
     let mut out = vec![
         Ditch {
             role: "main",
@@ -564,34 +614,35 @@ fn ditches(
             w_tail: 5.5,
         },
     ];
-    // THE DITCH'S STATIONS ARE THE PARCELS' OWN (the glyph check of Kuwabata, feature 444 T16): every row's start and end and the
+    // THE CHANNEL'S STATIONS ARE THE PARCELS' OWN (the glyph check of Kuwabata, feature 444 T16): every row's start and end and the
     // middle of every gap between rows, where the parcels beside it keep their corners (`plots`) - so between two stations the
-    // ditch and the parcels' sides are straight runs of the same warp, and the ditch stays in its gap; sampled finer, the mosaic's
-    // drift bowed it up to 24 ft into the banks
-    let (row_n, row_gap) = rows;
-    let mut stations = vec![-RING_FT.0];
-    for r in 0..row_n {
-        #[expect(clippy::cast_precision_loss, reason = "a small count")]
-        let u0 = r as f64 * (module + row_gap);
-        stations.extend([u0, u0 + module]);
-        if r + 1 < row_n {
-            stations.push(u0 + module + row_gap / 2.0);
-        }
-    }
-    stations.push(size.0 + RING_FT.0);
+    // channel and the parcels' sides are straight runs, and the channel stays in its gap; sampled finer, the mosaic's drift bowed
+    // it up to 24 ft into the banks. At each station it stands midway between the two sides (`Lattice::midway`, 449 T420): a
+    // merged pair keeps no corner at a row's end, so the lattice's own line there stood up to 4.6 ft off the corridor's middle
+    let (row_n, creek) = rows;
+    // a creek's rounded end is half its width long: it stops that far short of the ring canal's middle line (`creek_width`)
+    let short = creek.map_or(0.0, |w| w / 2.0);
+    let stations = stations(
+        row_n,
+        module,
+        row_gap,
+        (-RING_FT.0 + short, size.0 + RING_FT.0 - short),
+    );
     for c in 1..n {
         #[expect(clippy::cast_precision_loss, reason = "a small count")]
         let x = c as f64 * (module + gap) - gap / 2.0;
-        let pts = stations.iter().map(|&u| put(u, x)).collect();
+        let pts = stations.iter().map(|&u| lattice.midway(c, u)).collect();
         // the head canal's width where the column leaves it: 4.5 ft at the inlet's corner (x = breadth), its 1.5 ft tail at the far one
         let local = 1.5 + (4.5 - 1.5) * (x / size.1).clamp(0.0, 1.0);
         let head = 2.5_f64.min(0.8 * local);
+        // a rice polder's delivery tapers down its column; a dike-pond's creek holds the block's one width (449 T420)
+        let (w, w_tail) = creek.map_or((head, 1.2_f64.min(head)), |w| (w, w));
         out.push(Ditch {
             role: "lateral",
             seg: "column",
             pts,
-            w: head,
-            w_tail: 1.2_f64.min(head),
+            w,
+            w_tail,
         });
     }
     out
@@ -627,35 +678,20 @@ fn joins(sluices: [Pt; 2], trunks: &[Ditch]) -> [Ditch; 2] {
     ]
 }
 
-/// The dike-pond's ditches across the rows: in each column, a ditch down the middle of every row gap no parcel spans - where the
-/// column's ponds are not a merged pair across it - joining the column ditches (or the ring canal at the block's flanks), its
-/// stations the column's own corners, so it runs between the banks and never through one.
+/// The dike-pond's channels across the rows: in each column, a creek `w` feet wide down the middle of every row gap no parcel
+/// spans - where the column's ponds are not a merged pair across it - joining the column creeks (or the ring canal at the
+/// block's flanks), its stations the column's own corners, so it runs between the banks and never through one.
 ///
 /// Research:
-///     the row ditch's width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: a sub-ditch at most 0.75 of the delivery's head - of the narrower column ditch it joins
-///     the lattice both ways - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the dike-pond's lattice of ditches bent out of line both ways; research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: gaps of about 22 ft both ways - a row's ditch only where its gap is open, a merged pair's gap its own bank
-fn row_ditches(
-    put: &dyn Fn(f64, f64) -> Pt,
-    size: (f64, f64),
-    cols: (usize, f64, f64),
-    rows: (usize, f64),
-    plots: &[Plot],
-) -> Vec<Ditch> {
-    let ((n, module, col_gap), (row_n, row_gap)) = (cols, rows);
+///     the row ditch's width - GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#creek-width-between-ponds: a canal between ponds drawn about 6 to 8 ft wide - a channel across a dike-pond's rows at the block's one creek width (`creek_width`), the column channels' own, where before 449 T420 it took 0.75 of a rice polder's delivery rung
+///     the lattice both ways - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the dike-pond block's lattice of creeks bent out of line; research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: gaps of about 22 ft both ways - a row's channel only where its gap is open, a merged pair's gap its own bank; each end on the column creek it joins, at that creek's own station, or at the block's flank its rounded mouth on the ring canal (`ditches`)
+fn row_ditches(lattice: &Lattice, size: (f64, f64), grid: (usize, usize), w: f64) -> Vec<Ditch> {
+    let (module, (row_gap, col_gap)) = (lattice.module, lattice.gaps);
+    let ((row_n, n), put, plots) = (grid, lattice.put, lattice.plots);
     let mut out = Vec::new();
     for c in 0..n {
         #[expect(clippy::cast_precision_loss, reason = "a small count")]
         let x0 = c as f64 * (module + col_gap);
-        let left = if c == 0 {
-            -RING_FT.0
-        } else {
-            x0 - col_gap / 2.0
-        };
-        let right = if c + 1 == n {
-            size.1 + RING_FT.0
-        } else {
-            x0 + module + col_gap / 2.0
-        };
         for r in 0..row_n.saturating_sub(1) {
             // open where a parcel of this column ends at row `r`
             if !plots.iter().any(|p| p.col == c && p.row + p.span == r + 1) {
@@ -663,17 +699,25 @@ fn row_ditches(
             }
             #[expect(clippy::cast_precision_loss, reason = "a small count")]
             let u = r as f64 * (module + row_gap) + module + row_gap / 2.0;
-            // a sub-ditch at most 0.75 of the delivery it leaves (0068): the narrower of the column ditches either side
-            let head =
-                |x: f64| 2.5_f64.min(0.8 * (1.5 + (4.5 - 1.5) * (x / size.1).clamp(0.0, 1.0)));
-            let w = 0.75 * head(left.max(0.0)).min(head(right.min(size.1)));
             out.push(Ditch {
                 role: "lateral",
                 seg: "row",
-                pts: [left, x0, x0 + module, right]
-                    .iter()
-                    .map(|&x| put(u, x))
-                    .collect(),
+                // each end on the column creek it joins, at that creek's own station on this row's line, or its rounded mouth
+                // half its width short of the ring canal's middle line at the block's flank
+                pts: vec![
+                    if c == 0 {
+                        put(u, -RING_FT.0 + w / 2.0)
+                    } else {
+                        lattice.midway(c, u)
+                    },
+                    put(u, x0),
+                    put(u, x0 + module),
+                    if c + 1 == n {
+                        put(u, size.1 + RING_FT.0 - w / 2.0)
+                    } else {
+                        lattice.midway(c + 1, u)
+                    },
+                ],
                 w,
                 w_tail: w,
             });
@@ -769,93 +813,6 @@ pub fn rest(plots: &[Plot], seed: i64, unsettled: bool) -> Vec<usize> {
     chosen
 }
 
+pub mod creeks;
 #[cfg(test)]
-mod tests {
-    use super::{outfall, polder, rest, shape, MODULE_FT};
-    use crate::field::geom::{inside, signed_area};
-
-    #[test]
-    fn the_shape_wastes_least() {
-        assert_eq!(shape(24, 1.0), (6, 4));
-        let (r, c) = shape(34, 0.5);
-        assert!(r * c >= 34 && r * c - 34 < c);
-        assert_eq!(shape(1, 0.0), (1, 1));
-    }
-
-    #[test]
-    fn a_rice_polder_and_a_dike_pond_block() {
-        let paddy = 15.0 * 1.3 * 43_560.0;
-        for (dikepond, layout) in [(false, "mosaic"), (true, "mosaic"), (true, "chessboard")] {
-            let p = polder(paddy, dikepond, layout, 90.0, (3200.0, 3200.0), 1.0, 4);
-            let area: f64 = p.plots.iter().map(|x| signed_area(&x.ring).abs()).sum();
-            assert!(area >= paddy * 0.8, "{area} for {paddy}");
-            assert!(p
-                .plots
-                .iter()
-                .all(|x| x.ring.len() == 4 || x.ring.len() == 6));
-            assert!(p.plots.iter().any(|x| x.low));
-            #[expect(clippy::cast_precision_loss, reason = "a parcel's few corners")]
-            let center = |r: &[(f64, f64)]| {
-                (
-                    r.iter().map(|q| q.0).sum::<f64>() / r.len() as f64,
-                    r.iter().map(|q| q.1).sum::<f64>() / r.len() as f64,
-                )
-            };
-            assert!(p
-                .plots
-                .iter()
-                .all(|x| inside(center(&x.ring), &p.inner_env)));
-            assert!(!inside(p.pond.0, &p.inner_env));
-            assert!(
-                p.fringe.len() == 16
-                    && p.fringe
-                        .iter()
-                        .all(|q| (q.0 - p.pond.0 .0).abs() <= 82.0 + 40.0 + 1e-9)
-            );
-            assert!(p.ditches.len() >= 4 && p.feeder.len() == 3);
-            if dikepond {
-                let paired = p
-                    .plots
-                    .iter()
-                    .filter(|x| signed_area(&x.ring).abs() > MODULE_FT.1 * MODULE_FT.1 * 1.5)
-                    .count();
-                if layout == "mosaic" {
-                    assert!(paired * 2 > p.plots.len());
-                } else {
-                    // the chessboard's ponds are its squares, never paired
-                    assert_eq!(paired, 0);
-                }
-            } else {
-                assert!(p.plots.len() > p.shape.0 * p.shape.1);
-            }
-        }
-        let p = polder(paddy, false, "mosaic", 90.0, (3200.0, 3200.0), 1.0, 4);
-        assert!(rest(&p.plots, 4, false).is_empty() && rest(&[], 4, true).is_empty());
-        for seed in 0..10 {
-            let r = rest(&p.plots, seed, true);
-            assert!((1..=4).contains(&r.len()));
-            for (k, &i) in r.iter().enumerate() {
-                for &j in &r[k + 1..] {
-                    let (a, b) = (&p.plots[i], &p.plots[j]);
-                    assert!(a.col != b.col || a.row > b.row + b.span || b.row > a.row + a.span);
-                }
-            }
-        }
-        // the outfall runs down the fall off the canvas, whichever way the fall
-        for (deg, canvas) in [
-            (90.0, (6400.0, 6400.0)),
-            (0.0, (6400.0, 6400.0)),
-            (180.0, (6400.0, 6400.0)),
-            (270.0, (6400.0, 6400.0)),
-            (45.0, (6400.0, 6400.0)),
-        ] {
-            let run = outfall((3200.0, 3300.0), deg, canvas);
-            let end = run[run.len() - 1];
-            assert_eq!(run.len(), 3, "two turns of 45 degrees onto the fall");
-            assert!(end.0 < 0.0 || end.1 < 0.0 || end.0 > canvas.0 || end.1 > canvas.1);
-        }
-        let flat = polder(paddy, true, "chessboard", 90.0, (0.0, 0.0), 1.0, 4);
-        let warped = polder(paddy, true, "mosaic", 90.0, (0.0, 0.0), 1.0, 4);
-        assert_ne!(flat.plots, warped.plots, "the mosaic bends the lattice");
-    }
-}
+mod tests;

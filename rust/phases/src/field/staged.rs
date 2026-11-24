@@ -140,6 +140,7 @@ pub fn polder_stage(
         "write@polder_ditch",
         2 * p.ditches.iter().map(|d| d.pts.len() as u64).sum::<u64>(),
     );
+    counts.add("candidate@polder_corridor", p.corridor_tests);
     counts.add("write@polder_pond", 6);
     counts.add("write@dike_crest", 2 * dike.crest.len() as u64);
     counts.add("write@dike_face", 2 * dike.outer.len() as u64);
@@ -151,7 +152,17 @@ pub fn polder_stage(
         let (share, leftover, fry, crop) = pond;
         let rings: Vec<Vec<Pt>> = p.plots.iter().map(|x| x.ring.clone()).collect();
         let at = super::landuse::inset(&rings, share);
-        let (parcels, crops) = super::landuse::convert(&rings, seed, at, leftover, fry, crop);
+        let (parcels, mut crops) = super::landuse::convert(&rings, seed, at, leftover, fry, crop);
+        // no bush in a creek's water (0018; 449 T420): a creek may graze a bank's foot where the mosaic pinches a gap
+        let channels: Vec<(&[Pt], f64)> = p
+            .ditches
+            .iter()
+            .map(|d| (d.pts.as_slice(), d.w.max(d.w_tail)))
+            .collect();
+        counts.add(
+            "candidate@bank_crop_water",
+            super::landuse::off_the_water(&mut crops, &channels),
+        );
         counts.add("write@dikepond", 13 * parcels.len() as u64);
         counts.add(
             "write@bank_crop",

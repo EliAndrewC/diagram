@@ -1,7 +1,7 @@
 //! ONE HAMLET SPEC ROLLED AND JUDGED (feature 449 T252): `hamlet --check <spec>...`, the reference step of `make maps`' hamlet row. A
-//! single `make hamlet` roll writes its map and exits 0 even where a stage refused, and never asks the finished map's rules; the cohort
-//! asks both of each seed (`hamlet --cohort`). This asks them of a pool spec: a stage's error, each refusal, each rule the map breaks,
-//! one problem each, and writes nothing.
+//! single `make hamlet` roll never asks the finished map's rules (a roll a stage refused is an error and writes no map, 449 T426); the
+//! cohort asks them of each seed (`hamlet --cohort`). This asks them of a pool spec: a stage's error, each rule the map breaks, one
+//! problem each, and writes nothing.
 //!
 //! Research:
 //!     the spec check - NONE: plumbing over the driver's roll and its rule check, deciding nothing about a place

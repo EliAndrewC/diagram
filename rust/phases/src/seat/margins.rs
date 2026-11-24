@@ -124,7 +124,7 @@ pub struct Weights {
 ///     the square end in - GUESS: tier 1 takes "a margin 45 to 90 degrees off the wind" with both ends in, as the falls are admitted
 ///     (square to the wind or away, `water_frame.rs` `admitted`): a fall square to the wind leaves the head square to it, and with
 ///     the end out the Rust gate's seed 901280 (its windward flank, parallel to the fall, all on the wet toe) had no seat
-const SQUARE_EPS: f64 = 1e-9;
+pub(super) const SQUARE_EPS: f64 = 1e-9;
 
 /// The candidate seats a field's outline offers, `(margin midpoint, the back's direction, tier)`, in the outline's order.
 ///

@@ -80,10 +80,10 @@ pub const KNOBS: [(&str, &[&str], &str); 21] = [
     ("brook_side", &["1", "-1"], "brook"),
 ];
 
-/// The polder archetypes, laid to the survey grid.
+/// The polder archetypes: the two kinds of field diked out of standing water.
 ///
 /// Research:
-///     the polder archetypes - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a surveyed grid diked out of standing water
+///     the polder archetypes - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the rice polder and the dike-pond block, both fields diked out of standing water, each laying out its inside its own way - the rice polder on a surveyed grid, the dike-pond block as a mosaic or a chessboard of ponds
 pub const POLDERS: [&str; 2] = ["polder_grid", "mulberry_dike_fishpond"];
 
 /// A dike-pond block's arrangement, rolled where the spec is silent.

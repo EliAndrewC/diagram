@@ -191,7 +191,8 @@ pub struct Rolled {
     pub grain: Option<(f64, f64)>,
     /// The coarse grain the field's barley drew, the need it handed the hem and the room it left (acres).
     pub field_grain: Option<(f64, f64, f64)>,
-    /// The stages that refused, each with why: the stages before it drawn, none after it.
+    /// The stages that refused, each with why - empty on every roll `roll` hands back: a roll that kept one is refused whole
+    /// (`whole`, 449 T426), so the record's `refusals` is always `[]`.
     pub refusals: Vec<String>,
     pub counts: HashMap<String, u64>,
     /// Each stage run and its counted operations, the work budget's unit (`ops`).
@@ -663,7 +664,8 @@ fn field_refused(e: crate::field::rules::FieldRefused) -> Refused {
     Refused(format!("the field refused: {e}"))
 }
 
-/// A stage's result kept, or its refusal recorded and nothing kept: the stages before it drawn, none that read it.
+/// A stage's result kept, or its refusal recorded and nothing kept, so every stage that refuses is named together; the roll is then
+/// refused whole (`whole`).
 fn kept<T>(r: Result<T, Refused>, refusals: &mut Vec<String>) -> Option<T> {
     match r {
         Ok(x) => Some(x),
@@ -742,17 +744,35 @@ pub fn cohort_spec(seed: i64, archetype: Option<&str>) -> spec::Spec {
     }
 }
 
+/// A roll whose every stage stood, or its refusal: a hamlet a stage refused is not a map.
+///
+/// # Errors
+/// When a stage's refusal was kept (`kept`): each named, joined.
+///
+/// Research:
+///     no map of a refused hamlet - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: a bare winter paddy is drawn only where the dry ground holds the hamlet's grain need - a roll whose seat was refused laid no dry hem, and was still written as a map with a bare winter, a 17-acre grain need and no dry field (seed 508 of 20 households falling at 135 degrees, found 2026-11-24, 449 T418); so a kept refusal refuses the whole roll, nothing is written, and `make seeds` and `make cohort` count the seed failed
+fn whole(r: Rolled) -> Result<Rolled, Refused> {
+    if r.refusals.is_empty() {
+        return Ok(r);
+    }
+    Err(Refused(format!(
+        "{} - no map is drawn of a hamlet a stage refused",
+        r.refusals.join("; ")
+    )))
+}
+
 /// The hamlet rolled from its spec through the stages enabled so far.
 ///
 /// # Errors
-/// When the spec asks for a form the driver does not yet draw (a polder), or a stage refuses.
+/// When the spec asks for a form the driver does not yet draw, or a stage refuses - a comb's seat and a polder's seat or sluices
+/// with the rest (`whole`).
 ///
 /// Research:
 ///     the stages in order - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: the fall and the water decided before anything is placed, the field laid from them
 pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
     let p = plan::plan(spec);
     if plan::POLDERS.contains(&p.archetype.as_str()) {
-        return Ok(polder::roll_polder(p));
+        return whole(polder::roll_polder(p));
     }
     let fin = field_in(&p);
     let mut out = build(&fin).map_err(field_refused)?;
@@ -830,7 +850,7 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
         .chain(seated.as_ref().map(|_| "seat"))
         .chain(laid.as_ref().map(|_| "hem"))
         .collect();
-    Ok(Rolled {
+    whole(Rolled {
         plan: p,
         polder: None,
         waterward: None,

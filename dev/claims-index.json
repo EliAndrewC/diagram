@@ -37756,14 +37756,14 @@
   "date": "2026-11-22",
   "note": "the page's \"a few steps off\" is its own guess and gives no figure; 12 ft is a calibration inside it",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8feb1eada8b008c2"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::STANDOFF_FT#the settlement's standoff": {
@@ -38115,8 +38115,8 @@
  "rust/phases/src/driver.rs::roll#the stages in order": {
   "body": "97c0c68cf3a0666b",
   "claim": "the stages in order - which-way-water-flows-and-how-channels-bend-and-join.drawing: the fall and the water decided before anything is placed, the field laid from them",
-  "code": "bd26671f510b345f",
-  "core": "924015f6d903df23",
+  "code": "f5dc3c6b9a18cafe",
+  "core": "4babf75c52451ab2",
   "date": "2026-11-24",
   "note": "plan() fixes the fall and the water's bearing (down_deg, water_flow) before anything is placed; the field is built from them through field_in, and the sink, the seat and the hem follow in that order. The page says these declared figures are the only terrain, and that a hamlet takes its water's bearing from its fall and draws one field on one slope",
   "pages": {
@@ -38128,6 +38128,7 @@
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:a8aa562e10d530f1"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::seat_refused#the driver": {
@@ -38329,6 +38330,22 @@
   ],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver.rs::whole#no map of a refused hamlet": {
+  "body": "4ab6eb64722813a4",
+  "claim": "no map of a refused hamlet - where-a-farming-hamlet-grew-its-coarse-grain.drawing: a bare winter paddy is drawn only where the dry ground holds the hamlet's grain need - a roll whose seat was refused laid no dry hem, and was still written as a map with a bare winter, a 17-acre grain need and no dry field (seed 508 of 20 households falling at 135 degrees, found 2026-11-24, 449 T418); so a kept refusal refuses the whole roll, nothing is written, and `make seeds` and `make cohort` count the seed failed",
+  "code": "c880681254d43b02",
+  "core": "32bf579f93a23c8d",
+  "date": "2026-11-24",
+  "note": "any refusal a stage kept now refuses the whole roll, so no map with a bare winter and no dry field is written, as the page's rule requires",
+  "pages": {
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
+  },
+  "research": "8159982a6874674a",
+  "rests": [
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver.rs::wind#regional wind": {
   "body": "294053c22a242b22",
   "claim": "regional wind - shelter-belts-on-a-villages-windward-side-bofurin.drawing: the eight quarters, the northwest unless declared",
@@ -38361,19 +38378,19 @@
  "rust/phases/src/driver/check.rs::RING_CANAL#the ring canal": {
   "body": "0e5bbc688f449668",
   "claim": "the ring canal - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a ring canal round the inside foot of the dike, on the field side - the head canal, the two flank canals and the drain at the tail, the four ditches the polder lays at the dike's foot",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "043d1db8505ea910",
   "core": "52211a315c382775",
-  "date": "2026-11-22",
-  "note": "the four ditches at the dike's inside foot are the page's ring canal",
+  "date": "2026-11-24",
+  "note": "the four reaches at the dike's inside foot (head, two flanks, tail) are the ring canal the page draws round the inside foot, on the field side",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6a36dbfd16346637",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9081809619b0c364",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9caeef52dbf26f47"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::SLACK_FT#the drawing's slack": {
@@ -38508,21 +38525,20 @@
  "rust/phases/src/driver/check.rs::ground_on_polder#over the dike and the canal": {
   "body": "f5f0134499e04db4",
   "claim": "over the dike and the canal - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the village on the dry ground just off the dike, and from outside in the wild water, the dike, the ring canal - so the ground is tested against the dike's outer face and the canal's course",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "55d95cfa8beef13b",
   "core": "153874ad23d12026",
-  "date": "2026-11-22",
-  "note": "the ground is tested against the dike's outer face and against the course of the ring canal",
+  "date": "2026-11-24",
+  "note": "the ground is tested against the dike's outer face and sampled along the ring canal, matching the page's dry ground just off the dike and its outside-in order of water, dike, ring canal",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "0a2935971ee002de",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6a36dbfd16346637",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8feb1eada8b008c2"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::mean#the map's checks": {
@@ -38540,20 +38556,21 @@
  "rust/phases/src/driver/check.rs::polder_checks#the polder's checks": {
   "body": "50d728a5c6c7941c",
   "claim": "the polder's checks - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the reeds outside the dike on the flanks that face the water, the settlement on the block's dry shore",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d012c99f38cfacf0",
   "core": "ed4b213a55c375f3",
   "date": "2026-11-22",
   "note": "the seat is kept off the block and the reeds outside it",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "88909a6613b19427",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::polder_checks#the settlement's ground off the dike and the ring canal": {
@@ -38561,18 +38578,17 @@
   "claim": "the settlement's ground off the dike and the ring canal - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the village drawn on the dry ground just off the dike, and from outside in the wild water, the dike, the ring canal, the field ditches and the paddies - so no part of the settlement's ground lies over the dike's outer face or the ring canal at its inside foot (`seat_on_dike`, `seat_on_canal`)",
   "code": "7748be460fd942ea",
   "core": "ed4b213a55c375f3",
-  "date": "2026-11-22",
-  "note": "the ground, belt sweep included, is tested against the dike's outer face and sampled along the ring canal's reaches",
+  "date": "2026-11-24",
+  "note": "seat_on_dike and seat_on_canal refuse a settlement whose ground lies over the dike's outer face or the ring canal, as the page's village on the dry ground off the dike requires",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "88909a6613b19427",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6a36dbfd16346637",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8feb1eada8b008c2",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:bf09b8d4b7a35d7b"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8feb1eada8b008c2"
   ],
   "verdict": "IN-STEP"
  },
@@ -38657,17 +38673,17 @@
   "date": "2026-11-22",
   "note": "the relabel now holds: the code adds the dike's outer ring as a wall with no growth, so no way out can cross the dike or enter the diked fields. That matches the dike enclosing the polder \"all the way round\", a lane that \"stops at the flooded paddy\" and one that \"never crosses row crops\"",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2",
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "reads": "de024bca8c3b6c41",
-  "research": "329c0906b66f3918",
+  "research": "3f0fc8d030bc3585",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::BELT_REACH#the belt's reach": {
@@ -38975,42 +38991,37 @@
  },
  "rust/phases/src/driver/plan.rs::POLDERS#the polder archetypes": {
   "body": "f8f0d1d160908b20",
-  "claim": "the polder archetypes - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a surveyed grid diked out of standing water",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "aaa83788869313b3",
+  "claim": "the polder archetypes - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the rice polder and the dike-pond block, both fields diked out of standing water, each laying out its inside its own way - the rice polder on a surveyed grid, the dike-pond block as a mosaic or a chessboard of ponds",
+  "code": "1fb91bfc08b68b78",
   "core": "f16349b6cd603a13",
-  "date": "2026-11-07",
-  "note": "the rice polder on a grid and the dike-pond block, as recorded",
+  "date": "2026-11-24",
+  "note": "two archetypes, the rice polder on a grid and the dike-pond block as a mosaic or chessboard, as attested.",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:268186083f3ceadf",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:07248ec0cda7080e",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::POND_LAYOUTS#the dike-pond's layout": {
   "body": "ca5301d129e52f5c",
   "claim": "the dike-pond's layout - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: two layouts recorded, a mosaic and a chessboard (`grid`), the mosaic about two hamlets in three - the odds a GUESS there",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "90b21cd107ef02e9",
   "core": "01cc747bfef0e9e7",
-  "date": "2026-11-08",
-  "note": "mosaic twice and grid once gives the mosaic \"on about two hamlets in three\", rolled per hamlet, the odds a GUESS",
+  "date": "2026-11-24",
+  "note": "the table rolls the mosaic on two hamlets in three and the chessboard (`grid`) on the rest, as the page records, with the odds a GUESS",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:07248ec0cda7080e",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::Plan#the plan": {
@@ -39151,24 +39162,21 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#no brook knobs on a polder": {
-  "body": "9b5e4221af4c0298",
+  "body": "60bf74156f126d98",
   "claim": "no brook knobs on a polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a polder diked out of standing water has no brook, so no intake or brook side is rolled",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "81d1a8fdd285362a",
   "core": "938073f82ef5b7f4",
-  "date": "2026-11-09",
-  "note": "water reaches a polder through sluices from standing water, no channel outside the dike",
+  "date": "2026-11-24",
+  "note": "on a polder the brook knobs (`intake`, `brook_side`) are switched off. The page feeds a polder from its wild pond along a feeder to the inlet sluice, so it has no brook",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "ef98c6245b68085e",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:0fbfef4e578bd457",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#regional wind": {
@@ -39215,14 +39223,14 @@
   "date": "2026-11-09",
   "note": "polder only when asked, the recorded known gap",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "ef98c6245b68085e",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:268186083f3ceadf"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#water flow follows the fall": {
@@ -39559,44 +39567,50 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/polder.rs::draw_channels#the pond canals named": {
+  "body": "4481c02f45892fe0",
+  "claim": "the pond canals named - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: the canals are drawn as the waterways the ponds lie among, not as field ditches - on a dike-pond block the feeder, the ring canal's supply trunks and the creeks between the ponds are the `pond canal` kind, the drain the drainage ditch; on a rice polder they are irrigation ditches, as they were on both before 449 T420",
+  "code": "75145211e72d29f6",
+  "core": "eb705d9a990787d9",
+  "date": "2026-11-24",
+  "note": "on a converted block the feeder, trunks and creeks are named pond canal and the drain a drainage ditch; a rice polder's are irrigation ditches.",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6"
+  },
+  "reads": "d5cdff38cdd39534",
+  "research": "248a178c714ef0eb",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:98af9cb0c036de90"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/polder.rs::draw_polder#the band cut where a channel crosses": {
   "body": "aa7112f46a13b1b1",
   "claim": "the band cut where a channel crosses - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: where a channel crosses the dike, the band is cut, the water running through a gap in the earthwork under a sluice gate, not over its top - the band painted before every channel's stroke, so the feeder and the outfall each show through it at their drawn width (`FEEDER_W`, `RUN_W`), bank to bank, the earth meeting the water as the waterside reeds do (449 T236); before 449 T419 the band was painted after the water, unbroken over both crossings",
-  "code": "91193f16b204e02c",
-  "core": "607dced7066ddc51",
+  "code": "4d7164dcb4971127",
+  "core": "a3fb780c96cdc7a2",
   "date": "2026-11-24",
   "note": "the band and its mottle are painted before the ditches, the feeder (FEEDER_W) and the outfall (RUN_W), so each channel shows through at its own width",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "reads": "dc035ea24238424a",
+  "reads": "6a57ff76d907340c",
   "research": "9d4f4eee3c609249",
   "rests": [
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:e8c05b8d91b4cafc"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the cut as wide as the water": {
   "body": "bd0a8b41bb9877e9",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "claim": "the cut as wide as the water - GUESS: the page silent on the cut's width; the channel's own drawn width, the simpler drawing (paint order, the faces recorded whole) over a cut built into the band's outline, taken where the record does not choose",
-  "code": "22533603f23cca84",
-  "core": "607dced7066ddc51",
+  "code": "8d0afde8904bc6f2",
+  "core": "a3fb780c96cdc7a2",
   "date": "2026-11-24",
   "note": "the page does not give the cut's width; the code uses the channel's own stroke width, a fair guess",
   "pages": {},
-  "reads": "dc035ea24238424a",
+  "reads": "6a57ff76d907340c",
   "research": "",
   "triaged": "2026-11-24",
   "verdict": "IN-STEP"
@@ -39604,57 +39618,47 @@
  "rust/phases/src/driver/polder.rs::draw_polder#the dike and the banks mottled": {
   "body": "aa7112f46a13b1b1",
   "claim": "the dike and the banks mottled - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the band is mottled with patches of earth of different ages, as repairs are, never a ruled line; dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: a pond's bank is mottled earth under its bushes, like the polder's own dike - each band's patches (`mottle::dike`, `mottle::banks`) painted on its fill, the dike's before the channels that cut it and its trees, the banks' before the ponds' water and their crowns",
-  "code": "d29c84de26d2ec6c",
-  "core": "607dced7066ddc51",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
+  "code": "fd2acce42bbafc57",
+  "core": "a3fb780c96cdc7a2",
   "date": "2026-11-24",
   "note": "the banks' patches go on their fill before the ponds' water and the crowns; the dike's go on its band before the channels and its trees",
   "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "reads": "dc035ea24238424a",
-  "research": "3c136322d579b8bf",
+  "reads": "6a57ff76d907340c",
+  "research": "8e233fb2e339be2c",
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:0c906f5e26dcec83",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the pocket pond's ring": {
   "body": "a5f4347b1ff80095",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "claim": "the pocket pond's ring - GUESS: flooded ground 2.5 ft wide round the pond inside a bund line 2.2 ft wide, the deleted ink's; no page sizes the margin",
-  "code": "c67e9485a54a2564",
-  "core": "607dced7066ddc51",
+  "code": "88a74de67148a5d3",
+  "core": "a3fb780c96cdc7a2",
   "date": "2026-11-20",
   "note": "the code matches the claim: the fill is ink::FLOODED at prx+2.5 and pry+2.5, inside an ink::AZE stroke 2.2 wide. The page says nothing about the margin round a field or pocket pond, so GUESS is the right label",
   "pages": {},
-  "reads": "dc035ea24238424a",
+  "reads": "6a57ff76d907340c",
   "research": "",
   "rests": [],
   "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the polder drawn": {
-  "body": "aa7112f46a13b1b1",
+  "body": "a2c56416f7095416",
   "claim": "the polder drawn - CONVENTION: the deleted `ink.dike` and `dikeponds`, each record drawn as the engine drew it, the sluices apart",
-  "code": "a3957b440ea0ab04",
-  "core": "607dced7066ddc51",
+  "code": "14e83e0e747aa814",
+  "core": "a3fb780c96cdc7a2",
   "date": "2026-11-24",
-  "note": "paint order and records drawn; the new mottle and the pocket ring are each claimed separately",
+  "note": "the paint order, kinds and strokes are how things are shown; its physical figures are under its other claims.",
   "pages": {},
-  "reads": "dc035ea24238424a",
+  "reads": "6a57ff76d907340c",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -39713,21 +39717,23 @@
  "rust/phases/src/driver/polder.rs::landward#the shore over the wind": {
   "body": "ecdabdc5564a5478",
   "claim": "the shore over the wind - shelter-belts-on-a-villages-windward-side-bofurin.drawing: a settlement backs onto the wind except where a polder's village backs onto its landward shore, its belt still to windward; polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing lays the polder village on the landward dry ground - so the seat's back is handed the shore's normal and recorded off the wind where it does not face it",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "2be88f9c03b3ebfc",
   "core": "dd1fb170ea1dc929",
   "date": "2026-11-22",
   "note": "the 0072 drawing page now records the polder exception (the back to the landward shore, the belt still windward), and the code hands the cross normal away from the pond",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "1fc6cc6d67ef44a0"
   },
-  "research": "bbaf333615a5f370",
+  "research": "cef75389a4f0c35c",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:bf09b8d4b7a35d7b",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:70e1d65dbf9cecc4"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::landward#the tie": {
@@ -39751,15 +39757,15 @@
   "date": "2026-11-22",
   "note": "the cross flank away from the pond: the pond to the northwest, the village to the east, as drawn; the reading is labeled a guess",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::merged#the spans merged": {
@@ -39783,10 +39789,10 @@
   "date": "2026-11-22",
   "note": "the outline's sides pushed outward to clear the outer face; the village stands on dry ground just off the dike, hard against it; the outer face is a varying band outside the inner one",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "research": "36506e099a7d7fb1",
+  "research": "b8c98ca9a93a6dc0",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8feb1eada8b008c2",
@@ -39794,7 +39800,7 @@
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:46a44cd878ea07e4",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:4d5302327cebd38f"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::off_the_dike#straight at the widest": {
@@ -39828,28 +39834,17 @@
  },
  "rust/phases/src/driver/polder.rs::roll_polder#its back to the landward shore": {
   "body": "ee736b8a58213b8c",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "claim": "its back to the landward shore - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the village on the dry landward shore, every other flank holding water back - the seat's back handed the shore (`landward`), each seat then recorded against the map's own wind",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "66d019665f9c917d",
   "core": "1fead0b79e6a9e78",
   "date": "2026-11-22",
   "note": "`back: Some(landward(..))`, and offwind is recorded against the map's own wind",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "6c5594d0dd60350e",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2"
@@ -39859,29 +39854,18 @@
  },
  "rust/phases/src/driver/polder.rs::roll_polder#its belt to windward on the dry side": {
   "body": "c24926484e68ebac",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "claim": "its belt to windward on the dry side - GUESS shelter-belts-on-a-villages-windward-side-bofurin.drawing: the wind decides the belt's side, on one or two windward sides of the houses - so a polder seat's belt room is asked of the map's own wind (`SeatIn::belt_wind`), not the shore's way, and its ground kept on the margin's dry side (`margins::belt_swept`), the village staying a few steps off the dike (polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing); the record is silent on a belt between the houses and a dike (the research pass of 2026-11-22, 449 T292: the Nobi plain's ring-dike groves north to west of the homestead, a row village by the dike one belt along one side, which side unsaid), so Kuwabata's belt takes the band's north end, the windward side its polder leaves dry",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "e4050e2b6b97ab2f",
   "core": "1fead0b79e6a9e78",
   "date": "2026-11-22",
   "note": "the belt's room and the reserved ground are taken from the map's own wind, with no belt between the houses and the dike; the 0019 drawing page records that as a GUESS",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "1fc6cc6d67ef44a0"
   },
   "reads": "6c5594d0dd60350e",
-  "research": "bbaf333615a5f370",
+  "research": "cef75389a4f0c35c",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:bf09b8d4b7a35d7b",
@@ -39947,28 +39931,17 @@
  },
  "rust/phases/src/driver/polder.rs::roll_polder#the strips after the seat": {
   "body": "ee736b8a58213b8c",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "claim": "the strips after the seat - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: every flank but the landward one holds water back - the seat's side names the landward flank, so the waterside strips are laid once it is known (`stage_waterward`)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d1f5227973fa4d1e",
   "core": "1fead0b79e6a9e78",
   "date": "2026-11-22",
   "note": "`stage_waterward` takes the seat's `out` once it is known",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "6c5594d0dd60350e",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
@@ -39976,35 +39949,22 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::roll_polder#the village off its polder's dike": {
-  "body": "c24926484e68ebac",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
+  "body": "18c270bfe436ee03",
   "claim": "the village off its polder's dike - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the village drawn on the dry ground just off the dike, a few steps off it (the page's own GUESS), and hard against its own polder (its GUESS) - the seat handed a ring off the dike's outer face (`off_the_dike`), as a comb hands its fan, so the settlement's ground runs out from the dike's foot and never over the dike or the ring canal inside it (the cohort's `seat_on_dike` and `seat_on_canal`), its houses `STANDOFF_FT` off that ring; the page puts no number on \"a few steps\", so the 12 ft is a GUESS and a knob, and with the ring's side held straight at the face's widest the houses stand 12 to about 36 ft off the outer face (the face 2.7 to 24.3 ft inside the side along Kuwabata's band, 0 to 22.9 ft along a grid polder's falling obliquely; measured 2026-11-22, feature 449 T240)",
   "code": "b8df51209c5c22a4",
   "core": "1fead0b79e6a9e78",
-  "date": "2026-11-22",
-  "note": "the seat stands on a ring off the outer face (`off_the_dike`, at the face's widest), its houses `STANDOFF_FT` 12 ft off it, a GUESS knob for \"a few steps\", and its ground, the belt included, stays on the dry side",
+  "date": "2026-11-24",
+  "note": "the seat's ring is the polder's outline pushed out to the outer face's widest reach (`off_the_dike`), so the houses stand off the dike on its dry side, hard against their own polder; the page puts no figure on \"a few steps off the dike\", so the 12 ft is rightly a GUESS and a knob",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "6c5594d0dd60350e",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8feb1eada8b008c2",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:bf09b8d4b7a35d7b"
   ],
-  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::sluice_channel#the channel it shuts": {
@@ -40016,16 +39976,16 @@
   "date": "2026-11-22",
   "note": "finds the feeder, then the outfall, whose course passes through the sluice point, and returns its direction and drawn width; the board lies across the channel it blocks, and water crosses only at the gated sluices",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2",
    "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
   },
-  "research": "2657190c87125064",
+  "research": "1cd33821ac1d494f",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
    "0179-water-gates-and-sluices-shuimen.drawing.html:067bd7a407956917",
    "0179-water-gates-and-sluices-shuimen.drawing.html:cf888beb9dde091c"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::sluice_frame#the frame across its channel": {
@@ -40106,13 +40066,14 @@
   "code": "deb59625a01e6e19",
   "core": "c7c3158d71c12048",
   "date": "2026-11-24",
-  "note": "this stage only passes figures to `polder_stage`. Outward from the plots: plots, ditches, ring canal at `RING_FT.0`, dike on the `RING_FT.1` envelope",
+  "note": "this function only passes the plan's figures on and rolls the knobs; the claim rightly points to `polder_stage` for the order \"the dike, the ring canal, the field ditches and the paddies\" and the dike \"all the way round\"",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6a36dbfd16346637",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9caeef52dbf26f47",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
   "verdict": "IN-STEP"
@@ -40126,18 +40087,18 @@
   "date": "2026-11-22",
   "note": "the fringe on the outer face stops at the feeder (FEEDER_W) and the outfall's drain (RUN_W), the only water crossing the dike; the reeds run to the water's edge and stay out of the water",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
   "reads": "47bc512ccc91a5f1",
-  "research": "e168b23d37f2cb5f",
+  "research": "adf71f1e9a3bc470",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:73411ab3787c3b91",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::stage_waterward#the reed strips": {
@@ -40149,14 +40110,14 @@
   "date": "2026-11-20",
   "note": "the strips are laid off the dike's outer face on the waterward flanks",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "47bc512ccc91a5f1",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder/mottle.rs::BANK_TONES#the patches' tones": {
@@ -40273,19 +40234,21 @@
  "rust/phases/src/driver/polder/mottle.rs::banks#the bank mottled": {
   "body": "c54e067aa5db25ed",
   "claim": "the bank mottled - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: the bank is drawn as planted ground, mottled earth under rows of mulberry bushes, like the polder's own dike; before 449 T422 each bank was one flat fill under its bushes",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "33de5b4143f91701",
   "core": "e5625db3e5b9c917",
   "date": "2026-11-24",
   "note": "patches lie within the bank's breadth (the pond's inset) inward of each ring's edge, under the bushes",
   "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6"
   },
   "reads": "02734f30dbb9fcb3",
-  "research": "dede4a3ae0c4c6d4",
+  "research": "248a178c714ef0eb",
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:0c906f5e26dcec83",
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder/mottle.rs::dike#its own stream": {
@@ -41438,6 +41401,30 @@
   "triaged": "2026-11-20",
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/tests.rs::a_dike_ponds_channels_are_pond_canals_drawn_at_the_creeks_width#the driver's tests": {
+  "body": "f266e71b3a5cca41",
+  "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "21b4eadc92faba1a",
+  "core": "3b92904c2e712b94",
+  "date": "2026-11-24",
+  "note": "fixtures and assertions.",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/tests.rs::a_fall_square_across_the_wind_seats_at_the_heads_windward_corner_astride_its_intake#the driver's tests": {
+  "body": "b3fbed6a542cb01d",
+  "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "20110dedeb356ac6",
+  "core": "fb3924f016142be7",
+  "date": "2026-11-24",
+  "note": "fixtures and assertions only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/tests.rs::a_name_is_escaped_in_the_record#the driver's tests": {
   "body": "18bbf3d2f7839067",
   "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
@@ -41479,14 +41466,15 @@
  "rust/phases/src/driver/tests.rs::every_mark_drawn_is_a_registry_kind_in_the_census#the driver's tests": {
   "body": "934f661f401ecbf4",
   "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
-  "code": "8299f3c49ebc8e57",
-  "core": "400076a286e8e9b9",
+  "code": "831cb2d59b7008b3",
+  "core": "37bdbe8f520531e1",
   "date": "2026-11-19",
   "note": "checks the census against the registry's kinds; assertions only",
   "pages": {},
   "reads": "08bbb26f0ae3d06b",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/tests.rs::every_state_has_its_fill_and_a_field_refusal_names_its_rule#the driver's tests": {
@@ -43918,18 +43906,20 @@
  "rust/phases/src/field/dike.rs::dike#a dike round the polder": {
   "body": "8b06481526f11629",
   "claim": "a dike round the polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: water crosses the dike only at gated sluices",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "ed7fa3b7824b772a",
   "core": "fa319a0a099b9a95",
   "date": "2026-11-24",
   "note": "the band runs all the way round the inner face, and the gaps are the sluice points",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "d00e35a634e6a134",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dike.rs::dike#its trees": {
@@ -45931,18 +45921,20 @@
  "rust/phases/src/field/landuse.rs::MULBERRY_FT#mulberry on the bank": {
   "body": "9db177da105203d0",
   "claim": "mulberry on the bank - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: one row to every 5.5 ft of the bank's width, the bushes about 4.4 ft apart in the row; crowns 4.4 to 7 ft across",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "9c6da582c787ee7f",
   "core": "48ede15d0766cd1c",
   "date": "2026-10-31",
   "note": "5.5 ft per row, 4.4 ft in the row, crown radii 2.2-3.5 ft (4.4-7 ft across)",
   "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6"
   },
-  "research": "dede4a3ae0c4c6d4",
+  "research": "248a178c714ef0eb",
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:0c906f5e26dcec83",
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:ee8f3efe3d7340bb"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/landuse.rs::Parcel#a parcel's record": {
@@ -45971,18 +45963,17 @@
  },
  "rust/phases/src/field/landuse.rs::REACH_FT#the rounding": {
   "body": "32df6edb02743e80",
-  "claim": "the rounding - GUESS: dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing silent on a pond's corners; the bank's cut back 8 ft and the water's 16 ft",
-  "code": "7c96240baeb306a3",
+  "claim": "the rounding - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: the bank's corner is cut back about 8 ft and the water's about 16 ft, both figures the page's GUESS",
+  "code": "506eedb88bd431f9",
   "core": "76419e7a6fa5dfbc",
-  "date": "2026-11-22",
-  "note": "the page draws ponds of uneven shape but never says how their corners round; 8 ft and 16 ft reaches are a fair guess",
+  "date": "2026-11-24",
+  "note": "8 ft for the bank and 16 ft for the water, the page's own GUESS figures.",
   "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6"
   },
-  "research": "dede4a3ae0c4c6d4",
+  "research": "248a178c714ef0eb",
   "rests": [
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:9aaf0a58da02aa2b",
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e636a667b77a7329"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:c416c603528eb833"
   ],
   "verdict": "IN-STEP"
  },
@@ -46033,21 +46024,23 @@
  "rust/phases/src/field/landuse.rs::convert#the bank on the parcel's line": {
   "body": "199e310fcc135029",
   "claim": "the bank on the parcel's line - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: each pond ringed by a bank of its own mud - the bank's outer edge the parcel's own line, the water pushed in the village's inset from it",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d00bf5df1201f212",
   "core": "7116aefa06013402",
   "date": "2026-10-31",
   "note": "bank rounded at inset 0 on the parcel ring, water at the village's one inset_ft; matches \"the bank stays on the true parcel line\" and one village inset",
   "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6"
   },
   "reads": "6dd5fafae4abcb2c",
-  "research": "dede4a3ae0c4c6d4",
+  "research": "248a178c714ef0eb",
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e",
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:8cb3b577416449af",
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:9aaf0a58da02aa2b",
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e636a667b77a7329"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/landuse.rs::convert#the crop on the banks": {
@@ -46109,19 +46102,21 @@
  "rust/phases/src/field/landuse.rs::convert#the ponds' uneven shapes": {
   "body": "199e310fcc135029",
   "claim": "the ponds' uneven shapes - GUESS: dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing silent on how uneven, giving ponds of uneven shape; the bank and the water each rounded at its own reach (`REACH_FT`), a corner's cut rolled about it",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "719dc0678611f7dc",
   "core": "7116aefa06013402",
   "date": "2026-11-22",
   "note": "the page attests \"ponds of uneven shape\" but not how uneven; the code rounds bank and water each at its own REACH_FT reach, with each corner's cut rolled per pond",
   "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6"
   },
   "reads": "6dd5fafae4abcb2c",
-  "research": "dede4a3ae0c4c6d4",
+  "research": "248a178c714ef0eb",
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:9aaf0a58da02aa2b",
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e636a667b77a7329"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/landuse.rs::convert#the rice scattered": {
@@ -46146,19 +46141,21 @@
  "rust/phases/src/field/landuse.rs::grow#mulberry rows": {
   "body": "dd5f6c62074d5927",
   "claim": "mulberry rows - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: one row to every 5.5 ft of the bank's width, set evenly across it",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "1a6e42f98ff98337",
   "core": "7a1fd4c71ed1ecb8",
   "date": "2026-10-31",
   "note": "rows = floor(width/MULBERRY_FT.0), at least 1, each centered in an equal slice of the bank, so every crown center is on the bank",
   "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6"
   },
   "reads": "6f301c742282dd4a",
-  "research": "dede4a3ae0c4c6d4",
+  "research": "248a178c714ef0eb",
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:0c906f5e26dcec83",
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e8fdf34d7bd0e81d"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/landuse.rs::grow#tea's two hedges": {
@@ -46199,18 +46196,49 @@
  "rust/phases/src/field/landuse.rs::inset#the inset": {
   "body": "7460f258ab0df41b",
   "claim": "the inset - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: one inset holds for the whole village, measured on its parcel of median area; a drier split draws a wider bank",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "0d74e1f5e7411d08",
   "core": "c129ba476dcdf0b6",
   "date": "2026-10-31",
   "note": "one inset found from the median-area parcel, solving P*d - 4d^2 = A*(1-share); a lower water share gives a larger d",
   "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6"
   },
-  "research": "dede4a3ae0c4c6d4",
+  "research": "248a178c714ef0eb",
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e",
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:b6e1f2dff8a2b220"
   ],
+  "triaged": "2026-11-24",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/landuse.rs::off_the_water#never over a canal": {
+  "body": "fabe5fda839fad57",
+  "claim": "never over a canal - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: a bush's center always stands on the bank, never over a canal, while a crown's edge may lean over the water - where a canal grazes a bank's foot the bush whose center would stand in its water is not drawn; a crown is dropped after every row is rolled, so no other crown moves",
+  "code": "7c22cbc3d68c29e8",
+  "core": "c748e19b30bbc213",
+  "date": "2026-11-24",
+  "note": "drops only the crowns whose center lies within a channel's half-width, after every row is rolled, so a crown's edge may still lean over the water.",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6"
+  },
+  "research": "248a178c714ef0eb",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:8cb3b577416449af",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e8fdf34d7bd0e81d"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/landuse.rs::off_the_water#the channels' index": {
+  "body": "fabe5fda839fad57",
+  "claim": "the channels' index - NONE: plumbing, each channel's segments filed once in the field's water index and each crown asked of the cells about it (constitution X clause 15)",
+  "code": "3e49c52eb1063e50",
+  "core": "c748e19b30bbc213",
+  "date": "2026-11-24",
+  "note": "a spatial index, plumbing.",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/landuse.rs::shrunk#the row's line": {
@@ -46641,36 +46669,36 @@
  "rust/phases/src/field/polder.rs::BOW_NUDGE_FT#the bow and the nudge": {
   "body": "9567434b85338678",
   "claim": "the bow and the nudge - parcels-and-bunds-inside-a-polder-aze.drawing: each row and column line takes its own gentle bow and each crossing is nudged a few feet; the figures a GUESS, 6 and 3 ft",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "372b0837efd9c6ae",
   "core": "9c9cbf9c0b84ce7e",
   "date": "2026-10-31",
   "note": "6 ft bow and 3 ft nudge fit \"a few feet\"; the figures are a guess",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::DRIFT_SHARE#the mosaic's drift": {
   "body": "703e54851f1f8c69",
-  "claim": "the mosaic's drift - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a smooth drift that fades to nothing at the fixed outer edge; how strongly is a calibrated liberty, set on the Kuwabata map - 0.48 of a module, the strength at which Kuwabata's parcels skew as main drew them (measured 2026-11-02 on the four extreme corners of each parcel: median corner deviation 14.5 deg against main's 13.9, p90 20.1 against 23.8); the port's single weak wave at 0.15 drew 4.6 deg, a chessboard (the glyph check, feature 444 T16)",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "c1d4453a104f0260",
+  "claim": "the mosaic's drift - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a smooth drift that fades to nothing at the fixed outer edge; how strongly is a calibrated liberty, set on the Kuwabata map - 0.48 of a module, the strength at which Kuwabata's parcels skew as main drew them (measured 2026-11-02 on the four extreme corners of each parcel: median corner deviation 14.5 deg against main's 13.9, p90 20.1 against 23.8); the port's single weak wave at 0.15 drew 4.6 deg, a chessboard (the glyph check, feature 444 T16); a block whose corridors that strength would pinch under its creek's width keeps a lesser share of it (`eased`, 449 T420)",
+  "code": "4d935c66fca3788b",
   "core": "6892593aba0d4303",
-  "date": "2026-11-01",
-  "note": "the drawing page makes how strongly the lattice bends a calibrated liberty, set on the Kuwabata map, and 0.48 is that degree. The fade at the outer edge is the drift's shape, which the code using this constant sets, not this constant",
+  "date": "2026-11-24",
+  "note": "0.48, a calibrated strength set on Kuwabata, within the liberty the page grants.",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:363302c2e6652393",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::Ditch#a channel's record": {
@@ -46713,17 +46741,17 @@
   "date": "2026-11-22",
   "note": "0019 places reeds only on the polder's low side and west flank, not at the wild pond; 0061 gives a fringe at every pond but no width, so 40 ft is a guess",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2",
    "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
   },
-  "research": "15f2e8a6f8052f1e",
+  "research": "1f220b7cd0998594",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46",
    "0061-reservoir-ponds-tameike.drawing.html:a70a5b42abaea94f",
    "0061-reservoir-ponds-tameike.drawing.html:d6c10e2a38c86b30"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::Frame#the frame": {
@@ -46733,6 +46761,18 @@
   "core": "dc35682b10e3727c",
   "date": "2026-10-31",
   "note": "a coordinate transform",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder.rs::Frame.about#the frame": {
+  "body": "8b409721f4e5ccec",
+  "claim": "the frame - NONE: a coordinate transform",
+  "code": "617ffcad3b042ed3",
+  "core": "c2039e8eab6fb3f3",
+  "date": "2026-11-24",
+  "note": "a coordinate transform.",
   "pages": {},
   "research": "",
   "rests": [],
@@ -46753,54 +46793,56 @@
  "rust/phases/src/field/polder.rs::MERGE_IN#merged modules": {
   "body": "dd4008465e1e32b3",
   "claim": "merged modules - parcels-and-bunds-inside-a-polder-aze.drawing: a few merge along the fall of the ground; most merged in pairs; the shares a GUESS, one in eight and one in six",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "b37370d37bfa6759",
   "core": "fc250e17f2121ea3",
   "date": "2026-10-31",
   "note": "rice merges 1 in 8 (\"a few\"), dike-pond pairs 5 in 6 (\"most\"), along the fall",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:c34ac7096b3e1cd8",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::MODULE_FT#the modules": {
   "body": "e963fe179760a713",
   "claim": "the modules - parcels-and-bunds-inside-a-polder-aze.drawing: about 190 ft on a side; a dike-pond block about 160 ft",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "729c487a805189a3",
   "core": "aabcbd33170dfc27",
   "date": "2026-10-31",
   "note": "190 ft and 160 ft as the page gives them",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:87427868eb3365dc",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:c34ac7096b3e1cd8"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::MOSAIC_WAVES#the mosaic's waves": {
   "body": "fd517b3bfe3cf443",
   "claim": "the mosaic's waves - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing silent on the drift's shape, saying only that it is smooth and that neighboring crossings move together; the waves Kuwabata's mosaic was drawn with, 1.3 and 2.1 cycles down the fall, 1.1 and 1.9 across, the second at 0.6",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "24339016dd961527",
   "core": "5d32125e46fac27d",
-  "date": "2026-11-22",
-  "note": "0019 asks only for a smooth drift whose neighbors move together, its strength calibrated on Kuwabata; the waves' shape is a guess",
+  "date": "2026-11-24",
+  "note": "the cited page says only that the drift is smooth and neighboring crossings move together; the wave shape is a fair GUESS",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:363302c2e6652393",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::OUTFALL_LEG_FT#the outfall's first leg": {
@@ -46838,19 +46880,21 @@
  "rust/phases/src/field/polder.rs::POLDER_GAP_FT#the gaps": {
   "body": "ce057ed19ad00b94",
   "claim": "the gaps - parcels-and-bunds-inside-a-polder-aze.drawing: a walking bund about 3 ft wide, or a field ditch with its banks, about 8 ft",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d4671c368f64e84b",
   "core": "031ae6ba708bfa17",
   "date": "2026-10-31",
   "note": "(col 8, row 3): an 8 ft ditch corridor and a 3 ft walking bund",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:0df793b462e21b66",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:2121aaffee2cc5ab",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::POND_FT#the wild pond": {
@@ -46862,29 +46906,31 @@
   "date": "2026-10-31",
   "note": "the page is silent on the size, so the size is a guess; polder() places the pond at the head, off the same corner as the inlet",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::POND_GAP_FT#the gaps": {
   "body": "78c913a97513c50c",
   "claim": "the gaps - parcels-and-bunds-inside-a-polder-aze.drawing: a pond's parcel about 160 by 320 ft, with gaps of about 22 ft both ways",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "74f9a54d8cb48e9e",
   "core": "361c373808e2c668",
   "date": "2026-10-31",
   "note": "22 ft both ways",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:c34ac7096b3e1cd8"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::Plot#a plot's record": {
@@ -46902,48 +46948,50 @@
  "rust/phases/src/field/polder.rs::Polder#the polder's record": {
   "body": "7b67aaf9a6dc691a",
   "claim": "the polder's record - NONE: the record's type, holding what `polder` decides",
-  "code": "5fe1337ba4d34605",
-  "core": "099a8566779c0345",
+  "code": "cb530cec331a9a3b",
+  "core": "ac9a3b54d3acda1d",
   "date": "2026-10-31",
   "note": "a record type",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::RING_FT#the ring canal": {
   "body": "0e4f340d1c44299e",
   "claim": "the ring canal - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a ring canal round the inside foot of the dike, on the field side; the offsets a GUESS, 6 and 12 ft",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "369333a8f07bcd73",
   "core": "cc4fc12dbbbe26af",
-  "date": "2026-10-31",
-  "note": "the canal is 6 ft out from the plots, inside the 12 ft envelope, on the field side; the offsets are guesses",
+  "date": "2026-11-24",
+  "note": "ring canal inside the dike's foot on the field side; the 6 and 12 ft offsets are not on the page, so GUESS is right",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6a36dbfd16346637",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9caeef52dbf26f47"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::WHOLE_IN#whole modules among the strips": {
   "body": "d3cb5a414e1eb114",
   "claim": "whole modules among the strips - GUESS: parcels-and-bunds-inside-a-polder-aze.drawing silent on how many, saying only that most split into two or three oblong strips; one in five left whole",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "91e549269287c29f",
   "core": "5454ad79cad55509",
   "date": "2026-11-22",
   "note": "one in five whole agrees with \"most split into two or three oblong strips\"; the count is a guess",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:095f7e817a239457",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::Warp#the warp's state": {
@@ -46961,140 +47009,184 @@
  "rust/phases/src/field/polder.rs::Warp.at#the last row against the ring canal": {
   "body": "af17ebc507051a55",
   "claim": "the last row against the ring canal - GUESS: parcels-and-bunds-inside-a-polder-aze.drawing has the ring canal at the block's edge stay put and is silent on how near it a bowed plot may stand; the lattice's lines stand a whole pitch apart, so the plots' far edge, a gap short of the block's last line, keeps a small share of the last interior line's bow and nudge, and the last row's plots creep toward the fixed ring canal by up to about 2.3 ft of its `RING_FT` 6 ft - never onto its water (the least clear ground between a plot's corner and a trunk's bank 3.1 ft over 160 rolled polders, measured 2026-11-24, feature 449 T421), left as it stands",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "3963aa800e621683",
   "core": "c64e61f35eb353fa",
   "date": "2026-11-24",
   "note": "the page keeps the ring canal at the edge in place and says nothing on how near a bowed plot may stand; the creep stays off the water",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
   "reads": "04aabfeb90e748c5",
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::Warp.at#the mosaic's drift": {
   "body": "af17ebc507051a55",
   "claim": "the mosaic's drift - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the mosaic bends the lattice out of line, fading to nothing at the fixed outer edge (`DRIFT_SHARE` of a module on `MOSAIC_WAVES`); the chessboard held straight",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "b4c5967cc65032f6",
   "core": "c64e61f35eb353fa",
-  "date": "2026-11-01",
-  "note": "the mosaic shift is a smooth sine drift scaled by sin·sin of the block and so zero at the outer edge; the chessboard returns (0,0) and stays straight; the form is a parameter rolled elsewhere",
+  "date": "2026-11-24",
+  "note": "smooth sinusoidal drift scaled by DRIFT_SHARE of a module, sin·sin edge fade to zero at the block edge, chessboard returns (0,0)",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "04aabfeb90e748c5",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:363302c2e6652393",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::Warp.at#the rice polder's deformation": {
   "body": "abe3a88e033aca58",
   "claim": "the rice polder's deformation - parcels-and-bunds-inside-a-polder-aze.drawing: each row and column line takes its own gentle bow and each crossing is nudged a few feet, while the block's edge stays put - each line's bow a single arch along it, nothing at its ends, interpolated between lines; the crossings' nudges interpolated between crossings, so both sides of one bund move together",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "b8080d75d0934e48",
   "core": "c64e61f35eb353fa",
   "date": "2026-10-31",
   "note": "each line's bow is one arch that is zero at its ends, interpolated between lines; nudges are interpolated bilinearly between crossings; edge lines and nodes are zero",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
   "reads": "04aabfeb90e748c5",
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::Warp.new#the rolls": {
   "body": "0586fb1089df7a89",
   "claim": "the rolls - parcels-and-bunds-inside-a-polder-aze.drawing: each row and column line takes its own gentle bow and each crossing is nudged a few feet, while the dike and the ring canal at the block's edge stay put - a bow for each interior line and a nudge for each interior crossing within `BOW_NUDGE_FT`, either way, the edge lines and crossings held at nothing",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8c033584002fba57",
   "core": "7ed3c36c9ebb77b1",
   "date": "2026-10-31",
   "note": "every interior line gets its own bow and every interior crossing gets a nudge within BOW_NUDGE_FT either way; edges are held at 0",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
   "reads": "4f198d0dca3ff148",
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-24",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder.rs::channels#the channels gathered": {
+  "body": "94c56dd684ba76b1",
+  "claim": "the channels gathered - NONE: plumbing, each channel's rule claimed where it is laid",
+  "code": "82dfca0cf06dc3fe",
+  "core": "1db01967afa4cfc2",
+  "date": "2026-11-24",
+  "note": "gathers the trunks, joins and row creeks, each rule claimed where it is laid.",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder.rs::ditches#a creek's mouth on the ring canal": {
+  "body": "738ba89c042f6c1d",
+  "claim": "a creek's mouth on the ring canal - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing silent on how a channel between ponds meets the ring canal; each creek's course stops half its width short of the ring canal's middle line, so its rounded end reaches that line and no farther - drawn through to the line, the end of an 8 ft creek stood 4 ft past it, across a 1.5 ft trunk and onto the dike's foot (4 of some 2,700 ends over 80 rolled blocks reached the dike's inner face, measured 2026-11-24, feature 449 T420)",
+  "code": "6ed8f3f096c51568",
+  "core": "de09fec937a30de0",
+  "date": "2026-11-24",
+  "note": "the column's ends stop half the creek's width short of the canal line at RING_FT.0, and the cited pages are silent on how a creek meets the ring.",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
+  },
+  "reads": "ce1969726ee48761",
+  "research": "807b97fcf680d084",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6a36dbfd16346637",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9caeef52dbf26f47"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::ditches#ditches on the warped lattice": {
-  "body": "6f4f107ee6b5b3a6",
-  "claim": "ditches on the warped lattice - parcels-and-bunds-inside-a-polder-aze.drawing: each column line takes its own bow, so a column's ditch runs down its corridor through the same warp as the plots beside it",
-  "code": "a75935a4137500d7",
-  "core": "b73b229271b6fb29",
-  "date": "2026-11-01",
-  "note": "each column ditch sits in the middle of its gap and runs ring to ring through the shared `put` warp, at the same stations the plots use for their corners",
+  "body": "738ba89c042f6c1d",
+  "claim": "ditches on the warped lattice - parcels-and-bunds-inside-a-polder-aze.drawing: each column line takes its own bow, so a column's channel runs down its corridor through the same warp as the plots beside it - at every station midway between the two sides it runs between (`Lattice::midway`)",
+  "code": "51597badde4a4c64",
+  "core": "de09fec937a30de0",
+  "date": "2026-11-24",
+  "note": "each column channel is set midway between its warped sides at the parcels' own stations.",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
   "reads": "ce1969726ee48761",
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:0df793b462e21b66",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder.rs::ditches#the creeks' width": {
+  "body": "738ba89c042f6c1d",
+  "claim": "the creeks' width - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: a canal between ponds drawn about 6 to 8 ft wide - each column channel of a dike-pond block at the block's one creek width from head to tail (`creek_width`), no taper",
+  "code": "ddd1729ba1bbf6b2",
+  "core": "de09fec937a30de0",
+  "date": "2026-11-24",
+  "note": "the column creeks hold the block's one rolled width of 6 to 8 ft from head to tail, with no taper.",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6"
+  },
+  "reads": "ce1969726ee48761",
+  "research": "248a178c714ef0eb",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:ce56c3841e33c8c5"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::ditches#the deliveries' places": {
-  "body": "d30beb47d7c41309",
+  "body": "738ba89c042f6c1d",
   "claim": "the deliveries' places - parcels-and-bunds-inside-a-polder-aze.drawing: between one column of modules and the next, a ditch corridor - one delivery on the middle of each gap between columns, from ring to ring, `cols - 1` of them",
-  "code": "a189c71587a2994b",
-  "core": "b73b229271b6fb29",
-  "date": "2026-11-01",
-  "note": "one ditch at mid-gap (c*(module+gap) - gap/2) for c in 1..n, run from -RING_FT.0 to size.0+RING_FT.0, matches the ditch corridor between module columns",
+  "code": "bae3add1a3b3a124",
+  "core": "de09fec937a30de0",
+  "date": "2026-11-24",
+  "note": "one channel in each gap between columns, cols - 1 of them.",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
   "reads": "ce1969726ee48761",
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:0df793b462e21b66",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:0df793b462e21b66"
   ],
-  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/polder.rs::ditches#the dike-pond's interior ditches": {
-  "body": "6f4f107ee6b5b3a6",
-  "claim": "the dike-pond's interior ditches - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the mosaic's lattice of ditches - a column ditch in the dike between each column of ponds, through the same warp; the ditches across the rows are `row_ditches`'",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "4a2d626065de9ff3",
-  "core": "b73b229271b6fb29",
-  "date": "2026-11-02",
-  "note": "one column ditch per gap between columns, `cols - 1` of them, drawn through the same warp at the parcels' own stations so it bends with the lattice",
+ "rust/phases/src/field/polder.rs::ditches#the dike-pond's channels down its columns": {
+  "body": "738ba89c042f6c1d",
+  "claim": "the dike-pond's channels down its columns - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a channel is drawn along every pond's edge, each pond in a ring of bank of its own - a creek in the gap between each column of ponds and the next, through the same drift, so the channels between the ponds meander as creeks do; the creeks across the rows are `row_ditches`'",
+  "code": "9d589ac3856f9d66",
+  "core": "de09fec937a30de0",
+  "date": "2026-11-24",
+  "note": "a creek in every column gap through the same drift, as the page's GUESS.",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "ce1969726ee48761",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:363302c2e6652393",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:94a31a926026b16f"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::ditches#the far flank": {
   "body": "d30beb47d7c41309",
   "claim": "the far flank - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: the supply canal dwindling to a lateral - the head arm's 1.5 ft tail held down the far flank, a lateral at that width flat from the head's far corner to the tail's",
-  "code": "0625fa768bbc50aa",
-  "core": "b73b229271b6fb29",
+  "code": "74983ed8fe01fe3f",
+  "core": "de09fec937a30de0",
   "date": "2026-11-01",
   "note": "the w_toe lateral flat at 1.5 ft is the head arm's lateral tail held at the hamlet floor, inside the ladder's lateral rung; the page has no offtake or taper rule for a flank with no deliveries that this contradicts",
   "pages": {
@@ -47109,67 +47201,95 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bb9359b7865aa39b",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:f73d5c518c731c59"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::ditches#the field ditches": {
-  "body": "d30beb47d7c41309",
+  "body": "738ba89c042f6c1d",
   "claim": "the field ditches - parcels-and-bunds-inside-a-polder-aze.drawing: between one column of modules and the next, a ditch corridor of about 8 ft",
-  "code": "e0cf61c4f8e83462",
-  "core": "b73b229271b6fb29",
-  "date": "2026-10-31",
-  "note": "x = c*(module+gap) - gap/2 puts each ditch in the middle of the corridor between columns, one way only",
+  "code": "0fac529119a486b1",
+  "core": "de09fec937a30de0",
+  "date": "2026-11-24",
+  "note": "the channel lies in the column corridor that the lattice's gap gives, 8 ft on a rice polder.",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
   "reads": "ce1969726ee48761",
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:0df793b462e21b66",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
   ],
-  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::ditches#the ring canal": {
-  "body": "d30beb47d7c41309",
+  "body": "6f4f107ee6b5b3a6",
   "claim": "the ring canal - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a ring canal round the inside foot of the dike, on the field side",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "40b758f3eac7caff",
-  "core": "b73b229271b6fb29",
-  "date": "2026-10-31",
-  "note": "the four arms run on canal = ring(RING_FT.0), between the block edge and the dike's inner envelope ring(RING_FT.1)",
+  "code": "de586a38f0443e52",
+  "core": "de09fec937a30de0",
+  "date": "2026-11-24",
+  "note": "four straight trunks on the ring at RING_FT.0, square at the corners, inside the dike",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "ce1969726ee48761",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6a36dbfd16346637",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9caeef52dbf26f47"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/polder.rs::ditches#the widths": {
-  "body": "d30beb47d7c41309",
-  "claim": "the widths - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: from the inlet's corner the supply's two arms, 4.5 to 1.5 across the head and 4.0 to 1.5 down the inlet's flank, as a fan's canals A and B; a delivery 2.5 to 1.2 down each column, its head capped at 0.8 of the head canal's width where it leaves; the drain 1.2 to 5.5 ft across the tail to the outfall's corner",
-  "code": "d1ac074d39d24c44",
-  "core": "b73b229271b6fb29",
-  "date": "2026-11-01",
-  "note": "feeder 4.5->1.5, e_toe 4.0->1.5, drain 1.2->5.5, delivery head min(2.5, 0.8*local) with tail min(1.2, head), and local width tapering from 4.5 at the inlet's corner to 1.5 at the far one, all match the table and the 0.8 cap; the last delivery comes out at 1.2 ft flat",
+ "rust/phases/src/field/polder.rs::ditches#the ring canal on a dike-pond block": {
+  "body": "738ba89c042f6c1d",
+  "claim": "the ring canal on a dike-pond block - GUESS: dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing and polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing give a dike-pond block's ring canal no width of its own, and how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing's ladder is a rice field's; its four trunks keep the rice polder's rungs, 1.5 to 5.5 ft, the route that moves nothing else, so a creek of 6 to 8 ft opens on a ring canal narrower than itself",
+  "code": "d918e979af0adc06",
+  "core": "de09fec937a30de0",
+  "date": "2026-11-24",
+  "note": "a 6 to 8 ft creek opens on ring trunks of 1.5 to 5.5 ft (the far flank 1.5 ft flat), a branch wider than its trunk, where 0068 says \"A delivery ditch is never drawn wider than the canal feeding it\" and \"What the maps always keep is the order of the widths\", and 0018 says the block's canals are not \"a rice field's irrigation ditches\"; the cited pages do not exempt a dike-pond block; fix: code; effect: map - on every dike-pond block the creeks read wider than the ring canal that feeds them, so the width-as-rank order is inverted.",
   "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
   },
   "reads": "ce1969726ee48761",
-  "research": "65ae107a7028a36f",
+  "research": "d8bf0848acfebabb",
   "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:98af9cb0c036de90",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:ce56c3841e33c8c5",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6a36dbfd16346637",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:73d0646a39f8d7dd",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7d2ddc0969f9e213",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e9e1c49b84a3b570",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:f73d5c518c731c59"
+  ],
+  "said": "the ring canal on a dike-pond block - GUESS: dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing and polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing give a dike-pond block's ring canal no width of its own, and how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing's ladder is a rice field's; its four trunks keep the rice polder's rungs, 1.5 to 5.5 ft, the route that moves nothing else, so a creek of 6 to 8 ft opens on a ring canal narrower than itself",
+  "siblings": "d3d3b1121c4bbf84",
+  "verdict": "DRIFTED"
+ },
+ "rust/phases/src/field/polder.rs::ditches#the widths": {
+  "body": "738ba89c042f6c1d",
+  "claim": "the widths - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: a rice polder's and the ring canal's on either form - from the inlet's corner the supply's two arms, 4.5 to 1.5 across the head and 4.0 to 1.5 down the inlet's flank, as a fan's canals A and B; on a rice polder a delivery 2.5 to 1.2 down each column, its head capped at 0.8 of the head canal's width where it leaves; the drain 1.2 to 5.5 ft across the tail to the outfall's corner. A dike-pond block's column channels take no rung of this ladder: they are the waterways its ponds lie among, not field ditches (dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing), at the creeks' width (the next claim)",
+  "code": "2067f94dc19b571b",
+  "core": "de09fec937a30de0",
+  "date": "2026-11-24",
+  "note": "head 4.5 to 1.5, inlet flank 4.0 to 1.5, drain 1.2 to 5.5, rice deliveries 2.5 to 1.2 with the head capped at 0.8 of the local width, and the dike-pond column channels off the ladder at the creek width.",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+  },
+  "reads": "ce1969726ee48761",
+  "research": "77e2bfac03b76df9",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:98af9cb0c036de90",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:ce56c3841e33c8c5",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:4fb1798b8b989581",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:73d0646a39f8d7dd",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:a201b452f1a78418",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b60a8b29980e1035",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bb9359b7865aa39b"
   ],
-  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::fringe#the fringe's ring": {
@@ -47241,38 +47361,38 @@
  "rust/phases/src/field/polder.rs::plots#a dike-pond module never split": {
   "body": "d3e2e244a760b2e1",
   "claim": "a dike-pond module never split - parcels-and-bunds-inside-a-polder-aze.drawing: a dike-pond block's modules most merged in pairs, each a pond's parcel, never split into strips",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "b9168fd69d6587d6",
   "core": "23f183ee8a6fed57",
   "date": "2026-11-02",
   "note": "dike-pond strips fixed at 1, each parcel one pond",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
   "reads": "a79eb1cf3a97c754",
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:4ad5eefe417c910b",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:c34ac7096b3e1cd8"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::plots#every pond four-sided": {
   "body": "d3e2e244a760b2e1",
   "claim": "every pond four-sided - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the mosaic bends the lattice but keeps every pond four-sided - a merged pair's four corners the lattice's, its two mid-side points on the row line it spans bending its sides there, not adding corners",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "a9d0f227e06289bd",
   "core": "23f183ee8a6fed57",
-  "date": "2026-11-02",
-  "note": "the merged pair's mid-side points sit on its own row line and only bend the sides, the lattice's continuous bend",
+  "date": "2026-11-24",
+  "note": "a merged pair's ring keeps the lattice's four corners and adds only mid-side points on the row line it spans",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "a79eb1cf3a97c754",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:363302c2e6652393"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::plots#the chessboard's ponds single": {
@@ -47284,31 +47404,33 @@
   "date": "2026-11-02",
   "note": "chessboard forces pair=false and dikepond forces strips=1, so every pond is one square 160 ft module, as in \"its dikes the black lines and its ponds the squares\"",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "a79eb1cf3a97c754",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::plots#the dike-pond's parcels": {
   "body": "d3e2e244a760b2e1",
   "claim": "the dike-pond's parcels - parcels-and-bunds-inside-a-polder-aze.drawing: a dike-pond block's modules most merged in pairs",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "6d40c06ab7ab2f5f",
   "core": "23f183ee8a6fed57",
   "date": "2026-11-02",
   "note": "MERGE_IN.1=6 pairs 5 in 6 of the mosaic's modules, so \"most merged in pairs\"",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
   "reads": "a79eb1cf3a97c754",
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:c34ac7096b3e1cd8"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::plots#the low plots": {
@@ -47332,126 +47454,124 @@
  "rust/phases/src/field/polder.rs::plots#the strips": {
   "body": "d3e2e244a760b2e1",
   "claim": "the strips - parcels-and-bunds-inside-a-polder-aze.drawing: most modules split into two or three oblong strips, cut by the plain 3 ft walking bund, and a few merge along the fall",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "93d21d95222b41ac",
   "core": "23f183ee8a6fed57",
   "date": "2026-11-02",
   "note": "4 in 5 modules split into 2-3 strips along the fall, cut at row_gap 3 ft, and 1 in 8 merges along the fall",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
   "reads": "a79eb1cf3a97c754",
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:095f7e817a239457",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:2121aaffee2cc5ab",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::polder#never uniform rectangles": {
-  "body": "49b44fb634a906b6",
-  "claim": "never uniform rectangles - parcels-and-bunds-inside-a-polder-aze.drawing: our maps never draw the parcels as a grid of uniform rectangles - the rice polder bowed and nudged, the dike-pond mosaic drifted; the dike-pond's chessboard the one exception, attested on its own (the next claim)",
-  "code": "fb262b8780b4193d",
-  "core": "c523d965e8e30740",
-  "date": "2026-11-02",
-  "note": "the rice polder and the mosaic are warped and split; only the chessboard, attested in 0019, stands straight",
+  "body": "205426a3c9aaccf8",
+  "claim": "never uniform rectangles - parcels-and-bunds-inside-a-polder-aze.drawing: our maps never draw a rice polder's parcels as a grid of uniform rectangles - the rice polder's lattice bowed and nudged; the exception a block of dike-ponds, whose ponds some maps draw as a chessboard, a layout recorded on its own (the next claim)",
+  "code": "6003d122d25c7186",
+  "core": "1aa98dd553acb577",
+  "date": "2026-11-24",
+  "note": "the rice polder's lattice takes the \"polder\" warp (bowed and nudged), and only a dike-pond chessboard stands straight.",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
   "reads": "66a8b3f2227e3ef0",
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:66e15c3ced2be63d",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f5f276142524560a"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::polder#the chessboard": {
-  "body": "49b44fb634a906b6",
+  "body": "b93f80d847c4ca1a",
   "claim": "the chessboard - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a dike-pond's grid of ponds, the chessboard, attested beside the mosaic, its dikes the black lines and its ponds the squares - drawn straight, its modules never paired, the `pond_layout` knob's other form",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "7cf2b5415febca44",
-  "core": "c523d965e8e30740",
-  "date": "2026-11-02",
-  "note": "the layout knob picks between mosaic and chessboard, and the chessboard takes the straight form and is never paired",
+  "code": "622d6499632c6eaf",
+  "core": "1aa98dd553acb577",
+  "date": "2026-11-24",
+  "note": "any layout other than \"mosaic\" gives a straight chessboard with unpaired ponds; the per-hamlet roll is the layout knob's",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "66a8b3f2227e3ef0",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::polder#the feeder": {
-  "body": "49b44fb634a906b6",
-  "claim": "the feeder - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: no channel runs outside the dike (the ring canal's rule), and the wild pond feeds the polder at its head; the feeder is read as the wild water's own reach to the inlet sluice, not a channel outside the dike, and the page is silent on its course - straight from the wild pond to the inlet",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "da78ab027c5b8aad",
-  "core": "c523d965e8e30740",
-  "date": "2026-11-22",
-  "note": "the feeder's three points (pond_at, the point POND_FT.1 out, inlet) all sit at one across-offset, size.1 + RING_FT.1, so the feeder runs straight from the wild pond to the inlet. Reading it as the wild water's own reach agrees with the page's \"from outside in, ... the wild water, the dike\", and the page is silent on the feeder's course",
+  "body": "205426a3c9aaccf8",
+  "claim": "the feeder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the feeder drawn straight from the wild pond to the inlet sluice, a reach of the wild water itself by the shortest line, no page giving the course of a channel feeding a polder's inlet - from the wild pond's middle through its near shore to the inlet's point",
+  "code": "40281fb59dc5d1b6",
+  "core": "1aa98dd553acb577",
+  "date": "2026-11-24",
+  "note": "a straight three-point line from the wild pond's middle, through its near shore, to the inlet, as the page's GUESS.",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "66a8b3f2227e3ef0",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:0fbfef4e578bd457"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::polder#the grid's bearing": {
   "body": "b93f80d847c4ca1a",
   "claim": "the grid's bearing - GUESS: parcels-and-bunds-inside-a-polder-aze.drawing silent on which way the grid lies to the fall; the walking-bund rows across the fall, the ditch-corridor columns along it, the water running down the columns",
-  "code": "eabd4d244da70c9d",
-  "core": "c523d965e8e30740",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
+  "code": "3276420fbf938c0a",
+  "core": "1aa98dd553acb577",
   "date": "2026-11-22",
   "note": "the page does not say which way the grid lies to the fall. The code lays walking bunds across the fall (row gaps at constant u) and ditch corridors along it, and pairs rows down the fall. That agrees with \"a few merge along the fall of the ground\" and does not answer the bearing itself",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
   "reads": "66a8b3f2227e3ef0",
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:095f7e817a239457",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:0df793b462e21b66",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::polder#the inlet's side": {
   "body": "49b44fb634a906b6",
   "claim": "the inlet's side - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing silent beyond its pool's one polder (the wild pond to its northwest); the inlet, the pond and the outfall on one side of the fall",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "e13dcd060d90f2f7",
-  "core": "c523d965e8e30740",
+  "code": "5e95af5f232aaa50",
+  "core": "1aa98dd553acb577",
   "date": "2026-11-22",
   "note": "0019 gives a head inlet and a tail outfall and one pool polder's compass, but not which flank they share",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "66a8b3f2227e3ef0",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::polder#the least polder": {
   "body": "49b44fb634a906b6",
   "claim": "the least polder - how-much-farmland-a-settlement-works-and-in-what-tracts.drawing: a field enclosed on the map is never drawn under about 8 acres - the block's modules hold at least that",
-  "code": "46c1daa548fd070f",
-  "core": "c523d965e8e30740",
+  "code": "9554aa0b0aa9d4f8",
+  "core": "1aa98dd553acb577",
   "date": "2026-11-02",
   "note": "the paddy is floored at ENCLOSED_FLOOR_ACRES 8 before counting modules",
   "pages": {
@@ -47463,43 +47583,45 @@
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:7dca4c2800e4b3ca",
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:e683f56e64a0ff19"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::polder#the module by form": {
   "body": "49b44fb634a906b6",
   "claim": "the module by form - parcels-and-bunds-inside-a-polder-aze.drawing: a rice polder's module about 190 ft with its 8 ft ditch corridors and 3 ft bunds, a dike-pond block's about 160 ft with gaps of about 22 ft both ways",
-  "code": "6047b761098f8f0a",
-  "core": "c523d965e8e30740",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
+  "code": "744194ac7f199658",
+  "core": "1aa98dd553acb577",
   "date": "2026-11-02",
   "note": "modules 190/160 ft; gaps 8 ft between columns and 3 ft between rows for rice, 22 ft both ways for the dike-pond",
   "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
   "reads": "66a8b3f2227e3ef0",
-  "research": "5b339210163f008f",
+  "research": "a770270a4b731196",
   "rests": [
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:0df793b462e21b66",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:2121aaffee2cc5ab",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:87427868eb3365dc",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:c34ac7096b3e1cd8"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::polder#the polder's acreage": {
   "body": "49b44fb634a906b6",
   "claim": "the polder's acreage - how-much-farmland-a-settlement-works-and-in-what-tracts.drawing: 1.3 acres gross a household, in whole modules of parcels-and-bunds-inside-a-polder-aze.drawing at or above it",
-  "code": "8d31d03394091bba",
-  "core": "c523d965e8e30740",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
+  "code": "3be1165d588aa689",
+  "core": "1aa98dd553acb577",
   "date": "2026-11-22",
   "note": "whole modules, rounded up at or above the given paddy and the 8-acre floor; 1.3 acres falls within the 1 to 2.5 acre household band",
   "pages": {
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "a9cadcd1c6136196",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
   "reads": "66a8b3f2227e3ef0",
-  "research": "1d21d481a43df6ea",
+  "research": "c5f34af4ba4717bc",
   "rests": [
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:9347ee2726e82d57",
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:b53810ad8bfaff92",
@@ -47507,107 +47629,105 @@
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:87427868eb3365dc",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::polder#the pond's reeds": {
   "body": "49b44fb634a906b6",
   "claim": "the pond's reeds - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing silent on reeds at the wild pond; a fringe round it (`FRINGE_FT`)",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "8d33850fd0d98c28",
-  "core": "c523d965e8e30740",
+  "code": "b5187ef18347c1dd",
+  "core": "1aa98dd553acb577",
   "date": "2026-11-22",
   "note": "0019 gives no reeds at the wild pond; the fringe is a guess",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "66a8b3f2227e3ef0",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::polder#the ring canal's place": {
-  "body": "49b44fb634a906b6",
+  "body": "b93f80d847c4ca1a",
   "claim": "the ring canal's place - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a ring canal round the inside foot of the dike, on the field side - `RING_FT` out from the plots, inside the dike's inner face",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "95e6f093b75e8a8e",
-  "core": "c523d965e8e30740",
-  "date": "2026-11-02",
-  "note": "the canal ring sits RING_FT.0 6 ft out from the plots, inside the 12 ft inner face",
+  "code": "c8f8c361a1e0d55d",
+  "core": "1aa98dd553acb577",
+  "date": "2026-11-24",
+  "note": "canal at RING_FT.0 out from the plots, inside the 12 ft inner envelope",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "66a8b3f2227e3ef0",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6a36dbfd16346637"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::polder#the wild pond's place": {
   "body": "49b44fb634a906b6",
   "claim": "the wild pond's place - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the wild pond feeds the polder at its head, where its inlet is - up the fall from the inlet's corner, `POND_FT.2` out, in line with the inlet's flank (the page's \"northwest\" is its one pool polder's compass, the head read from the fall here, as every map's)",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "ad2dac9cec768a02",
-  "core": "c523d965e8e30740",
+  "code": "8e9d48c845647209",
+  "core": "1aa98dd553acb577",
   "date": "2026-11-02",
   "note": "pond_at sits POND_FT.2 up the fall from the inlet corner, on the inlet's flank x, so it feeds at the head where the inlet is; \"northwest\" read as head-side, as the claim says",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "66a8b3f2227e3ef0",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::polder#the wild pond's size": {
   "body": "49b44fb634a906b6",
   "claim": "the wild pond's size - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing silent on its size and distance (`POND_FT`)",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "4641b8a126e4fcbb",
-  "core": "c523d965e8e30740",
+  "code": "ddc0f94b3074de1f",
+  "core": "1aa98dd553acb577",
   "date": "2026-11-22",
   "note": "0019 gives no size or distance for the wild pond",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "66a8b3f2227e3ef0",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::polder#two sluices": {
   "body": "b93f80d847c4ca1a",
   "claim": "two sluices - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: water crosses the dike only at gated sluices, an inlet at the head and an outfall at the tail - the inlet at the head corner beside the wild pond, the outfall at the tail corner the drain widens to (field-drains-akusuiro.drawing: a drain reaches its full width at the outfall)",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "5715be4e0d1d7271",
-  "core": "c523d965e8e30740",
-  "date": "2026-11-22",
-  "note": "two sluices, as the page gives a village polder: the inlet at the head (u=-12), on the flank of the wild pond, and the outfall at the tail (u=size.0+12), beyond canal[2], where the drain is at its full 5.5 ft. The new join reach runs inside `inner_env`, so no channel is added outside the dike",
+  "code": "b80b71c49a967259",
+  "core": "1aa98dd553acb577",
+  "date": "2026-11-24",
+  "note": "inlet at the head corner and outfall at the tail corner on the inlet's flank, with the drain widening 1.2 to 5.5 ft toward the outfall",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2",
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
   "reads": "66a8b3f2227e3ef0",
-  "research": "402948ed9898a934",
+  "research": "2f9121db73205ca6",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
-   "0060-field-drains-akusuiro.drawing.html:9335eaa56aa337a3"
+   "0060-field-drains-akusuiro.drawing.html:9335eaa56aa337a3",
+   "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::rest#never a low plot": {
@@ -47649,63 +47769,244 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::row_ditches#the lattice both ways": {
-  "body": "a6f38f278b2bb81e",
-  "claim": "the lattice both ways - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the dike-pond's lattice of ditches bent out of line both ways; parcels-and-bunds-inside-a-polder-aze.drawing: gaps of about 22 ft both ways - a row's ditch only where its gap is open, a merged pair's gap its own bank",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "ad60673709a556f4",
-  "core": "187794ad714d80f4",
-  "date": "2026-11-22",
-  "note": "row ditches run in the 22 ft gaps through the warp, and only where a parcel ends; a merged pair spans its gap with no ditch",
+  "body": "bfd925e58c37ff87",
+  "claim": "the lattice both ways - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the dike-pond block's lattice of creeks bent out of line; parcels-and-bunds-inside-a-polder-aze.drawing: gaps of about 22 ft both ways - a row's channel only where its gap is open, a merged pair's gap its own bank; each end on the column creek it joins, at that creek's own station, or at the block's flank its rounded mouth on the ring canal (`ditches`)",
+  "code": "db7d0531cb735219",
+  "core": "1e5cab145c3f02c2",
+  "date": "2026-11-24",
+  "note": "a row creek only where a parcel ends at that row, each end on the column creek's midway station or its rounded mouth on the ring.",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
   "reads": "ce1969726ee48761",
-  "research": "13e048789e1d7ba1",
+  "research": "d5bbc507bde8113f",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:07248ec0cda7080e",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:363302c2e6652393",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:94a31a926026b16f",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:c34ac7096b3e1cd8"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::row_ditches#the row ditch's width": {
-  "body": "a6f38f278b2bb81e",
-  "claim": "the row ditch's width - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: a sub-ditch at most 0.75 of the delivery's head - of the narrower column ditch it joins",
-  "code": "d03d4916a8b82bca",
-  "core": "187794ad714d80f4",
-  "date": "2026-11-02",
-  "note": "w = 0.75 of the head width of the narrower column ditch either side, where a head is min(2.5, 0.8 x the canal's width there)",
+  "body": "bfd925e58c37ff87",
+  "claim": "the row ditch's width - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: a canal between ponds drawn about 6 to 8 ft wide - a channel across a dike-pond's rows at the block's one creek width (`creek_width`), the column channels' own, where before 449 T420 it took 0.75 of a rice polder's delivery rung",
+  "code": "83292658cc63b925",
+  "core": "1e5cab145c3f02c2",
+  "date": "2026-11-24",
+  "note": "the block's one creek width, flat.",
   "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6"
   },
   "reads": "ce1969726ee48761",
-  "research": "65ae107a7028a36f",
+  "research": "248a178c714ef0eb",
   "rests": [
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:73d0646a39f8d7dd",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bb9359b7865aa39b",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:edc063185cbdd489"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:ce56c3841e33c8c5"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::shape#whole modules": {
   "body": "8f7c94673443e439",
   "claim": "whole modules - parcels-and-bunds-inside-a-polder-aze.drawing: square modules about 190 ft on a side; at or above the households' paddy of how-much-farmland-a-settlement-works-and-in-what-tracts.drawing, the shape a CONVENTION of the block",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "1ba86d6b8c5d3f26",
   "core": "f1bc4d4a265cf0e3",
   "date": "2026-11-22",
   "note": "rows times columns is at least the module count, with the least waste; the block's proportion follows the aspect it is given",
   "pages": {
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "a9cadcd1c6136196",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
-  "research": "d6c5af43a983ca57",
+  "research": "20056444c9fa396b",
   "rests": [
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:e683f56e64a0ff19",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:87427868eb3365dc",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
   ],
+  "triaged": "2026-11-24",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder/creeks.rs::CREEK_FT#the creek's width": {
+  "body": "f3829b301f4707da",
+  "claim": "the creek's width - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: a canal between ponds drawn about 6 to 8 ft wide, no page giving a channel between ponds a width before modern times",
+  "code": "8fcf011440726a88",
+  "core": "e1562358fac2cba8",
+  "date": "2026-11-24",
+  "note": "(6.0, 8.0), the page's GUESS range.",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6"
+  },
+  "research": "248a178c714ef0eb",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:ce56c3841e33c8c5"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder/creeks.rs::EASE_STEPS#the easing's steps": {
+  "body": "be70738528c1d291",
+  "claim": "the easing's steps - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing gives the drift's strength as a calibrated liberty and no rule for a block it pinches; twenty steps, a twentieth of the full strength each, fine enough that an eased block keeps nearly all its drift (the worst of 51 rolled mosaics, 2026-11-24, feature 449 T420, needed its corridors about a fifth straighter)",
+  "code": "05872b2999479ff9",
+  "core": "6643b45710cd857b",
+  "date": "2026-11-24",
+  "note": "twenty steps; the page gives the drift's strength as a calibrated liberty and the cited pages give no rule for a pinched block.",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
+  },
+  "research": "807b97fcf680d084",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder/creeks.rs::Lattice#the lattice's record": {
+  "body": "d1a87c248c07f11c",
+  "claim": "the lattice's record - NONE: the record's type, holding what `polder` hands its channels",
+  "code": "5e805e8712a697dd",
+  "core": "0723b745ed4e7054",
+  "date": "2026-11-24",
+  "note": "a record type.",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder/creeks.rs::Lattice.midway#midway between its banks": {
+  "body": "ff95e131f6fe8ac7",
+  "claim": "midway between its banks - parcels-and-bunds-inside-a-polder-aze.drawing: between one column of modules and the next, a ditch corridor - the channel on the corridor's middle as the plots' sides draw it; a merged pair keeps one straight side from its end to the middle row line, where the lattice's own line bows away from it, and a channel on the lattice's line stood up to 4.6 ft off the middle beside such a side (27 of 51 rolled mosaics, measured 2026-11-24, feature 449 T420)",
+  "code": "5f12472653f6f7cb",
+  "core": "a2b98836e8eb4b16",
+  "date": "2026-11-24",
+  "note": "the midpoint of the two corridor sides as the plots draw them.",
+  "pages": {
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
+  },
+  "research": "a770270a4b731196",
+  "rests": [
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:0df793b462e21b66",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:c34ac7096b3e1cd8"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder/creeks.rs::Lattice.narrowest#the corridors measured": {
+  "body": "74fbae3599fdeebc",
+  "claim": "the corridors measured - NONE: geometry, each column's sides read at the channels' own stations, a few hundred distances a block, no scan of plot against plot (constitution X clause 15)",
+  "code": "c67ce5e2ac920c30",
+  "core": "3664344143ab0b50",
+  "date": "2026-11-24",
+  "note": "distance geometry; the threshold it feeds is claimed at eased.",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder/creeks.rs::Lattice.side#a side's point": {
+  "body": "bd7b83e2913a6547",
+  "claim": "a side's point - NONE: geometry, the plots' own sides as `plots` lays them",
+  "code": "4b778b0f55ed6b68",
+  "core": "fdcf19181bab8c64",
+  "date": "2026-11-24",
+  "note": "geometry on the plots' own sides.",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder/creeks.rs::creek_width#one width a block": {
+  "body": "7be20a01f06221d0",
+  "claim": "one width a block - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: a canal between ponds drawn about 6 to 8 ft wide, the page giving a range and no figure within it; each block's width rolled evenly over the range, to a thousandth of it, the same down a column and across a row and from head to tail - the page names no wider or narrower kind among them and no end to taper toward, and a figure fixed inside the range would be one more number no page gives",
+  "code": "212c0a289bb84ae3",
+  "core": "1ba1102c54ad0ff9",
+  "date": "2026-11-24",
+  "note": "rolled evenly over 6 to 8 ft to a thousandth, one width a block.",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6"
+  },
+  "reads": "e294cb1e52528df8",
+  "research": "248a178c714ef0eb",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:ce56c3841e33c8c5"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder/creeks.rs::eased#room for the creeks": {
+  "body": "cde000f9b23a3387",
+  "claim": "room for the creeks - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: a canal between ponds drawn about 6 to 8 ft wide; where the mosaic's drift (polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: its strength a calibrated liberty) pinches a corridor under its creek's width the block is given room rather than the creek laid over the banks or the ponds drawn smaller (the GM 2026-10-12, room before packing) - the drift eased block by block, a mosaic no corridor of which is pinched keeping it whole (Kuwabata's does); 13 of 51 rolled mosaics held a corridor of 4 to 7 ft under a creek of 6 to 8 (measured 2026-11-24, feature 449 T420)",
+  "code": "596ee3ac7cdbcee2",
+  "core": "1465a191ebaf33c6",
+  "date": "2026-11-24",
+  "note": "the drift is stepped down until the narrowest corridor holds the creek's width, and a block that needs no easing keeps the whole drift.",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
+  },
+  "reads": "375da83108488322",
+  "research": "bd75558d62b3837c",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:ce56c3841e33c8c5",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:363302c2e6652393",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder/creeks.rs::stations#the stations": {
+  "body": "40ae6dc44b7d6273",
+  "claim": "the stations - NONE: geometry, the plots' own corner lines",
+  "code": "5d03558583a48418",
+  "core": "629849839872b361",
+  "date": "2026-11-24",
+  "note": "the plots' own corner lines.",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder/tests.rs::a_creek_stands_midway_between_its_banks_and_a_pinched_mosaic_is_eased#the polder's tests": {
+  "body": "305fba45e4e28ba4",
+  "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "9c026066839b6bea",
+  "core": "cb56f6d1eb0fa127",
+  "date": "2026-11-24",
+  "note": "fixtures and assertions.",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder/tests.rs::a_dike_ponds_channels_are_creeks_and_a_rice_polders_stay_ditches#the polder's tests": {
+  "body": "86577e2d9864207b",
+  "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "8e902a66e2063540",
+  "core": "ca9749b20a018f29",
+  "date": "2026-11-24",
+  "note": "fixtures and assertions.",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder/tests.rs::a_rice_polder_and_a_dike_pond_block#the polder's tests": {
+  "body": "6acbfcefb904314d",
+  "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "180336dd571ea061",
+  "core": "db8d992ccedf2607",
+  "date": "2026-11-24",
+  "note": "fixtures and assertions.",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder/tests.rs::the_shape_wastes_least#the polder's tests": {
+  "body": "7b81b4e67cae3fff",
+  "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "b1ee9633e44a40e0",
+  "core": "b28ec9a84896a28f",
+  "date": "2026-11-24",
+  "note": "fixtures and assertions.",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/ponds.rs::CUT_STRAY#the corner's stray": {
@@ -47721,17 +48022,17 @@
  },
  "rust/phases/src/field/ponds.rs::LEAST_SHARE#the least pond": {
   "body": "f5c654e3b15af77d",
-  "claim": "the least pond - GUESS: dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing silent on a parcel too small for the village's bank; the water a tenth of the parcel across",
-  "code": "254471e5a0daab8f",
+  "claim": "the least pond - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: a parcel too small for its bank still gets a pond, the water drawn a tenth of the parcel across",
+  "code": "0e4df7bf22689f09",
   "core": "eb40dc1a97184ab2",
-  "date": "2026-11-22",
-  "note": "the drawing page says nothing about a parcel too small for the village's single inset; the fallback (0.1 across, about the middle) is a guess the page does not answer",
+  "date": "2026-11-24",
+  "note": "a tenth of the parcel across, the page's GUESS.",
   "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6"
   },
-  "research": "dede4a3ae0c4c6d4",
+  "research": "248a178c714ef0eb",
   "rests": [
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:18001fb80174f75f"
   ],
   "verdict": "IN-STEP"
  },
@@ -47748,50 +48049,56 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/ponds.rs::rounded#rounded corners": {
-  "body": "c2aa54c646ad2ef8",
-  "claim": "rounded corners - GUESS: dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing silent on a pond's corners, giving ponds of uneven shape; each corner rounded on a quadratic curve",
-  "code": "c9bbedfa4f4b7546",
-  "core": "d57f9ee83bf7668d",
-  "date": "2026-11-22",
-  "note": "the page asks only for \"ponds of uneven shape\" and says nothing about corners; the quadratic rounding with a cut that varies per corner is an unanswered guess that fits that shape",
+  "body": "449343f8a779d484",
+  "claim": "rounded corners - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: a pond's corners are drawn rounded, no page giving the shape of a pond's corner - each corner rounded on a quadratic curve, its cut-back rolled about the reach",
+  "code": "8646d7f2f2ff8ed0",
+  "core": "26f9a8c9a0a61e66",
+  "date": "2026-11-24",
+  "note": "each corner is rounded on a quadratic curve with its cut-back rolled about `reach`, and the drawing page records the rounding and its cut-back figures as a GUESS",
   "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6"
   },
   "reads": "dc630b5fc6a8c1f6",
-  "research": "dede4a3ae0c4c6d4",
+  "research": "248a178c714ef0eb",
   "rests": [
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:9aaf0a58da02aa2b"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:c416c603528eb833"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/ponds.rs::rounded#the bank's inset": {
-  "body": "c2aa54c646ad2ef8",
-  "claim": "the bank's inset - GUESS: dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing records that one inset serves every parcel as this project's GUESS - the same bank's width on every side of every pond",
-  "code": "c05e953136efbd0a",
-  "core": "d57f9ee83bf7668d",
-  "date": "2026-11-22",
-  "note": "one `inset` is passed to pushed_in, so every side is set in by the same width; the page records \"that one inset serves every parcel is this project's GUESS\"",
+  "body": "449343f8a779d484",
+  "claim": "the bank's inset - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: one inset holds for the whole village, measured on its parcel of median area - the same bank's width on every side of every pond whose parcel holds its bank, a parcel drawing the least pond excepted",
+  "code": "096dad29223a1a9f",
+  "core": "26f9a8c9a0a61e66",
+  "date": "2026-11-24",
+  "note": "the one village inset is passed to `pushed_in` and applied to every side of every pond; the page records it as GUESS; least-pond parcels are excepted as the claim says",
   "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6"
   },
   "reads": "dc630b5fc6a8c1f6",
-  "research": "dede4a3ae0c4c6d4",
+  "research": "248a178c714ef0eb",
   "rests": [
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e",
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:b6e1f2dff8a2b220"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:18001fb80174f75f",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/ponds.rs::rounded#the least pond": {
-  "body": "c2aa54c646ad2ef8",
-  "claim": "the least pond - GUESS: where the bank asks more than the parcel holds, the parcel shrunk about its middle to `LEAST_SHARE`",
-  "code": "42968fdbb5e2df38",
-  "core": "d57f9ee83bf7668d",
-  "date": "2026-10-31",
-  "note": "the fallback shrinks the corners about their mean by LEAST_SHARE = 0.1, and no block covers a bank wider than its parcel",
-  "pages": {},
+  "body": "449343f8a779d484",
+  "claim": "the least pond - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: where the bank the village's split asks for is more than a parcel holds, the water is still drawn - the parcel shrunk about its middle to `LEAST_SHARE`; and that least pond is the floor, so a parcel that holds its bank with water any side of which is shorter than a tenth of the parcel's same side draws the least pond too, never a sliver thinner than a tenth of the parcel across (feature 449 T420, its plan section's D8 holds the measurement)",
+  "code": "9861972de4f33cb4",
+  "core": "26f9a8c9a0a61e66",
+  "date": "2026-11-24",
+  "note": "the fallback shrinks the parcel about its vertex mean by LEAST_SHARE 0.1, which is the page's \"a tenth of the parcel across\". The page records that least pond as a GUESS with no source. The new floor (if any side of the water is under a tenth of the parcel's same side, the least pond is drawn) is the same recorded guess pushed to the sliver case, and nothing on the cited page contradicts it",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "eb4b1016579aaff6"
+  },
   "reads": "dc630b5fc6a8c1f6",
-  "research": "",
+  "research": "248a178c714ef0eb",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:18001fb80174f75f",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/rules.rs::ARROW_POINT_DEG#the arrowhead": {
@@ -47945,19 +48252,9 @@
  },
  "rust/phases/src/field/staged.rs::polder_stage#a rice polder's pocket pond": {
   "body": "ec725dd5ae31b586",
-  "build": {
-   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
-   "dirty": {
-    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
-    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
-    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
-    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
-    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
-   }
-  },
   "claim": "a rice polder's pocket pond - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: a polder may have a pond on a low plot, a little over half the time; the dike-pond ground has none - the comb's own roll (`features::pocket_pond`) over the block's low row, a resting plot never its host",
-  "code": "c8e88033adb3d043",
-  "core": "325af165e577e8d6",
+  "code": "49ccd9fa9650cd6f",
+  "core": "7256e63df023425a",
   "date": "2026-11-07",
   "note": "the rice polder gets `rice_pond`'s roll; dike-pond ground gets none",
   "pages": {
@@ -47978,19 +48275,9 @@
  },
  "rust/phases/src/field/staged.rs::polder_stage#no resting plot on a dike-pond block": {
   "body": "ec725dd5ae31b586",
-  "build": {
-   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
-   "dirty": {
-    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
-    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
-    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
-    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
-    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
-   }
-  },
   "claim": "no resting plot on a dike-pond block - GUESS: paddies-left-to-rest-kataarashi.drawing silent on a converted block; its parcels are ponds, their banks and a few in standing rice, and none is rested",
-  "code": "0276f4685d6aaec3",
-  "core": "325af165e577e8d6",
+  "code": "0f67eb2236b1567d",
+  "core": "7256e63df023425a",
   "date": "2026-11-22",
   "note": "rest(..., unsettled && !dikepond) means a dike-pond block rests no plot; the 0013 drawing page sets resting per settlement and per field and never speaks of converted dike-pond ground, so the GUESS stands",
   "pages": {
@@ -48007,19 +48294,9 @@
  },
  "rust/phases/src/field/staged.rs::polder_stage#resting only when unsettled": {
   "body": "ec725dd5ae31b586",
-  "build": {
-   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
-   "dirty": {
-    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
-    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
-    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
-    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
-    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
-   }
-  },
   "claim": "resting only when unsettled - paddies-left-to-rest-kataarashi.drawing: an unsettled settlement rests two to four whole plots (`polder::rest`), a settled one none",
-  "code": "5a6f45e41d9c9963",
-  "core": "325af165e577e8d6",
+  "code": "e0c764490ccceb0a",
+  "core": "7256e63df023425a",
   "date": "2026-11-07",
   "note": "`polder::rest` runs only when unsettled; a settled block rests none",
   "pages": {
@@ -48639,6 +48916,23 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/seat.rs::BAND_EXITS#the way out from the band's ends": {
+  "body": "ce12f3e0ce7a3770",
+  "claim": "the way out from the band's ends - GUESS village-lanes.drawing: lanes keep to dry ground and the page is silent on which point of a cluster its way out leaves from; 0.6 of the half-length either side of the center, the stations the band's ground is sampled at (`margins::SAMPLE_ALONG`)",
+  "code": "d9a0e1fed6b4c465",
+  "core": "b92d604ef35ce136",
+  "date": "2026-11-24",
+  "note": "the cited page keeps lanes on dry ground and does not say which point of a cluster its way out leaves from, so the 0.6 stations are rightly a GUESS",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:48cdd569d493520c",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/seat.rs::Frame#the seat": {
   "body": "2518e7f0e72478eb",
   "claim": "the seat - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
@@ -48712,33 +49006,57 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/seat.rs::seat#a walled-in head gives way": {
-  "body": "007fc0a9fa1c43b4",
-  "claim": "a walled-in head gives way - village-lanes.drawing: lanes keep to dry ground, so a margin whose seat has no dry way out of the frame is dropped and the next in the ranking taken",
-  "code": "06c288df936280db",
-  "core": "8d389cad32d21403",
+ "rust/phases/src/seat.rs::open_at_an_end#a seat astride the brook leaves by its open bank": {
+  "body": "4aecb8a9c634cec7",
+  "claim": "a seat astride the brook leaves by its open bank - GUESS villages-beside-their-stream-one-bank-or-both.drawing: \"Where the site that faces the fields and has its back to the winter wind is crossed by the brook, the houses are built on both banks\" - so a band whose center falls in the pocket between the brook, the intake's feeder and the field's corner, the rest of it on open ground, is no walled-in site; the record does not say where a cluster's way out starts (village-lanes.drawing keeps lanes on dry ground), so it is asked of the band's two stations, and only once no margin is left, each refused or walled in at its center and the hill-backed seat asked where a fall runs into the wind - 4 of 35,000 valley rolls, each falling square across its wind with its windward flank on the wet toe, the one seat kept at the head's windward corner over the intake (measured 2026-11-24: 20,000 cohort seeds at five starts and seeds 1 to 1,500 at ten sizes and falls; none refused after, none with a map check broken, the four bands 0.03 to 0.05 percent on the paddy)",
+  "code": "b988e450814b4f97",
+  "core": "bfed7d84fa309078",
   "date": "2026-11-24",
-  "note": "a margin whose seat has no dry way out is dropped and the next taken",
+  "note": "a site the brook crosses is allowed (both banks) and is asked only after every site it does not cross, matching the quote and the preference for such sites; where the way out starts is unanswered on the cited pages, so GUESS is right",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20",
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "reads": "a5e456d20b42eb04",
+  "research": "31f3e4e351e63089",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:09b499b11d9ab875",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542",
+   "0081-village-lanes.drawing.html:48cdd569d493520c",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/seat.rs::seat#a walled-in head gives way": {
+  "body": "dd9d810ade1db13f",
+  "claim": "a walled-in head gives way - village-lanes.drawing: lanes keep to dry ground, so a margin whose seat has no dry way out of the frame from its center is dropped and the next in the ranking taken; once none is left the dropped seats are asked again from their bands' ends (`open_at_an_end`), and one with a way out there is kept",
+  "code": "37f1005151972485",
+  "core": "696510769bddff3a",
+  "date": "2026-11-24",
+  "note": "a head with no dry way out is moved to `shut` and the next margin is tried; once none is left, `open_at_an_end` asks the shut seats of both rankings from their band ends and keeps any that has a way out; this follows the page's dry-ground lanes and the track running off the map",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
+  "reads": "8c6b60283fac636b",
   "research": "348d3cab06271e76",
   "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:48cdd569d493520c",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat.rs::seat#the back to the hill where the wind cannot be backed": {
-  "body": "007fc0a9fa1c43b4",
-  "claim": "the back to the hill where the wind cannot be backed - GUESS clustered-and-scattered-villages-shuson-sanson.drawing: where a map declares a fall toward the wind, no margin is both high and windward, so the cluster takes the high, dry one, its back to the hill and off the wind - once no margin facing the wind is left, each refused or its seat walled in, the margins are ranked again with the high side as the wind's, each seat recorded off the wind; its belt still on the windward side, between the houses and the paddy (`margins::ranked`)",
-  "code": "4aa14f0bd586f40c",
-  "core": "8d389cad32d21403",
+  "body": "dd9d810ade1db13f",
+  "claim": "the back to the hill where the wind cannot be backed - GUESS clustered-and-scattered-villages-shuson-sanson.drawing: where a map declares a fall toward the wind, no margin is both high and windward, so the cluster takes the high, dry one, its back to the hill and off the wind - once no margin facing the wind is left, each refused or its seat walled in, the margins are ranked again (a fall square across the wind, to its floating point's slack, is not one toward it) with the high side as the wind's, each seat recorded off the wind; its belt still on the windward side, between the houses and the paddy (`margins::ranked`); where the hill-backed ranking leaves none either, the seats walled in at their centers, of both rankings, are asked from their bands' ends, the wind-facing ones first (`open_at_an_end`)",
+  "code": "2d3383aee388ad72",
+  "core": "696510769bddff3a",
   "date": "2026-11-24",
-  "note": "only a fall toward the wind triggers it, asked once no windward margin is left; seats are marked off the wind and the belt stays against the map's own wind; 0031's drawing page records this as a GUESS",
+  "note": "the hill ranking is asked only for a fall toward the wind (`dot > SQUARE_EPS`, so a fall square across the wind is level, not toward it), and only once no wind-facing margin is left. Its seats are flagged off the wind and the belt stays against the map's wind. Seats walled in under both rankings are asked from their band ends in the order they were dropped, wind-facing ones first. This matches the GUESS the drawing page records (\"its back to the hill, its belt to windward, a GUESS\").",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
+  "reads": "8c6b60283fac636b",
   "research": "430afdccc4c0e546",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a"
@@ -48746,33 +49064,21 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat.rs::seat#the fords before the seat": {
-  "body": "73a06dafe9276094",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
+  "body": "dd9d810ade1db13f",
   "claim": "the fords before the seat - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses the brook only at a crossing place, so the seat's way out is asked of the brook gapped at them",
-  "code": "5657204b1000d99e",
-  "core": "8d389cad32d21403",
-  "date": "2026-11-07",
-  "note": "the streams are gapped at the fords before the way-out test, as \"A way crosses the water only at one of them\"",
+  "code": "5a0ab5603879db54",
+  "core": "696510769bddff3a",
+  "date": "2026-11-24",
+  "note": "the fords are set along the brook first, and the streams are gapped at them and added to the lines the way-out check runs against, so a way crosses only at a crossing place",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
+  "reads": "8c6b60283fac636b",
   "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
-  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/exit.rs::BEARINGS#the straight runs": {
@@ -49422,12 +49728,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::SQUARE_EPS#the square end in": {
-  "body": "eaf620b80f8f3b48",
+  "body": "0a9f1a35c29aae79",
   "claim": "the square end in - GUESS: tier 1 takes \"a margin 45 to 90 degrees off the wind\" with both ends in, as the falls are admitted (square to the wind or away, `water_frame.rs` `admitted`): a fall square to the wind leaves the head square to it, and with the end out the Rust gate's seed 901280 (its windward flank, parallel to the fall, all on the wet toe) had no seat",
-  "code": "082012c8ad640b89",
-  "core": "c912d72abdb60179",
-  "date": "2026-11-07",
-  "note": "`dot &gt; -SQUARE_EPS` admits a margin exactly square to the wind into tier 1; the record gives no tolerance",
+  "code": "11bd84de499500b8",
+  "core": "6d3de5a041e37c25",
+  "date": "2026-11-24",
+  "note": "this is floating-point slack, so a fall exactly square to the wind counts as admitted and not as falling toward it; that matches the page's falls \"away from the wind or across it\", and the margin band's included 90-degree end is otherwise unattested, as a GUESS should be",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -49548,18 +49854,20 @@
  "rust/phases/src/seat/margins.rs::belt_swept#on the dry side of the margin": {
   "body": "b3af84a8602fa26b",
   "claim": "on the dry side of the margin - GUESS polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a polder's village keeps its belt on the windward side its polder leaves dry, none between the houses and the dike - the record silent on a belt between houses and a dike or a field to windward (the research pass of 2026-11-22, 449 T292), so the belt's ground is kept on the band's side of the line through the margin's midpoint square to the band's back - the margin's own dry side on a tier-0 seat, turned with the band on a tier-1 seat, where it acts only through `belt_off`'s share under a separate belt wind (the algorithmically easier route); on a comb whose band stands off a windward field (`ranked`'s lead) the fringe's belt stands past the standoff, so the cut takes nothing there",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "344f1883fbd7376f",
   "core": "30a6f3d01e732f73",
   "date": "2026-11-22",
   "note": "`dry` is the half-plane off the margin on the band's `out` side, so no belt ground falls between the houses and the margin; 0019's drawing page records leaving no belt by a dike as a GUESS (\"No page we read puts a belt between the houses and a dike\"), and nothing cited speaks to a field to windward",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "880ccf131e22b39e",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:bf09b8d4b7a35d7b"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::belt_swept#the belt along the windward fringe": {
@@ -49954,6 +50262,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/seat/tests.rs::a_fall_square_across_the_wind_from_either_side_never_backs_the_hill#the seat's tests": {
+  "body": "ded9e59c45ef75c4",
+  "claim": "the seat's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "65c9936b2298d8ce",
+  "core": "3a8a982b1a069f07",
+  "date": "2026-11-24",
+  "note": "a test fixture and assertions only; it decides nothing about the place.",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/seat/tests.rs::a_flank_turns_its_back_and_a_notch_or_a_cramped_belt_is_refused#the seat's tests": {
   "body": "a39db3c581d94784",
   "claim": "the seat's tests - NONE: fixtures and assertions, deciding nothing about the place",
@@ -49974,6 +50294,18 @@
   "core": "8b601048353d2a9d",
   "date": "2026-11-04",
   "note": "fixtures and assertions on refusals and error text; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/seat/tests.rs::a_seat_walled_in_at_its_center_leaves_by_its_bands_end_once_no_margin_is_left#the seat's tests": {
+  "body": "5e9644c0d6899a5d",
+  "claim": "the seat's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "fc7e90af13dbce58",
+  "core": "331f4cf62af1af89",
+  "date": "2026-11-24",
+  "note": "fixtures and assertions only",
   "pages": {},
   "research": "",
   "rests": [],
@@ -52007,14 +52339,14 @@
   "date": "2026-11-04",
   "note": "both flanks across the fall plus the low foot, minus the landward flank; no fringe at the head",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/waterward.rs::fringe#reed fringe on the waterward flanks": {
@@ -52026,15 +52358,15 @@
   "date": "2026-11-22",
   "note": "`flanks` gives the two side flanks and the downslope flank, minus the seat's (landward) side, and each gets a strip",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2"
   },
   "reads": "57ec1e6dc635e27a",
-  "research": "b63ead8f04154e18",
+  "research": "807b97fcf680d084",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/waterward.rs::fringe#stopped at each sluice's channel": {
@@ -52094,11 +52426,11 @@
   "date": "2026-11-22",
   "note": "each reach's bed (half its width either side of the reach, so its drawn width) is cut out of the strip by difference, so the reeds run to the water and stay out of it. The strip ends at the channel the sluice gate shuts, where the band is cut",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "e0fb887e3d174cc2",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "research": "820c3f6bb88e6e9d",
+  "research": "944c2396be8fc814",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:e8c05b8d91b4cafc",
@@ -52106,7 +52438,7 @@
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/waterward.rs::slot#a side's list": {

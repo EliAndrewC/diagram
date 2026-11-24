@@ -8,7 +8,7 @@ by `l7r-gate measure work-budget`.
 
 | file | look here when |
 |---|---|
-| `../driver.rs` | the comb's stages in order (water frame, field, sink, seat, dry hem), a stage's refusal kept in the record |
+| `../driver.rs` | the comb's stages in order (water frame, field, sink, seat, dry hem), a roll a stage refused handed back as an error, no map (`whole`) |
 | `polder.rs` | a polder archetype: the block, its seat and its waterside reeds, and their drawing |
 | `polder/tests.rs` | the polder's tests: the sluices, the strips off the cuts, the seat's ring, ground and landward shore, the bank bands |
 | `plan.rs` | the canvas, the fall and the water frame's 21 knobs, a dike-pond's forms - what `plan_site` resolved |

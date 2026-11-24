@@ -1890,6 +1890,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
+  },
+  "### T420 (impl-drift 2026-11-24, `rust/phases/src/field/polder.rs::ditches#the widths` DRIFTED fix: code - a dike-pond block's channels drawn at a rice polder's field-ditch widths, 0.9 to 2.5 ft, where the page records a canal between ponds at about 6 to 8 ft, measured 2026-11-24 (the first builder's sweep and Kuwabata's drawing, `/tmp/t420/`))": {
+   "sha256": "02ee2977ab3da9d225c5dadeb38391bedaa6fd069398153e020af070e0706904",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T420 Approach (checklist part A)": {
+   "sha256": "b21fd23265e6ba515e913cc11f779ffa14388a533c4ba7cd3050bf2b08792174",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T426 (seed 508 written as a map with no settlement, and `make seeds`' fresh comb seed 941239097 refused by the seat, 2026-11-24: why each has no seat, the seat found for them, and a refused roll made no map)": {
+   "sha256": "379c77b07336988fda8beed521c0114ebefcd35c5494cc76294673afcfcfd62f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T426 Approach (checklist part A)": {
+   "sha256": "ad3dcae7aa73eceef8ad54bc05e0365b51bd60c395fa8a1f36af4d2106d9ffcf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -26063,6 +26087,283 @@
      "summary": "No budget step owed (no counted stage moves, measured against T418's log); red-first test plus three pinning tests; exits via closing-checks and impl-drift; found and left none.",
      "class": "within",
      "why": "Enforces the fix and keeps process; narrows nothing the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T420 (impl-drift 2026-11-24, `rust/phases/src/field/polder.rs::ditches#the widths` DRIFTED fix: code - a dike-pond block's channels drawn at a rice polder's field-ditch widths, 0.9 to 2.5 ft, where the page records a canal between ponds at about 6 to 8 ft, measured 2026-11-24 (the first builder's sweep and Kuwabata's drawing, `/tmp/t420/`))",
+    "### T420 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "One creek width per dike-pond block, rolled over 0018's 6 to 8 ft from a new seed stream, untapered; the rice polder keeps 0068's ladder",
+     "class": "within",
+     "why": "Fixes the defect T420 names (hairline field ditches where the page records 6 to 8 ft canals, 'not as field ditches'); the roll stays inside the page's range and is a knob, per the root rule for a silent record; no other roll moves."
+    },
+    {
+     "id": "D2",
+     "summary": "The ring canal left at 0068's rungs (1.5 to 5.5 ft) on a dike-pond block, a labeled GUESS; the second builder rules it reads wrong on the far flank (a 6.2 ft creek ends on a 1.5 ft line) and files the fix (ring canal no narrower than the creek, with a page item and RING_FT room measured) as T427, landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Presumed wrong, and the section itself rules this a wrong outcome, made more visible by T420's own widening, so it is a defect left by this task. It is legitimate only because it is not carried forward: the GM's rule (2026-11-18 'fix all known bugs in each step before moving on to porting the next step'; 2026-11-24 'if there are real defects ... I would like to fix those before we move forward') is about the port resuming, and T427 is filed to land before T158, i.e. before the port moves on, so the rule's purpose survives. The fix is a new drawing decision no page item records (0018, 0019, 0022, 0068 read), needing a page session and the room between dike foot and parcels measured, which is a separate task rather than T420's creek-width defect. This ruling holds only on T427 actually landing before T158; if it slips past the port's resumption the deferral becomes NOT LEGITIMATE."
+    },
+    {
+     "id": "D3",
+     "summary": "Each creek stops half its width short of the ring canal's middle line so its round cap ends on the line, not across the trunk or onto the dike's face",
+     "class": "within",
+     "why": "Removes a wrong outcome the widening created (creek ends on the dike's inner face, 4 of ~2,700 ends); a labeled GUESS, no scope added."
+    },
+    {
+     "id": "D4",
+     "summary": "Lattice::midway puts each column channel midway between its two sides at every station, both forms; row creeks end on the column creek's station",
+     "class": "within",
+     "why": "Needed for D1 not to create a new defect (27 of 51 mosaics grazing, 15 past 0018's foot and a half); keeps the drawing inside the page's graze sentence."
+    },
+    {
+     "id": "D5",
+     "summary": "Room before packing: eased keeps the mosaic's whole drift where every corridor holds the creek, else eases it a twentieth at a time (EASE_STEPS, GUESS); moves the parcels of 13 of 80 rolled dike-pond blocks, none on Kuwabata, chessboards or rice polders; DRIFT_SHARE stays 0.48",
+     "class": "within",
+     "why": "Applies the GM's room-before-packing rule (2026-10-12) instead of laying creeks over banks or shrinking ponds; maps may change so long as research holds (FR-002 as amended, GM 2026-11-17/18), and the DRIFT_SHARE claim is restated to say a block may keep a lesser share. Alternatives priced; no researched number moves."
+    },
+    {
+     "id": "D6",
+     "summary": "landuse::off_the_water drops a bank crown whose center lies in a channel's drawn water, after every row is rolled",
+     "class": "within",
+     "why": "Fixes a wrong outcome against 0018 ('a bush's center always stands on the bank, never over a canal'): 8 on HEAD, 26 with widening alone, 0 after; Kuwabata loses none."
+    },
+    {
+     "id": "D7",
+     "summary": "draw_channels names a dike-pond block's feeder, supply trunks and creeks 'pond canal', the drain 'drainage ditch'; rice polders keep 'irrigation ditch'",
+     "class": "within",
+     "why": "Fixes a wrong outcome (census named them irrigation ditches though the registry holds 'pond canal' and the irrigation-ditch pop-up excepts dike-pond fields)."
+    },
+    {
+     "id": "D8",
+     "summary": "ponds.rs::rounded draws the least pond when the bank leaves water smaller than LEAST_SHARE squared of the parcel; red first; moves one pond in 80 blocks, Kuwabata unchanged",
+     "class": "within",
+     "why": "A wrong outcome surfaced by this task's own D5 (a 5.6 by 19.3 ft sliver, 0.044 of the parcel across, thinner than the creek beside it, against 0018's least pond 'a tenth of the parcel across'), fixed as we go per the GM 2026-11-18. The page sentence's narrower trigger is reported for a page session, a wording difference with correct behavior."
+    },
+    {
+     "id": "graze-ruling",
+     "summary": "5 of 80 blocks graze a bank's corner by at most 1.21 ft at a junction, never a pond's water; ruled a difference, not a defect",
+     "class": "within",
+     "why": "Inside 0018's deliberate 'may graze a parcel's edge by a foot and a half or so'; per constitution XIV v2.36.0 a behavior inside the research is not a defect, so leaving it is not a narrowing."
+    },
+    {
+     "id": "found-T427-parcels",
+     "summary": "Pre-existing on HEAD: three of 80 blocks hold a parcel too small for its bank (drawn with the least pond) and a bent merged pair's pond stands under the bushes' rows; filed as T427, landing before T158",
+     "class": "within",
+     "why": "Outside the channels T420 is asked to fix and present on HEAD, so not a narrowing of T420's request; scheduled before T158 as the GM's fix-before-moving-forward rule requires."
+    },
+    {
+     "id": "code-layout-claims-budget",
+     "summary": "polder.rs split into polder/creeks.rs and polder/tests.rs at the 1,000-line bar; claims restated to their page items; five research boxes answered by page session P1 and its cascade; no budget change",
+     "class": "within",
+     "why": "Housekeeping and record restatements that carry the fix; no behavior beyond the decisions above, nothing the GM did not ask for."
+    },
+    {
+     "id": "popup-wording",
+     "summary": "The pond-canal pop-up's missing width and Guesses bullet reported for the pop-up's session, not edited here",
+     "class": "within",
+     "why": "Not a defect (the code now draws the kind the pop-ups name); a record wording item routed to its owner."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T420 (impl-drift 2026-11-24, `rust/phases/src/field/polder.rs::ditches#the widths` DRIFTED fix: code - a dike-pond block's channels drawn at a rice polder's field-ditch widths, 0.9 to 2.5 ft, where the page records a canal between ponds at about 6 to 8 ft, measured 2026-11-24 (the first builder's sweep and Kuwabata's drawing, `/tmp/t420/`))",
+    "### T420 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Approach",
+     "summary": "The hairline dike-pond channels are treated as a defect, fixed in code, and the cascade's claims are restated to the pages as P1 left them.",
+     "class": "within",
+     "why": "The GM 2026-11-24: real defects are found and fixed before new code; T420 is named in the close-out list."
+    },
+    {
+     "id": "D1",
+     "summary": "One creek width per block, rolled over the page's 6 to 8 ft from a new seed stream, untapered; the rice polder keeps 0068's ladder.",
+     "class": "within",
+     "why": "Takes the page's range as written; a roll with a knob that can be pinned to a constant is the root CLAUDE.md's knob or easier route, stated. Nothing outside the defect moves."
+    },
+    {
+     "id": "D2 / Found-and-left ring canal (bullets 1 and 5)",
+     "summary": "The ring canal stays at 0068's rungs on a dike-pond block; impl-drift ruled it DRIFTED fix: code (it reads wrong on the far flank); not fixed in T420, filed as T427, which lands before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A known defect is carried out of T420, which narrows T420 against 'fix all known bugs in each step before moving on to porting the next step' and 'real defects are found and fixed before new code'. Those rules govern when the port moves on, not which task does the fix. T427 is a scripted-map task that lands before T158, so the defect is fixed before porting resumes. The restated bullet now calls it a defect (it reads wrong, impl-drift's DRIFTED fix: code against 0068) instead of a GUESS left alone, which was the earlier finding."
+    },
+    {
+     "id": "D3",
+     "summary": "Each creek stops half its width short of the ring canal's middle line so its round cap ends on the line; labeled a GUESS.",
+     "class": "within",
+     "why": "It fixes a creek end overrunning onto the dike's face, which is a wrong outcome."
+    },
+    {
+     "id": "D4",
+     "summary": "Lattice::midway puts each column channel midway between its banks, and row creeks end on the column creek's station.",
+     "class": "within",
+     "why": "It fixes the widened creek lapping the banks past 0018's foot and a half."
+    },
+    {
+     "id": "D5",
+     "summary": "Room before packing: a pinched mosaic's drift is eased a twentieth at a time until every corridor holds its creek. No pond, bank or gap is shrunk.",
+     "class": "within",
+     "why": "Follows the GM's 2026-10-12 room-before-packing rule. Only the 13 pinched blocks move, and Kuwabata keeps its drift."
+    },
+    {
+     "id": "D6",
+     "summary": "landuse::off_the_water drops a bank crown whose center lies in a channel's drawn water, after every row is rolled.",
+     "class": "within",
+     "why": "Required by 0018's 'A bush's center always stands on the bank, never over a canal'. Kuwabata drops none."
+    },
+    {
+     "id": "D7",
+     "summary": "A dike-pond block's feeder, supply trunks and creeks are named pond canal and its drain drainage ditch; the rice polder's names stay.",
+     "class": "within",
+     "why": "The census named them wrongly against the registry's existing kind and the pop-up's exception. This is part of the same defect."
+    },
+    {
+     "id": "D8",
+     "summary": "Least-pond floor in ponds.rs::rounded: water with any side shorter than a tenth of the parcel's same side draws the least pond. It is tested side by side, not by area, after impl-drift's DRIFTED on the area form.",
+     "class": "within",
+     "why": "It fixes a wrong outcome: a 5.6 ft sliver, thinner than the page's least pond 'a tenth of the parcel across' and thinner than the creek beside it. The side-by-side form reads the page's 'across' per side, which the area form did not, and it has its own red case (red4.log, checked). The route not taken (easing drift until every parcel holds its bank) is rightly kept out because it would move blocks the defect does not touch."
+    },
+    {
+     "id": "Graze ruled",
+     "summary": "The remaining creek grazes of a parcel's edge (at most 1.16 ft, 5 of 80 blocks, never over water) are ruled a difference and no defect.",
+     "class": "within",
+     "why": "They are inside 0018's deliberate 'may graze a parcel's edge by a foot and a half or so'. Constitution XIV v2.36.0 says a difference that contradicts no finding is not a defect."
+    },
+    {
+     "id": "Found-and-left drift-crushed parcels (bullet 4)",
+     "summary": "On HEAD as now, three of 80 blocks hold a parcel too small for its bank (drawn with the least pond), and merged pairs bent at the middle set the pond off the bank's middle. Left by T420, filed as T427, which lands before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged apart from the ring canal, which T427 also carries. Whether this is a defect or only a difference, it lies outside the channels this task draws, it is filed, and it lands before T158, so no known defect is carried into the port's next step."
+    },
+    {
+     "id": "Found-and-left least-pond sentence, pop-up width",
+     "summary": "The page's least-pond trigger sentence and the pond-canal pop-up's missing width are reported for page and pop-up sessions, not edited here.",
+     "class": "within",
+     "why": "Neither is a wrong outcome: the drawing holds the page's least pond and draws the kind the pop-ups name. Each is a record wording reported to its owner."
+    },
+    {
+     "id": "Where the code lives / budget",
+     "summary": "polder.rs is split into creeks.rs and tests.rs with claim keys held. No researched constant moves (CREEK_FT and EASE_STEPS are new knobs, labeled GUESS). No budget changes.",
+     "class": "within",
+     "why": "These are housekeeping and record entries inside the task. They change no scope the GM set."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T426 (seed 508 written as a map with no settlement, and `make seeds`' fresh comb seed 941239097 refused by the seat, 2026-11-24: why each has no seat, the seat found for them, and a refused roll made no map)",
+    "### T426 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T426-build-band-exits",
+     "summary": "Seat the four refused rolls (fall at 135 degrees, windward flank wet) by asking the way out from the band's ends (seat::BAND_EXITS, 0.6 of the half-length, a GUESS and a knob) when the head's windward-corner seat is walled in at its center",
+     "class": "within",
+     "why": "Fixes a measured wrong outcome (a valley with no settlement; seed 508 a hamlet with no ground, bare winter, no dry field) under the GM 2026-11-24 'if there are real defects, then I do want to find them and fix them'; the seat taken is the one 0035/0031.drawing give (both banks, back to the wind); the unresearched station is a knob per constitution XII."
+    },
+    {
+     "id": "T426-only-once-no-margin-left",
+     "summary": "The band's-ends question is asked only once every margin is refused or walled in, so no roll that seated before seats differently",
+     "class": "within",
+     "why": "A scope choice of the fix's reach, not a carve-out from anything the GM asked: the request is to fix defects, and no roll that already seated is measured as a defect; maps that work are left alone per the 2026-11-19 'don't spend time fixing things which are not actually wrong'."
+    },
+    {
+     "id": "T426-hill-backed-not-built",
+     "summary": "The hill-backed seat for a fall across the wind, which also reaches zero refusals, is not built",
+     "class": "within",
+     "why": "Choosing one of two candidates that both fix the defect; the rejected one would contradict 0031.drawing and T261's ruling (a rolled fall keeps its back to the wind). Design choice, not a narrowing."
+    },
+    {
+     "id": "T426-refused-roll-no-map",
+     "summary": "driver::whole refuses a roll that kept any stage's refusal (comb seat, polder seat, sluices): make hamlet writes nothing and exits 1; make seeds, make cohort and hamlet --check count it failed; the record's refusals key stays, always empty",
+     "class": "within",
+     "why": "Writing a map of a hamlet with no seat is itself a wrong outcome (seed 508's record); refusing it serves the same defect fix and the seeds gate's existing rule that a refused seed is a failing seed. Every keeper of a refusal is censused with its search space (grep -n 'kept(' rust/phases/src)."
+    },
+    {
+     "id": "T426-read-not-filed",
+     "summary": "Three research-page silences (0057's toe on a tapering flank, 0031's wet-windward-flank case, 0081's way-out point) are noted and not filed",
+     "class": "within",
+     "why": "None is a wrong outcome on any measured roll (0 of 41,000 refused after, no map check broken, after-map reads right); under constitution XIV's definition (GM 2026-11-19) a page's silence or a difference from expectation is not a defect, so leaving them is not leaving a known bug."
+    },
+    {
+     "id": "T426-order-and-budget",
+     "summary": "Before T158, after T423 and T418; no work-budget step owed since the new question is asked only on rolls that were refused, which no budget seed is",
+     "class": "within",
+     "why": "Sequencing and a measured budget reading (work-budget unchanged, 2026-11-24); inside the GM's 2026-11-24 close-out list, which names T426."
+    },
+    {
+     "id": "T426-seeds-pool",
+     "summary": "Seed 941239097 dropped from dev/known-seeds.txt once it rolls clean; pool empty",
+     "class": "within",
+     "why": "The seeds gate's existing rule, applied."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T426 (seed 508 written as a map with no settlement, and `make seeds`' fresh comb seed 941239097 refused by the seat, 2026-11-24: why each has no seat, the seat found for them, and a refused roll made no map)",
+    "### T426 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T426-band-ends",
+     "summary": "Seat a walled-in or wholly refused comb by asking the way out from the band's ends (seat::BAND_EXITS, 0.6 of the half-length, a GUESS and a knob), asked only once no margin is left, so no roll that seated before changes",
+     "class": "within",
+     "why": "Fixes a measured defect (seed 941239097 refused, seed 508 written with no settlement), which the GM's 2026-11-24 words ask for: 'if there are real defects, then I do want to find them and fix them'. No rule eased; the kept seat keeps its back to the wind per 0031 and straddles the brook per 0035; the unresearched station is a declared knob per constitution XII."
+    },
+    {
+     "id": "T426-hill-backed-not-built",
+     "summary": "The alternative (hill-backed seat for any fall once no margin is left) also reached zero refusals but was not built, because it seats four hamlets off the wind against 0031.drawing and T261's ruling",
+     "class": "within",
+     "why": "A choice between candidates that each fix the defect; the one chosen holds the research as it stands. It narrows nothing asked."
+    },
+    {
+     "id": "T426-square-eps",
+     "summary": "A fall square across the wind to floating-point slack (margins::SQUARE_EPS) is no fall toward it, so the 315-degree rolls stop backing the hill and seat with their back to the wind",
+     "class": "within",
+     "why": "A wrong outcome (seats off the wind where 0031.drawing keeps a rolled fall's back to the wind, 4 measured rolls) found during the task and fixed in it, as the GM's fix-as-we-go rule (2026-11-18) and 2026-11-24 words ask."
+    },
+    {
+     "id": "T426-refused-roll-no-map",
+     "summary": "driver::whole refuses a roll that kept any stage's refusal (comb seat, polder seat, sluices): make hamlet writes nothing and exits 1, seeds/cohort/--check count it failed; the record's refusals key kept, always empty",
+     "class": "within",
+     "why": "Fixes a defect (a map written of a seatless hamlet, with a bare winter and no dry field against 0011.drawing); the seeds gate's rule that a refused seed is a failing seed. Keeping the key so no pool record changes shape is an implementation detail inside the fix."
+    },
+    {
+     "id": "T426-band-on-toe-tip",
+     "summary": "The new seats' bands cross the toe's tip (1.4 and 2.4 percent) and are kept, since center and margin midpoint are off the toe as the seat rule asks of every seat; where houses stand is the house stage's",
+     "class": "within",
+     "why": "Applies the existing toe rule unchanged to the new seats (no rule eased); no map check broken across 22,000 cohort seeds. Not a narrowing of the request: nothing the GM asked is left undone, and no wrong outcome on a measured roll is reported."
+    },
+    {
+     "id": "T426-page-questions-not-filed",
+     "summary": "Three page questions (0057's toe on a tapering flank, 0031's fall across the wind with a wet windward flank, 0081's start of a way out) read and not filed",
+     "class": "within",
+     "why": "Each is stated as a research page's silence with no wrong outcome on any measured roll; under constitution XIV's definition of a defect, a difference or gap that is not a wrong outcome is not one, so leaving it is not a defect left."
+    },
+    {
+     "id": "T426-order-budget-exits",
+     "summary": "Order before T158 after T423/T418; no work-budget step owed since the new question is asked only on previously refused rolls; exits and done-measures as listed",
+     "class": "within",
+     "why": "T426 is named in the GM's 2026-11-24 close-out list before the port resumes; the budget and exit choices settle nothing the request or spec left otherwise."
     }
    ]
   }
@@ -53900,6 +54201,144 @@
      "summary": "No budget step owed (no counted stage moves, measured against T418's log); red-first test plus three pinning tests; exits via closing-checks and impl-drift; found and left none.",
      "class": "within",
      "why": "Enforces the fix and keeps process; narrows nothing the GM asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T420": {
+   "section_sha256": "28e35173b5ec72c34561a07925e0b7f16b70db4f4956a91e8f64b7538ece4621",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach",
+     "summary": "The hairline dike-pond channels are treated as a defect, fixed in code, and the cascade's claims are restated to the pages as P1 left them.",
+     "class": "within",
+     "why": "The GM 2026-11-24: real defects are found and fixed before new code; T420 is named in the close-out list."
+    },
+    {
+     "id": "D1",
+     "summary": "One creek width per block, rolled over the page's 6 to 8 ft from a new seed stream, untapered; the rice polder keeps 0068's ladder.",
+     "class": "within",
+     "why": "Takes the page's range as written; a roll with a knob that can be pinned to a constant is the root CLAUDE.md's knob or easier route, stated. Nothing outside the defect moves."
+    },
+    {
+     "id": "D2 / Found-and-left ring canal (bullets 1 and 5)",
+     "summary": "The ring canal stays at 0068's rungs on a dike-pond block; impl-drift ruled it DRIFTED fix: code (it reads wrong on the far flank); not fixed in T420, filed as T427, which lands before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A known defect is carried out of T420, which narrows T420 against 'fix all known bugs in each step before moving on to porting the next step' and 'real defects are found and fixed before new code'. Those rules govern when the port moves on, not which task does the fix. T427 is a scripted-map task that lands before T158, so the defect is fixed before porting resumes. The restated bullet now calls it a defect (it reads wrong, impl-drift's DRIFTED fix: code against 0068) instead of a GUESS left alone, which was the earlier finding."
+    },
+    {
+     "id": "D3",
+     "summary": "Each creek stops half its width short of the ring canal's middle line so its round cap ends on the line; labeled a GUESS.",
+     "class": "within",
+     "why": "It fixes a creek end overrunning onto the dike's face, which is a wrong outcome."
+    },
+    {
+     "id": "D4",
+     "summary": "Lattice::midway puts each column channel midway between its banks, and row creeks end on the column creek's station.",
+     "class": "within",
+     "why": "It fixes the widened creek lapping the banks past 0018's foot and a half."
+    },
+    {
+     "id": "D5",
+     "summary": "Room before packing: a pinched mosaic's drift is eased a twentieth at a time until every corridor holds its creek. No pond, bank or gap is shrunk.",
+     "class": "within",
+     "why": "Follows the GM's 2026-10-12 room-before-packing rule. Only the 13 pinched blocks move, and Kuwabata keeps its drift."
+    },
+    {
+     "id": "D6",
+     "summary": "landuse::off_the_water drops a bank crown whose center lies in a channel's drawn water, after every row is rolled.",
+     "class": "within",
+     "why": "Required by 0018's 'A bush's center always stands on the bank, never over a canal'. Kuwabata drops none."
+    },
+    {
+     "id": "D7",
+     "summary": "A dike-pond block's feeder, supply trunks and creeks are named pond canal and its drain drainage ditch; the rice polder's names stay.",
+     "class": "within",
+     "why": "The census named them wrongly against the registry's existing kind and the pop-up's exception. This is part of the same defect."
+    },
+    {
+     "id": "D8",
+     "summary": "Least-pond floor in ponds.rs::rounded: water with any side shorter than a tenth of the parcel's same side draws the least pond. It is tested side by side, not by area, after impl-drift's DRIFTED on the area form.",
+     "class": "within",
+     "why": "It fixes a wrong outcome: a 5.6 ft sliver, thinner than the page's least pond 'a tenth of the parcel across' and thinner than the creek beside it. The side-by-side form reads the page's 'across' per side, which the area form did not, and it has its own red case (red4.log, checked). The route not taken (easing drift until every parcel holds its bank) is rightly kept out because it would move blocks the defect does not touch."
+    },
+    {
+     "id": "Graze ruled",
+     "summary": "The remaining creek grazes of a parcel's edge (at most 1.16 ft, 5 of 80 blocks, never over water) are ruled a difference and no defect.",
+     "class": "within",
+     "why": "They are inside 0018's deliberate 'may graze a parcel's edge by a foot and a half or so'. Constitution XIV v2.36.0 says a difference that contradicts no finding is not a defect."
+    },
+    {
+     "id": "Found-and-left drift-crushed parcels (bullet 4)",
+     "summary": "On HEAD as now, three of 80 blocks hold a parcel too small for its bank (drawn with the least pond), and merged pairs bent at the middle set the pond off the bank's middle. Left by T420, filed as T427, which lands before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged apart from the ring canal, which T427 also carries. Whether this is a defect or only a difference, it lies outside the channels this task draws, it is filed, and it lands before T158, so no known defect is carried into the port's next step."
+    },
+    {
+     "id": "Found-and-left least-pond sentence, pop-up width",
+     "summary": "The page's least-pond trigger sentence and the pond-canal pop-up's missing width are reported for page and pop-up sessions, not edited here.",
+     "class": "within",
+     "why": "Neither is a wrong outcome: the drawing holds the page's least pond and draws the kind the pop-ups name. Each is a record wording reported to its owner."
+    },
+    {
+     "id": "Where the code lives / budget",
+     "summary": "polder.rs is split into creeks.rs and tests.rs with claim keys held. No researched constant moves (CREEK_FT and EASE_STEPS are new knobs, labeled GUESS). No budget changes.",
+     "class": "within",
+     "why": "These are housekeeping and record entries inside the task. They change no scope the GM set."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T426": {
+   "section_sha256": "f6f3a03665ed1d01d52b7c4929c7c7a0248c4cad7b44a1103e2ad95ce4a91869",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T426-band-ends",
+     "summary": "Seat a walled-in or wholly refused comb by asking the way out from the band's ends (seat::BAND_EXITS, 0.6 of the half-length, a GUESS and a knob), asked only once no margin is left, so no roll that seated before changes",
+     "class": "within",
+     "why": "Fixes a measured defect (seed 941239097 refused, seed 508 written with no settlement), which the GM's 2026-11-24 words ask for: 'if there are real defects, then I do want to find them and fix them'. No rule eased; the kept seat keeps its back to the wind per 0031 and straddles the brook per 0035; the unresearched station is a declared knob per constitution XII."
+    },
+    {
+     "id": "T426-hill-backed-not-built",
+     "summary": "The alternative (hill-backed seat for any fall once no margin is left) also reached zero refusals but was not built, because it seats four hamlets off the wind against 0031.drawing and T261's ruling",
+     "class": "within",
+     "why": "A choice between candidates that each fix the defect; the one chosen holds the research as it stands. It narrows nothing asked."
+    },
+    {
+     "id": "T426-square-eps",
+     "summary": "A fall square across the wind to floating-point slack (margins::SQUARE_EPS) is no fall toward it, so the 315-degree rolls stop backing the hill and seat with their back to the wind",
+     "class": "within",
+     "why": "A wrong outcome (seats off the wind where 0031.drawing keeps a rolled fall's back to the wind, 4 measured rolls) found during the task and fixed in it, as the GM's fix-as-we-go rule (2026-11-18) and 2026-11-24 words ask."
+    },
+    {
+     "id": "T426-refused-roll-no-map",
+     "summary": "driver::whole refuses a roll that kept any stage's refusal (comb seat, polder seat, sluices): make hamlet writes nothing and exits 1, seeds/cohort/--check count it failed; the record's refusals key kept, always empty",
+     "class": "within",
+     "why": "Fixes a defect (a map written of a seatless hamlet, with a bare winter and no dry field against 0011.drawing); the seeds gate's rule that a refused seed is a failing seed. Keeping the key so no pool record changes shape is an implementation detail inside the fix."
+    },
+    {
+     "id": "T426-band-on-toe-tip",
+     "summary": "The new seats' bands cross the toe's tip (1.4 and 2.4 percent) and are kept, since center and margin midpoint are off the toe as the seat rule asks of every seat; where houses stand is the house stage's",
+     "class": "within",
+     "why": "Applies the existing toe rule unchanged to the new seats (no rule eased); no map check broken across 22,000 cohort seeds. Not a narrowing of the request: nothing the GM asked is left undone, and no wrong outcome on a measured roll is reported."
+    },
+    {
+     "id": "T426-page-questions-not-filed",
+     "summary": "Three page questions (0057's toe on a tapering flank, 0031's fall across the wind with a wet windward flank, 0081's start of a way out) read and not filed",
+     "class": "within",
+     "why": "Each is stated as a research page's silence with no wrong outcome on any measured roll; under constitution XIV's definition of a defect, a difference or gap that is not a wrong outcome is not one, so leaving it is not a defect left."
+    },
+    {
+     "id": "T426-order-budget-exits",
+     "summary": "Order before T158 after T423/T418; no work-budget step owed since the new question is asked only on previously refused rolls; exits and done-measures as listed",
+     "class": "within",
+     "why": "T426 is named in the GM's 2026-11-24 close-out list before the port resumes; the budget and exit choices settle nothing the request or spec left otherwise."
     }
    ],
    "verdict": "CLEAR"
