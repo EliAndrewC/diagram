@@ -10,11 +10,11 @@ The question task is `research: physical` with its five boxes; the rest are `res
 
 - [ ] T01 S1+C1: the empty bale (D1; FR-001, FR-002, FR-005, FR-006, FR-007)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
       verify: `make record-owed` names no unit of the new question or of 0279; `make record CHECK=1` passes
 - [ ] T02 The implementation check, the reply on #23 and the report (D2; FR-001, FR-003, FR-004)
       research: rendering
