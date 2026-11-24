@@ -2554,41 +2554,4 @@ The brief's 99 (88 GUESS, 11 DEVIATION): HEAD holds 83 unanchored GUESS, 11 unan
 
 **Performance work?** no
 
-### T207 (`make_only_hooks::tests::an_escape_is_recorded_with_its_reason` red under the coverage run and green alone, three times on 2026-11-23; the last `landbig2.log` line 143)
-
-- **Approach**: The lead was the log writer dropping a record when its lock wait timed out. Measuring refuted it. `log::place` takes no lock: it makes the directory, writes a temporary and renames it. `tool.rs`'s `flock_within` is not on its path. The cause, measured on 2026-11-23:
-  - **Reproduced.** The guard's test binary ran 8 suites side by side, each in its own `TMPDIR`, measured 2026-11-23 (`.git/t207/loop.sh`). The test failed 9 of 120, 7 of 80 and 10 of 80.
-  - **The record was written.** A temporary print in `place` showed the test's record written and renamed into place in every failing run. The test's later read found 2 to 147 files in the log, measured 2026-11-23 (the test's own print of the directory).
-  - **The log was emptied under it.** inotify on one loaded run (`.git/t207/watch.sh`, `.git/t207/inotify.txt`, excerpt `inotify-excerpt.txt`) caught the deletion. The record was renamed in at line 1039 and deleted at line 1286, among every other record. The directory was then removed and made again (line 1382), and a second pid wrote into it at once.
-  - **The second pid is a child.** It is a hang pin's child run of the same binary (`guards::passes_in_time`, `current_exe()`; the make-only, readme and no-poll in-time tests). Its tests call `log::quiet()`, whose `Once` is the child's own. `tempdir::beside_binary("guard-tests-log")` then emptied the directory it inherited through `TMPDIR` and `GUARD_LOG_DIR`, while the parent's tests were still reading it. The same child could empty the log under `repo_safety_hooks`' and `scratch_sweep_hooks`' log reads.
-  - **The fix (1), in `shared/src/log.rs` `quiet()`.** A process that inherits this run's own path (`<temp dir>/l7r-test-scratch/guard-tests-log`) as `GUARD_LOG_DIR`, with the directory there, keeps it. Any other inherited value is replaced as before, a session's real log among them. `beside_binary` is unchanged: no hang pin's child reaches another shared fixture.
-  - **The fix (2): the test owns its state.** `log::dir()` reads the test thread's own `GUARD_LOG_DIR` first (`env::opt`), then the process's. The escape test names its own `TempDir` log and asserts its one record. The `env.rs` header says so. A normal build's `env::opt` is the process's variable, so its answer is unchanged.
-  - **Fixed here, (3).** `scratch_sweep_hooks::tests::a_day_passes_between_sweeps_and_one_sweep_holds_the_lock` failed 3 times in the same 280 loaded runs, at its last assert: the 40-day mark was missing from the plan. The test set the mark's time through an open descriptor. A child forked by another test copies every open descriptor until it execs, and the plan, reading `/proc`, keeps a file a live process holds. That is inferred, not caught. The mark's time is now set by path (`touch -m -d @<secs>`), so no descriptor of it is open in the process.
-  - **A decision, not a change: a failed write stays silent.** The brief asked that a record is never dropped silently: either it waits or it fails closed. That premise was the lock lead, and no write failed in any measured run. The drop was test-only: `quiet()` and `beside_binary` are built only under `test` or the `test-env` feature, which only `rust/guard`'s dev-dependency turns on (every `Cargo.toml` under `rust/`, grepped 2026-11-23). A real escape's record was never at risk this way. `log.rs`'s recorded rule stands: "A write that fails is silent: an entry must never cost the guard its answer." It costs this: a disk-full or permission failure loses a record with no word. Making `fire` refuse on a failed write was considered and rejected: it would turn a log fault into a refusal of correct work. That choice is MODE 4's to overrule.
-
-| step | figure | what it says |
-|---|---|---|
-| red | `log/tests.rs` `a_child_run_of_the_tests_keeps_its_parents_log` ("the child emptied its parent's log") and `a_test_names_its_own_log` failed on the unfixed code, 2026-11-23 (`.git/t207/red.log`) | the child's wipe, pinned without load |
-| before | 26 of 280 loaded suite runs red on the escape test (8 side by side, `.git/t207/loop.sh`) | the flake, reproduced |
-| after | 104 of 104 loaded suite runs green, no test of any kind red (13 rounds of 8 side by side, the fixed binary, 2026-11-23, `.git/t207/proof.log`) | the flake and the sweep test's gone |
-
-### T207 Approach (checklist part A)
-
-1. **The goal, in the world.** A guard test reads back the records it wrote, under any load, and a child run of the tests never deletes its parent's log.
-2. **The constraints.** The brief's: the cause measured before the fix, red first, the test owning its state, 100 loaded runs green, and 100% coverage. T32's rule: no test reads a session's exports.
-3. **Where each comes from.** G: the task line and the brief. O: the loaded runs and the inotify trace, 2026-11-23.
-4. **Do they describe the world here?** Yes. The trace was taken on the real test binary under the load that turned it red.
-5. **The order.** After T201 and T202's files, none of which this task touches.
-6. **The exits.** Green: the two red tests pass, and 100 loaded runs are green. Red: what failed is recorded and the task is set down; a claim that it cannot be done is ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The loaded proof row above, and `make closing-checks T=T207 F=451`.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-12. **Before any fix.** These are defect fixes. The coverage run went red on a correct change, and three landings and closing checks stopped on it on 2026-11-23.
-
-**Found and left?**
-- `scratch_sweep_hooks`' pace test went red under load on a descriptor another test's child copied. Fixed here (3), observed 2026-11-23, method: the same 280 loaded runs. The other tests that set a time through an open descriptor (`put(.., true)`) mark a file that is kept either way, so their outcome cannot flip (observed 2026-11-23, method: every `set_modified` in `scratch_sweep_hooks/tests.rs`, grepped).
-
-**Performance work?** No.
-
+<!-- plan-archive: T207 to T207 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
