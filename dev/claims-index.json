@@ -9293,15 +9293,15 @@
  },
  "rust/mode_a/src/audit/roads.rs::DESTINATION_KINDS#a way walked to a well or clearing": {
   "body": "13a1579ed974eb82",
-  "claim": "a way walked to a well or clearing - CONVENTION: a way inside a precinct may end at a well or a precinct clearing, the places it is walked to, as a road may end at a gate or a door; no page gives it.",
-  "code": "51cab4fa3b22fcb9",
+  "claim": "a way walked to a well or clearing - UNRESEARCHED: a way inside a precinct may end at a well or a precinct clearing, the places it is walked to, as a road may end at a gate or a door; which places a path leads to is how the place was lived in, and no page asks it.",
+  "code": "93e5bde2972bbd9f",
   "core": "7fd08f5c29273dd5",
-  "date": "2026-11-17",
-  "note": "which places a path leads to is a fact about how the place was lived in, not how it is shown. It should be UNRESEARCHED (or a GUESS), not CONVENTION",
+  "date": "2026-11-24",
+  "note": "which places a precinct way may end at is a physical choice, and no cited material answers it",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/roads.rs::Frame#the roads": {
   "body": "881b89c49324c204",
@@ -13201,21 +13201,21 @@
  },
  "rust/mode_a/src/caption_place/search.rs::MEMBERS_TRIED#the parts tried": {
   "body": "d15eb41656758dd4",
-  "claim": "the parts tried - GUESS labels-on-maps-cartographic-label-placement.drawing: four; the page says nothing of scattered parts, and four tries of eight places each bound the work while finding a free place beside one of a pool sheet's scattered fire-water tubs",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "92c474beb6dbdfad",
+  "claim": "the parts tried - GUESS labels-on-maps-cartographic-label-placement.drawing: four; the page records the four tries as a guess, and four tries of eight places each bound the work while finding a free place beside one of a pool sheet's scattered fire-water tubs",
+  "code": "55f96bce85cd75ab",
   "core": "b020531c23acbde6",
-  "date": "2026-11-19",
-  "note": "the claim says the page \"says nothing of scattered parts\", but §19 does: a block among loose parts \"is seated beside the smallest box holding them all\", and the code instead seats it beside up to four parts' own boxes. Should be a DEVIATION of §19 recorded on the drawing page (or the code should seat beside the holding box); the count of four is the GUESS within that",
+  "date": "2026-11-24",
+  "note": "4 matches \"up to four tried, a guess\", and the eight places each match the eight ranked places",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "b37ee80314f9b54d"
   },
   "research": "7ba60ad54a01502e",
   "rests": [
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:a30922be20751500"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:55bfd6a67fcf7c4d",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:845f5c6984a40da4",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:96ce3e1cbe1c3715"
   ],
-  "triaged": "2026-11-19",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/search.rs::Placer#the caption's seat": {
   "body": "de8b664ad4fe745a",
@@ -17342,11 +17342,11 @@
  },
  "rust/mode_a/src/compound/emit.rs::grounds#office front, residence rear": {
   "body": "641f0cd85b6ed679",
-  "claim": "office front, residence rear - DEVIATION magistrates-compounds-jinya-and-yamen.drawing: the inner court drawn north of the divider and the outer court south of it, the residence behind the office",
-  "code": "3b644bbf6a2cdcb1",
+  "claim": "office front, residence rear - magistrates-compounds-jinya-and-yamen.drawing: the residence behind the office, the yamen's order and Takayama's (one Japanese case)",
+  "code": "cc8c441622cb93ec",
   "core": "b473bb9079f9236f",
-  "date": "2026-11-23",
-  "note": "the code is right but the label is wrong: putting the residence behind the office is not a departure. The restated page says it follows the record: \"the office in front and the residence behind. That is the yamen's order\", and it \"follows Takayama ... the residence stood at the back of the office\". The page records no deviation for this, so the label should be a plain question claim: `research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: the outer court with the office in front, the inner court with the residence behind it`. Putting the inner court north of the divider is a compass choice the page does not address, so it would be a separate CONVENTION claim.",
+  "date": "2026-11-24",
+  "note": "the inner court (residence) is drawn from the top to the divider and the outer court (office) below it, so the residence stands behind the office, as the yamen's order and Takayama's single case have it",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "0ca8ec5d92f0bdea"
   },
@@ -17356,7 +17356,7 @@
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:321267106ac110d8",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::grounds#the inner court to the north": {
   "body": "641f0cd85b6ed679",
@@ -17528,16 +17528,16 @@
  },
  "rust/mode_a/src/compound/emit.rs::shed_posts#the open shed on six posts": {
   "body": "d6b4f0ff193d2dc8",
-  "claim": "the open shed on six posts - CONVENTION: the hand sheet's cinnabar workshop (ochiba-magistracy.svg), its roof hatched over open sides with a dot for each of its six posts, 1 ft across the post's radius and set 10 px in from the roof's corners; no page draws or sizes a workshop shed's posts (449 T359)",
-  "code": "23ba6be115556bcb",
+  "claim": "the open shed on six posts - GUESS: no page counts or places a workshop shed's posts; six, one at each corner set 10 px (about 3 ft) in from the roof's corners and one at the middle of each long side, follow the hand sheet's cinnabar workshop (ochiba-magistracy.svg) (449 T359)",
+  "code": "7e8cc6190ce80bd9",
   "core": "ff96ce3b716aa1a1",
-  "date": "2026-11-23",
-  "note": "six posts at the corners and the long sides' middles is a physical count and placement for how the shed was built, not a way of showing it; the label should be GUESS (no page sizes or counts a workshop shed's posts), with only the dot marker a CONVENTION; the wording \"1 ft across the post's radius\" also misstates r=3 px, a 1 ft radius and 2 ft across",
+  "date": "2026-11-24",
+  "note": "the code places six posts: one at each corner, 10 px in, and one at the middle of each long side, whichever axis is longer. That matches the claim, and no cited page counts or places a shed's posts",
   "pages": {},
   "reads": "2fc31f0a78f51303",
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::shed_posts#the post mark": {
   "body": "d6b4f0ff193d2dc8",
@@ -17554,15 +17554,15 @@
  },
  "rust/mode_a/src/compound/emit.rs::stables#grooms' room open to the passage": {
   "body": "c0a9f994089043e3",
-  "claim": "grooms' room open to the passage - CONVENTION: its edge to the earth passage drawn dashed, as the passage's edge to the stalls is, the sheet's mark of an edge a body crosses where a solid interior line is a wall; 0108 puts the matted tozamurai across the kusa-no-ma from the stalls and is silent on what stood between them, and the stable is entered at its gable into the passage (449 T388; building-review 2026-11-23 E1: drawn solid, the grooms' room had no way in)",
-  "code": "75c82b90c6d9bd6b",
+  "claim": "grooms' room open to the passage - GUESS: the matted tozamurai opens onto the earth passage (kusa-no-ma), no wall between them, its edge drawn dashed as the passage's edge to the stalls is, the sheet's mark of an edge a body crosses where a solid interior line is a wall; 0108 puts the tozamurai across the kusa-no-ma from the stalls and is silent on what stood between them, and the stable is entered at its gable into the passage (449 T388; building-review 2026-11-23 E1: drawn solid, the grooms' room had no way in; impl-drift 2026-11-23 MISLABELED as a CONVENTION, a choice between built forms)",
+  "code": "ead7411525c1d440",
   "core": "3c57d3d7d77e2801",
-  "date": "2026-11-23",
-  "note": "the dash is a convention, but by the claim's own wording a dashed edge is \"an edge a body crosses where a solid interior line is a wall\", so the code decides that the matted tozamurai has no wall to the kusa-no-ma, which is a choice between built forms (wall or open edge); the claim itself says 0108 is silent on it, and the drawing page records no such choice; the label should be GUESS (the room opening onto the earth passage), with the dashed stroke as the sheet's mark of it",
+  "date": "2026-11-24",
+  "note": "two edges are drawn dashed, between the grooms' room and the passage and between the passage and the stalls, so there is no solid wall line between them. 0108 puts the tozamurai across the passage from the stalls but says nothing about what stood between them",
   "pages": {},
   "reads": "9bb5dec07869b738",
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::stables#grooms' room toward the court": {
   "body": "c0a9f994089043e3",
@@ -17716,14 +17716,15 @@
  },
  "rust/mode_a/src/compound/fixtures.rs::BOARD#the gate board drawn": {
   "body": "dc4cda0f6c9e2fde",
-  "claim": "the gate board drawn - CONVENTION: the bench's board drawn 6 x 1.7 ft (18 x 5 px) just outside the main gate beside its passage, as both generated sheets have drawn it; 0190's 16 x 6 ft frame is the town's board",
-  "code": "26d243eac9f19aa1",
+  "claim": "the gate board drawn - GUESS: the bench's board drawn 6 x 1.7 ft, smaller than the measured town frames; no page measures a magistracy's gate board",
+  "code": "e68435c56d91f751",
   "core": "df05b79358d1f9a2",
-  "date": "2026-11-19",
-  "note": "the 6 x 1.7 ft board is a size a reader reads as fact about the place, not just how it is shown; 0190 measures only town frames (16 x 6 ft) and records the gate board as a GUESS, so the label should be GUESS research/questions/0190-notice-boards-kosatsuba.drawing.html: the bench's board drawn 6 x 1.7 ft, smaller than the measured town frames",
+  "date": "2026-11-24",
+  "note": "6 x 5/3 ft (about 1.7) matches the stated size, and no cited page measures a magistracy's gate board",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/fixtures.rs::POST_R#practice ground striking posts": {
   "body": "727a27630d6c4c91",
@@ -36469,11 +36470,11 @@
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the knobs' tables": {
   "body": "adaf0910cc556575",
-  "claim": "the knobs' tables - GUESS: rolled per hamlet from their tables, each table's own claim in the deleted `hamletgen/consts*.py` (feature 444 T19), carried here as they stood",
-  "code": "59bb12955e51fb4e",
+  "claim": "the knobs' tables - GUESS: rolled per hamlet from their tables, carried from the deleted `hamletgen/consts*.py` (feature 444 T19); where the page records a table it is cited below",
+  "code": "49a8d71cb77544ae",
   "core": "3a50375d75cd3753",
-  "date": "2026-11-07",
-  "note": "a blanket GUESS, but 0031's drawing page answers or records several of these tables. farm_water channel/well at even odds is §14's recorded GUESS. grain_drift's +/-8 is §30's \"8 on a hamlet's\". The lane and cluster-shape forms are §24/§25's recorded GUESS. Those tables should cite research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html (GUESS 0031 where the page records a guess)",
+  "date": "2026-11-24",
+  "note": "this one GUESS covers every table the five cited claims leave out, row_shelter included, but the page answers row_shelter: \"a scattered or a row settlement draws a grove at each farm\", and a belt is drawn only for a clustered village. A linear hamlet that rolls \"sheltered\" (half the time) therefore either goes against §8 or needs a deviation the page does not record. The label should be a claim citing 0031.drawing §8 for row_shelter. The page's §5 also governs lane_web's not_dispersed condition (that agrees with the code) and is not cited; the other uncited tables (water_sink, bamboo, grove_sides and grove_flank, the row_line/sides/water tables, well_siting, manure_form, copse and kosatsuba siting, plot_size, intake, brook_side) are ones the page is silent on, so GUESS holds for them",
   "pages": {},
   "research": "",
   "verdict": "MISLABELED"
@@ -45177,15 +45178,15 @@
  },
  "rust/phases/src/seat/exit.rs::BEARINGS#the straight runs": {
   "body": "f9ae7032ee2d4e30",
-  "claim": "the straight runs - GUESS: no page gives a sampling, a knob of ours (feature 444 T27); 16 bearings",
-  "code": "cff7919dcda36822",
+  "claim": "the straight runs - NONE: a search's breadth, deciding nothing about the place - the walk answers where no run is clear; 16 bearings",
+  "code": "5dbf284be0a7fa3d",
   "core": "69b9534134e1a5e8",
-  "date": "2026-11-04",
-  "note": "16 bearings cannot change what has_exit returns: when every straight run fails, has_exit walks the grid, and by RUN_KEEP's own claim the straight test only ever passes where the walk would pass too. So BEARINGS sets how much work the search does, not anything about the place; the label should be NONE, not GUESS",
+  "date": "2026-11-24",
+  "note": "how many directions the search tries, which is plumbing; the walk takes over where no straight run is clear",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/exit.rs::EXIT_CELL#narrowest dry neck": {
   "body": "365ed72d08657883",
