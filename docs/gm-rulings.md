@@ -81,3 +81,14 @@ Once everything else is ported (feature 449) and the next step would be resuming
 don't actually proceed. Why don't you go ahead and stop, and then we can talk more after everything else is done before you get
 started on that."* Enforced by 449's task filed the same day (a parked stage resumed only with the GM's words; the session's stop
 there accepted).
+
+## A provincial city's 3,000 include the samurai country estates around it (2026-11-24)
+
+Canon. Two of the GM's own texts disagreed: feature 156's request (a city's ~3,000 "includes samurai country estates, only some of
+which are depicted on the map, but does not include farmers") against the campaign notes (`l7r.md`: taxed isolated farms "including
+samurai country estates, get tallied under the nearest village district") and `budgets.md` (the ~560 samurai on country estates
+"tallied into the surrounding village districts"). Asked which holds, the GM, 2026-11-24: *"Yes, the provincial cities 3,000 include
+the samurai country estates around it."* So the city place card's claim (`rust/mode_a/src/place.rs`, CANON, feature 156) stands as
+written; research page 0001's "counts only those living within the walls" is the sentence restated (its drawing page already counts
+"the samurai estates outside a city's wall" as city households). `l7r.md` and `budgets.md` are the GM's notes and are not edited
+from here; their two sentences now differ from this ruling until he changes them.

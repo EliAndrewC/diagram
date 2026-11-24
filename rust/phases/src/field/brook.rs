@@ -4,7 +4,7 @@
 //!
 //! Research:
 //!     the intake on the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the head race leaves the brook at its intake
-//!     the brook bends - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a step over 22 ft led in over two
+//!     the brook bends - GUESS: research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html gives only that every ditch turns on a sweep, no watercourse a mitered corner; the course moves in toward its line by at most the plan's slew a station (22 ft, the driver's `BROOK_SLEW`, a GUESS there), so a wider step across is led in over several stations
 
 use super::fan::{Fan, Pt};
 use super::geom::seg_dist;

@@ -1,4 +1,4 @@
-//! A kitchen garden's sun on a hand-drawn sheet (feature 449 T175, `pack_audit/sun.py` whole; feature 283, research homesteads 044).
+//! A kitchen garden's sun on a hand-drawn sheet (feature 449 T175, `pack_audit/sun.py` whole; feature 283, research 0038's drawing page).
 //!
 //! The GM, 2026-09-28: *"a garden needs a certain amount of sunlight per day ... That feels like it should be an automated check that gets
 //! run on hand-drawn diagrams that have gardens"*. The record's sun - 38 degrees north in the autumn shoulder month - is walked through
@@ -46,17 +46,17 @@ pub const DECL_DEG: f64 = -8.5;
 /// Research:
 ///     sun step - NONE: the day is walked in half-hour steps, a measuring grain.
 pub const STEP_H: f64 = 0.5;
-/// A half hour is lit when at least half the bed is out of shadow (homesteads 044, a guess).
+/// A half hour is lit when at least half the bed is out of shadow (research 0038's drawing page, a guess).
 ///
 /// Research:
 ///     lit share of a bed - GUESS research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: an hour counts as lit when at least half the bed is out of shadow; the page records the counting as a guess.
 pub const LIT_SHARE: f64 = 0.5;
-/// Sun crops - daikon, eggplant, cucumber, beans - want about 6 hours or more (homesteads 044).
+/// Sun crops - daikon, eggplant, cucumber, beans - want about 6 hours or more (research 0038's drawing page).
 ///
 /// Research:
 ///     sun bed hours - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a kitchen bed of sun crops such as daikon must get 6 hours of direct sun in autumn.
 pub const SUN_BED_H: f64 = 6.0;
-/// Half-shade crops do with 3 to 4 (homesteads 044).
+/// Half-shade crops do with 3 to 4 (research 0038's drawing page).
 ///
 /// Research:
 ///     half-shade bed hours - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a bed of half-shade crops needs 3 hours of direct sun (3 to 4 for such crops).
@@ -79,16 +79,12 @@ pub const TREE_FT: f64 = 10.0 / 0.3048;
 /// A roofed thing under [`SMALL_BUILDING_SQFT`] - a privy, a hokora, a covered way - at the least height a person stands under (a guess).
 ///
 /// Research:
-///     small roofed thing height - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: every building casts from the farmhouse ridge's 20 ft, with no smaller class - a roofed thing under SMALL_BUILDING_SQFT casts from 6 ft, a departure the code keeps until feature 417 T33; a roofed thing under SMALL_BUILDING_SQFT (a privy, a hokora, a covered way) casts a shadow from 6 ft, the least height a person stands under; no page gives it.
-#[expect(
-    clippy::doc_markdown,
-    reason = "the claim is the Python's, word for word"
-)]
+///     small roofed thing height - GUESS: research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html casts a building from the farmhouse ridge's 20 ft and names no smaller class; a roofed thing under `SMALL_BUILDING_SQFT` (a privy, a hokora, a covered way) casts its shadow from 6 ft, the least height a person stands under, so a bed the check fails is surely shaded; no page gives the 6 ft.
 pub const SMALL_BUILDING_FT: f64 = 6.0;
 /// The small roofed thing's area.
 ///
 /// Research:
-///     small roofed thing area - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: every building casts from the farmhouse ridge's 20 ft, with no smaller class - a roofed thing under 100 sq ft counts as small, a departure the code keeps until feature 417 T33; a roofed thing under 100 sq ft counts as small for its shadow height; no page gives the cutoff.
+///     small roofed thing area - GUESS: research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html casts a building from the farmhouse ridge's 20 ft and names no smaller class; a roofed thing under 100 sq ft counts as small for its shadow height; no page gives the cutoff.
 pub const SMALL_BUILDING_SQFT: f64 = 100.0;
 /// What a sheet draws that does not stand up to cast a garden's shadow: ground and water features, a building's own parts (under its
 /// roof, which casts for them) and furniture below head height. Everything else the parser counts as a structure casts.
@@ -443,7 +439,7 @@ pub fn garden_sun(plan: &ParsedPlan, svg: &Sheet) -> Result<Vec<String>, Error> 
             // a bed short of its hours has a shader, so the list is never empty (feature 449 T182: its "nothing drawn" could not show)
             let what = shaders(&bed, &cs, half).join(", ");
             out.push(format!(
-                "the {}kitchen bed at ({},{}), {} by {} ft, has {} h of sun in the shoulder month and needs {} (research homesteads 044) - shaded by {what}",
+                "the {}kitchen bed at ({},{}), {} by {} ft, has {} h of sun in the shoulder month and needs {} (research 0038's drawing page) - shaded by {what}",
                 if half { "half-shade " } else { "" },
                 fixed(r.x, 0),
                 fixed(r.y, 0),

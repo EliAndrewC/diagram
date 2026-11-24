@@ -44,7 +44,7 @@ const HEAD: [&str; 5] = [
     "owed-checks: impl-drift\n",
     "Each UNIT below is a function, method, class, constant or procedure section with its CLAIMS. Judge each claim against the questions it cites (inline at the end) and report one `VERDICT <key> <IN-STEP|DRIFTED|NEEDS-RESEARCH|MISLABELED|CANNOT-TELL> - <note>` line per KEY (a DRIFTED note with `fix: claim` or `fix: code` and `effect: ...` before its `[§...]`), plus `UNCLAIMED <path>::<qualname> - <decision>` for a physical decision in a unit's code that no claim covers.\n",
     "END EVERY VERDICT NOTE with the blocks of the cited questions it rests on, as numbered in the question files: `[§3, §12]`, or `[§]` when the questions are silent on the claim. A later edit to a page re-checks a claim only when a block it rests on changes (feature 318), so name every block your verdict reads.\n",
-    "LINES MARKED `+` ARE THE CHANGE being landed (against main). A DRIFTED, NEEDS-RESEARCH, MISLABELED or CANNOT-TELL verdict, or an UNCLAIMED decision, that rests on NO marked line - code the change did not touch, under a claim it did not add or reword - begins its note `[outside the change]`: it is filed as a task, not held against the change (feature 405 T36). Anything the change made or could have made untrue carries no tag. A unit with no marked line has no tag to give.\n",
+    "LINES MARKED `+` ARE THE CHANGE being landed (against main). A DRIFTED, NEEDS-RESEARCH, MISLABELED or CANNOT-TELL verdict, or an UNCLAIMED decision, that rests on NO marked line - code the change did not touch, under a claim it did not add or reword - begins its note `[outside the change]`: it is listed by `make claims-report`, not held against the change (features 405 T36, 445). Anything the change made or could have made untrue carries no tag. A unit with no marked line has no tag to give.\n",
 ];
 
 /// path -> the lines the delta added or changed, against the merge base with `base`, the working tree included (405 T36).
@@ -397,8 +397,13 @@ pub fn bundle(
             "code": row.code, "core": row.unit.core, "body": body_of(root, &row.unit)?, "claim": row.claim.normalized(),
             "research": row.research, "uid": row.uid(), "pages": pages,
         });
+        // the claim as said and the unit's claim labels, which a finding's row keeps (feature 451 T221)
+        u["said"] = json!(row.claim.unanchored());
+        u["siblings"] = json!(super::index::siblings_of(&row.unit));
         if row.unit.line_keyed() {
             u["section"] = json!(row.unit.core);
+            // the engine a section's `fix: code` drift is judged against (feature 451 T220)
+            u["drawn"] = json!(super::drawn::drawn_by(root));
         }
         // the constants a Rust unit read at its check, recorded on its row (feature 449 T166)
         if !row.unit.reads.is_empty() {

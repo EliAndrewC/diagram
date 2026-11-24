@@ -29,7 +29,7 @@ use l7r_shared::pyjson::dumps;
 use l7r_shared::speckit::splitlines;
 use serde_json::Value;
 
-use super::index::{current, load_map, owed, INDEX, QUESTIONS, STORE};
+use super::index::{current, owed, QUESTIONS};
 use crate::record::repo::universal;
 use crate::reviews::gm_review::name;
 use crate::Reply;
@@ -208,8 +208,7 @@ fn shown(v: &Value) -> Result<String, String> {
 /// What the claims reading raised: an unreadable or broken index or store, a unit that cannot be read.
 pub fn citing(root: &Path) -> Result<Cites, String> {
     let cur = current(root, &root.join(QUESTIONS))?;
-    let index = load_map(&root.join(INDEX))?;
-    let store = load_map(&root.join(STORE))?;
+    let super::landing::Read { index, store, .. } = super::landing::read(root)?;
     let due = owed(&cur, &index, Some(&root.join(QUESTIONS)), Some(&store))?
         .into_iter()
         .map(|(k, _)| k)

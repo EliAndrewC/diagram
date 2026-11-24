@@ -100,6 +100,75 @@ fn a_bundle_of_units_is_recorded_and_reported() {
     record_and_report(&root, &out);
 }
 
+/// Feature 451 T218: a reply that says the pages are silent is not recorded until the record's nearest pages for its words are in
+/// the bundle - the line is held, the page named with the command that adds it, and the same line recorded once it was read.
+#[test]
+fn a_silent_finding_is_held_until_the_record_s_nearest_pages_are_bundled() {
+    let root = fixture("claims-cmd-silent");
+    owed_units(&root);
+    let page = "0003-households.html";
+    put(
+        &root,
+        &format!("research/questions/{page}"),
+        "<h1>Households</h1>\n<p>A hamlet's helper serves three households.</p>\n",
+    );
+    let key = "rust/phases/src/owed.rs::assist#help";
+    let (out, wide) = (root.join("b"), root.join("b2"));
+    let (o, w) = (
+        out.to_string_lossy().into_owned(),
+        wide.to_string_lossy().into_owned(),
+    );
+    assert_eq!(
+        claims(&root, &["bundle", "--units", key, "--out", &o]).code,
+        0
+    );
+    let r = reply(
+        &root,
+        &format!(
+            "VERDICT {key} NEEDS-RESEARCH - no page says how many households a helper serves [§]\n"
+        ),
+    );
+    let got = claims(&root, &["record", "--bundle", &o, "--reply", &r]);
+    assert_eq!(got.code, 3, "{}", got.stderr);
+    assert!(
+        got.stderr.contains(&format!("claims-checked: HELD line - it says the pages are silent, and the record's nearest pages for its words are not in the bundle ({page}")),
+        "{}",
+        got.stderr
+    );
+    assert!(got
+        .stderr
+        .contains(&format!("make claims-bundle UNITS=\"{key}\" PAGES=\"")));
+    assert!(
+        got.stdout.contains("claims-checked: 0 of 1 recorded"),
+        "{}",
+        got.stdout
+    );
+    let pages = got
+        .stderr
+        .split("PAGES=\"")
+        .nth(1)
+        .unwrap()
+        .split('"')
+        .next()
+        .unwrap()
+        .to_owned();
+    assert_eq!(
+        claims(
+            &root,
+            &["bundle", "--units", key, "--out", &w, "--pages", &pages]
+        )
+        .code,
+        0
+    );
+    let got = claims(&root, &["record", "--bundle", &w, "--reply", &r]);
+    assert_eq!(got.code, 0, "{}", got.stderr);
+    assert!(
+        got.stdout.contains("claims-checked: 1 of 1 recorded"),
+        "{}",
+        got.stdout
+    );
+}
+
 /// The second half: the bundle's reply recorded in each form, then reported with and without the deferred.
 fn record_and_report(root: &Path, out: &Path) {
     let root = root.to_path_buf();
@@ -512,12 +581,12 @@ fn a_triage_clear_by_a_mixed_build_is_owed_again_in_a_landing_alone() {
     let out = std::process::Command::new("git")
         .arg("-C")
         .arg(&root)
-        .args(["rev-parse", "HEAD:docs/buildings.md"])
+        .args(["rev-parse", "HEAD:rust/gate/src/lib.rs"])
         .output()
         .unwrap();
     let blob = String::from_utf8_lossy(&out.stdout).trim().to_owned();
     // a file as landed, one deleted then and absent now, and one other builder's
-    let mixed = format!("{{\"commit\": \"c1\", \"dirty\": {{\"docs/buildings.md\": \"{blob}\", \"rust/gone.rs\": \"deleted\", \"rust/gate/x.rs\": \"b7\"}}}}");
+    let mixed = format!("{{\"commit\": \"c1\", \"dirty\": {{\"rust/gate/src/lib.rs\": \"{blob}\", \"rust/gone.rs\": \"deleted\", \"rust/gate/x.rs\": \"b7\"}}}}");
     let mixed = mixed.as_str();
     assert_eq!(
         with(Some(mixed), false, || claims(
@@ -546,6 +615,47 @@ fn a_triage_clear_by_a_mixed_build_is_owed_again_in_a_landing_alone() {
         0
     );
     assert!(index(&root)[key].get("build").is_none());
+}
+
+/// The round arbiter's red fixture, for a claim (feature 451 T225, `ask:stamp-reads-committed-code-as-mixed`): a clear by a build
+/// whose stamped blob is the file's at an earlier commit of the landing's delta, and not HEAD's, is the landing's own answer.
+#[test]
+fn a_triage_clear_by_a_build_of_an_earlier_commit_of_the_landing_stands() {
+    use l7r_gate_core::build::with;
+    let root = changed("claims-cmd-triaged-own");
+    let to = triaged(&root);
+    let key = "docs/buildings.md::Walls#wall height";
+    let r = reply(&root, "NONE\n");
+    let file = "rust/gate/src/lib.rs";
+    let run = |args: &[&str]| {
+        let out = std::process::Command::new("git")
+            .arg("-C")
+            .arg(&root)
+            .args(args)
+            .output()
+            .unwrap();
+        String::from_utf8_lossy(&out.stdout).trim().to_owned()
+    };
+    std::fs::write(root.join(file), "// as the clear's build held it\n").unwrap();
+    let then = run(&["hash-object", file]);
+    let build = format!("{{\"commit\": \"c1\", \"dirty\": {{\"{file}\": \"{then}\"}}}}");
+    assert_eq!(
+        with(Some(&build), false, || claims(
+            &root,
+            &["triaged", "--bundle", &to, "--reply", &r]
+        ))
+        .code,
+        0
+    );
+    assert_eq!(index(&root)[key]["build"]["dirty"][file], then.as_str());
+    run(&["add", "-A"]);
+    run(&["commit", "-qm", "the landing's commit of it, unchanged"]);
+    std::fs::write(root.join(file), "// a later fix of the same landing\n").unwrap();
+    run(&["add", "-A"]);
+    run(&["commit", "-qm", "the landing's later commit"]);
+    assert_ne!(run(&["rev-parse", &format!("HEAD:{file}")]), then);
+    let owed = with(None, true, || claims(&root, &["owed"]));
+    assert!(!owed.stdout.contains(key), "{}", owed.stdout);
 }
 
 /// Feature 451 T191's replay: what `claims triage` would do, read only - each claim owed a triage and its fate, then the counts - and
@@ -666,3 +776,5 @@ fn a_path_reads_as_python_s_normpath_reads_it() {
         )
     );
 }
+
+mod landing;

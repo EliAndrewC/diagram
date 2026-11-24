@@ -9,9 +9,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use serde_json::{json, Map, Value};
 
-use super::index::{
-    field, is, live_rows, load_map, owed, relabel_answered, Cur, Index, INDEX, STORE,
-};
+use super::index::{field, is, live_rows, owed, Cur, Index, INDEX};
 use super::report::{base_tree, classify, load_deferred, open_findings, Base};
 use crate::record::repo::{fail, git, read_text, Fail};
 use crate::record::units::re;
@@ -424,7 +422,7 @@ pub struct Reading {
 
 /// (owed refusals, introduced, pre-existing, carried) at `root` against its merge base with origin/main.
 pub fn classified(root: &Path, at: &Reading) -> Result<Classified, Fail> {
-    let store = load_map(&root.join(STORE))?;
+    let store = super::landing::store(root)?;
     let due = owed(
         &at.cur,
         &at.index,
@@ -476,14 +474,7 @@ pub fn classified(root: &Path, at: &Reading) -> Result<Classified, Fail> {
         let map = super::ports::load(root)?;
         let unported =
             super::ports::unported(&at.cur, &at.index, &before, &map, &mut every_unit_gone);
-        let mut answered = HashSet::new();
-        for (k, v) in &at.index {
-            if let Some(row) = at.cur.get(k) {
-                if relabel_answered(v, row, root)? {
-                    answered.insert(k.clone());
-                }
-            }
-        }
+        let answered = super::index::answered(&at.cur, &at.index, root)?;
         let deferred = load_deferred(&root.join(super::index::DEFERRED))?;
         let qdir = tmp.join("research").join("questions");
         let judged = classify(
@@ -511,8 +502,11 @@ pub fn classified(root: &Path, at: &Reading) -> Result<Classified, Fail> {
 /// (key, refusal) for every open finding `make claims-report` lists: what the gate refuses at `clean`.
 pub fn open_lines(root: &Path, at: &Reading) -> Result<Vec<(String, String)>, Fail> {
     let rows = live_rows(&at.cur, &at.index);
+    // a finding its relabel answered is not open (feature 451 T221)
+    let answered = super::index::answered(&at.cur, &at.index, root)?;
     Ok(open_findings(&rows, &load_deferred(&root.join(super::index::DEFERRED))?)?
         .into_iter()
+        .filter(|(_, k, _)| !answered.contains(k))
         .map(|(v, k, note)| {
             let cut: String = note.chars().take(160).collect();
             let line = format!("open ({v}): {k} - {cut} - fix it or its claim here: `make claims-bundle UNITS=\"{k}\"`");

@@ -340,7 +340,7 @@ fn changed_section(root: &Path, fragments: &[String]) -> Result<String, Fail> {
     } else {
         lines.join("\n")
     };
-    Ok(format!("\n## The change (feature 375, FR-006)\n\nThe blocks and notes this delta wrote or rewrote. A finding on anything NOT listed here is reported under a closing `OUTSIDE THE CHANGE` heading, one line each - `- <origin file> | <the block, a few words> | <the finding>` - and is filed as a row, not fixed in this change.\n\n{body}\n"))
+    Ok(format!("\n## The change (feature 375, FR-006)\n\nThe blocks and notes this delta wrote or rewrote. A finding on anything NOT listed here is not fixed in this change; it is filed as a row only where it names a wrong outcome its reader meets, or a tool's user - under a closing `OUTSIDE THE CHANGE` heading, one line each, `- <origin file> | <the block, a few words> | <the finding> | effect: <map|sheet|page|tool> - <that outcome>` - and otherwise listed under `NOTED, NOT FILED` and dropped (451 T219).\n\n{body}\n"))
 }
 
 /// A MANIFEST with the earlier rounds of the checks it owes (feature 393).

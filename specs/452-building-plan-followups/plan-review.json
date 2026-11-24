@@ -1,0 +1,1678 @@
+{
+ "feature": "452-building-plan-followups",
+ "blocks": {
+  "### T18 (<why: the finding or measurement that files it>)": {
+   "sha256": "2adedb1730f81aca393a7480415b7a7c362cb9fdd1541e4f0b9be68cea3bc4e1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T18 Approach (checklist part A)": {
+   "sha256": "25e7ee565b61f3a4a24c0e12bc19380ab23366e37f895315ae9e96067998ed04",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T19 (<why: the finding or measurement that files it>)": {
+   "sha256": "cd74f42a8ac26aa71a288c87133e0f9bcbee8bbcf5a80e0426442769cf76ba98",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T19 Approach (checklist part A)": {
+   "sha256": "8a599f51db4899222b30fa74e55768a5d6cdbe8e52b94b99b435bac3b5b4db15",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T20 (<why: the finding or measurement that files it>)": {
+   "sha256": "214ea587d5024d592ce8e50cc1b3d6892f5864645648138d5cbb558e16b353d1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T20 Approach (checklist part A)": {
+   "sha256": "4e4e19cc57569377b1ef3e765fdd9997bbe8f9d3d777b32d74c2b276c40b4245",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T22 (<why: the finding or measurement that files it>)": {
+   "sha256": "787ce4d6c9eb1a544db3bb0f147bf28bb758980c220519e1800ed6eede46521b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T22 Approach (checklist part A)": {
+   "sha256": "1bffbdc51a1af44fedb63ca9477dab634764dcc9528625c4ed949f31dc0b1040",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T001 (<why: the finding or measurement that files it>)": {
+   "sha256": "4935fab6fee4db3e8a631a72f516259a5d8a710d31d4754962c469b5175d5c1b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T001 Approach (checklist part A)": {
+   "sha256": "611c25843f4878a680d202ffeec8eeb05981a9158e2449d8c94f898dab973ca1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T002 (<why: the finding or measurement that files it>)": {
+   "sha256": "8c091ea671c6c5b0093da17445897c40d22302212dbca3342bdd3382db7992f7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T002 Approach (checklist part A)": {
+   "sha256": "555fdc238051ba7ac248974233efe9d50be7c4a2117122380a232e989e026ab8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T003 (<why: the finding or measurement that files it>)": {
+   "sha256": "3c673e47d16d9eccc79428dd098dbda23ff18df1c362903f8bbc3cd856bca2f4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T003 Approach (checklist part A)": {
+   "sha256": "a1f0fa6eeddc9050bf99bfaa4c034ec8da354372e9d15467694c0c40dd63818f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T004 (<why: the finding or measurement that files it>)": {
+   "sha256": "725777559a7927706be05b61d1d686d59169cbfd1d1494f041d7e4cd9a6b0e28",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T004 Approach (checklist part A)": {
+   "sha256": "95f77fa67de5c69589b37126f1446f58a42c64324ff5c63a2803d70ea1b711f1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T005 (<why: the finding or measurement that files it>)": {
+   "sha256": "eb3354ef2648db6057cd647db0e86847c4498d5e7aaaf46934f04e03bbf6c3d8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T005 Approach (checklist part A)": {
+   "sha256": "1f65df773e745dda8d3a245fa7576d9118190857cb77a1899178b7e62027d174",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T006 (<why: the finding or measurement that files it>)": {
+   "sha256": "635bbd72606200b3735515b0fb14ec2f5310b8266467859907f3378d82ce6ee8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T006 Approach (checklist part A)": {
+   "sha256": "3a5eb359cc12d1351872f88bbded8bf0fdf661d8f2ef86ed32ed19dc86b6cb21",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T016 (<why: the finding or measurement that files it>)": {
+   "sha256": "ddc684cbc4f94171368cffb7b2363119fb49632b2debc226265a8ccbbb5ac09a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T016 Approach (checklist part A)": {
+   "sha256": "f563ca726672487f86036929aae30cbaa4ef0345cf76061330188057e51a1f3f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T017 (<why: the finding or measurement that files it>)": {
+   "sha256": "6ab4677a3ab198c941e6862c985ad8aaf29188a14a0580f9c616e565088ece6d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T017 Approach (checklist part A)": {
+   "sha256": "7f58432adb4c3e11aeb2bd0873ba0184a3ee8ba16131a24400ee486fde77482c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T007, T008, T009, T010, T011, T012, T013, T014, T015, T21, T23 (bundle)": {
+   "sha256": "4414ba36bacf910f6cc603b3cc64fd7ae55433c315ee797cb2ade6dcbec38ceb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T007, T008, T009, T010, T011, T012, T013, T014, T015, T21, T23 Approach (checklist part A)": {
+   "sha256": "6f03395f0c237ae4a68a36dc8f0a3a5a0774e6fecb6d9a9a02619abc1d03bd26",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T001 (<why: the finding or measurement that files it>)",
+    "### T001 Approach (checklist part A)",
+    "### T002 (<why: the finding or measurement that files it>)",
+    "### T002 Approach (checklist part A)",
+    "### T003 (<why: the finding or measurement that files it>)",
+    "### T003 Approach (checklist part A)",
+    "### T004 (<why: the finding or measurement that files it>)",
+    "### T004 Approach (checklist part A)",
+    "### T005 (<why: the finding or measurement that files it>)",
+    "### T005 Approach (checklist part A)",
+    "### T006 (<why: the finding or measurement that files it>)",
+    "### T006 Approach (checklist part A)",
+    "### T007, T008, T009, T010, T011, T012, T013, T014, T015, T21, T23 (bundle)",
+    "### T007, T008, T009, T010, T011, T012, T013, T014, T015, T21, T23 Approach (checklist part A)",
+    "### T016 (<why: the finding or measurement that files it>)",
+    "### T016 Approach (checklist part A)",
+    "### T017 (<why: the finding or measurement that files it>)",
+    "### T017 Approach (checklist part A)",
+    "### T18 (<why: the finding or measurement that files it>)",
+    "### T18 Approach (checklist part A)",
+    "### T19 (<why: the finding or measurement that files it>)",
+    "### T19 Approach (checklist part A)",
+    "### T20 (<why: the finding or measurement that files it>)",
+    "### T20 Approach (checklist part A)",
+    "### T22 (<why: the finding or measurement that files it>)",
+    "### T22 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T007",
+     "summary": "docs/buildings.md Side gate bullet drops the Kochi cart gate, keeps Himeji's Kurumamon as 0082's drawing page has it",
+     "class": "within",
+     "why": "FR-004: a claim restated to the page it cites."
+    },
+    {
+     "id": "T008",
+     "summary": "latrine/privy rows' 'smallest farm privy counted' restated to 0101's drawing page ('this project's choice'), edited at the latrine pop-up's Guesses bullet and the table regenerated by make building-programs",
+     "class": "within",
+     "why": "FR-004; editing the rendered table's source is how the doc sentence is restated, not added scope."
+    },
+    {
+     "id": "T009",
+     "summary": "county example's research strings and notes cite 0331, 0097 and 0096 in place of an unopenable research pass; the seat sentence restated to what 0331 says",
+     "class": "within",
+     "why": "FR-004 (county sheet's research strings restated to their pages)."
+    },
+    {
+     "id": "T010",
+     "summary": "staff housing knob claim cites 0331 and 0097; two already-restated claims and knob 5 option (c)'s prose left as they stand",
+     "class": "within",
+     "why": "FR-004; what is left is already true of its page."
+    },
+    {
+     "id": "T011",
+     "summary": "grave markers claim labeled CONVENTION at 0235's tagged item, the ~2x1 ft size a GUESS",
+     "class": "within",
+     "why": "FR-004 'labeled as the record labels it'."
+    },
+    {
+     "id": "T012-restatement",
+     "summary": "the compound shrine claim and 'Modest shrine' bullet cite 0218 (one modest shrine) and 0220 (hall form), the wood a GUESS",
+     "class": "within",
+     "why": "FR-004's default path almost word for word."
+    },
+    {
+     "id": "T012-check",
+     "summary": "T012 declared 'a claim restatement, no sheet changes' unconditionally, on a spec-fidelity ruling; the exits name impl-drift, the two pop-ups' checks and closing-checks, and no source-applicability check of 0220's 'stone or wood' against the drawn shrine is recorded as run or scheduled",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-004 and SC-002 keep a branch open on 'T012's source-applicability check': should it rule 0220's two materials apply to the drawn shrine, the material becomes a knob and the sheets are redrawn. The block decides that question itself - it uses 0220 for the drawn hall's form while holding 0220's material sentence to be the small shrine's, which is exactly the applicability question FR-004 assigns to that check - and a spec-fidelity ruling is not a source-applicability verdict. The 'spec.md Decisions Recorded' entry it cites is not in the bundle (spec-cited.md carries FR-004 only, with the conditional intact); judged on FR-004 as carried. Not impossible, not implied by the GM's words, and dropping it forecloses a redraw the accepted spec keeps. Unblock: either the block records the source-applicability verdict on 0220's materials against the drawn shrine (dated, with method), or T012's Green exit names that check and carries FR-004's knob-and-redraw branch should it rule the materials apply."
+    },
+    {
+     "id": "T013",
+     "summary": "'Grave markers' bullet and a new claim carry the taller memorial stone(s) and six stone jizo at the entrance from 0235; no sheet redrawn because no Mode A sheet or generator draws a burial ground (grep stated)",
+     "class": "within",
+     "why": "FR-004's T013 sentence verbatim in effect, including 'none is redrawn'."
+    },
+    {
+     "id": "T014",
+     "summary": "barracks claim's stale '24 x 67 ft' restated to the county svg's measured 22x60 ft barracks and 48x24 ft junior retainers' quarters",
+     "class": "within",
+     "why": "FR-004 / FR-005; figures dated with method."
+    },
+    {
+     "id": "T015-result",
+     "summary": "round-trip notes' Result paragraph coverage figures marked as measured then, with today's 33%/66% from make pack-audit",
+     "class": "within",
+     "why": "FR-005: notes say what the drawing does."
+    },
+    {
+     "id": "T015-log-entries",
+     "summary": "Hayakawa's T276/T299/T312 entries and the round-trip's lines 100-118 left: dated log entries true when written, under later entries that supersede them",
+     "class": "within",
+     "why": "A dated log entry superseded in place is not a note contradicting its sheet; no wrong outcome (constitution XIV)."
+    },
+    {
+     "id": "T015-ubame-dais",
+     "summary": "Ubame's 'the room behind the dais' left (the dais runs a short way past one partition)",
+     "class": "within",
+     "why": "A difference no reader would see is not a defect (XIV v2.36.0); leaving it is within, never a narrowing."
+    },
+    {
+     "id": "T015-workshop",
+     "summary": "workshop's open form left, already labeled a GUESS in docs/buildings.md's workshop colonnade claim",
+     "class": "within",
+     "why": "Already says what the record holds."
+    },
+    {
+     "id": "T21",
+     "summary": "guest row restated to both generated sheets (round trip's front-row room; county's 40x42 ft guest house) at its source, the guest-quarters pop-up's Guesses bullet, the table regenerated",
+     "class": "within",
+     "why": "FR-007 (building-programs says what the county example draws)."
+    },
+    {
+     "id": "T23",
+     "summary": "three 'departure the code keeps until feature 417 T33' claims (genkan porch size, strongroom role, kitchen garden at the dwelling) restated to what the code and sheets draw; strongroom role a bare GUESS",
+     "class": "within",
+     "why": "FR-008 verbatim."
+    },
+    {
+     "id": "scope-no-code-no-page",
+     "summary": "no drawing, generator, audit code or research page edited; no Mode B pool map moves",
+     "class": "within",
+     "why": "FR-004/005 ask restatements of claims and notes; FR-006 forbids Mode B change. Research-page edits belong to FR-001/T001-T003."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "strongroom attribution corrected in the claim; building-programs edits owed their pop-up rounds; county service-gate citation of an unopenable pass dropped; 0218's page left unedited",
+     "class": "within",
+     "why": "Each either fixed here or not a defect; none narrows what was asked."
+    },
+    {
+     "id": "templates",
+     "summary": "T001-T006, T016-T017, T18-T20, T22: make task-add's empty templates, no content",
+     "class": "within",
+     "why": "Identical placeholders (checked by diff); they decide nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T001 (<why: the finding or measurement that files it>)",
+    "### T001 Approach (checklist part A)",
+    "### T002 (<why: the finding or measurement that files it>)",
+    "### T002 Approach (checklist part A)",
+    "### T003 (<why: the finding or measurement that files it>)",
+    "### T003 Approach (checklist part A)",
+    "### T004 (<why: the finding or measurement that files it>)",
+    "### T004 Approach (checklist part A)",
+    "### T005 (<why: the finding or measurement that files it>)",
+    "### T005 Approach (checklist part A)",
+    "### T006 (<why: the finding or measurement that files it>)",
+    "### T006 Approach (checklist part A)",
+    "### T007, T008, T009, T010, T011, T012, T013, T014, T015, T21, T23 (bundle)",
+    "### T007, T008, T009, T010, T011, T012, T013, T014, T015, T21, T23 Approach (checklist part A)",
+    "### T016 (<why: the finding or measurement that files it>)",
+    "### T016 Approach (checklist part A)",
+    "### T017 (<why: the finding or measurement that files it>)",
+    "### T017 Approach (checklist part A)",
+    "### T18 (<why: the finding or measurement that files it>)",
+    "### T18 Approach (checklist part A)",
+    "### T19 (<why: the finding or measurement that files it>)",
+    "### T19 Approach (checklist part A)",
+    "### T20 (<why: the finding or measurement that files it>)",
+    "### T20 Approach (checklist part A)",
+    "### T22 (<why: the finding or measurement that files it>)",
+    "### T22 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "templates",
+     "summary": "T001-T006, T016, T017, T18-T20, T22 blocks are unfilled make task-add placeholders, text identical to round 1",
+     "class": "within",
+     "why": "A placeholder decides nothing; each task's plan is owed when its session fills it."
+    },
+    {
+     "id": "bundle-scope",
+     "summary": "T007-T015, T21, T23 are restatements only: no drawing, generator or audit code, no research page edited, no pool svg/png/page moves",
+     "class": "within",
+     "why": "FR-004, FR-005 and FR-008 ask for claims, procedure bullets, pop-ups and notes restated to their pages and sheets; constitution XIV fixes a claim the fine code does not match by restating the claim; FR-006's no-Mode-B-move holds."
+    },
+    {
+     "id": "T012",
+     "summary": "Shrine material restated (wood a GUESS, 0220's stone-or-wood the small shrine's) as FR-004's default path, with the source-applicability agent run on 0220 against the drawn hall after this verdict and before landing; if it rules the materials apply, the knob-and-redraw branch is taken in a drawing task filed then and this restatement does not land as the answer; item 6's Green exit requires that check",
+     "class": "within",
+     "why": "Round 1's finding is resolved: FR-004 makes the restatement conditional on the source-applicability check and names the knob-and-redraw consequence, and the plan now runs the check before landing and carries both branches. Doing the redraw in a separately filed drawing task still redraws the sheets FR-004 and SC-002 name; nothing is dropped."
+    },
+    {
+     "id": "T013",
+     "summary": "Burial-ground drawing procedure gains the taller memorial stone(s) and six jizo from 0235; no sheet redrawn since none draws a burial ground (grep stated)",
+     "class": "within",
+     "why": "FR-004 states exactly this, including that no Mode A sheet is redrawn."
+    },
+    {
+     "id": "T008-T010-already",
+     "summary": "T008's garden row and two of T010's three claims found already restated and left; T008/T21 rows edited at their pop-up source and regenerated",
+     "class": "within",
+     "why": "Already true of their pages, so FR-004 is met; editing the rendered rows at their source is how the restatement takes effect."
+    },
+    {
+     "id": "T015-partial",
+     "summary": "Only the round-trip Result paragraph edited; dated log entries and Ubame's dais nit left as they are",
+     "class": "within",
+     "why": "FR-005 asks notes to say what the drawing does; dated log entries superseded by later entries are true as written, and a nit no reader sees is not a defect under constitution XIV."
+    },
+    {
+     "id": "T23",
+     "summary": "Three 'departure the code keeps until 417 T33' claims restated to what the code and sheets draw today",
+     "class": "within",
+     "why": "FR-008 verbatim."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T007, T008, T009, T010, T011, T012, T013, T014, T015, T21, T23 (bundle)",
+    "### T007, T008, T009, T010, T011, T012, T013, T014, T015, T21, T23 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "approach-restate-only",
+     "summary": "All eleven tasks: no drawing, generator or audit code and no research page is edited; every edit restates a claim, procedure bullet, pop-up Guesses bullet or note to its page or sheet.",
+     "class": "within",
+     "why": "FR-004 asks for claims restated to their pages, FR-005 for notes to say what the drawing does, FR-007 (T21) and FR-008 (T23) for doc statements to say what the sheets draw. None of them asks for code changes. The one code branch (T012's knob and redraw) is kept below. Constitution XIV says a claim the code does not match is restated, not 'fixed' in code."
+    },
+    {
+     "id": "T007",
+     "summary": "Side gate bullet: the Kochi cart gate is dropped and Himeji's Kurumamon stands alone, as 0082's drawing page has it.",
+     "class": "within",
+     "why": "FR-004: the claim is restated to the page it cites. The page holds no Kochi (grep count 0)."
+    },
+    {
+     "id": "T008",
+     "summary": "The garden row was already restated. The latrine and privy rows' 'smallest farm privy counted' is restated to 0101's 'this project's choice', at the rendered source (latrine.md Guesses), with the table regenerated.",
+     "class": "within",
+     "why": "FR-004 restatement of docs/building-programs.md. Editing the pop-up the row is rendered from is how that doc is changed, not added scope. A part already done needs no edit."
+    },
+    {
+     "id": "T009",
+     "summary": "The county example's research strings and notes cite 0331, 0097 and 0096 in place of 'research-pass 2026-11-23'. The seat sentence is restated to what 0331 says.",
+     "class": "within",
+     "why": "FR-004 names the county sheet's research strings: each is restated to the page it cites."
+    },
+    {
+     "id": "T010",
+     "summary": "Two of three claims were already restated. The staff-housing knob claim now cites 0331 and 0097. Knob 5 option (c) prose stands because 0331 carries it.",
+     "class": "within",
+     "why": "FR-004 restatement. Leaving prose that its cited page carries is the requirement met, not narrowed."
+    },
+    {
+     "id": "T011",
+     "summary": "Grave markers claim labeled CONVENTION at 0235's tagged item. The ~2 x 1 ft size is labeled a GUESS.",
+     "class": "within",
+     "why": "FR-004: 'labeled as the record labels it'."
+    },
+    {
+     "id": "T012",
+     "summary": "Default path: the claim and the 'Modest shrine' bullet cite 0218 and 0220, and the wooden hall is a GUESS. source-applicability runs before landing. If it rules that 0220's materials apply, the knob-and-redraw branch is taken in a drawing task and this restatement does not land as the answer.",
+     "class": "within",
+     "why": "This is FR-004's T012 text almost word for word, both branches included. The exit conditions in Approach item 6 carry the branch."
+    },
+    {
+     "id": "T013",
+     "summary": "The 'Grave markers' procedure bullet and a new claim carry the taller memorial stone(s) and the six stone jizo from 0235. No sheet is redrawn, because no Mode A sheet or generator draws a burial ground.",
+     "class": "within",
+     "why": "Matches FR-004 ('no Mode A sheet draws one today, so none is redrawn'). The search space is stated: greps over pool/country-shrines, pool/magistracies and rust/mode_a/src, plus Hoshigaoka's burial ground outside its frame per its notes."
+    },
+    {
+     "id": "T014",
+     "summary": "Barracks claim's stale '24 x 67 ft' restated to the measured 22 x 60 ft barracks and the 48 x 24 ft junior retainers' quarters.",
+     "class": "within",
+     "why": "FR-004 restatement to the sheet as drawn and to 0097. The figures carry a one-shot label (date and method)."
+    },
+    {
+     "id": "T015",
+     "summary": "One edit: the round-trip Result figures are marked as measured then, with today's 33%/66% added. The other items are left: dated log entries true when written, Hayakawa's svg comment already updated, Ubame's 'room behind the dais' off by a short dais run (a nit), and the workshop's open form already labeled a GUESS.",
+     "class": "within",
+     "why": "FR-005: notes say what the drawing does. Superseded dated log entries are not claims about the drawing as it is. The Ubame wording is a difference no reader of the sheet would see, not a wrong outcome (constitution XIV v2.36.0), so leaving it is within and owes no ruling. Items already done need no edit."
+    },
+    {
+     "id": "T21",
+     "summary": "Guest row restated so it is true of both the round-trip sheet (front-row room) and the county example (40 x 42 ft guest house), at its source guest-quarters.md, with the table regenerated.",
+     "class": "within",
+     "why": "FR-007: building-programs.md says what the county example draws."
+    },
+    {
+     "id": "T23",
+     "summary": "Three 'departure the code keeps until 417 T33' claims are restated. Genkan size matches layout.rs and 0104. The strongroom role is a bare GUESS that no sheet draws. The country-shrine kitchen garden follows Hoshigaoka since 283 and 0109.",
+     "class": "within",
+     "why": "FR-008: say what the sheets and generator draw today. The strongroom grep's search space is stated."
+    },
+    {
+     "id": "order-and-scope",
+     "summary": "T001-T006 and T016-T20 belong to other sessions and are untouched. The section's exits are claims-owed, impl-drift, the pop-ups' checks and closing-checks.",
+     "class": "within",
+     "why": "Scheduling across sessions. Nothing of FR-001..FR-003 or FR-007's audits is dropped, only left to their own tasks."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "The audit's strongroom attribution did not hold and the claim says so. The rows are rendered from the pop-ups, so the pop-up rounds are owed. The county service-gate citation of the pass is dropped. 0218 gives no material, so no page edit is made.",
+     "class": "within",
+     "why": "Each finding either corrects the audit's premise by measurement or is covered by FR-004's T012 text. Nothing the request or spec asks for is set aside."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T007, T008, T009, T010, T011, T012, T013, T014, T015, T21, T23 (bundle)",
+    "### T007, T008, T009, T010, T011, T012, T013, T014, T015, T21, T23 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "approach-restate-only",
+     "summary": "All eleven tasks: no drawing, generator or audit code and no research page is edited; every edit restates a claim, procedure bullet, pop-up Guesses bullet or note to its page or sheet.",
+     "class": "within",
+     "why": "FR-004 asks for claims restated to their pages, FR-005 for notes to say what the drawing does, FR-007 (T21) and FR-008 (T23) for doc statements to say what the sheets draw. None of them asks for code changes. The one code branch (T012's knob and redraw) is kept below. Constitution XIV says a claim the code does not match is restated, not 'fixed' in code."
+    },
+    {
+     "id": "T007",
+     "summary": "Side gate bullet: the Kochi cart gate is dropped and Himeji's Kurumamon stands alone, as 0082's drawing page has it.",
+     "class": "within",
+     "why": "FR-004: the claim is restated to the page it cites. The page holds no Kochi (grep count 0)."
+    },
+    {
+     "id": "T008",
+     "summary": "The garden row was already restated. The latrine and privy rows' 'smallest farm privy counted' is restated to 0101's 'this project's choice', at the rendered source (latrine.md Guesses), with the table regenerated.",
+     "class": "within",
+     "why": "FR-004 restatement of docs/building-programs.md. Editing the pop-up the row is rendered from is how that doc is changed, not added scope. A part already done needs no edit."
+    },
+    {
+     "id": "T009",
+     "summary": "The county example's research strings and notes cite 0331, 0097 and 0096 in place of 'research-pass 2026-11-23'. The seat sentence is restated to what 0331 says.",
+     "class": "within",
+     "why": "FR-004 names the county sheet's research strings: each is restated to the page it cites."
+    },
+    {
+     "id": "T010",
+     "summary": "Two of three claims were already restated. The staff-housing knob claim now cites 0331 and 0097. Knob 5 option (c) prose stands because 0331 carries it.",
+     "class": "within",
+     "why": "FR-004 restatement. Leaving prose that its cited page carries is the requirement met, not narrowed."
+    },
+    {
+     "id": "T011",
+     "summary": "Grave markers claim labeled CONVENTION at 0235's tagged item. The ~2 x 1 ft size is labeled a GUESS.",
+     "class": "within",
+     "why": "FR-004: 'labeled as the record labels it'."
+    },
+    {
+     "id": "T012",
+     "summary": "Default path: the claim and the 'Modest shrine' bullet cite 0218 and 0220, and the wooden hall is a GUESS. source-applicability runs before landing. If it rules that 0220's materials apply, the knob-and-redraw branch is taken in a drawing task and this restatement does not land as the answer.",
+     "class": "within",
+     "why": "This is FR-004's T012 text almost word for word, both branches included. The exit conditions in Approach item 6 carry the branch."
+    },
+    {
+     "id": "T013",
+     "summary": "The 'Grave markers' procedure bullet and a new claim carry the taller memorial stone(s) and the six stone jizo from 0235. No sheet is redrawn, because no Mode A sheet or generator draws a burial ground.",
+     "class": "within",
+     "why": "Matches FR-004 ('no Mode A sheet draws one today, so none is redrawn'). The search space is stated: greps over pool/country-shrines, pool/magistracies and rust/mode_a/src, plus Hoshigaoka's burial ground outside its frame per its notes."
+    },
+    {
+     "id": "T014",
+     "summary": "Barracks claim's stale '24 x 67 ft' restated to the measured 22 x 60 ft barracks and the 48 x 24 ft junior retainers' quarters.",
+     "class": "within",
+     "why": "FR-004 restatement to the sheet as drawn and to 0097. The figures carry a one-shot label (date and method)."
+    },
+    {
+     "id": "T015",
+     "summary": "One edit: the round-trip Result figures are marked as measured then, with today's 33%/66% added. The other items are left: dated log entries true when written, Hayakawa's svg comment already updated, Ubame's 'room behind the dais' off by a short dais run (a nit), and the workshop's open form already labeled a GUESS.",
+     "class": "within",
+     "why": "FR-005: notes say what the drawing does. Superseded dated log entries are not claims about the drawing as it is, and the svg comment and workshop items are already true. The Ubame wording is the one inaccuracy left: the plan's own words are 'off by the dais's short run past one partition (449 T380's N1, a nit)'. On that description it is a small difference of wording, not a wrong outcome (constitution XIV v2.36.0), so it stays within and owes no ruling. SC-003 ('no note ... contradicts its sheet as drawn') is what it is judged against at closing."
+    },
+    {
+     "id": "T21",
+     "summary": "Guest row restated so it is true of both the round-trip sheet (front-row room) and the county example (40 x 42 ft guest house), at its source guest-quarters.md, with the table regenerated.",
+     "class": "within",
+     "why": "FR-007: building-programs.md says what the county example draws."
+    },
+    {
+     "id": "T23",
+     "summary": "Three 'departure the code keeps until 417 T33' claims are restated. Genkan size matches layout.rs and 0104. The strongroom role is a bare GUESS that no sheet draws. The country-shrine kitchen garden follows Hoshigaoka since 283 and 0109.",
+     "class": "within",
+     "why": "FR-008: say what the sheets and generator draw today. The strongroom grep's search space is stated."
+    },
+    {
+     "id": "order-and-scope",
+     "summary": "T001-T006 and T016-T20 belong to other sessions and are untouched. The section's exits are claims-owed, impl-drift, the pop-ups' checks and closing-checks.",
+     "class": "within",
+     "why": "Scheduling across sessions. Nothing of FR-001..FR-003 or FR-007's audits is dropped, only left to their own tasks."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "The audit's strongroom attribution did not hold and the claim says so. The rows are rendered from the pop-ups, so the pop-up rounds are owed. The county service-gate citation of the pass is dropped. 0218 gives no material, so no page edit is made.",
+     "class": "within",
+     "why": "Each finding either corrects the audit's premise by measurement or is covered by FR-004's T012 text. Nothing the request or spec asks for is set aside."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T007, T008, T009, T010, T011, T012, T013, T014, T015, T21, T23 (bundle)",
+    "### T007, T008, T009, T010, T011, T012, T013, T014, T015, T21, T23 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Approach-scope",
+     "summary": "All tasks in the bundle restate claims, procedure bullets, pop-up Guesses bullets and notes only; no drawing, generator, audit code or research page edited",
+     "class": "within",
+     "why": "FR-004/FR-005/FR-007/FR-008 ask for restatements of claims, notes and rows to their pages and sheets; constitution XIV fixes a claim the code does not match where the outcome is fine by restating the claim. Research-page edits surfaced by the reading are reported to a page session; none is a wrong outcome on a map or sheet."
+    },
+    {
+     "id": "T007",
+     "summary": "Side gate bullet drops the Kochi cart gate, Himeji's Kurumamon alone, as 0082's drawing page has it",
+     "class": "within",
+     "why": "Exactly FR-004: a claim restated to the page it cites."
+    },
+    {
+     "id": "T008",
+     "summary": "No edit: the garden row was already restated; the latrine/privy rows' sentence is true of the record (rendered from latrine.md's Guesses bullet, whose About gives 0047's farm privy count); the earlier restatement was reverted after the modal-form round found it contradicting the pop-up's About; 0101's wider sentence left to a page session",
+     "class": "within",
+     "why": "FR-004 asks that each claim be restated to the page it cites; a claim found already true of its page owes no restatement, so 'no edit' carries the task rather than narrowing it. A claim narrower than a page's wider sentence ('no samurai privy size' vs 'no privy size') is consistent with it, not a contradiction, and so is no defect (XIV v2.36.0). Reverting a restatement that contradicted the pop-up's About serves FR-004/SC-003."
+    },
+    {
+     "id": "T009",
+     "summary": "County example research strings and notes cite 0331, 0097 and 0096's drawing pages in place of an unopenable research pass; seat sentence restated to 0331",
+     "class": "within",
+     "why": "FR-004: claims restated to their pages; the strings reach no svg, so no sheet moves."
+    },
+    {
+     "id": "T010",
+     "summary": "Staff housing knob claim cites 0331 and 0097; impl-drift's two labels added (form (b)'s married households a GUESS, form (c)'s wealthy-posting fit unclaimed); option (c) prose stands as carried by 0331",
+     "class": "within",
+     "why": "FR-004: restated and labeled as the record labels it; the two labels are the impl-drift round's findings applied, not a departure."
+    },
+    {
+     "id": "T011",
+     "summary": "Grave markers claim labeled CONVENTION at 0235's tagged item; the ~2 x 1 ft marker a GUESS",
+     "class": "within",
+     "why": "FR-004's labeling clause exactly."
+    },
+    {
+     "id": "T012",
+     "summary": "Default path of FR-004: wooden hall labeled GUESS; source-applicability answered DOES NOT APPLY (0220's stone-or-wood modifies the small shrine only), so no material knob and no redraw; 0220/source write-up EDITs reported to a page session",
+     "class": "within",
+     "why": "FR-004 names both branches and conditions the knob-and-redraw branch on the source-applicability check ruling that 0220's materials apply; the check ruled they do not, so the default path is the requested one. The record edits the check proposed are page work outside FR-004's files, and their absence leaves no claim untrue."
+    },
+    {
+     "id": "T013",
+     "summary": "Grave markers bullet and a new claim carry the taller memorial stone(s) and six stone jizo from 0235; no sheet redrawn because none draws a burial ground",
+     "class": "within",
+     "why": "FR-004 states this verbatim, including that none is redrawn; the grep search space is stated."
+    },
+    {
+     "id": "T014",
+     "summary": "Barracks claim's stale 24 x 67 ft restated to the county svg's measured 22 x 60 ft barracks and 48 x 24 ft junior quarters",
+     "class": "within",
+     "why": "FR-004: claim restated to the sheet as drawn and its page."
+    },
+    {
+     "id": "T015",
+     "summary": "Round-trip Result paragraph marked as measured then with today's figures; dated log entries, Hayakawa's svg comment, Ubame's dais nit and the workshop label left unedited",
+     "class": "within",
+     "why": "FR-005: notes say what the drawing does. Dated log entries true when written and superseded in place are not untrue statements; the dais nit is a difference no reader of the sheet would see (XIV v2.36.0, not a defect)."
+    },
+    {
+     "id": "T21",
+     "summary": "Guest row restated at its source (guest-quarters.md Guesses bullet) to both the round-trip's front-row room and the county example's 40 x 42 ft guest house; table regenerated; owes modal rounds",
+     "class": "within",
+     "why": "FR-007: building-programs.md says what the county example draws. Editing the pop-up that renders the row is where the row's text lives."
+    },
+    {
+     "id": "T23",
+     "summary": "Three 'departure the code keeps until 417 T33' claims restated: genkan to layout.rs's 12 x 9 ft from 0104 (Ochiba's hand-drawn 10 x 6 that page's GUESS); strongroom role a bare GUESS with impl-drift's two corrections (Wuyang and Fenzhou beside Pingyao; Takayama's store's name and floor only); kitchen garden on open ground per 0109 and Hoshigaoka's notes",
+     "class": "within",
+     "why": "FR-008 verbatim: each says what the sheets and the generator draw today; the impl-drift corrections make the account match 0123 and 0100."
+    },
+    {
+     "id": "Found-and-left: shrine hall FORM to T24",
+     "summary": "impl-drift found the shrine's hall FORM fixed where 0220 gives the small shrine as the commoner household form; deferred to a filed task T24 in this feature, landing before T004, outside this bundle's no-drawing scope",
+     "class": "within",
+     "why": "Not in any of the GM's 17 items as worded in FR-004 (T012 is the shrine's material, and the ruling set the form apart from it). It is not dropped: it is filed in this same feature with an order (before T004, the sheet redraw), so no known item is carried past the feature. The landed claim cites 0220 for the hall form, which the source-applicability answer confirms 0220 describes (the hall of a carefully kept shrine), so the restated claim is not left untrue while T24 decides the applicability question."
+    },
+    {
+     "id": "Found-and-left: audit attributions not held (strongroom svg/0100, T008 latrine, county service-gate citation, 0218's silence)",
+     "summary": "Audit readings that did not hold recorded; service-gate citation of the pass dropped; 0218's silence on form/material left with the claim carrying the GUESS",
+     "class": "within",
+     "why": "Each is either fixed here within FR-004's files or found not to be a defect (the claim already says what the page holds)."
+    }
+   ]
+  }
+ ],
+ "tasks": {
+  "T007": {
+   "section_sha256": "3300ca25085f2f95f9e4959b3efa5128d969f7e42a32d2ca12d5d0c253a4726e",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach-scope",
+     "summary": "All tasks in the bundle restate claims, procedure bullets, pop-up Guesses bullets and notes only; no drawing, generator, audit code or research page edited",
+     "class": "within",
+     "why": "FR-004/FR-005/FR-007/FR-008 ask for restatements of claims, notes and rows to their pages and sheets; constitution XIV fixes a claim the code does not match where the outcome is fine by restating the claim. Research-page edits surfaced by the reading are reported to a page session; none is a wrong outcome on a map or sheet."
+    },
+    {
+     "id": "T007",
+     "summary": "Side gate bullet drops the Kochi cart gate, Himeji's Kurumamon alone, as 0082's drawing page has it",
+     "class": "within",
+     "why": "Exactly FR-004: a claim restated to the page it cites."
+    },
+    {
+     "id": "T008",
+     "summary": "No edit: the garden row was already restated; the latrine/privy rows' sentence is true of the record (rendered from latrine.md's Guesses bullet, whose About gives 0047's farm privy count); the earlier restatement was reverted after the modal-form round found it contradicting the pop-up's About; 0101's wider sentence left to a page session",
+     "class": "within",
+     "why": "FR-004 asks that each claim be restated to the page it cites; a claim found already true of its page owes no restatement, so 'no edit' carries the task rather than narrowing it. A claim narrower than a page's wider sentence ('no samurai privy size' vs 'no privy size') is consistent with it, not a contradiction, and so is no defect (XIV v2.36.0). Reverting a restatement that contradicted the pop-up's About serves FR-004/SC-003."
+    },
+    {
+     "id": "T009",
+     "summary": "County example research strings and notes cite 0331, 0097 and 0096's drawing pages in place of an unopenable research pass; seat sentence restated to 0331",
+     "class": "within",
+     "why": "FR-004: claims restated to their pages; the strings reach no svg, so no sheet moves."
+    },
+    {
+     "id": "T010",
+     "summary": "Staff housing knob claim cites 0331 and 0097; impl-drift's two labels added (form (b)'s married households a GUESS, form (c)'s wealthy-posting fit unclaimed); option (c) prose stands as carried by 0331",
+     "class": "within",
+     "why": "FR-004: restated and labeled as the record labels it; the two labels are the impl-drift round's findings applied, not a departure."
+    },
+    {
+     "id": "T011",
+     "summary": "Grave markers claim labeled CONVENTION at 0235's tagged item; the ~2 x 1 ft marker a GUESS",
+     "class": "within",
+     "why": "FR-004's labeling clause exactly."
+    },
+    {
+     "id": "T012",
+     "summary": "Default path of FR-004: wooden hall labeled GUESS; source-applicability answered DOES NOT APPLY (0220's stone-or-wood modifies the small shrine only), so no material knob and no redraw; 0220/source write-up EDITs reported to a page session",
+     "class": "within",
+     "why": "FR-004 names both branches and conditions the knob-and-redraw branch on the source-applicability check ruling that 0220's materials apply; the check ruled they do not, so the default path is the requested one. The record edits the check proposed are page work outside FR-004's files, and their absence leaves no claim untrue."
+    },
+    {
+     "id": "T013",
+     "summary": "Grave markers bullet and a new claim carry the taller memorial stone(s) and six stone jizo from 0235; no sheet redrawn because none draws a burial ground",
+     "class": "within",
+     "why": "FR-004 states this verbatim, including that none is redrawn; the grep search space is stated."
+    },
+    {
+     "id": "T014",
+     "summary": "Barracks claim's stale 24 x 67 ft restated to the county svg's measured 22 x 60 ft barracks and 48 x 24 ft junior quarters",
+     "class": "within",
+     "why": "FR-004: claim restated to the sheet as drawn and its page."
+    },
+    {
+     "id": "T015",
+     "summary": "Round-trip Result paragraph marked as measured then with today's figures; dated log entries, Hayakawa's svg comment, Ubame's dais nit and the workshop label left unedited",
+     "class": "within",
+     "why": "FR-005: notes say what the drawing does. Dated log entries true when written and superseded in place are not untrue statements; the dais nit is a difference no reader of the sheet would see (XIV v2.36.0, not a defect)."
+    },
+    {
+     "id": "T21",
+     "summary": "Guest row restated at its source (guest-quarters.md Guesses bullet) to both the round-trip's front-row room and the county example's 40 x 42 ft guest house; table regenerated; owes modal rounds",
+     "class": "within",
+     "why": "FR-007: building-programs.md says what the county example draws. Editing the pop-up that renders the row is where the row's text lives."
+    },
+    {
+     "id": "T23",
+     "summary": "Three 'departure the code keeps until 417 T33' claims restated: genkan to layout.rs's 12 x 9 ft from 0104 (Ochiba's hand-drawn 10 x 6 that page's GUESS); strongroom role a bare GUESS with impl-drift's two corrections (Wuyang and Fenzhou beside Pingyao; Takayama's store's name and floor only); kitchen garden on open ground per 0109 and Hoshigaoka's notes",
+     "class": "within",
+     "why": "FR-008 verbatim: each says what the sheets and the generator draw today; the impl-drift corrections make the account match 0123 and 0100."
+    },
+    {
+     "id": "Found-and-left: shrine hall FORM to T24",
+     "summary": "impl-drift found the shrine's hall FORM fixed where 0220 gives the small shrine as the commoner household form; deferred to a filed task T24 in this feature, landing before T004, outside this bundle's no-drawing scope",
+     "class": "within",
+     "why": "Not in any of the GM's 17 items as worded in FR-004 (T012 is the shrine's material, and the ruling set the form apart from it). It is not dropped: it is filed in this same feature with an order (before T004, the sheet redraw), so no known item is carried past the feature. The landed claim cites 0220 for the hall form, which the source-applicability answer confirms 0220 describes (the hall of a carefully kept shrine), so the restated claim is not left untrue while T24 decides the applicability question."
+    },
+    {
+     "id": "Found-and-left: audit attributions not held (strongroom svg/0100, T008 latrine, county service-gate citation, 0218's silence)",
+     "summary": "Audit readings that did not hold recorded; service-gate citation of the pass dropped; 0218's silence on form/material left with the claim carrying the GUESS",
+     "class": "within",
+     "why": "Each is either fixed here within FR-004's files or found not to be a defect (the claim already says what the page holds)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T008": {
+   "section_sha256": "3300ca25085f2f95f9e4959b3efa5128d969f7e42a32d2ca12d5d0c253a4726e",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach-scope",
+     "summary": "All tasks in the bundle restate claims, procedure bullets, pop-up Guesses bullets and notes only; no drawing, generator, audit code or research page edited",
+     "class": "within",
+     "why": "FR-004/FR-005/FR-007/FR-008 ask for restatements of claims, notes and rows to their pages and sheets; constitution XIV fixes a claim the code does not match where the outcome is fine by restating the claim. Research-page edits surfaced by the reading are reported to a page session; none is a wrong outcome on a map or sheet."
+    },
+    {
+     "id": "T007",
+     "summary": "Side gate bullet drops the Kochi cart gate, Himeji's Kurumamon alone, as 0082's drawing page has it",
+     "class": "within",
+     "why": "Exactly FR-004: a claim restated to the page it cites."
+    },
+    {
+     "id": "T008",
+     "summary": "No edit: the garden row was already restated; the latrine/privy rows' sentence is true of the record (rendered from latrine.md's Guesses bullet, whose About gives 0047's farm privy count); the earlier restatement was reverted after the modal-form round found it contradicting the pop-up's About; 0101's wider sentence left to a page session",
+     "class": "within",
+     "why": "FR-004 asks that each claim be restated to the page it cites; a claim found already true of its page owes no restatement, so 'no edit' carries the task rather than narrowing it. A claim narrower than a page's wider sentence ('no samurai privy size' vs 'no privy size') is consistent with it, not a contradiction, and so is no defect (XIV v2.36.0). Reverting a restatement that contradicted the pop-up's About serves FR-004/SC-003."
+    },
+    {
+     "id": "T009",
+     "summary": "County example research strings and notes cite 0331, 0097 and 0096's drawing pages in place of an unopenable research pass; seat sentence restated to 0331",
+     "class": "within",
+     "why": "FR-004: claims restated to their pages; the strings reach no svg, so no sheet moves."
+    },
+    {
+     "id": "T010",
+     "summary": "Staff housing knob claim cites 0331 and 0097; impl-drift's two labels added (form (b)'s married households a GUESS, form (c)'s wealthy-posting fit unclaimed); option (c) prose stands as carried by 0331",
+     "class": "within",
+     "why": "FR-004: restated and labeled as the record labels it; the two labels are the impl-drift round's findings applied, not a departure."
+    },
+    {
+     "id": "T011",
+     "summary": "Grave markers claim labeled CONVENTION at 0235's tagged item; the ~2 x 1 ft marker a GUESS",
+     "class": "within",
+     "why": "FR-004's labeling clause exactly."
+    },
+    {
+     "id": "T012",
+     "summary": "Default path of FR-004: wooden hall labeled GUESS; source-applicability answered DOES NOT APPLY (0220's stone-or-wood modifies the small shrine only), so no material knob and no redraw; 0220/source write-up EDITs reported to a page session",
+     "class": "within",
+     "why": "FR-004 names both branches and conditions the knob-and-redraw branch on the source-applicability check ruling that 0220's materials apply; the check ruled they do not, so the default path is the requested one. The record edits the check proposed are page work outside FR-004's files, and their absence leaves no claim untrue."
+    },
+    {
+     "id": "T013",
+     "summary": "Grave markers bullet and a new claim carry the taller memorial stone(s) and six stone jizo from 0235; no sheet redrawn because none draws a burial ground",
+     "class": "within",
+     "why": "FR-004 states this verbatim, including that none is redrawn; the grep search space is stated."
+    },
+    {
+     "id": "T014",
+     "summary": "Barracks claim's stale 24 x 67 ft restated to the county svg's measured 22 x 60 ft barracks and 48 x 24 ft junior quarters",
+     "class": "within",
+     "why": "FR-004: claim restated to the sheet as drawn and its page."
+    },
+    {
+     "id": "T015",
+     "summary": "Round-trip Result paragraph marked as measured then with today's figures; dated log entries, Hayakawa's svg comment, Ubame's dais nit and the workshop label left unedited",
+     "class": "within",
+     "why": "FR-005: notes say what the drawing does. Dated log entries true when written and superseded in place are not untrue statements; the dais nit is a difference no reader of the sheet would see (XIV v2.36.0, not a defect)."
+    },
+    {
+     "id": "T21",
+     "summary": "Guest row restated at its source (guest-quarters.md Guesses bullet) to both the round-trip's front-row room and the county example's 40 x 42 ft guest house; table regenerated; owes modal rounds",
+     "class": "within",
+     "why": "FR-007: building-programs.md says what the county example draws. Editing the pop-up that renders the row is where the row's text lives."
+    },
+    {
+     "id": "T23",
+     "summary": "Three 'departure the code keeps until 417 T33' claims restated: genkan to layout.rs's 12 x 9 ft from 0104 (Ochiba's hand-drawn 10 x 6 that page's GUESS); strongroom role a bare GUESS with impl-drift's two corrections (Wuyang and Fenzhou beside Pingyao; Takayama's store's name and floor only); kitchen garden on open ground per 0109 and Hoshigaoka's notes",
+     "class": "within",
+     "why": "FR-008 verbatim: each says what the sheets and the generator draw today; the impl-drift corrections make the account match 0123 and 0100."
+    },
+    {
+     "id": "Found-and-left: shrine hall FORM to T24",
+     "summary": "impl-drift found the shrine's hall FORM fixed where 0220 gives the small shrine as the commoner household form; deferred to a filed task T24 in this feature, landing before T004, outside this bundle's no-drawing scope",
+     "class": "within",
+     "why": "Not in any of the GM's 17 items as worded in FR-004 (T012 is the shrine's material, and the ruling set the form apart from it). It is not dropped: it is filed in this same feature with an order (before T004, the sheet redraw), so no known item is carried past the feature. The landed claim cites 0220 for the hall form, which the source-applicability answer confirms 0220 describes (the hall of a carefully kept shrine), so the restated claim is not left untrue while T24 decides the applicability question."
+    },
+    {
+     "id": "Found-and-left: audit attributions not held (strongroom svg/0100, T008 latrine, county service-gate citation, 0218's silence)",
+     "summary": "Audit readings that did not hold recorded; service-gate citation of the pass dropped; 0218's silence on form/material left with the claim carrying the GUESS",
+     "class": "within",
+     "why": "Each is either fixed here within FR-004's files or found not to be a defect (the claim already says what the page holds)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T009": {
+   "section_sha256": "3300ca25085f2f95f9e4959b3efa5128d969f7e42a32d2ca12d5d0c253a4726e",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach-scope",
+     "summary": "All tasks in the bundle restate claims, procedure bullets, pop-up Guesses bullets and notes only; no drawing, generator, audit code or research page edited",
+     "class": "within",
+     "why": "FR-004/FR-005/FR-007/FR-008 ask for restatements of claims, notes and rows to their pages and sheets; constitution XIV fixes a claim the code does not match where the outcome is fine by restating the claim. Research-page edits surfaced by the reading are reported to a page session; none is a wrong outcome on a map or sheet."
+    },
+    {
+     "id": "T007",
+     "summary": "Side gate bullet drops the Kochi cart gate, Himeji's Kurumamon alone, as 0082's drawing page has it",
+     "class": "within",
+     "why": "Exactly FR-004: a claim restated to the page it cites."
+    },
+    {
+     "id": "T008",
+     "summary": "No edit: the garden row was already restated; the latrine/privy rows' sentence is true of the record (rendered from latrine.md's Guesses bullet, whose About gives 0047's farm privy count); the earlier restatement was reverted after the modal-form round found it contradicting the pop-up's About; 0101's wider sentence left to a page session",
+     "class": "within",
+     "why": "FR-004 asks that each claim be restated to the page it cites; a claim found already true of its page owes no restatement, so 'no edit' carries the task rather than narrowing it. A claim narrower than a page's wider sentence ('no samurai privy size' vs 'no privy size') is consistent with it, not a contradiction, and so is no defect (XIV v2.36.0). Reverting a restatement that contradicted the pop-up's About serves FR-004/SC-003."
+    },
+    {
+     "id": "T009",
+     "summary": "County example research strings and notes cite 0331, 0097 and 0096's drawing pages in place of an unopenable research pass; seat sentence restated to 0331",
+     "class": "within",
+     "why": "FR-004: claims restated to their pages; the strings reach no svg, so no sheet moves."
+    },
+    {
+     "id": "T010",
+     "summary": "Staff housing knob claim cites 0331 and 0097; impl-drift's two labels added (form (b)'s married households a GUESS, form (c)'s wealthy-posting fit unclaimed); option (c) prose stands as carried by 0331",
+     "class": "within",
+     "why": "FR-004: restated and labeled as the record labels it; the two labels are the impl-drift round's findings applied, not a departure."
+    },
+    {
+     "id": "T011",
+     "summary": "Grave markers claim labeled CONVENTION at 0235's tagged item; the ~2 x 1 ft marker a GUESS",
+     "class": "within",
+     "why": "FR-004's labeling clause exactly."
+    },
+    {
+     "id": "T012",
+     "summary": "Default path of FR-004: wooden hall labeled GUESS; source-applicability answered DOES NOT APPLY (0220's stone-or-wood modifies the small shrine only), so no material knob and no redraw; 0220/source write-up EDITs reported to a page session",
+     "class": "within",
+     "why": "FR-004 names both branches and conditions the knob-and-redraw branch on the source-applicability check ruling that 0220's materials apply; the check ruled they do not, so the default path is the requested one. The record edits the check proposed are page work outside FR-004's files, and their absence leaves no claim untrue."
+    },
+    {
+     "id": "T013",
+     "summary": "Grave markers bullet and a new claim carry the taller memorial stone(s) and six stone jizo from 0235; no sheet redrawn because none draws a burial ground",
+     "class": "within",
+     "why": "FR-004 states this verbatim, including that none is redrawn; the grep search space is stated."
+    },
+    {
+     "id": "T014",
+     "summary": "Barracks claim's stale 24 x 67 ft restated to the county svg's measured 22 x 60 ft barracks and 48 x 24 ft junior quarters",
+     "class": "within",
+     "why": "FR-004: claim restated to the sheet as drawn and its page."
+    },
+    {
+     "id": "T015",
+     "summary": "Round-trip Result paragraph marked as measured then with today's figures; dated log entries, Hayakawa's svg comment, Ubame's dais nit and the workshop label left unedited",
+     "class": "within",
+     "why": "FR-005: notes say what the drawing does. Dated log entries true when written and superseded in place are not untrue statements; the dais nit is a difference no reader of the sheet would see (XIV v2.36.0, not a defect)."
+    },
+    {
+     "id": "T21",
+     "summary": "Guest row restated at its source (guest-quarters.md Guesses bullet) to both the round-trip's front-row room and the county example's 40 x 42 ft guest house; table regenerated; owes modal rounds",
+     "class": "within",
+     "why": "FR-007: building-programs.md says what the county example draws. Editing the pop-up that renders the row is where the row's text lives."
+    },
+    {
+     "id": "T23",
+     "summary": "Three 'departure the code keeps until 417 T33' claims restated: genkan to layout.rs's 12 x 9 ft from 0104 (Ochiba's hand-drawn 10 x 6 that page's GUESS); strongroom role a bare GUESS with impl-drift's two corrections (Wuyang and Fenzhou beside Pingyao; Takayama's store's name and floor only); kitchen garden on open ground per 0109 and Hoshigaoka's notes",
+     "class": "within",
+     "why": "FR-008 verbatim: each says what the sheets and the generator draw today; the impl-drift corrections make the account match 0123 and 0100."
+    },
+    {
+     "id": "Found-and-left: shrine hall FORM to T24",
+     "summary": "impl-drift found the shrine's hall FORM fixed where 0220 gives the small shrine as the commoner household form; deferred to a filed task T24 in this feature, landing before T004, outside this bundle's no-drawing scope",
+     "class": "within",
+     "why": "Not in any of the GM's 17 items as worded in FR-004 (T012 is the shrine's material, and the ruling set the form apart from it). It is not dropped: it is filed in this same feature with an order (before T004, the sheet redraw), so no known item is carried past the feature. The landed claim cites 0220 for the hall form, which the source-applicability answer confirms 0220 describes (the hall of a carefully kept shrine), so the restated claim is not left untrue while T24 decides the applicability question."
+    },
+    {
+     "id": "Found-and-left: audit attributions not held (strongroom svg/0100, T008 latrine, county service-gate citation, 0218's silence)",
+     "summary": "Audit readings that did not hold recorded; service-gate citation of the pass dropped; 0218's silence on form/material left with the claim carrying the GUESS",
+     "class": "within",
+     "why": "Each is either fixed here within FR-004's files or found not to be a defect (the claim already says what the page holds)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T010": {
+   "section_sha256": "3300ca25085f2f95f9e4959b3efa5128d969f7e42a32d2ca12d5d0c253a4726e",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach-scope",
+     "summary": "All tasks in the bundle restate claims, procedure bullets, pop-up Guesses bullets and notes only; no drawing, generator, audit code or research page edited",
+     "class": "within",
+     "why": "FR-004/FR-005/FR-007/FR-008 ask for restatements of claims, notes and rows to their pages and sheets; constitution XIV fixes a claim the code does not match where the outcome is fine by restating the claim. Research-page edits surfaced by the reading are reported to a page session; none is a wrong outcome on a map or sheet."
+    },
+    {
+     "id": "T007",
+     "summary": "Side gate bullet drops the Kochi cart gate, Himeji's Kurumamon alone, as 0082's drawing page has it",
+     "class": "within",
+     "why": "Exactly FR-004: a claim restated to the page it cites."
+    },
+    {
+     "id": "T008",
+     "summary": "No edit: the garden row was already restated; the latrine/privy rows' sentence is true of the record (rendered from latrine.md's Guesses bullet, whose About gives 0047's farm privy count); the earlier restatement was reverted after the modal-form round found it contradicting the pop-up's About; 0101's wider sentence left to a page session",
+     "class": "within",
+     "why": "FR-004 asks that each claim be restated to the page it cites; a claim found already true of its page owes no restatement, so 'no edit' carries the task rather than narrowing it. A claim narrower than a page's wider sentence ('no samurai privy size' vs 'no privy size') is consistent with it, not a contradiction, and so is no defect (XIV v2.36.0). Reverting a restatement that contradicted the pop-up's About serves FR-004/SC-003."
+    },
+    {
+     "id": "T009",
+     "summary": "County example research strings and notes cite 0331, 0097 and 0096's drawing pages in place of an unopenable research pass; seat sentence restated to 0331",
+     "class": "within",
+     "why": "FR-004: claims restated to their pages; the strings reach no svg, so no sheet moves."
+    },
+    {
+     "id": "T010",
+     "summary": "Staff housing knob claim cites 0331 and 0097; impl-drift's two labels added (form (b)'s married households a GUESS, form (c)'s wealthy-posting fit unclaimed); option (c) prose stands as carried by 0331",
+     "class": "within",
+     "why": "FR-004: restated and labeled as the record labels it; the two labels are the impl-drift round's findings applied, not a departure."
+    },
+    {
+     "id": "T011",
+     "summary": "Grave markers claim labeled CONVENTION at 0235's tagged item; the ~2 x 1 ft marker a GUESS",
+     "class": "within",
+     "why": "FR-004's labeling clause exactly."
+    },
+    {
+     "id": "T012",
+     "summary": "Default path of FR-004: wooden hall labeled GUESS; source-applicability answered DOES NOT APPLY (0220's stone-or-wood modifies the small shrine only), so no material knob and no redraw; 0220/source write-up EDITs reported to a page session",
+     "class": "within",
+     "why": "FR-004 names both branches and conditions the knob-and-redraw branch on the source-applicability check ruling that 0220's materials apply; the check ruled they do not, so the default path is the requested one. The record edits the check proposed are page work outside FR-004's files, and their absence leaves no claim untrue."
+    },
+    {
+     "id": "T013",
+     "summary": "Grave markers bullet and a new claim carry the taller memorial stone(s) and six stone jizo from 0235; no sheet redrawn because none draws a burial ground",
+     "class": "within",
+     "why": "FR-004 states this verbatim, including that none is redrawn; the grep search space is stated."
+    },
+    {
+     "id": "T014",
+     "summary": "Barracks claim's stale 24 x 67 ft restated to the county svg's measured 22 x 60 ft barracks and 48 x 24 ft junior quarters",
+     "class": "within",
+     "why": "FR-004: claim restated to the sheet as drawn and its page."
+    },
+    {
+     "id": "T015",
+     "summary": "Round-trip Result paragraph marked as measured then with today's figures; dated log entries, Hayakawa's svg comment, Ubame's dais nit and the workshop label left unedited",
+     "class": "within",
+     "why": "FR-005: notes say what the drawing does. Dated log entries true when written and superseded in place are not untrue statements; the dais nit is a difference no reader of the sheet would see (XIV v2.36.0, not a defect)."
+    },
+    {
+     "id": "T21",
+     "summary": "Guest row restated at its source (guest-quarters.md Guesses bullet) to both the round-trip's front-row room and the county example's 40 x 42 ft guest house; table regenerated; owes modal rounds",
+     "class": "within",
+     "why": "FR-007: building-programs.md says what the county example draws. Editing the pop-up that renders the row is where the row's text lives."
+    },
+    {
+     "id": "T23",
+     "summary": "Three 'departure the code keeps until 417 T33' claims restated: genkan to layout.rs's 12 x 9 ft from 0104 (Ochiba's hand-drawn 10 x 6 that page's GUESS); strongroom role a bare GUESS with impl-drift's two corrections (Wuyang and Fenzhou beside Pingyao; Takayama's store's name and floor only); kitchen garden on open ground per 0109 and Hoshigaoka's notes",
+     "class": "within",
+     "why": "FR-008 verbatim: each says what the sheets and the generator draw today; the impl-drift corrections make the account match 0123 and 0100."
+    },
+    {
+     "id": "Found-and-left: shrine hall FORM to T24",
+     "summary": "impl-drift found the shrine's hall FORM fixed where 0220 gives the small shrine as the commoner household form; deferred to a filed task T24 in this feature, landing before T004, outside this bundle's no-drawing scope",
+     "class": "within",
+     "why": "Not in any of the GM's 17 items as worded in FR-004 (T012 is the shrine's material, and the ruling set the form apart from it). It is not dropped: it is filed in this same feature with an order (before T004, the sheet redraw), so no known item is carried past the feature. The landed claim cites 0220 for the hall form, which the source-applicability answer confirms 0220 describes (the hall of a carefully kept shrine), so the restated claim is not left untrue while T24 decides the applicability question."
+    },
+    {
+     "id": "Found-and-left: audit attributions not held (strongroom svg/0100, T008 latrine, county service-gate citation, 0218's silence)",
+     "summary": "Audit readings that did not hold recorded; service-gate citation of the pass dropped; 0218's silence on form/material left with the claim carrying the GUESS",
+     "class": "within",
+     "why": "Each is either fixed here within FR-004's files or found not to be a defect (the claim already says what the page holds)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T011": {
+   "section_sha256": "3300ca25085f2f95f9e4959b3efa5128d969f7e42a32d2ca12d5d0c253a4726e",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach-scope",
+     "summary": "All tasks in the bundle restate claims, procedure bullets, pop-up Guesses bullets and notes only; no drawing, generator, audit code or research page edited",
+     "class": "within",
+     "why": "FR-004/FR-005/FR-007/FR-008 ask for restatements of claims, notes and rows to their pages and sheets; constitution XIV fixes a claim the code does not match where the outcome is fine by restating the claim. Research-page edits surfaced by the reading are reported to a page session; none is a wrong outcome on a map or sheet."
+    },
+    {
+     "id": "T007",
+     "summary": "Side gate bullet drops the Kochi cart gate, Himeji's Kurumamon alone, as 0082's drawing page has it",
+     "class": "within",
+     "why": "Exactly FR-004: a claim restated to the page it cites."
+    },
+    {
+     "id": "T008",
+     "summary": "No edit: the garden row was already restated; the latrine/privy rows' sentence is true of the record (rendered from latrine.md's Guesses bullet, whose About gives 0047's farm privy count); the earlier restatement was reverted after the modal-form round found it contradicting the pop-up's About; 0101's wider sentence left to a page session",
+     "class": "within",
+     "why": "FR-004 asks that each claim be restated to the page it cites; a claim found already true of its page owes no restatement, so 'no edit' carries the task rather than narrowing it. A claim narrower than a page's wider sentence ('no samurai privy size' vs 'no privy size') is consistent with it, not a contradiction, and so is no defect (XIV v2.36.0). Reverting a restatement that contradicted the pop-up's About serves FR-004/SC-003."
+    },
+    {
+     "id": "T009",
+     "summary": "County example research strings and notes cite 0331, 0097 and 0096's drawing pages in place of an unopenable research pass; seat sentence restated to 0331",
+     "class": "within",
+     "why": "FR-004: claims restated to their pages; the strings reach no svg, so no sheet moves."
+    },
+    {
+     "id": "T010",
+     "summary": "Staff housing knob claim cites 0331 and 0097; impl-drift's two labels added (form (b)'s married households a GUESS, form (c)'s wealthy-posting fit unclaimed); option (c) prose stands as carried by 0331",
+     "class": "within",
+     "why": "FR-004: restated and labeled as the record labels it; the two labels are the impl-drift round's findings applied, not a departure."
+    },
+    {
+     "id": "T011",
+     "summary": "Grave markers claim labeled CONVENTION at 0235's tagged item; the ~2 x 1 ft marker a GUESS",
+     "class": "within",
+     "why": "FR-004's labeling clause exactly."
+    },
+    {
+     "id": "T012",
+     "summary": "Default path of FR-004: wooden hall labeled GUESS; source-applicability answered DOES NOT APPLY (0220's stone-or-wood modifies the small shrine only), so no material knob and no redraw; 0220/source write-up EDITs reported to a page session",
+     "class": "within",
+     "why": "FR-004 names both branches and conditions the knob-and-redraw branch on the source-applicability check ruling that 0220's materials apply; the check ruled they do not, so the default path is the requested one. The record edits the check proposed are page work outside FR-004's files, and their absence leaves no claim untrue."
+    },
+    {
+     "id": "T013",
+     "summary": "Grave markers bullet and a new claim carry the taller memorial stone(s) and six stone jizo from 0235; no sheet redrawn because none draws a burial ground",
+     "class": "within",
+     "why": "FR-004 states this verbatim, including that none is redrawn; the grep search space is stated."
+    },
+    {
+     "id": "T014",
+     "summary": "Barracks claim's stale 24 x 67 ft restated to the county svg's measured 22 x 60 ft barracks and 48 x 24 ft junior quarters",
+     "class": "within",
+     "why": "FR-004: claim restated to the sheet as drawn and its page."
+    },
+    {
+     "id": "T015",
+     "summary": "Round-trip Result paragraph marked as measured then with today's figures; dated log entries, Hayakawa's svg comment, Ubame's dais nit and the workshop label left unedited",
+     "class": "within",
+     "why": "FR-005: notes say what the drawing does. Dated log entries true when written and superseded in place are not untrue statements; the dais nit is a difference no reader of the sheet would see (XIV v2.36.0, not a defect)."
+    },
+    {
+     "id": "T21",
+     "summary": "Guest row restated at its source (guest-quarters.md Guesses bullet) to both the round-trip's front-row room and the county example's 40 x 42 ft guest house; table regenerated; owes modal rounds",
+     "class": "within",
+     "why": "FR-007: building-programs.md says what the county example draws. Editing the pop-up that renders the row is where the row's text lives."
+    },
+    {
+     "id": "T23",
+     "summary": "Three 'departure the code keeps until 417 T33' claims restated: genkan to layout.rs's 12 x 9 ft from 0104 (Ochiba's hand-drawn 10 x 6 that page's GUESS); strongroom role a bare GUESS with impl-drift's two corrections (Wuyang and Fenzhou beside Pingyao; Takayama's store's name and floor only); kitchen garden on open ground per 0109 and Hoshigaoka's notes",
+     "class": "within",
+     "why": "FR-008 verbatim: each says what the sheets and the generator draw today; the impl-drift corrections make the account match 0123 and 0100."
+    },
+    {
+     "id": "Found-and-left: shrine hall FORM to T24",
+     "summary": "impl-drift found the shrine's hall FORM fixed where 0220 gives the small shrine as the commoner household form; deferred to a filed task T24 in this feature, landing before T004, outside this bundle's no-drawing scope",
+     "class": "within",
+     "why": "Not in any of the GM's 17 items as worded in FR-004 (T012 is the shrine's material, and the ruling set the form apart from it). It is not dropped: it is filed in this same feature with an order (before T004, the sheet redraw), so no known item is carried past the feature. The landed claim cites 0220 for the hall form, which the source-applicability answer confirms 0220 describes (the hall of a carefully kept shrine), so the restated claim is not left untrue while T24 decides the applicability question."
+    },
+    {
+     "id": "Found-and-left: audit attributions not held (strongroom svg/0100, T008 latrine, county service-gate citation, 0218's silence)",
+     "summary": "Audit readings that did not hold recorded; service-gate citation of the pass dropped; 0218's silence on form/material left with the claim carrying the GUESS",
+     "class": "within",
+     "why": "Each is either fixed here within FR-004's files or found not to be a defect (the claim already says what the page holds)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T012": {
+   "section_sha256": "3300ca25085f2f95f9e4959b3efa5128d969f7e42a32d2ca12d5d0c253a4726e",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach-scope",
+     "summary": "All tasks in the bundle restate claims, procedure bullets, pop-up Guesses bullets and notes only; no drawing, generator, audit code or research page edited",
+     "class": "within",
+     "why": "FR-004/FR-005/FR-007/FR-008 ask for restatements of claims, notes and rows to their pages and sheets; constitution XIV fixes a claim the code does not match where the outcome is fine by restating the claim. Research-page edits surfaced by the reading are reported to a page session; none is a wrong outcome on a map or sheet."
+    },
+    {
+     "id": "T007",
+     "summary": "Side gate bullet drops the Kochi cart gate, Himeji's Kurumamon alone, as 0082's drawing page has it",
+     "class": "within",
+     "why": "Exactly FR-004: a claim restated to the page it cites."
+    },
+    {
+     "id": "T008",
+     "summary": "No edit: the garden row was already restated; the latrine/privy rows' sentence is true of the record (rendered from latrine.md's Guesses bullet, whose About gives 0047's farm privy count); the earlier restatement was reverted after the modal-form round found it contradicting the pop-up's About; 0101's wider sentence left to a page session",
+     "class": "within",
+     "why": "FR-004 asks that each claim be restated to the page it cites; a claim found already true of its page owes no restatement, so 'no edit' carries the task rather than narrowing it. A claim narrower than a page's wider sentence ('no samurai privy size' vs 'no privy size') is consistent with it, not a contradiction, and so is no defect (XIV v2.36.0). Reverting a restatement that contradicted the pop-up's About serves FR-004/SC-003."
+    },
+    {
+     "id": "T009",
+     "summary": "County example research strings and notes cite 0331, 0097 and 0096's drawing pages in place of an unopenable research pass; seat sentence restated to 0331",
+     "class": "within",
+     "why": "FR-004: claims restated to their pages; the strings reach no svg, so no sheet moves."
+    },
+    {
+     "id": "T010",
+     "summary": "Staff housing knob claim cites 0331 and 0097; impl-drift's two labels added (form (b)'s married households a GUESS, form (c)'s wealthy-posting fit unclaimed); option (c) prose stands as carried by 0331",
+     "class": "within",
+     "why": "FR-004: restated and labeled as the record labels it; the two labels are the impl-drift round's findings applied, not a departure."
+    },
+    {
+     "id": "T011",
+     "summary": "Grave markers claim labeled CONVENTION at 0235's tagged item; the ~2 x 1 ft marker a GUESS",
+     "class": "within",
+     "why": "FR-004's labeling clause exactly."
+    },
+    {
+     "id": "T012",
+     "summary": "Default path of FR-004: wooden hall labeled GUESS; source-applicability answered DOES NOT APPLY (0220's stone-or-wood modifies the small shrine only), so no material knob and no redraw; 0220/source write-up EDITs reported to a page session",
+     "class": "within",
+     "why": "FR-004 names both branches and conditions the knob-and-redraw branch on the source-applicability check ruling that 0220's materials apply; the check ruled they do not, so the default path is the requested one. The record edits the check proposed are page work outside FR-004's files, and their absence leaves no claim untrue."
+    },
+    {
+     "id": "T013",
+     "summary": "Grave markers bullet and a new claim carry the taller memorial stone(s) and six stone jizo from 0235; no sheet redrawn because none draws a burial ground",
+     "class": "within",
+     "why": "FR-004 states this verbatim, including that none is redrawn; the grep search space is stated."
+    },
+    {
+     "id": "T014",
+     "summary": "Barracks claim's stale 24 x 67 ft restated to the county svg's measured 22 x 60 ft barracks and 48 x 24 ft junior quarters",
+     "class": "within",
+     "why": "FR-004: claim restated to the sheet as drawn and its page."
+    },
+    {
+     "id": "T015",
+     "summary": "Round-trip Result paragraph marked as measured then with today's figures; dated log entries, Hayakawa's svg comment, Ubame's dais nit and the workshop label left unedited",
+     "class": "within",
+     "why": "FR-005: notes say what the drawing does. Dated log entries true when written and superseded in place are not untrue statements; the dais nit is a difference no reader of the sheet would see (XIV v2.36.0, not a defect)."
+    },
+    {
+     "id": "T21",
+     "summary": "Guest row restated at its source (guest-quarters.md Guesses bullet) to both the round-trip's front-row room and the county example's 40 x 42 ft guest house; table regenerated; owes modal rounds",
+     "class": "within",
+     "why": "FR-007: building-programs.md says what the county example draws. Editing the pop-up that renders the row is where the row's text lives."
+    },
+    {
+     "id": "T23",
+     "summary": "Three 'departure the code keeps until 417 T33' claims restated: genkan to layout.rs's 12 x 9 ft from 0104 (Ochiba's hand-drawn 10 x 6 that page's GUESS); strongroom role a bare GUESS with impl-drift's two corrections (Wuyang and Fenzhou beside Pingyao; Takayama's store's name and floor only); kitchen garden on open ground per 0109 and Hoshigaoka's notes",
+     "class": "within",
+     "why": "FR-008 verbatim: each says what the sheets and the generator draw today; the impl-drift corrections make the account match 0123 and 0100."
+    },
+    {
+     "id": "Found-and-left: shrine hall FORM to T24",
+     "summary": "impl-drift found the shrine's hall FORM fixed where 0220 gives the small shrine as the commoner household form; deferred to a filed task T24 in this feature, landing before T004, outside this bundle's no-drawing scope",
+     "class": "within",
+     "why": "Not in any of the GM's 17 items as worded in FR-004 (T012 is the shrine's material, and the ruling set the form apart from it). It is not dropped: it is filed in this same feature with an order (before T004, the sheet redraw), so no known item is carried past the feature. The landed claim cites 0220 for the hall form, which the source-applicability answer confirms 0220 describes (the hall of a carefully kept shrine), so the restated claim is not left untrue while T24 decides the applicability question."
+    },
+    {
+     "id": "Found-and-left: audit attributions not held (strongroom svg/0100, T008 latrine, county service-gate citation, 0218's silence)",
+     "summary": "Audit readings that did not hold recorded; service-gate citation of the pass dropped; 0218's silence on form/material left with the claim carrying the GUESS",
+     "class": "within",
+     "why": "Each is either fixed here within FR-004's files or found not to be a defect (the claim already says what the page holds)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T013": {
+   "section_sha256": "3300ca25085f2f95f9e4959b3efa5128d969f7e42a32d2ca12d5d0c253a4726e",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach-scope",
+     "summary": "All tasks in the bundle restate claims, procedure bullets, pop-up Guesses bullets and notes only; no drawing, generator, audit code or research page edited",
+     "class": "within",
+     "why": "FR-004/FR-005/FR-007/FR-008 ask for restatements of claims, notes and rows to their pages and sheets; constitution XIV fixes a claim the code does not match where the outcome is fine by restating the claim. Research-page edits surfaced by the reading are reported to a page session; none is a wrong outcome on a map or sheet."
+    },
+    {
+     "id": "T007",
+     "summary": "Side gate bullet drops the Kochi cart gate, Himeji's Kurumamon alone, as 0082's drawing page has it",
+     "class": "within",
+     "why": "Exactly FR-004: a claim restated to the page it cites."
+    },
+    {
+     "id": "T008",
+     "summary": "No edit: the garden row was already restated; the latrine/privy rows' sentence is true of the record (rendered from latrine.md's Guesses bullet, whose About gives 0047's farm privy count); the earlier restatement was reverted after the modal-form round found it contradicting the pop-up's About; 0101's wider sentence left to a page session",
+     "class": "within",
+     "why": "FR-004 asks that each claim be restated to the page it cites; a claim found already true of its page owes no restatement, so 'no edit' carries the task rather than narrowing it. A claim narrower than a page's wider sentence ('no samurai privy size' vs 'no privy size') is consistent with it, not a contradiction, and so is no defect (XIV v2.36.0). Reverting a restatement that contradicted the pop-up's About serves FR-004/SC-003."
+    },
+    {
+     "id": "T009",
+     "summary": "County example research strings and notes cite 0331, 0097 and 0096's drawing pages in place of an unopenable research pass; seat sentence restated to 0331",
+     "class": "within",
+     "why": "FR-004: claims restated to their pages; the strings reach no svg, so no sheet moves."
+    },
+    {
+     "id": "T010",
+     "summary": "Staff housing knob claim cites 0331 and 0097; impl-drift's two labels added (form (b)'s married households a GUESS, form (c)'s wealthy-posting fit unclaimed); option (c) prose stands as carried by 0331",
+     "class": "within",
+     "why": "FR-004: restated and labeled as the record labels it; the two labels are the impl-drift round's findings applied, not a departure."
+    },
+    {
+     "id": "T011",
+     "summary": "Grave markers claim labeled CONVENTION at 0235's tagged item; the ~2 x 1 ft marker a GUESS",
+     "class": "within",
+     "why": "FR-004's labeling clause exactly."
+    },
+    {
+     "id": "T012",
+     "summary": "Default path of FR-004: wooden hall labeled GUESS; source-applicability answered DOES NOT APPLY (0220's stone-or-wood modifies the small shrine only), so no material knob and no redraw; 0220/source write-up EDITs reported to a page session",
+     "class": "within",
+     "why": "FR-004 names both branches and conditions the knob-and-redraw branch on the source-applicability check ruling that 0220's materials apply; the check ruled they do not, so the default path is the requested one. The record edits the check proposed are page work outside FR-004's files, and their absence leaves no claim untrue."
+    },
+    {
+     "id": "T013",
+     "summary": "Grave markers bullet and a new claim carry the taller memorial stone(s) and six stone jizo from 0235; no sheet redrawn because none draws a burial ground",
+     "class": "within",
+     "why": "FR-004 states this verbatim, including that none is redrawn; the grep search space is stated."
+    },
+    {
+     "id": "T014",
+     "summary": "Barracks claim's stale 24 x 67 ft restated to the county svg's measured 22 x 60 ft barracks and 48 x 24 ft junior quarters",
+     "class": "within",
+     "why": "FR-004: claim restated to the sheet as drawn and its page."
+    },
+    {
+     "id": "T015",
+     "summary": "Round-trip Result paragraph marked as measured then with today's figures; dated log entries, Hayakawa's svg comment, Ubame's dais nit and the workshop label left unedited",
+     "class": "within",
+     "why": "FR-005: notes say what the drawing does. Dated log entries true when written and superseded in place are not untrue statements; the dais nit is a difference no reader of the sheet would see (XIV v2.36.0, not a defect)."
+    },
+    {
+     "id": "T21",
+     "summary": "Guest row restated at its source (guest-quarters.md Guesses bullet) to both the round-trip's front-row room and the county example's 40 x 42 ft guest house; table regenerated; owes modal rounds",
+     "class": "within",
+     "why": "FR-007: building-programs.md says what the county example draws. Editing the pop-up that renders the row is where the row's text lives."
+    },
+    {
+     "id": "T23",
+     "summary": "Three 'departure the code keeps until 417 T33' claims restated: genkan to layout.rs's 12 x 9 ft from 0104 (Ochiba's hand-drawn 10 x 6 that page's GUESS); strongroom role a bare GUESS with impl-drift's two corrections (Wuyang and Fenzhou beside Pingyao; Takayama's store's name and floor only); kitchen garden on open ground per 0109 and Hoshigaoka's notes",
+     "class": "within",
+     "why": "FR-008 verbatim: each says what the sheets and the generator draw today; the impl-drift corrections make the account match 0123 and 0100."
+    },
+    {
+     "id": "Found-and-left: shrine hall FORM to T24",
+     "summary": "impl-drift found the shrine's hall FORM fixed where 0220 gives the small shrine as the commoner household form; deferred to a filed task T24 in this feature, landing before T004, outside this bundle's no-drawing scope",
+     "class": "within",
+     "why": "Not in any of the GM's 17 items as worded in FR-004 (T012 is the shrine's material, and the ruling set the form apart from it). It is not dropped: it is filed in this same feature with an order (before T004, the sheet redraw), so no known item is carried past the feature. The landed claim cites 0220 for the hall form, which the source-applicability answer confirms 0220 describes (the hall of a carefully kept shrine), so the restated claim is not left untrue while T24 decides the applicability question."
+    },
+    {
+     "id": "Found-and-left: audit attributions not held (strongroom svg/0100, T008 latrine, county service-gate citation, 0218's silence)",
+     "summary": "Audit readings that did not hold recorded; service-gate citation of the pass dropped; 0218's silence on form/material left with the claim carrying the GUESS",
+     "class": "within",
+     "why": "Each is either fixed here within FR-004's files or found not to be a defect (the claim already says what the page holds)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T014": {
+   "section_sha256": "3300ca25085f2f95f9e4959b3efa5128d969f7e42a32d2ca12d5d0c253a4726e",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach-scope",
+     "summary": "All tasks in the bundle restate claims, procedure bullets, pop-up Guesses bullets and notes only; no drawing, generator, audit code or research page edited",
+     "class": "within",
+     "why": "FR-004/FR-005/FR-007/FR-008 ask for restatements of claims, notes and rows to their pages and sheets; constitution XIV fixes a claim the code does not match where the outcome is fine by restating the claim. Research-page edits surfaced by the reading are reported to a page session; none is a wrong outcome on a map or sheet."
+    },
+    {
+     "id": "T007",
+     "summary": "Side gate bullet drops the Kochi cart gate, Himeji's Kurumamon alone, as 0082's drawing page has it",
+     "class": "within",
+     "why": "Exactly FR-004: a claim restated to the page it cites."
+    },
+    {
+     "id": "T008",
+     "summary": "No edit: the garden row was already restated; the latrine/privy rows' sentence is true of the record (rendered from latrine.md's Guesses bullet, whose About gives 0047's farm privy count); the earlier restatement was reverted after the modal-form round found it contradicting the pop-up's About; 0101's wider sentence left to a page session",
+     "class": "within",
+     "why": "FR-004 asks that each claim be restated to the page it cites; a claim found already true of its page owes no restatement, so 'no edit' carries the task rather than narrowing it. A claim narrower than a page's wider sentence ('no samurai privy size' vs 'no privy size') is consistent with it, not a contradiction, and so is no defect (XIV v2.36.0). Reverting a restatement that contradicted the pop-up's About serves FR-004/SC-003."
+    },
+    {
+     "id": "T009",
+     "summary": "County example research strings and notes cite 0331, 0097 and 0096's drawing pages in place of an unopenable research pass; seat sentence restated to 0331",
+     "class": "within",
+     "why": "FR-004: claims restated to their pages; the strings reach no svg, so no sheet moves."
+    },
+    {
+     "id": "T010",
+     "summary": "Staff housing knob claim cites 0331 and 0097; impl-drift's two labels added (form (b)'s married households a GUESS, form (c)'s wealthy-posting fit unclaimed); option (c) prose stands as carried by 0331",
+     "class": "within",
+     "why": "FR-004: restated and labeled as the record labels it; the two labels are the impl-drift round's findings applied, not a departure."
+    },
+    {
+     "id": "T011",
+     "summary": "Grave markers claim labeled CONVENTION at 0235's tagged item; the ~2 x 1 ft marker a GUESS",
+     "class": "within",
+     "why": "FR-004's labeling clause exactly."
+    },
+    {
+     "id": "T012",
+     "summary": "Default path of FR-004: wooden hall labeled GUESS; source-applicability answered DOES NOT APPLY (0220's stone-or-wood modifies the small shrine only), so no material knob and no redraw; 0220/source write-up EDITs reported to a page session",
+     "class": "within",
+     "why": "FR-004 names both branches and conditions the knob-and-redraw branch on the source-applicability check ruling that 0220's materials apply; the check ruled they do not, so the default path is the requested one. The record edits the check proposed are page work outside FR-004's files, and their absence leaves no claim untrue."
+    },
+    {
+     "id": "T013",
+     "summary": "Grave markers bullet and a new claim carry the taller memorial stone(s) and six stone jizo from 0235; no sheet redrawn because none draws a burial ground",
+     "class": "within",
+     "why": "FR-004 states this verbatim, including that none is redrawn; the grep search space is stated."
+    },
+    {
+     "id": "T014",
+     "summary": "Barracks claim's stale 24 x 67 ft restated to the county svg's measured 22 x 60 ft barracks and 48 x 24 ft junior quarters",
+     "class": "within",
+     "why": "FR-004: claim restated to the sheet as drawn and its page."
+    },
+    {
+     "id": "T015",
+     "summary": "Round-trip Result paragraph marked as measured then with today's figures; dated log entries, Hayakawa's svg comment, Ubame's dais nit and the workshop label left unedited",
+     "class": "within",
+     "why": "FR-005: notes say what the drawing does. Dated log entries true when written and superseded in place are not untrue statements; the dais nit is a difference no reader of the sheet would see (XIV v2.36.0, not a defect)."
+    },
+    {
+     "id": "T21",
+     "summary": "Guest row restated at its source (guest-quarters.md Guesses bullet) to both the round-trip's front-row room and the county example's 40 x 42 ft guest house; table regenerated; owes modal rounds",
+     "class": "within",
+     "why": "FR-007: building-programs.md says what the county example draws. Editing the pop-up that renders the row is where the row's text lives."
+    },
+    {
+     "id": "T23",
+     "summary": "Three 'departure the code keeps until 417 T33' claims restated: genkan to layout.rs's 12 x 9 ft from 0104 (Ochiba's hand-drawn 10 x 6 that page's GUESS); strongroom role a bare GUESS with impl-drift's two corrections (Wuyang and Fenzhou beside Pingyao; Takayama's store's name and floor only); kitchen garden on open ground per 0109 and Hoshigaoka's notes",
+     "class": "within",
+     "why": "FR-008 verbatim: each says what the sheets and the generator draw today; the impl-drift corrections make the account match 0123 and 0100."
+    },
+    {
+     "id": "Found-and-left: shrine hall FORM to T24",
+     "summary": "impl-drift found the shrine's hall FORM fixed where 0220 gives the small shrine as the commoner household form; deferred to a filed task T24 in this feature, landing before T004, outside this bundle's no-drawing scope",
+     "class": "within",
+     "why": "Not in any of the GM's 17 items as worded in FR-004 (T012 is the shrine's material, and the ruling set the form apart from it). It is not dropped: it is filed in this same feature with an order (before T004, the sheet redraw), so no known item is carried past the feature. The landed claim cites 0220 for the hall form, which the source-applicability answer confirms 0220 describes (the hall of a carefully kept shrine), so the restated claim is not left untrue while T24 decides the applicability question."
+    },
+    {
+     "id": "Found-and-left: audit attributions not held (strongroom svg/0100, T008 latrine, county service-gate citation, 0218's silence)",
+     "summary": "Audit readings that did not hold recorded; service-gate citation of the pass dropped; 0218's silence on form/material left with the claim carrying the GUESS",
+     "class": "within",
+     "why": "Each is either fixed here within FR-004's files or found not to be a defect (the claim already says what the page holds)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T015": {
+   "section_sha256": "3300ca25085f2f95f9e4959b3efa5128d969f7e42a32d2ca12d5d0c253a4726e",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach-scope",
+     "summary": "All tasks in the bundle restate claims, procedure bullets, pop-up Guesses bullets and notes only; no drawing, generator, audit code or research page edited",
+     "class": "within",
+     "why": "FR-004/FR-005/FR-007/FR-008 ask for restatements of claims, notes and rows to their pages and sheets; constitution XIV fixes a claim the code does not match where the outcome is fine by restating the claim. Research-page edits surfaced by the reading are reported to a page session; none is a wrong outcome on a map or sheet."
+    },
+    {
+     "id": "T007",
+     "summary": "Side gate bullet drops the Kochi cart gate, Himeji's Kurumamon alone, as 0082's drawing page has it",
+     "class": "within",
+     "why": "Exactly FR-004: a claim restated to the page it cites."
+    },
+    {
+     "id": "T008",
+     "summary": "No edit: the garden row was already restated; the latrine/privy rows' sentence is true of the record (rendered from latrine.md's Guesses bullet, whose About gives 0047's farm privy count); the earlier restatement was reverted after the modal-form round found it contradicting the pop-up's About; 0101's wider sentence left to a page session",
+     "class": "within",
+     "why": "FR-004 asks that each claim be restated to the page it cites; a claim found already true of its page owes no restatement, so 'no edit' carries the task rather than narrowing it. A claim narrower than a page's wider sentence ('no samurai privy size' vs 'no privy size') is consistent with it, not a contradiction, and so is no defect (XIV v2.36.0). Reverting a restatement that contradicted the pop-up's About serves FR-004/SC-003."
+    },
+    {
+     "id": "T009",
+     "summary": "County example research strings and notes cite 0331, 0097 and 0096's drawing pages in place of an unopenable research pass; seat sentence restated to 0331",
+     "class": "within",
+     "why": "FR-004: claims restated to their pages; the strings reach no svg, so no sheet moves."
+    },
+    {
+     "id": "T010",
+     "summary": "Staff housing knob claim cites 0331 and 0097; impl-drift's two labels added (form (b)'s married households a GUESS, form (c)'s wealthy-posting fit unclaimed); option (c) prose stands as carried by 0331",
+     "class": "within",
+     "why": "FR-004: restated and labeled as the record labels it; the two labels are the impl-drift round's findings applied, not a departure."
+    },
+    {
+     "id": "T011",
+     "summary": "Grave markers claim labeled CONVENTION at 0235's tagged item; the ~2 x 1 ft marker a GUESS",
+     "class": "within",
+     "why": "FR-004's labeling clause exactly."
+    },
+    {
+     "id": "T012",
+     "summary": "Default path of FR-004: wooden hall labeled GUESS; source-applicability answered DOES NOT APPLY (0220's stone-or-wood modifies the small shrine only), so no material knob and no redraw; 0220/source write-up EDITs reported to a page session",
+     "class": "within",
+     "why": "FR-004 names both branches and conditions the knob-and-redraw branch on the source-applicability check ruling that 0220's materials apply; the check ruled they do not, so the default path is the requested one. The record edits the check proposed are page work outside FR-004's files, and their absence leaves no claim untrue."
+    },
+    {
+     "id": "T013",
+     "summary": "Grave markers bullet and a new claim carry the taller memorial stone(s) and six stone jizo from 0235; no sheet redrawn because none draws a burial ground",
+     "class": "within",
+     "why": "FR-004 states this verbatim, including that none is redrawn; the grep search space is stated."
+    },
+    {
+     "id": "T014",
+     "summary": "Barracks claim's stale 24 x 67 ft restated to the county svg's measured 22 x 60 ft barracks and 48 x 24 ft junior quarters",
+     "class": "within",
+     "why": "FR-004: claim restated to the sheet as drawn and its page."
+    },
+    {
+     "id": "T015",
+     "summary": "Round-trip Result paragraph marked as measured then with today's figures; dated log entries, Hayakawa's svg comment, Ubame's dais nit and the workshop label left unedited",
+     "class": "within",
+     "why": "FR-005: notes say what the drawing does. Dated log entries true when written and superseded in place are not untrue statements; the dais nit is a difference no reader of the sheet would see (XIV v2.36.0, not a defect)."
+    },
+    {
+     "id": "T21",
+     "summary": "Guest row restated at its source (guest-quarters.md Guesses bullet) to both the round-trip's front-row room and the county example's 40 x 42 ft guest house; table regenerated; owes modal rounds",
+     "class": "within",
+     "why": "FR-007: building-programs.md says what the county example draws. Editing the pop-up that renders the row is where the row's text lives."
+    },
+    {
+     "id": "T23",
+     "summary": "Three 'departure the code keeps until 417 T33' claims restated: genkan to layout.rs's 12 x 9 ft from 0104 (Ochiba's hand-drawn 10 x 6 that page's GUESS); strongroom role a bare GUESS with impl-drift's two corrections (Wuyang and Fenzhou beside Pingyao; Takayama's store's name and floor only); kitchen garden on open ground per 0109 and Hoshigaoka's notes",
+     "class": "within",
+     "why": "FR-008 verbatim: each says what the sheets and the generator draw today; the impl-drift corrections make the account match 0123 and 0100."
+    },
+    {
+     "id": "Found-and-left: shrine hall FORM to T24",
+     "summary": "impl-drift found the shrine's hall FORM fixed where 0220 gives the small shrine as the commoner household form; deferred to a filed task T24 in this feature, landing before T004, outside this bundle's no-drawing scope",
+     "class": "within",
+     "why": "Not in any of the GM's 17 items as worded in FR-004 (T012 is the shrine's material, and the ruling set the form apart from it). It is not dropped: it is filed in this same feature with an order (before T004, the sheet redraw), so no known item is carried past the feature. The landed claim cites 0220 for the hall form, which the source-applicability answer confirms 0220 describes (the hall of a carefully kept shrine), so the restated claim is not left untrue while T24 decides the applicability question."
+    },
+    {
+     "id": "Found-and-left: audit attributions not held (strongroom svg/0100, T008 latrine, county service-gate citation, 0218's silence)",
+     "summary": "Audit readings that did not hold recorded; service-gate citation of the pass dropped; 0218's silence on form/material left with the claim carrying the GUESS",
+     "class": "within",
+     "why": "Each is either fixed here within FR-004's files or found not to be a defect (the claim already says what the page holds)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T21": {
+   "section_sha256": "3300ca25085f2f95f9e4959b3efa5128d969f7e42a32d2ca12d5d0c253a4726e",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach-scope",
+     "summary": "All tasks in the bundle restate claims, procedure bullets, pop-up Guesses bullets and notes only; no drawing, generator, audit code or research page edited",
+     "class": "within",
+     "why": "FR-004/FR-005/FR-007/FR-008 ask for restatements of claims, notes and rows to their pages and sheets; constitution XIV fixes a claim the code does not match where the outcome is fine by restating the claim. Research-page edits surfaced by the reading are reported to a page session; none is a wrong outcome on a map or sheet."
+    },
+    {
+     "id": "T007",
+     "summary": "Side gate bullet drops the Kochi cart gate, Himeji's Kurumamon alone, as 0082's drawing page has it",
+     "class": "within",
+     "why": "Exactly FR-004: a claim restated to the page it cites."
+    },
+    {
+     "id": "T008",
+     "summary": "No edit: the garden row was already restated; the latrine/privy rows' sentence is true of the record (rendered from latrine.md's Guesses bullet, whose About gives 0047's farm privy count); the earlier restatement was reverted after the modal-form round found it contradicting the pop-up's About; 0101's wider sentence left to a page session",
+     "class": "within",
+     "why": "FR-004 asks that each claim be restated to the page it cites; a claim found already true of its page owes no restatement, so 'no edit' carries the task rather than narrowing it. A claim narrower than a page's wider sentence ('no samurai privy size' vs 'no privy size') is consistent with it, not a contradiction, and so is no defect (XIV v2.36.0). Reverting a restatement that contradicted the pop-up's About serves FR-004/SC-003."
+    },
+    {
+     "id": "T009",
+     "summary": "County example research strings and notes cite 0331, 0097 and 0096's drawing pages in place of an unopenable research pass; seat sentence restated to 0331",
+     "class": "within",
+     "why": "FR-004: claims restated to their pages; the strings reach no svg, so no sheet moves."
+    },
+    {
+     "id": "T010",
+     "summary": "Staff housing knob claim cites 0331 and 0097; impl-drift's two labels added (form (b)'s married households a GUESS, form (c)'s wealthy-posting fit unclaimed); option (c) prose stands as carried by 0331",
+     "class": "within",
+     "why": "FR-004: restated and labeled as the record labels it; the two labels are the impl-drift round's findings applied, not a departure."
+    },
+    {
+     "id": "T011",
+     "summary": "Grave markers claim labeled CONVENTION at 0235's tagged item; the ~2 x 1 ft marker a GUESS",
+     "class": "within",
+     "why": "FR-004's labeling clause exactly."
+    },
+    {
+     "id": "T012",
+     "summary": "Default path of FR-004: wooden hall labeled GUESS; source-applicability answered DOES NOT APPLY (0220's stone-or-wood modifies the small shrine only), so no material knob and no redraw; 0220/source write-up EDITs reported to a page session",
+     "class": "within",
+     "why": "FR-004 names both branches and conditions the knob-and-redraw branch on the source-applicability check ruling that 0220's materials apply; the check ruled they do not, so the default path is the requested one. The record edits the check proposed are page work outside FR-004's files, and their absence leaves no claim untrue."
+    },
+    {
+     "id": "T013",
+     "summary": "Grave markers bullet and a new claim carry the taller memorial stone(s) and six stone jizo from 0235; no sheet redrawn because none draws a burial ground",
+     "class": "within",
+     "why": "FR-004 states this verbatim, including that none is redrawn; the grep search space is stated."
+    },
+    {
+     "id": "T014",
+     "summary": "Barracks claim's stale 24 x 67 ft restated to the county svg's measured 22 x 60 ft barracks and 48 x 24 ft junior quarters",
+     "class": "within",
+     "why": "FR-004: claim restated to the sheet as drawn and its page."
+    },
+    {
+     "id": "T015",
+     "summary": "Round-trip Result paragraph marked as measured then with today's figures; dated log entries, Hayakawa's svg comment, Ubame's dais nit and the workshop label left unedited",
+     "class": "within",
+     "why": "FR-005: notes say what the drawing does. Dated log entries true when written and superseded in place are not untrue statements; the dais nit is a difference no reader of the sheet would see (XIV v2.36.0, not a defect)."
+    },
+    {
+     "id": "T21",
+     "summary": "Guest row restated at its source (guest-quarters.md Guesses bullet) to both the round-trip's front-row room and the county example's 40 x 42 ft guest house; table regenerated; owes modal rounds",
+     "class": "within",
+     "why": "FR-007: building-programs.md says what the county example draws. Editing the pop-up that renders the row is where the row's text lives."
+    },
+    {
+     "id": "T23",
+     "summary": "Three 'departure the code keeps until 417 T33' claims restated: genkan to layout.rs's 12 x 9 ft from 0104 (Ochiba's hand-drawn 10 x 6 that page's GUESS); strongroom role a bare GUESS with impl-drift's two corrections (Wuyang and Fenzhou beside Pingyao; Takayama's store's name and floor only); kitchen garden on open ground per 0109 and Hoshigaoka's notes",
+     "class": "within",
+     "why": "FR-008 verbatim: each says what the sheets and the generator draw today; the impl-drift corrections make the account match 0123 and 0100."
+    },
+    {
+     "id": "Found-and-left: shrine hall FORM to T24",
+     "summary": "impl-drift found the shrine's hall FORM fixed where 0220 gives the small shrine as the commoner household form; deferred to a filed task T24 in this feature, landing before T004, outside this bundle's no-drawing scope",
+     "class": "within",
+     "why": "Not in any of the GM's 17 items as worded in FR-004 (T012 is the shrine's material, and the ruling set the form apart from it). It is not dropped: it is filed in this same feature with an order (before T004, the sheet redraw), so no known item is carried past the feature. The landed claim cites 0220 for the hall form, which the source-applicability answer confirms 0220 describes (the hall of a carefully kept shrine), so the restated claim is not left untrue while T24 decides the applicability question."
+    },
+    {
+     "id": "Found-and-left: audit attributions not held (strongroom svg/0100, T008 latrine, county service-gate citation, 0218's silence)",
+     "summary": "Audit readings that did not hold recorded; service-gate citation of the pass dropped; 0218's silence on form/material left with the claim carrying the GUESS",
+     "class": "within",
+     "why": "Each is either fixed here within FR-004's files or found not to be a defect (the claim already says what the page holds)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T23": {
+   "section_sha256": "3300ca25085f2f95f9e4959b3efa5128d969f7e42a32d2ca12d5d0c253a4726e",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach-scope",
+     "summary": "All tasks in the bundle restate claims, procedure bullets, pop-up Guesses bullets and notes only; no drawing, generator, audit code or research page edited",
+     "class": "within",
+     "why": "FR-004/FR-005/FR-007/FR-008 ask for restatements of claims, notes and rows to their pages and sheets; constitution XIV fixes a claim the code does not match where the outcome is fine by restating the claim. Research-page edits surfaced by the reading are reported to a page session; none is a wrong outcome on a map or sheet."
+    },
+    {
+     "id": "T007",
+     "summary": "Side gate bullet drops the Kochi cart gate, Himeji's Kurumamon alone, as 0082's drawing page has it",
+     "class": "within",
+     "why": "Exactly FR-004: a claim restated to the page it cites."
+    },
+    {
+     "id": "T008",
+     "summary": "No edit: the garden row was already restated; the latrine/privy rows' sentence is true of the record (rendered from latrine.md's Guesses bullet, whose About gives 0047's farm privy count); the earlier restatement was reverted after the modal-form round found it contradicting the pop-up's About; 0101's wider sentence left to a page session",
+     "class": "within",
+     "why": "FR-004 asks that each claim be restated to the page it cites; a claim found already true of its page owes no restatement, so 'no edit' carries the task rather than narrowing it. A claim narrower than a page's wider sentence ('no samurai privy size' vs 'no privy size') is consistent with it, not a contradiction, and so is no defect (XIV v2.36.0). Reverting a restatement that contradicted the pop-up's About serves FR-004/SC-003."
+    },
+    {
+     "id": "T009",
+     "summary": "County example research strings and notes cite 0331, 0097 and 0096's drawing pages in place of an unopenable research pass; seat sentence restated to 0331",
+     "class": "within",
+     "why": "FR-004: claims restated to their pages; the strings reach no svg, so no sheet moves."
+    },
+    {
+     "id": "T010",
+     "summary": "Staff housing knob claim cites 0331 and 0097; impl-drift's two labels added (form (b)'s married households a GUESS, form (c)'s wealthy-posting fit unclaimed); option (c) prose stands as carried by 0331",
+     "class": "within",
+     "why": "FR-004: restated and labeled as the record labels it; the two labels are the impl-drift round's findings applied, not a departure."
+    },
+    {
+     "id": "T011",
+     "summary": "Grave markers claim labeled CONVENTION at 0235's tagged item; the ~2 x 1 ft marker a GUESS",
+     "class": "within",
+     "why": "FR-004's labeling clause exactly."
+    },
+    {
+     "id": "T012",
+     "summary": "Default path of FR-004: wooden hall labeled GUESS; source-applicability answered DOES NOT APPLY (0220's stone-or-wood modifies the small shrine only), so no material knob and no redraw; 0220/source write-up EDITs reported to a page session",
+     "class": "within",
+     "why": "FR-004 names both branches and conditions the knob-and-redraw branch on the source-applicability check ruling that 0220's materials apply; the check ruled they do not, so the default path is the requested one. The record edits the check proposed are page work outside FR-004's files, and their absence leaves no claim untrue."
+    },
+    {
+     "id": "T013",
+     "summary": "Grave markers bullet and a new claim carry the taller memorial stone(s) and six stone jizo from 0235; no sheet redrawn because none draws a burial ground",
+     "class": "within",
+     "why": "FR-004 states this verbatim, including that none is redrawn; the grep search space is stated."
+    },
+    {
+     "id": "T014",
+     "summary": "Barracks claim's stale 24 x 67 ft restated to the county svg's measured 22 x 60 ft barracks and 48 x 24 ft junior quarters",
+     "class": "within",
+     "why": "FR-004: claim restated to the sheet as drawn and its page."
+    },
+    {
+     "id": "T015",
+     "summary": "Round-trip Result paragraph marked as measured then with today's figures; dated log entries, Hayakawa's svg comment, Ubame's dais nit and the workshop label left unedited",
+     "class": "within",
+     "why": "FR-005: notes say what the drawing does. Dated log entries true when written and superseded in place are not untrue statements; the dais nit is a difference no reader of the sheet would see (XIV v2.36.0, not a defect)."
+    },
+    {
+     "id": "T21",
+     "summary": "Guest row restated at its source (guest-quarters.md Guesses bullet) to both the round-trip's front-row room and the county example's 40 x 42 ft guest house; table regenerated; owes modal rounds",
+     "class": "within",
+     "why": "FR-007: building-programs.md says what the county example draws. Editing the pop-up that renders the row is where the row's text lives."
+    },
+    {
+     "id": "T23",
+     "summary": "Three 'departure the code keeps until 417 T33' claims restated: genkan to layout.rs's 12 x 9 ft from 0104 (Ochiba's hand-drawn 10 x 6 that page's GUESS); strongroom role a bare GUESS with impl-drift's two corrections (Wuyang and Fenzhou beside Pingyao; Takayama's store's name and floor only); kitchen garden on open ground per 0109 and Hoshigaoka's notes",
+     "class": "within",
+     "why": "FR-008 verbatim: each says what the sheets and the generator draw today; the impl-drift corrections make the account match 0123 and 0100."
+    },
+    {
+     "id": "Found-and-left: shrine hall FORM to T24",
+     "summary": "impl-drift found the shrine's hall FORM fixed where 0220 gives the small shrine as the commoner household form; deferred to a filed task T24 in this feature, landing before T004, outside this bundle's no-drawing scope",
+     "class": "within",
+     "why": "Not in any of the GM's 17 items as worded in FR-004 (T012 is the shrine's material, and the ruling set the form apart from it). It is not dropped: it is filed in this same feature with an order (before T004, the sheet redraw), so no known item is carried past the feature. The landed claim cites 0220 for the hall form, which the source-applicability answer confirms 0220 describes (the hall of a carefully kept shrine), so the restated claim is not left untrue while T24 decides the applicability question."
+    },
+    {
+     "id": "Found-and-left: audit attributions not held (strongroom svg/0100, T008 latrine, county service-gate citation, 0218's silence)",
+     "summary": "Audit readings that did not hold recorded; service-gate citation of the pass dropped; 0218's silence on form/material left with the claim carrying the GUESS",
+     "class": "within",
+     "why": "Each is either fixed here within FR-004's files or found not to be a defect (the claim already says what the page holds)."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
+}

@@ -351,6 +351,42 @@ impl Svg {
         );
     }
 
+    /// Patches of earth (`patches`: each its middle, its two radii along the sheet and its tone) painted at `opacity` on the ground the
+    /// `rings` bound and clipped to it - a band between two rings, or each ring's own ground where they lie apart (even-odd) - so
+    /// no patch runs past its band's edge: one mark of the kind named, none where there is no patch.
+    ///
+    /// Research:
+    ///     the mottle's drawing - CONVENTION: each patch an ellipse along the sheet's axes under its band's clip, the patches' own strength so those that overlap darken; the deleted village dike's drawing
+    pub fn mottled(&mut self, rings: &[&[Pt]], patches: &[(Pt, f64, f64, &str)], opacity: f64) {
+        if patches.is_empty() {
+            return;
+        }
+        self.inked();
+        self.clips += 1;
+        let id = format!("earth{}", self.clips);
+        let ground: Vec<String> = rings.iter().map(|r| path(r, true)).collect();
+        let _ = writeln!(
+            self.body,
+            r#"<clipPath id="{id}"><path d="{}" clip-rule="evenodd"/></clipPath>"#,
+            ground.join(" ")
+        );
+        let _ = write!(
+            self.body,
+            r#"<g clip-path="url(#{id})" fill-opacity="{opacity}">"#
+        );
+        for &(c, rx, ry, tone) in patches {
+            let _ = write!(
+                self.body,
+                r#"<ellipse cx="{}" cy="{}" rx="{}" ry="{}" fill="{tone}"/>"#,
+                f(c.0),
+                f(c.1),
+                f(rx),
+                f(ry)
+            );
+        }
+        self.body.push_str("</g>\n");
+    }
+
     /// A group opened at an opacity; `close` ends it.
     pub fn group(&mut self, opacity: f64) {
         let _ = writeln!(self.body, r#"<g opacity="{opacity}">"#);
@@ -406,6 +442,24 @@ mod tests {
         s.ellipse((2.0, 1.0), 1.0, 1.0, ink::BEAN, None);
         let got: Vec<(&str, usize)> = s.census().iter().map(|(k, v)| (k.as_str(), *v)).collect();
         assert_eq!(got, [(UNNAMED, 1), ("well", 2)]);
+    }
+
+    #[test]
+    fn a_mottle_is_its_patches_clipped_to_their_ground_as_one_mark() {
+        let mut svg = Svg::default();
+        svg.kind("perimeter dike");
+        let ring = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)];
+        svg.mottled(&[&ring], &[], 0.4);
+        assert!(svg.census().is_empty(), "no patch, no mark");
+        svg.mottled(&[&ring], &[((3.0, 2.0), 2.0, 1.0, "#A8895A")], 0.4);
+        let drawn = svg.finish(20.0, 20.0, 0.0);
+        assert!(drawn.contains(
+            r#"<clipPath id="earth1"><path d="M0,0 L10,0 L10,10 Z" clip-rule="evenodd"/>"#
+        ));
+        assert!(drawn.contains(
+            r##"fill-opacity="0.4"><ellipse cx="3" cy="2" rx="2" ry="1" fill="#A8895A"/></g>"##
+        ));
+        assert_eq!(svg.census().get("perimeter dike"), Some(&1));
     }
 
     #[test]

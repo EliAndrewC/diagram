@@ -1,17 +1,17 @@
-About: The karo, the "house elder", was a lord's chief retainer. In Rokugan a county magistrate's samurai include a karo of
+About: The karo's house was the home of the karo, the "house elder", a lord's chief retainer. In Rokugan a county magistrate's samurai include a karo of
 their own: a typical county town has about fifteen samurai - the magistrate, of Rank 5 and 25 koku, then the karo and about
 three squad sergeants, of Rank 4 and 16 koku each. At a daimyo's court the karo and the other senior retainers often lived
 near the lord's residence or inside the castle; the Saigo, hereditary karo to the lords of Aizu, had a mansion of 38 rooms,
 about 10,000 sq ft, on a site of about two acres. Its rooms fell into four groups - the lord's reception suite, the retainers' office and guard rooms, the family's rooms, and the maids' and servants' rooms - and a range beside the front gate held retainers' dwellings.
 
 A shogunal intendant's office was run differently. Its junior officials, the tetsuki and tedai, lived
-inside the compound's walls, in small houses (koya) and long-houses (nagaya), and the intendant lived there - at Takayama, with their
+inside the compound's walls, in small houses and long-houses (nagaya), and the intendant lived there - at Takayama, with their
 family too. The head of the tedai was the motojime; whether the motojime lived apart from the rest is not recorded, and no
-chief retainer's own house inside the lord's compound is known. At the Sakai town magistracy the magistrate's own retainers seem to have lived in long-houses inside its grounds, while at Omori a mid-ranking official under the intendant had a spacious house of their own in the town, not far from the office.
+chief retainer's own house inside the lord's compound is known. At the Sakai town magistracy the magistrate's own retainers seem to have lived in long-houses inside its grounds, those of highest standing in a block of just two dwellings, while at Omori a mid-ranking official under the intendant had a spacious house of their own in the town, not far from the office.
 
 A staff long-house was a long, narrow, single-story building divided along its length into small dwellings, each
 with an earth-floored entry of its own and a raised plank floor; a dwelling was about 12 to 18 ft wide and 12 to 24 ft
-deep, and a retainer of higher rank had a longer one, up to about 36 ft along the row. What a karo's own quarters at such an office looked like, how big they were, and who lived in them with the karo, is
+deep, and a retainer of higher rank had a longer one, up to about 36 ft along the row; one castle's guards, housed with their families, had dwellings about 30 ft square. What a karo's own quarters at such an office looked like, how big they were, and who lived in them with the karo, is
 not recorded.
 
 Guesses:

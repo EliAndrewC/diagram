@@ -105,7 +105,11 @@ pub const SECTION_WORDS: &str = "dev/claims-section-words.jsonl";
 /// The kept words of each block [`SECTION_WORDS`] holds, by digest; a line that does not parse, or whose words do not hash to its
 /// digest (a hand edit), is not read, so its words are sought in the history.
 fn section_blocks(root: &Path) -> BTreeMap<String, String> {
-    let text = std::fs::read_to_string(root.join(SECTION_WORDS)).unwrap_or_default();
+    blocks_of(&std::fs::read_to_string(root.join(SECTION_WORDS)).unwrap_or_default())
+}
+
+/// The blocks a text of [`SECTION_WORDS`] holds, as [`section_blocks`] reads them.
+fn blocks_of(text: &str) -> BTreeMap<String, String> {
     text.lines()
         .filter_map(|line| serde_json::from_str::<Value>(line).ok())
         .filter_map(|v| {
@@ -201,7 +205,8 @@ pub fn removed_words(
 }
 
 /// The words of the blocks `digests` of the procedure section `title` of `path` that no longer stand: the repository's kept words
-/// ([`SECTION_WORDS`], feature 451 T210, T215), then its history.
+/// ([`SECTION_WORDS`], feature 451 T210, T215), then its history, then the kept words' own history (T223: the file is pruned to the
+/// snapshots the index names today, and a landing reads a row at an earlier answer, whose snapshot's words the file held then).
 pub fn section_words(
     root: &Path,
     path: &str,
@@ -226,6 +231,13 @@ pub fn section_words(
                 }
             }
         }
+        if found.len() == digests.len() {
+            return found;
+        }
+    }
+    for sha in git(root, &["log", "--format=%H", "-60", "--", SECTION_WORDS]).split_whitespace() {
+        let then = blocks_of(&git(root, &["show", &format!("{sha}:{SECTION_WORDS}")]));
+        found.extend(then.into_iter().filter(|(d, _)| digests.contains(d)));
         if found.len() == digests.len() {
             break;
         }

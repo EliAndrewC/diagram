@@ -94,7 +94,7 @@ const POND_LAYOUTS: [&str; 3] = ["mosaic", "mosaic", "grid"];
 /// The dikes' crop.
 ///
 /// Research:
-///     the dike crop's shares - GUESS: the page names no crop on the dikes; mulberry three in six, fruit two, tea one (the deleted `DIKE_CROPS`)
+///     the dike crop's shares - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: half the hamlets plant mulberry, a third fruit and a sixth tea, a GUESS - three, two and one of six, one crop to a hamlet
 const DIKE_CROPS: [&str; 6] = ["mulberry", "mulberry", "mulberry", "fruit", "fruit", "tea"];
 /// What a dike-pond block's leftover parcels hold.
 ///

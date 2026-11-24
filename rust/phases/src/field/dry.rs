@@ -48,7 +48,7 @@ pub const TRACT_APART_DEG: f64 = 20.0;
 /// A bound on the bands the hem climbs: the climb itself ends where the grain is held or a whole band finds no ground.
 ///
 /// Research:
-///     the bound - NONE: a guard far past any canvas (64 bands, over two miles); research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html has the plots climb out as far from the canal as the ground runs, until they hold the grain
+///     the bound - NONE: a guard far past any canvas (64 bands, over a mile and a half); research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html has the plots climb out as far from the canal as the ground runs, until they hold the grain
 pub const MAX_BANDS: u32 = 64;
 /// How far a candidate's corners are pulled toward its middle before the lap test (feet): plots laid side by side share their
 /// corners and edges exactly, which is no lap.
@@ -56,6 +56,11 @@ pub const MAX_BANDS: u32 = 64;
 /// Research:
 ///     the pull - NONE: a tolerance of the geometry, under any plot's side
 pub const LAP_PULL_FT: f64 = 1.0;
+/// The least a strip's edge may run along its canal, as a share of a plot's length, before its column's climb ends.
+///
+/// Research:
+///     the pinch - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html draws small rectangular plots of about a sixth of an acre and is silent on how far one may taper where the canal bends; half a plot's length, past which a strip reads as a sliver, not a plot
+pub const PINCH_SHARE: f64 = 0.5;
 /// The dry crops (0006's four), each map drawing its own mix.
 ///
 /// Research:
@@ -91,9 +96,14 @@ pub struct DryPlot {
 ///     the climb's bound - NONE: `MAX_BANDS`, a guard far past any canvas; the caller's `most_bands` the climb's own bound
 ///     a plot onto rice dropped - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot that would lap onto another canal's rice is dropped
 ///     the settlement's ground kept - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the houses between the canal and the dry fields, so a strip still on their ground past the push behind is dropped, not pushed further
+///     a column's climb ends - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the dry plots climb from the toe into the middle, plot by plot - so a column's climb ends where its strip pinches under `PINCH_SHARE` of a plot's length, the columns square to a canal bending toward its dry side converging as they climb, and where its strip laps a plot another column laid, never coming out behind that plot; the settlement's ground is stepped over (0006's houses between), and a strip refused for the water or for the rice is passed by without ending the climb, the ground past an intake race still the hem's (a cleared middle's plots on the race's upslope side, 17 of 141 such rolls, measured 2026-11-24 over seeds 1 to 150 at three sizes; ending the climb at the rice as well changed no roll of 3,200, measured 2026-11-24 over seeds 1 to 400 at eight sizes and falls) - before 449 T423 it climbed on, and drew slivers and detached strips turned against the block they had crossed (seed 52 of 15 households falling at 225 degrees; a plot under half the plot's area on 77 of 98 bare-winter wild rolls, measured 2026-11-24 over seeds 1 to 150 at three sizes); where the pinch falls a GUESS (`PINCH_SHARE`)
 #[expect(
     clippy::too_many_arguments,
     reason = "the hem's line, side, need, field, water, clearance, seed and tag"
+)]
+#[expect(
+    clippy::too_many_lines,
+    reason = "the climb in its order - band, tract, column, strip - each refusal where it is decided"
 )]
 #[must_use]
 pub fn hem(
@@ -133,9 +143,12 @@ pub fn hem(
     let mut tract = 0;
     // each band's tracts: their stretch along the canal and their rows' direction (degrees), the band below's kept for the next
     let mut below: Vec<(f64, f64, f64)> = Vec::new();
+    let mut climbs = Climbs::default();
+    // the strips under this band
+    let mut under = 0;
     for _band in 0..most_bands.min(MAX_BANDS) {
         let strips = TRACT_STRIPS.0 + rng.randbelow(TRACT_STRIPS.1 - TRACT_STRIPS.0 + 1);
-        let mut d = 0.0;
+        let (mut d, mut column) = (0.0, 0_usize);
         let mut band: Vec<(f64, f64, f64)> = Vec::new();
         let placed_before = plots.len();
         'band: while d + PLOT_FT.0 <= len {
@@ -170,6 +183,7 @@ pub fn hem(
                 // strips are laid behind it, a strip's depth at a time until clear - the houses between the paddy and the dry
                 // fields (0006)
                 let behind = past_keep(a, b, depth, keep, &mut ix.tests);
+                let (col, first) = (column + k as usize, under + strips_in(behind));
                 for j in 0..strips {
                     let (o0, o1) = (
                         depth + behind + f64::from(j) * PLOT_FT.1,
@@ -178,19 +192,31 @@ pub fn hem(
                     // the grain held, the band's rest is room the hem did not take: no seat built (the audit, T16: each was
                     // built only to be counted as room)
                     room += PLOT_FT.0 * PLOT_FT.1;
-                    if got >= need {
+                    // A COLUMN'S CLIMB (449 T423): a strip it already climbed is not asked again (a band pushed behind the settlement's
+                    // ground lands on the strips the band before it laid there), and an ended column lays nothing more
+                    if got >= need || !climbs.takes(col, first + j) {
                         continue;
                     }
                     let poly = Canal::seat(a, b, (o0, o1), &mut ix.tests);
+                    // ...ENDED WHERE THE STRIP PINCHES: the column's two sides have run together, and past it they cross
+                    if pinched((a.0, b.0), &poly) {
+                        climbs.end(col);
+                        continue;
+                    }
                     // EVERY STRIP OFF THE SETTLEMENT'S GROUND (feature 444 T42, the cohort's dry_on_settlement, 8 of 300 seeds):
                     // the push behind clears the column's first strip, and a ground set askew can still stand across a deeper one
                     let middle = (
                         f64::midpoint(poly[0].0, poly[2].0),
                         f64::midpoint(poly[0].1, poly[2].1),
                     );
-                    if on_keep(&poly, middle, keep, &mut ix.tests)
-                        || refused(&poly, &mut bands, (&plots, &mut laid), ix, clear)
-                    {
+                    if on_keep(&poly, middle, keep, &mut ix.tests) {
+                        continue;
+                    }
+                    if let Some(why) = refused(&poly, &mut bands, (&plots, &mut laid), ix, clear) {
+                        // ...AND WHERE IT MEETS ANOTHER COLUMN'S PLOTS: the ground behind them is not this column's to climb
+                        if why == Refusal::Laps {
+                            climbs.end(col);
+                        }
                         continue;
                     }
                     let own = f64::from(rng.randbelow(2 * TURN_DEG.1 + 1)) - f64::from(TURN_DEG.1);
@@ -213,8 +239,10 @@ pub fn hem(
             }
             tract += 1;
             d += f64::from(n) * PLOT_FT.0;
+            column += n as usize;
         }
         depth += f64::from(strips) * PLOT_FT.1;
+        under += strips;
         below = band;
         // the grain held, or a whole band without ground: the climb ends
         if got >= need || plots.len() == placed_before {
@@ -224,6 +252,75 @@ pub fn hem(
     ix.touched += laid.touched;
     ix.examined += laid.examined;
     (plots, room, bands.tested)
+}
+
+/// Each column's climb, by its place along the canal: the strip it has climbed to, and whether its climb has ended.
+///
+/// Research:
+///     a column's climb - NONE: the record `hem` keeps of each column; what ends a climb is `hem`'s claim
+#[derive(Default)]
+struct Climbs(Vec<(u32, bool)>);
+
+impl Climbs {
+    /// Whether column `col` climbs to strip `slot` now - its climb not ended and the strip not one it already climbed - the
+    /// strip then counted as climbed.
+    ///
+    /// Research:
+    ///     a strip asked once - NONE: bookkeeping; a strip a column was already asked for stands or was refused, and neither changes
+    fn takes(&mut self, col: usize, slot: u32) -> bool {
+        if self.0.len() <= col {
+            self.0.resize(col + 1, (0, false));
+        }
+        let climb = &mut self.0[col];
+        if climb.1 || slot < climb.0 {
+            return false;
+        }
+        climb.0 = slot + 1;
+        true
+    }
+
+    /// Column `col`'s climb ended (it was asked for a strip first, so it is on the record).
+    ///
+    /// Research:
+    ///     the end kept - NONE: bookkeeping of `hem`'s rule
+    fn end(&mut self, col: usize) {
+        self.0[col].1 = true;
+    }
+}
+
+/// The whole strips in `ft` feet of depth.
+///
+/// Research:
+///     the strips - NONE: arithmetic over the plot's depth, `PLOT_FT`'s
+#[expect(
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    reason = "whole strips behind a column, a few dozen at most"
+)]
+fn strips_in(ft: f64) -> u32 {
+    (ft / PLOT_FT.1).round() as u32
+}
+
+/// Whether a strip's seat `poly` has pinched: its inner or its outer edge runs under `PINCH_SHARE` of a plot's length along its
+/// column's own stretch of the canal (`along`, the column's two points on it) - an edge whose ends have crossed runs backward.
+///
+/// Research:
+///     the pinch - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html silent on how far a plot may taper; `PINCH_SHARE` of the plot's length, each edge measured along the canal where the column stands
+fn pinched(along: (Pt, Pt), poly: &[Pt]) -> bool {
+    let u = unit(along.0, along.1);
+    let run = |p: Pt, q: Pt| (q.0 - p.0) * u.0 + (q.1 - p.1) * u.1;
+    run(poly[0], poly[1]).min(run(poly[3], poly[2])) < PINCH_SHARE * PLOT_FT.0
+}
+
+/// Why a dry plot is refused: onto the rice, onto a plot laid before it, or in the water.
+///
+/// Research:
+///     the refusal's name - NONE: the record's type; what each refusal ends is `hem`'s
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum Refusal {
+    Rice,
+    Laps,
+    Water,
 }
 
 /// How far past `depth` a column's strips stand so their first is clear of the settlement's ground `keep` (feet): 0 where it
@@ -505,7 +602,7 @@ impl Canal {
     }
 }
 
-/// Whether a dry plot is refused: onto the rice (its middle or its outer corners in the field - its inner edge may lie on the
+/// Whether a dry plot is refused, and why: onto the rice (its middle or its outer corners in the field - its inner edge may lie on the
 /// canal's bank), onto a plot an earlier tract laid (either's middle in the other, or its corners in the laid one), or in the water along its inner edge, where a bend of the canal may meet it,
 /// or at its outer corners.
 ///
@@ -518,7 +615,7 @@ fn refused(
     (plots, laid): (&[DryPlot], &mut Boxes),
     ix: &mut Index,
     clear: f64,
-) -> bool {
+) -> Option<Refusal> {
     let middle = (
         f64::midpoint(poly[0].0, poly[2].0),
         f64::midpoint(poly[0].1, poly[2].1),
@@ -561,13 +658,15 @@ fn refused(
         });
         (hit, tests)
     };
-    onto()
-        || {
-            let (lapped, tests) = laps();
-            ix.tests += tests;
-            lapped
-        }
-        || wet(poly, ix, clear)
+    if onto() {
+        return Some(Refusal::Rice);
+    }
+    let (lapped, tests) = laps();
+    ix.tests += tests;
+    if lapped {
+        return Some(Refusal::Laps);
+    }
+    wet(poly, ix, clear).then_some(Refusal::Water)
 }
 
 /// Whether the plot `poly` meets the water filed in `ix`: a segment near it crossing its sides, ending inside it, or within `clear`
@@ -612,222 +711,4 @@ fn seg_seg_dist(a: Pt, b: Pt, c: Pt, d: Pt) -> f64 {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::{
-        apart, hem, past_keep, refused, DryPlot, BANK_FT, GRAIN_ACRES_PER_HOUSEHOLD, MAX_BANDS,
-        PLOT_FT, TRACT_APART_DEG, TRACT_STRIPS,
-    };
-    use crate::field::geom::inside;
-    use crate::field::index::Index;
-    use crate::field::index::{Bands, Boxes};
-
-    #[test]
-    fn a_later_plot_over_a_laid_slivers_corners_is_refused() {
-        // the pair `make seeds` found on fresh comb seed 549270514 (feature 444 T36): two of the laid sliver's corners stood inside
-        // the later plot, neither middle in the other, none of the later plot's corners in the sliver
-        let sliver = vec![
-            (2912.502, 4129.410),
-            (2895.458, 4126.519),
-            (2903.240, 4197.594),
-            (2912.110, 4200.909),
-        ];
-        let later = vec![
-            (2895.743, 4135.169),
-            (2790.850, 4178.074),
-            (2815.571, 4245.165),
-            (2922.717, 4201.386),
-        ];
-        let plots = vec![DryPlot {
-            poly: sliver.clone(),
-            crop: "millet",
-            theta: 0.0,
-            tract: 7,
-        }];
-        let mut laid = Boxes::default();
-        laid.file((2895.0, 4126.0), (2913.0, 4201.0));
-        let (mut bands, mut ix) = (Bands::new(&[]), Index::default());
-        assert!(refused(
-            &later,
-            &mut bands,
-            (&plots, &mut laid),
-            &mut ix,
-            1.0
-        ));
-        // ...and a plot beside the sliver, sharing no ground, is not
-        let beside: Vec<_> = sliver.iter().map(|p| (p.0 + 40.0, p.1)).collect();
-        assert!(!refused(
-            &beside,
-            &mut bands,
-            (&plots, &mut laid),
-            &mut ix,
-            1.0
-        ));
-    }
-    #[test]
-    fn a_cleared_middles_hem_is_one_band_along_the_whole_canal() {
-        let line = [(0.0, 0.0), (0.0, 1200.0)];
-        let field = [(1.0, -10.0), (900.0, -10.0), (900.0, 1300.0), (1.0, 1300.0)];
-        let mut ix = Index::default();
-        let (plots, _, _) = hem(
-            &line,
-            (-1.0, 0.0),
-            (1.0, 0.0),
-            (f64::INFINITY, 1),
-            &field,
-            &mut ix,
-            4.0,
-            4,
-            "f0",
-            &[],
-        );
-        // the whole canal, end to end, and no deeper than one band's strips
-        let deepest = BANK_FT + f64::from(TRACT_STRIPS.1) * PLOT_FT.1 + 1.0;
-        assert!(plots.iter().all(|p| p.poly.iter().all(|c| -c.0 <= deepest)));
-        assert!(plots.iter().any(|p| p.poly.iter().any(|c| c.1 < 1.0)));
-        assert!(plots
-            .iter()
-            .any(|p| p.poly.iter().any(|c| c.1 > 1200.0 - PLOT_FT.0 - 1.0)));
-    }
-
-    #[test]
-    #[expect(clippy::too_many_lines, reason = "the hem's cases, one scenario each")]
-    fn the_hem_holds_the_need_outside_the_field() {
-        let line = [(0.0, 0.0), (0.0, 1200.0)];
-        let field = [(1.0, -10.0), (900.0, -10.0), (900.0, 1300.0), (1.0, 1300.0)];
-        let need = 15.0 * GRAIN_ACRES_PER_HOUSEHOLD * 43_560.0;
-        let mut ix = Index::default();
-        let (plots, room, _) = hem(
-            &line,
-            (-1.0, 0.0),
-            (1.0, 0.0),
-            (need, MAX_BANDS),
-            &field,
-            &mut ix,
-            4.0,
-            4,
-            "f0",
-            &[],
-        );
-        #[expect(clippy::cast_precision_loss, reason = "a hundred plots")]
-        let got = plots.len() as f64 * PLOT_FT.0 * PLOT_FT.1;
-        assert!(got >= need && got < need + 2.0 * PLOT_FT.0 * PLOT_FT.1 * 4.0);
-        assert!(room >= got);
-        assert!(plots
-            .iter()
-            .all(|p| p.poly.iter().all(|c| !inside(*c, &field) && c.0 < 0.0)));
-        let mut tracts: Vec<_> = plots.iter().map(|p| p.tract).collect();
-        tracts.dedup();
-        assert!(tracts.len() > 2);
-        let _ = TRACT_APART_DEG;
-        // none where the water is
-        let mut wet = Index::default();
-        wet.file((-200.0, 0.0), (-200.0, 1200.0));
-        // a brook through a plot's middle, its ends outside it, refuses it
-        let mut through = Index::default();
-        through.file_w((-50.0, -100.0), (-50.0, 2000.0), 7.0);
-        let (crossed, _, _) = hem(
-            &line,
-            (-1.0, 0.0),
-            (1.0, 0.0),
-            (need, MAX_BANDS),
-            &field,
-            &mut through,
-            1.0,
-            4,
-            "f0",
-            &[],
-        );
-        assert!(crossed
-            .iter()
-            .all(|p| p.poly.iter().all(|c| c.0 > -46.0) || p.poly.iter().all(|c| c.0 < -54.0)));
-        let (dry, _, _) = hem(
-            &line,
-            (-1.0, 0.0),
-            (1.0, 0.0),
-            (need, MAX_BANDS),
-            &field,
-            &mut wet,
-            5000.0,
-            4,
-            "f0",
-            &[],
-        );
-        assert!(dry.is_empty());
-        let (none, _, _) = hem(
-            &line,
-            (-1.0, 0.0),
-            (1.0, 0.0),
-            (0.0, MAX_BANDS),
-            &field,
-            &mut Index::default(),
-            4.0,
-            4,
-            "f0",
-            &[],
-        );
-        assert!(none.is_empty(), "no need, no plots");
-        let (short, _, _) = hem(
-            &[(0.0, 0.0), (0.0, 10.0)],
-            (-1.0, 0.0),
-            (1.0, 0.0),
-            (need, MAX_BANDS),
-            &field,
-            &mut Index::default(),
-            4.0,
-            4,
-            "f0",
-            &[],
-        );
-        let (dot, _, _) = hem(
-            &[(0.0, 0.0)],
-            (-1.0, 0.0),
-            (1.0, 0.0),
-            (need, MAX_BANDS),
-            &field,
-            &mut Index::default(),
-            4.0,
-            4,
-            "f0",
-            &[],
-        );
-        assert!(dot.is_empty());
-        // the other side of the canal: the normal turned to it
-        let (east, _, _) = hem(
-            &line,
-            (1.0, 0.0),
-            (-1.0, 0.0),
-            (need, MAX_BANDS),
-            &[],
-            &mut Index::default(),
-            4.0,
-            4,
-            "f0",
-            &[],
-        );
-        assert!(east.iter().all(|p| p.poly.iter().all(|c| c.0 >= -1e-9)));
-        assert!(short.is_empty());
-    }
-
-    #[test]
-    fn a_tract_s_turn_stands_apart_from_its_neighbors_nearest_the_roll() {
-        let mut t = 0;
-        // the roll 15 on the contour between neighbors at 30 and -30: too near the first; on its side the windows' edges 10 and
-        // -10 both stand apart, and the one nearer the roll is taken
-        assert_eq!(apart((false, 15.0), &[30.0, -30.0], &mut t), (false, 10.0));
-    }
-
-    #[test]
-    fn a_column_on_ground_no_strip_clears_is_pushed_past_its_reach() {
-        let mut t = 0;
-        let frames = (((0.0, 0.0), (-1.0, 0.0)), ((0.0, 91.4), (-1.0, 0.0)));
-        let ground = vec![vec![
-            (-1000.0, -10.0),
-            (-1.0, -10.0),
-            (-1.0, 100.0),
-            (-1000.0, 100.0),
-        ]];
-        let behind = past_keep(frames.0, frames.1, 6.0, &ground, &mut t);
-        assert!(behind > 900.0, "{behind}");
-        assert!(past_keep(frames.0, frames.1, 6.0, &[], &mut t) == 0.0);
-    }
-}
+mod tests;

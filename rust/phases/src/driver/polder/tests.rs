@@ -866,3 +866,117 @@ fn the_dikes_band_and_rows_are_cut_where_the_feeder_and_the_outfall_cross() {
         assert_eq!(got, want);
     }
 }
+
+/// THE DIKE AND THE BANKS MOTTLED (449 T422): 0027's band is mottled with patches of earth of different ages, never one flat
+/// fill, and 0018's bank is mottled earth like it - painted on the band's fill, under the channels that cut the dike.
+#[test]
+fn a_polder_s_dike_and_its_ponds_banks_are_mottled_under_their_water() {
+    for (spec, groups) in [
+        (
+            r#"{"name": "R", "seed": 5, "households": 12, "down_deg": 30, "field_archetype": "polder_grid"}"#,
+            1,
+        ),
+        (
+            r#"{"name": "Kuwabata", "seed": 21, "households": 16, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond", "pond_layout": "mosaic", "dike_crop": "mulberry"}"#,
+            2,
+        ),
+    ] {
+        let r = roll(&parse(spec).unwrap()).unwrap();
+        let body = r.svg.split_once("</defs>").unwrap().1;
+        assert_eq!(body.matches(r#"<clipPath id="earth"#).count(), groups);
+        // the dike's patches right after its band, before any channel's water
+        let band = body.find(r#"fill-rule="evenodd""#).unwrap();
+        let after = &body[band..];
+        let mottle = after.find(r#"<clipPath id="earth"#).unwrap();
+        let water = after.find(super::super::svg::ink::SUPPLY).unwrap();
+        assert!(mottle < water, "the dike's mottle under the channels");
+        // the banks' patches before the first pond's water
+        if groups == 2 {
+            let first = body.find(r#"<clipPath id="earth"#).unwrap();
+            assert!(first < band && first < body.find(super::NURSERY_WATER).unwrap());
+        }
+    }
+}
+
+#[test]
+fn the_dike_s_patches_stand_on_its_band_a_step_apart_in_its_tones() {
+    use super::mottle::{dike, DIKE_TONES, PATCH_FT, PATCH_STEP_FT};
+    let stage = |seed: i64| {
+        let spec = format!(
+            r#"{{"name": "R", "seed": {seed}, "households": 12, "down_deg": 30, "field_archetype": "polder_grid"}}"#
+        );
+        roll(&parse(&spec).unwrap()).unwrap().polder.unwrap()
+    };
+    let s = stage(5);
+    let patches = dike(&s.dike, 5);
+    // one to every step of the inner face's length
+    let n = s.dike.outer.len();
+    let face: Vec<Pt> = (0..n)
+        .map(|i| {
+            let (c, o) = (s.dike.crest[i], s.dike.outer[i]);
+            (2.0 * c.0 - o.0, 2.0 * c.1 - o.1)
+        })
+        .collect();
+    let around: f64 = (0..n).map(|i| dist(face[i], face[(i + 1) % n])).sum();
+    #[expect(clippy::cast_precision_loss, reason = "a few hundred patches")]
+    let count = patches.len() as f64;
+    assert!((count - around / PATCH_STEP_FT).abs() <= 1.0);
+    for &(at, rx, ry, tone) in &patches {
+        // on the band: inside the outer face, outside the inner
+        assert!(inside(at, &s.dike.outer) && !inside(at, &face), "{at:?}");
+        assert!(
+            (PATCH_FT.0 .0..=PATCH_FT.0 .1).contains(&rx)
+                && (PATCH_FT.1 .0..=PATCH_FT.1 .1).contains(&ry)
+        );
+        assert!(DIKE_TONES.contains(&tone));
+    }
+    // every tone drawn, and the patches spread across the band, not strung on one line
+    assert!(DIKE_TONES.iter().all(|t| patches.iter().any(|p| p.3 == *t)));
+    let off = |p: Pt| {
+        (0..n)
+            .map(|i| seg_dist(p, face[i], face[(i + 1) % n]))
+            .fold(f64::INFINITY, f64::min)
+    };
+    let (near, far) = patches.iter().fold((0, 0), |(near, far), p| {
+        if off(p.0) < 5.0 {
+            (near + 1, far)
+        } else {
+            (near, far + 1)
+        }
+    });
+    assert!(near > 0 && far > near, "{near} near, {far} out");
+    // the same seed the same patches, another seed others
+    assert_eq!(dike(&s.dike, 5), patches);
+    assert_ne!(dike(&s.dike, 6), patches);
+}
+
+#[test]
+fn a_bank_s_patches_stand_within_its_breadth_of_its_edge() {
+    use super::mottle::{banks, BANK_TONES, PATCH_STEP_FT};
+    // a bank 400 ft square, turning either way, its pond 40 ft in
+    let ring = vec![(0.0, 0.0), (400.0, 0.0), (400.0, 400.0), (0.0, 400.0)];
+    let back: Vec<Pt> = ring.iter().rev().copied().collect();
+    for r in [&ring, &back] {
+        let patches = banks(&[r.as_slice()], 40.0, 21);
+        let per = (1600.0 / PATCH_STEP_FT).round();
+        #[expect(clippy::cast_precision_loss, reason = "a few hundred patches")]
+        let count = patches.len() as f64;
+        assert!((count - per).abs() <= 1.0, "{count} of {per}");
+        for &(at, _, _, tone) in &patches {
+            // inside the bank's ring, no deeper than its breadth
+            let deep = at.0.min(at.1).min(400.0 - at.0).min(400.0 - at.1);
+            assert!((0.0..=40.0).contains(&deep), "{at:?}");
+            assert!(BANK_TONES.contains(&tone));
+        }
+    }
+    // two banks, one stream: the second bank's patches are not the first's moved
+    let east: Vec<Pt> = ring.iter().map(|p| (p.0 + 500.0, p.1)).collect();
+    let both = banks(&[ring.as_slice(), east.as_slice()], 40.0, 21);
+    let half = both.len() / 2;
+    assert_eq!(both.len(), 2 * banks(&[ring.as_slice()], 40.0, 21).len());
+    assert!(
+        (both[0].0 .0 + 500.0 - both[half].0 .0).abs() > 1e-6
+            || (both[0].1 - both[half].1).abs() > 1e-6
+    );
+    assert!(banks(&[], 40.0, 21).is_empty());
+}

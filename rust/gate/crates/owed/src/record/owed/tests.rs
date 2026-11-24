@@ -149,11 +149,19 @@ fn the_store_keeps_every_answer_and_settles() {
     );
     assert!(reply_checks("nothing").is_empty());
     let own = l7r_shared::env::Rooted::with(&root, &[]);
-    assert!(file_outside(&root, "c", "no heading").unwrap().is_empty());
+    assert!(file_outside(&root, "c", "no heading")
+        .unwrap()
+        .filed
+        .is_empty());
     assert_eq!(
-        file_outside_in(&own, "c", "**OUTSIDE THE CHANGE**:\n- `f` | b | x\n")
-            .unwrap()
-            .len(),
+        file_outside_in(
+            &own,
+            "c",
+            "**OUTSIDE THE CHANGE**:\n- `f` | b | x | effect: page - its reader is told y\n"
+        )
+        .unwrap()
+        .filed
+        .len(),
         1
     );
     assert!(root.join("specs/_unfiled/found.jsonl").is_file());
@@ -162,13 +170,74 @@ fn the_store_keeps_every_answer_and_settles() {
     let got = file_outside_in(
         &own,
         "c",
-        &format!("**OUTSIDE THE CHANGE**:\n- `{brit}.md` | b | the \"{brit}\" \u{2013} off\n"),
+        &format!("**OUTSIDE THE CHANGE**:\n- `{brit}.md` | b | the \"{brit}\" \u{2013} off | effect: map - the \"{brit}\" reads off\n"),
     )
-    .unwrap();
+    .unwrap()
+    .filed;
     assert_eq!(got[0]["finding"], "the \"behavior\" - off");
+    assert_eq!(got[0]["effect"], "map - the \"behavior\" reads off");
     assert_eq!(got[0]["file"], format!("{brit}.md"));
     let written = std::fs::read_to_string(root.join("specs/_unfiled/found.jsonl")).unwrap();
     assert!(written.contains("the \\\"behavior\\\" - off"), "{written}");
+}
+
+/// Feature 451 T219: an outside-the-change note is filed only where it names a wrong outcome a reader of the map, the sheet or the
+/// page would meet. The two rows are feature 449's own, as its `found.jsonl` holds them: row 178 (2026-11-23, impl-drift), which says
+/// `effect: none on the map` in its own text and was filed, then settled by the wording audit as needing no change; and row 170
+/// (2026-11-22, impl-drift), the place card that contradicted itself on a declared northwest wind, fixed as 449 T317 - its last
+/// sentence, `The place card a reader sees contradicts itself`, said as the effect the form asks for.
+#[test]
+fn an_outside_note_is_filed_only_where_it_names_a_wrong_outcome_its_reader_meets() {
+    let root = crate::checks::scratch("owed-outside-effect");
+    let own = l7r_shared::env::Rooted::with(&root, &[]);
+    let row_178 = "- docs/building-programs.md | types.json:magistracies row `armory`, why column | \"14 by 16.7 to 14 by 20 ft in a hall\" names only the drawn back-row size, while the band's default form runs to 18 by 41 ft; effect: none on the map, but the table's why does not cover the band it sits beside";
+    let row_170 = "- rust/mode_a/src/place.rs | windbreak_default, the \"declared\" arm | A record with a declared wind from NW prints \"a local wind from the northwest that departs from the region's northwesterly winter wind\" | effect: map - the place card a reader sees contradicts itself";
+    let silent = "- research/questions/0019-x.drawing.html | the fringe | the page is silent on the fringe's width";
+    let reply = format!("impl-drift: 1\n\n## OUTSIDE THE CHANGE\n{row_178}\n{row_170}\n{silent}\n");
+    let got = file_outside_in(&own, "impl-drift", &reply).unwrap();
+    assert_eq!(got.filed.len(), 1);
+    assert_eq!(got.filed[0]["file"], "rust/mode_a/src/place.rs");
+    assert_eq!(
+        got.filed[0]["effect"],
+        "map - the place card a reader sees contradicts itself"
+    );
+    assert_eq!(got.dropped.len(), 2);
+    let written = std::fs::read_to_string(root.join("specs/_unfiled/found.jsonl")).unwrap();
+    assert_eq!(written.lines().count(), 1, "{written}");
+    let said = got.said("claims-checked");
+    assert!(
+        said.starts_with("claims-checked: filed, not fixed - rust/mode_a/src/place.rs | windbreak_default")
+            && said.contains("claims-checked: listed, not filed - docs/building-programs.md | types.json:magistracies row `armory`, why column |")
+            && said.contains("claims-checked: listed, not filed - research/questions/0019-x.drawing.html | the fringe | the page is silent")
+            && said.ends_with("claims-checked: a note outside the change is filed only where it ends `| effect: <map|sheet|page|tool> - <the wrong outcome its reader or user meets>` (451 T219); the rest are dropped\n"),
+    );
+    // nothing dropped, nothing to teach; nothing filed, no file written
+    assert!(
+        !file_outside_in(&own, "c", &format!("## OUTSIDE THE CHANGE\n{row_170}\n"))
+            .unwrap()
+            .said("x")
+            .contains("only where")
+    );
+    let bare = crate::checks::scratch("owed-outside-none");
+    let none = file_outside_in(
+        &l7r_shared::env::Rooted::with(&bare, &[]),
+        "c",
+        &format!("## OUTSIDE THE CHANGE\n{silent}\n"),
+    )
+    .unwrap();
+    assert!(none.filed.is_empty() && !bare.join("specs").exists());
+    // constitution XIV's other defect, a tool that refuses valid input, is filed too: 451's found row 26 (the make-only guard)
+    let guard = "- rust/guard/src/guards/make_only_hooks.rs | the direct-binary refusal | it reads a mention of the gate binary's path as a run of it | effect: tool - the make-only guard refuses `find ... -newer <tool/l7r-gate>`, a valid command";
+    let tool = file_outside_in(
+        &own,
+        "impl-drift",
+        &format!("## OUTSIDE THE CHANGE\n{guard}\n"),
+    )
+    .unwrap();
+    assert_eq!(
+        (tool.filed.len(), tool.dropped.len(), &tool.filed[0]["effect"]),
+        (1, 0, &serde_json::json!("tool - the make-only guard refuses `find ... -newer <tool/l7r-gate>`, a valid command"))
+    );
 }
 
 #[test]
@@ -838,4 +907,82 @@ fn an_answer_records_its_build_and_a_landing_alone_re_owes_a_mixed_one() {
     assert_eq!(rec["builds"]["fp2"], rec["builds"][&rf.fingerprint]);
     with(None, false, || write_answer(&s, &rf.slug, "fp3", "r", None)).unwrap();
     assert!(read_answer(&s, &rf.slug)["builds"].get("fp3").is_none());
+}
+
+/// The round arbiter's red fixture (feature 451 T225, `ask:stamp-reads-committed-code-as-mixed`): an answer whose build's stamped blob
+/// is the file's at an earlier commit of the landing's delta, and not HEAD's, was made by the landing's own committed code and
+/// stands; one whose blob no commit of the landing holds is re-owed, as is the first once no base names the delta.
+#[test]
+fn an_answer_by_a_build_of_an_earlier_commit_of_the_landing_stands() {
+    use l7r_gate_core::build::with;
+    let root = record("owed-build-own");
+    let file = "rust/gate/crates/owed/src/record/owed/answers.rs";
+    let base = git(&root, &["rev-parse", "HEAD"]);
+    git(
+        &root,
+        &["update-ref", "refs/remotes/origin/main", base.trim()],
+    );
+    put(&root, file, "// as the answer's build held it\n");
+    let _ = commit(&root, "the landing's commit of it, unchanged");
+    let then = git(&root, &["rev-parse", &format!("HEAD:{file}")]);
+    put(&root, file, "// a later fix of the same landing\n");
+    let _ = commit(&root, "the landing's later commit");
+    edit_everything(&root);
+    let rows = units(&root, None, None, &FAMILIES, "").unwrap();
+    let rf = rows
+        .iter()
+        .find(|u| u.slug == "record-format:0094")
+        .unwrap()
+        .clone();
+    let s = store(&root);
+    let owes = |blob: &str| {
+        let build = format!("{{\"commit\": \"c1\", \"dirty\": {{\"{file}\": \"{blob}\"}}}}");
+        with(Some(&build), false, || {
+            write_answer(&s, &rf.slug, &rf.fingerprint, "r", None)
+        })
+        .unwrap();
+        with(None, true, || unanswered(&root))
+            .unwrap()
+            .into_iter()
+            .find(|u| u.slug == rf.slug)
+    };
+    assert!(owes(then.trim()).is_none());
+    let u = owes("0123456789012345678901234567890123456789")
+        .expect("a blob no commit of the landing holds is another builder's");
+    assert!(u.occasion.contains(&format!("({file})")), "{}", u.occasion);
+    git(&root, &["update-ref", "-d", "refs/remotes/origin/main"]);
+    assert!(owes(then.trim()).is_some());
+}
+
+/// A landing alone re-owes a record answer only for uncommitted code its own verbs can run (feature 451 T224, the round arbiter's
+/// `ask:mixed-build-53-record-answers`): the claims crate's files and a Markdown doc mix nothing, the check bundle's builder does.
+#[test]
+fn a_record_answer_is_mixed_only_by_code_that_builds_or_records_it() {
+    use l7r_gate_core::build::with;
+    let root = record("owed-build-closure");
+    edit_everything(&root);
+    let rows = units(&root, None, None, &FAMILIES, "").unwrap();
+    let rf = rows
+        .iter()
+        .find(|u| u.slug == "record-format:0094")
+        .unwrap()
+        .clone();
+    let s = store(&root);
+    let owes = |dirty: &str| {
+        let build = format!("{{\"commit\": \"c1\", \"dirty\": {{{dirty}}}}}");
+        with(Some(&build), false, || {
+            write_answer(&s, &rf.slug, &rf.fingerprint, "r", None)
+        })
+        .unwrap();
+        with(None, true, || unanswered(&root))
+            .unwrap()
+            .into_iter()
+            .find(|u| u.slug == rf.slug)
+    };
+    let claims = "\"rust/gate/CLAUDE.md\": \"b1\", \"rust/gate/crates/claims/src/claims/index.rs\": \"b2\", \"rust/gate/crates/claims/src/claims/commands/tests.rs\": \"b3\"";
+    assert!(owes(claims).is_none());
+    let check = "rust/gate/crates/bundle/src/record/bundle/check.rs";
+    let u = owes(&format!("{claims}, \"{check}\": \"b4\""))
+        .expect("an answer whose bundle's builder was uncommitted is re-owed");
+    assert!(u.occasion.contains(&format!("({check})")), "{}", u.occasion);
 }

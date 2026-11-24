@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-24T19:28:46Z",
+  "target": "plan-gate push",
+  "commit": "c246b7cc2e",
+  "why": "449's stale blocks are sections of tasks filed and not started (T417, T420, T425, T426) and T415's section short one late claim; T418's and T423's CLEAR sections each carry wording notes left unapplied to keep their verdicts (T418: seed 508 does write a map, filed as T426); 451's is T203's withdrawn heading"
+}

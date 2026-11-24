@@ -11615,3 +11615,313 @@ not engine speed, so no performance checklist.
 **Found and left?** none.
 
 **Performance work?** no: it changes which dispatches the model guard passes, and the T217 line carries no `[perf]`.
+<!-- plan-archive: archived 2026-11-24 -->
+### T218 (the restatement audit, 2026-11-24: "the cited pages do not say it" filed from the bundle alone where the record says it)
+
+- **Approach**: impl-drift reads only the pages its claims cite, so its "none of the cited pages says it" was filed as if the record were silent: 449's found row 210 (452 T22) said no page gives the kitchen door "often at the rear", and `research/questions/0107-kitchens-daidokoro.html`, which the section did not cite, says the door "was often tucked away at the rear". The search is the tool's, at `make claims-checked` (`rust/gate/crates/claims/src/claims/silent.rs`, called from `commands.rs` before the reply is vetted), not the bundle builder's: a claim judged IN-STEP costs nothing, and the lines under OUTSIDE THE CHANGE, which row 210 was, are covered. A finding line that says the pages are silent - a VERDICT other than IN-STEP that is NEEDS-RESEARCH, ends `[§]` or uses a silence phrase ("none of the pages", "the page does not say/give/attest", "gives no", "silent on"), or an OUTSIDE THE CHANGE line with such a phrase that names its effect (one that names none is dropped unfiled by T219, so nothing is searched for it) - is HELD: taken out of the reply, so neither recorded in the index nor filed as a row, its key still owed and the command exiting 3, while any of the record's three nearest pages for its words is not in the bundle. The message names the missing pages and the call that adds them (`make claims-bundle UNITS=... PAGES=... REASON=...`; `PAGES=` already existed). Judged again with those pages in the bundle, the line is recorded as written, so a finding the record is truly silent on is still filed, after one more reading; where a page says it, impl-drift.md now tells the check the finding is the missing citation (`fix: claim`, naming the page) or nothing, and that "the pages do not say it" speaks of the cited pages, never of the record. The nearest pages are ranked by words alone - each question and drawing page (notes and originals are no pages) by its best block, a block by the share of the line's words it holds, a word weighing more the fewer blocks hold it; the words are the claim's text and the note for a VERDICT, the block and the finding for an outside line. No score separates silent from said, so there is no threshold: the rule is "read the nearest three, then file" (the number three is a knob, `silent::NEAREST`, a GUESS: the one recorded case ranks its page first). One hold a search: the pages a hold named are kept in the clone's `.git/claims-searched.json` under the claim's key (an outside line's file), and the next reply on that key is passed once those pages are in the bundle, whatever its new words rank, then the entry is forgotten - so a reworded second reply cannot be held again and the round ends. What it costs: every NEEDS-RESEARCH and every silent finding whose nearest pages the claim does not already cite is judged twice; and a pass is not searched, so a GUESS judged IN-STEP because its cited pages are silent, where another page answers it, is still missed (no filing comes of it; not built here).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a silent finding is held until the nearest pages are bundled | `claims::silent::tests::a_silent_finding_waits_for_the_record_s_nearest_pages` (row 210's line held, 0107 named; a reworded second reply passed once the pages are in the bundle) and `claims::commands::tests::a_silent_finding_is_held_until_the_record_s_nearest_pages_are_bundled` (end to end: exit 3, nothing recorded, then recorded from the widened bundle); red with the reading switched off, `/tmp/t218-red.log` (4 fail) | none: record tooling | none | n/a |
+| a truly silent finding still files | `claims::silent::tests::a_truly_silent_finding_is_recorded_once_the_nearest_pages_were_read` (449 T411 / 452 T011, the grave marker's size no page gives: held, then recorded as written) | none | none | n/a |
+| nothing else is held | `claims::silent::tests::only_a_finding_that_says_the_pages_are_silent_is_held` (a pass, a drift naming what a page says, another bundle's claim, an outside line with no effect or no silence) | none | none | n/a |
+| the real record | `make claims-checked` on a scratch bundle that lacks 0107, its reply row 210's line under the effect form: held, `0107-kitchens-daidokoro.html` named first, the index and the found rows unchanged (`/tmp/t218-live.log`) | none | none | n/a |
+
+### T218 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A finding that the record does not say something is filed only after the record's nearest pages for its words were read; the kitchen row's line is not filed, and a size no page gives still is.
+2. **The constraints.** The task line ("before such a line is filed the record is searched for the words ... and a hit turns it into a citation fix or nothing"); constitution XIV; the GM 2026-11-24, 449 request.md (real defects are still found and fixed, so a true silent finding must still file); the convergence talk (reviews that find no actual problem); docs/reviews.md (prove the rule on the unfixed artifact).
+3. **Where each comes from.** G: "The problem is when we do a cascading set of reviews that triggers a cascading set of changes that is mostly not finding actual problems" (451 request.md, the convergence talk) and "if there are real defects, then I do want to find them and fix them" (449 request.md, 2026-11-24). O: the restatement audit's first cause ("impl-drift judges from its bundle only"). R: none, tooling.
+4. **Do they describe the world here?** Yes: 449's found row 210 and 0107's sentence were read, and the ranking was run on the record as it stands - 565 question and drawing pages; row 210's words rank 0107 first, measured 2026-11-24 (`make claims-checked` on a scratch bundle, `/tmp/t218-live.log`; `grep rear` on 0107).
+5. **The order.** After T219 (an outside line is searched only where T219 would file it); before T220, whose claims round runs through `make claims-checked`.
+6. **The exits.** Green: the tests of the table red with the reading off and green with it; the real record names 0107 for row 210. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The task line names `make canon` or the registry as the search; neither reads the question pages (`make canon` searches the GM's setting notes), and `make semantic-find` on row 210's words did not return 0107 in its first five, measured 2026-11-24 (the previous builder's run, its handoff), where the word ranking returns it first - so the search is the word ranking over `research/questions/`, in the tool, with no embedder to start.
+8. **The budget.** One landing.
+9. **Done, measured.** 2026-11-24: `make crate-checks CRATE=rust/gate/crates/claims` green, 189 tests, every new line covered (`/tmp/t218-crate.log`); red run `/tmp/t218-red.log`; the live hold `/tmp/t218-live.log`.
+10. **Before moving a constant.** n/a: `NEAREST` is new, a knob labeled a GUESS where it is defined.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The tool that answers wrongly: `make claims-checked` filed "no page says it" as a found row, and the session a task (452 T22), where a page of the record says it.
+
+**Found and left?** none.
+
+**Performance work?** no: it removes filings the record already answers; filed with the restatement audit's five.
+
+
+### T203 (withdrawn: built in T199, its section the T198, T199, T200 bundle's; MODE 4 round 2, 2026-11-23, ruled its deferral NOT LEGITIMATE)
+
+<!-- plan-archive: archived 2026-11-24 -->
+### T219 (the restatement and task audits, 2026-11-24: every OUTSIDE THE CHANGE note is filed, the ones naming nothing wrong included)
+
+- **Approach**: the rule lived in instructions alone and did not hold - impl-drift.md already said a line with no effect "is not written", and 449's found row 178 was written and filed saying `effect: none on the map` in its own text. The tool now holds it. `rust/gate/crates/core/src/record/effect.rs` reads one form, `effect: <map|sheet|page|tool> - <the wrong outcome its reader or user meets>`, at the end of a note - the four are constitution XIV's wrong outcomes: a map, sheet or page that reads wrong or contradicts a finding, and a tool (a command, guard or check) that crashes, hangs, refuses valid input or answers wrongly; `effect: none`, an effect naming none of the four, and no effect at all name none. The found-row filer (`file_outside_in`, `rust/gate/crates/owed/src/record/owed/answers/cli.rs`, behind `make claims-checked` and `make record-checked REPLY=`) files a line under `OUTSIDE THE CHANGE` only with that effect, kept on the row as `effect`; every other line is printed `listed, not filed` with the form, never dropped silently, and no file is written when nothing is filed. `make review-verdict` (`rust/gate/crates/reviews/src/reviews/prereq/verdict.rs`, split from `prereq.rs` at the 1,000-line bar) refuses a findings file holding an `outside` finding whose `what` names no such effect, with the form. Every emitter states the same rule, found by `grep -rln 'OUTSIDE THE CHANGE' rust scripts docs .claude Makefile l7r` and a grep of `rust/gate` and `.claude/agents` for the `outside` severity, each hit read, measured 2026-11-24 (both greps): impl-drift.md, the five record checks' shared section (quote-check, record-format, record-style, intro-check, translation-check), modal-depiction.md's research rows, building-review.md, the check bundle's MANIFEST (`bundle/check.rs`) and the building-review dispatch prompt (`reviews/snapshot.rs`); a note naming no effect goes under `NOTED, NOT FILED` in the reply. A tool or check that answers wrongly is filed as `effect: tool - <the command and how it answers wrongly>` (this section's first form admitted only map, sheet and page; spec-fidelity ruled that narrowing not legitimate on 2026-11-24, since constitution XIV counts a tool's crash or wrong refusal a defect, and the form was widened); what names none of the four - a wording, a page that is only silent, a difference that reads fine - is listed and dropped. The third channel, a verdict tagged `[outside the change]` on an owed key, already files nothing at the claims switch's `report` (feature 445; `carry.rs` refuses the carry there): impl-drift.md and the claims bundle's MANIFEST said "filed as a task" and now say `make claims-report` lists it. The filer is in the `owed` crate and the form in `core`, outside the crates the coordinator's brief names, because that is where the one filer both commands call lives.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a found row is filed only with its effect; the rest listed | `owed::tests::an_outside_note_is_filed_only_where_it_names_a_wrong_outcome_its_reader_meets` on 449's found rows 178 (not filed) and 170 (filed, 449 T317's place card), and a tool note filed (451's found row 26, the make-only guard refusing a valid `find`); red with the form's reading removed, `/tmp/t219-red.log` | none: record tooling | none | n/a |
+| an `outside` review finding is recorded only with its effect | `reviews::prereq::tests::an_outside_finding_is_recorded_only_with_the_wrong_outcome_it_names` (449 T331's privy recorded, 449 T380's log entries refused, a `tool` finding recorded); red likewise | none | none | n/a |
+| the form read | `core::record::effect::tests::a_note_names_its_effect_or_none` | none | none | n/a |
+| the agent's rule on recorded cases | a live impl-drift round on each replay bundle after this section's verdict: row 170's at the tree before its fix (`/tmp/l7r-check/t219-row170`), row 178's at today's tree (`/tmp/l7r-check/t219-row178`); the result is recorded below in "Done, measured" | none | none | n/a |
+
+### T219 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A note on something a change did not touch becomes a row or a task only when it names a wrong outcome a reader of the map, the sheet or the page would meet, or the user of a tool or check; the rest are read in the reply and go no further.
+2. **The constraints.** The task line; constitution XIV v2.36.0 (a defect is a wrong outcome, not a difference); the GM 2026-11-24, 449 request.md (real defects are still found and fixed before new code, so no true row may be lost); the convergence talk (only factual findings force another round); docs/reviews.md (prove the rule on the unfixed artifact).
+3. **Where each comes from.** G: "The problem is when we do a cascading set of reviews that triggers a cascading set of changes that is mostly not finding actual problems" (451 request.md, the convergence talk) and "if there are real defects, then I do want to find them and fix them" (449 request.md, 2026-11-24, "real defects are found and fixed before new code"). O: the task audit (open-tasks-audit.md, summary item 6 and the OUT mechanism row) and the restatement audit's second cause. R: none, tooling.
+4. **Do they describe the world here?** Yes: 449's `found.jsonl` rows 178, 170, 150, 151 and 208 were read on 2026-11-24, measured 2026-11-24 (the file's lines printed by number).
+5. **The order.** After T221; before T220, whose claims round runs on the new impl-drift rule.
+6. **The exits.** Green: the tests red with the form's reading removed and green with it; the live rounds file row 170's finding and not row 178's. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** 2026-11-24: `make rust-test` green on `core`, `owed`, `claims`, `bundle` and `reviews` (`/tmp/t219-test-*.log`); the two tests fail with `effect::named` answering for every note (`/tmp/t219-red.log`). The live rounds: see the report of this bundle (run after this section's verdict, the decide-first guard holding them until then).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The tool that answers wrongly: the filer made a row, and the session a task, of a note whose own text said it had no effect on the map.
+
+**Found and left?** none.
+
+**Performance work?** no: it removes filings that named nothing wrong; filed with the restatement audit's five.
+
+
+<!-- plan-archive: archived 2026-11-24 -->
+### T220 (the restatement audit, 2026-11-24: "known (417 T33) ... fix: code" outlived its fixes)
+
+- **Approach**: two causes, each closed where it lives. (a) The agent's rule: impl-drift.md's FILED DEPARTURE paragraph told the check to judge "only whether the departure it states is what the code does" and to ask for no other label, so a claim that named 417 T33 came back `known (417 T33) ... fix: code` however the code and page had moved. The paragraph now has a filed departure judged afresh each time it is in the bundle, in order: does the code still depart as stated (if not, DRIFTED `fix: claim`, the claim drops the departure and its task); if it does, is the departure a wrong outcome under constitution XIV (if not, DRIFTED `fix: claim; effect: none`); only a departure that stands and is a wrong outcome keeps `known (NNN Tnn) ... fix: code`, and for that one the round arbiter's ruling (`ask:417-T49-claims`: no other label asked) is kept whole. (b) The tool: a claim is owed again when its unit's code, its section or its cited pages move (`index::owed_one`, which has no exception for a known drift - read 2026-11-24), but a claim of `docs/buildings.md` or `docs/building-programs.md` is fingerprinted by its section's text, never by the Rust that draws it, so the genkan porch's and the kitchen garden's fixes in `rust/mode_a` and on the sheet re-owed nothing. A procedure section's finding judged DRIFTED with `fix: code` now keeps a digest of the Mode A engine's sources (`drawn`, every `.rs` file under `rust/mode_a/src`; `rust/gate/crates/claims/src/claims/drawn.rs`, written by the bundle, kept by the reply's row) and is owed again, a full check, when it differs. What it costs, accepted here by the builder: each such finding is judged once more after any change under `rust/mode_a/src`, whether or not the change draws that section - two rows stand today, six the most the report has held, measured 2026-11-24 (`make claims-report`; the audit's table of the six). Priced and not taken: a pointer on each section claim naming the unit that draws it (exact, but the doc's claims number in the hundreds and none names its unit), and re-owing every known drift at each report (no signal, a judgment a report). A row judged before this lands keeps no digest and is not re-owed by it, so every row standing today was re-judged and recorded in this task (below): the one that came back a code fix, 452 T24's, carries its digest in `dev/claims-index.json`, and no `fix: code` row of a section is left without one, measured 2026-11-24 (the index's rows read by key after the round). A hand-drawn sheet's edit (`pool/**/*.svg`) still re-owes no section claim: the arch posts are drawn only on sheets; not built, and the re-judgment below covers the one case.
+- **The re-judgment**: see "Done, measured".
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a section's `fix: code` drift is owed again when the engine moves | `claims::drawn::tests::a_section_s_code_fix_drift_is_owed_again_when_the_engine_moves` (417 T33's genkan porch: owed once `layout.rs` moves; a `fix: claim` drift, a pass and a row with no digest are not), `claims::index::tests::a_corrected_claim_s_finding_is_answered_or_owed_again` (owed with the why "the code that draws it changed since the finding"), `claims::reply::tests::a_section_s_code_fix_drift_keeps_the_engine_it_was_judged_against`; red with the comparison off, `/tmp/t220-red.log` | none: record tooling | none | n/a |
+| the agent's rule on recorded cases | the standing known departures re-judged under the edited paragraph, and 452 T24's (a departure that is a wrong outcome) kept `known ... fix: code`: "Done, measured" | none | none | n/a |
+
+### T220 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A departure a claim files as known is printed as a code fix only while the code still departs and the departure is a wrong outcome; once the code or page moves it is judged again.
+2. **The constraints.** The task line; constitution XIV v2.36.0; the round arbiter's `ask:417-T49-claims` (a standing filed departure is not relabeled); the GM 2026-11-24, 449 request.md (real defects are still found and fixed); docs/reviews.md.
+3. **Where each comes from.** G: "The problem is when we do a cascading set of reviews that triggers a cascading set of changes that is mostly not finding actual problems" (451 request.md, the convergence talk) and "if there are real defects, then I do want to find them and fix them" (449 request.md, 2026-11-24). O: the restatement audit's third cause and its table "The six known (417 T33) drifts, plainly". R: none, tooling.
+4. **Do they describe the world here?** Partly, and the tree had moved: when the task was filed `make claims-report` printed seven keys as `known (417 T33)`; by this task's start the other builders' rounds of the same day had rewritten and re-judged five of them through `make claims-checked` (the genkan porch size, the tax archive's strongroom role, the kitchen garden at the dwelling, `SMALL_BUILDING_FT` and `SMALL_BUILDING_SQFT`, each IN-STEP in `dev/claims-index.json` dated 2026-11-24), leaving the arch dimensions and `NOTICE_BOARD_MAX_FT` DRIFTED and T221's four legacy rows MISLABELED, measured 2026-11-24 (`make claims-report` and the index's rows read by key). Neither `docs/buildings.md`'s arch line nor `compound.rs` was under another builder's edit when the bundle was built, measured 2026-11-24 (`git status` and `git diff` of both).
+5. **The order.** After T219 and T218 (the round runs on both rules); before T222.
+6. **The exits.** Green: the tests red with the comparison off and green with it; the round's verdicts recorded. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** 2026-11-24: `make crate-checks CRATE=rust/gate/crates/claims` green with every new line covered (`/tmp/t220-crate.log`), the red run `/tmp/t220-red.log`. The round: a dispatched `impl-drift` reads the mirror's agent file, not the clone's (measured under T219), so the six standing keys were bundled by `make claims-bundle`, judged by an agent told to follow the clone's `impl-drift.md`, and recorded by `make claims-checked` (`/tmp/l7r-check/t220-round`, `/tmp/t220-reply.txt`). Verdicts, observed 2026-11-24, method: that reply as recorded - the arch dimensions DRIFTED, `fix: claim; effect: none` (the posts are still drawn thinner than the one measured post, no wrong outcome: the claim drops the departure and 417 T33, and names the measured post as the Kokura arch's, not Kawataka's); `NOTICE_BOARD_MAX_FT` DRIFTED, `fix: claim; effect: none` (the audit's ceiling against the page's own unsourced nearer figure: the claim restated as a plain GUESS for every board); `shrine_tree`, `fixtures.rs::tree`, `TREE_ROOM` and the palette's table IN-STEP. The still-filed case: 452 T24's modest compound shrine, judged the same way on its own bundle, came back `known (452 T24) ... fix: code` with its effect on every compound sheet; `make claims-checked` held that line under T218 (it says no cited page records the hall as a chosen form), the bundle was rebuilt with the pages it named, the second reading returned the same verdict and was recorded, the row now keeping its `drawn` digest (`/tmp/l7r-check/t220-still2`, `/tmp/t220-still2-reply.txt`).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The check that answers wrongly: `make claims-report` printed code fixes owed for the genkan porch and the kitchen garden after the code and the sheet had made them.
+
+**Found and left?** - not a defect: the arch dimensions' claim (`docs/buildings.md` line 330) and `NOTICE_BOARD_MAX_FT`'s claim (`rust/mode_a/src/compound.rs`, with its test comment "kept until feature 417 T33") are to be restated as the round's verdicts say - no visible effect, each a claim's wording, so neither is a defect and neither is filed (constitution XIV); `make claims-report` lists both until their owner restates them, the files being those of other builders' tasks in this clone (452's doc restatements, 449's Mode A claims), though neither line was under edit when judged.
+- not a defect: 417 T33 stays open in a feature whose Python is deleted; closing it is its feature's, not this task's: no claim of the Mode A engine or its procedures names it once the arch line is restated, which the report says to its owner.
+
+**Performance work?** no: it removes findings that outlived their fix; filed with the restatement audit's five.
+
+
+<!-- plan-archive: archived 2026-11-24 -->
+### T221 (the restatement audit, 2026-11-24: four corrected claims still print MISLABELED in make claims-report beside owed 0)
+
+- **Approach**: the stale rows of `dev/claims-index.json` were read beside their claims at HEAD, measured 2026-11-24 (the index rows printed, the source lines grepped). Two mechanisms. (1) The shrine-tree trio (`grounds.rs::shrine_tree`, `fixtures.rs::tree`, `layout.rs::TREE_ROOM`) were judged citing 0218's drawing page as a finding and relabeled `GUESS <page>#shrine-tree`; a claim on a tagged item leaves its class word and anchor out of its fingerprint (T187), so the stored claim and code read the same before and after and nothing saw the relabel. (2) `audit/palette.rs::ROLE_NAMES#the palette's table` was told three of its rows need claims of their own; they were written beside it, the judged claim unmoved. The fix, in `rust/gate/crates/claims`: a FINDING's row now keeps the claim as it was said, class word kept and anchors dropped (`said`), and its unit's claim labels, fingerprinted (`siblings`); `bundle.rs` writes both to `units.json`, `reply.rs` copies them onto finding rows only, measured 2026-11-24 (`make claims-report`'s first line: 17 findings of 3,557 claims). `index::relabel_answered` reads the backing from `said`, so a relabel the fingerprint cannot see answers its MISLABELED verdict as any relabel does (385 T23 D45, T213: the account word for word, the body unchanged); `index::answered` is the one reading the push's carry, the report and the clean gate's `open_lines` share. `make claims-report` counts an answered finding as `ANSWERED` and leaves it off the list (`ALL=1` lists it), so the list is what stands. A finding whose unit's claim labels changed since it was judged is owed impl-drift again (`index::SIBLINGS`), never hidden: whether the new claims answer it is a judgment. A row recorded before T221 keeps neither field: it is answered only where its stored claim differs from the claim both with and without its anchors, and otherwise stands until judged again - the rows named here are such rows and are re-judged in T220's claims round. Found while writing the test and fixed here: before T221 a MISLABELED claim that only named its item, class kept, read as rewritten and so as answered at the push (`claim_rewritten` against `normalized`, which drops the class word; `relabeled_only` passing through T204's arm).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a relabel the fingerprint cannot see answers its verdict; a unit's new claim owes the finding again; an item named alone answers nothing | `index::tests::a_corrected_claim_s_finding_is_answered_or_owed_again` (red with the rule removed, `/tmp/t221-red.log`) | none: record tooling | none | n/a |
+| the report lists what stands | `report::tests::a_finding_its_relabel_answered_is_counted_apart_and_not_listed` (red likewise) | none | none | n/a |
+| a finding's row keeps `said` and `siblings`, an IN-STEP row neither | `reply::tests::a_finding_s_row_keeps_the_claim_as_said_and_its_unit_s_labels` | none | none | n/a |
+
+### T221 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. `make claims-report` lists a finding only while it stands: a corrected claim's old verdict is answered mechanically where the correction is a relabel, and owed its check again where only a judgment can say.
+2. **The constraints.** The task line; T213 (a MISLABELED claim's restated account is owed; only the backing may change); T204 (naming an item owes nothing, and must answer nothing); the GM 2026-11-24, 449 request.md (real defects are still found and fixed: nothing here may hide a wrong outcome); the convergence talk (only a claim-changing edit re-owes a check; labels cascade mechanically).
+3. **Where each comes from.** G: "Shouldn't attested versus guess be something that cascades mechanically rather than requiring a review, though?" and "if there are real defects, then I do want to find them and fix them". O: the restatement audit (restatement-audit.md, group 2: palette.rs, the trio, each ALREADY FIXED) and the index rows read 2026-11-24. R: none, tooling.
+4. **Do they describe the world here?** Yes: the trio's stored `claim` equals `normalized()` of today's claim and palette.rs's row is dated 2026-11-17 beside its sibling rows IN-STEP dated 11-18, measured 2026-11-24 (the index rows and the source lines read).
+5. **The order.** Before T220, whose claims round re-judges the four legacy rows.
+6. **The exits.** Green: the new tests red with the rule removed and green with it; the stale rows gone from the report after T220's round. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** 2026-11-24: `make rust-test CRATE=rust/gate/crates/claims` 185 passed (`/tmp/t221-test.log`); with `relabel_answered`'s `said` arm, `siblings_moved` and the report's `answered` removed, the two tests fail (`/tmp/t221-red.log`).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The tool that answers wrongly: `make claims-report` printed findings that no longer stand (the trio and palette.rs), and the push read a MISLABELED claim that only named its item as answered.
+
+**Found and left?** none - the legacy rows' re-judgment is T220's own round, an open task of this bundle, not a deferral.
+
+**Performance work?** no: the report's reading is made true; filed with the restatement audit's five.
+
+
+<!-- plan-archive: archived 2026-11-24 -->
+### T222 (the restatement audit, 2026-11-24: a dated log entry judged as a statement about the sheet today)
+
+- **Approach**: instructions only, in the two agent files the task names. `building-review.md` told the reviewer the notes' "deliberate choices and the Review log are settled" and nothing about what a dated entry is, and 449 T380's review (452 T015) reported that Hayakawa's log entries T276, T299 and T312 "still give the armory at the west end" with no pointer to T367, which mirrored the row afterwards: each entry was true when written and says when. The file now says a dated entry of a sheet's notes - a Review log line, a line under a dated heading, an entry naming the feature or task that made it - is history: it is not held to the sheet as it stands, an older entry a later change overtook is no finding, and it owes no "since superseded" pointer; only the notes' present-tense text (the choices, the program, a Result or summary paragraph that states the sheet as it is) is held to the drawing. `record-format.md`'s HISTORY rule stays whole - the GM's rule that a research page carries no history of itself - and gains one sentence: a dated entry is history by its form, ruled on as HISTORY (what is useful kept, the rest proposed for removal), and never reported as a statement the page makes today that is stale or contradicted; this permits no change log on a research page. No recorded record-format case of the kind was found (the audit's case is building-review's), so its sentence is stated on the rule alone and said so here.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the recorded case no longer filed, the true one still filed | a judgment of the two notes files as they stood before 452's fixes (`/tmp/t222/`, from the commit before bb0c821c91) under the edited `building-review.md` paragraph, by an agent told to follow the clone's file (a dispatched defined agent reads the mirror's file, measured under T219, so the rule cannot be run through `building-review` itself before it lands): Hayakawa's entries T312, T299 and T276 (notes lines 94 to 96) not findings, each as a dated log entry a later change overtook; the round-trip Result paragraph's "Coverage 36%, perimeter-hugging 61%" (line 45) a finding, observed 2026-11-24, method: the agent's reply | none: an agent's instructions | none | n/a |
+
+### T222 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A review no longer files a sheet's dated log entry for describing the sheet as it was; a present-tense sentence of the notes that the drawing contradicts is still filed.
+2. **The constraints.** The task line; constitution XIV; the GM 2026-11-24, 449 request.md (real defects are still found); record-format's HISTORY rule (the GM 2026-09-07, feature 209), which is not weakened.
+3. **Where each comes from.** G: "The problem is when we do a cascading set of reviews that triggers a cascading set of changes that is mostly not finding actual problems" (451 request.md, the convergence talk) and "if there are real defects, then I do want to find them and fix them" (449 request.md, 2026-11-24). O: the restatement audit's fifth cause ("Dated log entries are judged as present-tense statements (T015)"). R: none.
+4. **Do they describe the world here?** Yes: 452 T015's line and both notes files at the commit before their fix were read, measured 2026-11-24 (`git show` of the two files, the Hayakawa entries and the round-trip Result paragraph found by `grep`).
+5. **The order.** Last of the audit's five; after T219, whose effect form the same files carry.
+6. **The exits.** Green: the judgment names the Result paragraph's figures and not the dated entries. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The judgment's reply as the table gives it, observed 2026-11-24, method: one ad-hoc agent on the two files; `make closing-checks` green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The check that answers wrongly: a review filed three log entries, each true of its date, as untrue of the sheet.
+
+**Found and left?** none.
+
+**Performance work?** no: it removes findings that name nothing wrong; filed with the restatement audit's five.
+
+<!-- plan-archive: archived 2026-11-24 -->
+### T224 (the round arbiter's `ask:mixed-build-53-record-answers`, 2026-11-24, continue with a tooling fix: a landing was refused at the push and 53 record answers owed again by T197's rule, when for 49 of them the uncommitted files were the claims crate's and a Markdown doc)
+
+- **Approach**: A landing alone counts a build's uncommitted file against an answer only where that file's code can run in building the answer's bundle or recording it. The rule is one function, `runs_in`, in `rust/gate/crates/core/src/build.rs`, over a table per kind of answer; `mixed` takes the table.
+  - **(a) A record answer's table, `RECORD`.**
+    - The `owed` crate: it records the answer (`record-checked`, the modal triage, `write_answer`).
+    - The `bundle` crate: it builds the bundle the agent read (`check-bundle`, `modal-bundle`).
+    - Their path dependencies: core, pool, registry, research and `rust/guard/shared`. Observed 2026-11-24, method: `cargo tree` (`/home/agent/.claude/jobs/c6fd72d1/tmp/cargo-tree-owed-bundle.txt`) and the walk of the `Cargo.toml` files the new test makes.
+    - `rust/gate/src`: `l7r-gate` is one executable, and its `lib.rs` dispatches `record`.
+    - The `record` crate: it dispatches each `record` verb, holds `apply-edits` (which settles an answer through `write_answer`), and holds `html5_entities.tsv`, which `rust/guard/shared` includes.
+    - Left out: the `record` crate's other dependencies (archive, downloads, pages, semantic, trials, uncited). They are linked into the executable, and no verb that builds a check bundle or records its answer calls them. Observed 2026-11-24, method: every caller of `write_answer` and `write_judged` listed with grep (the `owed` crate, and `record/apply_edits/round.rs`), and the crates `apply_edits` names (bundle, core, owed, research).
+  - **(b) Files that are not code.**
+    - A Markdown file outside the table's crates never counts: it cannot run. `rust/gate/CLAUDE.md` is the measured case.
+    - A Markdown file inside a crate of the table counts. The `plan` crate includes Markdown fixtures by `include_str!`, so "Markdown cannot run" is not true inside a crate. Observed 2026-11-24, method: the new test failed on the first draft's blanket rule, naming three such files.
+    - A `tests.rs` or `tests/` file inside a crate of the table counts. Whether a file is test-only is its `mod` line's `cfg`, not its name, and `core` holds test helpers the `testkit` feature also compiles. The measured case does not need the exclusion: its tests files were the claims crate's.
+    - A `Cargo.toml` anywhere, `rust/Cargo.lock` and `.cargo/config.toml` always count: a manifest can turn on a feature of a shared crate.
+    - A path the rule does not know counts.
+  - **(c) The claims side.** Narrowed the same way, with its own table, `CLAIMS`: the `claims` crate, its path dependencies (core, owed, plan, pool, registry, research, reviews, tree, `rust/guard/shared`), `rust/gate/src`, and the one included file of the `record` crate. Every claims reader of a mixed build goes through `Landing::paths` in `claims/index.rs` (`landing.rs` calls it twice), so the one call is the whole change. Observed 2026-11-24, method: grep of `build::mixed` and `Landing` in the claims crate.
+  - **The table follows the tree.** `build::closure::gaps` walks the `[dependencies]` and `[build-dependencies]` path entries from the table's root crates, and the `include_str!` and `include_bytes!` lines of each crate reached. It names a crate reached and not in the table, a table entry nothing reaches that is not listed beside it with its reason, and an included file the table does not count. Core's test runs it on the real tree for both tables. Core's `Cargo.toml` declares those crates as what its tests read, so `make rust-test` runs the test again when one of their manifests moves.
+  - **The message is unchanged.**
+
+| the landing's record answers (`L7R_LAND_ALONE=1 make record-owed UNANSWERED=1`, read only, 2026-11-24) | before | after |
+|---|---|---|
+| listed as answered by a mixed build | 49 | 0 |
+| quote-check | 28 | 0 |
+| source-reader | 10 | 0 |
+| translation-check | 7 | 0 |
+| source-applicability | 3 | 0 |
+| intro-check | 1 | 0 |
+
+  Before is the clone at `1b064aa0de` with no edit (`/tmp/t224/before.txt`); after is the same tree with this task's edits uncommitted (`/tmp/t224/after.txt`: "no record check is owed"). The task line's 53 included 4 guest-quarters modal answers, re-run by the ruling before this task began. `L7R_LAND_ALONE=1 make claims-owed` after: no claim is owed.
+
+### T224 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing owes a record or claims answer again only when code that could have changed the answer was uncommitted.
+2. **The constraints.**
+   - T197: a landing alone never trusts an answer judged with code that is not its own. Kept for every file the answer's verbs can run.
+   - The ruling's `tooling_fix`: the closure of owed, bundle and their transitive dependencies, read from `Cargo.toml` or a fixed table whose test fails when a dependency is added.
+   - T223: the claims side's readers stay on one function.
+3. **Where each comes from.**
+   - O: the measurement, `/home/agent/.claude/jobs/c6fd72d1/tmp/arbiter-mixed-record.md`.
+   - R: the round arbiter, `ask:mixed-build-53-record-answers`, continue, its `tooling_fix`.
+4. **Do they describe the world here?** Yes: the table above, on the answers that refused the landing.
+5. **The order.** Before the landing of T218 to T223 is run again. Nothing else records in the clone while the gate's crates are uncommitted.
+6. **The exits.** Green: `make closing-checks T=T224 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, 2026-11-24: the owed crate's new test, `a_record_answer_is_mixed_only_by_code_that_builds_or_records_it`, failed on HEAD's code with the edits stashed (`/tmp/t224/red-first.log`, 123 passed, 1 failed: an answer whose build held only claims-crate files and `rust/gate/CLAUDE.md` was re-owed). After: 124 passed. The same test holds the opposite case: a build that held `rust/gate/crates/bundle/src/record/bundle/check.rs` uncommitted is still re-owed, naming that file alone. Core's fixture test holds the arbiter's requirement: a tree whose root crate gains a path dependency the table lacks returns a gap.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: the gate answered wrongly. It owed 49 checks again and refused a green landing on them, for uncommitted files no verb of theirs runs. No map changes.
+
+**Found and left?**
+- The claims side counted any uncommitted file too. Effect: a landing would owe a claims triage again for an edit of a crate the claims verbs never run. Fixed here (`CLAIMS`).
+- `rust/guard/shared` includes a file of the `record` crate, outside its own dependencies. Effect: an edit of that table could change an answer and a table built from `Cargo.toml` alone would miss it. Fixed here: the walk reads the include lines, and both tables count the file.
+
+**Performance work?** no: it corrects what a landing owes; the saved re-runs are its effect, not a speed change of any tool.
+
+
+<!-- plan-archive: archived 2026-11-24 -->
+### T225 (the round arbiter's `ask:stamp-reads-committed-code-as-mixed`, 2026-11-24, continue with a tooling fix: each of the day's three gate fixes re-owed the answers recorded before it - 241 claims, 53 record answers, 191 claims and 49 record answers, and the landing was refused each time - because the mixed-build rule compared a build's stamped blobs with HEAD alone)
+
+- **Approach**: A landing alone reads a build's uncommitted file as another builder's only where no commit holds the blob the build stamped for it. The reading is one type, `Own`, in `rust/gate/crates/core/src/build.rs`; `mixed` asks it, and the two readers (`Judged` in `owed/answers.rs`, `Landing` in `claims/index.rs`) each hold one `Own` in place of their own HEAD lookups.
+  - **(a) The ruling's rule.** A stamped blob is the landing's own committed code where it is its path's blob at HEAD, at a commit of the landing's delta, or at the delta's base. A stamped `deleted` is the landing's own where one of those commits holds no such file.
+  - **(b) How the delta and its base are found.** The base is `git merge-base HEAD origin/main`, the base `make land` already diffs from (`origin/main...HEAD` in `land.rs`). The delta is `base..HEAD`. The landing worktree is a worktree of the clone, so it resolves `origin/main` as the clone does. A merge of main into the clone moves the base to main's tip and leaves the clone's own commits in the delta. Where no base is found (no `origin/main`, no shared history) the delta is empty and a blob is held to HEAD: the rule before this task.
+  - **(c) A blob no commit holds still reads mixed.** That is the real case the rule exists for: another builder's work in progress, changed before it was committed or never committed. Observed 2026-11-24, method: a script over every `builds` entry of the clone's `.git/record-checks/*.json` (302 entries) and every `build` of `dev/claims-index.json` (205 rows): one answer holds blobs no commit holds, `modal-form:sheet/guest-quarters` at its superseded fingerprint `e22e938665b5` (a build of `07aac2b99c` with 24 dirty files, 15 of them never committed in that form). It is not the unit's current answer, so nothing reads it.
+  - **(d) Since the build: a decision this task adds to the ruling's words.** The stamp names the commit its binary was built at. A file committed unchanged after the build is at a commit of `<stamp commit>..HEAD`, wherever the landing's base stands, so a blob held there is committed code too. Why it is needed: the ruling's rule holds for one landing. Observed 2026-11-24, method: a script over `dev/claims-index.json` comparing each stamped blob with this tree: 189 rows carry a stamp of `1b064aa0de` with seven dirty files, and this task's own commit edits five of them. Once this landing is pushed, its commits are behind the next landing's base, and every one of those rows would read mixed at the next landing of any clone, the loop the ruling ends run once more. With (d), observed 2026-11-24, method: the same script: 0 of the 205 stamped rows, and 0 of the 302 record entries but the one in (c), hold a blob that no commit since its stamp holds. It is asked last, after HEAD, the delta and the base miss, so a landing whose answers are its own pays nothing for it. A stamp commit git does not know adds nothing.
+  - **(e) The cost.** A blob HEAD holds: one `rev-parse` a path, as before. The first blob HEAD does not hold: one `merge-base` and one `git log --raw` over the whole delta, kept for every later path and answer; then one `rev-parse` of the base a path. For (d): one `git log --raw` a stamp commit. The `git log` took 0.08 s for 106 commits (932 lines), 0.03 s for 65 and 0.01 s for 27, measured 2026-11-24 (`/usr/bin/time` on it in the clone).
+  - **(f) The stamp is refreshed at use.** `build::current()` hands the stamp on without each dirty file whose stamped blob is the one HEAD of the launcher's tree (`L7R_GATE_TREE`) holds now: one `git ls-tree` a call, none for a clean stamp. This is the ruling's second clause on the writing side. An answer recorded by a binary whose sources were committed unchanged since its build carries a clean stamp, and a triage clear by it stamps no row of the tracked index. The reading side already read such a stamp as clean, blob by blob.
+  - **The messages are unchanged.**
+
+| the landing as the clone stands (`L7R_LAND_ALONE=1`, read only, 2026-11-24) | before | after |
+|---|---|---|
+| `make record-owed UNANSWERED=1`: units listed as answered by a mixed build | 49 | 0 |
+| `make claims-owed`: claims owed | 0 | 0 |
+
+  Before is the clone at `764f15e3d2` with no edit (`/tmp/t225/before-record.txt`, `before-claims.txt`); after is the same tree with this task's edits uncommitted (`/tmp/t225/after-record.txt`: "no record check is owed"; `after-claims.txt`: "no claim is owed"). The claims row proves nothing by itself: every claim stamp equals HEAD until this task is committed. The claims half rests on the script in (d) and on the claims crate's fixture.
+
+### T225 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing owes an answer again only when code that was never committed judged it.
+2. **The constraints.**
+   - T197: a landing alone never trusts an answer judged with another builder's uncommitted code. Kept: a blob no commit holds reads mixed.
+   - The ruling's `tooling_fix`: a stamped blob equal to its path's blob at any commit of the landing's delta, or at its base, is the landing's own; a stamp whose dirty blobs all equal HEAD reads clean; a red fixture of the earlier-commit case.
+   - T223 and T224: the claims readers stay on `Landing::paths`, and a path counts only inside its closure table.
+3. **Where each comes from.**
+   - O: the measurement, `/home/agent/.claude/jobs/c6fd72d1/tmp/arbiter-stamp-history.md` and `stamp-history.txt`; the scripts' counts in (c) and (d).
+   - R: the round arbiter, `ask:stamp-reads-committed-code-as-mixed`, continue, its `tooling_fix`.
+4. **Do they describe the world here?** Yes: the table above, on the answers the ruling names, and the scan of every stored stamp.
+5. **The order.** Straight after the landing of T218 to T224, alone in the clone. Nothing records an answer in the clone while the gate's crates are uncommitted.
+6. **The exits.** Green: `make closing-checks T=T225 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, 2026-11-24, method: a detached worktree of HEAD (`764f15e3d2`) with only the two new tests copied in, `make rust-test` on each crate. The owed crate's `an_answer_by_a_build_of_an_earlier_commit_of_the_landing_stands` failed (`/tmp/t225/red-owed.log`, 124 passed, 1 failed: the answer whose stamped blob was the file's at the delta's first commit was re-owed). The claims crate's `a_triage_clear_by_a_build_of_an_earlier_commit_of_the_landing_stands` failed the same way (`/tmp/t225/red-claims.log`, 196 passed, 1 failed). After: 125 and 197 passed. The owed test also holds the opposite cases: a blob no commit holds is re-owed, and so is the earlier-commit blob of a build whose commit git does not know once no base names the delta. Core's fixture test holds each arm of `Own`: HEAD, an earlier commit, the base, a deleted file, a blob no commit holds, the pushed landing of (d), and no base.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: the gate answered wrongly. It owed 49 checks again, and three rounds of claims, for code this landing had committed. No map changes.
+
+**Found and left?**
+- The rule as the ruling words it holds for one landing: 189 claim rows would read mixed at the next landing. Effect: the next landing of any clone is refused or owes 189 claims a triage again. Fixed here: (d).
+- A binary built before its sources were committed unchanged kept stamping them dirty. Effect: each triage clear by it wrote a `build` into the tracked index, and each record answer carried up to 30 files that were HEAD's own. Fixed here: (f).
+
+**Performance work?** no: it corrects what a landing owes; the saved re-runs are its effect, not a speed change of any tool.
+### T15 (FR-008: T225's `make static` with a plain `&` sat untracked - the spec's User Story 4, research R4)
+
+- **Approach**: D12 in `no_poll_hooks`. Held: `rust/guard/src/guards/no_poll_hooks.rs` (`make guard-edit` first). Red first: R4's
+  observed `(make static > /tmp/t225-static.log 2>&1; echo END >> ...) & sleep 1` refused naming `run_in_background`; `nohup make
+  rust-test` refused; `for c in git setsid make; do ...` passes (a word, not a command); `make static > log 2>&1 & wait $!` passes;
+  `make static & echo wait` refused (a `wait` that is a word); `make static & sleep 5 & wait $!` refused (`$!` names the sleep); `make
+  static & P=$!; wait $P` refused (a saved pid, D12); `make static & (wait)` refused (another shell's wait); `make static & false &&
+  wait` refused (a conditional wait); `make static & wait &` refused (a backgrounded wait); `(make static > log) & make decide F=449
+  T=T121 | tail -40; wait` passes (R4's observed bare form); `sleep 30 & make static & wait %2` passes (`%2` names the make job,
+  the sleep no make or cargo); `setsid make static` refused; `make static & disown` refused; `make static & disown; wait` and `make static & disown;
+  wait $!` refused, each going red when the disown check is deleted (the covering wait would pass them); `make static & disown -h;
+  wait` and `make static & disown %1; wait` refused; `{ make static; } &`, `VAR=x make static &` and `env X=1 make
+  static &` each refused (D1's detector reads the target past `{`, `VAR=` and `env`); `make static` with `run_in_background` passes; `DETACH_OK="..."` passes and is
+  recorded. A compound that runs in another shell - a pipeline's part (`for t in a b; do make $t & done | cat; wait`, `{ make x & }
+  | cat; wait`), a `( )`, a backgrounded loop, one in `$( )` - is refused, since a later `wait` covers none of its jobs; a bare `wait`
+  after a loop, `if` or `case` body run in the same shell covers it (the plan review's ruling, LEGITIMATE, 2026-11-20).
+- **The shared readers, fixed here** (T30 folded in; the plan review of 2026-11-20 ruled leaving them NOT LEGITIMATE). Held also:
+  `rust/guard/src/shared/shape.rs`, `rust/guard/src/shared/make.rs` (`make guard-edit` first). Each red first in its own tests:
+  `strip_heredocs` takes a heredoc whose opener line goes on past its delimiter (`cat <<'EOF' > f`), keeping those words;
+  `strip_quotes` keeps a quoted string only after an interpreter's `-c`, its flags joined too (`bash -lc`, `sh -ec`, `python3 -c`),
+  never `grep -c` or `git -c`, and blanks the strings quoted inside a kept one; `invoked` reads `setsid [opts]` as a word that runs
+  what follows, `make;` as a call, and a goal-less make as `.DEFAULT_GOAL` (a goal it cannot read, `make $T`, still names none).
+  `no_poll_hooks` reads through them, its own heredoc and quote readers retired. Every guard reading them is replayed on the frozen
+  corpora before and after, each moved verdict named.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the detached run | n/a - no map | n/a | none | n/a |
+
+### T15 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; every long run is one whose end wakes the session.
+2. **The constraints.** FR-008, FR-012; D1 (the detector), D12; constitution XVIII (a mention is not an invocation).
+3. **Where each comes from.** G: the approved "a guard refusing that pattern"; O: research R4.
+4. **Do they describe the world here?** R4's cases are the session's own commands.
+5. **The order.** First in lane B (the GM 2026-11-20 order, FR-013); it needs only T02's make detector, landed.
+6. **The exits.** Green: the twenty-three cases, grown in the suite to 35 refused and 28 passed (cargo, `disown -a`, `disown $!`, the mentions, `&&`, `&>`, `2>&1`, `|&`, a non-make job), with the plan review's 6 compound-in-a-pipeline cases refused and 2 waits inside the part passing - measured 2026-11-20 (the case arrays of `no_poll_hooks/tests.rs`, counted). The four frozen corpora through `detached`: 1,134 commands, 16 refused, each a real `setsid nohup make done ... &` or `nohup make done ... &` launch read by hand, so 0 false refusals - measured 2026-11-20 (`detached` over `tests/hooks/fixtures/*.json`). The 14 of the first replay grew to 16 as the shared readers were fixed: one launch chained after a heredoc whose opener went on past its delimiter, one after a line continuation into `setsid nohup make done`. Every guard before and after the shared fix, on the same corpora: 3 of 1,134 verdicts moved, each a correction - no-poll refuses the `setsid nohup make done &` launch; no-poll brackets a `pkill -f "pytest"` it missed, the old `strip_quotes` having kept `grep -c "[p]ytest"` and knocked its quote pairing out of line; main-tree honors a `# MAIN_TREE_OK:` reason the same misreading swallowed after a `python3 -c "..."`, so `tests/hooks/fixtures/main-tree-refusals-2026-09.json` row 130, recorded under the misreading, is re-labeled `rewrote` to `allowed` and its split 109/64 to 110/63 (the suite's own case: an escaped command is allowed, not rewritten) - measured 2026-11-20 (the `l7r-guard` binaries built just before and just after the shared fix, all guards, one PreToolUse call a command, inside a scratch clone, each in a fresh HOME, results diffed; the same binary twice gave 0 differences). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The suite's cases. Red first: 2 of the 2 new guard tests failed on the code before the check; the check deleted, 35 of 35 firing cases red; the disown check alone deleted, the 6 `disown ...; wait` cases red; after the review's fixes, the check deleted again, 35 of 35 red - measured 2026-11-20 (`make rust-test CRATE=rust/guard`, four logged runs). The plan review's 6 compound-in-a-pipeline cases were refused before they were added, so not red first; with the pipeline's subshell cut deleted, 5 of the 6 red, the sixth (`( make x & ) | cat; wait`) a shell of its own either way - measured 2026-11-20 (`make rust-test CRATE=rust/guard`, one logged run). The shared readers' 2 new tests (`shape`'s, `make`'s) failed before their fix - measured 2026-11-20 (`make rust-test CRATE=rust/guard`, one logged run). Their callers in the gate held: `land`'s `run_target` and `rustc`'s skip a goal-less make's `.DEFAULT_GOAL`, as they skipped its empty goal before (`land`'s test went red on it and green with the skip). The walk is a small shell parse in `no_poll_hooks` (`Shell`), reading through `shared::shape` and `shared::make::invoked`; a bare `wait` after a loop, `if` or `case` body in the same shell covers its jobs (the plan review: LEGITIMATE), `wait $!` and `wait %N` only in the job's own list.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a.
+
+**Found and left?** none
+
+**Performance work?** yes - a `[perf]` task (FR-013): it makes the work after it faster; no engine timing, so no checklist
+
+<!-- plan-archive: T16 to T16 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+<!-- plan-archive: T17 to T17 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->

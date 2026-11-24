@@ -34,7 +34,7 @@ pub const HEAD_W: f64 = 6.0;
 /// Supply canal A's width at its head and B's, both tapering to `THREAD_W` (feet).
 ///
 /// Research:
-///     supply canals - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 4.5 -> 1.5 along the upper edge, 4.0 -> 1.5 along the far edge
+///     supply canals - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 4.5 -> 1.5 along the upper edge, 4.0 -> 1.5 along the far edge - the 4.5 ft canal A's, along the head and down the far flank; the 4.0 ft canal B's, down the brook's flank (the page's "far edge" is the brook's flank here)
 pub const SUPPLY_W: (f64, f64) = (4.5, 4.0);
 /// The width a supply canal tapers to (feet).
 ///
@@ -167,7 +167,7 @@ fn offtake_lines(fan: &Fan, lines: &Lines, fracs: &[f64], s: f64, probes: &mut u
 /// +1 the fan's right looking downhill, -1 its left), so the race is short and the brook keeps outside the crop beside it.
 ///
 /// Research:
-///     the fork - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the head race splits into a supply canal along the upper edge and one along the far edge
+///     the fork - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the head race splits into a supply canal along the upper edge and one along the far edge - canal A along the head and down the far flank, canal B (the page's far-edge canal, the 4.0 ft one) down the brook's flank
 ///     the fork's place - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the race runs from the intake down to the fork at the head of the fan - at the head's corner on the brook's side where the intake stands at that shoulder, at its middle where the intake does
 #[must_use]
 pub fn division(fan: &Fan, brook_side: f64, center: bool) -> Pt {
@@ -188,7 +188,7 @@ pub fn division(fan: &Fan, brook_side: f64, center: bool) -> Pt {
 ///     the head race's course - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the race runs from the intake down to the fork at the head of the fan - one straight run
 ///     the widths by role - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the head race 6.0, supply 4.5 to 1.5 along the upper edge and 4.0 to 1.5 along the other, delivery 2.5 to 1.2, drain 1.2 to 5.5 ft - canal A the upper edge's, along the head and down the far flank, canal B the other edge's, down the brook's flank (`HEAD_W`, `SUPPLY_W`, `DELIVERY_W`, `DRAIN_W`)
 ///     the first canal with no offtake - GUESS: research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html silent on a first canal its fractions leave no offtake; canal A runs on to the crop's edge
-///     the second canal with none - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the second canal is drawn partway down its edge - half way, where its fractions leave it no offtake
+///     the second canal with none - GUESS: research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html silent on a second canal its fractions leave no offtake (the page has it feed at least one delivery ditch on every hamlet map); canal B runs half way down its edge - a case no seed has rolled (6,000 cohort seeds and the pool's four comb hamlets, feature 449 T424)
 ///     the canal's steps - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: a canal narrows in equal steps from its head to 1.5 ft at its last offtake - an equal step a leg from its head's width to the thread there, the leg a canal runs on past it to the crop's edge flat at the thread
 ///     a delivery's course - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: delivery ditches leaving the supply canals - each along its row's bund from the flank to the drain at the middle, bowed as the bund is
 ///     the canal's end - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: its tail narrows to a thread and ends at the edge of the crop, or stops at its last offtake's junction (`tail_runs_on`) - at the thread from its last offtake either way

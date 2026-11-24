@@ -341,6 +341,38 @@ fn a_flank_turns_its_back_and_a_notch_or_a_cramped_belt_is_refused() {
     assert!(s.frames.iter().all(|f| f.out.1 < 0.0));
 }
 
+/// THE BAND HOLDS NO CORNER OF THE FIELD (449 T423): a tooth of the field 40 ft wide stands 150 ft into the band of each north
+/// margin beside it, between the points the band is sampled at (the middle and 0.6 of its half-length either side) - before T423
+/// both margins seated, a tenth of the houses' band on the paddy (14 of 446 seated rolls, measured 2026-11-24).
+#[test]
+fn a_band_holding_a_corner_of_the_field_between_its_samples_is_refused() {
+    let mut i = inp();
+    i.outline = vec![
+        (2500.0, 2500.0),
+        (2880.0, 2500.0),
+        (2880.0, 2350.0),
+        (2920.0, 2350.0),
+        (2920.0, 2500.0),
+        (3500.0, 2500.0),
+        (3500.0, 3500.0),
+        (2500.0, 3500.0),
+    ];
+    i.walls = vec![(i.outline.clone(), 0.0)];
+    let s = seat(&i).unwrap();
+    let held = s
+        .frames
+        .iter()
+        .filter(|f| {
+            i.outline.iter().any(|p| {
+                let r = (p.0 - f.center.0, p.1 - f.center.1);
+                (r.0 * f.along.0 + r.1 * f.along.1).abs() < f.band.0
+                    && (r.0 * f.out.0 + r.1 * f.out.1).abs() < f.band.1
+            })
+        })
+        .count();
+    assert_eq!((s.frames.is_empty(), held), (false, 0));
+}
+
 #[test]
 fn a_walled_in_head_gives_way_to_the_next_margin() {
     let mut i = inp();
@@ -384,4 +416,30 @@ fn only_a_fall_toward_the_wind_backs_the_hill() {
         .frames
         .iter()
         .any(|f| -(f.out.0 * i.wind.0 + f.out.1 * i.wind.1) >= i.back_min_dot));
+}
+
+#[test]
+fn a_fall_into_the_wind_backs_the_hill_when_its_one_windward_margin_is_walled_in() {
+    // the field falling north-west, into the wind; the north margin's seat on the toe, the west margin's kept by the ranking
+    let s = 0.5f64.sqrt();
+    let mut i = inp();
+    i.fall = (-s, -s);
+    i.toe = square(2000.0, 2100.0, 4000.0, 2400.0);
+    // ...and a ring of water round the whole west margin's ground: every seat the ranking kept has no dry way out
+    let (x0, y0, x1, y1) = (2050.0, 2450.0, 2490.0, 3550.0);
+    i.lines = vec![
+        ((x0, y0), (x1, y0)),
+        ((x1, y0), (x1, y1)),
+        ((x1, y1), (x0, y1)),
+        ((x0, y1), (x0, y0)),
+    ];
+    // before 449 T423 the hill-backed seat was asked only when the ranking kept no margin, so this site was refused "walled
+    // in" (seeds 115 and 260 of 12 households falling at 180 degrees); the high margin is taken, off the wind
+    let h = seat(&i).unwrap();
+    assert!(!h.frames.is_empty() && h.frames.iter().all(|f| f.offwind));
+    // a fall square across the wind still refuses by name, its walled-in margin counted
+    i.fall = (s, -s);
+    let refused = seat(&i).unwrap_err().to_string();
+    let named = refused.contains("walled in") && !refused.contains(" 0 walled in");
+    assert!(named, "{refused}");
 }

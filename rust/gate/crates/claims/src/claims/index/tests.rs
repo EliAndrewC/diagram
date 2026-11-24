@@ -518,3 +518,91 @@ fn a_mislabeled_claim_s_restated_account_is_owed() {
     );
     assert!(!relabeled_only(&bare, &r, &root).unwrap());
 }
+
+/// Feature 451 T221 (the shrine-tree trio and `audit/palette.rs`, `make claims-report` of 2026-11-24: four MISLABELED lines printed
+/// beside `owed 0`, each claim corrected since its verdict). A finding's row keeps the claim as it was said, class word and all, and its
+/// unit's claim labels: a relabel the fingerprint cannot see - a claim on a tagged item drops its class word - answers its MISLABELED
+/// verdict, a unit that gained a claim since owes the finding again, and a MISLABELED claim that only named its item stands.
+#[test]
+fn a_corrected_claim_s_finding_is_answered_or_owed_again() {
+    let root = fixture("claims-index-relabel");
+    let q = root.join("research/questions");
+    let u = unit("rust/phases/src/lib.rs", "GAP", "constant", (10, 10), &[]);
+    let body = body_of(&root, &u).unwrap();
+    let key = "rust/phases/src/lib.rs::GAP#gap";
+    let read = |line: &str, was: &Value| {
+        let r = row(key, u.clone(), line, "");
+        let mut cur = Cur::default();
+        cur.insert(r.clone());
+        let index = obj(&json!({key: was.clone()}));
+        (
+            owed(&cur, &index, Some(&q), None).unwrap().len(),
+            relabel_answered(was, &r, &root).unwrap(),
+            super::answered(&cur, &index, &root).unwrap().len(),
+        )
+    };
+    // the trio: judged MISLABELED citing the page as a finding, relabeled a GUESS on the page's tagged item - the stored claim and the
+    // fingerprint read the same before and after
+    let then = parse_claim(&format!("gap - {WELLS}: beside one tree")).unwrap();
+    let now = format!("gap - GUESS {WELLS}#tree: beside one tree");
+    let now_row = row(key, u.clone(), &now, "");
+    let mut was = json!({"code": now_row.code, "body": body, "claim": then.normalized(), "verdict": "MISLABELED", "research": "",
+        "said": then.unanchored(), "siblings": super::siblings_of(&now_row.unit)});
+    assert_eq!(then.normalized(), now_row.claim.normalized());
+    assert_eq!(read(&now, &was), (0, true, 1));
+    // the claim as it was judged, and the claim with its item named and nothing else: the finding stands
+    assert_eq!(
+        read(&format!("gap - {WELLS}: beside one tree"), &was),
+        (0, false, 0)
+    );
+    assert_eq!(
+        read(&format!("gap - {WELLS}#tree: beside one tree"), &was),
+        (0, false, 0)
+    );
+    // a row recorded before T221 kept no such line: a class word its fingerprint drops cannot be told from the one it was judged
+    // with, so it stands until it is judged again
+    was.as_object_mut().unwrap().remove("said");
+    assert_eq!(read(&now, &was), (0, false, 0));
+    // naming the item of a MISLABELED claim, its class kept, answered the verdict before T221 (the stored claim read rewritten)
+    let classed = parse_claim(&format!("gap - GUESS {WELLS}: beside one tree")).unwrap();
+    let old = json!({"code": "old", "body": body, "claim": classed.normalized(), "verdict": "MISLABELED", "research": ""});
+    assert_eq!(read(&now, &old), (0, false, 0));
+    // palette.rs: the claim as judged, its unit given the claims the finding asked for - owed again; an IN-STEP row is not
+    let mut grown = u.clone();
+    grown.claims = vec![
+        then.clone(),
+        parse_claim("kura - GUESS: a storehouse drawn as a kura").unwrap(),
+    ];
+    let owes = |verdict: &str, siblings: Option<String>| {
+        let r = row(key, grown.clone(), &then.line, "");
+        let mut was = json!({"code": r.code, "body": body, "claim": then.normalized(), "verdict": verdict, "research": ""});
+        if let Some(s) = siblings {
+            was["siblings"] = json!(s);
+        }
+        let mut cur = Cur::default();
+        cur.insert(r);
+        owed(&cur, &obj(&json!({key: was})), Some(&q), None).unwrap()
+    };
+    let alone = super::siblings_of(&u);
+    assert_eq!(
+        owes("MISLABELED", Some(alone.clone())),
+        [(key.to_owned(), super::SIBLINGS.to_owned())]
+    );
+    assert!(owes("MISLABELED", Some(super::siblings_of(&grown))).is_empty());
+    assert!(owes("MISLABELED", None).is_empty());
+    assert!(owes("IN-STEP", Some(alone)).is_empty());
+    // 417 T33's kind (feature 451 T220): a `fix: code` drift judged against an engine that has since moved is owed again
+    let known = |drawn: &str| {
+        let r = row(key, u.clone(), &then.line, "");
+        let was = json!({"code": r.code, "body": body, "claim": then.normalized(), "verdict": "DRIFTED", "research": "",
+            "note": "known (417 T33): the porch is drawn 8 by 6 ft; fix: code; effect: a short porch", "drawn": drawn});
+        let mut cur = Cur::default();
+        cur.insert(r);
+        owed(&cur, &obj(&json!({key: was})), Some(&q), None).unwrap()
+    };
+    assert!(known(&super::super::drawn::drawn_by(&root)).is_empty());
+    assert_eq!(
+        known("an engine since changed"),
+        [(key.to_owned(), super::super::drawn::DRAWN.to_owned())]
+    );
+}

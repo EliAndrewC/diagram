@@ -241,12 +241,6 @@
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   },
-  "### T100 (<why: the finding or measurement that files it>)": {
-   "sha256": "1ee0c3bd7e2e555bd0a9450992a32b8092e119fef3dffdb8be1388ace729f970",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
   "### T100 Approach (checklist part A)": {
    "sha256": "aea166f60a704e358e7e303ffd69d4ae7d3754e8f985b0e4df53e4b85434f686",
    "verdict": "CLEAR",
@@ -667,30 +661,6 @@
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
   },
-  "### T165 (<why: the finding or measurement that files it>)": {
-   "sha256": "65a6f44a2e6c55d8d68bafb912412aa6b050945e7668322ad47a201e502c84d4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T165 Approach (checklist part A)": {
-   "sha256": "b6bbbfc59a8b91a6e19ae352708cb193e88fdc7a5986081c54cb4feaba526cd7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T166 (<why: the finding or measurement that files it>)": {
-   "sha256": "a558f2a4f6e448b5f8abedd82f60a7f4a8abfb0d86e2e8a5c05a3e61cf8f3c97",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T166 Approach (checklist part A)": {
-   "sha256": "45d2f0e4ff29db4081f52c378ec4eb74f6aadd0bc40008b3bfd11761b649da1a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
   "### T167 (observed 2026-11-23: 449 T330's page sessions' event-log lines were booked to the clone's mark, T312 and then T328, and a 451 landing of T160 and T161 was refused \"review passes with no ledger row\" on a T330 page-session pass that 451 T157's `whose.rs` should have left to T330)": {
    "sha256": "7577ecef875a26bd9e1f9f625f28f6197ecafd4d687a07bcff81d0f87a4ea2ec",
    "verdict": "CLEAR",
@@ -829,18 +799,6 @@
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
   },
-  "### T182 (<why: the finding or measurement that files it>)": {
-   "sha256": "bb474d48c4c627758e8973640e84ea6946fd074a0602d918f4b9e100f985d16b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T182 Approach (checklist part A)#2": {
-   "sha256": "67edb4d9a212600303aedf9e5acca10a99de1ddb55190a16fe35c649de4523bc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
   "### T179 (observed 2026-11-23, 449 T377's builder: `round:spec-fidelity|plan:specs/449-rust-codebase#T377@3` - the feature's path where its directory name is the form - was ruled in 451's log and its accept recorded 18 of 451's owed plan blocks CLEAR; and T177's builder: the mirror's feature \"\" entry for `reversal:.../context_cap_hooks.rs`, ruled in the clone, held every builder's check dispatch for days)": {
    "sha256": "6d0a876e394146b0c0993ebd3703b1c8938b4e86f4ba4688653b491f354dfd41",
    "verdict": "CLEAR",
@@ -849,18 +807,6 @@
   },
   "### T179 Approach (checklist part A)": {
    "sha256": "94bacc820c05643d984d57e80a3ed69ce1394320921fdbec93b81240894df5be",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T179 (<why: the finding or measurement that files it>)": {
-   "sha256": "a7d2808423b7d85bb60ef2cd7164fc181716602b61b32588d2e3a4bdaf91b56e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T179 Approach (checklist part A)#2": {
-   "sha256": "2e7783c6e5fff2b93e81b8c55fd44ac7510e44c30dfa5e601b971b796f3580d6",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
@@ -1267,12 +1213,6 @@
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
   },
-  "### T215 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "0a4ae21f67f6a0d91b8c1d262030d6707e137028f43f8cff6e3825294ed5903e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-24",
-   "declared": "spec-fidelity"
-  },
   "### T216 (the GM 2026-11-24: builders were sent with `model: opus` under a Fable 5.2 session; an ad-hoc agent that judges or builds runs on the session's model)": {
    "sha256": "a2312f96a35504aefbd4b653bd9def76d70b2c949ec9272a9cf8b2a1b3ab4c3d",
    "verdict": "CLEAR",
@@ -1293,6 +1233,168 @@
   },
   "### T217 Approach (checklist part A)": {
    "sha256": "fdcc9631d8bea5db1ea0ca62c348090598b57efd1b9e7330dc8c8f3689ea8dca",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T221 (the restatement audit, 2026-11-24: four corrected claims still print MISLABELED in make claims-report beside owed 0)": {
+   "sha256": "6345c4fe94f3ee6ca3ba3188937ee7c5901df5ce146872ac56926f3fd5a717dd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T221 Approach (checklist part A)": {
+   "sha256": "5990d14d2d217b9e79aca5fd6bdb850b3671b0a3ad97e19103b138faebf72ec6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T219 (the restatement and task audits, 2026-11-24: every OUTSIDE THE CHANGE note is filed, the ones naming nothing wrong included)": {
+   "sha256": "0be07c7b7c73d010c0a39d572de679c3f9224882819c0541ea997bb3b53c57a5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T219 Approach (checklist part A)": {
+   "sha256": "a2ad54a7e70268e23bbeac0c038c912df52b4b4d1ffe8fa2bbada710adca2bd9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T218 (the restatement audit, 2026-11-24: \"the cited pages do not say it\" filed from the bundle alone where the record says it)": {
+   "sha256": "23f771e95cca8bef396069e6494b0fd5071328e80a9acebd7e3a1cc87698dadc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T218 Approach (checklist part A)": {
+   "sha256": "90edffc3420ab2420fca27d2cb575d809ecdbf78b4fdb02203e61c04a7ea565c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T222 (the restatement audit, 2026-11-24: a dated log entry judged as a statement about the sheet today)": {
+   "sha256": "92350373020ed8f8e1fac974a253851ee4ab2c509b384a108fb62ddde109b038",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T222 Approach (checklist part A)": {
+   "sha256": "74f1509dc1ab288c25c42eec32c09871abd5dae3c35b12afd2cb7da46023ff4d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T220 (the restatement audit, 2026-11-24: \"known (417 T33) ... fix: code\" outlived its fixes)": {
+   "sha256": "7807403b19d4ac247e0ebcdae80b7d8b27d4dcc8ad029f5838ffc9689088d3d9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T220 Approach (checklist part A)": {
+   "sha256": "74f8e6637c3d17de924080e0888b265a00ab652005ecf531cf4c6bc2f10e869e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T223 (the round arbiter's process-fault, `ask:mixed-build-241-claims`, 2026-11-24: a green landing of 449 T423 T424 T418 T422 was refused at the push because T197's rule owed its unchanged doc claims a full impl-drift, the only route offered)": {
+   "sha256": "b901cb8e9db885d0851a1f560e128ca17424265dfa4d6481ba4df6a23199b256",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T223 Approach (checklist part A)": {
+   "sha256": "66f215d4e65e68d179b854559f74734454d62cc40e73e2d5319755f2990d5a4f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T173 (<why: the finding or measurement that files it>)": {
+   "sha256": "c60a5e65842c8384d692ea026ed28156701db68b80f83d2e65cf361a3f6edb7f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T173 Approach (checklist part A)": {
+   "sha256": "70202d69bc869fe100b53964e41336fd99ad2781ee2622f1a33f4e3bba72f1a1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T178 (<why: the finding or measurement that files it>)": {
+   "sha256": "2bc34ba5beded568cf4156ccad6d08e8ed6e69b02d1c80e02316a0803a92b68c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T178 Approach (checklist part A)": {
+   "sha256": "d7a0276e9e00559343ee5a7eafa20055a6c9858202d5c2aa3d78563c84ad0a71",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T181 (<why: the finding or measurement that files it>)": {
+   "sha256": "731fa4ac4f4c83acdcadf4e161b959af69521ff644dac607af306c50bc212e93",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T181 Approach (checklist part A)": {
+   "sha256": "ea9591c6e775a0310d716522d2be4110f1a5c5d7b56b39fbd073578214095832",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T203 (withdrawn: built in T199, its section the T198, T199, T200 bundle's; MODE 4 round 2, 2026-11-23, ruled its deferral NOT LEGITIMATE)": {
+   "sha256": "9cf003fd40f48897825242b120884942d5998b9170b9fe9b3108c0c68c47906d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T206 (<why: the finding or measurement that files it>)": {
+   "sha256": "82349bfb8caeb97c82c0a9bfe4f0fafb4696c3c7e8a73f326d9327cfe3bcb0d1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T206 Approach (checklist part A)": {
+   "sha256": "e904c8f4399cd0164bf5c257f84c41f3f76eb42201a5c5d7373367f8b9fe8be6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T208 (<why: the finding or measurement that files it>)": {
+   "sha256": "51d7cb42c72be6e005203afd8289e8bc337d435b582717b5cc9d622f1a772ed7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T208 Approach (checklist part A)": {
+   "sha256": "e43b34ff5ec08f99298fc809750224411118ea36637f07b696836a1b07752501",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T224 (the round arbiter's `ask:mixed-build-53-record-answers`, 2026-11-24, continue with a tooling fix: a landing was refused at the push and 53 record answers owed again by T197's rule, when for 49 of them the uncommitted files were the claims crate's and a Markdown doc)": {
+   "sha256": "0f9486c03faf336eb6074922622382696bcc91278815190f7f53300cdb0fe27c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T224 Approach (checklist part A)": {
+   "sha256": "f17d43e96ec4cb21becfff2f2d3f1350d1ca5bac44da9196836a3d5d453e8aa1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T225 (the round arbiter's `ask:stamp-reads-committed-code-as-mixed`, 2026-11-24, continue with a tooling fix: each of the day's three gate fixes re-owed the answers recorded before it - 241 claims, 53 record answers, 191 claims and 49 record answers, and the landing was refused each time - because the mixed-build rule compared a build's stamped blobs with HEAD alone)": {
+   "sha256": "ea4c211e557a9a21ba2404b130693a0dbaba1f0d520a97dc1fbba752ca582530",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T225 Approach (checklist part A)": {
+   "sha256": "b4e89cb2129c1f8f8ee3364ab33e861f9500b750eaccace5ff0ba16250dc83ac",
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
@@ -18403,6 +18505,704 @@
      "why": "Documentation follows the guard. The census states its search space. The root clause's two routes (sonnet to read; no model plus the line to judge or build) are still true and are not narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T221 (the restatement audit, 2026-11-24: four corrected claims still print MISLABELED in make claims-report beside owed 0)",
+    "### T221 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 said+siblings on finding rows",
+     "summary": "A FINDING row keeps the claim as said (class word kept, anchors dropped) and its unit's claim labels fingerprinted; bundle.rs writes them to units.json, reply.rs copies them onto finding rows only.",
+     "class": "within",
+     "why": "Record tooling that makes a relabel visible to the index, which is what 'attested versus guess ... cascades mechanically' (convergence talk, 2026-11-23) needs; storing them on findings only is a design choice inside that."
+    },
+    {
+     "id": "D2 relabel answers MISLABELED via said",
+     "summary": "index::relabel_answered reads the backing from said, so a relabel the fingerprint cannot see answers its MISLABELED verdict; one index::answered is shared by the push, the report and the clean gate.",
+     "class": "within",
+     "why": "Directly carries the labels-cascade-mechanically rule and T213 (the account unchanged, only the backing may change); one shared reading changes no scope."
+    },
+    {
+     "id": "D3 report lists what stands",
+     "summary": "make claims-report counts an answered finding as ANSWERED and omits it from the list; ALL=1 lists it.",
+     "class": "within",
+     "why": "The task's own wrong outcome (findings that no longer stand printed beside owed 0); nothing is hidden since the count is shown and ALL=1 lists them."
+    },
+    {
+     "id": "D4 sibling change re-owes the finding",
+     "summary": "A finding whose unit's claim labels changed since judged is owed impl-drift again rather than answered or hidden.",
+     "class": "within",
+     "why": "Only a claim-changing edit re-owes a check and only the finding is re-owed (review scoped to the change), and 'if there are real defects, then I do want to find them' forbids answering it mechanically where only a judgment can say."
+    },
+    {
+     "id": "D5 legacy rows stand until T220 re-judges them",
+     "summary": "A row recorded before T221 has neither field; it is answered only where its stored claim differs from the claim with and without anchors, otherwise it stands until judged again; the task's four named rows are re-judged in T220's claims round, ordered after T221.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task's four rows keep printing until T220 instead of being cleared by T221, so this narrows what the task fixes. A mechanical answer is not possible for them: the trio's stored claim equals normalized() of today's claim (the class word was never stored), and palette.rs's finding needs a judgment on whether its new sibling claims answer it. Clearing them without that data would risk hiding a wrong outcome, which the GM's 'real defects ... find them and fix them' forbids. The re-judgment is the ordinary path in an open, ordered task of the same bundle, not an unfiled deferral."
+    },
+    {
+     "id": "D6 item-named-only no longer answers",
+     "summary": "Fixes a found bug: a MISLABELED claim that only named its item, class kept, read as rewritten and so as answered at the push.",
+     "class": "within",
+     "why": "T204 (naming an item owes nothing and must answer nothing) and T213 are among the six defects the GM said to fix ('Yes let's fix all 6 of those'); fixing a defect found during the task is the standing fix-as-we-go rule."
+    },
+    {
+     "id": "D7 tests as the step pins",
+     "summary": "Three claims-crate tests, two shown red with the rule removed.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior, not unrequested scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T219 (the restatement and task audits, 2026-11-24: every OUTSIDE THE CHANGE note is filed, the ones naming nothing wrong included)",
+    "### T219 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "core/record/effect.rs reads one form, `effect: <map|sheet|page|tool> - <wrong outcome>`; `effect: none`, an effect naming none of the four, and no effect name none",
+     "class": "within",
+     "why": "The four now cover constitution XIV's whole definition of a defect (a map/sheet/page that reads wrong or contradicts a finding; a tool, guard or check that crashes, hangs, refuses valid input or answers wrongly, which takes in a check passing bad work or refusing good). The round-1 narrowing (tool defects dropped) is repaired, and a tool note is filed in the tests (451 found row 26)."
+    },
+    {
+     "id": "D2",
+     "summary": "file_outside_in files an OUTSIDE THE CHANGE line only with that effect (kept as `effect`); every other line printed `listed, not filed` with the form, none dropped silently; no file written when nothing filed",
+     "class": "within",
+     "why": "Serves the convergence talk ('cascading changes ... not fixing any real flaws ... we have to fix that') and XIV's rule that a difference is not a defect; a true row is still filed (row 170 test) and an unfiled line is shown with the form, so 449's 'real defects are found and fixed' is not cut back."
+    },
+    {
+     "id": "D3",
+     "summary": "make review-verdict refuses an `outside` finding whose `what` names no effect, with the form",
+     "class": "within",
+     "why": "Same rule at the second channel; with `tool` admitted it no longer refuses a tool-defect finding (test records a tool finding)."
+    },
+    {
+     "id": "D4",
+     "summary": "every emitter states the same rule, enumerated from `grep -rln 'OUTSIDE THE CHANGE' rust scripts docs .claude Makefile l7r` plus a grep for the `outside` severity, each hit read, measured 2026-11-24; a note naming no effect goes under NOTED, NOT FILED in the reply",
+     "class": "within",
+     "why": "Enforcement of the same rule at every writer; the search space is stated and covers the string form across rust, scripts, docs, agents, Makefile and l7r."
+    },
+    {
+     "id": "D5",
+     "summary": "what names none of the four (a wording, a page only silent, a difference that reads fine) is listed and dropped",
+     "class": "within",
+     "why": "These are not defects under XIV v2.36.0 and the GM 2026-11-19 ('things which are different than you expected but still work perfectly well'); a silence that makes a page read wrong still names `page`."
+    },
+    {
+     "id": "D6",
+     "summary": "the third channel (`[outside the change]` verdict on an owed key) already files nothing at claims `report`; impl-drift.md and the claims MANIFEST corrected from 'filed as a task' to `make claims-report` lists it",
+     "class": "within",
+     "why": "A documentation correction to match existing behavior (feature 445); no behavior narrowed."
+    },
+    {
+     "id": "D7",
+     "summary": "the filer lives in the `owed` crate and the form in `core`, outside the coordinator brief's crates",
+     "class": "within",
+     "why": "Placement of the one filer both commands call; not a scope or fidelity matter."
+    },
+    {
+     "id": "D8",
+     "summary": "verification: unit tests red with the form's reading removed, plus live impl-drift rounds on row 170 (filed) and row 178 (not filed) replay bundles after the verdict; order after T221 before T220; exits via set-down and make arbiter-ask; found-and-left none",
+     "class": "within",
+     "why": "Tests that only fail when the rule is absent enforce what was asked; ordering and exits decide nothing the request left open."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T218 (the restatement audit, 2026-11-24: \"the cited pages do not say it\" filed from the bundle alone where the record says it)",
+    "### T218 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-search-in-tool",
+     "summary": "The record search runs in the tool at make claims-checked (silent.rs, called before the reply is vetted), not in the bundle builder, so IN-STEP claims cost nothing and OUTSIDE THE CHANGE lines are covered.",
+     "class": "within",
+     "why": "Where the task line's search runs is a mechanism choice; it reaches every line the task names, including row 210's own form (an outside line)."
+    },
+    {
+     "id": "D2-hold-not-convert",
+     "summary": "A silent-finding line is HELD (not recorded, key still owed, exit 3) while any of the record's three nearest pages is missing from the bundle; once they are bundled it is judged again and recorded as written, and impl-drift.md tells the check a page that says it means fix: claim or nothing.",
+     "class": "within",
+     "why": "The task line asks that a hit turn the finding into a citation fix or nothing; word ranking cannot tell 'says it' from 'mentions the words', so the plan has the check read the hit and decide between exactly those two outcomes. The truly silent finding still files, which the GM's 'if there are real defects, then I do want to find them and fix them' requires."
+    },
+    {
+     "id": "D3-which-lines",
+     "summary": "Lines held: a non-IN-STEP VERDICT that is NEEDS-RESEARCH, ends [section-mark] or uses a silence phrase, and an outside line with a silence phrase that names its effect (no-effect outside lines are dropped by T219 and not searched).",
+     "class": "within",
+     "why": "This is the task line's 'such a line' made concrete; the outside lines with no effect are never filed, so nothing is filed unsearched."
+    },
+    {
+     "id": "D4-search-space",
+     "summary": "The search covers the question and drawing pages (565) ranked by word weight; notes and originals are not searched, since they are not pages a claim cites.",
+     "class": "within",
+     "why": "The finding being tested is 'no page says it' and its fix is a citation of a page; the motivating case is a question page. Searching the citable pages is the search the finding's own words call for, not a narrowing of it."
+    },
+    {
+     "id": "D5-ranking-not-make-canon",
+     "summary": "The task line names make canon / the registry as the search; the plan uses a word ranking over research/questions in the tool instead, because make canon searches the GM's setting notes and semantic-find did not return 0107 in its first five (measured 2026-11-24).",
+     "class": "within",
+     "why": "The parenthetical is the task author's guess at a means, not the GM's words; the substitute is the one that finds the motivating sentence, so it serves the task's purpose better rather than narrowing it."
+    },
+    {
+     "id": "D6-nearest-three-no-threshold",
+     "summary": "Read the nearest three pages then file; NEAREST=3 is a knob labeled GUESS; no score threshold.",
+     "class": "within",
+     "why": "A design parameter inside the requested behavior; labeled as a guess per the project's rule."
+    },
+    {
+     "id": "D7-one-hold-per-key",
+     "summary": "The pages a hold named are kept in .git/claims-searched.json under the claim's key; the next reply on that key passes once those pages are bundled, however reworded, then the entry is forgotten.",
+     "class": "within",
+     "why": "Ends the round after one widened reading, which is what the convergence talk asks (no cascade of reviews that change nothing); the finding is still read against the pages the search named."
+    },
+    {
+     "id": "D8-passes-not-searched",
+     "summary": "A pass (IN-STEP) is not searched, so a GUESS judged IN-STEP whose cited pages are silent, where another page answers it, is still not caught; not built here.",
+     "class": "within",
+     "why": "The task is the filing of 'the pages do not say it' lines; a pass files nothing and nothing cascades from it. A conservatively labeled GUESS whose cited pages are silent is not a wrong outcome under XIV's defect definition (no map reads wrong, no finding is contradicted), so leaving it carries no deferred defect and needs no ruling."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T222 (the restatement audit, 2026-11-24: a dated log entry judged as a statement about the sheet today)",
+    "### T222 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T222-A1",
+     "summary": "building-review.md: a dated entry of a sheet's notes (Review log line, line under a dated heading, entry naming its feature/task) is history, not held to the sheet as it stands; an overtaken older entry is no finding and owes no 'since superseded' pointer; only present-tense text (choices, program, Result/summary paragraph) is held to the drawing",
+     "class": "within",
+     "why": "Implements the convergence talk's 'a cascading set of changes that is mostly not finding actual problems' and constitution XIV's defect definition (a wrong outcome, not a difference): a log entry true of its date makes no map read wrong. The present-tense text, including the Result paragraph, stays held, so real defects are still filed; no requested review is removed."
+    },
+    {
+     "id": "T222-A2",
+     "summary": "record-format.md: HISTORY rule kept whole, gains one sentence - a dated entry is history by its form, ruled on as HISTORY (useful kept, rest proposed for removal), never reported as a stale present-tense statement; permits no change log on a research page",
+     "class": "within",
+     "why": "Leaves the GM's 2026-09-07 HISTORY rule intact (dated entries are still found and proposed for removal); it only fixes which finding class they are filed under, so nothing the GM asked for is narrowed. One of the two agent files the task names."
+    },
+    {
+     "id": "T222-A3",
+     "summary": "Verification by one ad-hoc agent following the clone's edited building-review.md over the two notes files as they stood before 452's fixes, since a dispatched defined agent reads the mirror's file (T219); record-format's sentence stated on the rule alone, no recorded case found",
+     "class": "within",
+     "why": "A method of checking the change, with a red case (Hayakawa T312/T299/T276 not filed) and a green case (the round-trip Result paragraph's figures still filed) that together show real defects are still found; narrows no requirement."
+    },
+    {
+     "id": "T222-A4",
+     "summary": "Order: last of the restatement audit's five, after T219; classified not performance work; found-and-left none; no map changes",
+     "class": "within",
+     "why": "Scheduling and classification inside the task set; it is not measurement work (the GM 2026-11-20 rule) nor a speed-up of a tool, and leaves no defect unfixed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T220 (the restatement audit, 2026-11-24: \"known (417 T33) ... fix: code\" outlived its fixes)",
+    "### T220 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "a-filed-departure-rejudged",
+     "summary": "impl-drift.md's FILED DEPARTURE paragraph re-judges a filed departure each time it is bundled: no longer departs -> DRIFTED fix: claim; departs but not a wrong outcome -> DRIFTED fix: claim; effect: none; only a standing wrong outcome keeps known (NNN Tnn) fix: code, with ask:417-T49-claims kept whole for it",
+     "class": "within",
+     "why": "Serves the convergence talk's purpose (reviews that change nothing are the problem) and constitution XIV v2.36.0 (a difference with no wrong outcome is not a defect, fixed by restating the claim). The arbiter's ruling stopped relabeling of a departure that stands; a departure that no longer exists or is not a defect is outside what it protected, and the one that stands keeps it whole."
+    },
+    {
+     "id": "b-engine-digest",
+     "summary": "A procedure section's finding judged DRIFTED fix: code keeps a 'drawn' digest of every .rs file under rust/mode_a/src and is owed again (full check) when it differs; the over-owing cost accepted; per-claim unit pointers and re-owing every known drift each report priced and not taken",
+     "class": "within",
+     "why": "Tooling that makes 'once the code moves it is judged again' actually happen so stale code fixes are not printed and real defects are still found (449 request 2026-11-24). Choosing the coarser digest over alternatives is design, not a narrowing of what was asked."
+    },
+    {
+     "id": "b-no-backfill-452-T24",
+     "summary": "Rows judged before the digest lands keep none; every standing row was re-judged and recorded in this task, and the one still a code fix (452 T24's compound shrine) now carries its drawn digest via make claims-checked; no fix: code section row is left without one, measured 2026-11-24 by reading the index's rows by key",
+     "class": "within",
+     "why": "Round 1's finding closed: the section now states the 452 T24 re-judgment was recorded (second reading after the bundle was rebuilt with the pages make claims-checked named) and the row keeps its digest, with a one-shot measurement label. With no standing fix: code row undigested, the no-backfill rule leaves no row outside the fix."
+    },
+    {
+     "id": "b-sheet-edits-not-reowed",
+     "summary": "An edit to a hand-drawn sheet (pool/**/*.svg) still re-owes no section claim; not built",
+     "class": "within",
+     "why": "Both motivating stale cases (genkan porch, kitchen garden) are drawn by rust/mode_a and are covered by the engine digest; the only sheet-only case (arch posts) was re-judged this task to fix: claim, so no standing fix: code row depends on a sheet, and the agent rule (a) re-judges any filed departure whenever it is bundled. No wrong outcome is left standing."
+    },
+    {
+     "id": "round-on-clone-rule",
+     "summary": "The six standing keys and 452 T24 bundled by make claims-bundle, judged by an agent told to follow the clone's impl-drift.md (the dispatched agent reads the mirror's), recorded by make claims-checked",
+     "class": "within",
+     "why": "Procedure for running the round on the edited rule; decides nothing about scope."
+    },
+    {
+     "id": "found-left-arch-notice-board",
+     "summary": "The arch dimensions claim (docs/buildings.md) and NOTICE_BOARD_MAX_FT's claim (compound.rs), both DRIFTED fix: claim; effect: none, are left to their owners' restatement tasks (452 doc restatements, 449 Mode A claims); not filed as defects",
+     "class": "within",
+     "why": "Each is a claim's wording with no visible effect, which constitution XIV v2.36.0 says is not a defect; leaving a non-defect to its owner is not a narrowing and needs no ruling, and claims-report keeps listing both until restated."
+    },
+    {
+     "id": "found-left-417-T33",
+     "summary": "417 T33 stays open; closing it is its own feature's",
+     "class": "within",
+     "why": "Outside this task's request; the report surfaces it to its owner once no claim names it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T223 (the round arbiter's process-fault, `ask:mixed-build-241-claims`, 2026-11-24: a green landing of 449 T423 T424 T418 T422 was refused at the push because T197's rule owed its unchanged doc claims a full impl-drift, the only route offered)",
+    "### T223 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T223-before",
+     "summary": "The clean 'before' of a mixed row is read from dev/claims-index.json's own git history: walk from HEAD as far as checked_at, take the newest row whose build is not mixed.",
+     "class": "within",
+     "why": "The arbiter's tooling_fix (ask:mixed-build-241-claims) orders a mixed answer re-triaged by the clean build; a triage judges a change from a before, and the mixed row overwrote it, so reading it from the index's history is the mechanism the ruling needs, not a change of what it asks."
+    },
+    {
+     "id": "T223-withdraw",
+     "summary": "At a landing only the fields a triage writes (research, pages, section, code, core, reads, triaged, cleared, triage, build) are withdrawn; verdict, note, date, claim and rests stay.",
+     "class": "within",
+     "why": "Withdraws exactly the mixed build's answer the ruling says must not be trusted, and keeps the verdicts the ruling keeps; no claim text or full verdict is touched."
+    },
+    {
+     "id": "T223-owed-clears",
+     "summary": "A mixed clear or agent triage owes what claims-owed's ordinary rules find between the clean answer before and the tree: nothing where the tree is back where that answer judged it (73), a tool clear then the agent where a section, page or code moved (147 cleared, 21 to the agent), a full check only where no triage judges the change (1, the rewritten barracks claim).",
+     "class": "within",
+     "why": "This is the tooling_fix verbatim in effect: re-judge with the clean build, mechanical clear first, then claims-triage, impl-drift only for what neither reproduces. Owing nothing where nothing changed since a clean verdict is the clean build's own ordinary answer and is the GM's convergence rule (2026-11-23: only a claim-changing edit triggers review). The ruling's 229/57 split is a count, not a rule; formerly agent-triaged rows the tool now clears are cleared 'mechanical clear first' as the tooling_fix orders."
+    },
+    {
+     "id": "T223-no-base",
+     "summary": "A mixed answer with no clean answer in the walk, or whose claim has no row in a commit of the walk, owes impl-drift with its files named (fails closed).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Presumed wrong and ruled legitimate on three grounds: it fails toward more checking, never less, so it can pass no bad work; the ruling itself sends to impl-drift a claim 'neither reproduces', and with no clean before in the walk there is no change for a tool clear or the agent to judge, so neither can reproduce it; and T197's rule that a landing never trusts a mixed answer forbids the only other outcome (trusting it). The replay found a before for all 242 mixed rows, so the case guts nothing the ruling asked for."
+    },
+    {
+     "id": "T223-full-verdicts",
+     "summary": "A full impl-drift verdict is never re-owed: verdict_row builds a fresh row with no build, and the 14 edited claims keep their verdicts.",
+     "class": "within",
+     "why": "The ruling's what says verbatim 'The 14 edited claims keep their full impl-drift verdicts'; a row with no build is not mixed and so lies outside the rule being fixed."
+    },
+    {
+     "id": "T223-route",
+     "summary": "The route is L7R_LAND_ALONE=1 make claims-triage, which writes the withdrawal, clears what the tool can and bundles the rest for the agent; agent TOUCHES go to impl-drift; no command added; claims-owed and the push's gate say the count, files and command.",
+     "class": "within",
+     "why": "The tooling_fix names landing-mode claims-owed/claims-triage as the place of the fix. No verb is added, so ask:t197-rejudge-verb (which cut a withdrawal verb for T184's 81 modal marks) stands; the withdrawal here is the re-judging the later ruling ordered, inside the existing command. Naming the count, files and command is the project's guard-message rule."
+    },
+    {
+     "id": "T223-outside-landing",
+     "summary": "Outside a landing the index is read as it stands.",
+     "class": "within",
+     "why": "T197's mixed-build rule and the ruling's fix are both landing-mode only; nothing outside a landing changes."
+    },
+    {
+     "id": "T223-section-words",
+     "summary": "section_words also reads the kept words' own history (dev/claims-section-words.jsonl), so the 8 pruned base blocks are found rather than forced.",
+     "class": "within",
+     "why": "Required for the re-triage to work on the measured rows, and T210/T215's rule that a section's words are never forced where they can be found."
+    },
+    {
+     "id": "T223-stamp-build",
+     "summary": "Fix found here: clear_page_moves never stamped its build, so a mixed clear went unmarked and a clean clear of a marked row stayed marked; stamp_build fixes it.",
+     "class": "within",
+     "why": "A wrong outcome in the very check this task corrects (the landing answers wrongly either way); fixing a known defect in the task is the standing fix-as-we-go rule, not new scope."
+    },
+    {
+     "id": "T223-order",
+     "summary": "Committed before the landing of 449 T423 T424 T418 T422 is run again; the coordinating session then re-judges; red exits through make arbiter-ask.",
+     "class": "within",
+     "why": "The ruling's what (1)-(2): make and commit the tooling fix before any re-judging, then re-run the landing."
+    },
+    {
+     "id": "T223-not-perf",
+     "summary": "The task is not tagged performance work.",
+     "class": "within",
+     "why": "The GM's words class this kind of fix as a defect, not a performance improvement: on 2026-11-24 the cascade rules' over-sends (T210's 147 forced claims, T211's 22) were 'defects' to 'fix all 6 of those before we resume', and T223 is the same class - a check owing a full check to claims nothing changed for, refusing a green landing. Its time saved is the effect of correcting a wrong outcome, as the plan says. The label also moves nothing: the ruling already orders T223 before the landing re-run."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T173 (<why: the finding or measurement that files it>)",
+    "### T173 Approach (checklist part A)",
+    "### T178 (<why: the finding or measurement that files it>)",
+    "### T178 Approach (checklist part A)",
+    "### T181 (<why: the finding or measurement that files it>)",
+    "### T181 Approach (checklist part A)",
+    "### T203 (withdrawn: built in T199, its section the T198, T199, T200 bundle's; MODE 4 round 2, 2026-11-23, ruled its deferral NOT LEGITIMATE)",
+    "### T206 (<why: the finding or measurement that files it>)",
+    "### T206 Approach (checklist part A)",
+    "### T208 (<why: the finding or measurement that files it>)",
+    "### T208 Approach (checklist part A)",
+    "### T223 (the round arbiter's process-fault, `ask:mixed-build-241-claims`, 2026-11-24: a green landing of 449 T423 T424 T418 T422 was refused at the push because T197's rule owed its unchanged doc claims a full impl-drift, the only route offered)",
+    "### T223 Approach (checklist part A)",
+    "### T224 (<why: the finding or measurement that files it>)",
+    "### T224 Approach (checklist part A)",
+    "(removed) ### T100 (<why: the finding or measurement that files it>)",
+    "(removed) ### T165 (<why: the finding or measurement that files it>)",
+    "(removed) ### T165 Approach (checklist part A)",
+    "(removed) ### T166 (<why: the finding or measurement that files it>)",
+    "(removed) ### T166 Approach (checklist part A)",
+    "(removed) ### T179 (<why: the finding or measurement that files it>)",
+    "(removed) ### T179 Approach (checklist part A)#2",
+    "(removed) ### T182 (<why: the finding or measurement that files it>)",
+    "(removed) ### T182 Approach (checklist part A)#2",
+    "(removed) ### T215 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T223-walk",
+     "summary": "A landing alone reads each mixed-build row at the newest non-mixed row in dev/claims-index.json's history, walked from HEAD as far as checked_at reaches (landing.rs read).",
+     "class": "within",
+     "why": "Unchanged from the text judged CLEAR. It is the arbiter's tooling_fix for ask:mixed-build-241-claims: re-judge a mixed answer with the landing's clean build instead of owing it a full impl-drift."
+    },
+    {
+     "id": "T223-withdrawn-fields",
+     "summary": "Only the fields a triage writes are withdrawn. The verdict, note, date, claim and rests stay.",
+     "class": "within",
+     "why": "Unchanged. It keeps the 14 edited claims' verdicts, as the ruling's 'what' says."
+    },
+    {
+     "id": "T223-owed-rules",
+     "summary": "A mixed clear or triage owes what claims-owed's ordinary rules find between the answer before and the tree. With no clean answer in the walk it owes impl-drift, failing closed. A full impl-drift verdict is never re-owed.",
+     "class": "within",
+     "why": "Unchanged. This is the ruling's steps (2) to (4), and it matches the convergence rule that only a claim-changing edit re-owes a check."
+    },
+    {
+     "id": "T223-barracks-exception",
+     "summary": "New bullet: a verdict that a mixed build cleared again before the index was next committed fails closed. The walk's row predates the verdict, so the claim is owed in full. That is the barracks row, 1 of 242.",
+     "class": "within",
+     "why": "It does not narrow the request or the ruling. The barracks claim was rewritten, and a claim-changing edit re-owes a check under the request's own convergence rule. The row's last answer is a mixed clear, not the verdict, so the ruling's step (4) sends it to impl-drift as a claim the clean build cannot reproduce. It owes more, not less. The table's count of 1 is the same as in the text judged CLEAR; this bullet only explains it."
+    },
+    {
+     "id": "T223-route",
+     "summary": "The route is L7R_LAND_ALONE=1 make claims-triage. No command is added. claims-owed and the push name the count, the files and the command.",
+     "class": "within",
+     "why": "Unchanged. It honors ask:t197-rejudge-verb's 'no withdrawal verb'."
+    },
+    {
+     "id": "T223-section-words-history",
+     "summary": "section_words also reads the kept words' own history, so removed words are found rather than forced.",
+     "class": "within",
+     "why": "Unchanged. It serves the GM's 'fix all 6' T210/T215 rule and the convergence rule."
+    },
+    {
+     "id": "T223-stamp-build",
+     "summary": "clear_page_moves now stamps its build. Fixed here.",
+     "class": "within",
+     "why": "A defect fixed in the task, which is the default."
+    },
+    {
+     "id": "T223-done-measured",
+     "summary": "Done, measured: 191 passed and 3 failed red-first. After: 196 passed, with two new tests (the kept words' history, and the page-move clear's stamp).",
+     "class": "within",
+     "why": "Enforcement tests of the requested fix. 191+3=194; 194+2=196."
+    },
+    {
+     "id": "T223-perf-no",
+     "summary": "Performance work: no.",
+     "class": "within",
+     "why": "Unchanged and consistent with FR-013's definition."
+    },
+    {
+     "id": "T223-defer-T224",
+     "summary": "Found and left: a withdrawn row that owes nothing keeps its mixed stamp until a landing's triage writes the withdrawal, and claims-owed prompts none. Past the walk the claim would owe a full check. Not fixed here; filed as T224, lands before T22.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A defect is left, not a difference: the block's own Effect is that the gate would owe a full impl-drift for a claim nothing changed for. That is the wrong outcome item 12 names ('the gate answered wrongly') and that the GM's convergence talk asked fixed 'before we do literally anything else'. The arbiter chose a tooling fix over route B because the tool 'should do every time' what a hand comparison does once. The deferral rests on this one landing's triage writing the 242 withdrawals, which is exactly the once-only route the ruling refused. The stated why rebuts only one fix, a write from claims-owed. It does not show that a fix inside T223 is impossible (for example, the landing's or the triage's own write path writing the withdrawal of a row that owes nothing, or a read that does not lose the clean row past the walk). Fitting the existing design is not a legitimating ground. The order 'lands before T22' ties the fix to nothing this bundle shows: not the 449 landing that T223 itself precedes, and not the walk's reach. Fix-as-we-go asks each known defect to be fixed before the next step. T203's heading records a deferral in this same feature ruled NOT LEGITIMATE and built in its task. Required: fix it in T223. Failing that, order T224 so that it demonstrably lands before any mixed-build row can age past the walk unwritten (before the next landing that can record a mixed answer), with a why showing the fix cannot be made in T223."
+    },
+    {
+     "id": "placeholder-sections",
+     "summary": "T173, T178, T181, T206, T208 and T224's sections are unfilled templates, and T203 is a bare withdrawn heading.",
+     "class": "within",
+     "why": "They decide nothing."
+    },
+    {
+     "id": "removed-blocks",
+     "summary": "Removed by hand: the T100, T165, T166, T182 and T179 sections and the T215 performance checklist.",
+     "class": "within",
+     "why": "Each removed block, in earlier.md, was an unfilled template that carried no decision. Removing it drops nothing that was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T173 (<why: the finding or measurement that files it>)",
+    "### T173 Approach (checklist part A)",
+    "### T178 (<why: the finding or measurement that files it>)",
+    "### T178 Approach (checklist part A)",
+    "### T181 (<why: the finding or measurement that files it>)",
+    "### T181 Approach (checklist part A)",
+    "### T203 (withdrawn: built in T199, its section the T198, T199, T200 bundle's; MODE 4 round 2, 2026-11-23, ruled its deferral NOT LEGITIMATE)",
+    "### T206 (<why: the finding or measurement that files it>)",
+    "### T206 Approach (checklist part A)",
+    "### T208 (<why: the finding or measurement that files it>)",
+    "### T208 Approach (checklist part A)",
+    "### T223 (the round arbiter's process-fault, `ask:mixed-build-241-claims`, 2026-11-24: a green landing of 449 T423 T424 T418 T422 was refused at the push because T197's rule owed its unchanged doc claims a full impl-drift, the only route offered)",
+    "### T223 Approach (checklist part A)",
+    "(removed) ### T100 (<why: the finding or measurement that files it>)",
+    "(removed) ### T165 (<why: the finding or measurement that files it>)",
+    "(removed) ### T165 Approach (checklist part A)",
+    "(removed) ### T166 (<why: the finding or measurement that files it>)",
+    "(removed) ### T166 Approach (checklist part A)",
+    "(removed) ### T179 (<why: the finding or measurement that files it>)",
+    "(removed) ### T179 Approach (checklist part A)#2",
+    "(removed) ### T182 (<why: the finding or measurement that files it>)",
+    "(removed) ### T182 Approach (checklist part A)#2",
+    "(removed) ### T215 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "(removed) ### T224 (<why: the finding or measurement that files it>)",
+    "(removed) ### T224 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T223-rebase-on-walk",
+     "summary": "In a landing alone, a mixed build's clear or triage is withdrawn and the claim is owed whatever claims-owed's ordinary rules find between the newest clean row in dev/claims-index.json's history (the walk) and the tree: nothing where the tree is back where that answer judged it, a triage where a section/page/code moved, a full check where the claim was rewritten or a rest lost.",
+     "class": "within",
+     "why": "This is the arbiter's tooling_fix for ask:mixed-build-241-claims: a mixed answer is re-judged by the landing's clean build, a mechanical clear first, and impl-drift is owed only where neither reproduces it. 'Owes nothing where the tree is where the clean answer judged it' is that mechanical re-derivation, and it matches the request's convergence rule that only a claim-changing edit re-owes a check (2026-11-23)."
+    },
+    {
+     "id": "T223-withdrawn-fields",
+     "summary": "Only the fields a triage writes are withdrawn (research, pages, section, code, core, reads, triaged, cleared, triage, build); verdict, note, date, claim and rests stay.",
+     "class": "within",
+     "why": "It withdraws exactly what the mixed build wrote and nothing the agent's judgment wrote. No requested behavior is dropped."
+    },
+    {
+     "id": "T223-fail-closed-no-walk",
+     "summary": "A mixed answer with no clean row in the walk, or whose claim has no row in a commit of the walk, is owed impl-drift.",
+     "class": "within",
+     "why": "Ruling step (4): impl-drift for what the clean build cannot reproduce. A missing baseline cannot be reproduced, so this sends more to impl-drift, not less."
+    },
+    {
+     "id": "T223-verdicts-kept",
+     "summary": "A full impl-drift verdict is never re-owed (verdict_row builds a row with no build stamp).",
+     "class": "within",
+     "why": "The ruling says it outright: 'The 14 edited claims keep their full impl-drift verdicts'."
+    },
+    {
+     "id": "T223-barracks-exception",
+     "summary": "A verdict recorded and then cleared again by a mixed build before the index was next committed is owed a full check (1 of 242, the barracks claim, rewritten).",
+     "class": "within",
+     "why": "It fails closed. The walk's clean row comes before the rewrite, so the clean build cannot reproduce the latest answer, and the ruling's step (4) sends exactly such a claim to impl-drift. It removes no case from the re-triage the GM's arbiter ordered; it adds one full check."
+    },
+    {
+     "id": "T223-route-rekey",
+     "summary": "The landing's first pass (claims rekey, run by land/cheap.rs) writes the withdrawal into the index it commits. Before that commit, L7R_LAND_ALONE=1 make claims-triage writes it, clears again what it can, and bundles the rest for the claims-triage agent. No command is added.",
+     "class": "within",
+     "why": "This is the changed passage. It does the step the earlier deferral (T224) put off, and the previous MODE 4 ruled that deferral NOT LEGITIMATE. It adds no verb, so ask:t197-rejudge-verb holds: that ruling forbade a separate REJUDGE verb for modal-triage marks, and here the withdrawal is the automatic effect of the landing's own existing pass, which the later ruling ask:mixed-build-241-claims ordered."
+    },
+    {
+     "id": "T223-outside-landing",
+     "summary": "Outside a landing the index is read as it stands.",
+     "class": "within",
+     "why": "The ruling's tooling_fix is scoped to Landing::mixed and landing-mode claims-owed/claims-triage. T197's mixed-build rule applies only to a landing alone, so leaving other runs as they are narrows nothing that was asked."
+    },
+    {
+     "id": "T223-section-words-history",
+     "summary": "section_words also reads the kept words' own history, for words that reached no commit of their document. A page's kept text stays per clone.",
+     "class": "within",
+     "why": "It carries out T210/T215 ('never forced where they can be found'). Keeping page texts per clone matches the answer recorded under the 2026-11-24 T215 heading of the request."
+    },
+    {
+     "id": "T223-stamp-build",
+     "summary": "Found and left: clear_page_moves never stamped its build. Fixed here (stamp_build).",
+     "class": "within",
+     "why": "A wrong outcome (the landing's check answers wrongly) is fixed in the task, which is the default the request's improvement 4 and FR-009 ask for."
+    },
+    {
+     "id": "T223-found-withdrawal-fixed",
+     "summary": "Found and left: a withdrawn row that owed nothing kept its mixed stamp. Now fixed here by claims rekey, and T224 is withdrawn.",
+     "class": "within",
+     "why": "The deferral that was ruled NOT LEGITIMATE is gone and the defect is fixed in this task. Nothing is left."
+    },
+    {
+     "id": "T223-perf-no",
+     "summary": "T223 is not tagged performance work.",
+     "class": "within",
+     "why": "It is a correctness fix of what a landing owes, ordered by the arbiter before the 449 landing re-runs. The tag only affects FR-013 scheduling, and the task is already built and ordered first, so it narrows nothing."
+    },
+    {
+     "id": "T203-withdrawn",
+     "summary": "T203's heading is withdrawn: built in T199, its section is the T198-T200 bundle's.",
+     "class": "within",
+     "why": "This follows the earlier MODE 4 ruling, which found T203's deferral NOT LEGITIMATE. The work is done, not dropped."
+    },
+    {
+     "id": "templates-T173-T178-T181-T206-T208",
+     "summary": "Open tasks' sections are still the empty template, unchanged since last judged.",
+     "class": "within",
+     "why": "They decide nothing. Their earlier BLOCKED came from the bundle (T223's deferral), not from their own text. make decide judges each one when it is filled."
+    },
+    {
+     "id": "removed-T100-T165-T166-T179-T182-T215-checklist",
+     "summary": "Empty-template sections and an empty T215 performance checklist are removed by hand.",
+     "class": "within",
+     "why": "Each removed text was a bare placeholder with no decision in it. Removing it narrows nothing that was asked."
+    },
+    {
+     "id": "removed-T224",
+     "summary": "T224 (the deferred withdrawal-stamp fix) is removed.",
+     "class": "within",
+     "why": "Its work is folded into T223 and fixed there, as the previous MODE 4 required. Nothing requested is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T224 (the round arbiter's `ask:mixed-build-53-record-answers`, 2026-11-24, continue with a tooling fix: a landing was refused at the push and 53 record answers owed again by T197's rule, when for 49 of them the uncommitted files were the claims crate's and a Markdown doc)",
+    "### T224 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T224-a-RECORD",
+     "summary": "A record answer is counted as mixed only by an uncommitted file in RECORD: owed, bundle, their path dependencies (core, pool, registry, research, rust/guard/shared), rust/gate/src and the record crate; the record crate's other dependencies (archive, downloads, pages, semantic, trials, uncited) are left out on a grep of every caller of write_answer/write_judged.",
+     "class": "within",
+     "why": "This is the tooling_fix of ask:mixed-build-53-record-answers: an answer is mixed only when a dirty path lies in the closure of the crates that built and recorded it (owed, bundle and their transitive deps). RECORD is a superset of that closure. It adds rust/gate/src and the record crate, which keeps more of T197 than the ruling requires. The crates left out are not in the ruling's closure in the first place."
+    },
+    {
+     "id": "T224-b-markdown",
+     "summary": "A Markdown file outside the table's crates never counts; a Markdown file inside a table crate counts (include_str! fixtures).",
+     "class": "within",
+     "why": "The ruling names rust/gate/CLAUDE.md as a dirty path whose code could not have run. Markdown inside a table crate still counts, and the closure walk flags any included file the table does not count, so no file that can run is dropped."
+    },
+    {
+     "id": "T224-b-tests",
+     "summary": "tests.rs and tests/ files inside a table crate still count; no test-only exclusion.",
+     "class": "within",
+     "why": "This counts more than the ruling's closure would strictly require, so T197 is kept. It is not a narrowing."
+    },
+    {
+     "id": "T224-b-manifests-unknown",
+     "summary": "Any Cargo.toml, rust/Cargo.lock and .cargo/config.toml always count, and so does a path the rule does not know.",
+     "class": "within",
+     "why": "This is conservative. It keeps T197's rule for every file whose effect on the build the closure cannot rule out."
+    },
+    {
+     "id": "T224-c-CLAIMS",
+     "summary": "The claims side's mixed-build test is narrowed the same way through its own table CLAIMS (the claims crate's path-dependency closure, rust/gate/src, and the record crate's one included file), through the single Landing::paths call.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The tooling_fix names only the owed crate's record gate, so narrowing the claims side's T197 rule goes past its letter. The ruling's own why gives the reason. It calls the fault a false positive 'of the same class as mixed-build-241-claims', and it orders that the rule be narrowed by a tool and not waived again. Counting a dirty file that no claims verb can run is that same wrong outcome: a check refusing good work. Fixing it in this step is required by fix-as-we-go. The purpose test holds: T197 exists so that an answer judged by code that is not its own is not trusted. Code outside the claims verbs' closure cannot have judged the answer, and the closure test keeps the table honest as dependencies change."
+    },
+    {
+     "id": "T224-closure-test",
+     "summary": "build::closure::gaps walks the [dependencies]/[build-dependencies] path entries and the include_str!/include_bytes! lines from each table's roots. It reports an unlisted crate that is reached, an entry nothing reaches, or an uncounted included file. Core's test runs it on the real tree, and core's Cargo.toml declares those crates so rust-test re-runs when a manifest moves.",
+     "class": "within",
+     "why": "This is the ruling's own requirement, 'a fixed table whose test fails when a dependency is added', and it only enforces that. Reading the include lines closes the rust/guard/shared to record-crate gap the plan found."
+    },
+    {
+     "id": "T224-message-order",
+     "summary": "The refusal message is unchanged. The fix is built before T218..T223 are re-landed, while nothing else records in the clone.",
+     "class": "within",
+     "why": "This follows the ruling's what (3) to (5) exactly."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T225 (the round arbiter's `ask:stamp-reads-committed-code-as-mixed`, 2026-11-24, continue with a tooling fix: each of the day's three gate fixes re-owed the answers recorded before it - 241 claims, 53 record answers, 191 claims and 49 record answers, and the landing was refused each time - because the mixed-build rule compared a build's stamped blobs with HEAD alone)",
+    "### T225 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T225-own",
+     "summary": "One reading type, Own, in core/build.rs; mixed asks it; Judged (owed/answers.rs) and Landing (claims/index.rs) each hold one Own in place of their own HEAD lookups",
+     "class": "within",
+     "why": "Where the fix lives, not what it trusts. The ruling's tooling_fix names both the owed record and the claim answers, and one shared reading puts the same rule in both."
+    },
+    {
+     "id": "T225-a",
+     "summary": "A stamped blob is the landing's own where it is its path's blob at HEAD, at a commit of the delta, or at the base; a stamped deleted is own where one of those commits holds no such file",
+     "class": "within",
+     "why": "This is the ruling's tooling_fix nearly word for word. The deleted arm is the same rule applied to a file's absence."
+    },
+    {
+     "id": "T225-b-base",
+     "summary": "Base = git merge-base HEAD origin/main (the base make land already diffs from); delta = base..HEAD; a merge of main moves the base and keeps the clone's own commits in the delta",
+     "class": "within",
+     "why": "The ruling names 'the landing's delta (f7c105b4a0..HEAD)' and 'its base' without saying how to find them. Using the landing's own diff base reads them as make land already does."
+    },
+    {
+     "id": "T225-b-nobase",
+     "summary": "Where no base is found (no origin/main, no shared history) the delta is empty and a blob is held to HEAD, the rule before this task ((d) still applies where the stamp commit is known)",
+     "class": "within",
+     "why": "With no base the ruling's delta and base are undefined, so the ruling's rule has nothing to compare against. The fallback is the stricter earlier rule: it trusts less, never more."
+    },
+    {
+     "id": "T225-c",
+     "summary": "A blob no commit holds still reads mixed (the real case: another builder's work in progress); measured over 302 record entries and 205 claim rows, one superseded answer holds such blobs",
+     "class": "within",
+     "why": "This keeps T197 unchanged. The ruling widens 'own' only to committed blobs, so an uncommitted blob still reads mixed, as it did before."
+    },
+    {
+     "id": "T225-d",
+     "summary": "A blob held at a commit of <stamp commit>..HEAD is also committed code, asked after HEAD/delta/base miss; a stamp commit git does not know adds nothing",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This trusts more than the ruling's words, so it is tested as an exception. Taken literally, the ruling's rule would defeat the ruling's own stated purpose: 'ends the loop' and 'do not ask this question again'. The block measures it: once this landing is pushed, its commits fall behind the next landing's base. 189 claim rows stamped 1b064aa0de would then read mixed at the next landing of any clone, the same loop run once more. Against T197's purpose: (d) admits a blob only if a commit reachable from HEAD holds it, so it can never admit a blob that no commit holds. Another builder's uncommitted work therefore still reads mixed under (c). With (d), the block measures 0 of 205 rows and 0 of 302 record entries, the (c) one aside, left holding a blob that no commit since its stamp holds. It trusts only committed code, which is the ruling's own ground for its rule."
+    },
+    {
+     "id": "T225-f",
+     "summary": "build::current() drops from the stamp each dirty file whose stamped blob equals the launcher tree's HEAD now, so an answer by a binary whose sources were since committed unchanged carries a clean stamp and a triage clear by it writes no build row",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The ruling's second clause is worded as a reading rule ('reads a stamp as clean once all its dirty blobs equal HEAD'). (f) applies it when the stamp is written, per file, against HEAD at that moment, which goes past the words, so it is tested as an exception. It is implied by the ruling's own clause, and it admits nothing T197 guards: a file is dropped only when its blob is committed at HEAD when the answer is recorded, so uncommitted work (T197's object) is never dropped and still reads mixed under (c). The one case where it differs from the read-time rule is a write-time HEAD the landing later loses through an amend or reset. That gives the answer the same standing a clean build at an amended-away commit already has, because the mixed rule reads only dirty blobs, so it opens no new class of trusted code. Without (f), the defect the block records goes on: each triage clear writes a build row into the tracked index for files that were HEAD's own. That is a wrong outcome the ruling's clause was aimed at."
+    },
+    {
+     "id": "T225-order",
+     "summary": "Built straight after the landing of T218-T224, alone in the clone, nothing recording answers while the gate's crates are uncommitted",
+     "class": "within",
+     "why": "The ruling's 'what' step (3): 'straight after the landing, alone in the clone'."
+    },
+    {
+     "id": "T225-tests",
+     "summary": "Red-first fixtures in the owed and claims crates for an answer by a build of an earlier commit of the delta, plus opposite cases (blob no commit holds re-owed; unknown stamp commit with no base re-owed) and a core fixture per arm of Own",
+     "class": "within",
+     "why": "The ruling asks for 'a red fixture where an answer's stamped blob matches an earlier commit of the delta but not HEAD'. The opposite cases enforce T197, which is kept, so they are enforcement of what was asked, not extra scope."
+    },
+    {
+     "id": "T225-messages",
+     "summary": "The messages are unchanged",
+     "class": "within",
+     "why": "Nothing asked for a change of wording."
+    },
+    {
+     "id": "T225-perf",
+     "summary": "Not classed as performance work: it corrects what a landing owes",
+     "class": "within",
+     "why": "A classification. The arbiter's ruling fixes the order anyway (straight after the landing), so this changes no scheduling the GM or the ruling set."
+    },
+    {
+     "id": "T225-found",
+     "summary": "Found-and-left: both items (the one-landing limit of the ruling's rule, the stale dirty stamp) fixed here, nothing deferred",
+     "class": "within",
+     "why": "No defect is carried forward. Both are fixed in this task as (d) and (f), each ruled above."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -29633,6 +30433,459 @@
      "summary": "The docs, rules page, index line, doc comments and suites that carry SESSION_MODEL are restated. The list comes from a stated grep over the tree outside specs/ and .git. The root CLAUDE.md's two clauses are left unchanged, and the guard's message carries the type list.",
      "class": "within",
      "why": "Documentation follows the guard. The census states its search space. The root clause's two routes (sonnet to read; no model plus the line to judge or build) are still true and are not narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T221": {
+   "section_sha256": "94c1266a5f8cb48ea99a80c6a1f1bc6946bef8d3fb5aeae8dedb80f5306affe6",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 said+siblings on finding rows",
+     "summary": "A FINDING row keeps the claim as said (class word kept, anchors dropped) and its unit's claim labels fingerprinted; bundle.rs writes them to units.json, reply.rs copies them onto finding rows only.",
+     "class": "within",
+     "why": "Record tooling that makes a relabel visible to the index, which is what 'attested versus guess ... cascades mechanically' (convergence talk, 2026-11-23) needs; storing them on findings only is a design choice inside that."
+    },
+    {
+     "id": "D2 relabel answers MISLABELED via said",
+     "summary": "index::relabel_answered reads the backing from said, so a relabel the fingerprint cannot see answers its MISLABELED verdict; one index::answered is shared by the push, the report and the clean gate.",
+     "class": "within",
+     "why": "Directly carries the labels-cascade-mechanically rule and T213 (the account unchanged, only the backing may change); one shared reading changes no scope."
+    },
+    {
+     "id": "D3 report lists what stands",
+     "summary": "make claims-report counts an answered finding as ANSWERED and omits it from the list; ALL=1 lists it.",
+     "class": "within",
+     "why": "The task's own wrong outcome (findings that no longer stand printed beside owed 0); nothing is hidden since the count is shown and ALL=1 lists them."
+    },
+    {
+     "id": "D4 sibling change re-owes the finding",
+     "summary": "A finding whose unit's claim labels changed since judged is owed impl-drift again rather than answered or hidden.",
+     "class": "within",
+     "why": "Only a claim-changing edit re-owes a check and only the finding is re-owed (review scoped to the change), and 'if there are real defects, then I do want to find them' forbids answering it mechanically where only a judgment can say."
+    },
+    {
+     "id": "D5 legacy rows stand until T220 re-judges them",
+     "summary": "A row recorded before T221 has neither field; it is answered only where its stored claim differs from the claim with and without anchors, otherwise it stands until judged again; the task's four named rows are re-judged in T220's claims round, ordered after T221.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task's four rows keep printing until T220 instead of being cleared by T221, so this narrows what the task fixes. A mechanical answer is not possible for them: the trio's stored claim equals normalized() of today's claim (the class word was never stored), and palette.rs's finding needs a judgment on whether its new sibling claims answer it. Clearing them without that data would risk hiding a wrong outcome, which the GM's 'real defects ... find them and fix them' forbids. The re-judgment is the ordinary path in an open, ordered task of the same bundle, not an unfiled deferral."
+    },
+    {
+     "id": "D6 item-named-only no longer answers",
+     "summary": "Fixes a found bug: a MISLABELED claim that only named its item, class kept, read as rewritten and so as answered at the push.",
+     "class": "within",
+     "why": "T204 (naming an item owes nothing and must answer nothing) and T213 are among the six defects the GM said to fix ('Yes let's fix all 6 of those'); fixing a defect found during the task is the standing fix-as-we-go rule."
+    },
+    {
+     "id": "D7 tests as the step pins",
+     "summary": "Three claims-crate tests, two shown red with the rule removed.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior, not unrequested scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T219": {
+   "section_sha256": "9fcd02dbf9cdc81dcb192dff3cfa5122f6bfad8561b6b7ef895900cb6a3b616d",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "core/record/effect.rs reads one form, `effect: <map|sheet|page|tool> - <wrong outcome>`; `effect: none`, an effect naming none of the four, and no effect name none",
+     "class": "within",
+     "why": "The four now cover constitution XIV's whole definition of a defect (a map/sheet/page that reads wrong or contradicts a finding; a tool, guard or check that crashes, hangs, refuses valid input or answers wrongly, which takes in a check passing bad work or refusing good). The round-1 narrowing (tool defects dropped) is repaired, and a tool note is filed in the tests (451 found row 26)."
+    },
+    {
+     "id": "D2",
+     "summary": "file_outside_in files an OUTSIDE THE CHANGE line only with that effect (kept as `effect`); every other line printed `listed, not filed` with the form, none dropped silently; no file written when nothing filed",
+     "class": "within",
+     "why": "Serves the convergence talk ('cascading changes ... not fixing any real flaws ... we have to fix that') and XIV's rule that a difference is not a defect; a true row is still filed (row 170 test) and an unfiled line is shown with the form, so 449's 'real defects are found and fixed' is not cut back."
+    },
+    {
+     "id": "D3",
+     "summary": "make review-verdict refuses an `outside` finding whose `what` names no effect, with the form",
+     "class": "within",
+     "why": "Same rule at the second channel; with `tool` admitted it no longer refuses a tool-defect finding (test records a tool finding)."
+    },
+    {
+     "id": "D4",
+     "summary": "every emitter states the same rule, enumerated from `grep -rln 'OUTSIDE THE CHANGE' rust scripts docs .claude Makefile l7r` plus a grep for the `outside` severity, each hit read, measured 2026-11-24; a note naming no effect goes under NOTED, NOT FILED in the reply",
+     "class": "within",
+     "why": "Enforcement of the same rule at every writer; the search space is stated and covers the string form across rust, scripts, docs, agents, Makefile and l7r."
+    },
+    {
+     "id": "D5",
+     "summary": "what names none of the four (a wording, a page only silent, a difference that reads fine) is listed and dropped",
+     "class": "within",
+     "why": "These are not defects under XIV v2.36.0 and the GM 2026-11-19 ('things which are different than you expected but still work perfectly well'); a silence that makes a page read wrong still names `page`."
+    },
+    {
+     "id": "D6",
+     "summary": "the third channel (`[outside the change]` verdict on an owed key) already files nothing at claims `report`; impl-drift.md and the claims MANIFEST corrected from 'filed as a task' to `make claims-report` lists it",
+     "class": "within",
+     "why": "A documentation correction to match existing behavior (feature 445); no behavior narrowed."
+    },
+    {
+     "id": "D7",
+     "summary": "the filer lives in the `owed` crate and the form in `core`, outside the coordinator brief's crates",
+     "class": "within",
+     "why": "Placement of the one filer both commands call; not a scope or fidelity matter."
+    },
+    {
+     "id": "D8",
+     "summary": "verification: unit tests red with the form's reading removed, plus live impl-drift rounds on row 170 (filed) and row 178 (not filed) replay bundles after the verdict; order after T221 before T220; exits via set-down and make arbiter-ask; found-and-left none",
+     "class": "within",
+     "why": "Tests that only fail when the rule is absent enforce what was asked; ordering and exits decide nothing the request left open."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T218": {
+   "section_sha256": "da3f03276d92a2b472efe8a81307e2a8a903fab5a8116b57542ffd2ee8020b42",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1-search-in-tool",
+     "summary": "The record search runs in the tool at make claims-checked (silent.rs, called before the reply is vetted), not in the bundle builder, so IN-STEP claims cost nothing and OUTSIDE THE CHANGE lines are covered.",
+     "class": "within",
+     "why": "Where the task line's search runs is a mechanism choice; it reaches every line the task names, including row 210's own form (an outside line)."
+    },
+    {
+     "id": "D2-hold-not-convert",
+     "summary": "A silent-finding line is HELD (not recorded, key still owed, exit 3) while any of the record's three nearest pages is missing from the bundle; once they are bundled it is judged again and recorded as written, and impl-drift.md tells the check a page that says it means fix: claim or nothing.",
+     "class": "within",
+     "why": "The task line asks that a hit turn the finding into a citation fix or nothing; word ranking cannot tell 'says it' from 'mentions the words', so the plan has the check read the hit and decide between exactly those two outcomes. The truly silent finding still files, which the GM's 'if there are real defects, then I do want to find them and fix them' requires."
+    },
+    {
+     "id": "D3-which-lines",
+     "summary": "Lines held: a non-IN-STEP VERDICT that is NEEDS-RESEARCH, ends [section-mark] or uses a silence phrase, and an outside line with a silence phrase that names its effect (no-effect outside lines are dropped by T219 and not searched).",
+     "class": "within",
+     "why": "This is the task line's 'such a line' made concrete; the outside lines with no effect are never filed, so nothing is filed unsearched."
+    },
+    {
+     "id": "D4-search-space",
+     "summary": "The search covers the question and drawing pages (565) ranked by word weight; notes and originals are not searched, since they are not pages a claim cites.",
+     "class": "within",
+     "why": "The finding being tested is 'no page says it' and its fix is a citation of a page; the motivating case is a question page. Searching the citable pages is the search the finding's own words call for, not a narrowing of it."
+    },
+    {
+     "id": "D5-ranking-not-make-canon",
+     "summary": "The task line names make canon / the registry as the search; the plan uses a word ranking over research/questions in the tool instead, because make canon searches the GM's setting notes and semantic-find did not return 0107 in its first five (measured 2026-11-24).",
+     "class": "within",
+     "why": "The parenthetical is the task author's guess at a means, not the GM's words; the substitute is the one that finds the motivating sentence, so it serves the task's purpose better rather than narrowing it."
+    },
+    {
+     "id": "D6-nearest-three-no-threshold",
+     "summary": "Read the nearest three pages then file; NEAREST=3 is a knob labeled GUESS; no score threshold.",
+     "class": "within",
+     "why": "A design parameter inside the requested behavior; labeled as a guess per the project's rule."
+    },
+    {
+     "id": "D7-one-hold-per-key",
+     "summary": "The pages a hold named are kept in .git/claims-searched.json under the claim's key; the next reply on that key passes once those pages are bundled, however reworded, then the entry is forgotten.",
+     "class": "within",
+     "why": "Ends the round after one widened reading, which is what the convergence talk asks (no cascade of reviews that change nothing); the finding is still read against the pages the search named."
+    },
+    {
+     "id": "D8-passes-not-searched",
+     "summary": "A pass (IN-STEP) is not searched, so a GUESS judged IN-STEP whose cited pages are silent, where another page answers it, is still not caught; not built here.",
+     "class": "within",
+     "why": "The task is the filing of 'the pages do not say it' lines; a pass files nothing and nothing cascades from it. A conservatively labeled GUESS whose cited pages are silent is not a wrong outcome under XIV's defect definition (no map reads wrong, no finding is contradicted), so leaving it carries no deferred defect and needs no ruling."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T222": {
+   "section_sha256": "980101c5ceacc24584727be7c5393eaa3c67a914711a36ade5218dee32f273af",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T222-A1",
+     "summary": "building-review.md: a dated entry of a sheet's notes (Review log line, line under a dated heading, entry naming its feature/task) is history, not held to the sheet as it stands; an overtaken older entry is no finding and owes no 'since superseded' pointer; only present-tense text (choices, program, Result/summary paragraph) is held to the drawing",
+     "class": "within",
+     "why": "Implements the convergence talk's 'a cascading set of changes that is mostly not finding actual problems' and constitution XIV's defect definition (a wrong outcome, not a difference): a log entry true of its date makes no map read wrong. The present-tense text, including the Result paragraph, stays held, so real defects are still filed; no requested review is removed."
+    },
+    {
+     "id": "T222-A2",
+     "summary": "record-format.md: HISTORY rule kept whole, gains one sentence - a dated entry is history by its form, ruled on as HISTORY (useful kept, rest proposed for removal), never reported as a stale present-tense statement; permits no change log on a research page",
+     "class": "within",
+     "why": "Leaves the GM's 2026-09-07 HISTORY rule intact (dated entries are still found and proposed for removal); it only fixes which finding class they are filed under, so nothing the GM asked for is narrowed. One of the two agent files the task names."
+    },
+    {
+     "id": "T222-A3",
+     "summary": "Verification by one ad-hoc agent following the clone's edited building-review.md over the two notes files as they stood before 452's fixes, since a dispatched defined agent reads the mirror's file (T219); record-format's sentence stated on the rule alone, no recorded case found",
+     "class": "within",
+     "why": "A method of checking the change, with a red case (Hayakawa T312/T299/T276 not filed) and a green case (the round-trip Result paragraph's figures still filed) that together show real defects are still found; narrows no requirement."
+    },
+    {
+     "id": "T222-A4",
+     "summary": "Order: last of the restatement audit's five, after T219; classified not performance work; found-and-left none; no map changes",
+     "class": "within",
+     "why": "Scheduling and classification inside the task set; it is not measurement work (the GM 2026-11-20 rule) nor a speed-up of a tool, and leaves no defect unfixed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T220": {
+   "section_sha256": "5f2ee10f43597961b72c8791487dbcc10e9ccbc2144304dac7f28a42d2f844a3",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "a-filed-departure-rejudged",
+     "summary": "impl-drift.md's FILED DEPARTURE paragraph re-judges a filed departure each time it is bundled: no longer departs -> DRIFTED fix: claim; departs but not a wrong outcome -> DRIFTED fix: claim; effect: none; only a standing wrong outcome keeps known (NNN Tnn) fix: code, with ask:417-T49-claims kept whole for it",
+     "class": "within",
+     "why": "Serves the convergence talk's purpose (reviews that change nothing are the problem) and constitution XIV v2.36.0 (a difference with no wrong outcome is not a defect, fixed by restating the claim). The arbiter's ruling stopped relabeling of a departure that stands; a departure that no longer exists or is not a defect is outside what it protected, and the one that stands keeps it whole."
+    },
+    {
+     "id": "b-engine-digest",
+     "summary": "A procedure section's finding judged DRIFTED fix: code keeps a 'drawn' digest of every .rs file under rust/mode_a/src and is owed again (full check) when it differs; the over-owing cost accepted; per-claim unit pointers and re-owing every known drift each report priced and not taken",
+     "class": "within",
+     "why": "Tooling that makes 'once the code moves it is judged again' actually happen so stale code fixes are not printed and real defects are still found (449 request 2026-11-24). Choosing the coarser digest over alternatives is design, not a narrowing of what was asked."
+    },
+    {
+     "id": "b-no-backfill-452-T24",
+     "summary": "Rows judged before the digest lands keep none; every standing row was re-judged and recorded in this task, and the one still a code fix (452 T24's compound shrine) now carries its drawn digest via make claims-checked; no fix: code section row is left without one, measured 2026-11-24 by reading the index's rows by key",
+     "class": "within",
+     "why": "Round 1's finding closed: the section now states the 452 T24 re-judgment was recorded (second reading after the bundle was rebuilt with the pages make claims-checked named) and the row keeps its digest, with a one-shot measurement label. With no standing fix: code row undigested, the no-backfill rule leaves no row outside the fix."
+    },
+    {
+     "id": "b-sheet-edits-not-reowed",
+     "summary": "An edit to a hand-drawn sheet (pool/**/*.svg) still re-owes no section claim; not built",
+     "class": "within",
+     "why": "Both motivating stale cases (genkan porch, kitchen garden) are drawn by rust/mode_a and are covered by the engine digest; the only sheet-only case (arch posts) was re-judged this task to fix: claim, so no standing fix: code row depends on a sheet, and the agent rule (a) re-judges any filed departure whenever it is bundled. No wrong outcome is left standing."
+    },
+    {
+     "id": "round-on-clone-rule",
+     "summary": "The six standing keys and 452 T24 bundled by make claims-bundle, judged by an agent told to follow the clone's impl-drift.md (the dispatched agent reads the mirror's), recorded by make claims-checked",
+     "class": "within",
+     "why": "Procedure for running the round on the edited rule; decides nothing about scope."
+    },
+    {
+     "id": "found-left-arch-notice-board",
+     "summary": "The arch dimensions claim (docs/buildings.md) and NOTICE_BOARD_MAX_FT's claim (compound.rs), both DRIFTED fix: claim; effect: none, are left to their owners' restatement tasks (452 doc restatements, 449 Mode A claims); not filed as defects",
+     "class": "within",
+     "why": "Each is a claim's wording with no visible effect, which constitution XIV v2.36.0 says is not a defect; leaving a non-defect to its owner is not a narrowing and needs no ruling, and claims-report keeps listing both until restated."
+    },
+    {
+     "id": "found-left-417-T33",
+     "summary": "417 T33 stays open; closing it is its own feature's",
+     "class": "within",
+     "why": "Outside this task's request; the report surfaces it to its owner once no claim names it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T223": {
+   "section_sha256": "bb6314181f5fb28758ec50b22727c2da6e668e3ffe55ce0f96c3a9715d2e2ed6",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T223-before",
+     "summary": "The clean 'before' of a mixed row is read from dev/claims-index.json's own git history: walk from HEAD as far as checked_at, take the newest row whose build is not mixed.",
+     "class": "within",
+     "why": "The arbiter's tooling_fix (ask:mixed-build-241-claims) orders a mixed answer re-triaged by the clean build; a triage judges a change from a before, and the mixed row overwrote it, so reading it from the index's history is the mechanism the ruling needs, not a change of what it asks."
+    },
+    {
+     "id": "T223-withdraw",
+     "summary": "At a landing only the fields a triage writes (research, pages, section, code, core, reads, triaged, cleared, triage, build) are withdrawn; verdict, note, date, claim and rests stay.",
+     "class": "within",
+     "why": "Withdraws exactly the mixed build's answer the ruling says must not be trusted, and keeps the verdicts the ruling keeps; no claim text or full verdict is touched."
+    },
+    {
+     "id": "T223-owed-clears",
+     "summary": "A mixed clear or agent triage owes what claims-owed's ordinary rules find between the clean answer before and the tree: nothing where the tree is back where that answer judged it (73), a tool clear then the agent where a section, page or code moved (147 cleared, 21 to the agent), a full check only where no triage judges the change (1, the rewritten barracks claim).",
+     "class": "within",
+     "why": "This is the tooling_fix verbatim in effect: re-judge with the clean build, mechanical clear first, then claims-triage, impl-drift only for what neither reproduces. Owing nothing where nothing changed since a clean verdict is the clean build's own ordinary answer and is the GM's convergence rule (2026-11-23: only a claim-changing edit triggers review). The ruling's 229/57 split is a count, not a rule; formerly agent-triaged rows the tool now clears are cleared 'mechanical clear first' as the tooling_fix orders."
+    },
+    {
+     "id": "T223-no-base",
+     "summary": "A mixed answer with no clean answer in the walk, or whose claim has no row in a commit of the walk, owes impl-drift with its files named (fails closed).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Presumed wrong and ruled legitimate on three grounds: it fails toward more checking, never less, so it can pass no bad work; the ruling itself sends to impl-drift a claim 'neither reproduces', and with no clean before in the walk there is no change for a tool clear or the agent to judge, so neither can reproduce it; and T197's rule that a landing never trusts a mixed answer forbids the only other outcome (trusting it). The replay found a before for all 242 mixed rows, so the case guts nothing the ruling asked for."
+    },
+    {
+     "id": "T223-full-verdicts",
+     "summary": "A full impl-drift verdict is never re-owed: verdict_row builds a fresh row with no build, and the 14 edited claims keep their verdicts.",
+     "class": "within",
+     "why": "The ruling's what says verbatim 'The 14 edited claims keep their full impl-drift verdicts'; a row with no build is not mixed and so lies outside the rule being fixed."
+    },
+    {
+     "id": "T223-route",
+     "summary": "The route is L7R_LAND_ALONE=1 make claims-triage, which writes the withdrawal, clears what the tool can and bundles the rest for the agent; agent TOUCHES go to impl-drift; no command added; claims-owed and the push's gate say the count, files and command.",
+     "class": "within",
+     "why": "The tooling_fix names landing-mode claims-owed/claims-triage as the place of the fix. No verb is added, so ask:t197-rejudge-verb (which cut a withdrawal verb for T184's 81 modal marks) stands; the withdrawal here is the re-judging the later ruling ordered, inside the existing command. Naming the count, files and command is the project's guard-message rule."
+    },
+    {
+     "id": "T223-outside-landing",
+     "summary": "Outside a landing the index is read as it stands.",
+     "class": "within",
+     "why": "T197's mixed-build rule and the ruling's fix are both landing-mode only; nothing outside a landing changes."
+    },
+    {
+     "id": "T223-section-words",
+     "summary": "section_words also reads the kept words' own history (dev/claims-section-words.jsonl), so the 8 pruned base blocks are found rather than forced.",
+     "class": "within",
+     "why": "Required for the re-triage to work on the measured rows, and T210/T215's rule that a section's words are never forced where they can be found."
+    },
+    {
+     "id": "T223-stamp-build",
+     "summary": "Fix found here: clear_page_moves never stamped its build, so a mixed clear went unmarked and a clean clear of a marked row stayed marked; stamp_build fixes it.",
+     "class": "within",
+     "why": "A wrong outcome in the very check this task corrects (the landing answers wrongly either way); fixing a known defect in the task is the standing fix-as-we-go rule, not new scope."
+    },
+    {
+     "id": "T223-order",
+     "summary": "Committed before the landing of 449 T423 T424 T418 T422 is run again; the coordinating session then re-judges; red exits through make arbiter-ask.",
+     "class": "within",
+     "why": "The ruling's what (1)-(2): make and commit the tooling fix before any re-judging, then re-run the landing."
+    },
+    {
+     "id": "T223-not-perf",
+     "summary": "The task is not tagged performance work.",
+     "class": "within",
+     "why": "The GM's words class this kind of fix as a defect, not a performance improvement: on 2026-11-24 the cascade rules' over-sends (T210's 147 forced claims, T211's 22) were 'defects' to 'fix all 6 of those before we resume', and T223 is the same class - a check owing a full check to claims nothing changed for, refusing a green landing. Its time saved is the effect of correcting a wrong outcome, as the plan says. The label also moves nothing: the ruling already orders T223 before the landing re-run."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T224": {
+   "section_sha256": "2127ec95dd4ec7dd5f8e8767ecb9a320f64c4bfa4e03234853e497f8f4d44a78",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T224-a-RECORD",
+     "summary": "A record answer is counted as mixed only by an uncommitted file in RECORD: owed, bundle, their path dependencies (core, pool, registry, research, rust/guard/shared), rust/gate/src and the record crate; the record crate's other dependencies (archive, downloads, pages, semantic, trials, uncited) are left out on a grep of every caller of write_answer/write_judged.",
+     "class": "within",
+     "why": "This is the tooling_fix of ask:mixed-build-53-record-answers: an answer is mixed only when a dirty path lies in the closure of the crates that built and recorded it (owed, bundle and their transitive deps). RECORD is a superset of that closure. It adds rust/gate/src and the record crate, which keeps more of T197 than the ruling requires. The crates left out are not in the ruling's closure in the first place."
+    },
+    {
+     "id": "T224-b-markdown",
+     "summary": "A Markdown file outside the table's crates never counts; a Markdown file inside a table crate counts (include_str! fixtures).",
+     "class": "within",
+     "why": "The ruling names rust/gate/CLAUDE.md as a dirty path whose code could not have run. Markdown inside a table crate still counts, and the closure walk flags any included file the table does not count, so no file that can run is dropped."
+    },
+    {
+     "id": "T224-b-tests",
+     "summary": "tests.rs and tests/ files inside a table crate still count; no test-only exclusion.",
+     "class": "within",
+     "why": "This counts more than the ruling's closure would strictly require, so T197 is kept. It is not a narrowing."
+    },
+    {
+     "id": "T224-b-manifests-unknown",
+     "summary": "Any Cargo.toml, rust/Cargo.lock and .cargo/config.toml always count, and so does a path the rule does not know.",
+     "class": "within",
+     "why": "This is conservative. It keeps T197's rule for every file whose effect on the build the closure cannot rule out."
+    },
+    {
+     "id": "T224-c-CLAIMS",
+     "summary": "The claims side's mixed-build test is narrowed the same way through its own table CLAIMS (the claims crate's path-dependency closure, rust/gate/src, and the record crate's one included file), through the single Landing::paths call.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The tooling_fix names only the owed crate's record gate, so narrowing the claims side's T197 rule goes past its letter. The ruling's own why gives the reason. It calls the fault a false positive 'of the same class as mixed-build-241-claims', and it orders that the rule be narrowed by a tool and not waived again. Counting a dirty file that no claims verb can run is that same wrong outcome: a check refusing good work. Fixing it in this step is required by fix-as-we-go. The purpose test holds: T197 exists so that an answer judged by code that is not its own is not trusted. Code outside the claims verbs' closure cannot have judged the answer, and the closure test keeps the table honest as dependencies change."
+    },
+    {
+     "id": "T224-closure-test",
+     "summary": "build::closure::gaps walks the [dependencies]/[build-dependencies] path entries and the include_str!/include_bytes! lines from each table's roots. It reports an unlisted crate that is reached, an entry nothing reaches, or an uncounted included file. Core's test runs it on the real tree, and core's Cargo.toml declares those crates so rust-test re-runs when a manifest moves.",
+     "class": "within",
+     "why": "This is the ruling's own requirement, 'a fixed table whose test fails when a dependency is added', and it only enforces that. Reading the include lines closes the rust/guard/shared to record-crate gap the plan found."
+    },
+    {
+     "id": "T224-message-order",
+     "summary": "The refusal message is unchanged. The fix is built before T218..T223 are re-landed, while nothing else records in the clone.",
+     "class": "within",
+     "why": "This follows the ruling's what (3) to (5) exactly."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T225": {
+   "section_sha256": "25e4e1f7f0bd91fe0a2bd65b9544b501700766b05281a6d974fefc2e3461d55f",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T225-own",
+     "summary": "One reading type, Own, in core/build.rs; mixed asks it; Judged (owed/answers.rs) and Landing (claims/index.rs) each hold one Own in place of their own HEAD lookups",
+     "class": "within",
+     "why": "Where the fix lives, not what it trusts. The ruling's tooling_fix names both the owed record and the claim answers, and one shared reading puts the same rule in both."
+    },
+    {
+     "id": "T225-a",
+     "summary": "A stamped blob is the landing's own where it is its path's blob at HEAD, at a commit of the delta, or at the base; a stamped deleted is own where one of those commits holds no such file",
+     "class": "within",
+     "why": "This is the ruling's tooling_fix nearly word for word. The deleted arm is the same rule applied to a file's absence."
+    },
+    {
+     "id": "T225-b-base",
+     "summary": "Base = git merge-base HEAD origin/main (the base make land already diffs from); delta = base..HEAD; a merge of main moves the base and keeps the clone's own commits in the delta",
+     "class": "within",
+     "why": "The ruling names 'the landing's delta (f7c105b4a0..HEAD)' and 'its base' without saying how to find them. Using the landing's own diff base reads them as make land already does."
+    },
+    {
+     "id": "T225-b-nobase",
+     "summary": "Where no base is found (no origin/main, no shared history) the delta is empty and a blob is held to HEAD, the rule before this task ((d) still applies where the stamp commit is known)",
+     "class": "within",
+     "why": "With no base the ruling's delta and base are undefined, so the ruling's rule has nothing to compare against. The fallback is the stricter earlier rule: it trusts less, never more."
+    },
+    {
+     "id": "T225-c",
+     "summary": "A blob no commit holds still reads mixed (the real case: another builder's work in progress); measured over 302 record entries and 205 claim rows, one superseded answer holds such blobs",
+     "class": "within",
+     "why": "This keeps T197 unchanged. The ruling widens 'own' only to committed blobs, so an uncommitted blob still reads mixed, as it did before."
+    },
+    {
+     "id": "T225-d",
+     "summary": "A blob held at a commit of <stamp commit>..HEAD is also committed code, asked after HEAD/delta/base miss; a stamp commit git does not know adds nothing",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This trusts more than the ruling's words, so it is tested as an exception. Taken literally, the ruling's rule would defeat the ruling's own stated purpose: 'ends the loop' and 'do not ask this question again'. The block measures it: once this landing is pushed, its commits fall behind the next landing's base. 189 claim rows stamped 1b064aa0de would then read mixed at the next landing of any clone, the same loop run once more. Against T197's purpose: (d) admits a blob only if a commit reachable from HEAD holds it, so it can never admit a blob that no commit holds. Another builder's uncommitted work therefore still reads mixed under (c). With (d), the block measures 0 of 205 rows and 0 of 302 record entries, the (c) one aside, left holding a blob that no commit since its stamp holds. It trusts only committed code, which is the ruling's own ground for its rule."
+    },
+    {
+     "id": "T225-f",
+     "summary": "build::current() drops from the stamp each dirty file whose stamped blob equals the launcher tree's HEAD now, so an answer by a binary whose sources were since committed unchanged carries a clean stamp and a triage clear by it writes no build row",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The ruling's second clause is worded as a reading rule ('reads a stamp as clean once all its dirty blobs equal HEAD'). (f) applies it when the stamp is written, per file, against HEAD at that moment, which goes past the words, so it is tested as an exception. It is implied by the ruling's own clause, and it admits nothing T197 guards: a file is dropped only when its blob is committed at HEAD when the answer is recorded, so uncommitted work (T197's object) is never dropped and still reads mixed under (c). The one case where it differs from the read-time rule is a write-time HEAD the landing later loses through an amend or reset. That gives the answer the same standing a clean build at an amended-away commit already has, because the mixed rule reads only dirty blobs, so it opens no new class of trusted code. Without (f), the defect the block records goes on: each triage clear writes a build row into the tracked index for files that were HEAD's own. That is a wrong outcome the ruling's clause was aimed at."
+    },
+    {
+     "id": "T225-order",
+     "summary": "Built straight after the landing of T218-T224, alone in the clone, nothing recording answers while the gate's crates are uncommitted",
+     "class": "within",
+     "why": "The ruling's 'what' step (3): 'straight after the landing, alone in the clone'."
+    },
+    {
+     "id": "T225-tests",
+     "summary": "Red-first fixtures in the owed and claims crates for an answer by a build of an earlier commit of the delta, plus opposite cases (blob no commit holds re-owed; unknown stamp commit with no base re-owed) and a core fixture per arm of Own",
+     "class": "within",
+     "why": "The ruling asks for 'a red fixture where an answer's stamped blob matches an earlier commit of the delta but not HEAD'. The opposite cases enforce T197, which is kept, so they are enforcement of what was asked, not extra scope."
+    },
+    {
+     "id": "T225-messages",
+     "summary": "The messages are unchanged",
+     "class": "within",
+     "why": "Nothing asked for a change of wording."
+    },
+    {
+     "id": "T225-perf",
+     "summary": "Not classed as performance work: it corrects what a landing owes",
+     "class": "within",
+     "why": "A classification. The arbiter's ruling fixes the order anyway (straight after the landing), so this changes no scheduling the GM or the ruling set."
+    },
+    {
+     "id": "T225-found",
+     "summary": "Found-and-left: both items (the one-landing limit of the ruling's rule, the stale dirty stamp) fixed here, nothing deferred",
+     "class": "within",
+     "why": "No defect is carried forward. Both are fixed in this task as (d) and (f), each ruled above."
     }
    ],
    "verdict": "CLEAR"

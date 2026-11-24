@@ -105,13 +105,14 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   and two), so each junior samurai has at least 96 sq ft, above the barracks' 88 for a foot soldier (three to a 12 x 22 ft
   dwelling). Lodging was ordered by station: the Sayama jin'ya's rowhouses ran 4-6 ken by rank and the Kii rule gave a
   20-30 koku retainer 3 ken against the foot soldier's 2 (T320 Q5 above, outside the record), and the Sakai town
-  magistracy gave each doshin a dwelling of his own of 2 by 3 ken, about 216 sq ft (research-pass 2026-11-23, not yet on a
-  page). The men to a dwelling are a GUESS, 0097's few (its one case is three retainers sharing in 1860; eleven Sakai
+  magistracy gave each doshin a dwelling of his own of 2 by 3 ken, about 216 sq ft (0097's drawing page, "How big is a
+  dwelling of the junior retainers' quarters?"). The men to a dwelling are a GUESS, 0097's few (its one case is three retainers sharing in 1860; eleven Sakai
   dwellings would run 132 ft where the wall leaves about 58). Until the building-review of 2026-11-23 (E1) the rowhouse was 36 x
   18 ft in three dwellings of 12 x 18 ft, three or four men to each, about 59 sq ft a man - the samurai lodged below the
-  ashigaru. Its seat a GUESS: at Sakai and the Sayama domain jin'ya the
-  officials' rowhouses stood inside the grounds in the side or rear parts, apart from the gate (research-pass 2026-11-23),
-  silent for an intendant's office; the outer court's side walls are full and the rear court is the household's, so the
+  ashigaru. Its seat a GUESS: at Sakai the magistrate's retainers' rowhouses stood inside the
+  grounds beside his residence, and at the Sayama domain jin'ya the middle and lower retainers lived mainly along its East
+  Gate street and side lanes (research 0331, "Where an office's staff lived"), and no plan we read shows where on an
+  intendant's grounds its clerks' rowhouse stood (0097's drawing page); the outer court's side walls are full and the rear court is the household's, so the
   front wall's free run, 57 ft west of the main gate's west post.
 - **Rear yard**: the open ground between the storehouses and the kitchen, 37 x 22 ft, the Higuchi house's rear (research 0091); its size a GUESS in the 18-45 by 12-30 ft band the size-audits of 2026-10-12 set from two storehouses of the common 2 x 3 ken and the open ground before them (no rear yard was found measured); its 12 ft (2 ken) floor keeps it apart from the 6-10 ft service alley, the rear strip's other form.
 - **Tenure**: a freshly appointed, standardized office - no ancestral alcove, no accreted particulars (knob 6).
@@ -153,12 +154,12 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   0096; 449 T350). The service gate stands 21 ft east of the main gate (71 ft before T329 moved the main gate onto the
   genkan's line), labeled, not moved: a small gate beside a magistrate's main gate is drawn at Joge in 1869 (0093: a main
   gate, a small gate, a gatekeepers' room and stone steps together at its east wall), with no distance given, so 21 ft
-  is a GUESS (research-pass 2026-11-22, 449 T356).
+  is a GUESS (449 T356).
 - **Cell**: on the south wall below the hearing court, 10 x 12 ft, joined to the junior retainers' quarters' east end (132.3
   to 142.3 ft, about 44 ft west of the main gate's west post; 129 to 139 ft until 449 T388's stables' lane moved it 3.3 ft east) - 0096: a magistracy's temporary cell stood in the quarter that held its
   court rooms (Edo's town magistracy); joined to the lodging because its own seat and a fire gap would not fit in the about 58
-  ft of wall the stables and the gatehouse leave beside the rowhouse's 48 (59 until 449 T388's cart lane, 47 beside its 36 until 449 T351), a GUESS (research-pass 2026-11-23: no source says whether a cell stood
-  joined to a guardroom, a rowhouse or the gatehouse, or alone; Naruto's domain jin'ya kept its jail on the west side,
+  ft of wall the stables and the gatehouse leave beside the rowhouse's 48 (59 until 449 T388's cart lane, 47 beside its 36 until 449 T351), a GUESS (0096's drawing page, "Where does the county plan put its cell?": no page we read says whether a cell was
+  built on to a rowhouse, a guardroom or the gatehouse, or stood alone; 0096: Naruto's domain jin'ya kept its jail on the west side,
   its gate on the south). The seat matches 0096's Chinese case most closely: the Neixiang county yamen set its prison on
   the west side of its first courtyard, in the south-west, inside the main gate with the runners' quarters, short of the
   court where cases were heard (building-review 2026-11-23 N2); this cell stands in the front court, west of the

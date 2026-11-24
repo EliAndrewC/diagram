@@ -140,3 +140,9 @@ The GM, with the session on Fable 5.2 and its builders dispatched as `general-pu
 The GM, the same day, on the rule T216 builds:
 
 > because that ruling from before is something that I still want with regards to enforcing that Sonnet should be used to read, fetch, translate, or extract. But then instead of Opus for anything that judges, I'd like it to be inheriting the parent session model for anything that judges.
+
+## 2026-11-24, the page edits' cascades are watched
+
+The GM, as the session queued the page sessions that close out 449 T420 and T425 and feature 452's page items:
+
+> That all sounds good, and you should make sure to take a look at what cascades happen as a result of any of our page edits, just to make sure that we are cascading appropriately. and not doing anything silly like making a bunch of unnecessary edits as a result of something trivial changing, etc. But also that we really are cascading in situations that do call for it. Thank you.

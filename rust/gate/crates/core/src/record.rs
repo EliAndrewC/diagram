@@ -9,6 +9,7 @@ use crate::Reply;
 
 pub mod args;
 pub mod bundle;
+pub mod effect;
 pub mod repo;
 #[cfg(any(test, feature = "testkit"))]
 pub mod testkit;

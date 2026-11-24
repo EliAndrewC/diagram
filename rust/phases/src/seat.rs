@@ -107,7 +107,7 @@ pub use crate::counts::tally;
 /// Research:
 ///     a walled-in head gives way - research/questions/0081-village-lanes.drawing.html: lanes keep to dry ground, so a margin whose seat has no dry way out of the frame is dropped and the next in the ranking taken
 ///     the fords before the seat - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses the brook only at a crossing place, so the seat's way out is asked of the brook gapped at them
-///     the back to the hill where the wind cannot be backed - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: where a map declares a fall toward the wind, no margin is both high and windward, so the cluster takes the high, dry one, its back to the hill and off the wind - the margins ranked again with the high side as the wind's, each seat recorded off the wind; its belt still on the windward side, between the houses and the paddy (`margins::ranked`)
+///     the back to the hill where the wind cannot be backed - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: where a map declares a fall toward the wind, no margin is both high and windward, so the cluster takes the high, dry one, its back to the hill and off the wind - once no margin facing the wind is left, each refused or its seat walled in, the margins are ranked again with the high side as the wind's, each seat recorded off the wind; its belt still on the windward side, between the houses and the paddy (`margins::ranked`)
 pub fn seat(inp: &SeatIn) -> Result<Seated, SeatRefused> {
     let mut counts = HashMap::new();
     let (spacing, half, bend) = inp.ford;
@@ -119,7 +119,26 @@ pub fn seat(inp: &SeatIn) -> Result<Seated, SeatRefused> {
     // down from the high side, each seat recorded off the wind
     // only a fall toward the wind: a rolled fall runs away from it or square across it, and a map whose margins facing the
     // wind are all refused is refused by name, never seated off the wind (449 T261, its impl-drift's OUTSIDE THE CHANGE)
-    if ranked.is_empty() && inp.fall.0 * inp.wind.0 + inp.fall.1 * inp.wind.1 > 0.0 {
+    let mut hill = inp.fall.0 * inp.wind.0 + inp.fall.1 * inp.wind.1 > 0.0;
+    let mut walled = 0;
+    let mut lines = inp.lines.clone();
+    lines.extend(stream_segs.iter().copied());
+    let mut way = exit::Exit::new(&inp.walls, &lines, inp.canvas, &mut counts);
+    loop {
+        while let Some(head) = ranked.first() {
+            if way.has_exit(head.center, &mut counts) {
+                break;
+            }
+            ranked.remove(0);
+            walled += 1;
+        }
+        // ...ASKED ONCE NO MARGIN FACING THE WIND IS LEFT, WALLED IN OR REFUSED (449 T423): before it the hill was asked only
+        // when the ranking kept none, so a site whose one kept margin had no dry way out was refused with its high margin
+        // never asked (2 of 3,200 rolls, seeds 115 and 260 of 12 households falling at 180 degrees, measured 2026-11-24)
+        if !ranked.is_empty() || !hill {
+            break;
+        }
+        hill = false;
         let uphill = SeatIn {
             wind: (-inp.fall.0, -inp.fall.1),
             ..inp.clone()
@@ -130,17 +149,6 @@ pub fn seat(inp: &SeatIn) -> Result<Seated, SeatRefused> {
             .into_iter()
             .map(|f| Frame { offwind: true, ..f })
             .collect();
-    }
-    let mut walled = 0;
-    let mut lines = inp.lines.clone();
-    lines.extend(stream_segs.iter().copied());
-    let mut way = exit::Exit::new(&inp.walls, &lines, inp.canvas, &mut counts);
-    while let Some(head) = ranked.first() {
-        if way.has_exit(head.center, &mut counts) {
-            break;
-        }
-        ranked.remove(0);
-        walled += 1;
     }
     if ranked.is_empty() {
         let [frame, belt, toe, field, reeds, back] = stopped;

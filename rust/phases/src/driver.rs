@@ -534,6 +534,35 @@ fn stage_hem(f: &Field, seated: &Seated, wind: (f64, f64)) -> Option<crate::hem:
     Some(crate::hem::lay(h, &f.fan.ring, &water, &keep))
 }
 
+/// The dry hem laid, and laid again as a barley hamlet's where a rolled bare winter's dry fields came out short of the grain
+/// (`barley_instead`): the first hem is then not drawn, and both hems' work is counted. A pinned bare winter that came out short
+/// refuses the roll.
+///
+/// Research:
+///     the winter crop asked of the hem as laid - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: a bare winter paddy is drawn only where the fan's dry ground can grow the hamlet's whole grain need - the room is known only once the hem is laid behind the seat, so the hem is laid, asked, and where it is short laid once more for a barley hamlet (449 T418); never a third time, the barley hem drawn as it stands
+///     a pinned bare winter refused - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the same rule - a spec that pins its winter bare where the hem as laid is short of the need is refused, the whole roll and not the hem alone, so no map draws a bare winter beside dry fields short of the grain; the refusal names the pin, the acres drawn and needed, and the two ways out
+fn stage_hem_fed(
+    inp: &FieldIn,
+    out: &mut crate::field::build::FieldOut,
+    seated: &Seated,
+    wind: (f64, f64),
+) -> Option<Result<crate::hem::Laid, Refused>> {
+    use crate::field::build::{barley_instead, Winter};
+    let first = stage_hem(out.fields.first()?, seated, wind)?;
+    Some(match barley_instead(inp, out, first.grain.0) {
+        Winter::Stands => Ok(first),
+        Winter::Unfed => Err(Refused(format!(
+            "the winter crop refused: winter_crop is pinned none, a bare winter paddy, and the dry fields this ground holds grow {:.2} of the {:.2} acres of grain the hamlet needs - pin barley, or leave winter_crop unpinned and it is rolled",
+            first.grain.0, out.grain.1
+        ))),
+        Winter::Barley => {
+            let mut again = stage_hem(&out.fields[0], seated, wind)?;
+            crate::counts::merge(&mut again.counts, &first.counts);
+            Ok(again)
+        }
+    })
+}
+
 /// The sink (stage 3): the first field's collector run to its pond, to the passing brook or off the map.
 ///
 /// Research:
@@ -725,7 +754,8 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
     if plan::POLDERS.contains(&p.archetype.as_str()) {
         return Ok(polder::roll_polder(p));
     }
-    let mut out = build(&field_in(&p)).map_err(field_refused)?;
+    let fin = field_in(&p);
+    let mut out = build(&fin).map_err(field_refused)?;
     let mut work = 0;
     let mut brooks = Vec::new();
     for f in &mut out.fields {
@@ -757,11 +787,10 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
             &mut refusals,
         )
     });
-    let laid = out
-        .fields
-        .first()
-        .zip(seated.as_ref())
-        .and_then(|(f, s)| stage_hem(f, s, wind(&p.windward)));
+    let laid = seated
+        .as_ref()
+        .and_then(|s| stage_hem_fed(&fin, &mut out, s, wind(&p.windward)))
+        .transpose()?;
     let mut svg = Svg::default();
     // THE REEDS UNDER THE FIELD (feature 444 T42; the cohort's reeds_on_paddy check, 183 of 300 seeds): the reed ring runs its
     // 44 ft out from the shore into the paddy above the pond's berth, and the deleted `pond_reeds` cut it there against the drawn

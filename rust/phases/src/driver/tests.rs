@@ -4,6 +4,7 @@
 //!     the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests
 
 use super::{manifest, roll, spec::parse};
+use crate::field::geom::dist;
 
 #[test]
 fn a_comb_hamlet_rolls_and_draws_its_field() {
@@ -252,4 +253,40 @@ fn every_mark_drawn_is_a_registry_kind_in_the_census() {
     .filter(|k| !seen.contains(*k))
     .collect();
     assert!(never.is_empty(), "{never:?}");
+}
+
+/// A BARE WINTER THE DRY GROUND CANNOT FEED IS ROLLED AGAIN AS BARLEY (449 T418): seed 31 of 16 households falling at 200
+/// degrees rolled its winter crop bare, and its dry fields climbed to 43 plots, 6.45 of the 13.60 acres its grain needs, before
+/// every column ended - 0011 draws a bare winter paddy only where the fan's dry ground can grow the whole need.
+#[test]
+fn a_bare_winter_the_dry_ground_cannot_feed_is_rolled_again_as_barley() {
+    let short = r#"{"name": "S", "seed": 31, "households": 16, "down_deg": 200}"#;
+    let r = roll(&parse(short).unwrap()).unwrap();
+    let need = 16.0 * 0.85;
+    let (drawn, _) = r.grain.unwrap();
+    let (_, owed, _) = r.field_grain.unwrap();
+    // the barley on the drained paddy, counted acre for acre, and the dry fields on the toe's one band
+    assert_eq!(r.knobs["fan_middle"], "wild");
+    assert_eq!(r.knobs["winter_crop"], "barley", "{drawn} of {need} acres");
+    assert!(owed < need, "the dry need less the drained paddy: {owed}");
+    let line = &r.fields[0].hem.as_ref().unwrap().line;
+    let toe = dist(line[0], line[line.len() - 1]);
+    assert!(toe < 0.4 * r.fields[0].fan.length, "only up the toe: {toe}");
+    assert!(!r.dry.is_empty() && r.dry.len() < 43);
+    assert!(super::check::check(&r).is_empty());
+    // a PINNED bare winter the ground cannot feed is refused by name, on a wild middle and on a cleared one: no map of it is drawn
+    for middle in ["wild", "cleared"] {
+        let pinned = format!(
+            r#"{{"name": "S", "seed": 31, "households": 16, "down_deg": 200, "pins": {{"winter_crop": "none", "fan_middle": "{middle}"}}}}"#
+        );
+        let e = roll(&parse(&pinned).unwrap()).unwrap_err().0;
+        let named = e.starts_with("the winter crop refused: winter_crop is pinned none");
+        assert!(named && e.contains("of the 13.60 acres"), "{middle}: {e}");
+        assert!(e.contains("pin barley"), "{middle}: {e}");
+    }
+    // ...and a bare winter whose dry ground holds the need is left bare (Inashiro)
+    let fed = r#"{"name": "Inashiro", "seed": 4, "households": 15, "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated"}"#;
+    let f = roll(&parse(fed).unwrap()).unwrap();
+    assert_eq!(f.knobs["winter_crop"], "none");
+    assert!(f.grain.unwrap().0 >= 15.0 * 0.85);
 }

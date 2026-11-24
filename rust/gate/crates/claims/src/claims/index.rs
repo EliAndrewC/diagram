@@ -466,11 +466,56 @@ pub fn claim_rewritten(was: &Value, text: &str) -> bool {
         .is_some_and(|c| !c.is_null() && c.as_str() != Some(text))
 }
 
-/// A MISLABELED verdict answered by the relabel it prescribed (385 T23, plan D45).
+/// A MISLABELED verdict answered by the relabel it prescribed (385 T23, plan D45): the backing alone changed since the verdict.
+///
+/// The backing is read from the claim as its finding's row kept it said, class word and all (`said`, feature 451 T221): a claim on a
+/// tagged item leaves its class word out of its fingerprint, so the shrine-tree trio's relabel - a page cited as a finding, then as a
+/// `GUESS` on that page's item - moved nothing a row held, and their MISLABELED verdicts printed in `make claims-report` after the
+/// correction. A row recorded before T221 keeps no such line: it is answered only where its stored claim differs from the claim with
+/// and without its anchors - before T221 a MISLABELED claim that only named its item read as rewritten, and so as answered.
 pub fn relabel_answered(was: &Value, row: &Row, root: &Path) -> Result<bool, Fail> {
-    Ok(is(was, "verdict", "MISLABELED")
-        && claim_rewritten(was, &row.claim.normalized())
-        && relabeled_only(was, row, root)?)
+    if !is(was, "verdict", "MISLABELED") {
+        return Ok(false);
+    }
+    let now = row.claim.unanchored();
+    let moved = match was.get("said").and_then(Value::as_str) {
+        Some(said) => said != now,
+        None => claim_rewritten(was, &row.claim.normalized()) && claim_rewritten(was, &now),
+    };
+    Ok(moved && relabeled_only(was, row, root)?)
+}
+
+/// The keys of the findings a relabel answered ([`relabel_answered`]): what the push's carry, the report and the clean gate leave out.
+pub fn answered(cur: &Cur, index: &Index, root: &Path) -> Result<HashSet<String>, Fail> {
+    let mut out = HashSet::new();
+    for (k, v) in index {
+        if let Some(row) = cur.get(k) {
+            if relabel_answered(v, row, root)? {
+                out.insert(k.clone());
+            }
+        }
+    }
+    Ok(out)
+}
+
+/// Why a finding is owed again once its unit's claims are not the ones it was judged beside.
+pub const SIBLINGS: &str = "its unit's claims changed since the finding";
+
+/// A unit's claim labels, fingerprinted: what a finding's row keeps (`siblings`, feature 451 T221). `audit/palette.rs`'s MISLABELED
+/// asked for claims of their own on three of its table's rows; they were written beside the judged claim, which did not move, so its
+/// verdict stood in the report with nothing owed.
+pub fn siblings_of(unit: &Unit) -> String {
+    let mut labels: Vec<&str> = unit.claims.iter().map(|c| c.label.as_str()).collect();
+    labels.sort_unstable();
+    digest(&labels)
+}
+
+/// Is `was` a finding whose unit's claims changed since it was judged?
+fn siblings_moved(was: &Value, row: &Row) -> bool {
+    super::reply::FINDINGS.contains(&field(was, "verdict"))
+        && was
+            .get("siblings")
+            .is_some_and(|s| s.as_str() != Some(&siblings_of(&row.unit)))
 }
 
 /// `page:digest` for every block now standing on the questions `pointers` cite.
@@ -561,43 +606,41 @@ pub fn owed(
 }
 
 /// A landing alone's reading of the builds its clears were made by (feature 451 T197): a clear by a build holding uncommitted code
-/// other than the landing's own is owed again; outside a landing, and with no tree to read the landing's blobs from, none is.
-struct Landing<'a> {
-    root: &'a Path,
-    blobs: BTreeMap<String, String>,
+/// other than the landing's own is not the landing's answer; outside a landing, and with no tree to read the landing's blobs from,
+/// every clear stands. The index a landing reads has each such row at its last clean answer ([`super::landing::read`], T223), so the
+/// one this still finds mixed has none, and is owed in full.
+pub(super) struct Landing<'a> {
+    own: l7r_gate_core::build::Own<'a>,
 }
 
 impl<'a> Landing<'a> {
     fn of(qdir: Option<&'a Path>) -> Option<Self> {
-        let root = qdir.and_then(Path::parent).and_then(Path::parent)?;
+        Self::at(qdir.and_then(Path::parent).and_then(Path::parent)?)
+    }
+
+    /// The landing at `root`, or `None` outside a landing alone.
+    pub(super) fn at(root: &'a Path) -> Option<Self> {
         l7r_gate_core::build::landing().then(|| Self {
-            root,
-            blobs: BTreeMap::new(),
+            own: l7r_gate_core::build::Own::at(root),
         })
     }
 
+    /// The uncommitted files the build that answered `was` held that no commit of the landing, or since that build, holds
+    /// ([`l7r_gate_core::build::Own`], T225); none for a clean or unrecorded build.
+    pub(super) fn paths(&mut self, was: &Value) -> Vec<String> {
+        let own = &mut self.own;
+        l7r_gate_core::build::mixed(
+            was.get("build"),
+            l7r_gate_core::build::CLAIMS,
+            &mut |c, p, b| own.holds(c, p, b),
+        )
+    }
+
     fn mixed(&mut self, was: &Value) -> Option<String> {
-        let (root, blobs) = (self.root, &mut self.blobs);
-        let paths = l7r_gate_core::build::mixed(was.get("build"), &mut |p: &str| {
-            blobs
-                .entry(p.to_owned())
-                .or_insert_with(|| {
-                    let b = crate::record::repo::git(
-                        root,
-                        &["rev-parse", "--verify", "--quiet", &format!("HEAD:{p}")],
-                    );
-                    let b = b.trim();
-                    if b.is_empty() {
-                        l7r_gate_core::build::DELETED.to_owned()
-                    } else {
-                        b.to_owned()
-                    }
-                })
-                .clone()
-        });
+        let paths = self.paths(was);
         (!paths.is_empty()).then(|| {
             format!(
-                "triaged by an l7r-gate built with other builders' uncommitted code ({}), not this landing's: re-judge it here (451 T197)",
+                "triaged by an l7r-gate built with other builders' uncommitted code ({}), not this landing's, and the index's history holds no earlier answer of it by a clean build to triage again from: re-judge it here (451 T197, T223)",
                 paths.join(", ")
             )
         })
@@ -650,7 +693,14 @@ fn owed_one(
             None => "research changed".to_owned(),
         }));
     }
-    Ok(None)
+    if siblings_moved(was, row) {
+        return Ok(Some(SIBLINGS.to_owned()));
+    }
+    // a section's `fix: code` drift is judged again once the code that draws it moves (feature 451 T220)
+    let root = qdir.and_then(Path::parent).and_then(Path::parent);
+    Ok(root
+        .is_some_and(|r| super::drawn::moved(was, r))
+        .then(|| super::drawn::DRAWN.to_owned()))
 }
 
 #[cfg(test)]
