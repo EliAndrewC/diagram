@@ -89,3 +89,4 @@
 {"date": "2026-11-23", "claims": 1, "keys": ["rust/mode_a/src/reads.rs::take#the page's reads"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}
 {"date": "2026-11-23", "claims": 1, "keys": ["rust/mode_a/src/reads.rs::take#the page's reads"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}
 {"date": "2026-11-23", "claims": 1, "keys": ["rust/mode_a/src/reads.rs::take#the page's reads"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}
+{"date": "2026-11-24", "claims": 1, "keys": ["docs/buildings.md::Outer court (administrative / public)#barracks"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}

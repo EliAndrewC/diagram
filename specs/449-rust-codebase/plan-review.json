@@ -1782,6 +1782,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T399, T407, T409, T400, T378, T394, T403 (bundle)": {
+   "sha256": "5107772fff7afd324ec8c28a82b3bcb94c7e8c58622007961cddeba3155e500e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T399, T407, T409, T400, T378, T394, T403 Approach (checklist part A)": {
+   "sha256": "8b07a81b84758cd55afdc4e5e08c7fd16a7d50a3591e7d37abfd20f0a3fb0846",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -25103,6 +25115,168 @@
      "summary": "Ochiba's visitors' way from the genkan room through the day office and clerks' room kept, a labeled GUESS",
      "class": "within",
      "why": "T375's defect, as the plan's goal states it, is the household's way, and that way is traced clear on Ochiba. O1 is the visitors' way through public office rooms; the bundle names no wrong outcome against it, and it is labeled a GUESS."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T399, T407, T409, T400, T378, T394, T403 (bundle)",
+    "### T399, T407, T409, T400, T378, T394, T403 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T399-withdrawn",
+     "summary": "T399 withdrawn: a form slip (' and ' vs '; ' joins), no wrong outcome",
+     "class": "within",
+     "why": "The GM's cascade-test words make step 1 'checking whether or not we actually even need to make those changes' and expect only some to survive; XIV v2.36.0 says a form difference is not a defect. Leaves no defect."
+    },
+    {
+     "id": "T407-two-items-withdrawn",
+     "summary": "T407's ochiba-magistracy and hayakawa-magistracy items withdrawn; the roundtrip-test item done (T312/T367 marked superseded by T392, T392's entry states the west door)",
+     "class": "within",
+     "why": "Withdrawn on the step-1 need check the GM asked for (no pop-up shows the paragraph; line 54 already names the gate); the surviving item still serves the GM's 'should cascade nothing' row."
+    },
+    {
+     "id": "T409-accuracy-only",
+     "summary": "T409: the About's first sentence restated so the study seat is not given as history; the GAPS half (adding the tea room / garden outlook) not taken",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the filed task, but the GM's request makes the first step checking whether each change is needed, and the GAPS half as worded would merge two rooms 0103 and 0113 keep apart - adding it would create a wrong outcome, not fix one. No defect is left."
+    },
+    {
+     "id": "T400-restate",
+     "summary": "T400: four claims, the docs bullet and the fifth echo restated to 0090.drawing's yamen/Takayama reasoning",
+     "class": "within",
+     "why": "The GM's row: 'should cascade to exactly what repeats their words'; the fifth echo is such a repeat."
+    },
+    {
+     "id": "T378-withdrawn-residue",
+     "summary": "T378 withdrawn as moot (relabeled by 451 T192); its residue - two bullets giving the shrine tree as 0218's finding - restated to the GUESS",
+     "class": "within",
+     "why": "Already done work need not be redone (the GM's need check); the residue that still gives a guess as a finding is fixed, so no defect is left and the repeat-cascade is still exercised."
+    },
+    {
+     "id": "T394-branches",
+     "summary": "T394: a research pass on the rowhouse fabric, AGREES / CONTRADICTS / SILENT branches, each with its edit",
+     "class": "within",
+     "why": "The GM's row: 'new facts: cascade only where they contradict a pop-up'; the CONTRADICTS branch is the only one that rewrites a pop-up's sentence."
+    },
+    {
+     "id": "T403-branches",
+     "summary": "T403: the JAANUS passage added to 0108; a pass on whether a small 3-bay stable kept both doors; APPLIES -> DEVIATION or knob, CLASSIC ONLY / SILENT -> the one door stays a GUESS citing 'each gable end', Depiction restated",
+     "class": "within",
+     "why": "The GM's 'new facts' row; whichever branch, the drawing's one door is labeled for what the record holds (a labeled DEVIATION or a GUESS), so no research claim is left contradicted unlabeled."
+    },
+    {
+     "id": "order-exits-budget",
+     "summary": "Order (withdrawals, T378 residue, T407, T409, T400, T394, T403), owed tools after each, one landing, the cascade table filled",
+     "class": "within",
+     "why": "Implements the GM's cascade test: predicted owed vs actually owed per change."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T399, T407, T409, T400, T378, T394, T403 (bundle)",
+    "### T399, T407, T409, T400, T378, T394, T403 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T399-withdrawn",
+     "summary": "T399 withdrawn: the ' and ' joins are a form slip, not a wrong outcome (738 against 2,689, counted 2026-11-23)",
+     "class": "within",
+     "why": "The GM's cascade-test request makes step 1 'checking whether or not we actually even need to make those changes'; withdrawing a row that fixes no wrong outcome is that check, and XIV (v2.36.0) says a difference no reader sees is not a defect."
+    },
+    {
+     "id": "T407-ochiba-magistracy-withdrawn",
+     "summary": "T407's ochiba-magistracy item withdrawn: no pop-up shows the misfiled paragraph",
+     "class": "within",
+     "why": "Step 1's needs-check, as the GM asked; nothing a reader sees is wrong, so no defect is left."
+    },
+    {
+     "id": "T407-hayakawa-withdrawn",
+     "summary": "T407's hayakawa-magistracy item withdrawn: line 54 already names the middle gate",
+     "class": "within",
+     "why": "Already done in the record, so the change is not needed; the GM's own first step."
+    },
+    {
+     "id": "T407-roundtrip-notes",
+     "summary": "T407's ochiba-roundtrip-test notes: T312 and T367 orders marked superseded by T392, T392's entry restated to the drawn west door",
+     "class": "within",
+     "why": "The row's own fix, done as worded."
+    },
+    {
+     "id": "T407-review-not-dispatched",
+     "summary": "The building-review the notes fix re-owes (T407's own line) is not run: make review-fixed refuses (no kept snapshot), make verify owes none, reviews snapshot refuses; filed as 451 T214",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Every route the tooling gives for that round refuses it, so running it here is not available, not merely awkward; the sheet itself did not change (notes only) and no wrong outcome is left by the notes fix; and the refusal is itself a result of the cascade test the GM asked to hear about ('I look forward to hearing how it went'). It is filed, not dropped."
+    },
+    {
+     "id": "T409-accuracy",
+     "summary": "T409's ACCURACY half: the official study About's first sentence no longer gives the office-hall working room as history",
+     "class": "within",
+     "why": "The row as worded; its own Guesses bullet and 0113.drawing call the seat a GUESS."
+    },
+    {
+     "id": "T409-gaps-declined",
+     "summary": "T409's GAPS half not taken: adding 0103's tea room and garden outlook would merge the Arashiyama-no-ma he lived in with the ima 0113 has him working in",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Applying the row literally would write into the pop-up a merger of two rooms the record keeps apart - a wrong outcome the change would create - and the GM's request made the first step 'checking whether or not we actually even need to make those changes'. The exception is implied by the GM's own words and serves the purpose (a legitimate change), it does not gut it."
+    },
+    {
+     "id": "T400-restate",
+     "summary": "T400: four claims, the docs bullet and the granary echo restated to 0090.drawing (yamen and Takayama, one Japanese case); the dropped inner-court-north part becomes a new CONVENTION claim",
+     "class": "within",
+     "why": "The row as worded."
+    },
+    {
+     "id": "T400-mislabeled-account-unchecked",
+     "summary": "emit.rs grounds#office front, residence rear was restated but owed nothing (relabeled_only passes a MISLABELED row's rewrite); filed as tool defect (e), 451 T213",
+     "class": "within",
+     "why": "The restatement the row asked for was made; the unrun check is a tool miss found by the cascade test, which is the test's purpose, and is filed. No requested change is narrowed."
+    },
+    {
+     "id": "T378-withdrawn-and-residue",
+     "summary": "T378 withdrawn as moot (relabeled by 451 T192); its residue fixed (two bullets now call the shrine tree 0218's GUESS), and the two DRIFTED claims impl-drift then found fixed",
+     "class": "within",
+     "why": "Needs-check as the GM asked; what was still wrong (the residue and the half-wrong MOOT's claim account) was fixed under XIV, not left."
+    },
+    {
+     "id": "T394-branch",
+     "summary": "T394: a research pass with an AGREES / CONTRADICTS / SILENT branch rule; AGREES taken: a new 0097 finding (split to 0334 over the cap) and the two About tabs restated",
+     "class": "within",
+     "why": "The row is a research pass whose edit is chosen by its outcome; the branch rule was set before the pass and followed."
+    },
+    {
+     "id": "T403-branch",
+     "summary": "T403: the JAANUS passage added to 0108; the pass found two doors attested for the classic warrior stable only, so the one door stays a GUESS (one-gable-door) with no engine change, stables' Depiction and Guesses restated",
+     "class": "within",
+     "why": "The branch rule set before the pass and followed; no map change unless the pass applied to small stables, and it did not."
+    },
+    {
+     "id": "forced-claims-147",
+     "summary": "147 claims forced to full impl-drift after make building-programs regenerated hand-edited rows; put to the round arbiter before any ran, and claims-owed owes nothing at close",
+     "class": "within",
+     "why": "A tool behavior found by the test and filed (451 T210); the hand edit of generated rows was reverted by regeneration and nothing owed is left at close."
+    },
+    {
+     "id": "found-and-left-record-rows",
+     "summary": "T410-T414 (0334's rope-office gloss, grave markers MISLABELED, the shrine's one form, the burial ground's missing stones, the barracks length) filed, landing before T158",
+     "class": "within",
+     "why": "Outside the bundle's rows and filed to land before the next step, as fix-as-we-go asks; the cascade test asked for nothing beyond its rows."
+    },
+    {
+     "id": "tool-defects-after-talk",
+     "summary": "The cascade test's six tool defects (a)-(f) filed as 451 T209-T214, to land after the GM's talk",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's own words set the order: 'Fix the defects then stop and talk about what to do about the fact we're not converging', and the cascade test is the test he asked to hear back on before deciding ('I look forward to hearing how it went'). Holding its findings for that talk is implied by the request, and no port step proceeds before the talk, so no known defect is carried into a next step."
     }
    ]
   }
@@ -51797,6 +51971,713 @@
      "summary": "Ochiba's visitors' way from the genkan room through the day office and clerks' room kept, a labeled GUESS",
      "class": "within",
      "why": "T375's defect, as the plan's goal states it, is the household's way, and that way is traced clear on Ochiba. O1 is the visitors' way through public office rooms; the bundle names no wrong outcome against it, and it is labeled a GUESS."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T399": {
+   "section_sha256": "ee173684fe7444db1057c3922c6d0f2e66ccd78e16c4ff58d9858ecb85f08346",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T399-withdrawn",
+     "summary": "T399 withdrawn: the ' and ' joins are a form slip, not a wrong outcome (738 against 2,689, counted 2026-11-23)",
+     "class": "within",
+     "why": "The GM's cascade-test request makes step 1 'checking whether or not we actually even need to make those changes'; withdrawing a row that fixes no wrong outcome is that check, and XIV (v2.36.0) says a difference no reader sees is not a defect."
+    },
+    {
+     "id": "T407-ochiba-magistracy-withdrawn",
+     "summary": "T407's ochiba-magistracy item withdrawn: no pop-up shows the misfiled paragraph",
+     "class": "within",
+     "why": "Step 1's needs-check, as the GM asked; nothing a reader sees is wrong, so no defect is left."
+    },
+    {
+     "id": "T407-hayakawa-withdrawn",
+     "summary": "T407's hayakawa-magistracy item withdrawn: line 54 already names the middle gate",
+     "class": "within",
+     "why": "Already done in the record, so the change is not needed; the GM's own first step."
+    },
+    {
+     "id": "T407-roundtrip-notes",
+     "summary": "T407's ochiba-roundtrip-test notes: T312 and T367 orders marked superseded by T392, T392's entry restated to the drawn west door",
+     "class": "within",
+     "why": "The row's own fix, done as worded."
+    },
+    {
+     "id": "T407-review-not-dispatched",
+     "summary": "The building-review the notes fix re-owes (T407's own line) is not run: make review-fixed refuses (no kept snapshot), make verify owes none, reviews snapshot refuses; filed as 451 T214",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Every route the tooling gives for that round refuses it, so running it here is not available, not merely awkward; the sheet itself did not change (notes only) and no wrong outcome is left by the notes fix; and the refusal is itself a result of the cascade test the GM asked to hear about ('I look forward to hearing how it went'). It is filed, not dropped."
+    },
+    {
+     "id": "T409-accuracy",
+     "summary": "T409's ACCURACY half: the official study About's first sentence no longer gives the office-hall working room as history",
+     "class": "within",
+     "why": "The row as worded; its own Guesses bullet and 0113.drawing call the seat a GUESS."
+    },
+    {
+     "id": "T409-gaps-declined",
+     "summary": "T409's GAPS half not taken: adding 0103's tea room and garden outlook would merge the Arashiyama-no-ma he lived in with the ima 0113 has him working in",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Applying the row literally would write into the pop-up a merger of two rooms the record keeps apart - a wrong outcome the change would create - and the GM's request made the first step 'checking whether or not we actually even need to make those changes'. The exception is implied by the GM's own words and serves the purpose (a legitimate change), it does not gut it."
+    },
+    {
+     "id": "T400-restate",
+     "summary": "T400: four claims, the docs bullet and the granary echo restated to 0090.drawing (yamen and Takayama, one Japanese case); the dropped inner-court-north part becomes a new CONVENTION claim",
+     "class": "within",
+     "why": "The row as worded."
+    },
+    {
+     "id": "T400-mislabeled-account-unchecked",
+     "summary": "emit.rs grounds#office front, residence rear was restated but owed nothing (relabeled_only passes a MISLABELED row's rewrite); filed as tool defect (e), 451 T213",
+     "class": "within",
+     "why": "The restatement the row asked for was made; the unrun check is a tool miss found by the cascade test, which is the test's purpose, and is filed. No requested change is narrowed."
+    },
+    {
+     "id": "T378-withdrawn-and-residue",
+     "summary": "T378 withdrawn as moot (relabeled by 451 T192); its residue fixed (two bullets now call the shrine tree 0218's GUESS), and the two DRIFTED claims impl-drift then found fixed",
+     "class": "within",
+     "why": "Needs-check as the GM asked; what was still wrong (the residue and the half-wrong MOOT's claim account) was fixed under XIV, not left."
+    },
+    {
+     "id": "T394-branch",
+     "summary": "T394: a research pass with an AGREES / CONTRADICTS / SILENT branch rule; AGREES taken: a new 0097 finding (split to 0334 over the cap) and the two About tabs restated",
+     "class": "within",
+     "why": "The row is a research pass whose edit is chosen by its outcome; the branch rule was set before the pass and followed."
+    },
+    {
+     "id": "T403-branch",
+     "summary": "T403: the JAANUS passage added to 0108; the pass found two doors attested for the classic warrior stable only, so the one door stays a GUESS (one-gable-door) with no engine change, stables' Depiction and Guesses restated",
+     "class": "within",
+     "why": "The branch rule set before the pass and followed; no map change unless the pass applied to small stables, and it did not."
+    },
+    {
+     "id": "forced-claims-147",
+     "summary": "147 claims forced to full impl-drift after make building-programs regenerated hand-edited rows; put to the round arbiter before any ran, and claims-owed owes nothing at close",
+     "class": "within",
+     "why": "A tool behavior found by the test and filed (451 T210); the hand edit of generated rows was reverted by regeneration and nothing owed is left at close."
+    },
+    {
+     "id": "found-and-left-record-rows",
+     "summary": "T410-T414 (0334's rope-office gloss, grave markers MISLABELED, the shrine's one form, the burial ground's missing stones, the barracks length) filed, landing before T158",
+     "class": "within",
+     "why": "Outside the bundle's rows and filed to land before the next step, as fix-as-we-go asks; the cascade test asked for nothing beyond its rows."
+    },
+    {
+     "id": "tool-defects-after-talk",
+     "summary": "The cascade test's six tool defects (a)-(f) filed as 451 T209-T214, to land after the GM's talk",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's own words set the order: 'Fix the defects then stop and talk about what to do about the fact we're not converging', and the cascade test is the test he asked to hear back on before deciding ('I look forward to hearing how it went'). Holding its findings for that talk is implied by the request, and no port step proceeds before the talk, so no known defect is carried into a next step."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T407": {
+   "section_sha256": "ee173684fe7444db1057c3922c6d0f2e66ccd78e16c4ff58d9858ecb85f08346",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T399-withdrawn",
+     "summary": "T399 withdrawn: the ' and ' joins are a form slip, not a wrong outcome (738 against 2,689, counted 2026-11-23)",
+     "class": "within",
+     "why": "The GM's cascade-test request makes step 1 'checking whether or not we actually even need to make those changes'; withdrawing a row that fixes no wrong outcome is that check, and XIV (v2.36.0) says a difference no reader sees is not a defect."
+    },
+    {
+     "id": "T407-ochiba-magistracy-withdrawn",
+     "summary": "T407's ochiba-magistracy item withdrawn: no pop-up shows the misfiled paragraph",
+     "class": "within",
+     "why": "Step 1's needs-check, as the GM asked; nothing a reader sees is wrong, so no defect is left."
+    },
+    {
+     "id": "T407-hayakawa-withdrawn",
+     "summary": "T407's hayakawa-magistracy item withdrawn: line 54 already names the middle gate",
+     "class": "within",
+     "why": "Already done in the record, so the change is not needed; the GM's own first step."
+    },
+    {
+     "id": "T407-roundtrip-notes",
+     "summary": "T407's ochiba-roundtrip-test notes: T312 and T367 orders marked superseded by T392, T392's entry restated to the drawn west door",
+     "class": "within",
+     "why": "The row's own fix, done as worded."
+    },
+    {
+     "id": "T407-review-not-dispatched",
+     "summary": "The building-review the notes fix re-owes (T407's own line) is not run: make review-fixed refuses (no kept snapshot), make verify owes none, reviews snapshot refuses; filed as 451 T214",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Every route the tooling gives for that round refuses it, so running it here is not available, not merely awkward; the sheet itself did not change (notes only) and no wrong outcome is left by the notes fix; and the refusal is itself a result of the cascade test the GM asked to hear about ('I look forward to hearing how it went'). It is filed, not dropped."
+    },
+    {
+     "id": "T409-accuracy",
+     "summary": "T409's ACCURACY half: the official study About's first sentence no longer gives the office-hall working room as history",
+     "class": "within",
+     "why": "The row as worded; its own Guesses bullet and 0113.drawing call the seat a GUESS."
+    },
+    {
+     "id": "T409-gaps-declined",
+     "summary": "T409's GAPS half not taken: adding 0103's tea room and garden outlook would merge the Arashiyama-no-ma he lived in with the ima 0113 has him working in",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Applying the row literally would write into the pop-up a merger of two rooms the record keeps apart - a wrong outcome the change would create - and the GM's request made the first step 'checking whether or not we actually even need to make those changes'. The exception is implied by the GM's own words and serves the purpose (a legitimate change), it does not gut it."
+    },
+    {
+     "id": "T400-restate",
+     "summary": "T400: four claims, the docs bullet and the granary echo restated to 0090.drawing (yamen and Takayama, one Japanese case); the dropped inner-court-north part becomes a new CONVENTION claim",
+     "class": "within",
+     "why": "The row as worded."
+    },
+    {
+     "id": "T400-mislabeled-account-unchecked",
+     "summary": "emit.rs grounds#office front, residence rear was restated but owed nothing (relabeled_only passes a MISLABELED row's rewrite); filed as tool defect (e), 451 T213",
+     "class": "within",
+     "why": "The restatement the row asked for was made; the unrun check is a tool miss found by the cascade test, which is the test's purpose, and is filed. No requested change is narrowed."
+    },
+    {
+     "id": "T378-withdrawn-and-residue",
+     "summary": "T378 withdrawn as moot (relabeled by 451 T192); its residue fixed (two bullets now call the shrine tree 0218's GUESS), and the two DRIFTED claims impl-drift then found fixed",
+     "class": "within",
+     "why": "Needs-check as the GM asked; what was still wrong (the residue and the half-wrong MOOT's claim account) was fixed under XIV, not left."
+    },
+    {
+     "id": "T394-branch",
+     "summary": "T394: a research pass with an AGREES / CONTRADICTS / SILENT branch rule; AGREES taken: a new 0097 finding (split to 0334 over the cap) and the two About tabs restated",
+     "class": "within",
+     "why": "The row is a research pass whose edit is chosen by its outcome; the branch rule was set before the pass and followed."
+    },
+    {
+     "id": "T403-branch",
+     "summary": "T403: the JAANUS passage added to 0108; the pass found two doors attested for the classic warrior stable only, so the one door stays a GUESS (one-gable-door) with no engine change, stables' Depiction and Guesses restated",
+     "class": "within",
+     "why": "The branch rule set before the pass and followed; no map change unless the pass applied to small stables, and it did not."
+    },
+    {
+     "id": "forced-claims-147",
+     "summary": "147 claims forced to full impl-drift after make building-programs regenerated hand-edited rows; put to the round arbiter before any ran, and claims-owed owes nothing at close",
+     "class": "within",
+     "why": "A tool behavior found by the test and filed (451 T210); the hand edit of generated rows was reverted by regeneration and nothing owed is left at close."
+    },
+    {
+     "id": "found-and-left-record-rows",
+     "summary": "T410-T414 (0334's rope-office gloss, grave markers MISLABELED, the shrine's one form, the burial ground's missing stones, the barracks length) filed, landing before T158",
+     "class": "within",
+     "why": "Outside the bundle's rows and filed to land before the next step, as fix-as-we-go asks; the cascade test asked for nothing beyond its rows."
+    },
+    {
+     "id": "tool-defects-after-talk",
+     "summary": "The cascade test's six tool defects (a)-(f) filed as 451 T209-T214, to land after the GM's talk",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's own words set the order: 'Fix the defects then stop and talk about what to do about the fact we're not converging', and the cascade test is the test he asked to hear back on before deciding ('I look forward to hearing how it went'). Holding its findings for that talk is implied by the request, and no port step proceeds before the talk, so no known defect is carried into a next step."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T409": {
+   "section_sha256": "ee173684fe7444db1057c3922c6d0f2e66ccd78e16c4ff58d9858ecb85f08346",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T399-withdrawn",
+     "summary": "T399 withdrawn: the ' and ' joins are a form slip, not a wrong outcome (738 against 2,689, counted 2026-11-23)",
+     "class": "within",
+     "why": "The GM's cascade-test request makes step 1 'checking whether or not we actually even need to make those changes'; withdrawing a row that fixes no wrong outcome is that check, and XIV (v2.36.0) says a difference no reader sees is not a defect."
+    },
+    {
+     "id": "T407-ochiba-magistracy-withdrawn",
+     "summary": "T407's ochiba-magistracy item withdrawn: no pop-up shows the misfiled paragraph",
+     "class": "within",
+     "why": "Step 1's needs-check, as the GM asked; nothing a reader sees is wrong, so no defect is left."
+    },
+    {
+     "id": "T407-hayakawa-withdrawn",
+     "summary": "T407's hayakawa-magistracy item withdrawn: line 54 already names the middle gate",
+     "class": "within",
+     "why": "Already done in the record, so the change is not needed; the GM's own first step."
+    },
+    {
+     "id": "T407-roundtrip-notes",
+     "summary": "T407's ochiba-roundtrip-test notes: T312 and T367 orders marked superseded by T392, T392's entry restated to the drawn west door",
+     "class": "within",
+     "why": "The row's own fix, done as worded."
+    },
+    {
+     "id": "T407-review-not-dispatched",
+     "summary": "The building-review the notes fix re-owes (T407's own line) is not run: make review-fixed refuses (no kept snapshot), make verify owes none, reviews snapshot refuses; filed as 451 T214",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Every route the tooling gives for that round refuses it, so running it here is not available, not merely awkward; the sheet itself did not change (notes only) and no wrong outcome is left by the notes fix; and the refusal is itself a result of the cascade test the GM asked to hear about ('I look forward to hearing how it went'). It is filed, not dropped."
+    },
+    {
+     "id": "T409-accuracy",
+     "summary": "T409's ACCURACY half: the official study About's first sentence no longer gives the office-hall working room as history",
+     "class": "within",
+     "why": "The row as worded; its own Guesses bullet and 0113.drawing call the seat a GUESS."
+    },
+    {
+     "id": "T409-gaps-declined",
+     "summary": "T409's GAPS half not taken: adding 0103's tea room and garden outlook would merge the Arashiyama-no-ma he lived in with the ima 0113 has him working in",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Applying the row literally would write into the pop-up a merger of two rooms the record keeps apart - a wrong outcome the change would create - and the GM's request made the first step 'checking whether or not we actually even need to make those changes'. The exception is implied by the GM's own words and serves the purpose (a legitimate change), it does not gut it."
+    },
+    {
+     "id": "T400-restate",
+     "summary": "T400: four claims, the docs bullet and the granary echo restated to 0090.drawing (yamen and Takayama, one Japanese case); the dropped inner-court-north part becomes a new CONVENTION claim",
+     "class": "within",
+     "why": "The row as worded."
+    },
+    {
+     "id": "T400-mislabeled-account-unchecked",
+     "summary": "emit.rs grounds#office front, residence rear was restated but owed nothing (relabeled_only passes a MISLABELED row's rewrite); filed as tool defect (e), 451 T213",
+     "class": "within",
+     "why": "The restatement the row asked for was made; the unrun check is a tool miss found by the cascade test, which is the test's purpose, and is filed. No requested change is narrowed."
+    },
+    {
+     "id": "T378-withdrawn-and-residue",
+     "summary": "T378 withdrawn as moot (relabeled by 451 T192); its residue fixed (two bullets now call the shrine tree 0218's GUESS), and the two DRIFTED claims impl-drift then found fixed",
+     "class": "within",
+     "why": "Needs-check as the GM asked; what was still wrong (the residue and the half-wrong MOOT's claim account) was fixed under XIV, not left."
+    },
+    {
+     "id": "T394-branch",
+     "summary": "T394: a research pass with an AGREES / CONTRADICTS / SILENT branch rule; AGREES taken: a new 0097 finding (split to 0334 over the cap) and the two About tabs restated",
+     "class": "within",
+     "why": "The row is a research pass whose edit is chosen by its outcome; the branch rule was set before the pass and followed."
+    },
+    {
+     "id": "T403-branch",
+     "summary": "T403: the JAANUS passage added to 0108; the pass found two doors attested for the classic warrior stable only, so the one door stays a GUESS (one-gable-door) with no engine change, stables' Depiction and Guesses restated",
+     "class": "within",
+     "why": "The branch rule set before the pass and followed; no map change unless the pass applied to small stables, and it did not."
+    },
+    {
+     "id": "forced-claims-147",
+     "summary": "147 claims forced to full impl-drift after make building-programs regenerated hand-edited rows; put to the round arbiter before any ran, and claims-owed owes nothing at close",
+     "class": "within",
+     "why": "A tool behavior found by the test and filed (451 T210); the hand edit of generated rows was reverted by regeneration and nothing owed is left at close."
+    },
+    {
+     "id": "found-and-left-record-rows",
+     "summary": "T410-T414 (0334's rope-office gloss, grave markers MISLABELED, the shrine's one form, the burial ground's missing stones, the barracks length) filed, landing before T158",
+     "class": "within",
+     "why": "Outside the bundle's rows and filed to land before the next step, as fix-as-we-go asks; the cascade test asked for nothing beyond its rows."
+    },
+    {
+     "id": "tool-defects-after-talk",
+     "summary": "The cascade test's six tool defects (a)-(f) filed as 451 T209-T214, to land after the GM's talk",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's own words set the order: 'Fix the defects then stop and talk about what to do about the fact we're not converging', and the cascade test is the test he asked to hear back on before deciding ('I look forward to hearing how it went'). Holding its findings for that talk is implied by the request, and no port step proceeds before the talk, so no known defect is carried into a next step."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T400": {
+   "section_sha256": "ee173684fe7444db1057c3922c6d0f2e66ccd78e16c4ff58d9858ecb85f08346",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T399-withdrawn",
+     "summary": "T399 withdrawn: the ' and ' joins are a form slip, not a wrong outcome (738 against 2,689, counted 2026-11-23)",
+     "class": "within",
+     "why": "The GM's cascade-test request makes step 1 'checking whether or not we actually even need to make those changes'; withdrawing a row that fixes no wrong outcome is that check, and XIV (v2.36.0) says a difference no reader sees is not a defect."
+    },
+    {
+     "id": "T407-ochiba-magistracy-withdrawn",
+     "summary": "T407's ochiba-magistracy item withdrawn: no pop-up shows the misfiled paragraph",
+     "class": "within",
+     "why": "Step 1's needs-check, as the GM asked; nothing a reader sees is wrong, so no defect is left."
+    },
+    {
+     "id": "T407-hayakawa-withdrawn",
+     "summary": "T407's hayakawa-magistracy item withdrawn: line 54 already names the middle gate",
+     "class": "within",
+     "why": "Already done in the record, so the change is not needed; the GM's own first step."
+    },
+    {
+     "id": "T407-roundtrip-notes",
+     "summary": "T407's ochiba-roundtrip-test notes: T312 and T367 orders marked superseded by T392, T392's entry restated to the drawn west door",
+     "class": "within",
+     "why": "The row's own fix, done as worded."
+    },
+    {
+     "id": "T407-review-not-dispatched",
+     "summary": "The building-review the notes fix re-owes (T407's own line) is not run: make review-fixed refuses (no kept snapshot), make verify owes none, reviews snapshot refuses; filed as 451 T214",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Every route the tooling gives for that round refuses it, so running it here is not available, not merely awkward; the sheet itself did not change (notes only) and no wrong outcome is left by the notes fix; and the refusal is itself a result of the cascade test the GM asked to hear about ('I look forward to hearing how it went'). It is filed, not dropped."
+    },
+    {
+     "id": "T409-accuracy",
+     "summary": "T409's ACCURACY half: the official study About's first sentence no longer gives the office-hall working room as history",
+     "class": "within",
+     "why": "The row as worded; its own Guesses bullet and 0113.drawing call the seat a GUESS."
+    },
+    {
+     "id": "T409-gaps-declined",
+     "summary": "T409's GAPS half not taken: adding 0103's tea room and garden outlook would merge the Arashiyama-no-ma he lived in with the ima 0113 has him working in",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Applying the row literally would write into the pop-up a merger of two rooms the record keeps apart - a wrong outcome the change would create - and the GM's request made the first step 'checking whether or not we actually even need to make those changes'. The exception is implied by the GM's own words and serves the purpose (a legitimate change), it does not gut it."
+    },
+    {
+     "id": "T400-restate",
+     "summary": "T400: four claims, the docs bullet and the granary echo restated to 0090.drawing (yamen and Takayama, one Japanese case); the dropped inner-court-north part becomes a new CONVENTION claim",
+     "class": "within",
+     "why": "The row as worded."
+    },
+    {
+     "id": "T400-mislabeled-account-unchecked",
+     "summary": "emit.rs grounds#office front, residence rear was restated but owed nothing (relabeled_only passes a MISLABELED row's rewrite); filed as tool defect (e), 451 T213",
+     "class": "within",
+     "why": "The restatement the row asked for was made; the unrun check is a tool miss found by the cascade test, which is the test's purpose, and is filed. No requested change is narrowed."
+    },
+    {
+     "id": "T378-withdrawn-and-residue",
+     "summary": "T378 withdrawn as moot (relabeled by 451 T192); its residue fixed (two bullets now call the shrine tree 0218's GUESS), and the two DRIFTED claims impl-drift then found fixed",
+     "class": "within",
+     "why": "Needs-check as the GM asked; what was still wrong (the residue and the half-wrong MOOT's claim account) was fixed under XIV, not left."
+    },
+    {
+     "id": "T394-branch",
+     "summary": "T394: a research pass with an AGREES / CONTRADICTS / SILENT branch rule; AGREES taken: a new 0097 finding (split to 0334 over the cap) and the two About tabs restated",
+     "class": "within",
+     "why": "The row is a research pass whose edit is chosen by its outcome; the branch rule was set before the pass and followed."
+    },
+    {
+     "id": "T403-branch",
+     "summary": "T403: the JAANUS passage added to 0108; the pass found two doors attested for the classic warrior stable only, so the one door stays a GUESS (one-gable-door) with no engine change, stables' Depiction and Guesses restated",
+     "class": "within",
+     "why": "The branch rule set before the pass and followed; no map change unless the pass applied to small stables, and it did not."
+    },
+    {
+     "id": "forced-claims-147",
+     "summary": "147 claims forced to full impl-drift after make building-programs regenerated hand-edited rows; put to the round arbiter before any ran, and claims-owed owes nothing at close",
+     "class": "within",
+     "why": "A tool behavior found by the test and filed (451 T210); the hand edit of generated rows was reverted by regeneration and nothing owed is left at close."
+    },
+    {
+     "id": "found-and-left-record-rows",
+     "summary": "T410-T414 (0334's rope-office gloss, grave markers MISLABELED, the shrine's one form, the burial ground's missing stones, the barracks length) filed, landing before T158",
+     "class": "within",
+     "why": "Outside the bundle's rows and filed to land before the next step, as fix-as-we-go asks; the cascade test asked for nothing beyond its rows."
+    },
+    {
+     "id": "tool-defects-after-talk",
+     "summary": "The cascade test's six tool defects (a)-(f) filed as 451 T209-T214, to land after the GM's talk",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's own words set the order: 'Fix the defects then stop and talk about what to do about the fact we're not converging', and the cascade test is the test he asked to hear back on before deciding ('I look forward to hearing how it went'). Holding its findings for that talk is implied by the request, and no port step proceeds before the talk, so no known defect is carried into a next step."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T378": {
+   "section_sha256": "ee173684fe7444db1057c3922c6d0f2e66ccd78e16c4ff58d9858ecb85f08346",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T399-withdrawn",
+     "summary": "T399 withdrawn: the ' and ' joins are a form slip, not a wrong outcome (738 against 2,689, counted 2026-11-23)",
+     "class": "within",
+     "why": "The GM's cascade-test request makes step 1 'checking whether or not we actually even need to make those changes'; withdrawing a row that fixes no wrong outcome is that check, and XIV (v2.36.0) says a difference no reader sees is not a defect."
+    },
+    {
+     "id": "T407-ochiba-magistracy-withdrawn",
+     "summary": "T407's ochiba-magistracy item withdrawn: no pop-up shows the misfiled paragraph",
+     "class": "within",
+     "why": "Step 1's needs-check, as the GM asked; nothing a reader sees is wrong, so no defect is left."
+    },
+    {
+     "id": "T407-hayakawa-withdrawn",
+     "summary": "T407's hayakawa-magistracy item withdrawn: line 54 already names the middle gate",
+     "class": "within",
+     "why": "Already done in the record, so the change is not needed; the GM's own first step."
+    },
+    {
+     "id": "T407-roundtrip-notes",
+     "summary": "T407's ochiba-roundtrip-test notes: T312 and T367 orders marked superseded by T392, T392's entry restated to the drawn west door",
+     "class": "within",
+     "why": "The row's own fix, done as worded."
+    },
+    {
+     "id": "T407-review-not-dispatched",
+     "summary": "The building-review the notes fix re-owes (T407's own line) is not run: make review-fixed refuses (no kept snapshot), make verify owes none, reviews snapshot refuses; filed as 451 T214",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Every route the tooling gives for that round refuses it, so running it here is not available, not merely awkward; the sheet itself did not change (notes only) and no wrong outcome is left by the notes fix; and the refusal is itself a result of the cascade test the GM asked to hear about ('I look forward to hearing how it went'). It is filed, not dropped."
+    },
+    {
+     "id": "T409-accuracy",
+     "summary": "T409's ACCURACY half: the official study About's first sentence no longer gives the office-hall working room as history",
+     "class": "within",
+     "why": "The row as worded; its own Guesses bullet and 0113.drawing call the seat a GUESS."
+    },
+    {
+     "id": "T409-gaps-declined",
+     "summary": "T409's GAPS half not taken: adding 0103's tea room and garden outlook would merge the Arashiyama-no-ma he lived in with the ima 0113 has him working in",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Applying the row literally would write into the pop-up a merger of two rooms the record keeps apart - a wrong outcome the change would create - and the GM's request made the first step 'checking whether or not we actually even need to make those changes'. The exception is implied by the GM's own words and serves the purpose (a legitimate change), it does not gut it."
+    },
+    {
+     "id": "T400-restate",
+     "summary": "T400: four claims, the docs bullet and the granary echo restated to 0090.drawing (yamen and Takayama, one Japanese case); the dropped inner-court-north part becomes a new CONVENTION claim",
+     "class": "within",
+     "why": "The row as worded."
+    },
+    {
+     "id": "T400-mislabeled-account-unchecked",
+     "summary": "emit.rs grounds#office front, residence rear was restated but owed nothing (relabeled_only passes a MISLABELED row's rewrite); filed as tool defect (e), 451 T213",
+     "class": "within",
+     "why": "The restatement the row asked for was made; the unrun check is a tool miss found by the cascade test, which is the test's purpose, and is filed. No requested change is narrowed."
+    },
+    {
+     "id": "T378-withdrawn-and-residue",
+     "summary": "T378 withdrawn as moot (relabeled by 451 T192); its residue fixed (two bullets now call the shrine tree 0218's GUESS), and the two DRIFTED claims impl-drift then found fixed",
+     "class": "within",
+     "why": "Needs-check as the GM asked; what was still wrong (the residue and the half-wrong MOOT's claim account) was fixed under XIV, not left."
+    },
+    {
+     "id": "T394-branch",
+     "summary": "T394: a research pass with an AGREES / CONTRADICTS / SILENT branch rule; AGREES taken: a new 0097 finding (split to 0334 over the cap) and the two About tabs restated",
+     "class": "within",
+     "why": "The row is a research pass whose edit is chosen by its outcome; the branch rule was set before the pass and followed."
+    },
+    {
+     "id": "T403-branch",
+     "summary": "T403: the JAANUS passage added to 0108; the pass found two doors attested for the classic warrior stable only, so the one door stays a GUESS (one-gable-door) with no engine change, stables' Depiction and Guesses restated",
+     "class": "within",
+     "why": "The branch rule set before the pass and followed; no map change unless the pass applied to small stables, and it did not."
+    },
+    {
+     "id": "forced-claims-147",
+     "summary": "147 claims forced to full impl-drift after make building-programs regenerated hand-edited rows; put to the round arbiter before any ran, and claims-owed owes nothing at close",
+     "class": "within",
+     "why": "A tool behavior found by the test and filed (451 T210); the hand edit of generated rows was reverted by regeneration and nothing owed is left at close."
+    },
+    {
+     "id": "found-and-left-record-rows",
+     "summary": "T410-T414 (0334's rope-office gloss, grave markers MISLABELED, the shrine's one form, the burial ground's missing stones, the barracks length) filed, landing before T158",
+     "class": "within",
+     "why": "Outside the bundle's rows and filed to land before the next step, as fix-as-we-go asks; the cascade test asked for nothing beyond its rows."
+    },
+    {
+     "id": "tool-defects-after-talk",
+     "summary": "The cascade test's six tool defects (a)-(f) filed as 451 T209-T214, to land after the GM's talk",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's own words set the order: 'Fix the defects then stop and talk about what to do about the fact we're not converging', and the cascade test is the test he asked to hear back on before deciding ('I look forward to hearing how it went'). Holding its findings for that talk is implied by the request, and no port step proceeds before the talk, so no known defect is carried into a next step."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T394": {
+   "section_sha256": "ee173684fe7444db1057c3922c6d0f2e66ccd78e16c4ff58d9858ecb85f08346",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T399-withdrawn",
+     "summary": "T399 withdrawn: the ' and ' joins are a form slip, not a wrong outcome (738 against 2,689, counted 2026-11-23)",
+     "class": "within",
+     "why": "The GM's cascade-test request makes step 1 'checking whether or not we actually even need to make those changes'; withdrawing a row that fixes no wrong outcome is that check, and XIV (v2.36.0) says a difference no reader sees is not a defect."
+    },
+    {
+     "id": "T407-ochiba-magistracy-withdrawn",
+     "summary": "T407's ochiba-magistracy item withdrawn: no pop-up shows the misfiled paragraph",
+     "class": "within",
+     "why": "Step 1's needs-check, as the GM asked; nothing a reader sees is wrong, so no defect is left."
+    },
+    {
+     "id": "T407-hayakawa-withdrawn",
+     "summary": "T407's hayakawa-magistracy item withdrawn: line 54 already names the middle gate",
+     "class": "within",
+     "why": "Already done in the record, so the change is not needed; the GM's own first step."
+    },
+    {
+     "id": "T407-roundtrip-notes",
+     "summary": "T407's ochiba-roundtrip-test notes: T312 and T367 orders marked superseded by T392, T392's entry restated to the drawn west door",
+     "class": "within",
+     "why": "The row's own fix, done as worded."
+    },
+    {
+     "id": "T407-review-not-dispatched",
+     "summary": "The building-review the notes fix re-owes (T407's own line) is not run: make review-fixed refuses (no kept snapshot), make verify owes none, reviews snapshot refuses; filed as 451 T214",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Every route the tooling gives for that round refuses it, so running it here is not available, not merely awkward; the sheet itself did not change (notes only) and no wrong outcome is left by the notes fix; and the refusal is itself a result of the cascade test the GM asked to hear about ('I look forward to hearing how it went'). It is filed, not dropped."
+    },
+    {
+     "id": "T409-accuracy",
+     "summary": "T409's ACCURACY half: the official study About's first sentence no longer gives the office-hall working room as history",
+     "class": "within",
+     "why": "The row as worded; its own Guesses bullet and 0113.drawing call the seat a GUESS."
+    },
+    {
+     "id": "T409-gaps-declined",
+     "summary": "T409's GAPS half not taken: adding 0103's tea room and garden outlook would merge the Arashiyama-no-ma he lived in with the ima 0113 has him working in",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Applying the row literally would write into the pop-up a merger of two rooms the record keeps apart - a wrong outcome the change would create - and the GM's request made the first step 'checking whether or not we actually even need to make those changes'. The exception is implied by the GM's own words and serves the purpose (a legitimate change), it does not gut it."
+    },
+    {
+     "id": "T400-restate",
+     "summary": "T400: four claims, the docs bullet and the granary echo restated to 0090.drawing (yamen and Takayama, one Japanese case); the dropped inner-court-north part becomes a new CONVENTION claim",
+     "class": "within",
+     "why": "The row as worded."
+    },
+    {
+     "id": "T400-mislabeled-account-unchecked",
+     "summary": "emit.rs grounds#office front, residence rear was restated but owed nothing (relabeled_only passes a MISLABELED row's rewrite); filed as tool defect (e), 451 T213",
+     "class": "within",
+     "why": "The restatement the row asked for was made; the unrun check is a tool miss found by the cascade test, which is the test's purpose, and is filed. No requested change is narrowed."
+    },
+    {
+     "id": "T378-withdrawn-and-residue",
+     "summary": "T378 withdrawn as moot (relabeled by 451 T192); its residue fixed (two bullets now call the shrine tree 0218's GUESS), and the two DRIFTED claims impl-drift then found fixed",
+     "class": "within",
+     "why": "Needs-check as the GM asked; what was still wrong (the residue and the half-wrong MOOT's claim account) was fixed under XIV, not left."
+    },
+    {
+     "id": "T394-branch",
+     "summary": "T394: a research pass with an AGREES / CONTRADICTS / SILENT branch rule; AGREES taken: a new 0097 finding (split to 0334 over the cap) and the two About tabs restated",
+     "class": "within",
+     "why": "The row is a research pass whose edit is chosen by its outcome; the branch rule was set before the pass and followed."
+    },
+    {
+     "id": "T403-branch",
+     "summary": "T403: the JAANUS passage added to 0108; the pass found two doors attested for the classic warrior stable only, so the one door stays a GUESS (one-gable-door) with no engine change, stables' Depiction and Guesses restated",
+     "class": "within",
+     "why": "The branch rule set before the pass and followed; no map change unless the pass applied to small stables, and it did not."
+    },
+    {
+     "id": "forced-claims-147",
+     "summary": "147 claims forced to full impl-drift after make building-programs regenerated hand-edited rows; put to the round arbiter before any ran, and claims-owed owes nothing at close",
+     "class": "within",
+     "why": "A tool behavior found by the test and filed (451 T210); the hand edit of generated rows was reverted by regeneration and nothing owed is left at close."
+    },
+    {
+     "id": "found-and-left-record-rows",
+     "summary": "T410-T414 (0334's rope-office gloss, grave markers MISLABELED, the shrine's one form, the burial ground's missing stones, the barracks length) filed, landing before T158",
+     "class": "within",
+     "why": "Outside the bundle's rows and filed to land before the next step, as fix-as-we-go asks; the cascade test asked for nothing beyond its rows."
+    },
+    {
+     "id": "tool-defects-after-talk",
+     "summary": "The cascade test's six tool defects (a)-(f) filed as 451 T209-T214, to land after the GM's talk",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's own words set the order: 'Fix the defects then stop and talk about what to do about the fact we're not converging', and the cascade test is the test he asked to hear back on before deciding ('I look forward to hearing how it went'). Holding its findings for that talk is implied by the request, and no port step proceeds before the talk, so no known defect is carried into a next step."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T403": {
+   "section_sha256": "ee173684fe7444db1057c3922c6d0f2e66ccd78e16c4ff58d9858ecb85f08346",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T399-withdrawn",
+     "summary": "T399 withdrawn: the ' and ' joins are a form slip, not a wrong outcome (738 against 2,689, counted 2026-11-23)",
+     "class": "within",
+     "why": "The GM's cascade-test request makes step 1 'checking whether or not we actually even need to make those changes'; withdrawing a row that fixes no wrong outcome is that check, and XIV (v2.36.0) says a difference no reader sees is not a defect."
+    },
+    {
+     "id": "T407-ochiba-magistracy-withdrawn",
+     "summary": "T407's ochiba-magistracy item withdrawn: no pop-up shows the misfiled paragraph",
+     "class": "within",
+     "why": "Step 1's needs-check, as the GM asked; nothing a reader sees is wrong, so no defect is left."
+    },
+    {
+     "id": "T407-hayakawa-withdrawn",
+     "summary": "T407's hayakawa-magistracy item withdrawn: line 54 already names the middle gate",
+     "class": "within",
+     "why": "Already done in the record, so the change is not needed; the GM's own first step."
+    },
+    {
+     "id": "T407-roundtrip-notes",
+     "summary": "T407's ochiba-roundtrip-test notes: T312 and T367 orders marked superseded by T392, T392's entry restated to the drawn west door",
+     "class": "within",
+     "why": "The row's own fix, done as worded."
+    },
+    {
+     "id": "T407-review-not-dispatched",
+     "summary": "The building-review the notes fix re-owes (T407's own line) is not run: make review-fixed refuses (no kept snapshot), make verify owes none, reviews snapshot refuses; filed as 451 T214",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Every route the tooling gives for that round refuses it, so running it here is not available, not merely awkward; the sheet itself did not change (notes only) and no wrong outcome is left by the notes fix; and the refusal is itself a result of the cascade test the GM asked to hear about ('I look forward to hearing how it went'). It is filed, not dropped."
+    },
+    {
+     "id": "T409-accuracy",
+     "summary": "T409's ACCURACY half: the official study About's first sentence no longer gives the office-hall working room as history",
+     "class": "within",
+     "why": "The row as worded; its own Guesses bullet and 0113.drawing call the seat a GUESS."
+    },
+    {
+     "id": "T409-gaps-declined",
+     "summary": "T409's GAPS half not taken: adding 0103's tea room and garden outlook would merge the Arashiyama-no-ma he lived in with the ima 0113 has him working in",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Applying the row literally would write into the pop-up a merger of two rooms the record keeps apart - a wrong outcome the change would create - and the GM's request made the first step 'checking whether or not we actually even need to make those changes'. The exception is implied by the GM's own words and serves the purpose (a legitimate change), it does not gut it."
+    },
+    {
+     "id": "T400-restate",
+     "summary": "T400: four claims, the docs bullet and the granary echo restated to 0090.drawing (yamen and Takayama, one Japanese case); the dropped inner-court-north part becomes a new CONVENTION claim",
+     "class": "within",
+     "why": "The row as worded."
+    },
+    {
+     "id": "T400-mislabeled-account-unchecked",
+     "summary": "emit.rs grounds#office front, residence rear was restated but owed nothing (relabeled_only passes a MISLABELED row's rewrite); filed as tool defect (e), 451 T213",
+     "class": "within",
+     "why": "The restatement the row asked for was made; the unrun check is a tool miss found by the cascade test, which is the test's purpose, and is filed. No requested change is narrowed."
+    },
+    {
+     "id": "T378-withdrawn-and-residue",
+     "summary": "T378 withdrawn as moot (relabeled by 451 T192); its residue fixed (two bullets now call the shrine tree 0218's GUESS), and the two DRIFTED claims impl-drift then found fixed",
+     "class": "within",
+     "why": "Needs-check as the GM asked; what was still wrong (the residue and the half-wrong MOOT's claim account) was fixed under XIV, not left."
+    },
+    {
+     "id": "T394-branch",
+     "summary": "T394: a research pass with an AGREES / CONTRADICTS / SILENT branch rule; AGREES taken: a new 0097 finding (split to 0334 over the cap) and the two About tabs restated",
+     "class": "within",
+     "why": "The row is a research pass whose edit is chosen by its outcome; the branch rule was set before the pass and followed."
+    },
+    {
+     "id": "T403-branch",
+     "summary": "T403: the JAANUS passage added to 0108; the pass found two doors attested for the classic warrior stable only, so the one door stays a GUESS (one-gable-door) with no engine change, stables' Depiction and Guesses restated",
+     "class": "within",
+     "why": "The branch rule set before the pass and followed; no map change unless the pass applied to small stables, and it did not."
+    },
+    {
+     "id": "forced-claims-147",
+     "summary": "147 claims forced to full impl-drift after make building-programs regenerated hand-edited rows; put to the round arbiter before any ran, and claims-owed owes nothing at close",
+     "class": "within",
+     "why": "A tool behavior found by the test and filed (451 T210); the hand edit of generated rows was reverted by regeneration and nothing owed is left at close."
+    },
+    {
+     "id": "found-and-left-record-rows",
+     "summary": "T410-T414 (0334's rope-office gloss, grave markers MISLABELED, the shrine's one form, the burial ground's missing stones, the barracks length) filed, landing before T158",
+     "class": "within",
+     "why": "Outside the bundle's rows and filed to land before the next step, as fix-as-we-go asks; the cascade test asked for nothing beyond its rows."
+    },
+    {
+     "id": "tool-defects-after-talk",
+     "summary": "The cascade test's six tool defects (a)-(f) filed as 451 T209-T214, to land after the GM's talk",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's own words set the order: 'Fix the defects then stop and talk about what to do about the fact we're not converging', and the cascade test is the test he asked to hear back on before deciding ('I look forward to hearing how it went'). Holding its findings for that talk is implied by the request, and no port step proceeds before the talk, so no known defect is carried into a next step."
     }
    ],
    "verdict": "CLEAR"

@@ -272,7 +272,7 @@ pub fn divider_gates_ft(plan: &ParsedPlan) -> Result<Vec<f64>, Error> {
 /// on the main gate's side of it.
 ///
 /// Research:
-///     two courts and the gate between - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: a magistracy is two courts, the office in front and the residence behind, with a gate between them dividing the office from the home; the page records that order in a Japanese compound as a deliberate simplification.
+///     two courts and the gate between - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: a magistracy is two courts, the office in front and the residence behind, with a gate between them dividing the office from the home; in a Japanese compound that order rests on Takayama alone, whose residence stood at the back of the office.
 ///     the hearing court on the gate's side - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: the hearing court lies before the office hall in the outer court, so on the main gate's side of the divider; a vertical divider is not judged.
 ///     the middle gate's width in the message - UNRESEARCHED: the message gives the middle gate (nakamon) as about 6-8 ft, narrower than the main gate; the check holds only the narrowest gate's floor, and no page gives a middle gate's width.
 ///

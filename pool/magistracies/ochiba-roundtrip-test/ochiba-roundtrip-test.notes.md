@@ -116,8 +116,8 @@ fujomon, a samurai residence's rear wicket or gate for night soil, the dead and 
 drawn as a 6 ft one-bay gate inside the side gate's 5-8 ft band, not a wicket, 449 T340; its seat a GUESS). The armory keeps the hand sheet's west end (Q1): the research pass of 2026-11-22 found the county halls' arms at either end
 or both (Pingyao and Wuyang west, Jiexiu east after 1677, both end bays in 1591) and nothing that set the side, so the end is a GUESS,
 and from the west door the arms reach this sheet's east-side garrison along the hall's front or round the forecourt.
-2026-11-22 (feature 449 T312 bundle): the back row's order (impl-drift 2026-11-22 on the writing and binding rooms' claim, DRIFTED): west to east the armory, the writing room, the binding room, the clerks' room and the day office, so the clerks' room adjoins the day office as research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html places it at Takayama; where the two new rooms stand is a GUESS (Takayama attests them, not their place).
-2026-11-23 (feature 449 T367; impl-drift 2026-11-22 on docs/building-programs.md, OUTSIDE THE CHANGE): the armory's end bay is a
+2026-11-22 (feature 449 T312 bundle; this order superseded by the T392 entry below): the back row's order (impl-drift 2026-11-22 on the writing and binding rooms' claim, DRIFTED): west to east the armory, the writing room, the binding room, the clerks' room and the day office, so the clerks' room adjoins the day office as research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html places it at Takayama; where the two new rooms stand is a GUESS (Takayama attests them, not their place).
+2026-11-23 (feature 449 T367; impl-drift 2026-11-22 on docs/building-programs.md, OUTSIDE THE CHANGE; its back row's order and the study's seat superseded by the T392 entry below): the armory's end bay is a
 second roll of knob 4, since the armory's side varied across county offices (0123) and the end the Q1 line above kept was a GUESS -
 exactly `random.Random(zlib.crc32(b"ochiba-roundtrip-test:armory end bay")).choice(["west", "east"])` = east, recorded in the spec's
 knobs and held by the generator (the hand sheet's own roll gives west). The back row is drawn mirrored from the armory's end: east to
@@ -148,6 +148,6 @@ research/questions/0108 silent on what stood between the tozamurai and the earth
 2026-11-23 (feature 449 T392): the OFFICIAL STUDY re-seated at the hall's east end beside the armory, 14 ft along the front band from
 the rear door under the nakamon, the household's way into the office (it stood at the west end, about 91 ft from that door, the
 magistrate's way to it past his own dais; m:t392-roundtrip-study, m:t392-roundtrip-before; building-review 2026-11-23, Q1). The back row east to west: armory, study, clerks' room,
-day office, binding room, writing room; the clerks' room still beside the day office (0113, Takayama) and behind 13 ft of the dais's
+day office, binding room, writing room, so the west door, kept in the front band's west face, now opens at the writing room's end, not the study's (its seat still a GUESS); the clerks' room still beside the day office (0113, Takayama) and behind 13 ft of the dais's
 18. Research: research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html, pass t381-study-seat (the Edo North and
 South Town Magistracies, 1841 and 1842: the yobeya at the join of office and residence); the front band as the corridor a GUESS.

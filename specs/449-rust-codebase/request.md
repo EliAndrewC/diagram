@@ -164,3 +164,9 @@ The session offered the map-generation talk with the follow-ups filed and sorted
 Told that 449's follow-ups do not converge (52 landed since midnight, 23 open, each review round filing about as many as it closes), with 11 map or tool defects (T375, T383, T384, T388, T391, T392, T395, T397, T398, T401, T402) and 12 record and research rows, and the recommendation to finish the defects and hold the talk with the record rows worked alongside, the GM said:
 
 > 52 follow-ups is a lot!  yes let's do as you suggest.  Fix the defects then stop and talk about what to do about the fact we're not converging.
+
+## 2026-11-23, the cascade test (it lifts the round arbiter's hold on the rows it uses)
+
+> After you are done implementing all of these changes, then I think that it would be good to test them out by doing some kind of a change that will result in a cascade. In order to make sure that our cascading checks work as we expect. ... I want it to be a legitimate change ... the first step should be checking whether or not we actually even need to make those changes But assuming that any of them survive that kind of editing and review process, then we should try this.
+
+The rows used (the session's proposal, which the GM answered "Sounds great. I look forward to hearing how it went."): T399 and T407 (should cascade nothing), T409, T400 and T378 (should cascade to exactly what repeats their words), T394 and T403 (new facts: cascade only where they contradict a pop-up).

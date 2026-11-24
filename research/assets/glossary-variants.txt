@@ -2166,6 +2166,7 @@ izumo	Izumo
 j-stage	J-STAGE
 ja	JA
 ja zen-noh	Zennoh
+jaanus	JAANUS
 jagama	jagama
 jagatara	jagatara-imo
 jagatara-imo	jagatara-imo

@@ -1,23 +1,24 @@
 About: The stable, the umaya, kept the household's horses. A warrior's stable was a substantial building of its own, built
-in the same shoin style as the residence it served, with quarters in it for the grooms and retainers, where the senior
-members of the household also came to view their horses.
+in the shoin style, with quarters in it for the grooms and retainers; the senior
+members of the household also came there to view their horses.
 
-Inside, each horse had a separate stall one bay wide on a raised board floor. An earth-floored passage, the kusa-no-ma, ran
-the length of the building before the stalls, and a matted room, the tozamurai, lay across it from them. The classic warrior
+Inside, each horse had a separate stall one bay wide on a raised board floor. An earth-floored passage ran
+the length of the building before the stalls, and a matted room lay across it from them. The classic warrior
 stables of the 16th and 17th centuries were three, five or seven bays long, the most formal of them three bays and entered
-at the gable end; none of them survives.
+at the gable end: its passage had large sliding doors at each gable end, and each stall a pair of swing doors at its rear. None of them survives.
 
 A lord's stable could be far larger: Hikone castle's, built about 1700, is two single-story wings joined in an L, about 83
 and 102 ft long and 19 ft deep, with places for 19 to 21 horses and a grooms' room at the end. How deep a warrior's stall
-was, what a stable's walls and roof were made of, and how many horses a county magistrate's post kept, are not recorded.
+was, what a warrior's stable's walls and roof were made of, and how many horses a county magistrate's post kept, are not recorded.
 
 Guesses:
 - {0108#many-horses-stable-holds}
+- {0108#one-gable-door}
 - How deep a stall is, and so its area: only a stall's width is recorded.
 - {0116#stable-stays-smaller-than}
 
 Depiction: The plan draws the stable as a warrior's small stable, a few bays long: a row of stalls one ken (about 6 ft) wide
-at the back, the earth-floored passage before them running its length with the door at its end, and the grooms' room
+at the back, the earth-floored passage before them running its length with a door at one gable end, and the grooms' room
 across the passage from them. It stands at the edge of the
 outer court, against the compound wall. Each stall is one bay wide, as a warrior's stall was; the map takes a bay as one ken by convention.
 

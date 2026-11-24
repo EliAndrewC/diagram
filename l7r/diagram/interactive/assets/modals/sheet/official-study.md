@@ -1,5 +1,4 @@
-About: The official study was a magistrate's own working room in the office hall, where the office's
-papers would be read and answered; no account names such a room in an office hall. At Takayama the intendant ordinarily worked not in the office hall but in the residence, doing the day's official business in its living room (ima) and coming out to the hall when needed; at Edo's North Town Magistracy the magistrate's office room, a kind of secretariat, stood at the join of the office and the residence.
+About: A magistrate did the office's day-to-day business in a working room on the household's side of the compound, not among the clerks; no account names such a room inside an office hall. At Takayama the intendant ordinarily worked not in the office hall but in the residence, doing the day's official business in its living room (ima) and coming out to the hall when needed; at Edo's North Town Magistracy the magistrate's office room, a kind of secretariat, stood at the join of the office and the residence.
 
 At Takayama, the one intendant's office that survives, the entrance hall, examination room, working office
 and great hall were rebuilt together in the Edo period, most likely as one block. The officials sent by the shogunate worked in a

@@ -275,7 +275,8 @@ fn hearing(s: &mut Svg, z: Bx, cx: f64) {
 ///
 /// Research:
 ///     the plan scale - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: 3 px = 1 ft, set so drawn compounds fall between Joge and Takayama
-///     office front, residence rear - DEVIATION research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: the inner court drawn north of the divider and the outer court south of it, the residence behind the office
+///     office front, residence rear - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: the residence behind the office, the yamen's order and Takayama's (one Japanese case)
+///     the inner court to the north - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html: the gate faces south where nothing else decides, so the outer court lies south of the divider and the inner court, the residence, north of it (0090's office in front); the sheet's top as the compound's back is a map drawing convention
 pub fn grounds(s: &mut Svg, p: &Program, l: &Layout) {
     for (court, b) in [
         (Court::Inner, (0.0, 0.0, p.w, p.divider)),
@@ -580,6 +581,7 @@ pub const STABLES: &str = "stables";
 ///     stables - research/questions/0108-stables-umaya.html, research/questions/0108-stables-umaya.drawing.html: a warrior's small stable three bays long, its one-bay stalls on board floors, the earth passage (kusa-no-ma) before them running its length, the grooms' room (tozamurai) across the passage; the depths GUESSES
 ///     stable stall width - research/questions/0108-stables-umaya.drawing.html: a stall one bay, one ken (~6 ft) wide, by convention
 ///     grooms' room open to the passage - GUESS: the matted tozamurai opens onto the earth passage (kusa-no-ma), no wall between them, its edge drawn dashed as the passage's edge to the stalls is, the sheet's mark of an edge a body crosses where a solid interior line is a wall; 0108 puts the tozamurai across the kusa-no-ma from the stalls and is silent on what stood between them, and the stable is entered at its gable into the passage (449 T388; building-review 2026-11-23 E1: drawn solid, the grooms' room had no way in; impl-drift 2026-11-23 MISLABELED as a CONVENTION, a choice between built forms)
+///     grooms' room toward the court - GUESS: the tozamurai on the stable's court side and the stalls toward its back face; no page we read says which of a stable's long sides faced its court
 fn stables(s: &mut Svg, b: &Building, at: Bx) {
     let court = back_face(b).opposite();
     let (len, deep) = if court.along_x() {

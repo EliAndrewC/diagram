@@ -5,8 +5,8 @@ magistracy housed its constables apart, in a district of their own, and the lowe
 lord lived in rowhouses inside his residence.
 
 A rowhouse was a long, narrow building of one story, divided along its length into small dwellings, each entered by a
-door of its own: an earth-floored entry for leaving shoes, then a raised plank floor. One row,
-built in 1842, was thatched. A standard dwelling was about 9 by 12 ft. No bed or bunk is known in one before modern times.
+door of its own: an earth-floored entry for leaving shoes, then a raised plank floor. A country jin'ya's rows could be thatched, as Sayama's were, and so was a foot soldiers' row built in 1842,
+and a gate rowhouse tiled; one row has earth walls as it stands today, and what an office's staff row was walled and framed with is not recorded. A standard dwelling was about 9 by 12 ft. No bed or bunk is known in one before modern times.
 The servants below the foot soldiers lived instead in large common rooms.
 
 The rowhouses measured ran about 80 to 145 ft long and 12 to 24 ft deep: that row of 1842 held eight households, and a

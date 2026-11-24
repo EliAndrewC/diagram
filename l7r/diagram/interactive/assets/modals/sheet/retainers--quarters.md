@@ -5,7 +5,7 @@ Edo instead housed its constables in a district of their own. At Sakai's town ma
 
 The form was the rowhouse, the nagaya: a long, narrow, single-story building under one roof, divided along its length into
 dwellings. Each dwelling was an earth-floored entry for leaving shoes and a raised plank floor, and each had an entrance of
-its own, closed by a lattice door. No bed or bunk is known in a rowhouse before modern times.
+its own, closed by a lattice door. Such rows could be thatched, a gate rowhouse tiled, and Obata's row has earth walls as it stands today; what an office's staff row was walled and framed with is not recorded. No bed or bunk is known in a rowhouse before modern times.
 
 A rowhouse ran about 80 to 145 ft long and 12 to 24 ft deep, built of bays about 12 to 18 ft wide. A foot soldiers' row at Shibata,
 143 by 24 ft, held eight households under one thatched roof; at Obata each dwelling was about 12 by 21 ft,

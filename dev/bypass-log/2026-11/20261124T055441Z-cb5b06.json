@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-24T05:54:41Z",
+  "target": "plan-gate decide-defer 449-rust-codebase T403",
+  "commit": "ab26e3eebd",
+  "why": "feature 451 tasks wait on the GM's talk; no order yet"
+}
