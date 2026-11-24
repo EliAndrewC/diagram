@@ -10,9 +10,6 @@ The question task is `research: physical` with its five boxes; the rest are `res
 
 ## Tasks
 
-- [ ] T02 The implementation check, the reply on #23 and the report (D2; FR-001, FR-003, FR-004)
-      research: rendering
-      verify: `make impl-check F=453` reports nothing missing; the reply is on diagram#23
 - [ ] GM review (make gm-reviewed F=453) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
