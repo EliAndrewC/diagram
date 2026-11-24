@@ -1854,6 +1854,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
+  },
+  "### T423 (seed 52's detached slivers of dry plots, seen by T421 on 2026-11-24: the cause measured, and the two things seen beside them)": {
+   "sha256": "89e92e9347df685cc20ec88b9d30c69223326309001397e91229592fa4157e04",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T423 Approach (checklist part A)": {
+   "sha256": "81d317bbfe488e6e5348d054cf0c91db63dfefd3f6759474710a5f93b3c622a2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -25707,6 +25719,204 @@
      "summary": "Not filed: 'homesteads 044' in a pool note (feature 452's files), history mentions of deleted Python names in brook.rs, driver.rs and staged.rs, and 0090's page still saying 'about 15 ft'.",
      "class": "within",
      "why": "None is a wrong outcome (XIV v2.36.0): no map, sheet, check or tool misbehaves; the pool note belongs to feature 452, which the GM split off on 2026-11-24. Leaving a difference that is not a defect is within, not a narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T423 (seed 52's detached slivers of dry plots, seen by T421 on 2026-11-24: the cause measured, and the two things seen beside them)",
+    "### T423 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T423-seat-corner",
+     "summary": "margins::ranked refuses a margin whose band holds a vertex of the field's outline, with those on the field (fixes the band standing up to 9.8 percent on the paddy on 14 rolls, seed 52 among them)",
+     "class": "within",
+     "why": "A wrong outcome (houses' ground on the rice, against 0031.drawing's hamlet beside its paddy), fixed red-first where it is made: what the GM's 2026-11-24 'if there are real defects, then I do want to find them and fix them' asks. sweep-after shows band-on-paddy 0 of 451 lines (14 before)."
+    },
+    {
+     "id": "T423-dashed-mark",
+     "summary": "The driver's dashed settlement mark is left as drawn: it showed the ground the seat chose, so the fix is in the seat, not the mark",
+     "class": "within",
+     "why": "Fixing the cause rather than the symptom; nothing the request asks of the mark."
+    },
+    {
+     "id": "T423-four-refusals",
+     "summary": "The four refused rolls (3, 18, 134, 135 at 15/225, '1 walled in') are cured through the corner refusal, which lets the hill-backed seat be asked; seat's rule of asking the hill-backed seat only when the ranking keeps no margin is left as it is (read, not filed)",
+     "class": "within",
+     "why": "A tool refusing valid input is a defect, and it is gone: sweep-before lists 4 KEPT-REFUSAL, sweep-after none. The fallback rule left in place produces no wrong outcome on any of the 450 rolls after the fix; by the GM's 2026-11-19 rule a defect is a wrong outcome, not a code path, so leaving it is not leaving a defect."
+    },
+    {
+     "id": "T423-hem-pinch",
+     "summary": "hem ends a column's climb where its strip pinches under half a plot's length (PINCH_SHARE, a new GUESS knob)",
+     "class": "within",
+     "why": "Fixes the needles and slivers a reader saw (a plot under half the plot's area on 77 of 98 bare-winter wild rolls; thin 0 everywhere in sweep-after). A new GUESS constant marked as such; no researched number moves. The value is design, not fidelity."
+    },
+    {
+     "id": "T423-hem-lap",
+     "summary": "hem ends a column's climb where its strip laps another column's plot, and does not re-ask a strip the column already climbed",
+     "class": "within",
+     "why": "Fixes strips of plots loose behind the settlement and turned against the block (seed 52's eight plots in two strips, a strip past a lap on 4 rolls). The re-ask guard keeps the pushed-column stacking test green. Seed 52 after (s52-15) reads as one block along the flank."
+    },
+    {
+     "id": "T423-kept-step-overs",
+     "summary": "The settlement's ground is still stepped over, and a strip refused for the water still does not end its column",
+     "class": "within",
+     "why": "Kept behavior grounded in 0006.drawing (houses between canal and dry fields) and producing plots on the race's upslope side where the hem belongs; no wrong outcome shown. The 9 wild+none rolls with 'loose 1' in sweep-after are the same rolls and counts as before, and crop43 shows the plot standing on the field's edge, not detached."
+    },
+    {
+     "id": "T423-left-differences",
+     "summary": "Left as not wrong: narrow bare wedges inside a deep block where two columns run together and end (seeds 52, 116), and plots up to about twice the plot's area where columns spread round a bend",
+     "class": "within",
+     "why": "Differences, not defects: in s52-15, s51-20 and s116 after, the dry fields read as one contiguous body of plots, each on the one before, with notches in its edge or interior, none detached and none a sliver. Asking for them to be fixed would apply the standard the GM struck on 2026-11-19."
+    },
+    {
+     "id": "T423-mizuguchi",
+     "summary": "Mizuguchi's ground across its brook is not a defect; nothing changed",
+     "class": "within",
+     "why": "0035.drawing allows a hamlet astride its brook and makes one-bank a tie-break only. No change, no narrowing."
+    },
+    {
+     "id": "T423-acreage-count",
+     "summary": "The hem counts each plot as 0.15 acre whatever its drawn area (read, not filed)",
+     "class": "within",
+     "why": "No wrong outcome a reader sees: the only measured case (Inashiro, 13.70 drawn for 12.75 recorded) is over the need. Note that the sweep's 'short' is counted by plot count (drawn = plots x 0.15), not drawn area, so 'never under' by drawn area is not itself measured; with no plot now under half the plot's area this is not shown to be a defect."
+    },
+    {
+     "id": "T423-order",
+     "summary": "T423 lands before T158 and before T418, whose short-of-grain count is taken on the fixed hem",
+     "class": "within",
+     "why": "Follows the GM's 2026-11-24 instruction to fix real hamlet defects before new code and to close the open tasks before the port resumes."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T423 (seed 52's detached slivers of dry plots, seen by T421 on 2026-11-24: the cause measured, and the two things seen beside them)",
+    "### T423 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T423-seat-corner",
+     "summary": "margins::ranked refuses a margin whose band holds a vertex of the field's outline, with those on the field (fixes the band standing up to 9.8 percent on the paddy on 14 rolls, seed 52 among them)",
+     "class": "within",
+     "why": "A wrong outcome (houses' ground on the rice, against 0031.drawing's hamlet beside its paddy), fixed red-first where it is made: what the GM's 2026-11-24 'if there are real defects, then I do want to find them and fix them' asks. sweep-after shows band-on-paddy 0 of 451 lines (14 before)."
+    },
+    {
+     "id": "T423-dashed-mark",
+     "summary": "The driver's dashed settlement mark is left as drawn: it showed the ground the seat chose, so the fix is in the seat, not the mark",
+     "class": "within",
+     "why": "Fixing the cause rather than the symptom; nothing the request asks of the mark."
+    },
+    {
+     "id": "T423-four-refusals",
+     "summary": "The four refused rolls (3, 18, 134, 135 at 15/225, '1 walled in') are cured through the corner refusal, which lets the hill-backed seat be asked; seat's rule of asking the hill-backed seat only when the ranking keeps no margin is left as it is (read, not filed)",
+     "class": "within",
+     "why": "A tool refusing valid input is a defect, and it is gone: sweep-before lists 4 KEPT-REFUSAL, sweep-after none. The fallback rule left in place produces no wrong outcome on any of the 450 rolls after the fix; by the GM's 2026-11-19 rule a defect is a wrong outcome, not a code path, so leaving it is not leaving a defect."
+    },
+    {
+     "id": "T423-hem-pinch",
+     "summary": "hem ends a column's climb where its strip pinches under half a plot's length (PINCH_SHARE, a new GUESS knob)",
+     "class": "within",
+     "why": "Fixes the needles and slivers a reader saw (a plot under half the plot's area on 77 of 98 bare-winter wild rolls; thin 0 everywhere in sweep-after). A new GUESS constant marked as such; no researched number moves. The value is design, not fidelity."
+    },
+    {
+     "id": "T423-hem-lap",
+     "summary": "hem ends a column's climb where its strip laps another column's plot, and does not re-ask a strip the column already climbed",
+     "class": "within",
+     "why": "Fixes strips of plots loose behind the settlement and turned against the block (seed 52's eight plots in two strips, a strip past a lap on 4 rolls). The re-ask guard keeps the pushed-column stacking test green. Seed 52 after (s52-15) reads as one block along the flank."
+    },
+    {
+     "id": "T423-kept-step-overs",
+     "summary": "The settlement's ground is still stepped over, and a strip refused for the water still does not end its column",
+     "class": "within",
+     "why": "Kept behavior grounded in 0006.drawing (houses between canal and dry fields), with plots past the intake race on its upslope side where the hem belongs; no wrong outcome shown. sweep-after still flags 'loose' on 129 of 141 cleared+barley rolls (values 1 to 6, the same count as before) and on 9 wild+none rolls (the same rolls and counts as before); judged on Kashikawa's after render (a cleared hem whose plots sit along the paddy's edge, across the race and beside the settlement, none behind bare ground) and on the crop of roll 43 (a plot standing on the field's edge), not on every flagged roll."
+    },
+    {
+     "id": "T423-left-differences",
+     "summary": "Left as not wrong: narrow bare wedges inside a deep block where two columns run together and end (seeds 52, 116), and plots up to about twice the plot's area where columns spread round a bend",
+     "class": "within",
+     "why": "Differences, not defects: in s52-15, s51-20 and s116 after, the dry fields read as one contiguous body of plots, each on the one before, with notches in its edge or interior, none detached and none a sliver. Asking for them to be fixed would apply the standard the GM struck on 2026-11-19."
+    },
+    {
+     "id": "T423-mizuguchi",
+     "summary": "Mizuguchi's ground across its brook is not a defect; nothing changed",
+     "class": "within",
+     "why": "0035.drawing allows a hamlet astride its brook and makes one-bank a tie-break only. No change, no narrowing."
+    },
+    {
+     "id": "T423-acreage-count",
+     "summary": "The hem counts each plot as 0.15 acre whatever its drawn area (read, not filed)",
+     "class": "within",
+     "why": "No wrong outcome a reader sees: the only measured case (Inashiro, 13.70 drawn for 12.75 recorded) is over the need. Note that the sweep's 'short' is counted by plot count (drawn = plots x 0.15), not drawn area, so 'never under' by drawn area is not itself measured; with no plot now under half the plot's area this is not shown to be a defect."
+    },
+    {
+     "id": "T423-order",
+     "summary": "T423 lands before T158 and before T418, whose short-of-grain count is taken on the fixed hem",
+     "class": "within",
+     "why": "Follows the GM's 2026-11-24 instruction to fix real hamlet defects before new code and to close the open tasks before the port resumes."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T423 (seed 52's detached slivers of dry plots, seen by T421 on 2026-11-24: the cause measured, and the two things seen beside them)",
+    "### T423 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 corner rule",
+     "summary": "seat refuses a margin whose band holds a vertex of the field's outline deeper than FIELD_IN_BAND_MAX (a tenth of the band's depth, a GUESS knob)",
+     "class": "within",
+     "why": "fixes a wrong outcome a reader saw (houses' ground across the paddy's corner, 9.0 percent of seed 52's band, up to 15.2 percent on the wide sweep) against 0031.drawing's hamlet beside its paddy; the GM 2026-11-24: 'if there are real defects, then I do want to find them and fix them'"
+    },
+    {
+     "id": "D2 residual band on the paddy accepted",
+     "summary": "a straight band along a bending flank may still dip into the field's curve: some band on the paddy on 451 of 3,200 rolls, at most 3.5 percent; done measure is 0 over 5 percent",
+     "class": "within",
+     "why": "the zero-tolerance alternative was measured and is worse (70 rolls unseated, one hamlet short of its grain), so the tenth is the tolerance that leaves no refusal and no shortfall; a dip of a few percent of a placeholder band along a bend is not shown to read wrong. Approach item 1's 'none of their ground on the rice' overstates what item 9 accepts and should be restated to match - wording, not a ruling"
+    },
+    {
+     "id": "D3 hill-backed seat once no windward margin is left",
+     "summary": "seat asks the hill-backed seat once every margin facing the wind is refused or walled in, still only for a fall toward the wind",
+     "class": "within",
+     "why": "fixes rolls with no settlement at all (seeds 115, 260; the four refused at 225 degrees); 0081.drawing has a walled-in head give way, 0031.drawing's GUESS backs a windward fall to the hill; keeping it to a fall toward the wind leaves 0 of 3,200 refused, so nothing wrong is left"
+    },
+    {
+     "id": "D4 hem climb ends at a pinch, at another column's plots; a climbed strip not re-asked",
+     "summary": "PINCH_SHARE (half a plot's length, a GUESS) ends a converging column; a lap on another column's plot ends it; a strip already climbed is not asked again",
+     "class": "within",
+     "why": "fixes slivers, needles and plots loose behind the block (plot under half area on 77 of 98 bare-winter rolls before, 0 after) against 0011 ('climb ... plot by plot') and 0006 ('a hem of small rectangular plots'); no hamlet left short by count"
+    },
+    {
+     "id": "D5 hem behavior kept",
+     "summary": "settlement ground still stepped over; a strip refused for the water still does not end its column",
+     "class": "within",
+     "why": "keeps behavior the research supports (0006's houses between canal and dry fields; plots past the intake race on its upslope side, 17 of 141 such rolls) and that no reader is shown to read wrong"
+    },
+    {
+     "id": "D6 wedges and spread plots left",
+     "summary": "narrow bare wedges inside a deep block where columns run together, and plots up to about twice a plot's length round a bend away from the dry side, left as they are",
+     "class": "within",
+     "why": "differences, not wrong outcomes: no quoted research line contradicts them and the after renders show one body of plots; constitution XIV v2.36.0 keeps such differences within what was asked"
+    },
+    {
+     "id": "D7 Mizuguchi astride its brook",
+     "summary": "nothing changed",
+     "class": "within",
+     "why": "0035.drawing: 'A hamlet on our maps may stand astride its brook'; the one-bank preference is a tie-break, not a refusal"
+    },
+    {
+     "id": "D8 hem acreage counted by plots, read and not filed",
+     "summary": "each plot counted at 0.15 acre whatever its drawn area; Inashiro draws 13.70 acres for 12.75 recorded",
+     "class": "within",
+     "why": "no wrong outcome is shown: the one roll measured for drawn area is over its need and is a pool map this task leaves unchanged. The under direction (plots between half and a whole area counted whole) is UNMEASURED, and every '0 short' in the section is by count of plots, not drawn area; items 9 and 11 should carry that qualifier. Left within on XIV's test (a defect must be a wrong outcome shown), not certified as measured fine"
     }
    ]
   }
@@ -53373,6 +53583,113 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T423": {
+   "section_sha256": "64f7614e40bfcd90ebb89577701dfd8b331d3b7d1e153bbce64ef54de2f1a5d2",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 corner rule",
+     "summary": "seat refuses a margin whose band holds a vertex of the field's outline deeper than FIELD_IN_BAND_MAX (a tenth of the band's depth, a GUESS knob)",
+     "class": "within",
+     "why": "fixes a wrong outcome a reader saw (houses' ground across the paddy's corner, 9.0 percent of seed 52's band, up to 15.2 percent on the wide sweep) against 0031.drawing's hamlet beside its paddy; the GM 2026-11-24: 'if there are real defects, then I do want to find them and fix them'"
+    },
+    {
+     "id": "D2 residual band on the paddy accepted",
+     "summary": "a straight band along a bending flank may still dip into the field's curve: some band on the paddy on 451 of 3,200 rolls, at most 3.5 percent; done measure is 0 over 5 percent",
+     "class": "within",
+     "why": "the zero-tolerance alternative was measured and is worse (70 rolls unseated, one hamlet short of its grain), so the tenth is the tolerance that leaves no refusal and no shortfall; a dip of a few percent of a placeholder band along a bend is not shown to read wrong. Approach item 1's 'none of their ground on the rice' overstates what item 9 accepts and should be restated to match - wording, not a ruling"
+    },
+    {
+     "id": "D3 hill-backed seat once no windward margin is left",
+     "summary": "seat asks the hill-backed seat once every margin facing the wind is refused or walled in, still only for a fall toward the wind",
+     "class": "within",
+     "why": "fixes rolls with no settlement at all (seeds 115, 260; the four refused at 225 degrees); 0081.drawing has a walled-in head give way, 0031.drawing's GUESS backs a windward fall to the hill; keeping it to a fall toward the wind leaves 0 of 3,200 refused, so nothing wrong is left"
+    },
+    {
+     "id": "D4 hem climb ends at a pinch, at another column's plots; a climbed strip not re-asked",
+     "summary": "PINCH_SHARE (half a plot's length, a GUESS) ends a converging column; a lap on another column's plot ends it; a strip already climbed is not asked again",
+     "class": "within",
+     "why": "fixes slivers, needles and plots loose behind the block (plot under half area on 77 of 98 bare-winter rolls before, 0 after) against 0011 ('climb ... plot by plot') and 0006 ('a hem of small rectangular plots'); no hamlet left short by count"
+    },
+    {
+     "id": "D5 hem behavior kept",
+     "summary": "settlement ground still stepped over; a strip refused for the water still does not end its column",
+     "class": "within",
+     "why": "keeps behavior the research supports (0006's houses between canal and dry fields; plots past the intake race on its upslope side, 17 of 141 such rolls) and that no reader is shown to read wrong"
+    },
+    {
+     "id": "D6 wedges and spread plots left",
+     "summary": "narrow bare wedges inside a deep block where columns run together, and plots up to about twice a plot's length round a bend away from the dry side, left as they are",
+     "class": "within",
+     "why": "differences, not wrong outcomes: no quoted research line contradicts them and the after renders show one body of plots; constitution XIV v2.36.0 keeps such differences within what was asked"
+    },
+    {
+     "id": "D7 Mizuguchi astride its brook",
+     "summary": "nothing changed",
+     "class": "within",
+     "why": "0035.drawing: 'A hamlet on our maps may stand astride its brook'; the one-bank preference is a tie-break, not a refusal"
+    },
+    {
+     "id": "D8 hem acreage counted by plots, read and not filed",
+     "summary": "each plot counted at 0.15 acre whatever its drawn area; Inashiro draws 13.70 acres for 12.75 recorded",
+     "class": "within",
+     "why": "no wrong outcome is shown: the one roll measured for drawn area is over its need and is a pool map this task leaves unchanged. The under direction (plots between half and a whole area counted whole) is UNMEASURED, and every '0 short' in the section is by count of plots, not drawn area; items 9 and 11 should carry that qualifier. Left within on XIV's test (a defect must be a wrong outcome shown), not certified as measured fine"
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T418": {
+   "section_sha256": "eb581272115a987952ad2014ad1562df4dfdfe997508acae5ca75682a7f6ffa2",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T418-rule",
+     "summary": "Where the winter crop was rolled, the middle is wild, the roll is bare and the hem as laid falls short of the need, barley_instead sets the crop to barley, the dry need to what the drained paddy leaves owed (acre for acre), the hem's inputs to the toe's band, and lays the hem again; hem_in shared by build and barley_instead.",
+     "class": "within",
+     "why": "Fixes the defect the block measured (4 of 3,004 rolls drawing a bare winter with dry fields short of the need, which 0011.drawing says is never drawn) by the route that page gives (barley on the drained paddy, a barley hamlet's dry fields on the toe). The GM 2026-11-24: 'if there are real defects, then I do want to find them and fix them'. The hem_in refactor is implementation."
+    },
+    {
+     "id": "T418-pinned",
+     "summary": "A PINNED bare winter whose dry ground cannot hold the need stands, drawn short, its shortfall only recorded in grain_acres; named a GUESS at the claim because 'the record is silent ... so the easier route is taken'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This carves the pinned case out of the rule 0011.drawing states without exception ('A bare winter paddy is drawn only where the fan's dry ground can grow the hamlet's whole grain need'), and it leaves the very picture the block's item 12 names a defect: its own 'before' map (seed 31) is a PINNED roll drawing a bare winter with 6.45 of 13.60 acres, which a reader of the map sees exactly as item 12's reader did. A reader cannot see that a pin was set. None of the three grounds holds. It is not impossible: the block says 'the easier route is taken', so another route exists, for example refusing such a pin by name as a seatless roll is refused. It is not implied by the GM's words: request.md says nothing of pins, and its only clause here ('if there are real defects, then I do want to find them and fix them'; 'fix all known bugs in each step before moving on') reaches this case. The literal rule does not defeat the request's purpose. 'Easier', the record being silent, and keeping how a pin behaves today are each named non-grounds. Cure: the plan says what a pinned bare winter the ground cannot feed does that does not draw a bare winter beside dry fields short of the need (refused by name, or another route the plan names), with a test held red-first, or the question goes to the round arbiter through make arbiter-ask. Also: the bundle does not say whether any pool sheet pins a bare winter its ground cannot feed. 'Inashiro left bare' carries no drawn-beside-needed figure, so this ruling neither assumes nor rules out a pool-sheet case."
+    },
+    {
+     "id": "T418-wild-middle",
+     "summary": "The rule fires only where the middle is wild (0011.drawing's 'the toe and the whole wild middle together').",
+     "class": "within",
+     "why": "The condition repeats the research page's own framing. Part A item 4 states that after the fix no seated roll of the 15,000 (all middles) draws a bare winter short of the need, measured 2026-11-24, so no non-wild case is shown left short. Item 9 and the 'after' count are worded over wild-middle rolls only; the claim that covers every roll is item 4's."
+    },
+    {
+     "id": "T418-seat-refused",
+     "summary": "Seed 508 at 20 households falling 135 degrees, whose seat is refused and so draws no hem or dry field, is set aside as not this rule's case, its refusal kept in the record by name.",
+     "class": "within",
+     "why": "No bare winter is drawn short there: no map is drawn and the refusal is named in the record, so it is not the defect this task fixes. Whether that seat refusal is itself a defect is a separate question that this plan neither decides nor narrows."
+    },
+    {
+     "id": "T418-plot-count",
+     "summary": "'Short' is judged by the hem's count of plots at 0.15 acre each, not by drawn area; the difference is read and not filed.",
+     "class": "within",
+     "why": "The hem itself stops by this count, and the block records no visible effect on any roll measured. Under the 2026-11-19 definition, a difference that no reader sees is not a defect, so leaving it is within what was asked."
+    },
+    {
+     "id": "T418-acre-for-acre",
+     "summary": "The barley hamlet's dry need is what the drained paddy leaves owed, acre for acre, named a GUESS of 0011.drawing; no constant moves (TOE_SHARE read as it stands).",
+     "class": "within",
+     "why": "It takes the research page's stated rule as given and moves no constant."
+    },
+    {
+     "id": "T418-second-hem",
+     "summary": "The hem is laid a second time at most once a roll where the first comes out short (S4), counted in the hem's counters; ordered after T423 and before T158.",
+     "class": "within",
+     "why": "This is a cost and ordering choice inside the fix, and it was measured with work-budget. Cost is not a fidelity finding."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

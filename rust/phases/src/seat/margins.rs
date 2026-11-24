@@ -408,6 +408,12 @@ impl<'a> Ground<'a> {
     }
 }
 
+/// How deep into the band a corner of the field may stand, as a share of the band's depth, before the margin is refused.
+///
+/// Research:
+///     the band along a bending margin - GUESS: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html puts the cluster beside its paddy and is silent on how closely a straight band follows a bending field edge; a tenth of the band's depth - with none allowed 70 of 3,200 rolls found no seat, with a tenth 2, the most of any band on the paddy 3.5 percent of it (measured 2026-11-24, seeds 1 to 400 at eight sizes and falls)
+pub const FIELD_IN_BAND_MAX: f64 = 0.1;
+
 /// The margins in the order the seat prefers them, and how many each refusal stopped (off the frame, the belt off the canvas, on
 /// the toe, on the field, in the reeds, crop behind) - wind-facing ones first, each tier by score, the brook's share on the band
 /// the tie-break between margins otherwise level, the first met winning a tie - every one that breaks a rule refused.
@@ -416,7 +422,7 @@ impl<'a> Ground<'a> {
 ///     seat on the field's margin - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: higher, drier ground beside the paddy, scored upslope
 ///     band on the canvas - CONVENTION: the seat center at least the band's half-length inside the frame
 ///     not on the wet toe - research/questions/0058-ground-too-wet-to-build-on.drawing.html: seat and anchor off the marsh below the fields
-///     the band on open ground - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: beside its paddy, the band's points off the field
+///     the band on open ground - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: beside its paddy, the band's points off the field, and no corner of the field's outline deeper in the band than `FIELD_IN_BAND_MAX` of its depth - a margin whose band holds one is refused with those on the field (449 T423: the nine points alone passed a band with the paddy's corner between them)
 ///     not in the reed fringe - CANON: the GM's ruling of 2026-08-28, refused centered in a pond's reed fringe, scored down at an end; it departs from research/questions/0058-ground-too-wet-to-build-on.drawing.html, which does not count the fringe as marsh
 ///     no drain rule at the seat - research/questions/0058-ground-too-wet-to-build-on.drawing.html: the ground below a drain kept only from dispersed farmsteads, not a nucleated cluster
 ///     brook across the band - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: "A hamlet site the brook does not cross is preferred when two sites are otherwise equally good", the brook's share the tie-break, never refused
@@ -494,6 +500,21 @@ pub fn ranked(
             .map(|(d, t)| band_pt(d, t))
             .collect();
         if pts.iter().any(|&p| ground.outline.inside(p, &mut refusal)) {
+            stopped[3] += 1;
+            continue;
+        }
+        // ...AND NO CORNER OF THE FIELD DEEP IN THE BAND (449 T423): the samples stand at the band's middle and 0.6 of its
+        // half-length either side, and a corner of the field between them went unseen - a band turned off a flank swung over the
+        // paddy's corner, a tenth of it on the rice (14 of 446 seated rolls, measured 2026-11-24 over seeds 1 to 150 at three
+        // sizes); a straight band along a bending flank still dips into it at its near edge, up to `FIELD_IN_BAND_MAX`
+        refusal += 2 * inp.outline.len() as u64;
+        if inp.outline.iter().any(|p| {
+            let r = (p.0 - mid.0, p.1 - mid.1);
+            let (d, t) = (r.0 * n.0 + r.1 * n.1 - lead, r.0 * along.0 + r.1 * along.1);
+            STANDOFF + FIELD_IN_BAND_MAX * 2.0 * dep < d
+                && d < STANDOFF + 2.0 * dep
+                && t.abs() < lat
+        }) {
             stopped[3] += 1;
             continue;
         }
