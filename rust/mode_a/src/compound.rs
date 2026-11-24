@@ -283,7 +283,7 @@ mod tests {
         assert!(!tub_by_its_eaves((0.0, 3.6), (0.0, 0.0, 0.0, 0.0)));
         assert!(tub_by_its_door((0.0, 0.0), &[(30.0, 0.0), (10.5, 0.0)]));
         assert!(!tub_by_its_door((0.0, 0.0), &[]));
-        // the audit's 40 ft, a departure from 0090's ~15 ft kept until feature 417 T33
+        // the audit's 40 ft (feature 372's choice, a GUESS; 0090's drawing page still says ~15 ft, restated by 449 T425)
         assert!(board_by_a_gate((40.0, 0.0, 41.0, 1.0), &[(0.0, 0.0)]));
         assert!(!board_by_a_gate((40.1, 0.0, 41.0, 1.0), &[(0.0, 0.0)]));
         assert_eq!((fill("kura"), fill("nothing")), ("#F2EFE4", ""));
