@@ -1,0 +1,241 @@
+{
+ "feature": "453-empty-charcoal-bales",
+ "blocks": {
+  "preamble": {
+   "sha256": "80bbb18661db185c9fa21e6351132028058b432776af83dba85f6f6adf2020ec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "ab9e4237744cc7fa07f993715fe23cb9536b2c8ba8e8c924fd832c3719176d7b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "2257b26086201c9aa27be02c2c8d129e5ed76c06b473a19eb6590009ea1d473e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "e116895cc6f388a0be1bb5b3c1e802485d2c37ed4af2f0cc5950eb3a1acc4c83",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - the empty bale (FR-001, FR-002, FR-005, FR-006, FR-007)": {
+   "sha256": "e237db51f2f56752891667e69797670b5830f0b97e9737bb72c201017377284a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - the implementation check, the reply and the report (FR-001, FR-003, FR-004)": {
+   "sha256": "0e07776596c6815f65ff8971c29bf2e7138ae8a5f3fb89859f3e850d0d43dd8b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "0f71ed58b9520877ebf281b78964f540586f1fd558ae607aa27e6ffa48ad754b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "fedf45e12825d59433fa6743f763297e24101dd04e90d0cf7a13349d7599a4a1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the empty bale (FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "## D2 - the implementation check, the reply and the report (FR-001, FR-003, FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary/TC: one write session, at most ten new registry keys, best-evidenced first",
+     "summary": "The whole answer is written in ONE write session capped at ten new registry keys, the best-evidenced sources first, with no continuation for the rest.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The sources behind passes/a-bales.md sections 1-7 include at least 14 that are not in research/sources (URL and NDL-pid grep, 2026-11-24: NDL 1077861, 1178389, 2547651, 2547702, 2548494, 2548603, 2587102, 2587455, 2587751, 920967, ghosts.xrea.jp yore-092, scrapbox chouroudaigaku, seiryo-u.ac.jp, the Shizuoka sumi.pdf). Ten keys, best-evidenced first, in one session therefore drops findings FR-001/FR-002 require written, and the request asked for each part. Not physically impossible: the project's own rule (research/CLAUDE.md, CLAUDE.md 'Research') sends the eleventh key to a continuation brief. Fix: 'at most ten new registry keys a write session; the eleventh sends the rest to a continuation write session (make reserve), and no finding is dropped for the cap' and Summary 'one write session (and its continuations under the key cap)'."
+    },
+    {
+     "id": "Summary: no code, map or canon change",
+     "summary": "Research record only.",
+     "class": "within",
+     "why": "Spec 'This feature records only the history'; money-requests.md: nothing here edits the canon."
+    },
+    {
+     "id": "TC: pass is leads, every passage read on its page before citing",
+     "summary": "Citations only after reading the page via archive-find/source-pages.",
+     "class": "within",
+     "why": "Spec findings heading 'leads until read on the page'; FR-002 citation rules."
+    },
+    {
+     "id": "TC: machine-read manuscripts cited only once read on the page image, IMAGES= to the checks",
+     "summary": "OCR-only passages not cited.",
+     "class": "within",
+     "why": "Spec edge case 2."
+    },
+    {
+     "id": "Performance bookends N/A; Constitution Check",
+     "summary": "No generator change; research: physical task; record CHECK=1 green.",
+     "class": "within",
+     "why": "Affects: research record; procedural."
+    },
+    {
+     "id": "D1: one new money question, Japan first then China, parts in the issue's order, 0279 pointer",
+     "summary": "The question's structure: price, makers and material, time, trade, share, neighbors, then Beijing 1736 and Ming silence; pointer from 0279.",
+     "class": "within",
+     "why": "Request clause by clause; FR-002; AS-4. The named record files (0279, 0312, 0332, 0283) follow the accepted spec; when the spec adds 0199 and 0197 (MODE 2 finding) this block must add them too."
+    },
+    {
+     "id": "D1: neighbors '(mats, matting, rope, earth bags)'",
+     "summary": "The neighbors written into the question are only the ones with figures found; the request's rice bales and sandals are not listed.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request names rice bales first, then straw mats, sandals and rope, as the neighbors; the spec gives rice bales' price and sandals SILENT verdicts that FR-001/FR-005 require carried with what is still open. A list of only the found neighbors drops two named parts. Fix: '(mats, matting, rope, earth bags; empty rice bales - the 1859 order without a price - and sandals SILENT, named with what is still open)'."
+    },
+    {
+     "id": "D2: implementation-check line, reply part by part, escalation-check for anything for the GM",
+     "summary": "Close-out and reply.",
+     "class": "within",
+     "why": "FR-001, FR-003, FR-004; money-requests.md."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - the empty bale (FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "## D2 - the implementation check, the reply and the report (FR-001, FR-003, FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary: sessions",
+     "summary": "One search pass, one write session plus continuations under the key cap, one check-and-apply session, then the reply on #23; no code, map or canon change.",
+     "class": "within",
+     "why": "The request is a research question answered in the record and replied on #23 (FR-001, FR-002, FR-004); nothing in it asks for code, maps or canon. Continuations add capacity and remove nothing."
+    },
+    {
+     "id": "Technical Context: leads and page images",
+     "summary": "Pass hits are leads; every passage is read on its page (archive-find, source-pages) and machine-read NDL manuscripts are cited only once read on the page image, given to the checks with IMAGES=.",
+     "class": "within",
+     "why": "Method serving FR-002's citation rules; narrows no part of the question or figures asked."
+    },
+    {
+     "id": "Technical Context: write cap",
+     "summary": "One new question and a pointer; at most ten new registry keys per write session, the eleventh sending the rest to a continuation write session (make reserve); no finding dropped for the cap.",
+     "class": "within",
+     "why": "The earlier NOT LEGITIMATE ruling was that a ten-key cap read as dropping findings; the cap is now per session with continuations and states that no finding is dropped, so it limits session size, not what is answered. Every part of the question still reaches the record and the reply (FR-001)."
+    },
+    {
+     "id": "Performance bookends",
+     "summary": "N/A: no generator change.",
+     "class": "within",
+     "why": "No generator change is asked."
+    },
+    {
+     "id": "Constitution Check",
+     "summary": "Question task research: physical with its five boxes; make record CHECK=1 stays green; built as the spec's FRs.",
+     "class": "within",
+     "why": "Process conformance; narrows nothing."
+    },
+    {
+     "id": "D1: Japan parts",
+     "summary": "New money question; Japan first: the price (SILENT for the charcoal bale, Edo empty bales of unstated kind beside day wages as the nearest), who made them and of what, how long one took, whether traded empty, the share of a full bale.",
+     "class": "within",
+     "why": "Walks every clause of the request's question and figures (sen per bale, laborer-hours, share of full bale, who made them, traded separately) in the request's region order; SILENT-with-nearest is exactly FR-005, not a narrowing. Each part carries its wage where found (FR-007)."
+    },
+    {
+     "id": "D1: neighbors",
+     "summary": "Neighbors: mats, matting, rope, earth bags; empty rice bales (1859 order names no price) and sandals SILENT, named with what is still open; each with its wage where found.",
+     "class": "within",
+     "why": "The request names rice bales and straw goods (straw mats, sandals, rope) as neighbors if charcoal bales are silent; all are now carried, the earlier NOT LEGITIMATE finding (rice bales and sandals missing) is resolved. Reporting a neighbor SILENT with what is open is FR-005, not an omission."
+    },
+    {
+     "id": "D1: China",
+     "summary": "Then China: the Beijing baskets of 1736 and the Ming's silence.",
+     "class": "within",
+     "why": "The request asks for the Chinese equivalent (basket or matting) and its price, Ming/Qing as comparison, after Japan; the plan covers Qing with a find and Ming as silent. D1 cites FR-007, which requires the wage beside each price where found, so the Beijing basket price is owed its same-place wage by the requirement the block names."
+    },
+    {
+     "id": "D1: files and pointer",
+     "summary": "0279, 0199, 0197, 0312, 0332 and 0283 named by file where they bear; a one-line pointer to the new question from 0279 where it speaks of bales.",
+     "class": "within",
+     "why": "FR-002 requires the pointer from 0279; the request names 0279 as the neighbor to read first. Naming further record files where they bear adds, removes nothing."
+    },
+    {
+     "id": "D2",
+     "summary": "implementation-check.md holds the new question's no-code line with its search; the reply on #23 gives fragment file, verdict and what is still open part by part and figure by figure; anything for the GM through escalation-check.",
+     "class": "within",
+     "why": "Restates FR-001, FR-003, FR-004."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-constraints",
+     "summary": "T01 (the research and record write) is bound by D1 and FR-001, FR-002, FR-005, FR-006, FR-007.",
+     "class": "within",
+     "why": "Those FRs carry the issue's clauses: every part and figure answered with a verdict (FR-001, FR-005: a nearest is not an answer), findings into the record under the citation rules (FR-002), history as found with no Rokugani price (FR-006), each price beside the same place and period's day wage as the request asks (FR-007). Nothing is dropped or added."
+    },
+    {
+     "id": "T01-done",
+     "summary": "T01 is done when SC-001, SC-002 and SC-003 hold.",
+     "class": "within",
+     "why": "The three success criteria are the spec's own measures of those FRs; none is weakened or replaced."
+    },
+    {
+     "id": "T02-constraints",
+     "summary": "T02 (closing: impl-check, the no-engine-code grep, the reply on #23) is bound by D2 and FR-001, FR-003, FR-004.",
+     "class": "within",
+     "why": "The reply on #23 with every part's verdict and what is open (FR-001, FR-004) and the closing check (FR-003) are what the spec requires of the close; with T01 the two blocks cover FR-001 to FR-007 between them."
+    },
+    {
+     "id": "T02-done",
+     "summary": "T02 is done when SC-001 and SC-002 hold.",
+     "class": "within",
+     "why": "SC-001 measures the reply and SC-002 the record-owed and impl-check close; SC-003 (fragment content) belongs to T01, which measures it."
+    },
+    {
+     "id": "exits-and-budget",
+     "summary": "Both tasks: one landing; on red, the failure is recorded, the task set down, and any claim that it cannot be done goes to the round arbiter.",
+     "class": "within",
+     "why": "No part of the question may be dropped silently: a cannot-be-done claim is ruled, not taken, so the exit narrows nothing the GM asked for; a budget is not a scope change."
+    }
+   ]
+  }
+ ]
+}

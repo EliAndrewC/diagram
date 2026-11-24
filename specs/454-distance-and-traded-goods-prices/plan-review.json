@@ -1,0 +1,337 @@
+{
+ "feature": "454-distance-and-traded-goods-prices",
+ "blocks": {
+  "preamble": {
+   "sha256": "0deb7020d21fb46bc61f1ba215490b8c0ed21a051bfd223303fceac1525bbf53",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "1758a8fd85cb2158d2f3b8c3e4ca6db67c659dea442808a669ee36f52fe24dc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "815375e6dfbe81c9bf75d5736267eb00de80253d5af608b9e2c8160fda3cb2d4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "611382cb573edff7e36d48ce68d615ac12db7193a97479ba2a8945297a2fcc2b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - both ends' prices in Japan (issue question 1; FR-001, FR-002, FR-005, FR-006, FR-007)": {
+   "sha256": "336335b44c806c6f9aa50d961eea5254856ca6d2e344482d1eba00726d47ef01",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - both ends' prices in China (issue question 1; FR-001, FR-002, FR-005, FR-006, FR-007)": {
+   "sha256": "44ff6900df47cf8344d757aa6465ed483c4dca4256bc3ef45807662bd752716e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - what a trader kept (issue question 3; FR-001, FR-002, FR-005, FR-006, FR-007)": {
+   "sha256": "1a529e9ef65016cbb610d7e663ff8ec1659354d66a213010698002076152fc83",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## D4 - sea freight (issue question 2; FR-001, FR-002, FR-005, FR-006, FR-007)": {
+   "sha256": "66776787996fcdc4ce49c445cbd101c82eb389291a3a2a2d80c4a3ab7265aa2f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## D5 - coastal ships (issue question 4; FR-001, FR-002, FR-005, FR-006, FR-007)": {
+   "sha256": "1d5c078ef966419a67ae30d38597ba90fb94c06b20987b9f5f231a3b6029fa7f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "## D6 - the implementation check, the reply and the report (FR-001, FR-003, FR-004, FR-008)": {
+   "sha256": "460a91d9e24c504430c2b655bffdf1dc411d71cf6e9bf56444655f87a482192d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "0f71ed58b9520877ebf281b78964f540586f1fd558ae607aa27e6ffa48ad754b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "57360f943dd7177e6e0de0097fae5215c0e266040bf0301ae0b5684957bca5eb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "1e17f34f3659533336d1c4b879a01bfa30ba9b80cf791bff41452d2f3e2c980f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "17797fac272c73027911ff4bec5626acf0af0b1a58d313a3a60eb053f8d61af8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "dba9a22c17819339f5e87377a165fae5226586f3dcf3d24be8776858951f8657",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "5dda3fb5bf1fddf7111b7029f766a60d837e85ead57b61c9d97f53a50df3a70e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - both ends' prices in Japan (issue question 1; FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "## D2 - both ends' prices in China (issue question 1; FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "## D3 - what a trader kept (issue question 3; FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "## D4 - sea freight (issue question 2; FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "## D5 - coastal ships (issue question 4; FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "## D6 - the implementation check, the reply and the report (FR-001, FR-003, FR-004, FR-008)",
+    "## Performance bookends",
+    "## Summary",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary-order",
+     "summary": "Five write sessions each with a check-and-apply session, sequential in one clone, in the issue's priority order (Q1 Japan then China, Q3, Q2, Q4); each pair landed on its own; then the reply on #24; no code, map or canon change.",
+     "class": "within",
+     "why": "Carries the issue's stated priority and region order (FR-004) and the research-only scope of money-requests.md."
+    },
+    {
+     "id": "TC-leads",
+     "summary": "The passes are leads; every passage is read on its page (archive-find, source-pages) before citing; scrambled-scan tables are read on the page image and given to the checks.",
+     "class": "within",
+     "why": "Spec edge case on machine-read scans and the findings' 'leads until read on the page'."
+    },
+    {
+     "id": "TC-ledger",
+     "summary": "Pass A's nothing-found/rejected ledger rows that bear on the question are superseded with cited:<key> by the session that cites them.",
+     "class": "within",
+     "why": "Record bookkeeping under FR-002; drops nothing asked."
+    },
+    {
+     "id": "TC-split-and-cap",
+     "summary": "Nine new questions (D1 2, D2 1, D3 2, D4 2, D5 2), each under 20,000 bytes; at most four questions and ten keys per write session, the rest to a continuation; no finding dropped for the cap.",
+     "class": "within",
+     "why": "The spec leaves the count to the plan; the cap defers, never drops, a finding."
+    },
+    {
+     "id": "TC-conversions",
+     "summary": "Coin silver from 0287/0289, koku of burthen as the source converts it, a distance from the source or else measured and labeled as this project's.",
+     "class": "within",
+     "why": "FR-007 and Acceptance Scenario 2."
+    },
+    {
+     "id": "PB-CC",
+     "summary": "Performance bookends N/A; constitution check: question tasks research: physical, record CHECK=1 green.",
+     "class": "within",
+     "why": "No generator change; procedural."
+    },
+    {
+     "id": "D1",
+     "summary": "Japan Q1 in two questions (silk and iron; sugar and tea), each good with source units, ratio, distance and route, g silver/kg as labeled arithmetic, the source's account of the gap; neighbors with the question whose route they share; the new questions point at 0282 and 0283.",
+     "class": "within",
+     "why": "Every good the issue names for Japan is carried with the figures it asks; the gap's make-up serves the canon comparison (kiln price plus freight, tariff and margin)."
+    },
+    {
+     "id": "D2",
+     "summary": "China Q1 in one question: tea to Canton and Shanghai with the gap itemized, Beijing silent as a pair; raw silk silent; Taiwan sugar and Takow-Yokohama; Guangdong sugar silent; spices etc one-end only; points at D1 and 0283's Bohea tea.",
+     "class": "within",
+     "why": "Each China good the issue names is carried with a verdict."
+    },
+    {
+     "id": "D3",
+     "summary": "Q3 in two questions: the wholesaler (commissions, the buying house's markup, net margin silent, Qing brokerage silent, Hong margin) and the shipowner on own account (return per voyage, against carrying for hire, voyages a year, crew split, loss to wreck, Chinese cargoes, interest beside the canon).",
+     "class": "within",
+     "why": "Every part of Q3 (a) and (b), the voyages count and China are carried; split and wreck loss are costs inside 'what a merchant kept after costs'."
+    },
+    {
+     "id": "D4",
+     "summary": "Q2 in two questions (Japan, China): rates in source units, voyage days, Osaka-Edo silence beyond 0280, silver per 100 kg per 100 km as labeled arithmetic where a distance can be stated, comparison with 0280's river and pack-horse rates; a pointer from 0280.",
+     "class": "within",
+     "why": "Every route, figure and the comparison the issue asks are carried; the per-distance figure is SILENT only where no distance can be stated, per FR-005/FR-007."
+    },
+    {
+     "id": "D5-charter",
+     "summary": "Q4: 'charter's silence with how hire was paid' - charter recorded as SILENT in both countries.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Q4 asks 'what chartering one cost (silver per voyage or month)'. Pass D C2(a) (Matsuura, thesis Part 1 ch. 3) holds a Ninghai junk chartered whole for a voyage in 1862: 400-odd taels Ninghai-Niuzhuang, 535 taels Niuzhuang-Jiangnan. That is a per-voyage charter of a Chinese coastal junk (not a sand junk), so the figure is ATTESTED ONLY FOR that junk; pre-deciding SILENT drops an answer the passes hold. None of the three conditions for an exception applies."
+    },
+    {
+     "id": "D5-rest",
+     "summary": "Q4 otherwise: burthen by class and period, crew by size, crew pay, build cost, working life; the disputed essay author and the two unreconciled state rates both given.",
+     "class": "within",
+     "why": "Every Q4 figure carried; FR-007 on disagreement."
+    },
+    {
+     "id": "pointer-0283",
+     "summary": "Pointers: D4 adds a pointer FROM 0280; D1 and D2 only point AT 0283; no block (and no task) adds the pointer from 0283 that FR-002 requires.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-002 of the spec under review: 'pointed at from 0280 and 0283'. The plan carries 0280 and silently drops 0283; nothing physically prevents it, nothing in the request implies it, and it defeats FR-002's purpose of reaching the new answers from 0283 (a famous good far from home), the question the issue builds on."
+    },
+    {
+     "id": "D6",
+     "summary": "implementation-check.md lines per question; the reply on #24 question by question and figure by figure in priority order with fragment file, verdict, what is open and the canon beside; escalation-check for the GM; no canon edit.",
+     "class": "within",
+     "why": "FR-001, FR-003, FR-004, FR-008 and money-requests.md's answer form."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - both ends' prices in Japan (issue question 1; FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "## D2 - both ends' prices in China (issue question 1; FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "## D3 - what a trader kept (issue question 3; FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "## D4 - sea freight (issue question 2; FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "## D5 - coastal ships (issue question 4; FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "## D6 - the implementation check, the reply and the report (FR-001, FR-003, FR-004, FR-008)",
+    "## Performance bookends",
+    "## Summary",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary: order and queue",
+     "summary": "Five sequential write sessions (plus continuations), each followed by check-and-apply, in the order question 1 (Japan then China), 3, then 2 and 4; each pair landed alone; reply on #24 last; no code, map or canon change.",
+     "class": "within",
+     "why": "Carries the issue's stated priority ('question 1, then question 3, then 2 and 4') and its Japan-first region order (FR-004); a research-only change is what the issue asks."
+    },
+    {
+     "id": "Technical Context: passes as leads, page images, ledger rows, write cap, conversions",
+     "summary": "Pass leads re-read on the page before citing; scanned tables read on the page image; pass A's nothing-found rows superseded with cited:<key>; nine questions under the write cap with continuations and no finding dropped; silver from 0287/0289, distance from the source or measured and labeled.",
+     "class": "within",
+     "why": "Mechanics of FR-002 and FR-007; the cap moves work to a continuation and explicitly drops no finding, so nothing the issue asks is cut."
+    },
+    {
+     "id": "Performance bookends / Constitution Check / preamble",
+     "summary": "No generator change; research: physical tasks; record checks stay green.",
+     "class": "within",
+     "why": "Decides nothing the request or spec left open."
+    },
+    {
+     "id": "D1 goods and ends",
+     "summary": "Two Japan questions: raw silk Kyoto against Maebashi and Fukushima with Shinshu silent; iron as the Harima ironworks' cost against Osaka labeled a cost estimate, with Izumo and Iwami's producer-end figures and their silence as a pair; Satsuma black sugar with the two disagreeing silver figures; Ryukyu, Sanuki, Awa silent; tea silent with Uji's fixed price and Edo's retail prices named as what they are; spices, incense woods, medicinal roots SILENT; each good with source units, ratio, distance, route, grams of silver per kg as labeled arithmetic; points at 0282 and 0283 and is pointed at from 0283.",
+     "class": "within",
+     "why": "Every good and end the issue names for Japan gets a figure or a stated silence (FR-001, FR-005); the Harima figure is offered as what it is beside Izumo's silence rather than in place of it, and the two sugar figures are both given (FR-007). The earlier NOT LEGITIMATE finding (no pointer from 0283, which FR-002 names) is resolved by 'A pointer from 0283.' Safflower and rice ride as neighbors on a shared route: goods made in one region and sold far away, inside question 1's general wording."
+    },
+    {
+     "id": "D1 tea: the three tea leads tried once",
+     "summary": "Tea is reported SILENT for Japan, with Uji's fixed price and Edo's retail prices named as what they are and the three tea leads that were tried named.",
+     "class": "within",
+     "why": "A description of what was searched and how the silence is reported, not a limit on what is answered: FR-005 makes a SILENT verdict carry the nearest figures and the leads not tried under 'what is still open', and the write session re-reads before citing. The request asks what the price gap was; a stated silence with its leads is a verdict on that question, not a carve-out from it."
+    },
+    {
+     "id": "D2 China ends",
+     "summary": "One China question: tea hills to Canton and Shanghai with the gap itemized and Beijing silent; raw silk silent with far-end prices named; Taiwan sugar with its freight share and no Suzhou price, plus Takow-Yokohama; Guangdong sugar silent; spices, incense, medicinal roots as one-end prices only; points at D1 and 0283's Bohea tea without repeating it.",
+     "class": "within",
+     "why": "Each China good the issue names gets a figure or a stated silence under FR-001/FR-005: tea (with Beijing's silence), raw silk (silent, far-end prices named), and sugar - the block's producing end is Taiwan, which lay within Qing Fujian province (this reviewer's reading, not from the bundle), with Guangdong's silence stated, so the request's 'Guangdong or Fujian' is not cut. One-end-only prices are reported as such rather than passed off as a ratio (FR-005)."
+    },
+    {
+     "id": "D3 traders' keep",
+     "summary": "Wholesaler question (commissions, buying house markup, fish wholesalers' net share, net margin SILENT, China brokerage SILENT, Hong merchants' tea margin) and shipowner question (return per voyage in ryo, its percent of cargo SILENT, against carrying for hire, voyages a year, split with captain and crew, wreck loss, single Chinese cargoes, interest beside canon's rates).",
+     "class": "within",
+     "why": "Covers (a) the wholesaler, (b) the shipowner on own account against carrying for hire, return per voyage, voyages a year, and China as the issue asks. The figures the plan marks SILENT are reported as SILENT with the nearest named under FR-005, not dropped, and every write session re-reads the page before citing (Technical Context), so a planned silence that a page contradicts is corrected there."
+    },
+    {
+     "id": "D4 sea freight",
+     "summary": "Japan and China questions: each route's rate in source units and voyage days; Osaka-Edo silent beyond 0280's sake figure; silver per weight per distance as labeled arithmetic where a distance can be stated; comparison with 0280's river and pack-horse rates; pointer from 0280.",
+     "class": "within",
+     "why": "Carries every part of question 2 and FR-002's pointer from 0280. 'Where a distance can be stated' is not a carve-out: Technical Context requires a distance from the source or measured and labeled, and a rate with no statable distance is SILENT under FR-005 and reported."
+    },
+    {
+     "id": "D5 coastal ships",
+     "summary": "Japan and China questions: burthen by class and period, crew by size, crew pay, build cost, working life; charter per voyage attested only for the Ninghai junk's two 1862 charters (Matsuura, pass D), per month SILENT, with how hire was otherwise paid; the disputed author and two unreconciled state rates both given.",
+     "class": "within",
+     "why": "Every figure of question 4 is carried. The earlier NOT LEGITIMATE 'charter's silence' (contradicted by pass D's 1862 Ninghai charters) is resolved: the attested per-voyage charters are reported and only the unattested per-month figure is SILENT. Disagreements both given (FR-007)."
+    },
+    {
+     "id": "D6 implementation check and reply",
+     "summary": "implementation-check.md with each question's 'no code implements it' line and the search; reply on #24 question by question and figure by figure in priority order with fragment, verdict, what is open and the canon quotations beside; GM matters via escalation-check; no canon edit.",
+     "class": "within",
+     "why": "FR-001, FR-003, FR-004, FR-008 as written."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)",
+    "### T03 Approach (checklist part A)",
+    "### T04 Approach (checklist part A)",
+    "### T05 Approach (checklist part A)",
+    "### T06 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-T05 constraints",
+     "summary": "Each research task T01-T05 is bound by its design block (D1-D5) and FR-001, FR-002, FR-005, FR-006, FR-007, with done measured by SC-001, SC-002, SC-003.",
+     "class": "within",
+     "why": "These are the spec's fragment-level requirements (every question/figure answered with a verdict, record written under citation rules, nearest-is-not-an-answer, history only, source units first) restated per task; nothing is dropped from what the request asks of a research question, and FR-003/FR-004/FR-008 (engine grep, priority/close, canon beside history) are carried by T06, which writes the reply and closes the feature."
+    },
+    {
+     "id": "T06 constraints",
+     "summary": "The closing/reply task T06 is bound by D6 and FR-001, FR-003, FR-004, FR-008, done measured by SC-001 and SC-002 (not SC-003).",
+     "class": "within",
+     "why": "T06 writes the reply on #24 and runs impl-check; SC-003 concerns the fragments' content, which T01-T05 carry and measure. Omitting it from the reply task narrows nothing the request asked."
+    },
+    {
+     "id": "order n/a",
+     "summary": "Each block marks 'The order' n/a.",
+     "class": "within",
+     "why": "The per-task approach field is about ordering steps within the task; the request's priority (question 1, then 3, then 2 and 4) is FR-004, carried by T06 and by the task sequence of the design blocks already ruled CLEAR. Nothing in these blocks reorders or drops a question."
+    },
+    {
+     "id": "exits",
+     "summary": "Green exit: landed. Red exit: the failure recorded and the task set down, with any claim that it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "A research question the record cannot answer is already provided for by FR-005 (SILENT verdict with what is still open); the red exit routes a claim of impossibility to the arbiter rather than letting the session drop a question on its own say-so, so it does not carve anything out of the request."
+    },
+    {
+     "id": "budget",
+     "summary": "Each task budgeted at one landing.",
+     "class": "within",
+     "why": "A cost/scheduling statement; it neither narrows nor widens the questions or figures asked."
+    }
+   ]
+  }
+ ]
+}

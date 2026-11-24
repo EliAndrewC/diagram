@@ -100,7 +100,12 @@ report, file and tool result stays in the context for every later turn: on the m
 session was 87% of the input and ended at 324,000 tokens a turn. So a research feature is worked a page
 at a time, each page in two FRESH sessions - one locates, reads and writes, the next checks and applies - started
 from written briefs (`make page-session BRIEF="<1> <2>"` runs them in order), and the briefs and the handoff
-between them, not the context, carry the state. `make notes Q= KEYS=` prints a few notes and the
+between them, not the context, carry the state. **A running queue shows on the status line** (the GM, 2026-11-24: a
+window waiting on a queue looked frozen, since a detached session is no subagent and the interface lists none): in a
+session standing in the queue's clone, `pages #<n> <brief> · active 20s ago`, `· QUIET 9m` once the running session and
+its subagents have written nothing for five minutes, nothing when no queue is live. It is `_pages` in the user-level
+`~/.claude/hooks/usage_cap.py`, read from the queue's run log and the session's transcript, redrawn every
+`statusLine.refreshInterval` seconds (`~/.claude/settings.json`); `bash ~/.claude/hooks/test-usage-cap.sh` holds it. `make notes Q= KEYS=` prints a few notes and the
 paragraphs carrying them; a re-check names only the notes that moved (`make check-bundle ... NOTES=<key,key>`).
 
 **At most four questions and ten new registry keys to a write session** (feature 274, its research R1). After

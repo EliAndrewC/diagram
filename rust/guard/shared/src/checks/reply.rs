@@ -163,9 +163,16 @@ pub fn unread_edits(reply: &str) -> Vec<String> {
         let word = line.trim_start_matches(|c: char| {
             c.is_whitespace() || matches!(c, '-' | '*' | '>' | '#' | '+' | '\u{2022}')
         });
-        let header = word
-            .strip_prefix("EDIT")
-            .is_some_and(|rest| !rest.starts_with(|c: char| c.is_alphanumeric() || c == '_'));
+        // `EDIT: none - <why>` is the checks' own contract line for a finding with no block (entry-drift, intro-check, modal-form,
+        // modal-depiction): it opens no block, so it is not an unread one (feature 453's check session, 2026-11-24: nine replies
+        // were refused whole for it and applied from hand-altered copies). GUARD_EDIT_OK: fixing a guard that fires on correct work.
+        let header = word.strip_prefix("EDIT").is_some_and(|rest| {
+            !rest.starts_with(|c: char| c.is_alphanumeric() || c == '_')
+                && !rest
+                    .trim_start_matches([':', ' ', '*', '`'])
+                    .to_lowercase()
+                    .starts_with("none")
+        });
         if (header || line.trim() == "<<<") && !spans.iter().any(|(s, e)| (*s..*e).contains(&start))
         {
             out.push(format!("line {}: {}", i + 1, line.trim()));
@@ -245,6 +252,17 @@ mod tests {
         let fine = "Two EDIT blocks follow.\nEDITS:\nEDIT (LINKS) `l7r/m.md`\n<<<\na\n===\nb\n>>>\n  EDIT l7r/n.md\n  <<<\n  c\n  ===\n  >>>\n";
         assert_eq!(unread_edits(fine), Vec::<String>::new());
         assert_eq!(blocks(fine).len(), 2);
+    }
+
+    /// `EDIT: none - <why>`, the contract line of a finding that carries no block, is no unread EDIT - plain, bulleted or bold - and
+    /// a real block beside it is still read; a bulleted header naming a path is still refused.
+    #[test]
+    fn the_contract_line_edit_none_is_not_an_unread_edit() {
+        // GUARD_EDIT_OK: the test of a fix to a guard that fired on correct work
+        let reply = "FIX 1 needs a source.\nEDIT: none - a source to find\n- EDIT: none - a choice for the GM\n**EDIT: none** - research\nEDIT `l7r/m.md`\n<<<\na\n===\nb\n>>>\n";
+        assert_eq!(unread_edits(reply), Vec::<String>::new());
+        assert_eq!(blocks(reply).len(), 1);
+        assert!(!unread_edits("- EDIT l7r/m.md\n<<<\na\n===\nb\n>>>\n").is_empty());
     }
 
     #[test]
