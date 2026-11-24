@@ -233,9 +233,10 @@ fn sluice_frame(at: Pt, dir: Pt, w: f64) -> SluiceFrame {
 /// Research:
 ///     the polder drawn - CONVENTION: the deleted `ink.dike` and `dikeponds`, each record drawn as the engine drew it, the sluices apart
 ///     the band cut where a channel crosses - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: where a channel crosses the dike, the band is cut, the water running through a gap in the earthwork under a sluice gate, not over its top - the band painted before every channel's stroke, so the feeder and the outfall each show through it at their drawn width (`FEEDER_W`, `RUN_W`), bank to bank, the earth meeting the water as the waterside reeds do (449 T236); before 449 T419 the band was painted after the water, unbroken over both crossings
+///     the dike and the banks mottled - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the band is mottled with patches of earth of different ages, as repairs are, never a ruled line; research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: a pond's bank is mottled earth under its bushes, like the polder's own dike - each band's patches (`mottle::dike`, `mottle::banks`) painted on its fill, the dike's before the channels that cut it and its trees, the banks' before the ponds' water and their crowns
 ///     the cut as wide as the water - GUESS: the page silent on the cut's width; the channel's own drawn width, the simpler drawing (paint order, the faces recorded whole) over a cut built into the band's outline, taken where the record does not choose
 ///     the pocket pond's ring - GUESS: flooded ground 2.5 ft wide round the pond inside a bund line 2.2 ft wide, the deleted ink's; no page sizes the margin
-fn draw_polder(svg: &mut Svg, s: &PolderStage) {
+fn draw_polder(svg: &mut Svg, s: &PolderStage, seed: i64) {
     let (c, rx, ry) = s.polder.pond;
     svg.kind("marsh");
     svg.reeds(&s.polder.fringe);
@@ -245,11 +246,22 @@ fn draw_polder(svg: &mut Svg, s: &PolderStage) {
         svg.kind(paddy_kind(*st));
         svg.polygon(&x.ring, fill(*st), Some((ink::AZE, BUND_W)));
     }
-    if let Some((parcels, crops, _)) = &s.converted {
+    if let Some((parcels, crops, inset)) = &s.converted {
         svg.kind(dike_kind(&crops.crop));
-        for (_, ring) in parcels.iter().filter_map(|q| q.bank.as_ref()) {
+        let banks: Vec<&[Pt]> = parcels
+            .iter()
+            .filter_map(|q| q.bank.as_ref())
+            .map(|(_, ring)| ring.as_slice())
+            .collect();
+        for ring in &banks {
             svg.polygon(ring, BANK_FILL, Some((ink::AZE, BUND_W)));
         }
+        // the banks' earth mottled under their water and their bushes (449 T422)
+        svg.mottled(
+            &banks,
+            &mottle::banks(&banks, *inset, seed),
+            mottle::MOTTLE_OPACITY,
+        );
     }
     let waters = s
         .converted
@@ -268,6 +280,12 @@ fn draw_polder(svg: &mut Svg, s: &PolderStage) {
     // the dike's band under every channel's water (449 T419): the feeder and the outfall cross it, each through a cut its own width
     svg.kind("perimeter dike");
     svg.band(&s.dike.outer, &s.dike.inner, DIKE_EARTH, (DIKE_EDGE, 1.0));
+    // ...its earth mottled, under the channels that cut it and under its trees (449 T422)
+    svg.mottled(
+        &[&s.dike.outer, &s.dike.inner],
+        &mottle::dike(&s.dike, seed),
+        mottle::MOTTLE_OPACITY,
+    );
     for d in &s.polder.ditches {
         svg.kind(if d.role == "drain" || d.seg == "drain" {
             "drainage ditch"
@@ -715,7 +733,7 @@ pub(super) fn roll_polder(p: Plan) -> Rolled {
     let mut ward = stage_waterward(&p, &s, seated.as_ref());
     let bands = bank_bands(&s, &ward.strips, &mut ward.counts);
     let mut svg = Svg::default();
-    draw_polder(&mut svg, &s);
+    draw_polder(&mut svg, &s, p.seed);
     svg.kind("marsh");
     for strip in &ward.strips {
         svg.reeds(strip);
@@ -779,5 +797,6 @@ pub(super) fn roll_polder(p: Plan) -> Rolled {
     }
 }
 
+mod mottle;
 #[cfg(test)]
 mod tests;

@@ -156,6 +156,10 @@ pub struct FieldOut {
     pub knobs: HashMap<String, String>,
     pub fields: Vec<Field>,
     pub grain: (f64, f64, f64),
+    /// The paddy that drains (square feet) and whether the winter crop was rolled, no pin naming it: what a bare winter the dry
+    /// ground cannot feed is rolled again from, or refused by (`barley_instead`).
+    pub drained: f64,
+    pub winter_rolled: bool,
     pub counts: HashMap<String, u64>,
 }
 
@@ -270,11 +274,11 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
         fields.push(field);
     }
     // the winter crop, its odds the site's now that what drains is known (0009); a pin stands
-    if let Some((_, forms, _, _)) = inp
+    let unpinned = inp
         .knobs
         .iter()
-        .find(|k| k.0 == WINTER_CROP && k.3.is_none() && !k.1.is_empty())
-    {
+        .find(|k| k.0 == WINTER_CROP && k.3.is_none() && !k.1.is_empty());
+    if let Some((_, forms, _, _)) = unpinned {
         let near = knobs.get("town_nearness").is_some_and(|x| x == "near");
         let laid: f64 = fields.iter().map(|f: &Field| f.area).sum();
         // a cleared middle is drawn only as the one hem band, which cannot hold the whole need: always barley (0011)
@@ -295,51 +299,20 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
     } else {
         need
     };
-    // a wild middle keeps the hem to the toe - the toe's one band where the paddy carries the barley, a climb up the far flank
-    // from the foot, band behind band, as far as the grain asks where it lies bare; a cleared one hems the whole canal, the upper
-    // edge too (fields_for draws at least one field)
-    let (drawn, room) = {
-        let f = &mut fields[0];
-        let far = -inp.brook_side;
-        // the flank's drawn course from the foot up, every edge step - to the head, or only up the toe where a wild middle's
-        // paddy carries the barley; a cleared middle carries on across the head
-        let steps = 24_u32;
-        let rise = if is("fan_middle", "wild") && is("winter_crop", "barley") {
-            1.0 - TOE_SHARE
-        } else {
-            1.0
-        };
-        let mut line: Vec<Pt> = (0..=steps)
-            .map(|k| {
-                f.fan.at(
-                    f.fan.length * (1.0 - rise * (f64::from(k) / f64::from(steps))),
-                    far,
-                )
-            })
-            .collect();
-        if !is("fan_middle", "wild") {
-            line.extend((1..=steps).map(|k| {
-                f.fan
-                    .at(0.0, far - 2.0 * far * f64::from(k) / f64::from(steps))
-            }));
-        }
-        let out = (f.fan.across.0 * far, f.fan.across.1 * far);
-        // THE HEM IS LAID AFTER THE SEAT (T28, the round arbiter on ask:444-T27-seat-hem): the dry fields stand behind the houses
-        // where the settlement stands on the paddy's high edge (0006), and the field cannot know where that is - so the field
-        // hands on what the hem is laid from, and the hem stage lays it with the seat's ground kept
-        f.hem = Some(HemIn {
-            line,
-            out,
-            down: f.fan.down,
-            bounds: hem_bounds(
-                is("fan_middle", "wild"),
-                is("winter_crop", "barley"),
-                dry_need,
-            ),
-            seed: inp.seed,
-        });
-        (0.0, 0.0)
-    };
+    // THE HEM IS LAID AFTER THE SEAT (T28, the round arbiter on ask:444-T27-seat-hem): the dry fields stand behind the houses
+    // where the settlement stands on the paddy's high edge (0006), and the field cannot know where that is - so the field
+    // hands on what the hem is laid from, and the hem stage lays it with the seat's ground kept (fields_for draws at least one
+    // field)
+    let hem = hem_in(
+        inp,
+        &fields[0],
+        is("fan_middle", "wild"),
+        is("winter_crop", "barley"),
+        dry_need,
+    );
+    fields[0].hem = Some(hem);
+    let (drawn, room) = (0.0, 0.0);
+    let winter_rolled = unpinned.is_some();
     Ok(FieldOut {
         knobs,
         fields,
@@ -348,8 +321,86 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
             dry_need / SQ_FT_PER_ACRE,
             room / SQ_FT_PER_ACRE,
         ),
+        drained,
+        winter_rolled,
         counts: counts.0,
     })
+}
+
+/// What the hem is laid from on the first field `f`: the far flank's drawn course from the foot up, every edge step - to the head,
+/// or only up the toe where a wild middle's paddy carries the barley, a cleared middle carrying on across the head - the side it
+/// climbs to, the fall, and its bounds for the grain `dry_need` (`hem_bounds`).
+///
+/// Research:
+///     the hem's line - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: where the middle is left wild and the paddy lies bare over the winter the dry plots climb from the toe into the middle, and where the paddy carries barley its dry fields stay on the toe; a cleared middle drawn only as the hem along the whole canal - the line canal A's, the first field's far flank up from its foot: to the head on a bare-winter wild middle, only up the toe (`TOE_SHARE`) on a barley one, and on across the head where cleared
+///     the line's steps - NONE: 24 steps a flank, the drawn course's own sampling
+fn hem_in(inp: &FieldIn, f: &Field, wild: bool, barley: bool, dry_need: f64) -> HemIn {
+    let far = -inp.brook_side;
+    let steps = 24_u32;
+    let rise = if wild && barley { 1.0 - TOE_SHARE } else { 1.0 };
+    let mut line: Vec<Pt> = (0..=steps)
+        .map(|k| {
+            f.fan.at(
+                f.fan.length * (1.0 - rise * (f64::from(k) / f64::from(steps))),
+                far,
+            )
+        })
+        .collect();
+    if !wild {
+        line.extend((1..=steps).map(|k| {
+            f.fan
+                .at(0.0, far - 2.0 * far * f64::from(k) / f64::from(steps))
+        }));
+    }
+    HemIn {
+        line,
+        out: (f.fan.across.0 * far, f.fan.across.1 * far),
+        down: f.fan.down,
+        bounds: hem_bounds(wild, barley, dry_need),
+        seed: inp.seed,
+    }
+}
+
+/// What became of the winter crop once the hem was laid and its grain counted (`barley_instead`).
+///
+/// Research:
+///     the three outcomes - NONE: the record's type, holding what `barley_instead` decides
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Winter {
+    /// The crop stands: barley already, or a bare winter whose dry fields grow the whole need.
+    Stands,
+    /// A rolled bare winter came out short and is barley now: the hem is to be laid again.
+    Barley,
+    /// A pinned bare winter came out short: no map of it is drawn.
+    Unfed,
+}
+
+/// A bare winter the dry ground could not feed: where the winter crop is bare and the hem as laid drew `drawn` acres, under the
+/// grain the hamlet needs, a ROLLED crop is rolled again as barley - the knob set to barley, the dry need to what the drained
+/// paddy leaves owed, and the hem's inputs to a barley hamlet's, for the hem stage to lay again - and a PINNED one is named unfed,
+/// for the driver to refuse. Which of the three it was.
+///
+/// Research:
+///     a bare winter only where the dry ground feeds the hamlet - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: a bare winter paddy is drawn only where the fan's dry ground can grow the hamlet's whole grain need, the toe and the whole wild middle together - asked of the hem as laid, the one place the room is known (the hem is laid after the seat, its columns ending where they pinch or meet): a rolled bare winter whose hem came out short is rolled again as barley, its grain on the drained paddy acre for acre and its dry fields on the toe (4 of 3,004 bare-winter wild rolls short before 449 T418, measured 2026-11-24 over seeds 1 to 1,500 at ten sizes and falls)
+///     a pinned bare winter the ground cannot feed - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the same rule, which the page states with no exception - a spec's pin is never rolled again, so a pinned bare winter whose hem came out short is drawn on no map: the roll is refused by name (`Winter::Unfed`), on a wild middle and on a cleared one alike
+pub fn barley_instead(inp: &FieldIn, out: &mut FieldOut, drawn: f64) -> Winter {
+    let is = |k: &str, v: &str| out.knobs.get(k).is_some_and(|x| x == v);
+    let need = f64::from(inp.households) * GRAIN_ACRES_PER_HOUSEHOLD * SQ_FT_PER_ACRE;
+    let short = drawn * SQ_FT_PER_ACRE + 1.0 < need;
+    if !(short && is(WINTER_CROP, "none")) {
+        return Winter::Stands;
+    }
+    if !out.winter_rolled {
+        return Winter::Unfed;
+    }
+    let wild = is("fan_middle", "wild");
+    out.knobs
+        .insert(WINTER_CROP.to_owned(), "barley".to_owned());
+    let dry_need = (need - out.drained).max(0.0);
+    out.grain.1 = dry_need / SQ_FT_PER_ACRE;
+    let hem = hem_in(inp, &out.fields[0], wild, true, dry_need);
+    out.fields[0].hem = Some(hem);
+    Winter::Barley
 }
 
 /// The comb's angles tested once a row, at its two outermost basins, where the fan's taper makes them sharpest (D7): each row's

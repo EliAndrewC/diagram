@@ -42553,9 +42553,44 @@
  },
  "rust/phases/src/driver.rs::roll#the stages in order": {
   "body": "2e3084d4af0cb2a9",
+  "build": {
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
+   "dirty": {
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
+   }
+  },
   "claim": "the stages in order - which-way-water-flows-and-how-channels-bend-and-join.drawing: the fall and the water decided before anything is placed, the field laid from them",
-  "code": "4f19bf23e1b81b69",
-  "core": "2b99f8fbc07b6bbc",
+  "code": "bd26671f510b345f",
+  "core": "924015f6d903df23",
   "date": "2026-11-07",
   "note": "fall and water planned, the field built from them, then the rest",
   "pages": {
@@ -42567,7 +42602,7 @@
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:a8aa562e10d530f1"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::seat_refused#the driver": {
@@ -42678,6 +42713,41 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
   ],
   "triaged": "2026-11-22",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver.rs::stage_hem_fed#a pinned bare winter refused": {
+  "body": "552675d79309b7bc",
+  "claim": "a pinned bare winter refused - where-a-farming-hamlet-grew-its-coarse-grain.drawing: the same rule - a spec that pins its winter bare where the hem as laid is short of the need is refused, the whole roll and not the hem alone, so no map draws a bare winter beside dry fields short of the grain; the refusal names the pin, the acres drawn and needed, and the two ways out",
+  "code": "a7110a3edb17fa69",
+  "core": "a39e1190b206f657",
+  "date": "2026-11-24",
+  "note": "a pinned bare winter that comes out short (`Winter::Unfed`) refuses the whole roll; the refusal names the pin, the acres drawn and the acres needed, and offers pinning barley or leaving the crop unpinned; this matches \"drawn only where the fan's dry ground can grow the hamlet's whole grain need\"",
+  "pages": {
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
+  },
+  "research": "8159982a6874674a",
+  "rests": [
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver.rs::stage_hem_fed#the winter crop asked of the hem as laid": {
+  "body": "552675d79309b7bc",
+  "claim": "the winter crop asked of the hem as laid - where-a-farming-hamlet-grew-its-coarse-grain.drawing: a bare winter paddy is drawn only where the fan's dry ground can grow the hamlet's whole grain need - the room is known only once the hem is laid behind the seat, so the hem is laid, asked, and where it is short laid once more for a barley hamlet (449 T418); never a third time, the barley hem drawn as it stands",
+  "code": "009b201d74be093a",
+  "core": "a39e1190b206f657",
+  "date": "2026-11-24",
+  "note": "the hem is laid, then checked against the need; if a rolled bare winter is short, the hem is laid once more as barley and nothing checks it again",
+  "pages": {
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
+  },
+  "research": "8159982a6874674a",
+  "rests": [
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::stage_seat#the seat's back to the wind": {
@@ -43965,16 +44035,16 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the band cut where a channel crosses": {
-  "body": "bd0a8b41bb9877e9",
+  "body": "aa7112f46a13b1b1",
   "claim": "the band cut where a channel crosses - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: where a channel crosses the dike, the band is cut, the water running through a gap in the earthwork under a sluice gate, not over its top - the band painted before every channel's stroke, so the feeder and the outfall each show through it at their drawn width (`FEEDER_W`, `RUN_W`), bank to bank, the earth meeting the water as the waterside reeds do (449 T236); before 449 T419 the band was painted after the water, unbroken over both crossings",
-  "code": "4d0478e75126b562",
-  "core": "ff83646e4a5d2323",
+  "code": "91193f16b204e02c",
+  "core": "607dced7066ddc51",
   "date": "2026-11-24",
-  "note": "the band is now painted before the feeder (FEEDER_W) and outfall (RUN_W) strokes, so the water shows through the band at its drawn width, as the page says (\"the band is cut ... not over its top\")",
+  "note": "the band and its mottle are painted before the ditches, the feeder (FEEDER_W) and the outfall (RUN_W), so each channel shows through at its own width",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
-  "reads": "dacb6fbf9728b3b1",
+  "reads": "dc035ea24238424a",
   "research": "9d4f4eee3c609249",
   "rests": [
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:e8c05b8d91b4cafc"
@@ -43983,49 +44053,129 @@
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the cut as wide as the water": {
   "body": "bd0a8b41bb9877e9",
+  "build": {
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
+   "dirty": {
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
+   }
+  },
   "claim": "the cut as wide as the water - GUESS: the page silent on the cut's width; the channel's own drawn width, the simpler drawing (paint order, the faces recorded whole) over a cut built into the band's outline, taken where the record does not choose",
-  "code": "51c1ca1c62a0e7ec",
-  "core": "ff83646e4a5d2323",
+  "code": "22533603f23cca84",
+  "core": "607dced7066ddc51",
   "date": "2026-11-24",
   "note": "the page does not give the cut's width; the code uses the channel's own stroke width, a fair guess",
   "pages": {},
-  "reads": "dacb6fbf9728b3b1",
+  "reads": "dc035ea24238424a",
   "research": "",
+  "triaged": "2026-11-24",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::draw_polder#the dike and the banks mottled": {
+  "body": "aa7112f46a13b1b1",
+  "claim": "the dike and the banks mottled - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the band is mottled with patches of earth of different ages, as repairs are, never a ruled line; dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: a pond's bank is mottled earth under its bushes, like the polder's own dike - each band's patches (`mottle::dike`, `mottle::banks`) painted on its fill, the dike's before the channels that cut it and its trees, the banks' before the ponds' water and their crowns",
+  "code": "d29c84de26d2ec6c",
+  "core": "607dced7066ddc51",
+  "date": "2026-11-24",
+  "note": "the banks' patches go on their fill before the ponds' water and the crowns; the dike's go on its band before the channels and its trees",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b",
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
+  },
+  "reads": "dc035ea24238424a",
+  "research": "3c136322d579b8bf",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:0c906f5e26dcec83",
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the pocket pond's ring": {
   "body": "a5f4347b1ff80095",
   "build": {
-   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
    "dirty": {
-    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
-    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
-    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
-    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
-    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
    }
   },
   "claim": "the pocket pond's ring - GUESS: flooded ground 2.5 ft wide round the pond inside a bund line 2.2 ft wide, the deleted ink's; no page sizes the margin",
-  "code": "fcc06444f48213aa",
-  "core": "ff83646e4a5d2323",
+  "code": "c67e9485a54a2564",
+  "core": "607dced7066ddc51",
   "date": "2026-11-20",
   "note": "the code matches the claim: the fill is ink::FLOODED at prx+2.5 and pry+2.5, inside an ink::AZE stroke 2.2 wide. The page says nothing about the margin round a field or pocket pond, so GUESS is the right label",
   "pages": {},
-  "reads": "dacb6fbf9728b3b1",
+  "reads": "dc035ea24238424a",
   "research": "",
   "rests": [],
   "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the polder drawn": {
-  "body": "bd0a8b41bb9877e9",
+  "body": "aa7112f46a13b1b1",
   "claim": "the polder drawn - CONVENTION: the deleted `ink.dike` and `dikeponds`, each record drawn as the engine drew it, the sluices apart",
-  "code": "c47d21d7f2cb96e5",
-  "core": "ff83646e4a5d2323",
+  "code": "a3957b440ea0ab04",
+  "core": "607dced7066ddc51",
   "date": "2026-11-24",
-  "note": "fills, strokes and paint order only; the cut, which changed, has its own claim and the pocket ring is claimed separately",
+  "note": "paint order and records drawn; the new mottle and the pocket ring are each claimed separately",
   "pages": {},
-  "reads": "dacb6fbf9728b3b1",
+  "reads": "dc035ea24238424a",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -44199,9 +44349,44 @@
  },
  "rust/phases/src/driver/polder.rs::roll_polder#its back to the landward shore": {
   "body": "ee736b8a58213b8c",
+  "build": {
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
+   "dirty": {
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
+   }
+  },
   "claim": "its back to the landward shore - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the village on the dry landward shore, every other flank holding water back - the seat's back handed the shore (`landward`), each seat then recorded against the map's own wind",
-  "code": "6eb1004a45a8c962",
-  "core": "07f426e8e9c35fcb",
+  "code": "66d019665f9c917d",
+  "core": "1fead0b79e6a9e78",
   "date": "2026-11-22",
   "note": "`back: Some(landward(..))`, and offwind is recorded against the map's own wind",
   "pages": {
@@ -44213,14 +44398,49 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::roll_polder#its belt to windward on the dry side": {
   "body": "c24926484e68ebac",
+  "build": {
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
+   "dirty": {
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
+   }
+  },
   "claim": "its belt to windward on the dry side - GUESS shelter-belts-on-a-villages-windward-side-bofurin.drawing: the wind decides the belt's side, on one or two windward sides of the houses - so a polder seat's belt room is asked of the map's own wind (`SeatIn::belt_wind`), not the shore's way, and its ground kept on the margin's dry side (`margins::belt_swept`), the village staying a few steps off the dike (polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing); the record is silent on a belt between the houses and a dike (the research pass of 2026-11-22, 449 T292: the Nobi plain's ring-dike groves north to west of the homestead, a row village by the dike one belt along one side, which side unsaid), so Kuwabata's belt takes the band's north end, the windward side its polder leaves dry",
-  "code": "4e1c2e8fe2226283",
-  "core": "07f426e8e9c35fcb",
+  "code": "e4050e2b6b97ab2f",
+  "core": "1fead0b79e6a9e78",
   "date": "2026-11-22",
   "note": "the belt's room and the reserved ground are taken from the map's own wind, with no belt between the houses and the dike; the 0019 drawing page records that as a GUESS",
   "pages": {
@@ -44234,26 +44454,97 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:bf09b8d4b7a35d7b",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:70e1d65dbf9cecc4"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::roll_polder#its lines and no pond": {
   "body": "ee736b8a58213b8c",
+  "build": {
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
+   "dirty": {
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
+   }
+  },
   "claim": "its lines and no pond - GUESS: the field ditches, the feeder and the outfall handed as the lines `stage_seat` keeps its way out from crossing, as a comb's channels are; the wild pond not handed as a pond at its berth, the reed fringe round it standing for it",
-  "code": "0984fd258403fd99",
-  "core": "07f426e8e9c35fcb",
+  "code": "6022a70d04cd11a5",
+  "core": "1fead0b79e6a9e78",
   "date": "2026-11-22",
   "note": "the code passes the field ditches, the feeder and the outfall as `lines` and sets `pond: None`, with `s.polder.fringe` as the reeds. Neither cited page covers a way crossing a channel: §34 covers only reeds and wet ground (its reed part already claimed under `its wet ground`), and §39 covers only water forcing a turn. So the GUESS has nothing in the record that answers it.",
   "pages": {},
   "reads": "6c5594d0dd60350e",
   "research": "",
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::roll_polder#its wet ground": {
   "body": "ee736b8a58213b8c",
+  "build": {
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
+   "dirty": {
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
+   }
+  },
   "claim": "its wet ground - village-lanes.drawing: a track keeps off wet ground and every way off every marsh's reeds - the wild pond's reed fringe handed as the seat's reeds; the waterside strips are laid after the seat, on the flanks it does not take, so its way out is asked again past them by the cohort's check (`check::walled_by_reeds`), clear on Kuwabata and on a grid polder falling obliquely (measured 2026-11-22, feature 449 T240)",
-  "code": "4eab0e724a915bb5",
-  "core": "07f426e8e9c35fcb",
+  "code": "f964e2d52afbc528",
+  "core": "1fead0b79e6a9e78",
   "date": "2026-11-22",
   "note": "the fringe is handed as the seat's reeds, the strips are laid afterward and checked by `walled_by_reeds`",
   "pages": {
@@ -44264,14 +44555,49 @@
   "rests": [
    "0081-village-lanes.drawing.html:48cdd569d493520c"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::roll_polder#the strips after the seat": {
   "body": "ee736b8a58213b8c",
+  "build": {
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
+   "dirty": {
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
+   }
+  },
   "claim": "the strips after the seat - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: every flank but the landward one holds water back - the seat's side names the landward flank, so the waterside strips are laid once it is known (`stage_waterward`)",
-  "code": "a5ba428400588193",
-  "core": "07f426e8e9c35fcb",
+  "code": "d1f5227973fa4d1e",
+  "core": "1fead0b79e6a9e78",
   "date": "2026-11-22",
   "note": "`stage_waterward` takes the seat's `out` once it is known",
   "pages": {
@@ -44282,14 +44608,49 @@
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::roll_polder#the village off its polder's dike": {
   "body": "c24926484e68ebac",
+  "build": {
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
+   "dirty": {
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
+   }
+  },
   "claim": "the village off its polder's dike - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the village drawn on the dry ground just off the dike, a few steps off it (the page's own GUESS), and hard against its own polder (its GUESS) - the seat handed a ring off the dike's outer face (`off_the_dike`), as a comb hands its fan, so the settlement's ground runs out from the dike's foot and never over the dike or the ring canal inside it (the cohort's `seat_on_dike` and `seat_on_canal`), its houses `STANDOFF_FT` off that ring; the page puts no number on \"a few steps\", so the 12 ft is a GUESS and a knob, and with the ring's side held straight at the face's widest the houses stand 12 to about 36 ft off the outer face (the face 2.7 to 24.3 ft inside the side along Kuwabata's band, 0 to 22.9 ft along a grid polder's falling obliquely; measured 2026-11-22, feature 449 T240)",
-  "code": "ded441163ff91576",
-  "core": "07f426e8e9c35fcb",
+  "code": "b8df51209c5c22a4",
+  "core": "1fead0b79e6a9e78",
   "date": "2026-11-22",
   "note": "the seat stands on a ring off the outer face (`off_the_dike`, at the face's widest), its houses `STANDOFF_FT` 12 ft off it, a GUESS knob for \"a few steps\", and its ground, the belt included, stays on the dry side",
   "pages": {
@@ -44302,6 +44663,7 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8feb1eada8b008c2",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::sluice_channel#the channel it shuts": {
@@ -44456,6 +44818,177 @@
   "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/polder/mottle.rs::BANK_TONES#the patches' tones": {
+  "body": "369ff4bc97a4d717",
+  "claim": "the patches' tones - CONVENTION: the bank's own ink darkened and lightened beside two bare earths - a drawing's palette and no finding",
+  "code": "0f63605d062c3fa4",
+  "core": "bf573a2c83197e72",
+  "date": "2026-11-24",
+  "note": "BANK_FILL #A9AE7C darkened (#989D6B) and lightened (#BCC092), with DIKE_EARTH and one other earth; palette only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder/mottle.rs::DIKE_TONES#the patches' tones": {
+  "body": "b620c54f5a9be751",
+  "claim": "the patches' tones - CONVENTION: the deleted village dike's four earth inks, darker packed and lighter dried patches about the band's own - a drawing's palette and no finding",
+  "code": "1d46e8e0fd0ed34e",
+  "core": "d1cb5471f899a081",
+  "date": "2026-11-24",
+  "note": "the band's own DIKE_EARTH with darker and lighter earths; palette only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder/mottle.rs::MOTTLE_OPACITY#the patches' strength": {
+  "body": "90f5016e3d4edbd2",
+  "claim": "the patches' strength - CONVENTION: 0.4, the deleted village dike's, so patches that overlap read as mottle and no patch as a shape of its own",
+  "code": "a06887812ff151a4",
+  "core": "b8fd1cfaf668dff5",
+  "date": "2026-11-24",
+  "note": "0.4, a drawing strength",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder/mottle.rs::PATCH_FT#a patch's size": {
+  "body": "951bad5bd0fefd5f",
+  "claim": "a patch's size - GUESS: polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing silent on how big a patch of repaired earth is; 10 to 26 ft east-west by 8 to 18 ft north-south, the deleted village dike's, drawn along the sheet's axes whichever way the band runs and clipped to the band, whose own breadth is 14 to 40 ft",
+  "code": "a36ee17caa5aaa12",
+  "core": "3c5e35724c5d4e85",
+  "date": "2026-11-24",
+  "note": "GUESS correctly labeled: the drawing page has the band mottled with patches of repaired earth but gives no patch size. The constant's half-spans (5-13, 4-9) make the claimed 10-26 ft by 8-18 ft, and the band's 14 to 40 ft matches the page",
+  "pages": {
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
+  },
+  "research": "9d4f4eee3c609249",
+  "rests": [
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e",
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:46a44cd878ea07e4"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder/mottle.rs::PATCH_STEP_FT#the patches' spacing": {
+  "body": "82e24aecae185bc2",
+  "claim": "the patches' spacing - GUESS: polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing silent on how much of a dike is patched; one patch to every 16 ft of its length, so the patches overlap along the band and no stretch of it reads as one flat fill",
+  "code": "c74ef96429e54d58",
+  "core": "11172e4d328a9431",
+  "date": "2026-11-24",
+  "note": "one patch every 16 ft along the walked face; the page does not say how much of a dike was patched, so GUESS is right",
+  "pages": {
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
+  },
+  "research": "9d4f4eee3c609249",
+  "rests": [
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder/mottle.rs::Patch#a patch": {
+  "body": "01f964fc73e8d3f6",
+  "claim": "a patch - NONE: the record's type, holding what `along` decides",
+  "code": "cb757bbb162b1ba4",
+  "core": "9c8084d226a1f5cc",
+  "date": "2026-11-24",
+  "note": "a type alias, plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder/mottle.rs::along#patches of different ages": {
+  "body": "dfbd81fd495cbd2f",
+  "claim": "patches of different ages - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the band mottled with patches of earth of different ages, as repairs are - scattered, each patch's place across the band, its size and its tone rolled, where the dike's planting runs in rows",
+  "code": "424082e671368b4b",
+  "core": "6ba64d7fa75c92c7",
+  "date": "2026-11-24",
+  "note": "each patch's place across the band, its size and its tone are rolled, giving scattered mottle rather than rows",
+  "pages": {
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
+  },
+  "reads": "0830e03ab18c55c0",
+  "research": "9d4f4eee3c609249",
+  "rests": [
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder/mottle.rs::banks#its own stream": {
+  "body": "c54e067aa5db25ed",
+  "claim": "its own stream - NONE: the patches rolled from a stream of their own (`bank_mottle`), one for all the banks in their order",
+  "code": "e0a7d565c4a02010",
+  "core": "e5625db3e5b9c917",
+  "date": "2026-11-24",
+  "note": "an rng stream key, plumbing",
+  "pages": {},
+  "reads": "02734f30dbb9fcb3",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder/mottle.rs::banks#the bank mottled": {
+  "body": "c54e067aa5db25ed",
+  "claim": "the bank mottled - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: the bank is drawn as planted ground, mottled earth under rows of mulberry bushes, like the polder's own dike; before 449 T422 each bank was one flat fill under its bushes",
+  "code": "33de5b4143f91701",
+  "core": "e5625db3e5b9c917",
+  "date": "2026-11-24",
+  "note": "patches lie within the bank's breadth (the pond's inset) inward of each ring's edge, under the bushes",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+  },
+  "reads": "02734f30dbb9fcb3",
+  "research": "dede4a3ae0c4c6d4",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:0c906f5e26dcec83",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder/mottle.rs::dike#its own stream": {
+  "body": "74c79e837055e338",
+  "claim": "its own stream - NONE: the patches rolled from a stream of their own (`dike_mottle`), so no other roll of the map moves with them",
+  "code": "7797c4ef03a3042b",
+  "core": "488af99d92de3533",
+  "date": "2026-11-24",
+  "note": "an rng stream key, plumbing",
+  "pages": {},
+  "reads": "ec2b0c5aefdf8f74",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder/mottle.rs::dike#the dike mottled": {
+  "body": "74c79e837055e338",
+  "claim": "the dike mottled - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the band changes in width and is mottled, never a ruled line - mottled with patches of earth of different ages, as repairs are; before 449 T422 the band was one flat fill",
+  "code": "8827524e644eadf4",
+  "core": "488af99d92de3533",
+  "date": "2026-11-24",
+  "note": "patches spread across the band's varying breadth (the crest's mirror of the outer face, out to the outer face), so the band is no longer one flat fill",
+  "pages": {
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
+  },
+  "reads": "ec2b0c5aefdf8f74",
+  "research": "9d4f4eee3c609249",
+  "rests": [
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder/tests.rs::a_bank_s_patches_stand_within_its_breadth_of_its_edge#the polder's tests": {
+  "body": "1bee2abad0224ebf",
+  "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "66588ca80736c9de",
+  "core": "23a3b4c9677c3a92",
+  "date": "2026-11-24",
+  "note": "fixtures and assertions only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/polder/tests.rs::a_channel_through_the_reeds_is_lined_on_each_bank#the polder's tests": {
   "body": "8fe4c6d6680991a0",
   "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
@@ -44464,6 +44997,19 @@
   "date": "2026-11-22",
   "note": "assertions",
   "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder/tests.rs::a_polder_s_dike_and_its_ponds_banks_are_mottled_under_their_water#the polder's tests": {
+  "body": "a5c8e07500d2edf5",
+  "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "a87bb8c35aa306f7",
+  "core": "712e70af47a68e58",
+  "date": "2026-11-24",
+  "note": "fixtures and assertions only",
+  "pages": {},
+  "reads": "400e09ea8a816def",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -44705,6 +45251,18 @@
   "core": "bb090d66c45588b0",
   "date": "2026-11-22",
   "note": "an equality test against the plain search across six orientations and the mosaic, assertions only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder/tests.rs::the_dike_s_patches_stand_on_its_band_a_step_apart_in_its_tones#the polder's tests": {
+  "body": "51d630be09aeefe7",
+  "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "b8a289feab5a3f40",
+  "core": "9cea01a135bb9969",
+  "date": "2026-11-24",
+  "note": "fixtures and assertions only",
   "pages": {},
   "research": "",
   "rests": [],
@@ -45349,6 +45907,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/svg.rs::Svg.mottled#the mottle's drawing": {
+  "body": "8932ed589ab384eb",
+  "claim": "the mottle's drawing - CONVENTION: each patch an ellipse along the sheet's axes under its band's clip, the patches' own strength so those that overlap darken; the deleted village dike's drawing",
+  "code": "542d605d9fa70311",
+  "core": "2f85119b5f4ff93b",
+  "date": "2026-11-24",
+  "note": "ellipses lined up with the sheet's axes under an evenodd clip; fill-opacity on the group is inherited by each ellipse, so overlapping patches darken",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/svg.rs::Svg.polygon#the SVG writer": {
   "body": "51615b0acee6177b",
   "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
@@ -45473,6 +46043,18 @@
   "note": "test fixture",
   "pages": {},
   "reads": "066e9613b8fbd7d4",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/tests.rs::a_bare_winter_the_dry_ground_cannot_feed_is_rolled_again_as_barley#the driver's tests": {
+  "body": "b3f381d6f9cf615d",
+  "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "3d8f42d9e8a8bf65",
+  "core": "d02d2b0eb3c79481",
+  "date": "2026-11-24",
+  "note": "fixtures and assertions only",
+  "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -46470,14 +47052,50 @@
  },
  "rust/phases/src/field/build.rs::FieldOut#the stage's record": {
   "body": "7bf1a803ad7d9962",
+  "build": {
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
+   "dirty": {
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
+   }
+  },
   "claim": "the stage's record - NONE: the record's type, holding what `build` decides",
-  "code": "209f20212f9fb153",
-  "core": "bc43d65bd5b099e2",
+  "code": "773c80f52737274d",
+  "core": "17c3895ae2bd63b1",
   "date": "2026-11-01",
   "note": "record type",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::HemIn#the hem's inputs": {
@@ -46606,6 +47224,55 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/build.rs::Winter#the three outcomes": {
+  "body": "47e4b25331573011",
+  "claim": "the three outcomes - NONE: the record's type, holding what `barley_instead` decides",
+  "code": "bd46a80f79f5d612",
+  "core": "ba209f4d00349406",
+  "date": "2026-11-24",
+  "note": "an outcome type; it decides nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/build.rs::barley_instead#a bare winter only where the dry ground feeds the hamlet": {
+  "body": "868fe4696835e4e7",
+  "claim": "a bare winter only where the dry ground feeds the hamlet - where-a-farming-hamlet-grew-its-coarse-grain.drawing: a bare winter paddy is drawn only where the fan's dry ground can grow the hamlet's whole grain need, the toe and the whole wild middle together - asked of the hem as laid, the one place the room is known (the hem is laid after the seat, its columns ending where they pinch or meet): a rolled bare winter whose hem came out short is rolled again as barley, its grain on the drained paddy acre for acre and its dry fields on the toe (4 of 3,004 bare-winter wild rolls short before 449 T418, measured 2026-11-24 over seeds 1 to 1,500 at ten sizes and falls)",
+  "code": "3ae92f6c823f661c",
+  "core": "3417ad1d96538491",
+  "date": "2026-11-24",
+  "note": "a short rolled bare winter becomes barley; its dry need is the need less the drained paddy, counted acre for acre, and its hem is re-laid from the toe (barley=true)",
+  "pages": {
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
+  },
+  "reads": "917c9cf77e4b8c08",
+  "research": "8159982a6874674a",
+  "rests": [
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:973ce82b528d1f80",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/build.rs::barley_instead#a pinned bare winter the ground cannot feed": {
+  "body": "868fe4696835e4e7",
+  "claim": "a pinned bare winter the ground cannot feed - where-a-farming-hamlet-grew-its-coarse-grain.drawing: the same rule, which the page states with no exception - a spec's pin is never rolled again, so a pinned bare winter whose hem came out short is drawn on no map: the roll is refused by name (`Winter::Unfed`), on a wild middle and on a cleared one alike",
+  "code": "19ab2ff387f680f1",
+  "core": "3417ad1d96538491",
+  "date": "2026-11-24",
+  "note": "a pinned crop (`!winter_rolled`) returns Unfed before any check on the middle, so wild and cleared middles are refused alike",
+  "pages": {
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
+  },
+  "reads": "917c9cf77e4b8c08",
+  "research": "8159982a6874674a",
+  "rests": [
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/field/build.rs::barley_odds#the winter crop's odds": {
   "body": "f4d21c5b6e42370b",
   "claim": "the winter crop's odds - the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing: a settlement's drainage and the nearness of a town, whose manure a second crop needed, set the odds; how the two weigh against each other a GUESS there - the drained share of the paddy beside a town and half of it far from one, the deleted `WinterCropKnob.weights_for`",
@@ -46626,24 +47293,49 @@
  "rust/phases/src/field/build.rs::build#barley on a cleared middle": {
   "body": "921a6e68de7fc0e2",
   "build": {
-   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
    "dirty": {
-    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
-    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
-    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
-    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
-    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
    }
   },
   "claim": "barley on a cleared middle - where-a-farming-hamlet-grew-its-coarse-grain.drawing: on a fan whose middle is already cleared, the cleared ground is drawn only as the hem along the whole canal, which cannot hold the whole need, so such a hamlet is always drawn growing its barley on its paddy - an unpinned winter crop on a cleared middle is barley whatever the draw",
-  "code": "52f14bba1bdb26fe",
-  "core": "6da5daa966ce771b",
+  "code": "e6f49d8241015730",
+  "core": "3ece4e063b4d8a4c",
   "date": "2026-11-24",
   "note": "on a cleared fan_middle the odds are 1.0, so an unpinned roll is always barley",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
-  "reads": "4c364682cebf4c19",
+  "reads": "917c9cf77e4b8c08",
   "research": "8159982a6874674a",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
@@ -46654,24 +47346,49 @@
  "rust/phases/src/field/build.rs::build#barley on the drained paddy": {
   "body": "921a6e68de7fc0e2",
   "build": {
-   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
    "dirty": {
-    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
-    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
-    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
-    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
-    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
    }
   },
   "claim": "barley on the drained paddy - where-a-farming-hamlet-grew-its-coarse-grain.drawing: barley followed the rice on a paddy that drained, never on a wet one, and a drained paddy's winter barley is counted acre for acre against the dry field it spares",
-  "code": "9472a20413f3d221",
-  "core": "6da5daa966ce771b",
+  "code": "98825b930d923124",
+  "core": "3ece4e063b4d8a4c",
   "date": "2026-11-24",
   "note": "only the drained area (wet low-row and rested plots excluded) is taken from the need, acre for acre, when the crop is barley",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
-  "reads": "4c364682cebf4c19",
+  "reads": "917c9cf77e4b8c08",
   "research": "8159982a6874674a",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
@@ -46683,22 +47400,47 @@
  "rust/phases/src/field/build.rs::build#fields side by side": {
   "body": "921a6e68de7fc0e2",
   "build": {
-   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
    "dirty": {
-    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
-    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
-    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
-    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
-    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
    }
   },
   "claim": "fields side by side - GUESS: the record silent on where a settlement's tracts stood to each other; across the fall, each fan's half-breadths apart with the brook between them, its width and twice its skirt and wander",
-  "code": "a8123a09bac27949",
-  "core": "6da5daa966ce771b",
+  "code": "cd78a7cf12cfeff7",
+  "core": "3ece4e063b4d8a4c",
   "date": "2026-11-24",
   "note": "fields step across the fall by the half-breadths plus the brook's width, skirt and wander; the record is silent on where tracts stood",
   "pages": {},
-  "reads": "4c364682cebf4c19",
+  "reads": "917c9cf77e4b8c08",
   "research": "",
   "triaged": "2026-11-24",
   "verdict": "IN-STEP"
@@ -46706,24 +47448,49 @@
  "rust/phases/src/field/build.rs::build#the brook's flank unhemmed": {
   "body": "921a6e68de7fc0e2",
   "build": {
-   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
    "dirty": {
-    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
-    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
-    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
-    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
-    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
    }
   },
   "claim": "the brook's flank unhemmed - GUESS: where-a-farming-hamlet-grew-its-coarse-grain.drawing silent on dry plots between canal B and the brook; that flank left to the brook's skirt, the hem the high margin's",
-  "code": "a5f555b2c765c8cc",
-  "core": "6da5daa966ce771b",
+  "code": "dfbf5d0b9b81389f",
+  "core": "3ece4e063b4d8a4c",
   "date": "2026-11-24",
   "note": "the hem line runs the far flank (-brook_side) and, where cleared, across the head, never down the brook's flank; the page does not place dry plots there",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
-  "reads": "4c364682cebf4c19",
+  "reads": "917c9cf77e4b8c08",
   "research": "8159982a6874674a",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
@@ -46734,43 +47501,104 @@
  },
  "rust/phases/src/field/build.rs::build#the climb's order": {
   "body": "5a9d1fe66c5832d7",
+  "build": {
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
+   "dirty": {
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
+   }
+  },
   "claim": "the climb's order - GUESS where-a-farming-hamlet-grew-its-coarse-grain.drawing: the clearing starts from the plots nearest the toe, the page's own GUESS - laid band by band (`field::dry::hem`), each band a tract's two to four strips deep along the whole flank from the foot to the head before the next band behind it, the last band stopping where the grain is held; so a bare-winter hamlet's dry fields line its whole far flank, deepest at the foot (Inashiro, measured 2026-11-24: 85 plots holding its 12.75 acres, nine strips deep at the foot stepping to five at the head)",
-  "code": "c44eafe940fc21fa",
-  "core": "6da5daa966ce771b",
+  "code": "0d8f8693fbc39495",
+  "core": "3ece4e063b4d8a4c",
   "date": "2026-11-24",
   "note": "the line runs from the foot to the head, so the clearing starts at the toe, as the page's own GUESS says; the band depth matches the two-to-four-strip tract",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
-  "reads": "4c364682cebf4c19",
+  "reads": "917c9cf77e4b8c08",
   "research": "8159982a6874674a",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:348cf5c8d3c7cc78"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the fields under the cap": {
   "body": "921a6e68de7fc0e2",
   "build": {
-   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
    "dirty": {
-    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
-    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
-    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
-    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
-    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
    }
   },
   "claim": "the fields under the cap - how-much-farmland-a-settlement-works-and-in-what-tracts: a settlement with more farmland had several tracts - the paddy shared evenly among them, a GUESS (no page gives how a settlement's tracts compare)",
-  "code": "b5e79551719ae0b1",
-  "core": "6da5daa966ce771b",
+  "code": "11df5c10b5e0e694",
+  "core": "3ece4e063b4d8a4c",
   "date": "2026-11-24",
   "note": "several tracts when the paddy exceeds the cap, the paddy split evenly among them; the even split is a GUESS",
   "pages": {
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html": "e7ac9b403c0f1fdd"
   },
-  "reads": "4c364682cebf4c19",
+  "reads": "917c9cf77e4b8c08",
   "research": "47696314c55f9345",
   "rests": [
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:7316d44de7260de8",
@@ -46782,24 +47610,49 @@
  "rust/phases/src/field/build.rs::build#the grain owed": {
   "body": "921a6e68de7fc0e2",
   "build": {
-   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
    "dirty": {
-    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
-    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
-    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
-    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
-    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
    }
   },
   "claim": "the grain owed - where-a-farming-hamlet-grew-its-coarse-grain.drawing: about 0.85 acre a household (`GRAIN_ACRES_PER_HOUSEHOLD`), the need handed on to the hem stage, which reports the grain drawn and the room left (T28)",
-  "code": "dff6695d4c6e158e",
-  "core": "6da5daa966ce771b",
+  "code": "aed4392f9e2fa831",
+  "core": "3ece4e063b4d8a4c",
   "date": "2026-11-24",
   "note": "households × 0.85 acre, handed on to the hem stage",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
-  "reads": "4c364682cebf4c19",
+  "reads": "917c9cf77e4b8c08",
   "research": "8159982a6874674a",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:cf41fc04e040d5c8"
@@ -46810,22 +47663,47 @@
  "rust/phases/src/field/build.rs::build#the hem on the first field": {
   "body": "921a6e68de7fc0e2",
   "build": {
-   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
    "dirty": {
-    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
-    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
-    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
-    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
-    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
    }
   },
   "claim": "the hem on the first field - GUESS: the record silent on which of several fields a hamlet's dry hem fringes; the first, on its flank away from the brook, its inputs handed on (`Field.hem`)",
-  "code": "a8367bec83c2ab02",
-  "core": "6da5daa966ce771b",
+  "code": "113d673ff1d1b60f",
+  "core": "3ece4e063b4d8a4c",
   "date": "2026-11-24",
   "note": "fields[0], on the flank away from the brook, its inputs set in Field.hem; the record is silent on which field",
   "pages": {},
-  "reads": "4c364682cebf4c19",
+  "reads": "917c9cf77e4b8c08",
   "research": "",
   "rests": [],
   "triaged": "2026-11-24",
@@ -46833,50 +47711,75 @@
  },
  "rust/phases/src/field/build.rs::build#the hem's line": {
   "body": "5a9d1fe66c5832d7",
+  "build": {
+   "commit": "bb0c821c91344ee662101812e626c37b9b44b251",
+   "dirty": {
+    "rust/gate/CLAUDE.md": "b10fcea899f6ad7f4d8926a572e2f93b1214e2a8",
+    "rust/gate/crates/bundle/src/record/bundle/check.rs": "e7d83a17459c17f0db4881c7aac66b9afc94cb82",
+    "rust/gate/crates/claims/src/claims.rs": "811fbbfcfd750e2a5f2b3ce96f584be265df8d93",
+    "rust/gate/crates/claims/src/claims/bundle.rs": "41b3c4bfac5a621ee30c9cb1955b762ed26ef839",
+    "rust/gate/crates/claims/src/claims/carry.rs": "9c96345ff2b9c8ba3eabf85791a56a563bc784bb",
+    "rust/gate/crates/claims/src/claims/commands.rs": "890627626e7b45d5e8ccdd2373f133cbb114ded0",
+    "rust/gate/crates/claims/src/claims/commands/tests.rs": "ce53541ba941250de0391211bf45facdf634a01f",
+    "rust/gate/crates/claims/src/claims/drawn.rs": "986d7c0991660865d09f6637993058f7b75ed31e",
+    "rust/gate/crates/claims/src/claims/index.rs": "d727bc43efbbbdc9d8922a9189ba6b42ac28cc01",
+    "rust/gate/crates/claims/src/claims/index/tests.rs": "3d794e7e7609496a3137bcffe6fda8e71a43539b",
+    "rust/gate/crates/claims/src/claims/reply.rs": "ae9e3b0e23658b88e3f9625339dd9e9f0f97a74b",
+    "rust/gate/crates/claims/src/claims/reply/tests.rs": "379456f00a34578d596b1278f1a699e635d9e40a",
+    "rust/gate/crates/claims/src/claims/report.rs": "3aa6139abd7f075cd5b1122d0f9541df01b906fb",
+    "rust/gate/crates/claims/src/claims/report/tests.rs": "da97bd8714e3939d33e88a0ac7f9014a864934b0",
+    "rust/gate/crates/claims/src/claims/silent.rs": "a63360555b95102904c9dc57c1554c40fad87e23",
+    "rust/gate/crates/claims/src/claims/silent/tests.rs": "92490d1c467fbc372572ced298b8999502916b91",
+    "rust/gate/crates/claims/src/claims/triage.rs": "0ea849a3fae2028a249b408bb1c9f8b19370e89b",
+    "rust/gate/crates/claims/src/claims/triage/tests.rs": "5a167273ede4a7b48e0fb655d5670c26d5cb06a5",
+    "rust/gate/crates/core/src/record.rs": "7fb3263b9e4bc6b3ac0342eead9cb795b1cc53c7",
+    "rust/gate/crates/core/src/record/effect.rs": "d0a132beb26e207d094b16043f7446c2a6c4c56d",
+    "rust/gate/crates/owed/src/record/owed/answers.rs": "4563ba9ffc9c05060b22f4de91bd468b6e373a98",
+    "rust/gate/crates/owed/src/record/owed/answers/cli.rs": "71d003a51de699c5f24d967b37c46609d2c612c6",
+    "rust/gate/crates/owed/src/record/owed/tests.rs": "928b2b484c993d44a793dfed7ea3dce8e9444ef8",
+    "rust/gate/crates/owed/src/record/owed/tests/answer_modes.rs": "7d8ecee63ca3f6591b67d1f39510816e8f5f1f99",
+    "rust/gate/crates/reviews/src/reviews/prereq.rs": "295b1ac35aac1a19522fdbf1b7d59f1908464523",
+    "rust/gate/crates/reviews/src/reviews/prereq/scoped/tests.rs": "d232bc7fd1b685f1bddfbfc790c7bd622a820753",
+    "rust/gate/crates/reviews/src/reviews/prereq/tests.rs": "7ab8dede366bf7b2479fcb109eb49f32d6cd22cd",
+    "rust/gate/crates/reviews/src/reviews/prereq/verdict.rs": "b807c8c0205d06b5301a826dc178befec8ff0494",
+    "rust/gate/crates/reviews/src/reviews/snapshot.rs": "6fc011dd70d890806009ea1d2f7a776546a8cfc4",
+    "rust/gate/crates/reviews/src/reviews/snapshot/tests.rs": "af910217bed6516016942facfd90403c7b0dc9d2"
+   }
+  },
   "claim": "the hem's line - where-a-farming-hamlet-grew-its-coarse-grain.drawing: where the middle is left wild and the paddy lies bare over the winter the dry plots climb from the toe into the middle, as far as `hem_bounds` lets them, and where the paddy carries barley its dry fields stay on the toe; on a fan whose middle is cleared, the cleared ground is drawn only as the hem along the whole canal, one band of its tracts whatever the grain asks - the line canal A's, the first field's far flank up from its foot: to the head on a bare-winter wild middle, only up the toe (`TOE_SHARE`) on a barley one, and on across the head where cleared; the line and its bounds handed on to the hem stage, which lays the hem after the seat (T28)",
-  "code": "d78df94be1996259",
-  "core": "6da5daa966ce771b",
+  "code": "166139cd33326098",
+  "core": "3ece4e063b4d8a4c",
   "date": "2026-11-24",
   "note": "wild middle and bare winter: the line runs foot to head. Wild middle and barley: rise is 1 - TOE_SHARE, so the line runs u from L to 2L/3, which is the toe only. Cleared middle: the line carries on across the head with one band, so the whole canal is hemmed",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
-  "reads": "4c364682cebf4c19",
+  "reads": "917c9cf77e4b8c08",
   "research": "8159982a6874674a",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the winter crop after the fields": {
-  "body": "921a6e68de7fc0e2",
-  "build": {
-   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
-   "dirty": {
-    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
-    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
-    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
-    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
-    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
-   }
-  },
+  "body": "5e65807ce0535f23",
   "claim": "the winter crop after the fields - the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing: a settlement's drainage and the nearness of a town set the winter crop's odds - an unpinned winter crop rolled once the fields are laid (`winter_crop`), at the drained share of the laid paddy, halved far from a town (`barley_odds`); a spec's pin stands",
-  "code": "e9dffe266ea2707e",
-  "core": "6da5daa966ce771b",
+  "code": "45b50d08a84bf24c",
+  "core": "3ece4e063b4d8a4c",
   "date": "2026-11-24",
-  "note": "an unpinned winter_crop is rolled after the fields are laid, at the drained share of the laid paddy times the town-nearness factor; a pin stands, and how the two weigh is a GUESS there",
+  "note": "an unpinned winter crop is rolled once the fields are laid, at odds of the drained share times the town-nearness factor; a pinned crop stands through `rolled`",
   "pages": {
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
   },
-  "reads": "4c364682cebf4c19",
+  "reads": "917c9cf77e4b8c08",
   "research": "7b19741c5250f0fe",
   "rests": [
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:1707d1c770884a9d",
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:d90b5fa1bec814fe"
   ],
-  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::drained_area#no barley on a resting plot": {
@@ -46964,6 +47867,38 @@
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:fe49530da0a21b10"
   ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/build.rs::hem_in#the hem's line": {
+  "body": "36af51aa23a3824d",
+  "claim": "the hem's line - where-a-farming-hamlet-grew-its-coarse-grain.drawing: where the middle is left wild and the paddy lies bare over the winter the dry plots climb from the toe into the middle, and where the paddy carries barley its dry fields stay on the toe; a cleared middle drawn only as the hem along the whole canal - the line canal A's, the first field's far flank up from its foot: to the head on a bare-winter wild middle, only up the toe (`TOE_SHARE`) on a barley one, and on across the head where cleared",
+  "code": "01b96181b5d7ca9e",
+  "core": "8b5a39d6654cea0e",
+  "date": "2026-11-24",
+  "note": "the line runs up canal A's far flank from the foot: to the head on a bare-winter wild middle, only the toe's third (1 - TOE_SHARE) on a barley wild middle, and on across the head where the middle is cleared",
+  "pages": {
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
+  },
+  "reads": "f2a188db8778de04",
+  "research": "8159982a6874674a",
+  "rests": [
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/build.rs::hem_in#the line's steps": {
+  "body": "36af51aa23a3824d",
+  "claim": "the line's steps - NONE: 24 steps a flank, the drawn course's own sampling",
+  "code": "35f0f1d56db3f68e",
+  "core": "8b5a39d6654cea0e",
+  "date": "2026-11-24",
+  "note": "24 steps is only how finely the line is sampled",
+  "pages": {},
+  "reads": "f2a188db8778de04",
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::laid_fan#the fan": {
