@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-24T22:29:38Z",
+  "target": "plan-gate tick 449-rust-codebase",
+  "commit": "221a3c847a",
+  "why": "449's stale blocks are sections of tasks filed and not started (T417, T425, T427), T415's section short one late claim, and T418's and T423's CLEAR sections with wording notes left unapplied; 451's are T203's withdrawn heading and the unfilled template sections of T226-T232, filed and not started; 452's is T27's unfilled template section"
+}
