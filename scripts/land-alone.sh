@@ -181,9 +181,11 @@ def stage_review(head, work, tasks):
         out['block_reviews'] = reviews
     return head if out == h else dump(out)
 
-def merge3(base, ours, theirs, hunks=True):
+def merge3(base, ours, theirs, hunks=True, union=False):
     # git's line merge of three texts, and (`hunks`) of each hunk it leaves where both sides only added lines, the side whose added
-    # lines hold the other's in order (the same lines written on both sides, one side's with more: 451 T105); None while any is more
+    # lines hold the other's in order (the same lines written on both sides, one side's with more: 451 T105) - or, `union` (an
+    # append-only `.jsonl` log: the arbiter's, 451 T202), both sides' lines, the clone's first and the tip's it does not hold after;
+    # None while any is more
     with tempfile.TemporaryDirectory() as d:
         tmp = [os.path.join(d, k) for k in ('ours', 'base', 'theirs')]
         for t, x in zip(tmp, (ours, base, theirs)):
@@ -206,15 +208,19 @@ def merge3(base, ours, theirs, hunks=True):
             part = 'theirs'
         elif part == 'theirs' and mark == b'>' * 31 + b' ':
             o, t = hunk['ours'], hunk['theirs']
-            if hunk['base'] or not (holds(o, t) or holds(t, o)):
+            if hunk['base'] or not (union or holds(o, t) or holds(t, o)):
                 return None
-            out += o if holds(o, t) else t
+            out += o + [x for x in t if x not in o] if union else o if holds(o, t) else t
             part = None
         elif part:
             hunk[part].append(l)
         else:
             out.append(l)
     return b''.join(out)
+
+def unblank(text):
+    # a piece's lines but its blank ones
+    return [l for l in text.splitlines() if l.strip()]
 
 def holds(big, small):
     # `small`'s lines in `big`, in their order
@@ -230,7 +236,9 @@ def merge_pieces(name, base, ours, theirs):
     out, olist = list(t.items()), list(o.items())
     past = {k for k in t if k not in b and k not in o}
     for k, v in olist:
-        if b.get(k) == v or t.get(k) == v:
+        # a piece the clone changed only in its blank lines is no change of the clone's (451 T202: the blank line the clone put after
+        # an archive mark the tick then rewrote gave up the take twice on 2026-11-23, T187+T191's and T184+T196's)
+        if b.get(k) == v or t.get(k) == v or (k in b and unblank(b[k]) == unblank(v)):
             continue
         if k in b and k not in t:
             return None, k  # the tip archived or removed a piece the clone changed
@@ -314,6 +322,71 @@ def stage(root, feature, tasks):
     git(root, 'reset', '-q', '--', *staged)
     print('staged\t' + ' '.join(staged))
 
+def edit_inputs(lines):
+    # each Edit end's call - its `old_string` and `new_string` - read from its agent's transcript (`<projects>/*/<sid>.jsonl`, or
+    # `<sid>/subagents/agent-<by>.jsonl`) by its tool-use id; None where any cannot be read (the event line carries only digests)
+    projects = os.environ.get('L7R_PROJECTS_DIR') or os.path.expanduser('~/.claude/projects')
+    want, out = {}, {}
+    for d in lines:
+        if d is None or not d.get('id') or not d.get('sid'):
+            return None
+        tail = f"{d['sid']}/subagents/agent-{d['by']}.jsonl" if d.get('by') else f"{d['sid']}.jsonl"
+        found = glob.glob(os.path.join(projects, '*', tail))
+        if not found:
+            return None
+        want.setdefault(found[0], set()).add(d['id'])
+    for path, ids in want.items():
+        for l in open(path, errors='replace'):
+            if '"tool_use"' not in l or not any(i in l for i in ids):
+                continue
+            try:
+                blocks = json.loads(l)['message']['content']
+            except (ValueError, KeyError, TypeError):
+                continue
+            for b in blocks if isinstance(blocks, list) else []:
+                if isinstance(b, dict) and b.get('id') in ids and isinstance(b.get('input'), dict):
+                    i = b['input']
+                    out[b['id']] = (str(i.get('old_string', '')), str(i.get('new_string', '')), i.get('replace_all') is True)
+    return [out[d['id']] for d in lines] if all(d['id'] in out for d in lines) else None
+
+def inside(line, s):
+    # is the diff's `line` one an edit's string `s` wrote: a whole line of it, the string itself within the line (an edit inside one
+    # line), or its first line's end or last line's start (a string cut mid-line)
+    if not line.strip() or not s.strip():
+        return False
+    parts = s.split('\n')
+    if len(parts) == 1:
+        return s.strip() in line
+    first, last = parts[0], parts[-1]
+    return line in parts[1:-1] or (first.strip() and line.endswith(first)) or (last.strip() and line.startswith(last))
+
+def leaves_change(root, rel, lines):
+    # (451 T202) does a task's run of edits of `rel` leave a change of its own: a hunk of the file's uncommitted diff with a line one
+    # of its edits wrote (`new_string`) or removed (`old_string`)? T197's builder added the REJUDGE= lines to the Makefile and took them
+    # out again, and T195+T197's landing was refused on T198's lines there (observed 2026-11-23). A write no Edit's strings show (a
+    # Write, a Bash call's), or an Edit whose call cannot be read, leaves one: failing toward the refusal, never a landing short of
+    # the task's own edit. A `replace_all` edit's string is one the file repeats, so another task's line holding it is no line the
+    # edit wrote (451 T202's MODE 4, D8): its one-line string counts only as one of its replacements - the line with the string put
+    # back on the hunk's other side.
+    calls = edit_inputs(lines)
+    if calls is None:
+        return True
+    diff = git(root, 'diff', '-U0', 'HEAD', '--', rel).stdout.decode(errors='replace').splitlines()
+    hunks, hunk = [], None
+    for l in diff:
+        if l.startswith('@@'):
+            hunk = []
+            hunks.append(hunk)
+        elif hunk is not None and l[:1] in '+-' and not l.startswith(('+++', '---')):
+            hunk.append(l)
+    def wrote(l, h, old, new, every):
+        if not inside(l[1:], new if l[0] == '+' else old):
+            return False
+        if not every or '\n' in old or '\n' in new:
+            return True
+        return ('-' + l[1:].replace(new, old) if l[0] == '+' else '+' + l[1:].replace(old, new)) in h
+    return any(wrote(l, h, *call) for h in hunks for l in h for call in calls)
+
 def split(root, events, feature, tasks):
     # step 3: the landing tasks' own files - those a line filed under one of them names, by the closing checks' attribution
     # (`scripts/gates/closing-checks.sh`, 451 T86, T93; read here since 451 T96): an edit tool's end its path, a Bash call's end
@@ -332,7 +405,7 @@ def split(root, events, feature, tasks):
                 landed.setdefault((m.group(1), t), at)
         elif l:
             last.setdefault(l, at)
-    pre, own, named, others = root.rstrip('/') + '/', set(), set(), {}
+    pre, own, named, others, calls = root.rstrip('/') + '/', set(), set(), {}, {}
     sectioned = {f'specs/{feature}/{f}' for f in SECTIONED}
     for p in sorted(glob.glob(os.path.join(events, '*.jsonl'))):
         stem = os.path.basename(p)[:-6]
@@ -359,10 +432,15 @@ def split(root, events, feature, tasks):
                 # the sectioned files are staged by section (step 2): what is left uncommitted in them is other tasks'
                 if mine and rel not in sectioned:
                     own.add(rel)
+                    calls.setdefault(rel, []).append(d if edit and d.get('tool') == 'Edit' else None)
                 elif not mine and rel not in sectioned:
                     others.setdefault(rel, set()).add(d['task'])
+    put_back = {r for r in own if not leaves_change(root, r, calls[r])}
+    own -= put_back
     for r in sorted(own):
         print('own\t' + r)
+    for r in sorted(put_back):
+        print('putback\t' + r)
     for r in sorted(dirty - named):
         print('unnamed\t' + r)
     # another task's, listed by task, so a line filed under a wrong number is seen (451 T96: T101's builder, briefed as T100, wrote
@@ -396,7 +474,7 @@ def take(root, tip, feature):
         # piece by piece, its conflict named by the piece (a JSON or ledger hunk is never taken whole); any other, its pure-addition
         # hunks taken (merge3)
         base, theirs = show(old, p), show(new, p)
-        out = merge3(base, ours, theirs, p not in sectioned)
+        out = merge3(base, ours, theirs, p not in sectioned, p.endswith('.jsonl'))
         if out is not None:
             return out, None
         if p not in sectioned:
@@ -460,6 +538,8 @@ staged=$(py stage "$ROOT" "$F" "$T") || die "the task's own sections could not b
 split=$(py split "$ROOT" "${L7R_EVENTS_DIR:-$COMMON/l7r-events}" "$F" "$T") || die "the event log could not be read (above)"
 own=$(printf '%s\n' "$split" | sed -n 's/^own\t//p')
 [ -z "$own" ] || die "$T's own edits are uncommitted - commit them, then land again: git -C $ROOT commit -m \"<what>\" -- $(printf '%s ' $own)"
+putback=$(printf '%s\n' "$split" | sed -n 's/^putback\t//p')
+[ -z "$putback" ] || say "left uncommitted in the clone, not $T's own: its edits there were put back, leaving no change of its own (451 T202): $(printf '%s ' $putback | cut -c1-600)"
 unnamed=$(printf '%s\n' "$split" | sed -n 's/^unnamed\t//p')
 [ -z "$unnamed" ] || say "left uncommitted in the clone, not landed (no task's line names them: a write the walk cannot see - a make target's, a generator's - is named by none): $(printf '%s ' $unnamed | cut -c1-600)"
 other=$(printf '%s\n' "$split" | sed -n 's/^other\t//p')

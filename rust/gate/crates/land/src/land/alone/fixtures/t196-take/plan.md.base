@@ -1,0 +1,10 @@
+### T187 Performance checklist (docs/performance-checklist.md)
+
+6. **Did any map move, and does it still keep the research?** No map moved: the record and its tooling only.
+
+<!-- plan-archive: T185 to T185 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+<!-- plan-archive: T186 to T186 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+### T196 (the gap audit 2026-11-23, items 5, 6 and 7, `/home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md`: claims and later scoped rounds read only the page ci
+
+- **Approach**: one follower, shared. `change::follow` (owed crate, beside `pointer_targets`) is the core `modals::follo
+- **Measured** 2026-11-23, `make claims-owed` on the live clone with this change and T184's uncommitted pages: "no claim

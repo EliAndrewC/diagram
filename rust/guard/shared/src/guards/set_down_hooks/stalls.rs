@@ -18,13 +18,16 @@
 //! interim agents that never notified again, their work done by others; a builder (`builder_brief`) of a task still open named 3 in
 //! all: T184's, and 451 T51's and 449 T158's, abandoned a day earlier with their tasks still open. Each is said once (`idle`).
 
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::path::Path;
 use std::time::{Duration, SystemTime};
 
 use serde_json::Value;
 
-use super::{builders, open_boxes, read_in_order, subagents};
+use super::{
+    builders, holds, instant, landings, open_boxes, read_in_order, rows, subagents, waits,
+};
+use crate::state::field;
 
 /// How long a builder with no live work may be silent before it is named, in seconds: `L7R_STALL_SECS`, a GUESS of 600. Measured
 /// 2026-11-23 over the 479 subagent transcripts written that day: the longest silence of an agent at work - a gap that ends in its own
@@ -90,16 +93,68 @@ fn age(file: &Path, now: SystemTime) -> Option<Duration> {
     now.duration_since(at).ok()
 }
 
-/// Whether feature `number` has task `id` open in the clone at `root` (`specs/<number>-*/tasks.md`'s `- [ ]` lines).
-fn open(root: &Path, number: &str, ids: &[String]) -> bool {
+/// Whether one of a builder's tasks `ids` of feature `number` is IN PROGRESS NOW in the clone at `root` (451 T201; the coordinator's
+/// live false positives of 2026-11-23: 451 T51's builder, its line `(waits: T138 lands)` with T138 open, and 449 T158's, done and
+/// parked, 449 set down at 2026-11-23T10:34:24Z after the task's start at 2026-11-22T06:12:24Z - both named only because their boxes
+/// were open). A task is in progress where its box is open (`specs/<number>-*/tasks.md`'s `- [ ]` lines), it is STARTED since its
+/// last landing - a `task-starts.jsonl` row of its own later than that landing (the feature's event log, [`landings`]), or the
+/// clone's active mark (`make task-start`'s `active-task`) naming it - and nothing holds it: no unmet `(waits: ...)` ([`waits`], the
+/// reading the nothing-running refusal shares), no binding ruling holding it by name ([`holds::named`]), no `make set-down` of its
+/// feature at or after its last start (`active`'s set-down test). A ruling that holds NEW work ([`holds::held`]) does not hold it: it
+/// holds the tasks not yet started (T183), and T184's builder - started 2026-11-23T19:22:55Z under 451's hold, after a page
+/// session's set-down at 11:06:29 - is the one T193 was built to name. A log that cannot be read starts nothing: it fails toward
+/// silence, as the idle check's other readers do.
+fn in_progress(root: &Path, number: &str, ids: &[String]) -> bool {
+    let git = crate::guards::event_log_hooks::common_git_dir(root);
+    let starts = rows(&git.join("task-starts.jsonl")).unwrap_or_default();
+    let downs = rows(&git.join("set-downs.jsonl")).unwrap_or_default();
+    let mark = std::fs::read_to_string(git.join("active-task"))
+        .ok()
+        .and_then(|t| serde_json::from_str::<Value>(&t).ok())
+        .unwrap_or(Value::Null);
+    let mut lands = HashMap::new();
     crate::speckit::feature_dirs(&root.join("specs"))
         .iter()
-        .filter(|d| {
-            d.file_name()
-                .is_some_and(|n| n.to_string_lossy().starts_with(&format!("{number}-")))
+        .filter_map(|d| {
+            let feature = d.file_name()?.to_string_lossy().into_owned();
+            let text = std::fs::read_to_string(d.join("tasks.md")).ok()?;
+            feature
+                .starts_with(&format!("{number}-"))
+                .then_some((feature, text))
         })
-        .filter_map(|d| std::fs::read_to_string(d.join("tasks.md")).ok())
-        .any(|text| open_boxes(&text).iter().any(|(id, _)| ids.contains(id)))
+        .any(|(feature, text)| {
+            let boxes = open_boxes(&text);
+            let landed = landings(root, &feature).unwrap_or_default();
+            let named = holds::named(root, &feature);
+            let mine =
+                |r: &&Value, id: &str| field(r, "feature") == feature && field(r, "task") == id;
+            boxes
+                .iter()
+                .filter(|(id, _)| ids.contains(id))
+                .any(|(id, title)| {
+                    let start = starts
+                        .iter()
+                        .filter(|r| mine(r, id))
+                        .map(|r| field(r, "utc"))
+                        .max();
+                    let marked = field(&mark, "feature") == feature
+                        && mark["tasks"]
+                            .as_array()
+                            .is_some_and(|t| t.iter().any(|t| t == id.as_str()));
+                    let since_landing = start
+                        .and_then(instant)
+                        .is_some_and(|at| landed.get(id).is_none_or(|l| at > *l));
+                    let set_down = start.is_some_and(|s| {
+                        downs
+                            .iter()
+                            .any(|r| field(r, "feature") == feature && field(r, "utc") >= s)
+                    });
+                    (since_landing || marked)
+                        && !set_down
+                        && !named.contains(id)
+                        && !waits(root, &feature, &boxes, (id, title), &mut lands).unwrap_or(true)
+                })
+        })
 }
 
 /// The builders the session's transcript reads as running, of a task still open in the clone at `root`, that have no live work by
@@ -139,7 +194,7 @@ pub(super) fn stalled(
             .ids
             .keys()
             .any(|w| live.contains(w) || age(&own(w), now).is_some_and(|a| a <= bound));
-        if !open(root, &number, &tasks) {
+        if !in_progress(root, &number, &tasks) {
             continue;
         }
         if busy {

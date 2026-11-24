@@ -1,0 +1,12 @@
+### T187 Performance checklist (docs/performance-checklist.md)
+
+6. **Did any map move, and does it still keep the research?** No map moved: the record and its tooling only.
+
+<!-- plan-archive: T185 to T185 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+<!-- plan-archive: T196 to T186 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+<!-- plan-archive: T196 to T196 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+### T193 (the GM 2026-11-23, the task line; observed 2026-11-23: 451 T184's builder `a676c53072fd7258b` waited from 20:27:39Z to 21:35 on a watch that had ended
+
+- **What happened, measured 2026-11-23** (the coordinator's transcript `c6fd72d1-...jsonl`, its `subagents/` directory, 
+- **Approach**: a new `set_down_hooks/stalls.rs`. A builder (`builder_brief`: the session's own dispatch, its descriptio
+

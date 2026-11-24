@@ -328,10 +328,12 @@ fn a_watch_that_ended_after_the_stop_leaves_its_builder_named_with_no_later_stop
                "background_tasks": tasks})
     };
     let watch = json!([{"id": "bx5", "type": "shell", "command": WATCH}]);
-    assert_eq!(
-        idle_check(&input(watch.clone())),
-        None,
-        "the list as the Stop gave it"
+    // the list as the Stop gave it: the watch reads live to the end of the wait, so the builder is never named - only, since 451
+    // T201, the watch handed on to the next check
+    let kept = idle_check(&input(watch.clone())).expect("handed on");
+    assert!(
+        kept.starts_with("IDLE CHECK: ") && !kept.contains("STALLED"),
+        "the list as the Stop gave it: {kept}"
     );
     let blind = Table {
         looks: vec![None],
@@ -339,33 +341,36 @@ fn a_watch_that_ended_after_the_stop_leaves_its_builder_named_with_no_later_stop
         stale: Vec::new(),
         cmds: Vec::new(),
     };
-    assert_eq!(
+    // the watch still live: the builder is not named, the watch handed on (451 T201)
+    let kept = |said: Option<String>, why: &str| {
+        let said = said.unwrap_or_default();
+        assert!(
+            said.starts_with("IDLE CHECK: ") && !said.contains("STALLED"),
+            "{why}: {said}"
+        );
+    };
+    kept(
         idle_check_with(&input(watch.clone()), &blind),
-        None,
-        "an unread table keeps the list"
+        "an unread table keeps the list",
     );
-    assert_eq!(
+    kept(
         idle_check_with(&input(watch.clone()), &table(&[&[("bx5", 40)]], &[])),
-        None,
-        "a shell still writing"
+        "a shell still writing",
     );
     let live = running(table(&[&[]], &[]), &[(41, WATCH_LINE)]);
-    assert_eq!(
+    kept(
         idle_check_with(&input(watch.clone()), &live),
-        None,
-        "its command still runs"
+        "its command still runs",
     );
     let typed = json!([{"id": "bx5", "type": "monitor", "command": WATCH}]);
-    assert_eq!(
+    kept(
         idle_check_with(&input(typed), &live),
-        None,
-        "typed monitor: read the same"
+        "typed monitor: read the same",
     );
     let short = json!([{"id": "bx5", "type": "shell", "command": "sleep 60"}]);
-    assert_eq!(
+    kept(
         idle_check_with(&input(short), &table(&[&[]], &[])),
-        None,
-        "too short to tell"
+        "too short to tell",
     );
     let text = idle_check_with(&input(watch), &table(&[&[]], &[]))
         .expect("named once its watch has ended");
@@ -377,7 +382,7 @@ fn a_watch_that_ended_after_the_stop_leaves_its_builder_named_with_no_later_stop
 /// While it waits (`L7R_IDLE_WAIT_SECS`), the idle check looks again: at the moment a quiet builder crosses the bound, and each
 /// `L7R_IDLE_RECHECK_SECS` while a builder's own run still goes - so a watch that ends after the first look, or a builder that goes
 /// quiet as the session's last Stop is written, is named with no Stop after; a turn of the session's own during the wait silences it,
-/// and past the budget it says nothing.
+/// and past the budget a run still going is handed on (451 T201).
 #[test]
 fn the_idle_check_looks_again_until_its_budget() {
     let (_dir, c, tr) = world("stall-wait", "no");
@@ -392,12 +397,25 @@ fn the_idle_check_looks_again_until_its_budget() {
     let text = idle_check_with(&input, &ends).expect("named once its watch ends, a look later");
     assert!(text.contains("a676"), "{text}");
     assert_eq!(ends.seen.get(), 3, "three looks");
-    // the budget spent with the watch still going: silent
+    // the budget spent with the watch still going: the check hands the watch on (451 T201) - one short wake, its Stop arming the
+    // next check - each time, never said once only, since each wake is a check of its own
     crate::env::set("L7R_IDLE_WAIT_SECS", "1");
-    assert_eq!(
-        idle_check_with(&input, &table(&[&[("bx5", 40)]], &[])),
-        None
-    );
+    for _ in 0..2 {
+        let text =
+            idle_check_with(&input, &table(&[&[("bx5", 40)]], &[])).expect("handed on, not silent");
+        assert!(
+            text.starts_with("IDLE CHECK: 1 builder(s) still working past its wait."),
+            "{text}"
+        );
+        assert!(
+            text.ends_with("\n- a676 \"385 T02: size edits never change a claim\""),
+            "{text}"
+        );
+        assert!(
+            text.contains("End the turn; the next Stop re-arms the check."),
+            "{text}"
+        );
+    }
     // a builder that crosses the bound during the wait: named
     let (_dir2, c2, tr2) = world("stall-cross", "no");
     crate::env::set("SET_DOWN_ROOT", &c2);
@@ -535,6 +553,13 @@ fn the_hook_timeout_holds_both_waits() {
         timeout >= super::super::idle::IDLE_SECS + super::super::idle::WAIT_SECS + 60,
         "raise the Idle entry's timeout in .claude/settings.json to IDLE_SECS + WAIT_SECS + 60 s ({timeout} s)"
     );
+    // 451 T201: the wait covers a Monitor's own cap (its launch's `timeoutMs`, 1,800,000) and the bound after it, so a builder whose
+    // watch runs its full 30 minutes and ends unheard is named within one check; and the timeout stays within what Claude Code was
+    // measured to honor for an asyncRewake hook (MEASURED_TIMEOUT_SECS)
+    assert!(
+        timeout <= MEASURED_TIMEOUT_SECS,
+        "the Idle entry's timeout ({timeout} s) past the asyncRewake timeout measured honored"
+    );
 }
 
 /// THE STATUS PROBE (MODE 4 D11, the task line: "the coordinator's status of a builder comes from that probe, never from its last
@@ -607,4 +632,141 @@ fn the_status_probe_says_each_builder_working_or_stalled() {
     assert!(status(&input, &none).ends_with("No builder of an open task reads as running."));
     crate::env::unset("L7R_IDLE_CHECK_SECS");
     crate::env::unset("SET_DOWN_ROOT");
+}
+
+/// The longest `timeout` Claude Code was measured to honor for an `asyncRewake` hook, in seconds (451 T201, 2026-11-23, Claude Code
+/// 2.1.330, `/tmp/t201m/`: a nested session's Stop hooks sleeping past their timeouts; `plan.md` T201 has each run). The docs name no
+/// cap ("Claude Code still enforces `timeout` on a hook you run with `asyncRewake`", hooks reference, read 2026-11-23), and the binary
+/// sets a background hook's limit to `timeout * 1000` with no clamp; the Idle entry's `timeout` is held under this measured figure.
+const MEASURED_TIMEOUT_SECS: u64 = 2_900;
+
+// 451 T201: the idle check's wait covers a Monitor's own cap (its launch's `timeoutMs`, 1,800,000) and the bound after it, so a
+// builder whose watch runs its full 30 minutes and ends unheard is named within one check (red at T193's 600 s, as a test, 2026-11-23)
+const _: () = assert!(
+    super::super::idle::WAIT_SECS >= 1_800 + STALL_SECS,
+    "WAIT_SECS covers a Monitor's 1,800 s and the bound"
+);
+
+/// The ids `stalled` names in the clone `c` for the session's transcript `tr`, nothing listed.
+fn named_in(tr: &Path, c: &Path) -> Vec<String> {
+    stalled(
+        tr,
+        c,
+        &std::collections::HashSet::new(),
+        Duration::from_secs(STALL_SECS),
+    )
+    .stalls
+    .into_iter()
+    .map(|s| s.id)
+    .collect()
+}
+
+/// 451 T201, the coordinator's live false positives (2026-11-23): the landed T193 rule named 451 T51's builder - at its cap on
+/// 2026-11-22, its line `(waits: T138 lands)`, T138 still open - and 449 T158's - done 2026-11-22 07:33, its task started 06:12 and
+/// 449 set down at 2026-11-23T10:34:24Z since - because both tasks were open. A builder is named only while its task is IN PROGRESS:
+/// started (a `task-starts.jsonl` row, or the active mark) since its last landing, not waiting on an open task, not held by name, and
+/// its feature not set down since that start. T184's shape - started 19:22, after 451's 11:06 set-down, under 451's new-work hold -
+/// is still named (the hold holds new tasks, never a started one).
+#[test]
+fn only_a_builder_of_a_task_in_progress_now_is_named() {
+    let (_dir, c, tr) = world("in-progress", "no");
+    waiting_builder(&tr, 2_500);
+    assert_eq!(named_in(&tr, &c), ["a676"], "started, nothing holds it");
+    // T51's shape: its line waits on an open task's landing
+    let tasks = c.join("specs/385-x/tasks.md");
+    std::fs::write(
+        &tasks,
+        "- [x] T01 done\n- [ ] T02 (waits: T03 lands) the next thing\n- [ ] T03 later\n",
+    )
+    .unwrap();
+    assert!(named_in(&tr, &c).is_empty(), "T51's shape: it waits on T03");
+    std::fs::write(&tasks, super::TASKS).unwrap();
+    // 449 T158's shape: its feature set down after the task's start (T02 started 2026-10-18T23:00:00Z)
+    let downs = c.join(".git/set-downs.jsonl");
+    std::fs::write(
+        &downs,
+        "{\"feature\": \"385-x\", \"why\": \"a page session's\", \"utc\": \"2026-10-19T10:34:24Z\"}\n",
+    )
+    .unwrap();
+    assert!(
+        named_in(&tr, &c).is_empty(),
+        "T158's shape: set down since its start"
+    );
+    // T184's shape: a set-down BEFORE the start holds nothing, nor a new-work hold
+    std::fs::write(
+        &downs,
+        "{\"feature\": \"385-x\", \"why\": \"a page session's\", \"utc\": \"2026-10-18T22:30:00Z\"}\n{\"feature\": \"449-y\", \"utc\": \"2026-10-20T00:00:00Z\"}\n",
+    )
+    .unwrap();
+    std::fs::write(
+        c.join("specs/385-x/arbiter.jsonl"),
+        json!({"trigger": "ask:set-down-385-talk", "kind": "ask", "ruling": "continue",
+               "what": "385 starts no new task.", "utc": "2026-11-23T14:42:15Z"})
+        .to_string()
+            + "\n",
+    )
+    .unwrap();
+    assert_eq!(
+        named_in(&tr, &c),
+        ["a676"],
+        "T184's shape: named through the hold"
+    );
+    // a binding ruling that holds the task by name
+    std::fs::write(
+        c.join("specs/385-x/arbiter.jsonl"),
+        json!({"trigger": "ask:set-down-385-later", "kind": "ask", "ruling": "continue",
+               "what": "Go on with T03; do not start T02.", "utc": "2026-11-23T15:00:00Z"})
+        .to_string()
+            + "\n",
+    )
+    .unwrap();
+    assert!(named_in(&tr, &c).is_empty(), "held by name");
+    std::fs::remove_file(c.join("specs/385-x/arbiter.jsonl")).unwrap();
+    assert_eq!(named_in(&tr, &c), ["a676"]);
+    // landed since its last start: not in progress; started again after: in progress
+    let log = c.join(".git/l7r-events/385-x.jsonl");
+    std::fs::create_dir_all(log.parent().unwrap()).unwrap();
+    std::fs::write(
+        &log,
+        "{\"src\":\"land\",\"step\":\"end\",\"landed\":true,\"tasks\":[\"T02\"],\"t1\":\"2026-10-19T01:00:00Z\"}\n",
+    )
+    .unwrap();
+    assert!(named_in(&tr, &c).is_empty(), "landed since its start");
+    std::fs::write(
+        c.join(".git/active-task"),
+        r#"{"feature": "385-x", "task": "T02", "tasks": ["T02"]}"#,
+    )
+    .unwrap();
+    assert_eq!(named_in(&tr, &c), ["a676"], "the active mark names it");
+    std::fs::write(
+        c.join(".git/active-task"),
+        r#"{"feature": "385-x", "task": "T03", "tasks": ["T03"]}"#,
+    )
+    .unwrap();
+    assert!(named_in(&tr, &c).is_empty(), "the mark names another");
+    std::fs::write(c.join(".git/active-task"), "not json").unwrap();
+    assert!(
+        named_in(&tr, &c).is_empty(),
+        "an unreadable mark names none"
+    );
+    std::fs::write(
+        c.join(".git/task-starts.jsonl"),
+        format!(
+            "{}{{\"feature\": \"385-x\", \"task\": \"T02\", \"utc\": \"2026-10-19T02:00:00Z\"}}\n",
+            super::START
+        ),
+    )
+    .unwrap();
+    assert_eq!(
+        named_in(&tr, &c),
+        ["a676"],
+        "started again after its landing"
+    );
+    // a task never started is not in progress
+    std::fs::write(
+        c.join(".git/task-starts.jsonl"),
+        "{\"feature\": \"385-x\", \"task\": \"T03\", \"utc\": \"2026-10-18T22:00:00Z\"}\n",
+    )
+    .unwrap();
+    assert!(named_in(&tr, &c).is_empty(), "never started");
 }

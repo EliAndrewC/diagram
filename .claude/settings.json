@@ -106,7 +106,7 @@
             "type": "command",
             "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook Idle",
             "asyncRewake": true,
-            "timeout": 960
+            "timeout": 2760
           }
         ]
       }

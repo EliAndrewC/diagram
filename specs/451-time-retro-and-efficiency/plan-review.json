@@ -1164,6 +1164,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
+  },
+  "### T201 (451 T193's MODE 4 round 2, 2026-11-23: a builder whose live work outlasts the idle check's wait, the session silent, is named only at the session's next Stop)": {
+   "sha256": "a6a03af98266488c0c236d939819c741396e207b4ea60dfe2c085de7cfd8f83d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T201 Approach (checklist part A)": {
+   "sha256": "020d08396f8440aeddc7a249b9728534a9958db0c08e6657ab369f1509ebe98c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T201 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "c99479cd80d69f69c5993714ae6b7b751bf0508f2ea850ce2c6d633d05bf8878",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -17484,6 +17502,73 @@
      "why": "Scheduling and proof choices inside the task; no requirement narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T201 (451 T193's MODE 4 round 2, 2026-11-23: a builder whose live work outlasts the idle check's wait, the session silent, is named only at the session's next Stop)",
+    "### T201 Approach (checklist part A)",
+    "### T201 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "in-progress-rule",
+     "summary": "stalls::in_progress names a builder only while its task is in progress: box open, started since its last landing (task-starts row after the last land end, or the active mark), not held by waits, not held by name by a binding ruling (holds::named), its feature not set down at or after its last start",
+     "class": "within",
+     "why": "The GM approved (2026-11-23) a periodic check that 'speaks only when it is idle with actionable work and respects binding rulings and set-downs'. A parked (set down since start), waiting, held-by-name, landed or never-started builder is not actionable work; naming it with a wake command is the wrong outcome the request was filed to end. Each condition carries a clause of the approved proposal; none narrows it."
+    },
+    {
+     "id": "new-work-hold-and-earlier-set-down-do-not-silence-a-started-task",
+     "summary": "A ruling that holds NEW work (holds::held) does not hold a task already started, and a set-down BEFORE the task's start does not either: T184's builder, started 19:22:55Z under 451's new-work hold and after an 11:06:29Z set-down, is still named",
+     "class": "within",
+     "why": "'Respects binding rulings and set-downs' is honored to each ruling's own reach: a hold on new work holds the tasks not yet started (the plan's statement of holds::held and T183; rulings.md carries no ruling text, so the hold's scope is taken from the plan). The request itself describes the offending block as a 'builder slot is free' prompt under a ruling 'that held new work' - i.e. a prompt to START work; naming a live builder of an already-started task starts nothing. A set-down before a later start is superseded by that start (active's own test). No ruling or set-down is overridden, so nothing is narrowed."
+    },
+    {
+     "id": "wait-past-monitor-cap",
+     "summary": "WAIT_SECS 600 -> 2,400 s (MONITOR_SECS 1,800 measured + STALL_SECS 600 GUESS), so a watch that runs its full 30 minutes and ends unheard is named within one check",
+     "class": "within",
+     "why": "Fixes a defect in the approved check: a builder stalled after a Monitor that outlived the 600 s wait was never named, i.e. the check stayed silent while idle with actionable work, contrary to the request. A constant change serving the request."
+    },
+    {
+     "id": "idle-timeout-2760",
+     "summary": "The Idle hook entry's timeout 960 -> 2,760 s (the two waits + 60 s reads, a CONVENTION), pinned by the_hook_timeout_holds_both_waits under MEASURED_TIMEOUT_SECS 2,900 (measured 2026-11-23, hook2.log, D3000s2900 ran to its end and rewoke)",
+     "class": "within",
+     "why": "Mechanism needed for the wait above, held under a measured run; the task line asked to measure the cap and design within it, and it was measured (10 s and 1,200 s enforced as set; 2,000, 2,900 and 3,700 s runs completed and rewoke). No narrowing."
+    },
+    {
+     "id": "hand-on-notice-existence",
+     "summary": "When live work is still going at the check's deadline, the check exits 2 with one short notice ('IDLE CHECK: N builder(s) still working past its wait. End the turn; the next Stop re-arms the check.', each builder's id and description) instead of exiting silently",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Presumed not legitimate: the approved proposal says the check is 'silent while the session is active or waiting on a tracked agent', and this speaks while a builder is working. It passes on MODE 1's third route: silence here would defeat the request's own purpose, concretely. The check exists to speak 'when it is idle with actionable work'; a hook cannot outlive its timeout (measured 2026-11-23: enforced as set), and only the hook's own exit 2 wakes the session (hooks reference, read 2026-11-23; a detached successor cannot), so a silent exit at the deadline ends all checking until some unrelated Stop. A builder whose unbounded background run (or a chain of runs) then stalls, the session silent, is never named - the session sits idle forever with actionable work, the exact defect this task fixes. The only way to keep a Stop-armed check alive is one wake; the notice is the minimum text for it (BREVITY-cut by message-check), and with the 2,400 s wait covering a Monitor's full cap it arises only for runs longer than that. The GM's own framing ('a cron that fires every 5 minutes') presumes a check that keeps firing; this is the only means here to keep it firing. Not a word-level carve-out: it serves the purpose rather than gutting it."
+    },
+    {
+     "id": "hand-on-notice-repeats-every-wake",
+     "summary": "The notice is said every time live work outlasts the wait, not once",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated separately, same route: each wake is a new check with the same physical limit, so saying it once and then exiting silently at the next deadline reintroduces the dead check and the never-named stalled builder. Repetition is the existence decision applied at every deadline, not a further departure."
+    },
+    {
+     "id": "hand-on-cadence-45-min",
+     "summary": "Cadence one notice per IDLE_SECS + WAIT_SECS (45 minutes, a CONVENTION) while a builder's run outlasts the wait",
+     "class": "within",
+     "why": "Not a separate departure: given the legitimate wake, how often it comes trades notice frequency against how late a stalled builder is named; a 4,000 s timeout was measured to run with no clamp found, so a longer cadence is available, but choosing among them is design and cost, not fidelity - the request fixes no cadence. The plan flags the cost to the GM ('the GM may cut it')."
+    },
+    {
+     "id": "notice-outside-guard-messages-corpus",
+     "summary": "The hand-on notice is outside make guard-messages' corpus (as T193's idle words are) and was judged by message-check on a hand-built bundle: FIDELITY passed, BREVITY cuts applied",
+     "class": "within",
+     "why": "The 2026-11-23 hook-output request asked for brevity with no loss of fidelity, reviewed by a subagent; the notice was so reviewed and cut. The corpus gap is an existing reach of a check, not a narrowing of this request, and it leaves no wrong outcome."
+    },
+    {
+     "id": "order-and-performance-class",
+     "summary": "After T193 (landed) and before T200; classed as performance work (removes false wakes, names a Monitor-length stall ~10 minutes after the watch ends instead of never)",
+     "class": "within",
+     "why": "Order follows the GM's 2026-11-20 rule that performance work comes first and the 2026-11-23 request that motivated the idle check; no scope beyond the defects named."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -28154,6 +28239,70 @@
      "summary": "After T201/T202's files; one landing; green exit is the two red tests passing and 100 loaded runs green (104 of 104 shown); red exit set down, an impossibility claim through make arbiter-ask",
      "class": "within",
      "why": "Scheduling and proof choices inside the task; no requirement narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T201": {
+   "section_sha256": "7cf38fc974081a9284711acde0225d573c09c4e832972edc78364e31d3d11078",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "in-progress-rule",
+     "summary": "stalls::in_progress names a builder only while its task is in progress: box open, started since its last landing (task-starts row after the last land end, or the active mark), not held by waits, not held by name by a binding ruling (holds::named), its feature not set down at or after its last start",
+     "class": "within",
+     "why": "The GM approved (2026-11-23) a periodic check that 'speaks only when it is idle with actionable work and respects binding rulings and set-downs'. A parked (set down since start), waiting, held-by-name, landed or never-started builder is not actionable work; naming it with a wake command is the wrong outcome the request was filed to end. Each condition carries a clause of the approved proposal; none narrows it."
+    },
+    {
+     "id": "new-work-hold-and-earlier-set-down-do-not-silence-a-started-task",
+     "summary": "A ruling that holds NEW work (holds::held) does not hold a task already started, and a set-down BEFORE the task's start does not either: T184's builder, started 19:22:55Z under 451's new-work hold and after an 11:06:29Z set-down, is still named",
+     "class": "within",
+     "why": "'Respects binding rulings and set-downs' is honored to each ruling's own reach: a hold on new work holds the tasks not yet started (the plan's statement of holds::held and T183; rulings.md carries no ruling text, so the hold's scope is taken from the plan). The request itself describes the offending block as a 'builder slot is free' prompt under a ruling 'that held new work' - i.e. a prompt to START work; naming a live builder of an already-started task starts nothing. A set-down before a later start is superseded by that start (active's own test). No ruling or set-down is overridden, so nothing is narrowed."
+    },
+    {
+     "id": "wait-past-monitor-cap",
+     "summary": "WAIT_SECS 600 -> 2,400 s (MONITOR_SECS 1,800 measured + STALL_SECS 600 GUESS), so a watch that runs its full 30 minutes and ends unheard is named within one check",
+     "class": "within",
+     "why": "Fixes a defect in the approved check: a builder stalled after a Monitor that outlived the 600 s wait was never named, i.e. the check stayed silent while idle with actionable work, contrary to the request. A constant change serving the request."
+    },
+    {
+     "id": "idle-timeout-2760",
+     "summary": "The Idle hook entry's timeout 960 -> 2,760 s (the two waits + 60 s reads, a CONVENTION), pinned by the_hook_timeout_holds_both_waits under MEASURED_TIMEOUT_SECS 2,900 (measured 2026-11-23, hook2.log, D3000s2900 ran to its end and rewoke)",
+     "class": "within",
+     "why": "Mechanism needed for the wait above, held under a measured run; the task line asked to measure the cap and design within it, and it was measured (10 s and 1,200 s enforced as set; 2,000, 2,900 and 3,700 s runs completed and rewoke). No narrowing."
+    },
+    {
+     "id": "hand-on-notice-existence",
+     "summary": "When live work is still going at the check's deadline, the check exits 2 with one short notice ('IDLE CHECK: N builder(s) still working past its wait. End the turn; the next Stop re-arms the check.', each builder's id and description) instead of exiting silently",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Presumed not legitimate: the approved proposal says the check is 'silent while the session is active or waiting on a tracked agent', and this speaks while a builder is working. It passes on MODE 1's third route: silence here would defeat the request's own purpose, concretely. The check exists to speak 'when it is idle with actionable work'; a hook cannot outlive its timeout (measured 2026-11-23: enforced as set), and only the hook's own exit 2 wakes the session (hooks reference, read 2026-11-23; a detached successor cannot), so a silent exit at the deadline ends all checking until some unrelated Stop. A builder whose unbounded background run (or a chain of runs) then stalls, the session silent, is never named - the session sits idle forever with actionable work, the exact defect this task fixes. The only way to keep a Stop-armed check alive is one wake; the notice is the minimum text for it (BREVITY-cut by message-check), and with the 2,400 s wait covering a Monitor's full cap it arises only for runs longer than that. The GM's own framing ('a cron that fires every 5 minutes') presumes a check that keeps firing; this is the only means here to keep it firing. Not a word-level carve-out: it serves the purpose rather than gutting it."
+    },
+    {
+     "id": "hand-on-notice-repeats-every-wake",
+     "summary": "The notice is said every time live work outlasts the wait, not once",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated separately, same route: each wake is a new check with the same physical limit, so saying it once and then exiting silently at the next deadline reintroduces the dead check and the never-named stalled builder. Repetition is the existence decision applied at every deadline, not a further departure."
+    },
+    {
+     "id": "hand-on-cadence-45-min",
+     "summary": "Cadence one notice per IDLE_SECS + WAIT_SECS (45 minutes, a CONVENTION) while a builder's run outlasts the wait",
+     "class": "within",
+     "why": "Not a separate departure: given the legitimate wake, how often it comes trades notice frequency against how late a stalled builder is named; a 4,000 s timeout was measured to run with no clamp found, so a longer cadence is available, but choosing among them is design and cost, not fidelity - the request fixes no cadence. The plan flags the cost to the GM ('the GM may cut it')."
+    },
+    {
+     "id": "notice-outside-guard-messages-corpus",
+     "summary": "The hand-on notice is outside make guard-messages' corpus (as T193's idle words are) and was judged by message-check on a hand-built bundle: FIDELITY passed, BREVITY cuts applied",
+     "class": "within",
+     "why": "The 2026-11-23 hook-output request asked for brevity with no loss of fidelity, reviewed by a subagent; the notice was so reviewed and cut. The corpus gap is an existing reach of a check, not a narrowing of this request, and it leaves no wrong outcome."
+    },
+    {
+     "id": "order-and-performance-class",
+     "summary": "After T193 (landed) and before T200; classed as performance work (removes false wakes, names a Monitor-length stall ~10 minutes after the watch ends instead of never)",
+     "class": "within",
+     "why": "Order follows the GM's 2026-11-20 rule that performance work comes first and the 2026-11-23 request that motivated the idle check; no scope beyond the defects named."
     }
    ],
    "verdict": "CLEAR"

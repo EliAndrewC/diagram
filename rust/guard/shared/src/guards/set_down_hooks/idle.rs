@@ -43,13 +43,19 @@ pub(super) fn last_start(root: &Path) -> Result<Option<(PathBuf, String, String)
 
 /// How long the idle check waits after a Stop before it looks again, in seconds: `L7R_IDLE_CHECK_SECS`, a GUESS of 300 - the GM's
 /// "a cron that fires every 5 minutes" (2026-11-23). It and [`WAIT_SECS`] are held under the hook entry's `timeout` in
-/// `.claude/settings.json` (960 s: the two, and 60 s for the reads).
+/// `.claude/settings.json` (2,760 s: the two, and 60 s for the reads; 960 s before 451 T201).
 pub(super) const IDLE_SECS: u64 = 300;
 
-/// How long past [`IDLE_SECS`] the idle check may go on looking, in seconds: `L7R_IDLE_WAIT_SECS`, [`stalls::STALL_SECS`] (451 T193,
-/// MODE 4 D12): a builder that goes quiet as the session's last Stop is written crosses the bound within it, with no later Stop to arm
-/// another check. A builder whose live work outlasts it is named only at the session's next Stop (an accepted limit, `plan.md` T193).
-pub(super) const WAIT_SECS: u64 = stalls::STALL_SECS;
+/// A Monitor's own cap, in seconds: its launch's result carries `"timeoutMs": 1800000` (all 214 Monitor launches in the transcripts
+/// of 2026-11-22 and 23, measured by 451 T193), after which the harness ends the watch.
+const MONITOR_SECS: u64 = 1_800;
+
+/// How long past [`IDLE_SECS`] the idle check may go on looking, in seconds: `L7R_IDLE_WAIT_SECS`, a Monitor's cap and the bound
+/// after it ([`MONITOR_SECS`] + [`stalls::STALL_SECS`], 451 T201; T193's was the bound alone, MODE 4 D12): a builder that goes quiet
+/// as the session's last Stop is written crosses the bound within it, and so does one whose watch runs its full 30 minutes and ends
+/// unheard, with no later Stop to arm another check. Live work that outlasts even this is handed on ([`watched`]): one short wake,
+/// whose Stop arms the next check.
+pub(super) const WAIT_SECS: u64 = MONITOR_SECS + stalls::STALL_SECS;
 
 /// How often the idle check looks again while a builder's live work runs on, in seconds: `L7R_IDLE_RECHECK_SECS`, a GUESS of 60 (a
 /// background shell's end reaches only its builder, so nothing tells the session; a minute's lateness beside a 600 s bound).
@@ -383,6 +389,20 @@ fn watched(
         .flatten()
         .min();
         let Some(next) = next.filter(|n| Instant::now() + *n <= deadline) else {
+            // LIVE WORK OUTLASTING THE WAIT IS HANDED ON (451 T201): the check wakes the session only by its own exit, held under the
+            // hook's `timeout`, so a builder's run or child still live at the deadline would be named only at a later Stop, and with
+            // none, never. One short wake, said every time (each is a check of its own, not a repeat), whose Stop arms the next check
+            if found.watched {
+                crate::log::fire(
+                    "set-down",
+                    "reminded",
+                    "idle: handed on",
+                    "idle-handed-on",
+                    &event.input,
+                    session,
+                );
+                return Watched::Said(handed_on(&found.working));
+            }
             return Watched::Quiet(now_listed);
         };
         std::thread::sleep(next);
@@ -390,6 +410,22 @@ fn watched(
             return Watched::Turned;
         }
     }
+}
+
+/// The hand-on notice (451 T201): the builders still at work when the idle check's wait ran out, each its status line.
+fn handed_on(working: &[String]) -> String {
+    let names: Vec<&str> = working
+        .iter()
+        .map(|l| {
+            l.split_once(": working")
+                .map_or(l.as_str(), |(name, _)| name)
+        })
+        .collect();
+    format!(
+        "IDLE CHECK: {} builder(s) still working past its wait. End the turn; the next Stop re-arms the check.\n{}",
+        working.len(),
+        names.join("\n")
+    )
 }
 
 /// The notice: its waiters' section, then its stalled builders', or None where both are empty.
