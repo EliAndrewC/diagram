@@ -1,0 +1,16 @@
+{
+ "captured": "2026-11-24T18:59:31+00:00",
+ "final_url": "https://web.archive.org/web/20250425061608id_/https://hue.repo.nii.ac.jp/record/33/files/sagara201203_2.pdf",
+ "first": "03/03919836cceb/20261124T185929Z",
+ "gm_copies": [],
+ "keys": [
+  "sagara-2012-matsue-tatara"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "03/03919836cceb/20261124T185929Z",
+ "reason": "HTTP 406",
+ "revision": "",
+ "sha256": "10f71619ad0ca8c8835a39dd28454f502e7ace1f223bf9bf0e2f4c2c4cbf37aa",
+ "url": "https://hue.repo.nii.ac.jp/record/33/files/sagara201203_2.pdf"
+}

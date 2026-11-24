@@ -1,0 +1,16 @@
+{
+ "captured": "2026-11-24T18:59:58+00:00",
+ "final_url": "https://web.archive.org/web/20250807100520id_/https://seijo.repo.nii.ac.jp/record/3744/files/jpn-039-04.pdf",
+ "first": "e0/e0d5af42c251/20261124T185956Z",
+ "gm_copies": [],
+ "keys": [
+  "minowa-oshima-kibocho-1728"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "e0/e0d5af42c251/20261124T185956Z",
+ "reason": "HTTP 406",
+ "revision": "",
+ "sha256": "8046ae2422bbc19d34e3d5cfbde94f9a79b734e43b1e4fd15297eb2ff640f136",
+ "url": "https://seijo.repo.nii.ac.jp/record/3744/files/jpn-039-04.pdf"
+}
