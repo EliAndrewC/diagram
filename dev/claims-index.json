@@ -10464,24 +10464,23 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#arch dimensions": {
-  "body": "05921312b105d3af",
-  "claim": "arch dimensions - shrine-gateways-and-the-approach-to-the-hall-torii-sando: from about 8 ft between the posts at a country shrine to about 18 ft at a shrine of the city of Sendai, on the three stone arches found measured; one stands 2.5 m between its posts and 2.8 m high (Kawataka), its one measured post 0.47 m (~1.5 ft) thick - the posts are drawn 1.2 ft, a departure the code keeps until feature 417 T33; 15 ft beam, 1.2 ft posts, 10.3 ft clear",
-  "code": "023fcc66992f87c0",
+  "body": "7f129c5399842c50",
+  "claim": "arch dimensions - shrine-gateways-and-the-approach-to-the-hall-torii-sando: from about 8 ft between the posts at a country shrine to about 18 ft at a shrine of the city of Sendai, on the three stone arches found measured; one stands 2.5 m between its posts and 2.8 m high (Kawataka); the one post found measured, 0.47 m (~1.5 ft) thick, is the Kokura arch's - the posts are drawn 1.2 ft, a GUESS beside it (0.3 ft thinner, a difference no reader of a sheet sees), and the beam's 1.5 ft depth in plan and its overhang past the posts (11.5 ft between centers under 15 ft, where Kokura's posts stand at 0.615 of the beam) are GUESSES, the page giving no beam depth and one arch's ratio; 15 ft beam, 1.2 ft posts, 10.3 ft clear",
+  "code": "dda7da8d92375389",
   "core": "2eff7ebebbd3387b",
   "date": "2026-11-24",
-  "note": "the departure still stands (Hoshigaoka's posts are 3.6 px, 1.2 ft, where the page's one measured post is 0.47 m, ~1.5 ft) but is not a wrong outcome: one measured example against a drawn size 0.9 px away, and no finding gives a post's thickness as a rule; the claim also gives that post to Kawataka (\"its one measured post\") where the page has it on Yasaka Shrine's arch in Kokura, under a 5.87 m beam; restate the claim to drop the departure and feature 417 T33, name the post as Kokura's, and keep the 15 ft beam, 1.2 ft posts and 10.3 ft clear as drawn; fix: claim; effect: none",
-  "outside": true,
+  "note": "10.3 ft clear (11.5 ft between centers less one 1.2 ft post) falls within the page's 8-18 ft range; the page measures one post (Kokura) and one beam ratio and says no page shows other arches kept that proportion, so the 1.2 ft posts, the 1.5 ft beam depth and the overhang are guesses beside one example, and the claim says so; the 0220 drawing page records no arch dimension",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html": "642d0145b0a9b4c3"
   },
   "research": "328d2761f7ca3db3",
   "rests": [
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:9e1165ad179ba2d4"
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:4e891277aa5195d0",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:9e1165ad179ba2d4",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:e1613d56e908d1d3"
   ],
-  "said": "arch dimensions - shrine-gateways-and-the-approach-to-the-hall-torii-sando: from about 8 ft between the posts at a country shrine to about 18 ft at a shrine of the city of Sendai, on the three stone arches found measured; one stands 2.5 m between its posts and 2.8 m high (Kawataka), its one measured post 0.47 m (~1.5 ft) thick - the posts are drawn 1.2 ft, a departure the code keeps until feature 417 T33; 15 ft beam, 1.2 ft posts, 10.3 ft clear",
   "section": "2eff7ebebbd3387b",
-  "siblings": "e28665a76c390bd9",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#arch in plan": {
   "body": "8a835d732aff8441",
@@ -10871,13 +10870,13 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#modest compound shrine": {
-  "body": "05921312b105d3af",
+  "body": "5ef44286535861d1",
   "claim": "modest compound shrine - the-compounds-own-shrine-yashikigami.drawing, shrine-gateways-and-the-approach-to-the-hall-torii-sando: every compound draws one modest shrine, however many a real office kept (0218's drawing page, a deliberate deviation), always drawn as a small hall, the form 0220 gives a carefully kept household shrine and the rarer of its two (most were small shrines of stone or wood) - that an office's shrine was the kept kind is a GUESS, the small-shrine form never drawn (feature 452 T24 rules whether it applies); that the hall is wooden is a GUESS - 0218 gives an office's shrine no material, and 0220's 'of stone or wood' is the small household shrine's, not the hall's",
   "code": "9fafeb4ccebbdfac",
   "core": "2eff7ebebbd3387b",
   "date": "2026-11-24",
-  "drawn": "43294c2f5009e95b",
-  "note": "known (452 T24): the section still draws every compound shrine as a small hall and never the small shrine of stone or wood, the form 0220 says most household shrines took, and no page in the bundle records hall-always as a chosen form (0220's drawing page calls the compound shrine \"a small shrine inside a household's or an office's grounds\" and only presupposes \"its hall\"; 0218's drawing page and 0224's give no form); fix: code; effect: every compound sheet shows the rarer of the two forms 0220 attests, a form fixed where the page attests two",
+  "drawn": "7c8a74f7652dbf8c",
+  "note": "known (452 T24): the compound shrine is always drawn as a small hall and the small-shrine form is never drawn. 0220 attests both forms for a household shrine (\"Most household guardian shrines are small shrines of stone or wood; one that is carefully kept may be given a hall\"), and 0218's drawing page gives a household's god \"a small shrine or ... an old tree or a stone\". The form is fixed where the project's doctrine asks for a per-settlement roll. The claim states this departure accurately and names the open task. The rest of the claim is true of the code: one shrine per compound is 0218's recorded deliberate deviation, and the wooden hall is a GUESS; fix: code; effect: every compound shows the rarer, carefully kept hall form, and none shows the commoner small shrine of stone or wood",
   "pages": {
    "0218-the-compounds-own-shrine-yashikigami.drawing.html": "b136590cd5b120ce",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html": "642d0145b0a9b4c3"
@@ -10885,7 +10884,6 @@
   "research": "e87e6a4860668485",
   "rests": [
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:4b3a8c1080e747d8",
-   "0218-the-compounds-own-shrine-yashikigami.drawing.html:975bec7f678f69df",
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:d462ca0a1a370798",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:e462caf5af2d0d0d"
   ],
