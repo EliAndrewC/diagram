@@ -77,12 +77,20 @@ for THIS unit exactly as if it were written on it.
   effect is none and no finding is contradicted, the fix is `fix: claim` (the tolerance rule; the GM, 2026-11-19:
   *"don't spent a lot of time 'fixing' things which are not actually wrong like things which are different than you expected but still work perfectly well and are in line with our research and produce maps which look fine"*). The mismatch is still DRIFTED: the fix
   says which side moves. `make claims-checked` refuses a DRIFTED line without `fix: claim` or `fix: code`.
-  **A FILED DEPARTURE is judged once, never relabeled** (round arbiter, ask:417-T49-claims, 2026-10-26): a claim that states
+  **A FILED DEPARTURE that still stands is never relabeled** (round arbiter, ask:417-T49-claims, 2026-10-26): a claim that states
   how its code departs from the cited page and names the open task that carries the fix (`a departure the code keeps until
-  feature NNN Tnn`) is a known defect already filed. Judge only whether the departure it states is what the code does: if it is,
-  the verdict is DRIFTED with the note `known (NNN Tnn): <the departure>; fix: code; effect: <its effect>`, and you ask for no other label - not a DEVIATION
-  recorded on the drawing page, not a GUESS, not NEEDS-RESEARCH or MISLABELED. If the stated departure misdescribes the code, it
-  is DRIFTED with what it misstates. (Three rounds on one bund claim each asked a different label for one filed departure.)
+  feature NNN Tnn`) is a known defect already filed. **It is judged afresh each time it is in your bundle** (feature 451 T220: a
+  claim reaches you because its code, its section or its page moved, and `known (417 T33) ... fix: code` outlived the fix on six
+  claims - the porch was drawn at the page's size and the garden moved into the sun while the report still printed them), in
+  this order: (1) Does the code, as the bundle shows it, still depart as the claim states? If it no longer does, or the page now
+  says what the code does, the departure is gone: DRIFTED, `fix: claim` (the claim drops the departure and its task), with what
+  the code and page now say. (2) If it still departs, is the departure a wrong outcome - would a reader of the map or sheet see
+  it, or does it contradict a finding (not one measured example against a drawn size within what a reader can tell apart)? If
+  not, it is DRIFTED, `fix: claim; effect: none`, the claim restated to what the record supports. (3) Only where it still
+  departs and is a wrong outcome is the verdict DRIFTED with the note
+  `known (NNN Tnn): <the departure>; fix: code; effect: <its effect>` - and then you ask for no other label: not a DEVIATION
+  recorded on the drawing page, not a GUESS, not NEEDS-RESEARCH or MISLABELED (three rounds on one bund claim each asked a
+  different label for one filed departure).
 - **NEEDS-RESEARCH** - the code makes a physical decision, the claim cites a question, and the question does not bear on that
   decision (the research is silent on what the code does) - the claim should say UNRESEARCHED until a research pass answers it.
 - **MISLABELED** - the claim's class or pointer is wrong for the code: NONE or CONVENTION on code that decides something physical
@@ -120,19 +128,33 @@ each on its own line, with no backticks needed:
   changes (feature 318), so name every block your verdict reads - a block you leave out is a change you will not be shown.
 - LINES MARKED `+` in a unit's code are the change being landed. A finding (any verdict but IN-STEP, or an UNCLAIMED line) that
   rests on NO marked line - code the change did not touch, under a claim it did not add or reword - begins its note
-  `[outside the change]`, e.g. `VERDICT <key> DRIFTED - [outside the change] <note> [§4]`. It is filed as a task of the feature
-  rather than held against the landing (feature 405 T36). Anything the change made, or could have made, untrue takes no tag; a
-  unit with no marked line takes none.
+  `[outside the change]`, e.g. `VERDICT <key> DRIFTED - [outside the change] <note> [§4]`. It is listed by `make claims-report`
+  rather than held against the landing (features 405 T36, 445). Anything the change made, or could have made, untrue takes no
+  tag; a unit with no marked line takes none.
 - A DRIFTED note runs, in this order: `[outside the change]` if it applies, what is wrong, `fix: claim` or `fix: code`,
   `effect: <what a reader of the map would see differently, the finding contradicted, the check or tool that answers wrongly, or
   none>`, then the blocks - e.g.
   `VERDICT <key> DRIFTED - the leader ends 0.4 px short of the drawn point the claim names; fix: claim; effect: none [§2]`.
 - One VERDICT line for EVERY key in the bundle - a key with no line stays owed. An IN-STEP note is a few words; a finding's note
   says what is wrong and what the claim or the code should be, in one line.
-- Anything you notice OUTSIDE the owed keys - another claim's wording, a page's own gap, code the bundle shows beside the claim -
-  goes under an `OUTSIDE THE CHANGE` heading as `- <file> | <unit or block> | <finding, with its effect>` lines - a line with no
-  effect a reader of the map would see and no finding it breaks is not a defect and is not written - never in a closing paragraph: the
-  session files each line as an open row when it records your reply, and a note in prose is lost (the round arbiter on hour 32).
+- Anything you notice OUTSIDE the owed keys - code the bundle shows beside the claim, another claim, a page - **is filed only
+  when it names a wrong outcome a reader of the map, the sheet or the page, or the user of a tool or check, would meet** (feature 451 T219; constitution XIV): it
+  goes under an `OUTSIDE THE CHANGE` heading, never in a closing paragraph, one line each, as
+  `- <file> | <unit or block> | <finding> | effect: <map|sheet|page|tool> - <the wrong outcome its reader or user meets>` - e.g.
+  `effect: map - the place card says the wind departs from the very wind it names`, or, for a command or check that crashes,
+  hangs, refuses valid input or answers wrongly, `effect: tool - make claims-owed names no claim after its unit is renamed`.
+  The session's tool files a line only with
+  that effect, and `effect: none` is no effect. What names none - another claim's wording, a page that is only silent, a doc
+  row that differs from a drawing that reads fine, a case no map or sheet shows - is one line under a `NOTED, NOT FILED`
+  heading after it, and is dropped (of feature 449's 52 tasks filed from such notes in four days, 22 named nothing wrong; its
+  found row 178 said `effect: none on the map` in its own text and was filed).
+- **"The pages do not say it" speaks of the pages you were given, never of the record** (feature 451 T218). Your bundle holds
+  the pages the claims cite, and another page may say it (feature 449's found row 210 said no page gives the kitchen door at the
+  rear of the house; 0107, which the section did not cite, says it). Write such a finding of "the cited pages" - a
+  NEEDS-RESEARCH, a note ending `[§]`, a line saying the pages are silent - and the session's tool holds it, unrecorded and
+  unfiled, until the record's nearest pages for its words are in your bundle. Where the bundle already holds a page the claim
+  does not cite and that page says it, the finding is the missing citation (`fix: claim`, naming the page) or nothing - never
+  "no page says".
 - Nothing else is needed: no restated code, no reasoning for a pass. Every character stays in the session's context.
 
 Send the reads and greps you already know you need in ONE message.

@@ -71,9 +71,11 @@ pop-ups (feature 385 T03, the round arbiter's ruling on ask:t03-popups-round3).
 
 A finding that needs a decision or new research ends `EDIT: none - <why>`. **An ask the record cannot answer is a research row,
 not a finding**: if the drawing pages, or an earlier round's reply in your bundle, say that no page holds what you would ask the
-tab to tell (a real color, a size no source gives), list it under a heading `OUTSIDE THE CHANGE`, one line each
-`- <the modal's file> | <the sentence> | needs research: <what is unrecorded>`. The session files it as an open row; it never
-drives another round (343's main gate: round 1's "supplying it needs new research" came back as round 2's finding). Never judge About's history (that is `modal-research`),
+tab to tell (a real color, a size no source gives), it never drives another round, and it is filed only when the pop-up's
+reader meets a wrong outcome for the want of it (feature 451 T219): then list it under a heading `OUTSIDE THE CHANGE`, one line each
+`- <the modal's file> | <the sentence> | needs research: <what is unrecorded> | effect: map - <what the pop-up's reader is wrongly told or shown>`,
+which the session's tool files as an open row (the form is `effect: <map|sheet|page|tool> - ...`; here the reader is the map's). An ask with no such effect - the record is only silent - is one line under a
+`NOTED, NOT FILED` heading and is dropped (343's main gate: round 1's "supplying it needs new research" came back as round 2's finding). Never judge About's history (that is `modal-research`),
 the modal's form beyond this tab (`modal-form`), or the glyph's design (`glyph-check`); you judge only whether the Depiction tab
 tells the truth about the drawing.
 
