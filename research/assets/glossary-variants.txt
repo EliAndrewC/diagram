@@ -981,6 +981,9 @@ domain	domain
 domain era	domain era
 domain kiln	domain kiln
 domain kilns	domain kiln
+domain note	domain notes
+domain notes	domain notes
+domain's notes	domain notes
 domains	domain
 donggusup	donggusup
 dongjing	Dongjing
@@ -1376,6 +1379,8 @@ four stations of edo	four stations of Edo
 four trees	four trees
 four trees and three grasses	four trees
 four-and-a-half-mat	tatami
+four-blow	four-blow
+four-blow working	four-blow
 four-gods formulation	four gods
 four-room	four-room type
 four-room type	four-room type
@@ -2982,6 +2987,7 @@ mi	material index
 miaohui	miaohui
 michaelmas	Michaelmas
 michikiri	michikiri
+michinoshima	Michinoshima
 micro-high	micro-high
 micro-high ground	micro-high ground
 micro-highs	micro-high
@@ -3926,6 +3932,7 @@ ryudosui	ryudosui
 ryukyu	Ryukyu kingdom
 ryukyu kingdom	Ryukyu kingdom
 ryukyu wax tree	Ryukyu wax tree
+ryukyu-kan	Ryukyu-kan
 ryukyu-koku yuraiki	Ryukyu-koku yuraiki
 ryukyus	Ryukyu kingdom
 ryō	ryo
