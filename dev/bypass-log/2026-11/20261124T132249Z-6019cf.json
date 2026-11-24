@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-24T13:22:49Z",
+  "target": "plan-gate push",
+  "commit": "f49d36a390",
+  "why": "451's one stale block is T203's withdrawn heading (built in T199), a heading with no decision, as at the last landing"
+}
