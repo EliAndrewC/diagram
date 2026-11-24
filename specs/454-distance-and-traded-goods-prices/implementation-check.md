@@ -1,0 +1,2 @@
+- 0339: no code implements it - consumed by gm-assistant's money skill; searched: grep -rnIi -E 'raw silk|kiito|tatara|bar iron|pig iron|safflower|benibana' l7r pool rust (no hit outside the glossary)
+- 0340: no code implements it - consumed by gm-assistant's money skill; searched: grep -rnIi -E 'black sugar|wasanbon|sugar price|tea price|sencha|price_of_(tea|sugar)' l7r pool rust (no hit outside the glossary)
