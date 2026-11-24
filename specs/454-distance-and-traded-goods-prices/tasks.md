@@ -10,11 +10,11 @@ The question tasks are `research: physical` with their five boxes; the rest are 
 
 - [ ] T01 S1+C1: both ends' prices in Japan (D1; FR-001, FR-002, FR-005, FR-006, FR-007)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
       verify: `make record-owed` names no unit of the new questions or of 0283; `make record CHECK=1` passes
 - [ ] T02 S2+C2: both ends' prices in China (D2; FR-001, FR-002, FR-005, FR-006, FR-007)
       research: physical
