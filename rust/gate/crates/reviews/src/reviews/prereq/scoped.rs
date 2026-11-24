@@ -23,12 +23,13 @@
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
+use l7r_gate_pool::walk;
 use serde_json::{json, Value};
 
 use super::stands::MINOR;
 use super::{
     accepted_ids, folder_key, get, latest_verdict, raised_findings, read_json, reply, round_key,
-    text_of, unit_content_key, unit_folder, unit_gate_state, verdict_dir, Reply,
+    text_of, unit_content_key, unit_folder_on, unit_gate_state, unit_sheet, verdict_dir, Reply,
 };
 
 /// The sheet's two files a review reads, as [`super::folder_key`] hashes them.
@@ -67,17 +68,60 @@ pub fn carries(v: &Value, at: &str, now: &str) -> bool {
     })
 }
 
-/// Declare that the sheet's edit since `unit`'s last verdict fixes only the nitpicks `named`: the scoped prompt's path, or the refusal.
+/// What `make review-fixed` found: the change-scoped round declared (its prompt's path), or no round owed at all (the words to print).
+#[derive(Debug, PartialEq, Eq)]
+pub enum Fixed {
+    Declared(PathBuf),
+    NotOwed(String),
+}
+
+/// The unit `make review-fixed UNIT=` names: a unit's slug as given, a sheet's bare name as its building-review (451 T214: the cascade
+/// test's `UNIT=ochiba-roundtrip-test` was read as a unit with no verdict on file, and refused as one owing a full round).
+#[must_use]
+pub fn unit_of(name: &str) -> String {
+    if super::super::owed::is_unit_slug(name) {
+        name.to_owned()
+    } else {
+        format!("building-review--{name}")
+    }
+}
+
+/// Declare that the sheet's edit since `name`'s last verdict fixes only the nitpicks `named`: the scoped prompt's path, no round owed
+/// where the delta owes the unit none, or the refusal.
+///
+/// A unit the delta does not owe - its sheet's edit no occasion (feature 294: a notes edit is none) - owes no round of any kind, as
+/// `reviews owed` (`make verify`, `reviews snapshot`) and the push's review gate, which asks only owed units, read it (451 T214: the
+/// cascade test's round-trip sheet, whose notes-only fix these owed nothing and `make review-fixed` a full round). An owed unit whose
+/// verdict was written before T199 kept its sheet has that sheet found again in git history ([`recover`]).
 ///
 /// # Errors
 /// The refusal, naming what owes the full round.
-pub fn declare(clone: &Path, unit: &str, named: &[String]) -> Result<PathBuf, String> {
+pub fn declare(clone: &Path, name: &str, named: &[String]) -> Result<Fixed, String> {
     let full = "a full round is owed (`make verify`, then dispatch its prompt)";
+    let unit = unit_of(name);
+    let unit = unit.as_str();
+    // owed as `reviews owed` reads the delta, never by a snapshot an earlier `make verify` left: the round-trip sheet's, a day old,
+    // read as its sheet, was the cascade test's "not kept" (451 T214)
+    let sheet = unit_sheet(clone, unit);
+    let owed = (!sheet.is_empty()).then(|| unit_folder_on(clone, unit, || sheet.clone()));
+    let Some((folder, on)) = owed.flatten() else {
+        let sheet = unit.rsplit("--").next().unwrap_or_default();
+        if walk(clone).folder(sheet).is_none() {
+            return Err(format!(
+                "no pool sheet `{sheet}` (UNIT={name}): name a sheet or its building-review unit"
+            ));
+        }
+        return Ok(Fixed::NotOwed(format!(
+            "{unit} is not owed by this delta (no occasion in it, as `make verify`, `reviews snapshot` and the push's review gate read \
+             it): no round is owed for the edit, full or change-scoped, and the last verdict stays on file as it is (451 T214)\n"
+        )));
+    };
     let Some(v) = latest_verdict(clone, unit)
         .filter(|v| matches!(text_of(v, "verdict", "").as_str(), "PASS" | "NEEDS-WORK"))
     else {
         return Err(format!(
-            "{unit} has no PASS or NEEDS-WORK verdict to carry: {full}"
+            "{unit} has no PASS or NEEDS-WORK verdict to carry, and the delta owes it a round: its first full round, which no \
+             change-scoped one stands for - {full}"
         ));
     };
     if named.is_empty() {
@@ -102,16 +146,15 @@ pub fn declare(clone: &Path, unit: &str, named: &[String]) -> Result<PathBuf, St
             return Err(format!("{id}, a `{sev}` finding, is open: an error or questionable finding owes the full round - {full}"));
         }
     }
+    // a verdict carries a content key wherever its unit names a sheet (`write_verdict`)
     let from = text_of(&v, "content_key", "");
     let kept = kept_dir(clone, unit);
-    // a verdict carries a content key only where its unit names a sheet, so the folder is there wherever the key is kept
-    let Some((folder, on)) = unit_folder(clone, unit)
-        .filter(|(_, on)| !from.is_empty() && folder_key(&kept, on) == from)
-    else {
+    if folder_key(&kept, &on) != from && !recover::recover(clone, &folder, &on, &from, &kept) {
         return Err(format!(
-            "the sheet as {unit}'s review read it was not kept (a verdict written before 451 T199, or another since): {full}"
+            "the sheet as {unit}'s review read it is neither kept (a verdict written before 451 T199) nor in git history (no \
+             committed version of its drawing and notes hashes as it did), so its edit cannot be shown: {full}"
         ));
-    };
+    }
     let to = folder_key(&folder, &on);
     if to == from {
         return Err(format!(
@@ -126,7 +169,7 @@ pub fn declare(clone: &Path, unit: &str, named: &[String]) -> Result<PathBuf, St
         .and_then(|()| std::fs::write(&prompt, prompt_text(unit, &v, named, &kept, &folder, &on)))
         .and_then(|()| std::fs::write(dir.join("declared.json"), decl.to_string()))
         .map_err(|e| format!("{}: {e}", dir.display()))?;
-    Ok(prompt)
+    Ok(Fixed::Declared(prompt))
 }
 
 /// The change-scoped round's prompt: its contract, the named nitpicks, and the edit's pairs.
@@ -239,6 +282,8 @@ pub fn record(clone: &Path, unit: &str, verdict: &str, findings: &[Value]) -> Re
         0,
     )
 }
+
+mod recover;
 
 #[cfg(test)]
 mod tests;

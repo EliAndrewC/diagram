@@ -599,11 +599,21 @@ pub fn content_key(clone: &Path, sheet: &str) -> String {
 
 /// [`content_key`] of the sheet's files in `folder`.
 fn folder_key(folder: &Path, sheet: &str) -> String {
+    let read = |ext: &str| std::fs::read(folder.join(format!("{sheet}.{ext}"))).unwrap_or_default();
+    files_key(sheet, &read("svg"), &read("notes.md"))
+}
+
+/// [`content_key`] of a sheet whose drawing and notes are these bytes (an absent file's are none), wherever they were read from: the
+/// folder, or a version in git history (451 T214, `scoped::recover`).
+fn files_key(sheet: &str, svg: &[u8], notes: &[u8]) -> String {
     let mut data = Vec::new();
-    for name in [format!("{sheet}.svg"), format!("{sheet}.notes.md")] {
+    for (name, bytes) in [
+        (format!("{sheet}.svg"), svg),
+        (format!("{sheet}.notes.md"), notes),
+    ] {
         data.extend_from_slice(name.as_bytes());
         data.push(0);
-        data.extend(std::fs::read(folder.join(&name)).unwrap_or_default());
+        data.extend_from_slice(bytes);
         data.push(0);
     }
     l7r_shared::sha256::hex(&data)[..16].to_owned()
@@ -627,10 +637,19 @@ pub fn content_key_on(clone: &Path, unit: &str, on: impl FnOnce() -> String) -> 
 
 /// The folder whose files [`unit_content_key`] hashes, and the sheet's name: the snapshot's copy, else the sheet's pool folder.
 fn unit_folder(clone: &Path, unit: &str) -> Option<(PathBuf, String)> {
+    unit_folder_on(clone, unit, || unit_sheet(clone, unit))
+}
+
+/// [`unit_folder`] where the caller knows the sheet the unit is judged `on`, asked only where the review tree did not snapshot the unit.
+fn unit_folder_on(
+    clone: &Path,
+    unit: &str,
+    on: impl FnOnce() -> String,
+) -> Option<(PathBuf, String)> {
     if let Some(snap) = tree::of_unit(clone, unit) {
         return Some((snap.copy, snap.on));
     }
-    let sheet = unit_sheet(clone, unit);
+    let sheet = on();
     let dir = walk(clone).folder(&sheet).map(|m| m.dir.clone())?;
     Some((dir, sheet))
 }
@@ -805,10 +824,15 @@ fn run(command: &str, p: &Parsed) -> Reply {
                 .filter(|s| !s.is_empty())
                 .map(str::to_owned)
                 .collect();
-            scoped::declare(&clone, &map, &named).map_or_else(
-                |why| reply(String::new(), format!("make review-fixed: {why}\n"), 1),
-                |prompt| reply(scoped::declared_text(&map, &prompt), String::new(), 0),
-            )
+            match scoped::declare(&clone, &map, &named) {
+                Ok(scoped::Fixed::Declared(prompt)) => reply(
+                    scoped::declared_text(&scoped::unit_of(&map), &prompt),
+                    String::new(),
+                    0,
+                ),
+                Ok(scoped::Fixed::NotOwed(said)) => reply(said, String::new(), 0),
+                Err(why) => reply(String::new(), format!("make review-fixed: {why}\n"), 1),
+            }
         }
         "standing" => reply(
             stands::standing(&clone, p.text("--maps", "")),
