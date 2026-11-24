@@ -632,464 +632,481 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 <!-- plan-archive: T351 to T368 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T358 to T370 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T371 to T385 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
-### T374 (<why: the finding or measurement that files it>)
+### T374 (withdrawn: moved to 452 T007 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: none in 449 - the task moved to 452 T007 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md), with its full text and evidence; its plan is 452's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| withdrawn | n/a: nothing built in 449 | n/a | none | n/a |
 
 ### T374 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** n/a in 449: the task moved to 452 T007 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T007 states it.
+2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
+3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
+4. **Do they describe the world here?** n/a: no map changes in 449.
+5. **The order.** Withdrawn before T158, so 449 closes on its port.
+6. **The exits.** Green: the line ticked withdrawn and 452 T007 filed. Red: n/a.
+7. **The search smell.** None.
+8. **The budget.** None of its own.
+9. **Done, measured.** 452's tasks.md carries T007 from 449 T374; `make speckit-todo` no longer counts it open on 449.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: nothing fixed in 449; the fix is 452 T007's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task moved whole to 452 T007.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 <!-- plan-archive: T375 to T402 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T399 to T403 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
-### T380 (<why: the finding or measurement that files it>)
+### T380 (withdrawn: moved to 452 T015 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: none in 449 - the task moved to 452 T015 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md), with its full text and evidence; its plan is 452's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| withdrawn | n/a: nothing built in 449 | n/a | none | n/a |
 
 ### T380 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** n/a in 449: the task moved to 452 T015 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T015 states it.
+2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
+3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
+4. **Do they describe the world here?** n/a: no map changes in 449.
+5. **The order.** Withdrawn before T158, so 449 closes on its port.
+6. **The exits.** Green: the line ticked withdrawn and 452 T015 filed. Red: n/a.
+7. **The search smell.** None.
+8. **The budget.** None of its own.
+9. **Done, measured.** 452's tasks.md carries T015 from 449 T380; `make speckit-todo` no longer counts it open on 449.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: nothing fixed in 449; the fix is 452 T015's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task moved whole to 452 T015.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 <!-- plan-archive: T383 to T391 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
-### T386 (<why: the finding or measurement that files it>)
+### T386 (withdrawn: moved to 452 T001 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: none in 449 - the task moved to 452 T001 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md), with its full text and evidence; its plan is 452's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| withdrawn | n/a: nothing built in 449 | n/a | none | n/a |
 
 ### T386 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** n/a in 449: the task moved to 452 T001 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T001 states it.
+2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
+3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
+4. **Do they describe the world here?** n/a: no map changes in 449.
+5. **The order.** Withdrawn before T158, so 449 closes on its port.
+6. **The exits.** Green: the line ticked withdrawn and 452 T001 filed. Red: n/a.
+7. **The search smell.** None.
+8. **The budget.** None of its own.
+9. **Done, measured.** 452's tasks.md carries T001 from 449 T386; `make speckit-todo` no longer counts it open on 449.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: nothing fixed in 449; the fix is 452 T001's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task moved whole to 452 T001.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T387 (<why: the finding or measurement that files it>)
+### T387 (withdrawn: moved to 452 T002 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: none in 449 - the task moved to 452 T002 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md), with its full text and evidence; its plan is 452's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| withdrawn | n/a: nothing built in 449 | n/a | none | n/a |
 
 ### T387 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** n/a in 449: the task moved to 452 T002 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T002 states it.
+2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
+3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
+4. **Do they describe the world here?** n/a: no map changes in 449.
+5. **The order.** Withdrawn before T158, so 449 closes on its port.
+6. **The exits.** Green: the line ticked withdrawn and 452 T002 filed. Red: n/a.
+7. **The search smell.** None.
+8. **The budget.** None of its own.
+9. **Done, measured.** 452's tasks.md carries T002 from 449 T387; `make speckit-todo` no longer counts it open on 449.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: nothing fixed in 449; the fix is 452 T002's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task moved whole to 452 T002.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T389 (<why: the finding or measurement that files it>)
+### T389 (withdrawn: moved to 452 T003 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: none in 449 - the task moved to 452 T003 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md), with its full text and evidence; its plan is 452's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| withdrawn | n/a: nothing built in 449 | n/a | none | n/a |
 
 ### T389 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** n/a in 449: the task moved to 452 T003 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T003 states it.
+2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
+3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
+4. **Do they describe the world here?** n/a: no map changes in 449.
+5. **The order.** Withdrawn before T158, so 449 closes on its port.
+6. **The exits.** Green: the line ticked withdrawn and 452 T003 filed. Red: n/a.
+7. **The search smell.** None.
+8. **The budget.** None of its own.
+9. **Done, measured.** 452's tasks.md carries T003 from 449 T389; `make speckit-todo` no longer counts it open on 449.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: nothing fixed in 449; the fix is 452 T003's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task moved whole to 452 T003.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T390 (<why: the finding or measurement that files it>)
+### T390 (withdrawn: moved to 452 T008 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: none in 449 - the task moved to 452 T008 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md), with its full text and evidence; its plan is 452's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| withdrawn | n/a: nothing built in 449 | n/a | none | n/a |
 
 ### T390 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** n/a in 449: the task moved to 452 T008 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T008 states it.
+2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
+3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
+4. **Do they describe the world here?** n/a: no map changes in 449.
+5. **The order.** Withdrawn before T158, so 449 closes on its port.
+6. **The exits.** Green: the line ticked withdrawn and 452 T008 filed. Red: n/a.
+7. **The search smell.** None.
+8. **The budget.** None of its own.
+9. **Done, measured.** 452's tasks.md carries T008 from 449 T390; `make speckit-todo` no longer counts it open on 449.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: nothing fixed in 449; the fix is 452 T008's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task moved whole to 452 T008.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T393 (<why: the finding or measurement that files it>)
+### T393 (withdrawn: moved to 452 T009 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: none in 449 - the task moved to 452 T009 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md), with its full text and evidence; its plan is 452's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| withdrawn | n/a: nothing built in 449 | n/a | none | n/a |
 
 ### T393 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** n/a in 449: the task moved to 452 T009 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T009 states it.
+2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
+3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
+4. **Do they describe the world here?** n/a: no map changes in 449.
+5. **The order.** Withdrawn before T158, so 449 closes on its port.
+6. **The exits.** Green: the line ticked withdrawn and 452 T009 filed. Red: n/a.
+7. **The search smell.** None.
+8. **The budget.** None of its own.
+9. **Done, measured.** 452's tasks.md carries T009 from 449 T393; `make speckit-todo` no longer counts it open on 449.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: nothing fixed in 449; the fix is 452 T009's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task moved whole to 452 T009.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T396 (<why: the finding or measurement that files it>)
+### T396 (withdrawn: moved to 452 T010 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: none in 449 - the task moved to 452 T010 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md), with its full text and evidence; its plan is 452's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| withdrawn | n/a: nothing built in 449 | n/a | none | n/a |
 
 ### T396 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** n/a in 449: the task moved to 452 T010 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T010 states it.
+2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
+3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
+4. **Do they describe the world here?** n/a: no map changes in 449.
+5. **The order.** Withdrawn before T158, so 449 closes on its port.
+6. **The exits.** Green: the line ticked withdrawn and 452 T010 filed. Red: n/a.
+7. **The search smell.** None.
+8. **The budget.** None of its own.
+9. **Done, measured.** 452's tasks.md carries T010 from 449 T396; `make speckit-todo` no longer counts it open on 449.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: nothing fixed in 449; the fix is 452 T010's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task moved whole to 452 T010.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T404 (<why: the finding or measurement that files it>)
+### T404 (withdrawn: moved to 452 T004 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: none in 449 - the task moved to 452 T004 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md), with its full text and evidence; its plan is 452's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| withdrawn | n/a: nothing built in 449 | n/a | none | n/a |
 
 ### T404 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** n/a in 449: the task moved to 452 T004 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T004 states it.
+2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
+3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
+4. **Do they describe the world here?** n/a: no map changes in 449.
+5. **The order.** Withdrawn before T158, so 449 closes on its port.
+6. **The exits.** Green: the line ticked withdrawn and 452 T004 filed. Red: n/a.
+7. **The search smell.** None.
+8. **The budget.** None of its own.
+9. **Done, measured.** 452's tasks.md carries T004 from 449 T404; `make speckit-todo` no longer counts it open on 449.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: nothing fixed in 449; the fix is 452 T004's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task moved whole to 452 T004.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T405 (<why: the finding or measurement that files it>)
+### T405 (withdrawn: moved to 452 T005 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: none in 449 - the task moved to 452 T005 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md), with its full text and evidence; its plan is 452's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| withdrawn | n/a: nothing built in 449 | n/a | none | n/a |
 
 ### T405 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** n/a in 449: the task moved to 452 T005 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T005 states it.
+2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
+3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
+4. **Do they describe the world here?** n/a: no map changes in 449.
+5. **The order.** Withdrawn before T158, so 449 closes on its port.
+6. **The exits.** Green: the line ticked withdrawn and 452 T005 filed. Red: n/a.
+7. **The search smell.** None.
+8. **The budget.** None of its own.
+9. **Done, measured.** 452's tasks.md carries T005 from 449 T405; `make speckit-todo` no longer counts it open on 449.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: nothing fixed in 449; the fix is 452 T005's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task moved whole to 452 T005.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T406 (<why: the finding or measurement that files it>)
+### T406 (withdrawn: moved to 452 T016 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: none in 449 - the task moved to 452 T016 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md), with its full text and evidence; its plan is 452's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| withdrawn | n/a: nothing built in 449 | n/a | none | n/a |
 
 ### T406 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** n/a in 449: the task moved to 452 T016 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T016 states it.
+2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
+3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
+4. **Do they describe the world here?** n/a: no map changes in 449.
+5. **The order.** Withdrawn before T158, so 449 closes on its port.
+6. **The exits.** Green: the line ticked withdrawn and 452 T016 filed. Red: n/a.
+7. **The search smell.** None.
+8. **The budget.** None of its own.
+9. **Done, measured.** 452's tasks.md carries T016 from 449 T406; `make speckit-todo` no longer counts it open on 449.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: nothing fixed in 449; the fix is 452 T016's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task moved whole to 452 T016.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T408 (<why: the finding or measurement that files it>)
+### T408 (withdrawn: moved to 452 T006 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: none in 449 - the task moved to 452 T006 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md), with its full text and evidence; its plan is 452's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| withdrawn | n/a: nothing built in 449 | n/a | none | n/a |
 
 ### T408 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** n/a in 449: the task moved to 452 T006 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T006 states it.
+2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
+3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
+4. **Do they describe the world here?** n/a: no map changes in 449.
+5. **The order.** Withdrawn before T158, so 449 closes on its port.
+6. **The exits.** Green: the line ticked withdrawn and 452 T006 filed. Red: n/a.
+7. **The search smell.** None.
+8. **The budget.** None of its own.
+9. **Done, measured.** 452's tasks.md carries T006 from 449 T408; `make speckit-todo` no longer counts it open on 449.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: nothing fixed in 449; the fix is 452 T006's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task moved whole to 452 T006.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T410 (<why: the finding or measurement that files it>)
+### T410 (withdrawn: moved to 452 T017 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: none in 449 - the task moved to 452 T017 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md), with its full text and evidence; its plan is 452's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| withdrawn | n/a: nothing built in 449 | n/a | none | n/a |
 
 ### T410 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** n/a in 449: the task moved to 452 T017 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T017 states it.
+2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
+3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
+4. **Do they describe the world here?** n/a: no map changes in 449.
+5. **The order.** Withdrawn before T158, so 449 closes on its port.
+6. **The exits.** Green: the line ticked withdrawn and 452 T017 filed. Red: n/a.
+7. **The search smell.** None.
+8. **The budget.** None of its own.
+9. **Done, measured.** 452's tasks.md carries T017 from 449 T410; `make speckit-todo` no longer counts it open on 449.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: nothing fixed in 449; the fix is 452 T017's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task moved whole to 452 T017.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T411 (<why: the finding or measurement that files it>)
+### T411 (withdrawn: moved to 452 T011 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: none in 449 - the task moved to 452 T011 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md), with its full text and evidence; its plan is 452's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| withdrawn | n/a: nothing built in 449 | n/a | none | n/a |
 
 ### T411 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** n/a in 449: the task moved to 452 T011 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T011 states it.
+2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
+3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
+4. **Do they describe the world here?** n/a: no map changes in 449.
+5. **The order.** Withdrawn before T158, so 449 closes on its port.
+6. **The exits.** Green: the line ticked withdrawn and 452 T011 filed. Red: n/a.
+7. **The search smell.** None.
+8. **The budget.** None of its own.
+9. **Done, measured.** 452's tasks.md carries T011 from 449 T411; `make speckit-todo` no longer counts it open on 449.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: nothing fixed in 449; the fix is 452 T011's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task moved whole to 452 T011.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T412 (<why: the finding or measurement that files it>)
+### T412 (withdrawn: moved to 452 T012 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: none in 449 - the task moved to 452 T012 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md), with its full text and evidence; its plan is 452's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| withdrawn | n/a: nothing built in 449 | n/a | none | n/a |
 
 ### T412 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** n/a in 449: the task moved to 452 T012 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T012 states it.
+2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
+3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
+4. **Do they describe the world here?** n/a: no map changes in 449.
+5. **The order.** Withdrawn before T158, so 449 closes on its port.
+6. **The exits.** Green: the line ticked withdrawn and 452 T012 filed. Red: n/a.
+7. **The search smell.** None.
+8. **The budget.** None of its own.
+9. **Done, measured.** 452's tasks.md carries T012 from 449 T412; `make speckit-todo` no longer counts it open on 449.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: nothing fixed in 449; the fix is 452 T012's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task moved whole to 452 T012.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T413 (<why: the finding or measurement that files it>)
+### T413 (withdrawn: moved to 452 T013 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: none in 449 - the task moved to 452 T013 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md), with its full text and evidence; its plan is 452's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| withdrawn | n/a: nothing built in 449 | n/a | none | n/a |
 
 ### T413 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** n/a in 449: the task moved to 452 T013 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T013 states it.
+2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
+3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
+4. **Do they describe the world here?** n/a: no map changes in 449.
+5. **The order.** Withdrawn before T158, so 449 closes on its port.
+6. **The exits.** Green: the line ticked withdrawn and 452 T013 filed. Red: n/a.
+7. **The search smell.** None.
+8. **The budget.** None of its own.
+9. **Done, measured.** 452's tasks.md carries T013 from 449 T413; `make speckit-todo` no longer counts it open on 449.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: nothing fixed in 449; the fix is 452 T013's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task moved whole to 452 T013.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T414 (<why: the finding or measurement that files it>)
+### T414 (withdrawn: moved to 452 T014 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: none in 449 - the task moved to 452 T014 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md), with its full text and evidence; its plan is 452's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| withdrawn | n/a: nothing built in 449 | n/a | none | n/a |
 
 ### T414 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** n/a in 449: the task moved to 452 T014 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T014 states it.
+2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
+3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
+4. **Do they describe the world here?** n/a: no map changes in 449.
+5. **The order.** Withdrawn before T158, so 449 closes on its port.
+6. **The exits.** Green: the line ticked withdrawn and 452 T014 filed. Red: n/a.
+7. **The search smell.** None.
+8. **The budget.** None of its own.
+9. **Done, measured.** 452's tasks.md carries T014 from 449 T414; `make speckit-todo` no longer counts it open on 449.
+10. **Before moving a constant.** n/a: no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: nothing fixed in 449; the fix is 452 T014's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task moved whole to 452 T014.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 

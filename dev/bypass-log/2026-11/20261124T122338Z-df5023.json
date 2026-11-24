@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-24T12:23:38Z",
+  "target": "plan-gate tick 449-rust-codebase",
+  "commit": "c7dac385dd",
+  "why": "task moved unbuilt to 452 at the GM's request"
+}

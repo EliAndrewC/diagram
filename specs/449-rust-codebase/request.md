@@ -170,3 +170,11 @@ Told that 449's follow-ups do not converge (52 landed since midnight, 23 open, e
 > After you are done implementing all of these changes, then I think that it would be good to test them out by doing some kind of a change that will result in a cascade. In order to make sure that our cascading checks work as we expect. ... I want it to be a legitimate change ... the first step should be checking whether or not we actually even need to make those changes But assuming that any of them survive that kind of editing and review process, then we should try this.
 
 The rows used (the session's proposal, which the GM answered "Sounds great. I look forward to hearing how it went."): T399 and T407 (should cascade nothing), T409, T400 and T378 (should cascade to exactly what repeats their words), T394 and T403 (new facts: cascade only where they contradict a pop-up).
+
+## 2026-11-24, the 17 building-plan follow-ups move to their own feature
+
+Told that 449 held 17 open follow-ups beside T158 (three research questions T386, T387, T389; two stable details T404, T405; one sheet layout item T408; eight claims and docs restatements T374, T390, T393, T396, T411, T412, T413, T414; three record and notes items T380, T406, T410), none a defect in ported code, the GM said:
+
+> Okay, can we move all 17 of those into their own separate feature?  It seems like they all have to do with hand-drawn diagrams rather than scripted maps, is that correct?
+
+They are feature 452 (`specs/452-building-plan-followups/`), each keeping its text and naming its 449 number; each 449 line is ticked withdrawn, pointing to its 452 task.
