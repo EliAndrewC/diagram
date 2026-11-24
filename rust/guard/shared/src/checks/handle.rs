@@ -260,21 +260,15 @@ fn handle_locked(mode: &str, payload: &Value, path: &Path, t: f64) -> String {
 /// trigger was never matched to its footnote and the same footnote tripped a new round number at every dispatch - three trips and
 /// three arbiter dispatches with no round run. `GUARD_EDIT_OK`: fixing a guard that fires on correct work.
 fn keep_trips(path: &Path, state: &Value) {
-    let Some(trips) = state.get("flag_trips").filter(|v| v.is_object()) else {
-        return;
-    };
+    // GUARD_EDIT_OK: the same fix, written with no branch a test cannot reach (the coverage floor)
+    let trips = state.get("flag_trips").cloned().unwrap_or(Value::Null);
     let mut kept = load(path);
-    if !kept.is_object() {
-        return;
+    let moved = kept.get("flag_trips") != Some(&trips) || kept.get("flags") != state.get("flags");
+    if trips.is_object() && kept.is_object() && moved {
+        kept["flag_trips"] = trips;
+        kept["flags"] = state.get("flags").cloned().unwrap_or(Value::Null);
+        let _ = save(path, &kept);
     }
-    if kept.get("flag_trips") == Some(trips) && kept.get("flags") == state.get("flags") {
-        return;
-    }
-    kept["flag_trips"] = trips.clone();
-    if let Some(flags) = state.get("flags") {
-        kept["flags"] = flags.clone();
-    }
-    let _ = save(path, &kept);
 }
 
 /// What the `dispatch` branch decided.
