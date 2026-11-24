@@ -42,7 +42,8 @@ fn a_dispatch_with_no_model_and_no_file_is_refused_with_the_rule() {
     let at = world("refuse");
     let got = run("Agent", &json!({"subagent_type": "Explore"}), &at);
     assert!(refused(&got, "this `Explore` agent names no model"));
-    assert!(refused(&got, "for anything that judges"));
+    assert!(refused(&got, "for anything that judges or builds"));
+    assert!(refused(&got, "\n        SESSION_MODEL: <"));
     assert!(refused(&run("Agent", &json!({}), &at), "`general-purpose`"));
     assert!(refused(
         &run(
@@ -52,6 +53,51 @@ fn a_dispatch_with_no_model_and_no_file_is_refused_with_the_rule() {
         ),
         "no model"
     ));
+}
+
+/// 451 T216: reading work names sonnet or haiku; judging or building work names no model and marks its prompt; any other name is refused.
+#[test]
+fn the_sessions_model_is_asked_for_by_the_prompts_line_never_by_name() {
+    let at = world("session");
+    let send = |model: &str, prompt: &str| {
+        run(
+            "Agent",
+            &json!({"subagent_type": "general-purpose", "model": model, "prompt": prompt}),
+            &at,
+        )
+    };
+    let marked = "451 T216: build it\nSESSION_MODEL: builds the T216 guard\nRead first: x";
+    assert!(send("", marked).is_empty());
+    assert!(send("", "  SESSION_MODEL: judges the plan").is_empty());
+    assert!(send("haiku", "describe the page").is_empty());
+    assert!(send("sonnet", marked).is_empty());
+    for named in ["opus", "fable", "inherit", "Sonnet"] {
+        let got = send(named, marked);
+        assert!(refused(
+            &got,
+            &format!("names `{named}`, which would not follow")
+        ));
+        assert!(refused(&got, "omit `model`"));
+    }
+    for unmarked in [
+        "SESSION_MODEL: judges",
+        "SESSION_MODEL:",
+        "the guard reads a SESSION_MODEL: line of the prompt",
+        "SESSION_MODEL=\"judges the plan\"",
+        "SESSION_MODEL: <what it judges or builds, two words or more>",
+    ] {
+        assert!(refused(
+            &send("", unmarked),
+            "carries no `SESSION_MODEL:` line"
+        ));
+    }
+    // A defined type is out of scope whatever it names: its file pins its tier.
+    assert!(run(
+        "Agent",
+        &json!({"subagent_type": "quote-check", "model": "opus"}),
+        &at
+    )
+    .is_empty());
 }
 
 #[test]

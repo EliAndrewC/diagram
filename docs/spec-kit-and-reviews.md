@@ -238,9 +238,13 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   downgrade stands only after seeded-fault runs on known findings - THREE a leg, because one run of a
   judging agent is not a stable oracle; which checks were tried on which model, and how they did: `docs/spec-kit-and-reviews.md`
   "Models tried"). An ad-hoc agent is dispatched with
-  an explicit `model` - `sonnet` to read, fetch, translate or extract, `opus` for anything that judges -
-  and never with none: with none it runs on the session's model, and `agent_model_hooks.rs` refuses it
-  (`haiku` only for a plain description of a page - it misread a table's columns where sonnet did not). A DEFINED agent launches without this file, the nested `CLAUDE.md` files and the memory index
+  its model DECIDED: `model: sonnet` to read, fetch, translate or extract (`haiku` only for a plain description of a page -
+  it misread a table's columns where sonnet did not); for anything that judges or builds, no `model` and a line of the
+  prompt `SESSION_MODEL: <what it judges or builds, two words or more>`, so it runs on the session's model and follows the
+  GM when they switch it (feature 451 T216, the GM 2026-11-24: *"instead of Opus for anything that judges, I'd like it to be
+  inheriting the parent session model for anything that judges"*). `agent_model_hooks.rs` refuses a dispatch with neither -
+  reading work must not land on the session's model by omission - and one that names any other model (`opus`, `fable`),
+  which would not follow the switch; a Workflow script's ad-hoc `agent()` call is held to the same rule (`workflow_hooks.rs`). A DEFINED agent launches without this file, the nested `CLAUDE.md` files and the memory index
   (`omitClaudeMd: true`, feature 256, GM 2026-09-19: *"If there's something that a subagent should know, it should be in
   the subagent specification"*) - a rule a check needs is written in its contract, and a new agent file carries the field;
   an ad-hoc agent keeps all three (the tier test enforces the field on every agent file; `spec-fidelity`'s exception ended

@@ -92,5 +92,6 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
   (`make apply-edits`) before the next check is bundled; `make modal-bundle` refuses a check while one before it is owed,
   naming it. A round's applied EDITs settle the checks before it, so form is not owed again by research's fixes (feature 375
   amendment 3: run together, each check's edits re-owed the others, and pop-ups reached the round cap).
-- An ad-hoc agent always names a `model`: `sonnet` to read, fetch, translate or extract, `opus` for anything that
-  judges.
+- An ad-hoc agent always states its model: `model: sonnet` to read, fetch, translate or extract; for anything that
+  judges or builds, no `model` and a line of the prompt `SESSION_MODEL: <what it judges or builds>` - it runs on the
+  session's model (the GM 2026-11-24).

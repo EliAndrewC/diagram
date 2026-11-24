@@ -121,7 +121,7 @@ Spec-driven under `.specify/memory/constitution.md`. One line each here; the ful
 - Review checks run ON THEIR OCCASION (`docs/reviews.md`), one unit per agent; every pass is a ledger row with its cost
   (`make review-cost`); findings for the GM go through `escalation-check` first; to improve a check, add the general rule,
   prove it fires on the unfixed artifact, then fix the artifact. Each runs on the tier its file pins; an ad-hoc
-  agent names its `model` (`sonnet` to read, fetch, translate or extract; `opus` for anything that judges). A defined agent launches without the CLAUDE.md files (`omitClaudeMd: true`); **what every
+  agent states its model (`model: sonnet` to read, fetch, translate or extract; no `model` and a prompt line `SESSION_MODEL: <what it judges or builds>` - the session's model, following the GM's switch - for anything that judges or builds). A defined agent launches without the CLAUDE.md files (`omitClaudeMd: true`); **what every
   dispatch of a check shares lives in its agent file** - only that is reused across launches (feature 383 research R16) -
   and a wave of 4 or more of one type runs as ONE `Workflow` call, `check-wave`, which wakes the session once and puts each unit
   through the Agent guards (feature 383 amendment 7; `agent_prefix_hooks.rs`, `workflow_hooks.rs`). The review agents, and

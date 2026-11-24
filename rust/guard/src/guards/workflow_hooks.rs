@@ -1,6 +1,6 @@
 //! `workflow-hooks` (feature 383 amendment 7, FR-045; ported from the shell of the same name and `lib/hm_workflow.py`, feature 449 T040): A WORKFLOW CALL IS
 //! HELD TO THE GUARDS ITS AGENTS WOULD MEET AS AGENT CALLS, because no Agent hook fires for an agent a workflow spawns (research R20). An untyped `agent(` is
-//! refused (`GP_OK` with a reason, and a model, is the escape); a defined agent of this project runs through the saved `check-wave` workflow; and each unit of
+//! refused (`GP_OK` with a reason is the escape, its model decided as an ad-hoc Agent call's is: a reading tier named, or none and `SESSION_MODEL:` in the call, 451 T216); a defined agent of this project runs through the saved `check-wave` workflow; and each unit of
 //! `check-wave` is put through every `PreToolUse` hook an Agent call meets, the first refusal refusing the whole run.
 
 use std::path::{Path, PathBuf};
@@ -9,6 +9,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use serde_json::{json, Value};
 
+use crate::guards::agent_model_hooks::{decided, READING};
 use crate::guards::finished_run_hooks::runs::realpath;
 use crate::protocol::{Answer, Event, Guard};
 use crate::shared::log;
@@ -55,7 +56,11 @@ static GP_ESCAPE: LazyLock<Regex> = LazyLock::new(|| re(r#"GP_OK\s*[=:]\s*["']?\
 static AGENT_TYPE: LazyLock<Regex> =
     LazyLock::new(|| re(r#"\bagentType\s*:\s*(?:(['"`])([\w-]+)\1|(\S))"#));
 static NAMES_WAVE: LazyLock<Regex> = LazyLock::new(|| re(r#"['"`]check-wave['"`]"#));
-static MODEL: LazyLock<Regex> = LazyLock::new(|| re(r"\bmodel\s*:"));
+static MODEL: LazyLock<Regex> = LazyLock::new(|| re(r"\bmodel\s*:\s*"));
+static MODEL_VALUE: LazyLock<Regex> = LazyLock::new(|| re(r#"^(?:(['"`])([\w.-]*)\1|(\S))"#));
+/// `SESSION_MODEL: <reason>` in a call's text - its prompt or a comment (451 T216, `agent_model_hooks`' marker).
+static SESSION_MODEL: LazyLock<Regex> =
+    LazyLock::new(|| re(r#"\bSESSION_MODEL:[ \t]*([^\n'"`*]*)"#));
 
 fn found(pattern: &Regex, text: &str) -> bool {
     pattern.is_match(text).unwrap_or(false)
@@ -101,6 +106,50 @@ fn agent_type(call: &str) -> Option<String> {
     Some(m.get(2).map_or("?", |g| g.as_str()).to_owned())
 }
 
+/// The call with every string's contents blanked, byte for byte, its quotes kept: where a key of the options stands, apart from a
+/// prompt that only says `model: opus` (451 T216 - a prompt's words named the model, and a correct call was refused).
+fn strings_blanked(call: &str) -> String {
+    let mut quote = 0_u8;
+    let mut skip = false;
+    let out = call
+        .bytes()
+        .map(|c| {
+            if quote == 0 {
+                if matches!(c, b'\'' | b'"' | b'`') {
+                    quote = c;
+                }
+                return c;
+            }
+            if skip {
+                skip = false;
+            } else if c == b'\\' {
+                skip = true;
+            } else if c == quote {
+                quote = 0;
+                return c;
+            }
+            b' '
+        })
+        .collect();
+    String::from_utf8(out).unwrap_or_default()
+}
+
+/// A call's `model` option: its literal, `?` when it is an expression, None when the call names none.
+fn model_of(call: &str) -> Option<String> {
+    let blanked = strings_blanked(call);
+    let at = MODEL.find(&blanked).ok().flatten()?.end();
+    let m = MODEL_VALUE.captures(&call[at..]).ok().flatten()?;
+    Some(m.get(2).map_or("?", |g| g.as_str()).to_owned())
+}
+
+/// Does the call carry `SESSION_MODEL:` with a reason that clears the escapes' floor?
+fn session_marked(call: &str) -> bool {
+    SESSION_MODEL
+        .captures_iter(call)
+        .map_while(Result::ok)
+        .any(|c| c.get(1).is_some_and(|g| decided(g.as_str().trim())))
+}
+
 fn defined(root: &Path) -> Vec<String> {
     std::fs::read_dir(root.join(".claude/agents"))
         .into_iter()
@@ -126,7 +175,7 @@ fn script_verdict(script: &str, root: &Path) -> String {
         return "SCRIPT check-wave is run by name from the Workflow tool, its args written out, never from inside a script".to_owned();
     }
     let gp = found(&GP_ESCAPE, script);
-    let mut used = false;
+    let (mut used, mut marked) = (false, false);
     let ours = defined(root);
     for call in calls(script, "agent") {
         let kind = agent_type(&call);
@@ -137,15 +186,21 @@ fn script_verdict(script: &str, root: &Path) -> String {
         if let Some(k) = kind.filter(|k| k == "?" || ours.contains(k)) {
             return format!("GUARDED {k}");
         }
-        if !found(&MODEL, &call) {
-            return format!("MODEL {}", short(&call));
+        // An ad-hoc call's model, by `agent_model_hooks`' rule (451 T216): a reading tier named, or none and the marker.
+        match model_of(&call) {
+            Some(m) if READING.contains(&m.as_str()) => {}
+            Some(m) => return format!("NAMED {m} {}", short(&call)),
+            None if session_marked(&call) => marked = true,
+            None => return format!("MODEL {}", short(&call)),
         }
     }
-    if used {
-        "ESCAPED".to_owned()
-    } else {
-        String::new()
+    match (used, marked) {
+        (true, true) => "ESCAPED MARKED",
+        (true, false) => "ESCAPED",
+        (false, true) => "MARKED",
+        (false, false) => "",
     }
+    .to_owned()
 }
 
 /// The `PreToolUse` hook commands an Agent call meets, in order; an entry with no matcher takes every tool, Agent among them.
@@ -317,7 +372,7 @@ fn wave_verdict(event: &Event, ctx: &Ctx) -> String {
     String::new()
 }
 
-/// What the decider says: "", `WAVE-PASSED`, `ESCAPED` or the refusal's kind and words.
+/// What the decider says: "", `WAVE-PASSED`, `ESCAPED`, `MARKED` (a call on the session's model), both, or the refusal's kind and words.
 pub(crate) fn verdict(event: &Event, ctx: &Ctx) -> String {
     let null = Value::Null;
     let ti = event.input.get("tool_input").unwrap_or(&null);
@@ -356,6 +411,9 @@ pub(crate) fn verdict(event: &Event, ctx: &Ctx) -> String {
 const TRAILER: &str = "(rust/guard/src/guards/workflow_hooks.rs; feature 383 amendment 7)";
 const PASSED: &str = "check-wave: every unit passed the Agent guards. When this run finishes, `make wave-report` measures it - each agent's first-request cache read and write, and the main session's wakes - against the last hand-launched wave (feature 383 FR-046).";
 
+/// An ad-hoc call's two compliant forms, as `agent_model_hooks` holds an ad-hoc Agent call to them (451 T216).
+const MODEL_RULE: &str = "An ad-hoc call's model (agent_model_hooks.rs): model: \"sonnet\" to read, fetch, translate or extract; for anything that\njudges or builds, NO model and `SESSION_MODEL: <what it judges or builds, two words or more>` inside the call - in its\nprompt or a comment - so it runs on the session's model.\n";
+
 fn bold(line: &str) -> String {
     format!("\n\u{1b}[1mBLOCKED: {line}\u{1b}[0m\n")
 }
@@ -363,8 +421,18 @@ fn bold(line: &str) -> String {
 fn refusal(got: &str) -> String {
     let (kind, rest) = got.split_once(' ').unwrap_or((got, ""));
     let body = match kind {
-        "UNTYPED" => format!("{}A workflow's default subagent loads every CLAUDE.md and every tool - ~35k tokens written at its first request,\nagainst ~4k for a typed agent whose file omits them (feature 383 research R20). Pass agentType: \"<its .claude/agents/ name>\"\non every agent() call. A deliberate general-purpose stage: GP_OK: <reason> in the script, and name its model.\n", bold(&format!("an agent() call with no agentType: {rest}"))),
-        "MODEL" => format!("{}As an ad-hoc Agent call must (agent_model_hooks.rs): model: \"sonnet\" to read, fetch, translate or extract, \"opus\" for\nanything that judges.\n", bold(&format!("an ad-hoc agent() call names no model: {rest}"))),
+        // The ~35k: the default subagent loads every CLAUDE.md and every tool, a typed agent whose file omits them ~4k (feature 383 research R20).
+        "UNTYPED" => format!("{}A default subagent costs ~35k tokens, a typed one ~4k. Pass agentType: \"<its .claude/agents/ name>\"\non every agent() call. A deliberate general-purpose stage: GP_OK: <reason, two words or more> in the script, its model decided as below.\n{MODEL_RULE}", bold(&format!("an agent() call with no agentType: {rest}"))),
+        "MODEL" => format!("{}{MODEL_RULE}", bold(&format!("an ad-hoc agent() call names no model and carries no SESSION_MODEL: {rest}"))),
+        "NAMED" => {
+            let (model, call) = rest.split_once(' ').unwrap_or((rest, ""));
+            let why = if model == "?" {
+                "`?` is a model computed at run time, which nothing can read - name a literal.\n"
+            } else {
+                "A named model would not follow the session's when the GM switches it.\n"
+            };
+            format!("{}{why}{MODEL_RULE}", bold(&format!("an ad-hoc agent() call names the model `{model}`: {call}")))
+        }
         "GUARDED" => format!("{}No Agent hook fires inside a workflow, so a defined check is held to its guards (bundle, owed, freeze, round caps,\ndecide-first) only when its units are known before the run - as check-wave's args are:\n  Workflow({{name: \"check-wave\", args: {{agentType: \"<job>\", units: [{{label: \"<unit>\", prompt: \"<its prompt>\"}}, ...]}}}})\nAn agentType computed at run time is refused the same way: name it literally.\n", bold(&format!("`{rest}` runs through the check-wave workflow, not a script of its own."))),
         "UNIT" => {
             let (label, why) = rest.split_once('\n').unwrap_or((rest, ""));
@@ -372,6 +440,10 @@ fn refusal(got: &str) -> String {
         }
         _ => bold(rest),
     };
+    // The model rule's refusals name no source: message-check (451 T216) ruled the trailer a word their reader can spare.
+    if matches!(kind, "UNTYPED" | "MODEL" | "NAMED") {
+        return body.trim_end().to_owned();
+    }
     format!("{body}{TRAILER}")
 }
 
@@ -383,15 +455,27 @@ pub(crate) fn judge(event: &Event, session: &Session, ctx: &Ctx) -> Vec<Answer> 
     match got.as_str() {
         "" => Vec::new(),
         "WAVE-PASSED" => vec![Answer::Notice(PASSED.to_owned())],
-        "ESCAPED" => {
-            log::fire(
-                "workflow",
-                "escaped",
-                "an untyped agent() stage, with a reason",
-                "escape",
-                &event.input,
-                session,
-            );
+        "ESCAPED" | "MARKED" | "ESCAPED MARKED" => {
+            if got.starts_with("ESCAPED") {
+                log::fire(
+                    "workflow",
+                    "escaped",
+                    "an untyped agent() stage, with a reason",
+                    "escape",
+                    &event.input,
+                    session,
+                );
+            }
+            if got.ends_with("MARKED") {
+                log::fire(
+                    "workflow",
+                    "permitted",
+                    "an ad-hoc agent() call on the session's model, by its SESSION_MODEL reason",
+                    "session-model",
+                    &event.input,
+                    session,
+                );
+            }
             Vec::new()
         }
         _ => {

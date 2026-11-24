@@ -51,7 +51,14 @@ const r = await agent('summarize the file', {label: 'a', model: 'sonnet'})")"
 logged escape && ok "...and is recorded as an escape" || no "the escape is not recorded"
 wf "$(script "// GP_OK: a deliberate general stage
 const r = await agent('summarize the file', {label: 'a'})")"
-[ "$(rc)" -eq 2 ] && grep -q 'names no model' "$T/err" && ok "...but an untyped stage still names its model, as an ad-hoc Agent call must" || no "a model-less GP stage went" "(rc=$(rc))"
+[ "$(rc)" -eq 2 ] && grep -q 'names no model' "$T/err" && grep -q 'SESSION_MODEL: <' "$T/err" && ok "...but an untyped stage still decides its model, as an ad-hoc Agent call must" || no "a model-less GP stage went" "(rc=$(rc))"
+wf "$(script "// GP_OK: a deliberate general stage
+const r = await agent('SESSION_MODEL: judges the summary\\nis it right', {label: 'a'})")"
+[ "$(rc)" -eq 0 ] && ok "...no model and SESSION_MODEL with its reason in the call passes: the session's model (451 T216)" || no "a marked stage was refused" "(rc=$(rc)) $(head -3 "$T/err")"
+logged session-model && ok "...and is recorded" || no "session-model not recorded"
+wf "$(script "// GP_OK: a deliberate general stage
+const r = await agent('is it right', {label: 'a', model: 'opus'})")"
+[ "$(rc)" -eq 2 ] && grep -q 'names the model `opus`' "$T/err" && ok "...and a named opus is refused: it would not follow the GM's switch" || no "a named opus went" "(rc=$(rc))"
 wf "$(script "// GP_OK
 const r = await agent('summarize the file', {label: 'a', model: 'sonnet'})")"
 [ "$(rc)" -eq 2 ] && ok "a bare GP_OK with no reason does not pass" || no "a bare GP_OK passed" "(rc=$(rc))"

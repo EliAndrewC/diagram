@@ -1,12 +1,12 @@
-That is how 62 ad-hoc runs landed on Fable (feature 251's census), and no test pins an ad-hoc agent.
+Re-send the SAME dispatch with its model decided, by what you are asking the agent to do:
 
-Re-send the SAME dispatch with a `model`, chosen by what you are asking the agent to do:
+  - to read, fetch, translate or extract - the agent reports what is there:
+        model: "sonnet"
+  - for anything that judges or builds - does this support that, is this right, what is missing, write
+    the code - NO `model`, and a line of its own in the prompt (not the first, which names the task):
+        SESSION_MODEL: <what it judges or builds, two words or more>
+    It then runs on the session's model.
 
-    model: "sonnet"   to read, fetch, translate or extract - the agent reports what is there
-    model: "opus"     for anything that judges - does this support that, is this right, what is missing
-
-(Measured, feature 251 R7: sonnet extracted a table exactly as an opus reader had; haiku misread its
-columns - so haiku only for a plain description of a page, never for a table, a number or a quotation.)
-If it does both, it judges: use opus. A named check (`quote-check`, `settlement-review`, ...) needs no
-model - its file under .claude/agents/ pins its tier. Which one fits is yours to decide; that is why
-this is a refusal and not a default.
+(haiku only for a plain page description, never a table, number or quotation.)
+If it does both, it judges. A named check (`quote-check`, `settlement-review`, ...) needs neither - its
+file under .claude/agents/ pins its tier.

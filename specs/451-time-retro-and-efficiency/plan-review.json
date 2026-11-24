@@ -1272,6 +1272,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
+  },
+  "### T216 (the GM 2026-11-24: builders were sent with `model: opus` under a Fable 5.2 session; an ad-hoc agent that judges or builds runs on the session's model)": {
+   "sha256": "a2312f96a35504aefbd4b653bd9def76d70b2c949ec9272a9cf8b2a1b3ab4c3d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T216 Approach (checklist part A)": {
+   "sha256": "09b6fa603e7261fa3c973f020ae00cec868f2948fd60707f2213ff1afe25b2c8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -18269,6 +18281,76 @@
      "why": "It fixes a wrong outcome (a full impl-drift owed for text already checked) under 'fix all 6'. No defect is deferred."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T216 (the GM 2026-11-24: builders were sent with `model: opus` under a Fable 5.2 session; an ad-hoc agent that judges or builds runs on the session's model)",
+    "### T216 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "The carrier: an ad-hoc dispatch with no model asks for the session's model by a prompt line `SESSION_MODEL: <reason>` (line start, reason of two words / eight characters, logged as the guard log's detail).",
+     "class": "within",
+     "why": "The GM asked that judging agents inherit the session model while the Sonnet rule for read/fetch/translate/extract stays enforced ('that ruling from before is something that I still want'). Omitting the model is how inheritance happens, and the guard needs some way to tell an omission the caller decided on from an accidental one, or reading work would land on the session's model by default. A marker line is a mechanism for doing what was asked and narrows nothing. Recording the reason follows the project's every-firing-recorded convention."
+    },
+    {
+     "id": "(b)",
+     "summary": "Any named model other than sonnet or haiku is refused, the session's own model included (stricter than the task line's 'a named opus or fable that is not the session's'). The allow-list form means a future alias is refused until its tier is decided.",
+     "class": "within",
+     "why": "Judged against the GM's words, not against the task line (which is the session's text; spec-cited.md is empty). The GM asked for 'inheriting the parent session model for anything that judges' and 'if I switch back to Opus 5.5, then I would want them to use that'. A pinned name that happens to equal today's session model stops following at the next switch, so refusing it moves toward the request rather than away from it. What this costs is the ability to pin an ad-hoc judging agent to some other model, and nobody asked for that."
+    },
+    {
+     "id": "(c)",
+     "summary": "A named sonnet beside the SESSION_MODEL line passes as sonnet; the line is inert.",
+     "class": "within",
+     "why": "Sonnet is the tier the GM's kept ruling enforces for reading work. The caller named it, and what is named is what runs. Neither request quote is narrowed."
+    },
+    {
+     "id": "(d)",
+     "summary": "A dispatch with no model and no SESSION_MODEL line stays refused (no-model).",
+     "class": "within",
+     "why": "This is the GM's own words verbatim: 'that ruling from before is something that I still want with regards to enforcing that Sonnet should be used to read, fetch, translate, or extract.' Letting an unmarked omission through would put reading work on the session's model by default."
+    },
+    {
+     "id": "defined-agents",
+     "summary": "Defined agent types (files under .claude/agents/) pass whatever model they name, with that check moved ahead of the model check. Their pinned tiers in agent_models.rs ('judgment is on Opus') are left alone.",
+     "class": "within",
+     "why": "This is the one decision here that could narrow the GM's literal 'anything that judges', so it is decided on his words alone. The subject of his question is 'the general purpose subagents that you're firing off to do stuff', and he wants them to 'use whatever model it is that I have selected'. His second message changes 'that ruling from before', which he identifies by its enforcement of Sonnet for read, fetch, translate and extract. That is the ad-hoc dispatch rule whose text said 'opus for anything that judges'. Nothing in either quote reaches the defined review agents' frontmatter tiers, so the request as written never covered them. Leaving them alone therefore does not carve anything out of it. The same builder-versus-defined-review-agent line is drawn by the spec at FR-006. I relied on neither the session-written heading nor the plan's own assertion of scope."
+    },
+    {
+     "id": "builds",
+     "summary": "The inheritance rule covers ad-hoc agents that build as well as those that judge.",
+     "class": "within",
+     "why": "The GM's first quote asks that the general-purpose subagents 'you are firing off to do stuff use whatever model it is that I have selected', and builders are among them. The request was set off by builders named opus under a Fable session."
+    },
+    {
+     "id": "haiku",
+     "summary": "haiku is in the allow-list beside sonnet.",
+     "class": "within",
+     "why": "Per the Approach, the old guard passed any named model, so haiku was already allowed. The GM asked to keep the Sonnet half of the ruling and to replace only its Opus half. Keeping haiku allowed changes nothing he asked to change. (The bundle does not quote the 2026-09-19 rule's text, so this rests on the plan's description of the guard as built.)"
+    },
+    {
+     "id": "workflow-agent",
+     "summary": "workflow_hooks holds a script's ad-hoc agent() call to the same rule: the model literal is read, a computed model is refused as '?', the marker is accepted anywhere in the call's text including a comment, and a marked call is recorded session-model.",
+     "class": "within",
+     "why": "An agent() call from a workflow script is an ad-hoc subagent the session fires off, so the GM's rule reaches it. Without this change, scripts would go on pinning opus. Refusing a model the guard cannot read is how it enforces the Sonnet half of the kept ruling. Accepting the marker in the call text is the carrier of (a), fitted to that call's form."
+    },
+    {
+     "id": "no-escape",
+     "summary": "The SESSION_MODEL line is a compliant form, not an escape, and the guard has no escape.",
+     "class": "within",
+     "why": "The guard already had no escape, and the compliant dispatch is always available. FR-012's escape requirement covers FR-006 to FR-009, FR-011 and FR-013, not this guard, so nothing that was asked is narrowed."
+    },
+    {
+     "id": "restatements",
+     "summary": "The rule is restated in the root CLAUDE.md and its suite check, docs/guards.md, docs/spec-kit-and-reviews.md, docs/research-doctrine.md, page-session-rules.md and rust/guard/CLAUDE.md. Spec directories 252 and 293 are left alone as history.",
+     "class": "within",
+     "why": "These make the rule's written text match the rule the GM set. The search space is stated: grep for the rule's two phrases over the tree outside .git, observed 2026-11-24. Leaving history unedited narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -29393,6 +29475,74 @@
      "summary": "Not performance work, with no [perf] tag. Found and left: none.",
      "class": "within",
      "why": "It fixes a wrong outcome (a full impl-drift owed for text already checked) under 'fix all 6'. No defect is deferred."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T216": {
+   "section_sha256": "3f44a0f1c0e3e196e099322f435ee2d0e7a93ca9bc11bf574c6b33f6da3425ee",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "The carrier: an ad-hoc dispatch with no model asks for the session's model by a prompt line `SESSION_MODEL: <reason>` (line start, reason of two words / eight characters, logged as the guard log's detail).",
+     "class": "within",
+     "why": "The GM asked that judging agents inherit the session model while the Sonnet rule for read/fetch/translate/extract stays enforced ('that ruling from before is something that I still want'). Omitting the model is how inheritance happens, and the guard needs some way to tell an omission the caller decided on from an accidental one, or reading work would land on the session's model by default. A marker line is a mechanism for doing what was asked and narrows nothing. Recording the reason follows the project's every-firing-recorded convention."
+    },
+    {
+     "id": "(b)",
+     "summary": "Any named model other than sonnet or haiku is refused, the session's own model included (stricter than the task line's 'a named opus or fable that is not the session's'). The allow-list form means a future alias is refused until its tier is decided.",
+     "class": "within",
+     "why": "Judged against the GM's words, not against the task line (which is the session's text; spec-cited.md is empty). The GM asked for 'inheriting the parent session model for anything that judges' and 'if I switch back to Opus 5.5, then I would want them to use that'. A pinned name that happens to equal today's session model stops following at the next switch, so refusing it moves toward the request rather than away from it. What this costs is the ability to pin an ad-hoc judging agent to some other model, and nobody asked for that."
+    },
+    {
+     "id": "(c)",
+     "summary": "A named sonnet beside the SESSION_MODEL line passes as sonnet; the line is inert.",
+     "class": "within",
+     "why": "Sonnet is the tier the GM's kept ruling enforces for reading work. The caller named it, and what is named is what runs. Neither request quote is narrowed."
+    },
+    {
+     "id": "(d)",
+     "summary": "A dispatch with no model and no SESSION_MODEL line stays refused (no-model).",
+     "class": "within",
+     "why": "This is the GM's own words verbatim: 'that ruling from before is something that I still want with regards to enforcing that Sonnet should be used to read, fetch, translate, or extract.' Letting an unmarked omission through would put reading work on the session's model by default."
+    },
+    {
+     "id": "defined-agents",
+     "summary": "Defined agent types (files under .claude/agents/) pass whatever model they name, with that check moved ahead of the model check. Their pinned tiers in agent_models.rs ('judgment is on Opus') are left alone.",
+     "class": "within",
+     "why": "This is the one decision here that could narrow the GM's literal 'anything that judges', so it is decided on his words alone. The subject of his question is 'the general purpose subagents that you're firing off to do stuff', and he wants them to 'use whatever model it is that I have selected'. His second message changes 'that ruling from before', which he identifies by its enforcement of Sonnet for read, fetch, translate and extract. That is the ad-hoc dispatch rule whose text said 'opus for anything that judges'. Nothing in either quote reaches the defined review agents' frontmatter tiers, so the request as written never covered them. Leaving them alone therefore does not carve anything out of it. The same builder-versus-defined-review-agent line is drawn by the spec at FR-006. I relied on neither the session-written heading nor the plan's own assertion of scope."
+    },
+    {
+     "id": "builds",
+     "summary": "The inheritance rule covers ad-hoc agents that build as well as those that judge.",
+     "class": "within",
+     "why": "The GM's first quote asks that the general-purpose subagents 'you are firing off to do stuff use whatever model it is that I have selected', and builders are among them. The request was set off by builders named opus under a Fable session."
+    },
+    {
+     "id": "haiku",
+     "summary": "haiku is in the allow-list beside sonnet.",
+     "class": "within",
+     "why": "Per the Approach, the old guard passed any named model, so haiku was already allowed. The GM asked to keep the Sonnet half of the ruling and to replace only its Opus half. Keeping haiku allowed changes nothing he asked to change. (The bundle does not quote the 2026-09-19 rule's text, so this rests on the plan's description of the guard as built.)"
+    },
+    {
+     "id": "workflow-agent",
+     "summary": "workflow_hooks holds a script's ad-hoc agent() call to the same rule: the model literal is read, a computed model is refused as '?', the marker is accepted anywhere in the call's text including a comment, and a marked call is recorded session-model.",
+     "class": "within",
+     "why": "An agent() call from a workflow script is an ad-hoc subagent the session fires off, so the GM's rule reaches it. Without this change, scripts would go on pinning opus. Refusing a model the guard cannot read is how it enforces the Sonnet half of the kept ruling. Accepting the marker in the call text is the carrier of (a), fitted to that call's form."
+    },
+    {
+     "id": "no-escape",
+     "summary": "The SESSION_MODEL line is a compliant form, not an escape, and the guard has no escape.",
+     "class": "within",
+     "why": "The guard already had no escape, and the compliant dispatch is always available. FR-012's escape requirement covers FR-006 to FR-009, FR-011 and FR-013, not this guard, so nothing that was asked is narrowed."
+    },
+    {
+     "id": "restatements",
+     "summary": "The rule is restated in the root CLAUDE.md and its suite check, docs/guards.md, docs/spec-kit-and-reviews.md, docs/research-doctrine.md, page-session-rules.md and rust/guard/CLAUDE.md. Spec directories 252 and 293 are left alone as history.",
+     "class": "within",
+     "why": "These make the rule's written text match the rule the GM set. The search space is stated: grep for the rule's two phrases over the tree outside .git, observed 2026-11-24. Leaving history unedited narrows nothing."
     }
    ],
    "verdict": "CLEAR"

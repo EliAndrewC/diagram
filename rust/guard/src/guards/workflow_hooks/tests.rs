@@ -67,9 +67,64 @@ fn a_scripts_agent_calls_are_held_to_the_rules() {
     );
     assert_eq!(script("agent('x', {agentType: t})", &d, &ctx), "GUARDED ?");
     assert_eq!(
-        script("agent('x', {agentType: 'own', model: 'opus'})", &d, &ctx),
+        script("agent('x', {agentType: 'own', model: 'haiku'})", &d, &ctx),
         ""
     );
+    // 451 T216: an ad-hoc call names a reading tier, or no model and its SESSION_MODEL reason; any other model is refused.
+    assert!(
+        script("agent('x', {agentType: 'own', model: 'opus'})", &d, &ctx)
+            .starts_with("NAMED opus agent('x'")
+    );
+    assert!(script("agent('x', {agentType: 'own', model: m})", &d, &ctx).starts_with("NAMED ? "));
+    assert_eq!(
+        script(
+            "agent(p, {agentType: 'own' /* SESSION_MODEL: judges the plan */})",
+            &d,
+            &ctx
+        ),
+        "MARKED"
+    );
+    assert_eq!(
+        script(
+            "// GP_OK: a deliberate stage\nagent(`SESSION_MODEL: builds the stage\n${p}`, {})",
+            &d,
+            &ctx
+        ),
+        "ESCAPED MARKED"
+    );
+    assert!(script(
+        "// SESSION_MODEL: judges the plan\nagent('x', {agentType: 'own'})",
+        &d,
+        &ctx
+    )
+    .starts_with("MODEL "));
+    assert!(script(
+        "agent('SESSION_MODEL: judges', {agentType: 'own'})",
+        &d,
+        &ctx
+    )
+    .starts_with("MODEL "));
+    // The refusal's own placeholder pasted back decides nothing; a prompt that says `model: opus` names no model.
+    assert!(script(
+        "agent('SESSION_MODEL: <what it judges or builds, two words or more>', {agentType: 'own'})",
+        &d,
+        &ctx
+    )
+    .starts_with("MODEL "));
+    assert_eq!(
+        script(
+            "agent('compare the model: opus run, \\'quoted\\'', {agentType: 'own', model: \"sonnet\"})",
+            &d,
+            &ctx
+        ),
+        ""
+    );
+    assert!(script(
+        "agent(\"the model: opus run\", {agentType: 'own'})",
+        &d,
+        &ctx
+    )
+    .starts_with("MODEL "));
     assert!(script("workflow('check-wave', {})", &d, &ctx).starts_with("SCRIPT"));
     assert_eq!(script("workflow('other', {})", &d, &ctx), "");
 }
@@ -191,6 +246,24 @@ fn the_answers() {
         &run(&json!({"script": "agent('x', {agentType: 'quote-check'})"})),
         "name: \"check-wave\""
     ));
+    let named = run(&json!({"script": "agent('x', {agentType: 'own', model: 'fable'})"}));
+    assert!(refused(&named, "names the model `fable`: agent('x'"));
+    assert!(refused(&named, "SESSION_MODEL: <what it judges or builds"));
+    assert!(refused(&named, "would not follow the session's"));
+    assert!(refused(
+        &run(&json!({"script": "agent('x', {agentType: 'own', model: m})"})),
+        "names the model `?`: agent('x', {agentType: 'own', model: m})\u{1b}[0m\n`?` is a model computed at run time"
+    ));
+    assert!(refused(
+        &run(&json!({"script": "// GP_OK: one deliberate\nagent('x', {})"})),
+        "NO model and `SESSION_MODEL: <"
+    ));
+    for passes in [
+        "agent('x', {agentType: 'own' /* SESSION_MODEL: judges the plan */})",
+        "// GP_OK: one deliberate\nagent('SESSION_MODEL: builds the stage', {})",
+    ] {
+        assert!(run(&json!({"script": passes})).is_empty());
+    }
     assert!(refused(
         &run(&json!({"script": "workflow('check-wave')"})),
         "is run by name"

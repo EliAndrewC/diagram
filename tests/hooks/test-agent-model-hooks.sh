@@ -1,5 +1,6 @@
 #!/bin/bash
-# Tests for the agent-model guard (rust/guard, replayed through its link) - an ad-hoc agent dispatch names its model, or is refused (feature 252).
+# Tests for the agent-model guard (rust/guard, replayed through its link) - an ad-hoc agent dispatch states its model, or is refused (feature 252):
+# sonnet or haiku named for reading work, the session's model - no `model`, a SESSION_MODEL line in the prompt - for judging or building (451 T216).
 # Run: tests/hooks/test-agent-model-hooks.sh   (exit 0 = all green)
 # GUARD_EDIT_OK: feature 252 - a NEW guard's companion suite.
 #
@@ -29,10 +30,10 @@ logged() { grep -rlq "$1" "$GUARD_LOG_ROOT" 2>/dev/null; }
 echo "1. what is refused"
 dispatch '{"subagent_type":"general-purpose","prompt":"read three pages","description":"x"}'
 [ "$(rc)" -eq 2 ] && ok "a general-purpose dispatch with no model is refused" || no "it was allowed" "(rc=$(rc))"
-grep -q 'sonnet' "$T/err" && grep -q 'opus' "$T/err" && ok "...the message names both models" || no "the message does not name both models"
-grep -qi 'session' "$T/err" && ok "...says the agent would run on the SESSION's model" || no "the message does not say whose model it would run on"
+grep -q 'model: "sonnet"' "$T/err" && grep -q '^ *SESSION_MODEL: <' "$T/err" && ok "...the message names both compliant forms: sonnet named, or the prompt's SESSION_MODEL line" || no "the message does not name both forms"
+grep -q "session's model" "$T/err" && ok "...says the marked dispatch runs on the session's model" || no "the message does not say whose model it would run on"
 grep -qi 're-send' "$T/err" && ok "...and says to re-send the same dispatch" || no "the message does not say what to do"
-grep -q 'to read, fetch, translate or extract' "$T/err" && grep -q 'for anything that judges' "$T/err" && ok "...in the rule's own words" || no "the rule is not reiterated"
+grep -q 'to read, fetch, translate or extract' "$T/err" && grep -q 'for anything that judges or builds' "$T/err" && ok "...in the rule's own words" || no "the rule is not reiterated"
 logged no-model && ok "...recorded blocked/no-model" || no "no-model not recorded"
 dispatch '{"prompt":"no type at all","description":"x"}'
 [ "$(rc)" -eq 2 ] && ok "an omitted subagent_type is the general-purpose agent, and is refused" || no "an omitted type was allowed" "(rc=$(rc))"
@@ -40,13 +41,30 @@ dispatch '{"subagent_type":"Explore","prompt":"find the callers","description":"
 [ "$(rc)" -eq 2 ] && ok "a built-in type with no agent file (Explore) is refused" || no "Explore was allowed" "(rc=$(rc))"
 dispatch '{"subagent_type":"general-purpose","model":"","prompt":"an empty model is no model","description":"x"}'
 [ "$(rc)" -eq 2 ] && ok "an EMPTY model is no model" || no "an empty model was allowed" "(rc=$(rc))"
+dispatch '{"subagent_type":"general-purpose","model":"fable","prompt":"review this plan","description":"x"}'
+[ "$(rc)" -eq 2 ] && ok "a named fable is refused: a named model does not follow the GM's switch (451 T216)" || no "a named fable was allowed" "(rc=$(rc))"
+grep -q 'names `fable`' "$T/err" && grep -qi 'omit' "$T/err" && grep -q '^ *SESSION_MODEL: <' "$T/err" && ok "...the message names the model, says to omit it and gives the line to add" || no "the message does not name the compliant dispatch"
+logged judging-model-named && ok "...recorded blocked/judging-model-named" || no "judging-model-named not recorded"
+dispatch '{"subagent_type":"Explore","model":"opus","prompt":"SESSION_MODEL: judges the plan section\nreview it","description":"x"}'
+[ "$(rc)" -eq 2 ] && ok "a named opus is refused, its SESSION_MODEL line or not" || no "a named opus was allowed" "(rc=$(rc))"
+dispatch '{"subagent_type":"general-purpose","prompt":"451 T216: review it\nSESSION_MODEL: judges\n","description":"x"}'
+[ "$(rc)" -eq 2 ] && ok "a SESSION_MODEL line with a one-word reason is no decision" || no "a bare marker passed" "(rc=$(rc))"
+dispatch '{"subagent_type":"general-purpose","prompt":"the guard reads a SESSION_MODEL: line of the prompt, as the docs say","description":"x"}'
+[ "$(rc)" -eq 2 ] && ok "a MENTION of the marker inside a line is not the line" || no "a mention passed" "(rc=$(rc))"
 
 echo "2. what passes"
 dispatch '{"subagent_type":"general-purpose","model":"sonnet","prompt":"read three pages","description":"x"}'
 [ "$(rc)" -eq 0 ] && [ ! -s "$T/err" ] && ok "the same dispatch WITH a model passes, silently" || no "a named model was refused" "(rc=$(rc))"
 logged model-named && ok "...recorded permitted/model-named" || no "model-named not recorded"
-dispatch '{"subagent_type":"general-purpose","model":"fable","prompt":"a deliberate choice","description":"x"}'
-[ "$(rc)" -eq 0 ] && ok "ANY named model passes - the choice is the caller's" || no "a named model was second-guessed" "(rc=$(rc))"
+dispatch '{"subagent_type":"general-purpose","model":"haiku","prompt":"describe this page","description":"x"}'
+[ "$(rc)" -eq 0 ] && ok "haiku passes too - a reading model" || no "haiku was refused" "(rc=$(rc))"
+dispatch '{"subagent_type":"general-purpose","prompt":"451 T216: build the guard\nSESSION_MODEL: builds the T216 guard\nRead first: ...","description":"451 T216: build it"}'
+[ "$(rc)" -eq 0 ] && [ ! -s "$T/err" ] && ok "no model and a SESSION_MODEL line with its reason passes, silently - the session's model (451 T216)" || no "a marked dispatch was refused" "(rc=$(rc)) $(head -3 "$T/err")"
+logged session-model && logged 'builds the T216 guard' && ok "...recorded permitted/session-model with its reason" || no "session-model not recorded"
+dispatch '{"subagent_type":"general-purpose","model":"sonnet","prompt":"SESSION_MODEL: judges the plan section\nread it","description":"x"}'
+[ "$(rc)" -eq 0 ] && ok "a named sonnet beside the line passes: the named reading model is what runs" || no "sonnet beside the line was refused" "(rc=$(rc))"
+dispatch '{"subagent_type":"quote-check","model":"opus","prompt":"check hamlets","description":"x"}'
+[ "$(rc)" -eq 0 ] && ok "a type with an agent file is out of scope whatever model it names" || no "a pinned type naming a model was refused" "(rc=$(rc))"
 dispatch '{"subagent_type":"quote-check","prompt":"check hamlets","description":"x"}'
 [ "$(rc)" -eq 0 ] && ok "a type with an agent file passes with no model - its file pins its tier" || no "a pinned type was refused" "(rc=$(rc))"
 logged pinned-type && ok "...recorded permitted/pinned-type" || no "pinned-type not recorded"
@@ -60,7 +78,7 @@ out=$(printf 'not json' | ( cd "$FIX" && "$HOOK" pretool 2>/dev/null )); r=$?
 
 echo "3. the rule is stated once, and the docs say the same"
 ROOT="$(cd "$HERE/../.." && pwd)"
-grep -q 'to read, fetch, translate or extract' "$ROOT/CLAUDE.md" && grep -q 'for anything that judges' "$ROOT/CLAUDE.md" && ok "root CLAUDE.md carries the same two clauses the message reads from agent-model-rule.txt" || no "CLAUDE.md and the message's rule have drifted apart"
+grep -q 'to read, fetch, translate or extract' "$ROOT/CLAUDE.md" && grep -q 'for anything that judges or builds' "$ROOT/CLAUDE.md" && grep -q 'SESSION_MODEL: <' "$ROOT/CLAUDE.md" && ok "root CLAUDE.md carries the same two clauses, and the line, the message reads from agent_model_rule.txt" || no "CLAUDE.md and the message's rule have drifted apart"
 "$HOOK" bogus >/dev/null 2>&1; [ $? -eq 1 ] && ok "an unknown mode is an error, not a pass" || no "an unknown mode passed"
 
 echo
