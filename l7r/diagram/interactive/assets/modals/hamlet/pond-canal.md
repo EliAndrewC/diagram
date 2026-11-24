@@ -1,27 +1,27 @@
 About: The canals of a dike-pond block were the waterways its ponds lay among, inside the dike that ringed the polder.
 A pond was not a sealed basin. The polders south of the Yangtze had channels within the dike and gates through it, opened
 in drought to let the river in and shut in flood, and in the Pearl River delta the villagers watered and drained their
-land through the dikes, the creeks and the gates, reworking ponds to raise fish. Around Lake
+land through the dikes, the creeks and the gates, reworking ponds to raise fish. The creeks among the delta's ponds carried boats: in 1678 the fry raised in its ponds were carried off by boat, and late in the Qing one village built 58 landings along little more than a mile of its waterway. Around Lake
 Tai the houses stood along the streams, because the boat was how the villagers traveled, and nearly every household had
 one.
 
 In the Pearl River delta of old, the ponds lay in a mosaic among winding natural rivers, the line between dug water and
-natural water blurred. On the Lake Tai plain, by contrast, the great polders were laid out on a planned grid of channels,
+natural water blurred, though in 1678 one delta township's pond land was likened to a chessboard, its lines the dikes and its squares the ponds. On the Lake Tai plain, by contrast, the great polders were laid out on a planned grid of channels,
 cross channels and long channels at regular intervals.
 
-How wide or deep the canals between the ponds ran is not recorded.
+How wide or deep the canals between the ponds ran before modern times is not recorded.
 
 Guesses:
 - That the water runs in at one inlet high on the block and out at one outfall low on it: Japan's ring-diked
-  communities set their intakes at the upstream head and their outlets at the downstream tail, though a large ring had
+  communities set their intakes at the head of the ring and their outlets at its tail, most likely its upstream and downstream ends, though a large ring had
   many openings. No account from before 1912 describes a dike-pond block's water running so, or how many gates a
   small block had.
 
 Depiction: The map draws these canals as the network the ponds lie among, not as a rice field's irrigation ditches. The
-block's canals take one of the two layouts dike-pond blocks had, which differs by settlement: on about one hamlet in three the ponds lie in a chessboard and the canals between them run straight; on the rest, a mosaic, the lattice is bent out of line by a smooth drift that fades toward its outer edge, so the canals between
-the ponds become winding creeks while each pond stays four-sided; how strongly they bend is a degree chosen to read well. The main canal
-starts at a pond outside the dike and enters through the inlet gate. A canal is drawn round the inside foot of the dike:
-channels ran inside a polder's dike, but no single one ringing it at its foot is known, so that ring is a drawing
+block's canals between the ponds run straight or wind like creeks, by the settlement's pond layout; the title card says which this one has.
+The main canal
+starts at a pond outside the dike and enters through the inlet gate. A canal is drawn round the inside foot of the dike, straight along it and square at the corners:
+channels ran inside a polder's dike, but no single one ringing it at its foot is known, so that ring and its line are a drawing
 convention. No boat or landing is drawn: not every dike-pond
 hamlet need have had water a boat could travel.
 

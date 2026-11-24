@@ -29,4 +29,4 @@ Name: fruit dike
 Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is fruit, and its trees
 Sources: pwsannong-zhusanjiao-nongyeshi, guangdong-xinyu-22, guangdong-xinyu-25, zhwiki-guangdong-xinyu, sdlib-shunde-jitang, isis-dykepond
 Entry: research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html, research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html
-Drawing: research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html
+Drawing: research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html, research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html
