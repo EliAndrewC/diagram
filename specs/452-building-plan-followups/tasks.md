@@ -104,3 +104,13 @@ with its pointer); a claim, doc or note restated to a page the record already ho
       - [ ] recorded and cited
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
+- [ ] T18 Armory audit gap: rust/mode_a/src/audit/armory.rs drawn_end (lines 89-101) counts an armory anywhere inside the office hall as its west or east end bay by the side of the hall's center it falls on, so a mid-hall or dais-band armory passes armory_site; latent, no pool sheet draws one (449 found row 173; found 2026-11-24 by the triage of the open found rows (found-triage.md, found-triage-older.md))
+      research: rendering
+- [ ] T19 Audit size ranks have no bath pair: rust/mode_a/src/audit/program_rules.rs lines 478-490 (HIERARCHY) lacks the bath below the residence that 0116 drawing line 11 states (No kitchen, bath or shrine hall out-sizes it); the generator holds it but no audit does; latent (449 found rows 50, 55, 60; found 2026-11-24 by the triage of the open found rows (found-triage-older.md))
+      research: rendering
+- [ ] T20 arch_on_approach measures to the plan's bounds: rust/mode_a/src/audit/shared/grounds.rs lines 162-169 measures the first arch to plan.bounds() while its claim says the ground's edge (0220 section 48: the shrine's ground, not the edge of its wood); part verified, whether bounds equal the shrine's ground was not read, so a misplaced arch may pass (449 found rows 53, 58, 63; found 2026-11-24 by the triage of the open found rows (found-triage-older.md))
+      research: rendering
+- [ ] T21 docs/building-programs.md line 142 gives the generated guest quarters as a room beside the reception, where the county example (pool/magistracies/county-magistracy-example/*.compound.json line 63) draws a detached 40 x 42 ft guest house; restate the doc (449 found row 124; found 2026-11-24 by the triage of the open found rows (found-triage-older.md))
+      research: rendering
+- [ ] T22 docs/building-programs.md line 130 kitchen row says the door is recorded often at the rear of the house, a frequency its cited pages do not give; cite what they say or drop the frequency (449 found row 210; found by the triage of 2026-11-24, found-triage.md)
+      research: rendering
