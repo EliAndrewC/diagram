@@ -26,3 +26,4 @@
 - SEARCHES: the pass's (archive key p453bales, the web, NDL full text) as logged in note empty-bale-absence; this session added no web search of its own beyond the page reads on the ledger.
 - CODE: no code decides a bale's price (implementation-check.md).
 - ALSO TOUCHED: specs/413-money-tooltip-on-the-record/backfill.md (two lines for 0335's unmarked amounts).
+- SOURCE-READER ROUND 2 (bokumin-kinkan-13, gao-shouxian-jiuqing-wuliao, the two notes whose quoted originals changed): both READ and recorded; make record-owed lists no source-reader unit unanswered for 0335. The line above naming notes owed a second round is superseded by this one.
