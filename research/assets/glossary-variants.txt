@@ -424,6 +424,7 @@ butts	butt
 buyi	Buyi
 by-employment	by-employment
 by-employments	by-employment
+by-work	by-employment
 byre	byre
 byres	byre
 cadastral map	cadastre
@@ -2628,6 +2629,9 @@ kusayama	kusayama
 kuwabata	Kuwabata
 kwang-tung	Kwangtung
 kwangtung	Kwangtung
+kwantung	Kwantung territory
+kwantung leased territory	Kwantung territory
+kwantung territory	Kwantung territory
 kyo-machiya	machiya
 kyogen	kyogen
 kyoho	Kyoho

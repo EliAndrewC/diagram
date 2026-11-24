@@ -14108,7 +14108,8 @@
   "def": "Work a farm household or village took up beside its farming - a trade, a craft, a shop or a service such as a bathhouse - to earn cash; Edo-period surveys counted these village by village.",
   "variants": [
    "by-employment",
-   "by-employments"
+   "by-employments",
+   "by-work"
   ]
  },
  "press log": {
@@ -19676,6 +19677,41 @@
   "def": "The Japanese Architecture and Art Net Users System, an online dictionary of Japanese architecture and art terms hosted by Columbia University; the research pages cite its entries as \"a dictionary of Japanese architecture\".",
   "variants": [
    "JAANUS"
+  ]
+ },
+ "guan": {
+  "def": "A Chinese unit of account, nominally a string of a thousand copper cash; the Ming counted its paper money in guan.",
+  "variants": [
+   "guan"
+  ]
+ },
+ "Karafuto": {
+  "def": "The Japanese name for the southern half of Sakhalin island, north of Hokkaido, which Japan governed from 1905 to 1945.",
+  "variants": [
+   "Karafuto"
+  ]
+ },
+ "South Seas Agency": {
+  "def": "The Japanese government office, set up in 1922, that ran the Pacific islands of Micronesia Japan held under a League of Nations mandate.",
+  "variants": [
+   "South Seas Agency"
+  ]
+ },
+ "settlement price": {
+  "def": "In the forestry bureau's charcoal surveys, the price the charcoal settled at on the market, set beside the cost of making it; the bureau called the difference between the two the profit.",
+  "variants": [
+   "settlement price",
+   "settlement prices",
+   "standard settlement price",
+   "market settlement price"
+  ]
+ },
+ "Kwantung territory": {
+  "def": "The leased territory at the southern tip of the Liaodong peninsula in northeast China, around Port Arthur and Dalian, which Japan governed from 1905 to 1945.",
+  "variants": [
+   "Kwantung territory",
+   "Kwantung",
+   "Kwantung Leased Territory"
   ]
  }
 }
