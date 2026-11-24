@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-24T14:14:04Z",
+  "target": "plan-gate push",
+  "commit": "5eec349309",
+  "why": "451's one stale block is T203's withdrawn heading, a heading with no decision"
+}

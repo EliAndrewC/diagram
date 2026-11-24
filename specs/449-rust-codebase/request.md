@@ -178,3 +178,9 @@ Told that 449 held 17 open follow-ups beside T158 (three research questions T386
 > Okay, can we move all 17 of those into their own separate feature?  It seems like they all have to do with hand-drawn diagrams rather than scripted maps, is that correct?
 
 They are feature 452 (`specs/452-building-plan-followups/`), each keeping its text and naming its 449 number; each 449 line is ticked withdrawn, pointing to its 452 task.
+
+## 2026-11-24, real defects are found and fixed before new code
+
+The GM, while the session audited which of Friday-to-Monday's tasks were process-made:
+
+> Sounds good, and like I said, to be clear, if there are real defects, then I do want to find them and fix them, and I don't want to change our project guidelines around fixing defects before moving forward with writing new code. In fact, if we have any reason to believe that our existing Hamlet generation up until this point is riddled with defects, then I would like to fix those before we move forward. I have no reason to think that this is true other than the fact that we were finding defects before when we were making edits and looking and such.
