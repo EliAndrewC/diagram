@@ -1818,6 +1818,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
+  },
+  "### T419 (the triage of 444's open found rows 26 and 187, 2026-11-24: the dike's band painted unbroken over the feeder and the outfall, confirmed in HEAD's code)": {
+   "sha256": "97345f15d519d3da397973756d4b061b69016a84c068409041323d516d1f9a31",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T419 Approach (checklist part A)": {
+   "sha256": "732f6ef6fe80c42f2d54ee06ecefb7a470ab6c39ab0a3315b82c33c7dbb7ebdc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T421 (the triage of 444's open found rows 387, 388, 116 and 118, 2026-11-24: the rows it could not verify without running the geometry)": {
+   "sha256": "5d478836313bb6519e7310eaa71cde9841d3daa85d049649450e4235983c0fd3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T421 Approach (checklist part A)": {
+   "sha256": "6088ec5ffc188ecfa3661eb006e21114786ec2577f96b1ee64c1bc24a59632df",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -25433,6 +25457,162 @@
      "summary": "Found and left: the live seat stage keeps a clustered village's belt ground on every settlement form (settlement_ground / seat_room never read settlement_form), visible on the linear hamlets Kashikawa and Mizuguchi against 0031.drawing; not fixed in T415, filed as T417, which lands before T158.",
      "class": "within",
      "why": "This is a real defect by the block's own account (a visible belt's ground where 0031.drawing draws none), and it lies outside T415's mechanism (the row_shelter claim). It is not carried into the next step: the block commits 'Filed as T417; lands before T158', which is what the GM asked for on 2026-11-18 ('fix all known bugs in each step before moving on') and on 2026-11-24 ('if there are real defects ... fix those before we move forward'). Seam for T417's own plan, not this block: the block also says the seat stays one band 'until the row and grove seating parked in rust/parked/src/homesteads/ returns', and the GM (2026-11-21, T244) asked to stop before the parked hamlet stages; T417 must land its fix before T158 without depending on unparking, or put that conflict to the GM."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T419 (the triage of 444's open found rows 26 and 187, 2026-11-24: the dike's band painted unbroken over the feeder and the outfall, confirmed in HEAD's code)",
+    "### T419 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T419-defect",
+     "summary": "Treat the dike's band painted over the feeder and outfall, and willow rows left uncut on the channels' lines, as a defect and fix it in code (paint order and the rows' cut)",
+     "class": "within",
+     "why": "The GM 2026-11-24: 'if there are real defects, then I do want to find them and fix them'; a wrong outcome a reader sees (water stopping at the dike's outer face, a willow on the feeder) that contradicts the research page's rule 'the band is cut, and the rows stop with it' - a defect under XIV as the GM defined it 2026-11-19, not a mere difference."
+    },
+    {
+     "id": "T419-band-cut-by-paint-order",
+     "summary": "The band's cut is made by painting the band before the channels' strokes (each channel shows through at its own drawn width), not by cutting a hole in the band's outline; the dike faces stay whole rings in the record for the reeds and seat ring, labeled a GUESS",
+     "class": "within",
+     "why": "The page gives no cut width; the standing rule (root CLAUDE.md) is to take a knob or the algorithmically easier route where the record is silent and say which, which the block does. The visible result is the page's rule (water through a gap in the earthwork); the faces staying whole in the record leaves no wrong outcome on the map, since T236 already stops the reeds at the channel's bank. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T419-gap-half-ft",
+     "summary": "GAP_HALF_FT keeps 15 ft (a GUESS knob), now measured from each crossing channel's middle line all the way through the band instead of from the sluice point",
+     "class": "within",
+     "why": "A knob kept unchanged, re-anchored so the rows actually stop with the channel as the page requires; no researched number moves."
+    },
+    {
+     "id": "T419-outfall-first",
+     "summary": "polder_stage lays the outfall before the dike so dike() can read both crossing courses",
+     "class": "within",
+     "why": "Implementation ordering needed for the fix; the outfall reads only the tail sluice, so nothing else changes."
+    },
+    {
+     "id": "T419-glyph-check-deferred",
+     "summary": "The dike glyph change on kuwabata is declared placement-changed and its glyph-check set aside while the port switch stands at rust-only (444 FR-023)",
+     "class": "within",
+     "why": "444 FR-023 (amendment 8, the GM 2026-11-07) states a glyph-check the review gate owes for a pool hamlet a Rust stage moves is not owed while the switch stands, and is owed when thrown back; the block declares the change rather than hiding it. This applies an existing approved rule, not a new carve-out."
+    },
+    {
+     "id": "T419-order",
+     "summary": "Done before T158, first of T419, T421, T420",
+     "class": "within",
+     "why": "The GM 2026-11-24: real defects fixed before moving forward with new code."
+    },
+    {
+     "id": "T419-budget",
+     "summary": "No work budget changes; the polder stage's counted work falls only by trees no longer planted",
+     "class": "within",
+     "why": "No budget is relaxed; fewer writes."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T421 (the triage of 444's open found rows 387, 388, 116 and 118, 2026-11-24: the rows it could not verify without running the geometry)",
+    "### T421 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "387a",
+     "summary": "Row 387 on Inashiro (bare winter, wild middle): the hem climbing past the toe up the whole flank is kept; build's claim 'the hem's line' restated and a GUESS claim 'the climb's order' added; no code change.",
+     "class": "within",
+     "why": "0011.drawing has a bare-winter hamlet's dry fields climb into the wild middle until they hold the grain, the order a GUESS; the drawing matches the page, so this is a difference from the row's expectation, not a wrong outcome. Constitution XIV and the GM 2026-11-19 ('don't spend time fixing things which are not actually wrong') make restating the claim the requested treatment."
+    },
+    {
+     "id": "387b",
+     "summary": "Row 387, a wild middle's barley hamlet: drew no dry field on 209 of 209 rolls; fixed in field/build.rs by handing it the toe alone (far flank from the foot to TOE_SHARE, the page's two-thirds, a GUESS knob) and drawing its one band there whatever the grain asks.",
+     "class": "within",
+     "why": "A wrong outcome a reader sees (a farming hamlet with no dry field where 0006 and 0011 keep its dry fields on the toe) is a defect; the GM 2026-11-24 asked that real defects be found and fixed before new code, and 2026-11-18 that known bugs be fixed in each step. TOE_SHARE takes 0006.drawing's own two-thirds, so no researched number moves. Red-first test and a pinning test enforce the fix and are enforcement, not scope."
+    },
+    {
+     "id": "388",
+     "summary": "Row 388 (bands behind the seat after a push leave gaps): mechanism refuted by measurement on the named maps and 98 bare-winter wild rolls; a unit test pins the no-gap stack; no code change.",
+     "class": "within",
+     "why": "The row's claimed defect does not occur; leaving correct behavior unchanged and pinning it with a test that only fails if the gapless stack breaks is within the request."
+    },
+    {
+     "id": "found-T423",
+     "summary": "A different fault seen in the throwaway run (seed 52 at 225 degrees: outer climb bands drawn as detached slivers) is not fixed in T421 but filed as T423, to land before T158.",
+     "class": "within",
+     "why": "This is a real defect and it is not dropped: T423 is scheduled before T158, the next new-code step, which is what the GM asked for on 2026-11-18 ('fix all known bugs in each step before moving on to porting the next step') and 2026-11-24 ('fix those before we move forward'). Splitting an unmeasured cause into its own task, ordered ahead of the next step, sequences the fix without narrowing it. A plan that let T158 begin with T423 open would be the narrowing; this one does not."
+    },
+    {
+     "id": "116",
+     "summary": "Row 116, a short fan's rounded row step leaving the 40-60 ft basin: latent; the shortest drawn fan (15 rows, 696 ft) is far above the ~150 ft at which it could occur, unreachable at 10-20 households; nothing changed.",
+     "class": "within",
+     "why": "No map produces a wrong outcome; constitution XIV v2.36.0 does not count an unreachable path as a defect, and the GM 2026-11-19 asked that such things not be 'fixed'."
+    },
+    {
+     "id": "118",
+     "summary": "Row 118, the last polder row's creep toward the ring canal: up to about 2.3 ft, least clearance 3.13 ft over 160 polders, never reaching water; a GUESS claim on Warp::at restated; no code change.",
+     "class": "within",
+     "why": "Harmless difference no reader sees and the ring canal stays put per 0022; restating the claim is the treatment XIV and the GM's 2026-11-19 words prescribe."
+    },
+    {
+     "id": "order-budget",
+     "summary": "Ordering after T419, before T420 and T158; the hem's counted work rises only on wild-middle barley hamlets, reported against the stage's accepted count by make work-budget.",
+     "class": "within",
+     "why": "Sequencing and the budget report follow from the fix-before-new-code request; nothing asked for is excluded."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T421 (the triage of 444's open found rows 387, 388, 116 and 118, 2026-11-24: the rows it could not verify without running the geometry)",
+    "### T421 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "387a",
+     "summary": "Row 387 on Inashiro (bare winter, wild middle): the hem climbing past the toe up the whole flank is kept; build's claim 'the hem's line' restated and a GUESS claim 'the climb's order' added; no code change.",
+     "class": "within",
+     "why": "0011.drawing has a bare-winter hamlet's dry fields climb into the wild middle until they hold the grain, the order a GUESS; the drawing matches the page, so this is a difference from the row's expectation, not a wrong outcome. Constitution XIV and the GM 2026-11-19 ('don't spend time fixing things which are not actually wrong') make restating the claim the requested treatment."
+    },
+    {
+     "id": "387b",
+     "summary": "Row 387, a wild middle's barley hamlet: drew no dry field on 209 of 209 rolls; fixed in field/build.rs by handing it the toe alone (far flank from the foot to TOE_SHARE, the page's two-thirds, a GUESS knob) and drawing its one band there whatever the grain asks.",
+     "class": "within",
+     "why": "A wrong outcome a reader sees (a farming hamlet with no dry field where 0006 and 0011 keep its dry fields on the toe) is a defect; the GM 2026-11-24 asked that real defects be found and fixed before new code, and 2026-11-18 that known bugs be fixed in each step. TOE_SHARE takes 0006.drawing's own two-thirds, so no researched number moves. Red-first test and a pinning test enforce the fix and are enforcement, not scope."
+    },
+    {
+     "id": "388",
+     "summary": "Row 388 (bands behind the seat after a push leave gaps): mechanism refuted by measurement on the named maps and 98 bare-winter wild rolls; a unit test pins the no-gap stack; no code change.",
+     "class": "within",
+     "why": "The block shows the row's stated mechanism (a band laid after a pushed column leaving gaps) does not act on the two maps the row names or on a straight canal, and no bare-winter wild roll came out short of grain (0 of 98). That figure counts grain shortfall, not gaps. Gap-like slivers on a curving flank do appear (seed 52) with their cause unproven, and that symptom is carried by T423, not dismissed. Leaving the measured-correct case unchanged and pinning it with a test that fails only if the gapless stack breaks is within the request."
+    },
+    {
+     "id": "found-T423",
+     "summary": "A different fault seen in the throwaway run (seed 52 at 225 degrees: outer climb bands drawn as detached slivers) is not fixed in T421 but filed as T423, to land before T158.",
+     "class": "within",
+     "why": "This is a real defect and it is not dropped. The block files it as T423 and orders it before T158, and the 2026-11-24 section of request.md names T158 as the one open item that is not a follow-up, so the defect is fixed before that work goes on. The GM asked for exactly that on 2026-11-18 ('fix all known bugs in each step before moving on to porting the next step') and on 2026-11-24 ('fix those before we move forward'). The bundle does not say what T420 is. Splitting a defect whose cause is unmeasured into its own task, ordered ahead of T158, sequences the fix without narrowing it. A plan that let T158 begin with T423 open would be the narrowing."
+    },
+    {
+     "id": "116",
+     "summary": "Row 116, a short fan's rounded row step leaving the 40-60 ft basin: latent; the shortest drawn fan (15 rows, 696 ft) is far above the ~150 ft at which it could occur, unreachable at 10-20 households; nothing changed.",
+     "class": "within",
+     "why": "No map produces a wrong outcome; constitution XIV v2.36.0 does not count an unreachable path as a defect, and the GM 2026-11-19 asked that such things not be 'fixed'."
+    },
+    {
+     "id": "118",
+     "summary": "Row 118, the last polder row's creep toward the ring canal: up to about 2.3 ft, least clearance 3.13 ft over 160 polders, never reaching water; a GUESS claim on Warp::at restated; no code change.",
+     "class": "within",
+     "why": "Harmless difference no reader sees and the ring canal stays put per 0022; restating the claim is the treatment XIV and the GM's 2026-11-19 words prescribe."
+    },
+    {
+     "id": "order-budget",
+     "summary": "Ordering after T419, before T420 and T158; the hem's counted work rises only on wild-middle barley hamlets, reported against the stage's accepted count by make work-budget.",
+     "class": "within",
+     "why": "Sequencing and the budget report follow from the fix-before-new-code request; nothing asked for is excluded."
     }
    ]
   }
@@ -52916,6 +53096,106 @@
      "summary": "Found and left: the live seat stage keeps a clustered village's belt ground on every settlement form (settlement_ground / seat_room never read settlement_form), visible on the linear hamlets Kashikawa and Mizuguchi against 0031.drawing; not fixed in T415, filed as T417, which lands before T158.",
      "class": "within",
      "why": "This is a real defect by the block's own account (a visible belt's ground where 0031.drawing draws none), and it lies outside T415's mechanism (the row_shelter claim). It is not carried into the next step: the block commits 'Filed as T417; lands before T158', which is what the GM asked for on 2026-11-18 ('fix all known bugs in each step before moving on') and on 2026-11-24 ('if there are real defects ... fix those before we move forward'). Seam for T417's own plan, not this block: the block also says the seat stays one band 'until the row and grove seating parked in rust/parked/src/homesteads/ returns', and the GM (2026-11-21, T244) asked to stop before the parked hamlet stages; T417 must land its fix before T158 without depending on unparking, or put that conflict to the GM."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T419": {
+   "section_sha256": "2b32ce36e9e2555530825dd779d95a069f8500967d4e42898338961ad465ef6c",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T419-defect",
+     "summary": "Treat the dike's band painted over the feeder and outfall, and willow rows left uncut on the channels' lines, as a defect and fix it in code (paint order and the rows' cut)",
+     "class": "within",
+     "why": "The GM 2026-11-24: 'if there are real defects, then I do want to find them and fix them'; a wrong outcome a reader sees (water stopping at the dike's outer face, a willow on the feeder) that contradicts the research page's rule 'the band is cut, and the rows stop with it' - a defect under XIV as the GM defined it 2026-11-19, not a mere difference."
+    },
+    {
+     "id": "T419-band-cut-by-paint-order",
+     "summary": "The band's cut is made by painting the band before the channels' strokes (each channel shows through at its own drawn width), not by cutting a hole in the band's outline; the dike faces stay whole rings in the record for the reeds and seat ring, labeled a GUESS",
+     "class": "within",
+     "why": "The page gives no cut width; the standing rule (root CLAUDE.md) is to take a knob or the algorithmically easier route where the record is silent and say which, which the block does. The visible result is the page's rule (water through a gap in the earthwork); the faces staying whole in the record leaves no wrong outcome on the map, since T236 already stops the reeds at the channel's bank. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T419-gap-half-ft",
+     "summary": "GAP_HALF_FT keeps 15 ft (a GUESS knob), now measured from each crossing channel's middle line all the way through the band instead of from the sluice point",
+     "class": "within",
+     "why": "A knob kept unchanged, re-anchored so the rows actually stop with the channel as the page requires; no researched number moves."
+    },
+    {
+     "id": "T419-outfall-first",
+     "summary": "polder_stage lays the outfall before the dike so dike() can read both crossing courses",
+     "class": "within",
+     "why": "Implementation ordering needed for the fix; the outfall reads only the tail sluice, so nothing else changes."
+    },
+    {
+     "id": "T419-glyph-check-deferred",
+     "summary": "The dike glyph change on kuwabata is declared placement-changed and its glyph-check set aside while the port switch stands at rust-only (444 FR-023)",
+     "class": "within",
+     "why": "444 FR-023 (amendment 8, the GM 2026-11-07) states a glyph-check the review gate owes for a pool hamlet a Rust stage moves is not owed while the switch stands, and is owed when thrown back; the block declares the change rather than hiding it. This applies an existing approved rule, not a new carve-out."
+    },
+    {
+     "id": "T419-order",
+     "summary": "Done before T158, first of T419, T421, T420",
+     "class": "within",
+     "why": "The GM 2026-11-24: real defects fixed before moving forward with new code."
+    },
+    {
+     "id": "T419-budget",
+     "summary": "No work budget changes; the polder stage's counted work falls only by trees no longer planted",
+     "class": "within",
+     "why": "No budget is relaxed; fewer writes."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T421": {
+   "section_sha256": "045b1ccd61bacf144e5c1a3348e95589156242ff1c74239851116338519fc454",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "387a",
+     "summary": "Row 387 on Inashiro (bare winter, wild middle): the hem climbing past the toe up the whole flank is kept; build's claim 'the hem's line' restated and a GUESS claim 'the climb's order' added; no code change.",
+     "class": "within",
+     "why": "0011.drawing has a bare-winter hamlet's dry fields climb into the wild middle until they hold the grain, the order a GUESS; the drawing matches the page, so this is a difference from the row's expectation, not a wrong outcome. Constitution XIV and the GM 2026-11-19 ('don't spend time fixing things which are not actually wrong') make restating the claim the requested treatment."
+    },
+    {
+     "id": "387b",
+     "summary": "Row 387, a wild middle's barley hamlet: drew no dry field on 209 of 209 rolls; fixed in field/build.rs by handing it the toe alone (far flank from the foot to TOE_SHARE, the page's two-thirds, a GUESS knob) and drawing its one band there whatever the grain asks.",
+     "class": "within",
+     "why": "A wrong outcome a reader sees (a farming hamlet with no dry field where 0006 and 0011 keep its dry fields on the toe) is a defect; the GM 2026-11-24 asked that real defects be found and fixed before new code, and 2026-11-18 that known bugs be fixed in each step. TOE_SHARE takes 0006.drawing's own two-thirds, so no researched number moves. Red-first test and a pinning test enforce the fix and are enforcement, not scope."
+    },
+    {
+     "id": "388",
+     "summary": "Row 388 (bands behind the seat after a push leave gaps): mechanism refuted by measurement on the named maps and 98 bare-winter wild rolls; a unit test pins the no-gap stack; no code change.",
+     "class": "within",
+     "why": "The block shows the row's stated mechanism (a band laid after a pushed column leaving gaps) does not act on the two maps the row names or on a straight canal, and no bare-winter wild roll came out short of grain (0 of 98). That figure counts grain shortfall, not gaps. Gap-like slivers on a curving flank do appear (seed 52) with their cause unproven, and that symptom is carried by T423, not dismissed. Leaving the measured-correct case unchanged and pinning it with a test that fails only if the gapless stack breaks is within the request."
+    },
+    {
+     "id": "found-T423",
+     "summary": "A different fault seen in the throwaway run (seed 52 at 225 degrees: outer climb bands drawn as detached slivers) is not fixed in T421 but filed as T423, to land before T158.",
+     "class": "within",
+     "why": "This is a real defect and it is not dropped. The block files it as T423 and orders it before T158, and the 2026-11-24 section of request.md names T158 as the one open item that is not a follow-up, so the defect is fixed before that work goes on. The GM asked for exactly that on 2026-11-18 ('fix all known bugs in each step before moving on to porting the next step') and on 2026-11-24 ('fix those before we move forward'). The bundle does not say what T420 is. Splitting a defect whose cause is unmeasured into its own task, ordered ahead of T158, sequences the fix without narrowing it. A plan that let T158 begin with T423 open would be the narrowing."
+    },
+    {
+     "id": "116",
+     "summary": "Row 116, a short fan's rounded row step leaving the 40-60 ft basin: latent; the shortest drawn fan (15 rows, 696 ft) is far above the ~150 ft at which it could occur, unreachable at 10-20 households; nothing changed.",
+     "class": "within",
+     "why": "No map produces a wrong outcome; constitution XIV v2.36.0 does not count an unreachable path as a defect, and the GM 2026-11-19 asked that such things not be 'fixed'."
+    },
+    {
+     "id": "118",
+     "summary": "Row 118, the last polder row's creep toward the ring canal: up to about 2.3 ft, least clearance 3.13 ft over 160 polders, never reaching water; a GUESS claim on Warp::at restated; no code change.",
+     "class": "within",
+     "why": "Harmless difference no reader sees and the ring canal stays put per 0022; restating the claim is the treatment XIV and the GM's 2026-11-19 words prescribe."
+    },
+    {
+     "id": "order-budget",
+     "summary": "Ordering after T419, before T420 and T158; the hem's counted work rises only on wild-middle barley hamlets, reported against the stage's accepted count by make work-budget.",
+     "class": "within",
+     "why": "Sequencing and the budget report follow from the fix-before-new-code request; nothing asked for is excluded."
     }
    ],
    "verdict": "CLEAR"

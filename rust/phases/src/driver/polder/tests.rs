@@ -817,3 +817,52 @@ fn each_sluice_is_joined_to_its_ring_canal_corner_by_a_drawn_reach() {
         }
     }
 }
+
+/// THE WATER RUNS THROUGH THE DIKE, NOT UNDER IT (449 T419): on Kuwabata and a polder falling obliquely the feeder and the
+/// outfall each run some feet between the dike's two faces, the dike's band is drawn before every channel's stroke - so the water
+/// reads through a cut in the earthwork its own width - and no crown of the dike's rows stands on either channel; before 449 T419
+/// the band was painted after the water, unbroken over both crossings, and the rows were cut only round the sluice's point.
+#[test]
+fn the_dikes_band_and_rows_are_cut_where_the_feeder_and_the_outfall_cross() {
+    for spec in [
+        r#"{"name": "R", "seed": 5, "households": 12, "down_deg": 30, "field_archetype": "polder_grid"}"#,
+        r#"{"name": "Kuwabata", "seed": 21, "households": 16, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond", "pond_layout": "mosaic", "dike_crop": "mulberry"}"#,
+    ] {
+        let r = roll(&parse(spec).unwrap()).unwrap();
+        let s = r.polder.as_ref().unwrap();
+        let body = r.svg.split_once("</defs>").unwrap().1;
+        let band = body.find("fill-rule=\"evenodd\"").unwrap();
+        let water = [
+            super::super::svg::ink::SUPPLY,
+            super::super::svg::ink::DRAIN,
+        ]
+        .iter()
+        .filter_map(|ink| body.find(&format!("stroke=\"{ink}\"")))
+        .min()
+        .unwrap();
+        let channels = [
+            (s.polder.feeder.as_slice(), super::FEEDER_W),
+            (s.outfall.as_slice(), super::super::RUN_W),
+        ];
+        // the least clear water between a crown's edge and a channel's bank, over every tree and both channels (feet)
+        let mut clear = f64::INFINITY;
+        for (course, w) in channels {
+            // the channel's feet through the band: a walked point outside the inner face and inside the outer one
+            let through = course
+                .windows(2)
+                .flat_map(|g| walk(g[0], g[1]))
+                .filter(|&p| inside(p, &s.dike.outer) && !inside(p, &s.dike.inner))
+                .count();
+            assert!(through >= 10, "{through} ft through the band");
+            for &(x, y, c) in s.dike.trees.iter().flat_map(|(_, row)| row) {
+                let d = course
+                    .windows(2)
+                    .map(|g| seg_dist((x, y), g[0], g[1]))
+                    .fold(f64::INFINITY, f64::min);
+                clear = clear.min(d - c - w / 2.0);
+            }
+        }
+        let (got, want) = ((band < water, clear >= 0.0), (true, true));
+        assert_eq!(got, want);
+    }
+}

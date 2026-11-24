@@ -37298,26 +37298,66 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/polder.rs::draw_polder#the band cut where a channel crosses": {
+  "body": "bd0a8b41bb9877e9",
+  "claim": "the band cut where a channel crosses - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: where a channel crosses the dike, the band is cut, the water running through a gap in the earthwork under a sluice gate, not over its top - the band painted before every channel's stroke, so the feeder and the outfall each show through it at their drawn width (`FEEDER_W`, `RUN_W`), bank to bank, the earth meeting the water as the waterside reeds do (449 T236); before 449 T419 the band was painted after the water, unbroken over both crossings",
+  "code": "4d0478e75126b562",
+  "core": "ff83646e4a5d2323",
+  "date": "2026-11-24",
+  "note": "the band is now painted before the feeder (FEEDER_W) and outfall (RUN_W) strokes, so the water shows through the band at its drawn width, as the page says (\"the band is cut ... not over its top\")",
+  "pages": {
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
+  },
+  "reads": "dacb6fbf9728b3b1",
+  "research": "9d4f4eee3c609249",
+  "rests": [
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:e8c05b8d91b4cafc"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::draw_polder#the cut as wide as the water": {
+  "body": "bd0a8b41bb9877e9",
+  "claim": "the cut as wide as the water - GUESS: the page silent on the cut's width; the channel's own drawn width, the simpler drawing (paint order, the faces recorded whole) over a cut built into the band's outline, taken where the record does not choose",
+  "code": "51c1ca1c62a0e7ec",
+  "core": "ff83646e4a5d2323",
+  "date": "2026-11-24",
+  "note": "the page does not give the cut's width; the code uses the channel's own stroke width, a fair guess",
+  "pages": {},
+  "reads": "dacb6fbf9728b3b1",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/polder.rs::draw_polder#the pocket pond's ring": {
   "body": "a5f4347b1ff80095",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "the pocket pond's ring - GUESS: flooded ground 2.5 ft wide round the pond inside a bund line 2.2 ft wide, the deleted ink's; no page sizes the margin",
-  "code": "d1731a4dcc9badd7",
-  "core": "d1eb427215845d00",
+  "code": "fcc06444f48213aa",
+  "core": "ff83646e4a5d2323",
   "date": "2026-11-20",
   "note": "the code matches the claim: the fill is ink::FLOODED at prx+2.5 and pry+2.5, inside an ink::AZE stroke 2.2 wide. The page says nothing about the margin round a field or pocket pond, so GUESS is the right label",
   "pages": {},
   "reads": "dacb6fbf9728b3b1",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the polder drawn": {
-  "body": "a5f4347b1ff80095",
+  "body": "bd0a8b41bb9877e9",
   "claim": "the polder drawn - CONVENTION: the deleted `ink.dike` and `dikeponds`, each record drawn as the engine drew it, the sluices apart",
-  "code": "0cc3f41335dd4952",
-  "core": "d1eb427215845d00",
-  "date": "2026-11-20",
-  "note": "a CONVENTION for the drawing; the sluices are no longer drawn here, as the claim says",
+  "code": "c47d21d7f2cb96e5",
+  "core": "ff83646e4a5d2323",
+  "date": "2026-11-24",
+  "note": "fills, strokes and paint order only; the cut, which changed, has its own claim and the pocket ring is claimed separately",
   "pages": {},
   "reads": "dacb6fbf9728b3b1",
   "research": "",
@@ -38000,6 +38040,19 @@
   "date": "2026-11-22",
   "note": "an equality test against the plain search across six orientations and the mosaic, assertions only",
   "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder/tests.rs::the_dikes_band_and_rows_are_cut_where_the_feeder_and_the_outfall_cross#the polder's tests": {
+  "body": "bc77c33da6177ce6",
+  "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "3eb89c15539dbede",
+  "core": "6384ad053149ba3b",
+  "date": "2026-11-24",
+  "note": "test fixtures and assertions only, no decision of its own",
+  "pages": {},
+  "reads": "221236370cb25b9f",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -39821,6 +39874,22 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/build.rs::TOE_SHARE#the toe": {
+  "body": "af6c588fc69feb7f",
+  "claim": "the toe - GUESS dry-fields-and-their-crops-hatake.drawing: a fan's toe is taken to begin two-thirds of the way down the slope from its head, the page's own GUESS",
+  "code": "5f84220d47b695ff",
+  "core": "93513f4fc7e1a1fb",
+  "date": "2026-11-24",
+  "note": "2/3 of the way down from the head is the GUESS the page records",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
+  },
+  "research": "99a077469bb67bf5",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:79c616b0b0fbbeb4"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/field/build.rs::TOWN_FAR_FACTOR#a far town's weight": {
   "body": "c86971014e65ecda",
   "claim": "a far town's weight - GUESS the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing: drainage and a town's nearness set the odds, how the two weigh against each other a GUESS there; half a near town's, the manure a second crop needed being dearer to bring, the deleted `TOWN_FAR_FACTOR`",
@@ -39890,154 +39959,258 @@
  },
  "rust/phases/src/field/build.rs::build#barley on a cleared middle": {
   "body": "921a6e68de7fc0e2",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "barley on a cleared middle - where-a-farming-hamlet-grew-its-coarse-grain.drawing: on a fan whose middle is already cleared, the cleared ground is drawn only as the hem along the whole canal, which cannot hold the whole need, so such a hamlet is always drawn growing its barley on its paddy - an unpinned winter crop on a cleared middle is barley whatever the draw",
-  "code": "c654cc38e740ff3e",
-  "core": "130be1e295c0422b",
+  "code": "52f14bba1bdb26fe",
+  "core": "6da5daa966ce771b",
   "date": "2026-11-24",
   "note": "on a cleared fan_middle the odds are 1.0, so an unpinned roll is always barley",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
-  "reads": "917c9cf77e4b8c08",
+  "reads": "4c364682cebf4c19",
   "research": "8159982a6874674a",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#barley on the drained paddy": {
   "body": "921a6e68de7fc0e2",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "barley on the drained paddy - where-a-farming-hamlet-grew-its-coarse-grain.drawing: barley followed the rice on a paddy that drained, never on a wet one, and a drained paddy's winter barley is counted acre for acre against the dry field it spares",
-  "code": "7e70cd4c6c75a657",
-  "core": "130be1e295c0422b",
+  "code": "9472a20413f3d221",
+  "core": "6da5daa966ce771b",
   "date": "2026-11-24",
   "note": "only the drained area (wet low-row and rested plots excluded) is taken from the need, acre for acre, when the crop is barley",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
-  "reads": "917c9cf77e4b8c08",
+  "reads": "4c364682cebf4c19",
   "research": "8159982a6874674a",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:973ce82b528d1f80"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#fields side by side": {
   "body": "921a6e68de7fc0e2",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "fields side by side - GUESS: the record silent on where a settlement's tracts stood to each other; across the fall, each fan's half-breadths apart with the brook between them, its width and twice its skirt and wander",
-  "code": "69818050b87d5a31",
-  "core": "130be1e295c0422b",
+  "code": "a8123a09bac27949",
+  "core": "6da5daa966ce771b",
   "date": "2026-11-24",
   "note": "fields step across the fall by the half-breadths plus the brook's width, skirt and wander; the record is silent on where tracts stood",
   "pages": {},
-  "reads": "917c9cf77e4b8c08",
+  "reads": "4c364682cebf4c19",
   "research": "",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the brook's flank unhemmed": {
   "body": "921a6e68de7fc0e2",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "the brook's flank unhemmed - GUESS: where-a-farming-hamlet-grew-its-coarse-grain.drawing silent on dry plots between canal B and the brook; that flank left to the brook's skirt, the hem the high margin's",
-  "code": "946c635c84a91858",
-  "core": "130be1e295c0422b",
+  "code": "a5f555b2c765c8cc",
+  "core": "6da5daa966ce771b",
   "date": "2026-11-24",
   "note": "the hem line runs the far flank (-brook_side) and, where cleared, across the head, never down the brook's flank; the page does not place dry plots there",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
-  "reads": "917c9cf77e4b8c08",
+  "reads": "4c364682cebf4c19",
   "research": "8159982a6874674a",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
+  "triaged": "2026-11-24",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/build.rs::build#the climb's order": {
+  "body": "5a9d1fe66c5832d7",
+  "claim": "the climb's order - GUESS where-a-farming-hamlet-grew-its-coarse-grain.drawing: the clearing starts from the plots nearest the toe, the page's own GUESS - laid band by band (`field::dry::hem`), each band a tract's two to four strips deep along the whole flank from the foot to the head before the next band behind it, the last band stopping where the grain is held; so a bare-winter hamlet's dry fields line its whole far flank, deepest at the foot (Inashiro, measured 2026-11-24: 85 plots holding its 12.75 acres, nine strips deep at the foot stepping to five at the head)",
+  "code": "c44eafe940fc21fa",
+  "core": "6da5daa966ce771b",
+  "date": "2026-11-24",
+  "note": "the line runs from the foot to the head, so the clearing starts at the toe, as the page's own GUESS says; the band depth matches the two-to-four-strip tract",
+  "pages": {
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
+  },
+  "reads": "4c364682cebf4c19",
+  "research": "8159982a6874674a",
+  "rests": [
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:348cf5c8d3c7cc78"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the fields under the cap": {
   "body": "921a6e68de7fc0e2",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "the fields under the cap - how-much-farmland-a-settlement-works-and-in-what-tracts: a settlement with more farmland had several tracts - the paddy shared evenly among them, a GUESS (no page gives how a settlement's tracts compare)",
-  "code": "f82bca9093a884ad",
-  "core": "130be1e295c0422b",
+  "code": "b5e79551719ae0b1",
+  "core": "6da5daa966ce771b",
   "date": "2026-11-24",
   "note": "several tracts when the paddy exceeds the cap, the paddy split evenly among them; the even split is a GUESS",
   "pages": {
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html": "e7ac9b403c0f1fdd"
   },
-  "reads": "917c9cf77e4b8c08",
+  "reads": "4c364682cebf4c19",
   "research": "47696314c55f9345",
   "rests": [
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:7316d44de7260de8",
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:744a350ef9d49115"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the grain owed": {
   "body": "921a6e68de7fc0e2",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "the grain owed - where-a-farming-hamlet-grew-its-coarse-grain.drawing: about 0.85 acre a household (`GRAIN_ACRES_PER_HOUSEHOLD`), the need handed on to the hem stage, which reports the grain drawn and the room left (T28)",
-  "code": "0044406650511611",
-  "core": "130be1e295c0422b",
+  "code": "dff6695d4c6e158e",
+  "core": "6da5daa966ce771b",
   "date": "2026-11-24",
   "note": "households × 0.85 acre, handed on to the hem stage",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
-  "reads": "917c9cf77e4b8c08",
+  "reads": "4c364682cebf4c19",
   "research": "8159982a6874674a",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:cf41fc04e040d5c8"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the hem on the first field": {
   "body": "921a6e68de7fc0e2",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "the hem on the first field - GUESS: the record silent on which of several fields a hamlet's dry hem fringes; the first, on its flank away from the brook, its inputs handed on (`Field.hem`)",
-  "code": "6cac496a2135cca0",
-  "core": "130be1e295c0422b",
+  "code": "a8367bec83c2ab02",
+  "core": "6da5daa966ce771b",
   "date": "2026-11-24",
   "note": "fields[0], on the flank away from the brook, its inputs set in Field.hem; the record is silent on which field",
   "pages": {},
-  "reads": "917c9cf77e4b8c08",
+  "reads": "4c364682cebf4c19",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the hem's line": {
-  "body": "921a6e68de7fc0e2",
-  "claim": "the hem's line - where-a-farming-hamlet-grew-its-coarse-grain.drawing: where the middle is left wild the dry plots climb from the toe into the middle, as far as `hem_bounds` lets them; on a fan whose middle is cleared, the cleared ground is drawn only as the hem along the whole canal, one band of its tracts whatever the grain asks - canal A's, the first field's far flank up from its foot, and across its head where cleared; the line and its bounds handed on to the hem stage, which lays the hem after the seat (T28)",
-  "code": "16c1e036e21fa0bb",
-  "core": "130be1e295c0422b",
+  "body": "5a9d1fe66c5832d7",
+  "claim": "the hem's line - where-a-farming-hamlet-grew-its-coarse-grain.drawing: where the middle is left wild and the paddy lies bare over the winter the dry plots climb from the toe into the middle, as far as `hem_bounds` lets them, and where the paddy carries barley its dry fields stay on the toe; on a fan whose middle is cleared, the cleared ground is drawn only as the hem along the whole canal, one band of its tracts whatever the grain asks - the line canal A's, the first field's far flank up from its foot: to the head on a bare-winter wild middle, only up the toe (`TOE_SHARE`) on a barley one, and on across the head where cleared; the line and its bounds handed on to the hem stage, which lays the hem after the seat (T28)",
+  "code": "d78df94be1996259",
+  "core": "6da5daa966ce771b",
   "date": "2026-11-24",
-  "note": "a wild middle climbs from the toe only as far as the need allows (MAX_BANDS when the winter is bare, one band under barley); a cleared middle gets one band along the whole canal and across the head, whatever the need",
+  "note": "wild middle and bare winter: the line runs foot to head. Wild middle and barley: rise is 1 - TOE_SHARE, so the line runs u from L to 2L/3, which is the toe only. Cleared middle: the line carries on across the head with one band, so the whole canal is hemmed",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
-  "reads": "917c9cf77e4b8c08",
+  "reads": "4c364682cebf4c19",
   "research": "8159982a6874674a",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:348cf5c8d3c7cc78",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:8f4e868ad49f5555",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the winter crop after the fields": {
   "body": "921a6e68de7fc0e2",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "the winter crop after the fields - the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing: a settlement's drainage and the nearness of a town set the winter crop's odds - an unpinned winter crop rolled once the fields are laid (`winter_crop`), at the drained share of the laid paddy, halved far from a town (`barley_odds`); a spec's pin stands",
-  "code": "3a82a78c50d25a26",
-  "core": "130be1e295c0422b",
+  "code": "e9dffe266ea2707e",
+  "core": "6da5daa966ce771b",
   "date": "2026-11-24",
   "note": "an unpinned winter_crop is rolled after the fields are laid, at the drained share of the laid paddy times the town-nearness factor; a pin stands, and how the two weigh is a GUESS there",
   "pages": {
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
   },
-  "reads": "917c9cf77e4b8c08",
+  "reads": "4c364682cebf4c19",
   "research": "7b19741c5250f0fe",
   "rests": [
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:1707d1c770884a9d",
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:d90b5fa1bec814fe"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::drained_area#no barley on a resting plot": {
@@ -40074,32 +40247,30 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::hem_bounds#a barley hamlet's shortfall": {
-  "body": "8178f3c4a1083a98",
-  "claim": "a barley hamlet's shortfall - GUESS: where-a-farming-hamlet-grew-its-coarse-grain.drawing silent on where the grain goes when the toe's one band holds less than the drained barley left owed; drawn short, the shortfall recorded beside the need (`grain`: drawn, needed, the room), never refused",
-  "code": "787d82af805e4a16",
-  "core": "9b026f57a4035c01",
-  "date": "2026-11-22",
-  "note": "(wild, barley) gives (need, 1), so the hem stays on one band of the toe. The page keeps a barley hamlet's dry fields on the toe and does not say where a shortfall goes; drawn short and never refused is a fair GUESS",
+  "body": "890cf4b982cae2b3",
+  "claim": "a barley hamlet's shortfall - GUESS: where-a-farming-hamlet-grew-its-coarse-grain.drawing silent on where the grain goes when the toe's one band holds less than the drained barley left owed; the band drawn as it stands, the need recorded beside what is drawn (`grain`: drawn, needed, the room), never refused",
+  "code": "5a60fa00b25105be",
+  "core": "edbe67ddc3792b68",
+  "date": "2026-11-24",
+  "note": "the page does not say where a shortfall on the toe goes; the band is drawn in full and the need is handed on and recorded, never refused",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
   "reads": "82b300760cbe7ce7",
   "research": "8159982a6874674a",
   "rests": [
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:973ce82b528d1f80",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::hem_bounds#the hem's climb": {
-  "body": "8178f3c4a1083a98",
+  "body": "890cf4b982cae2b3",
   "claim": "the hem's climb - where-a-farming-hamlet-grew-its-coarse-grain.drawing: where a hamlet's paddy lies bare over the winter its dry fields climb from the toe into the wild middle until they hold the grain; where it carries barley its dry fields stay on the toe; a cleared middle drawn only as the hem along the whole canal - the toe one band, the climb bounded only by `MAX_BANDS`, a guard far past any canvas",
-  "code": "4aed30e92542dc75",
-  "core": "9b026f57a4035c01",
-  "date": "2026-11-01",
-  "note": "a bare paddy climbs up to MAX_BANDS until the need is met, a barley paddy stays on the toe (1 band), a cleared middle gets one band along the whole canal",
+  "code": "1950d4f22349d0b4",
+  "core": "edbe67ddc3792b68",
+  "date": "2026-11-24",
+  "note": "(wild, bare) gives (need, MAX_BANDS), a climb until the grain is held; barley or cleared gives one band",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
@@ -40109,6 +40280,23 @@
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/build.rs::hem_bounds#the toe's band whatever the grain asks": {
+  "body": "890cf4b982cae2b3",
+  "claim": "the toe's band whatever the grain asks - dry-fields-and-their-crops-hatake.drawing: where the middle stays wild the hem keeps to the fan's toe and leaves the middle to scrub - a wild middle's barley hamlet draws the toe's one band in full, as a cleared middle draws its canal's, not only as much as the grain left owed asks: before 449 T421 the band held only that grain, so a hamlet whose barley held its whole need drew no dry field (209 of 209 such rolls, measured 2026-11-24 over 450 rolls of seeds 1 to 150), where both pages keep its dry fields on the toe",
+  "code": "39767be37415a0da",
+  "core": "edbe67ddc3792b68",
+  "date": "2026-11-24",
+  "note": "(_, true) gives (INFINITY, 1), so the toe band is drawn in full even when the barley covers the whole need, and the dry fields stay on the toe",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
+  },
+  "reads": "82b300760cbe7ce7",
+  "research": "99a077469bb67bf5",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:fe49530da0a21b10"
   ],
   "verdict": "IN-STEP"
  },
@@ -41013,11 +41201,11 @@
  },
  "rust/phases/src/field/dike.rs::GAP_HALF_FT#the gap": {
   "body": "af13cfe47a8e9909",
-  "claim": "the gap - GUESS: polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing silent on the cut's width, attesting only that the band is cut where a channel crosses; half of a 30 ft cut, the deleted engine's opening (`DIKE_GAP_HW`); the waterside reeds stop at the channel's bank, not at this gap (449 T236)",
-  "code": "3d2875ee8520c028",
+  "claim": "the gap - GUESS: polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing silent on how wide the rows' opening is, attesting only that the band is cut where a channel crosses and the rows stop with it; 15 ft each side of the channel's middle line, the deleted engine's opening (`DIKE_GAP_HW`), which keeps the broadest crown (5.5 ft) off the widest crossing channel's water (5.5 ft) and off the sluice's frame (20 ft post to post); the band itself and the waterside reeds stop at the channel's bank, not at this gap (449 T236, T419)",
+  "code": "b35a53ba6f06329a",
   "core": "5a609849526efd17",
-  "date": "2026-11-22",
-  "note": "the page says only that the band is cut where a channel crosses; the 15 ft half-width is not on the page.",
+  "date": "2026-11-24",
+  "note": "the page does not say how wide the trees' opening is; 15 ft clears the widest crown (5.5) from the widest water (half of 5.5)",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
@@ -41068,13 +41256,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dike.rs::dike#a dike round the polder": {
-  "body": "9d59367c9d929bd0",
+  "body": "8b06481526f11629",
   "claim": "a dike round the polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: water crosses the dike only at gated sluices",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "b65b31caa43f4665",
-  "core": "cf101b5541941d08",
-  "date": "2026-10-31",
-  "note": "ring all the way round, water crosses only at the sluices passed in as gaps",
+  "code": "ed7fa3b7824b772a",
+  "core": "fa319a0a099b9a95",
+  "date": "2026-11-24",
+  "note": "the band runs all the way round the inner face, and the gaps are the sluice points",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "75cfd522d0e60b15"
   },
@@ -41083,14 +41270,23 @@
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dike.rs::dike#its trees": {
   "body": "9d59367c9d929bd0",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "its trees - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the willow row three quarters of the way out toward the water, 8.5 ft apart; the mulberry a quarter of the way, on the field side, 4.4 ft apart",
-  "code": "7636a0f74b16c669",
-  "core": "cf101b5541941d08",
+  "code": "c817517d39cfb78d",
+  "core": "fa319a0a099b9a95",
   "date": "2026-10-31",
   "note": "ROWS willow at 0.75 share, 8.5 ft apart; mulberry at 0.25 share, 4.4 ft apart, share measured outward from the field face; the rows on the faces are a deviation the page records",
   "pages": {
@@ -41104,13 +41300,24 @@
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:8763d008740507d7",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:f542d631ea0516a8"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dike.rs::dike#its two faces": {
   "body": "9d59367c9d929bd0",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "its two faces - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the inner face on the fields' envelope; the outer face that face pushed out by the rolled breadth, the waterward strip of reeds and wet ground laid against it later (`hamletgen/water/waterward.py`'s `dike_face`, which reads the outline this records), so the water's edge runs along the outer face",
-  "code": "fb9026458b8d0590",
-  "core": "cf101b5541941d08",
+  "code": "b5108704a3712859",
+  "core": "fa319a0a099b9a95",
   "date": "2026-10-31",
   "note": "inner face is the given field envelope, outer face is that face pushed out by width(); the outer face following the water is recorded as a GUESS",
   "pages": {
@@ -41122,13 +41329,24 @@
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:041f79721f113fc6",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:4d5302327cebd38f"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dike.rs::dike#the band's breadth": {
   "body": "9d59367c9d929bd0",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "the band's breadth - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: 14 to 40 ft across, changing along the length on two seeded waves",
-  "code": "c55e6a0ff194374f",
-  "core": "cf101b5541941d08",
+  "code": "fdb611551e4cee27",
+  "core": "fa319a0a099b9a95",
   "date": "2026-10-31",
   "note": "BAND_FT 14..40 with mix clamped to 0..1, varying along the length on two seeded-phase waves",
   "pages": {
@@ -41141,13 +41359,24 @@
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:46a44cd878ea07e4",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:4d5302327cebd38f"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dike.rs::dike#the breadth's waves": {
   "body": "9d59367c9d929bd0",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "the breadth's waves - GUESS: polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing silent on how long a thick or pinched stretch runs; waves of `WIDTH_WAVES` stations weighted three to two",
-  "code": "a040e6a5546cf9a5",
-  "core": "cf101b5541941d08",
+  "code": "2a40670b9b4022a0",
+  "core": "fa319a0a099b9a95",
   "date": "2026-11-22",
   "note": "the page attests thicker and pinched stretches but gives no length for them. The code's waves run 9 and 23 stations, weighted 0.3 to 0.2 (three to two), clamped within 14-40 ft.",
   "pages": {
@@ -41159,46 +41388,70 @@
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:46a44cd878ea07e4"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dike.rs::dike#the crest": {
   "body": "9d59367c9d929bd0",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "the crest - NONE: the band's midline, where its walked top runs",
-  "code": "d50eb6c957ed022d",
-  "core": "cf101b5541941d08",
+  "code": "b037d8d067a07193",
+  "core": "fa319a0a099b9a95",
   "date": "2026-10-31",
   "note": "the midline at share 0.5 is derived geometry, not a separate decision",
   "pages": {},
   "reads": "d00e35a634e6a134",
   "research": "",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dike.rs::dike#the crowns rolled": {
   "body": "9d59367c9d929bd0",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "the crowns rolled - GUESS: each tree's crown within its row's `CROWN_FT`, in tenths of a foot",
-  "code": "d0fea4a09af0a884",
-  "core": "cf101b5541941d08",
+  "code": "2c6cf14020ff6ed2",
+  "core": "fa319a0a099b9a95",
   "date": "2026-10-31",
   "note": "the page gives no crown size; each crown is rolled in tenths of a foot within CROWN_FT[k]",
   "pages": {},
   "reads": "d00e35a634e6a134",
   "research": "",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dike.rs::dike#the rows cut at the gaps": {
-  "body": "9d59367c9d929bd0",
-  "claim": "the rows cut at the gaps - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: where a channel crosses the dike, the band is cut, and the rows stop with it - no tree within `GAP_HALF_FT` of a sluice",
-  "code": "e0a77395c87c5564",
-  "core": "cf101b5541941d08",
-  "date": "2026-10-31",
-  "note": "trees are skipped within GAP_HALF_FT of any sluice and the gaps are recorded for cutting the band",
+  "body": "8b06481526f11629",
+  "claim": "the rows cut at the gaps - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: where a channel crosses the dike, the band is cut, and the rows stop with it - no tree within `GAP_HALF_FT` of a crossing channel's middle line, all the way through the band (before 449 T419 only round the sluice's point at the inner face, so a crown stood on the feeder's water farther out); the band's own cut is the drawing's (`driver::polder::draw_polder` paints the band under the channels' water), the faces recorded whole for the reeds and the seat that read them",
+  "code": "48a1b0389c1c0227",
+  "core": "fa319a0a099b9a95",
+  "date": "2026-11-24",
+  "note": "the `gap` check drops any tree within GAP_HALF_FT of any feeder or outfall segment, so the rows stop all the way through the band, as the page says (\"the rows stop with it\")",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
   "reads": "d00e35a634e6a134",
   "research": "9d4f4eee3c609249",
   "rests": [
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:e8c05b8d91b4cafc"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:e8c05b8d91b4cafc",
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:f542d631ea0516a8"
   ],
   "verdict": "IN-STEP"
  },
@@ -43747,6 +44000,23 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/polder.rs::Warp.at#the last row against the ring canal": {
+  "body": "af17ebc507051a55",
+  "claim": "the last row against the ring canal - GUESS: parcels-and-bunds-inside-a-polder-aze.drawing has the ring canal at the block's edge stay put and is silent on how near it a bowed plot may stand; the lattice's lines stand a whole pitch apart, so the plots' far edge, a gap short of the block's last line, keeps a small share of the last interior line's bow and nudge, and the last row's plots creep toward the fixed ring canal by up to about 2.3 ft of its `RING_FT` 6 ft - never onto its water (the least clear ground between a plot's corner and a trunk's bank 3.1 ft over 160 rolled polders, measured 2026-11-24, feature 449 T421), left as it stands",
+  "code": "3963aa800e621683",
+  "core": "c64e61f35eb353fa",
+  "date": "2026-11-24",
+  "note": "the page keeps the ring canal at the edge in place and says nothing on how near a bowed plot may stand; the creep stays off the water",
+  "pages": {
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+  },
+  "reads": "04aabfeb90e748c5",
+  "research": "5b339210163f008f",
+  "rests": [
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/field/polder.rs::Warp.at#the mosaic's drift": {
   "body": "af17ebc507051a55",
   "claim": "the mosaic's drift - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the mosaic bends the lattice out of line, fading to nothing at the fixed outer edge (`DRIFT_SHARE` of a module on `MOSAIC_WAVES`); the chessboard held straight",
@@ -44717,9 +44987,19 @@
  },
  "rust/phases/src/field/staged.rs::polder_stage#a rice polder's pocket pond": {
   "body": "ec725dd5ae31b586",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "a rice polder's pocket pond - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: a polder may have a pond on a low plot, a little over half the time; the dike-pond ground has none - the comb's own roll (`features::pocket_pond`) over the block's low row, a resting plot never its host",
-  "code": "8ad323830e23c0c2",
-  "core": "39913b0a743cb9e0",
+  "code": "c8e88033adb3d043",
+  "core": "325af165e577e8d6",
   "date": "2026-11-07",
   "note": "the rice polder gets `rice_pond`'s roll; dike-pond ground gets none",
   "pages": {
@@ -44735,13 +45015,24 @@
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:36c65c85e5f4ce74",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:ffcefa561c09cbc3"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/staged.rs::polder_stage#no resting plot on a dike-pond block": {
   "body": "ec725dd5ae31b586",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "no resting plot on a dike-pond block - GUESS: paddies-left-to-rest-kataarashi.drawing silent on a converted block; its parcels are ponds, their banks and a few in standing rice, and none is rested",
-  "code": "c227102f75d33be6",
-  "core": "39913b0a743cb9e0",
+  "code": "0276f4685d6aaec3",
+  "core": "325af165e577e8d6",
   "date": "2026-11-22",
   "note": "rest(..., unsettled && !dikepond) means a dike-pond block rests no plot; the 0013 drawing page sets resting per settlement and per field and never speaks of converted dike-pond ground, so the GUESS stands",
   "pages": {
@@ -44753,13 +45044,24 @@
    "0013-paddies-left-to-rest-kataarashi.drawing.html:2923b84b63379ea8",
    "0013-paddies-left-to-rest-kataarashi.drawing.html:cbe995f8e9b50877"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/staged.rs::polder_stage#resting only when unsettled": {
   "body": "ec725dd5ae31b586",
+  "build": {
+   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
+   "dirty": {
+    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
+    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
+    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
+    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
+    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
+   }
+  },
   "claim": "resting only when unsettled - paddies-left-to-rest-kataarashi.drawing: an unsettled settlement rests two to four whole plots (`polder::rest`), a settled one none",
-  "code": "07916712bb8c9162",
-  "core": "39913b0a743cb9e0",
+  "code": "5a6f45e41d9c9963",
+  "core": "325af165e577e8d6",
   "date": "2026-11-07",
   "note": "`polder::rest` runs only when unsettled; a settled block rests none",
   "pages": {
@@ -44771,6 +45073,7 @@
    "0013-paddies-left-to-rest-kataarashi.drawing.html:2923b84b63379ea8",
    "0013-paddies-left-to-rest-kataarashi.drawing.html:cbe995f8e9b50877"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/staged.rs::rice_pond#a four-sided host": {
@@ -45207,6 +45510,18 @@
   "core": "2d5d5cdd26cb79b6",
   "date": "2026-11-04",
   "note": "test helper that builds a rectangle ring; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/hem/tests.rs::the_bands_behind_a_pushed_column_stack_with_no_gap#the hem's tests": {
+  "body": "5770dd7d060eb0a5",
+  "claim": "the hem's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "3374dfc5859591b5",
+  "core": "cf4dcf10f19486fc",
+  "date": "2026-11-24",
+  "note": "a test fixture and its assertions; it decides nothing about the place",
   "pages": {},
   "research": "",
   "rests": [],

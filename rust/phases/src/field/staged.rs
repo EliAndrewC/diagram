@@ -122,8 +122,8 @@ pub fn polder_stage(
         aspect,
         seed,
     );
-    let dike = super::dike::dike(&p.inner_env, &p.sluices, seed);
     let outfall = super::polder::outfall(p.sluices[1], down_deg, canvas);
+    let dike = super::dike::dike(&p.inner_env, &p.sluices, &[&p.feeder, &outfall], seed);
     let resting = super::polder::rest(&p.plots, seed, unsettled && !dikepond);
     let mut pond_work = 0_u64;
     let pocket = if dikepond {
