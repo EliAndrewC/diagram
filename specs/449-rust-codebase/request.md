@@ -196,3 +196,11 @@ The GM, on reports of what is still open:
 The GM, told which open tasks can be done before the port resumes (all but T417):
 
 > Sounds great. So I guess I would like for you to close out all of these open tasks so that it makes sense to close out prior to us resuming our porting work, at which point I will want to talk over that process with you before we actually do resume the porting, just to make sure that our process is solid and such.
+
+## 2026-11-24, only scripted-map tasks are closed out before the port resumes
+
+The GM, told that nine page sessions remained before the talk, among them feature 452's (building plans):
+
+> I thought that we had agreed to move the stuff related to hand-drawn maps into a different feature, such that we were only fixing the outstanding tasks that related to scripted map generation before resuming.
+
+So the close-out before the port is 449's hamlet items alone: T420 (the dike-pond channels, its page session and code), T425's hamlet pages, T426. Feature 452's page sessions and tasks, and T425's three building-plan pages (0038, 0090, 0001), are not part of it; they stay in 452 for later.
