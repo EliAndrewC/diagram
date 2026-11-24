@@ -15,7 +15,7 @@ The question tasks are `research: physical` with their five boxes; the rest are 
       - [ ] recorded and cited
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
-      verify: `make record-owed` names no unit of the new questions; `make record CHECK=1` passes
+      verify: `make record-owed` names no unit of the new questions or of 0283; `make record CHECK=1` passes
 - [ ] T02 S2+C2: both ends' prices in China (D2; FR-001, FR-002, FR-005, FR-006, FR-007)
       research: physical
       - [ ] research pass

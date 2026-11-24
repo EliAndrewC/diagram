@@ -44,7 +44,7 @@ ironworks' cost against Osaka, labeled a cost estimate, with Izumo and Iwami's p
 sugar and tea: Satsuma's black sugar in the rice-exchange terms and the two silver figures that disagree; Ryukyu, Sanuki and Awa's silence;
 tea's silence, with Uji's fixed price and Edo's retail prices as what they are, and the three tea leads tried once. The neighbors (safflower,
 rice; spices, incense woods and medicinal roots SILENT) go with the question whose route they share. Each good: source units, the ratio, the
-distance and how it traveled, grams of silver per kg as labeled arithmetic, and what the source says made up the gap. Point at 0282 and 0283.
+distance and how it traveled, grams of silver per kg as labeled arithmetic, and what the source says made up the gap. Point at 0282 and 0283. A pointer from 0283.
 
 ## D2 - both ends' prices in China (issue question 1; FR-001, FR-002, FR-005, FR-006, FR-007)
 
@@ -68,8 +68,8 @@ pack-horse rates. A pointer from 0280.
 
 ## D5 - coastal ships (issue question 4; FR-001, FR-002, FR-005, FR-006, FR-007)
 
-Two new money questions, Japan and China: burthen by class and period, crew by size, crew pay, build cost, working life, and charter's
-silence with how hire was paid; the essay's disputed author and the two unreconciled state rates both given.
+Two new money questions, Japan and China: burthen by class and period, crew by size, crew pay, build cost, working life; charter per voyage ATTESTED ONLY FOR the Ninghai junk's two 1862 charters (Matsuura, from pass D), per month
+SILENT, with how hire was otherwise paid; the essay's disputed author and the two unreconciled state rates both given.
 
 ## D6 - the implementation check, the reply and the report (FR-001, FR-003, FR-004, FR-008)
 

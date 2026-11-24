@@ -63,9 +63,9 @@ priority order (question 1, then 3, then 2 and 4):
    unit's weight, the distance and where the distance comes from).
 3. What the record already holds (0280, 0281, 0282, 0283, and 0279's charcoal far from home) is named by file, not repeated; the comparison of
    sea freight with river and pack-horse rates is drawn against 0280's own figures.
-4. The canon beside each question is quoted beside the history, never altered: the 15% gate tariff and the charcoal rows' model of kiln price
-   plus freight, tariff and margin (question 1); the river freight row and the Yasuki harbor (question 2); interest of 15-20% a year in cities
-   and about 25% in the countryside (question 3); the Imperial koku (question 4).
+4. The canon beside each question is quoted beside the history, never altered: the 15% gate tariff, the charcoal rows' model of kiln price
+   plus freight, tariff and margin, and the Sparrow's tea (`setting/l7r.md`) (question 1); the river freight row and the Yasuki harbor (question 2); interest of 15-20% a year in cities
+   and about 25% in the countryside, and the 15% gate tariff (question 3); the Imperial koku (question 4).
 5. Where the history contradicts the canon or the ledger's model, the answer says so, and the contradiction goes to the GM through
    `escalation-check`.
 
@@ -74,8 +74,8 @@ priority order (question 1, then 3, then 2 and 4):
 - A producer paid in kind (Satsuma's islanders, paid in rice for sugar): the ratio is given in the terms the source gives, and a silver
   ratio only as labeled arithmetic or a named author's figure; two figures that disagree are both given.
 - A producer's COST against a city price (an ironworks' estimate, a shipper's cost) is that, never a producer's selling price.
-- A pair whose two ends are of different dates, teas or units is not a pair: no ratio is stated from it, and the figure is SILENT.
-- A consuming city outside the two countries asked (Taiwan sugar sold at Yokohama, tea at London) is ATTESTED ONLY FOR that route.
+- A pair whose two ends are of different dates, teas, or units that cannot be put on one basis from the sources (a bolt against a weight), is not a pair: no ratio is stated from it, and the figure is SILENT.
+- A consuming city other than those the issue names for that good (Taiwan sugar sold at Yokohama, tea at London) is ATTESTED ONLY FOR that route.
 - A figure after the premodern window (Japan after 1868, China after 1912) or from a modern summary without a date is given with its date
   and what it is, and carries no verdict for the period asked.
 - A text read through machine reading of a scan is cited only where the passage was read on the page image.
@@ -163,8 +163,10 @@ priority order (question 1, then 3, then 2 and 4):
 - Build cost: ATTESTED, Japan (a 900-koku ship, 53 kan 480 monme of silver, 1789; about 1,000 ryo for 1,000 koku in 1844) and China (a
   sand junk 7,000-8,000 taels about 1824-26, the essay's author disputed).
 - Working life: Japan ATTESTED from modern works (about 20 years, a major refit midway); China SILENT for sea junks.
-- Charter per voyage or month: SILENT in both; hire was paid as freight per koku or per shi (Hagi 1764 at 1.5 times the fixed rate; the
-  state's sand-junk hire of 1825-26, its two rates fourteen times apart and unreconciled, both given).
+- Charter: Japan SILENT (hire paid as freight per koku; Hagi 1764 at 1.5 times the fixed rate). China ATTESTED ONLY FOR one Shandong junk
+  chartered whole, 1862, 400-odd taels Ninghai to Niuzhuang and 535 taels Niuzhuang to Jiangnan (Matsuura, in `passes/d-sea-freight.md`),
+  not a sand junk; per month SILENT; the state's sand-junk hire of 1825-26 paid as freight per shi, its two rates fourteen times apart and
+  unreconciled, both given.
 
 ## Requirements
 
@@ -192,6 +194,10 @@ priority order (question 1, then 3, then 2 and 4):
   reports nothing missing.
 - **SC-003** (FR-006, FR-007): no fragment states a Rokugani figure, and each conversion, disagreement and reading from a scan is stated as
   such, as the check rounds read them.
+
+## Review history
+
+- spec-fidelity round 1 (2026-11-24, MODE 2): CHANGES REQUIRED - two of the issue's canon quotations missing from scenario 4; the charter verdict for China contradicted by pass D; two edge cases worded past their cases. All four applied.
 
 ## Assumptions
 
