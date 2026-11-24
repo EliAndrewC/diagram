@@ -1,0 +1,16 @@
+{
+ "captured": "2026-11-24T18:09:47+00:00",
+ "final_url": "https://web.archive.org/web/20260410170920id_/https://glim-re.repo.nii.ac.jp/record/1510/files/shigaku_8_47_70.pdf",
+ "first": "5a/5a779ed0c559/20261124T180945Z",
+ "gm_copies": [],
+ "keys": [
+  "anada-edo-uji-chashi"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "5a/5a779ed0c559/20261124T180945Z",
+ "reason": "HTTP 406",
+ "revision": "",
+ "sha256": "c3a4f906d36aeda17099c4bc64725d7ef1fa270aaa3ff7616feeaf26304d7fb4",
+ "url": "https://glim-re.repo.nii.ac.jp/record/1510/files/shigaku_8_47_70.pdf"
+}
