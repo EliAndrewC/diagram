@@ -11330,3 +11330,192 @@ The brief's 99 (88 GUESS, 11 DEVIATION): HEAD holds 83 unanchored GUESS, 11 unan
 5. **What did the before and after show, and under what conditions?** Before (HEAD's code): one tag owed 12 triages, and the two new owed tests failed. After: the sample's 55 tags and 27 references owed nothing; measured in this clone, 2026-11-23. The bulk, measured 2026-11-23 (`.git/t192/ledger.tsv`, the gate logs): the projected 60 write sessions (6-10 h) became 36 confirming sessions (about 8 min each, run before the restatement), one script run of seconds for 535 tags, and 3 sessions for 9 blocks; the 50 sessions the cheap route did not run were about 7 h at the measured rate (measured 2026-11-23 (the batch count times 8 min)). 0 checks owed throughout.
 
 <!-- plan-archive: T204 to T192 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-24 -->
+### T209 (the cascade test's stables Depiction miss: a pure addition cleared by the echo)
+
+- **Approach**: the triage's first filter (`change::fires`, rust/gate/crates/owed/src/record/triage/change.rs) gains THE ADDITION RULE, `change::addition`, read after the note keys and the echo: a sentence of a block new outright on the page (`Change::added`) that repeats a phrase of what the pop-up states - a word trigram, each word lower-cased and its possessive `'s` and plural `s` taken off, all three of whose words name a thing (`SUBJECT_WORDS` = 3; none of `NOT_SUBJECT`, the function words and the record's own words for its sources and plans: "page", "plan", "draw", "guess", "recorded", "our", "one" ...) - sends the pop-up on, the reason naming the sentence and the phrase. Only blocks new outright are read: a rewritten block is the echo's, and a block that arrived with an edit from a page the reader reached before (`Change::arrived_edited`, paired at `PAIR_RATIO` with a block gone from there) is a move, its edit read by the echo on the source page (T194's rule; T194's two tests went red on it before this field, measured 2026-11-24 (make rust-test on the crate)). T212 removes the phrase arm the addition rule replaces (its section). `fires` keeps its signature: its `found` argument is read no more (`_found`) while the claims crate's caller (`claims/src/claims/triage.rs`, another builder's file in this clone) passes it, so the claims' triage, which calls `fires`, gets the addition rule and loses the phrase arm with the pop-ups' (not replayed on claims: no tool replays a past landing's claims triage).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the addition rule | `change::tests::a_pure_addition_that_bears_on_a_pop_up_s_statement_is_sent` (red on HEAD: the one-gable-door block cleared, `/tmp/t209/logs/red-final.log`), the landing replays below | none: record tooling | none | n/a |
+| a block moved with an edit is no addition | `triage::tests::a_split_like_t184_s_owes_only_the_pop_up_repeating_changed_words`, `a_landing_s_replay_follows_a_split_s_pointers` (red on the rule without `arrived_edited`: hamlet/well sent on the moved "lined with cedar planks in old times") | none | none | n/a |
+
+### T209 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A page block new outright that says something of what a pop-up states (stables' "the door at its end" and 0108.drawing's new one-gable-door GUESS) reaches the triage agent, which judges it by (A)-(C); an addition sharing no subject with the pop-up is still cleared by the tool, so the cascade the GM stopped on 2026-11-23 does not come back.
+2. **The constraints.** The task line; the GM 2026-11-24 ("Yes let's fix all 6 of those before we resume."); the convergence talk (2026-11-23: only a claim-changing edit triggers review; the echo first filter, the agent after it); the modal-triage contract's (A), which counts an answered absence; the coordinator's brief (the stables case must send, count the newly sent pairs, an unrelated addition still clears, red first, 100% coverage, only this crate's files).
+3. **Where each comes from.** G: the GM's words above. O: the cascade test (cascade-test-2.md, the stables Depiction miss) and the landing replays below; needed.md's arm (c) (5 page-caused corrections from new blocks). R: none, tooling.
+4. **Do they describe the world here?** Yes: the replay is the real code path (`record modal-triage replay --landing`) over the cascade test's own landing, 7fc9f06512, and T186's two, 085f4598c3 and cce80ca436, scored against needed.md's 17 page-caused corrections as T186 scored them, measured 2026-11-24 (the landing replay, before and after).
+5. **The order.** After T186 and T194 (the echo and the moves it builds on); one change with T212, which it makes possible.
+6. **The exits.** Green: the stables pair sent, none of the 17 missed, the newly sent pairs counted and read. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** Measured, not tuned to the answer: five subject tests were replayed offline over the three landings' recorded pairs (a dump of each pair's additions, page blocks and pop-up from the replay, removed after): a trigram with 2 words naming a thing sent 65 of the 167 cleared pairs ("the main gate", "a samurai house", "the office hall": a page's own topic); 2 or 3 shared words in one sentence, counted only where rare on the page, 33 to 77; a trigram with one page-rare word, 21 to 46; 2 or 3 words inside a pop-up sentence stating an absence added 4 to 22 more, all incidental ("an intendant office", "the edo period"). At 3 of 3, 18, and every arm (c) case the record holds is caught by it where it is new (barracks and retainers' quarters on 0097, official-study on 0113, stables on 0108.drawing).
+8. **The budget.** One landing.
+9. **Done, measured.** 2026-11-24, `scripts/gates/l7r-gate.sh record modal-triage replay --landing <c>` before and after, per (pop-up, page) pair: 085f4598c3 81 pairs, 70 cleared before, 3 newly sent; cce80ca436 156 pairs, 82 cleared before, 12 newly sent; 7fc9f06512 23 pairs, 15 cleared before, 3 newly sent, `sheet/stables` x `0108-stables-umaya.drawing.html` among them ("repeats its phrase \"classic warrior stable\""). So 18 of the 167 pairs the tool cleared are now sent, 19 sends by the addition rule in all (one, residence x 0107, sent before by the phrase arm). Pop-ups sent: 8 of 44, 52 of 70, 5 of 11 (before 7, 49, 5); 0 of the 17 page-caused corrections missed, and the cascade test's 3 corrected pop-ups (barracks, retainers' quarters, stables) all sent. Read one by one, the 18 are: 5 on the new block's own subject (stables on 0108.drawing; barracks on 0097's "but not who else lived inside", "office's staff lived"; official-study, clerks' room and writing rooms on 0113's "the intendant ordinarily worked not in the office hall"), 13 a phrase only shared ("north/south/edo town magistracy" x7, "hearing court shirasu" x2, "east end bay", "court open ground", 0334's restated "long narrow building" to barracks and karo-s-house): the agent's to clear. Red first: the two tests above and `a_single_case_phrase_alone_sends_nothing_and_a_broken_absence_still_sends` (T212's) fail on HEAD's change.rs (`/tmp/t209/logs/red-final.log`: 3 failed, 119 passed), measured 2026-11-24 (make rust-test with HEAD's change.rs put back).
+10. **Before moving a constant.** `SUBJECT_WORDS` is a new KNOB, its measurement beside it in the code (the counts above); `PAIR_RATIO` unmoved.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The defect's visible effect: stables' Depiction said "the door at its end" while its drawing page made the one door a GUESS against two attested, and no check was owed (the cascade test fixed it by hand); a pop-up whose statement a new block narrows or answers is checked only by luck.
+
+**Found and left?**
+- The rule reads a phrase, not a meaning: a new sentence that says the same thing in other words is not caught (the stables Depiction alone, "the door at its end" against "one door, at one gable end", shares no 3-word phrase; the pair is sent through its About's "classic warrior stable", and the agent reads the whole pop-up). Not a defect of a wrong outcome on the record measured: none of the 20 corrections is missed. The knob is the place to move if one is.
+
+**Performance work?** yes (a `[perf]` task): it keeps the triage's tool clear for the additions that share no subject with a pop-up (149 of the 167 cleared pairs stay cleared) while sending the ones that do, so a missed correction is not found later by a full check.
+
+
+<!-- plan-archive: archived 2026-11-24 -->
+### T210 (the cascade test's 147 claims forced after a generated doc's rows were regenerated)
+
+- **Approach**: the root cause is that a procedure section's snapshot kept only its blocks' digests (`dev/claims-pages.json`), while its words were sought only in git's history, so a snapshot of words that never reached a commit - round 2's `claims-checked` over a hand edit of two generated rows, then `make building-programs` putting HEAD's words back - left `gather_section` (rust/gate/crates/claims/src/claims/triage.rs) no removed block to show, and it forced every claim of the section. A section's words are now kept as a page's are (feature 375 T04's blob map, `.git/claims-page-blobs.json`, key `section:<core>`): each bundle that snapshots a section writes its words beside the snapshot (`section_texts`, `SECTION_TEXTS`, in the impl-drift bundle's `blocks.json`, `bundle.rs`, and the triage's `triage.json`), and every record of a snapshot keeps them (`keep_sections`: `claims-checked`, the tool's clear, the all-forced record, `claims-triaged`, and `claims backfill-sections`; `commands.rs`, `commands/backfill.rs`), so they are the words as judged, not the tree's at record time. `section_words` reads the kept words first, then the history. The regenerated row then shows as a pair (hand edit -> HEAD words) and T191's filter judges it per claim, as it does any edit. `gather_section` now reads each section's edit once, its claims sharing it (`Gathered::section_lost`): the history search ran once a claim. `keep_texts`' blob writing is shared (`keep_blobs`). The kept texts and the removed-words search move to `triage/kept.rs`, and the backfills to `commands/backfill.rs` (constitution X clause 13's bar; observed 2026-11-24, method: `check file-scale` in the closing checks named triage.rs at 1017 lines and commands.rs at 1006), re-exported under their old paths. THE ONE FORCE LEFT, kept on purpose: a removed block whose words neither the kept snapshot nor the history holds (a snapshot recorded before T210 kept words, or recorded in another clone - the blob map is per clone - of words no commit holds, or older than the history the search reads): an echo of the new words cannot see a claim that repeated only the lost ones, and a full impl-drift is the one check that needs no old words, so its claims are owed in full (pinned by `a_change_that_only_removes_shows_none_new_and_a_lost_block_owes_in_full`). A change with nothing claim-bearing left is already cleared by the tool (T191). Also left forced, unchanged: `gather_code`'s empty hunks (a code fingerprint moved with no hunk of the unit's diff to show - a constant it reads changed elsewhere, `reads`): the code did change and nothing shows how, so forcing is the only safe answer there too. Priced and not taken: refusing `claims-checked` while a generated doc is stale against its generator (`make quick` already reds on it, `building-programs --check`): it covers generated rows only, not any section snapshotted with words later reverted, and the claims crate does not build on `mode_a`.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a section's words kept with its snapshot and read first | `triage::tests::a_section_snapshot_s_uncommitted_words_are_kept_so_putting_them_back_forces_nothing` (red on HEAD: both claims forced, `/tmp/t210-red.log`); `with_no_kept_words_a_section_s_removed_block_is_found_in_its_history`; `tests::the_recorded_rust_units_are_what_record_all_writes` (the kept section blob in the recorded state) | none: record tooling | none | n/a |
+| the one force left | `triage::tests::a_change_that_only_removes_shows_none_new_and_a_lost_block_owes_in_full` (unchanged) | none | none | n/a |
+
+### T210 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A regenerated generated row forces nothing by itself: a claim is sent on only when a block that bears on it changed, judged by T191's filter, and its section's claims are not forced to full impl-drift because the words a snapshot was taken of never reached a commit.
+2. **The constraints.** The task line; the GM 2026-11-24 ("Yes let's fix all 6 of those before we resume."); the convergence talk (2026-11-23: only a claim-changing edit triggers review); the round arbiter's ruling `ask:449-T403-claims-147-forced` (nothing in the 147 was new text to check); the coordinator's brief (the root cause, not only the symptom; a forced case kept only where it is the one safe answer, named; red first; 100% coverage; only this crate's files).
+3. **Where each comes from.** G: the GM's words above. O: the cascade test (cascade-test-2.md, line 35 and line 66) and the replay below. R: none, tooling.
+4. **Do they describe the world here?** Yes: the replay reproduces the 147 on the unfixed code (measured 2026-11-24, the replay in item 9) over the cascade test's own state - a `--shared` clone at 7fc9f06512 with `/tmp/ct2/bp-before.md` (docs/building-programs.md as round 2 snapshotted it, the hand edit in the latrine and privy rows) read for each claim's section core and snapshot, written into its index and store, then HEAD's regenerated doc put back (`/tmp/t210m/replay-new.sh`).
+5. **The order.** After T191 (the filter it hands the pair to) and T204; beside T211 and T213 (same crate, one landing).
+6. **The exits.** Green: the 147 forced on the unfixed code, none forced with the words kept. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** 2026-11-24, `l7r-gate claims --root /tmp/t210m/r147 triage-replay`: the unfixed binary 147 owed a section triage, 147 forced (the cascade test's count reproduced). The fixed binary with the words the fixed `claims-checked` keeps (the hand-edit sections' `section_texts` from its own bundle, written as kept blobs): 147 owed, 0 forced, 144 cleared by the tool, 3 sent to the triage agent (`Country shrine#dwelling kitchen floor`, `Magistrate's manor#garrison emphasis knob`, `#the armory's share of the office hall`, on words of the rewritten rows they repeat). With no kept words (a snapshot from before T210, the one force left): 147 forced, as designed.
+10. **Before moving a constant.** n/a: `PAIR_RATIO` and the 60-commit history depth unmoved.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The defect's visible effect: 147 claims owed a full impl-drift round for text already checked (the arbiter accepted them unrun); every revert of a snapshotted section, or regenerated generated row, did the same.
+
+**Found and left?**
+- The kept words live in the clone's blob map, not in a commit, so a snapshot of uncommitted words recorded in one clone and triaged in another still forces (the one force left). Not a defect of a wrong outcome: it costs a full check, never a miss, and every snapshot of committed words is found in the history in any clone.
+
+**Performance work?** yes (a `[perf]` task): a snapshot of words later put back no longer owes its section's claims a full impl-drift (147 of 147 in the cascade test, measured 2026-11-24, the replay in item 9), and a section's removed words are sought once a section, not once a claim (the unfixed replay of the 147 ran over 180 s, measured 2026-11-24, the tool's move of that run to the background at 180 s).
+
+
+<!-- plan-archive: archived 2026-11-24 -->
+### T211 (the cascade test's 22 claims forced on T192's #item anchors)
+
+- **Approach**: one reading of "did this claim's code move", `index::code_kept` (rust/gate/crates/claims/src/claims/index.rs): its fingerprint, or the one it had before it named its items with its class word kept (`Unit::code_unanchored`, T204). `claims-owed`'s `owed_one` asked it inline; `gather_code` (triage.rs) compared the fingerprint alone, so a claim whose only edit was T192's `#item` anchor read as changed code there, its own line in the section's added hunk, and was forced. Both now call `code_kept`, so they cannot diverge again. The triage's record of a cleared row still writes the anchored fingerprint (`!= row.code`), so the row heals to it.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the triage reads anchors as `claims-owed` does | `triage::tests::a_claim_that_only_named_its_item_is_no_code_change_at_the_triage` (red on HEAD: the claim forced, `/tmp/t211-red.log`); `index::tests::naming_the_item_of_a_classed_claim_owes_nothing` (T204's, unchanged) | none: record tooling | none | n/a |
+
+<!-- plan-archive: archived 2026-11-24 -->
+### T211 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A section triage of a section T192 relabeled forces none of its anchored claims for the anchors: an anchor named, the class kept, is no code change to `claims-owed` or to the triage.
+2. **The constraints.** The task line; the GM 2026-11-24 ("Yes let's fix all 6 of those before we resume."); T204 (naming an item on a claim owes nothing); the coordinator's brief (both read anchors the same way, ignored as a change; red first; 100% coverage; only this crate's files).
+3. **Where each comes from.** G: the GM's words above. O: the cascade test (cascade-test-2.md, line 12 and line 70) and the replay below. R: none, tooling.
+4. **Do they describe the world here?** Yes: the replay is the real code path over the cascade test's landing, T191's method - a `--shared` clone at 7fc9f06512 with its parent's `dev/claims-index.json` and `dev/claims-pages.json` and the clone's kept page blobs, then `claims triage-replay`, the unfixed and the fixed binary.
+5. **The order.** After T204 (whose fingerprint reading it shares); beside T210 and T213.
+6. **The exits.** Green: the 22 no longer forced, each cleared or sent by the filter. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** 2026-11-24, the replay of 7fc9f06512: unfixed, 106 owed a triage - 78 cleared by the tool, 3 cleared (feature 432), 22 forced (all `Magistrate's manor`, the cascade test's 22), 3 sent; fixed, 99 cleared by the tool, 3 cleared (432), 0 forced, 4 sent. Of the 22: 21 cleared by the tool, 1 (`#wells by use`) sent to the triage agent on words of the edit it repeats.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The defect's visible effect: every claim T192 anchored was forced to a full impl-drift whenever its section's visible text moved (22 on the T378 residue), work the GM's convergence rules say no edit of it owes.
+
+**Found and left?** none.
+
+**Performance work?** yes (a `[perf]` task): 22 full impl-drift checks a section edit owed for anchors alone are now the filter's (21 cleared, 1 to the triage agent).
+
+
+<!-- plan-archive: archived 2026-11-24 -->
+### T212 (the cascade test's 8 false sends from the three ABSENCE phrases)
+
+- **Approach**: the phrase arm of `change::fires` (`ABSENCE`, "the one case", "only one case", "every plan", and `says_absence`) is removed from rust/gate/crates/owed/src/record/triage/change.rs, and `judged` (triage.rs) passes no new findings: T209's addition rule, which reads each new block against what the pop-up states, decides instead, and the triage agent after it. The phrase list was dropped rather than narrowed, measured below.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the phrase arm dropped | `change::tests::a_single_case_phrase_alone_sends_nothing_and_a_broken_absence_still_sends` and `a_new_finding_is_read_and_a_key_gone_sends` (red on HEAD, `/tmp/t209/logs/red-final.log`) | none: record tooling | none | n/a |
+
+### T212 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A pop-up that states a single case or an absence is sent on only by a new block that says something of what it states; a new finding on another subject (0097's rowhouse fabric against main-gate's "Every plan's gate keeps a grievance drum", 0108.drawing's one door and 0334's moved finding against servants' quarters' "the one case recorded") sends nothing.
+2. **The constraints.** The task line; the GM 2026-11-24 ("Yes let's fix all 6 of those before we resume."); the convergence talk (2026-11-23); the modal-triage contract's (A) (an answered absence is a fact changed); the coordinator's brief (no false send from an unrelated change, a real absence break still sends, and if the right fix is to drop the phrase list, measure and say so).
+3. **Where each comes from.** G: the GM's words above. O: the cascade test (main-gate and servants' quarters, its table's lines 27 and 31), T186's measurement of `ABSENCE` (plan-done.md, T186 item 10), and the landing replays in T209's section. R: none, tooling.
+4. **Do they describe the world here?** Yes: the same three landings' replays, read pair by pair.
+5. **The order.** One change with T209, whose addition rule replaces the phrase arm.
+6. **The exits.** Green: every phrase-only send cleared, no correction missed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The phrase list is dropped, not narrowed: the arm sent a pop-up whose text held "the one case", "only one case" or "every plan" anywhere on ANY new finding (`new_findings`, read from the raw page, so a finding moved by a split counted as new: main-gate and servants' quarters on 0334). Tying the phrase to the pop-up sentence that shares the new block's subject was measured too (T209's search smell: 4 to 22 more sends, all incidental) and caught no correction the addition rule misses; the addition rule reads the absence in whatever words the pop-up states it ("no source says who else lived inside", which no phrase list held).
+8. **The budget.** One landing.
+9. **Done, measured.** 2026-11-24, the landing replays (T209's section): the phrase arm's 11 sends over the three landings - 7fc9f06512 main-gate x 0097 and x 0334, servants' quarters x 0108.drawing and x 0334; cce80ca436 retainers' quarters x 0090, servants' quarters x 0097.drawing, residence x 0107; 085f4598c3 residence and servants' quarters x 0091 and x 0091.drawing - are 10 cleared and 1 sent by the addition rule (residence x 0107, the doma phrase); main-gate is sent on by nothing, servants' quarters only through its echo on 0097 (the check session's rewording of "a few men to each"), and 0 of the 17 page-caused corrections nor the cascade test's 3 is missed. The arm (c) corrections it was kept for (needed.md: barracks and retainers' quarters on 0097's new blocks, "office's staff lived" and "who else lived inside", official-study on 0113's "office hall where") are each sent by the addition rule on its own, read with the echo off. `ABSENCE` and `says_absence` are removed; `new_findings` stays, which the claims' triage reads.
+10. **Before moving a constant.** `ABSENCE`, T186's knob, is removed: T186 kept the three phrases because none of the 17 was missed with them and 56 of 114 pop-ups were sent against 104; without them and with the addition rule, 60 of 114 are sent (8 and 52) and none is missed.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The defect's visible effect: a pop-up's three checks (main-gate's accuracy, gaps and references; servants' quarters' depiction) sent to the triage agent on a change that could not touch what it states.
+
+**Found and left?** none
+
+**Performance work?** yes (a `[perf]` task): 10 phrase-only sends no longer reach the triage agent over the three landings measured.
+
+
+<!-- plan-archive: archived 2026-11-24 -->
+### T214 (the cascade test's review-fixed refusal on a sheet with no carried verdict)
+
+- **Approach**: the GM 2026-11-24, request.md's last section: *"Yes let's fix all 6 of those before we resume."* Measured first
+  (2026-11-24, this clone, read-only): why the three tools disagreed on the round-trip sheet. `reviews owed` (so `make verify`) and
+  `reviews snapshot` both read the delta's occasions, and a notes-only edit is none (feature 294); the push's review gate
+  (`review-gate.sh`) asks only owed units, so it owed nothing too. `make review-fixed` (`prereq/scoped.rs`' `declare`) was the one that
+  disagreed, for three reasons. (a) `UNIT=ochiba-roundtrip-test`, the sheet's bare name, was looked up as a unit with no verdict record,
+  refused as "no PASS or NEEDS-WORK verdict to carry: a full round is owed". (b) It took the unit's sheet from `unit_folder`, which
+  prefers the review tree's snapshot, and `.git/review-snapshot/building-review--ochiba-roundtrip-test/` was still on disk from
+  2026-11-23 11:01, a delta that had landed, so a unit no delta owed read as owed. (c) That verdict was written at 11:06, before T199
+  landed (22eb592bad, 18:55), so no `.reviewed` copy was kept, and one let-else printed "was not kept: a full round is owed" for all of
+  not owed, not kept and kept-but-different. So `declare` now:
+  - reads a bare sheet name as its `building-review--<sheet>` unit (`unit_of`), and prints that slug when it declares;
+  - takes owed from `unit_sheet`, `reviews owed`'s own list, before any snapshot (`unit_folder_on`, the sheet asked once). A unit the
+    delta does not owe gets the answer the other tools give, with exit 0: not owed by this delta, no round full or change-scoped, the
+    last verdict left on file as it is. A name with no pool sheet is refused as that, and never read as not owed;
+  - keeps the full round for an owed unit with no PASS or NEEDS-WORK on file (a sheet never reviewed: its first round is the full one);
+  - finds the sheet as reviewed again where no copy was kept (`scoped/recover.rs`): every version of the drawing and the notes that git
+    holds (`DEPTH`, 200 commits back at most: observed 2026-11-24, method: `git log` of the round-trip sheet's notes, 15 commits over seven weeks), plus the drawing as it reads now, since a generated compound's drawing is never committed. These
+    are hashed by `files_key`, the bytes half of `folder_key`, so the hash is the verdict's own. The match is written to the kept
+    copy and the change-scoped prompt pairs it as before. With no match, the full round is owed, and the message says the sheet as
+    reviewed is neither kept nor in git history. Measured: on the real sheet, the drawing as it reads now with the notes at
+    03cc1514d1 hashes to its verdict's `9b7b9464d35cc002`.
+  The rest of T199's rule is unchanged: a named non-nitpick, an open error or questionable finding, an unchanged sheet.
+  Replayed on the real sheet after the fix (`l7r-gate reviews prereq fixed`, both names): exit 0, "is not owed by this delta ... no
+  round is owed", which agrees with `reviews owed --units` (no round-trip unit).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| not owed, the bare name, the stale snapshot | `scoped/tests.rs`' `a_notes_fix_on_a_sheet_no_delta_owes_is_owed_no_round_by_any_tool` (red on HEAD: "was not kept ... a full round is owed", the cascade test's words; red with owed read through `unit_folder`'s snapshot: "declared:") | n/a - no engine code | none | n/a |
+| the sheet as reviewed found in history | `scoped/tests.rs`' `a_verdict_written_before_its_sheet_was_kept_is_paired_from_git_history` (red on HEAD: "was not kept"); its unrecoverable half and `an_error_fix_or_an_unclean_scoped_round_owes_the_full_round` pin the full round where no version matches | n/a | none | n/a |
+
+### T214 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A nitpick fixed on a sheet, or a notes-only fix, never owes a full building-review
+   round just because no copy of the reviewed sheet is on file. A unit no delta owes gets the same answer from every tool. A sheet
+   never reviewed, and owed, still gets its full round.
+2. **The constraints.** The task line; the GM's words above; feature 294's occasions (no notes-edit occasion added); T199's rule (an
+   error or questionable finding owes the full round); FR-012 (red first); new Rust at 100% line coverage; only the `reviews` crate's
+   files touched (T209 to T213 build beside it in this clone).
+3. **Where each comes from.** G: the GM's words. O: the cascade test (cascade-test-2.md lines 16 and 80), the verdict's and the
+   snapshot's mtimes, T199's landing commit, the history hash above, and the replay.
+4. **Do they describe the world here?** Yes: measured on the round-trip sheet's own records in this clone.
+5. **The order.** Independent of T209 to T213 (other crates).
+6. **The exits.** Green: the crate's tests, lint, format and cover (`make crate-checks CRATE=rust/gate/crates/reviews`) and `make
+   closing-checks T=T214`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: every reader of `unit_content_key`, `answered`, `standing` and `content-key` (prereq, checkpoint,
+   arbiter, `review-gate.sh`, the guard's `pair_hooks/review.rs`) was found by grep and asks only owed units, so the stale snapshot
+   misleads `declare` alone.
+8. **The budget.** One landing.
+9. **Done, measured.** The replay above: `make review-fixed UNIT=ochiba-roundtrip-test FINDING=N1` agrees with `reviews owed`.
+10. **Before moving a constant.** n/a (`DEPTH` 200 is new, a search bound with its why beside it).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A builder reads "a full round is owed" where no tool owes one. The fix stops a full round being dispatched
+    for a notes-only nitpick fix.
+
+**Found and left?**
+- Not a defect (constitution XIV): `make verify`'s first run took 4 of the bundle's 27 files (measured 2026-11-24, the cascade
+  test's record, cascade-test-2.md line 80), which is the review tree taking the started task's own files (`review-tree.sh` line 116, `FILES=` adds the rest), by design. It owed nothing either way. The verdict that reads
+  NEEDS-WORK in the cascade clone and PASS (N1 nitpick) here is the per-clone `.git/review-verdicts` record, by design.
+- Not a defect (constitution XIV): `docs/reviews.md` (the review-fixed paragraph), the Makefile's `review-fixed` help line and `rust/gate/CLAUDE.md`'s `reviews` row
+  still read as before: they state the route and stay true, only less complete. Outside this builder's files; for the coordinating
+  session to add a clause if it wants one.
+
+**Performance work?** yes (a `[perf]` task, 451 FR-013: the builders' loop - no full review round for a notes-only nitpick fix);
+not engine speed, so no performance checklist.
+
