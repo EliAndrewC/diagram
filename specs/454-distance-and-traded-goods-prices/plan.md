@@ -4,7 +4,7 @@
 
 ## Summary
 
-A research-record feature answering the issue's four questions from five search passes (`passes/a-ratios-japan.md`, `b-ratios-china.md`,
+A research-record feature answering the issue's questions from the search passes in `passes/` (`passes/a-ratios-japan.md`, `b-ratios-china.md`,
 `c-margins.md`, `d-sea-freight.md`, `e-ships.md`). Five write sessions (and their continuations under the key cap), each followed by a
 check-and-apply session, one after another in this clone (`/diagram/.clones/diagram-research`), in the issue's priority order: question 1
 (Japan, then China), question 3, then questions 2 and 4. One queue, because the sources overlap between parts (Kibe on Hagi's rice ships,
@@ -19,7 +19,7 @@ pair is landed on its own. Then the reply on #24. No code, map or canon change.
   NOT-CHECKED; several tables (Ball 1848, Fortune 1852, Timkowski, Gutzlaff, the Satsuma law collection, the 1842 Edo price lists, Kibe's and
   Kudo's tables) were read from scrambled machine text. The session that cites one reads it on the page image and gives it to the checks
   with `IMAGES=` or an archive copy.
-- **Ledger rows to supersede**: pass A recorded six pages that bear on the question as nothing-found or rejected (Seijo jpn-039-04, Kito
+- **Ledger rows to supersede**: pass A recorded pages that bear on the question as nothing-found or rejected (Seijo jpn-039-04, Kito
   fe.sophia 53-03, Shimane 38042/4947, Yamagata 75_moriya, iwt_11 and Graduation_Thesis); the write session that cites one records
   `cited:<key>` over it.
 - **The question count and the write cap**: nine new questions (D1 2, D2 1, D3 2, D4 2, D5 2), each under 20,000 bytes of prose. Each write
@@ -63,7 +63,7 @@ loss to wreck; the single Chinese cargoes; and the interest on cargo money besid
 ## D4 - sea freight (issue question 2; FR-001, FR-002, FR-005, FR-006, FR-007)
 
 Two new money questions, Japan and China: each route's rate in source units and voyage days; the Osaka-Edo rate's silence beyond 0280's
-sake figure; silver per 100 kg per 100 km as labeled arithmetic where a distance can be stated; the comparison with 0280's river and
+sake figure; the request's freight figure (silver by weight and distance) as labeled arithmetic where a distance can be stated; the comparison with 0280's river and
 pack-horse rates. A pointer from 0280.
 
 ## D5 - coastal ships (issue question 4; FR-001, FR-002, FR-005, FR-006, FR-007)
