@@ -7,7 +7,8 @@
 //!     one inset a village - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: one inset holds for the whole village, measured on its parcel of median area - the fry ponds' banks the same
 
 use super::fan::Pt;
-use super::geom::{dist, signed_area, unit};
+use super::geom::{dist, seg_dist, signed_area, unit};
+use super::index::Index;
 use super::ponds::{pushed_in, rounded};
 use crate::pyrand::knob_rng;
 
@@ -30,7 +31,7 @@ pub const FRY_SHARE: f64 = 0.7;
 /// A bank's reach (the corner's rounding) and a pond's (feet).
 ///
 /// Research:
-///     the rounding - GUESS: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html silent on a pond's corners; the bank's cut back 8 ft and the water's 16 ft
+///     the rounding - GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#pond-corners-rounded: the bank's corner is cut back about 8 ft and the water's about 16 ft, both figures the page's GUESS
 pub const REACH_FT: (f64, f64) = (8.0, 16.0);
 /// The mulberry on a bank: a row a this many feet of the bank's width, its bushes this far apart (feet), each crown's radius.
 ///
@@ -70,6 +71,32 @@ pub struct Crops {
     pub crop: String,
     pub crowns: Vec<(f64, f64, f64)>,
     pub hedges: Vec<Vec<Pt>>,
+}
+
+/// The banks' crowns kept off the block's water: a crown whose center lies on a channel of `channels` (each its course and its
+/// drawn width) - nearer its middle line than half that width - is dropped, the rest left as they were rolled; returns the
+/// operations counted, the channels' index's own and each crown's tests.
+///
+/// Research:
+///     never over a canal - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: a bush's center always stands on the bank, never over a canal, while a crown's edge may lean over the water - where a canal grazes a bank's foot the bush whose center would stand in its water is not drawn; a crown is dropped after every row is rolled, so no other crown moves
+///     the channels' index - NONE: plumbing, each channel's segments filed once in the field's water index and each crown asked of the cells about it (constitution X clause 15)
+pub fn off_the_water(crops: &mut Crops, channels: &[(&[Pt], f64)]) -> u64 {
+    let mut ix = Index::default();
+    for &(pts, w) in channels {
+        for s in pts.windows(2) {
+            ix.file_w(s[0], s[1], w);
+        }
+    }
+    let reach = ix.widest / 2.0;
+    let mut tests = 0_u64;
+    crops.crowns.retain(|&(x, y, _)| {
+        let near = ix.near((x - reach, y - reach), (x + reach, y + reach));
+        tests += near.len() as u64;
+        !near
+            .into_iter()
+            .any(|i| seg_dist((x, y), ix.segs[i].0, ix.segs[i].1) < ix.widths[i] / 2.0)
+    });
+    ix.touched + ix.examined + tests
 }
 
 /// The ring pushed in `by` feet on every side (`ponds::pushed_in`), the line a row of the bank's crop runs on; the ring itself
@@ -274,8 +301,28 @@ fn grow(
 
 #[cfg(test)]
 mod tests {
-    use super::{convert, inset, TEA_FT};
+    use super::{convert, inset, off_the_water, Crops, TEA_FT};
     use crate::field::geom::{inside, signed_area};
+
+    /// NO BUSH IN A CREEK'S WATER (449 T420): a crown whose center lies within half a channel's width of its middle line is
+    /// dropped, one whose edge only leans over the water and one on the bank are kept, and the work is counted.
+    #[test]
+    fn a_crown_whose_center_is_in_a_channels_water_is_dropped() {
+        let mut crops = Crops {
+            crop: "mulberry".to_owned(),
+            crowns: vec![
+                (50.0, 1.0, 2.2),
+                (50.0, 3.9, 2.2),
+                (50.0, 5.0, 2.2),
+                (500.0, 500.0, 2.2),
+            ],
+            hedges: Vec::new(),
+        };
+        let course = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0)];
+        let work = off_the_water(&mut crops, &[(&course, 8.0), (&course[..1], 3.0)]);
+        assert_eq!(crops.crowns, vec![(50.0, 5.0, 2.2), (500.0, 500.0, 2.2)]);
+        assert!(work > 4);
+    }
 
     #[test]
     fn the_parcels_converted_and_their_banks_planted() {

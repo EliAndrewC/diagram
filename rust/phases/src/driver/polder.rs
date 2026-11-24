@@ -286,25 +286,7 @@ fn draw_polder(svg: &mut Svg, s: &PolderStage, seed: i64) {
         &mottle::dike(&s.dike, seed),
         mottle::MOTTLE_OPACITY,
     );
-    for d in &s.polder.ditches {
-        svg.kind(if d.role == "drain" || d.seg == "drain" {
-            "drainage ditch"
-        } else {
-            "irrigation ditch"
-        });
-        svg.taper(
-            &d.pts,
-            if d.role == "drain" || d.seg == "drain" {
-                ink::DRAIN
-            } else {
-                ink::SUPPLY
-            },
-            d.w,
-            d.w_tail,
-        );
-    }
-    svg.kind("irrigation ditch");
-    svg.line(&s.polder.feeder, ink::SUPPLY, FEEDER_W);
+    draw_channels(svg, s);
     svg.kind("drainage ditch");
     svg.unframed(&s.outfall, ink::DRAIN, RUN_W);
     svg.group(0.92);
@@ -339,6 +321,38 @@ fn draw_polder(svg: &mut Svg, s: &PolderStage, seed: i64) {
         );
         svg.ellipse((x, y), prx, pry, ink::POND_WATER, Some((ink::RIM, 1.2)));
     }
+}
+
+/// The polder's channels and its feeder drawn by kind: the drain a drainage ditch; the supply water a rice polder's irrigation
+/// ditches, a dike-pond block's pond canals.
+///
+/// Research:
+///     the pond canals named - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: the canals are drawn as the waterways the ponds lie among, not as field ditches - on a dike-pond block the feeder, the ring canal's supply trunks and the creeks between the ponds are the `pond canal` kind, the drain the drainage ditch; on a rice polder they are irrigation ditches, as they were on both before 449 T420
+fn draw_channels(svg: &mut Svg, s: &PolderStage) {
+    let supply = if s.converted.is_some() {
+        "pond canal"
+    } else {
+        "irrigation ditch"
+    };
+    for d in &s.polder.ditches {
+        svg.kind(if d.role == "drain" || d.seg == "drain" {
+            "drainage ditch"
+        } else {
+            supply
+        });
+        svg.taper(
+            &d.pts,
+            if d.role == "drain" || d.seg == "drain" {
+                ink::DRAIN
+            } else {
+                ink::SUPPLY
+            },
+            d.w,
+            d.w_tail,
+        );
+    }
+    svg.kind(supply);
+    svg.line(&s.polder.feeder, ink::SUPPLY, FEEDER_W);
 }
 
 /// The polder's sluices drawn, each a frame across the channel through its point (`sluice_channel`, `sluice_frame`), on top of

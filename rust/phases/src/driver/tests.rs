@@ -190,7 +190,7 @@ fn a_name_is_escaped_in_the_record() {
 #[test]
 fn every_mark_drawn_is_a_registry_kind_in_the_census() {
     // the registry's kinds the driver's stages draw (`rust/gate/crates/registry/src/kinds.rs`), and `-` for the placeholder
-    const KINDS: [&str; 23] = [
+    const KINDS: [&str; 24] = [
         "-",
         "paddy",
         "wet paddy",
@@ -202,6 +202,7 @@ fn every_mark_drawn_is_a_registry_kind_in_the_census() {
         "stream",
         "irrigation ditch",
         "drainage ditch",
+        "pond canal",
         "weir",
         "pond",
         "field pond",
@@ -289,4 +290,24 @@ fn a_bare_winter_the_dry_ground_cannot_feed_is_rolled_again_as_barley() {
     let f = roll(&parse(fed).unwrap()).unwrap();
     assert_eq!(f.knobs["winter_crop"], "none");
     assert!(f.grain.unwrap().0 >= 15.0 * 0.85);
+}
+
+/// A DIKE-POND'S WATER IS ITS POND CANALS (449 T420): the feeder, the ring's supply reaches and the creeks, each creek one stroke
+/// at the block's 6 to 8 ft (0018's drawing page), are `pond canal` in the census; a rice polder's stay irrigation ditches.
+#[test]
+fn a_dike_ponds_channels_are_pond_canals_drawn_at_the_creeks_width() {
+    let kuwabata = roll(&parse(r#"{"name": "Kuwabata", "seed": 21, "households": 16, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond", "pond_layout": "mosaic", "dike_crop": "mulberry"}"#).unwrap()).unwrap();
+    let s = kuwabata.polder.as_ref().unwrap();
+    let between = |d: &&crate::field::polder::Ditch| d.seg == "column" || d.seg == "row";
+    let creeks: Vec<_> = s.polder.ditches.iter().filter(between).collect();
+    let w = creeks[0].w;
+    let one = creeks.iter().all(|d| (d.w_tail - w).abs() < 1e-12);
+    assert!((6.0..=8.0).contains(&w) && one);
+    // the feeder, the ring's four supply reaches (two trunks, the far flank, the inlet's join) and each creek
+    assert_eq!(kuwabata.ink.get("pond canal"), Some(&(creeks.len() + 5)));
+    assert_eq!(kuwabata.ink.get("irrigation ditch"), None);
+    let stroke = format!(r#"stroke-width="{}""#, (w * 10.0).round() / 10.0);
+    assert!(kuwabata.svg.matches(stroke.as_str()).count() >= creeks.len());
+    let rice = roll(&parse(r#"{"name": "R", "seed": 5, "households": 12, "down_deg": 30, "field_archetype": "polder_grid"}"#).unwrap()).unwrap();
+    assert!(rice.ink.contains_key("irrigation ditch") && !rice.ink.contains_key("pond canal"));
 }
