@@ -17,8 +17,8 @@ use serde_json::{json, Map, Value};
 use super::bundle::bundle;
 use super::carry::{carry, classified, gate as carry_gate, record_known, Reading};
 use super::index::{
-    judged, live_rows, load_map, owed, page_blocks, rekey, rows_of, save_index, save_store, truthy,
-    Cur, Index, PageMemo, Store, DEFERRED, INDEX, QUESTIONS, STORE, TRIAGED,
+    judged, live_rows, load_map, owed, rekey, rows_of, save_index, save_store, truthy, Cur, Index,
+    Store, DEFERRED, INDEX, QUESTIONS, STORE, TRIAGED,
 };
 use super::report::{
     coverage, delta_form_problems, inherited_none, load_deferred, question_names, report,
@@ -26,12 +26,12 @@ use super::report::{
 };
 use super::scope::all_units;
 use super::triage::{
-    clear_page_moves, keep_texts, read_reply, record_cleared, record_triage, triage_bundle, vet,
+    clear_page_moves, keep_sections, keep_texts, read_reply, record_cleared, record_triage,
+    triage_bundle, vet,
 };
 use super::units::{sha, Pair};
 use crate::record::args::Parsed;
 use crate::record::repo::{fail, Fail};
-use crate::record::units::digest;
 
 /// A triage bundle of this many claims or fewer goes straight to impl-drift (feature 430 T06, D6).
 const TRIAGE_SKIP_MAX: usize = 3;
@@ -81,64 +81,6 @@ pub fn path_text(text: &str) -> String {
         };
     }
     format!("{lead}{joined}")
-}
-
-/// Every procedure-section claim re-keyed to its own line's fingerprint without owing it; how many.
-pub fn backfill_sections(cur: &Cur, index: &mut Index, store: &mut Store) -> usize {
-    let mut n = 0;
-    for row in cur.iter() {
-        let Some(Value::Object(was)) = index.get_mut(&row.key) else {
-            continue;
-        };
-        if !row.unit.line_keyed() || was.contains_key("section") {
-            continue;
-        }
-        let old = sha(&format!("{}\x1f{}", row.unit.core, row.claim.normalized()));
-        if was.get("code").and_then(Value::as_str) == Some(&old) {
-            was.insert("code".into(), json!(row.code));
-            was.insert("section".into(), json!(row.unit.core));
-            store.insert(
-                row.unit.core.clone(),
-                json!(row
-                    .unit
-                    .blocks
-                    .iter()
-                    .map(|b| digest(&[b]))
-                    .collect::<Vec<_>>()),
-            );
-            n += 1;
-        }
-    }
-    n
-}
-
-/// Every row checked at today's research given the pages it was checked at, and those pages snapshotted; how many.
-fn backfill(cur: &Cur, index: &mut Index, qdir: &Path, store: &mut Store) -> Result<usize, Fail> {
-    let mut memo = PageMemo::default();
-    let mut n = 0;
-    for row in cur.iter() {
-        let Some(Value::Object(was)) = index.get_mut(&row.key) else {
-            continue;
-        };
-        if was.contains_key("pages")
-            || was.get("research").and_then(Value::as_str) != Some(&row.research)
-            || row.research.is_empty()
-        {
-            continue;
-        }
-        let mut pages = Map::new();
-        for name in super::bundle::read_pages(&row.claim, qdir) {
-            let (fp, blocks) = page_blocks(&name, qdir, &mut memo)?;
-            pages.insert(name.clone(), json!(fp));
-            store.insert(
-                fp.clone(),
-                json!(blocks.iter().map(|(d, _)| d.clone()).collect::<Vec<_>>()),
-            );
-        }
-        was.insert("pages".into(), Value::Object(pages));
-        n += 1;
-    }
-    Ok(n)
 }
 
 /// Each row whose stored code is its claim's code under the old fingerprint carried to the new one - an UNCLAIMED row, keyed by its
@@ -417,6 +359,7 @@ fn record_cmd(
     merged.extend(blocks["snapshots"].as_object().cloned().unwrap_or_default());
     save_store(&root.join(STORE), &merged)?;
     keep_texts(&root.join(QUESTIONS), &units)?;
+    keep_sections(root, &blocks)?;
     for m in &msgs {
         o.say(&format!("claims-checked: {m}"));
     }
@@ -526,6 +469,7 @@ fn triage_cmd(
         merged.extend(data["snapshots"].as_object().cloned().unwrap_or_default());
         save_store(&root.join(STORE), &merged)?;
         keep_texts(&qdir, &tool)?;
+        keep_sections(root, &data)?;
         o.say(&format!("claims-triage: {} claim(s) cleared by the tool - no edit of the text each rests on is claim-bearing (feature 451 T191: comments, markup, links, marks and moves; a rewritten or removed sentence only where the claim repeats its changed words)", tool.len()));
     }
     let keys: Vec<String> = keys.into_iter().filter(|k| !tool.contains_key(k)).collect();
@@ -549,6 +493,7 @@ fn triage_cmd(
         merged.extend(data["snapshots"].as_object().cloned().unwrap_or_default());
         save_store(&root.join(STORE), &merged)?;
         keep_texts(&qdir, &units)?;
+        keep_sections(root, &data)?;
         o.say(&format!("claims-triage: all {} claim(s) are cx.owed in full (no diff or removed block to show) - no triage to dispatch; they go straight to impl-drift: `make claims-bundle OWED=1`, then `make claims-checked BUNDLE=<dir> REPLY=<file>`", keys.len()));
         return Ok(0);
     }
@@ -658,6 +603,7 @@ fn triaged_cmd(
     merged.extend(data["snapshots"].as_object().cloned().unwrap_or_default());
     save_store(&root.join(STORE), &merged)?;
     keep_texts(&root.join(QUESTIONS), &units)?;
+    keep_sections(root, &data)?;
     for m in &msgs {
         o.say(&format!("claims-triaged: {m}"));
     }
@@ -941,22 +887,7 @@ pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail>
         }
         "accept" => accept_cmd(root, &cur, &index, p, o),
         "owed" => owed_cmd(root, &pairs, &cur, &index, &store, o),
-        "backfill-sections" | "backfill" => {
-            let (mut index, mut store) = (index, store);
-            let n = if cmd == "backfill" {
-                backfill(&cur, &mut index, &qdir, &mut store)?
-            } else {
-                backfill_sections(&cur, &mut index, &mut store)
-            };
-            save_index(&root.join(INDEX), &live_rows(&cur, &index))?;
-            save_store(&root.join(STORE), &store)?;
-            o.say(&if cmd == "backfill" {
-                format!("claims-backfill: {n} row(s) given the pages they were checked at")
-            } else {
-                format!("claims-backfill-sections: {n} section claim(s) re-keyed to their own line; none owed by it")
-            });
-            Ok(0)
-        }
+        "backfill-sections" | "backfill" => backfill_cmd(cmd, root, &cur, index, store, o),
         "triage-owed" => {
             let n = owed(&cur, &index, Some(&qdir), Some(&store))?
                 .iter()
@@ -979,6 +910,11 @@ pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail>
         _ => record_cmd(root, &cur, &index, &store, p, o),
     }
 }
+
+mod backfill;
+use backfill::backfill_cmd;
+#[cfg(test)]
+use backfill::{backfill, backfill_sections};
 
 #[cfg(test)]
 mod more;

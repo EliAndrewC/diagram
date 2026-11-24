@@ -246,7 +246,7 @@ fn a_relabel_alone_owes_nothing_and_answers_its_mislabel() {
     );
     let mut cur = Cur::default();
     cur.insert(r.clone());
-    let was = json!({"code": "old", "body": body, "claim": "gap - NONE: before", "verdict": "MISLABELED", "research": ""});
+    let was = json!({"code": "old", "body": body, "claim": "gap - CONVENTION: relabeled", "verdict": "MISLABELED", "research": ""});
     assert!(owed(
         &cur,
         &obj(&json!({r.key.clone(): was.clone()})),
@@ -473,4 +473,48 @@ fn naming_the_item_of_a_classed_claim_owes_nothing() {
         let doc = row(key, section.clone(), &changed, "");
         assert_eq!(owes(&doc, &section_was(&before)).len(), 1, "{changed}");
     }
+}
+
+/// Feature 451 T213 (the cascade test's T400 miss, `emit.rs::grounds#office front, residence rear`): a MISLABELED claim whose body is
+/// unchanged passes as relabeled only where its backing alone changed - the class or the question cited, its account kept; an account
+/// restated with the relabel is owed its check, as any claim's would be. A row storing no claim is no relabel.
+#[test]
+fn a_mislabeled_claim_s_restated_account_is_owed() {
+    let root = fixture("claims-index-relabel");
+    let q = root.join("research/questions");
+    let u = unit("rust/phases/src/lib.rs", "GAP", "constant", (10, 10), &[]);
+    let body = body_of(&root, &u).unwrap();
+    let key = "rust/phases/src/lib.rs::GAP#gap";
+    let was = json!({"code": "old", "body": body, "claim": format!("gap - DEVIATION {WELLS}: the court north"), "verdict": "MISLABELED", "research": ""});
+    let owes = |line: &str| {
+        let r = row(key, u.clone(), line, "");
+        let mut cur = Cur::default();
+        cur.insert(r.clone());
+        let n = owed(&cur, &obj(&json!({key: was.clone()})), Some(&q), None)
+            .unwrap()
+            .len();
+        (n, relabel_answered(&was, &r, &root).unwrap())
+    };
+    // the prescribed relabel: the class flipped, or the question cited changed, the account word for word
+    assert_eq!(owes(&format!("gap - {WELLS}: the court north")), (0, true));
+    assert_eq!(owes("gap - CONVENTION: the court north"), (0, true));
+    // the account restated with it, or on its own: owed, and no relabel answers the MISLABELED verdict
+    assert_eq!(
+        owes(&format!("gap - {WELLS}: the residence behind")),
+        (1, false)
+    );
+    assert_eq!(
+        owes(&format!("gap - DEVIATION {WELLS}: the residence behind")),
+        (1, false)
+    );
+    assert_eq!(owes(&format!("gap - {WELLS}")), (1, false));
+    let mut bare = was.clone();
+    bare.as_object_mut().unwrap().remove("claim");
+    let r = row(
+        key,
+        u.clone(),
+        &format!("gap - {WELLS}: the court north"),
+        "",
+    );
+    assert!(!relabeled_only(&bare, &r, &root).unwrap());
 }

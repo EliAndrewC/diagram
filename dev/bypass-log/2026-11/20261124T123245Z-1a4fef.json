@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-24T12:32:45Z",
+  "target": "plan-gate push",
+  "commit": "a872b46eff",
+  "why": "449's 34 changed blocks are the 17 moved tasks' sections, each a withdrawn-as-moved note with no decision: the GM asked for the move to feature 452 on 2026-11-24 (specs/452-building-plan-followups/request.md)"
+}

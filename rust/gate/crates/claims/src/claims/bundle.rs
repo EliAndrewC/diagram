@@ -411,7 +411,7 @@ pub fn bundle(
         dumps(&sorted(&Value::Object(units)), Some(1), true) + "\n",
     )
     .map_err(fail)?;
-    let blocks = json!({"numbered": numbered, "snapshots": snapshots});
+    let blocks = json!({"numbered": numbered, "snapshots": snapshots, super::triage::SECTION_TEXTS: super::triage::section_texts(cur, keys)});
     std::fs::write(
         out.join("blocks.json"),
         dumps(&sorted(&blocks), Some(1), true) + "\n",

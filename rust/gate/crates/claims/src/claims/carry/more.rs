@@ -194,7 +194,7 @@ fn introduced(tag: &str) -> (l7r_shared::tempdir::TempDir, Cur) {
     let reach = cur.get("rust/phases/src/lib.rs::reach#reach").unwrap();
     let mut ix = crate::claims::index::load_map(&root.join("dev/claims-index.json")).unwrap();
     ix.insert("gone.rs::x#y".to_owned(), json!({"verdict": "UNCLAIMED"}));
-    ix["rust/phases/src/lib.rs::reach#reach"] = json!({"verdict": "MISLABELED", "code": "old", "body": body_of(&root, &reach.unit).unwrap(), "claim": "before", "research": reach.research});
+    ix["rust/phases/src/lib.rs::reach#reach"] = json!({"verdict": "MISLABELED", "code": "old", "body": body_of(&root, &reach.unit).unwrap(), "claim": "reach - CONVENTION: within GAP, relabeled", "research": reach.research});
     std::fs::write(
         root.join("dev/claims-index.json"),
         Value::Object(ix).to_string(),

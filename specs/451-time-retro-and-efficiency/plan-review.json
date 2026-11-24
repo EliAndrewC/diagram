@@ -1182,6 +1182,78 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
+  },
+  "### T214 (the cascade test's review-fixed refusal on a sheet with no carried verdict)": {
+   "sha256": "7dfcb3e5c34edf374110ec9d1f9a6523f9820068d7a115e74146827f948d7a5e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T214 Approach (checklist part A)": {
+   "sha256": "ef185b78658f55b2c82de5e67914c6d4e48e24f676ecb9559a14b17014ee71de",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T212 (the cascade test's 8 false sends from the three ABSENCE phrases)": {
+   "sha256": "5ae83ee5f09b54c7c3d3e1639ef5203b0422ef03bade7857ad3d9fbab7fba229",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T212 Approach (checklist part A)": {
+   "sha256": "1d38b61b930057c494447ec11c65204e643d5b9c8f0240c90ae86ff9300f4c54",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T209 (the cascade test's stables Depiction miss: a pure addition cleared by the echo)": {
+   "sha256": "e358b3f8f76974ad68cba0c0f884165dc6098e603094a203f090e1568f399697",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T209 Approach (checklist part A)": {
+   "sha256": "66ee6f91068c42de7d304de101cfc08c7599e0540f65e8db8eff046c2f73cf7e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T211 (the cascade test's 22 claims forced on T192's #item anchors)": {
+   "sha256": "1f410b5a057e612bcba4e4e72bae7006dc61d87de9e64bcfa723e313fa8ad65d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T211 Approach (checklist part A)": {
+   "sha256": "36012a756d0758d0c665977996fa289d59bca26b691c622c4e5b8063bea3a004",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T213 (the cascade test's T400 miss: relabeled_only passes a MISLABELED claim's rewritten account)": {
+   "sha256": "5584c4f7fe56f1d9c5610ac07024cfb83b1905da5a40b4d011dfd5a5016cd715",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T213 Approach (checklist part A)": {
+   "sha256": "dd185ac31be3be18849697b509725afd3c18cc1b74e0b356fcccf21efede97ae",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T210 (the cascade test's 147 claims forced after a generated doc's rows were regenerated)": {
+   "sha256": "57e35c88372acce59ac8b35cff8ab6ee1966cada2aa433e0ad3bd5c6a6b884ca",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T210 Approach (checklist part A)": {
+   "sha256": "1ac5ee18b289c2895ceb2becca99d4176f520ba0e36ae6e9620e378ef4346236",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -17659,6 +17731,385 @@
      "why": "A scheduling class under FR-013; the task removes triages and pop-up checks a tag would have owed, and it is ordered before the port as the GM asked either way."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T214 (the cascade test's review-fixed refusal on a sheet with no carried verdict)",
+    "### T214 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T214-bare-name",
+     "summary": "declare reads a bare sheet name (UNIT=ochiba-roundtrip-test) as its building-review--<sheet> unit and prints that slug",
+     "class": "within",
+     "why": "Removes cause (a) of the measured refusal, a bare name looked up as a unit with no verdict record; directly fixes the defect the GM approved fixing (T214: the change-scoped review refuses a sheet with no earlier verdict)."
+    },
+    {
+     "id": "T214-owed-first",
+     "summary": "owed is taken from unit_sheet (reviews owed's own list) before any snapshot; a unit no delta owes gets exit 0 'not owed by this delta, no round', its last verdict left on file; a name with no pool sheet is refused as such, never read as not owed",
+     "class": "within",
+     "why": "Removes cause (b), a stale landed snapshot making an unowed unit read as owed, so review-fixed agrees with reviews owed, make verify and the push's review gate. Serves the 2026-11-23 rule that only a claim-changing edit triggers review and re-reviews are scoped to the change. Refusing an unknown name keeps a typo from passing as not owed; that is correctness, not new scope."
+    },
+    {
+     "id": "T214-history-recovery",
+     "summary": "where no .reviewed copy was kept, scoped/recover.rs finds the sheet as reviewed from git history (DEPTH 200 commits) plus the drawing as it reads now, hashed by files_key so the hash is the verdict's own; the match is written as the kept copy and the change-scoped prompt pairs it as before",
+     "class": "within",
+     "why": "Removes cause (c), a verdict written before T199 kept copies. This is the mechanism by which a sheet with an earlier verdict and no kept copy gets a change-scoped round instead of a full one, the exact case the GM approved fixing. Measured on the real sheet: the notes at 03cc1514d1 with today's drawing hash to the verdict's 9b7b9464d35cc002. DEPTH 200 is a search bound against 15 commits observed over seven weeks; a bound, not a carve-out of a case."
+    },
+    {
+     "id": "T214-full-round-kept",
+     "summary": "the full round is still owed (1) for an owed unit with no PASS or NEEDS-WORK on file, i.e. a sheet never reviewed, and (2) where the sheet as reviewed is neither kept nor found in git history; the message now says which",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Read against the GM's approval of 'T214 the change-scoped review refuses a sheet with no earlier verdict', keeping a full round anywhere could read as preserving the behavior asked to change, so it is ruled. Each case separately: (1) a sheet never reviewed has no earlier review to scope a re-review to, so a change-scoped round is physically impossible; the measured defect was a sheet that HAD a verdict being misread as having none, and that is fixed. (2) With no reviewed version anywhere, there is no baseline to diff the change against, which is again physically impossible, not merely awkward; the measured case is recovered. Neither case guts the purpose (no full round for a notes-only or nitpick fix on a sheet that was reviewed)."
+    },
+    {
+     "id": "T214-T199-rule-kept",
+     "summary": "the rest of T199's rule unchanged: a named non-nitpick, an open error or questionable finding, or an unchanged sheet still owes/refuses as before",
+     "class": "within",
+     "why": "The GM asked to fix the six defects named; T199's rule (an error or questionable finding owes the full round) was not among them and matches the 2026-11-23 rule that only factual findings cascade. Leaving it is not a carve-out of the requested fix."
+    },
+    {
+     "id": "T214-scope-crate",
+     "summary": "only the reviews crate's files touched; FR-012 red-first tests; 100% line coverage; exits via crate-checks and closing-checks",
+     "class": "within",
+     "why": "Constraints of execution and enforcement of the fix itself (red-first tests pin the requested behavior); no added behavior."
+    },
+    {
+     "id": "T214-left-not-defects",
+     "summary": "left as not defects: make verify's first run taking 4 of 27 files (review tree takes the started task's files by design); per-clone verdict records differing; docs/reviews.md, the Makefile help line and rust/gate/CLAUDE.md's reviews row left as they read, still true but less complete",
+     "class": "within",
+     "why": "Per constitution XIV v2.36.0 a defect is a wrong outcome; none of these is one: the first two are by design and owed nothing either way, and the docs stay true. Nothing here is a defect deferred, so FR-009's filed-task demand does not bite."
+    },
+    {
+     "id": "T214-perf-tag",
+     "summary": "the task is tagged [perf] under FR-013 as builders'-loop work (no full review round for a notes-only nitpick fix)",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; this ordering choice sits inside the GM's 2026-11-20 rule and inside his 2026-11-24 instruction to fix all six before resuming."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T212 (the cascade test's 8 false sends from the three ABSENCE phrases)",
+    "### T212 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T212-drop",
+     "summary": "The phrase arm of change::fires (ABSENCE: 'the one case', 'only one case', 'every plan', and says_absence) is removed rather than narrowed; the alternative of tying a phrase to the pop-up sentence sharing the new block's subject was measured and rejected.",
+     "class": "within",
+     "why": "The GM (2026-11-24) approved fixing T212, '8 false sends from three fixed phrases'. The convergence talk separates cascades that could plausibly have needed review from changes that never could. Removing the arm that produced the false sends serves that directly. It stays within the request only if real absence breaks still send. Item 9's dated replay (2026-11-24, the three landings) says they do: 0 of the 17 page-caused corrections and none of the cascade test's 3 are missed, and the arm (c) corrections are each sent by the addition rule alone. That replay was not re-run here (bundle-only review), so this ruling rests on it. Choosing the drop over the narrower alternative is a design choice, not a narrowing of what was asked."
+    },
+    {
+     "id": "T212-judged",
+     "summary": "judged (triage.rs) passes no new findings; T209's addition rule and then the triage agent decide instead, landed as one change with T209 (item 5).",
+     "class": "within",
+     "why": "This follows from the drop. Absence detection moves to T209's addition rule, which is itself one of the six fixes the GM approved on 2026-11-24. Because the two land together (item 5), there is no window in which absence breaks go undetected."
+    },
+    {
+     "id": "T212-new_findings-kept",
+     "summary": "new_findings stays, because the claims' triage reads it.",
+     "class": "within",
+     "why": "Keeping a reader that another part of the pipeline still uses removes nothing the GM asked for."
+    },
+    {
+     "id": "T212-reach",
+     "summary": "The fix covers all 11 sends the arm made over the three landings (10 cleared, 1 kept by the addition rule), not just the 8 named in the task title.",
+     "class": "within",
+     "why": "The '8' in the GM's line is the cascade test's count: item 12 names main-gate's three checks and servants' quarters' depiction, each on two pairs (0097/0334 and 0108.drawing/0334). Item 9 clears all of those pairs. Applying the same fix to the arm's other sends in the same replays is the same defect at wider reach, not added scope."
+    },
+    {
+     "id": "T212-residuals",
+     "summary": "Two sends remain and are recorded with 'Found and left? none': residence x 0107, sent by the addition rule (the doma phrase), and servants' quarters x 0097, sent through the echo check (a check session's rewording of 'a few men to each').",
+     "class": "within",
+     "why": "Neither is a send from the three phrases. One comes from T209's addition rule reading the pop-up's stated absence. The other comes from the echo check, which the GM approved on 2026-11-23 as T186's first filter, and it fires on a pair other than the 8 false ones. Item 9 records both openly, so nothing T212 was asked to fix is left undone."
+    },
+    {
+     "id": "T212-perf",
+     "summary": "The task is labeled performance work ([perf]): 10 phrase-only sends no longer reach the triage agent.",
+     "class": "within",
+     "why": "The GM (2026-11-20) asked to prioritize performance improvements, and the convergence talk is about time spent on cascades that fix nothing. Fewer triage-agent dispatches fits that. The label affects scheduling only, not what the fix does."
+    },
+    {
+     "id": "T212-exits",
+     "summary": "Green when every phrase-only send is cleared and no correction is missed. Red means recording what failed and setting the task down, with any 'cannot be done' claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "These are the standard exits. The green condition matches both what the request asks for (no false sends) and its purpose (no missed corrections)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T209 (the cascade test's stables Depiction miss: a pure addition cleared by the echo)",
+    "### T209 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "addition-rule",
+     "summary": "change::fires gains change::addition: a sentence of a block new outright that shares a word trigram with the pop-up, all three words naming a thing (SUBJECT_WORDS = 3, NOT_SUBJECT excluded), sends the pop-up on with a reason naming sentence and phrase.",
+     "class": "within",
+     "why": "This is the fix the GM approved on 2026-11-24 for T209 ('a new fact contradicting a pop-up is cleared'): new facts now reach the agent triage behind a mechanical first filter, the shape the GM approved on 2026-11-23 (echo first, agent after). Dated replay (item 9, 2026-11-24): the stables x 0108 drawing pair is sent, 18 of 167 cleared pairs newly sent."
+    },
+    {
+     "id": "new-outright-only",
+     "summary": "Only blocks new outright are read by the addition rule; a rewritten block stays the echo's.",
+     "class": "within",
+     "why": "A division of labour between two filters, not a reach left out: rewritten blocks already pass through T186's echo, which the GM approved as the first filter for edits on 2026-11-23. The defect T209 names is a pure addition the echo cannot see (the section's title)."
+    },
+    {
+     "id": "arrived-edited-is-a-move",
+     "summary": "A block that arrived with an edit from a page the reader reached before (Change::arrived_edited, paired at PAIR_RATIO) is treated as a move; its edit is read by the echo on the source page, not by the addition rule.",
+     "class": "within",
+     "why": "The GM 2026-11-23: 'a split is a move' and 'nothing needs to cascade simply because a split occurs'. The edit riding on the move is not dropped: the echo still reads it on the source page (T194's rule; the pinned test a_split_like_t184_s_owes_only_the_pop_up_repeating_changed_words still owes the pop-up that repeats the changed words), which is the GM's 'only a claim-changing edit triggers review' applied to it."
+    },
+    {
+     "id": "fires-signature-and-claims-triage",
+     "summary": "fires keeps its signature (found unused) so the claims crate's caller is untouched; the claims triage therefore gets the addition rule and loses the phrase arm with the pop-ups', not replayed on claims.",
+     "class": "within",
+     "why": "Both behaviors are the same two approved fixes (T209 and T212) reaching the one shared function; nothing the GM asked is withheld from either consumer. The lack of a claims replay is a verification gap stated openly (no tool replays a past claims triage), not a narrowing of the fix."
+    },
+    {
+     "id": "order-with-t212",
+     "summary": "Ordered after T186 and T194; landed as one change with T212, whose phrase arm the addition rule replaces.",
+     "class": "within",
+     "why": "Sequencing inside the six fixes the GM asked for together before the port resumes ('Yes let's fix all 6 of those before we resume')."
+    },
+    {
+     "id": "phrase-only-sends-to-agent",
+     "summary": "Of the 18 newly sent pairs, 13 share only a phrase (7 from the north/south/edo town magistracy family) and are left for the agent triage to clear.",
+     "class": "within",
+     "why": "An over-sending first filter whose extra sends reach only the agent triage, not a review or an edit, is the shape the GM accepted on 2026-11-23 (the echo fired on 55 of 119 pairs). Dated replay, item 9: 149 of the 167 cleared pairs stay cleared. Whether the net against T212's 8 removed fixed-phrase sends holds is T212's section's to answer."
+    },
+    {
+     "id": "phrase-not-meaning-left",
+     "summary": "Found and left: the rule matches a 3-word phrase, not a meaning, so a new sentence that contradicts a pop-up in other words is still cleared by the tool (the stables Depiction itself shares no phrase; its pair is sent through the About's 'classic warrior stable').",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task as told to the GM is a class ('a new fact contradicting a pop-up is cleared') and the rule catches only the part that shares a subject phrase, so this narrows it. It is legitimate on the GM's own words, not on the record's clean count: on 2026-11-23 he approved a MECHANICAL first filter with the agent triage after it, and a tool cannot match meaning, so meaning-level matching means sending every addition pair to the agent. That would send up to all 167 pairs the tool clears today (item 9, 2026-11-24) instead of 18, and would bring back the cascade of reviews 'mostly not finding actual problems' that he stopped on 2026-11-23. A pair that is sent is read whole by the agent, so the named stables Depiction does reach a judge. SUBJECT_WORDS is a recorded knob to move if a missed case is measured."
+    },
+    {
+     "id": "perf-classing",
+     "summary": "Marked as performance work ([perf]).",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 rule on prioritising performance work; the tool keeps unrelated additions cleared so no full check is owed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T211 (the cascade test's 22 claims forced on T192's #item anchors)",
+    "### T211 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T211-D1",
+     "summary": "One reading of 'did this claim's code move': the triage's gather_code calls index::code_kept (the fingerprint, or the pre-anchor fingerprint with the class word kept, T204) as claims-owed's owed_one does, instead of comparing the fingerprint alone.",
+     "class": "within",
+     "why": "This is the fix the GM approved on 2026-11-24 ('Yes let's fix all 6 of those before we resume') for T211, '22 claims forced by the item anchors'; it applies the approved convergence rule that only a claim-changing edit triggers review."
+    },
+    {
+     "id": "T211-D2",
+     "summary": "A cleared row's record writes the anchored fingerprint so the row heals to it.",
+     "class": "within",
+     "why": "Completes the same fix: without it the row would keep reading as unanchored and the anchor would be re-compared each time; it changes no claim."
+    },
+    {
+     "id": "T211-D3",
+     "summary": "Only an anchor named with its class word kept is no code change; a class change still reads as changed (T204's reading, shared).",
+     "class": "within",
+     "why": "The defect is anchors forcing claims; the replay shows all 22 unforced under this reading, so the class condition leaves no part of the defect unfixed, and it reuses the already-accepted T204 rule rather than adding one."
+    },
+    {
+     "id": "T211-D4",
+     "summary": "Exit counted as the 22 no longer forced, each cleared or sent by the filter; one (#wells by use) goes to the triage agent on words of the edit it repeats.",
+     "class": "within",
+     "why": "The one sent is routed by the echo filter the GM approved as T186's first filter, not forced by its anchor; no defect is left."
+    },
+    {
+     "id": "T211-D5",
+     "summary": "Constraints: red test first, 100% coverage, only this crate's files; no map changes; ordered after T204, beside T210 and T213.",
+     "class": "within",
+     "why": "Process and order inside the task; nothing the GM asked for is dropped."
+    },
+    {
+     "id": "T211-D6",
+     "summary": "Booked as performance work: 22 full impl-drift checks per section edit move to the filter.",
+     "class": "within",
+     "why": "Scheduling class under FR-013 and the GM's 2026-11-20 rule; it narrows nothing asked."
+    },
+    {
+     "id": "T211-D7",
+     "summary": "Found and left: none.",
+     "class": "within",
+     "why": "No defect deferred."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T213 (the cascade test's T400 miss: relabeled_only passes a MISLABELED claim's rewritten account)",
+    "### T213 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T213-D1",
+     "summary": "relabeled_only's MISLABELED arm passes only when the stored claim's account equals the current one word for word (account_of, split as parse_claim splits it); the backing (class or cited question) may change.",
+     "class": "within",
+     "why": "This is the fix for the defect the GM approved fixing on 2026-11-24 ('T213 a claim marked mislabeled can be rewritten unchecked'; 'Yes let's fix all 6 of those before we resume.'). Letting the label change alone pass is what the convergence talk approved ('labels are data and propagate by regeneration'; 'attested versus guess ... cascades mechanically'). Sending a restated account to review follows 'only a claim-changing edit triggers review'."
+    },
+    {
+     "id": "T213-D2",
+     "summary": "A MISLABELED row that stores no claim is not treated as a relabel, so it is owed rather than passed.",
+     "class": "within",
+     "why": "Without a stored account there is nothing to compare, so passing such a row would bring back the unchecked rewrite this task removes. The row is treated as owed, the conservative outcome. The recorded measurement (item 9) shows that none of the 8 newly owed claims comes from this arm, so it adds no cascade the GM did not ask for."
+    },
+    {
+     "id": "T213-D3",
+     "summary": "relabel_answered (the push's carry, carry.rs) reads the fixed relabeled_only, so a restated account no longer answers a MISLABELED verdict at the push either.",
+     "class": "within",
+     "why": "The same defect through its other consumer. The fix lives in the shared function, so every caller inherits it. Narrowing the fix to the index path only would leave the T213 defect in place."
+    },
+    {
+     "id": "T213-D4",
+     "summary": "T204's item-naming arms are left untouched and run before this arm; a relabel alone still owes nothing.",
+     "class": "within",
+     "why": "This keeps behavior the GM approved (T204 and the labels rule). It does not narrow T213, whose defect concerns the account, not item naming."
+    },
+    {
+     "id": "T213-D5",
+     "summary": "Two fixtures that asserted the defect (an account rewrite passing as a relabel) are rewritten as true relabels, and a red-first test, a_mislabeled_claim_s_restated_account_is_owed, pins the fix.",
+     "class": "within",
+     "why": "Fixtures that encoded the defect are fixed along with it (fix as we go). The red-first test only fails if the requested fix is absent, so it is enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T213-D6",
+     "summary": "The 8 claims the fix newly owes (all MISLABELED rows whose account was restated, T400's among them) are taken through impl-drift in this landing's claims round, not deferred.",
+     "class": "within",
+     "why": "Bringing those restatements to review is exactly what the GM approved fixing. They are handled at this task's landing, so no defect is deferred and none is left."
+    },
+    {
+     "id": "T213-D7",
+     "summary": "Order: after T204, beside T210 and T211. Budget: one landing. No map, fresh block or pool manifest changes. Filed [perf] with the cascade test's six.",
+     "class": "within",
+     "why": "Scheduling and bookkeeping inside the GM's 2026-11-24 instruction to fix all six before the port resumes. It narrows nothing that was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T210 (the cascade test's 147 claims forced after a generated doc's rows were regenerated)",
+    "### T210 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T210-keep-section-words",
+     "summary": "A section snapshot keeps its words in the per-clone blob map (key section:<core>), written by each bundle that snapshots a section and kept by every record of a snapshot; section_words reads kept words first, then git history, so a regenerated row shows as a pair judged per claim by T191's filter.",
+     "class": "within",
+     "why": "This is the fix for the defect the GM approved fixing on 2026-11-24 (T210: 147 claims forced after a generated doc regenerated), and it serves the convergence rule that only a claim-changing edit triggers review. It fixes the root cause, not only the 147."
+    },
+    {
+     "id": "T210-section-edit-read-once",
+     "summary": "gather_section reads each section's edit once and its claims share it (Gathered::section_lost), where the history search used to run once per claim; keep_blobs shared.",
+     "class": "within",
+     "why": "This is performance work on the same path (an unfixed replay ran for over 180 s). FR-013 and the GM's 2026-11-20 words put performance first, and no behavior the GM asked for is narrowed."
+    },
+    {
+     "id": "T210-file-split",
+     "summary": "The kept texts and the removed-words search move to triage/kept.rs and the backfills to commands/backfill.rs, re-exported under their old paths, to meet constitution X clause 13's file-size bar.",
+     "class": "within",
+     "why": "This is a mechanical move to meet a standing project rule and changes no behavior."
+    },
+    {
+     "id": "T210-one-force-left",
+     "summary": "A removed block whose words neither the kept snapshot nor the history holds still forces its section's claims to a full impl-drift. That happens for a snapshot recorded before T210, a snapshot of uncommitted words triaged in another clone, or one older than the history depth.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "I judged each case separately. (a) Snapshots recorded before T210 of words no commit holds: the old words do not exist anywhere, so no diff can be shown and the general rule is physically impossible. (b) Beyond the 60-commit history: this can arise only for a stale snapshot whose section changed away long ago without a new snapshot. A section unchanged since its snapshot is found one commit back, and every post-T210 snapshot carries kept words. (c) An uncommitted snapshot triaged in a different clone: the snapshotting clone's own landing claims round triages with the kept words and re-records the snapshot (claims-triaged keeps sections), so this needs a stale snapshot to travel unrecorded. In all three cases the outcome is one extra full check, never a missed claim, which is not a wrong outcome under XIV's definition of a defect. The case the GM approved fixing (a regenerated row reverting words the same clone snapshotted) is fixed and measured: 147 owed, 0 forced, 3 sent. The cascade test's own pre-T210 state was already settled by the arbiter's accept ruling (ask:449-T403-claims-147-forced). The carve-out does not gut the purpose."
+    },
+    {
+     "id": "T210-gather-code-unchanged",
+     "summary": "gather_code's empty-hunk force (a code fingerprint moved with no hunk to show) is left as it is.",
+     "class": "within",
+     "why": "This is not part of T210's defect, which concerns a section's words after regeneration. The code did change and there is no hunk to show how, and leaving an unrelated existing path untouched narrows nothing that was asked."
+    },
+    {
+     "id": "T210-not-taken-stale-generated-refusal",
+     "summary": "The plan prices and declines refusing claims-checked while a generated doc is stale against its generator.",
+     "class": "within",
+     "why": "This is a design alternative that was not taken. make quick already turns red on a stale generated doc, and the chosen fix covers every reverted snapshotted section, not just generated rows."
+    },
+    {
+     "id": "T210-order-and-perf-tag",
+     "summary": "T210 runs after T191 and T204, lands beside T211 and T213 in one landing, and is tagged [perf].",
+     "class": "within",
+     "why": "The task depends on T191's filter. The [perf] tag follows FR-013 and the GM's 2026-11-20 rule on scheduling performance work first."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T213 (the cascade test's T400 miss: relabeled_only passes a MISLABELED claim's rewritten account)",
+    "### T213 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T213-D1",
+     "summary": "relabeled_only's MISLABELED arm passes only a relabel: the stored claim's account equal word for word to the claim's account now (account_of, split as parse_claim splits it); the backing (class or cited question) free to change.",
+     "class": "within",
+     "why": "This is the fix the GM approved on 2026-11-24 ('T213 a claim marked mislabeled can be rewritten unchecked' ... 'Yes let's fix all 6 of those'): a restated account is now owed. Leaving the label and its backing free keeps the convergence talk's 'attested versus guess ... cascades mechanically' and the approved rule 'labels are data and propagate by regeneration'."
+    },
+    {
+     "id": "T213-D2",
+     "summary": "A row storing no claim is no relabel, so it is owed.",
+     "class": "within",
+     "why": "Where no stored account exists the account cannot be shown unchanged; treating it as owed checks more, not less, and serves the request that a mislabeled claim not be rewritten unchecked."
+    },
+    {
+     "id": "T213-D3",
+     "summary": "relabel_answered (the push's carry, carry.rs) reads the same rule, so a restated account no longer answers a MISLABELED verdict there either.",
+     "class": "within",
+     "why": "Closes the same defect on the second path that reads it; without it a rewrite could still pass at the push, defeating the fix."
+    },
+    {
+     "id": "T213-D4",
+     "summary": "A relabel alone still owes nothing; T204's item-naming arms are untouched.",
+     "class": "within",
+     "why": "Preserves what the GM asked for in the convergence talk (labels cascade mechanically) and leaves another task's settled behavior alone; it is not a carve-out from T213, whose defect is the account rewrite only."
+    },
+    {
+     "id": "T213-D5",
+     "summary": "Two fixtures that asserted the defect (an account rewrite passing as a relabel) are restated as true relabels; a new red-first test pins a restated account as owed.",
+     "class": "within",
+     "why": "Tests that encoded the defect are corrected to the fixed behavior while still covering the relabel-passes case; the new test only fails when the requested fix is absent - enforcement of the request."
+    },
+    {
+     "id": "T213-D6",
+     "summary": "The 8 MISLABELED claims newly owed (the T400 miss among them) are owed impl-drift at this task's landing claims round, not deferred; no map change; nothing found and left.",
+     "class": "within",
+     "why": "Those 8 are exactly the unchecked restatements the defect let through; checking them at landing is the fix taking effect, not a narrowing or deferral."
+    },
+    {
+     "id": "T213-D7",
+     "summary": "Order after T204, beside T210 and T211; one landing; exits green/red via arbiter-ask.",
+     "class": "within",
+     "why": "Scheduling inside the GM's instruction to fix all six before the port resumes."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -28400,6 +28851,321 @@
      "summary": "After T193 (landed) and before T200; classed as performance work (removes false wakes, names a Monitor-length stall ~10 minutes after the watch ends instead of never)",
      "class": "within",
      "why": "Order follows the GM's 2026-11-20 rule that performance work comes first and the 2026-11-23 request that motivated the idle check; no scope beyond the defects named."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T214": {
+   "section_sha256": "f6b4f98b90ca001156d4e8e9611ee9b70103793518092c1fc2aa1c0bef41820e",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T214-bare-name",
+     "summary": "declare reads a bare sheet name (UNIT=ochiba-roundtrip-test) as its building-review--<sheet> unit and prints that slug",
+     "class": "within",
+     "why": "Removes cause (a) of the measured refusal, a bare name looked up as a unit with no verdict record; directly fixes the defect the GM approved fixing (T214: the change-scoped review refuses a sheet with no earlier verdict)."
+    },
+    {
+     "id": "T214-owed-first",
+     "summary": "owed is taken from unit_sheet (reviews owed's own list) before any snapshot; a unit no delta owes gets exit 0 'not owed by this delta, no round', its last verdict left on file; a name with no pool sheet is refused as such, never read as not owed",
+     "class": "within",
+     "why": "Removes cause (b), a stale landed snapshot making an unowed unit read as owed, so review-fixed agrees with reviews owed, make verify and the push's review gate. Serves the 2026-11-23 rule that only a claim-changing edit triggers review and re-reviews are scoped to the change. Refusing an unknown name keeps a typo from passing as not owed; that is correctness, not new scope."
+    },
+    {
+     "id": "T214-history-recovery",
+     "summary": "where no .reviewed copy was kept, scoped/recover.rs finds the sheet as reviewed from git history (DEPTH 200 commits) plus the drawing as it reads now, hashed by files_key so the hash is the verdict's own; the match is written as the kept copy and the change-scoped prompt pairs it as before",
+     "class": "within",
+     "why": "Removes cause (c), a verdict written before T199 kept copies. This is the mechanism by which a sheet with an earlier verdict and no kept copy gets a change-scoped round instead of a full one, the exact case the GM approved fixing. Measured on the real sheet: the notes at 03cc1514d1 with today's drawing hash to the verdict's 9b7b9464d35cc002. DEPTH 200 is a search bound against 15 commits observed over seven weeks; a bound, not a carve-out of a case."
+    },
+    {
+     "id": "T214-full-round-kept",
+     "summary": "the full round is still owed (1) for an owed unit with no PASS or NEEDS-WORK on file, i.e. a sheet never reviewed, and (2) where the sheet as reviewed is neither kept nor found in git history; the message now says which",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Read against the GM's approval of 'T214 the change-scoped review refuses a sheet with no earlier verdict', keeping a full round anywhere could read as preserving the behavior asked to change, so it is ruled. Each case separately: (1) a sheet never reviewed has no earlier review to scope a re-review to, so a change-scoped round is physically impossible; the measured defect was a sheet that HAD a verdict being misread as having none, and that is fixed. (2) With no reviewed version anywhere, there is no baseline to diff the change against, which is again physically impossible, not merely awkward; the measured case is recovered. Neither case guts the purpose (no full round for a notes-only or nitpick fix on a sheet that was reviewed)."
+    },
+    {
+     "id": "T214-T199-rule-kept",
+     "summary": "the rest of T199's rule unchanged: a named non-nitpick, an open error or questionable finding, or an unchanged sheet still owes/refuses as before",
+     "class": "within",
+     "why": "The GM asked to fix the six defects named; T199's rule (an error or questionable finding owes the full round) was not among them and matches the 2026-11-23 rule that only factual findings cascade. Leaving it is not a carve-out of the requested fix."
+    },
+    {
+     "id": "T214-scope-crate",
+     "summary": "only the reviews crate's files touched; FR-012 red-first tests; 100% line coverage; exits via crate-checks and closing-checks",
+     "class": "within",
+     "why": "Constraints of execution and enforcement of the fix itself (red-first tests pin the requested behavior); no added behavior."
+    },
+    {
+     "id": "T214-left-not-defects",
+     "summary": "left as not defects: make verify's first run taking 4 of 27 files (review tree takes the started task's files by design); per-clone verdict records differing; docs/reviews.md, the Makefile help line and rust/gate/CLAUDE.md's reviews row left as they read, still true but less complete",
+     "class": "within",
+     "why": "Per constitution XIV v2.36.0 a defect is a wrong outcome; none of these is one: the first two are by design and owed nothing either way, and the docs stay true. Nothing here is a defect deferred, so FR-009's filed-task demand does not bite."
+    },
+    {
+     "id": "T214-perf-tag",
+     "summary": "the task is tagged [perf] under FR-013 as builders'-loop work (no full review round for a notes-only nitpick fix)",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; this ordering choice sits inside the GM's 2026-11-20 rule and inside his 2026-11-24 instruction to fix all six before resuming."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T212": {
+   "section_sha256": "ee74d7217528a97e9bfd46611023fe2d921d8ca6e68b2ed0b46e325105f052f5",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T212-drop",
+     "summary": "The phrase arm of change::fires (ABSENCE: 'the one case', 'only one case', 'every plan', and says_absence) is removed rather than narrowed; the alternative of tying a phrase to the pop-up sentence sharing the new block's subject was measured and rejected.",
+     "class": "within",
+     "why": "The GM (2026-11-24) approved fixing T212, '8 false sends from three fixed phrases'. The convergence talk separates cascades that could plausibly have needed review from changes that never could. Removing the arm that produced the false sends serves that directly. It stays within the request only if real absence breaks still send. Item 9's dated replay (2026-11-24, the three landings) says they do: 0 of the 17 page-caused corrections and none of the cascade test's 3 are missed, and the arm (c) corrections are each sent by the addition rule alone. That replay was not re-run here (bundle-only review), so this ruling rests on it. Choosing the drop over the narrower alternative is a design choice, not a narrowing of what was asked."
+    },
+    {
+     "id": "T212-judged",
+     "summary": "judged (triage.rs) passes no new findings; T209's addition rule and then the triage agent decide instead, landed as one change with T209 (item 5).",
+     "class": "within",
+     "why": "This follows from the drop. Absence detection moves to T209's addition rule, which is itself one of the six fixes the GM approved on 2026-11-24. Because the two land together (item 5), there is no window in which absence breaks go undetected."
+    },
+    {
+     "id": "T212-new_findings-kept",
+     "summary": "new_findings stays, because the claims' triage reads it.",
+     "class": "within",
+     "why": "Keeping a reader that another part of the pipeline still uses removes nothing the GM asked for."
+    },
+    {
+     "id": "T212-reach",
+     "summary": "The fix covers all 11 sends the arm made over the three landings (10 cleared, 1 kept by the addition rule), not just the 8 named in the task title.",
+     "class": "within",
+     "why": "The '8' in the GM's line is the cascade test's count: item 12 names main-gate's three checks and servants' quarters' depiction, each on two pairs (0097/0334 and 0108.drawing/0334). Item 9 clears all of those pairs. Applying the same fix to the arm's other sends in the same replays is the same defect at wider reach, not added scope."
+    },
+    {
+     "id": "T212-residuals",
+     "summary": "Two sends remain and are recorded with 'Found and left? none': residence x 0107, sent by the addition rule (the doma phrase), and servants' quarters x 0097, sent through the echo check (a check session's rewording of 'a few men to each').",
+     "class": "within",
+     "why": "Neither is a send from the three phrases. One comes from T209's addition rule reading the pop-up's stated absence. The other comes from the echo check, which the GM approved on 2026-11-23 as T186's first filter, and it fires on a pair other than the 8 false ones. Item 9 records both openly, so nothing T212 was asked to fix is left undone."
+    },
+    {
+     "id": "T212-perf",
+     "summary": "The task is labeled performance work ([perf]): 10 phrase-only sends no longer reach the triage agent.",
+     "class": "within",
+     "why": "The GM (2026-11-20) asked to prioritize performance improvements, and the convergence talk is about time spent on cascades that fix nothing. Fewer triage-agent dispatches fits that. The label affects scheduling only, not what the fix does."
+    },
+    {
+     "id": "T212-exits",
+     "summary": "Green when every phrase-only send is cleared and no correction is missed. Red means recording what failed and setting the task down, with any 'cannot be done' claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "These are the standard exits. The green condition matches both what the request asks for (no false sends) and its purpose (no missed corrections)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T209": {
+   "section_sha256": "7792e104230612649182560824ad3f5b5e96aa61721293843fb527476cd4aff9",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "addition-rule",
+     "summary": "change::fires gains change::addition: a sentence of a block new outright that shares a word trigram with the pop-up, all three words naming a thing (SUBJECT_WORDS = 3, NOT_SUBJECT excluded), sends the pop-up on with a reason naming sentence and phrase.",
+     "class": "within",
+     "why": "This is the fix the GM approved on 2026-11-24 for T209 ('a new fact contradicting a pop-up is cleared'): new facts now reach the agent triage behind a mechanical first filter, the shape the GM approved on 2026-11-23 (echo first, agent after). Dated replay (item 9, 2026-11-24): the stables x 0108 drawing pair is sent, 18 of 167 cleared pairs newly sent."
+    },
+    {
+     "id": "new-outright-only",
+     "summary": "Only blocks new outright are read by the addition rule; a rewritten block stays the echo's.",
+     "class": "within",
+     "why": "A division of labour between two filters, not a reach left out: rewritten blocks already pass through T186's echo, which the GM approved as the first filter for edits on 2026-11-23. The defect T209 names is a pure addition the echo cannot see (the section's title)."
+    },
+    {
+     "id": "arrived-edited-is-a-move",
+     "summary": "A block that arrived with an edit from a page the reader reached before (Change::arrived_edited, paired at PAIR_RATIO) is treated as a move; its edit is read by the echo on the source page, not by the addition rule.",
+     "class": "within",
+     "why": "The GM 2026-11-23: 'a split is a move' and 'nothing needs to cascade simply because a split occurs'. The edit riding on the move is not dropped: the echo still reads it on the source page (T194's rule; the pinned test a_split_like_t184_s_owes_only_the_pop_up_repeating_changed_words still owes the pop-up that repeats the changed words), which is the GM's 'only a claim-changing edit triggers review' applied to it."
+    },
+    {
+     "id": "fires-signature-and-claims-triage",
+     "summary": "fires keeps its signature (found unused) so the claims crate's caller is untouched; the claims triage therefore gets the addition rule and loses the phrase arm with the pop-ups', not replayed on claims.",
+     "class": "within",
+     "why": "Both behaviors are the same two approved fixes (T209 and T212) reaching the one shared function; nothing the GM asked is withheld from either consumer. The lack of a claims replay is a verification gap stated openly (no tool replays a past claims triage), not a narrowing of the fix."
+    },
+    {
+     "id": "order-with-t212",
+     "summary": "Ordered after T186 and T194; landed as one change with T212, whose phrase arm the addition rule replaces.",
+     "class": "within",
+     "why": "Sequencing inside the six fixes the GM asked for together before the port resumes ('Yes let's fix all 6 of those before we resume')."
+    },
+    {
+     "id": "phrase-only-sends-to-agent",
+     "summary": "Of the 18 newly sent pairs, 13 share only a phrase (7 from the north/south/edo town magistracy family) and are left for the agent triage to clear.",
+     "class": "within",
+     "why": "An over-sending first filter whose extra sends reach only the agent triage, not a review or an edit, is the shape the GM accepted on 2026-11-23 (the echo fired on 55 of 119 pairs). Dated replay, item 9: 149 of the 167 cleared pairs stay cleared. Whether the net against T212's 8 removed fixed-phrase sends holds is T212's section's to answer."
+    },
+    {
+     "id": "phrase-not-meaning-left",
+     "summary": "Found and left: the rule matches a 3-word phrase, not a meaning, so a new sentence that contradicts a pop-up in other words is still cleared by the tool (the stables Depiction itself shares no phrase; its pair is sent through the About's 'classic warrior stable').",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task as told to the GM is a class ('a new fact contradicting a pop-up is cleared') and the rule catches only the part that shares a subject phrase, so this narrows it. It is legitimate on the GM's own words, not on the record's clean count: on 2026-11-23 he approved a MECHANICAL first filter with the agent triage after it, and a tool cannot match meaning, so meaning-level matching means sending every addition pair to the agent. That would send up to all 167 pairs the tool clears today (item 9, 2026-11-24) instead of 18, and would bring back the cascade of reviews 'mostly not finding actual problems' that he stopped on 2026-11-23. A pair that is sent is read whole by the agent, so the named stables Depiction does reach a judge. SUBJECT_WORDS is a recorded knob to move if a missed case is measured."
+    },
+    {
+     "id": "perf-classing",
+     "summary": "Marked as performance work ([perf]).",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 rule on prioritising performance work; the tool keeps unrelated additions cleared so no full check is owed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T211": {
+   "section_sha256": "2eb9041dc26394feeb9fe81a62647c3762b0085b8d299e3e4094b14779b91a27",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T211-D1",
+     "summary": "One reading of 'did this claim's code move': the triage's gather_code calls index::code_kept (the fingerprint, or the pre-anchor fingerprint with the class word kept, T204) as claims-owed's owed_one does, instead of comparing the fingerprint alone.",
+     "class": "within",
+     "why": "This is the fix the GM approved on 2026-11-24 ('Yes let's fix all 6 of those before we resume') for T211, '22 claims forced by the item anchors'; it applies the approved convergence rule that only a claim-changing edit triggers review."
+    },
+    {
+     "id": "T211-D2",
+     "summary": "A cleared row's record writes the anchored fingerprint so the row heals to it.",
+     "class": "within",
+     "why": "Completes the same fix: without it the row would keep reading as unanchored and the anchor would be re-compared each time; it changes no claim."
+    },
+    {
+     "id": "T211-D3",
+     "summary": "Only an anchor named with its class word kept is no code change; a class change still reads as changed (T204's reading, shared).",
+     "class": "within",
+     "why": "The defect is anchors forcing claims; the replay shows all 22 unforced under this reading, so the class condition leaves no part of the defect unfixed, and it reuses the already-accepted T204 rule rather than adding one."
+    },
+    {
+     "id": "T211-D4",
+     "summary": "Exit counted as the 22 no longer forced, each cleared or sent by the filter; one (#wells by use) goes to the triage agent on words of the edit it repeats.",
+     "class": "within",
+     "why": "The one sent is routed by the echo filter the GM approved as T186's first filter, not forced by its anchor; no defect is left."
+    },
+    {
+     "id": "T211-D5",
+     "summary": "Constraints: red test first, 100% coverage, only this crate's files; no map changes; ordered after T204, beside T210 and T213.",
+     "class": "within",
+     "why": "Process and order inside the task; nothing the GM asked for is dropped."
+    },
+    {
+     "id": "T211-D6",
+     "summary": "Booked as performance work: 22 full impl-drift checks per section edit move to the filter.",
+     "class": "within",
+     "why": "Scheduling class under FR-013 and the GM's 2026-11-20 rule; it narrows nothing asked."
+    },
+    {
+     "id": "T211-D7",
+     "summary": "Found and left: none.",
+     "class": "within",
+     "why": "No defect deferred."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T213": {
+   "section_sha256": "e0d7e1b9fe4b50601a23d100597a2adfd23f7c9dd27f64315c26d1f50cbd4715",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T213-D1",
+     "summary": "relabeled_only's MISLABELED arm passes only a relabel: the stored claim's account equal word for word to the claim's account now (account_of, split as parse_claim splits it); the backing (class or cited question) free to change.",
+     "class": "within",
+     "why": "This is the fix the GM approved on 2026-11-24 ('T213 a claim marked mislabeled can be rewritten unchecked' ... 'Yes let's fix all 6 of those'): a restated account is now owed. Leaving the label and its backing free keeps the convergence talk's 'attested versus guess ... cascades mechanically' and the approved rule 'labels are data and propagate by regeneration'."
+    },
+    {
+     "id": "T213-D2",
+     "summary": "A row storing no claim is no relabel, so it is owed.",
+     "class": "within",
+     "why": "Where no stored account exists the account cannot be shown unchanged; treating it as owed checks more, not less, and serves the request that a mislabeled claim not be rewritten unchecked."
+    },
+    {
+     "id": "T213-D3",
+     "summary": "relabel_answered (the push's carry, carry.rs) reads the same rule, so a restated account no longer answers a MISLABELED verdict there either.",
+     "class": "within",
+     "why": "Closes the same defect on the second path that reads it; without it a rewrite could still pass at the push, defeating the fix."
+    },
+    {
+     "id": "T213-D4",
+     "summary": "A relabel alone still owes nothing; T204's item-naming arms are untouched.",
+     "class": "within",
+     "why": "Preserves what the GM asked for in the convergence talk (labels cascade mechanically) and leaves another task's settled behavior alone; it is not a carve-out from T213, whose defect is the account rewrite only."
+    },
+    {
+     "id": "T213-D5",
+     "summary": "Two fixtures that asserted the defect (an account rewrite passing as a relabel) are restated as true relabels; a new red-first test pins a restated account as owed.",
+     "class": "within",
+     "why": "Tests that encoded the defect are corrected to the fixed behavior while still covering the relabel-passes case; the new test only fails when the requested fix is absent - enforcement of the request."
+    },
+    {
+     "id": "T213-D6",
+     "summary": "The 8 MISLABELED claims newly owed (the T400 miss among them) are owed impl-drift at this task's landing claims round, not deferred; no map change; nothing found and left.",
+     "class": "within",
+     "why": "Those 8 are exactly the unchecked restatements the defect let through; checking them at landing is the fix taking effect, not a narrowing or deferral."
+    },
+    {
+     "id": "T213-D7",
+     "summary": "Order after T204, beside T210 and T211; one landing; exits green/red via arbiter-ask.",
+     "class": "within",
+     "why": "Scheduling inside the GM's instruction to fix all six before the port resumes."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T210": {
+   "section_sha256": "eb8e51c4113c2b0db9af3a8f81aaf8271dbd6a49c1a73ee2d1dd59b501633889",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T210-keep-section-words",
+     "summary": "A section snapshot keeps its words in the per-clone blob map (key section:<core>), written by each bundle that snapshots a section and kept by every record of a snapshot; section_words reads kept words first, then git history, so a regenerated row shows as a pair judged per claim by T191's filter.",
+     "class": "within",
+     "why": "This is the fix for the defect the GM approved fixing on 2026-11-24 (T210: 147 claims forced after a generated doc regenerated), and it serves the convergence rule that only a claim-changing edit triggers review. It fixes the root cause, not only the 147."
+    },
+    {
+     "id": "T210-section-edit-read-once",
+     "summary": "gather_section reads each section's edit once and its claims share it (Gathered::section_lost), where the history search used to run once per claim; keep_blobs shared.",
+     "class": "within",
+     "why": "This is performance work on the same path (an unfixed replay ran for over 180 s). FR-013 and the GM's 2026-11-20 words put performance first, and no behavior the GM asked for is narrowed."
+    },
+    {
+     "id": "T210-file-split",
+     "summary": "The kept texts and the removed-words search move to triage/kept.rs and the backfills to commands/backfill.rs, re-exported under their old paths, to meet constitution X clause 13's file-size bar.",
+     "class": "within",
+     "why": "This is a mechanical move to meet a standing project rule and changes no behavior."
+    },
+    {
+     "id": "T210-one-force-left",
+     "summary": "A removed block whose words neither the kept snapshot nor the history holds still forces its section's claims to a full impl-drift. That happens for a snapshot recorded before T210, a snapshot of uncommitted words triaged in another clone, or one older than the history depth.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "I judged each case separately. (a) Snapshots recorded before T210 of words no commit holds: the old words do not exist anywhere, so no diff can be shown and the general rule is physically impossible. (b) Beyond the 60-commit history: this can arise only for a stale snapshot whose section changed away long ago without a new snapshot. A section unchanged since its snapshot is found one commit back, and every post-T210 snapshot carries kept words. (c) An uncommitted snapshot triaged in a different clone: the snapshotting clone's own landing claims round triages with the kept words and re-records the snapshot (claims-triaged keeps sections), so this needs a stale snapshot to travel unrecorded. In all three cases the outcome is one extra full check, never a missed claim, which is not a wrong outcome under XIV's definition of a defect. The case the GM approved fixing (a regenerated row reverting words the same clone snapshotted) is fixed and measured: 147 owed, 0 forced, 3 sent. The cascade test's own pre-T210 state was already settled by the arbiter's accept ruling (ask:449-T403-claims-147-forced). The carve-out does not gut the purpose."
+    },
+    {
+     "id": "T210-gather-code-unchanged",
+     "summary": "gather_code's empty-hunk force (a code fingerprint moved with no hunk to show) is left as it is.",
+     "class": "within",
+     "why": "This is not part of T210's defect, which concerns a section's words after regeneration. The code did change and there is no hunk to show how, and leaving an unrelated existing path untouched narrows nothing that was asked."
+    },
+    {
+     "id": "T210-not-taken-stale-generated-refusal",
+     "summary": "The plan prices and declines refusing claims-checked while a generated doc is stale against its generator.",
+     "class": "within",
+     "why": "This is a design alternative that was not taken. make quick already turns red on a stale generated doc, and the chosen fix covers every reverted snapshotted section, not just generated rows."
+    },
+    {
+     "id": "T210-order-and-perf-tag",
+     "summary": "T210 runs after T191 and T204, lands beside T211 and T213 in one landing, and is tagged [perf].",
+     "class": "within",
+     "why": "The task depends on T191's filter. The [perf] tag follows FR-013 and the GM's 2026-11-20 rule on scheduling performance work first."
     }
    ],
    "verdict": "CLEAR"

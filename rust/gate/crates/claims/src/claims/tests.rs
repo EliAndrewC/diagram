@@ -260,9 +260,12 @@ pub const RECORDED: &str = r#"{
 /// The page and section snapshots [`record_all`] keeps for [`RECORDED`] (`dev/claims-pages.json`).
 pub const RECORDED_PAGES: &str = r#"{"5a446aed967da80f": ["7d5a07ee41496c5d", "25080c5fca325e96", "9769715ae09a3066"], "d8de3199da52b188": ["920c9aa4904322d0", "3c34bf75e966571a"]}"#;
 
-/// The kept page blob [`record_all`] writes into the common git directory: the fixture's question page, committed with it.
-pub const RECORDED_BLOBS: &str =
-    r#"{"d8de3199da52b188": "3b949ddad95e20557cee0f406ee7ff635fd4b75d"}"#;
+/// The kept blobs [`record_all`] writes into the common git directory: the fixture's question page, committed with it, and the Walls
+/// section's words (feature 451 T210), [`RECORDED_SECTION`].
+pub const RECORDED_BLOBS: &str = r#"{"d8de3199da52b188": "3b949ddad95e20557cee0f406ee7ff635fd4b75d", "section:5a446aed967da80f": "1a2fb38bc38f10a694c6a907725d5341582d9478"}"#;
+
+/// The Walls section's words as [`record_all`] keeps them (feature 451 T210), written as the blob [`RECORDED_BLOBS`] names.
+const RECORDED_SECTION: &str = r#"["Walls stand.", "- a list item continued", "| a | table |"]"#;
 
 /// What [`record_all`] leaves, written by hand: [`RECORDED`] and `units`, each dated today as the record dates them, and the
 /// snapshots - [`RECORDED_PAGES`] and `pages` - and the kept blob.
@@ -290,6 +293,7 @@ pub fn write_recorded(root: &Path, units: &str, pages: &str) {
         &serde_json::Value::Object(store).to_string(),
     );
     put(root, ".git/claims-page-blobs.json", RECORDED_BLOBS);
+    assert!(super::stdin_git(root, &["hash-object", "-w", "--stdin"], RECORDED_SECTION).is_some());
 }
 
 /// The three files [`write_recorded`] writes, as parsed values.

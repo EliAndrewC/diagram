@@ -587,3 +587,133 @@ fn a_pure_split_is_cleared_without_a_dispatch() {
         .get("0003-moved.html")
         .is_some());
 }
+
+/// Feature 451 T211 (the cascade test's 22 forced claims): a section claim recorded with its class word, then made to name its item
+/// (T192's `#item` anchor, the class kept), has the code it was judged at - `claims-owed` reads it so (T204) - and the triage reads it
+/// the same: its own line in the section's diff is no code change, so a visible edit elsewhere in its section forces nothing, and an
+/// edit no claim repeats is cleared by the tool.
+#[test]
+fn a_claim_that_only_named_its_item_is_no_code_change_at_the_triage() {
+    const CLAIM: &str = "other size - GUESS research/questions/0002-other.drawing.html";
+    let root = crate::claims::tests::fixture_with("claims-triage-anchor", &|r| {
+        let b = crate::claims::tests::BUILDINGS.replace(
+            "<!-- Research: walls - CONVENTION -->\n",
+            &format!(
+                "<!-- Research: walls - CONVENTION -->\n<!-- Research: {CLAIM}: drawn 40 ft -->\n"
+            ),
+        );
+        put(r, "docs/buildings.md", &b);
+    });
+    record_all(&root);
+    commit_as_origin(&root, "recorded");
+    let (ix, store) = (
+        load_map(&root.join("dev/claims-index.json")).unwrap(),
+        load_map(&root.join("dev/claims-pages.json")).unwrap(),
+    );
+    let b = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
+    std::fs::write(
+        root.join("docs/buildings.md"),
+        b.replace(&format!("{CLAIM}:"), &format!("{CLAIM}#other:"))
+            .replace("Walls stand.\n", "Walls stand, rebuilt.\n"),
+    )
+    .unwrap();
+    let key = "docs/buildings.md::Walls#other size";
+    let owed: Vec<(String, String)> = owed_now(&root);
+    let why = crate::claims::index::SECTION_TRIAGE.to_owned();
+    assert!(owed.contains(&(key.to_owned(), why)), "{owed:?}");
+    manifest_of(&root, &ix, &store, &[key]);
+    let data: Value =
+        serde_json::from_str(&std::fs::read_to_string(root.join("t/triage.json")).unwrap())
+            .unwrap();
+    let forced = data["forced"].as_array().unwrap();
+    assert!(!forced.contains(&json!(key)), "{data}");
+    assert_eq!(cleared_of(&root), [key]);
+}
+
+/// Feature 451 T210 (the cascade test's 147 forced claims): `claims-checked` over a section holding words that never reach a commit (a
+/// hand edit of a generated row), then the words put back (the row regenerated). The snapshot's words are kept when it is recorded, so
+/// the triage shows the edit as a pair and the filter judges it per claim - here no claim repeats its words, so both are cleared by the
+/// tool - where before every claim of the section was forced to impl-drift, its removed words in no commit.
+#[test]
+fn a_section_snapshot_s_uncommitted_words_are_kept_so_putting_them_back_forces_nothing() {
+    let (root, _, _) = recorded();
+    let committed = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
+    std::fs::write(
+        root.join("docs/buildings.md"),
+        committed.replace("Walls stand.\n", "Walls stand, as a hand edit had it.\n"),
+    )
+    .unwrap();
+    let keys = [
+        "docs/buildings.md::Walls#walls",
+        "docs/buildings.md::Walls#wall height",
+    ];
+    let o = root.join("b-hand");
+    let o = o.to_string_lossy();
+    let got = crate::claims::tests::claims(
+        &root,
+        &[
+            "bundle",
+            "--units",
+            &keys.join(","),
+            "--out",
+            &o,
+            "--reason",
+            "a re check",
+        ],
+    );
+    assert_eq!(got.code, 0, "{}{}", got.stdout, got.stderr);
+    let reply = root.join("reply-hand.txt");
+    std::fs::write(
+        &reply,
+        keys.map(|k| format!("VERDICT {k} IN-STEP - fine [§1]\n"))
+            .concat(),
+    )
+    .unwrap();
+    let got = crate::claims::tests::claims(
+        &root,
+        &[
+            "record",
+            "--bundle",
+            &o,
+            "--reply",
+            &reply.to_string_lossy(),
+        ],
+    );
+    assert_eq!(got.code, 0, "{}{}", got.stdout, got.stderr);
+    std::fs::write(root.join("docs/buildings.md"), &committed).unwrap();
+    let owed = owed_now(&root);
+    let why = crate::claims::index::SECTION_TRIAGE;
+    for k in keys {
+        let pair = (k.to_owned(), why.to_owned());
+        assert!(owed.contains(&pair), "{owed:?}");
+    }
+    let (ix, store) = (
+        load_map(&root.join("dev/claims-index.json")).unwrap(),
+        load_map(&root.join("dev/claims-pages.json")).unwrap(),
+    );
+    manifest_of(&root, &ix, &store, &keys);
+    let data: Value =
+        serde_json::from_str(&std::fs::read_to_string(root.join("t/triage.json")).unwrap())
+            .unwrap();
+    assert_eq!(data["forced"], json!([]), "{data}");
+    assert_eq!(cleared_of(&root), keys);
+}
+
+/// Feature 451 T210: where no kept words hold a section's snapshot (one recorded before T210 kept them, or in another clone), its
+/// removed words are found in its history, so an edit of committed words is shown as a pair and forces nothing.
+#[test]
+fn with_no_kept_words_a_section_s_removed_block_is_found_in_its_history() {
+    let (root, ix, store) = recorded();
+    std::fs::remove_file(root.join(".git").join(super::BLOBS)).unwrap();
+    let b = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
+    std::fs::write(
+        root.join("docs/buildings.md"),
+        b.replace("Walls stand.\n", "Walls stand, rebuilt.\n"),
+    )
+    .unwrap();
+    let text = manifest_of(&root, &ix, &store, &["docs/buildings.md::Walls#walls"]);
+    let data: Value =
+        serde_json::from_str(&std::fs::read_to_string(root.join("t/triage.json")).unwrap())
+            .unwrap();
+    assert_eq!(data["forced"], json!([]), "{text}");
+}

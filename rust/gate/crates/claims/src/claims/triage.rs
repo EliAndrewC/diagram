@@ -8,16 +8,12 @@ use std::sync::LazyLock;
 
 use crate::record::triage::change;
 use fancy_regex::Regex;
-use l7r_shared::checks::pages::read_page;
 use l7r_shared::pyjson::{dumps, sorted};
 use serde_json::{json, Map, Value};
 
 use super::bundle::read_pages;
-use super::index::{
-    field, findings_of, page_blocks, Cur, Index, PageMemo, Store, INDEX, QUESTIONS,
-};
+use super::index::{code_kept, page_blocks, Cur, Index, PageMemo, Store, INDEX, QUESTIONS};
 use super::reply::bare;
-use super::units::doc_units;
 use crate::record::bundle::py_str;
 use crate::record::repo::{fail, git, Fail};
 use crate::record::units::{digest, re};
@@ -38,128 +34,11 @@ static QUESTION_PATH: LazyLock<Regex> = LazyLock::new(|| re(r"research/questions
 /// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
 pub(super) static WARM: [&LazyLock<Regex>; 3] = [&TOUCHES, &HUNK, &QUESTION_PATH];
 
-fn blob_map(qdir: &Path) -> Option<std::path::PathBuf> {
-    let common = git(
-        qdir,
-        &["rev-parse", "--path-format=absolute", "--git-common-dir"],
-    );
-    let common = l7r_shared::py_text::strip(&common);
-    (!common.is_empty()).then(|| Path::new(common).join(BLOBS))
-}
-
-/// Each page a recorded snapshot was taken of kept as a git blob, while the page still stands at it (feature 375 T04).
-pub fn keep_texts(qdir: &Path, units: &Map<String, Value>) -> Result<usize, Fail> {
-    let mut pages: BTreeMap<String, String> = BTreeMap::new();
-    for u in units.values() {
-        for (name, fp) in u
-            .get("pages")
-            .and_then(Value::as_object)
-            .into_iter()
-            .flatten()
-        {
-            pages.insert(name.clone(), fp.as_str().unwrap_or_default().to_owned());
-        }
-    }
-    let Some(path) = blob_map(qdir) else {
-        return Ok(0);
-    };
-    if pages.is_empty() {
-        return Ok(0);
-    }
-    let mut blobs = super::index::load_map(&path)?;
-    let mut kept = 0;
-    for (name, fp) in &pages {
-        let f = qdir.join(name);
-        if blobs.contains_key(fp) || !f.is_file() {
-            continue;
-        }
-        let text = crate::record::repo::read_text(&f)?;
-        if findings_of(&text) != *fp {
-            continue;
-        }
-        let sha = crate::claims::stdin_git(qdir, &["hash-object", "-w", "--stdin"], &text);
-        if let Some(sha) = sha {
-            blobs.insert(fp.clone(), json!(l7r_shared::py_text::strip(&sha)));
-            kept += 1;
-        }
-    }
-    if kept > 0 {
-        std::fs::write(
-            &path,
-            dumps(&sorted(&Value::Object(blobs)), Some(0), true) + "\n",
-        )
-        .map_err(fail)?;
-    }
-    Ok(kept)
-}
-
-/// The text of the page snapshot `fp`, from the clone's kept blobs, or "".
-pub fn kept_text(qdir: &Path, fp: &str) -> Result<String, Fail> {
-    let blob = match blob_map(qdir) {
-        Some(p) if p.is_file() => field(&Value::Object(super::index::load_map(&p)?), fp).to_owned(),
-        _ => String::new(),
-    };
-    Ok(if blob.is_empty() {
-        String::new()
-    } else {
-        git(qdir, &["cat-file", "-p", &blob])
-    })
-}
-
-/// The words of the blocks `digests` of the question `name` that no longer stand: the snapshot's kept text, then the page's history.
-pub fn removed_words(
-    qdir: &Path,
-    name: &str,
-    digests: &HashSet<String>,
-    snapshot: &str,
-) -> Result<BTreeMap<String, String>, Fail> {
-    let mut found = BTreeMap::new();
-    let mut texts = Vec::new();
-    if !snapshot.is_empty() {
-        texts.push(kept_text(qdir, snapshot)?);
-    }
-    for sha in git(qdir, &["log", "--format=%H", "-60", "--", name]).split_whitespace() {
-        texts.push(git(qdir, &["show", &format!("{sha}:./{name}")]));
-    }
-    for text in texts {
-        for b in read_page(&text).blocks {
-            let d = digest(&[&b.words]);
-            if digests.contains(&d) && !b.intro {
-                found.entry(d).or_insert(b.words);
-            }
-        }
-        if found.len() == digests.len() {
-            break;
-        }
-    }
-    Ok(found)
-}
-
-/// The words of the blocks `digests` of the procedure section `title` of `path` that no longer stand, from its history.
-pub fn section_words(
-    root: &Path,
-    path: &str,
-    title: &str,
-    digests: &HashSet<String>,
-) -> BTreeMap<String, String> {
-    let mut found = BTreeMap::new();
-    for sha in git(root, &["log", "--format=%H", "-60", "--", path]).split_whitespace() {
-        let text = git(root, &["show", &format!("{sha}:{path}")]);
-        let units = doc_units(&text, path, None);
-        for unit in units.iter().filter(|u| u.qualname == title) {
-            for b in &unit.blocks {
-                let d = digest(&[b]);
-                if digests.contains(&d) {
-                    found.entry(d).or_insert_with(|| b.clone());
-                }
-            }
-        }
-        if found.len() == digests.len() {
-            break;
-        }
-    }
-    found
-}
+mod kept;
+pub use kept::{
+    keep_sections, keep_texts, kept_text, removed_words, section_texts, section_words,
+    SECTION_TEXTS,
+};
 
 /// The newest commit of the claims index recording `key` checked at the code fingerprint `code`, or `origin/main`.
 pub fn checked_at(
@@ -268,6 +147,8 @@ struct Gathered {
     by_page: BTreeMap<(String, String), Vec<String>>,
     pages: HashMap<String, Moved>,
     lost: HashMap<(String, String), bool>,
+    /// `path::section|snapshot` -> whether a removed block's words could not be found (451 T210).
+    section_lost: HashMap<String, bool>,
     forced: BTreeSet<String>,
     /// `path::section` -> (its change, the claims in it).
     sections: BTreeMap<String, (Moved, Vec<String>)>,
@@ -301,10 +182,11 @@ fn gather_code(
     log: &mut Option<Vec<String>>,
 ) {
     let row = cur.get(key).unwrap_or_else(|| unreachable!());
-    let was_code = index.get(key).and_then(|r| r.get("code"));
-    if was_code.and_then(Value::as_str) == Some(&row.code) {
+    let was = index.get(key);
+    if was.is_some_and(|w| code_kept(w, row)) {
         return;
     }
+    let was_code = was.and_then(|r| r.get("code"));
     let uid = row.uid();
     if !g.codes.contains_key(&uid) {
         let shown = py_str(was_code.unwrap_or(&Value::Null));
@@ -346,7 +228,7 @@ fn gather_section(
     store: &Store,
     key: &str,
     root: &Path,
-) {
+) -> Result<(), Fail> {
     let row = cur.get(key).unwrap_or_else(|| unreachable!());
     let unit = &row.unit;
     let section = index.get(key).and_then(|r| r.get("section"));
@@ -354,39 +236,33 @@ fn gather_section(
         || section.is_none_or(Value::is_null)
         || section.and_then(Value::as_str) == Some(&unit.core)
     {
-        return;
+        return Ok(());
     }
-    let before: HashSet<String> = store
-        .get(section.and_then(Value::as_str).unwrap_or_default())
-        .and_then(Value::as_array)
-        .map(|a| {
-            a.iter()
-                .filter_map(|v| v.as_str().map(str::to_owned))
-                .collect()
-        })
-        .unwrap_or_default();
-    let fresh: Vec<&String> = unit
-        .blocks
-        .iter()
-        .filter(|b| !before.contains(&digest(&[b])))
-        .collect();
-    let now: HashSet<String> = unit.blocks.iter().map(|b| digest(&[b])).collect();
-    let missing: HashSet<String> = before.difference(&now).cloned().collect();
-    let words = if missing.is_empty() {
-        BTreeMap::new()
-    } else {
-        section_words(root, &unit.path, &unit.qualname, &missing)
-    };
-    if words.len() < missing.len() {
-        g.forced.insert(key.to_owned());
-    }
-    let place = format!(
-        "{}::{}|{}",
-        unit.path,
-        unit.qualname,
-        section.and_then(Value::as_str).unwrap_or_default()
-    );
-    let got = g.sections.entry(place).or_insert_with(|| {
+    let snapshot = section.and_then(Value::as_str).unwrap_or_default();
+    let place = format!("{}::{}|{snapshot}", unit.path, unit.qualname);
+    // each section's edit read once, its claims sharing it: its removed words were sought once a claim, 60 commits each (451 T210)
+    if !g.sections.contains_key(&place) {
+        let before: HashSet<String> = store
+            .get(snapshot)
+            .and_then(Value::as_array)
+            .map(|a| {
+                a.iter()
+                    .filter_map(|v| v.as_str().map(str::to_owned))
+                    .collect()
+            })
+            .unwrap_or_default();
+        let fresh: Vec<&String> = unit
+            .blocks
+            .iter()
+            .filter(|b| !before.contains(&digest(&[b])))
+            .collect();
+        let now: HashSet<String> = unit.blocks.iter().map(|b| digest(&[b])).collect();
+        let missing: HashSet<String> = before.difference(&now).cloned().collect();
+        let words = if missing.is_empty() {
+            BTreeMap::new()
+        } else {
+            section_words(root, &unit.path, &unit.qualname, &missing, snapshot)?
+        };
         // a section's Markdown read as a page's words, so a link, markup or code-tick edit is cleared by the tool (feature 451 T191)
         let md = |w: &String| change::md_words(w);
         let was: Vec<String> = words.values().map(md).collect();
@@ -406,9 +282,19 @@ fn gather_section(
             reached: HashSet::new(),
             found,
         };
-        (moved, Vec::new())
-    });
+        g.sections.insert(place.clone(), (moved, Vec::new()));
+        // THE ONE FORCE LEFT (451 T210): a removed block whose words neither the kept snapshot nor the history holds - a snapshot taken
+        // before T210 kept its words, or in another clone, of words no commit holds. No echo of the new words can see a claim that
+        // repeated only the lost ones, so its claims are owed in full.
+        g.section_lost
+            .insert(place.clone(), words.len() < missing.len());
+    }
+    if g.section_lost[&place] {
+        g.forced.insert(key.to_owned());
+    }
+    let got = g.sections.get_mut(&place).unwrap_or_else(|| unreachable!());
     got.1.push(key.to_owned());
+    Ok(())
 }
 
 fn gather_pages(
@@ -638,7 +524,7 @@ pub fn triage_bundle(
             g.forced.insert(key.clone());
         }
         gather_code(&mut g, cur, index, key, &root, &mut seen, &mut log);
-        gather_section(&mut g, cur, index, store, key, &root);
+        gather_section(&mut g, cur, index, store, key, &root)?;
         gather_pages(&mut g, index, store, key, qdir, &mut memo)?;
     }
     let cleared = filter(&mut g, cur, index);
@@ -704,7 +590,7 @@ pub fn triage_bundle(
             );
         }
     }
-    let data = json!({"units": units, "cleared": tool, "snapshots": snaps, "forced": g.forced.into_iter().collect::<Vec<_>>()});
+    let data = json!({"units": units, "cleared": tool, "snapshots": snaps, SECTION_TEXTS: section_texts(cur, keys), "forced": g.forced.into_iter().collect::<Vec<_>>()});
     std::fs::write(
         out.join("triage.json"),
         dumps(&sorted(&data), Some(1), true) + "\n",

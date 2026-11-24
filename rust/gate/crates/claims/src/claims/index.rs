@@ -442,9 +442,22 @@ pub fn relabeled_only(was: &Value, row: &Row, root: &Path) -> Result<bool, Fail>
     }
     // a claim that only named its items, its class word kept, is as it was judged (feature 451 T204): the row stored the claim with
     // its class, which `normalized` drops once the claim names an item, so the stored claim is read against the claim unanchored
+    // a MISLABELED verdict is answered mechanically by the relabel it prescribed - the backing alone changed, its account word for
+    // word - never by a restated account, which is owed its check (feature 451 T213: before it, any rewrite passed once the body held)
     Ok(is(was, "claim", &row.claim.normalized())
         || is(was, "claim", &row.claim.unanchored())
-        || is(was, "verdict", "MISLABELED"))
+        || (is(was, "verdict", "MISLABELED")
+            && was
+                .get("claim")
+                .and_then(Value::as_str)
+                .is_some_and(|c| account_of(c) == account_of(&row.claim.normalized()))))
+}
+
+/// A stored or normalized claim line's account, read as [`super::grammar::parse_claim`] splits it: after its first ` - `, after the
+/// backing's first `: `; "" where it states none.
+fn account_of(line: &str) -> &str {
+    let (_, _, rest) = super::grammar::partition(line, " - ");
+    l7r_shared::py_text::strip(super::grammar::partition(rest, ": ").2)
 }
 
 /// `was.get("claim") not in (None, text)`.
@@ -591,6 +604,14 @@ impl<'a> Landing<'a> {
     }
 }
 
+/// Has the claim of `row` the code its row `was` was judged at? Its fingerprint, or the one it had before it named its items, its class
+/// word kept (feature 451 T204: a doc section's claim stores no body for `relabeled_only` to read, its code the claim alone). The one
+/// reading of "did this claim's code move" that `claims-owed` and the triage's code hunks both ask (451 T211: the triage compared the
+/// fingerprint alone, and forced every claim T192's `#item` anchors renamed).
+pub fn code_kept(was: &Value, row: &Row) -> bool {
+    is(was, "code", &row.code) || is(was, "code", &row.unit.code_unanchored(&row.claim))
+}
+
 fn owed_one(
     row: &Row,
     was: &Value,
@@ -606,11 +627,7 @@ fn owed_one(
         let root = q.parent().and_then(Path::parent).unwrap_or(Path::new(""));
         relabeled_only(was, row, root)
     };
-    // a claim that only named its items, its class word kept, has the code it was judged at (feature 451 T204: a doc section's claim
-    // stores no body for `relabeled_only` to read, its code the claim alone)
-    let code_kept =
-        is(was, "code", &row.code) || is(was, "code", &row.unit.code_unanchored(&row.claim));
-    if !code_kept && !qdir.map(relabeled).transpose()?.unwrap_or(false) {
+    if !code_kept(was, row) && !qdir.map(relabeled).transpose()?.unwrap_or(false) {
         let text = row.claim.normalized();
         let full =
             is(was, "triage", "touched") || row.unit.line_keyed() || claim_rewritten(was, &text);
