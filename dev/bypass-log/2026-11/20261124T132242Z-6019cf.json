@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-24T13:22:42Z",
+  "target": "plan-gate tick 451-time-retro-and-efficiency",
+  "commit": "cbd097c8a5",
+  "why": "451's one stale block is T203's withdrawn heading (built in T199), a heading with no decision, as at the last landing"
+}
