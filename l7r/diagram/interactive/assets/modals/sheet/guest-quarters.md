@@ -10,7 +10,7 @@ zashiki. No guest house standing apart is known at a samurai house; a traveling 
 a post town's house for guests of rank, with its raised room of honor, and a lord's officials touring the villages lodged at the village headman's house.
 
 The guest room was the house's formal room, finished for formality where the master's own living room could be finished
-playfully. Like nearly every room of such a house but the kitchen, it was matted, and a wide veranda ran between it and the
+playfully. It had the alcove of a formal room, the tokonoma, which a foot soldier's dwelling normally went without. Like nearly every room of such a house but the kitchen, it was matted, and a wide veranda ran between it and the
 garden, which lay to the south before the formal rooms. Along that edge the house closed with storm shutters, board doors slid out at night and against wind and rain, and stowed by day in a box at the end of their run.
 
 How large a guest room was is not recorded.
@@ -28,5 +28,5 @@ of a building.
 Name: guest quarters
 Covers: the guest room of the residence with its floor and label, or a detached guest house and its label
 Sources: shirobito-1717-takayama, boso-no-mura-takei, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, morse-1886-homes, shiroishi-koseki, honjin-jawiki, matsue-bukeyashiki, shoinzukuri-jawiki, liq-takayasu-daidokoro, engawa-kotobank, oamishirasato-kaoku
-Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0107-kitchens-daidokoro.html, research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html, research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.html
+Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0107-kitchens-daidokoro.html, research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html, research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.html, research/questions/0170-a-citys-garrison-foot-soldiers-houses-barracks-and-the-armory.html
 Drawing: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html
