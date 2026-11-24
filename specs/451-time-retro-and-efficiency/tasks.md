@@ -13,6 +13,7 @@ seen red, then the check deleted and the test seen red again (FR-012).
 ## Occasions
 
 - none: tooling only - no map feature, sheet, glyph, placement rule or research page changes.
+- none: T218 T219 T220 T221 T222 T223 - tooling only: the gate's claims, owed, reviews, core and bundle crates and the check agents' rule files; no map feature, sheet, glyph, placement rule or research page of theirs changes (the drawing code and pages in the same delta are 449's, 452's and page session P7's, each declared on its own feature's lines).
 
 ## Dependencies
 
