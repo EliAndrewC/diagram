@@ -14,7 +14,7 @@ Second World War many graves were still built on a corner of a household's own l
 
 Guesses:
 - That about three paddy maps in ten draw a grave in their fields: no source gives a rate.
-- That a field grave is in a plot's corner about half the time and an island inside a plot the other half: both are placements of one thing, and no source weighs one against the other.
+- {0236#field-grave-plot-s}
 - The mound's size, about 13 by 9 ft with one or two stones: no size of a field grave was found.
 
 Depiction: The map draws the grave as a small mound with one or two stones in a corner of a paddy plot, standing against its

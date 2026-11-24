@@ -14,7 +14,7 @@ A fence was as thick as its one row of stakes. How long or high a village's fenc
 is not recorded.
 
 Guesses:
-- That a hamlet's weir is a woven fence, at even odds with the other three forms: no count of the forms was found.
+- {0059#hamlet-s-weir-woven}
 
 Depiction: The map draws the fence about 1.5 ft thick, wider than its one row of stakes, so that it shows. Like every weir
 on the map it closes the brook from bank to bank, so that it can be seen, though half-river closures were the common old

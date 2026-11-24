@@ -15,9 +15,7 @@ Guesses:
   trees among a southern Chinese village's houses, and in Japan only the loosely clustered villages of the Kanto and the Tohoku are recorded with each house in its own grove, the denser villages of the west with houses side by side behind walls.
 - That each farm's wood, its share of the copse counted in, runs between about 6,000 and 28,000 sq ft: the range is the one
   register's three households, not a survey.
-- That the copse is fruit and other broadleaf trees, without bamboo: no account describes a clump standing between the
-  houses, so it takes the broadleaf and fruit trees a homestead grove and a fengshui wood were planted with, and leaves a
-  household's bamboo to a stand of its own.
+- {0071#copse-fruit-other-broadleaf}
 
 Depiction: The map spreads the copse through the gaps between the houses, each clump within a dooryard's reach of its house,
 standing against the houses but never on a roof, a yard, a garden or a shed, out of the yards' and gardens' sun, and off the lanes and the main road, so no lane runs between a farm and its own trees.

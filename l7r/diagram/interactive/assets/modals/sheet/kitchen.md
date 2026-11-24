@@ -18,10 +18,9 @@ At the one house whose kitchen is measured, the Hagi house, its wing of board fl
 sixth of the house by one of its two official measures.
 
 Guesses:
-- That the kitchen has one door to the outside, on its doma where it has one: the kitchen door is recorded, often at the rear of the house and in the great mansions onto the service kitchen's doma, but not how many a kitchen had or
-  whether an ordinary kitchen's door opened on its doma.
+- {0107#kitchen-has-door-outside-2}
 - A second outside door, or a way of its own to carry food to the rooms, wherever a plan draws one: no source shows either.
-- The kitchen's size on the plan: one kitchen is measured, by one of two measures that disagree.
+- {0091#kitchen-s-size}
 - That the kitchen and its service ground stand to the side and rear of the house, away from the gate: the kitchen is
   recorded within the house, to its side, and a secondhand summary of one book counts a kitchen yard among the four kinds of Kanazawa's samurai gardens, but no source says which side of the lot it took, and at one middle-rank retainer's house, at Shiroishi, the gate leads along the wall straight to the kitchen entrance.
 

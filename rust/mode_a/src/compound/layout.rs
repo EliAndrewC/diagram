@@ -540,7 +540,7 @@ impl Layout {
     /// The middle gate in the divider beside the office hall, at the first stretch whose approach on both sides stands clear, nearest the
     /// hall's middle; its approach filed.
     ///
-    /// Research: the middle gate beside the office hall - DEVIATION research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: the docs seat the divider's gate behind the office hall (a GUESS: no page places a jin'ya's middle gate); the hall backs the divider with only the clear ground between, so the gate opens at the first stretch beside it whose approach is clear on both sides, the hall still the privacy baffle between the hearing court and the house
+    /// Research: the middle gate beside the office hall - DEVIATION research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html#middle-gate-beside-hall: the docs seat the divider's gate behind the office hall (a GUESS: no page places a jin'ya's middle gate); the hall backs the divider with only the clear ground between, so the gate opens at the first stretch beside it whose approach is clear on both sides, the hall still the privacy baffle between the hearing court and the house
     fn middle_gate(&mut self, p: &Program, hall: Bx) -> Result<(), Error> {
         let reach = DIVIDER_HALF + APPROACH;
         let rule = |e: &super::grid::Ent| match e.what {

@@ -10,8 +10,7 @@ River boatmen are also known to have kept a shrine to a water god, with a festiv
 records of the twentieth century.
 
 Guesses:
-- Its place at the head of the landing, and its size, about 3 by 5 ft: the guardian's shrine on land is recorded neither at a
-  landing nor with a size.
+- {0225#place-head-landing-size}
 
 Depiction: The plan draws the shrine small and vermilion at the land edge of the bank street, and draws no water-god shrine,
 since a water-god shrine at a landing is known only from modern records.

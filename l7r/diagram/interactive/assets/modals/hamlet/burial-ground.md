@@ -17,10 +17,8 @@ Guesses:
 - Its size on the map, 7.5 to 18 sq ft for each inhabitant it serves: no premodern ground's area is recorded, so it is
   reckoned from the Edo death rates, an urn plot of 10 to 20 sq ft and a plot reused after about 30 years, neither of which
   is recorded.
-- That a village's ground lies in the shrine's yard or apart from it at even odds: both forms are recorded, but not how many
-  villages took each.
-- That a village whose shrine stands on a hill always keeps its ground apart: no source says whether graves climbed a hill
-  shrine's slope.
+- {0236#village-s-ground-lies}
+- {0236#village-whose-shrine-stands}
 - That a ground apart lies downstream of the houses: that side is recorded only in villages as they stand today.
 
 Depiction: The map draws one burial ground for each village, at its real size: an irregular patch of earth set with rows of

@@ -10,12 +10,10 @@ its road had its bamboo on the south, likely because of the row of grove farms a
 Few farms seem to have done so. How deep the bamboo stood, and how far past the yard, is not recorded.
 
 Guesses:
-- That a row village takes this form or every farm's own grove at even odds: both are attested, but the one survey that
-  counts found only two farms of all it visited with their bamboo on the south side of the homestead, where this row's farms keep it, so even odds may draw this form
-  more often than it stood.
+- {0033#row-village-takes-form}
 - That a sheltered farm's windward grove is one tree deep: the account calls Ogawa's "rather thin" and gives no depth, though the same survey found another farm's grove on its north road a single line of white oak and zelkova.
 - That a street sheltering its lee row runs within about 67 degrees of across the wind: no account gives an angle.
-- The bamboo band's depth, 16 ft, and that it stands just past the yard's and beds' sun ground: no account gives either.
+- {0075#bamboo-band-s-depth}
 
 Depiction: The map draws the farms on the street's lee side with a thin grove, one tree deep, on their windward sides, and
 each with its bamboo in a band

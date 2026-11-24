@@ -12,7 +12,7 @@ which kept them off the fastest water in a flood. Weirs on small mountain stream
 How many small intakes had a weir is not recorded, though in old Japan intake weirs were hardly built at all. One dug up from the Kofun period was about 14 ft wide. How thick a village weir was is not recorded: a woven fence was as thick as its row of stakes.
 
 Guesses:
-- That a hamlet takes its water behind a weir about half the time: which form a hamlet built followed from its brook's level through the season, which the map does not model, and no source counts the two.
+- {0059#hamlet-takes-water-behind}
 
 Depiction: The map draws the weir at the head of the fan of paddies, running slantwise upstream from the intake mouth, and
 across the whole brook: half closures were the common old form, but at a brook a few feet wide a weir halfway across would be

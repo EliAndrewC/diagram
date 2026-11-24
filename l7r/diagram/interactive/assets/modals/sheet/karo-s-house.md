@@ -15,8 +15,7 @@ deep, and a retainer of higher rank had a longer one, up to about 36 ft along th
 not recorded.
 
 Guesses:
-- That the karo has a small house of their own in the residence court, where a plan draws one rather than a bay of the
-  staff's long-house: no source sets the head of an intendant's staff apart from the rest.
+- {0106#karo-has-small-house}
 - The size of the karo's quarters and where in the compound they stand: no source gives either.
 
 Depiction: The plans follow the scale of a shogunal intendant's office, the kind of office the magistracies are modeled on,

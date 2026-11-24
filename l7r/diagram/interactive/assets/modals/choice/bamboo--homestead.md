@@ -17,10 +17,8 @@ Guesses:
 - That about three farmsteads in five keep a stand of their own: no source gives a share before modern times; bamboo named as
   one of several lesser plants of the grove reads as common but not universal, and the only count found is modern and of a
   single hamlet, where every homestead kept one.
-- A farm's stand, about 22 by 16 ft: no source gives one's size.
-- Which side of the house the stand takes - behind it most often, then the windward side, then beside the shed, least often
-  the other flank: the sources give bamboo with the storehouses, at a wet edge, on the wind side, behind the house, and on a south side a neighbor's grove already sheltered, with no share for each
-  except one upland survey that found most farms' bamboo on the north, many in the northeast, and only two on the south.
+- {0075#farm-s-stand-about}
+- {0075#side-house-stand-takes}
 - How often a settlement's bamboo stands at its farmsteads rather than in a thicket, both or nowhere: no source counts them.
 
 Depiction: A bamboo culm is far too slim to see at the map's scale, so the map draws each stand as an area, its place and

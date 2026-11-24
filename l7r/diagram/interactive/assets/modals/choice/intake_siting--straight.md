@@ -3,8 +3,7 @@ a straight reach was the first place an intake was sought, and failing one, the
 outside of a bend. The mouth was set where the current's deepest line ran against the bank.
 
 Guesses:
-- That a hamlet's intake stands on a straight reach half the time: no source counts how often an intake was sited on a
-  straight reach and how often on a bend.
+- {0059#hamlet-s-intake-stands-2}
 
 Depiction: The map draws the intake where the brook's gentle wander crosses its own line, the brook there running straight
 and leaning a little away from the fields.

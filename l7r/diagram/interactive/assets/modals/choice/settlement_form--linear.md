@@ -18,8 +18,7 @@ Guesses:
   measured were planned colonies; no share of the forms was found.
 - Whether a row follows a street laid first or the dry edge of the paddy, and whether its farms take one side or both, at
   even odds: both forms of each are attested and none is counted against the other.
-- Whether a row's farms dig a well each or share wells along the street, at even odds: no account says which a row on low
-  ground did.
+- {0033#row-s-farms-dig}
 
 Depiction: The map strings the farms along a street, on one side or both, the street running on off the map as the road the
 row stands on, set a little back from the field's edge so it does not run on a bund. A street laid first is drawn straight; a row along the dry edge curves with the field's margin, which stands

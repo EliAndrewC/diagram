@@ -8,7 +8,7 @@ How many households shared one, and how wide one was, are not recorded.
 Guesses:
 - That half of settlements wash at shared places like these and half at a step by each house: no account gives a share between them.
 - One for every four households on a bank: no account counts a village's washing places.
-- A footing about 4 ft wide: no account gives one's width.
+- {0065#footing-about-4-ft}
 
 Depiction: The map sets shared washing places on the bank of a stream or ditch that passes the houses,
 one for every few households on that bank, each drawn as a small footing of steps down the bank. The steps are the

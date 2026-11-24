@@ -15,9 +15,8 @@ recorded, but the graves of one Edo-period temple graveyard ran about 2 to 8 ft 
 recorded either, though where the custom held they seem to have been common.
 
 Guesses:
-- [grave_form=island] That a grave stood as an island inside a flooded paddy plot: the Chinese accounts show graves
-  inside working fields without naming the crop, and no Japanese grave read stood in mid-paddy.
-- That a hamlet takes the island or the corner form at even odds: no source weighs one against the other.
+- [grave_form=island] {0236#grave-stood-island-inside}
+- {0236#hamlet-takes-island-corner}
 - The mound's size on the map, about half its plot's width for an island and smaller in a corner: no size of a grave in the
   fields was found.
 

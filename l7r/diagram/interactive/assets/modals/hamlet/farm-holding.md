@@ -16,11 +16,9 @@ Guesses:
 - That on a row with farms on both sides of the street only the farms across the street from the paddy hold a strip
   behind them, and the farms between the street and the paddy hold none: no source says which farms of a lowland row
   held dry field.
-- That the holding is dry field rather than paddy: the measured strips were dry field, but no lowland row's were measured.
-- [row_line=street] The strip's depth, three lots: Santome's strips ran far deeper, but in a dry-field colony, and no
-  lowland row's strip was measured.
-- [row_line=edge] The compact holding's depth, one lot: a dike row's land is said only to lie near the house, and no
-  levee or dike row's holding was measured.
+- {0033#holding-dry-field-rather}
+- [row_line=street] {0033#strip-s-depth-three}
+- [row_line=edge] {0033#compact-holding-s-depth}
 
 Depiction: Where the farms stand on both sides of the street, the map draws a holding behind each farm across the street
 from the paddy, and none behind the farms between the street and the paddy; a row on one side of its street has none.

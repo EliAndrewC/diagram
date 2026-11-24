@@ -22,9 +22,7 @@ Guesses:
   the share is not reckoned from it.
 - {0196#paved-apron-s-width}
 - {0196#village-s-well-may}
-- [settlement_form=dispersed] That a scattered settlement's farms draw channels or wells of their own at even odds, and
-  where in the dooryard a farm's well or channel ends: no source says how many areas used each, where a farm's well stood
-  or where a channel ended.
+- [settlement_form=dispersed] {0031#scattered-settlement-s-farms}
 
 Depiction: The map draws a well as a marker much larger than life, its curb about 19 ft across where a real well's mouth was about 3 ft (1 m), so a reader can find it:
 the marker shows where the well stands, not how much ground it takes. Wells stand

@@ -12,8 +12,8 @@ Fry ponds were found only there: elsewhere the ponds mostly raised grown fish, a
 big its fry ponds were is not recorded.
 
 Guesses:
-- That about one dike-pond hamlet in four is a fry village: no source gives the odds, and fry ponds being found only in Jiujiang makes it the rarer form.
-- That the smallest ponds hold the fry: which of Jiujiang's ponds held them is not recorded, so the choice follows a late-Ming method in which fry start in a small pond and move on to larger ones as they grow.
+- {0024#about-dike-pond-hamlet}
+- {0024#smallest-ponds-hold-fry}
 
 Depiction: The map gives a fry village's smallest ponds to fry until they hold up to seven tenths of its pond water (reading
 the seven parts in ten as a share of the ponds' area), and draws them in grayer, muddier water than the clear ponds where the

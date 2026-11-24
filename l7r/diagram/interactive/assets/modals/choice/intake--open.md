@@ -15,7 +15,7 @@ in the Edo period, in 1657, a branch of the Tamagawa aqueduct serving one villag
 
 Guesses:
 - That a hamlet takes its water through an open intake about half the time: which form a hamlet built followed from its brook's level through the season, which the map does not model, and no source counts the two.
-- How far above the fork the intake sits, chosen afresh for each map within a short run: no source gives how far a village's head race ran.
+- {0059#far-above-fork-intake}
 
 Depiction: The map opens the head race straight out of the brook's bank at the head of the fan of paddies, leaving at an acute
 angle pointing downstream, with no gate or boards at its mouth; the brook runs on past it down the flank of the fields. The head race is drawn wider than the brook that feeds it: on the map a channel's width shows its rank among the waters, not the water it carries, so the two widths are not matched.

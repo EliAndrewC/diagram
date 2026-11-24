@@ -30,7 +30,7 @@ pub const LARGE_FT: f64 = 20.0;
 pub const PERIMETER_FT: f64 = 25.0;
 /// The width a cart passes (feet).
 ///
-/// Research: cart lane - GUESS research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html: about 6 ft where carts use it
+/// Research: cart lane - GUESS research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html#wide-cart-lane: about 6 ft where carts use it
 pub const CART_FT: f64 = 6.0;
 /// The buildings whose doors a cart reaches, the granary and the stables (`cart_route`), and whose door on an end along its row opens on
 /// a cart's lane (`layout::CART_LANE`).

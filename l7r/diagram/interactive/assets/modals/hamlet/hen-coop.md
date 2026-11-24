@@ -16,9 +16,8 @@ a coop is not recorded.
 Guesses:
 - That every farm keeping chickens has a coop: the manual says to roost them in one, but no account of the empire's last years
   says where village chickens slept, and a count of 1972 in northern Japan found a coop standing apart on under three farms in ten.
-- Its size on the map, 5 by 5 ft: the excavated coop is square, but its size is not given.
-- That it stands beside the house: the accounts say only that chickens were kept in the yard, and the one house type whose
-  coops are placed, the Hakka enclosed house of south China, kept them in its own rear ring of rooms.
+- {0045#size-5-5-ft}
+- {0045#stands-beside-house}
 
 Depiction: The map draws a coop as Chinese farms kept it: a small square roost beside the house, barred across so it reads
 as a cage, on most farmsteads; how many farmsteads in a

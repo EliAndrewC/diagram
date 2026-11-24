@@ -15,8 +15,7 @@ the commoner is not recorded.
 Guesses:
 - That a row follows a street laid first or the dry edge of its ground at even odds: both are attested, and neither is counted
   against the other.
-- That a far farm's holding runs back three lots deep: Santome's strips ran about 2,240 ft in a dry-field colony, and how deep
-  a paddy row's strips ran is not recorded.
+- {0033#far-farm-s-holding}
 
 Depiction: The map draws the street straight, as a surveyed road is, a little off the field's edge, so the field reads as the row's own and the street keeps off the bunds, and runs it on off the map as the road the row stands
 on. It is drawn 6 ft wide, wider than the lanes off it; Santome's real roads were about 36 ft. On low ground behind dikes a row never takes

@@ -66,6 +66,25 @@ fn a_reference_no_tag_answers_is_refused_with_its_fix() {
     assert!(said.contains("shrine: the Guesses bullet {0218#tree} names no item: tag it"),);
 }
 
+/// A reference to a GUESS tag with no `data-guess` is refused with its fix (451 T192): the tag's bullet is owed from its first reference.
+#[test]
+fn a_reference_to_a_guess_tag_with_no_bullet_is_refused_with_its_fix() {
+    let root = scratch("registry-items-bare");
+    put(
+        &root,
+        PAGE,
+        r#"<ul><li>That they give it a tree is a GUESS.<span class="item" data-item="tree" data-label="GUESS"></span></li></ul>"#,
+    );
+    let e = resolve(&root, class(MODAL)).unwrap_err();
+    assert!(
+        e.message.contains(
+            "shrine: the Guesses bullet {0218#tree} names a GUESS tag with no data-guess"
+        ),
+        "{}",
+        e.message
+    );
+}
+
 #[test]
 fn an_about_that_states_a_tagged_guess_as_a_fact_is_named() {
     let root = scratch("registry-items-about");

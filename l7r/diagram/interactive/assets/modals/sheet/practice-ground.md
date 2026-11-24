@@ -15,11 +15,9 @@ posts were stood in a row in the open.
 How much ground a practice ground took is not recorded.
 
 Guesses:
-- Its size, about 90 to 135 sq ft for each samurai drilling on it: a solo form needs a square of about 8 to 10 ft and
-  paired work roughly doubles it; no floor area for each person training was found.
+- {0165#size-about-90-135}
 - That striking posts stood on a practice ground outside Satsuma, and how many: no record says.
-- The weapon rack at its edge, about 8 by 2 ft: joined from the guardroom's sword rack and the arrest weapons stood in the
-  open, since no rack for practice weapons, or its size, was found.
+- {0165#weapon-rack-edge-about}
 
 Depiction: The plan marks the ground by its gear rather than a building: a weapon rack at its edge and striking posts. Each
 post is drawn as a small marker of where it stands, though a real post stood a little over 4 ft high, and only upright

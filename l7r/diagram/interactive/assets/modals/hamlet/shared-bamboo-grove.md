@@ -16,9 +16,8 @@ bamboo, hachiku. Kept as a resource, a thicket was cut in moderation and renewed
 How large a village's thicket ran is not recorded.
 
 Guesses:
-- Its size, about 84 by 58 ft, a working stand: no source gives the size of a village's thicket.
-- That it stands just beyond the back row of houses: no source says which side of a settlement a thicket took, beyond high,
-  dry ground.
+- {0075#size-about-84-58}
+- {0075#stands-just-beyond-back}
 - That the thicket belongs to the village as a whole: no source says who held one, of any period.
 
 Depiction: The map draws the thicket as an area true to scale in its place and size, filled with paired cane strokes and

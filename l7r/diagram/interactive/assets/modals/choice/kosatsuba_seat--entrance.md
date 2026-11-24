@@ -12,7 +12,7 @@ bridge - and none seems to have stood set back on open ground.
 How many villages kept their board at the way in, rather than at the center or before an official's gate, is not recorded.
 
 Guesses:
-- That a village's board was the size of a post town's: no village board was measured.
+- {0190#village-s-board-size}
 - How often a settlement's board stands at its way in, its center or an official's frontage: no source counts them.
 
 Depiction: Only a settlement with a way in from outside takes this seat. The map seats the board

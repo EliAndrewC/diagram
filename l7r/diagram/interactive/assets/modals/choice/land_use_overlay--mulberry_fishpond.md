@@ -17,8 +17,7 @@ Guesses:
   rather than evenly scattered: no source says who dug a pond or how ponds spread.
 - That low ground alone did not make a dike-pond district: as low and wet as they were, the sandy fields of the outer delta
   are not recorded going over to ponds, and no source says why.
-- That a village's ponds take one of the five recorded splits of water and bank, each at even odds: every water-to-bank
-  split written as a number is modern, the sources give it both ways round, and none gives a share between them.
+- {0018#village-s-ponds-take}
 - How often a settlement grows this crop rather than lotus, tea or none: no source counts them, so the choices come up evenly
   where the ground allows them.
 - That the ponds lie in the two lowest rows of the valley floor: how wide a valley's wet bottom ran is not recorded, so the

@@ -15,9 +15,7 @@ six parts water to four of dike, or the reverse. An ordinary pond's size before 
 several tens of mu (a mu is about 7,200 sq ft), several acres, and ponds built out into the sea were reckoned by the hundred mu.
 
 Guesses:
-- That a hamlet's ponds take one of the five recorded splits of water and dike, each at even odds, and that one split
-  holds for every pond of the hamlet: no split written as a number before modern times was found, and no account gives a
-  share between them.
+- {0018#hamlet-s-ponds-take}
 
 Depiction: Where a hamlet is laid out as a block of dike-ponds inside a polder, the map draws the block as a mosaic, every pond four-sided but skewed to an uneven shape, or on some hamlets as a chessboard of ponds in straight rows.
 Each pond is set in from the

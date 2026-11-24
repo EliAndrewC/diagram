@@ -8,7 +8,7 @@ In Suzhou a house that backed onto a canal had a landing at its back with stone 
 
 Guesses:
 - That a settlement takes this form or shared washing places at even odds: no account gives a share between them.
-- A step about 4 ft wide: no account gives one's size.
+- {0065#step-about-4-ft}
 
 Depiction: The map sets each house's step at the end of the farm's own channel in its dooryard, so it is drawn only where the
 farms take their water by channel; the title card says which form a settlement takes. The map draws each step as a small pale footing with its steps marked across it, a drawing convention; in Suzhou a house's landing on its canal had stone steps down to the water.

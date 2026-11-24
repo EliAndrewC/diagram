@@ -16,7 +16,7 @@ hall; another village shrine's, two bays by one, comes to about 12 by 6 ft at a 
 Guesses:
 - The size the plan gives a sanctuary three bays wide, 18 by 6 ft: no sanctuary that wide is measured, so it is reckoned from
   the one built in 1789, about 6 ft square, and a two-bay one's 12 by 6 ft, reckoned at a bay of about 6 ft.
-- That every sanctuary stands on a stone plinth: one village's new sanctuary of 1841 stood on a stone base, the only one found, which is not enough to say what most stood on.
+- {0222#every-sanctuary-stands-stone}
 
 Depiction: The plan draws the sanctuary one, two or three bays wide - about 6 ft square for one bay, the size of the one built in 1789, 12 by 6 ft for two, 18 by 6 ft for three - which of them picked at random for each plan, behind
 the hall on the approach's line, in a small clearing where the shrine's wood stands behind the hall (which sides of the hall the wood takes differs by settlement; the title card says which), with no fence round it, and names the Fortune it

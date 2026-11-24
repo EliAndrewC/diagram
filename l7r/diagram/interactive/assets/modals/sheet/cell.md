@@ -15,12 +15,9 @@ Edo's Tenmacho jail, each shared by several prisoners; over a hundred could be p
 The size of a magistracy's own cell is not recorded.
 
 Guesses:
-- That a county cell holds one or two of the accused: no account counts them; a county holds only a few until their
-  hearing.
-- Its size on the plan, about 12 by 10 ft: no account gives a magistracy's temporary cell, so it is set at the small end
-  of the single cell rooms measured.
-- That the cell is built on to the end of the junior retainers' long-house, where a plan joins it to one: no account says
-  whether a temporary cell stood alone or was joined to a guardroom, a long-house or the gatehouse.
+- {0096#county-cell-holds-two}
+- {0096#size-about-12-10}
+- {0096#cell-built-end-junior}
 
 Depiction: The plan draws the cell as a small building with bars across its front, in the office's outer court. It may
 stand on any side of the compound: a Chinese county office set its jail to the south by rule, and Rokugan keeps no such

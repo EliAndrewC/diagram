@@ -16,8 +16,7 @@ oldest field channels with figures run from perhaps nine inches to 3 ft across, 
 Yayoi paddies was 1.5 to 3 ft (0.5 to 1 m) wide.
 
 Guesses:
-- A drain ending in a pond at the foot of its fields: every drain in the accounts lets its water go into a river or a
-  watercourse, and none describes one ending in a pond.
+- {0053#drain-ending-pond-foot}
 - Its width where it leaves the fields, about 5.5 ft: wider than the one early drain measured, it is reckoned from what
   a drain must carry off after a storm, not from a period figure.
 

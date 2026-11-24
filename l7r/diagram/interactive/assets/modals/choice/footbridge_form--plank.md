@@ -10,9 +10,7 @@ by far the commoner. How long or wide a village's plank crossing ran, and how of
 recorded.
 
 Guesses:
-- That a settlement's ditch crossings are all planked, at even odds with a single log and earth over logs: no count of
-  the forms over a farm ditch was found, and the one proportion found, for river bridges, would make the planked deck far
-  rarer than earth over logs.
+- {0084#settlement-s-ditch-crossings-3}
 
 Depiction: Every crossing a path along a bund takes over a ditch on the map takes this form, drawn as a timber deck with its seams running across it, so
 the boards read as laid from bank to bank. Each is drawn narrow and about 8 ft long,

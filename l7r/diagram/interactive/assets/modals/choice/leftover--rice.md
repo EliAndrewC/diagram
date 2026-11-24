@@ -10,7 +10,7 @@ the ground lay low and flooded.
 The shares above are a township's, not a hamlet's: how much rice a single dike-pond hamlet kept is not recorded.
 
 Guesses:
-- About one parcel in ten left in rice: chosen so a few plots read as standing rice among the ponds, below the two tenths of fields the 1678 writer gave one pond township.
+- {0020#about-parcel-ten-left}
 - That a wholesale dike-pond hamlet keeps some rice about half the time and none the other half: no source counts the hamlets of either kind.
 
 Depiction: The map lays the whole block out as dike-ponds and converts about nine parcels in ten, in patches; the parcels left

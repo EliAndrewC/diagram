@@ -14,8 +14,7 @@ along its canal ran 2.5 to 5 ft wide and seem also to have served as paths. How 
 later times is not recorded.
 
 Guesses:
-- The width of a walking bund on the map, 2 to 5 ft: no source gives it, so it is held between the two-shaku bund and
-  the one-ken (about 6 ft) farm road of a field replanned in 1869.
+- {0014#width-walking-bund-2}
 - The pile of earth at a crossing, 4 to 6 ft across, and that a crossing was the most worked point of a field: no
   source speaks of the junctions at all.
 - That a hand-piled bund's corners wore round and its line wandered a foot or two: reasoned from how piled earth

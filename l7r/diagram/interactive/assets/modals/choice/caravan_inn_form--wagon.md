@@ -14,8 +14,7 @@ rooms held heated sleeping platforms (kang), each a common bed for about twenty.
 No Chinese inn's frontage, depth or area is recorded.
 
 Guesses:
-- That an inn before modern times stood a single story: the 1780 account gives no height, so the single story is carried
-  back from the wagon inns of the 20th century.
+- {0185#inn-before-modern-times}
 - That a town's inn is a wagon inn, at even odds with the two-story post-station inn: nothing says how common either was.
 - Its size on the map, about 66 by 48 ft: no Chinese inn's size was found.
 

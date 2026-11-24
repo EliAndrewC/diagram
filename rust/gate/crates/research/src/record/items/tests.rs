@@ -84,21 +84,31 @@ fn a_tag_whose_block_says_another_label_is_refused() {
 }
 
 #[test]
-fn a_bad_id_a_twice_tagged_id_an_unknown_label_and_a_guess_with_no_bullet_are_refused() {
+fn a_bad_id_a_twice_tagged_id_and_an_unknown_label_are_refused() {
     let html = format!(
-        "<li>a GUESS{}</li><li>a GUESS{}</li><li>a GUESS{}</li><li>x{}</li><li>a GUESS{}</li>",
+        "<li>a GUESS{}</li><li>a GUESS{}</li><li>a GUESS{}</li><li>x{}</li>",
         tag("Bad Id", "GUESS", "b"),
         tag("dup", "GUESS", "b"),
         tag("dup", "GUESS", "b"),
         tag("odd", "MAYBE", ""),
-        tag("bare", "GUESS", " "),
     );
     let f = faults("p.html", &html);
-    assert_eq!(f.len(), 4, "{f:?}");
+    assert_eq!(f.len(), 3, "{f:?}");
     assert!(f[0].contains("lowercase slug"));
     assert!(f[1].contains("tagged twice"));
     assert!(f[2].contains("`MAYBE` is not one of"));
-    assert!(f[3].contains("carries its Guesses bullet"));
+}
+
+/// A GUESS tag's bullet is owed only where a pop-up references the item (451 T192, the GM's cheap route 2026-11-24): an unreferenced
+/// tag names its item and label alone, and the registry refuses a reference to a tag with no `data-guess`.
+#[test]
+fn a_guess_tag_with_no_bullet_is_no_fault_on_its_page() {
+    let html = format!(
+        "<li>a GUESS{}</li><li>a GUESS{}</li>",
+        tag("bare", "GUESS", " "),
+        r#"<span class="item" data-item="none" data-label="GUESS"></span>"#
+    );
+    assert_eq!(faults("p.html", &html), Vec::<String>::new());
 }
 
 /// Tagging moves nothing a pop-up's fingerprint reads (feature 451 T192): `strip` takes every well-formed tag out and leaves a malformed

@@ -16,10 +16,8 @@ garden, which lay to the south before the formal rooms. Along that edge the hous
 How large a guest room was is not recorded.
 
 Guesses:
-- A guest house drawn as a building of its own: none is known at a samurai house, and the nearest form, the honjin's suite
-  of honor, belonged to a post town's lodging house, not to an office.
-- A garden between the gate and a guest's formal entrance, where a plan draws one: no account of a formal entrance puts one there, and the two drawings of that
-  ground show it open; it is drawn from one loosely dated plate that runs a garden path from a second gateway to the entrance, and from the walled garden path by which a house without such an entrance led its guest.
+- {0091#guest-house-building-own}
+- {0104#garden-between-gate-guest}
 - The size the plan gives the guest quarters: how large a guest room was is not recorded, so a generated plan gives it the
   front row's room left beside the reception, with no band of its own, and a hand-drawn plan the size its notes record.
 

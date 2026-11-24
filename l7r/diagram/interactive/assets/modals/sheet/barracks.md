@@ -17,9 +17,8 @@ recorded.
 Guesses:
 - How many men the barracks lodges, about fifteen, within ten to twenty for a small office: an intendant governed with about ten retainers of the shogunate and a few local hires, but no page says how many of a
   rural office's staff the rowhouse lodged, so the figure is this project's own.
-- How many men share a dwelling, and so how long the barracks runs: a town magistracy's constables had a dwelling each and three retainers in Edo shared one, and no more than that
-  was found.
-- That the stable stands smaller than the barracks: no account says where a stable ranked among an office's buildings.
+- {0097#many-men-share-dwelling}
+- {0116#stable-stands-smaller-than}
 
 Depiction: The plan lodges the office's staff on its grounds, in a barracks divided into dwellings; nothing in it is
 drawn as a bunk room. It is drawn smaller than the office hall and the residence, as Takayama's rowhouse was.

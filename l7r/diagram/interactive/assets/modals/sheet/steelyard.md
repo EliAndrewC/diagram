@@ -10,7 +10,7 @@ balance valuables, and calls the steelyard easy to cheat with.
 A straw bale of charcoal had no standard size, so the bales were most likely weighed when they were sold.
 
 Guesses:
-- The frame or post the steelyard hangs from: no account describes how a heavy steelyard was hung at a depot.
+- {0197#frame-post-steelyard-hangs}
 
 Depiction: The plan draws a 6 ft beam hung near its hook end, the hook over the bales and the weight at the far end. It is
 drawn from the side, as it hangs, so that it reads as a scale on a plan otherwise seen from above.

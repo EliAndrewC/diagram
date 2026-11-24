@@ -13,7 +13,7 @@ recorded, and neither is how large one was or what it was built of.
 Guesses:
 - That a magistrate has a writing pavilion of their own in the inner garden of the posting: it extends the two recorded
   studies, a Kyoto scholar's and a Chinese house compound's, to an official's compound, where none was found.
-- Its size, about 18 by 14 ft: no detached study's size was found.
+- {0112#size-about-18-14}
 
 Depiction: The plan draws the pavilion as a small building of its own in the inner garden, set apart from both the office hall,
 where the county's business is done, and the family's house.

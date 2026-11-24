@@ -1106,21 +1106,21 @@
    "declared": "spec-fidelity"
   },
   "### T192 (the GM 2026-11-23, request.md: \"Yes please tag the rest of the record before resuming our port\"; filed by T187, which tagged one page, 0218)": {
-   "sha256": "12c8375548d783e7f88c704f818edbd0a48f48e92fac7b48cb47684f65be6a9f",
+   "sha256": "0a2e2e7f4cbafd81d9b3adaddd9a8d611401c5d8199ee93984084a40d8fe1271",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
+   "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
   },
   "### T192 Approach (checklist part A)": {
-   "sha256": "a52edc0298494edfe733840c52361cf06fdb4498e2ed68703286293e3aba5db2",
+   "sha256": "388b83d731233f3ac92e74d374a6c6f0aeec7763922b60fdfb22969fc59b483d",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
+   "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
   },
   "### T192 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "856eacfff3095aa12f61e342ec6d40623bfb9375e435347f30d753ea6a47a2c9",
+   "sha256": "53a9b8889b6be25cea9e2bd2f47d79a2f314dab89ec8d590259361d26675568a",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
+   "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
   },
   "### T204 (451 T192's sample, 2026-11-23: naming the item of 12 GUESS or DEVIATION claims citing 0090's and 0196's drawing pages owed all 12 impl-drift as `code changed`, while a plain pointer flipped to `GUESS ...#id` owed none; method: `make claims-owed` after `.git/t192/claims.py apply`)": {
@@ -17569,6 +17569,96 @@
      "why": "Order follows the GM's 2026-11-20 rule that performance work comes first and the 2026-11-23 request that motivated the idle check; no scope beyond the defects named."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T192 (the GM 2026-11-23, request.md: \"Yes please tag the rest of the record before resuming our port\"; filed by T187, which tagged one page, 0218)",
+    "### T192 Approach (checklist part A)",
+    "### T192 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "strip",
+     "summary": "page_words drops every well-formed item tag (a malformed one stays visible), so a tag-only page edit owes no pop-up triage",
+     "class": "within",
+     "why": "The task's own goal (tagging owes no check) and the GM's approved convergence rules (labels are data and propagate by regeneration; only a claim-changing edit triggers review). A tag adds nothing a reader meets."
+    },
+    {
+     "id": "filled-references",
+     "summary": "a pop-up's {NNNN#id} reference is filled from its tag's data-guess whatever the label, resolved as the registry does (own question first, else the one other question tagging the id); verbatim reference owes nothing, a reworded data-guess owes the pop-up its checks, a relabel owes nothing",
+     "class": "within",
+     "why": "Serves 'tag the rest of the record' and the approved rules: only a claim-changing edit cascades, labels propagate mechanically. A rewording still owes checks, so nothing a reader sees escapes review."
+    },
+    {
+     "id": "mechanical-route-first",
+     "summary": "tag.py matched bullets to GUESS blocks at >=0.6 content-word overlap and placed fixed-form convention/deviation tags; 36 page sessions confirmed them",
+     "class": "within",
+     "why": "Method of carrying out the request; run before the GM approved the cheap route and kept, its results confirmed by sessions."
+    },
+    {
+     "id": "cheap-route",
+     "summary": "cheap.py tags each remaining block that names its own label with an id and label and no bullet (476 GUESS, 32 CONVENTION, 27 DEVIATION); sessions only for the 9 blocks the script could not decide",
+     "class": "within",
+     "why": "Exactly the route the GM approved 2026-11-23: 'a script tags each block that names its own label ... only truly ambiguous blocks go to a session' - 'please proceed with that as the way forward'."
+    },
+    {
+     "id": "bullet-owed-at-first-reference",
+     "summary": "the page check no longer requires a GUESS tag's data-guess; the registry refuses a reference to a GUESS tag without one, naming the fix (the referencing pop-up's author writes it from the block)",
+     "class": "within",
+     "why": "The GM's approved route verbatim: 'a Guesses sentence is written only when a pop-up first cites the item'. The registry refusal is enforcement of that clause, not new scope."
+    },
+    {
+     "id": "attested-skipped",
+     "summary": "the 100 attested blocks stay untagged until a claim names one, because nothing reads an ATTESTED tag except a claim naming the item and no classed claim anchored here names one",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows 'tag the rest of the record', but the exception is in the GM's own approval of the route: 'attested blocks are skipped if nothing reads their tags'. The plan measures that condition rather than assuming it (every reader of an item tag in rust/ read; grep of ATTESTED over rust/; an untagged block reads as unknown, never attested; the registry drops a non-GUESS reference), so the GM's condition is shown met, not completed on his behalf."
+    },
+    {
+     "id": "mixed-label-grammar",
+     "summary": "T187's grammar is changed so one block may hold a GUESS tag beside a CONVENTION or DEVIATION tag, each needing its own word in the block (27 blocks on 22 pages)",
+     "class": "within",
+     "why": "Widens rather than narrows: under T187's rule those findings the GM asked tagged could not be tagged at all. Each tag must still match a word in its block (constitution XII: a tag never says more than its block)."
+    },
+    {
+     "id": "session-blocks-untagged",
+     "summary": "of the 9 blocks sent to sessions (negated or back-referring label words, nested-list blocks), 7 were tagged",
+     "class": "within",
+     "why": "The sessions are the GM's 'truly ambiguous blocks go to a session'; a block a session reads as stating no label (e.g. a negated convention word) has no label to tag, so leaving it is the goal met, not narrowed."
+    },
+    {
+     "id": "claims-anchored",
+     "summary": "an opus judge read the 94 classed claims still unanchored against their page's same-label tags; 72 now name their item; 22 cite a page where no tagged block states their decision and are left, listed in claims-verdicts.json; plain claims are not anchored",
+     "class": "within",
+     "why": "The goal is that claims on a tagged item name it; the 22 rest on no tagged item, so there is nothing to name, and plain claims carry no label for the tags to hold. Whether any of the 22 is itself a research defect is not shown by the plan; nothing here establishes one, and they are listed for reading."
+    },
+    {
+     "id": "question-size",
+     "summary": "question_size counts an item tag for nothing",
+     "class": "within",
+     "why": "A tag is not prose; without this, tagging put 0196 over its cap and would have owed a split or a trim, contrary to the GM's rule that no size edit is ever substantive and to the goal that tagging owes no check."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "three found defects (relabeled_only impl-drift on anchored classed claims; refs.rs filling from its own question only; a dangling research pointer in registry tests) are each fixed in this task or by T200/T204, landed with its code",
+     "class": "within",
+     "why": "Each known defect is fixed before the step ends, as the fix-as-we-go rule asks; none is deferred."
+    },
+    {
+     "id": "order",
+     "summary": "the strip and filled references land before or with the first tag batch; claims' anchors after T204; the whole bulk lands before the port resumes",
+     "class": "within",
+     "why": "The GM's condition 'tag the rest of the record before resuming our port'."
+    },
+    {
+     "id": "performance-class",
+     "summary": "the task is classed performance work",
+     "class": "within",
+     "why": "A scheduling class under FR-013; the task removes triages and pop-up checks a tag would have owed, and it is ordered before the port as the GM asked either way."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -27944,81 +28034,88 @@
    "verdict": "CLEAR"
   },
   "T192": {
-   "section_sha256": "7bba36f0568af66ce5d782d2864c0a02624fa956967bab9a61c15bae7481725f",
-   "reviewed": "2026-11-23",
+   "section_sha256": "612365fa00b3e1e78d7b17b0e603135b670e06d58c86cede2248bafb005e1e7f",
+   "reviewed": "2026-11-24",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "strip",
-     "summary": "page_words drops every well-formed item tag (items::strip), a malformed one left visible, so a tag-only edit owes no pop-up triage",
+     "summary": "page_words drops every well-formed item tag (a malformed one stays visible), so a tag-only page edit owes no pop-up triage",
      "class": "within",
-     "why": "Serves the GM's approved 2026-11-23 rules (labels are data and propagate by regeneration; only a claim-changing edit triggers review) and is what makes 'tag the rest of the record' possible without a cascade; leaving a malformed tag visible only keeps a review owed, it removes none."
+     "why": "The task's own goal (tagging owes no check) and the GM's approved convergence rules (labels are data and propagate by regeneration; only a claim-changing edit triggers review). A tag adds nothing a reader meets."
     },
     {
      "id": "filled-references",
-     "summary": "Pop-up Guesses read as the reader meets them, each {NNNN#id} reference filled from its tag's data-guess whatever its label; a verbatim reference owes nothing, a reworded referenced data-guess owes the pop-up its checks, a relabel owes nothing",
+     "summary": "a pop-up's {NNNN#id} reference is filled from its tag's data-guess whatever the label, resolved as the registry does (own question first, else the one other question tagging the id); verbatim reference owes nothing, a reworded data-guess owes the pop-up its checks, a relabel owes nothing",
      "class": "within",
-     "why": "Implements the referencing half of tagging (T187's form) and keeps a claim-changing rewording owing review, as the approved rule 'only a claim-changing edit triggers review' requires; nothing the GM asked to be reviewed escapes review."
+     "why": "Serves 'tag the rest of the record' and the approved rules: only a claim-changing edit cascades, labels propagate mechanically. A rewording still owes checks, so nothing a reader sees escapes review."
     },
     {
-     "id": "moved-item-locate",
-     "summary": "References resolved through T200's Pages::locate (own question first, else the one other question tagging the id), base from base pages and tree from tree pages",
+     "id": "mechanical-route-first",
+     "summary": "tag.py matched bullets to GUESS blocks at >=0.6 content-word overlap and placed fixed-form convention/deviation tags; 36 page sessions confirmed them",
      "class": "within",
-     "why": "A fix, red first, of a found defect (a moved item's reworded data-guess would have reached its pop-ups owing no check); closes a hole rather than narrowing anything."
+     "why": "Method of carrying out the request; run before the GM approved the cheap route and kept, its results confirmed by sessions."
     },
     {
-     "id": "grammar-mixed-block",
-     "summary": "T187's rule that a CONVENTION/DEVIATION tag stands only in a block with no GUESS is relaxed: a block may hold both, each its own tag needing its own label word; a tag whose block says another label is refused",
+     "id": "cheap-route",
+     "summary": "cheap.py tags each remaining block that names its own label with an id and label and no bullet (476 GUESS, 32 CONVENTION, 27 DEVIATION); sessions only for the 9 blocks the script could not decide",
      "class": "within",
-     "why": "Widens to meet the request: the old rule left 27 measured blocks the GM asked tagged untaggable. The new refusal enforces constitution XII (a tag never says more than its block). It removes nothing from what was asked."
+     "why": "Exactly the route the GM approved 2026-11-23: 'a script tags each block that names its own label ... only truly ambiguous blocks go to a session' - 'please proceed with that as the way forward'."
     },
     {
-     "id": "tag-not-prose",
-     "summary": "question_size counts an item tag for nothing toward the size cap",
+     "id": "bullet-owed-at-first-reference",
+     "summary": "the page check no longer requires a GUESS tag's data-guess; the registry refuses a reference to a GUESS tag without one, naming the fix (the referencing pop-up's author writes it from the block)",
      "class": "within",
-     "why": "Without it, tagging pushed 0196 over its cap, which would force a size trim; the GM ruled 2026-11-23 that size limits must not cut details and no size edit is substantive. Serves the request and that rule."
+     "why": "The GM's approved route verbatim: 'a Guesses sentence is written only when a pop-up first cites the item'. The registry refusal is enforcement of that clause, not new scope."
     },
     {
-     "id": "bulk-script",
-     "summary": "The bulk is done by a clone-local script matching each pop-up bullet to a cited page's block at >=0.6 content-word overlap (GUESS blocks tagged with the bullet verbatim and the bullet made a reference), tagging fixed-form convention/deviation blocks, and listing the rest (643) for page sessions that confirm and write tags",
-     "class": "within",
-     "why": "A method for doing exactly what was asked, over the whole record; the rest is not excluded but sent to page sessions. Its 10-of-12 hand-read match rate means script matches must be confirmed by the page sessions, as the sample's were ('placed by the script and confirmed') and as performance item 1 states; that is how the plan reads, and it is a quality condition, not a narrowing."
+     "id": "attested-skipped",
+     "summary": "the 100 attested blocks stay untagged until a claim names one, because nothing reads an ATTESTED tag except a claim naming the item and no classed claim anchored here names one",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows 'tag the rest of the record', but the exception is in the GM's own approval of the route: 'attested blocks are skipped if nothing reads their tags'. The plan measures that condition rather than assuming it (every reader of an item tag in rust/ read; grep of ATTESTED over rust/; an untagged block reads as unknown, never attested; the registry drops a non-GUESS reference), so the GM's condition is shown met, not completed on his behalf."
     },
     {
-     "id": "claims-anchors",
-     "summary": "The 223 claims pointing at a drawing page without an item get their item named (claims.py proposes by overlap), after T204",
+     "id": "mixed-label-grammar",
+     "summary": "T187's grammar is changed so one block may hold a GUESS tag beside a CONVENTION or DEVIATION tag, each needing its own word in the block (27 blocks on 22 pages)",
      "class": "within",
-     "why": "Part of labels being data that propagate mechanically (the approved rule); the goal states it and step 5 puts it inside the bulk that lands before the port resumes, so it is neither dropped nor deferred past the GM's condition."
+     "why": "Widens rather than narrows: under T187's rule those findings the GM asked tagged could not be tagged at all. Each tag must still match a word in its block (constitution XII: a tag never says more than its block)."
+    },
+    {
+     "id": "session-blocks-untagged",
+     "summary": "of the 9 blocks sent to sessions (negated or back-referring label words, nested-list blocks), 7 were tagged",
+     "class": "within",
+     "why": "The sessions are the GM's 'truly ambiguous blocks go to a session'; a block a session reads as stating no label (e.g. a negated convention word) has no label to tag, so leaving it is the goal met, not narrowed."
+    },
+    {
+     "id": "claims-anchored",
+     "summary": "an opus judge read the 94 classed claims still unanchored against their page's same-label tags; 72 now name their item; 22 cite a page where no tagged block states their decision and are left, listed in claims-verdicts.json; plain claims are not anchored",
+     "class": "within",
+     "why": "The goal is that claims on a tagged item name it; the 22 rest on no tagged item, so there is nothing to name, and plain claims carry no label for the tags to hold. Whether any of the 22 is itself a research defect is not shown by the plan; nothing here establishes one, and they are listed for reading."
+    },
+    {
+     "id": "question-size",
+     "summary": "question_size counts an item tag for nothing",
+     "class": "within",
+     "why": "A tag is not prose; without this, tagging put 0196 over its cap and would have owed a split or a trim, contrary to the GM's rule that no size edit is ever substantive and to the goal that tagging owes no check."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "three found defects (relabeled_only impl-drift on anchored classed claims; refs.rs filling from its own question only; a dangling research pointer in registry tests) are each fixed in this task or by T200/T204, landed with its code",
+     "class": "within",
+     "why": "Each known defect is fixed before the step ends, as the fix-as-we-go rule asks; none is deferred."
     },
     {
      "id": "order",
-     "summary": "Strip and filled references land before or with the first tag batch; the whole bulk, claims included, lands before the port resumes",
+     "summary": "the strip and filled references land before or with the first tag batch; claims' anchors after T204; the whole bulk lands before the port resumes",
      "class": "within",
-     "why": "Matches the GM's condition verbatim: 'tag the rest of the record before resuming our port'."
+     "why": "The GM's condition 'tag the rest of the record before resuming our port'."
     },
     {
-     "id": "sample-then-batches",
-     "summary": "One landing for the code and a four-page sample (15 pop-ups); the rest in batches at the page sessions' write cap, each its own landing",
+     "id": "performance-class",
+     "summary": "the task is classed performance work",
      "class": "within",
-     "why": "Staging of the same work, all of it before the port; no part of the record is excluded."
-    },
-    {
-     "id": "left-T204",
-     "summary": "Naming the item on a claim that already carries a class owes impl-drift (relabeled_only compares the stored claim with Claim::normalized); not fixed here, filed as T204, lands before T22; the sample's anchors reverted",
-     "class": "within",
-     "why": "A defect not left past the GM's condition: the claims' anchors wait on T204 and the bulk, claims included, lands before the port resumes, so it is fixed before the next step as FIX AS WE GO asks. It is deferred only because the file holds another builder's uncommitted hunks, with its reason, task and order stated."
-    },
-    {
-     "id": "left-T200-fixture",
-     "summary": "research_pointers test fails on T200's uncommitted fixture pointing at a nonexistent 0301 question file; left to T200, lands before T22",
-     "class": "within",
-     "why": "Not in T192's scope at all - another builder's uncommitted test fixture - and fixed in its own task before T22; nothing the GM asked of T192 is narrowed."
-    },
-    {
-     "id": "no-reader-change",
-     "summary": "Nothing a reader of a map or pop-up sees changes; each reference fills to its bullet's own words",
-     "class": "within",
-     "why": "Consistent with the request (tagging is bookkeeping, not content) and with the GM's convergence rules."
+     "why": "A scheduling class under FR-013; the task removes triages and pop-up checks a tag would have owed, and it is ordered before the port as the GM asked either way."
     }
    ],
    "verdict": "CLEAR"

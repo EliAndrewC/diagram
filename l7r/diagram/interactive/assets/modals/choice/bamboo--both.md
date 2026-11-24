@@ -15,8 +15,7 @@ kept one, so a farm's own bamboo was probably common.
 Guesses:
 - That about three farmsteads in five keep a stand of their own, about 22 by 16 ft: no source gives a stand's size, and
   the only count found is modern and of a single hamlet, where every homestead kept one.
-- A thicket of about 84 by 58 ft, on dry ground just beyond the back row of houses and held in common: no source gives its
-  size, its side of the settlement or who held it.
+- {0075#thicket-about-84-58}
 - How often a settlement keeps bamboo in both places rather than one or none: no source counts them.
 
 Depiction: A bamboo culm is far too slim to see at the map's scale, so the map draws each stand as an area, its place and

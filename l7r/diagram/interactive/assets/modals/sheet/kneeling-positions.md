@@ -13,8 +13,7 @@ How large the mats were is not recorded.
 
 Guesses:
 - The plan's seating, the accused at the center with the plaintiff and the officials behind, taken from Edo's court for every court: it is recorded only at Edo, and the county court at Neixiang marks only the plaintiff's and the defendant's places.
-- The mats' sizes on the plan, about 6 by 3 ft for the accused and 12 ft long for the village officials, and their
-  spacing: no account gives them.
+- {0099#mats-sizes-about-6}
 
 Depiction: The plan draws a mat at every place a party kneels, the accused at the center a third of the way in from the
 dais, the plaintiff behind to one side and the village officials behind to the other.

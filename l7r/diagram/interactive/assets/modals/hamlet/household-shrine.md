@@ -12,8 +12,7 @@ held to be the god's own body. In the one twentieth-century count, they were rar
 about one house in a hundred had one.
 
 Guesses:
-- How often each corner is drawn - the northwest 45 times in 100, the northeast 35 and the southwest 20: all three are
-  recorded, but no count gives their shares, so they are ordered after the account that names the northwest first.
+- {0219#often-corner-northwest-45}
 
 Depiction: The map draws the pattern in which only certain old families kept a shrine, so that one is notable where it
 stands: a household shrine appears on three to eight homesteads in a hundred across the countryside, so a small hamlet may have one or none. It stands in the plot's northwest, northeast

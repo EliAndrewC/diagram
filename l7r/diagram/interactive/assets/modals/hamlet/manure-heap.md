@@ -17,13 +17,10 @@ ground instead; the title card says which this one keeps.
 Guesses:
 - That the muck lies in an open heap rather than in a roofed manure house: the manuals called for a house, but no count
   from before modern times says how many farms built one, so the open heap is taken to have been the commoner.
-- That the heap stood just beyond the privy: no account says where in the yard it stood, and a Chinese latrine of the Han
-  dynasty was built over the pigsty and drained to a cesspool, so privy and muck are taken to have stood together.
-- Its size on the map, 8 by 6 ft: no account measures a heap.
-- That 40 to 70 farmsteads in 100 keep a heap: no count of any date gives it, so the share is set below the manuals' manure
-  house on every farm.
-- That a settlement keeps its muck in heaps or in sunk jars at even odds: both forms are recorded, but not how many
-  villages used each.
+- {0042#heap-stood-just-beyond}
+- {0042#size-8-6-ft}
+- {0042#40-70-farmsteads-100}
+- {0023#settlement-keeps-muck-heaps}
 
 Depiction: The map draws a heap as a small dark-brown mound with a few light strokes of straw and a plain outline, so it does not read as a bush; the real heap was dung trodden into straw and fallen leaves. It stands just beyond the privy on the side away from
 the house, or behind or beside the house where there is no privy. Where the privy stands on the sunny side and a neighbor

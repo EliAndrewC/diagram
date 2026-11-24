@@ -22,8 +22,8 @@ across.
 How thick a village weir was is not recorded, nor how many small intakes had one.
 
 Guesses:
-- [weir_form=gabion] A course of gabions across a brook: the only gabions found damming water were on large rivers.
-- [weir_form=frame|crib] Its thickness, about 5 ft: no thickness of a village weir was found, only of river works.
+- [weir_form=gabion] {0059#course-gabions-across-brook}
+- [weir_form=frame|crib] {0059#thickness-about-5-ft}
 
 Depiction: The map draws the weir closing the brook from bank to bank so that it can be seen; half-river closures were
 the common old form, and across a brook about 5.25 ft wide a half-bar would be a line a pixel or two long. It runs slantwise

@@ -16,10 +16,8 @@ unworked for many years.
 Guesses:
 - That about one settlement in five takes this form: the settled form is taken as the commoner, but no figure weighs the
   two.
-- That two to four whole plots rest in each field: the one estate measured rested nearly a third of its paddy, an upper
-  bound rather than a hamlet's norm.
-- That the resting plots lie toward the far end of the water's run: read from "short water", since no source says which
-  plots of a village's paddy rested.
+- {0013#two-four-whole-plots}
+- {0013#resting-plots-lie-toward}
 
 Depiction: The map draws each resting plot as a whole basin of grass with tufts inside its own banks, never a patch
 within a basin, and never two resting plots side by side, so they read as scattered among the cropped ground.

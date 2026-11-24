@@ -9,8 +9,7 @@ three or four of water to seven or six of dike, if its figures are read in the o
 half of its land to fish in one passage of a writer of the day, and in another of his eight tenths to its fish ponds.
 
 Guesses:
-- That each of the five splits was as common as the others: no account gives a share between them, and every account
-  found that writes the split as a ratio is modern.
+- {0018#five-splits-common-others}
 - That one split holds for the whole village: the accounts give the split for dike-ponds in general, or for a single pond
   as a worked example, never how it varied from one parcel to the next in one village.
 

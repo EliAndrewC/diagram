@@ -12,7 +12,7 @@ its modern canal Kagawa, on the dry Sanuki plain, drew most of its farm water fr
 is about 2.5 acres); the smallest, about 33 ft (10 m) on a side, were owned and kept by a single owner.
 
 Guesses:
-- That a drain ends in a pond at all: every drain found emptied into a river or a natural watercourse, and none into a pond of its own.
+- {0053#drain-ends-pond-all}
 - That a settlement's drain ends in a pond about two times in three: no source counts where drains ended.
 
 Depiction: The map ends the drain in a pond at the foot of the field, with a fringe of reeds on wet ground at its shore and a

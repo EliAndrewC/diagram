@@ -15,8 +15,7 @@ ordinary shrine's approach may run under one, three or seven arches, numbers tha
 all.
 
 Guesses:
-- How far a compound shrine's arch stands before its hall, about 5 ft where the plan is tight and up to 12 ft where there is
-  room: no distance from any torii to its hall was found.
+- {0220#far-compound-shrine-s}
 - That a row of arches before a country shrine stands 12 ft apart, its innermost 12 ft off the hall: the one small rural row
   whose spacing can be estimated stood about 10 to 14 ft apart, and no distance from an innermost arch to its hall was found.
 

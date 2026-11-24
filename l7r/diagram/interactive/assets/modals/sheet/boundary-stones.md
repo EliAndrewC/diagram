@@ -6,7 +6,7 @@ raised along their border after agreeing it in 1642, large and far apart at firs
 What a boundary pillar of the period looked like is not recorded.
 
 Guesses:
-- A pillar's size, a shaft of about 1 to 1.5 ft, up to about 3 ft with its plinth: no source gives one, so it is an estimate.
+- {0083#pillar-s-size-shaft}
 
 Depiction: The plan draws the border as a dashed line with no width, as the period's provincial maps drew their district
 boundaries as lines, and each pillar as a small stone-gray block standing on the line itself. The earth mounds that marked a real

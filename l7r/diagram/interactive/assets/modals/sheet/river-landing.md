@@ -11,8 +11,7 @@ Samurai residences on Hiroshima's rivers stood back from the bank behind their w
 opening straight onto the steps, as this compound's does.
 
 Guesses:
-- That the landing is the compound's own rather than a public one: no account of an official's compound with a landing of its
-  own was found.
+- {0176#landing-compound-s-own}
 - That the office kept its hold on the grain it shipped by counts and records: no account of how a county office kept track of grain it did not carry was found.
 
 Depiction: The label names the landing as a whole; its faced bank with the steps cut into it, the barge, the watch hut and

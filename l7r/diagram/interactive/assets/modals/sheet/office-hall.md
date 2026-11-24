@@ -17,10 +17,8 @@ Takayama's office had a floor of about 8,100 sq ft, a quarter again the size of 
 branch office's central building was about 2,850 sq ft. How long and how deep an intendant's office hall ran is not recorded; the great hall of a Chinese county office, at Neixiang, is about 89 ft across and 41 ft deep.
 
 Guesses:
-- Its size on the plan, about 80 to 150 ft long and 20 to 45 ft deep: no account gives an intendant's office hall's length and depth,
-  so the floor is set below Takayama's and, in all but its smallest form, above the branch office's.
-- That the day office and the official study stood behind the dais: no account places those rooms behind the court; they
-  are reckoned from what a working office had to hold.
+- {0113#size-about-80-150}
+- {0113#day-office-official-study}
 
 Depiction: The plan draws the office hall as one long building in the outer court, its front band the magistrate's dais
 over the roofed hearing court, and behind the dais the day office and the official study, with the clerks' room beside

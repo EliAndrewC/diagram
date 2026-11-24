@@ -10,8 +10,7 @@ A basin could be a gift. In 1828 the whole body of Nagao Shrine's parishioners, 
 with their gift. How big a village shrine's basin was is not recorded.
 
 Guesses:
-- That a village shrine's basin is a plain stone basin with no roof over it: neither the open basin nor the roofed one is
-  recorded at a village shrine before 1868.
+- {0222#village-shrine-s-basin}
 - Its size on the plan, about 3 ft square: no basin's size was found.
 
 Depiction: The plan draws the basin as a small square of stone holding a disc of water, beside the approach near the

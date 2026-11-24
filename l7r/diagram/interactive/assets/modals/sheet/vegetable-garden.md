@@ -12,11 +12,10 @@ Its size ran from about 1,100 sq ft (100 sq m) at the Takei house to about half 
 36,000 sq ft (3,340 sq m); the daikan's field was about 180 by 120 ft.
 
 Guesses:
-- That a household chose its plot's site by the sun, a site ruled out where a full-sun bed gets under six hours of direct
-  sun in autumn: no household's reason is recorded, and the six hours is modern growing advice.
+- {0109#household-chose-plot-s}
 - That a plot beside the formal garden stands beyond it, in rows, with no fence or hedge between them, and that no single
   bed is fenced: no record says either way.
-- Where a country shrine's resident keeper grew vegetables, and how much: no record says.
+- {0109#country-shrine-s-resident}
 
 Depiction: The plan draws the garden as beds in rows inside a dashed line, which marks the plot's edge and is not a
 fence. Its size and its site are each one of the forms recorded, each plan

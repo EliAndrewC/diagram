@@ -9,9 +9,9 @@ reeds at the shore.
 How many trees a planted bank carried, how far apart, and how wide their crowns spread is not recorded.
 
 Guesses:
-- One tree about every 30 ft of bank: the Song-dynasty advice says only "sparsely".
-- A crown about 12 ft across: no account gives how wide a bank tree's crown spread.
-- Mulberry and cudrania in turn round the bank: the manual names both, not their order.
+- {0061#tree-about-every-30-2}
+- {0061#crown-about-12-ft}
+- {0061#mulberry-cudrania-turn-round}
 
 Depiction: The map draws each tree as a round green crown on the bank beyond the reeds, the cudrania a shade darker than the
 mulberry, so the two kinds read apart. A tree is left out wherever its crown would fall on a roof, a wellhead or the sun of a yard or a kitchen bed, or its

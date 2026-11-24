@@ -14,10 +14,8 @@ manuals called for a manure house on every farm, and in northeastern Japan in 19
 farmhouses had a compost shed.
 
 Guesses:
-- That a settlement keeps its muck in heaps or in sunk jars at even odds: both forms are recorded, but not how many villages
-  used each.
-- That between 40 and 70 farmsteads in 100 keep a heap: no count of any date gives it, so the share is set below the manuals'
-  manure house on every farm.
+- {0023#settlement-keeps-muck-heaps}
+- {0042#between-40-70-farmsteads}
 - That the heap stands just beyond the privy, and its size, 8 by 6 ft: no account says where in the yard a heap stood or
   measures one.
 

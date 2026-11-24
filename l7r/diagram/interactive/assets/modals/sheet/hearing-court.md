@@ -16,7 +16,7 @@ How large a hearing court was is not recorded.
 
 Guesses:
 - The court's size on each plan: no measured hearing court was found.
-- That the posts along its open side stand two ken (about 12 ft) apart, and their size: both are reckoned, not recorded.
+- {0099#posts-along-open-side}
 - That the parties kneel in the Edo arrangement at a county court, and the mats' sizes (the accused's about 6 by 3 ft, the
   village officials' 12 ft long): the arrangement is recorded only at Edo, and no mat size was found.
 

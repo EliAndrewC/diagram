@@ -13,8 +13,7 @@ about 4 in high.
 How many fire-mouths a samurai kitchen's kamado had, and how large it was, is not recorded.
 
 Guesses:
-- A kamado on the kitchen's board floor, wherever a plan sets it there: only modern accounts put one in a samurai kitchen, so
-  it rests on them and on the commoner's tenement of the Edo period.
+- {0107#kamado-kitchen-s-board}
 - Two fire-mouths, in a kamado about 6 ft long and 3 ft deep: how many fire-mouths a samurai kitchen's kamado had, and its
   size, were searched for and not found.
 

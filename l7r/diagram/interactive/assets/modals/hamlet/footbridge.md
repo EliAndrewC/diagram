@@ -19,11 +19,9 @@ century. Over Japan's rivers, plank decks were kept to an important few.
 How wide a farm ditch had to be before anyone bridged it, and how wide or long its crossing ran, is not recorded.
 
 Guesses:
-- That a crossing stands where a bund path meets a farm ditch: no page from any period puts one there.
-- That a ditch is bridged once its water is 2 ft wide or more: no width at which a farm ditch was bridged was found, so the
-  line is reckoned from the width an old farm channel may have had and the head of the map's own delivery ditches.
-- That a settlement's crossings take each form at even odds: the one proportion found, for river bridges, would make the
-  planked deck far rarer than logs under earth.
+- {0084#crossing-stands-where-bund}
+- {0084#ditch-bridged-once-water}
+- {0084#settlement-s-crossings-take}
 - Where along a ditch a crossing stands, and how often: about the middle of a long stretch, with more on a very long one,
   since no page says.
 

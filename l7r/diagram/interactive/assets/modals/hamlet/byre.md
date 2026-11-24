@@ -21,11 +21,9 @@ One surviving Edo stable has a frame of about 15 by 12 ft, and the two cover abo
 Kyoto and Osaka, about 10 ft (3 m) square; how big an Edo-period smallholder's stall was is not recorded.
 
 Guesses:
-- [byre_form=detached_commons] A shed on common ground among the houses, shared by several households: no account found
-  describes one, and every arrangement recorded ties a beast to one keeper.
+- [byre_form=detached_commons] {0048#shed-common-ground-among}
 - [byre_form=yard_shed] How far a stable of its own stood from the farmhouse: no source gives it.
-- That a beast drank at its household's well, so a byre may stand near one: no source says where a farm's beast was watered, and
-  no old rule was found that kept the two apart.
+- {0048#beast-drank-household-s}
 
 Depiction: The map draws a byre as a small one-room shed of about 16 by 11 ft, near the frame of a surviving Edo stable, with
 a plank roof and a dark open front to its stall so it reads apart from the storehouse and the dwellings; the surviving

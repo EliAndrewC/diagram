@@ -9,8 +9,7 @@ is not recorded as a village shape of its own; the shapes recorded are the lump 
 How many villages took such a curve, and how large they were, are not recorded.
 
 Guesses:
-- That a cluster may bend into a crescent along its field's edge: no account names the crescent as a village shape, so it is
-  an extension of the attested lump and line.
+- {0031#cluster-may-bend-into}
 - How often a cluster comes out a crescent: no count of village shapes was found, so the share is set for the maps.
 
 Depiction: The map seats the houses in a band that follows the dry edge of the fields round its bend.

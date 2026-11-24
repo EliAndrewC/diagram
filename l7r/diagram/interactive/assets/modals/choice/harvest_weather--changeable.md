@@ -14,10 +14,8 @@ racks, or how long a run, one household put up is not recorded. A region's way o
 to village, set by its weather and ground, not chosen by each village.
 
 Guesses:
-- That a rack stands along one side of the yard, near the house and never in its southern half: no source places a rack on
-  any side of the house or its yard.
-- How long a rack by the house runs, from the yard's edge by the house to its middle: no source gives how much rack a
-  household put up.
+- {0016#rack-stands-along-side}
+- {0016#long-rack-house-runs}
 
 Depiction: The map draws a rack beside every farmhouse, along one side of its yard and never on the yard's sunny southern
 half, so it shades no drying floor. It is drawn thicker than its poles so that it can be seen. No racks are drawn out on

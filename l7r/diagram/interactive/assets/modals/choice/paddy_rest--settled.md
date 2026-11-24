@@ -15,8 +15,7 @@ paddy it does work.
 To a visitor such a field was planted from end to end each summer, every basin inside its banks under rice.
 
 Guesses:
-- That four settlements in five take the settled form: it is taken as the commoner from the setting's nucleated villages
-  and its canon, but no figure weighs the two forms.
+- {0013#four-settlements-five-take}
 
 Depiction: The map draws every basin of this settlement's paddy under rice, with no resting plot among them.
 

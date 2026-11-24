@@ -13,7 +13,7 @@ middle was the usual case is a tendency, not a rule: in old heartlands such as t
 were cleared from early times.
 
 Guesses:
-- That a fan's middle is left wild on about three maps in four: wild was the usual case, but no source gives a figure.
+- {0006#fan-s-middle-left}
 - That a fan's toe begins about two-thirds of the way down from its head: no source gives where the toe begins.
 - [winter_crop=none] That a hamlet's dry fields are cleared up into the wild middle from the plots nearest the toe first:
   no source says from which end the clearing of a fan went.

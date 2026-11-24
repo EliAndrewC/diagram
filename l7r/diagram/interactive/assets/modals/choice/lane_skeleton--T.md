@@ -9,7 +9,7 @@ beyond that, what shapes a village's lanes took, and how common each was, is not
 recorded.
 
 Guesses:
-- That a village's lanes took one of a few shapes - a spine, a T, a Y, a crossroads or a lane along the water - and that a T formed where a spur met the field track: no source names these shapes or says where each formed.
+- {0031#village-s-lanes-took}
 - How often each shape comes up: no source counts them.
 
 Depiction: The map seats the houses first and lays the T after, fitted to where they stand: one lane down through the cluster

@@ -15,9 +15,7 @@ said to have been needed for enough manure and fodder. In Aso, on Kyushu, a sett
 households kept about 50 to 75 acres (20 to 30 ha) of thatch meadow.
 
 Guesses:
-- That scrub stands 6 ft off every field's edge, for the bund and its cut strip: no record before 1868 gives the
-  width of the cut ground, and the one old figure, a land survey's 1726 reckoning of about 1.5 ft a field, is
-  narrower; on terraced ground the kept slope below a field was far wider.
+- {0073#scrub-stands-6-ft}
 - That a dug channel's bank is kept clear by the same 6 ft: a channel's bank beside a paddy is taken to be that paddy's
   bund and cut like one, but no source gives how wide a channel bank's grass was cut.
 

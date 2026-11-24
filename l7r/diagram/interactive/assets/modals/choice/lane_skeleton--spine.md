@@ -11,7 +11,7 @@ packhorse rather than carts. How wide a village's main lane ran is not recorded;
 What shapes a village's lanes took, and how common each was, is not recorded.
 
 Guesses:
-- That a village's lanes took one of a few shapes - a spine, a T, a Y, a crossroads or a lane along the water - and that a spine ran along a ridge: no description of the shapes a village's lanes took was found.
+- {0031#village-s-lanes-took-3}
 - How often each shape comes up: no source counts them.
 
 Depiction: The map seats the houses first and lays the spine after, fitted to where they stand, running the length of the

@@ -16,7 +16,7 @@ Guesses:
 - That an office kept its papers in a storehouse rather than a room of its hall because of fire: no account says why.
 - That a county office's records store was no larger than Takayama's: Takayama's served a whole province, so one
   governing less is reckoned to have needed no more; no other office's was measured.
-- The proportions the plan draws: no account gives a records storehouse's length and depth.
+- {0100#proportions}
 
 Depiction: The plan draws the archive as a solid plastered storehouse. No fire-water tub stands at it: the tubs
 stand at the wooden buildings, and the archive, like every plastered storehouse, was built not to burn. It stands below the

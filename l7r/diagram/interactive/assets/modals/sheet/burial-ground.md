@@ -15,10 +15,8 @@ How large a village's ground was is not recorded. In one excavated Tokyo temple 
 ground filled as its inhabitants died, some 18 to 30 in a thousand a year in three Edo farming villages.
 
 Guesses:
-- That a village's one ground lies in the shrine's yard or apart from it at even odds: both forms are recorded, but not how
-  many villages took each.
-- That a village whose shrine stands on a hill keeps its ground apart: no source says whether graves climbed a hill
-  shrine's slope.
+- {0236#village-s-ground-lies-2}
+- {0236#village-whose-shrine-stands-2}
 
 Depiction: Where a village's ground lies in the shrine's yard, the plan draws its graves in the yard around the hall and its
 arches, within a short walk of the hall, and never where an arch stands. It draws the graves as rows of low markers, a drawing convention; a real ground might be divided by household or by age, or kept to no rule.

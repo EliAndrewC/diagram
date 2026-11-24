@@ -14,8 +14,7 @@ at most about three-tenths of the ground and the rest lay open, and its largest 
 ft.
 
 Guesses:
-- Its width, about 15 to 20 ft: no loading apron's width was found, so it is reckoned as no wider than carts and draft
-  animals need to stand and turn.
+- {0116#width-about-15-20}
 
 Depiction: The plan draws the yard as open court ground inside the cart gate, its extent marked by a dashed line and its label.
 

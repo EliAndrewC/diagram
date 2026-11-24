@@ -22,8 +22,7 @@ Guesses:
 - How many of a settlement's homesteads keep one, which the title card states: no share across a region was found, so where
   the custom is kept the map gives one to some homesteads, not every one, since a household had a retired couple for only
   part of its life.
-- Which side of the farmhouse it stands on, and how far off: no source gives a rule beyond the one windswept village's, so
-  the map's choice of side and distance is a guess.
+- {0028#side-farmhouse-stands-how}
 
 Depiction: The map draws a retirement house as a small farmhouse, its roof in the farmhouse's own two shades of thatch,
 standing off the back wall or one flank of its farmhouse with its door on the side away from it, its own entrance; what a

@@ -12,7 +12,7 @@ Two free-standing stables of the Edo period that survive with their sizes are si
 roofs, of about 320 and 370 sq ft (30 and 34 sq m).
 
 Guesses:
-- That several households kept their beasts in one shed on the common ground among the houses, about one shed to every four or five households: no source describes such a shed.
+- {0048#several-households-kept-beasts}
 - That a settlement takes this form about one time in ten, the rarest of the three: no source counts the forms.
 
 Depiction: The map draws each shared shed as a small one-room shed of about 16 by 11 ft, open-fronted under a plank roof, on

@@ -17,8 +17,7 @@ width are not recorded.
 Guesses:
 - That a village polder needed only two gates, an inlet high on it and an outfall low on it: the counts found are for large
   polders, five gates on a great Song polder and many on a Japanese ring-diked community, drains outnumbering intakes.
-- That the board was raised from a crossbeam over the water, by hand or by a windlass: no account describes how a polder
-  gate was worked, so the frame is drawn from how a lifting gate works.
+- {0179#board-raised-crossbeam-over}
 
 Depiction: The map draws a gate as its frame seen from above: a board between two posts, with a crossbeam over them and a
 windlass drum at its middle. Its timbers and drum are drawn larger than life, at the smallest size the map draws anything, so that they show, as the wells' are;

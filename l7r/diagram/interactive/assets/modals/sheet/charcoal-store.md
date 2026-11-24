@@ -12,8 +12,7 @@ Charcoal was an industrial fuel on a state's scale elsewhere too: in Song-dynast
 iron-smelting households it oversaw.
 
 Guesses:
-- That charcoal was kept in a plastered storehouse, at no more than the ordinary spacing of the buildings round it: no source
-  says so or gives a spacing; it rests on the storehouse's purpose, since it kept gunpowder behind its wall.
+- {0197#charcoal-kept-plastered-storehouse}
 
 Depiction: The plan draws a plastered storehouse at the ordinary spacing of its neighbors, with no fire gap round it: its own wall
 does for the charcoal what a gap would do for an open stack.

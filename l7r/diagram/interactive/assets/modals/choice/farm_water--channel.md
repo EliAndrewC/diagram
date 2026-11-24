@@ -11,11 +11,10 @@ How wide a farm channel ran is not recorded; at Hongcun, in Anhui, a village's c
 (1 m) wide. How the Tonami areas without channels drew their water is not recorded either.
 
 Guesses:
-- That a scattered settlement leads channels to its farms or digs each a well at even odds: no account says how many areas
-  used each.
+- {0031#scattered-settlement-leads-channels}
 - That a channel may be led off the brook, standing for the irrigation water, or off a neighbor's channel: no account says
   where a channel was taken from, or whether neighbors shared one.
-- That it ends in the dooryard, a step off the threshing yard: no account says where it ended.
+- {0031#ends-dooryard-step-off}
 
 Depiction: The map leads each farm's channel off the nearest irrigation ditch it draws, or the brook where that is nearer, never the drain, round the buildings,
 yards and gardens and through the farm's own grove into its dooryard. Where the channel left the grounds again is not recorded, so it

@@ -19,19 +19,15 @@ How wide an ordinary village lane ran is not recorded; the one width given for a
 3 ft, a traditional figure of uncertain date. How far a lane ran past its last farmhouse is not recorded.
 
 Guesses:
-- [settlement_form=nucleated] That up to a quarter of the households are reached across a neighbor's land, and no more than
-  two in a chain: the custom is recorded, with one two-plot chain, but not how common it was.
-- [settlement_form=nucleated] That the lanes are the gaps left between the house plots: no account describes a village's
-  lanes so.
-- That a lane past its last farmhouse ends at the dooryard or runs on to something a reader can see: no account says how far
-  a lane ran past its last house.
+- [settlement_form=nucleated] {0246#up-quarter-households-reached}
+- [settlement_form=nucleated] {0246#lanes-gaps-left-between}
+- {0246#lane-past-last-farmhouse}
 - [settlement_form=nucleated][lane_web=alleys] That side lanes mark a village that grew a household at a time, each cutting its
   own way: no source says so; it is this project's reading of the form.
 - [settlement_form=nucleated][lane_web=back_lane] That a back lane marks a village laid out at once: no source ties the form to
   how a village grew; it is reckoned from the planned villages of medieval England.
 - That the path to the fields joins the paddy's outer bund at its point nearest the settlement: no account says where.
-- [settlement_form=linear] Where a farm with its grove between it and the street had its gate, and so its path round the
-  grove: not found.
+- [settlement_form=linear] {0033#farm-grove-between-street}
 
 Depiction: The map draws every lane as a narrow single track of bare earth with soft worn edges and no line down its middle.
 A footpath is drawn about 3 ft wide, a settlement's main lane and its spur to the fields about 5 ft, and the track out to the

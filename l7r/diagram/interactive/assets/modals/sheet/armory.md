@@ -9,7 +9,7 @@ Pingyao's armory stood in the office hall itself; Kaibara's stood in the range o
 Kaibara's took one or two of the three eight-mat rooms on its side of the gate, each about 12 ft square, though whether one or two is not recorded; how large or how deep Pingyao's bay was is not recorded. At Nirayama, the house of a line of intendants, the weapons store was a building of its own, about 18 by 12 ft, gabled, roofed in pantiles and entered at its gable end under a pent roof. What an armory's walls were built of is not recorded, nor how many arms it held or how they were racked.
 
 Guesses:
-- Its size on the plan, 14 by 16.7 to 14 by 20 ft in a hall: no account measures Pingyao's bays; of the stores of arms measured, Kaibara's took one or two of its eight-mat rooms of about 12 ft square, in a gate range rather than an office hall, and Nirayama's was a building of its own of about 18 by 12 ft.
+- {0093#size-14-16-7}
 - Its place in the hall's back row: no account says how deep Pingyao's armory ran; the whole end bay, front to back, is the more natural reading of a bay, and the plan draws only the back row, leaving the hall's front band, where the dais stands, whole.
 
 Depiction: The plan draws the armory as a room at one end of the office hall's back row, the west end or the east as each plan

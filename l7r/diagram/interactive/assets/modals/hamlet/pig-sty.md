@@ -24,13 +24,11 @@ built over the water, or built so that their waste ran straight into the pond, a
 Guesses:
 - [field_archetype=valley_paddy|polder_grid] That about two households in three keep a sty, the share differing by hamlet
   around the 1920s count: no count from before modern times was found.
-- [field_archetype=valley_paddy|polder_grid] That the sty stands against the farmhouse or one of its outbuildings: no page
-  read says where an ordinary paddy farm kept its sty.
-- [field_archetype=mulberry_dike_fishpond] That a quarter to a half of a hamlet's households keep a sty, the share differing by hamlet: no count of the households
-  that kept a pig in a dike-pond village was found.
+- [field_archetype=valley_paddy|polder_grid] {0049#sty-stands-against-farmhouse}
+- [field_archetype=mulberry_dike_fishpond] {0025#quarter-half-hamlet-s}
 - [field_archetype=mulberry_dike_fishpond] That each household's sty stands at a grow-out pond of its own near the houses, within about 320 ft of its farmhouse: no
   account says how a household's sty and its pond went together, or how far a household walked to its pigs.
-- Its size on the map, about 8 by 6 ft for shed and pen together: no size for a sty was found.
+- {0049#size-about-8-6}
 
 Depiction: The map draws a sty as a small ridged shed with a railed pen beside it.
 

@@ -112,3 +112,7 @@ On the narrowest check (told: of 30 pop-up edits, 20 corrected something wrong, 
 On T192 (told: tagging the rest of the record's labels is 670 GUESS items over 241 drawing pages and 613 Guesses bullets over 284 pop-ups, on the order of 60 or more page sessions, unmeasured; untagged labels keep the old review path):
 
 > Yes please tag the rest of the record before resuming our port, thanks.
+
+On T192's route (told the 6-10 hour projection assumed an agent writing a Guesses sentence for every GUESS block and reading every unworded one; offered: a script tags each block that names its own label, a Guesses sentence is written only when a pop-up first cites the item, attested blocks are skipped if nothing reads their tags, and only truly ambiguous blocks go to a session):
+
+> Thanks. Yes, please proceed with that as the way forward rather than the really expensive one that frankly seems kind of pointless for the purpose of what we are trying to accomplish.

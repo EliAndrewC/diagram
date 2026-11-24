@@ -12,7 +12,7 @@ and the common size was 2 by 3 ken, about 12 by 18 ft. Takayama's kitchen storeh
 province, has about 740 sq ft of floor.
 
 Guesses:
-- How many storehouses a plan draws, two as the Yokota house kept: no source gives a magistrate's household's count.
+- {0091#many-storehouses-two-yokota}
 
 Depiction: The plan draws the household's storehouses behind the house, across open ground from it, each at the common 2 by 3
 ken, about 12 by 18 ft. As buildings made not to burn they carry no fire-water tub, and they stand a little apart from their neighbors as a

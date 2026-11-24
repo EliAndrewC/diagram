@@ -12,8 +12,7 @@ Before modern times the stepped landings stood where boats berthed and goods cam
 quarters; the private landings behind back gates that survive were almost all built later.
 
 Guesses:
-- That these steps are the compound's own rather than a public landing: no account of an official's compound with a landing of
-  its own was found.
+- {0176#these-steps-compound-s}
 
 Depiction: The plan draws the dock as steps notched into the faced bank and gives it no pier: an official's landing gets one only
 where its bank shelves off into shallow water. The flight is drawn with four treads, as every landing on our maps is, a map

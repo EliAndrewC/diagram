@@ -9,8 +9,7 @@ on those rivers stood back from the revetment behind their walls, which is why t
 street. How far a river rose in a year is not recorded.
 
 Guesses:
-- That this faced bank and its steps are the compound's own rather than a public landing: no account of an official's compound
-  with a landing of its own was found.
+- {0176#faced-bank-steps-compound}
 
 Depiction: The plan draws the facing as a gray band along the water's edge, following the river's own line: a line along the
 bank, as a towpath is drawn, rather than a structure with a footprint of its own. The landing's steps are notched into it as one

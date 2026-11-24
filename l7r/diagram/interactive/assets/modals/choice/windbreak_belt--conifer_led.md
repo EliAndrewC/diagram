@@ -16,8 +16,7 @@ cedar.
 
 Guesses:
 - That this form is as likely as the mixed broadleaf wood: no source says which was commoner.
-- That the conifer is the commonest tree in a whole village's belt: one hamlet's farmhouse groves were nearly half cedar, but
-  no source gives a village belt's share, and drawing the farmhouse grove at a village's scale is itself an interpolation.
+- {0072#conifer-commonest-tree-whole}
 - How far apart the rows stood: no source gives the spacing, so the rows are spaced so a reader can make them out.
 
 Depiction: The map draws the belt as darker conifer crowns set in rows along the windward side, the rows bending with the

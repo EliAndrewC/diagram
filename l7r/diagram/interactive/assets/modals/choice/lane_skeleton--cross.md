@@ -11,8 +11,8 @@ and the blind alleys of one surveyed Manchu village were 7 to 13 ft (2 to 4 m) w
 What shapes a village's lanes took, and how common each was, is not recorded.
 
 Guesses:
-- That a village's lanes took one of a few shapes - a spine, a T, a Y, a crossroads or a lane along the water: no description of the shapes a village's lanes took was found.
-- That the lanes might cross at a small market of the village's own: an extension of China's grass markets, periodic rural markets that grew into market quarters at waterways, fords and post stations.
+- {0031#village-s-lanes-took-2}
+- {0031#lanes-might-cross-small}
 - How often each shape comes up: no source counts them.
 
 Depiction: The map seats the houses first and lays the crossroads after, fitted to where they stand: two lanes crossing in

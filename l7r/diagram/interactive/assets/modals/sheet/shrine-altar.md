@@ -10,10 +10,8 @@ front to back. A kami brought in from elsewhere could instead be given a small s
 Which of these ways was usual is not recorded, nor what an altar inside a hall looked like or how large it was.
 
 Guesses:
-- Altars side by side in one undivided hall, where a plan draws them so: what is recorded is a hall of two bays, or small halls
-  joined under one roof, not separate altars in one open hall.
-- A single altar for the main kami with the others kept behind it, where a plan takes that form: it is recorded on a household's
-  altar shelf, not in a hall.
+- {0222#altars-side-side-undivided}
+- {0222#single-altar-main-kami}
 
 Depiction: The plan draws each altar as a small mark standing for the kami it serves - a rice-straw figure, a fox's torii, a
 flame, a wave - not as the altar at its size, with the kami's name where the plan gives one. Where the altars stand side by

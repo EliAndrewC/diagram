@@ -6,7 +6,7 @@ How far a village's head race ran before it forked is not recorded. Small mounta
 
 Guesses:
 - Where across the head of the fields the water comes in - toward one shoulder, in the middle, or toward the other, the middle as often as both sides together: no source says where across the head a village's water came in, so it is chosen by chance for each settlement.
-- How far above the fork the intake sits, chosen by chance within the short distances the head race is known to have run: no source gives a figure.
+- {0059#far-above-fork-intake-2}
 
 Depiction: The map draws the brook coming down off the high ground past the head of the fan of paddies and running on down its flank. The intake stands on the bank nearest the fields, toward one shoulder of the head, and the head race leaves it at a slant pointing downstream and runs to the fork at the head of the fan; no intake is ever drawn below the fields, because water does not run uphill. The title card says whether this settlement's intake has a weir.
 

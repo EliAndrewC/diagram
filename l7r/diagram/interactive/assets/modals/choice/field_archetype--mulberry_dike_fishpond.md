@@ -14,8 +14,7 @@ land, and its ponds eight tenths. Water and dike were kept in proportion, so the
 fish beside it: in modern times about six parts water to four of dike, or the reverse.
 
 Guesses:
-- That a village takes each of the five recorded splits of water and dike at even odds, one split for all its ponds: no
-  account gives a share between them, and every account found that writes the split as a ratio is modern.
+- {0018#village-takes-five-recorded}
 - A pond's bank as wide as the village's split leaves it, from about 15 ft to about 42 ft: no width of a pond dike before
   modern times was found, and the widest banks are broader than any modern figure but one village's former dikes.
 - [dike_crop=mulberry] {0026#mulberry-bush-about-4}

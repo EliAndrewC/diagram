@@ -14,8 +14,7 @@ An ordinary door was probably no wider than about 3 ft, half a ken, and a farmho
 width of a kitchen door, a guest entrance or a storehouse's opening is not recorded.
 
 Guesses:
-- That a kitchen has one door to the outside, on its earth floor: the kitchen door is recorded, and at one middle-rank house the gate led to it, and in the great mansions it led onto the service kitchen's earth floor, but not that an ordinary kitchen's door did, or
-  whether a kitchen had two.
+- {0107#kitchen-has-door-outside}
 - A way by which food reached the rooms, where a plan draws one: no account shows one.
 - A storehouse leaf about 3.5 ft wide: the one width found is a standard of today.
 

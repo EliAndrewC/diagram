@@ -15,7 +15,7 @@ liters).
 Guesses:
 - Which buildings have a tub and how many, with the kitchen and its cooking fire among the first: the habit and
   the town order are recorded, but not a rule for every building or a ranking of buildings by risk.
-- A tub's size, about 2.5 ft across: no source gives a rain tub's width.
+- {0100#tub-s-size-about}
 - That a village shrine kept fire-water tubs: none was found named at a shrine, and the tubs recorded served the towns; the
   shrine's are reckoned from the farmhouse its keeper's dwelling is drawn as.
 

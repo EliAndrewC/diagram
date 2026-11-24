@@ -20,7 +20,7 @@ use super::spec::{Bx, Face, Program};
 
 /// A fire-water tub's radius (feet).
 ///
-/// Research: tub glyph - GUESS research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a tub about 2.5 ft across (~r3.8 px at 3 px = 1 ft)
+/// Research: tub glyph - GUESS research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html#tub-s-size-about: a tub about 2.5 ft across (~r3.8 px at 3 px = 1 ft)
 pub const TUB_R: f64 = 3.8 / 3.0;
 /// A tub's glyph off its wall (feet).
 ///
@@ -36,7 +36,7 @@ pub const CURB: f64 = 22.0 / 3.0;
 pub const WELL_KEEP: f64 = 30.0 / 3.0;
 /// How far the kitchen's well may stand from the kitchen (feet).
 ///
-/// Research: kitchen well - GUESS research/questions/0105-baths-furo.drawing.html: on a generated plan past the bath within 20 ft of the kitchen; no page places a samurai kitchen's well
+/// Research: kitchen well - GUESS research/questions/0105-baths-furo.drawing.html#do-put-kitchen-s: on a generated plan past the bath within 20 ft of the kitchen; no page places a samurai kitchen's well
 pub const KITCHEN_WELL_FT: f64 = 20.0;
 /// A tub's center within this of a door of its building (feet).
 ///
@@ -220,7 +220,7 @@ pub fn bath(p: &Program, l: &mut Layout, out: &mut Seated) -> Result<(), Error> 
 
 /// The water's depth: the landform the notes record, or rolled.
 ///
-/// Research: water depth from the landform - GUESS research/questions/0196-communal-wells-ido.drawing.html: a valley floor or river plain shallow, an upland or terrace deep; a sheet whose notes record no landform rolls it
+/// Research: water depth from the landform - GUESS research/questions/0196-communal-wells-ido.drawing.html#valley-shallow-upland-deep: a valley floor or river plain shallow, an upland or terrace deep; a sheet whose notes record no landform rolls it
 fn depth(p: &Program, out: &mut Seated) -> String {
     let d = match p.parts.landform.as_deref() {
         Some("valley floor" | "river plain") => "shallow".to_owned(),
@@ -294,7 +294,7 @@ pub fn wells(p: &Program, l: &mut Layout, out: &mut Seated) -> Result<(), Error>
     Ok(())
 }
 
-/// Research: kitchen well - GUESS research/questions/0105-baths-furo.drawing.html: on a generated plan past the bath within 20 ft of the kitchen; no page places a samurai kitchen's well
+/// Research: kitchen well - GUESS research/questions/0105-baths-furo.drawing.html#do-put-kitchen-s: on a generated plan past the bath within 20 ft of the kitchen; no page places a samurai kitchen's well
 fn kitchen_well(p: &Program, l: &mut Layout, out: &Seated) -> Result<Bx, Error> {
     let (k, kb) = of_kind(p, l, "kitchen")
         .ok_or_else(|| refuse("a kitchen well with no kitchen".to_owned()))?;

@@ -22,8 +22,7 @@ North pond was faced and floored with tataki, earth and gravel beaten hard with 
 rule for a small residence's or an office's pond.
 
 Guesses:
-- The pond's size: no residence pond's size is recorded, so it is drawn small, within sight of the rooms that face
-  the garden.
+- {0103#pond-s-size}
 - How often an office kept a pond rather than a dry garden: no source counts the two at government offices, and samurai
   houses went both ways (Chiran's gardens mostly dry, Matsushiro's mostly with a pond). Both forms are taken as accurate,
   though the two government offices whose gardens could be read, Takayama and Okutono (Okutono's as restored from an

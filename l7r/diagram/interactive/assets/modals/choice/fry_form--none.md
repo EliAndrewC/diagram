@@ -12,7 +12,7 @@ How many villages bought their fry is not counted, but in the late seventeenth c
 Jiujiang.
 
 Guesses:
-- That about three dike-pond hamlets in four buy their fry: no source gives the odds, so the fry village is made the rarer form, since fry ponds were found only in Jiujiang.
+- {0024#about-three-dike-pond}
 
 Depiction: The map draws every pond of the hamlet in the same clear grow-out water. No small nursery pond is drawn beside a
 big one: that was a late-Ming way of inland Jiangxi, away from the delta whose ponds the map draws.

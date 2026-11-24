@@ -13,9 +13,8 @@ posts over them.
 How many scattered farms kept a well of their own is not recorded.
 
 Guesses:
-- That the farms the channel did not serve dug a well of their own, and that a scattered settlement takes wells or channels
-  at even odds: no account says how the other areas drew their water, or how many used each.
-- Where on its lot the well stands: no account places a scattered farm's well.
+- {0031#farms-channel-did-serve}
+- {0031#lot-well-stands}
 
 Depiction: The map draws each farm's well in its own dooryard, inside its lot, near its work yard and off its way in, as a
 marker larger than life so a reader can find it: about 19 ft across, where the real curb was about 4 ft square.

@@ -11,7 +11,7 @@ built the same way, but its size is not recorded.
 Boards were most often set where people passed, at the village center or at a crossroads of main highways; how many villages kept theirs at a bridge instead is not recorded.
 
 Guesses:
-- Which of a settlement's bridges its board stood by: no source says, so the map takes the widest, a brook's bridge before a ditch's plank, and of two alike the one nearest the houses.
+- {0190#settlement-s-bridges-board}
 - That a village's board was the size of a post town's: no measurement of a village board was found.
 - How often a settlement's board stands at a bridge rather than its center, its way in or an official's gate: the one source that ranks them puts the center first but gives no share, so the map rolls evenly among the seats a settlement can site - one in four where all four can be sited.
 

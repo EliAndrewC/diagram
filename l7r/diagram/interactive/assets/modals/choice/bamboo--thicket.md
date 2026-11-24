@@ -11,10 +11,8 @@ tall and at most about 4 in (10 cm) across.
 Who held a village's thicket, and how large it was, is not recorded.
 
 Guesses:
-- A thicket of about 84 by 58 ft, a working stand cut and left to regrow: no source gives one's size.
-- That the thicket stands on dry ground just beyond the back row of houses, and is held in common: an early-Edo screen paints
-  settlements ringed by bamboo and an old Chinese farm manual wants it on dry ground, but no source says which side or who
-  held it.
+- {0075#thicket-about-84-58-2}
+- {0075#thicket-stands-dry-ground}
 - How often a settlement's bamboo stands in a thicket rather than at its farmsteads, both or nowhere: no source counts them.
 
 Depiction: A bamboo culm is far too slim to see at the map's scale, so the map draws the thicket as an area, its place and

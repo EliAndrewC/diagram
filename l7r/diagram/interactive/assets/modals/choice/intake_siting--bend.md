@@ -4,8 +4,7 @@ on the concave side
 of a bend.
 
 Guesses:
-- That a hamlet's intake stands on a bend half the time: no source counts how often an intake was sited on a bend and how
-  often on a straight reach.
+- {0059#hamlet-s-intake-stands}
 
 Depiction: The map draws the brook's bend at the intake bowing toward the fields, so the fields' bank is the outside of the
 bend, the intake at its apex on that bank, where the turn of the bend carries the brook straight down the slope.

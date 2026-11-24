@@ -12,8 +12,7 @@ Fans could be large. The Isawa fan, about 49,000 acres (20,000 ha) and one of th
 by order of the Sendai domain, with water drawn from its river through some 27 miles (43 km) of canals.
 
 Guesses:
-- That a fan's middle is cleared on about one map in four: a wild middle was the usual case, but no source gives a
-  figure.
+- {0006#fan-s-middle-cleared}
 
 Depiction: The map draws dry fields along the whole of the supply canal at the paddy's high edge, not only at the fan's
 toe. A hamlet on a cleared fan is always taken to grow its coarse grain as winter barley on its paddy, since the cleared

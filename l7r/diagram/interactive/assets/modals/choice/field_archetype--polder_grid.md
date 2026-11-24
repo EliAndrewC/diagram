@@ -16,8 +16,7 @@ drains against four intakes.
 
 Guesses:
 - That ten to twenty households share a small polder, behind a dike about 5 ft (1.5 m) high: no source gives either figure.
-- That a polder's own village kept its dike, and stood on the dry ground just off it where the polder met a shore: no source
-  says who kept a polder's dike, and houses are recorded on the raised margin itself.
+- {0019#polder-s-own-village}
 - That reed marsh and mudflat lay outside the dike: no source says what lay outside a polder.
 
 Depiction: The map encloses the polder with its dike all the way round, and water crosses it only at gated sluices, an inlet

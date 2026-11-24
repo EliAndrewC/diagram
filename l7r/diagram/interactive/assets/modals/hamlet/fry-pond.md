@@ -14,10 +14,8 @@ recorded. Away from the delta, in the late Ming, fish farmers started bought fry
 10 ft square and 8 ft deep beside the big one, and carried them on in early summer to a middle pond 20 to 30 ft square.
 
 Guesses:
-- That about one hamlet in four is a fry village: fry ponds are recorded only in Jiujiang, so the fry village is made the
-  rarer form, and the odds are arbitrary.
-- That a fry village's smallest ponds are its nursery ponds: which of Jiujiang's ponds held the fry is not recorded, so
-  the choice follows the graded ponds of the late-Ming method, where the fry start in the small pond.
+- {0024#about-hamlet-four-fry}
+- {0024#fry-village-s-smallest}
 
 Depiction: The map draws nursery ponds only in a hamlet that raises fry for sale; most hamlets buy their fry and have
 none, and the title card says which this one is. In a fry village the smallest ponds are given to fry until they hold up

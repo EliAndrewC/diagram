@@ -12,7 +12,7 @@ kept one; mulberry grew on the raised ground beside the houses, with vegetables 
 How old such dike-top houses were is not recorded, nor how many households a dike carried or how far apart they stood.
 
 Guesses:
-- That ten to twenty households shared a small polder: no figure for a small polder's households was found.
+- {0019#ten-twenty-households-shared}
 - That each house stood on its own stretch of crest widened for it, with spoil piled from the ditches: the margin is
   recorded as wider where the houses stood, but no account of a house's ground or its size was found, so the platform is a
   reconstruction.

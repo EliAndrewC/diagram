@@ -15,7 +15,7 @@ At Pingyao a drum was set up under the gate's porch for the people to beat with 
 one stood in the front half of the gate's east end bay.
 
 Guesses:
-- A Chinese office's gate drawn 18 to 24 ft wide: no record gives such a gate's width.
+- {0092#chinese-office-s-gate}
 - That the gate faces what the compound fronts, the town or the road beside it: no record says which way a Japanese seat's
   gate generally faced (the one branch office whose plan was found had its gate in its east wall); south, where nothing else decides it, is the Chinese office's facing.
 - A gatehouse of its own drawn about 40 ft long: the one measured end to end, beside a temple gate, is about 18 ft, and Takayama's has about 400 sq ft of floor.

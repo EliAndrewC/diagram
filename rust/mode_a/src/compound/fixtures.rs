@@ -18,11 +18,11 @@ use super::spec::{Bx, Face, Program, Wall};
 
 /// A privy's side (feet).
 ///
-/// Research: privy size - GUESS research/questions/0101-privies-setchin.drawing.html: 5 ft square (15 px), a one-seat privy
+/// Research: privy size - GUESS research/questions/0101-privies-setchin.drawing.html#privy-5-ft-square: 5 ft square (15 px), a one-seat privy
 pub const PRIVY: f64 = 5.0;
 /// How far a privy stands from any well (feet).
 ///
-/// Research: privies away from water - GUESS research/questions/0101-privies-setchin.drawing.html: at least 15 ft from any well
+/// Research: privies away from water - GUESS research/questions/0101-privies-setchin.drawing.html#privy-stands-least-15: at least 15 ft from any well
 pub const PRIVY_WELL_FT: f64 = 15.0;
 /// The notice board's drawn frame (feet).
 ///
@@ -40,7 +40,7 @@ pub const TREE: (f64, f64) = (10.0, 3.5);
 pub const RACK: (f64, f64) = (8.0, 2.0);
 /// A striking post's radius (feet).
 ///
-/// Research: practice ground striking posts - GUESS research/questions/0165-martial-training-grounds-and-dojo.drawing.html: 1-2 posts, ~1 ft across, drawn as small markers
+/// Research: practice ground striking posts - GUESS research/questions/0165-martial-training-grounds-and-dojo.drawing.html#striking-post-small-marker: 1-2 posts, ~1 ft across, drawn as small markers
 pub const POST_R: f64 = 2.0 / 3.0;
 /// The roji's stepping stones between the middle gate and the shoe stone.
 ///
@@ -176,7 +176,7 @@ fn hatch(p: &Program, bx: Bx, wall: Face) -> Bx {
 
 /// The notice board just outside the main gate, beside its passage.
 ///
-/// Research: notice board at the gate - GUESS research/questions/0190-notice-boards-kosatsuba.drawing.html: the bench's freestanding board just outside the main gate, apart from the town's kosatsuba
+/// Research: notice board at the gate - GUESS research/questions/0190-notice-boards-kosatsuba.drawing.html#magistracy-kept-freestanding-board: the bench's freestanding board just outside the main gate, apart from the town's kosatsuba
 pub fn board(p: &Program, l: &mut Layout, out: &mut Seated) {
     if !p.parts.board {
         return;

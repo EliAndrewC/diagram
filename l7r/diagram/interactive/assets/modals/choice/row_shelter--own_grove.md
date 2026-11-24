@@ -7,9 +7,7 @@ a homestead's grove could cover roughly 6,000 to 28,000 sq ft; how big a row far
 recorded.
 
 Guesses:
-- That a row village gives every farm its own grove, or leaves its leeward row sheltered by the grove row across its road, at even odds: both are
-  attested, but the one survey that counts found only two farms of all it visited with their bamboo on the south side of the homestead, as the farm sheltered by a grove row across its road kept it,
-  so even odds may draw the sheltered row more often than it stood.
+- {0033#row-village-gives-every}
 - The grove's size, its windward stand about one and a half house depths deep and any other planted side one tree deep:
   no record of a row farm's grove gives one, so a row farm's grove is drawn as every farm's grove is.
 

@@ -10,10 +10,9 @@ entrance, probably used as a set from early on, as symbols of order and authorit
 A rack for practice weapons at the edge of a practice ground is not recorded, nor its size.
 
 Guesses:
-- That a practice ground kept a rack for its practice weapons at its edge: joined from the guardroom's sword rack and the
-  guard post's long weapons, since no account describes one.
-- Its size, about 8 by 2 ft: no rack's size was found.
-- That weapons stood upright in the open: taken from the painting of the arrest weapons at a theater's entrance.
+- {0165#practice-ground-kept-rack}
+- {0165#size-about-8-2}
+- {0165#weapons-stood-upright-open}
 
 Depiction: The plan draws the rack to scale from above, at its guessed size, as a bar at the practice ground's edge with
 a label; the weapons on it are not drawn.

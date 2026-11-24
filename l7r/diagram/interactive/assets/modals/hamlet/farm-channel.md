@@ -14,11 +14,10 @@ wide, and a village's channels in southern China could be small: at
 Hongcun, in Anhui, the villagers cut a winding channel nearly 3 ft (1 m) wide to bring their water to every household.
 
 Guesses:
-- That a farm with no channel dug a well of its own, and that a scattered settlement takes one or the other at even
-  odds: no account says how the other areas drew their water, or how many used each.
+- {0031#farm-channel-dug-well}
 - That a channel may be led off the brook, standing for the irrigation water the ditches drew on, or off a neighbor's
   channel: no account says where a channel was taken from, or whether neighbors shared one.
-- That it ends in the dooryard, a step off the threshing yard: no account says where it ended.
+- {0031#ends-dooryard-step-off}
 
 Depiction: The map leads each channel off the nearest irrigation ditch it draws, or the brook where that is nearer,
 never the drain, and runs it round the buildings, yards and gardens and through the farm's own grove into its dooryard.

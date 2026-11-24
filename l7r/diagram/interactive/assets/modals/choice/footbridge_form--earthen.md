@@ -9,9 +9,7 @@ A visitor crossed on a level band of trodden earth, carried over the water on it
 How long or wide a village's earthen crossing ran, and how often one stood along a ditch, are not recorded.
 
 Guesses:
-- That a settlement's ditch crossings are all earth over logs, at even odds with a single log and a planked deck: no count
-  of the forms over a farm ditch was found; for river bridges, the one proportion found would make this form far commoner
-  than the planked deck.
+- {0084#settlement-s-ditch-crossings}
 
 Depiction: Every crossing a path along a bund takes over a ditch on the map takes this form, drawn as a deck of trodden earth between two dark edges, the
 ends of the logs under it ticked along each side, with no seams, so it does not read as planked. Each is drawn narrow and about 8 ft long,

@@ -16,13 +16,12 @@ middle-rank magistrate's house; a temple's dry garden beside its reception room,
 
 Guesses:
 - The garden's size on each plan: no record gives a residence garden's own size.
-- The pond's size and outline: no record gives either for a residence garden's pond.
-- How often a plan takes a pond rather than a dry garden: no source counts the two at government offices, and samurai houses went both ways (mostly dry at Chiran, mostly pond at Matsushiro). Both forms are
-  taken as accurate, though both government offices whose gardens could be read, Takayama and Okutono, had a pond: each plan takes one of the two, as its note says.
-- That the private rooms share the one garden at humbler postings too: it is recorded at Takayama alone.
+- {0103#pond-s-size-outline}
+- {0103#often-takes-pond-rather}
+- {0103#private-rooms-share-garden}
 - A garden drawn where a guest crosses from a gate to an entrance, or round a compound's shrine: the ground a guest crossed to a formal entrance
   is open on the two drawings that show it, and the one garden approach to such an entrance found is a loosely dated plate; no garden round a compound's shrine was found.
-- How many stone lanterns a garden held, and where: no record gives either.
+- {0103#many-stone-lanterns-garden}
 
 Depiction: The plan draws one ornamental garden in each compound, before the great hall where its buildings allow, with the private rooms reaching it
 by stepping stones of their own. Its water is a small pond or a dry garden, each plan taking one, as its note says. The garden is

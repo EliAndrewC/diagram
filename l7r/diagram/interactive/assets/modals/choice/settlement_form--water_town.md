@@ -13,8 +13,7 @@ canals.
 How many households a water town held, and how long its canal frontage ran, are not recorded.
 
 Guesses:
-- That the houses stand on both banks of the canal, alternating from one bank to the other and evenly spaced along it: no
-  account of a water town's plan was found.
+- {0082#houses-stand-both-banks}
 
 Depiction: The map strings the farmhouses along the canal, fronting the water, alternately on one bank and the other, each
 kept beside its fields. The map draws this form only in the Lion's lands or where a canal has been declared.

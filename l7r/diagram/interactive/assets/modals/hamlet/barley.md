@@ -15,16 +15,14 @@ the smallest under a twentieth and the largest a third. A farm family of the
 early 1900s worked about 2.5 acres of paddy and dry field together; how much of it bore barley is not recorded. In the everyday pot barley was cooked in with the rice, in one account about one part to four in a paddy district of the Katsushika delta, and seven or eight parts in ten in the dry-field belt of the Kanto plain.
 
 Guesses:
-- How far apart the furrows are drawn: no source gives the spacing of a Japanese dry field's rows before modern times.
+- {0006#far-apart-furrows}
 - The mix of millet, barley, buckwheat and soybean on each map, rolled at random: no source gives the proportions.
 - That neighboring plots on one lie of land ran their rows the same way, and that rows on steep ground ran along the
   contour: reasoned from a Chinese classic that let the land set a field's rows; no source describes a village's dry
   fields plot by plot.
-- That an alluvial fan's dry middle is left wild on three maps in four: wild was the usual case, but no figure is given.
-- That a settlement's drainage and the nearness of a town weigh as they do in the roll for its winter crop: both set the
-  odds, but no source says how much each counts.
-- [winter_crop=none] That a hamlet needed about 0.85 acre of dry field a household for its coarse grain: reckoned from
-  the grain a household ate and the yields the land surveys assessed, not found as a figure.
+- {0006#alluvial-fan-s-dry}
+- {0009#settlement-s-drainage-nearness-3}
+- [winter_crop=none] {0011#hamlet-needed-about-0}
 
 Depiction: The map draws the dry fields as a hem of small rectangular plots just above the supply canal along the
 paddy's high edge, where the paddy water stops, each squared to the canal behind a bare bank. Where the houses stand on that edge, the hem is drawn behind them instead, so the houses lie between the canal and their dry fields. On some maps an alluvial

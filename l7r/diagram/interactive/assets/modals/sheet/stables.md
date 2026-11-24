@@ -12,9 +12,9 @@ and 102 ft long and 19 ft deep, with places for 19 to 21 horses and a grooms' ro
 was, what a stable's walls and roof were made of, and how many horses a county magistrate's post kept, are not recorded.
 
 Guesses:
-- How many horses the stable holds, two to four: no source gives a county post's horses.
+- {0108#many-horses-stable-holds}
 - How deep a stall is, and so its area: only a stall's width is recorded.
-- That the stable stays smaller than the barracks: no source says where a stable ranked among an office's buildings.
+- {0116#stable-stays-smaller-than}
 
 Depiction: The plan draws the stable as a warrior's small stable, a few bays long: a row of stalls one ken (about 6 ft) wide
 at the back, the earth-floored passage before them running its length with the door at its end, and the grooms' room

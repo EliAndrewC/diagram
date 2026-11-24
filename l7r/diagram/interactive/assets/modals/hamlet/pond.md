@@ -14,10 +14,8 @@ A pond watered from about 2 acres (1 ha) to about 110 acres (45 ha) of paddy, a 
 kept by one owner; a larger pond could serve several villages, which took its water in turns when it ran low. The manual had the farmer give two or three parts in every ten of his land to the pond, so that it was a quarter to over two-fifths the size of the field it watered.
 
 Guesses:
-- That a pond with a stream also feeding its fields is drawn smaller than the manual's two or three tenths, and how much
-  smaller: no source says how much a feeding stream saves.
-- [water_sink=pond][field_archetype=valley_paddy|contour_terraces|ribbon_valley] That the fields' drain ends in a pond
-  below them at all: every drain found emptied into a river or a natural watercourse, and none into a pond of its own.
+- {0061#pond-stream-also-feeding}
+- [water_sink=pond][field_archetype=valley_paddy|contour_terraces|ribbon_valley] {0053#fields-drain-ends-pond}
 
 Depiction: Each pond is drawn with a fringe of reeds on ground tinted wet at its shore, and no reed or wet tint on its
 embankment. No reed harvest is drawn, since none is recorded at a pond. Where a channel enters a pond the rim opens and

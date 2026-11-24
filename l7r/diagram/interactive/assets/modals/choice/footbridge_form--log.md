@@ -10,8 +10,7 @@ a canal could be slippery in the rain.
 How long a log a ditch crossing took, how thick it was, and how often a crossing stood along a ditch are not recorded.
 
 Guesses:
-- That a settlement's ditch crossings are all single logs, at even odds with earth over logs and a planked deck: no count
-  of the forms over a farm ditch was found.
+- {0084#settlement-s-ditch-crossings-2}
 
 Depiction: Every crossing a path along a bund takes over a ditch on the map takes this form, drawn as one rounded, bark-brown trunk across the water. Each is drawn narrow and about 8 ft long,
 so it reads as a single-file crossing and not a road bridge.

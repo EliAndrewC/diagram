@@ -14,12 +14,9 @@ to 66 ft (3 to 20 m) tall; how big an ordinary dooryard tree grew before modern 
 saying praised its fine fruit, its leaves handsome once the frost had touched them, and its large, thick fallen leaves.
 
 Guesses:
-- Its crown on the map, about 23 ft across: a modern reference's full-grown spread, since no older record gives an ordinary
-  dooryard tree's crown.
-- That 80 to 95 farmhouses in 100 have one: the accounts give one to every dooryard, and drawing a few without is not
-  recorded anywhere.
-- How much likelier the front of the house is than the back: the front is the commoner in the accounts, but by how much is
-  not recorded.
+- {0046#crown-about-23-ft}
+- {0046#80-95-farmhouses-100}
+- {0046#much-likelier-front-house}
 
 Depiction: The map draws the persimmon olive green with four orange fruit dots, so it is told apart from the grove's trees
 at a glance; the dots mark no season. It stands near the house, in front or behind, and is kept out of the

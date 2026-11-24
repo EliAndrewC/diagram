@@ -16,8 +16,7 @@ plaza itself was about an eighth of the whole designated site, some 15,000 of ab
 known, a branch post of three officials at Joge, stood on a site of about 230 by 90 ft.
 
 Guesses:
-- That buildings cover up to about 42% of a compound's ground: only Takayama's site and buildings are measured, at about
-  30% in floor area, and no other office's site and buildings were found measured.
+- {0116#buildings-cover-up-about}
 - That the forecourt and the hearing court together take about 12 to 18% of the site: no measure of them was found.
 - That the ground is bare earth: the ground before an office's entrance was found surfaced only at Edo's South Town Magistracy, a stone path with gravel beside it, and nowhere was it found recorded as left bare earth.
 

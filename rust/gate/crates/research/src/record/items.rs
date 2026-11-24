@@ -11,7 +11,8 @@
 //! The token is EMPTY and sits INSIDE the block, never as an attribute of its `<li>`: `<li>\s*<strong>` is matched bare by the style
 //! prepass (`style.rs`) and the triage's findings (`owed::record::triage::change`), which an attribute would silently stop. Empty, it adds
 //! no word to the block (`pages::words` drops markup), so tagging a page changes nothing a page check reads. `data-guess` is the bullet a
-//! pop-up shows while the item is a GUESS, written once on the page; the block's own prose must carry the label word the tag names
+//! pop-up shows while the item is a GUESS, written once on the page, and owed only from the item's first `{NNNN#<id>}` reference (451 T192,
+//! the GM 2026-11-24's cheap route: the registry refuses a reference to a GUESS tag without one); the block's own prose must carry the label word the tag names
 //! ([`faults`]), so the page never says one label and its tag another.
 
 use std::sync::LazyLock;
@@ -128,9 +129,8 @@ pub fn faults(name: &str, html: &str) -> Vec<String> {
             ));
             continue;
         }
-        if it.label == "GUESS" && it.guess.trim().is_empty() {
-            out.push(format!("{who} - a GUESS tag carries its Guesses bullet: add data-guess=\"<what is guessed>: <why no page says>\""));
-        }
+        // a GUESS tag's `data-guess` is owed from the item's first reference, which the registry refuses without it (451 T192,
+        // the GM's cheap route 2026-11-24): an unreferenced tag names its item and label alone
         if !says(&it) {
             out.push(format!(
                 "{who} - its tag says {} but its block's words do not: write the label in the block (GUESS as `a GUESS`, a convention or a deviation by name, an ATTESTED block with no `GUESS`), or retag it - the two are one label"

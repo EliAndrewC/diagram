@@ -14,11 +14,8 @@ How many households kept theirs out by the fields varied widely from village to 
 surveyed in 1959, from 2 households of 83 in one to 15 of 18 in another.
 
 Guesses:
-- That a settlement keeps its manure in sunk jars or in heaps at even odds: both forms are recorded, but no source says
-  how many villages used each.
-- That a sunk jar was kept out by the fields as often as Japan's field pit was, from 2 to 85 households in 100 by
-  settlement: the share is recorded only for Japan's field pit, and the field-head pits of south China were lined with
-  brick, not jars.
+- {0023#settlement-keeps-manure-sunk}
+- {0023#sunk-jar-kept-out}
 
 Depiction: The map draws each jar as its mouth seen from above, a dark disc inside a pale rim, flush with the ground; a
 jar buried to its rim and one half buried look the same from above, so both are drawn as one mouth, a map drawing

@@ -15,10 +15,8 @@ transplanting was done in seven to ten days around the summer solstice. How much
 recorded.
 
 Guesses:
-- How a settlement's drainage and the nearness of a town, whose manure the second crop needed, weigh against each other in
-  whether its paddies carry a winter crop: both set the odds, but no source says how much each counts.
-- That a drained paddy's winter barley spares an equal area of dry field for the hamlet's coarse grain: no source gives a
-  winter barley crop's yield.
+- {0009#settlement-s-drainage-nearness}
+- {0011#drained-paddy-s-winter}
 
 Depiction: The map is set in high summer, so this settlement's drained paddies are drawn under rice, and the barley sown on them after the harvest is not
 shown. The paddies that never drain, which could not carry it, are tinted blue-green as wet ground, though on a comb

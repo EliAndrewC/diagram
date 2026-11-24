@@ -15,8 +15,8 @@ What Japan's footings were built of, how many a village kept, and how wide one w
 Guesses:
 - Which of the two forms a settlement takes, at even odds: no account gives a share between them.
 - [washing_form=shared] One for every four households on a bank: no account counts a village's washing places.
-- A footing of steps about 4 ft wide and 6 ft down the bank: no account gives one's form or size.
-- That the water passes the houses within about 120 ft: no account says how far a household walked to wash.
+- {0065#footing-steps-about-4}
+- {0065#water-passes-houses-within}
 
 Depiction: The map draws a washing place as a small pale footing at the water's edge, its steps marked across it so it reads as a footing; what Japan's footings were built of, and whether they were stepped, is not recorded, though Suzhou's house landings had stone steps down to the water. The footing is
 turned to the bank on the households' side; it is set where nothing else stands, so a footing whose spot a lane, a bridge

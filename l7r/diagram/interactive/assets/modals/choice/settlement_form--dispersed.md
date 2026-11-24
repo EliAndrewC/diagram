@@ -16,8 +16,7 @@ common the scattered form was across the country is not recorded beyond its bein
 Guesses:
 - How often a settlement is scattered: three in ten on the maps. No share of the forms was found, and the scattered village
   was a regional form, so the true share was lower; the odds are kept flatter so the form appears at all.
-- Whether a farm draws a channel or a well of its own, at even odds: on the Tonami plain many areas led a channel into the
-  house's grounds, and no account says how the other areas drew their water.
+- {0031#farm-channel-well-own}
 
 Depiction: The map stands each farm alone, with its own grove on two, three or four of its sides - the same at every farm of a settlement, as the groves' shape went by region, and the title card says which - and draws no lanes among the farms:
 the road out joins the settlement to the world, and the field paths join the farms to one another, a drawing convention so the scattered form reads at a glance, as a web of lanes would hide it. No village shelter belt

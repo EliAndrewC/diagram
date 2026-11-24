@@ -12,7 +12,7 @@ How many villages kept their board before an official's gate, rather than at the
 
 Guesses:
 - That in a hamlet too small for a headman of its own, a senior farmer answering to the village headman copied and passed on the circulars: no source says who did.
-- That a village's board was the size of a post town's: no village board was measured.
+- {0190#village-s-board-size}
 - How often a settlement's board stands at an official's frontage, its center or its way in: no source counts them.
 
 Depiction: Only a settlement whose map draws its official's house takes this seat. The map seats the board

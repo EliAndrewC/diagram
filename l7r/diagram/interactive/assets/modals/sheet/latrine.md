@@ -13,14 +13,12 @@ right to empty their privies.
 What a samurai house's privy was built of, and how big it was, is not recorded. A farm's privy, counted in one village in 1885, ran from 5 ft square to about 27 by 15 ft, most of them 18 by 12 ft or smaller.
 
 Guesses:
-- That the family's privy stood apart from the guests', toward the family's rooms: no source places a family privy near the family's rooms in a
-  samurai house before 1868, so this follows later town houses and a daimyo's retainers' row houses.
+- {0101#family-s-privy-stood}
 - About one privy to each part of the compound, three or four at a county office: no source counts a whole compound's privies, though a district magistrate's house had two.
 - Its size, 5 ft square for one seat: no source gives a samurai house's privy's size, so it takes the smallest farm privy counted.
-- A hatch through the wall behind a privy that stands against the compound wall, for the collector: none is recorded.
-- That a privy stands at least 15 ft from any well: no separation distance from before modern times is recorded.
-- A privy at a village shrine's dwelling for its country monk: no source names one at a village shrine, so it follows the
-  farmhouse the dwelling is drawn as.
+- {0101#hatch-through-wall-behind}
+- {0101#privy-stands-least-15}
+- {0222#privy-village-shrine-s}
 
 Depiction: The plan draws the residence's two privies built into the house: the guests' at the rear of the reception room,
 reached along a board veranda - a guest parlor's privy at its rear and a council hall's privies with board verandas, put

@@ -174,6 +174,13 @@ pub fn bullets(tree: &Path, key: &str, guesses: Vec<String>) -> Result<Vec<Strin
             )
         })?;
         if item.label == "GUESS" {
+            // the bullet is owed from the first reference (451 T192): an unreferenced GUESS tag may carry none
+            if item.guess.trim().is_empty() {
+                return Err(Error::new(
+                    "ValueError",
+                    format!("{key}: the Guesses bullet {{{number}#{id}}} names a GUESS tag with no data-guess: add data-guess=\"<what is guessed>: <why no page says>\" to its tag, from its block's own words"),
+                ));
+            }
             out.push(format!("{cond}{}", item.guess));
         }
     }

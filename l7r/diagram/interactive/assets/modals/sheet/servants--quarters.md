@@ -19,11 +19,8 @@ about 145 by 24 ft.
 Guesses:
 - Its depth of about 15 ft, and its length: the depth is that of the large long-house gate measured in Edo, and that so large
   a gate stands for an ordinary range is the guess; no ordinary range's length was found measured.
-- How many bays a common room runs to, and the sliding partitions sometimes drawn between them: the one room described
-  names its two six-mat rooms, not what stood between them.
-- That a large household's maids and kitchen hands slept under the main roof: the Aizu house kept rooms for its maids and
-  servants in the house, and the menservants are recorded in the gate range and the grooms in the stable's quarters, but no
-  page says where the maids slept.
+- {0097#many-bays-common-room}
+- {0115#large-household-s-maids}
 - That a small household's few servants slept under the main roof, in the storeroom and rooms off the kitchen: the one case recorded,
   the Miwa house, kept its chugen in a hut by the kitchen, and whether that house had a range is not said.
 

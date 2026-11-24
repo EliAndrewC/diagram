@@ -5,8 +5,8 @@ and the brook ran on past the intake, tapped and not taken whole.
 Guesses:
 - That a hamlet's intake stands at the middle of its fan's head half the time: the map rolls left, center and right at odds
   of 1:2:1, and no source counts where intakes stood.
-- How the brook bends away from a middle intake and runs on down one flank of the fields: no source describes the brook's course there.
-- That the head race leaves the brook at an acute angle pointing downstream: nothing from before modern times gives the angle at which a channel left its river; modern engineering takes a canal off at 30 to 45 degrees, pointing downstream.
+- {0059#brook-bends-away-middle}
+- {0054#head-race-leaves-brook}
 
 Depiction: The map draws the intake above the middle of the fan's head, the head race running straight down to the fork, and
 the brook swinging out to its flank before it runs on down that flank outside the fields.

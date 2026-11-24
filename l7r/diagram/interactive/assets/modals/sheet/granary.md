@@ -14,8 +14,7 @@ shared by three villages had storehouses of about 440 to 740 sq ft each; Takayam
 covers about 11,200 sq ft. How large a county office's granary was, and how much it held, is not recorded.
 
 Guesses:
-- Its size on the plan, about 43 to 50 by 25 to 36 ft: no account gives the size of a county office's grain storehouse or
-  how many it kept, so it is set above the village stores and at about a tenth to a sixth of Takayama's.
+- {0098#size-about-43-50}
 
 Depiction: The plan draws one of the two forms: the storehouse on posts, drawn slatted for its timber walls, with its posts
 as dark blocks at its edge, or the earth-walled kura, drawn plastered white with no posts, since how such a kura's floor was

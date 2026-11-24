@@ -9,9 +9,8 @@ at Kitami: in 1693, in the Edo period, about forty dogs were kept there, in a ca
 dogs in care, not a hunting pack.
 
 Guesses:
-- Its form and size, a small building about 11 ft square: no source describes a household's hunting kennel.
-- That it stands beside the stables: no source puts the two together, so it is set where both share the household's animals'
-  yard.
+- {0111#form-size-small-building}
+- {0111#stands-beside-stables}
 
 Depiction: The plan draws the kennel as a small building beside the stables in the service yard, sharing the yard's well
 and the service gate, away from the ceremonial ground of the forecourt.

@@ -13,10 +13,8 @@ Ome Shinmachi, a row opened on the Ome road, had 33 lots on each side, 66 in all
 Guesses:
 - That a row's farms take both sides of the way or one at even odds: both are attested, and neither is counted against the
   other.
-- That only the far farms, across the street from the paddy, have a strip of dry field behind them, and the near farms none:
-  where a paddy row's farms held their dry field is not recorded.
-- That a farm whose grove stands between it and the street reaches it by a path round the grove: where such a farm had its
-  gate is not recorded.
+- {0033#only-far-farms-across}
+- {0033#farm-whose-grove-stands}
 
 Depiction: The map stands the farms on both sides of the street, each farm's lot and grove set against the next. The far row has its
 holding drawn behind each farm as dry field, a strip running back from the street and cut into plots of one even size, long where the street was laid first and short on the paddy's dry edge (how large the real plots were is not recorded); the near row, between the paddy and the street, has none. A near-row farm walled

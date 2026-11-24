@@ -10,8 +10,7 @@ The grain traveled in straw bales (tawara), which held no standard amount before
 being a tenth of a koku, by time and place. Today's 132 lb (60 kg) rice bale is about 2.5 ft long and 1.5 ft across.
 
 Guesses:
-- The size of a bale before modern times: none was found measured; scaled from what the recorded bales held, one would be within
-  a tenth of today's size.
+- {0199#size-bale-before-modern}
 - That a county's grain went downriver on boats hired for the run, as the shogunate's rice went by sea on hired ships: tax
   rice is known to have been carried to river landings to be shipped, but no account says whose boats took it on.
 

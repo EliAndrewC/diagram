@@ -11,8 +11,7 @@ to an even depth can only be so large, so the ribbon was probably a chain of sma
 How long or wide a valley paddy ran, and how much rice it gave, is not recorded.
 
 Guesses:
-- That the brook ran down the middle of the paddy: every account places the paddy on the valley floor, and none says where
-  the stream ran through it.
+- {0021#brook-ran-down-middle}
 
 Depiction: The map draws the rice as one long, narrow field meandering down the valley floor. Banks across the field step it
 down the valley, each holding one level stretch above the next, so the field holds water as the valley falls, and each

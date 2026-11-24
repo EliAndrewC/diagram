@@ -12,8 +12,7 @@ by 12 ft, and three of the seven were about 24 by 12 ft. The houses with the mos
 houses, those of the leading farmers who served as village officials.
 
 Guesses:
-- Where on the plot the shed stands, behind or beside the house a short step off a wall: no source says where on the plot a
-  wood shed stood.
+- {0043#plot-shed-stands-behind}
 
 Depiction: The map draws a wood shed on about four farmsteads in ten, the larger houses first, every one at the commonest
 size, 24 by 12 ft. It is drawn as a roof with a band of log ends along one long side so it reads as a wood shed, though a

@@ -14,8 +14,7 @@ largest houses, though the largest house had none. In that district west of Edo,
 years of the shogunate.
 
 Guesses:
-- Which of two farmhouses of the same size has the storehouse: the map draws lots between them, since nothing found says
-  what set one household's storehouse apart from another's of the same size.
+- {0040#two-farmhouses-same-size}
 
 Depiction: The map gives a storehouse to about one farmhouse in eight, always the largest, so a well-off farm shows at a
 glance; in fact storehouses went to large houses, but not strictly to the largest. It draws the

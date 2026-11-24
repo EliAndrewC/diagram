@@ -20,7 +20,7 @@ on grounds of about 0.8 acre.
 
 Guesses:
 - {0090#gate-between-two-courts}
-- That the court's open ground was bare earth: no page we read says what lay underfoot in the residence court of a magistrate's compound.
+- {0091#court-s-open-ground}
 
 Depiction: The plan always sets the inner court behind the office hall; for a
 Japanese office it follows a single case, the intendant's office at Takayama, where the residence stood at the back of the office. A gate in the wall between the two courts leads into it. Its ground is kept

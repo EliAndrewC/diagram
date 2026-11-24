@@ -10,8 +10,7 @@ Left to grow, the black pine is a tall tree, some 50 to 130 ft (15 to 40 m). How
 its crown was, is not recorded.
 
 Guesses:
-- The crowns, about 4 to 6 ft across, the size of young or closely pruned trees: no record gives the crown of a pruned
-  garden pine.
+- {0076#crowns-about-4-6}
 - That pruning held a garden pine well below its wild height, and that an old garden's pines were wider than drawn,
   perhaps 15 to 30 ft across even when pruned: a garden kept up for generations would hold old trees, but no figure for
   either was found.

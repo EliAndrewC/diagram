@@ -15,8 +15,7 @@ privy joined to the house was at first an official's: in six villages only the h
 one until 1771, and about one house in ten by 1824.
 
 Guesses:
-- How often each of the places a privy stood is drawn: beyond one village where about three in four stood south or southeast
-  of the house, no source says how often each was used.
+- {0047#often-places-privy-stood}
 - How far from its house a privy stands, on the sunny side or in the front yard: no source gives a distance, so it is kept
   near enough to read as its own house's.
 

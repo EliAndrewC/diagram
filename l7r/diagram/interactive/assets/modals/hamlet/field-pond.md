@@ -13,13 +13,10 @@ pond where the water gathered. How often one field had a pond is not recorded ei
 in a valley whose stream watered every plot, to the dense pond country of a dry plain like Sanuki (today's Kagawa).
 
 Guesses:
-- How often a field keeps a pond, a little over half the time where it has low plots: no count of ponds per field or per
-  village was found, and the dense pond country of Kagawa bounds it only from above.
+- {0008#often-field-keeps-pond}
 - How large a field pond is: the record gives only the smallest ponds, about 33 ft (10 m) on a side, and a twelfth-century Chinese manual's pond of two or three parts in ten of its field, and no pond-to-field ratio for Japan before modern times was found, so the map fits it to the low plot it sits
   in, as large as the plot holds clear of its bunds.
-- How much of the pond is open water, and how wide the belt of reeds at its shallow edge: no page gives a dish pond's
-  proportions, so the map draws the open water across about three quarters of the pond and the reeds in a ring between
-  it and the bank.
+- {0008#much-pond-open-water}
 
 Depiction: The map sinks each pond wholly inside one low plot of paddy, never across a bund, as a pocket of ground too
 low and wet for rice. It is drawn as a dish pond: an earthen bank round its edge, the wet ground just inside it where

@@ -14,12 +14,9 @@ on, better water works and fields in the advanced farming regions ended the need
 the same ground every year. By the early modern period, when land surveys taxed paddy by area, resting had ended.
 
 Guesses:
-- That four settlements in five rest no paddy at all: the settled form is taken as the commoner from the setting's
-  nucleated villages and its canon, but no figure weighs the two.
-- That a settlement whose paddy rests leaves two to four whole plots resting in each field: the one estate measured rested
-  nearly a third of its paddy, an upper bound rather than a hamlet's norm.
-- That the resting plots lie toward the far end of the water's run, where the water reaches last: read from "short
-  water", since no source says which plots of a village's paddy rested.
+- {0013#four-settlements-five-rest}
+- {0013#settlement-whose-paddy-rests}
+- {0013#resting-plots-lie-toward-2}
 
 Depiction: The map draws a resting paddy as a whole plot of grass with tufts inside its own bunds, never a patch within
 a plot, and never two resting plots side by side, so they read as scattered among the cropped ground.

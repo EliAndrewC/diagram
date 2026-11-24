@@ -14,8 +14,7 @@ delta's root-cut planting today to about one to 24 sq ft in a late-Qing field of
 grew. A dike's width before modern times is not recorded. Water and bank were kept in proportion, so that the bank's mulberry could feed the fish beside it; today the split is given as about six parts water to four of bank, or the reverse, or seven to three, and no account before modern times writes it as a ratio, though in the late seventeenth century fish were said to take half of one delta township's land, and elsewhere its ponds eight tenths.
 
 Guesses:
-- That each of five splits of water and bank is drawn at even odds: the accounts give four of them outright, the fifth (three of water to seven of bank) is a reading of one account that does not say which side its figures name first, and they may differ by region rather than in error,
-  and every account found that writes the split as a ratio is modern.
+- {0018#five-splits-water-bank}
 - That one split holds for every pond of a village, so the bank is as wide as that split makes it: no width of a pond
   dike from before modern times was found, and the one modern account of how the split was set says only that in practice it was more complicated and generally governed by tradition.
 - Each bush's crown, 4.4 to 7 ft across: no account gives how wide a mulberry bush grew.

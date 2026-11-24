@@ -14,8 +14,7 @@ the Edo period, two or three houses in ten had one, of 1 to 2 tsubo, about 6 by 
 apart in the yard is not known before the Meiji period, from 1868.
 
 Guesses:
-- That a headman's house has its bath joined to its floored rooms: two of the three such baths found were in headmen's
-  houses, but no record says every headman's bath stood there.
+- {0044#headman-s-house-has}
 
 Depiction: The map draws a bath room as a small room joined to the farmhouse - beside its main door, at its stable end
 (beyond the stable wing, where the house has one) or against its floored rooms - and never as a shed standing apart in the yard. Two or three farms in ten are given one, the share late in the Edo period rather than the very few of about 1770. Most stand at the stable end, as most stood beyond the stable wing; the rest, save a few at the floored rooms, are drawn by the main door, where the earliest baths stood. A tub is drawn inside it so the

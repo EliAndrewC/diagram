@@ -11,9 +11,7 @@ recorded. The day office was a place of work, not of lodging: an intendant's sta
 elsewhere in the compound.
 
 Guesses:
-- That the day office stood in the back row behind the dais band, in the same hall: no account places such a room behind
-  the court, and which room stood directly behind the magistrate's seat at an intendant's office is not recorded (at Edo's
-  North Town Magistracy, on a plan of 1841, it was a room whose name marks it as the examiners' working room, though no account states its use); it is reckoned from what a working office had to hold.
+- {0113#day-office-stood-back}
 - The day office's size on the plan: no account gives how large such a room was, so it is drawn to share the hall's
   back row with the clerks' room, the official study and the other working rooms.
 

@@ -14,12 +14,10 @@ whose middle was often left wild, had little dry ground to hand for it. How much
 grain is not recorded.
 
 Guesses:
-- How a settlement's drainage and the nearness of a town, whose manure a second crop needed, weigh against each other in
-  whether its paddies lie bare over the winter: both set the odds, but no source says how much each counts.
+- {0009#settlement-s-drainage-nearness-2}
 - That coarse grain was about a third of a hamlet's diet: no source gives its share, so it is set between a delta
   district's pot of one part barley to four of rice and a Shinano village's midday meal three parts in five not rice.
-- That a hamlet needs about 0.85 acre of dry field a household for its coarse grain: reckoned from the grain a household
-  ate and the yields the land surveys assessed, not found as a figure.
+- {0011#hamlet-needs-about-0}
 - [fan_middle=wild] That the dry fields are cleared up into the fan's wild middle, from the plots nearest the toe first:
   no source says a hamlet at a fan's toe cleared its grain fields there, nor from which end.
 

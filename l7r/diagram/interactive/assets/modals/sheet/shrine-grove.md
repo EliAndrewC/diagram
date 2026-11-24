@@ -13,8 +13,7 @@ A village shrine's precinct typically ran to a few hundred tsubo, about 5,000 to
 part of it; how much of the rest the wood covered is not recorded.
 
 Guesses:
-- How much of a precinct the wood covers, some or nearly all of it with the rest open ground: no record splits a precinct
-  into buildings, wood and open ground.
+- {0215#much-precinct-wood-covers}
 - That each form the ground allows is equally likely: the one survey of the forms gives shares that cannot be read as
   counts, and it is of a modern city's woods.
 - That a hall midway on an even slope may take any of the slope's forms, and that the wood's edge against scrub or slope

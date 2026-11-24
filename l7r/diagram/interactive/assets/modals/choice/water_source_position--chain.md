@@ -5,7 +5,7 @@ Each pond was ringed by its own embankment, its water drawn off through a pipe i
 A great pond could feed many: Manno-ike in Shikoku, the largest irrigation pond in Japan, watered about 11,000 acres (4,600 ha), and some 60 smaller ponds took water from it. How many ponds a single village's chain held is not recorded.
 
 Guesses:
-- That a small village keeps a chain of ponds rather than one reservoir: the stacked pond is a named form, but no source shows one at a single village's scale.
+- {0031#small-village-keeps-chain}
 - That the water comes in midway along the high edge rather than at a corner: no source says where on a village's high ground its ponds lay, so the place is chosen by chance among those above the fields.
 
 Depiction: The water comes into the fields midway along their high edge, uphill of them. The pond that waters the fields is only ever drawn where its water could run down onto them: a source below the fields it feeds is never drawn, because water does not run uphill.

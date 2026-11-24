@@ -13,7 +13,7 @@ A basket was mostly about 16 to 24 in (40 to 60 cm) across and 13 to 33 ft (4 to
 stood about one basket thick. How many small intakes had a weir at all is not recorded.
 
 Guesses:
-- That a course of gabions was laid across a brook at all: the only gabions found damming water were on large rivers.
+- {0059#course-gabions-laid-across}
 - That a hamlet's weir is a course of gabions, at even odds with the other three forms: no count of the forms was found.
 
 Depiction: The map draws the baskets at one basket's width, about 2 ft. Like every weir on the map the course closes the

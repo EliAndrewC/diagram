@@ -12,7 +12,7 @@ measured. The headman, who copied out the lord's circulars, had to read and writ
 How many villages kept their board at the center, rather than at the way in or before an official's gate, is not recorded.
 
 Guesses:
-- That a village's board was the size of a post town's: no village board was measured.
+- {0190#village-s-board-size}
 - How often a settlement's board stands at its center, its way in or an official's frontage: no source counts them.
 
 Depiction: The map seats the board beside a way among the houses, a few feet off its edge where the verge has room, farther back where it does not, and turned broadside to it, at the busiest stretch the map finds where its label has room.

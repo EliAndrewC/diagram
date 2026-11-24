@@ -15,14 +15,13 @@ under a twentieth of an acre and the largest about a third. A farm family of the
 paddy and dry field together, seldom in one piece; how much of a household's dry field was millet is not recorded.
 
 Guesses:
-- How far apart the furrows are drawn: no source gives the spacing of a Japanese dry field's rows before modern times.
+- {0006#far-apart-furrows}
 - The mix of millet, barley, buckwheat and soybean on each map, rolled at random: no source gives the proportions.
 - That neighboring plots on one lie of land ran their rows the same way, and that rows on steep ground ran along the
   contour: reasoned from a Chinese classic that let the land set a field's rows; no source describes a village's dry
   fields plot by plot.
-- That an alluvial fan's dry middle is left wild on three maps in four: wild was the usual case, but no figure is given.
-- [winter_crop=none] That a hamlet needed about 0.85 acre of dry field a household for its coarse grain: reckoned from
-  the grain a household ate and the yields the land surveys assessed, not found as a figure.
+- {0006#alluvial-fan-s-dry}
+- [winter_crop=none] {0011#hamlet-needed-about-0}
 
 Depiction: The map draws the dry fields as a hem of small rectangular plots just above the supply canal along the
 paddy's high edge, where the paddy water stops, each squared to the canal behind a bare bank. Where the houses stand on that edge, the hem is drawn behind them instead, so the houses lie between the canal and their dry fields. On some maps an alluvial

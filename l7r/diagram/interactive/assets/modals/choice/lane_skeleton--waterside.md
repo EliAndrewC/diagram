@@ -10,7 +10,7 @@ one old figure for a field road is about 3 ft.
 What shapes a village's lanes took, and how common each was, is not recorded.
 
 Guesses:
-- That a village's lanes took one of a few shapes - a spine, a T, a Y, a crossroads or a lane along the water: no description of the shapes a village's lanes took was found.
+- {0031#village-s-lanes-took-2}
 - How often each shape comes up: no source counts them.
 
 Depiction: Only a settlement with water running along its cluster takes a lane along the water. The map lays it down the

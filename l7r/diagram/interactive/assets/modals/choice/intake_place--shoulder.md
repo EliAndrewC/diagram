@@ -7,7 +7,7 @@ Guesses:
 - That a hamlet's intake stands at a shoulder of its fan's head half the time, at either shoulder alike: the map rolls left,
   center and right at odds of 1:2:1, and no source counts where intakes stood.
 - That the brook runs on down the flank of the fields below the intake's shoulder: no source describes the brook's course past the fields.
-- That the head race leaves the brook at an acute angle pointing downstream: nothing from before modern times gives the angle at which a channel left its river; modern engineering takes a canal off at 30 to 45 degrees, pointing downstream.
+- {0054#head-race-leaves-brook}
 
 Depiction: The map draws the intake at the corner of the fan's head on the brook's side, the head race leaving it turned away
 from the brook's flank, and the brook running on down that flank outside the fields.
