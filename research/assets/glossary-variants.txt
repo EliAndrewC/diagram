@@ -1640,6 +1640,7 @@ grow-out ponds	grow-out pond
 groyne	groyne
 groynes	groyne
 gsi	GSI
+guan	guan
 guan-xiang	guanxiang
 guangdong	Kwangtung
 guangdong xinyu	Guangdong xinyu
@@ -2375,6 +2376,7 @@ kaogongji	Kaogongji
 kaomise	kaomise
 kara-hafu	kara-hafu
 kara-hafu-gabled	kara-hafu
+karafuto	Karafuto
 karahafu	karahafu
 karajiri	karajiri
 karamete	karamete-mon
@@ -2884,6 +2886,7 @@ maoqu	maoqu
 marco polo	Marco Polo
 market god	ichigami
 market integration	market integration
+market settlement price	settlement price
 market-god	ichigami
 martial temple	Martial temple
 martial temples	Martial temple
@@ -4087,6 +4090,8 @@ setchin	kawaya
 setouchi	Setouchi
 setta	setta
 settlement core	settlement core
+settlement price	settlement price
+settlement prices	settlement price
 settling basin	settling basin
 settling basins	settling basin
 settsu	Settsu
@@ -4339,6 +4344,7 @@ sotobori	sotobori
 sotomachi	outer town
 south range	south range
 south ranges	south range
+south seas agency	South Seas Agency
 south town magistrate	town magistrate
 southern song	Song dynasty
 sovereign temple	sovereign temple
@@ -4391,6 +4397,7 @@ standard deviation	standard deviation
 standard deviations	standard deviation
 standard error	standard error
 standard errors	standard error
+standard settlement price	settlement price
 state altar	state altar
 state altars	state altar
 state cult	state cult
