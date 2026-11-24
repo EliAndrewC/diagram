@@ -7,6 +7,8 @@ nothing behind it in physical reality, so each is `research: rendering`.
 
 ## Occasions
 
+- none: T415 - the knobs' claims restated to their pages (the row's leeward groves, the lane web, the row and plot tables, the intake and the brook's side); no code path, map drawing, placement, glyph or research page changes.
+- none: T416 - the winter crop rolled at the drained share, halved far from a town, and barley on a cleared middle, moves Kashikawa's driver record alone (winter crop none to barley, coarse-grain need 17.0 to 0.0 acres); every hamlet's drawing is unchanged, and the water-flow, sluice and polder items are claims restated and a test added; no map feature, glyph, placement rule or research page changes.
 - none: T252 - make maps adds read-only judges (the Mode A pool sweep's judge moved out of test-only code, a hamlet spec check) and the command over them; no map's drawing, placement, glyph or research page changes.
 - none: phase 1 moves the guards that run on Claude Code's tool calls; no map feature, glyph, placement rule or research page changes.
 - glyph-redrawn: sluice gate on kuwabata - T234: the polder's sluice redrawn from an 8 ft square on its point to the frame across its channel 0179's drawing page draws (board, two posts, crossbeam, windlass drum, 20 ft post to post); set aside at rust-only (444 FR-023)
