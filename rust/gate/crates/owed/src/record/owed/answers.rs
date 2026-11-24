@@ -27,7 +27,7 @@ use crate::Reply;
 mod cli;
 mod depiction;
 pub use super::reply::{reply_of, reply_text, unescaped};
-pub use cli::{file_outside, file_outside_in, run_in};
+pub use cli::{file_outside, file_outside_in, run_in, Outside};
 pub use depiction::{amendment1_depiction_answered, legacy_depiction_answered};
 
 /// A round's own EDIT blocks settled it.

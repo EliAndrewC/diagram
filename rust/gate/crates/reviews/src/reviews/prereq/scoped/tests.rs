@@ -73,7 +73,7 @@ fn a_nitpick_fixed_on_the_sheet_is_carried_by_a_clean_change_scoped_round() {
     );
     put(&r, ".git/green", "");
     let findings = json!([{"id": "N1", "severity": "nitpick", "what": "the label reads 'kura' for 'kura (storehouse)'"},
-        {"id": "O1", "severity": "outside"}]);
+        {"id": "O1", "severity": "outside", "what": "a door; effect: sheet - a door onto the alley"}]);
     full_round(&r, "NEEDS-WORK", &findings);
     let reviewed = unit_content_key(&r, U);
     assert!(answered(&r, U, ""));

@@ -228,12 +228,12 @@ fn a_reply_s_lines_are_vetted_and_its_outside_rows_filed() {
     let root = fixture("claims-triage-vet");
     let units = json!({"a::b#c": {}}).as_object().unwrap().clone();
     let (mut said, mut warned) = (String::new(), String::new());
-    let reply = "VERDICT a::b#c IN-STEP - fine\nVERDICT a::b#c IN-STEP - research/questions/0001-gap.html fine\n\n## OUTSIDE THE CHANGE\n- `x.py` | the block | a finding\n";
+    let reply = "VERDICT a::b#c IN-STEP - fine\nVERDICT a::b#c IN-STEP - research/questions/0001-gap.html fine\n\n## OUTSIDE THE CHANGE\n- `x.py` | the block | a finding | effect: sheet - a wrong door\n- `y.py` | a block | a difference; effect: none\n";
     let (kept, bad) = vet(reply, &units, &root, &mut said, &mut warned).unwrap();
     assert!(bad.is_empty() && kept.contains("OUTSIDE"));
     assert_eq!(
         said,
-        "claims-checked: filed, not fixed - x.py | the block | a finding\n"
+        "claims-checked: filed, not fixed - x.py | the block | a finding | effect: sheet - a wrong door\nclaims-checked: listed, not filed - y.py | a block | a difference; effect: none\nclaims-checked: a note outside the change is filed only where it ends `| effect: <map|sheet|page|tool> - <the wrong outcome its reader or user meets>` (451 T219); the rest are dropped\n"
     );
     assert!(warned.is_empty());
 }

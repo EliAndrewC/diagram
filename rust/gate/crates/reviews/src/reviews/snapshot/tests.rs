@@ -136,7 +136,7 @@ fn each_check_is_asked_its_own_question() {
         .unwrap()
     };
     assert!(prompt("building-review--s")
-        .contains("give it severity `outside` and judge the verdict on the change alone.\n"));
+        .contains("give that one severity `outside`, its `what` ending `effect: sheet - <that outcome>` (`effect: tool - ...` for a command or check that answers wrongly), list the rest in your reply, and judge the verdict on the change alone.\n"));
     assert!(prompt("glyph-check--it-s--s")
         .contains("the glyph check of the element \"it's\", on s: an occasion."));
     assert!(prompt("size-audit--bench").contains("the size audit of 'bench' on s"));

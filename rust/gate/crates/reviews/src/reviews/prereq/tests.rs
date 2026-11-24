@@ -114,6 +114,50 @@ fn a_verdict_record_is_the_reviews_last_act() {
     );
 }
 
+/// Feature 451 T219: an `outside` finding is recorded only where its `what` names the wrong outcome a reader of the sheet would meet.
+/// The two are building-review's own of 2026-11-22 and 11-23: the garrison privy 0.5 ft off the granary (449 T331, a drawn fault), and
+/// the Hayakawa notes' dated log entries with no `since mirrored` pointer (449 T380, moved to 452 T015, which the restatement audit
+/// read as fine).
+#[test]
+fn an_outside_finding_is_recorded_only_with_the_wrong_outcome_it_names() {
+    let r = repo("verdict-outside");
+    map(&r, "pool", "m", &["well"]);
+    put(&r, ".git/green", "");
+    let run = |findings: &str| {
+        put(&r, ".git/f.json", findings);
+        let f = r.join(".git/f.json").to_string_lossy().into_owned();
+        run_in(
+            &r,
+            &[
+                "verdict",
+                "--unit",
+                "building-review--m",
+                "--verdict",
+                "PASS",
+                "--findings-file",
+                &f,
+            ],
+        )
+    };
+    let privy = r#"{"id": "O1", "severity": "outside", "what": "the garrison privy stands 0.5 ft off the granary; effect: sheet - a privy drawn against the grain store's wall"}"#;
+    let log = r#"{"severity": "outside", "what": "the older log entries T276, T299 and T312 still give the armory at the west end with no pointer"}"#;
+    let bad = run(&format!(
+        "[{privy}, {log}, {{\"id\": \"N1\", \"severity\": \"nitpick\", \"what\": \"a label\"}}]"
+    ));
+    assert_eq!(
+        (bad.code, bad.stderr.as_str()),
+        (2, "review-verdict: refused - `outside` finding F2 names no wrong outcome its reader or user meets: end its `what` with `effect: <map|sheet|page|tool> - <the wrong outcome its reader or user meets>`, or take it out of the findings file and list it in your reply (451 T219)\n")
+    );
+    assert!(run(&format!("[{privy}]"))
+        .stdout
+        .starts_with("recorded PASS"));
+    // a tool that answers wrongly is a wrong outcome too (constitution XIV)
+    let tool = r#"{"id": "O2", "severity": "outside", "what": "the bundle's crop cuts the north range; effect: tool - make review-bundle crops a sheet wider than its page"}"#;
+    assert!(run(&format!("[{tool}]"))
+        .stdout
+        .starts_with("recorded PASS"));
+}
+
 #[test]
 fn a_finding_is_accepted_with_a_reason_for_its_round() {
     let r = repo("accept");

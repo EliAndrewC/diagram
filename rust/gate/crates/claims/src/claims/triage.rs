@@ -791,21 +791,10 @@ pub fn vet(
         }
         keep.push(raw);
     }
-    for row in crate::record::owed::answers::file_outside(root, "impl-drift", reply)? {
-        let get = |k: &str| {
-            row.get(k)
-                .and_then(Value::as_str)
-                .unwrap_or_default()
-                .to_owned()
-        };
-        let _ = writeln!(
-            said,
-            "claims-checked: filed, not fixed - {} | {} | {}",
-            get("file"),
-            get("block"),
-            get("finding")
-        );
-    }
+    said.push_str(
+        &crate::record::owed::answers::file_outside(root, "impl-drift", reply)?
+            .said("claims-checked"),
+    );
     for b in &bad {
         let _ = writeln!(warned, "claims-checked: REFUSED line - {b}");
     }

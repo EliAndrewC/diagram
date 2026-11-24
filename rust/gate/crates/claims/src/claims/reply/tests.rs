@@ -114,3 +114,41 @@ fn a_reply_writes_its_rows() {
     assert_eq!(out["a::u#c"]["rests"], json!(["p.html:d1"]));
     assert!(out["a::u#plain"].get("outside").is_none());
 }
+
+/// Feature 451 T221: a finding's row keeps the claim as it was said and its unit's claim labels, which a later correction is read
+/// against; an IN-STEP row keeps neither.
+#[test]
+fn a_finding_s_row_keeps_the_claim_as_said_and_its_unit_s_labels() {
+    let unit = json!({"code": "c", "core": "k", "research": "", "uid": "a::b", "said": "c - NONE", "siblings": "s"});
+    let units = obj(&json!({"a::b#c": unit.clone(), "a::b#d": unit}));
+    let (out, _) = record(
+        &Map::new(),
+        &units,
+        "VERDICT a::b#c MISLABELED - [outside the change] should be GUESS\nVERDICT a::b#d IN-STEP - ok",
+        "2026-11-24",
+        &Map::new(),
+    );
+    let found = &out["a::b#c"];
+    assert_eq!(
+        (&found["said"], &found["siblings"], &found["outside"]),
+        (&json!("c - NONE"), &json!("s"), &json!(true))
+    );
+    assert!(out["a::b#d"].get("said").is_none() && out["a::b#d"].get("siblings").is_none());
+}
+
+/// Feature 451 T220: a section's finding that the code is to be fixed keeps the engine it was judged against; one the claim answers
+/// does not.
+#[test]
+fn a_section_s_code_fix_drift_keeps_the_engine_it_was_judged_against() {
+    let unit = json!({"code": "c", "core": "k", "research": "", "uid": "docs/buildings.md::Porch", "section": "k", "drawn": "e1"});
+    let units = obj(&json!({"p#size": unit.clone(), "p#place": unit}));
+    let (out, _) = record(
+        &Map::new(),
+        &units,
+        "VERDICT p#size DRIFTED - known (417 T33): the porch is drawn 8 by 6 ft; fix: code; effect: a short porch\nVERDICT p#place DRIFTED - reads loosely; fix: claim; effect: none",
+        "2026-11-24",
+        &Map::new(),
+    );
+    assert_eq!(out["p#size"]["drawn"], json!("e1"));
+    assert!(out["p#place"].get("drawn").is_none());
+}

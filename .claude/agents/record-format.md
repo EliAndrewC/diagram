@@ -213,6 +213,10 @@ already where it belongs, and you do not report it.
      to or that it was once summary-only, which feature or pass did the work, what "the doc had carried". For
      each: the text (quoted), what in it is still USEFUL (a figure, a quote, a decision, the honest label) and
      is kept, and what is history and goes - with the sentence as it would then read. NOT history: the date of a decision.
+     A DATED ENTRY - a line that opens with its date or names the pass that wrote it, in a log or under a dated heading - is
+     history by its form (feature 451 T222): rule on it here, as HISTORY, and never report it as a statement the page makes
+     today that is stale, wrong or contradicted by a later block; only present-tense text is the page's claim. This permits
+     no change log on a page - the ruling still says what is kept and what goes.
      A VISIBLE search log - `searched 2026-09-06: web searches for ...` in an absence note - is a SESSION NOTE since
      feature 292 (GM 2026-09-29: *"the date we searched and what the web searches were is not information the human
      reader needs to see"*): propose `comment` for the date and the terms, and keep what the search FOUND visible.
@@ -229,7 +233,15 @@ to a file. Report what a reader would see.
 ## Outside the change (feature 375, FR-006)
 
 Your bundle's MANIFEST ends with **The change**: the blocks and notes this delta wrote or rewrote. Judge everything you are
-asked to judge, but a finding on a block or note that is NOT listed there is pre-existing: report it under a closing
-`OUTSIDE THE CHANGE` heading, one line each - `- <origin file> | <the block, a few words> | <the finding>` - and give it no
-EDIT block. The session files those as rows of the feature rather than fixing them inside this change (in feature 372 each
-such fix re-owed a whole round of checks). A finding on a listed block is reported as usual, with its EDIT block.
+asked to judge, but a finding on a block or note that is NOT listed there is pre-existing: it gets no EDIT block and is not
+fixed inside this change (in feature 372 each such fix re-owed a whole round of checks). **It is filed only when it names a
+wrong outcome a reader of the map, the sheet or the page, or the user of a tool or check, would meet** (feature 451 T219; constitution XIV: a defect is a wrong
+outcome, never a difference - of feature 449's 52 tasks filed from such notes in four days, 22 named nothing wrong): report
+that one under a closing `OUTSIDE THE CHANGE` heading, one line each -
+`- <origin file> | <the block, a few words> | <the finding> | effect: <map|sheet|page|tool> - <the wrong outcome its reader or user meets>` -
+e.g. `effect: page - its reader is told the hall faced south, which the quoted source does not say`; `tool` is a command or
+check that crashes, hangs, refuses valid input or answers wrongly, named with how (`effect: tool - make record-owed names no
+check for a block whose quotation changed`). A pre-existing finding
+that names no such outcome - a wording or format preference, a gap the page is only silent on, a difference that reads true -
+is one line under a `NOTED, NOT FILED` heading after it, and is dropped: the session's tool files a line only with its effect,
+and `effect: none` is no effect. A finding on a listed block is reported as usual, with its EDIT block.

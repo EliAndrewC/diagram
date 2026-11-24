@@ -289,3 +289,40 @@ fn a_finding_on_unchanged_rust_code_is_pre_existing() {
         vec!["DRIFTED        rust/phases/src/lib.rs::GAP#gap - off"]
     );
 }
+
+/// Feature 451 T221: a MISLABELED finding its claim's relabel answered is counted apart and left off the list, which names what stands;
+/// `ALL=1` lists it. Before it the report printed the corrected claim's old verdict beside `owed 0` (the shrine-tree trio, 2026-11-24).
+#[test]
+fn a_finding_its_relabel_answered_is_counted_apart_and_not_listed() {
+    let root = fixture("claims-report-answered");
+    put(&root, "a.rs", "fn a() {}\n");
+    let q = root.join("research/questions");
+    let mut cur = Cur::default();
+    let mut index = Map::new();
+    for (qual, line) in [("a", "a - GUESS: beside one tree"), ("b", "b - NONE")] {
+        let u = Rc::new(unit(qual, &[line], &[]));
+        let claim = u.claims[0].clone();
+        let body = crate::claims::index::body_of(&root, &u).unwrap();
+        index.insert(
+            u.key(&claim),
+            json!({"verdict": "MISLABELED", "note": "the label should be GUESS", "code": u.code(&claim), "body": body,
+                "claim": claim.normalized(), "said": format!("{qual} - NONE"), "research": ""}),
+        );
+        cur.insert(Row {
+            key: u.key(&claim),
+            code: u.code(&claim),
+            unit: u,
+            claim,
+            research: String::new(),
+        });
+    }
+    let said = |all: bool| report(&cur, &index, &q, &Map::new(), &HashSet::new(), all).unwrap();
+    assert_eq!(
+        said(false),
+        "claims: 2 in scope; MISLABELED 1, ANSWERED 1; owed 0\n  MISLABELED     a.rs::b#b - the label should be GUESS\n(1 MISLABELED findings answered by their claim's relabel not listed: make claims-report ALL=1 lists them)"
+    );
+    assert_eq!(
+        said(true),
+        "claims: 2 in scope; MISLABELED 1, ANSWERED 1; owed 0\n  ANSWERED       a.rs::a#a - the label should be GUESS\n  MISLABELED     a.rs::b#b - the label should be GUESS"
+    );
+}

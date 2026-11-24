@@ -60,8 +60,9 @@ fn ask_of(unit: &Unit) -> Option<String> {
         "settlement-review" => format!("the WHOLE-MAP review of {on}: {occasion}. Run your contract's whole-map sweeps on it."),
         "building-review" => format!(
             "the review of the sheet {on}: {occasion}. Run the sections of your contract this occasion owes. A finding on a part of the \
-             sheet this occasion did not change is a row to file, not this unit's verdict: give it severity `outside` and judge the verdict \
-             on the change alone." // GUARD_EDIT_OK: feature 374 batch 6 - the round arbiter's tooling fix (ask:b6-ochiba-r3)
+             sheet this occasion did not change is not this unit's verdict, and a row to file only where it names a wrong outcome the \
+             sheet's reader meets, or a tool's user: give that one severity `outside`, its `what` ending `effect: sheet - <that \
+             outcome>` (`effect: tool - ...` for a command or check that answers wrongly), list the rest in your reply, and judge the verdict on the change alone." // GUARD_EDIT_OK: feature 374 batch 6 - the round arbiter's tooling fix (ask:b6-ochiba-r3)
         ),
         "glyph-check" => format!("the glyph check of the element {subject}, on {on}: {occasion}. Judge that element where it stands on this map - nothing else on the map is under review."),
         "size-audit" => format!("the size audit of {subject} on {on}: {occasion}. Anchor that kind's size; nothing else is under review."),

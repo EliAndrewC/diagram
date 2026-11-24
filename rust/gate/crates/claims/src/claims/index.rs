@@ -466,11 +466,56 @@ pub fn claim_rewritten(was: &Value, text: &str) -> bool {
         .is_some_and(|c| !c.is_null() && c.as_str() != Some(text))
 }
 
-/// A MISLABELED verdict answered by the relabel it prescribed (385 T23, plan D45).
+/// A MISLABELED verdict answered by the relabel it prescribed (385 T23, plan D45): the backing alone changed since the verdict.
+///
+/// The backing is read from the claim as its finding's row kept it said, class word and all (`said`, feature 451 T221): a claim on a
+/// tagged item leaves its class word out of its fingerprint, so the shrine-tree trio's relabel - a page cited as a finding, then as a
+/// `GUESS` on that page's item - moved nothing a row held, and their MISLABELED verdicts printed in `make claims-report` after the
+/// correction. A row recorded before T221 keeps no such line: it is answered only where its stored claim differs from the claim with
+/// and without its anchors - before T221 a MISLABELED claim that only named its item read as rewritten, and so as answered.
 pub fn relabel_answered(was: &Value, row: &Row, root: &Path) -> Result<bool, Fail> {
-    Ok(is(was, "verdict", "MISLABELED")
-        && claim_rewritten(was, &row.claim.normalized())
-        && relabeled_only(was, row, root)?)
+    if !is(was, "verdict", "MISLABELED") {
+        return Ok(false);
+    }
+    let now = row.claim.unanchored();
+    let moved = match was.get("said").and_then(Value::as_str) {
+        Some(said) => said != now,
+        None => claim_rewritten(was, &row.claim.normalized()) && claim_rewritten(was, &now),
+    };
+    Ok(moved && relabeled_only(was, row, root)?)
+}
+
+/// The keys of the findings a relabel answered ([`relabel_answered`]): what the push's carry, the report and the clean gate leave out.
+pub fn answered(cur: &Cur, index: &Index, root: &Path) -> Result<HashSet<String>, Fail> {
+    let mut out = HashSet::new();
+    for (k, v) in index {
+        if let Some(row) = cur.get(k) {
+            if relabel_answered(v, row, root)? {
+                out.insert(k.clone());
+            }
+        }
+    }
+    Ok(out)
+}
+
+/// Why a finding is owed again once its unit's claims are not the ones it was judged beside.
+pub const SIBLINGS: &str = "its unit's claims changed since the finding";
+
+/// A unit's claim labels, fingerprinted: what a finding's row keeps (`siblings`, feature 451 T221). `audit/palette.rs`'s MISLABELED
+/// asked for claims of their own on three of its table's rows; they were written beside the judged claim, which did not move, so its
+/// verdict stood in the report with nothing owed.
+pub fn siblings_of(unit: &Unit) -> String {
+    let mut labels: Vec<&str> = unit.claims.iter().map(|c| c.label.as_str()).collect();
+    labels.sort_unstable();
+    digest(&labels)
+}
+
+/// Is `was` a finding whose unit's claims changed since it was judged?
+fn siblings_moved(was: &Value, row: &Row) -> bool {
+    super::reply::FINDINGS.contains(&field(was, "verdict"))
+        && was
+            .get("siblings")
+            .is_some_and(|s| s.as_str() != Some(&siblings_of(&row.unit)))
 }
 
 /// `page:digest` for every block now standing on the questions `pointers` cite.
@@ -650,7 +695,14 @@ fn owed_one(
             None => "research changed".to_owned(),
         }));
     }
-    Ok(None)
+    if siblings_moved(was, row) {
+        return Ok(Some(SIBLINGS.to_owned()));
+    }
+    // a section's `fix: code` drift is judged again once the code that draws it moves (feature 451 T220)
+    let root = qdir.and_then(Path::parent).and_then(Path::parent);
+    Ok(root
+        .is_some_and(|r| super::drawn::moved(was, r))
+        .then(|| super::drawn::DRAWN.to_owned()))
 }
 
 #[cfg(test)]

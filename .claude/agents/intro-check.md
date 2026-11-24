@@ -89,7 +89,15 @@ as blocks of exactly this shape, which `make apply-edits` applies and the freeze
 ## Outside the change (feature 375, FR-006)
 
 Your bundle's MANIFEST ends with **The change**: the blocks and notes this delta wrote or rewrote. Judge everything you are
-asked to judge, but a finding on a block or note that is NOT listed there is pre-existing: report it under a closing
-`OUTSIDE THE CHANGE` heading, one line each - `- <origin file> | <the block, a few words> | <the finding>` - and give it no
-EDIT block. The session files those as rows of the feature rather than fixing them inside this change (in feature 372 each
-such fix re-owed a whole round of checks). A finding on a listed block is reported as usual, with its EDIT block.
+asked to judge, but a finding on a block or note that is NOT listed there is pre-existing: it gets no EDIT block and is not
+fixed inside this change (in feature 372 each such fix re-owed a whole round of checks). **It is filed only when it names a
+wrong outcome a reader of the map, the sheet or the page, or the user of a tool or check, would meet** (feature 451 T219; constitution XIV: a defect is a wrong
+outcome, never a difference - of feature 449's 52 tasks filed from such notes in four days, 22 named nothing wrong): report
+that one under a closing `OUTSIDE THE CHANGE` heading, one line each -
+`- <origin file> | <the block, a few words> | <the finding> | effect: <map|sheet|page|tool> - <the wrong outcome its reader or user meets>` -
+e.g. `effect: page - its reader is told the hall faced south, which the quoted source does not say`; `tool` is a command or
+check that crashes, hangs, refuses valid input or answers wrongly, named with how (`effect: tool - make record-owed names no
+check for a block whose quotation changed`). A pre-existing finding
+that names no such outcome - a wording or format preference, a gap the page is only silent on, a difference that reads true -
+is one line under a `NOTED, NOT FILED` heading after it, and is dropped: the session's tool files a line only with its effect,
+and `effect: none` is no effect. A finding on a listed block is reported as usual, with its EDIT block.

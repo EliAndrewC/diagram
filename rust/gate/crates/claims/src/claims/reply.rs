@@ -240,8 +240,23 @@ fn verdict_row(
     if let Some(r) = rests {
         row.insert("rests".into(), json!(r));
     }
-    if outside && FINDINGS.contains(&verdict) {
-        row.insert("outside".into(), json!(true));
+    if FINDINGS.contains(&verdict) {
+        // what a later correction of the claim is read against (feature 451 T221): the claim as said, its unit's claim labels
+        for f in ["said", "siblings"] {
+            if let Some(v) = fp.get(f) {
+                row.insert(f.into(), v.clone());
+            }
+        }
+        // the engine a section's `fix: code` drift was judged against (feature 451 T220)
+        if let Some(v) = fp
+            .get("drawn")
+            .filter(|_| super::drawn::keeps(verdict, &note))
+        {
+            row.insert("drawn".into(), v.clone());
+        }
+        if outside {
+            row.insert("outside".into(), json!(true));
+        }
     }
     row
 }

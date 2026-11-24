@@ -737,14 +737,14 @@ claims-owed: ## [project] every research claim of the engine or the Mode A proce
 claims-bundle: ## [project] the bundle impl-drift reads, copied out of the repository - dispatch it on the MANIFEST printed   MODULE=<file> | OWED=1 | UNITS="<key>,<key>"   [OUT=<dir>] [REASON="<why>" for claims not owed] [WITH="<path>::<qualname>,..." context] [PAGES="<question file>,..."]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" bundle $(if $(OWED),--owed,) $(if $(MODULE),--module "$(MODULE)",) $(if $(UNITS),--units "$$UNITS",) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(REASON),--reason "$$REASON",) $(if $(WITH),--with "$$WITH",) $(if $(PAGES),--pages "$(PAGES)",)
 
-claims-checked: ## [project] record an impl-drift reply into the claims index, at the fingerprints its bundle read   BUNDLE=<dir> REPLY=<file holding the agent's reply>
+claims-checked: ## [project] record an impl-drift reply into the claims index, at the fingerprints its bundle read; a finding that says the pages are silent is held, unrecorded and unfiled, until the record's three nearest pages for its words are in the bundle - it names them and the claims-bundle PAGES= call (451 T218)   BUNDLE=<dir> REPLY=<file holding the agent's reply>
 	@if [ -z "$(BUNDLE)" ] || [ -z "$(REPLY)" ]; then printf 'make claims-checked: BUNDLE=<dir> and REPLY=<file> are required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" record --bundle "$(abspath $(BUNDLE))" --reply "$(abspath $(REPLY))"
 
 claims-coverage: ## [project] every unit with no research claim, a malformed claim or a pointer to no question - the gate's coverage test, narrowed   [IN=<part of a file path>]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" coverage $(if $(IN),--path "$(IN)",)
 
-claims-report: ## [project] the claims index: counts by verdict, every finding (drifted, needs research, mislabeled, unclaimed, undecided) and every UNRESEARCHED claim; DEFERRED findings are counted, not listed   [ALL=1 lists them]
+claims-report: ## [project] the claims index: counts by verdict, every finding (drifted, needs research, mislabeled, unclaimed, undecided) and every UNRESEARCHED claim; DEFERRED findings, and a MISLABELED its claim's relabel answered (451 T221), are counted, not listed   [ALL=1 lists them]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" report $(if $(filter 1,$(ALL)),--all,)
 
 tunables: ## [project] every claim whose value is ours - GUESS (searched, silent), UNRESEARCHED, CONVENTION - with its figure: a goal and a knob a fixing pass may move (feature 417 T28)   [UNDER=<file or dir>] [ALL=1 keeps claims with no figure] [COUNT=1] [INLINE=1 lists the numbers inside functions no claim states]
@@ -792,7 +792,7 @@ record-owed: ## [project] every record check this delta owes (intro-check, recor
 record-checked: ## [project] record that a record check returned on the units it read - what answers an owed unit at the push   CHECK=<check> RESULT="<counts>" (BUNDLE=<dir> | Q=<NNNN> NOTES=<k,k> for source-reader | ... REASON="<why>")
 ##  BUNDLE=<dir>    the bundle the check read: its units, at the content it read
 ##  Q= NOTES= KEY= KIND=  the units the tree owes on that subject, at today's content - source-reader on named notes, or any check with REASON= (written to dev/bypass-log/)
-##  REPLY=<file>    the check's reply: its OUTSIDE THE CHANGE findings are filed as open rows of the feature (feature 375)
+##  REPLY=<file>    the check's reply: its OUTSIDE THE CHANGE findings are filed as open rows of the feature (feature 375), each only where it names the wrong outcome a reader of the map, sheet or page meets, or a tool's user - `| effect: <map|sheet|page|tool> - ...`; the rest are listed and dropped (451 T219)
 ##  FIXED_BY="<check>: <its finding>"  CHECK=quote-check Q= NOTES=: a fix made by hand for ANOTHER check's finding, outside the quotation and its claim - the tool verifies both unchanged, else refuses (feature 399); no RESULT needed
 	@if [ -z "$(CHECK)" ] || { [ -z "$$RESULT" ] && [ -z "$$FIXED_BY" ]; }; then printf 'make record-checked: CHECK=<check> and RESULT="<its counts>" are required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record record-owed --root "$$(git rev-parse --show-toplevel)" --answer "$(CHECK)" --result "$$RESULT" $(if $(FIXED_BY),--fixed-by "$$FIXED_BY",) $(if $(BUNDLE),--bundle "$(abspath $(BUNDLE))",) $(if $(Q),--q "$$Q",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(KEY),--key "$$KEY",) $(if $(KIND),--kind "$$KIND",) $(if $(REASON),--reason "$$REASON",) $(if $(REPLY),--reply "$(abspath $(REPLY))",)

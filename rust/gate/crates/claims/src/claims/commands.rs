@@ -351,13 +351,18 @@ fn record_cmd(
     if l7r_shared::py_text::strip(&reply).is_empty() {
         return Ok(2);
     }
-    let (reply, bad) = vet(
+    // a finding that says the pages are silent waits for the record's nearest pages (feature 451 T218)
+    let (reply, held) = super::silent::hold(
         &super::reply::unelide(&reply, &stems),
         &units,
-        root,
-        &mut o.out,
-        &mut o.err,
+        &root.join(QUESTIONS),
+        &bundle_dir,
+        &root.join(super::silent::SEARCHED),
     )?;
+    for h in &held {
+        let _ = writeln!(o.err, "claims-checked: {h}");
+    }
+    let (reply, bad) = vet(&reply, &units, root, &mut o.out, &mut o.err)?;
     let blocks_file = bundle_dir.join("blocks.json");
     let blocks = if blocks_file.is_file() {
         Value::Object(load_map(&blocks_file)?)
@@ -383,7 +388,11 @@ fn record_cmd(
         .count();
     o.say(&format!("claims-checked: {n} of {} recorded", units.len()));
     super::flight::clear(root, &bundle_dir);
-    Ok(if bad.is_empty() { 0 } else { 3 })
+    Ok(if bad.is_empty() && held.is_empty() {
+        0
+    } else {
+        3
+    })
 }
 
 fn load_units(path: &Path) -> Result<Map<String, Value>, Fail> {

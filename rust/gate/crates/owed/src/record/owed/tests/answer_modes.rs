@@ -101,7 +101,7 @@ fn a_source_reader_answer_keeps_its_reply_and_files_what_is_outside_the_change()
         ],
     );
     assert_eq!(sr.code, 1);
-    put(&root, "reply.md", "source-reader: 1\n\u{300c}more\u{300d} \u{300c}x\u{300d}\n## OUTSIDE THE CHANGE\n- `a.html` | b | c\n- no row\n# end\n");
+    put(&root, "reply.md", "source-reader: 1\n\u{300c}more\u{300d} \u{300c}x\u{300d}\n## OUTSIDE THE CHANGE\n- `a.html` | b | c | effect: page - d\n- no row\n# end\n");
     let sr = run(
         &root,
         &[
@@ -117,7 +117,11 @@ fn a_source_reader_answer_keeps_its_reply_and_files_what_is_outside_the_change()
             &root.join("reply.md").to_string_lossy(),
         ],
     );
-    assert!(sr.stdout.contains("filed, not fixed - a.html | b | c") && sr.code == 0);
+    assert!(
+        sr.stdout
+            .contains("filed, not fixed - a.html | b | c | effect: page - d")
+            && sr.code == 0
+    );
     let rec = read_answer(&store(&root), "source-reader:0094#n");
     assert!(
         rec.contains_key("passages")

@@ -116,6 +116,9 @@ pub fn load_deferred(path: &Path) -> Result<HashSet<String>, Fail> {
     Ok(out)
 }
 
+/// A MISLABELED finding its claim's relabel answered ([`super::index::relabel_answered`]), as the report counts it (feature 451 T221).
+pub const ANSWERED: &str = "ANSWERED";
+
 /// A finding's verdict as the report shows it: DEFERRED where its unit is deferred, else its own.
 pub fn shown(key: &str, verdict: &str, deferred: &HashSet<String>) -> String {
     let unit = key.rsplit_once('#').map_or(key, |p| p.0);
@@ -207,16 +210,24 @@ pub fn report(
         .filter(|(_, v)| v.get("verdict").is_some())
         .collect();
     let due = owed(cur, index, Some(qdir), Some(store))?;
+    // a MISLABELED its relabel answered is counted apart and not listed: the report lists what stands (feature 451 T221)
+    let root = qdir.parent().and_then(Path::parent).unwrap_or(qdir);
+    let answered = super::index::answered(cur, &rows, root)?;
+    let seen = |k: &str, v: &Value| -> Result<String, Fail> {
+        Ok(if answered.contains(k) {
+            ANSWERED.to_owned()
+        } else {
+            shown(k, verdict_of(v)?, deferred)
+        })
+    };
     let mut counts: HashMap<String, usize> = HashMap::new();
     for (k, v) in &rows {
-        *counts
-            .entry(shown(k, verdict_of(v)?, deferred))
-            .or_default() += 1;
+        *counts.entry(seen(k, v)?).or_default() += 1;
     }
     let count = |v: &str| counts.get(v).copied().unwrap_or(0);
     let tally: Vec<String> = VERDICTS
         .iter()
-        .chain(&["DEFERRED"])
+        .chain(&["DEFERRED", ANSWERED])
         .filter(|v| count(v) > 0)
         .map(|v| format!("{v} {}", count(v)))
         .collect();
@@ -235,7 +246,7 @@ pub fn report(
         keys.sort();
         for key in keys {
             let v = &rows[key.as_str()];
-            let verdict = shown(key, verdict_of(v)?, deferred);
+            let verdict = seen(key, v)?;
             if verdict != "IN-STEP" {
                 lines.push(format!(
                     "  {} {key} - {}",
@@ -246,8 +257,16 @@ pub fn report(
         }
     } else {
         for (verdict, key, note) in open_findings(&rows, deferred)? {
-            lines.push(format!("  {} {key} - {note}", padded(&verdict)));
+            if !answered.contains(&key) {
+                lines.push(format!("  {} {key} - {note}", padded(&verdict)));
+            }
         }
+    }
+    if count(ANSWERED) > 0 && !show_deferred {
+        lines.push(format!(
+            "({} MISLABELED findings answered by their claim's relabel not listed: make claims-report ALL=1 lists them)",
+            count(ANSWERED)
+        ));
     }
     if count("DEFERRED") > 0 && !show_deferred {
         lines.push(format!(
