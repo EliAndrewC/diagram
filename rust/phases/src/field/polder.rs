@@ -233,6 +233,7 @@ impl Warp {
     ///
     /// Research:
     ///     the rice polder's deformation - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: each row and column line takes its own gentle bow and each crossing is nudged a few feet, while the block's edge stays put - each line's bow a single arch along it, nothing at its ends, interpolated between lines; the crossings' nudges interpolated between crossings, so both sides of one bund move together
+    ///     the last row against the ring canal - GUESS: research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html has the ring canal at the block's edge stay put and is silent on how near it a bowed plot may stand; the lattice's lines stand a whole pitch apart, so the plots' far edge, a gap short of the block's last line, keeps a small share of the last interior line's bow and nudge, and the last row's plots creep toward the fixed ring canal by up to about 2.3 ft of its `RING_FT` 6 ft - never onto its water (the least clear ground between a plot's corner and a trunk's bank 3.1 ft over 160 rolled polders, measured 2026-11-24, feature 449 T421), left as it stands
     ///     the mosaic's drift - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic bends the lattice out of line, fading to nothing at the fixed outer edge (`DRIFT_SHARE` of a module on `MOSAIC_WAVES`); the chessboard held straight
     #[expect(
         clippy::many_single_char_names,

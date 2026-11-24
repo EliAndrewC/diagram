@@ -114,7 +114,8 @@ const BANK_STEP_FT: f64 = 2.0;
 /// conversion (`field::staged::polder_stage`), each knob it reads rolled as the deleted polder stage rolled it.
 ///
 /// Research:
-///     the polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies
+///     the polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies - this stage only hands the plan's figures on; the order is built in `field::staged::polder_stage`, whose `field::polder::polder` lays the plots, the ditches between their columns and the ring canal `RING_FT` out from the plots, and whose `field::dike::dike` lays the dike's inner face on that envelope and its outer face beyond
+///     the block on the canvas's middle - CONVENTION: the block laid about the canvas's center, the sheet's framing and no place in the world - the drawing is cropped to what is drawn (`Svg::finish`), and the page's landward shore is the flank the village takes (`landward`), named after the block is laid, not a side of the canvas
 ///     the dike-pond's split - GUESS: the share of a parcel a pond takes, rolled from 0.3 to 0.7 (the registry's `dikepond_split`)
 ///     the paddy's rest - GUESS: settled 0.8 and unsettled 0.2, a knob between the two forms (the registry's `paddy_rest`)
 fn stage_polder(p: &Plan) -> PolderStage {
@@ -225,12 +226,14 @@ fn sluice_frame(at: Pt, dir: Pt, w: f64) -> SluiceFrame {
     }
 }
 
-/// The polder drawn: the wild pond and its fringe at the head, the plots by state, the ditches by role, the outfall, the dike's
-/// band with its crowns, a dike-pond's parcels with their banks, water and crops, a rice polder's pocket pond; the sluices are
-/// `draw_sluices`', drawn on top.
+/// The polder drawn: the wild pond and its fringe at the head, the plots by state, a dike-pond's parcels with their banks and
+/// water, the dike's band, then over it the ditches by role, the feeder and the outfall, then the dike's crowns and the banks'
+/// crops, a rice polder's pocket pond; the sluices are `draw_sluices`', drawn on top.
 ///
 /// Research:
 ///     the polder drawn - CONVENTION: the deleted `ink.dike` and `dikeponds`, each record drawn as the engine drew it, the sluices apart
+///     the band cut where a channel crosses - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: where a channel crosses the dike, the band is cut, the water running through a gap in the earthwork under a sluice gate, not over its top - the band painted before every channel's stroke, so the feeder and the outfall each show through it at their drawn width (`FEEDER_W`, `RUN_W`), bank to bank, the earth meeting the water as the waterside reeds do (449 T236); before 449 T419 the band was painted after the water, unbroken over both crossings
+///     the cut as wide as the water - GUESS: the page silent on the cut's width; the channel's own drawn width, the simpler drawing (paint order, the faces recorded whole) over a cut built into the band's outline, taken where the record does not choose
 ///     the pocket pond's ring - GUESS: flooded ground 2.5 ft wide round the pond inside a bund line 2.2 ft wide, the deleted ink's; no page sizes the margin
 fn draw_polder(svg: &mut Svg, s: &PolderStage) {
     let (c, rx, ry) = s.polder.pond;
@@ -262,6 +265,9 @@ fn draw_polder(svg: &mut Svg, s: &PolderStage) {
         svg.kind(kind);
         svg.polygon(ring, water, Some((ink::RIM, 1.0)));
     }
+    // the dike's band under every channel's water (449 T419): the feeder and the outfall cross it, each through a cut its own width
+    svg.kind("perimeter dike");
+    svg.band(&s.dike.outer, &s.dike.inner, DIKE_EARTH, (DIKE_EDGE, 1.0));
     for d in &s.polder.ditches {
         svg.kind(if d.role == "drain" || d.seg == "drain" {
             "drainage ditch"
@@ -283,8 +289,6 @@ fn draw_polder(svg: &mut Svg, s: &PolderStage) {
     svg.line(&s.polder.feeder, ink::SUPPLY, FEEDER_W);
     svg.kind("drainage ditch");
     svg.unframed(&s.outfall, ink::DRAIN, RUN_W);
-    svg.kind("perimeter dike");
-    svg.band(&s.dike.outer, &s.dike.inner, DIKE_EARTH, (DIKE_EDGE, 1.0));
     svg.group(0.92);
     let bank_crowns = s
         .converted
@@ -324,7 +328,7 @@ fn draw_polder(svg: &mut Svg, s: &PolderStage) {
 ///
 /// Research:
 ///     the sluices drawn - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: each a frame across the channel that crosses the dike at its point, at that channel's drawn width; none drawn where no channel is known, the gap named rather than guessed
-///     on top - CONVENTION: the frame drawn above the water and the reeds, as the deleted `sluice_gate` drew it (its top layer)
+///     on top - CONVENTION: the frame drawn above the water and the reeds, as the deleted `sluice_gate` drew it (its top layer) - `Svg` writes its marks in the order they are drawn, and `roll_polder` draws the sluices after the polder (`draw_polder`: its water, dike and fringe), the waterside strips and the bank bands, only the settlement's ground mark after them
 ///     the board's place - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the board a few steps down the blocked channel from the junction, so that it plainly crosses the channel it blocks, not the one it branches from; a polder's sluice point stands 8.5 ft out from the ring canal's corner or its drain trunk's end (`RING_FT`, 6 ft each way, measured on Kuwabata 2026-11-22, feature 449 T249), joined to that junction by a drawn reach (`field::polder::joins`, 449 T263) and no other channel through it, so the board is drawn on the point, 8.5 ft down the blocked channel from the junction
 fn draw_sluices(svg: &mut Svg, s: &PolderStage, missing: &mut Vec<String>) {
     svg.kind("sluice gate");

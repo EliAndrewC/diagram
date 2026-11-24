@@ -14,7 +14,12 @@ use crate::water_frame::{admitted, roll_plan};
 /// The water frame's 21 knobs in the order they roll, each with its table (a table's weights its repeated entries) and branch.
 ///
 /// Research:
-///     the knobs' tables - GUESS: rolled per hamlet from their tables, carried from the deleted `hamletgen/consts*.py` (feature 444 T19); where the page records a table it is cited below
+///     the knobs' tables - GUESS: the tables no page cited here speaks to (`water_sink`, `bamboo`, `grove_sides`, `grove_flank`, `well_siting`, `manure_form`, the copse's and the notice board's siting, `plot_size`'s three sizes and their weights, and `lane_web`'s two forms at even odds), rolled per hamlet as the deleted `hamletgen/consts*.py` held them (feature 444 T19); a table a page records is cited below
+///     the row's leeward groves - research/questions/0033-row-villages-resson.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: `row_shelter` is a row village's roll, at even odds, between its leeward row drawn with full groves like the row across the street (`own_grove`) and drawn after the farm the row across already shelters, its windward grove thin (`sheltered`) - both forms on 0033's page, the even odds a GUESS there; neither is a village shelter belt, every row farm keeping a grove of its own and no belt drawn for a row or a scattered settlement (0031)
+///     a row's line, sides and wells - GUESS research/questions/0033-row-villages-resson.drawing.html: a row along a street laid out first or along the paddy's dry edge (`row_line`), its farms on one side of the street or on both (`row_sides`), a well at every farm or wells shared along the street (`row_water`), each rolled per settlement at even odds, the even odds a GUESS there
+///     a hamlet's plot size rolled - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a hamlet chooses its plot size by chance from a table of its own, its plots never laid out in even rows (`plot_size`; the table's sizes and weights the GUESS above)
+///     the intake and the brook's side - GUESS research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: whether a hamlet has a weir or a bare mouth chosen at random with even odds (`intake`), a GUESS there; and which side of the fan the brook runs down (`brook_side`), the left or the right at even odds as the page's 1:2:1 has its two sides - the side alone is rolled here, whether the intake stands on that shoulder or at the center of the head being the field stage's `intake_place` (`driver.rs` `FIELD_KNOBS`, shoulder or center at even odds), the two together the page's left, center and right at 1:2:1
+///     the lane web on no scattered settlement - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a scattered settlement draws no lanes among its farms, so `lane_web` is rolled only for a clustered or a row settlement (`not_dispersed`)
 ///     the farm water - GUESS: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html records a channel or a well at even odds as a guess
 ///     the grain drift - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: eight degrees either way on a hamlet's
 ///     the cluster's shape - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the lump and the line along a levee or a road are the attested forms (round, elongated); the crescent a GUESS there
@@ -242,7 +247,8 @@ pub fn canvas_side(households: u32, shape: &str) -> f64 {
 /// Research:
 ///     the fall backs the wind - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a rolled fall only from the falls that leave a windward margin (`water_frame::admitted`)
 ///     regional wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the northwest unless declared
-///     water flow follows the fall - DEVIATION research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a hamlet's bearing taken from its land's fall unless the hamlet declares one (`Spec::water_flow`)
+///     water flow follows the fall - DEVIATION research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a hamlet's bearing taken from its land's fall unless the hamlet declares one (`Spec::water_flow`), a declared one standing only within the page's strict 90 degrees of the fall (`spec::follows`); against a declared fall the spec is refused (`spec::parse`), against a rolled one see the next claim
+///     a declared bearing off a rolled fall - GUESS: research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html silent on which yields when a hamlet declares its bearing, leaves its fall to the roll, and the roll lands 90 degrees or more off it; the bearing yields and the water runs down the rolled fall, so the page's bound holds (no water with a net uphill run) and the hamlet is still drawn - the easier route, taken over rolling a fall to fit (a polder under a northwest wind admits two falls, east and north, and a bearing to the southwest fits neither, so a second rule would still be owed) and over refusing a spec for what its seed rolled; no pool spec declares a bearing and all five declare their fall, so the case meets no map (measured 2026-11-24, feature 449 T416)
 ///     no brook knobs on a polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a polder diked out of standing water has no brook, so no intake or brook side is rolled
 ///     the field's archetype - DEVIATION research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a polder drawn only when the map asks for one, only the valley fan dealt at random - the polder and the dike-pond attested, their random dealing a known gap
 #[must_use]
@@ -330,6 +336,8 @@ pub fn plan(spec: &Spec) -> Plan {
         archetype,
         windward,
         down_deg,
+        // a declared bearing stands within 90 degrees of the fall; off a ROLLED fall it yields to the fall (the claim above:
+        // 0054 silent on which yields, its bound kept and the hamlet drawn; parse refuses the pair when both are declared)
         water_flow: spec
             .water_flow
             .filter(|w| crate::driver::spec::follows(*w, down_deg))
@@ -375,11 +383,24 @@ mod tests {
             &parse(r#"{"name": "a", "seed": 4, "down_deg": 225, "water_flow": 200}"#).unwrap(),
         );
         assert!((declared.water_flow - 200.0).abs() < 1e-9);
-        let rolled = plan(&parse(r#"{"name": "a", "seed": 4, "water_flow": 1000}"#).unwrap());
-        assert!(
-            (rolled.water_flow - rolled.down_deg).abs() < 1e-9
-                || crate::driver::spec::follows(1000.0, rolled.down_deg)
+        // against a ROLLED fall: a bearing within 90 degrees of it stands, one square against it yields to the fall
+        let fall = plan(&parse(r#"{"name": "a", "seed": 4}"#).unwrap()).down_deg;
+        let near = (fall + 30.0).rem_euclid(360.0);
+        let stands = plan(
+            &parse(&format!(
+                r#"{{"name": "a", "seed": 4, "water_flow": {near}}}"#
+            ))
+            .unwrap(),
         );
+        assert!((stands.down_deg - fall).abs() < 1e-9 && (stands.water_flow - near).abs() < 1e-9);
+        let against = (fall + 180.0).rem_euclid(360.0);
+        let yields = plan(
+            &parse(&format!(
+                r#"{{"name": "a", "seed": 4, "water_flow": {against}}}"#
+            ))
+            .unwrap(),
+        );
+        assert!((yields.down_deg - fall).abs() < 1e-9 && (yields.water_flow - fall).abs() < 1e-9);
     }
 
     #[test]

@@ -146,11 +146,16 @@ const CROP_MARGIN: f64 = 48.0;
 /// them: `plot_regularity` only `organic` on a hamlet, its `grid` form a planned field's.
 ///
 /// Research:
-///     the field's knobs - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: each rolled per settlement from its table and weights (`knobs.json`), a spec's pin standing
+///     the field's knobs - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: each rolled per settlement from its table and weights (`knobs.json`), a spec's pin standing - but for the winter crop's weights, which the site sets (the claim after next)
+///     a town's nearness - GUESS: near or far at even odds; no hamlet's spec records the distance to its market town (the deleted `TOWN_NEARNESS`)
+///     the winter crop's odds off the table - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: a settlement's drainage and the nearness of a town set the odds, so the table names the winter crop's forms alone and the field stage rolls it once its fields are built (`field::build::winter_crop`), from the drained share of the paddy and the town nearness rolled here
+///     the fan's middle - GUESS research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: left wild on three maps in four, a GUESS there (0.75 and 0.25)
+///     the weir's forms - GUESS research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a weir built in one of four ways, chosen at random with even odds, the even odds a GUESS there
+///     the intake's place and siting - GUESS research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake at the left, the center or the right of the fan's head at odds of 1:2:1, a GUESS there - the shoulder or the center at even odds here, the shoulder's side the brook's (`brook_side`, itself even); on a bend or a straight reach, the two equally likely
 ///     the planned grid on no hamlet - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a hamlet's basins organic, "never as the tidy grid"; the grid a planned field's
 const FIELD_KNOBS: [(&str, &[&str], &[f64]); 8] = [
     ("town_nearness", &["near", "far"], &[]),
-    ("winter_crop", &["barley", "none"], &[0.5, 0.5]),
+    ("winter_crop", &["barley", "none"], &[]),
     ("fan_middle", &["wild", "cleared"], &[0.75, 0.25]),
     ("paddy_rest", &["settled", "unsettled"], &[0.8, 0.2]),
     ("plot_regularity", &["organic"], &[]),

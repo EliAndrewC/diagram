@@ -159,7 +159,46 @@ pub struct FieldOut {
     pub counts: HashMap<String, u64>,
 }
 
-/// The stage's knobs: each pinned form taken, else rolled from its table as `Knob.roll` draws it.
+/// A far town's weight on the winter barley.
+///
+/// Research:
+///     a far town's weight - GUESS research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: drainage and a town's nearness set the odds, how the two weigh against each other a GUESS there; half a near town's, the manure a second crop needed being dearer to bring, the deleted `TOWN_FAR_FACTOR`
+const TOWN_FAR_FACTOR: f64 = 0.5;
+
+/// The odds a settlement's paddies carry winter barley: the drained share of its paddy, times `TOWN_FAR_FACTOR` far from a town.
+///
+/// Research:
+///     the winter crop's odds - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: a settlement's drainage and the nearness of a town, whose manure a second crop needed, set the odds; how the two weigh against each other a GUESS there - the drained share of the paddy beside a town and half of it far from one, the deleted `WinterCropKnob.weights_for`
+fn barley_odds(drained: f64, paddy: f64, near: bool) -> f64 {
+    if paddy <= 0.0 {
+        return 0.0;
+    }
+    (drained / paddy).min(1.0) * if near { 1.0 } else { TOWN_FAR_FACTOR }
+}
+
+/// The winter crop's knob, the one knob whose odds the site sets.
+///
+/// Research:
+///     the knob's name - NONE: the registry's name for the winter crop's knob
+const WINTER_CROP: &str = "winter_crop";
+
+/// An unpinned winter crop, rolled from its own stream once the fields are built: barley at the site's odds (`barley_odds`), any
+/// other form sharing the rest.
+///
+/// Research:
+///     the winter crop rolled from the site - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: both forms attested, so the choice is made at random, settlement by settlement, a settlement's drainage and the nearness of a town setting the odds - rolled after the fields, when the drained plots are known, since nothing the fields draw reads it (a summer map draws neither winter crop; it shapes only the dry hem laid after)
+fn winter_crop(seed: i64, forms: &[String], odds: f64, counts: &mut Counts) -> String {
+    counts.add("candidate@_roll", 1);
+    let n = u32::try_from(forms.len()).unwrap_or(u32::MAX);
+    let weights: Vec<f64> = forms
+        .iter()
+        .map(|f| if f == "barley" { odds } else { 1.0 - odds })
+        .collect();
+    forms[roll(seed, WINTER_CROP, n, &weights) as usize].clone()
+}
+
+/// The stage's knobs: each pinned form taken, else rolled from its table as `Knob.roll` draws it - but for an unpinned winter crop,
+/// rolled once the fields are built and what drains is known (`winter_crop`).
 ///
 /// Research:
 ///     knobs rolled from the seed - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each knob's form rolled per hamlet, never chosen
@@ -167,6 +206,7 @@ fn rolled(seed: i64, knobs: &[KnobIn], counts: &mut Counts) -> HashMap<String, S
     knobs
         .iter()
         .filter(|(_, forms, _, pin)| pin.is_some() || !forms.is_empty())
+        .filter(|(name, _, _, pin)| pin.is_some() || name != WINTER_CROP)
         .map(|(name, forms, weights, pin)| {
             counts.add("candidate@_roll", 1);
             let v = pin.clone().unwrap_or_else(|| {
@@ -185,7 +225,10 @@ fn rolled(seed: i64, knobs: &[KnobIn], counts: &mut Counts) -> HashMap<String, S
 ///     fields side by side - GUESS: the record silent on where a settlement's tracts stood to each other; across the fall, each fan's half-breadths apart with the brook between them, its width and twice its skirt and wander
 ///     the grain owed - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: about 0.85 acre a household (`GRAIN_ACRES_PER_HOUSEHOLD`), the need handed on to the hem stage, which reports the grain drawn and the room left (T28)
 ///     barley on the drained paddy - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: barley followed the rice on a paddy that drained, never on a wet one, and a drained paddy's winter barley is counted acre for acre against the dry field it spares
-///     the hem's line - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: where the middle is left wild the dry plots climb from the toe into the middle, as far as `hem_bounds` lets them; on a fan whose middle is cleared, the cleared ground is drawn only as the hem along the whole canal, one band of its tracts whatever the grain asks - canal A's, the first field's far flank up from its foot, and across its head where cleared; the line and its bounds handed on to the hem stage, which lays the hem after the seat (T28)
+///     the hem's line - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: where the middle is left wild and the paddy lies bare over the winter the dry plots climb from the toe into the middle, as far as `hem_bounds` lets them, and where the paddy carries barley its dry fields stay on the toe; on a fan whose middle is cleared, the cleared ground is drawn only as the hem along the whole canal, one band of its tracts whatever the grain asks - the line canal A's, the first field's far flank up from its foot: to the head on a bare-winter wild middle, only up the toe (`TOE_SHARE`) on a barley one, and on across the head where cleared; the line and its bounds handed on to the hem stage, which lays the hem after the seat (T28)
+///     the climb's order - GUESS research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the clearing starts from the plots nearest the toe, the page's own GUESS - laid band by band (`field::dry::hem`), each band a tract's two to four strips deep along the whole flank from the foot to the head before the next band behind it, the last band stopping where the grain is held; so a bare-winter hamlet's dry fields line its whole far flank, deepest at the foot (Inashiro, measured 2026-11-24: 85 plots holding its 12.75 acres, nine strips deep at the foot stepping to five at the head)
+///     the winter crop after the fields - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: a settlement's drainage and the nearness of a town set the winter crop's odds - an unpinned winter crop rolled once the fields are laid (`winter_crop`), at the drained share of the laid paddy, halved far from a town (`barley_odds`); a spec's pin stands
+///     barley on a cleared middle - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: on a fan whose middle is already cleared, the cleared ground is drawn only as the hem along the whole canal, which cannot hold the whole need, so such a hamlet is always drawn growing its barley on its paddy - an unpinned winter crop on a cleared middle is barley whatever the draw
 ///     the brook's flank unhemmed - GUESS: research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html silent on dry plots between canal B and the brook; that flank left to the brook's skirt, the hem the high margin's
 ///     the hem on the first field - GUESS: the record silent on which of several fields a hamlet's dry hem fringes; the first, on its flank away from the brook, its inputs handed on (`Field.hem`)
 ///
@@ -193,8 +236,7 @@ fn rolled(seed: i64, knobs: &[KnobIn], counts: &mut Counts) -> HashMap<String, S
 /// `FieldRefused` when a basin or a grave breaks a rule where it is decided (D7).
 pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
     let mut counts = Counts::default();
-    let knobs = rolled(inp.seed, &inp.knobs, &mut counts);
-    let is = |k: &str, v: &str| knobs.get(k).is_some_and(|x| x == v);
+    let mut knobs = rolled(inp.seed, &inp.knobs, &mut counts);
     let paddy = paddy_sq_ft(inp.households);
     let n = fields_for(paddy, cap_sq_ft(inp.seed));
     counts.add("write@area", 2);
@@ -222,29 +264,57 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
             laid_fan(inp, area, center, inp.seed + i64::from(k), &mut counts)
         };
         let field = one(inp, &f, (&tag, k == 0), &knobs, &mut counts)?;
-        // the drained plots' area, read only where the barley counts it (the audit, T16: every roll walked every ring for it)
-        if is("winter_crop", "barley") {
-            drained += drained_area(&field, &mut counts);
-        }
+        // the drained plots' area, read off the low row and the rested plots alone (the audit, T16: every roll walked every ring
+        // for it): the winter crop's odds on every roll, the barley's ground where it is rolled
+        drained += drained_area(&field, &mut counts);
         fields.push(field);
     }
+    // the winter crop, its odds the site's now that what drains is known (0009); a pin stands
+    if let Some((_, forms, _, _)) = inp
+        .knobs
+        .iter()
+        .find(|k| k.0 == WINTER_CROP && k.3.is_none() && !k.1.is_empty())
+    {
+        let near = knobs.get("town_nearness").is_some_and(|x| x == "near");
+        let laid: f64 = fields.iter().map(|f: &Field| f.area).sum();
+        // a cleared middle is drawn only as the one hem band, which cannot hold the whole need: always barley (0011)
+        let odds = if knobs.get("fan_middle").is_some_and(|x| x == "cleared") {
+            1.0
+        } else {
+            barley_odds(drained, laid, near)
+        };
+        knobs.insert(
+            WINTER_CROP.to_owned(),
+            winter_crop(inp.seed, forms, odds, &mut counts),
+        );
+    }
+    let is = |k: &str, v: &str| knobs.get(k).is_some_and(|x| x == v);
     // the coarse grain: a drained winter paddy grows its barley acre for acre; what is left goes to the dry hem of the first field
     let dry_need = if is("winter_crop", "barley") {
         (need - drained).max(0.0)
     } else {
         need
     };
-    // a wild middle keeps the hem to the toe, climbing up the far flank from the foot only as far as the grain asks; a cleared
-    // one hems the whole canal, the upper edge too (fields_for draws at least one field)
+    // a wild middle keeps the hem to the toe - the toe's one band where the paddy carries the barley, a climb up the far flank
+    // from the foot, band behind band, as far as the grain asks where it lies bare; a cleared one hems the whole canal, the upper
+    // edge too (fields_for draws at least one field)
     let (drawn, room) = {
         let f = &mut fields[0];
         let far = -inp.brook_side;
-        // the flank's drawn course from the foot up, every edge step; a cleared middle carries on across the head
+        // the flank's drawn course from the foot up, every edge step - to the head, or only up the toe where a wild middle's
+        // paddy carries the barley; a cleared middle carries on across the head
         let steps = 24_u32;
+        let rise = if is("fan_middle", "wild") && is("winter_crop", "barley") {
+            1.0 - TOE_SHARE
+        } else {
+            1.0
+        };
         let mut line: Vec<Pt> = (0..=steps)
             .map(|k| {
-                f.fan
-                    .at(f.fan.length * (1.0 - f64::from(k) / f64::from(steps)), far)
+                f.fan.at(
+                    f.fan.length * (1.0 - rise * (f64::from(k) / f64::from(steps))),
+                    far,
+                )
             })
             .collect();
         if !is("fan_middle", "wild") {
@@ -549,18 +619,24 @@ fn drained_area(field: &Field, counts: &mut Counts) -> f64 {
     field.area - wet - rested
 }
 
+/// Where a fan's toe begins, as a share of its length down from its head.
+///
+/// Research:
+///     the toe - GUESS research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a fan's toe is taken to begin two-thirds of the way down the slope from its head, the page's own GUESS
+pub const TOE_SHARE: f64 = 2.0 / 3.0;
+
 /// The hem's bounds, (the grain it holds, the bands it may climb): a wild middle's hem climbs until the grain is held where the
-/// paddy lies bare over the winter, and stays on the toe, one band, where it carries barley; a cleared middle's is the one band
-/// along the whole canal, whatever the grain asks.
+/// paddy lies bare over the winter, and is the one band of its line, the toe's (`build` hands it the toe alone), where it carries
+/// barley; a cleared middle's is the one band along the whole canal - a one-band hem laid whatever the grain asks.
 ///
 /// Research:
 ///     the hem's climb - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: where a hamlet's paddy lies bare over the winter its dry fields climb from the toe into the wild middle until they hold the grain; where it carries barley its dry fields stay on the toe; a cleared middle drawn only as the hem along the whole canal - the toe one band, the climb bounded only by `MAX_BANDS`, a guard far past any canvas
-///     a barley hamlet's shortfall - GUESS: research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html silent on where the grain goes when the toe's one band holds less than the drained barley left owed; drawn short, the shortfall recorded beside the need (`grain`: drawn, needed, the room), never refused
+///     the toe's band whatever the grain asks - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: where the middle stays wild the hem keeps to the fan's toe and leaves the middle to scrub - a wild middle's barley hamlet draws the toe's one band in full, as a cleared middle draws its canal's, not only as much as the grain left owed asks: before 449 T421 the band held only that grain, so a hamlet whose barley held its whole need drew no dry field (209 of 209 such rolls, measured 2026-11-24 over 450 rolls of seeds 1 to 150), where both pages keep its dry fields on the toe
+///     a barley hamlet's shortfall - GUESS: research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html silent on where the grain goes when the toe's one band holds less than the drained barley left owed; the band drawn as it stands, the need recorded beside what is drawn (`grain`: drawn, needed, the room), never refused
 fn hem_bounds(wild: bool, barley: bool, need: f64) -> (f64, u32) {
     match (wild, barley) {
         (true, false) => (need, MAX_BANDS),
-        (true, true) => (need, 1),
-        (false, _) => (f64::INFINITY, 1),
+        (_, true) | (false, _) => (f64::INFINITY, 1),
     }
 }
 
@@ -568,7 +644,7 @@ fn hem_bounds(wild: bool, barley: bool, need: f64) -> (f64, u32) {
 mod tests {
     use std::collections::HashMap;
 
-    use super::{build, hem_bounds, FieldIn};
+    use super::{barley_odds, build, hem_bounds, FieldIn, TOE_SHARE};
     use crate::field::brook::BrookIn;
     use crate::field::dry::MAX_BANDS;
     use crate::field::lattice::ROW_FT;
@@ -577,9 +653,40 @@ mod tests {
     #[test]
     fn a_barley_hamlets_hem_stays_on_the_toe() {
         assert_eq!(hem_bounds(true, false, 9.0), (9.0, MAX_BANDS));
-        assert_eq!(hem_bounds(true, true, 9.0), (9.0, 1));
+        assert_eq!(hem_bounds(true, true, 9.0), (f64::INFINITY, 1));
         assert_eq!(hem_bounds(false, false, 9.0), (f64::INFINITY, 1));
         assert_eq!(hem_bounds(false, true, 9.0), (f64::INFINITY, 1));
+    }
+
+    /// THE TOE'S HEM, WHATEVER THE GRAIN ASKS (449 T421): a wild-middle hamlet whose paddy carries its barley still draws its dry
+    /// fields, one band of them, and every one on the fan's toe; before 449 T421 it drew none where the barley held the whole need
+    /// (209 of 209 such rolls measured 2026-11-24, Mizuguchi among the pool's), and a need left over ran its band up the whole flank.
+    #[test]
+    fn a_wild_middles_barley_hamlet_hems_its_toe_and_only_its_toe() {
+        let mut i = inp(20, 4);
+        i.knobs[3].3 = Some("barley".to_owned());
+        i.knobs[4].3 = Some("wild".to_owned());
+        let out = build(&i).unwrap();
+        let f = &out.fields[0];
+        let water: Vec<_> = f
+            .water
+            .segs
+            .iter()
+            .zip(&f.water.widths)
+            .map(|(&(a, b), &w)| (a, b, w))
+            .collect();
+        let laid = crate::hem::lay(f.hem.as_ref().unwrap(), &f.fan.ring, &water, &[]);
+        // each plot's middle, as a share of the fan's length down from its head
+        let down = |d: &crate::field::dry::DryPlot| {
+            let (x, y) = d
+                .poly
+                .iter()
+                .fold((0.0, 0.0), |a, p| (a.0 + p.0 / 4.0, a.1 + p.1 / 4.0));
+            ((x - f.fan.fork.0) * f.fan.down.0 + (y - f.fan.fork.1) * f.fan.down.1) / f.fan.length
+        };
+        let highest = laid.plots.iter().map(down).fold(f64::INFINITY, f64::min);
+        let got = (laid.plots.is_empty(), highest >= TOE_SHARE - 0.05);
+        assert_eq!(got, (false, true), "the highest {highest:.2} down");
     }
 
     fn inp(households: u32, seed: i64) -> FieldIn {
@@ -707,6 +814,66 @@ mod tests {
                     + f0.rested.iter().map(|&i| f0.stats[i].2).sum::<f64>() / 43_560.0
                     + 1e-9
         );
+    }
+
+    /// The first seed whose `winter_crop` stream draws inside `[lo, hi)`.
+    fn seed_drawing(lo: f64, hi: f64) -> i64 {
+        (0..10_000_i64)
+            .find(|&s| {
+                let u = crate::pyrand::knob_rng(s, "winter_crop").random();
+                (lo..hi).contains(&u)
+            })
+            .unwrap()
+    }
+
+    #[test]
+    fn the_winter_crop_s_odds_are_the_drained_share_halved_far_from_a_town() {
+        let town = |form: &str| {
+            (
+                "town_nearness".to_owned(),
+                vec!["near".to_owned(), "far".to_owned()],
+                vec![],
+                Some(form.to_owned()),
+            )
+        };
+        // a draw of 0.5 to 0.6: barley beside a town (most of the paddy drains), a bare winter far from one
+        let seed = seed_drawing(0.5, 0.6);
+        let mut near = inp(20, seed);
+        near.knobs[3].3 = None;
+        near.knobs.push(town("near"));
+        let n = build(&near).unwrap();
+        assert_eq!(n.knobs["winter_crop"], "barley", "near a town");
+        let mut far = inp(20, seed);
+        far.knobs[3].3 = None;
+        far.knobs.push(town("far"));
+        assert_eq!(build(&far).unwrap().knobs["winter_crop"], "none", "far");
+        // a draw just under a half is past a far town's halved odds, whatever drains; no town named is a far one
+        let mut under = inp(20, seed_drawing(0.5 - 1e-3, 0.5));
+        under.knobs[3].3 = None;
+        let unnamed = build(&under).unwrap();
+        assert_eq!(unnamed.knobs["winter_crop"], "none");
+        // a cleared middle's one hem band cannot hold the whole need, so its hamlet always grows its barley on its paddy
+        // (0011), whatever the draw; the same draw on a wild middle leaves the paddy bare
+        let top = seed_drawing(0.99, 1.0);
+        let mut cleared = inp(20, top);
+        cleared.knobs[3].3 = None;
+        cleared.knobs[4].3 = Some("cleared".to_owned());
+        let c = build(&cleared).unwrap();
+        assert_eq!(c.knobs["winter_crop"], "barley");
+        let mut wild = inp(20, top);
+        wild.knobs[3].3 = None;
+        wild.knobs[4].3 = Some("wild".to_owned());
+        let w = build(&wild).unwrap();
+        assert_eq!(w.knobs["winter_crop"], "none");
+        // the odds themselves: the drained share beside a town, half of it far from one, a paddy of no area never barley
+        for ((drained, paddy, near), odds) in [
+            ((3.0, 4.0, true), 0.75),
+            ((3.0, 4.0, false), 0.375),
+            ((5.0, 4.0, true), 1.0),
+            ((1.0, 0.0, true), 0.0),
+        ] {
+            assert!((barley_odds(drained, paddy, near) - odds).abs() < 1e-12);
+        }
     }
 
     #[test]
