@@ -122,3 +122,11 @@ On T192's route (told the 6-10 hour projection assumed an agent writing a Guesse
 Told what the cascade test's six defects in the new rules are (451 T209 to T214: T209 a new fact contradicting a pop-up is cleared; T213 a claim marked mislabeled can be rewritten unchecked; T210 147 claims forced after a generated doc regenerated; T211 22 claims forced by the item anchors; T212 8 false sends from three fixed phrases; T214 the change-scoped review refuses a sheet with no earlier verdict), and that the session recommended fixing all six before the port resumes, the GM said:
 
 > Yes let's fix all 6 of those before we resume.
+
+## 2026-11-24, where T210's kept section words live
+
+Told that T210's kept section words live in each clone's `.git`, so another clone forces its sections once, the GM asked:
+
+> should it live in the clone rather than in the repo?
+
+The session's answer: in the repository, beside `dev/claims-index.json` (20 sections, 136 KB), because they can be the only copy of what was judged; page texts (5.6 MB) stay per clone, since git history holds them. Escalation-check (2026-11-24) ruled it the session's to build under "Yes let's fix all 6 of those before we resume.": the per-clone limit is T210's own wrong outcome. Filed as T215.
