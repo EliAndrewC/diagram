@@ -198,6 +198,7 @@ priority order (question 1, then 3, then 2 and 4):
 ## Review history
 
 - spec-fidelity round 1 (2026-11-24, MODE 2): CHANGES REQUIRED - two of the issue's canon quotations missing from scenario 4; the charter verdict for China contradicted by pass D; two edge cases worded past their cases. All four applied.
+- spec-fidelity round 2 (2026-11-24, verify): FAITHFUL - all four round-1 items resolved.
 
 ## Assumptions
 

@@ -109,6 +109,7 @@ laborer-hours to make one, and what share of a full bale's price the bale was.
 ## Review history
 
 - spec-fidelity round 1 (2026-11-24, MODE 2): CHANGES REQUIRED - 0199 and 0197 missing from what the record holds, and the list's search unnamed; the separate-trade verdict taken from a neighboring good. Both applied.
+- spec-fidelity round 2 (2026-11-24, verify): FAITHFUL - both round-1 items resolved.
 
 ## Assumptions
 

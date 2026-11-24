@@ -76,3 +76,87 @@ SILENT, with how hire was otherwise paid; the essay's disputed author and the tw
 `implementation-check.md` holds each new question's line (`no code implements it`, with the search). The reply on #24 gives, question by
 question and figure by figure in the issue's priority order, the fragment file and the verdict, what is still open, and the issue's canon
 quotations beside the history. Anything for the GM goes through `escalation-check` first, and nothing here edits the canon.
+
+### T01 Approach (checklist part A)
+
+1. **The goal, in the world.** n/a
+2. **The constraints.** D1; FR-001, FR-002, FR-005, FR-006, FR-007.
+3. **Where each comes from.** The FRs above, from `request.md`.
+4. **Do they describe the world here?** Yes.
+5. **The order.** n/a
+6. **The exits.** Green: landed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** SC-001, SC-002, SC-003.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+### T02 Approach (checklist part A)
+
+1. **The goal, in the world.** n/a
+2. **The constraints.** D2; FR-001, FR-002, FR-005, FR-006, FR-007.
+3. **Where each comes from.** The FRs above, from `request.md`.
+4. **Do they describe the world here?** Yes.
+5. **The order.** n/a
+6. **The exits.** Green: landed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** SC-001, SC-002, SC-003.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+### T03 Approach (checklist part A)
+
+1. **The goal, in the world.** n/a
+2. **The constraints.** D3; FR-001, FR-002, FR-005, FR-006, FR-007.
+3. **Where each comes from.** The FRs above, from `request.md`.
+4. **Do they describe the world here?** Yes.
+5. **The order.** n/a
+6. **The exits.** Green: landed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** SC-001, SC-002, SC-003.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+### T04 Approach (checklist part A)
+
+1. **The goal, in the world.** n/a
+2. **The constraints.** D4; FR-001, FR-002, FR-005, FR-006, FR-007.
+3. **Where each comes from.** The FRs above, from `request.md`.
+4. **Do they describe the world here?** Yes.
+5. **The order.** n/a
+6. **The exits.** Green: landed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** SC-001, SC-002, SC-003.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+### T05 Approach (checklist part A)
+
+1. **The goal, in the world.** n/a
+2. **The constraints.** D5; FR-001, FR-002, FR-005, FR-006, FR-007.
+3. **Where each comes from.** The FRs above, from `request.md`.
+4. **Do they describe the world here?** Yes.
+5. **The order.** n/a
+6. **The exits.** Green: landed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** SC-001, SC-002, SC-003.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+### T06 Approach (checklist part A)
+
+1. **The goal, in the world.** n/a
+2. **The constraints.** D6; FR-001, FR-003, FR-004, FR-008.
+3. **Where each comes from.** The FRs above, from `request.md`.
+4. **Do they describe the world here?** Yes.
+5. **The order.** n/a
+6. **The exits.** Green: landed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** SC-001, SC-002.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
