@@ -116,3 +116,9 @@ On T192 (told: tagging the rest of the record's labels is 670 GUESS items over 2
 On T192's route (told the 6-10 hour projection assumed an agent writing a Guesses sentence for every GUESS block and reading every unworded one; offered: a script tags each block that names its own label, a Guesses sentence is written only when a pop-up first cites the item, attested blocks are skipped if nothing reads their tags, and only truly ambiguous blocks go to a session):
 
 > Thanks. Yes, please proceed with that as the way forward rather than the really expensive one that frankly seems kind of pointless for the purpose of what we are trying to accomplish.
+
+## 2026-11-24, the cascade test's six defects fixed before the port resumes
+
+Told what the cascade test's six defects in the new rules are (451 T209 to T214: T209 a new fact contradicting a pop-up is cleared; T213 a claim marked mislabeled can be rewritten unchecked; T210 147 claims forced after a generated doc regenerated; T211 22 claims forced by the item anchors; T212 8 false sends from three fixed phrases; T214 the change-scoped review refuses a sheet with no earlier verdict), and that the session recommended fixing all six before the port resumes, the GM said:
+
+> Yes let's fix all 6 of those before we resume.
