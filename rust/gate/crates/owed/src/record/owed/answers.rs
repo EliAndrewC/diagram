@@ -580,7 +580,7 @@ impl<'a> Judged<'a> {
         let rec = read_answer(store_dir, &u.slug);
         let judge = rec.get("builds").and_then(|b| b.get(&u.fingerprint));
         let (root, blobs) = (self.root, &mut self.blobs);
-        let paths = build::mixed(judge, &mut |p: &str| {
+        let paths = build::mixed(judge, build::RECORD, &mut |p: &str| {
             blobs
                 .entry(p.to_owned())
                 .or_insert_with(|| {

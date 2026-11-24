@@ -630,23 +630,27 @@ impl<'a> Landing<'a> {
     /// The uncommitted files the build that answered `was` held that are not the landing's own; none for a clean or unrecorded build.
     pub(super) fn paths(&mut self, was: &Value) -> Vec<String> {
         let (root, blobs) = (self.root, &mut self.blobs);
-        l7r_gate_core::build::mixed(was.get("build"), &mut |p: &str| {
-            blobs
-                .entry(p.to_owned())
-                .or_insert_with(|| {
-                    let b = crate::record::repo::git(
-                        root,
-                        &["rev-parse", "--verify", "--quiet", &format!("HEAD:{p}")],
-                    );
-                    let b = b.trim();
-                    if b.is_empty() {
-                        l7r_gate_core::build::DELETED.to_owned()
-                    } else {
-                        b.to_owned()
-                    }
-                })
-                .clone()
-        })
+        l7r_gate_core::build::mixed(
+            was.get("build"),
+            l7r_gate_core::build::CLAIMS,
+            &mut |p: &str| {
+                blobs
+                    .entry(p.to_owned())
+                    .or_insert_with(|| {
+                        let b = crate::record::repo::git(
+                            root,
+                            &["rev-parse", "--verify", "--quiet", &format!("HEAD:{p}")],
+                        );
+                        let b = b.trim();
+                        if b.is_empty() {
+                            l7r_gate_core::build::DELETED.to_owned()
+                        } else {
+                            b.to_owned()
+                        }
+                    })
+                    .clone()
+            },
+        )
     }
 
     fn mixed(&mut self, was: &Value) -> Option<String> {

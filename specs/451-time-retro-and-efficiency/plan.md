@@ -2794,40 +2794,60 @@ engine speed, so no checklist.
 
 
 
-### T224 (<why: the finding or measurement that files it>)
+### T224 (the round arbiter's `ask:mixed-build-53-record-answers`, 2026-11-24, continue with a tooling fix: a landing was refused at the push and 53 record answers owed again by T197's rule, when for 49 of them the uncommitted files were the claims crate's and a Markdown doc)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: A landing alone counts a build's uncommitted file against an answer only where that file's code can run in building the answer's bundle or recording it. The rule is one function, `runs_in`, in `rust/gate/crates/core/src/build.rs`, over a table per kind of answer; `mixed` takes the table.
+  - **(a) A record answer's table, `RECORD`.**
+    - The `owed` crate: it records the answer (`record-checked`, the modal triage, `write_answer`).
+    - The `bundle` crate: it builds the bundle the agent read (`check-bundle`, `modal-bundle`).
+    - Their path dependencies: core, pool, registry, research and `rust/guard/shared`. Observed 2026-11-24, method: `cargo tree` (`/home/agent/.claude/jobs/c6fd72d1/tmp/cargo-tree-owed-bundle.txt`) and the walk of the `Cargo.toml` files the new test makes.
+    - `rust/gate/src`: `l7r-gate` is one executable, and its `lib.rs` dispatches `record`.
+    - The `record` crate: it dispatches each `record` verb, holds `apply-edits` (which settles an answer through `write_answer`), and holds `html5_entities.tsv`, which `rust/guard/shared` includes.
+    - Left out: the `record` crate's other dependencies (archive, downloads, pages, semantic, trials, uncited). They are linked into the executable, and no verb that builds a check bundle or records its answer calls them. Observed 2026-11-24, method: every caller of `write_answer` and `write_judged` listed with grep (the `owed` crate, and `record/apply_edits/round.rs`), and the crates `apply_edits` names (bundle, core, owed, research).
+  - **(b) Files that are not code.**
+    - A Markdown file outside the table's crates never counts: it cannot run. `rust/gate/CLAUDE.md` is the measured case.
+    - A Markdown file inside a crate of the table counts. The `plan` crate includes Markdown fixtures by `include_str!`, so "Markdown cannot run" is not true inside a crate. Observed 2026-11-24, method: the new test failed on the first draft's blanket rule, naming three such files.
+    - A `tests.rs` or `tests/` file inside a crate of the table counts. Whether a file is test-only is its `mod` line's `cfg`, not its name, and `core` holds test helpers the `testkit` feature also compiles. The measured case does not need the exclusion: its tests files were the claims crate's.
+    - A `Cargo.toml` anywhere, `rust/Cargo.lock` and `.cargo/config.toml` always count: a manifest can turn on a feature of a shared crate.
+    - A path the rule does not know counts.
+  - **(c) The claims side.** Narrowed the same way, with its own table, `CLAIMS`: the `claims` crate, its path dependencies (core, owed, plan, pool, registry, research, reviews, tree, `rust/guard/shared`), `rust/gate/src`, and the one included file of the `record` crate. Every claims reader of a mixed build goes through `Landing::paths` in `claims/index.rs` (`landing.rs` calls it twice), so the one call is the whole change. Observed 2026-11-24, method: grep of `build::mixed` and `Landing` in the claims crate.
+  - **The table follows the tree.** `build::closure::gaps` walks the `[dependencies]` and `[build-dependencies]` path entries from the table's root crates, and the `include_str!` and `include_bytes!` lines of each crate reached. It names a crate reached and not in the table, a table entry nothing reaches that is not listed beside it with its reason, and an included file the table does not count. Core's test runs it on the real tree for both tables. Core's `Cargo.toml` declares those crates as what its tests read, so `make rust-test` runs the test again when one of their manifests moves.
+  - **The message is unchanged.**
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+| the landing's record answers (`L7R_LAND_ALONE=1 make record-owed UNANSWERED=1`, read only, 2026-11-24) | before | after |
+|---|---|---|
+| listed as answered by a mixed build | 49 | 0 |
+| quote-check | 28 | 0 |
+| source-reader | 10 | 0 |
+| translation-check | 7 | 0 |
+| source-applicability | 3 | 0 |
+| intro-check | 1 | 0 |
+
+  Before is the clone at `1b064aa0de` with no edit (`/tmp/t224/before.txt`); after is the same tree with this task's edits uncommitted (`/tmp/t224/after.txt`: "no record check is owed"). The task line's 53 included 4 guest-quarters modal answers, re-run by the ruling before this task began. `L7R_LAND_ALONE=1 make claims-owed` after: no claim is owed.
 
 ### T224 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A landing owes a record or claims answer again only when code that could have changed the answer was uncommitted.
+2. **The constraints.**
+   - T197: a landing alone never trusts an answer judged with code that is not its own. Kept for every file the answer's verbs can run.
+   - The ruling's `tooling_fix`: the closure of owed, bundle and their transitive dependencies, read from `Cargo.toml` or a fixed table whose test fails when a dependency is added.
+   - T223: the claims side's readers stay on one function.
+3. **Where each comes from.**
+   - O: the measurement, `/home/agent/.claude/jobs/c6fd72d1/tmp/arbiter-mixed-record.md`.
+   - R: the round arbiter, `ask:mixed-build-53-record-answers`, continue, its `tooling_fix`.
+4. **Do they describe the world here?** Yes: the table above, on the answers that refused the landing.
+5. **The order.** Before the landing of T218 to T223 is run again. Nothing else records in the clone while the gate's crates are uncommitted.
+6. **The exits.** Green: `make closing-checks T=T224 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, 2026-11-24: the owed crate's new test, `a_record_answer_is_mixed_only_by_code_that_builds_or_records_it`, failed on HEAD's code with the edits stashed (`/tmp/t224/red-first.log`, 123 passed, 1 failed: an answer whose build held only claims-crate files and `rust/gate/CLAUDE.md` was re-owed). After: 124 passed. The same test holds the opposite case: a build that held `rust/gate/crates/bundle/src/record/bundle/check.rs` uncommitted is still re-owed, naming that file alone. Core's fixture test holds the arbiter's requirement: a tree whose root crate gains a path dependency the table lacks returns a gap.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: the gate answered wrongly. It owed 49 checks again and refused a green landing on them, for uncommitted files no verb of theirs runs. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The claims side counted any uncommitted file too. Effect: a landing would owe a claims triage again for an edit of a crate the claims verbs never run. Fixed here (`CLAIMS`).
+- `rust/guard/shared` includes a file of the `record` crate, outside its own dependencies. Effect: an edit of that table could change an answer and a table built from `Cargo.toml` alone would miss it. Fixed here: the walk reads the include lines, and both tables count the file.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-### T224 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
-
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+**Performance work?** no: it corrects what a landing owes; the saved re-runs are its effect, not a speed change of any tool.
 

@@ -1374,6 +1374,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
+  },
+  "### T224 (the round arbiter's `ask:mixed-build-53-record-answers`, 2026-11-24, continue with a tooling fix: a landing was refused at the push and 53 record answers owed again by T197's rule, when for 49 of them the uncommitted files were the claims crate's and a Markdown doc)": {
+   "sha256": "0f9486c03faf336eb6074922622382696bcc91278815190f7f53300cdb0fe27c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T224 Approach (checklist part A)": {
+   "sha256": "f17d43e96ec4cb21becfff2f2d3f1350d1ca5bac44da9196836a3d5d453e8aa1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -19042,6 +19054,59 @@
      "why": "Its work is folded into T223 and fixed there, as the previous MODE 4 required. Nothing requested is dropped."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T224 (the round arbiter's `ask:mixed-build-53-record-answers`, 2026-11-24, continue with a tooling fix: a landing was refused at the push and 53 record answers owed again by T197's rule, when for 49 of them the uncommitted files were the claims crate's and a Markdown doc)",
+    "### T224 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T224-a-RECORD",
+     "summary": "A record answer is counted as mixed only by an uncommitted file in RECORD: owed, bundle, their path dependencies (core, pool, registry, research, rust/guard/shared), rust/gate/src and the record crate; the record crate's other dependencies (archive, downloads, pages, semantic, trials, uncited) are left out on a grep of every caller of write_answer/write_judged.",
+     "class": "within",
+     "why": "This is the tooling_fix of ask:mixed-build-53-record-answers: an answer is mixed only when a dirty path lies in the closure of the crates that built and recorded it (owed, bundle and their transitive deps). RECORD is a superset of that closure. It adds rust/gate/src and the record crate, which keeps more of T197 than the ruling requires. The crates left out are not in the ruling's closure in the first place."
+    },
+    {
+     "id": "T224-b-markdown",
+     "summary": "A Markdown file outside the table's crates never counts; a Markdown file inside a table crate counts (include_str! fixtures).",
+     "class": "within",
+     "why": "The ruling names rust/gate/CLAUDE.md as a dirty path whose code could not have run. Markdown inside a table crate still counts, and the closure walk flags any included file the table does not count, so no file that can run is dropped."
+    },
+    {
+     "id": "T224-b-tests",
+     "summary": "tests.rs and tests/ files inside a table crate still count; no test-only exclusion.",
+     "class": "within",
+     "why": "This counts more than the ruling's closure would strictly require, so T197 is kept. It is not a narrowing."
+    },
+    {
+     "id": "T224-b-manifests-unknown",
+     "summary": "Any Cargo.toml, rust/Cargo.lock and .cargo/config.toml always count, and so does a path the rule does not know.",
+     "class": "within",
+     "why": "This is conservative. It keeps T197's rule for every file whose effect on the build the closure cannot rule out."
+    },
+    {
+     "id": "T224-c-CLAIMS",
+     "summary": "The claims side's mixed-build test is narrowed the same way through its own table CLAIMS (the claims crate's path-dependency closure, rust/gate/src, and the record crate's one included file), through the single Landing::paths call.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The tooling_fix names only the owed crate's record gate, so narrowing the claims side's T197 rule goes past its letter. The ruling's own why gives the reason. It calls the fault a false positive 'of the same class as mixed-build-241-claims', and it orders that the rule be narrowed by a tool and not waived again. Counting a dirty file that no claims verb can run is that same wrong outcome: a check refusing good work. Fixing it in this step is required by fix-as-we-go. The purpose test holds: T197 exists so that an answer judged by code that is not its own is not trusted. Code outside the claims verbs' closure cannot have judged the answer, and the closure test keeps the table honest as dependencies change."
+    },
+    {
+     "id": "T224-closure-test",
+     "summary": "build::closure::gaps walks the [dependencies]/[build-dependencies] path entries and the include_str!/include_bytes! lines from each table's roots. It reports an unlisted crate that is reached, an entry nothing reaches, or an uncounted included file. Core's test runs it on the real tree, and core's Cargo.toml declares those crates so rust-test re-runs when a manifest moves.",
+     "class": "within",
+     "why": "This is the ruling's own requirement, 'a fixed table whose test fails when a dependency is added', and it only enforces that. Reading the include lines closes the rust/guard/shared to record-crate gap the plan found."
+    },
+    {
+     "id": "T224-message-order",
+     "summary": "The refusal message is unchanged. The fix is built before T218..T223 are re-landed, while nothing else records in the clone.",
+     "class": "within",
+     "why": "This follows the ruling's what (3) to (5) exactly."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -30592,6 +30657,57 @@
      "summary": "The task is not tagged performance work.",
      "class": "within",
      "why": "The GM's words class this kind of fix as a defect, not a performance improvement: on 2026-11-24 the cascade rules' over-sends (T210's 147 forced claims, T211's 22) were 'defects' to 'fix all 6 of those before we resume', and T223 is the same class - a check owing a full check to claims nothing changed for, refusing a green landing. Its time saved is the effect of correcting a wrong outcome, as the plan says. The label also moves nothing: the ruling already orders T223 before the landing re-run."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T224": {
+   "section_sha256": "2127ec95dd4ec7dd5f8e8767ecb9a320f64c4bfa4e03234853e497f8f4d44a78",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T224-a-RECORD",
+     "summary": "A record answer is counted as mixed only by an uncommitted file in RECORD: owed, bundle, their path dependencies (core, pool, registry, research, rust/guard/shared), rust/gate/src and the record crate; the record crate's other dependencies (archive, downloads, pages, semantic, trials, uncited) are left out on a grep of every caller of write_answer/write_judged.",
+     "class": "within",
+     "why": "This is the tooling_fix of ask:mixed-build-53-record-answers: an answer is mixed only when a dirty path lies in the closure of the crates that built and recorded it (owed, bundle and their transitive deps). RECORD is a superset of that closure. It adds rust/gate/src and the record crate, which keeps more of T197 than the ruling requires. The crates left out are not in the ruling's closure in the first place."
+    },
+    {
+     "id": "T224-b-markdown",
+     "summary": "A Markdown file outside the table's crates never counts; a Markdown file inside a table crate counts (include_str! fixtures).",
+     "class": "within",
+     "why": "The ruling names rust/gate/CLAUDE.md as a dirty path whose code could not have run. Markdown inside a table crate still counts, and the closure walk flags any included file the table does not count, so no file that can run is dropped."
+    },
+    {
+     "id": "T224-b-tests",
+     "summary": "tests.rs and tests/ files inside a table crate still count; no test-only exclusion.",
+     "class": "within",
+     "why": "This counts more than the ruling's closure would strictly require, so T197 is kept. It is not a narrowing."
+    },
+    {
+     "id": "T224-b-manifests-unknown",
+     "summary": "Any Cargo.toml, rust/Cargo.lock and .cargo/config.toml always count, and so does a path the rule does not know.",
+     "class": "within",
+     "why": "This is conservative. It keeps T197's rule for every file whose effect on the build the closure cannot rule out."
+    },
+    {
+     "id": "T224-c-CLAIMS",
+     "summary": "The claims side's mixed-build test is narrowed the same way through its own table CLAIMS (the claims crate's path-dependency closure, rust/gate/src, and the record crate's one included file), through the single Landing::paths call.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The tooling_fix names only the owed crate's record gate, so narrowing the claims side's T197 rule goes past its letter. The ruling's own why gives the reason. It calls the fault a false positive 'of the same class as mixed-build-241-claims', and it orders that the rule be narrowed by a tool and not waived again. Counting a dirty file that no claims verb can run is that same wrong outcome: a check refusing good work. Fixing it in this step is required by fix-as-we-go. The purpose test holds: T197 exists so that an answer judged by code that is not its own is not trusted. Code outside the claims verbs' closure cannot have judged the answer, and the closure test keeps the table honest as dependencies change."
+    },
+    {
+     "id": "T224-closure-test",
+     "summary": "build::closure::gaps walks the [dependencies]/[build-dependencies] path entries and the include_str!/include_bytes! lines from each table's roots. It reports an unlisted crate that is reached, an entry nothing reaches, or an uncounted included file. Core's test runs it on the real tree, and core's Cargo.toml declares those crates so rust-test re-runs when a manifest moves.",
+     "class": "within",
+     "why": "This is the ruling's own requirement, 'a fixed table whose test fails when a dependency is added', and it only enforces that. Reading the include lines closes the rust/guard/shared to record-crate gap the plan found."
+    },
+    {
+     "id": "T224-message-order",
+     "summary": "The refusal message is unchanged. The fix is built before T218..T223 are re-landed, while nothing else records in the clone.",
+     "class": "within",
+     "why": "This follows the ruling's what (3) to (5) exactly."
     }
    ],
    "verdict": "CLEAR"

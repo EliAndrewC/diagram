@@ -908,3 +908,36 @@ fn an_answer_records_its_build_and_a_landing_alone_re_owes_a_mixed_one() {
     with(None, false, || write_answer(&s, &rf.slug, "fp3", "r", None)).unwrap();
     assert!(read_answer(&s, &rf.slug)["builds"].get("fp3").is_none());
 }
+
+/// A landing alone re-owes a record answer only for uncommitted code its own verbs can run (feature 451 T224, the round arbiter's
+/// `ask:mixed-build-53-record-answers`): the claims crate's files and a Markdown doc mix nothing, the check bundle's builder does.
+#[test]
+fn a_record_answer_is_mixed_only_by_code_that_builds_or_records_it() {
+    use l7r_gate_core::build::with;
+    let root = record("owed-build-closure");
+    edit_everything(&root);
+    let rows = units(&root, None, None, &FAMILIES, "").unwrap();
+    let rf = rows
+        .iter()
+        .find(|u| u.slug == "record-format:0094")
+        .unwrap()
+        .clone();
+    let s = store(&root);
+    let owes = |dirty: &str| {
+        let build = format!("{{\"commit\": \"c1\", \"dirty\": {{{dirty}}}}}");
+        with(Some(&build), false, || {
+            write_answer(&s, &rf.slug, &rf.fingerprint, "r", None)
+        })
+        .unwrap();
+        with(None, true, || unanswered(&root))
+            .unwrap()
+            .into_iter()
+            .find(|u| u.slug == rf.slug)
+    };
+    let claims = "\"rust/gate/CLAUDE.md\": \"b1\", \"rust/gate/crates/claims/src/claims/index.rs\": \"b2\", \"rust/gate/crates/claims/src/claims/commands/tests.rs\": \"b3\"";
+    assert!(owes(claims).is_none());
+    let check = "rust/gate/crates/bundle/src/record/bundle/check.rs";
+    let u = owes(&format!("{claims}, \"{check}\": \"b4\""))
+        .expect("an answer whose bundle's builder was uncommitted is re-owed");
+    assert!(u.occasion.contains(&format!("({check})")), "{}", u.occasion);
+}

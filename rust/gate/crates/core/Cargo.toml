@@ -5,6 +5,10 @@ version = "0.1.0"
 edition = "2021"
 publish = false
 
+# `build`'s closure tables are held to the manifests and the `include_str!` lines of the crates they name (feature 451 T224)
+[package.metadata.l7r]
+reads = ["rust/gate/crates/bundle/", "rust/gate/crates/claims/", "rust/gate/crates/owed/", "rust/gate/crates/plan/", "rust/gate/crates/pool/", "rust/gate/crates/registry/", "rust/gate/crates/research/", "rust/gate/crates/reviews/", "rust/gate/crates/tree/", "rust/guard/shared/"]
+
 [features]
 testkit = []
 

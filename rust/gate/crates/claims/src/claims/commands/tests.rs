@@ -581,12 +581,12 @@ fn a_triage_clear_by_a_mixed_build_is_owed_again_in_a_landing_alone() {
     let out = std::process::Command::new("git")
         .arg("-C")
         .arg(&root)
-        .args(["rev-parse", "HEAD:docs/buildings.md"])
+        .args(["rev-parse", "HEAD:rust/gate/src/lib.rs"])
         .output()
         .unwrap();
     let blob = String::from_utf8_lossy(&out.stdout).trim().to_owned();
     // a file as landed, one deleted then and absent now, and one other builder's
-    let mixed = format!("{{\"commit\": \"c1\", \"dirty\": {{\"docs/buildings.md\": \"{blob}\", \"rust/gone.rs\": \"deleted\", \"rust/gate/x.rs\": \"b7\"}}}}");
+    let mixed = format!("{{\"commit\": \"c1\", \"dirty\": {{\"rust/gate/src/lib.rs\": \"{blob}\", \"rust/gone.rs\": \"deleted\", \"rust/gate/x.rs\": \"b7\"}}}}");
     let mixed = mixed.as_str();
     assert_eq!(
         with(Some(mixed), false, || claims(
