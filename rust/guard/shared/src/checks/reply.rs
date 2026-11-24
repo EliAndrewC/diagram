@@ -255,9 +255,10 @@ mod tests {
     }
 
     /// `EDIT: none - <why>`, the contract line of a finding that carries no block, is no unread EDIT - plain, bulleted or bold - and
-    /// a real block beside it is still read; a bulleted header naming a path is still refused. GUARD_EDIT_OK: the fix's own test.
+    /// a real block beside it is still read; a bulleted header naming a path is still refused.
     #[test]
     fn the_contract_line_edit_none_is_not_an_unread_edit() {
+        // GUARD_EDIT_OK: the test of a fix to a guard that fired on correct work
         let reply = "FIX 1 needs a source.\nEDIT: none - a source to find\n- EDIT: none - a choice for the GM\n**EDIT: none** - research\nEDIT `l7r/m.md`\n<<<\na\n===\nb\n>>>\n";
         assert_eq!(unread_edits(reply), Vec::<String>::new());
         assert_eq!(blocks(reply).len(), 1);
