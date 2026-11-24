@@ -38,7 +38,14 @@ thing the finding is about. Re-run the gate read before your verdict.
 
 The snapshot the dispatch names: `<sheet>.png` (Read it as an image first - what the GM sees), `<sheet>.svg` (3 px = 1 ft),
 `<sheet>.notes.md` (deliberate choices and the Review log are settled; a knob recorded one way and drawn another is a
-finding). `docs/building-programs.md` (the type named by the notes' `**Program type**` line) and `docs/buildings.md`.
+finding). **A dated entry of the notes is history, not a statement about the sheet today** (feature 451 T222): a Review log
+line, a line under a dated heading, an entry that names the feature or task that made it says what was drawn or decided
+then. Do not hold it to the sheet as it stands: an older entry that a later change overtook is no finding and no nitpick, and
+it owes no "since superseded" pointer (449 T380 reported Hayakawa's entries T276, T299 and T312 for giving the armory at the
+west end, which T367's own entry mirrored afterwards). What you hold to the drawing is the notes' present-tense text - the
+choices, the program, a Result or summary paragraph that states the sheet as it is (the round-trip test's "Coverage 36%,
+perimeter-hugging 61%" where the audit reads 33% and 66% is a finding). A paragraph that states the sheet as it is stays
+held to the drawing even under a dated heading: the date excuses an entry that says what was done, not one that says what is. `docs/building-programs.md` (the type named by the notes' `**Program type**` line) and `docs/buildings.md`.
 `make pack-audit ARGS=<svg>` reports coverage, the largest vacant rectangles and the aligned gaps - numbers for you to judge.
 
 ## What you judge
@@ -85,7 +92,7 @@ VERDICT: pass | needs-work
 ERRORS / QUESTIONABLE / NITPICKS / CONFIRMATIONS: numbered, each naming its norm
 ```
 
-**Judge the change, file the rest** (feature 374 batch 6, the round arbiter): the dispatch's OCCASION names what the declared waves changed. A finding on a part of the sheet those waves did not change is a row for the feature to file - give it severity `outside` - and it does not decide the verdict; the verdict is the change's alone.
+**Judge the change, file the rest** (feature 374 batch 6, the round arbiter): the dispatch's OCCASION names what the declared waves changed. A finding on a part of the sheet those waves did not change does not decide the verdict; the verdict is the change's alone. **It is a row for the feature to file only when it names a wrong outcome a reader of the sheet would meet** (feature 451 T219; constitution XIV: a defect is a wrong outcome, never a difference): give that one severity `outside` and end its `what` with `effect: sheet - <the wrong outcome its reader meets>` (e.g. `effect: sheet - a privy drawn against the grain store's wall`; a command or check that crashes, refuses valid input or answers wrongly is `effect: tool - <the command and how it answers wrongly>`) - `make review-verdict` refuses an `outside` finding without it. One that names none - a note's wording, a stale comment, a preference - stays out of the findings file: list it in your reply under `NOTED, NOT FILED`, and it is dropped.
 
 **A change-scoped round** (451 T199): a prompt whose `SCOPE:` line says `change` is not a full round - it hands you the nitpicks a sheet
 edit claims to fix and that edit's lines before and after. Run no stage above: judge, adversarially, only whether the edit did more than
