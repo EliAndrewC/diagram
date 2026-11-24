@@ -558,45 +558,28 @@ pub fn keep_reading(store_dir: &Path, slug: &str, reading: &str, field: &str) ->
 /// A landing alone's reading of the builds its answers were judged by (feature 451 T197): outside a landing it judges nothing, so an
 /// answer stands as it always did.
 struct Judged<'a> {
-    root: &'a Path,
     landing: bool,
-    blobs: std::collections::HashMap<String, String>,
+    own: build::Own<'a>,
 }
 
 impl<'a> Judged<'a> {
     fn new(root: &'a Path) -> Self {
         Self {
-            root,
             landing: build::landing(),
-            blobs: std::collections::HashMap::new(),
+            own: build::Own::at(root),
         }
     }
 
-    /// Why `u`, answered at its fingerprint by a build holding uncommitted files other than the landing's own, is owed again.
+    /// Why `u`, answered at its fingerprint by a build holding uncommitted files that no commit of the landing, or since that build, holds
+    /// ([`build::Own`], T225), is owed again.
     fn mixed(&mut self, store_dir: &Path, u: &Unit) -> Option<String> {
         if !self.landing {
             return None;
         }
         let rec = read_answer(store_dir, &u.slug);
         let judge = rec.get("builds").and_then(|b| b.get(&u.fingerprint));
-        let (root, blobs) = (self.root, &mut self.blobs);
-        let paths = build::mixed(judge, build::RECORD, &mut |p: &str| {
-            blobs
-                .entry(p.to_owned())
-                .or_insert_with(|| {
-                    let b = git(
-                        root,
-                        &["rev-parse", "--verify", "--quiet", &format!("HEAD:{p}")],
-                    );
-                    let b = b.trim();
-                    if b.is_empty() {
-                        build::DELETED.to_owned()
-                    } else {
-                        b.to_owned()
-                    }
-                })
-                .clone()
-        });
+        let own = &mut self.own;
+        let paths = build::mixed(judge, build::RECORD, &mut |c, p, b| own.holds(c, p, b));
         (!paths.is_empty()).then(|| {
             format!(
                 "answered by an l7r-gate built with other builders' uncommitted code ({}), not this landing's: re-judge it here (451 T197)",

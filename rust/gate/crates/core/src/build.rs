@@ -4,9 +4,15 @@
 //! landed); a landing alone isolates its own code but trusted those answers. So the launcher writes, beside each binary it builds, the
 //! build's id - `{"commit": <HEAD>, "dirty": {<path>: <blob id, or "deleted">}}`, the uncommitted files the binary is built from - and
 //! hands it to the binary in `L7R_GATE_BUILD`; each answer records it, and a landing alone (`L7R_LAND_ALONE`) re-owes an answer whose
-//! build held an uncommitted file that differs from the landing's own (`mixed`).
+//! build held an uncommitted file that differs from the landing's own (`mixed`): from the file as any commit of the landing holds
+//! it ([`Own`], T225).
+
+use std::collections::{BTreeSet, HashMap};
+use std::path::Path;
 
 use serde_json::{Map, Value};
+
+use crate::record::repo::git;
 
 /// The variable the launcher hands the build's id in.
 pub const ENV: &str = "L7R_GATE_BUILD";
@@ -14,16 +20,57 @@ pub const ENV: &str = "L7R_GATE_BUILD";
 pub const LANDING: &str = "L7R_LAND_ALONE";
 /// A dirty path's recorded blob where the file was deleted.
 pub const DELETED: &str = "deleted";
+/// The variable the launcher hands the tree it built the binary from in (`scripts/gates/l7r-gate.sh`).
+pub const TREE: &str = "L7R_GATE_TREE";
+
+/// A test's environment: the build's id, a landing alone's flag, the launcher's tree.
+#[cfg(any(test, feature = "testkit"))]
+type Given = (Option<String>, bool, Option<String>);
 
 #[cfg(any(test, feature = "testkit"))]
 thread_local! {
-    static GIVEN: std::cell::RefCell<Option<(Option<String>, bool)>> = const { std::cell::RefCell::new(None) };
+    static GIVEN: std::cell::RefCell<Option<Given>> = const { std::cell::RefCell::new(None) };
 }
 
-/// The id of the build running now, `None` where the launcher handed none (a binary built before T197, or a test's).
+/// The id of the build running now, `None` where the launcher handed none (a binary built before T197, or a test's); its
+/// uncommitted files as the launcher's tree holds them now ([`refreshed`]) where the launcher named its tree.
 #[must_use]
 pub fn current() -> Option<Value> {
-    parse(env(ENV).as_deref())
+    let build = parse(env(ENV).as_deref())?;
+    Some(match env(TREE) {
+        Some(tree) => refreshed(build, Path::new(&tree)),
+        None => build,
+    })
+}
+
+/// A STAMP IS TAKEN AT THE BUILD AND READ AT EVERY RUN (feature 451 T225, the round arbiter's
+/// `ask:stamp-reads-committed-code-as-mixed`). WHY: the launcher writes the stamp only when it builds, so a binary built while
+/// files were uncommitted kept calling them dirty after they were committed unchanged - no source moved, nothing rebuilt - and
+/// every answer it recorded carried 30 "dirty" files that were HEAD's own (measured 2026-11-24, 49 record answers of 17:22-17:26).
+/// So `build` is handed on without each dirty file whose stamped blob is the one `root`'s HEAD holds ([`DELETED`]: HEAD holds
+/// none): that file is committed code now. One `git ls-tree` a call, none for a clean stamp.
+#[must_use]
+pub fn refreshed(mut build: Value, root: &Path) -> Value {
+    let stamped = dirty(&build);
+    if stamped.is_empty() {
+        return build;
+    }
+    let mut args = vec!["ls-tree", "-z", "HEAD", "--"];
+    args.extend(stamped.keys().map(String::as_str));
+    let listed = git(root, &args);
+    let head: HashMap<&str, &str> = listed
+        .split('\0')
+        .filter_map(|row| row.split_once('\t'))
+        .filter_map(|(meta, path)| Some((path, meta.split(' ').nth(2)?)))
+        .collect();
+    let left: Map<String, Value> = stamped
+        .into_iter()
+        .filter(|(path, blob)| {
+            blob.as_str() != Some(head.get(path.as_str()).copied().unwrap_or(DELETED))
+        })
+        .collect();
+    build["dirty"] = Value::Object(left);
+    build
 }
 
 /// Is this a landing alone's own run?
@@ -35,8 +82,9 @@ pub fn landing() -> bool {
 #[cfg(any(test, feature = "testkit"))]
 fn env(name: &str) -> Option<String> {
     GIVEN.with(|g| match &*g.borrow() {
-        Some((build, _)) if name == ENV => build.clone(),
-        Some((_, landing)) => landing.then(|| "1".to_owned()),
+        Some((build, _, _)) if name == ENV => build.clone(),
+        Some((_, _, tree)) if name == TREE => tree.clone(),
+        Some((_, landing, _)) => landing.then(|| "1".to_owned()),
         None => None,
     })
 }
@@ -49,7 +97,23 @@ fn env(name: &str) -> Option<String> {
 /// `f` run with the build's id `build` handed in and a landing alone's flag `landing`, on this thread only (a test's environment).
 #[cfg(any(test, feature = "testkit"))]
 pub fn with<R>(build: Option<&str>, landing: bool, f: impl FnOnce() -> R) -> R {
-    GIVEN.with(|g| *g.borrow_mut() = Some((build.map(str::to_owned), landing)));
+    given(build, landing, None, f)
+}
+
+/// [`with`], the launcher's tree `tree` handed in too.
+#[cfg(any(test, feature = "testkit"))]
+pub fn within<R>(build: &str, tree: &Path, f: impl FnOnce() -> R) -> R {
+    given(
+        Some(build),
+        false,
+        Some(tree.to_string_lossy().into_owned()),
+        f,
+    )
+}
+
+#[cfg(any(test, feature = "testkit"))]
+fn given<R>(build: Option<&str>, landing: bool, tree: Option<String>, f: impl FnOnce() -> R) -> R {
+    GIVEN.with(|g| *g.borrow_mut() = Some((build.map(str::to_owned), landing, tree)));
     let out = f();
     GIVEN.with(|g| *g.borrow_mut() = None);
     out
@@ -155,20 +219,164 @@ fn is_a(path: &str, ext: &str) -> bool {
         .is_some_and(|e| e.eq_ignore_ascii_case(ext))
 }
 
-/// The paths of `build`'s uncommitted files that [`runs_in`] `closure` and whose recorded blob is not the one `blob_of` gives for
-/// the landing's tree ([`DELETED`] where it holds none): the other builders' code it judged with. Empty for a clean build, and for
-/// an answer recorded before T197 (no build), which stands as it always did.
+/// THE LANDING'S OWN COMMITTED CODE (feature 451 T225, the round arbiter's `ask:stamp-reads-committed-code-as-mixed`). WHY: the
+/// mixed rule compared a stamped blob with `HEAD:path` alone, so when a later commit of the same landing edited a file, every
+/// earlier answer of the day read as made by "other builders' uncommitted code" although the code that ran was a commit of this
+/// landing - each of 2026-11-24's three gate fixes re-owed the answers before it (241 claims; 53 record answers; 191 claims and 49
+/// record answers: 41 minutes of re-triage and re-checks, five landing refusals; for 49 of 49 record answers every stamped blob
+/// was the path's blob at a commit of the delta or its base). A stamped blob is the landing's own where it is the path's blob at
+/// HEAD, at a commit of the landing's delta, or at the delta's base; [`DELETED`] where one of those holds no such file. A blob none
+/// of them holds is still another builder's uncommitted work: it was changed before it was committed, or never was.
+///
+/// THE DELTA is `base..HEAD`, the base `git merge-base HEAD origin/main` - the base `make land` diffs from (`origin/main...HEAD`,
+/// `land.rs`), which the landing worktree, a worktree of the clone, resolves as the clone does; a merge of main moves the base and
+/// leaves the clone's own commits in the delta. With no base to be found (no `origin/main`, no shared history) the delta is empty.
+///
+/// SINCE THE BUILD (the same task, its own decision): the stamp names the commit its binary was built at, and a file committed
+/// unchanged after the build is a commit of `<that commit>..HEAD` wherever the landing's base stands. Without it the rule held
+/// for one landing only: measured 2026-11-24, 189 rows of `dev/claims-index.json` carry a stamp of 1b064aa0de with seven dirty
+/// files, five of which T225's own commit edits - once that landing is pushed its commits are behind the next landing's base,
+/// and all 189 read mixed again at the next landing of any clone. A stamp whose commit git does not know adds nothing.
+///
+/// COST: a blob HEAD holds asks one `rev-parse` a path, as before; the first that HEAD does not hold asks `merge-base` and ONE
+/// `git log --raw` over the whole delta (36 commits on 2026-11-24), kept for every later path and answer, then one `rev-parse` of
+/// the base a path; one that all three miss asks one `git log --raw` a stamp commit (three distinct in the index that day).
+pub struct Own<'a> {
+    root: &'a Path,
+    head: HashMap<String, String>,
+    at_base: HashMap<String, String>,
+    /// The base, and each path's blobs at the commits of the delta that changed it; `None` until first asked.
+    delta: Option<(String, Blobs)>,
+    /// By a stamp's commit, each path's blobs at the commits made since it.
+    since: HashMap<String, Blobs>,
+}
+
+/// Each path's blobs at the commits of a range that changed it.
+type Blobs = HashMap<String, BTreeSet<String>>;
+
+impl<'a> Own<'a> {
+    /// The landing whose tree is `root`.
+    #[must_use]
+    pub fn at(root: &'a Path) -> Self {
+        Self {
+            root,
+            head: HashMap::new(),
+            at_base: HashMap::new(),
+            delta: None,
+            since: HashMap::new(),
+        }
+    }
+
+    /// `path`'s blob at `rev`, [`DELETED`] where it holds none.
+    fn blob(root: &Path, rev: &str, path: &str) -> String {
+        let b = git(
+            root,
+            &["rev-parse", "--verify", "--quiet", &format!("{rev}:{path}")],
+        );
+        match b.trim() {
+            "" => DELETED.to_owned(),
+            b => b.to_owned(),
+        }
+    }
+
+    /// What each commit of `from..HEAD` left of each path it changed (a merge against each parent, `-m`, and no commit simplified
+    /// away, `--full-history`); nothing where git does not know `from`.
+    fn changed(root: &Path, from: &str) -> Blobs {
+        let log = git(
+            root,
+            &[
+                "-c",
+                "core.quotePath=false",
+                "log",
+                "--raw",
+                "--no-abbrev",
+                "--no-renames",
+                "--full-history",
+                "-m",
+                "--format=",
+                "--end-of-options",
+                &format!("{from}..HEAD"),
+            ],
+        );
+        let mut blobs = Blobs::new();
+        for (meta, path) in log.lines().filter_map(|l| l.split_once('\t')) {
+            let blob = meta.split(' ').nth(3).unwrap_or_default();
+            let blob = if blob.bytes().all(|b| b == b'0') {
+                DELETED
+            } else {
+                blob
+            };
+            blobs
+                .entry(path.to_owned())
+                .or_default()
+                .insert(blob.to_owned());
+        }
+        blobs
+    }
+
+    /// The base and the delta's blobs; an empty base, and nothing, where there is none.
+    fn delta(root: &Path) -> (String, Blobs) {
+        let base = git(root, &["merge-base", "HEAD", "origin/main"])
+            .trim()
+            .to_owned();
+        let blobs = if base.is_empty() {
+            Blobs::new()
+        } else {
+            Self::changed(root, &base)
+        };
+        (base, blobs)
+    }
+
+    /// Is `blob` what a commit holds at `path`: HEAD, a commit of the landing's delta, the delta's base, or a commit made since
+    /// `built`, the commit of the build that stamped it?
+    pub fn holds(&mut self, built: &str, path: &str, blob: &str) -> bool {
+        let root = self.root;
+        let head = self
+            .head
+            .entry(path.to_owned())
+            .or_insert_with(|| Self::blob(root, "HEAD", path));
+        if head == blob {
+            return true;
+        }
+        let has = |blobs: &Blobs| blobs.get(path).is_some_and(|set| set.contains(blob));
+        let (base, delta) = self.delta.get_or_insert_with(|| Self::delta(root));
+        if has(delta) {
+            return true;
+        }
+        if !base.is_empty()
+            && self
+                .at_base
+                .entry(path.to_owned())
+                .or_insert_with(|| Self::blob(root, base, path))
+                == blob
+        {
+            return true;
+        }
+        has(self
+            .since
+            .entry(built.to_owned())
+            .or_insert_with(|| Self::changed(root, built)))
+    }
+}
+
+/// The paths of `build`'s uncommitted files that [`runs_in`] `closure` and whose recorded blob `own` - asked with the build's
+/// commit, the path and the blob - says is not committed code of the landing ([`Own::holds`]): the other builders' code it judged
+/// with. Empty for a clean build, and for an answer recorded before T197 (no build), which stands as it always did.
 pub fn mixed(
     build: Option<&Value>,
     closure: &[&str],
-    blob_of: &mut dyn FnMut(&str) -> String,
+    own: &mut dyn FnMut(&str, &str, &str) -> bool,
 ) -> Vec<String> {
+    let commit = build
+        .and_then(|b| b.get("commit"))
+        .and_then(Value::as_str)
+        .unwrap_or_default();
     let mut out: Vec<String> = build
         .map(dirty)
         .unwrap_or_default()
         .into_iter()
         .filter(|(path, _)| runs_in(path, closure))
-        .filter(|(path, blob)| blob.as_str() != Some(blob_of(path).as_str()))
+        .filter(|(path, blob)| !blob.as_str().is_some_and(|b| own(commit, path, b)))
         .map(|(path, _)| path)
         .collect();
     out.sort();
@@ -314,9 +522,10 @@ mod tests {
     use serde_json::json;
 
     use super::{
-        closure, current, landing, mixed, parse, runs_in, same, with, CLAIMS, CLAIMS_BESIDE,
-        CLAIMS_ROOTS, RECORD, RECORD_BESIDE, RECORD_ROOTS,
+        closure, current, landing, mixed, parse, refreshed, runs_in, same, with, within, Own,
+        CLAIMS, CLAIMS_BESIDE, CLAIMS_ROOTS, DELETED, RECORD, RECORD_BESIDE, RECORD_ROOTS,
     };
+    use crate::record::testkit::{commit, git, put, record};
 
     #[test]
     fn a_build_id_is_read_compared_and_judged_against_the_landing() {
@@ -330,13 +539,8 @@ mod tests {
         assert_eq!(parse(Some("not json")), None);
         assert_eq!(parse(None), None);
         let b = got.0.unwrap();
-        let mut landing_blobs = |p: &str| {
-            if p == "rust/a.rs" {
-                "b1".to_owned()
-            } else {
-                "b9".to_owned()
-            }
-        };
+        let mut landing_blobs =
+            |c: &str, p: &str, b: &str| c == "c1" && p == "rust/a.rs" && b == "b1";
         assert_eq!(
             mixed(Some(&b), RECORD, &mut landing_blobs),
             vec!["rust/b.rs".to_owned()]
@@ -393,7 +597,7 @@ mod tests {
             assert_eq!((path, runs_in(path, CLAIMS)), (path, in_claims));
         }
         let build = json!({"commit": "c1", "dirty": {claims: "b1", "rust/gate/CLAUDE.md": "b2", check: "b3"}});
-        let mut other = |_: &str| "b9".to_owned();
+        let mut other = |_: &str, _: &str, _: &str| false;
         assert_eq!(
             mixed(Some(&build), RECORD, &mut other),
             vec![check.to_owned()]
@@ -402,6 +606,106 @@ mod tests {
             mixed(Some(&build), CLAIMS, &mut other),
             vec![claims.to_owned()]
         );
+    }
+
+    /// The round arbiter's case (`ask:stamp-reads-committed-code-as-mixed`): a stamped blob an earlier commit of the landing's
+    /// delta holds, and HEAD no longer, is the landing's own code; so is the base's, and a file deleted where a commit of the
+    /// landing held none. A blob no commit holds is another builder's, and with no base to find the delta from only HEAD's counts.
+    #[test]
+    fn a_blob_an_earlier_commit_of_the_landing_holds_is_the_landing_s_own() {
+        let dir = record("build-own");
+        let root = dir.path();
+        let (file, born, gone) = (
+            "rust/gate/crates/owed/src/a.rs",
+            "rust/gate/crates/owed/src/born.rs",
+            "rust/gate/crates/owed/src/gone.rs",
+        );
+        let blob = |p: &str| git(root, &["rev-parse", &format!("HEAD:{p}")]);
+        put(root, file, "base\n");
+        put(root, gone, "base\n");
+        let base = commit(root, "the base");
+        git(root, &["update-ref", "refs/remotes/origin/main", &base]);
+        let (at_base, gone_at_base) = (blob(file), blob(gone));
+        put(root, file, "first\n");
+        put(root, born, "born\n");
+        std::fs::remove_file(root.join(gone)).unwrap();
+        let _ = commit(root, "the landing's first commit");
+        let (first, born_first) = (blob(file), blob(born));
+        put(root, file, "second\n");
+        put(root, born, "born, edited\n");
+        put(root, gone, "back\n");
+        let _ = commit(root, "the landing's second commit");
+        let (head, never) = (blob(file), "0123456789012345678901234567890123456789");
+        let build = json!({"commit": "c1", "dirty": {file: first, born: never}});
+        let mut own = Own::at(root);
+        assert_eq!(
+            mixed(Some(&build), RECORD, &mut |c, p, b| own.holds(c, p, b)),
+            vec![born.to_owned()]
+        );
+        for (path, blob, held) in [
+            (file, head.as_str(), true),
+            (file, first.as_str(), true),
+            (file, at_base.as_str(), true),
+            (file, never, false),
+            (file, DELETED, false),
+            (born, born_first.as_str(), true),
+            // the base held no such file, and the first commit none of the other
+            (born, DELETED, true),
+            (gone, DELETED, true),
+            (gone, gone_at_base.as_str(), true),
+            ("rust/gate/crates/owed/src/never.rs", DELETED, true),
+            ("rust/gate/crates/owed/src/never.rs", never, false),
+        ] {
+            assert_eq!(
+                (path, blob, own.holds("c1", path, blob)),
+                (path, blob, held)
+            );
+        }
+        // the landing pushed, its commits behind the next one's base: the commits made since the build still hold the blob, and
+        // a build of a commit git does not know, or made after them, is held to HEAD and the base
+        let tip = git(root, &["rev-parse", "HEAD"]);
+        git(root, &["update-ref", "refs/remotes/origin/main", &tip]);
+        let mut own = Own::at(root);
+        assert!(own.holds(&base, file, &first) && own.holds(&base, gone, DELETED));
+        assert!(!own.holds(&base, file, never) && !own.holds(&base, file, &at_base));
+        assert!(!own.holds("c1", file, &first) && !own.holds(&tip, file, &first));
+        assert!(!own.holds("--all", file, &first) && own.holds(&tip, file, &head));
+        let since = json!({"commit": base, "dirty": {file: first, born: never}});
+        assert_eq!(
+            mixed(Some(&since), RECORD, &mut |c, p, b| own.holds(c, p, b)),
+            vec![born.to_owned()]
+        );
+        // no base to be found and no commit of the build's: HEAD alone, the rule before T225
+        git(root, &["update-ref", "-d", "refs/remotes/origin/main"]);
+        let mut own = Own::at(root);
+        assert!(own.holds("c1", file, &head) && !own.holds("c1", file, &first));
+        assert!(!own.holds("c1", file, &at_base) && own.holds(&base, file, &first));
+        assert_eq!(
+            mixed(Some(&build), RECORD, &mut |c, p, b| own.holds(c, p, b)),
+            vec![file.to_owned(), born.to_owned()]
+        );
+    }
+
+    /// A build's stamp is handed on without the files committed unchanged since it was built: the binary did not move, its stamp
+    /// did (the ruling's second clause).
+    #[test]
+    fn a_stamp_drops_the_dirty_files_head_now_holds() {
+        let dir = record("build-refreshed");
+        let root = dir.path();
+        put(root, "rust/a.rs", "a\n");
+        put(root, "rust/b c.rs", "b\n");
+        let _ = commit(root, "committed unchanged after the build");
+        let blob = |p: &str| git(root, &["rev-parse", &format!("HEAD:{p}")]);
+        let stamp = json!({"commit": "c1", "dirty": {
+            "rust/a.rs": blob("rust/a.rs"), "rust/b c.rs": "b7", "rust/gone.rs": DELETED, "rust/new.rs": "b8"
+        }});
+        let want = json!({"commit": "c1", "dirty": {"rust/b c.rs": "b7", "rust/new.rs": "b8"}});
+        assert_eq!(refreshed(stamp.clone(), root), want);
+        assert_eq!(within(&stamp.to_string(), root, current), Some(want));
+        let all = json!({"commit": "c1", "dirty": {"rust/a.rs": blob("rust/a.rs"), "rust/b c.rs": blob("rust/b c.rs")}});
+        assert_eq!(refreshed(all, root), json!({"commit": "c1", "dirty": {}}));
+        let clean = json!({"commit": "c1"});
+        assert_eq!(refreshed(clean.clone(), root), clean);
     }
 
     /// The tables follow the tree: every crate `owed`, `bundle` and `claims` reach by `path`, and every file those include.

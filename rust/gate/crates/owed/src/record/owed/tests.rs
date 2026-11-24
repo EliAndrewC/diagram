@@ -909,6 +909,51 @@ fn an_answer_records_its_build_and_a_landing_alone_re_owes_a_mixed_one() {
     assert!(read_answer(&s, &rf.slug)["builds"].get("fp3").is_none());
 }
 
+/// The round arbiter's red fixture (feature 451 T225, `ask:stamp-reads-committed-code-as-mixed`): an answer whose build's stamped blob
+/// is the file's at an earlier commit of the landing's delta, and not HEAD's, was made by the landing's own committed code and
+/// stands; one whose blob no commit of the landing holds is re-owed, as is the first once no base names the delta.
+#[test]
+fn an_answer_by_a_build_of_an_earlier_commit_of_the_landing_stands() {
+    use l7r_gate_core::build::with;
+    let root = record("owed-build-own");
+    let file = "rust/gate/crates/owed/src/record/owed/answers.rs";
+    let base = git(&root, &["rev-parse", "HEAD"]);
+    git(
+        &root,
+        &["update-ref", "refs/remotes/origin/main", base.trim()],
+    );
+    put(&root, file, "// as the answer's build held it\n");
+    let _ = commit(&root, "the landing's commit of it, unchanged");
+    let then = git(&root, &["rev-parse", &format!("HEAD:{file}")]);
+    put(&root, file, "// a later fix of the same landing\n");
+    let _ = commit(&root, "the landing's later commit");
+    edit_everything(&root);
+    let rows = units(&root, None, None, &FAMILIES, "").unwrap();
+    let rf = rows
+        .iter()
+        .find(|u| u.slug == "record-format:0094")
+        .unwrap()
+        .clone();
+    let s = store(&root);
+    let owes = |blob: &str| {
+        let build = format!("{{\"commit\": \"c1\", \"dirty\": {{\"{file}\": \"{blob}\"}}}}");
+        with(Some(&build), false, || {
+            write_answer(&s, &rf.slug, &rf.fingerprint, "r", None)
+        })
+        .unwrap();
+        with(None, true, || unanswered(&root))
+            .unwrap()
+            .into_iter()
+            .find(|u| u.slug == rf.slug)
+    };
+    assert!(owes(then.trim()).is_none());
+    let u = owes("0123456789012345678901234567890123456789")
+        .expect("a blob no commit of the landing holds is another builder's");
+    assert!(u.occasion.contains(&format!("({file})")), "{}", u.occasion);
+    git(&root, &["update-ref", "-d", "refs/remotes/origin/main"]);
+    assert!(owes(then.trim()).is_some());
+}
+
 /// A landing alone re-owes a record answer only for uncommitted code its own verbs can run (feature 451 T224, the round arbiter's
 /// `ask:mixed-build-53-record-answers`): the claims crate's files and a Markdown doc mix nothing, the check bundle's builder does.
 #[test]

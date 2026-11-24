@@ -1386,6 +1386,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
+  },
+  "### T225 (the round arbiter's `ask:stamp-reads-committed-code-as-mixed`, 2026-11-24, continue with a tooling fix: each of the day's three gate fixes re-owed the answers recorded before it - 241 claims, 53 record answers, 191 claims and 49 record answers, and the landing was refused each time - because the mixed-build rule compared a build's stamped blobs with HEAD alone)": {
+   "sha256": "ea4c211e557a9a21ba2404b130693a0dbaba1f0d520a97dc1fbba752ca582530",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T225 Approach (checklist part A)": {
+   "sha256": "b4e89cb2129c1f8f8ee3364ab33e861f9500b750eaccace5ff0ba16250dc83ac",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -19107,6 +19119,90 @@
      "why": "This follows the ruling's what (3) to (5) exactly."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T225 (the round arbiter's `ask:stamp-reads-committed-code-as-mixed`, 2026-11-24, continue with a tooling fix: each of the day's three gate fixes re-owed the answers recorded before it - 241 claims, 53 record answers, 191 claims and 49 record answers, and the landing was refused each time - because the mixed-build rule compared a build's stamped blobs with HEAD alone)",
+    "### T225 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T225-own",
+     "summary": "One reading type, Own, in core/build.rs; mixed asks it; Judged (owed/answers.rs) and Landing (claims/index.rs) each hold one Own in place of their own HEAD lookups",
+     "class": "within",
+     "why": "Where the fix lives, not what it trusts. The ruling's tooling_fix names both the owed record and the claim answers, and one shared reading puts the same rule in both."
+    },
+    {
+     "id": "T225-a",
+     "summary": "A stamped blob is the landing's own where it is its path's blob at HEAD, at a commit of the delta, or at the base; a stamped deleted is own where one of those commits holds no such file",
+     "class": "within",
+     "why": "This is the ruling's tooling_fix nearly word for word. The deleted arm is the same rule applied to a file's absence."
+    },
+    {
+     "id": "T225-b-base",
+     "summary": "Base = git merge-base HEAD origin/main (the base make land already diffs from); delta = base..HEAD; a merge of main moves the base and keeps the clone's own commits in the delta",
+     "class": "within",
+     "why": "The ruling names 'the landing's delta (f7c105b4a0..HEAD)' and 'its base' without saying how to find them. Using the landing's own diff base reads them as make land already does."
+    },
+    {
+     "id": "T225-b-nobase",
+     "summary": "Where no base is found (no origin/main, no shared history) the delta is empty and a blob is held to HEAD, the rule before this task ((d) still applies where the stamp commit is known)",
+     "class": "within",
+     "why": "With no base the ruling's delta and base are undefined, so the ruling's rule has nothing to compare against. The fallback is the stricter earlier rule: it trusts less, never more."
+    },
+    {
+     "id": "T225-c",
+     "summary": "A blob no commit holds still reads mixed (the real case: another builder's work in progress); measured over 302 record entries and 205 claim rows, one superseded answer holds such blobs",
+     "class": "within",
+     "why": "This keeps T197 unchanged. The ruling widens 'own' only to committed blobs, so an uncommitted blob still reads mixed, as it did before."
+    },
+    {
+     "id": "T225-d",
+     "summary": "A blob held at a commit of <stamp commit>..HEAD is also committed code, asked after HEAD/delta/base miss; a stamp commit git does not know adds nothing",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This trusts more than the ruling's words, so it is tested as an exception. Taken literally, the ruling's rule would defeat the ruling's own stated purpose: 'ends the loop' and 'do not ask this question again'. The block measures it: once this landing is pushed, its commits fall behind the next landing's base. 189 claim rows stamped 1b064aa0de would then read mixed at the next landing of any clone, the same loop run once more. Against T197's purpose: (d) admits a blob only if a commit reachable from HEAD holds it, so it can never admit a blob that no commit holds. Another builder's uncommitted work therefore still reads mixed under (c). With (d), the block measures 0 of 205 rows and 0 of 302 record entries, the (c) one aside, left holding a blob that no commit since its stamp holds. It trusts only committed code, which is the ruling's own ground for its rule."
+    },
+    {
+     "id": "T225-f",
+     "summary": "build::current() drops from the stamp each dirty file whose stamped blob equals the launcher tree's HEAD now, so an answer by a binary whose sources were since committed unchanged carries a clean stamp and a triage clear by it writes no build row",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The ruling's second clause is worded as a reading rule ('reads a stamp as clean once all its dirty blobs equal HEAD'). (f) applies it when the stamp is written, per file, against HEAD at that moment, which goes past the words, so it is tested as an exception. It is implied by the ruling's own clause, and it admits nothing T197 guards: a file is dropped only when its blob is committed at HEAD when the answer is recorded, so uncommitted work (T197's object) is never dropped and still reads mixed under (c). The one case where it differs from the read-time rule is a write-time HEAD the landing later loses through an amend or reset. That gives the answer the same standing a clean build at an amended-away commit already has, because the mixed rule reads only dirty blobs, so it opens no new class of trusted code. Without (f), the defect the block records goes on: each triage clear writes a build row into the tracked index for files that were HEAD's own. That is a wrong outcome the ruling's clause was aimed at."
+    },
+    {
+     "id": "T225-order",
+     "summary": "Built straight after the landing of T218-T224, alone in the clone, nothing recording answers while the gate's crates are uncommitted",
+     "class": "within",
+     "why": "The ruling's 'what' step (3): 'straight after the landing, alone in the clone'."
+    },
+    {
+     "id": "T225-tests",
+     "summary": "Red-first fixtures in the owed and claims crates for an answer by a build of an earlier commit of the delta, plus opposite cases (blob no commit holds re-owed; unknown stamp commit with no base re-owed) and a core fixture per arm of Own",
+     "class": "within",
+     "why": "The ruling asks for 'a red fixture where an answer's stamped blob matches an earlier commit of the delta but not HEAD'. The opposite cases enforce T197, which is kept, so they are enforcement of what was asked, not extra scope."
+    },
+    {
+     "id": "T225-messages",
+     "summary": "The messages are unchanged",
+     "class": "within",
+     "why": "Nothing asked for a change of wording."
+    },
+    {
+     "id": "T225-perf",
+     "summary": "Not classed as performance work: it corrects what a landing owes",
+     "class": "within",
+     "why": "A classification. The arbiter's ruling fixes the order anyway (straight after the landing), so this changes no scheduling the GM or the ruling set."
+    },
+    {
+     "id": "T225-found",
+     "summary": "Found-and-left: both items (the one-landing limit of the ruling's rule, the stale dirty stamp) fixed here, nothing deferred",
+     "class": "within",
+     "why": "No defect is carried forward. Both are fixed in this task as (d) and (f), each ruled above."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -30708,6 +30804,88 @@
      "summary": "The refusal message is unchanged. The fix is built before T218..T223 are re-landed, while nothing else records in the clone.",
      "class": "within",
      "why": "This follows the ruling's what (3) to (5) exactly."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T225": {
+   "section_sha256": "25e4e1f7f0bd91fe0a2bd65b9544b501700766b05281a6d974fefc2e3461d55f",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T225-own",
+     "summary": "One reading type, Own, in core/build.rs; mixed asks it; Judged (owed/answers.rs) and Landing (claims/index.rs) each hold one Own in place of their own HEAD lookups",
+     "class": "within",
+     "why": "Where the fix lives, not what it trusts. The ruling's tooling_fix names both the owed record and the claim answers, and one shared reading puts the same rule in both."
+    },
+    {
+     "id": "T225-a",
+     "summary": "A stamped blob is the landing's own where it is its path's blob at HEAD, at a commit of the delta, or at the base; a stamped deleted is own where one of those commits holds no such file",
+     "class": "within",
+     "why": "This is the ruling's tooling_fix nearly word for word. The deleted arm is the same rule applied to a file's absence."
+    },
+    {
+     "id": "T225-b-base",
+     "summary": "Base = git merge-base HEAD origin/main (the base make land already diffs from); delta = base..HEAD; a merge of main moves the base and keeps the clone's own commits in the delta",
+     "class": "within",
+     "why": "The ruling names 'the landing's delta (f7c105b4a0..HEAD)' and 'its base' without saying how to find them. Using the landing's own diff base reads them as make land already does."
+    },
+    {
+     "id": "T225-b-nobase",
+     "summary": "Where no base is found (no origin/main, no shared history) the delta is empty and a blob is held to HEAD, the rule before this task ((d) still applies where the stamp commit is known)",
+     "class": "within",
+     "why": "With no base the ruling's delta and base are undefined, so the ruling's rule has nothing to compare against. The fallback is the stricter earlier rule: it trusts less, never more."
+    },
+    {
+     "id": "T225-c",
+     "summary": "A blob no commit holds still reads mixed (the real case: another builder's work in progress); measured over 302 record entries and 205 claim rows, one superseded answer holds such blobs",
+     "class": "within",
+     "why": "This keeps T197 unchanged. The ruling widens 'own' only to committed blobs, so an uncommitted blob still reads mixed, as it did before."
+    },
+    {
+     "id": "T225-d",
+     "summary": "A blob held at a commit of <stamp commit>..HEAD is also committed code, asked after HEAD/delta/base miss; a stamp commit git does not know adds nothing",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This trusts more than the ruling's words, so it is tested as an exception. Taken literally, the ruling's rule would defeat the ruling's own stated purpose: 'ends the loop' and 'do not ask this question again'. The block measures it: once this landing is pushed, its commits fall behind the next landing's base. 189 claim rows stamped 1b064aa0de would then read mixed at the next landing of any clone, the same loop run once more. Against T197's purpose: (d) admits a blob only if a commit reachable from HEAD holds it, so it can never admit a blob that no commit holds. Another builder's uncommitted work therefore still reads mixed under (c). With (d), the block measures 0 of 205 rows and 0 of 302 record entries, the (c) one aside, left holding a blob that no commit since its stamp holds. It trusts only committed code, which is the ruling's own ground for its rule."
+    },
+    {
+     "id": "T225-f",
+     "summary": "build::current() drops from the stamp each dirty file whose stamped blob equals the launcher tree's HEAD now, so an answer by a binary whose sources were since committed unchanged carries a clean stamp and a triage clear by it writes no build row",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The ruling's second clause is worded as a reading rule ('reads a stamp as clean once all its dirty blobs equal HEAD'). (f) applies it when the stamp is written, per file, against HEAD at that moment, which goes past the words, so it is tested as an exception. It is implied by the ruling's own clause, and it admits nothing T197 guards: a file is dropped only when its blob is committed at HEAD when the answer is recorded, so uncommitted work (T197's object) is never dropped and still reads mixed under (c). The one case where it differs from the read-time rule is a write-time HEAD the landing later loses through an amend or reset. That gives the answer the same standing a clean build at an amended-away commit already has, because the mixed rule reads only dirty blobs, so it opens no new class of trusted code. Without (f), the defect the block records goes on: each triage clear writes a build row into the tracked index for files that were HEAD's own. That is a wrong outcome the ruling's clause was aimed at."
+    },
+    {
+     "id": "T225-order",
+     "summary": "Built straight after the landing of T218-T224, alone in the clone, nothing recording answers while the gate's crates are uncommitted",
+     "class": "within",
+     "why": "The ruling's 'what' step (3): 'straight after the landing, alone in the clone'."
+    },
+    {
+     "id": "T225-tests",
+     "summary": "Red-first fixtures in the owed and claims crates for an answer by a build of an earlier commit of the delta, plus opposite cases (blob no commit holds re-owed; unknown stamp commit with no base re-owed) and a core fixture per arm of Own",
+     "class": "within",
+     "why": "The ruling asks for 'a red fixture where an answer's stamped blob matches an earlier commit of the delta but not HEAD'. The opposite cases enforce T197, which is kept, so they are enforcement of what was asked, not extra scope."
+    },
+    {
+     "id": "T225-messages",
+     "summary": "The messages are unchanged",
+     "class": "within",
+     "why": "Nothing asked for a change of wording."
+    },
+    {
+     "id": "T225-perf",
+     "summary": "Not classed as performance work: it corrects what a landing owes",
+     "class": "within",
+     "why": "A classification. The arbiter's ruling fixes the order anyway (straight after the landing), so this changes no scheduling the GM or the ruling set."
+    },
+    {
+     "id": "T225-found",
+     "summary": "Found-and-left: both items (the one-landing limit of the ruling's rule, the stale dirty stamp) fixed here, nothing deferred",
+     "class": "within",
+     "why": "No defect is carried forward. Both are fixed in this task as (d) and (f), each ruled above."
     }
    ],
    "verdict": "CLEAR"

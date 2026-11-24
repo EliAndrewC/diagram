@@ -20,6 +20,7 @@ seen red, then the check deleted and the test seen red again (FR-012).
 - none: T222 - tooling only: the gate's claims, owed, reviews, core and bundle crates and the check agents' rule files; no map feature, sheet, glyph, placement rule or research page of theirs changes (the drawing code and pages in the same delta are 449's, 452's and page session P7's, each declared on its own feature's lines).
 - none: T223 - tooling only: the gate's claims, owed, reviews, core and bundle crates and the check agents' rule files; no map feature, sheet, glyph, placement rule or research page of theirs changes (the drawing code and pages in the same delta are 449's, 452's and page session P7's, each declared on its own feature's lines).
 - none: T224 - tooling only: the gate's core crate (`build.rs`, the closure tables and their test), the one call each in the owed and claims crates, and `rust/gate/CLAUDE.md`; no map feature, sheet, glyph, placement rule or research page changes
+- none: T225 - tooling only: the gate's core crate (`build.rs`: which commits hold a build's stamped blob, the stamp refreshed at use, their tests), the one call each in the owed and claims crates with a test each, and `rust/gate/CLAUDE.md`; no map feature, sheet, glyph, placement rule or research page changes
 
 ## Dependencies
 

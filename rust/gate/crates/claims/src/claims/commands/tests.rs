@@ -617,6 +617,47 @@ fn a_triage_clear_by_a_mixed_build_is_owed_again_in_a_landing_alone() {
     assert!(index(&root)[key].get("build").is_none());
 }
 
+/// The round arbiter's red fixture, for a claim (feature 451 T225, `ask:stamp-reads-committed-code-as-mixed`): a clear by a build
+/// whose stamped blob is the file's at an earlier commit of the landing's delta, and not HEAD's, is the landing's own answer.
+#[test]
+fn a_triage_clear_by_a_build_of_an_earlier_commit_of_the_landing_stands() {
+    use l7r_gate_core::build::with;
+    let root = changed("claims-cmd-triaged-own");
+    let to = triaged(&root);
+    let key = "docs/buildings.md::Walls#wall height";
+    let r = reply(&root, "NONE\n");
+    let file = "rust/gate/src/lib.rs";
+    let run = |args: &[&str]| {
+        let out = std::process::Command::new("git")
+            .arg("-C")
+            .arg(&root)
+            .args(args)
+            .output()
+            .unwrap();
+        String::from_utf8_lossy(&out.stdout).trim().to_owned()
+    };
+    std::fs::write(root.join(file), "// as the clear's build held it\n").unwrap();
+    let then = run(&["hash-object", file]);
+    let build = format!("{{\"commit\": \"c1\", \"dirty\": {{\"{file}\": \"{then}\"}}}}");
+    assert_eq!(
+        with(Some(&build), false, || claims(
+            &root,
+            &["triaged", "--bundle", &to, "--reply", &r]
+        ))
+        .code,
+        0
+    );
+    assert_eq!(index(&root)[key]["build"]["dirty"][file], then.as_str());
+    run(&["add", "-A"]);
+    run(&["commit", "-qm", "the landing's commit of it, unchanged"]);
+    std::fs::write(root.join(file), "// a later fix of the same landing\n").unwrap();
+    run(&["add", "-A"]);
+    run(&["commit", "-qm", "the landing's later commit"]);
+    assert_ne!(run(&["rev-parse", &format!("HEAD:{file}")]), then);
+    let owed = with(None, true, || claims(&root, &["owed"]));
+    assert!(!owed.stdout.contains(key), "{}", owed.stdout);
+}
+
 /// Feature 451 T191's replay: what `claims triage` would do, read only - each claim owed a triage and its fate, then the counts - and
 /// nothing of the index written.
 #[test]

@@ -2852,40 +2852,46 @@ engine speed, so no checklist.
 **Performance work?** no: it corrects what a landing owes; the saved re-runs are its effect, not a speed change of any tool.
 
 
-### T225 (<why: the finding or measurement that files it>)
+### T225 (the round arbiter's `ask:stamp-reads-committed-code-as-mixed`, 2026-11-24, continue with a tooling fix: each of the day's three gate fixes re-owed the answers recorded before it - 241 claims, 53 record answers, 191 claims and 49 record answers, and the landing was refused each time - because the mixed-build rule compared a build's stamped blobs with HEAD alone)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: A landing alone reads a build's uncommitted file as another builder's only where no commit holds the blob the build stamped for it. The reading is one type, `Own`, in `rust/gate/crates/core/src/build.rs`; `mixed` asks it, and the two readers (`Judged` in `owed/answers.rs`, `Landing` in `claims/index.rs`) each hold one `Own` in place of their own HEAD lookups.
+  - **(a) The ruling's rule.** A stamped blob is the landing's own committed code where it is its path's blob at HEAD, at a commit of the landing's delta, or at the delta's base. A stamped `deleted` is the landing's own where one of those commits holds no such file.
+  - **(b) How the delta and its base are found.** The base is `git merge-base HEAD origin/main`, the base `make land` already diffs from (`origin/main...HEAD` in `land.rs`). The delta is `base..HEAD`. The landing worktree is a worktree of the clone, so it resolves `origin/main` as the clone does. A merge of main into the clone moves the base to main's tip and leaves the clone's own commits in the delta. Where no base is found (no `origin/main`, no shared history) the delta is empty and a blob is held to HEAD: the rule before this task.
+  - **(c) A blob no commit holds still reads mixed.** That is the real case the rule exists for: another builder's work in progress, changed before it was committed or never committed. Observed 2026-11-24, method: a script over every `builds` entry of the clone's `.git/record-checks/*.json` (302 entries) and every `build` of `dev/claims-index.json` (205 rows): one answer holds blobs no commit holds, `modal-form:sheet/guest-quarters` at its superseded fingerprint `e22e938665b5` (a build of `07aac2b99c` with 24 dirty files, 15 of them never committed in that form). It is not the unit's current answer, so nothing reads it.
+  - **(d) Since the build: a decision this task adds to the ruling's words.** The stamp names the commit its binary was built at. A file committed unchanged after the build is at a commit of `<stamp commit>..HEAD`, wherever the landing's base stands, so a blob held there is committed code too. Why it is needed: the ruling's rule holds for one landing. Observed 2026-11-24, method: a script over `dev/claims-index.json` comparing each stamped blob with this tree: 189 rows carry a stamp of `1b064aa0de` with seven dirty files, and this task's own commit edits five of them. Once this landing is pushed, its commits are behind the next landing's base, and every one of those rows would read mixed at the next landing of any clone, the loop the ruling ends run once more. With (d), observed 2026-11-24, method: the same script: 0 of the 205 stamped rows, and 0 of the 302 record entries but the one in (c), hold a blob that no commit since its stamp holds. It is asked last, after HEAD, the delta and the base miss, so a landing whose answers are its own pays nothing for it. A stamp commit git does not know adds nothing.
+  - **(e) The cost.** A blob HEAD holds: one `rev-parse` a path, as before. The first blob HEAD does not hold: one `merge-base` and one `git log --raw` over the whole delta, kept for every later path and answer; then one `rev-parse` of the base a path. For (d): one `git log --raw` a stamp commit. The `git log` took 0.08 s for 106 commits (932 lines), 0.03 s for 65 and 0.01 s for 27, measured 2026-11-24 (`/usr/bin/time` on it in the clone).
+  - **(f) The stamp is refreshed at use.** `build::current()` hands the stamp on without each dirty file whose stamped blob is the one HEAD of the launcher's tree (`L7R_GATE_TREE`) holds now: one `git ls-tree` a call, none for a clean stamp. This is the ruling's second clause on the writing side. An answer recorded by a binary whose sources were committed unchanged since its build carries a clean stamp, and a triage clear by it stamps no row of the tracked index. The reading side already read such a stamp as clean, blob by blob.
+  - **The messages are unchanged.**
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+| the landing as the clone stands (`L7R_LAND_ALONE=1`, read only, 2026-11-24) | before | after |
+|---|---|---|
+| `make record-owed UNANSWERED=1`: units listed as answered by a mixed build | 49 | 0 |
+| `make claims-owed`: claims owed | 0 | 0 |
+
+  Before is the clone at `764f15e3d2` with no edit (`/tmp/t225/before-record.txt`, `before-claims.txt`); after is the same tree with this task's edits uncommitted (`/tmp/t225/after-record.txt`: "no record check is owed"; `after-claims.txt`: "no claim is owed"). The claims row proves nothing by itself: every claim stamp equals HEAD until this task is committed. The claims half rests on the script in (d) and on the claims crate's fixture.
 
 ### T225 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A landing owes an answer again only when code that was never committed judged it.
+2. **The constraints.**
+   - T197: a landing alone never trusts an answer judged with another builder's uncommitted code. Kept: a blob no commit holds reads mixed.
+   - The ruling's `tooling_fix`: a stamped blob equal to its path's blob at any commit of the landing's delta, or at its base, is the landing's own; a stamp whose dirty blobs all equal HEAD reads clean; a red fixture of the earlier-commit case.
+   - T223 and T224: the claims readers stay on `Landing::paths`, and a path counts only inside its closure table.
+3. **Where each comes from.**
+   - O: the measurement, `/home/agent/.claude/jobs/c6fd72d1/tmp/arbiter-stamp-history.md` and `stamp-history.txt`; the scripts' counts in (c) and (d).
+   - R: the round arbiter, `ask:stamp-reads-committed-code-as-mixed`, continue, its `tooling_fix`.
+4. **Do they describe the world here?** Yes: the table above, on the answers the ruling names, and the scan of every stored stamp.
+5. **The order.** Straight after the landing of T218 to T224, alone in the clone. Nothing records an answer in the clone while the gate's crates are uncommitted.
+6. **The exits.** Green: `make closing-checks T=T225 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, 2026-11-24, method: a detached worktree of HEAD (`764f15e3d2`) with only the two new tests copied in, `make rust-test` on each crate. The owed crate's `an_answer_by_a_build_of_an_earlier_commit_of_the_landing_stands` failed (`/tmp/t225/red-owed.log`, 124 passed, 1 failed: the answer whose stamped blob was the file's at the delta's first commit was re-owed). The claims crate's `a_triage_clear_by_a_build_of_an_earlier_commit_of_the_landing_stands` failed the same way (`/tmp/t225/red-claims.log`, 196 passed, 1 failed). After: 125 and 197 passed. The owed test also holds the opposite cases: a blob no commit holds is re-owed, and so is the earlier-commit blob of a build whose commit git does not know once no base names the delta. Core's fixture test holds each arm of `Own`: HEAD, an earlier commit, the base, a deleted file, a blob no commit holds, the pushed landing of (d), and no base.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: the gate answered wrongly. It owed 49 checks again, and three rounds of claims, for code this landing had committed. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The rule as the ruling words it holds for one landing: 189 claim rows would read mixed at the next landing. Effect: the next landing of any clone is refused or owes 189 claims a triage again. Fixed here: (d).
+- A binary built before its sources were committed unchanged kept stamping them dirty. Effect: each triage clear by it wrote a `build` into the tracked index, and each record answer carried up to 30 files that were HEAD's own. Fixed here: (f).
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-### T225 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
-
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
-
+**Performance work?** no: it corrects what a landing owes; the saved re-runs are its effect, not a speed change of any tool.
