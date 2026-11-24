@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-24T19:20:42Z",
+  "target": "record-checked",
+  "commit": "84264bc270",
+  "why": "source-reader on source-reader:0341#kusano-1996-kinsei-shijo-keizai source-reader:0341#kusano-1996-kinsei-shijo-keizai-2 source-reader:0341#kusano-1996-kinsei-shijo-keizai-3 source-reader:0341#moriya-benibana-aidake-1 source-reader:0341#moriya-benibana-aidake-1-2: the five notes moved byte for byte from 0339 with the safflower and rice section (the size split, commit 9a65364efb); source-reader read them on 0339 at this content in session S1 (handoff, Session S1, Checks)"
+}

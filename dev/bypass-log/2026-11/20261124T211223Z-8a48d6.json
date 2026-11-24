@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-24T21:12:23Z",
+  "target": "record-checked",
+  "commit": "0e4f87ba37",
+  "why": "source-reader on source-reader:0340#anada-edo-uji-chashi source-reader:0340#anada-edo-uji-chashi-2: only the stored original's characters were corrected to the page on quote-check round 1's finding; quote-check round 2 read each corrected original VERBATIM on its page image; the claim is unchanged (anada-2's translation gained the year sign the page prints)"
+}

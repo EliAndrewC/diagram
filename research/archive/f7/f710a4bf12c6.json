@@ -1,0 +1,16 @@
+{
+ "captured": "2026-11-24T18:09:41+00:00",
+ "final_url": "https://web.archive.org/web/20251206221110id_/https://kurume.repo.nii.ac.jp/record/455/files/keisya58_1-2_1-19.pdf",
+ "first": "f7/f710a4bf12c6/20261124T180939Z",
+ "gm_copies": [],
+ "keys": [
+  "oyanome-2018-zusho-zaisei"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "f7/f710a4bf12c6/20261124T180939Z",
+ "reason": "HTTP 406",
+ "revision": "",
+ "sha256": "fed012fe7f5a151dd6a85a74483548295e260ab9c69b965290cda85abedfd124",
+ "url": "https://kurume.repo.nii.ac.jp/record/455/files/keisya58_1-2_1-19.pdf"
+}

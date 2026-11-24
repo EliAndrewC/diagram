@@ -102,6 +102,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
+  },
+  "### T01 part B (2026-11-24T18:05Z)": {
+   "sha256": "6a71794f625d979f13169bf2bf0a9e1f36d487489b0d28fc7b4382615d052f5d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -332,6 +338,74 @@
      "why": "A cost/scheduling statement; it neither narrows nor widens the questions or figures asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T01 Approach (checklist part A)",
+    "### T01 part B (2026-11-24T18:05Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-A2-constraints",
+     "summary": "T01 binds itself to D1 and FR-001, FR-002, FR-005, FR-006, FR-007, and measures done by SC-001, SC-002, SC-003",
+     "class": "within",
+     "why": "Names the spec's own requirements (none dropped or reworded); SC-001 carries FR-004 and FR-008, so the priority order and canon-beside obligations still bind the task through its done-measure. No clause of request.md is set aside."
+    },
+    {
+     "id": "T01-A6-exits",
+     "summary": "Green exit is a landing; red exit records what failed, sets the task down, and routes any cannot-be-done claim through make arbiter-ask",
+     "class": "within",
+     "why": "Procedure only; it narrows nothing the GM asked for and gives no route to dropping a question or figure without a ruling."
+    },
+    {
+     "id": "T01-A8-budget",
+     "summary": "Budget of one landing",
+     "class": "within",
+     "why": "A work-size estimate; it does not cap the questions, goods or figures of the request."
+    },
+    {
+     "id": "T01-B-red-gate",
+     "summary": "Answers the red-gate@2 trigger (two unlike red gates on feature 453's T01 landing, filed here by the tool), records both fixes as one-line corrections measured clean, and adds that a search-pass report is run through make quick when saved, before any landing",
+     "class": "within",
+     "why": "Records an incident and adds a process step enforcing the project's standing house-style and lint rules; it changes no requirement, good, question or figure of the request."
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T01": {
+   "section_sha256": "f01d35db5338583c7e3c6f5dc0be78b1358816128929ed2aed5db3c1ab18fb14",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T01-A2-constraints",
+     "summary": "T01 binds itself to D1 and FR-001, FR-002, FR-005, FR-006, FR-007, and measures done by SC-001, SC-002, SC-003",
+     "class": "within",
+     "why": "Names the spec's own requirements (none dropped or reworded); SC-001 carries FR-004 and FR-008, so the priority order and canon-beside obligations still bind the task through its done-measure. No clause of request.md is set aside."
+    },
+    {
+     "id": "T01-A6-exits",
+     "summary": "Green exit is a landing; red exit records what failed, sets the task down, and routes any cannot-be-done claim through make arbiter-ask",
+     "class": "within",
+     "why": "Procedure only; it narrows nothing the GM asked for and gives no route to dropping a question or figure without a ruling."
+    },
+    {
+     "id": "T01-A8-budget",
+     "summary": "Budget of one landing",
+     "class": "within",
+     "why": "A work-size estimate; it does not cap the questions, goods or figures of the request."
+    },
+    {
+     "id": "T01-B-red-gate",
+     "summary": "Answers the red-gate@2 trigger (two unlike red gates on feature 453's T01 landing, filed here by the tool), records both fixes as one-line corrections measured clean, and adds that a search-pass report is run through make quick when saved, before any landing",
+     "class": "within",
+     "why": "Records an incident and adds a process step enforcing the project's standing house-style and lint rules; it changes no requirement, good, question or figure of the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }

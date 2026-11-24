@@ -1,0 +1,16 @@
+{
+ "captured": "2026-11-24T18:59:05+00:00",
+ "final_url": "https://web.archive.org/web/20240917052029id_/https://yamagata.repo.nii.ac.jp/record/2984/files/iwt_11.pdf",
+ "first": "c9/c9872ec2473f/20261124T185904Z",
+ "gm_copies": [],
+ "keys": [
+  "iwata-2003-shohin-ryutsu-chakune"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "c9/c9872ec2473f/20261124T185904Z",
+ "reason": "HTTP 406",
+ "revision": "",
+ "sha256": "3f7d502b9ece40a1e15782b91ffaf53fa5649cf689da812ab6958a7bb7f79389",
+ "url": "https://yamagata.repo.nii.ac.jp/record/2984/files/iwt_11.pdf"
+}

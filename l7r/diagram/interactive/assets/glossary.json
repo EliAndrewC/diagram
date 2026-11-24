@@ -2163,7 +2163,7 @@
   ]
  },
  "kan": {
-  "def": "A Japanese weight of 3.75 kg. Rice was baled by it; charcoal, which had no standard bale, had to be weighed at sale.",
+  "def": "A Japanese weight of 3.75 kg. Rice was baled by it; charcoal, which had no standard bale, had to be weighed at sale. In money it is a thousand: a kan of silver is 1,000 monme, and a kan of copper cash 1,000 mon.",
   "variants": [
    "kan"
   ]
@@ -2492,7 +2492,8 @@
  "kurayashiki": {
   "def": "A domain's warehouse-and-residence at the Osaka rice market, where its tax rice was auctioned to brokers.",
   "variants": [
-   "kurayashiki"
+   "kurayashiki",
+   "warehouse-residence"
   ]
  },
  "kuromatsu": {
@@ -11750,7 +11751,8 @@
   "def": "Perilla, a leaf herb of the mint family grown for its fragrant leaves; it grows even in shade.",
   "variants": [
    "shiso"
-  ]
+  ],
+  "cased": true
  },
  "proso": {
   "def": "A small-grained millet (Japanese kibi), grown as a summer grain on dry fields.",
@@ -19733,6 +19735,189 @@
   "variants": [
    "tide gate",
    "tide gates"
+  ]
+ },
+ "Sparrow Clan": {
+  "def": "A minor clan of Rokugan whose hilly lands are poor for rice; the setting says its tea can always be sold to buy the food it cannot grow.",
+  "variants": [
+   "Sparrow Clan",
+   "the Sparrow's"
+  ]
+ },
+ "bar iron": {
+  "def": "Wrought iron forged from pig iron into bars at an ironworks' forges, the form in which it was sold; the Harima method book reckons two kinds, split bar and long bar.",
+  "variants": [
+   "bar iron",
+   "split bar iron",
+   "split bar",
+   "long bar"
+  ]
+ },
+ "Joshu": {
+  "def": "Another name for Kozuke province, north of Edo, whose silk towns - Maebashi, Tomioka, Fujioka - sent raw silk to Kyoto.",
+  "variants": [
+   "Joshu"
+  ]
+ },
+ "fixed courier house": {
+  "def": "A courier house that ran a regular service between the great cities and its branch towns, carrying letters, money and goods for hire; in the Joshu silk trade it carried the thread to Kyoto and brought its price back.",
+  "variants": [
+   "fixed courier house",
+   "fixed courier houses",
+   "fixed courier"
+  ]
+ },
+ "Oshu": {
+  "def": "Another name for Mutsu province, in the far northeast of Japan; the silk town of Fukushima lay in it.",
+  "variants": [
+   "Oshu"
+  ]
+ },
+ "Harima": {
+  "def": "A province on the Inland Sea west of Osaka, whose Shiso district held ironworks; its small Mikazuki domain kept the Genbun-era ironworks method book.",
+  "variants": [
+   "Harima"
+  ]
+ },
+ "Iwami": {
+  "def": "A province on the Sea of Japan coast west of Izumo, much of it the shogunate's land, whose ironworks made about 30,000 loads of pig iron a year around 1830.",
+  "variants": [
+   "Iwami"
+  ]
+ },
+ "mutsu-buki": {
+  "def": "A way of working an ironworks' furnace named in the Genbun method book; its editors set it beside smelts of three days, and the four-blow working beside smelts of two.",
+  "variants": [
+   "mutsu-buki",
+   "six-blow",
+   "six-blow working"
+  ]
+ },
+ "black sugar": {
+  "def": "Dark, unrefined sugar made by boiling down cane juice. It was the product of the Amami islands and Ryukyu, which Satsuma domain sold in Osaka, as against the refined white sugar of Sanuki.",
+  "variants": [
+   "black sugar"
+  ]
+ },
+ "Amami islands": {
+  "def": "A chain of islands south of Kyushu, among them Amami Oshima, Kikaijima and Tokunoshima, ruled by Satsuma domain. From 1747 their land tax was paid in black sugar, and the domain bought their sugar for rice at rates it set.",
+  "variants": [
+   "Amami islands",
+   "Amami",
+   "Amami's"
+  ]
+ },
+ "Amami Oshima": {
+  "def": "The largest of the Amami islands, about 905 km from Osaka in a straight line, a source of Satsuma domain's black sugar.",
+  "variants": [
+   "Amami Oshima"
+  ]
+ },
+ "Tokunoshima": {
+  "def": "One of the Amami islands, ruled by Satsuma domain. Its black sugar paid the dearest freight of the three islands in the 1745 schedule, 17.5 kin in every 100.",
+  "variants": [
+   "Tokunoshima"
+  ]
+ },
+ "Uji": {
+  "def": "A town of Yamashiro province south of Kyoto, the Edo period's best-known tea district. Its tea masters supplied the shogunate with the leaf for powdered tea at payments it fixed.",
+  "variants": [
+   "Uji",
+   "Uji's"
+  ]
+ },
+ "Shigaraki": {
+  "def": "A hill district of Omi province, southeast of Lake Biwa, that grew tea; an Edo handbill of 1852 priced its leaf tea together with Uji's.",
+  "variants": [
+   "Shigaraki"
+  ]
+ },
+ "Enkyo": {
+  "def": "The Japanese era name for the years 1744 to 1748.",
+  "variants": [
+   "Enkyo",
+   "Enkyō"
+  ]
+ },
+ "Kōka": {
+  "def": "The Japanese era name for the years 1844 to 1848.",
+  "variants": [
+   "Kōka",
+   "Koka"
+  ]
+ },
+ "Taiyuin": {
+  "def": "The posthumous name of Tokugawa Iemitsu, the third Tokugawa shogun (r. 1623 to 1651).",
+  "variants": [
+   "Taiyuin",
+   "Taiyūin"
+  ]
+ },
+ "gokujo": {
+  "def": "The finest of the three grades of powdered-tea leaf the shogunate bought from Uji's tea masters, paid 78 monme of silver a kin from 1642.",
+  "variants": [
+   "gokujo"
+  ]
+ },
+ "betsugi": {
+  "def": "The second of the three grades of powdered-tea leaf the shogunate bought from Uji's tea masters, paid 52 monme of silver a kin from 1642.",
+  "variants": [
+   "betsugi"
+  ]
+ },
+ "gokusoroi": {
+  "def": "The third of the three grades of powdered-tea leaf the shogunate bought from Uji's tea masters, paid 26 monme of silver a kin from 1642. Jo-gokusoroi, an upper gokusoroi, is a thin powdered tea an Edo shop sold at 27 monme a kin in 1852.",
+  "variants": [
+   "gokusoroi",
+   "jo-gokusoroi"
+  ]
+ },
+ "wari": {
+  "def": "A division or share. In reckoning a rate it is a tenth: \"1 wari 5 bu\" is 15%, the bu then counting hundredths. Of land, it is one of the groups into which a village's fields were divided for sharing out.",
+  "variants": [
+   "wari"
+  ]
+ },
+ "aloeswood": {
+  "def": "A fragrant resinous wood burned as incense, one of the incense woods that came to Japan from abroad through Nagasaki.",
+  "variants": [
+   "aloeswood",
+   "agarwood"
+  ]
+ },
+ "Shiso district": {
+  "def": "A district of Harima province, today the city of Shiso in Hyogo prefecture, whose Chigusa valley held ironworks.",
+  "variants": [
+   "Shiso district",
+   "Shiso city"
+  ],
+  "cased": true
+ },
+ "four-blow": {
+  "def": "A way of working a tatara iron-smelting furnace that the Genbun-era (1736-1741) ironworks method book calls the newer method, fashionable in those years. Its editors set it beside smelts of two days, against the three days of the older six-blow (mutsu-buki) working.",
+  "variants": [
+   "four-blow",
+   "four-blow working"
+  ]
+ },
+ "Michinoshima": {
+  "def": "Satsuma domain's name for the Amami islands, meaning \"the islands of the way\".",
+  "variants": [
+   "Michinoshima"
+  ]
+ },
+ "Ryukyu-kan": {
+  "def": "The office the Ryukyu kingdom kept at Kagoshima, Satsuma's castle town, where its sugar and tribute were delivered and its officials sold the sugar to the Satsuma merchants admitted there.",
+  "variants": [
+   "Ryukyu-kan"
+  ]
+ },
+ "domain notes": {
+  "def": "Paper money a domain printed for use within its own lands, its amounts written in the units of silver (monme) or of gold.",
+  "variants": [
+   "domain notes",
+   "domain note",
+   "domain's notes"
   ]
  }
 }

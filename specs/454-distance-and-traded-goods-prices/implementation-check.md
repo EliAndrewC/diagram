@@ -1,0 +1,5 @@
+- 0339: no code implements it - consumed by gm-assistant's money skill; searched: grep -rnIi -E 'raw silk|kiito|tatara|bar iron|pig iron|safflower|benibana' l7r pool rust (no hit outside the glossary)
+- 0340: no code implements it - consumed by gm-assistant's money skill; searched: grep -rnIi -E 'black sugar|wasanbon|sugar price|tea price|sencha|price_of_(tea|sugar)' l7r pool rust (no hit outside the glossary)
+- 0341: no code implements it - consumed by gm-assistant's money skill; searched: grep -rnIi -E 'safflower|benibana|rice.*fukui|fukui.*rice' l7r pool rust (no hit)
+- 0342: no code implements it - consumed by gm-assistant's money skill; searched: grep -rnIi -E 'white sugar|imported sugar|dejima|nagasaki|aloeswood|sandalwood|ginseng|rhubarb|licorice' l7r pool rust
+- 0343: no code implements it - consumed by gm-assistant's money skill; searched: grep -rnIi -E 'sanuki|ryukyu-kan|wasanbon|takamatsu' l7r pool rust (no hit outside the glossary)

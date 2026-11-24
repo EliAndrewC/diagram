@@ -538,3 +538,43 @@ fn a_dispatch_records_the_tree_its_hold_is_taken_in() {
     let rooted = said.is_empty() && recorded == json!(root.to_string_lossy());
     assert!(rooted, "{said} {recorded}");
 }
+
+/// The footnote hold's trip outlives the refusal that made it (ruling `ask:454-c1b-fixloop-retrip`): a refused dispatch saves the
+/// trigger, so the next dispatch names the SAME trigger, and once that trigger is ruled the dispatch goes through.
+/// `GUARD_EDIT_OK`: the test of a fix to a guard that fired on correct work.
+#[test]
+fn a_refused_dispatch_keeps_the_footnote_holds_trip() {
+    let (root, manifest) = setup("fixloop-kept");
+    std::fs::write(&manifest, "unit: quote-check:0105#bath newfp\n").unwrap();
+    let path = root.join(".git/checks-open.json");
+    let flagged = json!({"feature": "999-x", "rounds": {}, "flags": {"0105#bath": {"n": 2, "fp": "old", "lines": ["L1", "L2"]}}});
+    save(&path, &flagged).unwrap();
+    let ask = |tid: &str| {
+        handle(
+            "dispatch",
+            &agent(
+                &root,
+                "quote-check",
+                &format!("Read {}", manifest.display()),
+                tid,
+            ),
+            Some(1.0),
+        )
+    };
+    let first = ask("q1");
+    assert!(first.contains("round:quote-check|q:0105@3"), "{first}");
+    assert_eq!(
+        state(&root)["flag_trips"]["0105#bath"],
+        json!("round:quote-check|q:0105@3")
+    );
+    let second = ask("q2");
+    assert!(second.contains("round:quote-check|q:0105@3"));
+    assert!(!second.contains("@4"));
+    std::fs::write(
+        root.join("specs/999-x/arbiter.jsonl"),
+        "{\"trigger\": \"round:quote-check|q:0105@3\", \"ruling\": \"continue\"}\n",
+    )
+    .unwrap();
+    assert_eq!(ask("q3"), "");
+    assert!(state(&root)["flag_trips"].get("0105#bath").is_none());
+}

@@ -1,0 +1,16 @@
+{
+ "captured": "2026-11-24T18:59:11+00:00",
+ "final_url": "https://web.archive.org/web/20241110163857id_/https://yamagata.repo.nii.ac.jp/record/2979/files/Graduation_Thesis.pdf",
+ "first": "22/22f22358bb0e/20261124T185910Z",
+ "gm_copies": [],
+ "keys": [
+  "yamagata-benibana-yuso-keiro-sotsuron"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "22/22f22358bb0e/20261124T185910Z",
+ "reason": "HTTP 406",
+ "revision": "",
+ "sha256": "b93f81a772d8d645d2c2441d7e6d3514caaddd70506c9a68ee6f017e08490608",
+ "url": "https://yamagata.repo.nii.ac.jp/record/2979/files/Graduation_Thesis.pdf"
+}

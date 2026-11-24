@@ -1,5 +1,7 @@
 # Tasks - feature 454, what distance did to the price of traded goods
 
+Ticked tasks are archived in `tasks-done.md` (feature 449 T142): `make tick` moves each ticked task there with its lines; this file holds the open ones.
+
 The question tasks are `research: physical` with their five boxes; the rest are `research: rendering`.
 
 ## Occasions
@@ -8,14 +10,6 @@ The question tasks are `research: physical` with their five boxes; the rest are 
 
 ## Tasks
 
-- [ ] T01 S1+C1: both ends' prices in Japan (D1; FR-001, FR-002, FR-005, FR-006, FR-007)
-      research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: `make record-owed` names no unit of the new questions or of 0283; `make record CHECK=1` passes
 - [ ] T02 S2+C2: both ends' prices in China (D2; FR-001, FR-002, FR-005, FR-006, FR-007)
       research: physical
       - [ ] research pass
