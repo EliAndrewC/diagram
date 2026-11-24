@@ -66,6 +66,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "0f71ed58b9520877ebf281b78964f540586f1fd558ae607aa27e6ffa48ad754b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "57360f943dd7177e6e0de0097fae5215c0e266040bf0301ae0b5684957bca5eb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "1e17f34f3659533336d1c4b879a01bfa30ba9b80cf791bff41452d2f3e2c980f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "17797fac272c73027911ff4bec5626acf0af0b1a58d313a3a60eb053f8d61af8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "dba9a22c17819339f5e87377a165fae5226586f3dcf3d24be8776858951f8657",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "5dda3fb5bf1fddf7111b7029f766a60d837e85ead57b61c9d97f53a50df3a70e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -250,6 +286,50 @@
      "summary": "implementation-check.md with each question's 'no code implements it' line and the search; reply on #24 question by question and figure by figure in priority order with fragment, verdict, what is open and the canon quotations beside; GM matters via escalation-check; no canon edit.",
      "class": "within",
      "why": "FR-001, FR-003, FR-004, FR-008 as written."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)",
+    "### T03 Approach (checklist part A)",
+    "### T04 Approach (checklist part A)",
+    "### T05 Approach (checklist part A)",
+    "### T06 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-T05 constraints",
+     "summary": "Each research task T01-T05 is bound by its design block (D1-D5) and FR-001, FR-002, FR-005, FR-006, FR-007, with done measured by SC-001, SC-002, SC-003.",
+     "class": "within",
+     "why": "These are the spec's fragment-level requirements (every question/figure answered with a verdict, record written under citation rules, nearest-is-not-an-answer, history only, source units first) restated per task; nothing is dropped from what the request asks of a research question, and FR-003/FR-004/FR-008 (engine grep, priority/close, canon beside history) are carried by T06, which writes the reply and closes the feature."
+    },
+    {
+     "id": "T06 constraints",
+     "summary": "The closing/reply task T06 is bound by D6 and FR-001, FR-003, FR-004, FR-008, done measured by SC-001 and SC-002 (not SC-003).",
+     "class": "within",
+     "why": "T06 writes the reply on #24 and runs impl-check; SC-003 concerns the fragments' content, which T01-T05 carry and measure. Omitting it from the reply task narrows nothing the request asked."
+    },
+    {
+     "id": "order n/a",
+     "summary": "Each block marks 'The order' n/a.",
+     "class": "within",
+     "why": "The per-task approach field is about ordering steps within the task; the request's priority (question 1, then 3, then 2 and 4) is FR-004, carried by T06 and by the task sequence of the design blocks already ruled CLEAR. Nothing in these blocks reorders or drops a question."
+    },
+    {
+     "id": "exits",
+     "summary": "Green exit: landed. Red exit: the failure recorded and the task set down, with any claim that it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "A research question the record cannot answer is already provided for by FR-005 (SILENT verdict with what is still open); the red exit routes a claim of impossibility to the arbiter rather than letting the session drop a question on its own say-so, so it does not carve anything out of the request."
+    },
+    {
+     "id": "budget",
+     "summary": "Each task budgeted at one landing.",
+     "class": "within",
+     "why": "A cost/scheduling statement; it neither narrows nor widens the questions or figures asked."
     }
    ]
   }

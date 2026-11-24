@@ -42,6 +42,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "0f71ed58b9520877ebf281b78964f540586f1fd558ae607aa27e6ffa48ad754b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "fedf45e12825d59433fa6743f763297e24101dd04e90d0cf7a13349d7599a4a1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -182,6 +194,46 @@
      "summary": "implementation-check.md holds the new question's no-code line with its search; the reply on #23 gives fragment file, verdict and what is still open part by part and figure by figure; anything for the GM through escalation-check.",
      "class": "within",
      "why": "Restates FR-001, FR-003, FR-004."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-constraints",
+     "summary": "T01 (the research and record write) is bound by D1 and FR-001, FR-002, FR-005, FR-006, FR-007.",
+     "class": "within",
+     "why": "Those FRs carry the issue's clauses: every part and figure answered with a verdict (FR-001, FR-005: a nearest is not an answer), findings into the record under the citation rules (FR-002), history as found with no Rokugani price (FR-006), each price beside the same place and period's day wage as the request asks (FR-007). Nothing is dropped or added."
+    },
+    {
+     "id": "T01-done",
+     "summary": "T01 is done when SC-001, SC-002 and SC-003 hold.",
+     "class": "within",
+     "why": "The three success criteria are the spec's own measures of those FRs; none is weakened or replaced."
+    },
+    {
+     "id": "T02-constraints",
+     "summary": "T02 (closing: impl-check, the no-engine-code grep, the reply on #23) is bound by D2 and FR-001, FR-003, FR-004.",
+     "class": "within",
+     "why": "The reply on #23 with every part's verdict and what is open (FR-001, FR-004) and the closing check (FR-003) are what the spec requires of the close; with T01 the two blocks cover FR-001 to FR-007 between them."
+    },
+    {
+     "id": "T02-done",
+     "summary": "T02 is done when SC-001 and SC-002 hold.",
+     "class": "within",
+     "why": "SC-001 measures the reply and SC-002 the record-owed and impl-check close; SC-003 (fragment content) belongs to T01, which measures it."
+    },
+    {
+     "id": "exits-and-budget",
+     "summary": "Both tasks: one landing; on red, the failure is recorded, the task set down, and any claim that it cannot be done goes to the round arbiter.",
+     "class": "within",
+     "why": "No part of the question may be dropped silently: a cannot-be-done claim is ruled, not taken, so the exit narrows nothing the GM asked for; a budget is not a scope change."
     }
    ]
   }
