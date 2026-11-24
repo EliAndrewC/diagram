@@ -1,0 +1,1 @@
+{"file":"/home/agent/.claude/settings.json","reason":"adding an operation - statusLine.refreshInterval so the status line's page-session segment redraws while a window idles (the GM, 2026-11-24)","at":1795537482.1137745}
