@@ -515,3 +515,9 @@ And: "Sorry no, to be cleare we should stop optimizing our python gates for now 
 ## 2026-11-07, the hooks' startup
 
 "So while I don't think we need to port the Python code to Rusts that runs in hooks, because startup time for hooks is just generally more important.  How much would that affect this?"
+
+## 2026-11-24, findings on stages not yet built are closed
+
+Told that 24 of 444's open found rows concern hamlet stages not yet built in Rust (7 faults of the deleted Python, 17 notes on it), and that the session would keep them as a per-stage list for the port, the GM said:
+
+> Wait, but we're not doing a faithful port in the way that you're describing. We are specifically not looking at the Python code, specifically so that we don't repeat the mistakes of the past. So doesn't that mean that those 7 faults can just be closed? And then same thing for the 17 notes that are mostly traps.
