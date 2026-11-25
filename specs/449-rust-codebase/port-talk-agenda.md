@@ -82,6 +82,21 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
     little time and costs tokens; the lever is the re-read (handoffs that name what to read; tasks sized to finish). Caveats:
     the band past 300k is small and survivor-biased (the guard refuses there), and long-context builders run the heaviest
     tasks. The session's recommendation to move the stop to 600k was withdrawn on these numbers.
+13. An audit register for every optimization and procedure that costs time or tokens (the GM: "when we make this kind of
+    optimization, then we should be documenting the logic behind it, the measurements that we took, and then also crucially
+    what we would look at that would falsify the notion that this is a good idea ... a list of all of the auditable
+    optimizations and processes and procedures, and then each one would know the last time that it was audited ... re-audit
+    to see if they still make sense or if they need to be tweaked or redone or eliminated"). The session's proposal: one
+    register (a file per entry, as the glossary keeps a file per term), each entry naming what it is for in outcomes, the
+    measurement that justified it (dated, with the command that reproduces it), its FALSIFIER (the measurement that would
+    show it costs more than it saves, and the threshold), its cost source in the task time breakdown, the date last audited
+    and its cadence; `make audits` lists the overdue ones; a new guard, cap, gate step, mandatory check or procedure is
+    refused without its entry (the way a guard is refused without its test companion), and each port stage's end audits the
+    overdue entries. What warrants an entry: anything that runs on every task or blocks work - guards that refuse or
+    re-route, caps and thresholds, gate and landing steps, mandatory review checks and their rounds, the builder split; not
+    pure corrections that cost nothing (house-style rewriting). Backfill ordered by cost, from T243's per-target and per-hook
+    minutes. The first entry is the builders' context cap, audited 2026-11-25 (item 12: time a wash, tokens favor it; the
+    falsifier: re-read minutes past the slow-band minutes saved AND tokens no better).
 
 ## How each item closes (the GM, 2026-11-25) - its decision is recorded in `docs/process-decisions.md`
 
