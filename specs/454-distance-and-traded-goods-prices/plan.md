@@ -78,20 +78,7 @@ question and figure by figure in the issue's priority order, the fragment file a
 quotations beside the history. Anything for the GM goes through `escalation-check` first, and nothing here edits the canon.
 
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
-### T02 Approach (checklist part A)
-
-1. **The goal, in the world.** n/a
-2. **The constraints.** D2; FR-001, FR-002, FR-005, FR-006, FR-007.
-3. **Where each comes from.** The FRs above, from `request.md`.
-4. **Do they describe the world here?** Yes.
-5. **The order.** n/a
-6. **The exits.** Green: landed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** SC-001, SC-002, SC-003.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
+<!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
 ### T03 Approach (checklist part A)
 
 1. **The goal, in the world.** n/a
