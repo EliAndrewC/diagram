@@ -103,7 +103,9 @@ from written briefs (`make page-session BRIEF="<1> <2>"` runs them in order), an
 between them, not the context, carry the state. **A running queue shows on the status line** (the GM, 2026-11-24: a
 window waiting on a queue looked frozen, since a detached session is no subagent and the interface lists none): in a
 session standing in the queue's clone, `pages #<n> <brief> · active 20s ago`, `· QUIET 9m` once the running session and
-its subagents have written nothing for five minutes, nothing when no queue is live. It is `_pages` in the user-level
+its subagents have written nothing for five minutes, `· DEAD 9m (its runner is gone: start it again)` when a queue
+silent a minute has no runner process left (2026-11-24: a machine crash left a queue's log reading QUIET), nothing when no
+queue is live. It is `_pages` in the user-level
 `~/.claude/hooks/usage_cap.py`, read from the queue's run log and the session's transcript, redrawn every
 `statusLine.refreshInterval` seconds (`~/.claude/settings.json`); `bash ~/.claude/hooks/test-usage-cap.sh` holds it. `make notes Q= KEYS=` prints a few notes and the
 paragraphs carrying them; a re-check names only the notes that moved (`make check-bundle ... NOTES=<key,key>`).

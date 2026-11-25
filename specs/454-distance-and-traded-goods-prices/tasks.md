@@ -10,14 +10,6 @@ The question tasks are `research: physical` with their five boxes; the rest are 
 
 ## Tasks
 
-- [ ] T02 S2+C2: both ends' prices in China (D2; FR-001, FR-002, FR-005, FR-006, FR-007)
-      research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: `make record-owed` names no unit of the new question; `make record CHECK=1` passes
 - [ ] T03 S3+C3: what a trader kept (D3; FR-001, FR-002, FR-005, FR-006, FR-007)
       research: physical
       - [ ] research pass

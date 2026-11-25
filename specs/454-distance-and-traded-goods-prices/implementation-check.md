@@ -3,3 +3,6 @@
 - 0341: no code implements it - consumed by gm-assistant's money skill; searched: grep -rnIi -E 'safflower|benibana|rice.*fukui|fukui.*rice' l7r pool rust (no hit)
 - 0342: no code implements it - consumed by gm-assistant's money skill; searched: grep -rnIi -E 'white sugar|imported sugar|dejima|nagasaki|aloeswood|sandalwood|ginseng|rhubarb|licorice' l7r pool rust
 - 0343: no code implements it - consumed by gm-assistant's money skill; searched: grep -rnIi -E 'sanuki|ryukyu-kan|wasanbon|takamatsu' l7r pool rust (no hit outside the glossary)
+- 0344: no code implements it - consumed by gm-assistant's money skill; searched: grep -rnIi -E 'Congou|Bohea|raw silk|Wuyi|Ningbo|Takow|Songluo|sandalwood' l7r pool rust (no hit outside the glossary)
+- 0345: no code implements it - consumed by gm-assistant's money skill; searched: grep -rnIi -E 'Congou|Bohea|raw silk|Wuyi|Ningbo|Takow|Songluo|sandalwood' l7r pool rust (no hit outside the glossary)
+- 0283: no code implements it - consumed by gm-assistant's money skill; this feature added only pointer sentences to its opening paragraph (to 0339, 0340, 0344, 0345), no finding changed; searched: grep -rnIi -E 'Congou|Bohea|Nada sake|Tosa charcoal' l7r pool rust (no hit outside the glossary)

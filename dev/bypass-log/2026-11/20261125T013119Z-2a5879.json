@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-25T01:31:19Z",
+  "target": "record-checked",
+  "commit": "02e53c8f75",
+  "why": "record-format on record-format:0344: the only visible words moved since its round 2 (0 findings) are four page labels quote-check's own EDITs put before quoted passages ('(p. 379, leaf n406)', 'on p. 61', 'on p. 25:', 'on p. 24:'); a fourth round would be record-format's third on this page for labels alone"
+}

@@ -19927,6 +19927,88 @@
    "Meiji thirties"
   ]
  },
+ "chop": {
+  "def": "In the Canton tea trade, a lot of tea of one make, several hundred chests, bought and sold as one; Ball works one of 1,000 chests and one of 600.",
+  "variants": [
+   "chop",
+   "chops"
+  ]
+ },
+ "tea-factor": {
+  "def": "A middleman in the Canton tea trade who handled tea between the tea-men of the hills and the Canton merchants, paid by a profit on each picul; in Ball's account of 1824-6 that profit was 0.60 tael a picul.",
+  "variants": [
+   "tea-factor",
+   "tea-factors",
+   "tea-factors'"
+  ]
+ },
+ "supercargo": {
+  "def": "An East India Company officer who sailed with a ship's cargo and bought and sold for the Company in port; at Canton and Ningbo they made its contracts for tea and raw silk.",
+  "variants": [
+   "supercargo",
+   "supercargoes",
+   "supercargoes'"
+  ]
+ },
+ "Songluo": {
+  "def": "A fine tea of Huizhou, in Anhui, sold under that name; Ye Mengzhu counts it a fine grade, and Beijing's price list of 1736 prices it at more than three times ordinary tea leaf.",
+  "variants": [
+   "Songluo",
+   "Songluo tea"
+  ]
+ },
+ "godown": {
+  "def": "A warehouse at an Asian port. In a trading house's accounts its rent is the charge for storing goods there before shipping or after landing.",
+  "variants": [
+   "godown",
+   "godowns"
+  ]
+ },
+ "coolie": {
+  "def": "A hired laborer of the Asian trade, usually a porter paid by the job to carry goods overland or to and from the boats at a port. The word appears as it stands in the period's English accounts.",
+  "variants": [
+   "coolie",
+   "coolies"
+  ]
+ },
+ "petties": {
+  "def": "Petty expenses: small sundry charges grouped together on one line of a merchant's account.",
+  "variants": [
+   "petties"
+  ]
+ },
+ "Pingnan prince": {
+  "def": "The prince \"who pacifies the south,\" the Qing dynasty's feudatory lord of Guangdong. His troops rose in the rebellion of 1676, and once he submitted, Guangdong sugar reached the Yangzi again.",
+  "variants": [
+   "Pingnan prince",
+   "Pingnan"
+  ]
+ },
+ "bingchen": {
+  "def": "A year name in the sixty-year cycle of the Chinese calendar. Kangxi 15, the bingchen year, is 1676.",
+  "variants": [
+   "bingchen"
+  ]
+ },
+ "bingyin": {
+  "def": "A year name in the sixty-year cycle of the Chinese calendar. Kangxi 25, the bingyin year, is 1686.",
+  "variants": [
+   "bingyin"
+  ]
+ },
+ "Hyson": {
+  "def": "A green tea of China's export trade. Samuel Ball describes its making under green tea; at Ningbo in 1757 the East India Company paid 42 taels a picul for it, against 10 for Bohea.",
+  "variants": [
+   "Hyson"
+  ]
+ },
+ "Twankee": {
+  "def": "A green tea of China's export trade, also spelled Twankay, cheaper than Hyson: at Ningbo in 1757 the East India Company paid 22 taels a picul for it, against 42 for Hyson.",
+  "variants": [
+   "Twankee",
+   "Twankay"
+  ]
+ },
  "fan middle": {
   "def": "The middle slope of an alluvial fan, between its head and its toe, where the river sinks underground and the land is short of water: hard to make into paddy, it was often left wild or as coppice in Japan until the end of the Edo period.",
   "variants": [
