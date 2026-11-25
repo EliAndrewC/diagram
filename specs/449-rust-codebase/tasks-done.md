@@ -1308,3 +1308,6 @@
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
       verify: DONE. landed: the wet ground cut at a fan's lower corners after page session P12 recorded the search (its research boxes answered by P12's pages and their record checks); the seat's toe test widened (worst band on the toe 32.7% to 0.1%); 0 refused of 41,000; red-first; claims IN-STEP; the marsh pop-up restated; 0057 and 0031's stale sentences to a page session
+- [x] T433 lands before T158: the map check that no dry plot stands on water (rust/phases/src/driver/check.rs check#no dry plot on the water) tests only a plot's corners, so a watercourse that crosses a plot or ends inside it passes (impl-drift 2026-11-25 in page session P12's cascade, DRIFTED fix: code; /home/agent/.claude/jobs/c6fd72d1/tmp/cascade/p12-cascade.md): the check tests the plot's whole area against every watercourse, red-first on a constructed case, then a sweep says whether any rolled map draws such a plot (a check that passes bad work is a defect, constitution XIV)
+      research: rendering
+      verify: DONE. landed: the dry-on-water check asks a plot's whole area against every drawn water; red-first; 0 of 41,000 rolls fail; 7 claims IN-STEP; no map moves

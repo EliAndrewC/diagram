@@ -1204,47 +1204,7 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 <!-- plan-archive: T430 to T430 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
 <!-- plan-archive: T431 to T427 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
 <!-- plan-archive: T431 to T431 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
-### T433 (impl-drift 2026-11-25 in page session P12's cascade, `rust/phases/src/driver/check.rs::check#no dry plot on the water` DRIFTED fix: code - the map check asked only a dry plot's corners, so a watercourse crossing a plot or ending inside it passed)
-
-- **Approach**: the map check `dry_on_water` asks each dry plot's whole area of every water the map draws (`driver::check::Drawn`), not its corners. Measured 2026-11-25 with T426's sweep harness (a throwaway `T433_SWEEP` mode of the hamlet binary run through `make cohort`, removed before the closing checks): 20,000 cohort combs from five starts, 6,000 polders and 15,000 valley rolls (seeds 1 to 1,500 at ten size and fall pairs).
-  - **The rule as built.** `Drawn::of` files the water the map draws in the water index (`field::index::Index`), once a map: each channel of the field at the wider of its two ends (canal, ditch, the field's drain), the drawn brook at `BROOK_W`, the drain's run at `RUN_W`, and the tameike's rim (32 points round its ellipse) at its stroke, `POND_RIM_W`. `Drawn::meets` asks each plot of the segments in the cells its box, grown by the clearance and the widest half-width, overlaps. A plot fails where a segment's end lies inside it, where a segment comes within `hem::CLEAR_FT` (1 ft, GUESS) past its half-width of a side (crossing a side at zero), or where a corner stands inside a pond. That is 0006's drawing page `dry-plot-off-water`: a plot "within about a foot of any water the map draws - a canal, its own canal where it bends, a ditch, the brook or a pond - or would have the end of one inside it" is left out. The geometry is the hem's own (`field::dry::seg_seg_dist`, now `pub(crate)`), so a plot the hem laid at exactly its clearance is not failed on a float's difference.
-  - **What the old check missed.** It asked whether a plot's corner stood within a line's half-width less a foot, so a line through a plot's middle, or ending inside it, passed, and the pond was not asked at all (its claim gave the rim to `reed_checks`, which asks the reeds' ring, not the water).
-  - **The sweep, measured 2026-11-25 (the sweep).** 41,000 rolls, 0 refused, 0 checks broken, 0 `dry_on_water`, with 1,301,568 dry plots asked (the polders lay none: `driver::polder` sets `dry` empty). How near the plots come, least gap past the water's half-width over the 35,000 rolls that lay a hem, measured 2026-11-25 (the sweep's gap columns): the field's channels 1.001 ft (the hem's own clearance, in 34,830 rolls under 5 ft), the drawn brook 1.002 ft (1,047 rolls under 5 ft), the drain's run 262.2 ft, the pond's rim 187.3 ft. So the check is asked where it bites, and no generator defect was hidden: no generator change is made. What keeps each water clear differs. The field's channels and the brook are what the hem's drop rule asks (`field::dry::refused`, `wet`: a segment crossing or ending inside the plot, or within `CLEAR_FT` past its half-width), from the field's own water index (`stage_hem` hands it `f.water`: the channels as the field laid them and the brook as the field filed it). The drawn brook (`course::drawn`) is that brook with its bends rounded, and the drain's run and the pond are not filed for the hem at all: they stand clear by the layout, the dry plots upslope of the canal and the run and pond at the field's foot, the drawn brook's least gap still 1.002 ft, measured 2026-11-25 (the sweep's gap columns). The check is what now holds those three.
-  - **Pool, `make seeds`, work budget**, measured 2026-11-25.
-    - **Pool.** `make maps TIER=hamlets SCOPE=all` (`hamlet --check`, which asks `check::check`): all five pool specs clean. Each pool hamlet's spec rolled by `make hamlet` on the code as built and compared by checksum with HEAD's drawing and record: Inashiro, Kashikawa, Kuwabata, Mizuguchi and Sawada each draw and record the same. `POND_RIM_W` names the 2.4 ft stroke (CONVENTION) `draw_sink` and the polder's ponds already drew.
-    - **`make seeds`.** Green: the pool empty, 200 fresh seeds of each of the three forms from 174,516,686, 0 failed.
-    - **`make work-budget`.** Every stage's counts identical to HEAD's, measured 2026-11-25 (`make work-budget` on HEAD before the edit and on the code as built) (the comb's hem 6,888 / 11,340 / 18,106 / 30,359 at 10/20/40/80 households, 0.6x its budget at 40; the seat 19,278 / 26,757 / 38,859 / 61,204): the check is not a stage and is not counted, and no stage's code moved. No stage moves, so no step is owed.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| the check asks the plot's whole area of the drawn water | red first, observed 2026-11-25, method: `make rust-test` with the new test on HEAD's check body: `driver::check::tests::a_watercourse_through_a_plot_or_ending_in_it_is_named` named 0 of its 4 planted plots (a brook through one's middle, a run ending in another, one standing in the pond, one inside the clearance from a brook), green after; its fourth plot, set just past the clearance from a brook, and its last, just past the clearance from the pond's rim, are clear on both; the fifth plot, half a foot inside the clearance from a brook, is named after and not before | n/a: no repair step; the 41,000 rolls above | none | n/a |
-
-### T433 Approach (checklist part A)
-
-1. **The goal, in the world.** No map is passed with a dry plot that a watercourse crosses, ends in, or comes within about a foot of, or that stands in the pond: the check fails such a map, as 0006's drawing page drops such a plot.
-2. **The constraints.**
-   - `research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html` (`dry-plot-off-water`, GUESS): any water the map draws, about a foot, a water's end inside the plot.
-   - Constitution XIV: a check that passes bad work is a defect.
-   - The generator's drop rule and `hem::CLEAR_FT` unchanged; the drawing unchanged.
-3. **Where each comes from.**
-   - G: the GM 2026-11-24 (request.md: "if there are real defects, then I do want to find them and fix them").
-   - R: 0006's drawing page; P12's cascade (impl-drift, DRIFTED fix: code).
-   - O: the sweeps, the pool rolls, `make seeds` and `make work-budget`, 2026-11-25.
-4. **Do they describe the world here?** Yes. The sweep asked 1,301,568 plots of every drawn water and none fails; their least gaps (1.001 ft to a channel, 1.002 ft to the brook) sit at the hem's own clearance, so the check is asked where a plot can come near the water, measured 2026-11-25 (the sweep).
-5. **The order.** Before T158; after T432, on whose code it is measured.
-6. **The exits.** Green: the red-first test green; the sweep at zero; `make seeds` green; the pool hamlets unchanged; `make closing-checks T=T433` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None: no probe; one sweep with the check, one with each water's least gap.
-8. **The budget.** One landing.
-9. **Done, measured.** 0 of 41,000 rolls break the whole-area check, measured 2026-11-25 (the sweep); the new test red on HEAD's check, green after.
-10. **Before moving a constant.** n/a: `CLEAR_FT` unchanged; `POND_RIM_W` names the stroke already drawn (CONVENTION).
-11. **Before fitting things into room.** n/a.
-12. **Before any fix.** A reader of the map sees nothing different: no map moves. The finding the old check broke is 0006's drawing page `dry-plot-off-water` (a plot with a water's end inside it, or a line through it, would have passed); the check now holds it.
-
-**Found and left?** none
-
-**Performance work?** no
-
-
+<!-- plan-archive: T433 to T433 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
 ### T434 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
