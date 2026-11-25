@@ -1962,6 +1962,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T431 (449 T427, 2026-11-24: on a dike-pond block the ring canal, drawn at the creeks' 6 to 8 ft since T427 (GUESS, 0019's drawing page `ring-canal-width-dike-pond`), was fed through the inlet sluice by a 3 ft feeder (`FEEDER_W`, GUESS) and emptied through the outfall sluice into a 5.5 ft run (`RUN_W`, 0068's drawing page), each a step down under its sluice's board, observed 2026-11-24, method: T427's crops; crops pair-inlet-sluice.png and pair-outfall-sluice.png; spec-fidelity's T427 verdict accepted it as a known defect for this task)": {
+   "sha256": "079809ffbd940c880d715a39a045b017834bc3fa305c989be9fd9feacc945e69",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T431 Approach (checklist part A)": {
+   "sha256": "5e091eb9877f08ed15f19b92ae39f890449699defd668a1e9b3bdf7b6534f71f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -26741,6 +26753,144 @@
      "summary": "T432 lands before T158, after T426, T423 and T418.",
      "class": "within",
      "why": "Matches the GM 2026-11-24: defects in hamlet generation fixed before the port resumes."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T431 (449 T427, 2026-11-24: on a dike-pond block the ring canal, drawn at the creeks' 6 to 8 ft since T427 (GUESS, 0019's drawing page `ring-canal-width-dike-pond`), was fed through the inlet sluice by a 3 ft feeder (`FEEDER_W`, GUESS) and emptied through the outfall sluice into a 5.5 ft run (`RUN_W`, 0068's drawing page), each a step down under its sluice's board, observed 2026-11-24, method: T427's crops; crops pair-inlet-sluice.png and pair-outfall-sluice.png; spec-fidelity's T427 verdict accepted it as a known defect for this task)",
+    "### T431 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "the rule as built",
+     "summary": "On a dike-pond block the feeder and the outfall's run are drawn at the wider of FEEDER_W/RUN_W and the ring's join width (6.01-7.98 ft over the 80 dike-pond rolls), through one helper driver::polder::sluice_channels read by the drawing, the frames, the reeds, the bank bands and the tests; a rice polder keeps 3 ft and 5.5 ft.",
+     "class": "within",
+     "why": "Fixes the step-down under the sluice boards that T427's spec-fidelity verdict accepted as a known defect owed by this task; the GM 2026-11-24 asked that real defects be found and fixed before new code and that the scripted-map close-out (the dike-pond channels) be done before the port resumes. A rice polder is left as it is because its half of the red-first test is green on HEAD: nothing there is defective, so nothing asked is withheld."
+    },
+    {
+     "id": "Decision (a)",
+     "summary": "The crossing's width is page-silent; the easier route (the ring's width, no step under a sluice) is drawn as a best guess labeled UNRESEARCHED onto make research-backlog, with no search or page session, replacing the task line's 'the page's item first'.",
+     "class": "within",
+     "why": "Neither the GM's 449 request nor the spec asks for a page session on this width; 'the page's item first' is the session's own task wording, not the GM's. The chosen width is the shape the cited pages' never-wider rules point to (0019 ring-canal-width-dike-pond, 0068), the defect is fixed in full, and the label keeps the research owed visible rather than dropping it. A process route under the project's research rule (cited to the GM 2026-11-25 and root CLAUDE.md, outside this bundle) is not a narrowing of what the GM asked this feature to do."
+    },
+    {
+     "id": "Decision (b)",
+     "summary": "RUN_W's claim is restated to cite 0068's drawing page for the 5.5 ft figure and 0060 for the drain's class, and to send a dike-pond block's run to sluice_channels.",
+     "class": "within",
+     "why": "A claim restated to match its source, no code changed (constitution XIV as the GM ruled 2026-11-19); serves the fix."
+    },
+    {
+     "id": "the frame, the dike's rows, the seat's way out",
+     "summary": "sluice_frame's 20 ft span and FRAME_REACH_FT unchanged (the span still exceeds an 8 ft channel plus posts); the frame test pins the reach at CREEK_FT's two ends; GAP_HALF_FT's claim restated with the measured clearance; no tree lost; seat exit reads courses only.",
+     "class": "within",
+     "why": "Consequences of the fix checked and pinned, plus a test enforcing that the requested fix does not push a crown onto a frame; enforcement and claim restatement, nothing narrowed."
+    },
+    {
+     "id": "Kuwabata and tests moved",
+     "summary": "Kuwabata's driver SVG regenerated (10 lines: feeder, run, reed strips and bank bands); two roll-pinning tests re-pinned to the wider banks; the reeds test reads the run's half-width from sluice_channels; no settlement-review owed under FR-023.",
+     "class": "within",
+     "why": "The visible change is the requested fix itself; FR-023 (rust-only switch) makes the pool hamlet's review not owed while the switch stands. Re-pins follow from the fix, not a change of what is asked."
+    },
+    {
+     "id": "work budget and exits",
+     "summary": "make work-budget counts identical to HEAD, so no step owed; green exit is the red-first test, 0 refusals and closing checks; red exit sets the task down via make arbiter-ask.",
+     "class": "within",
+     "why": "Measurement and exit conditions for the fix; FR-022 budgets unchanged."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T431 (449 T427, 2026-11-24: on a dike-pond block the ring canal, drawn at the creeks' 6 to 8 ft since T427 (GUESS, 0019's drawing page `ring-canal-width-dike-pond`), was fed through the inlet sluice by a 3 ft feeder (`FEEDER_W`, GUESS) and emptied through the outfall sluice into a 5.5 ft run (`RUN_W`, 0068's drawing page), each a step down under its sluice's board, observed 2026-11-24, method: T427's crops; crops pair-inlet-sluice.png and pair-outfall-sluice.png; spec-fidelity's T427 verdict accepted it as a known defect for this task)",
+    "### T431 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "the rule as built",
+     "summary": "On a dike-pond block the feeder and the outfall's run are drawn at the wider of FEEDER_W/RUN_W and the ring's join width (6.01-7.98 ft over the 80 dike-pond rolls), through one helper driver::polder::sluice_channels read by the drawing, the frames, the reeds, the bank bands and the tests; a rice polder keeps 3 ft and 5.5 ft.",
+     "class": "within",
+     "why": "Fixes the step-down under the sluice boards that T427's spec-fidelity verdict accepted as a known defect owed by this task; the GM 2026-11-24 asked that real defects be found and fixed before new code and that the scripted-map close-out (the dike-pond channels) be done before the port resumes. A rice polder is left as it is because its half of the red-first test is green on HEAD: nothing there is defective, so nothing asked is withheld."
+    },
+    {
+     "id": "Decision (a)",
+     "summary": "The crossing's width is page-silent; the easier route (the ring's width, no step under a sluice) is drawn as a best guess labeled UNRESEARCHED onto make research-backlog, with no search or page session, replacing the task line's 'the page's item first'.",
+     "class": "within",
+     "why": "Judged on the bundle alone. Neither the GM's 449 request nor the spec asks for a page session on the feeder's or the run's width: the one place the request pairs the dike-pond channels with a page session (2026-11-24, 'T420 (the dike-pond channels, its page session and code)') names T420's own session in the close-out list, which does not include T431. The defect T427's verdict left to this task is fixed in full, the width taken is the shape the cited pages' never-wider rules point to (0019 ring-canal-width-dike-pond, 0068), and the UNRESEARCHED label onto make research-backlog keeps the research owed visible rather than dropping it. The plan's GM citations licensing the skipped search (2026-11-25 in 451 request.md; 2026-10-25 in root CLAUDE.md) are outside this bundle and were not read verbatim; the ruling does not rest on them."
+    },
+    {
+     "id": "Decision (b)",
+     "summary": "RUN_W's claim is restated to cite 0068's drawing page for the 5.5 ft figure and 0060 for the drain's class, and to send a dike-pond block's run to sluice_channels.",
+     "class": "within",
+     "why": "A claim restated to match its source, no code changed (constitution XIV as the GM ruled 2026-11-19); serves the fix."
+    },
+    {
+     "id": "the frame, the dike's rows, the seat's way out",
+     "summary": "sluice_frame's 20 ft span and FRAME_REACH_FT unchanged (the span still exceeds an 8 ft channel plus posts); the frame test pins the reach at CREEK_FT's two ends; GAP_HALF_FT's claim restated with the measured clearance; no tree lost; seat exit reads courses only.",
+     "class": "within",
+     "why": "Consequences of the fix checked and pinned, plus a test enforcing that the requested fix does not push a crown onto a frame; enforcement and claim restatement, nothing narrowed."
+    },
+    {
+     "id": "Kuwabata and tests moved",
+     "summary": "Kuwabata's driver SVG regenerated (10 lines: feeder, run, reed strips and bank bands); two roll-pinning tests re-pinned to the wider banks; the reeds test reads the run's half-width from sluice_channels; no settlement-review owed under FR-023.",
+     "class": "within",
+     "why": "The visible change is the requested fix itself; FR-023 (rust-only switch) makes the pool hamlet's review not owed while the switch stands. Re-pins follow from the fix, not a change of what is asked."
+    },
+    {
+     "id": "work budget and exits",
+     "summary": "make work-budget counts identical to HEAD, so no step owed; green exit is the red-first test, 0 refusals and closing checks; red exit sets the task down via make arbiter-ask.",
+     "class": "within",
+     "why": "Measurement and exit conditions for the fix; FR-022 budgets unchanged."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T431 (449 T427, 2026-11-24: on a dike-pond block the ring canal, drawn at the creeks' 6 to 8 ft since T427 (GUESS, 0019's drawing page `ring-canal-width-dike-pond`), was fed through the inlet sluice by a 3 ft feeder (`FEEDER_W`, GUESS) and emptied through the outfall sluice into a 5.5 ft run (`RUN_W`, 0068's drawing page), each a step down under its sluice's board, observed 2026-11-24, method: T427's crops; crops pair-inlet-sluice.png and pair-outfall-sluice.png; spec-fidelity's T427 verdict accepted it as a known defect for this task)",
+    "### T431 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "the rule as built",
+     "summary": "On a dike-pond block the feeder and the outfall's run are drawn at the wider of FEEDER_W/RUN_W and the ring's join width (6.01-7.98 ft over the 80 dike-pond rolls), through one helper driver::polder::sluice_channels read by the drawing, the frames, the reeds, the bank bands and the tests; a rice polder keeps 3 ft and 5.5 ft.",
+     "class": "within",
+     "why": "Fixes the step-down under the sluice boards that T427's spec-fidelity verdict accepted as a known defect owed by this task; the GM 2026-11-24 asked that real defects be found and fixed before new code and that the scripted-map close-out (the dike-pond channels) be done before the port resumes. A rice polder is left as it is because its half of the red-first test is green on HEAD: nothing there is defective, so nothing asked is withheld."
+    },
+    {
+     "id": "Decision (a)",
+     "summary": "The crossing's width is page-silent; the easier route (the ring's width, no step under a sluice) is drawn as a best guess labeled UNRESEARCHED onto make research-backlog, with no search or page session, replacing the task line's 'the page's item first'.",
+     "class": "within",
+     "why": "Judged on the bundle alone. Neither the GM's 449 request nor the spec asks for a page session on the feeder's or the run's width: the one place the request pairs the dike-pond channels with a page session (2026-11-24, 'T420 (the dike-pond channels, its page session and code)') names T420's own session in the close-out list, which does not include T431. The defect T427's verdict left to this task is fixed in full, the width taken is the shape the cited pages' never-wider rules point to (0019 ring-canal-width-dike-pond, 0068), and the UNRESEARCHED label onto make research-backlog keeps the research owed visible rather than dropping it. The plan's GM citations licensing the skipped search (2026-11-25 in 451 request.md; 2026-10-25 in root CLAUDE.md) are outside this bundle and were not read verbatim (the calling session relayed 451 request.md line 154's 'have some kind of research backlog. Where we make a best guess about what to render, and then note it as being something that is unresearched', which agrees with the plan, but it is not in the bundle); the ruling does not rest on them."
+    },
+    {
+     "id": "Decision (b)",
+     "summary": "RUN_W's claim is restated to cite 0068's drawing page for the 5.5 ft figure and 0060 for the drain's class, and to send a dike-pond block's run to sluice_channels.",
+     "class": "within",
+     "why": "A claim restated to match its source, no code changed (constitution XIV as the GM ruled 2026-11-19); serves the fix."
+    },
+    {
+     "id": "the frame, the dike's rows, the seat's way out",
+     "summary": "sluice_frame's 20 ft span and FRAME_REACH_FT unchanged (the span still exceeds an 8 ft channel plus posts); the frame test pins the reach at CREEK_FT's two ends; GAP_HALF_FT's claim restated with the measured clearance; no tree lost; seat exit reads courses only.",
+     "class": "within",
+     "why": "Consequences of the fix checked and pinned, plus a test enforcing that the requested fix does not push a crown onto a frame; enforcement and claim restatement, nothing narrowed."
+    },
+    {
+     "id": "Kuwabata and tests moved",
+     "summary": "Kuwabata's driver SVG regenerated (10 lines: feeder, run, reed strips and bank bands); two roll-pinning tests re-pinned to the wider banks; the reeds test reads the run's half-width from sluice_channels; no settlement-review owed under FR-023.",
+     "class": "within",
+     "why": "The visible change is the requested fix itself; FR-023 (rust-only switch) makes the pool hamlet's review not owed while the switch stands. Re-pins follow from the fix, not a change of what is asked."
+    },
+    {
+     "id": "work budget and exits",
+     "summary": "make work-budget counts identical to HEAD, so no step owed; green exit is the red-first test, 0 refusals and closing checks; red exit sets the task down via make arbiter-ask.",
+     "class": "within",
+     "why": "Measurement and exit conditions for the fix; FR-022 budgets unchanged."
     }
    ]
   }
@@ -54967,6 +55117,50 @@
      "summary": "T432 lands before T158, after T426, T423 and T418.",
      "class": "within",
      "why": "Matches the GM 2026-11-24: defects in hamlet generation fixed before the port resumes."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T431": {
+   "section_sha256": "fd375603f3b03a057d0c11cdc3648659f16474252b7aec091d78df9d243b4c64",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "the rule as built",
+     "summary": "On a dike-pond block the feeder and the outfall's run are drawn at the wider of FEEDER_W/RUN_W and the ring's join width (6.01-7.98 ft over the 80 dike-pond rolls), through one helper driver::polder::sluice_channels read by the drawing, the frames, the reeds, the bank bands and the tests; a rice polder keeps 3 ft and 5.5 ft.",
+     "class": "within",
+     "why": "Fixes the step-down under the sluice boards that T427's spec-fidelity verdict accepted as a known defect owed by this task; the GM 2026-11-24 asked that real defects be found and fixed before new code and that the scripted-map close-out (the dike-pond channels) be done before the port resumes. A rice polder is left as it is because its half of the red-first test is green on HEAD: nothing there is defective, so nothing asked is withheld."
+    },
+    {
+     "id": "Decision (a)",
+     "summary": "The crossing's width is page-silent; the easier route (the ring's width, no step under a sluice) is drawn as a best guess labeled UNRESEARCHED onto make research-backlog, with no search or page session, replacing the task line's 'the page's item first'.",
+     "class": "within",
+     "why": "Judged on the bundle alone. Neither the GM's 449 request nor the spec asks for a page session on the feeder's or the run's width: the one place the request pairs the dike-pond channels with a page session (2026-11-24, 'T420 (the dike-pond channels, its page session and code)') names T420's own session in the close-out list, which does not include T431. The defect T427's verdict left to this task is fixed in full, the width taken is the shape the cited pages' never-wider rules point to (0019 ring-canal-width-dike-pond, 0068), and the UNRESEARCHED label onto make research-backlog keeps the research owed visible rather than dropping it. The plan's GM citations licensing the skipped search (2026-11-25 in 451 request.md; 2026-10-25 in root CLAUDE.md) are outside this bundle and were not read verbatim (the calling session relayed 451 request.md line 154's 'have some kind of research backlog. Where we make a best guess about what to render, and then note it as being something that is unresearched', which agrees with the plan, but it is not in the bundle); the ruling does not rest on them."
+    },
+    {
+     "id": "Decision (b)",
+     "summary": "RUN_W's claim is restated to cite 0068's drawing page for the 5.5 ft figure and 0060 for the drain's class, and to send a dike-pond block's run to sluice_channels.",
+     "class": "within",
+     "why": "A claim restated to match its source, no code changed (constitution XIV as the GM ruled 2026-11-19); serves the fix."
+    },
+    {
+     "id": "the frame, the dike's rows, the seat's way out",
+     "summary": "sluice_frame's 20 ft span and FRAME_REACH_FT unchanged (the span still exceeds an 8 ft channel plus posts); the frame test pins the reach at CREEK_FT's two ends; GAP_HALF_FT's claim restated with the measured clearance; no tree lost; seat exit reads courses only.",
+     "class": "within",
+     "why": "Consequences of the fix checked and pinned, plus a test enforcing that the requested fix does not push a crown onto a frame; enforcement and claim restatement, nothing narrowed."
+    },
+    {
+     "id": "Kuwabata and tests moved",
+     "summary": "Kuwabata's driver SVG regenerated (10 lines: feeder, run, reed strips and bank bands); two roll-pinning tests re-pinned to the wider banks; the reeds test reads the run's half-width from sluice_channels; no settlement-review owed under FR-023.",
+     "class": "within",
+     "why": "The visible change is the requested fix itself; FR-023 (rust-only switch) makes the pool hamlet's review not owed while the switch stands. Re-pins follow from the fix, not a change of what is asked."
+    },
+    {
+     "id": "work budget and exits",
+     "summary": "make work-budget counts identical to HEAD, so no step owed; green exit is the red-first test, 0 refusals and closing checks; red exit sets the task down via make arbiter-ask.",
+     "class": "within",
+     "why": "Measurement and exit conditions for the fix; FR-022 budgets unchanged."
     }
    ],
    "verdict": "CLEAR"

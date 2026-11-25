@@ -76,7 +76,7 @@ const CELL_SHARE: f64 = 31.0;
 /// The drain's run, drawn at the collector's outfall width (ft).
 ///
 /// Research:
-///     the drain's run drawn - research/questions/0060-field-drains-akusuiro.drawing.html: the drainage-ditch class, at the collector's own outfall width, 5.5 ft (the deleted `DRAIN_FT`) - a polder's outfall run too, where on a dike-pond block the drain trunk itself is drawn at the block's creek width, 6 to 8 ft (`field::polder::ditches`, 449 T427), and the run keeps 5.5 ft past the sluice, a GUESS (research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html gives the ring no narrower than the creeks and no width for the run beyond the dike)
+///     the drain's run drawn - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the drawn drain widens from a 1.2 ft head to a 5.5 ft outfall, the drain's own run onward drawn at that outfall width, 5.5 ft (the deleted `DRAIN_FT`), in research/questions/0060-field-drains-akusuiro.drawing.html's drainage-ditch class - a rice polder's outfall run too; on a dike-pond block the run past the outfall sluice is drawn at the ring canal's width instead (`driver::polder::sluice_channels`, 449 T431)
 const RUN_W: f64 = 5.5;
 /// The reeds' width out from the pond's shore (ft).
 ///

@@ -13,8 +13,10 @@ use crate::field::geom::{dist, inside, seg_dist};
 #[test]
 fn no_dike_crown_stands_on_a_sluices_frame() {
     use crate::field::dike::FRAME_REACH_FT;
-    // the dike's keep-clear reaches every corner of a polder sluice's frame, on the feeder and on the outfall's run
-    for w in [super::FEEDER_W, super::RUN_W] {
+    // the dike's keep-clear reaches every corner of a polder sluice's frame, on the feeder and on the outfall's run, a rice
+    // polder's or a dike-pond block's at up to its widest creek (449 T431): the span's 20 ft holds them all
+    let creeks = crate::field::polder::creeks::CREEK_FT;
+    for w in [super::FEEDER_W, super::RUN_W, creeks.0, creeks.1] {
         let f = sluice_frame((0.0, 0.0), (0.0, 1.0), w);
         let far = f
             .posts
@@ -35,10 +37,7 @@ fn no_dike_crown_stands_on_a_sluices_frame() {
             r#"{{"name": "P", "seed": {seed}, "households": 15, "down_deg": 90, "field_archetype": "{form}"}}"#
         );
         let stage = roll(&parse(&spec).unwrap()).unwrap().polder.unwrap();
-        let channels = [
-            (stage.polder.feeder.as_slice(), super::FEEDER_W),
-            (stage.outfall.as_slice(), super::RUN_W),
-        ];
+        let channels = super::sluice_channels(&stage);
         for &at in &stage.polder.sluices {
             let (dir, width) = sluice_channel(at, &channels).unwrap();
             let frame = sluice_frame(at, dir, width);

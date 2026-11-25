@@ -87,8 +87,34 @@ const SLUICE_TIMBER_FT: (f64, (f64, f64), f64, f64, f64) = (2.8, (2.0, 4.0), 1.2
 /// The feeder's width (ft), from the wild pond to the inlet.
 ///
 /// Research:
-///     the feeder's width - GUESS: a line 3 ft wide, the deleted ink's, carried as it stood; no page sizes a polder's feeder - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html's ladder puts a pond feeder at roughly twice its 1.5 ft floor and the head race carrying a whole fan's water at 6.0 ft, and says neither is this channel
+///     the feeder's width - GUESS: a line 3 ft wide, the deleted ink's, carried as it stood; no page sizes a polder's feeder - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html's ladder puts a pond feeder at roughly twice its 1.5 ft floor and the head race carrying a whole fan's water at 6.0 ft, and says neither is this channel - a rice polder's feeder; on a dike-pond block the feeder is drawn at the ring canal's width instead (`sluice_channels`, 449 T431)
 const FEEDER_W: f64 = 3.0;
+/// The two channels that cross the dike at its sluices, each with its drawn width (ft): the feeder, then the outfall's run.
+///
+/// Research:
+///     the crossings no narrower than the ring - UNRESEARCHED: on a dike-pond block the feeder into the inlet sluice and the outfall's run out of the outfall sluice each drawn no narrower than the ring canal where it meets the sluice - its join's width (`field::polder::joins`), the block's creek width, 6 to 8 ft (`field::polder::ditches`, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html#ring-canal-width-dike-pond), so neither steps down from the ring under its sluice's board, as a channel is never drawn wider than the one feeding it (research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html); no page sizes a polder's feeder or its run beyond the dike, and taking the ring's width is the easier route where the record is silent; a rice polder's keep `FEEDER_W` and `RUN_W`. Before 449 T431 a dike-pond block's were 3 and 5.5 ft against a 6 to 8 ft ring
+pub(super) fn sluice_channels(s: &PolderStage) -> [(&[Pt], f64); 2] {
+    // the ring's width where it meets each sluice: the joins `field::polder::joins` lays through them
+    let ring = |seg: &str| {
+        s.polder
+            .ditches
+            .iter()
+            .find(|d| d.seg == seg)
+            .map_or(0.0, |d| d.w)
+    };
+    let (feeder, run) = if s.converted.is_some() {
+        (
+            FEEDER_W.max(ring("inlet_join")),
+            RUN_W.max(ring("outfall_join")),
+        )
+    } else {
+        (FEEDER_W, RUN_W)
+    };
+    [
+        (s.polder.feeder.as_slice(), feeder),
+        (s.outfall.as_slice(), run),
+    ]
+}
 /// The tea hedge row's width (ft), on a tea-planted dike.
 ///
 /// Research:
@@ -232,7 +258,7 @@ fn sluice_frame(at: Pt, dir: Pt, w: f64) -> SluiceFrame {
 ///
 /// Research:
 ///     the polder drawn - CONVENTION: the deleted `ink.dike` and `dikeponds`, each record drawn as the engine drew it, the sluices apart
-///     the band cut where a channel crosses - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: where a channel crosses the dike, the band is cut, the water running through a gap in the earthwork under a sluice gate, not over its top - the band painted before every channel's stroke, so the feeder and the outfall each show through it at their drawn width (`FEEDER_W`, `RUN_W`), bank to bank, the earth meeting the water as the waterside reeds do (449 T236); before 449 T419 the band was painted after the water, unbroken over both crossings
+///     the band cut where a channel crosses - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: where a channel crosses the dike, the band is cut, the water running through a gap in the earthwork under a sluice gate, not over its top - the band painted before every channel's stroke, so the feeder and the outfall each show through it at their drawn width (`sluice_channels`), bank to bank, the earth meeting the water as the waterside reeds do (449 T236); before 449 T419 the band was painted after the water, unbroken over both crossings
 ///     the dike and the banks mottled - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the band is mottled with patches of earth of different ages, as repairs are, never a ruled line; research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: a pond's bank is mottled earth under its bushes, like the polder's own dike - each band's patches (`mottle::dike`, `mottle::banks`) painted on its fill, the dike's before the channels that cut it and its trees, the banks' before the ponds' water and their crowns
 ///     the cut as wide as the water - GUESS: the page silent on the cut's width; the channel's own drawn width, the simpler drawing (paint order, the faces recorded whole) over a cut built into the band's outline, taken where the record does not choose
 ///     the pocket pond's ring - GUESS: flooded ground 2.5 ft wide round the pond inside a bund line 2.2 ft wide, the deleted ink's; no page sizes the margin
@@ -288,7 +314,7 @@ fn draw_polder(svg: &mut Svg, s: &PolderStage, seed: i64) {
     );
     draw_channels(svg, s);
     svg.kind("drainage ditch");
-    svg.unframed(&s.outfall, ink::DRAIN, RUN_W);
+    svg.unframed(&s.outfall, ink::DRAIN, sluice_channels(s)[1].1);
     svg.group(0.92);
     let bank_crowns = s
         .converted
@@ -352,7 +378,7 @@ fn draw_channels(svg: &mut Svg, s: &PolderStage) {
         );
     }
     svg.kind(supply);
-    svg.line(&s.polder.feeder, ink::SUPPLY, FEEDER_W);
+    svg.line(&s.polder.feeder, ink::SUPPLY, sluice_channels(s)[0].1);
 }
 
 /// The polder's sluices drawn, each a frame across the channel through its point (`sluice_channel`, `sluice_frame`), on top of
@@ -364,10 +390,7 @@ fn draw_channels(svg: &mut Svg, s: &PolderStage) {
 ///     the board's place - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the board a few steps down the blocked channel from the junction, so that it plainly crosses the channel it blocks, not the one it branches from; a polder's sluice point stands 8.5 ft out from the ring canal's corner or its drain trunk's end (`RING_FT`, 6 ft each way, measured on Kuwabata 2026-11-22, feature 449 T249), joined to that junction by a drawn reach (`field::polder::joins`, 449 T263) and no other channel through it, so the board is drawn on the point, 8.5 ft down the blocked channel from the junction
 fn draw_sluices(svg: &mut Svg, s: &PolderStage, missing: &mut Vec<String>) {
     svg.kind("sluice gate");
-    let channels = [
-        (s.polder.feeder.as_slice(), FEEDER_W),
-        (s.outfall.as_slice(), RUN_W),
-    ];
+    let channels = sluice_channels(s);
     for (i, &at) in s.polder.sluices.iter().enumerate() {
         let Some((dir, w)) = sluice_channel(at, &channels) else {
             missing.push(format!(
@@ -391,15 +414,12 @@ fn draw_sluices(svg: &mut Svg, s: &PolderStage, missing: &mut Vec<String>) {
 ///
 /// Research:
 ///     the reed strips - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: reeds on the flanks of a dike that face the water
-///     the channels they stop at - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: water crosses the dike only at gated sluices, the feeder at the inlet and the outfall's drain at the outfall, each at its drawn width (`FEEDER_W`, `RUN_W`); research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: the reeds drawn to the water's edge, kept out of the water
+///     the channels they stop at - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: water crosses the dike only at gated sluices, the feeder at the inlet and the outfall's drain at the outfall, each at its drawn width (`sluice_channels`: 3 and 5.5 ft on a rice polder, the ring canal's 6 to 8 ft on a dike-pond block, 449 T431); research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: the reeds drawn to the water's edge, kept out of the water
 fn stage_waterward(p: &Plan, s: &PolderStage, seated: Option<&Seated>) -> Fringe {
     let rad = p.down_deg.to_radians();
     fringe(
         &s.dike.outer,
-        &[
-            (s.polder.feeder.as_slice(), FEEDER_W),
-            (s.outfall.as_slice(), RUN_W),
-        ],
+        &sluice_channels(s),
         STRIP_DEPTH,
         (p.w, p.h),
         (rad.cos(), rad.sin()),
@@ -444,10 +464,7 @@ fn bank_bands(
     // each ring boxed, a test a corner
     tests += rings.iter().map(|(r, _)| r.len() as u64).sum::<u64>();
     let mut bands = Vec::new();
-    for (course, w) in [
-        (s.polder.feeder.as_slice(), FEEDER_W),
-        (s.outfall.as_slice(), RUN_W),
-    ] {
+    for (course, w) in sluice_channels(s) {
         for side in [1.0, -1.0] {
             let off = side * (w + BANK_FT) / 2.0;
             // the bank's samples, numbered along it across its reaches: a run breaks at a sample out of the reeds, and at a gap
@@ -812,6 +829,8 @@ pub(super) fn roll_polder(p: Plan) -> Rolled {
     }
 }
 
+#[cfg(test)]
+mod crossing_tests;
 #[cfg(test)]
 mod frame_tests;
 mod mottle;

@@ -81,10 +81,7 @@ fn a_rolled_polder_draws_its_sluices_across_their_channels_not_as_the_old_square
     ] {
         let r = roll(&parse(spec).unwrap()).unwrap();
         let s = r.polder.as_ref().unwrap();
-        let channels = [
-            (s.polder.feeder.as_slice(), super::FEEDER_W),
-            (s.outfall.as_slice(), super::RUN_W),
-        ];
+        let channels = super::sluice_channels(s);
         let found: Vec<(Pt, f64)> = s
             .polder
             .sluices
@@ -186,10 +183,8 @@ fn the_waterside_strips_stop_at_the_sluices_channels_and_keep_off_the_dike() {
         let ward = r.waterward.as_ref().unwrap();
         assert!(!ward.strips.is_empty());
         let name = &r.plan.name;
-        let channels = [
-            ("feeder", s.polder.feeder.as_slice(), super::FEEDER_W),
-            ("outfall", s.outfall.as_slice(), super::RUN_W),
-        ];
+        let [(feeder, fw), (outfall, rw)] = super::sluice_channels(s);
+        let channels = [("feeder", feeder, fw), ("outfall", outfall, rw)];
         for (i, strip) in ward.strips.iter().enumerate() {
             for &(channel, course, w) in &channels {
                 let near = (0..strip.len())
@@ -236,7 +231,7 @@ fn the_waterside_strips_stop_at_the_sluices_channels_and_keep_off_the_dike() {
                 .strips
                 .iter()
                 .flatten()
-                .any(|&p| (seg_dist(p, run.0, run.1) - super::RUN_W / 2.0).abs() < 1e-6));
+                .any(|&p| (seg_dist(p, run.0, run.1) - rw / 2.0).abs() < 1e-6));
         }
     }
     assert_eq!(got, want);
@@ -556,7 +551,8 @@ fn bank_rolls() -> Vec<crate::driver::Rolled> {
 }
 
 /// THE BANDS DRAWN AS THEY WERE (449 T250): each roll's bank bands, their points and a weighted sum of them, as T240 drew them
-/// before the bands' search was cut to the reeds' boxes - the cheaper search keeps every point.
+/// before the bands' search was cut to the reeds' boxes - the cheaper search keeps every point; Kuwabata re-pinned by 449 T431, its feeder and run
+/// widened to its ring canal's 6.2 ft.
 #[test]
 fn the_bank_bands_hold_their_points() {
     let mut got = Vec::new();
@@ -575,7 +571,7 @@ fn the_bank_bands_hold_their_points() {
         ));
     }
     let want: Vec<String> = [
-        "Kuwabata: 4 bands, 207 points, 1311312.754",
+        "Kuwabata: 4 bands, 207 points, 1311377.321",
         "Inashiro: 4 bands, 216 points, 1114273.530",
         "Inashiro: 4 bands, 217 points, 1119742.822",
         "Inashiro: 4 bands, 211 points, 1088477.999",
@@ -671,10 +667,7 @@ fn plain_bands(s: &crate::field::staged::PolderStage, strips: &[Vec<Pt>]) -> Vec
         .filter(|r| r.len() >= 3)
         .collect();
     let mut bands = Vec::new();
-    for (course, w) in [
-        (s.polder.feeder.as_slice(), super::FEEDER_W),
-        (s.outfall.as_slice(), super::RUN_W),
-    ] {
+    for (course, w) in super::sluice_channels(s) {
         for side in [1.0, -1.0] {
             let off = side * (w + super::BANK_FT) / 2.0;
             let mut samples: Vec<(Pt, bool)> = Vec::new();
@@ -709,7 +702,7 @@ fn plain_bands(s: &crate::field::staged::PolderStage, strips: &[Vec<Pt>]) -> Vec
 
 /// THE REEDS LAID AS THEY WERE (449 T250): each roll's waterside strips, their points and a weighted sum of them, on Kuwabata, the
 /// budget run's grid polders and grid polders falling off the axes, as the fringe laid them before its dike corners were filed once
-/// for all the flanks - filing them once moves no reed.
+/// for all the flanks - filing them once moves no reed; Kuwabata re-pinned by 449 T431 (its feeder and run 6.2 ft).
 #[test]
 fn the_waterside_strips_hold_their_points() {
     let mut rolls = bank_rolls();
@@ -733,7 +726,7 @@ fn the_waterside_strips_hold_their_points() {
         ));
     }
     let want: Vec<String> = [
-        "Kuwabata at 90: ['W', 'S'], 4 strips, 104 points, 679314.923",
+        "Kuwabata at 90: ['W', 'S'], 4 strips, 104 points, 679313.718",
         "Inashiro at 90: ['W', 'S'], 4 strips, 82 points, 433114.843",
         "Inashiro at 90: ['W', 'S'], 4 strips, 82 points, 433193.563",
         "Inashiro at 90: ['W', 'S'], 4 strips, 82 points, 433085.352",
@@ -840,10 +833,7 @@ fn the_dikes_band_and_rows_are_cut_where_the_feeder_and_the_outfall_cross() {
         .filter_map(|ink| body.find(&format!("stroke=\"{ink}\"")))
         .min()
         .unwrap();
-        let channels = [
-            (s.polder.feeder.as_slice(), super::FEEDER_W),
-            (s.outfall.as_slice(), super::super::RUN_W),
-        ];
+        let channels = super::sluice_channels(s);
         // the least clear water between a crown's edge and a channel's bank, over every tree and both channels (feet)
         let mut clear = f64::INFINITY;
         for (course, w) in channels {
