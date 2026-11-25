@@ -210,7 +210,7 @@ behavioral principles XII, XIV and XV.
   table when a conversion lands.
 - `.claude/agents/` - the review and verification agents; `dev/review-ledger.md` - every review pass.
 - `docs/` - the on-demand references: `session-clones.md`, `spec-kit-and-reviews.md`,
-  `efficiency-tooling.md`, `guards.md`, `gm-rulings.md` (his words no spec records), `research-doctrine.md`, `iteration-loop.md`, `container.md`. The L7R style
+  `efficiency-tooling.md`, `guards.md`, `gm-rulings.md` (his words no spec records), `process-decisions.md` (how we work and why: each decision with its reasoning and numbers), `research-doctrine.md`, `iteration-loop.md`, `container.md`. The L7R style
   guide is gm-assistant's `docs/l7r-style.md`, its one copy.
 - `specs/NNN-*/` - the features. There is deliberately no single active-plan pointer; current status
   is the highest-numbered spec, its `tasks.md` and `git log`. A path in a spec before 329 that starts with

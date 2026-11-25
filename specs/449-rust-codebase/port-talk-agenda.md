@@ -62,10 +62,13 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
     directly", and make land-tooling lands tooling alone; measure what a task added mid-feature costs (task-add, plan
     section, decide, spec-fidelity MODE 4, the landing) against a direct tweak, from today's 451 T226-T243.
 
-## How each item closes (the GM, 2026-11-25)
+## How each item closes (the GM, 2026-11-25) - its decision is recorded in `docs/process-decisions.md`
 
 Every item above is decided in the talk and its decision captured with its logic, its reasoning and the numbers that support
 it (the GM: "capture our logic and our reasoning and ideally the numbers that we gathered in order to support these
 decisions, not only for this specific item, but for also all of the other 9 items"): under each item, a `Decided:` line
 with the GM's words, the measurements it rested on (each dated, with its method), and what follows - a task filed (its
 number), a rule changed (where), or nothing, and why.
+
+Once an item is decided, its entry (question, decision, reasoning, numbers and what followed) is written into
+`docs/process-decisions.md`, the one place a later session looks; this agenda keeps a line pointing at it.
