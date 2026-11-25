@@ -10,5 +10,11 @@
     "why": "the GM 2026-11-07 (feature 444 amendment 8): the Rust stages iterated alone until the last stage is Rust",
     "who": "Eli Courtwright",
     "utc": "2026-11-07T05:22:23Z"
+  },
+  "research": {
+    "state": "deferred",
+    "why": "the GM 2026-11-25: I would like to essentially defer all of it until at least tomorrow",
+    "who": "Eli Courtwright",
+    "utc": "2026-11-25T16:52:27Z"
   }
 }
