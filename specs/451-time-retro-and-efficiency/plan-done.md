@@ -12625,3 +12625,38 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 **Performance work?** no.
 
 
+<!-- plan-archive: archived 2026-11-25 -->
+### T247 (451 T229's builder in a parallel worktree: the tool target's l7r-gate rebuilt inside a cover run's environment after a gate source edit, and 21 tests of clone-sync-hooks.sh and sync-with-main.sh then failed on 'uncommitted changes' from the default_*.profraw files in their fixture clones, observed 2026-11-25, method: T229's builder's hook-suite run; seen by T235's, T231's and T229's builders)
+
+- **Approach**: `scripts/gates/l7r-gate.sh` builds a stale tool with the coverage environment cleared, and removes a binary that comes out instrumented anyway rather than run it.
+  - **The cause, measured.** A crate's coverage tests run with `rustc/cover.rs`' environment (`cover_env`, then the run's own `LLVM_PROFILE_FILE`): `cargo llvm-cov show-env`'s five variables (RUSTFLAGS, LLVM_PROFILE_FILE, CARGO_LLVM_COV, CARGO_LLVM_COV_SHOW_ENV, CARGO_LLVM_COV_TARGET_DIR; its output in this tree, 2026-11-25), with `workspace_only` moving `-C instrument-coverage` out of RUSTFLAGS into a RUSTC_WORKSPACE_WRAPPER script. A test that calls the launcher inherits it, and the launcher's cargo built the tool in `~/.cache/l7r-cargo-target/<tree>/tool/` under it. The builder's workaround (`env -u RUSTFLAGS -u CARGO_ENCODED_RUSTFLAGS`) does not clear the flag, measured 2026-11-25 (a toy two-crate workspace in the scratchpad, real cargo): a release build under that wrapper alone gave a binary holding `__llvm_prf_cnts` that wrote `default_<id>_0_<pid>.profraw` into the directory it ran in, and the plain rebuild after it (0.05 s, the plain artifacts at their own metadata hash) put back a binary without the section.
+  - **The fix: the build's environment.** `build()` runs cargo under `env -u` of every variable show-env sets, every flag channel cargo reads (RUSTFLAGS, CARGO_ENCODED_RUSTFLAGS, CARGO_BUILD_RUSTFLAGS, RUSTDOCFLAGS, CARGO_ENCODED_RUSTDOCFLAGS), both wrapper channels (RUSTC_WORKSPACE_WRAPPER, RUSTC_WRAPPER: no config or script of this tree sets one, `grep -rn RUSTC_WRAPPER` 2026-11-25) and CARGO_LLVM_COV_BUILD_DIR. The tool's flags then come from `.cargo/config.toml` (rust-lld, T96), as at every build outside a cover run.
+  - **The fix: never left as the tool.** After a successful build and before the `touch` and the build id, a binary holding `__llvm_prf_cnts` is removed with its `build.json`, and the launcher exits 1 with "l7r-gate: <bin> came out instrumented for coverage, so it is removed and nothing runs on it ..." and where to look (a config's rustflags or rustc-wrapper). `L7R_GATE_PRINT_FRESH` names no binary then. The scan runs only at a build: 0.038 s over the 33 MB l7r-gate, measured 2026-11-25 (`time grep -qaF`), per call it would cost that on every one of a suite's hundreds of calls. The detector was checked for false positives: 0 of the 19 tool binaries in every clone's target hold the section (2026-11-25, `grep -caF` over each `tool/` program), so no plain build is refused.
+  - **A binary instrumented before this fix**: none exists (the same scan). One that did would run until a source newer than it rebuilds it, which the toy shows comes out plain. Accepted, the GM not asked (no cost to a map or a verdict; the scan is the evidence): the alternative priced was a `<bin>.plain` stamp the launcher requires as fresh - one stat a call, a rebuild of every program in every clone on the first call after landing, and the stamp in three suite fixtures (FT, HT, BT), observed 2026-11-25, method: `grep -n L7R_GATE_TARGET` over the suites - for a state the scan finds nowhere.
+  - **The guards' wrapper is left**: `scripts/hooks/l7r-guard.sh` builds the same way into the same target, but nothing runs it inside a cover environment - Claude Code's hooks and `make hooks-test` start it, and no Rust test does (`grep -rn l7r-guard.sh rust/`, 2026-11-25: three mentions in text and a fixture string). Its build also writes `l7r-guard`, not the gate's programs.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the build's coverage environment cleared | `tests/hooks/test-l7r-gate.1.sh` "a cover run's build: cargo is handed none of the coverage environment" and "a later call drops no profile where it runs", red on HEAD's launcher (2026-11-25) | n/a: tooling | none | n/a |
+| an instrumented build removed, never run | the same suite's "an instrumented build: refused", "removed, not left as the tool", "the refusal says why", "print-fresh names no binary", red on HEAD's launcher | n/a: tooling | none | n/a |
+
+<!-- plan-archive: archived 2026-11-25 -->
+### T247 Approach (checklist part A)
+
+1. **The goal, in the world.** A gate call never leaves a profile file where it runs: the tool binaries in the tool target are never coverage-instrumented, whatever environment the call that built them came from.
+2. **The constraints.** The task's line in tasks.md (rebuild with the instrumentation flags cleared; an instrumented binary never left as the tool; red-first on a cover-run environment). Feature 449 T61: the launcher fails closed. T205: no extra work on a fresh call.
+3. **Where each comes from.** O: T229's builder's 21 failures (tasks.md T247), the show-env output and the toy workspace, 2026-11-25. G: the task as filed.
+4. **Do they describe the world here?** Yes: the fixture replays the cover's environment as `cover_env` and the run build it (show-env's variables plus RUSTC_WORKSPACE_WRAPPER), and the toy measured that the wrapper alone instruments.
+5. **The order.** No dependency. T232, built in parallel, touches other files.
+6. **The exits.** Green: `make closing-checks T=T247 F=451`. Red: what failed is recorded and the task set down, and a claim that it cannot be done is ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, 2026-11-25: on HEAD's launcher `tests/hooks/test-l7r-gate.1.sh` gave 7 failures in the new group (cargo saw RUSTFLAGS, CARGO_ENCODED_RUSTFLAGS, RUSTC_WORKSPACE_WRAPPER, LLVM_PROFILE_FILE and the three CARGO_LLVM_COV variables; a later call left `default_1_0.profraw`; the instrumented stub ran, stayed and was named fresh). With the fix the shard passes whole.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: gate calls dropped profile files that failed 21 hook-suite tests. No map changes.
+
+**Found and left?** none.
+
+**Performance work?** no: one scan of the binary at a build, none on a call.
+
