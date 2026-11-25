@@ -37423,19 +37423,22 @@
  "rust/phases/src/driver.rs::CELL_SHARE#a basin's cell": {
   "body": "641b80d778be5e0b",
   "claim": "a basin's cell - rice-paddies-and-their-plots-suiden.drawing: about 48 ft across its canal and 26 to 36 ft along it, the cell the row's spacing times the middle, 31 ft",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "f4217a2d7856709b",
   "core": "d1107520081bdd87",
   "date": "2026-11-07",
   "note": "26-36 ft along, middle 31; row x 31 is about the 1,488 sq ft cell",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::CROP_MARGIN#the crop": {
@@ -37532,25 +37535,17 @@
  },
  "rust/phases/src/driver.rs::FIELD_KNOBS#the planned grid on no hamlet": {
   "body": "c67449863d8ce82e",
-  "build": {
-   "commit": "52c982ddb0caa5d8280ff5bb5543431b5b8187fb",
-   "dirty": {
-    "rust/guard/CLAUDE.md": "ef329dd85e05ca927dfbf80d8e3be91d4dd6d666",
-    "rust/guard/src/guards/agent_model_hooks.rs": "9c8d945d130bad4422f68a9e6d388f766749489a",
-    "rust/guard/src/guards/agent_model_hooks/tests.rs": "4e35d1fb7351fdde35a7a4b2ec8681393b171108",
-    "rust/guard/src/guards/workflow_hooks.rs": "7fb0600b29098b5b80282027fbc3cd4f19cfe76b",
-    "rust/guard/src/guards/workflow_hooks/tests.rs": "b22e6a1661798a3df6aa06a74bda4d3009c6f00c"
-   }
-  },
   "claim": "the planned grid on no hamlet - rice-paddies-and-their-plots-suiden.drawing: a hamlet's basins organic, \"never as the tidy grid\"; the grid a planned field's",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "44295c397e4b315d",
   "core": "9c33e1a1dd3a5d1f",
   "date": "2026-11-07",
   "note": "plot_regularity is organic only",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:218358b82a0824e2",
@@ -37998,20 +37993,23 @@
  "rust/phases/src/driver.rs::field_in#a basin's cell": {
   "body": "531872b104a954e7",
   "claim": "a basin's cell - rice-paddies-and-their-plots-suiden.drawing: the cell the row's spacing times the share along the canal (`CELL_SHARE`'s)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "2ad1f45a9f40952f",
   "core": "a3439dfb1339a11e",
   "date": "2026-11-24",
   "note": "row_ft times CELL_SHARE 31 gives about 48 x 31 = 1,488 sq ft, the page's cell",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
   "reads": "59acc62cfd089c2e",
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::field_in#the weir across the brook": {
@@ -43193,20 +43191,23 @@
  "rust/phases/src/field/build.rs::rows_held#the basins' rules where decided": {
   "body": "f41a3991d77f7d7a",
   "claim": "the basins' rules where decided - rice-paddies-and-their-plots-suiden.drawing: no basin sharper than 25 degrees, none under a quarter of its cell, none an arrowhead - asked of each row's two outermost basins, where the fan's taper makes them sharpest (D7)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8296723a7cb62abc",
   "core": "73942ccaaf98aa26",
   "date": "2026-11-01",
   "note": "held() is asked of each row's first and last basins, the clipped edge basins where the taper and the fragments fall",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:52e13caf7165417a",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:dd38ce71aa72575c"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::water#the field off the brook": {
@@ -45123,17 +45124,20 @@
  "rust/phases/src/field/fan.rs::Fan#the fan narrows toward its drain": {
   "body": "0e3bc70e5a81d528",
   "claim": "the fan narrows toward its drain - rice-paddies-and-their-plots-suiden.drawing: a fan of paddies narrows toward its drain, its bunds converging",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "63ae0726f198e50d",
   "core": "4a9da76ebeab8a3b",
   "date": "2026-10-31",
   "note": "holds the head and foot half-breadths the narrowing is built from",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/fan.rs::Fan.at#the fan's coordinates": {
@@ -45151,17 +45155,20 @@
  "rust/phases/src/field/fan.rs::Fan.half_at#the fan narrows toward its drain": {
   "body": "cd39b8df5435e217",
   "claim": "the fan narrows toward its drain - rice-paddies-and-their-plots-suiden.drawing: its bunds converging",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "fe0dd7541bf047a2",
   "core": "042f7f6ec2add284",
   "date": "2026-10-31",
   "note": "the half-breadth runs evenly from half_head at the fork to the narrower half_foot at the drain end; how fast it narrows is a degree",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/fan.rs::Fan.half_side#the flank's wander": {
@@ -45233,17 +45240,20 @@
  "rust/phases/src/field/fan.rs::fan#the fan narrows toward its drain": {
   "body": "36fd56ddf9984239",
   "claim": "the fan narrows toward its drain - rice-paddies-and-their-plots-suiden.drawing: its bunds converging",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "31ab934d769c2635",
   "core": "fde4011769db1617",
   "date": "2026-10-31",
   "note": "built through traced, which narrows toward the foot",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/fan.rs::heading#bearings": {
@@ -45265,54 +45275,63 @@
  "rust/phases/src/field/fan.rs::traced#the fan down the fall": {
   "body": "87c7a8a590d9fbfb",
   "claim": "the fan down the fall - rice-paddies-and-their-plots-suiden.drawing: a fan of paddies narrows toward its drain - its long axis down the fall, the fork upslope and the foot down, its length the area over its mean breadth (the aspect's)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "57ed69d7d67cf5f8",
   "core": "9410dbfca054c892",
   "date": "2026-10-31",
   "note": "head (fork, upslope) is wider than tail (foot, downslope), so the fan narrows toward its drain as the page says; the length (area over mean breadth) is a calibration the page leaves open",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
   "reads": "90415fefe2b82f03",
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/fan.rs::traced#the flanks' waves": {
   "body": "87c7a8a590d9fbfb",
   "claim": "the flanks' waves - GUESS: rice-paddies-and-their-plots-suiden.drawing silent on how a fan's flanks bulge; each flank's waves at phases rolled per settlement from the seed's `fan_wave` stream",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "f9cefb9abb49b4ad",
   "core": "9410dbfca054c892",
   "date": "2026-11-22",
   "note": "the page says the fan narrows to its drain but nothing on how its flanks bulge; the phases rolled per settlement from `fan_wave` are a guess the record does not answer",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
   "reads": "90415fefe2b82f03",
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:8ccf11d09624671d",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/fan.rs::traced#the taper": {
   "body": "87c7a8a590d9fbfb",
   "claim": "the taper - GUESS: rice-paddies-and-their-plots-suiden.drawing silent on how much a fan narrows; the head and the foot a fifth either side of its mean breadth (`TAPER`)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "02ca2978eeb49bf5",
   "core": "9410dbfca054c892",
   "date": "2026-11-22",
   "note": "the page attests the narrowing but no figure for it; TAPER 0.2 (head and foot a fifth either side of the mean breadth) is a guess the record does not answer, and it is a fan's outline, not a basin's point, so §17's 25-degree rule does not apply",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
   "reads": "90415fefe2b82f03",
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/features.rs::CORNER_FT#the corner grave": {
@@ -46339,12 +46358,13 @@
   "claim": "the basin's length - rice-paddies-and-their-plots-suiden.drawing: 26 to 36 ft along it",
   "code": "c8013ffdb0ffee01",
   "core": "ec823e433caf69e7",
-  "date": "2026-10-31",
+  "date": "2026-11-24",
   "note": "(26, 36) is the page's \"26 to 36 ft along it\"",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
@@ -46353,17 +46373,20 @@
  "rust/phases/src/field/lattice.rs::BOW#the bund's bow": {
   "body": "f6f80603e464f6de",
   "claim": "the bund's bow - rice-paddies-and-their-plots-suiden.drawing: a patchwork of small, irregular paddies, never the tidy grid of rectangles; the bow's size a GUESS, up to 15% of a row",
+  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "9c6e860f045aa5fc",
   "core": "ae35ef5a6c7293c8",
   "date": "2026-11-24",
   "note": "`BOW = 0.15` matches the bow 0284's drawing page now records as a GUESS and this project's setting (\"bows by up to about 15% of the spacing between its rows\"), but the claim cites only 0005, which says nothing about a bow beyond the patchwork; fix: claim (also cite research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html as the page that records the 15% GUESS); effect: none",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [],
   "said": "the bund's bow - rice-paddies-and-their-plots-suiden.drawing: a patchwork of small, irregular paddies, never the tidy grid of rectangles; the bow's size a GUESS, up to 15% of a row",
   "siblings": "793cc68afd02e3f6",
+  "triaged": "2026-11-24",
   "verdict": "DRIFTED"
  },
  "rust/phases/src/field/lattice.rs::Basin#a basin's record": {
@@ -46404,17 +46427,20 @@
  "rust/phases/src/field/lattice.rs::Lines.new#the bund's bow": {
   "body": "dd9f33053f89a224",
   "claim": "the bund's bow - rice-paddies-and-their-plots-suiden.drawing: a patchwork of small, irregular paddies, never the tidy grid of rectangles - each interior line's bow rolled up to `BOW` of a row at its own phase",
+  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "7ebd24394ed2636d",
   "core": "12820a1fa962f1f5",
   "date": "2026-11-24",
   "note": "the code is right: each interior line gets its own amplitude, rolled from 0 to `BOW * step`, and its own phase, and the head and foot lines stay at zero, as 0284 says (\"no two rows of paddies carry the same shape\", the drift \"fades to nothing at the first and last rows\", up to about 15% of the row spacing); but the claim cites only 0005, which does not cover the per-row bow or its 15% limit; fix: claim (also cite research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html for the per-row bow and its 15% GUESS); effect: none",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
   "reads": "305a5619988eae36",
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "said": "the bund's bow - rice-paddies-and-their-plots-suiden.drawing: a patchwork of small, irregular paddies, never the tidy grid of rectangles - each interior line's bow rolled up to `BOW` of a row at its own phase",
   "siblings": "96f868f7e4cc6a9e",
+  "triaged": "2026-11-24",
   "verdict": "DRIFTED"
  },
  "rust/phases/src/field/lattice.rs::Lines.new#the head's and foot's lines straight": {
@@ -46433,119 +46459,140 @@
  "rust/phases/src/field/lattice.rs::Lines.new#whole rows": {
   "body": "dd9f33053f89a224",
   "claim": "whole rows - rice-paddies-and-their-plots-suiden.drawing: about 48 ft across its canal - the rows evenly spaced, as many as the fan's length holds at about `row_ft`, so whole rows fill it",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "950753b2693f4c58",
   "core": "12820a1fa962f1f5",
   "date": "2026-10-31",
   "note": "rows=round(length/row_ft), evenly spaced at about row_ft, i.e. about 48 ft across the canal",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
   "reads": "305a5619988eae36",
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:914c46003720293e"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::Lines.u#the bow's shape": {
   "body": "2c88e90e375e7b8e",
   "claim": "the bow's shape - GUESS: rice-paddies-and-their-plots-suiden.drawing silent on how a bund bows; one full wave across the fan's breadth",
+  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "111ffabf7f31ab31",
   "core": "d373d0e96e992d73",
   "date": "2026-11-24",
   "note": "0005 is still silent on how a bund bows. 0284 now gives the fan bow's size and says it varies along the row and from row to row, but neither page gives the bow's form, so the claim's \"one full wave across the fan's breadth\" is still an unanswered GUESS",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::ROW_FT#the row spacing": {
   "body": "b1aab071ecab86fc",
   "claim": "the row spacing - rice-paddies-and-their-plots-suiden.drawing: about 48 ft across its canal",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "001330c345389563",
   "core": "0bcfc528676cd1e9",
   "date": "2026-10-31",
   "note": "48.0 is \"about 48 ft across its canal\"",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::SLANT#the bunds askew": {
   "body": "cee9423e45081b38",
   "claim": "the bunds askew - rice-paddies-and-their-plots-suiden.drawing: a patchwork of small, irregular paddies, never the tidy grid of rectangles - each divider's two ends set apart along the row; the share a GUESS, up to 0.4 of the narrower basin either way (between the 0.33 and 0.45 measured 2026-11-07 against the Python field's area CV 0.23 and p90 corner deviation 26.4 degrees), no basin folding and every row kept to `rules::held`",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "2cd10ea52ae1876d",
   "core": "cd51589444adb409",
   "date": "2026-11-07",
   "note": "room is SLANT times the narrower gap, moved either way (±0.4), so neighbors cannot fold; irregular patchwork",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:dd38ce71aa72575c"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::TRIANGLE_IN#the triangles": {
   "body": "6a2271964f64cae9",
   "claim": "the triangles - rice-paddies-and-their-plots-suiden.drawing: \"a triangular basin is legitimate, and several stand on every map\" - one row end in `TRIANGLE_IN` closed so, a GUESS that leaves a few on a hamlet's field",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "ba3895a19819d298",
   "core": "1ee51aa317725d39",
   "date": "2026-11-07",
   "note": "each flank row end closes to a triangle at 1 in 10, a guess within \"several stand on every map\"",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:dd38ce71aa72575c"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::basins#the comb": {
   "body": "645b1b094f07afd7",
   "claim": "the comb - rice-paddies-and-their-plots-suiden.drawing: about 48 ft across its canal and 26 to 36 ft along it, the bunds converging toward the drain",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "f6c03f3d8390c489",
   "core": "643b105aa705f34f",
   "date": "2026-11-07",
   "note": "a test wrapper of the organic comb whose cell is row_ft*31 (1,488 sq ft at 48 ft)",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::basins_counted#the comb": {
   "body": "a49228b3fff5a562",
   "claim": "the comb - rice-paddies-and-their-plots-suiden.drawing: about 48 ft across its canal and 26 to 36 ft along it, the bunds converging toward the drain",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "ada1f092b85903d9",
   "core": "69cb6c65a0883c12",
   "date": "2026-11-07",
   "note": "rows and cuts laid on the converging fan; every row kept to `rules::held`",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::basins_counted#the row's form": {
@@ -46576,33 +46623,38 @@
   "claim": "a half-row between counts - GUESS: rice-paddies-and-their-plots-suiden.drawing silent on a row no whole count of such basins fills; the count nearest the band's middle, its basins as long as the breadth makes them (the fan narrowing toward its drain) - the same count on both halves of a row, the drain at its middle, each basin's length rolled from the row's own stream",
   "code": "52b3aa310f171e58",
   "core": "1daf022d05a95246",
-  "date": "2026-11-22",
-  "note": "the page gives the 26-36 ft band but not the case where no whole count fills a half-row; the code does what the claim says: the count nearest the band's middle (clamped to the counts that fit when any does), the same n on both halves, the drain at s=0, and each length rolled from the row's own comb_row stream",
+  "date": "2026-11-24",
+  "note": "the code does what the page records: the count nearest the band's middle, the same count on both halves, the drain at 0 and the lengths rolled from the row's stream, run outside 26 to 36 ft when the band can't be met. But the claim still calls the drawing page \"silent\", and §6 now records this exact fallback as a GUESS; fix: claim (restate as \"GUESS: research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html records the guess: the count nearest the band's middle, ...\"); effect: none",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
   "reads": "795d6cc6c31ff64d",
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:fc3df1017e2f82cc"
   ],
-  "verdict": "IN-STEP"
+  "said": "a half-row between counts - GUESS: rice-paddies-and-their-plots-suiden.drawing silent on a row no whole count of such basins fills; the count nearest the band's middle, its basins as long as the breadth makes them (the fan narrowing toward its drain) - the same count on both halves of a row, the drain at its middle, each basin's length rolled from the row's own stream",
+  "siblings": "bdf97da722e6ea34",
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/lattice.rs::cuts_counted#the basin's length": {
   "body": "c731c349a7f23c77",
   "claim": "the basin's length - rice-paddies-and-their-plots-suiden.drawing: 26 to 36 ft along it, a knob rolled each basin, every basin of a half-row inside the band where a whole count fits it",
   "code": "08c70e85e31ae233",
   "core": "1daf022d05a95246",
-  "date": "2026-11-01",
-  "note": "each basin is rolled at 26 + randbelow(11), so 26 to 36 ft, and n is clamped to [ceil(half/36), floor(half/26)] so a fitting count is used whenever one exists; matches \"26 to 36 ft along it\"",
+  "date": "2026-11-24",
+  "note": "each length rolled from 26 to 36 ft; where a whole count fits, the count is clamped to ceil(half/36)..floor(half/26), so fit keeps every basin inside the band",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
   "reads": "795d6cc6c31ff64d",
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:fc3df1017e2f82cc"
   ],
   "verdict": "IN-STEP"
  },
@@ -46611,8 +46663,8 @@
   "claim": "the drain a bund of its own - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: one drain gathering the water along the lowest line",
   "code": "a3a02746a368292a",
   "core": "1daf022d05a95246",
-  "date": "2026-11-01",
-  "note": "both halves close at 0, which gives one cut on the row's middle line; matches \"one drain gathering the water along the lowest line\" and the drain down the low middle between the supply canals on both flanks",
+  "date": "2026-11-24",
+  "note": "one cut at 0, the row's middle, is the single drain both halves run to, along the low middle",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "4f97258a4c0b1ef8"
   },
@@ -46620,7 +46672,6 @@
   "research": "714621da4d4f5268",
   "rests": [
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:56868c4083858740",
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e105c2f647566aa0"
   ],
   "verdict": "IN-STEP"
@@ -46641,103 +46692,121 @@
  "rust/phases/src/field/lattice.rs::row_basins#a basin's size": {
   "body": "02770603b0a25591",
   "claim": "a basin's size - rice-paddies-and-their-plots-suiden.drawing: about 48 ft across its canal and 26 to 36 ft along it",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "c5e80ae9f5582ec3",
   "core": "7ba1e578870a8718",
   "date": "2026-11-07",
   "note": "each basin is the quad between consecutive cuts and row lines, sized by the comb upstream",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::row_basins#the bunds converge": {
   "body": "02770603b0a25591",
   "claim": "the bunds converge - rice-paddies-and-their-plots-suiden.drawing: a fan of paddies narrows toward its drain, its bunds converging",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5424fbd6fab459f8",
   "core": "7ba1e578870a8718",
   "date": "2026-11-07",
   "note": "corners are set on the fan's own coordinates (`fan.at`), so the bunds converge with it",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::row_ft_for#paddy plot size": {
   "body": "da4c58b9170f0a08",
   "claim": "paddy plot size - rice-paddies-and-their-plots-suiden.drawing: a hamlet basin about 48 ft across its canal (`ROW_FT`), the plan's medium",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "584b87034f7b197c",
   "core": "0cb8738fdcb071b5",
   "date": "2026-10-31",
   "note": "the default ROW_FT 48.0 is the page's hamlet basin \"about 48 ft across its canal\"",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
   "reads": "86dc084683d9c5c5",
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::row_ft_for#the small and large rows": {
   "body": "da4c58b9170f0a08",
   "claim": "the small and large rows - rice-paddies-and-their-plots-suiden.drawing: a hamlet basin some 40 to 60 ft across - a small plot's 40 ft at its foot, a large block's 60 ft at its top",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "134a7ac24f0c8251",
   "core": "0cb8738fdcb071b5",
   "date": "2026-10-31",
   "note": "the 40.0 and 60.0 ends sit inside the attested range \"some 40 to 60 ft across\", a degree set within the range; even at 60 ft x 26-36 ft a basin is a few se, well under the one-tan block",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
   "reads": "86dc084683d9c5c5",
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:cbd7bb1f74a11a17"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::slanted#the bunds askew": {
   "body": "fe68dc6269cf9eb0",
   "claim": "the bunds askew - rice-paddies-and-their-plots-suiden.drawing: never the tidy grid of rectangles",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "43d42659227d20a5",
   "core": "89c085ceba1ac4c8",
   "date": "2026-11-07",
   "note": "each inner divider's two ends are moved apart by a seeded amount, never a tidy grid",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
   "reads": "d38cab8262c46ec4",
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::slanted#the triangles": {
   "body": "fe68dc6269cf9eb0",
   "claim": "the triangles - rice-paddies-and-their-plots-suiden.drawing: a triangular basin is legitimate, several on every map",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "9f13a5c46f733b9e",
   "core": "89c085ceba1ac4c8",
   "date": "2026-11-07",
   "note": "the divider next to a flank has its top or bottom end closed to that flank, which makes a triangle",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
   "reads": "d38cab8262c46ec4",
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:dd38ce71aa72575c"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::BOW_NUDGE_FT#the bow and the nudge": {
@@ -48174,33 +48243,39 @@
  "rust/phases/src/field/rules.rs::ARROW_POINT_DEG#the arrowhead": {
   "body": "ab0918e782160a04",
   "claim": "the arrowhead - rice-paddies-and-their-plots-suiden.drawing: a point sharper than 40 degrees and a notch deep enough to bring its solidity under 0.90",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "c70c03c6d94ddfa0",
   "core": "315a0516bccc1322",
   "date": "2026-10-31",
   "note": "40.0 matches \"a point sharper than 40 degrees\"",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:52e13caf7165417a"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/rules.rs::ARROW_SOLIDITY#the arrowhead": {
   "body": "341a847e47bf2dc5",
   "claim": "the arrowhead - rice-paddies-and-their-plots-suiden.drawing: a notch deep enough to bring its solidity under 0.90",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "df2abf3178c8b91a",
   "core": "e82c54926aab2405",
   "date": "2026-10-31",
   "note": "0.90 matches \"solidity under 0.90\"",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:52e13caf7165417a"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/rules.rs::FieldRefused#a refusal": {
@@ -48230,71 +48305,83 @@
  "rust/phases/src/field/rules.rs::MIN_CELL_SHARE#the basin's floor": {
   "body": "23fe07d9ba5c1c0a",
   "claim": "the basin's floor - rice-paddies-and-their-plots-suiden.drawing: none smaller than a quarter of its cell",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "b8c39aab0acb4fe0",
   "core": "676a67ad6143ffb7",
   "date": "2026-10-31",
   "note": "0.25 of the cell's area matches \"a quarter of the design cell\"",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:2065f2aeadcf896b",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/rules.rs::MIN_CORNER_DEG#the basin's corner": {
   "body": "9f8ffc130ed31e6a",
   "claim": "the basin's corner - rice-paddies-and-their-plots-suiden.drawing: no basin tapering to a point sharper than 25 degrees",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "33b2dd8c0a6156e7",
   "core": "a162a8f417be73ab",
   "date": "2026-10-31",
   "note": "25.0 matches \"refuse a point sharper than 25 degrees\"",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/rules.rs::arrowhead#the arrowhead": {
   "body": "204ef5a522a5b0de",
   "claim": "the arrowhead - rice-paddies-and-their-plots-suiden.drawing: one that does both is an arrowhead, and the maps refuse it",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "69bf967defafd8d2",
   "core": "0ee1ecb0e86ceffd",
   "date": "2026-10-31",
   "note": "refuses only when both a corner under 40 degrees and area/hull solidity under 0.90 hold, as \"one that does both\"",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
   "reads": "bb2c6266bb454eda",
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:52e13caf7165417a"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/rules.rs::held#the basin's shape": {
   "body": "726b3e9751f4b30b",
   "claim": "the basin's shape - rice-paddies-and-their-plots-suiden.drawing: no basin tapering to a point sharper than 25 degrees, none smaller than a quarter of its cell, none an arrowhead",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "ef47d981cbbe104a",
   "core": "0973b4eef10bfcb4",
   "date": "2026-11-07",
   "note": "drops repeated consecutive corners so a flank triangle is judged as a triangle; the 25 degree, quarter-cell and arrowhead tests are unchanged",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "b1a22678a11248d0",
+   "0346-how-our-maps-draw-the-rice-inside-a-paddy.drawing.html": "1fbc7276bd00b839"
   },
   "reads": "79179dc3e6e8a752",
-  "research": "69aa78ae06a3c11d",
+  "research": "193e5b1a0f2d20cc",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:52e13caf7165417a",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:dd38ce71aa72575c"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/staged.rs::PolderStage#the polder stage's record": {
