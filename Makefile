@@ -1044,6 +1044,7 @@ _quick:
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" mode-a building-programs --check
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record check glossary
 	@if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs partial-citations; then "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check partial-citations .; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check gm-attributions .
 	@printf '\n\033[1mquick: clean\033[0m - `make done` before pushing.\n'
 	@$(STATE) green-local quick
 

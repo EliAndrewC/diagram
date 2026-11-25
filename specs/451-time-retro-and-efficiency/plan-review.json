@@ -1656,6 +1656,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T233 (`docs/gm-rulings.md`, section 'NOT a ruling', 2026-11-24: 0006's comment calling dry plots against the canal a ruling of his was never his; the audit of that day found 74 of 180 such comments with no recorded words behind them)": {
+   "sha256": "d605366578987d08dd8a7c74593beddf20734315bee1ea6b45d681090e575831",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T233 Approach (checklist part A)": {
+   "sha256": "aebb2fe60545e8c49426ffe06a2fb72466a5e6957444cdd9196c71a51da9035e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -21817,6 +21829,79 @@
      "why": "Wrong outcomes (an audit that misreports, a usage line that hides a mode) fixed in the task; none deferred, so FR-009's deferral clauses do not apply."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T233 (`docs/gm-rulings.md`, section 'NOT a ruling', 2026-11-24: 0006's comment calling dry plots against the canal a ruling of his was never his; the audit of that day found 74 of 180 such comments with no recorded words behind them)",
+    "### T233 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "check-not-guard",
+     "summary": "A static text check, gm-attributions, run in make quick and the push's checks, registered; not an Edit guard",
+     "class": "within",
+     "why": "The task line (request.md, T233 section) asks for 'a check'. The Edit guard was the other way to build it, and turning it down narrows nothing."
+    },
+    {
+     "id": "what-it-reads",
+     "summary": "HTML comments of research/questions/*.html; CANON claim lines in rust/ as claims::units::walked walks them (tooling trees out, rust/parked in) and the two procedure docs",
+     "class": "within",
+     "why": "The task line names 'a research page's comment or a claim's CANON label'. A claim is what the claims system walks, and the plan keeps parked claims in rather than dropping them."
+    },
+    {
+     "id": "what-names-a-ruling",
+     "summary": "The task's three forms, the comma date form, and the near-twins rule/doctrine/correction",
+     "class": "within",
+     "why": "These are the task line's three forms. The near-twins are named in the task line's baseline ('the about 60 unaudited near-twins'), so they have to be detected. The comma form is 'GM <date>' with punctuation. All of it widens the check toward the purpose."
+    },
+    {
+     "id": "what-backs-it",
+     "summary": "An existing path: specs/<slug>/request.md or gm-request.md, docs/gm-rulings.md, or specs/<slug>/gm-review.jsonl; a bare 'request.md' or 'feature 280' is no pointer",
+     "class": "within",
+     "why": "These are the task line's three record kinds. gm-request.md holds his request verbatim, so it is the same kind of record. Refusing 'feature 280' as a pointer is stricter than the task line. Pointing at the gm-review.jsonl file rather than one row is the same coarseness ruled on under existence-only."
+    },
+    {
+     "id": "existence-only",
+     "summary": "The check confirms the pointed-at record exists, not that it holds the attributed words",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured against the GM's own words (2026-11-24: rulings he never made must not be built on as his) and the session's task line. Two grounds hold. First, no static text check can judge whether a paraphrase is supported by a record: that takes reading and judgment. docs/gm-rulings.md puts that judgment 'before anything is built on it', and the pointer makes it possible. Second, the purpose survives. 0006's comment had nothing to point at, and under this check it would need a path a reader can follow, so a silent attribution becomes one that can be checked. A deliberately wrong pointer passes, and the plan states that cost. The ruling does NOT rest on the GM's 2026-10-25 words: they concern a map choice the research does not settle, and the strictness of a tool is not that kind of choice. Nothing measures the premise that a verbatim rule 'would refuse most correct pointers', and the ruling does not need it."
+    },
+    {
+     "id": "baseline-shrink-only",
+     "summary": "dev/gm-attribution-baseline.jsonl keyed by a text hash; three refusals (unlisted, stale with --prune, entry the merge base lacks); --seed only where none exists",
+     "class": "within",
+     "why": "The task line asks for the baseline to shrink as pages are edited, and these three refusals enforce that. Seeding the old attributions into the baseline is the requested mechanism."
+    },
+    {
+     "id": "baseline-scope-341-comments",
+     "summary": "The baseline holds 341 comments (176 four-word, 165 near-twins), more than the task line's '74 and about 60'",
+     "class": "within",
+     "why": "The task line's counts were estimates from the audit. The census also finds the audit's BACKED rows that name no path, and the comma-form near-twins. Each listed entry still owes a pointer when its text is edited, so the larger baseline excuses nothing for good."
+    },
+    {
+     "id": "parked-claims-fixed",
+     "summary": "The 3 rust/parked CANON claims get their request.md pointers here",
+     "class": "within",
+     "why": "This fixes found defects in this task."
+    },
+    {
+     "id": "defer-page-comments",
+     "summary": "The 341 page comments are not fixed here; a follow-up, filed by the coordinating session, runs once the research switch reopens",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged by class. (a) For the audit's 74 unbacked and the unaudited near-twins, 'saying whose rule it is' means finding what the research shows (the GM 2026-11-24: 'if that is not what the research shows, then we shouldn't do it'). That is research, and his 2026-11-25 words defer it ('defer all of it until at least tomorrow'), so the deferral follows from his own words. (b) The BACKED rows lack only a path to words that exist. That is not a wrong outcome, so leaving them is no defect left. The task line itself puts this work after the research switch."
+    },
+    {
+     "id": "defer-walked-claims",
+     "summary": "The 10 walked CANON claims are not fixed here; a follow-up lands the non-page-tied ones first and the four tied to 0039/0058/0100/0222 beside their pages",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged by group. (a) Pointer found: what is left is a missing path where his words exist. No reader gets a wrong outcome, so this is no defect left, though it is cheap and the block does not say why these differ from the parked three. (b) Needing a relabel or a GM question: a possible MISLABELED in the claims record. Under the GM's 2026-11-25 'sounds good please do that ASAP', the claims round is split off from the builder, so the relabel is not the builder's to judge. The follow-up orders these first and does not hold them for research. (c) The four tied to pages: their fix has to agree with the page comment's, and that fix waits on the research deferral above."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -34838,6 +34923,77 @@
      "summary": "three found items fixed here: transcripts overcounted, --scratch-sweep usage lacked landed, the audit's last line said 'disk under' at 29% free",
      "class": "within",
      "why": "Wrong outcomes (an audit that misreports, a usage line that hides a mode) fixed in the task; none deferred, so FR-009's deferral clauses do not apply."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T233": {
+   "section_sha256": "88bd91fe0f2889a69c2c4ecacf3101f53a3267c989dac5e83c54048e5a681519",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "check-not-guard",
+     "summary": "A static text check, gm-attributions, run in make quick and the push's checks, registered; not an Edit guard",
+     "class": "within",
+     "why": "The task line (request.md, T233 section) asks for 'a check'. The Edit guard was the other way to build it, and turning it down narrows nothing."
+    },
+    {
+     "id": "what-it-reads",
+     "summary": "HTML comments of research/questions/*.html; CANON claim lines in rust/ as claims::units::walked walks them (tooling trees out, rust/parked in) and the two procedure docs",
+     "class": "within",
+     "why": "The task line names 'a research page's comment or a claim's CANON label'. A claim is what the claims system walks, and the plan keeps parked claims in rather than dropping them."
+    },
+    {
+     "id": "what-names-a-ruling",
+     "summary": "The task's three forms, the comma date form, and the near-twins rule/doctrine/correction",
+     "class": "within",
+     "why": "These are the task line's three forms. The near-twins are named in the task line's baseline ('the about 60 unaudited near-twins'), so they have to be detected. The comma form is 'GM <date>' with punctuation. All of it widens the check toward the purpose."
+    },
+    {
+     "id": "what-backs-it",
+     "summary": "An existing path: specs/<slug>/request.md or gm-request.md, docs/gm-rulings.md, or specs/<slug>/gm-review.jsonl; a bare 'request.md' or 'feature 280' is no pointer",
+     "class": "within",
+     "why": "These are the task line's three record kinds. gm-request.md holds his request verbatim, so it is the same kind of record. Refusing 'feature 280' as a pointer is stricter than the task line. Pointing at the gm-review.jsonl file rather than one row is the same coarseness ruled on under existence-only."
+    },
+    {
+     "id": "existence-only",
+     "summary": "The check confirms the pointed-at record exists, not that it holds the attributed words",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured against the GM's own words (2026-11-24: rulings he never made must not be built on as his) and the session's task line. Two grounds hold. First, no static text check can judge whether a paraphrase is supported by a record: that takes reading and judgment. docs/gm-rulings.md puts that judgment 'before anything is built on it', and the pointer makes it possible. Second, the purpose survives. 0006's comment had nothing to point at, and under this check it would need a path a reader can follow, so a silent attribution becomes one that can be checked. A deliberately wrong pointer passes, and the plan states that cost. The ruling does NOT rest on the GM's 2026-10-25 words: they concern a map choice the research does not settle, and the strictness of a tool is not that kind of choice. Nothing measures the premise that a verbatim rule 'would refuse most correct pointers', and the ruling does not need it."
+    },
+    {
+     "id": "baseline-shrink-only",
+     "summary": "dev/gm-attribution-baseline.jsonl keyed by a text hash; three refusals (unlisted, stale with --prune, entry the merge base lacks); --seed only where none exists",
+     "class": "within",
+     "why": "The task line asks for the baseline to shrink as pages are edited, and these three refusals enforce that. Seeding the old attributions into the baseline is the requested mechanism."
+    },
+    {
+     "id": "baseline-scope-341-comments",
+     "summary": "The baseline holds 341 comments (176 four-word, 165 near-twins), more than the task line's '74 and about 60'",
+     "class": "within",
+     "why": "The task line's counts were estimates from the audit. The census also finds the audit's BACKED rows that name no path, and the comma-form near-twins. Each listed entry still owes a pointer when its text is edited, so the larger baseline excuses nothing for good."
+    },
+    {
+     "id": "parked-claims-fixed",
+     "summary": "The 3 rust/parked CANON claims get their request.md pointers here",
+     "class": "within",
+     "why": "This fixes found defects in this task."
+    },
+    {
+     "id": "defer-page-comments",
+     "summary": "The 341 page comments are not fixed here; a follow-up, filed by the coordinating session, runs once the research switch reopens",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged by class. (a) For the audit's 74 unbacked and the unaudited near-twins, 'saying whose rule it is' means finding what the research shows (the GM 2026-11-24: 'if that is not what the research shows, then we shouldn't do it'). That is research, and his 2026-11-25 words defer it ('defer all of it until at least tomorrow'), so the deferral follows from his own words. (b) The BACKED rows lack only a path to words that exist. That is not a wrong outcome, so leaving them is no defect left. The task line itself puts this work after the research switch."
+    },
+    {
+     "id": "defer-walked-claims",
+     "summary": "The 10 walked CANON claims are not fixed here; a follow-up lands the non-page-tied ones first and the four tied to 0039/0058/0100/0222 beside their pages",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged by group. (a) Pointer found: what is left is a missing path where his words exist. No reader gets a wrong outcome, so this is no defect left, though it is cheap and the block does not say why these differ from the parked three. (b) Needing a relabel or a GM question: a possible MISLABELED in the claims record. Under the GM's 2026-11-25 'sounds good please do that ASAP', the claims round is split off from the builder, so the relabel is not the builder's to judge. The follow-up orders these first and does not hold them for research. (c) The four tied to pages: their fix has to agree with the page comment's, and that fix waits on the research deferral above."
     }
    ],
    "verdict": "CLEAR"

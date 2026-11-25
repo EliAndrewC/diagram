@@ -216,7 +216,7 @@ struct Row(
     &'static str,
 );
 
-const CHECKS: [Row; 23] = [
+const CHECKS: [Row; 24] = [
     Row("file-scale selftest", Tool::Gate, &["check", "file-scale", "--selftest"], "check-file-scale selftest failed - the guard itself is broken; fix rust/gate/crates/checks/src/checks/ before pushing", true, ""),
     Row("file-scale", Tool::Gate, &["check", "file-scale", "{root}"], "a Rust file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173", false, ""),
     Row("make-docs", Tool::InProcess(crate::make_docs::check), &["make-docs", "{root}", "--check"], "docs/make-targets.html is stale against the Makefile (above) - run `make docs` and commit the page; feature 385 FR-017", false, "docs/make-targets.html"),
@@ -226,6 +226,7 @@ const CHECKS: [Row; 23] = [
     Row("research-pointers selftest", Tool::Gate, &["check", "research-pointers", "--selftest"], "check-research-pointers selftest failed - the guard itself is broken; fix rust/gate/crates/checks/src/checks/ before pushing", true, ""),
     Row("research-pointers", Tool::Gate, &["check", "research-pointers", "{root}"], "a pointer to the research does not resolve, or names a built page (above) - feature 301; `make fragment-move` moves a fragment with its pointers", false, ""),
     Row("partial-citations", Tool::Gate, &["check", "partial-citations", "{root}"], "a footnote cites a source no one can wholly read with no confirmed passage (above) - feature 312 FR-020; confirm the passage (quote-check) and record it in research/partial-confirmations.jsonl, or make the note an absence note", false, "delta:partial-citations"),
+    Row("gm-attributions", Tool::Gate, &["check", "gm-attributions", "{root}"], "a research page's comment or a CANON claim names a ruling of the GM's with no pointer to his recorded words, or the baseline grew or lists a fixed one (above) - feature 451 T233; each line above says the fix", false, ""),
     Row("downloads selftest", Tool::Gate, &["record", "downloads", "selftest"], "the download-list check's selftest failed - the guard itself is broken; fix rust/gate/crates/downloads/src/record/downloads/check.rs before pushing", true, ""),
     Row("downloads", Tool::Gate, &["record", "downloads", "check"], "the canonical download list is not append-only against main (above) - feature 313; `make download-add FILE=<draft.md>` appends an entry", false, ""),
     Row("spec-lint selftest", Tool::Gate, &["check", "spec-lint", "--selftest"], "spec-lint selftest failed - the guard itself is broken; fix rust/gate/crates/checks/src/checks/spec_lint.rs before pushing", true, ""),

@@ -10,7 +10,7 @@
 //!     each household's way laid once every house stands - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the homesteads built first and the lanes after; the corridor's own tests and the tree's lane law admit each
 //!     households' ways laid in order, nearest the way out first - GUESS: a search order, so a nearer household's way is there for a farther one to join
 //!     a household no way reaches is pinched across its nearest reached neighbor's yard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: reached across a neighbor's land, whose own way is always drawn
-//!     reached across a neighbor's yard in a pinch - CANON: the GM's ruling of 2026-10-03, "it's okay for people to cut through neighbors' yards in a pinch"
+//!     reached across a neighbor's yard in a pinch - CANON: the GM's ruling of 2026-10-03 (specs/318-grow-outward-no-restart/request.md), "it's okay for people to cut through neighbors' yards in a pinch"
 //!     lane ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: a way keeps the corridor's half-width off every homestead and to ground the site admits, and off the woodlots' seats
 //!     a way keeps to the middle of its gap - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: along the middle of the gaps
 //!     the shortest or easiest way - research/questions/0081-village-lanes.drawing.html: a worn path takes the shortest or easiest way

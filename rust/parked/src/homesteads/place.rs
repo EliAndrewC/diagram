@@ -9,7 +9,7 @@
 //!
 //! Research:
 //!     the grown irregular cluster - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the cluster grown from its first house
-//!     nearest the seat first, the field a tie-break - CANON: the GM's ruling of 2026-10-03, all else being equal; the ring a GUESS
+//!     nearest the seat first, the field a tie-break - CANON: the GM's ruling of 2026-10-03 (specs/318-grow-outward-no-restart/request.md), all else being equal; the ring a GUESS
 //!     no house refused for its distance from the fields - research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html
 //!     the exhaustive seat order - research/questions/0029-farmhouses-minka.drawing.html: every legal grid point on the canvas, nearest the seat first
 #![expect(

@@ -75,7 +75,7 @@ pub const MEET: (f64, f64, f64, f64, f64) = (140.0, 40.0, 20.0, 20.0, 1.5);
 /// Research:
 ///     doubled tread distance - CONVENTION: centerlines within 14 ft read as one tread
 ///     tail run length - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass A2, 2026-10-25); 30 ft beside a way before it is a doubled tail
-///     doubled tail angle - CANON: the GM's ruling of 2026-10-25 - the angle is a goal of 20, "arbitrary and not an actual hard requirement", free to move to 15 or 25 if placement or the look needs it; asked here at 15
+///     doubled tail angle - CANON: the GM's ruling of 2026-10-25 (specs/417-all-seeds-pass/request.md) - the angle is a goal of 20, "arbitrary and not an actual hard requirement", free to move to 15 or 25 if placement or the look needs it; asked here at 15
 pub const ALONG: (f64, f64, f64) = (14.0, 30.0, 15.0);
 
 /// An end's reaches: a way or a farmhouse, the bund, a steading's built ground (ft).

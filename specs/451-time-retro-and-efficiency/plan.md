@@ -2617,31 +2617,52 @@ engine speed, so no checklist.
 
 
 <!-- plan-archive: T232 to T232 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
-### T233 (<why: the finding or measurement that files it>)
+### T233 (`docs/gm-rulings.md`, section 'NOT a ruling', 2026-11-24: 0006's comment calling dry plots against the canal a ruling of his was never his; the audit of that day found 74 of 180 such comments with no recorded words behind them)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a static text check, `l7r-gate check gm-attributions` (`rust/gate/crates/checks/src/checks/gm_attributions.rs`), run in `make quick` (`_quick`, after partial-citations) and as a row of the push's checks (`cohort/src/push.rs`, `CHECKS` 23 -> 24), registered in `scripts/tool-registry.json`.
+  - **What it reads.** Every HTML comment of `research/questions/*.html`, and every CANON claim line (` - CANON`) in the Rust under `rust/` (the tooling trees `gate`, `guard`, `browser`, `embed` and `target` left out, as `claims::units::walked` leaves them; `rust/parked` kept in, its 3 claims come back when it is unparked) and in the two procedure docs (`docs/buildings.md`, `docs/building-programs.md`, `claims::units::PROCEDURES`). A claim is one line by the claims grammar, so a line scan reads it whole; the check does not build on the claims crate.
+  - **What names a ruling.** The task's three forms, case-insensitive: "the GM's ruling|catch|word|decision" (plural too), "the GM ruled", "GM <date>", the date also after a comma ("the GM, 2026-08", 109 of the comments). It also matches the audit's near-twins ("the GM's rule|doctrine|correction"), which the brief puts in the baseline.
+  - **What backs it.** A path in the same comment or line that exists in the tree: `specs/<NNN-slug>/request.md` (or `gm-request.md`, which holds his request verbatim: 152's opens "The GM's request, verbatim"; the audit counted it as his words), `docs/gm-rulings.md`, or `specs/<NNN-slug>/gm-review.jsonl` (the file `make gm-reviewed` writes its `gm_words` rows to, `reviews::gm_review`). A bare "request.md" or "feature 280" is no pointer. A path that does not exist is named in the refusal.
+  - **What is not checked: that the record holds those words.** The comments paraphrase rather than quote, so matching their words against the record would refuse most correct pointers. The cost is that a pointer to the wrong record passes, and whoever builds on the comment reads the record it names. A verbatim-quote rule was priced and turned down, because it would refuse most correct pointers. His words for this task (request.md, "2026-11-24: a ruling attributed to the GM names his recorded words") say what was wrong, not how a tool checks it. The sentence "checked against his recorded words before anything is built on it" is the session's in `docs/gm-rulings.md`, and it puts the reading on whoever builds; the check makes sure there is a record to read. The builder chose the pointer's existence under his 2026-10-25 words, quoted in the same request.md section: "we can just do whatever is algorithmically easier".
+  - **The baseline, `dev/gm-attribution-baseline.jsonl`.** Every attribution with no pointer at landing, one JSON line each (`file`, `key`, `kind`, `says`, `excerpt`). The key is the first 16 hex of the sha256 of its whitespace-normalized text, not its line, so an edit elsewhere on the page leaves it listed and an edit of its own text owes its pointer. Three refusals keep the list shrinking:
+    - an attribution not listed;
+    - an entry no longer found, with the fix `scripts/gates/l7r-gate.sh check gm-attributions --prune`, which only drops entries;
+    - an entry the merge base's copy lacks.
+    `--seed` writes the list only where none exists, so deleting it and seeding again is refused at the push by the third rule.
+  - **Why a check and not a guard on Edit.** A check is the easier and cheaper route. It is one module beside `partial_citations.rs`, about 0.5 s per run with the launcher, partial-citations 0.35 s, measured 2026-11-25 (`time` on each check over this tree). It also sees a page however it was written: a page session's `make` targets, a Write, or a Bash. An Edit guard would see only the Edit and Write tools, needs a hooks-test suite, and runs on every edit.
+  - **The baseline's counts**, 2026-11-25. Method: `check gm-attributions --seed` at this worktree's HEAD (c9d2cac85c), counted with `jq`/python over the file, then `--prune` after the three parked claims below were given their pointers.
+    - 351 entries: 341 page comments on 172 pages, and 10 CANON claims (`docs/buildings.md` 4, `docs/building-programs.md` 1, `rust/phases` 3, `rust/mode_a` 2), observed 2026-11-25, method: the file counted by kind and file. 13 claims were seeded. The 3 in `rust/parked`, which no claims round reads, are fixed here, because each one's words are in a request.md: `homesteads/gap_ways.rs` and `homesteads/place.rs` in `specs/318-grow-outward-no-restart/request.md` (lines 61 and 47), and `law/meet.rs` in `specs/417-all-seeds-pass/request.md` (line 42).
+    - Of the comments, 176 carry the four words. That is the audit's 180, less the 3 that already cite a request.md path (0029, 0094, 0246) and the edits since c693e6ddcb, among them 0006's disowned comment, removed by 9207459906. The 176 include the audit's 74 unbacked. They also include its BACKED rows, which name no record by path ("269 B32", "feature 280") and so are no pointer to the check.
+    - The other 165 comments are the near-twins: "GM, <date>" 109, "GM <date>" 29, "the GM's rule" 15, "the GM ruled" 5, "doctrine" 5, "correction" 5. These are more than the audit's "about 60", which did not count the comma form.
+  - **Not fixed here: the 341 page comments** (observed 2026-11-25, method: the baseline counted by kind). Giving each its pointer, or saying whose rule it is, is an edit of a research page. Page edits run as page sessions under the research switch, which his words of 2026-11-25 deferred (request.md, quoted in T233's section; `dev/switches.json`). T233's task line asks for the baseline "shrinking as pages are edited".
+  - **Not fixed here: the 10 walked claims** (observed 2026-11-25, method: the baseline counted by kind). A pointer is found for some of them, but each of the others needs either a relabel from CANON to what backs it, or a GM question. A relabel is a MISLABELED for the claims round to judge (impl-drift), and this builder's brief forbids dispatching it (`scripts/container/builder-brief.md`, 451 T237). Four of them share their rule with a baseline page comment: the tub (0100), true size (0039), the dedication (0222) and the reed fringe (0058). Their fix and the page's must agree.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a page comment or CANON claim naming a ruling with no record refused | the module's 4 behavior tests red with `findings` returning nothing (`make rust-test CRATE=rust/gate/crates/checks`: 4 failed, 168 passed, 2026-11-25), green with it | n/a: tooling | none | n/a |
+| the baseline lists, prunes and only shrinks | `the_baseline_lists_the_old_ones_and_only_shrinks`, `an_entry_the_merge_base_lacks_is_refused` | n/a: tooling | none | n/a |
+| on the real tree | 0006's remaining entry ("the GM's catch, 2026-07", key acf9608739fd2b6b) dropped from the baseline: refused, `0006-dry-fields-and-their-crops-hatake.drawing.html:38`, rc 1; restored: green, 2026-11-25 | n/a: tooling | none | n/a |
 
 ### T233 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A research page's comment or a CANON claim that calls something the GM's ruling names where his words are recorded. A new one without a pointer is refused. The ones written before are listed and can only go down.
+2. **The constraints.** `docs/gm-rulings.md` "NOT a ruling" (a comment naming his ruling is checked against his recorded words before anything is built on it). The research switch deferred (`dev/switches.json`), so no page is edited. The root CLAUDE.md: tips live in error output (each refusal prints its fix), and new Rust owes 100% line coverage.
+3. **Where each comes from.** G: the GM 2026-11-24 in `docs/gm-rulings.md` and `specs/449-rust-codebase/request.md:212`. R: the audit (`/home/agent/.claude/jobs/c6fd72d1/tmp/gm-attributions-audit.md`). O: the seed's counts and the real-tree fires-proof above, 2026-11-25.
+4. **Do they describe the world here?** Yes. The four-word scan over `research/questions` finds 179 comments on 113 pages (case-insensitive) against the audit's 180 on 112, measured 2026-11-25 with the same comment regex at this HEAD, 40 commits to the pages after the audit's.
+5. **The order.** No dependency. T246, built beside it, touches none of its files.
+6. **The exits.** Green: `make closing-checks T=T233 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The 4 tests red with the check emptied and green with it, and the real tree green with the baseline and red with one of its entries dropped, measured 2026-11-25 (`make rust-test CRATE=rust/gate/crates/checks`, then the check over this tree).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes. The finding: attributions with no recorded words became rules that code enforced (0006 and `field/dry.rs`). Observed 2026-11-24, method: the audit's full table.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The baseline's 341 page comments (observed 2026-11-25, method: the baseline counted by kind) still name a ruling of the GM's with no pointer to his words. Any one of them can carry a rule the GM never made, as 0006's did into the dry-field stage. Not fixed here: a research page's edit waits for the research switch to reopen (his words of 2026-11-25, request.md). Filed as T<n> by the coordinating session (a builder in a parallel worktree may not `make task-add`), titled "the gm-attributions baseline's page comments: each points at the GM's recorded words or says whose rule it is, the audit's 74 unbacked first (451 T233)"; the first page work to land once the research switch reopens.
+- The baseline's 10 walked CANON claims (observed 2026-11-25, method: the baseline counted by kind) carry the same risk in the engine and the procedure docs. Not fixed here: a relabel is the claims round's to judge. Filed as T<n> by the coordinating session, titled "the gm-attributions baseline's 10 CANON claims: each points at the GM's recorded words, or is relabeled to what backs it through the claims round (451 T233)"; lands beside the first item's pages it shares (0039, 0058, 0100, 0222), the others first.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: a new check; nothing runs faster.
 
 
 <!-- plan-archive: T234 to T234 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->

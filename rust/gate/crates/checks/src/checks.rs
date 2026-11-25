@@ -9,6 +9,7 @@ mod conflict;
 #[cfg(test)]
 mod documents;
 mod file_scale;
+mod gm_attributions;
 mod guard_deps;
 mod house_style_delta;
 mod partial_citations;
@@ -107,6 +108,7 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("run-plausible") => (run_plausible::USAGE_LOG_TOOL, run_plausible::cli(rest, root, &std::env::var("MAKEFLAGS").unwrap_or_default())),
         Some("tool-signals") => (tool_signals::USAGE_LOG_TOOL, tool_signals::cli(rest, root)),
         Some("partial-citations") => (partial_citations::USAGE_LOG_TOOL, partial_citations::cli(rest)),
+        Some("gm-attributions") => (gm_attributions::USAGE_LOG_TOOL, gm_attributions::cli(rest)),
         // the registry's half of feature 234, ported with it by feature 449 T149 (`ask:449-T065-scope` placed it in phase 4)
         Some("entry-headings") => {
             let (said, recorded) = l7r_gate_registry::headings::cli(rest, root);
@@ -120,7 +122,7 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
             let code = needs(rest.first().map_or("", String::as_str), root);
             return crate::Reply { stdout: String::new(), stderr: String::new(), code };
         }
-        _ => return crate::Reply { stdout: String::new(), stderr: "usage: l7r-gate check file-scale | stale-dirs | question-size | rust-tooling | guard-deps | research-pointers | house-style-delta [args]\n".to_owned(), code: 2 },
+        _ => return crate::Reply { stdout: String::new(), stderr: "usage: l7r-gate check file-scale | stale-dirs | question-size | rust-tooling | guard-deps | research-pointers | house-style-delta | gm-attributions [args]\n".to_owned(), code: 2 },
     };
     crate::stamp::record_for(
         root,

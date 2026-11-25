@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-25T22:27:14Z",
+  "target": "plan-gate decide-defer 451-time-retro-and-efficiency T233",
+  "commit": "c9d2cac85c",
+  "why": "the coordinating session files the follow-ups; a parallel builder may not task-add"
+}

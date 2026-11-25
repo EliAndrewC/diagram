@@ -13,6 +13,10 @@
       "kind": "check",
       "what": "rust/gate/crates/checks/src/checks/rust_tooling.rs - a refusing check (make rust-tooling, a step of make hooks-test); each run recorded passed or refused"
     },
+    "check-gm-attributions": {
+      "kind": "check",
+      "what": "rust/gate/crates/checks/src/checks/gm_attributions.rs - a refusing check (make quick, the push); each run recorded passed or refused"
+    },
     "check-file-scale": {
       "kind": "check",
       "what": "rust/gate/crates/checks/src/checks/file_scale.rs - a refusing check; each run recorded passed or refused"
