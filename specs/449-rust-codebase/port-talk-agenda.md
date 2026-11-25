@@ -97,6 +97,15 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
     pure corrections that cost nothing (house-style rewriting). Backfill ordered by cost, from T243's per-target and per-hook
     minutes. The first entry is the builders' context cap, audited 2026-11-25 (item 12: time a wash, tokens favor it; the
     falsifier: re-read minutes past the slow-band minutes saved AND tokens no better).
+    Finding the hidden ones (the GM: "some things are easy to identify as a measurable and auditable part of our tooling ...
+    something like this limit on builder token window context size might not even show up as an optimization ... after the
+    initial backfill, we can backfill as we go, as we find things that we missed"). The backfill enumerates from sources
+    that hold rules, not only from make targets: every guard module and every numeric threshold in rust/guard and the gate
+    (CAP_TOKENS, POLL_CHECK_S, the static-run limit, round caps); every rule line in the CLAUDE.md files and docs/ that
+    tells a session to wait, serialize or always do a step ("one builder at a time", "foreground-regenerate only the
+    motivating map"); the agent files' standing orders and the builder brief; and the escape log, where a rule escaped often
+    is a rule fighting the work. Missed ones are added as found: a session that notices a rule costing it time or tokens
+    files its entry with a first measurement.
 
 ## How each item closes (the GM, 2026-11-25) - its decision is recorded in `docs/process-decisions.md`
 
