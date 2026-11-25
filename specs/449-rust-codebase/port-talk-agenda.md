@@ -111,8 +111,10 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
     1.85M tokens in (72% cached) and 79k out, about 70k in a run, about half of the day's visible firings on statements, not
     questions (451 T235); output tokens on 2026-11-25: subagents 5.6M, the main session 0.5M (about 8%, most of it reasoning,
     briefs and commands rather than replies). Levers: T235's fix and a mechanical pre-filter (only a sentence put to the GM,
-    or an offer, reaches the agent); a narrower bundle for the check (the draft and the norm it cites); a smaller model for
-    the check (the GM's call: the rule today is that judging uses the session's model); a terse output style (small: about 8%
+    or an offer, reaches the agent); a narrower bundle for the check (the draft and the norm it cites); a cheaper tier for
+    the check (by the 2026-09-19 tier ruling, rust/gate/crates/checks/src/checks/documents/agent_models.rs: escalation-check
+    is pinned opus/medium and moves to sonnet if a seeded run on drafts with known findings catches them, as message-check,
+    settlement-review and fix-check did); a terse output style (small: about 8%
     of output, the GM likes the conversational style); a fixed short report format for builders (their 2k-5k-token reports
     enter the coordinator's context, re-read every later turn).
 
