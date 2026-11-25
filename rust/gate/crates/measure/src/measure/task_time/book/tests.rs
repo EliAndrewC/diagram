@@ -204,7 +204,8 @@ fn every_second_of_the_day_is_booked_by_what_it_was() {
         (program::WAIT, (110.0, 0.0, 0.0)),
         // the plan review the builder waited on in its turn
         ("plan review: agents", (60.0, 60.0, 0.0)),
-        (NOTHING, (0.0, 5.0, 0.0)),
+        // the stop's named work had ended 5 s before the next prompt woke it
+        (NOTHING_ENDED, (0.0, 5.0, 0.0)),
         ("cargo, called directly", (30.0, 30.0, 30.0)),
     ]
     .into_iter()
@@ -489,8 +490,10 @@ fn the_edges_of_a_day_are_booked() {
         (PAGES, (90.0, 60.0, 0.0)),
         // the builder-style loop held open 50 s; blocking, the page loop's own 30 s and this loop's 40 s
         (program::WAIT, (50.0, 70.0, 0.0)),
-        // 05:00-05:30, 11:10:10-11:11:00 and 11:12:00-11:13:00
-        (NOTHING, (0.0, 140.0, 0.0)),
+        // 05:00-05:30 (m2, which the 03:30 stop's loop waited on, ended at 05:00) and 11:12:00-11:13:00 (the loop x3 ended at 11:12)
+        (NOTHING_ENDED, (0.0, 90.0, 0.0)),
+        // 11:10:10-11:11:00: a stop naming nothing, then a notice woke it
+        (NOTHING_WOKEN, (0.0, 50.0, 0.0)),
         // 05:30 to 11:10:00, over the hour's cap: blocking, never minutes
         ("idle (over an hour)", (0.0, 3870.0, 0.0)),
         ("the GM away", (0.0, 4010.0, 0.0)),
@@ -539,7 +542,7 @@ fn a_wait_past_the_depth_bound_is_booked_to_its_fallback() {
         t0: 0.0,
         t1: 4.0,
         key: key.clone(),
-        what: What::Wait(Vec::new(), NOTHING),
+        what: What::Wait(Vec::new(), NOTHING.to_owned()),
     };
     let mut l = Ledger::default();
     ix.book_seg(&mut l, &seg, (1.0, 3.0), 8);
@@ -569,4 +572,111 @@ fn a_command_books_what_it_runs_not_what_it_mentions() {
             (want.0.to_owned(), want.1.to_owned())
         );
     }
+}
+
+#[test]
+fn a_wait_with_nothing_in_flight_is_classed_by_what_came_before_and_after_it() {
+    let runs = Runs::default();
+    let commands = HashMap::new();
+    let key = ("451-x".to_owned(), "T1".to_owned());
+    // a detached page session ran 4-6 s, nothing tracking it
+    let pages = [Page {
+        t0: 4.0,
+        t1: 6.0,
+        key: key.clone(),
+        sid: "p".to_owned(),
+    }];
+    let world = World {
+        stream: &[],
+        runs: &runs,
+        commands: &commands,
+        agents: &[],
+        pages: &pages,
+        window: (0.0, 10.0),
+    };
+    let ix = Ix::new(&world);
+    let stop =
+        line(&json!({"t": "2026-11-25T10:00:00Z", "sid": "s", "ev": "Stop", "inflight": []}));
+    let next =
+        |ev: &str| line(&json!({"t": "2026-11-25T10:00:10Z", "sid": "s", "ev": ev, "gm": false}));
+    let class = |ev: &str, c: &str| {
+        assert_eq!(
+            ix.after_stop("s:s", &stop, &next(ev), 10.0),
+            What::Wait(Vec::new(), c.to_owned())
+        );
+    };
+    class("UserPromptSubmit", NOTHING_WOKEN);
+    class("SessionStart", NOTHING_RESTART);
+    // what the data does not yet class is named so, with the line that ended it
+    class(
+        "PreToolUse",
+        "waiting: nothing in flight - unexplained, then a PreToolUse line",
+    );
+    // the gap's piece under the page session is the page session's class, the rest its own
+    let seg = Seg {
+        t0: 0.0,
+        t1: 10.0,
+        key: key.clone(),
+        what: What::Wait(Vec::new(), NOTHING_WOKEN.to_owned()),
+    };
+    let mut l = Ledger::default();
+    ix.book_seg(&mut l, &seg, (0.0, 10.0), 0);
+    let block = |c: &str| l.cells[&(key.clone(), c.to_owned(), String::new())].block;
+    assert!((block(NOTHING_PAGES) - 2.0).abs() < 1e-9 && (block(NOTHING_WOKEN) - 8.0).abs() < 1e-9);
+}
+
+#[test]
+#[expect(
+    clippy::float_cmp,
+    reason = "seconds summed from whole-second times, exact"
+)]
+fn a_page_session_blocks_only_where_nothing_else_waited_on_is_in_flight() {
+    let runs = Runs::default();
+    let commands = HashMap::new();
+    let key = ("451-x".to_owned(), "T1".to_owned());
+    // a page session ran 0-10 s beside a plan review the session waited on, 0-4 s
+    let pages = [Page {
+        t0: 0.0,
+        t1: 10.0,
+        key: key.clone(),
+        sid: "p".to_owned(),
+    }];
+    let agents = [columns::Agent {
+        aid: "R".to_owned(),
+        kind: "spec-fidelity".to_owned(),
+        spans: vec![(0.0, 4.0)],
+        ..columns::Agent::default()
+    }];
+    let world = World {
+        stream: &[],
+        runs: &runs,
+        commands: &commands,
+        agents: &agents,
+        pages: &pages,
+        window: (0.0, 10.0),
+    };
+    let ix = Ix::new(&world);
+    let seg = Seg {
+        t0: 0.0,
+        t1: 10.0,
+        key: key.clone(),
+        what: What::Wait(vec![Cand::Agent(0), Cand::Pages], MONITOR.to_owned()),
+    };
+    let mut l = Ledger::default();
+    ix.book_seg(&mut l, &seg, (0.0, 10.0), 0);
+    let block = |c: &str| {
+        l.cells
+            .iter()
+            .filter(|((_, cat, _), _)| cat == c)
+            .map(|(_, v)| v.block)
+            .sum::<f64>()
+    };
+    // the review's 4 s are the review's, though the page session ends later; the page session's are its 6 s alone
+    assert!((block("plan review: agents") - 4.0).abs() < 1e-9);
+    assert!((block(PAGES) - 6.0).abs() < 1e-9);
+    // two actors at once 0-4 s, one 4-10 s
+    assert_eq!(
+        at_once(&world, &ix, &[], &std::collections::HashSet::new()),
+        [0.0, 6.0, 4.0, 0.0]
+    );
 }

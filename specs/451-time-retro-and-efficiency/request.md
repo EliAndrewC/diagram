@@ -184,3 +184,15 @@ The GM, 2026-11-25, on the breakdown's biggest buckets (verbatim, dictated):
 > the things that take a larger percentage of our time seem like they are worth asking whether they can be parallelized
 
 The session's paraphrase, not the GM's words, of two amendments he agreed in the same exchange: every minute named, or the remainder reported with what it is and why it could not be booked, never a silent "other" (amendment (c)); and the review bucket's commands split by kind - plan review, claims round, record and pop-up checks, arbiter - each beside its agents' minutes, after he asked whether "review tooling" includes the plan review before a task begins (amendment (e)).
+
+The GM, 2026-11-25, three later amendments, relayed by the coordinating session; the ellipses are that session's, not the GM's:
+
+> (i) time spent waiting for me should probably not be counted in those percentages, even if it is recorded ... it is useful for you to mention ... that 458 minutes were spent waiting for me, and that this is 20% of the total time, but then when looking at everything else, those minutes should not be part of the denominator when calculating the other percentages ... as a percentage of the time that our Claude Code sessions spent working.
+
+> (j) as long as that automatically gets broken down in the future as we do our task timing breakdown.
+
+(said of the 180 blocking minutes the first run booked "waiting: nothing in flight")
+
+> (k) if they were running in parallel with other things, including running in parallel with other tasks which were not research-based, then that number would be misleading because it would essentially imply that we spent half of our wall clock time waiting for research to be done before we could proceed with implementation, which may or may not actually be true.
+
+(said of the 949 blocking minutes the first run booked "research and page sessions"; the coordinating session's reading, not his words: a session's own working time is minutes, blocking only where a waiter was stalled on it with nothing else in flight, and the window's concurrency is reported)

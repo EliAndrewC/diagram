@@ -1,4 +1,5 @@
-//! The logged passes, read, costed from their transcripts and kept (`load_passes`, `settled`, `distinct`, `unanswered`).
+//! The logged passes, read, costed from their transcripts and kept (`load_passes`, `settled`, `distinct`, `unanswered`); their costs are timings gathered in support of
+//! the task time breakdown (`make task-time`, 451 T243).
 
 use std::collections::{BTreeMap, HashSet};
 use std::path::{Path, PathBuf};

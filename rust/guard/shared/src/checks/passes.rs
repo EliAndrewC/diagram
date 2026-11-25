@@ -1,5 +1,5 @@
 //! A check's pass logged, read off its transcript (features 371, 294; from `hm_checks.log_pass`): one line per return in `<git common dir>/check-passes.jsonl`, the ledger's
-//! cost cells computed over the transcript by `shared::ledger::cost` (the one review cost, feature 449 T83). Never raises (the tool-usage line an automatic step leaves is `shared::usage`'s, feature 449 T129): a hook that fails here must not take the session's tool call with it.
+//! cost cells computed over the transcript by `shared::ledger::cost` (the one review cost, feature 449 T83); its wall cells are timings gathered in support of the task time breakdown (`make task-time`, 451 T243). Never raises (the tool-usage line an automatic step leaves is `shared::usage`'s, feature 449 T129): a hook that fails here must not take the session's tool call with it.
 
 use std::path::Path;
 

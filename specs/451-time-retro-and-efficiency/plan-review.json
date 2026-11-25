@@ -20167,6 +20167,75 @@
    "tasks": [
     "T243"
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T243 (the GM 2026-11-25, tasks.md T243 and its amendments (a)-(g) and (i)-(k): a task time breakdown across features, each bucket's minutes and blocking minutes with both percentages, nothing hidden in \"other\")",
+    "### T243 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "which-tasks/read-back-cut",
+     "summary": "Keep BACK= (default 48h, a GUESS knob); a landed task whose first task-starts.jsonl start precedes the read-back, or has none, is named in its heading and on a 'Cut at the read-back' line (none when nothing is cut), pinned by a_landed_task_started_before_the_read_back_is_named.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A narrowing: the GM asked for 'the time that was spent' on each landed task, and a task started before the read-back gets less than that, though nothing makes its whole time impossible to read (task-starts.jsonl gives the start). It is legitimate on two grounds from the GM's own purpose. (1) The feature's request asks for the data 'in ideally a relatively cheap way' (2026-11-19), and a bound on how far back is read serves that. (2) With the cut named on every run, in the task's own heading and on a report line, plus a knob to read further, the tool no longer gives a wrong answer: it gives a labeled partial one, so it is not a defect left, and amendment (c)'s 'never silent' holds. Note that rulings.md is empty, because the block cites the arbiter in prose and not as an ask: ruling. So 'the arbiter's ruling of round 4 letting the knob stand so named' is not shown in the bundle, and this ruling rests on the substance, not on that citation."
+    },
+    {
+     "id": "round-1/window-clipping",
+     "summary": "Window clipping restated: the window's own tables (the rest, the whole window) are clipped to it and sum to 100 over the working time; a landed task's tables carry its whole time.",
+     "class": "within",
+     "why": "This now agrees with the Which tasks item and with amendment (i). The round-3 item is settled."
+    },
+    {
+     "id": "gatherers/search",
+     "summary": "The name 'task time breakdown' goes at each gatherer, found by five commands: phase_row(, 'event-log phase' across the tree, event_log_hooks::append, write_dated(, ledger::cost::. Each command's hits are listed, with the name or the reason a hit is not a gatherer.",
+     "class": "within",
+     "why": "Round 3's item is met: every gatherer listed now has a command. Three gaps are left, none of them a narrowing that blocks, all to fix in the section. (a) The second command passes --exclude-dir=pool, saying 'the pool holds no code'. grep excludes by directory basename, so this also skips the pool CRATE that bullet 1 lists (pool/src/cache/phases.rs). Say so, or exclude by path. (b) The block now reads task-starts.jsonl, and D2 books by it, but no command searches that file's writer and no line says why it is not a gatherer. (c) The heading says 'written or computed through', but no command searches the reader's callers. make feature-report computes timing columns from the same lines (FR-005), and its Makefile help is one of 'the makefile comments that describe the timing' the GM named, yet only task-time's and where-time's help get the name."
+    },
+    {
+     "id": "amendment-i/working-denominator",
+     "summary": "'the GM' and 'the GM away' keep their minutes and show a share of the whole. Every other percentage (the category tables, the per-target table, the biggest-blocking list) is of the working time (the whole less the GM's). A 'working' row and a header line state the GM's minutes, their share, and which denominator each column uses.",
+     "class": "within",
+     "why": "This matches the GM's words: mention the minutes and their share of the total, and keep them out of 'the denominator when calculating the other percentages'. Folding 'the GM away' in is within: it is the same wait for him past a cap. Minutes denominators do not move because GM time is never machine time, which is correct."
+    },
+    {
+     "id": "amendment-j/nothing-in-flight-classes",
+     "summary": "'waiting: nothing in flight' becomes a family of classes read on every run from the event log (page session unmonitored; after the Stop's work had ended; until a notification woke it; until the session started again), plus a residual 'unexplained, then a <event> line'.",
+     "class": "within",
+     "why": "The GM asked that the row 'automatically gets broken down in the future'. This does it on every run. The residual names the event that ended each piece, so it is not a silent 'other'."
+    },
+    {
+     "id": "amendment-k/page-sessions-yield-others-critical-path",
+     "summary": "A page session takes a wait's piece only where nothing else is live; among builders, runs and agents the one that ends last keeps the piece (critical path); no 'several in flight' row.",
+     "class": "within",
+     "why": "The GM's sentence is about the research number only ('if they were running in parallel with other things ... that number would be misleading'). Making page sessions yield to anything else applies it to research as he said it. The rule that blocking happens only with nothing else in flight, applied to everything, is the coordinating session's reading, and request.md marks it 'not his words'. Keeping the existing critical-path rule for builders, runs and agents keeps behavior he did not ask to change, so it is no narrowing of what he asked, and it needs no ruling. The asymmetry also fits his purpose: research is a queue implementation need not wait for ('before we could proceed with implementation'), while a builder's, a run's or a review's end is what the waiter proceeds on."
+    },
+    {
+     "id": "amendment-k/its-waiter-scope",
+     "summary": "'Nothing else in flight' is read as nothing else THAT PAGE SESSION'S WAITER waits on. A main session waiting on page sessions alone books the wait as research blocking even while another main session (another clone) was implementing.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM: 'if they were running in parallel with other things, including running in parallel with other tasks which were not research-based, then that number would be misleading because it would essentially imply that we spent half of our wall clock time waiting for research to be done before we could proceed with implementation'. His words are 'other things' and 'other tasks', and 'we' is the project, with no limit to one waiter. The block says it applies 'nothing else in flight' 'literally to page sessions', but in its mechanism the words become 'nothing else its waiter waits on'. That is an unlabeled narrowing. Sessions do overlap: the block reads every clone's logs and sums every main session's clock, and the GM's '458 minutes ... 20% of the total time' puts the total near 2,290 min in a day of 1,440. So when one session waits only on page sessions while another implements, research still takes the blocking, and the number still implies implementation waited on research. That is the case his sentence names, and the fix's purpose fails there. The 'Working at once' header shows concurrency for the whole window, but it leaves the research number unchanged and does not say how much of it overlapped other work. Nothing makes the wider reading impossible: the walk already knows every actor at every instant (at_once()). Also, 'measured cause' carries no measurement, and no after-figure on real logs shows how much of the 949 the fix removes, so whether the narrowing matters rests on a premise nobody measured. What it should say: research blocking only where no other actor in ANY session read was working, the rest named in its own row or stated beside research's blocking as the share that overlapped other work, pinned by a test with two sessions. Or, if the session holds the waiter-only reading, it is the GM's to decide (through escalation), not this section's to assume."
+    },
+    {
+     "id": "amendment-k/working-at-once",
+     "summary": "The header adds 'Working at once': the window's minutes with none, one, two, three or more actors working together (at_once()).",
+     "class": "within",
+     "why": "A report line that serves (k) (showing what ran in parallel) and amendment (d)'s parallelism question. It changes no booking."
+    },
+    {
+     "id": "amendment-h/to-T235",
+     "summary": "Amendment (h) is written into T235's task line; its words are noted as the session's note, not the GM's.",
+     "class": "within",
+     "why": "Not a decision of this command. The relabeling of whose words they are is accurate: request.md does not carry them."
+    }
+   ],
+   "tasks": [
+    "T243"
+   ]
   }
  ],
  "tasks": {
@@ -32288,137 +32357,65 @@
    "verdict": "CLEAR"
   },
   "T243": {
-   "section_sha256": "499bc5f6c6f67cedbbc37272ea7b5b93a2e5547ec5e9f589520cf03cbe1d8b28",
+   "section_sha256": "bce581a7fab2942de16afaf6623b31ced42918ced753dc2a2e7476c4c3bc3cda",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "approach-new-command",
-     "summary": "A new command, make task-time, built on where-time's reader",
-     "class": "within",
-     "why": "The GM approved make task-time on make where-time by name: 'that sounds great. Yes, let me know when that's ready.'"
+     "id": "which-tasks/read-back-cut",
+     "summary": "Keep BACK= (default 48h, a GUESS knob); a landed task whose first task-starts.jsonl start precedes the read-back, or has none, is named in its heading and on a 'Cut at the read-back' line (none when nothing is cut), pinned by a_landed_task_started_before_the_read_back_is_named.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A narrowing: the GM asked for 'the time that was spent' on each landed task, and a task started before the read-back gets less than that, though nothing makes its whole time impossible to read (task-starts.jsonl gives the start). It is legitimate on two grounds from the GM's own purpose. (1) The feature's request asks for the data 'in ideally a relatively cheap way' (2026-11-19), and a bound on how far back is read serves that. (2) With the cut named on every run, in the task's own heading and on a report line, plus a knob to read further, the tool no longer gives a wrong answer: it gives a labeled partial one, so it is not a defect left, and amendment (c)'s 'never silent' holds. Note that rulings.md is empty, because the block cites the arbiter in prose and not as an ask: ruling. So 'the arbiter's ruling of round 4 letting the knob stand so named' is not shown in the bundle, and this ruling rests on the substance, not on that citation."
     },
     {
-     "id": "one-table-across-features",
-     "summary": "Every clone's event log is read, and tasks are keyed by (feature, task)",
+     "id": "round-1/window-clipping",
+     "summary": "Window clipping restated: the window's own tables (the rest, the whole window) are clipped to it and sum to 100 over the working time; a landed task's tables carry its whole time.",
      "class": "within",
-     "why": "The GM asked about 'all of the tasks that have landed over the last 24 hours', which is not one feature's."
+     "why": "This now agrees with the Which tasks item and with amendment (i). The round-3 item is settled."
     },
     {
-     "id": "which-tasks",
-     "summary": "Tasks landed in the window, F= to narrow, and 'the rest of the window' as one more section",
+     "id": "gatherers/search",
+     "summary": "The name 'task time breakdown' goes at each gatherer, found by five commands: phase_row(, 'event-log phase' across the tree, event_log_hooks::append, write_dated(, ledger::cost::. Each command's hits are listed, with the name or the reason a hit is not a gatherer.",
      "class": "within",
-     "why": "This is the GM's 'tasks that have landed'. The rest section adds no scope: it makes the window's percentages reconcile, which serves the percentages he asked for."
+     "why": "Round 3's item is met: every gatherer listed now has a command. Three gaps are left, none of them a narrowing that blocks, all to fix in the section. (a) The second command passes --exclude-dir=pool, saying 'the pool holds no code'. grep excludes by directory basename, so this also skips the pool CRATE that bullet 1 lists (pool/src/cache/phases.rs). Say so, or exclude by path. (b) The block now reads task-starts.jsonl, and D2 books by it, but no command searches that file's writer and no line says why it is not a gatherer. (c) The heading says 'written or computed through', but no command searches the reader's callers. make feature-report computes timing columns from the same lines (FR-005), and its Makefile help is one of 'the makefile comments that describe the timing' the GM named, yet only task-time's and where-time's help get the name."
     },
     {
-     "id": "whole-time-read-back-BACK-48h",
-     "summary": "A landed task's tables claim its WHOLE time, but the read-back stops BACK=48h before the window, a GUESS justified as 'two days covers most tasks' start'",
+     "id": "amendment-i/working-denominator",
+     "summary": "'the GM' and 'the GM away' keep their minutes and show a share of the whole. Every other percentage (the category tables, the per-target table, the biggest-blocking list) is of the working time (the whole less the GM's). A 'working' row and a header line state the GM's minutes, their share, and which denominator each column uses.",
+     "class": "within",
+     "why": "This matches the GM's words: mention the minutes and their share of the total, and keep them out of 'the denominator when calculating the other percentages'. Folding 'the GM away' in is within: it is the same wait for him past a cap. Minutes denominators do not move because GM time is never machine time, which is correct."
+    },
+    {
+     "id": "amendment-j/nothing-in-flight-classes",
+     "summary": "'waiting: nothing in flight' becomes a family of classes read on every run from the event log (page session unmonitored; after the Stop's work had ended; until a notification woke it; until the session started again), plus a residual 'unexplained, then a <event> line'.",
+     "class": "within",
+     "why": "The GM asked that the row 'automatically gets broken down in the future'. This does it on every run. The residual names the event that ended each piece, so it is not a silent 'other'."
+    },
+    {
+     "id": "amendment-k/page-sessions-yield-others-critical-path",
+     "summary": "A page session takes a wait's piece only where nothing else is live; among builders, runs and agents the one that ends last keeps the piece (critical path); no 'several in flight' row.",
+     "class": "within",
+     "why": "The GM's sentence is about the research number only ('if they were running in parallel with other things ... that number would be misleading'). Making page sessions yield to anything else applies it to research as he said it. The rule that blocking happens only with nothing else in flight, applied to everything, is the coordinating session's reading, and request.md marks it 'not his words'. Keeping the existing critical-path rule for builders, runs and agents keeps behavior he did not ask to change, so it is no narrowing of what he asked, and it needs no ruling. The asymmetry also fits his purpose: research is a queue implementation need not wait for ('before we could proceed with implementation'), while a builder's, a run's or a review's end is what the waiter proceeds on."
+    },
+    {
+     "id": "amendment-k/its-waiter-scope",
+     "summary": "'Nothing else in flight' is read as nothing else THAT PAGE SESSION'S WAITER waits on. A main session waiting on page sessions alone books the wait as research blocking even while another main session (another clone) was implementing.",
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
-     "why": "Round 2 ruled that 'the time that was spent' on a landed task is its whole time, and the section now says so. Its mechanism reaches only 48h before the window, though. A landed task that started earlier loses that time, and the report says nothing about it: neither the 'Nothing silent' list nor the test table names a task whose start precedes the read-back. That contradicts amendment (c), every minute named or its remainder reported. The cut also rests on an unmeasured premise ('most tasks') and on cost (1.3 s an hour), and cost is no ground for an exception. Keeping BACK= as a GUESS knob is fine. Cure, either one: read back to each landed task's recorded start (task-starts.jsonl), or name in the report and its footnote every landed task whose start precedes the read-back, with the cut stated, and pin that case with a test. Also qualify 'Round 1's questions': its unqualified 'Window clipping: the window is the question asked' still reads as the position round 2 struck. It should say the clipping applies to the window's own tables only."
+     "why": "The GM: 'if they were running in parallel with other things, including running in parallel with other tasks which were not research-based, then that number would be misleading because it would essentially imply that we spent half of our wall clock time waiting for research to be done before we could proceed with implementation'. His words are 'other things' and 'other tasks', and 'we' is the project, with no limit to one waiter. The block says it applies 'nothing else in flight' 'literally to page sessions', but in its mechanism the words become 'nothing else its waiter waits on'. That is an unlabeled narrowing. Sessions do overlap: the block reads every clone's logs and sums every main session's clock, and the GM's '458 minutes ... 20% of the total time' puts the total near 2,290 min in a day of 1,440. So when one session waits only on page sessions while another implements, research still takes the blocking, and the number still implies implementation waited on research. That is the case his sentence names, and the fix's purpose fails there. The 'Working at once' header shows concurrency for the whole window, but it leaves the research number unchanged and does not say how much of it overlapped other work. Nothing makes the wider reading impossible: the walk already knows every actor at every instant (at_once()). Also, 'measured cause' carries no measurement, and no after-figure on real logs shows how much of the 949 the fix removes, so whether the narrowing matters rests on a premise nobody measured. What it should say: research blocking only where no other actor in ANY session read was working, the rest named in its own row or stated beside research's blocking as the share that overlapped other work, pinned by a test with two sessions. Or, if the session holds the waiter-only reading, it is the GM's to decide (through escalation), not this section's to assume."
     },
     {
-     "id": "window-tables-clipped",
-     "summary": "The window's own tables (the rest and the whole window) stay clipped to the window, so their percentages sum to 100",
+     "id": "amendment-k/working-at-once",
+     "summary": "The header adds 'Working at once': the window's minutes with none, one, two, three or more actors working together (at_once()).",
      "class": "within",
-     "why": "The window chooses which tasks are counted, and the whole-window view is the window. The landed tasks' whole time is printed beside, with its in-window share."
+     "why": "A report line that serves (k) (showing what ran in parallel) and amendment (d)'s parallelism question. It changes no booking."
     },
     {
-     "id": "minutes-and-blocking",
-     "summary": "Minutes are overlapping machine time. Blocking minutes are each main session's wall clock, walked to whatever in flight ends last, with the descent into builders",
+     "id": "amendment-h/to-T235",
+     "summary": "Amendment (h) is written into T235's task line; its words are noted as the session's note, not the GM's.",
      "class": "within",
-     "why": "This is the GM's two numbers: 'the number of minutes ... and ... the number of minutes that we spend blocking on that thing', each with percentages."
-    },
-    {
-     "id": "model-turns-by-tool",
-     "summary": "Model-turn gaps are booked by the tool they end in: reading code, writing code, running a command, dispatching",
-     "class": "within",
-     "why": "It carries the GM's 'writing code and reading code in order to know what to write'."
-    },
-    {
-     "id": "agents-by-kind",
-     "summary": "Each review agent's span is booked to its kind (spec-fidelity and the rest), never pooled. Every other agent is a builder",
-     "class": "within",
-     "why": "The GM: 'spec fidelity agents, reading and judging, to be in a separate category than the reading and writing of code'. Amendment (f) adds never pooled."
-    },
-    {
-     "id": "review-by-kind",
-     "summary": "The review bucket's commands are split into plan review, claims round, record and pop-up checks, arbiter, and other, each beside its agents' row",
-     "class": "within",
-     "why": "This is amendment (e) as recorded in request.md."
-    },
-    {
-     "id": "per-make-target-and-programs",
-     "summary": "A per-target table (and per program for calls with no target) with runs, minutes, blocking and both percentages, and its category. Targets are read only by shared::make::invoked",
-     "class": "within",
-     "why": "The GM: 'each makefile command that we run will have its own timing breakdown'. Using the one detector makes the count correct and adds no scope."
-    },
-    {
-     "id": "page-session-not-main",
-     "summary": "A detached page session's lines are its phases' minutes, never main-session blocking",
-     "class": "within",
-     "why": "This is correctness of the blocking number the GM asked for."
-    },
-    {
-     "id": "generating-maps-category",
-     "summary": "One breakdown category, 'map generation', holds the map and sheet targets, the cohort targets, the map, cohort, seeds and reference phases, and run.sh sweeps. crate-checks books to tests. The guard's table and where-time keep their buckets",
-     "class": "within",
-     "why": "This cures round 2's finding. The GM named 'generating maps' beside compiling, tests and landing. The breakdown's own category does it without moving the guard's table, which the GM did not ask to change."
-    },
-    {
-     "id": "unbooked-research-targets-listed",
-     "summary": "Research and page targets the guard's table leaves unbooked are listed by name under 'Makefile targets the guard's table does not book'. Where-time's 'other' is left as it is",
-     "class": "within",
-     "why": "Nothing is hidden: each target is named with its figures, as amendment (c) asks. The GM's list ends 'and such', and he named no category for research. Where-time's own buckets are not part of this request."
-    },
-    {
-     "id": "wait-loops",
-     "summary": "Wait loops are named as held-open time, with blocking booked to what they waited on",
-     "class": "within",
-     "why": "This serves the blocking-versus-minutes distinction and amendment (c)."
-    },
-    {
-     "id": "nothing-silent",
-     "summary": "Unbookable time gets named rows and a footnote",
-     "class": "within",
-     "why": "This is amendment (c)."
-    },
-    {
-     "id": "biggest-blocking-parallelism-proxy",
-     "summary": "The five biggest blocking categories are listed first, each with its foreground and background share, as a labeled proxy",
-     "class": "within",
-     "why": "The GM: 'the things that take a larger percentage of our time seem like they are worth asking whether they can be parallelized'. The report surfaces that question per bucket and labels the proxy honestly."
-    },
-    {
-     "id": "name-docs-sites",
-     "summary": "'Task time breakdown' goes into the root CLAUDE.md, the Makefile help of task-time and where-time, and docs/efficiency-tooling.md section 6",
-     "class": "within",
-     "why": "The GM: 'maybe that could go into our CLAUDE.md ... And also into ... the makefile comments that describe the timing'."
-    },
-    {
-     "id": "name-at-gatherers-phase-writers",
-     "summary": "The Phase writer's callers, found by grep -rln \"phase_row(\" rust --include=*.rs, each carry the name",
-     "class": "within",
-     "why": "Derived from the waist, the one Phase writer, by a stated command. This part cures round 2's finding."
-    },
-    {
-     "id": "name-at-gatherers-rest",
-     "summary": "The other gatherers have no stated search: the shell door's callers were searched with grep -n \"event-log phase\" Makefile only, and core/src/logs.rs and reviews/ledger.rs are listed 'beside them' with no command",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The GM asked for the name 'everywhere that we're gathering these timings'. Round 2 blocked on gatherers named with no search, and this half is only partly cured. The shell door's search space is the Makefile alone, which visibly misses shell scripts, hooks and any other caller of 'event-log phase' outside the Makefile. The two 'beside them' entries, and the event log's non-Phase writer, carry no command that produced them, so the list cannot be checked for reach. Cure: give a command for every entry, search the door's callers across the whole tree (or state why nothing outside the Makefile can call it), and derive the other writers from their own waist (the event-log append and the run-record writer), not from recall."
-    },
-    {
-     "id": "amendment-h-to-T235",
-     "summary": "Amendment (h) is written into T235's task line, not built here",
-     "class": "within",
-     "why": "request.md carries no text of amendment (h), so this ruling cannot confirm the section's description of it as concerning T235's test cases. It is classed within only because it is moved to another task, not dropped. The bundle should carry (h)'s words for the next round."
-    },
-    {
-     "id": "found-and-left-where-time-other",
-     "summary": "The unbooked research targets stay unbooked in the guard's table and in where-time's 'other'",
-     "class": "within",
-     "why": "This is not a defect: the breakdown names each one, and changing the guard's table was not asked."
+     "why": "Not a decision of this command. The relabeling of whose words they are is accurate: request.md does not carry them."
     }
    ],
    "verdict": "BLOCKED"

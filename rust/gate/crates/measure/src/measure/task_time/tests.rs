@@ -98,8 +98,8 @@ fn one_table_across_features_each_landed_task_its_own() {
     let out = r.stdout;
     for want in [
         "# The task time breakdown, 2026-11-25T10:00:00Z to 2026-11-25T10:06:50Z UTC (2 tasks landed)",
-        "## 451-x T1 (landed 10:06)",
-        "## 449-z T1 (landed 10:02)",
+        "## 451-x T1 (landed 10:06; no start recorded",
+        "## 449-z T1 (landed 10:02; no start recorded",
         "| cargo, called directly | 0.5 | ",
         "| cargo | cargo, called directly | 1 | 0.5 | ",
         "| a wait loop (until/while/sleep) | wait loops (held open, no work) | 1 | 1.8 | ",
@@ -191,6 +191,66 @@ fn a_landed_task_carries_its_time_before_the_window() {
 }
 
 #[test]
+fn a_landed_task_started_before_the_read_back_is_named() {
+    let (d, root) = world();
+    let (projects, clones) = (d.join("home"), d.join("clones"));
+    let now = ts("2026-11-25T10:30:00Z").unwrap();
+    let run = |back: &str| {
+        cli(
+            &args(&[
+                "--root",
+                &root,
+                "--since",
+                "2026-11-25T10:01:00Z",
+                "--back",
+                back,
+            ]),
+            &projects,
+            &clones,
+            now,
+        )
+        .stdout
+    };
+    // no start recorded anywhere: each landed task is named, since its time before the read-back may be missing
+    let none = run("1h");
+    assert!(
+        none.contains("## 449-z T1 (landed 10:02; no start recorded: its time before 2026-11-25T09:01:00Z may be missing)")
+            && none.contains("`BACK=` reads further): 451-x T1, 449-z T1 -")
+    );
+    // its first start counts (a restart is not its start), from any tree's record
+    let line = |f: &str, t: &str, at: &str| ev(&json!({"feature": f, "task": t, "utc": at}));
+    put(
+        &d,
+        "root/.git/task-starts.jsonl",
+        &[
+            line("451-x", "T1", "2026-11-25T09:30:00Z"),
+            line("451-x", "T1", "2026-11-25T08:00:00Z"),
+            // a line with no time is no start
+            ev(&json!({"feature": "449-z", "task": "T1"})),
+        ],
+    );
+    put(
+        &d,
+        "clones/c1/.git/task-starts.jsonl",
+        &[line("449-z", "T1", "2026-11-25T10:00:30Z")],
+    );
+    let one = run("1h");
+    for want in [
+        "## 451-x T1 (landed 10:06; started 2026-11-25T08:00:00Z, before the read-back: its time before 2026-11-25T09:01:00Z is not in its tables)",
+        "## 449-z T1 (landed 10:02)\n",
+        "Cut at the read-back (2026-11-25T09:01:00Z, `BACK=` reads further): 451-x T1 - ",
+    ] {
+        assert!(one.contains(want), "{want}\n---\n{one}");
+    }
+    // read back far enough and nothing is cut
+    let all = run("3h");
+    assert!(
+        all.contains("## 451-x T1 (landed 10:06)\n")
+            && all.contains("`BACK=` reads further): none - ")
+    );
+}
+
+#[test]
 fn the_command_line_refuses_what_it_cannot_read() {
     let none = Path::new("/nonexistent");
     assert_eq!(cli(&args(&["--nope"]), none, none, 0.0).code, 2);
@@ -211,4 +271,39 @@ fn the_command_line_refuses_what_it_cannot_read() {
         &json!({"ev": "Phase", "src": "page-session", "t0": "2026-11-25T10:00:00Z", "t1": "2026-11-25T10:01:00Z", "task": "T3"}),
     );
     assert_eq!(pages(&[tasked]).unwrap()[0].key.1, "T3");
+}
+
+#[test]
+fn waiting_on_the_gm_is_out_of_every_other_percentage() {
+    let cell = |min: f64, block: f64| book::Cell {
+        min: min * 60.0,
+        block: block * 60.0,
+        fg: 0.0,
+    };
+    // a task's 100 blocking minutes, 20 of them waiting on the GM, in a window of 200, 40 of them his
+    let cats = vec![
+        ("the GM".to_owned(), cell(0.0, 20.0)),
+        ("tests".to_owned(), cell(30.0, 80.0)),
+    ];
+    let targets = vec![(
+        "make static".to_owned(),
+        "tests".to_owned(),
+        1,
+        cell(30.0, 80.0),
+    )];
+    let whole = cell(60.0, 200.0);
+    let mut out = String::new();
+    tables(&mut out, &cats, &targets, (whole, cell(60.0, 160.0)));
+    for want in [
+        // his row: of the whole, the task's 100 and the window's 200
+        "| the GM | 0.0 | 0.0% | 0.0% | 20.0 | 20.0% | 10.0% |",
+        // every other row: of the working time, the task's 80 and the window's 160
+        "| tests | 30.0 | 100.0% | 50.0% | 80.0 | 100.0% | 50.0% |",
+        "| make static | tests | 1 | 30.0 | 100.0% | 50.0% | 80.0 | 100.0% | 50.0% |",
+        "| all | 30.0 | | 50.0% | 100.0 | | 50.0% |",
+        "| working (all but waiting on the GM) | 30.0 | | 50.0% | 80.0 | | 50.0% |",
+    ] {
+        assert!(out.contains(want), "{want}\n---\n{out}");
+    }
+    assert!(!is_gm("tests") && is_gm("the GM away"));
 }

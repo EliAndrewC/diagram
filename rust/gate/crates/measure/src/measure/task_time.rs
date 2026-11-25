@@ -10,9 +10,12 @@
 //! THE DENOMINATORS. Minutes are machine minutes - every main session's and builder's own time, every review agent's span, every Bash
 //! run, every page-session phase - and overlap; a percentage of minutes is of the summed minutes. Blocking minutes are the main sessions'
 //! wall clock inside the window, each second once per session, booked through what it waited on (`book`'s doc); they sum to that
-//! clock, so their percentages of the window sum to 100.
+//! clock. Waiting on the GM (his turn, or away) is reported with its share of the whole, and left out of every other percentage's
+//! denominator (amendment (i), the GM 2026-11-25): those are of the WORKING time, the whole less the GM's, and sum to 100 over it. A
+//! page session is its own actor: blocking only where nothing else its waiter waited on was in flight (amendment (k)); the line
+//! "Working at once" shows how many actors worked together.
 
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
@@ -33,14 +36,10 @@ use book::{Cell, Key, Ledger, Page};
 /// Every event log of every clone (and the mirror's), each once: (feature, path), the feature its file's stem.
 #[must_use]
 pub fn all_logs(root: &Path, clones: &Path) -> Vec<(String, PathBuf)> {
-    // the clones' parent is the mirror (`/diagram`), whose own log a session there writes
-    let mut bases = vec![root.to_path_buf()];
-    bases.extend(clones.parent().map(Path::to_path_buf));
-    bases.extend(names(clones).into_iter().map(|n| clones.join(n)));
     let mut seen: Vec<PathBuf> = Vec::new();
     let mut out = Vec::new();
-    for base in bases.iter().filter(|b| b.join(".git").exists()) {
-        let dir = common_git_dir(base).join("l7r-events");
+    for base in bases(root, clones) {
+        let dir = common_git_dir(&base).join("l7r-events");
         for n in names(&dir).into_iter().filter(|n| {
             Path::new(n)
                 .extension()
@@ -52,6 +51,43 @@ pub fn all_logs(root: &Path, clones: &Path) -> Vec<(String, PathBuf)> {
                 seen.push(real);
                 out.push((n.trim_end_matches(".jsonl").to_owned(), p));
             }
+        }
+    }
+    out
+}
+
+/// The trees whose logs are read: `root`, the mirror (the clones' parent, whose own log a session there writes) and every clone.
+fn bases(root: &Path, clones: &Path) -> Vec<PathBuf> {
+    let mut bases = vec![root.to_path_buf()];
+    bases.extend(clones.parent().map(Path::to_path_buf));
+    bases.extend(names(clones).into_iter().map(|n| clones.join(n)));
+    bases.retain(|b| b.join(".git").exists());
+    bases
+}
+
+/// Each task's FIRST start in any tree's `task-starts.jsonl` (`make task-start`'s record), by (feature, task).
+#[must_use]
+pub fn starts(root: &Path, clones: &Path) -> BTreeMap<Key, f64> {
+    let mut out: BTreeMap<Key, f64> = BTreeMap::new();
+    // a record read twice (a tree that is another's) changes no first start
+    for base in bases(root, clones) {
+        let p = common_git_dir(&base).join("task-starts.jsonl");
+        let text = std::fs::read_to_string(&p).unwrap_or_default();
+        for v in text
+            .lines()
+            .filter_map(|l| serde_json::from_str::<Value>(l).ok())
+        {
+            let (Some(f), Some(t), Some(at)) = (
+                v.get("feature").and_then(Value::as_str),
+                v.get("task").and_then(Value::as_str),
+                v.get("utc")
+                    .and_then(Value::as_str)
+                    .and_then(|u| ts(u).ok()),
+            ) else {
+                continue;
+            };
+            let e = out.entry((f.to_owned(), t.to_owned())).or_insert(at);
+            *e = e.min(at);
         }
     }
     out
@@ -283,34 +319,67 @@ fn total(c: &[(String, Cell)]) -> Cell {
     })
 }
 
-/// One task's (or a group's) two tables, its percentages of itself and of the window `all`.
+/// Waiting on the GM (his turn, or away): reported, but out of every other percentage's denominator (the GM 2026-11-25: "time spent
+/// waiting for me should probably not be counted in those percentages, even if it is recorded").
+fn is_gm(cat: &str) -> bool {
+    cat.starts_with("the GM")
+}
+
+/// The working time of `cats`: their total less the GM's.
+fn working(cats: &[(String, Cell)]) -> Cell {
+    let gm = total(
+        &cats
+            .iter()
+            .filter(|(c, _)| is_gm(c))
+            .cloned()
+            .collect::<Vec<_>>(),
+    );
+    let all = total(cats);
+    Cell {
+        min: all.min - gm.min,
+        block: all.block - gm.block,
+        fg: all.fg - gm.fg,
+    }
+}
+
+/// One task's (or a group's) two tables: the GM's rows as percentages of the whole (itself, the window `all.0`), every other row of
+/// the working time (itself and the window `all.1`, each less the GM's).
 fn tables(
     out: &mut String,
     cats: &[(String, Cell)],
     targets: &[(String, String, usize, Cell)],
-    all: Cell,
+    (all, work): (Cell, Cell),
 ) {
-    let me = total(cats);
+    let (me, me_w) = (total(cats), working(cats));
     out.push_str("| category | minutes | % of task | % of window | blocking | % of task | % of window |\n|---|---|---|---|---|---|---|\n");
     for (cat, c) in cats {
+        let (t, w) = if is_gm(cat) { (me, all) } else { (me_w, work) };
         let _ = writeln!(
             out,
             "| {cat} | {} | {} | {} | {} | {} | {} |",
             m(c.min),
-            pct(c.min, me.min),
-            pct(c.min, all.min),
+            pct(c.min, t.min),
+            pct(c.min, w.min),
             m(c.block),
-            pct(c.block, me.block),
-            pct(c.block, all.block)
+            pct(c.block, t.block),
+            pct(c.block, w.block)
         );
     }
     let _ = writeln!(
         out,
-        "| all | {} | | {} | {} | | {} |\n",
+        "| all | {} | | {} | {} | | {} |",
         m(me.min),
         pct(me.min, all.min),
         m(me.block),
         pct(me.block, all.block)
+    );
+    let _ = writeln!(
+        out,
+        "| working (all but waiting on the GM) | {} | | {} | {} | | {} |\n",
+        m(me_w.min),
+        pct(me_w.min, work.min),
+        m(me_w.block),
+        pct(me_w.block, work.block)
     );
     out.push_str("| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |\n|---|---|---|---|---|---|---|---|---|\n");
     for (t, cat, n, c) in targets {
@@ -318,11 +387,11 @@ fn tables(
             out,
             "| {t} | {cat} | {n} | {} | {} | {} | {} | {} | {} |",
             m(c.min),
-            pct(c.min, me.min),
-            pct(c.min, all.min),
+            pct(c.min, me_w.min),
+            pct(c.min, work.min),
             m(c.block),
-            pct(c.block, me.block),
-            pct(c.block, all.block)
+            pct(c.block, me_w.block),
+            pct(c.block, work.block)
         );
     }
     out.push('\n');
@@ -334,23 +403,43 @@ fn tables(
 pub fn render(
     (l, whole): (&Ledger, &Ledger),
     landed: &[(f64, Key)],
-    (window, from): ((f64, f64), f64),
+    (window, from, starts): ((f64, f64), f64, &BTreeMap<Key, f64>),
     runs: &columns::Runs,
 ) -> String {
     let (all_c, all_t) = sums(l, &|_| true);
-    let all = total(&all_c);
+    let (all, work) = (total(&all_c), working(&all_c));
     let mut out = format!(
-        "# The task time breakdown, {} to {} UTC ({} tasks landed)\n\nminutes {} (machine, overlapping), blocking {} (the main sessions' clock)\n\n",
+        "# The task time breakdown, {} to {} UTC ({} tasks landed)\n\nminutes {} (machine, overlapping), blocking {} (the main sessions' clock)\n\n\
+         Waiting on the GM: {} min blocking, {} of the window's blocking. It is left out of every other percentage: the GM's rows are \
+         percentages of the whole (the task's, the window's), every other row's - minutes and blocking, of the task and of the window - \
+         of the working time, the whole less the GM's ({} min, {} min blocking in the window).\n\n",
         iso_of(window.0),
         iso_of(window.1),
         landed.len(),
         m(all.min),
-        m(all.block)
+        m(all.block),
+        m(all.block - work.block),
+        pct(all.block - work.block, all.block),
+        m(work.min),
+        m(work.block)
+    );
+    let n = l.at_once;
+    let _ = writeln!(
+        out,
+        "Working at once (main sessions in their own turns and runs, agents, page sessions), minutes of the window: none {}, one {}, two {}, three or more {}.\n",
+        m(n[0]),
+        m(n[1]),
+        m(n[2]),
+        m(n[3])
     );
     out.push_str("## The biggest blocking, and whether it could run in parallel\n\n");
     let mut by_block = all_c.clone();
     by_block.sort_by(|a, b| b.1.block.total_cmp(&a.1.block));
-    for (cat, c) in by_block.iter().take(5).filter(|(_, c)| c.block > 0.0) {
+    for (cat, c) in by_block
+        .iter()
+        .filter(|(cat, c)| c.block > 0.0 && !is_gm(cat))
+        .take(5)
+    {
         let how = if c.fg > 0.0 {
             format!(
                 "{} of it a foreground run its actor waited on, which could run in the background beside other work; the rest already in the background and waited on",
@@ -361,14 +450,21 @@ pub fn render(
         };
         let _ = writeln!(
             out,
-            "- {cat}: {} min blocking ({} of the window) - {how}",
+            "- {cat}: {} min blocking ({} of the window's working time) - {how}",
             m(c.block),
-            pct(c.block, all.block)
+            pct(c.block, work.block)
         );
     }
     out.push_str("\n(the parallel reading is a proxy, measured: the share of a category's blocking that was a foreground run in its actor)\n\n");
     for (t, k) in landed {
-        let _ = writeln!(out, "## {} {} (landed {})\n", k.0, k.1, hhmm(*t));
+        let _ = writeln!(
+            out,
+            "## {} {} (landed {}{})\n",
+            k.0,
+            k.1,
+            hhmm(*t),
+            cut_note(starts.get(k).copied(), from)
+        );
         // the task's WHOLE time, read back to `from`: the window picks which tasks, not which of their time (round 2 of its review)
         let (c, tg) = sums(whole, &|x| x == k);
         let (w, inside) = (total(&c), total(&sums(l, &|x| x == k).0));
@@ -383,20 +479,45 @@ pub fn render(
             m(inside.block),
             pct(inside.block, w.block)
         );
-        tables(&mut out, &c, &tg, all);
+        tables(&mut out, &c, &tg, (all, work));
     }
     let keys: Vec<&Key> = landed.iter().map(|(_, k)| k).collect();
     out.push_str(
         "## The rest of the window: tasks not landed in it, and time under no task (`-`)\n\n",
     );
     let (c, tg) = sums(l, &|x| !keys.contains(&x));
-    tables(&mut out, &c, &tg, all);
+    tables(&mut out, &c, &tg, (all, work));
     out.push_str("## The whole window\n\n");
-    tables(&mut out, &all_c, &all_t, all);
+    tables(&mut out, &all_c, &all_t, (all, work));
+    footnote(&mut out, landed, (from, starts), runs);
+    out
+}
+
+/// The report's last lines: the landed tasks cut at the read-back `from`, and what could not be booked, named.
+fn footnote(
+    out: &mut String,
+    landed: &[(f64, Key)],
+    (from, starts): (f64, &BTreeMap<Key, f64>),
+    runs: &columns::Runs,
+) {
+    // round 3 of its review: the read-back stops at `from`, so a landed task started before it, or with no start recorded, is named
+    let cut: Vec<String> = landed
+        .iter()
+        .filter(|(_, k)| starts.get(k).is_none_or(|s| *s < from))
+        .map(|(_, k)| format!("{} {}", k.0, k.1))
+        .collect();
+    let _ = writeln!(
+        out,
+        "Cut at the read-back ({}, `BACK=` reads further): {} - a landed task started before it, or with no start in `task-starts.jsonl`, \
+         carries only its time from there.\n",
+        iso_of(from),
+        if cut.is_empty() { "none".to_owned() } else { cut.join(", ") }
+    );
     let _ = writeln!(
         out,
         "Unbooked, named: {} Bash calls refused before running (no run); {} phases tied to no run ({} min, not in the minutes); a wait with \
-         nothing in flight is `{}`, with only a monitor and no page session `{}`; a builder's time inside its span no line of its accounts for \
+         nothing in flight is `{} - <class>`, its class what came just before and after it, one not yet classed `unexplained` with the \
+         line that followed it; with only a monitor and no page session `{}`; a builder's time inside its span no line of its accounts for \
          `{}`; a command no transcript holds `{}`. Wait loops do no work: their minutes are the time they were held open, and their blocking \
          is booked to what they waited on. (feature 451 T243, the task time breakdown)",
         runs.refused,
@@ -407,7 +528,22 @@ pub fn render(
         book::UNLINED,
         book::UNREAD
     );
-    out
+}
+
+/// A landed task's heading note where its whole time is cut at the read-back `from`: started before it, or no start recorded.
+fn cut_note(start: Option<f64>, from: f64) -> String {
+    match start {
+        Some(s) if s >= from => String::new(),
+        Some(s) => format!(
+            "; started {}, before the read-back: its time before {} is not in its tables",
+            iso_of(s),
+            iso_of(from)
+        ),
+        None => format!(
+            "; no start recorded: its time before {} may be missing",
+            iso_of(from)
+        ),
+    }
 }
 
 /// The report over the clones' logs, with the transcripts under `projects`.
@@ -465,7 +601,7 @@ pub fn run(
     Ok(render(
         (&l, &whole),
         &landed(&got.aside, window, only)?,
-        (window, got.window.0),
+        (window, got.window.0, &starts(root, clones)),
         &runs,
     ))
 }

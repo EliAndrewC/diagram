@@ -28,8 +28,20 @@ use super::program;
 /// (feature, task): task ids collide across features.
 pub type Key = (String, String);
 
-/// A main session's time with nothing in flight.
+/// A main session's time with nothing in flight: the prefix of its classes, each named by what came just before and after the gap
+/// (the GM 2026-11-25: "as long as that automatically gets broken down in the future"), the rest named unexplained.
 pub const NOTHING: &str = "waiting: nothing in flight";
+/// A gap while a detached page session ran with no monitor on it: the session was waiting on a queue it did not track.
+pub const NOTHING_PAGES: &str =
+    "waiting: nothing in flight - a page session running, no monitor on it";
+/// A gap after the work its `Stop` named had ended: the wake came after the thing waited on was done.
+pub const NOTHING_ENDED: &str =
+    "waiting: nothing in flight - after the work its Stop named had ended";
+/// A `Stop` naming nothing, then a notification or reminder (a prompt not the GM's) woke the session.
+pub const NOTHING_WOKEN: &str =
+    "waiting: nothing in flight - until a notification or reminder woke it";
+/// A `Stop` naming nothing, then the session started again (a resume, a compaction or a clear).
+pub const NOTHING_RESTART: &str = "waiting: nothing in flight - until the session started again";
 /// A main session's wait with only a monitor in flight and no page session running.
 pub const MONITOR: &str = "waiting: a monitor alone";
 /// A detached page session's phases and the research-pass agents.
@@ -76,6 +88,9 @@ pub struct Ledger {
     pub runs: HashMap<(Key, String), usize>,
     /// target -> the category its runs book to, their phases apart.
     pub books_to: HashMap<String, String>,
+    /// Seconds of the window with 0, 1, 2 and 3 or more actors working at once (a main session's own turns and runs, each agent's
+    /// span, each page-session phase): the overlap the minutes hide.
+    pub at_once: [f64; 4],
 }
 
 impl Ledger {
@@ -130,7 +145,7 @@ enum Cand {
 enum What {
     Own(String),
     Run(usize),
-    Wait(Vec<Cand>, &'static str),
+    Wait(Vec<Cand>, String),
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -435,10 +450,16 @@ impl<'a> Ix<'a> {
             l.iter()
                 .any(|x| x.get("type").and_then(serde_json::Value::as_str) == Some("monitor"))
         });
-        What::Wait(
-            self.named(who, stop),
-            if monitor { MONITOR } else { NOTHING },
-        )
+        let fallback = if monitor {
+            MONITOR.to_owned()
+        } else {
+            match or_s(next, "ev").as_str() {
+                "UserPromptSubmit" => NOTHING_WOKEN.to_owned(),
+                "SessionStart" => NOTHING_RESTART.to_owned(),
+                ev => format!("{NOTHING} - unexplained, then a {ev} line"),
+            }
+        };
+        What::Wait(self.named(who, stop), fallback)
     }
 
     /// An actor's segments from its lines in time order (the module's doc).
@@ -476,7 +497,7 @@ impl<'a> Ix<'a> {
                 match self.run_of.get(or_s(o, "id").as_str()) {
                     Some(&r) if tool == "Bash" && is_wait(&self.run_cats[r].0) => What::Wait(
                         self.owned.get(who).cloned().unwrap_or_default(),
-                        program::WAIT,
+                        program::WAIT.to_owned(),
                     ),
                     Some(&r) if tool == "Bash" => What::Run(r),
                     _ => What::Own(tool_cat(prefix, &tool)),
@@ -510,7 +531,10 @@ impl<'a> Ix<'a> {
                         t0: x,
                         t1: w_end,
                         key: key.clone(),
-                        what: What::Wait(held, "builders: waiting on its background work"),
+                        what: What::Wait(
+                            held,
+                            "builders: waiting on its background work".to_owned(),
+                        ),
                     });
                 }
                 if y > w_end {
@@ -570,6 +594,13 @@ impl<'a> Ix<'a> {
         depth: usize,
     ) {
         let mut cuts = vec![x, y];
+        // a gap with nothing in flight is split where a page session starts or ends, so its piece under one is named so
+        let nothing = fallback.starts_with(NOTHING);
+        if nothing {
+            for p in self.w.pages {
+                cuts.extend([p.t0, p.t1].into_iter().filter(|t| x < *t && *t < y));
+            }
+        }
         for c in cands {
             let (a, b) = self.span(*c);
             cuts.extend([a, b].into_iter().filter(|t| x < *t && *t < y));
@@ -583,14 +614,31 @@ impl<'a> Ix<'a> {
         cuts.dedup();
         for w in cuts.windows(2) {
             let (px, py) = (w[0], w[1]);
-            let best = cands
+            // a page session is its own actor: its wait is blocking only where nothing else the waiter waits on is in flight (the GM
+            // 2026-11-25: "if they were running in parallel with other things ... that number would be misleading"); among the rest,
+            // the one that ends last held the waiter (the critical one: the others ending sooner would not have shortened the wait)
+            let live: Vec<Cand> = cands
                 .iter()
-                .filter(|c| self.active(**c, px, py))
+                .copied()
+                .filter(|c| self.active(*c, px, py))
+                .collect();
+            let best = live
+                .iter()
+                .filter(|c| **c != Cand::Pages || live.len() == 1)
                 .max_by(|a, b| self.span(**a).1.total_cmp(&self.span(**b).1));
+            let class = if !nothing {
+                fallback
+            } else if self.w.pages.iter().any(|p| p.t0 <= px && py <= p.t1) {
+                NOTHING_PAGES
+            } else if cands.is_empty() {
+                fallback
+            } else {
+                NOTHING_ENDED
+            };
             match best {
                 None => l.add(
                     key,
-                    fallback,
+                    class,
                     "",
                     Cell {
                         block: py - px,
@@ -781,6 +829,7 @@ pub fn book(w: &World) -> Result<Ledger, Raised> {
         }
     }
     span_minutes(w, &ix, &mut l);
+    l.at_once = at_once(w, &ix, &order, &paged);
     // BLOCKING: each main session's own time, descended
     for who in order
         .iter()
@@ -794,6 +843,52 @@ pub fn book(w: &World) -> Result<Ledger, Raised> {
         }
     }
     Ok(l)
+}
+
+/// The window's seconds by how many actors worked at once: a main session in its own turn or run (never a wait, the GM's or idle),
+/// an agent inside one of its spans, a page session in one of its phases.
+fn at_once(w: &World, ix: &Ix, order: &[String], paged: &HashSet<String>) -> [f64; 4] {
+    let (lo, hi) = w.window;
+    let mut edges: Vec<(f64, i32)> = Vec::new();
+    let mut put = |a: f64, b: f64| {
+        let (a, b) = (a.max(lo), b.min(hi));
+        if b > a {
+            edges.extend([(a, 1), (b, -1)]);
+        }
+    };
+    for who in order
+        .iter()
+        .filter(|w| w.starts_with("s:") && !paged.contains(*w))
+    {
+        for s in &ix.segs[who] {
+            let working = match &s.what {
+                What::Own(c) => !c.starts_with("the GM") && !c.starts_with("idle"),
+                What::Run(_) => true,
+                What::Wait(..) => false,
+            };
+            if working {
+                put(s.t0, s.t1);
+            }
+        }
+    }
+    for a in w.agents {
+        for sp in &a.spans {
+            put(sp.0, sp.1);
+        }
+    }
+    for p in w.pages {
+        put(p.t0, p.t1);
+    }
+    edges.sort_by(|a, b| a.0.total_cmp(&b.0).then(a.1.cmp(&b.1)));
+    let mut out = [0.0; 4];
+    let (mut n, mut at) = (0_i32, lo);
+    for (t, d) in edges {
+        out[usize::try_from(n).unwrap_or(0).min(3)] += t - at;
+        at = t;
+        n += d;
+    }
+    out[0] += hi - at;
+    out
 }
 
 /// The minutes of every review agent's span and every page-session phase, clipped to the window.

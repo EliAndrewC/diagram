@@ -126,7 +126,7 @@ fi
 t1=${EPOCHREALTIME/,/.}
 awk -v a="$t0" -v b="$t1" 'BEGIN { printf "%.1f", b - a }' > "$WORK/$ID.s"
 # feature 451 T153: the suite's span and exit beside it, `<t0> <t1> <rc>`, which `make hooks-test` hands to the one Phase writer in ONE
-# call after the fan-out (`l7r-gate measure event-log phase`), so each suite's minutes reach `make where-time` as hook suites
+# call after the fan-out (`l7r-gate measure event-log phase`), so each suite's minutes reach `make where-time` as hook suites and feed the task time breakdown (`make task-time`, 451 T243)
 printf '%s %s %s\n' "$t0" "$t1" "$rc" > "$WORK/$ID.span"
 # feature 449 T125: kept beside the suite's stamp, pass or fail, so the next run starts the longest suites first
 mkdir -p "$GITDIR/hooks-test" && cp "$WORK/$ID.s" "$GITDIR/hooks-test/$ID.s"
