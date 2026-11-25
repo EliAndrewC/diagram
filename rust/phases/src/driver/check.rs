@@ -148,6 +148,7 @@ fn on_band(frame: &crate::seat::Frame, ring: &[Pt]) -> Option<Pt> {
 ///
 /// Research:
 ///     a plot's size held - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html draws each plot roughly 92 ft across (`PLOT_FT`), never dwarfing the rice basins, and a strip's edge never under half a plot's length; the page is silent on how far past a plot's length a strip may run, so the bound is the hem's own `STRETCH_SHARE` (1.5 plots), a GUESS, and the pinch's `PINCH_SHARE` (half a plot), the page's GUESS - each edge's straight length, within a hundredth of a foot
+///     a plot's four corners - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each plot "a rectangle square to the canal where it stands (at a bend they taper)" - so a dry plot of any corner count but four is named a size break (449 T435)
 fn sized(poly: &[Pt]) -> Option<String> {
     use crate::field::dry::{PINCH_SHARE, PLOT_FT, STRETCH_SHARE};
     if poly.len() != 4 {
