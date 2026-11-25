@@ -17,6 +17,17 @@ agents, 251 on background commands, 148 on nothing; agents used 2,147 agent-minu
     after 451 T244, T228 and T234 build side by side, each in its own worktree; recorded per trial - what broke (guards
     keyed on the clone's path, the started-task mark, landings of one feature back to back), a second copy's start cost (the
     cold build), and the wall clock saved; if it holds, the rest of the queue runs two or three at a time and adds data.
+    Trial 1, measured 2026-11-25 (451 T228 and T234, one builder each in its own worktree, landed together as 4cd58860ab;
+    the builders' logs were in the session scratchpad, summarized here): each builder about 44 min, side by side, against
+    about 88 min one after the other - about 40 min of wall clock saved. Costs and frictions: a worktree in 2 s and 288 MB, but
+    its own cold Rust build cache (first build 2-2.5 min, a cold coverage run about 9 min, 13-14 GB each within the trial);
+    the started-task mark lives in the shared .git, so the second `make task-start` overwrote the first, and a push of the
+    feature's other commits stayed refused while either task was in progress; the static-runs guard read the session's clone,
+    not the worktree, and said the task changed no Rust crate (both builders used its escape); two gitignored map renders were
+    missing in a fresh copy (a test failed until drawn); the pop-up checks' answer store is shared; both tasks edited 451's
+    tasks.md Occasions block and plan-review.json, merged by hand in minutes. What would make it routine: per-worktree task
+    marks, guards that read the tree they run in, a shared build cache, cleanup on landing (451 T245). Both worktrees and
+    their caches were removed after landing.
 
 2. A landing beside the next build: the landing's gate already runs in its own worktree; only its tick and push touch the
    clone (451 T242 fixes the late failure).
