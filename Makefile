@@ -805,7 +805,7 @@ style-prepass: ## [project] the style guide's mechanical half for one question -
 	@if [ -z "$$Q" ]; then printf 'make style-prepass: Q=<question number> is required - e.g. make style-prepass Q=0041\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record style-prepass --root "$$(git rev-parse --show-toplevel)" "$$Q"
 
-question-sizes: ## [project] every research question over the size cap (question + notes, feature 250 D14), largest first - make quick fails on one a change touched, make static on any (449 T385)
+question-sizes: ## [project] every research question over the size cap by its prose (no item tag or money mark counted; the measure the size-edit rule reads, 451 T238; feature 250 D14), largest first - make quick fails on one a change touched, make static on any (449 T385)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check question-size --report
 
 open-questions: ## [project] every guess and every unfound source, read from the record and the tracked files now - the research still owed, with the map features each touches (feature 285)

@@ -43,10 +43,15 @@ fn question_of(rel: &str) -> String {
 
 /// The question's prose in bytes: a money mark is markup around words already counted (feature 413), and an item tag is data no
 /// reader of the page reads, its label and its pop-up bullet (feature 451 T192: tagging 0196 put it over the cap by 1,838 bytes).
-fn size(path: &Path) -> usize {
-    let text = std::fs::read_to_string(path).unwrap_or_default();
+/// The one measure: the cap, `make question-sizes` and the size-edit rule all read it (451 T238: the rule read the file's
+/// bytes, item tags and all, and took P12's correction to 0006 at 19,513 bytes of prose for a size edit at 21,792).
+fn prose(text: &str) -> usize {
     let money = l7r_shared::regex::build(r#"(?s)<span class="money"[^>]*>(.*?)</span>"#).unwrap();
-    l7r_gate_research::record::items::strip(&money.replace_all(&text, "$1")).len()
+    l7r_gate_research::record::items::strip(&money.replace_all(text, "$1")).len()
+}
+
+fn size(path: &Path) -> usize {
+    prose(&std::fs::read_to_string(path).unwrap_or_default())
 }
 
 fn merge_base(root: &Path) -> String {
@@ -130,7 +135,8 @@ fn size_edit_refusal(root: &Path, base: &str, q: &str, limit: usize) -> Option<S
         return None;
     }
     let removed = size_edit::removed_bytes(&old, &new);
-    if !size_edit::is_size_edit(old.len(), new.len(), removed, limit) {
+    let (before, after) = (prose(&old), prose(&new));
+    if !size_edit::is_size_edit(before, after, removed, limit) {
         return None;
     }
     // Only a split's pointer, T185's `<a class="moved" href=...>`, carries a token: the triage (owed's `triage/change.rs`, POINTER)
@@ -150,7 +156,7 @@ fn size_edit_refusal(root: &Path, base: &str, q: &str, limit: usize) -> Option<S
     if lost.is_empty() {
         return None;
     }
-    let mut out = format!("question-size: {q} is a SIZE EDIT ({} bytes at the base, {} now, {removed} removed, against its {} limit) and it drops claim-bearing words the page no longer holds:\n", with_commas(old.len()), with_commas(new.len()), with_commas(limit));
+    let mut out = format!("question-size: {q} is a SIZE EDIT ({} bytes of prose at the base, {} now, {removed} removed, against its {} limit) and it drops claim-bearing words the page no longer holds:\n", with_commas(before), with_commas(after), with_commas(limit));
     for l in &lost {
         let _ = writeln!(out, "  [{}] {} `{}`", l.block, l.kind.word(), l.token);
     }

@@ -1434,6 +1434,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T238 (page session P12, 2026-11-25: its correction to 0006's drawing page from a search pass, b75ade5b7e, read as a SIZE EDIT at 21,792 bytes against the 20,000 cap while `make question-sizes` listed no page over 20,000 bytes of prose, measured 2026-11-25 (the refusal and the report as the landing printed them); the landing needed SIZE_EDIT_OK)": {
+   "sha256": "b939eacbae3709e39067953d86827b32ddee6882938005f49212ad7c4e4b6d95",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T238 Approach (checklist part A)": {
+   "sha256": "204266b1ff5ff9bc01c91345248e573efe1ef1bd15fd311acc90e298cc2fc273",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -19405,6 +19417,52 @@
      "why": "A difference left as it is that is not a defect once the attribution is fixed; BLOCKED stays red as constraint 2 requires."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T238 (page session P12, 2026-11-25: its correction to 0006's drawing page from a search pass, b75ade5b7e, read as a SIZE EDIT at 21,792 bytes against the 20,000 cap while `make question-sizes` listed no page over 20,000 bytes of prose, measured 2026-11-25 (the refusal and the report as the landing printed them); the landing needed SIZE_EDIT_OK)",
+    "### T238 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T238-measure",
+     "summary": "The size-edit rule (T184) reads the same measure as the cap and make question-sizes: one prose(text) function (money marks unwrapped, item tags stripped), called by size() and by size_edit_refusal on base and new text.",
+     "class": "within",
+     "why": "Fixes a defect (a wrong outcome: a search pass's claim correction was refused as a size trim and needed an escape) in T184, which implements the GM's 2026-11-23 'no edit to maintain entry size should ever be substantive'. An edit is 'to maintain entry size' only against the cap, and the cap is on prose; a correction under the cap by prose before, after and with its removed words restored is not maintaining size. Measuring the rule by the cap's own measure serves the purpose rather than narrowing it."
+    },
+    {
+     "id": "T238-rule-kept",
+     "summary": "is_size_edit keeps T184's rule unchanged (over before, or the removed words putting it back over: the add-then-trim clause), now on the prose measure.",
+     "class": "within",
+     "why": "Preserves the requested protection in full; only the unit it compares changes."
+    },
+    {
+     "id": "T238-wording",
+     "summary": "The refusal says 'bytes of prose'; make question-sizes's help line, which said 'question + notes', now says it counts the question's prose.",
+     "class": "within",
+     "why": "Makes the message and help state what is actually measured; no behavior beyond the fix."
+    },
+    {
+     "id": "T238-test",
+     "summary": "Red-first test carrying P12's real block on a page whose item tags put the raw file over 20,000 bytes while its prose stays under; red on HEAD, green on the fix.",
+     "class": "within",
+     "why": "Enforcement of the fix the task makes; serves the request."
+    },
+    {
+     "id": "T238-cap",
+     "summary": "The 20,000-byte cap is unchanged.",
+     "class": "within",
+     "why": "No change to the limit the GM's size rules address."
+    },
+    {
+     "id": "T238-order",
+     "summary": "Lands alone; T237 (performance work) is ordered after T240 by the coordinating session under a PERF_LATER_OK escape recorded at task-start.",
+     "class": "within",
+     "why": "FR-013/SC-006 provide a recorded escape for starting non-performance work while a performance task is open; this block records the escape the spec's own mechanism allows and does not alter the performance-first rule."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -31208,6 +31266,50 @@
      "summary": "T239 carries T230's fix and tests and nothing of its own, ticking in T230's landing (make land F=451 T=T230,T239).",
      "class": "within",
      "why": "The same closing-checks fault filed twice; deferring wholly to T230's within-scope fix decides nothing new and leaves no defect."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T238": {
+   "section_sha256": "0fe8d889580d3044acc4074ea33f86dcbcd7face343c09da4bc66004948261a5",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T238-measure",
+     "summary": "The size-edit rule (T184) reads the same measure as the cap and make question-sizes: one prose(text) function (money marks unwrapped, item tags stripped), called by size() and by size_edit_refusal on base and new text.",
+     "class": "within",
+     "why": "Fixes a defect (a wrong outcome: a search pass's claim correction was refused as a size trim and needed an escape) in T184, which implements the GM's 2026-11-23 'no edit to maintain entry size should ever be substantive'. An edit is 'to maintain entry size' only against the cap, and the cap is on prose; a correction under the cap by prose before, after and with its removed words restored is not maintaining size. Measuring the rule by the cap's own measure serves the purpose rather than narrowing it."
+    },
+    {
+     "id": "T238-rule-kept",
+     "summary": "is_size_edit keeps T184's rule unchanged (over before, or the removed words putting it back over: the add-then-trim clause), now on the prose measure.",
+     "class": "within",
+     "why": "Preserves the requested protection in full; only the unit it compares changes."
+    },
+    {
+     "id": "T238-wording",
+     "summary": "The refusal says 'bytes of prose'; make question-sizes's help line, which said 'question + notes', now says it counts the question's prose.",
+     "class": "within",
+     "why": "Makes the message and help state what is actually measured; no behavior beyond the fix."
+    },
+    {
+     "id": "T238-test",
+     "summary": "Red-first test carrying P12's real block on a page whose item tags put the raw file over 20,000 bytes while its prose stays under; red on HEAD, green on the fix.",
+     "class": "within",
+     "why": "Enforcement of the fix the task makes; serves the request."
+    },
+    {
+     "id": "T238-cap",
+     "summary": "The 20,000-byte cap is unchanged.",
+     "class": "within",
+     "why": "No change to the limit the GM's size rules address."
+    },
+    {
+     "id": "T238-order",
+     "summary": "Lands alone; T237 (performance work) is ordered after T240 by the coordinating session under a PERF_LATER_OK escape recorded at task-start.",
+     "class": "within",
+     "why": "FR-013/SC-006 provide a recorded escape for starting non-performance work while a performance task is open; this block records the escape the spec's own mechanism allows and does not alter the performance-first rule."
     }
    ],
    "verdict": "CLEAR"

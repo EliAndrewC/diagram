@@ -2,8 +2,8 @@
 //! maintain entry size should ever be substantive"*). The 2026-11-23 cuts of 0009 and 0059 under the cap (cce80ca436)
 //! dropped a quantifier, a body's restatement of its source and a source's term; a page over its limit is split, never cut.
 //!
-//! A SIZE EDIT is a change to a page that was over its limit before it, or that the words it removed would put back over
-//! it - the add-then-trim of one session included, which a test of "the page shrank" would miss. Of such an edit the
+//! A SIZE EDIT is a change to a page whose prose (the one measure of the cap and `make question-sizes`, 451 T238) was over its
+//! limit before it, or that the words it removed would put back over it -the add-then-trim of one session included, which a test of "the page shrank" would miss. Of such an edit the
 //! CLAIM-BEARING tokens of every block it changed must still stand: a number, a label, a quoted passage and a proper name
 //! anywhere on the page or on a page it now links to (a split's new page), a negation or qualifier in the block itself (a
 //! "not" or an "every" stands somewhere on any page, so page-wide it would excuse every cut).
@@ -235,14 +235,14 @@ pub(super) fn removed_bytes(old: &str, new: &str) -> usize {
         .sum()
 }
 
-/// Was the change made to fit the limit: the page over it before, or the removed words putting it back over?
+/// Was the change made to fit the limit: the page's prose over it before, or the removed words putting it back over?
 pub(super) const fn is_size_edit(
-    old_len: usize,
-    new_len: usize,
+    old_prose: usize,
+    new_prose: usize,
     removed: usize,
     limit: usize,
 ) -> bool {
-    old_len > limit || new_len + removed > limit
+    old_prose > limit || new_prose + removed > limit
 }
 
 #[cfg(test)]

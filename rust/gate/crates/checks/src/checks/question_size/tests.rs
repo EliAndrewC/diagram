@@ -260,3 +260,36 @@ fn a_page_limit_needs_its_verdict_and_raises_the_cap_for_that_page_alone() {
         .stdout
         .starts_with("0 question(s)"));
 }
+
+/// 0006's drawing page's block as page session P12 corrected it from a search pass (b75ade5b7e, 449 T428): its "not" and
+/// "without" went with a restated frame, a correction rather than a cut.
+const P12_OLD: &str = r#"<li><strong>Were strips squared to their canals Edo-period work?</strong><br>On the southern Musashino plateau, on this record's reading, yes: there the row villages formed along the canals that watered them,<sup class="fn" data-note="ishizue-musashino-3"></sup> with long, narrow strips of dry field behind the houses,<sup class="fn" data-note="ishizue-musashino-2"></sup> so the strips stood square to the canal. The page gives the line of the villages, not of the strips, so the frame is a reconstruction. There the strips lay behind the houses on a plateau without paddy, so squaring them to a paddy's canal is this project's own.</li>"#;
+const P12_NEW: &str = r#"<li><strong>Were strips squared to their canals Edo-period work?</strong><br>In part. On the Musashino plateau a new-field village's long, narrow strips of field and woodland ran back from a row of houses,<sup class="fn" data-note="ishizue-musashino-2"></sup> square to a settlement road laid out straight;<sup class="fn" data-note="santome-shinden-allotment"></sup> in the south the villages formed along canals dug beside the highways.<sup class="fn" data-note="ishizue-musashino-3"></sup> Where the road ran beside the canal the strips stood square to both: at Shinbori, on the Nobidome canal, they meet a road parallel to it at right angles.<sup class="fn" data-note="niiza-nobidome-landscape-2"></sup> That canal was dug for the settlers' drinking water.<sup class="fn" data-note="niiza-nobidome-landscape-1"></sup> Squaring the strips to a canal has two limits: at Nobidome village the highway crossed the canal, so its strips, square to the highway, ran along the canal's main stream, though in places its water was led in ditches down both sides of the highway;<sup class="fn" data-note="niiza-nobidome-landscape-2-2"></sup> and where the same canal irrigated, no strips formed.<sup class="fn" data-note="niiza-nobidome-landscape-1-2"></sup> The strips' boundaries were straight and sharp, with known departures: a strip wider at its back than at its house lot, and a village of irregular plots.<sup class="fn" data-note="santome-shinden-allotment-2"></sup> No page we read from either country gives the shape of a single dry plot beside an irrigation canal,<sup class="fn" data-note="how-our-maps-draw-dry-fields-and-their-crops-hatake-4"></sup> so squaring our plots to the canal is a reconstruction; and those strips were of dry field and woodland, beside a canal dug for drinking water, so squaring them to a paddy's canal is this project's own.</li>"#;
+
+/// 0006's page at P12, scaled: 17,558 bytes of prose before and 19,513 after against the 20,000 cap, its item tags taking
+/// the whole file to 21,792 bytes.
+fn p12_page(block: &str) -> String {
+    let tag = "<span class=\"item\" data-item=\"strip-frame\" data-label=\"GUESS\" data-guess=\"That a plot's strips square to the canal beside it: no page says\"></span>";
+    let tagged = format!("<li>A strip, a GUESS.{}</li>\n", tag.repeat(25));
+    let pad = format!("<p>{}</p>\n", "word ".repeat(17_000 / 5));
+    format!("<h2 id=\"q\">Q</h2>\n{pad}{tagged}{block}\n")
+}
+
+/// 451 T238: the size-edit rule reads the page's prose, the measure the cap and `make question-sizes` read - an edit under
+/// the cap before and after by it (and with its removed words put back) is no size edit, however many bytes its item tags
+/// add; P12's correction to 0006 read as one at 21,792 bytes while the report listed no page over 20,000 bytes of prose.
+#[test]
+fn an_edit_under_the_cap_by_its_prose_is_no_size_edit_though_its_item_tags_put_the_file_over() {
+    let dir = repo("size-edit-prose");
+    put(&dir, Q, &p12_page(P12_OLD));
+    commit(&dir);
+    based(&dir);
+    put(&dir, Q, &p12_page(P12_NEW));
+    let file = std::fs::read_to_string(dir.join(Q)).unwrap();
+    assert!(file.len() > CAP && size(&dir.join(Q)) < CAP);
+    let passed = cli_with(&[], &dir, None);
+    assert_eq!(passed.code, 0, "{}", passed.stderr);
+    assert!(cli(&["--report".to_owned()], &dir)
+        .stdout
+        .starts_with("0 question(s)"));
+}
