@@ -2710,31 +2710,44 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T230 (<why: the finding or measurement that files it>)
+### T230 (449 T224's builder, 2026-11-24, and 449 T433's, 2026-11-25: `make closing-checks T=<task>` printed "BLOCKED: every error static printed is in another task's files - ()" on errors in the task's own files; T239 is the same fault filed again and ticks with this task)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: The cause is the attribution's awk in `scripts/gates/closing-checks.sh` (`theirs`), not the parsing of the error lines.
+  - **What the lines say.** Every error line naming a file in the clone's red static logs is in one of two forms, both parsed already. One is clippy's `-->` at two or three spaces, its path from `rust/` (`  --> phases/src/driver/check.rs:84:18`, T433's run 0859Z). The other is rustfmt's `Diff in <absolute path>:<line>:` (T431's run 0836Z, T433's 0900Z). Eight of the 25 logs held such lines, observed 2026-11-25, method: `grep -E -- '-->|Diff in'` over `.git/closing-checks/*/static.log`. Those logs are pruned after `CLOSING_CHECKS_KEEP_MIN` (a GUESS knob, 360 minutes, T72), so the durable evidence is the suite's cases, which carry those lines verbatim.
+  - **Each form static prints, from the source.** `make static`'s recipe stops at its first red step, so one run's lines come from one step. Every red step was enumerated, observed 2026-11-25, method: the `static` recipe in `Makefile` and the `writeln!`s and `Ran`s of `rust/gate/crates/rustc/src/rustc.rs`. `lint` names its files by `-->`, and `format` by `Diff in`. `cover` prints `<path> - lines no test reaches` (parsed since T95), and a failing test's `thread '<name>' panicked at <path>:<line>:<col>:` (Rust 1.73's form; not parsed before). `dead` prints `  pub fn <name>: nothing in Rust calls it`, which names no file. The tree-wide text checks run before them and name no crate's file.
+  - **Why the list came out empty.** `theirs` read another task's files with `NR == FNR`. In T433's two runs the clone held no other task's file: `others` was empty in 24 of the clone's 25 runs, observed 2026-11-25, method: `wc -c` of each run's `others`. T224's run, 2026-11-24, is pruned. Its cause is inferred from the same printed line. With an empty first file, `NR == FNR` holds on stdin too, so each error path was stored as one of another task's files and none was printed. No line began with `-` (the caller's mark), so "every error is another task's" held vacuously, and the one empty line printed as ` ()`. Reproduced in mawk, the clone's awk.
+  - **The fix.** `theirs` tells the list apart by its file name (`FILENAME == o`) and skips an empty line. `blocked` returns on an empty attribution, never BLOCKED. A red whose lines name no file now says so: "no error line static printed names a file - none could be attributed, so all are counted as yours", followed by its first 8 failure lines, an APART crate's left out. This is said for static alone: hooks-test and quick stay counted whole (T86), so their reds carry no note. The BLOCKED line already names each file and its task once the attribution is read.
+  - **The arrow.** A path is read only from a line that OPENS with the arrow (`^ *-->`) or with `Diff in`. Before, an arrow anywhere in a line counted, so a source line quoted under an error (`5 | let s = "a --> mine/src/lib.rs";`) was read as a path.
+  - **The failing test.** The panic line's path is read as an error's. Without it, a cover red was BLOCKED whenever another task's file was named and the caller's own test failed: "nothing of yours was judged there", the same vacuous answer one level up.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| `theirs` by file name, `blocked` on an empty attribution | the suite's two empty-`others` cases red on HEAD's script | n/a: tooling | none | n/a |
+| the arrow opening its line | the quoted-source case red on HEAD's script | n/a: tooling | none | n/a |
+| the panic line read | the mixed cover case and the panic-alone case red on HEAD's script | n/a: tooling | none | n/a |
+| the unattributed note, static's counted lines | the no-file case and the APART-lines case red on HEAD's script | n/a: tooling | none | n/a |
 
 ### T230 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder whose closing run is red on its own files is told it is red on its own files. BLOCKED appears only when every named file is another task's, and it names those files.
+2. **The constraints.** 451 T86: another task's red is reported apart, and a miss costs a saving, never a wrong verdict. 451 T95: cover lines are attributed like the errors. The BLOCKED red stays red.
+3. **Where each comes from.** O: the two builders' runs, the clone's 25 static logs and static's own source, 2026-11-25. R: T86's header in `closing-checks.sh`: a file no line names is the caller's.
+4. **Do they describe the world here?** Yes. The suite's new cases use those runs' own lines, copied from `.git/closing-checks/` logs.
+5. **The order.** No dependency. It lands alone. T239 ticks with it.
+6. **The exits.** Green: `make closing-checks T=T230 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-25 (the suite run on HEAD's script and on the fix): the suite `tests/hooks/test-closing-checks.sh` gained ten cases. Run against HEAD's `closing-checks.sh`, it gave 53 passed and 7 failed. The two empty-`others` cases each printed "BLOCKED ... -  ()". The quoted-source, unattributed, mixed-cover, panic-alone and APART-lines cases also failed. The tenth case, a red hooks-test given no note, pins what HEAD already did. After the fix: 60 passed, 0 failed. Both runs' logs are kept in the session's scratchpad (`t230/red2.log`, `t230/green2.log`).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: the gate told a builder its own errors were another task's, so the builder could wait on a re-run that would never go green. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- An arrow inside a quoted source line was read as a path. Effect: a red on another task's file alone, quoting such a line, went untagged. Fixed here (`^ *-->`).
+- A failing test's panic line was not read. Effect: another task's error beside the caller's own failing test was BLOCKED. Fixed here.
+- A red whose lines named no file was passed over in silence. Fixed here: it says the red is unattributed and lists the error lines.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: it corrects a verdict's wording; no check runs faster or slower.
 
 
 ### T231 (<why: the finding or measurement that files it>)
@@ -2938,31 +2951,32 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T239 (<why: the finding or measurement that files it>)
+### T239 (T230's duplicate: the same empty BLOCKED list, filed again from 449 T433's builder, 2026-11-25)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: T230's fix and tests, nothing of its own. T230's plan section holds the cause, the fix and the red-first proof. It ticks in T230's landing (`make land F=451 T=T230,T239`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| T230's | T230's | n/a: tooling | none | n/a |
 
 ### T239 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** T230's.
+2. **The constraints.** T230's.
+3. **Where each comes from.** O: the same runs as T230's.
+4. **Do they describe the world here?** Yes, per T230's.
+5. **The order.** Lands with T230.
+6. **The exits.** Green: `make closing-checks T=T230 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** None of its own: T230's landing.
+9. **Done, measured.** T230's red-first and green suite runs, 2026-11-25.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** T230's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T240 (<why: the finding or measurement that files it>)

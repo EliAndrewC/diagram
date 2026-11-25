@@ -165,8 +165,11 @@ done
 # `wait` returns early on a trapped signal, so the trap runs while the checks run
 for p in "${pids[@]}"; do wait "$p"; done
 
-# another task's files whose path is, or ends in, each path on stdin (a cargo error names a path from the workspace's directory)
-theirs() { awk -F'\t' 'NR == FNR { p[$1] = $2; next } { for (k in p) if (k == $0 || substr(k, length(k) - length($0)) == "/" $0) { print k "\t" p[k]; next } print "-\t" $0 }' "$dir/others" -; }
+# another task's files whose path is, or ends in, each path on stdin (a cargo error names a path from the workspace's directory). The
+# list is told apart by its NAME, never by NR == FNR: an empty list makes NR == FNR hold on stdin too, so each path was read as one of
+# another task's and none printed - and "every error is another task's" held vacuously, "BLOCKED ... - ()" on the caller's own errors
+# (451 T230/T239: 449 T224's and T433's runs, 2026-11-24/25, no other task's file in the clone)
+theirs() { awk -F'\t' -v o="$dir/others" 'FILENAME == o { p[$1] = $2; next } $0 != "" { for (k in p) if (k == $0 || substr(k, length(k) - length($0)) == "/" $0) { print k "\t" p[k]; next } print "-\t" $0 }' "$dir/others" -; }
 # a counted red whose every error line names another task's file: nothing of the caller's was judged there (451 T86). Cover's lines no
 # test reaches name files too, read as the errors' are (451 T95: T81's second closing run, 2026-11-21, red on cover alone, its lines in
 # T88's files). Only the counted crates' lines are read: an APART crate's block, from its header to the next rust-checks line, is
@@ -176,10 +179,21 @@ theirs() { awk -F'\t' 'NR == FNR { p[$1] = $2; next } { for (k in p) if (k == $0
 blocked() {
   local named hit what why
   named=$(awk '/^rust-checks: APART / { apart = 1; next } /^rust-checks: / { apart = 0 } apart { next }
-    match($0, /(-->|Diff in) [^ :]+/) { s = substr($0, RSTART, RLENGTH); sub(/^(-->|Diff in) /, "", s); print "e\t" s; next }
+    match($0, /^( *-->|Diff in) [^ :]+/) { s = substr($0, RSTART, RLENGTH); sub(/^( *-->|Diff in) /, "", s); print "e\t" s; next }
+    match($0, /^thread .* panicked at [^ :]+:[0-9]/) { s = substr($0, RSTART, RLENGTH); sub(/^thread .* panicked at /, "", s); sub(/:[0-9]$/, "", s); print "e\t" s; next }
     /^[^ ]+ - lines no test reaches: [1-9]/ { print "c\t" $1 }' "$dir/$1.log" | sed "s#\t$(git rev-parse --show-toplevel)/#\t#" | sort -u)
-  [ -n "$named" ] || return 0
+  if [ -z "$named" ]; then
+    # no line names a file: nothing is attributed, so nothing is another task's (451 T230) - said for static, the one check whose files
+    # are attributed (hooks-test and quick stay counted whole), with its own failure lines, an APART crate's left out
+    [ "$1" = static ] || return 0
+    printf '\n  %s: no error line %s printed names a file - none could be attributed, so all are counted as yours:\n' "$1" "$1"
+    awk '/^rust-checks: APART / { apart = 1; next } /^rust-checks: / { apart = 0 } apart { next }
+      /^(error|FAIL)|FAILED|^thread .* panicked at |^  pub fn / { print "    " $0; if (++n == 8) exit }' "$dir/$1.log"
+    return 0
+  fi
   hit=$(printf '%s\n' "$named" | cut -f2 | sort -u | theirs)
+  # BLOCKED only on a named file of another task's for every line: an empty or unmatched attribution is the caller's
+  [ -n "$hit" ] || return 0
   printf '%s\n' "$hit" | grep -q '^-' && return 0
   case $(printf '%s\n' "$named" | cut -f1 | sort -u | paste -sd' ' -) in
     e) what="every error $1 printed"; why="nothing of yours was judged there, so it stays red: re-run once they compile" ;;

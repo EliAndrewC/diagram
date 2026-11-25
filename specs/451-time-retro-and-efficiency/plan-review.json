@@ -1410,6 +1410,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T230 (449 T224's builder, 2026-11-24, and 449 T433's, 2026-11-25: `make closing-checks T=<task>` printed \"BLOCKED: every error static printed is in another task's files - ()\" on errors in the task's own files; T239 is the same fault filed again and ticks with this task)": {
+   "sha256": "90b5f5a779ddb1c7fd3d3e082e5e4facb4ec1428b5361a7a7323f403e1af8927",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T230 Approach (checklist part A)": {
+   "sha256": "18fd5ae0dae1c2c4945c8843874b83967d4282b2ec49c6633bf154a2b7400bc7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T239 (T230's duplicate: the same empty BLOCKED list, filed again from 449 T433's builder, 2026-11-25)": {
+   "sha256": "f43d5e567efb13e6c0abe037354959886f820765d1f5369b536e8686cd1c86ff",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T239 Approach (checklist part A)": {
+   "sha256": "4372f1d141cb249dcc1b87180e24eef002adcd9aedb09d44ab105e058a8f6ca2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -19285,6 +19309,102 @@
      "why": "The GM's own premise is that punting research would not change maps in practice. The tests and proofs only verify that the rule he asked for holds."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T230 (449 T224's builder, 2026-11-24, and 449 T433's, 2026-11-25: `make closing-checks T=<task>` printed \"BLOCKED: every error static printed is in another task's files - ()\" on errors in the task's own files; T239 is the same fault filed again and ticks with this task)",
+    "### T230 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T230-cause-theirs",
+     "summary": "The fault is located in the attribution awk (`theirs`, NR==FNR over an empty `others` file), not in parsing the error lines; `theirs` tells the list apart by FILENAME and skips an empty line.",
+     "class": "within",
+     "why": "Fixes a wrong outcome in this feature's own closing-checks tool (a gate telling a builder its own red is another task's), the 2026-11-21 closing-checks task; repairing the tool so it does what was filed is inside the request."
+    },
+    {
+     "id": "T230-blocked-empty",
+     "summary": "`blocked` returns on an empty attribution and never prints BLOCKED; BLOCKED only when every named file is another task's, naming the files.",
+     "class": "within",
+     "why": "Restores the verdict T86 already promised (a miss costs a saving, never a wrong verdict); the red stays red, nothing is relaxed."
+    },
+    {
+     "id": "T230-unattributed-message",
+     "summary": "A red whose lines name no file says none could be attributed, counts all as the caller's, and prints its first 8 error lines.",
+     "class": "within",
+     "why": "Follows T86's stated rule that a file no line names is the caller's; it turns a silent pass-over into a stated red. No refusal is widened or narrowed; the line count is message content, not scope."
+    },
+    {
+     "id": "T230-arrow-anchor",
+     "summary": "A path is read only from a line that opens with `-->` (after spaces) or `Diff in`, so a quoted source line containing an arrow is no longer read as a path.",
+     "class": "within",
+     "why": "A second wrong outcome found in the same code and fixed in the task (fix as we go); the two forms the anchor keeps are the two the plan observed in all 24 static logs (one-shot label, 2026-11-25, grep over .git/closing-checks/*/static.log), so no real error line is dropped."
+    },
+    {
+     "id": "T230-lands-with-T239",
+     "summary": "T239, the same fault filed twice, ticks in T230's landing.",
+     "class": "within",
+     "why": "Bookkeeping of a duplicate; no scope change."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T239 (T230's duplicate: the same empty BLOCKED list, filed again from 449 T433's builder, 2026-11-25)",
+    "### T239 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T239-duplicate-of-T230",
+     "summary": "T239 carries T230's fix and tests and nothing of its own, ticking in T230's landing (make land F=451 T=T230,T239).",
+     "class": "within",
+     "why": "The same closing-checks fault filed twice; deferring wholly to T230's within-scope fix decides nothing new and leaves no defect."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T230 (449 T224's builder, 2026-11-24, and 449 T433's, 2026-11-25: `make closing-checks T=<task>` printed \"BLOCKED: every error static printed is in another task's files - ()\" on errors in the task's own files; T239 is the same fault filed again and ticks with this task)",
+    "### T230 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "theirs-by-filename",
+     "summary": "theirs tells another task's file list apart by FILENAME == o and skips an empty line; blocked returns on an empty attribution, never BLOCKED",
+     "class": "within",
+     "why": "Fixes the reported wrong outcome (BLOCKED on the caller's own errors, 449 T224/T433, T239) in the closing checks the GM asked filed as a performance task (2026-11-21); keeps T86's rule that a miss costs a saving, never a wrong verdict. No case of the fault is left unfixed."
+    },
+    {
+     "id": "arrow-opens-line",
+     "summary": "a path is read only from a line opening with ^ *--> or Diff in, so a quoted source line holding an arrow is not read as a path",
+     "class": "within",
+     "why": "Fixes a second wrong outcome found here (a red on another task's file quoting such a line went untagged); fixed in this task, nothing deferred."
+    },
+    {
+     "id": "panic-line-read",
+     "summary": "a failing test's 'thread ... panicked at <path>:<line>:<col>:' is read as an error's path",
+     "class": "within",
+     "why": "Closes the same vacuous BLOCKED one level up (another task's file named while the caller's own test failed); completes the attribution over every form static prints, which the block enumerates with a labeled observation and method (Makefile static recipe and rustc.rs writeln!/Ran), meeting FR-009's class-of-defect line."
+    },
+    {
+     "id": "unattributed-note-static-only",
+     "summary": "a static red whose lines name no file says none could be attributed and all are counted as the caller's, listing the first 8 failure lines of the counted red, an APART crate's lines left out; hooks-test and quick, counted whole under T86, carry no note",
+     "class": "within",
+     "why": "Not a narrowing: hooks-test and quick do no attribution (T86 counts them whole), so there is nothing unattributed to report there and no wrong outcome is left; leaving an APART crate's lines out follows T86's rule that another task's red is reported apart. The red stays red (counted as the caller's), so no verdict is weakened."
+    },
+    {
+     "id": "blocked-line-unchanged",
+     "summary": "the BLOCKED line's wording is left as it is, since it already names each file and its task once the attribution is read",
+     "class": "within",
+     "why": "A difference left as it is that is not a defect once the attribution is fixed; BLOCKED stays red as constraint 2 requires."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -31036,6 +31156,58 @@
      "summary": "No figure or map moves. Red-first tests for each step. Both-ways stand-in proofs of the changed check agents and of M8. closing-checks green",
      "class": "within",
      "why": "The GM's own premise is that punting research would not change maps in practice. The tests and proofs only verify that the rule he asked for holds."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T230": {
+   "section_sha256": "5669e1a14261ba3e2e3195478cb2871e7c7b0041b41db010cadf8ca779d10254",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "theirs-by-filename",
+     "summary": "theirs tells another task's file list apart by FILENAME == o and skips an empty line; blocked returns on an empty attribution, never BLOCKED",
+     "class": "within",
+     "why": "Fixes the reported wrong outcome (BLOCKED on the caller's own errors, 449 T224/T433, T239) in the closing checks the GM asked filed as a performance task (2026-11-21); keeps T86's rule that a miss costs a saving, never a wrong verdict. No case of the fault is left unfixed."
+    },
+    {
+     "id": "arrow-opens-line",
+     "summary": "a path is read only from a line opening with ^ *--> or Diff in, so a quoted source line holding an arrow is not read as a path",
+     "class": "within",
+     "why": "Fixes a second wrong outcome found here (a red on another task's file quoting such a line went untagged); fixed in this task, nothing deferred."
+    },
+    {
+     "id": "panic-line-read",
+     "summary": "a failing test's 'thread ... panicked at <path>:<line>:<col>:' is read as an error's path",
+     "class": "within",
+     "why": "Closes the same vacuous BLOCKED one level up (another task's file named while the caller's own test failed); completes the attribution over every form static prints, which the block enumerates with a labeled observation and method (Makefile static recipe and rustc.rs writeln!/Ran), meeting FR-009's class-of-defect line."
+    },
+    {
+     "id": "unattributed-note-static-only",
+     "summary": "a static red whose lines name no file says none could be attributed and all are counted as the caller's, listing the first 8 failure lines of the counted red, an APART crate's lines left out; hooks-test and quick, counted whole under T86, carry no note",
+     "class": "within",
+     "why": "Not a narrowing: hooks-test and quick do no attribution (T86 counts them whole), so there is nothing unattributed to report there and no wrong outcome is left; leaving an APART crate's lines out follows T86's rule that another task's red is reported apart. The red stays red (counted as the caller's), so no verdict is weakened."
+    },
+    {
+     "id": "blocked-line-unchanged",
+     "summary": "the BLOCKED line's wording is left as it is, since it already names each file and its task once the attribution is read",
+     "class": "within",
+     "why": "A difference left as it is that is not a defect once the attribution is fixed; BLOCKED stays red as constraint 2 requires."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T239": {
+   "section_sha256": "f691abeb73483bc85d2b8b436b42f9d9e9d6f03a703a694e582d959efdb088d0",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T239-duplicate-of-T230",
+     "summary": "T239 carries T230's fix and tests and nothing of its own, ticking in T230's landing (make land F=451 T=T230,T239).",
+     "class": "within",
+     "why": "The same closing-checks fault filed twice; deferring wholly to T230's within-scope fix decides nothing new and leaves no defect."
     }
    ],
    "verdict": "CLEAR"

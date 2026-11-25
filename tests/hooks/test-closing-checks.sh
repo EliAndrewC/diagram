@@ -59,6 +59,8 @@ if [ "$t" = static ] && [ -e "$d/static.red" ]; then
     printf 'rust-checks: lint FAILED on %s\nerror: half-done\n' "$crate"; exit 1
   fi
 fi
+# static.raw: lines a real static run printed (451 T230, copied from .git/closing-checks/ logs), @TOP@ the clone's root; a red
+[ "$t" = static ] && [ -e "$d/static.raw" ] && { sed "s#@TOP@#$top#g" "$d/static.raw"; exit 1; }
 exit "$rc"
 EOF
 chmod +x "$T/make"
@@ -230,7 +232,52 @@ c6cover 'echo "rust/mine 0" > "$T/c6/static.cover"' 'echo rust/other/src/lib.rs 
 c6cover 'echo "rust/mine 0" > "$T/c6/static.cover"' 'echo rust/other/src/lib.rs > "$T/c6/static.apart"'
 [ "$RC" -eq 1 ] && ! printf '%s' "$OUT" | grep -q BLOCKED \
   && ok "an APART crate's lines are not the counted red's: a caller's red naming no file beside them is not BLOCKED" || no "an APART crate's lines tagged the caller's red (exit $RC)" "$OUT"
-rm -f "$T/c6/static.cover" "$T/c6/static.apart"; echo rust/other/src/lib.rs > "$T/c6/static.red"
+# THE REAL LINE FORMS (451 T230/T239): 449 T224's and T433's closing runs, 2026-11-24/25, printed "BLOCKED: every error static printed is
+# in another task's files - ()" on errors in their own files. No other task had a file in the clone, so `others` was empty, and the
+# attribution's awk, reading it with NR == FNR, read the error paths as the (empty) list of another task's files and printed none of
+# them: "every one is another's" held vacuously. The lines below are those runs' own (clippy's `-->` at two and three spaces, the path
+# from rust/; rustfmt's `Diff in <absolute path>:<line>:`)
+rm -f "$T/c6/static.cover" "$T/c6/static.apart" "$T/c6/static.red" "$T/c6/static.blocked"; mkdir -p "$T/noevents"
+c6raw() { printf "$1" > "$T/c6/static.raw"; shift; c6 env CLOSING_TASK=T86 "$@"; }
+clippy='rust-checks: lint FAILED on rust/mine\nerror: for loop over a `&Option`. This is more readably written as an `if let` statement\n  --> %s:84:18\n   |\n84 |         for s in &r.sunk {\n\nerror: could not compile `l7r_mine` (lib) due to 1 previous error\n'
+rustfmt='rust-checks: format FAILED on rust/mine\nDiff in @TOP@/%s:267:\n     svg.kind("marsh");\n'
+c6raw "$(printf "$clippy" mine/src/lib.rs)" L7R_EVENTS_DIR="$T/noevents"
+[ "$RC" -eq 1 ] && ! printf '%s' "$OUT" | grep -q BLOCKED && ! printf '%s' "$OUT" | grep -q -- '- ()' \
+  && ok "no other task in the clone, clippy's error in the caller's own file: red, never BLOCKED" || no "the T433 run's empty BLOCKED (exit $RC)" "$OUT"
+c6raw "$(printf "$rustfmt" rust/mine/src/lib.rs)" L7R_EVENTS_DIR="$T/noevents"
+[ "$RC" -eq 1 ] && ! printf '%s' "$OUT" | grep -q BLOCKED \
+  && ok "no other task in the clone, rustfmt's diff in the caller's own file: red, never BLOCKED" || no "rustfmt's empty BLOCKED (exit $RC)" "$OUT"
+c6raw "$(printf "$rustfmt" rust/other/src/lib.rs)"
+[ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -q "BLOCKED.*every error static printed is in another task's files - rust/other/src/lib.rs (T84@451-x);" \
+  && ok "rustfmt's absolute path read: a diff in another task's file alone is BLOCKED, naming it" || no "rustfmt's path (exit $RC)" "$OUT"
+c6raw "$(printf "$clippy" other/src/lib.rs)"
+[ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -q "BLOCKED.*every error static printed is in another task's files - rust/other/src/lib.rs (T84@451-x);" \
+  && ok "clippy's two-space arrow, its path from rust/: an error in another task's file alone is BLOCKED, naming it" || no "clippy's path (exit $RC)" "$OUT"
+c6raw "$(printf "$clippy" other/src/lib.rs)"'5 |     let s = "a --> mine/src/lib.rs";\n'
+printf '%s' "$OUT" | grep -q "BLOCKED.*rust/other/src/lib.rs (T84@451-x);" \
+  && ok "an arrow inside a quoted source line names no file: only a line that opens with one does" || no "a source line's arrow read as a path" "$OUT"
+c6raw 'rust-checks: lint FAILED on rust/mine\nerror: linking with `cc` failed: exit status: 1\nerror: could not compile `l7r_mine` (lib)\n'
+[ "$RC" -eq 1 ] && ! printf '%s' "$OUT" | grep -q BLOCKED \
+  && printf '%s' "$OUT" | grep -q "no error line static printed names a file - none could be attributed, so all are counted as yours:" \
+  && printf '%s' "$OUT" | grep -q '    error: linking with `cc` failed: exit status: 1' \
+  && ok "a red naming no file: said to be unattributed, its error lines listed, never another task's" || no "the unattributed red (exit $RC)" "$OUT"
+# cover runs the tests, so one step's red can mix forms: a failing test names its file in the panic line (the form captured 2026-11-25
+# from a throwaway failing test under rustc 1.87: "thread 'seats' panicked at phases/src/lib.rs:3:5:", at column 0, the path as passed to rustc)
+panic="thread 'tests::seats' panicked at %s:12:5:\nassertion failed: ok\n"
+c6raw "rust-checks: cover FAILED on rust/other\n   --> other/src/lib.rs:3:1\nrust-checks: cover FAILED on rust/mine\n$(printf "$panic" mine/src/lib.rs)\n"
+[ "$RC" -eq 1 ] && ! printf '%s' "$OUT" | grep -q BLOCKED \
+  && ok "another task's error beside the caller's failing test: not BLOCKED, the test's panic line read" || no "a mixed red BLOCKED (exit $RC)" "$OUT"
+c6raw "rust-checks: cover FAILED on rust/other\n$(printf "$panic" other/src/lib.rs)\n"
+printf '%s' "$OUT" | grep -q "BLOCKED.*every error static printed is in another task's files - rust/other/src/lib.rs (T84@451-x);" \
+  && ok "a failing test in another task's file alone: BLOCKED, naming it" || no "the panic line's path (exit $RC)" "$OUT"
+c6raw "rust-checks: APART lint red on rust/other - another task's\nerror: theirs only\nrust-checks: dead FAILED on rust/mine\n  pub fn seat: nothing in Rust calls it - delete it, or call it\n"
+printf '%s' "$OUT" | grep -q '    rust-checks: dead FAILED on rust/mine' && printf '%s' "$OUT" | grep -q '      pub fn seat: nothing' && ! printf '%s' "$OUT" | grep -q '    error: theirs only' \
+  && ok "the unattributed lines are the counted red's: dead's line listed, an APART crate's error not" || no "the unattributed lines (exit $RC)" "$OUT"
+rm -f "$T/c6/static.raw"; echo 1 > "$T/c6/hooks-test.rc"; c6 env CLOSING_TASK=T86
+[ "$RC" -eq 1 ] && ! printf '%s' "$OUT" | grep -q 'none could be attributed' \
+  && ok "a red hooks-test is counted whole, as before: no attribution note" || no "hooks-test's red given static's note (exit $RC)" "$OUT"
+rm -f "$T/c6/hooks-test.rc"
+echo rust/other/src/lib.rs > "$T/c6/static.red"
 rm -f "$T/c6/static.blocked"; c6 env -u CLOSING_TASK
 [ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -q 'no T= - every crate and file in the clone is judged as yours' && printf '%s' "$OUT" | grep -Eq '^  static +RED' \
   && ok "no T=: the whole clone judged as before, the T= form named" || no "no T= (exit $RC)" "$OUT"
