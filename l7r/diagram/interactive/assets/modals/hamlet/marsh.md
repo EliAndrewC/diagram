@@ -16,6 +16,8 @@ The wet ground below a fan seems to have run as wide as the fan itself, followin
 Guesses:
 - That the marsh reaches about 90 ft past the fields on each side: no source gives how far seepage spread at a fan's
   foot.
+- That past each lower corner of the fields the marsh's edge stays at that corner's level: how the wet ground lay beside
+  a fan's lowest fields has not yet been searched for.
 
 Depiction: The map draws the marsh on the undrained low ground below the fields, its upper edge following the foot of
 the fields, and builds nothing on it, the ground being too wet. It runs straight along the slope rather than in the arc
