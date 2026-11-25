@@ -213,7 +213,8 @@ fn every_second_of_the_day_is_booked_by_what_it_was() {
     .collect();
     assert_eq!(got, want);
     let clock: f64 = got.values().map(|v| v.1).sum();
-    // the blocking sums to the session's clock
+    // the clock identity: the tasks' blocking and the time blocking no task sum to each session's clock or past it (each task with
+    // blocking work in flight gets its own piece); on this one-task day, with nothing apart, exactly to it
     assert!((clock - 410.0).abs() < 1e-6);
 }
 
@@ -557,6 +558,7 @@ fn a_wait_past_the_depth_bound_is_booked_to_its_fallback() {
         t0: 0.0,
         t1: 4.0,
         key: key.clone(),
+        who: String::new(),
         what: What::Wait(Vec::new(), NOTHING.to_owned()),
     };
     let mut l = Ledger::default();
@@ -633,6 +635,7 @@ fn a_wait_with_nothing_in_flight_is_classed_by_what_came_before_and_after_it() {
         t0: 0.0,
         t1: 10.0,
         key: key.clone(),
+        who: String::new(),
         what: What::Wait(Vec::new(), NOTHING_WOKEN.to_owned()),
     };
     let mut l = Ledger::default();
@@ -671,6 +674,7 @@ fn a_page_session_blocks_only_the_task_its_brief_names() {
         t0: 0.0,
         t1: 10.0,
         key: key.clone(),
+        who: String::new(),
         what: What::Wait(vec![Cand::Agent(0), Cand::Pages], MONITOR.to_owned()),
     };
     let booked = |pages: &[Page]| {
@@ -702,11 +706,16 @@ fn a_page_session_blocks_only_the_task_its_brief_names() {
         (4.0, 0.0)
     );
     assert_eq!(free.free[PAGES], 6.0);
-    // `Blocks: T7`: the page session blocks T7, ending last, so it holds the whole wait (the critical one)
+    // `Blocks: T7`: the page session blocks T7 its whole 10 s, and the review, the waiter's T1's, keeps its own 4 s beside it (each task
+    // its own piece, round 5's L4b): 14 s of blocking over a 10 s clock
     let named = booked(&[Page {
         blocks: "T7".to_owned(),
         ..page
     }]);
+    assert_eq!(
+        named.cells[&(key.clone(), "plan review: agents".to_owned(), String::new())].block,
+        4.0
+    );
     assert_eq!(
         named.cells[&(
             ("451-x".to_owned(), "T7".to_owned()),
@@ -805,4 +814,104 @@ fn blocking_follows_each_default_and_each_clue() {
     assert_eq!(ix.resolve("T5", None, "451-x"), k("451-x", "T5"));
     assert_eq!(ix.resolve("451 T5", None, ""), k("451-x", "T5"));
     assert_eq!(ix.resolve("999 T5", None, ""), k("999", "T5"));
+}
+
+/// Two tasks' blocking work in flight in one session at once (451 T243 round 5's L4b; the GM 2026-11-25: "that research would be blocking
+/// even if there was a different unrelated task happening in a different subagent at the same time"): each task gets its own piece, so
+/// the tasks' blocking may sum past the clock, and work blocking no task counts only where no task-blocking work is in flight.
+#[test]
+fn each_task_with_blocking_work_in_flight_gets_its_own_piece() {
+    let (runs, commands) = (Runs::default(), HashMap::new());
+    let agent = |aid: &str, kind: &str, task: &str, end: f64| columns::Agent {
+        aid: aid.to_owned(),
+        kind: kind.to_owned(),
+        task: task.to_owned(),
+        spans: vec![(0.0, end)],
+        ..columns::Agent::default()
+    };
+    // a T5 builder 0-10 s; research passes `Blocks: T4` 0-4, 0-6 and 0-3 s (T4's critical one, 0-6, met after a shorter and before
+    // one); a research pass with no clue 0-8 s - all the session's
+    let agents = [
+        agent("B", "general-purpose", "T5", 10.0),
+        agent("Q2", "research-pass", "", 4.0),
+        agent("Q", "research-pass", "", 6.0),
+        agent("Q3", "research-pass", "", 3.0),
+        agent("R", "research-pass", "", 8.0),
+        agent("R2", "research-pass", "", 5.0),
+    ];
+    let stream = [
+        line(&json!({"ev": "PostToolUse", "tool": "Agent", "id": "b", "aid": "B"})),
+        line(
+            &json!({"ev": "PostToolUse", "tool": "Agent", "id": "q2", "aid": "Q2", "blocks": "T4"}),
+        ),
+        line(&json!({"ev": "PostToolUse", "tool": "Agent", "id": "q", "aid": "Q", "blocks": "T4"})),
+        line(
+            &json!({"ev": "PostToolUse", "tool": "Agent", "id": "q3", "aid": "Q3", "blocks": "T4"}),
+        ),
+        line(&json!({"ev": "PostToolUse", "tool": "Agent", "id": "r", "aid": "R"})),
+    ];
+    let world = World {
+        stream: &stream,
+        runs: &runs,
+        commands: &commands,
+        agents: &agents,
+        pages: &[],
+        window: (0.0, 10.0),
+    };
+    let ix = Ix::new(&world);
+    let t5 = ("451-x".to_owned(), "T5".to_owned());
+    let all = [
+        Cand::Agent(0),
+        Cand::Agent(1),
+        Cand::Agent(2),
+        Cand::Agent(3),
+        Cand::Agent(4),
+    ];
+    let tasks = |l: &Ledger, task: &str| {
+        l.cells
+            .iter()
+            .filter(|((k, _, _), _)| k.1 == task)
+            .map(|(_, c)| c.block)
+            .sum::<f64>()
+    };
+    // the session WAITS on all of them, 0-10 s: the builder blocks T5 all 10 s, T4's passes block T4 its critical one's 6 s beside it,
+    // once (the ends-last pick within one task's work)
+    let mut waited = Ledger::default();
+    let seg = Seg {
+        t0: 0.0,
+        t1: 10.0,
+        key: t5.clone(),
+        who: "s:".to_owned(),
+        what: What::Wait(all.to_vec(), MONITOR.to_owned()),
+    };
+    ix.book_seg(&mut waited, &seg, (0.0, 10.0), Some(&t5), 0);
+    assert_eq!((tasks(&waited, "T5"), tasks(&waited, "T4")), (10.0, 6.0));
+    // the unclued pass blocks no task, and counts so nowhere: task-blocking work was in flight its whole span
+    assert!(waited.free.is_empty());
+    // the session in its OWN T5 turn, 0-10 s: its turn blocks T5, and its T4 passes in flight still block T4, 6 s
+    let mut turn = Ledger::default();
+    let own = Seg {
+        what: What::Own(tool_cat("main session", "Read")),
+        ..seg
+    };
+    ix.book_seg(&mut turn, &own, (0.0, 10.0), Some(&t5), 0);
+    assert_eq!((tasks(&turn, "T5"), tasks(&turn, "T4")), (10.0, 6.0));
+    assert!(turn.free.is_empty());
+    // the session waits on the two unclued passes alone: no task-blocking work in flight, so the one ending last is booked apart, 8 s
+    let mut apart = Ledger::default();
+    ix.descend(
+        &mut apart,
+        &[Cand::Agent(5), Cand::Agent(4)],
+        (0.0, 8.0),
+        Some(&t5),
+        MONITOR,
+        0,
+    );
+    assert!(apart.cells.is_empty() && (apart.free[PAGES] - 8.0).abs() < 1e-9);
+    // the clock identity, restated: the tasks' blocking and the free time sum to the clock or past it
+    for l in [&waited, &turn] {
+        let sum: f64 =
+            l.cells.values().map(|c| c.block).sum::<f64>() + l.free.values().sum::<f64>();
+        assert!(sum >= 10.0);
+    }
 }

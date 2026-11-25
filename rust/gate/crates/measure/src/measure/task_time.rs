@@ -10,9 +10,9 @@
 //! THE DENOMINATORS. Minutes are machine minutes - every main session's and builder's own time, every review agent's span, every Bash
 //! run, every page-session phase - and overlap; a percentage of minutes is of the summed minutes. Blocking minutes are BY TASK AND
 //! DEPENDENCY (the GM 2026-11-25: "a minute should count as blocking. When something else is waiting on it to be done before it can be
-//! started"): each main session's clock inside the window, each second once per session, booked to the task whose next step waited on
-//! it - by the `Blocks:` clue the work's dispatch, brief or command gave, else by the defaults (`book`'s doc) - so they sum over tasks
-//! and pass the clock where tasks ran side by side; a wait on work that blocked no task is named apart, never blocking. Waiting on the GM
+//! started"): each main session's clock inside the window, each second once per task it blocks, booked to the task whose next step waited on
+//! it - by the `Blocks:` clue the work's dispatch, brief or command gave, else by the defaults (`book`'s doc), each task with blocking
+//! work in flight its own piece - so they sum over tasks and pass the clock where tasks ran side by side, in one session or across clones; a wait on work that blocked no task is named apart, never blocking. Waiting on the GM
 //! (his turn, or away) is reported with its share of the whole, and left out of every other percentage's denominator (amendment (i),
 //! the GM 2026-11-25): those are of the WORKING time, the whole less the GM's, and sum to 100 over it. The line "Working at once" shows
 //! how many actors worked together.
@@ -415,7 +415,7 @@ pub fn render(
     let landed_block = total(&sums(l, &|x| keys.contains(&x)).0).block;
     let mut out = format!(
         "# The task time breakdown, {} to {} UTC ({} tasks landed)\n\nminutes {} (machine, overlapping), blocking {} (by task and dependency: \
-         each task's own turns and what its next step waited on, summed over tasks, so it passes the clock where tasks ran side by side; \
+         each task's own turns and what its next step waited on, summed over tasks, so it passes the clock where tasks ran side by side, in one session or across clones; \
          the landed tasks' {})\n\n\
          Waiting on the GM: {} min blocking, {} of the window's blocking. It is left out of every other percentage: the GM's rows are \
          percentages of the whole (the task's, the window's), every other row's - minutes and blocking, of the task and of the window - \

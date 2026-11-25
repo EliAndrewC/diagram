@@ -1,5 +1,5 @@
 //! The task time breakdown's booking (451 T243): every actor's time - each main session, each builder, each review agent, each Bash run -
-//! as MINUTES (machine time, which overlaps) and BLOCKING minutes (a main session's wall clock, each second once, descended into what
+//! as MINUTES (machine time, which overlaps) and BLOCKING minutes (a main session's wall clock, each second once per task it blocks, descended into what
 //! it waited on), by (feature, task), category and make target or program.
 //!
 //! THE RULES, each the GM's words in tasks.md T243's amendments:
@@ -11,9 +11,9 @@
 //! - A BASH RUN is booked by its make target through the guard's table (`columns::line_bucket`), its phases split out (compile, hook
 //!   suites, map generation), the review bucket split by kind; a run with no booked target by its program ([`super::program`]).
 //! - BLOCKING walks each main session's own time: its turns and calls are its own; a wait - between turns on work, or a wait loop - is
-//!   booked, at each instant, to the thing in flight that ends last (the critical one), descending into a builder's own time the same
-//!   way: its turns, its foreground commands, and its waits on its own background runs and agents. A wait with nothing in flight is
-//!   booked as that, named.
+//!   booked, at each instant, to each task's thing in flight that ends last (that task's critical one), descending into a builder's own
+//!   time the same way: its turns, its foreground commands, and its waits on its own background runs and agents. A wait with nothing in
+//!   flight is booked as that, named.
 //! - BLOCKING IS BY TASK AND DEPENDENCY (the GM 2026-11-25: "a minute should count as blocking. When something else is waiting on it to
 //!   be done before it can be started ... that research would be blocking even if there was a different unrelated task happening in a
 //!   different subagent at the same time"): each piece is booked to the task whose next step waited on it. A CLUE given with the data
@@ -22,8 +22,10 @@
 //!   be 100% exact": a main session's own turns and waits block the task its lines carry (its `make task-start` mark); a builder's time
 //!   (its turns, foreground commands, the review agents it awaits) blocks the builder's own task, else its waiter's; a run or a review
 //!   agent blocks its waiter's task, a background run only from when its waiter waits on it (the walk reaches it no sooner); a page
-//!   session or a research pass blocks nothing. Work that blocks no task is the wait's piece only where nothing in flight blocks one,
-//!   and is booked apart (`Ledger::free`), never blocking.
+//!   session or a research pass blocks nothing. EACH task with blocking work in flight gets its own piece of each second (round 5's L4b):
+//!   a wait books every task its work in flight blocks, and an actor's own time (a turn or run, and the session's waits on the GM and
+//!   idle hours too) books, beside its own task, every other task its background work in flight blocks - so the tasks' blocking sums to a session's clock or past it. Work that blocks no task is the
+//!   wait's piece only where nothing in flight blocks one, and is booked apart (`Ledger::free`), never blocking.
 
 use std::collections::{HashMap, HashSet};
 
@@ -175,6 +177,8 @@ struct Seg {
     t0: f64,
     t1: f64,
     key: Key,
+    /// The actor whose time it is (its owned background work is in flight beside it).
+    who: String,
     what: What,
 }
 
@@ -587,6 +591,7 @@ impl<'a> Ix<'a> {
                         t0: x,
                         t1: w_end,
                         key: key.clone(),
+                        who: who.to_owned(),
                         what: What::Wait(
                             held,
                             "builders: waiting on its background work".to_owned(),
@@ -598,6 +603,7 @@ impl<'a> Ix<'a> {
                         t0: w_end,
                         t1: y,
                         key,
+                        who: who.to_owned(),
                         what: What::Own(tool_cat(prefix, &tool)),
                     });
                 }
@@ -607,6 +613,7 @@ impl<'a> Ix<'a> {
                 t0: x,
                 t1: y,
                 key,
+                who: who.to_owned(),
                 what,
             });
         }
@@ -641,7 +648,7 @@ impl<'a> Ix<'a> {
         put(cat, y - x - split);
     }
 
-    /// The blocking of `[x, y]`, a wait on `cands` by a waiter blocking `blocked`: each instant to the one in flight that blocks a task
+    /// The blocking of `[x, y]`, a wait on `cands` by a waiter blocking `blocked`: each instant, for each task, to its work in flight that blocks it
     /// and ends last (the critical one); with none blocking a task, the one ending last, as waited-on time; with none, `fallback`.
     #[expect(
         clippy::many_single_char_names,
@@ -673,18 +680,19 @@ impl<'a> Ix<'a> {
         for w in cuts.windows(2) {
             let (px, py) = (w[0], w[1]);
             // blocking is by dependency (the GM 2026-11-25: "a minute should count as blocking. When something else is waiting on it to
-            // be done before it can be started"): what blocks a task is preferred to what blocks none; among them the one that ends
-            // last held the waiter (the others ending sooner would not have shortened the wait)
+            // be done before it can be started ... even if there was a different unrelated task happening in a different subagent at
+            // the same time"): EACH task with blocking work in flight gets its own piece, the one of its work that ends last (the
+            // others ending sooner would not have shortened its wait) - so the tasks' blocking may sum past the clock (round 5's L4b)
+            if self.each_task(l, cands, (px, py), blocked, None, depth) {
+                continue;
+            }
+            // nothing in flight blocks a task: the one ending last, waited on and blocking none
             let best = cands
                 .iter()
                 .copied()
                 .filter(|c| self.active(*c, px, py))
                 .map(|c| (self.target(c, (px, py), blocked), c))
-                .max_by(|a, b| {
-                    a.0.is_some()
-                        .cmp(&b.0.is_some())
-                        .then(self.span(a.1).1.total_cmp(&self.span(b.1).1))
-                });
+                .max_by(|a, b| self.span(a.1).1.total_cmp(&self.span(b.1).1));
             let class = if !nothing {
                 fallback
             } else if self.w.pages.iter().any(|p| p.t0 <= px && py <= p.t1) {
@@ -701,22 +709,111 @@ impl<'a> Ix<'a> {
                     block(l, to.as_ref(), (class, ""), py - px, false);
                 }
                 None => block(l, blocked, (class, ""), py - px, false),
-                Some((to, Cand::Pages)) => block(l, to.as_ref(), (PAGES, ""), py - px, false),
-                Some((to, Cand::Run(i))) if is_wait(&self.run_cats[i].0) => {
-                    let next: &[Cand] = if self.run_cats[i].0 == program::PAGE_WAIT {
-                        &[Cand::Pages]
-                    } else {
-                        &[]
-                    };
-                    self.descend(l, next, (px, py), to.as_ref(), program::WAIT, depth + 1);
-                }
-                Some((to, Cand::Run(i))) => {
-                    self.book_run(l, i, (px, py), As::Blocking(to.as_ref()), false);
-                }
-                Some((to, Cand::Agent(i))) => {
-                    self.agent_piece(l, i, (px, py), to.as_ref(), depth + 1);
-                }
+                Some((to, c)) => self.book_cand(l, c, (px, py), to.as_ref(), depth),
             }
+        }
+    }
+
+    /// Books, over `[x, y]` (no candidate starting or ending inside it), each task that work in `cands` blocks - but the task `skip` -
+    /// its own piece: that task's work in flight that ends last. Whether any was booked.
+    #[expect(
+        clippy::many_single_char_names,
+        reason = "an interval's ends `x`/`y` beside its run, agent or segment, as the module's doc names them"
+    )]
+    fn each_task(
+        &self,
+        l: &mut Ledger,
+        cands: &[Cand],
+        (x, y): (f64, f64),
+        blocked: Option<&Key>,
+        skip: Option<&Key>,
+        depth: usize,
+    ) -> bool {
+        let mut by_task: Vec<(Key, Cand)> = Vec::new();
+        for c in cands.iter().copied().filter(|c| self.active(*c, x, y)) {
+            let Some(k) = self.target(c, (x, y), blocked) else {
+                continue;
+            };
+            if skip == Some(&k) {
+                continue;
+            }
+            match by_task.iter_mut().find(|(t, _)| *t == k) {
+                Some(e) if self.span(c).1 > self.span(e.1).1 => e.1 = c,
+                Some(_) => {}
+                None => by_task.push((k, c)),
+            }
+        }
+        for (k, c) in &by_task {
+            self.book_cand(l, *c, (x, y), Some(k), depth);
+        }
+        !by_task.is_empty()
+    }
+
+    /// A candidate's piece `[x, y]` booked as blocking `to`.
+    #[expect(
+        clippy::many_single_char_names,
+        reason = "an interval's ends `x`/`y` beside its run, agent or segment, as the module's doc names them"
+    )]
+    fn book_cand(
+        &self,
+        l: &mut Ledger,
+        c: Cand,
+        (x, y): (f64, f64),
+        to: Option<&Key>,
+        depth: usize,
+    ) {
+        match c {
+            Cand::Pages => block(l, to, (PAGES, ""), y - x, false),
+            Cand::Run(i) if is_wait(&self.run_cats[i].0) => {
+                let next: &[Cand] = if self.run_cats[i].0 == program::PAGE_WAIT {
+                    &[Cand::Pages]
+                } else {
+                    &[]
+                };
+                self.descend(l, next, (x, y), to, program::WAIT, depth + 1);
+            }
+            Cand::Run(i) => self.book_run(l, i, (x, y), As::Blocking(to), false),
+            Cand::Agent(i) => self.agent_piece(l, i, (x, y), to, depth + 1),
+        }
+    }
+
+    /// While an actor's own turn or run blocks `blocked`, its background work in flight that blocks ANOTHER task blocks that task
+    /// beside it (round 5's L4b: a research pass `Blocks: T4` keeps blocking T4 while the session works its own T5 turn).
+    #[expect(
+        clippy::many_single_char_names,
+        reason = "an interval's ends `x`/`y` beside its run, agent or segment, as the module's doc names them"
+    )]
+    fn beside(
+        &self,
+        l: &mut Ledger,
+        who: &str,
+        (x, y): (f64, f64),
+        blocked: Option<&Key>,
+        depth: usize,
+    ) {
+        let owned: Vec<Cand> = self
+            .owned
+            .get(who)
+            .into_iter()
+            .flatten()
+            .copied()
+            .filter(|c| {
+                let (a, b) = self.span(*c);
+                a < y && x < b
+            })
+            .collect();
+        if owned.is_empty() || depth >= 8 {
+            return;
+        }
+        let mut cuts = vec![x, y];
+        for c in &owned {
+            let (a, b) = self.span(*c);
+            cuts.extend([a, b].into_iter().filter(|t| x < *t && *t < y));
+        }
+        cuts.sort_by(f64::total_cmp);
+        cuts.dedup();
+        for w in cuts.windows(2) {
+            self.each_task(l, &owned, (w[0], w[1]), blocked, blocked, depth);
         }
     }
 
@@ -762,8 +859,14 @@ impl<'a> Ix<'a> {
         depth: usize,
     ) {
         match &s.what {
-            What::Own(cat) => block(l, blocked, (cat, ""), piece.1 - piece.0, false),
-            What::Run(i) => self.book_run(l, *i, piece, As::Blocking(blocked), true),
+            What::Own(cat) => {
+                block(l, blocked, (cat, ""), piece.1 - piece.0, false);
+                self.beside(l, &s.who, piece, blocked, depth);
+            }
+            What::Run(i) => {
+                self.book_run(l, *i, piece, As::Blocking(blocked), true);
+                self.beside(l, &s.who, piece, blocked, depth);
+            }
             // a cycle cannot form (an agent waits only on what it started), but the depth bounds the walk all the same
             What::Wait(c, fb) if depth < 8 => self.descend(l, c, piece, blocked, fb, depth),
             What::Wait(_, fb) => block(l, blocked, (fb, ""), piece.1 - piece.0, false),
