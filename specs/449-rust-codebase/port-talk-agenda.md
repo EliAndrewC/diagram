@@ -47,3 +47,25 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
    a faster version would take (caching, incremental runs, narrowing, a lighter hook path); git actions and the hooks'
    per-call cost included (the guard's event log times every hook). First check the premise against T243's figures: the
    share of blocking time in tooling versus model turns writing code.
+10. Long-running features against small spec-kit features filed and closed (the GM: "whether to have long-running features
+    like the ones that we have been working for the last few weeks, or whether it is better to have small SpecKit features
+    that get filed and then completely closed out ... there are real implications ... for which tooling gets run and what
+    the review process is like ... wall clock time and also ... tokens and ... the amount of overhead"). Measure: what a
+    feature's lifecycle costs per task in each shape - spec and plan reviews, the plan gate's stale blocks and their escapes
+    (every landing today carried a PLAN_REVIEW_OK for 449's 17 moved tasks and unfilled sections), feature-report, archive
+    moves, claims and record rounds keyed per feature - from 449 and 451's records against the small features in specs/.
+11. Whether everything must go through a spec-kit feature (the GM: "I think on balance, this is probably for the best, but
+    that is an assumption worth questioning ... whether there are categories of changes for which it would make sense to
+    bypass those requirements ... tooling changes or minor bug fixes that we notice while working on something else ... if I
+    had to guess ... adding a new task to a feature that we are already in the middle of is probably fairly low overhead").
+    Start from the rule as written: the root CLAUDE.md already says "Feature work is a spec-kit feature ...; a tweak is done
+    directly", and make land-tooling lands tooling alone; measure what a task added mid-feature costs (task-add, plan
+    section, decide, spec-fidelity MODE 4, the landing) against a direct tweak, from today's 451 T226-T243.
+
+## How each item closes (the GM, 2026-11-25)
+
+Every item above is decided in the talk and its decision captured with its logic, its reasoning and the numbers that support
+it (the GM: "capture our logic and our reasoning and ideally the numbers that we gathered in order to support these
+decisions, not only for this specific item, but for also all of the other 9 items"): under each item, a `Decided:` line
+with the GM's words, the measurements it rested on (each dated, with its method), and what follows - a task filed (its
+number), a rule changed (where), or nothing, and why.
