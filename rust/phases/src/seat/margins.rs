@@ -121,9 +121,12 @@ pub struct Weights {
 /// 1 (its floating point's own slack).
 ///
 /// Research:
-///     the square end in - GUESS: tier 1 takes "a margin 45 to 90 degrees off the wind" with both ends in, as the falls are admitted
-///     (square to the wind or away, `water_frame.rs` `admitted`): a fall square to the wind leaves the head square to it, and with
-///     the end out the Rust gate's seed 901280 (its windward flank, parallel to the fall, all on the wet toe) had no seat
+///     the square end in - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a fall "across" the wind is admitted and such a hamlet sits by the windward side of its
+///     fields, so tier 1 takes "a margin 45 to 90 degrees off the wind" with both ends in, as the falls are admitted (square to the
+///     wind or away, `water_frame.rs` `admitted`): a fall square to the wind leaves the head square to it, and with the end out a
+///     roll so falling whose windward flank is refused has its head refused too (the Rust gate's seed 901280, when its windward
+///     flank lay on the wet toe, before 449 T432 cut the toe at the fields' lower corners; it seats with its back to the wind
+///     either way since 449 T426, measured 2026-11-25)
 pub(super) const SQUARE_EPS: f64 = 1e-9;
 
 /// The candidate seats a field's outline offers, `(margin midpoint, the back's direction, tier)`, in the outline's order.
@@ -421,7 +424,7 @@ pub const FIELD_IN_BAND_MAX: f64 = 0.1;
 /// Research:
 ///     seat on the field's margin - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: higher, drier ground beside the paddy, scored upslope
 ///     band on the canvas - CONVENTION: the seat center at least the band's half-length inside the frame
-///     not on the wet toe - research/questions/0058-ground-too-wet-to-build-on.drawing.html: seat and anchor off the marsh below the fields
+///     not on the wet toe - research/questions/0058-ground-too-wet-to-build-on.drawing.html, research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: nothing is built on the marsh below the fields - the seat, its margin's midpoint and every sample of its band off it, and where the toe stops at the fields' lower corners (a comb's) the band's corners and its ends' middles too (449 T432: the two points alone passed a band at the fields' lower corner swung under their foot); a polder's toe, spanning its ring and 90 ft up beside it, is asked at the samples alone, its rim refusing 654 of 6,000 polders (measured 2026-11-25)
 ///     the band on open ground - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: beside its paddy, the band's points off the field, and no corner of the field's outline deeper in the band than `FIELD_IN_BAND_MAX` of its depth - a margin whose band holds one is refused with those on the field (449 T423: the nine points alone passed a band with the paddy's corner between them)
 ///     not in the reed fringe - CANON: the GM's ruling of 2026-08-28, refused centered in a pond's reed fringe, scored down at an end; it departs from research/questions/0058-ground-too-wet-to-build-on.drawing.html, which does not count the fringe as marsh
 ///     no drain rule at the seat - research/questions/0058-ground-too-wet-to-build-on.drawing.html: the ground below a drain kept only from dispersed farmsteads, not a nucleated cluster
@@ -499,6 +502,32 @@ pub fn ranked(
             .flat_map(|&(k, ft)| SAMPLE_ALONG.iter().map(move |&t| (k * dep + ft, t)))
             .map(|(d, t)| band_pt(d, t))
             .collect();
+        // ...AND NONE OF THE BAND'S SAMPLES ON IT (449 T432): asked of the center and the margin's midpoint alone, a band at the
+        // fields' lower corner swung under their foot - 1,643 of 6,000 declared falls into the wind a quarter or more on the toe
+        // once it stopped at the corners, and 9,627 of 41,000 sweep rolls a twentieth or more before, the worst 32.7 percent; with
+        // the samples and the rim, none past 0.1 percent (measured 2026-11-25, each seated band's rectangle cut by its toe)
+        // ...and, where the toe stops at the fields' lower corners, its four corners and its ends' middles, where the toe's end
+        // reached in between the samples (a polder's toe spans its ring: its rim not asked, `SeatIn::toe_rim`)
+        if let Some(toe) = &ground.toe {
+            let rim = [
+                (0.0, -1.0),
+                (0.0, 1.0),
+                (1.0, -1.0),
+                (1.0, 1.0),
+                (2.0, -1.0),
+                (2.0, 1.0),
+            ]
+            .map(|(k, t)| band_pt(STANDOFF + k * dep, t));
+            let asked = if inp.toe_rim { &rim[..] } else { &[] };
+            if pts
+                .iter()
+                .chain(asked)
+                .any(|&p| toe.inside(p, &mut refusal))
+            {
+                stopped[2] += 1;
+                continue;
+            }
+        }
         if pts.iter().any(|&p| ground.outline.inside(p, &mut refusal)) {
             stopped[3] += 1;
             continue;

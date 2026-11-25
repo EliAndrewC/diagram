@@ -50,6 +50,9 @@ pub struct SeatIn {
     pub plots: Vec<Vec<Pt>>,
     /// The wet toe below the fields, where the roll lays one.
     pub toe: Vec<Pt>,
+    /// Whether the toe stops at the fields' lower corners (a comb's fan, 449 T432), so a band's rim is asked it too; a polder's
+    /// toe spans its ring and is asked at the band's samples alone.
+    pub toe_rim: bool,
     /// A tail pond's reed fringes.
     pub reeds: Vec<Vec<Pt>>,
     /// The brook's course as first laid.
@@ -108,7 +111,7 @@ pub const BAND_EXITS: [f64; 2] = [-0.6, 0.6];
 /// The walled-in seats that have a dry way out from a station of their band (`BAND_EXITS`), in the order the ranking held them.
 ///
 /// Research:
-///     a seat astride the brook leaves by its open bank - GUESS research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: "Where the site that faces the fields and has its back to the winter wind is crossed by the brook, the houses are built on both banks" - so a band whose center falls in the pocket between the brook, the intake's feeder and the field's corner, the rest of it on open ground, is no walled-in site; the record does not say where a cluster's way out starts (research/questions/0081-village-lanes.drawing.html keeps lanes on dry ground), so it is asked of the band's two stations, and only once no margin is left, each refused or walled in at its center and the hill-backed seat asked where a fall runs into the wind - 4 of 35,000 valley rolls, each falling square across its wind with its windward flank on the wet toe, the one seat kept at the head's windward corner over the intake (measured 2026-11-24: 20,000 cohort seeds at five starts and seeds 1 to 1,500 at ten sizes and falls; none refused after, none with a map check broken, the four bands 0.03 to 0.05 percent on the paddy)
+///     a seat astride the brook leaves by its open bank - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html#seat-astride-brook-windward-corner: a hamlet whose fall runs square across its wind, once every other site beside its fields is refused, takes the windward corner at the head of its fields astride the brook, its track leaving by the open bank; research/questions/0081-village-lanes.drawing.html keeps lanes on dry ground and does not say where a cluster's way out starts, so a band whose center falls in the pocket between the brook, the intake's feeder and the field's corner, the rest of it on open ground, is asked from its band's two stations, and only once no margin is left, each refused or walled in at its center and the hill-backed seat asked where a fall runs into the wind - 8 of 41,000 sweep rolls took it while the toe climbed the windward flank (measured 2026-11-24); none since 449 T432 cut the toe at the fields' lower corners (0 of the same 41,000 rolls, measured 2026-11-25), kept for a site walled in at its center
 fn open_at_an_end(
     shut: Vec<Frame>,
     way: &mut exit::Exit,

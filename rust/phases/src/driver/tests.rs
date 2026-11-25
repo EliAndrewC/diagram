@@ -258,10 +258,12 @@ fn every_mark_drawn_is_a_registry_kind_in_the_census() {
 
 /// A BARE WINTER THE DRY GROUND CANNOT FEED IS ROLLED AGAIN AS BARLEY (449 T418): seed 31 of 16 households falling at 200
 /// degrees rolled its winter crop bare, and its dry fields climbed to 43 plots, 6.45 of the 13.60 acres its grain needs, before
-/// every column ended - 0011 draws a bare winter paddy only where the fan's dry ground can grow the whole need.
+/// every column ended - 0011 draws a bare winter paddy only where the fan's dry ground can grow the whole need. Seed 636 since
+/// 449 T432: with the wet toe off the fan's narrowing sides, seed 31's hem held 13.65 of its 13.60 acres and stands bare; 636
+/// is a roll of the same size and fall whose field rolls a bare winter its hem cannot feed.
 #[test]
 fn a_bare_winter_the_dry_ground_cannot_feed_is_rolled_again_as_barley() {
-    let short = r#"{"name": "S", "seed": 31, "households": 16, "down_deg": 200}"#;
+    let short = r#"{"name": "S", "seed": 636, "households": 16, "down_deg": 200}"#;
     let r = roll(&parse(short).unwrap()).unwrap();
     let need = 16.0 * 0.85;
     let (drawn, _) = r.grain.unwrap();
@@ -278,7 +280,7 @@ fn a_bare_winter_the_dry_ground_cannot_feed_is_rolled_again_as_barley() {
     // a PINNED bare winter the ground cannot feed is refused by name, on a wild middle and on a cleared one: no map of it is drawn
     for middle in ["wild", "cleared"] {
         let pinned = format!(
-            r#"{{"name": "S", "seed": 31, "households": 16, "down_deg": 200, "pins": {{"winter_crop": "none", "fan_middle": "{middle}"}}}}"#
+            r#"{{"name": "S", "seed": 636, "households": 16, "down_deg": 200, "pins": {{"winter_crop": "none", "fan_middle": "{middle}"}}}}"#
         );
         let e = roll(&parse(&pinned).unwrap()).unwrap_err().0;
         let named = e.starts_with("the winter crop refused: winter_crop is pinned none");
@@ -313,21 +315,30 @@ fn a_dike_ponds_channels_are_pond_canals_drawn_at_the_creeks_width() {
 }
 
 #[test]
-fn a_fall_square_across_the_wind_seats_at_the_heads_windward_corner_astride_its_intake() {
+fn a_fall_square_across_the_wind_seats_on_its_dry_windward_flank() {
     // 449 T426: `make seeds`' fresh comb seed 941239097 and seed 508 at 20 households falling at 135 degrees were refused by the seat
-    // ("1 walled in"), and 508 was still written as a map with no settlement, a bare winter and no dry fields
+    // ("1 walled in"), and 508 was still written as a map with no settlement, a bare winter and no dry fields; T426 seated them at
+    // the head's windward corner astride the intake, asked from the band's ends. 449 T432: the wet toe no longer climbs the
+    // windward flank and no longer walls that corner in, so neither asks a band's end: 941239097 seats on its dry windward flank,
+    // its back square to the wind (tier 0); 508's flank bands each end on the toe, and it takes the head's windward corner, its
+    // back turned 45.5 degrees toward the wind (tier 1)
     let fresh = roll(&super::cohort_spec(941_239_097, None)).unwrap();
     let declared = roll(
         &parse(r#"{"name": "S508", "seed": 508, "households": 20, "down_deg": 135}"#).unwrap(),
     )
     .unwrap();
-    for r in [&fresh, &declared] {
+    for (r, square) in [(&fresh, 0.9), (&declared, 0.7)] {
         assert_eq!(
             r.stages,
             vec!["water_frame", "field", "sink", "seat", "hem"]
         );
         // its back to the wind still, and no rule of the finished map broken
         assert!(r.seated.as_ref().is_some_and(|s| !s.frames[0].offwind));
+        let (f, w) = (
+            &r.seated.as_ref().unwrap().frames[0],
+            super::wind(&r.plan.windward),
+        );
+        assert!(f.out.0 * w.0 + f.out.1 * w.1 > square, "{f:?}");
         assert_eq!(super::check::check(r), Vec::<String>::new());
     }
     // a roll that kept a stage's refusal is refused whole: no map is handed back to be written

@@ -1950,6 +1950,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T432 (page session P11, 2026-11-25: on a fan whose fields narrow inward downhill the wet toe climbed the whole side, recorded on 0057's drawing page as the DEVIATION `toe-on-tapering-flank`; page session P12's check ruled the hill-foot finding does not apply to that side)": {
+   "sha256": "63c02e5f36b2980a68e30f68e66b9a6b6d11566b128807e407db81b322b1db6e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T432 Approach (checklist part A)": {
+   "sha256": "0661a0362299f72f19adacc9896f12f66ba02c90032a1f92f9bb20927be327e0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -26583,6 +26595,152 @@
      "summary": "no work-budget step owed: the budgeted polder is a rice polder, never eased, and its stages are unmoved",
      "class": "within",
      "why": "A measured statement of scope (make work-budget, 2026-11-24), not a narrowing of anything asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T432 (page session P11, 2026-11-25: on a fan whose fields narrow inward downhill the wet toe climbed the whole side, recorded on 0057's drawing page as the DEVIATION `toe-on-tapering-flank`; page session P12's check ruled the hill-foot finding does not apply to that side)",
+    "### T432 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "toe-cut-at-lower-corners",
+     "summary": "The wet toe (toe_band) is cut at a comb fan's two lower field corners, PAD beyond each; a polder hands no corners and is unchanged.",
+     "class": "within",
+     "why": "Fixes a wrong outcome found by page session P11 (the DEVIATION toe-on-tapering-flank: wet ground climbing the whole side of a fan that narrows downhill, which 0057 does not attest and P12 ruled the hill-foot finding does not cover). The GM 2026-11-24: 'if there are real defects, then I do want to find them and fix them ... before we move forward'."
+    },
+    {
+     "id": "shoulder-at-corner-level",
+     "summary": "Past a corner the toe's edge stays at that corner's level rather than 90 ft up (UNRESEARCHED), chosen on a measured outcome (the dry hem's plots on the band with the 90 ft shoulder).",
+     "class": "within",
+     "why": "A design choice inside the defect fix, decided on a measured wrong outcome the alternative produced (dry plots on the band), labeled UNRESEARCHED per the research-backlog rule; it narrows nothing the GM asked."
+    },
+    {
+     "id": "band-width-foot-not-dry-fields",
+     "summary": "The band spans the paddy fan's foot, not the dry fields round it; the hem reaching past the band's ends on dry ground is left in code and the 0057 sentence is restated by its next page session with the DEVIATION block.",
+     "class": "within",
+     "why": "Measured not a wrong outcome (0 of 35,000 rolls with a dry plot on the band; the overreach is on dry ground). The GM 2026-11-19 and constitution XIV: a claim the code does not literally match, where behavior is fine, is fixed by restating the claim, not the code."
+    },
+    {
+     "id": "keep-off-at-samples-and-rim",
+     "summary": "margins::ranked asks the toe at the band's nine samples, and where the toe is cut also at its four corners and ends' middles, replacing the two-point test.",
+     "class": "within",
+     "why": "A defect fix (bands up to 32.7 percent on the wet toe), squarely the GM's 2026-11-24 instruction to find and fix real defects in hamlet generation before moving on."
+    },
+    {
+     "id": "a-polder-toe-uncut-samples-only",
+     "summary": "Decision (a): a polder's toe stays uncut beside its ring and is asked at the nine samples only (no rim); 654 of 6,000 polder bands touch it, none past a twentieth, worst 4.2 percent, unchanged from HEAD.",
+     "class": "within",
+     "why": "Leaves a difference, not a defect: no stage inks the toe, 0019 seats the village just off the dike and attests no wet ground on its landward side, the shoulder beside the ring is unresearched, and no band passes the plan's own twentieth line. The GM 2026-11-19 and XIV: a difference left as it is stays within, and what is left is not a wrong outcome the record attests."
+    },
+    {
+     "id": "bands-on-paddy-rise-within-tolerance",
+     "summary": "Bands touching the paddy rise from 6,799 to 7,036 rolls (worst 3.54 to 3.68 percent), all under the unchanged FIELD_IN_BAND_MAX rule; no change made.",
+     "class": "within",
+     "why": "A differing output within an accepted tolerance, not a wrong outcome (FR-002 as amended by T180; the GM 2026-11-17/18 on exactness)."
+    },
+    {
+     "id": "b-399-seats-windward-0031",
+     "summary": "Decision (b): 399 falls into the wind move from the hill-backed branch to the existing windward-margin branch on newly dry ground; T261/T423's order kept, 0031's sentence restated by its next page session.",
+     "class": "within",
+     "why": "No new kind of seat and no attested finding broken: the hamlet stands on dry ground beside its paddy with its back to the wind, 0031's general case; the fall-into-wind rule is a GUESS whose premise (no high windward margin) no longer holds for these rolls. A claim restated, not code changed, per XIV and the GM 2026-11-19."
+    },
+    {
+     "id": "band-end-exit-kept",
+     "summary": "T426's band's-end exit (open_at_an_end) and its 315-degree fix are kept though the exit fires in none of the 41,000 rolls after; its claim restated with the measurement.",
+     "class": "within",
+     "why": "Keeps landed behavior a site walled in at its center still needs; narrows nothing asked."
+    },
+    {
+     "id": "tests-repointed",
+     "summary": "T418's bare-winter test repointed from seed 31 to seed 636; T426's driver test renamed and asserting the windward-flank seat.",
+     "class": "within",
+     "why": "Tests that keep enforcing already-requested behavior on rolls the fix moved; enforcement, not scope."
+    },
+    {
+     "id": "order-before-T158",
+     "summary": "T432 lands before T158, after T426, T423 and T418.",
+     "class": "within",
+     "why": "Matches the GM 2026-11-24: defects in hamlet generation fixed before the port resumes."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T432 (page session P11, 2026-11-25: on a fan whose fields narrow inward downhill the wet toe climbed the whole side, recorded on 0057's drawing page as the DEVIATION `toe-on-tapering-flank`; page session P12's check ruled the hill-foot finding does not apply to that side)",
+    "### T432 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "toe-cut-at-lower-corners",
+     "summary": "The wet toe (toe_band) is cut at a comb fan's two lower field corners, PAD beyond each; a polder hands no corners and is unchanged.",
+     "class": "within",
+     "why": "Fixes a wrong outcome found by page session P11 (the DEVIATION toe-on-tapering-flank: wet ground climbing the whole side of a fan that narrows downhill, which 0057 does not attest and P12 ruled the hill-foot finding does not cover). The GM 2026-11-24: 'if there are real defects, then I do want to find them and fix them ... before we move forward'."
+    },
+    {
+     "id": "shoulder-at-corner-level",
+     "summary": "Past a corner the toe's edge stays at that corner's level rather than 90 ft up (UNRESEARCHED), chosen on a measured outcome (the dry hem's plots on the band with the 90 ft shoulder).",
+     "class": "within",
+     "why": "A design choice inside the defect fix, decided on a measured wrong outcome the alternative produced (dry plots on the band), labeled UNRESEARCHED per the research-backlog rule; it narrows nothing the GM asked."
+    },
+    {
+     "id": "band-width-foot-not-dry-fields",
+     "summary": "The band spans the paddy fan's foot, not the dry fields round it; the hem reaching past the band's ends on dry ground is left in code and the 0057 sentence is restated by its next page session with the DEVIATION block.",
+     "class": "within",
+     "why": "Measured not a wrong outcome (0 of 35,000 rolls with a dry plot on the band; the overreach is on dry ground). The GM 2026-11-19 and constitution XIV: a claim the code does not literally match, where behavior is fine, is fixed by restating the claim, not the code."
+    },
+    {
+     "id": "keep-off-at-samples-and-rim",
+     "summary": "margins::ranked asks the toe at the band's nine samples, and where the toe is cut also at its four corners and ends' middles, replacing the two-point test.",
+     "class": "within",
+     "why": "A defect fix (bands up to 32.7 percent on the wet toe), squarely the GM's 2026-11-24 instruction to find and fix real defects in hamlet generation before moving on."
+    },
+    {
+     "id": "a-polder-toe-uncut-samples-only",
+     "summary": "Decision (a): a polder's toe stays uncut beside its ring and is asked at the nine samples only (no rim); 654 of 6,000 polder bands touch it, none past a twentieth, worst 4.2 percent, unchanged from HEAD.",
+     "class": "within",
+     "why": "Leaves a difference, not a defect: no stage inks the toe, 0019 seats the village just off the dike and attests no wet ground on its landward side, the shoulder beside the ring is unresearched, and no band passes the plan's own twentieth line. The GM 2026-11-19 and XIV: a difference left as it is stays within, and what is left is not a wrong outcome the record attests."
+    },
+    {
+     "id": "bands-on-paddy-rise-within-tolerance",
+     "summary": "Bands touching the paddy rise from 6,799 to 7,036 rolls (worst 3.54 to 3.68 percent), all under the unchanged FIELD_IN_BAND_MAX rule; no change made.",
+     "class": "within",
+     "why": "A differing output within an accepted tolerance, not a wrong outcome (FR-002 as amended by T180; the GM 2026-11-17/18 on exactness)."
+    },
+    {
+     "id": "b-399-seats-windward-0031",
+     "summary": "Decision (b): 399 falls into the wind move from the hill-backed branch to the existing windward-margin branch on newly dry ground; T261/T423's order kept, 0031's sentence restated by its next page session.",
+     "class": "within",
+     "why": "T432 changes no seat ranking: it removes a wrongly placed wet wall (the toe up the fan's side), and the landed T261/T423 order (windward margin first, the hill once none is left; 3,574 of HEAD's 6,000 falls into the wind already seat so) then seats 399 more rolls on a margin of that existing kind, measured dry (0 dry plots on the band, no comb band past 0.1 percent on the toe), back to the wind, belt to windward. The block does not measure the margin's height, so this ruling does not rest on 0031's premise failing; it rests on the fact that whether that order honors 0031's 'higher, drier' and its fall-into-wind GUESS is T261/T423's landed decision, which T432 neither makes nor narrows. Restating 0031's sentence to the code's claim is wording (XIV, the GM 2026-11-19)."
+    },
+    {
+     "id": "band-end-exit-kept",
+     "summary": "T426's band's-end exit (open_at_an_end) and its 315-degree fix are kept though the exit fires in none of the 41,000 rolls after; its claim restated with the measurement.",
+     "class": "within",
+     "why": "Keeps landed behavior a site walled in at its center still needs; narrows nothing asked."
+    },
+    {
+     "id": "valley-508-head-corner",
+     "summary": "Valley 508, whose flank bands each end on the toe, keeps the head's windward corner astride the brook, back turned 45.5 degrees toward the wind (tier 1), now reached without the band's-end exit.",
+     "class": "within",
+     "why": "Left as is, and not a wrong outcome: the seat is inside the tier the landed T426 fix allows, no map check broken and none refused (the table), and the only change is that the corner is no longer walled in at its center by the defect T432 fixes."
+    },
+    {
+     "id": "tests-repointed",
+     "summary": "T418's bare-winter test repointed from seed 31 to seed 636; T426's driver test renamed and asserting the windward-flank seat.",
+     "class": "within",
+     "why": "Tests that keep enforcing already-requested behavior on rolls the fix moved; enforcement, not scope."
+    },
+    {
+     "id": "order-before-T158",
+     "summary": "T432 lands before T158, after T426, T423 and T418.",
+     "class": "within",
+     "why": "Matches the GM 2026-11-24: defects in hamlet generation fixed before the port resumes."
     }
    ]
   }
@@ -54735,6 +54893,80 @@
      "summary": "no work-budget step owed: the budgeted polder is a rice polder, never eased, and its stages are unmoved",
      "class": "within",
      "why": "A measured statement of scope (make work-budget, 2026-11-24), not a narrowing of anything asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T432": {
+   "section_sha256": "503cabd46e807890a3942d155659d0f833eb12bbac27f52ca2c95da7ed9b02d9",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "toe-cut-at-lower-corners",
+     "summary": "The wet toe (toe_band) is cut at a comb fan's two lower field corners, PAD beyond each; a polder hands no corners and is unchanged.",
+     "class": "within",
+     "why": "Fixes a wrong outcome found by page session P11 (the DEVIATION toe-on-tapering-flank: wet ground climbing the whole side of a fan that narrows downhill, which 0057 does not attest and P12 ruled the hill-foot finding does not cover). The GM 2026-11-24: 'if there are real defects, then I do want to find them and fix them ... before we move forward'."
+    },
+    {
+     "id": "shoulder-at-corner-level",
+     "summary": "Past a corner the toe's edge stays at that corner's level rather than 90 ft up (UNRESEARCHED), chosen on a measured outcome (the dry hem's plots on the band with the 90 ft shoulder).",
+     "class": "within",
+     "why": "A design choice inside the defect fix, decided on a measured wrong outcome the alternative produced (dry plots on the band), labeled UNRESEARCHED per the research-backlog rule; it narrows nothing the GM asked."
+    },
+    {
+     "id": "band-width-foot-not-dry-fields",
+     "summary": "The band spans the paddy fan's foot, not the dry fields round it; the hem reaching past the band's ends on dry ground is left in code and the 0057 sentence is restated by its next page session with the DEVIATION block.",
+     "class": "within",
+     "why": "Measured not a wrong outcome (0 of 35,000 rolls with a dry plot on the band; the overreach is on dry ground). The GM 2026-11-19 and constitution XIV: a claim the code does not literally match, where behavior is fine, is fixed by restating the claim, not the code."
+    },
+    {
+     "id": "keep-off-at-samples-and-rim",
+     "summary": "margins::ranked asks the toe at the band's nine samples, and where the toe is cut also at its four corners and ends' middles, replacing the two-point test.",
+     "class": "within",
+     "why": "A defect fix (bands up to 32.7 percent on the wet toe), squarely the GM's 2026-11-24 instruction to find and fix real defects in hamlet generation before moving on."
+    },
+    {
+     "id": "a-polder-toe-uncut-samples-only",
+     "summary": "Decision (a): a polder's toe stays uncut beside its ring and is asked at the nine samples only (no rim); 654 of 6,000 polder bands touch it, none past a twentieth, worst 4.2 percent, unchanged from HEAD.",
+     "class": "within",
+     "why": "Leaves a difference, not a defect: no stage inks the toe, 0019 seats the village just off the dike and attests no wet ground on its landward side, the shoulder beside the ring is unresearched, and no band passes the plan's own twentieth line. The GM 2026-11-19 and XIV: a difference left as it is stays within, and what is left is not a wrong outcome the record attests."
+    },
+    {
+     "id": "bands-on-paddy-rise-within-tolerance",
+     "summary": "Bands touching the paddy rise from 6,799 to 7,036 rolls (worst 3.54 to 3.68 percent), all under the unchanged FIELD_IN_BAND_MAX rule; no change made.",
+     "class": "within",
+     "why": "A differing output within an accepted tolerance, not a wrong outcome (FR-002 as amended by T180; the GM 2026-11-17/18 on exactness)."
+    },
+    {
+     "id": "b-399-seats-windward-0031",
+     "summary": "Decision (b): 399 falls into the wind move from the hill-backed branch to the existing windward-margin branch on newly dry ground; T261/T423's order kept, 0031's sentence restated by its next page session.",
+     "class": "within",
+     "why": "T432 changes no seat ranking: it removes a wrongly placed wet wall (the toe up the fan's side), and the landed T261/T423 order (windward margin first, the hill once none is left; 3,574 of HEAD's 6,000 falls into the wind already seat so) then seats 399 more rolls on a margin of that existing kind, measured dry (0 dry plots on the band, no comb band past 0.1 percent on the toe), back to the wind, belt to windward. The block does not measure the margin's height, so this ruling does not rest on 0031's premise failing; it rests on the fact that whether that order honors 0031's 'higher, drier' and its fall-into-wind GUESS is T261/T423's landed decision, which T432 neither makes nor narrows. Restating 0031's sentence to the code's claim is wording (XIV, the GM 2026-11-19)."
+    },
+    {
+     "id": "band-end-exit-kept",
+     "summary": "T426's band's-end exit (open_at_an_end) and its 315-degree fix are kept though the exit fires in none of the 41,000 rolls after; its claim restated with the measurement.",
+     "class": "within",
+     "why": "Keeps landed behavior a site walled in at its center still needs; narrows nothing asked."
+    },
+    {
+     "id": "valley-508-head-corner",
+     "summary": "Valley 508, whose flank bands each end on the toe, keeps the head's windward corner astride the brook, back turned 45.5 degrees toward the wind (tier 1), now reached without the band's-end exit.",
+     "class": "within",
+     "why": "Left as is, and not a wrong outcome: the seat is inside the tier the landed T426 fix allows, no map check broken and none refused (the table), and the only change is that the corner is no longer walled in at its center by the defect T432 fixes."
+    },
+    {
+     "id": "tests-repointed",
+     "summary": "T418's bare-winter test repointed from seed 31 to seed 636; T426's driver test renamed and asserting the windward-flank seat.",
+     "class": "within",
+     "why": "Tests that keep enforcing already-requested behavior on rolls the fix moved; enforcement, not scope."
+    },
+    {
+     "id": "order-before-T158",
+     "summary": "T432 lands before T158, after T426, T423 and T418.",
+     "class": "within",
+     "why": "Matches the GM 2026-11-24: defects in hamlet generation fixed before the port resumes."
     }
    ],
    "verdict": "CLEAR"

@@ -729,6 +729,7 @@ pub(super) fn roll_polder(p: Plan) -> Rolled {
     let ring = off_the_dike(&s.polder.outline, &s.dike.outer, &mut ring_counts);
     let ground = Ground {
         ring: &ring,
+        foot: None,
         lines,
         brook: &[],
         reeds: vec![s.polder.fringe.clone()],

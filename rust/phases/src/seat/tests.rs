@@ -34,6 +34,7 @@ fn inp() -> SeatIn {
         band: (150.0, 300.0),
         plots: Vec::new(),
         toe: Vec::new(),
+        toe_rim: true,
         reeds: Vec::new(),
         brook: Vec::new(),
         walls: vec![(field, 0.0)],
@@ -88,6 +89,44 @@ fn a_margin_that_breaks_a_rule_is_refused_and_a_site_with_none_named() {
     i.plots = vec![square(2940.0, 2380.0, 3060.0, 2440.0)];
     // a plot near the margin scores the hem down, no more
     assert!(seat(&i).is_ok());
+}
+
+/// A BAND WITH AN END ON THE WET TOE IS REFUSED THERE, ITS CENTER AND MARGIN OFF IT (449 T432): with the toe cut at the fields'
+/// lower corners a margin at a corner can seat with its band swung under the fields' foot, and the toe was asked only of the
+/// band's center and its margin's midpoint - the band's own samples are asked it too, as the field is.
+#[test]
+fn a_band_with_an_end_on_the_toe_is_refused_on_the_toe() {
+    let mut i = inp();
+    // the wet ground under the north margin band's west end alone: its center (3,000 ft east) and the margin's midpoint are off it
+    i.toe = square(2000.0, 2000.0, 2850.0, 2490.0);
+    let s = seat(&i).unwrap();
+    let on_toe = |p: Pt| p.0 < 2850.0 && p.1 > 2000.0 && p.1 < 2490.0;
+    for f in &s.frames {
+        let (lat, dep) = f.band;
+        for (a, b) in [(-0.6, 0.0), (0.0, 0.0), (0.6, 0.0)] {
+            let p = (
+                f.center.0 + f.along.0 * lat * a + f.out.0 * dep * b,
+                f.center.1 + f.along.1 * lat * a + f.out.1 * dep * b,
+            );
+            assert!(!on_toe(p), "{f:?}");
+        }
+    }
+    // the west margin seats
+    assert!(s.frames[0].out.0 < -0.5, "{:?}", s.frames[0]);
+}
+
+/// ...AND ITS RIM, WHERE THE TOE STOPS AT THE FIELDS' LOWER CORNERS (449 T432): a toe reaching in at the band's end between the
+/// samples refused the band (a comb's); a polder's toe, spanning its ring, is asked at the samples alone (`SeatIn::toe_rim`).
+#[test]
+fn a_band_whose_end_corner_is_on_the_toe_is_refused_where_the_toe_is_cut() {
+    let mut i = inp();
+    // under the north margin band's west end, west of every sample (the nearest at 2,820 ft east)
+    i.toe = square(2000.0, 2150.0, 2750.0, 2495.0);
+    let s = seat(&i).unwrap();
+    assert!(s.frames[0].out.0 < -0.5, "{:?}", s.frames[0]);
+    i.toe_rim = false;
+    let s = seat(&i).unwrap();
+    assert!(s.frames[0].out.1 < -0.5, "{:?}", s.frames[0]);
 }
 
 #[test]

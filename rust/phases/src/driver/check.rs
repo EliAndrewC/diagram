@@ -464,6 +464,7 @@ mod tests {
             let s = r.polder.as_ref().unwrap();
             let ground = crate::driver::Ground {
                 ring: &s.polder.outline,
+                foot: None,
                 lines: s
                     .polder
                     .ditches

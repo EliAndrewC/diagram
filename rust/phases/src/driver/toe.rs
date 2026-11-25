@@ -2,8 +2,9 @@
 //! below the fields (`toe_band`), and a ring grown outward by the lane's width (`wet_grown_by_the_lane`).
 //!
 //! Research:
-//!     toe band edge - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: 90 ft above the local lowest field, smoothed over three stations
-//!     toe band width - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: as wide as the fields plus 90 ft each side
+//!     toe band edge - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: 90 ft above the local lowest field between the fields' lower corners, smoothed over three stations
+//!     toe band width - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: the paddy fan's foot, corner to corner, plus 90 ft each side
+//!     stops at the lower corners - research/questions/0057-marshes-and-wetlands-shitchi.html: a fan's springs come out at its toe and its sides are among the land cleared early, so the wet ground stops at the fields' lower corners and does not climb a side that narrows downhill
 //!     flaring flanks - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: part of the straight-band deviation, the band's ends bow outward downhill as seepage spreads
 
 use std::collections::HashMap;
@@ -15,7 +16,7 @@ use crate::seat::tally;
 ///
 /// Research:
 ///     toe band edge - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: 90 ft above the local lowest field
-///     toe band width - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: as wide as the fields plus 90 ft each side
+///     toe band width - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: as wide as the fields' foot plus 90 ft each side
 pub const PAD: f64 = 90.0;
 /// The bleed past the canvas edge (ft).
 ///
@@ -24,18 +25,24 @@ pub const PAD: f64 = 90.0;
 const BLEED: f64 = 120.0;
 
 /// The reed-marsh toe: the wet band below the fields, laid across the fall, its inner edge `PAD` above the local lowest field
-/// point at each cross-slope station (smoothed over three), as wide as the fields plus `PAD`, its ends flaring downhill and off
-/// the canvas - the deleted `toe_band`, read from the fields' rings.
+/// point at each cross-slope station (smoothed over three), across the fields' foot from one lower corner to the other plus `PAD`
+/// each side, its edge past a corner at that corner's own level, its ends flaring downhill and off the canvas - the deleted
+/// `toe_band`, read from the fields' rings. `foot`, the fields' two lower corners (a comb's fan), stops it there: before 449 T432
+/// each station past a corner of a fan narrowing downhill found its lowest field up the side, and the band climbed the whole
+/// side. With none (a polder's ring) the band spans the rings and reads each station's lowest point, as before.
 ///
 /// Research:
-///     toe band edge - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: the inner edge `PAD` above the local lowest field within a pad each way, smoothed over three stations
-///     toe band width - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: the fields' cross-slope span and `PAD` each side, clipped to the bled canvas
+///     toe band edge - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: the inner edge `PAD` above the local lowest field within a pad each way, smoothed over three stations, between the fields' lower corners - where the foot runs slantwise across the fall the edge follows it
+///     toe band width - research/questions/0057-marshes-and-wetlands-shitchi.html: the springs at a fan's foot come out along its toe, so the band spans the fields' foot from one lower corner to the other; research/questions/0057-marshes-and-wetlands-shitchi.drawing.html gives the `PAD` of 90 ft each side, clipped to the bled canvas - the paddy fan's foot alone, narrower than the fields above a fan that narrows downhill, where the drawing page's "as wide as the fields above it" and "the fan's plots and the dry fields round them" still describe the band before 449 T432 and are owed a rewrite: the dry hem is laid after the seat, on dry ground beside the fan, none of it on the band (0 of 35,000 rolls with a dry plot on it, measured 2026-11-25), so the dry fields round the fan take no part in the band's width
+///     stops at the lower corners - research/questions/0057-marshes-and-wetlands-shitchi.html: the springs at a fan's foot come out along its toe and its sides are among the ground cleared early; research/questions/0057-marshes-and-wetlands-shitchi.drawing.html attests a wet side only on a valley floor against a hill foot, farmed as cold paddy - so the band stops at the fields' lower corners and no longer climbs a side that narrows downhill (449 T432); the drawing page's DEVIATION `toe-on-tapering-flank`, the wet ground climbing that side, describes the band before 449 T432 and is owed its removal
+///     the shoulder past a corner at the corner's level - UNRESEARCHED: research/questions/0057-marshes-and-wetlands-shitchi.drawing.html sets the edge 90 ft above the foot where that ground is paddy, and beside the fan it is not, so past a lower corner the edge stays at the corner's own level; with it 90 ft higher the dry hem's lowest plots stood on the band (up to 27 percent of a comb's dry plots, measured 2026-11-25)
 ///     flaring flanks - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: part of the straight-band deviation, the band's ends bow outward downhill to the canvas's far edge
 ///     flare size - GUESS: each side out to 1.5 pad past the shoulder on a t**1.6 profile
 ///     its search steps - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - a cross-slope station every 24 ft at least, the flank sampled at fifths
 #[must_use]
 pub(crate) fn toe_band(
     rings: &[&[Pt]],
+    foot: Option<[Pt; 2]>,
     down_deg: f64,
     canvas: Pt,
     counts: &mut HashMap<String, u64>,
@@ -61,11 +68,7 @@ pub(crate) fn toe_band(
         .map(|p| p.0 * dx + p.1 * dy)
         .fold(f64::MIN, f64::max)
         - PAD;
-    let us: Vec<f64> = pts.iter().map(|p| p.0 * ux + p.1 * uy).collect();
-    let (u_lo, u_hi) = (
-        us.iter().copied().fold(f64::MAX, f64::min) - PAD,
-        us.iter().copied().fold(f64::MIN, f64::max) + PAD,
-    );
+    let (corners_uv, u_lo, u_hi) = span(&pts, foot, (dx, dy));
     let cu: Vec<f64> = corners.iter().map(|c| c.0 * ux + c.1 * uy).collect();
     let (u0, u1) = (
         cu.iter().copied().fold(f64::MAX, f64::min).max(u_lo),
@@ -101,6 +104,12 @@ pub(crate) fn toe_band(
     let local: Vec<f64> = stations
         .iter()
         .map(|&u| {
+            // past a lower corner the band's edge stays at that corner's own level: no lowest field read up the side
+            match corners_uv {
+                Some([l, _]) if u < l.0 => return l.1,
+                Some([_, r]) if u > r.0 => return r.1,
+                _ => {}
+            }
             let lo = by_u.partition_point(|q| q.0 < u - PAD);
             let hi = by_u.partition_point(|q| q.0 <= u + PAD);
             examined += (hi - lo) as u64;
@@ -138,6 +147,34 @@ pub(crate) fn toe_band(
     out.extend(flank(u1, edge[n - 1], 1.0));
     out.extend(flank(u0, edge[0], -1.0).into_iter().rev());
     out
+}
+
+/// The fields' two lower corners, each across and down the slope.
+///
+/// Research:
+///     the corners - NONE: a pair of points across and down the slope
+type Corners = Option<[(f64, f64); 2]>;
+
+/// The fields' lower corners across and down the slope (the left one first), and the band's cross-slope span: from one corner to
+/// the other and `PAD` past each, or with none the rings' whole span and `PAD` past it.
+///
+/// Research:
+///     toe band width - research/questions/0057-marshes-and-wetlands-shitchi.html: the springs at a fan's foot come out along its toe, so the band spans the foot from corner to corner; research/questions/0057-marshes-and-wetlands-shitchi.drawing.html gives the `PAD` of 90 ft each side (its "as wide as the fields above it" describes the band before 449 T432, owed a rewrite); with no foot (a polder) the rings' whole span and `PAD` past it
+fn span(pts: &[Pt], foot: Option<[Pt; 2]>, (dx, dy): Pt) -> (Corners, f64, f64) {
+    let (ux, uy) = (-dy, dx);
+    let corners_uv = foot.map(|f| {
+        let mut c = f.map(|p| (p.0 * ux + p.1 * uy, p.0 * dx + p.1 * dy));
+        if c[0].0 > c[1].0 {
+            c.swap(0, 1);
+        }
+        c
+    });
+    let us = pts.iter().map(|p| p.0 * ux + p.1 * uy);
+    let (u_lo, u_hi) = match corners_uv {
+        Some([l, r]) => (l.0, r.0),
+        None => us.fold((f64::MAX, f64::MIN), |(a, b), u| (a.min(u), b.max(u))),
+    };
+    (corners_uv, u_lo - PAD, u_hi + PAD)
 }
 
 /// `ring` grown outward by `d` (ft): each vertex moved along the mean of its two edges' outward normals - the deleted
@@ -187,12 +224,61 @@ mod tests {
             (620.0, 600.0),
             (380.0, 600.0),
         ];
-        let toe = toe_band(&[&field], 90.0, (1000.0, 1000.0), &mut HashMap::new());
+        let toe = toe_band(&[&field], None, 90.0, (1000.0, 1000.0), &mut HashMap::new());
         assert!(toe.len() > 10);
         let lowest_inner = toe.iter().take(5).map(|p| p.1).fold(f64::MAX, f64::min);
         assert!((lowest_inner - (600.0 - PAD)).abs() < 1e-6);
         assert!(toe.iter().any(|p| p.1 > 1000.0));
-        assert!(toe_band(&[], 90.0, (10.0, 10.0), &mut HashMap::new()).is_empty());
+        assert!(toe_band(&[], None, 90.0, (10.0, 10.0), &mut HashMap::new()).is_empty());
+    }
+
+    /// THE WET GROUND STOPS AT THE FIELDS' LOWER CORNERS (449 T432): a fan whose head is wider than its foot, falling south;
+    /// before T432 each station past a lower corner found its lowest field up the narrowing side, so the band's inner edge
+    /// climbed both sides to the head (0057.drawing's DEVIATION `toe-on-tapering-flank`).
+    #[test]
+    fn the_toe_stops_at_a_narrowing_fans_lower_corners() {
+        let fan: Vec<(f64, f64)> = vec![(300.0, 0.0), (700.0, 0.0), (560.0, 800.0), (440.0, 800.0)];
+        let foot = [(440.0, 800.0), (560.0, 800.0)];
+        let toe = toe_band(
+            &[&fan],
+            Some(foot),
+            90.0,
+            (2000.0, 2000.0),
+            &mut HashMap::new(),
+        );
+        // no point of the band above the corners' level, nor across the slope past a corner and its 90 ft shoulder before it
+        // flares downhill
+        assert!(toe.iter().all(|p| p.1 >= 800.0 - PAD - 1e-6), "{toe:?}");
+        let inner: Vec<_> = toe.iter().filter(|p| p.1 < 1000.0).collect();
+        let (lo, hi) = (440.0 - 2.5 * PAD, 560.0 + 2.5 * PAD);
+        let strays: Vec<_> = inner.iter().filter(|p| p.0 < lo || p.0 > hi).collect();
+        assert_eq!(strays, Vec::<&&(f64, f64)>::new());
+        // a polder's ring hands no corners: its band as before, across the ring's whole span
+        let open = toe_band(&[&fan], None, 90.0, (2000.0, 2000.0), &mut HashMap::new());
+        assert!(open.iter().any(|p| p.1 < 400.0));
+    }
+
+    /// ...BUT ALONG A SLANTED FOOT THE EDGE STILL FOLLOWS THE FIELDS POINT BY POINT (0057.drawing, the GM on Inashiro 2026-08-26).
+    #[test]
+    fn between_the_corners_the_edge_follows_a_slanted_foot() {
+        let fan: Vec<(f64, f64)> =
+            vec![(200.0, 0.0), (1000.0, 0.0), (800.0, 900.0), (400.0, 600.0)];
+        let toe = toe_band(
+            &[&fan],
+            Some([(400.0, 600.0), (800.0, 900.0)]),
+            90.0,
+            (2000.0, 2000.0),
+            &mut HashMap::new(),
+        );
+        let at = |x: f64| {
+            toe.iter()
+                .filter(|p| (p.0 - x).abs() < 20.0 && p.1 < 1000.0)
+                .map(|p| p.1)
+                .fold(f64::MAX, f64::min)
+        };
+        let (west, east) = (at(450.0), at(750.0));
+        assert!(west < 700.0, "{west}");
+        assert!(east > 750.0, "{east}");
     }
 
     #[test]

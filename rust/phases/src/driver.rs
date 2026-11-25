@@ -390,12 +390,15 @@ struct Ground<'a> {
     pond: Option<((f64, f64), f64, f64)>,
     /// The way the settlement's back must face where the site, not the wind, decides it (a polder's landward shore); none on a comb.
     back: Option<(f64, f64)>,
+    /// The fields' two lower corners, where the wet toe stops across the slope (a comb's fan, 449 T432); none on a polder.
+    foot: Option<[(f64, f64); 2]>,
 }
 
 /// A comb field's ground for the seat: its fan, its ditches and the drain's run, its brook, the tameike and its reeds.
 fn comb_ground<'a>(f: &'a Field, sunk: Option<&'a Sunk>) -> Ground<'a> {
     Ground {
         ring: &f.fan.ring,
+        foot: Some([f.fan.at(f.fan.length, -1.0), f.fan.at(f.fan.length, 1.0)]),
         lines: f
             .channels
             .iter()
@@ -419,7 +422,7 @@ fn comb_ground<'a>(f: &'a Field, sunk: Option<&'a Sunk>) -> Ground<'a> {
 fn stage_seat(p: &Plan, g: &Ground) -> Result<Seated, Refused> {
     let rad = p.down_deg.to_radians();
     let mut counts = HashMap::new();
-    let toe = toe::toe_band(&[g.ring], p.down_deg, (p.w, p.h), &mut counts);
+    let toe = toe::toe_band(&[g.ring], g.foot, p.down_deg, (p.w, p.h), &mut counts);
     let reeds: Vec<Vec<(f64, f64)>> = g.reeds.iter().filter(|r| r.len() >= 3).cloned().collect();
     let mut walls: Vec<(Vec<(f64, f64)>, f64)> = std::iter::once(&toe)
         .chain(&reeds)
@@ -454,6 +457,7 @@ fn stage_seat(p: &Plan, g: &Ground) -> Result<Seated, Refused> {
         band: plan::band_extent(p.households, p.knob("cluster_shape")),
         plots: Vec::new(),
         toe,
+        toe_rim: g.foot.is_some(),
         reeds,
         brook: g.brook.to_vec(),
         walls,
