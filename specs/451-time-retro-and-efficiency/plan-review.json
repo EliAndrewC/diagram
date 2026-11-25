@@ -1524,6 +1524,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T228 (page session P7's cascade, 2026-11-24: `make apply-edits` refused a modal-form reply whole over three lines reading `EDIT: none - <why>`, the line the agent's contract gives; the session applied it from a hand-altered copy)": {
+   "sha256": "4f3dcb18933c843eb1c9dee6a653e39d8ce7bdf5e35a1c13345a93ba6114a45a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T228 Approach (checklist part A)": {
+   "sha256": "857f392d7cec84e3e222422a6c3a2774382c783df8166de475f7ac3755052e8d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -20628,6 +20640,110 @@
      "why": "Matches the task line and the GM's wish that the deferral is in force for the queued work."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T228 (page session P7's cascade, 2026-11-24: `make apply-edits` refused a modal-form reply whole over three lines reading `EDIT: none - <why>`, the line the agent's contract gives; the session applied it from a hand-altered copy)",
+    "### T228 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T228-D1 parser unchanged",
+     "summary": "The parser is not changed: commit 926e10e593 already taught unread_edits that 'EDIT: none - <why>' opens no block; P7 ran on a tree without it; on HEAD make apply-edits DRY=1 reads P7's saved reply whole (measured 2026-11-25).",
+     "class": "within",
+     "why": "The wrong outcome (a correct check reply refused whole) is already fixed on HEAD, and that is measured, not assumed; not re-changing working code is no narrowing of anything asked."
+    },
+    {
+     "id": "T228-D2 NO_EDIT constant",
+     "summary": "NO_EDIT ('EDIT: none - <why>') becomes a constant beside EDIT_FORM, and the parser comment names it instead of a list of four agents.",
+     "class": "within",
+     "why": "Names the one form the agent contracts give and the parser reads; serves the fix of a guard firing on correct work (root CLAUDE.md) and adds no behavior."
+    },
+    {
+     "id": "T228-D3 P7 reply fixture",
+     "summary": "P7's real reply kept byte for byte as reply_p7_modal_form.txt; the_p7_modal_form_reply_is_read_whole asserts no unread line and 3 blocks.",
+     "class": "within",
+     "why": "A test whose only effect is to keep the fixed behavior fixed; red with the exemption off (measured). Enforcement of the fix, not unrequested scope."
+    },
+    {
+     "id": "T228-D4 agent files vs parser test",
+     "summary": "every_check_agent_names_the_no_edit_line_the_parser_reads: every no-edit line in .claude/agents/*.md must hold NO_EDIT; the ten checks that write it must still name it; the parser reads NO_EDIT plain, bulleted, indented or bold as no block.",
+     "class": "within",
+     "why": "A test that only fails when the contract and the parser disagree, i.e. when the refusal of correct work could recur; it refuses no work and blocks nothing. Enforcement of the fix."
+    },
+    {
+     "id": "T228-D5 reads line",
+     "summary": "rust/guard/shared/Cargo.toml reads gains .claude/agents/ and .claude/settings.json so an edit there reruns the crate's tests instead of keeping a stale green.",
+     "class": "within",
+     "why": "Without it D4's test is skipped on the very drift it exists to catch (measured 2026-11-25). The settings.json half fixes a found defect (an undeclared read letting a kept green stand), fixed in this task per fix-as-we-go, with how the instances were found stated (grep CARGO_MANIFEST_DIR, 3 hits)."
+    },
+    {
+     "id": "T228-D6 variant coverage",
+     "summary": "Only the NO_EDIT form (plain, bulleted, indented, bold) is read as no block; no categorized 'EDIT (X): none' or other variant is added, because a grep over every -diagram transcript found none and all real no-block lines read on HEAD.",
+     "class": "within",
+     "why": "Scope decided by a measured premise (transcript grep, 2026-11-25), not an assumption; no wrong outcome is left - every real reply reads. Not a narrowing."
+    },
+    {
+     "id": "T228-D7 fail-closed kept",
+     "summary": "451 T195's fail-closed rule stays: a header-shaped line in no block is still refused.",
+     "class": "within",
+     "why": "Preserves an earlier accepted rule; the fix exempts only the contract's own no-edit line, which is the correct work that was refused, and leaves the refusal of malformed replies intact."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T228 (page session P7's cascade, 2026-11-24: `make apply-edits` refused a modal-form reply whole over three lines reading `EDIT: none - <why>`, the line the agent's contract gives; the session applied it from a hand-altered copy)",
+    "### T228 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T228-1 parser unchanged",
+     "summary": "The parser half (unread_edits reading 'EDIT: none - <why>' as no block) is already on HEAD in 926e10e593; P7 ran on a tree without it; the task does not change the parser.",
+     "class": "within",
+     "why": "The wrong outcome (a correct reply refused whole) is already fixed on HEAD, measured 2026-11-25 by make apply-edits DRY=1 on P7's saved reply. Not changing an already-fixed parser drops nothing the task asked for."
+    },
+    {
+     "id": "T228-2 NO_EDIT constant",
+     "summary": "One NO_EDIT constant beside EDIT_FORM; the parser comment names it instead of a list of four agents.",
+     "class": "within",
+     "why": "Names the one form the contracts and parser share; serves the agreement the task pins and removes a stale list. No behavior beyond the task."
+    },
+    {
+     "id": "T228-3 real-reply fixture",
+     "summary": "P7's reply byte for byte as a fixture; a test asserts it reads whole with its 3 blocks.",
+     "class": "within",
+     "why": "A test that fails only when the requested fix is absent: enforcement of the fix, not unrequested scope."
+    },
+    {
+     "id": "T228-4 agent files vs parser test",
+     "summary": "A test reads .claude/agents/*.md: every no-edit line must hold NO_EDIT, the ten checks must still name it, and the parser must read NO_EDIT (plain, bulleted, indented, bold) as no block.",
+     "class": "within",
+     "why": "Verification only; it refuses no work, it goes red when contracts and parser drift apart, which is the failure that produced the incident. Its search space is the whole agents directory, so it is not a sample."
+    },
+    {
+     "id": "T228-5 reads line",
+     "summary": "rust/guard/shared/Cargo.toml reads gains .claude/agents/ and .claude/settings.json.",
+     "class": "within",
+     "why": "Without it the kept-green result skips the new test after an agent-file edit (measured), so it is needed for the test to enforce anything. Adding settings.json fixes a found defect in the same line (a kept green over a settings edit the crate's test reads), found by a stated grep: fix-as-we-go, not deferred."
+    },
+    {
+     "id": "T228-6 no further variants",
+     "summary": "No other no-edit form (e.g. a categorized 'EDIT (X): none') is added to the parser, because a grep over every -diagram transcript found none in real replies and all found read as no block on HEAD.",
+     "class": "within",
+     "why": "Measured with method and date; nothing that real replies write is refused, so no wrong outcome is left. Not adding unseen forms leaves no defect."
+    },
+    {
+     "id": "T228-7 order and exits",
+     "summary": "After 926e10e593, no dependency on T234; one landing; closing checks green or recorded red with a claim of impossibility ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Sequencing and exits only; narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -32910,6 +33026,56 @@
      "summary": "Lands before 449's port resumes; the switch is thrown to deferred by make research-deferred after landing.",
      "class": "within",
      "why": "Matches the task line and the GM's wish that the deferral is in force for the queued work."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T228": {
+   "section_sha256": "e1cf495b23451ceef7b5d1a282e01b17fb30bd9f0eb5ac1208ba51e820daa1f0",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T228-1 parser unchanged",
+     "summary": "The parser half (unread_edits reading 'EDIT: none - <why>' as no block) is already on HEAD in 926e10e593; P7 ran on a tree without it; the task does not change the parser.",
+     "class": "within",
+     "why": "The wrong outcome (a correct reply refused whole) is already fixed on HEAD, measured 2026-11-25 by make apply-edits DRY=1 on P7's saved reply. Not changing an already-fixed parser drops nothing the task asked for."
+    },
+    {
+     "id": "T228-2 NO_EDIT constant",
+     "summary": "One NO_EDIT constant beside EDIT_FORM; the parser comment names it instead of a list of four agents.",
+     "class": "within",
+     "why": "Names the one form the contracts and parser share; serves the agreement the task pins and removes a stale list. No behavior beyond the task."
+    },
+    {
+     "id": "T228-3 real-reply fixture",
+     "summary": "P7's reply byte for byte as a fixture; a test asserts it reads whole with its 3 blocks.",
+     "class": "within",
+     "why": "A test that fails only when the requested fix is absent: enforcement of the fix, not unrequested scope."
+    },
+    {
+     "id": "T228-4 agent files vs parser test",
+     "summary": "A test reads .claude/agents/*.md: every no-edit line must hold NO_EDIT, the ten checks must still name it, and the parser must read NO_EDIT (plain, bulleted, indented, bold) as no block.",
+     "class": "within",
+     "why": "Verification only; it refuses no work, it goes red when contracts and parser drift apart, which is the failure that produced the incident. Its search space is the whole agents directory, so it is not a sample."
+    },
+    {
+     "id": "T228-5 reads line",
+     "summary": "rust/guard/shared/Cargo.toml reads gains .claude/agents/ and .claude/settings.json.",
+     "class": "within",
+     "why": "Without it the kept-green result skips the new test after an agent-file edit (measured), so it is needed for the test to enforce anything. Adding settings.json fixes a found defect in the same line (a kept green over a settings edit the crate's test reads), found by a stated grep: fix-as-we-go, not deferred."
+    },
+    {
+     "id": "T228-6 no further variants",
+     "summary": "No other no-edit form (e.g. a categorized 'EDIT (X): none') is added to the parser, because a grep over every -diagram transcript found none in real replies and all found read as no block on HEAD.",
+     "class": "within",
+     "why": "Measured with method and date; nothing that real replies write is refused, so no wrong outcome is left. Not adding unseen forms leaves no defect."
+    },
+    {
+     "id": "T228-7 order and exits",
+     "summary": "After 926e10e593, no dependency on T234; one landing; closing checks green or recorded red with a claim of impossibility ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Sequencing and exits only; narrows nothing."
     }
    ],
    "verdict": "CLEAR"

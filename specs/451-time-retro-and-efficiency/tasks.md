@@ -30,6 +30,7 @@ seen red, then the check deleted and the test seen red again (FR-012).
 - none: T238 - tooling only: the gate's checks crate (`question_size.rs`'s one prose measure, `size_edit.rs`'s rule over it, their test) and the Makefile's `question-sizes` help line; no map feature, sheet, glyph, placement rule or research page changes
 - none: T226 - tooling only: the gate's owed, bundle and research crates (a drawing page's new labeled item owes its readers' `modal-form`, triaged first; an item tag holding a comment is read), the modal-form and modal-triage agent contracts, dev/modals.md and research/record-checks.md; no map feature, sheet, glyph, placement rule or research page changes
 - none: T243 - a measurement command (`make task-time`, the task time breakdown: `rust/gate/crates/measure/src/measure/task_time.rs` and `task_time/`, where-time's transcript reader keeping each Bash command, one booking-table row, doc lines and gatherer comments at every `Phase` writer and the Makefile's timers); no map feature, sheet, glyph, placement rule or research page changes
+- none: T228 - tooling only: the reply parser's no-edit line named once (`NO_EDIT` in `rust/guard/shared/src/checks/reply.rs`), its tests on P7's real reply and on every check agent's contract, and the shared crate's declared test reads; no map feature, sheet, glyph, placement rule or research page changes.
 
 ## Dependencies
 

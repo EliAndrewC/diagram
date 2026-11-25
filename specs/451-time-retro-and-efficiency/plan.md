@@ -2590,31 +2590,40 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T228 (<why: the finding or measurement that files it>)
+### T228 (page session P7's cascade, 2026-11-24: `make apply-edits` refused a modal-form reply whole over three lines reading `EDIT: none - <why>`, the line the agent's contract gives; the session applied it from a hand-altered copy)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: The parser half is already on HEAD. Commit 926e10e593 (2026-11-24 12:32, feature 453's check session) taught `unread_edits` (`rust/guard/shared/src/checks/reply.rs`) that `EDIT: none - <why>` opens no block. P7 ran at 849bffb552, a tree without that commit (`git merge-base --is-ancestor`, 2026-11-25). On HEAD, `make apply-edits DRY=1` on P7's saved reply reads it whole, measured 2026-11-25: 3 blocks reached, each refused only because its old text is already applied. So this task does not change the parser. What it adds is the agreement the task names, pinned so neither side can drift alone:
+  - **One form, named once.** `NO_EDIT` ("EDIT: none - <why>") is a constant beside `EDIT_FORM`. The parser's comment names it in place of a list of four agents, since ten agent files carry the line.
+  - **The real reply as a fixture.** `reply_p7_modal_form.txt` is P7's reply byte for byte. `the_p7_modal_form_reply_is_read_whole` asserts it reads with no unread line and with its 3 blocks.
+  - **The agent files against the parser.** `every_check_agent_names_the_no_edit_line_the_parser_reads` reads `.claude/agents/*.md`. Every line naming a no-edit line (`EDIT` then `none`, `n/a` or `no edit`) must hold `NO_EDIT` itself. The ten checks that write the line must still name it. The parser must read `NO_EDIT`, plain, bulleted, indented or bold, as no block.
+  - **The kept result.** `rust/guard/shared/Cargo.toml`'s `reads` gains `.claude/agents/` (and `.claude/settings.json`, which `the_hook_timeout_holds_both_waits` already read undeclared). Without it, `make rust-test` kept a green over a drifted agent file, measured 2026-11-25: "test unchanged on rust/guard/shared - its last green result stands".
+  - **What real replies write**, measured 2026-11-25 by grep over every `-diagram*` transcript under `~/.claude/projects/`. Every no-block `EDIT` line in a check's reply opens `EDIT: none` or `**EDIT: none**` (some bulleted or indented), and all of them read as no block on HEAD. The six other `EDIT:` lines the grep found are session prose, not replies: a builder's report line `` - **EDIT**: `unread_edits` ... `` (4) and the survey's own echoed output (2). No categorized `EDIT (X): none` and no other variant was found. Nothing on HEAD is red.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the real reply read whole | `the_p7_modal_form_reply_is_read_whole`, red with the exemption off (`starts_with("none")` disabled): 3 failed of 483, measured 2026-11-25 (`make rust-test CRATE=rust/guard/shared`) | n/a: tooling | none | n/a |
+| agent files and parser agree | `every_check_agent_names_the_no_edit_line_the_parser_reads`, red with the exemption off (as above) and red with `modal-form.md`'s line drifted to `EDIT none (<why>)`: 1 failed of 483, naming the file and line | n/a: tooling | none | n/a |
+| an agent-file edit reruns the test | the `reads` line; before it, the drifted agent file left "its last green result stands" | n/a: tooling | none | n/a |
 
 ### T228 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A check that has no edit says so in the line its contract gives, `EDIT: none - <why>`, and `make apply-edits` reads that reply whole. A change to either side, the contracts or the parser, goes red at the next test run.
+2. **The constraints.** 451 T195's fail-closed rule stays: a header-shaped line in no block is still refused. Root CLAUDE.md: fix a guard that fires on correct work.
+3. **Where each comes from.** O: P7's cascade record and its saved reply (`/home/agent/.claude/jobs/c6fd72d1/tmp/cascade/`). O: commit 926e10e593. R: the ten agent files' contract lines.
+4. **Do they describe the world here?** Yes, measured 2026-11-25. HEAD reads P7's reply whole (`make apply-edits DRY=1`), and the transcript grep found no unread no-edit variant.
+5. **The order.** After 926e10e593 (the parser half). No dependency on T234.
+6. **The exits.** Green: `make closing-checks T=T228 F=451`. Red: what failed is recorded and the task set down, and a claim that it cannot be done is ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-25 (`make rust-test CRATE=rust/guard/shared`; logs in the session scratchpad). On HEAD the two new tests pass, because HEAD already carries the parser fix: no red on HEAD exists, as the Approach states. With the `none` exemption disabled, 3 of 483 failed (the two new tests and 926e10e593's own). With `modal-form.md` drifted, 1 of 483 failed, and before the `reads` line that run was skipped as unchanged. Restored, 483 passed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: a check's correct reply was refused whole, so the session hand-altered it. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `rust/guard/shared`'s tests read `.claude/settings.json` (`the_hook_timeout_holds_both_waits`) without declaring it in `reads`. Effect: a settings edit that breaks the hook timeout's test left a kept green standing. Fixed here, in the same `reads` line, observed 2026-11-25, method: `grep -rn 'CARGO_MANIFEST_DIR' rust/guard/shared/src`, which had 3 hits before this task. The other two read `tests/hooks/fixtures/`, which is declared, and the crate's own directory.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: it pins an agreement and runs no check faster.
 
 
 ### T229 (<why: the finding or measurement that files it>)

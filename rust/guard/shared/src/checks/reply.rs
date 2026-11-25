@@ -140,6 +140,11 @@ pub fn categorized(reply: &str) -> Vec<(String, String, String, String)> {
         .collect()
 }
 
+/// The line a check's finding ends with when it carries no EDIT block - the one form every check agent's contract under
+/// `.claude/agents/` gives, and the one [`unread_edits`] reads as no block (451 T228: P7's modal-form reply was refused whole over
+/// three of them; the test `every_check_agent_names_the_no_edit_line_the_parser_reads` holds the two sides to each other).
+pub const NO_EDIT: &str = "EDIT: none - <why>";
+
 /// The form of an EDIT block, as a refusal of an unread one names it.
 pub const EDIT_FORM: &str = "EDIT [(CATEGORY)] <path>, then the lines <<<, the old text, ===, the new text and >>>, each fence at the header's indent (plain text: no bullet or bold, the path alone or in one pair of backticks, the category before it)";
 
@@ -163,9 +168,9 @@ pub fn unread_edits(reply: &str) -> Vec<String> {
         let word = line.trim_start_matches(|c: char| {
             c.is_whitespace() || matches!(c, '-' | '*' | '>' | '#' | '+' | '\u{2022}')
         });
-        // `EDIT: none - <why>` is the checks' own contract line for a finding with no block (entry-drift, intro-check, modal-form,
-        // modal-depiction): it opens no block, so it is not an unread one (feature 453's check session, 2026-11-24: nine replies
-        // were refused whole for it and applied from hand-altered copies). GUARD_EDIT_OK: fixing a guard that fires on correct work.
+        // [`NO_EDIT`] is the checks' own contract line for a finding with no block (every check agent that writes EDIT blocks): it
+        // opens no block, so it is not an unread one (feature 453's check session, 2026-11-24: nine replies were refused whole for
+        // it and applied from hand-altered copies; 451 T228, P7's modal-form reply). GUARD_EDIT_OK: fixing a guard that fires on correct work.
         let header = word.strip_prefix("EDIT").is_some_and(|rest| {
             !rest.starts_with(|c: char| c.is_alphanumeric() || c == '_')
                 && !rest
@@ -232,7 +237,9 @@ pub fn response_text(resp: &Value) -> String {
 mod tests {
     use serde_json::json;
 
-    use super::{blocks, categorized, factual, reply_file, reply_of, response_text, unread_edits};
+    use super::{
+        blocks, categorized, factual, reply_file, reply_of, response_text, unread_edits, NO_EDIT,
+    };
     use crate::checks::testkit::dir;
 
     /// An EDIT header or fence the parser does not read is named, never dropped (feature 451 T195, gap audit item 12a): the
@@ -263,6 +270,66 @@ mod tests {
         assert_eq!(unread_edits(reply), Vec::<String>::new());
         assert_eq!(blocks(reply).len(), 1);
         assert!(!unread_edits("- EDIT l7r/m.md\n<<<\na\n===\nb\n>>>\n").is_empty());
+    }
+
+    /// The reply page session P7's cascade got back from modal-form (2026-11-24), byte for byte: three findings ending
+    /// `EDIT: none - <why>` beside three real blocks. `make apply-edits` refused it whole on a build without the contract line's
+    /// exemption and the session applied it from a hand-altered copy (451 T228); it reads whole, its three blocks found.
+    #[test]
+    fn the_p7_modal_form_reply_is_read_whole() {
+        let reply = include_str!("reply_p7_modal_form.txt");
+        assert_eq!(unread_edits(reply), Vec::<String>::new());
+        assert_eq!(blocks(reply).len(), 3);
+        assert_eq!(reply.matches("\nEDIT: none - ").count(), 3);
+    }
+
+    /// The parser and the agent files agree on how a check says it has no edit (451 T228): every line of a check agent's contract
+    /// that names a no-edit line names [`NO_EDIT`] itself, the checks that write EDIT blocks name it, and the parser reads it -
+    /// plain, bulleted, indented or bold - as no block.
+    #[test]
+    fn every_check_agent_names_the_no_edit_line_the_parser_reads() {
+        // GUARD_EDIT_OK: the test of the agreement T228 pins
+        let named = crate::regex::build(r"(?i)\bEDIT\W{0,4}(none|n/a|no edit)\b").unwrap();
+        let agents =
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../.claude/agents");
+        let mut naming = Vec::new();
+        for entry in std::fs::read_dir(&agents).unwrap() {
+            let path = entry.unwrap().path();
+            let text = std::fs::read_to_string(&path).unwrap();
+            for line in text.lines().filter(|l| named.is_match(l).unwrap()) {
+                let at = path.file_name().unwrap().to_string_lossy().into_owned();
+                let held = line.contains(NO_EDIT);
+                assert!(held, "{at}: no-edit line not `{NO_EDIT}`: {line}");
+                naming.push(at);
+            }
+        }
+        naming.sort();
+        naming.dedup();
+        for check in [
+            "entry-drift.md",
+            "intro-check.md",
+            "modal-depiction.md",
+            "modal-form.md",
+            "modal-research.md",
+            "quote-check.md",
+            "record-format.md",
+            "record-style.md",
+            "source-applicability.md",
+            "translation-check.md",
+        ] {
+            let kept = naming.iter().any(|n| n == check);
+            assert!(kept, "{check} no longer names `{NO_EDIT}`");
+        }
+        let line = NO_EDIT.replace("<why>", "a source to find");
+        for reply in [
+            line.clone(),
+            format!("- {line}"),
+            format!("   {line}"),
+            format!("**{}** - research", NO_EDIT.split(" - ").next().unwrap()),
+        ] {
+            let got = unread_edits(&format!("FIX 1 - x\n{reply}\n"));
+            assert_eq!(got, Vec::<String>::new(), "{reply:?}");
+        }
     }
 
     #[test]
