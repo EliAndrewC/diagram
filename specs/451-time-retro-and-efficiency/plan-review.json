@@ -1692,6 +1692,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T252 (T249's builder's closing run, 2026-11-25: test-closing-checks.sh case 1's static row reported FAIL while the output it printed showed it GREEN, observed 2026-11-25, method: that builder's report, quoted in tasks.md's T252)": {
+   "sha256": "0b3b768afdc91cf3dba26cb9ee057c1b1e870006d7d04f8fc6eaa7f3c39dea2d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T252 Approach (checklist part A)": {
+   "sha256": "fd60960c636480e5c13cda598a4a3c01fe665bc5772db83e9fbde3438da303b8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -22079,6 +22091,52 @@
      "why": "Scheduling and scope. None of it narrows anything."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T252 (T249's builder's closing run, 2026-11-25: test-closing-checks.sh case 1's static row reported FAIL while the output it printed showed it GREEN, observed 2026-11-25, method: that builder's report, quoted in tasks.md's T252)",
+    "### T252 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T252-D1",
+     "summary": "test-closing-checks.sh's checks grep a run's text from a here-string via a `seen VAR <grep args>` helper instead of `printf '%s' \"$VAR\" | grep -q` under pipefail; the 47 pipes over $OUT, $A, $B are moved.",
+     "class": "within",
+     "why": "The task is to find the race in this suite and make its verdict deterministic; the plan names the mechanism (printf killed by SIGPIPE after grep -q exits, pipeline 141 under pipefail) and removes it in the one suite the task names. No behavior of any guard changes; only the test's reading of output."
+    },
+    {
+     "id": "T252-D2",
+     "summary": "A section 0 forces the interleaving (the row, then seq 200000, more than a pipe holds) and shows the old pipe form reads a present row absent while `seen` reads it present; the forcing line keeps the old form on purpose.",
+     "class": "within",
+     "why": "The task asks for the race reproduced red on a forced interleaving; this is that reproduction, kept as a red-first test (63 passed / 1 failed before, 64 / 0 after, one-shot labeled 2026-11-25). Enforcement of what was asked, not new scope."
+    },
+    {
+     "id": "T252-D3",
+     "summary": "A self-grep in the suite refuses the pipe-into-grep form coming back in this suite.",
+     "class": "within",
+     "why": "Its only effect is to keep the requested determinism from regressing in this suite; delete the requested fix and it has nothing left to check. It does not reach other suites, commands or agents."
+    },
+    {
+     "id": "T252-D4",
+     "summary": "The suite keeps `set -uo pipefail`; the fix changes how text is read, not the shell options.",
+     "class": "within",
+     "why": "Keeps the suite's existing strictness rather than weakening it to hide the race; no requirement is narrowed."
+    },
+    {
+     "id": "T252-D5",
+     "summary": "What was shared is stated as the CPU, not disk: every path case 1 reads is under the suite's own mktemp -d and the run directory is made with plain mkdir; the brief's candidates (fixed /tmp path, common .git run dir, timestamp collision, stamp file) ruled out by reading the suite and scripts/gates/closing-checks.sh.",
+     "class": "within",
+     "why": "The task asks to say what was shared; this answers it with a stated method. No map or engine change (n/a rows)."
+    },
+    {
+     "id": "T252-D6",
+     "summary": "The same pipe-into-grep -q form in the other 17 pipefail suites of tests/hooks/ (98 sites, observed 2026-11-25 with the stated grep) is not fixed here; filed as T253, landing before T139 (whose suite test-no-poll-hooks.sh is one of the 17).",
+     "class": "within",
+     "why": "T252's task is the one suite; the other suites are not dropped but filed with a reason, a task id and an order, the shape FR-009 sets for a found-and-left defect, and ordered before the task whose suite would otherwise carry the flake. The census states its search space (the grep pattern over the suites that set pipefail), and restricting it to pipefail suites and grep -q matches the mechanism (without pipefail, or without an early-exiting grep, the pipeline's status cannot be the writer's SIGPIPE). Aside, not a ruling: the space is tests/hooks/ only; T253 may wish to state whether pipefail scripts outside tests/hooks/ (other test directories, scripts/gates/) use the same form, and early-exit readers other than grep -q (grep -m, head)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -35280,6 +35338,50 @@
      "summary": "After T227, before T22, parallel with T249 in other crates. Closing-checks exit, with a cannot-be-done claim ruled through make arbiter-ask. One landing.",
      "class": "within",
      "why": "Scheduling and scope. None of it narrows anything."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T252": {
+   "section_sha256": "3c5bdbfa7cff84817d15c2bd5bfa9c23f86db45f3f4a78c2bf914cdb06c2c1e5",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T252-D1",
+     "summary": "test-closing-checks.sh's checks grep a run's text from a here-string via a `seen VAR <grep args>` helper instead of `printf '%s' \"$VAR\" | grep -q` under pipefail; the 47 pipes over $OUT, $A, $B are moved.",
+     "class": "within",
+     "why": "The task is to find the race in this suite and make its verdict deterministic; the plan names the mechanism (printf killed by SIGPIPE after grep -q exits, pipeline 141 under pipefail) and removes it in the one suite the task names. No behavior of any guard changes; only the test's reading of output."
+    },
+    {
+     "id": "T252-D2",
+     "summary": "A section 0 forces the interleaving (the row, then seq 200000, more than a pipe holds) and shows the old pipe form reads a present row absent while `seen` reads it present; the forcing line keeps the old form on purpose.",
+     "class": "within",
+     "why": "The task asks for the race reproduced red on a forced interleaving; this is that reproduction, kept as a red-first test (63 passed / 1 failed before, 64 / 0 after, one-shot labeled 2026-11-25). Enforcement of what was asked, not new scope."
+    },
+    {
+     "id": "T252-D3",
+     "summary": "A self-grep in the suite refuses the pipe-into-grep form coming back in this suite.",
+     "class": "within",
+     "why": "Its only effect is to keep the requested determinism from regressing in this suite; delete the requested fix and it has nothing left to check. It does not reach other suites, commands or agents."
+    },
+    {
+     "id": "T252-D4",
+     "summary": "The suite keeps `set -uo pipefail`; the fix changes how text is read, not the shell options.",
+     "class": "within",
+     "why": "Keeps the suite's existing strictness rather than weakening it to hide the race; no requirement is narrowed."
+    },
+    {
+     "id": "T252-D5",
+     "summary": "What was shared is stated as the CPU, not disk: every path case 1 reads is under the suite's own mktemp -d and the run directory is made with plain mkdir; the brief's candidates (fixed /tmp path, common .git run dir, timestamp collision, stamp file) ruled out by reading the suite and scripts/gates/closing-checks.sh.",
+     "class": "within",
+     "why": "The task asks to say what was shared; this answers it with a stated method. No map or engine change (n/a rows)."
+    },
+    {
+     "id": "T252-D6",
+     "summary": "The same pipe-into-grep -q form in the other 17 pipefail suites of tests/hooks/ (98 sites, observed 2026-11-25 with the stated grep) is not fixed here; filed as T253, landing before T139 (whose suite test-no-poll-hooks.sh is one of the 17).",
+     "class": "within",
+     "why": "T252's task is the one suite; the other suites are not dropped but filed with a reason, a task id and an order, the shape FR-009 sets for a found-and-left defect, and ordered before the task whose suite would otherwise carry the flake. The census states its search space (the grep pattern over the suites that set pipefail), and restricting it to pipefail suites and grep -q matches the mechanism (without pipefail, or without an early-exiting grep, the pipeline's status cannot be the writer's SIGPIPE). Aside, not a ruling: the space is tests/hooks/ only; T253 may wish to state whether pipefail scripts outside tests/hooks/ (other test directories, scripts/gates/) use the same form, and early-exit readers other than grep -q (grep -m, head)."
     }
    ],
    "verdict": "CLEAR"

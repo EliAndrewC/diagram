@@ -70,15 +70,33 @@ run() { : > "$T/events"; OUT=$("$SCRIPT" 2>&1); RC=$?; }
 # the run directory a run's table names (its static row's log), and a wait on a line of the events file
 run_dir() { local l; l=$(grep -Eo "$T/logs/[^ ]*/static\.log" "$1" | head -1); printf '%s' "${l%/static.log}"; }
 wait_for() { for _ in $(seq 1 400); do grep -q "$1" "$T/events" 2>/dev/null && return 0; sleep 0.05; done; return 1; }
+# A RUN'S TEXT IS GREPPED FROM A HERE-STRING, NEVER A PIPE (451 T252): under pipefail, `seen OUT -q` failed when grep
+# matched an early line and exited while printf (bash writes its stdout a line at a time) still had lines to write - printf died of
+# SIGPIPE, the pipeline returned 141, and a row the printed output showed GREEN was reported FAIL (T249's builder, 2026-11-25, case 1's
+# static row, the first row, so the most text behind it; 1 in 3,000 at real size pinned to one CPU, the load of a closing run beside
+# it opening the window; nothing on disk was shared). A negated check turned the same race into a false pass. `seen VAR <grep args>`
+# greps the variable's text with no writer process to kill.
+seen() { local v=$1; shift; grep "$@" <<< "${!v}"; }
+
+echo "0. a run's text is grepped whole: a match early in a long text is a match, under pipefail (451 T252)"
+# the forced interleaving: the matching row first, then more than a pipe holds, so the old pipe's writer is always still writing when
+# grep -q exits on the match (50 of 50 runs red on the old form, measured 2026-11-25)
+LONG=$(printf '  static      GREEN\n'; seq 200000)
+seen LONG -Eq '^  static +GREEN' && ok "a row before a pipe's worth of text: found" || no "a row before a long text read as absent"
+! seen LONG -q '^  static' && no "a negated check passed on a row that is there" || ok "a negated check on a row that is there: still false"
+printf '%s' "$LONG" | grep -Eq '^  static +GREEN' && no "the forcing no longer forces: the old pipe found the row" || ok "the forcing holds: the old pipe form reads it absent"
+# no check of this suite greps a variable through a pipe (the comment lines above excepted)
+grep -nE '^[^#]*(printf|echo) [^|#]*"\$[A-Za-z_]+" *\| *grep' "${BASH_SOURCE[0]}" | grep -v 'the forcing' > "$T/piped"
+[ -s "$T/piped" ] && no "a check pipes a variable into grep - use \`seen VAR -q <pattern>\`:" "$(cat "$T/piped")" || ok "no check pipes a variable into grep"
 
 echo "1. all three green: one combined result, side by side"
 rm -f "$T"/*.rc; run
 [ "$RC" -eq 0 ] && ok "exit 0" || no "exit $RC" "$OUT"
 for c in static hooks-test quick; do
-  printf '%s' "$OUT" | grep -Eq "^  $c +GREEN .*$T/logs/[0-9]{8}T[0-9]{6}Z-[0-9]+/$c.log" && ok "$c: GREEN with its log, in the run's own directory" || no "$c's row" "$OUT"
+  seen OUT -Eq "^  $c +GREEN .*$T/logs/[0-9]{8}T[0-9]{6}Z-[0-9]+/$c.log" && ok "$c: GREEN with its log, in the run's own directory" || no "$c's row" "$OUT"
   grep -q "output of $c" "$T/logs/latest/$c.log" && ok "$c's output is in its log, latest naming the run" || no "$c's log"
 done
-printf '%s' "$OUT" | grep -q 'closing-checks: GREEN' && ok "the combined verdict" || no "no combined verdict" "$OUT"
+seen OUT -q 'closing-checks: GREEN' && ok "the combined verdict" || no "no combined verdict" "$OUT"
 [ "$(tail -1 "$T/records" 2>/dev/null)" = "log usage --tool closing-checks --kind check --outcome passed" ] && ok "the run recorded, passed" || no "no usage record" "$(cat "$T/records" 2>/dev/null)"
 # side by side: every check started before any ended
 last_start=$(grep '^start' "$T/events" | awk '{print $3}' | sort -n | tail -1)
@@ -88,13 +106,13 @@ first_end=$(grep '^end' "$T/events" | awk '{print $3}' | sort -n | head -1)
 echo "2. one red: every verdict, the red one's tail, exit 1"
 echo 2 > "$T/hooks-test.rc"; run
 [ "$RC" -eq 1 ] && ok "exit 1" || no "exit $RC" "$OUT"
-printf '%s' "$OUT" | grep -Eq '^  hooks-test +RED \(exit 2\)' && ok "hooks-test: RED with its exit" || no "hooks-test's row" "$OUT"
-printf '%s' "$OUT" | grep -Eq '^  static +GREEN' && printf '%s' "$OUT" | grep -Eq '^  quick +GREEN' && ok "the others still GREEN" || no "the green rows" "$OUT"
-printf '%s' "$OUT" | grep -q 'the failure of hooks-test' && ok "the red one's tail is shown" || no "no tail" "$OUT"
-printf '%s' "$OUT" | grep -q 'closing-checks: RED.* 1 of 3 red' && ok "the combined verdict counts it" || no "no red verdict" "$OUT"
+seen OUT -Eq '^  hooks-test +RED \(exit 2\)' && ok "hooks-test: RED with its exit" || no "hooks-test's row" "$OUT"
+seen OUT -Eq '^  static +GREEN' && seen OUT -Eq '^  quick +GREEN' && ok "the others still GREEN" || no "the green rows" "$OUT"
+seen OUT -q 'the failure of hooks-test' && ok "the red one's tail is shown" || no "no tail" "$OUT"
+seen OUT -q 'closing-checks: RED.* 1 of 3 red' && ok "the combined verdict counts it" || no "no red verdict" "$OUT"
 [ "$(tail -1 "$T/records")" = "log usage --tool closing-checks --kind check --outcome refused" ] && ok "the run recorded, refused" || no "no refused record" "$(cat "$T/records")"
 echo 1 > "$T/static.rc"; echo 1 > "$T/quick.rc"; run
-[ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -q '3 of 3 red' && ok "three red: every one reported" || no "not all reported" "$OUT"
+[ "$RC" -eq 1 ] && seen OUT -q '3 of 3 red' && ok "three red: every one reported" || no "not all reported" "$OUT"
 rm -f "$T"/*.rc
 
 echo "3. a TERM stops all three"
@@ -124,11 +142,11 @@ STUB_DIR="$T/B" STUB_TAG=B STUB_EVENTS="$T/events" STUB_SLEEP=0.3 "$SCRIPT" > "$
 sleep 0.2; touch "$T/A/release"; wait "$pa"; ra=$?
 touch "$T/B/release"; wait "$pb"; rb=$?
 A=$(cat "$T/A.out"); B=$(cat "$T/B.out")
-[ "$ra" -eq 1 ] && printf '%s' "$A" | grep -q '2 of 3 red' && ok "run A: RED, its two red checks counted" || no "run A's verdict (exit $ra)" "$A"
-printf '%s' "$A" | grep -Eq '^  quick +RED \(exit 1\)' && printf '%s' "$A" | grep -Eq '^  hooks-test +RED \(exit 1\)' && printf '%s' "$A" | grep -Eq '^  static +GREEN' \
+[ "$ra" -eq 1 ] && seen A -q '2 of 3 red' && ok "run A: RED, its two red checks counted" || no "run A's verdict (exit $ra)" "$A"
+seen A -Eq '^  quick +RED \(exit 1\)' && seen A -Eq '^  hooks-test +RED \(exit 1\)' && seen A -Eq '^  static +GREEN' \
   && ok "run A: its own quick, hooks-test and static verdicts" || no "run A read another run's verdict" "$A"
-[ "$rb" -eq 0 ] && printf '%s' "$B" | grep -q 'closing-checks: GREEN' && ok "run B: GREEN" || no "run B's verdict (exit $rb)" "$B"
-printf '%s' "$B" | grep -Eq '^  hooks-test +GREEN' && printf '%s' "$B" | grep -Eq '^  quick +GREEN' && ok "run B: its own hooks-test and quick verdicts" || no "run B read another run's verdict" "$B"
+[ "$rb" -eq 0 ] && seen B -q 'closing-checks: GREEN' && ok "run B: GREEN" || no "run B's verdict (exit $rb)" "$B"
+seen B -Eq '^  hooks-test +GREEN' && seen B -Eq '^  quick +GREEN' && ok "run B: its own hooks-test and quick verdicts" || no "run B read another run's verdict" "$B"
 da=$(run_dir "$T/A.out"); db=$(run_dir "$T/B.out")
 [ -n "$da" ] && [ -n "$db" ] && [ "$da" != "$db" ] && ok "each run has its own directory" || no "one directory for both" "A: $da B: $db"
 own=1
@@ -188,16 +206,16 @@ d6=$(run_dir <(printf '%s' "$OUT"))
   || no "the caller's files" "$(cat "$d6/caller-files" "$d6/split.txt" 2>&1)"
 [ "$(cut -f1 "$d6/others" 2>/dev/null | tr '\n' ' ')" = "docs/failed.md docs/sed.md rust/other/src/extra.rs rust/other/src/lib.rs " ] && grep -q 'T86@449-y' "$d6/others" && grep -q 'T84@451-x' "$d6/others" \
   && ok "another task's: T84's file, its Bash writes (a call's end and a failed end, 451 T93), and 449's T86's" || no "another task's files" "$(cat "$d6/others" 2>&1)"
-[ "$RC" -eq 0 ] && printf '%s' "$OUT" | grep -Eq '^  static +GREEN' && printf '%s' "$OUT" | grep -q 'closing-checks: GREEN' \
+[ "$RC" -eq 0 ] && seen OUT -Eq '^  static +GREEN' && seen OUT -q 'closing-checks: GREEN' \
   && ok "the caller's run is GREEN beside the other's red crate" || no "the caller's verdict (exit $RC)" "$OUT"
-printf '%s' "$OUT" | grep -q "another task's red.*reported apart and not counted" && printf '%s' "$OUT" | grep -q '  lint red on rust/other - .*T84@451-x: rust/other/src/lib.rs' \
+seen OUT -q "another task's red.*reported apart and not counted" && seen OUT -q '  lint red on rust/other - .*T84@451-x: rust/other/src/lib.rs' \
   && ok "the other's red named apart, with its task and file" || no "no apart section" "$OUT"
-printf '%s' "$OUT" | grep -q "judged as T86's: 7 of the clone's 11 uncommitted files (3 its own edits name, 4 no task's edit); another task's, its red reported apart: 4" \
+seen OUT -q "judged as T86's: 7 of the clone's 11 uncommitted files (3 its own edits name, 4 no task's edit); another task's, its red reported apart: 4" \
   && ok "the split is printed" || no "the split line" "$OUT"
 echo rust/mine/src/lib.rs > "$T/c6/static.red"; c6 env CLOSING_TASK=T86 CLOSING_FEATURE=451
-[ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -Eq '^  static +RED' && ! printf '%s' "$OUT" | grep -q "another task's red" \
+[ "$RC" -eq 1 ] && seen OUT -Eq '^  static +RED' && ! seen OUT -q "another task's red" \
   && ok "the caller's own red still fails" || no "the caller's red (exit $RC)" "$OUT"
-printf '%s' "$OUT" | grep -q 'then run `make closing-checks T=T86 F=451` once more' \
+seen OUT -q 'then run `make closing-checks T=T86 F=451` once more' \
   && ok "the red names the caller's own rerun, its T= and F=" || no "the rerun line drops T= (a bare one judges the whole clone)" "$OUT"
 c6 env CLOSING_TASK=T86 CLOSING_FEATURE=449
 d6=$(run_dir <(printf '%s' "$OUT"))
@@ -208,29 +226,29 @@ echo rust/other/src/extra.rs > "$T/c6/static.red"; c6 env CLOSING_TASK=T86,T84 C
 d6=$(run_dir <(printf '%s' "$OUT"))
 grep -qx rust/other/src/lib.rs "$d6/caller-files" && grep -qx docs/sed.md "$d6/caller-files" && grep -qx rust/mine/src/lib.rs "$d6/caller-files" \
   && [ "$(cut -f1 "$d6/others" 2>/dev/null | tr '\n' ' ')" = "rust/other/src/extra.rs " ] && [ "$RC" -eq 0 ] \
-  && printf '%s' "$OUT" | grep -q "judged as T86,T84's: 10 of the clone's 11 uncommitted files" \
+  && seen OUT -q "judged as T86,T84's: 10 of the clone's 11 uncommitted files" \
   && ok "a bundle's tasks' files judged as one task's, another feature's task still apart" || no "the bundle's split (exit $RC)" "$(cat "$d6/caller-files" "$d6/others" 2>&1; printf '%s' "$OUT")"
 echo rust/other/src/lib.rs > "$T/c6/static.red"; touch "$T/c6/static.blocked"; c6 env CLOSING_TASK=T86
-[ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -q "BLOCKED.*every error static printed is in another task's files - rust/other/src/lib.rs (T84@451-x)" \
+[ "$RC" -eq 1 ] && seen OUT -q "BLOCKED.*every error static printed is in another task's files - rust/other/src/lib.rs (T84@451-x)" \
   && ok "a red of the caller's whose every error is in another task's file: BLOCKED, still red" || no "the blocked red (exit $RC)" "$OUT"
 # a coverage red (451 T95): cover's lines no test reaches name files too, read as the errors' are; T81's second closing run, 2026-11-21,
 # was red on cover alone, its lines in T88's files, and went untagged
 c6cover() { rm -f "$T/c6/static.red" "$T/c6/static.blocked" "$T/c6/static.cover" "$T/c6/static.apart"; for a in "$@"; do eval "$a"; done; c6 env CLOSING_TASK=T86; }
 c6cover 'printf "rust/other/src/lib.rs\nrust/other/src/extra.rs 12\n" > "$T/c6/static.cover"'
 d6=$(run_dir <(printf '%s' "$OUT"))
-[ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -Eq '^  static +RED' && grep -q "$C/rust/other/src/lib.rs - lines no test reaches: 3, 7" "$d6/static.log" \
+[ "$RC" -eq 1 ] && seen OUT -Eq '^  static +RED' && grep -q "$C/rust/other/src/lib.rs - lines no test reaches: 3, 7" "$d6/static.log" \
   && ok "a coverage red on another task's files alone is still counted red" || no "the coverage red's verdict (exit $RC)" "$OUT"
-printf '%s' "$OUT" | grep -q "BLOCKED.*every line no test reaches that static printed is in another task's files - rust/other/src/extra.rs (T86@449-y), rust/other/src/lib.rs (T84@451-x); yours are covered" \
+seen OUT -q "BLOCKED.*every line no test reaches that static printed is in another task's files - rust/other/src/extra.rs (T86@449-y), rust/other/src/lib.rs (T84@451-x); yours are covered" \
   && ok "two tasks' work, the other's lines uncovered and the caller's covered: BLOCKED, naming each file and task" \
   || no "the coverage red on another's files went untagged" "$OUT"
 c6cover 'printf "rust/other/src/lib.rs\nrust/mine/src/lib.rs\n" > "$T/c6/static.cover"' 'echo rust/other/src/lib.rs > "$T/c6/static.red"' 'touch "$T/c6/static.blocked"'
-[ "$RC" -eq 1 ] && ! printf '%s' "$OUT" | grep -q BLOCKED \
+[ "$RC" -eq 1 ] && ! seen OUT -q BLOCKED \
   && ok "the caller's own line no test reaches, beside another task's error: not BLOCKED, red" || no "a caller's uncovered line tagged BLOCKED (exit $RC)" "$OUT"
 c6cover 'echo "rust/mine 0" > "$T/c6/static.cover"' 'echo rust/other/src/lib.rs > "$T/c6/static.red"' 'touch "$T/c6/static.blocked"'
-[ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -q "BLOCKED.*every error static printed is in another task's files - rust/other/src/lib.rs (T84@451-x)" \
+[ "$RC" -eq 1 ] && seen OUT -q "BLOCKED.*every error static printed is in another task's files - rust/other/src/lib.rs (T84@451-x)" \
   && ok "a failed coverage run's marker names a crate, not a file: its build broken on another's file stays BLOCKED" || no "the failed run's marker (exit $RC)" "$OUT"
 c6cover 'echo "rust/mine 0" > "$T/c6/static.cover"' 'echo rust/other/src/lib.rs > "$T/c6/static.apart"'
-[ "$RC" -eq 1 ] && ! printf '%s' "$OUT" | grep -q BLOCKED \
+[ "$RC" -eq 1 ] && ! seen OUT -q BLOCKED \
   && ok "an APART crate's lines are not the counted red's: a caller's red naming no file beside them is not BLOCKED" || no "an APART crate's lines tagged the caller's red (exit $RC)" "$OUT"
 # THE REAL LINE FORMS (451 T230/T239): 449 T224's and T433's closing runs, 2026-11-24/25, printed "BLOCKED: every error static printed is
 # in another task's files - ()" on errors in their own files. No other task had a file in the clone, so `others` was empty, and the
@@ -242,44 +260,44 @@ c6raw() { printf "$1" > "$T/c6/static.raw"; shift; c6 env CLOSING_TASK=T86 "$@";
 clippy='rust-checks: lint FAILED on rust/mine\nerror: for loop over a `&Option`. This is more readably written as an `if let` statement\n  --> %s:84:18\n   |\n84 |         for s in &r.sunk {\n\nerror: could not compile `l7r_mine` (lib) due to 1 previous error\n'
 rustfmt='rust-checks: format FAILED on rust/mine\nDiff in @TOP@/%s:267:\n     svg.kind("marsh");\n'
 c6raw "$(printf "$clippy" mine/src/lib.rs)" L7R_EVENTS_DIR="$T/noevents"
-[ "$RC" -eq 1 ] && ! printf '%s' "$OUT" | grep -q BLOCKED && ! printf '%s' "$OUT" | grep -q -- '- ()' \
+[ "$RC" -eq 1 ] && ! seen OUT -q BLOCKED && ! seen OUT -q -- '- ()' \
   && ok "no other task in the clone, clippy's error in the caller's own file: red, never BLOCKED" || no "the T433 run's empty BLOCKED (exit $RC)" "$OUT"
 c6raw "$(printf "$rustfmt" rust/mine/src/lib.rs)" L7R_EVENTS_DIR="$T/noevents"
-[ "$RC" -eq 1 ] && ! printf '%s' "$OUT" | grep -q BLOCKED \
+[ "$RC" -eq 1 ] && ! seen OUT -q BLOCKED \
   && ok "no other task in the clone, rustfmt's diff in the caller's own file: red, never BLOCKED" || no "rustfmt's empty BLOCKED (exit $RC)" "$OUT"
 c6raw "$(printf "$rustfmt" rust/other/src/lib.rs)"
-[ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -q "BLOCKED.*every error static printed is in another task's files - rust/other/src/lib.rs (T84@451-x);" \
+[ "$RC" -eq 1 ] && seen OUT -q "BLOCKED.*every error static printed is in another task's files - rust/other/src/lib.rs (T84@451-x);" \
   && ok "rustfmt's absolute path read: a diff in another task's file alone is BLOCKED, naming it" || no "rustfmt's path (exit $RC)" "$OUT"
 c6raw "$(printf "$clippy" other/src/lib.rs)"
-[ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -q "BLOCKED.*every error static printed is in another task's files - rust/other/src/lib.rs (T84@451-x);" \
+[ "$RC" -eq 1 ] && seen OUT -q "BLOCKED.*every error static printed is in another task's files - rust/other/src/lib.rs (T84@451-x);" \
   && ok "clippy's two-space arrow, its path from rust/: an error in another task's file alone is BLOCKED, naming it" || no "clippy's path (exit $RC)" "$OUT"
 c6raw "$(printf "$clippy" other/src/lib.rs)"'5 |     let s = "a --> mine/src/lib.rs";\n'
-printf '%s' "$OUT" | grep -q "BLOCKED.*rust/other/src/lib.rs (T84@451-x);" \
+seen OUT -q "BLOCKED.*rust/other/src/lib.rs (T84@451-x);" \
   && ok "an arrow inside a quoted source line names no file: only a line that opens with one does" || no "a source line's arrow read as a path" "$OUT"
 c6raw 'rust-checks: lint FAILED on rust/mine\nerror: linking with `cc` failed: exit status: 1\nerror: could not compile `l7r_mine` (lib)\n'
-[ "$RC" -eq 1 ] && ! printf '%s' "$OUT" | grep -q BLOCKED \
-  && printf '%s' "$OUT" | grep -q "no error line static printed names a file - none could be attributed, so all are counted as yours:" \
-  && printf '%s' "$OUT" | grep -q '    error: linking with `cc` failed: exit status: 1' \
+[ "$RC" -eq 1 ] && ! seen OUT -q BLOCKED \
+  && seen OUT -q "no error line static printed names a file - none could be attributed, so all are counted as yours:" \
+  && seen OUT -q '    error: linking with `cc` failed: exit status: 1' \
   && ok "a red naming no file: said to be unattributed, its error lines listed, never another task's" || no "the unattributed red (exit $RC)" "$OUT"
 # cover runs the tests, so one step's red can mix forms: a failing test names its file in the panic line (the form captured 2026-11-25
 # from a throwaway failing test under rustc 1.87: "thread 'seats' panicked at phases/src/lib.rs:3:5:", at column 0, the path as passed to rustc)
 panic="thread 'tests::seats' panicked at %s:12:5:\nassertion failed: ok\n"
 c6raw "rust-checks: cover FAILED on rust/other\n   --> other/src/lib.rs:3:1\nrust-checks: cover FAILED on rust/mine\n$(printf "$panic" mine/src/lib.rs)\n"
-[ "$RC" -eq 1 ] && ! printf '%s' "$OUT" | grep -q BLOCKED \
+[ "$RC" -eq 1 ] && ! seen OUT -q BLOCKED \
   && ok "another task's error beside the caller's failing test: not BLOCKED, the test's panic line read" || no "a mixed red BLOCKED (exit $RC)" "$OUT"
 c6raw "rust-checks: cover FAILED on rust/other\n$(printf "$panic" other/src/lib.rs)\n"
-printf '%s' "$OUT" | grep -q "BLOCKED.*every error static printed is in another task's files - rust/other/src/lib.rs (T84@451-x);" \
+seen OUT -q "BLOCKED.*every error static printed is in another task's files - rust/other/src/lib.rs (T84@451-x);" \
   && ok "a failing test in another task's file alone: BLOCKED, naming it" || no "the panic line's path (exit $RC)" "$OUT"
 c6raw "rust-checks: APART lint red on rust/other - another task's\nerror: theirs only\nrust-checks: dead FAILED on rust/mine\n  pub fn seat: nothing in Rust calls it - delete it, or call it\n"
-printf '%s' "$OUT" | grep -q '    rust-checks: dead FAILED on rust/mine' && printf '%s' "$OUT" | grep -q '      pub fn seat: nothing' && ! printf '%s' "$OUT" | grep -q '    error: theirs only' \
+seen OUT -q '    rust-checks: dead FAILED on rust/mine' && seen OUT -q '      pub fn seat: nothing' && ! seen OUT -q '    error: theirs only' \
   && ok "the unattributed lines are the counted red's: dead's line listed, an APART crate's error not" || no "the unattributed lines (exit $RC)" "$OUT"
 rm -f "$T/c6/static.raw"; echo 1 > "$T/c6/hooks-test.rc"; c6 env CLOSING_TASK=T86
-[ "$RC" -eq 1 ] && ! printf '%s' "$OUT" | grep -q 'none could be attributed' \
+[ "$RC" -eq 1 ] && ! seen OUT -q 'none could be attributed' \
   && ok "a red hooks-test is counted whole, as before: no attribution note" || no "hooks-test's red given static's note (exit $RC)" "$OUT"
 rm -f "$T/c6/hooks-test.rc"
 echo rust/other/src/lib.rs > "$T/c6/static.red"
 rm -f "$T/c6/static.blocked"; c6 env -u CLOSING_TASK
-[ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -q 'no T= - every crate and file in the clone is judged as yours' && printf '%s' "$OUT" | grep -Eq '^  static +RED' \
+[ "$RC" -eq 1 ] && seen OUT -q 'no T= - every crate and file in the clone is judged as yours' && seen OUT -Eq '^  static +RED' \
   && ok "no T=: the whole clone judged as before, the T= form named" || no "no T= (exit $RC)" "$OUT"
 rm -rf "$T/c6"
 
