@@ -39,8 +39,14 @@ pub const LABELS: [&str; 5] = [
 /// to the map's reader, the one searched and silent, the other not yet searched (feature 451 T236).
 pub const GUESSED: [&str; 2] = ["GUESS", "UNRESEARCHED"];
 
-static TAG: LazyLock<Regex> =
-    LazyLock::new(|| re(r#"<span class="item"((?:\s+data-[a-z]+="[^"]*")*)\s*></span>"#));
+// a comment inside the token adds no word and is read as part of it (451 T226: P15's `toe-shoulder-past-corner` on 0057's drawing page
+// carried `<!-- 449 T432, 2026-11-25 -->` inside, so no reader saw the item - not the owing, the backlog or the claims)
+static TAG: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r#"<span class="item"((?:\s+data-[a-z]+="[^"]*")*)\s*>(?:\s*<!--(?:(?!-->)[\s\S])*-->)*\s*</span>"#,
+    )
+});
+static OPENING: LazyLock<Regex> = LazyLock::new(|| re(r#"<span class="item""#));
 static ATTR: LazyLock<Regex> = LazyLock::new(|| re(r#"data-([a-z]+)="([^"]*)""#));
 static OPEN: LazyLock<Regex> = LazyLock::new(|| re(r"<(?:li|p)\b[^>]*>"));
 static CLOSE: LazyLock<Regex> = LazyLock::new(|| re(r"</(?:li|p)>"));
@@ -96,6 +102,16 @@ pub fn items(html: &str) -> Vec<Item> {
         .collect()
 }
 
+/// The words of every `<li>` or `<p>` block of a page, as [`Item::block`] reads its own: whether a tagged item's block stood on the page
+/// before, word for word (451 T226: a tag added to standing words owes no pop-up, new or reworded words do).
+#[must_use]
+pub fn blocks(html: &str) -> std::collections::HashSet<String> {
+    OPEN.find_iter(html)
+        .map_while(Result::ok)
+        .map(|m| block_at(html, m.end()))
+        .collect()
+}
+
 /// The page with every well-formed tag taken out (feature 451 T192): what a pop-up's fingerprint reads of a page, so tagging an item
 /// moves no pop-up that cites the page. A tag's `data-guess` is read where a pop-up shows it, by reference (`owed`'s `modals::refs`);
 /// a malformed tag is left in, so it stays visible.
@@ -124,7 +140,15 @@ fn says(item: &Item) -> bool {
 pub fn faults(name: &str, html: &str) -> Vec<String> {
     let mut out = Vec::new();
     let mut seen = std::collections::HashSet::new();
-    for it in items(html) {
+    let read = items(html);
+    let opened = OPENING.find_iter(html).map_while(Result::ok).count();
+    if opened > read.len() {
+        out.push(format!(
+            "{name}: {} item tag(s) the tag reader cannot read, so no reader sees the item - write each as `<span class=\"item\" data-item=\"<id>\" data-label=\"<LABEL>\" data-guess=\"...\"></span>`, nothing inside but a comment",
+            opened - read.len()
+        ));
+    }
+    for it in read {
         let who = format!("{name}: item `{}`", it.id);
         if !ID.is_match(&it.id).unwrap_or(false) {
             out.push(format!(

@@ -673,17 +673,20 @@ pub fn owed_in(
     let changed = changed_pages(delta, base)?;
     let was_tagged = tagged_at(delta, base, &before);
     let root = delta.root().to_path_buf();
+    let now: Vec<Modal> = modals_now(&root, true)?
+        .into_iter()
+        .filter(|m| uid.is_empty() || m.uid() == uid)
+        .collect();
+    let gained = labeled::gained(delta, base, &labeled::drawing_pages(&root, &now))?;
     let mut rows = Vec::new();
-    for m in modals_now(&root, true)? {
-        if !uid.is_empty() && m.uid() != uid {
-            continue;
-        }
+    for m in now {
         let was = before.get(&m.uid());
         let now_tagged = refs::tagged_now(&root, &refs::references(m.tag("Guesses")));
         let moved = was.is_none_or(|w| {
             w.prose_read(&was_tagged) != m.prose_read(&now_tagged) || w.entry() != m.entry()
         });
-        rows.extend(owed_row(&root, &m, was, moved, &changed)?);
+        let items = labeled::owed_items(&root, &m, &gained);
+        rows.extend(owed_row(&root, &m, was, moved, &changed, &items)?);
     }
     Ok(rows)
 }
@@ -714,13 +717,15 @@ fn tagged_at(delta: &mut Delta, base: &str, before: &Keyed<Modal>) -> refs::Tagg
     })
 }
 
-/// The rows `m` owes; `moved_text` whether its words as its reader meets them, or its Entry, moved.
+/// The rows `m` owes; `moved_text` whether its words as its reader meets them, or its Entry, moved; `items` the labeled items its
+/// drawing pages gained that its Guesses tab does not reference (451 T226).
 fn owed_row(
     root: &Path,
     m: &Modal,
     was: Option<&Modal>,
     moved_text: bool,
     changed: &HashSet<String>,
+    items: &[(String, items::Item)],
 ) -> Result<Vec<(String, String, String)>, Fail> {
     let mut rows = Vec::new();
     let uid = m.uid();
@@ -735,7 +740,11 @@ fn owed_row(
         } else {
             "its About, Guesses or Entry changed"
         };
-        rows.push((format!("{FORM_CHECK}:{uid}"), why.to_owned(), fp_form));
+        rows.push((
+            format!("{FORM_CHECK}:{uid}"),
+            why.to_owned(),
+            fp_form.clone(),
+        ));
         rows.extend(
             RESEARCH_CHECKS
                 .iter()
@@ -748,6 +757,13 @@ fn owed_row(
                 .iter()
                 .map(|c| (format!("{c}:{uid}"), why.clone(), fp_research.clone())),
         );
+    }
+    if !moved_text && !items.is_empty() {
+        rows.push((
+            format!("{FORM_CHECK}:{uid}"),
+            labeled::occasion(items),
+            labeled::fingerprint(&fp_form, items),
+        ));
     }
     let moved_drawing: Vec<String> = followed(root, &m.drawing_files())
         .into_iter()
@@ -859,6 +875,7 @@ pub fn cli(args: &[String]) -> crate::Reply {
     }
 }
 
+pub mod labeled;
 pub mod refs;
 
 #[cfg(test)]

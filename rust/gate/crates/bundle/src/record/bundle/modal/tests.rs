@@ -608,3 +608,57 @@ fn a_guesses_reference_is_filled_from_its_tag() {
         0,
     );
 }
+
+/// Feature 451 T226, red first: a form bundle shows the labeled items new on the pop-up's drawing pages that its Guesses tab does not
+/// reference, and its unit line carries the fingerprint that owed it, so its answer is recorded where the owing looks.
+#[test]
+fn a_form_bundle_shows_its_drawing_pages_new_labeled_items() {
+    let root = scratch("modal-bundle-items");
+    put(&root, crate::record::testkit::DRAWING, "<h2>How drawn</h2>\n<p>No shaft is drawn deeper than 30 ft, a GUESS.<span class=\"item\" data-item=\"shaft-depth\" data-label=\"GUESS\" data-guess=\"Its depth, at most 30 ft: not found\"></span></p>\n");
+    let o = root.join("out").to_string_lossy().into_owned();
+    let mut run = run_on(&root);
+    let code = bundle(
+        &mut run,
+        &root,
+        "hamlet/well",
+        &ask("modal-form", &o, "a test asked", "a test asked"),
+    )
+    .unwrap();
+    assert_eq!(code, 0, "{}", run.err);
+    let items = std::fs::read_to_string(root.join("out/drawing-items.md")).unwrap();
+    assert!(items.contains("- `{0094#shaft-depth}` GUESS on research/questions/0094-trade.drawing.html\n  its block: No shaft is drawn deeper than 30 ft, a GUESS.\n  its bullet, as a reference fills it: Its depth, at most 30 ft: not found"), "{items}");
+    let rows = owed_units(&own(&root), None, None, &["modal"], "hamlet/well").unwrap();
+    let form = rows
+        .iter()
+        .find(|u| u.slug == "modal-form:hamlet/well")
+        .unwrap();
+    let manifest = std::fs::read_to_string(root.join("out/MANIFEST.md")).unwrap();
+    let line = format!("unit: modal-form:hamlet/well {}\n", form.fingerprint);
+    assert!(manifest.contains(&line));
+    put(&root, crate::record::testkit::DRAWING, "<h2>How drawn</h2>\n<p>Drawn as a line, thin. A GUESS.<span class=\"item\" data-item=\"thin\" data-label=\"GUESS\"></span></p>\n");
+    let mut run = run_on(&root);
+    bundle(
+        &mut run,
+        &root,
+        "hamlet/well",
+        &ask("modal-form", &o, "a test asked", "a test asked"),
+    )
+    .unwrap();
+    let items = std::fs::read_to_string(root.join("out/drawing-items.md")).unwrap();
+    let ends = items.ends_with("  its block: Drawn as a line, thin. A GUESS.\n");
+    assert!(ends);
+    put(
+        &root,
+        crate::record::testkit::DRAWING,
+        "<h2>How drawn</h2>\n<p>Drawn as a line.</p>\n",
+    );
+    let mut run = run_on(&root);
+    bundle(
+        &mut run,
+        &root,
+        "hamlet/well",
+        &ask("modal-form", &o, "a test asked", "a test asked"),
+    )
+    .unwrap();
+    assert!(!root.join("out/drawing-items.md").exists());
+}

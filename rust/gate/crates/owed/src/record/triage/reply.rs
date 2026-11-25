@@ -10,7 +10,7 @@ use super::{Fail, TOUCHES};
 pub(super) type Named = Vec<(String, Vec<(String, String)>)>;
 
 /// The form of a reply line, as the refusal names it (the agent file's `## Your reply`).
-const FORM: &str = "`TOUCHES <uid> @ <page file name> - <A|B|C>: <which block>` (plain text: no bullet, no bold, an ASCII ` - `), or the one line `NONE`";
+const FORM: &str = "`TOUCHES <uid> @ <page file name> - <A|B|C|D>: <which block>` (plain text: no bullet, no bold, an ASCII ` - `), or the one line `NONE`";
 
 /// {uid: [(page, why)]} of a triage reply, FAIL CLOSED (feature 451 T195, gap audit item 3): a line that is not blank, not `NONE`
 /// and not in the form, a uid not of this triage, an empty reply, or `NONE` beside a TOUCHES line, refuses the whole reply, each

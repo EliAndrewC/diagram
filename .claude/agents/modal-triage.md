@@ -40,6 +40,11 @@ pop-up only when it:
 - **(C) removes a passage the pop-up's references point at** - a note whose key is EXACTLY one of its `Sources:` keys (a key with
   another suffix is another note), or a section its Entry rests on. A passage moved to another page with a pointer is not a
   removal (the tool has cleared those).
+- **(D) adds a labeled figure of the pop-up's own thing that its Guesses tab does not hold** - only where the page's section lists
+  "Labeled items new on this page" and the pop-up's `modal-form` is owed for one (feature 451 T226): the item says how the map draws
+  the thing this pop-up describes (its size, count, form or place) as a GUESS, UNRESEARCHED, DEVIATION or CONVENTION, and nothing
+  on its Guesses tab or, for a deviation, in its About says so. An item about another kind on the same page is not (D). (D) is the
+  one rule that counts a thing the pop-up does NOT state: the map draws it, so its reader is owed the label (dev/modals.md M8, M11).
 Anything else cannot change what the checks would find: name nothing for it. Apply the rule literally; a block on a topic the
 pop-up never mentions is none of (A)-(C), and so is new material on a topic the pop-up is silent on: a gap filled is a
 completion, not a correction (the GM 2026-11-23, needed.md). The page decides which checks are owed - a question page its research checks, a
@@ -49,7 +54,10 @@ completion, not a correction (the GM 2026-11-23, needed.md). The page decides wh
 
 One line per (pop-up, page) whose blocks meet the rule, and nothing for the rest:
 
-    TOUCHES <uid> @ <page file name> - <A|B|C>: <which block, a few words>
+    TOUCHES <uid> @ <page file name> - <A|B|C|D>: <which block, a few words>
+
+A `D:` line owes the pop-up's `modal-form` alone and an `A:`, `B:` or `C:` line its other checks, so a pop-up both rules touch takes
+two lines.
 
 A pop-up you do not name is cleared without its checks. When no pop-up is touched, reply with the one line `NONE`: an empty reply,
 or any line not in this form (a bullet, bold, a dash other than ` - `), is refused whole (feature 451 T195). No preamble, no

@@ -49,6 +49,12 @@ leave them. In particular:
   2026-10-04) - report each one found in About.
 - **One account for every map (M9), placement (M10).** Nothing true of one settlement only; no placement rules.
 - **Voice (M16-M19).** Rule on each barred phrase the prepass lists; find record talk it missed.
+- **The drawing pages' new labeled items (M8, M11, M13; feature 451 T226).** When the bundle has `drawing-items.md`, each item is a
+  figure the map draws, newly labeled on a drawing page this pop-up's `Drawing:` names. For one that draws THIS pop-up's thing: a
+  GUESS or UNRESEARCHED item the Guesses tab does not hold is a FIX M11 whose EDIT adds the bullet as the line the file names it,
+  `- {NNNN#<id>}` (filled from the tag at build), or, where the item shows no bullet, the bullet written out (M11's form); About stating a figure the item says the map does not draw, unremarked, is a FIX M8;
+  a DEVIATION About does not tell is a FIX M13. A CONVENTION is the Depiction tab's (`modal-depiction`): leave it. An item about
+  another kind on the same page is no finding.
 
 ## Your report: counts first, then only what to act on
 
@@ -272,7 +278,11 @@ update the pigsty write-up, asked *"if I hadn't said that ... then would you hav
 
 **What is owed.** `make record-owed` names it: a modal whose `Entry:` page changed its words (the intro aside), or whose own
 About, Guesses or `Entry:` text changed, owes `modal-form` and the three `modal-research` answers (`rust/gate/crates/owed/src/record/modals.rs`,
-folded into `make record-owed`). Answer them with `make modal-bundle KIND=<key> FOR=modal-research` (or `FOR=modal-form`),
+folded into `make record-owed`). A labeled item new or relabeled (GUESS, UNRESEARCHED, DEVIATION or CONVENTION), in new words, on a
+drawing page a modal's `Drawing:` names, that its Guesses tab does not reference as `{NNNN#<id>}`, owes its `modal-form` too, triaged
+first (`make modal-triage`, rule (D)); the form bundle shows the item in `drawing-items.md` (`modals/labeled.rs`, 451 T226: a moved
+drawing page otherwise owes only `modal-depiction`, whose contract is the Depiction tab, so a new guess the map draws reached no
+check of the Guesses tab). Answer them with `make modal-bundle KIND=<key> FOR=modal-research` (or `FOR=modal-form`),
 the dispatch, then `make record-checked`. **The push REFUSES** (`scripts/gates/entry-gate.sh`, the record gate) until every owed unit
 is answered, or discharged with `RECORD_CHECKS_OK="<why>"`, which goes to `dev/bypass-log/` and `make audit`. A modal still
 in the old form owes `entry-drift` instead (`l7r-gate record entry-owed`, `rust/gate/crates/owed/src/record/entry.rs`), which `ENTRY_DRIFT_OK="<what moved, and why no modal

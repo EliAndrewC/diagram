@@ -1,6 +1,6 @@
 //! The item tags (feature 451 T187).
 
-use super::{faults, items, strip, Item};
+use super::{blocks, faults, items, strip, Item};
 
 fn tag(id: &str, label: &str, guess: &str) -> String {
     format!(
@@ -146,4 +146,29 @@ fn an_unresearched_tag_is_a_fifth_label_its_block_saying_so() {
     // an ATTESTED block that calls itself unresearched says another label
     let attested = html.replace(r#"data-label="UNRESEARCHED""#, r#"data-label="ATTESTED""#);
     assert_eq!(faults("p.html", &attested).len(), 1);
+}
+
+/// A page's blocks read as an item's own block is read (451 T226): the tagged block's words are among the untagged page's.
+#[test]
+fn every_block_is_read_as_an_item_s_block() {
+    let bare =
+        "<ul>\n<li><strong>Why?</strong><br>Drawn so, a GUESS.</li>\n</ul>\n<p>Another.</p>\n";
+    let tagged = bare.replace("a GUESS.", &format!("a GUESS.{}", tag("why", "GUESS", "")));
+    let standing = blocks(bare);
+    assert_eq!(standing.len(), 2);
+    assert!(items(&tagged).iter().all(|i| standing.contains(&i.block)));
+}
+
+/// A comment inside a tag is read as part of the token; a tag the reader still cannot read is a fault naming the form (451 T226).
+#[test]
+fn a_comment_inside_a_tag_is_read_and_an_unreadable_tag_is_a_fault() {
+    let page = "<p>Past the corner, UNRESEARCHED.<span class=\"item\" data-item=\"corner\" data-label=\"UNRESEARCHED\" data-guess=\"g\"><!-- 449 T432 --></span></p>\n";
+    assert_eq!(items(page).len(), 1);
+    assert_eq!(strip(page), "<p>Past the corner, UNRESEARCHED.</p>\n");
+    assert!(faults("p.html", page).is_empty());
+    let broken =
+        "<p>A GUESS.<span class=\"item\" data-item=\"x\" data-label=\"GUESS\">words</span></p>\n";
+    let found = faults("p.html", broken);
+    assert_eq!(found.len(), 1);
+    assert!(found[0].starts_with("p.html: 1 item tag(s) the tag reader cannot read"));
 }

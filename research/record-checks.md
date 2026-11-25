@@ -23,6 +23,7 @@ against main:
 | a registry write-up | `source-applicability` |
 | a translated pair | `translation-check` (`make translation-owed`) |
 | a section a modal was written from | `entry-drift` (below) |
+| a labeled item (GUESS, UNRESEARCHED, DEVIATION, CONVENTION) new or relabeled, in new words, on a drawing page a pop-up's `Drawing:` names, that its Guesses tab does not reference | that pop-up's `modal-form`, after `make modal-triage` (its rule (D)); the form bundle's `drawing-items.md` shows the item (451 T226) |
 
 Only WORDS count: a comment, a tag marker, markup or a re-wrap owes nothing, and a move or a merge owes nothing either.
 `make check-bundle` refuses a bundle for a check nothing owes, and holds a `quote-check` to the owed notes; the dispatch

@@ -11,7 +11,7 @@ use l7r_shared::pyjson;
 use serde_json::{json, Map, Value};
 
 use super::args::{parse, Parsed, Spec};
-use super::modals::{self, Modal, DEPICTION_CHECK, RESEARCH_AGENT, RESEARCH_CHECKS};
+use super::modals::{self, Modal, DEPICTION_CHECK, FORM_CHECK, RESEARCH_AGENT, RESEARCH_CHECKS};
 use super::owed::{self, answered as is_answered, merge_base, read_answer, write_answer};
 use super::repo::{fail, git, read_text, read_universal, Fail};
 use super::units::re;
@@ -142,10 +142,12 @@ fn baseline(store: &Path, slug: &str, path: &str) -> String {
         .to_owned()
 }
 
+/// The pages a unit's triage reads: a depiction unit's, and a form unit's (owed only by a labeled item its drawing pages gained, 451
+/// T226), its `Drawing:` pages; a research unit's its `Entry:` pages.
 fn pages_of(root: &Path, m: &Modal, check: &str) -> Vec<String> {
     modals::followed(
         root,
-        &if check == DEPICTION_CHECK {
+        &if check == DEPICTION_CHECK || check == FORM_CHECK {
             m.drawing_files()
         } else {
             m.entry_files()
@@ -205,7 +207,12 @@ fn change_lines(c: &Change, parts: &mut Vec<String>) {
 }
 
 /// The bundle's `MANIFEST.md`, part by part: each moved page's change and the pop-ups it reaches, then each pop-up whole, once.
-fn manifest_parts(by_page: &ByPage, blocks: &Changed, modals: &[(String, Modal)]) -> Vec<String> {
+fn manifest_parts(
+    by_page: &ByPage,
+    blocks: &Changed,
+    modals: &[(String, Modal)],
+    gained: &Gained,
+) -> Vec<String> {
     let find = |uid: &str| modals.iter().find(|(u, _)| u == uid).map(|(_, m)| m);
     let mut parts = vec![
         "# Triage of pop-up checks (feature 375, FR-001; feature 451 T186)\n".to_owned(),
@@ -227,6 +234,10 @@ fn manifest_parts(by_page: &ByPage, blocks: &Changed, modals: &[(String, Modal)]
             let checks: Vec<&str> = checks.iter().map(String::as_str).collect();
             parts.push(format!("- UID `{uid}` ({})", checks.join(", ")));
             shown.insert(uid.as_str());
+        }
+        if let Some(lines) = gained.get(path) {
+            parts.push("\nLabeled items new on this page that a pop-up's Guesses tab does not reference - its `modal-form` is owed for them, judged by rule (D):\n".to_owned());
+            parts.extend(lines.iter().cloned());
         }
         parts.push(String::new());
     }
@@ -302,6 +313,10 @@ struct Unit<'a> {
     read: &'a mut modals::RevReader,
     elsewhere: &'a mut Option<Vec<(String, HashSet<String>)>>,
     unpointed: &'a mut Vec<String>,
+    /// The pages the tool may not clear for this unit: a form unit's drawing pages that gained a labeled item it is owed for (451
+    /// T226). The tool's filter reads what a pop-up states, and the item is what the pop-up does not state, so only the agent's rule
+    /// (D) judges it.
+    held: &'a HashSet<String>,
 }
 
 /// Each page of a unit's that still owes it the agent: its key in the MANIFEST and its change, after the tool's clears and a split's
@@ -362,7 +377,7 @@ fn unit_changes(
             u.unpointed
                 .extend(c.unpointed.iter().map(|(_, to)| format!("{path} -> {to}")));
         }
-        if why.is_none() {
+        if why.is_none() && !u.held.contains(path) {
             continue;
         }
         let digest = super::units::digest(&[&format!(
@@ -560,10 +575,12 @@ pub fn bundle_in(
     let mut elsewhere: Option<Vec<(String, HashSet<String>)>> = None;
     let (mut sent, mut cleared) = (Vec::new(), 0usize);
     let mut unpointed: Vec<String> = Vec::new();
+    let mut gained = Gained::new();
     for (slug, _why, fp) in &units {
         let (check, uid) = slug.split_once(':').unwrap_or((slug, ""));
         let m = find(uid).cloned().unwrap_or_default();
         let all = pages_of(root, &m, check);
+        let held = held_pages(root, &base, check, &m, &mut gained)?;
         let owed_pages = unit_changes(
             &mut Unit {
                 root,
@@ -572,6 +589,7 @@ pub fn bundle_in(
                 read: &mut read,
                 elsewhere: &mut elsewhere,
                 unpointed: &mut unpointed,
+                held: &held,
             },
             slug,
             check,
@@ -610,7 +628,7 @@ pub fn bundle_in(
         return Ok((None, cleared));
     }
     std::fs::create_dir_all(out).map_err(fail)?;
-    let mut parts = manifest_parts(&by_page, &blocks, &modals_now);
+    let mut parts = manifest_parts(&by_page, &blocks, &modals_now, &gained);
     if !unpointed.is_empty() {
         parts.push(format!(
             "(for the session, not the agent) blocks removed that stand verbatim on a page these pop-ups do not reach: {}. A split owes nothing when the source page points to where the text now lives: `<a class=\"moved\" href=\"NNNN-<slug>.html\">...</a>` (feature 451 T185).\n",
@@ -628,6 +646,34 @@ pub fn bundle_in(
     )
     .map_err(fail)?;
     Ok((Some((manifest, sent.len())), cleared))
+}
+
+/// Each page's lines naming the labeled items a form unit is owed for (451 T226), one a pop-up and item.
+type Gained = std::collections::BTreeMap<String, Vec<String>>;
+
+/// A form unit's drawing pages that gained a labeled item its Guesses tab does not reference, each item's line added to `gained`; none
+/// for another check.
+fn held_pages(
+    root: &Path,
+    base: &str,
+    check: &str,
+    m: &Modal,
+    gained: &mut Gained,
+) -> Result<HashSet<String>, Fail> {
+    if check != FORM_CHECK {
+        return Ok(HashSet::new());
+    }
+    let items = modals::labeled::of_modal(root, base, m)?;
+    for (page, i) in &items {
+        let says = Some(&i.guess).filter(|g| !g.is_empty()).unwrap_or(&i.block);
+        gained.entry(page.clone()).or_default().push(format!(
+            "- UID `{}`: `{}` {} - {says}",
+            m.uid(),
+            i.id,
+            i.label
+        ));
+    }
+    Ok(items.into_iter().map(|(page, _)| page).collect())
 }
 
 fn name_of(p: &str) -> String {
@@ -688,8 +734,12 @@ pub fn record(
             .find(|(u, _)| u == uid)
             .map_or(&[][..], |(_, v)| v.as_slice());
         let unit_pages = pages.and_then(|p| p.get(slug));
+        // rule (D) - a labeled item new on a drawing page, on the pop-up's own subject, that its Guesses tab does not hold - owes its
+        // form check alone, and (A)-(C) every other check (451 T226)
+        let by_d = slug.starts_with(&format!("{FORM_CHECK}:"));
         let hit: Vec<&str> = lines
             .iter()
+            .filter(|(_, why)| why.trim_start().starts_with("D:") == by_d)
             .filter(|(page, _)| {
                 page.is_empty()
                     || pages.is_none()

@@ -271,7 +271,11 @@ update the pigsty write-up, asked *"if I hadn't said that ... then would you hav
 
 **What is owed.** `make record-owed` names it: a modal whose `Entry:` page changed its words (the intro aside), or whose own
 About, Guesses or `Entry:` text changed, owes `modal-form` and the three `modal-research` answers (`rust/gate/crates/owed/src/record/modals.rs`,
-folded into `make record-owed`). Answer them with `make modal-bundle KIND=<key> FOR=modal-research` (or `FOR=modal-form`),
+folded into `make record-owed`). A labeled item new or relabeled (GUESS, UNRESEARCHED, DEVIATION or CONVENTION), in new words, on a
+drawing page a modal's `Drawing:` names, that its Guesses tab does not reference as `{NNNN#<id>}`, owes its `modal-form` too, triaged
+first (`make modal-triage`, rule (D)); the form bundle shows the item in `drawing-items.md` (`modals/labeled.rs`, 451 T226: a moved
+drawing page otherwise owes only `modal-depiction`, whose contract is the Depiction tab, so a new guess the map draws reached no
+check of the Guesses tab). Answer them with `make modal-bundle KIND=<key> FOR=modal-research` (or `FOR=modal-form`),
 the dispatch, then `make record-checked`. **The push REFUSES** (`scripts/gates/entry-gate.sh`, the record gate) until every owed unit
 is answered, or discharged with `RECORD_CHECKS_OK="<why>"`, which goes to `dev/bypass-log/` and `make audit`. A modal still
 in the old form owes `entry-drift` instead (`l7r-gate record entry-owed`, `rust/gate/crates/owed/src/record/entry.rs`), which `ENTRY_DRIFT_OK="<what moved, and why no modal

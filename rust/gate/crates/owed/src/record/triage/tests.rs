@@ -495,3 +495,35 @@ fn a_triage_reply_the_parser_cannot_read_is_refused_and_records_nothing() {
         ""
     ));
 }
+
+/// Feature 451 T226, red first: a form unit owed by a labeled item new on a pop-up's drawing page is triaged on that drawing page, and
+/// the tool's filter - which reads what the pop-up states, where the item is what it does not state - never clears it: the agent gets
+/// the item named under the page, for its rule (D).
+#[test]
+fn a_new_labeled_item_s_form_unit_reaches_the_agent_with_the_item_named() {
+    let root = fixture("triage-labeled-item");
+    put(&root, DRAWING, "<h2>How drawn</h2>\n<p>Drawn as a line.<sup class=\"fn\" data-note=\"d\"></sup></p>\n<p>No shaft is drawn deeper than 30 ft, a GUESS.<span class=\"item\" data-item=\"shaft-depth\" data-label=\"GUESS\" data-guess=\"Its depth, at most 30 ft: not found\"></span></p>\n");
+    assert!(units_of(&root, "hamlet/well").contains(&"modal-form:hamlet/well".to_owned()));
+    let s = store(&root);
+    let (got, _) = super::bundle_in(&root, &root.join("tri"), "", &s).unwrap();
+    let manifest = std::fs::read_to_string(got.unwrap().0).unwrap();
+    let named = manifest
+        .contains("- UID `hamlet/well`: `shaft-depth` GUESS - Its depth, at most 30 ft: not found");
+    assert!(named);
+    assert!(manifest.contains(&format!("## {DRAWING}")));
+    let data: Value =
+        serde_json::from_str(&std::fs::read_to_string(root.join("tri/triage.json")).unwrap())
+            .unwrap();
+    let units = data["units"].as_object().unwrap().clone();
+    assert!(units.contains_key("modal-form:hamlet/well"));
+    let d = "TOUCHES hamlet/well @ 0094-trade.drawing.html - D: the shaft's depth\n";
+    let msgs = record(&s, &units, d, data.get("pages"), data.get("blobs")).unwrap();
+    assert_eq!(
+        msgs,
+        ["touched: modal-form:hamlet/well - D: the shaft's depth"]
+    );
+    let a = "TOUCHES hamlet/well @ 0094-trade.drawing.html - A: the line it draws\n";
+    let msgs = record(&s, &units, a, data.get("pages"), data.get("blobs")).unwrap();
+    let joined = msgs.join("\n");
+    assert!(!joined.contains("modal-form"));
+}

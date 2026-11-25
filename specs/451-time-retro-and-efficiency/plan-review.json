@@ -1488,6 +1488,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T226 (page session P7's cascade, 2026-11-24: 0097's drawing page gained the GUESS items `barracks-length-ceiling` and `row-of-48-ft`, and nothing on sheet/barracks' Guesses or Depiction tab says the map draws no row past 145 ft; P15, 01549f3828, the same with 0057's new UNRESEARCHED `toe-shoulder-past-corner` against hamlet/marsh)": {
+   "sha256": "88c08f3ab39cd4490511da56c361df34e09221e5647ba0845d43fda4fb53a636",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T226 Approach (checklist part A)": {
+   "sha256": "d2ea08ef5fc76121c4d41eb2416b7d538452f66d983903cee5c7c9706f4234ad",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -19794,6 +19806,114 @@
      "why": "Under FR-013 and the GM's 2026-11-20 measurement ruling, a listing's last line is neither performance nor measurement work, so it takes no scheduling precedence."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T226 (page session P7's cascade, 2026-11-24: 0097's drawing page gained the GUESS items `barracks-length-ceiling` and `row-of-48-ft`, and nothing on sheet/barracks' Guesses or Depiction tab says the map draws no row past 145 ft; P15, 01549f3828, the same with 0057's new UNRESEARCHED `toe-shoulder-past-corner` against hamlet/marsh)",
+    "### T226 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "owe-form-on-new-labeled-item",
+     "summary": "A labeled item new on a drawing page owes modal-form of each About-form pop-up whose Drawing: names the page, triaged first, with the item shown to both agents.",
+     "class": "within",
+     "why": "Serves the GM 2026-11-24 ('make sure ... that we really are cascading in situations that do call for it'): P7 and P15 show a new guess the map draws reaching no check at all. Triaged first per feature 375 FR-001, so it stays inside the same request's 'not doing anything silly'."
+    },
+    {
+     "id": "tag-reader-comment-fix",
+     "summary": "items::items reads a comment inside an item tag's token as part of it; items::faults names any item tag still unreadable, with the form to write.",
+     "class": "within",
+     "why": "A defect fix (a tool that answers wrongly: the owing, the backlog and the claims missed toe-shoulder-past-corner). Fixing it serves the cascade request and the 2026-11-25 UNRESEARCHED backlog; the faults line only fails when a tag is unreadable, which is enforcement of the same thing."
+    },
+    {
+     "id": "labels-owing",
+     "summary": "Only GUESS, UNRESEARCHED, DEVIATION and CONVENTION items owe; ATTESTED-type items do not owe a form unit.",
+     "class": "within",
+     "why": "Does not narrow anything asked: a moved Drawing: page still owes modal-depiction for every other change (modals::owed_row, unchanged). The four labels are the ones whose disclosure is the form check's job."
+    },
+    {
+     "id": "convention-owes-form",
+     "summary": "A CONVENTION item also owes a modal-form unit, though the form contract leaves CONVENTION to modal-depiction.",
+     "class": "within",
+     "why": "Widens rather than narrows owing, and the triage bounds it; whether a form unit with nothing to judge is worth its cost is design, not fidelity. The rationale cites T236's line, which is not in this bundle and is not the GM's words; nothing here rests on it."
+    },
+    {
+     "id": "standing-words-exemption",
+     "summary": "A tag added to words that stood on the page before (T192's tagging) owes nothing.",
+     "class": "within",
+     "why": "Is the GM's own approved rules, not a carve-out from them: 2026-11-23 'only a claim-changing edit triggers review' and the T192 route ('a script tags each block that names its own label'). Adding a tag to words already there does not change a claim."
+    },
+    {
+     "id": "referenced-item-exemption",
+     "summary": "A pop-up whose Guesses tab already references the item as {NNNN#id} is not owed; the bullet regenerates from the tag (T187).",
+     "class": "within",
+     "why": "Directly the GM's 2026-11-23 rule 'labels are data and propagate by regeneration' and his question 'Shouldn't attested versus guess be something that cascades mechanically rather than requiring a review'."
+    },
+    {
+     "id": "relabel-owes-where-unreferenced",
+     "summary": "A changed label on a drawing-page item owes the form check of a pop-up that does not reference the item.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Counted as an exception to 'labels ... propagate by regeneration' (GM 2026-11-23), so it was judged per case, starting from presumed illegitimate. (a) Where the pop-up references the item, the exemption above applies and regeneration carries it, which is the rule as written. (b) Where the pop-up does not reference the item, regeneration has nothing to act on, so the rule cannot apply there. The plan also records that the label word is held in the block's prose (items::faults), so a relabel is a claim change under the GM's 'only a claim-changing edit triggers review'. A relabel to GUESS or UNRESEARCHED also gives the pop-up a new duty under the 2026-11-25 rule the GM approved ('UNRESEARCHED a fifth label on the research pages as well as in the claims'). Where a relabel only exposes a gap that already stood (GUESS to UNRESEARCHED on an unreferenced item), the 2026-11-25 rule still applies, because it puts the new label in the claims. The exception does not empty the regeneration rule, which still covers every referenced item."
+    },
+    {
+     "id": "rule-D-gap-fill-exception",
+     "summary": "Triage rule (D): a labeled figure of the pop-up's own thing that its Guesses tab does not hold is sent on; the plan names it the one exception to 'a gap filled is a completion, not a correction'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Starting from presumed illegitimate, and testing both pairs. The GM's own words reach both, so this is not inference. P7: the pop-up says rows ran to 300 ft while the map draws none past 145 ft as a GUESS. A reader is misled, which is a factual finding of the kind the 2026-11-23 rules keep cascading ('only factual findings cascade'), not a style gap. P15: a new UNRESEARCHED toe-shoulder-past-corner that hamlet/marsh does not hold. Here the GM's approval of 2026-11-25 ('UNRESEARCHED a fifth label on the research pages as well as in the claims'; 'note it as being something that is unresearched') requires the label to reach the claims, so leaving it out breaks a rule he approved. The 2026-11-24 instruction ('we really are cascading in situations that do call for it') covers both cases. Purpose test: the gap-fill clause was dropped because completion edits fixed no real flaw. A drawn guess that the pop-up never discloses is the flaw the label rules exist to show, so applying the drop here would defeat their purpose. The scope is narrow: only new or relabeled items, and only of the pop-up's own kind ('An item about another kind on the same page is not (D)'). The cited dev/modals.md M8/M11/M13, the T226 line and the coordinator's brief are not in the bundle and are not the GM's words. The ruling does not rest on them."
+    },
+    {
+     "id": "dedupe-own-text",
+     "summary": "The unit is owed only where the pop-up's own text did not already owe its form check.",
+     "class": "within",
+     "why": "Avoids a double owing; narrows nothing asked."
+    },
+    {
+     "id": "triage-first",
+     "summary": "The occasion opens 'a page its ', so make modal-triage runs first.",
+     "class": "within",
+     "why": "Feature 375 FR-001, quoted in spec-cited.md: a page-moved unit is triaged first."
+    },
+    {
+     "id": "fingerprint",
+     "summary": "The fingerprint is the form fingerprint plus the owed items; unchanged when none are owed.",
+     "class": "within",
+     "why": "An answer covers exactly what it was owed for, and no earlier answer is moved: serves 'not doing anything silly' (GM 2026-11-24)."
+    },
+    {
+     "id": "triage-held-and-pages",
+     "summary": "A form unit reads its Drawing: pages (pages_of); the filter may not clear a page carrying an owed item (Unit::held); the MANIFEST lists such items.",
+     "class": "within",
+     "why": "Mechanism that makes the triage see the item the owing names; without it the cascade the GM asked for is cleared by a filter that reads only what the pop-up states."
+    },
+    {
+     "id": "reply-line-routing",
+     "summary": "A D: reply line marks the form unit alone; A:-C: lines mark the other checks.",
+     "class": "within",
+     "why": "Scopes the cascade to the check that owns the finding: the 2026-11-23 rule 're-reviews scoped to the change'."
+    },
+    {
+     "id": "form-bundle-part",
+     "summary": "The form bundle writes drawing-items.md, carries the owing fingerprint on its unit: line, and its contract adds the {NNNN#id} bullet as an M11 FIX.",
+     "class": "within",
+     "why": "The fix is a reference that later regenerates from the tag, which the GM 2026-11-23 rule (labels propagate by regeneration) calls for."
+    },
+    {
+     "id": "order",
+     "summary": "After T241 and T236, before T242.",
+     "class": "within",
+     "why": "Sequencing only; T226 is not performance work and displaces none."
+    },
+    {
+     "id": "exits",
+     "summary": "Red exit records the failure and rules a cannot-be-done claim through make arbiter-ask.",
+     "class": "within",
+     "why": "Leaves no defect unfixed and does not narrow the task."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -31804,6 +31924,112 @@
      "summary": "'Performance work? no: one line more in a listing.'",
      "class": "within",
      "why": "Under FR-013 and the GM's 2026-11-20 measurement ruling, a listing's last line is neither performance nor measurement work, so it takes no scheduling precedence."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T226": {
+   "section_sha256": "fd2f1db9aeb8c318da2af339ea96fe5b3bbcd3b94512ddecacb38daea356d798",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "owe-form-on-new-labeled-item",
+     "summary": "A labeled item new on a drawing page owes modal-form of each About-form pop-up whose Drawing: names the page, triaged first, with the item shown to both agents.",
+     "class": "within",
+     "why": "Serves the GM 2026-11-24 ('make sure ... that we really are cascading in situations that do call for it'): P7 and P15 show a new guess the map draws reaching no check at all. Triaged first per feature 375 FR-001, so it stays inside the same request's 'not doing anything silly'."
+    },
+    {
+     "id": "tag-reader-comment-fix",
+     "summary": "items::items reads a comment inside an item tag's token as part of it; items::faults names any item tag still unreadable, with the form to write.",
+     "class": "within",
+     "why": "A defect fix (a tool that answers wrongly: the owing, the backlog and the claims missed toe-shoulder-past-corner). Fixing it serves the cascade request and the 2026-11-25 UNRESEARCHED backlog; the faults line only fails when a tag is unreadable, which is enforcement of the same thing."
+    },
+    {
+     "id": "labels-owing",
+     "summary": "Only GUESS, UNRESEARCHED, DEVIATION and CONVENTION items owe; ATTESTED-type items do not owe a form unit.",
+     "class": "within",
+     "why": "Does not narrow anything asked: a moved Drawing: page still owes modal-depiction for every other change (modals::owed_row, unchanged). The four labels are the ones whose disclosure is the form check's job."
+    },
+    {
+     "id": "convention-owes-form",
+     "summary": "A CONVENTION item also owes a modal-form unit, though the form contract leaves CONVENTION to modal-depiction.",
+     "class": "within",
+     "why": "Widens rather than narrows owing, and the triage bounds it; whether a form unit with nothing to judge is worth its cost is design, not fidelity. The rationale cites T236's line, which is not in this bundle and is not the GM's words; nothing here rests on it."
+    },
+    {
+     "id": "standing-words-exemption",
+     "summary": "A tag added to words that stood on the page before (T192's tagging) owes nothing.",
+     "class": "within",
+     "why": "Is the GM's own approved rules, not a carve-out from them: 2026-11-23 'only a claim-changing edit triggers review' and the T192 route ('a script tags each block that names its own label'). Adding a tag to words already there does not change a claim."
+    },
+    {
+     "id": "referenced-item-exemption",
+     "summary": "A pop-up whose Guesses tab already references the item as {NNNN#id} is not owed; the bullet regenerates from the tag (T187).",
+     "class": "within",
+     "why": "Directly the GM's 2026-11-23 rule 'labels are data and propagate by regeneration' and his question 'Shouldn't attested versus guess be something that cascades mechanically rather than requiring a review'."
+    },
+    {
+     "id": "relabel-owes-where-unreferenced",
+     "summary": "A changed label on a drawing-page item owes the form check of a pop-up that does not reference the item.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Counted as an exception to 'labels ... propagate by regeneration' (GM 2026-11-23), so it was judged per case, starting from presumed illegitimate. (a) Where the pop-up references the item, the exemption above applies and regeneration carries it, which is the rule as written. (b) Where the pop-up does not reference the item, regeneration has nothing to act on, so the rule cannot apply there. The plan also records that the label word is held in the block's prose (items::faults), so a relabel is a claim change under the GM's 'only a claim-changing edit triggers review'. A relabel to GUESS or UNRESEARCHED also gives the pop-up a new duty under the 2026-11-25 rule the GM approved ('UNRESEARCHED a fifth label on the research pages as well as in the claims'). Where a relabel only exposes a gap that already stood (GUESS to UNRESEARCHED on an unreferenced item), the 2026-11-25 rule still applies, because it puts the new label in the claims. The exception does not empty the regeneration rule, which still covers every referenced item."
+    },
+    {
+     "id": "rule-D-gap-fill-exception",
+     "summary": "Triage rule (D): a labeled figure of the pop-up's own thing that its Guesses tab does not hold is sent on; the plan names it the one exception to 'a gap filled is a completion, not a correction'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Starting from presumed illegitimate, and testing both pairs. The GM's own words reach both, so this is not inference. P7: the pop-up says rows ran to 300 ft while the map draws none past 145 ft as a GUESS. A reader is misled, which is a factual finding of the kind the 2026-11-23 rules keep cascading ('only factual findings cascade'), not a style gap. P15: a new UNRESEARCHED toe-shoulder-past-corner that hamlet/marsh does not hold. Here the GM's approval of 2026-11-25 ('UNRESEARCHED a fifth label on the research pages as well as in the claims'; 'note it as being something that is unresearched') requires the label to reach the claims, so leaving it out breaks a rule he approved. The 2026-11-24 instruction ('we really are cascading in situations that do call for it') covers both cases. Purpose test: the gap-fill clause was dropped because completion edits fixed no real flaw. A drawn guess that the pop-up never discloses is the flaw the label rules exist to show, so applying the drop here would defeat their purpose. The scope is narrow: only new or relabeled items, and only of the pop-up's own kind ('An item about another kind on the same page is not (D)'). The cited dev/modals.md M8/M11/M13, the T226 line and the coordinator's brief are not in the bundle and are not the GM's words. The ruling does not rest on them."
+    },
+    {
+     "id": "dedupe-own-text",
+     "summary": "The unit is owed only where the pop-up's own text did not already owe its form check.",
+     "class": "within",
+     "why": "Avoids a double owing; narrows nothing asked."
+    },
+    {
+     "id": "triage-first",
+     "summary": "The occasion opens 'a page its ', so make modal-triage runs first.",
+     "class": "within",
+     "why": "Feature 375 FR-001, quoted in spec-cited.md: a page-moved unit is triaged first."
+    },
+    {
+     "id": "fingerprint",
+     "summary": "The fingerprint is the form fingerprint plus the owed items; unchanged when none are owed.",
+     "class": "within",
+     "why": "An answer covers exactly what it was owed for, and no earlier answer is moved: serves 'not doing anything silly' (GM 2026-11-24)."
+    },
+    {
+     "id": "triage-held-and-pages",
+     "summary": "A form unit reads its Drawing: pages (pages_of); the filter may not clear a page carrying an owed item (Unit::held); the MANIFEST lists such items.",
+     "class": "within",
+     "why": "Mechanism that makes the triage see the item the owing names; without it the cascade the GM asked for is cleared by a filter that reads only what the pop-up states."
+    },
+    {
+     "id": "reply-line-routing",
+     "summary": "A D: reply line marks the form unit alone; A:-C: lines mark the other checks.",
+     "class": "within",
+     "why": "Scopes the cascade to the check that owns the finding: the 2026-11-23 rule 're-reviews scoped to the change'."
+    },
+    {
+     "id": "form-bundle-part",
+     "summary": "The form bundle writes drawing-items.md, carries the owing fingerprint on its unit: line, and its contract adds the {NNNN#id} bullet as an M11 FIX.",
+     "class": "within",
+     "why": "The fix is a reference that later regenerates from the tag, which the GM 2026-11-23 rule (labels propagate by regeneration) calls for."
+    },
+    {
+     "id": "order",
+     "summary": "After T241 and T236, before T242.",
+     "class": "within",
+     "why": "Sequencing only; T226 is not performance work and displaces none."
+    },
+    {
+     "id": "exits",
+     "summary": "Red exit records the failure and rules a cannot-be-done claim through make arbiter-ask.",
+     "class": "within",
+     "why": "Leaves no defect unfixed and does not narrow the task."
     }
    ],
    "verdict": "CLEAR"

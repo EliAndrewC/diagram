@@ -24,7 +24,7 @@ use crate::record::args::{parse_with, Parsed, Spec};
 use crate::record::modals::{
     self, Modal, DEPICTION_CHECK, FORM_CHECK, MODAL_DIRS, ORDER, RESEARCH_AGENT, RESEARCH_CHECKS,
 };
-use crate::record::owed::{answered, store_in, units as owed_units};
+use crate::record::owed::{answered, merge_base, store_in, units as owed_units};
 use crate::record::py_lines;
 use crate::record::repo::{fail, read_text, Fail};
 use crate::record::triage;
@@ -450,7 +450,15 @@ fn order_hold(s: &Path, m: &Modal, for_: &str, rows: &[Unit]) -> String {
 fn owed_lines(root: &Path, m: &Modal, for_: &str, owed: &[Unit]) -> Result<String, Fail> {
     let (fp_form, fp_research) = modals::fingerprints(root, m)?;
     let units: Vec<(String, String)> = if for_ == FORM_CHECK {
-        vec![(format!("{FORM_CHECK}:{}", m.uid()), fp_form)]
+        // a form unit owed by a labeled item its drawing pages gained carries those items in its fingerprint (451 T226): the answer
+        // is recorded at the fingerprint that owed it
+        let slug = format!("{FORM_CHECK}:{}", m.uid());
+        let fp = owed
+            .iter()
+            .rev()
+            .find(|u| u.slug == slug)
+            .map_or(fp_form, |u| u.fingerprint.clone());
+        vec![(slug, fp)]
     } else if for_ == DEPICTION_CHECK {
         vec![(
             format!("{DEPICTION_CHECK}:{}", m.uid()),
@@ -668,6 +676,38 @@ fn manifest_lines(m: &Modal, for_: &str, put: &Put, beside: bool) -> Result<Vec<
     Ok(manifest)
 }
 
+/// The labeled items new on the pop-up's drawing pages since the merge base that its Guesses tab does not reference (451 T226), for the
+/// form check's Guesses look: none, no part.
+fn drawing_items(root: &Path, m: &Modal, put: &mut Put) -> Result<(), Fail> {
+    let items = modals::labeled::of_modal(root, &merge_base(root), m)?;
+    if items.is_empty() {
+        return Ok(());
+    }
+    let lines: Vec<String> = items
+        .iter()
+        .map(|(page, i)| {
+            let guess = if i.guess.is_empty() {
+                String::new()
+            } else {
+                format!("\n  its bullet, as a reference fills it: {}", i.guess)
+            };
+            format!(
+                "- `{{{}#{}}}` {} on {page}\n  its block: {}{guess}",
+                modals::stem(page).chars().take(4).collect::<String>(),
+                i.id,
+                i.label,
+                i.block
+            )
+        })
+        .collect();
+    put.put(
+        "drawing-items.md",
+        &format!("# Labeled items new on this pop-up's drawing pages\n\n{}\n", lines.join("\n")),
+        ME,
+        "items a drawing page its Drawing: names gained, which its Guesses tab does not reference - your contract's drawing-items rule",
+    )
+}
+
 /// One pop-up's bundle (`bundle`).
 ///
 /// # Errors
@@ -746,6 +786,7 @@ pub fn bundle(run: &mut Run, root: &Rooted, kind: &str, ask: &Ask<'_>) -> Result
             let list: Vec<String> = fixed.iter().map(|h| format!("- {}", py_repr(h))).collect();
             put.put("research-held.md", &format!("# Wording the research rounds fixed - keep it\n\n{}\n", list.join("\n")), ME, "what modal-research rounds wrote and the record backs: a form EDIT never drops or widens these words")?;
         }
+        drawing_items(root, &m, &mut put)?;
     }
     if for_ == RESEARCH_AGENT {
         research_parts(root, &m, &mut put, &mut grep_targets)?;
