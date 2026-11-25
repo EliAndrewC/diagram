@@ -16,7 +16,7 @@ re-measures with the same command before arguing for a change.
 
 ## Open: the talk before the port resumes (449 T437)
 
-Eleven questions, raised by the GM on 2026-11-25, are listed with their context and the measurements each needs in
+The questions raised by the GM on 2026-11-25 (fourteen that day), are listed with their context and the measurements each needs in
 `specs/449-rust-codebase/port-talk-agenda.md`. The figures come from `make task-time` (the task time breakdown, 451
 T243) and `make where-time`. When the talk decides an item, its entry moves here, and the agenda keeps one line pointing
 at it.
