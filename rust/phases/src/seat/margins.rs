@@ -425,7 +425,7 @@ pub const FIELD_IN_BAND_MAX: f64 = 0.1;
 ///     seat on the field's margin - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: higher, drier ground beside the paddy, scored upslope
 ///     band on the canvas - CONVENTION: the seat center at least the band's half-length inside the frame
 ///     not on the wet toe - research/questions/0058-ground-too-wet-to-build-on.drawing.html, research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: nothing is built on the marsh below the fields - the seat, its margin's midpoint and every sample of its band off it, and where the toe stops at the fields' lower corners (a comb's) the band's corners and its ends' middles too (449 T432: the two points alone passed a band at the fields' lower corner swung under their foot); a polder's toe, spanning its ring and 90 ft up beside it, is asked at the samples alone, its rim refusing 654 of 6,000 polders (measured 2026-11-25)
-///     the band on open ground - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: beside its paddy, the band's points off the field, and no corner of the field's outline deeper in the band than `FIELD_IN_BAND_MAX` of its depth - a margin whose band holds one is refused with those on the field (449 T423: the nine points alone passed a band with the paddy's corner between them)
+///     the band on open ground - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: beside its paddy, the band's points off the field, and no corner of the field's outline deeper in the band than `FIELD_IN_BAND_MAX` of its depth - a margin whose band holds one is refused with those on the field (449 T423: the nine points alone passed a band with the paddy's corner between them), and none of the band's four corners past that dip on the field (449 T435: a margin shorter than the band, the field's next edge rising across the band's end, 574 of 41,000 sweep rolls)
 ///     not in the reed fringe - CANON: the GM's ruling of 2026-08-28, refused centered in a pond's reed fringe, scored down at an end; it departs from research/questions/0058-ground-too-wet-to-build-on.drawing.html, which does not count the fringe as marsh
 ///     no drain rule at the seat - research/questions/0058-ground-too-wet-to-build-on.drawing.html: the ground below a drain kept only from dispersed farmsteads, not a nucleated cluster
 ///     brook across the band - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: "A hamlet site the brook does not cross is preferred when two sites are otherwise equally good", the brook's share the tie-break, never refused
@@ -544,6 +544,44 @@ pub fn ranked(
                 && d < STANDOFF + 2.0 * dep
                 && t.abs() < lat
         }) {
+            stopped[3] += 1;
+            continue;
+        }
+        // ...AND NO PART OF THE FIELD PAST THAT DIP IN IT (449 T435): a margin shorter than the band leaves the band's ends past
+        // its own corners, and the field's next edge, rising, crossed a band's end with no corner of the field inside it - 574 of
+        // 41,000 sweep rolls had the paddy in the band past the tenth, up to 44 ft into it (measured 2026-11-25, the whole-area
+        // `seat_on_field` check); with the band's corners asked, one still had a field corner a foot past the band's end, its
+        // edges reaching 16 ft in - so the band past the dip is asked whole: a corner of it on the field, or an edge of the field
+        // across a side of it
+        let held = [
+            band_pt(STANDOFF + FIELD_IN_BAND_MAX * 2.0 * dep, -1.0),
+            band_pt(STANDOFF + FIELD_IN_BAND_MAX * 2.0 * dep, 1.0),
+            band_pt(STANDOFF + 2.0 * dep, 1.0),
+            band_pt(STANDOFF + 2.0 * dep, -1.0),
+        ];
+        // each edge of the field's outline asked by its box first, its four sides only of an edge whose box meets the band's
+        let m = inp.outline.len();
+        let (lo, hi) = (
+            held.iter()
+                .fold((f64::MAX, f64::MAX), |b, p| (b.0.min(p.0), b.1.min(p.1))),
+            held.iter()
+                .fold((f64::MIN, f64::MIN), |b, p| (b.0.max(p.0), b.1.max(p.1))),
+        );
+        refusal += m as u64;
+        if held.iter().any(|&p| ground.outline.inside(p, &mut refusal))
+            || (0..m).any(|i| {
+                let (a, b) = (inp.outline[i], inp.outline[(i + 1) % m]);
+                if a.0.max(b.0) < lo.0
+                    || a.0.min(b.0) > hi.0
+                    || a.1.max(b.1) < lo.1
+                    || a.1.min(b.1) > hi.1
+                {
+                    return false;
+                }
+                refusal += 4;
+                (0..4).any(|k| super::exit::seg_seg(a, b, held[k], held[(k + 1) % 4]) == 0.0)
+            })
+        {
             stopped[3] += 1;
             continue;
         }

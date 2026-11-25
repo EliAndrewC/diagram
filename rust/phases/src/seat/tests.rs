@@ -412,6 +412,71 @@ fn a_band_holding_a_corner_of_the_field_between_its_samples_is_refused() {
     assert_eq!((s.frames.is_empty(), held), (false, 0));
 }
 
+/// THE BAND'S CORNERS OFF THE FIELD PAST ITS DIP (449 T435): the north margin, 500 ft, is shorter than the 600 ft band, and the
+/// field's next edge rises north-east across the band's east end with no corner of the field inside the band - before T435 the
+/// margin seated with that end's corner on the paddy past the tenth of the band's depth the seat allows (574 of 41,000 sweep
+/// rolls, measured 2026-11-25).
+#[test]
+fn a_band_whose_end_corner_a_rising_field_edge_crosses_is_refused() {
+    let mut i = inp();
+    i.outline = vec![
+        (2700.0, 2500.0),
+        (3200.0, 2500.0),
+        (3700.0, 1800.0),
+        (3700.0, 3500.0),
+        (2700.0, 3500.0),
+    ];
+    i.walls = vec![(i.outline.clone(), 0.0)];
+    let s = seat(&i).unwrap();
+    let on = |f: &super::Frame| {
+        let near = f.band.1 - super::margins::FIELD_IN_BAND_MAX * 2.0 * f.band.1;
+        [
+            (-1.0, -near),
+            (1.0, -near),
+            (-1.0, f.band.1),
+            (1.0, f.band.1),
+        ]
+        .iter()
+        .any(|&(s, t)| {
+            let p = (
+                f.center.0 + f.along.0 * f.band.0 * s + f.out.0 * t,
+                f.center.1 + f.along.1 * f.band.0 * s + f.out.1 * t,
+            );
+            crate::field::geom::inside(p, &i.outline)
+        })
+    };
+    let north = s.frames.iter().any(|f| (f.anchor.1 - 2500.0).abs() < 1.0);
+    let held = s.frames.iter().filter(|f| on(f)).count();
+    assert_eq!((s.frames.is_empty(), north, held), (false, false, 0));
+}
+
+/// A TONGUE OF THE FIELD ACROSS THE BAND (449 T435): a tongue 20 ft wide runs north through both north margins' bands, its tip past
+/// their far edge, its foot in the tenth of the band the seat lets the field dip into, between the band's samples - so no corner of
+/// either holds the field and no corner of the field stands in either; before T435 both margins seated with the tongue across
+/// their houses.
+#[test]
+fn a_band_a_tongue_of_the_field_crosses_is_refused() {
+    let mut i = inp();
+    i.outline = vec![
+        (2700.0, 2500.0),
+        (2990.0, 2500.0),
+        (2990.0, 2100.0),
+        (3010.0, 2100.0),
+        (3010.0, 2500.0),
+        (3300.0, 2500.0),
+        (3300.0, 3500.0),
+        (2700.0, 3500.0),
+    ];
+    i.walls = vec![(i.outline.clone(), 0.0)];
+    let s = seat(&i).unwrap();
+    let north = s
+        .frames
+        .iter()
+        .filter(|f| (f.anchor.1 - 2500.0).abs() < 1.0)
+        .count();
+    assert_eq!((s.frames.is_empty(), north), (false, 0));
+}
+
 #[test]
 fn a_walled_in_head_gives_way_to_the_next_margin() {
     let mut i = inp();

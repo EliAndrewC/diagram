@@ -1998,6 +1998,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T435 (found 2026-11-25 by T434's builder: the last point-only map checks in `rust/phases/src/driver/check.rs` - `dry_on_dry`, `pond_on_paddy`, `seat_on_field` and `reeds_on_field` - asked a middle or a ring of points, and no standing check held a dry plot's size, T434's `STRETCH_SHARE` cut the generator's only guard)": {
+   "sha256": "1429d18f6f01f29913d8d1e6cee7ad629cf8cb09fa68ef7aa34b3c47f75c36ce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T435 Approach (checklist part A)": {
+   "sha256": "30fdd2f7e8523c072bc9533754dfb9daa137fbcc2d1bb0ba4bbfe0cb2e93d378",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -27135,6 +27147,88 @@
      "summary": "After T433, before T158.",
      "class": "within",
      "why": "Defects fixed before new code (the GM 2026-11-18 and 2026-11-24)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T435 (found 2026-11-25 by T434's builder: the last point-only map checks in `rust/phases/src/driver/check.rs` - `dry_on_dry`, `pond_on_paddy`, `seat_on_field` and `reeds_on_field` - asked a middle or a ring of points, and no standing check held a dry plot's size, T434's `STRETCH_SHARE` cut the generator's only guard)",
+    "### T435 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T435-whole-area",
+     "summary": "dry_on_dry, pond_on_paddy, seat_on_field and reeds_on_field ask the whole area (lies_over, the pond as a 64-point ring), not a middle or a ring of points",
+     "class": "within",
+     "why": "A check that passes bad work is a defect (XIV); the GM 2026-11-24: 'if there are real defects, then I do want to find them and fix them'. Making the checks see the whole area is that fix, and red-first tests pin it."
+    },
+    {
+     "id": "T435-threshold",
+     "summary": "Overlap is judged past the drawing's slack SLACK_FT (1 ft), since no page (0006, 0060, 0031, 0019) states a gap between these pairs",
+     "class": "within",
+     "why": "Uses the existing convention and the research pages as read; asks no gap the research does not state, and adds no tolerance beyond the drawing's own."
+    },
+    {
+     "id": "T435-seat-dip",
+     "summary": "seat_on_field tolerates the houses' band dipping onto the field by the seat's own FIELD_IN_BAND_MAX (a tenth of band depth, an existing recorded GUESS, 449 T423)",
+     "class": "within",
+     "why": "The check enforces the generator's already-recorded rule rather than inventing a stricter or looser one; the knob is unchanged and stays a named GUESS. Not an exception to anything the GM asked."
+    },
+    {
+     "id": "T435-old-arms-kept",
+     "summary": "dry_on_dry and reeds_on_field keep their old middle-point arm alongside the new whole-area test; reeds_on_field relies on the block being convex (all 6,000 measured convex)",
+     "class": "within",
+     "why": "Strictly adds detection; the convexity premise is measured, not assumed, and the concave side is taken as the ring."
+    },
+    {
+     "id": "T435-dike-arm-left",
+     "summary": "ground_on_polder's dike arm stays two corner tests, argued equivalent (both shapes convex, face wider than ground) and confirmed by the sweep's whole-area test (0 of 6,000, as the corner arm)",
+     "class": "within",
+     "why": "Not a defect: the corner test cannot pass an overlap the whole-area test would name, by the stated geometry and by measurement. Leaving a correct check as it is is not a narrowing."
+    },
+    {
+     "id": "T435-size-check",
+     "summary": "New dry_size check: each plot's inner and outer edge between PINCH_SHARE 0.5 and STRETCH_SHARE 1.5 of PLOT_FT, eps 0.01 ft",
+     "class": "within",
+     "why": "Closes the gap that no standing check held a dry plot's size after T434's STRETCH_SHARE cut the generator's guard - a check that would pass bad work. Bounds are the hem's existing shares (0006's GUESS, T434's), not new standards; SIZE_EPS_FT is a float grain."
+    },
+    {
+     "id": "T435-seat-fix",
+     "summary": "seat::margins::ranked refuses a margin whose held band (past the tenth) holds any of the field - band corners in the outline or an outline edge across a band side; a refused margin passes to the seat's next (the ladder)",
+     "class": "within",
+     "why": "A real defect the new check found (574 of 41,000 rolls, houses' band up to 44 ft onto the rice, contrary to 0031's cluster beside its paddy on drier ground), fixed in the generator where found (XIV; GM 2026-11-24). No roll loses its seat (room before packing, GM 2026-10-12)."
+    },
+    {
+     "id": "T435-outputs-move",
+     "summary": "After the fix 151 rolls lay a different plot count and 8 a different winter crop; pool unchanged",
+     "class": "within",
+     "why": "A differing output is not a regression (XIII; GM 2026-11-17/18): everything works, 0 checks broken, make seeds green."
+    },
+    {
+     "id": "T435-work-budget",
+     "summary": "The seat's work rises to 1.05x its budget at 40 households (a budgeted stage not yet accepted), inside the 2x leeway; no step owed",
+     "class": "within",
+     "why": "Measured before and after by the same command; the cost of the fix is small and inside the project's existing leeway, so no efficiency rule the GM set (2026-11-19 'horribly inefficient') is reached."
+    },
+    {
+     "id": "T435-dashed-ground-left",
+     "summary": "The settlement's dashed keep-out ground (placeholder for the parked houses' stage) still meets the paddy in 520 of 2,000 combs, at most 45.4 ft, every reach within standoff + belt lead + the allowed tenth; not asked by the check and not filed",
+     "class": "within",
+     "why": "Measured and shown to be the drawn face of the dip FIELD_IN_BAND_MAX already records, not a separate wrong outcome: the houses' band itself is now held to the dip, and the placeholder hull reaches no further than the allowed dip plus the hull's own standoff and lead. Under XIV v2.36.0 (GM 2026-11-19) a difference that is not a defect is left as it is and needs no ruling; changing the knob is not asked by anything measured."
+    },
+    {
+     "id": "T435-tests-moved",
+     "summary": "check.rs's tests moved to driver/check/tests.rs for the file-size bar; one existing test filtered to the seat's lines",
+     "class": "within",
+     "why": "Housekeeping required by the existing static check; no change to what is asked or enforced."
+    },
+    {
+     "id": "T435-order",
+     "summary": "Before T158, after T434",
+     "class": "within",
+     "why": "GM 2026-11-24: real defects in hamlet generation fixed before moving forward with new code."
     }
    ]
   }
@@ -55517,6 +55611,86 @@
      "summary": "After T433, before T158.",
      "class": "within",
      "why": "Defects fixed before new code (the GM 2026-11-18 and 2026-11-24)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T435": {
+   "section_sha256": "43d97e12dbac9914097eb09113b2f74a8ac139cca9e011dbbef36cd179f36642",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T435-whole-area",
+     "summary": "dry_on_dry, pond_on_paddy, seat_on_field and reeds_on_field ask the whole area (lies_over, the pond as a 64-point ring), not a middle or a ring of points",
+     "class": "within",
+     "why": "A check that passes bad work is a defect (XIV); the GM 2026-11-24: 'if there are real defects, then I do want to find them and fix them'. Making the checks see the whole area is that fix, and red-first tests pin it."
+    },
+    {
+     "id": "T435-threshold",
+     "summary": "Overlap is judged past the drawing's slack SLACK_FT (1 ft), since no page (0006, 0060, 0031, 0019) states a gap between these pairs",
+     "class": "within",
+     "why": "Uses the existing convention and the research pages as read; asks no gap the research does not state, and adds no tolerance beyond the drawing's own."
+    },
+    {
+     "id": "T435-seat-dip",
+     "summary": "seat_on_field tolerates the houses' band dipping onto the field by the seat's own FIELD_IN_BAND_MAX (a tenth of band depth, an existing recorded GUESS, 449 T423)",
+     "class": "within",
+     "why": "The check enforces the generator's already-recorded rule rather than inventing a stricter or looser one; the knob is unchanged and stays a named GUESS. Not an exception to anything the GM asked."
+    },
+    {
+     "id": "T435-old-arms-kept",
+     "summary": "dry_on_dry and reeds_on_field keep their old middle-point arm alongside the new whole-area test; reeds_on_field relies on the block being convex (all 6,000 measured convex)",
+     "class": "within",
+     "why": "Strictly adds detection; the convexity premise is measured, not assumed, and the concave side is taken as the ring."
+    },
+    {
+     "id": "T435-dike-arm-left",
+     "summary": "ground_on_polder's dike arm stays two corner tests, argued equivalent (both shapes convex, face wider than ground) and confirmed by the sweep's whole-area test (0 of 6,000, as the corner arm)",
+     "class": "within",
+     "why": "Not a defect: the corner test cannot pass an overlap the whole-area test would name, by the stated geometry and by measurement. Leaving a correct check as it is is not a narrowing."
+    },
+    {
+     "id": "T435-size-check",
+     "summary": "New dry_size check: each plot's inner and outer edge between PINCH_SHARE 0.5 and STRETCH_SHARE 1.5 of PLOT_FT, eps 0.01 ft",
+     "class": "within",
+     "why": "Closes the gap that no standing check held a dry plot's size after T434's STRETCH_SHARE cut the generator's guard - a check that would pass bad work. Bounds are the hem's existing shares (0006's GUESS, T434's), not new standards; SIZE_EPS_FT is a float grain."
+    },
+    {
+     "id": "T435-seat-fix",
+     "summary": "seat::margins::ranked refuses a margin whose held band (past the tenth) holds any of the field - band corners in the outline or an outline edge across a band side; a refused margin passes to the seat's next (the ladder)",
+     "class": "within",
+     "why": "A real defect the new check found (574 of 41,000 rolls, houses' band up to 44 ft onto the rice, contrary to 0031's cluster beside its paddy on drier ground), fixed in the generator where found (XIV; GM 2026-11-24). No roll loses its seat (room before packing, GM 2026-10-12)."
+    },
+    {
+     "id": "T435-outputs-move",
+     "summary": "After the fix 151 rolls lay a different plot count and 8 a different winter crop; pool unchanged",
+     "class": "within",
+     "why": "A differing output is not a regression (XIII; GM 2026-11-17/18): everything works, 0 checks broken, make seeds green."
+    },
+    {
+     "id": "T435-work-budget",
+     "summary": "The seat's work rises to 1.05x its budget at 40 households (a budgeted stage not yet accepted), inside the 2x leeway; no step owed",
+     "class": "within",
+     "why": "Measured before and after by the same command; the cost of the fix is small and inside the project's existing leeway, so no efficiency rule the GM set (2026-11-19 'horribly inefficient') is reached."
+    },
+    {
+     "id": "T435-dashed-ground-left",
+     "summary": "The settlement's dashed keep-out ground (placeholder for the parked houses' stage) still meets the paddy in 520 of 2,000 combs, at most 45.4 ft, every reach within standoff + belt lead + the allowed tenth; not asked by the check and not filed",
+     "class": "within",
+     "why": "Measured and shown to be the drawn face of the dip FIELD_IN_BAND_MAX already records, not a separate wrong outcome: the houses' band itself is now held to the dip, and the placeholder hull reaches no further than the allowed dip plus the hull's own standoff and lead. Under XIV v2.36.0 (GM 2026-11-19) a difference that is not a defect is left as it is and needs no ruling; changing the knob is not asked by anything measured."
+    },
+    {
+     "id": "T435-tests-moved",
+     "summary": "check.rs's tests moved to driver/check/tests.rs for the file-size bar; one existing test filtered to the seat's lines",
+     "class": "within",
+     "why": "Housekeeping required by the existing static check; no change to what is asked or enforced."
+    },
+    {
+     "id": "T435-order",
+     "summary": "Before T158, after T434",
+     "class": "within",
+     "why": "GM 2026-11-24: real defects in hamlet generation fixed before moving forward with new code."
     }
    ],
    "verdict": "CLEAR"

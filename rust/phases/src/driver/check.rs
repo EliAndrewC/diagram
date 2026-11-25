@@ -9,7 +9,7 @@ use super::Rolled;
 use crate::field::dry::seg_seg_dist;
 use crate::field::fan::Pt;
 use crate::field::geom::{inside, seg_dist};
-use crate::field::index::Index;
+use crate::field::index::{bbox, Index};
 
 /// How far inside a ring a point must stand to count as on it, and how close to a line's water past its half-width (ft): a
 /// drawing's slack, so two features sharing an edge read as neighbors.
@@ -110,6 +110,90 @@ fn mean(ring: &[Pt]) -> Pt {
         ring.iter().map(|p| p.1).sum::<f64>() / n,
     )
 }
+
+/// Whether two boxes (low corner, high corner) meet or come within the drawing's slack: two plots whose boxes stand farther apart
+/// cannot lie over each other, so `lies_over` is not asked of them.
+///
+/// Research:
+///     the boxes - NONE: a check's lookup
+fn boxes_meet(a: (Pt, Pt), b: (Pt, Pt)) -> bool {
+    a.0 .0 <= b.1 .0 + SLACK_FT
+        && b.0 .0 <= a.1 .0 + SLACK_FT
+        && a.0 .1 <= b.1 .1 + SLACK_FT
+        && b.0 .1 <= a.1 .1 + SLACK_FT
+}
+
+/// Where the field `ring` lies over the settlement's band (the houses' ground the seat chose, `frame`'s), or `None`: the band
+/// asked whole by `lies_over`, its near edge, on the field's side, drawn back by the seat's own `FIELD_IN_BAND_MAX` of its depth
+/// first - the dip a straight band along a bending field edge is let make into the paddy (449 T435).
+///
+/// Research:
+///     the band's whole area asked - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the cluster beside its paddy, on the higher, drier ground - so no part of the houses' band lies over the field past the dip the seat allows a straight band along a bending margin (`seat::margins::FIELD_IN_BAND_MAX`, a tenth of its depth, a GUESS), the drawing's slack beyond it; the page gives no gap between the houses and the paddy (449 T435)
+fn on_band(frame: &crate::seat::Frame, ring: &[Pt]) -> Option<Pt> {
+    let (l, o, (lat, half), c) = (frame.along, frame.out, frame.band, frame.center);
+    let near = half - crate::seat::margins::FIELD_IN_BAND_MAX * 2.0 * half;
+    let at = |s: f64, t: f64| (c.0 + l.0 * s + o.0 * t, c.1 + l.1 * s + o.1 * t);
+    let band = [
+        at(-lat, -near),
+        at(lat, -near),
+        at(lat, half),
+        at(-lat, half),
+    ];
+    lies_over(&band, ring)
+}
+
+/// Why the dry plot `poly` is not a plot's size, or `None`: its inner edge (`poly[0]`-`poly[1]`, on the canal's side) or its outer
+/// edge (`poly[3]`-`poly[2]`) running past `STRETCH_SHARE` of a plot's length or under `PINCH_SHARE` of it - the hem's two bounds
+/// on a strip, the stretch it cuts past and the pinch it ends a climb under (449 T435).
+///
+/// Research:
+///     a plot's size held - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html draws each plot roughly 92 ft across (`PLOT_FT`), never dwarfing the rice basins, and a strip's edge never under half a plot's length; the page is silent on how far past a plot's length a strip may run, so the bound is the hem's own `STRETCH_SHARE` (1.5 plots), a GUESS, and the pinch's `PINCH_SHARE` (half a plot), the page's GUESS - each edge's straight length, within a hundredth of a foot
+fn sized(poly: &[Pt]) -> Option<String> {
+    use crate::field::dry::{PINCH_SHARE, PLOT_FT, STRETCH_SHARE};
+    if poly.len() != 4 {
+        return Some(format!("{} corners are not a strip's four", poly.len()));
+    }
+    let run = |p: Pt, q: Pt| (q.0 - p.0).hypot(q.1 - p.1);
+    let (lo, hi) = (
+        PINCH_SHARE * PLOT_FT.0 - SIZE_EPS_FT,
+        STRETCH_SHARE * PLOT_FT.0 + SIZE_EPS_FT,
+    );
+    [
+        ("inner", run(poly[0], poly[1])),
+        ("outer", run(poly[3], poly[2])),
+    ]
+    .into_iter()
+    .find(|(_, ft)| !(lo..=hi).contains(ft))
+    .map(|(edge, ft)| {
+        format!(
+            "{edge} edge runs {ft:.1} ft, {:.2} plots' length, outside the {PINCH_SHARE} to {STRETCH_SHARE} a plot is drawn at",
+            ft / PLOT_FT.0
+        )
+    })
+}
+
+/// How far an edge's length may stand past a size bound and still be held to it (ft): the float arithmetic of a strip's corners.
+///
+/// Research:
+///     the size's grain - NONE: a check's tolerance, a hundredth of a foot
+const SIZE_EPS_FT: f64 = 0.01;
+
+/// The ellipse at `c` with radii `rx`, `ry` as a ring of `n` points, the first on the long radius's east end.
+///
+/// Research:
+///     the ellipse's ring - NONE: geometry
+fn ellipse(c: Pt, rx: f64, ry: f64, n: u32) -> Vec<Pt> {
+    (0..n)
+        .map(|k| f64::from(k) * std::f64::consts::TAU / f64::from(n))
+        .map(|a| (c.0 + rx * a.cos(), c.1 + ry * a.sin()))
+        .collect()
+}
+
+/// How many points the tameike's water is asked at against the field, round its ellipse.
+///
+/// Research:
+///     the pond's points - NONE: a check's grain, a 64-sided ring within about a thousandth of its radius of the ellipse (under the drawing's slack for any pond whose long radius is under 800 ft), its every fourth point the old 16-point rim's
+const POND_AREA_POINTS: u32 = 64;
 
 /// How many points the tameike's rim is filed at, round its ellipse.
 ///
@@ -222,9 +306,10 @@ impl Drawn {
 /// Research:
 ///     no dry plot on the paddy - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the dry fields stand beyond the paddy, along the canal's high side, and a plot that would lap onto the rice is dropped - so the plot's whole area is asked of the field past the drawing's slack (`lies_over`), not its corners (449 T434)
 ///     no dry plot on the water - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot that would come within about a foot of any water the map draws - a canal, a ditch, the brook or a pond - or would have the end of one inside it, is left out; the plot's whole area asked of the drawn water (`Drawn::meets`), not its corners (449 T433)
-///     no dry plot on another - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: plots laid end to end, each its own ground
-///     the tameike off the paddy - research/questions/0060-field-drains-akusuiro.drawing.html: the pond at the field's foot, below it
-///     the settlement off the field - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the houses on the field's margin, beside the paddy
+///     no dry plot on another - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: plots laid end to end, each its own ground, neighbors abutting - so a plot's whole area is asked of every other past the drawing's slack (`lies_over`), a shared edge not a lap, not its middle alone (449 T435)
+///     no dry plot past a plot's size - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each plot roughly 92 ft across, never dwarfing the rice basins - each plot's two edges along the canal between the hem's pinch and stretch (`sized`, 449 T435)
+///     the tameike off the paddy - research/questions/0060-field-drains-akusuiro.drawing.html: the pond at the field's foot, below it - its whole water asked of the field past the drawing's slack (`lies_over` on a 64-point ring), not sixteen points of its rim (449 T435)
+///     the settlement off the field - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the houses on the field's margin, beside the paddy - the houses' whole band asked (`on_band`), not its middle (449 T435)
 ///     on the canvas - CONVENTION: the map is drawn on its canvas; only the brook and the drain's run leave it
 #[must_use]
 pub fn check(r: &Rolled) -> Vec<String> {
@@ -233,6 +318,7 @@ pub fn check(r: &Rolled) -> Vec<String> {
     let off = |p: &Pt| p.0 < 0.0 || p.1 < 0.0 || p.0 > w || p.1 > h;
     let rings: Vec<&[Pt]> = r.fields.iter().map(|f| f.fan.ring.as_slice()).collect();
     let mut water = Drawn::of(r);
+    let boxes: Vec<(Pt, Pt)> = r.dry.iter().map(|d| bbox(&d.poly)).collect();
     for (i, d) in r.dry.iter().enumerate() {
         if let Some(p) = rings.iter().find_map(|ring| lies_over(&d.poly, ring)) {
             out.push(format!(
@@ -255,7 +341,20 @@ pub fn check(r: &Rolled) -> Vec<String> {
             out.push(format!(
                 "dry_on_dry: dry plot {i}'s middle stands inside dry plot {j}"
             ));
+        } else if let Some((j, p)) = r
+            .dry
+            .iter()
+            .enumerate()
+            .skip(i + 1)
+            .filter(|(j, _)| boxes_meet(boxes[i], boxes[*j]))
+            .find_map(|(j, e)| lies_over(&d.poly, &e.poly).map(|p| (j, p)))
+        {
+            out.push(format!(
+                "dry_on_dry: dry plot {i} lies over dry plot {j} near ({:.0}, {:.0})",
+                p.0, p.1
+            ));
         }
+        out.extend(sized(&d.poly).map(|why| format!("dry_size: dry plot {i}'s {why}")));
         if d.poly.iter().any(off) {
             out.push(format!("off_canvas: dry plot {i}"));
         }
@@ -265,10 +364,10 @@ pub fn check(r: &Rolled) -> Vec<String> {
             .map(|k| f64::from(k) * std::f64::consts::PI / 8.0)
             .map(|a| (c.0 + rx * a.cos(), c.1 + ry * a.sin()))
             .collect();
-        let reaches = rim
+        let water = ellipse(c, rx, ry, POND_AREA_POINTS);
+        let reaches = rings
             .iter()
-            .chain(std::iter::once(&c))
-            .any(|p| rings.iter().any(|ring| depth_inside(*p, ring) > SLACK_FT));
+            .any(|ring| depth_inside(c, ring) > SLACK_FT || lies_over(&water, ring).is_some());
         out.extend(reaches.then(|| {
             format!(
                 "pond_on_paddy: the tameike at ({:.0}, {:.0}) reaches inside the field",
@@ -283,13 +382,10 @@ pub fn check(r: &Rolled) -> Vec<String> {
     }
     out.extend(reed_checks(r));
     for f in r.seated.iter().filter_map(|s| s.frames.first()) {
-        let on = rings
-            .iter()
-            .any(|ring| depth_inside(f.center, ring) > SLACK_FT);
-        out.extend(on.then(|| {
+        out.extend(rings.iter().find_map(|ring| on_band(f, ring)).map(|p| {
             format!(
-                "seat_on_field: the settlement's middle ({:.0}, {:.0}) stands inside the field",
-                f.center.0, f.center.1
+                "seat_on_field: the settlement's band lies over the field near ({:.0}, {:.0})",
+                p.0, p.1
             )
         }));
     }
@@ -424,7 +520,7 @@ fn walled_by_reeds(r: &Rolled, s: &crate::field::staged::PolderStage, center: Pt
 /// and the ring canal, its waterside reeds off its ground, the block on the canvas.
 ///
 /// Research:
-///     the polder's checks - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the reeds outside the dike on the flanks that face the water, the settlement on the block's dry shore
+///     the polder's checks - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the reeds outside the dike on the flanks that face the water, the settlement on the block's dry shore - each strip's and the houses' band's whole area asked of the block past the drawing's slack (`lies_over`, `on_band`), not their middles (449 T435)
 ///     the way out past the waterside reeds - research/questions/0081-village-lanes.drawing.html: every way keeps off every marsh's reeds - the seat's way out asked again once the strips it came before are laid (`seat_walled_by_reeds`)
 ///     the settlement's ground off the dike and the ring canal - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the village drawn on the dry ground just off the dike, and from outside in the wild water, the dike, the ring canal, the field ditches and the paddies - so no part of the settlement's ground lies over the dike's outer face or the ring canal at its inside foot (`seat_on_dike`, `seat_on_canal`)
 fn polder_checks(r: &Rolled) -> Vec<String> {
@@ -436,11 +532,10 @@ fn polder_checks(r: &Rolled) -> Vec<String> {
     };
     let block = &s.polder.outline;
     for f in r.seated.iter().filter_map(|x| x.frames.first()) {
-        let on = depth_inside(f.center, block) > SLACK_FT;
-        out.extend(on.then(|| {
+        out.extend(on_band(f, block).map(|p| {
             format!(
-                "seat_on_field: the settlement's middle ({:.0}, {:.0}) stands inside the polder",
-                f.center.0, f.center.1
+                "seat_on_field: the settlement's band lies over the polder near ({:.0}, {:.0})",
+                p.0, p.1
             )
         }));
         out.extend(walled_by_reeds(r, s, f.center).then(|| {
@@ -461,10 +556,16 @@ fn polder_checks(r: &Rolled) -> Vec<String> {
         );
     }
     for (i, strip) in r.waterward.iter().flat_map(|w| w.strips.iter()).enumerate() {
-        let on = depth_inside(mean(strip), block) > SLACK_FT;
-        out.extend(on.then(|| {
-            format!("reeds_on_field: waterside strip {i}'s middle stands inside the polder")
-        }));
+        if depth_inside(mean(strip), block) > SLACK_FT {
+            out.push(format!(
+                "reeds_on_field: waterside strip {i}'s middle stands inside the polder"
+            ));
+        } else if let Some(p) = lies_over(block, strip) {
+            out.push(format!(
+                "reeds_on_field: waterside strip {i} lies over the polder near ({:.0}, {:.0})",
+                p.0, p.1
+            ));
+        }
     }
     out.extend(
         block
@@ -476,340 +577,4 @@ fn polder_checks(r: &Rolled) -> Vec<String> {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::{check, depth_inside, mean, polder_checks};
-    use crate::driver::{roll, spec::parse};
-    use crate::field::dry::DryPlot;
-
-    #[test]
-    fn a_dry_plot_on_the_belts_ground_at_the_bands_windward_end_is_named() {
-        // Inashiro's back faces the northwest wind 45 degrees off square (449 T294), so its belt wraps the band's windward end: a
-        // plot there, past the band's half-length, stands on the belt's ground and is named, as one behind the band's middle is
-        let mut r = roll(&parse(r#"{"name": "Inashiro", "seed": 4, "households": 15, "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated"}"#).unwrap()).unwrap();
-        let f = r.seated.as_ref().unwrap().frames[0].clone();
-        let w = crate::driver::wind(&r.plan.windward);
-        let side = (w.0 * f.along.0 + w.1 * f.along.1).signum();
-        let at = (
-            f.center.0 + f.along.0 * f.band.0 * side + w.0 * 80.0,
-            f.center.1 + f.along.1 * f.band.0 * side + w.1 * 80.0,
-        );
-        let past = (at.0 - f.center.0) * f.along.0 + (at.1 - f.center.1) * f.along.1;
-        assert!(past.abs() > f.band.0 + 50.0, "{past}");
-        r.dry = vec![DryPlot {
-            poly: vec![
-                (at.0 - 4.0, at.1 - 4.0),
-                (at.0 + 4.0, at.1 - 4.0),
-                (at.0 + 4.0, at.1 + 4.0),
-                (at.0 - 4.0, at.1 + 4.0),
-            ],
-            crop: "soy",
-            theta: 0.0,
-            tract: 0,
-        }];
-        let found = check(&r).join("\n");
-        assert!(found.contains("dry_on_settlement: dry plot 0"), "{found}");
-    }
-
-    #[test]
-    fn a_planted_break_is_named() {
-        // a roll to plant the breaks on; whether a seed rolls clean is the fresh seeds' question (`hamlet --seeds`), never a fixed
-        // seed's (the GM 2026-11-07: "We should probably avoid fixed seeds because of overfitting")
-        let mut r = roll(&parse(r#"{"name": "Inashiro", "seed": 4, "households": 15, "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated"}"#).unwrap()).unwrap();
-        let fan = r.fields[0].fan.ring.clone();
-        let m = mean(&fan);
-        let square = |c: (f64, f64), s: f64| {
-            vec![
-                (c.0 - s, c.1 - s),
-                (c.0 + s, c.1 - s),
-                (c.0 + s, c.1 + s),
-                (c.0 - s, c.1 + s),
-            ]
-        };
-        let on_water = r.fields[0].channels[0].pts[1];
-        r.dry = vec![
-            DryPlot {
-                poly: square(m, 20.0),
-                crop: "barley",
-                theta: 0.0,
-                tract: 0,
-            },
-            DryPlot {
-                poly: square(m, 10.0),
-                crop: "barley",
-                theta: 0.0,
-                tract: 0,
-            },
-            DryPlot {
-                poly: square(on_water, 0.5),
-                crop: "soy",
-                theta: 0.0,
-                tract: 1,
-            },
-            DryPlot {
-                poly: square((-50.0, -50.0), 5.0),
-                crop: "millet",
-                theta: 0.0,
-                tract: 2,
-            },
-        ];
-        let reed = r.sunk.as_ref().map(|s| mean(&s.reeds)).unwrap();
-        let home = mean(&crate::driver::settlement_ground(
-            &r.seated.as_ref().unwrap().frames[0],
-            crate::driver::wind(&r.plan.windward),
-        ));
-        r.dry.push(DryPlot {
-            poly: square(home, 5.0),
-            crop: "soy",
-            theta: 0.0,
-            tract: 4,
-        });
-        r.dry.push(DryPlot {
-            poly: square(reed, 5.0),
-            crop: "soy",
-            theta: 0.0,
-            tract: 3,
-        });
-        if let Some(s) = r.sunk.as_mut() {
-            s.pond = Some((m, 30.0, 20.0));
-        }
-        if let Some(s) = r.seated.as_mut() {
-            s.frames[0].center = m;
-        }
-        let found = check(&r).join("\n");
-        for rule in [
-            "dry_on_paddy",
-            "dry_on_water",
-            "dry_on_dry",
-            "off_canvas: dry plot",
-            "pond_on_paddy",
-            "seat_on_field",
-            "reeds_on_dry",
-            "dry_on_settlement",
-        ] {
-            assert!(found.contains(rule), "{rule} not named in:\n{found}");
-        }
-        r.fields[0].fan.ring.push((-10.0, -10.0));
-        r.sunk.as_mut().unwrap().pond = Some(((-5.0, -5.0), 30.0, 20.0));
-        let found = check(&r).join("\n");
-        assert!(
-            found.contains("off_canvas: the field") && found.contains("off_canvas: the tameike")
-        );
-        assert!(depth_inside((0.0, 0.0), &[(0.0, 0.0), (1.0, 0.0)]) == 0.0);
-        let mut p = roll(&parse(r#"{"name": "K", "seed": 21, "households": 16, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond"}"#).unwrap()).unwrap();
-        let block = p.polder.as_ref().unwrap().polder.outline.clone();
-        let mid = mean(&block);
-        p.seated.as_mut().unwrap().frames[0].center = mid;
-        p.waterward.as_mut().unwrap().strips.push(vec![
-            (mid.0 - 5.0, mid.1 - 5.0),
-            (mid.0 + 5.0, mid.1 - 5.0),
-            (mid.0, mid.1 + 5.0),
-        ]);
-        let found = check(&p).join("\n");
-        assert!(found.contains("inside the polder") && found.contains("reeds_on_field"));
-        p.polder.as_mut().unwrap().polder.outline.push((-9.0, -9.0));
-        assert!(check(&p).join("\n").contains("off_canvas: the polder"));
-    }
-
-    /// A WATERCOURSE THROUGH A PLOT, OR ENDING IN IT, OR A POND ROUND IT (449 T433): 0006's drawing drops a dry plot that comes within
-    /// about a foot of any water the map draws or would have the end of one inside it, so the check asks the plot's whole area. Red
-    /// before T433: the check asked only a plot's corners against the channels, the brook and the run, and named none of the first
-    /// three plots - a brook through one's middle, a run ending in another, one standing in the pond - nor the fifth, half a foot inside
-    /// the clearance from a brook; the fourth, half a foot past it, is clear on both.
-    #[test]
-    fn a_watercourse_through_a_plot_or_ending_in_it_is_named() {
-        let mut r = roll(&parse(r#"{"name": "Inashiro", "seed": 4, "households": 15, "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated"}"#).unwrap()).unwrap();
-        let square = |c: (f64, f64), s: f64| {
-            vec![
-                (c.0 - s, c.1 - s),
-                (c.0 + s, c.1 - s),
-                (c.0 + s, c.1 + s),
-                (c.0 - s, c.1 + s),
-            ]
-        };
-        let plot = |c: (f64, f64), s: f64| DryPlot {
-            poly: square(c, s),
-            crop: "soy",
-            theta: 0.0,
-            tract: 0,
-        };
-        // the map's own water taken off, the water each plot is asked against planted on open ground
-        r.fields[0].channels.clear();
-        let past = crate::driver::BROOK_W / 2.0 + crate::hem::CLEAR_FT + 0.5;
-        r.brooks = vec![
-            vec![(990.0, 1020.0), (1080.0, 1020.0)],
-            vec![(3980.0, 1040.0 + past), (4060.0, 1040.0 + past)],
-            vec![(4980.0, 1039.0 + past), (5060.0, 1039.0 + past)],
-        ];
-        let s = r.sunk.as_mut().unwrap();
-        s.run = vec![(1950.0, 1020.0), (2010.0, 1020.0)];
-        s.pond = Some(((3000.0, 1000.0), 60.0, 40.0));
-        s.reeds.clear();
-        r.dry = vec![
-            plot((1020.0, 1020.0), 20.0),
-            plot((2000.0, 1020.0), 20.0),
-            plot((3000.0, 1000.0), 5.0),
-            plot((4020.0, 1020.0), 20.0),
-            plot((5020.0, 1020.0), 20.0),
-        ];
-        let found = check(&r);
-        let on: Vec<&String> = found
-            .iter()
-            .filter(|l| l.starts_with("dry_on_water"))
-            .collect();
-        assert_eq!(on.len(), 4, "{found:?}");
-        for (i, how, what) in [
-            (0, "ft from the edge of", "the brook"),
-            (1, "reaching inside it", "the drain's run"),
-            (2, "stands in", "the pond"),
-            (4, "comes 0.5 ft from the edge of", "the brook"),
-        ] {
-            let tag = format!("dry plot {i} ");
-            let named = on
-                .iter()
-                .any(|l| l.contains(&tag) && l.contains(how) && l.contains(what));
-            assert!(named, "plot {i} {how} {what} not named in {on:?}");
-        }
-        // a plot just past the clearance from the pond's rim stands clear of it
-        r.dry = vec![plot(
-            (
-                3000.0,
-                1040.0 + super::super::POND_RIM_W / 2.0 + crate::hem::CLEAR_FT + 20.5,
-            ),
-            20.0,
-        )];
-        let found = check(&r).join("\n");
-        assert!(!found.contains("dry_on_water"), "{found}");
-    }
-
-    /// A PADDY, A SETTLEMENT'S GROUND OR A REED BED ACROSS A PLOT'S MIDDLE (449 T434): 0006 keeps a dry plot off the rice, off the
-    /// houses' ground and clear of the pond's ground, and states no gap for any of them, so each check asks the plot's whole area
-    /// past the drawing's slack. Red before T434: the three checks asked only a plot's corners, and named none of the plots a
-    /// paddy, the settlement's ground or a reed bed crosses without holding a corner of (the first three), nor a reed clump
-    /// inside a plot, nor a plot lapping the reeds by a foot and a half; a plot lapping them by half a foot, within the slack, is
-    /// named by neither.
-    #[test]
-    fn a_field_ground_or_reeds_across_a_plots_middle_is_named() {
-        use crate::field::fan::Pt;
-        use crate::field::geom::inside;
-        let mut r = roll(&parse(r#"{"name": "Inashiro", "seed": 4, "households": 15, "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated"}"#).unwrap()).unwrap();
-        let rect =
-            |x0: f64, y0: f64, x1: f64, y1: f64| vec![(x0, y0), (x1, y0), (x1, y1), (x0, y1)];
-        let plot = |poly: Vec<Pt>| DryPlot {
-            poly,
-            crop: "soy",
-            theta: 0.0,
-            tract: 0,
-        };
-        let named = |r: &crate::driver::Rolled, rule: &str| -> Vec<String> {
-            check(r)
-                .into_iter()
-                .filter(|l| l.starts_with(rule))
-                .collect()
-        };
-        let no_corner_in = |poly: &[Pt], ring: &[Pt]| poly.iter().all(|c| !inside(*c, ring));
-        // the paddy: a tongue of the field 20 ft wide through a plot's middle, past both its sides
-        r.fields[0].fan.ring = rect(950.0, 1010.0, 1100.0, 1030.0);
-        let p = rect(1000.0, 984.0, 1092.0, 1056.0);
-        assert!(no_corner_in(&p, &r.fields[0].fan.ring));
-        r.dry = vec![plot(p)];
-        assert_eq!(named(&r, "dry_on_paddy").len(), 1, "{:?}", check(&r));
-        // the settlement's ground as the seat chose it: a strip 20 ft deep running through its middle, past both its sides
-        let ground = crate::driver::settlement_ground(
-            &r.seated.as_ref().unwrap().frames[0],
-            crate::driver::wind(&r.plan.windward),
-        );
-        let (lo, hi) = crate::field::index::bbox(&ground);
-        let m = mean(&ground);
-        let p = rect(lo.0 - 50.0, m.1 - 10.0, hi.0 + 50.0, m.1 + 10.0);
-        assert!(no_corner_in(&p, &ground) && no_corner_in(&ground, &p));
-        r.dry = vec![plot(p)];
-        assert_eq!(named(&r, "dry_on_settlement").len(), 1, "{:?}", check(&r));
-        // the reeds: a bed 20 ft wide through a plot's middle; a clump inside one; a plot lapping the bed 1.5 ft, then 0.5 ft
-        let laps = |by: f64| rect(4000.0, 1030.0 - by, 4092.0, 1102.0 - by);
-        for (bed, p, want) in [
-            (3950.0, rect(4000.0, 984.0, 4092.0, 1056.0), 1),
-            (4010.0, laps(1.5), 1),
-            (4010.0, laps(0.5), 0),
-        ] {
-            r.sunk.as_mut().unwrap().reeds = rect(bed, 1010.0, 8090.0 - bed, 1030.0);
-            assert!(no_corner_in(&p, &r.sunk.as_ref().unwrap().reeds));
-            r.dry = vec![plot(p)];
-            assert_eq!(named(&r, "reeds_on_dry").len(), want, "{:?}", check(&r));
-        }
-        r.sunk.as_mut().unwrap().reeds = rect(4040.0, 1015.0, 4050.0, 1025.0);
-        r.dry = vec![plot(rect(4000.0, 984.0, 4092.0, 1056.0))];
-        assert_eq!(named(&r, "reeds_on_dry").len(), 1, "{:?}", check(&r));
-        // a plot under two slacks across is asked exactly: one standing across the bed is named
-        r.sunk.as_mut().unwrap().reeds = rect(3950.0, 1010.0, 4100.0, 1030.0);
-        r.dry = vec![plot(rect(4000.0, 1005.0, 4001.5, 1035.0))];
-        assert_eq!(named(&r, "reeds_on_dry").len(), 1, "{:?}", check(&r));
-        // a plot drawn in either way round, a corner on a straight side kept on it; a ring of two points meets nothing
-        let square = vec![
-            (0.0, 0.0),
-            (5.0, 0.0),
-            (10.0, 0.0),
-            (10.0, 10.0),
-            (0.0, 10.0),
-        ];
-        let reversed: Vec<Pt> = square.iter().rev().copied().collect();
-        for ring in [square, reversed] {
-            let inner = super::drawn_in(&ring, 1.0);
-            let kept = (inner.contains(&(5.0, 1.0)), inner.contains(&(9.0, 9.0)));
-            assert_eq!(kept, (true, true), "{inner:?}");
-        }
-        assert!(super::lies_over(&rect(0.0, 0.0, 9.0, 9.0), &[(1.0, 1.0), (5.0, 5.0)]).is_none());
-    }
-
-    /// THE SETTLEMENT'S GROUND OFF THE DIKE AND THE RING CANAL, ITS WAY OUT PAST THE REEDS (449 T240): Kuwabata as rolled passes the
-    /// polder's checks; a reed strip planted round its settlement is named as walling it in; and T239's unfixed roll - the seat handed the plots' edge as its ring, so its ground ran in over the dike and the head canal - is
-    /// named on both. Red before T240: the polder's checks tested only the seat's middle against the plots' edge, and named
-    /// nothing on T239's unfixed roll.
-    #[test]
-    fn a_settlement_over_the_dike_and_the_ring_canal_is_named() {
-        let mut r = roll(&parse(r#"{"name": "Kuwabata", "seed": 21, "households": 16, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond", "pond_layout": "mosaic", "dike_crop": "mulberry"}"#).unwrap()).unwrap();
-        let rolled = polder_checks(&r);
-        assert_eq!(rolled, Vec::<String>::new());
-        let unfixed = {
-            let s = r.polder.as_ref().unwrap();
-            let ground = crate::driver::Ground {
-                ring: &s.polder.outline,
-                foot: None,
-                lines: s
-                    .polder
-                    .ditches
-                    .iter()
-                    .map(|d| d.pts.as_slice())
-                    .chain([s.polder.feeder.as_slice(), s.outfall.as_slice()])
-                    .collect(),
-                brook: &[],
-                reeds: vec![s.polder.fringe.clone()],
-                pond: None,
-                back: None,
-            };
-            crate::driver::stage_seat(&r.plan, &ground).unwrap()
-        };
-        // a reed strip planted round the settlement walls its way out
-        let c = r.seated.as_ref().unwrap().frames[0].center;
-        let ring = vec![
-            (c.0 - 500.0, c.1 - 500.0),
-            (c.0 + 500.0, c.1 - 500.0),
-            (c.0 + 500.0, c.1 + 500.0),
-            (c.0 - 500.0, c.1 + 500.0),
-        ];
-        r.waterward.as_mut().unwrap().strips.push(ring);
-        let walled = polder_checks(&r);
-        let want_walled = vec![
-            "seat_walled_by_reeds: no dry way out of the settlement past the waterside reeds"
-                .to_owned(),
-        ];
-        assert_eq!(walled, want_walled);
-        r.waterward.as_mut().unwrap().strips.pop();
-        r.seated = Some(unfixed);
-        let found = polder_checks(&r);
-        let want = vec![
-            "seat_on_dike: the settlement's ground reaches over the dike's outer face".to_owned(),
-            "seat_on_canal: the settlement's ground lies over the ring canal".to_owned(),
-        ];
-        assert_eq!(found, want);
-    }
-}
+mod tests;
