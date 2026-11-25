@@ -1668,6 +1668,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T249 (T232's two found-and-left items, its builder 2026-11-25: a research page's record-check re-run applied its wording EDITs, and a later round with no kept snapshot read as scoped to a change it was never handed)": {
+   "sha256": "729dd4a16a0160cf2a57db2cbc0e42bd137a4607ffa26bb79e43eb6acd1c9b9f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T249 Approach (checklist part A)": {
+   "sha256": "58260278403d8bba64d23b389cb3bcc4ec080cb9a15cf23550565b4a223a0dee",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -21902,6 +21914,58 @@
      "why": "Judged by group. (a) Pointer found: what is left is a missing path where his words exist. No reader gets a wrong outcome, so this is no defect left, though it is cheap and the block does not say why these differ from the parked three. (b) Needing a relabel or a GM question: a possible MISLABELED in the claims record. Under the GM's 2026-11-25 'sounds good please do that ASAP', the claims round is split off from the builder, so the relabel is not the builder's to judge. The follow-up orders these first and does not hold them for research. (c) The four tied to pages: their fix has to agree with the page comment's, and that fix waits on the research deferral above."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T249 (T232's two found-and-left items, its builder 2026-11-25: a research page's record-check re-run applied its wording EDITs, and a later round with no kept snapshot read as scoped to a change it was never handed)",
+    "### T249 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T249(a) the hold reaches a research page",
+     "summary": "apply-edits' re-run hold maps an EDIT's file to its unit's subject with unit_of: a pop-up's unit as before, or the question number for any research/questions/NNNN-* file, the subject of record-format:NNNN and intro-check:NNNN; T232's rule otherwise unchanged (wording EDIT held and listed in noted.jsonl where every check carries rerun at the current fingerprint, RERUN_OK applies it, logged).",
+     "class": "within",
+     "why": "Fixes the wrong outcome T232 found and left: a re-run on unchanged research-page text applied wording EDITs, rewording what an earlier answer settled and re-owing the checks after it. That is the GM's 2026-11-23 rules as approved ('only factual findings cascade', 'settled choices stay settled', 'style edits are just a different category of thing than factual inaccuracies'), carried to the record checks' own units. Enforces what was asked; adds no new behavior beyond T232's hold."
+    },
+    {
+     "id": "T249(a) factual checks' EDITs apply and cascade",
+     "summary": "quote-check and translation-check EDITs are factual (in neither WORDING_CHECKS nor WORDING_CATEGORIES), so they apply and cascade as a first round's; their per-note units are never looked up; pinned by a test green before and after.",
+     "class": "within",
+     "why": "The GM's split is that factual findings DO cascade; holding them would contradict 'we really are cascading in situations that do call for it' (2026-11-24). Leaving them applied is the rule, not a carve-out."
+    },
+    {
+     "id": "T249(a) a source write-up's and a GLOSSARY term file's EDIT not held",
+     "summary": "A write-up under research/sources/ names no question, and a GLOSSARY block writes a term file, never the question, so neither EDIT is held.",
+     "class": "within",
+     "why": "The hold's condition is 'unchanged text', read as a re-run at the current fingerprint of the check's subject; record-format's and intro-check's subject is the question (units::fingerprint reads the question's files), so neither file is part of what the earlier answer settled or what the fingerprint proves unchanged. The defect found is on the question unit; no wrong outcome on write-ups or term files is named or measured, and FIX AS WE GO reaches defects, not hypothetical cases. Adjudicated separately: write-up EDITs come through the factual checks (applied by the decision above); a term file is outside the unit entirely."
+    },
+    {
+     "id": "T249(a) the re-run mark is not rebuilt",
+     "summary": "No change to how rerun is written for record checks: answer_unit serves every check, and a page session records its answer before applying EDITs (settle requires it); measured 2026-11-25 that record-format's 82 and intro-check's 7 records are per question and none yet carries rerun.",
+     "class": "within",
+     "why": "A measured statement that the existing mechanism already reaches the case; it narrows nothing the GM asked for."
+    },
+    {
+     "id": "T249(b) a later round with no kept snapshot says its scope",
+     "summary": "parts_in also returns each check/subject that is a later round with no snapshot of its last round, and headed_in (called by both MANIFEST writers, check::with_earlier and the modal bundle) writes one line under the MANIFEST title: judge the whole unit, every block, as in a first round.",
+     "class": "within",
+     "why": "Fixes the wrong outcome of 2026-11-24: a later round with no change section judged one bullet where the whole unit was owed, and missed the alcove gap for a round. The GM's 'Re-reviews scoped to the change' presupposes a change to scope to; where none is kept, feature 393's Earlier rounds rule (a round with no change section judges as a first round, GM 2026-10-18) applies, and the line makes it happen. The fix sits at headed_in, the function the bundle writers pass through, rather than at each writer."
+    },
+    {
+     "id": "T249(b) who gets no line",
+     "summary": "A first round, a subject with rulings only, and a later round whose last bundle was kept get no line; a rebuild before dispatch keeps it.",
+     "class": "within",
+     "why": "These are the cases the defect does not reach: a first round already judges the whole unit, and a kept snapshot gives a change section. Nothing the GM asked for is excluded."
+    },
+    {
+     "id": "T249 order and brief",
+     "summary": "After T232, parallel with T248 (disjoint files), before T246 as T232 filed it; build and test only, no page session and no edit of a research page, the research switch deferred.",
+     "class": "within",
+     "why": "The GM deferred the queued research on 2026-11-25 ('defer all of it until at least tomorrow'); the defect is in tooling and is fixed in this task, so nothing defective is carried forward. Ordering is scheduling, not scope."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -34994,6 +35058,56 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "Judged by group. (a) Pointer found: what is left is a missing path where his words exist. No reader gets a wrong outcome, so this is no defect left, though it is cheap and the block does not say why these differ from the parked three. (b) Needing a relabel or a GM question: a possible MISLABELED in the claims record. Under the GM's 2026-11-25 'sounds good please do that ASAP', the claims round is split off from the builder, so the relabel is not the builder's to judge. The follow-up orders these first and does not hold them for research. (c) The four tied to pages: their fix has to agree with the page comment's, and that fix waits on the research deferral above."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T249": {
+   "section_sha256": "986134df3b3055f3768ca7de1a243029c74e2c54d5c2cb5a854b090a5b14d3ee",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T249(a) the hold reaches a research page",
+     "summary": "apply-edits' re-run hold maps an EDIT's file to its unit's subject with unit_of: a pop-up's unit as before, or the question number for any research/questions/NNNN-* file, the subject of record-format:NNNN and intro-check:NNNN; T232's rule otherwise unchanged (wording EDIT held and listed in noted.jsonl where every check carries rerun at the current fingerprint, RERUN_OK applies it, logged).",
+     "class": "within",
+     "why": "Fixes the wrong outcome T232 found and left: a re-run on unchanged research-page text applied wording EDITs, rewording what an earlier answer settled and re-owing the checks after it. That is the GM's 2026-11-23 rules as approved ('only factual findings cascade', 'settled choices stay settled', 'style edits are just a different category of thing than factual inaccuracies'), carried to the record checks' own units. Enforces what was asked; adds no new behavior beyond T232's hold."
+    },
+    {
+     "id": "T249(a) factual checks' EDITs apply and cascade",
+     "summary": "quote-check and translation-check EDITs are factual (in neither WORDING_CHECKS nor WORDING_CATEGORIES), so they apply and cascade as a first round's; their per-note units are never looked up; pinned by a test green before and after.",
+     "class": "within",
+     "why": "The GM's split is that factual findings DO cascade; holding them would contradict 'we really are cascading in situations that do call for it' (2026-11-24). Leaving them applied is the rule, not a carve-out."
+    },
+    {
+     "id": "T249(a) a source write-up's and a GLOSSARY term file's EDIT not held",
+     "summary": "A write-up under research/sources/ names no question, and a GLOSSARY block writes a term file, never the question, so neither EDIT is held.",
+     "class": "within",
+     "why": "The hold's condition is 'unchanged text', read as a re-run at the current fingerprint of the check's subject; record-format's and intro-check's subject is the question (units::fingerprint reads the question's files), so neither file is part of what the earlier answer settled or what the fingerprint proves unchanged. The defect found is on the question unit; no wrong outcome on write-ups or term files is named or measured, and FIX AS WE GO reaches defects, not hypothetical cases. Adjudicated separately: write-up EDITs come through the factual checks (applied by the decision above); a term file is outside the unit entirely."
+    },
+    {
+     "id": "T249(a) the re-run mark is not rebuilt",
+     "summary": "No change to how rerun is written for record checks: answer_unit serves every check, and a page session records its answer before applying EDITs (settle requires it); measured 2026-11-25 that record-format's 82 and intro-check's 7 records are per question and none yet carries rerun.",
+     "class": "within",
+     "why": "A measured statement that the existing mechanism already reaches the case; it narrows nothing the GM asked for."
+    },
+    {
+     "id": "T249(b) a later round with no kept snapshot says its scope",
+     "summary": "parts_in also returns each check/subject that is a later round with no snapshot of its last round, and headed_in (called by both MANIFEST writers, check::with_earlier and the modal bundle) writes one line under the MANIFEST title: judge the whole unit, every block, as in a first round.",
+     "class": "within",
+     "why": "Fixes the wrong outcome of 2026-11-24: a later round with no change section judged one bullet where the whole unit was owed, and missed the alcove gap for a round. The GM's 'Re-reviews scoped to the change' presupposes a change to scope to; where none is kept, feature 393's Earlier rounds rule (a round with no change section judges as a first round, GM 2026-10-18) applies, and the line makes it happen. The fix sits at headed_in, the function the bundle writers pass through, rather than at each writer."
+    },
+    {
+     "id": "T249(b) who gets no line",
+     "summary": "A first round, a subject with rulings only, and a later round whose last bundle was kept get no line; a rebuild before dispatch keeps it.",
+     "class": "within",
+     "why": "These are the cases the defect does not reach: a first round already judges the whole unit, and a kept snapshot gives a change section. Nothing the GM asked for is excluded."
+    },
+    {
+     "id": "T249 order and brief",
+     "summary": "After T232, parallel with T248 (disjoint files), before T246 as T232 filed it; build and test only, no page session and no edit of a research page, the research switch deferred.",
+     "class": "within",
+     "why": "The GM deferred the queued research on 2026-11-25 ('defer all of it until at least tomorrow'); the defect is in tooling and is fixed in this task, so nothing defective is carried forward. Ordering is scheduling, not scope."
     }
    ],
    "verdict": "CLEAR"

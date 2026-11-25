@@ -243,3 +243,80 @@ fn a_later_round_pairs_a_change_on_a_split_s_target_page() {
     );
     assert!(has_pair && !has_moved, "{text}");
 }
+
+/// 451 T249, the guest-quarters round of 2026-11-24 in small: a later round whose last round's bundle kept no snapshot (bundled
+/// before 451 T189) gets no change section, and its MANIFEST says so in one line under its title, the check told to judge the whole
+/// unit; a first round, a unit with rulings only, and a later round whose last bundle was kept get no such line, and a rebuild
+/// before the dispatch keeps it.
+#[test]
+fn a_later_round_with_no_kept_snapshot_says_at_its_head_that_it_judges_the_whole_unit() {
+    let root = scratch("bundle-earlier-scope");
+    let out = root.join("out");
+    put(&root, "specs/500-f/spec.md", "spec");
+    commit(&root, "the feature");
+    put(
+        &root,
+        ".specify/feature.json",
+        "{\"feature_directory\": \"specs/500-f\"}",
+    );
+    put(
+        &root,
+        "research/questions/0094-trade.html",
+        "<p>Words.</p>\n",
+    );
+    let manifest = "# Check bundle - 0094\n\nWritten today.\nowed-checks: quote-check, record-format\nunit: quote-check:0094#k fp\nunit: record-format:0094 fp\n";
+    let at = |m: &str| headed_in(&Rooted::with(&*root, &[]), &out, m).unwrap();
+    // a first round: no earlier round, no line
+    state(&root, &json!({"dispatches": {}}));
+    assert!(!at(manifest).contains("451 T249"));
+    std::fs::remove_dir_all(root.join(".git/record-checks/seen")).unwrap();
+    // rulings only: no round, no line
+    put(
+        &root,
+        "specs/500-f/arbiter.jsonl",
+        &format!(
+            "{}\n",
+            json!({"trigger": "round:quote-check|q:0094@3", "ruling": "continue"})
+        ),
+    );
+    assert!(!at(manifest).contains("451 T249"));
+    std::fs::remove_dir_all(root.join(".git/record-checks/seen")).unwrap();
+    // a later round of each check, neither last bundle kept: one line naming both, under the title, and no change section
+    let one = root.join("one.md");
+    put(&root, "one.md", "quote-check: 0094 - 0 findings\n");
+    state(
+        &root,
+        &json!({"dispatches": {
+            "a": {"check": "quote-check", "subjects": ["q:0094"], "t": 9_999_999_999.0, "state": "returned", "reply": one.to_string_lossy()},
+            "b": {"check": "record-format", "subjects": ["q:0094"], "t": 9_999_999_999.1, "state": "returned", "reply": one.to_string_lossy()}
+        }}),
+    );
+    let text = at(manifest);
+    let line = "**Scope: the whole unit (451 T249).** No snapshot was kept of what the last round of quote-check on q:0094, record-format on q:0094 was bundled (a round bundled before 451 T189), so this bundle has no change section: judge the whole unit, every block, as in a first round - not only what an earlier round named.";
+    let head = format!("# Check bundle - 0094\n\n{line}\n\nWritten today.\n");
+    let headed = text.starts_with(&head);
+    assert!(headed, "{text}");
+    assert_eq!(text.matches("451 T249").count(), 1, "{text}");
+    assert!(!text.contains("The change since round"), "{text}");
+    // a rebuild before the dispatch keeps the line: what it keeps is the next round's bundle, not the last
+    assert!(at(manifest).contains(line));
+    // the next round, its last bundle kept: no line, whether or not anything changed
+    state(
+        &root,
+        &json!({"dispatches": {
+            "a": {"check": "quote-check", "subjects": ["q:0094"], "t": 9_999_999_999.0, "state": "returned", "reply": one.to_string_lossy()},
+            "b": {"check": "record-format", "subjects": ["q:0094"], "t": 9_999_999_999.1, "state": "returned", "reply": one.to_string_lossy()},
+            "c": {"check": "quote-check", "subjects": ["q:0094"], "t": 9_999_999_999.2, "state": "returned", "reply": one.to_string_lossy()},
+            "d": {"check": "record-format", "subjects": ["q:0094"], "t": 9_999_999_999.3, "state": "returned", "reply": one.to_string_lossy()}
+        }}),
+    );
+    assert!(!at(manifest).contains("451 T249"));
+    put(
+        &root,
+        "research/questions/0094-trade.html",
+        "<p>Other words.</p>\n",
+    );
+    let changed = at(manifest);
+    let scoped = !changed.contains("451 T249") && changed.contains("The change since round 2");
+    assert!(scoped, "{changed}");
+}

@@ -10,11 +10,20 @@ use crate::record::owed::{self, answers};
 
 /// A scratch record whose `check` unit on hamlet/well was answered twice at its text, so a re-run; its store.
 fn rerun_of(tag: &str, check: &str) -> (l7r_shared::tempdir::TempDir, std::path::PathBuf) {
+    rerun_on(tag, check, "hamlet/well")
+}
+
+/// [`rerun_of`] on `subject`: a pop-up's unit or a research question's number.
+fn rerun_on(
+    tag: &str,
+    check: &str,
+    subject: &str,
+) -> (l7r_shared::tempdir::TempDir, std::path::PathBuf) {
     let root = l7r_gate_core::record::testkit::record(tag);
     l7r_gate_core::record::testkit::edit_everything(&root);
     super::assemblable(&root);
     let store = answers::store_in(&l7r_shared::env::Rooted::with(&*root, &[]));
-    let slug = format!("{check}:hamlet/well");
+    let slug = format!("{check}:{subject}");
     // the mark is read against the unit's recorded fingerprint, which its next answer moves before any EDIT of it applies
     let fp = owed::fingerprints(&root, &[check.to_owned()])
         .unwrap()
@@ -124,4 +133,116 @@ fn a_hold_that_cannot_keep_its_note_or_log_its_escape_refuses() {
     let logged = run(&root, &reply, &["--rerun-ok", "the GM asked for it"]);
     assert_eq!(logged.code, 2, "{}", logged.stdout);
     assert!(well(&root).contains("It is deep."));
+}
+
+fn text(root: &Path, file: &str) -> String {
+    std::fs::read_to_string(root.join(file)).unwrap()
+}
+
+/// A research page's record check re-run on its text (451 T249): a record-format re-run's wording EDIT on its question - the page or
+/// its drawing, one unit - is held and listed, while a first round's EDIT on another question of the same reply applies.
+#[test]
+fn a_re_run_s_wording_edit_on_a_research_page_answered_before_is_held_and_listed() {
+    use l7r_gate_core::record::testkit::{DRAWING, PAGE};
+    const OTHER: &str = "research/questions/0095-other.html";
+    let (root, _) = rerun_on("apply-edits-rerun-page", "record-format", "0094");
+    let reply = format!(
+        "record-format: 0094, 0095 - 3 findings (3 EDIT)\n{}{}{}",
+        edit(
+            PAGE,
+            "An unmarked claim, reworded.",
+            Some("A claim, reworded.")
+        ),
+        edit(
+            DRAWING,
+            "Drawn as a line, thin.",
+            Some("Drawn as a thin line.")
+        ),
+        edit(OTHER, "<p>Body.</p>", Some("<p>The body.</p>"))
+    );
+    let said = run(&root, &reply, &[]);
+    assert!(
+        text(&root, PAGE).contains("An unmarked claim, reworded."),
+        "{}",
+        said.stdout
+    );
+    assert!(
+        text(&root, DRAWING).contains("Drawn as a line, thin."),
+        "{}",
+        said.stdout
+    );
+    assert!(
+        text(&root, OTHER).contains("The body."),
+        "{}{}",
+        said.stdout,
+        said.stderr
+    );
+    assert!(said.stdout.starts_with("apply-edits: held EDIT 1 (research/questions/0094-trade.html) - record-format:0094 was answered at this text before (was: 0 findings)"), "{}", said.stdout);
+    assert!(said.stdout.contains("apply-edits: held EDIT 2 (research/questions/0094-trade.drawing.html) - record-format:0094"), "{}", said.stdout);
+    let rows = super::super::rerun::kept(&root);
+    assert_eq!(rows.len(), 2, "{rows:?}");
+    assert_eq!(rows[0]["units"], "record-format:0094");
+    // RERUN_OK applies them, as for a pop-up
+    let ok = run(&root, &reply, &["--rerun-ok", "the GM asked for it"]);
+    assert!(ok.stdout.starts_with("apply-edits: RERUN_OK - a re-run's EDITs applied on record-format:0094 record-format:0094 (451 T232)"), "{}", ok.stdout);
+    assert!(text(&root, PAGE).contains("A claim, reworded."));
+}
+
+/// A record check whose findings are factual (quote-check, translation-check) applies a re-run's EDIT on a research page, and a
+/// page's source write-up is no question unit, so it is never held (451 T249).
+#[test]
+fn a_re_run_s_factual_edit_on_a_research_page_applies() {
+    use l7r_gate_core::record::testkit::PAGE;
+    let (root, _) = rerun_on("apply-edits-rerun-page-fact", "quote-check", "0094#k");
+    let store = answers::store_in(&l7r_shared::env::Rooted::with(&*root, &[]));
+    answers::answer_unit(
+        &store,
+        "quote-check:0094",
+        "f0f0f0f0f0f0f0f0",
+        "0 findings",
+        None,
+        "",
+    )
+    .unwrap();
+    answers::answer_unit(
+        &store,
+        "quote-check:0094",
+        "f0f0f0f0f0f0f0f0",
+        "0 findings",
+        None,
+        "",
+    )
+    .unwrap();
+    let said = run(
+        &root,
+        &format!(
+            "quote-check: 0094 - 1 finding\n{}",
+            edit(
+                PAGE,
+                "An unmarked claim, reworded.",
+                Some("A claim, reworded.")
+            )
+        ),
+        &[],
+    );
+    assert!(!said.stdout.contains("451 T232"), "{}", said.stdout);
+    assert!(text(&root, PAGE).contains("A claim, reworded."));
+    // a record-format re-run's EDIT on a write-up under research/sources/ names no question: applied
+    let (root, _) = rerun_on("apply-edits-rerun-source", "record-format", "0094");
+    let src = "research/sources/010-works-cited/0001-key-a.html";
+    let said = run(
+        &root,
+        &format!(
+            "record-format: 0094 - 1 finding\n{}",
+            edit(src, "<p>Write-up A.</p>", Some("<p>Write-up A, read.</p>"))
+        ),
+        &[],
+    );
+    assert!(!said.stdout.contains("451 T232"), "{}", said.stdout);
+    assert!(
+        text(&root, src).contains("Write-up A, read."),
+        "{}{}",
+        said.stdout,
+        said.stderr
+    );
 }

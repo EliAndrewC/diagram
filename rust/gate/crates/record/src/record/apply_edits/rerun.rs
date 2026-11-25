@@ -2,7 +2,8 @@
 //! verdict counts agreed in 6 of 6 re-runs, and the two answers that differed (sheet/guest-quarters' gaps, 2026-11-24, and
 //! sheet/barracks' form on the measurement's re-run) each paired an earlier round that judged only a change with a later one that
 //! judged more. A re-run's new wording finding is therefore on text an earlier answer stood on: it is listed in the feature's `noted.jsonl`
-//! for the next session, not applied mid-landing, where applying it re-owes the checks after it.
+//! for the next session, not applied mid-landing, where applying it re-owes the checks after it. A research page's record checks are
+//! held the same way (451 T249): their re-runs applied and re-owed the checks after them, as the pop-ups' did before T232.
 
 use std::collections::HashSet;
 use std::fmt::Write as _;
@@ -18,11 +19,23 @@ use crate::record::owed::{self, answers};
 /// Where a pop-up's text lives: its unit is the path between these.
 const MODALS: &str = "l7r/diagram/interactive/assets/modals/";
 
-/// The pop-up unit an EDIT's file is, or none.
-fn modal_unit(path: &str) -> Option<&str> {
-    path.trim_matches('`')
-        .strip_prefix(MODALS)?
-        .strip_suffix(".md")
+/// The subject of the unit an EDIT's file is part of, or none: a pop-up's unit, or a research question's number (451 T249) - the
+/// subject of its record-format and intro-check units, the record's wording checks, each of which reads the whole question (its
+/// page, notes and drawing; `units::fingerprint`). A source write-up under `research/sources/` is no question's unit, and a
+/// factual check's EDIT never reaches the unit (quote-check's and translation-check's units are per note), so neither is held.
+fn unit_of(path: &str) -> Option<String> {
+    let path = path.trim_matches('`');
+    if let Some(unit) = path
+        .strip_prefix(MODALS)
+        .and_then(|p| p.strip_suffix(".md"))
+    {
+        return Some(unit.to_owned());
+    }
+    super::QUESTION
+        .captures(path)
+        .ok()
+        .flatten()
+        .map(|c| c[1].to_owned())
 }
 
 /// One held EDIT: its number, the unit, the result the unit held before the re-run, and the EDIT's file and words.
@@ -35,7 +48,8 @@ pub(super) struct Held {
     new: String,
 }
 
-/// Each wording EDIT not skipped whose pop-up every check of the reply answered before on the text it holds now.
+/// Each wording EDIT not skipped whose pop-up or research question every check of the reply answered before on the text it holds
+/// now (a research page's since 451 T249).
 pub(super) fn held(
     root: &Rooted,
     report: &str,
@@ -47,7 +61,7 @@ pub(super) fn held(
     let mut out = Vec::new();
     for b in found {
         let Block::Edit(e) = b else { continue };
-        let Some(unit) = modal_unit(&e.path).filter(|_| !skip.contains(&e.n)) else {
+        let Some(unit) = unit_of(&e.path).filter(|_| !skip.contains(&e.n)) else {
             continue;
         };
         // a factual EDIT applies and cascades as a first round's would (451 T188, the GM: only factual findings cascade); and only

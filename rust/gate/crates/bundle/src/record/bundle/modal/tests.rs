@@ -220,6 +220,12 @@ fn a_form_bundle_keeps_the_research_rounds_wording() {
         std::fs::read_to_string(root.join("out/f/research-held.md")).unwrap(),
         "# Wording the research rounds fixed - keep it\n\n- 'A well in the yard.'\n"
     );
+    // a later round whose last round kept no snapshot says, under its title, that it judges the whole unit (451 T249)
+    let top = std::fs::read_to_string(root.join("out/f/MANIFEST.md")).unwrap();
+    let second = top.lines().nth(2).unwrap_or("");
+    let scoped = second.starts_with("**Scope: the whole unit (451 T249).**")
+        && second.contains("modal-form on modal:hamlet/well");
+    assert!(scoped, "{top}");
     assert!(research_held(&root, "sheet/well", "x").is_empty());
 }
 

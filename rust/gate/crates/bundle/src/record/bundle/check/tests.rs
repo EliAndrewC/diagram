@@ -534,6 +534,9 @@ fn earlier_rounds_ride_a_bundle() {
     assert!(std::fs::read_to_string(root.join("out/MANIFEST.md"))
         .unwrap()
         .contains("## Earlier rounds (feature 393)"));
+    // its last round kept no snapshot: the scope is said under the title (451 T249)
+    let top = std::fs::read_to_string(root.join("out/MANIFEST.md")).unwrap();
+    assert!(top.lines().nth(2).unwrap_or("").starts_with("**Scope: the whole unit (451 T249).** No snapshot was kept of what the last round of record-format on q:0094 was bundled"), "{top}");
 }
 
 #[test]

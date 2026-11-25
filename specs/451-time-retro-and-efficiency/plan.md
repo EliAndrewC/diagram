@@ -2716,31 +2716,36 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T249 (<why: the finding or measurement that files it>)
+### T249 (T232's two found-and-left items, its builder 2026-11-25: a research page's record-check re-run applied its wording EDITs, and a later round with no kept snapshot read as scoped to a change it was never handed)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: Two rules, each in the tool that owns it, measured first in the store.
+  - **(a) The hold reaches a research page.** `make apply-edits`' hold (`apply_edits/rerun.rs`) read a pop-up's file only (`modal_unit`). It now maps an EDIT's file to its unit's subject with `unit_of`: a pop-up's unit as before, or a research question's number for any file of the question (`research/questions/NNNN-*.html`, the `QUESTION` pattern apply-edits already reads - the page, its notes and its drawing). That is the subject of the record's two wording checks, `record-format:NNNN` and `intro-check:NNNN`, each of which reads the whole question (`units::fingerprint`). The rest of the rule is T232's unchanged: a wording EDIT (`factual` false for every check of the reply) is held where every check of the reply carries `rerun` at its current fingerprint on that subject, kept as a row of `noted.jsonl`, and `RERUN_OK` applies it, logged. quote-check's and translation-check's EDITs are factual (neither is in `WORDING_CHECKS` nor `WORDING_CATEGORIES`), so they apply and cascade as a first round's, and their per-note units are never looked up. A write-up under `research/sources/` names no question, so its EDIT is not held. A GLOSSARY block writes a term file, never the question, so it is not held. The re-run mark itself was already written for record checks: `answer_unit` serves every check (`answer_from_bundle`, `answer_inner`), and a page session records an answer (`make record-checked`) before applying its EDITs, which `settle` already requires (`scripts/container/page-session-rules.md`). Measured 2026-11-25 (`ls` of the main clone's `.git/record-checks`): record-format's 82 and intro-check's 7 records are all `check:NNNN`, and no record yet carries `rerun`.
+  - **(b) A later round with no kept snapshot says its scope.** `bundle::earlier` hands a later round its change since the last round only where that round's bundle was kept (451 T189); a subject whose last round predates the keeping got no change section and no word why. `parts_in` now also returns each check and subject that is a later round (one round or more counted) with no snapshot of its last round, and `headed_in`, which both MANIFEST writers call (`check::with_earlier`, the modal bundle), writes ONE line under the MANIFEST's title naming them: `**Scope: the whole unit (451 T249).** No snapshot was kept of what the last round of <check> on <subject>, ... was bundled (a round bundled before 451 T189), so this bundle has no change section: judge the whole unit, every block, as in a first round - not only what an earlier round named.` A first round, a subject with rulings only, and a later round whose last bundle was kept get no line; a rebuild before the dispatch keeps it, since what a bundle keeps is the next round's snapshot. Measured 2026-11-25: the main clone's `.git/record-checks/seen/` holds 162 snapshots, and the incident's 10:56 reply said "My manifest names no change section, so I did not re-open it" (451 T232's measurement).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a re-run's wording EDIT on a research page held and listed | `a_re_run_s_wording_edit_on_a_research_page_answered_before_is_held_and_listed` (record crate) red with the question branch absent (the code before this task), measured 2026-11-25 | n/a: tooling | none | n/a |
+| a re-run's factual EDIT on a page, and a source write-up's, applied | `a_re_run_s_factual_edit_on_a_research_page_applies` (record crate), green before and after: it pins that the hold does not reach them | n/a: tooling | none | n/a |
+| a later round with no kept snapshot says its scope under the title | `a_later_round_with_no_kept_snapshot_says_at_its_head_that_it_judges_the_whole_unit` (bundle crate), with `earlier_rounds_ride_a_bundle` and `a_form_bundle_keeps_the_research_rounds_wording` through both writers, red with the line off, measured 2026-11-25 | n/a: tooling | none | n/a |
 
 ### T249 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A record check run again on a research page's text nothing changed leaves its wording as it was, its new wording findings listed for the next session, its factual ones applied. A later round handed no change section is told in its MANIFEST's first lines that it judges the whole unit.
+2. **The constraints.** 451 T232's rule as built (a re-run's wording EDITs held and listed, factual ones applied, `RERUN_OK` the escape). 451 T188's split (`checks::reply::factual`: only factual findings cascade). 451 T189's change section, and feature 393's Earlier rounds paragraph: a round with no change section judges as a first round. The brief: the research switch is deferred - build and test only, no page session and no edit of a research page.
+3. **Where each comes from.** G: the GM 2026-11-23 on T188 (style edits are a different category of thing than factual inaccuracies), as T232 quotes him; the GM 2026-10-18 on feature 393's Earlier rounds. R: `ask:mixed-build-53-record-answers` (`specs/451-time-retro-and-efficiency/arbiter.jsonl`), which forced the incident's re-run. O: T232's measurement of 2026-11-25 and this task's store listing above.
+4. **Do they describe the world here?** Yes, measured 2026-11-25: the store's record-format and intro-check units are per question, as `units::fingerprint` reads them, and both MANIFEST writers open with a `# ` title line.
+5. **The order.** After T232 (its hold and mark). No dependency on T248, built in parallel in `rounds.rs` and `handle.rs`, which this task does not touch. Lands before T246, as T232 filed it.
+6. **The exits.** Green: `make closing-checks T=T249 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-25 (`make rust-test CRATE=rust/gate/crates/record` and `CRATE=rust/gate/crates/bundle`, logs in the session scratchpad). (a) Before `unit_of`, the page test failed at line 156: the record-format re-run's EDIT was applied. (b) With `headed_in` writing no line, the scope test failed at line 281 (no line under the title); on the final code with the line forced off, it and both writers' tests failed (check tests line 539, modal tests line 226). With the round test dropped (`was.is_none()` alone), the scope test failed at line 267 (a rulings-only unit said the line); with the snapshot test dropped (`n > 0` alone), it failed at line 296 (a kept round said it). With the code as built: record 103 passed, bundle 87 passed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: a record-check re-run on unchanged text rewords what an earlier answer settled and re-owes the checks after it; and a later round with no snapshot judged one bullet where the whole unit was owed, missing the alcove gap for a round (2026-11-24). No map changes. A page's wording changes one session later, not mid-landing; a later round's MANIFEST carries one more line.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: one more line in a MANIFEST and a held EDIT; nothing runs faster or slower.
 
 ### T250 (<why: the finding or measurement that files it>)
 

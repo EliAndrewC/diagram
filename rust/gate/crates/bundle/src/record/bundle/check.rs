@@ -343,13 +343,14 @@ fn changed_section(root: &Path, fragments: &[String]) -> Result<String, Fail> {
     Ok(format!("\n## The change (feature 375, FR-006)\n\nThe blocks and notes this delta wrote or rewrote. A finding on anything NOT listed here is not fixed in this change; it is filed as a row only where it names a wrong outcome its reader meets, or a tool's user - under a closing `OUTSIDE THE CHANGE` heading, one line each, `- <origin file> | <the block, a few words> | <the finding> | effect: <map|sheet|page|tool> - <that outcome>` - and otherwise listed under `NOTED, NOT FILED` and dropped (451 T219).\n\n{body}\n"))
 }
 
-/// A MANIFEST with the earlier rounds of the checks it owes (feature 393).
+/// A MANIFEST with the earlier rounds of the checks it owes (feature 393), its scope said under its title where a later round kept no
+/// snapshot (451 T249).
 ///
 /// # Errors
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn with_earlier(root: &Path, out: &Path, text: &str) -> Result<String, Fail> {
-    Ok(format!("{text}{}", earlier::section(root, out, text)?))
+    earlier::headed_in(&l7r_shared::env::Rooted::process(root), out, text)
 }
 
 /// A helper's output and exit, each run in this process (feature 383 D6): `translation-owed`, and since feature 449 T145 the four

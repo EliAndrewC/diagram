@@ -800,7 +800,7 @@ pub fn bundle(run: &mut Run, root: &Rooted, kind: &str, ask: &Ask<'_>) -> Result
         String::new()
     };
     let text = manifest.join("\n") + "\n" + &owed_lines(root, &m, for_, &rows)? + &escape;
-    let full = format!("{text}{}", earlier::section_in(root, &out, &text)?);
+    let full = earlier::headed_in(root, &out, &text)?;
     write(&out.join("MANIFEST.md"), &full)?;
     run.say(&format!(
         "modal-bundle: {} file(s) in {} - hand the {for_} agent {}",

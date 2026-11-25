@@ -240,7 +240,8 @@ fn change_lines(n: usize, pairs: Vec<String>) -> Vec<String> {
     lines
 }
 
-/// The lines for one check on one subject, its replies written beside the MANIFEST; none with no earlier round or ruling.
+/// The lines for one check on one subject, its replies written beside the MANIFEST; none with no earlier round or ruling. And whether
+/// it is a later round whose last round was bundled with no snapshot kept, so it reads the whole unit (451 T249).
 #[expect(clippy::too_many_arguments, reason = "the Python's own parameters")]
 fn unit_section(
     root: &Path,
@@ -251,11 +252,11 @@ fn unit_section(
     subject: &str,
     since: f64,
     notes: &[String],
-) -> Result<Vec<String>, Fail> {
+) -> Result<(Vec<String>, bool), Fail> {
     let mine = rounds(state, check, subject, since, notes);
     let ruled = ruling_lines(rulings, check, subject);
     if mine.is_empty() && ruled.is_empty() {
-        return Ok(Vec::new());
+        return Ok((Vec::new(), false));
     }
     let replies: Vec<String> = mine.iter().map(|v| reply_of(v)).collect();
     let others: Vec<(String, String)> = state
@@ -302,7 +303,9 @@ fn unit_section(
     // what the last round was bundled, where it was kept, against the files now: every change since it, by an EDIT or by hand; a
     // subject whose last round was bundled before the keeping gets none, and its round reads the whole unit, unscoped as before
     let n = mine.len();
-    if let Some(was) = seen_at(root, check, subject, n) {
+    let was = seen_at(root, check, subject, n);
+    let unscoped = n > 0 && was.is_none();
+    if let Some(was) = was {
         lines.extend(change_lines(n, pairs_since(root, &was, &files)));
     }
     if !ruled.is_empty() {
@@ -310,7 +313,7 @@ fn unit_section(
         lines.extend(ruled);
         lines.push(String::new());
     }
-    Ok(lines)
+    Ok((lines, unscoped))
 }
 
 /// The MANIFEST's Earlier rounds section for the checks and subjects `manifest` owes, or "".
@@ -328,6 +331,32 @@ pub fn section(root: &Path, out: &Path, manifest: &str) -> Result<String, Fail> 
 ///
 /// Where what it reads or writes fails: the error says which and why.
 pub fn section_in(root: &Rooted, out: &Path, manifest: &str) -> Result<String, Fail> {
+    Ok(parts_in(root, out, manifest)?.0)
+}
+
+/// A MANIFEST `text` with its Earlier rounds section after it (feature 393), and, where a later round's last round kept no snapshot,
+/// one line under its title saying the round judges the whole unit (451 T249). Measured 2026-11-25 (451 T232): the guest-quarters
+/// round of 2026-11-24 10:56 had no change section, its last round bundled before 451 T189 kept one, and with nothing saying so it
+/// judged only "the bullet that changed", missing the alcove gap the next round found - against the Earlier rounds paragraph, which
+/// says a round with no change section judges as a first round.
+///
+/// # Errors
+///
+/// Where what it reads or writes fails: the error says which and why.
+pub fn headed_in(root: &Rooted, out: &Path, text: &str) -> Result<String, Fail> {
+    let (section, unscoped) = parts_in(root, out, text)?;
+    if unscoped.is_empty() {
+        return Ok(format!("{text}{section}"));
+    }
+    let line = format!("**Scope: the whole unit (451 T249).** No snapshot was kept of what the last round of {} was bundled (a round bundled before 451 T189), so this bundle has no change section: judge the whole unit, every block, as in a first round - not only what an earlier round named.", unscoped.join(", "));
+    // under the title, so the check meets its scope before anything it reads
+    let (title, rest) = text.split_once('\n').unwrap_or((text, ""));
+    let rest = rest.strip_prefix('\n').unwrap_or(rest);
+    Ok(format!("{title}\n\n{line}\n\n{rest}{section}"))
+}
+
+/// [`section_in`] and the later rounds whose last bundle kept no snapshot.
+fn parts_in(root: &Rooted, out: &Path, manifest: &str) -> Result<(String, Vec<String>), Fail> {
     let owed = OWED
         .captures(manifest)
         .ok()
@@ -343,10 +372,10 @@ pub fn section_in(root: &Rooted, out: &Path, manifest: &str) -> Result<String, F
     let subjects = subjects_of_manifest(manifest);
     let path = state_path(&root.to_string_lossy());
     let Some(path) = path.filter(|p| p.is_file()) else {
-        return Ok(String::new());
+        return Ok((String::new(), Vec::new()));
     };
     if checks.is_empty() || subjects.is_empty() {
-        return Ok(String::new());
+        return Ok((String::new(), Vec::new()));
     }
     let (state, rulings, since) = (
         load(&path),
@@ -354,22 +383,25 @@ pub fn section_in(root: &Rooted, out: &Path, manifest: &str) -> Result<String, F
         feature_start(root),
     );
     let notes: Vec<String> = notes_of_manifest(manifest).into_iter().collect();
-    let mut body = Vec::new();
+    let (mut body, mut unscoped) = (Vec::new(), Vec::new());
     for c in &checks {
         for s in &subjects {
-            body.extend(unit_section(
-                root, out, &state, &rulings, c, s, since, &notes,
-            )?);
+            let (lines, whole) = unit_section(root, out, &state, &rulings, c, s, since, &notes)?;
+            body.extend(lines);
+            if whole {
+                unscoped.push(format!("{c} on {s}"));
+            }
             // this bundle is the next round's: what it was bundled is kept for the round after (451 T189)
             let n = rounds(&state, c, s, since, &notes).len() + 1;
             keep_seen(root, c, s, n, &subject_files(root, s))?;
         }
     }
-    Ok(if body.is_empty() {
+    let section = if body.is_empty() {
         String::new()
     } else {
         format!("\n{HEAD}\n\n{INTRO}\n\n{}", body.join("\n"))
-    })
+    };
+    Ok((section, unscoped))
 }
 
 #[cfg(test)]
