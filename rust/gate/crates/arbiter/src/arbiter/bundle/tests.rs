@@ -258,7 +258,7 @@ fn a_batch_and_the_command_line() {
         .contains("no round trigger is owed a ruling"));
     owed(
         &root,
-        &json!({"round:quote-check|q:0094@3": {"kind": "round", "unit": "quote-check|q:0094"}, "round:quote-check|q:0777@3": {"kind": "round", "unit": "quote-check|q:0777", "feature": "999-other"}}),
+        &json!({"round:quote-check|q:0094@3": {"kind": "round", "unit": "quote-check|q:0094"}, "round:building-review|building-review--x@3": {"kind": "round", "unit": "building-review|building-review--x", "feature": "999-other"}}),
     );
     let batch = bundle_cli(&root, &["--batch", "--out", &o]);
     assert_eq!(batch.code, 0);

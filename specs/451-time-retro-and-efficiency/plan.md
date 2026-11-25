@@ -2499,31 +2499,43 @@ engine speed, so no checklist.
 <!-- plan-archive: T15 to T225 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
 
 <!-- plan-archive: T226 to T226 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
-### T227 (<why: the finding or measurement that files it>)
+### T227 (page session P7's cascade, 2026-11-24: record-format was dispatched on 0097 four times across features and the counter held 0 rounds; 2026-11-25: modal-form ran three rounds on sheet/barracks in four minutes and `make arbiter-bundle BATCH=1` said no round trigger was owed)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: The round cap (`rounds::cap_refusal`, `ROUND_CAP` 2) was sound. Two things kept it from being reached, and one more kept its ruling from being read.
+  - **Cause 1, the feature reset.** `handle::handle_locked` replaced the whole check state with `{feature, dispatches}` whenever the active feature changed. That wiped every unit's `rounds`, `seen`, `own_edits`, `notes_read`, `rebased` and `round_batch`. Observed 2026-11-25, method: the source, and `.git/checks-open.json` of the coordinating clone. Its `feature` was 451 and it held no `record-format|q:0097` count, although its `dispatches` kept 13 record-format rows on q:0097, 4 of them dated 2026-11-24.
+  - **Cause 2, a hand fix read as a first look.** `first_look` (374 wave 120, the arbiter on 0190) let a round go uncounted when its unread sentences were none of the check's own EDITs. Its stated rule is "text OTHER checks' edits added", but it tested the opposite: anything not its own. It also asked whether the own-EDIT text contained the whole sentence, and an EDIT that replaces a span inside a sentence never does. Observed 2026-11-25, method: the barracks rows of the same state (dispatch toolu_01QzUrB5 `counted` [barracks]; toolu_01HDWmSu `counted` [marsh] only; toolu_01TWD7L7 `counted` []), the three kept replies (round 1's EDIT "and a gate rowhouse was tiled; ...", rounds 2 and 3 with `EDIT: none`), and `git diff 32d0d88c55 6557ee05b7` of `sheet/barracks.md` (the EDIT applied inside a longer sentence, a Guesses bullet added and then taken out by hand). Each of rounds 2 and 3 was read as a first look, so `rounds` stayed at 1 and no third round was held.
+  - **The fix: what survives a feature change.** Nothing is wiped. Every key of the state is keyed by unit or subject, not by feature, so a count follows its unit. A unit's HOME is the feature its count began in (`round_home`, written when its first round is counted, and for a unit counted before this change, the state's old `feature` at the switch). Its triggers are filed under its home (`arbiter::trip_under`), and its `continue` and `accept` are read from there (`arbiter::rulings_of`, `continues_of`, `closed_of`), as 451 T240 reads a plan round's rulings from its trigger's feature. `arbiter-ruled` already files a ruling where the owed row names it (`home.rs`). An owed record round (`round:<record check>|q:NNNN@N` or `|modal:...@N`) is every feature's to hold and batch (`arbiter::record_round` in `mine`). So `make arbiter-bundle BATCH=1` lists it under any feature, and `blocking` holds only that unit's dispatch. Why a home and not every feature's log: counts restarted with each feature, so the same trigger is ruled in two features 10 times today, for example `round:record-format|q:0047@3`. Reading every log would let an old `continue` lift a new cap, and would make a new trigger "already ruled".
+  - **The fix: what counts as a first look.** A round is a first look only when every unread sentence carries another check's EDIT words on that subject and none carries its own. Matching is sentence by sentence, an EDIT's sentence inside the page's or the page's inside it. Text the session wrote between rounds, a finding fixed by hand, is the fix loop and is counted.
+  - **The gate's readers.** The arbiter bundle's `counted` returned 0 unless the state's feature was the active one. It now reads the count whatever feature is active. Its counter section and the rounds line no longer say "in this feature".
+  - **The refusal** reads "round N of `<check>` on <subject> passes its cap of C - ...". "in this feature" is cut, because it is no longer true.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| no state wiped on a feature change; a unit's home filed, ruled and batched | `a_record_round_follows_its_unit_across_features` (handle) red on HEAD: the third round under the next feature let through (""); `a_new_feature_keeps_the_counts_their_home_and_the_dispatches` restated; arbiter `a_held_gate_and_a_batch_are_told_apart`'s record-round case | n/a: tooling | none | n/a |
+| a first look only for other checks' EDIT text | `a_session_s_own_fixes_between_rounds_count_the_next_round` (rounds) red on HEAD: round 2 `counted` [] where [barracks] was wanted; `first_looks_and_fresh_readings_are_no_repeat`'s hand-written case | n/a: tooling | none | n/a |
+| the arbiter bundle's count read under any feature | `the_round_counters` restated (sections) | n/a: tooling | none | n/a |
 
 ### T227 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A record check's third round on one page or pop-up is refused until the round arbiter rules, whatever feature is active and whether the session fixed the last round's findings by EDIT or by hand. The refusal names `make arbiter-bundle`, and the ruling, filed in the unit's home feature, lifts the hold under any feature.
+2. **The constraints.** The root CLAUDE.md's tripwire: "a check's third round on one subject" owes the round arbiter's ruling. 375 FR-010 and FR-011 (the cap, one ruling per trigger). 374 wave 120's first-look rule, for text other checks' EDITs added. The batch rule from 2026-10-12 (c5db336fd3: "count afresh only in a later batch, never on a batch's own edits"), unchanged here. 451 T240's pattern: rulings are read where the trigger is filed.
+3. **Where each comes from.** G: the CLAUDE.md tripwire line. R: the 0190 ruling (`specs/374-match-the-research-continued/arbiter.jsonl`, `round:quote-check|q:0190@3`). O: the coordinating clone's check state, its kept replies and the barracks diff, 2026-11-25.
+4. **Do they describe the world here?** Yes, measured 2026-11-25. The two red tests replay each case's sequence through the real `dispatch`/`launched`/`returned` and, for case 1, through the hook's `handle`: rounds under 999-x, then the active feature moved to 998-y, measured 2026-11-25 (`make rust-test CRATE=rust/guard/shared`). Case 2 replays the barracks texts as the coordinating clone's state recorded them, measured 2026-11-25 (the state's rows, kept replies and `git diff 32d0d88c55 6557ee05b7`): round 1's EDIT applied inside its sentence, a bullet added by hand, then taken out.
+5. **The order.** No dependency. T240 fixed the plan-review counter the same way. T229 is in parallel and touches other files.
+6. **The exits.** Green: `make closing-checks T=T227 F=451`. Red: what failed is recorded and the task set down, and a claim that it cannot be done is ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-25 (`make rust-test CRATE=rust/guard/shared` on HEAD's code with the two new tests): 483 passed, 2 failed. Case 1 failed with "the third round is held under the next feature: " and an empty refusal. Case 2 failed with "the round after the session's own fixes is a repeat", `left: []`. After the fix both pass, and so do both crates' suites: `make crate-checks CRATE="rust/guard/shared rust/gate/crates/arbiter"` gave 485 and 41 passed, with lint and format clean. FIRES-PROOF, measured 2026-11-25. Each fix was disabled in turn with the rest kept, and the shared crate was run each time. (a) `first_look` with its other-checks condition made always true: 483 passed and 2 failed, the barracks replay and `first_looks_and_fresh_readings_are_no_repeat`. (b) The old feature wipe put back in `handle_locked`: 2 failed, the cross-feature replay and `a_new_feature_keeps_...`. (c) The cap's rulings read from the active feature, not the home: 1 failed, the cross-feature replay at "the continue ruled in its home feature lifts the hold". Logs are in the session scratchpad (`t227-red-head.log`, `t227-fires1.log` to `t227-fires3.log`).
+10. **Before moving a constant.** n/a: `ROUND_CAP` stays 2.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: the tripwire the root CLAUDE.md requires did not fire. Third and later rounds ran without the arbiter's ruling (record-format on 0097, modal-form on barracks). No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The arbiter bundle counted no rounds of a unit unless the state's feature was the active one (`arbiter/bundle.rs` `counted`). Effect: `misnumbered` told the session to ask about `@1` for a unit at round 3. Fixed here.
+- The real 2026-11-24 record-format rounds on 0097 crossed two `origin/main` batches (05:15-05:25Z and 17:15-17:23Z, with ten moves between). The next round would have followed a move at 18:08Z (method: the clone's `origin/main` reflog against the dispatch times). The batch rule (`new_cause`) restarts the count on any move of `origin/main`. Effect: with several sessions landing, a third round in one batch is rare, so case 1's own next round would still not have been held. Not fixed here: it restates a ruled rule (c5db336fd3), needs a measured test of what counts as the subject moving, and its fix differs from this one. Filed as T248; lands before T22.
+- The record bundle's "Earlier rounds" section (`bundle/earlier.rs`, feature 393) still lists only this feature's rounds, its rulings read from the active feature. Effect: none on the cap. It is what a reviewer is shown, and feature 393's contract words it "in this feature". Not a defect of the counter, so not filed.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: it holds a review round. Only a capped repeat reads one extra `arbiter.jsonl`.
 
 
 <!-- plan-archive: T228 to T228 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
@@ -2783,3 +2795,28 @@ engine speed, so no checklist.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
+### T248 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T248 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>

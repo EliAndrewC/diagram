@@ -129,7 +129,7 @@ fn a_check_round_goes_through_every_mode() {
 }
 
 #[test]
-fn a_new_feature_resets_the_counts_but_not_the_dispatches() {
+fn a_new_feature_keeps_the_counts_their_home_and_the_dispatches() {
     let (root, _) = setup("feature");
     save(
         &root.join(".git/checks-open.json"),
@@ -146,7 +146,9 @@ fn a_new_feature_resets_the_counts_but_not_the_dispatches() {
     );
     let s = state(&root);
     assert_eq!(s["feature"], json!("999-x"));
-    assert!(s.get("rounds").is_none());
+    // a count follows its unit (451 T227)
+    assert_eq!(s["rounds"]["x"], json!(9));
+    assert_eq!(s["round_home"]["x"], json!("000-old"));
     assert!(s["dispatches"].get("a").is_some() && s["dispatches"].get("tx").is_some());
 }
 
@@ -577,4 +579,72 @@ fn a_refused_dispatch_keeps_the_footnote_holds_trip() {
     .unwrap();
     assert_eq!(ask("q3"), "");
     assert!(state(&root)["flag_trips"].get("0105#bath").is_none());
+}
+
+/// One record-format round on 0097 through the hook's three events, its reply `reply`.
+fn record_round(root: &Path, prompt: &str, tid: &str, at: f64) -> String {
+    let said = handle(
+        "dispatch",
+        &agent(root, "record-format", prompt, tid),
+        Some(at),
+    );
+    if said.is_empty() {
+        let aid = format!("ag-{tid}");
+        let launched = json!({"cwd": root, "tool_name": "Agent", "tool_use_id": tid, "tool_input": {}, "tool_response": {"status": "async_launched", "agentId": aid}});
+        assert_eq!(handle("launched", &launched, Some(at)), "");
+        let done = json!({"cwd": root, "agent_id": aid, "agent_type": "record-format", "last_assistant_message": "record-format: 0097 - 1 finding"});
+        assert_eq!(handle("returned", &done, Some(at)), "");
+    }
+    said
+}
+
+#[test]
+fn a_record_round_follows_its_unit_across_features() {
+    // 451 T227's first case, 2026-11-24: record-format was dispatched on 0097 four times across features and its third round was
+    // held only because the page session noticed it - a change of active feature wiped the counts
+    let (root, _) = setup("unit-follows");
+    std::fs::create_dir_all(root.join("research/questions")).unwrap();
+    std::fs::write(
+        root.join("research/questions/0097-staff-rowhouses.html"),
+        "<p>Rowhouses ran about 80 to 300 ft long.</p>",
+    )
+    .unwrap();
+    let manifest = root.join("rf/MANIFEST.md");
+    std::fs::create_dir_all(manifest.parent().unwrap()).unwrap();
+    std::fs::write(&manifest, "unit: record-format:0097 fp\n").unwrap();
+    let prompt = format!("Run your check on the bundle {}", manifest.display());
+    assert_eq!(record_round(&root, &prompt, "r1", 1000.0), "");
+    assert_eq!(record_round(&root, &prompt, "r2", 1001.0), "");
+    std::fs::create_dir_all(root.join("specs/998-y")).unwrap();
+    std::fs::write(
+        root.join(".specify/feature.json"),
+        r#"{"feature_directory": "specs/998-y"}"#,
+    )
+    .unwrap();
+    let third = record_round(&root, &prompt, "r3", 1002.0);
+    // the third round is held under the next feature
+    assert!(third.contains("round 3 of `record-format` on q:0097 passes its cap of 2"));
+    let s = state(&root);
+    assert_eq!(s["rounds"]["record-format|q:0097"], json!(2));
+    assert_eq!(s["round_home"]["record-format|q:0097"], json!("999-x"));
+    let owed = load(&root.join(".git/arbiter-owed.json"));
+    // filed under the feature its count began in, where its ruling is read
+    assert_eq!(
+        owed["round:record-format|q:0097@3"]["feature"],
+        json!("999-x")
+    );
+    // make arbiter-bundle BATCH=1 bundles it under the active feature
+    assert_eq!(
+        crate::checks::arbiter::batch_triggers(&root, &[]),
+        ["round:record-format|q:0097@3"]
+    );
+    std::fs::write(
+        root.join("specs/999-x/arbiter.jsonl"),
+        "{\"trigger\": \"round:record-format|q:0097@3\", \"ruling\": \"continue\"}\n",
+    )
+    .unwrap();
+    let path = root.join(".git/arbiter-owed.json");
+    save(&path, &json!({})).unwrap();
+    // the continue ruled in its home feature lifts the hold under the next
+    assert_eq!(record_round(&root, &prompt, "r4", 1003.0), "");
 }

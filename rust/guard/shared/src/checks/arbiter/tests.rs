@@ -170,6 +170,30 @@ fn a_held_gate_and_a_batch_are_told_apart() {
             "round:e|q:5@3 (feature 000-other)"
         ]
     );
+    // a record check's round follows its unit (451 T227): another feature's holds that unit's dispatch and joins the batch
+    owe(
+        &d,
+        &json!({"round:record-format|q:7@3": {"kind": "round", "unit": "record-format|q:7", "feature": "000-other"}}),
+    );
+    assert!(aside(&d).is_empty());
+    assert_eq!(
+        blocking(&d, "record-format|q:7", false),
+        ["round:record-format|q:7@3"]
+    );
+    assert_eq!(batch_triggers(&d, &[]), ["round:record-format|q:7@3"]);
+    owe(
+        &d,
+        &json!({
+            "round:c|q:1@3": {"kind": "round", "unit": "c|q:1", "feature": "999-x"},
+            "round:d|q:2@3": {"kind": "round", "unit": "d|q:2", "feature": "999-x"},
+            "round:spec-fidelity|999-x#1@6": {"kind": "round", "unit": "s", "feature": "999-x"},
+            "round:e|q:5@3": {"kind": "round", "unit": "e|q:5", "feature": "000-other"},
+            "reversal:a": {"kind": "reversal", "unit": "x"},
+            "cascade@1": {"kind": "cascade", "feature": ""},
+            "red-gate@t": {"kind": "red-gate", "feature": "000-other"},
+            "red-gate@u": {"kind": "red-gate", "feature": "999-x"},
+        }),
+    );
     assert_eq!(
         blocking(&d, "c|q:1", false),
         ["cascade@1", "reversal:a", "round:c|q:1@3"]

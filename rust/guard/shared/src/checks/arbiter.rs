@@ -125,9 +125,23 @@ pub fn owed(root: &Path) -> Map<String, Value> {
     }
 }
 
+/// A record check's round on a page or pop-up (`round:<check>|q:NNNN@N`, `...|modal:<kind>/<name>@N`): its count follows its unit,
+/// whatever feature is active (451 T227: record-format's rounds on 0097 were counted under one feature and unseen under the next),
+/// so its owed row holds that unit's dispatch and joins the batch under every feature.
+fn record_round(v: &Value) -> bool {
+    text(v, "kind") == "round"
+        && text(v, "unit")
+            .split_once('|')
+            .is_some_and(|(check, subject)| {
+                super::rounds::PAGE_CHECKS.contains(&check)
+                    && (subject.starts_with("q:") || subject.starts_with("modal:"))
+            })
+}
+
 fn mine(root: &Path, v: &Value, env: Env) -> bool {
     let d = feature_dir_in(root, "", env);
-    super::falsy(v.get("feature"))
+    record_round(v)
+        || super::falsy(v.get("feature"))
         || d.is_none()
         || d.is_some_and(|d| v.get("feature").and_then(Value::as_str) == Some(name_of(&d).as_str()))
 }
@@ -162,10 +176,14 @@ pub fn rulings(root: &Path, trigger: &str) -> Map<String, Value> {
 /// [`rulings`] with its environment given (feature 451 T38).
 #[must_use]
 pub fn rulings_in(root: &Path, trigger: &str, env: Env) -> Map<String, Value> {
+    feature_dir_in(root, trigger, env).map_or_else(Map::new, |d| rulings_of(&d))
+}
+
+/// `{trigger: its ruling}` of the feature directory `d`'s `arbiter.jsonl`: a record check's round reads its unit's home feature, the
+/// one its count began in, whatever feature is active (451 T227).
+#[must_use]
+pub fn rulings_of(d: &Path) -> Map<String, Value> {
     let mut out = Map::new();
-    let Some(d) = feature_dir_in(root, trigger, env) else {
-        return out;
-    };
     for line in super::reply::py_lines(
         &std::fs::read_to_string(d.join("arbiter.jsonl")).unwrap_or_default(),
     ) {
@@ -202,7 +220,13 @@ pub fn round_no(trigger: &str) -> u64 {
 /// active feature's (451 T240: a plan round's `continue` went unread while another feature was active, so its hold never lifted).
 #[must_use]
 pub fn continues(root: &Path, prefix: &str, after: u64) -> u64 {
-    let n = rulings(root, prefix)
+    continues_of(&rulings(root, prefix), prefix, after)
+}
+
+/// [`continues`] over rulings already read.
+#[must_use]
+pub fn continues_of(rulings: &Map<String, Value>, prefix: &str, after: u64) -> u64 {
+    let n = rulings
         .iter()
         .filter(|(t, r)| {
             t.starts_with(prefix) && text(r, "ruling") == "continue" && round_no(t) > after
@@ -224,7 +248,13 @@ fn lapsed_one(r: &Value, content: Option<&str>) -> bool {
 /// The ruling that closed the unit, or ""; with `content`, a ruling bound to another `content_key` has lapsed.
 #[must_use]
 pub fn closed(root: &Path, prefix: &str, content: Option<&str>) -> String {
-    rulings(root, prefix)
+    closed_of(&rulings(root, prefix), prefix, content)
+}
+
+/// [`closed`] over rulings already read.
+#[must_use]
+pub fn closed_of(rulings: &Map<String, Value>, prefix: &str, content: Option<&str>) -> String {
+    rulings
         .iter()
         .find(|(t, r)| t.starts_with(prefix) && is_closing(r) && !lapsed_one(r, content))
         .map_or_else(String::new, |(_, r)| text(r, "ruling").to_owned())
@@ -624,17 +654,48 @@ pub fn trip_as(
         (kind, unit, detail),
         &Value::Null,
         "",
-        Filer { who, filed },
+        Filer {
+            who,
+            filed,
+            home: None,
+        },
         &crate::env::opt,
     )
     .unwrap_or(false)
 }
 
-/// Who filed a trigger, and the feature to file it under where its root names none.
+/// [`trip`] for a record check's round, filed under its unit's home feature `home` (a directory under `specs/`), where its rulings
+/// are read, whatever feature is active (451 T227). False where it is not new or could not be recorded.
+#[must_use]
+pub fn trip_under(
+    root: &Path,
+    home: &Path,
+    trigger: &str,
+    (kind, unit, detail): (&str, &str, &str),
+    when: &Value,
+) -> bool {
+    let filer = Filer {
+        home: Some(home),
+        ..Filer::default()
+    };
+    try_trip_row(
+        root,
+        trigger,
+        (kind, unit, detail),
+        when,
+        "",
+        filer,
+        &crate::env::opt,
+    )
+    .unwrap_or(false)
+}
+
+/// Who filed a trigger, the feature to file it under where its root names none, and a record round's home feature, filed under first.
 #[derive(Clone, Copy, Default)]
 struct Filer<'a> {
     who: Who<'a>,
     filed: &'a str,
+    home: Option<&'a Path>,
 }
 
 fn try_trip_row(
@@ -647,13 +708,21 @@ fn try_trip_row(
     env: Env,
 ) -> Result<bool, String> {
     let who = filer.who;
-    if rulings_in(root, trigger, env).contains_key(trigger) {
+    let ruled = filer
+        .home
+        .map_or_else(|| rulings_in(root, trigger, env), rulings_of);
+    if ruled.contains_key(trigger) {
         return Ok(false);
     }
     // FILED UNDER A FEATURE OR NOT AT ALL (feature 451 T179): a row with feature "" is every feature's to `mine` - the mirror's
     // `reversal:...context_cap_hooks.rs`, filed so on 2026-11-20, held every builder's check dispatch for days (observed 2026-11-23)
-    let feature =
-        feature_dir_in(root, trigger, env).map_or_else(|| filer.filed.to_owned(), |d| name_of(&d));
+    let feature = filer.home.map_or_else(
+        || {
+            feature_dir_in(root, trigger, env)
+                .map_or_else(|| filer.filed.to_owned(), |d| name_of(&d))
+        },
+        name_of,
+    );
     if feature.is_empty() {
         return Err(format!("{trigger}: no feature to file it under - none is active here (.specify/feature.json) and the trigger names none"));
     }

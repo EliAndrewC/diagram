@@ -195,7 +195,7 @@ fn the_round_counters() {
         &root,
         &json!({"rounds": {"quote-check|q:0094": 3, "record-format|q:0094": 2}, "rebased": {"quote-check|q:0094": {"n": 1}}}),
     );
-    assert!(round_counter(&root, "quote-check|q:0094")[0].contains("3 round(s) counted in this feature; a new change rebased the count at round 1 (`hm_checks.py`, the cap ROUND_CAP = 2"));
+    assert!(round_counter(&root, "quote-check|q:0094")[0].contains("3 round(s) counted; a new change rebased the count at round 1 (`rust/guard/shared/src/checks/rounds.rs`, the cap ROUND_CAP = 2"));
     assert!(!round_counter(&root, "record-format|q:0094")[0].contains("rebased"));
     put(&root, ".git/checks-open.json", "not json");
     assert!(round_counter(&root, "quote-check|q:0094").is_empty());

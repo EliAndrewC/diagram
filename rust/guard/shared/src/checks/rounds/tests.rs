@@ -171,7 +171,7 @@ fn the_cap_refuses_a_repeat_and_an_arbiter_lifts_it() {
     let root = clone_at("cap");
     let mut state = repeating_state(2, "/m/MANIFEST.md");
     let msg = dispatch(&mut state, &req("n", "quote-check", MANIFEST, Some(&root)));
-    assert!(msg.contains("round 3 of `quote-check` on q:0105 in this feature passes its cap of 2"));
+    assert!(msg.contains("round 3 of `quote-check` on q:0105 passes its cap of 2"));
     assert!(std::fs::read_to_string(root.join(".git/arbiter-owed.json"))
         .unwrap()
         .contains("round:quote-check|q:0105@3"));
@@ -443,12 +443,21 @@ fn first_looks_and_fresh_readings_are_no_repeat() {
         dispatch(&mut own, &req("n", "quote-check", MANIFEST, Some(&root))),
         ""
     );
-    let mut first = json!({"seen": {"quote-check|q:0105": [key("one fact.")]}, "rounds": {"quote-check|q:0105": 2}, "notes_read": {"quote-check|q:0105": ["*"]}});
+    let mut first = json!({"seen": {"quote-check|q:0105": [key("one fact.")]}, "own_edits": {"record-format|q:0105": ["A brand new sentence."]}, "rounds": {"quote-check|q:0105": 2}, "notes_read": {"quote-check|q:0105": ["*"]}});
     assert_eq!(
         dispatch(&mut first, &req("n", "quote-check", MANIFEST, Some(&root))),
         ""
     );
     assert_eq!(first["dispatches"]["n"]["counted"], json!([]));
+    // a sentence no check's EDIT carries was written by hand between rounds: the fix loop, a repeat (451 T227)
+    let mut by_hand = json!({"seen": {"quote-check|q:0105": [key("one fact.")]}, "rounds": {"quote-check|q:0105": 2}, "notes_read": {"quote-check|q:0105": ["*"]}});
+    assert_ne!(
+        dispatch(
+            &mut by_hand,
+            &req("n", "quote-check", MANIFEST, Some(&root))
+        ),
+        ""
+    );
     let mut seen_all = json!({"seen": {"quote-check|q:0105": [key("one fact."), key("A brand new sentence.")]}, "rounds": {"quote-check|q:0105": 2}, "notes_read": {"quote-check|q:0105": ["*"]}});
     assert_ne!(
         dispatch(
@@ -761,4 +770,92 @@ fn a_reversal_refuses_its_own_builders_dispatch_and_lets_another_builders_throug
         by: "b1",
     };
     assert!(dispatch(&mut json!({}), &own).contains("reversal:/f"));
+}
+
+/// One round of `modal-form` on the barracks pop-up as it ran on 2026-11-25: dispatched, launched and returned with `reply`.
+fn barracks_round(state: &mut Value, root: &Path, tid: &str, reply: &str) -> String {
+    let mut ask = req(
+        tid,
+        "modal-form",
+        "unit: modal-form:sheet/barracks fp\n",
+        Some(root),
+    );
+    ask.manifest = "/tmp/l7r-check/modal-sheet-barracks-modal-form/MANIFEST.md";
+    let said = dispatch(state, &ask);
+    if said.is_empty() {
+        launched(state, tid, &format!("ag-{tid}"), true, "", None);
+        returned(state, &format!("ag-{tid}"), reply, None);
+        state["dispatches"][tid]["state"] = json!("answered");
+    }
+    said
+}
+
+#[test]
+fn a_session_s_own_fixes_between_rounds_count_the_next_round() {
+    // 451 T227's second case, 2026-11-25: modal-form ran three rounds on sheet/barracks in four minutes and none was held - the
+    // first round's EDIT was applied inside a longer sentence and the session added, then took out, a Guesses bullet by hand, and
+    // each round read its unread sentences as a first look; a first look is text OTHER checks' EDITs added (374 wave 120)
+    let root = clone_at("barracks");
+    let modal = root.join("l7r/diagram/interactive/assets/modals/sheet/barracks.md");
+    std::fs::create_dir_all(modal.parent().unwrap()).unwrap();
+    let head = "A rowhouse was a long, narrow building. A country jin'ya's rows could be thatched, as Sayama's were,\n";
+    let first = format!("{head}and a gate rowhouse tiled; one row has earth walls as it stands today, and what an office's staff row was walled with is not recorded.\n\nGuesses:\n- {{0097#many-men-share-dwelling}}\n- {{0116#stable-stands-smaller-than}}\n");
+    std::fs::write(&modal, &first).unwrap();
+    let mut state = json!({"feature": "999-x"});
+    let edit = "modal-form: barracks - 1 finding\n\nEDIT l7r/diagram/interactive/assets/modals/sheet/barracks.md\n<<<\nand a gate rowhouse tiled; one row has earth walls as it stands today\n===\nand a gate rowhouse was tiled; one row has earth walls as it stands today\n>>>\n";
+    assert_eq!(barracks_round(&mut state, &root, "r1", edit), "");
+    let applied = first.replace("rowhouse tiled", "rowhouse was tiled");
+    let by_hand = applied.replace(
+        "- {0116#",
+        "- {0097#barracks-length-ceiling}\n- {0097#row-of-48-ft}\n- {0116#",
+    );
+    std::fs::write(&modal, &by_hand).unwrap();
+    assert_eq!(
+        barracks_round(&mut state, &root, "r2", "modal-form: barracks - 1 FIX"),
+        ""
+    );
+    // the round after the session's own fixes is a repeat
+    assert_eq!(
+        state["dispatches"]["r2"]["counted"],
+        json!(["modal-form|modal:sheet/barracks"])
+    );
+    std::fs::write(&modal, by_hand.replace("- {0097#row-of-48-ft}\n", "")).unwrap();
+    let third = barracks_round(&mut state, &root, "r3", "modal-form: barracks - 0 FIX");
+    // the third round is held for the round arbiter
+    assert!(third.contains("round 3 of `modal-form` on modal:sheet/barracks passes its cap of 2"));
+    let other = clone_at("barracks-other");
+    let modal = other.join("l7r/diagram/interactive/assets/modals/sheet/barracks.md");
+    std::fs::create_dir_all(modal.parent().unwrap()).unwrap();
+    std::fs::write(&modal, &first).unwrap();
+    let mut state = json!({"feature": "999-x"});
+    assert_eq!(
+        barracks_round(&mut state, &other, "r1", "modal-form: 0 findings"),
+        ""
+    );
+    let research = "modal-research: barracks\n\nEDIT l7r/diagram/interactive/assets/modals/sheet/barracks.md\n<<<\nas it stands today\n===\nas it stands today. A second row was boarded\n>>>\n";
+    let mut ask = req(
+        "x1",
+        "modal-research",
+        "unit: modal-research:sheet/barracks fp\n",
+        Some(&other),
+    );
+    ask.manifest = "/m/research/MANIFEST.md";
+    assert_eq!(dispatch(&mut state, &ask), "");
+    launched(&mut state, "x1", "ag-x1", true, "", None);
+    returned(&mut state, "ag-x1", research, None);
+    state["dispatches"]["x1"]["state"] = json!("answered");
+    std::fs::write(
+        &modal,
+        first.replace(
+            "as it stands today",
+            "as it stands today. A second row was boarded",
+        ),
+    )
+    .unwrap();
+    assert_eq!(
+        barracks_round(&mut state, &other, "r2", "modal-form: 0 findings"),
+        ""
+    );
+    // a sentence only another check's EDIT added is still a first look
+    assert_eq!(state["dispatches"]["r2"]["counted"], json!([]));
 }

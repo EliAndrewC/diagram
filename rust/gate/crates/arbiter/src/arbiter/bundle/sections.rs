@@ -416,7 +416,7 @@ fn record_round_counter(root: &Path, unit: &str) -> Vec<String> {
             field(b, "n", "0")
         )
     });
-    vec![format!("## The round counter\n\nrecord check `{unit}`: {n} round(s) counted in this feature{since} (`hm_checks.py`, the cap ROUND_CAP = {ROUND_CAP} past the rebase).\n")]
+    vec![format!("## The round counter\n\nrecord check `{unit}`: {n} round(s) counted{since} (`rust/guard/shared/src/checks/rounds.rs`, the cap ROUND_CAP = {ROUND_CAP} past the rebase).\n")]
 }
 
 /// What the pair guard counted for `unit`'s round cap (feature 374 batch 5); a record check's from `hm_checks.py`.

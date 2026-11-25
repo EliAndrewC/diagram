@@ -28,7 +28,8 @@ pub const PAGE_CHECKS: [&str; 10] = [
     "modal-research",
     "modal-depiction",
 ];
-/// Rounds a check may have on one subject in one feature before the round arbiter rules (FR-010).
+/// Rounds a check may have on one subject before the round arbiter rules (FR-010), whatever feature is active: the count follows
+/// its unit (451 T227, record-format on 0097 dispatched four times across features on 2026-11-24 with no tripwire).
 pub const ROUND_CAP: u64 = 2;
 /// A check silent this long is reported stale and may be closed by hand.
 const STALE_S: f64 = 90.0 * 60.0;
@@ -404,6 +405,32 @@ fn sentence_key(s: &str) -> String {
     sha1::hex(s.as_bytes()).chars().take(12).collect()
 }
 
+/// The collapsed sentences of the EDIT blocks recorded for `unit` (its check's own proposals on its subject).
+fn edit_sentences(state: &Value, unit: &str) -> Vec<String> {
+    let edits: Vec<String> = state
+        .get("own_edits")
+        .and_then(|m| m.get(unit))
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter_map(|n| n.as_str().map(str::to_owned))
+        .collect();
+    sentences(&edits)
+}
+
+/// Whether sentence `s` carries an EDIT's words: one of its sentences inside `s`, or `s` inside one (an EDIT replaces a span inside a
+/// sentence as often as whole sentences).
+fn from_edits(s: &str, edits: &[String]) -> bool {
+    edits
+        .iter()
+        .any(|e| s.contains(e.as_str()) || e.contains(s))
+}
+
+/// A first look, not a repeat round: every sentence this check has not read came from ANOTHER check's EDITs on the subject, and none
+/// from its own (374 wave 120, the round arbiter on 0190: the depiction checks' text). Text the session wrote by hand between rounds -
+/// its own fix of a finding that came with no EDIT - is the fix loop, so a repeat (451 T227: modal-form ran three rounds on
+/// sheet/barracks on 2026-11-25, each read as a first look, so none was held; the first round's own EDIT, applied inside a longer
+/// sentence, was not recognized as its own).
 fn first_look(state: &Value, unit: &str, current: &[String]) -> bool {
     let seen: BTreeSet<String> = state
         .get("seen")
@@ -420,16 +447,34 @@ fn first_look(state: &Value, unit: &str, current: &[String]) -> bool {
         .iter()
         .filter(|s| !seen.contains(&sentence_key(s)))
         .collect();
-    let own = state
+    let (check, subject) = unit.split_once('|').unwrap_or((unit, ""));
+    let own = edit_sentences(state, unit);
+    let others: Vec<String> = state
         .get("own_edits")
-        .and_then(|m| m.get(unit))
-        .and_then(Value::as_array)
+        .and_then(Value::as_object)
         .into_iter()
         .flatten()
-        .map(|n| collapsed(n.as_str().unwrap_or("")))
-        .collect::<Vec<_>>()
-        .join(" ");
-    !unseen.is_empty() && !unseen.iter().any(|s| own.contains(s.as_str()))
+        .filter(|(k, _)| {
+            k.split_once('|')
+                .is_some_and(|(c, s)| c != check && s == subject)
+        })
+        .flat_map(|(k, _)| edit_sentences(state, k))
+        .collect();
+    !unseen.is_empty()
+        && !unseen.iter().any(|s| from_edits(s, &own))
+        && unseen.iter().all(|s| from_edits(s, &others))
+}
+
+/// The feature directory a unit's rounds are filed and ruled in: the feature its count began in (`round_home`, else the state's), so
+/// a ruling is read there whatever feature is active (451 T227); None where this clone has no such directory.
+fn home_dir(state: &Value, root: &Path, unit: &str) -> Option<std::path::PathBuf> {
+    let home = state
+        .get("round_home")
+        .and_then(|m| m.get(unit))
+        .and_then(Value::as_str)
+        .unwrap_or_else(|| text(state, "feature"));
+    let d = root.join("specs").join(home);
+    (!home.is_empty() && d.is_dir()).then_some(d)
 }
 
 /// The bundle a split bundle's `batch-N/MANIFEST.md` belongs to, or "".
@@ -576,7 +621,11 @@ fn repeat(
 fn cap_refusal(state: &mut Value, ask: &Dispatch, root: &Path, s: &str, n: u64) -> String {
     let unit = format!("{}|{s}", ask.check);
     let prefix = format!("round:{unit}@");
-    let shut = arbiter::closed(root, &prefix, None);
+    let home = home_dir(state, root, &unit);
+    let rulings = home
+        .as_deref()
+        .map_or_else(|| arbiter::rulings(root, &prefix), arbiter::rulings_of);
+    let shut = arbiter::closed_of(&rulings, &prefix, None);
     let moved = if shut.is_empty() {
         String::new()
     } else {
@@ -607,19 +656,22 @@ fn cap_refusal(state: &mut Value, ask: &Dispatch, root: &Path, s: &str, n: u64) 
     } else {
         0
     };
-    let cap = n0 + ROUND_CAP + arbiter::continues(root, &prefix, n0);
+    let cap = n0 + ROUND_CAP + arbiter::continues_of(&rulings, &prefix, n0);
     if n >= cap {
-        let _ = arbiter::trip(
-            root,
-            &format!("round:{unit}@{}", n + 1),
-            "round",
-            &unit,
-            &format!("round {} of {} on {s}", n + 1, ask.check),
-            &json!(ask.now),
-            "",
-        );
+        let trigger = format!("round:{unit}@{}", n + 1);
+        let detail = format!("round {} of {} on {s}", n + 1, ask.check);
+        let _ = match home.as_deref() {
+            Some(h) => arbiter::trip_under(
+                root,
+                h,
+                &trigger,
+                ("round", &unit, &detail),
+                &json!(ask.now),
+            ),
+            None => arbiter::trip(root, &trigger, "round", &unit, &detail, &json!(ask.now), ""),
+        };
         return format!(
-            "round {} of `{}` on {s} in this feature passes its cap of {cap} - {}",
+            "round {} of `{}` on {s} passes its cap of {cap} - {}",
             n + 1,
             ask.check,
             arbiter::refusal(&[format!("round:{unit}@{}", n + 1)], Some(root))
@@ -843,7 +895,13 @@ pub fn returned(state: &mut Value, agent_id: &str, reply_text: &str, keep: Optio
                 .flatten()
                 .filter_map(|v| v.as_str().map(str::to_owned))
                 .collect();
+            let feature = text(state, "feature").to_owned();
             for unit in counted {
+                // the feature its count began in, where its rounds are filed and ruled (451 T227)
+                let homes = map_mut(state, "round_home");
+                if !feature.is_empty() && !homes.contains_key(&unit) {
+                    homes.insert(unit.clone(), json!(feature));
+                }
                 let rounds = map_mut(state, "rounds");
                 let n = rounds.get(&unit).and_then(Value::as_u64).unwrap_or(0);
                 rounds.insert(unit, json!(n + 1));

@@ -217,7 +217,20 @@ fn handle_locked(mode: &str, payload: &Value, path: &Path, t: f64) -> String {
     }
     let feature = current_feature(path, payload);
     if state.get("feature").and_then(Value::as_str) != Some(feature.as_str()) {
-        state = json!({"feature": feature, "dispatches": state.get("dispatches").cloned().unwrap_or_else(|| json!({}))});
+        // A RECORD CHECK'S COUNT FOLLOWS ITS UNIT, whatever feature is active (451 T227): a change of feature wiped every count, so
+        // record-format's rounds on 0097 in one feature were unseen in the next and no third round was held (2026-11-24). Nothing is
+        // wiped now; a unit counted before keeps the feature it was counted in as its home, where its triggers are filed and ruled.
+        let old = text(&state, "feature").to_owned();
+        let units: Vec<String> = state
+            .get("rounds")
+            .and_then(Value::as_object)
+            .map(|m| m.keys().cloned().collect())
+            .unwrap_or_default();
+        let homes = map_mut(&mut state, "round_home");
+        for unit in units.into_iter().filter(|_| !old.is_empty()) {
+            homes.entry(unit).or_insert_with(|| json!(old));
+        }
+        state["feature"] = json!(feature);
     }
     let ti = tool_input(payload);
     let tool = text(payload, "tool_name");

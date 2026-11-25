@@ -201,7 +201,7 @@ fn rounds_section(
         }
     )];
     if !n.is_empty() {
-        lines.push(format!("The owed round is the counter's round {n}: it counts the dispatches let through on this unit in this feature, a first reading of new notes not counted, so the list below - every dispatch kept - may run longer.\n"));
+        lines.push(format!("The owed round is the counter's round {n}: it counts the dispatches let through on this unit under any feature, a first reading of new notes or of text only other checks' EDITs added not counted, so the list below - every dispatch kept - may run longer.\n"));
     }
     let mut missing = Vec::new();
     for (i, (v, marked)) in rounds
@@ -525,18 +525,11 @@ fn batch_dir(trigger: &str) -> String {
     tail.trim_start_matches('-').to_owned()
 }
 
-/// The rounds the dispatch counter holds for `unit` in the active feature; 0 where it holds none.
+/// The rounds the dispatch counter holds for `unit`, whatever feature is active - the count follows its unit (451 T227); 0 where it
+/// holds none.
 fn counted(root: &Rooted, unit: &str) -> u64 {
     let state =
         load(&state_path(&root.to_string_lossy()).unwrap_or_else(|| PathBuf::from("/nonexistent")));
-    let Some(d) = core::feature_dir_in(root, "", root.reader()) else {
-        return 0;
-    };
-    if state.get("feature").and_then(Value::as_str)
-        != Some(&*d.file_name().unwrap_or_default().to_string_lossy())
-    {
-        return 0;
-    }
     state
         .get("rounds")
         .and_then(|r| r.get(unit))

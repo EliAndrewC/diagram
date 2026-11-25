@@ -1608,6 +1608,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T227 (page session P7's cascade, 2026-11-24: record-format was dispatched on 0097 four times across features and the counter held 0 rounds; 2026-11-25: modal-form ran three rounds on sheet/barracks in four minutes and `make arbiter-bundle BATCH=1` said no round trigger was owed)": {
+   "sha256": "27f686d922b3428b8a35e43b24ed7ea2668ea7bd90bce17dba268e9cc67e5807",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T227 Approach (checklist part A)": {
+   "sha256": "dae57b684e177e47d15b7d1844f2f8c586e87b0ee99622fb0bd77987b489306f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -21282,6 +21294,65 @@
      "why": "A record of the exits item 6 set, not a new decision; nothing deferred (found and left: none)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T227 (page session P7's cascade, 2026-11-24: record-format was dispatched on 0097 four times across features and the counter held 0 rounds; 2026-11-25: modal-form ran three rounds on sheet/barracks in four minutes and `make arbiter-bundle BATCH=1` said no round trigger was owed)",
+    "### T227 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T227-1 no wipe on a feature change; a unit's home feature",
+     "summary": "handle_locked no longer replaces the check state on a feature switch; every key stays keyed by unit or subject; a unit's count keeps a home (round_home, the feature its first round was counted in, or the state's old feature for a unit counted before the change); its triggers are filed, and its continue/accept read, under that home; an owed record round is held and batched by every feature.",
+     "class": "within",
+     "why": "This repairs the tripwire the root CLAUDE.md and 375 FR-010/FR-011 already require: the same check on the same thing reaching its cap dispatches the arbiter, one binding ruling per unit per trigger. Before this fix a feature switch reset the count, so the cap never fired. Choosing a home over reading every feature's log is a design choice, and the reason the plan gives (an old continue must not lift a new cap, and a new trigger must not read as already ruled) protects FR-011's one-ruling-per-trigger. It narrows nothing that was asked."
+    },
+    {
+     "id": "T227-2 first look only for other checks' EDIT text",
+     "summary": "A round is uncounted as a first look only when every unread sentence carries another check's EDIT words on that subject and none carries its own, matched sentence by sentence (containment either way). Hand fixes the session made between rounds count as the fix loop.",
+     "class": "within",
+     "why": "This makes the code do what the 374 wave 120 / 0190 rule says it does ('text OTHER checks' edits added'). The code tested 'anything not its own', and a span EDIT could never match a whole sentence, so the measured barracks rounds 2 and 3 went uncounted. The fix restores a ruled rule and widens nothing past it."
+    },
+    {
+     "id": "T227-3 the arbiter bundle's count read under any feature",
+     "summary": "arbiter/bundle.rs counted no longer returns 0 when the state's feature differs from the active one; its counter section and rounds line drop 'in this feature'.",
+     "class": "within",
+     "why": "A defect fix that follows from T227-1: the bundle the arbiter rules from (375 FR-011) must show the rounds actually counted. Before this, misnumbered named @1 for a unit on round 3."
+    },
+    {
+     "id": "T227-4 the refusal's wording",
+     "summary": "The cap refusal reads 'round N of <check> on <subject> passes its cap of C - ...', with 'in this feature' cut.",
+     "class": "within",
+     "why": "The message is reworded to match the new behavior and still names make arbiter-bundle, the compliant command. A wording change, not a change of scope."
+    },
+    {
+     "id": "T227-5 ROUND_CAP stays 2",
+     "summary": "The cap constant is unchanged.",
+     "class": "within",
+     "why": "375 FR-010 caps record checks at two rounds, the same as review checks."
+    },
+    {
+     "id": "T227-6 found and left: the batch rule restarts the count on any origin/main move (filed T248, lands before T22)",
+     "summary": "new_cause restarts a unit's count whenever origin/main moves. With several sessions landing, a third round in one batch is rare, so the 0097 record-format case that prompted this task would still not have been held. Deferred to T248 with a reason, its id and its order.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the task's motivating case: T227 alone would not have caught P7's 0097 cascade. It is still a legitimate deferral. It is a separate defect in a separately ruled rule (c5db336fd3, 2026-10-12, 'count afresh only in a later batch'). Changing that rule is not this task's fix, and it needs its own measured definition of when the subject has moved. Folding it in here would silently overrule a ruled rule. The deferral meets 451 FR-009's form: why it is not fixed here, the filed task id, and its order ('lands before T22'). Nothing in the GM's request asks for it to be fixed in this task rather than in its own. The defect is filed and sequenced, not dropped."
+    },
+    {
+     "id": "T227-7 found and left: the record bundle's 'Earlier rounds' still lists only this feature's rounds (not filed)",
+     "summary": "bundle/earlier.rs (feature 393) shows a reviewer only the active feature's earlier rounds, with rulings read from the active feature. Left as it is and not filed, because it has no effect on the cap and matches 393's contract wording.",
+     "class": "within",
+     "why": "Under the defect rule (constitution XIV, the GM 2026-11-19) this is not a wrong outcome for what T227 fixes. The cap, the trigger and the arbiter's bundle (T227-1 and T227-3) now all follow the unit across features. This section is what a record reviewer is shown, and it does what feature 393 specified. Leaving behavior that matches its own contract is not a narrowing. If someone later shows a reviewer reading wrongly because of it, that would be a defect to file then."
+    },
+    {
+     "id": "T227-8 not performance work",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "The task holds a review round. Its only added cost is one extra arbiter.jsonl read on a capped repeat. Scheduling under 451 FR-013 is unaffected."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -34007,6 +34078,63 @@
      "summary": "Item 9 records crate-checks green on owed, claims, record, measure and the new test red with HEAD's reader, green with the new one.",
      "class": "within",
      "why": "A record of the exits item 6 set, not a new decision; nothing deferred (found and left: none)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T227": {
+   "section_sha256": "8d73fd2bff97faf86fc5a05f96c2c887481ea7a7115484c92929f65b2fffa28f",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T227-1 no wipe on a feature change; a unit's home feature",
+     "summary": "handle_locked no longer replaces the check state on a feature switch; every key stays keyed by unit or subject; a unit's count keeps a home (round_home, the feature its first round was counted in, or the state's old feature for a unit counted before the change); its triggers are filed, and its continue/accept read, under that home; an owed record round is held and batched by every feature.",
+     "class": "within",
+     "why": "This repairs the tripwire the root CLAUDE.md and 375 FR-010/FR-011 already require: the same check on the same thing reaching its cap dispatches the arbiter, one binding ruling per unit per trigger. Before this fix a feature switch reset the count, so the cap never fired. Choosing a home over reading every feature's log is a design choice, and the reason the plan gives (an old continue must not lift a new cap, and a new trigger must not read as already ruled) protects FR-011's one-ruling-per-trigger. It narrows nothing that was asked."
+    },
+    {
+     "id": "T227-2 first look only for other checks' EDIT text",
+     "summary": "A round is uncounted as a first look only when every unread sentence carries another check's EDIT words on that subject and none carries its own, matched sentence by sentence (containment either way). Hand fixes the session made between rounds count as the fix loop.",
+     "class": "within",
+     "why": "This makes the code do what the 374 wave 120 / 0190 rule says it does ('text OTHER checks' edits added'). The code tested 'anything not its own', and a span EDIT could never match a whole sentence, so the measured barracks rounds 2 and 3 went uncounted. The fix restores a ruled rule and widens nothing past it."
+    },
+    {
+     "id": "T227-3 the arbiter bundle's count read under any feature",
+     "summary": "arbiter/bundle.rs counted no longer returns 0 when the state's feature differs from the active one; its counter section and rounds line drop 'in this feature'.",
+     "class": "within",
+     "why": "A defect fix that follows from T227-1: the bundle the arbiter rules from (375 FR-011) must show the rounds actually counted. Before this, misnumbered named @1 for a unit on round 3."
+    },
+    {
+     "id": "T227-4 the refusal's wording",
+     "summary": "The cap refusal reads 'round N of <check> on <subject> passes its cap of C - ...', with 'in this feature' cut.",
+     "class": "within",
+     "why": "The message is reworded to match the new behavior and still names make arbiter-bundle, the compliant command. A wording change, not a change of scope."
+    },
+    {
+     "id": "T227-5 ROUND_CAP stays 2",
+     "summary": "The cap constant is unchanged.",
+     "class": "within",
+     "why": "375 FR-010 caps record checks at two rounds, the same as review checks."
+    },
+    {
+     "id": "T227-6 found and left: the batch rule restarts the count on any origin/main move (filed T248, lands before T22)",
+     "summary": "new_cause restarts a unit's count whenever origin/main moves. With several sessions landing, a third round in one batch is rare, so the 0097 record-format case that prompted this task would still not have been held. Deferred to T248 with a reason, its id and its order.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the task's motivating case: T227 alone would not have caught P7's 0097 cascade. It is still a legitimate deferral. It is a separate defect in a separately ruled rule (c5db336fd3, 2026-10-12, 'count afresh only in a later batch'). Changing that rule is not this task's fix, and it needs its own measured definition of when the subject has moved. Folding it in here would silently overrule a ruled rule. The deferral meets 451 FR-009's form: why it is not fixed here, the filed task id, and its order ('lands before T22'). Nothing in the GM's request asks for it to be fixed in this task rather than in its own. The defect is filed and sequenced, not dropped."
+    },
+    {
+     "id": "T227-7 found and left: the record bundle's 'Earlier rounds' still lists only this feature's rounds (not filed)",
+     "summary": "bundle/earlier.rs (feature 393) shows a reviewer only the active feature's earlier rounds, with rulings read from the active feature. Left as it is and not filed, because it has no effect on the cap and matches 393's contract wording.",
+     "class": "within",
+     "why": "Under the defect rule (constitution XIV, the GM 2026-11-19) this is not a wrong outcome for what T227 fixes. The cap, the trigger and the arbiter's bundle (T227-1 and T227-3) now all follow the unit across features. This section is what a record reviewer is shown, and it does what feature 393 specified. Leaving behavior that matches its own contract is not a narrowing. If someone later shows a reviewer reading wrongly because of it, that would be a defect to file then."
+    },
+    {
+     "id": "T227-8 not performance work",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "The task holds a review round. Its only added cost is one extra arbiter.jsonl read on a capped repeat. Scheduling under 451 FR-013 is unaffected."
     }
    ],
    "verdict": "CLEAR"
