@@ -20,7 +20,7 @@ Guesses:
 Depiction: The map draws the marsh on the undrained low ground below the fields, its upper edge following the foot of
 the fields, and builds nothing on it, the ground being too wet. It runs straight along the slope rather than in the arc
 of a real fan's foot, a simplification: its reeds thin toward the margin and its ends bow outward downhill so the
-straight run does not read as an edge. Where a fan's fields narrow inward downhill, the marsh does not climb their side: its edge is set just below the lowest field at each point between the fields' lower corners, and past each corner it stays at that corner's level, as the real ground lay - a fan's springs came out along its foot, and its sides were among the land cleared early. The reeds are one small block repeated over a pale wet haze. Where the marsh
+straight run does not read as an edge. Where a fan's fields narrow inward downhill, the marsh does not climb their side: its edge is set just below the lowest field at each point between the fields' lower corners, as the real ground lay - a fan's springs came out along its foot, and its sides were among the land cleared early. Past each corner the marsh runs on a little, its edge held at that corner's level. The reeds are one small block repeated over a pale wet haze. Where the marsh
 meets the rough grass, a narrow mixed band lets grass and reed thin into each other along a rounded, waving edge - a
 drawing convention for the sedge and wet meadow that lay between the reed and dry ground - and no brush or pine stands
 inside. Where a stream or ditch crosses it, the reeds run to the water, and a band of denser, darker reeds lines each

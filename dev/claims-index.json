@@ -38210,25 +38210,23 @@
  "rust/phases/src/driver.rs::settlement_ground#the belt's ground kept": {
   "body": "95ec56bb0fcacda0",
   "claim": "the belt's ground kept - shelter-belts-on-a-villages-windward-side-bofurin.drawing: a clustered village shelters behind one belt along its windward edge, so its ground reaches past the band to the belt on the band's windward faces - behind it where its back faces the wind, round its windward end where the wind falls obliquely (Inashiro's and Mizuguchi's belts 52 and 54 percent outside the old strip, measured 2026-11-22, 449 T294), between it and the field where a declared fall into the wind backs it to the hill (GUESS, clustered-and-scattered-villages-shuson-sanson.drawing), on the margin's dry side alone (GUESS, `margins::belt_swept`)",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "e840545d429b2f43",
   "core": "a2f63d816917321f",
-  "date": "2026-11-22",
-  "note": "the strip and the swept belt are hulled against the map's own wind; the hill case and the dry-side-only rule are GUESSes the pages record as guesses",
+  "date": "2026-11-25",
+  "note": "hull reaches the belt on the map's own wind; the belt stays to windward under the hill-backed seat, a GUESS 0031 §85 records",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "1fc6cc6d67ef44a0",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
   "reads": "49dfcd9410aae564",
-  "research": "0f3710d56db49126",
+  "research": "f4343aef8ccd2050",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ab8b682cb0eace93",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:4b8db97a0ad26796",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:5e9ac2daf3925f70",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:70e1d65dbf9cecc4",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:dde93f148061b296"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:70e1d65dbf9cecc4"
   ],
-  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::settlement_ground#the settlement's ground": {
@@ -38642,15 +38640,15 @@
   "code": "1f4a8e02e888b397",
   "core": "c0eb557cc284495d",
   "date": "2026-11-25",
-  "note": "the cluster sits beside its paddy and the whole band is asked through on_band",
+  "note": "the whole band is asked through `on_band`, so the houses stand beside the paddy and off it",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
   "reads": "e649c74b3261f12e",
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ab8b682cb0eace93"
   ],
   "verdict": "IN-STEP"
  },
@@ -38768,15 +38766,15 @@
   "code": "0892d415893157ce",
   "core": "5e5c5aa33c391dd3",
   "date": "2026-11-25",
-  "note": "the band is asked from 0.8 of its half-depth on the near side, which is FIELD_IN_BAND_MAX of its full depth and the same dip ranked allows; the page gives no gap",
+  "note": "the band is asked from a tenth of its depth past the standoff out to its far edge, matching `ranked`'s held rectangle",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
   "reads": "b2ee704d3f2eb4be",
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ab8b682cb0eace93"
   ],
   "verdict": "IN-STEP"
  },
@@ -39175,16 +39173,16 @@
   "date": "2026-11-24",
   "note": "the hamlet rolls plot_size from a table of its own, and no form in it is even rows",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:8e7dc25140e55c18",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b63de3757149f3e3"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#a row's line, sides and wells": {
@@ -39216,32 +39214,34 @@
   "date": "2026-11-22",
   "note": "the table holds the attested round and elongated forms plus the crescent recorded as a GUESS, rolled per hamlet; no split, since a hamlet never splits",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the farm water": {
   "body": "adaf0910cc556575",
   "claim": "the farm water - GUESS: clustered-and-scattered-villages-shuson-sanson.drawing records a channel or a well at even odds as a guess",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d99da27d40868faf",
   "core": "3a50375d75cd3753",
   "date": "2026-11-24",
   "note": "channel or well at even odds, recorded as a guess",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:f1b6bb70334abd0d"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the grain drift": {
@@ -39253,14 +39253,14 @@
   "date": "2026-11-22",
   "note": "-8 to 8 degrees is within the hamlet's 8",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the intake and the brook's side": {
@@ -39298,19 +39298,21 @@
  "rust/phases/src/driver/plan.rs::KNOBS#the lane forms": {
   "body": "adaf0910cc556575",
   "claim": "the lane forms - GUESS: clustered-and-scattered-villages-shuson-sanson.drawing records the spine, the T, the Y and the cross as guesses",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8710ffe0fe67fe70",
   "core": "3a50375d75cd3753",
   "date": "2026-11-24",
   "note": "spine, T, Y and cross from a hamlet's own table, all recorded as guesses",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the lane web on no scattered settlement": {
@@ -39322,14 +39324,14 @@
   "date": "2026-11-24",
   "note": "`lane_web` is rolled only on \"not_dispersed\"",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the row's leeward groves": {
@@ -39341,16 +39343,16 @@
   "date": "2026-11-24",
   "note": "`row_shelter` is a linear-only roll at even odds between the two forms 0033 records, and no village belt is drawn for a row",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
-  "research": "083804a041af161d",
+  "research": "c29f985860f99754",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66",
    "0033-row-villages-resson.drawing.html:514e71a741d206f3"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the settlement form's shares": {
@@ -39362,15 +39364,15 @@
   "date": "2026-11-22",
   "note": "5, 3 and 2 of ten entries give half, three in ten and two in ten",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1aa166d76e3e06fe",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3197321e78d71dc5"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::LEFTOVER_FORMS#the leftover parcels": {
@@ -39533,15 +39535,15 @@
   "date": "2026-11-22",
   "note": "an even draw from the knob's table, seeded per hamlet and per knob",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#a declared bearing off a rolled fall": {
@@ -39605,16 +39607,17 @@
   "claim": "the fall backs the wind - DEVIATION clustered-and-scattered-villages-shuson-sanson.drawing: a rolled fall only from the falls that leave a windward margin (`water_frame::admitted`)",
   "code": "b1779106d65d39d1",
   "core": "938073f82ef5b7f4",
-  "date": "2026-11-24",
-  "note": "a rolled fall only from the admitted falls, the deviation 0031 records",
+  "date": "2026-11-25",
+  "note": "falls are rolled only from `admitted` (away from the wind or square across it), the deviation 0031 records",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
   "reads": "ef98c6245b68085e",
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:5d63bab526a39b1d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ab8b682cb0eace93"
   ],
   "verdict": "IN-STEP"
  },
@@ -42006,14 +42009,14 @@
   "code": "8f2d986648c85b08",
   "core": "2e0a108008029e92",
   "date": "2026-11-25",
-  "note": "90 ft above the lowest field near each point",
+  "note": "edge 90 ft above the lowest field near each point",
   "pages": {
-   "0057-marshes-and-wetlands-shitchi.drawing.html": "44b6eee49ca6ad4b"
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "19d30700b695abed"
   },
-  "research": "760323a72ab9946f",
+  "research": "b8612a365ea63683",
   "rests": [
    "0057-marshes-and-wetlands-shitchi.drawing.html:54ca08b790a43ab3",
-   "0057-marshes-and-wetlands-shitchi.drawing.html:cd3989989039bcad"
+   "0057-marshes-and-wetlands-shitchi.drawing.html:641826ef9fbccff6"
   ],
   "verdict": "IN-STEP"
  },
@@ -42023,14 +42026,14 @@
   "code": "54881d08061cc497",
   "core": "2e0a108008029e92",
   "date": "2026-11-25",
-  "note": "90 ft each side, as the page gives",
+  "note": "the fields' foot plus 90 ft each side",
   "pages": {
-   "0057-marshes-and-wetlands-shitchi.drawing.html": "44b6eee49ca6ad4b"
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "19d30700b695abed"
   },
-  "research": "760323a72ab9946f",
+  "research": "b8612a365ea63683",
   "rests": [
-   "0057-marshes-and-wetlands-shitchi.drawing.html:4cf27b58fdb08b33",
-   "0057-marshes-and-wetlands-shitchi.drawing.html:cd3989989039bcad"
+   "0057-marshes-and-wetlands-shitchi.drawing.html:19bd329c240de6ed",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:641826ef9fbccff6"
   ],
   "verdict": "IN-STEP"
  },
@@ -42048,20 +42051,19 @@
  },
  "rust/phases/src/driver/toe.rs::span#toe band width": {
   "body": "6d314aaf60d74536",
-  "claim": "toe band width - marshes-and-wetlands-shitchi: the springs at a fan's foot come out along its toe, so the band spans the foot from corner to corner; marshes-and-wetlands-shitchi.drawing gives the `PAD` of 90 ft each side (its \"as wide as the fields above it\" describes the band before 449 T432, owed a rewrite); with no foot (a polder) the rings' whole span and `PAD` past it",
-  "code": "276eff901b8c1c0c",
+  "claim": "toe band width - marshes-and-wetlands-shitchi: the springs at a fan's foot come out along its toe, so the band spans the foot from corner to corner; marshes-and-wetlands-shitchi.drawing: as wide as the fields' foot, from one lower corner to the other, with the `PAD` of 90 ft more on each side; with no foot (a polder) the rings' whole span and `PAD` past it",
+  "code": "cf13ed99595ff5dd",
   "core": "19f4c6dca800ffab",
   "date": "2026-11-25",
-  "note": "with a foot, `(l.0, r.0)` ± `PAD` spans the foot from corner to corner, which is §12's \"as wide as the fan\" with the springs \"along its toe\"; the 90 ft per side is §38's; with no foot, the rings' whole span ± `PAD` is what the claim says; it names the stale wording in §39 as owed a rewrite",
+  "note": "the band's width is taken from the foot's two lower corners, with `PAD` (90 ft) added on each side, as the drawing page sets it; with no foot it falls back to the rings' full span plus `PAD`, which follows the same rule",
   "pages": {
-   "0057-marshes-and-wetlands-shitchi.drawing.html": "44b6eee49ca6ad4b",
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "19d30700b695abed",
    "0057-marshes-and-wetlands-shitchi.html": "0f418f3e02998b72"
   },
   "reads": "71ad197d651377bf",
-  "research": "fc7e48c6d33e7b3a",
+  "research": "372e62efc9bd6703",
   "rests": [
-   "0057-marshes-and-wetlands-shitchi.drawing.html:4cf27b58fdb08b33",
-   "0057-marshes-and-wetlands-shitchi.drawing.html:cd3989989039bcad",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:641826ef9fbccff6",
    "0057-marshes-and-wetlands-shitchi.html:333d0510bcc598ae",
    "0057-marshes-and-wetlands-shitchi.html:a8e579c6e523611c"
   ],
@@ -42082,18 +42084,20 @@
  "rust/phases/src/driver/toe.rs::toe_band#flaring flanks": {
   "body": "2f27a13f7154de8b",
   "claim": "flaring flanks - marshes-and-wetlands-shitchi.drawing: part of the straight-band deviation, the band's ends bow outward downhill to the canvas's far edge",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8591122a6f339289",
   "core": "4f37e1407192fe1f",
   "date": "2026-11-25",
   "note": "the ends bow outward downhill to v_out, the recorded deviation",
   "pages": {
-   "0057-marshes-and-wetlands-shitchi.drawing.html": "44b6eee49ca6ad4b"
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "19d30700b695abed"
   },
   "reads": "61baf0c18f64a05d",
-  "research": "760323a72ab9946f",
+  "research": "b8612a365ea63683",
   "rests": [
    "0057-marshes-and-wetlands-shitchi.drawing.html:fb59dad7cefa1d14"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/toe.rs::toe_band#its search steps": {
@@ -42111,19 +42115,20 @@
  },
  "rust/phases/src/driver/toe.rs::toe_band#stops at the lower corners": {
   "body": "2f27a13f7154de8b",
-  "claim": "stops at the lower corners - marshes-and-wetlands-shitchi: the springs at a fan's foot come out along its toe and its sides are among the ground cleared early; marshes-and-wetlands-shitchi.drawing attests a wet side only on a valley floor against a hill foot, farmed as cold paddy - so the band stops at the fields' lower corners and no longer climbs a side that narrows downhill (449 T432); the drawing page's DEVIATION `toe-on-tapering-flank`, the wet ground climbing that side, describes the band before 449 T432 and is owed its removal",
-  "code": "d9c9f824ca342a95",
+  "claim": "stops at the lower corners - marshes-and-wetlands-shitchi: the springs at a fan's foot come out along its toe and its sides are among the ground cleared early; marshes-and-wetlands-shitchi.drawing: where the fields narrow inward downhill the wet ground does not climb their side but runs between the fields' two lower corners, ATTESTED (a wet side found only on a valley floor against a hill foot, farmed as cold paddy) - so the band stops at the fields' lower corners (449 T432)",
+  "code": "c6589d41d31d77de",
   "core": "4f37e1407192fe1f",
   "date": "2026-11-25",
-  "note": "`u < l.0 => return l.1` / `u > r.0 => return r.1` holds the edge at each corner's level, so the band no longer climbs a side that narrows downhill; this fits §8 (springs at the toe), §11 (sides \"farmed, not kept off\") and §43 (a wet side attested only on a valley floor against a hill foot); the claim names the stale deviation in §44 as owed its removal",
+  "note": "between the corners the edge follows the lowest field, and past each corner it is held at that corner's level, so the band never climbs the fields' side; the attestation matches the page (a wet side found only on a valley floor against a hill foot, farmed as cold paddy)",
   "pages": {
-   "0057-marshes-and-wetlands-shitchi.drawing.html": "44b6eee49ca6ad4b",
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "19d30700b695abed",
    "0057-marshes-and-wetlands-shitchi.html": "0f418f3e02998b72"
   },
   "reads": "61baf0c18f64a05d",
-  "research": "fc7e48c6d33e7b3a",
+  "research": "372e62efc9bd6703",
   "rests": [
-   "0057-marshes-and-wetlands-shitchi.drawing.html:289416c5e4600e59",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:6a0767c5d99b3652",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:a4e9ac2645ac3ea0",
    "0057-marshes-and-wetlands-shitchi.drawing.html:f5d77e4f4a9633c9",
    "0057-marshes-and-wetlands-shitchi.html:333d0510bcc598ae",
    "0057-marshes-and-wetlands-shitchi.html:823c99155c18891e"
@@ -42136,15 +42141,15 @@
   "code": "301233e89500e79c",
   "core": "4f37e1407192fe1f",
   "date": "2026-11-25",
-  "note": "past a corner the code returns the corner's own level (l.1/r.1); no page in the bundle sets the edge beside the fan",
+  "note": "past a lower corner the edge returns that corner's own level with no PAD lift, as the page's new UNRESEARCHED block records",
   "pages": {
-   "0057-marshes-and-wetlands-shitchi.drawing.html": "44b6eee49ca6ad4b"
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "19d30700b695abed"
   },
   "reads": "61baf0c18f64a05d",
-  "research": "760323a72ab9946f",
+  "research": "b8612a365ea63683",
   "rests": [
-   "0057-marshes-and-wetlands-shitchi.drawing.html:4cf27b58fdb08b33",
-   "0057-marshes-and-wetlands-shitchi.drawing.html:54ca08b790a43ab3"
+   "0057-marshes-and-wetlands-shitchi.drawing.html:54ca08b790a43ab3",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:6a0767c5d99b3652"
   ],
   "verdict": "IN-STEP"
  },
@@ -42154,34 +42159,34 @@
   "code": "7f9e1b81c930ffd1",
   "core": "4f37e1407192fe1f",
   "date": "2026-11-25",
-  "note": "the edge is PAD above the lowest field within ±PAD, smoothed over three stations and confined between the corners",
+  "note": "PAD above the lowest field within a pad each way, smoothed over three stations, between the corners and following the foot",
   "pages": {
-   "0057-marshes-and-wetlands-shitchi.drawing.html": "44b6eee49ca6ad4b"
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "19d30700b695abed"
   },
   "reads": "61baf0c18f64a05d",
-  "research": "760323a72ab9946f",
+  "research": "b8612a365ea63683",
   "rests": [
    "0057-marshes-and-wetlands-shitchi.drawing.html:54ca08b790a43ab3",
-   "0057-marshes-and-wetlands-shitchi.drawing.html:cd3989989039bcad"
+   "0057-marshes-and-wetlands-shitchi.drawing.html:a4e9ac2645ac3ea0"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/toe.rs::toe_band#toe band width": {
   "body": "2f27a13f7154de8b",
-  "claim": "toe band width - marshes-and-wetlands-shitchi: the springs at a fan's foot come out along its toe, so the band spans the fields' foot from one lower corner to the other; marshes-and-wetlands-shitchi.drawing gives the `PAD` of 90 ft each side, clipped to the bled canvas - the paddy fan's foot alone, narrower than the fields above a fan that narrows downhill, where the drawing page's \"as wide as the fields above it\" and \"the fan's plots and the dry fields round them\" still describe the band before 449 T432 and are owed a rewrite: the dry hem is laid after the seat, on dry ground beside the fan, none of it on the band (0 of 35,000 rolls with a dry plot on it, measured 2026-11-25), so the dry fields round the fan take no part in the band's width",
-  "code": "f18abd4cff475c07",
+  "claim": "toe band width - marshes-and-wetlands-shitchi: the springs at a fan's foot come out along its toe, so the band spans the fields' foot from one lower corner to the other; marshes-and-wetlands-shitchi.drawing: as wide as the fields' foot, from one lower corner to the other, with the `PAD` of 90 ft more on each side, clipped to the bled canvas - the paddy fan's foot alone, so the dry hem laid beside the fan stays off the band (0 of 35,000 rolls with a dry plot on it, measured 2026-11-25)",
+  "code": "d2f127bdfa49e830",
   "core": "4f37e1407192fe1f",
   "date": "2026-11-25",
-  "note": "`span(&pts, foot, ...)` then clamped to the bleed corners `cu` gives the foot's corner-to-corner span plus `PAD`, clipped to the bled canvas, as the claim says; the dry hem's absence from the band rests on the claim's own measurement, and the claim names the stale wording in §38/§39",
+  "note": "the band runs from one lower corner of the foot to the other, plus `PAD` on each side, and is clipped to the bled canvas, which is the page's \"stopping at the map's edge\"; the 35,000-roll count is the claim's own measurement",
   "pages": {
-   "0057-marshes-and-wetlands-shitchi.drawing.html": "44b6eee49ca6ad4b",
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "19d30700b695abed",
    "0057-marshes-and-wetlands-shitchi.html": "0f418f3e02998b72"
   },
   "reads": "61baf0c18f64a05d",
-  "research": "fc7e48c6d33e7b3a",
+  "research": "372e62efc9bd6703",
   "rests": [
-   "0057-marshes-and-wetlands-shitchi.drawing.html:4cf27b58fdb08b33",
-   "0057-marshes-and-wetlands-shitchi.drawing.html:cd3989989039bcad",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:641826ef9fbccff6",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:6a0767c5d99b3652",
    "0057-marshes-and-wetlands-shitchi.html:333d0510bcc598ae",
    "0057-marshes-and-wetlands-shitchi.html:a8e579c6e523611c"
   ],
@@ -43733,16 +43738,16 @@
   "date": "2026-11-24",
   "note": "an unpinned winter_crop is now held back and rolled from the same seed in build, and a pin still stands",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
   "reads": "e024ff33ad69c1f9",
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::rows_held#the basins' rules where decided": {
@@ -49840,15 +49845,15 @@
   "date": "2026-11-22",
   "note": "a seeded roll per knob, even or weighted over its forms",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/pyrand.rs::sha256#the draws": {
@@ -49961,16 +49966,17 @@
   "code": "0fcba5cd5d0c9815",
   "core": "bfed7d84fa309078",
   "date": "2026-11-25",
-  "note": "it asks for a way out from the band's two stations at ±0.6 only as the fallback, recorded as a GUESS on both pages",
+  "note": "the band's ends at six-tenths are asked only once no site is left, keeping the astride-the-brook seat 0031 records as a GUESS",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0081-village-lanes.drawing.html": "460fb5c616e3b1d5",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
   "reads": "a5e456d20b42eb04",
-  "research": "79fd3ecc532b19ff",
+  "research": "e3e1186ca2c8c043",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:fa16daa7d34e7e1d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:5d63bab526a39b1d",
+   "0081-village-lanes.drawing.html:48cdd569d493520c",
    "0081-village-lanes.drawing.html:a4283016d4a47c2b"
   ],
   "verdict": "IN-STEP"
@@ -50000,17 +50006,17 @@
   "claim": "the back to the hill where the wind cannot be backed - GUESS clustered-and-scattered-villages-shuson-sanson.drawing: where a map declares a fall toward the wind, no margin is both high and windward, so the cluster takes the high, dry one, its back to the hill and off the wind - once no margin facing the wind is left, each refused or its seat walled in, the margins are ranked again (a fall square across the wind, to its floating point's slack, is not one toward it) with the high side as the wind's, each seat recorded off the wind; its belt still on the windward side, between the houses and the paddy (`margins::ranked`); where the hill-backed ranking leaves none either, the seats walled in at their centers, of both rankings, are asked from their bands' ends, the wind-facing ones first (`open_at_an_end`)",
   "code": "2d3383aee388ad72",
   "core": "696510769bddff3a",
-  "date": "2026-11-24",
-  "note": "the hill is asked only for a fall toward the wind (a fall square across it never), and the belt stays windward; the GUESS is on 0031",
+  "date": "2026-11-25",
+  "note": "the hill is asked only for a fall toward the wind and only once no margin facing the wind is left; a square fall is excluded through SQUARE_EPS; ends are asked across both rankings, wind-facing first",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
   "reads": "8c6b60283fac636b",
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:fa16daa7d34e7e1d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:5d63bab526a39b1d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ab8b682cb0eace93"
   ],
   "verdict": "IN-STEP"
  },
@@ -50593,20 +50599,18 @@
  "rust/phases/src/seat/margins.rs::FIELD_IN_BAND_MAX#the band along a bending margin": {
   "body": "3856e57e75aa6883",
   "claim": "the band along a bending margin - GUESS: clustered-and-scattered-villages-shuson-sanson.drawing puts the cluster beside its paddy and is silent on how closely a straight band follows a bending field edge; a tenth of the band's depth - with none allowed 70 of 3,200 rolls found no seat, with a tenth 2, the most of any band on the paddy 3.5 percent of it (measured 2026-11-24, seeds 1 to 400 at eight sizes and falls)",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "1d435de6fbf9a386",
   "core": "dd3e93f120ad503b",
-  "date": "2026-11-24",
-  "note": "the page puts the cluster beside its paddy but gives no tolerance; the tenth is a GUESS",
+  "date": "2026-11-25",
+  "note": "a GUESS; the page is silent on how a straight band follows a bending edge",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ab8b682cb0eace93"
   ],
-  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::Ground#the margins": {
@@ -50690,14 +50694,15 @@
   "code": "1dce14bd9719f342",
   "core": "6d3de5a041e37c25",
   "date": "2026-11-25",
-  "note": "a fall square to the wind is admitted into tier 1 (dot > -eps), as the page admits a fall across the wind",
+  "note": "a square margin is admitted with both ends in, so a hamlet whose fall runs across the wind sits on its dry windward side, a GUESS",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:5d63bab526a39b1d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ab8b682cb0eace93"
   ],
   "verdict": "IN-STEP"
  },
@@ -50979,24 +50984,23 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#not on the wet toe": {
-  "body": "6bc2daf79fa3a1c0",
+  "body": "22e31579ef2cf91d",
   "claim": "not on the wet toe - ground-too-wet-to-build-on.drawing, marshes-and-wetlands-shitchi.drawing: nothing is built on the marsh below the fields - the seat, its margin's midpoint and every sample of its band off it, and where the toe stops at the fields' lower corners (a comb's) the band's corners and its ends' middles too (449 T432: the two points alone passed a band at the fields' lower corner swung under their foot); a polder's toe, spanning its ring and 90 ft up beside it, is asked at the samples alone, its rim refusing 654 of 6,000 polders (measured 2026-11-25)",
   "code": "a2d7555232235604",
   "core": "47f72db54e940ba7",
   "date": "2026-11-25",
-  "note": "the center, the midpoint and the 9 samples are tested against the toe, plus the 6 rim points (the four corners and the ends' middles) where toe_rim is set; polders are asked at the samples alone, as the claim states",
+  "note": "center, midpoint, samples and (on a comb) the band's rim are all kept off the toe; nothing is built on the marsh",
   "pages": {
-   "0057-marshes-and-wetlands-shitchi.drawing.html": "44b6eee49ca6ad4b",
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "19d30700b695abed",
    "0058-ground-too-wet-to-build-on.drawing.html": "f91787095acd06d1"
   },
   "reads": "6288a6585a296fd3",
-  "research": "8697eaaaf30b62db",
+  "research": "45a8fd12dc8dabd6",
   "rests": [
-   "0057-marshes-and-wetlands-shitchi.drawing.html:cd3989989039bcad",
-   "0058-ground-too-wet-to-build-on.drawing.html:103bbbc12ffe07de",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:19bd329c240de6ed",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:a4e9ac2645ac3ea0",
    "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
   ],
-  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#seat on the field's margin": {
@@ -51005,15 +51009,15 @@
   "code": "9eeda596b290e0e9",
   "core": "47f72db54e940ba7",
   "date": "2026-11-25",
-  "note": "higher, drier ground beside the paddy, scored upslope by WEIGHTS.upslope against the fall",
+  "note": "beside the paddy and scored upslope",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
   "reads": "6288a6585a296fd3",
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ab8b682cb0eace93"
   ],
   "verdict": "IN-STEP"
  },
@@ -51037,15 +51041,15 @@
   "code": "0f399503316b4ddc",
   "core": "47f72db54e940ba7",
   "date": "2026-11-25",
-  "note": "the code does what the claim says: the band's samples stay off the field, no field corner sits deeper in the band than `FIELD_IN_BAND_MAX`, and past that dip none of the band's four corners is on the field and no field edge crosses a side of the band. This keeps the band beside its paddy and off it",
+  "note": "samples, field corners past the tenth, band corners and edge crossings are all refused on the field",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
   "reads": "6288a6585a296fd3",
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ab8b682cb0eace93"
   ],
   "verdict": "IN-STEP"
  },
@@ -51055,16 +51059,16 @@
   "code": "d1c64c312e8ae3e6",
   "core": "47f72db54e940ba7",
   "date": "2026-11-25",
-  "note": "the page records the belt to windward on a fall toward the wind as a GUESS, and the wind decides the side",
+  "note": "`lead` applies only under the hill-backed `belt_wind` with the field within 45 degrees of the wind, so the belt stands to windward between the houses and the paddy",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "1fc6cc6d67ef44a0",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
   "reads": "6288a6585a296fd3",
-  "research": "2cc7b75277689e2a",
+  "research": "11096c10297e176b",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ab8b682cb0eace93",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:4b8db97a0ad26796",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:70e1d65dbf9cecc4"
   ],
@@ -51085,23 +51089,21 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#the ladder": {
-  "body": "c613a2b6d5428e57",
+  "body": "22e31579ef2cf91d",
   "claim": "the ladder - clustered-and-scattered-villages-shuson-sanson.drawing: a hamlet never splits, so the margins it falls back to are whole seats, ranked",
   "code": "65110cffd227fd79",
   "core": "47f72db54e940ba7",
-  "date": "2026-11-24",
-  "note": "whole seats, ranked, and a hamlet never splits",
+  "date": "2026-11-25",
+  "note": "whole seats ranked, never split",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
   "reads": "6288a6585a296fd3",
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:fa16daa7d34e7e1d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685"
   ],
-  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/tests.rs::a_band_a_tongue_of_the_field_crosses_is_refused#the seat's tests": {
@@ -52910,14 +52912,14 @@
   "date": "2026-11-22",
   "note": "a polder's falls are kept to the four 90-degree points; the page records the untilted surveyed grid as a deviation",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::admitted#high side and windward side as one": {
@@ -52925,15 +52927,16 @@
   "claim": "high side and windward side as one - DEVIATION clustered-and-scattered-villages-shuson-sanson.drawing: the high windward margin, which the page calls one case among several, taken on every hamlet, both ends in, a fall away from the wind or square across it",
   "code": "9fffcf2cc28cc510",
   "core": "3c5d7747422d0f57",
-  "date": "2026-11-24",
-  "note": "the filter keeps the falls whose dot with the wind is zero or less, so both square-across falls are in, as the page records",
+  "date": "2026-11-25",
+  "note": "the falls kept are away from the wind or square across it, both ends inclusive, the deviation 0031 records",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:5d63bab526a39b1d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ab8b682cb0eace93"
   ],
   "verdict": "IN-STEP"
  },
@@ -52979,14 +52982,14 @@
   "date": "2026-11-22",
   "note": "randbelow(n) over the table keeps the shares its repeated entries carry",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1aa166d76e3e06fe"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::roll_plan#knobs rolled from the seed": {
@@ -52998,15 +53001,15 @@
   "date": "2026-11-22",
   "note": "each knob is rolled from its own seed only where applies() lets its branch run under the rolled form; pinned knobs are left to the pin",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
-  "research": "3422f6c41eca839c",
+  "research": "0d613c94817b1ce5",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::roll_plan#the fall at even odds": {
