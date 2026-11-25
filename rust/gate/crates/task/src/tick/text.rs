@@ -6,6 +6,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_shared::py_text::{is_space, repr, strip, SPACE_CLASS};
 use l7r_shared::speckit::splitlines;
+use l7r_shared::switches::DEFERRED_ANSWER;
 
 /// Why a tick cannot be made: a refusal (`ValueError`, exit 2 where `make tick` reports it), or `--boxes` with no box to tick
 /// (`SystemExit` with its message, exit 1).
@@ -65,8 +66,13 @@ pub(crate) fn is_boxes_line(line: &str) -> bool {
     line.chars().next().is_some_and(is_space) && lstrip(line).starts_with("- [")
 }
 
+/// A box line carrying the deferred answer (451 T244): its boxes are answered, not ticked - a tick would say a pass ran.
+pub(crate) fn is_answered(line: &str) -> bool {
+    is_boxes_line(line) && line.contains(DEFERRED_ANSWER)
+}
+
 fn tick_boxes(line: &str) -> String {
-    if is_boxes_line(line) {
+    if is_boxes_line(line) && !is_answered(line) {
         line.replace("- [ ]", "- [x]")
     } else {
         line.to_owned()
@@ -141,7 +147,7 @@ pub fn tick(text: &str, task: &str, note: &str, boxes: bool) -> Result<(String, 
         let ticked: Vec<String> = block.iter().map(|l| tick_boxes(l)).collect();
         // AND IT SAYS SO WHEN IT DOES NOTHING: asked to tick the boxes, the script once found no line to tick and still reported the task
         // ticked
-        if ticked == block {
+        if ticked == block && !block.iter().any(|l| is_answered(l)) {
             return Err(Refused::Exit(format!(
                 "--boxes: no research-box line found in {} - is this a `research: physical` task?",
                 repr(strip(&block[0]))
@@ -161,16 +167,17 @@ pub fn tick(text: &str, task: &str, note: &str, boxes: bool) -> Result<(String, 
 
 /// Why `task` may not be ticked: a `research: physical` task with a research box unticked, unless this tick ticks them (`--boxes`).
 /// 408 T01/T02 were ticked so and only the gate's research-box test saw it - after the push, on the next session's landing.
+///
+/// A box answered `deferred: UNRESEARCHED` on its line (451 T244) is no refusal while the research switch is `deferred`
+/// (`research_deferred`, `l7r_shared::switches`); while it is `open` the answer is refused, `--boxes` or not, since `--boxes` does not
+/// tick an answered box and the standing rule (`research_boxes.rs`) accepts it whatever the switch says.
 #[must_use]
-pub fn boxes_refusal(text: &str, task: &str, boxes: bool) -> String {
+pub fn boxes_refusal(text: &str, task: &str, boxes: bool, research_deferred: bool) -> String {
     let lines = splitlines(text);
     let any = task_line("[ xX]", task);
     let Some(at) = lines.iter().position(|l| matches(&any, l)) else {
         return String::new();
     };
-    if boxes {
-        return String::new();
-    }
     let rest = &lines[at + 1..];
     let k = rest
         .iter()
@@ -179,15 +186,22 @@ pub fn boxes_refusal(text: &str, task: &str, boxes: bool) -> String {
     let block: Vec<&str> = std::iter::once(lines[at])
         .chain(rest.iter().take(k).copied())
         .collect();
-    let physical = block.iter().any(|l| matches(&PHYSICAL, l));
-    if physical
-        && block[1..]
-            .iter()
-            .any(|l| is_boxes_line(l) && l.contains("- [ ]"))
-    {
-        return format!("{task} is a `research: physical` task with a research box unticked - verify each, then tick with BOXES=1 (make tick F=<n> T={task} BOXES=1 NOTE=..., or make land ... BOXES=1)");
+    if !block.iter().any(|l| matches(&PHYSICAL, l)) {
+        return String::new();
     }
-    String::new()
+    let open = |l: &&str| is_boxes_line(l) && l.contains("- [ ]");
+    if block[1..].iter().any(|l| open(l) && is_answered(l)) && !research_deferred {
+        return format!("{task} answers a research box `{DEFERRED_ANSWER}`, but the research switch is open - run the research pass and tick the box (BOXES=1), or, if the GM defers research, make research-deferred REASON=\"<the GM's words>\" first (make switches shows it)");
+    }
+    if boxes || !block[1..].iter().any(|l| open(l) && !is_answered(l)) {
+        return String::new();
+    }
+    let answer = if research_deferred {
+        format!("; the research switch is deferred, so a box may instead be answered `{DEFERRED_ANSWER}` on its line, the decision drawn UNRESEARCHED onto make research-backlog")
+    } else {
+        String::new()
+    };
+    format!("{task} is a `research: physical` task with a research box unticked - verify each, then tick with BOXES=1 (make tick F=<n> T={task} BOXES=1 NOTE=..., or make land ... BOXES=1){answer}")
 }
 
 #[cfg(test)]

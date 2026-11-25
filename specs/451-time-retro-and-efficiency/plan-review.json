@@ -1512,6 +1512,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T244 (the GM 2026-11-25, tasks.md T244: \"I would like to essentially defer all of it until at least tomorrow ... will our current procedures end up inadvertently kicking off a bunch of research tasks ... If so, then what can we do about that?\")": {
+   "sha256": "639ddfa79dbc4d88ae2377f6dc3612095936e89bbfa340ba67017535292f89c4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T244 Approach (checklist part A)": {
+   "sha256": "e483033225af6d15c389659157f4f39832d67a16b03a82624e3356e497f6f0fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -20546,6 +20558,76 @@
      "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): Brings the checklist in line with the request; (h) is T235's by the settled item."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T244 (the GM 2026-11-25, tasks.md T244: \"I would like to essentially defer all of it until at least tomorrow ... will our current procedures end up inadvertently kicking off a bunch of research tasks ... If so, then what can we do about that?\")",
+    "### T244 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "switch",
+     "summary": "A `research` axis (open|deferred) in dev/switches.json beside claims and port, thrown by make research-deferred / research-open with a recorded reason, who and when; one reader l7r_shared::switches::research.",
+     "class": "within",
+     "why": "The GM (2026-11-25): defer the queued research 'until at least tomorrow', and asked what can stop procedures kicking it off. A reversible, recorded switch is the deferral itself; it has no automatic expiry, so reopening stays the GM's call, which fits 'at least tomorrow'."
+    },
+    {
+     "id": "switch-default",
+     "summary": "A missing file or entry reads open; a malformed entry reads open with MALFORMED in its why.",
+     "class": "within",
+     "why": "Open is the shipped rules (research binds), as clean is for claims; this follows the switches' existing form and governs only a broken file. It carves no research out of a deferral thrown correctly."
+    },
+    {
+     "id": "write-defect",
+     "summary": "switches::write serialized only claims and port; now writes every axis, pinned by a test.",
+     "class": "within",
+     "why": "Without it the next claims or port throw would silently erase the deferral and defeat the request; a wrong outcome fixed as found."
+    },
+    {
+     "id": "box-answer",
+     "summary": "While deferred, a research: physical task's boxes may be answered 'deferred: UNRESEARCHED' on the box line; the box stays [ ], BOXES=1 does not tick it; tick and land accept it only while deferred and refuse it, naming the switch, while open.",
+     "class": "within",
+     "why": "This is how a physical task lands without starting a research pass, i.e. the deferral the GM asked for; leaving the box unticked keeps the record honest that no pass ran, and refusing the answer while open restores the shipped rules. The bundle does not list the five boxes; if any of them is not a search (e.g. a review of the guess), letting it be answered too is wider than research, but it widens nothing the GM asked to keep and narrows nothing he asked for."
+    },
+    {
+     "id": "standing-rule-and-backlog",
+     "summary": "research_boxes.rs::violations accepts an answered box whatever the switch's state (a task ticked while deferred stays green after reopening), and the tick does not check that make research-backlog lists the deferred decision; the answer's text and the refusal name the backlog instead.",
+     "class": "within",
+     "why": "Judged together because each leans on the other. T244 asks that procedures not start research while it is deferred; it asks for no new check that deferred decisions reach the backlog, and the UNRESEARCHED labeling of a guess is the 2026-11-25 backlog rule's existing mechanism, which this plan leaves as it was. Nothing in the bundle makes the task's decision appear on research-backlog, so the plan's goal line ('lands with its decision drawn UNRESEARCHED onto the backlog') states an intent, not an enforced outcome; but the deferred box itself stays '[ ] ... deferred: UNRESEARCHED' in tasks.md permanently, a findable record of every search not run, so reopening does not turn the deferral into a silent waiver. The plan's 'cheaper route' reason is not what makes this within; that the request does not ask for the check is. Not building an unasked check narrows nothing."
+    },
+    {
+     "id": "stage-end-list",
+     "summary": "Root CLAUDE.md Research bullet, research-doctrine.md and the research-backlog help line restated: while deferred, a port stage's end lists what it touched (make research-backlog STAGE=) and does not search it.",
+     "class": "within",
+     "why": "The stage-end search is a procedure that would start queued backlog research, exactly what the GM deferred."
+    },
+    {
+     "id": "search-first-exception-via-escape",
+     "summary": "While deferred, the approved search-first exception (a decision that other code builds on, or a guess likely visibly wrong) goes through RESEARCH_OK: the doctrine prose says so, and the guard refuses a research-pass dispatch for it without the escape.",
+     "class": "within",
+     "why": "Read against request.md: 'all of it' is 'the research that we currently have queued', deferred because none of it is blocking or likely to change the maps, so suspending the 2026-11-25 search-first exception for decisions that ARE foundational would exceed his words. The plan does not suspend it: the search still runs first, on the session's judgment, once a reason is given in RESEARCH_OK and recorded. What changes is that the search becomes a recorded, deliberate act rather than a procedure firing by itself, which is the GM's concern ('inadvertently kicking off'). The exception's purpose (do not build on a wrong foundation) is untouched, so this neither narrows the T244 request nor guts the earlier rule. The ruling depends on the escape staying a reason-only escape; a version that refused such a search outright would be NOT LEGITIMATE."
+    },
+    {
+     "id": "guard",
+     "summary": "PreToolUse guard: while deferred, refuses an Agent dispatch of research-pass (check-wave units included) and a Bash invocation of make page-session; RESEARCH_OK=\"<reason>\" escape, logged; silent while open.",
+     "class": "within",
+     "why": "Real enforcement of 'not inadvertently kicking off research'; an escape with a stated, recorded reason means what passes is deliberate. Note on reach: request.md shows page sessions also used for non-search work (T192 label tagging, cascade repairs); the guard refuses those too while deferred, passing only via RESEARCH_OK. That is reach beyond research, but it removes nothing the GM asked for (the escape keeps that work reachable). If page sessions are routinely needed for non-research work while deferred, the escape will get used often and that is worth watching."
+    },
+    {
+     "id": "impl-drift-not-built",
+     "summary": "No code for impl-drift NEEDS-RESEARCH verdicts: they already stay listed and refuse nothing while claims stand at report (feature 445).",
+     "class": "within",
+     "why": "Doing nothing where existing behavior already starts no research narrows nothing asked. The premise depends on claims staying at report, and the bundle shows no measurement of it; if claims is moved to clean while research is deferred, this path needs re-checking."
+    },
+    {
+     "id": "order",
+     "summary": "Lands before 449's port resumes; the switch is thrown to deferred by make research-deferred after landing.",
+     "class": "within",
+     "why": "Matches the task line and the GM's wish that the deferral is in force for the queued work."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -32760,6 +32842,74 @@
      "summary": "Constraints now list T243's amendments (a)-(g) and (i)-(l), (l) replacing (k)'s reading; Done-measured lists the three crates' counts.",
      "class": "within",
      "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): Brings the checklist in line with the request; (h) is T235's by the settled item."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T244": {
+   "section_sha256": "e65c7d04efe890f318dcd224faf93edb7f79a6d33409595b4d1c72a5691c6bd4",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "switch",
+     "summary": "A `research` axis (open|deferred) in dev/switches.json beside claims and port, thrown by make research-deferred / research-open with a recorded reason, who and when; one reader l7r_shared::switches::research.",
+     "class": "within",
+     "why": "The GM (2026-11-25): defer the queued research 'until at least tomorrow', and asked what can stop procedures kicking it off. A reversible, recorded switch is the deferral itself; it has no automatic expiry, so reopening stays the GM's call, which fits 'at least tomorrow'."
+    },
+    {
+     "id": "switch-default",
+     "summary": "A missing file or entry reads open; a malformed entry reads open with MALFORMED in its why.",
+     "class": "within",
+     "why": "Open is the shipped rules (research binds), as clean is for claims; this follows the switches' existing form and governs only a broken file. It carves no research out of a deferral thrown correctly."
+    },
+    {
+     "id": "write-defect",
+     "summary": "switches::write serialized only claims and port; now writes every axis, pinned by a test.",
+     "class": "within",
+     "why": "Without it the next claims or port throw would silently erase the deferral and defeat the request; a wrong outcome fixed as found."
+    },
+    {
+     "id": "box-answer",
+     "summary": "While deferred, a research: physical task's boxes may be answered 'deferred: UNRESEARCHED' on the box line; the box stays [ ], BOXES=1 does not tick it; tick and land accept it only while deferred and refuse it, naming the switch, while open.",
+     "class": "within",
+     "why": "This is how a physical task lands without starting a research pass, i.e. the deferral the GM asked for; leaving the box unticked keeps the record honest that no pass ran, and refusing the answer while open restores the shipped rules. The bundle does not list the five boxes; if any of them is not a search (e.g. a review of the guess), letting it be answered too is wider than research, but it widens nothing the GM asked to keep and narrows nothing he asked for."
+    },
+    {
+     "id": "standing-rule-and-backlog",
+     "summary": "research_boxes.rs::violations accepts an answered box whatever the switch's state (a task ticked while deferred stays green after reopening), and the tick does not check that make research-backlog lists the deferred decision; the answer's text and the refusal name the backlog instead.",
+     "class": "within",
+     "why": "Judged together because each leans on the other. T244 asks that procedures not start research while it is deferred; it asks for no new check that deferred decisions reach the backlog, and the UNRESEARCHED labeling of a guess is the 2026-11-25 backlog rule's existing mechanism, which this plan leaves as it was. Nothing in the bundle makes the task's decision appear on research-backlog, so the plan's goal line ('lands with its decision drawn UNRESEARCHED onto the backlog') states an intent, not an enforced outcome; but the deferred box itself stays '[ ] ... deferred: UNRESEARCHED' in tasks.md permanently, a findable record of every search not run, so reopening does not turn the deferral into a silent waiver. The plan's 'cheaper route' reason is not what makes this within; that the request does not ask for the check is. Not building an unasked check narrows nothing."
+    },
+    {
+     "id": "stage-end-list",
+     "summary": "Root CLAUDE.md Research bullet, research-doctrine.md and the research-backlog help line restated: while deferred, a port stage's end lists what it touched (make research-backlog STAGE=) and does not search it.",
+     "class": "within",
+     "why": "The stage-end search is a procedure that would start queued backlog research, exactly what the GM deferred."
+    },
+    {
+     "id": "search-first-exception-via-escape",
+     "summary": "While deferred, the approved search-first exception (a decision that other code builds on, or a guess likely visibly wrong) goes through RESEARCH_OK: the doctrine prose says so, and the guard refuses a research-pass dispatch for it without the escape.",
+     "class": "within",
+     "why": "Read against request.md: 'all of it' is 'the research that we currently have queued', deferred because none of it is blocking or likely to change the maps, so suspending the 2026-11-25 search-first exception for decisions that ARE foundational would exceed his words. The plan does not suspend it: the search still runs first, on the session's judgment, once a reason is given in RESEARCH_OK and recorded. What changes is that the search becomes a recorded, deliberate act rather than a procedure firing by itself, which is the GM's concern ('inadvertently kicking off'). The exception's purpose (do not build on a wrong foundation) is untouched, so this neither narrows the T244 request nor guts the earlier rule. The ruling depends on the escape staying a reason-only escape; a version that refused such a search outright would be NOT LEGITIMATE."
+    },
+    {
+     "id": "guard",
+     "summary": "PreToolUse guard: while deferred, refuses an Agent dispatch of research-pass (check-wave units included) and a Bash invocation of make page-session; RESEARCH_OK=\"<reason>\" escape, logged; silent while open.",
+     "class": "within",
+     "why": "Real enforcement of 'not inadvertently kicking off research'; an escape with a stated, recorded reason means what passes is deliberate. Note on reach: request.md shows page sessions also used for non-search work (T192 label tagging, cascade repairs); the guard refuses those too while deferred, passing only via RESEARCH_OK. That is reach beyond research, but it removes nothing the GM asked for (the escape keeps that work reachable). If page sessions are routinely needed for non-research work while deferred, the escape will get used often and that is worth watching."
+    },
+    {
+     "id": "impl-drift-not-built",
+     "summary": "No code for impl-drift NEEDS-RESEARCH verdicts: they already stay listed and refuse nothing while claims stand at report (feature 445).",
+     "class": "within",
+     "why": "Doing nothing where existing behavior already starts no research narrows nothing asked. The premise depends on claims staying at report, and the bundle shows no measurement of it; if claims is moved to clean while research is deferred, this path needs re-checking."
+    },
+    {
+     "id": "order",
+     "summary": "Lands before 449's port resumes; the switch is thrown to deferred by make research-deferred after landing.",
+     "class": "within",
+     "why": "Matches the task line and the GM's wish that the deferral is in force for the queued work."
     }
    ],
    "verdict": "CLEAR"

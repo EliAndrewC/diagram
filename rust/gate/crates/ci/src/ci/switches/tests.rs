@@ -195,3 +195,29 @@ fn the_guard_refuses_outside_make_and_answers_under_it() {
         "rust-only\n"
     );
 }
+
+/// 451 T244: the research axis, read, thrown and shown like the others, and KEPT by a later throw of another axis - `write` once
+/// serialized only the axes it knew, so a third would have been erased by the next `make claims-*` or `make port-*`.
+#[test]
+fn the_research_axis_is_thrown_shown_and_kept_by_another_throw() {
+    let dir = repo("research");
+    assert_eq!(read(&dir).research.state, "open");
+    assert!(describe(&read(&dir)).contains("research open"));
+    sets(&dir, "research", "deferred");
+    sets(&dir, "claims", "clean");
+    let sw = read(&dir);
+    assert_eq!(
+        (sw.research.state.as_str(), sw.research.why.as_str()),
+        ("deferred", "because")
+    );
+    assert!(describe(&sw).contains("research deferred"));
+    assert_eq!(ask(&dir, &["state", "research"]).stdout, "deferred\n");
+    assert!(write(&dir, "research", "later", "w", "u").is_err());
+    put(
+        &dir,
+        "dev/switches.json",
+        "{\"research\": {\"state\": \"later\"}}",
+    );
+    let bad = read(&dir);
+    assert!(bad.research.state == "open" && bad.research.why.contains("MALFORMED"));
+}

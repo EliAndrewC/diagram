@@ -10,6 +10,10 @@ Committed, repository-wide switches in one tracked file, `dev/switches.json`:
 |---|---|---|---|
 | **claims** | `report` (default) / `clean` | whether an open claims finding refuses a landing | `make claims-clean REASON=...` / `make claims-report-only REASON=...` |
 | **port** | `rust-only` (default) / `integrated` | whether the Python stages run beside the Rust ones | `make port-integrated REASON=...` / `make port-rust-only REASON=...` |
+| **research** | `open` (default) / `deferred` | whether a search pass or page session starts unasked (`research_switch_hooks.rs`, `RESEARCH_OK` escapes), and whether a physical task's boxes may answer `deferred: UNRESEARCHED` (feature 451 T244) | `make research-deferred REASON=...` / `make research-open REASON=...` |
+
+A malformed research entry reads `open`, with MALFORMED in its why: `open` is where the research rules bind, so a broken file never
+silently defers research.
 
 `make switches` prints them, with the reason, who threw each and when. The history is the file's git log - each target commits its
 own change.

@@ -104,6 +104,7 @@ pub mod readme_hooks;
 pub mod record_edit_gate;
 pub mod record_edit_hooks;
 pub mod repo_safety_hooks;
+pub mod research_switch_hooks;
 pub mod review_round_hooks;
 pub mod scratch_sweep_hooks;
 pub use l7r_shared::guards::set_down_hooks;

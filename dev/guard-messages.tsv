@@ -38,6 +38,7 @@ key	verdict	chars	guard	kind	by	over	head
 16fe6e50a0c8529a	BASELINE	823	phase-source-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this search over <path> prints lines of <path> - the old
 174d84113d435734	PASS	767	static-runs-hooks	refuse	ae5329252c169f895		BLOCKED: TN of N-x has run `make static` N times since its
 17d79bae9b512eee	BASELINE	534	main-tree-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: MAIN_TREE_OK with no reason given. An escape is a workaround, and
+188284d41e734a22	PASS	478	research-switch-hooks	refuse	a298fc28230da3c64		BLOCKED: make page-session - research is DEFERRED (make switches; since N-N-NTN:N:NZ by
 18b6b9a327dd1c53	BASELINE	759	measure-hooks	notice	unreviewed - stood before 451 T170		REMINDER (measure-hooks, once per batch of work): this is the expensive measurement.
 19bb45378871e9dc	PASS	718	review-round-hooks	refuse	ab27eab0ddbc290ad		BLOCKED: round N of <path>'s spec review - past the five-round cap
 1a2dd0843953ee9c	BASELINE	318	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an engine entry point run outside make - no make target
@@ -124,6 +125,7 @@ key	verdict	chars	guard	kind	by	over	head
 565f3f4c3b47539d	BASELINE	480	guard-file-hooks	notice	unreviewed - stood before 451 T170		This is the ROSTER OF ROLLED HAMLETS, and it is a GUARD
 58788f1c009dc664	PASS	1628	check-bundle-hooks	refuse	message-check a83c6cc7fb5c17b95		BLOCKED: N pop-ups owe modal-depiction together - send ONE agent on them
 593c109ea9d37431	BASELINE	479	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a glyph-check with no green gate for this content. A review
+5a35798c0d0bdef5	PASS	145	research-switch-hooks	refuse	a7d96724557e39ebb		BLOCKED: RESEARCH_OK with no reason given. Put one, two words or more,
 5a67f27dbbccd7f3	BASELINE	559	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: `quote-check` runs through the check-wave workflow, not a script of its
 5aaf6a4514f40b0b	BASELINE	434	review-round-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: STALE_TERMS_OK with no reason given. An escape is a workaround, and
 5b025fe3c8f4391e	BASELINE	934	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has
@@ -332,6 +334,7 @@ eb8dbc9f738d4fce	BASELINE	467	gm-tree-hooks	refuse	unreviewed - stood before 451
 ed8e85dd559d50a4	BASELINE	383	escalation-hooks	refuse	unreviewed - stood before 451 T170		QUESTION UNFILTERED: your final message puts something to the GM and no
 ee111d8def80a0e2	PASS	355	workflow-hooks	refuse	a066d53b0b706fa51		BLOCKED: an ad-hoc agent() call names no model and carries no SESSION_MODEL:
 ef61e1f3080925d4	PASS	157	context-cap-hooks	refuse	a428547a5cd4d6ca2		BLOCKED: SPLIT_OK with no reason. Put one in the prompt: SPLIT_OK="<why this
+ef9533c10a2d83ee	PASS	484	research-switch-hooks	refuse	a298fc28230da3c64		BLOCKED: a research-pass dispatch - research is DEFERRED (make switches; since N-N-NTN:N:NZ
 f129932e221f76a5	BASELINE	799	claims-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: the research claims sheet is not opened by hand (Write). Ask
 f1f787afa84a2a3c	BASELINE	446	blocked-fetch-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this Bash refused: https:/<path> is on the blocked list (blocked-domains.json: grokipedia.com
 f23270b86a91468b	BASELINE	1002	main-tree-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: your shell is standing in <path>, inside <path> - the MIRROR
@@ -341,6 +344,7 @@ f341249640267810	BASELINE	388	gate-write-hooks	refuse	unreviewed - stood before 
 f487f6ae99b8af5e	BASELINE	231	idle-tests-hooks	notice	unreviewed - stood before 451 T170		idle-tests: ran NTNZ in Ns on N (<path>; suspends N, deferrals N):
 f4a4ac3da3e2be10	BASELINE	381	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: `escalation-check` is not an authorized wave job (source-applicability, quote-check, settlement-review, entry-drift,
 f4c2a3758dadc27a	BASELINE	195	house-style-hooks	notice	unreviewed - house-style's command notice, a family of 2 keys: 22 shown a session, 4,686 characters, under 2 x 31,680 - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		House style was applied to this command for you (`colour` -> `color`).
+f59bf215705c7eac	PASS	144	research-switch-hooks	refuse	a7d96724557e39ebb		BLOCKED: RESEARCH_OK with no reason given. Put one, two words or more,
 f6d9c81916c57b42	BASELINE	319	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an engine entry point run outside make - no make target
 f7143cf6276fb8d0	BASELINE	534	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: SLOW_POLL_OK with no reason given. An escape is a workaround, and
 f7dd68f8d293ee02	PASS	476	workflow-hooks	refuse	a3f4533b308fc243f		BLOCKED: an agent() call with no agentType is not measured to run

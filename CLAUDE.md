@@ -58,6 +58,7 @@ Constitution XII. One line each here; the full text of every rule, with its feat
   `research-pass` agent runs one) before asking the GM and before writing "guess"; a new rendering decision may skip it, drawn as
   a best guess labeled `UNRESEARCHED` onto `make research-backlog` (each port stage's end searches the ones it touched), unless other code builds on it or the guess is likely visibly
   wrong (GM 2026-11-25, feature 451 T236).
+- **The research switch** (`make switches`; 451 T244): while `deferred`, every new decision is drawn `UNRESEARCHED`, a physical task's boxes answer `deferred: UNRESEARCHED`, a port stage's end lists its backlog (`make research-backlog STAGE=`) unsearched, and a `research-pass` dispatch or `make page-session` is refused (`RESEARCH_OK="<reason>"`); `make research-open REASON=` reopens it.
 - Whether a finding APPLIES to a case, form or map is the record's and the reviewers' to rule, never the GM's; where the record is
   silent on a choice, take a knob or the algorithmically easier route and say which (GM 2026-10-25; `escalation-check` tests 4-5).
 - A `GUESS`, `UNRESEARCHED` or `CONVENTION` value, and a number no claim states, is a goal and a knob, never a target to defend:

@@ -261,7 +261,12 @@ pub fn refusal(ask: &Ask, landed: bool, boxes: bool) -> Raise<(String, String)> 
         String::new()
     };
     let asked = [
-        boxes_refusal(&text, task, boxes),
+        boxes_refusal(
+            &text,
+            task,
+            boxes,
+            l7r_shared::switches::research(root).deferred(),
+        ),
         waits(root, dir)?,
         // 379: an open tooling fix, but one landing with this landing's tasks (451 T182); 383: the hour
         l7r_gate_reviews::reviews::closing::landing::fix_hold_landing(dir, root, &ask.landing),

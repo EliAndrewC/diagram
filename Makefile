@@ -18,7 +18,7 @@ FREE_TEXT = UNITS WITH KEYS KEY CLASS KIND SUBJECT REASON GROWTH_REASON SPREAD N
 $(foreach v,$(FREE_TEXT),$(if $(filter command line environment,$(origin $(v))),$(eval override $(v) := $$(value $(v)))$(eval export $(v))))
 
 .PHONY: closing-checks modal-bundle modal-prepass done docs static format guard _reference _quick bypass-audit quick page-check tick claim speckit-todo audit guard-edit context-ok guard-log scratch-sweep cache-clean hooks-test guard-messages citations fragment-move \
-	 switches _switch \
+	 switches _switch research-deferred research-open \
 	 map maps cohort cohort-landing hamlet placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 pack-audit help \
 	 notes-census glossary page-lit picture-diff \
@@ -129,7 +129,7 @@ COHORT_FRESH = 4
 # ---- iteration switches (dev/switches.json) ----
 SWITCH = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" switches
 
-switches:       ## [project] the iteration switches: claims and port, with reason, who and when (feature 132)
+switches:       ## [project] the iteration switches: claims, port and research, with reason, who and when (feature 132; research 451 T244)
 	@$(SWITCH) show
 claims-report-only: ## [project] CLAIMS AT REPORT - a claims finding refuses no landing and files no task; it is checked and listed by make claims-report (feature 445; the shipped state)   REASON="..."
 ##  REASON=<text>  why claims go to report - recorded with who and when
@@ -143,6 +143,12 @@ port-integrated: ## [project] PORT INTEGRATED - make done rolls the map-rolling 
 port-rust-only: ## [project] PORT RUST-ONLY - the default while any stage is Python: no landing waits on the Python stages after the Rust front, make done rolls no map, make land lands on the Rust stage gate alone (feature 444 FR-023)   REASON="..."
 ##  REASON=<text>  why the port goes rust-only - recorded with who and when
 	@$(MAKE) --no-print-directory _switch AXIS=port STATE=rust-only MSG="port rust-only"
+research-deferred: ## [project] RESEARCH DEFERRED - no research-pass dispatch and no make page-session starts unasked (RESEARCH_OK="<reason>" escapes, recorded); a physical task's boxes may be answered `deferred: UNRESEARCHED`; a port stage's end lists its backlog, unsearched (feature 451 T244)   REASON="<the GM's words>"
+##  REASON=<text>  why research is deferred - recorded with who and when
+	@$(MAKE) --no-print-directory _switch AXIS=research STATE=deferred MSG="research deferred"
+research-open:  ## [project] RESEARCH OPEN - the shipped rules: a search pass runs when a decision needs it, and each port stage's end searches the backlog it touched (feature 451 T244)   REASON="..."
+##  REASON=<text>  why research reopens - recorded with who and when
+	@$(MAKE) --no-print-directory _switch AXIS=research STATE=open MSG="research open"
 _switch:
 	@[ -n "$$REASON" ] || { printf '\n\033[1mREFUSED: a reason is required\033[0m - a reason someone will READ is a decision you have to defend.\n  make <target> REASON="..."\n\n'; exit 1; }
 	@$(SWITCH) set $(AXIS) $(STATE) --why "$$REASON"
@@ -754,7 +760,7 @@ claims-report: ## [project] the claims index: counts by verdict, every finding (
 tunables: ## [project] every claim whose value is ours - GUESS (searched, silent), UNRESEARCHED, CONVENTION - with its figure: a goal and a knob a fixing pass may move (feature 417 T28)   [UNDER=<file or dir>] [ALL=1 keeps claims with no figure] [COUNT=1] [INLINE=1 lists the numbers inside functions no claim states]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" tunables --root "$$(git rev-parse --show-toplevel)" $(if $(UNDER),--path $(UNDER),) $(if $(filter 1,$(ALL)),--all,) $(if $(filter 1,$(COUNT)),--count,) $(if $(filter 1,$(INLINE)),--inline,)
 
-research-backlog: ## [project] the research backlog: every UNRESEARCHED claim and page item (not yet searched, a guess drawn meanwhile - distinct from a GUESS, searched and silent), by the code file it belongs to; a port stage works its own at its end (feature 451 T236, the GM 2026-11-25)   [STAGE=<a hamlet stage, e.g. seat, or a path glob>]
+research-backlog: ## [project] the research backlog: every UNRESEARCHED claim and page item (not yet searched, a guess drawn meanwhile - distinct from a GUESS, searched and silent), by the code file it belongs to; a port stage works its own at its end - while the research switch is deferred, lists them and does not search (feature 451 T236, T244, the GM 2026-11-25)   [STAGE=<a hamlet stage, e.g. seat, or a path glob>]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" research-backlog --root "$$(git rev-parse --show-toplevel)" $(if $(STAGE),--stage "$(STAGE)",)
 
 impl-check: ## [project] a research-record feature's changed questions, each with the claims citing it and their verdicts, and what its close still owes (feature 378)   F=<n>

@@ -1,4 +1,4 @@
-//! The iteration switches (feature 132, from `l7r/diagram/switches.py`): `dev/switches.json` holds `claims` and `port`. Absent is the defaults; malformed closes: remote off, claims `clean`, the port at the last
+//! The iteration switches (feature 132, from `l7r/diagram/switches.py`): `dev/switches.json` holds `claims`, `port` and `research` (451 T244, its one reader `l7r_shared::switches`, a missing or malformed entry reading `open`). Absent is the defaults; malformed closes: remote off, claims `clean`, the port at the last
 //! committed state. Unknown keys are ignored, on purpose (feature 185): only the named axes are read, so a leftover block from before a lock was retired is simply not looked at.
 
 use std::fmt::Write as _;
@@ -14,6 +14,7 @@ const CLAIMS_STATES: [&str; 2] = ["report", "clean"];
 const DEFAULT_CLAIMS: &str = "report";
 const PORT_STATES: [&str; 2] = ["rust-only", "integrated"];
 const DEFAULT_PORT: &str = "rust-only";
+const DEFAULT_RESEARCH: &str = "open";
 /// The idle timer's entry in its command line (feature 449 T014).
 const IDLE_TIMER_MARK: &str = "--idle-tests";
 
@@ -44,6 +45,8 @@ pub struct Switches {
     pub error: String,
     pub claims: Axis,
     pub port: Axis,
+    /// `open` or `deferred` (451 T244).
+    pub research: Axis,
 }
 
 impl Switches {
@@ -52,6 +55,7 @@ impl Switches {
             error: String::new(),
             claims: Axis::bare(DEFAULT_CLAIMS),
             port: Axis::bare(DEFAULT_PORT),
+            research: Axis::bare(DEFAULT_RESEARCH),
         }
     }
 }
@@ -92,6 +96,7 @@ fn closed(error: &str, root: &Path) -> Switches {
             why,
             ..Axis::default()
         },
+        research: Axis::bare(DEFAULT_RESEARCH),
     }
 }
 
@@ -120,6 +125,17 @@ fn axis(data: &Value, name: &str, allowed: &[&str; 2], default: &str) -> Result<
         who: text(raw, "who"),
         utc: text(raw, "utc"),
     })
+}
+
+/// The research axis through its one reader (`l7r_shared::switches`), which the guard and the tick share.
+fn research_axis(root: &Path) -> Axis {
+    let r = l7r_shared::switches::research(root);
+    Axis {
+        state: r.state,
+        why: r.why,
+        who: r.who,
+        utc: r.utc,
+    }
 }
 
 #[must_use]
@@ -151,6 +167,7 @@ pub fn read(root: &Path) -> Switches {
         error: String::new(),
         claims,
         port,
+        research: research_axis(root),
     }
 }
 
@@ -186,6 +203,7 @@ pub fn write(
     let allowed = match name {
         "claims" => CLAIMS_STATES,
         "port" => PORT_STATES,
+        "research" => l7r_shared::switches::RESEARCH_STATES,
         _ => ["", ""],
     };
     if state.is_empty() || !allowed.contains(&state) {
@@ -205,13 +223,14 @@ pub fn write(
     };
     match name {
         "claims" => out.claims = new,
-        _ => out.port = new,
+        "port" => out.port = new,
+        _ => out.research = new,
     }
     let path = root.join(FILE);
     stated(std::fs::create_dir_all(root.join("dev")), FILE)?;
     let body = stated(
         serde_json::to_string_pretty(
-            &json!({"claims": out.claims.json(), "port": out.port.json()}),
+            &json!({"claims": out.claims.json(), "port": out.port.json(), "research": out.research.json()}),
         )
         .map_err(std::io::Error::other),
         FILE,
@@ -238,7 +257,7 @@ pub fn describe(sw: &Switches) -> String {
     if !sw.error.is_empty() {
         let _ = write!(
             head,
-            "\n  MALFORMED - {} - claims closed until a `make claims-*` or `make port-*` rewrites it",
+            "\n  MALFORMED - {} - claims closed until a `make claims-*`, `make port-*` or `make research-*` rewrites it",
             sw.error
         );
     }
@@ -246,6 +265,7 @@ pub fn describe(sw: &Switches) -> String {
         head,
         described("claims", &sw.claims, DEFAULT_CLAIMS),
         described("port", &sw.port, DEFAULT_PORT),
+        described("research", &sw.research, DEFAULT_RESEARCH),
     ]
     .join("\n")
 }
@@ -313,6 +333,7 @@ pub fn cli(args: &[String], root: &Path, utc: &str) -> crate::Reply {
         ["show"] => say(format!("{}\n", describe(&read(root))), String::new(), 0),
         ["state", "claims"] => say(format!("{}\n", read(root).claims.state), String::new(), 0),
         ["state", "port"] => say(format!("{}\n", read(root).port.state), String::new(), 0),
+        ["state", "research"] => say(format!("{}\n", read(root).research.state), String::new(), 0),
         ["idle"] => say(
             format!(
                 "{}\n",

@@ -111,9 +111,10 @@ pub fn checks(
     env: Env,
 ) -> Raise<Vec<Checked>> {
     let text = read_strict(&dir.join("tasks.md"))?;
+    let deferred = l7r_shared::switches::research(root).deferred();
     let mut out = Vec::new();
     for task in tasks {
-        let box_open = !text::boxes_refusal(&text, task, false).is_empty();
+        let box_open = !text::boxes_refusal(&text, task, false, deferred).is_empty();
         let row = match tick_text(dir, &text, task, note, false) {
             Err(Refused::Value(why) | Refused::Exit(why)) => Checked {
                 task: task.clone(),

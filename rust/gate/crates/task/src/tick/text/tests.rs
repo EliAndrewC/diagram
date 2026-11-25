@@ -73,13 +73,43 @@ fn python_s_line_boundaries_and_whitespace_hold() {
 #[test]
 fn an_open_research_box_refuses_a_physical_task_unless_this_tick_ticks_it() {
     let physical = "- [ ] T03 p\n      research: physical\n      - [ ] research pass\n- [ ] T04 q\n      research: physical\n      - [x] research pass\n# end\n      - [ ] after the heading\n";
-    assert!(boxes_refusal(physical, "T03", false)
+    assert!(boxes_refusal(physical, "T03", false, false)
         .contains("T03 is a `research: physical` task with a research box unticked"));
-    assert_eq!(boxes_refusal(physical, "T03", true), "");
-    assert_eq!(boxes_refusal(physical, "T04", false), "");
-    assert_eq!(boxes_refusal(physical, "T99", false), "");
+    assert_eq!(boxes_refusal(physical, "T03", true, false), "");
+    assert_eq!(boxes_refusal(physical, "T04", false, false), "");
+    assert_eq!(boxes_refusal(physical, "T99", false, false), "");
     assert_eq!(
-        boxes_refusal("- [ ] T05 r\n      - [ ] a box\n", "T05", false),
+        boxes_refusal("- [ ] T05 r\n      - [ ] a box\n", "T05", false, false),
         ""
     );
+}
+
+/// 451 T244: while the research switch is deferred, a box answered `deferred: UNRESEARCHED` on its own line is no refusal and is not
+/// ticked by `BOXES=1` (a tick would say a pass ran); while it is open, the answer is refused, `BOXES=1` or not, naming the switch.
+#[test]
+fn a_box_answered_deferred_lands_only_while_research_is_deferred() {
+    let answered = "- [ ] T03 p\n      research: physical\n      - [ ] research pass  - [ ] source-reader confirmed  deferred: UNRESEARCHED (the ford's width, on make research-backlog)\n      - [x] recorded and cited\n";
+    assert_eq!(boxes_refusal(answered, "T03", false, true), "");
+    assert_eq!(boxes_refusal(answered, "T03", true, true), "");
+    for boxes in [false, true] {
+        let open = boxes_refusal(answered, "T03", boxes, false);
+        assert!(open.contains("the research switch is open"), "{open}");
+        assert!(open.contains("make research-deferred"), "{open}");
+    }
+    // an open box not answered still refuses, and while deferred the refusal offers the answer
+    let unanswered = "- [ ] T03 p\n      research: physical\n      - [ ] research pass\n";
+    assert!(boxes_refusal(unanswered, "T03", false, true).contains("deferred: UNRESEARCHED"));
+    assert!(!boxes_refusal(unanswered, "T03", false, false).contains("deferred: UNRESEARCHED"));
+    // BOXES=1 leaves the answered line's boxes open and ticks the rest
+    let (new, _) = tick(answered, "T03", "n", true).unwrap();
+    assert!(new.contains(
+        "      - [ ] research pass  - [ ] source-reader confirmed  deferred: UNRESEARCHED"
+    ));
+    let mixed = answered.replace(
+        "      - [x] recorded and cited",
+        "      - [ ] recorded and cited",
+    );
+    let (new, _) = tick(&mixed, "T03", "n", true).unwrap();
+    assert!(new.contains("      - [x] recorded and cited"));
+    assert!(new.contains("      - [ ] research pass  - [ ] source-reader"));
 }

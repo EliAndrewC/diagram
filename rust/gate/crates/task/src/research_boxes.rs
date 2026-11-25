@@ -12,6 +12,8 @@
 
 use std::path::{Path, PathBuf};
 
+use l7r_shared::switches::DEFERRED_ANSWER;
+
 use crate::tick::text::re;
 
 const BOXES: [&str; 3] = [
@@ -72,7 +74,12 @@ fn violations(text: &str, feature: u32, at: &str) -> Vec<String> {
             continue;
         }
         for b in &boxes {
-            if !body.contains(&format!("- [x] {b}")) {
+            let open = format!("- [ ] {b}");
+            // answered `deferred: UNRESEARCHED` on its line (451 T244): answered, whatever the research switch says now
+            let deferred = body
+                .lines()
+                .any(|l| l.contains(&open) && l.contains(DEFERRED_ANSWER));
+            if !deferred && !body.contains(&format!("- [x] {b}")) {
                 bad.push(format!("{at}{id}: `{b}` not ticked"));
             }
         }
@@ -154,4 +161,16 @@ fn the_fourth_and_fifth_boxes_bind_from_their_features() {
     )
     .is_empty());
     assert!(violations(&four.replace("  - [x] quote-check confirmed", ""), 193, "").is_empty());
+}
+
+/// 451 T244: a box answered `deferred: UNRESEARCHED` on its line is answered, whatever the research switch says now - a task ticked while
+/// research was deferred stays green once the switch reopens; its answer is the history.
+#[test]
+fn a_box_answered_deferred_is_no_violation() {
+    let text = "- [x] T01 **x**\n      research: physical\n      - [ ] research pass  - [ ] source-reader confirmed  deferred: UNRESEARCHED (on make research-backlog)\n      - [x] recorded and cited\n";
+    assert!(violations(text, 0, "").is_empty());
+    assert_eq!(
+        violations(&text.replace("  deferred: UNRESEARCHED", ""), 0, "").len(),
+        2
+    );
 }
