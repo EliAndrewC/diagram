@@ -424,48 +424,8 @@ None.
 
 <!-- plan-archive: T24 to T02 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T28 to T28 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-### T29 (`make set-down` left the feature's started-task mark: 449 was set down with T241 parked while `.git/active-task` still named 449 T241, so every push touching 449's specs was held and T06's landing refused, observed 2026-11-20, method: T06's refused landing and the revert of its ticks, `git log`)
-
-- **Approach**: `set_down.rs` gains `clear_mark`: once the set-down's row is written, the clone's `active-task` mark is removed when it
-  names the set-down feature, and the reply says so ("its started-task mark (T241) cleared"). A refused set-down, another feature's
-  mark, or a mark that cannot be read or names no feature, is left as it stands and fails nothing. The next `make task-start` of the
-  feature writes the mark again, as it always has.
-  - red first, the test before the code: 1 failed of 60 (the mark still there after the set-down), measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/task`, `/tmp/t29-red.log`).
-  - green: 60 of 60, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/task`, `/tmp/t29-green.log`); the clear deleted: 1 failed of 60, measured 2026-11-20 (the same command, `/tmp/t29-deleted.log`).
-  - the incident replayed in a scratch repository: `speckit-todo --holding` named "T241 ... the active task" before the set-down and nothing after it, the mark gone, measured 2026-11-20 (`scripts/gates/l7r-gate.sh speckit-todo --holding` and `set-down 449`, `/tmp/t29-replay.LoEu/`).
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| the mark cleared at a set-down | n/a - no map | n/a | none | n/a |
-
-### T29 Approach (checklist part A)
-
-1. **The goal, in the world.** No map changes; a feature set down holds no push touching its specs as a started task's.
-2. **The constraints.** T29's line (the mark cleared when it names the set-down feature, a later task-start restoring it, red first);
-   100% line coverage of the task crate by its own tests.
-3. **Where each comes from.** O: T06's refused landing, observed 2026-11-20, method: its landing's refusal and the reverted ticks;
-   O: the replay above, measured 2026-11-20 (`speckit-todo --holding` before and after).
-4. **Do they describe the world here?** The holding box reads the mark through `shared::speckit::active_task`, which answers no task where the mark is missing, read 2026-11-20 (`rust/guard/src/shared/speckit.rs`); the replay's holding list went from one line to none, measured 2026-11-20 (`/tmp/t29-replay.LoEu/after.log`).
-5. **The order.** With T28 (the same tool); independent of the other lanes.
-6. **The exits.** Green: the red test green, the clear deleted and red, `make rust-test` on the task crate, `make quick`, `make
-   static` (once), `make hooks-test`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** Every reader of the mark was found: `shared::speckit::active_task`, `plan door active-task` (`plan/task.rs`)
-   and `task_start.rs`, its one writer; each reads a missing mark as no task, read 2026-11-20 (`grep active-task` over `rust/`).
-8. **The budget.** One landing.
-9. **Done, measured.** The replay's holding list empty after the set-down, measured 2026-11-20 (`/tmp/t29-replay.LoEu/after.log`).
-10. **Before moving a constant.** n/a - no constant.
-11. **Before fitting things into room.** n/a.
-12. **Before any fix.** Nothing on a map; a set-down no longer leaves a push touching the feature's specs held as its parked task's.
-
-**Found and left?** none.
-
-**Performance work?** yes - a `[perf]` task in FR-013's sense: a push held by a stale mark cost T06 a refused landing and its ticks
-reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
-
-<!-- plan-archive: T30 to T30 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-<!-- plan-archive: T31 to T15 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-<!-- plan-archive: T08 to T08 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
-<!-- plan-archive: T33 to T33 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+<!-- plan-archive: T241 to T241 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
+<!-- plan-archive: T29 to T29 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
 ### T36 (T17's replay, 2026-11-20: thirteen archived sections of plan-done.md deferred work with no filed task or order - 449 T156, T200, T201, T208, T218, T219, T221, T224, T239 and 451 T02, T03, T16, T26)
 
 - **Approach**: each section's deferral read by hand (its `**Found and left?**`, and for 451 T02, whose answer was `none`, the class its fix named) and given one verdict per deferred defect: **carried** (an open or ticked task covers it), **fixed** (a later commit), **still open** (filed now, `make task-add`), or **not a defect** (no visible effect and no research finding broken, so not filed - constitution XIV). History is not re-judged: a ticked task's work is taken as its tick says. Three tasks filed: 449 T243, 451 T52, 451 T53.
@@ -2953,50 +2913,7 @@ engine speed, so no checklist.
 **Performance work?** no: it holds a review round; no check runs faster or slower.
 
 
-### T241 (page session P15's cascade, 2026-11-25: hamlet/marsh contradicted 0057's new UNRESEARCHED block `toe-shoulder-past-corner` and was briefed as not owed by `make record-owed`; a directed read found it)
-
-- **Approach**: The listing did owe the pop-up. The read of the listing was cut. The fix makes a cut read still show the count and every pop-up owed.
-  - **The cause, measured.** `make record-owed` owed `modal-depiction:hamlet/marsh` ("a page its Drawing: names moved (0057-marshes-and-wetlands-shitchi.drawing.html)", triage first). Three readings agree, 2026-11-25:
-    - a replay in a detached worktree at 01549f3828~1 with P15's files uncommitted and an empty answer store: 43 units owed, marsh among them;
-    - P15's check session's own listing at 10:47Z (its transcript);
-    - the cascade's report: "43 units in all", marsh among "eight more 0031/0057 readers".
-  - **Where "not owed" came from.** The coordinator ran `make record-owed UNANSWERED=1 2>&1 | grep -v '^\s*$' | tail -6` at 11:08:59Z. It read the last two units, hamlet/windbreak and sheet/well, and briefed them as the listing (coordinator transcript, 11:09:17Z). The listing states its count only on its first line, which the tail cut.
-  - **Ruled out.** The pop-up's `Drawing:` line names 0057's drawing page. The page-moved rule (`modals::owed_row`) owed it. No earlier answer covered P15's digest: T432's round at 03:23 read 0057 at blob 7edb49 (the base), fingerprint 6073a58f, and 7c3a53732e9b2405 was first answered by the cascade's own batch at 06:12. A new block is owed like a changed one: the triage MANIFEST shows marsh the three changed blocks and the new UNRESEARCHED one.
-  - **The triage, undirected.** The real triage prompt told the agent to "pay particular attention to hamlet/marsh". So the triage was replayed on the same bundle (`make modal-triage`'s from the worktree) with a plain prompt, 2026-11-25. It sent marsh on three times, once as "B: new block calls the corner-level spread past the fields' corners UNRESEARCHED", and it cleared hamlet/windbreak. One replay.
-  - **The fix.** `report`'s last line repeats its first, then lists every pop-up an unanswered unit owes: "record-owed: 43 unit(s) owed - every unit is listed above; pop-ups owed: ...". A tail, or a cut read, now shows the count and the pop-ups. A listing that owes no pop-up ends "- every unit is listed above".
-  - **The over-flag, measured** on the same pair, from the replay and the real run:
-    - Each of the three pop-ups was owed through 0031's drawing page on its `Drawing:` line:
-      - hamlet/windbreak's line names it plain;
-      - hamlet/well's names it `[settlement_form=dispersed]`;
-      - sheet/well's names it plain.
-    - Of the 43 units owed, `make modal-triage`'s tool cleared 32, both wells among them ("no claim-bearing change"). Of the remaining 11, the agent cleared 8, hamlet/windbreak among them, and sent 3 on.
-    - That is the intended filter: the owing is cheap, and the triage drops the flag. Nothing there is a defect, and nothing changes.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| the listing's last line: its count and the pop-ups owed | `a_cut_read_of_the_listing_still_meets_its_count_and_its_pop_ups` red on HEAD, 2026-11-25 (`make rust-test CRATE=rust/gate/crates/owed`: 125 passed, 1 failed) | n/a: tooling | none | n/a |
-
-### T241 Approach (checklist part A)
-
-1. **The goal, in the world.** A pop-up whose drawing page changes a block it echoes is owed, and whoever reads the listing sees that it is owed, even through a cut read.
-2. **The constraints.** The T241 line: make that pop-up owed, red-first on the pair, and measure the over-flag. The GM's request of 2026-11-24 (request.md, "the page edits' cascades are watched"): "we really are cascading in situations that do call for it", and no "unnecessary edits as a result of something trivial changing". Feature 375: a pop-up owed only by a moved page goes to the triage first.
-3. **Where each comes from.** G: the T241 line and request.md. O: the replay, the transcripts and the answer store, all 2026-11-25.
-4. **Do they describe the world here?** Yes, measured 2026-11-25 (above): the pair was owed. The miss was in the reading.
-5. **The order.** No dependency. 451 T226 stays open (below).
-6. **The exits.** Green: `make closing-checks T=T241`. Red: what failed is recorded and the task set down, and a claim that it cannot be done is ruled through `make arbiter-ask`.
-7. **The search smell.** none.
-8. **The budget.** One landing.
-9. **Done, measured.** RED FIRST, 2026-11-25, `make rust-test CRATE=rust/gate/crates/owed`: the new test failed on HEAD's code (125 passed, 1 failed) and passes on the fix (126 passed). The pair itself: the replay owes `modal-depiction:hamlet/marsh` both on HEAD's code and on the fix. It was never unowed, so it has no red of its own.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-12. **Before any fix.** The finding: a contradicting pop-up was nearly missed because the listing's count was not in the part read. Nothing on a map changes.
-
-**Found and left?**
-- 451 T226 is not this task's cause. A moved `Drawing:` page owes a pop-up only `modal-depiction` (`modals::owed_row`), never modal-form. So a page's new labeled guess never owes the look at a pop-up's Guesses tab that T226 asks for. The cascade noted the same here: marsh's Guesses bullet ("no source gives how far seepage spread at a fan's foot") "may want UNRESEARCHED wording", and nothing owed a check on it. Not fixed here: it is T226's own rule, a check owed by a new item, outside this task's listing. Filed as T226; lands before T242. 0057 with hamlet/marsh is a second fixture for it.
-
-**Performance work?** no: one line more in a listing.
-
-
+<!-- plan-archive: T29 to T06 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
 ### T242 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
