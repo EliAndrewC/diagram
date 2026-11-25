@@ -12281,3 +12281,42 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 **Performance work?** no: it measures; it makes nothing faster.
 
 
+<!-- plan-archive: archived 2026-11-25 -->
+### T244 (the GM 2026-11-25, tasks.md T244: "I would like to essentially defer all of it until at least tomorrow ... will our current procedures end up inadvertently kicking off a bunch of research tasks ... If so, then what can we do about that?")
+
+- **Approach**: a `research` switch in `dev/switches.json`, beside `claims` and `port`, and the three places research starts read it.
+  - **The switch.** `research` is `open` (the default, the shipped rules) or `deferred`. It is thrown like the others, with a reason recorded with who and when: `make research-deferred REASON="..."` and `make research-open REASON="..."` through `_switch`, which commits it. `make switches` shows it, and `l7r-gate switches state research` prints it. Its one reader is `l7r_shared::switches::research` (new, `rust/guard/shared/src/switches.rs`), which the guard, the tick and the switches tool all call. The guard cannot build on a gate crate (`check guard-deps`), and the task crate does not build on `ci`. A missing file or entry reads `open`. A malformed entry also reads `open`, with MALFORMED in its why. That is the label of this decision: `open` is the state in which the research rules bind, as `clean` is for claims, so a broken file never silently defers research. **A defect fixed on the way:** `switches::write` serialized only `claims` and `port`, so any later `make claims-*` or `make port-*` would have dropped a third axis. It now writes all three, pinned by a test (set research, then claims; research survives).
+  - **(1) The box answer.** While deferred, a `research: physical` task's boxes may be answered `deferred: UNRESEARCHED` instead of by a pass. The literal text goes on the box line itself, after its box(es): `- [ ] research pass  deferred: UNRESEARCHED`. It goes on the box line because the tick keeps only box lines below `verify:` (feature 315), so an answer on a line of its own would be cut. Every box on an answered line is answered, and any of the five boxes may take the answer. An answered box stays `[ ]`, and `BOXES=1` does not tick it, because a tick would say a pass ran. At tick and land (`tick/text.rs::boxes_refusal`, the one rule both ask), an answered open box is no refusal while the switch is `deferred`. While the switch is `open`, an answered box is refused with or without `BOXES=1`, and the refusal names the switch. The standing rule over every tasks file (`research_boxes.rs::violations`) accepts an answered box whatever the switch's state, so a task ticked while deferred stays green once the switch reopens; its answer is the history. The tick does not check that `make research-backlog` lists the decision. The backlog is keyed by claim and page item, not by task, so the check would need each task to name its items, a form no task has. The answer's text and the refusal's wording name the backlog instead (GUESS: the cheaper route, taken where the record is silent).
+  - **(2) A port stage's end.** No tool enforces "each port stage's end searches the ones it touched"; it is prose in the root CLAUDE.md's Research bullet and `docs/research-doctrine.md` (the T236 restatement, and the citation-rules paragraph). Both are restated to say that while the switch is `deferred`, a stage's end LISTS what it touched (`make research-backlog STAGE=<stage>`) and does not search it. While deferred, the exception that still searches first ("other code builds on it or a guess is likely visibly wrong") goes through `RESEARCH_OK` too, because the GM deferred "all of it". The `research-backlog` target's help line says the same.
+  - **(3) The guard.** New `research_switch_hooks.rs` (PreToolUse, `Agent|Bash`). While the switch is `deferred` it refuses:
+    - an Agent dispatch of `research-pass`. A check-wave unit is covered too, because `workflow_hooks` puts each unit through the Agent hooks.
+    - a Bash call that invokes `make page-session`, read by `shared::make::targets` (an invocation, not a mention).
+    The refusal names the switch, its reason, who threw it and when, and the compliant steps: label the decision UNRESEARCHED onto `make research-backlog`, or `make research-open REASON=` once the GM turns to research. `RESEARCH_OK="<reason>"` is the escape, in the prompt or the command, and is logged `escaped`. A bare token is refused (`shared::escape`). Each refusal is logged `blocked`. While `open`, the guard is silent. The switch is read from the session's clone, else the mirror. Its tests run on fixture trees (open, deferred, missing, malformed), never the live file. It is registered in `guards.rs` and `lib.rs`, with the suite `tests/hooks/research-switch-hooks.sh` -> `guard-shim.sh` and `test-research-switch-hooks.sh`. Its messages go through `make guard-messages`.
+  - **Not built:** impl-drift's NEEDS-RESEARCH verdicts already stay listed and refuse nothing while claims stand at `report` (feature 445), so the T244 line's last clause needs no code.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the research axis, and `write` keeping every axis | `ci` crate's switches tests: the research axis read, set and kept by a later throw (red on HEAD: no axis; claims' throw dropped it) | n/a: tooling | none | n/a |
+| the box answer at tick and in the standing rule | `task` crate's text and research-box tests (red on HEAD: the answered box refused) | n/a: tooling | none | n/a |
+| the guard | `test-research-switch-hooks.sh` red with the rule disabled | n/a: tooling | none | n/a |
+
+### T244 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. While the GM defers research, no procedure of this repository starts a search pass or a page session unasked. A physical task lands with its decision drawn UNRESEARCHED onto the backlog. Reopening is one `make research-open REASON=`.
+2. **The constraints.** The T244 line. The switches' form (`docs/switches.md`: reason required, recorded who and when, an unknown key ignored). The guard doctrine (root CLAUDE.md "What is enforced": match invocations, not mentions; the escape checked first; proven to fire). T236's backlog rule.
+3. **Where each comes from.** G: the GM 2026-11-25 (tasks.md T244). R: `docs/research-doctrine.md` T236's restatement. O: the code read 2026-11-25 (`ci/switches.rs` writes two axes; `tick/text.rs::boxes_refusal`; `research_boxes.rs::violations`).
+4. **Do they describe the world here?** Yes, read 2026-11-25: the stage-end search exists only as prose (`grep -rn "stage's end"` outside `specs/`: CLAUDE.md, `docs/research-doctrine.md`, the Makefile's help line), and research starts only through `research-pass` and `make page-session`.
+5. **The order.** Before 449's port resumes (the T244 line). The switch is thrown to `deferred` by `make research-deferred`, which commits by itself, after this lands.
+6. **The exits.** Green: `make closing-checks T=T244 F=451`. Red: what failed is recorded and the task set down; a claim that it cannot be done is ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** Red first: each new test is shown failing on HEAD's code. The guard's suite is shown red with its rule disabled and green restored. `make guard-messages` is clean.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The `write` defect: a third axis, once added, would be erased by the next claims or port throw. Fixed here. No map changes.
+
+**Found and left?**
+- `switches::write` serialized only the two axes it knew, so an added axis would be erased by any later throw. Fixed here.
+
+**Performance work?** no: a switch and a guard.
+
