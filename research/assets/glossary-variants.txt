@@ -1197,12 +1197,15 @@ fairway	fairway
 fall line	fall line
 fan foot	fan foot
 fan head	alluvial fan
+fan middle	fan middle
+fan middles	fan middle
 fan palm	fan palm
 fan palms	fan palm
 fan plain	alluvial fan
 fan zhongyan	Fan Zhongyan
 fan's foot	fan foot
 fan's head	alluvial fan
+fan's middle	fan middle
 fan-foot	fan foot
 fan-palm	fan palm
 fan-palm-dike	fan palm
