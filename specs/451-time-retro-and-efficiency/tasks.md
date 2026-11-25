@@ -166,3 +166,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T238 the size-edit check (rust/gate checks question_size, 451 T184) and make question-sizes measure a page's size two ways: on 2026-11-25 page session P12's research correction to 0006's drawing page read as a SIZE EDIT at 21,792 bytes against a 20,000 limit while make question-sizes reported 0 pages over 20,000 bytes of prose, and the check refused the rewrite for dropping 'not' and 'without' although the edit was a correction from a search pass (449 T428), not a cut to fit the cap: the two read one measure (the prose the cap is set on), and an edit that leaves the page under its cap by that measure is no size edit
       research: rendering
+- [ ] T239 make closing-checks prints 'BLOCKED: every error static printed is in another task's files - ()' with an empty list when the errors are in the started task's own files (seen by 449 T224's, T433's builders, 2026-11-24/25): an empty list is never an attribution - the line names the files, or says the errors are the task's own
+      research: rendering

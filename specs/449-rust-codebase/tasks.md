@@ -118,6 +118,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
 - [ ] T433 lands before T158: the map check that no dry plot stands on water (rust/phases/src/driver/check.rs check#no dry plot on the water) tests only a plot's corners, so a watercourse that crosses a plot or ends inside it passes (impl-drift 2026-11-25 in page session P12's cascade, DRIFTED fix: code; /home/agent/.claude/jobs/c6fd72d1/tmp/cascade/p12-cascade.md): the check tests the plot's whole area against every watercourse, red-first on a constructed case, then a sweep says whether any rolled map draws such a plot (a check that passes bad work is a defect, constitution XIV)
       research: rendering
+- [ ] T434 lands before T158: three more map checks in rust/phases/src/driver/check.rs ask only a plot's corners, the gap 449 T433 closed for dry_on_water: dry_on_paddy, dry_on_settlement and reeds_on_dry (found 2026-11-25 by T433's builder; no wrong map measured from them): each asks the plot's whole area as T433's Drawn::meets does, red-first on a constructed case, and the 41,000-roll sweep says whether any rolled map now fails (a check that would pass a wrong map is a defect, constitution XIV)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
