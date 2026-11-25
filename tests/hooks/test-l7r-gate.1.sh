@@ -296,5 +296,39 @@ rm -f "$BT/tool/l7r-gate.build.json"; touch -d '2100-01-01' "$BT/tool/l7r-gate"
 OUT=$(L7R_GATE_TARGET="$BT" L7R_GATE_CARGO="$TMP/cargo-id" "$STAMP" x 2>&1); check "build id: a binary built before T197 runs" 0 $?
 [ -z "$OUT" ]; check "build id: ...and is handed none ($OUT)" 0 $?
 
+# ---- a build inside a cover run (feature 451 T247): a crate's coverage tests run with the cover's environment - its RUSTFLAGS, the
+# RUSTC_WORKSPACE_WRAPPER that adds `-C instrument-coverage` to the workspace's crates (`rustc/cover.rs`' `workspace_only`), cargo-llvm-cov's
+# own variables - and a test that calls this launcher after a gate source edit rebuilt the tool inside it: an instrumented l7r-gate, whose
+# every later call dropped a default_*.profraw in its working directory (21 hook-suite tests failed on their fixture clones, 2026-11-25).
+# The build clears that environment, and a binary that comes out instrumented anyway is removed, never run.
+CT="$TMP/cover-target"; mkdir -p "$CT/tool" "$TMP/cover-cwd"
+cat > "$TMP/cargo-cover" <<'EOF3'
+#!/usr/bin/env bash
+# names each coverage variable it was given, and builds a stub that is instrumented (carries the section's name, drops a profile) if any was
+seen=; for v in RUSTFLAGS CARGO_ENCODED_RUSTFLAGS CARGO_BUILD_RUSTFLAGS RUSTDOCFLAGS RUSTC_WORKSPACE_WRAPPER RUSTC_WRAPPER LLVM_PROFILE_FILE \
+  CARGO_LLVM_COV CARGO_LLVM_COV_SHOW_ENV CARGO_LLVM_COV_TARGET_DIR; do [ -n "${!v+x}" ] && seen="$seen $v"; done
+echo "seen=$seen" >> "$COVER_CALLS"
+if [ -n "$seen" ] || [ -n "${COVER_ALWAYS:-}" ]; then
+  printf '#!/usr/bin/env bash\n# __llvm_prf_cnts\n: > default_1_0.profraw; echo "stub $*"\n' > "$CARGO_TARGET_DIR/tool/l7r-gate"
+else printf '#!/usr/bin/env bash\necho "stub $*"\n' > "$CARGO_TARGET_DIR/tool/l7r-gate"; fi
+chmod +x "$CARGO_TARGET_DIR/tool/l7r-gate"
+EOF3
+chmod +x "$TMP/cargo-cover"; export COVER_CALLS="$TMP/cover.calls"
+cover_env=(RUSTFLAGS="-C link-arg=-fuse-ld=lld" CARGO_ENCODED_RUSTFLAGS= RUSTC_WORKSPACE_WRAPPER="$TMP/instrument.sh" LLVM_PROFILE_FILE="$TMP/cover-%p.profraw"
+  CARGO_LLVM_COV=1 CARGO_LLVM_COV_SHOW_ENV=1 CARGO_LLVM_COV_TARGET_DIR="$TMP/llvm-cov-target")
+OUT=$(cd "$TMP/cover-cwd" && env "${cover_env[@]}" L7R_GATE_TARGET="$CT" L7R_GATE_CARGO="$TMP/cargo-cover" "$STAMP" a b 2>&1); check "a cover run's build: the command runs" 0 $?
+[ "$(cat "$COVER_CALLS")" = "seen=" ]; rc=$?; check "a cover run's build: cargo is handed none of the coverage environment ($(cat "$COVER_CALLS"))" 0 $rc
+OUT=$(cd "$TMP/cover-cwd" && L7R_GATE_TARGET="$CT" L7R_GATE_CARGO="$TMP/cargo-cover" "$STAMP" a b 2>&1)
+[ "$OUT" = "stub a b" ] && [ -z "$(ls "$TMP/cover-cwd")" ]; rc=$?; check "a cover run's build: a later call drops no profile where it runs ($OUT; $(ls "$TMP/cover-cwd" | paste -sd' ' -))" 0 $rc
+rm -f "$TMP/cover-cwd"/*
+rm -f "$CT/tool/l7r-gate" "$COVER_CALLS"
+OUT=$(cd "$TMP/cover-cwd" && COVER_ALWAYS=1 L7R_GATE_TARGET="$CT" L7R_GATE_CARGO="$TMP/cargo-cover" "$STAMP" a b 2>&1); check "an instrumented build: refused" 1 $?
+case $OUT in *"stub "*) echo "FAIL  an instrumented binary never runs: $OUT"; FAILED=1 ;; esac
+[ ! -e "$CT/tool/l7r-gate" ] && [ ! -e "$CT/tool/l7r-gate.build.json" ] && [ -z "$(ls "$TMP/cover-cwd")" ]
+check "an instrumented build: removed, not left as the tool" 0 $?
+case $OUT in *"l7r-gate: l7r-gate came out instrumented for coverage"*) : ;; *) echo "FAIL  the refusal says why: $OUT"; FAILED=1 ;; esac
+OUT=$(COVER_ALWAYS=1 L7R_GATE_TARGET="$CT" L7R_GATE_CARGO="$TMP/cargo-cover" L7R_GATE_PRINT_FRESH=1 "$STAMP" 2>&1); check "an instrumented build: print-fresh names no binary" 1 $?
+unset COVER_CALLS
+
 echo -----
 if [ "$FAILED" -eq 0 ]; then echo "all gate-stamp tests passed (shard 1)"; exit 0; else echo "SOME TESTS FAILED"; exit 1; fi

@@ -1620,6 +1620,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T247 (451 T229's builder in a parallel worktree: the tool target's l7r-gate rebuilt inside a cover run's environment after a gate source edit, and 21 tests of clone-sync-hooks.sh and sync-with-main.sh then failed on 'uncommitted changes' from the default_*.profraw files in their fixture clones, observed 2026-11-25, method: T229's builder's hook-suite run; seen by T235's, T231's and T229's builders)": {
+   "sha256": "14441c6ade6c86d6863fdd76360977344ea49dc0fb3e1585b2a66a2381a2af90",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T247 Approach (checklist part A)": {
+   "sha256": "dec6655866cd4daf89a0fba81a07988678b2f3f342586deb43ff959fa6be1999",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -21353,6 +21365,52 @@
      "why": "The task holds a review round. Its only added cost is one extra arbiter.jsonl read on a capped repeat. Scheduling under 451 FR-013 is unaffected."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T247 (451 T229's builder in a parallel worktree: the tool target's l7r-gate rebuilt inside a cover run's environment after a gate source edit, and 21 tests of clone-sync-hooks.sh and sync-with-main.sh then failed on 'uncommitted changes' from the default_*.profraw files in their fixture clones, observed 2026-11-25, method: T229's builder's hook-suite run; seen by T235's, T231's and T229's builders)",
+    "### T247 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T247-env",
+     "summary": "build() runs cargo under env -u of every variable cargo llvm-cov show-env sets, every rustflags/rustdocflags channel, both wrapper channels (RUSTC_WORKSPACE_WRAPPER, RUSTC_WRAPPER) and CARGO_LLVM_COV_BUILD_DIR, so the tool's flags come only from .cargo/config.toml",
+     "class": "within",
+     "why": "The task line asks for the rebuild with the instrumentation flags cleared; the plan measured (toy workspace, 2026-11-25) that the builder's env -u RUSTFLAGS workaround misses the RUSTC_WORKSPACE_WRAPPER channel, and clears every channel that can carry the flag. This is the requested fix, no wider."
+    },
+    {
+     "id": "T247-refuse",
+     "summary": "After a successful build, a binary holding __llvm_prf_cnts is removed with its build.json, the launcher exits 1 naming why and where to look, and L7R_GATE_PRINT_FRESH names no binary",
+     "class": "within",
+     "why": "The task line: an instrumented binary is never left as the tool; feature 449 T61: the launcher fails closed. The false-positive check (0 of 19 plain tool binaries hold the section) shows no correct build is refused."
+    },
+    {
+     "id": "T247-scan-at-build",
+     "summary": "The instrumentation scan runs only at a build (0.038 s over the 33 MB binary), never on a fresh call",
+     "class": "within",
+     "why": "T205: no extra work on a fresh call. Where the check runs is a cost choice that does not narrow what is enforced, since every new binary passes through a build."
+    },
+    {
+     "id": "T247-pre-existing",
+     "summary": "A binary instrumented before this fix is not hunted down; the <bin>.plain freshness stamp was priced and not built, because the scan finds no such binary in any clone",
+     "class": "within",
+     "why": "Nothing is left unfixed here: the scan of every clone's tool target (2026-11-25) found 0 instrumented binaries, so there is no wrong outcome. A guard against a state measured to exist nowhere is not owed (constitution XIV, what a defect is), and every binary built from now on passes through the new refusal. The plan states this openly with its evidence rather than hiding it."
+    },
+    {
+     "id": "T247-guard-wrapper",
+     "summary": "scripts/hooks/l7r-guard.sh, which builds the same way into the same target, is left unchanged",
+     "class": "within",
+     "why": "The task is the gate launcher's tool build. The plan measured that no Rust test runs l7r-guard.sh (grep -rn l7r-guard.sh rust/, 2026-11-25), so it is never started inside a cover environment and shows no defect, and its build writes l7r-guard, not the gate's programs. Caveat for the builder, not a ruling: that search finds the script by name in rust/ only; a Rust test reaching it through another script would be missed."
+    },
+    {
+     "id": "T247-tests",
+     "summary": "Red-first tests in tests/hooks/test-l7r-gate.1.sh: cargo is handed none of the coverage environment, a later call drops no profile, and the instrumented-build refusal (refused, removed, says why, print-fresh names nothing)",
+     "class": "within",
+     "why": "Enforcement of what the task line asks (red-first on a cover-run environment); each test fails only when the requested behavior is absent."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -34135,6 +34193,50 @@
      "summary": "Performance work? no.",
      "class": "within",
      "why": "The task holds a review round. Its only added cost is one extra arbiter.jsonl read on a capped repeat. Scheduling under 451 FR-013 is unaffected."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T247": {
+   "section_sha256": "d9f48536e219e3e57603678ec1afa499775666152b0df03acc04b9930a78db25",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T247-env",
+     "summary": "build() runs cargo under env -u of every variable cargo llvm-cov show-env sets, every rustflags/rustdocflags channel, both wrapper channels (RUSTC_WORKSPACE_WRAPPER, RUSTC_WRAPPER) and CARGO_LLVM_COV_BUILD_DIR, so the tool's flags come only from .cargo/config.toml",
+     "class": "within",
+     "why": "The task line asks for the rebuild with the instrumentation flags cleared; the plan measured (toy workspace, 2026-11-25) that the builder's env -u RUSTFLAGS workaround misses the RUSTC_WORKSPACE_WRAPPER channel, and clears every channel that can carry the flag. This is the requested fix, no wider."
+    },
+    {
+     "id": "T247-refuse",
+     "summary": "After a successful build, a binary holding __llvm_prf_cnts is removed with its build.json, the launcher exits 1 naming why and where to look, and L7R_GATE_PRINT_FRESH names no binary",
+     "class": "within",
+     "why": "The task line: an instrumented binary is never left as the tool; feature 449 T61: the launcher fails closed. The false-positive check (0 of 19 plain tool binaries hold the section) shows no correct build is refused."
+    },
+    {
+     "id": "T247-scan-at-build",
+     "summary": "The instrumentation scan runs only at a build (0.038 s over the 33 MB binary), never on a fresh call",
+     "class": "within",
+     "why": "T205: no extra work on a fresh call. Where the check runs is a cost choice that does not narrow what is enforced, since every new binary passes through a build."
+    },
+    {
+     "id": "T247-pre-existing",
+     "summary": "A binary instrumented before this fix is not hunted down; the <bin>.plain freshness stamp was priced and not built, because the scan finds no such binary in any clone",
+     "class": "within",
+     "why": "Nothing is left unfixed here: the scan of every clone's tool target (2026-11-25) found 0 instrumented binaries, so there is no wrong outcome. A guard against a state measured to exist nowhere is not owed (constitution XIV, what a defect is), and every binary built from now on passes through the new refusal. The plan states this openly with its evidence rather than hiding it."
+    },
+    {
+     "id": "T247-guard-wrapper",
+     "summary": "scripts/hooks/l7r-guard.sh, which builds the same way into the same target, is left unchanged",
+     "class": "within",
+     "why": "The task is the gate launcher's tool build. The plan measured that no Rust test runs l7r-guard.sh (grep -rn l7r-guard.sh rust/, 2026-11-25), so it is never started inside a cover environment and shows no defect, and its build writes l7r-guard, not the gate's programs. Caveat for the builder, not a ruling: that search finds the script by name in rust/ only; a Rust test reaching it through another script would be missed."
+    },
+    {
+     "id": "T247-tests",
+     "summary": "Red-first tests in tests/hooks/test-l7r-gate.1.sh: cargo is handed none of the coverage environment, a later call drops no profile, and the instrumented-build refusal (refused, removed, says why, print-fresh names nothing)",
+     "class": "within",
+     "why": "Enforcement of what the task line asks (red-first on a cover-run environment); each test fails only when the requested behavior is absent."
     }
    ],
    "verdict": "CLEAR"

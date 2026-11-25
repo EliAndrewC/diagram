@@ -100,7 +100,15 @@ elif stale; then
   # parsing, regexes, logs, house style) into nearly every command, so its verdicts and records could come from code older than the code
   # they judge. The commands that render no verdict and write no record a gate trusts (`rust format` writing, a bare `speckit-todo`
   # listing, `coord lines`) were 6% of the week's 12,700 make targets (`.git/tool-usage.jsonl`, 2026-11-13 to 20), too few for the risk.
-  build() { ( cd "$TREE" && RUSTUP_HOME="${RUSTUP_HOME:-$real/.rustup}" CARGO_HOME="${CARGO_HOME:-$real/.cargo}" CARGO_TARGET_DIR="$TARGET" "$cargo" build --profile tool --quiet --manifest-path "$TREE/rust/Cargo.toml" "${PKG[@]}" ) 2> "$err"; }
+  # A BUILD INSIDE A COVER RUN (feature 451 T247): a crate's coverage tests run with the cover's environment, and one that calls this
+  # launcher after a gate source edit rebuilt the tool inside it - instrumented, so every later call dropped a default_*.profraw where it
+  # ran (21 hook-suite tests failed on their fixture clones, 2026-11-25). The flag rides RUSTC_WORKSPACE_WRAPPER (`rustc/cover.rs`'
+  # `workspace_only` moves it out of RUSTFLAGS), so clearing RUSTFLAGS alone keeps it (a toy workspace under that wrapper, 2026-11-25):
+  # the build clears every variable `cargo llvm-cov show-env` sets and every flag or wrapper channel cargo reads, and the tool's own
+  # flags come from `.cargo/config.toml`, as outside a cover run.
+  plain=(-u RUSTFLAGS -u CARGO_ENCODED_RUSTFLAGS -u CARGO_BUILD_RUSTFLAGS -u RUSTDOCFLAGS -u CARGO_ENCODED_RUSTDOCFLAGS -u RUSTC_WORKSPACE_WRAPPER
+    -u RUSTC_WRAPPER -u LLVM_PROFILE_FILE -u CARGO_LLVM_COV -u CARGO_LLVM_COV_SHOW_ENV -u CARGO_LLVM_COV_TARGET_DIR -u CARGO_LLVM_COV_BUILD_DIR)
+  build() { ( cd "$TREE" && env "${plain[@]}" RUSTUP_HOME="${RUSTUP_HOME:-$real/.rustup}" CARGO_HOME="${CARGO_HOME:-$real/.cargo}" CARGO_TARGET_DIR="$TARGET" "$cargo" build --profile tool --quiet --manifest-path "$TREE/rust/Cargo.toml" "${PKG[@]}" ) 2> "$err"; }
   err=$(mktemp); build; rc=$?
   # A STALE INCREMENTAL UNIT (feature 451 T142): the tool profile is incremental release (T95), and rustc 1.87 can reuse one codegen unit's
   # post-ThinLTO object while the unit that defines a symbol it imports is rebuilt under a new `.llvm.<hash>` name: the crate's rlib then
@@ -147,6 +155,14 @@ elif stale; then
     exit 1
   fi
   rm -f "$err"
+  # NEVER LEFT INSTRUMENTED (T247): a binary that carries LLVM's profile counters (`__llvm_prf_cnts`, a section only an instrumented build
+  # has: 0 of the 19 tool binaries in every clone's target, 2026-11-25) is removed, not run, whatever put the flag in - read here, at a
+  # build, never on a call
+  if grep -qaF __llvm_prf_cnts "$BIN"; then
+    rm -f "$BIN" "$BIN.build.json"
+    echo "l7r-gate: ${BIN##*/} came out instrumented for coverage, so it is removed and nothing runs on it (it would drop a default_*.profraw wherever it runs): find what adds -C instrument-coverage outside the cover run (\`.cargo/config.toml\`'s rustflags, a cargo config's rustc-wrapper) and re-run" >&2
+    exit 1
+  fi
   touch "$BIN"  # cargo leaves an up-to-date binary's time alone, and a source newer than it would ask again on every call
   # THE BUILD'S ID (feature 451 T197): HEAD and each uncommitted file the binary is built from at its blob ("deleted" where gone),
   # written beside it, so an answer it records says what judged it - this tree holds other builders' uncommitted code
