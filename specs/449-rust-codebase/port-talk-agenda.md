@@ -37,6 +37,18 @@ agents, 251 on background commands, 148 on nothing; agents used 2,147 agent-minu
     copies until 451 T245 or a shared build cache. Measure: comparable small tasks at 1, 2, 3 and 4 builders, each builder's
     minutes to its stop point and its compile and test minutes from the task time breakdown, peak memory and load; the count
     is where total time stops improving or memory nears a safety margin.
+    Trials 2-5, measured 2026-11-25 (451 T235+T242, T245+T231, T227+T229, T232/T247/T246/T233, T248+T249: eleven tasks, two
+    builders at a time, each in its own worktree, carried into the clone by cherry-pick and landed one at a time; all
+    landed). New frictions beyond trial 1: the shared started-task mark refused a landing while the other task was started
+    (worked around by moving the mark for each landing; a task builds fine without it); parallel builders filing tasks
+    collided on task numbers twice (T247, T248 - renumbered by hand; builders now give titles and the coordinator files);
+    every carry-over conflicted on plan-review.json (merged as JSON, both sides kept) and sometimes plan.md and request.md;
+    plan reviewers recorded verdicts from the session clone instead of the worktree (brief now names the tree); closing
+    checks run after a commit set a task's own lint red aside as another task's; one closing-checks test flaked with two
+    runs side by side (451 T252); a worktree's fetch was logged into the session clone's attempts file; coverage-instrumented
+    gate binaries dropped profraw files (fixed, 451 T247); disk peaked at 91% with two cold caches (fixed by 451 T245/T246,
+    63% free at the end). What would make it routine, beyond trial 1's list: a mark per task, task numbers reserved by one
+    writer, plan-review.json written per task (or merged by a tool), and the verdict's tree named in the review bundle.
 
 2. A landing beside the next build: the landing's gate already runs in its own worktree; only its tick and push touch the
    clone (451 T242 fixes the late failure).
