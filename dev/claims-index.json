@@ -37698,19 +37698,22 @@
  },
  "rust/phases/src/driver.rs::RUN_W#the drain's run drawn": {
   "body": "485df2d92f2c6dc1",
-  "claim": "the drain's run drawn - field-drains-akusuiro.drawing: the drainage-ditch class, at the collector's own outfall width, 5.5 ft (the deleted `DRAIN_FT`) - a polder's outfall run too, where on a dike-pond block the drain trunk itself is drawn at the block's creek width, 6 to 8 ft (`field::polder::ditches`, 449 T427), and the run keeps 5.5 ft past the sluice, a GUESS (polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing gives the ring no narrower than the creeks and no width for the run beyond the dike)",
-  "code": "e1793fea03c63712",
+  "claim": "the drain's run drawn - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: the drawn drain widens from a 1.2 ft head to a 5.5 ft outfall, the drain's own run onward drawn at that outfall width, 5.5 ft (the deleted `DRAIN_FT`), in field-drains-akusuiro.drawing's drainage-ditch class - a rice polder's outfall run too; on a dike-pond block the run past the outfall sluice is drawn at the ring canal's width instead (`driver::polder::sluice_channels`, 449 T431)",
+  "code": "4d9838f10fb13704",
   "core": "732a42dd766762cc",
-  "date": "2026-11-24",
-  "note": "5.5 ft is the drain's outfall rung; on a dike-pond block the trunk is max(rung, creek) = the creek width; the run past the sluice is a GUESS that 0019 does not answer, and junction widths need not add up",
+  "date": "2026-11-25",
+  "note": "5.5 ft is the drain's outfall rung, and the run onward is drawn at that width in the drainage-ditch class; the dike-pond exception matches `sluice_channels`",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "1a8d2810a9ba7323",
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
   },
-  "research": "707cf4088a389a49",
+  "research": "118079b449f31503",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:425944624bb66aef",
-   "0060-field-drains-akusuiro.drawing.html:d0df1f98de058c4f"
+   "0060-field-drains-akusuiro.drawing.html:d0df1f98de058c4f",
+   "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:603250935c007233",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b60a8b29980e1035",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:f480baa549c2f610"
   ],
   "verdict": "IN-STEP"
  },
@@ -39401,24 +39404,19 @@
  },
  "rust/phases/src/driver/polder.rs::FEEDER_W#the feeder's width": {
   "body": "3467c3edc57a3a07",
-  "claim": "the feeder's width - GUESS: a line 3 ft wide, the deleted ink's, carried as it stood; no page sizes a polder's feeder - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing's ladder puts a pond feeder at roughly twice its 1.5 ft floor and the head race carrying a whole fan's water at 6.0 ft, and says neither is this channel",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "c316ed1d0724b84f",
+  "claim": "the feeder's width - GUESS: a line 3 ft wide, the deleted ink's, carried as it stood; no page sizes a polder's feeder - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing's ladder puts a pond feeder at roughly twice its 1.5 ft floor and the head race carrying a whole fan's water at 6.0 ft, and says neither is this channel - a rice polder's feeder; on a dike-pond block the feeder is drawn at the ring canal's width instead (`sluice_channels`, 449 T431)",
+  "code": "a4f19b4e6e9f024f",
   "core": "8bce39cf9dfe3ec8",
-  "date": "2026-11-22",
-  "note": "3.0 ft is not sized by any page; it sits on the ladder at twice the 1.5 ft floor, below the 6.0 ft head race; GUESS holds",
+  "date": "2026-11-25",
+  "note": "the cited pages never size a feeder from the wild water to the inlet (0019 gives only its course); 3 ft also fits the ladder's pond-feeder step of about twice the 1.5 ft floor",
   "pages": {
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
   },
   "research": "36e3a982de000a83",
   "rests": [
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:0c50dfc54e196c68",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7d2ddc0969f9e213",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:8ab31b5afaea5611",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b3d0c7e9f522e493",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:f73d5c518c731c59"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:8ab31b5afaea5611"
   ],
-  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::HEDGE#the polder's paint": {
@@ -39529,14 +39527,14 @@
  "rust/phases/src/driver/polder.rs::bank_bands#only in the reeds": {
   "body": "060b0d1c8fe100fa",
   "claim": "only in the reeds - reed-beds-and-the-marshs-edge-yoshihara.drawing: the band lines the water through the marsh, so it runs only where the bank's ground is reeds, and stops at the wild pond's rim, the water itself",
-  "code": "6dc3a4cb925b6276",
-  "core": "e8eab2a99c7caf93",
+  "code": "a322329498a323f5",
+  "core": "64ecceead40775cb",
   "date": "2026-11-22",
   "note": "the band is kept only where a bank sample falls inside a marsh strip or the fringe, and only outside the pond's ellipse grown by BANK_FT. This matches reeds to the water where a stream or ditch crosses the marsh, and reeds kept out of the water itself.",
   "pages": {
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "reads": "01c40c5a96dab429",
+  "reads": "0b4e5fd188c8ab5f",
   "research": "a44790630d28af23",
   "rests": [
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:66a290834b74bd0d",
@@ -39544,19 +39542,20 @@
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::bank_bands#the band on each bank": {
-  "body": "060b0d1c8fe100fa",
+  "body": "ad3708560b448031",
   "claim": "the band on each bank - reed-beds-and-the-marshs-edge-yoshihara.drawing: a narrow band of denser reeds lines each bank where a stream or ditch crosses the marsh (`BANK_FT`)",
-  "code": "48bcd3c9ad1eccb4",
-  "core": "e8eab2a99c7caf93",
-  "date": "2026-11-22",
-  "note": "both banks of the feeder and of the outfall drain get a band, each set off by (w+BANK_FT)/2 from the center line. This matches \"a narrow band of denser ... reeds lines each bank\", which the page records as a map drawing convention.",
+  "code": "da165c6ea5a43f3c",
+  "core": "64ecceead40775cb",
+  "date": "2026-11-25",
+  "note": "a band of denser reeds lines each bank, set off at each channel's drawn width from `sluice_channels`",
   "pages": {
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "reads": "01c40c5a96dab429",
+  "reads": "0b4e5fd188c8ab5f",
   "research": "a44790630d28af23",
   "rests": [
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:66a290834b74bd0d",
@@ -39568,14 +39567,15 @@
  "rust/phases/src/driver/polder.rs::bank_bands#the reach crossed once per ring": {
   "body": "060b0d1c8fe100fa",
   "claim": "the reach crossed once per ring - NONE: plane geometry, which decides nothing about the place",
-  "code": "ed99731ef45470ea",
-  "core": "e8eab2a99c7caf93",
+  "code": "b2f1a604473f75f7",
+  "core": "64ecceead40775cb",
   "date": "2026-11-22",
   "note": "the bounding boxes, clipping, crossing order, span merging and run breaks are plumbing and decide nothing about the place.",
   "pages": {},
-  "reads": "01c40c5a96dab429",
+  "reads": "0b4e5fd188c8ab5f",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::clip#the clip": {
@@ -39642,32 +39642,31 @@
   "body": "4481c02f45892fe0",
   "claim": "the pond canals named - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: the canals are drawn as the waterways the ponds lie among, not as field ditches - on a dike-pond block the feeder, the ring canal's supply trunks and the creeks between the ponds are the `pond canal` kind, the drain the drainage ditch; on a rice polder they are irrigation ditches, as they were on both before 449 T420",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "75145211e72d29f6",
-  "core": "eb705d9a990787d9",
+  "code": "20bcc91c25f93c02",
+  "core": "70f67edee984c34e",
   "date": "2026-11-24",
   "note": "on a converted block the feeder, trunks and creeks are named pond canal and the drain a drainage ditch; a rice polder's are irrigation ditches.",
   "pages": {
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "4081a9fc34433087"
   },
-  "reads": "d5cdff38cdd39534",
   "research": "c422f7c0138d3951",
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:98af9cb0c036de90"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the band cut where a channel crosses": {
-  "body": "a2c56416f7095416",
-  "claim": "the band cut where a channel crosses - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: where a channel crosses the dike, the band is cut, the water running through a gap in the earthwork under a sluice gate, not over its top - the band painted before every channel's stroke, so the feeder and the outfall each show through it at their drawn width (`FEEDER_W`, `RUN_W`), bank to bank, the earth meeting the water as the waterside reeds do (449 T236); before 449 T419 the band was painted after the water, unbroken over both crossings",
-  "code": "4d7164dcb4971127",
-  "core": "a3fb780c96cdc7a2",
-  "date": "2026-11-24",
-  "note": "the band is painted before `draw_channels` (the feeder at FEEDER_W) and the outfall (RUN_W), so each crossing shows at its own drawn width",
+  "body": "393b0ab7b37b334e",
+  "claim": "the band cut where a channel crosses - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: where a channel crosses the dike, the band is cut, the water running through a gap in the earthwork under a sluice gate, not over its top - the band painted before every channel's stroke, so the feeder and the outfall each show through it at their drawn width (`sluice_channels`), bank to bank, the earth meeting the water as the waterside reeds do (449 T236); before 449 T419 the band was painted after the water, unbroken over both crossings",
+  "code": "00efdb057b2d709b",
+  "core": "7ec04340562757cf",
+  "date": "2026-11-25",
+  "note": "the band is painted before both channels, and the outfall is now stroked at its `sluice_channels` width, so both show through the band",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "ab92e43e839f458b"
   },
-  "reads": "6a57ff76d907340c",
+  "reads": "2e837d0351e5519e",
   "research": "4d6c0cf7fdf1026e",
   "rests": [
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:e8c05b8d91b4cafc"
@@ -39675,62 +39674,61 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the cut as wide as the water": {
-  "body": "bd0a8b41bb9877e9",
+  "body": "393b0ab7b37b334e",
   "claim": "the cut as wide as the water - GUESS: the page silent on the cut's width; the channel's own drawn width, the simpler drawing (paint order, the faces recorded whole) over a cut built into the band's outline, taken where the record does not choose",
-  "code": "8d0afde8904bc6f2",
-  "core": "a3fb780c96cdc7a2",
-  "date": "2026-11-24",
-  "note": "the page does not give the cut's width; the code uses the channel's own stroke width, a fair guess",
+  "code": "c51eb2d82db454cf",
+  "core": "7ec04340562757cf",
+  "date": "2026-11-25",
+  "note": "the cited page gives no width for the cut; it is a GUESS at the channel's own width",
   "pages": {},
-  "reads": "6a57ff76d907340c",
+  "reads": "2e837d0351e5519e",
   "research": "",
-  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the dike and the banks mottled": {
   "body": "aa7112f46a13b1b1",
   "claim": "the dike and the banks mottled - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the band is mottled with patches of earth of different ages, as repairs are, never a ruled line; dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: a pond's bank is mottled earth under its bushes, like the polder's own dike - each band's patches (`mottle::dike`, `mottle::banks`) painted on its fill, the dike's before the channels that cut it and its trees, the banks' before the ponds' water and their crowns",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "fd2acce42bbafc57",
-  "core": "a3fb780c96cdc7a2",
+  "code": "2b860b51bbccec2c",
+  "core": "7ec04340562757cf",
   "date": "2026-11-24",
   "note": "the banks' patches go on their fill before the ponds' water and the crowns; the dike's go on its band before the channels and its trees",
   "pages": {
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "4081a9fc34433087",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "ab92e43e839f458b"
   },
-  "reads": "6a57ff76d907340c",
+  "reads": "2e837d0351e5519e",
   "research": "8da5968fcca316e3",
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:0c906f5e26dcec83",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the pocket pond's ring": {
   "body": "a5f4347b1ff80095",
   "claim": "the pocket pond's ring - GUESS: flooded ground 2.5 ft wide round the pond inside a bund line 2.2 ft wide, the deleted ink's; no page sizes the margin",
-  "code": "88a74de67148a5d3",
-  "core": "a3fb780c96cdc7a2",
+  "code": "02037c4431e94f4b",
+  "core": "7ec04340562757cf",
   "date": "2026-11-20",
   "note": "the code matches the claim: the fill is ink::FLOODED at prx+2.5 and pry+2.5, inside an ink::AZE stroke 2.2 wide. The page says nothing about the margin round a field or pocket pond, so GUESS is the right label",
   "pages": {},
-  "reads": "6a57ff76d907340c",
+  "reads": "2e837d0351e5519e",
   "research": "",
   "rests": [],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the polder drawn": {
-  "body": "a2c56416f7095416",
+  "body": "393b0ab7b37b334e",
   "claim": "the polder drawn - CONVENTION: the deleted `ink.dike` and `dikeponds`, each record drawn as the engine drew it, the sluices apart",
-  "code": "14e83e0e747aa814",
-  "core": "a3fb780c96cdc7a2",
-  "date": "2026-11-24",
-  "note": "the paint order, kinds and strokes are how things are shown; its physical figures are under its other claims.",
+  "code": "a90385e8329f668b",
+  "core": "7ec04340562757cf",
+  "date": "2026-11-25",
+  "note": "the strokes and paint follow the records as drawn; the figures with physical meaning carry claims of their own",
   "pages": {},
-  "reads": "6a57ff76d907340c",
+  "reads": "2e837d0351e5519e",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -39738,51 +39736,53 @@
  "rust/phases/src/driver/polder.rs::draw_sluices#on top": {
   "body": "fc877f78ad61615a",
   "claim": "on top - CONVENTION: the frame drawn above the water and the reeds, as the deleted `sluice_gate` drew it (its top layer) - `Svg` writes its marks in the order they are drawn, and `roll_polder` draws the sluices after the polder (`draw_polder`: its water, dike and fringe), the waterside strips and the bank bands, only the settlement's ground mark after them",
-  "code": "16432a6bd354db36",
-  "core": "9369cadd57809e1b",
+  "code": "532a9f1c62020a5a",
+  "core": "30f8b286d8614453",
   "date": "2026-11-24",
   "note": "pure draw order: `roll_polder` draws the sluices after the water, the strips and the bank bands, so the frame sits above the water",
   "pages": {},
-  "reads": "cc568008dd481174",
+  "reads": "b32ff88a57bad289",
   "research": "",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_sluices#the board's place": {
   "body": "fc877f78ad61615a",
   "claim": "the board's place - water-gates-and-sluices-shuimen.drawing: the board a few steps down the blocked channel from the junction, so that it plainly crosses the channel it blocks, not the one it branches from; a polder's sluice point stands 8.5 ft out from the ring canal's corner or its drain trunk's end (`RING_FT`, 6 ft each way, measured on Kuwabata 2026-11-22, feature 449 T249), joined to that junction by a drawn reach (`field::polder::joins`, 449 T263) and no other channel through it, so the board is drawn on the point, 8.5 ft down the blocked channel from the junction",
-  "code": "7aae3a366adb809e",
-  "core": "9369cadd57809e1b",
+  "code": "4697c9b056a18807",
+  "core": "30f8b286d8614453",
   "date": "2026-11-22",
   "note": "the inlet sluice sits at frame (-12, breadth+12) and its ring canal corner at (-6, breadth+6), 6 ft each way and about 8.5 ft apart; the outfall is the same at the tail. The board is centered on the sluice point and is a few steps down from the junction, as the page asks. It lies across the feeder or outfall, not across the ring canal it branches from. The join is not in `channels`, so no other channel is read through the point",
   "pages": {
    "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
   },
-  "reads": "cc568008dd481174",
+  "reads": "b32ff88a57bad289",
   "research": "e305ba29a00899a2",
   "rests": [
    "0179-water-gates-and-sluices-shuimen.drawing.html:067bd7a407956917",
    "0179-water-gates-and-sluices-shuimen.drawing.html:b61cf64d7fc5dad2",
    "0179-water-gates-and-sluices-shuimen.drawing.html:cf888beb9dde091c"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_sluices#the sluices drawn": {
-  "body": "fc877f78ad61615a",
+  "body": "fed4a9744811c8d4",
   "claim": "the sluices drawn - water-gates-and-sluices-shuimen.drawing: each a frame across the channel that crosses the dike at its point, at that channel's drawn width; none drawn where no channel is known, the gap named rather than guessed",
-  "code": "a90d4f549a52bc91",
-  "core": "9369cadd57809e1b",
-  "date": "2026-11-20",
-  "note": "each frame is laid across the channel found at its point, sized by that channel's drawn width; a sluice with no channel is skipped and the gap pushed to `missing`; one glyph, no open or shut form",
+  "code": "8c93ed888528a7b4",
+  "core": "30f8b286d8614453",
+  "date": "2026-11-25",
+  "note": "each frame lies across its channel at that channel's drawn width, now taken from `sluice_channels`; no frame is drawn where no channel is known",
   "pages": {
    "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
   },
-  "reads": "cc568008dd481174",
+  "reads": "b32ff88a57bad289",
   "research": "e305ba29a00899a2",
   "rests": [
-   "0179-water-gates-and-sluices-shuimen.drawing.html:067bd7a407956917",
    "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
-   "0179-water-gates-and-sluices-shuimen.drawing.html:30803fa2df4a125c",
-   "0179-water-gates-and-sluices-shuimen.drawing.html:b61cf64d7fc5dad2"
+   "0179-water-gates-and-sluices-shuimen.drawing.html:65c2e2ee17e2dda0",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:b61cf64d7fc5dad2",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:cf888beb9dde091c"
   ],
   "verdict": "IN-STEP"
  },
@@ -40041,6 +40041,27 @@
   "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/polder.rs::sluice_channels#the crossings no narrower than the ring": {
+  "body": "ed84aa741cc13b5c",
+  "claim": "the crossings no narrower than the ring - UNRESEARCHED: on a dike-pond block the feeder into the inlet sluice and the outfall's run out of the outfall sluice each drawn no narrower than the ring canal where it meets the sluice - its join's width (`field::polder::joins`), the block's creek width, 6 to 8 ft (`field::polder::ditches`, polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing#ring-canal-width-dike-pond), so neither steps down from the ring under its sluice's board, as a channel is never drawn wider than the one feeding it (how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing); no page sizes a polder's feeder or its run beyond the dike, and taking the ring's width is the easier route where the record is silent; a rice polder's keep `FEEDER_W` and `RUN_W`. Before 449 T431 a dike-pond block's were 3 and 5.5 ft against a 6 to 8 ft ring",
+  "code": "ea520f8ba6f2a8a2",
+  "core": "ca01097ff180c13d",
+  "date": "2026-11-25",
+  "note": "on a dike-pond block the feeder is max(3, inlet join) and the run is max(5.5, outfall join), both equal to the creek width of 6 to 8 ft; the rule that a branch is drawn no wider than its parent is on 0068; no cited page sizes the feeder or the run",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "1a8d2810a9ba7323",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
+  },
+  "reads": "221236370cb25b9f",
+  "research": "0ba6e961d2a2c33b",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:0fbfef4e578bd457",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:425944624bb66aef",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:73d0646a39f8d7dd",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e9e1c49b84a3b570"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/polder.rs::sluice_frame#the frame across its channel": {
   "body": "058d384ebbd99254",
   "claim": "the frame across its channel - water-gates-and-sluices-shuimen.drawing: a sluice drawn as a timber board across its channel between two posts, with the crossbeam and windlass that lifted it, the frame's span drawn true, post to post - about 16 to 24 ft on a field channel (`SLUICE_SPAN_FT`), bank to bank on a wider one; the frame itself the page's GUESS from how a lifting gate works",
@@ -40134,58 +40155,81 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::stage_waterward#the channels they stop at": {
-  "body": "4c4fd8c7b30d49f8",
-  "claim": "the channels they stop at - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: water crosses the dike only at gated sluices, the feeder at the inlet and the outfall's drain at the outfall, each at its drawn width (`FEEDER_W`, `RUN_W`); reed-beds-and-the-marshs-edge-yoshihara.drawing: the reeds drawn to the water's edge, kept out of the water",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "3e661dd1faf89473",
-  "core": "37107798ae2dd111",
-  "date": "2026-11-22",
-  "note": "the fringe on the outer face stops at the feeder (FEEDER_W) and the outfall's drain (RUN_W), the only water crossing the dike; the reeds run to the water's edge and stay out of the water",
+  "body": "0e8af15fa6219a01",
+  "claim": "the channels they stop at - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: water crosses the dike only at gated sluices, the feeder at the inlet and the outfall's drain at the outfall, each at its drawn width (`sluice_channels`: 3 and 5.5 ft on a rice polder, the ring canal's 6 to 8 ft on a dike-pond block, 449 T431); reed-beds-and-the-marshs-edge-yoshihara.drawing: the reeds drawn to the water's edge, kept out of the water",
+  "code": "65c7b4d7f91f9153",
+  "core": "4a06c2cfb43684a3",
+  "date": "2026-11-25",
+  "note": "water crosses the dike only at the two sluice channels, at the widths `sluice_channels` gives, and the reeds run to the water",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "1a8d2810a9ba7323",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
-  "reads": "47bc512ccc91a5f1",
+  "reads": "2c8ce14f5d4628d0",
   "research": "ea907de837a4268d",
   "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6a36dbfd16346637",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:73411ab3787c3b91",
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
   ],
-  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::stage_waterward#the reed strips": {
   "body": "4c4fd8c7b30d49f8",
   "claim": "the reed strips - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: reeds on the flanks of a dike that face the water",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "ff101ced4359f035",
-  "core": "37107798ae2dd111",
+  "code": "dd7670be2d17a550",
+  "core": "4a06c2cfb43684a3",
   "date": "2026-11-20",
   "note": "the strips are laid off the dike's outer face on the waterward flanks",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "1a8d2810a9ba7323"
   },
-  "reads": "47bc512ccc91a5f1",
+  "reads": "2c8ce14f5d4628d0",
   "research": "0640985f1cb092b8",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder/crossing_tests.rs::a_dike_ponds_feeder_and_outfall_run_are_no_narrower_than_its_ring_canal#the crossings' tests": {
+  "body": "08a1a646abfab7f1",
+  "claim": "the crossings' tests - NONE: fixtures and assertions; the rule's claim is at `sluice_channels`",
+  "code": "a785f46577f79f1b",
+  "core": "ca1c72605f93a4d9",
+  "date": "2026-11-25",
+  "note": "fixtures and assertions; the 3.0 and 5.5 restate `FEEDER_W` and `RUN_W` and decide nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder/crossing_tests.rs::drawn_width#the crossings' tests": {
+  "body": "3bc23d11614fdd69",
+  "claim": "the crossings' tests - NONE: fixtures and assertions; the rule's claim is at `sluice_channels`",
+  "code": "9d3900ffb7b7cfc0",
+  "core": "7b38dd4f4c307e51",
+  "date": "2026-11-25",
+  "note": "reads a stroke width out of the SVG text; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder/frame_tests.rs::no_dike_crown_stands_on_a_sluices_frame#the frame's tests": {
   "body": "bd90cf06c82dda01",
   "claim": "the frame's tests - NONE: fixtures and assertions; the rule's claim is at `field::dike::FRAME_REACH_FT`",
-  "code": "44883b1788dd50bc",
-  "core": "633b3db9b34302ee",
+  "code": "1c68479c6aa731aa",
+  "core": "102dbc45ea086bea",
   "date": "2026-11-24",
   "note": "fixtures and assertions",
   "pages": {},
-  "reads": "f389bc452ff43312",
+  "reads": "e39b69c658f60ae6",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder/mottle.rs::BANK_TONES#the patches' tones": {
@@ -40421,14 +40465,15 @@
  "rust/phases/src/driver/polder/tests.rs::a_rolled_polder_draws_its_sluices_across_their_channels_not_as_the_old_square#the polder's tests": {
   "body": "68a5b02430fa3f74",
   "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
-  "code": "b6d4b978669c6899",
-  "core": "32672f383ab344f4",
+  "code": "d03177f5d8fc1ae4",
+  "core": "1361d9169266e09f",
   "date": "2026-11-22",
   "note": "assertions",
   "pages": {},
-  "reads": "734ed78e90cebf65",
+  "reads": "f670f223d27dd1d3",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder/tests.rs::a_sluice_finds_the_channel_through_its_point#the polder's tests": {
@@ -40578,14 +40623,15 @@
  "rust/phases/src/driver/polder/tests.rs::plain_bands#the polder's tests": {
   "body": "3df5a0eff50ccb3a",
   "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
-  "code": "3e86f00f08ae1b80",
-  "core": "382108449ef99aa2",
+  "code": "0ae494862530b35e",
+  "core": "1615361ceaff68bf",
   "date": "2026-11-22",
   "note": "the reference oracle repeats bank_bands' rule (reed ring, pond rim plus BANK_FT, runs of two or more) and decides nothing new",
   "pages": {},
-  "reads": "9ddbf9a77ec819e4",
+  "reads": "d4334875e81fee8f",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder/tests.rs::seg_seg#the polder's tests": {
@@ -40603,13 +40649,14 @@
  "rust/phases/src/driver/polder/tests.rs::the_bank_bands_hold_their_points#the polder's tests": {
   "body": "fca18415c0a2562e",
   "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
-  "code": "33936b630e866b97",
-  "core": "2f531edcb962acb0",
+  "code": "2cf086aa09503c5a",
+  "core": "2c228461804df30b",
   "date": "2026-11-22",
   "note": "pins the drawn points, assertions only",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder/tests.rs::the_bank_bands_search_only_the_reeds#the polder's tests": {
@@ -40651,14 +40698,14 @@
  "rust/phases/src/driver/polder/tests.rs::the_dikes_band_and_rows_are_cut_where_the_feeder_and_the_outfall_cross#the polder's tests": {
   "body": "bc77c33da6177ce6",
   "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
-  "code": "3eb89c15539dbede",
-  "core": "6384ad053149ba3b",
+  "code": "845723f5ddb0a730",
+  "core": "d55bee7bea193daa",
   "date": "2026-11-24",
   "note": "test fixtures and assertions only, no decision of its own",
   "pages": {},
-  "reads": "221236370cb25b9f",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder/tests.rs::the_met_spans_merge_into_runs_each_sample_once#the polder's tests": {
@@ -40726,26 +40773,27 @@
  "rust/phases/src/driver/polder/tests.rs::the_waterside_strips_hold_their_points#the polder's tests": {
   "body": "e17f548784cd30e8",
   "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
-  "code": "efbf3370754b81cf",
-  "core": "ea8757b11c9eb256",
+  "code": "58696afe59374e13",
+  "core": "a705c40093c0251a",
   "date": "2026-11-22",
   "note": "fixtures and assertions only",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder/tests.rs::the_waterside_strips_stop_at_the_sluices_channels_and_keep_off_the_dike#the polder's tests": {
   "body": "d329e4b7ae0569f0",
   "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
-  "code": "b0390b3727d4fcef",
-  "core": "196b40369c3cb16b",
+  "code": "9559446fa673ddc6",
+  "core": "f8a0892c8c354744",
   "date": "2026-11-22",
   "note": "assertions",
   "pages": {},
-  "reads": "221236370cb25b9f",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder/tests.rs::walk#the polder's tests": {
@@ -44100,17 +44148,18 @@
  },
  "rust/phases/src/field/dike.rs::GAP_HALF_FT#the gap": {
   "body": "af13cfe47a8e9909",
-  "claim": "the gap - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the rows stop about 15 ft to each side of the channel's middle line, a bare stretch left as room for the sluice and its banks, no page read giving how far the trees stood back from a sluice - 15 ft, the deleted engine's opening (`DIKE_GAP_HW`), a tree's middle no nearer a crossing channel's middle line than this, so the broadest crown, a willow of radius 5.5 ft, keeps off the widest crossing channel's water but not always off the sluice's frame, whose posts stand out past the crown's reach - so a tree whose crown would reach the frame is left out besides (`FRAME_REACH_FT`, 449 T427); the band itself and the waterside reeds stop at the channel's bank, not at this gap (449 T236, T419)",
-  "code": "2bfc50da2fc61a39",
+  "claim": "the gap - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the rows stop about 15 ft to each side of the channel's middle line, a bare stretch left as room for the sluice and its banks, no page read giving how far the trees stood back from a sluice - 15 ft, the deleted engine's opening (`DIKE_GAP_HW`), a tree's middle no nearer a crossing channel's middle line than this, so the broadest crown, a willow of radius 5.5 ft, keeps off the widest crossing channel's water (a dike-pond block's feeder or run at its creek width, up to 8 ft, since 449 T431: every crown at least 6.17 ft clear of it over 80 rolled dike-pond blocks, 7.07 ft over 80 rice polders, measured 2026-11-25) but not always off the sluice's frame, whose posts stand out past the crown's reach - so a tree whose crown would reach the frame is left out besides (`FRAME_REACH_FT`, 449 T427); the band itself and the waterside reeds stop at the channel's bank, not at this gap (449 T236, T419)",
+  "code": "dddc6bde3b481351",
   "core": "5a609849526efd17",
-  "date": "2026-11-24",
-  "note": "the rows stop 15 ft from the channel's middle line, as the page says",
+  "date": "2026-11-25",
+  "note": "the label fits: the drawing page records 15 ft as its GUESS (\"no page we read gives how far the trees stood back from a sluice\"), and the code is 15.0. The 6.17 and 7.07 ft figures are measured on our own maps and owe no page. The 8 ft is the top of the creek-width GUESS (0018 #creek-width-between-ponds, carried by 0019 #ring-canal-width-dike-pond), and the 5.5 ft willow radius is half of 0027's 7 to 11 ft crown",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "ab92e43e839f458b"
   },
   "research": "4d6c0cf7fdf1026e",
   "rests": [
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:92326c292e1c218d",
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:e2d6e5c4d638d2cf",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:e8c05b8d91b4cafc"
   ],
   "verdict": "IN-STEP"
@@ -47544,11 +47593,11 @@
  },
  "rust/phases/src/field/polder.rs::ditches#the ring canal on a dike-pond block": {
   "body": "6cc6f4949774cccb",
-  "claim": "the ring canal on a dike-pond block - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: on a dike-pond block the ring canal is drawn no narrower than the block's creeks, which open on it, a channel never drawn wider than the one it joins (how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing) - every reach of its four trunks, head, flanks and drain, at least the block's creek width (`creek_width`, 6 to 8 ft) - each of 0068's rungs under the least creek, so the whole ring is drawn at the creek's width - and the joins through the sluices carry it too (`joins`); the feeder (`driver::polder::FEEDER_W`) and the outfall's run (`driver::RUN_W`) beyond the sluices keep their own widths, each a step under the sluice's board; a rice polder's ring keeps the rungs. Before 449 T427 the trunks kept the rice rungs here too, and a 6 to 8 ft creek opened on a ring as narrow as the drain's head rung. The room it takes - centered `RING_FT` 6 ft out from the plots and 6 ft in from the dike's inner face, an 8 ft ring leaves 2 ft of clear ground on each side (2.0 ft at the widest creek rolled, over 80 rolled dike-pond blocks, measured 2026-11-24, feature 449 T427), so the ring is not moved",
-  "code": "2928505e0534e0c5",
+  "claim": "the ring canal on a dike-pond block - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: on a dike-pond block the ring canal is drawn no narrower than the block's creeks, which open on it, a channel never drawn wider than the one it joins (how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing) - every reach of its four trunks, head, flanks and drain, at least the block's creek width (`creek_width`, 6 to 8 ft) - each of 0068's rungs under the least creek, so the whole ring is drawn at the creek's width - and the joins through the sluices carry it too (`joins`); the feeder and the outfall's run beyond the sluices are drawn at the ring's width too (`driver::polder::sluice_channels`, 449 T431), so neither steps down from it under its sluice's board; a rice polder's ring keeps the rungs. Before 449 T427 the trunks kept the rice rungs here too, and a 6 to 8 ft creek opened on a ring as narrow as the drain's head rung. The room it takes - centered `RING_FT` 6 ft out from the plots and 6 ft in from the dike's inner face, an 8 ft ring leaves 2 ft of clear ground on each side (2.0 ft at the widest creek rolled, over 80 rolled dike-pond blocks, measured 2026-11-24, feature 449 T427), so the ring is not moved",
+  "code": "b7d06988cb50e138",
   "core": "6d1d1b7cff1e1887",
-  "date": "2026-11-24",
-  "note": "every trunk's w and w_tail is raised to at least the creek width, every rung is under 6 ft, the joins take the head's w and the drain's w_tail, and the rice polder is untouched",
+  "date": "2026-11-25",
+  "note": "every trunk reach is max(rung, creek), and 0019 records this bound as a GUESS; a ring centered 6 ft from the plots, 8 ft wide, leaves 2 ft clear on each side",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "1a8d2810a9ba7323",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "0d746c8f1f9f1707"
@@ -47619,16 +47668,17 @@
  },
  "rust/phases/src/field/polder.rs::joins#the outfall's join": {
   "body": "45c4755bd81a0018",
-  "claim": "the outfall's join - field-drains-akusuiro.drawing: the drain's own run onward bends out of the collector's exit, so the junction reads as a turn - the drain trunk carried on to the outfall's sluice at the width it reaches at the outfall, its full 5.5 ft on a rice polder and the block's creek width on a dike-pond block (the ring canal on a dike-pond block, `ditches`), where the run beyond the sluice keeps 5.5 ft (`driver::RUN_W`), the step under the sluice's board",
-  "code": "c818694aacc3791c",
+  "claim": "the outfall's join - field-drains-akusuiro.drawing: the drain's own run onward bends out of the collector's exit, so the junction reads as a turn - the drain trunk carried on to the outfall's sluice at the width it reaches at the outfall, its full 5.5 ft on a rice polder and the block's creek width on a dike-pond block (the ring canal on a dike-pond block, `ditches`), the run beyond the sluice drawn at the same width on either (`driver::polder::sluice_channels`: `driver::RUN_W`'s 5.5 ft on a rice polder, the ring's on a dike-pond block, 449 T431), no step under the sluice's board",
+  "code": "3ae2736af0943bfa",
   "core": "98632d9ee5d16c30",
-  "date": "2026-11-24",
-  "note": "the join takes the drain's w_tail (5.5 ft rice, the creek width on a dike-pond block) and runs from the corner to the sluice set diagonally off it; the run beyond is RUN_W",
+  "date": "2026-11-25",
+  "note": "the join carries the drain's tail width (5.5 ft on a rice polder, the creek width on a dike-pond block), and the run past the sluice matches it through `sluice_channels`, so there is no step under the board",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
   "research": "8ff7ceb036c4856e",
   "rests": [
+   "0060-field-drains-akusuiro.drawing.html:9335eaa56aa337a3",
    "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
   ],
   "verdict": "IN-STEP"
