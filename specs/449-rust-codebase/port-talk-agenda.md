@@ -62,6 +62,16 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
     directly", and make land-tooling lands tooling alone; measure what a task added mid-feature costs (task-add, plan
     section, decide, spec-fidelity MODE 4, the landing) against a direct tweak, from today's 451 T226-T243.
 
+12. A builder's context: handoff against compaction, and the cap itself (the GM: "I thought that we had done something to fix
+    that issue with builders hitting their context limit ... our builder is not able to do automatic context compaction? Or
+    would that not be the correct thing to do regardless?"). Today: 451 T12's guard stops a builder at 300k tokens of context
+    (a GUESS knob, spec FR-006: past 400k a builder's calls ran 14.8 s per 1,000 output tokens against 11.9 s below, observed
+    2026-11-19) and has it write a handoff; a fresh builder re-reads it, 10 to 20 minutes each. 451 T237 took the claims
+    round out of builders; T432 and T243 still hit the cap on a large sweep or a large build. Measure: each handoff's cost
+    (the fresh builder's minutes and tokens before its first new edit), how often builders hit the cap by task size, whether
+    a subagent's automatic compaction is available in this harness and what it costs and loses (a summary drops the
+    measurements and paths a handoff names), and the cap's own setting against T243's per-turn data.
+
 ## How each item closes (the GM, 2026-11-25) - its decision is recorded in `docs/process-decisions.md`
 
 Every item above is decided in the talk and its decision captured with its logic, its reasoning and the numbers that support
