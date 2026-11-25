@@ -349,7 +349,7 @@ fn a_hand_write_refuses_the_landing_s_plan_review_rows() {
         &args(&[&L[..], &["--write", "dev/x", "--by-hand"]].concat()),
         &env,
     );
-    let want = "ledger-owed: 1 row(s) written for every session; 1 plan review row(s) refused as the landing's own - make land writes them (as make land-tooling and the push do, --write-plan-reviews, 385 T72); written here, uncommitted, a landing alone writes them again (451 T105)\n";
+    let want = "ledger-owed: 1 row(s) written for every session; 1 plan review row(s) refused as the landing's own - its task's make land writes them, or the next push where the task has no open line (--write-plan-reviews, 385 T72; 451 T231); written here, uncommitted, a landing alone writes them again (451 T105)\n";
     assert_eq!(got.stdout, want);
     let text = ledger(&env);
     assert!(text.contains("| quote-check |"), "{text}");

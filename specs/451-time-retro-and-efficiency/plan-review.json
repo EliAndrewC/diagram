@@ -1584,6 +1584,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T231 (449 T418's and T422's plan-review rows were written by hand to land on 2026-11-24 while `make ledger-owed WRITE=` refused them as the landing's own; on 2026-11-25 nearly every push and commit of the coordinating session printed `ledger-owed: N check pass(es) have no row` naming MODE 4 plan reviews of tasks not yet landed, and spec-only pushes carried those rows forward)": {
+   "sha256": "74d3b593a5e4935b5d9507168e006a9df48f81ea624f3f21ac71b0bb11025ec4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T231 Approach (checklist part A)": {
+   "sha256": "b3a15a0dee2a58da65e80667bdbbe1cb3db7927d365b3c0b99be9791ddd01cc1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -21090,6 +21102,58 @@
      "why": "The build names 'a knob, GUESS 20% free'; the GM's 'a certain percentage' leaves the value open."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T231 (449 T418's and T422's plan-review rows were written by hand to land on 2026-11-24 while `make ledger-owed WRITE=` refused them as the landing's own; on 2026-11-25 nearly every push and commit of the coordinating session printed `ledger-owed: N check pass(es) have no row` naming MODE 4 plan reviews of tasks not yet landed, and spec-only pushes carried those rows forward)",
+    "### T231 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "premise-corrected",
+     "summary": "The task line's premise (the hand write of 449 T418/T422's rows was needed because the landing disagreed with WRITE=) is corrected by replay: the landing wrote both rows and was refused on P7's passes; the listing, not the landing's check, disagreed. The fix is built on the corrected diagnosis.",
+     "class": "within",
+     "why": "Every symptom the task line names is still removed: the hand write against a refusing WRITE= (the listing no longer offers WRITE= for these rows), the 'N check pass(es) have no row' notice on unrelated pushes and commits (the listing and --brief leave an open task's review), and spec-only pushes carrying rows forward (the push's write leaves it). The correction changes the route, not the outcome; the replay is labeled with its date and method."
+    },
+    {
+     "id": "ownership-rule",
+     "summary": "A MODE 4 plan review whose task has an open line belongs to its task's landing (make land's write now passes --landing <feature> --tasks <its tasks>); the push's write with no landing, the push's and landing's checks, the listing and the commit notice all leave it and name it in the existing left note.",
+     "class": "within",
+     "why": "The task line's own goal ('one of the two writes them') and the constraints the block names (371/385 FR-019: every pass owes its row; 451 T105: no row written twice). Case walk: open and landed - the landing writes it; no open line - the next push writes it; open and not yet landed - left until its landing, which the push's and landing's checks already did (451 T147), so no row loses its writer. FR-019's refusal still names WRITE= for rows that are actually owed by hand; these are not."
+    },
+    {
+     "id": "next-push-listing",
+     "summary": "A recorded plan review whose task has no open line (ticked, withdrawn, absent, or a block review naming no task) is written by the next push, whichever it is, and the listing names it 'N recorded plan review row(s) the next push writes', never as WRITE='s.",
+     "class": "within",
+     "why": "Removes a tool answering wrongly (the notice told the session to run a command that refuses these rows) while keeping 385 T72's push-route write for every row that no landing owns."
+    },
+    {
+     "id": "open-means-open-line",
+     "summary": "left.rs's open test becomes an open '- [ ] T<n>' line in tasks.md instead of 'ticked in neither file', so a withdrawn or renumbered task is no longer open for ever.",
+     "class": "within",
+     "why": "Needed for the ownership rule not to leave a row unwritten for ever once the push's write also leaves open tasks' reviews; it widens who writes, narrows nothing. Pinned by the first test's T7 (no line) written by the push."
+    },
+    {
+     "id": "write-refusal-kept",
+     "summary": "make ledger-owed WRITE='s refusal of recorded plan reviews (451 T105) stays; its message names both owners (the task's landing, or the next push).",
+     "class": "within",
+     "why": "T105's constraint (a hand write must not write a row a landing writes again) is kept; the defect was the listing offering WRITE=, which the plan fixes; the refusal's message changes to name the real owner."
+    },
+    {
+     "id": "whose-rs-unchanged",
+     "summary": "whose.rs (451 T157, other checks' passes of a STARTED task) keeps its own ticked test.",
+     "class": "within",
+     "why": "A different class of pass whose rows the started task's session writes itself; nothing in this task changes who writes them, so the 'open for ever' consequence that motivates the left.rs change (a row nobody writes) is not created there. Not a defect left by this task."
+    },
+    {
+     "id": "readers-census",
+     "summary": "The fix's reach, 'every reader and writer of the rows', rests on the census of four readers (push check, landing check, push write, WRITE=, listing/--brief notice), measured 2026-11-25 by reading the code and replaying the real pass log and ledger.",
+     "class": "within",
+     "why": "Not a narrowing: the plan routes every named reader through left.rs's one split, the shared waist, so a caller through it inherits the fix. Limitation noted: the census's method is stated as 'the code', with no search command, so its reach could not be checked from the bundle (the reviewer read nothing in the repository, as the manifest directs)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -33703,6 +33767,56 @@
      "summary": "L7R_DISK_FREE_PCT (20) and the per-place budgets are GUESS constants with their why beside them; L7R_CACHE_IDLE_HOURS and L7R_CACHE_BUDGET_GB reused",
      "class": "within",
      "why": "The build names 'a knob, GUESS 20% free'; the GM's 'a certain percentage' leaves the value open."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T231": {
+   "section_sha256": "072af231621ce48ff8e39d0c67a1e14e5b5f1ee44f303e71f4fc380faa2bb1ab",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "premise-corrected",
+     "summary": "The task line's premise (the hand write of 449 T418/T422's rows was needed because the landing disagreed with WRITE=) is corrected by replay: the landing wrote both rows and was refused on P7's passes; the listing, not the landing's check, disagreed. The fix is built on the corrected diagnosis.",
+     "class": "within",
+     "why": "Every symptom the task line names is still removed: the hand write against a refusing WRITE= (the listing no longer offers WRITE= for these rows), the 'N check pass(es) have no row' notice on unrelated pushes and commits (the listing and --brief leave an open task's review), and spec-only pushes carrying rows forward (the push's write leaves it). The correction changes the route, not the outcome; the replay is labeled with its date and method."
+    },
+    {
+     "id": "ownership-rule",
+     "summary": "A MODE 4 plan review whose task has an open line belongs to its task's landing (make land's write now passes --landing <feature> --tasks <its tasks>); the push's write with no landing, the push's and landing's checks, the listing and the commit notice all leave it and name it in the existing left note.",
+     "class": "within",
+     "why": "The task line's own goal ('one of the two writes them') and the constraints the block names (371/385 FR-019: every pass owes its row; 451 T105: no row written twice). Case walk: open and landed - the landing writes it; no open line - the next push writes it; open and not yet landed - left until its landing, which the push's and landing's checks already did (451 T147), so no row loses its writer. FR-019's refusal still names WRITE= for rows that are actually owed by hand; these are not."
+    },
+    {
+     "id": "next-push-listing",
+     "summary": "A recorded plan review whose task has no open line (ticked, withdrawn, absent, or a block review naming no task) is written by the next push, whichever it is, and the listing names it 'N recorded plan review row(s) the next push writes', never as WRITE='s.",
+     "class": "within",
+     "why": "Removes a tool answering wrongly (the notice told the session to run a command that refuses these rows) while keeping 385 T72's push-route write for every row that no landing owns."
+    },
+    {
+     "id": "open-means-open-line",
+     "summary": "left.rs's open test becomes an open '- [ ] T<n>' line in tasks.md instead of 'ticked in neither file', so a withdrawn or renumbered task is no longer open for ever.",
+     "class": "within",
+     "why": "Needed for the ownership rule not to leave a row unwritten for ever once the push's write also leaves open tasks' reviews; it widens who writes, narrows nothing. Pinned by the first test's T7 (no line) written by the push."
+    },
+    {
+     "id": "write-refusal-kept",
+     "summary": "make ledger-owed WRITE='s refusal of recorded plan reviews (451 T105) stays; its message names both owners (the task's landing, or the next push).",
+     "class": "within",
+     "why": "T105's constraint (a hand write must not write a row a landing writes again) is kept; the defect was the listing offering WRITE=, which the plan fixes; the refusal's message changes to name the real owner."
+    },
+    {
+     "id": "whose-rs-unchanged",
+     "summary": "whose.rs (451 T157, other checks' passes of a STARTED task) keeps its own ticked test.",
+     "class": "within",
+     "why": "A different class of pass whose rows the started task's session writes itself; nothing in this task changes who writes them, so the 'open for ever' consequence that motivates the left.rs change (a row nobody writes) is not created there. Not a defect left by this task."
+    },
+    {
+     "id": "readers-census",
+     "summary": "The fix's reach, 'every reader and writer of the rows', rests on the census of four readers (push check, landing check, push write, WRITE=, listing/--brief notice), measured 2026-11-25 by reading the code and replaying the real pass log and ledger.",
+     "class": "within",
+     "why": "Not a narrowing: the plan routes every named reader through left.rs's one split, the shared waist, so a caller through it inherits the fix. Limitation noted: the census's method is stated as 'the code', with no search command, so its reach could not be checked from the bundle (the reviewer read nothing in the repository, as the manifest directs)."
     }
    ],
    "verdict": "CLEAR"

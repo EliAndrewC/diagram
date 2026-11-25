@@ -19,7 +19,9 @@
 //! ledger-owed ... --refuse --landing <feature dir> --tasks "<ids>"
 //!                                                      `make land`'s first pass: an open task's plan review left to its landing
 //!                                                      (451 T147, `left.rs`), as `--refuse` alone leaves it at the push
-//! ledger-owed --write-plan-reviews                     append the row of each owed plan review that recorded its verdict (385 T72)
+//! ledger-owed --write-plan-reviews [--landing <feature dir> --tasks "<ids>"]
+//!                                                      append the row of each owed plan review that recorded its verdict (385 T72),
+//!                                                      but an open task's, its own landing's (451 T231, `left.rs`)
 //! ledger-owed --write ... --by-hand                    `make ledger-owed WRITE=`: the landing's own rows refused (451 T105, below)
 //! ledger-passes                                        the settled passes as JSON (what `measure feature-report` costs, in process)
 //! ```
@@ -317,8 +319,20 @@ fn run(o: &Opts, env: &Env) -> Result<Reply, String> {
         .and_then(Path::parent)
         .map(Path::to_path_buf)
         .unwrap_or_default();
+    let landing = left::Landing {
+        feature: o.landing,
+        tasks: o.tasks.split_whitespace().collect(),
+    };
     if o.plan_reviews {
-        let made = rows::plan_review_rows(&owed, &transcripts, &repo)?;
+        // an open task's plan review is its own landing's row (451 T231, `left.rs`): the push's write leaves it, the landing's
+        // (`--landing --tasks`) writes its own tasks'; the note names only the plan reviews left, the check's own note the rest
+        let reviews: Vec<Pass> = owed
+            .iter()
+            .filter(|p| field(p, "subject").is_some_and(|s| s.starts_with(rows::PLAN_REVIEW)))
+            .cloned()
+            .collect();
+        let (kept, whose) = left::split(&reviews, &repo, &transcripts, &landing);
+        let made = rows::plan_review_rows(&kept, &transcripts, &repo)?;
         if !made.is_empty() {
             let mut f = open_append(&ledger)?;
             for row in &made {
@@ -327,7 +341,11 @@ fn run(o: &Opts, env: &Env) -> Result<Reply, String> {
         }
         record_usage(env, outcome(made.is_empty()));
         return Ok(reply(
-            format!("ledger-owed: {} plan review row(s) written\n", made.len()),
+            format!(
+                "ledger-owed: {} plan review row(s) written\n{}",
+                made.len(),
+                left::note(&whose)
+            ),
             String::new(),
             0,
         ));
@@ -335,16 +353,27 @@ fn run(o: &Opts, env: &Env) -> Result<Reply, String> {
     if !o.write.is_empty() {
         return write_owed(o, env, &owed, (&ledger, &repo, &transcripts));
     }
-    // a refusal leaves an open task's plan review to that task's landing (451 T147, `left.rs`); a listing by hand names every pass
-    let (owed, note) = if o.refuse || !o.landing.is_empty() {
-        let landing = left::Landing {
-            feature: o.landing,
-            tasks: o.tasks.split_whitespace().collect(),
-        };
-        let (kept, whose) = left::split(&owed, &repo, &transcripts, &landing);
-        (kept, left::note(&whose))
+    // every reader leaves an open task's pass to that task's landing or session (451 T147, T157, `left.rs`): the refusals, and since
+    // 451 T231 the listing and a commit's notice, which named such rows as owed with "WRITE=", which refuses them
+    let (kept, whose) = left::split(&owed, &repo, &transcripts, &landing);
+    let mut note = left::note(&whose);
+    let owed = if o.refuse {
+        kept
     } else {
-        (owed, String::new())
+        // ...and a listing names a recorded plan review no landing is left to write as the next push's, never as WRITE='s (451 T105)
+        let mut listed = Vec::new();
+        let mut pushed = 0;
+        for p in kept {
+            if rows::recorded_plan_review(&p, &transcripts, &repo)? {
+                pushed += 1;
+            } else {
+                listed.push(p);
+            }
+        }
+        if pushed > 0 {
+            let _ = writeln!(note, "ledger-owed: {pushed} recorded plan review row(s) the next push writes (--write-plan-reviews, 385 T72; 451 T231)");
+        }
+        listed
     };
     if owed.is_empty() {
         return Ok(reply(note, String::new(), 0));
@@ -441,7 +470,7 @@ fn write_owed(
         String::new()
     };
     let landing = if refused > 0 {
-        format!("; {refused} plan review row(s) refused as the landing's own - make land writes them (as make land-tooling and the push do, --write-plan-reviews, 385 T72); written here, uncommitted, a landing alone writes them again (451 T105)")
+        format!("; {refused} plan review row(s) refused as the landing's own - its task's make land writes them, or the next push where the task has no open line (--write-plan-reviews, 385 T72; 451 T231); written here, uncommitted, a landing alone writes them again (451 T105)")
     } else {
         String::new()
     };

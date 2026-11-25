@@ -48,10 +48,21 @@ impl Land {
     /// The ledger rows the push would name as owed, written and committed: the plan reviews' (385 T72) and every other pass traced to
     /// this feature - its claims round's above all (405 T39, D13). Asked in the first pass, and again after the claims wait (405 T52,
     /// D27: T49's claims round ran beside the gate, after the first pass, and its row was written by hand).
-    pub(super) fn write_ledger(&self, d: &Path) -> Result<(), String> {
+    pub(super) fn write_ledger(&self, d: &Path, tasks: &[String]) -> Result<(), String> {
         let ledger = self.root.join("dev/review-ledger.md");
         let ledger = ledger.to_string_lossy();
-        self.ledger(&["--write-plan-reviews", "--ledger", &ledger]);
+        // its own tasks' plan reviews are this landing's to write, open as they still are before the tick; every other open task's
+        // is left to that task's landing (451 T231, `reviews`' `ledger_passes/left.rs`)
+        let (feature, ticks) = (name_of(d), tasks.join(" "));
+        self.ledger(&[
+            "--write-plan-reviews",
+            "--ledger",
+            &ledger,
+            "--landing",
+            &feature,
+            "--tasks",
+            &ticks,
+        ]);
         let at = format!(
             "specs/{}/ (the records its checks wrote; make land)",
             name_of(d)
@@ -219,7 +230,7 @@ impl Land {
             .into_iter()
             .map(|(why, ts)| format!("{}: {why}", ts.join(", ")))
             .collect();
-        self.records_on_the_way(d)?;
+        self.records_on_the_way(d, tasks)?;
         let stale = self.stale_exempt_refusal()?;
         if !stale.is_empty() {
             stops.push(stale);
@@ -290,8 +301,8 @@ impl Land {
 
     /// The records the first pass writes and commits for itself: the ledger, the make-targets page, the claims' moved rows, the
     /// carries, the known drifts and its own escape records.
-    fn records_on_the_way(&self, d: &Path) -> Result<(), String> {
-        self.write_ledger(d)?;
+    fn records_on_the_way(&self, d: &Path, tasks: &[String]) -> Result<(), String> {
+        self.write_ledger(d, tasks)?;
         // ...and the make-targets page, regenerated where the Makefile moved (feature 405 T46, D19): the push's `make-docs` check
         // refused T43's landing after its hooks-test, for a page `make docs` writes in a second
         // asked in process (feature 449 T135, where it ran `scripts/make-docs.py`): a failed write is passed over as the command's

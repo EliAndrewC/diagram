@@ -229,14 +229,14 @@ fn a_second_pass_regenerates_and_commits_no_current_page() {
     put(&fx.root, "Makefile", "a:   ## [tests] a target\n\techo a\n");
     put(&fx.root, "docs/make-targets.html", "stale\n");
     git(&fx.root, &["add", "Makefile", "docs/make-targets.html"]);
-    fx.land.records_on_the_way(&d).unwrap();
+    fx.land.records_on_the_way(&d, &tasks(&["T1"])).unwrap();
     // the page current now: a second pass regenerates and commits nothing
     let before = fx
         .subjects()
         .matches("docs/make-targets.html regenerated")
         .count();
     assert_eq!(before, 1, "the first pass regenerated the stale page");
-    fx.land.records_on_the_way(&d).unwrap();
+    fx.land.records_on_the_way(&d, &tasks(&["T1"])).unwrap();
     assert_eq!(
         fx.subjects()
             .matches("docs/make-targets.html regenerated")

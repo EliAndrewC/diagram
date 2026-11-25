@@ -2594,31 +2594,40 @@ engine speed, so no checklist.
 **Performance work?** no: it corrects a verdict's wording; no check runs faster or slower.
 
 
-### T231 (<why: the finding or measurement that files it>)
+### T231 (449 T418's and T422's plan-review rows were written by hand to land on 2026-11-24 while `make ledger-owed WRITE=` refused them as the landing's own; on 2026-11-25 nearly every push and commit of the coordinating session printed `ledger-owed: N check pass(es) have no row` naming MODE 4 plan reviews of tasks not yet landed, and spec-only pushes carried those rows forward)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: one reading of whose a ledger row is - `ledger_passes/left.rs`'s split, which the push's check (`--refuse`) and the landing's check (`--refuse --landing --tasks`) already asked - asked by every reader and writer of the rows.
+  - **Where each side read ownership**, measured 2026-11-25 (the code, and replays of the real pass log and ledger). Four readers, three rules. (a) The push's check (`push.rs`'s `ledger-owed --refuse`) and the landing's check (`cheap.rs`) leave a MODE 4 pass of an open task to that task's landing (451 T147). (b) The push's write (`sync-with-main.sh`'s `--write-plan-reviews`, every push route) wrote the row of EVERY recorded plan review, open task or not. (c) `make ledger-owed WRITE=` (`--by-hand`) refuses every recorded plan review as "the landing's own" (451 T105). (d) The listing and a commit's notice (`--brief`, `ledger_hooks.rs`) asked no ownership at all and named every such pass as owed, with "write them: make ledger-owed WRITE=", which (c) refuses.
+  - **What that did.** Today's six 451 T243 plan-review rows were written by four unrelated pushes (d2a61853be 09:49, 9a1c8cd121 10:22, fdce5cc36f 10:40, 546cd2b775 11:18, each "the plan reviews' ledger rows, written at landing (feature 385 T72)") before T243 was ticked at f1458390c3 (11:24), measured 2026-11-25 (`git log --grep "385 T72" -p -- dev/review-ledger.md`, each row's cost cells matched to its pass in `check-passes.jsonl`). The coordinator's transcript holds the line "ledger-owed: N check pass(es) have no row" 906 times since 2026-11-12, measured 2026-11-25 (a count of that line in the session's transcript, tool results and their echoes alike); the one push refusal of today read (2026-11-25 14:50Z) left T243's review correctly and refused on an escalation-check pass, which was owed.
+  - **The task line's premise, corrected.** The 2026-11-24 hand write fixed nothing: the refused T423-T418-T422 landings wrote both rows in their worktree each time (3214651875 and 4e4e315222, "the review passes' ledger rows, written at landing (make land)", in `diagram-backlog-land`'s reflog) and were refused on page session P7's 15 passes; the clone's listing named the two rows as owed because a refused landing's commits stay in its worktree, and the session read the listing, not the refusal, observed 2026-11-25, method: the coordinator's transcript at 2026-11-24 17:25-17:27Z and the landing worktree's reflog (and replayed 2026-11-25: `--write-plan-reviews` then `--refuse --landing 449-rust-codebase --tasks "T423 T424 T418 T422"` on the ledger and `plan-review.json` of 7f5d85fef7^ write both rows and refuse nothing). The landing's check never disagreed with `WRITE=`; the listing did.
+  - **The rule as built.** A MODE 4 plan review naming its feature and task whose task has an OPEN line (`- [ ] T<n>`) in that feature's `tasks.md`, and is not a task this landing lands, belongs to its task's landing: the push that carries its tick (`make land`'s own write, `cheap.rs`'s `write_ledger`, now `--write-plan-reviews --landing <feature> --tasks <its tasks>`). Every other reader leaves it and names it in the existing note line (`the passes of N open task(s) left to their own landings and sessions`): the push's write (`--write-plan-reviews` with no landing), the push's and landing's checks (unchanged), and the listing and commit notice, which no longer offer it to `WRITE=`. A recorded plan review whose task has no open line - ticked, withdrawn, absent, or a block review naming no task - belongs to the next push, whichever it is; the listing names it as such (`N recorded plan review row(s) the next push writes`), never as `WRITE=`'s. `WRITE=`'s refusal (T105) stays, its message naming both owners.
+  - **Open is an open line, not "ticked in neither file".** `left.rs` read a plan review's task as open while no `- [x]` line named it, so a withdrawn or renumbered task was open for ever; harmless while only the checks left it, its row would never be written once the push's write left it too. The open test is now `- [ ] T<n>` in `tasks.md`. `whose.rs` (T157, other checks' passes of a STARTED task) keeps its own ticked test: a started task's session writes those rows itself, and nothing here changes who writes them.
+  - **Red first**, measured 2026-11-25 (`make rust-test CRATE=rust/gate/crates/reviews`, the two new tests in `ledger_passes/left/tests.rs` against HEAD's `ledger_passes.rs` and `left.rs`): an unrelated push's `--write-plan-reviews` wrote 2 rows where the open task's must be left ("ledger-owed: 2 plan review row(s) written", want 1 and the left note), and the `--brief` notice named a recorded ticked task's review as "1 check pass(es) have no row ... WRITE=". After the fix the crate passes 206 of 206, and `make rust-test CRATE=rust/gate/crates/land` passes with the landing's write asserted to carry `--landing 449-x --tasks T1`.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the push's write leaves an open task's plan review; its landing's write takes it | `an_open_task_s_recorded_plan_review_is_its_own_landing_s_and_no_other_push_s`, red on HEAD; `land::tests` asserts the write's `--landing --tasks` | n/a: tooling | none | n/a |
+| the listing and notice leave it and name a recorded one as the next push's | the same test's listing and `--brief` loop; `a_recorded_plan_review_no_landing_writes_is_listed_as_the_next_push_s`, red on HEAD | n/a: tooling | none | n/a |
+| open means an open line | the first test's T7 (no line) written by the push | n/a: tooling | none | n/a |
 
 ### T231 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A plan review's ledger row is written once, by the push that lands its task, and no other push, listing or commit notice treats it as owed elsewhere; a push of unrelated work neither writes nor asks for it.
+2. **The constraints.** Feature 371 and 385 FR-019 (every pass owes its row, the push refuses without it); 385 T72 (a recorded plan review's row written by the push routes); 451 T105 (a hand write must not write a row a landing writes again); 451 T147 and T157 (another open task's passes left to its landing or session).
+3. **Where each comes from.** G: the task line (`one of the two writes them`) and the coordinating session's brief of 2026-11-25. O: the replays and git history above.
+4. **Do they describe the world here?** Yes: the real pass log, the ledger at 7f5d85fef7^, the landing worktree's reflog and today's push commits, read 2026-11-25.
+5. **The order.** No dependency. T245, built beside it in its own worktree, touches no file of this task.
+6. **The exits.** Green: `make closing-checks T=T231` green, the reviews and land crates' tests covering every new line. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The two new tests red on HEAD's code and green after, and the land test's write arguments, measured 2026-11-25 (above).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: rows of tasks not yet landed written by unrelated pushes, a notice telling the session to write rows its own command refuses, and rows written by hand that the landing had already written, observed 2026-11-25, method: the measurements above. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: it changes who writes ledger rows; nothing runs faster.
 
 
 ### T232 (<why: the finding or measurement that files it>)

@@ -359,3 +359,79 @@ fn a_page_session_pass_naming_its_session_letter_is_left_to_its_briefs_task() {
         got.stdout
     );
 }
+
+/// 451 T231's pin: a recorded plan review of an OPEN task (a `- [ ]` line) is its own landing's row - an unrelated push's
+/// `--write-plan-reviews` writes none of it, the listing and a commit's notice name it as left (never "write them: WRITE=", which
+/// refuses it), and the landing of that task writes it; a task with no open line (ticked, withdrawn, absent) is the next push's.
+#[test]
+fn an_open_task_s_recorded_plan_review_is_its_own_landing_s_and_no_other_push_s() {
+    let subject = "MODE 4: PLAN REVIEW of one task's section - feature 449-x, task T2 (a decision";
+    let gone = "MODE 4: PLAN REVIEW of one task's section - feature 449-x, task T7 (a decision";
+    let (d, env) = world("t231", &[review("r1", subject), review("r7", gone)]);
+    put(&env.cwd, "specs/449-x/tasks.md", "- [ ] T2 two\n");
+    let sub = d.join("home/.claude/projects/p/s/subagents");
+    put(
+        &sub,
+        "agent-r1.jsonl",
+        &transcript(&json!(subject), "CLEAR recorded for T2"),
+    );
+    // a row answers its pass by its check and cost cells, so T7's run costs more than T2's
+    let t7 = transcript(&json!(gone), "CLEAR recorded for T7").replace("1650", "2650");
+    put(&sub, "agent-r7.jsonl", &t7);
+    let left = "ledger-owed: the passes of 1 open task(s) left to their own landings and sessions (451 T147, T157), which write their rows: 449-x T2\n";
+    // an unrelated push (sync-with-main's write, no landing): T7's row written, T2's left
+    let push = cli(&args(&[&L[..], &["--write-plan-reviews"]].concat()), &env);
+    assert_eq!(
+        push.stdout,
+        format!("ledger-owed: 1 plan review row(s) written\n{left}")
+    );
+    let rows = std::fs::read_to_string(env.cwd.join("dev/review-ledger.md")).unwrap();
+    assert!(rows.contains("CLEAR recorded for T7") && !rows.contains("CLEAR recorded for T2"));
+    // the listing and the commit's notice: T2's review is left, never offered to WRITE=
+    for brief in [&[][..], &["--brief"][..]] {
+        let listed = cli(&args(&[&L[..], brief].concat()), &env);
+        let said = format!("{}{}", listed.stdout, listed.stderr);
+        assert_eq!(listed.code, 0);
+        assert!(said.starts_with(left));
+        assert!(!said.contains("have no row"));
+    }
+    // the push's check leaves it as before
+    let check = cli(&args(&[&L[..], &["--refuse"]].concat()), &env);
+    assert_eq!((check.code, check.stdout.as_str()), (0, left));
+    // T2's own landing writes it, once
+    let landing = [
+        &L[..],
+        &[
+            "--write-plan-reviews",
+            "--landing",
+            "449-x",
+            "--tasks",
+            "T2",
+        ],
+    ]
+    .concat();
+    let own = cli(&args(&landing), &env);
+    assert_eq!(own.stdout, "ledger-owed: 1 plan review row(s) written\n");
+    let rows = std::fs::read_to_string(env.cwd.join("dev/review-ledger.md")).unwrap();
+    assert_eq!(rows.matches("CLEAR recorded for T2").count(), 1);
+}
+
+/// 451 T231: a recorded plan review no landing is left to write (its task has no open line) is listed as the next push's to write,
+/// never offered to `WRITE=`, which refuses it (451 T105).
+#[test]
+fn a_recorded_plan_review_no_landing_writes_is_listed_as_the_next_push_s() {
+    let gone = "MODE 4: PLAN REVIEW of one task's section - feature 449-x, task T7 (a decision";
+    let (d, env) = world("t231-push", &[review("r7", gone)]);
+    put(&env.cwd, "specs/449-x/tasks.md", "- [x] T7 seven\n");
+    let sub = d.join("home/.claude/projects/p/s/subagents");
+    put(
+        &sub,
+        "agent-r7.jsonl",
+        &transcript(&json!(gone), "CLEAR recorded for T7"),
+    );
+    let listed = cli(&args(&[&L[..], &["--brief"]].concat()), &env);
+    assert_eq!(
+        (listed.code, listed.stdout.as_str()),
+        (0, "ledger-owed: 1 recorded plan review row(s) the next push writes (--write-plan-reviews, 385 T72; 451 T231)\n")
+    );
+}

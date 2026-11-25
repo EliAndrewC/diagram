@@ -362,7 +362,7 @@ impl Land {
                 self.warn(&claims_wait::claims_stop_line(&why));
                 return Ok(2);
             }
-            self.write_ledger(d)?; // the passes the claims round made beside the gate (405 T52, D27)
+            self.write_ledger(d, tasks)?; // the passes the claims round made beside the gate (405 T52, D27)
             Ok(0)
         })?;
         if rc != 0 {

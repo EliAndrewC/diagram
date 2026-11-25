@@ -15,6 +15,18 @@
 //!
 //! Since 451 T157 (`whose.rs`) a pass of any other check is left the same way where its own words, its builder or its page session's
 //! brief name another STARTED task, open, that the landing does not land: that task's landing or session writes its row.
+//!
+//! ONE READING OF WHOSE A ROW IS (451 T231). WHY: this split was the push's and the landing's check alone. The push's own write
+//! (`--write-plan-reviews`, sync-with-main) wrote a recorded plan review of ANY task, so a spec-only push carried an open task's rows
+//! forward - 451 T243's six plan-review rows were written by four unrelated pushes on 2026-11-25 (d2a61853be, 9a1c8cd121, fdce5cc36f,
+//! 546cd2b775) before T243 was ticked at f1458390c3 - while the listing and a commit's notice named the same rows as owed with
+//! "make ledger-owed WRITE=", which refuses them as the landing's own (451 T105). The notice was the noise: the coordinator's session
+//! read "N check pass(es) have no row" 906 times from 2026-11-12 to 2026-11-25, and on 2026-11-24 it wrote 449 T418's and T422's rows by hand
+//! (7f5d85fef7) after the clone's listing named them, though the refused landing had written both in its worktree (3214651875) and was
+//! refused on another session's passes. So every reader asks this split: the push's write (no landing) writes no row it leaves, the
+//! landing's write (`--landing --tasks`, `cheap.rs`) writes its own tasks', and the listing and notice name a left pass in the note
+//! line only. A plan review's row belongs to the push that lands its task (`make land`, the commit carrying its tick); a recorded one
+//! whose task has no open line - ticked, withdrawn, a block review - to the next push, whichever it is.
 
 use std::path::Path;
 use std::sync::LazyLock;
@@ -64,15 +76,27 @@ fn ticked(repo: &Path, feature: &str, task: &str) -> bool {
     ticked_in(&read("tasks.md"), task) || ticked_in(&read("tasks-done.md"), task)
 }
 
-/// The open task whose landing writes this pass's row: a MODE 4 pass naming its feature and task, that feature's specs here, the task
-/// ticked in neither of its files and not one this landing lands; any other pass, the started task `whose.rs` reads it as serving.
+/// Has `feature`'s `tasks.md` an open line (`- [ ] T5 ...`) for `task`? Since 451 T231 a plan review is left to its task's landing
+/// only while it has one: read as "ticked in neither file", a withdrawn or renumbered task was open for ever, and once the push's write
+/// left it too (451 T231) its row would never be written.
+fn open(repo: &Path, feature: &str, task: &str) -> bool {
+    let text = std::fs::read_to_string(repo.join("specs").join(feature).join("tasks.md"))
+        .unwrap_or_default();
+    text.lines().any(|line| {
+        line.strip_prefix("- [ ] ")
+            .is_some_and(|rest| rest.split_whitespace().next() == Some(task))
+    })
+}
+
+/// The open task whose landing writes this pass's row: a MODE 4 pass naming its feature and task, that task's line open in its
+/// feature's `tasks.md` here and not one this landing lands; any other pass, the started task `whose.rs` reads it as serving.
 fn left_to(p: &Pass, repo: &Path, clues: &mut whose::Clues, landing: &Landing) -> Option<String> {
     let subject = text(p, "subject");
     if !subject.starts_with(PLAN_REVIEW) {
         return clues.left_to(p, landing);
     }
     let (feature, task) = (group(&FEATURE, subject)?, group(&TASK, subject)?);
-    if !repo.join("specs").join(&feature).is_dir() || ticked(repo, &feature, &task) {
+    if !open(repo, &feature, &task) {
         return None;
     }
     let landed = landing.feature == feature && landing.tasks.contains(&task.as_str());

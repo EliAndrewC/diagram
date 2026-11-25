@@ -21,7 +21,7 @@ fn re(pattern: &str) -> Regex {
 static BUNDLE: LazyLock<Regex> =
     LazyLock::new(|| re(&format!(r"/tmp/l7r-check/([^/{SPACE_CLASS}]+)/")));
 /// A PLAN REVIEW RECORDS ITSELF (feature 385 T72, plan D92): its agent runs `make plan-verdict`, whose line its reply quotes
-const PLAN_REVIEW: &str = "MODE 4: PLAN REVIEW";
+pub(super) const PLAN_REVIEW: &str = "MODE 4: PLAN REVIEW";
 /// ...the target's own line quoted, or the call the agent says it ran (T74's first review wrote "I recorded T74 as BLOCKED ... with
 /// `make plan-verdict F=385 ...`" and quoted no line)
 static PLAN_RECORDED: LazyLock<Regex> = LazyLock::new(|| {

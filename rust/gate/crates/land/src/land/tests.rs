@@ -457,6 +457,11 @@ fn every_cheap_refusal_is_said_together_and_nothing_runs_long() {
     assert!(err.contains("review passes with no ledger row"));
     let asked = fx.answers.asked.borrow().join("\n");
     assert!(asked.contains("/dev/review-ledger.md --refuse --landing 449-x --tasks T1"));
+    // the landing's own write takes its own tasks' plan reviews, an open task's being left to that task's landing (451 T231)
+    let write = asked
+        .lines()
+        .find(|l| l.starts_with("ledger --write-plan-reviews --ledger "));
+    assert!(write.is_some_and(|l| l.ends_with("/dev/review-ledger.md --landing 449-x --tasks T1")));
     assert!(err.contains("review-gate.sh: a review is owed"));
     assert!(!fx.log().contains("stamp --check"));
 }
