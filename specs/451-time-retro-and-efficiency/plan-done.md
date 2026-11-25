@@ -12320,3 +12320,146 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 
 **Performance work?** no: a switch and a guard.
 
+<!-- plan-archive: archived 2026-11-25 -->
+### T228 (page session P7's cascade, 2026-11-24: `make apply-edits` refused a modal-form reply whole over three lines reading `EDIT: none - <why>`, the line the agent's contract gives; the session applied it from a hand-altered copy)
+
+- **Approach**: The parser half is already on HEAD. Commit 926e10e593 (2026-11-24 12:32, feature 453's check session) taught `unread_edits` (`rust/guard/shared/src/checks/reply.rs`) that `EDIT: none - <why>` opens no block. P7 ran at 849bffb552, a tree without that commit (`git merge-base --is-ancestor`, 2026-11-25). On HEAD, `make apply-edits DRY=1` on P7's saved reply reads it whole, measured 2026-11-25: 3 blocks reached, each refused only because its old text is already applied. So this task does not change the parser. What it adds is the agreement the task names, pinned so neither side can drift alone:
+  - **One form, named once.** `NO_EDIT` ("EDIT: none - <why>") is a constant beside `EDIT_FORM`. The parser's comment names it in place of a list of four agents, since ten agent files carry the line.
+  - **The real reply as a fixture.** `reply_p7_modal_form.txt` is P7's reply byte for byte. `the_p7_modal_form_reply_is_read_whole` asserts it reads with no unread line and with its 3 blocks.
+  - **The agent files against the parser.** `every_check_agent_names_the_no_edit_line_the_parser_reads` reads `.claude/agents/*.md`. Every line naming a no-edit line (`EDIT` then `none`, `n/a` or `no edit`) must hold `NO_EDIT` itself. The ten checks that write the line must still name it. The parser must read `NO_EDIT`, plain, bulleted, indented or bold, as no block.
+  - **The kept result.** `rust/guard/shared/Cargo.toml`'s `reads` gains `.claude/agents/` (and `.claude/settings.json`, which `the_hook_timeout_holds_both_waits` already read undeclared). Without it, `make rust-test` kept a green over a drifted agent file, measured 2026-11-25: "test unchanged on rust/guard/shared - its last green result stands".
+  - **What real replies write**, measured 2026-11-25 by grep over every `-diagram*` transcript under `~/.claude/projects/`. Every no-block `EDIT` line in a check's reply opens `EDIT: none` or `**EDIT: none**` (some bulleted or indented), and all of them read as no block on HEAD. The six other `EDIT:` lines the grep found are session prose, not replies: a builder's report line `` - **EDIT**: `unread_edits` ... `` (4) and the survey's own echoed output (2). No categorized `EDIT (X): none` and no other variant was found. Nothing on HEAD is red.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the real reply read whole | `the_p7_modal_form_reply_is_read_whole`, red with the exemption off (`starts_with("none")` disabled): 3 failed of 483, measured 2026-11-25 (`make rust-test CRATE=rust/guard/shared`) | n/a: tooling | none | n/a |
+| agent files and parser agree | `every_check_agent_names_the_no_edit_line_the_parser_reads`, red with the exemption off (as above) and red with `modal-form.md`'s line drifted to `EDIT none (<why>)`: 1 failed of 483, naming the file and line | n/a: tooling | none | n/a |
+| an agent-file edit reruns the test | the `reads` line; before it, the drifted agent file left "its last green result stands" | n/a: tooling | none | n/a |
+
+### T228 Approach (checklist part A)
+
+1. **The goal, in the world.** A check that has no edit says so in the line its contract gives, `EDIT: none - <why>`, and `make apply-edits` reads that reply whole. A change to either side, the contracts or the parser, goes red at the next test run.
+2. **The constraints.** 451 T195's fail-closed rule stays: a header-shaped line in no block is still refused. Root CLAUDE.md: fix a guard that fires on correct work.
+3. **Where each comes from.** O: P7's cascade record and its saved reply (`/home/agent/.claude/jobs/c6fd72d1/tmp/cascade/`). O: commit 926e10e593. R: the ten agent files' contract lines.
+4. **Do they describe the world here?** Yes, measured 2026-11-25. HEAD reads P7's reply whole (`make apply-edits DRY=1`), and the transcript grep found no unread no-edit variant.
+5. **The order.** After 926e10e593 (the parser half). No dependency on T234.
+6. **The exits.** Green: `make closing-checks T=T228 F=451`. Red: what failed is recorded and the task set down, and a claim that it cannot be done is ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, measured 2026-11-25 (`make rust-test CRATE=rust/guard/shared`; logs in the session scratchpad). On HEAD the two new tests pass, because HEAD already carries the parser fix: no red on HEAD exists, as the Approach states. With the `none` exemption disabled, 3 of 483 failed (the two new tests and 926e10e593's own). With `modal-form.md` drifted, 1 of 483 failed, and before the `reads` line that run was skipped as unchanged. Restored, 483 passed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: a check's correct reply was refused whole, so the session hand-altered it. No map changes.
+
+**Found and left?**
+- `rust/guard/shared`'s tests read `.claude/settings.json` (`the_hook_timeout_holds_both_waits`) without declaring it in `reads`. Effect: a settings edit that breaks the hook timeout's test left a kept green standing. Fixed here, in the same `reads` line, observed 2026-11-25, method: `grep -rn 'CARGO_MANIFEST_DIR' rust/guard/shared/src`, which had 3 hits before this task. The other two read `tests/hooks/fixtures/`, which is declared, and the crate's own directory.
+
+**Performance work?** no: it pins an agreement and runs no check faster.
+
+
+<!-- plan-archive: archived 2026-11-25 -->
+### T23 (two builders' cargo runs in one clone corrupted each other's coverage: T02's `make static` beside T234's cargo failed on corrupt or missing coverage profiles in seven crates, observed 2026-11-20, method: T02's `make static` log)
+
+- **Approach**: every `l7r-gate rust <cmd>` (`l7r-rust`) joins a record in each directory it writes - the clone's target directory
+  `~/.cache/l7r-cargo-target/<clone>` (the coverage families' `cover-*/view/<crate>` directories are under it), and the cargo target
+  and coverage directory an override names, sorted - for its whole length: `rust-checks-run.json`, edited under the short `flock` of
+  `rust-checks-run.lock` (`l7r_guard::shared::tool::flock_within`, no guard source edited). A RUN is the outermost `make` above the
+  process (`/proc`'s parent chain), so the checks one `make done` runs side by side (`static` in the background beside `counters-inert`
+  at `rust-only`) and a run nested in a run's tests share it; with no `make` above, the process is its own run. A member is a process by
+  pid and start time, gone when the process is, so a killed run leaves nothing to clear. Another run's live member is waited for: a line
+  on stderr at once and every 30 s (a GUESS knob) naming the holder (pid, its check, its run's make line and pid, since when) and the seconds waited;
+  past the ceiling (`L7R_RUST_LOCK_CEILING`, default 1800 s, a GUESS knob) the check refuses, naming the holder and `kill <run pid>`. A usage error
+  takes no lock. The lock is per process, not per crate: `rustc/side.rs`' and the coverage pass's threads run inside it. New:
+  `rust/gate/crates/rustc/src/rustc/runlock.rs`, its tests `rustc/tests/runlock.rs`; `rustc.rs`' `cli` goes through `locked_dispatch`.
+  Red first: `two_runs_in_one_target_directory_take_turns` - two runs of `lint` over a two-crate fixture on one scratch target, a fake
+  cargo that notes an entry while another call is inside it:
+  - before (`locked_dispatch` a bare `dispatch`): 3 overlaps, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/rustc`).
+  - after: 0 overlaps, 61 tests in 1.16 s, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/rustc`).
+  - the two takers given one run id: 5 overlaps, measured 2026-11-20 (`make rust-test`, the red still firing at the 0.1 s fake).
+  Real cargo, 12 pairs of concurrent `rust cover --crate tests/fixtures/rust/fixture` (`L7R_RUST_FRESH=1`, one scratch target a pair):
+  - pre-T23 binary: 2 of 12 pairs failed, measured 2026-11-20 (`/tmp/t23/pair.sh`, `t02-base`'s `l7r-rust`).
+  - their failure: `llvm-cov` "failed to load coverage ... No such file or directory", observed 2026-11-20, method: the pair's stderr.
+  - with the lock: 0 of 12 failed, 12 of 12 second runs printed a wait, measured 2026-11-20 (`/tmp/t23/pair.sh`, this tree's binary).
+  The `make done` shape, `rust cover` and `rust test-counters` started together under one parent named `make`:
+  - one run joined, 0 wait lines, both exit 0, measured 2026-11-20 (`/tmp/t23/side-inner.sh` under a copy of bash named `make`).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the run's lock | n/a - no map | n/a | none | n/a |
+
+### T234 (the P3b cascade record, 2026-11-25, `/home/agent/.claude/jobs/c6fd72d1/tmp/cascade/p3b-cascade.md`: after page session P3b moved 0005's rice-shoots section to the new drawing page 0346, `hamlet/paddy`'s `Drawing:` still named only 0005, the tool cleared it, and D5 and modal-depiction's LINKS contract, saying nothing of a split, would read 0346 as a missing link)
+
+- **Approach**: The task's words are taken literally: "a split ADDS the target page to each pop-up whose Drawing: names the source page and whose Depiction states a moved block (mechanically, owing nothing), and D5 says so". That is not M14's "the pointer counts as listed, the line is not edited" (451 T184): the `Drawing:` list is what the Depiction tab shows its reader, so it gains the page the rules now live on.
+  - **The writer.** `rust/gate/crates/owed/src/record/modals/split_links.rs`: `owed_links` follows each split pointer (`<a class="moved">`, `change::follow`, T185/T196) from a pop-up's listed `Drawing:` pages to a `.drawing.html` page the line does not name, and owes it where the Depiction states the target's blocks (below). `apply` appends it to the line (`with_links`, a continued line too) with the condition of the listed page reaching it (`[settlement_form=dispersed]`; none where an unconditional listed page reaches it - a bug the first real run found, the well's 0031 entry carries one).
+  - **Owing nothing.** `Modal::depiction()` holds the `Drawing` tag, so an edit of the line owes `modal-depiction` ("its Depiction, Drawing: or Entry: changed") at a new fingerprint. The writer does not change that rule (it would move every pop-up's fingerprint, and `trials/depiction_replay.rs` shares `depiction_owed_by`); it carries the pop-up's answer to the new fingerprint with `answers::settle`, as an applied LINKS fix "states no fact, so it settles once applied" (451 T188). A pop-up not answered as it stands is left and named: the edit would turn a triage it is owed into a full check, and the check it is owed reads the pointer and makes the link as a LINKS fix. So `make modal-triage` runs it AFTER its own clears (`run_bundle`), and says each addition first.
+  - **"States".** The addition rule's phrase (451 T209, `change::subject_trigrams`, now taking its word count; `shared_phrases`): the Depiction and the target's blocks, a pointer back left out, share at least `LINK_PHRASES` (3) word trigrams of `LINK_WORDS` (2) words naming a thing. Two KNOBS, measured 2026-11-25 over every pop-up's unlisted split targets in the tree (52 (pop-up, target) pairs, targets 0346 of P3b and 0349 of P11; a throwaway test over the real tree, removed): at the triage's own 3 words, one pair (`settlement_form--dispersed`, 0349) and the paddy missed; at 2 words, eight pairs share a phrase; at 3 phrases of 2 words, two: `hamlet/paddy` and 0346 ("dot a plant", "no ruled row", "scatter of shoot") and `settlement_form--dispersed` and 0349 (6, "a scattered settlement", "a roomier field" ...), the two whose Depictions state the moved section, read by eye. At 2 phrases `hamlet/well` ("a scattered farm", "within reach of": its water, not the farm's reach of its rice) and `settlement_form--nucleated` ("gap between the", "the gap between": one phrase) join; at 1, four more on one generic phrase ("the field edge", "beside its field").
+  - **The contract.** `dev/modals.md` D5 gains the clause (and through `make agent-sync` each modal check's copy); modal-depiction's own LINKS contract gains it. `checks/documents/modal_split_pointer.rs`, which pins M14's clause, pins D5's and LINKS' too.
+  - **The fix.** `make modal-triage` run on the clone wrote both lines: `hamlet/paddy` gained 0346, `choice/settlement_form--dispersed` gained 0349 (P11's split, 2026-11-24, which the same gap had left). `make record-owed` after: "2 unit(s) owed by the delta, 0 still unanswered", both `[answered]`.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the writer and its answer carried | `split_links/tests.rs`: 4 of its 5 first tests red on the stub (the pair owed, the line written, the answer carried, the triage's line) | n/a: tooling | none | n/a |
+| the phrase knobs | `two_shared_phrases_owe_nothing` (the well's case) and the 52-pair measurement | n/a: tooling | none | n/a |
+| the source's condition | `the_link_keeps_its_source_s_condition` | n/a: tooling | none | n/a |
+| D5 and LINKS | `modal_split_pointer` red on the real tree before the clauses (5 findings, measured 2026-11-25 (`make rust-test CRATE=rust/gate/crates/checks`)), and its fixture case | n/a: rules | none | n/a |
+
+### T234 Approach (checklist part A)
+
+1. **The goal, in the world.** A reader of a pop-up's Depiction tab whose rules a split moved to a new drawing page finds that page in its links, and nobody re-checks a pop-up for it.
+2. **The constraints.** The task's words (a split ADDS the target, mechanically, owing nothing; D5 says so). The GM 2026-11-23 (451 T184): *"nothing needs to cascade simply because a split occurs"*. 451 T188: a LINKS fix states no fact and settles once applied. D5 and LINKS: every drawing page the modal rests on, and no other.
+3. **Where each comes from.** G: the GM's split ruling (T184). R: `dev/modals.md` D5, M14; modal-depiction's LINKS. O: the P3b cascade record; the 52-pair measurement, 2026-11-25.
+4. **Do they describe the world here?** Yes: the two splits in the tree (0005 -> 0346, 0031 -> 0349) are the cases measured, and both pop-ups the rule selects state the moved sections.
+5. **The order.** No dependency. It lands alone.
+6. **The exits.** Green: `make closing-checks T=T234 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, 2026-11-25: `make rust-test CRATE=rust/gate/crates/owed` on the stub, 131 passed and 4 failed (the split_links tests); with the writer, 138 passed. Measured 2026-11-25 (`make rust-test CRATE=rust/gate/crates/checks`): with the pin and before the clauses, 165 passed and 1 failed (5 findings: D5 in dev/modals.md and its three copies, modal-depiction's LINKS); after the clauses and `make agent-sync`, 166 passed. Measured 2026-11-25 (`make modal-triage`, then `make record-owed` on the clone): the two lines gained, 0 unanswered.
+10. **Before moving a constant.** n/a (two new knobs, measured above).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reader of `hamlet/paddy`'s or the dispersed choice's Depiction tab now reaches the page holding the rules it states in one click, not two; no map changes.
+
+**Found and left?**
+- `choice/settlement_form--dispersed`'s `Drawing:` lacked 0349 after P11's split (2026-11-24), the same gap. Fixed here (the tool's run).
+- A `Drawing:` entry's condition was not carried to a split's target by the first draft of the writer (`hamlet/well` reaches 0349 through `0031 [settlement_form=dispersed]`). Fixed here, before it wrote anything that stayed.
+
+**Performance work?** no: one walk of the pop-ups at `make modal-triage`, reading only the split targets their lines reach.
+
+
+<!-- plan-archive: archived 2026-11-25 -->
+### T23 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; a builder's Rust checks never share a target directory with another builder's run
+   at the same moment, so a red coverage result is the code's, never a collision.
+2. **The constraints.** T23's line (one lock a target directory for the length of a run, the second waiting named and timed rather
+   than racing, red first with two concurrent runs); `make done` and `make static` keep running their checks side by side; the
+   time rule (what a single run pays measured).
+3. **Where each comes from.** O: the real-cargo collisions above; the task as filed (T23's line); O: T02's failed `make static`:
+   seven crates' coverage profiles corrupt or missing, observed 2026-11-20, method: T02's `make static` log.
+4. **Do they describe the world here?** The cover pass's `view/<crate>` reset (`rustc/cover.rs` `run_one`) and the test binaries run
+   directly (`side.rs`, `cover.rs`) are outside cargo's own build-directory lock; the pre-T23 binary's failure named exactly the
+   removed `view` binary.
+5. **The order.** Independent of T03-T22; before any other task's `make static` runs beside a builder's in this clone.
+6. **The exits.** Green: the red-first test green, `make rust-test` on the crate, `make quick`, `make static`, `make hooks-test`.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The runlock tests green and the crate at 100% of its lines (measured 2026-11-20 (`make static`, its cover step)):
+   - 9 runlock tests, 61 of the crate's, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/rustc`; `make static` cover).
+   - the lock's cost, 2.2 ms median a call, measured 2026-11-20 (one binary with a temporary lock-off switch, 60 alternating runs each).
+   - with the lock 129.03 ms median, p90 136.45 ms, measured 2026-11-20 (`rust test --crate tests/fixtures/rust/fixture`, kept result).
+   - without it 126.85 ms median, p90 136.28 ms, measured 2026-11-20 (the same runs, the switch on).
+   - `make static`, 4 calls, so about 9 ms of it: 7 s, measured 2026-11-20 (`make static` wall clock, kept results standing).
+10. **Before moving a constant.** n/a - new knobs, each labeled GUESS beside it: the ceiling 1800 s (`L7R_RUST_LOCK_CEILING`), the
+    30 s between wait lines, the 0.5 s poll, the record lock's 10 s.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reader of a builder's log sees a wait line instead of a coverage failure that was another run's; nothing
+    on a map.
+
+**Found and left?** none
+
+**Performance work?** no
+
+<!-- plan-archive: T24 to T02 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+<!-- plan-archive: T28 to T28 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+<!-- plan-archive: T241 to T241 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
+<!-- plan-archive: T29 to T29 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
