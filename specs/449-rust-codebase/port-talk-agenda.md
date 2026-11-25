@@ -28,6 +28,15 @@ agents, 251 on background commands, 148 on nothing; agents used 2,147 agent-minu
     tasks.md Occasions block and plan-review.json, merged by hand in minutes. What would make it routine: per-worktree task
     marks, guards that read the tree they run in, a shared build cache, cleanup on landing (451 T245). Both worktrees and
     their caches were removed after landing.
+    How many at once (the GM, 2026-11-25: "is the number 2 here something that was picked deliberately ... Presumably there is a
+    point at which things like CPU contention or available RAM make it inadvisable to spin up additional parallelized threads
+    ... doing some actual measurements on that is something that we should do as part of determining what our standard
+    workflow should be"). Two was a default, held by disk (13-14 GB of build cache per copy). The machine on 2026-11-25 with
+    two builders: 22 cores at a load of about 16, 15 GB of memory with about 9 GB available, 60 GB of disk free. CPU slows
+    compiles when shared (one rustc ran at 900%); memory is the hard limit (an out-of-memory kill, not a slowdown); disk caps
+    copies until 451 T245 or a shared build cache. Measure: comparable small tasks at 1, 2, 3 and 4 builders, each builder's
+    minutes to its stop point and its compile and test minutes from the task time breakdown, peak memory and load; the count
+    is where total time stops improving or memory nears a safety margin.
 
 2. A landing beside the next build: the landing's gate already runs in its own worktree; only its tick and push touch the
    clone (451 T242 fixes the late failure).
