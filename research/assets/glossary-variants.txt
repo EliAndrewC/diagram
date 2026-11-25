@@ -301,7 +301,9 @@ bills of lading	bill of lading
 bincho	bincho
 bincho charcoal	bincho
 binchotan	bincho
+bingchen	bingchen
 bingo	Bingo
+bingyin	bingyin
 bishamon	Bishamon
 bishamonten	Bishamon
 bitchu	Bitchu
@@ -596,6 +598,8 @@ chongzhen	Chongzhen era
 chongzhen era	Chongzhen era
 chonin	chonin
 chonin-chi	buke-chi
+chop	chop
+chops	chop
 chori	chori
 choriboshi	chori
 chotojiba	chotojiba
@@ -710,6 +714,8 @@ contour canal	contour canal
 contour canals	contour canal
 contours	contour
 convection column	convection column
+coolie	coolie
+coolies	coolie
 cooper	cooper
 cooperage	cooper
 coopered	cooper
@@ -1575,6 +1581,8 @@ gobunsho	Ofumi
 gobunshō	Ofumi
 god of government office	yamen-god
 god of land	tudi miao
+godown	godown
+godowns	godown
 goemon-buro	goemon-buro
 goemonburo	goemon-buro
 gofuku-machi	Gofukumachi
@@ -2026,6 +2034,7 @@ hydrosere	hydrosere
 hydroseres	hydrosere
 hyo	hyō
 hyojosho	Hyōjōsho
+hyson	Hyson
 hyō	hyō
 hyōjōsho	Hyōjōsho
 hùdǒu	hudou
@@ -3550,6 +3559,7 @@ perry	Perry
 persimmon tannin	persimmon tannin
 person-year	person-year
 person-years	person-year
+petties	petties
 petuntse	petuntse
 phalansteries	phalanstery
 phalanstery	phalanstery
@@ -3577,6 +3587,8 @@ piloted ignition	piloted ignition
 piloted-ignition	piloted ignition
 pingjiang map	Pingjiang tu
 pingjiang tu	Pingjiang tu
+pingnan	Pingnan prince
+pingnan prince	Pingnan prince
 pingyao	Pingyao
 pit privies	pit privy
 pit privy	pit privy
@@ -4373,6 +4385,8 @@ song dynasty	Song dynasty
 song yingxing	Song Yingxing
 song-dynasty	Song dynasty
 songjiang	Songjiang
+songluo	Songluo
+songluo tea	Songluo
 sonsha	sonsha
 soochow	Soochow
 soroban	soroban
@@ -4554,6 +4568,9 @@ summer-green broadleaf forest	summer-green
 summer-green forest	summer-green
 suo	Suo
 suo province	Suo
+supercargo	supercargo
+supercargoes	supercargo
+supercargoes'	supercargo
 superelevated	superelevation
 superelevates	superelevation
 superelevation	superelevation
@@ -4698,6 +4715,9 @@ tchek	copper cash
 tchoki	copper cash
 tea garden	tea garden
 tea gardens	tea garden
+tea-factor	tea-factor
+tea-factors	tea-factor
+tea-factors'	tea-factor
 tedai	tedai
 teien	teien
 teikaku	teikaku
@@ -4987,6 +5007,8 @@ tung tree	tung
 tung trees	tung
 tutelary shrine	chinju
 tutelary shrines	chinju
+twankay	Twankee
+twankee	Twankee
 twelve-mat	tatami
 twill	twill
 twills	twill
