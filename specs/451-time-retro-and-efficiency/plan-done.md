@@ -12809,3 +12809,99 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 
 <!-- plan-archive: T234 to T234 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
 <!-- plan-archive: T235 to T235 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-25 -->
+### T151 (make ledger-owed traced no check-wave unit to the session that ran it: 35 impl-drift passes of 449 T249's re-check stayed owed after the session's write and refused every landing)
+
+- **Approach**: measured first, then the trace and the reply of a Workflow agent taught to `reviews`' `ledger_passes/rows.rs`:
+  - HOW A PASS IS TIED TO A SESSION, measured 2026-11-22 (reading `ledger_passes.rs`, `rows.rs`, `settle.rs`, `trace.rs` and the
+    guard's `ledger/cost.rs`): `make ledger-owed WRITE=` passes `--session $CLAUDE_CODE_SESSION_ID`, and `write_owed` keeps a pass
+    where `rows::session_of` names that session - the agent's transcript's parent's parent. The transcript is found by
+    `cost::transcript`, which lists `<project>/<session>/subagents/agent-*.jsonl` only. A check-wave unit's transcript sits at
+    `<session>/subagents/workflows/<run>/agent-<id>.jsonl`, measured 2026-11-22 (`ls` of the session's directory: 13 runs under
+    `subagents/workflows/wf_*`), so it was never found: `session_of` gave "", and the pass was "not traced to it". Had it been found,
+    its parent's parent is `workflows`, not the session.
+  - WHERE A UNIT'S REPLY STANDS, measured 2026-11-22 (`tail` of a unit's transcript and its run's `journal.jsonl`): the transcript
+    ends in the StructuredOutput call's tool result, no text; the run's `journal.jsonl` holds one `{"type":"result","agentId":...,
+    "result":{label, verdict, text}}` line per unit, `text` the unit's reply and `label` its bundle's name (`claims-rust-...`, the
+    same name as the `/tmp/l7r-check/<name>/` its prompt reads, checked on one unit's first user message).
+  - THE FIX (`rows.rs`): `wave_transcript` finds `<project>/<session>/subagents/workflows/<run>/agent-<id>.jsonl`; `session_of`
+    names a hand-dispatched agent's session as before and a wave unit's as the directory above `subagents/workflows/<run>/`;
+    `filled_row` takes a wave unit's reply and place from its run's journal (`journal_reply`: the last result line naming the agent,
+    its `text` and `label`, or the result itself where it is text), and fills the same cells a hand-dispatched pass gets - the
+    verdict by `verdict_of` on the reply, its first line, `nothing` or `judgment`, the acted-on cell from `WRITE=`.
+  - THE VERDICT CELL, a decision, labeled (parity): read from the reply as a hand-dispatched pass's is, not from the journal's
+    `verdict` field, so an all-IN-STEP impl-drift reply reads `findings` as the session's hand-dispatched impl-drift rows already do.
+  - THE COST CELLS, a decision, labeled (an accepted limitation): the costing (`settle::settled`, through `cost::subagent_files`) is
+    left looking where it looked, so a wave pass keeps its logged cells. Cost: a wave unit's cells are the hook's, not recomputed from
+    its finished transcript (how far they differ was not measured). The alternative priced: teaching the costing the wave directory
+    recomputes the cells of the ~342 wave passes already answered (377 in the log, 35 owed, measured 2026-11-22 by `grep -c` of the
+    clone's `check-passes.jsonl`), and a row answers a pass by its cost cells, so those rows would answer nothing and the passes
+    would be owed again. Chosen by the T151 builder.
+  - THE WRITE, measured 2026-11-22 (`make ledger-owed WRITE=` in the clone, the new binary): 41 rows written for c6fd72d1 - the 35
+    impl-drift units, each with its bundle's label and its reply's first line, and 6 passes launched after the brief (a
+    building-review, a glyph-check and a size-audit of 449 T265, two escalation-checks, one spec-fidelity `ARBITER_OK` dispatch); 40
+    plan reviews refused as their landings' own (451 T105). `WRITE=` was the session's earlier rows' full text, which begins with the
+    brief's ("each pass's verdict recorded by its tool: make claims-checked into dev/claims-index.json") and names where the other
+    checks' verdicts are recorded, so the 6 later rows' acted-on cells are true. After, `make ledger-owed` lists 40 passes, every
+    one a MODE 4 plan review, measured 2026-11-22 (its listing, `grep -vc "MODE 4"` = 0).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the trace and the reply | `ledger_passes/tests.rs`' `a_sessions_write_takes_its_own_check_wave_units_from_the_journal` (a check-wave unit under `s/subagents/workflows/wf_r/` with its journal is written for session `s` from the journal's label, verdict and first line; another session's unit stays owed and is written for its own) - red before the fix, measured 2026-11-22 (`make rust-test CRATE=rust/gate/crates/reviews`: `0 row(s) written for s; 2 pass(es) not traced`); `rows/tests.rs`' `a_wave_unit_s_text_result_is_its_reply` (a text result, a structured result with no `text`, a journal with no result for the agent, a pass with no agent) | n/a - no engine code | none | n/a |
+
+### T151 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A session's `make ledger-owed WRITE=` writes the rows of the check-wave units it ran,
+   so they no longer refuse every landing.
+2. **The constraints.** T151's line; FR-012 (red first); 451 T105 (the by-hand write refuses the landing's plan reviews); 451 T147's
+   uncommitted `left.rs` built on; feature 371 (a row answers a pass by its check and cost cells).
+3. **Where each comes from.** G: none beyond the task line. O: the measurements above, each dated with its method. R: none -
+   tooling, no research question.
+4. **Do they describe the world here?** Yes: the session's own 13 runs and the 35 owed passes, measured 2026-11-22 (`ls` of its `subagents/workflows/`, `make ledger-owed` in this clone).
+5. **The order.** Measured first; the pin written and shown red; the fix; the crate's tests green; the write; the listing after.
+6. **The exits.** Green: the pins pass and the crate's tests, lint and cover are clean; the write leaves only plan reviews owed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: `transcript(` callers under `rust/gate/crates/reviews` found by grep; `trace.rs`' `unit_prompt` already
+   walks the wave directory for a feature's write and is unchanged.
+8. **The budget.** One landing.
+9. **Done, measured.** `make closing-checks T=T151 F=451` green; the after-listing above (40 owed, all MODE 4).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect: every landing refused on 35 passes no command could write, measured above.
+
+**Found and left?** none.
+
+**Performance work?** no.
+
+
+
+### T249 (T232's two found-and-left items, its builder 2026-11-25: a research page's record-check re-run applied its wording EDITs, and a later round with no kept snapshot read as scoped to a change it was never handed)
+
+- **Approach**: Two rules, each in the tool that owns it, measured first in the store.
+  - **(a) The hold reaches a research page.** `make apply-edits`' hold (`apply_edits/rerun.rs`) read a pop-up's file only (`modal_unit`). It now maps an EDIT's file to its unit's subject with `unit_of`: a pop-up's unit as before, or a research question's number for any file of the question (`research/questions/NNNN-*.html`, the `QUESTION` pattern apply-edits already reads - the page, its notes and its drawing). That is the subject of the record's two wording checks, `record-format:NNNN` and `intro-check:NNNN`, each of which reads the whole question (`units::fingerprint`). The rest of the rule is T232's unchanged: a wording EDIT (`factual` false for every check of the reply) is held where every check of the reply carries `rerun` at its current fingerprint on that subject, kept as a row of `noted.jsonl`, and `RERUN_OK` applies it, logged. quote-check's and translation-check's EDITs are factual (neither is in `WORDING_CHECKS` nor `WORDING_CATEGORIES`), so they apply and cascade as a first round's, and their per-note units are never looked up. A write-up under `research/sources/` names no question, so its EDIT is not held. A GLOSSARY block writes a term file, never the question, so it is not held. The re-run mark itself was already written for record checks: `answer_unit` serves every check (`answer_from_bundle`, `answer_inner`), and a page session records an answer (`make record-checked`) before applying its EDITs, which `settle` already requires (`scripts/container/page-session-rules.md`). Measured 2026-11-25 (`ls` of the main clone's `.git/record-checks`): record-format's 82 and intro-check's 7 records are all `check:NNNN`, and no record yet carries `rerun`.
+  - **(b) A later round with no kept snapshot says its scope.** `bundle::earlier` hands a later round its change since the last round only where that round's bundle was kept (451 T189); a subject whose last round predates the keeping got no change section and no word why. `parts_in` now also returns each check and subject that is a later round (one round or more counted) with no snapshot of its last round, and `headed_in`, which both MANIFEST writers call (`check::with_earlier`, the modal bundle), writes ONE line under the MANIFEST's title naming them: `**Scope: the whole unit (451 T249).** No snapshot was kept of what the last round of <check> on <subject>, ... was bundled (a round bundled before 451 T189), so this bundle has no change section: judge the whole unit, every block, as in a first round - not only what an earlier round named.` A first round, a subject with rulings only, and a later round whose last bundle was kept get no line; a rebuild before the dispatch keeps it, since what a bundle keeps is the next round's snapshot. Measured 2026-11-25: the main clone's `.git/record-checks/seen/` holds 162 snapshots, and the incident's 10:56 reply said "My manifest names no change section, so I did not re-open it" (451 T232's measurement).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a re-run's wording EDIT on a research page held and listed | `a_re_run_s_wording_edit_on_a_research_page_answered_before_is_held_and_listed` (record crate) red with the question branch absent (the code before this task), measured 2026-11-25 | n/a: tooling | none | n/a |
+| a re-run's factual EDIT on a page, and a source write-up's, applied | `a_re_run_s_factual_edit_on_a_research_page_applies` (record crate), green before and after: it pins that the hold does not reach them | n/a: tooling | none | n/a |
+| a later round with no kept snapshot says its scope under the title | `a_later_round_with_no_kept_snapshot_says_at_its_head_that_it_judges_the_whole_unit` (bundle crate), with `earlier_rounds_ride_a_bundle` and `a_form_bundle_keeps_the_research_rounds_wording` through both writers, red with the line off, measured 2026-11-25 | n/a: tooling | none | n/a |
+
+### T249 Approach (checklist part A)
+
+1. **The goal, in the world.** A record check run again on a research page's text nothing changed leaves its wording as it was, its new wording findings listed for the next session, its factual ones applied. A later round handed no change section is told in its MANIFEST's first lines that it judges the whole unit.
+2. **The constraints.** 451 T232's rule as built (a re-run's wording EDITs held and listed, factual ones applied, `RERUN_OK` the escape). 451 T188's split (`checks::reply::factual`: only factual findings cascade). 451 T189's change section, and feature 393's Earlier rounds paragraph: a round with no change section judges as a first round. The brief: the research switch is deferred - build and test only, no page session and no edit of a research page.
+3. **Where each comes from.** G: the GM 2026-11-23 on T188 (style edits are a different category of thing than factual inaccuracies), as T232 quotes him; the GM 2026-10-18 on feature 393's Earlier rounds. R: `ask:mixed-build-53-record-answers` (`specs/451-time-retro-and-efficiency/arbiter.jsonl`), which forced the incident's re-run. O: T232's measurement of 2026-11-25 and this task's store listing above.
+4. **Do they describe the world here?** Yes, measured 2026-11-25: the store's record-format and intro-check units are per question, as `units::fingerprint` reads them, and both MANIFEST writers open with a `# ` title line.
+5. **The order.** After T232 (its hold and mark). No dependency on T248, built in parallel in `rounds.rs` and `handle.rs`, which this task does not touch. Lands before T246, as T232 filed it.
+6. **The exits.** Green: `make closing-checks T=T249 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, measured 2026-11-25 (`make rust-test CRATE=rust/gate/crates/record` and `CRATE=rust/gate/crates/bundle`, logs in the session scratchpad). (a) Before `unit_of`, the page test failed at line 156: the record-format re-run's EDIT was applied. (b) With `headed_in` writing no line, the scope test failed at line 281 (no line under the title); on the final code with the line forced off, it and both writers' tests failed (check tests line 539, modal tests line 226). With the round test dropped (`was.is_none()` alone), the scope test failed at line 267 (a rulings-only unit said the line); with the snapshot test dropped (`n > 0` alone), it failed at line 296 (a kept round said it). With the code as built: record 103 passed, bundle 87 passed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: a record-check re-run on unchanged text rewords what an earlier answer settled and re-owes the checks after it; and a later round with no snapshot judged one bullet where the whole unit was owed, missing the alcove gap for a round (2026-11-24). No map changes. A page's wording changes one session later, not mid-landing; a later round's MANIFEST carries one more line.
+
+**Found and left?** none.
+
+**Performance work?** no: one more line in a MANIFEST and a held EDIT; nothing runs faster or slower.
+
