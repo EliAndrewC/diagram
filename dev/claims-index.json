@@ -38514,8 +38514,8 @@
  "rust/phases/src/driver/check.rs::check#no dry plot on another": {
   "body": "0870542d337b78f4",
   "claim": "no dry plot on another - dry-fields-and-their-crops-hatake.drawing: plots laid end to end, each its own ground",
-  "code": "13bde2fa7cf7126b",
-  "core": "0aa503f26d8f4e54",
+  "code": "bda5650f02879564",
+  "core": "d2fd9ee8bacf479b",
   "date": "2026-11-25",
   "note": "the dry_on_dry test (a plot's middle inside another plot) keeps each plot on its own ground, laid end to end",
   "pages": {
@@ -38531,13 +38531,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::check#no dry plot on the paddy": {
-  "body": "0870542d337b78f4",
-  "claim": "no dry plot on the paddy - dry-fields-and-their-crops-hatake.drawing: the dry fields stand beyond the paddy, along the canal's high side",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "18921a05019dd941",
-  "core": "0aa503f26d8f4e54",
-  "date": "2026-11-07",
-  "note": "tests that no plot corner lies inside a field ring; the hem keeps to dry ground upslope of the canal",
+  "body": "48577ee8265f713c",
+  "claim": "no dry plot on the paddy - dry-fields-and-their-crops-hatake.drawing: the dry fields stand beyond the paddy, along the canal's high side, and a plot that would lap onto the rice is dropped - so the plot's whole area is asked of the field past the drawing's slack (`lies_over`), not its corners (449 T434)",
+  "code": "f8509f7dbcadb78f",
+  "core": "d2fd9ee8bacf479b",
+  "date": "2026-11-25",
+  "note": "the whole plot is tested against every field's ring past the slack; this matches the hem upslope of the paddy and the rule that a plot lapping onto rice is dropped",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
@@ -38548,14 +38547,13 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf"
   ],
-  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::check#no dry plot on the water": {
   "body": "5e223e683f80253f",
   "claim": "no dry plot on the water - dry-fields-and-their-crops-hatake.drawing: a plot that would come within about a foot of any water the map draws - a canal, a ditch, the brook or a pond - or would have the end of one inside it, is left out; the plot's whole area asked of the drawn water (`Drawn::meets`), not its corners (449 T433)",
-  "code": "c785a9d067dd0ac2",
-  "core": "0aa503f26d8f4e54",
+  "code": "3643f6bc35de8e20",
+  "core": "d2fd9ee8bacf479b",
   "date": "2026-11-25",
   "note": "dry_on_water now asks `Drawn::meets` for each plot, as the page's drop rule says",
   "pages": {
@@ -38566,13 +38564,14 @@
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1a9bff0e449a703a"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::check#on the canvas": {
   "body": "0870542d337b78f4",
   "claim": "on the canvas - CONVENTION: the map is drawn on its canvas; only the brook and the drain's run leave it",
-  "code": "dc0997c21a25a494",
-  "core": "0aa503f26d8f4e54",
+  "code": "a9bea38966398ab2",
+  "core": "d2fd9ee8bacf479b",
   "date": "2026-11-07",
   "note": "the off-canvas tests on dry plots, the tameike rim and the field rings are a drawing convention",
   "pages": {},
@@ -38586,8 +38585,8 @@
   "body": "0870542d337b78f4",
   "claim": "the settlement off the field - clustered-and-scattered-villages-shuson-sanson.drawing: the houses on the field's margin, beside the paddy",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "9c2e8fb2be461506",
-  "core": "0aa503f26d8f4e54",
+  "code": "4f51214507eedbdc",
+  "core": "d2fd9ee8bacf479b",
   "date": "2026-11-22",
   "note": "refuses a settlement whose middle stands inside the field ring, matching \"on the higher, drier ground beside its paddy\"",
   "pages": {
@@ -38606,8 +38605,8 @@
  "rust/phases/src/driver/check.rs::check#the tameike off the paddy": {
   "body": "0870542d337b78f4",
   "claim": "the tameike off the paddy - field-drains-akusuiro.drawing: the pond at the field's foot, below it",
-  "code": "9fbb59674d24007a",
-  "core": "0aa503f26d8f4e54",
+  "code": "d7314179129d640b",
+  "core": "d2fd9ee8bacf479b",
   "date": "2026-11-07",
   "note": "the pond's rim and center must lie outside the field; matches \"a pond at the field's foot\"",
   "pages": {
@@ -38635,6 +38634,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/check.rs::drawn_in#the plot drawn in": {
+  "body": "9ceb512dfe0d50cb",
+  "claim": "the plot drawn in - NONE: geometry, each side's line moved in and its neighbors' lines met",
+  "code": "5cd3140b51141a0d",
+  "core": "9e8330a92d963ea9",
+  "date": "2026-11-25",
+  "note": "an inward offset of a polygon, pure geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/check.rs::ground_on_polder#over the dike and the canal": {
   "body": "f5f0134499e04db4",
   "claim": "over the dike and the canal - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the village on the dry ground just off the dike, and from outside in the wild water, the dike, the ring canal - so the ground is tested against the dike's outer face and the canal's course",
@@ -38654,6 +38665,25 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8feb1eada8b008c2"
   ],
   "triaged": "2026-11-24",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/check.rs::lies_over#the plot's whole area asked": {
+  "body": "af8260a12d355841",
+  "claim": "the plot's whole area asked - CONVENTION: dry-fields-and-their-crops-hatake.drawing states no gap between a dry plot and the rice, the houses' ground or the pond's, so exact overlap past the drawing's slack (`SLACK_FT`), a shared edge not an overlap (449 T434)",
+  "code": "5118204c9c1b9448",
+  "core": "79329bfe95d8f314",
+  "date": "2026-11-25",
+  "note": "the overlap tolerance is the drawing's 1 ft slack, so a shared edge passes; the page gives no gap between plots and the rice or the houses",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
+  },
+  "reads": "88909a6613b19427",
+  "research": "caa437c806462f43",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:f263da6e48629364"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::mean#the map's checks": {
@@ -38729,43 +38759,36 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::reed_checks#no dry plot in the reeds": {
-  "body": "77108c615fda091f",
-  "claim": "no dry plot in the reeds - dry-fields-and-their-crops-hatake.drawing: the dry plots laid clear of the water and the pond's ground",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "07a70f6f8a0a8739",
-  "core": "25f9ddd9cba05a51",
-  "date": "2026-11-07",
-  "note": "no plot corner may lie in the tameike's reeds; dry crops keep to \"the higher, drier ground\"",
+  "body": "ba23a221068b8556",
+  "claim": "no dry plot in the reeds - dry-fields-and-their-crops-hatake.drawing: the dry fields drawn on the higher, drier ground along the paddy's high edge, where the paddy water stops - so none on the reed bed round the tameike at the field's foot; the plot's whole area asked of the reeds' ring past the drawing's slack (`lies_over`), not its corners (449 T434)",
+  "code": "6148df3e29b73c0b",
+  "core": "deb90030b4a0c858",
+  "date": "2026-11-25",
+  "note": "dry plots only on the higher, drier ground, none on the wet reed bed by the pond",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "reads": "88909a6613b19427",
   "research": "caa437c806462f43",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:1a9bff0e449a703a",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
   ],
-  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::reed_checks#no dry plot on the settlement's ground": {
-  "body": "a65d3c65b6573103",
-  "claim": "no dry plot on the settlement's ground - dry-fields-and-their-crops-hatake.drawing: the houses between the canal and the dry fields, so no plot stands where they do (`dry_on_settlement`)",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "abaef449fbebc38f",
-  "core": "25f9ddd9cba05a51",
-  "date": "2026-11-22",
-  "note": "a dry plot corner is refused on any seat's ground, which now carries its belt's ground too",
+  "body": "ba23a221068b8556",
+  "claim": "no dry plot on the settlement's ground - dry-fields-and-their-crops-hatake.drawing: the houses between the canal and the dry fields, so no plot stands where they do (`dry_on_settlement`); the plot's whole area asked of the ground past the drawing's slack (`lies_over`), not its corners (449 T434)",
+  "code": "380f2f33947416b1",
+  "core": "deb90030b4a0c858",
+  "date": "2026-11-25",
+  "note": "the houses stand between the canal and the hem, so no plot overlaps their ground",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "reads": "88909a6613b19427",
   "research": "caa437c806462f43",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:33f680a97951ad27",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
   ],
-  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::walled_by_reeds#a dry way out past the reeds": {
@@ -41555,8 +41578,8 @@
  "rust/phases/src/driver/tests.rs::a_bare_winter_the_dry_ground_cannot_feed_is_rolled_again_as_barley#the driver's tests": {
   "body": "b3f381d6f9cf615d",
   "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
-  "code": "00ecdf58b55ae6ba",
-  "core": "310c3b0eee30be11",
+  "code": "a54d28ac99062817",
+  "core": "f342f799caa7b111",
   "date": "2026-11-24",
   "note": "fixtures and assertions only",
   "pages": {},
@@ -44717,6 +44740,23 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/dry.rs::STRETCH_SHARE#the stretch": {
+  "body": "6b63287485732086",
+  "claim": "the stretch - GUESS: dry-fields-and-their-crops-hatake.drawing draws each plot roughly 92 ft across, never dwarfing the rice basins, and is silent on a strip beside a canal bending away from the dry side; past one and a half plots' length a strip is cut into plots, the mirror of `PINCH_SHARE`",
+  "code": "3ba7005edc545f61",
+  "core": "3dce798926a2e47d",
+  "date": "2026-11-25",
+  "note": "a GUESS: the page covers only a canal bending toward the dry side, and 1.5 plots keeps pieces near the 92 ft plot and within the under-0.25-acre average",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
+  },
+  "research": "caa437c806462f43",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:840c22fc45dfbdff"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/field/dry.rs::TRACT_APART_DEG#tracts apart": {
   "body": "6a3bd9dbe8bb2563",
   "claim": "tracts apart - dry-fields-and-their-crops-hatake.drawing: tracts are set apart by at least 20 degrees, by a drawing convention - their rows' directions, the right angle between contour and down counted, against the tract beside each along its band and those directly downslope; where the turns allowed leave no such direction, the one farthest from them all (the page: two rows within about 6 degrees read as one)",
@@ -44822,12 +44862,30 @@
   "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/dry.rs::cut#a stretched strip cut": {
+  "body": "d6a8fa7285d38f42",
+  "claim": "a stretched strip cut - GUESS: dry-fields-and-their-crops-hatake.drawing draws each plot roughly 92 ft across and is silent on a strip beside a canal bending away from the dry side; cutting it keeps the ground the hem climbs (room before packing), where ending the column's climb would drop the hem along such bends (9 percent of the strips asked beside the canal itself on 4,000 cohort combs, measured 2026-11-25), and the taper's half-plot bound holds before the stretch's",
+  "code": "66d2ac496b3753c2",
+  "core": "77f510c552ddbb01",
+  "date": "2026-11-25",
+  "note": "a GUESS: the cut splits into round(longer/plot) pieces, and the half-plot pinch bound is applied before the count is kept, as the claim says",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
+  },
+  "reads": "40b68112ec169785",
+  "research": "caa437c806462f43",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:840c22fc45dfbdff"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/field/dry.rs::hem#a band's strips": {
   "body": "57252853dd763be0",
   "claim": "a band's strips - GUESS: dry-fields-and-their-crops-hatake.drawing silent on whether a band's tracts run alike upslope; the strip count rolled once a band, every tract in it as deep",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "d1f516ea93b170ed",
-  "core": "40dbad554e584baa",
+  "code": "794a322f87345832",
+  "core": "54b3ac299e2640e2",
   "date": "2026-11-22",
   "note": "the page gives two to four strips a tract and is silent on whether a band's tracts share a depth; `strips` is rolled once a band",
   "pages": {
@@ -44842,12 +44900,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#a column's climb ends": {
-  "body": "0784cf1b4051ebbe",
+  "body": "79f65f5a5fc43960",
   "claim": "a column's climb ends - where-a-farming-hamlet-grew-its-coarse-grain.drawing: the dry plots climb from the toe into the middle, plot by plot - so a column's climb ends where its strip pinches under `PINCH_SHARE` of a plot's length, the columns square to a canal bending toward its dry side converging as they climb, and where its strip laps a plot another column laid, never coming out behind that plot; the settlement's ground is stepped over (0006's houses between), and a strip refused for the water or for the rice is passed by without ending the climb, the ground past an intake race still the hem's (a cleared middle's plots on the race's upslope side, 17 of 141 such rolls, measured 2026-11-24 over seeds 1 to 150 at three sizes; ending the climb at the rice as well changed no roll of 3,200, measured 2026-11-24 over seeds 1 to 400 at eight sizes and falls) - before 449 T423 it climbed on, and drew slivers and detached strips turned against the block they had crossed (seed 52 of 15 households falling at 225 degrees; a plot under half the plot's area on 77 of 98 bare-winter wild rolls, measured 2026-11-24 over seeds 1 to 150 at three sizes); where the pinch falls a GUESS (`PINCH_SHARE`)",
-  "code": "bb29ac1dde1525d1",
-  "core": "40dbad554e584baa",
+  "code": "3d2e6dbd4668569c",
+  "core": "54b3ac299e2640e2",
   "date": "2026-11-25",
-  "note": "the claim gives the pinch rule only 0011 for backing and calls where the pinch falls a bare GUESS. 0006's drawing page now says it: \"Where a strip's lower or upper edge would run under half a plot's length, that strip is not drawn, and its column of strips climbs no farther ... That is a GUESS\". The code does the same: `pinched` leads to `climbs.end(col); continue`. The bundle does not show `PINCH_SHARE`, so I could not confirm that it is 0.5. fix: claim (cite research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html §158 for the taper and the pinch at half a plot's length, a GUESS recorded there; 0011 §166 for the climb); effect: none",
+  "note": "a column ends where its strip pinches or where a piece laps another column's plot; strips refused for water or rice are passed by and the houses' ground is stepped over; the pinch point is the GUESS",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
@@ -44856,18 +44914,15 @@
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d"
   ],
-  "said": "a column's climb ends - where-a-farming-hamlet-grew-its-coarse-grain.drawing: the dry plots climb from the toe into the middle, plot by plot - so a column's climb ends where its strip pinches under `PINCH_SHARE` of a plot's length, the columns square to a canal bending toward its dry side converging as they climb, and where its strip laps a plot another column laid, never coming out behind that plot; the settlement's ground is stepped over (0006's houses between), and a strip refused for the water or for the rice is passed by without ending the climb, the ground past an intake race still the hem's (a cleared middle's plots on the race's upslope side, 17 of 141 such rolls, measured 2026-11-24 over seeds 1 to 150 at three sizes; ending the climb at the rice as well changed no roll of 3,200, measured 2026-11-24 over seeds 1 to 400 at eight sizes and falls) - before 449 T423 it climbed on, and drew slivers and detached strips turned against the block they had crossed (seed 52 of 15 households falling at 225 degrees; a plot under half the plot's area on 77 of 98 bare-winter wild rolls, measured 2026-11-24 over seeds 1 to 150 at three sizes); where the pinch falls a GUESS (`PINCH_SHARE`)",
-  "siblings": "7e11807325d9ba2c",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#a plot onto rice dropped": {
-  "body": "0784cf1b4051ebbe",
+  "body": "79f65f5a5fc43960",
   "claim": "a plot onto rice dropped - dry-fields-and-their-crops-hatake.drawing: a plot that would lap onto another canal's rice is dropped",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "83882fd864a2bc4b",
-  "core": "40dbad554e584baa",
-  "date": "2026-11-24",
-  "note": "a Rice refusal drops the plot",
+  "code": "49bb92d5d7fe6341",
+  "core": "54b3ac299e2640e2",
+  "date": "2026-11-25",
+  "note": "every piece goes through `refused`, and a piece over rice is skipped",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
@@ -44876,15 +44931,32 @@
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf"
   ],
-  "triaged": "2026-11-25",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/dry.rs::hem#a strip stretched round a bend cut into plots": {
+  "body": "79f65f5a5fc43960",
+  "claim": "a strip stretched round a bend cut into plots - GUESS: dry-fields-and-their-crops-hatake.drawing draws each plot roughly 92 ft across, never dwarfing the rice basins, and is silent on a strip beside a canal bending away from the dry side - a strip whose edge runs past `STRETCH_SHARE` of a plot's length is cut across into plots (`cut`), each asked as a plot; before 449 T434 it was drawn whole, up to 15 plots' length, in 15,644 of 35,000 hem rolls (measured 2026-11-25)",
+  "code": "2d793aa99b1f23d8",
+  "core": "54b3ac299e2640e2",
+  "date": "2026-11-25",
+  "note": "a GUESS: the page covers bends toward the dry side only; every piece is asked as a plot",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
+  },
+  "reads": "b98d4ffaa8b84fdb",
+  "research": "caa437c806462f43",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:840c22fc45dfbdff"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#not steep ground": {
   "body": "57252853dd763be0",
   "claim": "not steep ground - dry-fields-and-their-crops-hatake.drawing: on steep ground every tract runs the contour - the comb's hem stands on an alluvial fan's gentle fall, the steep ground's terraced form another archetype this stage does not draw, so its tracts take either",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "ccfdaa29f24bc4b6",
-  "core": "40dbad554e584baa",
+  "code": "91f5ee92dfd25ee8",
+  "core": "54b3ac299e2640e2",
   "date": "2026-11-07",
   "note": "the gentle-ground case, where contour rows are one option among others",
   "pages": {
@@ -44903,8 +44975,8 @@
   "body": "57252853dd763be0",
   "claim": "rows on the contour or down - dry-fields-and-their-crops-hatake.drawing: rows run either along the contour or down to its outfall, the two a right angle apart; even odds a tract between them, a GUESS (the page: the tract's size and the turns are GUESSES) - the contour square to the fall, not the canal's heading",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "3557501cb9ea59e2",
-  "core": "40dbad554e584baa",
+  "code": "108a222b7ac20d5b",
+  "core": "54b3ac299e2640e2",
   "date": "2026-11-07",
   "note": "even odds between the two forms, turn ±17, each plot's own turn ±3, base square to the fall",
   "pages": {
@@ -44920,31 +44992,29 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#square to the canal": {
-  "body": "0784cf1b4051ebbe",
+  "body": "79f65f5a5fc43960",
   "claim": "square to the canal - dry-fields-and-their-crops-hatake.drawing: plots square to the canal and laid end to end along its curving line",
-  "code": "03ce583d553445f8",
-  "core": "40dbad554e584baa",
+  "code": "5e9e489c45bf62b8",
+  "core": "54b3ac299e2640e2",
   "date": "2026-11-25",
-  "note": "each strip's seat is built from the column's frames square to the canal, laid end to end along its line and tapering at a bend",
+  "note": "the pieces are cut at matching fractions along the inner and outer edges of a strip whose sides are square to the canal, so the cuts fan with the bend and stay square to it",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "b98d4ffaa8b84fdb",
   "research": "caa437c806462f43",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:840c22fc45dfbdff",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:e87bb4e4f15222b8"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the climb": {
-  "body": "0784cf1b4051ebbe",
+  "body": "79f65f5a5fc43960",
   "claim": "the climb - where-a-farming-hamlet-grew-its-coarse-grain.drawing: the dry plots climb out as far from the canal as the ground runs, until they hold the grain the hamlet needs",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "4bda5fe0a4dfdc3e",
-  "core": "40dbad554e584baa",
-  "date": "2026-11-24",
-  "note": "bands climb until the need is met or a whole band finds no ground",
+  "code": "929a12c87b4a6a1b",
+  "core": "54b3ac299e2640e2",
+  "date": "2026-11-25",
+  "note": "bands climb from the canal until the grain need is met or a whole band finds no ground",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
@@ -44953,27 +45023,27 @@
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d"
   ],
-  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the climb's bound": {
   "body": "0784cf1b4051ebbe",
   "claim": "the climb's bound - NONE: `MAX_BANDS`, a guard far past any canvas; the caller's `most_bands` the climb's own bound",
-  "code": "4655abe2d6ee3d84",
-  "core": "40dbad554e584baa",
+  "code": "414331976d2d73fa",
+  "core": "54b3ac299e2640e2",
   "date": "2026-11-24",
   "note": "`MAX_BANDS` (64) is only a guard, at least 64 x 2 x 71.5 ft, far past any canvas; the caller's `most_bands`, the ground and the grain end the climb, as 0011 says",
   "pages": {},
   "reads": "b98d4ffaa8b84fdb",
   "research": "",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the hem's figures": {
   "body": "57252853dd763be0",
   "claim": "the hem's figures - dry-fields-and-their-crops-hatake.drawing: a tract two to four strips of plots running upslope from the canal (`TRACT_STRIPS`), its length along the canal a GUESS (`TRACT_PLOTS`); the plots begin behind the canal's bare bank (`BANK_FT`); each map's mix of the four crops at random (its one hem, on the first field), each plot one of the mix at even odds, a GUESS",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "1ece48ddc8f96dfa",
-  "core": "40dbad554e584baa",
+  "code": "2ddced8e4572d186",
+  "core": "54b3ac299e2640e2",
   "date": "2026-11-07",
   "note": "TRACT_STRIPS 2-4, TRACT_PLOTS a guess, BANK_FT bank, random non-empty mix, even odds per plot",
   "pages": {
@@ -44990,52 +45060,50 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the last band from the canal's start": {
-  "body": "0784cf1b4051ebbe",
+  "body": "79f65f5a5fc43960",
   "claim": "the last band from the canal's start - GUESS: where-a-farming-hamlet-grew-its-coarse-grain.drawing silent on where along the canal the last of the plots stands; from its start, along it, until the need is met",
-  "code": "552f05021f58d793",
-  "core": "40dbad554e584baa",
+  "code": "3826d54656265d3b",
+  "core": "54b3ac299e2640e2",
   "date": "2026-11-25",
-  "note": "the cited page is not silent: §36 records the order as a GUESS (\"laid from the toe end of the canal, up along it, until the need is met\"). The code lays the last band from `d = 0`, which is `line[0]`. To judge it I would need to know which end of the canal `line[0]` is, the toe end or the head (0053 §99 draws canals from head to tail). If `line[0]` is the toe end, this is DRIFTED with fix: claim (cite §36). If it is the head end, it is fix: code, and the last band would be laid starting at the canal's upslope end",
+  "note": "0011 is not silent: it records the order as a GUESS, \"laid from the toe end of the canal, up along it\". The code lays the last band from d=0, the first point of `line`. To judge, I need to know whether the hem's `line` starts at the canal's toe end or at its intake",
+  "outside": true,
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
   "reads": "b98d4ffaa8b84fdb",
   "research": "f60968f2a5a6aaf5",
   "rests": [
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:0bb732e0cc16823c"
   ],
   "said": "the last band from the canal's start - GUESS: where-a-farming-hamlet-grew-its-coarse-grain.drawing silent on where along the canal the last of the plots stands; from its start, along it, until the need is met",
-  "siblings": "7e11807325d9ba2c",
+  "siblings": "c0d6430306b10602",
   "verdict": "CANNOT-TELL"
  },
  "rust/phases/src/field/dry.rs::hem#the plot": {
-  "body": "57252853dd763be0",
+  "body": "79f65f5a5fc43960",
   "claim": "the plot - dry-fields-and-their-crops-hatake.drawing: roughly 92 ft across and 72 ft down a row (`PLOT_FT`), tiled along and up from the canal",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "33c82e2be85f98b2",
-  "core": "40dbad554e584baa",
-  "date": "2026-11-07",
-  "note": "91.4 x 71.5 ft, roughly 92 x 72",
+  "code": "22ba2554bc8190ad",
+  "core": "54b3ac299e2640e2",
+  "date": "2026-11-25",
+  "note": "PLOT_FT (91.4, 71.5) is tiled along the canal and up from it. A cut piece runs about 0.75 to 1.5 plots across, which keeps the under-0.25-acre average",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "b98d4ffaa8b84fdb",
   "research": "caa437c806462f43",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:e87bb4e4f15222b8"
   ],
-  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the settlement's ground kept": {
-  "body": "0784cf1b4051ebbe",
+  "body": "79f65f5a5fc43960",
   "claim": "the settlement's ground kept - dry-fields-and-their-crops-hatake.drawing: the houses between the canal and the dry fields, so a strip still on their ground past the push behind is dropped, not pushed further",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "9b8648f6514d5444",
-  "core": "40dbad554e584baa",
-  "date": "2026-11-24",
-  "note": "past_keep pushes the strips behind the settlement's ground and on_keep drops any strip still on it",
+  "code": "c7f21be86de09b50",
+  "core": "54b3ac299e2640e2",
+  "date": "2026-11-25",
+  "note": "a piece still on the houses' ground after the push behind is skipped (`on_keep`), not pushed further",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
@@ -45044,15 +45112,14 @@
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
   ],
-  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the tracts apart": {
   "body": "57252853dd763be0",
   "claim": "the tracts apart - CONVENTION: dry-fields-and-their-crops-hatake.drawing sets tracts at least 20 degrees apart by a drawing convention (`apart`)",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "9616a35978edefcb",
-  "core": "40dbad554e584baa",
+  "code": "5e76c2425f3db7b8",
+  "core": "54b3ac299e2640e2",
   "date": "2026-11-22",
   "note": "the page itself calls the 20-degree separation a drawing convention; `hem` hands it to `apart`",
   "pages": {
@@ -45303,6 +45370,30 @@
   "core": "cbf94b0fd0b7979f",
   "date": "2026-11-24",
   "note": "test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/dry/tests.rs::a_stretched_strip_is_cut_its_taper_kept_first#the dry hem's tests": {
+  "body": "657e29389ccbf9d4",
+  "claim": "the dry hem's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "98d03d70a771926c",
+  "core": "b7755a5a5675cf6a",
+  "date": "2026-11-25",
+  "note": "fixtures and assertions only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/dry/tests.rs::a_strip_stretched_round_a_bend_is_cut_into_plots#the dry hem's tests": {
+  "body": "bcbc288f4db88cac",
+  "claim": "the dry hem's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "2f5caa0f8d8538d9",
+  "core": "fa8d7b552deae467",
+  "date": "2026-11-25",
+  "note": "fixtures and assertions only",
   "pages": {},
   "research": "",
   "rests": [],
