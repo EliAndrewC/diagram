@@ -168,3 +168,7 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T249 T232's leftovers (its builder, 2026-11-25): (a) a re-run of a record check (quote-check, record-format, intro-check, translation-check) on a research page answered before at its text is not held - its EDITs apply and re-owe the checks after them, as the pop-up re-runs did before T232 (make apply-edits' hold reads a pop-up file only); (b) a later round whose last round's bundle was kept no snapshot (rounds bundled before 451 T189) gets no change section and no line saying so, and the guest-quarters round of 2026-11-24 10:56 left all but one bullet unopened on that silence, against the Earlier rounds paragraph, missing the alcove gap the next round found - the MANIFEST should say the scope where no snapshot was kept
       research: rendering
+- [ ] T250 the gm-attributions baseline's page comments: each points at the GM's recorded words or says whose rule it is, the audit's 74 unbacked first (451 T233); the first page work to land once the research switch reopens (dev/switches.json, deferred by the GM 2026-11-25)
+      research: rendering
+- [ ] T251 the gm-attributions baseline's 10 CANON claims: each points at the GM's recorded words, or is relabeled to what backs it through the claims round (451 T233); lands beside the pages it shares with the page-comment task (0039, 0058, 0100, 0222), the other claims first
+      research: rendering
