@@ -1398,6 +1398,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
+  },
+  "### T236 (the GM 2026-11-25, request.md \"a research backlog\": of eight hamlet searches in two days two changed what is drawn; \"yes please\" to UNRESEARCHED as a fifth label and a backlog in place of a search before every guess)": {
+   "sha256": "3dec818274c657ea2db89948d7f37f2cffebeeb9bb354a972307871576681566",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T236 Approach (checklist part A)": {
+   "sha256": "f676c21a77ad09c32a8b84a69a9e00640098ae6879f2c8bda4d430ffac6e2355",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -19203,6 +19215,76 @@
      "why": "No defect is carried forward. Both are fixed in this task as (d) and (f), each ruled above."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T236 (the GM 2026-11-25, request.md \"a research backlog\": of eight hamlet searches in two days two changed what is drawn; \"yes please\" to UNRESEARCHED as a fifth label and a backlog in place of a search before every guess)",
+    "### T236 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 fifth label in the tooling",
+     "summary": "UNRESEARCHED becomes a fifth label: the page item tag's LABELS, the claims grammar (UNRESEARCHED [<file>#<id>] parses and is held to its tag), the registry's Guesses tab, Mode A's CLASSES",
+     "class": "within",
+     "why": "The GM accepted 'UNRESEARCHED a fifth label on the research pages as well as in the claims' ('yes please', 2026-11-25). The registry and Mode A changes are what make that label usable: without them an UNRESEARCHED item would be dropped from the pop-up reader or refused as a class."
+    },
+    {
+     "id": "D2 the rules restated",
+     "summary": "The root CLAUDE.md, research/CLAUDE.md, docs/research-doctrine.md, docs/research-record-rules.md, the page-session rules, the plan template's XII entry, the constitution 2.39.0 (XII narrowed), research-pass.md and escalation-check.md: a new guess is recorded UNRESEARCHED with no search; a search still comes first where a decision is foundational or a guess is likely visibly wrong; UNRESEARCHED is a question for the backlog, never for the GM",
+     "class": "within",
+     "why": "This is the rule change the GM accepted, exception included. 'XII narrowed' narrows the search-first rule, which is the change he asked for, not a narrowing of his request. The copies were found by a grep of the tree for the old wording, so the search space is stated."
+    },
+    {
+     "id": "D3 the check agents",
+     "summary": "quote-check: an UNRESEARCHED sentence owes no footnote. impl-drift: five classes; UNRESEARCHED is never a finding for lacking a source, and is MISLABELED where its account states as found what no page gives. record-format: UNRESEARCHED is no session note. modal-research: an UNRESEARCHED bullet is not a finding for want of a search",
+     "class": "within",
+     "why": "These carry the GM's rule into the checks: a session may record an unsearched guess and move on. The MISLABELED case enforces his own distinction ('unresearched would mean that we know we have not yet checked'), so it is enforcement, not new scope."
+    },
+    {
+     "id": "D4 GUESS-UNNOTED and the 148 blocks",
+     "summary": "quote-check's old step 5 exempted every labeled GUESS. It now flags a GUESS with no absence note as GUESS-UNNOTED. The 148 GUESS blocks without a footnote (a proxy scan, 2026-11-25) are fixed as their pages are rechecked, by an absence note or by relabeling them UNRESEARCHED, with no sweep",
+     "class": "within",
+     "why": "One reading covers both halves. GUESS-UNNOTED only flags; it does not block or rewrite work. It enforces the GM's line between unsupported ('we did research and couldn't find anything') and unresearched, and that line means nothing if a GUESS need not record that a search ran. The 148 blocks are not defects under constitution XIV v2.36.0: a missing absence note changes no map, contradicts no research finding, and is a record gap no reader of the map sees. Leaving them to page rechecks with no sweep therefore carries no defect forward. It also fits the GM's purpose (move forward faster) and the 2026-11-23 rule against cascades that fix no real flaw."
+    },
+    {
+     "id": "D5 dev/modals.md M8",
+     "summary": "A standard question the record does not answer no longer owes a research pass before the modal is written. Its guess bullet is labeled UNRESEARCHED until the backlog reaches it, or GUESS where a search found nothing. A search still comes first where the answer is foundational or the guess is likely visibly wrong. Carried by agent-sync to modal-research, modal-form and modal-depiction",
+     "class": "within",
+     "why": "This applies 'a new guess recorded as UNRESEARCHED with no search' to pop-ups, with the exception the GM accepted, worded as he accepted it."
+    },
+    {
+     "id": "D6 make research-backlog as the backlog's reader",
+     "summary": "A new target lists every UNRESEARCHED claim (the same filter as make claims-report's list) and every UNRESEARCHED page item, grouped by code file, with an item no claim names listed under its page. make claims-report's UNRESEARCHED count is kept",
+     "class": "within",
+     "why": "The offer named claims-report's UNRESEARCHED list as the backlog. This target adds grouping and a stage filter on top of that list and keeps claims-report's count, so nothing the GM accepted is removed. It serves 'searched at each port stage's end for the items that stage touched', and it adds page items because the label also lives on the pages."
+    },
+    {
+     "id": "D7 what STAGE= reaches",
+     "summary": "STAGE= selects the stage's own module (<stage>.rs and <stage>/) in the crates that define stage_<name>, plus every file of those crates that no stage's module holds, listed under a heading marking it shared. It does not use the work budget's stage_files, and it matches names in the stages' crate only, so Mode A's labels/ is excluded. A path glob is the alternative, and anything else is refused",
+     "class": "within",
+     "why": "This is the mechanism for 'the items that stage touched', and it reaches wider than stage_files: shared driver code is included, and seat/fords.rs, which stage_files misses, is caught. Excluding rust/mode_a only stops a name collision ('labels' matched eight Mode A files). No UNRESEARCHED item disappears: the unfiltered list shows every claim and item, and a glob reaches any path. Both choices rest on figures measured 2026-11-25."
+    },
+    {
+     "id": "D8 where the stage-end search lives",
+     "summary": "The block's goal: 'the not-yet-searched decisions are one list, by code file and stage, for each port stage's end'. The rules restated (D2) carry the new rule, but the block does not name which line sets the stage-end search",
+     "class": "within",
+     "why": "The block does not drop the stage-end search, and it builds the per-stage listing the search needs. Which restated rule line holds the duty is not named in the bundle, and the rule files are outside it. This is not a narrowing, but the restated root CLAUDE.md search bullet should say that the backlog is searched at each port stage's end for the items that stage touched."
+    },
+    {
+     "id": "D9 order",
+     "summary": "After T237 (a builder's claims round split off) and before page sessions P13 and P14, 'which the GM's rule drops from the pre-port list'",
+     "class": "within",
+     "why": "This is ordering only: nothing is removed from P13 or P14 here. The GM accepted 'most of page sessions P13 and P14 dropped from the pre-port list, P12 kept', so 'drops' overstates it a little. Whatever part of P13/P14 survives is decided where those sessions are scheduled, not by this block."
+    },
+    {
+     "id": "D10 no map changes; exits, proofs and done",
+     "summary": "No figure or map moves. Red-first tests for each step. Both-ways stand-in proofs of the changed check agents and of M8. closing-checks green",
+     "class": "within",
+     "why": "The GM's own premise is that punting research would not change maps in practice. The tests and proofs only verify that the rule he asked for holds."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -30886,6 +30968,74 @@
      "summary": "Found-and-left: both items (the one-landing limit of the ruling's rule, the stale dirty stamp) fixed here, nothing deferred",
      "class": "within",
      "why": "No defect is carried forward. Both are fixed in this task as (d) and (f), each ruled above."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T236": {
+   "section_sha256": "723b3cb905bf3fdd2e59386c0af43f52f2efcb9055498851f260756b7628d686",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 fifth label in the tooling",
+     "summary": "UNRESEARCHED becomes a fifth label: the page item tag's LABELS, the claims grammar (UNRESEARCHED [<file>#<id>] parses and is held to its tag), the registry's Guesses tab, Mode A's CLASSES",
+     "class": "within",
+     "why": "The GM accepted 'UNRESEARCHED a fifth label on the research pages as well as in the claims' ('yes please', 2026-11-25). The registry and Mode A changes are what make that label usable: without them an UNRESEARCHED item would be dropped from the pop-up reader or refused as a class."
+    },
+    {
+     "id": "D2 the rules restated",
+     "summary": "The root CLAUDE.md, research/CLAUDE.md, docs/research-doctrine.md, docs/research-record-rules.md, the page-session rules, the plan template's XII entry, the constitution 2.39.0 (XII narrowed), research-pass.md and escalation-check.md: a new guess is recorded UNRESEARCHED with no search; a search still comes first where a decision is foundational or a guess is likely visibly wrong; UNRESEARCHED is a question for the backlog, never for the GM",
+     "class": "within",
+     "why": "This is the rule change the GM accepted, exception included. 'XII narrowed' narrows the search-first rule, which is the change he asked for, not a narrowing of his request. The copies were found by a grep of the tree for the old wording, so the search space is stated."
+    },
+    {
+     "id": "D3 the check agents",
+     "summary": "quote-check: an UNRESEARCHED sentence owes no footnote. impl-drift: five classes; UNRESEARCHED is never a finding for lacking a source, and is MISLABELED where its account states as found what no page gives. record-format: UNRESEARCHED is no session note. modal-research: an UNRESEARCHED bullet is not a finding for want of a search",
+     "class": "within",
+     "why": "These carry the GM's rule into the checks: a session may record an unsearched guess and move on. The MISLABELED case enforces his own distinction ('unresearched would mean that we know we have not yet checked'), so it is enforcement, not new scope."
+    },
+    {
+     "id": "D4 GUESS-UNNOTED and the 148 blocks",
+     "summary": "quote-check's old step 5 exempted every labeled GUESS. It now flags a GUESS with no absence note as GUESS-UNNOTED. The 148 GUESS blocks without a footnote (a proxy scan, 2026-11-25) are fixed as their pages are rechecked, by an absence note or by relabeling them UNRESEARCHED, with no sweep",
+     "class": "within",
+     "why": "One reading covers both halves. GUESS-UNNOTED only flags; it does not block or rewrite work. It enforces the GM's line between unsupported ('we did research and couldn't find anything') and unresearched, and that line means nothing if a GUESS need not record that a search ran. The 148 blocks are not defects under constitution XIV v2.36.0: a missing absence note changes no map, contradicts no research finding, and is a record gap no reader of the map sees. Leaving them to page rechecks with no sweep therefore carries no defect forward. It also fits the GM's purpose (move forward faster) and the 2026-11-23 rule against cascades that fix no real flaw."
+    },
+    {
+     "id": "D5 dev/modals.md M8",
+     "summary": "A standard question the record does not answer no longer owes a research pass before the modal is written. Its guess bullet is labeled UNRESEARCHED until the backlog reaches it, or GUESS where a search found nothing. A search still comes first where the answer is foundational or the guess is likely visibly wrong. Carried by agent-sync to modal-research, modal-form and modal-depiction",
+     "class": "within",
+     "why": "This applies 'a new guess recorded as UNRESEARCHED with no search' to pop-ups, with the exception the GM accepted, worded as he accepted it."
+    },
+    {
+     "id": "D6 make research-backlog as the backlog's reader",
+     "summary": "A new target lists every UNRESEARCHED claim (the same filter as make claims-report's list) and every UNRESEARCHED page item, grouped by code file, with an item no claim names listed under its page. make claims-report's UNRESEARCHED count is kept",
+     "class": "within",
+     "why": "The offer named claims-report's UNRESEARCHED list as the backlog. This target adds grouping and a stage filter on top of that list and keeps claims-report's count, so nothing the GM accepted is removed. It serves 'searched at each port stage's end for the items that stage touched', and it adds page items because the label also lives on the pages."
+    },
+    {
+     "id": "D7 what STAGE= reaches",
+     "summary": "STAGE= selects the stage's own module (<stage>.rs and <stage>/) in the crates that define stage_<name>, plus every file of those crates that no stage's module holds, listed under a heading marking it shared. It does not use the work budget's stage_files, and it matches names in the stages' crate only, so Mode A's labels/ is excluded. A path glob is the alternative, and anything else is refused",
+     "class": "within",
+     "why": "This is the mechanism for 'the items that stage touched', and it reaches wider than stage_files: shared driver code is included, and seat/fords.rs, which stage_files misses, is caught. Excluding rust/mode_a only stops a name collision ('labels' matched eight Mode A files). No UNRESEARCHED item disappears: the unfiltered list shows every claim and item, and a glob reaches any path. Both choices rest on figures measured 2026-11-25."
+    },
+    {
+     "id": "D8 where the stage-end search lives",
+     "summary": "The block's goal: 'the not-yet-searched decisions are one list, by code file and stage, for each port stage's end'. The rules restated (D2) carry the new rule, but the block does not name which line sets the stage-end search",
+     "class": "within",
+     "why": "The block does not drop the stage-end search, and it builds the per-stage listing the search needs. Which restated rule line holds the duty is not named in the bundle, and the rule files are outside it. This is not a narrowing, but the restated root CLAUDE.md search bullet should say that the backlog is searched at each port stage's end for the items that stage touched."
+    },
+    {
+     "id": "D9 order",
+     "summary": "After T237 (a builder's claims round split off) and before page sessions P13 and P14, 'which the GM's rule drops from the pre-port list'",
+     "class": "within",
+     "why": "This is ordering only: nothing is removed from P13 or P14 here. The GM accepted 'most of page sessions P13 and P14 dropped from the pre-port list, P12 kept', so 'drops' overstates it a little. Whatever part of P13/P14 survives is decided where those sessions are scheduled, not by this block."
+    },
+    {
+     "id": "D10 no map changes; exits, proofs and done",
+     "summary": "No figure or map moves. Red-first tests for each step. Both-ways stand-in proofs of the changed check agents and of M8. closing-checks green",
+     "class": "within",
+     "why": "The GM's own premise is that punting research would not change maps in practice. The tests and proofs only verify that the rule he asked for holds."
     }
    ],
    "verdict": "CLEAR"

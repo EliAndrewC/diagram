@@ -125,3 +125,30 @@ fn a_moved_item_the_cited_page_points_to_is_followed_and_owes_no_edit() {
     let two = said.len() == 1 && said[0].contains("which pages its split reaches each tag");
     assert!(two, "{said:?}");
 }
+
+#[test]
+fn a_claim_on_an_unresearched_item_names_it_and_its_flip_to_a_finding_moves_no_fingerprint() {
+    // feature 451 T236 (the GM 2026-11-25): a tag may say UNRESEARCHED, and the claim on it writes the backing the check asks for
+    let root = crate::claims::tests::fixture("claims-item-unresearched");
+    put(&root, FILE, &tagged("UNRESEARCHED", "UNRESEARCHED"));
+    let unres = format!("shrine tree - UNRESEARCHED {FILE}#tree: a tree beside the shrine");
+    let claim = parse_claim(&unres).unwrap();
+    assert_eq!(claim.backing, "UNRESEARCHED");
+    assert_eq!(claim.items, vec![(FILE.to_owned(), "tree".to_owned())]);
+    assert!(disagreements(&root, &[unit(&unres)]).is_empty());
+    let attested = format!("shrine tree - {FILE}#tree: a tree beside the shrine");
+    let said = disagreements(&root, &[unit(&attested)]);
+    let want = format!("write its backing `UNRESEARCHED {FILE}#tree`");
+    assert!(said[0].contains(&want), "{said:?}");
+    // the backlog's life: searched and found, the flip moves no fingerprint
+    assert_eq!(
+        claim.normalized(),
+        parse_claim(&attested).unwrap().normalized()
+    );
+    assert_eq!(
+        crate::claims::grammar::label_free(&unres),
+        crate::claims::grammar::label_free(&attested)
+    );
+    // a bare UNRESEARCHED still takes no page alone
+    assert!(parse_claim(&format!("shrine tree - UNRESEARCHED {FILE}: x")).is_err());
+}

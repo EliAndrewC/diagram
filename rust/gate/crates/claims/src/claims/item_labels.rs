@@ -21,7 +21,7 @@ use super::units::Unit;
 use crate::record::repo::Fail;
 
 /// Every tagged item of every research and drawing page of the record (not a notes page), each with its page's repository path.
-fn every_tag(root: &Path) -> Vec<(String, Item)> {
+pub(super) fn every_tag(root: &Path) -> Vec<(String, Item)> {
     let dir = "research/questions";
     let mut names: Vec<String> = std::fs::read_dir(root.join(dir))
         .into_iter()

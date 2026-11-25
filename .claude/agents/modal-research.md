@@ -35,7 +35,8 @@ classing its findings. It decides how a modal may state each one (guidelines M8,
 **ACCURACY.** For every statement in About and every guess bullet: is it supported by a page in `entry/`, stated no more
 firmly than the page's evidence class allows (a `reading` hedged, a `guess` only as a bullet, a `silence` never stated as
 fact)? Is every figure the page's (rounded is fine, changed is not)? Is each guess bullet truly a guess - the record silent on it
-- and not something a page answers? A statement no page in `entry/` supports is a finding even if it is true; say whether a
+- and not something a page answers? A bullet whose item is tagged UNRESEARCHED (not yet searched; feature 451 T236) is a guess
+before any search: never a finding for want of a search or an absence note, only where a page in `entry/` answers it. A statement no page in `entry/` supports is a finding even if it is true; say whether a
 candidate supports it (then it is a REFERENCES finding too). For a particular modal (`Form: particular`), also: nothing
 contradicts the GM's canon the bundle carries, and nothing reads as GM-only.
 
@@ -139,10 +140,13 @@ value): the same three questions as they fit the kind - what it was and for whom
 Where the three do not fit a kind, the rollout adds a section here for it and the GM sees it in the rollout report. (inferred)
 
 **M8. Answer from the research; say plainly what was not found.** Each answer comes from the research record. A standard
-question the record does not answer gets the research pass before anything is written (constitution XII). If it is still
-unanswered, About either leaves it out or says in a clause that it is not recorded ("how many hens a household kept is not
-recorded"), and the figure the map draws is a guess bullet (M11). Never a figure the record does not give, stated as fact.
-(GM: *"certainly for accuracy, and consistency with the research"*; the spec's Assumption)
+question the record does not answer needs no research pass before it is written: About either leaves it out or says in a
+clause that it is not recorded ("how many hens a household kept is not recorded"), and the figure the map draws is a guess
+bullet (M11) - labeled UNRESEARCHED where nobody has searched yet (it waits on the backlog, `make research-backlog`), GUESS
+where a search found nothing. A search still comes first where the answer is foundational or the guess is likely visibly
+wrong (constitution XII). Never a figure the record does not give, stated as fact. (GM: *"certainly for accuracy, and
+consistency with the research"*; the spec's Assumption; the backlog, 451 T236, the GM 2026-11-25: *"unresearched would mean
+that we know we have not yet checked"*)
 
 **M9. One account for every map.** A hamlet modal is the same on every map: nothing in it is true of one settlement only. What
 varies by settlement - nucleated or dispersed, back lane or side alleys, which bamboo, the harvest weather, how many keep a

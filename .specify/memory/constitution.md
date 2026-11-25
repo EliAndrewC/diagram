@@ -1,7 +1,16 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.37.0 → 2.38.0
+Version change: 2.38.0 → 2.39.0
+
+Version 2.39.0 (amended 2026-11-25, feature 451 T236): A RESEARCH BACKLOG. Principle XII's "A GUESS IS THE LAST RESORT" is narrowed:
+a new rendering decision may be drawn as a best guess labeled UNRESEARCHED (not yet searched) with no search and no absence note,
+the research a backlog (`make research-backlog`) worked at each port stage's end; a search still runs first where the decision is
+foundational or a guess likely visibly wrong. A GUESS still means searched and silent. The GM's words, 2026-11-25
+(`specs/451-time-retro-and-efficiency/request.md`, "a research backlog"): "yes please". Dependent: the root `CLAUDE.md`,
+`research/CLAUDE.md` ("Five labels", the GROUNDS rule), `docs/research-doctrine.md`, `scripts/container/page-session-rules.md`,
+`.specify/templates/plan-template.md`'s XII entry, the check agents (`quote-check`, `record-format`, `impl-drift`) (✅ updated). MINOR (a principle's requirement narrowed; precedent
+2.37.0).
 
 Version 2.38.0 (amended 2026-11-22, feature 449 T251): THE PYTHON-ERA PASSAGES T228 LEFT, restated to today's checks or RETIRED in
 place, every GM quotation kept. Versioned - enforcement mechanisms changed in VI, X and the Development Workflow, each replacement on
@@ -1644,6 +1653,16 @@ sedge -> alder/willow hydrosere in the Japanese and Chinese record, confirmed
 the form as accurate, and surfaced a second supportable form (an alder-willow
 carr) that became a knob candidate - none of which a guess could have given.
 
+**A RESEARCH BACKLOG: UNRESEARCHED (GM 2026-11-25, feature 451 T236).** The rule above is narrowed for a
+NEW rendering decision: it may be drawn as a best guess labeled UNRESEARCHED - not yet searched, distinct
+from a guess, which was searched and found silent - with no search and no absence note, and the research
+becomes a backlog (`make research-backlog`) that each port stage's end works for the items it touched. The
+GM: *"maybe the procedural change here is to not stop and kick off research. In all of these situations
+right away, but rather to have some kind of research backlog. Where we make a best guess about what to
+render, and then note it as being something that is unresearched ... unresearched would mean that we know
+we have not yet checked"*; offered the rule, *"yes please"*. The search still runs FIRST where other code
+builds on the decision (it is foundational) or a guess is likely visibly wrong, and before the GM is asked.
+
 **EVERY RENDERING DECISION IS CAPTURED FOR THE READER WHO WILL CLICK ON IT (GM
 2026-08-26).** The record-the-why rules (`CLAUDE.md`: the why of every
 research-driven rule; the alternatives declined when a limitation is
@@ -2568,4 +2587,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.38.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-11-22
+**Version**: 2.39.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-11-25

@@ -209,3 +209,39 @@ fn the_pages_a_reference_reads_are_told_to_the_cache() {
         "research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html"
     )));
 }
+
+/// An UNRESEARCHED item is a guess to the pop-up's reader (feature 451 T236, the GM 2026-11-25: "make a best guess about what to
+/// render, and then note it as being something that is unresearched"): its bullet shows, owed its data-guess, and an About stating
+/// it as a fact is named.
+#[test]
+fn an_unresearched_item_shows_on_guesses_and_is_never_stated_as_a_fact() {
+    let root = scratch("registry-items-unresearched");
+    put(&root, PAGE, &page("UNRESEARCHED", "UNRESEARCHED"));
+    assert_eq!(
+        guesses(&root),
+        [
+            "[layout=row] The tree beside the shrine: no account gives it as the custom",
+            "A garden: no account."
+        ]
+    );
+    let said = MODAL.replace(
+        "About: A shrine in a corner.",
+        "About: A shrine in a corner. The tree beside the shrine is old.",
+    );
+    let found = restated(&root, &class(&said), &mut Pages::default());
+    assert_eq!(found.len(), 1, "{found:?}");
+    let fact = found[0].contains("tagged an UNRESEARCHED, as a fact");
+    assert!(fact, "{found:?}");
+    put(
+        &root,
+        PAGE,
+        r#"<ul><li>A tree, UNRESEARCHED.<span class="item" data-item="tree" data-label="UNRESEARCHED"></span></li></ul>"#,
+    );
+    let e = resolve(&root, class(MODAL)).unwrap_err();
+    assert!(
+        e.message
+            .contains("names an UNRESEARCHED tag with no data-guess"),
+        "{}",
+        e.message
+    );
+}

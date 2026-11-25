@@ -19,7 +19,7 @@ pub const CLASSES: [&str; 6] = [
 ];
 
 /// What every refusal prints, so the fix is in the message (the project's guard doctrine).
-pub const GRAMMAR: &str = "a claim is one line of a `Research:` docstring section: `<label> - <backing>[: <what the code does>]`, the backing being question files (`research/questions/NNNN-<id>.html` or `.drawing.html`, comma-separated), `GUESS [<drawing page>]` (searched, silent; the `.drawing.html` that records the guess), `UNRESEARCHED` (not yet searched), `CONVENTION`, `DEVIATION <question file>`, `CANON` (the GM's setting canon or ruling), or `NONE` (no physical decision); a question file may name the item it rests on, `...html#<item id>`, whose tag on the page then holds the claim's class (`GUESS`, `CONVENTION <file>#<id>`, `DEVIATION`, or a plain pointer for ATTESTED - feature 451 T187); one claim may sit on the header line (`Research: <label> - <backing>`); a constant's claim is a string literal directly after its assignment; a module's claims are inherited by its units that carry none";
+pub const GRAMMAR: &str = "a claim is one line of a `Research:` docstring section: `<label> - <backing>[: <what the code does>]`, the backing being question files (`research/questions/NNNN-<id>.html` or `.drawing.html`, comma-separated), `GUESS [<drawing page>]` (searched, silent; the `.drawing.html` that records the guess), `UNRESEARCHED` (not yet searched: no search and no absence note owed, a backlog item `make research-backlog` lists), `CONVENTION`, `DEVIATION <question file>`, `CANON` (the GM's setting canon or ruling), or `NONE` (no physical decision); a question file may name the item it rests on, `...html#<item id>`, whose tag on the page then holds the claim's class (`GUESS`, `UNRESEARCHED <file>#<id>`, `CONVENTION <file>#<id>`, `DEVIATION`, or a plain pointer for ATTESTED - feature 451 T187); one claim may sit on the header line (`Research: <label> - <backing>`); a constant's claim is a string literal directly after its assignment; a module's claims are inherited by its units that carry none";
 
 /// A question file, as a claim names it (feature 303's flat directory).
 pub static POINTER: LazyLock<Regex> =
@@ -32,10 +32,11 @@ static POINTER_WHOLE: LazyLock<Regex> = LazyLock::new(|| {
 /// An item anchor after a question file (feature 451 T187).
 static ANCHOR: LazyLock<Regex> = LazyLock::new(|| re(r"(?<=\.html)#[a-z0-9][a-z0-9-]*"));
 /// The class word a claim on tagged items carries, which its tags hold, not its fingerprint.
-static ITEM_CLASS: LazyLock<Regex> = LazyLock::new(|| re(r" - (?:GUESS|CONVENTION|DEVIATION) "));
+static ITEM_CLASS: LazyLock<Regex> =
+    LazyLock::new(|| re(r" - (?:GUESS|UNRESEARCHED|CONVENTION|DEVIATION) "));
 /// A class word before an anchored question file, in any text (a doc comment's claim lines).
 static ITEM_BACKING: LazyLock<Regex> = LazyLock::new(|| {
-    re(r" - (?:GUESS|CONVENTION|DEVIATION) (research/questions/[a-z0-9.-]+\.html#)")
+    re(r" - (?:GUESS|UNRESEARCHED|CONVENTION|DEVIATION) (research/questions/[a-z0-9.-]+\.html#)")
 });
 
 /// `text` with the label of every claim on a tagged item left out - each class word before an anchored question file and each
@@ -165,15 +166,16 @@ pub fn parse_claim(line: &str) -> Result<Claim, String> {
         }
         return Ok(claim("GUESS", parts));
     }
-    if head == "CONVENTION" && backing != head {
-        let parts: Vec<String> = backing["CONVENTION".len()..]
+    // a CONVENTION or an UNRESEARCHED decision may name the items whose tags say so (feature 451 T236: an UNRESEARCHED tag's claim)
+    if (head == "CONVENTION" || head == "UNRESEARCHED") && backing != head {
+        let parts: Vec<String> = backing[head.len()..]
             .split(',')
             .map(|p| strip(p).to_owned())
             .collect();
         if !parts.iter().all(|p| whole(p).is_some() && p.contains('#')) {
-            return Err(format!("`{text}`: `CONVENTION` takes no pointer, or only items (`...html#<item id>`) whose tags say so"));
+            return Err(format!("`{text}`: `{head}` takes no pointer, or only items (`...html#<item id>`) whose tags say so"));
         }
-        return Ok(claim("CONVENTION", parts));
+        return Ok(claim(head, parts));
     }
     if CLASSES.contains(&head) && head != "DEVIATION" {
         if backing != head {

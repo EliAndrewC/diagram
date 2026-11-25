@@ -2,7 +2,7 @@
 //! something that cascades mechanically rather than requiring a review, though?"*): a finding of a page carries a TAG, an empty token
 //! inside its block, naming the item and its label once:
 //!
-//! `<span class="item" data-item="<id>" data-label="<ATTESTED|GUESS|CONVENTION|DEVIATION>" data-guess="<the Guesses bullet>"></span>`
+//! `<span class="item" data-item="<id>" data-label="<ATTESTED|GUESS|UNRESEARCHED|CONVENTION|DEVIATION>" data-guess="<the Guesses bullet>"></span>`
 //!
 //! What reads the label reads it from here: a pop-up's Guesses bullet `{NNNN#<id>}` is filled from the tag at build
 //! (`l7r_gate_registry::items`), and an engine claim naming `research/questions/NNNN-<slug>.drawing.html#<id>` is held to it
@@ -23,9 +23,21 @@ use l7r_shared::html_text::unescape;
 
 use crate::re;
 
-/// The labels a tag takes: the claim grammar's classes for a decision (`GUESS`, `CONVENTION`, `DEVIATION`) and `ATTESTED` for a pointer
-/// claim's, historically accurate. An untagged item is UNKNOWN, never attested.
-pub const LABELS: [&str; 4] = ["ATTESTED", "GUESS", "CONVENTION", "DEVIATION"];
+/// The labels a tag takes: the claim grammar's classes for a decision (`GUESS`, `UNRESEARCHED`, `CONVENTION`, `DEVIATION`) and
+/// `ATTESTED` for a pointer claim's, historically accurate. `UNRESEARCHED` is not yet searched, a `GUESS` searched and silent (feature
+/// 451 T236, the GM 2026-11-25: "unresearched would mean that we know we have not yet checked"). An untagged item is UNKNOWN, never
+/// attested.
+pub const LABELS: [&str; 5] = [
+    "ATTESTED",
+    "GUESS",
+    "UNRESEARCHED",
+    "CONVENTION",
+    "DEVIATION",
+];
+
+/// The labels a pop-up shows on its Guesses tab, never as a fact: a `GUESS` and an `UNRESEARCHED` decision are both our own best guess
+/// to the map's reader, the one searched and silent, the other not yet searched (feature 451 T236).
+pub const GUESSED: [&str; 2] = ["GUESS", "UNRESEARCHED"];
 
 static TAG: LazyLock<Regex> =
     LazyLock::new(|| re(r#"<span class="item"((?:\s+data-[a-z]+="[^"]*")*)\s*></span>"#));
@@ -95,13 +107,15 @@ pub fn strip(html: &str) -> String {
 /// Whether the block's own words carry the label its tag names.
 fn says(item: &Item) -> bool {
     let guess = item.block.contains("GUESS");
+    let unresearched = item.block.contains("UNRESEARCHED");
     let found = |w: &Regex| w.is_match(&item.block).unwrap_or(false);
     match item.label.as_str() {
         "GUESS" => guess,
+        "UNRESEARCHED" => unresearched,
         // a block may hold a guess beside a convention or a deviation, each its own tag (451 T192): the word is the label's
         "CONVENTION" => found(&CONVENTION_WORD),
         "DEVIATION" => found(&DEVIATION_WORD),
-        _ => !guess,
+        _ => !guess && !unresearched,
     }
 }
 
@@ -133,7 +147,7 @@ pub fn faults(name: &str, html: &str) -> Vec<String> {
         // the GM's cheap route 2026-11-24): an unreferenced tag names its item and label alone
         if !says(&it) {
             out.push(format!(
-                "{who} - its tag says {} but its block's words do not: write the label in the block (GUESS as `a GUESS`, a convention or a deviation by name, an ATTESTED block with no `GUESS`), or retag it - the two are one label"
+                "{who} - its tag says {} but its block's words do not: write the label in the block (GUESS as `a GUESS`, UNRESEARCHED by that word, a convention or a deviation by name, an ATTESTED block with neither), or retag it - the two are one label"
             , it.label));
         }
     }

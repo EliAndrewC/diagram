@@ -112,13 +112,16 @@ references" (the QUESTIONS we asked) -> the answer on the research page -> the s
   modal. The pointer is exactly the questions the modal's statements rest on (`dev/modals.md` M14), and
   `modal-research` checks it both ways and searches the record for a question that answers what the modal leaves open.
 
-## Four labels (GM 2026-09-05, feature 183)
+## Five labels (GM 2026-09-05, feature 183; the fifth GM 2026-11-25, feature 451 T236)
 
-A finding and the modal written from it carry one of four labels: **accurate**, **deviation** (the setting
+A finding and the modal written from it carry one of five labels: **accurate**, **deviation** (the setting
 differs from the history it is based on), **convention** (a glyph drawn at another size or color so the map
-reads), **guess**. A convention's modal note says so in the GM's form and ends with the real size or color, or
-says it was searched for and not found. The word is the same in the entry, the rule, the code comment and the
-map's notes.
+reads), **guess** (searched for, the record silent: it owes its absence note), **unresearched** (not yet
+searched: a best guess drawn meanwhile, owing no search and no note until the backlog, `make research-backlog`,
+reaches it - the GM: *"unresearched would mean that we know we have not yet checked"*). A convention's modal note
+says so in the GM's form and ends with the real size or color, or says it was searched for and not found. The word
+is the same in the entry, the rule, the code comment and the map's notes; an item tag's `data-label` is
+`UNRESEARCHED`, and a pop-up shows an unresearched item on its Guesses tab as it shows a guess.
 
 ## Every reference is a link (GM 2026-09-06, feature 190)
 
@@ -177,7 +180,9 @@ A note is one of THREE forms:
 - **GROUNDS**: `no source is owed: <reason>` from a CLOSED list - `measured on our own maps`, `the record's own
   silence`, `follows from the definitions`, `physical necessity`, `a drawing convention`, `this project's
   decision`. NEVER for a claim about how a place was built, farmed, planted, governed or lived in, nor for a
-  labeled GUESS about the physical world - those owe a citation or an absence note. A note may name more than one
+  labeled GUESS about the physical world - those owe a citation or an absence note. A sentence labeled UNRESEARCHED (not yet
+  searched, feature 451 T236) owes neither, nor a grounds note: its label is its honesty until a search reaches it, and a
+  GROUNDS note on it is still misused. A note may name more than one
   reason; using one of the four not yet exemplified on an existing note takes a written argument at that note's page. A
   note converted from an absence note keeps its search in an HTML comment.
 

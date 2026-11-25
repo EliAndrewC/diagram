@@ -162,7 +162,8 @@ they themselves asked in this session, which is answered rather than filtered.
    A grep that returns nothing may be a wrong pattern, not a missing norm: confirm the file exists and the spelling is
    right before you record a norm as unverifiable - a verification that never ran looks exactly like one that passed.
    And "the record is silent" has a vocabulary: an ABSENCE note means a search that found nothing, a labeled GUESS
-   means the record has already answered honestly, a GROUNDS note means nothing was owed. Only the first is silence.
+   means the record has already answered honestly, a GROUNDS note means nothing was owed, an UNRESEARCHED label means no
+   search has run yet (feature 451 T236: a research question for the backlog, never one for the GM). Only the first is silence.
    A rule the draft calls the GM's ("your ruling", "GM 2026-09-05") is verified like any norm: find his quoted words in
    a `specs/*/request.md`, an `**Approved**:` line, a spec or `docs/gm-rulings.md`. A docstring or doc that says "GM
    ruling" is not enough - sessions have labeled their own choices rulings (2026-10-19: a cited "GM ruling" against

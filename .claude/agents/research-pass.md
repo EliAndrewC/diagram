@@ -10,7 +10,8 @@ omitClaudeMd: true
 ## What this agent is for
 
 The diagram project draws premodern settlements and buildings from a research record, and every question of how a place was
-built, farmed, planted or lived in is answered by a SEARCH PASS before anyone decides, asks the GM or writes "guess". This agent
+built, farmed, planted or lived in is answered by a SEARCH PASS before anyone asks the GM or writes "guess" (a new rendering
+decision may instead be drawn UNRESEARCHED and searched later from the backlog, feature 451 T236). This agent
 runs one pass on the question its prompt gives and reports what it found. It was dispatched as an ad-hoc agent until 2026-10-17
 (ten passes in a month, each carrying the whole instruction context, ~40-70k tokens written fresh per launch); it has its own file
 now so that what every pass shares - this contract - is its system prompt, read from the prompt cache, and the prompt carries only

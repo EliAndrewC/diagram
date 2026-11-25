@@ -6457,13 +6457,12 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#modest compound shrine": {
-  "body": "5ef44286535861d1",
+  "body": "7f129c5399842c50",
   "claim": "modest compound shrine - the-compounds-own-shrine-yashikigami.drawing, shrine-gateways-and-the-approach-to-the-hall-torii-sando: every compound draws one modest shrine, however many a real office kept (0218's drawing page, a deliberate deviation), always drawn as a small hall, the form 0220 gives a carefully kept household shrine and the rarer of its two (most were small shrines of stone or wood) - that an office's shrine was the kept kind is a GUESS, the small-shrine form never drawn (feature 452 T24 rules whether it applies); that the hall is wooden is a GUESS - 0218 gives an office's shrine no material, and 0220's 'of stone or wood' is the small household shrine's, not the hall's",
   "code": "9fafeb4ccebbdfac",
   "core": "2eff7ebebbd3387b",
-  "date": "2026-11-24",
-  "drawn": "7c8a74f7652dbf8c",
-  "note": "known (452 T24): the compound shrine is always drawn as a small hall and the small-shrine form is never drawn. 0220 attests both forms for a household shrine (\"Most household guardian shrines are small shrines of stone or wood; one that is carefully kept may be given a hall\"), and 0218's drawing page gives a household's god \"a small shrine or ... an old tree or a stone\". The form is fixed where the project's doctrine asks for a per-settlement roll. The claim states this departure accurately and names the open task. The rest of the claim is true of the code: one shrine per compound is 0218's recorded deliberate deviation, and the wooden hall is a GUESS; fix: code; effect: every compound shows the rarer, carefully kept hall form, and none shows the commoner small shrine of stone or wood",
+  "date": "2026-11-25",
+  "note": "matches 0218's drawing page: one shrine per compound is its recorded deliberate deviation (§3), and the corner of the grounds is where it sets the shrine (§6). The small hall is 0220's carefully kept household form (§18), and the claim itself says it treats an office's shrine as that kind by GUESS and draws the small form nowhere, with the ruling left to 452 T24. The wooden hall is a GUESS on material neither cited page gives, since 0220's \"of stone or wood\" belongs to the small shrines (§18).",
   "pages": {
    "0218-the-compounds-own-shrine-yashikigami.drawing.html": "b136590cd5b120ce",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html": "642d0145b0a9b4c3"
@@ -6471,13 +6470,12 @@
   "research": "e87e6a4860668485",
   "rests": [
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:4b3a8c1080e747d8",
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:975bec7f678f69df",
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:d462ca0a1a370798",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:e462caf5af2d0d0d"
   ],
-  "said": "modest compound shrine - the-compounds-own-shrine-yashikigami.drawing, shrine-gateways-and-the-approach-to-the-hall-torii-sando: every compound draws one modest shrine, however many a real office kept (0218's drawing page, a deliberate deviation), always drawn as a small hall, the form 0220 gives a carefully kept household shrine and the rarer of its two (most were small shrines of stone or wood) - that an office's shrine was the kept kind is a GUESS, the small-shrine form never drawn (feature 452 T24 rules whether it applies); that the hall is wooden is a GUESS - 0218 gives an office's shrine no material, and 0220's 'of stone or wood' is the small household shrine's, not the hall's",
   "section": "2eff7ebebbd3387b",
-  "siblings": "e28665a76c390bd9",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#more than one kami in a hall": {
   "body": "8a835d732aff8441",
@@ -36346,12 +36344,12 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/types.rs::CLASSES#the building types' reader": {
-  "body": "161273efbe91ccb9",
+  "body": "a58d518bce8a92a8",
   "claim": "the building types' reader - NONE: the declaration read and validated; what each type requires is `types.json`'s, and its research is claimed in `docs/building-programs.md`",
-  "code": "0ed1068beec65b4f",
-  "core": "d7e791272d8838be",
-  "date": "2026-11-17",
-  "note": "the four record class names, used to validate",
+  "code": "28badebe82d7624b",
+  "core": "005d83438cd59aa8",
+  "date": "2026-11-25",
+  "note": "the five class labels a declaration may carry, a validation vocabulary deciding nothing about a building",
   "pages": {},
   "research": "",
   "rests": [],
@@ -36565,14 +36563,14 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/types.rs::item#the building types' reader": {
-  "body": "09b6b0d92d818f9e",
+  "body": "dcf2cd1c858ca9ec",
   "claim": "the building types' reader - NONE: the declaration read and validated; what each type requires is `types.json`'s, and its research is claimed in `docs/building-programs.md`",
-  "code": "b006bb5c21e5695c",
-  "core": "a1734325e61d7270",
-  "date": "2026-11-17",
-  "note": "parse and validate",
+  "code": "4524299b6154ca33",
+  "core": "7ddd24fd2b55140b",
+  "date": "2026-11-25",
+  "note": "parsing and validation of a required item; the new error text lists the fifth class and decides nothing physical",
   "pages": {},
-  "reads": "857b82083364c1d5",
+  "reads": "e6d7ceb997d0a939",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -36735,12 +36733,12 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/types/tests.rs::a_malformed_item_is_refused_in_the_python_s_words#the building types' tests": {
-  "body": "81fcc3d8279920e0",
+  "body": "002ef50d502ada97",
   "claim": "the building types' tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "53931080d90ccf2c",
-  "core": "2fb3376f656cdc32",
-  "date": "2026-11-17",
-  "note": "assertions",
+  "code": "b0b02d7ca5354dde",
+  "core": "91211a7fef61b217",
+  "date": "2026-11-25",
+  "note": "fixtures and assertions; the added lines test that \"unresearched\" is accepted and an unknown class is refused, deciding nothing about a building",
   "pages": {},
   "research": "",
   "rests": [],

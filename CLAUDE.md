@@ -55,7 +55,9 @@ Constitution XII. One line each here; the full text of every rule, with its feat
 `research/CLAUDE.md`, which auto-loads under `research/`.
 
 - A question about how a place was built, farmed, planted or lived in is a RESEARCH question: run the search pass (the
-  `research-pass` agent runs one) before deciding, before asking the GM, and before writing "guess".
+  `research-pass` agent runs one) before asking the GM and before writing "guess"; a new rendering decision may skip it, drawn as
+  a best guess labeled `UNRESEARCHED` onto `make research-backlog` (each port stage's end searches the ones it touched), unless other code builds on it or the guess is likely visibly
+  wrong (GM 2026-11-25, feature 451 T236).
 - Whether a finding APPLIES to a case, form or map is the record's and the reviewers' to rule, never the GM's; where the record is
   silent on a choice, take a knob or the algorithmically easier route and say which (GM 2026-10-25; `escalation-check` tests 4-5).
 - A `GUESS`, `UNRESEARCHED` or `CONVENTION` value, and a number no claim states, is a goal and a knob, never a target to defend:
@@ -68,8 +70,9 @@ Constitution XII. One line each here; the full text of every rule, with its feat
 - Several attested forms are a KNOB rolled from the map's seed, never a choice.
 - **Room before packing** (GM 2026-10-12): when features will not fit, more room first; an unresearched number is a knob to
   move, never a target to defend.
-- Every rendering decision is labeled - historically accurate, deliberate deviation, map drawing convention, guess - in
-  `research/`, the operative doc, the point of change and the spec. An unlabeled guess is the one failure.
+- Every rendering decision is labeled - historically accurate, deliberate deviation, map drawing convention, guess (searched,
+  silent), unresearched (not yet searched) - in `research/`, the operative doc, the point of change and the spec. An unlabeled
+  guess is the one failure.
 - Record the why of every research-driven rule and magic number beside the rule. Record a decision to ACCEPT a limitation
   with what it costs, the alternatives that were priced, and who chose.
 - A citation quotes the passage verbatim from a public page, English translation marked as one; an unreadable source is not

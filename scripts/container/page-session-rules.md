@@ -20,13 +20,14 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
 
 ## Research (constitution XII; the full rules are the research record's CLAUDE.md and `docs/research-doctrine.md`)
 
-- Search before deciding and before writing "guess"; a record that is silent after a search gets an absence note
-  saying what was searched and when.
+- Search before writing "guess"; a record that is silent after a search gets an absence note saying what was searched
+  and when. A new rendering decision may instead be labeled UNRESEARCHED (not yet searched) with no search and no note,
+  onto `make research-backlog`, unless other code builds on it or a guess is likely visibly wrong (feature 451 T236).
 - Geography resolves China first, Japan as tiebreaker, and the GM's canon overrides both (`docs/research-doctrine.md`).
 - Two or more attested forms are a KNOB rolled per settlement from the seed, never a choice. A degree along a
   continuum is calibrated liberty.
-- Every rendering decision is one of four classes: historically accurate, deliberate deviation, map drawing
-  convention, guess. An unlabeled guess is the one failure.
+- Every rendering decision is one of five classes: historically accurate, deliberate deviation, map drawing
+  convention, guess (searched, silent), unresearched (not yet searched). An unlabeled guess is the one failure.
 - Record the why of every research-driven rule and magic number beside the rule. A decision to ACCEPT a limitation
   records what it costs, the alternatives that were priced, and who chose.
 - A citation is a footnote at the assertion quoting the passage verbatim from a public page a reader can open, in

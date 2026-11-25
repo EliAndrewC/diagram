@@ -238,7 +238,12 @@ fn a_malformed_item_is_refused_in_the_python_s_words() {
         })),
         "ValueError: t/7: kind names a Mode A kind (a non-empty string), not 3"
     );
-    assert_eq!(refused(&with_item(|i| { i.insert("class".into(), json!("odd")); })), "ValueError: t/a: class must be one of ('accurate', 'deviation', 'convention', 'guess'), not 'odd'");
+    assert_eq!(refused(&with_item(|i| { i.insert("class".into(), json!("odd")); })), "ValueError: t/a: class must be one of ('accurate', 'deviation', 'convention', 'guess', 'unresearched'), not 'odd'");
+    // the record's fifth label (feature 451 T236): not yet searched
+    assert!(parse_types(&with_item(|i| {
+        i.insert("class".into(), json!("unresearched"));
+    }))
+    .is_ok());
     assert_eq!(
         refused(&with_item(|i| {
             i.insert("forms".into(), json!([1]));

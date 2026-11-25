@@ -151,6 +151,7 @@ pub fn cli(args: &[String]) -> Reply {
         }
         Some("land") => land::cli(&args[1..], &std::env::current_dir().unwrap_or_default()),
         Some("tunables") => claims::tunables_cli(&args[1..]),
+        Some("research-backlog") => claims::backlog::backlog_cli(&args[1..]),
         Some("work-budget-bundle") => measure::work_budget_bundle::cli(&args[1..], &top()),
         Some("budget-change") => measure::budget_change::cli(&args[1..], &top()),
         // the authoring tools (feature 449 T135): the trials read the tree the wrapper names, as the Python read its own file's tree
@@ -250,6 +251,10 @@ mod tests {
         assert_eq!(cli(&["impl-check".to_owned()]).code, 2);
         assert_eq!(cli(&["claims".to_owned()]).code, 2);
         assert_eq!(cli(&["tunables".to_owned(), "--bogus".to_owned()]).code, 2);
+        assert_eq!(
+            cli(&["research-backlog".to_owned(), "--bogus".to_owned()]).code,
+            2
+        );
         assert_eq!(cli(&["reviews".to_owned()]).code, 2);
         assert!(cli(&["pool".to_owned()])
             .stderr

@@ -186,11 +186,13 @@ reader who asks for them.
   limit yourself to the questions that we already have"*); the GM will say at a later time which new
   questions they want added to what is shown.
 
-## Four labels, and the GM's line between two of them (GM 2026-09-05, feature 183)
+## Five labels, and the GM's line between two of them (GM 2026-09-05, feature 183; the fifth GM 2026-11-25, feature 451 T236)
 
-An entry's finding, and the class explanation written from it, carries one of FOUR labels (constitution
+An entry's finding, and the class explanation written from it, carries one of FIVE labels (constitution
 XII): **accurate**, **deviation**,
-**convention**, **guess**. The GM's rule for the two in the middle, verbatim: a deviation is *"our
+**convention**, **guess** (searched, the record silent), **unresearched** (not yet searched: a best guess drawn
+meanwhile, owing no search and no note until `make research-backlog`'s backlog reaches it; the GM: *"unresearched
+would mean that we know we have not yet checked"*). The GM's rule for the two in the middle, verbatim: a deviation is *"our
 fictional setting being different from the actual history and historical places it is based on"*; a map
 drawing convention is *"rendering glyphs on a map which are differently scaled or differently colored than
 what the features would be in order to make the map more readable and legible to human eyes."* So the
@@ -280,7 +282,8 @@ the public internet where that passage can be read. So a footnote is one of THRE
   `physical necessity`, `a drawing convention`, `this project's decision` - and a note may name more than one where
   a sentence rests on more than one. **Two things it may never carry**: a claim about how a place was built,
   farmed, planted, governed or lived in, and a sentence the record labels a GUESS about the physical world. Both
-  owe a citation or an absence note however they are dressed, and that prohibition is the whole guard - without it
+  owe a citation or an absence note however they are dressed (a sentence labeled UNRESEARCHED owes neither until the
+  backlog reaches it, feature 451 T236, and a grounds note on it is still misused), and that prohibition is the whole guard - without it
   a hard research question can be relabelled a decision and the backlog flatters itself. Only two of the six are
   exemplified in today's record; the rest are vocabulary for the future, and using one on an existing note takes a
   written argument at that note's page. Where a note converts FROM an absence note, its recorded search is kept in
@@ -374,7 +377,8 @@ are the form of every entry from here, new or revised:
    without it. The `Sources:` roster stays visible: it is the reader's list of the works, and each key's
    parenthetical says what the work contributed, nothing about when or how it was read. What is NOT a note for
    a session: a source key that links to its work; a GM ruling and the alternatives it declined (the decision the
-   record owes its reader); the honest label on a claim - a GUESS, or a search that found nothing, with its date.
+   record owes its reader); the honest label on a claim - a GUESS, or a search that found nothing, with its date; an
+   UNRESEARCHED, not yet searched.
 3. **No history of the document in the document.** *"I do not see any purpose in recording in our research
    findings references to things which used to be in these documents that were wrong and have since been
    removed ... the commentary about the history of how this research document came to read as it does now is

@@ -91,10 +91,12 @@ counts as a readable source, when a guess may be recorded, how a two-form findin
   trade-off), a **map drawing convention** (a glyph drawn at a different scale or color than the
   feature would have, so the map reads to a human eye - the oversized well, the dark bund beads; GM
   2026-09-05: *"we should distinguish in our descriptions between 'deviations' ... and 'map drawing
-  conventions'"*), or a **guess** made because the record has no firm number. On a city map,
+  conventions'"*), a **guess** made because the record, searched, has no firm number, or an
+  **unresearched** best guess drawn before any search (feature 451 T236, the GM 2026-11-25: *"unresearched would
+  mean that we know we have not yet checked"*). On a city map,
   highlight every tannery and learn that a tannery stands by water because hides are soaked. So every
   rendering decision - glyph, size, placement rule, distance, density - is recorded in one of those
-  four classes, in `research/` (the finding), the operative doc (the rule) and at the point of change
+  five classes, in `research/` (the finding), the operative doc (the rule) and at the point of change
   (the pointer), and listed in the feature's spec under "Decisions Recorded". An unlabeled guess is
   the one failure: the reader must never be told a guess is a finding.
 - **The reader reaches the record by QUESTION** (GM 2026-09-05): the audience is *"casual RPG
@@ -136,6 +138,18 @@ counts as a readable source, when a guess may be recorded, how a two-form findin
   planted or lived in whose answer you do not know - from the GM, a reviewer, a test or your own
   doubt, however small. The "guess" label is for a record that was searched and found silent. *"That
   is the kind of project that this is."*
+  **Restated 2026-11-25 (feature 451 T236): a RESEARCH BACKLOG.** Told that of eight hamlet searches in
+  two days two changed what is drawn, the GM: *"maybe the procedural change here is to not stop and kick off
+  research. In all of these situations right away, but rather to have some kind of research backlog. Where we
+  make a best guess about what to render, and then note it as being something that is unresearched. Where
+  unresearched is different than unsupported ... unresearched would mean that we know we have not yet
+  checked"*; offered the rule, *"yes please"*. So a NEW rendering decision may be drawn as a best guess
+  labeled **UNRESEARCHED** with no search and no absence note - on its page item (`data-label="UNRESEARCHED"`)
+  or its code claim (`<label> - UNRESEARCHED`) - and the research is a backlog, not a stop: `make
+  research-backlog [STAGE=]` lists every UNRESEARCHED claim and page item by the code it belongs to, and each
+  port stage's end searches the ones it touched. A GUESS still means searched and silent, and still owes its
+  absence note. The search still runs FIRST where the decision is foundational (other code builds on it) or a
+  guess is likely visibly wrong; and still before the GM is asked.
 - **MULTIPLE SUPPORTABLE ANSWERS BECOME A KNOB, NOT A CHOICE (REQUIRED)** (GM 2026-08-18). Where the
   research shows a thing was genuinely done more than one way, do NOT pick the reading you prefer:
   make it a **tunable knob with per-settlement variance**, rolled from the map's own seed like every
@@ -300,7 +314,7 @@ with its tool in the same change.
 | 11 | An absence note supports only a stated silence or a GUESS of our own - never a claim of what a named page says that no one here could read. | RC (ABSENCE, feature 292, GM 2026-09-30) | `quote-check`'s `CLAIM-FROM-UNREAD` (`.claude/agents/quote-check.md`, feature 312), owed on every changed note by `rust/gate/crates/core/src/record/units.rs` | no |
 | 12 | An absence note may carry `settled DATE` only after two independent passes on different dates, the second using a tool the first lacked; it re-opens on anything that changes what can be read. | RC (ABSENCE); RR:251 | `tests/interactive/test_footnotes.py::sourceless_shape_faults` (settled needs two different `searched` dates; only an absence note can be settled); "second used a tool the first lacked" is left to `record-format` (per the test comment); `l7r-gate record open-questions` (`rust/gate/crates/registry/src/open_questions.rs`, feature 449 T149) derives the open list. | yes (two dates); no (tool differs) |
 | 13 | A GROUNDS note (`no source is owed: <reason>`) takes a reason from a CLOSED list of six; carries no key, link or quotation. | RC (GROUNDS); RR:251 | `rust/gate/crates/research/src/citations.rs::GROUNDS_REASONS`, `grounds_reasons`, `footnote_form` ("names a reason that is not one of the six"); `tests/interactive/test_footnotes.py` (`sourceless_shape_faults`). | yes |
-| 14 | A GROUNDS note is NEVER used for a claim about how a place was built, farmed, planted, governed or lived in, nor for a labeled GUESS about the physical world - those owe a citation or an absence note. | RC (GROUNDS); RR:251 | `quote-check`'s `GROUNDS-MISUSED` (`.claude/agents/quote-check.md`, feature 312), owed on every changed note by `rust/gate/crates/core/src/record/units.rs` | no |
+| 14 | A GROUNDS note is NEVER used for a claim about how a place was built, farmed, planted, governed or lived in, nor for a labeled GUESS about the physical world - those owe a citation or an absence note; a sentence labeled UNRESEARCHED owes neither, nor a grounds note, until the backlog reaches it (feature 451 T236). | RC (GROUNDS); RR:251 | `quote-check`'s `GROUNDS-MISUSED` (`.claude/agents/quote-check.md`, feature 312) and `GUESS-UNNOTED` (a labeled GUESS with neither, feature 451 T236), owed on every changed note by `rust/gate/crates/core/src/record/units.rs` | no |
 | 15 | Using one of the four not-yet-exemplified grounds reasons on an existing note takes a written argument at that note's page; a note converted from an absence note keeps its search in an HTML comment. | RC (GROUNDS); RR:251 | `quote-check`'s `GROUNDS-UNARGUED` (`.claude/agents/quote-check.md`, feature 312), owed on every changed note by `rust/gate/crates/core/src/record/units.rs` | no (written-argument part); the HTML-comment part is partly yes but unchecked |
 | 16 | Only the GM's own campaign notes are exempt from the citation rule (canon, not evidence); they keep their registry link, and that entry cites the notes on GitHub (`https://github.com/EliAndrewC/l7r/blob/master/setting/<file>.md`, each quoted section followed by its heading URL by GitHub's anchor rule). Nothing else is carved out (`URL: none`, gone pages, SUMMARY-ONLY). | RC (the one exception ...); RR:251; RD:57-59; ROOT ("GM's own campaign notes ... need no citation") | `rust/gate/crates/research/src/citations.rs::footnote_form` (canon keys allowed to link `SOURCES.html#`); `rust/gate/crates/research/src/sources.rs::canon_keys`; `tests/interactive/test_citations.py::test_every_canon_entry_links_its_notes_on_github_and_none_says_url_none`; `rust/gate/crates/research/src/record/source_tags.rs` (exactly one canon section). | yes |
 | 17 | Every reference to a work is a link: a key is never bare; a document READ links to the first URL on its registry citation line; one not read (SUMMARY-ONLY, `URL: none`, unfetched) links to its registry entry; the key is the link text; a work named in prose or by surname is linked at first mention in a section. | RC (Every reference is a link); RR:198 | `tests/interactive/test_sources.py` (every cited key a link to the right target); a work named in prose or by surname: `quote-check`'s `UNLINKED-NAME` (`.claude/agents/quote-check.md`, feature 312) | yes (keys); NONE for prose/surname mentions |
@@ -323,9 +337,9 @@ with its tool in the same change.
 | 34 | Look in the archive before the web: start each research pass with `make archive-inbox` (the GM's downloads archived then removed; a NEW download is WAITING until `MATCH='<file>=<key>'` or `NONE='<file>'`), then `make archive-find URL= | KEY= | `rust/gate/crates/archive/src/ops.rs` (the commands, `l7r-gate record archive inbox|find`); the order is held by `rust/guard/src/guards/blocked_fetch_hooks.rs`, which tells a WebFetch of an archived page to use `make archive-find` (feature 312), and `make archive-find` prints the earlier attempts first | ROOT; RC (Look in the archive before the web); RD:207-216; PS:34-38 |
 | 35 | Every page read is on the sources-consulted ledger and the attempts log: `make source-pages ... QUESTION=<NNNN> SOUGHT="..."` prints each URL's earlier reads, attempts and filter verdict before it fetches; a page already judged for the same question is not re-read without a reason; every page's outcome is recorded with `make source-outcome`. | RC (Every page read is on the ledger); PS:44-47; ROOT | `rust/gate/crates/research/src/source_pages.rs` (prints earlier reads and attempts first; refuses without `SOUGHT=`; refuses a re-read of a page already judged for the same question without `REREAD=` - feature 312); `rust/guard/shared/src/attempts.rs`; `rust/gate/crates/record/src/record/sources.rs` (`make source-outcome`) | yes |
 | 36 | Several attested forms are a KNOB rolled per settlement from the seed, never a choice (a degree along a continuum is calibrated liberty). | ROOT; RD:139-149; PS:25-26 | out of FR-005's scope - a design rule for the generator | no |
-| 37 | Every rendering decision is recorded in one of four classes - accurate, deviation, convention, guess - in `research/` (the finding), the operative doc, the point of change (pointer) and the feature's spec "Decisions Recorded"; an unlabeled guess is the one failure; a convention's modal note ends with the real size or color. | ROOT; RC (Four labels); RR:182; RD:86-99; PS:27-28 | out of FR-005's scope - a rule for labeling rendering decisions | no |
+| 37 | Every rendering decision is recorded in one of five classes - accurate, deviation, convention, guess (searched, silent), unresearched (not yet searched, feature 451 T236) - in `research/` (the finding), the operative doc, the point of change (pointer) and the feature's spec "Decisions Recorded"; an unlabeled guess is the one failure; a convention's modal note ends with the real size or color. | ROOT; RC (Five labels); RR:182; RD:86-99; PS:27-28 | out of FR-005's scope - a rule for labeling rendering decisions | no |
 | 38 | A research-driven rule or magic number records its why beside the rule; a decision to ACCEPT a limitation records what it costs, the alternatives priced, and who chose. | ROOT; RD:15-25, RD:115-127; PS:29-30 | out of FR-005's scope - a rule for recording the why of a rule | no |
-| 39 | Run the search pass before deciding, before asking the GM, and before writing "guess"; ask the GM only when the record is silent or contradictory and say what was searched and found; a record silent after a search gets an absence note. | ROOT; RD:128-138; PS:23-24 | out of FR-005's scope - a process rule for when to ask the GM | no |
+| 39 | Run the search pass before asking the GM and before writing "guess" - a new rendering decision may instead be drawn UNRESEARCHED with no search, onto `make research-backlog`, unless it is foundational or a guess is likely visibly wrong (feature 451 T236); ask the GM only when the record is silent or contradictory and say what was searched and found; a record silent after a search gets an absence note. | ROOT; RD:128-138; PS:23-24 | out of FR-005's scope - a process rule for when to ask the GM | no |
 | 40 | Setting canon is searched with `make canon TERMS="a\|b\|c"` (every term in one call). | ROOT (guards table); PS:18-19 | `rust/gate/crates/record/src/record.rs` (`make canon`) (its guard, the canon-read hook, retired by the GM 2026-11-07: "you can remove that hook that blocks you") | no |
 | 41 | The record is HTML under `research/`: one stem per question (`questions/NNNN-<heading id>.html`, `.drawing.html`, `.notes.html`, `.originals.html`), sources under `sources/NNNN-<key>.html`; never edit a built page; footnote numbers are allocated at build. | ROOT; RC (Where things are, Editing); RD:60-65; RR:439-520; PS:39-41 | `rust/guard/src/guards/record_edit_hooks.rs` (an Edit aimed at a built page is re-aimed at the fragment or refused; Write refused); `rust/gate/crates/research/src/record/site.rs` (build refusals: duplicate ids, orphan notes, links that land nowhere); `tests/interactive/test_record_site.py`, `test_record_store.py`. | yes |
 | 42 | A pointer to the research (code comment, doc, spec, `Entry:`) names the FILE (`research/questions/NNNN-<id>[.drawing].html`, or `research/contents.json#<section>`), never a built page or a retired form. | ROOT; RC (Where things are); RR:520 | `l7r-gate check research-pointers` ("pointers to the research that do not resolve, or are of a retired form"), run at the gate and at push; `make fragment-move` rewrites pointers; `l7r-gate check entry-headings` (`rust/gate/crates/registry/src/headings.rs`, feature 449 T149) (Entry: heading resolves; fails the gate). | yes |
@@ -359,8 +373,13 @@ operative form of the citation rules (the footnote shape, the notes and the work
 auto-loads when a session edits the record; the archive and the download list are `research/downloads.md`.
 
 - A question about how a place was built, farmed, planted or lived in is a RESEARCH question. Run
-  the search pass (the `research-pass` agent runs one) before deciding, before asking the GM, and before writing "guess". The GM is asked
-  only when the record is silent or contradictory, and the ask says what was searched and found.
+  the search pass (the `research-pass` agent runs one) before asking the GM and before writing "guess". The GM is asked
+  only when the record is silent or contradictory, and the ask says what was searched and found. A NEW rendering decision may
+  instead be drawn as a best guess labeled `UNRESEARCHED` (not yet searched), with no search and no absence note, onto the
+  backlog `make research-backlog` lists by stage, each port stage's end working the items it touched; a search still runs first
+  where other code builds on the decision or a guess is likely visibly wrong (the GM, 2026-11-25, feature 451 T236: *"have some
+  kind of research backlog. Where we make a best guess about what to render, and then note it as being something that is
+  unresearched"*).
 - The search pass looks in the ARCHIVE before the web (feature 309): `make archive-inbox` first (the GM's downloads in
   `academic-sources/` archived, then removed - what is left there is unprocessed), then `make archive-find` for each
   source. Every cited page is archived in the PRIVATE repository `EliAndrewC/diagram-research`; never
@@ -385,8 +404,8 @@ auto-loads when a session edits the record; the archive and the download list ar
   claims-report`, its note naming `fix: claim` or `fix: code`; a drift with no visible effect and no finding contradicted is
   fixed by restating the claim (the tolerance rule, constitution XIV v2.36.0); the code is fixed only if the feature's spec asks. `make impl-check F=<n>` says what is owed, and the
   closing check refuses until it reports nothing.
-- Every rendering decision is recorded in one of four classes - historically accurate, deliberate
-  deviation, map drawing convention, guess - in `research/` (the finding), the operative doc (the
+- Every rendering decision is recorded in one of five classes - historically accurate, deliberate
+  deviation, map drawing convention, guess (searched, silent), unresearched (not yet searched) - in `research/` (the finding), the operative doc (the
   rule), the point of change (the pointer) and the feature's spec under "Decisions Recorded". An
   unlabeled guess is the one failure.
 - Record the why of every research-driven rule and magic number beside the rule. Record a decision to

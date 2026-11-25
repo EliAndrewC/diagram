@@ -23,8 +23,14 @@ use serde_json::{Map, Value};
 
 use crate::py::{iterate, os_error, type_name};
 
-/// A required item's classes (`types.CLASSES`).
-pub const CLASSES: [&str; 4] = ["accurate", "deviation", "convention", "guess"];
+/// A required item's classes (`types.CLASSES`): the record's labels, `unresearched` (not yet searched) the fifth (feature 451 T236).
+pub const CLASSES: [&str; 5] = [
+    "accurate",
+    "deviation",
+    "convention",
+    "guess",
+    "unresearched",
+];
 
 /// The declaration, from the tree's root.
 pub const DECLARATION: &str = "l7r/diagram/buildings/types.json";
@@ -209,7 +215,7 @@ fn item(raw: &Value, at: &str) -> Result<RequiredItem, Error> {
     }
     if labeled && !m["class"].as_str().is_some_and(|c| CLASSES.contains(&c)) {
         return Err(value_error(format!(
-            "{at}/{id}: class must be one of ('accurate', 'deviation', 'convention', 'guess'), not {}",
+            "{at}/{id}: class must be one of ('accurate', 'deviation', 'convention', 'guess', 'unresearched'), not {}",
             value_repr(&m["class"])
         )));
     }

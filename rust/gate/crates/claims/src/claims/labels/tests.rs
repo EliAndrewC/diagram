@@ -15,6 +15,8 @@ fn each_label_fault_is_flagged() {
         flag("k", &parse_claim(line).unwrap(), &q, pages)
     };
     assert!(f("a - NONE", &mut pages).is_empty());
+    // an UNRESEARCHED claim was never searched (feature 451 T236): no search, no page and no absence note is owed it here
+    assert!(f("a - UNRESEARCHED: 40 ft, as 0054 does not say", &mut pages).is_empty());
     let got = f(
         "a - GUESS: stricter than the page, as 0054 says",
         &mut pages,

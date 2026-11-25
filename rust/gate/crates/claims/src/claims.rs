@@ -12,6 +12,7 @@ use std::path::{Path, PathBuf};
 use crate::record::args::{parse, Spec};
 use crate::Reply;
 
+pub mod backlog;
 mod bundle;
 mod carry;
 mod commands;

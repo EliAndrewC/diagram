@@ -37,15 +37,18 @@ dispatch.
 The backing is one of:
 
 - **question files** (`research/questions/NNNN-<id>.html`, or its `.drawing.html`): the claim says the code implements what that
-  question finds. The research page holds the FINDINGS; the drawing page says how our maps draw it and which of the four
-  classes each choice is (historically accurate, deliberate deviation, map drawing convention, guess).
+  question finds. The research page holds the FINDINGS; the drawing page says how our maps draw it and which of the five
+  classes each choice is (historically accurate, deliberate deviation, map drawing convention, guess, unresearched).
 - **`DEVIATION <question file>`**: the code knowingly departs from what that question finds.
 - **`GUESS [<question file>]`**: a decision the record was searched for and is silent on; a named file is the drawing
   page that records the guess (IN-STEP when that page records this figure as a guess).
 - **`CANON`**: a decision the GM made - the GM's setting canon or the GM's ruling - which needs no research (the record's
   rule: the GM's campaign notes are canon, not evidence). IN-STEP when the claim's account names the ruling; MISLABELED when a
   question in the bundle actually answers it.
-- **`UNRESEARCHED`**: a decision no research pass has looked for yet.
+- **`UNRESEARCHED [<question file>#<item id>]`**: a decision no research pass has looked for yet - a best guess drawn meanwhile,
+  on the research backlog (`make research-backlog`; feature 451 T236, the GM 2026-11-25); a named item is the page's tag that says
+  UNRESEARCHED. It owes no search, no page and no absence note: never NEEDS-RESEARCH, MISLABELED or DRIFTED for lacking one. A
+  GUESS is different: it says a search ran and the record is silent.
 - **`CONVENTION`**: a map drawing convention - how a thing is SHOWN (a color, a line weight, a label's offset, a symbol), with no
   claim about how a place was built, farmed, planted or lived in.
 - **`NONE`**: no physical or rendering decision at all - plumbing: geometry, indexing, iteration, caching, parsing, I/O.
@@ -95,7 +98,8 @@ for THIS unit exactly as if it were written on it.
   decision (the research is silent on what the code does) - the claim should say UNRESEARCHED until a research pass answers it.
 - **MISLABELED** - the claim's class or pointer is wrong for the code: NONE or CONVENTION on code that decides something physical
   (a size, a count, a distance, a share, a placement rule, a choice between forms); a GUESS or UNRESEARCHED that a question in the
-  bundle actually answers; a pointer to a question about something else. Say what the label should be.
+  bundle actually answers; an UNRESEARCHED whose account states as found (as how it was, citing a page) what no page in the bundle
+  gives; a pointer to a question about something else. Say what the label should be.
 - **CANNOT-TELL** - say what you would need. Use this rather than guessing.
 
 Then, per UNIT, every **physical decision its code makes that no claim of it covers** - a magic number with a physical meaning, a

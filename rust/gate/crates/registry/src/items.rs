@@ -20,7 +20,7 @@ use std::sync::{LazyLock, Mutex, PoisonError};
 
 use fancy_regex::Regex;
 use l7r_gate_research::pyre::py;
-use l7r_gate_research::record::items::{items, Item};
+use l7r_gate_research::record::items::{items, Item, GUESSED};
 use l7r_gate_research::{Error, Result};
 
 use crate::about::FeatureClass;
@@ -144,7 +144,7 @@ impl Pages {
     }
 }
 
-/// The kind's class with each reference bullet filled from its tag, or dropped while the tag is no GUESS.
+/// The kind's class with each reference bullet filled from its tag, or dropped while the tag is no GUESS or UNRESEARCHED.
 ///
 /// # Errors
 /// A reference naming an item no page of its question tags.
@@ -173,18 +173,25 @@ pub fn bullets(tree: &Path, key: &str, guesses: Vec<String>) -> Result<Vec<Strin
                 format!("{key}: the Guesses bullet {{{number}#{id}}} {why}"),
             )
         })?;
-        if item.label == "GUESS" {
-            // the bullet is owed from the first reference (451 T192): an unreferenced GUESS tag may carry none
+        if GUESSED.contains(&item.label.as_str()) {
+            // the bullet is owed from the first reference (451 T192): an unreferenced GUESS tag may carry none; an UNRESEARCHED tag is
+            // a guess to the reader as well (451 T236)
             if item.guess.trim().is_empty() {
                 return Err(Error::new(
                     "ValueError",
-                    format!("{key}: the Guesses bullet {{{number}#{id}}} names a GUESS tag with no data-guess: add data-guess=\"<what is guessed>: <why no page says>\" to its tag, from its block's own words"),
+                    format!("{key}: the Guesses bullet {{{number}#{id}}} names {} tag with no data-guess: add data-guess=\"<what is guessed>: <why no page says>\" to its tag, from its block's own words", a(&item.label)),
                 ));
             }
             out.push(format!("{cond}{}", item.guess));
         }
     }
     Ok(out)
+}
+
+/// The label with its article, as a message names it: `a GUESS`, `an UNRESEARCHED`.
+fn a(label: &str) -> String {
+    let an = label.starts_with(['A', 'E', 'I', 'O', 'U']);
+    format!("{} {label}", if an { "an" } else { "a" })
 }
 
 /// The head of a bullet: its words before the first `: `, lowercased, a leading "that " dropped.
@@ -221,7 +228,11 @@ pub fn restated(tree: &Path, fc: &FeatureClass, pages: &mut Pages) -> Vec<String
         .collect();
     let mut out = Vec::new();
     for n in numbers {
-        for it in pages.of(tree, &n).iter().filter(|i| i.label == "GUESS") {
+        for it in pages
+            .of(tree, &n)
+            .iter()
+            .filter(|i| GUESSED.contains(&i.label.as_str()))
+        {
             let phrase = head(&it.guess);
             if phrase.split_whitespace().count() < 3 {
                 continue;
@@ -230,8 +241,8 @@ pub fn restated(tree: &Path, fc: &FeatureClass, pages: &mut Pages) -> Vec<String
                 let low = s.to_lowercase();
                 if low.contains(&phrase) && !low.contains("guess") {
                     out.push(format!(
-                        "{}: its About states {n}#{} (\"{phrase}\"), tagged a GUESS, as a fact - in \"{s}\": move it to Guesses as `- {{{n}#{}}}`, or say in the sentence that it is a guess",
-                        fc.key, it.id, it.id
+                        "{}: its About states {n}#{} (\"{phrase}\"), tagged {}, as a fact - in \"{s}\": move it to Guesses as `- {{{n}#{}}}`, or say in the sentence that it is a guess",
+                        fc.key, it.id, a(&it.label), it.id
                     ));
                 }
             }

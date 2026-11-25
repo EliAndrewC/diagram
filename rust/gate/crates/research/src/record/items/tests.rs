@@ -128,3 +128,22 @@ fn strip_takes_out_each_well_formed_tag_and_leaves_a_malformed_one() {
     let malformed = r#"<li>x<span class="item" data-item="g">y</span></li>"#;
     assert_eq!(strip(malformed), malformed);
 }
+
+#[test]
+fn an_unresearched_tag_is_a_fifth_label_its_block_saying_so() {
+    // feature 451 T236 (the GM 2026-11-25): UNRESEARCHED, not yet searched, beside a GUESS, searched and silent
+    let html = format!(
+        "<li>The fence's height is UNRESEARCHED: no search has run.{}</li>",
+        tag("fence", "UNRESEARCHED", "")
+    );
+    assert_eq!(faults("p.html", &html), Vec::<String>::new());
+    assert_eq!(items(&html)[0].label, "UNRESEARCHED");
+    // a block that does not say it is refused, as a GUESS's is
+    let silent = html.replace("UNRESEARCHED: no", "four feet: no");
+    let f = faults("p.html", &silent);
+    assert_eq!(f.len(), 1, "{f:?}");
+    assert!(f[0].contains("its tag says UNRESEARCHED"), "{f:?}");
+    // an ATTESTED block that calls itself unresearched says another label
+    let attested = html.replace(r#"data-label="UNRESEARCHED""#, r#"data-label="ATTESTED""#);
+    assert_eq!(faults("p.html", &attested).len(), 1);
+}

@@ -750,6 +750,9 @@ claims-report: ## [project] the claims index: counts by verdict, every finding (
 tunables: ## [project] every claim whose value is ours - GUESS (searched, silent), UNRESEARCHED, CONVENTION - with its figure: a goal and a knob a fixing pass may move (feature 417 T28)   [UNDER=<file or dir>] [ALL=1 keeps claims with no figure] [COUNT=1] [INLINE=1 lists the numbers inside functions no claim states]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" tunables --root "$$(git rev-parse --show-toplevel)" $(if $(UNDER),--path $(UNDER),) $(if $(filter 1,$(ALL)),--all,) $(if $(filter 1,$(COUNT)),--count,) $(if $(filter 1,$(INLINE)),--inline,)
 
+research-backlog: ## [project] the research backlog: every UNRESEARCHED claim and page item (not yet searched, a guess drawn meanwhile - distinct from a GUESS, searched and silent), by the code file it belongs to; a port stage works its own at its end (feature 451 T236, the GM 2026-11-25)   [STAGE=<a hamlet stage, e.g. seat, or a path glob>]
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" research-backlog --root "$$(git rev-parse --show-toplevel)" $(if $(STAGE),--stage "$(STAGE)",)
+
 impl-check: ## [project] a research-record feature's changed questions, each with the claims citing it and their verdicts, and what its close still owes (feature 378)   F=<n>
 	@if [ -z "$(F)" ]; then printf 'make impl-check: F=<feature number> is required - e.g. make impl-check F=343\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" impl-check "$(F)"

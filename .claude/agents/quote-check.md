@@ -94,7 +94,8 @@ beside it (`NNNN-<heading id>.notes.html`; features 258, 303): read BOTH files, 
 file for the notes; a bundle gives them numbered as the reader sees them. `research/sources/` holds the registry entry
 behind each key. A footnote with no
 key and no link that reads `no publicly readable source (searched ...)` is an ABSENCE note - report it as such and
-check nothing for it.
+check nothing for it. A sentence the record labels UNRESEARCHED (not yet searched; feature 451 T236, the GM 2026-11-25) owes
+no footnote at all - no citation, no absence note - until the research backlog reaches it: never report it for lacking one.
 
 **A THIRD FORM SINCE FEATURE 235 (GM 2026-09-12): the GROUNDS note.** A footnote with no key and no link that
 reads `no source is owed: <reason>` is a GROUNDS note - a sentence with nothing to find, because it is a number
@@ -104,7 +105,8 @@ an absence note. It is NOT an assertion with a missing citation and must never b
 
 What you SHOULD report about a grounds note is the one thing it may not do: carry a claim about how a place was
 built, farmed, planted, governed or lived in, or a sentence the record itself labels a GUESS about the physical
-world. Those owe a citation or an absence note however they are dressed, and a grounds note on one of them is
+world. Those owe a citation or an absence note however they are dressed (an UNRESEARCHED sentence owes neither, but a
+grounds note on it is still misused: it says no source is owed where one is, later), and a grounds note on one of them is
 exactly the failure the form was created to prevent - a research question relabelled as a decision, leaving the
 backlog while the record gets less honest.
 
@@ -177,8 +179,11 @@ run the whole procedure: nothing this check covers goes unchecked for want of th
      a link to its registry entry or its read URL.
 5. Per section, list the assertions that carry NO footnote and rest on something outside the record - a number,
    a practice, a date, a "was", a "never" - one line each, quoted. Reasoning from the record's own earlier
-   findings, the GM's rulings, a measurement on the map and a labeled GUESS do not need one; say so when you
-   skip one for that reason.
+   findings, the GM's rulings, a measurement on the map and a sentence labeled UNRESEARCHED (not yet searched, feature
+   451 T236) do not need one; say so when you skip one for that reason. A labeled GUESS about the physical world is
+   different: it says a search ran and found nothing, so it owes its absence note (or a citation) - list one with
+   neither as `GUESS-UNNOTED`, quoted. An UNRESEARCHED sentence that states as found what no footnote supports (a figure
+   or a practice given as how it was, not as our guess) is still an assertion with no footnote: list it.
 
 ## Output
 
