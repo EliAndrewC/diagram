@@ -109,7 +109,7 @@ fn a_gone_tree_s_build_goes_whole_and_a_live_one_loses_only_old_variants() {
     )
     .unwrap();
     std::fs::write(k.join("a-file"), "x").unwrap();
-    let got = plan(&c, cutoff(), &[]);
+    let got = plan(&c, cutoff(), &[], within());
     assert_eq!(
         names(&got, &c),
         [
@@ -124,9 +124,9 @@ fn a_gone_tree_s_build_goes_whole_and_a_live_one_loses_only_old_variants() {
     blind.cargo = c.cargo.clone();
     blind.clones = c.clones.join("missing");
     blind.mirror = c.mirror.clone();
-    assert!(!names(&plan(&blind, cutoff(), &[]), &c).contains(&"gone-scratch".to_owned()));
+    assert!(!names(&plan(&blind, cutoff(), &[], within()), &c).contains(&"gone-scratch".to_owned()));
     blind.cargo = c.cargo.join("a-file");
-    assert!(plan(&blind, cutoff(), &[]).is_empty());
+    assert!(plan(&blind, cutoff(), &[], within()).is_empty());
 }
 
 /// A build directory's top dep-info, `<target>/<profile>/<bin>.d`, naming the tree it was built from, `days` old.
@@ -181,7 +181,7 @@ fn a_target_is_taken_whole_only_once_proven_dead() {
     put(&k, &k.join("unknown/debug/x"), 9);
     // head: its one tree gone and no code path names it - taken
     built_from(&k, &k.join("head"), &gone.join("t235/head"), 9);
-    assert_eq!(names(&plan(&c, cutoff(), &[]), &c), ["head"]);
+    assert_eq!(names(&plan(&c, cutoff(), &[], within()), &c), ["head"]);
 }
 
 #[test]
@@ -196,7 +196,7 @@ fn an_entry_whose_age_cannot_be_read_is_kept() {
     let locked = store.join("c-h0/s");
     std::fs::set_permissions(&locked, std::fs::Permissions::from_mode(0o000)).unwrap();
     age(k, &store.join("c-h0"), 20);
-    let got = names(&plan(&c, cutoff(), &[]), &c);
+    let got = names(&plan(&c, cutoff(), &[], within()), &c);
     std::fs::set_permissions(&locked, std::fs::Permissions::from_mode(0o755)).unwrap();
     assert_eq!(got.len(), 1, "{got:?}");
     assert!(!got.iter().any(|g| g.ends_with("c-h0")), "{got:?}");
@@ -262,7 +262,7 @@ fn a_registered_worktree_s_name_and_the_tooling_landing_s_are_live_and_a_used_ta
     .unwrap();
     age(&k, &k.join("ran/a/b/rust-checks-run.json"), 9);
     let held = [k.join("held/debug/.cargo-lock")];
-    let got = names(&plan(&c, cutoff(), &held), &c);
+    let got = names(&plan(&c, cutoff(), &held, within()), &c);
     assert_eq!(got, ["old", "ran"]);
     assert_eq!(super::worktrees(&c).len(), 1);
     assert!(super::started(&c.proc, 4_000_000_000).is_none());
@@ -275,4 +275,48 @@ fn a_registered_worktree_s_name_and_the_tooling_landing_s_are_live_and_a_used_ta
     )
     .unwrap();
     assert_eq!(super::worktrees(&c).len(), 2);
+}
+
+/// Within the budget: no live tree's profile asked for (451 T245).
+fn within() -> super::Budget {
+    super::Budget {
+        need: 0,
+        idle: SystemTime::now(),
+    }
+}
+
+#[test]
+fn past_the_budget_a_profile_taken_whole_lists_none_of_its_variants() {
+    let (_base, c) = world();
+    let k = &c.cargo;
+    // eighteen old variants in a live clone's coverage profile, and in its debug profile, built today
+    for (i, d) in (10..28).enumerate() {
+        put(
+            k,
+            &k.join(format!("live-clone/cover-gate/deps/liba-h{i}.rlib")),
+            d,
+        );
+    }
+    for i in 0..18 {
+        put(
+            k,
+            &k.join(format!("live-clone/debug/deps/libb-h{i}.rlib")),
+            0,
+        );
+    }
+    let all = super::Budget {
+        need: u64::MAX,
+        idle: SystemTime::now() - Duration::from_secs(DAY),
+    };
+    let got = names(&plan(&c, SystemTime::now(), &[], all), &c);
+    // the idle profile whole, none of its variants beside it; the fresh profile kept, its variants past sixteen pruned
+    assert!(got.contains(&"live-clone/cover-gate".to_owned()), "{got:?}");
+    let inside = got.iter().any(|n| n.starts_with("live-clone/cover-gate/"));
+    assert!(!inside, "{got:?}");
+    assert_eq!(
+        got.iter()
+            .filter(|n| n.starts_with("live-clone/debug/deps/"))
+            .count(),
+        2
+    );
 }

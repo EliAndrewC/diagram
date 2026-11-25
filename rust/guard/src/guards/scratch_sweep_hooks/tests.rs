@@ -40,6 +40,8 @@ fn world(tag: &str) -> (TempDir, Config) {
     c.tmp = base.join("tmp");
     c.exe = PathBuf::from("/bin/true");
     c.keep = "current".to_owned();
+    // the disk well above the low-disk share (451 T245): no prompt here starts an eviction
+    c.space = Some((100, 100));
     (base, c)
 }
 

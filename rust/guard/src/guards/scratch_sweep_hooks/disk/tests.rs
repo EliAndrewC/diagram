@@ -100,8 +100,9 @@ fn below_the_floor_the_gate_is_refused_naming_the_space_the_targets_the_cleanup_
     for want in [
         "REFUSED: 1.2 GB free on the build cache's disk, below the 15.0 GB floor",
         "live-clone  (a live tree's",
-        "t42-scratch  (no live tree's: removed whole once idle; idle 24.0 h)",
-        "make cache-clean frees 0.0 GB now (1 entries idle 12 h or more",
+        "t42-scratch  (no live tree's: removed whole once proven dead; idle 24.0 h)",
+        // the fresh dead one too, with no idle wait (451 T245)
+        "make cache-clean frees 0.0 GB now (2 entries idle 12 h or more",
         "scratch worktree ",
         "worktree remove --force ",
         "DISK_OK=",
@@ -141,9 +142,10 @@ fn the_cleanup_takes_the_idle_dead_targets_alone_and_never_while_a_build_runs_or
     let ran = cache(&c, now(), false);
     assert_eq!(ran.code, 0, "{}", ran.stderr);
     assert!(ran.stdout.contains("removed ") && removed(&c, "t42-scratch"));
-    assert!(!removed(&c, "live-clone") && !removed(&c, "fresh"));
-    // HOURS=0: the fresh dead target goes too; but not while a build runs
-    c.cache_age = Duration::ZERO;
+    // the fresh dead target goes too, with no idle wait (451 T245: a removed worktree's build directory with it); the live one stays
+    assert!(!removed(&c, "live-clone") && removed(&c, "fresh"));
+    // but not while a build runs
+    dead(&c.cargo, "fresh", 0);
     std::fs::create_dir_all(c.proc.join("9")).unwrap();
     std::fs::write(c.proc.join("9/comm"), "cargo\n").unwrap();
     let building = cache(&c, now(), false);
@@ -207,10 +209,36 @@ fn df_reads_a_directory_s_free_space_and_nothing_of_a_missing_one() {
 #[test]
 fn past_the_budget_the_cleanup_takes_what_is_not_in_use_whatever_its_age() {
     let (_base, mut c) = world();
-    assert!(!cache(&c, now(), true).stdout.contains("/fresh "));
+    // within the budget a live tree's profile is kept; past it (451 T245), its idle profile goes, never the build directory whole
+    assert!(!cache(&c, now(), true).stdout.contains("cargo/live-clone/"));
     c.budget = 0;
     let dry = cache(&c, now(), true);
-    assert!(dry.stdout.contains("cargo/fresh ") && !dry.stdout.contains("cargo/live-clone "));
+    assert!(
+        dry.stdout.contains("cargo/live-clone/debug (")
+            && !dry.stdout.contains("cargo/live-clone ("),
+        "{}",
+        dry.stdout
+    );
+    assert!(dry.stdout.contains("an idle tree's profile"));
+    // a build begun after the plan holds the removal of a cache entry (451 T245), not of another
+    std::fs::create_dir_all(c.proc.join("5")).unwrap();
+    std::fs::write(c.proc.join("5/comm"), "rustc\n").unwrap();
+    let item = |p: PathBuf| crate::guards::scratch_sweep_hooks::sweep::Item {
+        path: p,
+        bytes: 0,
+        why: "",
+    };
+    assert!(!crate::guards::scratch_sweep_hooks::sweep::take(
+        &c,
+        &item(c.cargo.join("live-clone"))
+    ));
+    assert!(c.cargo.join("live-clone").exists());
+    let other = c.state.join("loose");
+    std::fs::create_dir_all(&other).unwrap();
+    assert!(
+        crate::guards::scratch_sweep_hooks::sweep::take(&c, &item(other.clone()))
+            && !other.exists()
+    );
 }
 
 #[test]
@@ -235,10 +263,25 @@ fn a_landing_removes_its_tasks_own_scratch_and_says_which_number_it_left() {
         &base.join("wt/t7/clean"),
         9,
     );
+    // ...and its build directory with it, fresh (451 T245), while another tree's of a live name stays
+    dead(&c.cargo, "clean", 0);
+    std::fs::write(
+        c.cargo.join("clean/debug/x.d"),
+        format!("x: {}/rust/a.rs\n", tree.display()),
+    )
+    .unwrap();
     let out = with(&args(&["landed", "451", &s, "T158,T160"]), &mut c, now());
     assert_eq!(out.code, 0);
     assert!(out.stdout.contains("removed ") && out.stdout.contains("left /tmp/t160*"));
     assert!(out.stdout.contains("removed the clean scratch worktree") && !tree.exists());
+    assert!(
+        removed(&c, "clean") && !removed(&c, "live-clone"),
+        "{}",
+        out.stdout
+    );
+    assert!(out
+        .stdout
+        .contains("the build directory of the scratch worktree removed with it"));
     assert!(!c.tmp.join("t158").exists() && c.tmp.join("t160").exists());
     let none = with(&args(&["landed", "451", &s, "T999"]), &mut c, now());
     assert!(none.code == 0 && none.stdout.is_empty());

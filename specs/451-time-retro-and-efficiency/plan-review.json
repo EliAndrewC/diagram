@@ -1572,6 +1572,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "round-arbiter"
+  },
+  "### T245 (the GM 2026-11-25; measured 2026-11-25 (`du`, `df`, `make cache-clean DRY=1`): the disk at 88-90%, the build cache 190 GB against its own 100 GB budget, the cleanup freeing 27 MB)": {
+   "sha256": "92028b5548fe37e3227e4859a9443d30ece4bf034b874bd7d4638d7cc72b8f40",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T245 Approach (checklist part A)": {
+   "sha256": "18e2b936aa01993fe82d38e61a5252aa2b1a42fb0bb8b351dfa109c48049c934",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -20998,6 +21010,86 @@
    "tasks": [
     "T235"
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T245 (the GM 2026-11-25; measured 2026-11-25 (`du`, `df`, `make cache-clean DRY=1`): the disk at 88-90%, the build cache 190 GB against its own 100 GB budget, the cleanup freeing 27 MB)",
+    "### T245 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 the audit",
+     "summary": "make disk-audit: every place the container writes, size, largest entries with owner and age, a GUESS budget each, the total against the disk, the unaccounted remainder, what the eviction would free now; read-only",
+     "class": "within",
+     "why": "The GM's second sentence asks for 'some kind of audit of disk space and what this container specifically is leaving sitting around'. Budgets per place are the coordinating session's build and are stated as GUESS knobs. The remainder is reported, not hidden; I measured independently (du -x over / on 2026-11-25): the container's visible tree is about 240 GB plus the ~/.claude bind mount, against 411 GB used on df, so the plan's 'about 177 GB outside the container's view' holds."
+    },
+    {
+     "id": "D2 the trigger on the host disk",
+     "summary": "A prompt reads df; below L7R_DISK_FREE_PCT (GUESS 20) free, at most hourly, starts the eviction detached and says what it freed in one line; the share is read on the host's disk",
+     "class": "within",
+     "why": "The GM's third sentence: 'trigger something automatically if our disk space ever drops below a certain percentage of free space'. The disk he names is the host's ('my host has a 461G disk drive'), so reading the share there is the plain reading. The threshold is a GUESS knob."
+    },
+    {
+     "id": "D3 the budget evicts idle and gone trees' profiles",
+     "summary": "Past the cache budget, whole profiles of trees that are gone or idle (HEAD log unmoved for 12 h, no live cwd) go first, least recently built first, only until back within budget",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It relaxes T158's keeping of every live tree's build directory whole. Ruled on purpose: the GM's T245 words locate the problem in 'artifacts sitting around', and his 2026-11-22 request was to 'clean up after ourselves ... to not have 30 gigs of stuff suddenly get eaten without us realizing it'. Under the old rule the budget held nothing (190 GB against 100) and evicting only gone trees freed 27 MB, so the literal old rule defeats both requests. A profile unbuilt for 12 h in an idle tree is exactly an artifact sitting around, and the cost (a cold rebuild) is priced in the plan and tied to three knobs."
+    },
+    {
+     "id": "D4 active trees' idle profiles, the profile as unit",
+     "summary": "An active tree's profiles idle past 12 h rank after idle trees' and may go; the unit is the profile, not the tree",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged apart from D3 because the tree is in use. A profile not built for 12 h is sitting around whatever tree holds it; the plan measured a 25 GB cover-gate idle while its tree's tool profile was fresh, so a per-tree age keeps idle artifacts and defeats the GM's purpose. The working set stays protected: in_use, the running-build hold, the mirror exclusion, and the dry run touched none of diagram-backlog's debug, cover-gate or tool, nor a parallel builder's tree."
+    },
+    {
+     "id": "D5 the budget path without a low disk",
+     "summary": "The eviction also runs from cargo::plan past the 100 GB budget when the disk is not below the share",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The low-disk path is the GM's third sentence. The budget path answers his 2026-11-22 request ('not have 30 gigs ... eaten without us realizing it'), which is about growth, not about a full disk. The budget already existed under T158 and is what that request built; D5 makes it hold for artifacts sitting around rather than inventing a new rule. Waiting for the disk to be low would bring back the 2026-11-22 failure the request exists to prevent."
+    },
+    {
+     "id": "D6 a removed worktree's build directory with it",
+     "summary": "T158's proven-dead rule loses its idle wait; the day's sweep removes clean scratch worktrees before planning; make land removes each cleaned tree's build directory; a hand removal is caught at the next sweep",
+     "class": "within",
+     "why": "A build directory whose tree is gone is an artifact left sitting around with no possible user; in_use still guards a running build. It is in the coordinating session's build and serves the GM's first sentence."
+    },
+    {
+     "id": "D7 never under a running build",
+     "summary": "T158's global hold kept; each removal re-checks it (sweep::take)",
+     "class": "within",
+     "why": "Stricter than before; preserves the existing protection of builds in progress."
+    },
+    {
+     "id": "D8 the cache stays over budget where live working sets exceed it",
+     "summary": "When the working sets alone pass the budget the cache is left over it and the audit says by how much; an active tree's working set is never evicted to hold the number",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the coordinating session's build ('the cache budget made to hold'), not the GM's words. It is implied by his words: what he asked to deal with is what the container is 'leaving sitting around', and a working set built that morning in a tree in use is not. The build itself limits eviction to 'idle trees' targets' and 'never under a running build'. The overage is reported by the audit, so nothing is silent, and the budget is a GUESS knob."
+    },
+    {
+     "id": "D9 'found nothing it may take' said once",
+     "summary": "When the disk is under the share but nothing is evictable, the notice is said once until an eviction frees something again",
+     "class": "within",
+     "why": "The trigger still runs hourly and says every eviction that frees something. Reporting the same empty result every hour is not asked for anywhere. The plan's own figures show the share is unreachable on the host disk (about 18.7% free after everything evictable goes), and that is stated as the knob's question. Whether the notice repeats is a design choice, not a fidelity finding."
+    },
+    {
+     "id": "D10 the audit register's disk entry noted, not built",
+     "summary": "449 T437 item 13 gets the disk entry noted here; no register is built in this task",
+     "class": "within",
+     "why": "Checked: 449 T437 is a discussion task, explicitly 'NOT a build task'. Its item 13, an audit register with falsifiers, is a possibility to put to the GM, not something he approved. Building it here would be unrequested. The GM's 'add to our performance tuning and checks' is carried by make disk-audit, the automatic low-disk check at each prompt and the budget's eviction, and the task is filed as performance work."
+    },
+    {
+     "id": "D11 knobs and GUESS budgets",
+     "summary": "L7R_DISK_FREE_PCT (20) and the per-place budgets are GUESS constants with their why beside them; L7R_CACHE_IDLE_HOURS and L7R_CACHE_BUDGET_GB reused",
+     "class": "within",
+     "why": "The build names 'a knob, GUESS 20% free'; the GM's 'a certain percentage' leaves the value open."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -33536,6 +33628,84 @@
     ],
     "verdict": "BLOCKED"
    }
+  },
+  "T245": {
+   "section_sha256": "a8b571ecf45b9b2fe2f953c25eac1cc70b661b1f8557c50b649244e58d09eed4",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 the audit",
+     "summary": "make disk-audit: every place the container writes, size, largest entries with owner and age, a GUESS budget each, the total against the disk, the unaccounted remainder, what the eviction would free now; read-only",
+     "class": "within",
+     "why": "The GM's second sentence asks for 'some kind of audit of disk space and what this container specifically is leaving sitting around'. Budgets per place are the coordinating session's build and are stated as GUESS knobs. The remainder is reported, not hidden; I measured independently (du -x over / on 2026-11-25): the container's visible tree is about 240 GB plus the ~/.claude bind mount, against 411 GB used on df, so the plan's 'about 177 GB outside the container's view' holds."
+    },
+    {
+     "id": "D2 the trigger on the host disk",
+     "summary": "A prompt reads df; below L7R_DISK_FREE_PCT (GUESS 20) free, at most hourly, starts the eviction detached and says what it freed in one line; the share is read on the host's disk",
+     "class": "within",
+     "why": "The GM's third sentence: 'trigger something automatically if our disk space ever drops below a certain percentage of free space'. The disk he names is the host's ('my host has a 461G disk drive'), so reading the share there is the plain reading. The threshold is a GUESS knob."
+    },
+    {
+     "id": "D3 the budget evicts idle and gone trees' profiles",
+     "summary": "Past the cache budget, whole profiles of trees that are gone or idle (HEAD log unmoved for 12 h, no live cwd) go first, least recently built first, only until back within budget",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It relaxes T158's keeping of every live tree's build directory whole. Ruled on purpose: the GM's T245 words locate the problem in 'artifacts sitting around', and his 2026-11-22 request was to 'clean up after ourselves ... to not have 30 gigs of stuff suddenly get eaten without us realizing it'. Under the old rule the budget held nothing (190 GB against 100) and evicting only gone trees freed 27 MB, so the literal old rule defeats both requests. A profile unbuilt for 12 h in an idle tree is exactly an artifact sitting around, and the cost (a cold rebuild) is priced in the plan and tied to three knobs."
+    },
+    {
+     "id": "D4 active trees' idle profiles, the profile as unit",
+     "summary": "An active tree's profiles idle past 12 h rank after idle trees' and may go; the unit is the profile, not the tree",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged apart from D3 because the tree is in use. A profile not built for 12 h is sitting around whatever tree holds it; the plan measured a 25 GB cover-gate idle while its tree's tool profile was fresh, so a per-tree age keeps idle artifacts and defeats the GM's purpose. The working set stays protected: in_use, the running-build hold, the mirror exclusion, and the dry run touched none of diagram-backlog's debug, cover-gate or tool, nor a parallel builder's tree."
+    },
+    {
+     "id": "D5 the budget path without a low disk",
+     "summary": "The eviction also runs from cargo::plan past the 100 GB budget when the disk is not below the share",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The low-disk path is the GM's third sentence. The budget path answers his 2026-11-22 request ('not have 30 gigs ... eaten without us realizing it'), which is about growth, not about a full disk. The budget already existed under T158 and is what that request built; D5 makes it hold for artifacts sitting around rather than inventing a new rule. Waiting for the disk to be low would bring back the 2026-11-22 failure the request exists to prevent."
+    },
+    {
+     "id": "D6 a removed worktree's build directory with it",
+     "summary": "T158's proven-dead rule loses its idle wait; the day's sweep removes clean scratch worktrees before planning; make land removes each cleaned tree's build directory; a hand removal is caught at the next sweep",
+     "class": "within",
+     "why": "A build directory whose tree is gone is an artifact left sitting around with no possible user; in_use still guards a running build. It is in the coordinating session's build and serves the GM's first sentence."
+    },
+    {
+     "id": "D7 never under a running build",
+     "summary": "T158's global hold kept; each removal re-checks it (sweep::take)",
+     "class": "within",
+     "why": "Stricter than before; preserves the existing protection of builds in progress."
+    },
+    {
+     "id": "D8 the cache stays over budget where live working sets exceed it",
+     "summary": "When the working sets alone pass the budget the cache is left over it and the audit says by how much; an active tree's working set is never evicted to hold the number",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the coordinating session's build ('the cache budget made to hold'), not the GM's words. It is implied by his words: what he asked to deal with is what the container is 'leaving sitting around', and a working set built that morning in a tree in use is not. The build itself limits eviction to 'idle trees' targets' and 'never under a running build'. The overage is reported by the audit, so nothing is silent, and the budget is a GUESS knob."
+    },
+    {
+     "id": "D9 'found nothing it may take' said once",
+     "summary": "When the disk is under the share but nothing is evictable, the notice is said once until an eviction frees something again",
+     "class": "within",
+     "why": "The trigger still runs hourly and says every eviction that frees something. Reporting the same empty result every hour is not asked for anywhere. The plan's own figures show the share is unreachable on the host disk (about 18.7% free after everything evictable goes), and that is stated as the knob's question. Whether the notice repeats is a design choice, not a fidelity finding."
+    },
+    {
+     "id": "D10 the audit register's disk entry noted, not built",
+     "summary": "449 T437 item 13 gets the disk entry noted here; no register is built in this task",
+     "class": "within",
+     "why": "Checked: 449 T437 is a discussion task, explicitly 'NOT a build task'. Its item 13, an audit register with falsifiers, is a possibility to put to the GM, not something he approved. Building it here would be unrequested. The GM's 'add to our performance tuning and checks' is carried by make disk-audit, the automatic low-disk check at each prompt and the budget's eviction, and the task is filed as performance work."
+    },
+    {
+     "id": "D11 knobs and GUESS budgets",
+     "summary": "L7R_DISK_FREE_PCT (20) and the per-place budgets are GUESS constants with their why beside them; L7R_CACHE_IDLE_HOURS and L7R_CACHE_BUDGET_GB reused",
+     "class": "within",
+     "why": "The build names 'a knob, GUESS 20% free'; the GM's 'a certain percentage' leaves the value open."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

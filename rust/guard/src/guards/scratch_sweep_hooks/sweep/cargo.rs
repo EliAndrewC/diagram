@@ -6,7 +6,8 @@
 //! `du -ch` on that target). 54 GB in 56 directories in all.
 //!
 //! Two rules: (a) a build directory named for no live tree - neither the mirror nor any clone under the clones directory - goes once
-//! nothing in it changed in the threshold; the mirror's and every clone's are never removed whole (the guard hook runs the mirror's
+//! proven dead (below), with no idle wait since 451 T245 (a removed worktree's build directory goes with it); the mirror's and every
+//! clone's are never removed whole (past the budget, a live tree's idle profiles go instead: `evict.rs`) (the guard hook runs the mirror's
 //! kept binary); (b) inside every directory kept, each crate's variants in a store beyond its newest four go once each is idle past the
 //! threshold. Sixteen (451 T158; four before it): a crate's live variants are not three - one landing's gate (12:10-12:16, 2026-11-22)
 //! touched 13 `l7r_mode_a` variants in the landing target's `debug/incremental` (its lib, its binary, its test builds, each built and
@@ -40,7 +41,7 @@ const STORES: [&str; 4] = ["deps", "incremental", ".fingerprint", "build"];
 /// user, 2026-11-22): `clone`, the hooks suites' fixture clones that run the real wrapper (`clone/build.log` named
 /// `/tmp/l7r-hooks-suite-pair-hooks.sh-*/clone`), a `git clone -q . $T/clone` standing in the mirror (451 T79) and a review
 /// snapshot's side; `tree` and `main-tree`, the model trial's own clones (`trials/src/measure/model_trial/case.rs`).
-const BUILT_INTO: [&str; 3] = ["clone", "tree", "main-tree"];
+pub(crate) const BUILT_INTO: [&str; 3] = ["clone", "tree", "main-tree"];
 /// A clone's landing trees beside it: `make land`'s worktree (`scripts/land-alone.sh`, its target "built once and kept"), the tooling
 /// landing's worktree (`scripts/land-tooling.sh`, the gate's build) and that landing's guard build.
 const LANDING: [&str; 3] = ["-land", "-tooling", "-land-tooling"];
@@ -52,34 +53,59 @@ pub(super) fn plan(
     c: &Config,
     cutoff: SystemTime,
     held: &[PathBuf],
+    budget: Budget,
 ) -> Vec<(PathBuf, &'static str)> {
     let mut out = Vec::new();
     if !std::fs::symlink_metadata(&c.cargo).is_ok_and(|m| m.is_dir()) {
         return out;
     }
     let live = trees(c);
+    let mut kept = Vec::new();
     for (target, name, meta) in children(&c.cargo) {
         if !meta.is_dir() || in_use(&target, held, &c.proc) {
             continue;
         }
-        let whole = live.as_ref().is_some_and(|l| !l.contains(&name))
-            && !BUILT_INTO.contains(&name.as_str())
-            && newest(&target).is_some_and(|t| t < cutoff)
-            && built_from(&target).is_some_and(|trees| trees.iter().all(|t| !t.exists()));
-        if whole {
+        // no idle wait (451 T245: a removed worktree's build directory goes with it, at the next sweep, where the day's trials left
+        // 13-14 GB each until removed by hand): proven dead, nothing builds into it again, and a build running in it is `in_use`
+        if dead(&target, &name, live.as_deref()) {
             out.push((
                 target,
-                "a build directory proven dead (no code path builds into its name, every tree it was built from gone), idle",
+                "a build directory proven dead (no code path builds into its name, every tree it was built from gone)",
             ));
-            continue;
+        } else {
+            kept.push(target);
         }
+    }
+    // past the budget, an idle profile of a live tree's (451 T245, `evict.rs`), for what the dead ones leave short
+    let dead: u64 = out.iter().map(|(p, _)| super::bytes(p)).sum();
+    let profiles = super::evict::choose(c, budget.need.saturating_sub(dead), budget.idle, held);
+    for target in kept {
         let mut stores = Vec::new();
         find_stores(&target, DEPTH, &mut stores);
         for store in stores {
-            out.extend(stale_variants(&store, cutoff));
+            if !profiles.iter().any(|(p, _)| store.starts_with(p)) {
+                out.extend(stale_variants(&store, cutoff));
+            }
         }
     }
+    out.extend(profiles);
     out
+}
+
+/// A build directory proven dead: no live tree has its name (None, the clones directory unread: none is), no code path builds into
+/// it, and every tree its dep-info names is gone.
+pub(super) fn dead(target: &Path, name: &str, live: Option<&[String]>) -> bool {
+    live.is_some_and(|l| !l.iter().any(|n| n == name))
+        && !BUILT_INTO.contains(&name)
+        && built_from(target).is_some_and(|trees| trees.iter().all(|t| !t.exists()))
+}
+
+/// What the cache's budget asks of a plan (451 T245): the bytes to free (0 within the budget), and the time before which a live tree's
+/// profile counts idle.
+#[derive(Clone, Copy)]
+pub(crate) struct Budget {
+    pub need: u64,
+    pub idle: SystemTime,
 }
 
 /// The names of the trees whose build directories are never removed whole: the mirror's and every clone's; None where the clones

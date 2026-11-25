@@ -216,3 +216,14 @@ The GM, 2026-11-25, after pasting a QUESTION UNFILTERED refusal of a message tha
 > So you have already told me what the cost is roughly for each of these at about $70,000 tokens per run. Though I do have a couple of questions about that. One is that you said 1.85 million tokens in, but I thought that our context window was only 1 million tokens at a maximum. So what does it mean for something to be 1.85 million tokens? Another question is, whether or not there are more efficient ways to do this Or efficiencies that we can add to augment this.
 
 (the session's reply, not his words, listed the levers: stop the false firings, which T235 fixes; a mechanical pre-filter, the hook sending the agent only messages that put something to him - a sentence ending in "?" addressed to him, or an offer - "T235's natural shape"; and a narrower bundle for the check, which is a separate change. The coordinating session's T235 brief relays the pre-filter as asked by him that day.)
+## 2026-11-25: what this container leaves on disk (451 T245)
+
+The GM, 2026-11-25, with the disk at 88% (relayed by the coordinating session in T245's task line, three sentences as quoted there):
+
+> my host has a 461G disk drive, so if that is full then it is because this container specifically is leaving artifacts sitting around
+
+> having some kind of audit of disk space and what this container specifically is leaving sitting around is probably something we should add to our performance tuning and checks
+
+> we might even want to trigger something automatically if our disk space ever drops below a certain percentage of free space
+
+(the coordinating session's build of it, not his words: `make disk-audit` - every place the container writes, its size, owner and age, against a budget each; the cache budget made to hold - least-recently-built variants and idle trees' targets evicted past the budget, never under a running build; an automatic eviction below a free-space percentage, a knob, GUESS 20% free, that says what it freed; a removed worktree's build directory removed with it; the audit register's disk entry (449 T437 item 13) noted in the plan and not built in this task, by the builder's brief - T245)

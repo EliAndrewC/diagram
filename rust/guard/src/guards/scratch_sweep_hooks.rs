@@ -75,6 +75,13 @@ pub(crate) struct Config {
     pub outputs_age: Duration,
     /// This process's uid: only its own `/tmp` entries are judged.
     pub uid: u32,
+    /// Below this share of the disk free, a prompt starts the cache's eviction (`L7R_DISK_FREE_PCT`, 451 T245), as a fraction.
+    pub free_at: f64,
+    /// The disk's size and free bytes where a test or a suite sets them (`SCRATCH_SWEEP_DF="<size> <free>"`); else `df` is asked.
+    pub space: Option<(u64, u64)>,
+    /// `~/.cache` and the guard log's directory, which `make disk-audit` sizes (451 T245).
+    pub cache_home: PathBuf,
+    pub guard_log: PathBuf,
 }
 
 impl Config {
@@ -139,7 +146,20 @@ impl Config {
                 knob("SCRATCH_SWEEP_OUTPUT_HOURS", disk::TMP_HOURS) * 3600.0,
             ),
             uid,
+            free_at: knob("L7R_DISK_FREE_PCT", disk::FREE_PCT) / 100.0,
+            space: set("SCRATCH_SWEEP_DF").and_then(|v| {
+                let (a, b) = v.split_once(' ')?;
+                Some((a.trim().parse().ok()?, b.trim().parse().ok()?))
+            }),
+            cache_home: home.join(".cache"),
+            guard_log: set("GUARD_LOG_DIR")
+                .map_or_else(|| home.join(".claude/guard-log"), PathBuf::from),
         }
+    }
+
+    /// The cache's disk: its size and free bytes (`space`, else `df`); None where neither says.
+    pub(crate) fn disk(&self) -> Option<(u64, u64)> {
+        self.space.or_else(|| disk::df(&self.cargo))
     }
 
     /// The configuration from the environment, through `shared::env` (a test's own, feature 451 T32).
@@ -169,10 +189,20 @@ fn decide(event: &Event, _: &Session) -> Vec<Answer> {
     judge(event, &Config::read(), SystemTime::now())
 }
 
-/// Start a sweep, detached, when none ran within the period; says nothing.
+/// Start a sweep, detached, when none ran within the period; below the disk's free-space share, start the eviction (451 T245); say
+/// the line the last eviction wrote, once.
 pub(crate) fn judge(event: &Event, c: &Config, now: SystemTime) -> Vec<Answer> {
     start(event, c, now);
-    Vec::new()
+    if c.off {
+        return Vec::new();
+    }
+    let keep = event
+        .input
+        .get("session_id")
+        .and_then(Value::as_str)
+        .unwrap_or("");
+    disk::trigger(c, keep, now);
+    disk::note(c).map(Answer::Notice).into_iter().collect()
 }
 
 /// `judge`'s work, saying whether it started the sweep: the test of a prompt within the day asks this where it slept 0.3 s to see no
@@ -245,6 +275,9 @@ pub(crate) fn with(args: &[String], c: &mut Config, now: SystemTime) -> Reply {
         // the disk and the build cache (451 T158, `disk.rs`)
         Some("floor") => disk::floor(c, disk::free(&c.cargo), now),
         Some(mode @ ("cache" | "cache-dry")) => disk::cache(c, now, mode == "cache-dry"),
+        // the low-disk trigger's eviction and the audit (451 T245)
+        Some(mode @ ("evict" | "evict-dry")) => disk::evict(c, now, mode == "evict-dry"),
+        Some("audit") => disk::audit(c, now),
         Some("landed") => disk::landed(c, &args[1..], now),
         Some("trees") => say(
             disk::trees(c, now)
@@ -255,7 +288,7 @@ pub(crate) fn with(args: &[String], c: &mut Config, now: SystemTime) -> Reply {
         ),
         _ => Reply {
             stdout: String::new(),
-            stderr: "usage: l7r-guard --scratch-sweep run | now | dry | floor | cache | cache-dry | trees [--keep <session id>]\n"
+            stderr: "usage: l7r-guard --scratch-sweep run | now | dry | floor | cache | cache-dry | evict | evict-dry | audit | trees [--keep <session id>]\n"
                 .to_owned(),
             code: 2,
         },
@@ -290,7 +323,7 @@ fn locked(c: &Config, now: SystemTime, periodic: bool) -> Option<String> {
         );
     }
     let plan = sweep::plan(c, now);
-    let removed: Vec<sweep::Item> = plan.into_iter().filter(sweep::remove).collect();
+    let removed: Vec<sweep::Item> = plan.into_iter().filter(|i| sweep::take(c, i)).collect();
     for item in &removed {
         record(
             &input,

@@ -4,7 +4,10 @@
 //! clone's 86 GB, the landing worktree's 31 GB and ~30 GB of idle scratch worktrees' targets, which the session removed by hand. The
 //! day's sweep (`sweep/cargo.rs`) had removed none of it: its threshold is three days, and the scratch targets were hours old.
 //!
-//! Three modes of `--scratch-sweep`:
+//! 451 T245 added `audit` (`make disk-audit`, `disk/audit.rs`), and `evict` / `evict-dry`, the low-disk trigger's eviction
+//! (`disk/low.rs`), which a prompt starts below `L7R_DISK_FREE_PCT` free.
+//!
+//! The modes of `--scratch-sweep`:
 //! - `floor`: `make done`, `make land` and `make closing-checks` refuse first when the cache's disk has less free than the floor,
 //!   naming the free space, the largest build directories, what `make cache-clean` would free and the scratch worktrees to remove.
 //! - `cache` / `cache-dry`: `make cache-clean`, the cache's share of the sweep alone, idle past `L7R_CACHE_IDLE_HOURS` (not three
@@ -45,8 +48,29 @@ pub(super) const BUDGET_GB: f64 = 100.0;
 /// `SCRATCH_SWEEP_OUTPUT_HOURS`): a day - the host's measurement split 63 GB of scratch at "idle over a day" (27 GB), and a builder
 /// back at a trial's scratch after a night still finds it.
 pub(super) const TMP_HOURS: f64 = 24.0;
+/// THE LOW-DISK TRIGGER (451 T245, GUESS, a knob: `L7R_DISK_FREE_PCT`, the GM's "a certain percentage of free space"): below this
+/// share of the disk free, the next prompt starts the cache's eviction. Twenty percent of the 461 GB disk is 92 GB: six of the cold
+/// 14 GB trial builds of 2026-11-25 side by side, or two cold full coverage builds (31 GB each, 2026-11-22), before the floor (15 GB).
+pub(super) const FREE_PCT: f64 = 20.0;
 /// How many of the largest build directories the refusal names.
 const NAMED: usize = 6;
+
+mod audit;
+mod low;
+pub(super) use audit::audit;
+pub(super) use low::{evict, note, trigger};
+
+/// The size and free bytes of the filesystem holding `dir` (`df -B1 --output=size,avail`); None where df cannot say.
+pub(super) fn df(dir: &Path) -> Option<(u64, u64)> {
+    let out = Command::new("df")
+        .args(["-B1", "--output=size,avail"])
+        .arg(dir)
+        .output()
+        .ok()?;
+    let text = String::from_utf8_lossy(&out.stdout);
+    let mut words = text.lines().last()?.split_whitespace();
+    Some((words.next()?.parse().ok()?, words.next()?.parse().ok()?))
+}
 
 /// The free bytes of the filesystem holding `dir` (`df -B1 --output=avail`); None where df cannot say.
 pub(super) fn free(dir: &Path) -> Option<u64> {
@@ -95,9 +119,9 @@ fn refusal(c: &Config, free: u64, now: SystemTime) -> String {
     ];
     for t in sweep::targets(c).into_iter().take(NAMED) {
         let whose = if t.live {
-            "a live tree's: pruned of old variants, never removed whole"
+            "a live tree's: old variants pruned, idle profiles taken past the budget"
         } else {
-            "no live tree's: removed whole once idle"
+            "no live tree's: removed whole once proven dead"
         };
         out.push(format!(
             "  {:>9}  {}  ({whose}; idle {})",
@@ -107,7 +131,7 @@ fn refusal(c: &Config, free: u64, now: SystemTime) -> String {
         ));
     }
     let cutoff = now.checked_sub(c.cache_age).unwrap_or(UNIX_EPOCH);
-    out.push(match sweep::cache_plan(c, cutoff, now) {
+    out.push(match sweep::cache_plan(c, cutoff, now, 0) {
         Ok(plan) => format!(
             "make cache-clean frees {} now ({} entries idle {} h or more; DRY=1 lists them, HOURS=<n> moves the threshold).",
             gb(plan.iter().map(|i| i.bytes).sum()),
@@ -132,11 +156,11 @@ fn refusal(c: &Config, free: u64, now: SystemTime) -> String {
 pub(super) fn cache(c: &Config, now: SystemTime, dry: bool) -> Reply {
     let cutoff = now.checked_sub(c.cache_age).unwrap_or(UNIX_EPOCH);
     let run = || -> Result<String, String> {
-        let plan = sweep::cache_plan(c, cutoff, now)?;
+        let plan = sweep::cache_plan(c, cutoff, now, 0)?;
         if dry {
             return Ok(report(&plan, "would remove"));
         }
-        let removed: Vec<Item> = plan.into_iter().filter(sweep::remove).collect();
+        let removed: Vec<Item> = plan.into_iter().filter(|i| sweep::take(c, i)).collect();
         let input = json!({ "session_id": c.keep });
         for item in &removed {
             record(
@@ -217,7 +241,8 @@ pub(super) fn landed(c: &Config, args: &[String], now: SystemTime) -> Reply {
         report(&removed, "removed")
     };
     // the clean scratch worktrees idle past the scratch threshold (451 T158's plan review): removed, not only named
-    for tree in sweep::clean_trees(c, now) {
+    let cleaned = sweep::clean_trees(c, now);
+    for tree in &cleaned {
         record(
             &input,
             "removed",
@@ -228,6 +253,25 @@ pub(super) fn landed(c: &Config, args: &[String], now: SystemTime) -> Reply {
             text,
             "removed the clean scratch worktree {} (idle, its HEAD on a ref; git worktree remove)",
             tree.display()
+        );
+    }
+    // ...and each one's build directory with it (451 T245)
+    for item in sweep::gone_targets(c, &cleaned)
+        .into_iter()
+        .filter(|i| sweep::take(c, i))
+    {
+        record(
+            &input,
+            "removed",
+            &item.path.to_string_lossy(),
+            json!({ "bytes": item.bytes, "why": item.why, "by": "land" }),
+        );
+        let _ = writeln!(
+            text,
+            "removed {} ({}, {})",
+            item.path.display(),
+            gb(item.bytes),
+            item.why
         );
     }
     for n in shared {

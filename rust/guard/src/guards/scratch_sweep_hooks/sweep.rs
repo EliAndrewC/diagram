@@ -11,6 +11,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use super::Config;
 
 mod cargo;
+mod evict;
 mod tmp;
 mod trees;
 
@@ -74,20 +75,28 @@ pub(crate) fn plan(c: &Config, now: SystemTime) -> Vec<Item> {
             .map(|(p, _, _)| (p, "a session's first-prompt mark")),
     );
     if building(&c.proc).is_none() {
-        out.extend(cargo::plan(c, budgeted(c, cutoff, now), &live));
+        let (cut, budget) = budgeted(c, cutoff, now, 0);
+        out.extend(cargo::plan(c, cut, &live, budget));
     }
     items(out, &live)
 }
 
 /// THE CACHE'S SIZE BUDGET (451 T158): past `L7R_CACHE_BUDGET_GB` in all, the cache's share takes every dead tree's build directory
-/// and every variant past a crate's newest sixteen whatever its age - never one in use, never while a build runs - not only the idle.
-fn budgeted(c: &Config, cutoff: SystemTime, now: SystemTime) -> SystemTime {
+/// and every variant past a crate's newest sixteen whatever its age - never one in use, never while a build runs - not only the idle;
+/// and (451 T245, `evict.rs`) live trees' idle profiles until the cache is back within it, or `short` more bytes are free (the
+/// low-disk trigger's shortfall), whichever asks more.
+fn budgeted(
+    c: &Config,
+    cutoff: SystemTime,
+    now: SystemTime,
+    short: u64,
+) -> (SystemTime, cargo::Budget) {
     let total: u64 = targets(c).iter().map(|t| t.bytes).sum();
-    if total > c.budget {
-        now
-    } else {
-        cutoff
-    }
+    let budget = cargo::Budget {
+        need: total.saturating_sub(c.budget).max(short),
+        idle: now.checked_sub(c.cache_age).unwrap_or(UNIX_EPOCH),
+    };
+    (if total > c.budget { now } else { cutoff }, budget)
 }
 
 /// The landed tasks' own `/tmp` scratch (`tmp::landed`), held by no live process; with the numbers another feature shares.
@@ -123,6 +132,7 @@ pub(crate) fn cache_plan(
     c: &Config,
     cutoff: SystemTime,
     now: SystemTime,
+    short: u64,
 ) -> Result<Vec<Item>, String> {
     if let Some(build) = building(&c.proc) {
         return Err(build);
@@ -130,10 +140,14 @@ pub(crate) fn cache_plan(
     let Some(live) = live_paths(&c.proc) else {
         return Ok(Vec::new());
     };
-    Ok(items(
-        cargo::plan(c, budgeted(c, cutoff, now), &live),
-        &live,
-    ))
+    let (cut, budget) = budgeted(c, cutoff, now, short);
+    Ok(items(cargo::plan(c, cut, &live, budget), &live))
+}
+
+/// Remove one entry of the plan unless a build has started since it was made (451 T245: an eviction walks for seconds, and a build
+/// begun meanwhile holds its profile from the moment it starts); whether it went.
+pub(crate) fn take(c: &Config, item: &Item) -> bool {
+    (!item.path.starts_with(&c.cargo) || building(&c.proc).is_none()) && remove(item)
 }
 
 /// The first live cargo, rustc or clippy process (`/proc/<pid>/comm`), as `<pid> <name>`: a build runs, so the cache's share waits
@@ -179,8 +193,8 @@ pub(crate) fn targets(c: &Config) -> Vec<Target> {
     out
 }
 
-pub(crate) use cargo::worktrees;
 use cargo::Worktree;
+pub(crate) use cargo::{worktrees, BUILT_INTO};
 #[cfg(test)]
 pub(crate) use trees::fixture;
 
@@ -191,6 +205,34 @@ pub(crate) fn clean_trees(c: &Config, now: SystemTime) -> Vec<PathBuf> {
     };
     let cutoff = now.checked_sub(c.tmp_age).unwrap_or(UNIX_EPOCH);
     trees::remove_clean(c, cutoff, &live)
+}
+
+/// The build directories of the trees just removed (451 T245), each named for its tree's basename and taken once proven dead (another
+/// tree of that name keeps it), none in use, none while a build runs.
+pub(crate) fn gone_targets(c: &Config, removed: &[PathBuf]) -> Vec<Item> {
+    let Some(live) = live_paths(&c.proc) else {
+        return Vec::new();
+    };
+    if removed.is_empty() || building(&c.proc).is_some() {
+        return Vec::new();
+    }
+    let names = cargo::trees(c);
+    let found = removed
+        .iter()
+        .filter_map(|t| t.file_name())
+        .map(|n| n.to_string_lossy().into_owned())
+        .map(|n| (c.cargo.join(&n), n))
+        .filter(|(t, n)| {
+            t.is_dir() && !cargo::in_use(t, &live, &c.proc) && cargo::dead(t, n, names.as_deref())
+        })
+        .map(|(t, _)| {
+            (
+                t,
+                "the build directory of the scratch worktree removed with it",
+            )
+        })
+        .collect();
+    items(found, &live)
 }
 
 /// Remove one entry, a directory's tree without following any symlink in it; whether it went.
@@ -263,6 +305,22 @@ pub(crate) fn newest(path: &Path) -> Option<SystemTime> {
 /// Nothing at or under `path` modified at or after `cutoff`; a directory that cannot be read is not idle.
 fn idle(path: &Path, cutoff: SystemTime) -> bool {
     walk(path, |m| m.modified().is_ok_and(|t| t < cutoff))
+}
+
+/// The blocks `path` and everything under it hold on disk, and the newest mtime there, in one walk (`make disk-audit`, 451 T245).
+pub(crate) fn measure(path: &Path) -> (u64, SystemTime) {
+    let (mut total, mut latest) = (0, UNIX_EPOCH);
+    walk(path, |m| {
+        total += m.blocks() * 512;
+        latest = latest.max(m.modified().unwrap_or(UNIX_EPOCH));
+        true
+    });
+    (total, latest)
+}
+
+/// A directory's entries that are not symlinks (`make disk-audit`'s listing, 451 T245).
+pub(crate) fn entries(dir: &Path) -> Vec<(PathBuf, String, Metadata)> {
+    children(dir)
 }
 
 /// The blocks `path` and everything under it hold on disk, symlinks counted as themselves.
