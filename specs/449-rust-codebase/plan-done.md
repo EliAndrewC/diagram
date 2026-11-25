@@ -9552,3 +9552,68 @@ Read and not filed, each a question for a page session and none a wrong outcome 
 **Performance work?** no
 
 
+<!-- plan-archive: archived 2026-11-25 -->
+### T431 (449 T427, 2026-11-24: on a dike-pond block the ring canal, drawn at the creeks' 6 to 8 ft since T427 (GUESS, 0019's drawing page `ring-canal-width-dike-pond`), was fed through the inlet sluice by a 3 ft feeder (`FEEDER_W`, GUESS) and emptied through the outfall sluice into a 5.5 ft run (`RUN_W`, 0068's drawing page), each a step down under its sluice's board, observed 2026-11-24, method: T427's crops; crops pair-inlet-sluice.png and pair-outfall-sluice.png; spec-fidelity's T427 verdict accepted it as a known defect for this task)
+
+- **Approach**: on a dike-pond block the feeder (the wild pond to the inlet sluice) and the outfall's run (the outfall sluice outward) are drawn no narrower than the ring canal where it meets each sluice; a rice polder's keep `FEEDER_W`'s 3 ft (GUESS) and `RUN_W`'s 5.5 ft (0068's drawing page). One helper, `driver::polder::sluice_channels`, hands the two (course, width) pairs to every reader: the drawing of the feeder and the run, the sluices' frames, the waterside reeds' stops and the denser bands on the banks, and the tests. Measured 2026-11-25 with a throwaway probe test (`probe431.rs`, removed) over seeds 1-80 of `polder_grid` and `mulberry_dike_fishpond` at 15 households and 90 degrees, plus Kuwabata, on HEAD and on the code as built.
+  - **The rule as built.** On a dike-pond block (`PolderStage::converted` set) the feeder's width is `FEEDER_W` or the inlet join's width, whichever is the wider, and the run's `RUN_W` or the outfall join's. The joins (`field::polder::joins`) carry the ring's trunk width at each corner, the block's creek width since T427 (every rung under the least creek, 6.01 ft, measured 2026-11-25 (the probe)), so both crossings take the creek width: 6.01 to 7.98 ft over the 80 dike-pond blocks, Kuwabata 6.2 ft, measured 2026-11-25 (the probe). A rice polder's are unchanged.
+  - **Decision (a): the width, the page-silent route, labeled UNRESEARCHED.**
+    - **What the record says.** No page sizes a polder's feeder or its run beyond the dike. `research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html` (`feeder-course`) gives the feeder's course, not its width, and its `ring-canal-width-dike-pond` ties the ring to the creeks, "a channel is never drawn wider than the one it joins". `research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html` has "A delivery ditch is never drawn wider than the canal feeding it" and a drain "from a 1.2 ft head to a 5.5 ft outfall" for a fan's collector. 0060's drawing page gives the drain's class and that it widens to its outfall, with no figure.
+    - **The ruling.** Where the record is silent the easier route is taken (the GM 2026-10-25, root CLAUDE.md): the crossing takes the width of the ring it meets, so no channel steps down or up under a sluice. It is drawn UNRESEARCHED, with no search and no page session (the GM 2026-11-25 in 451 request.md, its section on a research backlog: a best guess drawn and noted as unresearched, the search left to the backlog). The root CLAUDE.md carries it as a new rendering decision that may skip the search, drawn as a best guess labeled `UNRESEARCHED` onto `make research-backlog`. The rule's carve-out does not apply. No other code builds on the width as a premise: the frames, the reeds and the bank bands read whatever width is drawn, and the seat's way out reads the courses only. And the guess is not likely visibly wrong: it is the shape 0068's own never-wider rule points to, and the measurements below show nothing it touches moving onto anything. The T431 line's "the page's item first" is answered by this label; the page item is `make research-backlog`'s to reach.
+  - **Decision (b): `RUN_W`'s claim cites 0068, not 0060.** The 5.5 ft (`RUN_W`) is on research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html ("a 1.2 ft head to a 5.5 ft outfall"), and 0060's drawing page gives no figure. `driver.rs` `RUN_W#the drain's run drawn` is restated to cite 0068 for the figure and 0060 for the class, and to send a dike-pond block's run to `sluice_channels`. This is a claim restated, not code (constitution XIV).
+  - **What the wider crossings touch**, measured 2026-11-25 (the probe, HEAD then as built; dike-pond blocks unless named):
+
+    | | HEAD | as built |
+    |---|---|---|
+    (measured 2026-11-25 (the probe)) | refusals (rice / dike-pond) | 0 / 0 | 0 / 0 |
+    (measured 2026-11-25 (the probe)) | ponds, least pond | 1,983, 373.4 sq ft | 1,983, 373.4 sq ft |
+    (measured 2026-11-25 (the probe)) | feeder and run widths | 3 and 5.5 ft | 6.01 to 7.98 ft, each equal to its join |
+    (measured 2026-11-25 (the probe)) | step under the board (crossing less ring) | feeder -3.01 to -4.98 ft, run -0.51 to -2.48 ft | 0 and 0 |
+    (measured 2026-11-25 (the probe)) | dike trees (sum over 80) | 120,740 | 120,740 |
+    (measured 2026-11-25 (the probe)) | least crown to a sluice's frame | 0.06 ft (seed 76) | 0.06 ft (seed 76) |
+    (measured 2026-11-25 (the probe)) | least crown to a crossing's water | 7.07 ft | 6.17 ft (seed 74) |
+    (measured 2026-11-25 (the probe)) | a crossing over a parcel (least clearance) | 14.22 ft | 12.98 ft (seed 35) |
+    (measured 2026-11-25 (the probe)) | a crossing over the seat's ground (least clearance) | 845.9 ft (rice), 952.1 ft (dike-pond) | 845.9 ft (rice), 949.9 ft (dike-pond) |
+    (measured 2026-11-25 (the probe)) | waterside reeds over a crossing's water | 0 ft, the strip's edge on the bank | 0 ft, the strip's edge on the bank |
+
+  - **The frame.** `sluice_frame` spans `SLUICE_SPAN_FT` 20 ft or the channel's width plus two posts, whichever is the wider (0179's drawing page, GUESS). At 8 ft (`CREEK_FT`'s top, GUESS) the span stays 20 ft, measured 2026-11-25 (`no_dike_crown_stands_on_a_sluices_frame`'s pin), so the frame and `FRAME_REACH_FT` do not move. `no_dike_crown_stands_on_a_sluices_frame` now pins the reach at `CREEK_FT`'s two ends too.
+  - **The dike's rows, the mottle, the river.** The rows' gap (`GAP_HALF_FT`, 15 ft from the middle line, GUESS on 0027's drawing page) leaves the broadest willow (`CROWN_FT`, 5.5 ft) 9.5 ft from the middle, outside an 8 ft crossing's 4 ft half-width, measured 2026-11-25 (the probe: crowns at least 6.17 ft clear of the water). No tree is lost (the sum above), and `GAP_HALF_FT`'s claim is restated with the measured clearance. The mottle is painted under the channels, and its patches are unmoved. The feeder still starts at the wild pond's middle, in its water.
+  - **The seat's way out.** It reads the channels' courses, not their widths (`seat::exit::Exit` over line segments), so it cannot move. The settlement's ground stays at least 845 ft from either crossing, measured 2026-11-25 (the probe).
+  - **Kuwabata**, regenerated in the foreground: 10 SVG lines differ. They are the feeder (3 to 6.2 ft), the run (5.5 to 6.2 ft), and the reed strips and denser bank bands, now stopped at the wider banks (each feeder bank 1.6 ft farther out, the run's 0.35 ft), measured 2026-11-25 (`make hamlet`, the two SVGs diffed). The sluices, the dike, its trees and every pond are unmoved. Crops (before | after) are in the scratchpad: `crops431/pair-inlet.png` and `crops431/pair-outfall.png`.
+  - **Tests moved.** `the_bank_bands_hold_their_points` and `the_waterside_strips_hold_their_points` re-pin Kuwabata's row (the reeds stop at the wider banks); every other roll they pin is unchanged. The reeds test reads the run's half-width from `sluice_channels`.
+  - **`make work-budget`**: every stage's counts identical to HEAD's, measured 2026-11-25 (HEAD's run in a detached worktree): field.polder 3,035 / 4,718 at 10/20 households against 4,651 / 6,584 budgeted, seat.polder 2,075 / 2,731, waterward.polder 4,439 / 5,701 at its accepted 4,439 / 5,701, the comb's seat 19,278 / 26,757 / 38,859 / 61,204. No stage moves, so no step is owed.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the crossings at the ring's width on a dike-pond block | red first, observed 2026-11-25, method: `make rust-test` on HEAD's code: `driver::polder::crossing_tests::a_dike_ponds_feeder_and_outfall_run_are_no_narrower_than_its_ring_canal` failed on HEAD (Kuwabata's feeder 3 ft and run 5.5 ft against a 6.2 ft ring, seed 35's against 7.98 ft), green after; its rice polder half green on both | n/a: no repair step; the 160 rolls above | Kuwabata's driver SVG (rust-only, 444 FR-023) | n/a |
+
+<!-- plan-archive: archived 2026-11-25 -->
+### T431 Approach (checklist part A)
+
+1. **The goal, in the world.** On a dike-pond block, water comes in and goes out through each sluice in a channel as wide as the ring canal it meets, with no narrower ditch under the board. A rice polder is drawn as before.
+2. **The constraints.**
+   - 0019's drawing page (`ring-canal-width-dike-pond`, `feeder-course`): the ring no narrower than the creeks.
+   - 0068's drawing page: a channel is never drawn wider than the one feeding it.
+   - 0179's drawing page: the frame drawn at its channel's width.
+   - 0074's drawing page: the reeds to the water's edge, out of the water.
+   - T427's frame-clear rule; zero refusals.
+3. **Where each comes from.**
+   - G: the GM 2026-11-25 (451 request.md, its section on a research backlog: a page-silent rendering decision drawn UNRESEARCHED); the GM 2026-10-25 (the easier route where the record is silent).
+   - R: the pages above.
+   - O: the probe and Kuwabata, 2026-11-25.
+4. **Do they describe the world here?** Yes. Every dike-pond block's crossing stepped down, by 0.51 to 4.98 ft over the 80 rolled, measured 2026-11-25 (the probe on HEAD).
+5. **The order.** After T427, whose ring width it meets; before T158.
+6. **The exits.** Green: the red-first test green, the sweep with 0 refusals and nothing moved onto a parcel, the frame or the seat, `make closing-checks T=T431` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None. The width comes from the join the field already lays.
+8. **The budget.** One landing.
+9. **Done, measured.** The table above, measured 2026-11-25 (the probe): step 0 at both sluices on all 80 dike-pond blocks; 0 refusals; ponds and trees unchanged; least crown to a frame unchanged at 0.06 ft, measured 2026-11-25 (the probe).
+10. **Before moving a constant.** n/a. `FEEDER_W` and `RUN_W` are unchanged and stay the rice polder's; their claims are restated.
+11. **Before fitting things into room.** n/a. The wider crossings run outside the dike and through its 30 ft gap (`GAP_HALF_FT`, GUESS), with at least 12.98 ft clear of any parcel, measured 2026-11-25 (the probe).
+12. **Before any fix.** A reader of Kuwabata sees the feeder and the outfall's run as wide as the ring canal at each sluice, where a thin ditch had met a wider canal under the board, against 0068's never-wider rule.
+
+**Found and left?** none
+
+**Performance work?** no
+
+
+<!-- plan-archive: T432 to T432 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
