@@ -2772,31 +2772,51 @@ engine speed, so no checklist.
 
 
 <!-- plan-archive: T29 to T06 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
-### T242 (<why: the finding or measurement that files it>)
+### T242 (451 T238's landing, 2026-11-25: its tick left staged, the push refusing the dirty clone, the revert refused; T238 reached main only with T240's landing)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `rust/gate/crates/land/src/land/writers.rs`, new, called from `land.rs` and `cheap.rs`.
+  - **What happened, measured 2026-11-25** (the clone's 451 event log, its reflog, the T240 builder's transcript). T238's `make land` ran in the clone `/diagram/.clones/diagram-backlog`, clean at its start (12:28:20), so it did not land alone (451 T88). T240's builder was dispatched into the same clone at 12:28:29. Its first Edit came at 12:32:44, after the landing ended. The push step failed with exit 1 at 12:29:21. The reflog holds no commit between the escape records (12:29:13) and the tick commit made by hand at 12:29:39. So the landing's `git commit` of the tick made nothing. `tick_and_push` never read that commit's exit (`self.run(..)?` stops only on a spawn failure). It then read HEAD, the escape-record commit, as the tick's. `sync-with-main.sh done` refused the dirty clone (its `die`, exit 1). The revert, aimed at that wrong commit, was refused by the staged tick. On a scratch repository a staged change refuses `git revert` with the incident's own words ("your local changes would be overwritten by revert"), observed 2026-11-25. Why the commit failed is NOT measured. A held `index.lock` (exit 128, what was added left staged, observed 2026-11-25 on the scratch repository) is a hypothesis: the builder's calls in that second ran grep and sed.
+  - **The rule as built.**
+    - (1) **In the first pass** (`cheap.rs`), the refusal "uncommitted changes - commit them first" becomes `writer_refusal`. It lists the clone's `git status --porcelain` lines that are not the landing's own, the first six and a count of the rest. The landing's own escape records are committed before it asks (feature 408). Where an open builder handoff names the clone, the refusal names that handoff too. The handoff is `<git common dir>/l7r-handoffs/T<n>-<agent>.md`, and it counts when:
+      - its text names the clone's root as a whole path (`<root>-t235` does not count);
+      - its task is not one being landed;
+      - its task is open (`- [ ] T<n>`) in some `specs/*/tasks.md`. A ticked task is a closed handoff, as the context-cap guard reads a resume;
+      - it was written in the last 24 hours (`HANDOFF_FRESH_S`, a CONVENTION knob). Task numbers repeat across features. Measured 2026-11-25 (a script of this rule over the clone's handoff directory): of 538 files, 26 named the clone with a task open in some other feature's tasks.md, all 2 to 5 days old, and with the bound none is named.
+
+      A handoff is named only beside changes, never a refusal on its own.
+    - (2) **The same check runs again at the push step's start**, before the ticks. A refusal there means nothing is ticked and nothing pushed.
+    - (3) **The tick's own `git add` and `git commit` are read** (`commit_tick`). A commit refused for `index.lock` is tried three times, 500 ms apart (`COMMIT_TRIES`, `COMMIT_POLL_MS`, a CONVENTION knob). Where the add or the commit fails, the ticks are put back (`put_back`): the tick's paths are unstaged and the feature's directory is checked out from HEAD. The archives a tick created are removed, the fixes' rows are pending again, and the tick's own escape record is committed. Nothing is left staged. The refused-tick branch shares `put_back`.
+    - (4) **The revert after a failed push now always names the tick's own commit** (its id is read only from a successful commit). Where another writer's edit blocks that revert, the tick commit stands, committed and never staged, with the message that already says so.
+  - **Where it sits beside landing alone (451 T88, T101).** A clone dirty at `make land`'s start still lands alone, unchanged: `alone_owed` is asked before the first pass, and `land-alone.sh` step 3 already sorts the clone's files into the task's own, another task's and unnamed. This refusal reads the tree the landing ticks in. That is the clone on a direct landing, which was clean when it started, so dirt there arrived since. In the landing worktree's own run (`L7R_LAND_ALONE`), nobody else writes. Refusing a dirty clone outright before `alone_owed` would reverse T88, so it is not done.
+  - **A writer arriving during the gate.** The claims wait, before the push step, already waits up to 20 min (`CLAIMS_WAIT_S`, 405 T50's knob) for a clean tree and then refuses with nothing ticked (a pin, `a_writer_arriving_during_the_gate_ticks_nothing`). It waits rather than refuses because the session commits the claims round's records beside the gate. Check (2) covers the seconds between that wait and the ticks. It also keeps (3)'s put-back from taking another writer's edit of the feature's files: they held none just before.
+  - **A builder's worktree.** Today's parallel trial builds in linked worktrees and carries commits into the clone by cherry-pick. A worktree's uncommitted work bears on none of this. Its files and index are its own, never in the clone's `git status`, and its handoff names the worktree, not the clone. A landing from the clone with a dirty worktree and that handoff lands (`a_builders_worktree_bears_on_nothing`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| (1) the first pass names another writer's changes and an open handoff | `the_first_pass_names_the_changes_and_an_open_handoff_naming_the_clone`; the tests that held the old words, restated | n/a: tooling | none | n/a |
+| (2) the same check before the ticks | `a_writer_arriving_after_the_claims_wait_is_refused_before_the_ticks`, red on HEAD's behavior | n/a: tooling | none | n/a |
+| (3) the tick committed or put back | `a_tick_whose_commit_fails_is_put_back_with_nothing_staged`, `a_commit_a_lock_held_once_is_tried_again_and_lands`, `a_tick_whose_add_fails_is_put_back`, each red on HEAD's behavior | n/a: tooling | none | n/a |
+| (4) a blocked revert leaves the tick committed | `a_failed_push_whose_revert_another_writer_blocks_leaves_the_tick_committed` (a pin) | n/a: tooling | none | n/a |
 
 ### T242 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A landing never leaves a tick staged. When another writer's changes are in the clone, it says so before anything long runs and again before the ticks, naming the changes and that writer's handoff. When its push fails, the tick is committed or put back.
+2. **The constraints.** 451 T88 and T101: a dirty clone at the start lands alone, so the refusal must not reverse that. Feature 408: the landing's own escape records are its own. CLAUDE.md: never rewrite history, so the put-back is a checkout and the failed-push undo a revert, never a reset of a commit. The task's line: a fixture remote, never the real one, and no live fetches.
+3. **Where each comes from.** G: the task's line in tasks.md (filed from T238's landing). O: the handoff directory's count, 2026-11-25. O: the 451 event log, the clone's reflog and the T240 builder's transcript, 2026-11-25. O: the scratch repository probes of `index.lock` and `git revert`, 2026-11-25.
+4. **Do they describe the world here?** Yes, measured 2026-11-25 (above). The incident's commit failed while the clone held no other writer's file. So the fix that answers it is (3), and (1) and (2) answer the task's named refusal, measured 2026-11-25 (the event log's Edit lines and the reflog).
+5. **The order.** No dependency. T235 is built beside this in its own worktree and touches no file of the `land` crate.
+6. **The exits.** Green: `make closing-checks T=T242`. Red: what failed is recorded and the task set down, and a claim that it cannot be done is ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-25 (`make rust-test CRATE=rust/gate/crates/land`, logs in the session scratchpad `t242-red.log` and `t242-green.log`). HEAD's behavior was restored in place: the pre-tick check disabled and the add and commit unread. With it, four of the new tests failed: the pre-tick refusal, the failed commit, the lock held once and the failed add. Each is a landing that reported landed with its tick staged, or ticked past a foreign change. With the fix, 107 passed and 0 failed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: the landing left a tick staged, and its revert named the wrong commit. A revert that had succeeded would have undone the landing's escape records and reported "its ticks reverted". No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The failed push's revert named HEAD whatever the tick's commit did. Effect: a tick commit that failed sent the revert at the commit before it. Fixed here by (3).
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: a `git status` and a directory read in the first pass and at the push.
 
 
 <!-- plan-archive: T243 to T243 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->

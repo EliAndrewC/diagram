@@ -14,7 +14,8 @@
 //! carries engine code and the cohort gate would refuse - BESIDE the gate when both are owed (405 T48, D21); what those runs regenerate
 //! under `pool/` is committed; then the claims gate, waited on ([`claims_wait`]) - its round runs beside the gate (405 T50); then each
 //! tick, committed, and ONE `scripts/sync-with-main.sh done` with `L7R_LAND_TICKS` set carries work and ticks (405 T51). A failed landing
-//! ticks nothing (a failed push reverts its ticks).
+//! ticks nothing (a failed push reverts its ticks), and leaves no tick staged: another writer's changes in the clone are refused in the
+//! first pass and again before the ticks, and a tick whose commit fails is put back ([`writers`], 451 T242).
 //!
 //! What the port asks in process, by the ruling: the review ledger's owed rows (`reviews ledger-owed`, T117), the holding box
 //! (`speckit-todo --holding`, T118) and the claims (`claims carry|known|rekey|report`, the scope split and the claims in flight, T82),
@@ -34,6 +35,7 @@ mod memory;
 mod phase;
 mod ready;
 mod stop;
+mod writers;
 
 use l7r_shared::env::Rooted;
 use std::cell::RefCell;
@@ -383,6 +385,15 @@ impl Land {
     /// ONE PUSH, THE TICKS IN IT (405 T51, D24): T13's landing pushed its work, then its ticks - two runs of every push check.
     fn tick_and_push(&self, d: &Path, tasks: &[String], note: &str) -> Result<i32, String> {
         let rel = rel_of(&self.root, d);
+        // A WRITER THAT ARRIVED DURING THE GATE (451 T242): met here, before anything is ticked - the push would refuse its dirty
+        // clone, and a tick's put-back would take its edits of the feature's files with the tick's
+        let writer = self.writer_refusal(tasks)?;
+        if !writer.is_empty() {
+            self.warn(&format!(
+                "land: refused before the ticks - nothing ticked, nothing pushed: {writer}"
+            ));
+            return Ok(2);
+        }
         let how = if tasks.len() > 1 {
             format!("landed in batch {}", tasks.join("+"))
         } else {
@@ -412,22 +423,10 @@ impl Land {
             }
         }
         if !failed.is_empty() {
-            // the ticks already written put back: a landing that does not push ticks nothing
-            self.run(&["git", "checkout", "--", &rel], &[])?;
-            // ...and an archive a tick created, which the checkout leaves: an earlier task of the batch archived in a new
-            // tasks-done.md (or plan-done.md) would read ticked beside its box put back open (feature 449 T142)
-            self.run(
-                &[
-                    "git",
-                    "clean",
-                    "-q",
-                    "-f",
-                    "--",
-                    &format!("{rel}/tasks-done.md"),
-                    &format!("{rel}/plan-done.md"),
-                ],
-                &[],
-            )?;
+            // the ticks already written put back: a landing that does not push ticks nothing - and an archive a tick created, which a
+            // checkout leaves: an earlier task of the batch archived in a new tasks-done.md (or plan-done.md) would read ticked beside
+            // its box put back open (feature 449 T142)
+            self.put_back(d, &[])?;
             // ...and the fixes' rows, a log in another feature's directory among them: still pending, for the landing that pushes
             settled.undo()?;
             self.warn(&format!(
@@ -444,10 +443,20 @@ impl Land {
             .collect();
         let mut add = vec!["git", "add", "--", &rel, "dev/bypass-log"];
         add.extend(homes.iter().map(String::as_str));
-        self.run(&add, &[])?;
         let message = format!("{}: {} ticked (make land)", name_of(d), tasks.join(" "));
-        self.run(&["git", "commit", "-q", "-m", &message], &[])?;
-        let tick_sha = strip(&self.run(&["git", "rev-parse", "HEAD"], &[])?.1).to_owned();
+        // THE TICK COMMITTED, OR PUT BACK - NEVER LEFT STAGED (451 T242: T238's tick commit made nothing, unread, and the revert was
+        // aimed at the commit before it)
+        let tick_sha = match self.commit_tick(&add, &message)? {
+            Ok(sha) => sha,
+            Err(why) => {
+                self.put_back(d, &add[3..])?;
+                settled.undo()?;
+                // the tick's own escape record, as the first pass commits one (feature 408)
+                self.commit_escape_records()?;
+                self.warn(&format!("land: the tick's commit failed ({why}) - its ticks put back, nothing staged, nothing landed; land again"));
+                return Ok(2);
+            }
+        };
         let rc = self.loud(
             &[&self.script("sync-with-main.sh"), "done"],
             &[("L7R_LAND_TICKS", &tasks.join(" "))],

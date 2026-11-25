@@ -133,7 +133,7 @@ impl Land {
     }
 
     /// `sorted((root / "specs").glob("*/<file>"))`, relative to the root.
-    fn each_spec(&self, file: &str) -> Vec<String> {
+    pub(super) fn each_spec(&self, file: &str) -> Vec<String> {
         let mut out: Vec<String> = std::fs::read_dir(self.root.join("specs"))
             .into_iter()
             .flatten()
@@ -224,8 +224,10 @@ impl Land {
         if !stale.is_empty() {
             stops.push(stale);
         }
-        if !self.dirty(&[])?.is_empty() {
-            stops.push("uncommitted changes - commit them first".to_owned());
+        // ANOTHER WRITER'S CHANGES, NAMED (451 T242), with an open builder handoff naming the clone; asked again before the ticks
+        let writer = self.writer_refusal(tasks)?;
+        if !writer.is_empty() {
+            stops.push(writer);
         }
         let ledger = self.root.join("dev/review-ledger.md");
         // the landing owes the rows of its own tasks' passes and every pass no other landing writes; another open task's plan review

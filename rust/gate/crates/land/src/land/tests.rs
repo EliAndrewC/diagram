@@ -452,7 +452,7 @@ fn every_cheap_refusal_is_said_together_and_nothing_runs_long() {
     assert_eq!(land(&fx), Ok(2));
     let err = fx.said().1;
     assert!(err.starts_with("land: refused before anything ran"));
-    assert!(err.contains("uncommitted changes - commit them first"));
+    assert!(err.contains("uncommitted changes in the clone, not this landing's: ?? untracked.txt"));
     assert!(err.contains("held by T9 nine"));
     assert!(err.contains("review passes with no ledger row"));
     let asked = fx.answers.asked.borrow().join("\n");

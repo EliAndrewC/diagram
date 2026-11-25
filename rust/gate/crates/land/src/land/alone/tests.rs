@@ -82,7 +82,7 @@ fn the_landing_worktree_s_own_run_is_never_sent_alone_again() {
     assert!(fx
         .said()
         .1
-        .contains("uncommitted changes - commit them first"));
+        .contains("uncommitted changes in the clone, not this landing's: ?? untracked.txt"));
     assert!(!fx.log().contains("land-alone.sh"));
     assert_eq!(ends(&fx.root).len(), 1);
 }
