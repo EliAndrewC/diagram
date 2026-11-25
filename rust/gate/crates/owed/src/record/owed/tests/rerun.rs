@@ -17,10 +17,26 @@ fn a_second_answer_on_one_fingerprint_is_a_re_run_and_a_new_fingerprint_clears_i
     answer_unit(&store, slug, FP, clean, None, "round-3").unwrap();
     assert_eq!(rerun_at(&store, slug), None, "a re-record is no re-run");
     // another bundle on the same text: a re-run, the earlier result beside it
-    answer_unit(&store, slug, FP, "ACCURACY 0; REFERENCES 0; GAPS 1", None, "round-4").unwrap();
+    answer_unit(
+        &store,
+        slug,
+        FP,
+        "ACCURACY 0; REFERENCES 0; GAPS 1",
+        None,
+        "round-4",
+    )
+    .unwrap();
     assert_eq!(rerun_at(&store, slug).as_deref(), Some(clean));
     // the re-run recorded again keeps its mark
-    answer_unit(&store, slug, FP, "ACCURACY 0; REFERENCES 0; GAPS 1", None, "round-4").unwrap();
+    answer_unit(
+        &store,
+        slug,
+        FP,
+        "ACCURACY 0; REFERENCES 0; GAPS 1",
+        None,
+        "round-4",
+    )
+    .unwrap();
     assert_eq!(rerun_at(&store, slug).as_deref(), Some(clean));
     let said = rerun_said(&store, &[slug.to_owned(), "modal-form:sheet/x".to_owned()]);
     assert_eq!(said.lines().count(), 1, "{said}");

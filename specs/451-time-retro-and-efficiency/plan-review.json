@@ -1634,16 +1634,16 @@
    "declared": "spec-fidelity"
   },
   "### T232 (the 2026-11-24 landing: modal-research passed sheet/guest-quarters in the morning and found the alcove gap in the afternoon on one fingerprint, the fix re-owing a depiction check; claims-triage sent 5 then 2 of 44 claims on)": {
-   "sha256": "555baf3361da03f2ba08c7373a8e9e4cfafcc0ba1c279cedbe39f26aaa4a9fff",
+   "sha256": "894c5d6e6269151eeb29e9d6c9003d632053a41e6e4a66e2eaf923a2e3166a1e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T232 Approach (checklist part A)": {
-   "sha256": "3a9dbe1c8628ba28dc324f8e9fff65434affc2d4595f0840b6a4618f6a9d6ef0",
+   "sha256": "52967542fbc8b5979c711e5439f044686d12d11e5fe5061d691a2026ed3d708b",
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -21595,6 +21595,25 @@
      "why": "This is a defect (a check round passing work with a factual gap), so leaving it narrows. Legitimate as a scheduled deferral meeting FR-009 (reason, filed id, order before T246), not an abandonment; the factual finding itself still lands under D3, and the arbiter-forced whole-text re-run caught the gap. Note: D11 and D12 are two unlike defects both 'Filed as T249'; T249's line must carry both, or one needs its own id."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T232 (the 2026-11-24 landing: modal-research passed sheet/guest-quarters in the morning and found the alcove gap in the afternoon on one fingerprint, the fix re-owing a depiction check; claims-triage sent 5 then 2 of 44 claims on)",
+    "### T232 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T232@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T232's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T232"
+   ]
   }
  ],
  "tasks": {
@@ -34426,86 +34445,99 @@
    "verdict": "CLEAR"
   },
   "T232": {
-   "section_sha256": "ae8aa2cb7699eca0089d256984c5ada01d9cef02c4ac7c545d5ea45a9089ad25",
+   "section_sha256": "d6babb9db243ca95bc69947370ac582a7925c5a4719c4c304af9a2f94dd28b83",
    "reviewed": "2026-11-25",
-   "declared": "spec-fidelity",
+   "declared": "round-arbiter",
    "decisions": [
     {
-     "id": "D1 route (1) already holds",
-     "summary": "No change to make record-owed: an answered unit on an unchanged fingerprint is not re-owed; the incident's re-run was forced by the arbiter's ruling ask:mixed-build-53-record-answers, not owed.",
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T232@3",
      "class": "within",
-     "why": "Leaves existing correct behavior as it is; the ruling quoted in rulings.md itself ordered the 4 guest-quarters answers re-run."
-    },
-    {
-     "id": "D2 route (3) rejected alone",
-     "summary": "No new contract line as the whole fix, because the variance came from a contract line an agent did not follow.",
-     "class": "within",
-     "why": "Choosing a tool-enforced mechanism over an instruction matches the GM's 2026-11-19 'make sure all of the enforcement is real enforcement and not just instructions'."
-    },
-    {
-     "id": "D3 route (2) narrowed to wording",
-     "summary": "A re-run's new WORDING finding on text an earlier answer stood on is held and listed, not applied; a re-run's FACTUAL finding applies and cascades as a first round's does (checks::reply::factual).",
-     "class": "within",
-     "why": "Carries the GM's 2026-11-23 rules verbatim in request.md: 'style edits are just a different category of thing than factual inaccuracies ... when we are cascading, we are only interested in factual inaccuracies', approved as 'only factual findings cascade' and 'settled choices stay settled'. Letting factual findings through keeps the alcove-gap class of correction landing. A held wording finding is a difference, not a defect (XIV v2.36), and it is kept, not dropped."
-    },
-    {
-     "id": "D4 the re-run mark",
-     "summary": "make record-checked marks an answer at a fingerprint already answered (rerun: fingerprint and earlier result), says so one line per unit, records the answer and re-stamps the build; the mark clears with the next answer or settle at another fingerprint.",
-     "class": "within",
-     "why": "The mechanism that makes D3 enforceable; recording the forced answer is what the arbiter ruling asked for."
-    },
-    {
-     "id": "D5 every-check rule for a mixed reply",
-     "summary": "apply-edits holds a wording EDIT only when the unit carries rerun at its current fingerprint for EVERY check of the reply; a reply mixing a re-run and a first round holds nothing.",
-     "class": "within",
-     "why": "Errs to the prior behavior (apply) rather than wrongly holding a first round's edits. Observed 2026-11-25 (WORDING_CHECKS / WORDING_CATEGORIES against reply_checks) that every pop-up reply with wording EDITs names one check today, so no case reaches the gap; no defect is left. Should a multi-check wording reply appear, re-run wording edits in it would apply - worth revisiting then."
-    },
-    {
-     "id": "D6 held EDITs kept in noted.jsonl",
-     "summary": "Each held EDIT becomes a row of the feature's noted.jsonl via T229's keep_noted_rows, counted by make found-list, reaching the next session.",
-     "class": "within",
-     "why": "451 T219/T229: a note outside the change is listed and kept, never filed or applied; nothing the check found is lost."
-    },
-    {
-     "id": "D7 RERUN_OK escape and dry run",
-     "summary": "RERUN_OK=\"<reason, two words or more>\" applies held edits, logged to dev/bypass-log/; a dry run holds nothing.",
-     "class": "within",
-     "why": "The project's guard rule (FR-012's form: a recorded escape of two words or more)."
-    },
-    {
-     "id": "D8 git-history proxy not used",
-     "summary": "The 30-pair/25-difference proxy is rejected as measuring fix rounds; the decision rests on the two true same-fingerprint pairs and a six-unit re-run sample, stated as unable to bound a rate.",
-     "class": "within",
-     "why": "Measurement method; the limit of six units is stated rather than hidden."
-    },
-    {
-     "id": "D9 claims-triage left unmeasured",
-     "summary": "The 5-then-2 triage difference is not shown to be variance on one bundle (no triage reply kept; the claims crate held T223's uncommitted fix between the dispatches); the hold does not cover triage.",
-     "class": "within",
-     "why": "No wrong outcome is shown; triage sends claims on rather than applying EDITs, so the hold's purpose does not reach it."
-    },
-    {
-     "id": "D10 round-5 snapshot restored (found and fixed)",
-     "summary": "The measurement's historical bundle overwrote sheet/guest-quarters' round-5 snapshot, producing a false change section; set back to the text that round judged.",
-     "class": "within",
-     "why": "A defect found and fixed in the task (fix defects where you find them)."
-    },
-    {
-     "id": "D11 research-page record re-runs not held (found and left, T249)",
-     "summary": "The hold covers pop-up files only; a record check re-run on a research page answered before at its text still applies its EDITs and re-owes. Filed as T249, lands before T246.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "The task's goal ('a check run again on text nothing changed leaves that text's wording as it was') is generic and the build reaches pop-ups only, so it narrows. Legitimate because it is scheduled, not dropped: FR-009's form is met (why: a page's units are its notes and questions, a different mapping; filed id; order 'lands before T246'), no record-check re-run has been measured to occur, and the observed incident's class (pop-up re-runs) is fully covered. The GM's 'settled choices stay settled' is still owed in T249."
-    },
-    {
-     "id": "D12 no line saying what a round covers (found and left, T249)",
-     "summary": "Where a subject's last round predates the kept snapshots (451 T189), a later round gets no change section and no line saying what it covers - the cause of the 2026-11-24 morning round missing the alcove gap. Not fixed here (bundle::earlier, outside this task's hold); filed as T249, lands before T246.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "This is a defect (a check round passing work with a factual gap), so leaving it narrows. Legitimate as a scheduled deferral meeting FR-009 (reason, filed id, order before T246), not an abandonment; the factual finding itself still lands under D3, and the arbiter-forced whole-text re-run caught the gap. Note: D11 and D12 are two unlike defects both 'Filed as T249'; T249's line must carry both, or one needs its own id."
+     "summary": "the round arbiter accepted T232's section as it stands"
     }
    ],
-   "verdict": "CLEAR"
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "ae8aa2cb7699eca0089d256984c5ada01d9cef02c4ac7c545d5ea45a9089ad25",
+    "reviewed": "2026-11-25",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "D1 route (1) already holds",
+      "summary": "No change to make record-owed: an answered unit on an unchanged fingerprint is not re-owed; the incident's re-run was forced by the arbiter's ruling ask:mixed-build-53-record-answers, not owed.",
+      "class": "within",
+      "why": "Leaves existing correct behavior as it is; the ruling quoted in rulings.md itself ordered the 4 guest-quarters answers re-run."
+     },
+     {
+      "id": "D2 route (3) rejected alone",
+      "summary": "No new contract line as the whole fix, because the variance came from a contract line an agent did not follow.",
+      "class": "within",
+      "why": "Choosing a tool-enforced mechanism over an instruction matches the GM's 2026-11-19 'make sure all of the enforcement is real enforcement and not just instructions'."
+     },
+     {
+      "id": "D3 route (2) narrowed to wording",
+      "summary": "A re-run's new WORDING finding on text an earlier answer stood on is held and listed, not applied; a re-run's FACTUAL finding applies and cascades as a first round's does (checks::reply::factual).",
+      "class": "within",
+      "why": "Carries the GM's 2026-11-23 rules verbatim in request.md: 'style edits are just a different category of thing than factual inaccuracies ... when we are cascading, we are only interested in factual inaccuracies', approved as 'only factual findings cascade' and 'settled choices stay settled'. Letting factual findings through keeps the alcove-gap class of correction landing. A held wording finding is a difference, not a defect (XIV v2.36), and it is kept, not dropped."
+     },
+     {
+      "id": "D4 the re-run mark",
+      "summary": "make record-checked marks an answer at a fingerprint already answered (rerun: fingerprint and earlier result), says so one line per unit, records the answer and re-stamps the build; the mark clears with the next answer or settle at another fingerprint.",
+      "class": "within",
+      "why": "The mechanism that makes D3 enforceable; recording the forced answer is what the arbiter ruling asked for."
+     },
+     {
+      "id": "D5 every-check rule for a mixed reply",
+      "summary": "apply-edits holds a wording EDIT only when the unit carries rerun at its current fingerprint for EVERY check of the reply; a reply mixing a re-run and a first round holds nothing.",
+      "class": "within",
+      "why": "Errs to the prior behavior (apply) rather than wrongly holding a first round's edits. Observed 2026-11-25 (WORDING_CHECKS / WORDING_CATEGORIES against reply_checks) that every pop-up reply with wording EDITs names one check today, so no case reaches the gap; no defect is left. Should a multi-check wording reply appear, re-run wording edits in it would apply - worth revisiting then."
+     },
+     {
+      "id": "D6 held EDITs kept in noted.jsonl",
+      "summary": "Each held EDIT becomes a row of the feature's noted.jsonl via T229's keep_noted_rows, counted by make found-list, reaching the next session.",
+      "class": "within",
+      "why": "451 T219/T229: a note outside the change is listed and kept, never filed or applied; nothing the check found is lost."
+     },
+     {
+      "id": "D7 RERUN_OK escape and dry run",
+      "summary": "RERUN_OK=\"<reason, two words or more>\" applies held edits, logged to dev/bypass-log/; a dry run holds nothing.",
+      "class": "within",
+      "why": "The project's guard rule (FR-012's form: a recorded escape of two words or more)."
+     },
+     {
+      "id": "D8 git-history proxy not used",
+      "summary": "The 30-pair/25-difference proxy is rejected as measuring fix rounds; the decision rests on the two true same-fingerprint pairs and a six-unit re-run sample, stated as unable to bound a rate.",
+      "class": "within",
+      "why": "Measurement method; the limit of six units is stated rather than hidden."
+     },
+     {
+      "id": "D9 claims-triage left unmeasured",
+      "summary": "The 5-then-2 triage difference is not shown to be variance on one bundle (no triage reply kept; the claims crate held T223's uncommitted fix between the dispatches); the hold does not cover triage.",
+      "class": "within",
+      "why": "No wrong outcome is shown; triage sends claims on rather than applying EDITs, so the hold's purpose does not reach it."
+     },
+     {
+      "id": "D10 round-5 snapshot restored (found and fixed)",
+      "summary": "The measurement's historical bundle overwrote sheet/guest-quarters' round-5 snapshot, producing a false change section; set back to the text that round judged.",
+      "class": "within",
+      "why": "A defect found and fixed in the task (fix defects where you find them)."
+     },
+     {
+      "id": "D11 research-page record re-runs not held (found and left, T249)",
+      "summary": "The hold covers pop-up files only; a record check re-run on a research page answered before at its text still applies its EDITs and re-owes. Filed as T249, lands before T246.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "The task's goal ('a check run again on text nothing changed leaves that text's wording as it was') is generic and the build reaches pop-ups only, so it narrows. Legitimate because it is scheduled, not dropped: FR-009's form is met (why: a page's units are its notes and questions, a different mapping; filed id; order 'lands before T246'), no record-check re-run has been measured to occur, and the observed incident's class (pop-up re-runs) is fully covered. The GM's 'settled choices stay settled' is still owed in T249."
+     },
+     {
+      "id": "D12 no line saying what a round covers (found and left, T249)",
+      "summary": "Where a subject's last round predates the kept snapshots (451 T189), a later round gets no change section and no line saying what it covers - the cause of the 2026-11-24 morning round missing the alcove gap. Not fixed here (bundle::earlier, outside this task's hold); filed as T249, lands before T246.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "This is a defect (a check round passing work with a factual gap), so leaving it narrows. Legitimate as a scheduled deferral meeting FR-009 (reason, filed id, order before T246), not an abandonment; the factual finding itself still lands under D3, and the arbiter-forced whole-text re-run caught the gap. Note: D11 and D12 are two unlike defects both 'Filed as T249'; T249's line must carry both, or one needs its own id."
+     }
+    ],
+    "verdict": "CLEAR"
+   }
   }
  }
 }
