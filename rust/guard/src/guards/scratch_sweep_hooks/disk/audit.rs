@@ -137,7 +137,20 @@ pub(in super::super) fn audit(c: &Config, now: SystemTime) -> Reply {
     }
 }
 
-/// Every place, its entries and their owners.
+/// A directory's entries that `keep` keeps, each with the owner `owner` names.
+fn dirs(
+    dir: &Path,
+    keep: &dyn Fn(&str, &std::fs::Metadata) -> bool,
+    owner: &dyn Fn(&str) -> String,
+) -> Vec<(PathBuf, String)> {
+    sweep::entries(dir)
+        .into_iter()
+        .filter(|(_, n, m)| keep(n, m))
+        .map(|(p, n, _)| (p, owner(&n)))
+        .collect()
+}
+
+/// Every place, its entries and their owners: the places counted in the total, then those within the clones and the mirror.
 fn places(c: &Config) -> Vec<Place> {
     let place = |name: String, budget: u64, entries| Place {
         name,
@@ -145,26 +158,10 @@ fn places(c: &Config) -> Vec<Place> {
         entries,
         within: false,
     };
-    let inner = |name: String, budget: u64, entries| Place {
-        name,
-        budget,
-        entries,
-        within: true,
-    };
-    let dirs = |dir: &Path,
-                keep: &dyn Fn(&str, &std::fs::Metadata) -> bool,
-                owner: &dyn Fn(&str) -> String| {
-        sweep::entries(dir)
-            .into_iter()
-            .filter(|(_, n, m)| keep(n, m))
-            .map(|(p, n, _)| (p, owner(&n)))
-            .collect::<Vec<_>>()
-    };
     let mine = |m: &std::fs::Metadata| m.uid() == c.uid;
     // this project's transcripts alone: the mirror's slug, and every path under it (its clones'), never another project's (451 T246)
     let slug = slug_of(&c.mirror);
     let ours = |n: &str| n == slug || n.starts_with(&format!("{slug}-"));
-    let gits = sweep::leftovers::git_dirs(c);
     let tmp_root = c.root.clone();
     let mut sessions = Vec::new();
     for (slug, name, m) in sweep::entries(&c.root) {
@@ -240,6 +237,22 @@ fn places(c: &Config) -> Vec<Place> {
                 &|n| format!("cache {n}"),
             ),
         ),
+    ]
+    .into_iter()
+    .chain(within_places(c))
+    .collect()
+}
+
+/// The places within the clones and the mirror (451 T246): sized, each its own line, not added to the total again.
+fn within_places(c: &Config) -> Vec<Place> {
+    let inner = |name: String, budget: u64, entries| Place {
+        name,
+        budget,
+        entries,
+        within: true,
+    };
+    let gits = sweep::leftovers::git_dirs(c);
+    vec![
         inner(
             "the tasks' scratch in the git directories <tree>/.git/t<N>*".to_owned(),
             GB,
