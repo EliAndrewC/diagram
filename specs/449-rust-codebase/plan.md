@@ -1163,11 +1163,11 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 9. **Done, measured.** <the measurement that says it is done>
 10. **Before moving a constant.** <n/a, or the claim it moves>
 11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+12. **Before any fix.** No map changes: T425 is page work only. Its untrue sentences were findings against the research record (the 2026-11-24 wording audit), each written true in page sessions P1-P13 with their record checks and cascades; the code-labeled guesses whose page was silent (P13 items e and f, P14) went to `make research-backlog` under 451 T236 (the GM, 2026-11-25), not fixed here because a guess the page does not record is not a wrong map.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** - Not fixed here: 0057's and 0031's sentences that 449 T432 left behind the code (found 2026-11-25 by T432's claims round). Filed as T436; lands before T158.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 <!-- plan-archive: T426 to T426 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
