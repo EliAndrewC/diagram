@@ -213,6 +213,9 @@ pub struct Subagents {
     pub queued: HashMap<String, f64>,
     /// agent id -> its tokens inside the window (T10, `spent::tokens`).
     pub tokens: HashMap<String, spent::Tok>,
+    /// tool-use id -> a Bash call's command, the session's and its subagents': the program a call running no make target is listed by
+    /// (451 T243, the task time breakdown - the event log keeps no command).
+    pub commands: HashMap<String, String>,
 }
 
 /// [`stopped`]'s map, and tool-use id -> when a SUBAGENT's background run's notice was queued (feature 451 T09, plan D3): the
@@ -224,7 +227,7 @@ pub struct Subagents {
 /// them each agent's tokens inside `window` ([`spent::tokens`], T10).
 #[must_use]
 pub fn read_subagents(sids: &[String], projects: &Path, window: (f64, f64)) -> Subagents {
-    let (mut out, mut queued) = (HashMap::new(), HashMap::new());
+    let (mut out, mut queued, mut commands) = (HashMap::new(), HashMap::new(), HashMap::new());
     let mut tokens = spent::Tokens::default();
     for sid in sids {
         for project in names(projects) {
@@ -241,6 +244,7 @@ pub fn read_subagents(sids: &[String], projects: &Path, window: (f64, f64)) -> S
                     l.contains("\"TaskStop\"")
                         || l.contains("\"KillShell\"")
                         || l.contains("\"queued_command\"")
+                        || l.contains("\"Bash\"")
                 }) {
                     let Ok(row) = serde_json::from_str::<Value>(line) else {
                         continue;
@@ -258,6 +262,14 @@ pub fn read_subagents(sids: &[String], projects: &Path, window: (f64, f64)) -> S
                     }
                     let blocks = row.pointer("/message/content").and_then(Value::as_array);
                     for b in blocks.into_iter().flatten() {
+                        if let (Some("Bash"), Some(id), Some(cmd)) = (
+                            b.get("name").and_then(Value::as_str),
+                            b.get("id").and_then(Value::as_str),
+                            b.pointer("/input/command").and_then(Value::as_str),
+                        ) {
+                            commands.insert(id.to_owned(), cmd.to_owned());
+                            continue;
+                        }
                         let input =
                             |k: &str| b.pointer(&format!("/input/{k}")).and_then(Value::as_str);
                         if let (Some(id), Some(task)) = (
@@ -275,6 +287,7 @@ pub fn read_subagents(sids: &[String], projects: &Path, window: (f64, f64)) -> S
         stopped: out,
         queued,
         tokens: tokens.sums(),
+        commands,
     }
 }
 

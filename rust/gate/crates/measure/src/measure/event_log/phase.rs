@@ -3,7 +3,8 @@
 //! (T05) and `make land` (T06) wrote `Phase` lines, so a hook suite, `make record`, `make quick`, `make preflight` and `make cohort`
 //! were invisible to `make where-time`. A recipe or `hookrun.sh` times its own step and hands the spans here, one call for many (a
 //! `hooks-test` run's 57 suites are one process after the fan-out, not 57: one call a suite cost 6.9 s on a loaded host, measured
-//! 2026-11-20 for `hookrun.sh --jobs`), each written through `phase_row` and `append_row_with`.
+//! 2026-11-20 for `hookrun.sh --jobs`), each written through `phase_row` and `append_row_with`. It feeds the task time breakdown
+//! (`make task-time`, 451 T243).
 //!
 //! ```text
 //! l7r-gate measure event-log phase --root <tree> --src <tool> [--make <target>] [--feature <F>] <step>:<t0>:<t1>:<code>[:<name>]...

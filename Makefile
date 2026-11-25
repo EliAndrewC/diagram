@@ -365,7 +365,7 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	  [ "$$pm" -gt 8 ] && pm=8; [ "$$pm" -lt 1 ] && pm=1; export PARTS_MAX=$$pm; \
 	  xargs -P $(HOOKS_JOBS) -L1 -a "$$work/todo" "$$root/tests/hooks/hookrun.sh" "$$work" "$$gitdir" || true; \
 	  if [ -s "$$work/close" ]; then while read -r b sha js; do "$$root/tests/hooks/hookrun.sh" --close "$$work" "$$gitdir" "$$b" "$$sha" $$js; done < "$$work/close"; fi; \
-	  : "EACH SUITE'S PHASE LINE, ONE CALL FOR ALL (feature 451 T153; the GM 2026-11-22: \"make the hook suites measure their time so they won't be missing\"): hookrun.sh leaves each job's span, and the one Phase writer writes them all in one process (one a suite cost 6.9 s for 57, 2026-11-20)"; \
+	  : "EACH SUITE'S PHASE LINE, ONE CALL FOR ALL (feature 451 T153; the GM 2026-11-22: \"make the hook suites measure their time so they won't be missing\"): hookrun.sh leaves each job's span, and the one Phase writer writes them all in one process (one a suite cost 6.9 s for 57, 2026-11-20); they feed the task time breakdown (make task-time, 451 T243)"; \
 	  spans=$$(for f in "$$work"/*.span; do [ -f "$$f" ] || continue; read -r a b c < "$$f"; printf 'suite:%s:%s:%s:%s ' "$$a" "$$b" "$$c" "$$(basename "$$f" .span)"; done); \
 	  [ -z "$$spans" ] || "$$root/scripts/gates/l7r-gate.sh" measure event-log phase --root "$$root" --src hooks $$spans >/dev/null 2>&1 || true; \
 	  for rc in "$$work"/*.rc; do \
@@ -477,6 +477,7 @@ LOGRUN = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" log run
 RUNSTATS = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure runstats
 # A STEP TIMED INTO ITS PHASE LINE (feature 451 T153; the GM 2026-11-22: "we want everything measured so we know where our time goes"):
 # $(call TIMED,<src>,<step>,<command>) runs the command, then hands its span and exit to the one Phase writer, and exits as it did
+# (its lines feed the task time breakdown, make task-time, 451 T243)
 TIMED = t0=$$(date +%s.%N); $(3); rc=$$?; "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure event-log phase --root "$$(git rev-parse --show-toplevel)" --src $(1) "$(2):$$t0:$$(date +%s.%N):$$rc" >/dev/null 2>&1; exit $$rc
 COMMIT_RUN_RECORD = bash "$$(git rev-parse --show-toplevel)/scripts/gates/commit-run-record.sh"
 
@@ -505,7 +506,10 @@ tool-yield:     ## [project] every tool measured: how often it runs, how often i
 events-refile:  ## [project] re-file the event-log lines written before 451 T26 under the feature of the task each carries (its dispatch's brief, else its task id), idempotent, its counts printed (feature 451 T26); FROM=<events dir> refiles another directory's logs into this clone's (451 T76); RETASK="<session id> ..." re-books those page sessions' lines, within their log, to the task their brief names (451 T168)   [DRY=1] [FROM=<dir>] [RETASK="<session id> ..."]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure event-log refile --root "$$(git rev-parse --show-toplevel)" $(if $(DRY),--dry-run,) $(foreach s,$(RETASK),--retask $(s)) $(if $(FROM),--dir "$$(git rev-parse --show-toplevel)/.git/l7r-events" --from "$(FROM)",)
 
-where-time:     ## [project] where a feature's time went, by task: the time by bucket and the agents by kind (feature 385 T77); BY=tick books each tick-to-tick window (T115)   F=<feature> [SINCE=<ISO UTC>] [UNTIL=<ISO UTC>] [BY=tick]
+task-time:      ## [project] the task time breakdown: each task landed in the window, across features, by category and by make target or program - minutes and blocking minutes, each % of the task and of the window; a landed task's tables carry its whole time, read BACK hours before the window (451 T243)   [SINCE=24h|<N>h|<ISO UTC>] [UNTIL=<ISO UTC>] [F=<feature>] [BACK=48h]
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure task-time --root "$$(git rev-parse --show-toplevel)" --since "$(or $(SINCE),24h)" $(if $(UNTIL),--until "$(UNTIL)",) $(if $(F),--feature "$(F)",) $(if $(BACK),--back "$(BACK)",)
+
+where-time:     ## [project] where a feature's time went, by task: the time by bucket and the agents by kind (feature 385 T77); BY=tick books each tick-to-tick window (T115); feeds the task time breakdown (make task-time)   F=<feature> [SINCE=<ISO UTC>] [UNTIL=<ISO UTC>] [BY=tick]
 	@if [ -z "$(F)" ]; then printf 'make where-time: F=<feature> is required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure where-time "$(F)" $(if $(SINCE),--since "$(SINCE)",) $(if $(UNTIL),--until "$(UNTIL)",) $(if $(filter tick,$(BY)),--by-tick,)
 
@@ -1092,7 +1096,7 @@ builder-status:  ## [project] each builder of an open task the session reads as 
 	  "$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --builder-status "$$t"
 
 .PHONY: builder-status
-.PHONY: review-yield cohort-seeds task-add set-down where-time land-batch fix-yield
+.PHONY: review-yield cohort-seeds task-add set-down where-time task-time land-batch fix-yield
 review-yield:     ## [performance] each review check's passes, findings acted on / dismissed / deferred, author-missed, hours and tokens, from the ledger   [SINCE=2026-09-26]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure review-yield $(if $(SINCE),--since $(SINCE),)
 

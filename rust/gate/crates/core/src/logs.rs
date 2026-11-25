@@ -158,6 +158,7 @@ fn run_record(args: &[String], env: &RunEnv, root: &Path) -> Result<(), String> 
             put(&k, v);
         }
     }
+    // the gate's run record feeds the task time breakdown (`make task-time`, 451 T243)
     let file = write_dated(root, "run-log", &now, &Value::Object(record))?;
     let git_dir = git(root, &["rev-parse", "--absolute-git-dir"]).1;
     let whole = std::fs::canonicalize(&file).map_err(crate::measure::text_err)?;

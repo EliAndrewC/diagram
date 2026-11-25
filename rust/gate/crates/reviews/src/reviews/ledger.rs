@@ -71,7 +71,7 @@ pub fn rows_cli(args: &[String], input: &mut dyn std::io::Read) -> Reply {
 }
 
 /// `review_cost.py --agent <id> [--root DIR] [--last]`: the ledger's two cost cells of the agent's newest transcript, one line a return
-/// when it was resumed (feature 371), only the latest with `--last`.
+/// when it was resumed (feature 371), only the latest with `--last`. Its costs feed the task time breakdown (`make task-time`, 451 T243).
 #[must_use]
 pub fn cost_cli(args: &[String], home: &str) -> Reply {
     let usage = |why: &str| {

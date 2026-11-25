@@ -162,3 +162,25 @@ Offered the rule change (UNRESEARCHED a fifth label on the research pages as wel
 Told that most code builders on 2026-11-24/25 hit the 300k context cap and handed off (449 T420, T423, T427, T429, T430; 451 T218-T222), each handoff costing a fresh builder 10 to 20 minutes of re-reading, and that the cause is one builder doing the fix, the measurement sweep, the plan section, the plan review and the claims round, the session proposed splitting the claims round off by default. The GM:
 
 > sounds good please do that ASAP
+
+## 2026-11-25: the task time breakdown (451 T243)
+
+The GM, 2026-11-25 (verbatim, dictated; voice substitutions none):
+
+> let's take a look at all of the tasks that have landed over the last 24 hours or so, and I would be interested to know how they break down in terms of the time that was spent, you know, like how much time was spent actually writing code and reading code in order to know what to write versus compiling code versus running tests versus generating maps versus landing and such. We should probably have like a name for this kind of breakdown so that I don't have to keep specifying it. Maybe if I just say "task time breakdown" then that can mean this kind of thing, like maybe that could go into our CLAUDE.md or something. And also into, I guess, the makefile comments that describe the timing and such. And yeah, basically just everywhere that we're gathering these timings, then we could refer to this as being in support of "Task Time Breakdown" or something.
+
+> I think that when you give the breakdown we should also make sure to include percentages, just since that is a helpful thing for me. So that I don't have to do the percentage math in my head.
+
+> I believe that it is the case that some of these things end up running in parallel, right? ... So how will that be reflected in the task time breakdown? Like, I guess the two numbers that we would care about for any given thing would be the number of minutes and, of course, its associated percentage that we spend doing that thing, but then also separately the number of minutes that we spend blocking on that thing. So for instance, if we spent 122 minutes running tests, but only 84 minutes blocking on those tests running, then that is significant. So I think that the tooling needs to be able to reflect that
+
+> I think that we do want the spec fidelity agents, reading and judging, to be in a separate category than the reading and writing of code, because that is conceptually different, and the way that we would optimize it is also different.
+
+> it sounds like in addition to each category, then it will be the case that each makefile command that we run will have its own timing breakdown, I guess, because that's something that is fairly easy to track in our tooling?
+
+The session answered that `make task-time` would be built on `make where-time` (a new make target, the GM's "that sounds great. Yes, let me know when that's ready.").
+
+The GM, 2026-11-25, on the breakdown's biggest buckets (verbatim, dictated):
+
+> the things that take a larger percentage of our time seem like they are worth asking whether they can be parallelized
+
+The session's paraphrase, not the GM's words, of two amendments he agreed in the same exchange: every minute named, or the remainder reported with what it is and why it could not be booked, never a silent "other" (amendment (c)); and the review bucket's commands split by kind - plan review, claims round, record and pop-up checks, arbiter - each beside its agents' minutes, after he asked whether "review tooling" includes the plan review before a task begins (amendment (e)).

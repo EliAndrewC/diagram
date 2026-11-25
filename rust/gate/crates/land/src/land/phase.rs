@@ -1,3 +1,5 @@
+//! (The landing log: these lines feed the task time breakdown, `make task-time`, 451 T243, which reads a landing's `end` for what landed.)
+//!
 //! THE LANDING'S PHASE LINES (feature 451 T06, plan D5, FR-003; the GM's approved "make land its phases' seconds"): a landing was one
 //! span in the event log, so its first pass, its gate, the claims wait and its push could not be told apart, and a refused landing was
 //! counted only by guessing from a tool response. Each step now writes one `Phase` line at its end, through the writer the hooks use

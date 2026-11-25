@@ -449,6 +449,7 @@ fn run(args: &[String], h: &Host) -> crate::Reply {
 /// the run log alone, so its seeds and counters were invisible to `make where-time`. Given the tree (`<root>`, the recipe's `$(CURDIR)`),
 /// each also writes its `Phase` line (`src: gate`, `step` the phase), in process: no process beside the one the recipe already starts.
 /// Its span is `seconds` back from now, the recipe's whole seconds (`date +%s`); its code 1 where this run marked the phase failed.
+/// It feeds the task time breakdown (`make task-time`, 451 T243).
 fn phase_line(dir: &Path, root: &Path, name: &str, seconds: f64, h: &Host) {
     let now = SystemTime::now();
     let began = now

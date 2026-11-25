@@ -20,6 +20,7 @@ pub mod runstats;
 pub mod spec;
 pub mod stepback_bundle;
 pub mod task_phases;
+pub mod task_time;
 pub mod tool_yield;
 pub mod turn_time;
 pub mod wave_report;
@@ -58,6 +59,7 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
             &l7r_gate_reviews::reviews::ledger_passes::Env::of_process(),
             Path::new(events::CLONES),
         ),
+        Some("task-time") => task_time::cli(rest, &home().join(".claude/projects"), Path::new(events::CLONES), tool_yield::now()),
         Some("where-time") => where_time::cli(rest, &home().join(".claude/projects"), Path::new(events::CLONES)),
         Some("event-log") => event_log::cli(rest, &mut std::io::stdin()),
         // T83's fourth slice (feature 449 T120): the step-back bundle and the yield reports, the step-back reading the reviews crate in

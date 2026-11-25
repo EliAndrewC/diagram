@@ -305,7 +305,8 @@ fn run_session(
 /// each session run to its end - its retries and resumes inside it - is one line through the one writer (`phase_row`), `src:
 /// page-session`, `step` its kind (`write`, a brief that writes, else `check`), `name` its session id; filed by the runner's own
 /// environment (`run.environ`, never the process's), and its make target the detached runner's outermost make (none: the runner is
-/// started detached, so a reader books it by its task, not a holding Bash run).
+/// started detached, so a reader books it by its task, not a holding Bash run). It feeds the task time breakdown (`make task-time`,
+/// 451 T243).
 fn phase_line(run: &Run, item: &Value, began: std::time::SystemTime, rc: i32) {
     let step = if super::retry::truthy(item.get("write")) {
         "write"

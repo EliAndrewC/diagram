@@ -59,7 +59,7 @@ pub fn drawn(
 }
 
 impl Run<'_> {
-    /// One step of map `m`'s, its line written now.
+    /// One step of map `m`'s, its line written now. It feeds the task time breakdown (`make task-time`, 451 T243).
     pub(super) fn phase(&self, m: &Map, step: &str, span: (SystemTime, SystemTime), code: i32) {
         let mut row = phase_row("map", step, span, code, &self.make, &self.root);
         row.insert("name".into(), Value::from(m.rel()));

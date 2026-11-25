@@ -40,6 +40,7 @@ pub(super) fn step_of(cmd: &str) -> Option<&'static str> {
 
 /// One step's line, written at its end: its crates by their directories from the tree's root, `began` its start, `code` how it went;
 /// `t` is its end, and the line names the run's make target and the clone it ran in, which the readers tie it to a Bash call by.
+/// It feeds the task time breakdown (`make task-time`, 451 T243).
 pub(super) fn wrote<P: AsRef<Path>>(
     world: &World,
     step: &str,

@@ -143,6 +143,7 @@ Without these, "is this guard worth what it costs" is an impression. With them i
 | `dev/bypass-log/` | every override with the reason someone will read |
 | `make test-times CRATE=<dir>` | where a crate's test time goes (each test alone, those over a tenth of a second listed) |
 | the perf bookends | recorded with the machine's state at both ends and flagged over 5% at landing - never a gate (feature 375 amendment 5) |
+| `make task-time [SINCE=24h] [UNTIL=] [F=]` - THE TASK TIME BREAKDOWN | each task landed in the window, across features, by category (the main session's and the builders' turns by the tool each ends in, the commands by make target and phase, the review agents by kind, the waits) and by make target or program: MINUTES (machine time, overlapping) and BLOCKING minutes (the main sessions' clock, each wait booked to what it waited on, a builder's own time descended into), each with its % of the task and of the window; the biggest blocking named with the share a foreground run could have backgrounded (451 T243). Every gatherer of timings feeds it: the guard's event log (`.git/l7r-events/`), the gate's run records (`dev/run-log/`), the review ledger's costs (`make review-cost`) and the landing log (a landing's `Phase` lines) |
 
 ## 7. The caches, and what invalidates them
 

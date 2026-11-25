@@ -1,0 +1,834 @@
+//! The task time breakdown's booking (451 T243): every actor's time - each main session, each builder, each review agent, each Bash run -
+//! as MINUTES (machine time, which overlaps) and BLOCKING minutes (a main session's wall clock, each second once, descended into what
+//! it waited on), by (feature, task), category and make target or program.
+//!
+//! THE RULES, each the GM's words in tasks.md T243's amendments:
+//! - A MODEL TURN is the gap from an actor's line to its next call, booked by the tool that call is: Read/Grep/Glob reading code,
+//!   Edit/Write writing code, Bash running a command, Agent dispatching; a gap ending at a `Stop` writes its reply. A tool's own run
+//!   joins its turn's category (a Read's milliseconds are reading). The main session's and the builders' are apart.
+//! - A REVIEW AGENT's whole span is its kind's (plan review, claims round, record and pop-up checks, arbiter, the GM's filter, research
+//!   and page sessions, map and building reviews), never pooled with the builders' reading and writing.
+//! - A BASH RUN is booked by its make target through the guard's table (`columns::line_bucket`), its phases split out (compile, hook
+//!   suites, map generation), the review bucket split by kind; a run with no booked target by its program ([`super::program`]).
+//! - BLOCKING walks each main session's own time: its turns and calls are its own; a wait - between turns on work, or a wait loop - is
+//!   booked, at each instant, to the thing in flight that ends last (the critical one), descending into a builder's own time the same
+//!   way: its turns, its foreground commands, and its waits on its own background runs and agents. A wait with nothing in flight is
+//!   booked as that, named.
+
+use std::collections::{HashMap, HashSet};
+
+use l7r_shared::guards::event_log_hooks::{agent_category, bucket_of};
+
+use super::super::events::{get, is, or_s, t_of, Event, Raised, IDLE_CAP_S};
+use l7r_shared::make::{invoked, DEFAULT_GOAL};
+
+use super::super::where_time::columns::{Agent, Run, Runs, PRECEDENCE};
+use super::program;
+
+/// (feature, task): task ids collide across features.
+pub type Key = (String, String);
+
+/// A main session's time with nothing in flight.
+pub const NOTHING: &str = "waiting: nothing in flight";
+/// A main session's wait with only a monitor in flight and no page session running.
+pub const MONITOR: &str = "waiting: a monitor alone";
+/// A detached page session's phases and the research-pass agents.
+pub const PAGES: &str = "research and page sessions";
+/// The record and pop-up checks' agents.
+const RECORD: &str = "record and pop-up checks: agents";
+/// A builder's time inside its span that no line of its accounts for.
+/// Generating maps: a map, sheet or cohort run's remainder, its phases' column, and a builder's scratch sweep (the GM's "generating maps").
+pub const MAPS: &str = "map generation";
+
+/// The targets that draw maps or sheets: the guard's table books them tests (`map`, `hamlet`, `compound`, `sheet-render`, the dev
+/// loop's own run) or gate (`cohort`, `cohort-landing`, the sweep a landing reads); the breakdown books them all to [`MAPS`].
+const MAP_TARGETS: [&str; 7] = [
+    "map",
+    "hamlet",
+    "compound",
+    "sheet-render",
+    "maps-moved",
+    "cohort",
+    "cohort-landing",
+];
+pub const UNLINED: &str = "builders: inside its span, no line of its";
+/// A command no transcript holds.
+pub const UNREAD: &str = "commands no transcript holds";
+const BOOKED_ELSEWHERE: &str = "Makefile targets the guard's table does not book";
+
+/// One (key, category, target) cell.
+#[derive(Debug, Default, Clone, Copy, PartialEq)]
+pub struct Cell {
+    /// Machine seconds.
+    pub min: f64,
+    /// Blocking seconds.
+    pub block: f64,
+    /// The blocking seconds booked from a foreground run in its actor.
+    pub fg: f64,
+}
+
+/// What the booking found.
+#[derive(Debug, Default)]
+pub struct Ledger {
+    /// (key, category, target or "") -> its cell.
+    pub cells: HashMap<(Key, String, String), Cell>,
+    /// (key, target) -> runs.
+    pub runs: HashMap<(Key, String), usize>,
+    /// target -> the category its runs book to, their phases apart.
+    pub books_to: HashMap<String, String>,
+}
+
+impl Ledger {
+    fn add(&mut self, key: &Key, cat: &str, target: &str, c: Cell) {
+        let e = self
+            .cells
+            .entry((key.clone(), cat.to_owned(), target.to_owned()))
+            .or_default();
+        e.min += c.min;
+        e.block += c.block;
+        e.fg += c.fg;
+    }
+}
+
+/// A page session's phase: a detached runner's, held by no Bash run.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Page {
+    /// Its span.
+    pub t0: f64,
+    /// Its end.
+    pub t1: f64,
+    /// Its feature and task.
+    pub key: Key,
+    /// The session the runner started (the phase's `name`): its own lines are the page session's, never a main session's.
+    pub sid: String,
+}
+
+/// What the booking reads.
+pub struct World<'a> {
+    /// Every log's lines in the window, each tagged with its log's `feature`, in time order.
+    pub stream: &'a [Event],
+    /// Every Bash run ([`super::super::where_time::columns::runs`]).
+    pub runs: &'a Runs,
+    /// tool-use id -> its command.
+    pub commands: &'a HashMap<String, String>,
+    /// Every agent with its spans.
+    pub agents: &'a [Agent],
+    /// The page sessions' phases.
+    pub pages: &'a [Page],
+    /// The window, `[lo, hi]` in UTC seconds.
+    pub window: (f64, f64),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+enum Cand {
+    Run(usize),
+    Agent(usize),
+    Pages,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+enum What {
+    Own(String),
+    Run(usize),
+    Wait(Vec<Cand>, &'static str),
+}
+
+#[derive(Debug, Clone, PartialEq)]
+struct Seg {
+    t0: f64,
+    t1: f64,
+    key: Key,
+    what: What,
+}
+
+/// An event's (feature, task).
+fn key_of(e: &Event) -> Key {
+    let task = or_s(e, "task");
+    (
+        or_s(e, "feature"),
+        if task.is_empty() {
+            "-".to_owned()
+        } else {
+            task
+        },
+    )
+}
+
+/// The review kind an agent's whole span is booked to, `None` for a builder (451 T243 (f)).
+#[must_use]
+pub fn review_cat(kind: &str) -> Option<&'static str> {
+    Some(match kind {
+        "claims-triage" => "claims round: agents",
+        "modal-triage" | "source-filter" | "size-exception" => RECORD,
+        "escalation-check" => "the GM's filter: agents (escalation-check)",
+        "research-pass" => PAGES,
+        "work-budget" | "message-check" | "perf-audit" => {
+            "other review agents (work-budget, message-check)"
+        }
+        _ => match agent_category(kind, "") {
+            "claims check" => "claims round: agents",
+            "record check" => RECORD,
+            "review check" => "map and building reviews: agents",
+            "spec review" => "plan review: agents",
+            "round arbiter" => "arbiter: agents",
+            _ => return None,
+        },
+    })
+}
+
+/// A model turn's or a tool's category for actor `who` (`main session` or `builders`), by the tool (`""` the reply).
+#[must_use]
+pub fn tool_cat(who: &str, tool: &str) -> String {
+    let what = match tool {
+        "Read" | "Grep" | "Glob" => "reading code".to_owned(),
+        "Edit" | "Write" | "NotebookEdit" | "MultiEdit" => "writing code".to_owned(),
+        "Bash" => "running a command (the model's turn)".to_owned(),
+        "Agent" | "Task" => "dispatching an agent".to_owned(),
+        "" => "writing its reply".to_owned(),
+        other => format!("other tools ({other})"),
+    };
+    format!("{who}: {what}")
+}
+
+/// The review bucket's kind by target (451 T243 (e)).
+fn review_kind(target: &str) -> &'static str {
+    match target {
+        "decide" | "plan-delta" | "plan-verdict" => "plan review: commands",
+        t if t.starts_with("claims-") || t == "impl-check" => "claims round: commands",
+        t if t.starts_with("arbiter-") => "arbiter: commands",
+        "check-bundle" | "modal-bundle" | "record-owed" | "modal-triage" | "modal-triaged"
+        | "modal-prepass" | "translation-owed" | "record-checked" | "record-prepass"
+        | "style-prepass" | "quote-verbatim" => "record and pop-up checks: commands",
+        _ => "review: other commands",
+    }
+}
+
+/// A run's category (its phases apart) and its label in the per-target table.
+#[must_use]
+#[expect(clippy::implicit_hasher, reason = "the map `read_subagents` makes")]
+pub fn run_cat(r: &Run, commands: &HashMap<String, String>) -> (String, String) {
+    // a line that logged no target (a past log, a detector since fixed): the targets its command RUNS, never one it mentions
+    let found: Vec<String>;
+    let (makes, bucket) = if r.makes.is_empty() {
+        found = commands.get(&r.id).map_or_else(Vec::new, |c| {
+            invoked(c)
+                .into_iter()
+                .filter(|t| t != DEFAULT_GOAL)
+                .collect()
+        });
+        let buckets: Vec<&str> = found.iter().map(|m| bucket_of(m)).collect();
+        let first = PRECEDENCE.iter().find(|b| buckets.contains(b));
+        (&found[..], first.copied().unwrap_or("other"))
+    } else {
+        (&r.makes[..], r.bucket)
+    };
+    if bucket != "other" {
+        let t = makes
+            .iter()
+            .find(|m| bucket_of(m) == bucket)
+            .map_or("", String::as_str);
+        let cat = match bucket {
+            _ if MAP_TARGETS.contains(&t) => MAPS,
+            "review" => review_kind(t),
+            "docs" => "record builds and docs",
+            "land" => "landing",
+            b => b,
+        };
+        return (cat.to_owned(), format!("make {t}"));
+    }
+    if let Some(m) = makes.first() {
+        let cat = match m.as_str() {
+            "crate-checks" => "tests",
+            _ => BOOKED_ELSEWHERE,
+        };
+        return (cat.to_owned(), format!("make {m}"));
+    }
+    match commands.get(&r.id) {
+        Some(c) => {
+            let (cat, label) = program::class(c);
+            (cat.to_owned(), label)
+        }
+        None => (
+            UNREAD.to_owned(),
+            "a command no transcript holds".to_owned(),
+        ),
+    }
+}
+
+fn phase_cat(col: &str) -> &str {
+    match col {
+        "docs" => "record builds and docs",
+        "review" => PAGES,
+        c => c,
+    }
+}
+
+fn is_wait(cat: &str) -> bool {
+    cat == program::WAIT || cat == program::PAGE_WAIT
+}
+
+/// The booking's indexes over the world.
+struct Ix<'a> {
+    w: &'a World<'a>,
+    run_of: HashMap<&'a str, usize>,
+    run_key: Vec<Key>,
+    run_cats: Vec<(String, String)>,
+    agent_of: HashMap<&'a str, usize>,
+    agent_key: Vec<Key>,
+    /// actor -> its own background runs and the agents it dispatched.
+    owned: HashMap<String, Vec<Cand>>,
+    segs: HashMap<String, Vec<Seg>>,
+}
+
+/// An actor's name: a main session's `s:<sid>`, an agent's id.
+fn actor(e: &Event) -> String {
+    let by = or_s(e, "by");
+    if by.is_empty() {
+        format!("s:{}", or_s(e, "sid"))
+    } else {
+        by
+    }
+}
+
+impl<'a> Ix<'a> {
+    fn new(w: &'a World<'a>) -> Self {
+        let mut pre_key: HashMap<&str, Key> = HashMap::new();
+        let mut agent_feature: HashMap<String, String> = HashMap::new();
+        let mut owned: HashMap<String, Vec<Cand>> = HashMap::new();
+        let agent_of: HashMap<&str, usize> = w
+            .agents
+            .iter()
+            .enumerate()
+            .map(|(i, a)| (a.aid.as_str(), i))
+            .collect();
+        for e in w.stream {
+            if let Some(id) = get(e, "id").as_str() {
+                if is(e, "ev", "PreToolUse") {
+                    pre_key.insert(id, key_of(e));
+                }
+            }
+            let aid = or_s(e, "aid");
+            if !aid.is_empty() {
+                agent_feature
+                    .entry(aid.clone())
+                    .or_insert_with(|| or_s(e, "feature"));
+                if is(e, "ev", "PostToolUse") && is(e, "tool", "Agent") {
+                    if let Some(&i) = agent_of.get(aid.as_str()) {
+                        owned.entry(actor(e)).or_default().push(Cand::Agent(i));
+                    }
+                }
+            }
+        }
+        let run_key: Vec<Key> = w
+            .runs
+            .runs
+            .iter()
+            .map(|r| {
+                let k = pre_key.get(r.id.as_str()).cloned().unwrap_or_default();
+                (k.0, r.task.clone())
+            })
+            .collect();
+        for (i, r) in w.runs.runs.iter().enumerate().filter(|(_, r)| r.bg) {
+            let who = if r.by.is_empty() {
+                format!("s:{}", r.sid)
+            } else {
+                r.by.clone()
+            };
+            owned.entry(who).or_default().push(Cand::Run(i));
+        }
+        let agent_key = w
+            .agents
+            .iter()
+            .map(|a| {
+                let task = if a.task.is_empty() { "-" } else { &a.task };
+                (
+                    agent_feature.get(&a.aid).cloned().unwrap_or_default(),
+                    task.to_owned(),
+                )
+            })
+            .collect();
+        Ix {
+            w,
+            run_of: w
+                .runs
+                .runs
+                .iter()
+                .enumerate()
+                .map(|(i, r)| (r.id.as_str(), i))
+                .collect(),
+            run_cats: w.runs.runs.iter().map(|r| run_cat(r, w.commands)).collect(),
+            run_key,
+            agent_of,
+            agent_key,
+            owned,
+            segs: HashMap::new(),
+        }
+    }
+
+    fn span(&self, c: Cand) -> (f64, f64) {
+        match c {
+            Cand::Run(i) => (self.w.runs.runs[i].t0, self.w.runs.runs[i].t1),
+            Cand::Agent(i) => {
+                let s = &self.w.agents[i].spans;
+                (
+                    s.first().map_or(0.0, |x| x.0),
+                    s.last().map_or(0.0, |x| x.1),
+                )
+            }
+            Cand::Pages => self
+                .w
+                .pages
+                .iter()
+                .fold((f64::MAX, f64::MIN), |(a, b), p| (a.min(p.t0), b.max(p.t1))),
+        }
+    }
+
+    /// Whether `c` is in flight over all of `[x, y]`.
+    #[expect(
+        clippy::many_single_char_names,
+        reason = "an interval's ends `x`/`y` beside its run, agent or segment, as the module's doc names them"
+    )]
+    fn active(&self, c: Cand, x: f64, y: f64) -> bool {
+        match c {
+            Cand::Run(i) => {
+                let r = &self.w.runs.runs[i];
+                r.t0 <= x && y <= r.t1
+            }
+            Cand::Agent(i) => self.w.agents[i].spans.iter().any(|s| s.0 <= x && y <= s.1),
+            Cand::Pages => self.w.pages.iter().any(|p| p.t0 <= x && y <= p.t1),
+        }
+    }
+
+    /// The candidates a `Stop` names in flight; with no list, every one the actor owns.
+    fn named(&self, who: &str, stop: &Event) -> Vec<Cand> {
+        let Some(list) = get(stop, "inflight").as_array() else {
+            return self.owned.get(who).cloned().unwrap_or_default();
+        };
+        let mut out = Vec::new();
+        for x in list {
+            let id = x
+                .get("id")
+                .and_then(serde_json::Value::as_str)
+                .unwrap_or("");
+            if let Some(&i) = self.agent_of.get(id) {
+                out.push(Cand::Agent(i));
+            } else if let Some(i) = self.w.runs.runs.iter().position(|r| r.bg && r.bg_id == id) {
+                out.push(Cand::Run(i));
+            } else if x.get("type").and_then(serde_json::Value::as_str) == Some("monitor") {
+                out.push(Cand::Pages);
+            }
+        }
+        out
+    }
+
+    /// A main session's time from its `Stop` to the next line `next`, `gap` seconds: the GM's when he speaks, else a wait.
+    fn after_stop(&self, who: &str, stop: &Event, next: &Event, gap: f64) -> What {
+        if is(next, "ev", "UserPromptSubmit") && get(next, "gm").as_bool() != Some(false) {
+            let cat = if gap > IDLE_CAP_S {
+                "the GM away"
+            } else {
+                "the GM"
+            };
+            return What::Own(cat.to_owned());
+        }
+        let monitor = get(stop, "inflight").as_array().is_some_and(|l| {
+            l.iter()
+                .any(|x| x.get("type").and_then(serde_json::Value::as_str) == Some("monitor"))
+        });
+        What::Wait(
+            self.named(who, stop),
+            if monitor { MONITOR } else { NOTHING },
+        )
+    }
+
+    /// An actor's segments from its lines in time order (the module's doc).
+    fn segments(&self, who: &str, lines: &[&Event], builder: bool) -> Result<Vec<Seg>, Raised> {
+        let posted: HashSet<String> = lines
+            .iter()
+            .filter(|e| is(e, "ev", "PostToolUse") || is(e, "ev", "PostToolUseFailure"))
+            .map(|e| or_s(e, "id"))
+            .collect();
+        let prefix = if builder { "builders" } else { "main session" };
+        let mut open: Vec<&Event> = Vec::new();
+        let mut out = Vec::new();
+        let mut between: Option<&Event> = None;
+        for (i, a) in lines.iter().enumerate() {
+            let ev = or_s(a, "ev");
+            match ev.as_str() {
+                "PreToolUse" if posted.contains(&or_s(a, "id")) => open.push(a),
+                "PostToolUse" | "PostToolUseFailure" => {
+                    open.retain(|o| or_s(o, "id") != or_s(a, "id"));
+                }
+                "Stop" if !builder => between = Some(a),
+                "UserPromptSubmit" => between = None,
+                _ => {}
+            }
+            let Some(b) = lines.get(i + 1) else { break };
+            let (x, y) = (t_of(a)?, t_of(b)?);
+            if y <= x {
+                continue;
+            }
+            let key = key_of(a);
+            let what = if let Some(stop) = between {
+                self.after_stop(who, stop, b, y - x)
+            } else if let Some(o) = open.last() {
+                let tool = or_s(o, "tool");
+                match self.run_of.get(or_s(o, "id").as_str()) {
+                    Some(&r) if tool == "Bash" && is_wait(&self.run_cats[r].0) => What::Wait(
+                        self.owned.get(who).cloned().unwrap_or_default(),
+                        program::WAIT,
+                    ),
+                    Some(&r) if tool == "Bash" => What::Run(r),
+                    _ => What::Own(tool_cat(prefix, &tool)),
+                }
+            } else if y - x > IDLE_CAP_S {
+                What::Own("idle (over an hour)".to_owned())
+            } else {
+                let tool = if is(b, "ev", "PreToolUse") {
+                    or_s(b, "tool")
+                } else {
+                    String::new()
+                };
+                // a builder's turn that ends after its own background work did is a wait on it up to that end (the module's doc)
+                let held: Vec<Cand> = if builder {
+                    self.owned
+                        .get(who)
+                        .into_iter()
+                        .flatten()
+                        .copied()
+                        .filter(|c| {
+                            let (s0, s1) = self.span(*c);
+                            s0 <= x && x < s1 && s1 <= y
+                        })
+                        .collect()
+                } else {
+                    Vec::new()
+                };
+                let w_end = held.iter().map(|c| self.span(*c).1).fold(x, f64::max);
+                if w_end > x {
+                    out.push(Seg {
+                        t0: x,
+                        t1: w_end,
+                        key: key.clone(),
+                        what: What::Wait(held, "builders: waiting on its background work"),
+                    });
+                }
+                if y > w_end {
+                    out.push(Seg {
+                        t0: w_end,
+                        t1: y,
+                        key,
+                        what: What::Own(tool_cat(prefix, &tool)),
+                    });
+                }
+                continue;
+            };
+            out.push(Seg {
+                t0: x,
+                t1: y,
+                key,
+                what,
+            });
+        }
+        Ok(out)
+    }
+
+    /// A run's piece `[x, y]` booked: its phases, the rest its category.
+    #[expect(
+        clippy::many_single_char_names,
+        reason = "an interval's ends `x`/`y` beside its run, agent or segment, as the module's doc names them"
+    )]
+    fn book_run(&self, l: &mut Ledger, i: usize, (x, y): (f64, f64), block: bool, fg: bool) {
+        let r = &self.w.runs.runs[i];
+        let (cat, target) = &self.run_cats[i];
+        let key = &self.run_key[i];
+        let mut split = 0.0;
+        let cell = |s: f64| Cell {
+            min: if block { 0.0 } else { s },
+            block: if block { s } else { 0.0 },
+            fg: if block && fg { s } else { 0.0 },
+        };
+        for (col, s) in r.split.booked(x, y) {
+            l.add(key, phase_cat(col), target, cell(s));
+            split += s;
+        }
+        l.add(key, cat, target, cell(y - x - split));
+    }
+
+    /// The blocking of `[x, y]`, a wait on `cands`, each instant to the one in flight that ends last; none: `fallback`.
+    #[expect(
+        clippy::many_single_char_names,
+        reason = "an interval's ends `x`/`y` beside its run, agent or segment, as the module's doc names them"
+    )]
+    fn descend(
+        &self,
+        l: &mut Ledger,
+        cands: &[Cand],
+        (x, y): (f64, f64),
+        key: &Key,
+        fallback: &str,
+        depth: usize,
+    ) {
+        let mut cuts = vec![x, y];
+        for c in cands {
+            let (a, b) = self.span(*c);
+            cuts.extend([a, b].into_iter().filter(|t| x < *t && *t < y));
+            if *c == Cand::Pages {
+                for p in self.w.pages {
+                    cuts.extend([p.t0, p.t1].into_iter().filter(|t| x < *t && *t < y));
+                }
+            }
+        }
+        cuts.sort_by(f64::total_cmp);
+        cuts.dedup();
+        for w in cuts.windows(2) {
+            let (px, py) = (w[0], w[1]);
+            let best = cands
+                .iter()
+                .filter(|c| self.active(**c, px, py))
+                .max_by(|a, b| self.span(**a).1.total_cmp(&self.span(**b).1));
+            match best {
+                None => l.add(
+                    key,
+                    fallback,
+                    "",
+                    Cell {
+                        block: py - px,
+                        ..Cell::default()
+                    },
+                ),
+                Some(Cand::Pages) => {
+                    let k = self
+                        .w
+                        .pages
+                        .iter()
+                        .find(|p| p.t0 <= px && py <= p.t1)
+                        .map_or(key, |p| &p.key);
+                    l.add(
+                        k,
+                        PAGES,
+                        "",
+                        Cell {
+                            block: py - px,
+                            ..Cell::default()
+                        },
+                    );
+                }
+                Some(Cand::Run(i)) if is_wait(&self.run_cats[*i].0) => {
+                    let next: &[Cand] = if self.run_cats[*i].0 == program::PAGE_WAIT {
+                        &[Cand::Pages]
+                    } else {
+                        &[]
+                    };
+                    self.descend(
+                        l,
+                        next,
+                        (px, py),
+                        &self.run_key[*i],
+                        program::WAIT,
+                        depth + 1,
+                    );
+                }
+                Some(Cand::Run(i)) => self.book_run(l, *i, (px, py), true, false),
+                Some(Cand::Agent(i)) => self.agent_piece(l, *i, (px, py), depth + 1),
+            }
+        }
+    }
+
+    /// An agent's time `[x, y]` booked as blocking: a review agent's to its kind, a builder's by its own segments.
+    #[expect(
+        clippy::many_single_char_names,
+        reason = "an interval's ends `x`/`y` beside its run, agent or segment, as the module's doc names them"
+    )]
+    fn agent_piece(&self, l: &mut Ledger, i: usize, (x, y): (f64, f64), depth: usize) {
+        let a = &self.w.agents[i];
+        if let Some(cat) = review_cat(&a.kind) {
+            l.add(
+                &self.agent_key[i],
+                cat,
+                "",
+                Cell {
+                    block: y - x,
+                    ..Cell::default()
+                },
+            );
+            return;
+        }
+        let mut covered = 0.0;
+        for s in self.segs.get(&a.aid).into_iter().flatten() {
+            let (sx, sy) = (s.t0.max(x), s.t1.min(y));
+            if sy <= sx {
+                continue;
+            }
+            covered += sy - sx;
+            self.book_seg(l, s, (sx, sy), depth);
+        }
+        if y - x - covered > 0.0 {
+            l.add(
+                &self.agent_key[i],
+                UNLINED,
+                "",
+                Cell {
+                    block: y - x - covered,
+                    ..Cell::default()
+                },
+            );
+        }
+    }
+
+    /// A segment's piece booked as blocking.
+    fn book_seg(&self, l: &mut Ledger, s: &Seg, piece: (f64, f64), depth: usize) {
+        match &s.what {
+            What::Own(cat) => l.add(
+                &s.key,
+                cat,
+                "",
+                Cell {
+                    block: piece.1 - piece.0,
+                    ..Cell::default()
+                },
+            ),
+            What::Run(i) => self.book_run(l, *i, piece, true, true),
+            // a cycle cannot form (an agent waits only on what it started), but the depth bounds the walk all the same
+            What::Wait(c, fb) if depth < 8 => self.descend(l, c, piece, &s.key, fb, depth),
+            What::Wait(_, fb) => l.add(
+                &s.key,
+                fb,
+                "",
+                Cell {
+                    block: piece.1 - piece.0,
+                    ..Cell::default()
+                },
+            ),
+        }
+    }
+}
+
+/// The ledger of the world (the module's doc).
+///
+/// # Errors
+///
+/// A line's time the reader cannot read.
+pub fn book(w: &World) -> Result<Ledger, Raised> {
+    let mut ix = Ix::new(w);
+    let mut lines: HashMap<String, Vec<&Event>> = HashMap::new();
+    let mut order: Vec<String> = Vec::new();
+    for e in w.stream {
+        let ev = or_s(e, "ev");
+        let who = match ev.as_str() {
+            "PreToolUse" | "PostToolUse" | "PostToolUseFailure" => actor(e),
+            "Stop" | "UserPromptSubmit" => format!("s:{}", or_s(e, "sid")),
+            "SubagentStart" | "SubagentStop" => or_s(e, "aid"),
+            _ => continue,
+        };
+        if !lines.contains_key(&who) {
+            order.push(who.clone());
+        }
+        lines.entry(who).or_default().push(e);
+    }
+    for who in &order {
+        let builder = !who.starts_with("s:");
+        let segs = ix.segments(who, &lines[who], builder)?;
+        ix.segs.insert(who.clone(), segs);
+    }
+    let mut l = Ledger::default();
+    let (lo, hi) = w.window;
+    // a page session is a detached `claude` session that logs as one: its phases are its minutes, and nobody's clock is its own (on
+    // 2026-11-25 its sessions' turns booked 393 min of "main session" blocking before this, measured by `make task-time SINCE=24h`)
+    let paged: HashSet<String> = w.pages.iter().map(|p| format!("s:{}", p.sid)).collect();
+    // MINUTES: every run but a review agent's foreground one (its agent's span holds it), every builder's and main session's own
+    // segment, every review agent's span, every page-session phase
+    for (i, r) in w.runs.runs.iter().enumerate() {
+        let review_fg = (!r.bg
+            && ix
+                .agent_of
+                .get(r.by.as_str())
+                .is_some_and(|&a| review_cat(&w.agents[a].kind).is_some()))
+            || (r.by.is_empty() && paged.contains(&format!("s:{}", r.sid)));
+        let (x, y) = (r.t0.max(lo), r.t1.min(hi));
+        // a run counts where it ran: one read back before the window is a landed task's, never the window's
+        if r.t1 >= lo && r.t0 <= hi {
+            *l.runs
+                .entry((ix.run_key[i].clone(), ix.run_cats[i].1.clone()))
+                .or_default() += 1;
+        }
+        l.books_to
+            .insert(ix.run_cats[i].1.clone(), ix.run_cats[i].0.clone());
+        if !review_fg && y > x {
+            ix.book_run(&mut l, i, (x, y), false, false);
+        }
+    }
+    for who in order.iter().filter(|w| !paged.contains(*w)) {
+        let review = ix
+            .agent_of
+            .get(who.as_str())
+            .is_some_and(|&a| review_cat(&w.agents[a].kind).is_some());
+        for s in ix.segs[who].iter().filter(|_| !review) {
+            if let What::Own(cat) = &s.what {
+                let (x, y) = (s.t0.max(lo), s.t1.min(hi));
+                if y > x && !cat.starts_with("the GM") && !cat.starts_with("idle") {
+                    l.add(
+                        &s.key,
+                        cat,
+                        "",
+                        Cell {
+                            min: y - x,
+                            ..Cell::default()
+                        },
+                    );
+                }
+            }
+        }
+    }
+    span_minutes(w, &ix, &mut l);
+    // BLOCKING: each main session's own time, descended
+    for who in order
+        .iter()
+        .filter(|w| w.starts_with("s:") && !paged.contains(*w))
+    {
+        for s in &ix.segs[who] {
+            let (x, y) = (s.t0.max(lo), s.t1.min(hi));
+            if y > x {
+                ix.book_seg(&mut l, s, (x, y), 0);
+            }
+        }
+    }
+    Ok(l)
+}
+
+/// The minutes of every review agent's span and every page-session phase, clipped to the window.
+fn span_minutes(w: &World, ix: &Ix, l: &mut Ledger) {
+    let (lo, hi) = w.window;
+    for (i, a) in w.agents.iter().enumerate() {
+        if let Some(cat) = review_cat(&a.kind) {
+            let secs: f64 = a
+                .spans
+                .iter()
+                .map(|s| (s.1.min(hi) - s.0.max(lo)).max(0.0))
+                .sum();
+            l.add(
+                &ix.agent_key[i],
+                cat,
+                "",
+                Cell {
+                    min: secs,
+                    ..Cell::default()
+                },
+            );
+        }
+    }
+    for p in w.pages {
+        l.add(
+            &p.key,
+            PAGES,
+            "",
+            Cell {
+                min: (p.t1.min(hi) - p.t0.max(lo)).max(0.0),
+                ..Cell::default()
+            },
+        );
+    }
+}
+
+#[cfg(test)]
+pub mod tests;

@@ -215,7 +215,8 @@ pub fn make_target(command: &str) -> String {
 /// tool" - `static` 30.8, `format` 20.9, `hooks-test` 20.2, `rust-test` 16.6, `render-sync` 6.1, `map` 3.6 of them (observed 2026-11-20,
 /// method: the `ms` of the 449 log's `PostToolUse` lines since 2026-11-19T14:00Z, summed by `make`; research R1). Rows are
 /// `data-model.md`'s, finished from the Makefile's `## [tag]` lines; moving a target between buckets is a one-line change. `compile` is
-/// no target's: it is the `build`/`cover-build` phase lines inside a tests run (D4, T05), booked by the readers (T08).
+/// no target's: it is the `build`/`cover-build` phase lines inside a tests run (D4, T05), booked by the readers (T08). It feeds the
+/// task time breakdown (`make task-time`, 451 T243), which lists by name each target a row here leaves `other`.
 pub const BUCKETS: [(&str, &[&str]); 7] = [
     // TESTS: what checks a change while iterating - the `[tests]`/`[static]` checks, the crates' tests and the gate's own crate-scoped
     // forms of them (`rust-test`, `rust-cover`, `rust-lint`, `rust-format`, ...; never a bare `rust-` prefix: `rust-hamlet` is a counting
@@ -339,6 +340,7 @@ pub const BUCKETS: [(&str, &[&str]); 7] = [
             "record",
             "feature-report",
             "where-time",
+            "task-time",
             "render-sync",
             "pool-index",
             "pool-index-if-stale",
