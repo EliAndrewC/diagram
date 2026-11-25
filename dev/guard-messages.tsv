@@ -104,6 +104,7 @@ key	verdict	chars	guard	kind	by	over	head
 47559d07daa05c57	BASELINE	329	record-edit-hooks	notice	unreviewed - stood before 451 T170		<path> is assembled from <path> and is never hand-edited, so this edit
 47792da72a670863	BASELINE	285	clone-sync-hooks	notice	unreviewed - stood before 451 T170		clone-sync: <path> is behind main, but a make runs in it -
 47a0eb4e06fc6945	BASELINE	661	guard-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this edit puts a COMMAND SUBSTITUTION inside a recipe comment of
+499f388d45183dbe	PASS	409	context-cap-hooks	refuse	a92ea34b3fbbcb36f		BLOCKED: a code builder does not dispatch claims-triage; the claims round is
 4bd89a7e45c8662f	BASELINE	1036	context-cap-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: resuming builder N: its context is N tokens, past the cap
 4c1474e8a0b0167a	BASELINE	743	phase-source-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this search over <path> prints lines of <path> - the old
 4d2d2ad728c095cd	BASELINE	385	gate-write-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (gate-write): a shell write of . (`git apply <path>`) while this
@@ -155,6 +156,7 @@ key	verdict	chars	guard	kind	by	over	head
 73e5b27008fce832	BASELINE	202	new-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a new glossary file takes a RESERVED prefix, so parallel queues
 75392613244f979d	BASELINE	859	static-runs-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (static-runs, the closing step's order - feature N TN): `make hooks-test`
 76922f6025e1d469	BASELINE	813	shell-check-hooks	refuse	unreviewed - shell-check's parse refusal, a family of 4 keys: 5 shown a session, 5,650 characters, under 4 x 31,680 - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		BLOCKED: the command does not parse: bash: -c: line N: syntax error:
+770abc509f3feddd	FAIL	204	context-cap-hooks	refuse	adcc691351458bcd7		BLOCKED: SPLIT_OK with no reason. Put one in the prompt: SPLIT_OK="<why this
 774c809a1d73a156	BASELINE	427	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a Rust binary run directly rather than through make. make is
 796983e64255e105	BASELINE	459	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (no-poll): this wait sleeps up to N s between its checks,
 79a2a7039a45e586	BASELINE	456	blocked-fetch-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this WebFetch refused: https:/<path> is on the blocked list (blocked-domains.json: grokipedia.com
@@ -323,11 +325,13 @@ e6dd99b13dc7ec31	BASELINE	524	check-bundle-hooks	refuse	unreviewed - stood befor
 e74b40c554993d0c	FAIL	498	workflow-hooks	refuse	a3f4533b308fc243f		BLOCKED: an ad-hoc agent() call names the model `opus`: agent('is it right',
 e77d44e0d21b8458	PASS	244	check-bundle-hooks	refuse	a321d8220347ee8b7		BLOCKED: `quote-check` is already in q:N's round and that round has a
 e8de0c1ac6270bcf	BASELINE	991	shell-check-hooks	refuse	unreviewed - shell-check's backtick refusal, a family of 2 keys: 7 shown a session, 6,944 characters, under 2 x 31,680 - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		BLOCKED: a backtick span that bash will EXECUTE: `make done`. Inside double
+ea1dad7c47624b11	PASS	406	context-cap-hooks	refuse	a92ea34b3fbbcb36f		BLOCKED: a code builder does not dispatch impl-drift; the claims round is
 ea631dc60c21494e	BASELINE	1072	context-cap-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: resuming builder N: its task TN has landed or is ticked
 eb5c55f3156a1044	BASELINE	877	shell-check-hooks	refuse	unreviewed - shell-check's parse refusal, a family of 4 keys: 5 shown a session, 5,650 characters, under 4 x 31,680 - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		BLOCKED: the command does not parse: bash: -c: line N: syntax error
 eb8dbc9f738d4fce	BASELINE	467	gm-tree-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a write into gm-assistant's main working tree (<path>). A dirty main
 ed8e85dd559d50a4	BASELINE	383	escalation-hooks	refuse	unreviewed - stood before 451 T170		QUESTION UNFILTERED: your final message puts something to the GM and no
 ee111d8def80a0e2	PASS	355	workflow-hooks	refuse	a066d53b0b706fa51		BLOCKED: an ad-hoc agent() call names no model and carries no SESSION_MODEL:
+ef61e1f3080925d4	PASS	157	context-cap-hooks	refuse	a428547a5cd4d6ca2		BLOCKED: SPLIT_OK with no reason. Put one in the prompt: SPLIT_OK="<why this
 f129932e221f76a5	BASELINE	799	claims-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: the research claims sheet is not opened by hand (Write). Ask
 f1f787afa84a2a3c	BASELINE	446	blocked-fetch-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this Bash refused: https:/<path> is on the blocked list (blocked-domains.json: grokipedia.com
 f23270b86a91468b	BASELINE	1002	main-tree-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: your shell is standing in <path>, inside <path> - the MIRROR
@@ -350,6 +354,7 @@ fb2299f555d6a925	BASELINE	525	readme-hooks	refuse	unreviewed - stood before 451 
 fd40cd8e085acc60	BASELINE	640	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has
 fd6f4400a52f2c2a	PASS	602	discard-hooks	refuse	ace1afc5bc6430da1		BLOCKED (discard): this command would throw away UNCOMMITTED work in: <path> <path>
 fdee832cb5ab9ead	PASS	550	make-only-hooks	refuse	message-check a92df90484ef842d4		BLOCKED: a GUARD FILE written from a shell command. Layer N only
+fe0abdf9f077b3c8	PASS	736	context-cap-hooks	refuse	a92ea34b3fbbcb36f		BLOCKED: this builder's context is N tokens, past the cap of N.
 fe30d702c11d5eaa	BASELINE	125	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: REVIEW_PREREQ_OK needs a REASON (two words, eight characters, in quotes) -
 fea86051af136fca	PASS	448	workflow-hooks	refuse	a3f4533b308fc243f		BLOCKED: an agent() call with no agentType is not measured to run
 ff0eedda411337c1	BASELINE	640	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has

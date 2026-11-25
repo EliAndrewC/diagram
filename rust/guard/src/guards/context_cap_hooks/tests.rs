@@ -197,7 +197,8 @@ fn a_builder_past_the_cap_is_refused_but_for_its_handoff() {
             Some(Said::Refused {
                 agent: AID.to_owned(),
                 tokens: 310_000,
-                handoff: handoff.clone()
+                handoff: handoff.clone(),
+                code: false
             })
         );
     }
@@ -273,7 +274,8 @@ fn a_builder_just_past_an_advisor_call_is_judged_on_its_own_context() {
         Some(Said::Refused {
             agent: AID.to_owned(),
             tokens: 310_000,
-            handoff: f.handoffs().join(format!("{AID}.md"))
+            handoff: f.handoffs().join(format!("{AID}.md")),
+            code: false
         })
     );
 }
@@ -370,7 +372,7 @@ fn the_answers_and_their_records() {
         answer(&e, &Session::from_input(&e.input), Path::new("/"), &none)
     };
     let handoff = f.handoffs().join(format!("{AID}.md"));
-    let text = refusal(310_000, &handoff);
+    let text = refusal(310_000, &handoff, false);
     assert_eq!(
         ask(f.bash("builder", "make quick")),
         vec![Answer::Refuse(text.clone())]
@@ -832,7 +834,7 @@ fn a_call_from_the_mirror_names_the_handoff_in_the_sessions_clone() {
         .join(format!("T60-{AID}.md"));
     assert_eq!(
         ask(f.bash("builder", "make quick")),
-        vec![Answer::Refuse(refusal(310_000, &handoff))]
+        vec![Answer::Refuse(refusal(310_000, &handoff, false))]
     );
     assert!(ask(write(&handoff)).is_empty());
     assert!(matches!(ask(write(&stray)).as_slice(), [Answer::Refuse(_)]));

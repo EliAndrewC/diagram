@@ -7,6 +7,11 @@ Why: on 2026-11-24/25 five 449 code builders and the 451 T218-T222 builder hit t
 handoff costing a fresh builder 10 to 20 minutes of re-reading. One builder did the fix, the measurement sweep, the plan
 section, the plan review AND the claims round. The claims round (agents, replies, re-bundles) is the part that runs it out.
 
+Enforced (451 T237, `rust/guard/src/guards/context_cap_hooks/split.rs`): a builder whose brief holds a line opening
+`STOP POINT` is refused a `claims-triage` or `impl-drift` dispatch (an Agent call, or a Workflow naming either), and its
+context-cap handoff says it stops there; keep that line in every code builder's brief. A claims-round dispatch's prompt opens
+`Run the claims round for feature ...` and is never held.
+
 ```
 STOP POINT. Your work ends when ALL of these hold, and not before:
  - the code is done, red-first, with 100% line coverage on new Rust;

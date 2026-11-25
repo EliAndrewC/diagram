@@ -129,6 +129,44 @@ printf '%s' "$OUT" | grep -q "^context-ok: agent $AID may pass the context cap u
 run builder Bash "$(bash_in 'make quick')"
 [ "$RC" -eq 0 ] && grep -lq 'context-ok-permit' "$GUARD_LOG_DIR"/* && ok "...and the builder's next call past the cap passes, recorded" || no "the permitted call refused" "(rc=$RC: $OUT)"
 
+echo "8. the builder split (451 T237): a code builder - its brief carries a STOP POINT line - dispatches no claims agent"
+brief() {  # brief <prompt text> <tokens>: the builder's own transcript, its brief first
+  jq -nc --arg p "$1" '{type: "user", message: {role: "user", content: $p}}' > "$OWN"
+  printf '{"type":"assistant","message":{"id":"m","usage":{"input_tokens":2,"cache_read_input_tokens":%s,"cache_creation_input_tokens":0}}}\n' "$(($2 - 2))" >> "$OWN"
+}
+agent_in() { jq -nc --arg t "$1" --arg p "${2:-Triage the claims bundle}" '{subagent_type: $t, prompt: $p, description: "x"}'; }
+CODE=$'Build feature 451 task T05 in the clone.\n\nSTOP POINT. Your work ends when ALL of these hold:\n - make claims-triage has run'
+brief "$CODE" 120000
+run builder Agent "$(agent_in claims-triage)"
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'STOP POINT' && printf '%s' "$OUT" | grep -q 'make claims-owed' && ok "a code builder's claims-triage dispatch is refused, naming the stop point and what to report" || no "the claims-triage dispatch passed" "(rc=$RC: $OUT)"
+grep -lq 'builder-split' "$GUARD_LOG_DIR"/* && ok "...recorded" || no "no record of the split's refusal"
+run builder Agent "$(agent_in impl-drift)"
+[ "$RC" -eq 2 ] && ok "...and its impl-drift dispatch" || no "the impl-drift dispatch passed" "(rc=$RC: $OUT)"
+run builder Agent "$(agent_in spec-fidelity 'MODE 4: PLAN REVIEW')"
+[ "$RC" -eq 0 ] && ok "its spec-fidelity dispatch passes" || no "a plan review refused" "(rc=$RC: $OUT)"
+run builder Workflow '{"name":"check-wave","args":{"agentType":"impl-drift","units":[{"label":"a","prompt":"p"}]}}'
+[ "$RC" -eq 2 ] && ok "...and a check-wave of impl-drift is refused it too" || no "the wave passed" "(rc=$RC: $OUT)"
+run builder Agent "$(agent_in impl-drift 'SPLIT_OK="the GM asked for it" Judge the bundle')"
+[ "$RC" -eq 0 ] && grep -lq 'the GM asked for it' "$GUARD_LOG_DIR"/* && ok "SPLIT_OK with a reason in the prompt passes, recorded" || no "the split's escape" "(rc=$RC: $OUT)"
+run builder Agent "$(agent_in impl-drift 'Judge the bundle SPLIT_OK')"
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'SPLIT_OK with no reason' && ok "a bare SPLIT_OK is refused" || no "a bare SPLIT_OK" "(rc=$RC: $OUT)"
+brief $'Run the claims round for feature 449 task T431 in the clone.\nSTOP POINT. quoted from the builder brief' 120000
+run builder Agent "$(agent_in claims-triage)"
+[ "$RC" -eq 0 ] && ok "a claims-round dispatch passes, a STOP POINT line quoted in it or not" || no "the claims round refused" "(rc=$RC: $OUT)"
+brief 'Build feature 449 task T427 (a brief with no stop point)' 120000
+run builder Agent "$(agent_in impl-drift)"
+[ "$RC" -eq 0 ] && ok "a builder whose brief has no STOP POINT line passes" || no "an unmarked builder refused" "(rc=$RC: $OUT)"
+run main Agent "$(agent_in impl-drift)"
+[ "$RC" -eq 0 ] && ok "the main session's dispatch passes" || no "the main session refused" "(rc=$RC: $OUT)"
+echo "9. the cap's handoff names the split for a code builder, and only for one"
+rm -f "$C/.git/l7r-guard-permits.jsonl"  # case 7's permit would let the call through
+brief "$CODE" 310000
+run builder Bash "$(bash_in 'make quick')"
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'does not run the claims round' && ok "a code builder past the cap is told it hands off at its stop point" || no "the handoff names no split" "(rc=$RC: $OUT)"
+brief 'Run the claims round for feature 449 task T431' 310000
+run builder Bash "$(bash_in 'make quick')"
+[ "$RC" -eq 2 ] && ! printf '%s' "$OUT" | grep -q 'claims round' && ok "...and a claims-round dispatch past it is not" || no "the claims round's handoff" "(rc=$RC: $OUT)"
+
 echo
 echo "context-cap-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

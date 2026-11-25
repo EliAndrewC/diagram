@@ -84,12 +84,15 @@ enum Said {
     Escaped(String),
     /// `CONTEXT_OK` with no reason: the escape's own refusal.
     NoReason(String),
-    /// Refused, naming the handoff file.
+    /// Refused, naming the handoff file; `code` where its brief makes it a code builder (451 T237, [`split`]).
     Refused {
         agent: String,
         tokens: u64,
         handoff: PathBuf,
+        code: bool,
     },
+    /// A code builder's dispatch of a claims agent (451 T237, [`split`]).
+    Split(Split),
     /// Past the cap, let through by the session's `make context-ok` permit for this agent, its reason.
     Permitted(String),
     /// A resume of a builder whose task none of D2's rungs finds: passed, recorded.
@@ -168,9 +171,22 @@ fn answer(
             agent,
             tokens,
             handoff,
+            code,
         }) => {
             log("blocked", &format!("{agent}: {tokens} tokens"), "past-cap");
-            vec![Answer::Refuse(refusal(tokens, &handoff))]
+            vec![Answer::Refuse(refusal(tokens, &handoff, code))]
+        }
+        Some(Said::Split(Split::Refused(kind))) => {
+            log("blocked", &kind, "builder-split");
+            vec![Answer::Refuse(split::refusal(&kind))]
+        }
+        Some(Said::Split(Split::Escaped(why))) => {
+            log("escaped", &why, "split-ok");
+            Vec::new()
+        }
+        Some(Said::Split(Split::NoReason(text))) => {
+            log("blocked", "SPLIT_OK with no reason", "SPLIT_OK-no-reason");
+            vec![Answer::Refuse(text)]
         }
         Some(Said::Permitted(why)) => {
             log("escaped", &why, "context-ok-permit");
@@ -208,8 +224,9 @@ fn answer(
 }
 
 /// The verdict on one hook input against the cap `cap`: None to pass it silently. A `SendMessage` is judged as a resume (D10) once its
-/// sender's own cap lets it through: a builder past its cap is refused its `SendMessage` as any other call. `clone` is the session's
-/// clone, asked only past the cap or on a resume of a builder (451 T60, [`seat`]).
+/// sender's own cap lets it through: a builder past its cap is refused its `SendMessage` as any other call. A code builder's dispatch
+/// of a claims agent is judged by the split (451 T237) once the cap lets it through. `clone` is the session's clone, asked only past
+/// the cap or on a resume of a builder (451 T60, [`seat`]).
 fn judge(
     input: &Value,
     here: &Path,
@@ -218,12 +235,41 @@ fn judge(
     clone: &dyn Fn() -> Option<PathBuf>,
 ) -> Option<Said> {
     let own = own_cap(input, here, env, cap, clone);
-    if field(input, "tool_name") != "SendMessage"
-        || matches!(own, Some(Said::Refused { .. } | Said::NoReason(_)))
-    {
+    if matches!(own, Some(Said::Refused { .. } | Said::NoReason(_))) {
+        return own;
+    }
+    // THE SPLIT (451 T237): a claims agent's dispatch, named before anything is read, from a code builder
+    if let Some((kind, text)) = split::dispatch(input) {
+        if builder_tree(input, here).is_some()
+            && own_transcript(field(input, "transcript_path"), field(input, "agent_id"))
+                .is_some_and(|t| split::code_builder(&t))
+        {
+            return Some(Said::Split(split::judge(kind, &text)));
+        }
+    }
+    if field(input, "tool_name") != "SendMessage" {
         return own;
     }
     resume(input, here, env, cap, clone)
+}
+
+/// The working tree of a builder's call (D8): None for the main session (no `agent_id`), an id no path can take, a call in no tree,
+/// or a defined agent (its type names a file of the tree's `.claude/agents/`, a stat and no read).
+fn builder_tree(input: &Value, here: &Path) -> Option<PathBuf> {
+    if !plain(field(input, "agent_id")) {
+        return None;
+    }
+    let tree = tree_of(&match field(input, "cwd") {
+        "" => here.to_path_buf(),
+        c => PathBuf::from(c),
+    })?;
+    let kind = field(input, "agent_type");
+    let defined = plain(kind)
+        && tree
+            .join(".claude/agents")
+            .join(format!("{kind}.md"))
+            .is_file();
+    (!defined).then_some(tree)
 }
 
 /// The verdict on a call against its own builder's cap (D8, D9).
@@ -234,27 +280,11 @@ fn own_cap(
     cap: u64,
     clone: &dyn Fn() -> Option<PathBuf>,
 ) -> Option<Said> {
-    // THE MAIN SESSION, AND AN ID NO PATH CAN TAKE: every call of the main thread ends here, nothing read
+    // THE MAIN SESSION, AN ID NO PATH CAN TAKE AND A DEFINED AGENT (D8): every call of the main thread ends here, nothing read
+    let tree = builder_tree(input, here)?;
     let agent = field(input, "agent_id");
-    if !plain(agent) {
-        return None;
-    }
-    let cwd = match field(input, "cwd") {
-        "" => here.to_path_buf(),
-        c => PathBuf::from(c),
-    };
-    let tree = tree_of(&cwd)?;
-    // A DEFINED AGENT (D8): its type names a file of the clone's `.claude/agents/`, a stat and no read
-    let kind = field(input, "agent_type");
-    if plain(kind)
-        && tree
-            .join(".claude/agents")
-            .join(format!("{kind}.md"))
-            .is_file()
-    {
-        return None;
-    }
-    let tokens = context(&own_transcript(field(input, "transcript_path"), agent)?)?;
+    let own = own_transcript(field(input, "transcript_path"), agent)?;
+    let tokens = context(&own)?;
     if tokens <= cap {
         return None;
     }
@@ -286,6 +316,7 @@ fn own_cap(
         agent: agent.to_owned(),
         tokens,
         handoff,
+        code: split::code_builder(&own),
     })
 }
 
@@ -524,13 +555,19 @@ fn is_handoff(file: &str, dir: &Path, agent: &str) -> bool {
 
 /// The refusal: the context against the cap, the handoff file, the next step, the escape. 451 T177 (message-check): the why is one
 /// clause; its figures (10 s per 1,000 output tokens under 200k, 23 s over 700k) and its spec line (451 FR-006) are this module's.
-fn refusal(tokens: u64, handoff: &Path) -> String {
+/// A code builder's (`code`, 451 T237) also names the split: it hands off at its stop point, the claims round not its own.
+fn refusal(tokens: u64, handoff: &Path, code: bool) -> String {
     let path = handoff.display();
+    let split = if code {
+        "\n     A code builder hands off at its STOP POINT and does not run the claims round: say what of it is left."
+    } else {
+        ""
+    };
     format!(
         "\n\u{1b}[1mBLOCKED: this builder's context is {tokens} tokens, past the cap of {CONTEXT_CAP_TOKENS}.\u{1b}[0m\n\n\
 Long contexts slow model calls, so the task goes on in a fresh builder:\n\n\
   1. Write the handoff file - what is done, what is left, the files touched and the next command - with the Write tool,\n\
-     the one call this guard lets through:\n\n       {path}\n\n\
+     the one call this guard lets through:\n\n       {path}{split}\n\n\
   2. Stop, and reply with that path; the main session dispatches a fresh builder from it.\n\n\
 Escape: {TOKEN}=\"<reason>\" (two words or more) in a Bash command, recorded in the guard log.\n"
     )
@@ -566,6 +603,10 @@ Escape: {TOKEN}=\"<reason>\" in the SendMessage's summary, recorded in the guard
 still refused every call but its handoff's until the session grants it an hour: make context-ok AID={agent} WHY=\"<reason>\"\n"
     )
 }
+
+mod split;
+
+use split::Split;
 
 #[cfg(test)]
 mod tests;

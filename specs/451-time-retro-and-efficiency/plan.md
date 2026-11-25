@@ -2886,31 +2886,40 @@ engine speed, so no checklist.
 
 
 <!-- plan-archive: T236 to T236 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
-### T237 (<why: the finding or measurement that files it>)
+### T237 (the GM 2026-11-25, request.md: "sounds good please do that ASAP": five 449 code builders and the 451 T218-T222 builder hit the 300k context cap and handed off, the claims round the part that ran them out; the brief template half landed as `scripts/container/builder-brief.md`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: The enforcement half, in the context-cap guard (`rust/guard/src/guards/context_cap_hooks.rs`, which already tells a builder from the main session and a defined agent, D8, and reads its own transcript, D9), a new submodule `context_cap_hooks/split.rs`.
+  - **Who is a code builder.** A builder whose brief - the first row of its own transcript, the prompt it was dispatched with - holds a line opening `STOP POINT`, and does not itself open `Run the claims round` (the claims round's own dispatch, which may quote the brief). The main session (no `agent_id`) and a defined agent are never read. Any read that fails passes.
+  - **The measurement**, 2026-11-25, method: every subagent transcript of this session (c6fd72d1, 579 builders) read for its first row and its own Agent calls. The 12 builders whose brief held a line opening `STOP POINT` (449 T431-T435, 451 T230-T240, from 06:21Z on) dispatched 0 `claims-triage` or `impl-drift`: the split held by brief alone, and the rule refuses none of their calls. The 6 claims-round dispatches (prompts beginning "Run the claims round for feature ...") carry no such line, nor do the 131 claims dispatches the main thread made itself (no `agent_id`): none would be refused. The builders before the brief (449 T426, T427, T429/T430 and T430's finisher) did dispatch claims agents themselves (5, 1, 4 and 3), so "held by brief alone" is true of briefed builders only. What the guard adds: a backstop for a briefed builder that drifts; it is silent where the brief is omitted.
+  - **Why the marker, not every builder** (spec-fidelity MODE 4 round 1, 2026-11-25, asked for the count). Of the same 579 builders, 85 with no `STOP POINT` line, the claims-round dispatches aside, dispatched a claims agent themselves, measured 2026-11-25 (their first rows, descriptions and Agent calls): 52 code or landing builders, 19 record or pop-up bundles, 11 page-session cascades and 3 claims rounds worded otherwise ("Claims round: arch claim re-check", "Finish 449 T430's claims round"). Since the split's first brief (06:21Z) there was ONE: the page session P15 cascade ("Run the cascade of page session P15 (feature 449 T436)"), whose claims round is its own correct work. So the wider test - every builder but a prompt opening `Run the claims round` - would have refused correct work on the split's first day, and every page cascade and record bundle after it; a guard that fires on correct work is worse than none (root CLAUDE.md, "What is enforced"). No test the transcripts hold separates a code builder from a record bundle or a cascade but its brief, so the brief carries the mark: the template (`scripts/container/builder-brief.md`) is the coordinating session's standing order for every code builder's dispatch, the guard enforces the split on every builder it sets, and an unmarked builder passes, as D8 passes what it cannot tell.
+  - **What is refused.** A code builder's `Agent` call of `claims-triage` or `impl-drift`, or a `Workflow` naming either as an `agentType` (args, a unit's `then` step, or a script literal: a wave of 4 or more runs through `check-wave`, whose units no Agent hook of the builder sees, since `workflow_hooks` replays them without `agent_id`). The refusal names the agent, the brief's STOP POINT (`make claims-triage` and stop), and what to report (the claim keys, what `make claims-owed` lists, the paths to commit). Escape: `SPLIT_OK="<reason>"` in the prompt, recorded (`split-ok`); a firing is recorded `builder-split`.
+  - **The handoff names the split.** The cap's refusal, for a code builder only, adds one line: it hands off at its STOP POINT and does not run the claims round. A claims-round dispatch past its cap is not told that.
+  - **The brief** (`scripts/container/builder-brief.md`) says the guard keys on its `STOP POINT` line, so the marker is one the brief sets.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a code builder's claims dispatch refused | suite case 8 red on HEAD, measured 2026-11-25 (`tests/hooks/test-context-cap-hooks.sh`: 34 passed, 8 failed - the claims-triage, impl-drift and wave dispatches passed, no record, no escape); `split/tests.rs` | n/a: tooling | none | n/a |
+| the cap's handoff names the split | suite case 9 red on HEAD (both cases) | n/a: tooling | none | n/a |
 
 ### T237 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A code builder stops at its stop point; the coordinating session runs the claims round as its own dispatch. A builder that drifts is refused its claims dispatch, and told what to report instead.
+2. **The constraints.** The root CLAUDE.md "What is enforced": a guard that fires on correct work is worse than none, so the rule must refuse none of the coordinating session's claims rounds. The escape states a two-word reason, recorded. The message names the compliant action.
+3. **Where each comes from.** G: request.md, "sounds good please do that ASAP". O: this session's 579 builder transcripts, 2026-11-25 (above). The task line: "enforced, not remembered: the context-cap guard's handoff names the split".
+4. **Do they describe the world here?** Yes: the 12 briefed builders made no claims dispatch, and the 6 claims-round dispatches and the 131 main-thread dispatches carry no mark, measured 2026-11-25 (this session's subagent transcripts, their first rows and Agent calls).
+5. **The order.** After the brief template (on main). No other task depends on it.
+6. **The exits.** Green: `make closing-checks T=T237` and the suite. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-25: the suite on HEAD's guard gave 34 passed, 8 failed (cases 8 and 9); on the fix, 42 passed, 0 failed. Fires-proof: HEAD is the rule deleted, and case 8 goes red there.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: the split was remembered (in the brief), not enforced. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `workflow_hooks` replays a `check-wave` unit through the Agent hooks without the caller's `agent_id`, so no builder-keyed rule sees a builder's wave. Effect here: a code builder's wave of claims checks would pass. Fixed here for this rule (the split reads the `Workflow` call itself); the replay itself is left as it is: adding `agent_id` there changes what the event log and the checks' records book, a wider change than this task, and no other builder-keyed Agent rule exists today.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: it refuses a dispatch; nothing runs faster or slower.
 
 ### T237 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 

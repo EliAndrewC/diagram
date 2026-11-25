@@ -1458,6 +1458,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T237 (the GM 2026-11-25, request.md: \"sounds good please do that ASAP\": five 449 code builders and the 451 T218-T222 builder hit the 300k context cap and handed off, the claims round the part that ran them out; the brief template half landed as `scripts/container/builder-brief.md`)": {
+   "sha256": "1d08063f9e29c48bf0eb2874508ab96e4ced2db245b1010198cf206707236d98",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T237 Approach (checklist part A)": {
+   "sha256": "b05977f7d8353b146438b5e1c6834839fa53d40478d8efecc9b5ef08ae953414",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T237 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "fe7fd32b829bb6d3d58bf7352f1e1fc19f85ad96139f045bcfe5d05d6e5ec1d8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -19589,6 +19607,141 @@
      "why": "A separate, already-filed task about a different counter. This task's own counter no longer carries that flaw. No defect of this task's subject is carried forward."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T237 (the GM 2026-11-25, request.md: \"sounds good please do that ASAP\": five 449 code builders and the 451 T218-T222 builder hit the 300k context cap and handed off, the claims round the part that ran them out; the brief template half landed as `scripts/container/builder-brief.md`)",
+    "### T237 Approach (checklist part A)",
+    "### T237 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T237-1 placement",
+     "summary": "The enforcement goes in the context-cap guard as a new submodule context_cap_hooks/split.rs, reusing its builder test (D8) and transcript read (D9).",
+     "class": "within",
+     "why": "Where the guard lives is design. It narrows nothing the GM asked for ('sounds good please do that ASAP')."
+    },
+    {
+     "id": "T237-2 claims-round exclusion",
+     "summary": "A builder whose brief opens 'Run the claims round' is not a code builder, so the claims round's own dispatch may still dispatch claims-triage and impl-drift.",
+     "class": "within",
+     "why": "The split moves the claims round into its own dispatch, so that dispatch has to be able to run it. Measured 2026-11-25: 6 claims-round dispatches, none would be refused."
+    },
+    {
+     "id": "T237-3 fail open",
+     "summary": "A failed read of the transcript passes.",
+     "class": "within",
+     "why": "The guard rule is that a guard which fires on correct work is worse than none. A read failure is not evidence of drift."
+    },
+    {
+     "id": "T237-4 what is refused",
+     "summary": "A code builder's Agent call of claims-triage or impl-drift is refused, and so is a Workflow naming either as an agentType (args, a then step, a script literal). The refusal names the STOP POINT and what to report. Escape SPLIT_OK=\"<reason>\", recorded split-ok; a firing is recorded builder-split.",
+     "class": "within",
+     "why": "This is the split, enforced, with an FR-012-shaped escape and message. The Workflow reach closes the check-wave route a builder would otherwise take around an Agent-only rule. The bundle never defines which agents make up the claims round, so whether these two are all of it is the session's claim, not one this bundle shows."
+    },
+    {
+     "id": "T237-5 handoff line",
+     "summary": "For a code builder only, the cap's refusal adds a line: hand off at the STOP POINT and do not run the claims round. A claims-round dispatch is not told that.",
+     "class": "within",
+     "why": "The task line has it: 'enforced, not remembered: the context-cap guard's handoff names the split'. Withholding the line from the claims-round dispatch keeps it from being wrong there."
+    },
+    {
+     "id": "T237-6 workflow_hooks replay left",
+     "summary": "workflow_hooks still replays check-wave units without the caller's agent_id. This rule works around that by reading the Workflow call itself.",
+     "class": "within",
+     "why": "No outcome is wrong today: this rule covers itself, and the block states that no other builder-keyed Agent rule exists. So this is not a defect deferred under FR-009 or the FIX AS WE GO rule."
+    },
+    {
+     "id": "T237-7 keyed on the brief's STOP POINT marker; silent where the brief is omitted",
+     "summary": "Only a builder whose brief holds a line opening STOP POINT counts as a code builder. A code builder dispatched without the template's marker is not read, and its claims dispatches pass 'by design'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Purpose: the GM approved splitting the claims round off a code builder ('sounds good please do that ASAP'), under feature 451's standing 'let's make sure all of the enforcement is real enforcement and not just instructions'. The block's own finding is that 'the split was remembered (in the brief), not enforced'. Keying the guard on a marker that only the brief sets leaves enforcement resting on the session remembering to use the brief, one step removed. The block's own census sharpens this: the only builders that ever dispatched claims agents themselves (449 T426, T427, T429/T430, and T430's finisher: 5, 1, 4 and 3 calls) were unmarked, the very population this guard never reads, and the 12 marked builders made 0. Impossibility is asserted, not measured: 'the unmarked builder is no code builder it can tell' carries no count. The 579-transcript census does not report any unmarked builder, outside a claims-round dispatch, whose claims dispatch was correct work under the split (a page session, for instance). That count is the only thing that would make the obvious key, a D8 builder minus a brief opening 'Run the claims round', refuse correct work. D8 itself turned down a marker key for the same reason ('requiring a T<n> in it would let a builder with an unnamed brief pass'). 'By default' does not rescue it: a default's exceptions go through the recorded SPLIT_OK escape, not through an unrecorded omitted marker. Nothing in the bundle requires a code builder's dispatch to carry the marker. Either cure clears this: (a) key on D8's builder minus the claims-round prefix, or refuse a code builder's dispatch whose brief lacks the STOP POINT marker, so the unmarked gap closes; or (b) measure from the same 579 transcripts how many unmarked, non-claims-round builders made a claims dispatch that is correct work under the split, and if any are, name the key that tells them apart and state why the remaining gap cannot be closed."
+    }
+   ],
+   "tasks": [
+    "T237"
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T237 (the GM 2026-11-25, request.md: \"sounds good please do that ASAP\": five 449 code builders and the 451 T218-T222 builder hit the 300k context cap and handed off, the claims round the part that ran them out; the brief template half landed as `scripts/container/builder-brief.md`)",
+    "### T237 Approach (checklist part A)",
+    "### T237 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T237-placement",
+     "summary": "The split's enforcement lives in the context-cap guard as a new submodule context_cap_hooks/split.rs, reusing D8's builder test and D9's transcript read.",
+     "class": "within",
+     "why": "Where the enforcement lives is design; the request (2026-11-25, 'sounds good please do that ASAP') asks for the claims round split off code builders, and the feature's 2026-11-19 approval asks that enforcement be real. Placing it in the guard that already reads builders' transcripts narrows nothing."
+    },
+    {
+     "id": "T237-code-builders-only",
+     "summary": "The rule applies to code builders, not every builder: record and pop-up bundles, page-session cascades and claims-round dispatches keep their own claims work.",
+     "class": "within",
+     "why": "The request is about code builders ('most code builders ... hit the 300k context cap', the cause 'one builder doing the fix, ... and the claims round'). A cascade's or bundle's claims round is that builder's own correct work and was never asked to be split off; the block's measurement (the P15 cascade on the split's first day) shows an every-builder rule would refuse it."
+    },
+    {
+     "id": "T237-marker-opt-in",
+     "summary": "A code builder is recognized only by a line opening STOP POINT in its brief (the brief template sets it); an unmarked builder passes, so the guard is silent where the coordinating session omits the template.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows enforcement: an unmarked code builder (the session dispatching without scripts/container/builder-brief.md) is unguarded, and the split there rests on the session remembering the template - the gap is real and is named in the block ('silent where the brief is omitted'). It is legitimate on purpose, not on consistency: the block's own evidence shows that no transcript-only test separates a code builder from other builders without refusing correct work - an every-builder rule refused the P15 cascade on the split's first day, and even the claims round's own dispatches are not worded uniformly (3 of the 85 opened 'Claims round: arch claim re-check' and 'Finish 449 T430's claims round', which an opener-keyed rule would refuse). A default-on test from prompt wording would therefore refuse correct work, which the project's guard rule ranks worse than none, so the only false-positive-free mark of a code builder is one its brief sets. The purpose - keep the claims round out of a code builder's context - is enforced on every builder dispatched as a code builder through the template, which is the coordinating session's standing order and the same brief that tells a builder where to stop at all; the 06:21Z-on measurement (12 briefed builders, 0 claims dispatches) is consistent with this but is not the ground."
+    },
+    {
+     "id": "T237-claims-round-exclusion",
+     "summary": "A builder whose prompt itself opens 'Run the claims round' is not a code builder even if it quotes a STOP POINT line.",
+     "class": "within",
+     "why": "The claims round's own dispatch is the half the request moves to the coordinating session; refusing it would refuse the requested split's own work. A claims round worded otherwise that quotes the brief would be refused and has SPLIT_OK, which is an escape, not a narrowing."
+    },
+    {
+     "id": "T237-fail-open-read",
+     "summary": "Any transcript read that fails passes; the main session and defined agents are never read.",
+     "class": "within",
+     "why": "The accepted D8/D9 design of this same guard: it passes what it cannot tell and never reads the main session or a defined agent. No narrowing of the request beyond the accepted spec."
+    },
+    {
+     "id": "T237-what-is-refused",
+     "summary": "A code builder's Agent call of claims-triage or impl-drift, or a Workflow naming either as an agentType (args, a unit's then step, a script literal), is refused, naming the agent, the brief's STOP POINT (make claims-triage and stop) and what to report.",
+     "class": "within",
+     "why": "This is the requested split, enforced; covering the Workflow form closes a hole (check-wave units replay without agent_id) rather than adding behavior beyond the request. The message names the compliant action per FR-012."
+    },
+    {
+     "id": "T237-escape",
+     "summary": "Escape SPLIT_OK=\"<reason>\" in the prompt, recorded split-ok; firings recorded builder-split.",
+     "class": "within",
+     "why": "The project's guard rule restated in FR-012 (a reason escape, recorded); 'by default' in the request admits a deliberate exception path."
+    },
+    {
+     "id": "T237-handoff-line",
+     "summary": "The cap's handoff refusal, for a code builder only, adds one line: hand off at the STOP POINT and do not run the claims round; a claims-round dispatch past its cap is not told that.",
+     "class": "within",
+     "why": "The task's own enforcement line ('the context-cap guard's handoff names the split'); scoping it to code builders follows the request's subject."
+    },
+    {
+     "id": "T237-brief-names-marker",
+     "summary": "The brief template states that the guard keys on its STOP POINT line.",
+     "class": "within",
+     "why": "Documents the mark the guard reads; no behavior beyond the request."
+    },
+    {
+     "id": "T237-found-and-left-replay",
+     "summary": "workflow_hooks' replay of check-wave units without agent_id is left as it is; this rule reads the Workflow call itself instead.",
+     "class": "within",
+     "why": "Not a defect left: the wrong outcome for this rule (a builder's wave of claims checks passing) is fixed here, and the block states no other builder-keyed Agent rule exists today (its premise, not measured by this review; nothing in D8, D9 or FR-006 contradicts it - the cap refuses the builder's own Workflow call directly). Leaving a difference that causes no wrong outcome stays within (constitution XIV v2.36.0)."
+    },
+    {
+     "id": "T237-not-performance-work",
+     "summary": "Declared not performance work; the performance checklist is left as its template.",
+     "class": "within",
+     "why": "A guard that refuses a dispatch; the checklist is prompts, never a gate. No narrowing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -31486,6 +31639,81 @@
      "summary": "T227 (the record checks' counter kept per active feature) is left as a separate task",
      "class": "within",
      "why": "A separate, already-filed task about a different counter. This task's own counter no longer carries that flaw. No defect of this task's subject is carried forward."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T237": {
+   "section_sha256": "d75b70cdda2fa72ac5eb855d2fffb4a1840d22feed8707809406c119b490b47d",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T237-placement",
+     "summary": "The split's enforcement lives in the context-cap guard as a new submodule context_cap_hooks/split.rs, reusing D8's builder test and D9's transcript read.",
+     "class": "within",
+     "why": "Where the enforcement lives is design; the request (2026-11-25, 'sounds good please do that ASAP') asks for the claims round split off code builders, and the feature's 2026-11-19 approval asks that enforcement be real. Placing it in the guard that already reads builders' transcripts narrows nothing."
+    },
+    {
+     "id": "T237-code-builders-only",
+     "summary": "The rule applies to code builders, not every builder: record and pop-up bundles, page-session cascades and claims-round dispatches keep their own claims work.",
+     "class": "within",
+     "why": "The request is about code builders ('most code builders ... hit the 300k context cap', the cause 'one builder doing the fix, ... and the claims round'). A cascade's or bundle's claims round is that builder's own correct work and was never asked to be split off; the block's measurement (the P15 cascade on the split's first day) shows an every-builder rule would refuse it."
+    },
+    {
+     "id": "T237-marker-opt-in",
+     "summary": "A code builder is recognized only by a line opening STOP POINT in its brief (the brief template sets it); an unmarked builder passes, so the guard is silent where the coordinating session omits the template.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows enforcement: an unmarked code builder (the session dispatching without scripts/container/builder-brief.md) is unguarded, and the split there rests on the session remembering the template - the gap is real and is named in the block ('silent where the brief is omitted'). It is legitimate on purpose, not on consistency: the block's own evidence shows that no transcript-only test separates a code builder from other builders without refusing correct work - an every-builder rule refused the P15 cascade on the split's first day, and even the claims round's own dispatches are not worded uniformly (3 of the 85 opened 'Claims round: arch claim re-check' and 'Finish 449 T430's claims round', which an opener-keyed rule would refuse). A default-on test from prompt wording would therefore refuse correct work, which the project's guard rule ranks worse than none, so the only false-positive-free mark of a code builder is one its brief sets. The purpose - keep the claims round out of a code builder's context - is enforced on every builder dispatched as a code builder through the template, which is the coordinating session's standing order and the same brief that tells a builder where to stop at all; the 06:21Z-on measurement (12 briefed builders, 0 claims dispatches) is consistent with this but is not the ground."
+    },
+    {
+     "id": "T237-claims-round-exclusion",
+     "summary": "A builder whose prompt itself opens 'Run the claims round' is not a code builder even if it quotes a STOP POINT line.",
+     "class": "within",
+     "why": "The claims round's own dispatch is the half the request moves to the coordinating session; refusing it would refuse the requested split's own work. A claims round worded otherwise that quotes the brief would be refused and has SPLIT_OK, which is an escape, not a narrowing."
+    },
+    {
+     "id": "T237-fail-open-read",
+     "summary": "Any transcript read that fails passes; the main session and defined agents are never read.",
+     "class": "within",
+     "why": "The accepted D8/D9 design of this same guard: it passes what it cannot tell and never reads the main session or a defined agent. No narrowing of the request beyond the accepted spec."
+    },
+    {
+     "id": "T237-what-is-refused",
+     "summary": "A code builder's Agent call of claims-triage or impl-drift, or a Workflow naming either as an agentType (args, a unit's then step, a script literal), is refused, naming the agent, the brief's STOP POINT (make claims-triage and stop) and what to report.",
+     "class": "within",
+     "why": "This is the requested split, enforced; covering the Workflow form closes a hole (check-wave units replay without agent_id) rather than adding behavior beyond the request. The message names the compliant action per FR-012."
+    },
+    {
+     "id": "T237-escape",
+     "summary": "Escape SPLIT_OK=\"<reason>\" in the prompt, recorded split-ok; firings recorded builder-split.",
+     "class": "within",
+     "why": "The project's guard rule restated in FR-012 (a reason escape, recorded); 'by default' in the request admits a deliberate exception path."
+    },
+    {
+     "id": "T237-handoff-line",
+     "summary": "The cap's handoff refusal, for a code builder only, adds one line: hand off at the STOP POINT and do not run the claims round; a claims-round dispatch past its cap is not told that.",
+     "class": "within",
+     "why": "The task's own enforcement line ('the context-cap guard's handoff names the split'); scoping it to code builders follows the request's subject."
+    },
+    {
+     "id": "T237-brief-names-marker",
+     "summary": "The brief template states that the guard keys on its STOP POINT line.",
+     "class": "within",
+     "why": "Documents the mark the guard reads; no behavior beyond the request."
+    },
+    {
+     "id": "T237-found-and-left-replay",
+     "summary": "workflow_hooks' replay of check-wave units without agent_id is left as it is; this rule reads the Workflow call itself instead.",
+     "class": "within",
+     "why": "Not a defect left: the wrong outcome for this rule (a builder's wave of claims checks passing) is fixed here, and the block states no other builder-keyed Agent rule exists today (its premise, not measured by this review; nothing in D8, D9 or FR-006 contradicts it - the cap refuses the builder's own Workflow call directly). Leaving a difference that causes no wrong outcome stays within (constitution XIV v2.36.0)."
+    },
+    {
+     "id": "T237-not-performance-work",
+     "summary": "Declared not performance work; the performance checklist is left as its template.",
+     "class": "within",
+     "why": "A guard that refuses a dispatch; the checklist is prompts, never a gate. No narrowing."
     }
    ],
    "verdict": "CLEAR"
