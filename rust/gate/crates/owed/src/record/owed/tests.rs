@@ -118,6 +118,8 @@ mod answer_modes;
 mod listing_tail;
 // a listed note echoed and kept (451 T229), beside it for the same bar
 mod noted;
+// a re-run on text answered before, marked (451 T232)
+mod rerun;
 
 #[test]
 fn the_store_keeps_every_answer_and_settles() {

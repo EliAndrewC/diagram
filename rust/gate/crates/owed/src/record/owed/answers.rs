@@ -27,7 +27,7 @@ use crate::Reply;
 mod cli;
 mod depiction;
 pub use super::reply::{reply_of, reply_text, unescaped};
-pub use cli::{file_outside, file_outside_in, file_outside_with, run_in, Outside};
+pub use cli::{file_outside, file_outside_in, file_outside_with, keep_noted_rows, run_in, Outside};
 pub use depiction::{amendment1_depiction_answered, legacy_depiction_answered};
 
 /// A round's own EDIT blocks settled it.
@@ -188,6 +188,79 @@ pub fn write_answer(
         pages,
         build::current().as_ref(),
     )
+}
+
+/// The field a re-run's answer carries (451 T232): `{"fingerprint", "was"}`, the text it judged and the result the unit already held
+/// at it. Measured 2026-11-25 (451 T232): the two answers that differed on one fingerprint (sheet/guest-quarters' gaps on 11-24,
+/// sheet/barracks' form on the re-run) each paired a round judging only a change with a later one judging more, so a re-run's new
+/// finding is one on text an earlier answer stood on - a wording one listed, not applied, by `make apply-edits` (a factual one applies).
+pub const RERUN: &str = "rerun";
+/// The field an answer from a bundle carries (451 T232): its MANIFEST's digest, so the same bundle recorded again is told from a
+/// re-run, whose bundle holds one more earlier round.
+pub const MANIFEST: &str = "manifest";
+
+/// [`write_answer`] for a check's reply, marking the record a re-run where `fp` was answered before (451 T232): the earlier result
+/// stands beside the new one, and `make apply-edits` holds the re-run's wording EDITs on that unit while its fingerprint stands.
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn answer_unit(
+    store_dir: &Path,
+    slug: &str,
+    fp: &str,
+    result: &str,
+    pages: Option<&Value>,
+    manifest: &str,
+) -> Result<(), Fail> {
+    let old = read_answer(store_dir, slug);
+    // the same bundle recorded again (after a refused line or a hold) is the same round, never a re-run: its mark, if any, stays
+    let same = !manifest.is_empty() && old.get(MANIFEST).and_then(Value::as_str) == Some(manifest);
+    let mark = if same {
+        old.get(RERUN).cloned()
+    } else if answered(store_dir, slug, fp, "") {
+        let was = old.get("result").and_then(Value::as_str).unwrap_or("");
+        Some(json!({"fingerprint": fp, "was": was}))
+    } else {
+        None
+    };
+    write_answer(store_dir, slug, fp, result, pages)?;
+    if manifest.is_empty() && mark.is_none() {
+        return Ok(());
+    }
+    let mut rec = read_answer(store_dir, slug);
+    if !manifest.is_empty() {
+        rec.insert(MANIFEST.to_owned(), json!(manifest));
+    }
+    if let Some(m) = mark {
+        rec.insert(RERUN.to_owned(), m);
+    }
+    write_record(store_dir, slug, &rec, Some(1), true)
+}
+
+/// The result a unit held before a re-run on the text it holds now (451 T232), or none: no re-run, or its text moved since.
+#[must_use]
+pub fn rerun_at(store_dir: &Path, slug: &str) -> Option<String> {
+    let rec = read_answer(store_dir, slug);
+    let mark = rec.get(RERUN)?;
+    (mark.get("fingerprint") == rec.get("fingerprint")).then(|| {
+        mark.get("was")
+            .and_then(Value::as_str)
+            .unwrap_or("")
+            .to_owned()
+    })
+}
+
+/// What `make record-checked` says of each unit of `done` it recorded as a re-run (451 T232), one line each.
+#[must_use]
+pub fn rerun_said(store_dir: &Path, done: &[String]) -> String {
+    let mut out = String::new();
+    for slug in done {
+        if let Some(was) = rerun_at(store_dir, slug) {
+            let _ = writeln!(out, "record-checked: {slug} - a re-run on text answered before (was: {was}); its wording EDITs are held by make apply-edits and listed in noted.jsonl, not applied (451 T232)");
+        }
+    }
+    out
 }
 
 /// [`write_answer`] judged by `judge`, the build whose answer it is (feature 451 T197): kept under `builds`, by fingerprint, so a
@@ -802,10 +875,11 @@ fn answer_from_bundle(
         pages.insert(c[1].to_owned(), json!(c[2].to_owned()));
     }
     let pages = Value::Object(pages);
+    let sum = ru::digest(&[&text]);
     let mut done = Vec::new();
     for c in UNIT_LINE.captures_iter(&text).map_while(Result::ok) {
         if checks.iter().any(|ch| c[1].split(':').next() == Some(ch)) {
-            write_answer(s, &c[1], &c[2], result, Some(&pages))?;
+            answer_unit(s, &c[1], &c[2], result, Some(&pages), &sum)?;
             done.push(c[1].to_owned());
         }
     }
@@ -841,7 +915,7 @@ fn answer_inner(
         let by_key = !named.key.is_empty() && u.subject() == named.key;
         let by_kind = !named.kind.is_empty() && named.kind.split(',').any(|k| k == u.subject());
         if by_q || by_key || by_kind {
-            write_answer(&s, &u.slug, &u.fingerprint, result, None)?;
+            answer_unit(&s, &u.slug, &u.fingerprint, result, None, "")?;
             done.push(u.slug.clone());
         }
     }

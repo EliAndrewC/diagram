@@ -367,6 +367,7 @@ fn is_repo(root: &Path) -> bool {
     ok && l7r_gate_research::resolve(Path::new(strip(&top))) == l7r_gate_research::resolve(root)
 }
 
+mod rerun;
 mod round;
 mod settled;
 
@@ -392,6 +393,7 @@ pub fn cli_in(args: &[String], cwd: &Rooted) -> Reply {
         Spec::value("--root"),
         Spec::value("--skip"),
         Spec::flag("--dry-run"),
+        Spec::value("--rerun-ok"),
     ];
     let p = match parse_with(args, &specs, 1) {
         Ok(p) if !p.positional.is_empty() => p,
@@ -456,7 +458,25 @@ pub fn cli_in(args: &[String], cwd: &Rooted) -> Reply {
             }
         }
     }
-    round::run(&root, &report, &found, &skip, dry, form)
+    // a re-run's EDITs on text answered before are listed, not applied (451 T232)
+    let held = rerun::held(&root, &report, &found, &skip);
+    let said = if dry {
+        String::new()
+    } else {
+        match rerun::hold(&root, &mut skip, &held, p.text("--rerun-ok", "")) {
+            Ok(s) => s,
+            Err(e) => {
+                return Reply {
+                    stdout: String::new(),
+                    stderr: e + "\n",
+                    code: 2,
+                }
+            }
+        }
+    };
+    let mut out = round::run(&root, &report, &found, &skip, dry, form);
+    out.stdout = said + &out.stdout;
+    out
 }
 
 #[cfg(test)]

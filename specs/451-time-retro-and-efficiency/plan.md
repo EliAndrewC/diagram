@@ -2616,31 +2616,43 @@ engine speed, so no checklist.
 **Performance work?** no: it changes who writes ledger rows; nothing runs faster.
 
 
-### T232 (<why: the finding or measurement that files it>)
+### T232 (the 2026-11-24 landing: modal-research passed sheet/guest-quarters in the morning and found the alcove gap in the afternoon on one fingerprint, the fix re-owing a depiction check; claims-triage sent 5 then 2 of 44 claims on)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: Measured first, then one rule, enforced by the tool. A re-run on text already answered keeps the earlier answer standing, and its new wording findings are listed, not applied; its factual ones apply.
+  - **The record, measured 2026-11-25.** Method: every reply in `.git/check-replies` (2,901 files) grouped by unit and check. Only the 228 replies with `## unit:` headers carry a fingerprint. Among them, two pairs of answers on one fingerprint, two separate dispatches (`cmp`: the files differ), each pair with the same verdict. The answer store keeps only the last result per unit, and its `answered` list is a set, so no other same-fingerprint repeat can be read back. A proxy by git history (no commit touching the pop-up, its pages or the agent file between two replies) gave 30 pairs and 25 differences, measured 2026-11-25 (`git log origin/main` over each pair's window). Nearly all are 2 to 10 minutes apart with the counts falling, measured 2026-11-25 (the same listing), which is a fix round whose EDITs sat uncommitted in a clone. The proxy measures fix rounds, so it is not used.
+  - **The incident, re-measured.** The morning reply (10:56 local) and the afternoon one (13:35) judged fingerprint `ee9707b851db0435`: the bundle rebuilt on the text of `bb0c821c91` gives that fingerprint, and the store's `answered` list holds it before the post-edit `3e948ebc96424330`. The bundles differed in their Earlier rounds section, though: the afternoon had one more round. The morning reply says "My manifest names no change section, so I did not re-open it" and judged only "the bullet that changed". The Earlier rounds paragraph says that with no change section "all other text is judged as in a first round". The afternoon judged the whole and found the gap, which was valid: the GM's commit `1b064aa0de` landed it, and this task's re-run confirms the sentence rests on 0170's accurate block. The re-run was forced by the arbiter's ruling `ask:mixed-build-53-record-answers` (a dirty bundle crate), not owed by `make record-owed`, which owes no unit on an answered fingerprint.
+  - **The sample, re-run 2026-11-25.** Seven units of three checks, each answered at the fingerprint its rebuilt bundle carries (the MANIFEST's `unit:` lines matched the store). modal-research: sheet/guest-quarters (settled text; its bundle scoped to round 4's two applied lines) and hamlet/marsh. modal-depiction: hamlet/soy, hamlet/farm-holding and hamlet/buckwheat. modal-form: sheet/barracks and hamlet/marsh. The round cap refused modal-form on hamlet/marsh (round 3 of 2), so six ran. The verdict counts agreed in 6 of 6. Five findings agreed as well, measured 2026-11-25 (each reply read against its recorded round). sheet/barracks' form agreed on its count only, 1 NOTE, measured 2026-11-25 (the reply against `earlier/` round 6): the recorded round 6 "judged only the change since round 5" (a NOTE on the 48 ft row), and the re-run, with no change section, judged as a first round and raised a different NOTE, M2/M3's five-sentence look paragraph, with two EDITs. Six units cannot bound a rate. What they show is the mechanism of both differences seen: a round scoped to a change, then a later round judging more of the same text. Tokens: 413,173 subagent tokens over the six (30k to 92k each).
+  - **claims-triage: not measurable.** The two dispatches were at 18:09:42Z and 18:50:19Z (the event log). No triage reply is kept in `.git/check-replies`, and between the two the claims crate, which builds the triage bundle, held T223's uncommitted fix. So the 5-then-2 cannot be shown to be variance on one bundle.
+  - **The decision.** Of the three routes in the brief, (1) already holds: an answered unit on an unchanged fingerprint is not re-owed. (3) does not hold alone: the variance came from a contract line an agent did not follow, so another line would repeat it. (2) is built, narrowed to wording: a re-run's new WORDING finding on text an earlier answer stood on is listed for the next session, not applied, and a re-run's FACTUAL finding applies and cascades as a first round's does. The split is 451 T188's (`checks::reply::factual`, the GM 2026-11-23: style edits are a different category of thing than factual inaccuracies, and only factual findings cascade). So the alcove gap (modal-research, factual) still lands in the round that finds it, and the barracks re-run's sentence move (modal-form, wording) is held, as a settled wording stays settled (451 T190).
+  - **As built.** `make record-checked` marks an answer whose fingerprint the unit was answered at before: the record's `rerun` holds the fingerprint and the earlier result (`answers::answer_unit`, `rerun_at`). It says so, one line per unit (`rerun_said`). The mark goes with the next answer or settle at another fingerprint, since `write_judged` writes a fresh record. The answer itself is recorded and re-stamps the build, which is what a forced re-run is for. `make apply-edits` holds each wording EDIT (`factual` false for every check of the reply) on a pop-up file whose unit carries `rerun` at its current fingerprint for EVERY check of the reply, so a reply mixing a re-run and a first round holds nothing (`apply_edits/rerun.rs`). Today a pop-up reply with wording EDITs names one check (modal-form, or modal-depiction's LINKS), so the every-check rule is a guard for a reply of several checks, observed 2026-11-25, method: `WORDING_CHECKS` and `WORDING_CATEGORIES` in `checks/reply.rs` against `reply_checks`. It keeps each held EDIT as a row of the feature's `noted.jsonl`, through T229's writer (`keep_noted_rows`), which `make found-list` counts. `RERUN_OK="<reason, two words or more>"` applies them, logged to `dev/bypass-log/`. A dry run holds nothing.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a second answer at one fingerprint marked a re-run | `a_second_answer_on_one_fingerprint_is_a_re_run_and_a_new_fingerprint_clears_it` (owed crate) red with the mark's condition removed, measured 2026-11-25 | n/a: tooling | none | n/a |
+| a re-run's wording EDIT held and listed, RERUN_OK applying it | `a_re_run_s_wording_edit_on_text_answered_before_is_held_and_listed` (record crate) red with the hold's checks emptied, measured 2026-11-25 | n/a: tooling | none | n/a |
+| a re-run's factual EDIT, and a first round's, applied | `a_re_run_s_factual_edit_and_a_first_round_s_apply` (record crate), added after the MODE 4 review's round 1 | n/a: tooling | none | n/a |
 
 ### T232 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A check run again on text nothing changed leaves that text's wording as it was: its new wording findings reach the next session in `noted.jsonl` and re-owe nothing mid-landing. Its factual findings are applied, as any round's are.
+2. **The constraints.** Root CLAUDE.md: "Decide first, then check" and "fix defects where you find them" (constitution XIV). 451 T219 and T229: a note outside the change is listed and kept, never filed or applied. Feature 393's Earlier rounds: what an earlier round passed stays passed while its text stands.
+3. **Where each comes from.** G: the GM 2026-10-18, as the Earlier rounds paragraph of each modal agent file quotes him (feature 393). R: `ask:mixed-build-53-record-answers` (`specs/451-time-retro-and-efficiency/arbiter.jsonl`). O: the measurement above, 2026-11-25.
+4. **Do they describe the world here?** Yes, measured 2026-11-25: six re-runs on bundles rebuilt at their stored fingerprints, and the incident's two fingerprints recomputed from the texts at `bb0c821c91^` and `bb0c821c91`.
+5. **The order.** No dependency. T227's round counter (`checks/rounds.rs`, `arbiter.rs`) is untouched. This task writes the owed crate's `answers.rs` and the record crate's `apply_edits`.
+6. **The exits.** Green: `make closing-checks T=T232 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-25 (`make rust-test CRATE=rust/gate/crates/owed` and `CRATE=rust/gate/crates/record`, logs in the session scratchpad). With the mark's condition replaced by `true`, the owed test failed at its first assertion (a first answer marked a re-run). With `held`'s checks emptied, the record test failed at line 30: the EDIT was applied. After the MODE 4 review's round 1 narrowed the hold to wording EDITs, measured 2026-11-25 (`make rust-test CRATE=rust/gate/crates/record`): with the `factual` test removed from `held`, `a_re_run_s_factual_edit_and_a_first_round_s_apply` failed at line 79 (the factual EDIT was held). With the code as built: owed 140 passed, record 100 passed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: a re-run on text an earlier answer stood on rewords what that answer settled (the barracks re-run moved a sentence an earlier round passed). No map changes. A pop-up's wording changes one session later, not mid-landing; a factual fix lands as before.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The measurement's own re-runs counted as rounds of feature 451. A historical bundle built for the fingerprint replay overwrote sheet/guest-quarters' kept round-5 snapshot with pre-alcove text, so the next bundle showed a false change section. Effect: the next real round would have judged only the lines of a false change, observed 2026-11-25, method: the bundle rebuilt showed `### The change since round 5`. Fixed here: the round-5 snapshot was set back to the text that round judged (the tool's own round-6 write), and a rebuilt bundle shows no change section (2026-11-25). The old file is kept in the session scratchpad.
+- A re-run of a record check on a research page answered before at its text is not held. Effect: its EDITs apply and re-owe the checks after them, as pop-up re-runs did before this task. Not fixed here: `apply-edits` maps a pop-up file to its unit, and a page's units are its notes and questions, a different mapping, with no measurement of record-check re-runs yet. Filed as T249; lands before T246.
+- Where a subject's last round predates the kept snapshots (451 T189), a later round gets no change section and no line saying what it covers. Effect: the 2026-11-24 morning round left every block but one unopened and missed the alcove gap for a round. Not fixed here: it is a bundle change, `bundle::earlier`, outside this task's hold. Filed as T249; lands before T246.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: a re-run's EDITs are held and listed. Nothing runs faster or slower.
 
 
 ### T233 (<why: the finding or measurement that files it>)
@@ -2779,6 +2791,33 @@ engine speed, so no checklist.
 |---|---|---|---|---|
 
 ### T248 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T249 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T249 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

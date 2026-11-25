@@ -8,6 +8,7 @@ use l7r_gate_core::record::testkit::{put, record, PAGE};
 use super::{blocks, Block};
 
 mod rare;
+mod rerun;
 mod rounds;
 mod settled;
 

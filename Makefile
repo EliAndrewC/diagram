@@ -855,9 +855,9 @@ canon: ## [project] search the GM's setting canon for EVERY term of a claim in o
 	@if [ -z "$$TERMS" ]; then printf 'make canon: TERMS="<a>|<b>|<c>" is required - every term of the claim at once\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record canon "$$TERMS"
 
-apply-edits: ## [project] apply a quote-check or record-format report's EDIT and GLOSSARY blocks in one command - each only where its old text occurs once in a record file; the rest are listed REFUSED for you (feature 250 D15)   FROM=<the agent's output_file or a saved reply> [SKIP=2,5: EDIT and GLOSSARY blocks counted together, in reply order] [DRY=1]
+apply-edits: ## [project] apply a quote-check or record-format report's EDIT and GLOSSARY blocks in one command - each only where its old text occurs once in a record file; the rest are listed REFUSED for you (feature 250 D15)   FROM=<the agent's output_file or a saved reply> [SKIP=2,5: EDIT and GLOSSARY blocks counted together, in reply order] [DRY=1] [RERUN_OK="<reason>": apply a re-run's wording EDITs on a pop-up answered before at its text, else held and listed in noted.jsonl - 451 T232]
 	@if [ -z "$(FROM)" ]; then printf 'make apply-edits: FROM=<the output_file the agent dispatch named> is required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record apply-edits "$(FROM)" --root "$$(git rev-parse --show-toplevel)" $(if $(SKIP),--skip "$(SKIP)",) $(if $(DRY),--dry-run,)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record apply-edits "$(FROM)" --root "$$(git rev-parse --show-toplevel)" $(if $(SKIP),--skip "$(SKIP)",) $(if $(DRY),--dry-run,) $(if $(RERUN_OK),--rerun-ok "$$RERUN_OK",)
 
 page-session: ## [project] start ONE page's work in a FRESH headless session, detached, from written briefs, one after another - absolute paths; a then:<script> step queues the briefs it prints (feature 250 D7, R3); a write brief over four questions is refused (feature 274)   BRIEF="<file> then:<script>" [NAME=<session name, default this clone's>] [MODEL=<model>] [EFFORT=<level>] [AGENTS=<agents.json>] [WRITE_CAP_OK='<reason>']
 	@if [ -z "$(BRIEF)" ]; then printf 'make page-session: BRIEF=<file> is required - e.g. make page-session BRIEF=specs/250-close-the-record-checks/briefs/homesteads.md\n' >&2; exit 2; fi

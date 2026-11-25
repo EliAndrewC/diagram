@@ -141,6 +141,16 @@ fn keep_noted(root: &Rooted, rows: &[Value]) -> Result<Option<String>, Fail> {
     Ok(Some(shown.display().to_string()))
 }
 
+/// Keep `rows` as listed notes in the feature's `noted.jsonl`, as a reply's NOTED lines are kept: `make apply-edits`'s held re-run
+/// EDITs (451 T232). The file's path from the root, or none where `rows` is empty.
+///
+/// # Errors
+///
+/// Where what it reads or writes fails: the error says which and why.
+pub fn keep_noted_rows(root: &Rooted, rows: &[Value]) -> Result<Option<String>, Fail> {
+    keep_noted(root, rows)
+}
+
 /// Append a reply's OUTSIDE THE CHANGE findings to the active feature's `found.jsonl` as open rows.
 ///
 /// # Errors
@@ -308,7 +318,7 @@ fn run_answer(root: &Rooted, parsed: &Parsed) -> Result<Reply, Fail> {
         kind: parsed.text("--kind", ""),
     };
     let done = answer(root, check, result, bundle, &named, &reply)?;
-    let mut out = String::new();
+    let mut out = rerun_said(&store_in(root), &done);
     if !reply.is_empty() {
         out.push_str(
             &file_outside_with(root, check, &reply, &done.join(", "))?.said("record-checked"),
