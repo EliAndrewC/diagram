@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-25T12:58:45Z",
+  "target": "plan-gate push",
+  "commit": "667a31ad7e",
+  "why": "451's stale blocks are unfilled template sections of tasks filed and not started (T226-T229, T231-T237, T241) and T203's withdrawn heading; 449's are the 17 tasks moved to 452 and T417's template; 452's are template sections"
+}
