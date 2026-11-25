@@ -1974,6 +1974,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T433 (impl-drift 2026-11-25 in page session P12's cascade, `rust/phases/src/driver/check.rs::check#no dry plot on the water` DRIFTED fix: code - the map check asked only a dry plot's corners, so a watercourse crossing a plot or ending inside it passed)": {
+   "sha256": "5f869f381cf03fb785a7742b3acbc8b9b6fb849f98a79a52779fc0a9b256a9c8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T433 Approach (checklist part A)": {
+   "sha256": "08fc15e68770c5d1cefad9d73fb79fddb7e2c4f70dce8fc69e6062647be30113",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -26891,6 +26903,104 @@
      "summary": "make work-budget counts identical to HEAD, so no step owed; green exit is the red-first test, 0 refusals and closing checks; red exit sets the task down via make arbiter-ask.",
      "class": "within",
      "why": "Measurement and exit conditions for the fix; FR-022 budgets unchanged."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T433 (impl-drift 2026-11-25 in page session P12's cascade, `rust/phases/src/driver/check.rs::check#no dry plot on the water` DRIFTED fix: code - the map check asked only a dry plot's corners, so a watercourse crossing a plot or ending inside it passed)",
+    "### T433 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T433-whole-area",
+     "summary": "The map check dry_on_water asks each dry plot's whole area (a segment's end inside it, a segment within CLEAR_FT past its half-width of a side, crossing at zero) instead of its corners only.",
+     "class": "within",
+     "why": "Fixes a check that passed bad work (constitution XIV's defect: a watercourse through a plot or ending in it passed), which the GM's 2026-11-24 words ask for: 'if there are real defects, then I do want to find them and fix them'. It enforces 0006's drawing page dry-plot-off-water as written; no carve-out."
+    },
+    {
+     "id": "T433-drawn-water-set",
+     "summary": "Drawn::of files every water the map draws: the field's channels (canal, ditch, drain) at the wider end's width, the drawn brook, the drain's run, and the tameike's rim; the pond is now asked by this check rather than left to reed_checks.",
+     "class": "within",
+     "why": "Matches 0006's list ('a canal, its own canal where it bends, a ditch, the brook or a pond'); taking a channel at its wider end is stricter, not narrower; adding the pond closes a gap rather than opening one. Polders lay no dry plots, so leaving their water out excepts nothing."
+    },
+    {
+     "id": "T433-clearance-unchanged",
+     "summary": "hem::CLEAR_FT (1 ft, GUESS) and the generator's drop rule left unchanged; the check uses the hem's own seg_seg_dist (made pub(crate)) so a plot at exactly the clearance is not failed on float difference.",
+     "class": "within",
+     "why": "0006 says 'about a foot'; reusing the generator's geometry is an implementation choice that keeps the check and the drop rule in agreement, not a tolerance that admits water-crossed plots."
+    },
+    {
+     "id": "T433-no-generator-change",
+     "summary": "No generator change, on the measured 41,000-roll sweep (0 dry_on_water failures, least gaps at the hem's clearance).",
+     "class": "within",
+     "why": "The GM asked for real defects to be fixed; the sweep measured that the generator already keeps plots off drawn water, so there is no generator defect to leave. Nothing asked for is withheld."
+    },
+    {
+     "id": "T433-pond-rim-width-name",
+     "summary": "POND_RIM_W names the 2.4 ft stroke (CONVENTION) the pond is already drawn with.",
+     "class": "within",
+     "why": "Names an existing drawn value; no map moves (pool hamlets compared by checksum, unchanged)."
+    },
+    {
+     "id": "T433-order",
+     "summary": "Lands before T158 and after T432, as part of the hamlet close-out before the port resumes.",
+     "class": "within",
+     "why": "Consistent with the GM's 2026-11-24 'close out all of these open tasks' before resuming, and 'fix all known bugs in each step before moving on'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T433 (impl-drift 2026-11-25 in page session P12's cascade, `rust/phases/src/driver/check.rs::check#no dry plot on the water` DRIFTED fix: code - the map check asked only a dry plot's corners, so a watercourse crossing a plot or ending inside it passed)",
+    "### T433 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T433-check-whole-area",
+     "summary": "The map check dry_on_water asks each dry plot's whole area (a segment's end inside it, a segment within CLEAR_FT past its half-width of a side, a corner inside a pond) instead of its corners only.",
+     "class": "within",
+     "why": "A check that passes bad work is a defect (constitution XIV); the old check passed a watercourse through a plot's middle or ending in it and never asked the pond. Fixing it is the GM's 2026-11-24 'if there are real defects, then I do want to find them and fix them' on scripted hamlet generation, the close-out scope of 2026-11-24. The rule enforced is 0006's dry-plot-off-water as written; nothing is added beyond it."
+    },
+    {
+     "id": "T433-water-set",
+     "summary": "The water asked is every water the map draws: the field's channels at the wider of their two ends, the drawn brook at BROOK_W, the drain's run at RUN_W, and the tameike's rim (32 points) at POND_RIM_W.",
+     "class": "within",
+     "why": "0006's page names 'any water the map draws - a canal, its own canal where it bends, a ditch, the brook or a pond'; the set covers exactly that. Taking the wider end is conservative, not a narrowing."
+    },
+    {
+     "id": "T433-pond-rim-w",
+     "summary": "A named constant POND_RIM_W for the 2.4 ft stroke draw_sink and the polder's ponds already draw.",
+     "class": "within",
+     "why": "Names an existing drawn stroke; no drawing changes (pool hamlets compare the same by checksum)."
+    },
+    {
+     "id": "T433-hem-geometry",
+     "summary": "The check reuses the hem's own seg_seg_dist (made pub(crate)) so a plot the hem laid at exactly its clearance is not failed on a float's difference.",
+     "class": "within",
+     "why": "Implementation choice making the check agree with the generator's own rule; it does not narrow what the check catches."
+    },
+    {
+     "id": "T433-no-generator-change",
+     "summary": "No generator change: the drop rule and hem::CLEAR_FT unchanged; the drain's run and pond stay unfiled for the hem and are held by the check alone; the hem asks the field's brook while the check asks the drawn (rounded) brook.",
+     "class": "within",
+     "why": "Leaving these as they are leaves no defect: the 41,000-roll sweep (20,000 + 6,000 + 15,000, measured 2026-11-25) found 0 dry_on_water, with least gaps of 1.001 ft to a channel, 1.002 ft to the drawn brook, 262.2 ft to the run and 187.3 ft to the pond. No map reads wrong, so there is nothing to fix. Under constitution XIV v2.36.0 a difference that produces no wrong outcome is not a defect, and the check now refuses any future map where these do meet."
+    },
+    {
+     "id": "T433-red-first-test",
+     "summary": "A test that plants plots through a brook, with a run ending in one, inside the pond and within the clearance, red on HEAD's check body and green after, with just-past-clearance controls clear on both.",
+     "class": "within",
+     "why": "Enforcement of the requested fix: delete the fix and the test has nothing to check (GM 2026-09-20)."
+    },
+    {
+     "id": "T433-order-exits",
+     "summary": "Ordered after T432 (on whose code it is measured) and before T158; exits are the red-first test, the sweep at zero, make seeds, pool hamlets unchanged and closing-checks; a red result is set down and ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Sequencing and exits inside 'fix defects before new code' (2026-11-24) and 'fix all known bugs in each step before moving on' (2026-11-18)."
     }
    ]
   }
@@ -55161,6 +55271,56 @@
      "summary": "make work-budget counts identical to HEAD, so no step owed; green exit is the red-first test, 0 refusals and closing checks; red exit sets the task down via make arbiter-ask.",
      "class": "within",
      "why": "Measurement and exit conditions for the fix; FR-022 budgets unchanged."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T433": {
+   "section_sha256": "ccd92bae63a90fb66896c7d7e60fef1e4cfd6af16b3d2fc5c68dea4338c0c9e8",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T433-check-whole-area",
+     "summary": "The map check dry_on_water asks each dry plot's whole area (a segment's end inside it, a segment within CLEAR_FT past its half-width of a side, a corner inside a pond) instead of its corners only.",
+     "class": "within",
+     "why": "A check that passes bad work is a defect (constitution XIV); the old check passed a watercourse through a plot's middle or ending in it and never asked the pond. Fixing it is the GM's 2026-11-24 'if there are real defects, then I do want to find them and fix them' on scripted hamlet generation, the close-out scope of 2026-11-24. The rule enforced is 0006's dry-plot-off-water as written; nothing is added beyond it."
+    },
+    {
+     "id": "T433-water-set",
+     "summary": "The water asked is every water the map draws: the field's channels at the wider of their two ends, the drawn brook at BROOK_W, the drain's run at RUN_W, and the tameike's rim (32 points) at POND_RIM_W.",
+     "class": "within",
+     "why": "0006's page names 'any water the map draws - a canal, its own canal where it bends, a ditch, the brook or a pond'; the set covers exactly that. Taking the wider end is conservative, not a narrowing."
+    },
+    {
+     "id": "T433-pond-rim-w",
+     "summary": "A named constant POND_RIM_W for the 2.4 ft stroke draw_sink and the polder's ponds already draw.",
+     "class": "within",
+     "why": "Names an existing drawn stroke; no drawing changes (pool hamlets compare the same by checksum)."
+    },
+    {
+     "id": "T433-hem-geometry",
+     "summary": "The check reuses the hem's own seg_seg_dist (made pub(crate)) so a plot the hem laid at exactly its clearance is not failed on a float's difference.",
+     "class": "within",
+     "why": "Implementation choice making the check agree with the generator's own rule; it does not narrow what the check catches."
+    },
+    {
+     "id": "T433-no-generator-change",
+     "summary": "No generator change: the drop rule and hem::CLEAR_FT unchanged; the drain's run and pond stay unfiled for the hem and are held by the check alone; the hem asks the field's brook while the check asks the drawn (rounded) brook.",
+     "class": "within",
+     "why": "Leaving these as they are leaves no defect: the 41,000-roll sweep (20,000 + 6,000 + 15,000, measured 2026-11-25) found 0 dry_on_water, with least gaps of 1.001 ft to a channel, 1.002 ft to the drawn brook, 262.2 ft to the run and 187.3 ft to the pond. No map reads wrong, so there is nothing to fix. Under constitution XIV v2.36.0 a difference that produces no wrong outcome is not a defect, and the check now refuses any future map where these do meet."
+    },
+    {
+     "id": "T433-red-first-test",
+     "summary": "A test that plants plots through a brook, with a run ending in one, inside the pond and within the clearance, red on HEAD's check body and green after, with just-past-clearance controls clear on both.",
+     "class": "within",
+     "why": "Enforcement of the requested fix: delete the fix and the test has nothing to check (GM 2026-09-20)."
+    },
+    {
+     "id": "T433-order-exits",
+     "summary": "Ordered after T432 (on whose code it is measured) and before T158; exits are the red-first test, the sweep at zero, make seeds, pool hamlets unchanged and closing-checks; a red result is set down and ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Sequencing and exits inside 'fix defects before new code' (2026-11-24) and 'fix all known bugs in each step before moving on' (2026-11-18)."
     }
    ],
    "verdict": "CLEAR"

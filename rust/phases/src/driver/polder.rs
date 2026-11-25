@@ -267,7 +267,13 @@ fn draw_polder(svg: &mut Svg, s: &PolderStage, seed: i64) {
     svg.kind("marsh");
     svg.reeds(&s.polder.fringe);
     svg.kind("pond");
-    svg.ellipse(c, rx, ry, ink::POND_WATER, Some((ink::RIM, 2.4)));
+    svg.ellipse(
+        c,
+        rx,
+        ry,
+        ink::POND_WATER,
+        Some((ink::RIM, super::POND_RIM_W)),
+    );
     for (x, st) in s.polder.plots.iter().zip(&s.states) {
         svg.kind(paddy_kind(*st));
         svg.polygon(&x.ring, fill(*st), Some((ink::AZE, BUND_W)));

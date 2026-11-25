@@ -78,6 +78,11 @@ const CELL_SHARE: f64 = 31.0;
 /// Research:
 ///     the drain's run drawn - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the drawn drain widens from a 1.2 ft head to a 5.5 ft outfall, the drain's own run onward drawn at that outfall width, 5.5 ft (the deleted `DRAIN_FT`), in research/questions/0060-field-drains-akusuiro.drawing.html's drainage-ditch class - a rice polder's outfall run too; on a dike-pond block the run past the outfall sluice is drawn at the ring canal's width instead (`driver::polder::sluice_channels`, 449 T431)
 const RUN_W: f64 = 5.5;
+/// The tameike's rim, the stroke round its water (ft): the pond's edge a dry plot is kept off is its outer side (449 T433).
+///
+/// Research:
+///     the pond's rim - CONVENTION: a map's stroke round the water, under the brook's width
+const POND_RIM_W: f64 = 2.4;
 /// The reeds' width out from the pond's shore (ft).
 ///
 /// Research:
@@ -621,7 +626,7 @@ fn draw_sink(svg: &mut Svg, s: &Sunk) {
     svg.line(&s.run, ink::DRAIN, RUN_W);
     if let Some((c, rx, ry)) = s.pond {
         svg.kind("pond");
-        svg.ellipse(c, rx, ry, ink::POND_WATER, Some((ink::RIM, 2.4)));
+        svg.ellipse(c, rx, ry, ink::POND_WATER, Some((ink::RIM, POND_RIM_W)));
         svg.ellipse(
             c,
             (rx - 12.0).max(1.0),

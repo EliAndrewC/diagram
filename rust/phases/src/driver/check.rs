@@ -6,8 +6,10 @@
 //!     the map's checks - NONE: read-only, each rule's claim at the Rust that keeps it while laying
 
 use super::Rolled;
+use crate::field::dry::seg_seg_dist;
 use crate::field::fan::Pt;
 use crate::field::geom::{inside, seg_dist};
+use crate::field::index::Index;
 
 /// How far inside a ring a point must stand to count as on it, and how close to a line's water past its half-width (ft): a
 /// drawing's slack, so two features sharing an edge read as neighbors.
@@ -37,11 +39,117 @@ fn mean(ring: &[Pt]) -> Pt {
     )
 }
 
+/// How many points the tameike's rim is filed at, round its ellipse.
+///
+/// Research:
+///     the rim's points - NONE: a check's grain, a 32-sided rim within about a hundredth of its radius of the ellipse
+const RIM_POINTS: u32 = 32;
+
+/// The water the map draws, filed once in the water index at each line's drawn width, with what each segment is, and the ponds:
+/// asked of each dry plot (449 T433).
+///
+/// Research:
+///     the drawn water - NONE: the check's lookup; what it keeps a plot off is `Drawn::of`'s and `Drawn::meets`'
+struct Drawn {
+    ix: Index,
+    what: Vec<&'static str>,
+    ponds: Vec<(Pt, f64, f64)>,
+}
+
+impl Drawn {
+    /// The field's channels as drawn, the drawn brook, the drain's run and the tameike's rim.
+    ///
+    /// Research:
+    ///     the water a plot is kept off - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: any water the map draws - a canal, its own canal where it bends, a ditch, the brook or a pond - each line at its drawn width (a ditch at the wider of its two ends), the pond's rim at its stroke; a polder's water is not filed, since a polder lays no dry plot (`driver::polder`)
+    fn of(r: &Rolled) -> Self {
+        let mut d = Self {
+            ix: Index::default(),
+            what: Vec::new(),
+            ponds: Vec::new(),
+        };
+        let mut file = |line: &[Pt], w: f64, what: &'static str| {
+            for s in line.windows(2) {
+                d.ix.file_w(s[0], s[1], w);
+                d.what.push(what);
+            }
+        };
+        for c in r.fields.iter().flat_map(|f| &f.channels) {
+            let what = match c.role {
+                "main" => "a canal",
+                "drain" => "the field's drain",
+                _ => "a ditch",
+            };
+            file(&c.pts, c.w.max(c.w_tail), what);
+        }
+        for b in &r.brooks {
+            file(b, super::BROOK_W, "the brook");
+        }
+        if let Some(s) = &r.sunk {
+            file(&s.run, super::RUN_W, "the drain's run");
+        }
+        for (c, rx, ry) in r.sunk.iter().filter_map(|s| s.pond) {
+            let rim: Vec<Pt> = (0..=RIM_POINTS)
+                .map(|k| f64::from(k) * std::f64::consts::TAU / f64::from(RIM_POINTS))
+                .map(|a| (c.0 + rx * a.cos(), c.1 + ry * a.sin()))
+                .collect();
+            file(&rim, super::POND_RIM_W, "the pond");
+            d.ponds.push((c, rx, ry));
+        }
+        d
+    }
+
+    /// Why the plot `poly` stands on the water, or `None`: a line reaching inside it, a line within the hem's clearance past its
+    /// half-width of a side (crossing it, at zero), or a corner in a pond.
+    ///
+    /// Research:
+    ///     the plot's whole area asked - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot that would come within about a foot of any water the map draws, or would have the end of one inside it, is left out - so its whole area is asked, the hem's `CLEAR_FT` past each line's half-width, not its corners alone
+    fn meets(&mut self, poly: &[Pt]) -> Option<String> {
+        let clear = crate::hem::CLEAR_FT;
+        let reach = clear + self.ix.widest / 2.0;
+        let lo = poly
+            .iter()
+            .fold((f64::MAX, f64::MAX), |m, p| (m.0.min(p.0), m.1.min(p.1)));
+        let hi = poly
+            .iter()
+            .fold((f64::MIN, f64::MIN), |m, p| (m.0.max(p.0), m.1.max(p.1)));
+        for i in self
+            .ix
+            .near((lo.0 - reach, lo.1 - reach), (hi.0 + reach, hi.1 + reach))
+        {
+            let ((a, b), half) = (self.ix.segs[i], self.ix.widths[i] / 2.0);
+            if let Some(p) = [a, b].into_iter().find(|p| inside(*p, poly)) {
+                return Some(format!(
+                    "has {} reaching inside it at ({:.0}, {:.0})",
+                    self.what[i], p.0, p.1
+                ));
+            }
+            let gap = (0..poly.len())
+                .map(|k| seg_seg_dist(a, b, poly[k], poly[(k + 1) % poly.len()]))
+                .fold(f64::MAX, f64::min);
+            if gap < clear + half {
+                return Some(format!(
+                    "comes {:.1} ft from the edge of {} near ({:.0}, {:.0}), inside the {clear} ft kept clear",
+                    gap - half,
+                    self.what[i],
+                    a.0,
+                    a.1
+                ));
+            }
+        }
+        let ellipse = |p: &Pt, &(c, rx, ry): &(Pt, f64, f64)| {
+            ((p.0 - c.0) / rx).powi(2) + ((p.1 - c.1) / ry).powi(2) < 1.0
+        };
+        poly.iter()
+            .find(|p| self.ponds.iter().any(|e| ellipse(p, e)))
+            .map(|p| format!("stands in the pond at ({:.0}, {:.0})", p.0, p.1))
+    }
+}
+
 /// The rolled hamlet's violations, each a line naming the rule, what broke it and where; none on a sound map.
 ///
 /// Research:
 ///     no dry plot on the paddy - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the dry fields stand beyond the paddy, along the canal's high side
-///     no dry plot on the water - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the dry plots kept to the dry side of the canal, behind a bare bank - tested against the field's channels, the brook and the drain's run (the pond's rim is `reed_checks`' reeds')
+///     no dry plot on the water - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot that would come within about a foot of any water the map draws - a canal, a ditch, the brook or a pond - or would have the end of one inside it, is left out; the plot's whole area asked of the drawn water (`Drawn::meets`), not its corners (449 T433)
 ///     no dry plot on another - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: plots laid end to end, each its own ground
 ///     the tameike off the paddy - research/questions/0060-field-drains-akusuiro.drawing.html: the pond at the field's foot, below it
 ///     the settlement off the field - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the houses on the field's margin, beside the paddy
@@ -52,27 +160,7 @@ pub fn check(r: &Rolled) -> Vec<String> {
     let (w, h) = (r.plan.w, r.plan.h);
     let off = |p: &Pt| p.0 < 0.0 || p.1 < 0.0 || p.0 > w || p.1 > h;
     let rings: Vec<&[Pt]> = r.fields.iter().map(|f| f.fan.ring.as_slice()).collect();
-    let water: Vec<(Pt, Pt, f64)> = r
-        .fields
-        .iter()
-        .flat_map(|f| {
-            f.channels.iter().flat_map(|c| {
-                c.pts
-                    .windows(2)
-                    .map(move |s| (s[0], s[1], c.w.max(c.w_tail)))
-            })
-        })
-        .chain(
-            r.brooks
-                .iter()
-                .flat_map(|b| b.windows(2).map(|s| (s[0], s[1], super::BROOK_W))),
-        )
-        .chain(
-            r.sunk
-                .iter()
-                .flat_map(|s| s.run.windows(2).map(|w| (w[0], w[1], super::RUN_W))),
-        )
-        .collect();
+    let mut water = Drawn::of(r);
     for (i, d) in r.dry.iter().enumerate() {
         if let Some(p) = d
             .poly
@@ -84,16 +172,11 @@ pub fn check(r: &Rolled) -> Vec<String> {
                 p.0, p.1
             ));
         }
-        if let Some(p) = d.poly.iter().find(|p| {
+        out.extend(
             water
-                .iter()
-                .any(|&(a, b, ww)| seg_dist(**p, a, b) < ww / 2.0 - SLACK_FT)
-        }) {
-            out.push(format!(
-                "dry_on_water: dry plot {i} has a corner on the water at ({:.0}, {:.0})",
-                p.0, p.1
-            ));
-        }
+                .meets(&d.poly)
+                .map(|why| format!("dry_on_water: dry plot {i} {why}")),
+        );
         let m = mean(&d.poly);
         if let Some(j) = r
             .dry
@@ -449,6 +532,77 @@ mod tests {
         assert!(found.contains("inside the polder") && found.contains("reeds_on_field"));
         p.polder.as_mut().unwrap().polder.outline.push((-9.0, -9.0));
         assert!(check(&p).join("\n").contains("off_canvas: the polder"));
+    }
+
+    /// A WATERCOURSE THROUGH A PLOT, OR ENDING IN IT, OR A POND ROUND IT (449 T433): 0006's drawing drops a dry plot that comes within
+    /// about a foot of any water the map draws or would have the end of one inside it, so the check asks the plot's whole area. Red
+    /// before T433: the check asked only a plot's corners against the channels, the brook and the run, and named none of the first
+    /// three plots - a brook through one's middle, a run ending in another, one standing in the pond - nor the fifth, half a foot inside
+    /// the clearance from a brook; the fourth, half a foot past it, is clear on both.
+    #[test]
+    fn a_watercourse_through_a_plot_or_ending_in_it_is_named() {
+        let mut r = roll(&parse(r#"{"name": "Inashiro", "seed": 4, "households": 15, "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated"}"#).unwrap()).unwrap();
+        let square = |c: (f64, f64), s: f64| {
+            vec![
+                (c.0 - s, c.1 - s),
+                (c.0 + s, c.1 - s),
+                (c.0 + s, c.1 + s),
+                (c.0 - s, c.1 + s),
+            ]
+        };
+        let plot = |c: (f64, f64), s: f64| DryPlot {
+            poly: square(c, s),
+            crop: "soy",
+            theta: 0.0,
+            tract: 0,
+        };
+        // the map's own water taken off, the water each plot is asked against planted on open ground
+        r.fields[0].channels.clear();
+        let past = crate::driver::BROOK_W / 2.0 + crate::hem::CLEAR_FT + 0.5;
+        r.brooks = vec![
+            vec![(990.0, 1020.0), (1080.0, 1020.0)],
+            vec![(3980.0, 1040.0 + past), (4060.0, 1040.0 + past)],
+            vec![(4980.0, 1039.0 + past), (5060.0, 1039.0 + past)],
+        ];
+        let s = r.sunk.as_mut().unwrap();
+        s.run = vec![(1950.0, 1020.0), (2010.0, 1020.0)];
+        s.pond = Some(((3000.0, 1000.0), 60.0, 40.0));
+        s.reeds.clear();
+        r.dry = vec![
+            plot((1020.0, 1020.0), 20.0),
+            plot((2000.0, 1020.0), 20.0),
+            plot((3000.0, 1000.0), 5.0),
+            plot((4020.0, 1020.0), 20.0),
+            plot((5020.0, 1020.0), 20.0),
+        ];
+        let found = check(&r);
+        let on: Vec<&String> = found
+            .iter()
+            .filter(|l| l.starts_with("dry_on_water"))
+            .collect();
+        assert_eq!(on.len(), 4, "{found:?}");
+        for (i, how, what) in [
+            (0, "ft from the edge of", "the brook"),
+            (1, "reaching inside it", "the drain's run"),
+            (2, "stands in", "the pond"),
+            (4, "comes 0.5 ft from the edge of", "the brook"),
+        ] {
+            let tag = format!("dry plot {i} ");
+            let named = on
+                .iter()
+                .any(|l| l.contains(&tag) && l.contains(how) && l.contains(what));
+            assert!(named, "plot {i} {how} {what} not named in {on:?}");
+        }
+        // a plot just past the clearance from the pond's rim stands clear of it
+        r.dry = vec![plot(
+            (
+                3000.0,
+                1040.0 + super::super::POND_RIM_W / 2.0 + crate::hem::CLEAR_FT + 20.5,
+            ),
+            20.0,
+        )];
+        let found = check(&r).join("\n");
+        assert!(!found.contains("dry_on_water"), "{found}");
     }
 
     /// THE SETTLEMENT'S GROUND OFF THE DIKE AND THE RING CANAL, ITS WAY OUT PAST THE REEDS (449 T240): Kuwabata as rolled passes the

@@ -698,7 +698,7 @@ fn wet(poly: &[Pt], ix: &mut Index, clear: f64) -> bool {
 ///
 /// Research:
 ///     the distance - NONE: geometry
-fn seg_seg_dist(a: Pt, b: Pt, c: Pt, d: Pt) -> f64 {
+pub(crate) fn seg_seg_dist(a: Pt, b: Pt, c: Pt, d: Pt) -> f64 {
     let side = |p: Pt, q: Pt, r: Pt| (q.0 - p.0) * (r.1 - p.1) - (q.1 - p.1) * (r.0 - p.0);
     let (d1, d2, d3, d4) = (side(c, d, a), side(c, d, b), side(a, b, c), side(a, b, d));
     if d1 * d2 < 0.0 && d3 * d4 < 0.0 {
