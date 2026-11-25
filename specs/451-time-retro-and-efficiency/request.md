@@ -146,3 +146,13 @@ The GM, the same day, on the rule T216 builds:
 The GM, as the session queued the page sessions that close out 449 T420 and T425 and feature 452's page items:
 
 > That all sounds good, and you should make sure to take a look at what cascades happen as a result of any of our page edits, just to make sure that we are cascading appropriately. and not doing anything silly like making a bunch of unnecessary edits as a result of something trivial changing, etc. But also that we really are cascading in situations that do call for it. Thank you.
+
+## 2026-11-25, a research backlog: UNRESEARCHED, no search before a guess
+
+Told what the last two days' research changed (of eight hamlet searches, two changed what is drawn), the GM proposed:
+
+> Okay, so maybe the procedural change here is to not stop and kick off research. In all of these situations right away, but rather to have some kind of research backlog. Where we make a best guess about what to render, and then note it as being something that is unresearched. Where unresearched is different than unsupported, because I think unsupported means, if I'm not mistaken, that we did research and couldn't find anything, whereas unresearched would mean that we know we have not yet checked. Does that sound right to you? And then that would allow us to move forward more quickly and it sounds like that would not in practice make a big difference at this point. Like it's very unlikely that we will be rendering meaningfully different maps as a result of punting on this kind of research until later, right?
+
+Offered the rule change (UNRESEARCHED a fifth label on the research pages as well as in the claims; a new guess recorded as UNRESEARCHED with no search; the backlog `make claims-report`'s UNRESEARCHED list, searched at each port stage's end for the items that stage touched; a search still first where a decision is foundational or a guess is likely visibly wrong; most of page sessions P13 and P14 dropped from the pre-port list, P12 kept), the GM said:
+
+> yes please
