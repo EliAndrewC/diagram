@@ -71,6 +71,17 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
     (the fresh builder's minutes and tokens before its first new edit), how often builders hit the cap by task size, whether
     a subagent's automatic compaction is available in this harness and what it costs and loses (a summary drops the
     measurements and paths a handoff names), and the cap's own setting against T243's per-turn data.
+    Measured 2026-11-25 (method and scripts: a read-only pass over the 634 general-purpose builder transcripts since
+    2026-11-18, 61,271 turns since 11-19, context as rust/guard/shared/src/context.rs reads it; cache read 0.1x, cache write
+    1.25x, output 5x fresh input, assumed): turn speed barely moves with context (7.3 s per 1,000 output tokens under 300k,
+    7.8 over, total seconds over total tokens; medians 4 against 6-8); per-turn cost rises about 2.5x from 100k to 300k and
+    1.6x more to 600k. Handoffs since 11-19: 135 with a successor, 107 at the cap; the fresh builder re-reads for a median
+    3.7 min (p90 12.5) and 326k tokens before its first edit, 421 min in all, against about 215 min the old builder would
+    have spent running slower - a net of about 205 min over six days. Break-even: time a wash at every context from 300k to
+    800k (within 2.5 min); tokens favor the handoff everywhere, 33% less at 300k, 62% less at 800k. So raising the cap buys
+    little time and costs tokens; the lever is the re-read (handoffs that name what to read; tasks sized to finish). Caveats:
+    the band past 300k is small and survivor-biased (the guard refuses there), and long-context builders run the heaviest
+    tasks. The session's recommendation to move the stop to 600k was withdrawn on these numbers.
 
 ## How each item closes (the GM, 2026-11-25) - its decision is recorded in `docs/process-decisions.md`
 
