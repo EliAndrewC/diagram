@@ -564,6 +564,9 @@
 - [x] T230 closing-checks' BLOCKED line said 'every error static printed is in another task's files - ()' when the errors were in the task's own file (rust/gate/crates/core/src/build.rs, 451 T224's builder, 2026-11-24): an empty list is never an attribution
       research: rendering
       verify: DONE. landed in batch T230+T239: closing-checks' empty attribution fixed; red-first (7 cases red on HEAD); CLEAR; no claims
+- [x] T231 make ledger-owed WRITE= writes no row for a landing's own plan-review passes ('the landing's own - make land writes them') while the landing's cheap check refuses for the same rows - 449 T418 and T422's rows were written by hand to land (2026-11-24): one of the two writes them
+      research: rendering
+      verify: DONE. landed: one rule for who writes a plan review's ledger row; red-first; CLEAR; no claims; built in a parallel worktree
 - [x] T234 a split is a move for a pop-up's Drawing: line as M14 makes it for its Entry: line (451 T184): dev/modals.md's D5 and the modal-depiction LINKS contract have no split clause, so after page session P3b moved 0005's rice-shoots section to 0346 (2026-11-25) hamlet/paddy's Drawing: line no longer names the page holding its Depiction's rules, nothing re-owed it, and the next modal-depiction read will report 0346 as a missing link (the cascade record: /home/agent/.claude/jobs/c6fd72d1/tmp/cascade/p3b-cascade.md): a split adds the target page to each pop-up whose Drawing: names the source page and whose Depiction states a moved block (mechanically, owing nothing), and D5 says so
       research: rendering
       verify: DONE. landed in batch T228+T234: the parallel trial's two tasks, each built in its own worktree and carried into the clone: T228 holds a check's no-edit line to one form; T234 follows a page split to a pop-up's Drawing: line; both red-first, CLEAR, no claims; carries T245's filing
