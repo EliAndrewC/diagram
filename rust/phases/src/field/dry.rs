@@ -61,6 +61,11 @@ pub const LAP_PULL_FT: f64 = 1.0;
 /// Research:
 ///     the pinch - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html draws small rectangular plots of about a sixth of an acre and is silent on how far one may taper where the canal bends; half a plot's length, past which a strip reads as a sliver, not a plot
 pub const PINCH_SHARE: f64 = 0.5;
+/// The most a strip's edge may run, as a share of a plot's length, before the strip is cut into plots.
+///
+/// Research:
+///     the stretch - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html draws each plot roughly 92 ft across, never dwarfing the rice basins, and is silent on a strip beside a canal bending away from the dry side; past one and a half plots' length a strip is cut into plots, the mirror of `PINCH_SHARE`
+pub const STRETCH_SHARE: f64 = 1.5;
 /// The dry crops (0006's four), each map drawing its own mix.
 ///
 /// Research:
@@ -97,6 +102,7 @@ pub struct DryPlot {
 ///     a plot onto rice dropped - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot that would lap onto another canal's rice is dropped
 ///     the settlement's ground kept - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the houses between the canal and the dry fields, so a strip still on their ground past the push behind is dropped, not pushed further
 ///     a column's climb ends - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the dry plots climb from the toe into the middle, plot by plot - so a column's climb ends where its strip pinches under `PINCH_SHARE` of a plot's length, the columns square to a canal bending toward its dry side converging as they climb, and where its strip laps a plot another column laid, never coming out behind that plot; the settlement's ground is stepped over (0006's houses between), and a strip refused for the water or for the rice is passed by without ending the climb, the ground past an intake race still the hem's (a cleared middle's plots on the race's upslope side, 17 of 141 such rolls, measured 2026-11-24 over seeds 1 to 150 at three sizes; ending the climb at the rice as well changed no roll of 3,200, measured 2026-11-24 over seeds 1 to 400 at eight sizes and falls) - before 449 T423 it climbed on, and drew slivers and detached strips turned against the block they had crossed (seed 52 of 15 households falling at 225 degrees; a plot under half the plot's area on 77 of 98 bare-winter wild rolls, measured 2026-11-24 over seeds 1 to 150 at three sizes); where the pinch falls a GUESS (`PINCH_SHARE`)
+///     a strip stretched round a bend cut into plots - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html draws each plot roughly 92 ft across, never dwarfing the rice basins, and is silent on a strip beside a canal bending away from the dry side - a strip whose edge runs past `STRETCH_SHARE` of a plot's length is cut across into plots (`cut`), each asked as a plot; before 449 T434 it was drawn whole, up to 15 plots' length, in 15,644 of 35,000 hem rolls (measured 2026-11-25)
 #[expect(
     clippy::too_many_arguments,
     reason = "the hem's line, side, need, field, water, clearance, seed and tag"
@@ -203,38 +209,54 @@ pub fn hem(
                         climbs.end(col);
                         continue;
                     }
-                    // EVERY STRIP OFF THE SETTLEMENT'S GROUND (feature 444 T42, the cohort's dry_on_settlement, 8 of 300 seeds):
-                    // the push behind clears the column's first strip, and a ground set askew can still stand across a deeper one
-                    let middle = (
-                        f64::midpoint(poly[0].0, poly[2].0),
-                        f64::midpoint(poly[0].1, poly[2].1),
-                    );
-                    if on_keep(&poly, middle, keep, &mut ix.tests) {
-                        continue;
-                    }
-                    if let Some(why) = refused(&poly, &mut bands, (&plots, &mut laid), ix, clear) {
-                        // ...AND WHERE IT MEETS ANOTHER COLUMN'S PLOTS: the ground behind them is not this column's to climb
-                        if why == Refusal::Laps {
-                            climbs.end(col);
+                    // A STRIP STRETCHED ROUND A BEND IS CUT INTO PLOTS (449 T434): beside a canal bending away from the dry
+                    // side the columns splay as they climb, and a strip drawn whole ran up to fifteen plots' length (the
+                    // ground is kept, each piece asked as a plot)
+                    let pieces = cut(&poly, &mut ix.tests);
+                    room += PLOT_FT.0
+                        * PLOT_FT.1
+                        * f64::from(u32::try_from(pieces.len() - 1).unwrap_or(0));
+                    for poly in pieces {
+                        if got >= need {
+                            break;
                         }
-                        continue;
+                        // EVERY STRIP OFF THE SETTLEMENT'S GROUND (feature 444 T42, the cohort's dry_on_settlement, 8 of 300 seeds):
+                        // the push behind clears the column's first strip, and a ground set askew can still stand across a deeper one
+                        let middle = (
+                            f64::midpoint(poly[0].0, poly[2].0),
+                            f64::midpoint(poly[0].1, poly[2].1),
+                        );
+                        if on_keep(&poly, middle, keep, &mut ix.tests) {
+                            continue;
+                        }
+                        if let Some(why) =
+                            refused(&poly, &mut bands, (&plots, &mut laid), ix, clear)
+                        {
+                            // ...AND WHERE IT MEETS ANOTHER COLUMN'S PLOTS: the ground behind them is not this column's to climb
+                            if why == Refusal::Laps {
+                                climbs.end(col);
+                            }
+                            continue;
+                        }
+                        let own =
+                            f64::from(rng.randbelow(2 * TURN_DEG.1 + 1)) - f64::from(TURN_DEG.1);
+                        // the rows on the contour, square to the fall (not the canal's heading: canals run diagonally to the fall), or
+                        // down the fall to the outfall
+                        let base = (if down { fall.1 } else { fall.0 })
+                            .1
+                            .atan2((if down { fall.1 } else { fall.0 }).0);
+                        let crop =
+                            mix[rng.randbelow(u32::try_from(mix.len()).unwrap_or(1)) as usize];
+                        let (lo, hi) = bbox(&poly);
+                        laid.file(lo, hi);
+                        plots.push(DryPlot {
+                            poly,
+                            crop,
+                            theta: base + (turn + own).to_radians(),
+                            tract,
+                        });
+                        got += PLOT_FT.0 * PLOT_FT.1;
                     }
-                    let own = f64::from(rng.randbelow(2 * TURN_DEG.1 + 1)) - f64::from(TURN_DEG.1);
-                    // the rows on the contour, square to the fall (not the canal's heading: canals run diagonally to the fall), or
-                    // down the fall to the outfall
-                    let base = (if down { fall.1 } else { fall.0 })
-                        .1
-                        .atan2((if down { fall.1 } else { fall.0 }).0);
-                    let crop = mix[rng.randbelow(u32::try_from(mix.len()).unwrap_or(1)) as usize];
-                    let (lo, hi) = bbox(&poly);
-                    laid.file(lo, hi);
-                    plots.push(DryPlot {
-                        poly,
-                        crop,
-                        theta: base + (turn + own).to_radians(),
-                        tract,
-                    });
-                    got += PLOT_FT.0 * PLOT_FT.1;
                 }
             }
             tract += 1;
@@ -321,6 +343,44 @@ enum Refusal {
     Rice,
     Laps,
     Water,
+}
+
+/// The strip `poly` (inner edge `poly[0]`-`poly[1]`, outer `poly[3]`-`poly[2]`) as plots: whole where neither edge runs past
+/// `STRETCH_SHARE` of a plot's length, else cut across into the whole number of pieces nearest its longer edge's plots, each
+/// edge divided evenly - fewer where the shorter edge's pieces would run under `PINCH_SHARE`, that bound kept first. The pieces
+/// built counted in `tests`.
+///
+/// Research:
+///     a stretched strip cut - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html draws each plot roughly 92 ft across and is silent on a strip beside a canal bending away from the dry side; cutting it keeps the ground the hem climbs (room before packing), where ending the column's climb would drop the hem along such bends (9 percent of the strips asked beside the canal itself on 4,000 cohort combs, measured 2026-11-25), and the taper's half-plot bound holds before the stretch's
+fn cut(poly: &[Pt], tests: &mut u64) -> Vec<Vec<Pt>> {
+    let (inner, outer) = (dist(poly[0], poly[1]), dist(poly[3], poly[2]));
+    let (longer, shorter) = (inner.max(outer), inner.min(outer));
+    if longer <= STRETCH_SHARE * PLOT_FT.0 {
+        return vec![poly.to_vec()];
+    }
+    let mut n = (longer / PLOT_FT.0).round();
+    while n > 1.0 && shorter / n < PINCH_SHARE * PLOT_FT.0 {
+        n -= 1.0;
+    }
+    #[expect(
+        clippy::cast_possible_truncation,
+        clippy::cast_sign_loss,
+        reason = "a strip's pieces, a handful"
+    )]
+    let n = n as u32;
+    *tests += u64::from(n);
+    let at = |p: Pt, q: Pt, t: f64| (p.0 + (q.0 - p.0) * t, p.1 + (q.1 - p.1) * t);
+    (0..n)
+        .map(|k| {
+            let (t0, t1) = (f64::from(k) / f64::from(n), f64::from(k + 1) / f64::from(n));
+            vec![
+                at(poly[0], poly[1], t0),
+                at(poly[0], poly[1], t1),
+                at(poly[3], poly[2], t1),
+                at(poly[3], poly[2], t0),
+            ]
+        })
+        .collect()
 }
 
 /// How far past `depth` a column's strips stand so their first is clear of the settlement's ground `keep` (feet): 0 where it

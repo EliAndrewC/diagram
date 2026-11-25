@@ -259,11 +259,12 @@ fn every_mark_drawn_is_a_registry_kind_in_the_census() {
 /// A BARE WINTER THE DRY GROUND CANNOT FEED IS ROLLED AGAIN AS BARLEY (449 T418): seed 31 of 16 households falling at 200
 /// degrees rolled its winter crop bare, and its dry fields climbed to 43 plots, 6.45 of the 13.60 acres its grain needs, before
 /// every column ended - 0011 draws a bare winter paddy only where the fan's dry ground can grow the whole need. Seed 636 since
-/// 449 T432: with the wet toe off the fan's narrowing sides, seed 31's hem held 13.65 of its 13.60 acres and stands bare; 636
-/// is a roll of the same size and fall whose field rolls a bare winter its hem cannot feed.
+/// 449 T432: with the wet toe off the fan's narrowing sides, seed 31's hem held 13.65 of its 13.60 acres and stands bare; 8
+/// is a roll of the same size and fall whose field rolls a bare winter its hem cannot feed (636 until 449 T434, whose strips
+/// stretched round a bend, cut into plots, now hold its need).
 #[test]
 fn a_bare_winter_the_dry_ground_cannot_feed_is_rolled_again_as_barley() {
-    let short = r#"{"name": "S", "seed": 636, "households": 16, "down_deg": 200}"#;
+    let short = r#"{"name": "S", "seed": 8, "households": 16, "down_deg": 200}"#;
     let r = roll(&parse(short).unwrap()).unwrap();
     let need = 16.0 * 0.85;
     let (drawn, _) = r.grain.unwrap();
@@ -280,7 +281,7 @@ fn a_bare_winter_the_dry_ground_cannot_feed_is_rolled_again_as_barley() {
     // a PINNED bare winter the ground cannot feed is refused by name, on a wild middle and on a cleared one: no map of it is drawn
     for middle in ["wild", "cleared"] {
         let pinned = format!(
-            r#"{{"name": "S", "seed": 636, "households": 16, "down_deg": 200, "pins": {{"winter_crop": "none", "fan_middle": "{middle}"}}}}"#
+            r#"{{"name": "S", "seed": 8, "households": 16, "down_deg": 200, "pins": {{"winter_crop": "none", "fan_middle": "{middle}"}}}}"#
         );
         let e = roll(&parse(&pinned).unwrap()).unwrap_err().0;
         let named = e.starts_with("the winter crop refused: winter_crop is pinned none");

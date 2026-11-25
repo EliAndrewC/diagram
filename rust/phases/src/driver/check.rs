@@ -27,6 +27,78 @@ fn depth_inside(p: Pt, ring: &[Pt]) -> f64 {
         .fold(f64::MAX, f64::min)
 }
 
+/// The plot `poly` drawn in by `by` feet on every side, or the plot itself where it is under two of `by` across (a side of the
+/// drawn-in ring turning back on its own), so a small plot is asked exactly.
+///
+/// Research:
+///     the plot drawn in - NONE: geometry, each side's line moved in and its neighbors' lines met
+#[expect(
+    clippy::many_single_char_names,
+    reason = "the plane geometry's own names"
+)]
+fn drawn_in(poly: &[Pt], by: f64) -> Vec<Pt> {
+    let n = poly.len();
+    let sense = crate::field::geom::signed_area(poly).signum();
+    // each side's line moved in: a point on it and its direction
+    let lines: Vec<(Pt, Pt)> = (0..n)
+        .map(|i| {
+            let (a, b) = (poly[i], poly[(i + 1) % n]);
+            let len = (b.0 - a.0).hypot(b.1 - a.1).max(f64::MIN_POSITIVE);
+            let u = ((b.0 - a.0) / len, (b.1 - a.1) / len);
+            // the inward normal on the ring's own turning
+            let inward = (-u.1 * sense, u.0 * sense);
+            ((a.0 + inward.0 * by, a.1 + inward.1 * by), u)
+        })
+        .collect();
+    let corner = |i: usize| {
+        let ((p, u), (q, v)) = (lines[(i + n - 1) % n], lines[i]);
+        let cross = u.0 * v.1 - u.1 * v.0;
+        if cross.abs() < 1e-9 {
+            return q;
+        }
+        let t = ((q.0 - p.0) * v.1 - (q.1 - p.1) * v.0) / cross;
+        (p.0 + u.0 * t, p.1 + u.1 * t)
+    };
+    let inner: Vec<Pt> = (0..n).map(corner).collect();
+    let kept = (0..n).all(|i| {
+        let (a, b) = (inner[i], inner[(i + 1) % n]);
+        (b.0 - a.0) * lines[i].1 .0 + (b.1 - a.1) * lines[i].1 .1 > 0.0
+    });
+    if kept {
+        inner
+    } else {
+        poly.to_vec()
+    }
+}
+
+/// Where the ring `ring` lies over the dry plot `poly` past the drawing's slack, or `None`: a corner of the plot more than the
+/// slack inside the ring, or the plot drawn in by the slack meeting it - a corner of the drawn-in plot inside the ring, or a side
+/// of the ring ending inside the drawn-in plot or crossing its sides. So the plot's whole area is asked, not its corners alone,
+/// and a ring sharing an edge with it within the slack is not named.
+///
+/// Research:
+///     the plot's whole area asked - CONVENTION: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html states no gap between a dry plot and the rice, the houses' ground or the pond's, so exact overlap past the drawing's slack (`SLACK_FT`), a shared edge not an overlap (449 T434)
+fn lies_over(poly: &[Pt], ring: &[Pt]) -> Option<Pt> {
+    if ring.len() < 3 || poly.len() < 3 {
+        return None;
+    }
+    if let Some(p) = poly.iter().find(|p| depth_inside(**p, ring) > SLACK_FT) {
+        return Some(*p);
+    }
+    let inner = drawn_in(poly, SLACK_FT);
+    if let Some(p) = inner.iter().find(|p| inside(**p, ring)) {
+        return Some(*p);
+    }
+    let m = inner.len();
+    (0..ring.len())
+        .map(|i| (ring[i], ring[(i + 1) % ring.len()]))
+        .find(|&(a, b)| {
+            inside(a, &inner)
+                || (0..m).any(|k| seg_seg_dist(a, b, inner[k], inner[(k + 1) % m]) == 0.0)
+        })
+        .map(|(a, b)| if inside(a, &inner) { a } else { mean(&[a, b]) })
+}
+
 fn mean(ring: &[Pt]) -> Pt {
     #[expect(
         clippy::cast_precision_loss,
@@ -148,7 +220,7 @@ impl Drawn {
 /// The rolled hamlet's violations, each a line naming the rule, what broke it and where; none on a sound map.
 ///
 /// Research:
-///     no dry plot on the paddy - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the dry fields stand beyond the paddy, along the canal's high side
+///     no dry plot on the paddy - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the dry fields stand beyond the paddy, along the canal's high side, and a plot that would lap onto the rice is dropped - so the plot's whole area is asked of the field past the drawing's slack (`lies_over`), not its corners (449 T434)
 ///     no dry plot on the water - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot that would come within about a foot of any water the map draws - a canal, a ditch, the brook or a pond - or would have the end of one inside it, is left out; the plot's whole area asked of the drawn water (`Drawn::meets`), not its corners (449 T433)
 ///     no dry plot on another - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: plots laid end to end, each its own ground
 ///     the tameike off the paddy - research/questions/0060-field-drains-akusuiro.drawing.html: the pond at the field's foot, below it
@@ -162,13 +234,9 @@ pub fn check(r: &Rolled) -> Vec<String> {
     let rings: Vec<&[Pt]> = r.fields.iter().map(|f| f.fan.ring.as_slice()).collect();
     let mut water = Drawn::of(r);
     for (i, d) in r.dry.iter().enumerate() {
-        if let Some(p) = d
-            .poly
-            .iter()
-            .find(|p| rings.iter().any(|ring| depth_inside(**p, ring) > SLACK_FT))
-        {
+        if let Some(p) = rings.iter().find_map(|ring| lies_over(&d.poly, ring)) {
             out.push(format!(
-                "dry_on_paddy: dry plot {i} has a corner inside the field at ({:.0}, {:.0})",
+                "dry_on_paddy: dry plot {i} lies over the field near ({:.0}, {:.0})",
                 p.0, p.1
             ));
         }
@@ -235,8 +303,8 @@ pub fn check(r: &Rolled) -> Vec<String> {
 /// The tameike's reeds off the dry plots; the paddy is painted over them, the deleted `pond_reeds`' cut on the sheet (`roll`).
 ///
 /// Research:
-///     no dry plot in the reeds - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the dry plots laid clear of the water and the pond's ground
-///     no dry plot on the settlement's ground - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the houses between the canal and the dry fields, so no plot stands where they do (`dry_on_settlement`)
+///     no dry plot in the reeds - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the dry fields drawn on the higher, drier ground along the paddy's high edge, where the paddy water stops - so none on the reed bed round the tameike at the field's foot; the plot's whole area asked of the reeds' ring past the drawing's slack (`lies_over`), not its corners (449 T434)
+///     no dry plot on the settlement's ground - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the houses between the canal and the dry fields, so no plot stands where they do (`dry_on_settlement`); the plot's whole area asked of the ground past the drawing's slack (`lies_over`), not its corners (449 T434)
 fn reed_checks(r: &Rolled) -> Vec<String> {
     let ground: Vec<Vec<Pt>> = r
         .seated
@@ -245,22 +313,30 @@ fn reed_checks(r: &Rolled) -> Vec<String> {
         .map(|f| super::settlement_ground(f, super::wind(&r.plan.windward)))
         .collect();
     let on_ground = r.dry.iter().enumerate().filter_map(|(i, d)| {
-        d.poly
+        ground
             .iter()
-            .any(|p| ground.iter().any(|g| depth_inside(*p, g) > SLACK_FT))
-            .then(|| {
-                format!("dry_on_settlement: dry plot {i} has a corner on the settlement's ground")
+            .find_map(|g| lies_over(&d.poly, g))
+            .map(|p| {
+                format!(
+                    "dry_on_settlement: dry plot {i} lies over the settlement's ground near ({:.0}, {:.0})",
+                    p.0, p.1
+                )
             })
     });
     r.sunk
         .iter()
-        .filter(|s| s.reeds.len() >= 3)
         .filter_map(|s| {
             r.dry
                 .iter()
-                .position(|d| d.poly.iter().any(|p| depth_inside(*p, &s.reeds) > SLACK_FT))
+                .enumerate()
+                .find_map(|(i, d)| lies_over(&d.poly, &s.reeds).map(|p| (i, p)))
         })
-        .map(|i| format!("reeds_on_dry: dry plot {i} has a corner inside the tameike's reeds"))
+        .map(|(i, p)| {
+            format!(
+                "reeds_on_dry: dry plot {i} lies over the tameike's reeds near ({:.0}, {:.0})",
+                p.0, p.1
+            )
+        })
         .chain(on_ground)
         .collect()
 }
@@ -603,6 +679,85 @@ mod tests {
         )];
         let found = check(&r).join("\n");
         assert!(!found.contains("dry_on_water"), "{found}");
+    }
+
+    /// A PADDY, A SETTLEMENT'S GROUND OR A REED BED ACROSS A PLOT'S MIDDLE (449 T434): 0006 keeps a dry plot off the rice, off the
+    /// houses' ground and clear of the pond's ground, and states no gap for any of them, so each check asks the plot's whole area
+    /// past the drawing's slack. Red before T434: the three checks asked only a plot's corners, and named none of the plots a
+    /// paddy, the settlement's ground or a reed bed crosses without holding a corner of (the first three), nor a reed clump
+    /// inside a plot, nor a plot lapping the reeds by a foot and a half; a plot lapping them by half a foot, within the slack, is
+    /// named by neither.
+    #[test]
+    fn a_field_ground_or_reeds_across_a_plots_middle_is_named() {
+        use crate::field::fan::Pt;
+        use crate::field::geom::inside;
+        let mut r = roll(&parse(r#"{"name": "Inashiro", "seed": 4, "households": 15, "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated"}"#).unwrap()).unwrap();
+        let rect =
+            |x0: f64, y0: f64, x1: f64, y1: f64| vec![(x0, y0), (x1, y0), (x1, y1), (x0, y1)];
+        let plot = |poly: Vec<Pt>| DryPlot {
+            poly,
+            crop: "soy",
+            theta: 0.0,
+            tract: 0,
+        };
+        let named = |r: &crate::driver::Rolled, rule: &str| -> Vec<String> {
+            check(r)
+                .into_iter()
+                .filter(|l| l.starts_with(rule))
+                .collect()
+        };
+        let no_corner_in = |poly: &[Pt], ring: &[Pt]| poly.iter().all(|c| !inside(*c, ring));
+        // the paddy: a tongue of the field 20 ft wide through a plot's middle, past both its sides
+        r.fields[0].fan.ring = rect(950.0, 1010.0, 1100.0, 1030.0);
+        let p = rect(1000.0, 984.0, 1092.0, 1056.0);
+        assert!(no_corner_in(&p, &r.fields[0].fan.ring));
+        r.dry = vec![plot(p)];
+        assert_eq!(named(&r, "dry_on_paddy").len(), 1, "{:?}", check(&r));
+        // the settlement's ground as the seat chose it: a strip 20 ft deep running through its middle, past both its sides
+        let ground = crate::driver::settlement_ground(
+            &r.seated.as_ref().unwrap().frames[0],
+            crate::driver::wind(&r.plan.windward),
+        );
+        let (lo, hi) = crate::field::index::bbox(&ground);
+        let m = mean(&ground);
+        let p = rect(lo.0 - 50.0, m.1 - 10.0, hi.0 + 50.0, m.1 + 10.0);
+        assert!(no_corner_in(&p, &ground) && no_corner_in(&ground, &p));
+        r.dry = vec![plot(p)];
+        assert_eq!(named(&r, "dry_on_settlement").len(), 1, "{:?}", check(&r));
+        // the reeds: a bed 20 ft wide through a plot's middle; a clump inside one; a plot lapping the bed 1.5 ft, then 0.5 ft
+        let laps = |by: f64| rect(4000.0, 1030.0 - by, 4092.0, 1102.0 - by);
+        for (bed, p, want) in [
+            (3950.0, rect(4000.0, 984.0, 4092.0, 1056.0), 1),
+            (4010.0, laps(1.5), 1),
+            (4010.0, laps(0.5), 0),
+        ] {
+            r.sunk.as_mut().unwrap().reeds = rect(bed, 1010.0, 8090.0 - bed, 1030.0);
+            assert!(no_corner_in(&p, &r.sunk.as_ref().unwrap().reeds));
+            r.dry = vec![plot(p)];
+            assert_eq!(named(&r, "reeds_on_dry").len(), want, "{:?}", check(&r));
+        }
+        r.sunk.as_mut().unwrap().reeds = rect(4040.0, 1015.0, 4050.0, 1025.0);
+        r.dry = vec![plot(rect(4000.0, 984.0, 4092.0, 1056.0))];
+        assert_eq!(named(&r, "reeds_on_dry").len(), 1, "{:?}", check(&r));
+        // a plot under two slacks across is asked exactly: one standing across the bed is named
+        r.sunk.as_mut().unwrap().reeds = rect(3950.0, 1010.0, 4100.0, 1030.0);
+        r.dry = vec![plot(rect(4000.0, 1005.0, 4001.5, 1035.0))];
+        assert_eq!(named(&r, "reeds_on_dry").len(), 1, "{:?}", check(&r));
+        // a plot drawn in either way round, a corner on a straight side kept on it; a ring of two points meets nothing
+        let square = vec![
+            (0.0, 0.0),
+            (5.0, 0.0),
+            (10.0, 0.0),
+            (10.0, 10.0),
+            (0.0, 10.0),
+        ];
+        let reversed: Vec<Pt> = square.iter().rev().copied().collect();
+        for ring in [square, reversed] {
+            let inner = super::drawn_in(&ring, 1.0);
+            let kept = (inner.contains(&(5.0, 1.0)), inner.contains(&(9.0, 9.0)));
+            assert_eq!(kept, (true, true), "{inner:?}");
+        }
+        assert!(super::lies_over(&rect(0.0, 0.0, 9.0, 9.0), &[(1.0, 1.0), (5.0, 5.0)]).is_none());
     }
 
     /// THE SETTLEMENT'S GROUND OFF THE DIKE AND THE RING CANAL, ITS WAY OUT PAST THE REEDS (449 T240): Kuwabata as rolled passes the

@@ -1986,6 +1986,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T434 (found 2026-11-25 by T433's builder: three more map checks in `rust/phases/src/driver/check.rs` - `dry_on_paddy`, `dry_on_settlement`, `reeds_on_dry` - asked only a dry plot's corners, the gap T433 closed for `dry_on_water`)": {
+   "sha256": "f4562980abbbdf08868970692ee8374244a943163624a1beb3a25a9a7465e391",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T434 Approach (checklist part A)": {
+   "sha256": "9eff4398f7c9e46c972babf0e0f6f7f13892c7ee076730bc37622653e1323249",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -27001,6 +27013,128 @@
      "summary": "Ordered after T432 (on whose code it is measured) and before T158; exits are the red-first test, the sweep at zero, make seeds, pool hamlets unchanged and closing-checks; a red result is set down and ruled through make arbiter-ask.",
      "class": "within",
      "why": "Sequencing and exits inside 'fix defects before new code' (2026-11-24) and 'fix all known bugs in each step before moving on' (2026-11-18)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T434 (found 2026-11-25 by T433's builder: three more map checks in `rust/phases/src/driver/check.rs` - `dry_on_paddy`, `dry_on_settlement`, `reeds_on_dry` - asked only a dry plot's corners, the gap T433 closed for `dry_on_water`)",
+    "### T434 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 whole-area checks",
+     "summary": "dry_on_paddy, dry_on_settlement and reeds_on_dry ask a dry plot's whole area (lies_over): the old corner test kept, plus the plot drawn in by SLACK_FT meeting the ring (a drawn-in corner inside it, or a ring side ending inside or crossing it).",
+     "class": "within",
+     "why": "A check that passes a plot lying across the rice, the settlement's ground or the reeds passes bad work (Constitution XIV); closing that gap is fixing a real defect, which the GM asked for on 2026-11-24 ('if there are real defects, then I do want to find them and fix them'). Keeping the corner test loses nothing the old check named."
+    },
+    {
+     "id": "D2 the slack: abutting within SLACK_FT not named",
+     "summary": "No gap is required between a dry plot and the rice, the settlement's ground or the reeds; a ring sharing an edge with a plot within the 1 ft drawing slack is not named (901 plots abut the ground at 0.00 ft).",
+     "class": "within",
+     "why": "Per the block, 0006 states a gap only for the water and 0060/0072/0031 state none, so abutting is no wrong outcome; the slack is the drawing's existing CONVENTION (SLACK_FT, unchanged). Nothing the request asks for is excluded."
+    },
+    {
+     "id": "D3 stretched strips cut (STRETCH_SHARE 1.5, GUESS)",
+     "summary": "A hem strip whose inner or outer edge runs past 1.5 plots' length is cut across into the nearest whole number of pieces, fewer where a piece would fall under PINCH_SHARE; each piece asked as a plot and counted as one.",
+     "class": "within",
+     "why": "The whole-area sweep found 527 plots across the settlement's ground, every one a strip stretched 5.0 to 10.4 plots' length; a map passing with a plot over the settlement's ground, and plots up to 15.4 plots' length against 0006's plot of roughly 92 ft that never dwarfs the rice basins, are wrong outcomes (a check-failing map, a research finding contradicted), so this is a found defect fixed in the step it was found, as the GM asked on 2026-11-18 and 2026-11-24. The cut does not impose the rectangles the GM disowned on 2026-11-24: the taper stays a GUESS and the cut only bounds a piece's length. The 1.5 threshold is a labeled GUESS knob, a design parameter, not a scope change."
+    },
+    {
+     "id": "D4 cut, not end the climb",
+     "summary": "The stretched strip is cut rather than the column's climb ended, so the hem keeps the ground it climbs.",
+     "class": "within",
+     "why": "Of the two routes that fix the defect, the plan takes the one that keeps the ground (room before packing, GM 2026-10-12); ending the climb would drop the hem along such bends. Neither route narrows what was asked."
+    },
+    {
+     "id": "D5 no crossing arm added to on_keep",
+     "summary": "The generator's on_keep (corners and middle) is left as it is; the whole-area crossing arm is added only to the map check.",
+     "class": "within",
+     "why": "Not a defect left: after the cut the sweep measured 0 plots over the settlement's ground in 41,000 rolls, and the map check now asks the whole area, so a crossing would be refused rather than passed. Under the GM's 2026-11-19 rule a gap no map shows is not a defect, so leaving it is within what was asked and owes no ruling."
+    },
+    {
+     "id": "D6 the bare-winter test re-seeded",
+     "summary": "driver::tests::a_bare_winter_the_dry_ground_cannot_feed_is_rolled_again_as_barley moves from seed 636 to seed 8, which still rolls a bare winter refused when pinned and barley unpinned.",
+     "class": "within",
+     "why": "The fix changed what seed 636 draws; the test keeps its job on a seed that still exhibits the case (FR-002 / SC-004: a case whose result a bug fix changes is changed as fixed, named)."
+    },
+    {
+     "id": "D7 outputs move: pool sheets, winter crop, work budget",
+     "summary": "Inashiro, Kashikawa and Sawada move; the winter crop moves on 9 of the 15,634 rolls that drew a stretched plot and 10 of the 25,366 whose plots were all unstretched; the hem's work rises (7,541 / 11,760 / 18,465 / 30,411 at 10/20/40/80 households), under its budget; no step owed.",
+     "class": "within",
+     "why": "A differing output is not a regression (Constitution XIII, the GM 2026-11-17 and 2026-11-18); the plan reports the moves and shows the checks pass, make seeds green and the hem under its accepted budget, so everything still works."
+    },
+    {
+     "id": "D8 the order",
+     "summary": "T434 lands before T158 and after T433, on whose code it is measured.",
+     "class": "within",
+     "why": "Fixes a known defect before new code resumes, as the GM asked 2026-11-18 ('fix all known bugs in each step before moving on') and 2026-11-24."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T434 (found 2026-11-25 by T433's builder: three more map checks in `rust/phases/src/driver/check.rs` - `dry_on_paddy`, `dry_on_settlement`, `reeds_on_dry` - asked only a dry plot's corners, the gap T433 closed for `dry_on_water`)",
+    "### T434 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 whole-area checks",
+     "summary": "dry_on_paddy, dry_on_settlement and reeds_on_dry ask a dry plot's whole area (lies_over) rather than its corners, the old corner test kept so nothing it named goes unnamed.",
+     "class": "within",
+     "why": "A check that passes bad work is a defect (constitution XIV); the GM 2026-11-24: 'if there are real defects, then I do want to find them and fix them', and fix existing hamlet defects before moving forward. Widening what the checks catch serves that directly."
+    },
+    {
+     "id": "D2 no gap, drawing slack",
+     "summary": "No page states a gap from the rice, the settlement's ground or the reeds, so each check asks exact overlap past SLACK_FT (1 ft, the drawing's existing convention); a ring sharing an edge within the slack is not named.",
+     "class": "within",
+     "why": "Follows what the research states (a gap only for the water) and the drawing's existing tolerance, unchanged; an edge shared within a foot is not a plot lying over the ground, so nothing the GM asked to have caught is let through. The GM approved such tolerance rules 2026-11-19."
+    },
+    {
+     "id": "D3 the stretch is the defect, cut with STRETCH_SHARE",
+     "summary": "Strips past STRETCH_SHARE (1.5 plots' length, new GUESS knob) are cut across into about a plot's length each, each piece asked as a plot and counted as one.",
+     "class": "within",
+     "why": "A wrong outcome, not a mere difference: 600 ft bands crossing the settlement's ground and plots dwarfing the rice basins, against 0006's ~92 ft plot. Fixing the generator defect the sweep found is what the GM's 2026-11-24 words ask; it relies on plot size from 0006, not on the rectangles 'ruling' the GM disowned."
+    },
+    {
+     "id": "D4 cut rather than end the climb",
+     "summary": "The stretched strip is cut, keeping the hem's ground, instead of ending the column's climb and dropping the hem along such bends.",
+     "class": "within",
+     "why": "A choice between two fixes of the same defect; the chosen one removes nothing from the map. No GM requirement is narrowed."
+    },
+    {
+     "id": "D5 taper bound kept first",
+     "summary": "Fewer pieces where the shorter edge's pieces would run under PINCH_SHARE; the taper's bound wins over the stretch bound.",
+     "class": "within",
+     "why": "A priority between two GUESS knobs, neither a GM requirement; measured 2026-11-25 the sweep left no plot over 1.5 plots' length in 1,430,500, so no defect is left by it."
+    },
+    {
+     "id": "D6 on_keep's crossing arm not added",
+     "summary": "The generator's on_keep (corners and middle) is not given the check's crossing arm.",
+     "class": "within",
+     "why": "Not a defect left: the map check, now whole-area, refuses any crossing, and after the cut 0 of 41,000 rolls had one. No wrong outcome reaches a map, so nothing the GM asked fixed is left; this is a not-doing of redundant work, not a narrowing."
+    },
+    {
+     "id": "D7 pool and outputs move",
+     "summary": "Inashiro, Kashikawa and Sawada redraw; winter crops and plot counts move on some rolls; work budget of the hem rises within budget.",
+     "class": "within",
+     "why": "Maps may change so long as everything works and research holds (FR-002, the GM 2026-11-17 and 2026-11-18); every check clean, make seeds green."
+    },
+    {
+     "id": "D8 test fixture seed 636 to 8",
+     "summary": "The bare-winter-rerolled-as-barley test rolls seed 8, since seed 636 no longer exhibits the case after the cut.",
+     "class": "within",
+     "why": "The test still checks the same behavior on a seed that exhibits it; fix-as-we-go changes are expected, not regressions."
+    },
+    {
+     "id": "D9 order",
+     "summary": "After T433, before T158.",
+     "class": "within",
+     "why": "Defects fixed before new code (the GM 2026-11-18 and 2026-11-24)."
     }
    ]
   }
@@ -55321,6 +55455,68 @@
      "summary": "Ordered after T432 (on whose code it is measured) and before T158; exits are the red-first test, the sweep at zero, make seeds, pool hamlets unchanged and closing-checks; a red result is set down and ruled through make arbiter-ask.",
      "class": "within",
      "why": "Sequencing and exits inside 'fix defects before new code' (2026-11-24) and 'fix all known bugs in each step before moving on' (2026-11-18)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T434": {
+   "section_sha256": "b624d786d12c1cc2125ced7af0f022ad2b1a333735e2982c3beec7c775c6c96c",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 whole-area checks",
+     "summary": "dry_on_paddy, dry_on_settlement and reeds_on_dry ask a dry plot's whole area (lies_over) rather than its corners, the old corner test kept so nothing it named goes unnamed.",
+     "class": "within",
+     "why": "A check that passes bad work is a defect (constitution XIV); the GM 2026-11-24: 'if there are real defects, then I do want to find them and fix them', and fix existing hamlet defects before moving forward. Widening what the checks catch serves that directly."
+    },
+    {
+     "id": "D2 no gap, drawing slack",
+     "summary": "No page states a gap from the rice, the settlement's ground or the reeds, so each check asks exact overlap past SLACK_FT (1 ft, the drawing's existing convention); a ring sharing an edge within the slack is not named.",
+     "class": "within",
+     "why": "Follows what the research states (a gap only for the water) and the drawing's existing tolerance, unchanged; an edge shared within a foot is not a plot lying over the ground, so nothing the GM asked to have caught is let through. The GM approved such tolerance rules 2026-11-19."
+    },
+    {
+     "id": "D3 the stretch is the defect, cut with STRETCH_SHARE",
+     "summary": "Strips past STRETCH_SHARE (1.5 plots' length, new GUESS knob) are cut across into about a plot's length each, each piece asked as a plot and counted as one.",
+     "class": "within",
+     "why": "A wrong outcome, not a mere difference: 600 ft bands crossing the settlement's ground and plots dwarfing the rice basins, against 0006's ~92 ft plot. Fixing the generator defect the sweep found is what the GM's 2026-11-24 words ask; it relies on plot size from 0006, not on the rectangles 'ruling' the GM disowned."
+    },
+    {
+     "id": "D4 cut rather than end the climb",
+     "summary": "The stretched strip is cut, keeping the hem's ground, instead of ending the column's climb and dropping the hem along such bends.",
+     "class": "within",
+     "why": "A choice between two fixes of the same defect; the chosen one removes nothing from the map. No GM requirement is narrowed."
+    },
+    {
+     "id": "D5 taper bound kept first",
+     "summary": "Fewer pieces where the shorter edge's pieces would run under PINCH_SHARE; the taper's bound wins over the stretch bound.",
+     "class": "within",
+     "why": "A priority between two GUESS knobs, neither a GM requirement; measured 2026-11-25 the sweep left no plot over 1.5 plots' length in 1,430,500, so no defect is left by it."
+    },
+    {
+     "id": "D6 on_keep's crossing arm not added",
+     "summary": "The generator's on_keep (corners and middle) is not given the check's crossing arm.",
+     "class": "within",
+     "why": "Not a defect left: the map check, now whole-area, refuses any crossing, and after the cut 0 of 41,000 rolls had one. No wrong outcome reaches a map, so nothing the GM asked fixed is left; this is a not-doing of redundant work, not a narrowing."
+    },
+    {
+     "id": "D7 pool and outputs move",
+     "summary": "Inashiro, Kashikawa and Sawada redraw; winter crops and plot counts move on some rolls; work budget of the hem rises within budget.",
+     "class": "within",
+     "why": "Maps may change so long as everything works and research holds (FR-002, the GM 2026-11-17 and 2026-11-18); every check clean, make seeds green."
+    },
+    {
+     "id": "D8 test fixture seed 636 to 8",
+     "summary": "The bare-winter-rerolled-as-barley test rolls seed 8, since seed 636 no longer exhibits the case after the cut.",
+     "class": "within",
+     "why": "The test still checks the same behavior on a seed that exhibits it; fix-as-we-go changes are expected, not regressions."
+    },
+    {
+     "id": "D9 order",
+     "summary": "After T433, before T158.",
+     "class": "within",
+     "why": "Defects fixed before new code (the GM 2026-11-18 and 2026-11-24)."
     }
    ],
    "verdict": "CLEAR"

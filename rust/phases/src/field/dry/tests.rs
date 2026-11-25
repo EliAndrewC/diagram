@@ -319,3 +319,83 @@ fn a_column_on_ground_no_strip_clears_is_pushed_past_its_reach() {
     assert!(behind > 900.0, "{behind}");
     assert!(past_keep(frames.0, frames.1, 6.0, &[], &mut t) == 0.0);
 }
+
+/// A STRIP STRETCHED ROUND A BEND AWAY FROM THE DRY SIDE IS CUT INTO PLOTS (449 T434): the columns square to such a bend splay
+/// as they climb, and a strip's edges grow with its depth; 0006 draws a plot roughly 92 ft across that never dwarfs the rice
+/// basins. Red before T434: the hem drew each strip as one plot, stretched past three plots' length along a bend of 250 ft
+/// radius; now each is cut into plots of about a plot's length, no edge past one and a half, the pieces standing on the bank
+/// or on the plots below them.
+#[test]
+fn a_strip_stretched_round_a_bend_is_cut_into_plots() {
+    // an arc of 250 ft radius, 120 degrees of it, the dry side outside it: the columns splay as they climb
+    let line: Vec<(f64, f64)> = (0..=24)
+        .map(|k| {
+            let a = (-60.0 + 5.0 * f64::from(k)).to_radians();
+            (-250.0 + 250.0 * a.cos(), 600.0 + 250.0 * a.sin())
+        })
+        .collect();
+    let field = [
+        (-260.0, 590.0),
+        (-250.0, 590.0),
+        (-250.0, 610.0),
+        (-260.0, 610.0),
+    ];
+    let (plots, _, _) = hem(
+        &line,
+        (1.0, 0.0),
+        (-1.0, 0.0),
+        (60.0 * PLOT_FT.0 * PLOT_FT.1, MAX_BANDS),
+        &field,
+        &mut Index::default(),
+        1.0,
+        4,
+        "f0",
+        &[],
+    );
+    let side = |a: (f64, f64), b: (f64, f64)| (a.0 - b.0).hypot(a.1 - b.1);
+    let longest = plots
+        .iter()
+        .map(|p| side(p.poly[0], p.poly[1]).max(side(p.poly[2], p.poly[3])))
+        .fold(0.0, f64::max);
+    let (n, most) = (plots.len(), 1.5 * PLOT_FT.0);
+    assert!(n >= 60 && longest < most, "{n}: {longest:.1}");
+    // each piece's inner corners stand on the canal's bank or on the outer edge of a plot below it
+    let bank = |p: (f64, f64)| {
+        line.windows(2)
+            .map(|w| crate::field::geom::seg_dist(p, w[0], w[1]))
+            .fold(f64::INFINITY, f64::min)
+            <= BANK_FT + 0.01
+    };
+    let on = |c: (f64, f64)| {
+        bank(c)
+            || plots
+                .iter()
+                .any(|q| crate::field::geom::seg_dist(c, q.poly[3], q.poly[2]) < 1e-6)
+    };
+    let stands = |p: &DryPlot| on(p.poly[0]) && on(p.poly[1]);
+    assert_eq!(plots.iter().filter(|p| !stands(p)).count(), 0);
+}
+
+/// A STRIP CUT, ITS TAPER KEPT FIRST (449 T434): a strip whose outer edge runs four plots' length is cut in four; one whose inner
+/// edge is a plot's length and outer three is cut in two, not three, so no piece's inner edge runs under half a plot's length;
+/// one no longer than one and a half plots is whole.
+#[test]
+fn a_stretched_strip_is_cut_its_taper_kept_first() {
+    let l = PLOT_FT.0;
+    let pieces = |inner: f64, outer: f64| {
+        let mut tests = 0;
+        super::cut(
+            &[(0.0, 0.0), (inner, 0.0), (outer, 71.5), (0.0, 71.5)],
+            &mut tests,
+        )
+        .len()
+    };
+    assert_eq!(
+        (
+            pieces(4.0 * l, 4.0 * l),
+            pieces(l, 3.0 * l),
+            pieces(l, 1.4 * l)
+        ),
+        (4, 2, 1)
+    );
+}
