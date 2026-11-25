@@ -1192,7 +1192,7 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 9. **Done, measured.** <the measurement that says it is done>
 10. **Before moving a constant.** <n/a, or the claim it moves>
 11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+12. **Before any fix.** No map changes: the search (page session P12) found the record holding what the code draws - 0006's drawing page has each plot a rectangle square to the canal where it stands, tapering at a bend - so the bend taper (PINCH_SHARE, 449 T423) stands, and the comment naming a GM ruling the GM never made is gone from rust/phases/src/field/dry.rs. Not a defect in the drawing; the claim was restated (constitution XIV).
 
 **Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
