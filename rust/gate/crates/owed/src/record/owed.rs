@@ -542,7 +542,8 @@ fn report(
     } else {
         format!(" by the delta, {left} still unanswered")
     };
-    let mut lines = vec![format!("record-owed: {} unit(s) owed{tail}", rows.len())];
+    let head = format!("record-owed: {} unit(s) owed{tail}", rows.len());
+    let mut lines = vec![head.clone()];
     for u in rows {
         if answered_slugs.contains(&u.slug) {
             lines.push(format!("  [answered] {}  - {}", u.slug, u.occasion));
@@ -564,7 +565,27 @@ fn report(
     }
     lines.push("Answer each with `make record-checked CHECK=<check> BUNDLE=<its bundle> RESULT=\"<counts>\"` when its check returns.".to_owned());
     lines.push("Apply a round's own EDITs with `make apply-edits FROM=<the agent's reply or its transcript>` - its unit then settles, owing no round to re-read its own words - the same command settles an EDIT you already applied by hand, word for word (feature 385 T21).".to_owned());
+    lines.push(closing(&head, rows, answered_slugs));
     lines.join("\n") + "\n"
+}
+
+/// The listing's last line: its first again and every pop-up an unanswered unit owes, so a read cut to the tail still meets them
+/// (451 T241: a `tail -6` of a 43-unit listing showed two of its eleven pop-ups, and a pop-up it owed was briefed as not owed).
+fn closing(head: &str, rows: &[Unit], answered_slugs: &HashSet<String>) -> String {
+    let mut popups: Vec<&str> = rows
+        .iter()
+        .filter(|u| !answered_slugs.contains(&u.slug) && u.check().starts_with("modal-"))
+        .map(Unit::subject)
+        .collect();
+    popups.sort_unstable();
+    popups.dedup();
+    if popups.is_empty() {
+        return format!("{head} - every unit is listed above");
+    }
+    format!(
+        "{head} - every unit is listed above; pop-ups owed: {}",
+        popups.join(" ")
+    )
 }
 
 fn touched_of(store_dir: &Path) -> Result<HashMap<String, String>, Fail> {

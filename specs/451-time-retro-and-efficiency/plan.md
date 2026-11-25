@@ -2953,31 +2953,48 @@ engine speed, so no checklist.
 **Performance work?** no: it holds a review round; no check runs faster or slower.
 
 
-### T241 (<why: the finding or measurement that files it>)
+### T241 (page session P15's cascade, 2026-11-25: hamlet/marsh contradicted 0057's new UNRESEARCHED block `toe-shoulder-past-corner` and was briefed as not owed by `make record-owed`; a directed read found it)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: The listing did owe the pop-up. The read of the listing was cut. The fix makes a cut read still show the count and every pop-up owed.
+  - **The cause, measured.** `make record-owed` owed `modal-depiction:hamlet/marsh` ("a page its Drawing: names moved (0057-marshes-and-wetlands-shitchi.drawing.html)", triage first). Three readings agree, 2026-11-25:
+    - a replay in a detached worktree at 01549f3828~1 with P15's files uncommitted and an empty answer store: 43 units owed, marsh among them;
+    - P15's check session's own listing at 10:47Z (its transcript);
+    - the cascade's report: "43 units in all", marsh among "eight more 0031/0057 readers".
+  - **Where "not owed" came from.** The coordinator ran `make record-owed UNANSWERED=1 2>&1 | grep -v '^\s*$' | tail -6` at 11:08:59Z. It read the last two units, hamlet/windbreak and sheet/well, and briefed them as the listing (coordinator transcript, 11:09:17Z). The listing states its count only on its first line, which the tail cut.
+  - **Ruled out.** The pop-up's `Drawing:` line names 0057's drawing page. The page-moved rule (`modals::owed_row`) owed it. No earlier answer covered P15's digest: T432's round at 03:23 read 0057 at blob 7edb49 (the base), fingerprint 6073a58f, and 7c3a53732e9b2405 was first answered by the cascade's own batch at 06:12. A new block is owed like a changed one: the triage MANIFEST shows marsh the three changed blocks and the new UNRESEARCHED one.
+  - **The triage, undirected.** The real triage prompt told the agent to "pay particular attention to hamlet/marsh". So the triage was replayed on the same bundle (`make modal-triage`'s from the worktree) with a plain prompt, 2026-11-25. It sent marsh on three times, once as "B: new block calls the corner-level spread past the fields' corners UNRESEARCHED", and it cleared hamlet/windbreak. One replay.
+  - **The fix.** `report`'s last line repeats its first, then lists every pop-up an unanswered unit owes: "record-owed: 43 unit(s) owed - every unit is listed above; pop-ups owed: ...". A tail, or a cut read, now shows the count and the pop-ups. A listing that owes no pop-up ends "- every unit is listed above".
+  - **The over-flag, measured** on the same pair, from the replay and the real run:
+    - Each of the three pop-ups was owed through 0031's drawing page on its `Drawing:` line:
+      - hamlet/windbreak's line names it plain;
+      - hamlet/well's names it `[settlement_form=dispersed]`;
+      - sheet/well's names it plain.
+    - Of the 43 units owed, `make modal-triage`'s tool cleared 32, both wells among them ("no claim-bearing change"). Of the remaining 11, the agent cleared 8, hamlet/windbreak among them, and sent 3 on.
+    - That is the intended filter: the owing is cheap, and the triage drops the flag. Nothing there is a defect, and nothing changes.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the listing's last line: its count and the pop-ups owed | `a_cut_read_of_the_listing_still_meets_its_count_and_its_pop_ups` red on HEAD, 2026-11-25 (`make rust-test CRATE=rust/gate/crates/owed`: 125 passed, 1 failed) | n/a: tooling | none | n/a |
 
 ### T241 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A pop-up whose drawing page changes a block it echoes is owed, and whoever reads the listing sees that it is owed, even through a cut read.
+2. **The constraints.** The T241 line: make that pop-up owed, red-first on the pair, and measure the over-flag. The GM's request of 2026-11-24 (request.md, "the page edits' cascades are watched"): "we really are cascading in situations that do call for it", and no "unnecessary edits as a result of something trivial changing". Feature 375: a pop-up owed only by a moved page goes to the triage first.
+3. **Where each comes from.** G: the T241 line and request.md. O: the replay, the transcripts and the answer store, all 2026-11-25.
+4. **Do they describe the world here?** Yes, measured 2026-11-25 (above): the pair was owed. The miss was in the reading.
+5. **The order.** No dependency. 451 T226 stays open (below).
+6. **The exits.** Green: `make closing-checks T=T241`. Red: what failed is recorded and the task set down, and a claim that it cannot be done is ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, 2026-11-25, `make rust-test CRATE=rust/gate/crates/owed`: the new test failed on HEAD's code (125 passed, 1 failed) and passes on the fix (126 passed). The pair itself: the replay owes `modal-depiction:hamlet/marsh` both on HEAD's code and on the fix. It was never unowed, so it has no red of its own.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: a contradicting pop-up was nearly missed because the listing's count was not in the part read. Nothing on a map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- 451 T226 is not this task's cause. A moved `Drawing:` page owes a pop-up only `modal-depiction` (`modals::owed_row`), never modal-form. So a page's new labeled guess never owes the look at a pop-up's Guesses tab that T226 asks for. The cascade noted the same here: marsh's Guesses bullet ("no source gives how far seepage spread at a fan's foot") "may want UNRESEARCHED wording", and nothing owed a check on it. Not fixed here: it is T226's own rule, a check owed by a new item, outside this task's listing. Filed as T226; lands before T242. 0057 with hamlet/marsh is a second fixture for it.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: one line more in a listing.
 
 
 ### T242 (<why: the finding or measurement that files it>)

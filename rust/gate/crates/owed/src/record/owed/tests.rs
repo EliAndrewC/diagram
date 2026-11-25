@@ -114,6 +114,8 @@ fn the_listing_between_two_revisions_and_its_refusals() {
 
 // the answer modes, split by feature 449 T164 into tests of their own, which pushed this file past the 1,000-line bar (Principle X)
 mod answer_modes;
+// the listing's closing line (451 T241), beside it for the same bar
+mod listing_tail;
 
 #[test]
 fn the_store_keeps_every_answer_and_settles() {

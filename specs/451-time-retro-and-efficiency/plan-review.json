@@ -1476,6 +1476,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T241 (page session P15's cascade, 2026-11-25: hamlet/marsh contradicted 0057's new UNRESEARCHED block `toe-shoulder-past-corner` and was briefed as not owed by `make record-owed`; a directed read found it)": {
+   "sha256": "9c3174b8c10f29abcc161e936869a9a647c5d0cbe45605c9d1ae2a84b9681e8c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T241 Approach (checklist part A)": {
+   "sha256": "6466f364702401ab2e218372671cf2ac2c3e5f2f49ac29b73865a4bdae5c51ec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -19742,6 +19754,46 @@
      "why": "A guard that refuses a dispatch; the checklist is prompts, never a gate. No narrowing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T241 (page session P15's cascade, 2026-11-25: hamlet/marsh contradicted 0057's new UNRESEARCHED block `toe-shoulder-past-corner` and was briefed as not owed by `make record-owed`; a directed read found it)",
+    "### T241 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T241-fix",
+     "summary": "The cause is placed in the reading, not the owing: the plan records three readings (a replay at 01549f3828~1, P15's check-session listing, the cascade's report, all 2026-11-25) that record-owed already owed modal-depiction:hamlet/marsh, and that the coordinator's `| tail -6` cut the count off the listing's first line. The fix makes report's last line repeat the count and list every pop-up an unanswered unit owes, so a tail still shows both.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-24 'we really are cascading in situations that do call for it': the pop-up that called for a cascade was nearly briefed as not owed, and the fix closes the route by which it was. The fix reaches the stated case (any tail that includes the last line shows the count and the owed pop-ups). Pure tooling; nothing on a map changes."
+    },
+    {
+     "id": "T241-red-on-the-pair",
+     "summary": "The task line's 'make that pop-up owed, red-first on the pair' is met by a red-first test on the listing's last line (recorded red on HEAD, 125 passed / 1 failed; 126 passed on the fix), not a red on the pair, because the pair was owed on HEAD's code and on the fix.",
+     "class": "within",
+     "why": "The task line is the session's wording, not the GM's; the GM asks that cascades fire where called for, and a red on a pair that was never unowed cannot exist. The red-first test enforces the defect actually found."
+    },
+    {
+     "id": "T241-over-flag-left",
+     "summary": "The over-flag measured on the same run (windbreak and both wells owed through 0031's moved drawing page; of 43 owed, the tool cleared 32, the agent 8, 3 sent on) is judged the intended filter and left unchanged.",
+     "class": "within",
+     "why": "The GM's concern is 'unnecessary edits as a result of something trivial changing'; the owing is cheap and the triage dropped the trivial ones before any edit, so no wrong outcome exists (constitution XIV: a defect is a wrong outcome). Leaving a non-defect is within what was asked and needs no ruling."
+    },
+    {
+     "id": "T241-T226-sequenced",
+     "summary": "Found and left: a moved Drawing: page owes only modal-depiction, never modal-form, so a page's new labeled guess (here 0057's UNRESEARCHED block, marsh's Guesses bullet) never owes the Guesses-tab check. Left to the already-open 451 T226, which 'lands before T242', with 0057/hamlet-marsh given to it as a second fixture.",
+     "class": "within",
+     "why": "Nothing the GM asked for is undone, only ordered: the defect is already carried by its own open task in this feature, and the block states why it is not fixed here (T226's own rule, a check owed by a new item, outside this listing), its id and its order, the shape FR-009 provides for a deferred defect. T241's own pair was owed and sent on through modal-depiction, so T241's scope is not narrowed. T226 itself serves the 2026-11-24 clause 'we really are cascading in situations that do call for it'."
+    },
+    {
+     "id": "T241-not-performance",
+     "summary": "'Performance work? no: one line more in a listing.'",
+     "class": "within",
+     "why": "Under FR-013 and the GM's 2026-11-20 measurement ruling, a listing's last line is neither performance nor measurement work, so it takes no scheduling precedence."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -31714,6 +31766,44 @@
      "summary": "Declared not performance work; the performance checklist is left as its template.",
      "class": "within",
      "why": "A guard that refuses a dispatch; the checklist is prompts, never a gate. No narrowing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T241": {
+   "section_sha256": "8ec13257a74fd01177499903bb42566421fb9b6f4419408df46451fc519acd69",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T241-fix",
+     "summary": "The cause is placed in the reading, not the owing: the plan records three readings (a replay at 01549f3828~1, P15's check-session listing, the cascade's report, all 2026-11-25) that record-owed already owed modal-depiction:hamlet/marsh, and that the coordinator's `| tail -6` cut the count off the listing's first line. The fix makes report's last line repeat the count and list every pop-up an unanswered unit owes, so a tail still shows both.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-24 'we really are cascading in situations that do call for it': the pop-up that called for a cascade was nearly briefed as not owed, and the fix closes the route by which it was. The fix reaches the stated case (any tail that includes the last line shows the count and the owed pop-ups). Pure tooling; nothing on a map changes."
+    },
+    {
+     "id": "T241-red-on-the-pair",
+     "summary": "The task line's 'make that pop-up owed, red-first on the pair' is met by a red-first test on the listing's last line (recorded red on HEAD, 125 passed / 1 failed; 126 passed on the fix), not a red on the pair, because the pair was owed on HEAD's code and on the fix.",
+     "class": "within",
+     "why": "The task line is the session's wording, not the GM's; the GM asks that cascades fire where called for, and a red on a pair that was never unowed cannot exist. The red-first test enforces the defect actually found."
+    },
+    {
+     "id": "T241-over-flag-left",
+     "summary": "The over-flag measured on the same run (windbreak and both wells owed through 0031's moved drawing page; of 43 owed, the tool cleared 32, the agent 8, 3 sent on) is judged the intended filter and left unchanged.",
+     "class": "within",
+     "why": "The GM's concern is 'unnecessary edits as a result of something trivial changing'; the owing is cheap and the triage dropped the trivial ones before any edit, so no wrong outcome exists (constitution XIV: a defect is a wrong outcome). Leaving a non-defect is within what was asked and needs no ruling."
+    },
+    {
+     "id": "T241-T226-sequenced",
+     "summary": "Found and left: a moved Drawing: page owes only modal-depiction, never modal-form, so a page's new labeled guess (here 0057's UNRESEARCHED block, marsh's Guesses bullet) never owes the Guesses-tab check. Left to the already-open 451 T226, which 'lands before T242', with 0057/hamlet-marsh given to it as a second fixture.",
+     "class": "within",
+     "why": "Nothing the GM asked for is undone, only ordered: the defect is already carried by its own open task in this feature, and the block states why it is not fixed here (T226's own rule, a check owed by a new item, outside this listing), its id and its order, the shape FR-009 provides for a deferred defect. T241's own pair was owed and sent on through modal-depiction, so T241's scope is not narrowed. T226 itself serves the 2026-11-24 clause 'we really are cascading in situations that do call for it'."
+    },
+    {
+     "id": "T241-not-performance",
+     "summary": "'Performance work? no: one line more in a listing.'",
+     "class": "within",
+     "why": "Under FR-013 and the GM's 2026-11-20 measurement ruling, a listing's last line is neither performance nor measurement work, so it takes no scheduling precedence."
     }
    ],
    "verdict": "CLEAR"
