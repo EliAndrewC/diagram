@@ -2950,8 +2950,10 @@ megajoules	MJ
 mehrgarh	Mehrgarh
 meibutsu	meibutsu
 meiji	Meiji
+meiji 30s	Meiji 30s
 meiji restoration	Restoration
 meiji teens	Meiji teens
+meiji thirties	Meiji 30s
 meireki	Meireki
 meisho zue	meisho zue
 meisho-zue	meisho zue
