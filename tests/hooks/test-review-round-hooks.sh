@@ -270,6 +270,41 @@ out=$(pagent "MODE 4: PLAN REVIEW of 2 block(s)")
 rm "$PC/.specify/feature.json"; out=$(pagent "MODE 4: PLAN REVIEW of 2 block(s)")
 [ "$(rc)" -eq 0 ] && ok "no active task: nothing to count" || no "held with no active task" "(rc=$(rc))"
 
+# 451 T240: 449 T432's sequence through the REAL recorder - `make decide`'s section review records by TASK=, which wrote no
+# block_reviews row for a BLOCKED verdict, so two BLOCKED rounds counted none and the third dispatch went unheld
+echo "12. a section review's two BLOCKED verdicts, recorded by the plan tool, hold its third dispatch"
+GATE="$HERE/../../scripts/gates/l7r-gate.sh"
+SC="$T/section-clone"; mkdir -p "$SC/specs/386-y" "$SC/specs/387-z" "$SC/.specify"; git -C "$SC" init -q 2>/dev/null
+printf '# plan\n\n## T14 the toe\n\n- the wet toe on the fan (GUESS)\n\n## T15 the wells\n\n- a well\n' > "$SC/specs/386-y/plan.md"
+printf -- '- [ ] T14 the toe\n- [ ] T15 the wells\n' > "$SC/specs/386-y/tasks.md"
+printf -- '- [ ] T01 elsewhere\n' > "$SC/specs/387-z/tasks.md"
+printf '{"feature_directory": "specs/386-y"}' > "$SC/.specify/feature.json"
+printf '{"feature": "386-y", "task": "T14"}' > "$SC/.git/active-task"
+SECTION="MODE 4: PLAN REVIEW of one task's section - feature 386-y, task T14 (a decision preflight, feature 375 FR-003a), on its bundle: read $T/plan-386-y-T14/MANIFEST.md and the files beside it, and nothing in the repository."
+sagent() { jq -nc '{"session_id":"t-rr-section","cwd":$ARGS.positional[1],"tool_name":"Agent","tool_input":{"subagent_type":"spec-fidelity","prompt":$ARGS.positional[0]}}' --args -- "$1" "$SC" | ( cd "$SC" && "$HOOK" pretool 2>"$T/err" ); echo $? > "$T/rc"; }
+blocked_verdict() { # what the reviewer records: the section's digest, a NOT LEGITIMATE narrowing ($1 its id)
+  sha=$( cd "$SC" && "$GATE" plan section-sha 386-y T14 | tr -d '[:space:]' )
+  jq -nc --arg sha "$sha" --arg id "$1" '{"section_sha256": $sha, "decisions": [{"id": $id, "summary": "the toe left unmeasured", "class": "narrowing", "ruling": "NOT LEGITIMATE", "why": "w"}]}' > "$T/verdict.json"
+  ( cd "$SC" && "$GATE" plan record-task 386-y T14 "$T/verdict.json" --as spec-fidelity >/dev/null 2>"$T/rec-err" ) || no "the plan tool refused the verdict" "$(head -c 200 "$T/rec-err")"
+}
+sagent "$SECTION"; [ "$(rc)" -eq 0 ] && ok "round 1 is dispatched" || no "round 1 was held" "(rc=$(rc))"
+blocked_verdict D1
+sagent "$SECTION"; [ "$(rc)" -eq 0 ] && ok "round 2 is dispatched (round 1 BLOCKED)" || no "round 2 was held" "(rc=$(rc))"
+# ...a NOT-REVIEWABLE return records nothing, and is no round (ask:449-T432-plan-round3)
+sagent "$SECTION"; [ "$(rc)" -eq 0 ] && ok "a dispatch after a return that recorded nothing is still round 2" || no "an unrecorded return was counted" "(rc=$(rc))"
+blocked_verdict D2
+sagent "$SECTION"
+[ "$(rc)" -eq 2 ] && grep -q "BLOCKED: round 3 of T14's plan review" "$T/err" && grep -q 'make arbiter-bundle TRIGGER="round:spec-fidelity|plan:386-y#T14@3' "$T/err" && grep -q 'round:spec-fidelity|plan:386-y#T14@3' "$SC/.git/arbiter-owed.json" && ok "the third dispatch is refused, naming make arbiter-bundle and its trigger" || no "the third section round was not held" "(rc=$(rc)) $(head -3 "$T/err")"
+# the subject is the task the dispatch reviews, whatever the active task names (a coordinating session's dispatch, 451 T227's kind)
+printf '{"feature_directory": "specs/387-z"}' > "$SC/.specify/feature.json"; printf '{"feature": "387-z", "task": "T01"}' > "$SC/.git/active-task"
+sagent "$SECTION"
+[ "$(rc)" -eq 2 ] && grep -q 'plan:386-y#T14@3' "$T/err" && ok "...held under another active feature, keyed by the section it names" || no "the held round followed the active task" "(rc=$(rc)) $(head -2 "$T/err")"
+DELTA="MODE 4: PLAN REVIEW of 1 changed block(s) of feature 386-y's plan (feature 375 FR-043), on their bundle: read $T/plan-386-y-blocks-T14-0123abcd/MANIFEST.md and the files beside it, and nothing in the repository."
+sagent "$DELTA"
+[ "$(rc)" -eq 2 ] && grep -q 'plan:386-y#T14@3' "$T/err" && ok "...and a block review of its blocks, keyed by the feature and tasks its bundle names" || no "the block review's round followed the active task" "(rc=$(rc)) $(head -2 "$T/err")"
+printf '%s\n' '{"trigger": "round:spec-fidelity|plan:386-y#T14@3", "kind": "round", "ruling": "continue", "why": "converging", "utc": "t"}' > "$SC/specs/386-y/arbiter.jsonl"
+sagent "$SECTION"; [ "$(rc)" -eq 0 ] && ok "the arbiter's continue releases round 3" || no "the ruling did not release it" "(rc=$(rc)) $(head -2 "$T/err")"
+
 echo
 echo "test-review-round-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

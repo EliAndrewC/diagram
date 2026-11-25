@@ -197,10 +197,12 @@ pub fn round_no(trigger: &str) -> u64 {
         .unwrap_or(0)
 }
 
-/// How many `continue` rulings the round triggers of one unit carry; with `after`, only those past round `after`.
+/// How many `continue` rulings the round triggers of one unit carry; with `after`, only those past round `after`. The rulings are
+/// read where the prefix's own feature files them, as `make arbiter-ruled` does (a plan or spec round, `asked_feature`), else the
+/// active feature's (451 T240: a plan round's `continue` went unread while another feature was active, so its hold never lifted).
 #[must_use]
 pub fn continues(root: &Path, prefix: &str, after: u64) -> u64 {
-    let n = rulings(root, "")
+    let n = rulings(root, prefix)
         .iter()
         .filter(|(t, r)| {
             t.starts_with(prefix) && text(r, "ruling") == "continue" && round_no(t) > after
@@ -222,7 +224,7 @@ fn lapsed_one(r: &Value, content: Option<&str>) -> bool {
 /// The ruling that closed the unit, or ""; with `content`, a ruling bound to another `content_key` has lapsed.
 #[must_use]
 pub fn closed(root: &Path, prefix: &str, content: Option<&str>) -> String {
-    rulings(root, "")
+    rulings(root, prefix)
         .iter()
         .find(|(t, r)| t.starts_with(prefix) && is_closing(r) && !lapsed_one(r, content))
         .map_or_else(String::new, |(_, r)| text(r, "ruling").to_owned())
@@ -364,9 +366,14 @@ fn said(triggers: &[String], batch_root: Option<&Path>, list_root: Option<&Path>
     }
     // 451 T170, message-check's cut: the rule's sources (feature 375 FR-010/FR-011, amendment 2 for the batch) and why the escape
     // is rare - Claude Code picks up a new agent file mid-session, as this one was on 2026-10-10 - are the code's, not the reader's.
+    // 451 T240, message-check's cut: one trigger is named by the command itself, so only a list is said before it
+    let list = if triggers.len() > 1 {
+        format!(" ({})", named(triggers, list_root))
+    } else {
+        String::new()
+    };
     format!(
-        "a tripwire is owed its ruling first ({}): make arbiter-bundle TRIGGER=\"{t}\", dispatch `round-arbiter` on the MANIFEST it prints, then make arbiter-ruled TRIGGER=\"{t}\" FILE=<its JSON> AS=round-arbiter. Several units at their cap together (a batch of pop-ups or pages)? `make arbiter-bundle BATCH=1` puts every owed round trigger to ONE ruling. Escape (only if `round-arbiter` is missing from the agent list): ARBITER_OK=\"<reason>\" on the gate or in the check's prompt - logged.",
-        named(triggers, list_root)
+        "a tripwire is owed its ruling first{list}: make arbiter-bundle TRIGGER=\"{t}\", dispatch `round-arbiter` on the MANIFEST it prints, then make arbiter-ruled TRIGGER=\"{t}\" FILE=<its JSON> AS=round-arbiter. Several units at their cap together (a batch of pop-ups or pages)? `make arbiter-bundle BATCH=1` puts every owed round trigger to ONE ruling. Escape (only if `round-arbiter` is missing from the agent list): ARBITER_OK=\"<reason, two words or more>\" on the gate or in the check's prompt - logged."
     )
 }
 

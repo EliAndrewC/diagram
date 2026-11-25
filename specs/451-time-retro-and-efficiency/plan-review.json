@@ -1446,6 +1446,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T240 (449 T432's builder, 2026-11-25: spec-fidelity MODE 4 was dispatched a third time on T432's section after two BLOCKED rounds and no guard refused it; the arbiter, asked after, ruled no fault, ask:449-T432-plan-round3)": {
+   "sha256": "c4b813b1b2ed1c5bdab73b887f0ff1a0d18d7b95a8bfc278bd1796a032a43187",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T240 Approach (checklist part A)": {
+   "sha256": "7b7167f0ed4e5891acfe0a28dd767767c527337f0a9a1972af1c482514b4caa9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -19463,6 +19475,120 @@
      "why": "FR-013/SC-006 provide a recorded escape for starting non-performance work while a performance task is open; this block records the escape the spec's own mechanism allows and does not alter the performance-first rule."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T240 (449 T432's builder, 2026-11-25: spec-fidelity MODE 4 was dispatched a third time on T432's section after two BLOCKED rounds and no guard refused it; the arbiter, asked after, ruled no fault, ask:449-T432-plan-round3)",
+    "### T240 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "blocked-section-row",
+     "summary": "record_task appends a block_reviews row for a BLOCKED section verdict, naming the section's blocks (the CLEAR path's keys) and in tasks the task plus any bundle member sharing the section; the blocks' own verdicts stay unwritten",
+     "class": "within",
+     "why": "Fixes a wrong outcome: the CLAUDE.md tripwire on a check's third round on one subject did not fire, because a BLOCKED section verdict left no row, so T432's third dispatch counted as round 1. The approval asked that all enforcement be real enforcement (request.md 2026-11-19). Listing bundle members follows 451 T141 (one review of a bundle is one round of each of its tasks). Leaving the blocks' verdicts unwritten keeps a BLOCKED from standing as their review."
+    },
+    {
+     "id": "round-is-a-recorded-verdict",
+     "summary": "Rounds are counted from recorded verdicts, not from the dispatch log: a NOT-REVIEWABLE return or a dispatch another guard refused is no round, and the same verdict recorded again on unchanged bytes is the same round",
+     "class": "within",
+     "why": "The guard already counted recorded rows, so this keeps the existing unit and does not narrow it. The spec-fidelity contract says a NOT-REVIEWABLE return consumes no round, and a refused dispatch reviewed nothing. One line on the citation: 'the ask itself says it does not count' cannot be checked from the bundle. The only 'does not count' in rulings.md is about the round-3 dispatch launched before the ask, so this ruling rests on the existing counting unit, not on that citation."
+    },
+    {
+     "id": "subject-from-section-dispatch",
+     "summary": "The guard takes the subject from the section the dispatch names ('feature <NNN-slug>, task <T>') when that feature is in the clone, no longer from the .git/active-task mark",
+     "class": "within",
+     "why": "Fixes a wrong outcome measured red on HEAD: 'the held round followed the active task (rc=0)'. A third section round under another active feature was not held."
+    },
+    {
+     "id": "block-review-falls-back-to-active-task",
+     "summary": "A block review (make plan-delta, BLOCKS=1), whose prompt names no task, still takes its subject from the active task. Item 5: 'This task's counter no longer has that flaw for a section review ... A block review still falls back to the active task.' Found-and-left does not list it, and no task is filed for it",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The plan's own words call counting by the active feature a 'flaw' that the section path 'no longer has'. Its red case on HEAD is exactly 'the held round followed the active task'. The block says nothing about why that outcome is wrong for a section review but fine for a block review. As the block states it, a third block-review round on a feature other than the active one may go through unheld: a check passing bad work, which is a defect, not a mere difference. This is unmeasured from here, and the ruling rests on the plan's own wording. It is also not physically impossible to address, it is not implied by the GM's words, and leaving it weakens the tripwire the task exists to make real. A known defect carried forward with no filed task, why and order is what FIX AS WE GO and 451's FR-009 forbid. To clear it, do ANY ONE of: (a) a measured statement that a third block-review round under another active feature is held (or cannot arise, e.g. plan-delta only runs on the active feature), with its method; (b) a Found-and-left line giving why it is not fixed in T240, its filed task id and its order ('lands before ...'); (c) the fix, taking the subject from the feature the plan-delta dispatch names."
+    },
+    {
+     "id": "rulings-from-trigger-feature",
+     "summary": "A plan round's continue or accept is read from the arbiter.jsonl of the feature its trigger names (checks::arbiter::continues/closed take rulings(root, prefix)), not from the active feature's",
+     "class": "within",
+     "why": "Fixes a wrong outcome listed in Found-and-left and marked fixed here: a hold under another active feature could not be lifted by its own ruling. Without this, the round cap could not be released as the tripwire intends."
+    },
+    {
+     "id": "arbiter-bundle-sees-blocked-rounds",
+     "summary": "The arbiter bundle's plan_rounds lists a section review's BLOCKED rounds, through the same row",
+     "class": "within",
+     "why": "Fixes a wrong outcome: the arbiter ruled on a third round without seeing the first two. It falls out of the same row as the main fix."
+    },
+    {
+     "id": "refusal-unchanged",
+     "summary": "The refusal text and its make arbiter-bundle TRIGGER are unchanged",
+     "class": "within",
+     "why": "Nothing is narrowed. The existing refusal now fires where it should."
+    },
+    {
+     "id": "not-performance-work",
+     "summary": "'Performance work? no': the task holds a review round and makes no check faster or slower, which sets its place in FR-013's order",
+     "class": "within",
+     "why": "FR-013's full text is not in the bundle (only its first sentence is in spec-index.md), so this ruling is on the GM's 2026-11-20 words in request.md: prioritize performance improvements, with measurement tasks counted as performance. A guard fix that measures nothing and speeds nothing is neither. Classing it as not performance work narrows nothing the GM asked for."
+    }
+   ],
+   "tasks": [
+    "T240"
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T240 (449 T432's builder, 2026-11-25: spec-fidelity MODE 4 was dispatched a third time on T432's section after two BLOCKED rounds and no guard refused it; the arbiter, asked after, ruled no fault, ask:449-T432-plan-round3)",
+    "### T240 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "blocked-section-row",
+     "summary": "record_task appends a block_reviews row for a BLOCKED section verdict, naming the section's blocks (the CLEAR path's keys) and in tasks the task plus any bundle member sharing the section; the blocks' own verdicts stay unwritten",
+     "class": "within",
+     "why": "Fixes the defect the task was filed for: a section's BLOCKED rounds left no row, so the root CLAUDE.md tripwire on a check's third round never fired (T432). Listing bundle members follows 451 T141 (one review of a bundle is one round of each of its tasks). Leaving the blocks' verdicts unwritten keeps a BLOCKED from posing as their CLEAR review."
+    },
+    {
+     "id": "count-from-recorded-verdicts",
+     "summary": "a round is a recorded verdict, not a dispatch: a NOT-REVIEWABLE return (records nothing) and a dispatch another guard refused do not count",
+     "class": "within",
+     "why": "The agent contract itself says a NOT-REVIEWABLE return does not consume a round, because nothing was reviewed, and a refused dispatch reviewed nothing either. The section cites the ask's `asked` text for T432's case. That text is not in this bundle (rulings.md carries only the ruling, why and what), so the quote is unconfirmed here. Nothing in the ruling contradicts it, and the rule stands on the contract without it. This keeps the existing row-based counter and does not narrow the tripwire."
+    },
+    {
+     "id": "same-verdict-rerecorded",
+     "summary": "the same verdict recorded again on unchanged bytes (the same tasks.<id> entry) is the same round",
+     "class": "within",
+     "why": "Tied by its parenthetical to the identical tasks.<id> entry, this makes re-recording idempotent rather than letting a double write count as two rounds. A fresh reviewer's new verdict is not excluded by this text."
+    },
+    {
+     "id": "subject-from-dispatch",
+     "summary": "the guard takes its subject from the section the dispatch names (feature and task, task_prompt's words) or, for a block review, the feature its prompt names and the tasks in its bundle directory's name, each counted with the first past its cap holding; a plan round's continue/accept is read from its trigger's feature's arbiter.jsonl",
+     "class": "within",
+     "why": "Answers round 1's NOT LEGITIMATE finding by option (c): a block review of task blocks now counts against those tasks, not against the active task under .specify/feature.json. Reading the ruling from the trigger's feature fixes a found defect: a hold under another active feature could never be lifted. Both serve the tripwire as written."
+    },
+    {
+     "id": "fallback-to-active-task",
+     "summary": "only a dispatch naming neither a section nor a task-bearing block bundle (a hand-written prompt, or a block review of no task's blocks) falls back to the active task",
+     "class": "within",
+     "why": "Each case judged separately. (1) A hand-written prompt names no subject, so there is nothing to read one from, and falling back is the only reading available. (2) A block review of no task's blocks: the cap's unit is the task, in the section's own terms (plan_rounds counts the task's rows, the refusal reads 'round 3 of <T>'s', the trigger is plan:<slug>#<T>@3). Such a review holds no task whose third round is at stake, so round 1's failure, a task's third round going unheld, cannot pass through this path. It leaves a difference, not a shown defect."
+    },
+    {
+     "id": "refusal-wording-and-arbiter-ok-hint",
+     "summary": "the refusal's first line is shortened to 'BLOCKED: round 3 of <T>'s plan review. Nothing was dispatched.' with the arbiter-bundle line after; the shared refusal's ARBITER_OK hint gains '<reason, two words or more>'",
+     "class": "within",
+     "why": "Message wording under message-check's BREVITY and FIDELITY findings. The hint fixes a found defect (a one-word reason was refused with no hint why) in the one function that writes it, and the search's method is stated. No requested behavior is removed: the rule is still stated on the next line."
+    },
+    {
+     "id": "t227-separate",
+     "summary": "T227 (the record checks' counter kept per active feature) is left as a separate task",
+     "class": "within",
+     "why": "A separate, already-filed task about a different counter. This task's own counter no longer carries that flaw. No defect of this task's subject is carried forward."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -31310,6 +31436,56 @@
      "summary": "Lands alone; T237 (performance work) is ordered after T240 by the coordinating session under a PERF_LATER_OK escape recorded at task-start.",
      "class": "within",
      "why": "FR-013/SC-006 provide a recorded escape for starting non-performance work while a performance task is open; this block records the escape the spec's own mechanism allows and does not alter the performance-first rule."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T240": {
+   "section_sha256": "eb1eeddf16e518558bd08556634cc107500e32f295d027023b1fa21797e515f4",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "blocked-section-row",
+     "summary": "record_task appends a block_reviews row for a BLOCKED section verdict, naming the section's blocks (the CLEAR path's keys) and in tasks the task plus any bundle member sharing the section; the blocks' own verdicts stay unwritten",
+     "class": "within",
+     "why": "Fixes the defect the task was filed for: a section's BLOCKED rounds left no row, so the root CLAUDE.md tripwire on a check's third round never fired (T432). Listing bundle members follows 451 T141 (one review of a bundle is one round of each of its tasks). Leaving the blocks' verdicts unwritten keeps a BLOCKED from posing as their CLEAR review."
+    },
+    {
+     "id": "count-from-recorded-verdicts",
+     "summary": "a round is a recorded verdict, not a dispatch: a NOT-REVIEWABLE return (records nothing) and a dispatch another guard refused do not count",
+     "class": "within",
+     "why": "The agent contract itself says a NOT-REVIEWABLE return does not consume a round, because nothing was reviewed, and a refused dispatch reviewed nothing either. The section cites the ask's `asked` text for T432's case. That text is not in this bundle (rulings.md carries only the ruling, why and what), so the quote is unconfirmed here. Nothing in the ruling contradicts it, and the rule stands on the contract without it. This keeps the existing row-based counter and does not narrow the tripwire."
+    },
+    {
+     "id": "same-verdict-rerecorded",
+     "summary": "the same verdict recorded again on unchanged bytes (the same tasks.<id> entry) is the same round",
+     "class": "within",
+     "why": "Tied by its parenthetical to the identical tasks.<id> entry, this makes re-recording idempotent rather than letting a double write count as two rounds. A fresh reviewer's new verdict is not excluded by this text."
+    },
+    {
+     "id": "subject-from-dispatch",
+     "summary": "the guard takes its subject from the section the dispatch names (feature and task, task_prompt's words) or, for a block review, the feature its prompt names and the tasks in its bundle directory's name, each counted with the first past its cap holding; a plan round's continue/accept is read from its trigger's feature's arbiter.jsonl",
+     "class": "within",
+     "why": "Answers round 1's NOT LEGITIMATE finding by option (c): a block review of task blocks now counts against those tasks, not against the active task under .specify/feature.json. Reading the ruling from the trigger's feature fixes a found defect: a hold under another active feature could never be lifted. Both serve the tripwire as written."
+    },
+    {
+     "id": "fallback-to-active-task",
+     "summary": "only a dispatch naming neither a section nor a task-bearing block bundle (a hand-written prompt, or a block review of no task's blocks) falls back to the active task",
+     "class": "within",
+     "why": "Each case judged separately. (1) A hand-written prompt names no subject, so there is nothing to read one from, and falling back is the only reading available. (2) A block review of no task's blocks: the cap's unit is the task, in the section's own terms (plan_rounds counts the task's rows, the refusal reads 'round 3 of <T>'s', the trigger is plan:<slug>#<T>@3). Such a review holds no task whose third round is at stake, so round 1's failure, a task's third round going unheld, cannot pass through this path. It leaves a difference, not a shown defect."
+    },
+    {
+     "id": "refusal-wording-and-arbiter-ok-hint",
+     "summary": "the refusal's first line is shortened to 'BLOCKED: round 3 of <T>'s plan review. Nothing was dispatched.' with the arbiter-bundle line after; the shared refusal's ARBITER_OK hint gains '<reason, two words or more>'",
+     "class": "within",
+     "why": "Message wording under message-check's BREVITY and FIDELITY findings. The hint fixes a found defect (a one-word reason was refused with no hint why) in the one function that writes it, and the search's method is stated. No requested behavior is removed: the rule is still stated on the next line."
+    },
+    {
+     "id": "t227-separate",
+     "summary": "T227 (the record checks' counter kept per active feature) is left as a separate task",
+     "class": "within",
+     "why": "A separate, already-filed task about a different counter. This task's own counter no longer carries that flaw. No defect of this task's subject is carried forward."
     }
    ],
    "verdict": "CLEAR"

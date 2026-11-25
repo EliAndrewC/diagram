@@ -427,7 +427,7 @@ fn arbiter_verdict(cx: &Ctx, unit: &str, n: usize) -> String {
     };
     let shut = checks::arbiter::closed(root, &prefix, ck.as_deref());
     if !shut.is_empty() {
-        return format!("closed\tthe round arbiter closed {unit} ({shut}) - what is left is filed; the session does not re-ask (FR-011)");
+        return format!("closed\tthe round arbiter closed {unit} ({shut}) - what is left is filed; the session does not re-ask");
     }
     if u64::try_from(n.saturating_sub(2)).unwrap_or(u64::MAX)
         > checks::arbiter::continues(root, &prefix, 0)
@@ -470,7 +470,7 @@ fn rounds(cx: &Ctx, atype: &str, named: &[String], key: &str) -> Option<Answer> 
     let said = arb.split_once('\t').map_or(arb.as_str(), |(_, r)| r);
     cx.log("blocked", &format!("{atype}:{unit}"), "review-round-cap");
     Some(Answer::Refuse(format!(
-        "\n\x1b[1mBLOCKED: round {n} of {unit} for {atype} in this feature - the cap is two (feature 294 FR-009).\x1b[0m\n{said}\n"
+        "\n\x1b[1mBLOCKED: round {n} of {unit} for {atype} in this feature - the cap is two.\x1b[0m\n{said}\n"
     )))
 }
 

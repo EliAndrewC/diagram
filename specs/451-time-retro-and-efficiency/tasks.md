@@ -23,6 +23,7 @@ seen red, then the check deleted and the test seen red again (FR-012).
 - none: T225 - tooling only: the gate's core crate (`build.rs`: which commits hold a build's stamped blob, the stamp refreshed at use, their tests), the one call each in the owed and claims crates with a test each, and `rust/gate/CLAUDE.md`; no map feature, sheet, glyph, placement rule or research page changes
 - none: T236 - tooling and rules only
 - none: T230 - tooling only: `scripts/gates/closing-checks.sh`'s attribution of a red to another task and its suite; no map feature, sheet, glyph, placement rule or research page changes (T239, its duplicate, ticks with it)
+- none: T240 - tooling only: the plan tool's record of a BLOCKED section verdict (`rust/gate/crates/plan/src/plan/record.rs`), the review-round guard's plan-round subject (`review_round_hooks.rs`), the arbiter's rulings read by trigger (`checks/arbiter.rs`) and their suites; no map feature, sheet, glyph, placement rule or research page changes
 - none: T238 - tooling only: the gate's checks crate (`question_size.rs`'s one prose measure, `size_edit.rs`'s rule over it, their test) and the Makefile's `question-sizes` help line; no map feature, sheet, glyph, placement rule or research page changes
 
 ## Dependencies

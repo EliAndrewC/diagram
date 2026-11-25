@@ -2953,31 +2953,41 @@ engine speed, so no checklist.
 **Performance work?** no.
 
 
-### T240 (<why: the finding or measurement that files it>)
+### T240 (449 T432's builder, 2026-11-25: spec-fidelity MODE 4 was dispatched a third time on T432's section after two BLOCKED rounds and no guard refused it; the arbiter, asked after, ruled no fault, ask:449-T432-plan-round3)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: The guard already held a plan review's third round on one task (`review_round_hooks.rs`, `PLAN_ROUND_CAP`). What failed is its count. `plan_rounds` counts the task's rows of `plan-review.json`'s `block_reviews` back to the last CLEAR, and a section review never wrote a BLOCKED row.
+  - **The cause, from the source.** `make decide`'s dispatch (`plan::bundle::task_prompt`) has the reviewer record by `make plan-verdict TASK=`, which is `record::record_task`. That function wrote the verdict to `tasks.<id>`, overwriting the last one, and reached `record_blocks` only on CLEAR. A BLOCKED section verdict therefore left no `block_reviews` row. Only `make plan-delta`'s block reviews (`BLOCKS=1`) wrote BLOCKED rows: 449's record holds 4 BLOCKED rows and 383 CLEAR, and 451's holds 7 and 258, all from block reviews. Observed 2026-11-25, method: `jq` over both `plan-review.json` files, and the T432 rows in the history of 449's record (`git log` of the file, `jq` of each commit), which hold two CLEAR rows and no BLOCKED one. T432's two BLOCKED rounds counted 0, so its third dispatch was "round 1" and was let through (`permitted/other-mode` in `make guard-log GUARD=review-round`). The arbiter bundle's `plan_rounds` (`arbiter/bundle/reviews.rs`) reads the same rows, so it showed the arbiter none of a section's BLOCKED rounds either.
+  - **The fix: what counts.** `record_task` appends a `block_reviews` row for a BLOCKED section verdict. The row names the section's blocks (the same keys the CLEAR path computes), and its `tasks` lists the task and any bundle member that shares the section. The blocks' own verdicts stay unwritten, because only a CLEAR is their review. The count is taken from the recorded verdicts, not from the dispatch log. A round is a verdict: T432's NOT-REVIEWABLE return recorded nothing, and the session's own ask counted it out ("a NOT-REVIEWABLE dispatch that does not count", the `asked` text of ask:449-T432-plan-round3; the ruling did not dispute it), while a dispatch log would count it, along with any dispatch another guard refused. The same verdict recorded again on unchanged bytes (the same `tasks.<id>` entry) is the same round, not another.
+  - **The fix: the subject.** The guard took its subject from `plan door active-task`, the `.git/active-task` mark under `.specify/feature.json`'s feature. It now takes it from the section the dispatch names ("feature <NNN-slug>, task <T>", `task_prompt`'s words) when that feature is in the clone. A block review's dispatch (`plan::bundle::delta_prompt`) names its feature ("of feature <NNN-slug>'s plan") and, in its bundle's directory `plan-<NNN-slug>-blocks-<T05-T07>-<8 hex>`, the tasks whose blocks it holds: each named task is counted and the first past its cap holds the dispatch (the MODE 4 review of this section, round 1: a third `make plan-delta` round under another active feature went unheld). Only a dispatch naming neither, a hand-written prompt or a block review of no task's blocks, falls back to the active task. A `continue` or `accept` on a plan round is read from the feature its trigger names, where `make arbiter-ruled` files it (`checks::arbiter::continues` and `closed` read `rulings(root, prefix)`, no longer the active feature's). Before this change, a hold under another active feature could never be lifted.
+  - **The refusal** reads "BLOCKED: round 3 of <T>'s plan review. Nothing was dispatched.", followed by `checks::arbiter::refusal`'s `make arbiter-bundle TRIGGER="round:spec-fidelity|plan:<NNN-slug>#<T>@3"`. Its first line lost the tripwire's rule, which the next line states (message-check's BREVITY cut, 2026-11-25).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a BLOCKED section verdict written as a `block_reviews` row | `a_blocked_task_section_is_a_round_of_its_blocks` red on HEAD, measured 2026-11-25 (`make rust-test CRATE=rust/gate/crates/plan`: 0 rows, 1 wanted); suite case 12 "the third dispatch is refused" red on HEAD | n/a: tooling | none | n/a |
+| the subject read from the dispatch, a section's or a block review's | `a_section_dispatch_counts_the_section_it_names`; suite case 12 "held under another active feature" and "...and a block review of its blocks" red on HEAD | n/a: tooling | none | n/a |
+| a plan round's rulings read from its trigger's feature | the shared crate's `rulings_and_owed_triggers_read_back`; suite case 12 "the arbiter's continue releases round 3" red before it | n/a: tooling | none | n/a |
 
 ### T240 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The third MODE 4 dispatch on one task's section, after two BLOCKED verdicts, is refused until the round arbiter rules. The refusal names `make arbiter-bundle` with the trigger.
+2. **The constraints.** The root CLAUDE.md's tripwires: "a check's third round on one subject" owes the round arbiter's ruling before the next check. Feature 432: the ruling stays in the arbiter's log. 451 T141: one review of a bundle is one round of each of its tasks.
+3. **Where each comes from.** G: CLAUDE.md's tripwire line. R: ask:449-T432-plan-round3 in `specs/449-rust-codebase/arbiter.jsonl`. O: the recorder's source and the two records' rows, 2026-11-25.
+4. **Do they describe the world here?** Yes, measured 2026-11-25 (the suite run on HEAD's code and on the fix): the suite's case 12 plays T432's sequence through the real `l7r-gate plan record-task` and the real hook: a BLOCKED round, a dispatch whose return recorded nothing, a second BLOCKED round, then the third dispatch.
+5. **The order.** No dependency. T227 (the record checks' counter, kept per active feature) is separate. This task's counter no longer has that flaw: a section review and a block review each name their subject. Only a dispatch naming neither falls back to the active task.
+6. **The exits.** Green: `make closing-checks T=T240 F=451`. Red: what failed is recorded and the task set down, and a claim that it cannot be done is ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-25. On HEAD's code, the plan crate's new test failed, measured 2026-11-25 (`make rust-test CRATE=rust/gate/crates/plan`): `block_reviews` held 0 rows where 1 was wanted. `tests/hooks/test-review-round-hooks.sh` gave 88 passed and 2 failed: "the third section round was not held (rc=0)" and "the held round followed the active task (rc=0)". After the fix it gave 90 passed and 0 failed. With the cap disabled (`plan_cap_held` returning ""), it gave 87 passed and 3 failed. The block-review case, added after the MODE 4 review's round 1, failed with the block subject disabled (90 passed, 1 failed: "the block review's round followed the active task (rc=0)"), and the final code gives 91 passed, 0 failed. Logs are in the session scratchpad.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: a tripwire the root CLAUDE.md requires did not fire, so a third review round ran without the arbiter's ruling. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A plan round's `continue` or `accept` was read from the active feature's `arbiter.jsonl`, not from its trigger's. Effect: a hold under another active feature could not be lifted by its ruling. Fixed here.
+- The arbiter's bundle listed none of a section review's BLOCKED rounds. Effect: the arbiter ruled on a third round without seeing the first two. Fixed here by the same row.
+- The shared arbiter refusal (`checks::arbiter::refusal`) offered `ARBITER_OK="<reason>"` without its two-word bar (`escape::enough`). Effect: a one-word reason was refused again with no hint why (message-check's FIDELITY finding, 2026-11-25). Fixed here: `<reason, two words or more>`, in the one function that writes it, observed 2026-11-25, method: `grep -rn 'ARBITER_OK=' rust/` (the other hits, in `checks/handle.rs`'s tests, are a different text). The guards' wordings that carry it are reviewed again by message-check.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: it holds a review round; no check runs faster or slower.
 
 
 ### T241 (<why: the finding or measurement that files it>)

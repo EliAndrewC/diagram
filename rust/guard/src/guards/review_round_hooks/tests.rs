@@ -513,6 +513,38 @@ fn the_third_plan_round_goes_to_the_arbiter() {
     }
 }
 
+/// 451 T240: a section dispatch's round is the section it names, whatever the active task names; a named feature not in the clone
+/// falls back to the active task.
+#[test]
+fn a_section_dispatch_counts_the_section_it_names() {
+    let d = world("plansection");
+    let dir = d.join("specs/301-x");
+    let other = format!("echo '[\"{}\", \"T01\"]'", dir.display());
+    let c = ctx(&d, NO_STALE, &other);
+    let r = json!({"verdict": "BLOCKED", "blocks": ["## T14 the toe"], "tasks": ["T14"]});
+    std::fs::write(
+        dir.join("plan-review.json"),
+        json!({"block_reviews": [r, r]}).to_string(),
+    )
+    .unwrap();
+    let named = "MODE 4: PLAN REVIEW of one task's section - feature 301-x, task T14 (a decision preflight), on its bundle";
+    let o = spec(named, &d, &c);
+    assert_eq!(o.rule, "plan-round-cap");
+    assert!(refused(
+        &o,
+        "make arbiter-bundle TRIGGER=\"round:spec-fidelity|plan:301-x#T14@3"
+    ));
+    let elsewhere = named.replace("301-x", "999-gone");
+    assert_eq!(spec(&elsewhere, &d, &c).rule, "other-mode");
+    // a block review names its feature and, in its bundle's directory, the tasks whose blocks it holds (T240's MODE 4)
+    let delta = |tasks: &str| {
+        format!("MODE 4: PLAN REVIEW of 2 changed block(s) of feature 301-x's plan (feature 375 FR-043), on their bundle: read /tmp/l7r-check/plan-301-x-blocks-{tasks}-0123abcd/MANIFEST.md and the files beside it")
+    };
+    let o = spec(&delta("T03-T14"), &d, &c);
+    assert!(o.rule == "plan-round-cap" && refused(&o, "plan:301-x#T14@3"));
+    assert_eq!(spec(&delta("T03"), &d, &c).rule, "other-mode");
+}
+
 #[test]
 fn the_answers_and_the_command_line() {
     let d = world("answers");

@@ -181,21 +181,36 @@ pub(super) fn record_task(
     let day = when.map_or_else(today, str::to_owned);
     let mut out = starting_record(spec_dir);
     let entry = json!({"section_sha256": sha, "reviewed": day, "declared": declared, "decisions": decisions, "verdict": verdict});
+    let inside: Map<String, Value> = blocks(&plan)
+        .into_iter()
+        .filter(|(_, b, _)| !b.trim().is_empty() && section.contains(b.trim()))
+        .map(|(k, b, _)| (k, Value::from(block_digest(&b))))
+        .collect();
     out.as_object_mut().into_iter().for_each(|o| {
         let tasks = o.entry("tasks").or_insert(json!({}));
+        let again = tasks.get(task) == Some(&entry);
         tasks[task] = entry.clone();
         for t in &shared {
             tasks[*t] = entry.clone();
+        }
+        // ...AND A BLOCKED SECTION IS A ROUND OF ITS BLOCKS (451 T240): the review-round guard counts a task's plan rounds from
+        // `block_reviews`, and a BLOCKED section verdict wrote none, so 449 T432's two BLOCKED `make decide` rounds counted nothing
+        // and its third dispatch went unheld. The blocks' own verdicts stay unwritten (only a CLEAR is their review, below); the same
+        // verdict recorded again on the same bytes is the same round, not another.
+        if verdict != "CLEAR" && !again {
+            let mut keys: Vec<&String> = inside.keys().collect();
+            keys.sort();
+            let mut named: Vec<&str> = vec![task];
+            named.extend(shared.iter().copied());
+            let row = json!({"reviewed": day, "blocks": keys, "verdict": verdict, "decisions": decisions, "tasks": named});
+            if let Some(rows) = o.entry("block_reviews").or_insert(json!([])).as_array_mut() {
+                rows.push(row);
+            }
         }
     });
     let _ = std::fs::write(spec_dir.join(RECORD), pretty(&out));
     // ...AND A CLEAR SECTION IS ITS BLOCKS' REVIEW TOO (the GM 2026-10-24): the reviewer read every block of the section
     if verdict == "CLEAR" {
-        let inside: Map<String, Value> = blocks(&plan)
-            .into_iter()
-            .filter(|(_, b, _)| !b.trim().is_empty() && section.contains(b.trim()))
-            .map(|(k, b, _)| (k, Value::from(block_digest(&b))))
-            .collect();
         let named = json!({"blocks": inside, "decisions": decisions});
         record_blocks(spec_dir, &named, declared, when)?;
     }

@@ -132,6 +132,19 @@ fn rulings_and_owed_triggers_read_back() {
     assert_eq!(closed(&d, "round:c|q:9@", None), "");
     assert_eq!(lapsed(&d, "round:c|q:2@", Some("other")), 1);
     assert_eq!(lapsed(&d, "round:c|q:2@", None), 0);
+    // 451 T240: a plan round's rulings are read from the feature its prefix names, where `make arbiter-ruled` files them, not the
+    // active feature's (the clone's pointer names 999-x)
+    std::fs::create_dir_all(d.join("specs/386-y")).unwrap();
+    std::fs::write(
+        d.join("specs/386-y/arbiter.jsonl"),
+        "{\"trigger\": \"round:spec-fidelity|plan:386-y#T14@3\", \"ruling\": \"continue\"}\n{\"trigger\": \"round:spec-fidelity|plan:386-y#T15@3\", \"ruling\": \"accept\"}\n",
+    )
+    .unwrap();
+    assert_eq!(continues(&d, "round:spec-fidelity|plan:386-y#T14@", 0), 1);
+    assert_eq!(
+        closed(&d, "round:spec-fidelity|plan:386-y#T15@", None),
+        "accept"
+    );
 }
 
 #[test]
@@ -174,7 +187,7 @@ fn a_held_gate_and_a_batch_are_told_apart() {
     assert_eq!(refusal(&[], Some(&d)), "");
     let one = refusal(&["cascade@1".to_owned()], Some(&d));
     assert!(
-        one.contains("a tripwire is owed its ruling first (cascade@1):")
+        one.contains("a tripwire is owed its ruling first: make arbiter-bundle")
             && one.contains("TRIGGER=\"cascade@1\"")
     );
     let many = refusal(&batch, Some(&d));

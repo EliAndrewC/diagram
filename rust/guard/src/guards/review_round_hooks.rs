@@ -62,6 +62,16 @@ static REWRITTEN: LazyLock<Regex> =
     LazyLock::new(|| re(r"^MODE 3 \(VERIFY\) - round \d+ of feature (\d{3}-[a-z0-9][a-z0-9-]*)"));
 static STATED: LazyLock<Regex> =
     LazyLock::new(|| re(r"[Vv]erdict\W{0,6}(CHANGES REQUIRED|FAITHFUL|NOT-REVIEWABLE)"));
+/// The subject `make decide`'s section dispatch names (`plan::bundle::task_prompt`): "feature <NNN-slug>, task <T>" (451 T240).
+static SECTION: LazyLock<Regex> =
+    LazyLock::new(|| re(r"\bfeature (\d{3}-[a-z0-9][a-z0-9-]*), task (T\d+[a-z]?)\b"));
+/// The subject `make plan-delta`'s dispatch names (`plan::bundle::delta_prompt`): "of feature <NNN-slug>'s plan", its tasks in its
+/// bundle's directory, `plan-<NNN-slug>-blocks-<T05-T07>-<8 hex>` (451 T240's MODE 4).
+static DELTA: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r"\bof feature (\d{3}-[a-z0-9][a-z0-9-]*)'s plan\b(?s:.*?)-blocks-((?:T\d+[a-z]?-)*T\d+[a-z]?)-[0-9a-f]{8}/",
+    )
+});
 static HISTORY: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^## Review history\s*$"));
 static NEXT_SECTION: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^## "));
 
@@ -406,7 +416,7 @@ fn spec_cap_refusal(root: &Path, feature: &str, round_no: u64, pass_no: u64) -> 
         &format!("spec-fidelity|{feature}"),
         &format!("round {round_no} of specs/{feature}'s spec review"),
     );
-    format!("BLOCKED: round {round_no} of specs/{feature}'s spec review - past the five-round cap the round arbiter rules, not the GM (feature 379). Nothing was dispatched and no round was counted.\n{refusal}")
+    format!("BLOCKED: round {round_no} of specs/{feature}'s spec review - past the five-round cap the round arbiter rules, not the GM. Nothing was dispatched and no round was counted.\n{refusal}")
 }
 
 /// The rounds `task`'s plan blocks have had since their last CLEAR.
@@ -440,8 +450,41 @@ pub(crate) fn plan_rounds(feature_dir: &Path, task: &str) -> u64 {
     u64::try_from(n).unwrap_or(0)
 }
 
-/// Why the active task's next plan round waits for the round arbiter, or "".
-fn plan_cap_refusal(root: &Path, ctx: &Ctx) -> String {
+/// The section a task-section dispatch names, when its feature is in this clone (451 T240): the round is that section's, whatever
+/// the active task names - a coordinating session dispatches a builder's review, and the mark follows `.specify/feature.json`.
+/// A block review's dispatch names its feature and the tasks whose blocks it holds the same way (the spec-fidelity review of T240:
+/// a third `make plan-delta` round under another active feature went unheld, the active task counted in its place).
+fn named_subject(root: &Path, prompt: &str) -> Option<(PathBuf, Vec<String>)> {
+    let (feature, tasks) = if let Some(c) = SECTION.captures(prompt).ok()? {
+        (c[1].to_owned(), vec![c[2].to_owned()])
+    } else {
+        let c = DELTA.captures(prompt).ok()??;
+        (
+            c[1].to_owned(),
+            c[2].split('-').map(str::to_owned).collect(),
+        )
+    };
+    let dir = root.join("specs").join(feature);
+    dir.is_dir().then_some((dir, tasks))
+}
+
+/// Why the next plan round of a task the dispatch names, else of the active task, waits for the round arbiter, or "": the first
+/// named task past its cap.
+fn plan_cap_refusal(root: &Path, prompt: &str, ctx: &Ctx) -> String {
+    let (dir, tasks) = named_subject(root, prompt).unwrap_or_else(|| {
+        let (dir, task) = active_task(root, ctx);
+        (dir, vec![task])
+    });
+    tasks
+        .iter()
+        .filter(|t| !t.is_empty())
+        .map(|t| plan_cap_held(root, &dir, t))
+        .find(|held| !held.is_empty())
+        .unwrap_or_default()
+}
+
+/// The active task as the plan gate names it, `(dir, task)`, the task empty where it names none.
+fn active_task(root: &Path, ctx: &Ctx) -> (PathBuf, String) {
     // the active feature's directory and task, `[dir, task]` from the plan gate (`l7r-gate plan door active-task`), asked directly: an
     // inline python3 snippet only ran that command and read its JSON, starting Python on each spec-fidelity dispatch (feature 449 T141);
     // a failed run, unreadable JSON, a null directory or an empty task hold nothing, as the snippet's did
@@ -458,12 +501,13 @@ fn plan_cap_refusal(root: &Path, ctx: &Ctx) -> String {
         Value::Null
     };
     let (Some(dir), Some(task)) = (pair[0].as_str(), pair[1].as_str()) else {
-        return String::new();
+        return (PathBuf::new(), String::new());
     };
-    if task.is_empty() {
-        return String::new();
-    }
-    let d = Path::new(dir);
+    (PathBuf::from(dir), task.to_owned())
+}
+
+/// Why `task`'s next plan round in `d` waits for the round arbiter, or "".
+fn plan_cap_held(root: &Path, d: &Path, task: &str) -> String {
     let round_no = plan_rounds(d, task) + 1;
     if round_no <= PLAN_ROUND_CAP {
         return String::new();
@@ -484,7 +528,8 @@ fn plan_cap_refusal(root: &Path, ctx: &Ctx) -> String {
         &format!("spec-fidelity|plan:{name}#{task}"),
         &format!("round {round_no} of {task}'s plan review"),
     );
-    format!("BLOCKED: round {round_no} of {task}'s plan review - a check's third round on one subject owes the round arbiter's ruling first (CLAUDE.md, the tripwires). Nothing was dispatched.\n{refusal}")
+    // 451 T240's message-check: the tripwire's rule is the refusal's next line, so this one names the round alone
+    format!("BLOCKED: round {round_no} of {task}'s plan review. Nothing was dispatched.\n{refusal}")
 }
 
 /// One branch's record and answer.
@@ -640,7 +685,7 @@ fn later_round(
 }
 
 fn plan_gate_outcome(prompt: &str, root: &Path, ctx: &Ctx) -> Option<Outcome> {
-    let held = plan_cap_refusal(root, ctx);
+    let held = plan_cap_refusal(root, prompt, ctx);
     if held.is_empty() {
         return None;
     }

@@ -225,6 +225,52 @@ fn a_clear_task_section_records_its_blocks_reviewed() {
     assert!(recorded.values().all(|v| v["verdict"] == "CLEAR"));
 }
 
+/// 451 T240: a BLOCKED section verdict is a round of the review-round guard's count, a row of `block_reviews` naming the section's
+/// blocks - 449 T432's two BLOCKED `make decide` rounds left none, so its third dispatch went unheld - while its blocks' own verdicts
+/// stay unrecorded (only a CLEAR is their review); the same verdict recorded again on the same section is the same round.
+#[test]
+fn a_blocked_task_section_is_a_round_of_its_blocks() {
+    let dir = feature(Some(PLAN_TASKS), None);
+    let sha = digest(task_sections(PLAN_TASKS)["T05"].as_bytes());
+    let narrowing = json!({"id": "P2", "summary": "a module", "class": "narrowing", "ruling": "NOT LEGITIMATE"});
+    let blocked = json!({"section_sha256": sha, "decisions": [narrowing]});
+    let sf = "spec-fidelity";
+    record_task(&dir, "T05", &blocked, sf, Some("2026-11-25")).unwrap();
+    record_task(&dir, "T05", &blocked, sf, Some("2026-11-25")).unwrap();
+    let expect: Vec<String> = blocks(PLAN_TASKS)
+        .into_iter()
+        .map(|(k, ..)| k)
+        .filter(|k| k.contains("T05"))
+        .collect();
+    let rows = || {
+        read(&dir)["block_reviews"]
+            .as_array()
+            .cloned()
+            .unwrap_or_default()
+    };
+    assert_eq!(rows().len(), 1);
+    assert_eq!(rows()[0]["verdict"], "BLOCKED");
+    assert_eq!(rows()[0]["tasks"], json!(["T05"]));
+    assert_eq!(rows()[0]["blocks"], json!(expect));
+    assert!(read(&dir).get("blocks").is_none());
+    let again = json!({"section_sha256": sha, "decisions": [narrowing, within()]});
+    record_task(&dir, "T05", &again, sf, None).unwrap();
+    assert_eq!(rows().len(), 2);
+    record_task(
+        &dir,
+        "T05",
+        &json!({"section_sha256": sha, "decisions": [within()]}),
+        sf,
+        None,
+    )
+    .unwrap();
+    let verdicts: Vec<Value> = rows().iter().map(|r| r["verdict"].clone()).collect();
+    assert_eq!(
+        verdicts,
+        [json!("BLOCKED"), json!("BLOCKED"), json!("CLEAR")]
+    );
+}
+
 #[test]
 fn a_verdict_s_free_text_is_written_in_the_house_style_its_keys_as_given() {
     let brit = format!("gr{}", "ey");
