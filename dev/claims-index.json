@@ -37673,6 +37673,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver.rs::POND_RIM_W#the pond's rim": {
+  "body": "548897ef8b138716",
+  "claim": "the pond's rim - CONVENTION: a map's stroke round the water, under the brook's width",
+  "code": "b360bc1d6c8d071b",
+  "core": "ef87685efe9e0b51",
+  "date": "2026-11-25",
+  "note": "a stroke width only, 2.4 ft, under the brook's 5.25",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver.rs::REED_FT#the pond's reeds": {
   "body": "ddd3b5002c147494",
   "claim": "the pond's reeds - GUESS: the deleted `SINK_FRINGE`, 44 ft of reeds out from the shore",
@@ -37982,21 +37994,21 @@
  "rust/phases/src/driver.rs::draw_sink#the drain's run drawn": {
   "body": "ba5191445b0af9d1",
   "claim": "the drain's run drawn - field-drains-akusuiro.drawing: the drainage-ditch class whichever way it runs, at the collector's own outfall width",
-  "code": "4129b45159d178e6",
-  "core": "f8fb51243aee1943",
+  "code": "cb95a54ccc770bbd",
+  "core": "b406bfa3412d0a0d",
   "date": "2026-11-07",
   "note": "drawn at RUN_W in the drain hue",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
-  "reads": "d6e2790bae127e86",
+  "reads": "1f47e4e65460fcf1",
   "research": "8ff7ceb036c4856e",
   "rests": [
    "0060-field-drains-akusuiro.drawing.html:9335eaa56aa337a3",
    "0060-field-drains-akusuiro.drawing.html:d0df1f98de058c4f",
    "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599"
   ],
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::field_in#a basin's cell": {
@@ -38409,6 +38421,64 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/check.rs::Drawn#the drawn water": {
+  "body": "c7a7e1a08f6d2013",
+  "claim": "the drawn water - NONE: the check's lookup; what it keeps a plot off is `Drawn::of`'s and `Drawn::meets`'",
+  "code": "918ca078330c21b6",
+  "core": "510dcd69fe32c9fa",
+  "date": "2026-11-25",
+  "note": "a lookup structure; it decides nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/check.rs::Drawn.meets#the plot's whole area asked": {
+  "body": "b8e1425a2668a2c8",
+  "claim": "the plot's whole area asked - dry-fields-and-their-crops-hatake.drawing: a plot that would come within about a foot of any water the map draws, or would have the end of one inside it, is left out - so its whole area is asked, the hem's `CLEAR_FT` past each line's half-width, not its corners alone",
+  "code": "c41f85d1de5a1d39",
+  "core": "cc8c3927c03b8ff5",
+  "date": "2026-11-25",
+  "note": "drops a plot when a water line ends inside it or any plot edge comes within CLEAR_FT (1 ft) past the line's half-width; a line crossing the plot gives a gap of 0, and the pond's inside is caught by the ellipse test, so the whole area is asked",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
+  },
+  "reads": "9dad7e31a1b59bbf",
+  "research": "caa437c806462f43",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:1a9bff0e449a703a"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/check.rs::Drawn.of#the water a plot is kept off": {
+  "body": "0c06f786798842aa",
+  "claim": "the water a plot is kept off - dry-fields-and-their-crops-hatake.drawing: any water the map draws - a canal, its own canal where it bends, a ditch, the brook or a pond - each line at its drawn width (a ditch at the wider of its two ends), the pond's rim at its stroke; a polder's water is not filed, since a polder lays no dry plot (`driver::polder`)",
+  "code": "da62f57a19c3df4c",
+  "core": "79318f0a713a3f25",
+  "date": "2026-11-25",
+  "note": "every field channel, at the wider of its two ends; the brook; the drain's run; and the pond's rim at its stroke: the page's \"any water the map draws\"",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
+  },
+  "reads": "50eb69fb7634e5cf",
+  "research": "caa437c806462f43",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:1a9bff0e449a703a"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/check.rs::RIM_POINTS#the rim's points": {
+  "body": "c83e32ae756836f1",
+  "claim": "the rim's points - NONE: a check's grain, a 32-sided rim within about a hundredth of its radius of the ellipse",
+  "code": "614d51fc54106f2f",
+  "core": "ea97a9de61df4eba",
+  "date": "2026-11-25",
+  "note": "a check's sampling; 32 sides stray at most about 0.005 of the radius from the ellipse",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/check.rs::RING_CANAL#the ring canal": {
   "body": "0e5bbc688f449668",
   "claim": "the ring canal - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a ring canal round the inside foot of the dike, on the field side - the head canal, the two flank canals and the drain at the tail, the four ditches the polder lays at the dike's foot",
@@ -38444,33 +38514,34 @@
  "rust/phases/src/driver/check.rs::check#no dry plot on another": {
   "body": "0870542d337b78f4",
   "claim": "no dry plot on another - dry-fields-and-their-crops-hatake.drawing: plots laid end to end, each its own ground",
-  "code": "3657e8fefc8d282b",
-  "core": "2024c9a132a901b0",
+  "code": "13bde2fa7cf7126b",
+  "core": "0aa503f26d8f4e54",
   "date": "2026-11-25",
   "note": "the dry_on_dry test (a plot's middle inside another plot) keeps each plot on its own ground, laid end to end",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "reads": "08f68ce2dd847b69",
+  "reads": "88909a6613b19427",
   "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:a97455eb3aeed622",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:e87bb4e4f15222b8"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::check#no dry plot on the paddy": {
   "body": "0870542d337b78f4",
   "claim": "no dry plot on the paddy - dry-fields-and-their-crops-hatake.drawing: the dry fields stand beyond the paddy, along the canal's high side",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "854e7b8a2d138acf",
-  "core": "2024c9a132a901b0",
+  "code": "18921a05019dd941",
+  "core": "0aa503f26d8f4e54",
   "date": "2026-11-07",
   "note": "tests that no plot corner lies inside a field ring; the hem keeps to dry ground upslope of the canal",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "reads": "08f68ce2dd847b69",
+  "reads": "88909a6613b19427",
   "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
@@ -38481,76 +38552,75 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::check#no dry plot on the water": {
-  "body": "0870542d337b78f4",
-  "claim": "no dry plot on the water - dry-fields-and-their-crops-hatake.drawing: the dry plots kept to the dry side of the canal, behind a bare bank - tested against the field's channels, the brook and the drain's run (the pond's rim is `reed_checks`' reeds')",
-  "code": "4d1ccd86afd955ad",
-  "core": "2024c9a132a901b0",
+  "body": "5e223e683f80253f",
+  "claim": "no dry plot on the water - dry-fields-and-their-crops-hatake.drawing: a plot that would come within about a foot of any water the map draws - a canal, a ditch, the brook or a pond - or would have the end of one inside it, is left out; the plot's whole area asked of the drawn water (`Drawn::meets`), not its corners (449 T433)",
+  "code": "c785a9d067dd0ac2",
+  "core": "0aa503f26d8f4e54",
   "date": "2026-11-25",
-  "note": "`dry_on_water` tests only a plot's corners, through `seg_dist(corner, a, b) < ww/2 - SLACK_FT`. A ditch, the brook or the drain's run that crosses a plot, or ends inside it, without reaching a corner passes the check. 0006 §161 drops a plot that \"would have the end of one inside it\", and the claim cites only §159's bank. fix: code (also test each plot edge against each water segment, and a water end inside the plot); effect: tool - the map check passes a dry plot with a watercourse running through it, which §161 forbids",
+  "note": "dry_on_water now asks `Drawn::meets` for each plot, as the page's drop rule says",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "reads": "08f68ce2dd847b69",
+  "reads": "88909a6613b19427",
   "research": "caa437c806462f43",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:1a9bff0e449a703a",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:1a9bff0e449a703a"
   ],
-  "said": "no dry plot on the water - dry-fields-and-their-crops-hatake.drawing: the dry plots kept to the dry side of the canal, behind a bare bank - tested against the field's channels, the brook and the drain's run (the pond's rim is `reed_checks`' reeds')",
-  "siblings": "503ffa0b2a0c391a",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::check#on the canvas": {
   "body": "0870542d337b78f4",
   "claim": "on the canvas - CONVENTION: the map is drawn on its canvas; only the brook and the drain's run leave it",
-  "code": "a294e8ec95b94b60",
-  "core": "2024c9a132a901b0",
+  "code": "dc0997c21a25a494",
+  "core": "0aa503f26d8f4e54",
   "date": "2026-11-07",
   "note": "the off-canvas tests on dry plots, the tameike rim and the field rings are a drawing convention",
   "pages": {},
-  "reads": "08f68ce2dd847b69",
+  "reads": "88909a6613b19427",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::check#the settlement off the field": {
   "body": "0870542d337b78f4",
   "claim": "the settlement off the field - clustered-and-scattered-villages-shuson-sanson.drawing: the houses on the field's margin, beside the paddy",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "bf46784af75baeaa",
-  "core": "2024c9a132a901b0",
+  "code": "9c2e8fb2be461506",
+  "core": "0aa503f26d8f4e54",
   "date": "2026-11-22",
   "note": "refuses a settlement whose middle stands inside the field ring, matching \"on the higher, drier ground beside its paddy\"",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "ea84f334d7572654",
    "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
   },
-  "reads": "08f68ce2dd847b69",
+  "reads": "88909a6613b19427",
   "research": "3422f6c41eca839c",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::check#the tameike off the paddy": {
   "body": "0870542d337b78f4",
   "claim": "the tameike off the paddy - field-drains-akusuiro.drawing: the pond at the field's foot, below it",
-  "code": "3cfb2aecb5ac4454",
-  "core": "2024c9a132a901b0",
+  "code": "9fbb59674d24007a",
+  "core": "0aa503f26d8f4e54",
   "date": "2026-11-07",
   "note": "the pond's rim and center must lie outside the field; matches \"a pond at the field's foot\"",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
-  "reads": "08f68ce2dd847b69",
+  "reads": "88909a6613b19427",
   "research": "8ff7ceb036c4856e",
   "rests": [
    "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
    "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599",
    "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::depth_inside#the map's checks": {
@@ -39659,45 +39729,47 @@
  "rust/phases/src/driver/polder.rs::draw_polder#the band cut where a channel crosses": {
   "body": "393b0ab7b37b334e",
   "claim": "the band cut where a channel crosses - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: where a channel crosses the dike, the band is cut, the water running through a gap in the earthwork under a sluice gate, not over its top - the band painted before every channel's stroke, so the feeder and the outfall each show through it at their drawn width (`sluice_channels`), bank to bank, the earth meeting the water as the waterside reeds do (449 T236); before 449 T419 the band was painted after the water, unbroken over both crossings",
-  "code": "00efdb057b2d709b",
-  "core": "7ec04340562757cf",
+  "code": "31c0cd82361c63f1",
+  "core": "c962dc2eeafe209a",
   "date": "2026-11-25",
   "note": "the band is painted before both channels, and the outfall is now stroked at its `sluice_channels` width, so both show through the band",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "ab92e43e839f458b"
   },
-  "reads": "2e837d0351e5519e",
+  "reads": "448e51b923515951",
   "research": "4d6c0cf7fdf1026e",
   "rests": [
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:e8c05b8d91b4cafc"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the cut as wide as the water": {
   "body": "393b0ab7b37b334e",
   "claim": "the cut as wide as the water - GUESS: the page silent on the cut's width; the channel's own drawn width, the simpler drawing (paint order, the faces recorded whole) over a cut built into the band's outline, taken where the record does not choose",
-  "code": "c51eb2d82db454cf",
-  "core": "7ec04340562757cf",
+  "code": "3b06374d8846b47c",
+  "core": "c962dc2eeafe209a",
   "date": "2026-11-25",
   "note": "the cited page gives no width for the cut; it is a GUESS at the channel's own width",
   "pages": {},
-  "reads": "2e837d0351e5519e",
+  "reads": "448e51b923515951",
   "research": "",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the dike and the banks mottled": {
   "body": "aa7112f46a13b1b1",
   "claim": "the dike and the banks mottled - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the band is mottled with patches of earth of different ages, as repairs are, never a ruled line; dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: a pond's bank is mottled earth under its bushes, like the polder's own dike - each band's patches (`mottle::dike`, `mottle::banks`) painted on its fill, the dike's before the channels that cut it and its trees, the banks' before the ponds' water and their crowns",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "2b860b51bbccec2c",
-  "core": "7ec04340562757cf",
+  "code": "c99ad2fb7af78e85",
+  "core": "c962dc2eeafe209a",
   "date": "2026-11-24",
   "note": "the banks' patches go on their fill before the ponds' water and the crowns; the dike's go on its band before the channels and its trees",
   "pages": {
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "4081a9fc34433087",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "ab92e43e839f458b"
   },
-  "reads": "2e837d0351e5519e",
+  "reads": "448e51b923515951",
   "research": "8da5968fcca316e3",
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:0c906f5e26dcec83",
@@ -39709,28 +39781,27 @@
  "rust/phases/src/driver/polder.rs::draw_polder#the pocket pond's ring": {
   "body": "a5f4347b1ff80095",
   "claim": "the pocket pond's ring - GUESS: flooded ground 2.5 ft wide round the pond inside a bund line 2.2 ft wide, the deleted ink's; no page sizes the margin",
-  "code": "02037c4431e94f4b",
-  "core": "7ec04340562757cf",
+  "code": "aaf6d4d61f32dc37",
+  "core": "c962dc2eeafe209a",
   "date": "2026-11-20",
   "note": "the code matches the claim: the fill is ink::FLOODED at prx+2.5 and pry+2.5, inside an ink::AZE stroke 2.2 wide. The page says nothing about the margin round a field or pocket pond, so GUESS is the right label",
   "pages": {},
-  "reads": "2e837d0351e5519e",
+  "reads": "448e51b923515951",
   "research": "",
   "rests": [],
   "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the polder drawn": {
-  "body": "393b0ab7b37b334e",
+  "body": "429d816708dbef96",
   "claim": "the polder drawn - CONVENTION: the deleted `ink.dike` and `dikeponds`, each record drawn as the engine drew it, the sluices apart",
-  "code": "a90385e8329f668b",
-  "core": "7ec04340562757cf",
+  "code": "b05cae3fec739c0b",
+  "core": "c962dc2eeafe209a",
   "date": "2026-11-25",
-  "note": "the strokes and paint follow the records as drawn; the figures with physical meaning carry claims of their own",
+  "note": "the change only swaps the polder pond's rim stroke to the shared POND_RIM_W, which is how it is shown; the cuts, mottling and pocket ring are covered by the unit's other claims",
   "pages": {},
-  "reads": "2e837d0351e5519e",
+  "reads": "448e51b923515951",
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_sluices#on top": {
@@ -45130,13 +45201,14 @@
  "rust/phases/src/field/dry.rs::seg_seg_dist#the distance": {
   "body": "93ffb90cb0f638c1",
   "claim": "the distance - NONE: geometry",
-  "code": "96e5e562f3352973",
-  "core": "f8b66fb8a4b5dcc1",
+  "code": "8bd0162c6dadb63a",
+  "core": "fb82d2670c0bdb87",
   "date": "2026-11-01",
   "note": "geometry",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::strips_in#the strips": {
