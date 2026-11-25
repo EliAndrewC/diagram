@@ -208,6 +208,22 @@ fn the_list_numbers_open_rows_in_file_order() {
             path.display()
         )
     );
+    // the notes a check listed and did not file are counted after the rows, never among them (451 T229)
+    std::fs::write(
+        dir.join("noted.jsonl"),
+        "{\"note\": \"a\"}\n{\"note\": \"b\"}\n\n",
+    )
+    .unwrap();
+    let got = found(&words(&["list", "--feature", &name]));
+    assert!(
+        got.stdout.ends_with(&format!(
+            "found: 2 open of 3 row(s) in {}\nnoted: 2 note(s) listed, not filed, in {}\n",
+            path.display(),
+            dir.join("noted.jsonl").display()
+        )),
+        "{}",
+        got.stdout
+    );
 }
 
 #[test]

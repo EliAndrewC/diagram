@@ -27,7 +27,7 @@ use crate::Reply;
 mod cli;
 mod depiction;
 pub use super::reply::{reply_of, reply_text, unescaped};
-pub use cli::{file_outside, file_outside_in, run_in, Outside};
+pub use cli::{file_outside, file_outside_in, file_outside_with, run_in, Outside};
 pub use depiction::{amendment1_depiction_answered, legacy_depiction_answered};
 
 /// A round's own EDIT blocks settled it.
@@ -52,6 +52,8 @@ static RUN: LazyLock<Regex> = LazyLock::new(|| re("\u{300c}([^\u{300c}\u{300d}]+
 static TAG: LazyLock<Regex> = LazyLock::new(|| re(r"<[^>]+>"));
 static OUTSIDE: LazyLock<Regex> =
     LazyLock::new(|| re(r"(?m)^#*\s*\**OUTSIDE THE CHANGE\**\s*:?\s*$"));
+/// The heading the agent files give a note that names no wrong outcome (feature 451 T219): listed, never filed (451 T229).
+static NOTED: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^#*\s*\**NOTED,? NOT FILED\**\s*:?\s*$"));
 static ROW: LazyLock<Regex> =
     LazyLock::new(|| re(r"^\s*-\s*`?([^|`]+?)`?\s*\|\s*(.+?)\s*\|\s*(.+?)\s*$"));
 static PAGE_LINE: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^page: (\S+) ([0-9a-f]{40})$"));

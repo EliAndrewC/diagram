@@ -30,8 +30,10 @@ const RECORDS: [&str; 4] = [
     "dev/claims-section-words.jsonl",
     "dev/review-ledger.md",
 ];
-const FEATURE_RECORDS: [&str; 4] = [
+const FEATURE_RECORDS: [&str; 5] = [
     "found.jsonl",
+    // the notes a check listed and did not file (451 T229)
+    "noted.jsonl",
     "arbiter.jsonl",
     "claims-carried.jsonl",
     "tasks.md",

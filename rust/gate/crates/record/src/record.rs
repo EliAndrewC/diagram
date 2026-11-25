@@ -317,7 +317,19 @@ fn found(args: &[String]) -> Reply {
         );
     };
     if verb == "list" {
-        return reply(found_list(&rows, &path), String::new(), 0);
+        // the notes a check listed and did not file, kept beside the rows (451 T229): counted here, so a session listing a feature's
+        // findings meets them, never among the open rows
+        let noted = path.with_file_name("noted.jsonl");
+        let mut said = found_list(&rows, &path);
+        if let Ok(text) = std::fs::read_to_string(&noted) {
+            let n = text.lines().filter(|l| !l.trim().is_empty()).count();
+            let _ = writeln!(
+                said,
+                "noted: {n} note(s) listed, not filed, in {}",
+                noted.display()
+            );
+        }
+        return reply(said, String::new(), 0);
     }
     let compact = flag(args, "--rows").replace(' ', "");
     let numbers: Result<Vec<usize>, _> = compact

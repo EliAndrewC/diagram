@@ -2527,31 +2527,33 @@ engine speed, so no checklist.
 
 
 <!-- plan-archive: T228 to T228 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
-### T229 (<why: the finding or measurement that files it>)
+### T229 (page session P7's cascade, 2026-11-24: impl-drift's `NOTED, NOT FILED` line and modal-research's OUTSIDE THE CHANGE note filed nothing, as T219 meant, but neither recording command echoed them, so "listed" meant only in the saved reply)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the echo existed and missed both real forms. `Outside::said` (`rust/gate/crates/owed/src/record/owed/answers/cli.rs`, behind `make claims-checked` and `make record-checked REPLY=`) printed `listed, not filed - <line>` only for a `- <file> | <block> | <finding>` row under an `OUTSIDE THE CHANGE` heading naming no effect, and its reader stopped at the next `#` line. The two replies of P7's cascade, read 2026-11-24 (`/home/agent/.claude/jobs/c6fd72d1/tmp/cascade/impl-5.txt`, `modal-research-reply-1.txt`): impl-drift's note sat under a bare `NOTED, NOT FILED` heading, the heading the agent files give every no-effect note since T219 (impl-drift.md, the five record checks, modal-depiction.md), with no OUTSIDE heading in the reply, so nothing was read; modal-research's sat under `OUTSIDE THE CHANGE` as a prose line with no pipes, which the row form skipped. The reader now walks the reply's lines: a heading `OUTSIDE THE CHANGE` or `NOTED, NOT FILED` (each with or without `#`, bold or a colon) opens a section, which ends at any other `#` heading, a `---` rule, or a prose line after a blank line (a closing paragraph). In an OUTSIDE section a row naming its effect is filed as before; a row naming none, any other bullet, and the prose of the section's first paragraph are listed; a line saying the section is empty (`None.`, `none (every block and note is listed under THE CHANGE).`, never `None of the pages ...`) is no note and still ends its paragraph - the common form, the first line of 13 of the 23 such sections in the saved replies, observed 2026-11-25, method: the first non-blank line after each heading, over `/tmp/*.txt` and the cascade's replies. In a NOTED section every line is listed and none is filed, whatever it names: the check chose not to file it. Each listed note prints one line, `<cmd>: listed, not filed - <file> | <block> | <note>`; a note naming no file and block takes the reply's units instead - the bundle's claim keys for `claims-checked`, the units it answered for `record-checked` - so the line says which unit it was read with. **Where they are kept**: `specs/<active feature>/noted.jsonl`, beside `found.jsonl` and found the same way, one row a note (`check`, `file`, `block`, `note`, `utc`, house-styled as a found row is), a note already kept for the same check, file and block not written again (the tool tells a session to run a reply again after a refused line or a hold); the closing echo line names the file, and `make found-list` ends with how many notes the feature keeps there and its path, so the session listing a feature's findings meets them. Not `found.jsonl`: a row there is open work, which T219 took away from these notes, and `make found-list`'s count of open rows must not grow by them. The task line's "the round's report keeps them" read as this record, since no command keeps a round's report: the claims round's record is `dev/claims-index.json` (claims only) and a record check's is its answer store (units only), neither of which holds a note; `noted.jsonl` is added to `preflight.rs`'s feature records beside `found.jsonl`, as a record the round writes. What it costs: a tracked file per feature that grows by a few lines a round (P7's cascade had two notes, observed 2026-11-24, method: its record's 451 T219 line); priced and not taken, the gitignored `.git` (a later session in another clone would not find it) and the round's bundle directory under `/tmp` (pruned).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| every listed note echoed, with its unit | `owed::tests::noted::a_listed_note_is_echoed_with_its_unit_and_kept`, on the two P7 replies verbatim (impl-5's NOTED line, modal-research's prose OUTSIDE note) and a filed row beside them; red on HEAD's reader (`/tmp/t229-red.log`) | none: record tooling | none | n/a |
+| kept once in the feature's `noted.jsonl`, named by `make found-list` | the same test (a second run writes nothing new) and `record::tests` on `found list` | none | none | n/a |
 
 ### T229 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. Every note a check lists and does not file - under `NOTED, NOT FILED`, or under `OUTSIDE THE CHANGE` naming no wrong outcome - is printed by the command that records its reply, one line with its unit, and kept in the feature's `noted.jsonl`, where `make found-list` points a later session; nothing more is filed than T219 files.
+2. **The constraints.** The task line; T219's rule (a note is filed only with its effect, so a listed note never becomes a found row or open work; `found.jsonl` is still written only when a row is filed); constitution XIV; docs/reviews.md (prove the rule on the unfixed artifact); the house style for a JSON record (449 T242).
+3. **Where each comes from.** G: "The problem is when we do a cascading set of reviews that triggers a cascading set of changes that is mostly not finding actual problems" (451 request.md, the convergence talk) - the notes stay unfiled. O: P7's cascade record, 2026-11-24 (`/home/agent/.claude/jobs/c6fd72d1/tmp/cascade/p7-cascade.md`, its 451 T219 line: "Neither was echoed by the recording command, so \"listed\" means only in the saved reply"), and the impl-drift notes of 449 T434 and T431, seen only as the claims-round agent relayed them, observed 2026-11-25, method: the coordinating session's brief for this task. R: none, tooling.
+4. **Do they describe the world here?** Yes: the two saved replies read 2026-11-24 against HEAD's `outside()` by its code: impl-5 has no OUTSIDE heading, modal-research's line has no `|`; the agent files that give the `NOTED, NOT FILED` heading found by `grep -rn 'NOTED, NOT FILED' .claude/agents` (impl-drift, quote-check, record-format, record-style, intro-check, translation-check, modal-depiction), measured 2026-11-25.
+5. **The order.** After T219 (its rule) and T218 (`silent.rs` reads its own OUTSIDE lines, untouched here); independent of T227 (the round counter).
+6. **The exits.** Green: the new test red on HEAD's reader and green with the new one; `make crate-checks` green on `owed`, `record`, `claims` and `measure`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 2026-11-25: `make crate-checks` green on `owed`, `claims`, `record` and `measure` (`/tmp/t229-crate.log`); `owed::tests::noted::a_listed_note_is_echoed_with_its_unit_and_kept` fails with the reader cut back to HEAD's (the OUTSIDE heading alone, row-form lines alone; `/tmp/t229-red.log`) and passes with it.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The tool that answers wrongly: `make claims-checked` and `make record-checked` said nothing of a note they had been given and dropped, so the coordinating session met it only through an agent's relay.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T230 (449 T224's builder, 2026-11-24, and 449 T433's, 2026-11-25: `make closing-checks T=<task>` printed "BLOCKED: every error static printed is in another task's files - ()" on errors in the task's own files; T239 is the same fault filed again and ticks with this task)

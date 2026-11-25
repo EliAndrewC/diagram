@@ -116,6 +116,8 @@ fn the_listing_between_two_revisions_and_its_refusals() {
 mod answer_modes;
 // the listing's closing line (451 T241), beside it for the same bar
 mod listing_tail;
+// a listed note echoed and kept (451 T229), beside it for the same bar
+mod noted;
 
 #[test]
 fn the_store_keeps_every_answer_and_settles() {
@@ -151,7 +153,7 @@ fn the_store_keeps_every_answer_and_settles() {
     );
     assert!(reply_checks("nothing").is_empty());
     let own = l7r_shared::env::Rooted::with(&root, &[]);
-    assert!(file_outside(&root, "c", "no heading")
+    assert!(file_outside(&root, "c", "no heading", "")
         .unwrap()
         .filed
         .is_empty());
@@ -211,7 +213,7 @@ fn an_outside_note_is_filed_only_where_it_names_a_wrong_outcome_its_reader_meets
         said.starts_with("claims-checked: filed, not fixed - rust/mode_a/src/place.rs | windbreak_default")
             && said.contains("claims-checked: listed, not filed - docs/building-programs.md | types.json:magistracies row `armory`, why column |")
             && said.contains("claims-checked: listed, not filed - research/questions/0019-x.drawing.html | the fringe | the page is silent")
-            && said.ends_with("claims-checked: a note outside the change is filed only where it ends `| effect: <map|sheet|page|tool> - <the wrong outcome its reader or user meets>` (451 T219); the rest are dropped\n"),
+            && said.ends_with("claims-checked: a note outside the change is filed only where it ends `| effect: <map|sheet|page|tool> - <the wrong outcome its reader or user meets>` (451 T219); the rest are listed, not filed, and kept in specs/_unfiled/noted.jsonl (451 T229)\n"),
     );
     // nothing dropped, nothing to teach; nothing filed, no file written
     assert!(
@@ -227,7 +229,8 @@ fn an_outside_note_is_filed_only_where_it_names_a_wrong_outcome_its_reader_meets
         &format!("## OUTSIDE THE CHANGE\n{silent}\n"),
     )
     .unwrap();
-    assert!(none.filed.is_empty() && !bare.join("specs").exists());
+    // nothing filed, no found row written; the listed note is kept in noted.jsonl (451 T229)
+    assert!(none.filed.is_empty() && !bare.join("specs/_unfiled/found.jsonl").exists());
     // constitution XIV's other defect, a tool that refuses valid input, is filed too: 451's found row 26 (the make-only guard)
     let guard = "- rust/guard/src/guards/make_only_hooks.rs | the direct-binary refusal | it reads a mention of the gate binary's path as a run of it | effect: tool - the make-only guard refuses `find ... -newer <tool/l7r-gate>`, a valid command";
     let tool = file_outside_in(

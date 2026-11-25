@@ -233,7 +233,7 @@ fn a_reply_s_lines_are_vetted_and_its_outside_rows_filed() {
     assert!(bad.is_empty() && kept.contains("OUTSIDE"));
     assert_eq!(
         said,
-        "claims-checked: filed, not fixed - x.py | the block | a finding | effect: sheet - a wrong door\nclaims-checked: listed, not filed - y.py | a block | a difference; effect: none\nclaims-checked: a note outside the change is filed only where it ends `| effect: <map|sheet|page|tool> - <the wrong outcome its reader or user meets>` (451 T219); the rest are dropped\n"
+        "claims-checked: filed, not fixed - x.py | the block | a finding | effect: sheet - a wrong door\nclaims-checked: listed, not filed - y.py | a block | a difference; effect: none\nclaims-checked: a note outside the change is filed only where it ends `| effect: <map|sheet|page|tool> - <the wrong outcome its reader or user meets>` (451 T219); the rest are listed, not filed, and kept in specs/_unfiled/noted.jsonl (451 T229)\n"
     );
     assert!(warned.is_empty());
 }

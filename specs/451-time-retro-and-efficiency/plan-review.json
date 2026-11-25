@@ -1596,6 +1596,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T229 (page session P7's cascade, 2026-11-24: impl-drift's `NOTED, NOT FILED` line and modal-research's OUTSIDE THE CHANGE note filed nothing, as T219 meant, but neither recording command echoed them, so \"listed\" meant only in the saved reply)": {
+   "sha256": "558b8e5581d1a61f8c0aa98f9b1ca8e60576fda6560ecf79cf60ca02ddb235a7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T229 Approach (checklist part A)": {
+   "sha256": "e79203646e08b47129895b33fc9df93d51b393896f2ebd821b7f09951e15257a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -21154,6 +21166,122 @@
      "why": "Not a narrowing: the plan routes every named reader through left.rs's one split, the shared waist, so a caller through it inherits the fix. Limitation noted: the census's method is stated as 'the code', with no search command, so its reach could not be checked from the bundle (the reviewer read nothing in the repository, as the manifest directs)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T229 (page session P7's cascade, 2026-11-24: impl-drift's `NOTED, NOT FILED` line and modal-research's OUTSIDE THE CHANGE note filed nothing, as T219 meant, but neither recording command echoed them, so \"listed\" meant only in the saved reply)",
+    "### T229 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 reader forms",
+     "summary": "The reply reader opens a section at OUTSIDE THE CHANGE or NOTED, NOT FILED (with or without #, bold or colon), so both forms P7's cascade actually produced - a bare NOTED heading and a pipe-less prose line under OUTSIDE - are read.",
+     "class": "within",
+     "why": "The task is that these notes were given to the recording command and dropped; reading both real forms is the fix itself, and it widens rather than narrows what is echoed."
+    },
+    {
+     "id": "D2 section end",
+     "summary": "A section ends at another # heading, a --- rule, or a prose line after a blank line (a closing paragraph); in OUTSIDE, rows naming no effect, other bullets and the first paragraph's prose are listed.",
+     "class": "within",
+     "why": "A parsing boundary that keeps a reply's closing paragraph from being echoed as a note; it excludes no form the saved replies or the agent files give a note, and the red-first test runs on the two P7 replies verbatim."
+    },
+    {
+     "id": "D3 filed vs listed",
+     "summary": "An OUTSIDE row naming its effect is filed as before; every line under NOTED, NOT FILED is listed and none filed, whatever it names.",
+     "class": "within",
+     "why": "Carries T219's rule unchanged (a note is filed only with its effect; the check chose not to file a NOTED line); nothing more is filed than T219 files, which serves the GM's convergence-talk aim that cascades not make changes that fix no real flaw."
+    },
+    {
+     "id": "D4 echo with unit",
+     "summary": "Each listed note prints '<cmd>: listed, not filed - <file> | <block> | <note>', or with the reply's units (claim keys / answered units) where it names no file and block.",
+     "class": "within",
+     "why": "The echo the task asks for, made to say which unit the note was read with so the session can act on it; adds no behavior beyond the echo."
+    },
+    {
+     "id": "D5 kept in noted.jsonl",
+     "summary": "Notes are kept, once per check/file/block, in the tracked specs/<feature>/noted.jsonl, house-styled; the echo names the file; make found-list ends with the count and path; preflight.rs lists it as a feature record. The task line's 'the round's report keeps them' is read as this record, since no command keeps a round's report.",
+     "class": "within",
+     "why": "Implements the task line's keeping of the notes where a later session (the one the GM's 2026-11-24 'make sure to take a look at what cascades happen' asks to watch cascades) meets them; tracked rather than .git or /tmp so another clone finds them. Not a narrowing: it keeps more, not less, and the reading of 'the round's report' is stated with its measured reason (the two existing round records hold no notes)."
+    },
+    {
+     "id": "D6 not found.jsonl",
+     "summary": "Notes are not written to found.jsonl and do not grow make found-list's open-row count.",
+     "class": "within",
+     "why": "Required by T219's rule that a listed note is not open work; preserves rather than narrows, and the GM's cascade concern is precisely that unfiled observations not become work."
+    },
+    {
+     "id": "D7 silent.rs untouched; order",
+     "summary": "After T219 and T218, independent of T227; T218's silent.rs reading of OUTSIDE lines is left as is.",
+     "class": "within",
+     "why": "Sequencing and a boundary with another task's code; no defect is named in silent.rs, and the section's found-and-left is 'none'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T229 (page session P7's cascade, 2026-11-24: impl-drift's `NOTED, NOT FILED` line and modal-research's OUTSIDE THE CHANGE note filed nothing, as T219 meant, but neither recording command echoed them, so \"listed\" meant only in the saved reply)",
+    "### T229 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T229-D1 the reader's sections",
+     "summary": "Outside::said walks the reply's lines; an OUTSIDE THE CHANGE or NOTED, NOT FILED heading (with or without #, bold or colon) opens a section, ended by any other # heading, a --- rule, or prose after a blank line.",
+     "class": "within",
+     "why": "Widens the reader to the two forms P7's cascade actually used, so the notes the task line says were dropped are read; serves the GM's 2026-11-24 instruction to watch what cascades do, and narrows nothing."
+    },
+    {
+     "id": "T229-D2 OUTSIDE rows",
+     "summary": "In an OUTSIDE section a row naming its effect is filed as before; a row naming none, any other bullet, and the section's first-paragraph prose are listed.",
+     "class": "within",
+     "why": "Keeps T219's rule (filed only with its effect) and the convergence talk's 'only factual findings cascade'; adds listing, files nothing more."
+    },
+    {
+     "id": "T229-D3 an empty-section line (new since the first CLEAR)",
+     "summary": "A line saying the section is empty (None., none (every block ... listed)), never 'None of the pages ...', is no note and still ends its paragraph.",
+     "class": "within",
+     "why": "A line saying there is no note is not a note; echoing it would be a false listing. 'None of the pages ...' is kept as a note, so a real note is not swallowed by the form. Its frequency figure (13 of 23) carries a dated method label. Nothing the request or the task asks for is narrowed."
+    },
+    {
+     "id": "T229-D4 NOTED rows",
+     "summary": "In a NOTED, NOT FILED section every line is listed and none filed, whatever it names.",
+     "class": "within",
+     "why": "The check chose not to file; filing it would add the cascade the GM's convergence talk asked to stop. Every line is still echoed."
+    },
+    {
+     "id": "T229-D5 the echo line and its unit",
+     "summary": "Each listed note prints '<cmd>: listed, not filed - <file> | <block> | <note>', a note naming no file and block taking the reply's units (claim keys / answered units).",
+     "class": "within",
+     "why": "Is the echo the task asks for, with a unit so the session can place it."
+    },
+    {
+     "id": "T229-D6 where notes are kept",
+     "summary": "Kept in specs/<feature>/noted.jsonl (one row a note, deduplicated on check, file, block), named by the closing echo line and by make found-list; not found.jsonl; the task line's 'the round's report keeps them' read as this record, since no command keeps a round's report.",
+     "class": "within",
+     "why": "Keeps the notes where a later session meets them, which is what the task line's keeping is for; keeping them out of found.jsonl is T219's rule (a listed note is not open work), not a carve-out. The reading is stated with the measured reason (claims-index and answer stores hold no notes)."
+    },
+    {
+     "id": "T229-D7 preflight record",
+     "summary": "noted.jsonl is added to preflight.rs's feature records beside found.jsonl.",
+     "class": "within",
+     "why": "Treats the new record as a record the round writes; mechanical consequence of D6."
+    },
+    {
+     "id": "T229-D8 alternatives priced",
+     "summary": "The gitignored .git and the /tmp bundle directory priced and not taken.",
+     "class": "within",
+     "why": "Both would lose the note for a later session; the taken route keeps more, narrows nothing."
+    },
+    {
+     "id": "T229-D9 done, measured (new since the first CLEAR)",
+     "summary": "Item 9 records crate-checks green on owed, claims, record, measure and the new test red with HEAD's reader, green with the new one.",
+     "class": "within",
+     "why": "A record of the exits item 6 set, not a new decision; nothing deferred (found and left: none)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -33817,6 +33945,68 @@
      "summary": "The fix's reach, 'every reader and writer of the rows', rests on the census of four readers (push check, landing check, push write, WRITE=, listing/--brief notice), measured 2026-11-25 by reading the code and replaying the real pass log and ledger.",
      "class": "within",
      "why": "Not a narrowing: the plan routes every named reader through left.rs's one split, the shared waist, so a caller through it inherits the fix. Limitation noted: the census's method is stated as 'the code', with no search command, so its reach could not be checked from the bundle (the reviewer read nothing in the repository, as the manifest directs)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T229": {
+   "section_sha256": "34fd059bb087f72e84c5e320060a164d18b568c45609a8cc92c003cfa9aae799",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T229-D1 the reader's sections",
+     "summary": "Outside::said walks the reply's lines; an OUTSIDE THE CHANGE or NOTED, NOT FILED heading (with or without #, bold or colon) opens a section, ended by any other # heading, a --- rule, or prose after a blank line.",
+     "class": "within",
+     "why": "Widens the reader to the two forms P7's cascade actually used, so the notes the task line says were dropped are read; serves the GM's 2026-11-24 instruction to watch what cascades do, and narrows nothing."
+    },
+    {
+     "id": "T229-D2 OUTSIDE rows",
+     "summary": "In an OUTSIDE section a row naming its effect is filed as before; a row naming none, any other bullet, and the section's first-paragraph prose are listed.",
+     "class": "within",
+     "why": "Keeps T219's rule (filed only with its effect) and the convergence talk's 'only factual findings cascade'; adds listing, files nothing more."
+    },
+    {
+     "id": "T229-D3 an empty-section line (new since the first CLEAR)",
+     "summary": "A line saying the section is empty (None., none (every block ... listed)), never 'None of the pages ...', is no note and still ends its paragraph.",
+     "class": "within",
+     "why": "A line saying there is no note is not a note; echoing it would be a false listing. 'None of the pages ...' is kept as a note, so a real note is not swallowed by the form. Its frequency figure (13 of 23) carries a dated method label. Nothing the request or the task asks for is narrowed."
+    },
+    {
+     "id": "T229-D4 NOTED rows",
+     "summary": "In a NOTED, NOT FILED section every line is listed and none filed, whatever it names.",
+     "class": "within",
+     "why": "The check chose not to file; filing it would add the cascade the GM's convergence talk asked to stop. Every line is still echoed."
+    },
+    {
+     "id": "T229-D5 the echo line and its unit",
+     "summary": "Each listed note prints '<cmd>: listed, not filed - <file> | <block> | <note>', a note naming no file and block taking the reply's units (claim keys / answered units).",
+     "class": "within",
+     "why": "Is the echo the task asks for, with a unit so the session can place it."
+    },
+    {
+     "id": "T229-D6 where notes are kept",
+     "summary": "Kept in specs/<feature>/noted.jsonl (one row a note, deduplicated on check, file, block), named by the closing echo line and by make found-list; not found.jsonl; the task line's 'the round's report keeps them' read as this record, since no command keeps a round's report.",
+     "class": "within",
+     "why": "Keeps the notes where a later session meets them, which is what the task line's keeping is for; keeping them out of found.jsonl is T219's rule (a listed note is not open work), not a carve-out. The reading is stated with the measured reason (claims-index and answer stores hold no notes)."
+    },
+    {
+     "id": "T229-D7 preflight record",
+     "summary": "noted.jsonl is added to preflight.rs's feature records beside found.jsonl.",
+     "class": "within",
+     "why": "Treats the new record as a record the round writes; mechanical consequence of D6."
+    },
+    {
+     "id": "T229-D8 alternatives priced",
+     "summary": "The gitignored .git and the /tmp bundle directory priced and not taken.",
+     "class": "within",
+     "why": "Both would lose the note for a later session; the taken route keeps more, narrows nothing."
+    },
+    {
+     "id": "T229-D9 done, measured (new since the first CLEAR)",
+     "summary": "Item 9 records crate-checks green on owed, claims, record, measure and the new test red with HEAD's reader, green with the new one.",
+     "class": "within",
+     "why": "A record of the exits item 6 set, not a new decision; nothing deferred (found and left: none)."
     }
    ],
    "verdict": "CLEAR"

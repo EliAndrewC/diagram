@@ -796,8 +796,10 @@ pub fn vet(
         }
         keep.push(raw);
     }
+    // a listed note naming no file and block is the bundle's claims' (451 T229)
+    let keys: Vec<&str> = units.keys().map(String::as_str).collect();
     said.push_str(
-        &crate::record::owed::answers::file_outside(root, "impl-drift", reply)?
+        &crate::record::owed::answers::file_outside(root, "impl-drift", reply, &keys.join(", "))?
             .said("claims-checked"),
     );
     for b in &bad {
