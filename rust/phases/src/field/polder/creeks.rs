@@ -19,13 +19,13 @@ pub const CREEK_FT: (f64, f64) = (6.0, 8.0);
 /// The steps a mosaic's drift is eased in, each this share of its full strength (`eased`).
 ///
 /// Research:
-///     the easing's steps - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html gives the drift's strength as a calibrated liberty and no rule for a block it pinches; twenty steps, a twentieth of the full strength each, fine enough that an eased block keeps nearly all its drift (the worst of 51 rolled mosaics, 2026-11-24, feature 449 T420, needed its corridors about a fifth straighter)
+///     the easing's steps - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html#pinched-mosaic-eased: a mosaic that would pinch a creek is bent less, the bend eased a twentieth at a time until every corridor holds its creek - twenty steps, a twentieth of the full strength each, fine enough that an eased block keeps nearly all its drift (the worst of 51 rolled mosaics, 2026-11-24, feature 449 T420, needed its corridors about a fifth straighter)
 pub const EASE_STEPS: u32 = 20;
 /// A dike-pond block's creek width (feet): one figure for every channel between its ponds, down the columns and across the rows,
 /// rolled between `CREEK_FT`'s ends from the seed's own `polder_creek` stream, so no other roll of the block moves with it.
 ///
 /// Research:
-///     one width a block - GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#creek-width-between-ponds: a canal between ponds drawn about 6 to 8 ft wide, the page giving a range and no figure within it; each block's width rolled evenly over the range, to a thousandth of it, the same down a column and across a row and from head to tail - the page names no wider or narrower kind among them and no end to taper toward, and a figure fixed inside the range would be one more number no page gives
+///     one width a block - GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#one-creek-width-a-block: each dike-pond block takes one creek width, chosen by chance anywhere in the 6 to 8 ft (#creek-width-between-ponds), every creek of the block drawn at it, down a column and across a row, end to end with no taper - each block's width rolled evenly over the range, to a thousandth of it, from the seed's own `polder_creek` stream
 pub(super) fn creek_width(seed: i64) -> f64 {
     let mut rng = knob_rng(seed, "polder_creek");
     CREEK_FT.0 + (CREEK_FT.1 - CREEK_FT.0) * f64::from(rng.randbelow(1001)) / 1000.0
@@ -36,7 +36,7 @@ pub(super) fn creek_width(seed: i64) -> f64 {
 /// kept and the plots laid at it. A rice polder (no `creek`) keeps the whole.
 ///
 /// Research:
-///     room for the creeks - GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#creek-width-between-ponds: a canal between ponds drawn about 6 to 8 ft wide; where the mosaic's drift (research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: its strength a calibrated liberty) pinches a corridor under its creek's width the block is given room rather than the creek laid over the banks or the ponds drawn smaller (the GM 2026-10-12, room before packing) - the drift eased block by block, a mosaic no corridor of which is pinched keeping it whole (Kuwabata's does); 13 of 51 rolled mosaics held a corridor of 4 to 7 ft under a creek of 6 to 8 (measured 2026-11-24, feature 449 T420)
+///     room for the creeks - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html#pinched-mosaic-eased: where the full bend would leave a corridor between two ponds narrower than the creek drawn in it (a canal between ponds about 6 to 8 ft wide, GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#creek-width-between-ponds), that block is bent less, so no creek is laid over a bank and no pond is drawn smaller (the GM 2026-10-12, room before packing) - the drift eased block by block, a mosaic no corridor of which is pinched keeping it whole (Kuwabata's does); 13 of 51 rolled mosaics held a corridor of 4 to 7 ft under a creek of 6 to 8 (measured 2026-11-24, feature 449 T420)
 pub(super) fn eased(
     put_at: &dyn Fn(f64, f64, f64) -> Pt,
     lay: &dyn Fn(f64) -> Vec<Plot>,

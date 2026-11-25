@@ -1914,6 +1914,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
+  },
+  "### T427 (impl-drift 2026-11-24, page session P10's cascade, `rust/phases/src/field/polder.rs::ditches#the ring canal on a dike-pond block` DRIFTED fix: code - a 6 to 8 ft creek opens on a ring canal drawn at 0068's rice rungs, as narrow as 1.2 ft measured 2026-11-24 (the builder's sweep), where 0019's drawing page (`ring-canal-width-dike-pond`, P10's item) has the ring no narrower than the block's creeks; and a willow's crown over a sluice's post, measured 2026-11-24 (the builder's sweep))": {
+   "sha256": "c497a70f17e8eba4b96a538c1ae048e089fd90f823dcb7407a9fd05123b94abb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T427 Approach (checklist part A)": {
+   "sha256": "7143cd09cf9c8a0f5f4fa5836ef3e7782d6c109baef307561cdb4b00ea5e3816",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -26364,6 +26376,85 @@
      "summary": "Order before T158 after T423/T418; no work-budget step owed since the new question is asked only on previously refused rolls; exits and done-measures as listed",
      "class": "within",
      "why": "T426 is named in the GM's 2026-11-24 close-out list before the port resumes; the budget and exit choices settle nothing the request or spec left otherwise."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T427 (impl-drift 2026-11-24, page session P10's cascade, `rust/phases/src/field/polder.rs::ditches#the ring canal on a dike-pond block` DRIFTED fix: code - a 6 to 8 ft creek opens on a ring canal drawn at 0068's rice rungs, as narrow as 1.2 ft measured 2026-11-24 (the builder's sweep), where 0019's drawing page (`ring-canal-width-dike-pond`, P10's item) has the ring no narrower than the block's creeks; and a willow's crown over a sluice's post, measured 2026-11-24 (the builder's sweep))",
+    "### T427 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "On a dike-pond block each of the ring's four trunks set to the larger of its rung and the block's creek width; rice polders' rungs untouched.",
+     "class": "within",
+     "why": "Implements 0019's ring-canal-width-dike-pond clause 'no narrower than the block's creeks' and its 'a rice polder's ring canal keeps the usual widths'; a defect fix under the GM 2026-11-24 ('if there are real defects, then I do want to find them and fix them'). Its side effect at the outfall is ruled separately (D4-outfall)."
+    },
+    {
+     "id": "D2",
+     "summary": "RING_FT unmoved; the wider ring measured to fit with about 2 ft of ground each side, no room given.",
+     "class": "within",
+     "why": "No researched constant moves and nothing is squeezed (measured, not assumed); the reduced clearances leave no crown center in water. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "D3",
+     "summary": "Creek mouths unchanged in code; with the ring as wide as the creek the round end now lies inside the ring's water.",
+     "class": "within",
+     "why": "The course stops half its width short of the middle line, so its round end reaches the middle line, which is what creek-mouth-on-ring-canal asks; the wider ring removes HEAD's overshoot past the far edge. A difference that reads correctly is not a defect (constitution XIV, GM 2026-11-19)."
+    },
+    {
+     "id": "D4-inlet",
+     "summary": "The 3 ft feeder kept, now stepping to a 6-8 ft ring under the inlet sluice's board (HEAD already stepped 3 to 4.5 ft).",
+     "class": "within",
+     "why": "The step existed on HEAD at the inlet on both forms; D1 makes it larger but does not create it. Its follow-up is filed as T431 (see that entry). The feeder is the narrower channel joining the wider ring, which 'a channel is never drawn wider than the one it joins' does not forbid on its plain reading."
+    },
+    {
+     "id": "D4-outfall",
+     "summary": "RUN_W 5.5 ft kept, so a 6-8 ft ring now empties into a 5.5 ft run, a step-down newly created by D1 (HEAD's drain rung topped out at 5.5 ft, equal to RUN_W).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D1 implements one clause of ring-canal-width-dike-pond and newly breaks another ('a channel is never drawn wider than the one it joins') at the outfall - a known defect, left for T431. Legitimate because both alternatives are worse against the request: widening RUN_W (cited to 0060) or FEEDER_W without a page item moves a researched number unresearched, and pinching the ring at its join contradicts the item D1 implements; and the GM's rule is per step ('fix all known bugs in each step before moving on to porting the next step', 2026-11-18), which the block keeps by binding T431 to land before T158. Note the block's own tension: RUN_W is cited to 0060 yet 'no page sizes either beyond the dike'; T431's page item must settle which."
+    },
+    {
+     "id": "D5",
+     "summary": "A dike tree whose crown would come within FRAME_REACH_FT (10.2 ft, from 0179's frame) of a sluice is left out, its radius rolled first; the 15 ft gap of 0027 kept; applies to rice polders too.",
+     "class": "within",
+     "why": "A crown overlapping a sluice post (seed 66) is a wrong outcome against 0027's bare stretch 'left as room for the sluice and its banks'; the GM 2026-11-24 asks real defects found to be fixed. No researched constant moves (FRAME_REACH_FT is derived from the drawn frame); rice polders had the same defect (seed 37), so covering them is the same fix, not added scope."
+    },
+    {
+     "id": "split-T430",
+     "summary": "The T427 line's second half (a merged pair's pond off the bank's bare middle; parcels the drift leaves too small, weighed against easing the drift) split out to T430, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "'Outside this builder's brief' is not by itself a justification - a brief is not the GM's words. What makes it legitimate: the GM's rule is per step, not per task ('fix all known bugs in each step before moving on to porting the next step'; 'close out all of these open tasks ... prior to us resuming our porting work'), and the block binds T430 to land before T158 ('The order' and 'Found and left?'), so no known defect passes into the port; it is a separate measurement and decision on other files (landuse.rs, creeks.rs). The bundle does not carry the T427 task line verbatim; the two-halves account rests on the block's own text."
+    },
+    {
+     "id": "split-T431",
+     "summary": "The feeder and outfall-run widths against the wider ring filed as T431, the page's item first, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same ground as D4-outfall: research before code (no page sizes a polder's feeder or run beyond the dike, so the number comes from a page item, not a guess in code), and the per-step rule is kept by T431 landing before T158."
+    },
+    {
+     "id": "mulberry-crown",
+     "summary": "The dike mulberry's crown up to 7.2 ft across against 0018's GUESS of up to 7 ft left in code, the claim restated.",
+     "class": "within",
+     "why": "0.1 ft a side invisible at the map's scale is a difference, not a defect (constitution XIV; GM 2026-11-19 'don't spend a lot of time fixing things which are not actually wrong'); restating the claim is the prescribed remedy."
+    },
+    {
+     "id": "T420-test",
+     "summary": "T420's test changed to expect the wider ring.",
+     "class": "within",
+     "why": "A test's expectation changed as a bug is fixed is expected under fix-as-we-go (GM 2026-11-18), not a regression."
+    },
+    {
+     "id": "research-boxes",
+     "summary": "The five research boxes answered by page session P10's write and check sessions and its cascade, none ticked by this builder.",
+     "class": "within",
+     "why": "The code follows the page items P10 wrote (all GUESS with absence notes); no new source's number reaches a rule. Nothing the GM asked is narrowed."
     }
    ]
   }
@@ -54339,6 +54430,83 @@
      "summary": "Order before T158 after T423/T418; no work-budget step owed since the new question is asked only on previously refused rolls; exits and done-measures as listed",
      "class": "within",
      "why": "T426 is named in the GM's 2026-11-24 close-out list before the port resumes; the budget and exit choices settle nothing the request or spec left otherwise."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T427": {
+   "section_sha256": "289dab1bd1789130fdc10d95e77c198b446b8c31affb34ed7153e3f49f85c3af",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "On a dike-pond block each of the ring's four trunks set to the larger of its rung and the block's creek width; rice polders' rungs untouched.",
+     "class": "within",
+     "why": "Implements 0019's ring-canal-width-dike-pond clause 'no narrower than the block's creeks' and its 'a rice polder's ring canal keeps the usual widths'; a defect fix under the GM 2026-11-24 ('if there are real defects, then I do want to find them and fix them'). Its side effect at the outfall is ruled separately (D4-outfall)."
+    },
+    {
+     "id": "D2",
+     "summary": "RING_FT unmoved; the wider ring measured to fit with about 2 ft of ground each side, no room given.",
+     "class": "within",
+     "why": "No researched constant moves and nothing is squeezed (measured, not assumed); the reduced clearances leave no crown center in water. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "D3",
+     "summary": "Creek mouths unchanged in code; with the ring as wide as the creek the round end now lies inside the ring's water.",
+     "class": "within",
+     "why": "The course stops half its width short of the middle line, so its round end reaches the middle line, which is what creek-mouth-on-ring-canal asks; the wider ring removes HEAD's overshoot past the far edge. A difference that reads correctly is not a defect (constitution XIV, GM 2026-11-19)."
+    },
+    {
+     "id": "D4-inlet",
+     "summary": "The 3 ft feeder kept, now stepping to a 6-8 ft ring under the inlet sluice's board (HEAD already stepped 3 to 4.5 ft).",
+     "class": "within",
+     "why": "The step existed on HEAD at the inlet on both forms; D1 makes it larger but does not create it. Its follow-up is filed as T431 (see that entry). The feeder is the narrower channel joining the wider ring, which 'a channel is never drawn wider than the one it joins' does not forbid on its plain reading."
+    },
+    {
+     "id": "D4-outfall",
+     "summary": "RUN_W 5.5 ft kept, so a 6-8 ft ring now empties into a 5.5 ft run, a step-down newly created by D1 (HEAD's drain rung topped out at 5.5 ft, equal to RUN_W).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D1 implements one clause of ring-canal-width-dike-pond and newly breaks another ('a channel is never drawn wider than the one it joins') at the outfall - a known defect, left for T431. Legitimate because both alternatives are worse against the request: widening RUN_W (cited to 0060) or FEEDER_W without a page item moves a researched number unresearched, and pinching the ring at its join contradicts the item D1 implements; and the GM's rule is per step ('fix all known bugs in each step before moving on to porting the next step', 2026-11-18), which the block keeps by binding T431 to land before T158. Note the block's own tension: RUN_W is cited to 0060 yet 'no page sizes either beyond the dike'; T431's page item must settle which."
+    },
+    {
+     "id": "D5",
+     "summary": "A dike tree whose crown would come within FRAME_REACH_FT (10.2 ft, from 0179's frame) of a sluice is left out, its radius rolled first; the 15 ft gap of 0027 kept; applies to rice polders too.",
+     "class": "within",
+     "why": "A crown overlapping a sluice post (seed 66) is a wrong outcome against 0027's bare stretch 'left as room for the sluice and its banks'; the GM 2026-11-24 asks real defects found to be fixed. No researched constant moves (FRAME_REACH_FT is derived from the drawn frame); rice polders had the same defect (seed 37), so covering them is the same fix, not added scope."
+    },
+    {
+     "id": "split-T430",
+     "summary": "The T427 line's second half (a merged pair's pond off the bank's bare middle; parcels the drift leaves too small, weighed against easing the drift) split out to T430, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "'Outside this builder's brief' is not by itself a justification - a brief is not the GM's words. What makes it legitimate: the GM's rule is per step, not per task ('fix all known bugs in each step before moving on to porting the next step'; 'close out all of these open tasks ... prior to us resuming our porting work'), and the block binds T430 to land before T158 ('The order' and 'Found and left?'), so no known defect passes into the port; it is a separate measurement and decision on other files (landuse.rs, creeks.rs). The bundle does not carry the T427 task line verbatim; the two-halves account rests on the block's own text."
+    },
+    {
+     "id": "split-T431",
+     "summary": "The feeder and outfall-run widths against the wider ring filed as T431, the page's item first, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same ground as D4-outfall: research before code (no page sizes a polder's feeder or run beyond the dike, so the number comes from a page item, not a guess in code), and the per-step rule is kept by T431 landing before T158."
+    },
+    {
+     "id": "mulberry-crown",
+     "summary": "The dike mulberry's crown up to 7.2 ft across against 0018's GUESS of up to 7 ft left in code, the claim restated.",
+     "class": "within",
+     "why": "0.1 ft a side invisible at the map's scale is a difference, not a defect (constitution XIV; GM 2026-11-19 'don't spend a lot of time fixing things which are not actually wrong'); restating the claim is the prescribed remedy."
+    },
+    {
+     "id": "T420-test",
+     "summary": "T420's test changed to expect the wider ring.",
+     "class": "within",
+     "why": "A test's expectation changed as a bug is fixed is expected under fix-as-we-go (GM 2026-11-18), not a regression."
+    },
+    {
+     "id": "research-boxes",
+     "summary": "The five research boxes answered by page session P10's write and check sessions and its cascade, none ticked by this builder.",
+     "class": "within",
+     "why": "The code follows the page items P10 wrote (all GUESS with absence notes); no new source's number reaches a rule. Nothing the GM asked is narrowed."
     }
    ],
    "verdict": "CLEAR"

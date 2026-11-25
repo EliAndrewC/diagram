@@ -31,8 +31,13 @@ pub const WIDTH_WAVES: (f64, f64) = (9.0, 23.0);
 /// Half the opening a crossing channel cuts in the dike's tree rows (feet): no tree stands within this of the channel's middle line.
 ///
 /// Research:
-///     the gap - GUESS: research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html silent on how wide the rows' opening is, attesting only that the band is cut where a channel crosses and the rows stop with it; 15 ft each side of the channel's middle line, the deleted engine's opening (`DIKE_GAP_HW`), which keeps the broadest crown (5.5 ft) off the widest crossing channel's water (5.5 ft) and off the sluice's frame (20 ft post to post); the band itself and the waterside reeds stop at the channel's bank, not at this gap (449 T236, T419)
+///     the gap - GUESS research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html#rows-gap-at-channel: the rows stop about 15 ft to each side of the channel's middle line, a bare stretch left as room for the sluice and its banks, no page read giving how far the trees stood back from a sluice - 15 ft, the deleted engine's opening (`DIKE_GAP_HW`), a tree's middle no nearer a crossing channel's middle line than this, so the broadest crown, a willow of radius 5.5 ft, keeps off the widest crossing channel's water but not always off the sluice's frame, whose posts stand out past the crown's reach - so a tree whose crown would reach the frame is left out besides (`FRAME_REACH_FT`, 449 T427); the band itself and the waterside reeds stop at the channel's bank, not at this gap (449 T236, T419)
 pub const GAP_HALF_FT: f64 = 15.0;
+/// How far a sluice's frame reaches from its point (feet): no crown comes within this of a sluice.
+///
+/// Research:
+///     the frame kept clear - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: a field channel's sluice drawn 20 ft post to post, its posts 2 by 4 ft drawn larger than life (`driver::polder::SLUICE_SPAN_FT`, `SLUICE_TIMBER_FT`) - a post's outer corner 10.2 ft from the sluice's point, so a tree whose crown would reach within that is left out; `GAP_HALF_FT` alone let the broadest willow reach 9.5 ft from the channel's middle line, over the post's outer face 10 ft out (a crown 0.17 ft over a post on seed 66 of the dike-pond form, one touching on seed 37 of the rice polder, over 160 rolled polders, measured 2026-11-24, feature 449 T427)
+pub const FRAME_REACH_FT: f64 = 10.2;
 /// Each row's place across the band from the field side, and its trees' spacing along it (feet), willow then mulberry.
 ///
 /// Research:
@@ -41,7 +46,7 @@ pub const ROWS: [(&str, f64, f64); 2] = [("willow", 0.75, 8.5), ("mulberry", 0.2
 /// Each row's crown radius, least and most (feet).
 ///
 /// Research:
-///     the crowns - GUESS: research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html silent on a crown's size, giving only the spacing at which the crowns read as a run of touching trees; willow 3.5-5.5 ft and mulberry 2.2-3.6 ft, each about its row's spacing across
+///     the crowns - GUESS research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html#willow-crown-size: each willow's crown drawn 7 to 11 ft across, the mulberry's recorded at research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#bush-few-feet-across (a GUESS too, 4.4 to 7 ft across) - a willow's radius 3.5 to 5.5 ft - a mulberry's radius 2.2 to 3.6 ft, its broadest a tenth of a foot a side over the page's 7 ft across, which no reader of the map can see, left as it stands (the dike-pond bank's own bushes, `landuse::MULBERRY_FT`, keep 2.2 to 3.5)
 pub const CROWN_FT: [(f64, f64); 2] = [(3.5, 5.5), (2.2, 3.6)];
 
 /// A tree's crown: its middle and its radius (feet).
@@ -122,6 +127,7 @@ fn stations(ring: &[Pt]) -> Vec<(Pt, Pt, f64)> {
 ///     its two faces - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the inner face on the fields' envelope; the outer face that face pushed out by the rolled breadth, the waterward strip of reeds and wet ground laid against it later (`hamletgen/water/waterward.py`'s `dike_face`, which reads the outline this records), so the water's edge runs along the outer face
 ///     its trees - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the willow row three quarters of the way out toward the water, 8.5 ft apart; the mulberry a quarter of the way, on the field side, 4.4 ft apart
 ///     the crowns rolled - GUESS: each tree's crown within its row's `CROWN_FT`, in tenths of a foot
+///     the sluice's frame kept clear - GUESS research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html#rows-gap-at-channel: the bare stretch at a crossing is room for the sluice and its banks - a tree whose crown would come within `FRAME_REACH_FT` of a sluice's point is left out, its radius rolled first so no other tree's roll moves (449 T427 - with the gap alone a willow overlapped a post on one of 160 rolled polders and touched one on another, after it none, measured 2026-11-24; Kuwabata loses no tree)
 ///     the crest - NONE: the band's midline, where its walked top runs
 #[expect(
     clippy::many_single_char_names,
@@ -189,7 +195,11 @@ pub fn dike(inner: &[Pt], sluices: &[Pt], courses: &[&[Pt]], seed: i64) -> Dike 
                         reason = "a crown's size in tenths of a foot"
                     )]
                     let span = ((hi - lo) * 10.0) as u32 + 1;
-                    row.push((p.0, p.1, lo + f64::from(rolls.randbelow(span)) / 10.0));
+                    let r = lo + f64::from(rolls.randbelow(span)) / 10.0;
+                    // rolled, then left out where its crown would reach a sluice's frame (449 T427): the roll's stream unmoved
+                    if sluices.iter().all(|&g| dist(p, g) >= FRAME_REACH_FT + r) {
+                        row.push((p.0, p.1, r));
+                    }
                 }
                 next += step;
             }

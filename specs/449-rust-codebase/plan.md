@@ -1171,31 +1171,47 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 
 
 <!-- plan-archive: T426 to T426 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
-### T427 (<why: the finding or measurement that files it>)
+### T427 (impl-drift 2026-11-24, page session P10's cascade, `rust/phases/src/field/polder.rs::ditches#the ring canal on a dike-pond block` DRIFTED fix: code - a 6 to 8 ft creek opens on a ring canal drawn at 0068's rice rungs, as narrow as 1.2 ft measured 2026-11-24 (the builder's sweep), where 0019's drawing page (`ring-canal-width-dike-pond`, P10's item) has the ring no narrower than the block's creeks; and a willow's crown over a sluice's post, measured 2026-11-24 (the builder's sweep))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the ring canal's width on a dike-pond block, fixed in code to the item page session P10 wrote, and a crown on a sluice's post found by the brief's measurement and fixed; the T427 line's second half split to T430. Measured 2026-11-24 with a throwaway test reading each rolled stage (seeds 1-80 of `polder_grid` and `mulberry_dike_fishpond`, 15 households, 90 degrees, and Kuwabata; removed before landing) on HEAD's code and after, and on Kuwabata's drawing (`make hamlet SPEC=pool/hamlets/kuwabata/kuwabata.spec.json`, crops by rsvg-convert on the same boxes before and after, the builder's scratchpad `crops/pair-*.png`).
+  - **What the pages say.** 0019 drawing, `ring-canal-width-dike-pond` (GUESS): "On a dike-pond block the ring canal is drawn no narrower than the block's creeks ... a channel is never drawn wider than the one it joins ... A rice polder's ring canal keeps the usual widths." `creek-mouth-on-ring-canal` (GUESS): the creek's end "drawn to the ring canal's middle line and no farther". 0018 drawing, `one-creek-width-a-block` (GUESS): one width a block, 6 to 8 ft (`creek-width-between-ponds`). 0027 drawing, `rows-gap-at-channel` (GUESS): "The rows stop about 15 ft to each side of the channel's middle line", "left as room for the sluice and its banks".
+  - **D1, the ring no narrower than the creeks.** On a dike-pond block `ditches` sets each of the ring's four trunks (head, both flanks, drain) to the larger of its rung and the block's creek width; every rung (1.2 to 5.5 ft, 0068's ladder) is under the least creek (6 ft, a GUESS of 0018), so the whole ring is drawn at the creek's width, and the joins through the two sluices carry it (`joins` takes the trunk's width at its corner). A rice polder's rungs are untouched (pinned exactly by the new test). Measured 2026-11-24 (the sweep): the ring's least width on a dike-pond block 1.20 ft on HEAD, 6.01 to 7.98 ft after (the creek's own); the creek's width minus the ring's at a mouth 4.51 to 6.48 ft on HEAD, 0 after, measured 2026-11-24 (the sweep).
+  - **D2, the room: `RING_FT` unmoved.** The ring stays centered 6 ft out from the plots and 6 ft in from the dike's inner face (a GUESS, 0019). Measured 2026-11-24 (the sweep), the least clear ground between the ring's water and a plot 3.26 ft on HEAD, 2.01 ft after (seed 35, its creek 7.98 ft), and between the ring's water and the dike's inner face 3.25 ft on HEAD, 2.01 ft after: an 8 ft ring fits with 2 ft of ground on each side, so nothing is squeezed and no room is owed (room before packing: the parcels and the dike unmoved). A bank's crown keeps 1.58 ft off the ring's water at the least (2.68 on HEAD), no crown's center in it (0 before and after), and a dike crown 1.14 ft off any channel's water at the least (2.21 on HEAD), measured 2026-11-24 (the sweep).
+  - **D3, the creeks' mouths.** Unchanged in code (each course stops half its width short of the ring's middle line, T420); with the ring now as wide as the creek, the rounded end lies inside the ring's water: its far reach at least 2.06 ft inside the ring's far edge over the 80 blocks (on HEAD up to 0.36 ft past it, seed 69) - measured 2026-11-24 (the sweep). On the drain the creek's paler end is painted over the drain's darker water to its middle line, as on HEAD (`pair-creek-mouth-drain.png`): it reads as the creek opening on the drain.
+  - **D4, the feeder and the outfall's run keep their widths.** The feeder stays 3 ft (`FEEDER_W`, a GUESS; 0068 puts a pond feeder at about twice its 1.5 ft floor) and the outfall's run 5.5 ft (`RUN_W`, 0060), so on a dike-pond block a 6 to 8 ft ring is fed through a 3 ft feeder and empties into a 5.5 ft run, each step under its sluice's board (`pair-inlet-sluice.png`, `pair-outfall-sluice.png`, and HEAD already stepped 3 to 4.5 ft at the inlet on both forms), measured 2026-11-24 (Kuwabata's drawings diffed). No page sizes either beyond the dike, so the page's item comes first: filed as T431. The band (T419's paint order: under every channel) and the tree rows' gaps are cut along the feeder and the outfall's courses, which do not move.
+  - **D5, no crown on a sluice's frame.** The brief's measurement, on paper (`GAP_HALF_FT` 15 ft, a GUESS of 0027, less the broadest willow's radius 5.5 ft is 9.5 ft from the channel's middle line, and a post's outer face stands 10 ft out, 20 ft post to post, a GUESS of 0179). Measured 2026-11-24 (the sweep, each dike crown against each sluice's post, board and drum polygons as `sluice_frame` draws them): on HEAD a willow overlapped a post by 0.17 ft (seed 66, dike-pond) and one touched (0.00 ft, seed 37, rice), 7 more within 0.5 ft. Fix: a tree whose crown would come within `FRAME_REACH_FT` (10.2 ft, a post's outer corner from the sluice's point, derived from 0179's GUESS of the frame) of a sluice is left out, its radius rolled first, so no other tree's roll moves, and the page's 15 ft gap (GUESS, 0027) is kept. After: the least clear ground between a crown and the frame 0.06 ft (seed 76), none touching, measured 2026-11-24 (the sweep), and Kuwabata loses no tree, measured 2026-11-24 (Kuwabata's drawings diffed).
+  - **What moves.** Kuwabata: 6 svg lines, the ring's four trunks and the two joins, 1.5 to 5.5 ft to 6.2 ft, plots, banks, ponds, creeks, crowns, dike, sluices unmoved, measured 2026-11-24 (Kuwabata's drawings diffed). Over the sweep, HEAD then after: refusals 0 and 0, ponds 1,983 and 1,983, least pond 90.7 sq ft both (seed 51), blocks with a creek over a parcel's edge 7 and 7, worst 1.27 ft both (seed 75), the plots unmoved, measured 2026-11-24 (the sweep). Rice polders: ditches and plots unmoved; only the dike trees within the frame's reach are left out, on the seeds that had them.
+  - **The claims restated.** Code: `ditches#the ring canal on a dike-pond block` (cites `ring-canal-width-dike-pond`, every trunk at least the creek width, the room measured), `ditches#the widths` (the ladder's trunk rungs for a rice polder only), `ditches#the far flank`, `joins#the outfall's join`, `driver.rs::RUN_W#the drain's run drawn`, `polder#the last row against the ring canal` (re-measured), `dike.rs::GAP_HALF_FT#the gap` (`rows-gap-at-channel`, a GUESS, the broadest crown's 5.5 ft a radius, the frame left out besides), `CROWN_FT#the crowns` (radii; `willow-crown-size`, 0018 `bush-few-feet-across`, the dike's mulberry radius up to 3.6 ft (`CROWN_FT`, a GUESS) 7.2 ft across against the item's GUESS of 7, invisible at the map's scale and left as it stands, constitution XIV), new `FRAME_REACH_FT#the frame kept clear` and `dike#the sluice's frame kept clear`. Wording only (the cascade's): `ditches#a creek's mouth on the ring canal` (`creek-mouth-on-ring-canal`), `creeks.rs::EASE_STEPS#the easing's steps` and `eased#room for the creeks` (`pinched-mosaic-eased`), `creek_width#one width a block`, `ditches#the creeks' width`, `row_ditches#the row ditch's width` (`one-creek-width-a-block`).
+  - **Where the code lives.** `field/polder.rs::ditches` (D1); `field/dike.rs::dike` and `FRAME_REACH_FT` (D5); the tests in `field/polder/tests.rs` and the new `driver/polder/frame_tests.rs` (`driver/polder/tests.rs` stands at the 1,000-line bar, unchanged).
+  - **The five boxes** (`research: physical`), answered by page session P10's work (commit d76187f689) and its cascade (313c910a28), none ticked by this builder: research pass - P10's write session (`.git/l7r-handoffs/p10-polder-followups-write.md`), whose items record that no source read names a canal at a dike's inside foot; source-reader and quote-check - P10's check session (`.git/l7r-handoffs/p10-polder-followups-check.md`: quote-check 0018 and 0019 round 1, the creek-mouth block's footnote moved to the absence note); source-applicability - no new source's numbers reach a rule (every item a GUESS with an absence note); recorded - P10's commit and its cascade.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the ring no narrower than the creeks | red first: `a_dike_pond_ring_canal_is_no_narrower_than_its_creeks_and_a_rice_polders_keeps_its_rungs` ("mosaic seed 1: the ring's feeder drawn 4.50 to 1.50 ft against a 6.92 ft creek", `red-T427.log`, measured 2026-11-24 (the test on HEAD's code)), green after, T420's test now expecting the wider ring | the sweep: the ring 1.20 ft at least on HEAD, 6.01 to 7.98 after, ponds, refusals, least pond, creek grazes unmoved, measured 2026-11-24 (the sweep) | Kuwabata's drawing: 6 lines | n/a - measured 2026-11-24 (the sweep) |
+| no crown on a sluice's frame | red first: `no_dike_crown_stands_on_a_sluices_frame` ("mulberry_dike_fishpond seed 66: a crown of radius 5.5 ft stands 5.33 ft from the frame", `red-T427.log`, measured 2026-11-24 (the test on HEAD's code)), green after, and it pins `FRAME_REACH_FT` to `sluice_frame`'s corners | the sweep: least clear -0.17 ft on HEAD, 0.06 after, measured 2026-11-24 (the sweep) | none (Kuwabata loses no tree) | n/a - measured 2026-11-24 (the sweep) |
 
 ### T427 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** On a dike-pond block the creeks open on a ring canal at least as wide as they are, the ring running in its own ground between the ponds' banks and the dike's foot; no willow stands over a sluice's post.
+2. **The constraints.** 0019 drawing (`ring-canal-width-dike-pond`, `creek-mouth-on-ring-canal`, `pinched-mosaic-eased`), 0018 drawing (`creek-width-between-ponds`, `one-creek-width-a-block`, `least-pond`, `bush-few-feet-across`), 0068 drawing (the rice polder's ladder, kept), 0027 drawing (`rows-gap-at-channel`, `willow-crown-size`), 0179 drawing (the frame's span); room before packing.
+3. **Where each comes from.** G: the GM 2026-11-24, request.md, "if there are real defects, then I do want to find them and fix them"; the GM 2026-10-12, room before packing. R: the pages above, quoted in the approach. O: the sweep and Kuwabata's crops, 2026-11-24.
+4. **Do they describe the world here?** Yes: the far flank's crop before shows a 6.2 ft creek ending in a round mouth on a 1.5 ft line, after a 6.2 ft ring it opens on (`pair-ring-farflank.png`), measured 2026-11-24 (Kuwabata's drawing).
+5. **The order.** Before T158; after page session P10 and its cascade; T430 and T431 after it.
+6. **The exits.** Green: the tests green, `make closing-checks T=T427` green, each touched claim's impl-drift verdict recorded with `make claims-checked`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: D1 is a width set on four records; D5 asks two sluice points of each tree already walked.
+8. **The budget.** One landing. `make work-budget`, measured 2026-11-24 (its run on the tree after the change): field.polder 3,069 at 10 households and 4,812 at 20 against budgets of 4,651 and 6,584, seat.polder 2,057 and 2,713, waterward.polder 4,439 and 5,701 at its accepted figures - the same as T420's on HEAD, so no stage moves and no budget step is owed; the reference polder is a rice polder (no creek, so D1 sets nothing) and loses no tree to D5, whose two distances a tree, against the sluices' points, ride the walk already counted (`write@dike_tree`).
+9. **Done, measured.** The tests green and the sweep after: the ring at the creek's width, 2.01 ft clear each side at the widest creek, no creek's end past the ring, no crown on a frame - measured 2026-11-24 (the sweep).
+10. **Before moving a constant.** No researched number moves: `RING_FT`, `GAP_HALF_FT`, `CROWN_FT`, 0068's rungs, `FEEDER_W` and `RUN_W` keep their values; `FRAME_REACH_FT` is new, derived from the frame's drawn span and posts.
+11. **Before fitting things into room.** Measured first (D2), the wider ring fits the room it had with 2 ft each side, measured 2026-11-24 (the sweep), so no room is given and nothing is squeezed.
+12. **Before any fix.** A reader of Kuwabata's map saw creeks wider than the canal they open on, against the page's ring no narrower than its creeks; on seed 66 a tree's crown over a sluice's post, against the page's bare stretch left as room for the sluice: defects (constitution XIV).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+- The T427 line's second half - a merged pair bent at its middle draws its pond off the bank's bare middle, under the bushes' rows (seeds 51 and 75), and the parcels the drift leaves too small for their bank weighed against easing the drift further: outside this builder's brief (the ring canal's width and its claims). Not fixed here: its own measurement and decision, on `landuse.rs` and `creeks.rs`. Filed as T430; lands before T158.
+- On a dike-pond block the ring, now 6 to 8 ft, is fed through a 3 ft feeder and empties into a 5.5 ft run, a step under each sluice's board (`pair-inlet-sluice.png`, `pair-outfall-sluice.png`), measured 2026-11-24 (Kuwabata's drawings diffed), against 0019's "a channel is never drawn wider than the one it joins"; no page sizes a polder's feeder or run beyond the dike. Not fixed here: the page's item first. Filed as T431; lands before T158.
+- The dike's mulberry crown is rolled up to radius 3.6 ft, 7.2 ft across (`CROWN_FT`, a GUESS), against 0018's `bush-few-feet-across` GUESS of 4.4 to 7 ft: no reader of the map can see 0.1 ft a side. Not a defect: the claim restated (constitution XIV).
+
+**Performance work?** no.
 
 
 ### T428 (<why: the finding or measurement that files it>)
@@ -1233,6 +1249,60 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 |---|---|---|---|---|
 
 ### T429 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T430 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T430 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T431 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T431 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

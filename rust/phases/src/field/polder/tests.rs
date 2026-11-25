@@ -154,14 +154,15 @@ fn a_creek_stands_midway_between_its_banks_and_a_pinched_mosaic_is_eased() {
 /// A DIKE-POND'S CHANNELS ARE CREEKS, A RICE POLDER'S DITCHES (449 T420): the channels between a dike-pond block's ponds, down
 /// its columns and across its rows, are each 6 to 8 ft wide (0018's drawing page), one width the block over, where they took
 /// the rice polder's delivery rung, 1.2 to 2.5 ft down a column and 0.75 of it across a row; a rice polder's column ditches
-/// keep that rung and it has no row channels; the ring canal's four trunks are 0068's on both.
+/// keep that rung and it has no row channels; the ring canal's four trunks are 0068's on the rice polder, and on a dike-pond block
+/// each reach is the larger of its rung and the creek's width (449 T427: the next test).
 #[test]
 fn a_dike_ponds_channels_are_creeks_and_a_rice_polders_stay_ditches() {
     let paddy = 15.0 * 1.3 * 43_560.0;
     let trunks = |p: &super::Polder| -> Vec<(f64, f64)> {
         p.ditches[..4].iter().map(|d| (d.w, d.w_tail)).collect()
     };
-    let ladder = vec![(4.5, 1.5), (1.5, 1.5), (4.0, 1.5), (1.2, 5.5)];
+    let ladder: Vec<(f64, f64)> = vec![(4.5, 1.5), (1.5, 1.5), (4.0, 1.5), (1.2, 5.5)];
     let mut widths = Vec::new();
     for (layout, seed) in [
         ("mosaic", 4),
@@ -186,7 +187,11 @@ fn a_dike_ponds_channels_are_creeks_and_a_rice_polders_stay_ditches() {
         assert!(creeks, "{said}");
         let one = found.iter().all(|&x| (x.0 - found[0].0).abs() < 1e-12);
         assert!(one, "one width a block");
-        assert_eq!(trunks(&p), ladder);
+        let wider: Vec<(f64, f64)> = ladder
+            .iter()
+            .map(|&(w, t)| (w.max(found[0].0), t.max(found[0].0)))
+            .collect();
+        assert_eq!(trunks(&p), wider);
         widths.push(found[0].0);
     }
     let same = (widths[0] - widths[1]).abs() < 1e-12;
@@ -202,4 +207,48 @@ fn a_dike_ponds_channels_are_creeks_and_a_rice_polders_stay_ditches() {
     assert!(columns
         .iter()
         .all(|d| d.w <= 2.5 && d.w_tail <= 1.2 && d.w >= d.w_tail));
+}
+
+#[test]
+fn a_dike_pond_ring_canal_is_no_narrower_than_its_creeks_and_a_rice_polders_keeps_its_rungs() {
+    let paddy = 15.0 * 1.3 * 43_560.0;
+    let trunks = ["feeder", "w_toe", "e_toe", "drain"];
+    for seed in 1..=12 {
+        for (dikepond, layout) in [(false, "mosaic"), (true, "mosaic"), (true, "chessboard")] {
+            let p = polder(paddy, dikepond, layout, 90.0, (3200.0, 3200.0), 1.0, seed);
+            let ring: Vec<_> = p
+                .ditches
+                .iter()
+                .filter(|d| trunks.contains(&d.seg))
+                .collect();
+            assert_eq!(ring.len(), 4);
+            let widths: Vec<(f64, f64)> = ring.iter().map(|d| (d.w, d.w_tail)).collect();
+            if !dikepond {
+                // 0068's ladder, untouched: the supply's two arms, the far flank's lateral, the drain
+                assert_eq!(widths, [(4.5, 1.5), (1.5, 1.5), (4.0, 1.5), (1.2, 5.5)]);
+                continue;
+            }
+            let creek = p.ditches.iter().find(|d| d.seg == "column").unwrap().w;
+            assert!((6.0..=8.0).contains(&creek));
+            for (d, &(w, tail)) in ring.iter().zip(&widths) {
+                // every reach of the ring at least the creek's width, never below its rice rung
+                let seg = d.seg;
+                let said = format!("{layout} seed {seed}: the ring's {seg} drawn {w:.2} to {tail:.2} ft against a {creek:.2} ft creek");
+                assert!(w.min(tail) >= creek - 1e-9, "{said}");
+            }
+            // the joins through the sluices carry their trunk's width at the corner
+            let join = |seg: &str| p.ditches.iter().find(|d| d.seg == seg).unwrap().w;
+            assert!(join("inlet_join") >= creek - 1e-9 && join("outfall_join") >= creek - 1e-9);
+            // a creek's rounded mouth on the ring's middle line stays inside the ring's water
+            for c in p.ditches.iter().filter(|d| d.seg == "column") {
+                for end in [c.pts[0], c.pts[c.pts.len() - 1]] {
+                    let (near, tw) = ring
+                        .iter()
+                        .map(|t| (seg_dist(end, t.pts[0], t.pts[1]), t.w.max(t.w_tail)))
+                        .fold((f64::INFINITY, 0.0), |a, b| if b.0 < a.0 { b } else { a });
+                    assert!(c.w / 2.0 - near <= tw / 2.0 + 1e-6);
+                }
+            }
+        }
+    }
 }

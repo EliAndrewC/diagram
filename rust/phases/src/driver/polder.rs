@@ -811,6 +811,8 @@ pub(super) fn roll_polder(p: Plan) -> Rolled {
     }
 }
 
+#[cfg(test)]
+mod frame_tests;
 mod mottle;
 #[cfg(test)]
 mod tests;
