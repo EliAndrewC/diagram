@@ -37899,13 +37899,13 @@
   "claim": "the bean beads - CONVENTION: a bead 3 ft across in a single row on the bund (bunds-between-the-paddies-aze.drawing)",
   "code": "09219b2cbcd3ff20",
   "core": "9d59f0d038a5ff47",
-  "date": "2026-11-22",
-  "note": "a bead of radius 1.5, so 3 ft across, a convention of its own",
+  "date": "2026-11-24",
+  "note": "radius 1.5, so a bead 3 ft across, in the bean ink, one row on the bund",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "ce85804a5b639854"
   },
   "reads": "50765e32c69be724",
-  "research": "1a1b231001c7410e",
+  "research": "92417b953c58e8d8",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:119695a7f7a5c6b0",
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22",
@@ -37930,20 +37930,22 @@
  "rust/phases/src/driver.rs::draw_field#the grave mound's size": {
   "body": "039442de3214a2c6",
   "claim": "the grave mound's size - UNRESEARCHED: the deleted ink's 13 by 9 ft mound (ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing places a grave, not its size)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "b3749473af03b3d9",
   "core": "9d59f0d038a5ff47",
   "date": "2026-11-22",
   "note": "radii 6.5 by 4.5 make a mound 13 by 9 ft; the page places a grave but never sizes it",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
   "reads": "50765e32c69be724",
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:118c0e65bc0df044",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e4da437e97125540"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::draw_field#the pocket pond's ring": {
@@ -38159,18 +38161,20 @@
   "claim": "no bead in the water - bunds-between-the-paddies-aze.drawing: in a single row on the bund - none inside a pond, none on a line's water",
   "code": "70f22843cfee28f8",
   "core": "21137b700a40c95c",
-  "date": "2026-11-07",
-  "note": "beads kept off every channel, the brook, the run and the ponds",
+  "date": "2026-11-24",
+  "note": "the page records the rule (canal, ditch, pond) as a GUESS of the project's own; the label should be GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: none inside a pond, none on a line's water",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "ce85804a5b639854"
   },
   "reads": "1a4ff9a7ac6721a5",
-  "research": "1a1b231001c7410e",
+  "research": "92417b953c58e8d8",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22",
-   "0014-bunds-between-the-paddies-aze.drawing.html:dc6c6faf409db09b"
+   "0014-bunds-between-the-paddies-aze.drawing.html:89ab6d2d829580fe",
+   "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
   ],
-  "verdict": "IN-STEP"
+  "said": "no bead in the water - bunds-between-the-paddies-aze.drawing: in a single row on the bund - none inside a pond, none on a line's water",
+  "siblings": "161d2970637010d2",
+  "verdict": "MISLABELED"
  },
  "rust/phases/src/driver.rs::settlement_ground#the back strip a belt's depth whatever the wind": {
   "body": "95ec56bb0fcacda0",
@@ -41753,17 +41757,19 @@
  "rust/phases/src/field/beans.rs::BEAD_R_FT#the bead": {
   "body": "b3234b2eb79bfc58",
   "claim": "the bead - bunds-between-the-paddies-aze.drawing: a round bead about 3 ft across",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "f5c1d4c5d15683b2",
   "core": "5154a804ed21b714",
   "date": "2026-11-01",
   "note": "radius 1.5 ft gives the 3 ft bead the page draws",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "ce85804a5b639854"
   },
-  "research": "1a1b231001c7410e",
+  "research": "92417b953c58e8d8",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/beans.rs::BEAD_STEP_FT#the beads' spacing": {
@@ -41782,24 +41788,27 @@
   "claim": "which bunds - GUESS: the record silent on how many, 0014 says some bunds carry a row and not how many; three in eight, near the density today's maps draw",
   "code": "43429f2363e523aa",
   "core": "a5bd0ec5d3c6408d",
-  "date": "2026-11-01",
-  "note": "the page says only that some bunds carry a row, so 3 in 8 is a guess",
+  "date": "2026-11-24",
+  "note": "the claim says 0014 gives \"not how many\", but the page now states \"About three bunds in eight carry beans\" and records the share as a GUESS; the code's (3, 8) matches; fix: claim (GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: three in eight, the page's recorded guess); effect: none",
   "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "said": "which bunds - GUESS: the record silent on how many, 0014 says some bunds carry a row and not how many; three in eight, near the density today's maps draw",
+  "siblings": "efa6f07fdffda6ca",
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/beans.rs::RUN_BEADS#a run": {
   "body": "51f34a5f6724e76d",
   "claim": "a run - bunds-between-the-paddies-aze.drawing: a stretch of bund that carries them shows at least two beads; the most, four, a GUESS",
   "code": "e779e33910a358d4",
   "core": "83652a1e5bcbfe6b",
-  "date": "2026-11-01",
-  "note": "the floor of 2 is the page's \"at least two beads\"; the most, 4, is a guess the page does not answer",
+  "date": "2026-11-24",
+  "note": "at least two (§16); two to four, the page's GUESS (§18)",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "ce85804a5b639854"
   },
-  "research": "1a1b231001c7410e",
+  "research": "92417b953c58e8d8",
   "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:49fb551a6de994d0",
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
   ],
   "verdict": "IN-STEP"
@@ -41809,13 +41818,13 @@
   "claim": "a run's beads - bunds-between-the-paddies-aze.drawing: a stretch of bund that carries them shows at least two beads",
   "code": "c2e35fef466e1fc1",
   "core": "f80876804be031bd",
-  "date": "2026-11-01",
-  "note": "a run is kept only when it has at least RUN_BEADS.0 = 2 beads, matching \"shows at least two beads\"",
+  "date": "2026-11-24",
+  "note": "a run is kept only when it has at least two beads",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "ce85804a5b639854"
   },
   "reads": "0af04fb54c3a67c8",
-  "research": "1a1b231001c7410e",
+  "research": "92417b953c58e8d8",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
   ],
@@ -41824,37 +41833,41 @@
  "rust/phases/src/field/beans.rs::bean_runs#a run's most and its spacing": {
   "body": "b5f1e313d1753252",
   "claim": "a run's most and its spacing - GUESS: bunds-between-the-paddies-aze.drawing silent on how many beads a run holds and how far apart; four at most (`RUN_BEADS`), `BEAD_STEP_FT` apart",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d9c6f2feda0545ff",
   "core": "f80876804be031bd",
   "date": "2026-11-22",
   "note": "the drawing page says nothing on beads per run or their spacing; n is rolled in RUN_BEADS (2..4) and set BEAD_STEP_FT (8 ft) apart, as the claim says",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "ce85804a5b639854"
   },
   "reads": "0af04fb54c3a67c8",
-  "research": "1a1b231001c7410e",
+  "research": "92417b953c58e8d8",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22",
    "0014-bunds-between-the-paddies-aze.drawing.html:dc6c6faf409db09b"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/beans.rs::bean_runs#how many": {
   "body": "b5f1e313d1753252",
   "claim": "how many - GUESS: bunds-between-the-paddies-aze.drawing silent on how many bunds carry a row, saying only that some do; three bunds in eight (`BUND_SHARE`), each its own roll",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "02a348cd58e09e8f",
   "core": "f80876804be031bd",
   "date": "2026-11-22",
   "note": "the page says only \"Some bunds carry a row\"; each bund gets its own seeded roll at BUND_SHARE 3 in 8",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "ce85804a5b639854"
   },
   "reads": "0af04fb54c3a67c8",
-  "research": "1a1b231001c7410e",
+  "research": "92417b953c58e8d8",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22",
    "0014-bunds-between-the-paddies-aze.drawing.html:dc6c6faf409db09b"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/beans.rs::bean_runs#no bead in the water": {
@@ -41862,32 +41875,37 @@
   "claim": "no bead in the water - bunds-between-the-paddies-aze.drawing: in a single row on the bund - held at the map's finish (`settle`), against its final water",
   "code": "2f50dd0eb1e8b35c",
   "core": "f80876804be031bd",
-  "date": "2026-11-01",
-  "note": "the code puts one straight row on the shared bund edge (ring[1] to ring[2]), and the water test is left to settle as the claim says",
+  "date": "2026-11-24",
+  "note": "the claim cites §16's \"in a single row on the bund\" as a finding, but the page now records the rule itself as \"a GUESS of this project's own, a fallback of the drawing\"; the label should be GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html, held at settle",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "ce85804a5b639854"
   },
   "reads": "0af04fb54c3a67c8",
-  "research": "1a1b231001c7410e",
+  "research": "92417b953c58e8d8",
   "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:89ab6d2d829580fe",
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
   ],
-  "verdict": "IN-STEP"
+  "said": "no bead in the water - bunds-between-the-paddies-aze.drawing: in a single row on the bund - held at the map's finish (`settle`), against its final water",
+  "siblings": "a6aaad46e3760e36",
+  "verdict": "MISLABELED"
  },
  "rust/phases/src/field/beans.rs::bean_runs#the run on its bund": {
   "body": "b5f1e313d1753252",
   "claim": "the run on its bund - GUESS: bunds-between-the-paddies-aze.drawing silent on where along a bund the row stands, saying only in a single row on it; about the bund's middle, none past a bead's radius of either end",
   "code": "fdc4ee6e6aed1b6f",
   "core": "f80876804be031bd",
-  "date": "2026-11-22",
-  "note": "the page says nothing on where along the bund the row stands; the run is centered on the midpoint, and offsets past half the length minus BEAD_R_FT are dropped",
+  "date": "2026-11-24",
+  "note": "\"down the middle of the bund\" means across the bund; where along the bund a row stands is still unstated, and centered placement is a GUESS",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "ce85804a5b639854"
   },
   "reads": "0af04fb54c3a67c8",
-  "research": "1a1b231001c7410e",
+  "research": "92417b953c58e8d8",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
+   "0014-bunds-between-the-paddies-aze.drawing.html:49fb551a6de994d0",
+   "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22",
+   "0014-bunds-between-the-paddies-aze.drawing.html:c4cfcd852bc6f7d1"
   ],
   "verdict": "IN-STEP"
  },
@@ -41896,15 +41914,16 @@
   "claim": "which bunds - GUESS: bunds-between-the-paddies-aze.drawing silent on which bunds carry them; the bund between two neighbors in a row, never a row's foot, the fan's outer bund or the bund the drain runs in",
   "code": "5b90262182368957",
   "core": "f80876804be031bd",
-  "date": "2026-11-22",
-  "note": "the page says nothing on which bunds; the code skips the last basin in a row (next is none) and the drain bund (on_drain_right), and draws only the shared ring[1]-ring[2] wall between neighbors",
+  "date": "2026-11-24",
+  "note": "the page gives a share but not which bunds; skipping the drain's bund agrees with its no-bead-in-water rule",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "ce85804a5b639854"
   },
   "reads": "0af04fb54c3a67c8",
-  "research": "1a1b231001c7410e",
+  "research": "92417b953c58e8d8",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22",
+   "0014-bunds-between-the-paddies-aze.drawing.html:44e0e218b2d3dc68",
+   "0014-bunds-between-the-paddies-aze.drawing.html:89ab6d2d829580fe",
    "0014-bunds-between-the-paddies-aze.drawing.html:dc6c6faf409db09b"
   ],
   "verdict": "IN-STEP"
@@ -41925,18 +41944,20 @@
  "rust/phases/src/field/beans.rs::settle#a drowned bead alone": {
   "body": "35447d430ad9d3e3",
   "claim": "a drowned bead alone - GUESS: bunds-between-the-paddies-aze.drawing silent on a row that meets water; the drowned bead dropped and the rest of its run left where it stands, the gap shown as the water crossing it",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "2f4597c5c2b1df8f",
   "core": "39f3fe7ebaa0bd60",
   "date": "2026-11-22",
   "note": "the page says nothing on a row that meets water; settle drops each bead that falls in a pond or on a line, keeps the rest in place, and drops a run left with fewer than RUN_BEADS.0 beads",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "ce85804a5b639854"
   },
   "reads": "46d26fa6a10a4fd1",
-  "research": "1a1b231001c7410e",
+  "research": "92417b953c58e8d8",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/beans.rs::settle#a run shows at least two": {
@@ -41944,14 +41965,15 @@
   "claim": "a run shows at least two - bunds-between-the-paddies-aze.drawing: a stretch of bund that carries them shows at least two beads",
   "code": "45f290d34148013f",
   "core": "39f3fe7ebaa0bd60",
-  "date": "2026-11-01",
-  "note": "after filtering, a run with fewer than RUN_BEADS.0 = 2 beads is dropped",
+  "date": "2026-11-24",
+  "note": "runs under two are dropped after the water test",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "ce85804a5b639854"
   },
   "reads": "46d26fa6a10a4fd1",
-  "research": "1a1b231001c7410e",
+  "research": "92417b953c58e8d8",
   "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:89ab6d2d829580fe",
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
   ],
   "verdict": "IN-STEP"
@@ -41961,17 +41983,20 @@
   "claim": "no bead in the water - bunds-between-the-paddies-aze.drawing: in a single row on the bund - none inside a pond grown by a bead's radius, none within a bead's radius past a line's half-width",
   "code": "bfa7bce1cf7af442",
   "core": "39f3fe7ebaa0bd60",
-  "date": "2026-11-01",
-  "note": "the pond ellipse is grown by BEAD_R_FT, and a bead near a water line is dropped by drowned(), which keeps every bead on the dry bund",
+  "date": "2026-11-24",
+  "note": "the page records the no-bead-in-water rule as a GUESS of the project's own, not a finding; the label should be GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html, with the code's pond and line clearances as stated",
   "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
+   "0014-bunds-between-the-paddies-aze.drawing.html": "ce85804a5b639854"
   },
   "reads": "46d26fa6a10a4fd1",
-  "research": "1a1b231001c7410e",
+  "research": "92417b953c58e8d8",
   "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:89ab6d2d829580fe",
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
   ],
-  "verdict": "IN-STEP"
+  "said": "no bead in the water - bunds-between-the-paddies-aze.drawing: in a single row on the bund - none inside a pond grown by a bead's radius, none within a bead's radius past a line's half-width",
+  "siblings": "405205dd0f73c90e",
+  "verdict": "MISLABELED"
  },
  "rust/phases/src/field/brook.rs::AXIS_OFF_DEG#no screen axis": {
   "body": "479f72df9bf207aa",
@@ -42995,55 +43020,61 @@
  "rust/phases/src/field/build.rs::one#the grave off the pond's plot": {
   "body": "4410a04d49576ac7",
   "claim": "the grave off the pond's plot - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on a grave beside a pocket pond; never in the pond's plot",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "dfb2ddb811c08e5e",
   "core": "e3271ddc0f60d691",
   "date": "2026-11-22",
   "note": "the pond's plot is passed as `skip` to `grave`, which never hosts on it. The drawing page does not say whether a grave may share a plot with a pond",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
   "reads": "a0424262a19b95f1",
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:118c0e65bc0df044",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e4da437e97125540"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#the grave once a map": {
   "body": "4410a04d49576ac7",
   "claim": "the grave once a map - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: about three maps in ten draw a grave in the fields - rolled once, on the first field",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "55cd7812c13189c5",
   "core": "e3271ddc0f60d691",
   "date": "2026-11-07",
   "note": "only the first field may hold the grave, so it is rolled once a map",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
   "reads": "a0424262a19b95f1",
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e4da437e97125540"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#the grave's form": {
   "body": "4410a04d49576ac7",
   "claim": "the grave's form - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: an island inside a plot or a grave in a plot's corner - the `grave_form` knob's, an island where the knob gave none",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "2f9cd056497662f8",
   "core": "e3271ddc0f60d691",
   "date": "2026-11-07",
   "note": "the `grave_form` knob chooses island or corner, and an island when the knob is absent",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
   "reads": "a0424262a19b95f1",
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:118c0e65bc0df044"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#the hem later": {
@@ -45287,49 +45318,55 @@
  "rust/phases/src/field/features.rs::CORNER_FT#the corner grave": {
   "body": "1079de2101791f0f",
   "claim": "the corner grave - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: a short step in from its corner, clear of any ditch or path along the plot's edge, with the bund carried round it; the step a GUESS, 8 ft clear of each edge",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "e2bbc84e9c01c069",
   "core": "dcbc8e03227fab61",
   "date": "2026-11-01",
   "note": "matches \"a short step in from its corner, clear of any ditch or path\"; the 8 ft step is a disclosed guess",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/features.rs::CORNER_FT#the plot kept off the mound": {
   "body": "1079de2101791f0f",
   "claim": "the plot kept off the mound - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on how far; the mound's half-length and a bund, 8 ft every way",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "7ea0807eecb2ea56",
   "core": "dcbc8e03227fab61",
   "date": "2026-11-22",
   "note": "the page says each half stops short of the mound but gives no distance; the code keeps 8 ft (CORNER_FT.1) every way, as the GUESS says",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/features.rs::GRAVE_IN_TEN#the grave's odds": {
   "body": "649b18abe523c33f",
   "claim": "the grave's odds - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: about three maps in ten, this project's choice and an arbitrary one",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "1aad59e302032720",
   "core": "2532dc88dd937dda",
   "date": "2026-11-01",
   "note": "3 in 10 is \"about three maps in ten\", which the page calls an arbitrary choice",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e4da437e97125540"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/features.rs::Grave#a grave's record": {
@@ -45359,17 +45396,19 @@
  "rust/phases/src/field/features.rs::POND_PCT#the pond's odds": {
   "body": "b7c0d5b9490f29ae",
   "claim": "the pond's odds - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: a little over half the time, where it has low plots, a GUESS",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "caf682c4a019c8e1",
   "core": "5aff45493596cb18",
   "date": "2026-11-01",
   "note": "55 in 100 is \"a little over half the time\", a disclosed guess",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:02605b446c604185"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/features.rs::POND_SHARE#the pond's size": {
@@ -45422,15 +45461,16 @@
  "rust/phases/src/field/features.rs::grave#its host": {
   "body": "c298eb9d29e53c60",
   "claim": "its host - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on which plot keeps a grave; any of the field's plots at even odds, the low ones among them, the pond's plot excepted",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5d8712c33012f243",
   "core": "3c3bbe50725f5b9c",
   "date": "2026-11-22",
   "note": "the page puts no limit on which plot keeps a grave (only the pond is tied to a low plot); the code picks any plot at even odds and skips the pond's plot, as the GUESS says",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
   "reads": "079bea4057560872",
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:03ed9353fdea1d55",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e4329c9fbceff71",
@@ -45440,74 +45480,83 @@
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:da9a9f91dc7c0ef6",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/features.rs::grave#no basin under the grave": {
   "body": "c298eb9d29e53c60",
   "claim": "no basin under the grave - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: no flooded basin runs under a field grave; the paddy is carved round it",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "0042cbb35c0912e7",
   "core": "3c3bbe50725f5b9c",
   "date": "2026-11-01",
   "note": "the host plot's ring is carved round the grave, as in \"the paddy is carved round it\"",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
   "reads": "079bea4057560872",
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/features.rs::grave#the bund round the corner": {
   "body": "c298eb9d29e53c60",
   "claim": "the bund round the corner - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: a corner grave stands a short step in from its corner, clear of any ditch or path along the plot's edge, and the plot's bund is carried round it out to the corner, a GUESS - the corner rolled among the plot's four",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "67fbad595e192b0c",
   "core": "3c3bbe50725f5b9c",
   "date": "2026-11-01",
   "note": "the corner is rolled from the four (randbelow(4)) and the bund is carried round, a guess",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
   "reads": "079bea4057560872",
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/features.rs::grave#the grave's odds": {
   "body": "c298eb9d29e53c60",
   "claim": "the grave's odds - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: about three maps in ten draw a grave in the fields (`GRAVE_IN_TEN`)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "51e61e710e478523",
   "core": "3c3bbe50725f5b9c",
   "date": "2026-11-01",
   "note": "randbelow(10) < GRAVE_IN_TEN gives three in ten",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
   "reads": "079bea4057560872",
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e4da437e97125540"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/features.rs::grave#the island splits its plot": {
   "body": "c298eb9d29e53c60",
   "claim": "the island splits its plot - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: the host plot is split in two through the mound, as if a bund were run out to the island, and each half stops short of the mound, a GUESS - the split across the fall, from one side's middle to the other's",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "7909c6611f205a5f",
   "core": "3c3bbe50725f5b9c",
   "date": "2026-11-01",
   "note": "the plot is split side-middle to side-middle through the mound, each half notched short of it, a guess",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
   "reads": "079bea4057560872",
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/features.rs::island#the split and its notch": {
@@ -45537,35 +45586,39 @@
  "rust/phases/src/field/features.rs::pocket_pond#at the plot's middle": {
   "body": "003562d2ec1bb733",
   "claim": "at the plot's middle - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on where in its plot a pond lies; at the host's centroid, and no pond where the centroid falls outside the plot",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5922ff65a362e6b8",
   "core": "d7ac7390870a3add",
   "date": "2026-11-22",
   "note": "the page says only that the pond lies wholly inside one low plot, not where in it; the code centers it on the centroid and draws none when the centroid falls outside the plot",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
   "reads": "d4b697b42ba756f1",
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/features.rs::pocket_pond#the pond in a low plot": {
   "body": "003562d2ec1bb733",
   "claim": "the pond in a low plot - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: sunk wholly in one low plot, never across a bund - sixteen points of its edge held inside the plot",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "9cf8d85133df6371",
   "core": "d7ac7390870a3add",
   "date": "2026-11-01",
   "note": "the host is one plot of the lowest row; the radii are fitted under 0.95 of the centroid's least distance to the plot's sides, and the 16-point `within` test gates the pond, so it lies wholly in one plot and never crosses a bund, as the page says (\"sink each pond wholly inside one low plot ... never across a bund\")",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
   "reads": "d4b697b42ba756f1",
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/features.rs::pocket_pond#the pond's form": {
@@ -45573,69 +45626,75 @@
   "claim": "the pond's form - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on a dish pond's shape and where in its plot; an ellipse squared to the map at the plot's middle",
   "code": "cc5a358fdd10b745",
   "core": "d7ac7390870a3add",
-  "date": "2026-11-22",
-  "note": "the page gives a dish pond with a bank, reeds and open water but no outline; the code draws an ellipse with its axes square to the map at the plot's middle",
+  "date": "2026-11-24",
+  "note": "the page still gives no shape for the pond and no place in its plot beyond \"wholly inside one low plot\"; the new §23 sentence on four sides is about the host plot, not the pond's outline",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
   "reads": "d4b697b42ba756f1",
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:aaec071aac2463f0"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/features.rs::pocket_pond#the pond's odds": {
   "body": "eef044780dada49d",
   "claim": "the pond's odds - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: a little over half the time, where it has low plots (`POND_PCT`)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d97adccf2026c2ca",
   "core": "d7ac7390870a3add",
   "date": "2026-11-01",
   "note": "randbelow(100) < 55, only where low plots exist",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
   "reads": "d4b697b42ba756f1",
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:02605b446c604185"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/features.rs::pocket_pond#the pond's size": {
   "body": "003562d2ec1bb733",
   "claim": "the pond's size - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on a dish pond's size; `POND_SHARE` of the plot's shortest side, fitted once to `POND_FIT` of the room from its middle to the plot's nearest side where that is smaller",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "e607f373d7ec079e",
   "core": "d7ac7390870a3add",
   "date": "2026-11-22",
   "note": "the page records that no source gives a dish pond's proportions; the code sizes it by POND_SHARE of the shortest side and fits it once to POND_FIT of the room, as the claim says",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
   "reads": "d4b697b42ba756f1",
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/features.rs::pocket_pond#which low plot": {
   "body": "003562d2ec1bb733",
   "claim": "which low plot - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on which low plot holds the pond; any plot of the lowest row, at even odds",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "3c4398ff84d709e3",
   "core": "d7ac7390870a3add",
   "date": "2026-11-22",
   "note": "the page says \"on a low plot\" but not which one; the code picks any plot of the lowest row at even odds",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
   "reads": "d4b697b42ba756f1",
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:03ed9353fdea1d55",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/features.rs::toward#the step": {
@@ -46296,16 +46355,16 @@
   "claim": "the bund's bow - rice-paddies-and-their-plots-suiden.drawing: a patchwork of small, irregular paddies, never the tidy grid of rectangles; the bow's size a GUESS, up to 15% of a row",
   "code": "9c6e860f045aa5fc",
   "core": "ae35ef5a6c7293c8",
-  "date": "2026-10-31",
-  "note": "the bow makes the irregular patchwork the page attests; the claim calls its 15% size a guess",
+  "date": "2026-11-24",
+  "note": "`BOW = 0.15` matches the bow 0284's drawing page now records as a GUESS and this project's setting (\"bows by up to about 15% of the spacing between its rows\"), but the claim cites only 0005, which says nothing about a bow beyond the patchwork; fix: claim (also cite research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html as the page that records the 15% GUESS); effect: none",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
   "research": "69aa78ae06a3c11d",
-  "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93"
-  ],
-  "verdict": "IN-STEP"
+  "rests": [],
+  "said": "the bund's bow - rice-paddies-and-their-plots-suiden.drawing: a patchwork of small, irregular paddies, never the tidy grid of rectangles; the bow's size a GUESS, up to 15% of a row",
+  "siblings": "793cc68afd02e3f6",
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/lattice.rs::Basin#a basin's record": {
   "body": "8f830d662b1527ac",
@@ -46347,18 +46406,16 @@
   "claim": "the bund's bow - rice-paddies-and-their-plots-suiden.drawing: a patchwork of small, irregular paddies, never the tidy grid of rectangles - each interior line's bow rolled up to `BOW` of a row at its own phase",
   "code": "7ebd24394ed2636d",
   "core": "12820a1fa962f1f5",
-  "date": "2026-10-31",
-  "note": "interior lines bowed by a rolled amount and phase, never a tidy grid; how much they bow is a degree the page leaves open",
+  "date": "2026-11-24",
+  "note": "the code is right: each interior line gets its own amplitude, rolled from 0 to `BOW * step`, and its own phase, and the head and foot lines stay at zero, as 0284 says (\"no two rows of paddies carry the same shape\", the drift \"fades to nothing at the first and last rows\", up to about 15% of the row spacing); but the claim cites only 0005, which does not cover the per-row bow or its 15% limit; fix: claim (also cite research/questions/0284-how-our-maps-draw-a-bunds-bends-and-corners.drawing.html for the per-row bow and its 15% GUESS); effect: none",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
   "reads": "305a5619988eae36",
   "research": "69aa78ae06a3c11d",
-  "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
-  ],
-  "verdict": "IN-STEP"
+  "said": "the bund's bow - rice-paddies-and-their-plots-suiden.drawing: a patchwork of small, irregular paddies, never the tidy grid of rectangles - each interior line's bow rolled up to `BOW` of a row at its own phase",
+  "siblings": "96f868f7e4cc6a9e",
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/lattice.rs::Lines.new#the head's and foot's lines straight": {
   "body": "dd9f33053f89a224",
@@ -46397,17 +46454,12 @@
   "claim": "the bow's shape - GUESS: rice-paddies-and-their-plots-suiden.drawing silent on how a bund bows; one full wave across the fan's breadth",
   "code": "111ffabf7f31ab31",
   "core": "d373d0e96e992d73",
-  "date": "2026-11-22",
-  "note": "the page says the patchwork is irregular but says nothing about how a bund bows; sin(PI*(s+1)+ph) over s in [-1,1] is one full wave across the breadth, as the claim says",
+  "date": "2026-11-24",
+  "note": "0005 is still silent on how a bund bows. 0284 now gives the fan bow's size and says it varies along the row and from row to row, but neither page gives the bow's form, so the claim's \"one full wave across the fan's breadth\" is still an unanswered GUESS",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
   "research": "69aa78ae06a3c11d",
-  "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:8ccf11d09624671d",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
-  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::ROW_FT#the row spacing": {
@@ -48269,27 +48321,27 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/staged.rs::polder_stage#a rice polder's pocket pond": {
-  "body": "ec725dd5ae31b586",
+  "body": "1ba8729f5718f740",
   "claim": "a rice polder's pocket pond - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: a polder may have a pond on a low plot, a little over half the time; the dike-pond ground has none - the comb's own roll (`features::pocket_pond`) over the block's low row, a resting plot never its host",
   "code": "49ccd9fa9650cd6f",
   "core": "7256e63df023425a",
-  "date": "2026-11-07",
-  "note": "the rice polder gets `rice_pond`'s roll; dike-pond ground gets none",
+  "date": "2026-11-24",
+  "note": "the claim puts the pond \"over the block's low row\", but `rice_pond` builds each basin's row as `usize::from(x.low)` from the non-resting, four-sided plots only, and `pocket_pond` takes the highest row present. So when every low plot is resting or not four-sided, the highest row is 0 and a plot that is not low can hold the pond; the code should return no pond when no host is low; fix: code; effect: map - a rice polder can show a pond in a plot that is not low, against \"polder - on a low plot\" and \"Our maps sink each pond wholly inside one low plot\" (the odds, 55 of 100, and the dike-pond's none otherwise agree with §26 and §27)",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:02605b446c604185",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:03ed9353fdea1d55",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:083596e0af6f1902",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:140bedbf9c3f6d56",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:36c65c85e5f4ce74",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:ffcefa561c09cbc3"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:49243a3720ff985d"
   ],
-  "triaged": "2026-11-24",
-  "verdict": "IN-STEP"
+  "said": "a rice polder's pocket pond - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: a polder may have a pond on a low plot, a little over half the time; the dike-pond ground has none - the comb's own roll (`features::pocket_pond`) over the block's low row, a resting plot never its host",
+  "siblings": "fc901be457bdcf21",
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/staged.rs::polder_stage#no resting plot on a dike-pond block": {
   "body": "ec725dd5ae31b586",
@@ -48332,18 +48384,20 @@
  "rust/phases/src/field/staged.rs::rice_pond#a four-sided host": {
   "body": "910d55e3142c87df",
   "claim": "a four-sided host - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on the host plot's shape; only a four-sided plot, so the pond's fit inside it holds",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "eb42ec8d8ad20a90",
   "core": "8467a302358e0290",
   "date": "2026-11-22",
   "note": "the filter is ring.len() == 4; the page sinks the pond wholly inside one low plot and says nothing of the plot's shape",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:02605b446c604185",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/staged.rs::rice_pond#never a resting plot": {
@@ -48351,18 +48405,18 @@
   "claim": "never a resting plot - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on a pond in a plot left to rest; never its host",
   "code": "1e8e4eb3ce63b420",
   "core": "8467a302358e0290",
-  "date": "2026-11-22",
-  "note": "the filter !resting.contains(i) means a resting plot never hosts a pond; the pond page never mentions resting plots, so the GUESS stands",
+  "date": "2026-11-24",
+  "note": "the code still leaves out resting plots (`!resting.contains(i)`), but the claim calls the page \"silent on a pond in a plot left to rest\", and §24 now records the rule as a GUESS (\"A plot left to rest never holds the pond\"); restate as recorded on the page (§24), dropping \"silent\"; fix: claim; effect: none",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
-  "research": "2b8a8213b9c89d51",
+  "research": "54c6bcaeb70fbf2e",
   "rests": [
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:02605b446c604185",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:03ed9353fdea1d55",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:49243a3720ff985d"
   ],
-  "verdict": "IN-STEP"
+  "said": "never a resting plot - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on a pond in a plot left to rest; never its host",
+  "siblings": "ea08f3cf0b0255fe",
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/staged.rs::rice_pond#the pond's host": {
   "body": "910d55e3142c87df",
