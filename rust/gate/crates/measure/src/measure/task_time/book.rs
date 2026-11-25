@@ -14,6 +14,16 @@
 //!   booked, at each instant, to the thing in flight that ends last (the critical one), descending into a builder's own time the same
 //!   way: its turns, its foreground commands, and its waits on its own background runs and agents. A wait with nothing in flight is
 //!   booked as that, named.
+//! - BLOCKING IS BY TASK AND DEPENDENCY (the GM 2026-11-25: "a minute should count as blocking. When something else is waiting on it to
+//!   be done before it can be started ... that research would be blocking even if there was a different unrelated task happening in a
+//!   different subagent at the same time"): each piece is booked to the task whose next step waited on it. A CLUE given with the data
+//!   names it - a dispatch's or a page brief's `Blocks: <feature> T<n>` / `Blocks: T<n>` / `Blocks: none` line, a command's
+//!   `L7R_BLOCKS=<feature>:T<n>` (the event log's `blocks`). With none, the DEFAULTS, each a GUESS held to the GM's "it doesn't have to
+//!   be 100% exact": a main session's own turns and waits block the task its lines carry (its `make task-start` mark); a builder's time
+//!   (its turns, foreground commands, the review agents it awaits) blocks the builder's own task, else its waiter's; a run or a review
+//!   agent blocks its waiter's task, a background run only from when its waiter waits on it (the walk reaches it no sooner); a page
+//!   session or a research pass blocks nothing. Work that blocks no task is the wait's piece only where nothing in flight blocks one,
+//!   and is booked apart (`Ledger::free`), never blocking.
 
 use std::collections::{HashMap, HashSet};
 
@@ -88,6 +98,9 @@ pub struct Ledger {
     pub runs: HashMap<(Key, String), usize>,
     /// target -> the category its runs book to, their phases apart.
     pub books_to: HashMap<String, String>,
+    /// Seconds a wait was held by work that blocked no task (a page session or research pass whose brief names none, a `Blocks: none`
+    /// clue), by the category the work is: waited on, never blocking.
+    pub free: HashMap<String, f64>,
     /// Seconds of the window with 0, 1, 2 and 3 or more actors working at once (a main session's own turns and runs, each agent's
     /// span, each page-session phase): the overlap the minutes hide.
     pub at_once: [f64; 4],
@@ -116,6 +129,8 @@ pub struct Page {
     pub key: Key,
     /// The session the runner started (the phase's `name`): its own lines are the page session's, never a main session's.
     pub sid: String,
+    /// Its brief's `Blocks:` clue, "" where it gave none (it then blocks nothing).
+    pub blocks: String,
 }
 
 /// What the booking reads.
@@ -146,6 +161,13 @@ enum What {
     Own(String),
     Run(usize),
     Wait(Vec<Cand>, String),
+}
+
+/// How a run's piece is booked: as minutes under its own task, or as blocking the task given (none: waited on, blocking nothing).
+#[derive(Debug, Clone, Copy)]
+enum As<'k> {
+    Minutes,
+    Blocking(Option<&'k Key>),
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -290,6 +312,11 @@ struct Ix<'a> {
     run_cats: Vec<(String, String)>,
     agent_of: HashMap<&'a str, usize>,
     agent_key: Vec<Key>,
+    /// Each run's and each agent's `Blocks:` clue, "" where none was given.
+    run_clue: Vec<String>,
+    agent_clue: Vec<String>,
+    /// The features the lines name, a clue's `451` read as the one it opens.
+    features: Vec<String>,
     /// actor -> its own background runs and the agents it dispatched.
     owned: HashMap<String, Vec<Cand>>,
     segs: HashMap<String, Vec<Seg>>,
@@ -308,6 +335,8 @@ fn actor(e: &Event) -> String {
 impl<'a> Ix<'a> {
     fn new(w: &'a World<'a>) -> Self {
         let mut pre_key: HashMap<&str, Key> = HashMap::new();
+        let mut clue: HashMap<String, String> = HashMap::new();
+        let mut features: Vec<String> = Vec::new();
         let mut agent_feature: HashMap<String, String> = HashMap::new();
         let mut owned: HashMap<String, Vec<Cand>> = HashMap::new();
         let agent_of: HashMap<&str, usize> = w
@@ -322,7 +351,17 @@ impl<'a> Ix<'a> {
                     pre_key.insert(id, key_of(e));
                 }
             }
+            let (f, blocks) = (or_s(e, "feature"), or_s(e, "blocks"));
+            if !features.contains(&f) {
+                features.push(f);
+            }
             let aid = or_s(e, "aid");
+            // a call's clue under its id, an Agent call's under its agent's too (its end's line names the agent)
+            for id in [or_s(e, "id"), aid.clone()] {
+                if !blocks.is_empty() && !id.is_empty() {
+                    clue.insert(id, blocks.clone());
+                }
+            }
             if !aid.is_empty() {
                 agent_feature
                     .entry(aid.clone())
@@ -332,6 +371,11 @@ impl<'a> Ix<'a> {
                         owned.entry(actor(e)).or_default().push(Cand::Agent(i));
                     }
                 }
+            }
+        }
+        for p in w.pages {
+            if !features.contains(&p.key.0) {
+                features.push(p.key.0.clone());
             }
         }
         let run_key: Vec<Key> = w
@@ -364,6 +408,18 @@ impl<'a> Ix<'a> {
             .collect();
         Ix {
             w,
+            run_clue: w
+                .runs
+                .runs
+                .iter()
+                .map(|r| clue.get(&r.id).cloned().unwrap_or_default())
+                .collect(),
+            agent_clue: w
+                .agents
+                .iter()
+                .map(|a| clue.get(&a.aid).cloned().unwrap_or_default())
+                .collect(),
+            features,
             run_of: w
                 .runs
                 .runs
@@ -557,29 +613,36 @@ impl<'a> Ix<'a> {
         Ok(out)
     }
 
-    /// A run's piece `[x, y]` booked: its phases, the rest its category.
+    /// A run's piece `[x, y]` booked: its phases, the rest its category - as minutes under its own task, or as blocking `blocked`.
     #[expect(
         clippy::many_single_char_names,
         reason = "an interval's ends `x`/`y` beside its run, agent or segment, as the module's doc names them"
     )]
-    fn book_run(&self, l: &mut Ledger, i: usize, (x, y): (f64, f64), block: bool, fg: bool) {
+    fn book_run(&self, l: &mut Ledger, i: usize, (x, y): (f64, f64), how: As, fg: bool) {
         let r = &self.w.runs.runs[i];
         let (cat, target) = &self.run_cats[i];
-        let key = &self.run_key[i];
         let mut split = 0.0;
-        let cell = |s: f64| Cell {
-            min: if block { 0.0 } else { s },
-            block: if block { s } else { 0.0 },
-            fg: if block && fg { s } else { 0.0 },
+        let mut put = |col: &str, s: f64| match how {
+            As::Blocking(b) => block(l, b, (col, target), s, fg),
+            As::Minutes => l.add(
+                &self.run_key[i],
+                col,
+                target,
+                Cell {
+                    min: s,
+                    ..Cell::default()
+                },
+            ),
         };
         for (col, s) in r.split.booked(x, y) {
-            l.add(key, phase_cat(col), target, cell(s));
+            put(phase_cat(col), s);
             split += s;
         }
-        l.add(key, cat, target, cell(y - x - split));
+        put(cat, y - x - split);
     }
 
-    /// The blocking of `[x, y]`, a wait on `cands`, each instant to the one in flight that ends last; none: `fallback`.
+    /// The blocking of `[x, y]`, a wait on `cands` by a waiter blocking `blocked`: each instant to the one in flight that blocks a task
+    /// and ends last (the critical one); with none blocking a task, the one ending last, as waited-on time; with none, `fallback`.
     #[expect(
         clippy::many_single_char_names,
         reason = "an interval's ends `x`/`y` beside its run, agent or segment, as the module's doc names them"
@@ -589,43 +652,39 @@ impl<'a> Ix<'a> {
         l: &mut Ledger,
         cands: &[Cand],
         (x, y): (f64, f64),
-        key: &Key,
+        blocked: Option<&Key>,
         fallback: &str,
         depth: usize,
     ) {
         let mut cuts = vec![x, y];
         // a gap with nothing in flight is split where a page session starts or ends, so its piece under one is named so
         let nothing = fallback.starts_with(NOTHING);
-        if nothing {
-            for p in self.w.pages {
-                cuts.extend([p.t0, p.t1].into_iter().filter(|t| x < *t && *t < y));
-            }
-        }
         for c in cands {
             let (a, b) = self.span(*c);
             cuts.extend([a, b].into_iter().filter(|t| x < *t && *t < y));
-            if *c == Cand::Pages {
-                for p in self.w.pages {
-                    cuts.extend([p.t0, p.t1].into_iter().filter(|t| x < *t && *t < y));
-                }
+        }
+        if nothing || cands.contains(&Cand::Pages) {
+            for p in self.w.pages {
+                cuts.extend([p.t0, p.t1].into_iter().filter(|t| x < *t && *t < y));
             }
         }
         cuts.sort_by(f64::total_cmp);
         cuts.dedup();
         for w in cuts.windows(2) {
             let (px, py) = (w[0], w[1]);
-            // a page session is its own actor: its wait is blocking only where nothing else the waiter waits on is in flight (the GM
-            // 2026-11-25: "if they were running in parallel with other things ... that number would be misleading"); among the rest,
-            // the one that ends last held the waiter (the critical one: the others ending sooner would not have shortened the wait)
-            let live: Vec<Cand> = cands
+            // blocking is by dependency (the GM 2026-11-25: "a minute should count as blocking. When something else is waiting on it to
+            // be done before it can be started"): what blocks a task is preferred to what blocks none; among them the one that ends
+            // last held the waiter (the others ending sooner would not have shortened the wait)
+            let best = cands
                 .iter()
                 .copied()
                 .filter(|c| self.active(*c, px, py))
-                .collect();
-            let best = live
-                .iter()
-                .filter(|c| **c != Cand::Pages || live.len() == 1)
-                .max_by(|a, b| self.span(**a).1.total_cmp(&self.span(**b).1));
+                .map(|c| (self.target(c, (px, py), blocked), c))
+                .max_by(|a, b| {
+                    a.0.is_some()
+                        .cmp(&b.0.is_some())
+                        .then(self.span(a.1).1.total_cmp(&self.span(b.1).1))
+                });
             let class = if !nothing {
                 fallback
             } else if self.w.pages.iter().any(|p| p.t0 <= px && py <= p.t1) {
@@ -636,70 +695,47 @@ impl<'a> Ix<'a> {
                 NOTHING_ENDED
             };
             match best {
-                None => l.add(
-                    key,
-                    class,
-                    "",
-                    Cell {
-                        block: py - px,
-                        ..Cell::default()
-                    },
-                ),
-                Some(Cand::Pages) => {
-                    let k = self
-                        .w
-                        .pages
-                        .iter()
-                        .find(|p| p.t0 <= px && py <= p.t1)
-                        .map_or(key, |p| &p.key);
-                    l.add(
-                        k,
-                        PAGES,
-                        "",
-                        Cell {
-                            block: py - px,
-                            ..Cell::default()
-                        },
-                    );
+                // a wait on a page session nothing tracked blocks what the page session blocks: its brief's task, else nothing
+                None if class == NOTHING_PAGES => {
+                    let to = self.target(Cand::Pages, (px, py), blocked);
+                    block(l, to.as_ref(), (class, ""), py - px, false);
                 }
-                Some(Cand::Run(i)) if is_wait(&self.run_cats[*i].0) => {
-                    let next: &[Cand] = if self.run_cats[*i].0 == program::PAGE_WAIT {
+                None => block(l, blocked, (class, ""), py - px, false),
+                Some((to, Cand::Pages)) => block(l, to.as_ref(), (PAGES, ""), py - px, false),
+                Some((to, Cand::Run(i))) if is_wait(&self.run_cats[i].0) => {
+                    let next: &[Cand] = if self.run_cats[i].0 == program::PAGE_WAIT {
                         &[Cand::Pages]
                     } else {
                         &[]
                     };
-                    self.descend(
-                        l,
-                        next,
-                        (px, py),
-                        &self.run_key[*i],
-                        program::WAIT,
-                        depth + 1,
-                    );
+                    self.descend(l, next, (px, py), to.as_ref(), program::WAIT, depth + 1);
                 }
-                Some(Cand::Run(i)) => self.book_run(l, *i, (px, py), true, false),
-                Some(Cand::Agent(i)) => self.agent_piece(l, *i, (px, py), depth + 1),
+                Some((to, Cand::Run(i))) => {
+                    self.book_run(l, i, (px, py), As::Blocking(to.as_ref()), false);
+                }
+                Some((to, Cand::Agent(i))) => {
+                    self.agent_piece(l, i, (px, py), to.as_ref(), depth + 1);
+                }
             }
         }
     }
 
-    /// An agent's time `[x, y]` booked as blocking: a review agent's to its kind, a builder's by its own segments.
+    /// An agent's time `[x, y]` booked as blocking `blocked`: a review agent's to its kind, a builder's by its own segments.
     #[expect(
         clippy::many_single_char_names,
         reason = "an interval's ends `x`/`y` beside its run, agent or segment, as the module's doc names them"
     )]
-    fn agent_piece(&self, l: &mut Ledger, i: usize, (x, y): (f64, f64), depth: usize) {
+    fn agent_piece(
+        &self,
+        l: &mut Ledger,
+        i: usize,
+        (x, y): (f64, f64),
+        blocked: Option<&Key>,
+        depth: usize,
+    ) {
         let a = &self.w.agents[i];
         if let Some(cat) = review_cat(&a.kind) {
-            l.add(
-                &self.agent_key[i],
-                cat,
-                "",
-                Cell {
-                    block: y - x,
-                    ..Cell::default()
-                },
-            );
+            block(l, blocked, (cat, ""), y - x, false);
             return;
         }
         let mut covered = 0.0;
@@ -709,46 +745,46 @@ impl<'a> Ix<'a> {
                 continue;
             }
             covered += sy - sx;
-            self.book_seg(l, s, (sx, sy), depth);
+            self.book_seg(l, s, (sx, sy), blocked, depth);
         }
         if y - x - covered > 0.0 {
-            l.add(
-                &self.agent_key[i],
-                UNLINED,
-                "",
-                Cell {
-                    block: y - x - covered,
-                    ..Cell::default()
-                },
-            );
+            block(l, blocked, (UNLINED, ""), y - x - covered, false);
         }
     }
 
-    /// A segment's piece booked as blocking.
-    fn book_seg(&self, l: &mut Ledger, s: &Seg, piece: (f64, f64), depth: usize) {
+    /// A segment's piece booked as blocking `blocked`.
+    fn book_seg(
+        &self,
+        l: &mut Ledger,
+        s: &Seg,
+        piece: (f64, f64),
+        blocked: Option<&Key>,
+        depth: usize,
+    ) {
         match &s.what {
-            What::Own(cat) => l.add(
-                &s.key,
-                cat,
-                "",
-                Cell {
-                    block: piece.1 - piece.0,
-                    ..Cell::default()
-                },
-            ),
-            What::Run(i) => self.book_run(l, *i, piece, true, true),
+            What::Own(cat) => block(l, blocked, (cat, ""), piece.1 - piece.0, false),
+            What::Run(i) => self.book_run(l, *i, piece, As::Blocking(blocked), true),
             // a cycle cannot form (an agent waits only on what it started), but the depth bounds the walk all the same
-            What::Wait(c, fb) if depth < 8 => self.descend(l, c, piece, &s.key, fb, depth),
-            What::Wait(_, fb) => l.add(
-                &s.key,
-                fb,
-                "",
-                Cell {
-                    block: piece.1 - piece.0,
-                    ..Cell::default()
-                },
-            ),
+            What::Wait(c, fb) if depth < 8 => self.descend(l, c, piece, blocked, fb, depth),
+            What::Wait(_, fb) => block(l, blocked, (fb, ""), piece.1 - piece.0, false),
         }
+    }
+}
+
+/// `secs` of `cat` (its make target `target`) booked as blocking `blocked`, or, blocking no task, as waited-on time.
+fn block(l: &mut Ledger, blocked: Option<&Key>, (cat, target): (&str, &str), secs: f64, fg: bool) {
+    match blocked {
+        Some(k) => l.add(
+            k,
+            cat,
+            target,
+            Cell {
+                block: secs,
+                fg: if fg { secs } else { 0.0 },
+                ..Cell::default()
+            },
+        ),
+        None => *l.free.entry(cat.to_owned()).or_default() += secs,
     }
 }
 
@@ -803,7 +839,7 @@ pub fn book(w: &World) -> Result<Ledger, Raised> {
         l.books_to
             .insert(ix.run_cats[i].1.clone(), ix.run_cats[i].0.clone());
         if !review_fg && y > x {
-            ix.book_run(&mut l, i, (x, y), false, false);
+            ix.book_run(&mut l, i, (x, y), As::Minutes, false);
         }
     }
     for who in order.iter().filter(|w| !paged.contains(*w)) {
@@ -838,92 +874,16 @@ pub fn book(w: &World) -> Result<Ledger, Raised> {
         for s in &ix.segs[who] {
             let (x, y) = (s.t0.max(lo), s.t1.min(hi));
             if y > x {
-                ix.book_seg(&mut l, s, (x, y), 0);
+                ix.book_seg(&mut l, s, (x, y), Some(&s.key), 0);
             }
         }
     }
     Ok(l)
 }
 
-/// The window's seconds by how many actors worked at once: a main session in its own turn or run (never a wait, the GM's or idle),
-/// an agent inside one of its spans, a page session in one of its phases.
-fn at_once(w: &World, ix: &Ix, order: &[String], paged: &HashSet<String>) -> [f64; 4] {
-    let (lo, hi) = w.window;
-    let mut edges: Vec<(f64, i32)> = Vec::new();
-    let mut put = |a: f64, b: f64| {
-        let (a, b) = (a.max(lo), b.min(hi));
-        if b > a {
-            edges.extend([(a, 1), (b, -1)]);
-        }
-    };
-    for who in order
-        .iter()
-        .filter(|w| w.starts_with("s:") && !paged.contains(*w))
-    {
-        for s in &ix.segs[who] {
-            let working = match &s.what {
-                What::Own(c) => !c.starts_with("the GM") && !c.starts_with("idle"),
-                What::Run(_) => true,
-                What::Wait(..) => false,
-            };
-            if working {
-                put(s.t0, s.t1);
-            }
-        }
-    }
-    for a in w.agents {
-        for sp in &a.spans {
-            put(sp.0, sp.1);
-        }
-    }
-    for p in w.pages {
-        put(p.t0, p.t1);
-    }
-    edges.sort_by(|a, b| a.0.total_cmp(&b.0).then(a.1.cmp(&b.1)));
-    let mut out = [0.0; 4];
-    let (mut n, mut at) = (0_i32, lo);
-    for (t, d) in edges {
-        out[usize::try_from(n).unwrap_or(0).min(3)] += t - at;
-        at = t;
-        n += d;
-    }
-    out[0] += hi - at;
-    out
-}
-
-/// The minutes of every review agent's span and every page-session phase, clipped to the window.
-fn span_minutes(w: &World, ix: &Ix, l: &mut Ledger) {
-    let (lo, hi) = w.window;
-    for (i, a) in w.agents.iter().enumerate() {
-        if let Some(cat) = review_cat(&a.kind) {
-            let secs: f64 = a
-                .spans
-                .iter()
-                .map(|s| (s.1.min(hi) - s.0.max(lo)).max(0.0))
-                .sum();
-            l.add(
-                &ix.agent_key[i],
-                cat,
-                "",
-                Cell {
-                    min: secs,
-                    ..Cell::default()
-                },
-            );
-        }
-    }
-    for p in w.pages {
-        l.add(
-            &p.key,
-            PAGES,
-            "",
-            Cell {
-                min: (p.t1.min(hi) - p.t0.max(lo)).max(0.0),
-                ..Cell::default()
-            },
-        );
-    }
-}
+mod clue;
+mod window;
+use window::{at_once, span_minutes};
 
 #[cfg(test)]
 pub mod tests;

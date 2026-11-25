@@ -171,8 +171,9 @@ fn a_landed_task_carries_its_time_before_the_window() {
     // the session's clock runs 10:00:00-10:06:50, 410 s; the window holds its last 230 s, and the window's own figures stay its own
     let r = late("1h");
     for want in [
-        "minutes 5.6 (machine, overlapping), blocking 3.8 (the main sessions' clock)",
-        "Its whole time, from 2026-11-25T09:03:00Z: 8.9 min, 6.8 min blocking; inside the window 4.8 min (53.5% of it), 3.8 min blocking (56.1%);",
+        "minutes 5.6 (machine, overlapping), blocking 3.8 (by task and dependency",
+        "the landed tasks' 3.8)",
+        "Its whole time, from 2026-11-25T09:03:00Z: 8.9 min, 6.8 min blocking; inside the window 4.8 min (53.5% of it), 3.8 min blocking (55.6%);",
     ] {
         assert!(r.stdout.contains(want), "{want}\n---\n{}", r.stdout);
     }
@@ -180,7 +181,7 @@ fn a_landed_task_carries_its_time_before_the_window() {
     // the window's own figures too - 0.8 min of its 3.8
     let z = late("0h").stdout;
     assert!(
-        z.contains("blocking 0.8 (the main sessions' clock)")
+        z.contains("blocking 0.8 (by task and dependency")
             && z.contains("inside the window 2.8 min (100.0% of it), 0.8 min blocking (100.0%)")
     );
     let bad = late("x");
@@ -306,4 +307,21 @@ fn waiting_on_the_gm_is_out_of_every_other_percentage() {
         assert!(out.contains(want), "{want}\n---\n{out}");
     }
     assert!(!is_gm("tests") && is_gm("the GM away"));
+}
+
+/// Work waited on that blocked no task is named in the header, largest first, never in the blocking (451 T243).
+#[test]
+fn waited_on_work_blocking_no_task_is_named_apart() {
+    let mut l = Ledger::default();
+    l.free.insert(book::PAGES.to_owned(), 600.0);
+    l.free.insert("plan review: agents".to_owned(), 120.0);
+    let text = render(
+        (&l, &Ledger::default()),
+        &[],
+        ((0.0, 3600.0), 0.0, &BTreeMap::new()),
+        &columns::Runs::default(),
+    );
+    let want = "blocking no task (a page session or research pass whose brief names none, work whose clue is `Blocks: none`): 12.0 min \
+                - research and page sessions 10.0 - plan review: agents 2.0.\n";
+    assert!(text.contains(want));
 }

@@ -12,7 +12,13 @@ Enforced (451 T237, `rust/guard/src/guards/context_cap_hooks/split.rs`): a build
 context-cap handoff says it stops there; keep that line in every code builder's brief. A claims-round dispatch's prompt opens
 `Run the claims round for feature ...` and is never held.
 
+The block's first line, `Blocks:` (451 T243, the GM 2026-11-25: "a minute should count as blocking. When something else is
+waiting on it to be done before it can be started"), is written on the dispatch's event-log line and read by `make task-time`:
+the task named is the one this builder's time blocks; with none, the builder's own task. A command takes the same clue as
+`L7R_BLOCKS=<feature>:T<n>` (or `none`) before its `make`.
+
 ```
+Blocks: <feature> T<n>   (the task whose next step waits on this work; `Blocks: none` if it runs beside other work)
 STOP POINT. Your work ends when ALL of these hold, and not before:
  - the code is done, red-first, with 100% line coverage on new Rust;
  - `make closing-checks T=<task>` (run_in_background) is green on the final code;

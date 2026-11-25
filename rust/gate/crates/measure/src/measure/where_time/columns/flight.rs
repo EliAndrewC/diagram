@@ -60,8 +60,9 @@ pub struct Agent {
     /// 2026-11-21 (feature 451 T11, a Python pass over the log's Agent calls, their agents' first start and stop). The stop first stays
     /// right for those lines.
     pub task: String,
-    /// Each span, a start to the first stop after it, else to the window's end; cut to the window and merged by `spent::clip` where the
-    /// command reads the agents' minutes.
+    /// Each span, a start to the first stop after it; a start no stop follows ends at the agent's last own call before its next start,
+    /// else (no call: still running) at the window's end (451 T243); cut to the window and merged by `spent::clip` where the command
+    /// reads the agents' minutes.
     pub spans: Vec<(f64, f64)>,
     /// Its last stop's `tok` (D6: a stop is cumulative), with that stop's `adv` (451 T69), if any stop carried one.
     pub tok: Option<super::spent::Tok>,
@@ -77,7 +78,8 @@ const MONITOR: usize = AGENT + 2;
 /// `SubagentStop` lines from EVERY feature's log (`events::lines_of`), since they are filed by the active feature as the turn lines are:
 /// of the main session's since 2026-11-20T04:33Z, 75 starts and 61 stops sat in 449's log, and 9 of the 115 agents a `Stop` named in
 /// flight had their start only there, measured 2026-11-21 (`/tmp/t09/scripts/agents.py` over both logs). A resumed agent starts again
-/// under its id (31 did), so each start opens a span to the first stop after it, else to `end`; a line two logs hold is read once. An
+/// under its id (31 did), so each start opens a span to the first stop after it, else to its last own call (`Agent::spans`), else to
+/// `end`; a line two logs hold is read once. An
 /// agent is this feature's only where a line of `stream` (the feature's own log) names it - its launch's `aid` or its own calls' `by`:
 /// read from every log, the 449 agents the session ran over two hours of 2026-11-20 (08:32-09:35Z, 10:42-11:46Z, between 451's turns)
 /// were booked to 451's waits, observed 2026-11-21, method: `/tmp/t09/scripts/idle.py` and `held.py` over both logs.
@@ -141,17 +143,15 @@ pub fn flight(runs: &Runs, agents: &[Event], stream: &[Event], end: f64) -> Resu
             }
         }
     }
+    let own = own_calls(stream)?;
     let mut at: HashMap<String, usize> = HashMap::new();
     for (i, (t0, e)) in lines.iter().enumerate() {
         if !is(e, "ev", "SubagentStart") {
             continue;
         }
         let aid = or_s(e, "aid");
-        let stop = lines[i..]
-            .iter()
-            .find(|(_, x)| is(x, "ev", "SubagentStop") && or_s(x, "aid") == aid);
         let kind = kinds.get(&aid).map_or("?", String::as_str);
-        let t1 = stop.map_or(end, |(t, _)| *t);
+        let t1 = span_end(&lines[i + 1..], &aid, (*t0, end), own.get(&aid));
         let i = *at.entry(aid.clone()).or_insert_with(|| {
             f.agents.push(Agent {
                 aid: aid.clone(),
@@ -175,6 +175,43 @@ pub fn flight(runs: &Runs, agents: &[Event], stream: &[Event], end: f64) -> Resu
         });
     }
     Ok(f)
+}
+
+/// aid -> the times of its own calls (`by`), for a span no stop ends ([`span_end`]).
+fn own_calls(stream: &[Event]) -> Result<HashMap<String, Vec<f64>>, Raised> {
+    let mut own: HashMap<String, Vec<f64>> = HashMap::new();
+    for e in stream {
+        let by = or_s(e, "by");
+        if !by.is_empty() {
+            own.entry(by).or_default().push(t_of(e)?);
+        }
+    }
+    Ok(own)
+}
+
+/// The end of agent `aid`'s span begun at `t0`, `after` its lines after the start: its next line if a stop; a start with no stop (an
+/// agent cut off, its stop in no log read) ends at its last own call before its next start or `end`, with none at `end` (still
+/// running). Before this every unstopped span ran to the window's end: on 2026-11-25 eight agents, three started before a 24-hour
+/// window, held `make task-time`'s "Working at once" at three or more for all 1,440 min (451 T243).
+fn span_end(
+    after: &[(f64, &Event)],
+    aid: &str,
+    (t0, end): (f64, f64),
+    own: Option<&Vec<f64>>,
+) -> f64 {
+    let next = after.iter().find(|(_, x)| or_s(x, "aid") == aid);
+    match next {
+        Some((t, x)) if is(x, "ev", "SubagentStop") => *t,
+        _ => {
+            let until = next.map_or(end, |(t, _)| *t);
+            own.into_iter()
+                .flatten()
+                .copied()
+                .filter(|t| t0 <= *t && *t <= until)
+                .reduce(f64::max)
+                .unwrap_or(until)
+        }
+    }
 }
 
 impl Flight {

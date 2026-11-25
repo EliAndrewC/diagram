@@ -121,7 +121,7 @@ fn a_stop_naming_none_books_the_sessions_own_runs() {
 }
 
 /// A resumed agent starts again under its id: each start opens its own span, to the first stop after it, its kind from the start that
-/// names one; a line two logs hold is read once, and a start with no stop runs to the window's end.
+/// names one; a line two logs hold is read once, and a start with no stop and no own call runs to the window's end.
 #[test]
 fn a_resumed_agent_is_in_flight_in_each_of_its_spans() {
     let at = |m: u32| format!("2026-11-01T08:{m:02}:00Z");
@@ -153,6 +153,50 @@ fn a_resumed_agent_is_in_flight_in_each_of_its_spans() {
             ("plan review".to_owned(), "agent", 600.0),
             (UNBOOKED.to_owned(), "", 600.0),
             ("plan review".to_owned(), "agent", 300.0),
+        ]
+    );
+}
+
+/// A start no stop follows ends at the agent's last own call before its next start, or the window's end where it made none: an agent
+/// cut off (its stop in no log read) is not in flight to the window's end (451 T243: on 2026-11-25 eight such agents held `make
+/// task-time`'s "Working at once" at three or more for all 1,440 minutes of a day).
+#[test]
+fn an_unstopped_agent_ends_at_its_last_own_call() {
+    let at = |m: u32| format!("2026-11-01T08:{m:02}:00Z");
+    let t = |m: u32| ts(&at(m)).unwrap();
+    let start = |m: u32, aid: &str| {
+        ev(
+            &json!({"t": at(m), "ev": "SubagentStart", "sid": "s", "aid": aid, "agent": "general-purpose"}),
+        )
+    };
+    let call = |m: u32, aid: &str| {
+        ev(&json!({"t": at(m), "ev": "PreToolUse", "sid": "s", "by": aid, "tool": "Read"}))
+    };
+    let lines = [
+        start(0, "a1"),
+        call(5, "a1"),
+        call(12, "a1"),
+        start(20, "a1"),
+        call(25, "a1"),
+        start(30, "a2"),
+    ];
+    let agents: Vec<Event> = lines
+        .iter()
+        .filter(|e| is(e, "ev", "SubagentStart"))
+        .cloned()
+        .collect();
+    let f = flight(&Runs::default(), &agents, &lines, t(50)).unwrap();
+    let spans: Vec<(String, Vec<(f64, f64)>)> = f
+        .agents
+        .iter()
+        .map(|a| (a.aid.clone(), a.spans.clone()))
+        .collect();
+    assert_eq!(
+        spans,
+        vec![
+            ("a1".to_owned(), vec![(t(0), t(12)), (t(20), t(25))]),
+            // no own call: still running, to the window's end
+            ("a2".to_owned(), vec![(t(30), t(50))]),
         ]
     );
 }

@@ -243,6 +243,7 @@ fn a_monitor_wait_goes_to_the_page_session_and_the_gm_is_named() {
         t1: ts(&at("06:20")).unwrap(),
         key: ("454-y".to_owned(), "T3".to_owned()),
         sid: "pg".to_owned(),
+        blocks: String::new(),
     };
     // the page session's own lines: a session of its own, whose turns and runs are its phase's, nobody's clock
     for (t, ev, tool) in [
@@ -260,6 +261,15 @@ fn a_monitor_wait_goes_to_the_page_session_and_the_gm_is_named() {
             .unwrap()
             .total_cmp(&ts(b["t"].as_str().unwrap()).unwrap())
     });
+    // its brief names no task: waited on, blocking nothing (451 T243)
+    let free = booked(&mon, &aside, &commands, &[page.clone()]);
+    assert_eq!(by_cat(&free)[PAGES], (320.0, 0.0, 0.0));
+    assert_eq!(free.free[PAGES], 255.0);
+    // its brief's `Blocks: 454 T3`: the task it names, the feature's number read as the feature it opens
+    let page = Page {
+        blocks: "454 T3".to_owned(),
+        ..page
+    };
     let l = booked(&mon, &aside, &commands, &[page.clone()]);
     let got = by_cat(&l);
     assert_eq!(got[PAGES], (320.0, 255.0, 0.0));
@@ -402,7 +412,7 @@ fn the_edges_of_a_day_are_booked() {
         line(
             &json!({"t": at("00:06"), "sid": "s", "ev": "SubagentStart", "aid": "B", "agent": "general-purpose"}),
         ),
-        // the builder's last line: it never stops, so its span runs to the window's end with no line of its
+        // the builder's last line: it never stops, so its span ends here, at its last own call (451 T243)
         pre("00:07", "Read", "rb", "B", &none),
         post("00:08", "Read", "rb", "B", &none),
         // the session's own background wait on the page queue
@@ -463,6 +473,7 @@ fn the_edges_of_a_day_are_booked() {
         t1: ts(&at("04:30")).unwrap(),
         key: ("451-x".to_owned(), "T2".to_owned()),
         sid: "pg".to_owned(),
+        blocks: String::new(),
     };
     let l = booked_to(
         &stream,
@@ -483,13 +494,13 @@ fn the_edges_of_a_day_are_booked() {
         ("main session: writing its reply", (46.0, 46.0, 0.0)),
         // the builder's two lines, before anybody waited on it
         ("builders: reading code", (2.0, 0.0, 0.0)),
-        // the first stop's 170 s and each wait loop's launch second: the builder ends last, and no line of its covers them
-        (UNLINED, (0.0, 173.0, 0.0)),
-        // the wait loops held open 170 s and 100 s; their blocking is the page session's hour, then the loop's own 30 s
+        // the wait loops held open 170 s and 100 s; the page session they waited on names no task in its brief, so its hour and the
+        // second launching the second loop block nothing (below)
         (program::PAGE_WAIT, (270.0, 0.0, 0.0)),
-        (PAGES, (90.0, 60.0, 0.0)),
-        // the builder-style loop held open 50 s; blocking, the page loop's own 30 s and this loop's 40 s
-        (program::WAIT, (50.0, 70.0, 0.0)),
+        (PAGES, (90.0, 0.0, 0.0)),
+        // blocking, the loops' own time with no page session running: the first stop's 160 s to 03:00 (the builder ended at 00:08),
+        // the first and third loops' launch seconds, the second loop's 30 s after the page session, and the builder-style loop's 40 s
+        (program::WAIT, (50.0, 232.0, 0.0)),
         // 05:00-05:30 (m2, which the 03:30 stop's loop waited on, ended at 05:00) and 11:12:00-11:13:00 (the loop x3 ended at 11:12)
         (NOTHING_ENDED, (0.0, 90.0, 0.0)),
         // 11:10:10-11:11:00: a stop naming nothing, then a notice woke it
@@ -502,8 +513,12 @@ fn the_edges_of_a_day_are_booked() {
     .map(|(k, v)| (k.to_owned(), v))
     .collect();
     assert_eq!(got, want);
-    // every second of the session's clock, 10:00:00 to 12:20:00, is booked once
-    let clock: f64 = got.values().map(|v| v.1).sum();
+    // the page session's 60 s and the second loop's launch second, waited on, blocking no task; and 03:00-03:10, the first loop ended
+    // and the page session running, untracked: a wait on what it blocks, nothing
+    assert_eq!(l.free.get(PAGES).copied(), Some(61.0));
+    assert_eq!(l.free.get(NOTHING_PAGES).copied(), Some(10.0));
+    // every second of the session's clock, 10:00:00 to 12:20:00, is booked once: as blocking, or as waited on blocking nothing
+    let clock: f64 = got.values().map(|v| v.1).sum::<f64>() + l.free.values().sum::<f64>();
     assert!((clock - 8400.0).abs() < 1e-6);
     // from 03:10 the first page-queue wait (00:10-03:00) is before the window: one run of the label counted, not two
     let late = booked_to(
@@ -545,7 +560,7 @@ fn a_wait_past_the_depth_bound_is_booked_to_its_fallback() {
         what: What::Wait(Vec::new(), NOTHING.to_owned()),
     };
     let mut l = Ledger::default();
-    ix.book_seg(&mut l, &seg, (1.0, 3.0), 8);
+    ix.book_seg(&mut l, &seg, (1.0, 3.0), Some(&seg.key), 8);
     let c = &l.cells[&(key, NOTHING.to_owned(), String::new())];
     assert!((c.block - 2.0).abs() < 1e-9 && c.min.abs() < 1e-9);
 }
@@ -585,6 +600,7 @@ fn a_wait_with_nothing_in_flight_is_classed_by_what_came_before_and_after_it() {
         t1: 6.0,
         key: key.clone(),
         sid: "p".to_owned(),
+        blocks: String::new(),
     }];
     let world = World {
         stream: &[],
@@ -620,9 +636,12 @@ fn a_wait_with_nothing_in_flight_is_classed_by_what_came_before_and_after_it() {
         what: What::Wait(Vec::new(), NOTHING_WOKEN.to_owned()),
     };
     let mut l = Ledger::default();
-    ix.book_seg(&mut l, &seg, (0.0, 10.0), 0);
+    ix.book_seg(&mut l, &seg, (0.0, 10.0), Some(&seg.key), 0);
     let block = |c: &str| l.cells[&(key.clone(), c.to_owned(), String::new())].block;
-    assert!((block(NOTHING_PAGES) - 2.0).abs() < 1e-9 && (block(NOTHING_WOKEN) - 8.0).abs() < 1e-9);
+    // the piece under the page session blocks what it blocks: its brief names nothing, so nothing (451 T243)
+    assert!(
+        (l.free[NOTHING_PAGES] - 2.0).abs() < 1e-9 && (block(NOTHING_WOKEN) - 8.0).abs() < 1e-9
+    );
 }
 
 #[test]
@@ -630,53 +649,160 @@ fn a_wait_with_nothing_in_flight_is_classed_by_what_came_before_and_after_it() {
     clippy::float_cmp,
     reason = "seconds summed from whole-second times, exact"
 )]
-fn a_page_session_blocks_only_where_nothing_else_waited_on_is_in_flight() {
+fn a_page_session_blocks_only_the_task_its_brief_names() {
     let runs = Runs::default();
     let commands = HashMap::new();
     let key = ("451-x".to_owned(), "T1".to_owned());
     // a page session ran 0-10 s beside a plan review the session waited on, 0-4 s
-    let pages = [Page {
+    let page = Page {
         t0: 0.0,
         t1: 10.0,
         key: key.clone(),
         sid: "p".to_owned(),
-    }];
+        blocks: String::new(),
+    };
     let agents = [columns::Agent {
         aid: "R".to_owned(),
         kind: "spec-fidelity".to_owned(),
         spans: vec![(0.0, 4.0)],
         ..columns::Agent::default()
     }];
-    let world = World {
-        stream: &[],
-        runs: &runs,
-        commands: &commands,
-        agents: &agents,
-        pages: &pages,
-        window: (0.0, 10.0),
-    };
-    let ix = Ix::new(&world);
     let seg = Seg {
         t0: 0.0,
         t1: 10.0,
         key: key.clone(),
         what: What::Wait(vec![Cand::Agent(0), Cand::Pages], MONITOR.to_owned()),
     };
-    let mut l = Ledger::default();
-    ix.book_seg(&mut l, &seg, (0.0, 10.0), 0);
-    let block = |c: &str| {
+    let booked = |pages: &[Page]| {
+        let world = World {
+            stream: &[],
+            runs: &runs,
+            commands: &commands,
+            agents: &agents,
+            pages,
+            window: (0.0, 10.0),
+        };
+        let ix = Ix::new(&world);
+        let mut l = Ledger::default();
+        ix.book_seg(&mut l, &seg, (0.0, 10.0), Some(&seg.key), 0);
+        l.at_once = at_once(&world, &ix, &[], &std::collections::HashSet::new());
+        l
+    };
+    let block = |l: &Ledger, c: &str| {
         l.cells
             .iter()
             .filter(|((_, cat, _), _)| cat == c)
             .map(|(_, v)| v.block)
             .sum::<f64>()
     };
-    // the review's 4 s are the review's, though the page session ends later; the page session's are its 6 s alone
-    assert!((block("plan review: agents") - 4.0).abs() < 1e-9);
-    assert!((block(PAGES) - 6.0).abs() < 1e-9);
-    // two actors at once 0-4 s, one 4-10 s
+    // no `Blocks:` line: the page session blocks nothing though it ends last; the review blocks the waiter's task, 4 s
+    let free = booked(std::slice::from_ref(&page));
     assert_eq!(
-        at_once(&world, &ix, &[], &std::collections::HashSet::new()),
-        [0.0, 6.0, 4.0, 0.0]
+        (block(&free, "plan review: agents"), block(&free, PAGES)),
+        (4.0, 0.0)
     );
+    assert_eq!(free.free[PAGES], 6.0);
+    // `Blocks: T7`: the page session blocks T7, ending last, so it holds the whole wait (the critical one)
+    let named = booked(&[Page {
+        blocks: "T7".to_owned(),
+        ..page
+    }]);
+    assert_eq!(
+        named.cells[&(
+            ("451-x".to_owned(), "T7".to_owned()),
+            PAGES.to_owned(),
+            String::new()
+        )]
+            .block,
+        10.0
+    );
+    assert!(named.free.is_empty());
+    // two actors at once 0-4 s, one 4-10 s
+    assert_eq!(named.at_once, [0.0, 6.0, 4.0, 0.0]);
+}
+
+/// The defaults where no clue is given, and a clue over each (451 T243, the GM 2026-11-25: "if we need to decide which of two
+/// implementations to perform, and ... that research must complete prior to us beginning our implementation work, then that research is
+/// blocking"; "it doesn't have to be 100% exact").
+#[test]
+#[expect(
+    clippy::float_cmp,
+    reason = "seconds summed from whole-second times, exact"
+)]
+fn blocking_follows_each_default_and_each_clue() {
+    let commands = HashMap::new();
+    let mut r = run("tests", &["rust-test"], "x9");
+    (r.t0, r.t1, r.bg) = (0.0, 10.0, true);
+    let mut r2 = run("tests", &["rust-test"], "x8");
+    (r2.t0, r2.t1, r2.bg) = (0.0, 10.0, true);
+    let runs = Runs {
+        runs: vec![r, r2],
+        ..Runs::default()
+    };
+    let agent = |aid: &str, kind: &str, task: &str| columns::Agent {
+        aid: aid.to_owned(),
+        kind: kind.to_owned(),
+        task: task.to_owned(),
+        spans: vec![(0.0, 10.0)],
+        ..columns::Agent::default()
+    };
+    let agents = [
+        agent("P", "research-pass", ""),
+        agent("Q", "research-pass", ""),
+        agent("C", "spec-fidelity", ""),
+        agent("B", "general-purpose", "T8"),
+    ];
+    // the clues as the event log writes them: a dispatch's on its Agent lines, a command's on its call's
+    let stream = [
+        line(&json!({"ev": "PostToolUse", "tool": "Agent", "id": "q", "aid": "Q", "blocks": "T4"})),
+        line(
+            &json!({"ev": "PostToolUse", "tool": "Agent", "id": "c", "aid": "C", "blocks": "none"}),
+        ),
+        line(&json!({"ev": "PostToolUse", "tool": "Agent", "id": "b", "aid": "B"})),
+        line(&json!({"ev": "PreToolUse", "tool": "Bash", "id": "x9", "blocks": "451 T9"})),
+    ];
+    let world = World {
+        stream: &stream,
+        runs: &runs,
+        commands: &commands,
+        agents: &agents,
+        pages: &[],
+        window: (0.0, 10.0),
+    };
+    let ix = Ix::new(&world);
+    let waiter = ("451-x".to_owned(), "T1".to_owned());
+    let mut l = Ledger::default();
+    for c in [
+        Cand::Agent(0),
+        Cand::Agent(1),
+        Cand::Agent(2),
+        Cand::Agent(3),
+        Cand::Run(0),
+        Cand::Run(1),
+    ] {
+        ix.descend(&mut l, &[c], (0.0, 10.0), Some(&waiter), MONITOR, 0);
+    }
+    let at = |task: &str, cat: &str| {
+        l.cells
+            .get(&(
+                ("451-x".to_owned(), task.to_owned()),
+                cat.to_owned(),
+                if cat == "tests" { "make rust-test" } else { "" }.to_owned(),
+            ))
+            .map_or(0.0, |c| c.block)
+    };
+    // a research pass with no clue blocks nothing; with `Blocks: T4`, T4
+    assert_eq!((l.free[PAGES], at("T4", PAGES)), (10.0, 10.0));
+    // a review agent `Blocks: none` blocks nothing
+    assert_eq!(l.free["plan review: agents"], 10.0);
+    // a builder its own task (its brief's), its time no line of its covers
+    assert_eq!(at("T8", UNLINED), 10.0);
+    // a background run `L7R_BLOCKS=451:T9` that task; with none, the waiter's
+    assert_eq!((at("T9", "tests"), at("T1", "tests")), (10.0, 10.0));
+    // and a clue's words read: none, a task alone under the work's own feature, a feature's number as the feature it opens
+    let k = |f: &str, t: &str| Some((f.to_owned(), t.to_owned()));
+    assert_eq!(ix.resolve("none", Some(&waiter), "451-x"), None);
+    assert_eq!(ix.resolve("T5", None, "451-x"), k("451-x", "T5"));
+    assert_eq!(ix.resolve("451 T5", None, ""), k("451-x", "T5"));
+    assert_eq!(ix.resolve("999 T5", None, ""), k("999", "T5"));
 }

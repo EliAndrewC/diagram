@@ -23,6 +23,23 @@ pattern!(TASK_ID, r"<task-id>([^<]+)</task-id>");
 pattern!(STATUS, r"<status>([^<]+)</status>");
 pattern!(SUMMARY, r"<summary>([^<]*)</summary>");
 pattern!(EXIT_CODE, r"exit code (-?\d+)");
+pattern!(BLOCKS_LINE, r"(?m)^Blocks:[ \t]*(\S[^\n]*?)[ \t]*$");
+pattern!(BLOCKS_ENV, r#"\bL7R_BLOCKS=(?:"([^"]*)"|'([^']*)'|(\S+))"#);
+
+/// A dispatch brief's or a page brief's BLOCKS CLUE (451 T243, the GM 2026-11-25: "to the extent that we can pass that kind of context
+/// clues to our tooling when the data is collected ... that will make it easier"): its line `Blocks: <feature> T<n>`, `Blocks: T<n>`
+/// or `Blocks: none` - the task whose next step waits on this work, or none - as written. The task time breakdown books by it.
+#[must_use]
+pub fn blocks_line(text: &str) -> Option<String> {
+    first_group(&BLOCKS_LINE, text)
+}
+
+/// A command's clue, `L7R_BLOCKS=<feature>:T<n>` (or quoted, `"451 T5"`, or `none`), its `:` read as a space.
+fn blocks_env(command: &str) -> Option<String> {
+    let c = BLOCKS_ENV.captures(command).ok().flatten()?;
+    let v = (1..=3).find_map(|i| c.get(i))?.as_str();
+    Some(v.replace(':', " ").trim().to_owned())
+}
 
 /// The fields a tool's own call adds to its line.
 pub(super) fn tool_fields(
@@ -42,6 +59,7 @@ pub(super) fn tool_fields(
             }
         }
         let target = all.first().cloned().unwrap_or_default();
+        out.extend(blocks_env(&command).map(|b| ("blocks".to_owned(), Value::from(b))));
         if all.len() > 1 {
             out.insert("makes".into(), Value::from(all));
         }
@@ -87,6 +105,7 @@ pub(super) fn tool_fields(
                 .unwrap_or_else(|| Value::from("general-purpose")),
         );
         let prompt = text_of(ti.get("prompt"));
+        out.extend(blocks_line(&prompt).map(|b| ("blocks".to_owned(), Value::from(b))));
         if let Some(m) = first_group(&MANIFEST, &prompt) {
             out.insert("manifest".into(), Value::from(m));
         }

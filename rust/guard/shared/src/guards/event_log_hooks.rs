@@ -993,6 +993,7 @@ mod fields;
 mod filed;
 pub mod read;
 
+pub use fields::blocks_line;
 pub use filed::{brief_feature, in_force, started, starts, Start};
 
 #[cfg(test)]

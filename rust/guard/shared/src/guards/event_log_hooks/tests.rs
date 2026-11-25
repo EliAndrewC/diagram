@@ -847,3 +847,37 @@ fn a_phase_line_is_one_form() {
     let want = json!({"ev": "Phase", "src": "hooks", "step": "suite", "t0": "1970-01-01T00:00:01.500Z", "t1": "1970-01-01T00:00:04.000Z", "t": "1970-01-01T00:00:04.000Z", "code": 1, "make": "done", "clone": "/c"});
     assert_eq!(got, want);
 }
+
+#[test]
+fn a_dispatch_or_a_command_carries_its_blocks_clue() {
+    let t = "T";
+    // the Blocks clue (451 T243, the GM 2026-11-25: "pass that kind of context clues to our tooling when the data is collected"): a
+    // dispatch's `Blocks:` line, a command's `L7R_BLOCKS=`, each normalized; none written where none is given
+    let clue =
+        |tool: &str, input: &Value| line(&json!({"tool_name": tool, "tool_input": input}), t);
+    for (tool, input, want) in [
+        (
+            "Agent",
+            json!({"prompt": "Do X.\nBlocks: 451 T243\nSTOP POINT."}),
+            Some("451 T243"),
+        ),
+        ("Agent", json!({"prompt": "Blocks:  none "}), Some("none")),
+        ("Agent", json!({"prompt": "it blocks: nothing"}), None),
+        (
+            "Bash",
+            json!({"command": "L7R_BLOCKS=451:T5 make rust-test"}),
+            Some("451 T5"),
+        ),
+        (
+            "Bash",
+            json!({"command": "L7R_BLOCKS=\"451 T5\" make quick"}),
+            Some("451 T5"),
+        ),
+        ("Bash", json!({"command": "make quick"}), None),
+    ] {
+        let row = clue(tool, &input);
+        let got = row.get("blocks").and_then(Value::as_str);
+        assert_eq!(got, want, "{input}");
+    }
+    assert_eq!(super::blocks_line("x\nBlocks: T3"), Some("T3".to_owned()));
+}

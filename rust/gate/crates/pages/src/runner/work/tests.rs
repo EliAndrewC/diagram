@@ -126,7 +126,7 @@ fn a_queue_continues_retries_plans_and_stops_on_a_refusal() {
     put(Path::new(&a), &write_brief(1));
     put(
         &Path::new(&w.root).join("b.md"),
-        "<!-- page-load: kind=assertions -->",
+        "<!-- page-load: kind=assertions -->\nBlocks: 451 T9\n",
     );
     put(&w.stub.join("continue"), "<!-- page-load: kind=check -->");
     put(&w.stub.join("fail-once"), "");
@@ -179,6 +179,7 @@ fn a_queue_continues_retries_plans_and_stops_on_a_refusal() {
     // feature 451 T153: each session run to its end is one Phase line, its kind its step, its id its name
     let events = std::fs::read_dir(Path::new(&w.root).join(".git/l7r-events")).unwrap();
     let mut phases: Vec<(String, String, i64)> = Vec::new();
+    let mut blocks: Vec<Option<String>> = Vec::new();
     for f in events.flatten() {
         for l in std::fs::read_to_string(f.path()).unwrap().lines() {
             let v: Value = serde_json::from_str(l).unwrap();
@@ -188,6 +189,7 @@ fn a_queue_continues_retries_plans_and_stops_on_a_refusal() {
                     v["step"].as_str().unwrap().to_owned(),
                     v["code"].as_i64().unwrap(),
                 ));
+                blocks.push(v["blocks"].as_str().map(str::to_owned));
             }
         }
     }
@@ -198,6 +200,8 @@ fn a_queue_continues_retries_plans_and_stops_on_a_refusal() {
     ]
     .map(|(a, b, c)| (a.to_owned(), b.to_owned(), c));
     assert_eq!(phases, want);
+    // 451 T243: a brief's `Blocks:` line rides on its session's Phase line, none written where the brief gives none
+    assert_eq!(blocks, [None, None, Some("451 T9".to_owned())]);
     let named = index
         .lines()
         .map(|l| l.split(' ').next().unwrap().to_owned())

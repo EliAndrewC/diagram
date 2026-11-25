@@ -120,7 +120,11 @@ group's writing declares `<!-- page-load: kind=<kind> -->`, one of `check`, `ass
 is not capped. Keys are not known before writing, so `make reserve` refuses a write session's eleventh registry key
 with the continuation: the session writes its unreached items to `$L7R_CONTINUE`, commits and stops, and the runner
 queues that brief next, before the group's checks. Escapes: `WRITE_CAP_OK='<reason>'`, `KEY_CAP_OK='<reason>'`,
-each logged. **Coordination files by line**: 619 whole reads of the claims file, 418 of handoffs and 388 of checks
+each logged. **A brief's `Blocks:` line** (451 T243, the GM 2026-11-25: "to the extent that we can pass that kind of
+context clues to our tooling when the data is collected ... that will make it easier"): a brief carries `Blocks: <feature>
+T<n>` when that task's next step waits on the page's result (research deciding which of two implementations to build),
+`Blocks: none` when it runs beside other work; the runner writes it on the session's `Phase` line, and `make task-time`
+books the session's time as blocking that task, none given as blocking nothing. **Coordination files by line**: 619 whole reads of the claims file, 418 of handoffs and 388 of checks
 reports carried about 60 M tokens (5%), so a session reads its own lines with `make lines FILE= KEY=` and adds one
 with `make append FILE= LINE=`. And a headless page session carries `scripts/container/page-session-rules.md` in
 place of the root CLAUDE.md (about 5,200 tokens a turn).

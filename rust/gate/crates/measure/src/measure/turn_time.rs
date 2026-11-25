@@ -1,5 +1,5 @@
 //! How long the model takes per turn, against the context it reads (feature 375 amendment 7, FR-034, `research.md` R5; feature 449 T120,
-//! from `turn_time.py`, under `ask:449-T83-scope`).
+//! from `turn_time.py`, under `ask:449-T83-scope`). A timing gathered in support of the task time breakdown (`make task-time`, 451 T243).
 //!
 //! A TURN is an assistant reply that follows a tool result: its time is from the tool result to the reply. Each turn's context is the
 //! input tokens it read (cached, cache-written and fresh) and its output tokens are what it wrote. A least-squares fit of time on context

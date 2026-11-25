@@ -12,7 +12,7 @@ use std::fs::File;
 use std::io::Write as _;
 use std::path::{Path, PathBuf};
 
-use l7r_shared::guards::event_log_hooks::{append_row_with, phase_row};
+use l7r_shared::guards::event_log_hooks::{append_row_with, blocks_line, phase_row};
 use serde_json::Value;
 
 use super::retry::{failed, first_line, resume_command, wait_for, RETRIES};
@@ -324,6 +324,9 @@ fn phase_line(run: &Run, item: &Value, began: std::time::SystemTime, rc: i32) {
         root,
     );
     row.insert("name".into(), Value::from(field(item, "sid")));
+    // the task this session's work blocks, from its brief's `Blocks:` line (451 T243; none given: it blocks nothing)
+    let brief = read_lossy(Path::new(field(item, "brief")));
+    row.extend(blocks_line(&brief).map(|b| ("blocks".to_owned(), Value::from(b))));
     let env = |k: &str| {
         run.environ
             .iter()

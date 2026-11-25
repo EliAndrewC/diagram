@@ -705,7 +705,7 @@ gm-reviewed:    ## [project] the GM has reviewed a feature's rows; OVERTURN=<row
 	@if [ -z "$(F)" ]; then printf 'make gm-reviewed: F=<feature> is required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && $(if $(ROW),scripts/gates/l7r-gate.sh gm-review reviewed-row "$(F)" "$(ROW)",scripts/gates/l7r-gate.sh gm-review reviewed "$(F)" $(if $(OVERTURN),"$(OVERTURN)" "$(TO)",))
 
-feature-report: ## [project] where a feature's time and dispatches went, as a table, from the event log, the run log and git   F=375 [TRANSCRIPT="<jsonl> ..."] [SINCE=<ISO>] [UNTIL=<ISO>] [WRITE=1]
+feature-report: ## [project] where a feature's time and dispatches went, as a table, from the event log, the run log and git (its timing columns read the lines that feed the task time breakdown, make task-time, 451 T243)   F=375 [TRANSCRIPT="<jsonl> ..."] [SINCE=<ISO>] [UNTIL=<ISO>] [WRITE=1]
 ##  F=<NNN>            the feature
 ##  TRANSCRIPT=<files> session transcripts to convert where the event log has no lines (a feature before 375)
 ##  SINCE= UNTIL=      ISO UTC bounds on the events read (a transcript holding more than this feature)
