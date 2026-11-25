@@ -208,3 +208,11 @@ The GM, 2026-11-25, on the research queued (relayed by the coordinating session 
 > because none of the research that we currently have queued is particularly important, in terms of being blocking, or likely to significantly change our scripted map generation, then I would like to essentially defer all of it until at least tomorrow ... will our current procedures end up inadvertently kicking off a bunch of research tasks ... If so, then what can we do about that?
 
 (the coordinating session's build of it, not his words: a `research` switch, open or deferred, beside claims and port - T244)
+
+## 2026-11-25: the escalation check's cost and the Stop hook's false questions (451 T235)
+
+The GM, 2026-11-25, after pasting a QUESTION UNFILTERED refusal of a message that asked him nothing (verbatim, dictated; voice substitutions none; the cost is his figure as dictated):
+
+> So you have already told me what the cost is roughly for each of these at about $70,000 tokens per run. Though I do have a couple of questions about that. One is that you said 1.85 million tokens in, but I thought that our context window was only 1 million tokens at a maximum. So what does it mean for something to be 1.85 million tokens? Another question is, whether or not there are more efficient ways to do this Or efficiencies that we can add to augment this.
+
+(the session's reply, not his words, listed the levers: stop the false firings, which T235 fixes; a mechanical pre-filter, the hook sending the agent only messages that put something to him - a sentence ending in "?" addressed to him, or an offer - "T235's natural shape"; and a narrower bundle for the check, which is a separate change. The coordinating session's T235 brief relays the pre-filter as asked by him that day.)

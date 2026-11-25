@@ -200,6 +200,62 @@ fn asks_and_offers_are_told_apart() {
     assert_eq!(classify("Is it done?").0.len(), 0);
 }
 
+/// 451 T235: the statements the Stop rule read as questions put to the GM on 2026-11-16..25 (each escalation-check run kept them as
+/// information, about 70k tokens each), and the asks and offers beside them that must still fire.
+#[test]
+fn a_statement_that_nothing_waits_on_the_gm_is_no_ask() {
+    let statements = [
+        "Nothing is waiting on you.",
+        "Nothing is waiting on you, but the page session is still running.",
+        "That last message didn't ask you anything, but the hook read it as one.",
+        "Nothing else is waiting on you. Page session P3's check session is still running in the clone.",
+        "Seventeen tasks have landed this stretch; the clone is level with `main` at `b1b4fe`, and nothing is waiting on you.",
+        "**Nothing needs your decision right now.** Two questions came up and neither reached you:",
+        "That last message didn't ask you anything. The Stop hook read `x` as a question to you, the same misreading T235 fixes.",
+        "That lets you see, for example, whether plan reviews cost more in the agent's judging, which would mean smaller sections or fewer rounds.",
+        "- **Started task:** the marker for the task being worked, which one clone holds once.",
+        "The two options differ in which of two piles of text the index covers.",
+        "- **Waiting on you** is still reported, with its minutes and its share of the whole window. Every other percentage uses working time as its denominator: the total less the time spent waiting on you.",
+        "Waiting on you was 458 of 2,340 blocking minutes, 20% of the window.",
+        "- **Your waits:** 442 minutes of waiting on you.",
+        "4. Put a time limit on it, so a run this long stops itself and says why instead of waiting for you to notice.",
+        "| Waiting for you to answer | 0.5 | 1% |",
+    ];
+    for s in statements {
+        assert_eq!(classify(s), (Vec::new(), Vec::new()), "{s}");
+    }
+    let asks = [
+        "Should I redraw the three sheets, or record the deviation?",
+        "Which should I do: start T168, or set 451 down?",
+        "Which one do you want",
+        "**Waiting on you:** the removal command from my earlier message hasn't been run.",
+        "**Waiting on you, not blocking:** the four statements attributed to you with no recorded words.",
+        "T26 is still waiting on your budget answer, so I'm working T22 meanwhile.",
+        "It is not landed, and it is waiting on your go-ahead.",
+        "Waiting on your go-ahead to land it.",
+        "| T22 | Waiting on you: the budget's words |",
+        "| T26 | Waiting on your budget answer |",
+        "This can't land without your call.",
+        "Nothing else needs your decision except the budget.",
+        "Nothing is left but your call on the split.",
+        "It brings back a Python check you chose to delete, so whether to keep it is your call.",
+        "| T22 | yours to decide |",
+    ];
+    for s in asks {
+        assert_eq!(classify(s).0.len(), 1, "{s}");
+    }
+    let offers = [
+        "If you'd rather keep the broader skip, say so and it stands.",
+        "If you agree, I'll file it as a 451 task.",
+        "Say if you want them moved.",
+        "Neither names the wrong thing. Say if that reading is wrong.",
+    ];
+    for s in offers {
+        assert_eq!(classify(s), (Vec::new(), vec![s.to_owned()]), "{s}");
+    }
+    assert_eq!(classify("I can't say if it helps.").1.len(), 0);
+}
+
 #[test]
 fn a_question_owes_the_filter_once_and_a_dispatch_since_the_gm_answers_it() {
     let d = world("ask");

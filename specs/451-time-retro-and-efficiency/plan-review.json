@@ -1560,6 +1560,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T235 (the Stop hook's QUESTION UNFILTERED fired on statements, `Nothing is waiting on you.` and `That lets you see, for example, whether ...` among them, each costing an escalation-check run that kept the reply as information; the GM asked 2026-11-25 for efficiencies in that check (request.md, \"the escalation check's cost\"), and the session's reply named a mechanical pre-filter as T235's shape)": {
+   "sha256": "d47cb904476b8df066b5e02d198959089b73239a3ea127249aed3626707cefdd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "round-arbiter"
+  },
+  "### T235 Approach (checklist part A)": {
+   "sha256": "1dd8dac511b10694976c89dbcdb48c65589b4220fe44712d5006fc096af56372",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -20891,6 +20903,101 @@
      "why": "A worktree's files and index are not in the clone's git status, so the rule's own subject (another writer in the tree the landing ticks in) does not include them. This states the rule's reach and carves no case out of it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T235 (the Stop hook's QUESTION UNFILTERED fired on statements, `Nothing is waiting on you.` and `That lets you see, for example, whether ...` among them, each costing an escalation-check run that kept the reply as information; the GM asked 2026-11-25 for efficiencies in that check (request.md, \"the escalation check's cost\"), and the session's reply named a mechanical pre-filter as T235's shape)",
+    "### T235 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T235-which",
+     "summary": "`which` kept in ASK only as the interrogative (`which (one |of these|...)?(do you|would you|should I|shall I)`)",
+     "class": "within",
+     "why": "The task is to stop statements firing as asks (the task line, and the GM's 2026-11-25 question about efficiencies in the check). On the corpus this alternative fired on 18 F (relative clauses) and on no T that another alternative missed, so no ask is lost; the interrogative form is kept."
+    },
+    {
+     "id": "T235-stated-negation",
+     "summary": "A STATED decision (`your call`, `needs your ...`, `ask you`, `waiting on you`, ...) is exempt when `nothing`/`none`/`nobody`/`neither`/`no one` stands earlier in its clause, or `not`/`never`/`-n't` within two words before it",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Exempting a negated statement (`Nothing is waiting on you`, `didn't ask you anything`) serves the purpose: the GM asked for efficiencies and each false firing costs an escalation-check run. But the bound as written also exempts ordinary asks, which feature 429 FR-002 says are refused and which this section's own goal (item 1) and its Recall paragraph say still fire. The `-n't` within-two-words window exempts `This can't land without your call.` (can't [land without] your call). The clause-wide `nothing` exempts `Nothing else needs your decision except the budget.` and `Nothing is left but your call on the split.` The old rule refused all three. A tighter bound is possible: the negation governs the stated phrase itself, with no `without`/`until`/`unless`/`but`/`except` between them. So the case is not impossible, it is not implied by the GM's words, and the literal rule does not defeat the purpose. The corpus shows no real T lost, but round 1 judged the same way on a constructed form (`Waiting on your go-ahead to land it.`). Fix: tighten the bound, and pin these forms as asks in the new test."
+    },
+    {
+     "id": "T235-stated-measure",
+     "summary": "A STATED decision after `of` or `spent` (`442 minutes of waiting on you`, `the time spent waiting on you`) is a measure, not an ask",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "These are reports of time, and they fired on corpus F messages. `of`/`spent` immediately before the phrase does not reach a decision put to him in any ordinary form, so the bound holds to its purpose: stopping statements from costing a check run, as the GM asked on 2026-11-25."
+    },
+    {
+     "id": "T235-stated-measure-name",
+     "summary": "A sentence-opening `waiting ...` is a measure's name when it is the subject of is/was/were, or when it is a table cell with no `:`",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Judged in two parts. (a) The subject of is/was/were (`**Waiting on you** is still reported`) is a measure's name. That part is LEGITIMATE on its own and is bounded. (b) 'A table cell with no `:`' reaches past measure names to status rows. `| T26 | Waiting on your budget answer |` and `| T22 | Waiting on your go-ahead |` are exempted. In sentence form this section itself treats them as asks or borderline-kept (`T26 is still waiting on your budget answer` stays firing; `Waiting on your go-ahead to land it.` fires). The pinned table ask has a colon, so the test does not reach this form. A tighter bound exists: the row's first cell, or a cell followed by a numeric cell, as in the measure example `| Waiting for you to answer | 0.5 | 1% |`. Fix: bound (b) so that a status cell still fires, and pin a no-colon status cell as an ask."
+    },
+    {
+     "id": "T235-offers",
+     "summary": "OFFER gains `if you agree` and a sentence opening `Say if`",
+     "class": "within",
+     "why": "This adds refusals and removes none. It enforces feature 429 amendment 1's rule that an offer owes the filter, so it is enforcement of what was asked, not unrequested scope. Measured over 6,374 end-of-turn messages: 28 new firings, each an offer on reading. Amendment 1's text is not in the bundle (spec-cited.md carries only 429 FR-002 and 375 FR-044), so this ruling rests on the block's citation of it."
+    },
+    {
+     "id": "T235-borderline",
+     "summary": "The 8 borderline firings stay firing",
+     "class": "within",
+     "why": "No change to them. Each puts something to the GM (a pointer to a question, a deferred decision, a pause for his word, an invitation), so they keep firing under FR-002. The feature-432 kept-id exemption is unchanged. Feature 432's text is not in the bundle, so this rests on the block's citation of it."
+    },
+    {
+     "id": "T235-narrow-prompt",
+     "summary": "A narrower prompt to escalation-check (only the flagged sentences, not the draft) is not built",
+     "class": "within",
+     "why": "The GM's words ask whether more efficient ways exist and do not request this lever. The session's own reply named the narrower bundle as a separate change. Leaving it out drops nothing the GM asked for in T235."
+    },
+    {
+     "id": "T235-strict-question-rule",
+     "summary": "A strict '?'-or-offer detector is not adopted",
+     "class": "within",
+     "why": "The '?'-or-offer wording is the session's sketch, not the GM's words. The sketch's purpose is that only messages putting something to him reach the agent, and the plan's rule implements that purpose. The literal form would drop 24 of the 74 true asks on the corpus (measured 2026-11-25), contrary to feature 429 FR-002. Even read as a narrowing of the relayed brief, it would be LEGITIMATE, because the literal rule defeats the check's purpose."
+    },
+    {
+     "id": "T235-corpus-private",
+     "summary": "The 112-message labeled corpus stays in the session scratchpad, not the repository; the task's named statements are the committed cases",
+     "class": "within",
+     "why": "FR-002 asks for the detector's hit rate, a sample of hits and recall to be recorded, not for the raw messages to be committed. The section records the figures (with date and method) and quotes a sample of the forms, and the repository is public."
+    },
+    {
+     "id": "T235-not-performance",
+     "summary": "`Performance work? no`",
+     "class": "within",
+     "why": "This label decides only scheduling under FR-013, and the task is being done now, so no ordering the GM asked for is lost. It arguably undersells the work: each false firing avoided saves an escalation-check run and a turn, which is the efficiency the GM's 2026-11-25 words ask about. That is not a narrowing of what is built."
+    }
+   ],
+   "tasks": [
+    "T235"
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T235 (the Stop hook's QUESTION UNFILTERED fired on statements, `Nothing is waiting on you.` and `That lets you see, for example, whether ...` among them, each costing an escalation-check run that kept the reply as information; the GM asked 2026-11-25 for efficiencies in that check (request.md, \"the escalation check's cost\"), and the session's reply named a mechanical pre-filter as T235's shape)",
+    "### T235 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T235@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T235's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T235"
+   ]
   }
  ],
  "tasks": {
@@ -33345,6 +33452,90 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T235": {
+   "section_sha256": "2f4c9034767d0c1fd08105b4c385ece3662929ee213c34db6c3c516f71c62abf",
+   "reviewed": "2026-11-25",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T235@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T235's section as it stands"
+    }
+   ],
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "18d6d2be2479cca1c308136364f80ee08aad8d032bed406b93b8e39aa4c08d3d",
+    "reviewed": "2026-11-25",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "T235-which",
+      "summary": "`which` kept in ASK only as the interrogative (`which (one |of these|...)?(do you|would you|should I|shall I)`)",
+      "class": "within",
+      "why": "The task is to stop statements firing as asks (the task line, and the GM's 2026-11-25 question about efficiencies in the check). On the corpus this alternative fired on 18 F (relative clauses) and on no T that another alternative missed, so no ask is lost; the interrogative form is kept."
+     },
+     {
+      "id": "T235-stated-negation",
+      "summary": "A STATED decision (`your call`, `needs your ...`, `ask you`, `waiting on you`, ...) is exempt when `nothing`/`none`/`nobody`/`neither`/`no one` stands earlier in its clause, or `not`/`never`/`-n't` within two words before it",
+      "class": "narrowing",
+      "ruling": "NOT LEGITIMATE",
+      "why": "Exempting a negated statement (`Nothing is waiting on you`, `didn't ask you anything`) serves the purpose: the GM asked for efficiencies and each false firing costs an escalation-check run. But the bound as written also exempts ordinary asks, which feature 429 FR-002 says are refused and which this section's own goal (item 1) and its Recall paragraph say still fire. The `-n't` within-two-words window exempts `This can't land without your call.` (can't [land without] your call). The clause-wide `nothing` exempts `Nothing else needs your decision except the budget.` and `Nothing is left but your call on the split.` The old rule refused all three. A tighter bound is possible: the negation governs the stated phrase itself, with no `without`/`until`/`unless`/`but`/`except` between them. So the case is not impossible, it is not implied by the GM's words, and the literal rule does not defeat the purpose. The corpus shows no real T lost, but round 1 judged the same way on a constructed form (`Waiting on your go-ahead to land it.`). Fix: tighten the bound, and pin these forms as asks in the new test."
+     },
+     {
+      "id": "T235-stated-measure",
+      "summary": "A STATED decision after `of` or `spent` (`442 minutes of waiting on you`, `the time spent waiting on you`) is a measure, not an ask",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "These are reports of time, and they fired on corpus F messages. `of`/`spent` immediately before the phrase does not reach a decision put to him in any ordinary form, so the bound holds to its purpose: stopping statements from costing a check run, as the GM asked on 2026-11-25."
+     },
+     {
+      "id": "T235-stated-measure-name",
+      "summary": "A sentence-opening `waiting ...` is a measure's name when it is the subject of is/was/were, or when it is a table cell with no `:`",
+      "class": "narrowing",
+      "ruling": "NOT LEGITIMATE",
+      "why": "Judged in two parts. (a) The subject of is/was/were (`**Waiting on you** is still reported`) is a measure's name. That part is LEGITIMATE on its own and is bounded. (b) 'A table cell with no `:`' reaches past measure names to status rows. `| T26 | Waiting on your budget answer |` and `| T22 | Waiting on your go-ahead |` are exempted. In sentence form this section itself treats them as asks or borderline-kept (`T26 is still waiting on your budget answer` stays firing; `Waiting on your go-ahead to land it.` fires). The pinned table ask has a colon, so the test does not reach this form. A tighter bound exists: the row's first cell, or a cell followed by a numeric cell, as in the measure example `| Waiting for you to answer | 0.5 | 1% |`. Fix: bound (b) so that a status cell still fires, and pin a no-colon status cell as an ask."
+     },
+     {
+      "id": "T235-offers",
+      "summary": "OFFER gains `if you agree` and a sentence opening `Say if`",
+      "class": "within",
+      "why": "This adds refusals and removes none. It enforces feature 429 amendment 1's rule that an offer owes the filter, so it is enforcement of what was asked, not unrequested scope. Measured over 6,374 end-of-turn messages: 28 new firings, each an offer on reading. Amendment 1's text is not in the bundle (spec-cited.md carries only 429 FR-002 and 375 FR-044), so this ruling rests on the block's citation of it."
+     },
+     {
+      "id": "T235-borderline",
+      "summary": "The 8 borderline firings stay firing",
+      "class": "within",
+      "why": "No change to them. Each puts something to the GM (a pointer to a question, a deferred decision, a pause for his word, an invitation), so they keep firing under FR-002. The feature-432 kept-id exemption is unchanged. Feature 432's text is not in the bundle, so this rests on the block's citation of it."
+     },
+     {
+      "id": "T235-narrow-prompt",
+      "summary": "A narrower prompt to escalation-check (only the flagged sentences, not the draft) is not built",
+      "class": "within",
+      "why": "The GM's words ask whether more efficient ways exist and do not request this lever. The session's own reply named the narrower bundle as a separate change. Leaving it out drops nothing the GM asked for in T235."
+     },
+     {
+      "id": "T235-strict-question-rule",
+      "summary": "A strict '?'-or-offer detector is not adopted",
+      "class": "within",
+      "why": "The '?'-or-offer wording is the session's sketch, not the GM's words. The sketch's purpose is that only messages putting something to him reach the agent, and the plan's rule implements that purpose. The literal form would drop 24 of the 74 true asks on the corpus (measured 2026-11-25), contrary to feature 429 FR-002. Even read as a narrowing of the relayed brief, it would be LEGITIMATE, because the literal rule defeats the check's purpose."
+     },
+     {
+      "id": "T235-corpus-private",
+      "summary": "The 112-message labeled corpus stays in the session scratchpad, not the repository; the task's named statements are the committed cases",
+      "class": "within",
+      "why": "FR-002 asks for the detector's hit rate, a sample of hits and recall to be recorded, not for the raw messages to be committed. The section records the figures (with date and method) and quotes a sample of the forms, and the repository is public."
+     },
+     {
+      "id": "T235-not-performance",
+      "summary": "`Performance work? no`",
+      "class": "within",
+      "why": "This label decides only scheduling under FR-013, and the task is being done now, so no ordering the GM asked for is lost. It arguably undersells the work: each false firing avoided saves an escalation-check run and a turn, which is the efficiency the GM's 2026-11-25 words ask about. That is not a narrowing of what is built."
+     }
+    ],
+    "verdict": "BLOCKED"
+   }
   }
  }
 }

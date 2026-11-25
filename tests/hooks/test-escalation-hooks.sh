@@ -180,6 +180,22 @@ rc=0; final_stop 'Should I also redraw the gate house?' || rc=$?
 [ "$rc" -eq 2 ] && grep -q "QUESTION UNFILTERED" "$HOOK_ERR" && ok "...a new question beside it still owes the filter" || no "a new question passed" "(rc=$rc)"
 rm -rf "$FIX/specs" "$TR"
 
+echo "12. a STATEMENT that nothing waits on the GM is no question (451 T235: 2026-11-16..25's misfirings, each a 70k-token filter run)"
+: > "$TR"; gm_said "carry on"
+for s in 'Nothing is waiting on you.' 'Nothing else is waiting on you. Page session P3'"'"'s check session is still running in the clone.' \
+  'That lets you see, for example, whether plan reviews cost more in the agent'"'"'s judging, which would mean smaller sections or fewer rounds.' \
+  '- **Waiting on you** is still reported, with its minutes and its share of the whole window.' \
+  'That last message didn'"'"'t ask you anything. The Stop hook read it as a question to you.' \
+  '- **Your waits:** 442 minutes of waiting on you.' '- **Started task:** the marker for the task being worked, which one clone holds once.'; do
+  rc=0; final_stop "$s" || rc=$?
+  [ "$rc" -eq 0 ] && ok "a statement passes: ${s:0:50}" || no "a statement was refused as a question" "(rc=$rc) $s"
+done
+rc=0; final_stop '**Waiting on you:** the removal command from my earlier message has not been run.' || rc=$?
+[ "$rc" -eq 2 ] && grep -q "QUESTION UNFILTERED" "$HOOK_ERR" && ok "...while a decision waiting on the GM still owes the filter" || no "a waiting decision passed" "(rc=$rc)"
+rc=0; final_stop 'If you agree, I'"'"'ll file it as a 451 task.' || rc=$?
+[ "$rc" -eq 2 ] && grep -q "OFFER UNFILTERED" "$HOOK_ERR" && ok "...and an offer on the GM's agreement owes it as an offer" || no "an if-you-agree offer passed" "(rc=$rc)"
+rm -f "$TR"
+
 echo "8. outside a work tree the hook does nothing"
 OUT=$(mktemp -d)
 rc=0; printf '{"session_id":"t1"}' | ( cd "$OUT" && "$HOOK" stop 2>/dev/null ) || rc=$?

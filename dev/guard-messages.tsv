@@ -317,10 +317,12 @@ dafb0239f4ca40cd	BASELINE	169	workflow-hooks	refuse	unreviewed - stood before 45
 dbbb6a0e05562710	BASELINE	410	house-style-hooks	notice	unreviewed - house-style's both-spellings notice, a family of 2 keys: 20 shown a session, 8,300 characters, under 2 x 31,680 - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		House style, in this command payload: `—`. Not corrected for you: this
 dc71d96f906bba4d	BASELINE	343	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: source-reader on its prompt: decide first, then check (feature N FR-Na)
 dcaab12843de9898	BASELINE	871	repo-safety-hooks	refuse	unreviewed - repo-safety's force-push refusal: 0 shown a session - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		BLOCKED: git push --force. CLAUDE.md calls this "the one thing that overwrites
+dcb77e69b033dc0f	PASS	386	escalation-hooks	refuse	a17673d9041f37133		QUESTION UNFILTERED: your final message puts something to the GM and no
 de0932ca609ad194	BASELINE	272	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: check-wave unit N / source-reader - a guard of its type
 deb6db8f2bef4d33	BASELINE	181	clone-sync-hooks	notice	unreviewed - stood before 451 T170		clone-sync: <path> holds a running gate's lock - clone merge skipped; mirror
 e09f17b92e1ea58c	BASELINE	797	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a settlement-review with no green gate for this content. A review
 e627a18457b45e56	PASS	489	workflow-hooks	refuse	aca18caf1a04b8724		BLOCKED: an ad-hoc agent() call names no model and carries no SESSION_MODEL:
+e635d558d24223af	PASS	374	escalation-hooks	refuse	a17673d9041f37133		OFFER UNFILTERED: your final message offers a decision back to the GM
 e683b508f5ea6ebb	BASELINE	305	wakeup-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: ScheduleWakeup, and this guard could not establish that the session is
 e6845fff5c1b8c74	BASELINE	356	gate-write-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (gate-write): an Edit of a.txt while this tree's `make done` runs.
 e6dd99b13dc7ec31	BASELINE	524	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: `impl-drift` is not owed on this bundle. Its MANIFEST (<path>) owes:

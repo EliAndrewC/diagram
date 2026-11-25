@@ -51,17 +51,60 @@ static FENCE: LazyLock<Regex> = LazyLock::new(|| re(r"(?s)```.*?```"));
 static CODE: LazyLock<Regex> = LazyLock::new(|| re(r"`[^`\n]*`"));
 static QUOTED: LazyLock<Regex> =
     LazyLock::new(|| re("\"[^\"\\n]*\"|\u{201c}[^\u{201d}\\n]*\u{201d}"));
+/// An ask in a question's own words. `which` only as the interrogative (451 T235): `which of them give wrong answers`, `which would
+/// mean` and `which one clone holds` were 18 of the 30 statements on the corpus of 2026-10-26..11-25's firings, and no true ask.
 static ASK: LazyLock<Regex> = LazyLock::new(|| {
     re(
-        r"(?i)\b(should I|shall I|do you want|would you (like|prefer|rather)|want me to|which (one|of|would|do you)|your call|or should (I|we)|do you agree|is that (ok|okay|right|what you)|can you confirm|let me know (whether|which)|say (go|the word|yes)|for you to (decide|approve|choose|pick|confirm|rule)|approve or decline|ask (of )?you|needs your (words|approval|decision|ruling|go-ahead|call|answer)|waiting (on|for) (you|your)|yours to (decide|call|choose))\b",
+        r"(?i)\b(should I|shall I|do you want|would you (like|prefer|rather)|want me to|which (one |of (these|those|them|the two) )?(do you|would you|should I|shall I)|or should (I|we)|do you agree|is that (ok|okay|right|what you)|can you confirm|let me know (whether|which)|say (go|the word|yes)|approve or decline)\b",
     )
 });
+/// A decision STATED to be the GM's: an ask, unless its clause says no such thing waits (`NEGATED`) or it names a measure (`MEASURED`,
+/// `NAMED`) - 451 T235: "Nothing is waiting on you.", "442 minutes of waiting on you", "**Waiting on you** is still reported".
+static STATED: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r"(?i)\b(your call|for you to (decide|approve|choose|pick|confirm|rule)|ask (of )?you|needs your (words|approval|decision|ruling|go-ahead|call|answer)|waiting (on|for) (you|your)|yours to (decide|call|choose))\b",
+    )
+});
+/// The text before a stated ask, when its clause negates it: a `nothing`-like subject, or a `not` within two words of it, with no
+/// exceptive between (`This can't land without your call.`, `Nothing is left but your call.` stay asks; spec-fidelity, 2026-11-25).
+static NEGATED: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r"(?i)(\b(nothing|none|nobody|neither|no one)\b((?!\b(but|except|without|until|unless|besides|than)\b)[^.;:!?,])*|\b(not|never|\w+n['\u{2019}]t)\s+((?!(but|except|without|until|unless|besides|than)\b)\w+\s+){0,2})$",
+    )
+});
+/// The text after a negated stated ask that excepts it back in its clause (`Nothing else needs your decision except the budget.`); past
+/// a comma it is a new clause (`Nothing is waiting on you, but the page session is still running.` stays a statement).
+static EXCEPTED: LazyLock<Regex> =
+    LazyLock::new(|| re(r"(?i)^[^.;:!?,]*\b(but|except|besides|other than|apart from)\b"));
+static MEASURED: LazyLock<Regex> = LazyLock::new(|| re(r"(?i)\b(of|spent)\s+$"));
+/// `Waiting on you` opening its sentence as a measure's name: the subject of `is`/`was` (`**Waiting on you** is still reported`), or a
+/// table cell with no `:` in it (`| Waiting for you to answer | 0.5 |`). With a colon (`**Waiting on you:** the command`) it is a label,
+/// and with neither (`Waiting on your go-ahead to land it.`) an ask.
+static SENTENCE_START: LazyLock<Regex> = LazyLock::new(|| re(r"(^|[.!?]\s+)[\s*_|#>\d.-]*$"));
+static NAME_OF: LazyLock<Regex> = LazyLock::new(|| re(r"(?i)^[*_]*\s+(is|was|were)\b"));
+static CELL: LazyLock<Regex> = LazyLock::new(|| re(r"\|\s*$"));
+static LABEL: LazyLock<Regex> = LazyLock::new(|| re(r"^[^.|]*:"));
 static OFFER: LazyLock<Regex> = LazyLock::new(|| {
     re(
-        r"(?i)\b(if you('d| would)? (want|like|prefer|rather)|let me know if|happy to|say so and I'll|easy to (revert|reverse|undo)|I can (also |easily )?(revert|reverse|undo|switch|change|restore|raise|add|drop|re-?run|put (it|them) back))\b",
+        r"(?i)\b(if you('d| would)? (want|like|prefer|rather)|if you agree|let me know if|happy to|say so and I'll|easy to (revert|reverse|undo)|I can (also |easily )?(revert|reverse|undo|switch|change|restore|raise|add|drop|re-?run|put (it|them) back))\b",
     )
 });
+/// `Say if ...` opening a sentence (451 T235); `I can't say if it helps` is none.
+static SAY_IF: LazyLock<Regex> = LazyLock::new(|| re(r"(?i)(^|[.!?:]\s+)[\s*_-]*say if\b"));
 static ADDRESSED: LazyLock<Regex> = LazyLock::new(|| re(r"\b(you|your|I)\b"));
+
+/// Does a stated decision in `s` put something to the GM?
+fn stated_ask(s: &str) -> bool {
+    STATED.find_iter(s).map_while(Result::ok).any(|m| {
+        let (before, after) = (&s[..m.start()], &s[m.end()..]);
+        let named = m.as_str().to_lowercase().starts_with("waiting")
+            && matches_any(&SENTENCE_START, before)
+            && (matches_any(&NAME_OF, after)
+                || (matches_any(&CELL, before) && !matches_any(&LABEL, after)));
+        let negated = matches_any(&NEGATED, before) && !matches_any(&EXCEPTED, after);
+        !(named || negated || matches_any(&MEASURED, before))
+    })
+}
 
 fn matches_any(pattern: &Regex, text: &str) -> bool {
     pattern.is_match(text).unwrap_or(false)
@@ -90,11 +133,13 @@ pub(crate) fn classify(text: &str) -> (Vec<String>, Vec<String>) {
             continue;
         }
         let s = blank(&QUOTED, &blank(&CODE, line));
+        let offer = matches_any(&OFFER, &s) || matches_any(&SAY_IF, &s);
         if matches_any(&ASK, &s)
-            || (!matches_any(&OFFER, &s) && s.ends_with('?') && matches_any(&ADDRESSED, &s))
+            || stated_ask(&s)
+            || (!offer && s.ends_with('?') && matches_any(&ADDRESSED, &s))
         {
             asks.push(short(&s));
-        } else if matches_any(&OFFER, &s) {
+        } else if offer {
             offers.push(short(&s));
         }
     }
