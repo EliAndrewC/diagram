@@ -567,3 +567,6 @@
 - [x] T239 make closing-checks prints 'BLOCKED: every error static printed is in another task's files - ()' with an empty list when the errors are in the started task's own files (seen by 449 T224's, T433's builders, 2026-11-24/25): an empty list is never an attribution - the line names the files, or says the errors are the task's own
       research: rendering
       verify: DONE. landed in batch T230+T239: closing-checks' empty attribution fixed; red-first (7 cases red on HEAD); CLEAR; no claims
+- [x] T240 a check's third round on one subject launches with no round-arbiter ruling: 449 T432's builder dispatched spec-fidelity MODE 4 a third time on the plan section (2026-11-25) and no guard refused it; the arbiter, asked after, ruled no fault (ask:449-T432-plan-round3) - the root CLAUDE.md makes a check's third round on one subject a tripwire owing the arbiter's ruling BEFORE the next check: the dispatch guard counts a plan review's rounds per task section (as it counts record checks' rounds) and refuses the third until make arbiter-bundle's ruling is recorded, naming that command; red-first on the T432 sequence
+      research: rendering
+      verify: DONE. landed: the third plan-review round held for the arbiter; red-first on T432's sequence; proven to fire; CLEAR; no claims; carries T238's ticked commits, whose push the started T240 held
