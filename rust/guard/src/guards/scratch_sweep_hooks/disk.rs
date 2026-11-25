@@ -13,7 +13,9 @@
 //! - `cache` / `cache-dry`: `make cache-clean`, the cache's share of the sweep alone, idle past `L7R_CACHE_IDLE_HOURS` (not three
 //!   days), and nothing at all while any cargo, rustc or clippy process runs.
 //! - `landed <feature> <task-starts.jsonl> <task>...`: `make land`'s last step once it lands, the landed tasks' own `/tmp/t<N>`
-//!   scratch removed (`sweep/tmp.rs`), and every clean scratch worktree idle past the scratch threshold (`sweep/trees.rs`).
+//!   scratch removed (`sweep/tmp.rs`) and their directories in the git directory holding `task-starts.jsonl` - `t<N>...` and
+//!   `l7r-handoffs/T<N>-...` (451 T246, `sweep/leftovers.rs`) - and every clean scratch worktree idle past the scratch threshold
+//!   (`sweep/trees.rs`).
 //! - `trees`: the scratch worktrees (a registered worktree of a clone or the mirror outside the clones directory), each with the
 //!   command that removes it; `make land` prints the ones left at its end (a modified or untracked file, a commit no ref holds,
 //!   touched lately, or held), so a builder's hand-made worktree is named when its task lands.
@@ -52,6 +54,10 @@ pub(super) const TMP_HOURS: f64 = 24.0;
 /// share of the disk free, the next prompt starts the cache's eviction. Twenty percent of the 461 GB disk is 92 GB: six of the cold
 /// 14 GB trial builds of 2026-11-25 side by side, or two cold full coverage builds (31 GB each, 2026-11-22), before the floor (15 GB).
 pub(super) const FREE_PCT: f64 = 20.0;
+/// How long a review snapshot without the review tree's `tree.json` sits idle before the sweep takes it, in days (451 T246, GUESS, a
+/// knob: `SCRATCH_SWEEP_SNAPSHOT_DAYS`): a week, 16 times the oldest read measured - 245 review dispatches, each at most 10.6 h after
+/// its unit's snapshot was taken (2026-11-25, the transcripts; `sweep/leftovers.rs`).
+pub(super) const SNAPSHOT_DAYS: f64 = 7.0;
 /// How many of the largest build directories the refusal names.
 const NAMED: usize = 6;
 
@@ -225,7 +231,18 @@ pub(super) fn landed(c: &Config, args: &[String], now: SystemTime) -> Reply {
         .filter_map(|t| t.trim().trim_start_matches('T').parse().ok())
         .collect();
     let (gone, shared) = sweep::landed_plan(c, feature, &numbers, Path::new(starts), now);
-    let removed: Vec<Item> = gone.into_iter().filter(sweep::remove).collect();
+    // ...and their scratch in the clone's git directory, the one `task-starts.jsonl` is in (451 T246, `sweep/leftovers.rs`)
+    let ours: Vec<u64> = numbers
+        .iter()
+        .copied()
+        .filter(|n| !shared.contains(n))
+        .collect();
+    let git = Path::new(starts).parent().unwrap_or(Path::new(""));
+    let removed: Vec<Item> = gone
+        .into_iter()
+        .chain(sweep::landed_leftovers(c, git, &ours))
+        .filter(sweep::remove)
+        .collect();
     let input = json!({ "session_id": c.keep });
     for item in &removed {
         record(

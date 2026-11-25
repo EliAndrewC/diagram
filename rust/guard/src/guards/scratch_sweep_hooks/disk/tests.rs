@@ -181,18 +181,27 @@ fn the_command_line_reaches_each_mode_and_the_knobs_read_from_the_environment() 
         &|k| match k {
             "L7R_DISK_FLOOR_GB" => Some("2.5".to_owned()),
             "L7R_CACHE_IDLE_HOURS" => Some("0.5".to_owned()),
+            "SCRATCH_SWEEP_SNAPSHOT_DAYS" => Some("2".to_owned()),
             _ => None,
         },
         1,
     );
     assert_eq!(
-        (knobs.floor, knobs.cache_age),
-        (2_500_000_000, Duration::from_secs(1800))
+        (knobs.floor, knobs.cache_age, knobs.snapshot_age),
+        (
+            2_500_000_000,
+            Duration::from_secs(1800),
+            Duration::from_secs(48 * HOUR)
+        )
     );
     let defaults = Config::from_env(&|k| (k == "L7R_DISK_FLOOR_GB").then(|| "-3".to_owned()), 1);
     assert_eq!(
-        (defaults.floor, defaults.cache_age),
-        (15_000_000_000, Duration::from_secs(12 * HOUR))
+        (defaults.floor, defaults.cache_age, defaults.snapshot_age),
+        (
+            15_000_000_000,
+            Duration::from_secs(12 * HOUR),
+            Duration::from_secs(7 * 24 * HOUR)
+        )
     );
 }
 
@@ -257,6 +266,17 @@ fn a_landing_removes_its_tasks_own_scratch_and_says_which_number_it_left() {
     )
     .unwrap();
     let s = starts.display().to_string();
+    // the git directory is the one holding task-starts.jsonl (451 T246): the landed task's scratch and handoff scratch go, its note,
+    // a log and the shared number's stay
+    for f in [
+        "t158/tree/a.rs",
+        "t158-land.log",
+        "l7r-handoffs/T158-scratch/run.sh",
+        "l7r-handoffs/T158-a1.md",
+        "l7r-handoffs/T160-scratch/x",
+    ] {
+        put(&base, &base.join(f), 0);
+    }
     // a clean scratch worktree idle past the scratch threshold: removed at the landing, not only named (451 T158's plan review)
     let tree = crate::guards::scratch_sweep_hooks::sweep::fixture::clean(
         &c.clones,
@@ -283,6 +303,15 @@ fn a_landing_removes_its_tasks_own_scratch_and_says_which_number_it_left() {
         .stdout
         .contains("the build directory of the scratch worktree removed with it"));
     assert!(!c.tmp.join("t158").exists() && c.tmp.join("t160").exists());
+    assert!(!base.join("t158").exists() && !base.join("l7r-handoffs/T158-scratch").exists());
+    assert!(out.stdout.contains("the handoff's scratch folder"));
+    for kept in [
+        "t158-land.log",
+        "l7r-handoffs/T158-a1.md",
+        "l7r-handoffs/T160-scratch",
+    ] {
+        assert!(base.join(kept).exists(), "{kept} kept");
+    }
     let none = with(&args(&["landed", "451", &s, "T999"]), &mut c, now());
     assert!(none.code == 0 && none.stdout.is_empty());
     assert_eq!(with(&args(&["landed", "451"]), &mut c, now()).code, 2);

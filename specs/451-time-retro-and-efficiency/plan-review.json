@@ -1644,6 +1644,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "round-arbiter"
+  },
+  "### T246 (the coordinating session's measurement of 2026-11-25 and the GM's words on the old task scratch folder, which tasks.md's T246 line carries; amended the same day by the host session's five points)": {
+   "sha256": "7f3e85ebf498119b4716b1d8c52ad6b1d4092b047e43386636111edd1fa2318f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T246 Approach (checklist part A)": {
+   "sha256": "0dc8f5d74931e211ad4f1c889879073df8dc43ec1e461949e27174c2fd0bffcd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -21614,6 +21626,197 @@
    "tasks": [
     "T232"
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T246 (the coordinating session's measurement of 2026-11-25 and the GM's words on the old task scratch folder, which tasks.md's T246 line carries; amended the same day by the host session's five points)",
+    "### T246 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "landed-scratch",
+     "summary": "make land's last step takes a landed number's DIRECTORIES t<N>... in the git directory and l7r-handoffs/T<N>-...; never a file (handoff note, land log); a number another feature started within the day is left by tmp::landed's rule",
+     "class": "within",
+     "why": "Answers the GM's 'the old task scratch folder is over 1/3 of a gigabyte? That doesn't seem right to me': the bulk (the handoff scratch folders, 207 MB) now goes at landing or by the sweep's age. The files left are small (1.1 MB measured), read by land/writers.rs and the context-cap guard, and given a place and budget in the audit; the same-number rule keeps another feature's live task's scratch, which taking would be a wrong outcome."
+    },
+    {
+     "id": "snapshots-without-tree",
+     "summary": "a review snapshot without tree.json is taken once idle SCRATCH_SWEEP_SNAPSHOT_DAYS (GUESS, a week)",
+     "class": "within",
+     "why": "The brief's 'first measure whether any review reads a snapshot older than its current unit's, and keep what one does' was measured first (one snapshot per unit; 245 reads, none past 72 h after its take); a week is many times the oldest read, so nothing read is taken."
+    },
+    {
+     "id": "snapshots-with-tree",
+     "summary": "a review snapshot WITH tree.json is kept whatever its age, until its unit is snapshotted again (about 0.9 GB held); taking one whose copy matches the live pool priced and not built",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the plan's own goal that every leftover goes by age. Legitimate on two grounds: the brief relays 'keep what one does', and tree::of_unit keys the unit's verdict carry, checkpoint and arbiter round count to that copy, so taking it would make them read the live pool - a wrong outcome that defeats the reviews, not merely awkward. The purpose (nothing kept unseen, no 30 GB eaten unnoticed) survives: the snapshots keep a place and a 1.5 GB budget in make disk-audit, flagged OVER when they pass it."
+    },
+    {
+     "id": "gencache-dead-stores",
+     "summary": "every .gencache store but rust taken once idle SCRATCH_SWEEP_DAYS in each tree; rust never taken",
+     "class": "within",
+     "why": "A leftover the container keeps (6.1 GB dead Python roll store, measured) cleaned by age as T245/T246 ask; the live rust store has its own lock and readers, and taking it would break a live read."
+    },
+    {
+     "id": "p1-scratchpad-entries",
+     "summary": "(1) finished sessions' scratchpad entries judged one by one by idle SCRATCH_SWEEP_DAYS (GUESS 3 days); prompting and registered-running sessions kept; task outputs keep their own rule; the low-disk trigger runs the age shares before the cache's share, a build running or not",
+     "class": "within",
+     "why": "The host's point (1): an age sweep, GUESS 3 days, at session start (already, 451 T158) and at the low-disk trigger, the running session's scratchpad kept. The per-entry rule reaches the 12.8 GB the whole-session rule kept by its transcript."
+    },
+    {
+     "id": "p2-worktree-build-cache",
+     "summary": "(2) a gone tree's build directory goes with no idle wait (T245), the hand removal pinned by a test; diagram-backlog-review wanted; diagram-backlog-pages reported, not removed",
+     "class": "within",
+     "why": "Point (2) asks that the hand removal be measured to be caught (pinned by a_target_is_taken_whole_only_once_proven_dead and the live ls) and that whether the two clones are still wanted be checked: checked and reported. Removal of -pages was not asked, and it holds 19 commits no remote has."
+    },
+    {
+     "id": "p3-debug-0",
+     "summary": "(3) [profile.dev] (and test, inheriting) set to debug = 0 after measuring size and build/test times; RUST_BACKTRACE file:line and a debugger's source view lost; one cold rebuild per tree",
+     "class": "within",
+     "why": "Point (3) names 'line-tables-only (or 0)' and asks before-and-after in size and time; the brief's condition (change only if times are not worse beyond noise) was measured (the table, two runs per cell under load 11-31, plus the coverage build, 447 vs 271 MB, the same report). What is lost is stated."
+    },
+    {
+     "id": "p3-incremental-left",
+     "summary": "(3) CARGO_INCREMENTAL=0 measured and left unchanged, numbers reported for the GM",
+     "class": "within",
+     "why": "Point (3) asks it MEASURED for one-shot gate and landing builds; the measurement found no build of theirs is one-shot (their targets are kept and rebuilt every run) and a one-file rebuild many times slower (29-36 s vs 2.6-10 s), and the brief says exactly that case is reported and left for the GM. Not an open-question narrowing: the ask was a measurement, which is done."
+    },
+    {
+     "id": "p3-target-age-pruning",
+     "summary": "(3) age pruning of old artifacts inside a live target left to T158's and T245's existing rules (sixteen variants, idle profiles)",
+     "class": "within",
+     "why": "The part of point (3) already built by earlier tasks; nothing asked is dropped."
+    },
+    {
+     "id": "p4-transcripts",
+     "summary": "(4) the audit counts only the mirror's slug and those under it (-diagram, -diagram-...), GUESS budget 10 GB, the rest to unaccounted",
+     "class": "within",
+     "why": "Point (4) verbatim: counts only this project's transcripts, never the others."
+    },
+    {
+     "id": "p5-podman",
+     "summary": "(5) the host's unused podman layers named on a line of their own, not counted",
+     "class": "within",
+     "why": "Point (5): the host's to clean, the audit names it as host-side; the container cannot see it."
+    },
+    {
+     "id": "audit-places",
+     "summary": "new audit places with GUESS budgets (.git/t<N>* 1 GB, handoffs 0.5 GB, snapshots 1.5 GB, .gencache 1 GB), sized within the clones and not added to the total again",
+     "class": "within",
+     "why": "T245's 'audit of disk space and what this container specifically is leaving sitting around', extended to the leftovers T246 finds; budgets labeled GUESS."
+    },
+    {
+     "id": "found-fixed",
+     "summary": "three found items fixed here: transcripts overcounted, --scratch-sweep usage lacked landed, the audit's last line said 'disk under' at 29% free",
+     "class": "within",
+     "why": "Wrong outcomes (an audit that misreports, a usage line that hides a mode) fixed in the task; none deferred, so FR-009's deferral clauses do not apply."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T246 (the coordinating session's measurement of 2026-11-25 and the GM's words on the old task scratch folder, which tasks.md's T246 line carries; amended the same day by the host session's five points)",
+    "### T246 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "landed-scratch",
+     "summary": "make land's last step takes a landed number's DIRECTORIES t<N>... in the git directory and l7r-handoffs/T<N>-...; never a file (handoff note, land log); a number another feature started within the day is left by tmp::landed's rule",
+     "class": "within",
+     "why": "Answers the GM's 'the old task scratch folder is over 1/3 of a gigabyte? That doesn't seem right to me': a landed task's scratch directories (the handoff folder held 207 MB) go at landing. The files left are small (1.1 MB measured), read by land/writers.rs and the context-cap guard, and audited under a budget; the same-number rule keeps another feature's live task's scratch, which taking would be a wrong outcome."
+    },
+    {
+     "id": "landed-only-reach",
+     "summary": "the .git/t<N> and l7r-handoffs/T<N>- directories are taken only for a LANDED number; a set-down or never-landed number's scratch has no age rule and stays, sized under the audit's budgets (1 GB, 0.5 GB)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrower than the goal's 'or by the sweep's age'. Legitimate by purpose: the GM's complaint is about OLD task scratch, and an unlanded task's scratch is the handoff material a set-down task resumes from, so taking it by age would lose live work, which is a wrong outcome. The residue cannot grow unseen, because each place has its own audit line and budget, flagged OVER (measured 2026-11-25: 0.0 of 1.0 GB and 0.2 of 0.5 GB)."
+    },
+    {
+     "id": "snapshots-without-tree",
+     "summary": "a review snapshot without tree.json is taken once idle SCRATCH_SWEEP_SNAPSHOT_DAYS (GUESS, a week)",
+     "class": "within",
+     "why": "The brief's 'first measure whether any review reads a snapshot older than its current unit's, and keep what one does' was measured first (one snapshot per unit; 245 reads, none past 72 h after its take); a week is many times the oldest read, so nothing read is taken."
+    },
+    {
+     "id": "snapshots-with-tree",
+     "summary": "a review snapshot WITH tree.json is kept whatever its age, until its unit is snapshotted again (about 0.9 GB held); taking one whose copy matches the live pool priced and not built",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the plan's own goal that every leftover goes by age. Legitimate on the wrong outcome alone: tree::of_unit keys the unit's verdict carry, checkpoint and arbiter round count to that copy, so taking it would make them read the live pool, which breaks the reviews and is not merely awkward. The GM's purpose (nothing piling up unseen) survives: the snapshots keep a place and a 1.5 GB budget in make disk-audit and are flagged OVER past it."
+    },
+    {
+     "id": "gencache-dead-stores",
+     "summary": "every .gencache store but rust taken once idle SCRATCH_SWEEP_DAYS in each tree; rust never taken",
+     "class": "within",
+     "why": "A leftover the container keeps (6.1 GB dead Python roll store, measured) cleaned by age as T245/T246 ask; the live rust store has its own lock and readers, and taking it would break a live read."
+    },
+    {
+     "id": "p1-scratchpad-entries",
+     "summary": "(1) finished sessions' scratchpad entries judged one by one by idle SCRATCH_SWEEP_DAYS (GUESS 3 days); prompting and registered-running sessions kept; task outputs keep their own rule; the low-disk trigger runs the age shares before the cache's share, a build running or not",
+     "class": "within",
+     "why": "The host's point (1): an age sweep, GUESS 3 days, at session start (already, 451 T158) and at the low-disk trigger, the running session's scratchpad kept. The per-entry rule reaches the 12.8 GB the whole-session rule kept by its transcript."
+    },
+    {
+     "id": "p2-worktree-build-cache",
+     "summary": "(2) a gone tree's build directory goes with no idle wait (T245), the hand removal pinned by a test; diagram-backlog-review wanted; diagram-backlog-pages reported, not removed",
+     "class": "within",
+     "why": "Point (2) asks that the hand removal be measured to be caught (pinned by a_target_is_taken_whole_only_once_proven_dead and the live ls) and that whether the two clones are still wanted be checked: checked and reported. Removal of -pages was not asked, and it holds 19 commits no remote has."
+    },
+    {
+     "id": "p3-measured-where",
+     "summary": "(3) the settings measured on cargo test -p l7r_guard from a git archive of HEAD into fresh scratch targets (and a coverage build of l7r_gate_pool), not on the live 80 GB and 43 GB caches",
+     "class": "within",
+     "why": "Point (3) asks for before and after in size and build time. A controlled build of the same code under each setting measures exactly that without this task's edits or a shared cache moving the numbers; the live caches take the setting through one cold rebuild, which the plan states (31 GB, T158's figure). This is a method, nothing asked is dropped."
+    },
+    {
+     "id": "p3-debug-0",
+     "summary": "(3) [profile.dev] (and test, inheriting) set to debug = 0 after measuring size and build/test times; RUST_BACKTRACE file:line and a debugger's source view lost; one cold rebuild per tree",
+     "class": "within",
+     "why": "Point (3) names 'line-tables-only (or 0)' and asks before-and-after in size and time; the brief's condition (change only if times are not worse beyond noise) was measured (the table, two runs per cell under load 11-31, plus the coverage build, 447 vs 271 MB, the same report). What is lost is stated."
+    },
+    {
+     "id": "p3-incremental-left",
+     "summary": "(3) CARGO_INCREMENTAL=0 measured and left unchanged, numbers reported for the GM",
+     "class": "within",
+     "why": "Point (3) asks it MEASURED for one-shot gate and landing builds; the measurement found no build of theirs is one-shot (their targets are kept and rebuilt every run) and a one-file rebuild many times slower (29-36 s vs 2.6-10 s), and the brief says exactly that case is reported and left for the GM. Not an open-question narrowing: the ask was a measurement, which is done."
+    },
+    {
+     "id": "p3-target-age-pruning",
+     "summary": "(3) age pruning of old artifacts inside a live target left to T158's and T245's existing rules (sixteen variants, idle profiles)",
+     "class": "within",
+     "why": "The part of point (3) already built by earlier tasks; nothing asked is dropped."
+    },
+    {
+     "id": "p4-transcripts",
+     "summary": "(4) the audit counts only the mirror's slug and those under it (-diagram, -diagram-...), GUESS budget 10 GB, the rest to unaccounted",
+     "class": "within",
+     "why": "Point (4) verbatim: counts only this project's transcripts, never the others."
+    },
+    {
+     "id": "p5-podman",
+     "summary": "(5) the host's unused podman layers named on a line of their own, not counted",
+     "class": "within",
+     "why": "Point (5): the host's to clean, the audit names it as host-side; the container cannot see it."
+    },
+    {
+     "id": "audit-places",
+     "summary": "new audit places with GUESS budgets (.git/t<N>* 1 GB, handoffs 0.5 GB, snapshots 1.5 GB, .gencache 1 GB), sized within the clones and not added to the total again",
+     "class": "within",
+     "why": "T245's 'audit of disk space and what this container specifically is leaving sitting around', extended to the leftovers T246 finds; budgets labeled GUESS."
+    },
+    {
+     "id": "found-fixed",
+     "summary": "three found items fixed here: transcripts overcounted, --scratch-sweep usage lacked landed, the audit's last line said 'disk under' at 29% free",
+     "class": "within",
+     "why": "Wrong outcomes (an audit that misreports, a usage line that hides a mode) fixed in the task; none deferred, so FR-009's deferral clauses do not apply."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -34538,6 +34741,106 @@
     ],
     "verdict": "CLEAR"
    }
+  },
+  "T246": {
+   "section_sha256": "9c002a54a87ee4e22a4d8b1366024815345a2436bfe4344357bc95f64d446e53",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "landed-scratch",
+     "summary": "make land's last step takes a landed number's DIRECTORIES t<N>... in the git directory and l7r-handoffs/T<N>-...; never a file (handoff note, land log); a number another feature started within the day is left by tmp::landed's rule",
+     "class": "within",
+     "why": "Answers the GM's 'the old task scratch folder is over 1/3 of a gigabyte? That doesn't seem right to me': a landed task's scratch directories (the handoff folder held 207 MB) go at landing. The files left are small (1.1 MB measured), read by land/writers.rs and the context-cap guard, and audited under a budget; the same-number rule keeps another feature's live task's scratch, which taking would be a wrong outcome."
+    },
+    {
+     "id": "landed-only-reach",
+     "summary": "the .git/t<N> and l7r-handoffs/T<N>- directories are taken only for a LANDED number; a set-down or never-landed number's scratch has no age rule and stays, sized under the audit's budgets (1 GB, 0.5 GB)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrower than the goal's 'or by the sweep's age'. Legitimate by purpose: the GM's complaint is about OLD task scratch, and an unlanded task's scratch is the handoff material a set-down task resumes from, so taking it by age would lose live work, which is a wrong outcome. The residue cannot grow unseen, because each place has its own audit line and budget, flagged OVER (measured 2026-11-25: 0.0 of 1.0 GB and 0.2 of 0.5 GB)."
+    },
+    {
+     "id": "snapshots-without-tree",
+     "summary": "a review snapshot without tree.json is taken once idle SCRATCH_SWEEP_SNAPSHOT_DAYS (GUESS, a week)",
+     "class": "within",
+     "why": "The brief's 'first measure whether any review reads a snapshot older than its current unit's, and keep what one does' was measured first (one snapshot per unit; 245 reads, none past 72 h after its take); a week is many times the oldest read, so nothing read is taken."
+    },
+    {
+     "id": "snapshots-with-tree",
+     "summary": "a review snapshot WITH tree.json is kept whatever its age, until its unit is snapshotted again (about 0.9 GB held); taking one whose copy matches the live pool priced and not built",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the plan's own goal that every leftover goes by age. Legitimate on the wrong outcome alone: tree::of_unit keys the unit's verdict carry, checkpoint and arbiter round count to that copy, so taking it would make them read the live pool, which breaks the reviews and is not merely awkward. The GM's purpose (nothing piling up unseen) survives: the snapshots keep a place and a 1.5 GB budget in make disk-audit and are flagged OVER past it."
+    },
+    {
+     "id": "gencache-dead-stores",
+     "summary": "every .gencache store but rust taken once idle SCRATCH_SWEEP_DAYS in each tree; rust never taken",
+     "class": "within",
+     "why": "A leftover the container keeps (6.1 GB dead Python roll store, measured) cleaned by age as T245/T246 ask; the live rust store has its own lock and readers, and taking it would break a live read."
+    },
+    {
+     "id": "p1-scratchpad-entries",
+     "summary": "(1) finished sessions' scratchpad entries judged one by one by idle SCRATCH_SWEEP_DAYS (GUESS 3 days); prompting and registered-running sessions kept; task outputs keep their own rule; the low-disk trigger runs the age shares before the cache's share, a build running or not",
+     "class": "within",
+     "why": "The host's point (1): an age sweep, GUESS 3 days, at session start (already, 451 T158) and at the low-disk trigger, the running session's scratchpad kept. The per-entry rule reaches the 12.8 GB the whole-session rule kept by its transcript."
+    },
+    {
+     "id": "p2-worktree-build-cache",
+     "summary": "(2) a gone tree's build directory goes with no idle wait (T245), the hand removal pinned by a test; diagram-backlog-review wanted; diagram-backlog-pages reported, not removed",
+     "class": "within",
+     "why": "Point (2) asks that the hand removal be measured to be caught (pinned by a_target_is_taken_whole_only_once_proven_dead and the live ls) and that whether the two clones are still wanted be checked: checked and reported. Removal of -pages was not asked, and it holds 19 commits no remote has."
+    },
+    {
+     "id": "p3-measured-where",
+     "summary": "(3) the settings measured on cargo test -p l7r_guard from a git archive of HEAD into fresh scratch targets (and a coverage build of l7r_gate_pool), not on the live 80 GB and 43 GB caches",
+     "class": "within",
+     "why": "Point (3) asks for before and after in size and build time. A controlled build of the same code under each setting measures exactly that without this task's edits or a shared cache moving the numbers; the live caches take the setting through one cold rebuild, which the plan states (31 GB, T158's figure). This is a method, nothing asked is dropped."
+    },
+    {
+     "id": "p3-debug-0",
+     "summary": "(3) [profile.dev] (and test, inheriting) set to debug = 0 after measuring size and build/test times; RUST_BACKTRACE file:line and a debugger's source view lost; one cold rebuild per tree",
+     "class": "within",
+     "why": "Point (3) names 'line-tables-only (or 0)' and asks before-and-after in size and time; the brief's condition (change only if times are not worse beyond noise) was measured (the table, two runs per cell under load 11-31, plus the coverage build, 447 vs 271 MB, the same report). What is lost is stated."
+    },
+    {
+     "id": "p3-incremental-left",
+     "summary": "(3) CARGO_INCREMENTAL=0 measured and left unchanged, numbers reported for the GM",
+     "class": "within",
+     "why": "Point (3) asks it MEASURED for one-shot gate and landing builds; the measurement found no build of theirs is one-shot (their targets are kept and rebuilt every run) and a one-file rebuild many times slower (29-36 s vs 2.6-10 s), and the brief says exactly that case is reported and left for the GM. Not an open-question narrowing: the ask was a measurement, which is done."
+    },
+    {
+     "id": "p3-target-age-pruning",
+     "summary": "(3) age pruning of old artifacts inside a live target left to T158's and T245's existing rules (sixteen variants, idle profiles)",
+     "class": "within",
+     "why": "The part of point (3) already built by earlier tasks; nothing asked is dropped."
+    },
+    {
+     "id": "p4-transcripts",
+     "summary": "(4) the audit counts only the mirror's slug and those under it (-diagram, -diagram-...), GUESS budget 10 GB, the rest to unaccounted",
+     "class": "within",
+     "why": "Point (4) verbatim: counts only this project's transcripts, never the others."
+    },
+    {
+     "id": "p5-podman",
+     "summary": "(5) the host's unused podman layers named on a line of their own, not counted",
+     "class": "within",
+     "why": "Point (5): the host's to clean, the audit names it as host-side; the container cannot see it."
+    },
+    {
+     "id": "audit-places",
+     "summary": "new audit places with GUESS budgets (.git/t<N>* 1 GB, handoffs 0.5 GB, snapshots 1.5 GB, .gencache 1 GB), sized within the clones and not added to the total again",
+     "class": "within",
+     "why": "T245's 'audit of disk space and what this container specifically is leaving sitting around', extended to the leftovers T246 finds; budgets labeled GUESS."
+    },
+    {
+     "id": "found-fixed",
+     "summary": "three found items fixed here: transcripts overcounted, --scratch-sweep usage lacked landed, the audit's last line said 'disk under' at 29% free",
+     "class": "within",
+     "why": "Wrong outcomes (an audit that misreports, a usage line that hides a mode) fixed in the task; none deferred, so FR-009's deferral clauses do not apply."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

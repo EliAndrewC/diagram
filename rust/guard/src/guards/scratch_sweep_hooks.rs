@@ -73,6 +73,9 @@ pub(crate) struct Config {
     pub tmp: PathBuf,
     pub tmp_age: Duration,
     pub outputs_age: Duration,
+    /// How long a review snapshot without the review tree's record sits idle before the sweep takes it (`SCRATCH_SWEEP_SNAPSHOT_DAYS`,
+    /// 451 T246).
+    pub snapshot_age: Duration,
     /// This process's uid: only its own `/tmp` entries are judged.
     pub uid: u32,
     /// Below this share of the disk free, a prompt starts the cache's eviction (`L7R_DISK_FREE_PCT`, 451 T245), as a fraction.
@@ -144,6 +147,9 @@ impl Config {
             ),
             outputs_age: Duration::from_secs_f64(
                 knob("SCRATCH_SWEEP_OUTPUT_HOURS", disk::TMP_HOURS) * 3600.0,
+            ),
+            snapshot_age: Duration::from_secs_f64(
+                knob("SCRATCH_SWEEP_SNAPSHOT_DAYS", disk::SNAPSHOT_DAYS) * DAY,
             ),
             uid,
             free_at: knob("L7R_DISK_FREE_PCT", disk::FREE_PCT) / 100.0,
@@ -288,7 +294,7 @@ pub(crate) fn with(args: &[String], c: &mut Config, now: SystemTime) -> Reply {
         ),
         _ => Reply {
             stdout: String::new(),
-            stderr: "usage: l7r-guard --scratch-sweep run | now | dry | floor | cache | cache-dry | evict | evict-dry | audit | trees [--keep <session id>]\n"
+            stderr: "usage: l7r-guard --scratch-sweep run | now | dry | floor | cache | cache-dry | evict | evict-dry | audit | trees | landed <feature> <task-starts.jsonl> <task>... [--keep <session id>]\n"
                 .to_owned(),
             code: 2,
         },

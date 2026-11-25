@@ -417,7 +417,7 @@ context-ok:     ## [project] let one builder past the context cap for an hour, a
 	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" permit grant "$$(git rev-parse --show-toplevel)/context-cap:$(AID)" "$$CONTEXT_WHY"
 
 # The sweep a prompt starts once a day (rust/guard/src/guards/scratch_sweep_hooks.rs), run now; DRY=1 takes no lock and stamps nothing.
-scratch-sweep:  ## [project] remove finished sessions' scratch under /tmp/claude-<uid> now - idle 3 days, held by no live process, never this session's (449 T103); DRY=1 lists what it would remove and the total   [DRY=1]
+scratch-sweep:  ## [project] remove finished sessions' scratch under /tmp/claude-<uid> now - idle 3 days, held by no live process, never this session's (449 T103), and the clones' review snapshots idle a week and dead .gencache stores (451 T246); DRY=1 lists what it would remove and the total   [DRY=1]
 	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep $(if $(DRY),dry,now)
 
 # THE DISK AND THE BUILD CACHE (451 T158, rust/guard/src/guards/scratch_sweep_hooks/disk.rs; the GM 2026-11-22: "make sure that we clean
@@ -434,7 +434,7 @@ scratch-sweep:  ## [project] remove finished sessions' scratch under /tmp/claude
 # what it freed.
 cache-clean:    ## [project] free the build cache (~/.cache/l7r-cargo-target): a build directory proven dead (no code path builds into its name, every tree its dep-info names gone), past the budget (L7R_CACHE_BUDGET_GB, 100) live trees' profiles idle HOURS (12), an idle tree's first, and a crate's variants past its newest 16; never while a build runs; names the scratch worktrees to remove (451 T158, T245)   [DRY=1] [HOURS=<n>]
 	@$(if $(HOURS),L7R_CACHE_IDLE_HOURS="$(HOURS)" ,)"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep $(if $(DRY),cache-dry,cache) </dev/null
-disk-audit:     ## [project] every place this container writes - the build cache by tree, /tmp/claude-<uid> by session, /tmp/l7r-*, the rest of /tmp, the transcripts, the guard log, the clones, the mirror, ~/.cache - each with its size, owner, age and budget, the total against the disk, and what the low-disk eviction would free now; removes nothing (451 T245)
+disk-audit:     ## [project] every place this container writes - the build cache by tree, /tmp/claude-<uid> by session, /tmp/l7r-*, the rest of /tmp, this project's transcripts, the guard log, the clones, the mirror, ~/.cache, and within the clones their tasks' .git/t<N>, handoff folders, review snapshots and .gencache - each with its size, owner, age and budget, the total against the disk, the host's podman storage named as the host's, and what the low-disk eviction would free now; removes nothing (451 T245, T246)
 	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep audit </dev/null
 done land closing-checks: export DISK_OK := $(DISK_OK)
 DISK_FLOOR = $(if $(DISK_OK),$(LOGESCAPE) DISK_OK "$$DISK_OK",@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep floor </dev/null)

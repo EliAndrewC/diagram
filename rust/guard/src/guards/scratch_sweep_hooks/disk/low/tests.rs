@@ -35,6 +35,12 @@ fn world() -> (TempDir, Config) {
     c.mirror = base.join("diagram");
     c.state = base.join("state");
     c.proc = base.join("proc");
+    // the age shares' places (451 T246), never the machine's own
+    c.root = base.join("root");
+    c.projects = base.join("projects");
+    c.sessions = base.join("sessions");
+    c.tmp = base.join("tmp");
+    std::fs::create_dir_all(&c.root).unwrap();
     std::fs::create_dir_all(c.proc.join("1")).unwrap();
     std::fs::write(c.proc.join("1/comm"), "bash\n").unwrap();
     std::fs::create_dir_all(c.clones.join("idle")).unwrap();
@@ -111,9 +117,19 @@ fn a_build_holds_the_eviction_and_the_next_prompt_tries_again() {
     assert!(trigger(&c, "sid", now));
     std::fs::create_dir_all(c.proc.join("8")).unwrap();
     std::fs::write(c.proc.join("8/comm"), "cargo\n").unwrap();
+    // the age shares run while a build holds the cache's (451 T246): a loose entry idle four days goes
+    put(&c.root, &c.root.join("old.log"), 96);
+    let dry = evict(&c, now, true);
+    let listed = dry.stdout.contains("would remove") && c.root.join("old.log").exists();
+    assert!(listed, "{}", dry.stdout);
     let held = evict(&c, now, false);
     assert!(held.code == 1 && held.stdout.contains("a build runs (8 cargo)"));
+    let swept = held.stdout.contains("old.log") && !c.root.join("old.log").exists();
+    assert!(swept, "{}", held.stdout);
     assert!(c.cargo.join("idle/cover-gate").exists());
+    assert!(evict(&c, now, false)
+        .stdout
+        .starts_with("evict: a build runs"));
     // its stamp gone: the next prompt tries again
     assert!(trigger(&c, "sid", now));
     // another sweep holds the lock

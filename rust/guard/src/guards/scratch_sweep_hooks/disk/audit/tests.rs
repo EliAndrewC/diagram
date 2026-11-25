@@ -75,7 +75,7 @@ fn the_audit_names_every_place_its_size_owner_age_and_budget_and_the_disk_s_tota
         "Claude Code's scratch ",
         "(session sess-1;",
         "(loose;",
-        "the session transcripts ",
+        "this project's session transcripts ",
         "the guard log ",
         "/l7r-*",
         "l7r-check  (a suite or a tool",
@@ -109,4 +109,81 @@ fn the_audit_names_every_place_its_size_owner_age_and_budget_and_the_disk_s_tota
     assert!(audit(&c, SystemTime::now())
         .stdout
         .contains("disk: df could not read"));
+}
+
+#[test]
+fn the_audit_sizes_the_clones_leftovers_within_them_and_counts_only_this_project_s_transcripts() {
+    crate::shared::log::quiet();
+    let base = TempDir::new("guard-disk-audit-leftovers");
+    let mut c = Config::from_env(&|_| None, 4242);
+    c.cargo = base.join("home/.cache/l7r-cargo-target");
+    c.cache_home = base.join("home/.cache");
+    c.mirror = base.join("diagram");
+    c.clones = base.join("diagram/.clones");
+    c.root = base.join("tmp/claude-4242");
+    c.tmp = base.join("tmp");
+    c.projects = base.join("home/.claude/projects");
+    c.guard_log = base.join("home/.claude/guard-log");
+    c.state = base.join("state");
+    c.proc = base.join("proc");
+    std::fs::create_dir_all(c.proc.join("1")).unwrap();
+    c.space = Some((10_000_000_000, 9_000_000_000));
+    let slug = super::slug_of(&c.mirror);
+    for (p, n) in [
+        ("diagram/.clones/work/.git/t204/a", 8_000),
+        (
+            "diagram/.clones/work/.git/l7r-handoffs/T432-scratch/x",
+            8_000,
+        ),
+        ("diagram/.clones/work/.git/l7r-handoffs/T432-a1.md", 100),
+        (
+            "diagram/.clones/work/.git/review-snapshot/glyph-check--a/tree.json",
+            100,
+        ),
+        (
+            "diagram/.clones/work/.git/review-snapshot/building-review--b/dispatch.md",
+            100,
+        ),
+        ("diagram/.clones/work/.gencache/rust/reads.tsv", 100),
+        ("diagram/.clones/work/.gencache/rolls/x", 8_000),
+        ("home/.claude/projects/-other-project/s.jsonl", 8_000),
+    ] {
+        put(&base.join(p), n);
+    }
+    put(&c.projects.join(&slug).join("s.jsonl"), 8_000);
+    put(
+        &c.projects
+            .join(format!("{slug}--clones-work"))
+            .join("s.jsonl"),
+        8_000,
+    );
+    // a name that only begins like the mirror's slug is another project's
+    put(&c.projects.join(format!("{slug}x")).join("s.jsonl"), 8_000);
+    let out = audit(&c, SystemTime::now()).stdout;
+    for want in [
+        "the tasks' scratch in the git directories <tree>/.git/t<N>* (1 entries; within the clones and the mirror above, not added again)",
+        "/t204  (a task's scratch: make land takes its directory",
+        "/T432-scratch  (a handoff's scratch: make land takes a folder",
+        "/T432-a1.md  (a builder's handoff note",
+        "/glyph-check--a  (the review tree's: kept until taken again",
+        "/building-review--b  (the sweep takes it idle 7 days",
+        "/rust  (the live cache",
+        "/rolls  (a dead store: the sweep takes it idle",
+        "this project's session transcripts ",
+        "(2 entries)",
+        "host-side, not counted: podman's image storage",
+        "now: disk at or above 20% free (L7R_DISK_FREE_PCT): the eviction found nothing",
+    ] {
+        assert!(out.contains(want), "{want:?} in\n{out}");
+    }
+    let other = out.contains("-other-project") || out.contains(&format!("{slug}x  ("));
+    assert!(!other, "{out}");
+    let clone_slug = super::slug_of(std::path::Path::new("/diagram/.clones/x"));
+    assert_eq!(clone_slug, "-diagram--clones-x");
+    let tasks = [
+        super::task("t122-land.log", 't'),
+        super::task("tmp.x", 't'),
+        super::task("t", 't'),
+    ];
+    assert_eq!(tasks, [true, false, false]);
 }

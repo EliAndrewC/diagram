@@ -78,38 +78,52 @@ pub(in super::super) fn note(c: &Config) -> Option<String> {
 pub(in super::super) fn evict(c: &Config, now: SystemTime, dry: bool) -> Reply {
     let short = short(c);
     let cutoff = now.checked_sub(c.cache_age).unwrap_or(UNIX_EPOCH);
-    let run = || -> Result<(Vec<sweep::Item>, String), String> {
-        let plan = sweep::cache_plan(c, cutoff, now, short)?;
-        if dry {
-            return Ok((plan, "would remove".to_owned()));
+    // the age shares first (451 T246: the amendment's "an age sweep ... at session start and at the low-disk trigger"), a build
+    // running or not; the cache's share then, which a build holds
+    let run = || -> (Vec<sweep::Item>, Result<String, String>) {
+        let removed = |plan: Vec<sweep::Item>| -> Vec<sweep::Item> {
+            if dry {
+                return plan;
+            }
+            let gone: Vec<sweep::Item> = plan.into_iter().filter(|i| sweep::take(c, i)).collect();
+            let input = json!({ "session_id": c.keep });
+            for item in &gone {
+                record(
+                    &input,
+                    "removed",
+                    &item.path.to_string_lossy(),
+                    json!({ "bytes": item.bytes, "why": item.why, "by": "low-disk" }),
+                );
+            }
+            gone
+        };
+        let mut items = removed(sweep::aged_plan(c, now));
+        let verb = if dry { "would remove" } else { "removed" }.to_owned();
+        match sweep::cache_plan(c, cutoff, now, short) {
+            Ok(plan) => {
+                items.extend(removed(plan));
+                (items, Ok(verb))
+            }
+            Err(build) => (items, Err(build)),
         }
-        let removed: Vec<sweep::Item> = plan.into_iter().filter(|i| sweep::take(c, i)).collect();
-        let input = json!({ "session_id": c.keep });
-        for item in &removed {
-            record(
-                &input,
-                "removed",
-                &item.path.to_string_lossy(),
-                json!({ "bytes": item.bytes, "why": item.why, "by": "low-disk" }),
-            );
-        }
-        Ok((removed, "removed".to_owned()))
     };
     let result = if dry { Some(run()) } else { locked_by(c, run) };
     let pct = (c.free_at * 100.0).round();
     let (stdout, code) = match result {
-        Some(Ok((items, verb))) => {
+        Some((items, Ok(verb))) => {
             let total: u64 = items.iter().map(|i| i.bytes).sum();
+            // `make disk-audit` asks this dry with the disk above the share too: not "under" then (451 T246)
+            let disk = if short > 0 { "under" } else { "at or above" };
             let line = if items.is_empty() {
                 format!(
-                    "disk under {pct}% free (L7R_DISK_FREE_PCT): the eviction found nothing it may take - every build directory \
+                    "disk {disk} {pct}% free (L7R_DISK_FREE_PCT): the eviction found nothing it may take - every build directory \
                      in use or built within {} h; make disk-audit lists what holds the disk",
                     c.cache_age.as_secs() / 3600
                 )
             } else {
                 format!(
-                    "disk under {pct}% free (L7R_DISK_FREE_PCT): the eviction {verb} {} of the build cache ({} entries; \
-                     make disk-audit lists the rest)",
+                    "disk {disk} {pct}% free (L7R_DISK_FREE_PCT): the eviction {verb} {} of the idle scratch and the build cache \
+                     ({} entries; make disk-audit lists the rest)",
                     gb(total),
                     items.len()
                 )
@@ -129,13 +143,20 @@ pub(in super::super) fn evict(c: &Config, now: SystemTime, dry: bool) -> Reply {
             }
             (super::super::report(&items, &verb) + &line + "\n", 0)
         }
-        Some(Err(build)) => {
-            // a build holds it: tried again at the next prompt, not in an hour
+        Some((items, Err(build))) => {
+            // a build holds the cache's share: tried again at the next prompt, not in an hour
             if !dry {
                 let _ = std::fs::remove_file(stamp(c));
             }
+            let aged = if items.is_empty() {
+                String::new()
+            } else {
+                super::super::report(&items, if dry { "would remove" } else { "removed" })
+            };
             (
-                format!("evict: a build runs ({build}); nothing removed\n"),
+                format!(
+                    "{aged}evict: a build runs ({build}); nothing of the build cache removed\n"
+                ),
                 1,
             )
         }

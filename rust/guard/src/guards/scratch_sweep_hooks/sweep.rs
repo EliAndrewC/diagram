@@ -12,6 +12,7 @@ use super::Config;
 
 mod cargo;
 mod evict;
+pub(crate) mod leftovers;
 mod tmp;
 mod trees;
 
@@ -22,17 +23,38 @@ pub(crate) struct Item {
     pub why: &'static str,
 }
 
-/// Every entry idle past the threshold and held by no live process, the current session's excepted.
+/// Every entry idle past the threshold and held by no live process, the current session's excepted: the age shares, then the
+/// cache's.
 pub(crate) fn plan(c: &Config, now: SystemTime) -> Vec<Item> {
     let (Some(root), Some(live)) = (real_root(&c.root), live_paths(&c.proc)) else {
         return Vec::new();
     };
+    let mut out = aged(c, &root, now);
+    if building(&c.proc).is_none() {
+        let cutoff = now.checked_sub(c.age).unwrap_or(UNIX_EPOCH);
+        let (cut, budget) = budgeted(c, cutoff, now, 0);
+        out.extend(cargo::plan(c, cut, &live, budget));
+    }
+    items(out, &live)
+}
+
+/// The age shares alone, held by no live process (451 T246: the low-disk trigger runs them too, a build running or not).
+pub(crate) fn aged_plan(c: &Config, now: SystemTime) -> Vec<Item> {
+    let (Some(root), Some(live)) = (real_root(&c.root), live_paths(&c.proc)) else {
+        return Vec::new();
+    };
+    items(aged(c, &root, now), &live)
+}
+
+/// Every share judged by age: the root's sessions, loose entries and finished sessions' scratchpad entries, the task outputs, `/tmp`'s
+/// scratch, the first-prompt marks, and the clones' review snapshots and dead generation-cache stores (451 T246, `leftovers.rs`).
+fn aged(c: &Config, root: &Path, now: SystemTime) -> Vec<(PathBuf, &'static str)> {
     // a session whose process still runs is live however long its transcript has been quiet; where the registry cannot be read, no
     // session directory is judged at all
     let running = running_sessions(&c.sessions, &c.proc);
     let cutoff = now.checked_sub(c.age).unwrap_or(UNIX_EPOCH);
     let mut out = Vec::new();
-    for (entry, name, meta) in children(&root) {
+    for (entry, name, meta) in children(root) {
         if !(name.starts_with('-') && meta.is_dir()) {
             if idle(&entry, cutoff) {
                 out.push((entry, "loose, nothing inside changed"));
@@ -55,13 +77,27 @@ pub(crate) fn plan(c: &Config, now: SystemTime) -> Vec<Item> {
                 Err(_) if idle(&session, cutoff) => {
                     out.push((session, "no transcript, nothing inside changed"));
                 }
-                Ok(_) | Err(_) => {}
+                // A FINISHED SESSION'S SCRATCHPAD, ENTRY BY ENTRY (451 T246): a session no process runs whose transcript moved within
+                // the threshold (resumed, or written by a subagent) kept its whole scratchpad - 12.8 GB of one session's on 2026-11-25,
+                // every file of it over three days old (`find -mtime +3` summed), its pid gone. Each top-level entry of its
+                // `scratchpad/` goes once nothing inside changed; a running session's, and the prompting one's, are never judged.
+                Ok(_) | Err(_) => out.extend(
+                    children(&session.join("scratchpad"))
+                        .into_iter()
+                        .filter(|(p, _, _)| idle(p, cutoff))
+                        .map(|(p, _, _)| {
+                            (
+                                p,
+                                "a finished session's scratchpad entry, nothing inside changed",
+                            )
+                        }),
+                ),
             }
         }
     }
     let ago = |d: std::time::Duration| now.checked_sub(d).unwrap_or(UNIX_EPOCH);
     // an output inside a session already going whole is not listed twice
-    for output in tmp::outputs(&root, ago(c.outputs_age)) {
+    for output in tmp::outputs(root, ago(c.outputs_age)) {
         if !out.iter().any(|(p, _)| output.0.starts_with(p)) {
             out.push(output);
         }
@@ -74,11 +110,18 @@ pub(crate) fn plan(c: &Config, now: SystemTime) -> Vec<Item> {
             .filter(|(p, _, _)| idle(p, ago(std::time::Duration::from_secs(30 * 86_400))))
             .map(|(p, _, _)| (p, "a session's first-prompt mark")),
     );
-    if building(&c.proc).is_none() {
-        let (cut, budget) = budgeted(c, cutoff, now, 0);
-        out.extend(cargo::plan(c, cut, &live, budget));
-    }
-    items(out, &live)
+    out.extend(leftovers::snapshots(c, ago(c.snapshot_age)));
+    out.extend(leftovers::dead_stores(c, cutoff));
+    out
+}
+
+/// The landed tasks' own directories in the git directory `git` (451 T246, `leftovers::landed`), held by no live process; none where
+/// `/proc` cannot be read.
+pub(crate) fn landed_leftovers(c: &Config, git: &Path, numbers: &[u64]) -> Vec<Item> {
+    let Some(live) = live_paths(&c.proc) else {
+        return Vec::new();
+    };
+    items(leftovers::landed(git, numbers), &live)
 }
 
 /// THE CACHE'S SIZE BUDGET (451 T158): past `L7R_CACHE_BUDGET_GB` in all, the cache's share takes every dead tree's build directory

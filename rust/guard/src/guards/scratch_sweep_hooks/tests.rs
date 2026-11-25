@@ -193,6 +193,9 @@ fn a_finished_sessions_scratch_goes_and_everything_live_stays() {
         "-not-a-dir",
         "-proj/idle",
         "-proj/orphan-old",
+        // its transcript recent, its process gone: its scratchpad's idle entry goes, the session stays (451 T246); the running
+        // session's and the prompting one's (`current`) are never judged
+        "-proj/recent/scratchpad/a",
         "old.log",
         "trials",
     ];
@@ -200,13 +203,13 @@ fn a_finished_sessions_scratch_goes_and_everything_live_stays() {
     // what that walk had open until it execs (feature 449 T167)
     only_held_by(&base, &[cwd.id(), fd.id()]);
     assert_eq!(names(&plan(&c, now()), &c), gone);
-    assert!(dry.stdout.contains("would remove") && dry.stdout.contains("5 entries"));
+    assert!(dry.stdout.contains("would remove") && dry.stdout.contains("6 entries"));
     // a dry run removes and stamps nothing
     assert!(c.root.join("trials").exists() && !c.state.join("stamp").exists());
     only_held_by(&base, &[cwd.id(), fd.id()]);
     let swept = with(&args(&["now", "--keep", "current"]), &mut c, now());
     assert!(
-        swept.stdout.contains("5 entries") && swept.stdout.contains("removed"),
+        swept.stdout.contains("6 entries") && swept.stdout.contains("removed"),
         "{}",
         swept.stdout
     );
@@ -215,9 +218,9 @@ fn a_finished_sessions_scratch_goes_and_everything_live_stays() {
     }
     for kept in [
         "-proj/recent",
-        "-proj/agent-wrote",
-        "-proj/running",
-        "-proj/current",
+        "-proj/agent-wrote/scratchpad/fresh",
+        "-proj/running/scratchpad/a",
+        "-proj/current/scratchpad/a",
         "-proj/orphan-new",
         "-proj/cwd-held",
         "-proj/fd-held",
@@ -235,7 +238,7 @@ fn a_finished_sessions_scratch_goes_and_everything_live_stays() {
         .flatten()
         .any(|e| {
             std::fs::read_to_string(e.path())
-                .is_ok_and(|t| t.contains("scratch-sweep") && t.contains("5 removed"))
+                .is_ok_and(|t| t.contains("scratch-sweep") && t.contains("6 removed"))
         });
     assert!(logged, "the total is on the guard log");
     let _ = (cwd.kill(), fd.kill(), cwd.wait(), fd.wait());

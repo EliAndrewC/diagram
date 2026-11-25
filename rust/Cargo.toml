@@ -91,7 +91,14 @@ opt-level = 2
 # gate crate's test binary 136 MB and its link 1.2-15 s under GNU ld; line tables keep a panic's file and line and the coverage
 # report (llvm-cov reads its own mapping, not DWARF: claims' and core's reports the same line for line), and halved the target.
 # `[profile.test]` inherits this; `release` and `tool` (the hamlet engine, l7r-gate, l7r-guard) do not.
-debug = "line-tables-only"
+# NO DEBUG INFO AT ALL (451 T246, measured 2026-11-25 on a `git archive` of HEAD, fresh targets, two runs each under a loaded machine,
+# scratchpad/trial/t246-build.sh): `debug = 0` made l7r_guard's test target 399 MB against line tables' 693 MB, its cold build 54/84 s
+# against 69/50 s, a one-file rebuild 2.5/5.1 s against 10.1/2.6 s and its test run 5.5/8.1 s against 12.9/5.9 s - within the noise -
+# and l7r_gate_pool's coverage build 271 MB against 447 MB (27 s against 33 s) with its llvm-cov report the same file for file. A
+# panic's file and line come from its `Location`, not DWARF: the same failing test printed the same `tests.rs:230:5` under both. Lost:
+# file and line in a RUST_BACKTRACE frame (nothing here sets it) and a debugger's source view. Do not add line tables back for a panic's
+# location or the coverage report; neither needs them.
+debug = 0
 
 # THE TOOLS BUILD INCREMENTALLY (feature 449 T95, the GM 2026-11-11, `request.md` "the Rust tooling's efficiency"): `l7r-gate`, `l7r-rust`
 # and `l7r-guard` build this profile (`scripts/gates/l7r-gate.sh`, `scripts/hooks/l7r-guard.sh`), into `<target>/tool/`. Cargo's release

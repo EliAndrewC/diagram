@@ -181,7 +181,13 @@ fn a_target_is_taken_whole_only_once_proven_dead() {
     put(&k, &k.join("unknown/debug/x"), 9);
     // head: its one tree gone and no code path names it - taken
     built_from(&k, &k.join("head"), &gone.join("t235/head"), 9);
-    assert_eq!(names(&plan(&c, cutoff(), &[], within()), &c), ["head"]);
+    // a trial worktree removed by hand just after its build (451 T246's point 2): its build directory goes at the next sweep with no
+    // idle wait - keyed to its tree's existence, not its age
+    built_from(&k, &k.join("trial-wt"), &gone.join("t300/trial-wt"), 0);
+    assert_eq!(
+        names(&plan(&c, cutoff(), &[], within()), &c),
+        ["head", "trial-wt"]
+    );
 }
 
 #[test]
