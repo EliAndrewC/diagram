@@ -169,7 +169,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T251 the gm-attributions baseline's 10 CANON claims: each points at the GM's recorded words, or is relabeled to what backs it through the claims round (451 T233); lands beside the pages it shares with the page-comment task (0039, 0058, 0100, 0222), the other claims first
       research: rendering
-- [ ] T252 tests/hooks/test-closing-checks.sh case 1's static-row check failed once while its printed output showed the static row GREEN, then passed on the next two runs (451 T249's builder in a parallel worktree, 2026-11-25): find the race or the read that makes it flaky (two closing-checks runs side by side on one machine are the likely shared state) and make it deterministic, red-first on a forced interleaving
-      research: rendering
 - [ ] T253 the other 17 pipefail guard suites under tests/hooks/ grep a run's text through a pipe (`printf '%s' "$OUT" | grep -q`, 98 sites, counted 2026-11-25 by T252's grep): grep -q exits on an early match while bash's printf still writes, SIGPIPE makes the pipeline 141 under pipefail, a present line reads FAIL and a negated check passes falsely (T252: 1 in 3,000 at real size on one CPU); move each to a here-string helper as test-closing-checks.sh's `seen` and lift its self-grep into a check over every suite
       research: rendering

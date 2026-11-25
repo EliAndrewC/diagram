@@ -12943,3 +12943,33 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 
 
 <!-- plan-archive: T249 to T232 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-25 -->
+### T252 (T249's builder's closing run, 2026-11-25: test-closing-checks.sh case 1's static row reported FAIL while the output it printed showed it GREEN, observed 2026-11-25, method: that builder's report, quoted in tasks.md's T252)
+
+- **Approach**: the suite's checks grep a run's text from a here-string (`seen VAR <grep args>`), never through `printf '%s' "$OUT" | grep -q`; a section 0 forces the race and a self-grep refuses the pipe form coming back. Measured 2026-11-25 (bash 5.3.9, the loops in this section's item 4).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| here-string greps | the suite's section 0: the old pipe form reads a present row absent on the forced text (measured 2026-11-25 (50 runs of the loop of item 4)), `seen` reads it present | n/a: no engine code | none | n/a |
+
+<!-- plan-archive: archived 2026-11-25 -->
+### T252 Approach (checklist part A)
+
+1. **The goal, in the world.** `tests/hooks/test-closing-checks.sh` gives one verdict for one code, however loaded the machine: a row its output shows is a row it finds.
+2. **The constraints.** The task's text: find the race or shared read, reproduce it red on a forced interleaving, make it deterministic, say what was shared. The suite keeps `set -uo pipefail`.
+3. **Where each comes from.** G: the task line of tasks.md (T252). O: the measurements of item 4.
+4. **Do they describe the world here?** Yes. WHAT WAS SHARED: nothing on disk - every path the suite's case 1 reads (the stub make, its events, `CLOSING_CHECKS_DIR`, the gate stub) is under the suite's own `mktemp -d`, measured 2026-11-25 (reading the suite and `scripts/gates/closing-checks.sh`), and the run id's directory is made with a plain `mkdir`, so the brief's candidates (a fixed /tmp path, the run directory under the common .git, a timestamp collision, the stamp file) were ruled out by reading `scripts/gates/closing-checks.sh` and the suite. What two side-by-side runs share is the CPU. THE RACE: the check is `printf '%s' "$OUT" | grep -Eq '^  static +GREEN ...'` under pipefail. Bash writes the printf builtin's stdout a line at a time (6 write calls for an 8-line text, measured 2026-11-25 (`/proc/<pid>/io`'s `syscw` read before and after one printf into a pipe)); grep -q exits at its first match; a printf still writing when grep has exited dies of SIGPIPE, the pipeline returns 141, and the check reports FAIL with `$OUT`, which shows the row, beside it. The static row is the first row, so it has the most text behind it - the row that failed. Unloaded, 0 of 2,000 runs on a 461-byte copy of case 1's output failed; pinned to one CPU 1 of 3,000 did, measured 2026-11-25 (a bash loop of the check's own pipeline, the second under `taskset -c 0`). The forced interleaving: the row first, then 1.3 MB (`seq 200000`), more than a pipe holds, so the writer is always still writing at grep's exit: the old form 50 of 50 red, its negation (`! printf | grep -q`) a false pass 50 of 50, the here-string form 0 of 50 red, measured 2026-11-25 (one bash loop of 50 over each form).
+5. **The order.** No dependency.
+6. **The exits.** Green: `make closing-checks T=T252 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, measured 2026-11-25: with section 0 added and the checks not yet moved, the suite gave 63 passed, 1 failed ("a check pipes a variable into grep", naming every line that pipes); section 0's forcing check confirms the old form reads the row absent. After `seen` replaced the 47 pipes (`$OUT`, `$A`, `$B`; the forcing line keeps the old form on purpose), 64 passed, 0 failed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: a check's verdict depended on scheduling - a green row read FAIL, and a negated check could pass on a line that is there. No map changes.
+
+**Found and left?**
+- The other 17 pipefail suites of `tests/hooks/` grep a variable through a pipe the same way, 98 sites (observed 2026-11-25, method: `grep -cE '(printf|echo) [^|#]*"\$[A-Za-z_]+" *\| *grep -[A-Za-z]*q'` over the suites that set pipefail); visible effect: the same false FAIL or false pass under load. Not fixed here: a mechanical edit of 17 other guards' suites, outside this task's one suite, each owing its own suite's run. Filed as T253; lands before T139 (test-no-poll-hooks.sh, one of the 17, is that task's suite).
+
+**Performance work?** no: the suite's checks are made deterministic, not faster.
+
