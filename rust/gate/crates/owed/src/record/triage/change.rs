@@ -590,13 +590,25 @@ fn names_a_thing(w: &str) -> bool {
     !NOT_SUBJECT.contains(&w) && !NOT_SUBJECT.contains(&format!("{w}s").as_str())
 }
 
-/// A text's word trigrams that hold [`SUBJECT_WORDS`] words naming a thing.
-fn subject_trigrams(text: &str) -> HashSet<String> {
+/// A text's word trigrams that hold `words` words naming a thing.
+fn subject_trigrams(text: &str, words: usize) -> HashSet<String> {
     stems(text)
         .windows(3)
-        .filter(|t| t.iter().filter(|w| names_a_thing(w)).count() >= SUBJECT_WORDS)
+        .filter(|t| t.iter().filter(|w| names_a_thing(w)).count() >= words)
         .map(|t| t.join(" "))
         .collect()
+}
+
+/// The phrases two texts share, sorted: each a word trigram of `words` words naming a thing, as the addition rule reads a phrase (451
+/// T234: a split's target read against a Depiction, `split_links`).
+#[must_use]
+pub fn shared_phrases(one: &str, other: &str, words: usize) -> Vec<String> {
+    let mut shared: Vec<String> = subject_trigrams(one, words)
+        .intersection(&subject_trigrams(other, words))
+        .cloned()
+        .collect();
+    shared.sort();
+    shared
 }
 
 /// THE ADDITION RULE (451 T209, T212; the cascade test, 2026-11-24): a sentence of a block new outright on the page that repeats a
@@ -606,10 +618,14 @@ fn subject_trigrams(text: &str) -> HashSet<String> {
 /// reached, with an edit or none, is no addition.
 #[must_use]
 pub fn addition(c: &Change, reader: &str) -> Option<(String, String)> {
-    let said = subject_trigrams(reader);
+    let words = SUBJECT_WORDS;
+    let said = subject_trigrams(reader, words);
     let new = c.added.iter().filter(|a| !c.arrived_edited.contains(a));
     sentences(new).into_iter().find_map(|s| {
-        let mut shared: Vec<String> = subject_trigrams(&s).intersection(&said).cloned().collect();
+        let mut shared: Vec<String> = subject_trigrams(&s, words)
+            .intersection(&said)
+            .cloned()
+            .collect();
         shared.sort();
         shared.into_iter().next().map(|t| (s, t))
     })

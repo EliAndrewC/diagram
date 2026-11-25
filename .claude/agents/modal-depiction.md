@@ -47,7 +47,10 @@ as in About (M16).
 **LINKS** (D5, D6). The links are exactly the drawing pages the modal and its KIND rest on - every one, no other. A CANDIDATE page
 that holds how the map draws this kind is owed a link: its absence is a finding (with the `Drawing:` line to add), and so is a
 Depiction tab left out while such a page exists. A LISTED page that holds nothing about this kind should go. With nothing notable to
-say, the links alone is right; only a kind with no drawing page and nothing to explain has no tab.
+say, the links alone is right; only a kind with no drawing page and nothing to explain has no tab. A split ADDS its target (D5, 451 T234): a page
+reached through a LISTED page's split pointer (`<a class="moved">`) whose blocks the Depiction states is owed a link like a CANDIDATE
+(the `Drawing:` line to add, a LINKS fix); `make modal-triage` adds it for a modal already answered, so you meet it only where your
+check was owed.
 
 ## Your report: counts first, then only what to act on
 
@@ -226,8 +229,12 @@ do NOT present the single form as deliberate: leave it unsaid here, and the drif
 
 **D5. The drawing pages, linked.** The tab ends with the "how our maps draw it" pages the modal and its kind rest on - every
 one of them, and no other - as links (the `Drawing:` list). A kind's drawing page is usually the one beside a research question
-the modal cites; leaving it off is a finding, not an option. (GM: *"things which are currently linked on the References tab which
-are about how something is drawn would be moved to this tab"*)
+the modal cites; leaving it off is a finding, not an option. A split ADDS its target: where a split's pointer (`<a class="moved">`)
+on a listed page leads to a drawing page the modal does not list and its Depiction states a block that page holds, the page joins
+the `Drawing:` list - mechanically, by `make modal-triage`, owing no check, the modal's answer carried to the new list (451 T234; a
+LINKS fix states no fact, 451 T188). Unlike an `Entry:` (M14), the list is what the tab shows its reader, so it names the page the
+rules now live on; a modal whose depiction check is owed meanwhile is left to that check, which adds the link as its LINKS fix. (GM:
+*"things which are currently linked on the References tab which are about how something is drawn would be moved to this tab"*)
 
 **D6. Links alone, or no tab.** With nothing notable to explain, the tab is the links alone; with no drawing page and nothing to
 explain, there is no tab. (GM: *"In cases where there is nothing noteable to explain, then we would simply link to the 'How we

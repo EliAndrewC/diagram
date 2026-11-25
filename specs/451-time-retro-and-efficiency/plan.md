@@ -2774,31 +2774,42 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T234 (<why: the finding or measurement that files it>)
+### T234 (the P3b cascade record, 2026-11-25, `/home/agent/.claude/jobs/c6fd72d1/tmp/cascade/p3b-cascade.md`: after page session P3b moved 0005's rice-shoots section to the new drawing page 0346, `hamlet/paddy`'s `Drawing:` still named only 0005, the tool cleared it, and D5 and modal-depiction's LINKS contract, saying nothing of a split, would read 0346 as a missing link)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: The task's words are taken literally: "a split ADDS the target page to each pop-up whose Drawing: names the source page and whose Depiction states a moved block (mechanically, owing nothing), and D5 says so". That is not M14's "the pointer counts as listed, the line is not edited" (451 T184): the `Drawing:` list is what the Depiction tab shows its reader, so it gains the page the rules now live on.
+  - **The writer.** `rust/gate/crates/owed/src/record/modals/split_links.rs`: `owed_links` follows each split pointer (`<a class="moved">`, `change::follow`, T185/T196) from a pop-up's listed `Drawing:` pages to a `.drawing.html` page the line does not name, and owes it where the Depiction states the target's blocks (below). `apply` appends it to the line (`with_links`, a continued line too) with the condition of the listed page reaching it (`[settlement_form=dispersed]`; none where an unconditional listed page reaches it - a bug the first real run found, the well's 0031 entry carries one).
+  - **Owing nothing.** `Modal::depiction()` holds the `Drawing` tag, so an edit of the line owes `modal-depiction` ("its Depiction, Drawing: or Entry: changed") at a new fingerprint. The writer does not change that rule (it would move every pop-up's fingerprint, and `trials/depiction_replay.rs` shares `depiction_owed_by`); it carries the pop-up's answer to the new fingerprint with `answers::settle`, as an applied LINKS fix "states no fact, so it settles once applied" (451 T188). A pop-up not answered as it stands is left and named: the edit would turn a triage it is owed into a full check, and the check it is owed reads the pointer and makes the link as a LINKS fix. So `make modal-triage` runs it AFTER its own clears (`run_bundle`), and says each addition first.
+  - **"States".** The addition rule's phrase (451 T209, `change::subject_trigrams`, now taking its word count; `shared_phrases`): the Depiction and the target's blocks, a pointer back left out, share at least `LINK_PHRASES` (3) word trigrams of `LINK_WORDS` (2) words naming a thing. Two KNOBS, measured 2026-11-25 over every pop-up's unlisted split targets in the tree (52 (pop-up, target) pairs, targets 0346 of P3b and 0349 of P11; a throwaway test over the real tree, removed): at the triage's own 3 words, one pair (`settlement_form--dispersed`, 0349) and the paddy missed; at 2 words, eight pairs share a phrase; at 3 phrases of 2 words, two: `hamlet/paddy` and 0346 ("dot a plant", "no ruled row", "scatter of shoot") and `settlement_form--dispersed` and 0349 (6, "a scattered settlement", "a roomier field" ...), the two whose Depictions state the moved section, read by eye. At 2 phrases `hamlet/well` ("a scattered farm", "within reach of": its water, not the farm's reach of its rice) and `settlement_form--nucleated` ("gap between the", "the gap between": one phrase) join; at 1, four more on one generic phrase ("the field edge", "beside its field").
+  - **The contract.** `dev/modals.md` D5 gains the clause (and through `make agent-sync` each modal check's copy); modal-depiction's own LINKS contract gains it. `checks/documents/modal_split_pointer.rs`, which pins M14's clause, pins D5's and LINKS' too.
+  - **The fix.** `make modal-triage` run on the clone wrote both lines: `hamlet/paddy` gained 0346, `choice/settlement_form--dispersed` gained 0349 (P11's split, 2026-11-24, which the same gap had left). `make record-owed` after: "2 unit(s) owed by the delta, 0 still unanswered", both `[answered]`.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the writer and its answer carried | `split_links/tests.rs`: 4 of its 5 first tests red on the stub (the pair owed, the line written, the answer carried, the triage's line) | n/a: tooling | none | n/a |
+| the phrase knobs | `two_shared_phrases_owe_nothing` (the well's case) and the 52-pair measurement | n/a: tooling | none | n/a |
+| the source's condition | `the_link_keeps_its_source_s_condition` | n/a: tooling | none | n/a |
+| D5 and LINKS | `modal_split_pointer` red on the real tree before the clauses (5 findings, measured 2026-11-25 (`make rust-test CRATE=rust/gate/crates/checks`)), and its fixture case | n/a: rules | none | n/a |
 
 ### T234 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A reader of a pop-up's Depiction tab whose rules a split moved to a new drawing page finds that page in its links, and nobody re-checks a pop-up for it.
+2. **The constraints.** The task's words (a split ADDS the target, mechanically, owing nothing; D5 says so). The GM 2026-11-23 (451 T184): *"nothing needs to cascade simply because a split occurs"*. 451 T188: a LINKS fix states no fact and settles once applied. D5 and LINKS: every drawing page the modal rests on, and no other.
+3. **Where each comes from.** G: the GM's split ruling (T184). R: `dev/modals.md` D5, M14; modal-depiction's LINKS. O: the P3b cascade record; the 52-pair measurement, 2026-11-25.
+4. **Do they describe the world here?** Yes: the two splits in the tree (0005 -> 0346, 0031 -> 0349) are the cases measured, and both pop-ups the rule selects state the moved sections.
+5. **The order.** No dependency. It lands alone.
+6. **The exits.** Green: `make closing-checks T=T234 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, 2026-11-25: `make rust-test CRATE=rust/gate/crates/owed` on the stub, 131 passed and 4 failed (the split_links tests); with the writer, 138 passed. Measured 2026-11-25 (`make rust-test CRATE=rust/gate/crates/checks`): with the pin and before the clauses, 165 passed and 1 failed (5 findings: D5 in dev/modals.md and its three copies, modal-depiction's LINKS); after the clauses and `make agent-sync`, 166 passed. Measured 2026-11-25 (`make modal-triage`, then `make record-owed` on the clone): the two lines gained, 0 unanswered.
+10. **Before moving a constant.** n/a (two new knobs, measured above).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reader of `hamlet/paddy`'s or the dispersed choice's Depiction tab now reaches the page holding the rules it states in one click, not two; no map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `choice/settlement_form--dispersed`'s `Drawing:` lacked 0349 after P11's split (2026-11-24), the same gap. Fixed here (the tool's run).
+- A `Drawing:` entry's condition was not carried to a split's target by the first draft of the writer (`hamlet/well` reaches 0349 through `0031 [settlement_form=dispersed]`). Fixed here, before it wrote anything that stayed.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: one walk of the pop-ups at `make modal-triage`, reading only the split targets their lines reach.
 
 
 ### T235 (<why: the finding or measurement that files it>)

@@ -1536,6 +1536,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T234 (the P3b cascade record, 2026-11-25, `/home/agent/.claude/jobs/c6fd72d1/tmp/cascade/p3b-cascade.md`: after page session P3b moved 0005's rice-shoots section to the new drawing page 0346, `hamlet/paddy`'s `Drawing:` still named only 0005, the tool cleared it, and D5 and modal-depiction's LINKS contract, saying nothing of a split, would read 0346 as a missing link)": {
+   "sha256": "e596184a68ada9281b12e52cb159291911d918b316d8b3173e010b89542c83b2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T234 Approach (checklist part A)": {
+   "sha256": "9824bc2de6ac73eaae3af7b7cf08a9d368d8fb39d65f5658b9b83791702ab382",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -20744,6 +20756,71 @@
      "why": "Sequencing and exits only; narrows nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T234 (the P3b cascade record, 2026-11-25, `/home/agent/.claude/jobs/c6fd72d1/tmp/cascade/p3b-cascade.md`: after page session P3b moved 0005's rice-shoots section to the new drawing page 0346, `hamlet/paddy`'s `Drawing:` still named only 0005, the tool cleared it, and D5 and modal-depiction's LINKS contract, saying nothing of a split, would read 0346 as a missing link)",
+    "### T234 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T234-literal",
+     "summary": "The task's words read literally: a split ADDS the target page to the Drawing: line of each pop-up whose Drawing: names the source and whose Depiction states a moved block, rather than M14's 'the pointer counts as listed, the line is not edited'.",
+     "class": "within",
+     "why": "It is the task's own wording. It serves the GM's split rule (2026-11-23: 'nothing needs to cascade simply because a split occurs') and the approved rule 'a split is a move': without it, D5/LINKS would read the target as a missing link, and a check would be owed because of the split."
+    },
+    {
+     "id": "T234-writer",
+     "summary": "split_links.rs follows each split pointer from a pop-up's listed Drawing: pages to an unnamed .drawing.html target and appends it to the line, a continued line included.",
+     "class": "within",
+     "why": "It is the mechanical addition the task names."
+    },
+    {
+     "id": "T234-condition",
+     "summary": "The appended target carries the condition of the listed page that reaches it ([settlement_form=dispersed]), or none where an unconditional listed page reaches it.",
+     "class": "within",
+     "why": "Without this, the link would apply under conditions where the pop-up does not rest on the page, which is a wrong outcome under D5/LINKS ('every drawing page the modal rests on, and no other'). Carrying the condition is part of adding the page correctly and does not narrow the task."
+    },
+    {
+     "id": "T234-owing-nothing",
+     "summary": "The fingerprint rule (Drawing: is part of depiction()) is left unchanged. The pop-up's existing answer is carried to the new fingerprint with answers::settle, because an applied LINKS fix states no fact (451 T188).",
+     "class": "within",
+     "why": "This implements 'owing nothing' as the task states it. Leaving the fingerprint rule unchanged avoids moving every pop-up's fingerprint, which would itself be a cascade."
+    },
+    {
+     "id": "T234-unanswered-left",
+     "summary": "A pop-up that is not answered as it stands is not edited. It is named, and its owed check makes the link as a LINKS fix. The writer runs after modal-triage's own clears so that this set is as small as it can be.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task says the split adds the target to EACH such pop-up, mechanically and owing nothing. For a pop-up that already owes a check, those two clauses conflict: the edit would turn the triage it is owed into a full check, so the split would cause more owing, against 'owing nothing' and against the GM's 'nothing needs to cascade simply because a split occurs'. Following the literal reading there would defeat the request's stated purpose. The carve-out does not empty the rule: the link is still made, by the check the pop-up already owes (now bound by the new D5/LINKS clause), and the pop-up is named rather than skipped silently. It covers exactly one class: pop-ups that already owe a check."
+    },
+    {
+     "id": "T234-states",
+     "summary": "'States a moved block' is made mechanical: at least 3 shared word trigrams of at least 2 naming words between the Depiction and the target's blocks, with a pointer back excluded. Two knobs, measured 2026-11-25 over 52 (pop-up, target) pairs; they select exactly the two pairs that state the moved sections, as read by eye.",
+     "class": "within",
+     "why": "The task requires a test for 'states', and this is that test, with its thresholds measured against the whole tree and checked by eye. Nothing the request covers is left out: hamlet/well and settlement_form--nucleated are excluded with the reasons given (water, not the rice's reach; a single repeated phrase). If the rule misses a pop-up, the D5/LINKS clause still makes the link as a fact-free LINKS fix."
+    },
+    {
+     "id": "T234-contract",
+     "summary": "dev/modals.md D5 gains the clause and is copied to each modal check by agent-sync. modal-depiction's LINKS contract gains it too. modal_split_pointer.rs pins both.",
+     "class": "within",
+     "why": "'D5 says so' is the task's own words. The LINKS clause and the pin only enforce that same rule where the check reads it; their sole effect is that the requested behavior happens and keeps happening."
+    },
+    {
+     "id": "T234-dispersed-fix",
+     "summary": "The tool's run also adds 0349 to choice/settlement_form--dispersed, the same gap left by P11's split.",
+     "class": "within",
+     "why": "This is the same rule applied to every pop-up it covers ('each pop-up'), not a new behavior."
+    },
+    {
+     "id": "T234-timing",
+     "summary": "The addition runs inside make modal-triage, and announces each addition before making it, rather than at the moment of the split.",
+     "class": "within",
+     "why": "It remains a mechanical addition that owes nothing; the timing is an implementation choice the task leaves open, and the outcome the request asks for is unchanged."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -33076,6 +33153,69 @@
      "summary": "After 926e10e593, no dependency on T234; one landing; closing checks green or recorded red with a claim of impossibility ruled through make arbiter-ask.",
      "class": "within",
      "why": "Sequencing and exits only; narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T234": {
+   "section_sha256": "f29ec3ed5c186896038b7b6c3ed59a0766a5a7d7269917ac2851c49a098827ff",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T234-literal",
+     "summary": "The task's words read literally: a split ADDS the target page to the Drawing: line of each pop-up whose Drawing: names the source and whose Depiction states a moved block, rather than M14's 'the pointer counts as listed, the line is not edited'.",
+     "class": "within",
+     "why": "It is the task's own wording. It serves the GM's split rule (2026-11-23: 'nothing needs to cascade simply because a split occurs') and the approved rule 'a split is a move': without it, D5/LINKS would read the target as a missing link, and a check would be owed because of the split."
+    },
+    {
+     "id": "T234-writer",
+     "summary": "split_links.rs follows each split pointer from a pop-up's listed Drawing: pages to an unnamed .drawing.html target and appends it to the line, a continued line included.",
+     "class": "within",
+     "why": "It is the mechanical addition the task names."
+    },
+    {
+     "id": "T234-condition",
+     "summary": "The appended target carries the condition of the listed page that reaches it ([settlement_form=dispersed]), or none where an unconditional listed page reaches it.",
+     "class": "within",
+     "why": "Without this, the link would apply under conditions where the pop-up does not rest on the page, which is a wrong outcome under D5/LINKS ('every drawing page the modal rests on, and no other'). Carrying the condition is part of adding the page correctly and does not narrow the task."
+    },
+    {
+     "id": "T234-owing-nothing",
+     "summary": "The fingerprint rule (Drawing: is part of depiction()) is left unchanged. The pop-up's existing answer is carried to the new fingerprint with answers::settle, because an applied LINKS fix states no fact (451 T188).",
+     "class": "within",
+     "why": "This implements 'owing nothing' as the task states it. Leaving the fingerprint rule unchanged avoids moving every pop-up's fingerprint, which would itself be a cascade."
+    },
+    {
+     "id": "T234-unanswered-left",
+     "summary": "A pop-up that is not answered as it stands is not edited. It is named, and its owed check makes the link as a LINKS fix. The writer runs after modal-triage's own clears so that this set is as small as it can be.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task says the split adds the target to EACH such pop-up, mechanically and owing nothing. For a pop-up that already owes a check, those two clauses conflict: the edit would turn the triage it is owed into a full check, so the split would cause more owing, against 'owing nothing' and against the GM's 'nothing needs to cascade simply because a split occurs'. Following the literal reading there would defeat the request's stated purpose. The carve-out does not empty the rule: the link is still made, by the check the pop-up already owes (now bound by the new D5/LINKS clause), and the pop-up is named rather than skipped silently. It covers exactly one class: pop-ups that already owe a check."
+    },
+    {
+     "id": "T234-states",
+     "summary": "'States a moved block' is made mechanical: at least 3 shared word trigrams of at least 2 naming words between the Depiction and the target's blocks, with a pointer back excluded. Two knobs, measured 2026-11-25 over 52 (pop-up, target) pairs; they select exactly the two pairs that state the moved sections, as read by eye.",
+     "class": "within",
+     "why": "The task requires a test for 'states', and this is that test, with its thresholds measured against the whole tree and checked by eye. Nothing the request covers is left out: hamlet/well and settlement_form--nucleated are excluded with the reasons given (water, not the rice's reach; a single repeated phrase). If the rule misses a pop-up, the D5/LINKS clause still makes the link as a fact-free LINKS fix."
+    },
+    {
+     "id": "T234-contract",
+     "summary": "dev/modals.md D5 gains the clause and is copied to each modal check by agent-sync. modal-depiction's LINKS contract gains it too. modal_split_pointer.rs pins both.",
+     "class": "within",
+     "why": "'D5 says so' is the task's own words. The LINKS clause and the pin only enforce that same rule where the check reads it; their sole effect is that the requested behavior happens and keeps happening."
+    },
+    {
+     "id": "T234-dispersed-fix",
+     "summary": "The tool's run also adds 0349 to choice/settlement_form--dispersed, the same gap left by P11's split.",
+     "class": "within",
+     "why": "This is the same rule applied to every pop-up it covers ('each pop-up'), not a new behavior."
+    },
+    {
+     "id": "T234-timing",
+     "summary": "The addition runs inside make modal-triage, and announces each addition before making it, rather than at the moment of the split.",
+     "class": "within",
+     "why": "It remains a mechanical addition that owes nothing; the timing is an implementation choice the task leaves open, and the outcome the request asks for is unchanged."
     }
    ],
    "verdict": "CLEAR"

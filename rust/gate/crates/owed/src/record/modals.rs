@@ -877,6 +877,7 @@ pub fn cli(args: &[String]) -> crate::Reply {
 
 pub mod labeled;
 pub mod refs;
+pub mod split_links;
 
 #[cfg(test)]
 mod tests;

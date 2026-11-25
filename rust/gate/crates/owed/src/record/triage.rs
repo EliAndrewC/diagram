@@ -843,15 +843,23 @@ fn run_bundle(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
     } else {
         PathBuf::from(out_arg)
     };
-    Ok(Reply {
-        stdout: match bundle_in(root, &out, "", &owed::store(root))? {
+    let store = owed::store(root);
+    let triaged = bundle_in(root, &out, "", &store)?;
+    let linked = modals::split_links::apply(root, &store)?;
+    let said: String = linked
+        .iter()
+        .flat_map(|l| ["modal-triage: ", l.as_str(), "\n"])
+        .collect();
+    let tail = match triaged {
             (None, 0) => "modal-triage: no pop-up is owed a triage\n".to_owned(),
             (None, c) => format!("modal-triage: {c} unit(s) cleared by the tool (no claim-bearing change); no agent is owed\n"),
             (Some((manifest, n)), c) => format!(
                 "{}\nmodal-triage: {c} unit(s) cleared by the tool; {n} unit(s) left; dispatch the `modal-triage` agent on the MANIFEST (a session started before 2026-10-17's amendment 6 landed: restart to load it), save its reply, then `make modal-triaged BUNDLE=<dir> REPLY=<file>`\n",
                 manifest.display()
             ),
-        },
+        };
+    Ok(Reply {
+        stdout: said + &tail,
         stderr: String::new(),
         code: 0,
     })
