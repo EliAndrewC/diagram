@@ -561,6 +561,9 @@
 - [x] T228 the reply parser refuses a whole modal-form reply over lines reading 'EDIT: none', the form the agent's own contract gives (451 T195's fail-closed rule; /home/agent/.claude/jobs/c6fd72d1/tmp/cascade/p7-cascade.md, page session P7's cascade, 2026-11-24): the parser and the agent files agree on how a check says it has no edit
       research: rendering
       verify: DONE. landed in batch T228+T234: the parallel trial's two tasks, each built in its own worktree and carried into the clone: T228 holds a check's no-edit line to one form; T234 follows a page split to a pop-up's Drawing: line; both red-first, CLEAR, no claims; carries T245's filing
+- [x] T229 an outside-the-change note that is listed and not filed (451 T219) is echoed by no recording command, so it lives only in the saved reply (/home/agent/.claude/jobs/c6fd72d1/tmp/cascade/p7-cascade.md, page session P7's cascade, 2026-11-24): make claims-checked and make record-checked print each listed note, and the round's report keeps them
+      research: rendering
+      verify: DONE. landed: a check's listed notes echoed by the recording commands and kept in noted.jsonl; red-first on P7's replies; CLEAR; no claims; built in a parallel worktree
 - [x] T230 closing-checks' BLOCKED line said 'every error static printed is in another task's files - ()' when the errors were in the task's own file (rust/gate/crates/core/src/build.rs, 451 T224's builder, 2026-11-24): an empty list is never an attribution
       research: rendering
       verify: DONE. landed in batch T230+T239: closing-checks' empty attribution fixed; red-first (7 cases red on HEAD); CLEAR; no claims
