@@ -156,3 +156,9 @@ Told what the last two days' research changed (of eight hamlet searches, two cha
 Offered the rule change (UNRESEARCHED a fifth label on the research pages as well as in the claims; a new guess recorded as UNRESEARCHED with no search; the backlog `make claims-report`'s UNRESEARCHED list, searched at each port stage's end for the items that stage touched; a search still first where a decision is foundational or a guess is likely visibly wrong; most of page sessions P13 and P14 dropped from the pre-port list, P12 kept), the GM said:
 
 > yes please
+
+## 2026-11-25, a builder's claims round split off
+
+Told that most code builders on 2026-11-24/25 hit the 300k context cap and handed off (449 T420, T423, T427, T429, T430; 451 T218-T222), each handoff costing a fresh builder 10 to 20 minutes of re-reading, and that the cause is one builder doing the fix, the measurement sweep, the plan section, the plan review and the claims round, the session proposed splitting the claims round off by default. The GM:
+
+> sounds good please do that ASAP
