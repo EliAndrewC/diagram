@@ -338,3 +338,67 @@ fn a_fall_square_across_the_wind_seats_at_the_heads_windward_corner_astride_its_
         "the seat refused: x - no map is drawn of a hamlet a stage refused"
     );
 }
+
+#[test]
+fn a_rice_polder_s_pocket_pond_is_never_off_its_low_row() {
+    // 449 T429: seed 183 at ten households lays every last-row plot a merged pair, and the pond fell to a top-row plot
+    // (0008: "Our maps sink each pond wholly inside one low plot")
+    for rest in ["", r#", "pins": {"paddy_rest": "unsettled"}"#] {
+        let spec = format!(
+            r#"{{"name": "P", "seed": 183, "households": 10, "down_deg": 90, "field_archetype": "polder_grid"{rest}}}"#
+        );
+        let r = roll(&parse(&spec).unwrap()).unwrap();
+        let s = r.polder.as_ref().unwrap();
+        let reached = s
+            .polder
+            .plots
+            .iter()
+            .filter(|p| p.low)
+            .all(|p| p.ring.len() != 4);
+        assert!(reached, "the case no longer reached");
+        let drawn = s.pocket.is_some();
+        assert!(!drawn, "{rest}: a pond with no low four-sided plot left");
+    }
+}
+
+/// A DIKE-POND BLOCK'S PONDS HOLD THEIR BANKS (449 T430): on the rolled mosaics whose drift left a parcel too small for its
+/// bank or folded a bent pair's water over it, every pond keeps its bank's width all round (a foot and a half of slack for a
+/// corner's rounding), none falls to the least pond for the bend alone, and no bush or hedge stands in a pond's water.
+#[test]
+fn a_dike_pond_block_s_ponds_hold_their_banks_and_no_bush_stands_in_one() {
+    use crate::field::geom::{inside, seg_dist, signed_area};
+    for seed in [14, 47, 51, 54, 75, 79] {
+        let spec = format!(
+            r#"{{"name": "P", "seed": {seed}, "households": 15, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond"}}"#
+        );
+        let r = roll(&parse(&spec).unwrap()).unwrap();
+        let s = r.polder.as_ref().unwrap();
+        let (parcels, crops, inset) = s.converted.as_ref().unwrap();
+        for q in parcels {
+            let Some((_, w)) = &q.water else { continue };
+            let n = q.ring.len();
+            let line = |p: (f64, f64)| {
+                (0..n)
+                    .map(|k| seg_dist(p, q.ring[k], q.ring[(k + 1) % n]))
+                    .fold(f64::INFINITY, f64::min)
+            };
+            let near = w.iter().map(|&p| line(p)).fold(f64::INFINITY, f64::min);
+            let (bank, at) = (*inset, near);
+            assert!(at >= bank - 1.5, "seed {seed}: {at:.1} of {bank:.1}");
+            let share = signed_area(w).abs() / signed_area(&q.ring).abs();
+            assert!(share > 0.02, "seed {seed}: a speck pond, {share:.3} of it");
+            let wet = crops
+                .crowns
+                .iter()
+                .filter(|c| inside((c.0, c.1), w))
+                .count()
+                + crops
+                    .hedges
+                    .iter()
+                    .flatten()
+                    .filter(|&&p| inside(p, w))
+                    .count();
+            assert_eq!(wet, 0, "seed {seed}: crowns or hedge points in a pond");
+        }
+    }
+}

@@ -7,6 +7,9 @@
 use super::{outfall, polder, rest, shape, MODULE_FT};
 use crate::field::geom::{inside, seg_dist, signed_area};
 
+/// A dike-pond block's share of water and its leftover form: Kuwabata's three parts water to seven of dike, every parcel a pond.
+const WET: Option<(f64, &str)> = Some((0.3, "none"));
+
 #[test]
 fn the_shape_wastes_least() {
     assert_eq!(shape(24, 1.0), (6, 4));
@@ -18,7 +21,7 @@ fn the_shape_wastes_least() {
 #[test]
 fn a_rice_polder_and_a_dike_pond_block() {
     let paddy = 15.0 * 1.3 * 43_560.0;
-    for (dikepond, layout) in [(false, "mosaic"), (true, "mosaic"), (true, "chessboard")] {
+    for (dikepond, layout) in [(None, "mosaic"), (WET, "mosaic"), (WET, "chessboard")] {
         let p = polder(paddy, dikepond, layout, 90.0, (3200.0, 3200.0), 1.0, 4);
         let area: f64 = p.plots.iter().map(|x| signed_area(&x.ring).abs()).sum();
         assert!(area >= paddy * 0.8, "{area} for {paddy}");
@@ -46,7 +49,7 @@ fn a_rice_polder_and_a_dike_pond_block() {
                     .all(|q| (q.0 - p.pond.0 .0).abs() <= 82.0 + 40.0 + 1e-9)
         );
         assert!(p.ditches.len() >= 4 && p.feeder.len() == 3);
-        if dikepond {
+        if dikepond.is_some() {
             let paired = p
                 .plots
                 .iter()
@@ -62,7 +65,7 @@ fn a_rice_polder_and_a_dike_pond_block() {
             assert!(p.plots.len() > p.shape.0 * p.shape.1);
         }
     }
-    let p = polder(paddy, false, "mosaic", 90.0, (3200.0, 3200.0), 1.0, 4);
+    let p = polder(paddy, None, "mosaic", 90.0, (3200.0, 3200.0), 1.0, 4);
     assert!(rest(&p.plots, 4, false).is_empty() && rest(&[], 4, true).is_empty());
     for seed in 0..10 {
         let r = rest(&p.plots, seed, true);
@@ -87,8 +90,8 @@ fn a_rice_polder_and_a_dike_pond_block() {
         assert_eq!(run.len(), 3, "two turns of 45 degrees onto the fall");
         assert!(end.0 < 0.0 || end.1 < 0.0 || end.0 > canvas.0 || end.1 > canvas.1);
     }
-    let flat = polder(paddy, true, "chessboard", 90.0, (0.0, 0.0), 1.0, 4);
-    let warped = polder(paddy, true, "mosaic", 90.0, (0.0, 0.0), 1.0, 4);
+    let flat = polder(paddy, WET, "chessboard", 90.0, (0.0, 0.0), 1.0, 4);
+    let warped = polder(paddy, WET, "mosaic", 90.0, (0.0, 0.0), 1.0, 4);
     assert_ne!(flat.plots, warped.plots, "the mosaic bends the lattice");
 }
 
@@ -103,7 +106,7 @@ fn a_creek_stands_midway_between_its_banks_and_a_pinched_mosaic_is_eased() {
     let (mut eased, mut whole) = (0, 0);
     for seed in 1..=40 {
         for layout in ["mosaic", "chessboard"] {
-            let p = polder(paddy, true, layout, 90.0, (3200.0, 3200.0), 1.0, seed);
+            let p = polder(paddy, WET, layout, 90.0, (3200.0, 3200.0), 1.0, seed);
             assert!(p.ease > 0.0 && p.ease <= 1.0 && p.corridor_tests > 0);
             if layout == "chessboard" {
                 assert!((p.ease - 1.0).abs() < 1e-12, "a chessboard keeps the whole");
@@ -148,7 +151,8 @@ fn a_creek_stands_midway_between_its_banks_and_a_pinched_mosaic_is_eased() {
             }
         }
     }
-    assert!(eased > 0 && whole > eased, "{eased} eased, {whole} whole");
+    // at the driest split a mosaic is eased for its banks as well as its creeks (449 T430), so both kinds stay common
+    assert!(eased > 0 && whole > 0, "{eased} eased, {whole} whole");
 }
 
 /// A DIKE-POND'S CHANNELS ARE CREEKS, A RICE POLDER'S DITCHES (449 T420): the channels between a dike-pond block's ponds, down
@@ -170,7 +174,7 @@ fn a_dike_ponds_channels_are_creeks_and_a_rice_polders_stay_ditches() {
         ("mosaic", 21),
         ("mosaic", 7),
     ] {
-        let p = polder(paddy, true, layout, 90.0, (3200.0, 3200.0), 1.0, seed);
+        let p = polder(paddy, WET, layout, 90.0, (3200.0, 3200.0), 1.0, seed);
         let between: Vec<_> = p
             .ditches
             .iter()
@@ -198,7 +202,7 @@ fn a_dike_ponds_channels_are_creeks_and_a_rice_polders_stay_ditches() {
     assert!(same, "the width is the seed's, not the layout's");
     let rolled = widths.iter().any(|&w| (w - widths[0]).abs() > 1e-9);
     assert!(rolled, "rolled block by block");
-    let rice = polder(paddy, false, "mosaic", 90.0, (3200.0, 3200.0), 1.0, 4);
+    let rice = polder(paddy, None, "mosaic", 90.0, (3200.0, 3200.0), 1.0, 4);
     assert!((rice.ease - 1.0).abs() < 1e-12 && rice.corridor_tests == 0);
     assert_eq!(trunks(&rice), ladder);
     assert!(rice.ditches.iter().all(|d| d.seg != "row"));
@@ -214,7 +218,7 @@ fn a_dike_pond_ring_canal_is_no_narrower_than_its_creeks_and_a_rice_polders_keep
     let paddy = 15.0 * 1.3 * 43_560.0;
     let trunks = ["feeder", "w_toe", "e_toe", "drain"];
     for seed in 1..=12 {
-        for (dikepond, layout) in [(false, "mosaic"), (true, "mosaic"), (true, "chessboard")] {
+        for (dikepond, layout) in [(None, "mosaic"), (WET, "mosaic"), (WET, "chessboard")] {
             let p = polder(paddy, dikepond, layout, 90.0, (3200.0, 3200.0), 1.0, seed);
             let ring: Vec<_> = p
                 .ditches
@@ -223,7 +227,7 @@ fn a_dike_pond_ring_canal_is_no_narrower_than_its_creeks_and_a_rice_polders_keep
                 .collect();
             assert_eq!(ring.len(), 4);
             let widths: Vec<(f64, f64)> = ring.iter().map(|d| (d.w, d.w_tail)).collect();
-            if !dikepond {
+            if dikepond.is_none() {
                 // 0068's ladder, untouched: the supply's two arms, the far flank's lateral, the drain
                 assert_eq!(widths, [(4.5, 1.5), (1.5, 1.5), (4.0, 1.5), (1.2, 5.5)]);
                 continue;
@@ -251,4 +255,33 @@ fn a_dike_pond_ring_canal_is_no_narrower_than_its_creeks_and_a_rice_polders_keep
             }
         }
     }
+}
+
+/// A BLOCK NO DRIFT LEAVES ROOM FOR IS LAID STRAIGHT (449 T430): where no share of the drift lets every parcel hold its bank,
+/// the block keeps none of it and lays its modules as the lattice has them.
+#[test]
+fn a_block_whose_banks_never_hold_keeps_none_of_its_drift() {
+    let plot = |col: usize| {
+        #[expect(clippy::cast_precision_loss, reason = "a small count")]
+        let x = col as f64 * 182.0;
+        super::Plot {
+            row: 0,
+            span: 1,
+            col,
+            ring: vec![(x, 0.0), (x + 160.0, 0.0), (x + 160.0, 160.0), (x, 160.0)],
+            low: true,
+        }
+    };
+    let lay = |_: f64| vec![plot(0), plot(1)];
+    let put_at = |_: f64, u: f64, x: f64| (x, u);
+    let never = |_: &[super::Plot]| false;
+    let (ease, tests, laid) = super::creeks::eased(
+        &put_at,
+        &lay,
+        (160.0, (22.0, 22.0)),
+        (1, 2),
+        Some((6.0, &never)),
+    );
+    assert!(ease.abs() < 1e-12 && tests > 0);
+    assert_eq!(laid, vec![plot(0), plot(1)]);
 }

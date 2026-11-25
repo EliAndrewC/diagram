@@ -41485,6 +41485,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/tests.rs::a_dike_pond_block_s_ponds_hold_their_banks_and_no_bush_stands_in_one#the driver's tests": {
+  "body": "e42a9a119944d626",
+  "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "06c3a01519177f92",
+  "core": "c1530d9fb1a073b1",
+  "date": "2026-11-24",
+  "note": "fixtures and assertions only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/tests.rs::a_dike_pond_polder_rolls_through_its_seat_and_its_waterside_reeds#the driver's tests": {
   "body": "1bb51551e58e7c56",
   "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
@@ -41547,6 +41559,18 @@
   "research": "",
   "rests": [],
   "triaged": "2026-11-22",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/tests.rs::a_rice_polder_s_pocket_pond_is_never_off_its_low_row#the driver's tests": {
+  "body": "04089e998e6dd635",
+  "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "cc423baa1ccca5f5",
+  "core": "c7c3baaef289afad",
+  "date": "2026-11-24",
+  "note": "a fixture and assertions only; the rule it tests is claimed at rice_pond",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/tests.rs::each_stage_run_reports_its_counted_work_and_not_its_placements#the driver's tests": {
@@ -46143,14 +46167,14 @@
   "body": "199e310fcc135029",
   "claim": "the bank on the parcel's line - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: each pond ringed by a bank of its own mud - the bank's outer edge the parcel's own line, the water pushed in the village's inset from it",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "d00bf5df1201f212",
-  "core": "7116aefa06013402",
+  "code": "4e18c967fcd8c17c",
+  "core": "a4d76643642f24aa",
   "date": "2026-10-31",
   "note": "bank rounded at inset 0 on the parcel ring, water at the village's one inset_ft; matches \"the bank stays on the true parcel line\" and one village inset",
   "pages": {
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "4081a9fc34433087"
   },
-  "reads": "6dd5fafae4abcb2c",
+  "reads": "05da2c215e364ed2",
   "research": "c422f7c0138d3951",
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e",
@@ -46162,57 +46186,56 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/landuse.rs::convert#the crop on the banks": {
-  "body": "199e310fcc135029",
+  "body": "8800b58a4a9427ec",
   "claim": "the crop on the banks - mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing: every dike of a dike-pond hamlet is planted, and all of them with one crop - mulberry, fruit or tea, the nursery's banks too",
-  "code": "274fbe595183bd6f",
-  "core": "7116aefa06013402",
-  "date": "2026-10-31",
-  "note": "grow() runs on every non-rice parcel, nursery included, with the one hamlet crop passed in",
+  "code": "90de95d32b8d04e9",
+  "core": "a4d76643642f24aa",
+  "date": "2026-11-24",
+  "note": "one crop passed in and grown on every pond's bank, the nursery's included",
   "pages": {
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
   },
-  "reads": "6dd5fafae4abcb2c",
+  "reads": "05da2c215e364ed2",
   "research": "5204a1fdda1ca89b",
   "rests": [
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:563eca2ea8c3ee4b",
-   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:a89d6a71550c7130",
-   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:d0ae5fd2fe2dc7ac"
+   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:a89d6a71550c7130"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/landuse.rs::convert#the fry ponds": {
   "body": "199e310fcc135029",
   "claim": "the fry ponds - fish-fry-and-nursery-ponds-yumiao.drawing: the smallest ponds are given to fry until they hold up to seven-tenths of its pond water - taken smallest first by their water's area while the water they hold stays within `FRY_SHARE` of every pond's",
-  "code": "13d0d0372631151f",
-  "core": "7116aefa06013402",
+  "code": "372f30d1d511b2b0",
+  "core": "a4d76643642f24aa",
   "date": "2026-10-31",
   "note": "smallest water first, added while held stays within FRY_SHARE 0.7 of all pond water, stopping at the first that would exceed it; only when fry == \"fry_village\"",
   "pages": {
    "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html": "62bb3e51a7a5a1b1"
   },
-  "reads": "6dd5fafae4abcb2c",
+  "reads": "05da2c215e364ed2",
   "research": "7c54d1e1ec4abfaa",
   "rests": [
    "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html:3b71b145c095e8f3",
    "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html:557c25aae872a619",
    "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html:e2179169987f8f17"
   ],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/landuse.rs::convert#the leftover form": {
-  "body": "199e310fcc135029",
+  "body": "8800b58a4a9427ec",
   "claim": "the leftover form - cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing: every parcel a pond, or about one parcel in ten left in standing rice",
-  "code": "3cbf51b780d22c10",
-  "core": "7116aefa06013402",
-  "date": "2026-10-31",
-  "note": "leftover form passed in per village; under \"rice\" each parcel stays rice at 1 in RICE_IN=10, matching \"about one parcel in ten left in standing rice\"",
+  "code": "ace716ae9f646ade",
+  "core": "a4d76643642f24aa",
+  "date": "2026-11-24",
+  "note": "the leftover knob picks every parcel a pond or about one in ten left in rice (`left_in_rice`)",
   "pages": {
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
   },
-  "reads": "6dd5fafae4abcb2c",
+  "reads": "05da2c215e364ed2",
   "research": "909bb100e23424ac",
   "rests": [
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e",
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:976a6c6d725a9bd9"
   ],
   "verdict": "IN-STEP"
@@ -46221,14 +46244,14 @@
   "body": "199e310fcc135029",
   "claim": "the ponds' uneven shapes - GUESS: dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing silent on how uneven, giving ponds of uneven shape; the bank and the water each rounded at its own reach (`REACH_FT`), a corner's cut rolled about it",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "719dc0678611f7dc",
-  "core": "7116aefa06013402",
+  "code": "c66c8c664936e09a",
+  "core": "a4d76643642f24aa",
   "date": "2026-11-22",
   "note": "the page attests \"ponds of uneven shape\" but not how uneven; the code rounds bank and water each at its own REACH_FT reach, with each corner's cut rolled per pond",
   "pages": {
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "4081a9fc34433087"
   },
-  "reads": "6dd5fafae4abcb2c",
+  "reads": "05da2c215e364ed2",
   "research": "c422f7c0138d3951",
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:9aaf0a58da02aa2b",
@@ -46238,21 +46261,20 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/landuse.rs::convert#the rice scattered": {
-  "body": "199e310fcc135029",
+  "body": "8800b58a4a9427ec",
   "claim": "the rice scattered - GUESS: cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing silent on where the leftover rice stands among the ponds; each parcel rolled on its own",
-  "code": "3ec88196a7708cd9",
-  "core": "7116aefa06013402",
-  "date": "2026-11-22",
-  "note": "§21 says only \"about one parcel in ten left in standing rice among the ponds\"; §17's patches cover low-ground conversion, which §20 says this village is not held to; a per-parcel roll is a guess the page does not answer",
+  "code": "0797e42a96f45d3f",
+  "core": "a4d76643642f24aa",
+  "date": "2026-11-24",
+  "note": "each parcel rolled on its own stream; the cited page does not say where the rice stands in a village of ponds throughout",
   "pages": {
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
   },
-  "reads": "6dd5fafae4abcb2c",
+  "reads": "05da2c215e364ed2",
   "research": "909bb100e23424ac",
   "rests": [
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:976a6c6d725a9bd9",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:ac2f9b58c769b1bc"
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:976a6c6d725a9bd9"
   ],
   "verdict": "IN-STEP"
  },
@@ -46328,6 +46350,41 @@
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:b6e1f2dff8a2b220"
   ],
   "triaged": "2026-11-24",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/landuse.rs::left_in_rice#the rice left": {
+  "body": "e1c06d8686d02b46",
+  "claim": "the rice left - cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing: every parcel a pond, or about one parcel in ten left in standing rice",
+  "code": "76d2bbc7d428badb",
+  "core": "ba105c5783185a14",
+  "date": "2026-11-24",
+  "note": "`randbelow(RICE_IN) == 0` with RICE_IN 10 is one parcel in ten, only under the \"rice\" form",
+  "pages": {
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
+  },
+  "reads": "eca1f85a7ca161f5",
+  "research": "909bb100e23424ac",
+  "rests": [
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:976a6c6d725a9bd9"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/landuse.rs::off_its_pond#no bush in its pond": {
+  "body": "6507137c5028e9d4",
+  "claim": "no bush in its pond - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: the bank is a ring, the pond showing through the middle, and the mulberry planted on the dike - no crown's center and no hedge over the pond's water",
+  "code": "2335c1a97a64f5fa",
+  "core": "c358d26ea462f1bc",
+  "date": "2026-11-24",
+  "note": "crowns whose center falls in the water are dropped and hedges are cut at the water, so the bank stays a ring and the bushes stand on it",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "4081a9fc34433087"
+  },
+  "research": "c422f7c0138d3951",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:0c906f5e26dcec83",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e636a667b77a7329",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e8fdf34d7bd0e81d"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/landuse.rs::off_the_water#never over a canal": {
@@ -47637,12 +47694,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::polder#never uniform rectangles": {
-  "body": "205426a3c9aaccf8",
+  "body": "52284c1ef7278e35",
   "claim": "never uniform rectangles - parcels-and-bunds-inside-a-polder-aze.drawing: our maps never draw a rice polder's parcels as a grid of uniform rectangles - the rice polder's lattice bowed and nudged; the exception a block of dike-ponds, whose ponds some maps draw as a chessboard, a layout recorded on its own (the next claim)",
-  "code": "6003d122d25c7186",
-  "core": "1aa98dd553acb577",
+  "code": "bd8266f7ef45621a",
+  "core": "3010f9e496f33086",
   "date": "2026-11-24",
-  "note": "the rice polder's lattice takes the \"polder\" warp (bowed and nudged), and only a dike-pond chessboard stands straight.",
+  "note": "the rice polder still bows and nudges, and the dike-pond layout still rolls between mosaic and chessboard; the change only rethreads the dike-pond argument",
   "pages": {
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "813289e9b0525746"
   },
@@ -47658,8 +47715,8 @@
   "body": "b93f80d847c4ca1a",
   "claim": "the chessboard - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a dike-pond's grid of ponds, the chessboard, attested beside the mosaic, its dikes the black lines and its ponds the squares - drawn straight, its modules never paired, the `pond_layout` knob's other form",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "622d6499632c6eaf",
-  "core": "1aa98dd553acb577",
+  "code": "0acc7258281e059f",
+  "core": "3010f9e496f33086",
   "date": "2026-11-24",
   "note": "any layout other than \"mosaic\" gives a straight chessboard with unpaired ponds; the per-hamlet roll is the layout knob's",
   "pages": {
@@ -47677,8 +47734,8 @@
   "body": "205426a3c9aaccf8",
   "claim": "the feeder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the feeder drawn straight from the wild pond to the inlet sluice, a reach of the wild water itself by the shortest line, no page giving the course of a channel feeding a polder's inlet - from the wild pond's middle through its near shore to the inlet's point",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "40281fb59dc5d1b6",
-  "core": "1aa98dd553acb577",
+  "code": "33eb76652963db6f",
+  "core": "3010f9e496f33086",
   "date": "2026-11-24",
   "note": "a straight three-point line from the wild pond's middle, through its near shore, to the inlet, as the page's GUESS.",
   "pages": {
@@ -47696,8 +47753,8 @@
   "body": "b93f80d847c4ca1a",
   "claim": "the grid's bearing - GUESS: parcels-and-bunds-inside-a-polder-aze.drawing silent on which way the grid lies to the fall; the walking-bund rows across the fall, the ditch-corridor columns along it, the water running down the columns",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "3276420fbf938c0a",
-  "core": "1aa98dd553acb577",
+  "code": "50176bcfb27e3f01",
+  "core": "3010f9e496f33086",
   "date": "2026-11-22",
   "note": "the page does not say which way the grid lies to the fall. The code lays walking bunds across the fall (row gaps at constant u) and ditch corridors along it, and pairs rows down the fall. That agrees with \"a few merge along the fall of the ground\" and does not answer the bearing itself",
   "pages": {
@@ -47718,8 +47775,8 @@
   "body": "49b44fb634a906b6",
   "claim": "the inlet's side - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing silent beyond its pool's one polder (the wild pond to its northwest); the inlet, the pond and the outfall on one side of the fall",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "5e95af5f232aaa50",
-  "core": "1aa98dd553acb577",
+  "code": "0e5cf3fcf8c94146",
+  "core": "3010f9e496f33086",
   "date": "2026-11-22",
   "note": "0019 gives a head inlet and a tail outfall and one pool polder's compass, but not which flank they share",
   "pages": {
@@ -47737,8 +47794,8 @@
  "rust/phases/src/field/polder.rs::polder#the least polder": {
   "body": "49b44fb634a906b6",
   "claim": "the least polder - how-much-farmland-a-settlement-works-and-in-what-tracts.drawing: a field enclosed on the map is never drawn under about 8 acres - the block's modules hold at least that",
-  "code": "9554aa0b0aa9d4f8",
-  "core": "1aa98dd553acb577",
+  "code": "69ea196ff333960c",
+  "core": "3010f9e496f33086",
   "date": "2026-11-02",
   "note": "the paddy is floored at ENCLOSED_FLOOR_ACRES 8 before counting modules",
   "pages": {
@@ -47757,8 +47814,8 @@
   "body": "49b44fb634a906b6",
   "claim": "the module by form - parcels-and-bunds-inside-a-polder-aze.drawing: a rice polder's module about 190 ft with its 8 ft ditch corridors and 3 ft bunds, a dike-pond block's about 160 ft with gaps of about 22 ft both ways",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "744194ac7f199658",
-  "core": "1aa98dd553acb577",
+  "code": "4064ee7ec059a970",
+  "core": "3010f9e496f33086",
   "date": "2026-11-02",
   "note": "modules 190/160 ft; gaps 8 ft between columns and 3 ft between rows for rice, 22 ft both ways for the dike-pond",
   "pages": {
@@ -47779,8 +47836,8 @@
   "body": "49b44fb634a906b6",
   "claim": "the polder's acreage - how-much-farmland-a-settlement-works-and-in-what-tracts.drawing: 1.3 acres gross a household, in whole modules of parcels-and-bunds-inside-a-polder-aze.drawing at or above it",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "3be1165d588aa689",
-  "core": "1aa98dd553acb577",
+  "code": "77fc1846b608dbca",
+  "core": "3010f9e496f33086",
   "date": "2026-11-22",
   "note": "whole modules, rounded up at or above the given paddy and the 8-acre floor; 1.3 acres falls within the 1 to 2.5 acre household band",
   "pages": {
@@ -47803,8 +47860,8 @@
   "body": "49b44fb634a906b6",
   "claim": "the pond's reeds - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing silent on reeds at the wild pond; a fringe round it (`FRINGE_FT`)",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "b5187ef18347c1dd",
-  "core": "1aa98dd553acb577",
+  "code": "f92161a8646d9e1d",
+  "core": "3010f9e496f33086",
   "date": "2026-11-22",
   "note": "0019 gives no reeds at the wild pond; the fringe is a guess",
   "pages": {
@@ -47823,8 +47880,8 @@
   "body": "b93f80d847c4ca1a",
   "claim": "the ring canal's place - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a ring canal round the inside foot of the dike, on the field side - `RING_FT` out from the plots, inside the dike's inner face",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "c8f8c361a1e0d55d",
-  "core": "1aa98dd553acb577",
+  "code": "27eec7425a1a965c",
+  "core": "3010f9e496f33086",
   "date": "2026-11-24",
   "note": "canal at RING_FT.0 out from the plots, inside the 12 ft inner envelope",
   "pages": {
@@ -47842,8 +47899,8 @@
   "body": "49b44fb634a906b6",
   "claim": "the wild pond's place - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the wild pond feeds the polder at its head, where its inlet is - up the fall from the inlet's corner, `POND_FT.2` out, in line with the inlet's flank (the page's \"northwest\" is its one pool polder's compass, the head read from the fall here, as every map's)",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "8e9d48c845647209",
-  "core": "1aa98dd553acb577",
+  "code": "b1bb23032b33d481",
+  "core": "3010f9e496f33086",
   "date": "2026-11-02",
   "note": "pond_at sits POND_FT.2 up the fall from the inlet corner, on the inlet's flank x, so it feeds at the head where the inlet is; \"northwest\" read as head-side, as the claim says",
   "pages": {
@@ -47862,8 +47919,8 @@
   "body": "49b44fb634a906b6",
   "claim": "the wild pond's size - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing silent on its size and distance (`POND_FT`)",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "ddc0f94b3074de1f",
-  "core": "1aa98dd553acb577",
+  "code": "3c687ecf693e7340",
+  "core": "3010f9e496f33086",
   "date": "2026-11-22",
   "note": "0019 gives no size or distance for the wild pond",
   "pages": {
@@ -47881,8 +47938,8 @@
   "body": "b93f80d847c4ca1a",
   "claim": "two sluices - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: water crosses the dike only at gated sluices, an inlet at the head and an outfall at the tail - the inlet at the head corner beside the wild pond, the outfall at the tail corner the drain widens to (field-drains-akusuiro.drawing: a drain reaches its full width at the outfall)",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "b80b71c49a967259",
-  "core": "1aa98dd553acb577",
+  "code": "7a20138559acf90a",
+  "core": "3010f9e496f33086",
   "date": "2026-11-24",
   "note": "inlet at the head corner and outfall at the tail corner on the inlet's flank, with the drain widening 1.2 to 5.5 ft toward the outfall",
   "pages": {
@@ -48001,6 +48058,18 @@
   "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/polder/creeks.rs::Banks#the creeks' module": {
+  "body": "93cd0149fac0dc07",
+  "claim": "the creeks' module - NONE: the units below carry each decision's claim",
+  "code": "8dce0d189369d9c9",
+  "core": "76caf6cd10e93e86",
+  "date": "2026-11-24",
+  "note": "a type alias, plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/field/polder/creeks.rs::CREEK_FT#the creek's width": {
   "body": "f3829b301f4707da",
   "claim": "the creek's width - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: a canal between ponds drawn about 6 to 8 ft wide, no page giving a channel between ponds a width before modern times",
@@ -48088,6 +48157,25 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/polder/creeks.rs::banks_held#room for the banks": {
+  "body": "2eededa483d889c3",
+  "claim": "room for the banks - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: one inset holds for the whole village, measured on its parcel of median area - a mosaic bent so far that a parcel of it cannot hold that bank, or folds its water over it, is bent less (`eased`), so no parcel falls to the least pond for the bend alone (the GM 2026-10-12, room before packing); polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing eases a block for its creeks only and is silent on its banks; 5 of 80 rolled mosaics at 15 households eased further, none below 0.65 of the drift (measured 2026-11-24, feature 449 T430)",
+  "code": "f8a958f109d057ef",
+  "core": "8ff2f45c254f2252",
+  "date": "2026-11-24",
+  "note": "one village inset is taken from the laid plots, and every parcel either stays in rice or holds its bank; 0019 eases a block only for its creeks, so easing for the banks is correctly a GUESS",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "4081a9fc34433087",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "1a8d2810a9ba7323"
+  },
+  "research": "cefe5aa8d2b5e3fc",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:0f2990d69aee9eb4",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:d17f9bc4d929a0ee"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/field/polder/creeks.rs::creek_width#one width a block": {
   "body": "7be20a01f06221d0",
   "claim": "one width a block - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: each dike-pond block takes one creek width, chosen by chance anywhere in the 6 to 8 ft (#creek-width-between-ponds), every creek of the block drawn at it, down a column and across a row, end to end with no taper - each block's width rolled evenly over the range, to a thousandth of it, from the seed's own `polder_creek` stream",
@@ -48107,12 +48195,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder/creeks.rs::eased#room for the creeks": {
-  "body": "cde000f9b23a3387",
-  "claim": "room for the creeks - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: where the full bend would leave a corridor between two ponds narrower than the creek drawn in it (a canal between ponds about 6 to 8 ft wide, GUESS dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing), that block is bent less, so no creek is laid over a bank and no pond is drawn smaller (the GM 2026-10-12, room before packing) - the drift eased block by block, a mosaic no corridor of which is pinched keeping it whole (Kuwabata's does); 13 of 51 rolled mosaics held a corridor of 4 to 7 ft under a creek of 6 to 8 (measured 2026-11-24, feature 449 T420)",
-  "code": "f392f5593cde96fc",
-  "core": "1465a191ebaf33c6",
+  "body": "d740c90a02b714fb",
+  "claim": "room for the creeks - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: where the full bend would leave a corridor between two ponds narrower than the creek drawn in it (a canal between ponds about 6 to 8 ft wide, GUESS dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing), that block is bent less, so no creek is laid over a bank and no pond is drawn smaller (the GM 2026-10-12, room before packing) - the drift eased block by block; 13 of 51 rolled mosaics held a corridor of 4 to 7 ft under a creek of 6 to 8 (measured 2026-11-24, feature 449 T420)",
+  "code": "f901b9d92c1aa56b",
+  "core": "db352781f938643e",
   "date": "2026-11-24",
-  "note": "a block is kept whole unless pinched, otherwise eased until the narrowest corridor >= creek and re-laid at that ease, so no pond is shrunk; at zero ease the corridors are the whole 22 ft gap",
+  "note": "the page's recorded guess: a pinched block is eased a twentieth at a time (EASE_STEPS 20) until every corridor holds a creek of the block's one 6 to 8 ft width",
   "pages": {
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "4081a9fc34433087",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "1a8d2810a9ba7323"
@@ -48121,6 +48209,26 @@
   "research": "65490cfd859636b0",
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:ce56c3841e33c8c5",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e820ea31c8ba8dbd",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:d17f9bc4d929a0ee"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder/creeks.rs::eased#the banks held": {
+  "body": "d740c90a02b714fb",
+  "claim": "the banks held - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: this widens the page's recorded guess, whose sentence that a block with no corridor pinched keeps the whole bend no longer holds where a parcel would fold its water over its bank - the same steps also ask that every parcel holds its bank (`banks_held`, 449 T430), so a block keeps its whole bend only where no corridor is pinched and every parcel holds its bank (Kuwabata's does), and a block no step lets hold both is drawn with no bend at all (ease 0), its parcels then each their module; the bend is eased before any pond falls back to the least pond of 0018's drawing page because easing gives the parcel room where the least pond packs less water into it (the GM 2026-10-12, room before packing); 0019's page does not yet say this (a page need, 449 T430)",
+  "code": "0f5d5c59144e500a",
+  "core": "db352781f938643e",
+  "date": "2026-11-24",
+  "note": "GUESS is the right label: none of the cited pages says whether a bend that keeps its corridors should still yield where a parcel would fold its water over its bank. The code matches the claim as written. It steps the ease down from 1 by twentieths, takes the first share where both the corridor test (`least < w`) and `banks(&laid)` hold, and otherwise falls back to `lay(0.0)` at ease 0 with every parcel its own module. It eases before the least pond of 0018 is reached. The claim also says openly that it widens §30's guess, and files the page change under 449 T430",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "1a8d2810a9ba7323"
+  },
+  "reads": "375da83108488322",
+  "research": "0640985f1cb092b8",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:363302c2e6652393",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:d17f9bc4d929a0ee"
   ],
   "verdict": "IN-STEP"
@@ -48137,35 +48245,61 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/polder/tests.rs::WET#the polder's tests": {
+  "body": "c1a455710fe5e86d",
+  "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "1b64e51b8fda4eef",
+  "core": "61c5f10d127289e7",
+  "date": "2026-11-24",
+  "note": "a test fixture, decides nothing on a map",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder/tests.rs::a_block_whose_banks_never_hold_keeps_none_of_its_drift#the polder's tests": {
+  "body": "208dfade8b282c81",
+  "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "bf60fd7052f0a582",
+  "core": "d0368624fd16b851",
+  "date": "2026-11-24",
+  "note": "fixture plots and assertions; its sizes are test inputs, not drawn figures",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/field/polder/tests.rs::a_creek_stands_midway_between_its_banks_and_a_pinched_mosaic_is_eased#the polder's tests": {
   "body": "305fba45e4e28ba4",
   "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
-  "code": "9c026066839b6bea",
-  "core": "cb56f6d1eb0fa127",
+  "code": "2bf27a52d38b169f",
+  "core": "a7df3b652406fe07",
   "date": "2026-11-24",
   "note": "fixtures and assertions.",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder/tests.rs::a_dike_pond_ring_canal_is_no_narrower_than_its_creeks_and_a_rice_polders_keeps_its_rungs#the polder's tests": {
   "body": "a779c6cf8e95956b",
   "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
-  "code": "f5c0850580bd0ffc",
-  "core": "866786c47ae158f2",
+  "code": "af04a46e7db9b56a",
+  "core": "5d9fa2a8e86ee6be",
   "date": "2026-11-24",
   "note": "fixtures and assertions",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder/tests.rs::a_dike_ponds_channels_are_creeks_and_a_rice_polders_stay_ditches#the polder's tests": {
   "body": "86577e2d9864207b",
   "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
-  "code": "0601df7f5a7d6e37",
-  "core": "cf4da9d262a16baf",
+  "code": "b8340595e5bf0f92",
+  "core": "750d4f3a015873de",
   "date": "2026-11-24",
   "note": "fixtures and assertions.",
   "pages": {},
@@ -48177,13 +48311,14 @@
  "rust/phases/src/field/polder/tests.rs::a_rice_polder_and_a_dike_pond_block#the polder's tests": {
   "body": "6acbfcefb904314d",
   "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
-  "code": "180336dd571ea061",
-  "core": "db8d992ccedf2607",
+  "code": "9fc9e83a0f550f36",
+  "core": "844ed188583c9bbd",
   "date": "2026-11-24",
   "note": "fixtures and assertions.",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder/tests.rs::the_shape_wastes_least#the polder's tests": {
@@ -48209,6 +48344,23 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/ponds.rs::FOLD_SLACK_FT#the slack": {
+  "body": "7f9b167648f9260f",
+  "claim": "the slack - GUESS dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: no page sizes it; a foot, under what a reader sees of a bank the page draws about 15 ft (seven parts water to three) to about 42 ft (Kuwabata's three to seven) wide, where water folded over its bank comes tens of feet nearer (seed 75 of a rolled mosaic: water within about a third of its bank's width of the parcel's edge, 449 T430)",
+  "code": "0acbde8ec0f21ac0",
+  "core": "93d4d6cf3d129163",
+  "date": "2026-11-24",
+  "note": "a 1 ft tolerance on water folding toward a parcel's edge, well under the 15 to 42 ft banks the page draws; the cited pages give no figure, and no reader could see the difference",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "4081a9fc34433087"
+  },
+  "research": "c422f7c0138d3951",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:8cb3b577416449af",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:b6e1f2dff8a2b220"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/field/ponds.rs::LEAST_SHARE#the least pond": {
   "body": "f5c654e3b15af77d",
   "claim": "the least pond - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: a parcel too small for its bank still gets a pond, the water drawn a tenth of the parcel across",
@@ -48222,6 +48374,41 @@
   "research": "c422f7c0138d3951",
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:0f2990d69aee9eb4"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/ponds.rs::held#a sliver is not the pond": {
+  "body": "29555c0a561e09b3",
+  "claim": "a sliver is not the pond - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: water any side of which is shorter than a tenth of the parcel's same side is a sliver, not held",
+  "code": "cec795b98f777ffe",
+  "core": "00df28c692aed31f",
+  "date": "2026-11-24",
+  "note": "`side(water,i) >= side(ring,i) * LEAST_SHARE` with LEAST_SHARE 0.1 is the page's tenth",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "4081a9fc34433087"
+  },
+  "reads": "e072c12337f41849",
+  "research": "c422f7c0138d3951",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:0f2990d69aee9eb4"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/ponds.rs::held#the bank held": {
+  "body": "29555c0a561e09b3",
+  "claim": "the bank held - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: the same bank's width on every side of the pond - water any corner of which comes nearer the parcel's line than the bank's width is not that bank's water",
+  "code": "0f52feebe88dd87f",
+  "core": "00df28c692aed31f",
+  "date": "2026-11-24",
+  "note": "water any corner of which falls outside the parcel or nearer its line than the inset (less the slack) is refused, so every side keeps the same bank",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "4081a9fc34433087"
+  },
+  "reads": "e072c12337f41849",
+  "research": "c422f7c0138d3951",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e636a667b77a7329"
   ],
   "verdict": "IN-STEP"
  },
@@ -48241,8 +48428,8 @@
   "body": "449343f8a779d484",
   "claim": "rounded corners - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: a pond's corners are drawn rounded, no page giving the shape of a pond's corner - each corner rounded on a quadratic curve, its cut-back rolled about the reach",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "8646d7f2f2ff8ed0",
-  "core": "26f9a8c9a0a61e66",
+  "code": "6e9410ac0da5ddca",
+  "core": "1a8f1cdbd0e7f6f3",
   "date": "2026-11-24",
   "note": "each corner is rounded on a quadratic curve with its cut-back rolled about `reach`, and the drawing page records the rounding and its cut-back figures as a GUESS",
   "pages": {
@@ -48257,12 +48444,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/ponds.rs::rounded#the bank's inset": {
-  "body": "449343f8a779d484",
+  "body": "942897c840505ec6",
   "claim": "the bank's inset - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: one inset holds for the whole village, measured on its parcel of median area - the same bank's width on every side of every pond whose parcel holds its bank, a parcel drawing the least pond excepted",
-  "code": "096dad29223a1a9f",
-  "core": "26f9a8c9a0a61e66",
+  "code": "7cd737e641f3eb3d",
+  "core": "1a8f1cdbd0e7f6f3",
   "date": "2026-11-24",
-  "note": "the inset the code is given is applied on every side alike, and a parcel that falls back to the least pond is excepted, as §3 and §17 say; §3 records the one village-wide inset as a GUESS",
+  "note": "the water is the village's one inset pushed in from the parcel line wherever `held` accepts it, otherwise the least pond",
   "pages": {
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "4081a9fc34433087"
   },
@@ -48275,12 +48462,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/ponds.rs::rounded#the least pond": {
-  "body": "449343f8a779d484",
-  "claim": "the least pond - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: where the bank the village's split asks for is more than a parcel holds, the water is still drawn - the parcel shrunk about its middle to `LEAST_SHARE`; and that least pond is the floor, so a parcel that holds its bank with water any side of which is shorter than a tenth of the parcel's same side draws the least pond too, never a sliver thinner than a tenth of the parcel across (feature 449 T420, its plan section's D8 holds the measurement)",
-  "code": "9861972de4f33cb4",
-  "core": "26f9a8c9a0a61e66",
+  "body": "942897c840505ec6",
+  "claim": "the least pond - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: where the bank the village's split asks for is more than a parcel holds, the water is still drawn - the parcel shrunk about its middle to `LEAST_SHARE`; and that least pond is the floor, so a parcel that holds its bank with water any side of which is shorter than a tenth of the parcel's same side draws the least pond too, never a sliver thinner than a tenth of the parcel across (feature 449 T420, its plan section's D8 holds the measurement); nor water folded over its bank (`held`, 449 T430), which the polder's easing leaves no rolled block drawing",
+  "code": "2a5846a442fdcc2c",
+  "core": "1a8f1cdbd0e7f6f3",
   "date": "2026-11-24",
-  "note": "the code covers both of §17's cases: the inset fails (`pushed_in` returns None), or a side of the water is shorter than LEAST_SHARE times the parcel's same side; either way the parcel is shrunk about its middle to a tenth across, which §17 records as a GUESS",
+  "note": "when `held` refuses the water (bank too wide, a sliver, or water folded over its bank) the parcel is shrunk about its middle to a tenth, so no water is thinner than a tenth across",
   "pages": {
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "4081a9fc34433087"
   },
@@ -48460,11 +48647,11 @@
  },
  "rust/phases/src/field/staged.rs::polder_stage#a rice polder's pocket pond": {
   "body": "1ba8729f5718f740",
-  "claim": "a rice polder's pocket pond - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: a polder may have a pond on a low plot, a little over half the time; the dike-pond ground has none - the comb's own roll (`features::pocket_pond`) over the block's low row, a resting plot never its host",
-  "code": "49ccd9fa9650cd6f",
-  "core": "7256e63df023425a",
+  "claim": "a rice polder's pocket pond - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: a polder may have a pond on a low plot, a little over half the time; the dike-pond ground has none - the comb's own roll (`features::pocket_pond`) over the block's low plots of four ring points, a resting plot never its host, and no pond where no such plot is left (`rice_pond`)",
+  "code": "94360adcfca710fa",
+  "core": "27f36387d36cb31d",
   "date": "2026-11-24",
-  "note": "the claim puts the pond \"over the block's low row\", but `rice_pond` builds each basin's row as `usize::from(x.low)` from the non-resting, four-sided plots only, and `pocket_pond` takes the highest row present. So when every low plot is resting or not four-sided, the highest row is 0 and a plot that is not low can hold the pond; the code should return no pond when no host is low; fix: code; effect: map - a rice polder can show a pond in a plot that is not low, against \"polder - on a low plot\" and \"Our maps sink each pond wholly inside one low plot\" (the odds, 55 of 100, and the dike-pond's none otherwise agree with §26 and §27)",
+  "note": "dike-pond ground gets None and other polders go to rice_pond over low, unrested, four-sided plots, as the table and the pond rules say; the rate is pocket_pond's roll",
   "pages": {
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
@@ -48474,19 +48661,19 @@
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:03ed9353fdea1d55",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:083596e0af6f1902",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:36c65c85e5f4ce74",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:49243a3720ff985d"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:140bedbf9c3f6d56",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:49243a3720ff985d",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:aaec071aac2463f0"
   ],
-  "said": "a rice polder's pocket pond - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: a polder may have a pond on a low plot, a little over half the time; the dike-pond ground has none - the comb's own roll (`features::pocket_pond`) over the block's low row, a resting plot never its host",
-  "siblings": "fc901be457bdcf21",
-  "verdict": "DRIFTED"
+  "triaged": "2026-11-24",
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/staged.rs::polder_stage#no resting plot on a dike-pond block": {
   "body": "ec725dd5ae31b586",
   "claim": "no resting plot on a dike-pond block - GUESS: paddies-left-to-rest-kataarashi.drawing silent on a converted block; its parcels are ponds, their banks and a few in standing rice, and none is rested",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "0f67eb2236b1567d",
-  "core": "7256e63df023425a",
+  "code": "75bc64baf726b16a",
+  "core": "27f36387d36cb31d",
   "date": "2026-11-22",
   "note": "rest(..., unsettled && !dikepond) means a dike-pond block rests no plot; the 0013 drawing page sets resting per settlement and per field and never speaks of converted dike-pond ground, so the GUESS stands",
   "pages": {
@@ -48505,8 +48692,8 @@
   "body": "ec725dd5ae31b586",
   "claim": "resting only when unsettled - paddies-left-to-rest-kataarashi.drawing: an unsettled settlement rests two to four whole plots (`polder::rest`), a settled one none",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "e0c764490ccceb0a",
-  "core": "7256e63df023425a",
+  "code": "998274cc8fd77e99",
+  "core": "27f36387d36cb31d",
   "date": "2026-11-07",
   "note": "`polder::rest` runs only when unsettled; a settled block rests none",
   "pages": {
@@ -48522,31 +48709,28 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/staged.rs::rice_pond#a four-sided host": {
-  "body": "910d55e3142c87df",
-  "claim": "a four-sided host - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on the host plot's shape; only a four-sided plot, so the pond's fit inside it holds",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "eb42ec8d8ad20a90",
-  "core": "8467a302358e0290",
-  "date": "2026-11-22",
-  "note": "the filter is ring.len() == 4; the page sinks the pond wholly inside one low plot and says nothing of the plot's shape",
+  "body": "7dc6b195c864b0cb",
+  "claim": "a four-sided host - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: \"On a polder's rice, the pond takes only a four-sided plot\", a fallback of the drawing - a plot of four ring points; a merged pair, which carries two mid-side points, is passed over",
+  "code": "60340f815cad2c3e",
+  "core": "bc4dc42b0066c8e6",
+  "date": "2026-11-24",
+  "note": "the `x.ring.len() == 4` filter is the GUESS the drawing page records",
   "pages": {
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
   "research": "54c6bcaeb70fbf2e",
   "rests": [
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:02605b446c604185",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:aaec071aac2463f0"
   ],
-  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/staged.rs::rice_pond#never a resting plot": {
-  "body": "910d55e3142c87df",
-  "claim": "never a resting plot - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on a pond in a plot left to rest; never its host",
-  "code": "1e8e4eb3ce63b420",
-  "core": "8467a302358e0290",
+  "body": "7dc6b195c864b0cb",
+  "claim": "never a resting plot - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: \"A plot left to rest never holds the pond\", a fallback of the drawing - held already by `polder::rest`, which never rests a low plot (0007), and repeated here",
+  "code": "735f1f7692a20802",
+  "core": "bc4dc42b0066c8e6",
   "date": "2026-11-24",
-  "note": "the code still leaves out resting plots (`!resting.contains(i)`), but the claim calls the page \"silent on a pond in a plot left to rest\", and §24 now records the rule as a GUESS (\"A plot left to rest never holds the pond\"); restate as recorded on the page (§24), dropping \"silent\"; fix: claim; effect: none",
+  "note": "`!resting.contains(i)` is the GUESS the drawing page records; no low plot resting fits 0013's rule that only plots drawn green rest",
   "pages": {
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
   },
@@ -48554,20 +48738,34 @@
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:49243a3720ff985d"
   ],
-  "said": "never a resting plot - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on a pond in a plot left to rest; never its host",
-  "siblings": "ea08f3cf0b0255fe",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/staged.rs::rice_pond#only a low plot": {
+  "body": "7dc6b195c864b0cb",
+  "claim": "only a low plot - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: \"Our maps sink each pond wholly inside one low plot\" - only the block's low plots are hosts, so where none of them is left the block draws no pond (449 T429: seed 183 at ten households laid every low plot a merged pair, and the pond fell to a top-row plot)",
+  "code": "27691ef115a46436",
+  "core": "bc4dc42b0066c8e6",
+  "date": "2026-11-24",
+  "note": "the `x.low` filter matches \"sink each pond wholly inside one low plot\", and no host left means no pond",
+  "pages": {
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "9ceb9cb999df65f5"
+  },
+  "research": "54c6bcaeb70fbf2e",
+  "rests": [
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:03ed9353fdea1d55",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/staged.rs::rice_pond#the pond's host": {
-  "body": "910d55e3142c87df",
+  "body": "7dc6b195c864b0cb",
   "claim": "the pond's host - NONE: the polder's plots as the comb's basins; the roll and its rules are `features::pocket_pond`'s",
-  "code": "4c00bc8d72ee131b",
-  "core": "8467a302358e0290",
-  "date": "2026-11-01",
-  "note": "only reshapes the plots into Basin records and hands the roll to pocket_pond",
+  "code": "88e71d7db1d00c1f",
+  "core": "bc4dc42b0066c8e6",
+  "date": "2026-11-24",
+  "note": "turning the plots into the comb's basins is plumbing; the host rules (low, unrested, four-sided) are covered by the unit's sibling claims",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/states.rs::FLOODED_IN#flooded": {

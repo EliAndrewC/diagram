@@ -28,13 +28,14 @@ pub struct PolderStage {
     pub counts: Counts,
 }
 
-/// A rice polder's pocket pond: the comb's own roll over the block's low row, a resting plot never its host (0008) - the host
-/// plot's index, the pond's middle and radii.
+/// A rice polder's pocket pond: the comb's own roll over the block's low plots of four ring points, a resting plot never its
+/// host, and no pond where none is left (0008; 449 T429) - the host plot's index, the pond's middle and radii.
 ///
 /// Research:
 ///     the pond's host - NONE: the polder's plots as the comb's basins; the roll and its rules are `features::pocket_pond`'s
-///     a four-sided host - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on the host plot's shape; only a four-sided plot, so the pond's fit inside it holds
-///     never a resting plot - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a pond in a plot left to rest; never its host
+///     only a low plot - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: "Our maps sink each pond wholly inside one low plot" - only the block's low plots are hosts, so where none of them is left the block draws no pond (449 T429: seed 183 at ten households laid every low plot a merged pair, and the pond fell to a top-row plot)
+///     a four-sided host - GUESS research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html#pond-host-four-sided: "On a polder's rice, the pond takes only a four-sided plot", a fallback of the drawing - a plot of four ring points; a merged pair, which carries two mid-side points, is passed over
+///     never a resting plot - GUESS research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html#pond-never-resting-plot: "A plot left to rest never holds the pond", a fallback of the drawing - held already by `polder::rest`, which never rests a low plot (0007), and repeated here
 fn rice_pond(
     plots: &[super::polder::Plot],
     resting: &[usize],
@@ -44,7 +45,7 @@ fn rice_pond(
     let hosts: Vec<(usize, super::lattice::Basin)> = plots
         .iter()
         .enumerate()
-        .filter(|(i, x)| !resting.contains(i) && x.ring.len() == 4)
+        .filter(|(i, x)| x.low && !resting.contains(i) && x.ring.len() == 4)
         .map(|(i, x)| {
             (
                 i,
@@ -93,7 +94,7 @@ fn polder_drawn(
 /// on a dike-pond, its conversion.
 ///
 /// Research:
-///     a rice polder's pocket pond - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: a polder may have a pond on a low plot, a little over half the time; the dike-pond ground has none - the comb's own roll (`features::pocket_pond`) over the block's low row, a resting plot never its host
+///     a rice polder's pocket pond - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: a polder may have a pond on a low plot, a little over half the time; the dike-pond ground has none - the comb's own roll (`features::pocket_pond`) over the block's low plots of four ring points, a resting plot never its host, and no pond where no such plot is left (`rice_pond`)
 ///     resting only when unsettled - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: an unsettled settlement rests two to four whole plots (`polder::rest`), a settled one none
 ///     no resting plot on a dike-pond block - GUESS: research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html silent on a converted block; its parcels are ponds, their banks and a few in standing rice, and none is rested
 #[must_use]
@@ -115,7 +116,7 @@ pub fn polder_stage(
 ) -> PolderStage {
     let p = super::polder::polder(
         super::paddy_sq_ft(households),
-        dikepond,
+        dikepond.then_some((pond.0, pond.1)),
         layout,
         down_deg,
         center,
@@ -184,7 +185,67 @@ pub fn polder_stage(
 
 #[cfg(test)]
 mod tests {
-    use super::polder_stage;
+    use super::{polder_stage, rice_pond};
+    use crate::field::polder::Plot;
+
+    /// A plot of the block: its row, span and column, a square ring at `(x, y)` (a merged pair's two mid-side points added when
+    /// `pair`), low when it reaches the last row.
+    fn plot(row: usize, col: usize, pair: bool, low: bool) -> Plot {
+        #[expect(clippy::cast_precision_loss, reason = "a small count")]
+        let (x, y) = (col as f64 * 100.0, row as f64 * 100.0);
+        let h = if pair { 190.0 } else { 90.0 };
+        let ring = if pair {
+            vec![
+                (x, y),
+                (x + 90.0, y),
+                (x + 90.0, y + 95.0),
+                (x + 90.0, y + h),
+                (x, y + h),
+                (x, y + 95.0),
+            ]
+        } else {
+            vec![(x, y), (x + 90.0, y), (x + 90.0, y + h), (x, y + h)]
+        };
+        Plot {
+            row,
+            span: if pair { 2 } else { 1 },
+            col,
+            ring,
+            low,
+        }
+    }
+
+    #[test]
+    fn a_rice_polder_whose_low_plots_are_all_merged_pairs_draws_no_pond() {
+        // 449 T429: seed 183 at ten households laid every last-row plot a merged pair, and the pond fell to a top-row plot
+        // (0008: "Our maps sink each pond wholly inside one low plot"; a low plot of any other shape passed over)
+        let plots = vec![
+            plot(0, 0, false, false),
+            plot(0, 1, false, false),
+            plot(1, 0, true, true),
+            plot(1, 1, true, true),
+        ];
+        for seed in [183, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] {
+            let mut work = 0;
+            let drawn = rice_pond(&plots, &[], seed, &mut work).is_some();
+            assert!(!drawn, "seed {seed}: a pond in a plot not low");
+        }
+        // with a four-sided low plot left, the pond still takes it, and only it
+        let mixed = vec![
+            plot(0, 0, false, false),
+            plot(1, 0, true, true),
+            plot(2, 1, false, true),
+        ];
+        let mut drawn = 0;
+        for seed in 1..=40 {
+            let mut work = 0;
+            if let Some((k, ..)) = rice_pond(&mixed, &[], seed, &mut work) {
+                assert_eq!(k, 2, "seed {seed}");
+                drawn += 1;
+            }
+        }
+        assert!(drawn > 0);
+    }
 
     #[test]
     fn a_rice_polder_and_a_dike_pond_block_are_laid() {

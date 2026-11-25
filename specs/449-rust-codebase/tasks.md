@@ -70,6 +70,8 @@ nothing behind it in physical reality, so each is `research: rendering`.
 - none: T398 - the gatehouse site knob (layout.rs); the county rolls beside, as drawn, and no sheet draws the behind form, so no glyph is new or redrawn
 - none: T401 - the stables' depth claim restated in emit.rs with its search pass (t401-umaya); nothing drawn differently
 - none: T424 - claims, comments and the garden-sun message's citation restated in the hamlet and Mode A code (the canals' edges, the second canal with no offtake, the brook's bend, the dike crops, the small roofed thing, the notice board); no code path, map drawing, placement, glyph or research page changes.
+- none: T429 - a rice polder whose every low plot is a merged pair draws no pocket pond where it drew one in a plot that is not low (seed 183 at ten households, 2 of 8,800 swept rolls); every other roll's pond unmoved, and the pool's one polder, Kuwabata, is a dike-pond block that never asks for the pocket pond, so no pool map moves
+- none: T430 - a rolled dike-pond mosaic is bent less until its parcels hold their banks, folded water is no pond and no bush stands in its own pond (86 of 880 swept blocks bent less, their least ponds, folds and drowned crowns gone); Kuwabata keeps its whole drift and its drawing is cmp-identical, so no pool map moves
 
 ## Tasks
 

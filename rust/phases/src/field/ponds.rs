@@ -23,6 +23,12 @@ pub const CUT_STRAY: f64 = 0.15;
 ///     the least pond - GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#least-pond: a parcel too small for its bank still gets a pond, the water drawn a tenth of the parcel across
 pub const LEAST_SHARE: f64 = 0.1;
 
+/// How much nearer than its bank's width the pushed-in water may come to a parcel's side and still be that bank's water (feet).
+///
+/// Research:
+///     the slack - GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: no page sizes it; a foot, under what a reader sees of a bank the page draws about 15 ft (seven parts water to three) to about 42 ft (Kuwabata's three to seven) wide, where water folded over its bank comes tens of feet nearer (seed 75 of a rolled mosaic: water within about a third of its bank's width of the parcel's edge, 449 T430)
+pub const FOLD_SLACK_FT: f64 = 1.0;
+
 /// `ring` pushed in `by` feet on every side: each side's line moved inward along its normal, the corners where neighboring lines
 /// meet. `None` where the bank asks more than the ring holds (the result turned inside out or a corner run off).
 ///
@@ -67,6 +73,35 @@ pub fn pushed_in(ring: &[Pt], by: f64) -> Option<Vec<Pt>> {
         .then_some(out)
 }
 
+/// The water a parcel `ring` holds inside a bank `inset` feet wide, or `None` where it holds none: `ring` pushed in `inset` on every
+/// side (`pushed_in`), with as many corners as the parcel, each side at least `LEAST_SHARE` of the parcel's same side, and a true
+/// inset - each corner inside the parcel and no nearer than `inset` to any of its sides. A parcel bent at its middle can push in to
+/// a ring that crosses itself, its water folded over its own bank (seed 75 of a rolled mosaic, 449 T430); that ring is no inset.
+///
+/// Research:
+///     the bank held - GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#pond-set-parcel-s: the same bank's width on every side of the pond - water any corner of which comes nearer the parcel's line than the bank's width is not that bank's water
+///     a sliver is not the pond - GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#least-pond: water any side of which is shorter than a tenth of the parcel's same side is a sliver, not held
+#[must_use]
+pub fn held(ring: &[Pt], inset: f64) -> Option<Vec<Pt>> {
+    let corners = ring.len();
+    let side = |r: &[Pt], i: usize| super::geom::dist(r[i], r[(i + 1) % r.len()]);
+    let true_inset = |water: &[Pt]| {
+        inset <= 0.0
+            || water.iter().all(|&p| {
+                super::geom::inside(p, ring)
+                    && (0..corners).all(|i| {
+                        super::geom::seg_dist(p, ring[i], ring[(i + 1) % corners])
+                            >= inset - FOLD_SLACK_FT
+                    })
+            })
+    };
+    pushed_in(ring, inset).filter(|water| {
+        water.len() == corners
+            && (0..corners).all(|i| side(water, i) >= side(ring, i) * LEAST_SHARE)
+            && true_inset(water)
+    })
+}
+
 /// The pond (or bank) on `ring`'s four corners: pushed in `inset` feet on every side (`pushed_in`; where the bank asks more than the
 /// parcel holds, or leaves water a side of which is shorter than the least pond's, the parcel shrunk about its middle to `LEAST_SHARE`), each corner then rounded by a quadratic curve with its
 /// control at the corner, cut back `reach` times a factor rolled within `CUT_STRAY` from `draw`. Returns the SVG path and the 13
@@ -75,34 +110,28 @@ pub fn pushed_in(ring: &[Pt], by: f64) -> Option<Vec<Pt>> {
 /// Research:
 ///     the bank's inset - GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#pond-set-parcel-s: one inset holds for the whole village, measured on its parcel of median area - the same bank's width on every side of every pond whose parcel holds its bank, a parcel drawing the least pond excepted
 ///     rounded corners - GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#pond-corners-rounded: a pond's corners are drawn rounded, no page giving the shape of a pond's corner - each corner rounded on a quadratic curve, its cut-back rolled about the reach
-///     the least pond - GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#least-pond: where the bank the village's split asks for is more than a parcel holds, the water is still drawn - the parcel shrunk about its middle to `LEAST_SHARE`; and that least pond is the floor, so a parcel that holds its bank with water any side of which is shorter than a tenth of the parcel's same side draws the least pond too, never a sliver thinner than a tenth of the parcel across (feature 449 T420, its plan section's D8 holds the measurement)
+///     the least pond - GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#least-pond: where the bank the village's split asks for is more than a parcel holds, the water is still drawn - the parcel shrunk about its middle to `LEAST_SHARE`; and that least pond is the floor, so a parcel that holds its bank with water any side of which is shorter than a tenth of the parcel's same side draws the least pond too, never a sliver thinner than a tenth of the parcel across (feature 449 T420, its plan section's D8 holds the measurement); nor water folded over its bank (`held`, 449 T430), which the polder's easing leaves no rolled block drawing
 #[must_use]
 pub fn rounded(ring: &[Pt], inset: f64, reach: f64, draw: u32) -> (String, Vec<Pt>) {
     let corners = ring.len();
     // the least pond is a floor: water the bank leaves with a side shorter than the least pond's same side is a sliver, and
-    // the least pond is drawn in its place
-    let side = |r: &[Pt], i: usize| super::geom::dist(r[i], r[(i + 1) % r.len()]);
-    let at = pushed_in(ring, inset)
-        .filter(|water| {
-            water.len() == corners
-                && (0..corners).all(|i| side(water, i) >= side(ring, i) * LEAST_SHARE)
-        })
-        .unwrap_or_else(|| {
-            #[expect(clippy::cast_precision_loss, reason = "a parcel's four corners")]
-            let count = corners as f64;
-            let middle = (
-                ring.iter().map(|p| p.0).sum::<f64>() / count,
-                ring.iter().map(|p| p.1).sum::<f64>() / count,
-            );
-            ring.iter()
-                .map(|p| {
-                    (
-                        middle.0 + (p.0 - middle.0) * LEAST_SHARE,
-                        middle.1 + (p.1 - middle.1) * LEAST_SHARE,
-                    )
-                })
-                .collect()
-        });
+    // the least pond is drawn in its place; so is water folded over its own bank (`held`)
+    let at = held(ring, inset).unwrap_or_else(|| {
+        #[expect(clippy::cast_precision_loss, reason = "a parcel's four corners")]
+        let count = corners as f64;
+        let middle = (
+            ring.iter().map(|p| p.0).sum::<f64>() / count,
+            ring.iter().map(|p| p.1).sum::<f64>() / count,
+        );
+        ring.iter()
+            .map(|p| {
+                (
+                    middle.0 + (p.0 - middle.0) * LEAST_SHARE,
+                    middle.1 + (p.1 - middle.1) * LEAST_SHARE,
+                )
+            })
+            .collect()
+    });
     let mut rolls = PyRandom::new(u64::from(draw));
     let cuts: Vec<f64> = (0..corners)
         .map(|_| reach * (1.0 - CUT_STRAY + 2.0 * CUT_STRAY * rolls.random()))
@@ -211,5 +240,38 @@ mod tests {
         assert!(wide
             .iter()
             .all(|p| (40.0 - 1e-9..=60.0 + 1e-9).contains(&p.1)));
+    }
+
+    /// WATER FOLDED OVER ITS BANK IS NO POND (449 T430): a parcel bent at its middle, its corner so sharp that its bank's width
+    /// pushes the corner past the far side, folds the pushed-in ring over itself; the water drawn is the least pond, never a ring
+    /// a corner of which comes nearer the parcel's line than the bank (a rolled mosaic's pair drew its pond 12.9 ft from its line
+    /// under a 41.1 ft bank, its hedges across the water).
+    #[test]
+    fn water_folded_over_its_bank_is_not_drawn() {
+        // seed 75's merged pair (15 households, a rolled mosaic at its full drift), moved to the origin: a sharp corner at its head
+        let bent = [
+            (95.9, 69.2),
+            (0.0, 0.0),
+            (48.1, 91.2),
+            (36.6, 269.8),
+            (163.1, 299.3),
+            (155.4, 141.9),
+        ];
+        let inset = 41.1;
+        let (_, water) = rounded(&bent, inset, 16.0, 7);
+        let near = water
+            .iter()
+            .map(|&p| {
+                (0..bent.len())
+                    .map(|i| super::super::geom::seg_dist(p, bent[i], bent[(i + 1) % bent.len()]))
+                    .fold(f64::INFINITY, f64::min)
+            })
+            .fold(f64::INFINITY, f64::min);
+        let least = signed_area(&water).abs() < signed_area(&bent).abs() * 0.011;
+        let folded = !least && near < inset - 16.0;
+        assert!(!folded, "water {near:.1} ft in, bank {inset}");
+        assert!(super::held(&bent, inset).is_none());
+        // the same parcel under a narrow bank holds its water
+        assert!(super::held(&bent, 10.0).is_some());
     }
 }

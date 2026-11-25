@@ -9,7 +9,7 @@
 //!     the rice polder's grid - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a rice polder is drawn on a surveyed grid
 //!     the modules - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: square modules about 190 ft on a side; a dike-pond block a smaller module, about 160 ft, most merged in pairs
 
-use self::creeks::{creek_width, eased, stations, Lattice};
+use self::creeks::{banks_held, creek_width, eased, stations, Banks, Lattice};
 use super::fan::{heading, Pt};
 use crate::pyrand::knob_rng;
 
@@ -312,8 +312,9 @@ impl Warp {
     }
 }
 
-/// The polder of `paddy` square feet: the rice polder's grid (`dikepond` false) or the dike-pond block, falling along
-/// `down_deg`, its middle at `center`; `layout` the dike-pond's `pond_layout` knob (mosaic or chessboard).
+/// The polder of `paddy` square feet: the rice polder's grid (`dikepond` None) or the dike-pond block (`dikepond` its parcels'
+/// rolled share of water and its leftover form), falling along `down_deg`, its middle at `center`; `layout` the dike-pond's
+/// `pond_layout` knob (mosaic or chessboard).
 ///
 /// Research:
 ///     the polder's acreage - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: 1.3 acres gross a household, in whole modules of research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html at or above it
@@ -332,13 +333,14 @@ impl Warp {
 #[must_use]
 pub fn polder(
     paddy: f64,
-    dikepond: bool,
+    dikepond: Option<(f64, &str)>,
     layout: &str,
     down_deg: f64,
     center: Pt,
     aspect: f64,
     seed: i64,
 ) -> Polder {
+    let (share, dikepond) = (dikepond, dikepond.is_some());
     let module = if dikepond { MODULE_FT.1 } else { MODULE_FT.0 };
     let (col_gap, row_gap) = if dikepond {
         (POND_GAP_FT, POND_GAP_FT)
@@ -387,12 +389,13 @@ pub fn polder(
         )
     };
     let creek = dikepond.then(|| creek_width(seed));
+    let banks = |laid: &[Plot]| banks_held(laid, share.unwrap_or((1.0, "none")), seed);
     let (ease, corridor_tests, plots) = eased(
         &put_at,
         &lay,
         (module, (row_gap, col_gap)),
         (rows, cols),
-        creek,
+        creek.map(|w| (w, &banks as Banks)),
     );
     let put = |u: f64, x: f64| put_at(ease, u, x);
     let ring = |o: f64| {

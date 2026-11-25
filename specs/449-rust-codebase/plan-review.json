@@ -1926,6 +1926,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T429 (impl-drift 2026-11-24, page session P3's directed check, `rust/phases/src/field/staged.rs::polder_stage#a rice polder's pocket pond` DRIFTED fix: code - `rice_pond` falls through to a host that is not low when every low plot is not four-sided; reached by seed 183 at ten households, measured 2026-11-24 (the builder's sweep))": {
+   "sha256": "dc05f56fa1a8e8fbdecf8d33a76255f7bc03502420ea62bc48d41f7d713c58a7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T429 Approach (checklist part A)": {
+   "sha256": "ec9384721a41d6383a699bf19ac9fdaed60d6d0042a1aa736c86f61b335d98ae",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T430 (449 T420's close-out and T427's split, 2026-11-24: on a rolled mosaic a merged pair bent at its middle drew its pond off its bank's middle, under the bushes' rows (seeds 51 and 75 at 15 households), and three blocks (seeds 14, 51, 54) held a parcel too small for its bank, drawn with the least pond - measured again 2026-11-24 (the builder's sweep))": {
+   "sha256": "4f5402fb08e26582506706bee5ecebaadee4c2c81bc536116d917edd144769ed",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T430 Approach (checklist part A)": {
+   "sha256": "e28f2485e635bcc36aa9272dd916d491940d88ed2c6b513849b01539b1c4321a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -26455,6 +26479,110 @@
      "summary": "The five research boxes answered by page session P10's write and check sessions and its cascade, none ticked by this builder.",
      "class": "within",
      "why": "The code follows the page items P10 wrote (all GUESS with absence notes); no new source's number reaches a rule. Nothing the GM asked is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T429 (impl-drift 2026-11-24, page session P3's directed check, `rust/phases/src/field/staged.rs::polder_stage#a rice polder's pocket pond` DRIFTED fix: code - `rice_pond` falls through to a host that is not low when every low plot is not four-sided; reached by seed 183 at ten households, measured 2026-11-24 (the builder's sweep))",
+    "### T429 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "rice_pond's hosts filtered to plots that are low, not resting and four ring points; where none is left, the block draws no pond (seed 183 at ten households: its pond had stood in a top-row and a middle-row plot)",
+     "class": "within",
+     "why": "Fixes a wrong outcome a reader sees (a pond three rows off the low row the 0008 drawing puts it on), which the GM's 2026-11-24 words ask for: 'if there are real defects, then I do want to find them and fix them'. The no-pond result is the page's own rules applied together ('wholly inside one low plot' plus pond-host-four-sided passing over any other shape), not a new carve-out; the 8,798 other rolls are unchanged, measured."
+    },
+    {
+     "id": "claims-restated",
+     "summary": "new claim rice_pond#only a low plot; rice_pond#a four-sided host and #never a resting plot restated against their GUESS items; polder_stage#a rice polder's pocket pond restated to no pond where no low four-sided plot is left",
+     "class": "within",
+     "why": "The claims follow the fixed behavior and cite the pages and items the fix rests on; no claim reaches past the rule the pages state."
+    },
+    {
+     "id": "order",
+     "summary": "lands before T158, after page session P3 and its cascade, before T430",
+     "class": "within",
+     "why": "A scripted-map (hamlet rice polder) defect found by the close-out's own directed check, worked before the port resumes as the GM's 2026-11-24 close-out and fix-defects-first words ask; it does not reach feature 452's hand-drawn work."
+    },
+    {
+     "id": "pin-placement",
+     "summary": "the rolled pin goes in driver/tests.rs because driver/polder/tests.rs stands at the 1,000-line bar",
+     "class": "within",
+     "why": "Where a test lives; the test still enforces the requested fix."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "whether 0008 counts a merged pair as four-sided (0019 calls one four-sided) left as a page item for a page session; the code passes a merged pair over as its claim now states",
+     "class": "within",
+     "why": "A difference between two pages' wording that no reader of a map sees beyond the rule as claimed, not a wrong outcome; the GM, 2026-11-19, asks that such differences not be 'fixed', and constitution XIV v2.36.0 says a difference left is within, needing no ruling."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T430 (449 T420's close-out and T427's split, 2026-11-24: on a rolled mosaic a merged pair bent at its middle drew its pond off its bank's middle, under the bushes' rows (seeds 51 and 75 at 15 households), and three blocks (seeds 14, 51, 54) held a parcel too small for its bank, drawn with the least pond - measured again 2026-11-24 (the builder's sweep))",
+    "### T430 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "a bank's water is a true inset: each corner inside the parcel and no nearer any side than the bank's width less FOLD_SLACK_FT (one foot, a GUESS); water refused draws the least pond",
+     "class": "within",
+     "why": "Fixes a wrong outcome (seed 75's pond folded over its own bank with hedges across the water, against 0018's bank a ring with the pond through the middle): a defect under the 2026-11-19 definition, which the GM's 2026-11-24 'if there are real defects, then I do want to find them and fix them' asks be fixed. A new GUESS constant whose slack sits under a reader's sight of a measured 25.3-49.4 ft bank narrows nothing asked."
+    },
+    {
+     "id": "D2",
+     "summary": "the mosaic is eased for its banks as it already is for its creeks: bent less a twentieth of the drift at a time until every pond-holding parcel holds its water; at no share the block lays straight; the least pond stays the fallback",
+     "class": "within",
+     "why": "Stands on request.md alone: the speck ponds under the bushes' rows are wrong outcomes against 0018's ring-bank rule, and the GM's 2026-11-24 words ask that defects be fixed; 2026-11-17 says maps may change so long as the research holds. The drift is the page's 'calibrated liberty', which 0019 already eases for creeks; nothing in the request or the spec asks that the whole drift be kept, so bending 86 of 880 mosaics less narrows nothing the GM asked for. The task line's weighing of speck ponds against easing further was done: the least pond is kept as the fallback and easing chosen, so no defect is left. The page's silence on easing for banks is the block's own claim; it is recorded as a project GUESS and a page need, which is the research ladder's to check, not a fidelity finding."
+    },
+    {
+     "id": "D3",
+     "summary": "crowns whose center lies in their own pond's water are dropped and hedges cut at it; roll stream unmoved",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a bush in a pond, seed 47) against 0018's 'a bush's center always stands on the bank'; fixing a defect is what the 2026-11-24 request asks."
+    },
+    {
+     "id": "T420-test-count",
+     "summary": "T420's easing test keeps its rule and drops its count of eased against whole blocks",
+     "class": "within",
+     "why": "The rule the test enforces is kept; the count no longer holds because banks now ease more blocks than creeks at the driest split. The test still enforces the requested behavior, and D2's own tests pin the new one; no check that enforces what the GM asked is lost."
+    },
+    {
+     "id": "sweep-throwaway",
+     "summary": "the 880-block sweep is a throwaway removed before landing; six seeds (14, 47, 51, 54, 75, 79) are pinned in a driver test",
+     "class": "within",
+     "why": "The measurement instrument is not something the GM asked to keep; the defect cases it found are pinned by tests that fail with each change switched off (red logs recorded)."
+    },
+    {
+     "id": "ease-zero",
+     "summary": "a block whose banks hold at no eased share lays straight (ease 0)",
+     "class": "within",
+     "why": "Gives room before anything is packed, where every parcel is its module and holds; it leaves no defect and narrows nothing asked."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "0019 records easing for creeks only; easing for banks is left as a page item for a page session, not a defect",
+     "class": "within",
+     "why": "A record gap with the drawing correct is not a wrong outcome under the 2026-11-19 definition, so leaving it for a page session leaves no defect; the 2026-11-24 close-out asks that defects be fixed, which D1-D3 do."
+    },
+    {
+     "id": "order",
+     "summary": "after T420, T427, T429 (T429 first or together, for field/staged.rs); before T158 and T431",
+     "class": "within",
+     "why": "Sequencing among the close-out tasks the GM asked to finish before the port resumes (2026-11-24); it narrows nothing."
+    },
+    {
+     "id": "budget",
+     "summary": "no work-budget step owed: the budgeted polder is a rice polder, never eased, and its stages are unmoved",
+     "class": "within",
+     "why": "A measured statement of scope (make work-budget, 2026-11-24), not a narrowing of anything asked."
     }
    ]
   }
@@ -54507,6 +54635,106 @@
      "summary": "The five research boxes answered by page session P10's write and check sessions and its cascade, none ticked by this builder.",
      "class": "within",
      "why": "The code follows the page items P10 wrote (all GUESS with absence notes); no new source's number reaches a rule. Nothing the GM asked is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T429": {
+   "section_sha256": "3a941d3020225419098400d0cceae6561bfd16622d7294473246ba2e9188420f",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "rice_pond's hosts filtered to plots that are low, not resting and four ring points; where none is left, the block draws no pond (seed 183 at ten households: its pond had stood in a top-row and a middle-row plot)",
+     "class": "within",
+     "why": "Fixes a wrong outcome a reader sees (a pond three rows off the low row the 0008 drawing puts it on), which the GM's 2026-11-24 words ask for: 'if there are real defects, then I do want to find them and fix them'. The no-pond result is the page's own rules applied together ('wholly inside one low plot' plus pond-host-four-sided passing over any other shape), not a new carve-out; the 8,798 other rolls are unchanged, measured."
+    },
+    {
+     "id": "claims-restated",
+     "summary": "new claim rice_pond#only a low plot; rice_pond#a four-sided host and #never a resting plot restated against their GUESS items; polder_stage#a rice polder's pocket pond restated to no pond where no low four-sided plot is left",
+     "class": "within",
+     "why": "The claims follow the fixed behavior and cite the pages and items the fix rests on; no claim reaches past the rule the pages state."
+    },
+    {
+     "id": "order",
+     "summary": "lands before T158, after page session P3 and its cascade, before T430",
+     "class": "within",
+     "why": "A scripted-map (hamlet rice polder) defect found by the close-out's own directed check, worked before the port resumes as the GM's 2026-11-24 close-out and fix-defects-first words ask; it does not reach feature 452's hand-drawn work."
+    },
+    {
+     "id": "pin-placement",
+     "summary": "the rolled pin goes in driver/tests.rs because driver/polder/tests.rs stands at the 1,000-line bar",
+     "class": "within",
+     "why": "Where a test lives; the test still enforces the requested fix."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "whether 0008 counts a merged pair as four-sided (0019 calls one four-sided) left as a page item for a page session; the code passes a merged pair over as its claim now states",
+     "class": "within",
+     "why": "A difference between two pages' wording that no reader of a map sees beyond the rule as claimed, not a wrong outcome; the GM, 2026-11-19, asks that such differences not be 'fixed', and constitution XIV v2.36.0 says a difference left is within, needing no ruling."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T430": {
+   "section_sha256": "184dfa77f1c221fb5c8a95fd30c062a00dcf8e3539d53c48b85accce09bcf3ac",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "a bank's water is a true inset: each corner inside the parcel and no nearer any side than the bank's width less FOLD_SLACK_FT (one foot, a GUESS); water refused draws the least pond",
+     "class": "within",
+     "why": "Fixes a wrong outcome (seed 75's pond folded over its own bank with hedges across the water, against 0018's bank a ring with the pond through the middle): a defect under the 2026-11-19 definition, which the GM's 2026-11-24 'if there are real defects, then I do want to find them and fix them' asks be fixed. A new GUESS constant whose slack sits under a reader's sight of a measured 25.3-49.4 ft bank narrows nothing asked."
+    },
+    {
+     "id": "D2",
+     "summary": "the mosaic is eased for its banks as it already is for its creeks: bent less a twentieth of the drift at a time until every pond-holding parcel holds its water; at no share the block lays straight; the least pond stays the fallback",
+     "class": "within",
+     "why": "Stands on request.md alone: the speck ponds under the bushes' rows are wrong outcomes against 0018's ring-bank rule, and the GM's 2026-11-24 words ask that defects be fixed; 2026-11-17 says maps may change so long as the research holds. The drift is the page's 'calibrated liberty', which 0019 already eases for creeks; nothing in the request or the spec asks that the whole drift be kept, so bending 86 of 880 mosaics less narrows nothing the GM asked for. The task line's weighing of speck ponds against easing further was done: the least pond is kept as the fallback and easing chosen, so no defect is left. The page's silence on easing for banks is the block's own claim; it is recorded as a project GUESS and a page need, which is the research ladder's to check, not a fidelity finding."
+    },
+    {
+     "id": "D3",
+     "summary": "crowns whose center lies in their own pond's water are dropped and hedges cut at it; roll stream unmoved",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a bush in a pond, seed 47) against 0018's 'a bush's center always stands on the bank'; fixing a defect is what the 2026-11-24 request asks."
+    },
+    {
+     "id": "T420-test-count",
+     "summary": "T420's easing test keeps its rule and drops its count of eased against whole blocks",
+     "class": "within",
+     "why": "The rule the test enforces is kept; the count no longer holds because banks now ease more blocks than creeks at the driest split. The test still enforces the requested behavior, and D2's own tests pin the new one; no check that enforces what the GM asked is lost."
+    },
+    {
+     "id": "sweep-throwaway",
+     "summary": "the 880-block sweep is a throwaway removed before landing; six seeds (14, 47, 51, 54, 75, 79) are pinned in a driver test",
+     "class": "within",
+     "why": "The measurement instrument is not something the GM asked to keep; the defect cases it found are pinned by tests that fail with each change switched off (red logs recorded)."
+    },
+    {
+     "id": "ease-zero",
+     "summary": "a block whose banks hold at no eased share lays straight (ease 0)",
+     "class": "within",
+     "why": "Gives room before anything is packed, where every parcel is its module and holds; it leaves no defect and narrows nothing asked."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "0019 records easing for creeks only; easing for banks is left as a page item for a page session, not a defect",
+     "class": "within",
+     "why": "A record gap with the drawing correct is not a wrong outcome under the 2026-11-19 definition, so leaving it for a page session leaves no defect; the 2026-11-24 close-out asks that defects be fixed, which D1-D3 do."
+    },
+    {
+     "id": "order",
+     "summary": "after T420, T427, T429 (T429 first or together, for field/staged.rs); before T158 and T431",
+     "class": "within",
+     "why": "Sequencing among the close-out tasks the GM asked to finish before the port resumes (2026-11-24); it narrows nothing."
+    },
+    {
+     "id": "budget",
+     "summary": "no work-budget step owed: the budgeted polder is a rice polder, never eased, and its stages are unmoved",
+     "class": "within",
+     "why": "A measured statement of scope (make work-budget, 2026-11-24), not a narrowing of anything asked."
     }
    ],
    "verdict": "CLEAR"

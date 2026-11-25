@@ -7,7 +7,7 @@
 //!     one inset a village - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: one inset holds for the whole village, measured on its parcel of median area - the fry ponds' banks the same
 
 use super::fan::Pt;
-use super::geom::{dist, seg_dist, signed_area, unit};
+use super::geom::{dist, inside, seg_dist, signed_area, unit};
 use super::index::Index;
 use super::ponds::{pushed_in, rounded};
 use crate::pyrand::knob_rng;
@@ -99,6 +99,30 @@ pub fn off_the_water(crops: &mut Crops, channels: &[(&[Pt], f64)]) -> u64 {
     ix.touched + ix.examined + tests
 }
 
+/// A bank's crop kept off its own pond: of the crowns and hedges grown since `from` (their counts before the bank was planted), a
+/// crown whose center lies in the pond's `water` is dropped, and a hedge is cut where it runs into the water, a piece of fewer than
+/// two points left out. Where the water's corner is rounded into a bend of its bank, a row run at the bank's own depth can cross it
+/// (seed 47 of a rolled mosaic, 449 T430).
+///
+/// Research:
+///     no bush in its pond - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: the bank is a ring, the pond showing through the middle, and the mulberry planted on the dike - no crown's center and no hedge over the pond's water
+fn off_its_pond(crops: &mut Crops, from: (usize, usize), water: &[Pt]) {
+    let grown = crops.crowns.split_off(from.0);
+    crops.crowns.extend(
+        grown
+            .into_iter()
+            .filter(|&(x, y, _)| !inside((x, y), water)),
+    );
+    let grown: Vec<Vec<Pt>> = crops.hedges.split_off(from.1);
+    for hedge in grown {
+        for piece in hedge.split(|&p| inside(p, water)) {
+            if piece.len() >= 2 {
+                crops.hedges.push(piece.to_vec());
+            }
+        }
+    }
+}
+
 /// The ring pushed in `by` feet on every side (`ponds::pushed_in`), the line a row of the bank's crop runs on; the ring itself
 /// where the bank holds no such line.
 ///
@@ -149,6 +173,16 @@ pub fn inset(parcels: &[Vec<Pt>], share: f64) -> f64 {
     (perimeter - (perimeter * perimeter - 16.0 * area * dry).max(0.0).sqrt()) / 8.0
 }
 
+/// Whether the block's parcel `i` is left in standing rice: one in `RICE_IN` where the leftover form is rice, from the parcel's own
+/// stream - asked by `convert` and by the polder's easing, which gives room only to the parcels that hold a pond.
+///
+/// Research:
+///     the rice left - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: every parcel a pond, or about one parcel in ten left in standing rice
+#[must_use]
+pub fn left_in_rice(seed: i64, i: usize, leftover: &str) -> bool {
+    leftover == "rice" && knob_rng(seed, &format!("dikepond:{i}")).randbelow(RICE_IN) == 0
+}
+
 /// The block's `parcels` converted: each rolled from its own stream - rice at one in `RICE_IN` where `leftover` is rice, else a
 /// pond, each pond's bank and water rounded at `inset` and its bank planted with the `crop`; a fry village's smallest ponds its
 /// nursery while their water stays within `FRY_SHARE` of the ponds'. Returns the parcels and the crops.
@@ -170,9 +204,7 @@ pub fn convert(
     crop: &str,
 ) -> (Vec<Parcel>, Crops) {
     let rice: Vec<bool> = (0..parcels.len())
-        .map(|i| {
-            leftover == "rice" && knob_rng(seed, &format!("dikepond:{i}")).randbelow(RICE_IN) == 0
-        })
+        .map(|i| left_in_rice(seed, i, leftover))
         .collect();
     let mut crops = Crops {
         crop: crop.to_owned(),
@@ -188,7 +220,9 @@ pub fn convert(
         let mut rng = knob_rng(seed, &format!("dikepond_shape:{i}"));
         let bank = rounded(ring, 0.0, REACH_FT.0, rng.randbelow(u32::MAX));
         let water = rounded(ring, inset_ft, REACH_FT.1, rng.randbelow(u32::MAX));
+        let (crowns, hedges) = (crops.crowns.len(), crops.hedges.len());
         grow(ring, inset_ft, crop, &mut rng, &mut crops);
+        off_its_pond(&mut crops, (crowns, hedges), &water.1);
         built.push(Some((bank, water)));
     }
     // a fry village's nursery: its smallest ponds, taken while their water stays within `FRY_SHARE` of the ponds' whole
@@ -322,6 +356,40 @@ mod tests {
         let work = off_the_water(&mut crops, &[(&course, 8.0), (&course[..1], 3.0)]);
         assert_eq!(crops.crowns, vec![(50.0, 5.0, 2.2), (500.0, 500.0, 2.2)]);
         assert!(work > 4);
+    }
+
+    /// NO BUSH IN ITS OWN POND (449 T430): a crown whose center lies in the pond's water is dropped and a hedge is cut where it
+    /// runs into it, a piece of one point left out; what was grown before the bank was planted is left alone.
+    #[test]
+    fn a_bank_s_crop_is_kept_off_its_own_pond() {
+        let water = [(10.0, 10.0), (20.0, 10.0), (20.0, 20.0), (10.0, 20.0)];
+        let mut crops = Crops {
+            crop: "tea".to_owned(),
+            crowns: vec![(15.0, 15.0, 2.0), (15.0, 15.0, 2.0), (5.0, 5.0, 2.0)],
+            hedges: vec![
+                vec![(15.0, 15.0), (16.0, 15.0)],
+                vec![
+                    (0.0, 15.0),
+                    (5.0, 15.0),
+                    (15.0, 15.0),
+                    (25.0, 15.0),
+                    (30.0, 15.0),
+                    (35.0, 15.0),
+                ],
+                vec![(5.0, 0.0), (15.0, 0.0)],
+            ],
+        };
+        super::off_its_pond(&mut crops, (1, 1), &water);
+        assert_eq!(crops.crowns, vec![(15.0, 15.0, 2.0), (5.0, 5.0, 2.0)]);
+        assert_eq!(
+            crops.hedges,
+            vec![
+                vec![(15.0, 15.0), (16.0, 15.0)],
+                vec![(0.0, 15.0), (5.0, 15.0)],
+                vec![(25.0, 15.0), (30.0, 15.0), (35.0, 15.0)],
+                vec![(5.0, 0.0), (15.0, 0.0)],
+            ]
+        );
     }
 
     #[test]

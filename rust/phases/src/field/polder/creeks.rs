@@ -31,21 +31,41 @@ pub(super) fn creek_width(seed: i64) -> f64 {
     CREEK_FT.0 + (CREEK_FT.1 - CREEK_FT.0) * f64::from(rng.randbelow(1001)) / 1000.0
 }
 
-/// The block's plots with room for its creeks: the lattice's deformation kept whole where every corridor between the plots is
-/// at least `creek` wide, and where one is pinched narrower, eased a step in `EASE_STEPS` at a time until none is - the share
-/// kept and the plots laid at it. A rice polder (no `creek`) keeps the whole.
+/// The question the easing asks of a laid block's parcels besides its corridors: do they hold their banks (`banks_held`).
+pub(super) type Banks<'a> = &'a dyn Fn(&[Plot]) -> bool;
+
+/// Whether every parcel of a dike-pond block laid as `plots` that holds a pond holds the bank its village's split asks for: the
+/// one inset `landuse::inset` measures on them all at the water's share `split.0`, each parcel not left in rice (`split.1` the
+/// leftover form, `landuse::left_in_rice`) holding its water inside that bank (`ponds::held`).
 ///
 /// Research:
-///     room for the creeks - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html#pinched-mosaic-eased: where the full bend would leave a corridor between two ponds narrower than the creek drawn in it (a canal between ponds about 6 to 8 ft wide, GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#creek-width-between-ponds), that block is bent less, so no creek is laid over a bank and no pond is drawn smaller (the GM 2026-10-12, room before packing) - the drift eased block by block, a mosaic no corridor of which is pinched keeping it whole (Kuwabata's does); 13 of 51 rolled mosaics held a corridor of 4 to 7 ft under a creek of 6 to 8 (measured 2026-11-24, feature 449 T420)
+///     room for the banks - GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#pond-set-parcel-s: one inset holds for the whole village, measured on its parcel of median area - a mosaic bent so far that a parcel of it cannot hold that bank, or folds its water over it, is bent less (`eased`), so no parcel falls to the least pond for the bend alone (the GM 2026-10-12, room before packing); research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html#pinched-mosaic-eased eases a block for its creeks only and is silent on its banks; 5 of 80 rolled mosaics at 15 households eased further, none below 0.65 of the drift (measured 2026-11-24, feature 449 T430)
+pub(super) fn banks_held(plots: &[Plot], split: (f64, &str), seed: i64) -> bool {
+    let rings: Vec<Vec<Pt>> = plots.iter().map(|x| x.ring.clone()).collect();
+    let at = crate::field::landuse::inset(&rings, split.0);
+    rings.iter().enumerate().all(|(i, r)| {
+        crate::field::landuse::left_in_rice(seed, i, split.1)
+            || crate::field::ponds::held(r, at).is_some()
+    })
+}
+
+/// The block's plots with room for its creeks and its banks: the lattice's deformation kept whole where every corridor between
+/// the plots is at least `creek.0` wide and every parcel holds its bank (`creek.1`, `banks_held`), and otherwise eased a step in
+/// `EASE_STEPS` at a time until both hold, none of it kept where no step does - the share kept and the plots laid at it. A rice
+/// polder (no `creek`) keeps the whole.
+///
+/// Research:
+///     room for the creeks - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html#pinched-mosaic-eased: where the full bend would leave a corridor between two ponds narrower than the creek drawn in it (a canal between ponds about 6 to 8 ft wide, GUESS research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html#creek-width-between-ponds), that block is bent less, so no creek is laid over a bank and no pond is drawn smaller (the GM 2026-10-12, room before packing) - the drift eased block by block; 13 of 51 rolled mosaics held a corridor of 4 to 7 ft under a creek of 6 to 8 (measured 2026-11-24, feature 449 T420)
+///     the banks held - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html#pinched-mosaic-eased: this widens the page's recorded guess, whose sentence that a block with no corridor pinched keeps the whole bend no longer holds where a parcel would fold its water over its bank - the same steps also ask that every parcel holds its bank (`banks_held`, 449 T430), so a block keeps its whole bend only where no corridor is pinched and every parcel holds its bank (Kuwabata's does), and a block no step lets hold both is drawn with no bend at all (ease 0), its parcels then each their module; the bend is eased before any pond falls back to the least pond of 0018's drawing page because easing gives the parcel room where the least pond packs less water into it (the GM 2026-10-12, room before packing); 0019's page does not yet say this (a page need, 449 T430)
 pub(super) fn eased(
     put_at: &dyn Fn(f64, f64, f64) -> Pt,
     lay: &dyn Fn(f64) -> Vec<Plot>,
     lattice: (f64, (f64, f64)),
     grid: (usize, usize),
-    creek: Option<f64>,
+    creek: Option<(f64, Banks)>,
 ) -> (f64, u64, Vec<Plot>) {
     let whole = lay(1.0);
-    let Some(w) = creek else {
+    let Some((w, banks)) = creek else {
         return (1.0, 0, whole);
     };
     let mut tests = 0_u64;
@@ -59,17 +79,21 @@ pub(super) fn eased(
         };
         let (least, asked) = lattice.narrowest(grid);
         tests += asked;
-        least >= w
+        if least < w {
+            return None;
+        }
+        // and every parcel holds its bank (449 T430): the plots laid at this share and each asked once
+        let laid = if ease < 1.0 { lay(ease) } else { whole.clone() };
+        tests += laid.len() as u64;
+        banks(&laid).then_some(laid)
     };
-    // the deformation scales with the share kept, and with none kept every corridor is its whole gap
-    let ease = (0..EASE_STEPS)
+    // the deformation scales with the share kept, and with none kept every corridor is its whole gap and every parcel its module
+    let found = (0..EASE_STEPS)
         .map(|k| 1.0 - f64::from(k) / f64::from(EASE_STEPS))
-        .find(|&ease| roomy(ease))
-        .unwrap_or(0.0);
-    if ease < 1.0 {
-        (ease, tests, lay(ease))
-    } else {
-        (1.0, tests, whole)
+        .find_map(|ease| roomy(ease).map(|laid| (ease, laid)));
+    match found {
+        Some((ease, laid)) => (ease, tests, laid),
+        None => (0.0, tests, lay(0.0)),
     }
 }
 
