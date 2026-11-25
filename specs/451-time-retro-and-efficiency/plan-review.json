@@ -1680,6 +1680,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T248 (451 T227's builder, 2026-11-25: record-format's 2026-11-24 rounds on 0097 spanned two `origin/main` batches, and the batch rule restarts a unit's count on any move of `origin/main`, so with several sessions landing the cap seldom fires)": {
+   "sha256": "76ec936a6dbdc1fe6258308410a740b8042a6fc14562dc7a4b20e100e57cff8a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T248 Approach (checklist part A)": {
+   "sha256": "c29ae9f7cecf32e7101600c8a8566164c29453679144c5f8766d8de6565dba31",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -21966,6 +21978,107 @@
      "why": "The GM deferred the queued research on 2026-11-25 ('defer all of it until at least tomorrow'); the defect is in tooling and is fixed in this task, so nothing defective is carried forward. Ordering is scheduling, not scope."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T248 (451 T227's builder, 2026-11-25: record-format's 2026-11-24 rounds on 0097 spanned two `origin/main` batches, and the batch rule restarts a unit's count on any move of `origin/main`, so with several sessions landing the cap seldom fires)",
+    "### T248 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T248-1 the batch rule narrowed",
+     "summary": "new_cause restarts a unit's count in a later batch only where the subject itself moved upstream by another session's landing (a non-push origin/main reflog step whose diff names a file of the subject), never by this clone's own push of the round's edits or by moves elsewhere.",
+     "class": "within",
+     "why": "What was asked is 375 FR-010: the same check on the same thing reaching its round cap is a tripwire that dispatches the round arbiter (FR-011). The batch restart is a carve-out from that cap built by c5db336fd3, not something the GM asked for; narrowing it makes the cap fire where FR-010 says it fires, and the case that still restarts (a page change no counted round saw, made by another session) is the 374 ruling's case. Measured: with several sessions landing, every restart for 0097 came from moves of other files or the round's own landing, so the cap as built seldom fired - a check failing at its job, a defect under XIV."
+    },
+    {
+     "id": "T248-2 the subject is the unit's own files, not the pages it reads",
+     "summary": "A change to a page the pop-up reads (the 374 ruling's own trigger, 0077 for a hamlet pop-up) no longer restarts the count; it trips the cap and one round-arbiter ruling stands where the automatic restart stood. Counting read pages as the subject was priced and not built.",
+     "class": "within",
+     "why": "Nothing is removed from what was asked: the read-page case still gets its fresh round if warranted, by the arbiter's ruling, which is exactly FR-010/FR-011's design (the tripwire dispatches the arbiter, who may rule continue). The automatic restart was a tooling build, not the GM's words or the spec's. Even read against the 374 ruling as a narrowing it would be LEGITIMATE: the ruling's case still reaches a ruling rather than being dropped, and the cascade from a read page is owed its own triage (make modal-triage). The block states the cost openly."
+    },
+    {
+     "id": "T248-3 authorship read from the origin/main reflog kind",
+     "summary": "An 'update by push' step is this clone's landing; a fetch or pull step is another session's; an unrecognized message counts as another session's. HEAD-reflog authorship was tried and rejected on measurement.",
+     "class": "within",
+     "why": "A mechanism choice inside the task, measured 2026-11-25 on 150 reflog entries (147 pushes, 3 fetches, every pushed commit made in this clone). Its failure direction (unknown = another session's) can only restart, never hold, so it narrows nothing the spec asks."
+    },
+    {
+     "id": "T248-4 the fallbacks",
+     "summary": "Reflog not reaching the stored batch: any change of the subject between the two batches restarts, whoever made it. Stored batch unreadable or diff refused: nothing moves, the cap holds and the arbiter rules.",
+     "class": "within",
+     "why": "Each fallback either keeps the 374 ruling's intent where authorship cannot be read or fails toward the FR-010 tripwire and FR-011 ruling; neither carves anything out of what was asked."
+    },
+    {
+     "id": "T248-5 ROUND_CAP and T227's per-unit count unchanged",
+     "summary": "The cap stays 2 and the count still follows its unit.",
+     "class": "within",
+     "why": "Leaves FR-010's cap (record checks capped at two rounds like review checks) as specified."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T248 (451 T227's builder, 2026-11-25: record-format's 2026-11-24 rounds on 0097 spanned two `origin/main` batches, and the batch rule restarts a unit's count on any move of `origin/main`, so with several sessions landing the cap seldom fires)",
+    "### T248 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 the restart kept for another session's change",
+     "summary": "A later origin/main batch restarts a unit's count when moved_upstream finds a non-push (fetch or pull) reflog step whose diff names a file of the subject. A batch whose moves leave the subject alone no longer restarts it.",
+     "class": "within",
+     "why": "Baseline: the GM's request, 451's spec, 375 FR-010 (the cap dispatches the arbiter) and FR-011 (the arbiter's ruling binds where the GM was asked). Under that baseline, the binding 374 ruling (a fresh count for a later page change no counted round saw) is part of what was asked. Another session's change to the subject is that case, and it is kept. Batches that never touched the subject were never that case. Measured 2026-11-25: nine of 0097's ten moves were such batches. Dropping their restart restores FR-010's cap where it had stopped firing, a defect fixed under fix-as-we-go."
+    },
+    {
+     "id": "D2a a page the unit only reads",
+     "summary": "A change to a page the unit reads but which is not one of its own files (the 374 ruling's own 0077 trigger) no longer restarts the count. The third round is held for one arbiter ruling.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the 374 ruling's automatic fresh count, so it is judged as an exception and presumed wrong. It is legitimate on the GM's own rule and on purpose. The root CLAUDE.md tripwire (labeled G in the block) owes the arbiter a ruling at a check's third round on one subject, so the fresh count was the exception and this returns that case to the rule. The ruling's purpose survives: such a cause still gets its look. The arbiter rules on it under FR-011 and can rule continue, which is exactly how the 374 ruling itself was reached (the cap tripped at round 3 and the arbiter ruled continue). FR-010 says the tripwire 'does not stop the feature'. The GM's 2026-11-24 words, 'that we really are cascading in situations that do call for it', still hold: the cascade owed by a read page's change still runs, through modal-triage and one ruling, and is neither dropped nor settled silently. Restarting on every read page's move would bring back what the GM's 2026-11-23 cascade talk was about, every pop-up citing an edited page re-owed without limit. This is the ruling's reach narrowed to its own mechanism, not a carve-out against it. Not counted as grounds: 'the task's words' and cost."
+    },
+    {
+     "id": "D2b the subject's own files changed by other work in this clone",
+     "summary": "Every push from this clone counts as the round's own edits. So a later edit to the subject's own files by other work of this session (another task, a page session), landed by push, no longer restarts the count and goes to the arbiter.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a different case from D2a and is ruled on its own. It is a change to the subject itself that no counted round saw, so it falls inside the 374 ruling's words, and the mechanism reaches further than goal line 1 says ('the round's own edits'). It is legitimate on the same two grounds. First, the GM's tripwire is a third round on one subject, and that holds whichever of this session's edits re-owed it. Second, a session's own later edits re-owing its own checks is the very loop the cap exists to catch (the GM's 2026-11-23 cascade talk), while another session's change, which D1 keeps, is not this session's loop. The case still reaches the arbiter, who can rule continue. With 147 of the clone's last 150 reflog entries pushes (measured 2026-11-25, as the block states), D1's restart still reaches every fetched landing from another session, and those arrive in large fetches (one of 36 commits), so the kept restart is not hollowed out."
+    },
+    {
+     "id": "D3 fallback where authorship cannot be read",
+     "summary": "If the reflog does not reach the stored batch (expired or no tracking log), any change to the subject between the batches restarts the count. An unrecognized reflog message counts as another session's.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In this branch the round's own edits can reset the count, which goes past the 374 ruling (a page change no counted round saw) and against FR-010's cap, so it is ruled as an exception. It is legitimate because the deciding fact, who made the change, cannot physically be read here. Either default breaks one owed rule some of the time: holding puts another session's real new cause into a capped count against the binding ruling, and restarting lets own edits reset it. It still requires an actual change to the subject, and it needs two rounds on one unit further apart than the reflog's expiry, so it does not gut the cap."
+    },
+    {
+     "id": "D4 fallback where git cannot read the stored batch or its diff",
+     "summary": "A stored batch git cannot read, or a diff git refuses, moves nothing. The cap holds and the arbiter rules.",
+     "class": "within",
+     "why": "Fails toward FR-010's cap and FR-011's ruling."
+    },
+    {
+     "id": "D5 the split into rounds/cap.rs",
+     "summary": "The cap's functions move unchanged from rounds.rs (1,029 lines with the rule) into rounds/cap.rs. rounds.rs is now 843 lines and cap.rs 198 (measured 2026-11-25, wc -l).",
+     "class": "within",
+     "why": "A behavior-neutral split under the file-scale bar."
+    },
+    {
+     "id": "D6 tests and fires-proof",
+     "summary": "A 0097 replay through handle with a bare origin and a second clone, red on HEAD. A moved-page replay and the restated batch test, each pinned by disabling one half of the rule.",
+     "class": "within",
+     "why": "Enforcement of FR-010's cap and of the restart D1 keeps. Per the 2026-09-20 rule, enforcement serves the request."
+    },
+    {
+     "id": "D7 order, exits, budget",
+     "summary": "After T227, before T22, parallel with T249 in other crates. Closing-checks exit, with a cannot-be-done claim ruled through make arbiter-ask. One landing.",
+     "class": "within",
+     "why": "Scheduling and scope. None of it narrows anything."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -35108,6 +35221,65 @@
      "summary": "After T232, parallel with T248 (disjoint files), before T246 as T232 filed it; build and test only, no page session and no edit of a research page, the research switch deferred.",
      "class": "within",
      "why": "The GM deferred the queued research on 2026-11-25 ('defer all of it until at least tomorrow'); the defect is in tooling and is fixed in this task, so nothing defective is carried forward. Ordering is scheduling, not scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T248": {
+   "section_sha256": "dda5ee6906a37b513c2da11e7d2eb636f0a698ee3cc6a146993516c602016cad",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 the restart kept for another session's change",
+     "summary": "A later origin/main batch restarts a unit's count when moved_upstream finds a non-push (fetch or pull) reflog step whose diff names a file of the subject. A batch whose moves leave the subject alone no longer restarts it.",
+     "class": "within",
+     "why": "Baseline: the GM's request, 451's spec, 375 FR-010 (the cap dispatches the arbiter) and FR-011 (the arbiter's ruling binds where the GM was asked). Under that baseline, the binding 374 ruling (a fresh count for a later page change no counted round saw) is part of what was asked. Another session's change to the subject is that case, and it is kept. Batches that never touched the subject were never that case. Measured 2026-11-25: nine of 0097's ten moves were such batches. Dropping their restart restores FR-010's cap where it had stopped firing, a defect fixed under fix-as-we-go."
+    },
+    {
+     "id": "D2a a page the unit only reads",
+     "summary": "A change to a page the unit reads but which is not one of its own files (the 374 ruling's own 0077 trigger) no longer restarts the count. The third round is held for one arbiter ruling.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the 374 ruling's automatic fresh count, so it is judged as an exception and presumed wrong. It is legitimate on the GM's own rule and on purpose. The root CLAUDE.md tripwire (labeled G in the block) owes the arbiter a ruling at a check's third round on one subject, so the fresh count was the exception and this returns that case to the rule. The ruling's purpose survives: such a cause still gets its look. The arbiter rules on it under FR-011 and can rule continue, which is exactly how the 374 ruling itself was reached (the cap tripped at round 3 and the arbiter ruled continue). FR-010 says the tripwire 'does not stop the feature'. The GM's 2026-11-24 words, 'that we really are cascading in situations that do call for it', still hold: the cascade owed by a read page's change still runs, through modal-triage and one ruling, and is neither dropped nor settled silently. Restarting on every read page's move would bring back what the GM's 2026-11-23 cascade talk was about, every pop-up citing an edited page re-owed without limit. This is the ruling's reach narrowed to its own mechanism, not a carve-out against it. Not counted as grounds: 'the task's words' and cost."
+    },
+    {
+     "id": "D2b the subject's own files changed by other work in this clone",
+     "summary": "Every push from this clone counts as the round's own edits. So a later edit to the subject's own files by other work of this session (another task, a page session), landed by push, no longer restarts the count and goes to the arbiter.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a different case from D2a and is ruled on its own. It is a change to the subject itself that no counted round saw, so it falls inside the 374 ruling's words, and the mechanism reaches further than goal line 1 says ('the round's own edits'). It is legitimate on the same two grounds. First, the GM's tripwire is a third round on one subject, and that holds whichever of this session's edits re-owed it. Second, a session's own later edits re-owing its own checks is the very loop the cap exists to catch (the GM's 2026-11-23 cascade talk), while another session's change, which D1 keeps, is not this session's loop. The case still reaches the arbiter, who can rule continue. With 147 of the clone's last 150 reflog entries pushes (measured 2026-11-25, as the block states), D1's restart still reaches every fetched landing from another session, and those arrive in large fetches (one of 36 commits), so the kept restart is not hollowed out."
+    },
+    {
+     "id": "D3 fallback where authorship cannot be read",
+     "summary": "If the reflog does not reach the stored batch (expired or no tracking log), any change to the subject between the batches restarts the count. An unrecognized reflog message counts as another session's.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In this branch the round's own edits can reset the count, which goes past the 374 ruling (a page change no counted round saw) and against FR-010's cap, so it is ruled as an exception. It is legitimate because the deciding fact, who made the change, cannot physically be read here. Either default breaks one owed rule some of the time: holding puts another session's real new cause into a capped count against the binding ruling, and restarting lets own edits reset it. It still requires an actual change to the subject, and it needs two rounds on one unit further apart than the reflog's expiry, so it does not gut the cap."
+    },
+    {
+     "id": "D4 fallback where git cannot read the stored batch or its diff",
+     "summary": "A stored batch git cannot read, or a diff git refuses, moves nothing. The cap holds and the arbiter rules.",
+     "class": "within",
+     "why": "Fails toward FR-010's cap and FR-011's ruling."
+    },
+    {
+     "id": "D5 the split into rounds/cap.rs",
+     "summary": "The cap's functions move unchanged from rounds.rs (1,029 lines with the rule) into rounds/cap.rs. rounds.rs is now 843 lines and cap.rs 198 (measured 2026-11-25, wc -l).",
+     "class": "within",
+     "why": "A behavior-neutral split under the file-scale bar."
+    },
+    {
+     "id": "D6 tests and fires-proof",
+     "summary": "A 0097 replay through handle with a bare origin and a second clone, red on HEAD. A moved-page replay and the restated batch test, each pinned by disabling one half of the rule.",
+     "class": "within",
+     "why": "Enforcement of FR-010's cap and of the restart D1 keeps. Per the 2026-09-20 rule, enforcement serves the request."
+    },
+    {
+     "id": "D7 order, exits, budget",
+     "summary": "After T227, before T22, parallel with T249 in other crates. Closing-checks exit, with a cannot-be-done claim ruled through make arbiter-ask. One landing.",
+     "class": "within",
+     "why": "Scheduling and scope. None of it narrows anything."
     }
    ],
    "verdict": "CLEAR"

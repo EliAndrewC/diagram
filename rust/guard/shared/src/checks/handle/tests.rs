@@ -648,3 +648,132 @@ fn a_record_round_follows_its_unit_across_features() {
     // the continue ruled in its home feature lifts the hold under the next
     assert_eq!(record_round(&root, &prompt, "r4", 1003.0), "");
 }
+
+fn git(at: &Path, args: &[&str]) {
+    let said = crate::tool::ask(at, "git", args, "");
+    assert!(said.ok(), "{args:?}: {}", said.err);
+}
+
+/// Commit everything in `at` as `msg`.
+fn commit(at: &Path, msg: &str) {
+    git(at, &["add", "-A"]);
+    let who = ["-c", "user.name=t", "-c", "user.email=t@t"];
+    git(at, &[&who[..], &["commit", "-q", "-m", msg]].concat());
+}
+
+/// A clone with 0097's page committed and pushed to a bare `origin`, and a second clone of that origin: another session.
+fn two_sessions(
+    tag: &str,
+) -> (
+    crate::tempdir::Held<std::path::PathBuf>,
+    crate::tempdir::TempDir,
+    crate::tempdir::TempDir,
+) {
+    let (root, _) = setup(tag);
+    std::fs::create_dir_all(root.join("research/questions")).unwrap();
+    std::fs::write(
+        root.join("research/questions/0097-staff-rowhouses.html"),
+        "<p>Rowhouses ran about 80 to 300 ft long.</p>",
+    )
+    .unwrap();
+    commit(&root, "the page");
+    let up = crate::checks::testkit::dir(&format!("{tag}-up"));
+    git(up.path(), &["init", "--bare", "-q"]);
+    git(
+        &root,
+        &["remote", "add", "origin", &up.path().to_string_lossy()],
+    );
+    git(&root, &["push", "-q", "origin", "HEAD:main"]);
+    let other = crate::checks::testkit::dir(&format!("{tag}-other"));
+    git(
+        other.path(),
+        &["clone", "-q", &up.path().to_string_lossy(), "."],
+    );
+    (root, up, other)
+}
+
+/// The other session lands `file` with `body`; this clone fetches and merges it (a fetch move of `origin/main`).
+fn they_land(root: &Path, other: &Path, file: &str, body: &str) {
+    git(other, &["fetch", "-q", "origin"]);
+    git(other, &["merge", "-q", "--ff-only", "origin/main"]);
+    let path = other.join(file);
+    std::fs::create_dir_all(path.parent().unwrap()).unwrap();
+    std::fs::write(path, body).unwrap();
+    commit(other, file);
+    git(other, &["push", "-q", "origin", "HEAD:main"]);
+    git(root, &["fetch", "-q", "origin"]);
+    git(root, &["merge", "-q", "--ff-only", "origin/main"]);
+}
+
+/// This clone lands `file` with `body` (a push move of `origin/main`).
+fn we_land(root: &Path, file: &str, body: &str) {
+    let path = root.join(file);
+    std::fs::create_dir_all(path.parent().unwrap()).unwrap();
+    std::fs::write(path, body).unwrap();
+    commit(root, file);
+    git(root, &["push", "-q", "origin", "HEAD:main"]);
+}
+
+/// A record round dispatched, returned and answered (`make record-answer`), as 0097's 2026-11-24 rounds stand in the clone's state.
+fn answered_round(root: &Path, prompt: &str, tid: &str, at: f64) -> String {
+    let said = record_round(root, prompt, tid, at);
+    crate::checks::rounds::record_answer(root, "record-format", &["record-format:0097".to_owned()]);
+    said
+}
+
+fn whole_page_prompt(root: &Path) -> String {
+    let manifest = root.join("rf/MANIFEST.md");
+    std::fs::create_dir_all(manifest.parent().unwrap()).unwrap();
+    std::fs::write(&manifest, "unit: record-format:0097 fp\n").unwrap();
+    format!("Run your check on the bundle {}", manifest.display())
+}
+
+#[test]
+fn a_later_batch_whose_moves_left_the_page_alone_keeps_the_count() {
+    // 451 T248, 0097's 2026-11-24 sequence (the clone's origin/main reflog against record-format's dispatch times): rounds 1 and 2 at
+    // 05:15-05:25Z, then ten moves of origin/main - the round's own edits of 0097 landed by this clone's push (7fc9f06512 in
+    // c7dac385dd), eight more of its own pushes and a fetch of other sessions' work on other files - and the next round after them
+    // ran as round 1 of a fresh count
+    let (root, _up, other) = two_sessions("unrelated-moves");
+    let prompt = whole_page_prompt(&root);
+    assert_eq!(answered_round(&root, &prompt, "r1", 1000.0), "");
+    assert_eq!(answered_round(&root, &prompt, "r2", 1001.0), "");
+    let page = "research/questions/0097-staff-rowhouses.html";
+    we_land(
+        &root,
+        page,
+        "<p>Rowhouses ran about 80 to 300 ft long, past 145 ft at Matsusaka.</p>",
+    );
+    for n in 0..8 {
+        we_land(&root, &format!("specs/999-x/n{n}.md"), "x\n");
+    }
+    they_land(&root, other.path(), "specs/453-z/spec.md", "theirs\n");
+    let third = answered_round(&root, &prompt, "r3", 1002.0);
+    // the round's own edits landing, and moves elsewhere, are no new cause: round 3 is held (on HEAD it was let through, "")
+    assert!(third.contains("round 3 of `record-format` on q:0097 passes its cap of 2"));
+}
+
+#[test]
+fn a_later_batch_whose_page_another_session_moved_starts_a_fresh_count() {
+    // 451 T248: the batch rule's intent kept (c5db336fd3, the round arbiter on woodland-commons@3) - a subject that truly changed
+    // upstream owes a check its next rounds afresh
+    let (root, _up, other) = two_sessions("page-moved");
+    let prompt = whole_page_prompt(&root);
+    assert_eq!(answered_round(&root, &prompt, "r1", 1000.0), "");
+    assert_eq!(answered_round(&root, &prompt, "r2", 1001.0), "");
+    we_land(&root, "specs/999-x/n.md", "x\n");
+    they_land(
+        &root,
+        other.path(),
+        "research/questions/0097-staff-rowhouses.notes.html",
+        "<p>A note another session wrote.</p>",
+    );
+    assert_eq!(answered_round(&root, &prompt, "r3", 1002.0), "");
+    let s = state(&root);
+    assert_eq!(s["rebased"]["record-format|q:0097"]["cause"], json!(true));
+    assert_eq!(s["rebased"]["record-format|q:0097"]["n"], json!(2));
+    // its fresh count has its own cap
+    assert_eq!(answered_round(&root, &prompt, "r4", 1003.0), "");
+    assert!(answered_round(&root, &prompt, "r5", 1004.0)
+        .contains("round 5 of `record-format` on q:0097 passes its cap of 4"));
+}

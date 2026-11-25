@@ -465,18 +465,6 @@ fn first_look(state: &Value, unit: &str, current: &[String]) -> bool {
         && unseen.iter().all(|s| from_edits(s, &others))
 }
 
-/// The feature directory a unit's rounds are filed and ruled in: the feature its count began in (`round_home`, else the state's), so
-/// a ruling is read there whatever feature is active (451 T227); None where this clone has no such directory.
-fn home_dir(state: &Value, root: &Path, unit: &str) -> Option<std::path::PathBuf> {
-    let home = state
-        .get("round_home")
-        .and_then(|m| m.get(unit))
-        .and_then(Value::as_str)
-        .unwrap_or_else(|| text(state, "feature"));
-    let d = root.join("specs").join(home);
-    (!home.is_empty() && d.is_dir()).then_some(d)
-}
-
 /// The bundle a split bundle's `batch-N/MANIFEST.md` belongs to, or "".
 #[must_use]
 pub fn batch_root(manifest: &str) -> String {
@@ -490,73 +478,6 @@ pub fn batch_root(manifest: &str) -> String {
     } else {
         String::new()
     }
-}
-
-/// The batch a round is counted in: the `origin/main` the clone stands on.
-#[must_use]
-pub fn batch_of(root: Option<&Path>) -> String {
-    root.map_or_else(String::new, |r| {
-        git_stdout(r, &["rev-parse", "origin/main"])
-    })
-}
-
-fn new_cause(state: &Value, unit: &str, batch: &str) -> bool {
-    let seen = state
-        .get("round_batch")
-        .and_then(|m| m.get(unit))
-        .and_then(Value::as_str)
-        .unwrap_or("");
-    !seen.is_empty() && !batch.is_empty() && seen != batch
-}
-
-/// Whether the record store says every unit the bundle carries on `subject` is answered at its fingerprint; else the fingerprint of the first that is not.
-fn moved_since_answer(root: &Path, text_of: &str, subject: &str) -> String {
-    // `shared::env`: a test reads its own environment, never a session's export (feature 451 T32)
-    let store = record_store(root, crate::env::opt("RECORD_CHECKS_DIR").as_deref());
-    UNIT_FP
-        .captures_iter(text_of)
-        .map_while(Result::ok)
-        .find(|c| {
-            let slug = &c[1];
-            let tail = slug.split_once(':').map_or("", |(_, t)| t);
-            subject_of_unit(tail) == subject && !answered(&store, slug, &c[2])
-        })
-        .map_or_else(String::new, |c| c[2].to_owned())
-}
-
-/// Where the answer records live: `RECORD_CHECKS_DIR` (a test's throwaway store), else the clone's git dir.
-fn record_store(root: &Path, given: Option<&str>) -> std::path::PathBuf {
-    if let Some(dir) = given.filter(|d| !d.is_empty()) {
-        return dir.into();
-    }
-    let common = git_stdout(root, &["rev-parse", "--git-common-dir"]);
-    let path = Path::new(if common.is_empty() { ".git" } else { &common });
-    root.join(path).join("record-checks")
-}
-
-/// `urllib.parse.quote(slug, safe="")`.
-fn quoted(slug: &str) -> String {
-    slug.bytes()
-        .map(|b| {
-            if b.is_ascii_alphanumeric() || b"_.-~".contains(&b) {
-                char::from(b).to_string()
-            } else {
-                format!("%{b:02X}")
-            }
-        })
-        .collect()
-}
-
-fn answered(store: &Path, slug: &str, fp: &str) -> bool {
-    let rec: Value = std::fs::read_to_string(store.join(format!("{}.json", quoted(slug))))
-        .ok()
-        .and_then(|t| serde_json::from_str(&t).ok())
-        .unwrap_or(Value::Null);
-    fp == text(&rec, "fingerprint")
-        || rec
-            .get("answered")
-            .and_then(Value::as_array)
-            .is_some_and(|a| a.iter().any(|x| x.as_str() == Some(fp)))
 }
 
 /// What a dispatch needs beyond the state: the clone, and the escapes taken.
@@ -616,68 +537,6 @@ fn repeat(
     sibling: bool,
 ) -> bool {
     !sibling && !fresh_reading(state, unit, notes) && !first_look(state, unit, cur)
-}
-
-fn cap_refusal(state: &mut Value, ask: &Dispatch, root: &Path, s: &str, n: u64) -> String {
-    let unit = format!("{}|{s}", ask.check);
-    let prefix = format!("round:{unit}@");
-    let home = home_dir(state, root, &unit);
-    let rulings = home
-        .as_deref()
-        .map_or_else(|| arbiter::rulings(root, &prefix), arbiter::rulings_of);
-    let shut = arbiter::closed_of(&rulings, &prefix, None);
-    let moved = if shut.is_empty() {
-        String::new()
-    } else {
-        moved_since_answer(root, ask.text, s)
-    };
-    if !shut.is_empty() && moved.is_empty() {
-        return format!("the round arbiter closed {unit} ({shut}) - what is left is filed; the session does not re-ask (FR-011)");
-    }
-    let base_has_moved = map_mut(state, "rebased")
-        .get(&unit)
-        .is_some_and(|b| text(b, "fp") == moved);
-    if !moved.is_empty() && !base_has_moved {
-        map_mut(state, "rebased").insert(unit.clone(), json!({"fp": moved, "n": n}));
-    }
-    let batch = batch_of(Some(root));
-    if new_cause(state, &unit, &batch) && open_round(state, s, ask.now).is_empty() {
-        map_mut(state, "rebased").insert(unit.clone(), json!({"fp": batch, "n": n, "cause": true}));
-        map_mut(state, "round_batch").insert(unit.clone(), json!(batch));
-    }
-    let rebased = state
-        .get("rebased")
-        .and_then(|b| b.get(&unit))
-        .cloned()
-        .unwrap_or(Value::Null);
-    let cause = !falsy(rebased.get("cause"));
-    let n0 = if !shut.is_empty() || cause {
-        rebased.get("n").and_then(Value::as_u64).unwrap_or(0)
-    } else {
-        0
-    };
-    let cap = n0 + ROUND_CAP + arbiter::continues_of(&rulings, &prefix, n0);
-    if n >= cap {
-        let trigger = format!("round:{unit}@{}", n + 1);
-        let detail = format!("round {} of {} on {s}", n + 1, ask.check);
-        let _ = match home.as_deref() {
-            Some(h) => arbiter::trip_under(
-                root,
-                h,
-                &trigger,
-                ("round", &unit, &detail),
-                &json!(ask.now),
-            ),
-            None => arbiter::trip(root, &trigger, "round", &unit, &detail, &json!(ask.now), ""),
-        };
-        return format!(
-            "round {} of `{}` on {s} passes its cap of {cap} - {}",
-            n + 1,
-            ask.check,
-            arbiter::refusal(&[format!("round:{unit}@{}", n + 1)], Some(root))
-        );
-    }
-    String::new()
 }
 
 /// `hm_checks.dispatch`: record a check's dispatch, or say why it is refused.
@@ -971,6 +830,11 @@ pub fn record_answer(root: &Path, check: &str, slugs: &[String]) {
     drop(held);
 }
 
+mod cap;
+pub use cap::batch_of;
+use cap::cap_refusal;
+#[cfg(test)]
+use cap::record_store;
 mod freeze;
 pub use freeze::{
     apply_refusal, changed_lines, close_dispatches, dispatches_since, edit_refusal, oscillation,

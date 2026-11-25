@@ -20,6 +20,27 @@ fn git(root: &Path, args: &[&str]) {
     assert!(said.ok(), "{args:?}: {}", said.err);
 }
 
+fn git_out(root: &Path, args: &[&str]) -> String {
+    crate::checks::git_stdout(root, args)
+}
+
+fn commit_all(root: &Path) {
+    git(root, &["add", "-A"]);
+    git(
+        root,
+        &[
+            "-c",
+            "user.name=t",
+            "-c",
+            "user.email=t@t",
+            "commit",
+            "-q",
+            "-m",
+            "y",
+        ],
+    );
+}
+
 const MANIFEST: &str = "unit: quote-check:0105.drawing#bath abc\nowed: a reason\n";
 
 fn req<'a>(tid: &'a str, check: &'a str, text: &'a str, root: Option<&'a Path>) -> Dispatch<'a> {
@@ -367,16 +388,33 @@ fn a_later_batch_starts_its_own_count() {
             "x",
         ],
     );
+    let earlier = git_out(&root, &["rev-parse", "HEAD"]);
+    // a later batch the reflog does not reach back to (`update-ref` logs no move from `earlier`): any change of the subject
+    // between the two batches restarts the count, whoever made it (451 T248)
+    std::fs::create_dir_all(root.join("research/questions")).unwrap();
+    std::fs::write(root.join("research/questions/0105-x.html"), "<p>A.</p>").unwrap();
+    commit_all(&root);
     git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
     let mut s = repeating_state(2, "");
-    s["round_batch"] = json!({"quote-check|q:0105": "an-earlier-batch"});
+    s["round_batch"] = json!({"quote-check|q:0105": earlier});
     assert_eq!(
         dispatch(&mut s, &req("n", "quote-check", MANIFEST, Some(&root))),
         ""
     );
     assert_eq!(s["rebased"]["quote-check|q:0105"]["cause"], json!(true));
+    // a change elsewhere is no new cause, and a batch git cannot read moves nothing: the cap holds
+    let base = git_out(&root, &["rev-parse", "HEAD"]);
+    std::fs::write(root.join("other.md"), "x\n").unwrap();
+    commit_all(&root);
+    git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    for from in [base.as_str(), "an-earlier-batch"] {
+        let mut held = repeating_state(2, "");
+        held["round_batch"] = json!({ "quote-check|q:0105": from });
+        let said = dispatch(&mut held, &req("n", "quote-check", MANIFEST, Some(&root)));
+        assert!(said.contains("passes its cap of 2"));
+    }
     let mut still = repeating_state(2, "");
-    still["round_batch"] = json!({"quote-check|q:0105": "an-earlier-batch"});
+    still["round_batch"] = json!({"quote-check|q:0105": earlier});
     still["dispatches"]["open"] =
         json!({"check": "x", "subjects": ["q:0105"], "state": "running", "t": 1000.0});
     assert_ne!(
