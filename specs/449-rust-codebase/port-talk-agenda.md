@@ -11,6 +11,13 @@ agents, 251 on background commands, 148 on nothing; agents used 2,147 agent-minu
 1. Several builders at once, each in its own working copy (a worktree per builder), landings still one at a time through
    main. The largest: most of the 385 min waiting on agents was builders run one at a time, because two writers in one
    clone collided (2026-11-24 parallel builders; 2026-11-25 a landing beside a builder, 451 T242).
+    Trial before the talk (the GM, 2026-11-25: "giving a try to what our new approach might be seems like something that
+    would be good to do in advance of deciding whether or not to switch over ... if that works, then you can parallelize
+    other things between now and then in the meantime to gather more data, and then we can decide whether to lock that in"):
+    after 451 T244, T228 and T234 build side by side, each in its own worktree; recorded per trial - what broke (guards
+    keyed on the clone's path, the started-task mark, landings of one feature back to back), a second copy's start cost (the
+    cold build), and the wall clock saved; if it holds, the rest of the queue runs two or three at a time and adds data.
+
 2. A landing beside the next build: the landing's gate already runs in its own worktree; only its tick and push touch the
    clone (451 T242 fixes the late failure).
 3. The claims round beside the next build, in its own copy.
