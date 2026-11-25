@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-25T02:54:13Z",
+  "target": "plan-gate tick 449-rust-codebase",
+  "commit": "2122cb11d1",
+  "why": "449's stale blocks are the 17 tasks moved to feature 452 at the GM's request and the unfilled template sections of tasks filed and not started (T417, T425, T428, T429, T430, T431); 451's and 452's are unfilled template sections and T203's withdrawn heading"
+}
