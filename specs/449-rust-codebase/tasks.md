@@ -123,6 +123,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
 - [ ] T434 lands before T158: three more map checks in rust/phases/src/driver/check.rs ask only a plot's corners, the gap 449 T433 closed for dry_on_water: dry_on_paddy, dry_on_settlement and reeds_on_dry (found 2026-11-25 by T433's builder; no wrong map measured from them): each asks the plot's whole area as T433's Drawn::meets does, red-first on a constructed case, and the 41,000-roll sweep says whether any rolled map now fails (a check that would pass a wrong map is a defect, constitution XIV)
       research: rendering
+- [ ] T435 lands before T158: the last point-only map checks in rust/phases/src/driver/check.rs - dry_on_dry, pond_on_paddy, seat_on_field and reeds_on_field test points, not area (found 2026-11-25 by T434's builder, whose whole-area test of three siblings found 527 stretched dry plots the corner test hid) - and no standing check holds a dry plot's size (T434's STRETCH_SHARE cut is the generator's only guard): each asks the whole area as T434's lies_over does, a size check added, red-first, the 41,000-roll sweep says whether any rolled map fails, and a generator defect found is fixed (constitution XIV)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
