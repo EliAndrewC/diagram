@@ -11960,3 +11960,36 @@ not engine speed, so no performance checklist.
 **Performance work?** no: a rule and its tools; it saves searches, not tool time.
 
 
+<!-- plan-archive: archived 2026-11-25 -->
+### T238 (page session P12, 2026-11-25: its correction to 0006's drawing page from a search pass, b75ade5b7e, read as a SIZE EDIT at 21,792 bytes against the 20,000 cap while `make question-sizes` listed no page over 20,000 bytes of prose, measured 2026-11-25 (the refusal and the report as the landing printed them); the landing needed SIZE_EDIT_OK)
+
+- **Approach**: The two measures are in one file, `rust/gate/crates/checks/src/checks/question_size.rs`.
+  - **What each counted.** The cap and `make question-sizes` (`--report`) read `size`: the page's bytes with each money mark unwrapped to its words (feature 413) and each item tag removed (`items::strip`, 451 T192). The size-edit rule (`size_edit_refusal`, 451 T184) handed `is_size_edit` `old.len()` and `new.len()`, the raw file: item tags, money markup and all. Comments, footnote marks and other markup count in both; only the item tags and money marks differ.
+  - **The case.** Raw: 19,539 bytes before, 21,792 after, measured 2026-11-25 (`git show` of the page at `b75ade5b7e~1` and `b75ade5b7e`, `wc -c`). Prose: 17,558 before, 19,513 after, measured 2026-11-25 (the same two texts, money marks unwrapped and item tags stripped by the check's two patterns, `wc -c`). The edit removed 171 bytes of words, measured 2026-11-25 (the refusal's own figure, `l7r-gate check question-size --base b75ade5b7e~1`). By prose the page was under the cap before, after, and with the removed words put back (19,684), so it was no size edit; by the raw file its after-plus-removed was over, so the rule fired and refused the correction's dropped `not` and `without`.
+  - **The fix.** One function, `prose(text)`, is the measure. `size(path)` reads the file and calls it; `size_edit_refusal` calls it on the base and the new text and hands those to `is_size_edit`. Its refusal prints "bytes of prose". `is_size_edit` keeps T184's rule (over before, or the removed words putting it back over: the add-then-trim of one session), now by that one measure. `make question-sizes`'s help line said "question + notes"; it counts the question's prose alone, and now says so.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the size-edit rule reads `prose` | the 0006 case red on HEAD's code | n/a: tooling | none | n/a |
+
+### T238 Approach (checklist part A)
+
+1. **The goal, in the world.** A page edit is a size edit only where the page's prose, the measure the cap is set on, was over its limit before or would be with its removed words put back. A correction under the cap by that measure lands without an escape.
+2. **The constraints.** research/CLAUDE.md "A question has a size": the cap is on prose. 451 T192: an item tag is not prose. 451 T184: a size edit never drops a claim-bearing word; its add-then-trim clause stays.
+3. **Where each comes from.** R: research/CLAUDE.md and T184's header in `size_edit.rs`. O: the P12 measurement above, 2026-11-25.
+4. **Do they describe the world here?** Yes. The check refused 0006 on HEAD's code and names nothing of 0006 on the fix, measured 2026-11-25 (`l7r-gate check question-size --base b75ade5b7e~1` on the clone, before and after the edit).
+5. **The order.** No dependency; it lands alone. T237, performance work, is ordered after T240 by the coordinating session (PERF_LATER_OK at task-start).
+6. **The exits.** Green: `make closing-checks T=T238`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, measured 2026-11-25 (`make rust-test CRATE=rust/gate/crates/checks`): the new test `an_edit_under_the_cap_by_its_prose_is_no_size_edit_though_its_item_tags_put_the_file_over` carries P12's real block before and after on a page whose item tags put the file over 20,000 bytes while its prose stays under. On HEAD's code it failed, "is a SIZE EDIT (21,368 bytes at the base, 22,591 now, 163 removed ...)", 164 passed, 1 failed, measured 2026-11-25 (`make rust-test CRATE=rust/gate/crates/checks`). On the fix: 165 passed, 0 failed. On the real tree, `l7r-gate check question-size --base b75ade5b7e~1` named 0006 as a size edit on HEAD's code and names nothing of 0006 on the fix.
+10. **Before moving a constant.** n/a: the 20,000 cap is unchanged.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: a correction from a search pass was refused as a cut to fit the cap, so a page session's landing needed an escape. No map changes.
+
+**Found and left?**
+- `make question-sizes`'s help said it counted "question + notes"; it counts the question's prose alone. Fixed here.
+
+**Performance work?** no: it changes which measure a check reads, not its speed.
+
+
