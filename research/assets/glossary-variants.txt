@@ -1460,6 +1460,7 @@ fung shui	fengshui grove
 fung shui wood	fengshui grove
 fung shui woods	fengshui grove
 furegaki	ofuregaki
+furigana	furigana
 furo	furo
 fuse	fuse
 fusekoshi	inverted siphon
