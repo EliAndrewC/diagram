@@ -37462,13 +37462,13 @@
   "date": "2026-11-22",
   "note": "a thin tan-brown outline about 1.4 ft wide on a hamlet map, a map drawing convention",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:f263da6e48629364"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::FIELD_KNOBS#a town's nearness": {
@@ -37491,14 +37491,14 @@
   "date": "2026-11-24",
   "note": "wild or cleared at 0.75 and 0.25, the page's three maps in four, recorded as a GUESS",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:78e339c5e0d9be52",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:fe49530da0a21b10"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::FIELD_KNOBS#the field's knobs": {
@@ -37781,13 +37781,13 @@
   "date": "2026-11-22",
   "note": "the page gives the order (paddy in front of the houses, dry fields behind) and no distance, so 12 ft is a GUESS",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::Segment#the driver": {
@@ -37867,15 +37867,15 @@
   "date": "2026-11-22",
   "note": "each crop at its ripest color: barley tan-gold, millet ochre, buckwheat pale with reddish stems, soybean green",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:640cea571aba6412",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:7e438855d3e0806f",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:9fe8ff40fe5e68aa"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::draw_field#ditches by role": {
@@ -38227,15 +38227,15 @@
   "date": "2026-11-22",
   "note": "the band from the canal-side anchor out past the houses keeps the hem behind them",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "49dfcd9410aae564",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::sink_refused#the driver": {
@@ -38259,13 +38259,13 @@
   "date": "2026-11-07",
   "note": "the hem keeps off the settlement's ground",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::stage_hem_fed#a pinned bare winter refused": {
@@ -38277,14 +38277,14 @@
   "date": "2026-11-24",
   "note": "a pinned bare winter that comes out short (`Winter::Unfed`) refuses the whole roll; the refusal names the pin, the acres drawn and the acres needed, and offers pinning barley or leaving the crop unpinned; this matches \"drawn only where the fan's dry ground can grow the hamlet's whole grain need\"",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::stage_hem_fed#the winter crop asked of the hem as laid": {
@@ -38296,15 +38296,15 @@
   "date": "2026-11-24",
   "note": "the hem is laid, then checked against the need; if a rolled bare winter is short, the hem is laid once more as barley and nothing checks it again",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::stage_seat#the seat's back to the wind": {
@@ -38329,8 +38329,8 @@
   "claim": "the way out's walls - village-lanes.drawing: a track keeps off wet ground and runs off the map - the wet toe and the reed fringe grown by the lane's width, the field, the pond at its berth; the drain's run and every watercourse lines it may not cross",
   "code": "f8e85fd9f1c73ef0",
   "core": "4555decac9b7131f",
-  "date": "2026-11-24",
-  "note": "walls on the toe (with its flank), the reeds, the flooded field and the watercourses; the track runs off the map",
+  "date": "2026-11-25",
+  "note": "the toe and the reeds grown by the lane's width, the field ring, the pond at its berth and the watercourse lines it may not cross match \"a track keeps off wet ground\" and its run off the map; the toe includes the wet side that 0057 §202 says a track keeps off",
   "pages": {
    "0081-village-lanes.drawing.html": "460fb5c616e3b1d5"
   },
@@ -38370,13 +38370,13 @@
   "date": "2026-11-24",
   "note": "any refusal a stage kept now refuses the whole roll, so no map with a bare winter and no dry field is written, as the page's rule requires",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::wind#regional wind": {
@@ -38443,21 +38443,19 @@
  "rust/phases/src/driver/check.rs::check#no dry plot on another": {
   "body": "0870542d337b78f4",
   "claim": "no dry plot on another - dry-fields-and-their-crops-hatake.drawing: plots laid end to end, each its own ground",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "3657e8fefc8d282b",
   "core": "2024c9a132a901b0",
-  "date": "2026-11-07",
-  "note": "tests that no plot's middle lies inside another plot; matches plots abutting end to end, each its own field",
+  "date": "2026-11-25",
+  "note": "the dry_on_dry test (a plot's middle inside another plot) keeps each plot on its own ground, laid end to end",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "08f68ce2dd847b69",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:a97455eb3aeed622"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:a97455eb3aeed622",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:e87bb4e4f15222b8"
   ],
-  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::check#no dry plot on the paddy": {
@@ -38469,16 +38467,16 @@
   "date": "2026-11-07",
   "note": "tests that no plot corner lies inside a field ring; the hem keeps to dry ground upslope of the canal",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "08f68ce2dd847b69",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::check#no dry plot on the water": {
@@ -38486,13 +38484,13 @@
   "claim": "no dry plot on the water - dry-fields-and-their-crops-hatake.drawing: the dry plots kept to the dry side of the canal, behind a bare bank - tested against the field's channels, the brook and the drain's run (the pond's rim is `reed_checks`' reeds')",
   "code": "4d1ccd86afd955ad",
   "core": "2024c9a132a901b0",
-  "date": "2026-11-24",
-  "note": "the claim rests on §27 (\"keep to the dry side of the canal, behind a bare bank\"), which speaks only of the plot's own canal. The check also tests the brook and the drain's run, and those are covered by §29 (`dry-plot-off-water`: \"any water the map draws - a canal, ... a ditch, the brook or a pond\"). fix: claim (cite `dry-plot-off-water` beside §27 for the brook and the drain's run); effect: none",
+  "date": "2026-11-25",
+  "note": "`dry_on_water` tests only a plot's corners, through `seg_dist(corner, a, b) < ww/2 - SLACK_FT`. A ditch, the brook or the drain's run that crosses a plot, or ends inside it, without reaching a corner passes the check. 0006 §161 drops a plot that \"would have the end of one inside it\", and the claim cites only §159's bank. fix: code (also test each plot edge against each water segment, and a water end inside the plot); effect: tool - the map check passes a dry plot with a watercourse running through it, which §161 forbids",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "08f68ce2dd847b69",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1a9bff0e449a703a",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d"
@@ -38668,15 +38666,15 @@
   "date": "2026-11-07",
   "note": "no plot corner may lie in the tameike's reeds; dry crops keep to \"the higher, drier ground\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "88909a6613b19427",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::reed_checks#no dry plot on the settlement's ground": {
@@ -38688,15 +38686,15 @@
   "date": "2026-11-22",
   "note": "a dry plot corner is refused on any seat's ground, which now carries its belt's ground too",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "88909a6613b19427",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:33f680a97951ad27",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::walled_by_reeds#a dry way out past the reeds": {
@@ -41096,15 +41094,15 @@
   "date": "2026-11-22",
   "note": "the drawing page records furrow spacing as a GUESS (\"No page we read gives how far apart the ridged rows stood\"), so the 5 ft spacing is a guess it records",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:0f2c041752f55add",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:92c3a1caf521b198"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/svg.rs::ROW_FT#furrowed rows": {
@@ -41116,14 +41114,14 @@
   "date": "2026-11-07",
   "note": "dry plots drawn in ridged rows, as the page finds",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:92c3a1caf521b198"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/svg.rs::Svg#the SVG writer": {
@@ -41223,16 +41221,16 @@
   "date": "2026-11-08",
   "note": "fills the plot and draws parallel rows ROW_FT apart at the tract angle it is handed; the page has every dry plot furrowed, in ridged rows, with the spacing a guess",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "9e5c370de9c1ba55",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:0f2c041752f55add",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:92c3a1caf521b198"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/svg.rs::Svg.furrowed#the furrow's stroke": {
@@ -41627,35 +41625,33 @@
   "claim": "toe band edge - marshes-and-wetlands-shitchi.drawing: 90 ft above the local lowest field",
   "code": "8f2d986648c85b08",
   "core": "2e0a108008029e92",
-  "date": "2026-11-24",
-  "note": "90 ft above the local lowest field",
+  "date": "2026-11-25",
+  "note": "90 ft above the lowest field near each point",
   "pages": {
-   "0057-marshes-and-wetlands-shitchi.drawing.html": "0f80d8ed9fde5e17"
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "44b6eee49ca6ad4b"
   },
-  "research": "1418f144bf7d5ef4",
+  "research": "760323a72ab9946f",
   "rests": [
    "0057-marshes-and-wetlands-shitchi.drawing.html:54ca08b790a43ab3",
-   "0057-marshes-and-wetlands-shitchi.drawing.html:76b35a1a6c579d94"
+   "0057-marshes-and-wetlands-shitchi.drawing.html:cd3989989039bcad"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/toe.rs::PAD#toe band width": {
   "body": "bcb31261916594f4",
   "claim": "toe band width - marshes-and-wetlands-shitchi.drawing: as wide as the fields plus 90 ft each side",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "21a103d5c2b5b551",
   "core": "2e0a108008029e92",
-  "date": "2026-11-08",
-  "note": "90 ft each side of the fields, as the page gives",
+  "date": "2026-11-25",
+  "note": "90 ft added on each side",
   "pages": {
-   "0057-marshes-and-wetlands-shitchi.drawing.html": "0f80d8ed9fde5e17"
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "44b6eee49ca6ad4b"
   },
-  "research": "1418f144bf7d5ef4",
+  "research": "760323a72ab9946f",
   "rests": [
-   "0057-marshes-and-wetlands-shitchi.drawing.html:76b35a1a6c579d94",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:4cf27b58fdb08b33",
    "0057-marshes-and-wetlands-shitchi.drawing.html:cd3989989039bcad"
   ],
-  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/toe.rs::grow#the ring's offset": {
@@ -41685,20 +41681,18 @@
  "rust/phases/src/driver/toe.rs::toe_band#flaring flanks": {
   "body": "01d5f9d17322a26b",
   "claim": "flaring flanks - marshes-and-wetlands-shitchi.drawing: part of the straight-band deviation, the band's ends bow outward downhill to the canvas's far edge",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "a2bcd2764c70c86e",
   "core": "192f8fc69a4c000c",
-  "date": "2026-11-08",
-  "note": "the band's ends bow outward downhill to the far edge, part of the recorded straight-band deviation",
+  "date": "2026-11-25",
+  "note": "the flanks bow outward 1.5 pad on a t^1.6 profile down to the canvas's far edge, as \"its ends bow outward downhill as seepage spreads\", part of the straight band's recorded deviation",
   "pages": {
-   "0057-marshes-and-wetlands-shitchi.drawing.html": "0f80d8ed9fde5e17"
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "44b6eee49ca6ad4b"
   },
   "reads": "61baf0c18f64a05d",
-  "research": "1418f144bf7d5ef4",
+  "research": "760323a72ab9946f",
   "rests": [
    "0057-marshes-and-wetlands-shitchi.drawing.html:fb59dad7cefa1d14"
   ],
-  "triaged": "2026-11-24",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/toe.rs::toe_band#its search steps": {
@@ -41718,40 +41712,38 @@
   "claim": "toe band edge - marshes-and-wetlands-shitchi.drawing: the inner edge `PAD` above the local lowest field within a pad each way, smoothed over three stations",
   "code": "65fccad642a962a8",
   "core": "192f8fc69a4c000c",
-  "date": "2026-11-24",
-  "note": "the edge is set point by point and smoothed as §136 says, but on a side where the fields narrow downhill that same edge carries the wet ground up the whole side, which 0057 now records as a deliberate deviation, and the claim gives it as a finding. Add: \"; where the fields narrow inward downhill the edge carries the wet ground up that side its whole length - DEVIATION research/questions/0057-marshes-and-wetlands-shitchi.drawing.html (`toe-on-tapering-flank`)\"; fix: claim; effect: none",
+  "date": "2026-11-25",
+  "note": "a station every 24 ft or less; at each, the deepest field point within PAD less PAD, then the max over three stations; this is the page's smoothed edge that climbs a narrowing side",
   "pages": {
-   "0057-marshes-and-wetlands-shitchi.drawing.html": "0f80d8ed9fde5e17"
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "44b6eee49ca6ad4b"
   },
   "reads": "61baf0c18f64a05d",
-  "research": "1418f144bf7d5ef4",
+  "research": "760323a72ab9946f",
   "rests": [
-   "0057-marshes-and-wetlands-shitchi.drawing.html:54ca08b790a43ab3",
-   "0057-marshes-and-wetlands-shitchi.drawing.html:6e0a3693db0599f4"
+   "0057-marshes-and-wetlands-shitchi.drawing.html:289416c5e4600e59",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:54ca08b790a43ab3"
   ],
-  "said": "toe band edge - marshes-and-wetlands-shitchi.drawing: the inner edge `PAD` above the local lowest field within a pad each way, smoothed over three stations",
-  "siblings": "3f032cdf0400ad71",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/toe.rs::toe_band#toe band width": {
   "body": "01d5f9d17322a26b",
   "claim": "toe band width - marshes-and-wetlands-shitchi.drawing: the fields' cross-slope span and `PAD` each side, clipped to the bled canvas",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "06a9b5ffa8296729",
   "core": "192f8fc69a4c000c",
-  "date": "2026-11-08",
-  "note": "the fields' cross-slope span plus PAD each side, clipped to the bled canvas",
+  "date": "2026-11-25",
+  "note": "the page now takes the band's width from \"the fan's plots and the dry fields round them\". The claim says \"the fields'\", and `toe_band` measures only the `rings` it is handed. I need the caller to show whether those rings include the dry plots. If they hold only the paddy fans, the hem's strips on the far flank can reach past the marsh's end",
   "pages": {
-   "0057-marshes-and-wetlands-shitchi.drawing.html": "0f80d8ed9fde5e17"
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "44b6eee49ca6ad4b"
   },
   "reads": "61baf0c18f64a05d",
-  "research": "1418f144bf7d5ef4",
+  "research": "760323a72ab9946f",
   "rests": [
-   "0057-marshes-and-wetlands-shitchi.drawing.html:76b35a1a6c579d94",
-   "0057-marshes-and-wetlands-shitchi.drawing.html:fb59dad7cefa1d14"
+   "0057-marshes-and-wetlands-shitchi.drawing.html:4cf27b58fdb08b33",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:54ca08b790a43ab3"
   ],
-  "triaged": "2026-11-24",
-  "verdict": "IN-STEP"
+  "said": "toe band width - marshes-and-wetlands-shitchi.drawing: the fields' cross-slope span and `PAD` each side, clipped to the bled canvas",
+  "siblings": "3f032cdf0400ad71",
+  "verdict": "CANNOT-TELL"
  },
  "rust/phases/src/field.rs::ACRES_PER_HOUSEHOLD#paddy per household": {
   "body": "612babfa6f7cda1f",
@@ -42616,17 +42608,19 @@
  "rust/phases/src/field/build.rs::TOE_SHARE#the toe": {
   "body": "af6c588fc69feb7f",
   "claim": "the toe - GUESS dry-fields-and-their-crops-hatake.drawing: a fan's toe is taken to begin two-thirds of the way down the slope from its head, the page's own GUESS",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5f84220d47b695ff",
   "core": "93513f4fc7e1a1fb",
   "date": "2026-11-24",
   "note": "two-thirds down from the head, the page's GUESS",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:79c616b0b0fbbeb4"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::TOWN_FAR_FACTOR#a far town's weight": {
@@ -42700,17 +42694,17 @@
   "date": "2026-11-24",
   "note": "a short rolled bare winter becomes barley; its dry need is the need less the drained paddy, counted acre for acre, and its hem is re-laid from the toe (barley=true)",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
   "reads": "917c9cf77e4b8c08",
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:973ce82b528d1f80",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::barley_instead#a pinned bare winter the ground cannot feed": {
@@ -42722,14 +42716,14 @@
   "date": "2026-11-24",
   "note": "a pinned crop (`!winter_rolled`) returns Unfed before any check on the middle, so wild and cleared middles are refused alike",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
   "reads": "917c9cf77e4b8c08",
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::barley_odds#the winter crop's odds": {
@@ -42758,14 +42752,14 @@
   "date": "2026-11-24",
   "note": "on a cleared fan_middle the odds are 1.0, so an unpinned roll is always barley",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
   "reads": "917c9cf77e4b8c08",
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#barley on the drained paddy": {
@@ -42777,15 +42771,15 @@
   "date": "2026-11-24",
   "note": "the drained area (field area less the wet low row and the rested plots) is taken acre for acre off the need when the winter crop is barley, as the page finds and guesses",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
   "reads": "917c9cf77e4b8c08",
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:973ce82b528d1f80"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#fields side by side": {
@@ -42822,15 +42816,15 @@
   "date": "2026-11-24",
   "note": "the cited page does not say which flank the dry plots take; the code passes only the first field to `hem_in`, which matches the claim",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
   "reads": "917c9cf77e4b8c08",
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the climb's order": {
@@ -42838,16 +42832,16 @@
   "claim": "the climb's order - GUESS where-a-farming-hamlet-grew-its-coarse-grain.drawing: the clearing starts from the plots nearest the toe, the page's own GUESS - laid band by band (`field::dry::hem`), each band a tract's two to four strips deep along the whole flank from the foot to the head before the next band behind it, the last band stopping where the grain is held; so a bare-winter hamlet's dry fields line its whole far flank, deepest at the foot (Inashiro, measured 2026-11-24: 85 plots holding its 12.75 acres, nine strips deep at the foot stepping to five at the head)",
   "code": "0d8f8693fbc39495",
   "core": "3ece4e063b4d8a4c",
-  "date": "2026-11-24",
-  "note": "the drawing page records this order as a GUESS: the clearing starts nearest the toe, each band runs the whole canal, and the last band runs from the canal's start until the need is met, which leaves the hem deepest at the foot",
+  "date": "2026-11-25",
+  "note": "the band loop runs from d=0 at the canal's foot (the hem's line goes up from the foot), band behind band, and the last band stops where the grain is held. The page records this order as a GUESS",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
   "reads": "917c9cf77e4b8c08",
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:477b7693e5cb5eaf"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:0bb732e0cc16823c"
   ],
   "verdict": "IN-STEP"
  },
@@ -42891,14 +42885,14 @@
   "date": "2026-11-24",
   "note": "households × 0.85 acre, handed on to the hem stage",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
   "reads": "917c9cf77e4b8c08",
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:cf41fc04e040d5c8"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the hem on the first field": {
@@ -42930,20 +42924,22 @@
  "rust/phases/src/field/build.rs::build#the hem's line": {
   "body": "5e65807ce0535f23",
   "claim": "the hem's line - where-a-farming-hamlet-grew-its-coarse-grain.drawing: where the middle is left wild and the paddy lies bare over the winter the dry plots climb from the toe into the middle, as far as `hem_bounds` lets them, and where the paddy carries barley its dry fields stay on the toe; on a fan whose middle is cleared, the cleared ground is drawn only as the hem along the whole canal, one band of its tracts whatever the grain asks - the line canal A's, the first field's far flank up from its foot: to the head on a bare-winter wild middle, only up the toe (`TOE_SHARE`) on a barley one, and on across the head where cleared; the line and its bounds handed on to the hem stage, which lays the hem after the seat (T28)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "166139cd33326098",
   "core": "3ece4e063b4d8a4c",
   "date": "2026-11-24",
   "note": "climbs on a bare-winter wild middle, toe only on barley, whole canal and one band where cleared",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
   "reads": "917c9cf77e4b8c08",
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the winter crop after the fields": {
@@ -42992,89 +42988,97 @@
   "date": "2026-11-01",
   "note": "the field's area less its wet low-row plots and its rested plots; only drained plots count",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::hem_bounds#a barley hamlet's shortfall": {
   "body": "890cf4b982cae2b3",
   "claim": "a barley hamlet's shortfall - GUESS: where-a-farming-hamlet-grew-its-coarse-grain.drawing silent on where the grain goes when the toe's one band holds less than the drained barley left owed; the band drawn as it stands, the need recorded beside what is drawn (`grain`: drawn, needed, the room), never refused",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5a60fa00b25105be",
   "core": "edbe67ddc3792b68",
   "date": "2026-11-24",
   "note": "0011 says the barley hamlet's dry fields stay on the toe, nowhere what happens when the band is short; 0006 §6 also says no page gives such a hamlet's toe ground",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
   "reads": "82b300760cbe7ce7",
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::hem_bounds#the hem's climb": {
   "body": "890cf4b982cae2b3",
   "claim": "the hem's climb - where-a-farming-hamlet-grew-its-coarse-grain.drawing: where a hamlet's paddy lies bare over the winter its dry fields climb from the toe into the wild middle until they hold the grain; where it carries barley its dry fields stay on the toe; a cleared middle drawn only as the hem along the whole canal - the toe one band, the climb bounded only by `MAX_BANDS`, a guard far past any canvas",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "1950d4f22349d0b4",
   "core": "edbe67ddc3792b68",
   "date": "2026-11-24",
   "note": "the bare-winter wild middle climbs to the need, barley and cleared take one band",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
   "reads": "82b300760cbe7ce7",
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::hem_bounds#the toe's band whatever the grain asks": {
   "body": "890cf4b982cae2b3",
   "claim": "the toe's band whatever the grain asks - dry-fields-and-their-crops-hatake.drawing: where the middle stays wild the hem keeps to the fan's toe and leaves the middle to scrub - a wild middle's barley hamlet draws the toe's one band in full, as a cleared middle draws its canal's, not only as much as the grain left owed asks: before 449 T421 the band held only that grain, so a hamlet whose barley held its whole need drew no dry field (209 of 209 such rolls, measured 2026-11-24 over 450 rolls of seeds 1 to 150), where both pages keep its dry fields on the toe",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "39767be37415a0da",
   "core": "edbe67ddc3792b68",
   "date": "2026-11-24",
   "note": "the claim quotes §3 (\"the hem keeps to the fan's toe\") and takes the full band from \"both pages\". The fact it implements, one full band on the toe \"however much of the hamlet's grain the barley already supplies\", is now its own block, §6 (`barley-hamlet-toe-band`), which records that band as \"a GUESS, a drawing fallback of ours\". The code ((_, true) => INFINITY, 1) matches. fix: claim (cite `barley-hamlet-toe-band` and say the one band is the page's GUESS); effect: none",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "82b300760cbe7ce7",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:fae927ed4fb5fe85",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:fe49530da0a21b10"
   ],
   "said": "the toe's band whatever the grain asks - dry-fields-and-their-crops-hatake.drawing: where the middle stays wild the hem keeps to the fan's toe and leaves the middle to scrub - a wild middle's barley hamlet draws the toe's one band in full, as a cleared middle draws its canal's, not only as much as the grain left owed asks: before 449 T421 the band held only that grain, so a hamlet whose barley held its whole need drew no dry field (209 of 209 such rolls, measured 2026-11-24 over 450 rolls of seeds 1 to 150), where both pages keep its dry fields on the toe",
   "siblings": "12a5e0127c98f675",
+  "triaged": "2026-11-25",
   "verdict": "DRIFTED"
  },
  "rust/phases/src/field/build.rs::hem_in#the hem's line": {
   "body": "36af51aa23a3824d",
   "claim": "the hem's line - where-a-farming-hamlet-grew-its-coarse-grain.drawing: where the middle is left wild and the paddy lies bare over the winter the dry plots climb from the toe into the middle, and where the paddy carries barley its dry fields stay on the toe; a cleared middle drawn only as the hem along the whole canal - the line canal A's, the first field's far flank up from its foot: to the head on a bare-winter wild middle, only up the toe (`TOE_SHARE`) on a barley one, and on across the head where cleared",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "01b96181b5d7ca9e",
   "core": "8b5a39d6654cea0e",
   "date": "2026-11-24",
   "note": "the line runs foot to head when wild and bare, the toe's last third when barley, and on across the head when cleared",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
   "reads": "f2a188db8778de04",
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::hem_in#the line's steps": {
@@ -44283,14 +44287,14 @@
   "date": "2026-11-04",
   "note": "the four attested crops; the mix is a random nonempty subset, a GUESS as the page records",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:73f55068e82112e4"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::Canal#the canal's course": {
@@ -44338,16 +44342,16 @@
   "claim": "square to the canal - dry-fields-and-their-crops-hatake.drawing: each plot a rectangle square to the canal where it stands, the project's choice - the normal to the course's local line, taken over a plot's length either way, not to the paddy's slope",
   "code": "7f7e6e505fff9833",
   "core": "87f259f24a71d740",
-  "date": "2026-11-24",
-  "note": "normal to the canal's local line, the project's choice over the paddy's slope",
+  "date": "2026-11-25",
+  "note": "square to the canal's local line, taken over a plot's length either way, which the page records as the project's choice",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "27bf52bc269bcf65",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:6501f794f6c83ba6",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:e87bb4e4f15222b8"
   ],
   "verdict": "IN-STEP"
  },
@@ -44444,13 +44448,13 @@
   "date": "2026-11-01",
   "note": "0.85 acre, as the page gives",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:cf41fc04e040d5c8"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::LAP_PULL_FT#the pull": {
@@ -44474,13 +44478,13 @@
   "date": "2026-11-24",
   "note": "a loop guard far past any canvas; the plots still climb as far as the ground runs",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::PINCH_SHARE#the pinch": {
@@ -44488,18 +44492,19 @@
   "claim": "the pinch - GUESS: dry-fields-and-their-crops-hatake.drawing draws small rectangular plots of about a sixth of an acre and is silent on how far one may taper where the canal bends; half a plot's length, past which a strip reads as a sliver, not a plot",
   "code": "05affa2e45028857",
   "core": "e995a28c3e2e8523",
-  "date": "2026-11-24",
-  "note": "a sixth of an acre, rectangular, the cited page silent on how far a plot may taper",
+  "date": "2026-11-25",
+  "note": "the cited page is not silent: §27 already records this figure as a GUESS (\"Where a strip's lower or upper edge would run under half a plot's length, that strip is not drawn, and its column of strips climbs no farther\"), and `PINCH_SHARE = 0.5` matches it; restate the claim as \"GUESS: 0006 drawing §27 records half a plot's length as the taper past which a strip is not drawn\"; fix: claim; effect: none",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:840c22fc45dfbdff",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:e87bb4e4f15222b8"
   ],
-  "verdict": "IN-STEP"
+  "said": "the pinch - GUESS: dry-fields-and-their-crops-hatake.drawing draws small rectangular plots of about a sixth of an acre and is silent on how far one may taper where the canal bends; half a plot's length, past which a strip reads as a sliver, not a plot",
+  "siblings": "ee766ae7fe39eda1",
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/dry.rs::PLOT_FT#the plot": {
   "body": "585a3d14b46dfecf",
@@ -44510,13 +44515,13 @@
   "date": "2026-11-01",
   "note": "91.4 x 71.5 ft, about 0.15 acre",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::Refusal#the refusal's name": {
@@ -44540,13 +44545,13 @@
   "date": "2026-11-01",
   "note": "20 degrees, a recorded convention",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::TRACT_PLOTS#a tract's length": {
@@ -44569,13 +44574,13 @@
   "date": "2026-11-01",
   "note": "two to four strips",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::TURN_DEG#the turns": {
@@ -44587,13 +44592,13 @@
   "date": "2026-11-01",
   "note": "17 degrees per tract, 3 per plot",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::apart#tracts apart": {
@@ -44605,15 +44610,15 @@
   "date": "2026-11-01",
   "note": "candidates kept within ±TURN_DEG.0 on the contour or down side (the two 90 apart), each kept TRACT_APART_DEG clear of its neighbors' rows",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "394f4850d3f45187",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::apart#where none stands apart": {
@@ -44625,15 +44630,15 @@
   "date": "2026-11-22",
   "note": "the page sets the 20-degree floor and says nothing of a tract that cannot meet it; the fallback picks among the range's ends and the midpoints between neighbors, as the claim says",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "394f4850d3f45187",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#a band's strips": {
@@ -44645,14 +44650,14 @@
   "date": "2026-11-22",
   "note": "the page gives two to four strips a tract and is silent on whether a band's tracts share a depth; `strips` is rolled once a band",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "b98d4ffaa8b84fdb",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#a column's climb ends": {
@@ -44660,17 +44665,19 @@
   "claim": "a column's climb ends - where-a-farming-hamlet-grew-its-coarse-grain.drawing: the dry plots climb from the toe into the middle, plot by plot - so a column's climb ends where its strip pinches under `PINCH_SHARE` of a plot's length, the columns square to a canal bending toward its dry side converging as they climb, and where its strip laps a plot another column laid, never coming out behind that plot; the settlement's ground is stepped over (0006's houses between), and a strip refused for the water or for the rice is passed by without ending the climb, the ground past an intake race still the hem's (a cleared middle's plots on the race's upslope side, 17 of 141 such rolls, measured 2026-11-24 over seeds 1 to 150 at three sizes; ending the climb at the rice as well changed no roll of 3,200, measured 2026-11-24 over seeds 1 to 400 at eight sizes and falls) - before 449 T423 it climbed on, and drew slivers and detached strips turned against the block they had crossed (seed 52 of 15 households falling at 225 degrees; a plot under half the plot's area on 77 of 98 bare-winter wild rolls, measured 2026-11-24 over seeds 1 to 150 at three sizes); where the pinch falls a GUESS (`PINCH_SHARE`)",
   "code": "bb29ac1dde1525d1",
   "core": "40dbad554e584baa",
-  "date": "2026-11-24",
-  "note": "the climb goes plot by plot out from the canal, the ground behind the houses is stepped over, and plots refused for the water or the rice are dropped, not reshaped; where the pinch falls is labeled a GUESS, and neither page records it",
+  "date": "2026-11-25",
+  "note": "the claim gives the pinch rule only 0011 for backing and calls where the pinch falls a bare GUESS. 0006's drawing page now says it: \"Where a strip's lower or upper edge would run under half a plot's length, that strip is not drawn, and its column of strips climbs no farther ... That is a GUESS\". The code does the same: `pinched` leads to `climbs.end(col); continue`. The bundle does not show `PINCH_SHARE`, so I could not confirm that it is 0.5. fix: claim (cite research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html §158 for the taper and the pinch at half a plot's length, a GUESS recorded there; 0011 §166 for the climb); effect: none",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
   "reads": "b98d4ffaa8b84fdb",
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d"
   ],
-  "verdict": "IN-STEP"
+  "said": "a column's climb ends - where-a-farming-hamlet-grew-its-coarse-grain.drawing: the dry plots climb from the toe into the middle, plot by plot - so a column's climb ends where its strip pinches under `PINCH_SHARE` of a plot's length, the columns square to a canal bending toward its dry side converging as they climb, and where its strip laps a plot another column laid, never coming out behind that plot; the settlement's ground is stepped over (0006's houses between), and a strip refused for the water or for the rice is passed by without ending the climb, the ground past an intake race still the hem's (a cleared middle's plots on the race's upslope side, 17 of 141 such rolls, measured 2026-11-24 over seeds 1 to 150 at three sizes; ending the climb at the rice as well changed no roll of 3,200, measured 2026-11-24 over seeds 1 to 400 at eight sizes and falls) - before 449 T423 it climbed on, and drew slivers and detached strips turned against the block they had crossed (seed 52 of 15 households falling at 225 degrees; a plot under half the plot's area on 77 of 98 bare-winter wild rolls, measured 2026-11-24 over seeds 1 to 150 at three sizes); where the pinch falls a GUESS (`PINCH_SHARE`)",
+  "siblings": "7e11807325d9ba2c",
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/dry.rs::hem#a plot onto rice dropped": {
   "body": "0784cf1b4051ebbe",
@@ -44681,14 +44688,14 @@
   "date": "2026-11-24",
   "note": "a Rice refusal drops the plot",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "b98d4ffaa8b84fdb",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#not steep ground": {
@@ -44700,15 +44707,15 @@
   "date": "2026-11-07",
   "note": "the gentle-ground case, where contour rows are one option among others",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "b98d4ffaa8b84fdb",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:2c9808eceb0cc72a",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:a0379c2117836a92"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#rows on the contour or down": {
@@ -44720,15 +44727,15 @@
   "date": "2026-11-07",
   "note": "even odds between the two forms, turn ±17, each plot's own turn ±3, base square to the fall",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "b98d4ffaa8b84fdb",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:6501f794f6c83ba6",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#square to the canal": {
@@ -44736,15 +44743,16 @@
   "claim": "square to the canal - dry-fields-and-their-crops-hatake.drawing: plots square to the canal and laid end to end along its curving line",
   "code": "03ce583d553445f8",
   "core": "40dbad554e584baa",
-  "date": "2026-11-24",
-  "note": "end to end along the curving line, each square where it stands",
+  "date": "2026-11-25",
+  "note": "each strip's seat is built from the column's frames square to the canal, laid end to end along its line and tapering at a bend",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "b98d4ffaa8b84fdb",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:840c22fc45dfbdff",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:e87bb4e4f15222b8"
   ],
   "verdict": "IN-STEP"
  },
@@ -44757,14 +44765,14 @@
   "date": "2026-11-24",
   "note": "bands climb until the need is met or a whole band finds no ground",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
   "reads": "b98d4ffaa8b84fdb",
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the climb's bound": {
@@ -44788,16 +44796,16 @@
   "date": "2026-11-07",
   "note": "TRACT_STRIPS 2-4, TRACT_PLOTS a guess, BANK_FT bank, random non-empty mix, even odds per plot",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "b98d4ffaa8b84fdb",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:73f55068e82112e4",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the last band from the canal's start": {
@@ -44805,18 +44813,20 @@
   "claim": "the last band from the canal's start - GUESS: where-a-farming-hamlet-grew-its-coarse-grain.drawing silent on where along the canal the last of the plots stands; from its start, along it, until the need is met",
   "code": "552f05021f58d793",
   "core": "40dbad554e584baa",
-  "date": "2026-11-24",
-  "note": "each band starts at d = 0, the canal's first point, runs along it and stops at got >= need; the 0011 drawing page records this order as a GUESS (\"laid from the canal's start along it until the need is met. That order is a GUESS\")",
+  "date": "2026-11-25",
+  "note": "the cited page is not silent: §36 records the order as a GUESS (\"laid from the toe end of the canal, up along it, until the need is met\"). The code lays the last band from `d = 0`, which is `line[0]`. To judge it I would need to know which end of the canal `line[0]` is, the toe end or the head (0053 §99 draws canals from head to tail). If `line[0]` is the toe end, this is DRIFTED with fix: claim (cite §36). If it is the head end, it is fix: code, and the last band would be laid starting at the canal's upslope end",
   "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "c92329f1cce039ec"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "87b02008c5ca6ab7"
   },
   "reads": "b98d4ffaa8b84fdb",
-  "research": "9c38c2d336f8ddf7",
+  "research": "f60968f2a5a6aaf5",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:477b7693e5cb5eaf"
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:0bb732e0cc16823c"
   ],
-  "verdict": "IN-STEP"
+  "said": "the last band from the canal's start - GUESS: where-a-farming-hamlet-grew-its-coarse-grain.drawing silent on where along the canal the last of the plots stands; from its start, along it, until the need is met",
+  "siblings": "7e11807325d9ba2c",
+  "verdict": "CANNOT-TELL"
  },
  "rust/phases/src/field/dry.rs::hem#the plot": {
   "body": "57252853dd763be0",
@@ -44827,14 +44837,14 @@
   "date": "2026-11-07",
   "note": "91.4 x 71.5 ft, roughly 92 x 72",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "b98d4ffaa8b84fdb",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the settlement's ground kept": {
@@ -44846,14 +44856,14 @@
   "date": "2026-11-24",
   "note": "past_keep pushes the strips behind the settlement's ground and on_keep drops any strip still on it",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "b98d4ffaa8b84fdb",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the tracts apart": {
@@ -44865,14 +44875,14 @@
   "date": "2026-11-22",
   "note": "the page itself calls the 20-degree separation a drawing convention; `hem` hands it to `apart`",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "b98d4ffaa8b84fdb",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::neighbors#the neighbors": {
@@ -44884,14 +44894,14 @@
   "date": "2026-11-01",
   "note": "compares a tract with the one before it in its band and with the tracts below whose span overlaps it, matching the neighboring-tract seams the 20-degree convention sets apart",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::on_keep#the overlap": {
@@ -44915,14 +44925,14 @@
   "date": "2026-11-07",
   "note": "pushes the strips behind the settlement's ground, so the houses stand between the canal and the dry fields",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "27bf52bc269bcf65",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::past_keep#the push behind": {
@@ -44942,17 +44952,20 @@
   "claim": "the pinch - GUESS: dry-fields-and-their-crops-hatake.drawing silent on how far a plot may taper; `PINCH_SHARE` of the plot's length, each edge measured along the canal where the column stands",
   "code": "6c2174a98121fe92",
   "core": "33b2e97893f02b3f",
-  "date": "2026-11-24",
-  "note": "the cited page silent on taper; each edge's run along the canal measured against `PINCH_SHARE`",
+  "date": "2026-11-25",
+  "note": "the cited page is not silent: §27 records the rule as a GUESS (a strip whose lower or upper edge runs under half a plot's length is not drawn, and its column ends). `pinched` takes the shorter of the two edges, measured along the canal at the column, and compares it with `PINCH_SHARE * PLOT_FT.0`, and `hem` ends the column, so code and page agree; restate the claim to cite §27 as the page that records the guess; fix: claim; effect: none",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "6ce58fbb38e71be2",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:840c22fc45dfbdff",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:e87bb4e4f15222b8"
   ],
-  "verdict": "IN-STEP"
+  "said": "the pinch - GUESS: dry-fields-and-their-crops-hatake.drawing silent on how far a plot may taper; `PINCH_SHARE` of the plot's length, each edge measured along the canal where the column stands",
+  "siblings": "ee766ae7fe39eda1",
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/dry.rs::refused#a plot onto rice dropped": {
   "body": "f953cf20ed3bf264",
@@ -44963,14 +44976,14 @@
   "date": "2026-11-24",
   "note": "the field test comes first and returns Rice",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "ed49a3ec31acf907",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::refused#off the water": {
@@ -44982,14 +44995,14 @@
   "date": "2026-11-24",
   "note": "the water test (wet) is unchanged; the page says nothing on clearance from water",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "ed49a3ec31acf907",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::room_left#the room": {
@@ -49088,19 +49101,21 @@
  "rust/phases/src/hem.rs::CLEAR_FT#off the water": {
   "body": "eaa1523813af4a0e",
   "claim": "off the water - GUESS: dry-fields-and-their-crops-hatake.drawing silent on how near the water a dry plot may come; 1 ft past a filed water's half-width",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "48fe95c165b6ebaa",
   "core": "142cdbb8d59757bc",
   "date": "2026-11-24",
   "note": "the claim calls 0006's drawing page \"silent\", but §29 (`dry-plot-off-water`) now records the figure as \"within about a foot of any water\", a GUESS. The 1 ft matches it. fix: claim (GUESS 0006 drawing, recorded at `dry-plot-off-water`: about a foot past a water's half-width); effect: none",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1a9bff0e449a703a"
   ],
   "said": "off the water - GUESS: dry-fields-and-their-crops-hatake.drawing silent on how near the water a dry plot may come; 1 ft past a filed water's half-width",
   "siblings": "502b2e0a7902d203",
+  "triaged": "2026-11-25",
   "verdict": "DRIFTED"
  },
  "rust/phases/src/hem.rs::Laid#the hem's stage": {
@@ -49136,14 +49151,14 @@
   "date": "2026-11-04",
   "note": "hands the seat's keep to hem, which lays the plots behind the settlement",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "d1ce1c564d5def26"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "5ccde3172eb2c679"
   },
   "reads": "96b356b5ff34ab8c",
-  "research": "17b0eedebda69557",
+  "research": "caa437c806462f43",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/hem/tests.rs::a_ground_no_strip_clears_pushes_its_columns_past_its_reach#the hem's tests": {
@@ -49432,8 +49447,8 @@
   "claim": "a seat astride the brook leaves by its open bank - GUESS villages-beside-their-stream-one-bank-or-both.drawing: \"Where the site that faces the fields and has its back to the winter wind is crossed by the brook, the houses are built on both banks\" - so a band whose center falls in the pocket between the brook, the intake's feeder and the field's corner, the rest of it on open ground, is no walled-in site; the record does not say where a cluster's way out starts (village-lanes.drawing keeps lanes on dry ground), so it is asked of the band's two stations, and only once no margin is left, each refused or walled in at its center and the hill-backed seat asked where a fall runs into the wind - 4 of 35,000 valley rolls, each falling square across its wind with its windward flank on the wet toe, the one seat kept at the head's windward corner over the intake (measured 2026-11-24: 20,000 cohort seeds at five starts and seeds 1 to 1,500 at ten sizes and falls; none refused after, none with a map check broken, the four bands 0.03 to 0.05 percent on the paddy)",
   "code": "b988e450814b4f97",
   "core": "bfed7d84fa309078",
-  "date": "2026-11-24",
-  "note": "the code still does what the claim says: it keeps a frame when either of the two stations at plus or minus 0.6 along its band has a way out. But the claim names the wrong page and its wording is out of date. It names 0035's drawing page as the page that records the GUESS, yet 0035 records only the both-banks seat (§2). It also says the record is silent on where the way out starts, and cites 0081 only as keeping lanes on dry ground. 0081 §24 now records this exact fallback (\"asked again from two more points, six-tenths of the way from the middle to each end ... a site with a way out from either is kept; this keeps the one site astride the brook ... a GUESS\"). 0031 §60 records the windward-corner seat and \"its track leaves by the open bank\" as a GUESS. 0057 §81 records the wet tapering flank as a DEVIATION. The claim should read: `a seat astride the brook leaves by its open bank - GUESS research/questions/0081-village-lanes.drawing.html: a site with no dry way out from its band's middle is asked again, once no site is left, from six-tenths of the way to each end of its band, and kept if either has a way out; this keeps the one seat astride the brook, which research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html places at the windward corner at the head of its fields, its track leaving by the open bank, where the land falls square across the wind onto the wet ground climbing the tapering flank (research/questions/0057-marshes-and-wetlands-shitchi.drawing.html), houses on both banks (research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html) - 4 of 35,000 valley rolls (measured 2026-11-24: ...as now)`; fix: claim; effect: none",
+  "date": "2026-11-25",
+  "note": "this GUESS names 0035 as the page that records it, but 0035 records no such guess. The guess is recorded by 0031 §21 (\"its track leaves by the open bank ... a GUESS\") and 0081 §116 (\"six-tenths of the way from the middle to each end ... this keeps the one site astride the brook ... a GUESS\"), and `BAND_EXITS` ±0.6 matches §116. 0057 §202 now also records the wet windward flank the claim measures. The claim's note \"0081 keeps lanes on dry ground\" points past §116, which is the block that holds this fallback; fix: claim (GUESS naming 0031 drawing §21 and 0081 drawing §116, with 0057 drawing §202 for the wet windward side); effect: none",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20",
    "0081-village-lanes.drawing.html": "460fb5c616e3b1d5"
@@ -49442,7 +49457,6 @@
   "research": "bbfc445796a4eda1",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542",
-   "0081-village-lanes.drawing.html:48cdd569d493520c",
    "0081-village-lanes.drawing.html:a4283016d4a47c2b"
   ],
   "said": "a seat astride the brook leaves by its open bank - GUESS villages-beside-their-stream-one-bank-or-both.drawing: \"Where the site that faces the fields and has its back to the winter wind is crossed by the brook, the houses are built on both banks\" - so a band whose center falls in the pocket between the brook, the intake's feeder and the field's corner, the rest of it on open ground, is no walled-in site; the record does not say where a cluster's way out starts (village-lanes.drawing keeps lanes on dry ground), so it is asked of the band's two stations, and only once no margin is left, each refused or walled in at its center and the hill-backed seat asked where a fall runs into the wind - 4 of 35,000 valley rolls, each falling square across its wind with its windward flank on the wet toe, the one seat kept at the head's windward corner over the intake (measured 2026-11-24: 20,000 cohort seeds at five starts and seeds 1 to 1,500 at ten sizes and falls; none refused after, none with a map check broken, the four bands 0.03 to 0.05 percent on the paddy)",
@@ -50163,11 +50177,13 @@
   "claim": "the square end in - GUESS: tier 1 takes \"a margin 45 to 90 degrees off the wind\" with both ends in, as the falls are admitted (square to the wind or away, `water_frame.rs` `admitted`): a fall square to the wind leaves the head square to it, and with the end out the Rust gate's seed 901280 (its windward flank, parallel to the fall, all on the wet toe) had no seat",
   "code": "11bd84de499500b8",
   "core": "6d3de5a041e37c25",
-  "date": "2026-11-24",
-  "note": "this is floating-point slack, so a fall exactly square to the wind counts as admitted and not as falling toward it; that matches the page's falls \"away from the wind or across it\", and the margin band's included 90-degree end is otherwise unattested, as a GUESS should be",
+  "date": "2026-11-25",
+  "note": "this is a bare GUESS, but a page in the bundle answers it. 0031 §20 admits a fall \"across\" the wind, and §21 seats such a hamlet at \"the windward corner at the head of its fields\", which is the margin square to the wind that this epsilon admits. 0057 §202 records the wet windward flank of the claim's seed 901280. The label should be `GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html`, citing §20, §21 and 0057 drawing §202",
   "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "said": "the square end in - GUESS: tier 1 takes \"a margin 45 to 90 degrees off the wind\" with both ends in, as the falls are admitted (square to the wind or away, `water_frame.rs` `admitted`): a fall square to the wind leaves the head square to it, and with the end out the Rust gate's seed 901280 (its windward flank, parallel to the fall, all on the wet toe) had no seat",
+  "siblings": "189198f6647ddf0c",
+  "verdict": "MISLABELED"
  },
  "rust/phases/src/seat/margins.rs::STANDOFF#seat standoff from the field": {
   "body": "80000291e77101ee",
@@ -50473,17 +50489,20 @@
   "claim": "not on the wet toe - ground-too-wet-to-build-on.drawing: seat and anchor off the marsh below the fields",
   "code": "ba5c9af6e0731335",
   "core": "ed5efbe364a61ca2",
-  "date": "2026-11-24",
-  "note": "the seat and anchor are refused on the toe, which now includes the narrowing flank, and 0057 §137 keeps a cluster off that flank too",
+  "date": "2026-11-25",
+  "note": "the code refuses a seat whose center or anchor lies on the toe band, which is correct. But the claim says the marsh lies \"below the fields\", and the toe band also climbs the side of the fields that narrows downhill. 0057's drawing page now says so and says \"a house, a cluster and a track keep off it as off the rest of the marsh\". The claim cites only 0058; fix: claim (say the marsh lies below the fields and up their narrowing side, and cite research/questions/0057-marshes-and-wetlands-shitchi.drawing.html §200, §202 alongside 0058 §42); effect: none",
   "pages": {
    "0058-ground-too-wet-to-build-on.drawing.html": "f91787095acd06d1"
   },
   "reads": "6288a6585a296fd3",
   "research": "8a406c56299151e7",
   "rests": [
+   "0058-ground-too-wet-to-build-on.drawing.html:32fa9821335681fb",
    "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
   ],
-  "verdict": "IN-STEP"
+  "said": "not on the wet toe - ground-too-wet-to-build-on.drawing: seat and anchor off the marsh below the fields",
+  "siblings": "576a4a8ae062e406",
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/seat/margins.rs::ranked#seat on the field's margin": {
   "body": "c613a2b6d5428e57",
