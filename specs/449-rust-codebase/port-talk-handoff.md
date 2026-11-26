@@ -43,7 +43,8 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 ## Before the port resumes (the GM, 2026-11-26)
 
 - "I agree that all of our tooling fixes around work trees need to land before we resume the port." The set: 451 T159, T275,
-  T281, T284, T286, T288, T294, T295, T296, T297, T300, and the disk follow-ups T278 and T301 ("we should make sure to fix all of this as part of our
+  T281, T284, T286, T288, T294, T295, T296, T297, T300, T302, T303, T304, T305, T104 (the test that fails under load: "I agree with prioritizing the
+  test that fails under load being fixed"), and the disk follow-ups T278 and T301 ("we should make sure to fix all of this as part of our
   tasking that we are doing before resuming our port. But after we talk about the most efficient way to parallelize") (landed already: T285 the warm pool, T292 the landing refusals and
   `make carry`).
 - The sequence he approved ("Your proposed sequence ... sounds right to me, so yes, please proceed with that"): (1) the pool
