@@ -141,6 +141,12 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
     (451 T261 fixes that) and 31% were blocks reviewed CLEAR and touched since. Plan reviews per task: 0.83 and 1.51. A task
     added mid-feature (451 T226-T259, from the task-time records): median 57 machine minutes, 40 blocking minutes, 177
     minutes from filing to landing.
+    CORRECTED 2026-11-26 (451 T261's builder, replaying 12 escape records at their commits with the push's scope): the
+    60% counted the WORDING of the session's escape reasons, not what the gate held. Since 451 T84 the gate never counts an
+    unstarted task's stub; in 7 of 12 replays feature 451 owed nothing and the escape was a standing reason; what the gate
+    truly held was 449's 17 withdrawn tasks' edited, never-reviewed sections (34 blocks), three ticked tasks' untouched
+    stubs and one renumbered block. So the per-landing escape counts stand, their cause does not; T261 is withdrawn, 451
+    T262 refuses an escape the gate does not owe, and 449 T439 reviews the withdrawn sections.
 
 12. A builder's context: handoff against compaction, and the cap itself (the GM: "I thought that we had done something to fix
     that issue with builders hitting their context limit ... our builder is not able to do automatic context compaction? Or

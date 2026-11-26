@@ -119,6 +119,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T438 the grove at each farm of a row or scattered hamlet, the second half of 449 T417 (split 2026-11-25 at the GM's word: 'if we can work the workable half of T417 overnight then we might as well do that and split the other part off into a separate task'): 0031's drawing page has a row or a scattered settlement draw a grove at each farm and no village belt; T417 removes the wrong belt, this draws the groves, which needs the homesteads stage (parked in rust/parked/src/homesteads/), so it lands with or after that stage's port
       research: rendering
+- [ ] T439 449's plan sections the plan gate truly holds get their review, so 449's landings need no escape (451 T261's builder, 2026-11-26: 34 blocks of the 17 withdrawn tasks T374-T414 edited at their move to feature 452 and never reviewed, the untouched template stubs of ticked T425, T428 and T436, on 12 of 12 replayed landings): make plan-delta F=449 refuses on 34 form findings first (an Approach item 4 figure with no measured label, and the like) - fix the form, answer each ticked task's stub honestly (T425, T428 and T436 were page work with no code), then one spec-fidelity MODE 4 block review to CLEAR; not a build, no map changes
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
