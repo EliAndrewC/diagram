@@ -1,0 +1,31 @@
+97 27
+-- by jobs(types): group n hit rate | med prompt chars, med calls, med out
+1          n=  5 hit=  2 rate=0.40 | 5873 55 62323
+2          n=  2 hit=  0 rate=0.00 | 2499 48 37238
+3          n= 23 hit=  4 rate=0.17 | 3078 71 38388
+4          n= 36 hit=  8 rate=0.22 | 2848 116 62522
+5          n= 31 hit= 13 rate=0.42 | 3823 113 74620
+-- by jobs>=4 vs <4: group n hit rate | med prompt chars, med calls, med out
+4+         n= 67 hit= 21 rate=0.31 | 3187 114 64670
+<4         n= 30 hit=  6 rate=0.20 | 3190 61 47319
+-- by began brief-measure: group n hit rate | med prompt chars, med calls, med out
+False      n= 94 hit= 25 rate=0.27 | 3196 97 60142
+True       n=  3 hit=  2 rate=0.67 | 2210 130 53306
+-- by began behavior-measure: group n hit rate | med prompt chars, med calls, med out
+False      n= 81 hit= 21 rate=0.26 | 3197 98 60119
+True       n= 16 hit=  6 rate=0.38 | 2614 100 62235
+-- by files edited: group n hit rate | med prompt chars, med calls, med out
+1-3        n= 68 hit= 15 rate=0.22 | 3558 69 48305
+4-8        n= 18 hit=  7 rate=0.39 | 2749 134 67831
+9+         n= 11 hit=  5 rate=0.45 | 3197 171 100878
+-- by prompt length: group n hit rate | med prompt chars, med calls, med out
+3-4.5k     n= 29 hit=  9 rate=0.31 | 3460 113 64498
+4.5k+      n= 25 hit=  9 rate=0.36 | 5050 74 59960
+<3k        n= 43 hit=  9 rate=0.21 | 2508 96 53306
+-- by numbered items: group n hit rate | med prompt chars, med calls, med out
+13+        n=  5 hit=  2 rate=0.40 | 2532 130 53306
+7-12       n=  3 hit=  0 rate=0.00 | 6627 78 45692
+<=6        n= 89 hit= 25 rate=0.28 | 3187 99 60500
+-- by edited 0: group n hit rate | med prompt chars, med calls, med out
+False      n= 58 hit= 18 rate=0.31 | 2902 130 65782
+True       n= 39 hit=  9 rate=0.23 | 4420 64 50038

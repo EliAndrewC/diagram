@@ -1,0 +1,5 @@
+ctx 0-300k: n=16 total(own+reread) med 436k mean 679k; own-only med 121k; frac>650k 0.38; med out 2808, med min 0.9
+ctx 300-600k: n=42 total(own+reread) med 322k mean 420k; own-only med 171k; frac>650k 0.12; med out 2147, med min 0.6
+ctx 600-2000k: n=49 total(own+reread) med 316k mean 454k; own-only med 279k; frac>650k 0.24; med out 2808, med min 0.6
+stretches >=5 min: 7 total min 57.24136666854223 mean cost 1509k mean out 9089.714285714286 mean files 2.7142857142857144
+all stretches 107 total min 168, total out 351k, total own cost 29.6M, total reread 21.2M

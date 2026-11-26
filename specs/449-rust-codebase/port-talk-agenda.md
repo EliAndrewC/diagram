@@ -113,6 +113,10 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
    a faster version would take (caching, incremental runs, narrowing, a lighter hook path); git actions and the hooks'
    per-call cost included (the guard's event log times every hook). First check the premise against T243's figures: the
    share of blocking time in tooling versus model turns writing code.
+    Measured 2026-11-25 (M4; tables in dev/measurements/2026-11-25/talk-measures/ALL-TABLES.txt): of 1,310 blocking minutes outside the GM's wait in 24 hours (task-time
+    records, each minute assigned to one cause), tooling execution was 39%, model turns 45%, waiting 14% and review agents 2%.
+    Top blocking targets: make closing-checks 105 min, make land 97, make rust-test 77; compile 145 as a category. The
+    earlier "about 8%" read from a provisional run is superseded.
 10. Long-running features against small spec-kit features filed and closed (the GM: "whether to have long-running features
     like the ones that we have been working for the last few weeks, or whether it is better to have small SpecKit features
     that get filed and then completely closed out ... there are real implications ... for which tooling gets run and what
@@ -120,6 +124,8 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
     feature's lifecycle costs per task in each shape - spec and plan reviews, the plan gate's stale blocks and their escapes
     (every landing today carried a PLAN_REVIEW_OK for 449's 17 moved tasks and unfilled sections), feature-report, archive
     moves, claims and record rounds keyed per feature - from 449 and 451's records against the small features in specs/.
+    Measured 2026-11-25: see the M3 paragraph under item 11 (escapes per landing 1.85 in 449 and 1.13 in 451 against 0.0 in
+    25 small features; plan reviews per task 0.83 and 1.51; tables in dev/measurements/2026-11-25/talk-measures/ALL-TABLES.txt).
 11. Whether everything must go through a spec-kit feature (the GM: "I think on balance, this is probably for the best, but
     that is an assumption worth questioning ... whether there are categories of changes for which it would make sense to
     bypass those requirements ... tooling changes or minor bug fixes that we notice while working on something else ... if I
@@ -127,6 +133,11 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
     Start from the rule as written: the root CLAUDE.md already says "Feature work is a spec-kit feature ...; a tweak is done
     directly", and make land-tooling lands tooling alone; measure what a task added mid-feature costs (task-add, plan
     section, decide, spec-fidelity MODE 4, the landing) against a direct tweak, from today's 451 T226-T243.
+    Measured 2026-11-25 (M3; tables in dev/measurements/2026-11-25/talk-measures/ALL-TABLES.txt): escapes per landing 1.85 in 449 and 1.13 in 451 against 0.0 in 25 small
+    features. Of 636 plan-gate escapes since 2026-11-19, 60% were unfilled template sections of tasks filed and not started
+    (451 T261 fixes that) and 31% were blocks reviewed CLEAR and touched since. Plan reviews per task: 0.83 and 1.51. A task
+    added mid-feature (451 T226-T259, from the task-time records): median 57 machine minutes, 40 blocking minutes, 177
+    minutes from filing to landing.
 
 12. A builder's context: handoff against compaction, and the cap itself (the GM: "I thought that we had done something to fix
     that issue with builders hitting their context limit ... our builder is not able to do automatic context compaction? Or
@@ -148,6 +159,12 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
     little time and costs tokens; the lever is the re-read (handoffs that name what to read; tasks sized to finish). Caveats:
     the band past 300k is small and survivor-biased (the guard refuses there), and long-context builders run the heaviest
     tasks. The session's recommendation to move the stop to 600k was withdrawn on these numbers.
+    Measured 2026-11-25 (M1 and M2; tables in dev/measurements/2026-11-25/talk-measures/ALL-TABLES.txt): handoff rate by brief size - 16% at 1-2 jobs, 22% at 3 jobs and
+    52% at 4 or more; 22% at 1-3 files edited, 39% at 4-8, 45% at 9 or more (builder transcripts since 11-19, grouped by the
+    brief's job count and the files the builder edited). Past one in three, a builder hands off at 4 or more jobs, 4 or more
+    files, about 120 tool calls or 80k output tokens. Arm (c), the coordinator editing directly: a one-turn edit costs about
+    0.3-0.4M weighted tokens against 0.65M for a small builder and finishes in under a minute; past 5 minutes or several
+    files it costs about 1.5M, where a builder's small context wins. Samples are unmatched (the tasks differ by arm).
     Three-way measurement (the GM, 2026-11-25: "we should make sure to measure whether the complexity of the handoffs actually saves time and/or tokens relative to either letting the builders grow or not using them in the first place"): three arms, each in minutes (blocking and total) and tokens per landed task, from the task time breakdown and the transcripts: (a) builders capped at 300k with handoffs (today's way); (b) builders let grow past the cap (no handoff); (c) no builders - the coordinating session builds in its own context. Arm (a) against (b) has a first measurement (2026-11-25: time a wash, tokens favor the handoff); arm (c) has none, and its cost lands on the coordinator's own context, re-read every turn. Also the handoff's own overhead: writing the handoff, the brief, the coordinator's reading of the report.
 
 13. An audit register for every optimization and procedure that costs time or tokens (the GM: "when we make this kind of

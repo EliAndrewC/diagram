@@ -1,0 +1,40 @@
+TOP15 by blocking
+make closing-checks                    tests                          runs   125 min   415.6 ( 9.0%) blk  104.9 ( 8.0%)
+make land                              landing                        runs    42 min   120.1 ( 2.6%) blk   97.1 ( 7.4%)
+make rust-test                         tests                          runs   273 min   105.8 ( 2.3%) blk   77.0 ( 5.9%)
+shell (grep, sed, cat, ls, ...)        shell reads and file edits     runs  3230 min  1564.2 (33.9%) blk   75.7 ( 5.8%)
+git                                    git                            runs   636 min    24.2 ( 0.5%) blk   21.0 ( 1.6%)
+python3                                python3                        runs   535 min    18.5 ( 0.4%) blk   15.9 ( 1.2%)
+make format                            tests                          runs   145 min    98.2 ( 2.1%) blk   15.8 ( 1.2%)
+make task-start                        spec-kit step                  runs    36 min    13.6 ( 0.3%) blk   13.3 ( 1.0%)
+a scratch run.sh sweep                 map generation                 runs    19 min    27.2 ( 0.6%) blk    9.7 ( 0.7%)
+make ledger-owed                       review: other commands         runs    50 min     8.3 ( 0.2%) blk    8.2 ( 0.6%)
+make task-add                          spec-kit step                  runs    21 min    11.0 ( 0.2%) blk    7.9 ( 0.6%)
+make decide                            plan review: commands          runs   191 min    14.7 ( 0.3%) blk    7.8 ( 0.6%)
+make crate-checks                      tests                          runs    25 min    31.7 ( 0.7%) blk    7.5 ( 0.6%)
+make guard-edit                        Makefile targets the guard's t runs    44 min     5.6 ( 0.1%) blk    5.2 ( 0.4%)
+make record-owed                       record and pop-up checks: comm runs    43 min     5.4 ( 0.1%) blk    4.8 ( 0.4%)
+TOP15 by minutes
+shell (grep, sed, cat, ls, ...)        shell reads and file edits     runs  3230 min  1564.2 (33.9%) blk   75.7 ( 5.8%)
+make closing-checks                    tests                          runs   125 min   415.6 ( 9.0%) blk  104.9 ( 8.0%)
+a wait loop on a page session          wait loops on page sessions (h runs     9 min   288.2 ( 6.3%) blk    0.0 ( 0.0%)
+a wait loop (until/while/sleep)        wait loops (held open, no work runs   101 min   169.6 ( 3.7%) blk    0.0 ( 0.0%)
+make land                              landing                        runs    42 min   120.1 ( 2.6%) blk   97.1 ( 7.4%)
+make rust-test                         tests                          runs   273 min   105.8 ( 2.3%) blk   77.0 ( 5.9%)
+make format                            tests                          runs   145 min    98.2 ( 2.1%) blk   15.8 ( 1.2%)
+make crate-checks                      tests                          runs    25 min    31.7 ( 0.7%) blk    7.5 ( 0.6%)
+a scratch run.sh sweep                 map generation                 runs    19 min    27.2 ( 0.6%) blk    9.7 ( 0.7%)
+git                                    git                            runs   636 min    24.2 ( 0.5%) blk   21.0 ( 1.6%)
+python3                                python3                        runs   535 min    18.5 ( 0.4%) blk   15.9 ( 1.2%)
+make task-time                         record builds and docs         runs    10 min    16.8 ( 0.4%) blk    2.3 ( 0.2%)
+make rust-lint                         tests                          runs    18 min    16.0 ( 0.3%) blk    4.2 ( 0.3%)
+make decide                            plan review: commands          runs   191 min    14.7 ( 0.3%) blk    7.8 ( 0.6%)
+make task-start                        spec-kit step                  runs    36 min    13.6 ( 0.3%) blk   13.3 ( 1.0%)
+blocking groups (excl GM, denominator 1310.1)
+tooling execution            min  2898.3 blk   514.1  39.2% of non-GM blocking
+model turns                  min   840.4 blk   586.8  44.8% of non-GM blocking
+GM                           min     0.0 blk   407.1   0.0% of non-GM blocking
+waiting/idle                 min   451.1 blk   186.0  14.2% of non-GM blocking
+agent spans (review/check)   min   426.6 blk    23.2   1.8% of non-GM blocking
+[('shell reads and file edits', 74.4), ('tests', 102.4), ('compile', 144.6), ('research and page sessions', 0.0), ('hook suites', 22.5), ('map generation', 22.8), ('landing', 28.2), ('git', 21.0), ('gate', 19.6), ('spec-kit step', 18.6), ("Makefile targets the guard's table does not book", 12.6), ('python3', 13.1), ('plan review: commands', 8.5), ('record builds and docs', 3.8), ('record and pop-up checks: commands', 7.3), ('review: other commands', 8.0), ('claims round: commands', 3.8), ('the gate binary, called directly', 2.2), ('arbiter: commands', 0.5), ('cargo, called directly', 0.1), ('fetching and extracting sources', 0.1)]
+excluding waiting: tooling 45.7% model 52.2% agents 2.1%

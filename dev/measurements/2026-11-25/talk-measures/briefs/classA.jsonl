@@ -1,0 +1,49 @@
+{"id": "ae34bc0b038f2adf3", "jobs": 3, "cats": ["write_content", "claims_round", "plan_review"], "first": "write_content", "began_with_measure": false, "build_task_count": 1}
+{"id": "a4cc4e1b4bf75df73", "jobs": 3, "cats": ["measure_or_sweep", "fix_found_defect", "plan_review"], "first": "measure_or_sweep", "began_with_measure": true, "build_task_count": 1}
+{"id": "ab62f6ce4ffbe4219", "jobs": 3, "cats": ["build", "measure_or_sweep", "plan_review"], "first": "build", "began_with_measure": false, "build_task_count": 2}
+{"id": "ad188c275bf11e994", "jobs": 4, "cats": ["write_content", "measure_or_sweep", "claims_round", "plan_review"], "first": "write_content", "began_with_measure": false, "build_task_count": 7}
+{"id": "acd24eef2b8a64084", "jobs": 3, "cats": ["other", "write_content", "plan_review"], "first": "other", "began_with_measure": false, "build_task_count": 0}
+{"id": "a8d12331d3c6acae7", "jobs": 3, "cats": ["write_content", "plan_review", "other"], "first": "write_content", "began_with_measure": false, "build_task_count": 0}
+{"id": "abd41567207bf7df6", "jobs": 3, "cats": ["fix_found_defect", "measure_or_sweep", "plan_review"], "first": "fix_found_defect", "began_with_measure": false, "build_task_count": 2}
+{"id": "aa945997cc8a76aef", "jobs": 3, "cats": ["fix_found_defect", "measure_or_sweep", "plan_review"], "first": "fix_found_defect", "began_with_measure": false, "build_task_count": 3}
+{"id": "a1edc7592e7d7fbe2", "jobs": 2, "cats": ["fix_found_defect", "plan_review"], "first": "fix_found_defect", "began_with_measure": false, "build_task_count": 1}
+{"id": "a361160368adf7065", "jobs": 3, "cats": ["build", "measure_or_sweep", "plan_review"], "first": "build", "began_with_measure": false, "build_task_count": 1}
+{"id": "a1b34126b46f5f7fd", "jobs": 3, "cats": ["build", "write_content", "plan_review"], "first": "build", "began_with_measure": false, "build_task_count": 1}
+{"id": "af7c7c3eaaba9510a", "jobs": 2, "cats": ["build", "plan_review"], "first": "build", "began_with_measure": false, "build_task_count": 1}
+{"id": "ab9231eb31662103d", "jobs": 4, "cats": ["fix_found_defect", "measure_or_sweep", "claims_round", "plan_review"], "first": "fix_found_defect", "began_with_measure": false, "build_task_count": 2}
+{"id": "a28d147452e93c2a5", "jobs": 5, "cats": ["fix_found_defect", "measure_or_sweep", "other", "claims_round", "plan_review"], "first": "fix_found_defect", "began_with_measure": false, "build_task_count": 3}
+{"id": "a2e041fd946a81146", "jobs": 3, "cats": ["build", "claims_round", "plan_review"], "first": "build", "began_with_measure": false, "build_task_count": 5}
+{"id": "a11fc716fcd595857", "jobs": 4, "cats": ["write_content", "claims_round", "plan_review", "other"], "first": "write_content", "began_with_measure": false, "build_task_count": 2}
+{"id": "a353d3cd10e7feaac", "jobs": 4, "cats": ["write_content", "measure_or_sweep", "claims_round", "plan_review"], "first": "write_content", "began_with_measure": false, "build_task_count": 1}
+{"id": "a539cfc88697840c1", "jobs": 4, "cats": ["fix_found_defect", "measure_or_sweep", "claims_round", "plan_review"], "first": "fix_found_defect", "began_with_measure": false, "build_task_count": 3}
+{"id": "a8788979efedb2ab7", "jobs": 4, "cats": ["build", "measure_or_sweep", "claims_round", "plan_review"], "first": "build", "began_with_measure": false, "build_task_count": 4}
+{"id": "aa9dd5b481a992656", "jobs": 1, "cats": ["write_content"], "first": "write_content", "began_with_measure": false, "build_task_count": 0}
+{"id": "a4aaf6cc86fbc1490", "jobs": 4, "cats": ["plan_review", "claims_round", "build", "measure_or_sweep"], "first": "plan_review", "began_with_measure": false, "build_task_count": 3}
+{"id": "ada9603c4051c8d05", "jobs": 1, "cats": ["write_content"], "first": "write_content", "began_with_measure": false, "build_task_count": 0}
+{"id": "ab4878926b3753a3c", "jobs": 4, "cats": ["fix_found_defect", "build", "claims_round", "plan_review"], "first": "fix_found_defect", "began_with_measure": false, "build_task_count": 2}
+{"id": "a8b49b43399cb063f", "jobs": 3, "cats": ["build", "measure_or_sweep", "plan_review"], "first": "build", "began_with_measure": false, "build_task_count": 1}
+{"id": "a430f7f83feda5766", "jobs": 3, "cats": ["claims_round", "other", "write_content"], "first": "claims_round", "began_with_measure": false, "build_task_count": 0}
+{"id": "a5ac56d7c753f0f71", "jobs": 3, "cats": ["build", "measure_or_sweep", "plan_review"], "first": "build", "began_with_measure": false, "build_task_count": 1}
+{"id": "a43ae3f339bf24782", "jobs": 3, "cats": ["build", "measure_or_sweep", "plan_review"], "first": "build", "began_with_measure": false, "build_task_count": 1}
+{"id": "ad1875073cb6c709c", "jobs": 3, "cats": ["other", "claims_round", "write_content"], "first": "other", "began_with_measure": false, "build_task_count": 0}
+{"id": "af8d222a85f19dfce", "jobs": 4, "cats": ["build", "measure_or_sweep", "claims_round", "plan_review"], "first": "build", "began_with_measure": false, "build_task_count": 1}
+{"id": "ab5b1e3f6fd3f318c", "jobs": 4, "cats": ["measure_or_sweep", "fix_found_defect", "claims_round", "plan_review"], "first": "measure_or_sweep", "began_with_measure": true, "build_task_count": 1}
+{"id": "a192d9d790cb36927", "jobs": 4, "cats": ["measure_or_sweep", "fix_found_defect", "claims_round", "plan_review"], "first": "measure_or_sweep", "began_with_measure": true, "build_task_count": 1}
+{"id": "ae624c454d9e16540", "jobs": 1, "cats": ["write_content"], "first": "write_content", "began_with_measure": false, "build_task_count": 0}
+{"id": "a16be6322f0051f49", "jobs": 3, "cats": ["claims_round", "other", "write_content"], "first": "claims_round", "began_with_measure": false, "build_task_count": 0}
+{"id": "a7170bdc7258349ad", "jobs": 3, "cats": ["claims_round", "other", "write_content"], "first": "claims_round", "began_with_measure": false, "build_task_count": 0}
+{"id": "ac0f4179c659de2c5", "jobs": 3, "cats": ["claims_round", "other", "write_content"], "first": "claims_round", "began_with_measure": false, "build_task_count": 0}
+{"id": "a4e5b3fd3ff7c7ea6", "jobs": 3, "cats": ["claims_round", "other", "write_content"], "first": "claims_round", "began_with_measure": false, "build_task_count": 0}
+{"id": "a01a26f6ef859f7e4", "jobs": 3, "cats": ["claims_round", "other", "write_content"], "first": "claims_round", "began_with_measure": false, "build_task_count": 0}
+{"id": "adb9a097ce6e5b8c0", "jobs": 3, "cats": ["claims_round", "other", "write_content"], "first": "claims_round", "began_with_measure": false, "build_task_count": 0}
+{"id": "ae966e87d19ace090", "jobs": 4, "cats": ["build", "measure_or_sweep", "claims_round", "plan_review"], "first": "build", "began_with_measure": false, "build_task_count": 1}
+{"id": "af0bf97c9627ab2b1", "jobs": 3, "cats": ["other", "claims_round", "write_content"], "first": "other", "began_with_measure": false, "build_task_count": 0}
+{"id": "a9a4eb9b6215b2848", "jobs": 4, "cats": ["measure_or_sweep", "fix_found_defect", "claims_round", "plan_review"], "first": "measure_or_sweep", "began_with_measure": true, "build_task_count": 2}
+{"id": "a0a5f5bf1f22cec7d", "jobs": 1, "cats": ["write_content"], "first": "write_content", "began_with_measure": false, "build_task_count": 0}
+{"id": "a792934dc6ae5ee5e", "jobs": 2, "cats": ["other", "claims_round"], "first": "other", "began_with_measure": false, "build_task_count": 0}
+{"id": "a86ec8feb8f06d0ba", "jobs": 3, "cats": ["other", "claims_round", "write_content"], "first": "other", "began_with_measure": false, "build_task_count": 0}
+{"id": "a0f3cb163e14dbdc1", "jobs": 3, "cats": ["build", "write_content", "plan_review"], "first": "build", "began_with_measure": false, "build_task_count": 1}
+{"id": "afa946171000f5223", "jobs": 3, "cats": ["write_content", "other", "plan_review"], "first": "write_content", "began_with_measure": false, "build_task_count": 0}
+{"id": "add2f1cd653fd388a", "jobs": 4, "cats": ["build", "measure_or_sweep", "claims_round", "plan_review"], "first": "build", "began_with_measure": false, "build_task_count": 1}
+{"id": "a7a981aeb527c59e3", "jobs": 2, "cats": ["plan_review", "other"], "first": "plan_review", "began_with_measure": false, "build_task_count": 0}
+{"id": "a9969ab6f8b821661", "jobs": 2, "cats": ["claims_round", "other"], "first": "claims_round", "began_with_measure": false, "build_task_count": 0}

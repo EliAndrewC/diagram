@@ -1,0 +1,46 @@
+tasks ticked since 11-19 415 landings 157
+escapes per landing, by class:
+  plan-gate: unworked/unfilled template blocks stale       379 2.41/landing
+  review-accept                                            247 1.57/landing
+  plan-gate: reviewed CLEAR earlier, since touched         199 1.27/landing
+  plan-gate: withdrawn/moved task blocks                    40 0.25/landing
+  pair-hooks                                                30 0.19/landing
+  record-checked                                            27 0.17/landing
+  plan-gate: other                                          18 0.11/landing
+all escapes 940 -> 5.99/landing
+449 tasks 194 landings 37 esc/landing 15.24 mode4 rows/task mean 0.82 med 0.0, tasks with 0 rows 121, BLOCKED/NOT-REV rows 38
+451 tasks 221 landings 120 esc/landing 3.13 mode4 rows/task mean 0.02 med 0, tasks with 0 rows 218, BLOCKED/NOT-REV rows 1
+window 451 tasks with filing time 32
+filed->landed min: median 177 min 24 max 1584
+T236 11-25 00:13 -> 11-25 01:56 103 min rounds 0 [] tasks-in-landing 1
+T230 11-24 14:30 -> 11-25 07:23 1013 min rounds 0 [] tasks-in-landing 2
+T239 11-25 04:10 -> 11-25 07:23 193 min rounds 0 [] tasks-in-landing 2
+T238 11-25 01:20 -> 11-25 07:29 369 min rounds 0 [] tasks-in-landing 1
+T240 11-25 07:12 -> 11-25 07:58 47 min rounds 0 [] tasks-in-landing 1
+T237 11-25 00:39 -> 11-25 08:17 458 min rounds 0 [] tasks-in-landing 1
+T241 11-25 07:12 -> 11-25 08:31 80 min rounds 0 [] tasks-in-landing 1
+T226 11-24 14:30 -> 11-25 08:57 1107 min rounds 0 [] tasks-in-landing 1
+T243 11-25 08:32 -> 11-25 11:24 172 min rounds 0 [] tasks-in-landing 1
+T244 11-25 10:23 -> 11-25 11:51 88 min rounds 0 [] tasks-in-landing 1
+T228 11-24 14:30 -> 11-25 12:45 1335 min rounds 0 [] tasks-in-landing 2
+T234 11-24 20:09 -> 11-25 12:45 996 min rounds 0 [] tasks-in-landing 2
+T242 11-25 07:59 -> 11-25 13:30 331 min rounds 0 [] tasks-in-landing 1
+T235 11-24 22:05 -> 11-25 13:43 937 min rounds 0 [] tasks-in-landing 1
+T245 11-25 12:36 -> 11-25 14:32 116 min rounds 0 [] tasks-in-landing 1
+T231 11-24 14:30 -> 11-25 14:37 1447 min rounds 0 [] tasks-in-landing 1
+T229 11-24 14:30 -> 11-25 15:40 1510 min rounds 0 [] tasks-in-landing 1
+T227 11-24 14:30 -> 11-25 15:54 1524 min rounds 0 [] tasks-in-landing 1
+T227 11-24 14:30 -> 11-25 15:55 1525 min rounds 0 [] tasks-in-landing 1
+T247 11-25 15:42 -> 11-25 16:27 45 min rounds 0 [] tasks-in-landing 1
+T232 11-24 14:30 -> 11-25 16:54 1584 min rounds 0 [] tasks-in-landing 1
+T246 11-25 14:37 -> 11-25 17:38 181 min rounds 0 [] tasks-in-landing 1
+T233 11-24 18:21 -> 11-25 17:43 1401 min rounds 0 [] tasks-in-landing 1
+T249 11-25 16:51 -> 11-25 18:19 88 min rounds 0 [] tasks-in-landing 1
+T248 11-25 15:43 -> 11-25 18:31 168 min rounds 0 [] tasks-in-landing 1
+T252 11-25 18:20 -> 11-25 18:43 24 min rounds 0 [] tasks-in-landing 1
+T253 11-25 18:43 -> 11-25 19:16 34 min rounds 0 [] tasks-in-landing 1
+T256 11-25 19:46 -> 11-25 20:25 39 min rounds 0 [] tasks-in-landing 2
+T257 11-25 19:46 -> 11-25 20:25 39 min rounds 0 [] tasks-in-landing 2
+T254 11-25 19:46 -> 11-25 21:10 84 min rounds 0 [] tasks-in-landing 2
+T255 11-25 19:46 -> 11-25 21:10 84 min rounds 0 [] tasks-in-landing 2
+T259 11-25 21:12 -> 11-25 22:17 65 min rounds 0 [] tasks-in-landing 1

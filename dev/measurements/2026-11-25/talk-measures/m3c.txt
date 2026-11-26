@@ -1,0 +1,4 @@
+ledger rows unattributed 58 rows attributed 534
+449 tasks 193 rounds mean 0.83 median 0; 0 rounds 119; >=2 rounds 47; >=3 rounds 24; non-CLEAR round rows 38 (0.20 per task)
+451 tasks 209 rounds mean 1.51 median 1; 0 rounds 13; >=2 rounds 91; >=3 rounds 22; non-CLEAR round rows 75 (0.36 per task)
+451 T226-T259 landed tasks 31 rounds mean 1.48 0: 2 1: 16 2+: 13

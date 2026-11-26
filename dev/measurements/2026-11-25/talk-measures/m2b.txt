@@ -1,0 +1,17 @@
+== since 11-19
+code (rust/scripts/tests/Makefile/hooks): n=10 total min 16; median/mean minutes 0.6/1.6; out 2760/3709; ctx growth 6k/9k; later turns med 174.0; reread cost(0.1) 138k/327k; own span cost 366k/357k; total 409k/684k; mean files 1.4
+   per file edited: cost 489k, minutes 1.1
+spec/plan/tasks/docs: n=97 total min 152; median/mean minutes 0.6/1.6; out 2552/3232; ctx growth 4k/6k; later turns med 290; reread cost(0.1) 108k/184k; own span cost 184k/268k; total 322k/453k; mean files 1.4
+   per file edited: cost 330k, minutes 1.1
+== since 11-24
+code (rust/scripts/tests/Makefile/hooks): n=1 total min 1; median/mean minutes 0.6/0.6; out 2957/2957; ctx growth 7k/7k; later turns med 49; reread cost(0.1) 34k/34k; own span cost 378k/378k; total 412k/412k; mean files 3.0
+   per file edited: cost 137k, minutes 0.2
+spec/plan/tasks/docs: n=35 total min 47; median/mean minutes 0.5/1.3; out 2031/3274; ctx growth 3k/5k; later turns med 179; reread cost(0.1) 72k/134k; own span cost 162k/242k; total 223k/375k; mean files 1.4
+   per file edited: cost 268k, minutes 1.0
+== builders (since 11-24, n=99)
+all builders: n=99 builder cost med 1983k mean 2101k | coordinator brief+report cost med 81k | total med 2086k | out med 60k calls med 96 files med 1
+small: <60 calls: n=33 builder cost med 595k mean 614k | coordinator brief+report cost med 64k | total med 652k | out med 21k calls med 39 files med 0
+small: <60 calls and no handoff: n=33 builder cost med 595k mean 614k | coordinator brief+report cost med 64k | total med 652k | out med 21k calls med 39 files med 0
+mid: 60-119 calls: n=32 builder cost med 2026k mean 2002k | coordinator brief+report cost med 92k | total med 2101k | out med 60k calls med 94 files med 0
+big: 120+ calls: n=34 builder cost med 3533k mean 3638k | coordinator brief+report cost med 82k | total med 3605k | out med 92k calls med 150 files med 4
+<=3 files edited & not hit: n=23 builder cost med 825k mean 1485k | coordinator brief+report cost med 69k | total med 889k | out med 29k calls med 52 files med 2

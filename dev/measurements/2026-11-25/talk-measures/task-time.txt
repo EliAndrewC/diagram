@@ -1,0 +1,2443 @@
+# The task time breakdown, 2026-11-25T03:18:19Z to 2026-11-26T03:18:19Z UTC (40 tasks landed)
+
+minutes 4616.4 (machine, overlapping), blocking 1717.0 (by task and dependency: each task's own turns and what its next step waited on, summed over tasks, so it passes the clock where tasks ran side by side, in one session or across clones; the landed tasks' 1659.4)
+
+Waiting on the GM: 407.9 min blocking, 23.8% of the window's blocking. It is left out of every other percentage: the GM's rows are percentages of the whole (the task's, the window's), every other row's - minutes and blocking, of the task and of the window - of the working time, the whole less the GM's (4610.3 min, 1309.1 min blocking in the window).
+
+Waited on, blocking no task (a page session or research pass whose brief names none, work whose clue is `Blocks: none`): 229.4 min - research and page sessions 225.4 - waiting: nothing in flight - a page session running, no monitor on it 4.1.
+
+Working at once (main sessions in their own turns and runs, agents, page sessions), minutes of the window: none 336.7, one 620.2, two 366.9, three or more 116.2.
+
+## The biggest blocking, and whether it could run in parallel
+
+- builders: running a command (the model's turn): 404.3 min blocking (30.9% of the window's working time) - serial in its actor (a model's turn, an agent's span or a wait): parallel only across more actors
+- compile: 144.6 min blocking (11.0% of the window's working time) - 35.7% of it a foreground run its actor waited on, which could run in the background beside other work; the rest already in the background and waited on
+- waiting: nothing in flight - after the work its Stop named had ended: 104.3 min blocking (8.0% of the window's working time) - serial in its actor (a model's turn, an agent's span or a wait): parallel only across more actors
+- tests: 102.4 min blocking (7.8% of the window's working time) - 59.7% of it a foreground run its actor waited on, which could run in the background beside other work; the rest already in the background and waited on
+- shell reads and file edits: 74.4 min blocking (5.7% of the window's working time) - 86.3% of it a foreground run its actor waited on, which could run in the background beside other work; the rest already in the background and waited on
+
+(the parallel reading is a proxy, measured: the share of a category's blocking that was a foreground run in its actor)
+
+## 449-rust-codebase T429 (landed 04:39)
+
+Its whole time, from 2026-11-23T03:18:19Z: 44.3 min, 33.6 min blocking; inside the window 44.3 min (100.0% of it), 33.6 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 19.6 | 44.3% | 0.4% | 18.8 | 55.9% | 1.4% |
+| tests | 7.7 | 17.4% | 0.2% | 7.1 | 21.1% | 0.5% |
+| compile | 4.1 | 9.3% | 0.1% | 3.8 | 11.5% | 0.3% |
+| wait loops (held open, no work) | 6.0 | 13.6% | 0.1% | 0.0 | 0.0% | 0.0% |
+| builders: writing code | 1.7 | 3.9% | 0.0% | 1.4 | 4.1% | 0.1% |
+| landing | 1.0 | 2.2% | 0.0% | 0.0 | 0.1% | 0.0% |
+| plan review: agents | 0.8 | 1.7% | 0.0% | 0.1 | 0.4% | 0.0% |
+| main session: writing its reply | 0.4 | 0.9% | 0.0% | 0.4 | 1.1% | 0.0% |
+| map generation | 0.5 | 1.2% | 0.0% | 0.2 | 0.7% | 0.0% |
+| builders: dispatching an agent | 0.4 | 0.8% | 0.0% | 0.4 | 1.2% | 0.0% |
+| claims round: agents | 0.6 | 1.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| claims round: commands | 0.3 | 0.6% | 0.0% | 0.2 | 0.7% | 0.0% |
+| shell reads and file edits | 0.2 | 0.5% | 0.0% | 0.2 | 0.6% | 0.0% |
+| builders: reading code | 0.2 | 0.4% | 0.0% | 0.2 | 0.7% | 0.0% |
+| main session: running a command (the model's turn) | 0.2 | 0.5% | 0.0% | 0.2 | 0.6% | 0.0% |
+| gate | 0.2 | 0.6% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: dispatching an agent | 0.1 | 0.3% | 0.0% | 0.1 | 0.4% | 0.0% |
+| plan review: commands | 0.0 | 0.1% | 0.0% | 0.1 | 0.4% | 0.0% |
+| fetching and extracting sources | 0.1 | 0.2% | 0.0% | 0.1 | 0.2% | 0.0% |
+| python3 | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| builders: other tools (SendMessage) | 0.1 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (ToolSearch) | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| git | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| builders: writing its reply | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| review: other commands | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| spec-kit step | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 44.3 | | 1.0% | 33.6 | | 2.0% |
+| working (all but waiting on the GM) | 44.3 | | 1.0% | 33.6 | | 2.6% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make rust-test | tests | 19 | 6.5 | 14.7% | 0.1% | 6.5 | 19.2% | 0.5% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 3 | 6.0 | 13.6% | 0.1% | 0.0 | 0.0% | 0.0% |
+| make format | tests | 16 | 2.1 | 4.7% | 0.0% | 2.0 | 6.0% | 0.2% |
+| make crate-checks | tests | 3 | 1.5 | 3.3% | 0.0% | 1.5 | 4.4% | 0.1% |
+| make land | landing | 1 | 1.9 | 4.2% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make closing-checks | tests | 3 | 1.1 | 2.4% | 0.0% | 0.6 | 1.8% | 0.0% |
+| make work-budget | tests | 2 | 0.2 | 0.6% | 0.0% | 0.2 | 0.7% | 0.0% |
+| make hamlet | map generation | 2 | 0.2 | 0.5% | 0.0% | 0.2 | 0.7% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 74 | 0.2 | 0.5% | 0.0% | 0.2 | 0.6% | 0.0% |
+| make quick | tests | 2 | 0.1 | 0.3% | 0.0% | 0.1 | 0.4% | 0.0% |
+| make claims-owed | claims round: commands | 4 | 0.1 | 0.3% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make decide | plan review: commands | 1 | 0.0 | 0.1% | 0.0% | 0.1 | 0.4% | 0.0% |
+| make claims-checked | claims round: commands | 1 | 0.1 | 0.2% | 0.0% | 0.1 | 0.2% | 0.0% |
+| python3 | python3 | 15 | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| convert | fetching and extracting sources | 1 | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make claims-triaged | claims round: commands | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| git | git | 7 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make claims-coverage | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make ledger-owed | review: other commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-bundle | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| rsvg-convert | fetching and extracting sources | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 449-rust-codebase T430 (landed 04:39)
+
+Its whole time, from 2026-11-23T03:18:19Z: 193.2 min, 98.8 min blocking; inside the window 193.2 min (100.0% of it), 98.8 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| wait loops on page sessions (held open, no work) | 87.0 | 45.0% | 1.9% | 0.0 | 0.0% | 0.0% |
+| research and page sessions | 86.8 | 45.0% | 1.9% | 0.0 | 0.0% | 0.0% |
+| the GM | 0.0 | 0.0% | 0.0% | 75.3 | 76.2% | 4.4% |
+| builders: running a command (the model's turn) | 3.9 | 2.0% | 0.1% | 7.3 | 31.5% | 0.6% |
+| main session: running a command (the model's turn) | 3.1 | 1.6% | 0.1% | 3.1 | 13.6% | 0.2% |
+| main session: writing its reply | 2.3 | 1.2% | 0.1% | 2.3 | 10.0% | 0.2% |
+| plan review: agents | 3.1 | 1.6% | 0.1% | 0.0 | 0.0% | 0.0% |
+| main session: dispatching an agent | 1.1 | 0.6% | 0.0% | 1.1 | 4.9% | 0.1% |
+| record and pop-up checks: commands | 0.5 | 0.3% | 0.0% | 1.8 | 7.7% | 0.1% |
+| claims round: agents | 2.0 | 1.0% | 0.0% | 0.1 | 0.4% | 0.0% |
+| builders: writing code | 0.3 | 0.1% | 0.0% | 1.4 | 6.1% | 0.1% |
+| tests | 0.9 | 0.5% | 0.0% | 0.5 | 2.4% | 0.0% |
+| builders: dispatching an agent | 0.3 | 0.2% | 0.0% | 0.8 | 3.4% | 0.1% |
+| wait loops (held open, no work) | 0.0 | 0.0% | 0.0% | 1.0 | 4.5% | 0.1% |
+| review: other commands | 0.3 | 0.2% | 0.0% | 0.5 | 2.1% | 0.0% |
+| git | 0.4 | 0.2% | 0.0% | 0.4 | 1.8% | 0.0% |
+| Makefile targets the guard's table does not book | 0.0 | 0.0% | 0.0% | 0.8 | 3.3% | 0.1% |
+| claims round: commands | 0.2 | 0.1% | 0.0% | 0.2 | 1.1% | 0.0% |
+| builders: writing its reply | 0.0 | 0.0% | 0.0% | 0.4 | 1.6% | 0.0% |
+| compile | 0.3 | 0.1% | 0.0% | 0.1 | 0.5% | 0.0% |
+| the GM's filter: agents (escalation-check) | 0.0 | 0.0% | 0.0% | 0.3 | 0.3% | 0.0% |
+| record and pop-up checks: agents | 0.0 | 0.0% | 0.0% | 0.3 | 1.3% | 0.0% |
+| builders: reading code | 0.2 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| arbiter: commands | 0.0 | 0.0% | 0.0% | 0.2 | 1.0% | 0.0% |
+| arbiter: agents | 0.0 | 0.0% | 0.0% | 0.2 | 0.8% | 0.0% |
+| plan review: commands | 0.2 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (Skill) | 0.0 | 0.0% | 0.0% | 0.2 | 0.7% | 0.0% |
+| builders: other tools (ToolSearch) | 0.1 | 0.0% | 0.0% | 0.1 | 0.3% | 0.0% |
+| landing | 0.1 | 0.0% | 0.0% | 0.1 | 0.2% | 0.0% |
+| shell reads and file edits | 0.0 | 0.0% | 0.0% | 0.1 | 0.3% | 0.0% |
+| record builds and docs | 0.0 | 0.0% | 0.0% | 0.1 | 0.3% | 0.0% |
+| python3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.2% | 0.0% |
+| main session: writing code | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| spec-kit step | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 193.2 | | 4.2% | 98.8 | | 5.8% |
+| working (all but waiting on the GM) | 193.2 | | 4.2% | 23.1 | | 1.8% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| a wait loop on a page session | wait loops on page sessions (held open, no work) | 1 | 87.0 | 45.0% | 1.9% | 0.0 | 0.0% | 0.0% |
+| make record-owed | record and pop-up checks: commands | 2 | 0.5 | 0.3% | 0.0% | 0.8 | 3.4% | 0.1% |
+| make quick | tests | 2 | 0.6 | 0.3% | 0.0% | 0.6 | 2.7% | 0.0% |
+| make ledger-owed | review: other commands | 2 | 0.3 | 0.2% | 0.0% | 0.5 | 2.1% | 0.0% |
+| git | git | 7 | 0.4 | 0.2% | 0.0% | 0.4 | 1.8% | 0.0% |
+| make apply-edits | Makefile targets the guard's table does not book | 0 | 0.0 | 0.0% | 0.0% | 0.7 | 3.2% | 0.1% |
+| make modal-bundle | record and pop-up checks: commands | 0 | 0.0 | 0.0% | 0.0% | 0.7 | 3.1% | 0.1% |
+| make crate-checks | tests | 1 | 0.4 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make arbiter-bundle | arbiter: commands | 0 | 0.0 | 0.0% | 0.0% | 0.2 | 1.0% | 0.0% |
+| make claims-checked | claims round: commands | 3 | 0.1 | 0.1% | 0.0% | 0.1 | 0.5% | 0.0% |
+| make decide | plan review: commands | 7 | 0.2 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make closing-checks | tests | 1 | 0.2 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-bundle | claims round: commands | 3 | 0.1 | 0.0% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make record-checked | record and pop-up checks: commands | 0 | 0.0 | 0.0% | 0.0% | 0.1 | 0.5% | 0.0% |
+| make land-tooling | landing | 2 | 0.1 | 0.0% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make format | tests | 4 | 0.1 | 0.0% | 0.0% | 0.0 | 0.2% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 17 | 0.0 | 0.0% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make page-check | tests | 0 | 0.0 | 0.0% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make modal-triage | record and pop-up checks: commands | 0 | 0.0 | 0.0% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make claims-report | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| python3 | python3 | 6 | 0.0 | 0.0% | 0.0% | 0.0 | 0.2% | 0.0% |
+| make check-bundle | record and pop-up checks: commands | 0 | 0.0 | 0.0% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make claims-triage | claims round: commands | 0 | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make claims-owed | claims round: commands | 0 | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make help | Makefile targets the guard's table does not book | 0 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make modal-triaged | record and pop-up checks: commands | 0 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 449-rust-codebase T432 (landed 08:27)
+
+Its whole time, from 2026-11-23T03:18:19Z: 149.5 min, 91.8 min blocking; inside the window 149.5 min (100.0% of it), 91.8 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 31.3 | 20.9% | 0.7% | 17.6 | 19.2% | 1.3% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 45.2 | 49.2% | 3.5% |
+| map generation | 22.7 | 15.2% | 0.5% | 7.6 | 8.2% | 0.6% |
+| wait loops (held open, no work) | 23.7 | 15.8% | 0.5% | 4.1 | 4.4% | 0.3% |
+| record and pop-up checks: agents | 21.4 | 14.3% | 0.5% | 0.0 | 0.0% | 0.0% |
+| plan review: agents | 16.9 | 11.3% | 0.4% | 0.0 | 0.0% | 0.0% |
+| tests | 9.7 | 6.5% | 0.2% | 5.0 | 5.5% | 0.4% |
+| compile | 4.0 | 2.7% | 0.1% | 1.5 | 1.6% | 0.1% |
+| shell reads and file edits | 4.1 | 2.8% | 0.1% | 0.3 | 0.3% | 0.0% |
+| python3 | 2.0 | 1.3% | 0.0% | 1.8 | 2.0% | 0.1% |
+| builders: writing code | 2.4 | 1.6% | 0.1% | 0.8 | 0.8% | 0.1% |
+| claims round: agents | 2.2 | 1.4% | 0.0% | 0.9 | 0.9% | 0.1% |
+| record and pop-up checks: commands | 1.3 | 0.9% | 0.0% | 1.2 | 1.3% | 0.1% |
+| arbiter: agents | 2.4 | 1.6% | 0.1% | 0.0 | 0.0% | 0.0% |
+| waiting: a monitor alone | 0.0 | 0.0% | 0.0% | 2.0 | 2.2% | 0.2% |
+| main session: dispatching an agent | 0.8 | 0.5% | 0.0% | 0.8 | 0.8% | 0.1% |
+| landing | 0.8 | 0.5% | 0.0% | 0.7 | 0.7% | 0.1% |
+| main session: writing its reply | 0.7 | 0.4% | 0.0% | 0.7 | 0.7% | 0.1% |
+| builders: dispatching an agent | 0.7 | 0.5% | 0.0% | 0.5 | 0.5% | 0.0% |
+| claims round: commands | 0.7 | 0.5% | 0.0% | 0.3 | 0.3% | 0.0% |
+| gate | 0.3 | 0.2% | 0.0% | 0.3 | 0.3% | 0.0% |
+| main session: running a command (the model's turn) | 0.3 | 0.2% | 0.0% | 0.3 | 0.3% | 0.0% |
+| plan review: commands | 0.4 | 0.3% | 0.0% | 0.1 | 0.1% | 0.0% |
+| arbiter: commands | 0.1 | 0.1% | 0.0% | 0.1 | 0.1% | 0.0% |
+| builders: reading code | 0.2 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (ToolSearch) | 0.1 | 0.1% | 0.0% | 0.1 | 0.1% | 0.0% |
+| builders: other tools (Monitor) | 0.1 | 0.1% | 0.0% | 0.1 | 0.1% | 0.0% |
+| builders: writing its reply | 0.1 | 0.1% | 0.0% | 0.1 | 0.1% | 0.0% |
+| Makefile targets the guard's table does not book | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| git | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (TaskStop) | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| the gate binary, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| review: other commands | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| hook suites | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| spec-kit step | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 149.5 | | 3.2% | 91.8 | | 5.3% |
+| working (all but waiting on the GM) | 149.5 | | 3.2% | 91.8 | | 7.0% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 11 | 29.1 | 19.5% | 0.6% | 0.0 | 0.0% | 0.0% |
+| a scratch run.sh sweep | map generation | 6 | 10.9 | 7.3% | 0.2% | 4.9 | 5.4% | 0.4% |
+| make rust-test | tests | 29 | 7.3 | 4.9% | 0.2% | 5.7 | 6.3% | 0.4% |
+| python3 | python3 | 26 | 4.1 | 2.7% | 0.1% | 3.7 | 4.1% | 0.3% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 113 | 6.1 | 4.1% | 0.1% | 0.3 | 0.3% | 0.0% |
+| make land | landing | 1 | 2.0 | 1.3% | 0.0% | 1.9 | 2.0% | 0.1% |
+| make cohort | map generation | 8 | 1.5 | 1.0% | 0.0% | 0.4 | 0.4% | 0.0% |
+| make format | tests | 3 | 1.5 | 1.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make work-budget | tests | 3 | 1.5 | 1.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make record-checked | record and pop-up checks: commands | 2 | 0.6 | 0.4% | 0.0% | 0.5 | 0.6% | 0.0% |
+| make crate-checks | tests | 2 | 1.1 | 0.7% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make closing-checks | tests | 7 | 1.0 | 0.7% | 0.0% | 0.1 | 0.1% | 0.0% |
+| make claims-owed | claims round: commands | 9 | 0.7 | 0.5% | 0.0% | 0.2 | 0.2% | 0.0% |
+| make hamlet | map generation | 3 | 0.6 | 0.4% | 0.0% | 0.1 | 0.1% | 0.0% |
+| make record-owed | record and pop-up checks: commands | 2 | 0.4 | 0.3% | 0.0% | 0.4 | 0.4% | 0.0% |
+| make modal-bundle | record and pop-up checks: commands | 2 | 0.3 | 0.2% | 0.0% | 0.3 | 0.3% | 0.0% |
+| make decide | plan review: commands | 10 | 0.4 | 0.2% | 0.0% | 0.1 | 0.1% | 0.0% |
+| make arbiter-ask | arbiter: commands | 1 | 0.1 | 0.1% | 0.0% | 0.1 | 0.1% | 0.0% |
+| make quick | tests | 3 | 0.2 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-triage | claims round: commands | 4 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make seeds | Makefile targets the guard's table does not book | 1 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| git | git | 9 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-checked | claims round: commands | 2 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-triaged | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make claims-bundle | claims round: commands | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make ledger-owed | review: other commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make plan-verdict | plan review: commands | 5 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 449-rust-codebase T431 (landed 08:47)
+
+Its whole time, from 2026-11-23T03:18:19Z: 22.4 min, 19.7 min blocking; inside the window 22.4 min (100.0% of it), 19.7 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 9.3 | 41.3% | 0.2% | 8.2 | 41.5% | 0.6% |
+| tests | 3.1 | 13.9% | 0.1% | 1.5 | 7.8% | 0.1% |
+| plan review: agents | 2.4 | 10.7% | 0.1% | 1.0 | 5.0% | 0.1% |
+| waiting: a monitor alone | 0.0 | 0.0% | 0.0% | 3.2 | 16.1% | 0.2% |
+| builders: writing code | 1.3 | 5.8% | 0.0% | 1.3 | 6.6% | 0.1% |
+| compile | 1.2 | 5.3% | 0.0% | 1.2 | 6.0% | 0.1% |
+| landing | 0.6 | 2.9% | 0.0% | 0.6 | 3.1% | 0.0% |
+| claims round: agents | 1.1 | 5.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| main session: running a command (the model's turn) | 0.4 | 1.7% | 0.0% | 0.4 | 2.0% | 0.0% |
+| main session: dispatching an agent | 0.4 | 1.7% | 0.0% | 0.4 | 2.0% | 0.0% |
+| map generation | 0.3 | 1.4% | 0.0% | 0.3 | 1.6% | 0.0% |
+| record and pop-up checks: commands | 0.3 | 1.3% | 0.0% | 0.3 | 1.5% | 0.0% |
+| plan review: commands | 0.5 | 2.1% | 0.0% | 0.1 | 0.5% | 0.0% |
+| main session: writing its reply | 0.2 | 1.1% | 0.0% | 0.2 | 1.2% | 0.0% |
+| claims round: commands | 0.3 | 1.3% | 0.0% | 0.2 | 0.8% | 0.0% |
+| builders: dispatching an agent | 0.2 | 0.9% | 0.0% | 0.2 | 1.0% | 0.0% |
+| gate | 0.1 | 0.6% | 0.0% | 0.1 | 0.7% | 0.0% |
+| shell reads and file edits | 0.1 | 0.5% | 0.0% | 0.1 | 0.6% | 0.0% |
+| builders: other tools (Monitor) | 0.1 | 0.5% | 0.0% | 0.1 | 0.6% | 0.0% |
+| builders: reading code | 0.1 | 0.3% | 0.0% | 0.1 | 0.4% | 0.0% |
+| builders: other tools (SendMessage) | 0.1 | 0.5% | 0.0% | 0.0 | 0.0% | 0.0% |
+| git | 0.1 | 0.2% | 0.0% | 0.1 | 0.3% | 0.0% |
+| review: other commands | 0.0 | 0.2% | 0.0% | 0.0 | 0.2% | 0.0% |
+| fetching and extracting sources | 0.0 | 0.2% | 0.0% | 0.0 | 0.2% | 0.0% |
+| builders: other tools (ToolSearch) | 0.0 | 0.2% | 0.0% | 0.0 | 0.2% | 0.0% |
+| builders: writing its reply | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| python3 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| spec-kit step | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 22.4 | | 0.5% | 19.7 | | 1.1% |
+| working (all but waiting on the GM) | 22.4 | | 0.5% | 19.7 | | 1.5% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make rust-test | tests | 6 | 1.2 | 5.3% | 0.0% | 1.2 | 6.1% | 0.1% |
+| make land | landing | 1 | 1.2 | 5.4% | 0.0% | 1.2 | 6.0% | 0.1% |
+| make work-budget | tests | 2 | 1.5 | 6.8% | 0.0% | 0.2 | 1.1% | 0.0% |
+| make crate-checks | tests | 1 | 0.8 | 3.4% | 0.0% | 0.8 | 3.9% | 0.1% |
+| make closing-checks | tests | 3 | 0.4 | 1.7% | 0.0% | 0.2 | 1.3% | 0.0% |
+| make record-owed | record and pop-up checks: commands | 1 | 0.3 | 1.3% | 0.0% | 0.3 | 1.5% | 0.0% |
+| make decide | plan review: commands | 6 | 0.3 | 1.1% | 0.0% | 0.1 | 0.5% | 0.0% |
+| make quick | tests | 3 | 0.2 | 0.8% | 0.0% | 0.1 | 0.3% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 56 | 0.1 | 0.5% | 0.0% | 0.1 | 0.6% | 0.0% |
+| make plan-delta | plan review: commands | 2 | 0.2 | 1.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make hamlet | map generation | 1 | 0.1 | 0.5% | 0.0% | 0.1 | 0.5% | 0.0% |
+| make claims-coverage | claims round: commands | 1 | 0.1 | 0.3% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make claims-triage | claims round: commands | 2 | 0.1 | 0.3% | 0.0% | 0.1 | 0.3% | 0.0% |
+| git | git | 8 | 0.1 | 0.2% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make ledger-owed | review: other commands | 2 | 0.0 | 0.2% | 0.0% | 0.0 | 0.2% | 0.0% |
+| convert | fetching and extracting sources | 1 | 0.0 | 0.2% | 0.0% | 0.0 | 0.2% | 0.0% |
+| make claims-checked | claims round: commands | 1 | 0.1 | 0.4% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | python3 | 9 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make claims-owed | claims round: commands | 2 | 0.1 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-bundle | claims round: commands | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make claims-triaged | claims round: commands | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make format | tests | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make task-start | spec-kit step | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 449-rust-codebase T433 (landed 09:14)
+
+Its whole time, from 2026-11-23T03:18:19Z: 35.0 min, 26.1 min blocking; inside the window 35.0 min (100.0% of it), 26.1 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 11.2 | 31.9% | 0.2% | 10.8 | 41.3% | 0.8% |
+| wait loops (held open, no work) | 7.4 | 21.2% | 0.2% | 3.7 | 14.3% | 0.3% |
+| map generation | 4.7 | 13.6% | 0.1% | 1.9 | 7.1% | 0.1% |
+| tests | 2.4 | 6.9% | 0.1% | 1.7 | 6.6% | 0.1% |
+| compile | 1.6 | 4.4% | 0.0% | 1.4 | 5.5% | 0.1% |
+| builders: writing code | 1.7 | 4.8% | 0.0% | 1.1 | 4.1% | 0.1% |
+| plan review: agents | 1.5 | 4.2% | 0.0% | 0.5 | 2.0% | 0.0% |
+| landing | 0.7 | 1.9% | 0.0% | 0.6 | 2.4% | 0.0% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 1.2 | 4.8% | 0.1% |
+| main session: running a command (the model's turn) | 0.4 | 1.2% | 0.0% | 0.4 | 1.6% | 0.0% |
+| builders: other tools (Monitor) | 0.4 | 1.2% | 0.0% | 0.4 | 1.5% | 0.0% |
+| builders: writing its reply | 0.4 | 1.1% | 0.0% | 0.4 | 1.4% | 0.0% |
+| claims round: agents | 0.6 | 1.6% | 0.0% | 0.1 | 0.3% | 0.0% |
+| main session: dispatching an agent | 0.3 | 0.9% | 0.0% | 0.3 | 1.2% | 0.0% |
+| record and pop-up checks: commands | 0.3 | 0.8% | 0.0% | 0.3 | 1.1% | 0.0% |
+| main session: writing its reply | 0.3 | 0.8% | 0.0% | 0.3 | 1.0% | 0.0% |
+| gate | 0.2 | 0.6% | 0.0% | 0.2 | 0.8% | 0.0% |
+| builders: reading code | 0.2 | 0.5% | 0.0% | 0.2 | 0.6% | 0.0% |
+| claims round: commands | 0.2 | 0.6% | 0.0% | 0.1 | 0.3% | 0.0% |
+| shell reads and file edits | 0.1 | 0.4% | 0.0% | 0.1 | 0.5% | 0.0% |
+| plan review: commands | 0.1 | 0.3% | 0.0% | 0.1 | 0.4% | 0.0% |
+| builders: dispatching an agent | 0.1 | 0.4% | 0.0% | 0.1 | 0.3% | 0.0% |
+| Makefile targets the guard's table does not book | 0.1 | 0.3% | 0.0% | 0.1 | 0.4% | 0.0% |
+| review: other commands | 0.1 | 0.2% | 0.0% | 0.0 | 0.2% | 0.0% |
+| builders: other tools (ToolSearch) | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| python3 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| git | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| the gate binary, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (TaskStop) | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 35.0 | | 0.8% | 26.1 | | 1.5% |
+| working (all but waiting on the GM) | 35.0 | | 0.8% | 26.1 | | 2.0% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 8 | 7.4 | 21.2% | 0.2% | 0.0 | 0.0% | 0.0% |
+| a scratch run.sh sweep | map generation | 3 | 4.3 | 12.3% | 0.1% | 1.4 | 5.4% | 0.1% |
+| make format | tests | 7 | 2.2 | 6.3% | 0.0% | 1.8 | 6.9% | 0.1% |
+| make land | landing | 1 | 1.3 | 3.8% | 0.0% | 1.3 | 4.9% | 0.1% |
+| make rust-test | tests | 4 | 0.6 | 1.6% | 0.0% | 0.6 | 2.1% | 0.0% |
+| make closing-checks | tests | 4 | 0.6 | 1.6% | 0.0% | 0.2 | 0.8% | 0.0% |
+| make record-owed | record and pop-up checks: commands | 1 | 0.3 | 0.8% | 0.0% | 0.3 | 1.1% | 0.0% |
+| make work-budget | tests | 2 | 0.3 | 0.7% | 0.0% | 0.3 | 1.0% | 0.0% |
+| make ledger-owed | review: other commands | 2 | 0.2 | 0.4% | 0.0% | 0.1 | 0.6% | 0.0% |
+| make cohort | map generation | 2 | 0.1 | 0.4% | 0.0% | 0.1 | 0.5% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 67 | 0.1 | 0.4% | 0.0% | 0.1 | 0.5% | 0.0% |
+| make hamlet | map generation | 1 | 0.1 | 0.3% | 0.0% | 0.1 | 0.4% | 0.0% |
+| make decide | plan review: commands | 4 | 0.1 | 0.3% | 0.0% | 0.1 | 0.4% | 0.0% |
+| make maps | Makefile targets the guard's table does not book | 1 | 0.1 | 0.3% | 0.0% | 0.1 | 0.4% | 0.0% |
+| make claims-triage | claims round: commands | 3 | 0.1 | 0.2% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make claims-checked | claims round: commands | 1 | 0.1 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-owed | claims round: commands | 2 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make quick | tests | 1 | 0.1 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | python3 | 7 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| git | git | 6 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make claims-triaged | claims round: commands | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-bundle | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 449-rust-codebase T434 (landed 09:54)
+
+Its whole time, from 2026-11-23T03:18:19Z: 52.3 min, 55.2 min blocking; inside the window 52.3 min (100.0% of it), 55.2 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 21.7 | 41.5% | 0.5% | 21.5 | 39.0% | 1.6% |
+| map generation | 7.2 | 13.8% | 0.2% | 5.5 | 9.9% | 0.4% |
+| waiting: a monitor alone | 0.0 | 0.0% | 0.0% | 12.4 | 22.5% | 0.9% |
+| wait loops (held open, no work) | 5.9 | 11.3% | 0.1% | 1.4 | 2.6% | 0.1% |
+| plan review: agents | 3.3 | 6.2% | 0.1% | 2.4 | 4.4% | 0.2% |
+| compile | 2.2 | 4.2% | 0.0% | 1.8 | 3.2% | 0.1% |
+| tests | 1.9 | 3.7% | 0.0% | 1.6 | 2.8% | 0.1% |
+| builders: writing code | 1.7 | 3.2% | 0.0% | 1.7 | 3.1% | 0.1% |
+| gate | 1.2 | 2.3% | 0.0% | 1.0 | 1.8% | 0.1% |
+| main session: running a command (the model's turn) | 0.9 | 1.7% | 0.0% | 0.9 | 1.6% | 0.1% |
+| builders: writing its reply | 0.7 | 1.3% | 0.0% | 0.7 | 1.2% | 0.1% |
+| main session: dispatching an agent | 0.6 | 1.2% | 0.0% | 0.6 | 1.1% | 0.0% |
+| claims round: agents | 1.2 | 2.4% | 0.0% | 0.0 | 0.0% | 0.0% |
+| landing | 0.6 | 1.2% | 0.0% | 0.6 | 1.0% | 0.0% |
+| record and pop-up checks: commands | 0.6 | 1.1% | 0.0% | 0.6 | 1.0% | 0.0% |
+| main session: writing its reply | 0.4 | 0.7% | 0.0% | 0.4 | 0.7% | 0.0% |
+| Makefile targets the guard's table does not book | 0.3 | 0.6% | 0.0% | 0.3 | 0.6% | 0.0% |
+| hook suites | 0.3 | 0.6% | 0.0% | 0.3 | 0.5% | 0.0% |
+| shell reads and file edits | 0.3 | 0.5% | 0.0% | 0.3 | 0.5% | 0.0% |
+| builders: dispatching an agent | 0.2 | 0.5% | 0.0% | 0.2 | 0.4% | 0.0% |
+| plan review: commands | 0.2 | 0.4% | 0.0% | 0.2 | 0.3% | 0.0% |
+| builders: reading code | 0.2 | 0.3% | 0.0% | 0.2 | 0.3% | 0.0% |
+| claims round: commands | 0.2 | 0.4% | 0.0% | 0.2 | 0.3% | 0.0% |
+| review: other commands | 0.2 | 0.3% | 0.0% | 0.2 | 0.3% | 0.0% |
+| python3 | 0.1 | 0.3% | 0.0% | 0.1 | 0.2% | 0.0% |
+| builders: other tools (ToolSearch) | 0.1 | 0.1% | 0.0% | 0.1 | 0.1% | 0.0% |
+| builders: other tools (Monitor) | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| git | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| the gate binary, called directly | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| spec-kit step | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| fetching and extracting sources | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 52.3 | | 1.1% | 55.2 | | 3.2% |
+| working (all but waiting on the GM) | 52.3 | | 1.1% | 55.2 | | 4.2% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| a scratch run.sh sweep | map generation | 4 | 5.0 | 9.5% | 0.1% | 3.3 | 5.9% | 0.2% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 6 | 5.9 | 11.3% | 0.1% | 0.0 | 0.0% | 0.0% |
+| make cohort | map generation | 5 | 1.7 | 3.3% | 0.0% | 1.7 | 3.2% | 0.1% |
+| make land | landing | 1 | 1.4 | 2.6% | 0.0% | 1.3 | 2.4% | 0.1% |
+| make rust-test | tests | 7 | 1.1 | 2.2% | 0.0% | 1.1 | 2.0% | 0.1% |
+| make verify-wait | gate | 1 | 1.3 | 2.4% | 0.0% | 0.8 | 1.5% | 0.1% |
+| make closing-checks | tests | 3 | 1.0 | 2.0% | 0.0% | 0.6 | 1.0% | 0.0% |
+| make verify | gate | 1 | 0.8 | 1.6% | 0.0% | 0.7 | 1.3% | 0.1% |
+| make record-owed | record and pop-up checks: commands | 2 | 0.6 | 1.1% | 0.0% | 0.6 | 1.0% | 0.0% |
+| make format | tests | 4 | 0.4 | 0.7% | 0.0% | 0.4 | 0.6% | 0.0% |
+| make seeds | Makefile targets the guard's table does not book | 1 | 0.3 | 0.6% | 0.0% | 0.3 | 0.6% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 69 | 0.3 | 0.5% | 0.0% | 0.3 | 0.5% | 0.0% |
+| make work-budget | tests | 2 | 0.2 | 0.5% | 0.0% | 0.2 | 0.4% | 0.0% |
+| make ledger-owed | review: other commands | 3 | 0.2 | 0.4% | 0.0% | 0.2 | 0.4% | 0.0% |
+| make quick | tests | 3 | 0.2 | 0.4% | 0.0% | 0.2 | 0.4% | 0.0% |
+| make decide | plan review: commands | 7 | 0.2 | 0.4% | 0.0% | 0.2 | 0.3% | 0.0% |
+| make hamlet | map generation | 3 | 0.1 | 0.3% | 0.0% | 0.1 | 0.2% | 0.0% |
+| python3 | python3 | 19 | 0.1 | 0.3% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make claims-owed | claims round: commands | 4 | 0.1 | 0.2% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make map | map generation | 1 | 0.1 | 0.2% | 0.0% | 0.1 | 0.2% | 0.0% |
+| git | git | 8 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 3 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make claims-checked | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-triaged | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-bundle | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| rsvg-convert | fetching and extracting sources | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 449-rust-codebase T435 (landed 10:32)
+
+Its whole time, from 2026-11-23T03:18:19Z: 113.9 min, 36.3 min blocking; inside the window 113.9 min (100.0% of it), 36.3 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 17.7 | 15.6% | 0.4% | 13.5 | 37.1% | 1.0% |
+| wait loops on page sessions (held open, no work) | 30.0 | 26.4% | 0.7% | 0.0 | 0.0% | 0.0% |
+| research and page sessions | 29.4 | 25.9% | 0.6% | 0.0 | 0.0% | 0.0% |
+| map generation | 9.3 | 8.2% | 0.2% | 1.4 | 3.9% | 0.1% |
+| builders: writing code | 4.1 | 3.6% | 0.1% | 2.9 | 8.0% | 0.2% |
+| wait loops (held open, no work) | 5.5 | 4.9% | 0.1% | 0.9 | 2.5% | 0.1% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 6.0 | 16.4% | 0.5% |
+| main session: running a command (the model's turn) | 2.5 | 2.2% | 0.1% | 2.5 | 7.0% | 0.2% |
+| builders: other tools (Monitor) | 2.3 | 2.0% | 0.0% | 2.2 | 6.2% | 0.2% |
+| compile | 2.2 | 2.0% | 0.0% | 1.3 | 3.5% | 0.1% |
+| tests | 2.2 | 1.9% | 0.0% | 0.5 | 1.5% | 0.0% |
+| main session: writing code | 0.9 | 0.8% | 0.0% | 0.9 | 2.4% | 0.1% |
+| landing | 0.8 | 0.7% | 0.0% | 0.7 | 1.9% | 0.1% |
+| claims round: agents | 1.3 | 1.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| arbiter: agents | 1.0 | 0.9% | 0.0% | 0.0 | 0.0% | 0.0% |
+| plan review: agents | 1.0 | 0.9% | 0.0% | 0.0 | 0.0% | 0.0% |
+| record and pop-up checks: commands | 0.2 | 0.1% | 0.0% | 0.6 | 1.7% | 0.0% |
+| shell reads and file edits | 0.4 | 0.3% | 0.0% | 0.3 | 0.9% | 0.0% |
+| gate | 0.3 | 0.3% | 0.0% | 0.3 | 0.9% | 0.0% |
+| main session: writing its reply | 0.3 | 0.3% | 0.0% | 0.3 | 0.9% | 0.0% |
+| main session: reading code | 0.3 | 0.3% | 0.0% | 0.3 | 0.9% | 0.0% |
+| Makefile targets the guard's table does not book | 0.4 | 0.3% | 0.0% | 0.2 | 0.7% | 0.0% |
+| builders: dispatching an agent | 0.2 | 0.2% | 0.0% | 0.4 | 1.0% | 0.0% |
+| main session: dispatching an agent | 0.3 | 0.2% | 0.0% | 0.3 | 0.7% | 0.0% |
+| claims round: commands | 0.3 | 0.2% | 0.0% | 0.1 | 0.3% | 0.0% |
+| the GM's filter: agents (escalation-check) | 0.3 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| record builds and docs | 0.1 | 0.1% | 0.0% | 0.1 | 0.4% | 0.0% |
+| builders: reading code | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| builders: other tools (ToolSearch) | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| git | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| builders: writing its reply | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| the gate binary, called directly | 0.1 | 0.0% | 0.0% | 0.1 | 0.1% | 0.0% |
+| arbiter: commands | 0.1 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| plan review: commands | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| spec-kit step | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| fetching and extracting sources | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| review: other commands | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| waiting: a monitor alone | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 113.9 | | 2.5% | 36.3 | | 2.1% |
+| working (all but waiting on the GM) | 113.6 | | 2.5% | 36.3 | | 2.8% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| a wait loop on a page session | wait loops on page sessions (held open, no work) | 1 | 30.0 | 26.4% | 0.7% | 0.0 | 0.0% | 0.0% |
+| a scratch run.sh sweep | map generation | 5 | 7.1 | 6.2% | 0.2% | 0.1 | 0.2% | 0.0% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 6 | 5.5 | 4.9% | 0.1% | 0.0 | 0.0% | 0.0% |
+| make land | landing | 1 | 1.8 | 1.6% | 0.0% | 1.8 | 4.9% | 0.1% |
+| make cohort | map generation | 5 | 1.8 | 1.6% | 0.0% | 1.1 | 3.0% | 0.1% |
+| make rust-test | tests | 6 | 1.3 | 1.1% | 0.0% | 1.3 | 3.5% | 0.1% |
+| make format | tests | 6 | 1.5 | 1.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make record-owed | record and pop-up checks: commands | 1 | 0.3 | 0.3% | 0.0% | 0.8 | 2.1% | 0.1% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 121 | 0.4 | 0.3% | 0.0% | 0.3 | 0.9% | 0.0% |
+| make crate-checks | tests | 1 | 0.6 | 0.5% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-log | Makefile targets the guard's table does not book | 1 | 0.2 | 0.2% | 0.0% | 0.2 | 0.6% | 0.0% |
+| make closing-checks | tests | 3 | 0.3 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-owed | claims round: commands | 5 | 0.1 | 0.1% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make hamlet | map generation | 4 | 0.1 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make task-add | spec-kit step | 1 | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make work-budget | tests | 2 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| git | git | 14 | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make seeds | Makefile targets the guard's table does not book | 1 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make quick | tests | 2 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make arbiter-ask | arbiter: commands | 2 | 0.1 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make claims-checked | claims round: commands | 2 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make decide | plan review: commands | 4 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-bundle | claims round: commands | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| rsvg-convert | fetching and extracting sources | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make research-claim | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-triaged | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make question-sizes | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | python3 | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make ledger-owed | review: other commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make page-session | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 449-rust-codebase T425 (landed 10:37; no start recorded: its time before 2026-11-23T03:18:19Z may be missing)
+
+Its whole time, from 2026-11-23T03:18:19Z: 47.9 min, 2.8 min blocking; inside the window 20.6 min (42.9% of it), 2.5 min blocking (90.2%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| record and pop-up checks: agents | 26.5 | 55.2% | 0.6% | 0.0 | 0.0% | 0.0% |
+| claims round: agents | 10.2 | 21.2% | 0.2% | 0.0 | 0.0% | 0.0% |
+| arbiter: agents | 5.8 | 12.0% | 0.1% | 0.0 | 0.0% | 0.0% |
+| landing | 2.3 | 4.8% | 0.1% | 2.3 | 82.0% | 0.2% |
+| builders: dispatching an agent | 1.5 | 3.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: running a command (the model's turn) | 0.9 | 1.9% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: running a command (the model's turn) | 0.2 | 0.4% | 0.0% | 0.2 | 6.9% | 0.0% |
+| main session: dispatching an agent | 0.1 | 0.3% | 0.0% | 0.1 | 5.1% | 0.0% |
+| main session: writing its reply | 0.1 | 0.3% | 0.0% | 0.1 | 4.7% | 0.0% |
+| builders: other tools (Skill) | 0.2 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: writing code | 0.1 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: reading code | 0.0 | 0.1% | 0.0% | 0.0 | 1.2% | 0.0% |
+| gate | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 47.9 | | 1.0% | 2.8 | | 0.2% |
+| working (all but waiting on the GM) | 47.9 | | 1.0% | 2.8 | | 0.2% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make land | landing | 4 | 2.3 | 4.8% | 0.1% | 2.3 | 82.1% | 0.2% |
+
+## 449-rust-codebase T428 (landed 10:37; no start recorded: its time before 2026-11-23T03:18:19Z may be missing)
+
+Its whole time, from 2026-11-23T03:18:19Z: 16.6 min, 0.2 min blocking; inside the window 16.6 min (100.0% of it), 0.2 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| record and pop-up checks: agents | 16.4 | 99.0% | 0.4% | 0.0 | 0.0% | 0.0% |
+| main session: dispatching an agent | 0.2 | 1.0% | 0.0% | 0.2 | 100.0% | 0.0% |
+| all | 16.6 | | 0.4% | 0.2 | | 0.0% |
+| working (all but waiting on the GM) | 16.6 | | 0.4% | 0.2 | | 0.0% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+
+## 449-rust-codebase T436 (landed 11:19)
+
+Its whole time, from 2026-11-23T03:18:19Z: 6.1 min, 67.5 min blocking; inside the window 6.1 min (100.0% of it), 67.5 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| the GM | 0.0 | 0.0% | 0.0% | 62.1 | 92.0% | 3.6% |
+| tests | 1.5 | 24.6% | 0.0% | 1.5 | 27.9% | 0.1% |
+| spec-kit step | 1.4 | 22.8% | 0.0% | 1.4 | 25.9% | 0.1% |
+| main session: running a command (the model's turn) | 0.8 | 13.9% | 0.0% | 0.8 | 15.8% | 0.1% |
+| landing | 0.8 | 12.7% | 0.0% | 0.7 | 12.6% | 0.1% |
+| main session: writing its reply | 0.4 | 6.1% | 0.0% | 0.4 | 6.9% | 0.0% |
+| builders: running a command (the model's turn) | 0.6 | 9.7% | 0.0% | 0.0 | 0.0% | 0.0% |
+| record and pop-up checks: commands | 0.3 | 4.4% | 0.0% | 0.3 | 5.1% | 0.0% |
+| git | 0.1 | 2.1% | 0.0% | 0.1 | 2.4% | 0.0% |
+| gate | 0.1 | 1.3% | 0.0% | 0.1 | 1.5% | 0.0% |
+| map generation | 0.1 | 1.2% | 0.0% | 0.1 | 1.4% | 0.0% |
+| shell reads and file edits | 0.0 | 0.5% | 0.0% | 0.0 | 0.5% | 0.0% |
+| builders: reading code | 0.0 | 0.5% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: dispatching an agent | 0.0 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: dispatching an agent | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 6.1 | | 0.1% | 67.5 | | 3.9% |
+| working (all but waiting on the GM) | 6.1 | | 0.1% | 5.4 | | 0.4% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make task-add | spec-kit step | 2 | 2.9 | 47.3% | 0.1% | 2.9 | 53.7% | 0.2% |
+| make land | landing | 1 | 0.9 | 15.2% | 0.0% | 0.8 | 15.5% | 0.1% |
+| make record-owed | record and pop-up checks: commands | 1 | 0.3 | 4.4% | 0.0% | 0.3 | 5.1% | 0.0% |
+| git | git | 2 | 0.1 | 2.1% | 0.0% | 0.1 | 2.4% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 1 | 0.0 | 0.5% | 0.0% | 0.0 | 0.5% | 0.0% |
+| make task-start | spec-kit step | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+
+## 451-time-retro-and-efficiency T236 (landed 06:56)
+
+Its whole time, from 2026-11-23T03:18:19Z: 41.1 min, 36.1 min blocking; inside the window 41.1 min (100.0% of it), 36.1 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 16.3 | 39.7% | 0.4% | 16.1 | 44.6% | 1.2% |
+| compile | 5.0 | 12.3% | 0.1% | 3.7 | 10.2% | 0.3% |
+| plan review: agents | 6.0 | 14.7% | 0.1% | 2.1 | 5.7% | 0.2% |
+| builders: writing code | 2.5 | 6.1% | 0.1% | 2.3 | 6.3% | 0.2% |
+| tests | 3.1 | 7.5% | 0.1% | 1.7 | 4.7% | 0.1% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 3.3 | 9.3% | 0.3% |
+| shell reads and file edits | 0.9 | 2.3% | 0.0% | 0.9 | 2.5% | 0.1% |
+| main session: dispatching an agent | 0.9 | 2.2% | 0.0% | 0.9 | 2.5% | 0.1% |
+| claims round: commands | 0.7 | 1.6% | 0.0% | 0.7 | 1.8% | 0.1% |
+| landing | 0.6 | 1.6% | 0.0% | 0.6 | 1.6% | 0.0% |
+| hook suites | 1.2 | 2.8% | 0.0% | 0.0 | 0.1% | 0.0% |
+| builders: dispatching an agent | 0.5 | 1.3% | 0.0% | 0.6 | 1.5% | 0.0% |
+| main session: running a command (the model's turn) | 0.4 | 1.1% | 0.0% | 0.4 | 1.2% | 0.0% |
+| builders: writing its reply | 0.3 | 0.7% | 0.0% | 0.6 | 1.6% | 0.0% |
+| Makefile targets the guard's table does not book | 0.4 | 1.0% | 0.0% | 0.4 | 1.1% | 0.0% |
+| main session: writing its reply | 0.4 | 1.0% | 0.0% | 0.4 | 1.1% | 0.0% |
+| gate | 0.3 | 0.8% | 0.0% | 0.3 | 1.0% | 0.0% |
+| plan review: commands | 0.3 | 0.8% | 0.0% | 0.3 | 0.7% | 0.0% |
+| builders: reading code | 0.3 | 0.8% | 0.0% | 0.2 | 0.7% | 0.0% |
+| builders: other tools (Monitor) | 0.2 | 0.5% | 0.0% | 0.2 | 0.6% | 0.0% |
+| map generation | 0.2 | 0.5% | 0.0% | 0.2 | 0.5% | 0.0% |
+| builders: other tools (ToolSearch) | 0.1 | 0.2% | 0.0% | 0.1 | 0.2% | 0.0% |
+| git | 0.1 | 0.2% | 0.0% | 0.1 | 0.2% | 0.0% |
+| python3 | 0.1 | 0.2% | 0.0% | 0.1 | 0.2% | 0.0% |
+| claims round: agents | 0.1 | 0.2% | 0.0% | 0.0 | 0.1% | 0.0% |
+| spec-kit step | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| wait loops (held open, no work) | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| waiting: a monitor alone | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| the gate binary, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 41.1 | | 0.9% | 36.1 | | 2.1% |
+| working (all but waiting on the GM) | 41.1 | | 0.9% | 36.1 | | 2.8% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make format | tests | 9 | 2.3 | 5.5% | 0.0% | 2.3 | 6.3% | 0.2% |
+| make rust-test | tests | 11 | 2.0 | 4.8% | 0.0% | 2.0 | 5.5% | 0.2% |
+| make closing-checks | tests | 3 | 3.9 | 9.4% | 0.1% | 0.1 | 0.2% | 0.0% |
+| make land | landing | 1 | 1.7 | 4.1% | 0.0% | 1.6 | 4.5% | 0.1% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 101 | 0.9 | 2.3% | 0.0% | 0.9 | 2.5% | 0.1% |
+| make claims-checked | claims round: commands | 2 | 0.5 | 1.2% | 0.0% | 0.5 | 1.4% | 0.0% |
+| make rust-uncovered | tests | 1 | 0.4 | 1.0% | 0.0% | 0.4 | 1.1% | 0.0% |
+| make research-backlog | Makefile targets the guard's table does not book | 2 | 0.4 | 0.9% | 0.0% | 0.4 | 1.1% | 0.0% |
+| make decide | plan review: commands | 5 | 0.2 | 0.5% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make plan-delta | plan review: commands | 1 | 0.1 | 0.3% | 0.0% | 0.1 | 0.4% | 0.0% |
+| make task-add | spec-kit step | 1 | 0.1 | 0.3% | 0.0% | 0.1 | 0.4% | 0.0% |
+| make quick | tests | 3 | 0.2 | 0.4% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make claims-triage | claims round: commands | 2 | 0.1 | 0.2% | 0.0% | 0.1 | 0.2% | 0.0% |
+| git | git | 17 | 0.1 | 0.2% | 0.0% | 0.1 | 0.2% | 0.0% |
+| python3 | python3 | 23 | 0.1 | 0.2% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make claims-owed | claims round: commands | 2 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make claims-bundle | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 3 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make agent-sync | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-edit | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T230 (landed 12:23)
+
+Its whole time, from 2026-11-23T03:18:19Z: 14.1 min, 12.5 min blocking; inside the window 14.1 min (100.0% of it), 12.5 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 6.1 | 43.1% | 0.1% | 6.0 | 47.8% | 0.5% |
+| plan review: agents | 1.4 | 10.1% | 0.0% | 1.1 | 8.8% | 0.1% |
+| builders: writing code | 1.1 | 7.5% | 0.0% | 1.1 | 8.4% | 0.1% |
+| tests | 0.9 | 6.1% | 0.0% | 0.2 | 1.9% | 0.0% |
+| landing | 0.7 | 4.8% | 0.0% | 0.4 | 3.3% | 0.0% |
+| hook suites | 0.9 | 6.5% | 0.0% | 0.1 | 0.6% | 0.0% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 0.9 | 7.4% | 0.1% |
+| shell reads and file edits | 0.4 | 2.9% | 0.0% | 0.4 | 3.2% | 0.0% |
+| plan review: commands | 0.4 | 2.7% | 0.0% | 0.4 | 3.3% | 0.0% |
+| git | 0.4 | 2.7% | 0.0% | 0.4 | 3.0% | 0.0% |
+| main session: running a command (the model's turn) | 0.2 | 1.7% | 0.0% | 0.2 | 1.9% | 0.0% |
+| main session: writing its reply | 0.2 | 1.6% | 0.0% | 0.2 | 1.8% | 0.0% |
+| main session: dispatching an agent | 0.2 | 1.4% | 0.0% | 0.2 | 1.6% | 0.0% |
+| builders: writing its reply | 0.3 | 1.9% | 0.0% | 0.1 | 0.7% | 0.0% |
+| python3 | 0.2 | 1.1% | 0.0% | 0.2 | 1.3% | 0.0% |
+| builders: dispatching an agent | 0.1 | 0.6% | 0.0% | 0.2 | 1.7% | 0.0% |
+| compile | 0.3 | 1.9% | 0.0% | 0.0 | 0.0% | 0.0% |
+| review: other commands | 0.1 | 0.7% | 0.0% | 0.1 | 0.8% | 0.0% |
+| main session: reading code | 0.1 | 0.6% | 0.0% | 0.1 | 0.7% | 0.0% |
+| builders: reading code | 0.1 | 0.4% | 0.0% | 0.1 | 0.5% | 0.0% |
+| builders: other tools (Monitor) | 0.1 | 0.5% | 0.0% | 0.0 | 0.4% | 0.0% |
+| main session: writing code | 0.0 | 0.3% | 0.0% | 0.0 | 0.4% | 0.0% |
+| builders: other tools (ToolSearch) | 0.0 | 0.2% | 0.0% | 0.0 | 0.3% | 0.0% |
+| claims round: commands | 0.0 | 0.2% | 0.0% | 0.0 | 0.2% | 0.0% |
+| wait loops (held open, no work) | 0.0 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| spec-kit step | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| gate | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| map generation | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 14.1 | | 0.3% | 12.5 | | 0.7% |
+| working (all but waiting on the GM) | 14.1 | | 0.3% | 12.5 | | 1.0% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make closing-checks | tests | 3 | 1.9 | 13.6% | 0.0% | 0.2 | 1.5% | 0.0% |
+| make land | landing | 1 | 0.7 | 4.9% | 0.0% | 0.4 | 3.3% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 38 | 0.4 | 2.9% | 0.0% | 0.4 | 3.2% | 0.0% |
+| git | git | 7 | 0.4 | 2.7% | 0.0% | 0.4 | 3.0% | 0.0% |
+| make decide | plan review: commands | 6 | 0.3 | 2.0% | 0.0% | 0.3 | 2.4% | 0.0% |
+| python3 | python3 | 3 | 0.2 | 1.1% | 0.0% | 0.2 | 1.3% | 0.0% |
+| make quick | tests | 2 | 0.1 | 0.9% | 0.0% | 0.1 | 1.1% | 0.0% |
+| make plan-delta | plan review: commands | 1 | 0.1 | 0.8% | 0.0% | 0.1 | 0.8% | 0.0% |
+| make ledger-owed | review: other commands | 1 | 0.1 | 0.7% | 0.0% | 0.1 | 0.8% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.0 | 0.2% | 0.0% | 0.0 | 0.2% | 0.0% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 1 | 0.0 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 2 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+
+## 451-time-retro-and-efficiency T239 (landed 12:23; no start recorded: its time before 2026-11-23T03:18:19Z may be missing)
+
+Its whole time, from 2026-11-23T03:18:19Z: 0.2 min, 0.0 min blocking; inside the window 0.2 min (100.0% of it), 0.0 min blocking (-); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: dispatching an agent | 0.1 | 82.4% | 0.0% | 0.0 | - | 0.0% |
+| plan review: commands | 0.0 | 17.6% | 0.0% | 0.0 | - | 0.0% |
+| all | 0.2 | | 0.0% | 0.0 | | 0.0% |
+| working (all but waiting on the GM) | 0.2 | | 0.0% | 0.0 | | 0.0% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make decide | plan review: commands | 1 | 0.0 | 17.6% | 0.0% | 0.0 | - | 0.0% |
+
+## 451-time-retro-and-efficiency T240 (landed 12:58)
+
+Its whole time, from 2026-11-23T03:18:19Z: 38.6 min, 32.2 min blocking; inside the window 38.6 min (100.0% of it), 32.2 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 7.7 | 19.8% | 0.2% | 4.9 | 15.1% | 0.4% |
+| compile | 6.6 | 17.2% | 0.1% | 4.0 | 12.5% | 0.3% |
+| tests | 6.9 | 17.8% | 0.1% | 3.3 | 10.2% | 0.3% |
+| waiting: a monitor alone | 0.0 | 0.0% | 0.0% | 9.2 | 28.6% | 0.7% |
+| builders: writing code | 3.4 | 8.9% | 0.1% | 2.2 | 6.9% | 0.2% |
+| plan review: agents | 5.4 | 14.1% | 0.1% | 0.0 | 0.1% | 0.0% |
+| hook suites | 3.0 | 7.8% | 0.1% | 1.0 | 3.3% | 0.1% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 3.6 | 11.3% | 0.3% |
+| shell reads and file edits | 0.9 | 2.2% | 0.0% | 0.4 | 1.3% | 0.0% |
+| landing | 0.6 | 1.6% | 0.0% | 0.6 | 1.7% | 0.0% |
+| main session: running a command (the model's turn) | 0.5 | 1.3% | 0.0% | 0.5 | 1.6% | 0.0% |
+| Makefile targets the guard's table does not book | 0.7 | 1.7% | 0.0% | 0.3 | 1.0% | 0.0% |
+| review: other commands | 0.4 | 1.1% | 0.0% | 0.4 | 1.3% | 0.0% |
+| main session: writing its reply | 0.3 | 0.9% | 0.0% | 0.3 | 1.1% | 0.0% |
+| builders: reading code | 0.3 | 0.8% | 0.0% | 0.3 | 1.0% | 0.0% |
+| builders: dispatching an agent | 0.4 | 1.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| main session: dispatching an agent | 0.2 | 0.6% | 0.0% | 0.2 | 0.8% | 0.0% |
+| gate | 0.2 | 0.6% | 0.0% | 0.2 | 0.7% | 0.0% |
+| plan review: commands | 0.4 | 1.0% | 0.0% | 0.1 | 0.2% | 0.0% |
+| git | 0.1 | 0.3% | 0.0% | 0.1 | 0.3% | 0.0% |
+| builders: other tools (Monitor) | 0.1 | 0.3% | 0.0% | 0.0 | 0.1% | 0.0% |
+| map generation | 0.1 | 0.2% | 0.0% | 0.1 | 0.2% | 0.0% |
+| spec-kit step | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| builders: other tools (ToolSearch) | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| claims round: commands | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| builders: writing its reply | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| wait loops (held open, no work) | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| the gate binary, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 38.6 | | 0.8% | 32.2 | | 1.9% |
+| working (all but waiting on the GM) | 38.6 | | 0.8% | 32.2 | | 2.5% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make closing-checks | tests | 6 | 12.4 | 32.1% | 0.3% | 5.8 | 18.0% | 0.4% |
+| make rust-test | tests | 3 | 1.9 | 4.9% | 0.0% | 1.9 | 5.8% | 0.1% |
+| make land | landing | 1 | 1.6 | 4.1% | 0.0% | 1.5 | 4.7% | 0.1% |
+| make crate-checks | tests | 1 | 1.3 | 3.5% | 0.0% | 0.0 | 0.0% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 75 | 0.9 | 2.2% | 0.0% | 0.4 | 1.3% | 0.0% |
+| make ledger-owed | review: other commands | 2 | 0.4 | 1.1% | 0.0% | 0.4 | 1.3% | 0.0% |
+| make guard-log | Makefile targets the guard's table does not book | 1 | 0.3 | 0.7% | 0.0% | 0.3 | 0.9% | 0.0% |
+| make decide | plan review: commands | 7 | 0.4 | 1.0% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 9 | 0.2 | 0.6% | 0.0% | 0.0 | 0.0% | 0.0% |
+| git | git | 6 | 0.1 | 0.3% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make task-add | spec-kit step | 1 | 0.1 | 0.2% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make guard-edit | Makefile targets the guard's table does not book | 6 | 0.1 | 0.4% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make format | tests | 3 | 0.2 | 0.4% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| python3 | python3 | 2 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T237 (landed 13:17)
+
+Its whole time, from 2026-11-23T03:18:19Z: 25.9 min, 23.4 min blocking; inside the window 25.9 min (100.0% of it), 23.4 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 6.9 | 26.4% | 0.1% | 4.7 | 22.2% | 0.4% |
+| plan review: agents | 6.9 | 26.7% | 0.2% | 1.3 | 6.1% | 0.1% |
+| waiting: a monitor alone | 0.0 | 0.0% | 0.0% | 5.8 | 27.6% | 0.4% |
+| builders: writing code | 2.5 | 9.6% | 0.1% | 2.1 | 9.9% | 0.2% |
+| the GM | 0.0 | 0.0% | 0.0% | 2.4 | 10.2% | 0.1% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 2.2 | 10.6% | 0.2% |
+| tests | 1.7 | 6.6% | 0.0% | 0.3 | 1.6% | 0.0% |
+| hook suites | 1.6 | 6.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | 0.8 | 3.2% | 0.0% | 0.7 | 3.2% | 0.1% |
+| main session: writing its reply | 0.7 | 2.8% | 0.0% | 0.7 | 3.4% | 0.1% |
+| main session: running a command (the model's turn) | 0.6 | 2.5% | 0.0% | 0.6 | 3.0% | 0.0% |
+| landing | 0.6 | 2.4% | 0.0% | 0.6 | 2.6% | 0.0% |
+| compile | 0.9 | 3.5% | 0.0% | 0.2 | 1.2% | 0.0% |
+| record builds and docs | 0.4 | 1.5% | 0.0% | 0.4 | 1.8% | 0.0% |
+| shell reads and file edits | 0.3 | 1.2% | 0.0% | 0.3 | 1.4% | 0.0% |
+| main session: dispatching an agent | 0.3 | 1.0% | 0.0% | 0.3 | 1.3% | 0.0% |
+| gate | 0.2 | 0.8% | 0.0% | 0.2 | 1.0% | 0.0% |
+| plan review: commands | 0.3 | 1.0% | 0.0% | 0.1 | 0.3% | 0.0% |
+| other review agents (work-budget, message-check) | 0.3 | 1.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| review: other commands | 0.1 | 0.6% | 0.0% | 0.1 | 0.7% | 0.0% |
+| builders: dispatching an agent | 0.2 | 0.9% | 0.0% | 0.1 | 0.3% | 0.0% |
+| map generation | 0.1 | 0.5% | 0.0% | 0.1 | 0.6% | 0.0% |
+| Makefile targets the guard's table does not book | 0.1 | 0.5% | 0.0% | 0.0 | 0.1% | 0.0% |
+| builders: other tools (ToolSearch) | 0.1 | 0.3% | 0.0% | 0.1 | 0.3% | 0.0% |
+| builders: reading code | 0.1 | 0.2% | 0.0% | 0.1 | 0.3% | 0.0% |
+| builders: other tools (Monitor) | 0.0 | 0.2% | 0.0% | 0.0 | 0.2% | 0.0% |
+| claims round: commands | 0.0 | 0.1% | 0.0% | 0.0 | 0.2% | 0.0% |
+| builders: writing its reply | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| git | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| the gate binary, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| spec-kit step | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 25.9 | | 0.6% | 23.4 | | 1.4% |
+| working (all but waiting on the GM) | 25.9 | | 0.6% | 21.0 | | 1.6% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make land | landing | 1 | 1.1 | 4.4% | 0.0% | 1.1 | 5.1% | 0.1% |
+| make closing-checks | tests | 3 | 2.0 | 7.7% | 0.0% | 0.0 | 0.1% | 0.0% |
+| python3 | python3 | 9 | 0.8 | 3.2% | 0.0% | 0.7 | 3.2% | 0.1% |
+| make rust-test | tests | 2 | 0.6 | 2.5% | 0.0% | 0.4 | 1.8% | 0.0% |
+| make crate-checks | tests | 1 | 0.8 | 3.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make where-time | record builds and docs | 1 | 0.4 | 1.5% | 0.0% | 0.4 | 1.8% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 51 | 0.3 | 1.2% | 0.0% | 0.3 | 1.4% | 0.0% |
+| make hooks-test | tests | 1 | 0.6 | 2.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make decide | plan review: commands | 6 | 0.3 | 1.0% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make ledger-owed | review: other commands | 1 | 0.1 | 0.6% | 0.0% | 0.1 | 0.7% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 7 | 0.1 | 0.5% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.2% | 0.0% |
+| git | git | 4 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-edit | Makefile targets the guard's table does not book | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make format | tests | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T241 (landed 13:32)
+
+Its whole time, from 2026-11-23T03:18:19Z: 16.8 min, 22.5 min blocking; inside the window 16.8 min (100.0% of it), 22.5 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 8.0 | 47.5% | 0.2% | 7.7 | 63.1% | 0.6% |
+| the GM | 0.0 | 0.0% | 0.0% | 10.2 | 45.5% | 0.6% |
+| plan review: agents | 2.3 | 13.7% | 0.0% | 0.0 | 0.0% | 0.0% |
+| tests | 0.9 | 5.5% | 0.0% | 0.3 | 2.8% | 0.0% |
+| landing | 0.6 | 3.7% | 0.0% | 0.5 | 4.3% | 0.0% |
+| compile | 0.6 | 3.8% | 0.0% | 0.4 | 3.4% | 0.0% |
+| hook suites | 1.0 | 6.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: writing code | 0.5 | 2.8% | 0.0% | 0.5 | 3.8% | 0.0% |
+| builders: reading code | 0.4 | 2.3% | 0.0% | 0.4 | 3.2% | 0.0% |
+| main session: running a command (the model's turn) | 0.4 | 2.2% | 0.0% | 0.4 | 3.0% | 0.0% |
+| main session: dispatching an agent | 0.2 | 1.5% | 0.0% | 0.2 | 2.0% | 0.0% |
+| git | 0.2 | 1.4% | 0.0% | 0.2 | 1.8% | 0.0% |
+| the gate binary, called directly | 0.2 | 1.3% | 0.0% | 0.2 | 1.8% | 0.0% |
+| gate | 0.2 | 1.2% | 0.0% | 0.2 | 1.6% | 0.0% |
+| review: other commands | 0.2 | 1.1% | 0.0% | 0.2 | 1.6% | 0.0% |
+| plan review: commands | 0.2 | 1.3% | 0.0% | 0.1 | 1.1% | 0.0% |
+| builders: dispatching an agent | 0.2 | 1.0% | 0.0% | 0.2 | 1.4% | 0.0% |
+| main session: writing its reply | 0.1 | 0.8% | 0.0% | 0.1 | 1.1% | 0.0% |
+| python3 | 0.1 | 0.7% | 0.0% | 0.1 | 1.0% | 0.0% |
+| map generation | 0.1 | 0.7% | 0.0% | 0.1 | 1.0% | 0.0% |
+| shell reads and file edits | 0.1 | 0.7% | 0.0% | 0.1 | 0.9% | 0.0% |
+| spec-kit step | 0.0 | 0.2% | 0.0% | 0.0 | 0.3% | 0.0% |
+| claims round: commands | 0.0 | 0.2% | 0.0% | 0.0 | 0.3% | 0.0% |
+| builders: writing its reply | 0.0 | 0.2% | 0.0% | 0.0 | 0.2% | 0.0% |
+| record and pop-up checks: agents | 0.0 | 0.0% | 0.0% | 0.0 | 0.3% | 0.0% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 16.8 | | 0.4% | 22.5 | | 1.3% |
+| working (all but waiting on the GM) | 16.8 | | 0.4% | 12.2 | | 0.9% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make land | landing | 1 | 1.2 | 7.2% | 0.0% | 1.1 | 9.2% | 0.1% |
+| make closing-checks | tests | 2 | 1.9 | 11.2% | 0.0% | 0.0 | 0.3% | 0.0% |
+| make rust-test | tests | 3 | 0.4 | 2.4% | 0.0% | 0.4 | 3.3% | 0.0% |
+| git | git | 17 | 0.2 | 1.4% | 0.0% | 0.2 | 1.8% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 3 | 0.2 | 1.3% | 0.0% | 0.2 | 1.8% | 0.0% |
+| make ledger-owed | review: other commands | 1 | 0.2 | 1.1% | 0.0% | 0.2 | 1.6% | 0.0% |
+| make decide | plan review: commands | 4 | 0.2 | 1.3% | 0.0% | 0.1 | 1.1% | 0.0% |
+| python3 | python3 | 16 | 0.1 | 0.7% | 0.0% | 0.1 | 1.0% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 43 | 0.1 | 0.7% | 0.0% | 0.1 | 0.9% | 0.0% |
+| make task-add | spec-kit step | 1 | 0.1 | 0.5% | 0.0% | 0.1 | 0.7% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.0 | 0.2% | 0.0% | 0.0 | 0.3% | 0.0% |
+| make task-start | spec-kit step | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T226 (landed 13:57)
+
+Its whole time, from 2026-11-23T03:18:19Z: 33.9 min, 40.2 min blocking; inside the window 33.9 min (100.0% of it), 40.2 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 12.9 | 38.0% | 0.3% | 8.6 | 32.9% | 0.7% |
+| the GM | 0.0 | 0.0% | 0.0% | 14.1 | 34.9% | 0.8% |
+| compile | 4.3 | 12.8% | 0.1% | 1.6 | 6.0% | 0.1% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 4.5 | 17.4% | 0.3% |
+| plan review: agents | 3.6 | 10.8% | 0.1% | 0.0 | 0.0% | 0.0% |
+| tests | 2.1 | 6.3% | 0.0% | 0.8 | 2.9% | 0.1% |
+| waiting: a monitor alone | 0.0 | 0.0% | 0.0% | 2.9 | 11.0% | 0.2% |
+| main session: running a command (the model's turn) | 1.2 | 3.6% | 0.0% | 1.2 | 4.7% | 0.1% |
+| builders: writing code | 1.2 | 3.6% | 0.0% | 1.2 | 4.6% | 0.1% |
+| main session: writing its reply | 1.2 | 3.4% | 0.0% | 1.2 | 4.5% | 0.1% |
+| hook suites | 1.9 | 5.7% | 0.0% | 0.4 | 1.5% | 0.0% |
+| landing | 0.7 | 2.0% | 0.0% | 0.6 | 2.2% | 0.0% |
+| git | 0.7 | 2.0% | 0.0% | 0.5 | 1.9% | 0.0% |
+| review: other commands | 0.5 | 1.5% | 0.0% | 0.5 | 2.0% | 0.0% |
+| main session: dispatching an agent | 0.5 | 1.4% | 0.0% | 0.5 | 1.8% | 0.0% |
+| the gate binary, called directly | 0.7 | 2.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: writing code | 0.3 | 0.9% | 0.0% | 0.3 | 1.2% | 0.0% |
+| gate | 0.3 | 0.8% | 0.0% | 0.3 | 1.0% | 0.0% |
+| map generation | 0.2 | 0.7% | 0.0% | 0.2 | 0.9% | 0.0% |
+| plan review: commands | 0.3 | 1.0% | 0.0% | 0.1 | 0.2% | 0.0% |
+| claims round: commands | 0.2 | 0.5% | 0.0% | 0.2 | 0.7% | 0.0% |
+| shell reads and file edits | 0.2 | 0.6% | 0.0% | 0.1 | 0.5% | 0.0% |
+| builders: other tools (Monitor) | 0.2 | 0.6% | 0.0% | 0.1 | 0.4% | 0.0% |
+| record and pop-up checks: agents | 0.0 | 0.0% | 0.0% | 0.2 | 0.9% | 0.0% |
+| Makefile targets the guard's table does not book | 0.2 | 0.6% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: dispatching an agent | 0.1 | 0.2% | 0.0% | 0.1 | 0.2% | 0.0% |
+| builders: other tools (ToolSearch) | 0.1 | 0.2% | 0.0% | 0.1 | 0.2% | 0.0% |
+| python3 | 0.1 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: reading code | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| builders: reading code | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| builders: writing its reply | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| cargo, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| spec-kit step | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 33.9 | | 0.7% | 40.2 | | 2.3% |
+| working (all but waiting on the GM) | 33.9 | | 0.7% | 26.2 | | 2.0% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make closing-checks | tests | 3 | 4.9 | 14.4% | 0.1% | 0.9 | 3.4% | 0.1% |
+| make land | landing | 1 | 1.6 | 4.6% | 0.0% | 1.5 | 5.6% | 0.1% |
+| make rust-test | tests | 10 | 1.6 | 4.9% | 0.0% | 1.1 | 4.1% | 0.1% |
+| git | git | 11 | 0.7 | 2.0% | 0.0% | 0.5 | 1.9% | 0.0% |
+| make ledger-owed | review: other commands | 1 | 0.5 | 1.5% | 0.0% | 0.5 | 2.0% | 0.0% |
+| make format | tests | 4 | 0.7 | 2.0% | 0.0% | 0.1 | 0.3% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 4 | 0.7 | 2.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make page-check | tests | 1 | 0.2 | 0.6% | 0.0% | 0.2 | 0.7% | 0.0% |
+| make decide | plan review: commands | 4 | 0.3 | 1.0% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make crate-checks | tests | 1 | 0.3 | 1.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 83 | 0.2 | 0.6% | 0.0% | 0.1 | 0.5% | 0.0% |
+| make claims-owed | claims round: commands | 1 | 0.1 | 0.4% | 0.0% | 0.1 | 0.5% | 0.0% |
+| make rust-lint | tests | 2 | 0.1 | 0.3% | 0.0% | 0.1 | 0.4% | 0.0% |
+| make rust-cover | tests | 2 | 0.2 | 0.5% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make research-backlog | Makefile targets the guard's table does not book | 1 | 0.1 | 0.4% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-triage | claims round: commands | 2 | 0.1 | 0.2% | 0.0% | 0.1 | 0.2% | 0.0% |
+| python3 | python3 | 11 | 0.1 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make agent-sync | Makefile targets the guard's table does not book | 1 | 0.1 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| cargo | cargo, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T243 (landed 16:24)
+
+Its whole time, from 2026-11-23T03:18:19Z: 196.9 min, 139.4 min blocking; inside the window 196.9 min (100.0% of it), 139.4 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| the GM | 0.0 | 0.0% | 0.0% | 80.1 | 57.5% | 4.7% |
+| builders: running a command (the model's turn) | 56.5 | 28.7% | 1.2% | 9.4 | 15.9% | 0.7% |
+| plan review: agents | 21.1 | 10.7% | 0.5% | 7.5 | 12.6% | 0.6% |
+| compile | 24.7 | 12.6% | 0.5% | 3.6 | 6.1% | 0.3% |
+| tests | 19.3 | 9.8% | 0.4% | 3.1 | 5.2% | 0.2% |
+| record builds and docs | 16.8 | 8.5% | 0.4% | 2.3 | 3.9% | 0.2% |
+| builders: writing code | 12.2 | 6.2% | 0.3% | 2.9 | 4.8% | 0.2% |
+| main session: running a command (the model's turn) | 5.7 | 2.9% | 0.1% | 5.7 | 9.7% | 0.4% |
+| git | 4.4 | 2.2% | 0.1% | 4.0 | 6.8% | 0.3% |
+| main session: writing its reply | 3.8 | 1.9% | 0.1% | 3.8 | 6.5% | 0.3% |
+| builders: reading code | 5.1 | 2.6% | 0.1% | 1.7 | 2.9% | 0.1% |
+| arbiter: agents | 6.7 | 3.4% | 0.1% | 0.0 | 0.0% | 0.0% |
+| hook suites | 5.2 | 2.6% | 0.1% | 1.0 | 1.6% | 0.1% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 5.5 | 9.3% | 0.4% |
+| wait loops (held open, no work) | 4.4 | 2.2% | 0.1% | 0.3 | 0.5% | 0.0% |
+| main session: dispatching an agent | 1.5 | 0.8% | 0.0% | 1.5 | 2.6% | 0.1% |
+| python3 | 1.1 | 0.6% | 0.0% | 0.9 | 1.6% | 0.1% |
+| review: other commands | 0.9 | 0.5% | 0.0% | 0.9 | 1.6% | 0.1% |
+| plan review: commands | 1.0 | 0.5% | 0.0% | 0.4 | 0.7% | 0.0% |
+| builders: writing its reply | 0.7 | 0.4% | 0.0% | 0.6 | 1.0% | 0.0% |
+| landing | 0.7 | 0.3% | 0.0% | 0.6 | 1.0% | 0.0% |
+| main session: other tools (SendMessage) | 0.6 | 0.3% | 0.0% | 0.6 | 1.1% | 0.0% |
+| builders: dispatching an agent | 0.9 | 0.5% | 0.0% | 0.3 | 0.5% | 0.0% |
+| shell reads and file edits | 1.0 | 0.5% | 0.0% | 0.2 | 0.3% | 0.0% |
+| main session: writing code | 0.4 | 0.2% | 0.0% | 0.4 | 0.6% | 0.0% |
+| Makefile targets the guard's table does not book | 0.4 | 0.2% | 0.0% | 0.3 | 0.5% | 0.0% |
+| waiting: a monitor alone | 0.0 | 0.0% | 0.0% | 0.6 | 1.0% | 0.0% |
+| spec-kit step | 0.2 | 0.1% | 0.0% | 0.2 | 0.4% | 0.0% |
+| gate | 0.2 | 0.1% | 0.0% | 0.2 | 0.4% | 0.0% |
+| claims round: commands | 0.2 | 0.1% | 0.0% | 0.1 | 0.1% | 0.0% |
+| builders: other tools (ToolSearch) | 0.2 | 0.1% | 0.0% | 0.1 | 0.1% | 0.0% |
+| wait loops on page sessions (held open, no work) | 0.3 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| the GM's filter: agents (escalation-check) | 0.0 | 0.0% | 0.0% | 0.2 | 0.2% | 0.0% |
+| builders: other tools (SendMessage) | 0.1 | 0.1% | 0.0% | 0.1 | 0.1% | 0.0% |
+| builders: other tools (Monitor) | 0.2 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| map generation | 0.1 | 0.0% | 0.0% | 0.1 | 0.1% | 0.0% |
+| main session: other tools (ToolSearch) | 0.1 | 0.0% | 0.0% | 0.1 | 0.1% | 0.0% |
+| arbiter: commands | 0.1 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| fetching and extracting sources | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| the gate binary, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 196.9 | | 4.3% | 139.4 | | 8.1% |
+| working (all but waiting on the GM) | 196.9 | | 4.3% | 59.1 | | 4.5% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make closing-checks | tests | 10 | 18.4 | 9.4% | 0.4% | 5.0 | 8.4% | 0.4% |
+| make task-time | record builds and docs | 10 | 16.8 | 8.5% | 0.4% | 2.3 | 3.9% | 0.2% |
+| make rust-test | tests | 40 | 10.9 | 5.5% | 0.2% | 1.3 | 2.3% | 0.1% |
+| make format | tests | 17 | 9.3 | 4.7% | 0.2% | 0.7 | 1.1% | 0.1% |
+| git | git | 52 | 4.4 | 2.2% | 0.1% | 4.0 | 6.8% | 0.3% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 4 | 4.4 | 2.2% | 0.1% | 0.0 | 0.0% | 0.0% |
+| make rust-format | tests | 12 | 4.3 | 2.2% | 0.1% | 0.0 | 0.0% | 0.0% |
+| make land | landing | 1 | 1.5 | 0.8% | 0.0% | 1.5 | 2.5% | 0.1% |
+| make rust-lint | tests | 6 | 2.9 | 1.5% | 0.1% | 0.0 | 0.0% | 0.0% |
+| python3 | python3 | 64 | 1.1 | 0.6% | 0.0% | 0.9 | 1.6% | 0.1% |
+| make ledger-owed | review: other commands | 3 | 0.9 | 0.5% | 0.0% | 0.9 | 1.6% | 0.1% |
+| make quick | tests | 5 | 1.7 | 0.9% | 0.0% | 0.1 | 0.1% | 0.0% |
+| make decide | plan review: commands | 17 | 1.0 | 0.5% | 0.0% | 0.4 | 0.7% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 304 | 1.0 | 0.5% | 0.0% | 0.2 | 0.3% | 0.0% |
+| make crate-checks | tests | 1 | 0.6 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-log | Makefile targets the guard's table does not book | 1 | 0.3 | 0.1% | 0.0% | 0.3 | 0.5% | 0.0% |
+| make rust-cover | tests | 1 | 0.5 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-add | spec-kit step | 1 | 0.3 | 0.1% | 0.0% | 0.3 | 0.4% | 0.0% |
+| a wait loop on a page session | wait loops on page sessions (held open, no work) | 3 | 0.3 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-triage | claims round: commands | 5 | 0.2 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make arbiter-bundle | arbiter: commands | 4 | 0.1 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-edit | Makefile targets the guard's table does not book | 7 | 0.1 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-owed | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 3 | 0.1 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claim | spec-kit step | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| curl | fetching and extracting sources | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| a scratch run.sh sweep | map generation | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T244 (landed 16:51)
+
+Its whole time, from 2026-11-23T03:18:19Z: 33.4 min, 41.5 min blocking; inside the window 33.4 min (100.0% of it), 41.5 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 10.7 | 32.1% | 0.2% | 10.3 | 37.5% | 0.8% |
+| the GM | 0.0 | 0.0% | 0.0% | 14.0 | 33.7% | 0.8% |
+| tests | 4.4 | 13.2% | 0.1% | 3.7 | 13.4% | 0.3% |
+| compile | 3.3 | 9.8% | 0.1% | 3.2 | 11.8% | 0.2% |
+| builders: writing code | 3.3 | 9.9% | 0.1% | 3.2 | 11.5% | 0.2% |
+| hook suites | 3.3 | 10.0% | 0.1% | 1.1 | 4.2% | 0.1% |
+| plan review: agents | 3.3 | 10.0% | 0.1% | 0.0 | 0.0% | 0.0% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 1.3 | 4.8% | 0.1% |
+| landing | 0.6 | 1.9% | 0.0% | 0.6 | 2.1% | 0.0% |
+| review: other commands | 0.5 | 1.5% | 0.0% | 0.5 | 1.8% | 0.0% |
+| wait loops (held open, no work) | 0.8 | 2.3% | 0.0% | 0.1 | 0.3% | 0.0% |
+| builders: reading code | 0.4 | 1.2% | 0.0% | 0.4 | 1.5% | 0.0% |
+| main session: running a command (the model's turn) | 0.4 | 1.2% | 0.0% | 0.4 | 1.5% | 0.0% |
+| waiting: a monitor alone | 0.0 | 0.0% | 0.0% | 0.7 | 2.6% | 0.1% |
+| main session: dispatching an agent | 0.3 | 0.9% | 0.0% | 0.3 | 1.1% | 0.0% |
+| gate | 0.3 | 0.9% | 0.0% | 0.3 | 1.1% | 0.0% |
+| main session: writing its reply | 0.2 | 0.7% | 0.0% | 0.2 | 0.8% | 0.0% |
+| shell reads and file edits | 0.2 | 0.7% | 0.0% | 0.2 | 0.8% | 0.0% |
+| Makefile targets the guard's table does not book | 0.2 | 0.6% | 0.0% | 0.2 | 0.7% | 0.0% |
+| plan review: commands | 0.2 | 0.7% | 0.0% | 0.0 | 0.2% | 0.0% |
+| the gate binary, called directly | 0.1 | 0.4% | 0.0% | 0.1 | 0.5% | 0.0% |
+| map generation | 0.1 | 0.4% | 0.0% | 0.1 | 0.5% | 0.0% |
+| git | 0.1 | 0.4% | 0.0% | 0.1 | 0.5% | 0.0% |
+| builders: other tools (Monitor) | 0.1 | 0.4% | 0.0% | 0.1 | 0.4% | 0.0% |
+| builders: dispatching an agent | 0.1 | 0.4% | 0.0% | 0.1 | 0.2% | 0.0% |
+| claims round: commands | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| builders: other tools (ToolSearch) | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| builders: writing its reply | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| record builds and docs | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| spec-kit step | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| cargo, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 33.4 | | 0.7% | 41.5 | | 2.4% |
+| working (all but waiting on the GM) | 33.4 | | 0.7% | 27.5 | | 2.1% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make closing-checks | tests | 2 | 4.9 | 14.6% | 0.1% | 4.7 | 17.2% | 0.4% |
+| make hooks-test | tests | 4 | 3.1 | 9.4% | 0.1% | 0.5 | 1.9% | 0.0% |
+| make land | landing | 1 | 1.6 | 4.8% | 0.0% | 1.5 | 5.5% | 0.1% |
+| make format | tests | 6 | 1.7 | 5.0% | 0.0% | 1.4 | 5.2% | 0.1% |
+| make rust-test | tests | 5 | 0.9 | 2.6% | 0.0% | 0.9 | 3.1% | 0.1% |
+| make ledger-owed | review: other commands | 1 | 0.5 | 1.5% | 0.0% | 0.5 | 1.8% | 0.0% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 4 | 0.8 | 2.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 70 | 0.2 | 0.7% | 0.0% | 0.2 | 0.8% | 0.0% |
+| make research-deferred | Makefile targets the guard's table does not book | 1 | 0.2 | 0.5% | 0.0% | 0.2 | 0.6% | 0.0% |
+| make decide | plan review: commands | 4 | 0.2 | 0.7% | 0.0% | 0.0 | 0.2% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 2 | 0.1 | 0.4% | 0.0% | 0.1 | 0.5% | 0.0% |
+| git | git | 9 | 0.1 | 0.4% | 0.0% | 0.1 | 0.5% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 5 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make guard-edit | Makefile targets the guard's table does not book | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make claims-owed | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make docs | record builds and docs | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make switches | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| cargo | cargo, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T228 (landed 17:45)
+
+Its whole time, from 2026-11-23T03:18:19Z: 77.9 min, 43.9 min blocking; inside the window 77.9 min (100.0% of it), 43.9 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| shell reads and file edits | 13.4 | 17.2% | 0.3% | 12.1 | 27.5% | 0.9% |
+| tests | 13.7 | 17.6% | 0.3% | 7.3 | 16.6% | 0.6% |
+| builders: running a command (the model's turn) | 10.1 | 13.0% | 0.2% | 10.0 | 22.9% | 0.8% |
+| wait loops (held open, no work) | 14.1 | 18.0% | 0.3% | 3.0 | 6.9% | 0.2% |
+| compile | 11.1 | 14.3% | 0.2% | 2.3 | 5.2% | 0.2% |
+| hook suites | 4.9 | 6.3% | 0.1% | 2.9 | 6.5% | 0.2% |
+| spec-kit step | 2.1 | 2.7% | 0.0% | 2.0 | 4.6% | 0.2% |
+| builders: writing code | 1.5 | 2.0% | 0.0% | 1.5 | 3.5% | 0.1% |
+| gate | 1.6 | 2.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| plan review: agents | 1.4 | 1.8% | 0.0% | 0.1 | 0.2% | 0.0% |
+| Makefile targets the guard's table does not book | 0.7 | 0.9% | 0.0% | 0.7 | 1.5% | 0.1% |
+| plan review: commands | 0.6 | 0.8% | 0.0% | 0.6 | 1.4% | 0.0% |
+| landing | 1.1 | 1.4% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: writing its reply | 0.4 | 0.5% | 0.0% | 0.4 | 0.9% | 0.0% |
+| git | 0.2 | 0.3% | 0.0% | 0.2 | 0.4% | 0.0% |
+| map generation | 0.2 | 0.3% | 0.0% | 0.1 | 0.3% | 0.0% |
+| builders: dispatching an agent | 0.2 | 0.2% | 0.0% | 0.2 | 0.4% | 0.0% |
+| claims round: commands | 0.2 | 0.2% | 0.0% | 0.2 | 0.4% | 0.0% |
+| main session: writing its reply | 0.2 | 0.2% | 0.0% | 0.2 | 0.4% | 0.0% |
+| main session: dispatching an agent | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| builders: reading code | 0.1 | 0.1% | 0.0% | 0.1 | 0.1% | 0.0% |
+| the gate binary, called directly | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| python3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| arbiter: commands | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (TaskStop) | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 77.9 | | 1.7% | 43.9 | | 2.6% |
+| working (all but waiting on the GM) | 77.9 | | 1.7% | 43.9 | | 3.4% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make closing-checks | tests | 4 | 20.2 | 25.9% | 0.4% | 6.7 | 15.3% | 0.5% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 61 | 13.4 | 17.2% | 0.3% | 12.1 | 27.5% | 0.9% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 4 | 14.1 | 18.0% | 0.3% | 0.0 | 0.0% | 0.0% |
+| make land | landing | 1 | 6.7 | 8.6% | 0.1% | 0.0 | 0.0% | 0.0% |
+| make rust-test | tests | 5 | 2.8 | 3.6% | 0.1% | 2.8 | 6.4% | 0.2% |
+| make crate-checks | tests | 2 | 2.4 | 3.1% | 0.1% | 2.4 | 5.5% | 0.2% |
+| make task-start | spec-kit step | 1 | 2.1 | 2.7% | 0.0% | 2.0 | 4.6% | 0.2% |
+| make decide | plan review: commands | 3 | 0.6 | 0.8% | 0.0% | 0.6 | 1.4% | 0.0% |
+| make apply-edits | Makefile targets the guard's table does not book | 1 | 0.4 | 0.5% | 0.0% | 0.4 | 0.9% | 0.0% |
+| make guard-edit | Makefile targets the guard's table does not book | 2 | 0.3 | 0.4% | 0.0% | 0.3 | 0.6% | 0.0% |
+| make rust-lint | tests | 1 | 0.2 | 0.3% | 0.0% | 0.2 | 0.5% | 0.0% |
+| git | git | 18 | 0.2 | 0.3% | 0.0% | 0.2 | 0.4% | 0.0% |
+| make format | tests | 3 | 0.2 | 0.2% | 0.0% | 0.2 | 0.4% | 0.0% |
+| make compound | map generation | 1 | 0.1 | 0.1% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make quick | tests | 1 | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make claims-owed | claims round: commands | 1 | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| l7r-gate | the gate binary, called directly | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | python3 | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make arbiter-bundle | arbiter: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T234 (landed 17:45)
+
+Its whole time, from 2026-11-23T03:18:19Z: 84.4 min, 53.7 min blocking; inside the window 84.4 min (100.0% of it), 53.7 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| wait loops (held open, no work) | 28.6 | 33.8% | 0.6% | 0.0 | 0.0% | 0.0% |
+| builders: running a command (the model's turn) | 15.9 | 18.9% | 0.3% | 7.9 | 25.1% | 0.6% |
+| the GM | 0.0 | 0.0% | 0.0% | 22.3 | 41.5% | 1.3% |
+| compile | 11.9 | 14.1% | 0.3% | 4.9 | 15.5% | 0.4% |
+| shell reads and file edits | 5.3 | 6.3% | 0.1% | 4.9 | 15.5% | 0.4% |
+| tests | 6.6 | 7.8% | 0.1% | 1.3 | 4.0% | 0.1% |
+| hook suites | 4.9 | 5.8% | 0.1% | 0.8 | 2.6% | 0.1% |
+| main session: running a command (the model's turn) | 2.5 | 2.9% | 0.1% | 2.5 | 7.8% | 0.2% |
+| spec-kit step | 2.4 | 2.8% | 0.1% | 2.3 | 7.2% | 0.2% |
+| review: other commands | 1.0 | 1.2% | 0.0% | 1.0 | 3.1% | 0.1% |
+| git | 1.0 | 1.2% | 0.0% | 0.9 | 2.8% | 0.1% |
+| gate | 0.0 | 0.0% | 0.0% | 1.6 | 5.2% | 0.1% |
+| builders: writing code | 0.7 | 0.9% | 0.0% | 0.7 | 2.3% | 0.1% |
+| plan review: agents | 1.1 | 1.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| landing | 0.0 | 0.0% | 0.0% | 0.9 | 2.9% | 0.1% |
+| main session: writing its reply | 0.3 | 0.4% | 0.0% | 0.3 | 1.1% | 0.0% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 0.6 | 1.8% | 0.0% |
+| Makefile targets the guard's table does not book | 0.3 | 0.4% | 0.0% | 0.3 | 0.8% | 0.0% |
+| main session: dispatching an agent | 0.3 | 0.3% | 0.0% | 0.3 | 0.9% | 0.0% |
+| builders: writing its reply | 0.4 | 0.4% | 0.0% | 0.0 | 0.0% | 0.0% |
+| record and pop-up checks: commands | 0.4 | 0.4% | 0.0% | 0.0 | 0.0% | 0.0% |
+| plan review: commands | 0.2 | 0.3% | 0.0% | 0.1 | 0.3% | 0.0% |
+| map generation | 0.1 | 0.1% | 0.0% | 0.1 | 0.4% | 0.0% |
+| python3 | 0.1 | 0.1% | 0.0% | 0.1 | 0.3% | 0.0% |
+| builders: other tools (ToolSearch) | 0.2 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (Monitor) | 0.2 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: reading code | 0.0 | 0.1% | 0.0% | 0.0 | 0.2% | 0.0% |
+| claims round: commands | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| cargo, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (TaskStop) | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: dispatching an agent | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 84.4 | | 1.8% | 53.7 | | 3.1% |
+| working (all but waiting on the GM) | 84.4 | | 1.8% | 31.4 | | 2.4% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 11 | 28.6 | 33.8% | 0.6% | 0.0 | 0.0% | 0.0% |
+| make closing-checks | tests | 5 | 17.6 | 20.9% | 0.4% | 0.0 | 0.0% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 132 | 5.3 | 6.3% | 0.1% | 4.9 | 15.5% | 0.4% |
+| make rust-test | tests | 11 | 3.9 | 4.6% | 0.1% | 3.1 | 9.8% | 0.2% |
+| make land | landing | 0 | 0.0 | 0.0% | 0.0% | 6.5 | 20.7% | 0.5% |
+| make task-start | spec-kit step | 1 | 2.2 | 2.6% | 0.0% | 2.1 | 6.7% | 0.2% |
+| make ledger-owed | review: other commands | 2 | 1.0 | 1.2% | 0.0% | 1.0 | 3.1% | 0.1% |
+| git | git | 30 | 1.0 | 1.2% | 0.0% | 0.9 | 2.8% | 0.1% |
+| make rust-lint | tests | 1 | 0.9 | 1.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make format | tests | 4 | 0.9 | 1.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make cache-clean | Makefile targets the guard's table does not book | 2 | 0.3 | 0.3% | 0.0% | 0.3 | 0.8% | 0.0% |
+| make task-add | spec-kit step | 1 | 0.2 | 0.3% | 0.0% | 0.2 | 0.7% | 0.0% |
+| make decide | plan review: commands | 3 | 0.2 | 0.3% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make modal-triage | record and pop-up checks: commands | 2 | 0.3 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | python3 | 14 | 0.1 | 0.1% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make record-owed | record and pop-up checks: commands | 1 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make map | map generation | 2 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 2 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| cargo | cargo, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T242 (landed 18:31)
+
+Its whole time, from 2026-11-23T03:18:19Z: 47.6 min, 44.9 min blocking; inside the window 47.6 min (100.0% of it), 44.9 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| compile | 19.7 | 41.3% | 0.4% | 19.4 | 43.3% | 1.5% |
+| builders: running a command (the model's turn) | 10.9 | 22.9% | 0.2% | 10.1 | 22.4% | 0.8% |
+| hook suites | 4.5 | 9.5% | 0.1% | 3.6 | 8.1% | 0.3% |
+| tests | 4.1 | 8.6% | 0.1% | 3.5 | 7.8% | 0.3% |
+| spec-kit step | 2.1 | 4.5% | 0.0% | 2.0 | 4.5% | 0.2% |
+| builders: writing code | 1.4 | 2.9% | 0.0% | 1.4 | 3.1% | 0.1% |
+| landing | 0.8 | 1.7% | 0.0% | 0.7 | 1.5% | 0.1% |
+| main session: writing its reply | 0.6 | 1.2% | 0.0% | 0.6 | 1.3% | 0.0% |
+| git | 0.5 | 1.1% | 0.0% | 0.5 | 1.1% | 0.0% |
+| main session: running a command (the model's turn) | 0.5 | 1.1% | 0.0% | 0.5 | 1.1% | 0.0% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 1.0 | 2.3% | 0.1% |
+| plan review: agents | 0.8 | 1.7% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: dispatching an agent | 0.3 | 0.6% | 0.0% | 0.3 | 0.6% | 0.0% |
+| review: other commands | 0.3 | 0.6% | 0.0% | 0.3 | 0.6% | 0.0% |
+| gate | 0.3 | 0.6% | 0.0% | 0.3 | 0.6% | 0.0% |
+| plan review: commands | 0.2 | 0.3% | 0.0% | 0.1 | 0.3% | 0.0% |
+| shell reads and file edits | 0.2 | 0.3% | 0.0% | 0.1 | 0.3% | 0.0% |
+| python3 | 0.1 | 0.3% | 0.0% | 0.1 | 0.3% | 0.0% |
+| builders: reading code | 0.1 | 0.2% | 0.0% | 0.1 | 0.3% | 0.0% |
+| claims round: commands | 0.1 | 0.2% | 0.0% | 0.1 | 0.1% | 0.0% |
+| builders: dispatching an agent | 0.1 | 0.1% | 0.0% | 0.1 | 0.1% | 0.0% |
+| builders: other tools (ToolSearch) | 0.1 | 0.1% | 0.0% | 0.1 | 0.1% | 0.0% |
+| builders: writing its reply | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| Makefile targets the guard's table does not book | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| wait loops (held open, no work) | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 47.6 | | 1.0% | 44.9 | | 2.6% |
+| working (all but waiting on the GM) | 47.6 | | 1.0% | 44.9 | | 3.4% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make closing-checks | tests | 2 | 25.2 | 52.9% | 0.5% | 23.6 | 52.4% | 1.8% |
+| make land | landing | 1 | 2.3 | 4.9% | 0.1% | 2.2 | 4.9% | 0.2% |
+| make task-start | spec-kit step | 1 | 2.1 | 4.5% | 0.0% | 2.0 | 4.5% | 0.2% |
+| make rust-test | tests | 4 | 1.7 | 3.7% | 0.0% | 1.7 | 3.9% | 0.1% |
+| git | git | 17 | 0.5 | 1.1% | 0.0% | 0.5 | 1.1% | 0.0% |
+| make ledger-owed | review: other commands | 1 | 0.3 | 0.6% | 0.0% | 0.3 | 0.6% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 32 | 0.2 | 0.3% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make decide | plan review: commands | 2 | 0.1 | 0.3% | 0.0% | 0.1 | 0.3% | 0.0% |
+| python3 | python3 | 10 | 0.1 | 0.3% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make claims-owed | claims round: commands | 2 | 0.1 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make format | tests | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make plan-verdict | plan review: commands | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T235 (landed 18:43)
+
+Its whole time, from 2026-11-23T03:18:19Z: 87.3 min, 16.0 min blocking; inside the window 87.3 min (100.0% of it), 16.0 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| tests | 35.3 | 40.5% | 0.8% | 1.0 | 6.5% | 0.1% |
+| builders: running a command (the model's turn) | 9.5 | 10.9% | 0.2% | 6.0 | 37.8% | 0.5% |
+| compile | 9.5 | 10.9% | 0.2% | 0.9 | 5.7% | 0.1% |
+| plan review: agents | 10.0 | 11.4% | 0.2% | 0.0 | 0.0% | 0.0% |
+| builders: writing code | 6.7 | 7.6% | 0.1% | 3.0 | 18.8% | 0.2% |
+| hook suites | 6.4 | 7.4% | 0.1% | 0.0 | 0.0% | 0.0% |
+| Makefile targets the guard's table does not book | 2.4 | 2.7% | 0.1% | 2.1 | 13.3% | 0.2% |
+| arbiter: agents | 2.0 | 2.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| shell reads and file edits | 1.4 | 1.6% | 0.0% | 0.7 | 4.1% | 0.1% |
+| python3 | 1.0 | 1.1% | 0.0% | 0.8 | 5.2% | 0.1% |
+| builders: reading code | 0.8 | 0.9% | 0.0% | 0.6 | 3.9% | 0.0% |
+| landing | 0.8 | 0.9% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: dispatching an agent | 0.4 | 0.4% | 0.0% | 0.1 | 0.8% | 0.0% |
+| plan review: commands | 0.4 | 0.4% | 0.0% | 0.1 | 0.9% | 0.0% |
+| main session: running a command (the model's turn) | 0.1 | 0.2% | 0.0% | 0.1 | 0.9% | 0.0% |
+| gate | 0.3 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: writing its reply | 0.1 | 0.1% | 0.0% | 0.1 | 0.6% | 0.0% |
+| main session: dispatching an agent | 0.1 | 0.1% | 0.0% | 0.1 | 0.5% | 0.0% |
+| map generation | 0.2 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| claims round: commands | 0.0 | 0.0% | 0.0% | 0.0 | 0.2% | 0.0% |
+| spec-kit step | 0.0 | 0.0% | 0.0% | 0.0 | 0.2% | 0.0% |
+| git | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| builders: writing its reply | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| arbiter: commands | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| the gate binary, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| fetching and extracting sources | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| other review agents (work-budget, message-check) | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 87.3 | | 1.9% | 16.0 | | 0.9% |
+| working (all but waiting on the GM) | 87.3 | | 1.9% | 16.0 | | 1.2% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make closing-checks | tests | 6 | 29.7 | 34.1% | 0.6% | 0.0 | 0.1% | 0.0% |
+| make format | tests | 4 | 17.6 | 20.2% | 0.4% | 0.0 | 0.0% | 0.0% |
+| make rust-test | tests | 5 | 2.6 | 3.0% | 0.1% | 1.9 | 12.2% | 0.1% |
+| make guard-log | Makefile targets the guard's table does not book | 1 | 2.3 | 2.6% | 0.1% | 2.1 | 13.0% | 0.2% |
+| make land | landing | 2 | 2.2 | 2.6% | 0.0% | 0.0 | 0.0% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 43 | 1.4 | 1.6% | 0.0% | 0.7 | 4.1% | 0.1% |
+| python3 | python3 | 20 | 1.0 | 1.1% | 0.0% | 0.8 | 5.2% | 0.1% |
+| make decide | plan review: commands | 5 | 0.3 | 0.4% | 0.0% | 0.1 | 0.9% | 0.0% |
+| make quick | tests | 1 | 0.2 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 4 | 0.0 | 0.1% | 0.0% | 0.0 | 0.3% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.2% | 0.0% |
+| make task-start | spec-kit step | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.2% | 0.0% |
+| git | git | 8 | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make plan-verdict | plan review: commands | 3 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make arbiter-bundle | arbiter: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-edit | Makefile targets the guard's table does not book | 3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| curl | fetching and extracting sources | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| l7r-gate | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T245 (landed 19:33)
+
+Its whole time, from 2026-11-23T03:18:19Z: 76.6 min, 29.9 min blocking; inside the window 76.6 min (100.0% of it), 29.9 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| tests | 24.2 | 31.6% | 0.5% | 0.0 | 0.0% | 0.0% |
+| the GM | 0.0 | 0.0% | 0.0% | 17.3 | 57.9% | 1.0% |
+| builders: running a command (the model's turn) | 11.1 | 14.5% | 0.2% | 5.3 | 42.1% | 0.4% |
+| builders: writing code | 8.4 | 10.9% | 0.2% | 1.1 | 8.9% | 0.1% |
+| plan review: agents | 8.8 | 11.4% | 0.2% | 0.0 | 0.0% | 0.0% |
+| hook suites | 6.7 | 8.7% | 0.1% | 0.0 | 0.0% | 0.0% |
+| spec-kit step | 2.7 | 3.5% | 0.1% | 2.7 | 21.5% | 0.2% |
+| compile | 3.2 | 4.2% | 0.1% | 0.0 | 0.0% | 0.0% |
+| main session: running a command (the model's turn) | 1.2 | 1.6% | 0.0% | 1.2 | 9.9% | 0.1% |
+| Makefile targets the guard's table does not book | 1.7 | 2.2% | 0.0% | 0.4 | 3.5% | 0.0% |
+| shell reads and file edits | 1.0 | 1.4% | 0.0% | 0.8 | 6.0% | 0.1% |
+| builders: other tools (TaskStop) | 1.6 | 2.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| landing | 1.4 | 1.8% | 0.0% | 0.0 | 0.0% | 0.0% |
+| gate | 0.9 | 1.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: reading code | 0.6 | 0.8% | 0.0% | 0.2 | 1.4% | 0.0% |
+| plan review: commands | 0.7 | 0.9% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: dispatching an agent | 0.2 | 0.3% | 0.0% | 0.2 | 1.9% | 0.0% |
+| main session: writing its reply | 0.2 | 0.3% | 0.0% | 0.2 | 1.6% | 0.0% |
+| git | 0.2 | 0.3% | 0.0% | 0.2 | 1.5% | 0.0% |
+| builders: dispatching an agent | 0.4 | 0.5% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (Monitor) | 0.4 | 0.5% | 0.0% | 0.0 | 0.0% | 0.0% |
+| map generation | 0.4 | 0.5% | 0.0% | 0.0 | 0.0% | 0.0% |
+| review: other commands | 0.2 | 0.2% | 0.0% | 0.2 | 1.4% | 0.0% |
+| claims round: commands | 0.2 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (ToolSearch) | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| record builds and docs | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| cargo, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| builders: writing its reply | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 76.6 | | 1.7% | 29.9 | | 1.7% |
+| working (all but waiting on the GM) | 76.6 | | 1.7% | 12.6 | | 1.0% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make closing-checks | tests | 5 | 27.1 | 35.4% | 0.6% | 0.0 | 0.0% | 0.0% |
+| make land | landing | 1 | 7.1 | 9.2% | 0.2% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 1 | 2.7 | 3.5% | 0.1% | 2.7 | 21.5% | 0.2% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 48 | 1.0 | 1.4% | 0.0% | 0.8 | 6.0% | 0.1% |
+| make rust-test | tests | 3 | 1.6 | 2.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make disk-audit | Makefile targets the guard's table does not book | 1 | 1.0 | 1.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make format | tests | 5 | 0.9 | 1.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make cache-clean | Makefile targets the guard's table does not book | 1 | 0.4 | 0.5% | 0.0% | 0.4 | 3.3% | 0.0% |
+| make decide | plan review: commands | 8 | 0.7 | 0.9% | 0.0% | 0.0 | 0.0% | 0.0% |
+| git | git | 7 | 0.2 | 0.3% | 0.0% | 0.2 | 1.5% | 0.0% |
+| make ledger-owed | review: other commands | 1 | 0.2 | 0.2% | 0.0% | 0.2 | 1.4% | 0.0% |
+| make guard-edit | Makefile targets the guard's table does not book | 3 | 0.2 | 0.3% | 0.0% | 0.0 | 0.3% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.2 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 1 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make docs | record builds and docs | 1 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| cargo | cargo, called directly | 9 | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| python3 | python3 | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T231 (landed 19:37)
+
+Its whole time, from 2026-11-23T03:18:19Z: 69.0 min, 78.1 min blocking; inside the window 69.0 min (100.0% of it), 78.1 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| compile | 29.5 | 42.7% | 0.6% | 14.4 | 30.3% | 1.1% |
+| the GM | 0.0 | 0.0% | 0.0% | 30.6 | 39.2% | 1.8% |
+| builders: running a command (the model's turn) | 12.6 | 18.3% | 0.3% | 10.3 | 21.6% | 0.8% |
+| tests | 4.3 | 6.3% | 0.1% | 5.3 | 11.2% | 0.4% |
+| main session: running a command (the model's turn) | 2.9 | 4.2% | 0.1% | 2.9 | 6.1% | 0.2% |
+| git | 2.8 | 4.0% | 0.1% | 2.7 | 5.8% | 0.2% |
+| shell reads and file edits | 2.8 | 4.0% | 0.1% | 2.5 | 5.3% | 0.2% |
+| main session: writing its reply | 2.0 | 2.9% | 0.0% | 2.0 | 4.3% | 0.2% |
+| plan review: agents | 3.7 | 5.3% | 0.1% | 0.0 | 0.0% | 0.0% |
+| landing | 1.3 | 1.8% | 0.0% | 2.1 | 4.4% | 0.2% |
+| builders: writing code | 1.6 | 2.4% | 0.0% | 0.9 | 2.0% | 0.1% |
+| the gate binary, called directly | 1.2 | 1.7% | 0.0% | 1.1 | 2.4% | 0.1% |
+| gate | 0.6 | 0.9% | 0.0% | 0.7 | 1.5% | 0.1% |
+| main session: writing code | 0.5 | 0.7% | 0.0% | 0.5 | 1.0% | 0.0% |
+| hook suites | 0.3 | 0.4% | 0.0% | 0.5 | 1.1% | 0.0% |
+| plan review: commands | 0.8 | 1.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| spec-kit step | 0.3 | 0.5% | 0.0% | 0.3 | 0.7% | 0.0% |
+| main session: dispatching an agent | 0.3 | 0.4% | 0.0% | 0.3 | 0.6% | 0.0% |
+| Makefile targets the guard's table does not book | 0.3 | 0.4% | 0.0% | 0.2 | 0.5% | 0.0% |
+| builders: reading code | 0.2 | 0.3% | 0.0% | 0.2 | 0.4% | 0.0% |
+| review: other commands | 0.2 | 0.3% | 0.0% | 0.2 | 0.4% | 0.0% |
+| map generation | 0.1 | 0.2% | 0.0% | 0.1 | 0.3% | 0.0% |
+| builders: dispatching an agent | 0.2 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | 0.1 | 0.2% | 0.0% | 0.1 | 0.2% | 0.0% |
+| claims round: commands | 0.2 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (ToolSearch) | 0.2 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: writing its reply | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| the GM's filter: agents (escalation-check) | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| wait loops (held open, no work) | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| cargo, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 69.0 | | 1.5% | 78.1 | | 4.5% |
+| working (all but waiting on the GM) | 69.0 | | 1.5% | 47.5 | | 3.6% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make closing-checks | tests | 2 | 29.1 | 42.2% | 0.6% | 14.5 | 30.5% | 1.1% |
+| make land | landing | 1 | 3.4 | 4.9% | 0.1% | 5.0 | 10.6% | 0.4% |
+| make rust-test | tests | 7 | 3.5 | 5.1% | 0.1% | 3.5 | 7.4% | 0.3% |
+| git | git | 28 | 2.8 | 4.0% | 0.1% | 2.7 | 5.8% | 0.2% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 61 | 2.8 | 4.0% | 0.1% | 2.5 | 5.3% | 0.2% |
+| l7r-gate.sh | the gate binary, called directly | 3 | 1.2 | 1.7% | 0.0% | 1.1 | 2.4% | 0.1% |
+| make decide | plan review: commands | 2 | 0.8 | 1.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-add | spec-kit step | 1 | 0.4 | 0.5% | 0.0% | 0.4 | 0.8% | 0.0% |
+| make guard-log | Makefile targets the guard's table does not book | 1 | 0.2 | 0.3% | 0.0% | 0.2 | 0.5% | 0.0% |
+| make ledger-owed | review: other commands | 1 | 0.2 | 0.3% | 0.0% | 0.2 | 0.4% | 0.0% |
+| python3 | python3 | 10 | 0.1 | 0.2% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.2 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make format | tests | 3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| cargo | cargo, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T229 (landed 20:40)
+
+Its whole time, from 2026-11-23T03:18:19Z: 141.3 min, 34.4 min blocking; inside the window 141.3 min (100.0% of it), 34.4 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| tests | 58.0 | 41.1% | 1.3% | 3.9 | 11.4% | 0.3% |
+| builders: running a command (the model's turn) | 16.9 | 11.9% | 0.4% | 14.0 | 40.7% | 1.1% |
+| shell reads and file edits | 25.7 | 18.2% | 0.6% | 4.7 | 13.7% | 0.4% |
+| compile | 17.8 | 12.6% | 0.4% | 3.0 | 8.8% | 0.2% |
+| hook suites | 8.4 | 5.9% | 0.2% | 0.0 | 0.0% | 0.0% |
+| builders: writing code | 3.3 | 2.3% | 0.1% | 3.3 | 9.6% | 0.3% |
+| plan review: commands | 2.1 | 1.5% | 0.0% | 1.7 | 4.8% | 0.1% |
+| spec-kit step | 1.4 | 1.0% | 0.0% | 1.4 | 4.2% | 0.1% |
+| plan review: agents | 2.0 | 1.5% | 0.0% | 0.0 | 0.1% | 0.0% |
+| gate | 1.7 | 1.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| landing | 1.5 | 1.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| Makefile targets the guard's table does not book | 0.5 | 0.4% | 0.0% | 0.5 | 1.6% | 0.0% |
+| main session: writing its reply | 0.4 | 0.3% | 0.0% | 0.4 | 1.3% | 0.0% |
+| builders: reading code | 0.4 | 0.3% | 0.0% | 0.4 | 1.2% | 0.0% |
+| record builds and docs | 0.3 | 0.2% | 0.0% | 0.3 | 0.9% | 0.0% |
+| builders: dispatching an agent | 0.3 | 0.2% | 0.0% | 0.3 | 0.8% | 0.0% |
+| claims round: commands | 0.1 | 0.1% | 0.0% | 0.1 | 0.4% | 0.0% |
+| builders: writing its reply | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| map generation | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (ToolSearch) | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| git | 0.1 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| the gate binary, called directly | 0.1 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| wait loops (held open, no work) | 0.1 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: dispatching an agent | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| cargo, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 141.3 | | 3.1% | 34.4 | | 2.0% |
+| working (all but waiting on the GM) | 141.3 | | 3.1% | 34.4 | | 2.6% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make format | tests | 2 | 48.1 | 34.1% | 1.0% | 6.1 | 17.6% | 0.5% |
+| make closing-checks | tests | 4 | 32.2 | 22.8% | 0.7% | 0.0 | 0.1% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 86 | 25.7 | 18.2% | 0.6% | 4.7 | 13.7% | 0.4% |
+| make land | landing | 1 | 6.3 | 4.5% | 0.1% | 0.0 | 0.1% | 0.0% |
+| make decide | plan review: commands | 7 | 2.1 | 1.5% | 0.0% | 1.7 | 4.8% | 0.1% |
+| make task-start | spec-kit step | 1 | 1.4 | 1.0% | 0.0% | 1.4 | 4.2% | 0.1% |
+| make rust-test | tests | 2 | 0.9 | 0.6% | 0.0% | 0.9 | 2.5% | 0.1% |
+| make guard-edit | Makefile targets the guard's table does not book | 1 | 0.5 | 0.4% | 0.0% | 0.5 | 1.5% | 0.0% |
+| make docs | record builds and docs | 1 | 0.3 | 0.2% | 0.0% | 0.3 | 0.9% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.1 | 0.1% | 0.0% | 0.1 | 0.4% | 0.0% |
+| git | git | 3 | 0.1 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 2 | 0.1 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| l7r-gate | the gate binary, called directly | 4 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | python3 | 4 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| cargo | cargo, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T227 (landed 20:55)
+
+Its whole time, from 2026-11-23T03:18:19Z: 117.1 min, 76.3 min blocking; inside the window 117.1 min (100.0% of it), 76.3 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| compile | 23.9 | 20.4% | 0.5% | 12.4 | 16.2% | 0.9% |
+| tests | 18.7 | 15.9% | 0.4% | 8.6 | 11.3% | 0.7% |
+| wait loops (held open, no work) | 21.7 | 18.5% | 0.5% | 5.5 | 7.2% | 0.4% |
+| builders: running a command (the model's turn) | 15.2 | 13.0% | 0.3% | 11.5 | 15.1% | 0.9% |
+| shell reads and file edits | 3.4 | 2.9% | 0.1% | 12.5 | 16.4% | 1.0% |
+| hook suites | 7.3 | 6.2% | 0.2% | 2.2 | 2.9% | 0.2% |
+| git | 3.7 | 3.2% | 0.1% | 3.4 | 4.4% | 0.3% |
+| landing | 2.8 | 2.4% | 0.1% | 3.8 | 5.0% | 0.3% |
+| builders: writing code | 3.8 | 3.3% | 0.1% | 2.0 | 2.6% | 0.2% |
+| gate | 2.0 | 1.7% | 0.0% | 3.7 | 4.8% | 0.3% |
+| main session: running a command (the model's turn) | 2.5 | 2.2% | 0.1% | 2.5 | 3.3% | 0.2% |
+| spec-kit step | 2.7 | 2.3% | 0.1% | 2.2 | 2.8% | 0.2% |
+| review: other commands | 2.0 | 1.7% | 0.0% | 2.0 | 2.6% | 0.1% |
+| main session: writing its reply | 1.8 | 1.5% | 0.0% | 1.8 | 2.3% | 0.1% |
+| python3 | 0.9 | 0.8% | 0.0% | 0.8 | 1.1% | 0.1% |
+| plan review: agents | 1.4 | 1.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| Makefile targets the guard's table does not book | 0.5 | 0.4% | 0.0% | 0.5 | 0.6% | 0.0% |
+| plan review: commands | 0.9 | 0.8% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: dispatching an agent | 0.4 | 0.3% | 0.0% | 0.4 | 0.5% | 0.0% |
+| map generation | 0.3 | 0.2% | 0.0% | 0.3 | 0.4% | 0.0% |
+| builders: dispatching an agent | 0.4 | 0.4% | 0.0% | 0.0 | 0.0% | 0.0% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 0.3 | 0.4% | 0.0% |
+| builders: reading code | 0.2 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (ToolSearch) | 0.2 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (TaskStop) | 0.2 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (Monitor) | 0.2 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| claims round: commands | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: writing its reply | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| the gate binary, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 117.1 | | 2.5% | 76.3 | | 4.4% |
+| working (all but waiting on the GM) | 117.1 | | 2.5% | 76.3 | | 5.8% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make land | landing | 2 | 11.2 | 9.5% | 0.2% | 16.9 | 22.2% | 1.3% |
+| make closing-checks | tests | 2 | 17.6 | 15.0% | 0.4% | 8.5 | 11.1% | 0.6% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 4 | 21.7 | 18.5% | 0.5% | 0.0 | 0.0% | 0.0% |
+| make crate-checks | tests | 2 | 14.4 | 12.3% | 0.3% | 2.3 | 3.0% | 0.2% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 67 | 3.4 | 2.9% | 0.1% | 12.5 | 16.4% | 1.0% |
+| make rust-test | tests | 7 | 8.4 | 7.2% | 0.2% | 3.3 | 4.3% | 0.2% |
+| git | git | 20 | 3.7 | 3.2% | 0.1% | 3.4 | 4.4% | 0.3% |
+| make task-add | spec-kit step | 2 | 3.8 | 3.3% | 0.1% | 0.8 | 1.1% | 0.1% |
+| make ledger-owed | review: other commands | 1 | 2.0 | 1.7% | 0.0% | 2.0 | 2.6% | 0.1% |
+| make task-start | spec-kit step | 2 | 1.4 | 1.2% | 0.0% | 1.4 | 1.8% | 0.1% |
+| python3 | python3 | 9 | 0.9 | 0.8% | 0.0% | 0.8 | 1.1% | 0.1% |
+| make guard-edit | Makefile targets the guard's table does not book | 2 | 0.5 | 0.4% | 0.0% | 0.5 | 0.6% | 0.0% |
+| make decide | plan review: commands | 2 | 0.9 | 0.8% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make format | tests | 2 | 0.8 | 0.7% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make compound | map generation | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T247 (landed 21:27)
+
+Its whole time, from 2026-11-23T03:18:19Z: 32.3 min, 13.4 min blocking; inside the window 32.3 min (100.0% of it), 13.4 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| tests | 16.3 | 50.4% | 0.4% | 0.0 | 0.2% | 0.0% |
+| builders: running a command (the model's turn) | 6.9 | 21.4% | 0.1% | 6.5 | 48.3% | 0.5% |
+| shell reads and file edits | 2.4 | 7.3% | 0.1% | 2.4 | 17.7% | 0.2% |
+| hook suites | 2.7 | 8.3% | 0.1% | 1.7 | 13.0% | 0.1% |
+| landing | 1.4 | 4.4% | 0.0% | 1.3 | 9.8% | 0.1% |
+| plan review: agents | 1.1 | 3.4% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: writing code | 0.5 | 1.5% | 0.0% | 0.5 | 3.5% | 0.0% |
+| builders: reading code | 0.2 | 0.7% | 0.0% | 0.2 | 1.6% | 0.0% |
+| main session: writing its reply | 0.2 | 0.6% | 0.0% | 0.2 | 1.3% | 0.0% |
+| plan review: commands | 0.2 | 0.6% | 0.0% | 0.2 | 1.1% | 0.0% |
+| python3 | 0.1 | 0.4% | 0.0% | 0.1 | 1.0% | 0.0% |
+| gate | 0.1 | 0.4% | 0.0% | 0.1 | 1.0% | 0.0% |
+| claims round: commands | 0.0 | 0.2% | 0.0% | 0.0 | 0.4% | 0.0% |
+| builders: writing its reply | 0.0 | 0.1% | 0.0% | 0.0 | 0.4% | 0.0% |
+| git | 0.0 | 0.1% | 0.0% | 0.0 | 0.2% | 0.0% |
+| cargo, called directly | 0.0 | 0.1% | 0.0% | 0.0 | 0.2% | 0.0% |
+| builders: dispatching an agent | 0.0 | 0.1% | 0.0% | 0.0 | 0.2% | 0.0% |
+| wait loops (held open, no work) | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| the gate binary, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| main session: dispatching an agent | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| map generation | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 32.3 | | 0.7% | 13.4 | | 0.8% |
+| working (all but waiting on the GM) | 32.3 | | 0.7% | 13.4 | | 1.0% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make closing-checks | tests | 1 | 17.2 | 53.3% | 0.4% | 0.0 | 0.3% | 0.0% |
+| make land | landing | 1 | 3.3 | 10.1% | 0.1% | 3.2 | 23.6% | 0.2% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 15 | 2.4 | 7.3% | 0.1% | 2.4 | 17.7% | 0.2% |
+| make decide | plan review: commands | 3 | 0.2 | 0.6% | 0.0% | 0.2 | 1.1% | 0.0% |
+| python3 | python3 | 2 | 0.1 | 0.4% | 0.0% | 0.1 | 1.0% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.0 | 0.2% | 0.0% | 0.0 | 0.4% | 0.0% |
+| make quick | tests | 1 | 0.1 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| git | git | 4 | 0.0 | 0.1% | 0.0% | 0.0 | 0.2% | 0.0% |
+| cargo | cargo, called directly | 3 | 0.0 | 0.1% | 0.0% | 0.0 | 0.2% | 0.0% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T232 (landed 21:54)
+
+Its whole time, from 2026-11-23T03:18:19Z: 135.3 min, 88.4 min blocking; inside the window 135.3 min (100.0% of it), 88.4 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 28.6 | 21.1% | 0.6% | 26.6 | 30.1% | 2.0% |
+| shell reads and file edits | 24.1 | 17.8% | 0.5% | 13.5 | 15.3% | 1.0% |
+| compile | 22.6 | 16.7% | 0.5% | 7.5 | 8.4% | 0.6% |
+| tests | 21.8 | 16.1% | 0.5% | 8.2 | 9.3% | 0.6% |
+| wait loops (held open, no work) | 0.1 | 0.0% | 0.0% | 8.9 | 10.1% | 0.7% |
+| plan review: agents | 6.8 | 5.0% | 0.1% | 0.0 | 0.0% | 0.0% |
+| main session: running a command (the model's turn) | 3.3 | 2.4% | 0.1% | 3.3 | 3.7% | 0.3% |
+| builders: writing code | 3.1 | 2.3% | 0.1% | 3.1 | 3.5% | 0.2% |
+| hook suites | 4.0 | 3.0% | 0.1% | 2.1 | 2.4% | 0.2% |
+| spec-kit step | 2.8 | 2.1% | 0.1% | 2.8 | 3.2% | 0.2% |
+| record and pop-up checks: agents | 5.6 | 4.2% | 0.1% | 0.0 | 0.0% | 0.0% |
+| git | 1.5 | 1.1% | 0.0% | 1.4 | 1.6% | 0.1% |
+| main session: writing its reply | 1.4 | 1.0% | 0.0% | 1.4 | 1.6% | 0.1% |
+| plan review: commands | 1.2 | 0.9% | 0.0% | 1.2 | 1.4% | 0.1% |
+| landing | 1.4 | 1.1% | 0.0% | 0.9 | 1.0% | 0.1% |
+| main session: dispatching an agent | 1.1 | 0.8% | 0.0% | 1.1 | 1.3% | 0.1% |
+| builders: dispatching an agent | 0.8 | 0.6% | 0.0% | 1.1 | 1.3% | 0.1% |
+| record and pop-up checks: commands | 0.7 | 0.5% | 0.0% | 0.7 | 0.8% | 0.1% |
+| waiting: a monitor alone | 0.0 | 0.0% | 0.0% | 1.3 | 1.5% | 0.1% |
+| record builds and docs | 0.6 | 0.4% | 0.0% | 0.6 | 0.6% | 0.0% |
+| builders: writing its reply | 0.5 | 0.3% | 0.0% | 0.5 | 0.5% | 0.0% |
+| python3 | 0.4 | 0.3% | 0.0% | 0.4 | 0.5% | 0.0% |
+| builders: reading code | 0.4 | 0.3% | 0.0% | 0.4 | 0.5% | 0.0% |
+| Makefile targets the guard's table does not book | 0.4 | 0.3% | 0.0% | 0.4 | 0.5% | 0.0% |
+| arbiter: agents | 0.8 | 0.6% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (Monitor) | 0.3 | 0.2% | 0.0% | 0.3 | 0.3% | 0.0% |
+| gate | 0.4 | 0.3% | 0.0% | 0.2 | 0.2% | 0.0% |
+| claims round: commands | 0.2 | 0.1% | 0.0% | 0.2 | 0.2% | 0.0% |
+| builders: other tools (ToolSearch) | 0.2 | 0.1% | 0.0% | 0.2 | 0.2% | 0.0% |
+| map generation | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| the gate binary, called directly | 0.1 | 0.0% | 0.0% | 0.1 | 0.1% | 0.0% |
+| arbiter: commands | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| review: other commands | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 135.3 | | 2.9% | 88.4 | | 5.1% |
+| working (all but waiting on the GM) | 135.3 | | 2.9% | 88.4 | | 6.8% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 95 | 24.1 | 17.8% | 0.5% | 13.5 | 15.3% | 1.0% |
+| make closing-checks | tests | 5 | 25.8 | 19.1% | 0.6% | 5.9 | 6.7% | 0.5% |
+| make rust-test | tests | 13 | 9.9 | 7.3% | 0.2% | 6.5 | 7.4% | 0.5% |
+| make rust-lint | tests | 1 | 10.4 | 7.7% | 0.2% | 3.1 | 3.5% | 0.2% |
+| make land | landing | 1 | 3.7 | 2.7% | 0.1% | 2.7 | 3.1% | 0.2% |
+| make task-start | spec-kit step | 2 | 1.5 | 1.1% | 0.0% | 1.5 | 1.7% | 0.1% |
+| git | git | 50 | 1.5 | 1.1% | 0.0% | 1.4 | 1.6% | 0.1% |
+| make task-add | spec-kit step | 1 | 1.4 | 1.0% | 0.0% | 1.4 | 1.6% | 0.1% |
+| make decide | plan review: commands | 5 | 1.0 | 0.7% | 0.0% | 1.0 | 1.1% | 0.1% |
+| make docs | record builds and docs | 2 | 0.6 | 0.5% | 0.0% | 0.6 | 0.7% | 0.0% |
+| make modal-bundle | record and pop-up checks: commands | 5 | 0.6 | 0.4% | 0.0% | 0.6 | 0.7% | 0.0% |
+| make format | tests | 3 | 0.5 | 0.3% | 0.0% | 0.5 | 0.5% | 0.0% |
+| python3 | python3 | 15 | 0.4 | 0.3% | 0.0% | 0.4 | 0.5% | 0.0% |
+| make guard-edit | Makefile targets the guard's table does not book | 1 | 0.4 | 0.3% | 0.0% | 0.4 | 0.4% | 0.0% |
+| make plan-delta | plan review: commands | 1 | 0.3 | 0.2% | 0.0% | 0.3 | 0.3% | 0.0% |
+| make claims-triage | claims round: commands | 2 | 0.2 | 0.1% | 0.0% | 0.2 | 0.2% | 0.0% |
+| make record-owed | record and pop-up checks: commands | 1 | 0.1 | 0.1% | 0.0% | 0.1 | 0.1% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 2 | 0.1 | 0.0% | 0.0% | 0.1 | 0.1% | 0.0% |
+| make quick | tests | 1 | 0.1 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 1 | 0.1 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make arbiter-bundle | arbiter: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make ledger-owed | review: other commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-owed | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T246 (landed 22:39)
+
+Its whole time, from 2026-11-23T03:18:19Z: 109.3 min, 45.4 min blocking; inside the window 109.3 min (100.0% of it), 45.4 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 18.4 | 16.8% | 0.4% | 12.8 | 28.3% | 1.0% |
+| compile | 18.4 | 16.8% | 0.4% | 8.4 | 18.6% | 0.6% |
+| wait loops (held open, no work) | 16.3 | 15.0% | 0.4% | 0.0 | 0.0% | 0.0% |
+| builders: writing code | 10.0 | 9.2% | 0.2% | 6.0 | 13.2% | 0.5% |
+| shell reads and file edits | 13.3 | 12.2% | 0.3% | 2.3 | 5.1% | 0.2% |
+| tests | 6.8 | 6.2% | 0.1% | 1.2 | 2.6% | 0.1% |
+| hook suites | 6.1 | 5.5% | 0.1% | 1.8 | 3.9% | 0.1% |
+| gate | 4.0 | 3.7% | 0.1% | 3.8 | 8.3% | 0.3% |
+| Makefile targets the guard's table does not book | 4.2 | 3.8% | 0.1% | 2.3 | 5.1% | 0.2% |
+| python3 | 3.6 | 3.3% | 0.1% | 2.8 | 6.1% | 0.2% |
+| plan review: agents | 2.3 | 2.1% | 0.1% | 0.0 | 0.0% | 0.0% |
+| landing | 1.2 | 1.1% | 0.0% | 1.1 | 2.4% | 0.1% |
+| main session: running a command (the model's turn) | 0.9 | 0.8% | 0.0% | 0.9 | 2.0% | 0.1% |
+| main session: writing its reply | 0.6 | 0.6% | 0.0% | 0.6 | 1.4% | 0.0% |
+| cargo, called directly | 1.0 | 0.9% | 0.0% | 0.0 | 0.0% | 0.0% |
+| git | 0.5 | 0.5% | 0.0% | 0.4 | 0.9% | 0.0% |
+| builders: reading code | 0.4 | 0.4% | 0.0% | 0.2 | 0.3% | 0.0% |
+| plan review: commands | 0.4 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: writing its reply | 0.1 | 0.1% | 0.0% | 0.1 | 0.3% | 0.0% |
+| map generation | 0.1 | 0.1% | 0.0% | 0.1 | 0.3% | 0.0% |
+| claims round: commands | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| spec-kit step | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 0.2 | 0.4% | 0.0% |
+| builders: other tools (ToolSearch) | 0.1 | 0.1% | 0.0% | 0.1 | 0.1% | 0.0% |
+| builders: dispatching an agent | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (SendMessage) | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| review: other commands | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| record builds and docs | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: dispatching an agent | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| the gate binary, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 109.3 | | 2.4% | 45.4 | | 2.6% |
+| working (all but waiting on the GM) | 109.3 | | 2.4% | 45.4 | | 3.5% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make land | landing | 1 | 16.6 | 15.2% | 0.4% | 16.1 | 35.5% | 1.2% |
+| make closing-checks | tests | 3 | 16.8 | 15.4% | 0.4% | 0.0 | 0.0% | 0.0% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 8 | 16.3 | 15.0% | 0.4% | 0.0 | 0.0% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 85 | 13.3 | 12.2% | 0.3% | 2.3 | 5.1% | 0.2% |
+| python3 | python3 | 4 | 3.6 | 3.3% | 0.1% | 2.8 | 6.1% | 0.2% |
+| make guard-edit | Makefile targets the guard's table does not book | 7 | 2.4 | 2.2% | 0.1% | 2.3 | 5.1% | 0.2% |
+| make rust-test | tests | 3 | 2.8 | 2.6% | 0.1% | 0.1 | 0.3% | 0.0% |
+| make scratch-sweep | Makefile targets the guard's table does not book | 1 | 1.5 | 1.4% | 0.0% | 0.0 | 0.0% | 0.0% |
+| cargo | cargo, called directly | 7 | 1.0 | 0.9% | 0.0% | 0.0 | 0.0% | 0.0% |
+| git | git | 19 | 0.5 | 0.5% | 0.0% | 0.4 | 0.9% | 0.0% |
+| make task-add | spec-kit step | 1 | 0.2 | 0.2% | 0.0% | 0.2 | 0.5% | 0.0% |
+| make decide | plan review: commands | 8 | 0.4 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 1 | 0.3 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make format | tests | 5 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make quick | tests | 1 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make ledger-owed | review: other commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make docs | record builds and docs | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T233 (landed 22:43)
+
+Its whole time, from 2026-11-23T03:18:19Z: 50.5 min, 18.8 min blocking; inside the window 50.5 min (100.0% of it), 18.8 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 10.8 | 21.4% | 0.2% | 7.4 | 39.2% | 0.6% |
+| compile | 11.6 | 22.9% | 0.3% | 2.3 | 12.2% | 0.2% |
+| tests | 9.2 | 18.1% | 0.2% | 1.9 | 10.0% | 0.1% |
+| plan review: agents | 6.4 | 12.7% | 0.1% | 0.0 | 0.0% | 0.0% |
+| builders: writing code | 2.7 | 5.3% | 0.1% | 2.4 | 12.6% | 0.2% |
+| hook suites | 3.5 | 6.9% | 0.1% | 0.4 | 2.1% | 0.0% |
+| builders: other tools (ToolSearch) | 1.7 | 3.3% | 0.0% | 0.1 | 0.7% | 0.0% |
+| landing | 0.8 | 1.7% | 0.0% | 0.8 | 4.1% | 0.1% |
+| main session: running a command (the model's turn) | 0.5 | 1.0% | 0.0% | 0.5 | 2.7% | 0.0% |
+| builders: reading code | 0.5 | 0.9% | 0.0% | 0.4 | 2.0% | 0.0% |
+| main session: writing its reply | 0.4 | 0.8% | 0.0% | 0.4 | 2.2% | 0.0% |
+| main session: dispatching an agent | 0.3 | 0.6% | 0.0% | 0.3 | 1.5% | 0.0% |
+| gate | 0.3 | 0.5% | 0.0% | 0.3 | 1.4% | 0.0% |
+| builders: dispatching an agent | 0.3 | 0.6% | 0.0% | 0.2 | 0.9% | 0.0% |
+| Makefile targets the guard's table does not book | 0.2 | 0.5% | 0.0% | 0.2 | 1.2% | 0.0% |
+| git | 0.2 | 0.5% | 0.0% | 0.2 | 1.2% | 0.0% |
+| plan review: commands | 0.3 | 0.5% | 0.0% | 0.1 | 0.6% | 0.0% |
+| shell reads and file edits | 0.2 | 0.5% | 0.0% | 0.1 | 0.7% | 0.0% |
+| wait loops (held open, no work) | 0.0 | 0.0% | 0.0% | 0.3 | 1.7% | 0.0% |
+| builders: other tools (Monitor) | 0.1 | 0.3% | 0.0% | 0.1 | 0.7% | 0.0% |
+| map generation | 0.1 | 0.3% | 0.0% | 0.1 | 0.7% | 0.0% |
+| python3 | 0.1 | 0.2% | 0.0% | 0.1 | 0.6% | 0.0% |
+| the gate binary, called directly | 0.1 | 0.3% | 0.0% | 0.1 | 0.5% | 0.0% |
+| claims round: commands | 0.1 | 0.2% | 0.0% | 0.1 | 0.3% | 0.0% |
+| builders: writing its reply | 0.1 | 0.1% | 0.0% | 0.1 | 0.3% | 0.0% |
+| builders: other tools (TaskStop) | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| waiting: a monitor alone | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 50.5 | | 1.1% | 18.8 | | 1.1% |
+| working (all but waiting on the GM) | 50.5 | | 1.1% | 18.8 | | 1.4% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make closing-checks | tests | 3 | 18.7 | 37.0% | 0.4% | 0.0 | 0.1% | 0.0% |
+| make land | landing | 1 | 3.1 | 6.2% | 0.1% | 3.1 | 16.3% | 0.2% |
+| make rust-test | tests | 3 | 2.6 | 5.2% | 0.1% | 2.6 | 14.0% | 0.2% |
+| make format | tests | 2 | 0.9 | 1.8% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-edit | Makefile targets the guard's table does not book | 1 | 0.2 | 0.5% | 0.0% | 0.2 | 1.2% | 0.0% |
+| git | git | 6 | 0.2 | 0.5% | 0.0% | 0.2 | 1.2% | 0.0% |
+| make decide | plan review: commands | 5 | 0.3 | 0.5% | 0.0% | 0.1 | 0.6% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 50 | 0.2 | 0.5% | 0.0% | 0.1 | 0.7% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 5 | 0.1 | 0.3% | 0.0% | 0.1 | 0.5% | 0.0% |
+| python3 | python3 | 8 | 0.1 | 0.2% | 0.0% | 0.1 | 0.6% | 0.0% |
+| make claims-triage | claims round: commands | 2 | 0.1 | 0.2% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make quick | tests | 1 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python | python3 | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T249 (landed 23:19)
+
+Its whole time, from 2026-11-23T03:18:19Z: 60.6 min, 34.9 min blocking; inside the window 60.6 min (100.0% of it), 34.9 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| wait loops (held open, no work) | 22.2 | 36.6% | 0.5% | 12.6 | 36.2% | 1.0% |
+| builders: running a command (the model's turn) | 11.7 | 19.2% | 0.3% | 11.6 | 33.2% | 0.9% |
+| compile | 10.2 | 16.9% | 0.2% | 5.8 | 16.5% | 0.4% |
+| tests | 8.1 | 13.4% | 0.2% | 2.0 | 5.7% | 0.2% |
+| hook suites | 2.5 | 4.1% | 0.1% | 0.1 | 0.2% | 0.0% |
+| landing | 1.3 | 2.2% | 0.0% | 0.1 | 0.3% | 0.0% |
+| builders: reading code | 0.7 | 1.1% | 0.0% | 0.7 | 1.9% | 0.1% |
+| builders: writing code | 0.6 | 1.0% | 0.0% | 0.6 | 1.8% | 0.0% |
+| plan review: agents | 1.1 | 1.8% | 0.0% | 0.0 | 0.0% | 0.0% |
+| plan review: commands | 0.4 | 0.7% | 0.0% | 0.4 | 1.2% | 0.0% |
+| builders: writing its reply | 0.3 | 0.5% | 0.0% | 0.3 | 0.9% | 0.0% |
+| gate | 0.5 | 0.9% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: writing its reply | 0.2 | 0.4% | 0.0% | 0.2 | 0.7% | 0.0% |
+| builders: dispatching an agent | 0.2 | 0.3% | 0.0% | 0.2 | 0.5% | 0.0% |
+| shell reads and file edits | 0.1 | 0.2% | 0.0% | 0.1 | 0.4% | 0.0% |
+| claims round: commands | 0.1 | 0.2% | 0.0% | 0.1 | 0.3% | 0.0% |
+| map generation | 0.2 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| git | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| python3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: dispatching an agent | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 60.6 | | 1.3% | 34.9 | | 2.0% |
+| working (all but waiting on the GM) | 60.6 | | 1.3% | 34.9 | | 2.7% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 8 | 22.2 | 36.6% | 0.5% | 0.0 | 0.0% | 0.0% |
+| make closing-checks | tests | 3 | 16.2 | 26.7% | 0.4% | 4.5 | 12.8% | 0.3% |
+| make rust-test | tests | 8 | 3.1 | 5.0% | 0.1% | 3.1 | 8.7% | 0.2% |
+| make land | landing | 1 | 3.3 | 5.5% | 0.1% | 0.1 | 0.3% | 0.0% |
+| make decide | plan review: commands | 2 | 0.4 | 0.7% | 0.0% | 0.4 | 1.2% | 0.0% |
+| make rust-cover | tests | 1 | 0.2 | 0.4% | 0.0% | 0.2 | 0.7% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 44 | 0.1 | 0.2% | 0.0% | 0.1 | 0.4% | 0.0% |
+| make format | tests | 3 | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make claims-owed | claims round: commands | 1 | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| git | git | 9 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| python3 | python3 | 3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T248 (landed 23:31)
+
+Its whole time, from 2026-11-23T03:18:19Z: 56.9 min, 38.9 min blocking; inside the window 56.9 min (100.0% of it), 38.9 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 12.5 | 21.9% | 0.3% | 10.4 | 31.9% | 0.8% |
+| compile | 11.4 | 20.0% | 0.2% | 5.5 | 16.8% | 0.4% |
+| tests | 11.9 | 20.9% | 0.3% | 4.2 | 12.8% | 0.3% |
+| the GM | 0.0 | 0.0% | 0.0% | 6.1 | 15.8% | 0.4% |
+| hook suites | 4.5 | 7.9% | 0.1% | 1.3 | 4.0% | 0.1% |
+| plan review: agents | 5.7 | 10.1% | 0.1% | 0.0 | 0.0% | 0.0% |
+| builders: writing code | 2.6 | 4.6% | 0.1% | 2.3 | 7.0% | 0.2% |
+| landing | 1.6 | 2.8% | 0.0% | 1.5 | 4.5% | 0.1% |
+| gate | 1.4 | 2.5% | 0.0% | 1.4 | 4.4% | 0.1% |
+| git | 1.2 | 2.0% | 0.0% | 1.1 | 3.5% | 0.1% |
+| main session: running a command (the model's turn) | 1.1 | 1.9% | 0.0% | 1.1 | 3.3% | 0.1% |
+| waiting: a monitor alone | 0.0 | 0.0% | 0.0% | 1.2 | 3.7% | 0.1% |
+| Makefile targets the guard's table does not book | 0.6 | 1.0% | 0.0% | 0.6 | 1.7% | 0.0% |
+| plan review: commands | 0.5 | 0.8% | 0.0% | 0.3 | 1.0% | 0.0% |
+| main session: dispatching an agent | 0.3 | 0.6% | 0.0% | 0.3 | 1.0% | 0.0% |
+| main session: writing its reply | 0.3 | 0.5% | 0.0% | 0.3 | 0.9% | 0.0% |
+| map generation | 0.3 | 0.5% | 0.0% | 0.2 | 0.7% | 0.0% |
+| builders: other tools (Monitor) | 0.3 | 0.4% | 0.0% | 0.2 | 0.5% | 0.0% |
+| builders: reading code | 0.2 | 0.3% | 0.0% | 0.2 | 0.5% | 0.0% |
+| shell reads and file edits | 0.2 | 0.3% | 0.0% | 0.1 | 0.4% | 0.0% |
+| builders: dispatching an agent | 0.1 | 0.2% | 0.0% | 0.1 | 0.3% | 0.0% |
+| spec-kit step | 0.1 | 0.2% | 0.0% | 0.1 | 0.4% | 0.0% |
+| builders: other tools (ToolSearch) | 0.1 | 0.2% | 0.0% | 0.1 | 0.3% | 0.0% |
+| builders: writing its reply | 0.1 | 0.2% | 0.0% | 0.1 | 0.3% | 0.0% |
+| claims round: commands | 0.1 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| wait loops (held open, no work) | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 56.9 | | 1.2% | 38.9 | | 2.3% |
+| working (all but waiting on the GM) | 56.9 | | 1.2% | 32.7 | | 2.5% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make closing-checks | tests | 3 | 14.6 | 25.7% | 0.3% | 3.5 | 10.7% | 0.3% |
+| make land | landing | 1 | 6.4 | 11.2% | 0.1% | 6.3 | 19.2% | 0.5% |
+| make rust-test | tests | 6 | 4.2 | 7.4% | 0.1% | 4.2 | 12.9% | 0.3% |
+| make crate-checks | tests | 3 | 5.7 | 10.0% | 0.1% | 0.0 | 0.0% | 0.0% |
+| git | git | 20 | 1.2 | 2.0% | 0.0% | 1.1 | 3.5% | 0.1% |
+| make guard-edit | Makefile targets the guard's table does not book | 1 | 0.6 | 1.0% | 0.0% | 0.6 | 1.7% | 0.0% |
+| make decide | plan review: commands | 3 | 0.5 | 0.8% | 0.0% | 0.3 | 1.0% | 0.0% |
+| make task-add | spec-kit step | 1 | 0.2 | 0.4% | 0.0% | 0.2 | 0.7% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 36 | 0.2 | 0.3% | 0.0% | 0.1 | 0.4% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make format | tests | 1 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make compound | map generation | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-owed | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | python3 | 3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python | python3 | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T252 (landed 23:44)
+
+Its whole time, from 2026-11-23T03:18:19Z: 15.2 min, 11.4 min blocking; inside the window 15.2 min (100.0% of it), 11.4 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 7.5 | 49.1% | 0.2% | 5.0 | 44.1% | 0.4% |
+| Makefile targets the guard's table does not book | 1.2 | 8.0% | 0.0% | 1.2 | 10.5% | 0.1% |
+| shell reads and file edits | 1.3 | 8.5% | 0.0% | 0.9 | 8.1% | 0.1% |
+| main session: running a command (the model's turn) | 0.9 | 5.8% | 0.0% | 0.9 | 7.7% | 0.1% |
+| landing | 0.8 | 5.0% | 0.0% | 0.7 | 5.8% | 0.1% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 1.4 | 12.4% | 0.1% |
+| plan review: agents | 0.9 | 5.8% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: writing code | 0.5 | 3.1% | 0.0% | 0.4 | 3.2% | 0.0% |
+| main session: writing its reply | 0.4 | 2.6% | 0.0% | 0.4 | 3.5% | 0.0% |
+| tests | 0.6 | 3.8% | 0.0% | 0.1 | 0.8% | 0.0% |
+| compile | 0.5 | 3.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | 0.2 | 1.3% | 0.0% | 0.2 | 1.8% | 0.0% |
+| git | 0.1 | 0.9% | 0.0% | 0.1 | 1.1% | 0.0% |
+| main session: dispatching an agent | 0.1 | 0.5% | 0.0% | 0.1 | 0.7% | 0.0% |
+| plan review: commands | 0.1 | 0.6% | 0.0% | 0.0 | 0.1% | 0.0% |
+| builders: dispatching an agent | 0.1 | 0.6% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: writing its reply | 0.1 | 0.5% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: reading code | 0.1 | 0.4% | 0.0% | 0.0 | 0.0% | 0.0% |
+| hook suites | 0.0 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| spec-kit step | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| gate | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 15.2 | | 0.3% | 11.4 | | 0.7% |
+| working (all but waiting on the GM) | 15.2 | | 0.3% | 11.4 | | 0.9% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make disk-audit | Makefile targets the guard's table does not book | 1 | 1.2 | 7.9% | 0.0% | 1.2 | 10.5% | 0.1% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 29 | 1.3 | 8.5% | 0.0% | 0.9 | 8.1% | 0.1% |
+| make land | landing | 1 | 0.8 | 5.0% | 0.0% | 0.7 | 5.8% | 0.1% |
+| make closing-checks | tests | 1 | 0.9 | 6.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| python3 | python3 | 2 | 0.2 | 1.3% | 0.0% | 0.2 | 1.8% | 0.0% |
+| git | git | 6 | 0.1 | 0.9% | 0.0% | 0.1 | 1.1% | 0.0% |
+| make task-add | spec-kit step | 1 | 0.1 | 0.5% | 0.0% | 0.1 | 0.7% | 0.0% |
+| make decide | plan review: commands | 3 | 0.1 | 0.6% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make quick | tests | 1 | 0.1 | 0.7% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T253 (landed 00:17)
+
+Its whole time, from 2026-11-23T03:18:19Z: 55.9 min, 71.3 min blocking; inside the window 55.9 min (100.0% of it), 71.3 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 25.8 | 46.2% | 0.6% | 30.3 | 66.3% | 2.3% |
+| the GM | 0.0 | 0.0% | 0.0% | 25.4 | 35.6% | 1.5% |
+| plan review: agents | 13.4 | 24.0% | 0.3% | 0.1 | 0.1% | 0.0% |
+| main session: running a command (the model's turn) | 2.3 | 4.1% | 0.1% | 2.3 | 5.1% | 0.2% |
+| main session: writing its reply | 1.8 | 3.2% | 0.0% | 1.8 | 3.9% | 0.1% |
+| python3 | 0.2 | 0.3% | 0.0% | 2.6 | 5.6% | 0.2% |
+| shell reads and file edits | 1.5 | 2.7% | 0.0% | 1.1 | 2.4% | 0.1% |
+| builders: writing code | 1.3 | 2.3% | 0.0% | 1.3 | 2.8% | 0.1% |
+| tests | 1.4 | 2.5% | 0.0% | 1.0 | 2.1% | 0.1% |
+| git | 1.1 | 2.0% | 0.0% | 1.1 | 2.4% | 0.1% |
+| compile | 1.3 | 2.3% | 0.0% | 0.7 | 1.5% | 0.1% |
+| hook suites | 1.6 | 2.8% | 0.0% | 0.0 | 0.1% | 0.0% |
+| landing | 0.9 | 1.5% | 0.0% | 0.7 | 1.6% | 0.1% |
+| wait loops (held open, no work) | 1.0 | 1.8% | 0.0% | 0.1 | 0.1% | 0.0% |
+| builders: writing its reply | 0.4 | 0.7% | 0.0% | 0.6 | 1.3% | 0.0% |
+| main session: dispatching an agent | 0.4 | 0.7% | 0.0% | 0.4 | 0.8% | 0.0% |
+| plan review: commands | 0.3 | 0.6% | 0.0% | 0.3 | 0.7% | 0.0% |
+| the gate binary, called directly | 0.3 | 0.5% | 0.0% | 0.3 | 0.7% | 0.0% |
+| spec-kit step | 0.2 | 0.4% | 0.0% | 0.2 | 0.5% | 0.0% |
+| review: other commands | 0.2 | 0.4% | 0.0% | 0.2 | 0.5% | 0.0% |
+| builders: dispatching an agent | 0.2 | 0.3% | 0.0% | 0.2 | 0.4% | 0.0% |
+| gate | 0.2 | 0.3% | 0.0% | 0.2 | 0.4% | 0.0% |
+| map generation | 0.1 | 0.2% | 0.0% | 0.1 | 0.3% | 0.0% |
+| the GM's filter: agents (escalation-check) | 0.0 | 0.0% | 0.0% | 0.2 | 0.3% | 0.0% |
+| builders: reading code | 0.1 | 0.1% | 0.0% | 0.1 | 0.1% | 0.0% |
+| claims round: commands | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| builders: other tools (ToolSearch) | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| Makefile targets the guard's table does not book | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 55.9 | | 1.2% | 71.3 | | 4.2% |
+| working (all but waiting on the GM) | 55.9 | | 1.2% | 45.7 | | 3.5% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| python3 | python3 | 1 | 0.2 | 0.3% | 0.0% | 2.6 | 5.6% | 0.2% |
+| make land | landing | 1 | 1.4 | 2.4% | 0.0% | 1.3 | 2.8% | 0.1% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 270 | 1.5 | 2.7% | 0.0% | 1.1 | 2.4% | 0.1% |
+| git | git | 34 | 1.1 | 2.0% | 0.0% | 1.1 | 2.4% | 0.1% |
+| make closing-checks | tests | 3 | 2.0 | 3.5% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make rust-test | tests | 2 | 0.7 | 1.2% | 0.0% | 0.7 | 1.5% | 0.1% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 3 | 1.0 | 1.8% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-add | spec-kit step | 1 | 0.5 | 0.8% | 0.0% | 0.5 | 1.0% | 0.0% |
+| make hooks-test | tests | 1 | 0.7 | 1.3% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make ledger-owed | review: other commands | 1 | 0.3 | 0.5% | 0.0% | 0.3 | 0.6% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 7 | 0.3 | 0.5% | 0.0% | 0.3 | 0.6% | 0.0% |
+| make quick | tests | 3 | 0.2 | 0.4% | 0.0% | 0.2 | 0.4% | 0.0% |
+| make decide | plan review: commands | 5 | 0.2 | 0.3% | 0.0% | 0.2 | 0.4% | 0.0% |
+| make plan-delta | plan review: commands | 1 | 0.2 | 0.3% | 0.0% | 0.2 | 0.3% | 0.0% |
+| make format | tests | 2 | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make crate-checks | tests | 1 | 0.1 | 0.2% | 0.0% | 0.1 | 0.1% | 0.0% |
+| l7r-gate | the gate binary, called directly | 3 | 0.1 | 0.1% | 0.0% | 0.1 | 0.1% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make claims-owed | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-edit | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T256 (landed 01:25)
+
+Its whole time, from 2026-11-23T03:18:19Z: 46.8 min, 67.3 min blocking; inside the window 46.8 min (100.0% of it), 67.3 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| compile | 10.1 | 21.5% | 0.2% | 15.5 | 23.5% | 1.2% |
+| builders: running a command (the model's turn) | 11.4 | 24.4% | 0.2% | 10.6 | 16.0% | 0.8% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 20.9 | 31.6% | 1.6% |
+| tests | 9.8 | 21.0% | 0.2% | 8.9 | 13.4% | 0.7% |
+| builders: writing code | 2.5 | 5.4% | 0.1% | 2.5 | 3.8% | 0.2% |
+| hook suites | 4.0 | 8.6% | 0.1% | 1.0 | 1.5% | 0.1% |
+| gate | 1.4 | 3.0% | 0.0% | 1.1 | 1.6% | 0.1% |
+| landing | 1.2 | 2.6% | 0.0% | 0.9 | 1.4% | 0.1% |
+| main session: running a command (the model's turn) | 1.0 | 2.1% | 0.0% | 1.0 | 1.5% | 0.1% |
+| main session: writing its reply | 0.8 | 1.7% | 0.0% | 0.8 | 1.2% | 0.1% |
+| builders: other tools (Monitor) | 0.9 | 1.9% | 0.0% | 0.6 | 0.9% | 0.0% |
+| plan review: agents | 1.2 | 2.5% | 0.0% | 0.1 | 0.1% | 0.0% |
+| the GM | 0.0 | 0.0% | 0.0% | 1.2 | 1.7% | 0.1% |
+| git | 0.5 | 1.1% | 0.0% | 0.5 | 0.7% | 0.0% |
+| main session: dispatching an agent | 0.3 | 0.7% | 0.0% | 0.3 | 0.5% | 0.0% |
+| shell reads and file edits | 0.3 | 0.7% | 0.0% | 0.3 | 0.5% | 0.0% |
+| plan review: commands | 0.2 | 0.5% | 0.0% | 0.3 | 0.5% | 0.0% |
+| builders: dispatching an agent | 0.2 | 0.5% | 0.0% | 0.3 | 0.4% | 0.0% |
+| builders: other tools (ToolSearch) | 0.2 | 0.4% | 0.0% | 0.2 | 0.3% | 0.0% |
+| main session: other tools (SendMessage) | 0.1 | 0.3% | 0.0% | 0.1 | 0.2% | 0.0% |
+| map generation | 0.2 | 0.4% | 0.0% | 0.0 | 0.0% | 0.0% |
+| claims round: commands | 0.1 | 0.2% | 0.0% | 0.1 | 0.1% | 0.0% |
+| builders: other tools (TaskStop) | 0.1 | 0.2% | 0.0% | 0.1 | 0.1% | 0.0% |
+| the gate binary, called directly | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: writing its reply | 0.0 | 0.1% | 0.0% | 0.0 | 0.1% | 0.0% |
+| python3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 46.8 | | 1.0% | 67.3 | | 3.9% |
+| working (all but waiting on the GM) | 46.8 | | 1.0% | 66.2 | | 5.1% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make closing-checks | tests | 3 | 16.1 | 34.3% | 0.3% | 18.9 | 28.5% | 1.4% |
+| make rust-test | tests | 8 | 5.7 | 12.2% | 0.1% | 5.6 | 8.4% | 0.4% |
+| make land | landing | 1 | 4.9 | 10.5% | 0.1% | 3.0 | 4.5% | 0.2% |
+| git | git | 18 | 0.5 | 1.1% | 0.0% | 0.5 | 0.7% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 67 | 0.3 | 0.7% | 0.0% | 0.3 | 0.5% | 0.0% |
+| make decide | plan review: commands | 3 | 0.2 | 0.5% | 0.0% | 0.3 | 0.5% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.1 | 0.2% | 0.0% | 0.1 | 0.1% | 0.0% |
+| make format | tests | 3 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate | the gate binary, called directly | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 4 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | python3 | 5 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make compound | map generation | 1 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T257 (landed 01:25; no start recorded: its time before 2026-11-23T03:18:19Z may be missing)
+
+Its whole time, from 2026-11-23T03:18:19Z: 2.7 min, 0.0 min blocking; inside the window 2.7 min (100.0% of it), 0.0 min blocking (-); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| plan review: agents | 2.1 | 77.0% | 0.0% | 0.0 | - | 0.0% |
+| builders: running a command (the model's turn) | 0.4 | 15.6% | 0.0% | 0.0 | - | 0.0% |
+| plan review: commands | 0.2 | 7.1% | 0.0% | 0.0 | - | 0.0% |
+| builders: dispatching an agent | 0.0 | 0.2% | 0.0% | 0.0 | - | 0.0% |
+| all | 2.7 | | 0.1% | 0.0 | | 0.0% |
+| working (all but waiting on the GM) | 2.7 | | 0.1% | 0.0 | | 0.0% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make decide | plan review: commands | 3 | 0.2 | 7.1% | 0.0% | 0.0 | - | 0.0% |
+
+## 451-time-retro-and-efficiency T254 (landed 02:10)
+
+Its whole time, from 2026-11-23T03:18:19Z: 99.9 min, 54.2 min blocking; inside the window 99.9 min (100.0% of it), 54.2 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 32.7 | 32.7% | 0.7% | 21.4 | 42.3% | 1.6% |
+| compile | 17.7 | 17.7% | 0.4% | 9.6 | 19.0% | 0.7% |
+| tests | 17.1 | 17.2% | 0.4% | 7.1 | 14.1% | 0.5% |
+| hook suites | 6.0 | 6.0% | 0.1% | 0.0 | 0.0% | 0.0% |
+| plan review: agents | 5.4 | 5.4% | 0.1% | 0.4 | 0.9% | 0.0% |
+| builders: writing code | 2.5 | 2.5% | 0.1% | 2.5 | 5.0% | 0.2% |
+| wait loops (held open, no work) | 4.0 | 4.0% | 0.1% | 0.0 | 0.0% | 0.0% |
+| landing | 3.2 | 3.2% | 0.1% | 0.8 | 1.6% | 0.1% |
+| gate | 1.9 | 1.9% | 0.0% | 1.8 | 3.6% | 0.1% |
+| the GM | 0.0 | 0.0% | 0.0% | 3.6 | 6.7% | 0.2% |
+| shell reads and file edits | 1.8 | 1.9% | 0.0% | 1.7 | 3.3% | 0.1% |
+| arbiter: agents | 2.1 | 2.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: writing its reply | 0.7 | 0.7% | 0.0% | 0.7 | 1.5% | 0.1% |
+| main session: running a command (the model's turn) | 0.7 | 0.7% | 0.0% | 0.7 | 1.4% | 0.1% |
+| python3 | 0.6 | 0.6% | 0.0% | 0.6 | 1.1% | 0.0% |
+| builders: dispatching an agent | 0.7 | 0.7% | 0.0% | 0.4 | 0.9% | 0.0% |
+| plan review: commands | 0.5 | 0.5% | 0.0% | 0.4 | 0.8% | 0.0% |
+| main session: dispatching an agent | 0.4 | 0.4% | 0.0% | 0.4 | 0.8% | 0.0% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 0.8 | 1.5% | 0.1% |
+| git | 0.5 | 0.5% | 0.0% | 0.1 | 0.3% | 0.0% |
+| Makefile targets the guard's table does not book | 0.3 | 0.3% | 0.0% | 0.3 | 0.6% | 0.0% |
+| spec-kit step | 0.2 | 0.2% | 0.0% | 0.2 | 0.4% | 0.0% |
+| map generation | 0.2 | 0.2% | 0.0% | 0.2 | 0.4% | 0.0% |
+| builders: other tools (ToolSearch) | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| builders: reading code | 0.1 | 0.1% | 0.0% | 0.1 | 0.2% | 0.0% |
+| arbiter: commands | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: writing its reply | 0.1 | 0.1% | 0.0% | 0.1 | 0.1% | 0.0% |
+| claims round: commands | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| the gate binary, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 99.9 | | 2.2% | 54.2 | | 3.2% |
+| working (all but waiting on the GM) | 99.9 | | 2.2% | 50.6 | | 3.9% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make rust-test | tests | 17 | 13.1 | 13.1% | 0.3% | 11.8 | 23.4% | 0.9% |
+| make land | landing | 1 | 10.2 | 10.3% | 0.2% | 6.8 | 13.5% | 0.5% |
+| make closing-checks | tests | 5 | 16.8 | 16.8% | 0.4% | 0.1 | 0.1% | 0.0% |
+| make format | tests | 7 | 4.6 | 4.6% | 0.1% | 0.0 | 0.0% | 0.0% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 5 | 4.0 | 4.0% | 0.1% | 0.0 | 0.0% | 0.0% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 137 | 1.8 | 1.9% | 0.0% | 1.7 | 3.3% | 0.1% |
+| make rust-lint | tests | 5 | 1.3 | 1.3% | 0.0% | 0.8 | 1.5% | 0.1% |
+| python3 | python3 | 39 | 0.6 | 0.6% | 0.0% | 0.6 | 1.1% | 0.0% |
+| make decide | plan review: commands | 5 | 0.5 | 0.5% | 0.0% | 0.4 | 0.8% | 0.0% |
+| git | git | 26 | 0.5 | 0.5% | 0.0% | 0.1 | 0.3% | 0.0% |
+| make guard-edit | Makefile targets the guard's table does not book | 3 | 0.3 | 0.3% | 0.0% | 0.3 | 0.6% | 0.0% |
+| make task-add | spec-kit step | 1 | 0.3 | 0.3% | 0.0% | 0.3 | 0.5% | 0.0% |
+| make arbiter-bundle | arbiter: commands | 2 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-owed | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make claims-triage | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## 451-time-retro-and-efficiency T255 (landed 02:10; no start recorded: its time before 2026-11-23T03:18:19Z may be missing)
+
+Its whole time, from 2026-11-23T03:18:19Z: 1.1 min, 0.0 min blocking; inside the window 1.1 min (100.0% of it), 0.0 min blocking (-); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| plan review: agents | 0.9 | 82.7% | 0.0% | 0.0 | - | 0.0% |
+| builders: running a command (the model's turn) | 0.2 | 14.1% | 0.0% | 0.0 | - | 0.0% |
+| plan review: commands | 0.0 | 2.9% | 0.0% | 0.0 | - | 0.0% |
+| builders: dispatching an agent | 0.0 | 0.3% | 0.0% | 0.0 | - | 0.0% |
+| all | 1.1 | | 0.0% | 0.0 | | 0.0% |
+| working (all but waiting on the GM) | 1.1 | | 0.0% | 0.0 | | 0.0% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make decide | plan review: commands | 1 | 0.0 | 2.9% | 0.0% | 0.0 | - | 0.0% |
+
+## 451-time-retro-and-efficiency T259 (landed 03:17)
+
+Its whole time, from 2026-11-23T03:18:19Z: 78.5 min, 58.9 min blocking; inside the window 78.5 min (100.0% of it), 58.9 min blocking (100.0%); its % of window is its whole time against the window's totals, so it can pass 100%.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| the GM | 0.0 | 0.0% | 0.0% | 37.7 | 64.0% | 2.2% |
+| builders: running a command (the model's turn) | 29.3 | 37.4% | 0.6% | 3.0 | 14.4% | 0.2% |
+| plan review: agents | 20.0 | 25.4% | 0.4% | 3.7 | 17.5% | 0.3% |
+| builders: writing code | 8.6 | 10.9% | 0.2% | 0.0 | 0.0% | 0.0% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 5.3 | 24.9% | 0.4% |
+| main session: running a command (the model's turn) | 2.0 | 2.5% | 0.0% | 2.0 | 9.3% | 0.2% |
+| compile | 3.9 | 5.0% | 0.1% | 0.0 | 0.0% | 0.0% |
+| main session: writing its reply | 1.7 | 2.2% | 0.0% | 1.7 | 8.2% | 0.1% |
+| tests | 2.6 | 3.3% | 0.1% | 0.2 | 1.0% | 0.0% |
+| main session: dispatching an agent | 1.1 | 1.5% | 0.0% | 1.1 | 5.4% | 0.1% |
+| hook suites | 1.9 | 2.5% | 0.0% | 0.0 | 0.0% | 0.0% |
+| git | 1.4 | 1.7% | 0.0% | 0.5 | 2.2% | 0.0% |
+| landing | 0.9 | 1.2% | 0.0% | 0.8 | 3.9% | 0.1% |
+| map generation | 0.1 | 0.2% | 0.0% | 1.4 | 6.8% | 0.1% |
+| shell reads and file edits | 0.5 | 0.6% | 0.0% | 0.5 | 2.3% | 0.0% |
+| arbiter: agents | 0.7 | 0.9% | 0.0% | 0.0 | 0.0% | 0.0% |
+| review: other commands | 0.4 | 0.5% | 0.0% | 0.4 | 1.7% | 0.0% |
+| builders: reading code | 0.5 | 0.6% | 0.0% | 0.1 | 0.3% | 0.0% |
+| builders: other tools (Monitor) | 0.5 | 0.6% | 0.0% | 0.0 | 0.0% | 0.0% |
+| plan review: commands | 0.4 | 0.5% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: dispatching an agent | 0.4 | 0.5% | 0.0% | 0.0 | 0.0% | 0.0% |
+| gate | 0.2 | 0.2% | 0.0% | 0.2 | 0.8% | 0.0% |
+| the gate binary, called directly | 0.3 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: other tools (SendMessage) | 0.1 | 0.2% | 0.0% | 0.1 | 0.6% | 0.0% |
+| arbiter: commands | 0.2 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| Makefile targets the guard's table does not book | 0.2 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: writing code | 0.1 | 0.1% | 0.0% | 0.1 | 0.4% | 0.0% |
+| claims round: commands | 0.1 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (ToolSearch) | 0.1 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: reading code | 0.0 | 0.1% | 0.0% | 0.0 | 0.2% | 0.0% |
+| builders: writing its reply | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| wait loops (held open, no work) | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| spec-kit step | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| record builds and docs | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| waiting: a monitor alone | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 78.5 | | 1.7% | 58.9 | | 3.4% |
+| working (all but waiting on the GM) | 78.5 | | 1.7% | 21.2 | | 1.6% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| make closing-checks | tests | 4 | 4.3 | 5.5% | 0.1% | 0.0 | 0.0% | 0.0% |
+| make land | landing | 1 | 1.5 | 1.8% | 0.0% | 1.3 | 6.3% | 0.1% |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 151 | 0.5 | 0.6% | 0.0% | 1.8 | 8.4% | 0.1% |
+| git | git | 35 | 1.4 | 1.7% | 0.0% | 0.5 | 2.2% | 0.0% |
+| make crate-checks | tests | 4 | 1.3 | 1.6% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make rust-test | tests | 9 | 1.2 | 1.5% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make format | tests | 11 | 1.2 | 1.5% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make ledger-owed | review: other commands | 1 | 0.4 | 0.5% | 0.0% | 0.4 | 1.7% | 0.0% |
+| make decide | plan review: commands | 7 | 0.3 | 0.4% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 7 | 0.3 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make arbiter-bundle | arbiter: commands | 2 | 0.2 | 0.3% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make audits | Makefile targets the guard's table does not book | 7 | 0.2 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make plan-delta | plan review: commands | 1 | 0.1 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make rust-lint | tests | 2 | 0.1 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make quick | tests | 1 | 0.1 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-triage | claims round: commands | 2 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-add | spec-kit step | 1 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-owed | claims round: commands | 1 | 0.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | python3 | 7 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-messages | Makefile targets the guard's table does not book | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make docs | record builds and docs | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate | the gate binary, called directly | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-edit | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## The rest of the window: tasks not landed in it, and time under no task (`-`)
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| shell reads and file edits | 1452.6 | 68.9% | 31.5% | 8.9 | 16.9% | 0.7% |
+| research and page sessions | 211.6 | 10.0% | 4.6% | 0.0 | 0.0% | 0.0% |
+| wait loops on page sessions (held open, no work) | 170.9 | 8.1% | 3.7% | 0.0 | 0.0% | 0.0% |
+| record and pop-up checks: agents | 150.6 | 7.1% | 3.3% | 0.0 | 0.0% | 0.0% |
+| builders: running a command (the model's turn) | 50.3 | 2.4% | 1.1% | 18.3 | 34.7% | 1.4% |
+| compile | 10.3 | 0.5% | 0.2% | 4.1 | 7.8% | 0.3% |
+| tests | 9.3 | 0.4% | 0.2% | 3.8 | 7.1% | 0.3% |
+| builders: writing code | 7.1 | 0.3% | 0.2% | 2.6 | 4.9% | 0.2% |
+| map generation | 4.7 | 0.2% | 0.1% | 2.0 | 3.8% | 0.2% |
+| record and pop-up checks: commands | 4.8 | 0.2% | 0.1% | 1.5 | 2.9% | 0.1% |
+| builders: writing its reply | 5.3 | 0.3% | 0.1% | 0.7 | 1.4% | 0.1% |
+| the GM's filter: agents (escalation-check) | 5.7 | 0.3% | 0.1% | 0.0 | 0.0% | 0.0% |
+| main session: running a command (the model's turn) | 2.5 | 0.1% | 0.1% | 2.5 | 4.8% | 0.2% |
+| claims round: agents | 5.0 | 0.2% | 0.1% | 0.0 | 0.0% | 0.0% |
+| the GM | 0.0 | 0.0% | 0.0% | 4.8 | 8.3% | 0.3% |
+| builders: dispatching an agent | 2.8 | 0.1% | 0.1% | 0.9 | 1.6% | 0.1% |
+| python3 | 3.2 | 0.2% | 0.1% | 0.2 | 0.4% | 0.0% |
+| git | 1.8 | 0.1% | 0.0% | 1.2 | 2.4% | 0.1% |
+| main session: writing its reply | 1.3 | 0.1% | 0.0% | 1.3 | 2.5% | 0.1% |
+| Makefile targets the guard's table does not book | 1.9 | 0.1% | 0.0% | 0.2 | 0.3% | 0.0% |
+| plan review: agents | 1.9 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: dispatching an agent | 0.9 | 0.0% | 0.0% | 0.9 | 1.8% | 0.1% |
+| landing | 1.3 | 0.1% | 0.0% | 0.4 | 0.8% | 0.0% |
+| builders: reading code | 1.3 | 0.1% | 0.0% | 0.3 | 0.6% | 0.0% |
+| other review agents (work-budget, message-check) | 1.6 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| wait loops (held open, no work) | 1.1 | 0.1% | 0.0% | 0.3 | 0.6% | 0.0% |
+| claims round: commands | 0.9 | 0.0% | 0.0% | 0.4 | 0.7% | 0.0% |
+| hook suites | 1.3 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| plan review: commands | 0.5 | 0.0% | 0.0% | 0.4 | 0.8% | 0.0% |
+| gate | 0.5 | 0.0% | 0.0% | 0.4 | 0.8% | 0.0% |
+| builders: other tools (Monitor) | 0.4 | 0.0% | 0.0% | 0.4 | 0.7% | 0.0% |
+| arbiter: agents | 0.5 | 0.0% | 0.0% | 0.1 | 0.3% | 0.0% |
+| review: other commands | 0.4 | 0.0% | 0.0% | 0.2 | 0.3% | 0.0% |
+| spec-kit step | 0.3 | 0.0% | 0.0% | 0.3 | 0.5% | 0.0% |
+| arbiter: commands | 0.3 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| main session: writing code | 0.1 | 0.0% | 0.0% | 0.1 | 0.3% | 0.0% |
+| builders: other tools (ToolSearch) | 0.1 | 0.0% | 0.0% | 0.1 | 0.2% | 0.0% |
+| record builds and docs | 0.1 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| the gate binary, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| fetching and extracting sources | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (Skill) | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 2115.5 | | 45.8% | 57.6 | | 3.4% |
+| working (all but waiting on the GM) | 2109.8 | | 45.8% | 52.9 | | 4.0% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 413 | 1454.1 | 68.9% | 31.5% | 8.9 | 16.9% | 0.7% |
+| a wait loop on a page session | wait loops on page sessions (held open, no work) | 4 | 170.9 | 8.1% | 3.7% | 0.0 | 0.0% | 0.0% |
+| make closing-checks | tests | 5 | 12.6 | 0.6% | 0.3% | 0.1 | 0.1% | 0.0% |
+| make done | gate | 1 | 4.8 | 0.2% | 0.1% | 4.7 | 8.9% | 0.4% |
+| python3 | python3 | 160 | 4.1 | 0.2% | 0.1% | 1.1 | 2.1% | 0.1% |
+| make record-owed | record and pop-up checks: commands | 31 | 2.6 | 0.1% | 0.1% | 1.3 | 2.5% | 0.1% |
+| make land | landing | 3 | 2.0 | 0.1% | 0.0% | 1.1 | 2.0% | 0.1% |
+| git | git | 93 | 1.8 | 0.1% | 0.0% | 1.2 | 2.4% | 0.1% |
+| make work-budget | tests | 2 | 1.4 | 0.1% | 0.0% | 1.4 | 2.7% | 0.1% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 3 | 2.3 | 0.1% | 0.1% | 0.0 | 0.0% | 0.0% |
+| make rust-test | tests | 15 | 0.9 | 0.0% | 0.0% | 0.9 | 1.7% | 0.1% |
+| make apply-edits | Makefile targets the guard's table does not book | 15 | 1.7 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make quick | tests | 11 | 0.8 | 0.0% | 0.0% | 0.4 | 0.8% | 0.0% |
+| make record-checked | record and pop-up checks: commands | 26 | 1.0 | 0.0% | 0.0% | 0.3 | 0.5% | 0.0% |
+| make modal-bundle | record and pop-up checks: commands | 6 | 1.1 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make crate-checks | tests | 1 | 0.5 | 0.0% | 0.0% | 0.5 | 0.9% | 0.0% |
+| make decide | plan review: commands | 13 | 0.5 | 0.0% | 0.0% | 0.4 | 0.8% | 0.0% |
+| make task-add | spec-kit step | 3 | 0.4 | 0.0% | 0.0% | 0.4 | 0.7% | 0.0% |
+| make claims-checked | claims round: commands | 9 | 0.4 | 0.0% | 0.0% | 0.2 | 0.3% | 0.0% |
+| make ledger-owed | review: other commands | 18 | 0.4 | 0.0% | 0.0% | 0.2 | 0.3% | 0.0% |
+| make map | map generation | 2 | 0.2 | 0.0% | 0.0% | 0.2 | 0.5% | 0.0% |
+| make cohort | map generation | 5 | 0.2 | 0.0% | 0.0% | 0.2 | 0.4% | 0.0% |
+| make format | tests | 3 | 0.2 | 0.0% | 0.0% | 0.2 | 0.4% | 0.0% |
+| make arbiter-bundle | arbiter: commands | 8 | 0.3 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make seeds | Makefile targets the guard's table does not book | 1 | 0.2 | 0.0% | 0.0% | 0.2 | 0.3% | 0.0% |
+| make claims-owed | claims round: commands | 9 | 0.2 | 0.0% | 0.0% | 0.1 | 0.1% | 0.0% |
+| make claims-triage | claims round: commands | 5 | 0.1 | 0.0% | 0.0% | 0.1 | 0.2% | 0.0% |
+| make claims-bundle | claims round: commands | 6 | 0.1 | 0.0% | 0.0% | 0.0 | 0.1% | 0.0% |
+| make page-check | tests | 2 | 0.1 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make modal-triage | record and pop-up checks: commands | 1 | 0.1 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make check-bundle | record and pop-up checks: commands | 13 | 0.1 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| l7r-gate.sh | the gate binary, called directly | 6 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make help | Makefile targets the guard's table does not book | 3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make task-start | spec-kit step | 3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make modal-triaged | record and pop-up checks: commands | 3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-triaged | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make page-session | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make guard-edit | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| rsvg-convert | fetching and extracting sources | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make docs | record builds and docs | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+## The whole window
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| shell reads and file edits | 1560.8 | 33.9% | 33.9% | 74.4 | 5.7% | 5.7% |
+| builders: running a command (the model's turn) | 589.2 | 12.8% | 12.8% | 404.3 | 30.9% | 30.9% |
+| tests | 348.6 | 7.6% | 7.6% | 102.4 | 7.8% | 7.8% |
+| compile | 305.9 | 6.6% | 6.6% | 144.6 | 11.0% | 11.0% |
+| the GM | 0.0 | 0.0% | 0.0% | 407.1 | 23.7% | 23.7% |
+| research and page sessions | 327.9 | 7.1% | 7.1% | 0.0 | 0.0% | 0.0% |
+| wait loops on page sessions (held open, no work) | 288.2 | 6.3% | 6.3% | 0.0 | 0.0% | 0.0% |
+| wait loops (held open, no work) | 162.9 | 3.5% | 3.5% | 42.3 | 3.2% | 3.2% |
+| record and pop-up checks: agents | 199.9 | 4.3% | 4.3% | 0.6 | 0.0% | 0.0% |
+| plan review: agents | 177.4 | 3.8% | 3.8% | 20.4 | 1.6% | 1.6% |
+| builders: writing code | 109.4 | 2.4% | 2.4% | 63.9 | 4.9% | 4.9% |
+| hook suites | 100.0 | 2.2% | 2.2% | 22.5 | 1.7% | 1.7% |
+| waiting: nothing in flight - after the work its Stop named had ended | 0.0 | 0.0% | 0.0% | 104.3 | 8.0% | 8.0% |
+| main session: running a command (the model's turn) | 43.4 | 0.9% | 0.9% | 43.4 | 3.3% | 3.3% |
+| map generation | 53.2 | 1.2% | 1.2% | 22.8 | 1.7% | 1.7% |
+| landing | 38.5 | 0.8% | 0.8% | 28.2 | 2.2% | 2.2% |
+| main session: writing its reply | 27.5 | 0.6% | 0.6% | 27.5 | 2.1% | 2.1% |
+| git | 24.2 | 0.5% | 0.5% | 21.0 | 1.6% | 1.6% |
+| gate | 22.6 | 0.5% | 0.5% | 19.6 | 1.5% | 1.5% |
+| waiting: a monitor alone | 0.0 | 0.0% | 0.0% | 39.4 | 3.0% | 3.0% |
+| spec-kit step | 19.5 | 0.4% | 0.4% | 18.6 | 1.4% | 1.4% |
+| Makefile targets the guard's table does not book | 18.3 | 0.4% | 0.4% | 12.6 | 1.0% | 1.0% |
+| main session: dispatching an agent | 14.6 | 0.3% | 0.3% | 14.6 | 1.1% | 1.1% |
+| python3 | 15.6 | 0.3% | 0.3% | 13.1 | 1.0% | 1.0% |
+| plan review: commands | 15.8 | 0.3% | 0.3% | 8.5 | 0.6% | 0.6% |
+| builders: reading code | 14.7 | 0.3% | 0.3% | 8.2 | 0.6% | 0.6% |
+| arbiter: agents | 22.1 | 0.5% | 0.5% | 0.3 | 0.0% | 0.0% |
+| record builds and docs | 18.3 | 0.4% | 0.4% | 3.8 | 0.3% | 0.3% |
+| builders: dispatching an agent | 13.2 | 0.3% | 0.3% | 7.9 | 0.6% | 0.6% |
+| claims round: agents | 19.3 | 0.4% | 0.4% | 1.1 | 0.1% | 0.1% |
+| builders: writing its reply | 10.8 | 0.2% | 0.2% | 6.0 | 0.5% | 0.5% |
+| record and pop-up checks: commands | 9.2 | 0.2% | 0.2% | 7.3 | 0.6% | 0.6% |
+| review: other commands | 8.1 | 0.2% | 0.2% | 8.0 | 0.6% | 0.6% |
+| builders: other tools (Monitor) | 7.1 | 0.2% | 0.2% | 5.0 | 0.4% | 0.4% |
+| claims round: commands | 6.0 | 0.1% | 0.1% | 3.8 | 0.3% | 0.3% |
+| the GM's filter: agents (escalation-check) | 6.0 | 0.1% | 0.1% | 0.8 | 0.0% | 0.0% |
+| builders: other tools (ToolSearch) | 4.2 | 0.1% | 0.1% | 1.8 | 0.1% | 0.1% |
+| the gate binary, called directly | 3.5 | 0.1% | 0.1% | 2.2 | 0.2% | 0.2% |
+| main session: writing code | 2.3 | 0.0% | 0.0% | 2.3 | 0.2% | 0.2% |
+| builders: other tools (TaskStop) | 1.9 | 0.0% | 0.0% | 0.1 | 0.0% | 0.0% |
+| other review agents (work-budget, message-check) | 1.9 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: other tools (SendMessage) | 0.9 | 0.0% | 0.0% | 0.9 | 0.1% | 0.1% |
+| arbiter: commands | 1.0 | 0.0% | 0.0% | 0.5 | 0.0% | 0.0% |
+| cargo, called directly | 1.1 | 0.0% | 0.0% | 0.1 | 0.0% | 0.0% |
+| main session: reading code | 0.5 | 0.0% | 0.0% | 0.5 | 0.0% | 0.0% |
+| builders: other tools (SendMessage) | 0.4 | 0.0% | 0.0% | 0.1 | 0.0% | 0.0% |
+| builders: other tools (Skill) | 0.2 | 0.0% | 0.0% | 0.2 | 0.0% | 0.0% |
+| fetching and extracting sources | 0.2 | 0.0% | 0.0% | 0.1 | 0.0% | 0.0% |
+| main session: other tools (ToolSearch) | 0.1 | 0.0% | 0.0% | 0.1 | 0.0% | 0.0% |
+| all | 4616.4 | | 100.0% | 1717.0 | | 100.0% |
+| working (all but waiting on the GM) | 4610.3 | | 100.0% | 1309.1 | | 100.0% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|---|---|
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 3230 | 1564.2 | 33.9% | 33.9% | 75.7 | 5.8% | 5.8% |
+| make closing-checks | tests | 125 | 415.6 | 9.0% | 9.0% | 104.9 | 8.0% | 8.0% |
+| a wait loop on a page session | wait loops on page sessions (held open, no work) | 9 | 288.2 | 6.3% | 6.3% | 0.0 | 0.0% | 0.0% |
+| make land | landing | 42 | 120.1 | 2.6% | 2.6% | 97.1 | 7.4% | 7.4% |
+| make rust-test | tests | 273 | 105.8 | 2.3% | 2.3% | 77.0 | 5.9% | 5.9% |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 101 | 169.6 | 3.7% | 3.7% | 0.0 | 0.0% | 0.0% |
+| make format | tests | 145 | 98.2 | 2.1% | 2.1% | 15.8 | 1.2% | 1.2% |
+| git | git | 636 | 24.2 | 0.5% | 0.5% | 21.0 | 1.6% | 1.6% |
+| make crate-checks | tests | 25 | 31.7 | 0.7% | 0.7% | 7.5 | 0.6% | 0.6% |
+| a scratch run.sh sweep | map generation | 19 | 27.2 | 0.6% | 0.6% | 9.7 | 0.7% | 0.7% |
+| python3 | python3 | 535 | 18.5 | 0.4% | 0.4% | 15.9 | 1.2% | 1.2% |
+| make task-start | spec-kit step | 36 | 13.6 | 0.3% | 0.3% | 13.3 | 1.0% | 1.0% |
+| make decide | plan review: commands | 191 | 14.7 | 0.3% | 0.3% | 7.8 | 0.6% | 0.6% |
+| make rust-lint | tests | 18 | 16.0 | 0.3% | 0.3% | 4.2 | 0.3% | 0.3% |
+| make task-time | record builds and docs | 10 | 16.8 | 0.4% | 0.4% | 2.3 | 0.2% | 0.2% |
+| make task-add | spec-kit step | 21 | 11.0 | 0.2% | 0.2% | 7.9 | 0.6% | 0.6% |
+| make ledger-owed | review: other commands | 50 | 8.3 | 0.2% | 0.2% | 8.2 | 0.6% | 0.6% |
+| make guard-edit | Makefile targets the guard's table does not book | 44 | 5.6 | 0.1% | 0.1% | 5.2 | 0.4% | 0.4% |
+| make record-owed | record and pop-up checks: commands | 43 | 5.4 | 0.1% | 0.1% | 4.8 | 0.4% | 0.4% |
+| make done | gate | 1 | 4.8 | 0.1% | 0.1% | 4.7 | 0.4% | 0.4% |
+| make cohort | map generation | 25 | 5.4 | 0.1% | 0.1% | 3.6 | 0.3% | 0.3% |
+| make work-budget | tests | 15 | 5.4 | 0.1% | 0.1% | 2.4 | 0.2% | 0.2% |
+| make quick | tests | 48 | 5.4 | 0.1% | 0.1% | 2.0 | 0.2% | 0.2% |
+| make guard-log | Makefile targets the guard's table does not book | 5 | 3.3 | 0.1% | 0.1% | 3.1 | 0.2% | 0.2% |
+| l7r-gate.sh | the gate binary, called directly | 63 | 3.3 | 0.1% | 0.1% | 2.1 | 0.2% | 0.2% |
+| make hooks-test | tests | 6 | 4.4 | 0.1% | 0.1% | 0.6 | 0.0% | 0.0% |
+| make rust-format | tests | 12 | 4.3 | 0.1% | 0.1% | 0.0 | 0.0% | 0.0% |
+| make claims-triage | claims round: commands | 51 | 2.4 | 0.1% | 0.1% | 1.4 | 0.1% | 0.1% |
+| make modal-bundle | record and pop-up checks: commands | 13 | 2.0 | 0.0% | 0.0% | 1.6 | 0.1% | 0.1% |
+| make disk-audit | Makefile targets the guard's table does not book | 2 | 2.2 | 0.0% | 0.0% | 1.2 | 0.1% | 0.1% |
+| make apply-edits | Makefile targets the guard's table does not book | 16 | 2.1 | 0.0% | 0.0% | 1.1 | 0.1% | 0.1% |
+| make claims-owed | claims round: commands | 49 | 1.9 | 0.0% | 0.0% | 1.0 | 0.1% | 0.1% |
+| make record-checked | record and pop-up checks: commands | 28 | 1.6 | 0.0% | 0.0% | 0.9 | 0.1% | 0.1% |
+| make claims-checked | claims round: commands | 22 | 1.5 | 0.0% | 0.0% | 0.9 | 0.1% | 0.1% |
+| make hamlet | map generation | 14 | 1.4 | 0.0% | 0.0% | 0.7 | 0.1% | 0.1% |
+| make verify-wait | gate | 1 | 1.3 | 0.0% | 0.0% | 0.8 | 0.1% | 0.1% |
+| make docs | record builds and docs | 8 | 1.0 | 0.0% | 0.0% | 0.9 | 0.1% | 0.1% |
+| make plan-delta | plan review: commands | 7 | 1.0 | 0.0% | 0.0% | 0.7 | 0.1% | 0.1% |
+| make verify | gate | 1 | 0.8 | 0.0% | 0.0% | 0.7 | 0.1% | 0.1% |
+| make scratch-sweep | Makefile targets the guard's table does not book | 1 | 1.5 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make cache-clean | Makefile targets the guard's table does not book | 3 | 0.7 | 0.0% | 0.0% | 0.7 | 0.1% | 0.1% |
+| make guard-messages | Makefile targets the guard's table does not book | 43 | 1.1 | 0.0% | 0.0% | 0.2 | 0.0% | 0.0% |
+| make seeds | Makefile targets the guard's table does not book | 4 | 0.8 | 0.0% | 0.0% | 0.5 | 0.0% | 0.0% |
+| cargo | cargo, called directly | 25 | 1.1 | 0.0% | 0.0% | 0.1 | 0.0% | 0.0% |
+| make rust-cover | tests | 4 | 0.9 | 0.0% | 0.0% | 0.2 | 0.0% | 0.0% |
+| make arbiter-bundle | arbiter: commands | 20 | 0.8 | 0.0% | 0.0% | 0.3 | 0.0% | 0.0% |
+| make research-backlog | Makefile targets the guard's table does not book | 3 | 0.5 | 0.0% | 0.0% | 0.4 | 0.0% | 0.0% |
+| make rust-uncovered | tests | 1 | 0.4 | 0.0% | 0.0% | 0.4 | 0.0% | 0.0% |
+| make where-time | record builds and docs | 1 | 0.4 | 0.0% | 0.0% | 0.4 | 0.0% | 0.0% |
+| make map | map generation | 5 | 0.4 | 0.0% | 0.0% | 0.3 | 0.0% | 0.0% |
+| make claims-bundle | claims round: commands | 18 | 0.3 | 0.0% | 0.0% | 0.2 | 0.0% | 0.0% |
+| make page-check | tests | 3 | 0.3 | 0.0% | 0.0% | 0.3 | 0.0% | 0.0% |
+| make modal-triage | record and pop-up checks: commands | 3 | 0.3 | 0.0% | 0.0% | 0.1 | 0.0% | 0.0% |
+| make arbiter-ask | arbiter: commands | 3 | 0.2 | 0.0% | 0.0% | 0.2 | 0.0% | 0.0% |
+| make compound | map generation | 4 | 0.2 | 0.0% | 0.0% | 0.1 | 0.0% | 0.0% |
+| make claims-triaged | claims round: commands | 7 | 0.2 | 0.0% | 0.0% | 0.1 | 0.0% | 0.0% |
+| make research-deferred | Makefile targets the guard's table does not book | 1 | 0.2 | 0.0% | 0.0% | 0.2 | 0.0% | 0.0% |
+| l7r-gate | the gate binary, called directly | 19 | 0.2 | 0.0% | 0.0% | 0.1 | 0.0% | 0.0% |
+| make maps | Makefile targets the guard's table does not book | 1 | 0.1 | 0.0% | 0.0% | 0.1 | 0.0% | 0.0% |
+| convert | fetching and extracting sources | 2 | 0.1 | 0.0% | 0.0% | 0.1 | 0.0% | 0.0% |
+| make claims-coverage | claims round: commands | 2 | 0.1 | 0.0% | 0.0% | 0.1 | 0.0% | 0.0% |
+| make audits | Makefile targets the guard's table does not book | 7 | 0.2 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make land-tooling | landing | 2 | 0.1 | 0.0% | 0.0% | 0.1 | 0.0% | 0.0% |
+| make check-bundle | record and pop-up checks: commands | 13 | 0.1 | 0.0% | 0.0% | 0.1 | 0.0% | 0.0% |
+| make agent-sync | Makefile targets the guard's table does not book | 2 | 0.1 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make plan-verdict | plan review: commands | 72 | 0.1 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claims-report | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make claim | spec-kit step | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| curl | fetching and extracting sources | 15 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make help | Makefile targets the guard's table does not book | 3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| rsvg-convert | fetching and extracting sources | 5 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make modal-triaged | record and pop-up checks: commands | 3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make page-session | Makefile targets the guard's table does not book | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make research-claim | Makefile targets the guard's table does not book | 5 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make question-sizes | Makefile targets the guard's table does not book | 7 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python | python3 | 4 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| make switches | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+
+Cut at the read-back (2026-11-23T03:18:19Z, `BACK=` reads further): 449-rust-codebase T425, 449-rust-codebase T428, 451-time-retro-and-efficiency T239, 451-time-retro-and-efficiency T257, 451-time-retro-and-efficiency T255 - a landed task started before it, or with no start in `task-starts.jsonl`, carries only its time from there.
+
+Unbooked, named: 371 Bash calls refused before running (no run); 8330 phases tied to no run (210.5 min, not in the minutes); a wait with nothing in flight is `waiting: nothing in flight - <class>`, its class what came just before and after it, one not yet classed `unexplained` with the line that followed it; with only a monitor and no page session `waiting: a monitor alone`; a builder's time inside its span no line of its accounts for `builders: inside its span, no line of its`; a command no transcript holds `commands no transcript holds`. Wait loops do no work: their minutes are the time they were held open, and their blocking is booked to what they waited on. (feature 451 T243, the task time breakdown)

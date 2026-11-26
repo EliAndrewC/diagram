@@ -1,0 +1,41 @@
+97 of 97 classified; hit 27
+-- by jobs in brief
+  1          n=  6 handoff/cap=  3 rate=0.50 | med prompt 5194 chars, med calls 53, med out 60k, med files 0
+  2          n= 19 handoff/cap=  1 rate=0.05 | med prompt 2606 chars, med calls 71, med out 45k, med files 2
+  3          n= 49 handoff/cap= 11 rate=0.22 | med prompt 3124 chars, med calls 96, med out 53k, med files 2
+  4          n= 22 handoff/cap= 12 rate=0.55 | med prompt 4132 chars, med calls 118, med out 94k, med files 0
+  5          n=  1 handoff/cap=  0 rate=0.00 | med prompt 4051 chars, med calls 106, med out 91k, med files 0
+-- by jobs 1-2 / 3 / 4+
+  1-2        n= 25 handoff/cap=  4 rate=0.16 | med prompt 2866 chars, med calls 60, med out 47k, med files 1
+  3          n= 49 handoff/cap= 11 rate=0.22 | med prompt 3124 chars, med calls 96, med out 53k, med files 2
+  4+         n= 23 handoff/cap= 12 rate=0.52 | med prompt 4051 chars, med calls 117, med out 92k, med files 0
+-- by began with measure (brief)
+  False      n= 84 handoff/cap= 21 rate=0.25 | med prompt 3238 chars, med calls 92, med out 60k, med files 1
+  True       n= 13 handoff/cap=  6 rate=0.46 | med prompt 3124 chars, med calls 107, med out 60k, med files 3
+-- by began with measure (behavior: measuring cmd in first 6 calls)
+  False      n= 81 handoff/cap= 21 rate=0.26 | med prompt 3197 chars, med calls 98, med out 60k, med files 1
+  True       n= 16 handoff/cap=  6 rate=0.38 | med prompt 2614 chars, med calls 100, med out 62k, med files 2
+-- by either
+  False      n= 71 handoff/cap= 16 rate=0.23 | med prompt 3309 chars, med calls 87, med out 60k, med files 1
+  True       n= 26 handoff/cap= 11 rate=0.42 | med prompt 2872 chars, med calls 108, med out 61k, med files 2
+-- by files edited
+  1-3        n= 68 handoff/cap= 15 rate=0.22 | med prompt 3558 chars, med calls 69, med out 48k, med files 0
+  4-8        n= 18 handoff/cap=  7 rate=0.39 | med prompt 2749 chars, med calls 134, med out 68k, med files 5
+  9+         n= 11 handoff/cap=  5 rate=0.45 | med prompt 3197 chars, med calls 171, med out 101k, med files 12
+-- by files x jobs>=3
+  1-3/J3+    n= 51 handoff/cap= 12 rate=0.24 | med prompt 4051 chars, med calls 85, med out 52k, med files 0
+  1-3/J<3    n= 17 handoff/cap=  3 rate=0.18 | med prompt 2606 chars, med calls 46, med out 31k, med files 0
+  4-8/J3+    n= 14 handoff/cap=  6 rate=0.43 | med prompt 2656 chars, med calls 139, med out 73k, med files 5
+  4-8/J<3    n=  4 handoff/cap=  1 rate=0.25 | med prompt 2920 chars, med calls 90, med out 62k, med files 5
+  9+/J3+     n=  7 handoff/cap=  5 rate=0.71 | med prompt 3425 chars, med calls 189, med out 114k, med files 17
+  9+/J<3     n=  4 handoff/cap=  0 rate=0.00 | med prompt 2908 chars, med calls 151, med out 68k, med files 11
+-- by prompt length
+  3-4.5k     n= 29 handoff/cap=  9 rate=0.31 | med prompt 3460 chars, med calls 113, med out 64k, med files 2
+  4.5k+      n= 25 handoff/cap=  9 rate=0.36 | med prompt 5050 chars, med calls 74, med out 60k, med files 0
+  <3k        n= 43 handoff/cap=  9 rate=0.21 | med prompt 2508 chars, med calls 96, med out 53k, med files 2
+-- by calls
+  120+       n= 34 handoff/cap= 17 rate=0.50 | med prompt 2972 chars, med calls 150, med out 92k, med files 4
+  60-119     n= 32 handoff/cap=  8 rate=0.25 | med prompt 3924 chars, med calls 94, med out 60k, med files 0
+  <60        n= 31 handoff/cap=  2 rate=0.06 | med prompt 2933 chars, med calls 41, med out 21k, med files 0
+hit breakdown: refused 18 handoff written 24 ctx>=290k 15
+hit by out tokens:  [(0, 0.07, 30), (40000, 0.18, 39), (80000, 0.62, 26), (120000, 1.0, 2), (160000, 0.0, 0)]
