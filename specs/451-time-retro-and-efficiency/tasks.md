@@ -227,3 +227,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T291 the plan-review bundle's spec-cited.md was empty although the block cited T259-D1 and D3 (a reviewer's note at 451 T269): find why the cited decisions were not gathered
       research: rendering
+- [ ] T292 make land ticked and pushed a task whose code was not in the delta (2026-11-26, 451 T270: the carry-over cherry-pick stood unfinished on a tasks.md conflict, CHERRY_PICK_HEAD present, the code staged and uncommitted, and the landing went through, so main said T270 landed without its code for one landing; the third time a landing ran over an unfinished carry-over, after T235 and T262): make land refuses, first and cheaply, while a cherry-pick, merge or revert is in progress, while a path is unmerged, or while staged changes stand uncommitted, printing the command that finishes it; and a builder's work reaches the clone by one command that carries and verifies it (make carry FROM=<tree>) in place of a hand cherry-pick
+      research: rendering
