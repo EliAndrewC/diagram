@@ -40,7 +40,7 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 ## Before the port resumes (the GM, 2026-11-26)
 
 - "I agree that all of our tooling fixes around work trees need to land before we resume the port." The set: 451 T159, T275,
-  T281, T284, T286, T288, T294, T295, T296, T297, T301 (landed already: T285 the warm pool, T292 the landing refusals and
+  T281, T284, T286, T288, T294, T295, T296, T297, T300 (landed already: T285 the warm pool, T292 the landing refusals and
   `make carry`).
 - The sequence he approved ("Your proposed sequence ... sounds right to me, so yes, please proceed with that"): (1) the pool
   lands - done; (2) round one, three builders at once in warm pool trees with no build slot yet, on T284, T295 and T281, the
