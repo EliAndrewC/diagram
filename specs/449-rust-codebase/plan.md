@@ -645,9 +645,9 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 1. **The goal, in the world.** n/a in 449: the task moved to 452 T007 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T007 states it.
 2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
 3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
-4. **Do they describe the world here?** n/a: no map changes in 449.
+4. **Do they describe the world here?** n/a: no map changes in feature 449, nothing of this task being built in it.
 5. **The order.** Withdrawn before T158, so 449 closes on its port.
-6. **The exits.** Green: the line ticked withdrawn and 452 T007 filed. Red: n/a.
+6. **The exits.** Green: the line ticked withdrawn and 452 T007 filed. Red: no build here can go red, the task being withdrawn; were the move itself found wrong, what failed is recorded and the claim ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** None of its own.
 9. **Done, measured.** 452's tasks.md carries T007 from 449 T374; `make speckit-todo` no longer counts it open on 449.
@@ -675,9 +675,9 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 1. **The goal, in the world.** n/a in 449: the task moved to 452 T015 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T015 states it.
 2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
 3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
-4. **Do they describe the world here?** n/a: no map changes in 449.
+4. **Do they describe the world here?** n/a: no map changes in feature 449, nothing of this task being built in it.
 5. **The order.** Withdrawn before T158, so 449 closes on its port.
-6. **The exits.** Green: the line ticked withdrawn and 452 T015 filed. Red: n/a.
+6. **The exits.** Green: the line ticked withdrawn and 452 T015 filed. Red: no build here can go red, the task being withdrawn; were the move itself found wrong, what failed is recorded and the claim ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** None of its own.
 9. **Done, measured.** 452's tasks.md carries T015 from 449 T380; `make speckit-todo` no longer counts it open on 449.
@@ -704,9 +704,9 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 1. **The goal, in the world.** n/a in 449: the task moved to 452 T001 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T001 states it.
 2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
 3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
-4. **Do they describe the world here?** n/a: no map changes in 449.
+4. **Do they describe the world here?** n/a: no map changes in feature 449, nothing of this task being built in it.
 5. **The order.** Withdrawn before T158, so 449 closes on its port.
-6. **The exits.** Green: the line ticked withdrawn and 452 T001 filed. Red: n/a.
+6. **The exits.** Green: the line ticked withdrawn and 452 T001 filed. Red: no build here can go red, the task being withdrawn; were the move itself found wrong, what failed is recorded and the claim ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** None of its own.
 9. **Done, measured.** 452's tasks.md carries T001 from 449 T386; `make speckit-todo` no longer counts it open on 449.
@@ -732,9 +732,9 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 1. **The goal, in the world.** n/a in 449: the task moved to 452 T002 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T002 states it.
 2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
 3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
-4. **Do they describe the world here?** n/a: no map changes in 449.
+4. **Do they describe the world here?** n/a: no map changes in feature 449, nothing of this task being built in it.
 5. **The order.** Withdrawn before T158, so 449 closes on its port.
-6. **The exits.** Green: the line ticked withdrawn and 452 T002 filed. Red: n/a.
+6. **The exits.** Green: the line ticked withdrawn and 452 T002 filed. Red: no build here can go red, the task being withdrawn; were the move itself found wrong, what failed is recorded and the claim ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** None of its own.
 9. **Done, measured.** 452's tasks.md carries T002 from 449 T387; `make speckit-todo` no longer counts it open on 449.
@@ -760,9 +760,9 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 1. **The goal, in the world.** n/a in 449: the task moved to 452 T003 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T003 states it.
 2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
 3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
-4. **Do they describe the world here?** n/a: no map changes in 449.
+4. **Do they describe the world here?** n/a: no map changes in feature 449, nothing of this task being built in it.
 5. **The order.** Withdrawn before T158, so 449 closes on its port.
-6. **The exits.** Green: the line ticked withdrawn and 452 T003 filed. Red: n/a.
+6. **The exits.** Green: the line ticked withdrawn and 452 T003 filed. Red: no build here can go red, the task being withdrawn; were the move itself found wrong, what failed is recorded and the claim ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** None of its own.
 9. **Done, measured.** 452's tasks.md carries T003 from 449 T389; `make speckit-todo` no longer counts it open on 449.
@@ -788,9 +788,9 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 1. **The goal, in the world.** n/a in 449: the task moved to 452 T008 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T008 states it.
 2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
 3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
-4. **Do they describe the world here?** n/a: no map changes in 449.
+4. **Do they describe the world here?** n/a: no map changes in feature 449, nothing of this task being built in it.
 5. **The order.** Withdrawn before T158, so 449 closes on its port.
-6. **The exits.** Green: the line ticked withdrawn and 452 T008 filed. Red: n/a.
+6. **The exits.** Green: the line ticked withdrawn and 452 T008 filed. Red: no build here can go red, the task being withdrawn; were the move itself found wrong, what failed is recorded and the claim ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** None of its own.
 9. **Done, measured.** 452's tasks.md carries T008 from 449 T390; `make speckit-todo` no longer counts it open on 449.
@@ -816,9 +816,9 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 1. **The goal, in the world.** n/a in 449: the task moved to 452 T009 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T009 states it.
 2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
 3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
-4. **Do they describe the world here?** n/a: no map changes in 449.
+4. **Do they describe the world here?** n/a: no map changes in feature 449, nothing of this task being built in it.
 5. **The order.** Withdrawn before T158, so 449 closes on its port.
-6. **The exits.** Green: the line ticked withdrawn and 452 T009 filed. Red: n/a.
+6. **The exits.** Green: the line ticked withdrawn and 452 T009 filed. Red: no build here can go red, the task being withdrawn; were the move itself found wrong, what failed is recorded and the claim ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** None of its own.
 9. **Done, measured.** 452's tasks.md carries T009 from 449 T393; `make speckit-todo` no longer counts it open on 449.
@@ -844,9 +844,9 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 1. **The goal, in the world.** n/a in 449: the task moved to 452 T010 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T010 states it.
 2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
 3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
-4. **Do they describe the world here?** n/a: no map changes in 449.
+4. **Do they describe the world here?** n/a: no map changes in feature 449, nothing of this task being built in it.
 5. **The order.** Withdrawn before T158, so 449 closes on its port.
-6. **The exits.** Green: the line ticked withdrawn and 452 T010 filed. Red: n/a.
+6. **The exits.** Green: the line ticked withdrawn and 452 T010 filed. Red: no build here can go red, the task being withdrawn; were the move itself found wrong, what failed is recorded and the claim ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** None of its own.
 9. **Done, measured.** 452's tasks.md carries T010 from 449 T396; `make speckit-todo` no longer counts it open on 449.
@@ -872,9 +872,9 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 1. **The goal, in the world.** n/a in 449: the task moved to 452 T004 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T004 states it.
 2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
 3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
-4. **Do they describe the world here?** n/a: no map changes in 449.
+4. **Do they describe the world here?** n/a: no map changes in feature 449, nothing of this task being built in it.
 5. **The order.** Withdrawn before T158, so 449 closes on its port.
-6. **The exits.** Green: the line ticked withdrawn and 452 T004 filed. Red: n/a.
+6. **The exits.** Green: the line ticked withdrawn and 452 T004 filed. Red: no build here can go red, the task being withdrawn; were the move itself found wrong, what failed is recorded and the claim ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** None of its own.
 9. **Done, measured.** 452's tasks.md carries T004 from 449 T404; `make speckit-todo` no longer counts it open on 449.
@@ -900,9 +900,9 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 1. **The goal, in the world.** n/a in 449: the task moved to 452 T005 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T005 states it.
 2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
 3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
-4. **Do they describe the world here?** n/a: no map changes in 449.
+4. **Do they describe the world here?** n/a: no map changes in feature 449, nothing of this task being built in it.
 5. **The order.** Withdrawn before T158, so 449 closes on its port.
-6. **The exits.** Green: the line ticked withdrawn and 452 T005 filed. Red: n/a.
+6. **The exits.** Green: the line ticked withdrawn and 452 T005 filed. Red: no build here can go red, the task being withdrawn; were the move itself found wrong, what failed is recorded and the claim ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** None of its own.
 9. **Done, measured.** 452's tasks.md carries T005 from 449 T405; `make speckit-todo` no longer counts it open on 449.
@@ -928,9 +928,9 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 1. **The goal, in the world.** n/a in 449: the task moved to 452 T016 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T016 states it.
 2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
 3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
-4. **Do they describe the world here?** n/a: no map changes in 449.
+4. **Do they describe the world here?** n/a: no map changes in feature 449, nothing of this task being built in it.
 5. **The order.** Withdrawn before T158, so 449 closes on its port.
-6. **The exits.** Green: the line ticked withdrawn and 452 T016 filed. Red: n/a.
+6. **The exits.** Green: the line ticked withdrawn and 452 T016 filed. Red: no build here can go red, the task being withdrawn; were the move itself found wrong, what failed is recorded and the claim ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** None of its own.
 9. **Done, measured.** 452's tasks.md carries T016 from 449 T406; `make speckit-todo` no longer counts it open on 449.
@@ -956,9 +956,9 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 1. **The goal, in the world.** n/a in 449: the task moved to 452 T006 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T006 states it.
 2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
 3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
-4. **Do they describe the world here?** n/a: no map changes in 449.
+4. **Do they describe the world here?** n/a: no map changes in feature 449, nothing of this task being built in it.
 5. **The order.** Withdrawn before T158, so 449 closes on its port.
-6. **The exits.** Green: the line ticked withdrawn and 452 T006 filed. Red: n/a.
+6. **The exits.** Green: the line ticked withdrawn and 452 T006 filed. Red: no build here can go red, the task being withdrawn; were the move itself found wrong, what failed is recorded and the claim ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** None of its own.
 9. **Done, measured.** 452's tasks.md carries T006 from 449 T408; `make speckit-todo` no longer counts it open on 449.
@@ -984,9 +984,9 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 1. **The goal, in the world.** n/a in 449: the task moved to 452 T017 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T017 states it.
 2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
 3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
-4. **Do they describe the world here?** n/a: no map changes in 449.
+4. **Do they describe the world here?** n/a: no map changes in feature 449, nothing of this task being built in it.
 5. **The order.** Withdrawn before T158, so 449 closes on its port.
-6. **The exits.** Green: the line ticked withdrawn and 452 T017 filed. Red: n/a.
+6. **The exits.** Green: the line ticked withdrawn and 452 T017 filed. Red: no build here can go red, the task being withdrawn; were the move itself found wrong, what failed is recorded and the claim ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** None of its own.
 9. **Done, measured.** 452's tasks.md carries T017 from 449 T410; `make speckit-todo` no longer counts it open on 449.
@@ -1012,9 +1012,9 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 1. **The goal, in the world.** n/a in 449: the task moved to 452 T011 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T011 states it.
 2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
 3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
-4. **Do they describe the world here?** n/a: no map changes in 449.
+4. **Do they describe the world here?** n/a: no map changes in feature 449, nothing of this task being built in it.
 5. **The order.** Withdrawn before T158, so 449 closes on its port.
-6. **The exits.** Green: the line ticked withdrawn and 452 T011 filed. Red: n/a.
+6. **The exits.** Green: the line ticked withdrawn and 452 T011 filed. Red: no build here can go red, the task being withdrawn; were the move itself found wrong, what failed is recorded and the claim ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** None of its own.
 9. **Done, measured.** 452's tasks.md carries T011 from 449 T411; `make speckit-todo` no longer counts it open on 449.
@@ -1040,9 +1040,9 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 1. **The goal, in the world.** n/a in 449: the task moved to 452 T012 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T012 states it.
 2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
 3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
-4. **Do they describe the world here?** n/a: no map changes in 449.
+4. **Do they describe the world here?** n/a: no map changes in feature 449, nothing of this task being built in it.
 5. **The order.** Withdrawn before T158, so 449 closes on its port.
-6. **The exits.** Green: the line ticked withdrawn and 452 T012 filed. Red: n/a.
+6. **The exits.** Green: the line ticked withdrawn and 452 T012 filed. Red: no build here can go red, the task being withdrawn; were the move itself found wrong, what failed is recorded and the claim ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** None of its own.
 9. **Done, measured.** 452's tasks.md carries T012 from 449 T412; `make speckit-todo` no longer counts it open on 449.
@@ -1068,9 +1068,9 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 1. **The goal, in the world.** n/a in 449: the task moved to 452 T013 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T013 states it.
 2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
 3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
-4. **Do they describe the world here?** n/a: no map changes in 449.
+4. **Do they describe the world here?** n/a: no map changes in feature 449, nothing of this task being built in it.
 5. **The order.** Withdrawn before T158, so 449 closes on its port.
-6. **The exits.** Green: the line ticked withdrawn and 452 T013 filed. Red: n/a.
+6. **The exits.** Green: the line ticked withdrawn and 452 T013 filed. Red: no build here can go red, the task being withdrawn; were the move itself found wrong, what failed is recorded and the claim ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** None of its own.
 9. **Done, measured.** 452's tasks.md carries T013 from 449 T413; `make speckit-todo` no longer counts it open on 449.
@@ -1096,9 +1096,9 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 1. **The goal, in the world.** n/a in 449: the task moved to 452 T014 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md); 452 T014 states it.
 2. **The constraints.** The GM's request of 2026-11-24 (specs/452-building-plan-followups/request.md).
 3. **Where each comes from.** G: the GM 2026-11-24, "can we move all 17 of those into their own separate feature?"
-4. **Do they describe the world here?** n/a: no map changes in 449.
+4. **Do they describe the world here?** n/a: no map changes in feature 449, nothing of this task being built in it.
 5. **The order.** Withdrawn before T158, so 449 closes on its port.
-6. **The exits.** Green: the line ticked withdrawn and 452 T014 filed. Red: n/a.
+6. **The exits.** Green: the line ticked withdrawn and 452 T014 filed. Red: no build here can go red, the task being withdrawn; were the move itself found wrong, what failed is recorded and the claim ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** None of its own.
 9. **Done, measured.** 452's tasks.md carries T014 from 449 T414; `make speckit-todo` no longer counts it open on 449.
@@ -1159,26 +1159,27 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 <!-- plan-archive: T418 to T416 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
 <!-- plan-archive: T418 to T418 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
 <!-- plan-archive: T420 to T420 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
-### T425 (<why: the finding or measurement that files it>)
+### T425 (the 2026-11-24 wording audits: sentences on the hamlet research pages found untrue, guesses the code labels that no page records, and the pop-ups page session P1's cascade left at odds with the corrected pages)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: page work only, done in page sessions (write, then check-and-apply, each with its cascade over the claims and the pop-ups); no engine behavior changes and nothing is measured here. Each sentence the task line names was read against its page and written true there. Each guess the code labels was checked against its page first and recorded there as a GUESS where a session reached it; the ones no session reached are item 12's, on `make research-backlog`. The building-plan pages the line once held moved to feature 452 at the GM's word of 2026-11-24 (`request.md`). This section was written after the landing, on 2026-11-25, from the task's line, its tick note and the page sessions' commits (`git log -E --grep='page session P[0-9]+'`); no commit of a page session or its cascade for this task touches a file under `rust/` (the same log with `-- rust`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the page sentences written true, the guesses recorded, the pop-ups restated | n/a: page and pop-up words, no roll changes | n/a: no engine behavior changes | none | n/a |
 
 ### T425 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A reader of a hamlet research page, or of a pop-up written from one, is told what the record holds and what the map draws; no map changes.
+2. **The constraints.** The task line's items and no others; constitution XII (the finding and its class live in `research/`, the code the pointer); the page-session rules (`scripts/container/page-session-rules.md`); the building-plan pages are feature 452's and are not edited here.
+3. **Where each comes from.** G: the GM 2026-11-24, only the scripted-map tasks closed out before the port resumes (`request.md`, that date's section), and 2026-11-25 on a guess no page records (451 T236). R: the pages the task line names and the pages of the code-labeled guesses. O: the wording audit of 2026-11-24 and P1's cascade, as the task line cites them.
+4. **Do they describe the world here?** Yes, as the sessions read them: each named sentence was read on its page, and each labeled guess against its page, in the session that edited it, before the edit. No figure is measured here.
+5. **The order.** Before T158; after T424, which restated the code's half of the same audits and left the pages' wording to this task; T436 after it.
+6. **The exits.** Green: every named sentence written in a page session whose check session applied its findings, and each session's cascade answered. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The task's tick note of 2026-11-25 (`tasks-done.md`): the page sentences written in their page sessions with their cascades, the page-silent guesses on `make research-backlog`.
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a.
 12. **Before any fix.** No map changes: T425 is page work only. Its untrue sentences were findings against the research record (the 2026-11-24 wording audit), each written true in page sessions P1-P13 with their record checks and cascades; the code-labeled guesses whose page was silent (P13 items e and f, P14) went to `make research-backlog` under 451 T236 (the GM, 2026-11-25), not fixed here because a guess the page does not record is not a wrong map.
 
 **Found and left?** - Not fixed here: 0057's and 0031's sentences that 449 T432 left behind the code (found 2026-11-25 by T432's claims round). Filed as T436; lands before T158.
@@ -1188,31 +1189,32 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 
 <!-- plan-archive: T426 to T426 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
 <!-- plan-archive: T427 to T427 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
-### T428 (<why: the finding or measurement that files it>)
+### T428 (the GM 2026-11-24: he never ruled that dry plots are rectangles laid against the canal, so a dry plot's shape along its canal and at a bend is a research question, and the comment on 0006's drawing page misattributes)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a search pass first (the archive, then the web in Japanese, Chinese and English, searched 2026-11-24 and recorded in the note `how-our-maps-draw-dry-fields-and-their-crops-hatake-4` of 0006's drawing notes), then page session P12 wrote what it showed onto `research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html`. Strips squared to a canal stay a reconstruction, from the Musashino strips square to a straight road that at Shinbori ran beside the canal, with its limits stated. No page read in either country says what a strip did where its canal bent, so the taper at a bend is labeled a GUESS (the page's item `dry-plot-taper-at-bend`). The drawing was already what the page now says, so no code changed: no commit of P12 or its cascade touches a file under `rust/` (`git show --stat b75ade5b7e e75e3cd126`). The comment naming a GM ruling stood on that page, not in the code, and page session P4 removed it (`git show 9207459906`). The task line also asks for the measurement of what a sweep draws at a bend; no record of one was found on 2026-11-25 (`grep -rn T428` over `dev/` and this spec directory, and the page's notes), so none is claimed here. This section was written after the landing, on 2026-11-25, from the task's line, the GM's words and those commits.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the page restated with its true labels | n/a: page words, no roll changes | n/a: no engine behavior changes | none | n/a |
 
 ### T428 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** 0006's drawing page says what the research shows of a dry plot beside its canal and at a bend, each statement under its true label, and names no ruling the GM did not make; the drawn hem is unchanged.
+2. **The constraints.** The GM's words of 2026-11-24 (`request.md`); constitution XII (the search before a guess, every decision labeled) and XIV (a claim the drawing does not break is restated, not the code); the page-session rules (`scripts/container/page-session-rules.md`).
+3. **Where each comes from.** G: the GM 2026-11-24, "if that is not what the research shows, then we shouldn't do it" (`request.md`). R: 0006's drawing page and its notes. O: the search pass of 2026-11-24, as the page's note records it.
+4. **Do they describe the world here?** Yes, as searched: the pass of 2026-11-24 found no page in Japan or China giving a single dry plot's shape beside an irrigation canal or at its bend, so the page calls the squared strips a reconstruction and the taper a GUESS, and the code's claim at `PINCH_SHARE` carries the same GUESS. No figure is measured here.
+5. **The order.** Before T158; after T423, which drew the taper, and after page session P4, which removed the comment.
+6. **The exits.** Green: the page session's check session applied and its cascade answered. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one search pass, run until a batch added nothing (the page's note).
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** No map changes: the search (page session P12) found the record holding what the code draws - 0006's drawing page has each plot a rectangle square to the canal where it stands, tapering at a bend - so the bend taper (PINCH_SHARE, 449 T423) stands, and the comment naming a GM ruling the GM never made is gone from rust/phases/src/field/dry.rs. Not a defect in the drawing; the claim was restated (constitution XIV).
+9. **Done, measured.** 0006's drawing page carries the item `dry-plot-taper-at-bend` labeled GUESS and the word "ruling" nowhere (`grep -c -i ruling` on the page answers 0, observed 2026-11-25). The sweep's count at a bend that the task line asks for is not among what was done: see the approach.
+10. **Before moving a constant.** n/a: no constant moves; `PINCH_SHARE` stands, a GUESS and a knob.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes: the search (page session P12) found no source saying what a strip did at a canal's bend, so 0006's drawing page keeps each plot a rectangle square to the canal where it stands as a reconstruction and labels its taper at a bend a GUESS, which is what the code draws (PINCH_SHARE, 449 T423). The comment naming a GM ruling the GM never made is gone from 0006's drawing page (page session P4); this item first said it went from rust/phases/src/field/dry.rs, where it never stood. Not a defect in the drawing; the claim was restated (constitution XIV).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - one thing is noted and not filed, having no visible effect and breaking no finding: the task line's measurement of what a sweep draws at a bend has no record (see the approach), and the task's tick note in `tasks-done.md` says the comment went from dry.rs where the commits show it went from the page.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 <!-- plan-archive: T429 to T429 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
@@ -1226,31 +1228,32 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 <!-- plan-archive: T435 to T434 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
 <!-- plan-archive: T435 to T435 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
 
-### T436 (<why: the finding or measurement that files it>)
+### T436 (T432's claims round, 2026-11-25: sentences on 0057's and 0031's drawing pages left behind the code T432 landed)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: page wording only, in page session P15 (write, then check; `git show --stat 01549f3828`). 0057's drawing page now says the wet ground lies between the fields' lower corners and takes its width at the fields' foot, and its item `toe-on-tapering-flank` is no longer a DEVIATION (its label on the page is ATTESTED), the code now drawing what the record says. 0031's drawing page restates the cross-wind seat in the seat order's words. The cascade (`git show ef7ad0bb55`) restated the toe's claim comments in `rust/phases/src/driver/toe.rs` - comment lines only, no statement of code - and the pop-ups item 12 names. No code line's behavior moved and nothing is measured here. This section was written after the landing, on 2026-11-25, from the task's line, its tick note and those commits.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the pages, the claim comments and the pop-ups restated | n/a: words only, no roll changes | n/a: no engine behavior changes | none | n/a |
 
 ### T436 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A reader of 0057's or 0031's drawing page, of the toe's claims or of the pop-ups written from those pages is told what the map draws since T432; no map changes.
+2. **The constraints.** The task line's items and no others; constitution XIV (a claim is restated where the outcome is right); one page session, write then check, its cascade read both ways; the round arbiter's wording of 2026-11-25 for 0031's sentence, as the task line gives it.
+3. **Where each comes from.** G: none of the GM's own words files it; it closes what T432's landing left behind. R: 0057's and 0031's drawing pages. O: T432's claims round of 2026-11-25 and its cascade, as the task line cites them.
+4. **Do they describe the world here?** Yes: the claims round of 2026-11-25 named each sentence against the code T432 landed, and the page session read each on its page before restating it. No figure is measured here.
+5. **The order.** After T432 and T425, which left it; before T158.
+6. **The exits.** Green: the page session's checks applied and its cascade read both ways, every claim it owed judged IN-STEP. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The task's tick note of 2026-11-25 (`tasks-done.md`): the page session's checks applied, the cascade's claims IN-STEP, the claim comments and the pop-ups restated, no code line moved.
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a.
 12. **Before any fix.** No map changes: T436 is page wording only (page session P15, 2026-11-25) - 0057 and 0031 restated to what 449 T432 draws; its cascade restated three toe.rs claim comments (no code) and three pop-ups (hamlet/marsh, choice/cluster_position--high_margin, choice/settlement_form--nucleated) whose words the new pages contradicted.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the task's tick note records nothing left.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T437 (<why: the finding or measurement that files it>)
@@ -1307,29 +1310,30 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T439 (<why: the finding or measurement that files it>)
+### T439 (451 T261's builder: the plan gate holds this feature's landings on plan sections never reviewed - the withdrawn tasks' sections edited at their move to feature 452, and the template stubs of ticked T425, T428 and T436)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: plan-form work and one block review; no code, no map changes. `make plan-delta F=449` refused before it built a bundle on 34 form findings, measured 2026-11-25 (that command's refusal in this task's worktree), every one in the withdrawn tasks' sections: each Approach item 4 named this feature by its bare number, which the form check reads as a figure with no label, and each item 6 gave no red exit through `make arbiter-ask`. Item 4 now says "feature 449", and item 6 says that no build here can go red and routes a wrong move through `make arbiter-ask`; no figure was added. The stubs of T425, T428 and T436 are answered from each task's line, its tick note and its commits, each section saying it was written after the landing. T428's item 12 said the misattributing comment went from `rust/phases/src/field/dry.rs`; the commits show it stood on 0006's drawing page, and the item now says so. The sections of T437 and T438, open and unstarted, are not touched.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the withdrawn sections' form, the ticked tasks' stubs answered, the block review | n/a: plan words only | n/a: no engine behavior changes | none | n/a |
 
 ### T439 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Every section of a withdrawn or ticked task of this feature carries a CLEAR verdict, so no landing needs an escape for them; no map changes.
+2. **The constraints.** The task line: fix the form, answer each ticked task's stub honestly, then one MODE 4 block review to CLEAR; no figure invented for a withdrawn task; no section of an open, unstarted task touched; constitution XVI (the literal thing).
+3. **Where each comes from.** G: none of the GM's own words files it. R: none. O: 451 T261's builder's replay of landings, as the task line cites it, and the refusal of `make plan-delta F=449` in this task's worktree.
+4. **Do they describe the world here?** Yes: the refusal listed 34 form findings, measured 2026-11-25 (`make plan-delta F=449` in this task's worktree, before any edit), an item 4 and an item 6 in each withdrawn task's Approach block, and the same command built its bundle after the edits.
+5. **The order.** After T436, the last of the ticked tasks whose stub it answers; before this feature's next landing.
+6. **The exits.** Green: `make plan-delta F=449` builds its bundle and the review records the withdrawn and ticked tasks' blocks CLEAR. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `scripts/gates/l7r-gate.sh plan owed specs/449-rust-codebase` names no block of a withdrawn or ticked task, and `make quick` is green.
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader of a map would see differently, and not a defect in a check: the plan gate held each landing, rightly, on sections changed without a review (the withdrawn tasks' sections edited at their move, and the ticked tasks' stubs); this task gives them the review they owed.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - two things are noted and not filed, neither with a visible effect or a finding broken: T428's task line asks for a measurement of what a sweep draws at a canal's bend and no record of one was found, and T428's tick note in `tasks-done.md` says the comment went from dry.rs where the commits show it went from the page (both stated in T428's section).
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 

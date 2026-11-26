@@ -1639,42 +1639,6 @@
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
   },
-  "### T341 (<why: the finding or measurement that files it>)": {
-   "sha256": "f195eb56857d019b423167e1f49445910865c3cd5f48db6428f1216ad920936e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T341 Approach (checklist part A)": {
-   "sha256": "42ac2203bdbeed06da942724c3051197b94845428f9f919f6f336c878a977660",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T342 (<why: the finding or measurement that files it>)": {
-   "sha256": "9029210bb5e1c5e6c682054c9cc3e4e11845c4fc54d58efd0ebf3b1cd7d08fbd",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T342 Approach (checklist part A)": {
-   "sha256": "86e776751e83c308545be0e8fab54ac01aab48a3dab6e086901a183f103bac36",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T343 (<why: the finding or measurement that files it>)": {
-   "sha256": "a57fbefdaa6411993e9edf8a3848aa9c10336a540afc2772269a638526936dcf",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T343 Approach (checklist part A)": {
-   "sha256": "071837ad018dc73c7d0a2ef77482890d2b6c375458c1dda434e6455ab36eca60",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
   "### T342, T343, T344, T349 (bundle)": {
    "sha256": "78605e7773c8a854ab9390dfa867ce5295a06efd0b618c950ca6396307ae6884",
    "verdict": "CLEAR",
@@ -2019,6 +1983,282 @@
   },
   "### T417 Approach (checklist part A)": {
    "sha256": "8ba7638628d7212f1330212c7e371b6653488b231c26c744e2b97adc49118d00",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T374 (withdrawn: moved to 452 T007 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))": {
+   "sha256": "5df7da58cb44f9ee973b1c1355d2a0f601f23146c9371eac54017cf6ef896eb6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T374 Approach (checklist part A)": {
+   "sha256": "5d046b7e3b684c4afec62382a15b9d18ef4cc45d832d1f739fc40f6eb214ae2e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T380 (withdrawn: moved to 452 T015 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))": {
+   "sha256": "687cb415877fc9c670bf62ff9a038de22e734a30beb8686aa7994e059c090092",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T380 Approach (checklist part A)": {
+   "sha256": "af2a6012ba0d66ae3981bf4e3fd3c99c1ca6b6e3783bd1419115923a633a726e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T386 (withdrawn: moved to 452 T001 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))": {
+   "sha256": "d7b69cf00804045c5b2c8961c0ace059da40c76c139e111c7ac191c092ad165b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T386 Approach (checklist part A)": {
+   "sha256": "2f90cc6d363369dbc3999ec3234ab0ae3c6f1a78a48b33f5e23b5b4d8db4dac2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T387 (withdrawn: moved to 452 T002 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))": {
+   "sha256": "602248e1f628c07b6cba9464ccb2905494f80b357261f790202b792000b2c15a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T387 Approach (checklist part A)": {
+   "sha256": "c6fe7b645d09254649c59fe84f239dc93c20b97372239219060d2ff178e79de2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T389 (withdrawn: moved to 452 T003 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))": {
+   "sha256": "cc7d0013aa722920cf34a784d1bcd5039a4226829484718c30c13b39bb2601c8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T389 Approach (checklist part A)": {
+   "sha256": "85b825ad8cce0efdcf5feff0d39b7d1931f3762659d5c8c1cf224c3f6bb65bcb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T390 (withdrawn: moved to 452 T008 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))": {
+   "sha256": "7b2be8cff22332ce13f7d8a29b43d7acb0a3c743f1f000d6e2056ff50bc39551",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T390 Approach (checklist part A)": {
+   "sha256": "f511985011055541be08d830277e1e8425ebdc91471f4d052b36e167ff8049a7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T393 (withdrawn: moved to 452 T009 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))": {
+   "sha256": "348d0d168d0735985cdd117cfb400830fd338cce0b73eeb23614c4032d7fc7e9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T393 Approach (checklist part A)": {
+   "sha256": "faeaedfa01cd72e1cdb0b030707d2750b75436a16fe33eeed3f3a4d3f8d7c89c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T396 (withdrawn: moved to 452 T010 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))": {
+   "sha256": "bde8e8489b55e19ad70a376028ee079d81ea364f524bad615469a7229cce53e8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T396 Approach (checklist part A)": {
+   "sha256": "b1a64218a1a8849b33e6263947726897ca256d7b323123d21f596ed90bed5e81",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T404 (withdrawn: moved to 452 T004 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))": {
+   "sha256": "2196b8fd4a826e05e3b85e16f19452d8bad99877fde5ea094753b123c3ffdc34",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T404 Approach (checklist part A)": {
+   "sha256": "09f330c6e4b9c93d8399ee05bdb640d6120cd0e069d48af85e179d5a9f4d6ecb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T405 (withdrawn: moved to 452 T005 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))": {
+   "sha256": "a67e9f7f04e7e6db675e0f6057833b547cc30402ac0ed92b6e7ce8ebf7009eb6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T405 Approach (checklist part A)": {
+   "sha256": "ad102998758f47657109b20c1abec6b35ca29fa5c1d679499d53318154c60e39",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T406 (withdrawn: moved to 452 T016 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))": {
+   "sha256": "571b55950bd7b13d4ec878b02bdbaaf3054e1a6d78d0a3a7eadfceb6e52b6c3c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T406 Approach (checklist part A)": {
+   "sha256": "eebeb764fbaa06599c94445aa10ada295bb03a0209dfc9cf4fab302a244ccfb7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T408 (withdrawn: moved to 452 T006 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))": {
+   "sha256": "08d6f6065566a98c547f9828d7e993353f70bda20cb6a2ec7b65a2574755e610",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T408 Approach (checklist part A)": {
+   "sha256": "45d176b088064d12fb973b46486a71e6dbaf62f2f5dd7e186ea9cc3609a653c3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T410 (withdrawn: moved to 452 T017 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))": {
+   "sha256": "ce0109fc74d29561a9ee0fec04acd6118eca639e3d7d48cead59b550121104bc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T410 Approach (checklist part A)": {
+   "sha256": "a10df4e6a6bbb681e4f9497bbfefad6e348d5a26882dad047aa0beba9eae028e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T411 (withdrawn: moved to 452 T011 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))": {
+   "sha256": "efb82133e6847ab384629d08d21d9d704904f658532339ebc9a82059a81a5150",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T411 Approach (checklist part A)": {
+   "sha256": "6db12784caf8b1e98fb2f47d29c8819b868ef42bf24a9f4e0e8e5410a41edab0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T412 (withdrawn: moved to 452 T012 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))": {
+   "sha256": "aecd0ae4bc806d3c6bc5b753729539c2f75781995c6e95f892a9521edfee8736",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T412 Approach (checklist part A)": {
+   "sha256": "4d6870bada293ff3f895dbb2e956f47fb366853c3b9f67572a9212f19adf0f1a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T413 (withdrawn: moved to 452 T013 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))": {
+   "sha256": "7320a136bca5df2d302300cad285846eed156b366a032ba5539da748d12783e2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T413 Approach (checklist part A)": {
+   "sha256": "27bffafc232cfa46693b3221f90d5e76c9d7277218c3b298bb2d43b801f22462",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T414 (withdrawn: moved to 452 T014 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))": {
+   "sha256": "629342d0fffc734ca7e3c895dff517290f4051cfbdaad1575f828079da3e9c11",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T414 Approach (checklist part A)": {
+   "sha256": "a7bef1d322357c44d77eedacc0a901d52c39f60a46d597431b856e9455451455",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T425 (the 2026-11-24 wording audits: sentences on the hamlet research pages found untrue, guesses the code labels that no page records, and the pop-ups page session P1's cascade left at odds with the corrected pages)": {
+   "sha256": "05540b85b1f830866d7624eb0a4696732e9357f2ba46e0d37ada30eb762eaf3f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T425 Approach (checklist part A)": {
+   "sha256": "085749f6854231c0931c9ec4f2502ce1bc30e02e84b356a8d4f86d42c6f3fe2a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T428 (the GM 2026-11-24: he never ruled that dry plots are rectangles laid against the canal, so a dry plot's shape along its canal and at a bend is a research question, and the comment on 0006's drawing page misattributes)": {
+   "sha256": "e168f69687e13de6c3a310ef137be4fd2678683633e8df9c8be832214e131305",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T428 Approach (checklist part A)": {
+   "sha256": "018822a42df5e528a1cf927bea7695287442873db93afe2bace456b9c15c56ac",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T436 (T432's claims round, 2026-11-25: sentences on 0057's and 0031's drawing pages left behind the code T432 landed)": {
+   "sha256": "efe7fd28a3caf4c3d129ca403e9b1876e32caac832d922e41cbcd21328101766",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T436 Approach (checklist part A)": {
+   "sha256": "c694467cf104024a29b28a554607d538809cc3cea373781feb252e457cfdf858",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T437 (<why: the finding or measurement that files it>)": {
+   "sha256": "07332f6949557efd5cc7984eb027771a696a7d4e37c238df8c37def0c9f3dd7c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T437 Approach (checklist part A)": {
+   "sha256": "71502845eb7cb19b83fd6acef6f53ce9a88a49502c0f2331758c0e52a60a96a4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T438 (<why: the finding or measurement that files it>)": {
+   "sha256": "72b3cccb2344202ac7182943a0c35bf1e0c447aea28c87cf766e7c6f6a5423fd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T438 Approach (checklist part A)": {
+   "sha256": "d1b9f9255dcb6772e0bccf87c025521d952d26a9a186b4f552f473942d02ac26",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T439 (451 T261's builder: the plan gate holds this feature's landings on plan sections never reviewed - the withdrawn tasks' sections edited at their move to feature 452, and the template stubs of ticked T425, T428 and T436)": {
+   "sha256": "e4f2d28512bed4c744689ba9aa2578ccb97ebbc4ad48c56194805dc059120c71",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T439 Approach (checklist part A)": {
+   "sha256": "810afdab99c860761223a29463af7515b625a63e14a494da47d30da34116e1e4",
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
@@ -27288,6 +27528,165 @@
      "summary": "BELT_REACH, BELT_BAND and BELT_FAR_FT keep their figures, now applying to a clustered village alone, with their claims restated to say so; the canvas shrinks for row and scattered rolls, measured 0 of 20,256 refused, so no room is owed back",
      "class": "within",
      "why": "Consequences of the fix; restating the claims to the new scope is what the rule asks, and no reader-visible outcome is made wrong."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T374 (withdrawn: moved to 452 T007 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))",
+    "### T374 Approach (checklist part A)",
+    "### T380 (withdrawn: moved to 452 T015 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))",
+    "### T380 Approach (checklist part A)",
+    "### T386 (withdrawn: moved to 452 T001 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))",
+    "### T386 Approach (checklist part A)",
+    "### T387 (withdrawn: moved to 452 T002 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))",
+    "### T387 Approach (checklist part A)",
+    "### T389 (withdrawn: moved to 452 T003 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))",
+    "### T389 Approach (checklist part A)",
+    "### T390 (withdrawn: moved to 452 T008 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))",
+    "### T390 Approach (checklist part A)",
+    "### T393 (withdrawn: moved to 452 T009 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))",
+    "### T393 Approach (checklist part A)",
+    "### T396 (withdrawn: moved to 452 T010 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))",
+    "### T396 Approach (checklist part A)",
+    "### T404 (withdrawn: moved to 452 T004 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))",
+    "### T404 Approach (checklist part A)",
+    "### T405 (withdrawn: moved to 452 T005 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))",
+    "### T405 Approach (checklist part A)",
+    "### T406 (withdrawn: moved to 452 T016 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))",
+    "### T406 Approach (checklist part A)",
+    "### T408 (withdrawn: moved to 452 T006 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))",
+    "### T408 Approach (checklist part A)",
+    "### T410 (withdrawn: moved to 452 T017 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))",
+    "### T410 Approach (checklist part A)",
+    "### T411 (withdrawn: moved to 452 T011 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))",
+    "### T411 Approach (checklist part A)",
+    "### T412 (withdrawn: moved to 452 T012 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))",
+    "### T412 Approach (checklist part A)",
+    "### T413 (withdrawn: moved to 452 T013 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))",
+    "### T413 Approach (checklist part A)",
+    "### T414 (withdrawn: moved to 452 T014 unbuilt (the GM 2026-11-24, specs/452-building-plan-followups/request.md))",
+    "### T414 Approach (checklist part A)",
+    "### T425 (the 2026-11-24 wording audits: sentences on the hamlet research pages found untrue, guesses the code labels that no page records, and the pop-ups page session P1's cascade left at odds with the corrected pages)",
+    "### T425 Approach (checklist part A)",
+    "### T428 (the GM 2026-11-24: he never ruled that dry plots are rectangles laid against the canal, so a dry plot's shape along its canal and at a bend is a research question, and the comment on 0006's drawing page misattributes)",
+    "### T428 Approach (checklist part A)",
+    "### T436 (T432's claims round, 2026-11-25: sentences on 0057's and 0031's drawing pages left behind the code T432 landed)",
+    "### T436 Approach (checklist part A)",
+    "### T437 (<why: the finding or measurement that files it>)",
+    "### T437 Approach (checklist part A)",
+    "### T438 (<why: the finding or measurement that files it>)",
+    "### T438 Approach (checklist part A)",
+    "### T439 (451 T261's builder: the plan gate holds this feature's landings on plan sections never reviewed - the withdrawn tasks' sections edited at their move to feature 452, and the template stubs of ticked T425, T428 and T436)",
+    "### T439 Approach (checklist part A)",
+    "(removed) ### T341 (<why: the finding or measurement that files it>)",
+    "(removed) ### T341 Approach (checklist part A)",
+    "(removed) ### T342 (<why: the finding or measurement that files it>)",
+    "(removed) ### T342 Approach (checklist part A)",
+    "(removed) ### T343 (<why: the finding or measurement that files it>)",
+    "(removed) ### T343 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T374-T414 withdrawn (17 tasks, 34 blocks)",
+     "summary": "Each of the 17 tasks the GM named on 2026-11-24 is withdrawn from 449 unbuilt and moved whole to 452 (T386->T001 ... T410->T017, one-to-one, checked by script); its plan is 452's; nothing built in 449; item 4 says 'feature 449' and item 6 routes a wrong move through make arbiter-ask; no figure added.",
+     "class": "within",
+     "why": "Exactly the GM's 2026-11-24 words 'can we move all 17 of those into their own separate feature?' and the recorded consequence 'each 449 line is ticked withdrawn, pointing to its 452 task'. The 17 ids equal the GM's list; the 34 blocks are identical apart from their ids; the quoted words are verbatim in request.md."
+    },
+    {
+     "id": "T425-scope",
+     "summary": "Page work only on the hamlet pages; the building-plan pages (0038, 0090, 0001) left to 452; untrue sentences written true in page sessions P1-P13 with cascades; no engine change.",
+     "class": "within",
+     "why": "request.md 2026-11-24: 'T425's hamlet pages' are in the close-out, 'T425's three building-plan pages (0038, 0090, 0001), are not part of it; they stay in 452'."
+    },
+    {
+     "id": "T425-page-silent-guesses",
+     "summary": "Code-labeled guesses whose page is silent (P13 e and f, P14) are put on make research-backlog, not recorded on a page in this task.",
+     "class": "within",
+     "why": "Judged on request.md and the defect definition alone; the block's citation of the GM's 2026-11-25 words in 451 T236 is not in the bundle and was not relied on. A guess the code labels and no page records changes no map and contradicts no finding, so it is not a defect (constitution XIV v2.36.0, the GM 2026-11-19), and leaving it is within; it is also not dropped but listed on the research backlog. The GM asked for no per-guess page recording."
+    },
+    {
+     "id": "T425-T436-deferral",
+     "summary": "0057's and 0031's sentences left behind by T432 deferred from T425 to T436, landing before T158.",
+     "class": "within",
+     "why": "A filed deferral in the required form, and T436 has landed; fix-as-we-go is honoured within the step."
+    },
+    {
+     "id": "T428-research-and-drawing",
+     "summary": "Search pass first; the page calls strips squared to a canal a reconstruction (from the Musashino strips) and labels the taper at a bend a GUESS; the drawing (T423's taper, PINCH_SHARE, itself labeled GUESS) is left as it is; the misattributed 'ruling' comment removed from 0006's drawing page (P4).",
+     "class": "within",
+     "why": "The GM 2026-11-24: 'if that is not what the research shows, then we shouldn't do it', and request.md: 'What the research shows ... is a research question, and the drawing follows its answer.' The research question was asked and answered under labels; the answer (reconstruction for squared strips, GUESS for the bend) is what the code draws (T423 drew the taper; PINCH_SHARE carries the same GUESS), so the drawing follows the answer and the claim is restated, not the code (XIV). The 'git show --stat' shows only that no code changed; the drawing-matches basis is T423 and PINCH_SHARE, which is enough for this ruling."
+    },
+    {
+     "id": "T428-sweep-measurement-not-done",
+     "summary": "The task line's measurement of what a sweep draws at a bend has no record and is noted, not filed.",
+     "class": "within",
+     "why": "The measurement is the session's own task-line wording, not the GM's request or the spec; the GM asked that the drawing follow the research's answer, which the T423/PINCH_SHARE basis shows. A missing measurement with no visible effect and no finding broken is not a defect (XIV), and the block says plainly that none is claimed."
+    },
+    {
+     "id": "T436",
+     "summary": "Page wording of 0057 and 0031 restated to what T432 draws in page session P15; cascade restated three toe.rs claim comments (comments only) and three pop-ups; no behavior moved.",
+     "class": "within",
+     "why": "Closes what T432's landing left behind before the next step (the GM 2026-11-18, fix as we go; 2026-11-24 close-out). Restating claims where the outcome is right is the XIV rule."
+    },
+    {
+     "id": "T437-T438-templates",
+     "summary": "Untouched make task-add templates of two open, unstarted tasks.",
+     "class": "within",
+     "why": "A template decides nothing. CLEAR here approves nothing of T437 or T438; any later edit changes the block's digest and owes a review."
+    },
+    {
+     "id": "T439",
+     "summary": "Fix the withdrawn sections' form (item 4 'feature 449', item 6's red exit), answer T425/T428/T436's stubs after the landing from their lines, tick notes and commits, correct T428's item 12 (the comment stood on the page, not in dry.rs), leave T437/T438 untouched, then one MODE 4 block review to CLEAR; no gate change.",
+     "class": "within",
+     "why": "Satisfies feature 243's GM-approved plan gate (tasks not ticked while decisions lack a recorded independent verdict) by giving the owed sections their review; no decision changes what the gate holds or exempts any section. The wording of items 1 and 12 ('truly owes a review', 'a check held wrongly') misstates this and is a non-blocking finding in the reply."
+    },
+    {
+     "id": "T341-T343-removed",
+     "summary": "Three empty make task-add template stubs (earlier verdict CLEAR) removed.",
+     "class": "within",
+     "why": "Judged from their earlier text: empty templates carrying no decision, so their removal loses none. T439's section does not say how or why they went (non-blocking note in the reply)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T439 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T439 item 1 (goal)",
+     "summary": "Every section of a withdrawn or ticked task of feature 449 carries a CLEAR verdict, so no landing needs an escape for them; no map changes.",
+     "class": "within",
+     "why": "Gives the owed reviews to sections changed without one; it serves constitution XVI and the plan-stage gate as approved (GM 2026-09-13) and narrows nothing the GM asked for. The new wording now states the goal as reviews owed and given, with no claim that the gate was wrong."
+    },
+    {
+     "id": "T439 item 2 (constraints: no figure invented for a withdrawn task; no open, unstarted task's section touched)",
+     "summary": "Scope limited to fixing the form findings and answering ticked tasks' stubs.",
+     "class": "within",
+     "why": "Keeps to the task line and to the standing rule that a figure is measured, never invented; leaving open tasks' sections alone limits this task's reach and drops nothing the GM asked for. Unchanged since the CLEAR verdict."
+    },
+    {
+     "id": "T439 items 5, 6, 8, 9 (order, exits, budget, done-measure)",
+     "summary": "After T436, before the next landing; green is a CLEAR block review and plan owed naming no withdrawn or ticked block; red goes through make arbiter-ask; one landing.",
+     "class": "within",
+     "why": "Process and sequencing that the request and spec leave open; the done-measure is a mechanical check of the goal. Unchanged."
+    },
+    {
+     "id": "T439 item 12 (before any fix)",
+     "summary": "Not a defect in a check: the plan gate held each landing rightly on sections changed without a review, and this task gives them the review they owed.",
+     "class": "within",
+     "why": "Corrects the earlier round's wording finding: the gate refusing unreviewed changed sections is the gate doing its job (feature 243), so there is no check to fix and nothing changes in the tooling. Consistent with item 1."
+    },
+    {
+     "id": "T439 Found and left",
+     "summary": "Two T428 record discrepancies (no record found of a requested canal-bend sweep measurement; a tick note naming dry.rs where commits show the page) noted in T428's section and not filed.",
+     "class": "within",
+     "why": "Neither one is a wrong outcome under constitution XIV's definition of a defect: no map reads differently, no check passes bad work or refuses good work. Both are stated where a reader will find them. Unchanged since the CLEAR verdict."
     }
    ]
   }
