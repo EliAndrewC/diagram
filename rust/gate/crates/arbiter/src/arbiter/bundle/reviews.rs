@@ -10,7 +10,7 @@ use l7r_shared::checks::reply;
 use l7r_shared::py_text::strip;
 use serde_json::{json, Map, Value};
 
-use super::marks::{mark_rounds, transcripts};
+use super::marks::mark_rounds;
 use super::sections::{field, g, json_file, text, truthy};
 use crate::record::bundle::{hit, py_str, pyre, relative, shown, sort_paths, write};
 use crate::record::py_lines;
@@ -157,23 +157,25 @@ fn reviewed_feature(prompt: &str) -> String {
 
 #[cfg(test)]
 thread_local! {
-    /// The transcripts a test's spec rounds read on its own thread, `None` for this machine's (T99): the machine's 8,696 cost a bundle
-    /// test 0.28 s against FR-008's 0.1 s, and tested only that the folder was there. The build of the binary has no such seam.
+    /// The transcripts a test's spec rounds and replies read on its own thread (T99): the machine's 8,696 cost a bundle test 0.28 s
+    /// against FR-008's 0.1 s, and tested only that the folder was there. `None` is no directory at all, never this machine's (451
+    /// T309): a test's results and the crate's coverage are the same whatever `~/.claude/projects` holds. The build of the binary has
+    /// no such seam.
     pub(crate) static TRANSCRIPTS: std::cell::RefCell<Option<PathBuf>> = const { std::cell::RefCell::new(None) };
 }
 
 /// A spec review's rounds, each reviewer's whole reply beside the MANIFEST and its findings marked (387's ruling).
 pub fn spec_rounds(out: &Path, subject: &str) -> Result<Vec<String>, Fail> {
-    let base = given_transcripts().unwrap_or_else(transcripts);
-    spec_rounds_in(&base, out, subject)
+    spec_rounds_in(&transcripts_base(), out, subject)
 }
 
-/// The transcripts a test gave ([`TRANSCRIPTS`]); in the binary's build, none.
-fn given_transcripts() -> Option<PathBuf> {
+/// Where the bundle reads the subagent transcripts: this machine's `~/.claude/projects`; in a test build, the directory the test
+/// gave ([`TRANSCRIPTS`]) and the empty path - which holds nothing - where it gave none.
+pub(super) fn transcripts_base() -> PathBuf {
     #[cfg(test)]
-    return TRANSCRIPTS.with(|t| t.borrow().clone());
+    return TRANSCRIPTS.with(|t| t.borrow().clone()).unwrap_or_default();
     #[cfg(not(test))]
-    None
+    super::marks::transcripts()
 }
 
 /// [`spec_rounds`] over the transcripts under `base`.

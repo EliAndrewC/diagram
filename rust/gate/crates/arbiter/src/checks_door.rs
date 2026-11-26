@@ -11,6 +11,12 @@ use crate::Reply;
 /// `make check-closed SUBJECT= REASON= [AGENT=]`.
 #[must_use]
 pub fn close_cli(args: &[String]) -> Reply {
+    close_in(&std::env::current_dir().unwrap_or_default(), args)
+}
+
+/// [`close_cli`] on the tree at `root`, whose check state it reads and writes: a test's is a scratch one, never that of the tree the
+/// tests run in (451 T309).
+fn close_in(root: &std::path::Path, args: &[String]) -> Reply {
     if !matches!(args.len(), 2 | 3) {
         return Reply {
             stdout: String::new(),
@@ -18,9 +24,8 @@ pub fn close_cli(args: &[String]) -> Reply {
             code: 2,
         };
     }
-    let root = std::env::current_dir().unwrap_or_default();
     let (code, stdout, stderr) = handle::close(
-        &root,
+        root,
         &args[0],
         &args[1],
         checks::now(),

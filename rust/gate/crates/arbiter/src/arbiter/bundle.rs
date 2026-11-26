@@ -25,8 +25,8 @@ pub use l7r_gate_bundle::arbiter::bundle::marks;
 mod reviews;
 mod sections;
 
-use marks::{last_edits, mark_rounds, reply_of, subject_files};
-use reviews::{feature_section, plan_rounds, review_verdicts, spec_rounds};
+use marks::{last_edits, mark_rounds, reply_in, subject_files};
+use reviews::{feature_section, plan_rounds, review_verdicts, spec_rounds, transcripts_base};
 use sections::{
     capped_round_cause, claims_section, evidence_section, field, flow_sections, g, red_gate_runs,
     round_counter,
@@ -170,6 +170,8 @@ fn rounds_section(
             .and_then(Value::as_array)
             .is_some_and(|s| s.iter().any(|x| x.as_str() == Some(subject)))
     };
+    // a round's reply is read from the transcripts the spec rounds read: a test's own, never this machine's (451 T309)
+    let base = transcripts_base();
     let every: Vec<Value> = dispatches(&state).into_iter().filter(on).cloned().collect();
     let of = |v: &Value| v.get("check").and_then(Value::as_str).map(str::to_owned);
     let rounds: Vec<Value> = every
@@ -181,12 +183,12 @@ fn rounds_section(
         .iter()
         .filter(|v| !check.is_empty() && of(v).as_deref() != Some(check))
         .flat_map(|v| {
-            reply::blocks(&reply_of(v))
+            reply::blocks(&reply_in(v, &base))
                 .into_iter()
                 .map(|(_, o, n)| (o, n))
         })
         .collect();
-    let replies: Vec<String> = rounds.iter().map(reply_of).collect();
+    let replies: Vec<String> = rounds.iter().map(|v| reply_in(v, &base)).collect();
     let n = if trigger.starts_with("round:") {
         trigger.rsplit_once('@').map_or("", |p| p.1)
     } else {

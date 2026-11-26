@@ -6,6 +6,17 @@ use super::*;
 use crate::record::bundle::tests::scratch;
 use crate::record::testkit::{commit, put};
 
+/// A fixture transcript's modified time, set: the spec rounds sort on it, and the kernel stamps back-to-back writes from one coarse
+/// clock tick - 300 of 300 triples tied here on 2026-11-26 - so a time left to the clock ties or not by the machine's load (451 T309).
+fn aged(root: &std::path::Path, rel: &str, secs: u64) {
+    std::fs::File::options()
+        .write(true)
+        .open(root.join(rel))
+        .unwrap()
+        .set_modified(std::time::UNIX_EPOCH + std::time::Duration::from_secs(secs))
+        .unwrap();
+}
+
 #[test]
 fn plans_specs_reviews_and_the_feature() {
     let root = scratch("arbiter-plans");
@@ -52,6 +63,14 @@ fn plans_specs_reviews_and_the_feature() {
             json!({"message": {"content": "MODE 4 specs/500-f"}})
         ),
     );
+    // each round its own time, in the order the rounds ran: no tie here (the tie is `spec_rounds_of_one_time_keep_their_paths_order`)
+    for (name, secs) in [("a", 100), ("b", 200), ("e", 300)] {
+        aged(
+            &root,
+            &format!("home/x/y/subagents/agent-{name}.jsonl"),
+            secs,
+        );
+    }
     put(&root, "home/x/y/subagents/agent-d.jsonl", "not json\n");
     put(&root, "home/x/y/subagents/note.txt", "");
     assert_eq!(reviewed_feature("  specs/500-f/spec.md"), "500-f");
@@ -89,6 +108,53 @@ fn plans_specs_reviews_and_the_feature() {
         .contains(&format!("from {})", outside.display())));
     std::fs::remove_dir_all(&out).unwrap();
     assert!(feature_section(&root, &out, Some(&d), "x").is_err());
+}
+
+/// 451 T309: two spec review dispatches of one modified time keep their paths' order - the sort's tie-break, which the crate's
+/// coverage reached only when the clock gave two of the fixture's transcripts one time (red at 451 T295's landing gate on 2026-11-26,
+/// green on the re-run). The transcripts arrive sorted by path and the sort is stable, so the tie-break restates that order; this
+/// pins the order, and the times are set so that the tie is the fixture's.
+#[test]
+fn spec_rounds_of_one_time_keep_their_paths_order() {
+    let root = scratch("arbiter-spec-ties");
+    let reply = |verdict: &str| {
+        format!(
+            "{}\n{}\n",
+            json!({"message": {"content": "MODE 2 review specs/700-t/spec.md"}}),
+            json!({"message": {"role": "assistant", "content": [{"type": "text", "text": format!("Verdict: {verdict}")}]}})
+        )
+    };
+    // written later-path first, and a third dispatch of an earlier time whose path sorts last
+    put(&root, "home/q/r/subagents/agent-b.jsonl", &reply("BLOCKED"));
+    put(
+        &root,
+        "home/p/r/subagents/agent-a.jsonl",
+        &reply("FAITHFUL"),
+    );
+    put(&root, "home/z/r/subagents/agent-c.jsonl", &reply("CLEAR"));
+    aged(&root, "home/q/r/subagents/agent-b.jsonl", 500);
+    aged(&root, "home/p/r/subagents/agent-a.jsonl", 500);
+    aged(&root, "home/z/r/subagents/agent-c.jsonl", 400);
+    let out = root.join("out");
+    std::fs::create_dir_all(&out).unwrap();
+    let got = spec_rounds_in(&root.join("home"), &out, "700-t").unwrap();
+    let at = |round: &str| got[0].find(round).unwrap();
+    assert!(
+        at("### Round 1: spec-fidelity (CLEAR)") < at("### Round 2: spec-fidelity (FAITHFUL)")
+            && at("### Round 2: spec-fidelity (FAITHFUL)")
+                < at("### Round 3: spec-fidelity (BLOCKED)")
+    );
+}
+
+/// 451 T309: a test's spec rounds and replies read the transcripts it names and, where it names none, no directory at all - never
+/// this machine's `~/.claude/projects`.
+#[test]
+fn a_test_reads_its_own_transcripts_or_none() {
+    assert_eq!(transcripts_base(), PathBuf::new());
+    let out = scratch("arbiter-no-base");
+    assert!(spec_rounds(&out, "500-f").unwrap()[0].contains("no spec review dispatch found"));
+    TRANSCRIPTS.with(|t| *t.borrow_mut() = Some(out.to_path_buf()));
+    assert_eq!(transcripts_base(), out.to_path_buf());
 }
 
 #[test]

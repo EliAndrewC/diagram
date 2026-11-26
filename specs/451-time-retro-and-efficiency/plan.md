@@ -3476,31 +3476,43 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T309 (<why: the finding or measurement that files it>)
+### T309 (2026-11-26: the landing gate of 451 T295 went red on `rust/gate/crates/arbiter/src/arbiter/bundle/reviews.rs` line 221, "no test reaches", and green on the re-run minutes later; the same red was listed apart at T272's closing checks that morning)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the tie-break is given a fixture whose transcripts' modified times are set, and the crate's tests are closed to the machine's state: the transcripts, the check state of the tree they run in, and the live guard log.
+  - **The cause is the clock, not the live transcripts**, measured 2026-11-26. The task line supposed the tie was reached through `~/.claude/projects`. Method 1, measured 2026-11-26 (a probe, reverted: the unset test seam and a dispatch with an `aid` made to panic, then `scripts/gates/l7r-gate.sh rust test --crate rust/gate/crates/arbiter`): 41 of 41 tests passed, so no test of the crate read the live transcripts - 449 T99's thread-local seam already covered the two tests that reach `spec_rounds`, and no fixture dispatch carries an `aid`. Method 2 (`scripts/gates/l7r-gate.sh rust cover --crate rust/gate/crates/arbiter` with `HOME` an empty directory holding only a link to the build cache, `L7R_RUST_FRESH=1` set directly): clean on HEAD, line 221 reached. What reached it was `plans_specs_reviews_and_the_feature`, whose three matching fixture transcripts are written back to back and sorted on their modified times as the clock left them. Method 3, measured 2026-11-26 (three files written back to back in a shell loop, their `stat` times compared, 300 rounds, on the container's overlay filesystem): two or more tied in 300 of 300, all three carrying one stamp - the kernel stamps a write from a coarse clock, one tick's. So the line is reached while two of the three writes fall in one tick and missed when a loaded machine parts all three, which is what a gate beside other builders' coverage builds does by turns.
+  - **Red first**, measured 2026-11-26 (the same cover command on the live `HOME`, after setting the three fixture transcripts' times to 100, 200 and 300 seconds and nothing else): `reviews.rs - lines no test reaches: 221`, every run.
+  - **The fix.** `reviews/tests.rs`: `aged` sets a fixture transcript's modified time (`File::set_modified`); the old test's three rounds are 100, 200 and 300; the new `spec_rounds_of_one_time_keep_their_paths_order` gives two dispatches one time and a third an earlier one, and asserts the rounds' order. The transcripts reach the sort already sorted by path and the sort is stable, so the tie-break restates an order it cannot change: the test pins that order and reaches the line, and claims no more.
+  - **The tests read a fixture's transcripts or none.** `reviews.rs`'s `transcripts_base`: in a test build the directory the test gave (`TRANSCRIPTS`) and, where it gave none, the empty path, which holds nothing - before, the machine's. `bundle.rs`'s two reads of a round's reply take the same base (`marks::reply_in`), where `marks::reply_of` read the machine's for any dispatch with an `aid`. The binary's build reads `~/.claude/projects` as before.
+  - **The checks door's test read and wrote the machine**, observed 2026-11-26, method: what the empty `HOME` held after the cover run, two files under `.claude/guard-log`. `close_answers_its_usage_and_its_verdict` called `close_cli`, which reads the check state of the tree the tests run in and, at each accepted reason, writes a `CHECK_CLOSED` escape to the guard log: 2,229 entries holding `nothing to close here` stood in `~/.claude/guard-log`, observed 2026-11-26, method: `grep -l` over the directory. `close_in(root, args)` now carries the work, the test runs it on a scratch tree, and the process's `GUARD_LOG_DIR` is the test binary's own directory, as the land, plan and task crates' `quiet_census`.
+  - **The proof**, measured 2026-11-26 (the cover command twice after the fix, on the live `HOME` and on the empty one with `L7R_RUST_FRESH=1`; the crate's lines of `lcov-arbiter.info` reduced to reached or not and compared): clean both times, the same 4,382 lines reached and none missed in each; the empty `HOME` held nothing but its cache link afterwards. Before the fix the empty-`HOME` run reached 4,316 lines and wrote the two guard-log entries, measured 2026-11-26 (the same reduction of that run's `lcov-arbiter.info`, and `find` over the empty `HOME`).
+  - **Not changed**: `arbiter::cli(&["bogus"])` and `arbiter::cli(&["bundle", "--check-ask", "x"])` run on the process's directory and environment to reach the two `cli` wrappers; both answer before reading a file.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| line 221 is reached whatever the clock does | `spec_rounds_of_one_time_keep_their_paths_order`; the old fixture's times set apart, red on 221 without it | n/a: tooling | none | n/a |
+| a test with no transcripts named reads none | `a_test_reads_its_own_transcripts_or_none` | n/a: tooling | none | n/a |
+| the checks door's test reads a scratch tree and writes no live log | `close_answers_its_usage_and_its_verdict`; the empty `HOME` empty after the run | n/a: tooling | none | n/a |
 
 ### T309 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The arbiter crate's tests and coverage give one answer whatever the machine's clock, home directory and working tree hold.
+2. **The constraints.** 100% line coverage of the crate from its own tests; 449 T99 (the transcripts seam, feature 449's FR-008 and its tenth of a second); 451 T94 and T207 (a test's guard log is never the live one); the binary's behavior unchanged.
+3. **Where each comes from.** G: the task line and the coordinating session's brief of 2026-11-26. O: the probe, the tie count and the cover runs above.
+4. **Do they describe the world here?** In part: the red is real and the line is the one named; its cause is the fixture's clock-given times, not the live transcripts (measured above).
+5. **The order.** No dependency.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/arbiter"` green in the builder's tree, and the crate's cover run clean on the live and the empty `HOME` with the same lines reached (this task alone may run the crate's coverage, its subject). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The cover run red on 221 with the fixture's times set apart and clean with the tie test; the two reached sets the same, measured 2026-11-26 (above).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: a landing gate red and then green on unchanged code, observed 2026-11-26; and a test writing two entries to the live guard log each run, which `make audit` and `make guard-log GUARD=checks` count as escapes. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The 2,229 test-written entries already in `~/.claude/guard-log` (`checks escaped/check-closed "nothing to close here"`, two a run of the arbiter crate's `close_answers_its_usage_and_its_verdict` before this task), which `make guard-log GUARD=checks` and `make audit` list as escapes that no session took - counted 2026-11-26 by this task's builder (grep of the log for that reason text). Not fixed here: the entries stand in the live log outside this tree, and removing or filtering test-written rows is the open task that already names this test. Filed as T143; lands before T302.
+- Sibling crates' tests that default to the machine's live transcripts or guard log (the bundle crate's `marks::reply_of` and `record/bundle/modal.rs`, the task crate's `task_add/quick/tests.rs`, `GUARD_LOG_DIR` set process-wide in the land, plan and task crates), found 2026-11-26 by grep and not run, so their effect is unmeasured. Not fixed here: other crates, each to be measured first. Filed as T312; lands before T302.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: it makes a gate's verdict repeatable; nothing runs faster.
 
 
 ### T310 (<why: the finding or measurement that files it>)

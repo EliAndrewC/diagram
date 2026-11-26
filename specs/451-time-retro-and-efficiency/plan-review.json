@@ -2040,6 +2040,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T309 (2026-11-26: the landing gate of 451 T295 went red on `rust/gate/crates/arbiter/src/arbiter/bundle/reviews.rs` line 221, \"no test reaches\", and green on the re-run minutes later; the same red was listed apart at T272's closing checks that morning)": {
+   "sha256": "dce5bf58c5a00c8a4ccd26279728f626f0d7afbc25a386513a402d8155609e91",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T309 Approach (checklist part A)": {
+   "sha256": "7d9273a74a8aa9e80a838aff9c86312278d5ce5285ef7e7cc65cfbe8755eaa88",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -26062,6 +26074,122 @@
      "why": "A wrong outcome against the GM's task time breakdown (every minute named, 2026-11-25), so it may not be dropped; round 1 blocked it for want of a filed task and an order, and it is now filed as T310 with an order (before T302), which is how a known defect is carried rather than abandoned. It is a separate mechanism (the guard's shared description reader and its hook suites) from this task's ledger reading, and this task's fix does not depend on it. The time is not silently lost meanwhile: it is booked to no task, which the breakdown reports as a remainder."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T309 (2026-11-26: the landing gate of 451 T295 went red on `rust/gate/crates/arbiter/src/arbiter/bundle/reviews.rs` line 221, \"no test reaches\", and green on the re-run minutes later; the same red was listed apart at T272's closing checks that morning)",
+    "### T309 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1 the cause",
+     "summary": "The cause is put down to the clock: three fixture transcripts are written in one coarse tick, so the sort ties some of the time. The task line had guessed the live transcripts.",
+     "class": "within",
+     "why": "The diagnosis is measured (probe 41 of 41, ties in 300 of 300 rounds, red every run once the times are set apart). Fixing the flaky gate verdict the task names is exactly the defect at hand."
+    },
+    {
+     "id": "D2 the tie test",
+     "summary": "aged() sets the fixture times to 100/200/300. A new spec_rounds_of_one_time_keep_their_paths_order reaches line 221 and pins its order. The redundant tie-break is kept, not removed.",
+     "class": "within",
+     "why": "This makes the gate's coverage verdict repeatable, which is the task. Keeping the tie-break or cutting it is a design choice, not a fidelity question. The test claims no more than it shows."
+    },
+    {
+     "id": "D3 transcripts in test builds",
+     "summary": "In a test build, transcripts_base and marks::reply_in read the fixture's TRANSCRIPTS or the empty path, never ~/.claude/projects. The binary is unchanged.",
+     "class": "within",
+     "why": "This closes the crate's tests to machine state, the same class of nondeterminism as the red. No behavior of the shipped binary changes."
+    },
+    {
+     "id": "D4 the checks door's test",
+     "summary": "close_in(root, args) carries the work. The test runs it on a scratch tree, with GUARD_LOG_DIR set to the test binary's own directory.",
+     "class": "within",
+     "why": "It fixes a found defect: a test reading the live tree's check state and writing CHECK_CLOSED escapes to the live guard log. That breaks the standing rule that a test's guard log is never the live one (451 T94/T207)."
+    },
+    {
+     "id": "D5 not changed: two cli wrapper calls",
+     "summary": "arbiter::cli(['bogus']) and cli(['bundle','--check-ask','x']) still run on the process's directory and environment.",
+     "class": "within",
+     "why": "Both answer before reading a file. The empty-HOME run shows nothing read or written, so no wrong outcome is left."
+    },
+    {
+     "id": "D6 exits, budget, performance",
+     "summary": "Green is builder-checks plus a clean cover run on the live HOME and an empty one. Red is set down and ruled through arbiter-ask. Budget is one landing. Not performance work.",
+     "class": "within",
+     "why": "These are the task's own exits and classification. Nothing narrows what was asked."
+    },
+    {
+     "id": "D7 the 2,229 test-written guard-log entries left",
+     "summary": "The section heads 'Found and left?' with 'none', then leaves the 2,229 CHECK_CLOSED 'nothing to close here' entries the test already wrote to ~/.claude/guard-log, because 'nothing here deletes from the live log'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This rests on the plan's own step 12, which says make audit and make guard-log GUARD=checks count these entries as escapes. By the plan's own words, then, those tools report about 2,229 escapes that no session made. That is a tool answering wrongly, a defect, not a mere difference. The figures SC-005/SC-006 read off the escape log depend on those counts. Fixing it is not physically impossible. Nothing in request.md or the spec carves out the guard log. Fixing it would not defeat the task's purpose. 'Nothing here deletes from the live log' describes the task's reach; it is not a reason. FR-009 lets a deferred defect stand only with the reason it is not fixed here, a filed task id and its order ('lands before ...'), and the section gives none of the three. It also labels the item 'none', which hides it from that check. The section must either remedy the 2,229 entries' effect on those counts in this task, or record it as a found-and-left defect with all three of FR-009's parts."
+    }
+   ],
+   "tasks": [
+    "T309"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T309 (2026-11-26: the landing gate of 451 T295 went red on `rust/gate/crates/arbiter/src/arbiter/bundle/reviews.rs` line 221, \"no test reaches\", and green on the re-run minutes later; the same red was listed apart at T272's closing checks that morning)",
+    "### T309 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The cause is the fixture transcripts' clock-given modified times (measured by probe, empty-HOME cover run and a 300-round tie count), not the live transcripts the task line supposed; the fix sets the old fixture's times to 100/200/300 and adds spec_rounds_of_one_time_keep_their_paths_order, which pins the stable sort's path order and reaches line 221.",
+     "class": "within",
+     "why": "Fixing the red-then-green landing gate on line 221 is the task line itself; correcting the task line's supposed cause by measurement and pinning the line by a deterministic fixture does what was asked and claims no more than the test proves."
+    },
+    {
+     "id": "D2",
+     "summary": "reviews.rs transcripts_base in a test build returns the test's TRANSCRIPTS directory or the empty path, never the machine's ~/.claude/projects; the binary's build unchanged.",
+     "class": "within",
+     "why": "Serves the stated goal that the crate's tests give one answer whatever the home directory holds; touches test builds only, so the binary's behavior (a stated constraint) is kept."
+    },
+    {
+     "id": "D3",
+     "summary": "bundle.rs's two reads of a round's reply take the same base (marks::reply_in) instead of marks::reply_of reading the machine's transcripts for any dispatch with an aid.",
+     "class": "within",
+     "why": "The same closure of the arbiter crate's tests to machine state, applied to the second read path in the same crate; binary behavior unchanged."
+    },
+    {
+     "id": "D4",
+     "summary": "close_in(root, args) carries close_cli's work; close_answers_its_usage_and_its_verdict runs it on a scratch tree, and the process's GUARD_LOG_DIR is the test binary's own directory, so the test no longer reads the live tree's check state or writes CHECK_CLOSED escapes to ~/.claude/guard-log.",
+     "class": "within",
+     "why": "A defect found in the crate under repair (a test writing two false escapes to the live guard log each run, measured) fixed in this task, matching the 451 T94/T207 constraint that a test's guard log is never the live one; the land, plan and task crates' quiet_census is the existing pattern."
+    },
+    {
+     "id": "D5",
+     "summary": "Not changed: arbiter::cli([\"bogus\"]) and arbiter::cli([\"bundle\",\"--check-ask\",\"x\"]) keep running on the process's directory and environment.",
+     "class": "within",
+     "why": "Both answer before reading any file, so they read no machine state and the goal is met without change; leaving correct code as it is is not a narrowing."
+    },
+    {
+     "id": "D6",
+     "summary": "Exits and proof: builder-checks green and the crate's cover run clean on the live and on an empty HOME with the same 4,382 lines reached; the empty HOME holding nothing but its cache link afterwards.",
+     "class": "within",
+     "why": "A check whose only effect is to show the requested repeatability actually holds; it enforces the task, it adds no behavior."
+    },
+    {
+     "id": "D7a",
+     "summary": "Found and left: the 2,229 test-written 'nothing to close here' entries already in ~/.claude/guard-log are not removed here; filed as T143 (the open task the section says already names this test's writes), lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Round 1's NOT LEGITIMATE was for leaving them with no deferral; the item now carries FR-009's three parts - why not here (the entries stand in the live log outside this tree, and removing or filtering test-written rows is an existing task's subject), the filed id (T143) and the order (lands before T302). The purpose of the fix - the audit's escape counts not polluted by tests - is not gutted: the source of new entries is stopped in this task (D4), and the standing ones are ordered to be cleared before a later step rather than carried indefinitely. That T143 names this test is the section's statement; the bundle holds no tasks file to confirm it, and if T143 does not cover these rows the deferral would need its own filed task."
+    },
+    {
+     "id": "D7b",
+     "summary": "Found and left: sibling crates' tests that default to the machine's live transcripts or guard log (bundle crate's marks::reply_of and record/bundle/modal.rs, task crate's task_add/quick/tests.rs, process-wide GUARD_LOG_DIR in land, plan and task crates), found by grep and unmeasured; filed as T312, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task's goal is the arbiter crate's tests and coverage; these are other crates whose effect is unmeasured, so whether each is a defect at all (a wrong outcome, not a difference) is not yet known and measuring first is this project's standing rule. The item carries FR-009's form - why not here, filed id T312, order lands before T302 - and does not reach back into the arbiter crate's own fix."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -41060,6 +41188,64 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "A wrong outcome against the GM's task time breakdown (every minute named, 2026-11-25), so it may not be dropped; round 1 blocked it for want of a filed task and an order, and it is now filed as T310 with an order (before T302), which is how a known defect is carried rather than abandoned. It is a separate mechanism (the guard's shared description reader and its hook suites) from this task's ledger reading, and this task's fix does not depend on it. The time is not silently lost meanwhile: it is booked to no task, which the breakdown reports as a remainder."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T309": {
+   "section_sha256": "a63baea0b9e2a4daf7942bb76b70619333e8e0c40753ae1327f833cd1f2bf317",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The cause is the fixture transcripts' clock-given modified times (measured by probe, empty-HOME cover run and a 300-round tie count), not the live transcripts the task line supposed; the fix sets the old fixture's times to 100/200/300 and adds spec_rounds_of_one_time_keep_their_paths_order, which pins the stable sort's path order and reaches line 221.",
+     "class": "within",
+     "why": "Fixing the red-then-green landing gate on line 221 is the task line itself; correcting the task line's supposed cause by measurement and pinning the line by a deterministic fixture does what was asked and claims no more than the test proves."
+    },
+    {
+     "id": "D2",
+     "summary": "reviews.rs transcripts_base in a test build returns the test's TRANSCRIPTS directory or the empty path, never the machine's ~/.claude/projects; the binary's build unchanged.",
+     "class": "within",
+     "why": "Serves the stated goal that the crate's tests give one answer whatever the home directory holds; touches test builds only, so the binary's behavior (a stated constraint) is kept."
+    },
+    {
+     "id": "D3",
+     "summary": "bundle.rs's two reads of a round's reply take the same base (marks::reply_in) instead of marks::reply_of reading the machine's transcripts for any dispatch with an aid.",
+     "class": "within",
+     "why": "The same closure of the arbiter crate's tests to machine state, applied to the second read path in the same crate; binary behavior unchanged."
+    },
+    {
+     "id": "D4",
+     "summary": "close_in(root, args) carries close_cli's work; close_answers_its_usage_and_its_verdict runs it on a scratch tree, and the process's GUARD_LOG_DIR is the test binary's own directory, so the test no longer reads the live tree's check state or writes CHECK_CLOSED escapes to ~/.claude/guard-log.",
+     "class": "within",
+     "why": "A defect found in the crate under repair (a test writing two false escapes to the live guard log each run, measured) fixed in this task, matching the 451 T94/T207 constraint that a test's guard log is never the live one; the land, plan and task crates' quiet_census is the existing pattern."
+    },
+    {
+     "id": "D5",
+     "summary": "Not changed: arbiter::cli([\"bogus\"]) and arbiter::cli([\"bundle\",\"--check-ask\",\"x\"]) keep running on the process's directory and environment.",
+     "class": "within",
+     "why": "Both answer before reading any file, so they read no machine state and the goal is met without change; leaving correct code as it is is not a narrowing."
+    },
+    {
+     "id": "D6",
+     "summary": "Exits and proof: builder-checks green and the crate's cover run clean on the live and on an empty HOME with the same 4,382 lines reached; the empty HOME holding nothing but its cache link afterwards.",
+     "class": "within",
+     "why": "A check whose only effect is to show the requested repeatability actually holds; it enforces the task, it adds no behavior."
+    },
+    {
+     "id": "D7a",
+     "summary": "Found and left: the 2,229 test-written 'nothing to close here' entries already in ~/.claude/guard-log are not removed here; filed as T143 (the open task the section says already names this test's writes), lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Round 1's NOT LEGITIMATE was for leaving them with no deferral; the item now carries FR-009's three parts - why not here (the entries stand in the live log outside this tree, and removing or filtering test-written rows is an existing task's subject), the filed id (T143) and the order (lands before T302). The purpose of the fix - the audit's escape counts not polluted by tests - is not gutted: the source of new entries is stopped in this task (D4), and the standing ones are ordered to be cleared before a later step rather than carried indefinitely. That T143 names this test is the section's statement; the bundle holds no tasks file to confirm it, and if T143 does not cover these rows the deferral would need its own filed task."
+    },
+    {
+     "id": "D7b",
+     "summary": "Found and left: sibling crates' tests that default to the machine's live transcripts or guard log (bundle crate's marks::reply_of and record/bundle/modal.rs, task crate's task_add/quick/tests.rs, process-wide GUARD_LOG_DIR in land, plan and task crates), found by grep and unmeasured; filed as T312, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task's goal is the arbiter crate's tests and coverage; these are other crates whose effect is unmeasured, so whether each is a defect at all (a wrong outcome, not a difference) is not yet known and measuring first is this project's standing rule. The item carries FR-009's form - why not here, filed id T312, order lands before T302 - and does not reach back into the arbiter crate's own fix."
     }
    ],
    "verdict": "CLEAR"
