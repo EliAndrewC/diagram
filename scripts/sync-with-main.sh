@@ -227,6 +227,9 @@ sync_in() { # [--mirror-only] [--background-render]
   # would flow back into main via render-sync's copy - but render-sync no longer copies anything,
   # it REGENERATES main in place, so nothing flows clone -> main and the clone never needs main's
   # renders. A clone regenerates whatever map it iterates on; the GM browses renders in main.
+  # THE SESSION-CLONE SETUP RESTORES THE TOOLING STATE (feature 451 T258): a clone with no state mirror yet - a fresh clone, a lost
+  # container's replacement - takes its branch's check answers and event logs back, once, in the background (nothing waits on it).
+  "$(dirname "${BASH_SOURCE[0]}")/state-sync.sh" restore --if-fresh || :
   date > "$(git -C "$ROOT" rev-parse --absolute-git-dir)/sync-with-main.stamp"
   echo "sync-with-main: clone synced with GitHub main (git)"
 }

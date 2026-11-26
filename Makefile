@@ -17,7 +17,7 @@ FREE_TEXT = UNITS WITH KEYS KEY CLASS KIND SUBJECT REASON GROWTH_REASON SPREAD N
 	CHECK_ORDER_OK URLS MATCH NONE SHARD EXTRA IMAGES DIRS LAND SUITES PERF_LATER_OK DEFER_FORM_OK QUICK_OK BY OVER
 $(foreach v,$(FREE_TEXT),$(if $(filter command line environment,$(origin $(v))),$(eval override $(v) := $$(value $(v)))$(eval export $(v))))
 
-.PHONY: closing-checks audits modal-bundle modal-prepass done docs static format guard _reference _quick bypass-audit quick page-check tick claim speckit-todo audit guard-edit context-ok guard-log scratch-sweep cache-clean disk-audit hooks-test guard-messages citations fragment-move \
+.PHONY: closing-checks audits state-push state-restore modal-bundle modal-prepass done docs static format guard _reference _quick bypass-audit quick page-check tick claim speckit-todo audit guard-edit context-ok guard-log scratch-sweep cache-clean disk-audit hooks-test guard-messages citations fragment-move \
 	 switches _switch research-deferred research-open \
 	 map maps cohort cohort-landing hamlet placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 pack-audit help \
@@ -326,7 +326,7 @@ fragment-move:  ## [docs] rename or renumber a question - every file of its stem
 hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each guard still has a companion
 	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --path-format=absolute --git-common-dir); fail=""; n=0; skipped=0; \
 	work=$$(mktemp -d); trap 'rm -rf "$$work"' EXIT; \
-	roster=$$(for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/cohort-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/closing-checks.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$root/tests/hooks/parts.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do basename $$h; done | sort -u); \
+	roster=$$(for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/cohort-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/closing-checks.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/state-sync.sh $$root/scripts/hooks/l7r-guard.sh $$root/tests/hooks/parts.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do basename $$h; done | sort -u); \
 	traced=" $$(if [ -z "$(HOOKS_ALL)" ]; then "$$root/scripts/hooks/l7r-guard.sh" trace fresh "$$gitdir" "$$root" $$roster 2>/dev/null; fi | tr '\n' ' ') "; \
 	export HOOKS_SHIM="$$("$$root/scripts/hooks/l7r-guard.sh" trace shim "$$gitdir" 2>/dev/null)" HOOKS_ROOT="$$root"; \
 	: "THE LAUNCHERS' BINARIES BUILT AND CHECKED ONCE A RUN (feature 449 T205): each call of l7r-gate.sh or l7r-guard.sh walked its Rust sources to see whether to build, about 1,400 and 2,000 paths, and under the read recorder each path was a line of the suite's log - sync-with-main's run wrote 1,260,877 lines; with the fresh binaries named here a call skips the walk and hookrun.sh records the sources once a suite (an empty name, where a build failed, leaves every call to walk as before)"; \
@@ -336,7 +336,7 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	keys=$$("$$root/scripts/hooks/l7r-guard.sh" deps --keys $$roster $$shards); \
 	owned=$$(for b in $$roster; do t=test-$${b%.py}; case $$t in *.sh) ;; *) t=$$t.sh ;; esac; printf '%s ' "$$t"; done); \
 	pairs=$$("$$root/tests/hooks/hookrun.sh" --jobs "$$root/tests/hooks" $$owned); \
-	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/cohort-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/closing-checks.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$root/tests/hooks/parts.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do \
+	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/cohort-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/closing-checks.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/state-sync.sh $$root/scripts/hooks/l7r-guard.sh $$root/tests/hooks/parts.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do \
 	  b=$$(basename $$h); case $$b in test-*) continue ;; esac; case " $$seen " in *" $$b "*) continue ;; esac; seen="$$seen $$b"; \
 	  t=test-$${b%.py}; case $$t in *.sh) ;; *) t=$$t.sh ;; esac; \
 	  jobs=$$(printf '%s\n' "$$pairs" | awk -v t="$$t" '$$1 == t { $$1 = ""; print substr($$0, 2) }'); \
@@ -608,7 +608,15 @@ arbiter-ask:  ## [project] put a PROCESS question (a cap, a waiver, a stuck choi
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh arbiter bundle --check-ask "$$ARBITER_WHY" --evidence "$(FILES)" && scripts/gates/l7r-gate.sh arbiter ask "$$SUBJECT" "$$ARBITER_WHY" "$$ARBITER_REVIEW" && scripts/gates/l7r-gate.sh arbiter bundle "ask:$$SUBJECT" --root "$$(pwd)" --evidence "$(FILES)"
 
 land-tooling:  ## [project] land the named TOOLING files on main by themselves, mid-feature (feature 379)   FILES="scripts/x.py tests/tooling/test_x.py"
-	@"$$(git rev-parse --show-toplevel)/scripts/land-tooling.sh" $(FILES)
+	@"$$(git rev-parse --show-toplevel)/scripts/land-tooling.sh" $(FILES); rc=$$?; \
+	  if [ $$rc = 0 ]; then "$$(git rev-parse --show-toplevel)/scripts/state-sync.sh" push --detach || :; fi; exit $$rc
+
+# THE TOOLING STATE (feature 451 T258): a landing's own push made, the clone's check answers and event logs follow it to the private
+# tooling-state repository, detached - the landing's exit is its own, and a failed state push is one line at the next landing.
+state-push:     ## [project] push this clone's check answers and event logs (.git/record-checks, .git/l7r-events) to the private tooling-state repository, on the clone's branch - what make land and make land-tooling run, detached, after their own push; never a refusal (feature 451 T258)
+	@"$$(git rev-parse --show-toplevel)/scripts/state-sync.sh" push
+state-restore:  ## [project] bring the check answers and event logs back from the private tooling-state repository into this clone (a fresh clone, a lost container's replacement): merged, an answer by its record's utc and a log by the lines it lacks, nothing newer here overwritten (feature 451 T258)   [FROM=<another clone's name>]
+	@"$$(git rev-parse --show-toplevel)/scripts/state-sync.sh" restore $(FROM)
 
 arbiter-fix-declined:  ## [project] the round arbiter's tooling fix OVERHAULS a process: declined, never filed - a question for the GM owed escalation-check (features 379, 432)   ID=<trigger> REASON="<why>"
 	@if [ -z "$(ID)" ] || [ -z "$$REASON" ]; then printf 'make arbiter-fix-declined: ID= and REASON= are required\n' >&2; exit 2; fi
@@ -630,6 +638,7 @@ land:           ## [project] land one task or several and tick them: every cheap
 	$(if $(COVER_OK),$(LOGESCAPE) COVER_OK "$$COVER_OK",@:)
 	@$(LAND_RUN) "$(F)" "$(T)"; rc=$$?; \
 	  if [ $$rc = 0 ]; then "$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep landed "$(F)" "$$(git rev-parse --path-format=absolute --git-common-dir)/task-starts.jsonl" $(T) </dev/null; fi; \
+	  if [ $$rc = 0 ] || [ $$rc = 3 ]; then "$$(git rev-parse --show-toplevel)/scripts/state-sync.sh" push --detach || :; fi; \
 	  $(SCRATCH_TREES); exit $$rc
 
 coverage-exempt: ## [tests] the engine files the Rust port replaces, exempt from the coverage floor (dev/coverage-exempt.json; feature 448, the GM 2026-11-02); PRUNE=1 drops the stale entries   [PRUNE=1]

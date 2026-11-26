@@ -2689,31 +2689,51 @@ engine speed, so no checklist.
 <!-- plan-archive: T254 to T254 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T255 to T248 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T255 to T255 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
-### T258 (<why: the finding or measurement that files it>)
+### T258 (the GM 2026-11-25: "I created https://github.com/EliAndrewC/diagram-tooling-state for the tooling state" - a clone's check answers and event logs live only in its .git, so a lost container loses them)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `scripts/state-sync.sh`, with a push and a restore. `push` commits the common .git's `record-checks/` and `l7r-events/` into a bare git mirror at `<common .git>/tooling-state.git` and pushes the branch named for the clone to the private repository; `make land` and `make land-tooling` run it detached (`push --detach`) after their own push succeeded, and exit with their own code. `restore` (`make state-restore [FROM=<clone>]`, and from `sync-with-main.sh sync-in` for a clone that has no mirror yet) fetches a branch and merges it in: the answers by `l7r-gate record merge-answers` (each record's utc, the newer kept), a log by appending the lines the local log lacks. The audit entry is `dev/audits/tooling-state.md`. Every figure is in item 9.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the push and the restore | `tests/hooks/test-state-sync.sh` on a local bare fixture remote, red before the script existed (item 9) | n/a: no engine code | none | n/a |
 
 ### T258 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A container is lost. Its replacement's clone, at its next sync-in, has the check answers and the event logs the lost container had pushed at its last landing, and no landing waited or was refused for it.
+2. **The constraints.** The task line (tasks.md T258): both directories pushed at each landing (`make land` and `make land-tooling`, after the main push, never refusing it) and restored into a fresh clone or a replacement container (a make target, and the session-clone setup). The project's token, never printed, never on a command line, never in a config. The repository private, never linked or copied anywhere public. Handoffs and caches stay out. An audit-register entry with a falsifier. The brief: the mechanism chosen by measuring. A restore never overwrites a newer local answer, merged by each record's utc as `record merge-answers` does. Tests on a local bare fixture, never the real remote. A real push by hand at the end.
+3. **Where each comes from.** G: the task line and `request.md` ("2026-11-25: before three parallel builders ... and the tooling-state repository"). O: the measurements of item 9.
+4. **Do they describe the world here?** Yes. THE DECISIONS (their measurements are item 9's):
+   - T258-D1 A GIT MIRROR, NOT TAR SNAPSHOTS: a tar snapshot re-sends everything at every landing, a mirror committed into sends everything at its branch's opening push and afterwards what changed. The mirror is `<common .git>/tooling-state.git`, bare. The answers are added from where they lie (`--work-tree=<common .git>`), with no copy made.
+   - T258-D2 THE LOGS GO IN AS SEGMENTS of whole lines (`split -C`, the size `SEGMENT` in the script, a GUESS knob: any size under GitHub's per-file limit works). A log committed whole stored a new blob of its full size each landing, and the largest log was on its way to GitHub's per-file limit, past which every push would fail for good. An append-only file's segments never change, the last excepted. The mirror is repacked at each run so it stays small.
+   - T258-D3 DETACHED, SO NO LANDING WAITS (the task line: "never refusing it", the brief: "never refusing or delaying"). `push --detach` starts the push in its own session and returns. What it costs, accepted by this builder: a detached push's failure cannot be said by the landing that started it, so it is logged (`<common .git>/tooling-state.log`, a JSON line a run) and said in a single line at the NEXT landing (`the last push FAILED ...`). The alternative priced: a foreground push says its failure at once and delays every landing by the push's seconds. `make state-push` by hand is the foreground form. A lock (flock) lets a single run work the mirror, and a push that meets a running push is skipped, the next landing's carrying its state.
+   - T258-D4 A BRANCH A CLONE, named for the clone the common .git belongs to, so a worktree's state is its clone's (the suite's worktree case). "Per-clone" is the task line's word. A replacement container's clone of the same name takes that branch.
+   - T258-D5 NEVER A FORCE PUSH, AND A FRESH MIRROR TAKES THE BRANCH IN BEFORE IT COMMITS. A mirror that has never seen its branch (a fresh clone, a replacement container) fetches and merges the remote's state before it commits, so the commit removes nothing and its push is a fast-forward (the suite's replacement and fresh-clone cases). A push the remote refuses because another container moved the branch is fetched, merged in and pushed on top, as a merge commit (the suite's shared-branch case).
+   - T258-D6 THE RESTORE MERGES, NEVER OVERWRITES. Answers: `l7r-gate record merge-answers`, the answer store's other writer, unchanged - a unit only the branch holds is copied, a unit both hold keeps every fingerprint either answered and the record of the later utc (the suite's newer-here case). Logs: the branch's segments joined, and the lines the local log lacks appended (`O_APPEND`, as the hooks write, and both readers sort by `t`, per `refile.rs`'s header). A local line is never removed. A `.tmp` file (a half-written answer or log) is not pushed.
+   - T258-D7 THE SESSION-CLONE SETUP IS `sync-in`: a clone is made by a bare `git clone`, and `sync-with-main.sh sync-in` is where its config is set (`ensure_git_config`), so `sync_in` runs `state-sync.sh restore --if-fresh`. With no mirror yet it makes the mirror and restores in the background. A clone that has a mirror does nothing (the suite's setup case). A CONVENTION for where "the session-clone setup" is. `make state-restore` is the door by hand.
+   - T258-D8 A CLONE WHOSE ORIGIN IS NOT GITHUB MAIN'S DOES NOTHING unless `STATE_REMOTE` names a remote (the suite's skipped case): the other suites' fixture clones run `sync-with-main.sh` and must never reach the real repository. The landings call the script from the Makefile's recipes, which no suite runs. The suite itself holds git to the file transport (`GIT_ALLOW_PROTOCOL=file`) and its answers and log lines are made up.
+   - T258-D9 THE TOKEN as `sync-with-main.sh` hands it: `l7r-gate github-token` into `GITHUB_TOKEN`, `scripts/git-askpass-token.sh` as git's askpass, `credential.helper` emptied for the mirror's calls. The remote is passed by URL at each call and never stored, so the mirror's config holds no remote (the suite reads it).
+   - T258-D10 A SHELL SCRIPT, NOT A GATE CRATE: it is git plumbing end to end, beside `sync-with-main.sh` and `land-tooling.sh`, which are shell for the same reason. Its only logic with rules, the answers' merge, is the gate's and is reused. The easier route where nothing rules.
+   - T258-D11 HANDOFFS AND CACHES STAY OUT: only `record-checks` and `l7r-events` are added to the mirror's index.
+5. **The order.** Alone; before a container is next replaced.
+6. **The exits.** Green: `make closing-checks T=T258`, and the real push. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.**
+   - THE STATE: 2,837 answer files in 71 MB and 31 logs in 122 MB, the largest log 38.6 MB, measured 2026-11-25 (`find | wc -l`, `du -sh` and `ls -l` on diagram-backlog's common .git).
+   - RED FIRST: 36 of the suite's 41 checks failed with no script and 5 passed (each asserts an absence), then 41 of 41 passed with it, measured 2026-11-25 (`bash tests/hooks/test-state-sync.sh`, before and after `scripts/state-sync.sh` was written).
+   - D1's CHOICE: a tar.gz of both directories was 33.8 MB and took 4.7 s, owed at every landing, measured 2026-11-25 (`time tar -czf` on that state). The mirror sent 29 MB at its opening push and then 0.72 MB in 9.7 s and 0.13 MB in 2.6 s at the next 2 pushes, measured 2026-11-25 (`state-sync.sh push` to a local bare remote, the seconds and bytes of its log lines, the machine at load 24 to 28).
+   - D2's GROWTH: with logs committed whole the mirror grew 9 MB a commit, measured 2026-11-25 (`du -sh` of a scratch mirror before and after a commit of 15 appended lines), and with segments and the repack it stayed at 29 MB across 3 pushes, measured 2026-11-25 (`du -sh` after each push).
+   - D3's WAIT: `push --detach` returned in 0.03 s, measured 2026-11-25 (`time bash scripts/state-sync.sh push --detach`).
+   - THE REAL PUSH, by hand: the branch `diagram-backlog` went up as 29.3 MB in 8.7 s, measured 2026-11-25 (`make state-push` in this worktree at load 26, its own line), and `git ls-remote` read the remote's tip back equal to the mirror's. The next push sent 0.13 MB in 7.0 s, measured 2026-11-25 (`make state-push`, its own line). `make state-restore` over the full state took 15.9 s and brought 0 answers and 0 lines, everything being here already, measured 2026-11-25 (its own line).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing is fixed: a new operation. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- not a defect (constitution XIV): a landing's push sends each grown log's last segment whole where the appended lines are far smaller, because git's thin pack found no delta base for the segment - 28 appended lines, a 7 KB diff, packed to 125 KB at `pack.window` 10 and at 50, measured 2026-11-25 (`git diff | wc -c` and `git pack-objects --thin --revs --stdout | wc -c` between the mirror's last 2 commits). No visible effect and no finding broken, the push being detached and under the audit entry's threshold. Recorded in the audit entry's known limits.
+- not a defect (constitution XIV): `l7r-gate check audit-register` does not see this landing step, a script a recipe calls being none of the kinds its detectors read (`audit_register/detect.rs`'s header), observed 2026-11-25, method: `l7r-gate check audit-register --delta` on this delta named 0 mechanisms. Its header calls a miss cheaper than a false fire. The entry is written all the same, with no `covers:` line. A title for the coordinating session, since this builder files no task: "audit-register: a script newly called from make land's or land-tooling's recipe is a landing step no detector sees (451 T258's state-sync.sh)".
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: it adds a detached step; nothing is made faster.
 
 
 <!-- plan-archive: T259 to T259 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->

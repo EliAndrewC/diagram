@@ -1776,6 +1776,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "round-arbiter"
+  },
+  "### T258 (the GM 2026-11-25: \"I created https://github.com/EliAndrewC/diagram-tooling-state for the tooling state\" - a clone's check answers and event logs live only in its .git, so a lost container loses them)": {
+   "sha256": "de0cf6626a0170d2d73bd5e25670187c8be0df1aa5b69a0113f3c97182a13b7a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T258 Approach (checklist part A)": {
+   "sha256": "d8d6b4fcff6af7a110c8a74d921d9a58962eea98b5054e195784876a34516b4a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -23077,6 +23089,107 @@
    "tasks": [
     "T259"
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T258 (the GM 2026-11-25: \"I created https://github.com/EliAndrewC/diagram-tooling-state for the tooling state\" - a clone's check answers and event logs live only in its .git, so a lost container loses them)",
+    "### T258 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T258-D1",
+     "summary": "A bare git mirror at <common .git>/tooling-state.git, committed from where the files lie, not tar snapshots",
+     "class": "within",
+     "why": "The mechanism that carries 'the tooling state' to the GM's repository; chosen by measurement (item 9, dated, methods named). Nothing the GM asked for is dropped."
+    },
+    {
+     "id": "T258-D2",
+     "summary": "Logs committed as whole-line segments (split -C, SEGMENT a GUESS knob), the mirror repacked each run",
+     "class": "within",
+     "why": "A storage layout that keeps every log line in the repository and keeps pushes clear of GitHub's per-file limit, which would otherwise end every push. Nothing is dropped."
+    },
+    {
+     "id": "T258-D3a",
+     "summary": "The landing's push runs detached (push --detach); make land / land-tooling exit with their own code",
+     "class": "within",
+     "why": "Implements the task line's 'never refusing it'. The GM's words set no timing for the push."
+    },
+    {
+     "id": "T258-D3b",
+     "summary": "A detached push's failure is logged and said in one line at the NEXT landing; make state-push is the foreground form",
+     "class": "within",
+     "why": "The cost of D3a, named and priced against a foreground push. A failure is still reported, so the state does not silently stop reaching the repository."
+    },
+    {
+     "id": "T258-D3c",
+     "summary": "A push that meets a running push (flock held) is skipped; the next landing's push carries its state",
+     "class": "within",
+     "why": "'At each landing' is in the section's quotation of the task line, not in request.md or the spec. On the block's own text, state written after the running push's commit is unsaved until the next landing, and so is all state written between any two landings. The skip widens that gap by one landing and does not lose state. The cost is named here rather than ruled as a narrowing."
+    },
+    {
+     "id": "T258-D4",
+     "summary": "One branch per clone, named for the clone the common .git belongs to; a replacement container's clone of that name takes it",
+     "class": "within",
+     "why": "A layout inside the GM's repository. Every clone's state still reaches the repository."
+    },
+    {
+     "id": "T258-D5",
+     "summary": "Never a force push; a fresh mirror fetches and merges the branch before its first commit; a refused push is fetched, merged and pushed on top",
+     "class": "within",
+     "why": "Keeps state already in the repository from being overwritten. Serves the purpose and drops nothing."
+    },
+    {
+     "id": "T258-D6",
+     "summary": "Restore merges and never overwrites: answers by l7r-gate record merge-answers (newer utc kept), logs by appending missing lines; .tmp files not pushed",
+     "class": "within",
+     "why": "Restoring the state into a fresh clone is the point of the repository. A .tmp file is a half-written answer or log line, not finished tooling state."
+    },
+    {
+     "id": "T258-D7",
+     "summary": "Session-clone setup is sync-with-main.sh sync-in, running restore --if-fresh (mirror made and restored in the background); a clone that already has a mirror does nothing; make state-restore by hand",
+     "class": "within",
+     "why": "A clone that has a mirror is not the fresh or replacement clone the restore exists for, and the by-hand door stays open. The background restore delays nothing."
+    },
+    {
+     "id": "T258-D8",
+     "summary": "A clone whose origin is not GitHub main's does nothing unless STATE_REMOTE names a remote",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled class by class. (1) Other suites' fixture clones, which run sync-with-main.sh with local origins and made-up answers and logs: pushing them would put fake data into the GM's private repository and have tests reach the real remote. Excluding them is implied by the purpose ('for the tooling state', the real record-check answers and event logs), so this class is legitimate. (2) A real working clone whose origin is something other than GitHub main: the stated justification does not cover it, because its state is real tooling state. The bundle shows one real push, from diagram-backlog. It does not say whether make state-push goes through this origin check, or what any other clone's origin is. D7 says clones are made by a bare git clone, presumably of GitHub, and the block names no real clone the check leaves out. So no defect is shown here. If such a clone exists, STATE_REMOTE is its door, and leaving it silently unbacked would be a defect for its owner to fix."
+    },
+    {
+     "id": "T258-D9",
+     "summary": "Token via l7r-gate github-token into GITHUB_TOKEN with the askpass script; credential.helper emptied; remote passed by URL per call, never stored in the mirror's config",
+     "class": "within",
+     "why": "Implements the task line's 'never printed, never on a command line, never in a config' for the GM's private repository."
+    },
+    {
+     "id": "T258-D10",
+     "summary": "A shell script beside sync-with-main.sh and land-tooling.sh, not a gate crate; the answers' merge reused from the gate",
+     "class": "within",
+     "why": "A choice of implementation form. Not a fidelity matter."
+    },
+    {
+     "id": "T258-D11",
+     "summary": "Only record-checks and l7r-events are added to the mirror's index; handoffs and caches stay out",
+     "class": "within",
+     "why": "Matches the GM's 'for the record-check answers and event logs' and the task line's exclusion."
+    },
+    {
+     "id": "T258-FL1",
+     "summary": "Found and left, not a defect: a grown log's last segment is sent whole (no thin-pack delta base), about 125 KB for a 7 KB diff",
+     "class": "within",
+     "why": "A size cost, measured with its method. There is no wrong outcome: the push is detached and every line still arrives."
+    },
+    {
+     "id": "T258-FL2",
+     "summary": "Found and left, not a defect: check audit-register's detectors do not see a script newly called from a landing recipe; the entry is written by hand, and a task title is handed to the coordinating session",
+     "class": "within",
+     "why": "The GM's own T259 words expect misses and say how they are handled: 'after the initial backfill, we can backfill as we go, as we find things that we missed'. This entry is that backfill, so no mechanism goes unregistered. The detector's reach is left as it was, and the title is passed on so the miss can be filed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -36764,6 +36877,105 @@
     ],
     "verdict": "BLOCKED"
    }
+  },
+  "T258": {
+   "section_sha256": "5eef0745804b76f95c9fc2e4e8fc5581f3bad38be9d8ad2164fc86283e1a7592",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T258-D1",
+     "summary": "A bare git mirror at <common .git>/tooling-state.git, committed from where the files lie, not tar snapshots",
+     "class": "within",
+     "why": "The mechanism that carries 'the tooling state' to the GM's repository; chosen by measurement (item 9, dated, methods named). Nothing the GM asked for is dropped."
+    },
+    {
+     "id": "T258-D2",
+     "summary": "Logs committed as whole-line segments (split -C, SEGMENT a GUESS knob), the mirror repacked each run",
+     "class": "within",
+     "why": "A storage layout that keeps every log line in the repository and keeps pushes clear of GitHub's per-file limit, which would otherwise end every push. Nothing is dropped."
+    },
+    {
+     "id": "T258-D3a",
+     "summary": "The landing's push runs detached (push --detach); make land / land-tooling exit with their own code",
+     "class": "within",
+     "why": "Implements the task line's 'never refusing it'. The GM's words set no timing for the push."
+    },
+    {
+     "id": "T258-D3b",
+     "summary": "A detached push's failure is logged and said in one line at the NEXT landing; make state-push is the foreground form",
+     "class": "within",
+     "why": "The cost of D3a, named and priced against a foreground push. A failure is still reported, so the state does not silently stop reaching the repository."
+    },
+    {
+     "id": "T258-D3c",
+     "summary": "A push that meets a running push (flock held) is skipped; the next landing's push carries its state",
+     "class": "within",
+     "why": "'At each landing' is in the section's quotation of the task line, not in request.md or the spec. On the block's own text, state written after the running push's commit is unsaved until the next landing, and so is all state written between any two landings. The skip widens that gap by one landing and does not lose state. The cost is named here rather than ruled as a narrowing."
+    },
+    {
+     "id": "T258-D4",
+     "summary": "One branch per clone, named for the clone the common .git belongs to; a replacement container's clone of that name takes it",
+     "class": "within",
+     "why": "A layout inside the GM's repository. Every clone's state still reaches the repository."
+    },
+    {
+     "id": "T258-D5",
+     "summary": "Never a force push; a fresh mirror fetches and merges the branch before its first commit; a refused push is fetched, merged and pushed on top",
+     "class": "within",
+     "why": "Keeps state already in the repository from being overwritten. Serves the purpose and drops nothing."
+    },
+    {
+     "id": "T258-D6",
+     "summary": "Restore merges and never overwrites: answers by l7r-gate record merge-answers (newer utc kept), logs by appending missing lines; .tmp files not pushed",
+     "class": "within",
+     "why": "Restoring the state into a fresh clone is the point of the repository. A .tmp file is a half-written answer or log line, not finished tooling state."
+    },
+    {
+     "id": "T258-D7",
+     "summary": "Session-clone setup is sync-with-main.sh sync-in, running restore --if-fresh (mirror made and restored in the background); a clone that already has a mirror does nothing; make state-restore by hand",
+     "class": "within",
+     "why": "A clone that has a mirror is not the fresh or replacement clone the restore exists for, and the by-hand door stays open. The background restore delays nothing."
+    },
+    {
+     "id": "T258-D8",
+     "summary": "A clone whose origin is not GitHub main's does nothing unless STATE_REMOTE names a remote",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled class by class. (1) Other suites' fixture clones, which run sync-with-main.sh with local origins and made-up answers and logs: pushing them would put fake data into the GM's private repository and have tests reach the real remote. Excluding them is implied by the purpose ('for the tooling state', the real record-check answers and event logs), so this class is legitimate. (2) A real working clone whose origin is something other than GitHub main: the stated justification does not cover it, because its state is real tooling state. The bundle shows one real push, from diagram-backlog. It does not say whether make state-push goes through this origin check, or what any other clone's origin is. D7 says clones are made by a bare git clone, presumably of GitHub, and the block names no real clone the check leaves out. So no defect is shown here. If such a clone exists, STATE_REMOTE is its door, and leaving it silently unbacked would be a defect for its owner to fix."
+    },
+    {
+     "id": "T258-D9",
+     "summary": "Token via l7r-gate github-token into GITHUB_TOKEN with the askpass script; credential.helper emptied; remote passed by URL per call, never stored in the mirror's config",
+     "class": "within",
+     "why": "Implements the task line's 'never printed, never on a command line, never in a config' for the GM's private repository."
+    },
+    {
+     "id": "T258-D10",
+     "summary": "A shell script beside sync-with-main.sh and land-tooling.sh, not a gate crate; the answers' merge reused from the gate",
+     "class": "within",
+     "why": "A choice of implementation form. Not a fidelity matter."
+    },
+    {
+     "id": "T258-D11",
+     "summary": "Only record-checks and l7r-events are added to the mirror's index; handoffs and caches stay out",
+     "class": "within",
+     "why": "Matches the GM's 'for the record-check answers and event logs' and the task line's exclusion."
+    },
+    {
+     "id": "T258-FL1",
+     "summary": "Found and left, not a defect: a grown log's last segment is sent whole (no thin-pack delta base), about 125 KB for a 7 KB diff",
+     "class": "within",
+     "why": "A size cost, measured with its method. There is no wrong outcome: the push is detached and every line still arrives."
+    },
+    {
+     "id": "T258-FL2",
+     "summary": "Found and left, not a defect: check audit-register's detectors do not see a script newly called from a landing recipe; the entry is written by hand, and a task title is handed to the coordinating session",
+     "class": "within",
+     "why": "The GM's own T259 words expect misses and say how they are handled: 'after the initial backfill, we can backfill as we go, as we find things that we missed'. This entry is that backfill, so no mechanism goes unregistered. The detector's reach is left as it was, and the title is passed on so the miss can be filed."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
