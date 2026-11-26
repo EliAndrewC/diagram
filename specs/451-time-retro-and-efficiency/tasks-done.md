@@ -672,3 +672,6 @@
 - [x] T267 make claims-checked crashes with 'File exists (os error 17)' in a linked worktree when a reply line is held: silent::SEARCHED joins .git/claims-searched.json onto the root (rust/gate/crates/claims/src/claims/commands.rs:384) and .git is a file there - resolve the git dir as the other state files do
       research: rendering
       verify: DONE. landed: claims-checked holds a silent finding in a linked worktree: the searched-claims file sits in the tree's own git dir, read from the .git file's gitdir line; red-first on a real linked worktree (201 passed 1 failed, then 202 passed); the census of like paths filed as T275
+- [x] T272 the Stop hook's question detector still fires on a statement inside a table row ('waiting on you' mid row; 451 T235's remaining false positive): add the case red-first
+      research: rendering
+      verify: DONE. landed: the Stop hook's question detector no longer reads 'what's waiting on you' as an ask when it is one item of a listed content; 'for you to confirm' is a true ask and stays one, pinned; red-first on the real row (521 passed 1 failed, then 522); T235's corpus re-run loses no ask
