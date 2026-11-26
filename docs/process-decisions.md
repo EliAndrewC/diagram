@@ -179,7 +179,7 @@ figures). **Falsifier:** over a week of builders briefed under the rule, measure
 falling below about one in five (it was 28%) - then sizing the brief is not the lever, and the task's own size or the cap is
 looked at again.
 
-### Two code builders at once, in reused worktrees; three or four only for work that compiles nothing (decided 2026-11-26)
+### Two code builders at once, in reused worktrees (decided 2026-11-26); three or four for work that compiles nothing is an offer
 
 **Question.** How many builders run at once, each in its own worktree, landings still one at a time through main (the talk's
 items 1-5 and 7)?

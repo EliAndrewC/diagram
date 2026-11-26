@@ -45,8 +45,12 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
   builder, 2.02 at two; memory measured that morning - two builders and a landing peaked at 6.3 GiB anonymous against the
   container's 10 GiB limit, no sample over the 7 GiB margin, no OOM kill; three code builders were not run, the headroom too
   small. Load is the other limit (median 32, peak 67 on 22 cores). Items 2-5 and 7 have no measurement of their own.
-- **Still open of the pre-approved set - item 14** (the builder report format; escalation-check on a narrower bundle; a
-  Sonnet-tier seeded test): not measured overnight. Each closes with a Decided entry and an audit entry.
+- **Still open of the pre-approved set - item 14**: its cost is measured (the agenda's item 14: 26 escalation-check runs,
+  1.85M tokens in), but neither pre-approved lever has been - a shorter builder report format (adopt if shorter with nothing
+  lost) and escalation-check on a narrower bundle (adopt if its verdicts do not change). A Sonnet-tier seeded test was
+  discussed beside them and is NOT in his pre-approval's words. Each closes with a Decided entry and an audit entry.
+- **Item 13, the audit register**: built and in force (451 T259; `make audits`), its backfill 451 T260. It was not in the
+  pre-approved set and is not a question for the talk; it is where the talk's decisions get their audit entries.
 
 ## The GM's canon answers (recorded in `docs/gm-rulings.md`), and what the record did with them
 
