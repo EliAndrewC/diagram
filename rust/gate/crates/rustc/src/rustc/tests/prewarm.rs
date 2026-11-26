@@ -80,9 +80,10 @@ fn codes(root: &Path) -> Vec<i64> {
         .collect()
 }
 
-/// A fake cargo that stays in a build for as long as `slow` lies beside it.
+/// A fake cargo that stays in a build for as long as `slow` lies beside it - for 30 s at most, so a test that fails before it
+/// removes the file ends red instead of holding the suite (it held a batch's checks for 9 minutes on 2026-11-26).
 const SLOW: &str =
-    "[ \"$1\" = test ] && while [ -f \"$(dirname \"$0\")/slow\" ]; do sleep 0.05; done\nexit 0";
+    "i=0\n[ \"$1\" = test ] && while [ -f \"$(dirname \"$0\")/slow\" ] && [ $i -lt 600 ]; do sleep 0.05; i=$((i+1)); done\nexit 0";
 
 #[test]
 fn the_moved_crates_test_builds_are_asked_as_a_real_run_asks_them_a_crate_before_its_dependents() {
@@ -187,7 +188,8 @@ fn it_starts_a_crate_only_while_a_slot_is_spare_and_never_cuts_the_one_in_flight
         );
         // a real compile takes the last slot: the build in flight goes on, its slot held, and ends as cargo ends it
         let real = take(&world.slots, "a real run\n", &mut |_| {});
-        assert!(real.hold.is_some() && real.waited.is_none());
+        // (it may wait a moment: the pre-warm's own look for a spare slot holds the slot's lock while it looks)
+        assert!(real.hold.is_some());
         still_building(&root);
         assert!(!spare(&world.slots));
         std::fs::remove_file(world.target.join("slow")).unwrap();
