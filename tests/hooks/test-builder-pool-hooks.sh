@@ -19,7 +19,7 @@ run() {  # run <command-string> -> sets RC and OUT
 }
 expect_block() {  # <command> <words the refusal holds>
   run "$1"
-  if [ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -qF -- "$2"; then pass=$((pass+1)); else fail=$((fail+1)); echo "FAIL: expected BLOCK naming '$2', got rc=$RC for: $1"; fi
+  if [ "$RC" -eq 2 ] && grep -qF -- "$2" <<< "$OUT"; then pass=$((pass+1)); else fail=$((fail+1)); echo "FAIL: expected BLOCK naming '$2', got rc=$RC for: $1"; fi
 }
 expect_allow() {
   run "$1"
