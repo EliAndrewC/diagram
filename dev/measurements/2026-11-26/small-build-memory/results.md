@@ -1,5 +1,7 @@
 # 451 T347: what a small test build needs of memory, and how the tool can tell one before it starts
 
+2026-11-26, added by the task's closing half: the knob as built is `L7R_BUILD_SLOTS_SMALL` (`rust/gate/crates/rustc/src/rustc/slot.rs`); this record, written before the build, names it `L7R_BUILD_SMALL_SLOTS`, and is left as it was written.
+
 Measured 2026-11-26, 21:20-21:50 UTC, in the pool tree `diagram-backlog-t269`, one build at a time, beside other builders' work
 (load 9.6 to 32.3 on 22 cores; the container's anonymous memory 0.7 to 1.8 GiB where a run began). Scripts beside this file:
 `mem-sample.py` (the sampler), `windows.py` (its samples by `Phase` span), `small-run.sh` (one test run after a body edit),

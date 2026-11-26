@@ -382,3 +382,11 @@ line by T334's closing builder, who did not hear them; the elision is the line's
 
 The rest of T334's line is the coordinating session's: the command's name and its kinds, what its block holds, and the list of what
 the check on a builder's dispatch refuses.
+
+## 2026-11-26: a small test build's lane beside the build slots (451 T347)
+
+T347's line in `tasks.md` holds no words of the GM. It is the coordinating session's, written from 451 T315's measurement of a
+builder's test builds waiting for a build slot (the waits and compiles it lists, the twelve `slot-wait` lines of the day), with
+the order of work it asks for: measure the memory of a one-crate test build first, then let that class of build take no slot or
+a slot of its own kind, and say what `make task-time`'s minutes waiting on a build slot were before and after. The slot itself
+is 451 T284's, whose section above carries his words on it.

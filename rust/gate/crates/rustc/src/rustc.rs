@@ -35,7 +35,9 @@ mod times;
 use cover::uncovered_each;
 #[cfg(test)]
 use kept::{content_ids, declared_reads, relative, verdict_key};
-use kept::{kept_reads, undeclared, undeclared_refusal, unit_tests_only, Kept, Reads, Verdict};
+use kept::{
+    kept_reads, undeclared, undeclared_refusal, unit_tests_only, Kept, Reads, Told, Verdict,
+};
 
 /// Each run is recorded for `make tool-yield`, as `usage_log` records a Python tool's.
 const USAGE_LOG_TOOL: &str = "rust_checks";
@@ -67,6 +69,8 @@ pub struct World {
     make: String,
     /// The machine's build slots, one held around each cargo call that compiles (feature 451 T284, `slot.rs`).
     slots: slot::Slots,
+    /// The small lane beside them, for a test build of one crate alone (feature 451 T347, `slot.rs`, `kept/alone.rs`).
+    small: slot::Slots,
 }
 
 struct Ran {
@@ -194,6 +198,13 @@ fn cargo_in(
     let (all, mut env) = cargo_call(world, args, manifest, after, tmp);
     // every cargo call that compiles holds a build slot for its length (feature 451 T284); `cargo fmt` compiles nothing
     let _slot = (args.first() != Some(&"fmt")).then(|| slot::around(world, &all, &mut env));
+    run_in(Some(&world.root), &world.cargo, &all, &env)
+}
+
+/// `cargo`, for a test build told to compile its crate alone (feature 451 T347, `kept/alone.rs`): the small lane, never a wide slot.
+fn cargo_small(world: &World, args: &[&str], manifest: &Path) -> Ran {
+    let (all, mut env) = cargo_call(world, args, manifest, &[], None);
+    let _slot = slot::around_small(world, manifest, &all, &mut env);
     run_in(Some(&world.root), &world.cargo, &all, &env)
 }
 
@@ -497,14 +508,22 @@ fn test_args(cmd: &str, manifest: &Path, no_run: bool) -> Vec<String> {
 /// crate compiles from cold. Its build is asked first, `--no-run` with the run's own words, and booked `build`; the run then finds it
 /// fresh and is booked `test`. A build that fails is the crate's answer, in cargo's own words, and nothing runs after it. Where the
 /// binary key's build ran and passed (`built`: a build that named no binary), it wrote the `build` line and the run compiles nothing,
-/// so no build is asked again; where it failed, the build is asked again here, so the failure reads as cargo's and not as JSON.
-fn stepped(world: &World, cmd: &str, manifest: &Path, formatting_check: bool, built: bool) -> Ran {
+/// so no build is asked again; where it failed, the build is asked again here, so the failure reads as cargo's and not as JSON -
+/// in the lane the binary key's build was told (`told`, feature 451 T347), so a red build of one crate alone waits on no wide slot.
+fn stepped(
+    world: &World,
+    cmd: &str,
+    manifest: &Path,
+    formatting_check: bool,
+    built: bool,
+    told: &Told,
+) -> Ran {
     if phase::step_of(cmd) == Some("test") && !built {
         let words = test_args(cmd, manifest, true);
         let args: Vec<&str> = words.iter().map(String::as_str).collect();
         let began = std::time::SystemTime::now();
         // a link on a session a killed build left mixed is healed and asked once more (`stale.rs`, feature 451 T336)
-        let built = stale::built(world, &args, manifest);
+        let built = stale::built(world, &args, manifest, told);
         phase::wrote(world, "build", &[manifest], began, built.code);
         if built.code != 0 {
             return built;
@@ -683,9 +702,9 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
             continue;
         }
         let built = verdict.built;
-        let done = together
-            .remove(manifest)
-            .unwrap_or_else(|| stepped(world, cmd, manifest, formatting_check, built));
+        let done = together.remove(manifest).unwrap_or_else(|| {
+            stepped(world, cmd, manifest, formatting_check, built, &verdict.told)
+        });
         if cmd == "hamlet" {
             stdout.push_str(&done.stdout);
         }
@@ -801,6 +820,7 @@ fn world_here(make: String) -> World {
     let root = l7r_shared::env::Rooted::process(tree);
     World {
         slots: slot::Slots::of(root.reader(), &home),
+        small: slot::Slots::small(root.reader(), &home),
         target: home.join(".cache/l7r-cargo-target").join(name),
         cargo: cargo_exe(&cargo_bin),
         path_dir: home.join(".cargo/bin"),

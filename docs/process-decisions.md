@@ -452,6 +452,13 @@ compile minutes, or closing checks at three builders no faster with it than at `
 own tool build and a hook suite's guard build, which were not at the peaks (at most 2.6 GiB and 13 compilers where no check's
 phase ran).
 
+The small lane (451 T347, 2026-11-26; the same audit). A test build the checks can tell compiles its crate alone - its
+dependencies' files and their times unmoved since the same build last passed in that target directory - takes a lane of its
+own, `L7R_BUILD_SLOTS_SMALL` wide (1, a GUESS: 0.19 to 1.42 GiB a build against the 1.6 GiB left beside two wide builds), and
+never a wide slot: with both wide slots held it waited 60 s before and 1 to 2 ms after
+(`dev/measurements/2026-11-26/small-build-memory/lane-results.md`). Chosen by the building session; the day's `waiting on a
+build slot` minutes with the lane live are not yet read.
+
 **What followed.** `scripts/container/builder-brief.md`'s SIZING paragraph names the count; the frictions of running several
 were fixed by 451 T245-T247 and T252-T257, with T271 (shared scratch and plan-review bundle directory) open. 451 T274 keeps the sampler as
 tooling (the first run was a hand-started loop): every `make builder-tree` starts the clone's sampler where none runs, and

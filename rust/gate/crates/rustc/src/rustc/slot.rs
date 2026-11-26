@@ -19,6 +19,19 @@
 //!
 //! THE WAIT IS BOOKED: a call that waited writes one `Phase` line, `slot-wait`, which `make task-time` books as `waiting on a build
 //! slot` ahead of the compile it precedes, and says so on stderr each minute it lasts.
+//!
+//! THE SMALL LANE (feature 451 T347). A builder's test build of one crate after a body edit waited its turn behind coverage builds:
+//! four runs of `rust/gate/crates/reviews` waited 57.3, 18.2, 2.5 and 34.9 s for a slot for compiles of 2.3 to 4.0 s. Measured
+//! 2026-11-26 (`dev/measurements/2026-11-26/small-build-memory/results.md`): a test build that compiles ONE crate alone, its
+//! dependencies fresh, is 0.19-0.64 GiB anonymous after a body edit and 1.42 GiB at the most (every source of the largest crate),
+//! two rustc at once, where a slot's own kind of build is 2.0 GiB a tree and 12 rustc. The budget - 1.4 GiB of sessions and two
+//! wide builds at 2.0 against a 7 GiB margin (GUESS) - leaves 1.6: room for one such build, not two at the ceiling. So a build
+//! the tool can tell is of that class before it starts (`kept/alone.rs`) takes a lane of its own, `L7R_BUILD_SLOTS_SMALL` wide
+//! (files `small-<i>` beside the `slot-<i>`), and never a wide slot: it waits only behind another of its kind. A lane, not a skip:
+//! it bounds a wrong telling at one more large build, which no slot at all would not. A build the telling cannot vouch for takes a
+//! wide slot as before, and so does every build where the lane is `0`; with no wide slots (`L7R_BUILD_SLOTS=0`, a run under a
+//! holder) there is no lane either. A wait in the lane is a `slot-wait` line like any other; each build that took the lane writes a
+//! `slot-small` line, its span the wait for it, which the readers book to no category, so it is there to count.
 
 use std::collections::BTreeMap;
 use std::fs::File;
@@ -40,6 +53,10 @@ pub(super) const MARK: &str = "L7R_BUILD_SLOT_HELD";
 pub(super) const CEILING: &str = "L7R_BUILD_SLOT_CEILING";
 /// The wait's `Phase` step.
 pub(super) const STEP: &str = "slot-wait";
+/// How many builds of one crate alone run at once on the machine, beside the wide slots; `0` is no lane (a wide slot instead).
+pub(super) const SMALL: &str = "L7R_BUILD_SLOTS_SMALL";
+/// The `Phase` step of a build that took the small lane: its span is its wait for the lane, its code 1 where it ran without.
+pub(super) const USE: &str = "slot-small";
 
 /// THE COUNT (GUESS, a knob: `L7R_BUILD_SLOTS`): two. Three compiles at once is the measured peak the slot is there to stop (6.4 GiB,
 /// load median 42 on 22 cores, so the third added no throughput), and one cargo call already asks for a job a core (`-j` 22, left as
@@ -47,6 +64,11 @@ pub(super) const STEP: &str = "slot-wait";
 /// (peak 6.3 GiB only where a landing's gate made a third). One would also hold memory, and queue every tree behind every other;
 /// unmeasured. Retuned from `make task-time`'s `waiting on a build slot` minutes against the compile minutes beside them.
 const DEFAULT: usize = 2;
+/// THE LANE'S WIDTH (GUESS, a knob: `L7R_BUILD_SLOTS_SMALL`): one. The room beside two wide builds is 1.6 GiB (the module's words),
+/// a build of one crate alone 1.42 GiB at the most measured and 0.64 after a body edit: one at its ceiling fits, two do not (2.8).
+/// What would widen it: the wide slots' holders measured under 2.0 GiB each with the slot on, or a lane wait showing in `make
+/// task-time`.
+const SMALL_DEFAULT: usize = 1;
 /// THE CEILING (GUESS, a knob: `L7R_BUILD_SLOT_CEILING` seconds): past it the call runs without a slot. Fifteen minutes outlasts the
 /// longest coverage build measured under three-way load (589 s), and is half the run lock's 1,800 s ceiling, which a slot's waiter
 /// holds its target directory under: a hung holder costs a tree a quarter hour, never a refusal.
@@ -66,6 +88,10 @@ pub(super) struct Slots {
     /// The `flock` program (a test names one that cannot start).
     pub(super) flock: String,
     pub(super) clock: Box<dyn Clock>,
+    /// The slot files' name: `slot` the wide ones, `small` the lane's (feature 451 T347).
+    pub(super) stem: &'static str,
+    /// The knob that counts them, which a waiter's line names.
+    pub(super) knob: &'static str,
 }
 
 impl Slots {
@@ -84,6 +110,26 @@ impl Slots {
             poll: POLL,
             flock: "flock".to_owned(),
             clock: Box::new(Wall(Instant::now())),
+            stem: "slot",
+            knob: COUNT,
+        }
+    }
+
+    /// The small lane (feature 451 T347) as the run's environment has it: `L7R_BUILD_SLOTS_SMALL` files `small-<i>` beside the
+    /// wide slots, with their ceiling; none where there are no wide slots (`L7R_BUILD_SLOTS=0`, a run under a holder's mark).
+    pub(super) fn small(env: &dyn Fn(&str) -> Option<String>, home: &Path) -> Self {
+        let wide = Self::of(env, home);
+        if wide.count == 0 {
+            return wide;
+        }
+        let count = env(SMALL)
+            .and_then(|v| v.trim().parse().ok())
+            .unwrap_or(SMALL_DEFAULT);
+        Self {
+            count,
+            stem: "small",
+            knob: SMALL,
+            ..wide
         }
     }
 
@@ -144,7 +190,7 @@ fn try_lock(flock: &str, file: &File) -> Try {
 }
 
 fn slot_file(slots: &Slots, i: usize) -> PathBuf {
-    slots.dir.join(format!("slot-{i}"))
+    slots.dir.join(format!("{}-{i}", slots.stem))
 }
 
 /// The first free slot, taken and signed with `who`; none where every one is held; an error where there are no slots to ask.
@@ -246,9 +292,10 @@ pub(super) fn take(slots: &Slots, who: &str, say: &mut dyn FnMut(&str)) -> Taken
         }
         if so_far >= next {
             say(&format!(
-                "rust-checks: waiting on a build slot, {} s so far - {} compiling cargo call(s) run at once on this machine ({COUNT}, feature 451 T284); held by: {}\n",
+                "rust-checks: waiting on a build slot, {} s so far - {} compiling cargo call(s) run at once on this machine ({}, feature 451 T284); held by: {}\n",
                 so_far.as_secs(),
                 slots.count,
+                slots.knob,
                 holders(slots)
             ));
             next += slots.notice;
@@ -265,6 +312,32 @@ pub(super) fn around(
     args: &[String],
     env: &mut BTreeMap<String, String>,
 ) -> Option<Hold> {
+    around_of(world, &world.slots, args, env)
+}
+
+/// `around`, for a test build of `manifest`'s crate alone (feature 451 T347, `kept/alone.rs`): a place in the small lane, never a
+/// wide slot, and a `slot-small` line whose span is its wait for it. No lane (`L7R_BUILD_SLOTS_SMALL=0`, no wide slots) is `around`.
+pub(super) fn around_small(
+    world: &World,
+    manifest: &Path,
+    args: &[String],
+    env: &mut BTreeMap<String, String>,
+) -> Option<Hold> {
+    if world.small.count == 0 {
+        return around(world, args, env);
+    }
+    let began = SystemTime::now();
+    let hold = around_of(world, &world.small, args, env);
+    super::phase::wrote(world, USE, &[manifest], began, i32::from(hold.is_none()));
+    hold
+}
+
+fn around_of(
+    world: &World,
+    slots: &Slots,
+    args: &[String],
+    env: &mut BTreeMap<String, String>,
+) -> Option<Hold> {
     let began = SystemTime::now();
     let tree = world.root.file_name().unwrap_or_default().to_string_lossy();
     let what: Vec<&str> = args.iter().take(2).map(String::as_str).collect();
@@ -274,7 +347,7 @@ pub(super) fn around(
         world.make,
         what.join(" ")
     );
-    let taken = take(&world.slots, &who, &mut |line| eprint!("{line}"));
+    let taken = take(slots, &who, &mut |line| eprint!("{line}"));
     if taken.waited.is_some() {
         let none: [&Path; 0] = [];
         let code = i32::from(taken.hold.is_none());

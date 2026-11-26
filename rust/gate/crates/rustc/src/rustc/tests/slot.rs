@@ -17,7 +17,7 @@ use crate::rustc::runlock::{Clock, Wall};
 use crate::rustc::slot::{around, take, Slots, CEILING, COUNT, DIR, MARK, STEP};
 use crate::rustc::{cargo, cargo_in};
 
-fn quiet(_: &str) {}
+pub(super) fn quiet(_: &str) {}
 
 /// The wall clock, telling `waiting` at each sleep: a test lets a slot go only once the waiter is in its wait, however long the host
 /// took to start it (a fixed pause raced the waiter's thread under three builders' load).
@@ -35,7 +35,7 @@ impl Clock for Telling {
 }
 
 /// `count` quick slots under `dir` whose waiter tells the receiver each time it finds none free.
-fn telling(dir: &Path, count: usize) -> (Slots, Receiver<()>) {
+pub(super) fn telling(dir: &Path, count: usize) -> (Slots, Receiver<()>) {
     let (tell, waiting) = channel();
     let clock = Telling(Wall(Instant::now()), Mutex::new(tell));
     let slots = Slots {
@@ -46,7 +46,7 @@ fn telling(dir: &Path, count: usize) -> (Slots, Receiver<()>) {
 }
 
 /// `count` slots under `dir`, looked at every 10 ms of the wall clock.
-fn quick(dir: &Path, count: usize) -> Slots {
+pub(super) fn quick(dir: &Path, count: usize) -> Slots {
     Slots {
         poll: Duration::from_millis(10),
         ..Slots::at(dir.to_path_buf(), count)

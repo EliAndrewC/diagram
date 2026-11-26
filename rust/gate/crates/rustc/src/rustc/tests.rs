@@ -12,6 +12,7 @@ use super::{
 use crate::checks::scratch;
 use l7r_shared::tempdir::{Held, TempDir};
 
+mod alone;
 mod assertline;
 mod caller;
 mod cover;
@@ -58,6 +59,7 @@ fn world_with(root: &Path, body: &str) -> Held<World> {
         cover_work: None,
         make: "static".to_owned(),
         slots: super::slot::Slots::off(),
+        small: super::slot::Slots::off(),
         target: target.to_path_buf(),
     };
     target.hold(world)
@@ -584,6 +586,7 @@ fn the_real_cargo_tests_a_real_crate() {
         cover_work: None,
         make: "static".to_owned(),
         slots: super::slot::Slots::off(),
+        small: super::slot::Slots::off(),
         target: target.to_path_buf(),
     };
     let got = answer(&world, "test", &[], false);

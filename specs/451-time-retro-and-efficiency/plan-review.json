@@ -2244,6 +2244,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T347 (2026-11-26, found by 451 T315's measurement: a builder's test build of one crate after a body edit waited 57.3, 18.2, 2.5 and 34.9 s for one of the machine's two build slots for compiles of 2.3 to 4.0 s, measured 2026-11-26, `dev/measurements/2026-11-26/test-run-split/body-edit.sh` and the `slot-wait` lines beside it)": {
+   "sha256": "66eb325a658d84477f95507fe3d73bde5d97e96b9fb7e0ecaa999d8a9444a51b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T347 Approach (checklist part A)": {
+   "sha256": "ba768c2c3fda71f9b75252578a6688887379a56e3d2fd26a64d505a371adc9f7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T347 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "4746f434bffd8f0ded23d2fa049ababe7fc697cd1e042bf7dd990a9d67d11687",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -28667,6 +28685,157 @@
      "why": "Follows the GM's two-tier checking (2026-11-26, T308: the rigor belongs at the landing) and FR-013's ordering; settles nothing the spec left open against the request."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T347 (2026-11-26, found by 451 T315's measurement: a builder's test build of one crate after a body edit waited 57.3, 18.2, 2.5 and 34.9 s for one of the machine's two build slots for compiles of 2.3 to 4.0 s, measured 2026-11-26, `dev/measurements/2026-11-26/test-run-split/body-edit.sh` and the `slot-wait` lines beside it)",
+    "### T347 Approach (checklist part A)",
+    "### T347 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "measure-first",
+     "summary": "The memory of a one-crate test build measured before the lane was built (0.19-0.64 GiB after a body edit, at most 1.42 GiB where the crate recompiles whole), against the wide builds the slot is for.",
+     "class": "within",
+     "why": "T347's line asks exactly this order: measure the memory of a one-crate test build first."
+    },
+    {
+     "id": "T347-D1",
+     "summary": "A lane of its own kind, one wide, knob L7R_BUILD_SLOTS_SMALL (GUESS), rather than no slot; its width argued from the 7 GiB margin's 1.6 GiB of room.",
+     "class": "within",
+     "why": "The line offers 'no slot or a slot of its own kind'; choosing the second, with the budget arithmetic shown and a knob, is a choice inside the offer and keeps T284's memory purpose."
+    },
+    {
+     "id": "T347-D2",
+     "summary": "A build is told alone by a kept content key of everything but the crate's own sources AND every keyed file being older than the key file.",
+     "class": "within",
+     "why": "How the class is recognized; the file-times half is measured (git checkout recompiled a dependency at an unchanged key). Mechanism, not scope."
+    },
+    {
+     "id": "T347-D3",
+     "summary": "Times read conservatively: a tie counts as newer, an unaskable time is not alone, anything unknown takes a wide slot.",
+     "class": "within",
+     "why": "Errs toward the behavior before the lane, which keeps T284's memory purpose; not a narrowing of the class, which is defined by what can be shown to compile one crate alone."
+    },
+    {
+     "id": "T347-D4",
+     "summary": "One telling per crate per run, shared by the binary-key build and a red build's second asking; runs that ask no binary key are wide.",
+     "class": "within",
+     "why": "Consistency of one answer within a run; the excluded runs (FRESH=1, outside a repository, test-no-counters) are not one-crate incremental builds."
+    },
+    {
+     "id": "T347-D5",
+     "summary": "The build after a healed link takes a wide slot; only the first build runs in the lane it was told.",
+     "class": "within",
+     "why": "After the heal drops fingerprints and incremental sessions the build is no longer of the class the lane is for; sending it wide is applying the rule, not excepting from it."
+    },
+    {
+     "id": "T347-D6",
+     "summary": "No lane where L7R_BUILD_SLOTS=0 or under a holder; with the lane at 0 nothing is told and the build is wide as before.",
+     "class": "within",
+     "why": "Preserves the existing off switch the measuring scripts rely on and gives the new knob an off position; neither narrows the lane where slots exist."
+    },
+    {
+     "id": "T347-D7",
+     "summary": "A lane that cannot be taken (no flock, the shared 900 s ceiling passed) runs the build without one and writes slot-small code 1; it never falls back to a wide slot.",
+     "class": "within",
+     "why": "Mirrors T284's own convention for the wide slot; refusing the wide fallback is what keeps the wait the task removes from returning."
+    },
+    {
+     "id": "T347-D8",
+     "summary": "Event lines slot-tell and slot-small; a lane wait written as slot-wait so where_time books it as waiting on a build slot; measure crate unchanged.",
+     "class": "within",
+     "why": "Serves the line's ask to say the waiting-on-a-build-slot minutes before and after, by keeping lane waits in that same category."
+    },
+    {
+     "id": "Deviation 1, 2, 4, 5",
+     "summary": "Module at rustc/kept/alone.rs (reads kept.rs privates), knob named L7R_BUILD_SLOTS_SMALL per the coordinating brief, the key also holds dependencies' compiled-in files and binary_args whole, the key file named by the crate's full path from the root.",
+     "class": "within",
+     "why": "Departures from a builder's handoff, not from the request or spec; placement and naming, or a key that is more complete (an edited include_str! target recompiles its crate), which keeps the telling correct."
+    },
+    {
+     "id": "Deviation 3",
+     "summary": "A build told alone never touches its key, pass or fail; a wide build writes <key>.new, renames it on a pass, removes it on a failure.",
+     "class": "within",
+     "why": "A behavior choice inside the lane's design: a red build of the crate alone moved no dependency, so its key still stands; removing it would send every run after a red build back to a wide slot, the wait the line asks removed. It narrows nothing asked and the key file is in the build's own target directory (no new disk residue outside it, T245/T246)."
+    },
+    {
+     "id": "include-fix",
+     "summary": "A compiled-in path stops at a line's end (kept.rs INCLUDE); the defect made the first two runs after each tool rebuild tell wide.",
+     "class": "within",
+     "why": "A wrong outcome (a kept key differing from the same key read fresh) found in the step and fixed in it, as FIX AS WE GO requires."
+    },
+    {
+     "id": "still-wide-by-design",
+     "summary": "First build in a target directory, after a dependency edit or checkout, FRESH=1, test-no-counters, pre-warm builds, lint, cargo test --doc, make test-times, a heal's second build stay on wide slots.",
+     "class": "within",
+     "why": "Each is outside the class the line names (a one-crate incremental test build, whose memory was what was measured) or cannot be told to be in it; kept as before the lane, not excluded from a rule that covered them. The pre-warm's first-build gap is ruled separately as T367."
+    },
+    {
+     "id": "after-minutes-deferred",
+     "summary": "make task-time's waiting-on-a-build-slot minutes AFTER the change are not given; the mechanism's wait (60 s to 1-2 ms with both wide slots held) stands in, and the day's figure is the coordinating session's to read after 24 h live, into dev/audits/build-slot.md.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible inside the task: a day of builders' slot waits under the lane exists only after the lane has landed. The before figure is given, the same command is named for the after, and the controlled before/after on the mechanism carries the line's purpose (showing the wait removed) in the meantime."
+    },
+    {
+     "id": "run-lock-not-filed",
+     "summary": "Two runs of one tree take turns on the run lock even with two target directories; not filed.",
+     "class": "within",
+     "why": "T23's existing rule, no wrong outcome; the lane is for builds of two trees, so nothing asked is narrowed."
+    },
+    {
+     "id": "concurrent-memory-not-measured",
+     "summary": "Two compiling small builds of two trees queued on the lane, and the lane beside two compiling wide holders, not measured; the memory falsifier is the sampler's report.",
+     "class": "within",
+     "why": "The line asks for the one-crate build's memory measured first, which was; the combined figure follows from measured parts and the audit names a falsifier. No requested measurement is dropped."
+    },
+    {
+     "id": "T367-prewarm-key",
+     "summary": "The pre-warm keeps no key, so a builder's first test build of each crate after a handout, sync or dependency edit is told wide though it may compile one crate alone; filed T367 (a performance task), lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the lane's reach inside the class T347's line names. It is not a defect under the standing definition (no wrong outcome: the build waits as it did before the lane, nothing refuses or answers wrongly), and of what a plan leaves unfixed only a defect is NOT LEGITIMATE; it is left by the conservative telling of D3 (no key, no proof), not carved out by choice, and it is carried by a filed performance task that lands before the next step, with its size (first builds a day) to be measured first as the line's own order asks. The coordinating brief's bar on prewarm.rs is context, not the ground."
+    },
+    {
+     "id": "T355-lint",
+     "summary": "A builder's lint (clippy) takes a wide slot whatever it compiles; filed T355, lands before T302.",
+     "class": "within",
+     "why": "Lint is not a test build, the class the line names, and its memory was not measured; the line's measure-first order keeps it wide."
+    },
+    {
+     "id": "T356-measure-cover",
+     "summary": "The coverage pass of rust/gate/crates/measure red on five lines in a pool tree where the landing's was green; filed T356, lands before T302.",
+     "class": "within",
+     "why": "A defect (a check refusing good work in one tree), but another crate's, found in passing and outside what T347 asks; FR-009's why, filed id and order are all stated, and it lands before T302, so it is not carried into the next step."
+    },
+    {
+     "id": "T357-leftover-process",
+     "summary": "An l7r_shared test process alive 66 minutes after its run; filed T357, lands before T302.",
+     "class": "within",
+     "why": "Another crate's test, found in passing, outside T347; why, id and order stated, lands before the next step."
+    },
+    {
+     "id": "T368-single-line-include",
+     "summary": "A string naming include_str! on one line is read as a compiled-in path with an empty id; filed T368, lands before T302.",
+     "class": "within",
+     "why": "No wrong outcome today (an empty id never moves the key); the residue of the in-task include fix, needing a token-level reader; why, id and order stated."
+    },
+    {
+     "id": "slot-test-either-order",
+     "summary": "A build-half test that asserted which wide slot each of two holders took now compares the two holders' names in either order.",
+     "class": "within",
+     "why": "It still requires both named holders, one in each slot, so it still pins two distinct slots taken; only the assignment order, which a just-released slot makes racy, is dropped."
+    },
+    {
+     "id": "per-test-time-none-split",
+     "summary": "No test of the new module split: slowest 0.57 s, none near a second; all over a 'tenth of a second' attributed to FR-008.",
+     "class": "within",
+     "why": "Inside the crate's existing practice. The citation is wrong: this feature's FR-008 is the background-run and poll-interval guard and says nothing of a tenth of a second; the plan should name the rule it means. A citation error, not a narrowing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -45082,6 +45251,154 @@
      "summary": "Exits: builder-checks first tier, the clone-sync hook suite, the crate's cover step; full gate at landing; one landing; before T302 and independent of T339/T341/T342/T344/T347/T357.",
      "class": "within",
      "why": "Follows the GM's two-tier checking (2026-11-26, T308: the rigor belongs at the landing) and FR-013's ordering; settles nothing the spec left open against the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T347": {
+   "section_sha256": "d3a865d3c27891ba498c4bdf9c761c1440a300b269c98f8227faecb9df993244",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "measure-first",
+     "summary": "The memory of a one-crate test build measured before the lane was built (0.19-0.64 GiB after a body edit, at most 1.42 GiB where the crate recompiles whole), against the wide builds the slot is for.",
+     "class": "within",
+     "why": "T347's line asks exactly this order: measure the memory of a one-crate test build first."
+    },
+    {
+     "id": "T347-D1",
+     "summary": "A lane of its own kind, one wide, knob L7R_BUILD_SLOTS_SMALL (GUESS), rather than no slot; its width argued from the 7 GiB margin's 1.6 GiB of room.",
+     "class": "within",
+     "why": "The line offers 'no slot or a slot of its own kind'; choosing the second, with the budget arithmetic shown and a knob, is a choice inside the offer and keeps T284's memory purpose."
+    },
+    {
+     "id": "T347-D2",
+     "summary": "A build is told alone by a kept content key of everything but the crate's own sources AND every keyed file being older than the key file.",
+     "class": "within",
+     "why": "How the class is recognized; the file-times half is measured (git checkout recompiled a dependency at an unchanged key). Mechanism, not scope."
+    },
+    {
+     "id": "T347-D3",
+     "summary": "Times read conservatively: a tie counts as newer, an unaskable time is not alone, anything unknown takes a wide slot.",
+     "class": "within",
+     "why": "Errs toward the behavior before the lane, which keeps T284's memory purpose; not a narrowing of the class, which is defined by what can be shown to compile one crate alone."
+    },
+    {
+     "id": "T347-D4",
+     "summary": "One telling per crate per run, shared by the binary-key build and a red build's second asking; runs that ask no binary key are wide.",
+     "class": "within",
+     "why": "Consistency of one answer within a run; the excluded runs (FRESH=1, outside a repository, test-no-counters) are not one-crate incremental builds."
+    },
+    {
+     "id": "T347-D5",
+     "summary": "The build after a healed link takes a wide slot; only the first build runs in the lane it was told.",
+     "class": "within",
+     "why": "After the heal drops fingerprints and incremental sessions the build is no longer of the class the lane is for; sending it wide is applying the rule, not excepting from it."
+    },
+    {
+     "id": "T347-D6",
+     "summary": "No lane where L7R_BUILD_SLOTS=0 or under a holder; with the lane at 0 nothing is told and the build is wide as before.",
+     "class": "within",
+     "why": "Preserves the existing off switch the measuring scripts rely on and gives the new knob an off position; neither narrows the lane where slots exist."
+    },
+    {
+     "id": "T347-D7",
+     "summary": "A lane that cannot be taken (no flock, the shared 900 s ceiling passed) runs the build without one and writes slot-small code 1; it never falls back to a wide slot.",
+     "class": "within",
+     "why": "Mirrors T284's own convention for the wide slot; refusing the wide fallback is what keeps the wait the task removes from returning."
+    },
+    {
+     "id": "T347-D8",
+     "summary": "Event lines slot-tell and slot-small; a lane wait written as slot-wait so where_time books it as waiting on a build slot; measure crate unchanged.",
+     "class": "within",
+     "why": "Serves the line's ask to say the waiting-on-a-build-slot minutes before and after, by keeping lane waits in that same category."
+    },
+    {
+     "id": "Deviation 1, 2, 4, 5",
+     "summary": "Module at rustc/kept/alone.rs (reads kept.rs privates), knob named L7R_BUILD_SLOTS_SMALL per the coordinating brief, the key also holds dependencies' compiled-in files and binary_args whole, the key file named by the crate's full path from the root.",
+     "class": "within",
+     "why": "Departures from a builder's handoff, not from the request or spec; placement and naming, or a key that is more complete (an edited include_str! target recompiles its crate), which keeps the telling correct."
+    },
+    {
+     "id": "Deviation 3",
+     "summary": "A build told alone never touches its key, pass or fail; a wide build writes <key>.new, renames it on a pass, removes it on a failure.",
+     "class": "within",
+     "why": "A behavior choice inside the lane's design: a red build of the crate alone moved no dependency, so its key still stands; removing it would send every run after a red build back to a wide slot, the wait the line asks removed. It narrows nothing asked and the key file is in the build's own target directory (no new disk residue outside it, T245/T246)."
+    },
+    {
+     "id": "include-fix",
+     "summary": "A compiled-in path stops at a line's end (kept.rs INCLUDE); the defect made the first two runs after each tool rebuild tell wide.",
+     "class": "within",
+     "why": "A wrong outcome (a kept key differing from the same key read fresh) found in the step and fixed in it, as FIX AS WE GO requires."
+    },
+    {
+     "id": "still-wide-by-design",
+     "summary": "First build in a target directory, after a dependency edit or checkout, FRESH=1, test-no-counters, pre-warm builds, lint, cargo test --doc, make test-times, a heal's second build stay on wide slots.",
+     "class": "within",
+     "why": "Each is outside the class the line names (a one-crate incremental test build, whose memory was what was measured) or cannot be told to be in it; kept as before the lane, not excluded from a rule that covered them. The pre-warm's first-build gap is ruled separately as T367."
+    },
+    {
+     "id": "after-minutes-deferred",
+     "summary": "make task-time's waiting-on-a-build-slot minutes AFTER the change are not given; the mechanism's wait (60 s to 1-2 ms with both wide slots held) stands in, and the day's figure is the coordinating session's to read after 24 h live, into dev/audits/build-slot.md.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible inside the task: a day of builders' slot waits under the lane exists only after the lane has landed. The before figure is given, the same command is named for the after, and the controlled before/after on the mechanism carries the line's purpose (showing the wait removed) in the meantime."
+    },
+    {
+     "id": "run-lock-not-filed",
+     "summary": "Two runs of one tree take turns on the run lock even with two target directories; not filed.",
+     "class": "within",
+     "why": "T23's existing rule, no wrong outcome; the lane is for builds of two trees, so nothing asked is narrowed."
+    },
+    {
+     "id": "concurrent-memory-not-measured",
+     "summary": "Two compiling small builds of two trees queued on the lane, and the lane beside two compiling wide holders, not measured; the memory falsifier is the sampler's report.",
+     "class": "within",
+     "why": "The line asks for the one-crate build's memory measured first, which was; the combined figure follows from measured parts and the audit names a falsifier. No requested measurement is dropped."
+    },
+    {
+     "id": "T367-prewarm-key",
+     "summary": "The pre-warm keeps no key, so a builder's first test build of each crate after a handout, sync or dependency edit is told wide though it may compile one crate alone; filed T367 (a performance task), lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the lane's reach inside the class T347's line names. It is not a defect under the standing definition (no wrong outcome: the build waits as it did before the lane, nothing refuses or answers wrongly), and of what a plan leaves unfixed only a defect is NOT LEGITIMATE; it is left by the conservative telling of D3 (no key, no proof), not carved out by choice, and it is carried by a filed performance task that lands before the next step, with its size (first builds a day) to be measured first as the line's own order asks. The coordinating brief's bar on prewarm.rs is context, not the ground."
+    },
+    {
+     "id": "T355-lint",
+     "summary": "A builder's lint (clippy) takes a wide slot whatever it compiles; filed T355, lands before T302.",
+     "class": "within",
+     "why": "Lint is not a test build, the class the line names, and its memory was not measured; the line's measure-first order keeps it wide."
+    },
+    {
+     "id": "T356-measure-cover",
+     "summary": "The coverage pass of rust/gate/crates/measure red on five lines in a pool tree where the landing's was green; filed T356, lands before T302.",
+     "class": "within",
+     "why": "A defect (a check refusing good work in one tree), but another crate's, found in passing and outside what T347 asks; FR-009's why, filed id and order are all stated, and it lands before T302, so it is not carried into the next step."
+    },
+    {
+     "id": "T357-leftover-process",
+     "summary": "An l7r_shared test process alive 66 minutes after its run; filed T357, lands before T302.",
+     "class": "within",
+     "why": "Another crate's test, found in passing, outside T347; why, id and order stated, lands before the next step."
+    },
+    {
+     "id": "T368-single-line-include",
+     "summary": "A string naming include_str! on one line is read as a compiled-in path with an empty id; filed T368, lands before T302.",
+     "class": "within",
+     "why": "No wrong outcome today (an empty id never moves the key); the residue of the in-task include fix, needing a token-level reader; why, id and order stated."
+    },
+    {
+     "id": "slot-test-either-order",
+     "summary": "A build-half test that asserted which wide slot each of two holders took now compares the two holders' names in either order.",
+     "class": "within",
+     "why": "It still requires both named holders, one in each slot, so it still pins two distinct slots taken; only the assignment order, which a just-released slot makes racy, is dropped."
+    },
+    {
+     "id": "per-test-time-none-split",
+     "summary": "No test of the new module split: slowest 0.57 s, none near a second; all over a 'tenth of a second' attributed to FR-008.",
+     "class": "within",
+     "why": "Inside the crate's existing practice. The citation is wrong: this feature's FR-008 is the background-run and poll-interval guard and says nothing of a tenth of a second; the plan should name the rule it means. A citation error, not a narrowing."
     }
    ],
    "verdict": "CLEAR"

@@ -7,7 +7,7 @@ use std::path::Path;
 use super::phases::phases;
 use super::{calls, two_crates, world_with};
 use crate::rustc::stale::{healed, LOCK_S, STEP};
-use crate::rustc::{stepped, Ran};
+use crate::rustc::{stepped, Ran, Told};
 
 fn ran(code: i32, stderr: &str) -> Ran {
     Ran {
@@ -18,7 +18,7 @@ fn ran(code: i32, stderr: &str) -> Ran {
 }
 
 /// A build directory with one crate's two incremental directories, a dependency's, another crate's, and each build's fingerprint.
-fn cache(profile: &Path) {
+pub(super) fn cache(profile: &Path) {
     for dir in [
         "incremental/k-aaa/s-1-working",
         "incremental/k-bbb/s-2-done",
@@ -34,7 +34,7 @@ fn cache(profile: &Path) {
 }
 
 /// The linker's words: a unit of the crate by its path, and a unit of a dependency as a member of its rlib.
-fn link_error(profile: &Path) -> String {
+pub(super) fn link_error(profile: &Path) -> String {
     let deps = profile.join("deps");
     format!(
         "error: linking with `cc` failed: exit status: 1\n  = note: rust-lld: error: undefined hidden symbol: anon.1.llvm.2\n          >>> referenced by u1\n          >>>               {0}/k-0123456789abcdef.u1.rcgu.o:(k::f)\n          >>> referenced by u2\n          >>>               {0}/libdep-fedcba9876543210.rlib(dep-fedcba9876543210.u2.rcgu.o):(dep::g)\n",
@@ -62,7 +62,7 @@ fn a_link_on_a_mixed_session_drops_the_named_crates_sessions_and_builds_once_mor
     let profile = world.target.join("debug");
     cache(&profile);
     std::fs::write(world.target.join("link-error"), link_error(&profile)).unwrap();
-    let done = stepped(&world, "test", &a, false, false);
+    let done = stepped(&world, "test", &a, false, false, &Told::wide());
     assert_eq!(done.code, 0, "{}", done.stderr);
     let builds = |w: &crate::rustc::World| {
         calls(w)
@@ -96,7 +96,7 @@ fn a_second_failed_link_is_the_builds_answer_and_no_third_build_is_asked() {
     let profile = world.target.join("debug");
     cache(&profile);
     std::fs::write(world.target.join("link-error"), link_error(&profile)).unwrap();
-    let done = stepped(&world, "test", &a, false, false);
+    let done = stepped(&world, "test", &a, false, false, &Told::wide());
     assert_eq!(done.code, 101);
     assert_eq!(calls(&world).len(), 2, "{:?}", calls(&world));
     let twice = " and built again: that build failed too, in cargo's words below\nerror: linking with `cc` failed";

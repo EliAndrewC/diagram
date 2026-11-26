@@ -733,6 +733,23 @@ fn a_test_key_reads_what_the_crate_s_sources_include() {
     );
 }
 
+/// A compiled-in path never spans a line (found by feature 451 T347): `core`'s own reader of `include_str!` lines names the macros in
+/// strings, and the text from one such string's quote to the next quote, lines and all, was read as a path - which the kept views,
+/// a line a file, gave back cut at its first line, so every key that reads the compiled-in files moved once after each rebuild of
+/// the checks, and a test build told alone (`kept/alone.rs`) was not until its second run.
+#[test]
+fn a_compiled_in_path_never_spans_a_line_so_the_kept_views_read_back_as_they_were_read() {
+    let (root, _, _) = two_crates();
+    let text = "fn f() {\n    for word in [\"include_str!(\", \"include_bytes!(\"] {\n        drop(word);\n    }\n}\nconst S: &str = \"x\";\n";
+    std::fs::write(root.join("rust/a/src/lib.rs"), text).unwrap();
+    let ids = ids(&[("rust/a/src/lib.rs", "1")]);
+    let cache = root.join("views");
+    let fresh = super::super::kept::code_ids_kept(&root, &ids, Some(&cache)).2;
+    let kept = super::super::kept::code_ids_kept(&root, &ids, Some(&cache)).2;
+    assert_eq!(fresh, kept);
+    assert_eq!(fresh["rust/a/src/lib.rs"], ["rust/a/src/, "]);
+}
+
 /// The code views are kept by each file's path and content (feature 449 T160): a file whose blob id stands is not read again, one that
 /// moved is, and a cache another binary wrote is not trusted.
 #[test]

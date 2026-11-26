@@ -12,10 +12,12 @@ use fancy_regex::Regex;
 use l7r_shared::sha256;
 use serde_json::Value;
 
-use super::{cargo, crates, own, re, run, rust_text, World};
+use super::{crates, own, re, run, rust_text, World};
 
+pub(super) mod alone;
 mod code;
 use crate::Reply;
+pub(super) use alone::Told;
 
 /// The append-only records every run writes: no test reads them, and keying on them would re-run every crate's tests after every run.
 const RECORDS: [&str; 4] = [
@@ -302,8 +304,10 @@ pub(super) type Views<'a> = (
 /// The files each Rust file compiles in (`include_str!`, `include_bytes!`, `include!`), as paths from the tree's root.
 pub(super) type Includes = BTreeMap<String, Vec<String>>;
 
+/// A path is on one line: a string that only names the macro (`core`'s reader of these lines) once ran to the next quote, lines and
+/// all, and the kept views, a line a file, gave that "path" back cut short, so a key moved after each rebuild (feature 451 T347).
 static INCLUDE: LazyLock<Regex> =
-    LazyLock::new(|| re(r#"\binclude(?:_str|_bytes)?!\s*\(\s*"([^"]+)""#));
+    LazyLock::new(|| re(r#"\binclude(?:_str|_bytes)?!\s*\(\s*"([^"\n]+)""#));
 
 /// The paths a Rust file at `path` (from the root) compiles in, resolved from its directory.
 fn included(path: &str, text: &str) -> Vec<String> {
@@ -550,17 +554,15 @@ fn binary_key(
     world: &World,
     cmd: &str,
     manifest: &Path,
-    all: &[PathBuf],
-    ids: &BTreeMap<String, String>,
-    compiler: &str,
+    kept: &Kept,
+    told: &Told,
     passed: &mut bool,
 ) -> Option<(String, Vec<String>)> {
-    let mut args = vec!["test", "--no-run", "--message-format=json", "--quiet"];
-    if cmd == "test-counters" {
-        args.push("--all-features");
-    }
+    let (all, ids, compiler) = (&kept.all, &kept.ids, &kept.compiler);
+    let args = binary_args(cmd);
     let began = std::time::SystemTime::now();
-    let built = cargo(world, &args, manifest, &[]);
+    // in the lane it was told: a build of this crate alone takes the small lane, never a wide slot (feature 451 T347)
+    let built = told.cargo(world, &args, manifest);
     super::phase::wrote(world, "build", &[manifest], began, built.code);
     *passed = built.code == 0;
     let exes = executables(&built.stdout);
@@ -579,6 +581,15 @@ fn binary_key(
         }
     }
     Some((sha256::hex(&hash), order))
+}
+
+/// The binary key's build: the crate's test build, its binaries named as JSON; the counting build's with every feature.
+fn binary_args(cmd: &str) -> Vec<&'static str> {
+    let mut args = vec!["test", "--no-run", "--message-format=json", "--quiet"];
+    if cmd == "test-counters" {
+        args.push("--all-features");
+    }
+    args
 }
 
 /// Does `path` lie under a declared read (`"."` the whole tree)?
@@ -794,6 +805,9 @@ pub(super) struct Verdict {
     /// The binary key's build ran and passed (feature 451 T05): its `build` phase line is written and the test binaries are built, so a
     /// `cargo test` after it - a build that named no binary - compiles nothing and is booked `test` alone.
     pub(super) built: bool,
+    /// What the binary key's build was told before it started (feature 451 T347, `kept/alone.rs`): the small lane where it compiles
+    /// this crate alone. `stepped`'s second asking of a red build runs in the same lane. A build nothing told is a wide one.
+    pub(super) told: Told,
 }
 
 impl Verdict {
@@ -829,6 +843,7 @@ impl Verdict {
             passed: Vec::new(),
             exes: Vec::new(),
             built: false,
+            told: Told::wide(),
         };
         if world.no_reuse || verdict.key.is_none() {
             return (verdict, false);
@@ -837,17 +852,11 @@ impl Verdict {
             return (verdict, true);
         }
         if cmd.starts_with("test") {
+            if let Some(k) = k {
+                verdict.told = Told::of(world, cmd, manifest, k, &binary_args(cmd));
+            }
             if let Some((binary, exes)) = k.and_then(|k| {
-                let compiler = &k.compiler;
-                binary_key(
-                    world,
-                    cmd,
-                    manifest,
-                    &k.all,
-                    &k.ids,
-                    compiler,
-                    &mut verdict.built,
-                )
+                binary_key(world, cmd, manifest, k, &verdict.told, &mut verdict.built)
             }) {
                 verdict.binary = Some(binary);
                 verdict.exes = exes;

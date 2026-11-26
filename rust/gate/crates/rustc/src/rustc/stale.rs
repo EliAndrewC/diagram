@@ -22,7 +22,7 @@ use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::time::SystemTime;
 
-use super::{cargo, phase, Ran, World};
+use super::{cargo, phase, Ran, Told, World};
 
 /// The linker's words for it.
 const SIGN: &str = "undefined hidden symbol";
@@ -96,9 +96,10 @@ fn name(path: &Path) -> String {
 }
 
 /// A crate's test build (`cargo test --no-run`, `args`), its link on a mixed session healed once. A heal that linked is said here,
-/// on the gate's own stderr: `stepped` goes on to the run and keeps nothing a green build said.
-pub(super) fn built(world: &World, args: &[&str], manifest: &Path) -> Ran {
-    let first = cargo(world, args, manifest, &[]);
+/// on the gate's own stderr: `stepped` goes on to the run and keeps nothing a green build said. The first build runs in the lane it
+/// was told (`told`, feature 451 T347); the one after a heal has had fingerprints dropped, is no crate alone, and takes a wide slot.
+pub(super) fn built(world: &World, args: &[&str], manifest: &Path, told: &Told) -> Ran {
+    let first = told.cargo(world, args, manifest);
     let red = first.code != 0;
     let done = healed(world, manifest, first, LOCK_S, &mut || {
         cargo(world, args, manifest, &[])
