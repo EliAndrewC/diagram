@@ -13629,38 +13629,3 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 **Performance work?** no: a check's pattern and doc lines; nothing runs faster.
 
 
-<!-- plan-archive: archived 2026-11-26 -->
-### T272 (the Stop hook's QUESTION UNFILTERED was refused three times on 2026-11-25 for a table row of session c6fd72d1's final message that lists a handoff file's contents, `what's waiting on you` among them: 451 T235's remaining false positive, observed 2026-11-26, method: every `QUESTION UNFILTERED` refusal in that session's transcript, counted by its quoted line)
-
-- **Approach**: `escalation_hooks::stated_ask` gains one more statement form, and keeps every ask it read before.
-  - **The cases, read from the transcript.** (1) The row is `| Where things stand and what's next | this conversation | a morning handoff file in the repo: what landed, what's open, what was measured, what's waiting on you. Enough for a session with no memory of today. |`. It is not a status cell saying an item waits on the GM, which the task's brief took it for: `what's waiting on you` is the last of the row's `what` clauses naming the kinds of content a file holds, and names no decision. A false positive. (2) `- **The two-builders rule is marked provisional, for you to confirm.** I'd recorded it as closed under your pre-approval. ...` (2026-11-26) asks the GM for a confirmation: `for you to confirm` is `STATED`'s own phrase, T235's record rules the like form (`a candidate fix for you to decide on`) as putting something to him, and escalation-check kept it, reworded as an offer, where it cuts information. A true positive: the rule is unchanged for it, and it is pinned as an ask.
-  - **The rule.** A `waiting (on|for) you` is `listed`, and no ask, when the text before it ends a `what's` / `what is` / `what was` / `what were` clause (an optional `still`) that follows a list's `,` `;` `:` or `and`/`or` (`LISTED`), and the text after it ends the clause (`.`, a table's `|`, the line's end) or goes on to a sibling `what` clause (`LIST_GOES_ON`). Both sides bound it, as T235's exemptions are bounded: with no list before it (`Here is what's waiting on you.`, `The budget answer is what's waiting on you.`), or with the thing that waits named after it (`: the budget's words`, `is the split`, `, the budget answer`, `(the budget answer)`, `waiting on your budget answer`), it is still an ask. T235's table rule is untouched: `| T26 | Waiting on your budget answer |` and `| T22 | yours to decide |`, a cell that says an item waits on him, still fire, so no status-cell exemption is built (it would undo those pinned asks).
-  - **How wide the form is.** In session c6fd72d1's transcript `what ... waiting (on|for) you` occurs only as this row, measured 2026-11-26 (`grep -oiE "what.{1,12}waiting (on|for) you.{0,60}"` over the transcript: the row and its three refusals). The rule is written for the form, an enumeration of contents, not for the one line.
-  - **Measured on T235's corpus** (112 labeled firings, 2026-10-26 to 2026-11-25, in the session scratchpad): through the fixed guard 82 fire, all 74 T and all 8 B, and none of the 30 F, the same figures as T235's after, measured 2026-11-26 (`measure.py` over `labeled.json`, each message through `tests/hooks/escalation-hooks.sh stop`). The corpus predates the row, so it shows only that no ask is lost.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| `what's waiting on you` as a listed content is no ask | `what_is_waiting_on_the_gm_as_a_listed_content_is_no_ask` (the real row and three siblings), red on HEAD; suite case 12 "a table row listing what's waiting on you", red on HEAD | n/a: tooling | none | n/a |
-| the asks beside it still fire | the same test's nine asks (the thing that waits named, no list before, `for you to confirm`), green on HEAD and after; the suite carries only the statement, since a refusal quoting a new line is a new guard message owing its own review (451 T170) | n/a: tooling | none | n/a |
-
-<!-- plan-archive: archived 2026-11-26 -->
-### T272 Approach (checklist part A)
-
-1. **The goal, in the world.** A final message whose table or sentence lists what a file or a report holds, `what's waiting on you` among its contents, ends its turn with no escalation-check run. A message that says what waits on the GM, or marks something for him to confirm, is still refused until the filter has read it.
-2. **The constraints.** Feature 429 FR-002 and amendment 1: a question or an offer with no review behind it owes the filter. T235's pinned asks and statements, every one still as it was. The T272 task line.
-3. **Where each comes from.** G: the GM's 2026-11-25 words on the check's cost (request.md, "the escalation check's cost and the Stop hook's false questions"), which T235 answered and this task finishes for one form. O: the transcript's refusals and the corpus measurement above.
-4. **Do they describe the world here?** Yes: the row is the transcript's own line, run through the real guard before and after, measured 2026-11-26 (`tests/hooks/test-escalation-hooks.sh`).
-5. **The order.** No dependency.
-6. **The exits.** Green: `make closing-checks T=T272 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none.
-8. **The budget.** One landing.
-9. **Done, measured.** RED FIRST, measured 2026-11-26. On HEAD's code the new Rust test failed on the real row (`make rust-test CRATE=rust/guard`: 521 passed, 1 failed), and `tests/hooks/test-escalation-hooks.sh` refused the row (55 passed, 1 failed, with two ask cases then beside it, since moved to the Rust test alone). After the fix: 522 passed, and the suite 54 passed, 0 failed. The `for you to confirm` pin is green on HEAD and after: it is a true positive, not a fix.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-12. **Before any fix.** The finding: the hook refused a turn three times for a row that asked the GM nothing, each refusal an escalation-check run. No map changes.
-
-**Found and left?** none.
-
-**Performance work?** no: it removes a false refusal of a Stop hook; nothing runs faster.
-
-
