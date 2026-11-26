@@ -1980,6 +1980,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "round-arbiter"
+  },
+  "### T281 (the store of rendered guard messages lay in the git common directory, one for every worktree of a clone: on 2026-11-26 a builder's `make guard-messages BUNDLE=1` said \"nothing owed\" for wordings its own red hooks-test had just named, and 451 T292's last hooks-test went red on the wordings of a guard only T285's tree held)": {
+   "sha256": "3612528c3fa8366f1c39ad8946c556fa000152baa6dc2fdce4d8d8da6dd4813d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T281 Approach (checklist part A)": {
+   "sha256": "8c918d2ca29e542b733862b335849125e20ad222b0fe8510ca3a24ead2c35a73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -25270,6 +25282,120 @@
    "tasks": [
     "T285"
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T281 (the store of rendered guard messages lay in the git common directory, one for every worktree of a clone: on 2026-11-26 a builder's `make guard-messages BUNDLE=1` said \"nothing owed\" for wordings its own red hooks-test had just named, and 451 T292's last hooks-test went red on the wordings of a guard only T285's tree held)",
+    "### T281 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T281-store",
+     "summary": "renderings kept per tree under the tree's own git dir (git rev-parse --absolute-git-dir), one resolver `l7r-guard messages store` asked by both the hooks-test and guard-messages recipes; dev/guard-messages.tsv stays one tracked file",
+     "class": "within",
+     "why": "the fix the task names (key the store by tree), serving the GM's 2026-11-23 hook-wording review (T170) so each tree's check reads its own wordings; fix-as-we-go of a check that passed bad work"
+    },
+    {
+     "id": "T281-stamps-shared",
+     "summary": "the suites' freshness stamps stay shared between worktrees; stamps per tree priced and declined",
+     "class": "within",
+     "why": "keeps an existing measured saving (83 s vs 151 s, d7456c4c8d) the request never asked to give up; declining per-tree stamps narrows nothing asked, since the per-tree store still delivers each tree its own wordings"
+    },
+    {
+     "id": "T281-keyed-rendering",
+     "summary": "a green job also leaves <common>/hooks-test/rendered/<job>@<key>.jsonl, written before the stamp and moved in whole; a suite is skipped only where a rendering at its stamp's key exists",
+     "class": "within",
+     "why": "the mechanism that lets shared stamps and a per-tree store coexist without a tree judging a stale or another tree's rendering; the key is the suite's inputs, so the filled rendering is what this tree's own run would render"
+    },
+    {
+     "id": "T281-gather",
+     "summary": "after the fan-out, `messages gather` makes the tree's store this run's: skipped suites filled from their key, ran suites keep their own output, files of no suite on the run's roster removed",
+     "class": "within",
+     "why": "fixes the second fault (corpus read every .jsonl, never the roster) and the left-behind rendering reproduced red; directly the task's correction"
+    },
+    {
+     "id": "T281-race-fail",
+     "summary": "a skipped suite whose keyed rendering was replaced by another tree in between fails the run by name, naming `make hooks-test` again as the fix",
+     "class": "within",
+     "why": "never judges a wrong wording; it refuses and names a retry that reruns the suite, so the goal (each tree sees its own wordings whatever the other ran in between) holds. An inline rerun would be a design choice, not a fidelity matter"
+    },
+    {
+     "id": "T281-first-run-cost",
+     "summary": "each clone's first hooks-test after landing reruns every suite once (160 s measured 2026-11-26), one more launcher call a run",
+     "class": "within",
+     "why": "a one-time transition cost of the fix, narrowing nothing asked"
+    },
+    {
+     "id": "T281-copy-left",
+     "summary": "scripts/land-alone.sh and scripts/gates/review-tree.sh still copy the common hooks-test/ into the tree's own git dir, seeding that tree's store with the main worktree's renderings; declared not a defect because the next run's gather replaces them so nothing reads a seeded file after a run",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "the no-defect ground is a premise nobody measured and covers only reads AFTER a run. A read of the store in a land or review tree BEFORE that tree's first gather (a guard-messages check, BUNDLE=1 or KEY= there) would see another tree's renderings, which is effect (a)/(b) itself, the exact outcome T281 exists to end. No table row pins it and the bundle holds no dated observation of the order. Cure, narrowly: record as an observation with its method that in both scripts every read of the store follows that tree's own hooks-test gather, or pin it with a case; either makes this within. Not asking for the copy to be removed - no wrong outcome is shown, only unshown."
+    }
+   ],
+   "tasks": [
+    "T281"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T281 (the store of rendered guard messages lay in the git common directory, one for every worktree of a clone: on 2026-11-26 a builder's `make guard-messages BUNDLE=1` said \"nothing owed\" for wordings its own red hooks-test had just named, and 451 T292's last hooks-test went red on the wordings of a guard only T285's tree held)",
+    "### T281 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "store-per-tree",
+     "summary": "Rendered guard messages are kept in each tree's own git dir (hooks-test/messages/), found by one resolver (l7r-guard messages store, git rev-parse --absolute-git-dir) that both the hooks-test and guard-messages recipes use.",
+     "class": "within",
+     "why": "This is the task line's own fix (reproduce with two worktrees, then key the store by tree), and it corrects a defect: a check reading another tree's renderings tells a builder nothing is owed when wordings are owed, or turns red on a guard the tree does not hold."
+    },
+    {
+     "id": "reviewed-record-shared",
+     "summary": "dev/guard-messages.tsv, the reviewed record, stays one tracked file.",
+     "class": "within",
+     "why": "The reviewed record is tracked content, not run state. Keeping it as one file leaves 451 T170's rule (every rendered wording reviewed or baselined) as it was, and narrows nothing."
+    },
+    {
+     "id": "roster-bound-reader",
+     "summary": "The tree's store is made to match this run's roster: a file of no suite on the run's list is removed, so a rendering from a guard the tree no longer holds is not judged.",
+     "class": "within",
+     "why": "This fixes the second fault the plan found (messages::corpus read every .jsonl in the directory, not the run's roster), which is a check passing or refusing on the wrong input. It is red first in test-parts.3.sh."
+    },
+    {
+     "id": "stamps-stay-shared-with-keyed-renderings",
+     "summary": "Suite freshness stamps stay shared across worktrees (stamps per tree was priced and not taken). A green job also writes <common dir>/hooks-test/rendered/<job>@<key>.jsonl, and a suite is skipped only where a rendering at its stamp's key exists. A gather step fills a skipped suite's files from that keyed rendering.",
+     "class": "within",
+     "why": "This keeps the existing measured saving (commit d7456c4c8d, 5 of 46 suites rerun, 83 s against 151 s) and stops it from defeating the per-tree store. Declining per-tree stamps leaves existing behavior that works as it is. It carves nothing out of the fix, because each tree is still judged on its own content's renderings."
+    },
+    {
+     "id": "gone-rendering-fails-by-name",
+     "summary": "If a skipped suite's keyed rendering was replaced by another tree's run between the skip and the gather, the run fails by name and names the fix (make hooks-test again, which reruns that suite).",
+     "class": "within",
+     "why": "This is a loud, self-healing failure in a narrow race, not a wrong outcome. The run never judges stale or foreign renderings, so the defect the task fixes is not carried forward. Rerunning the suite automatically instead is a design choice, not a fidelity question."
+    },
+    {
+     "id": "one-time-full-rerun",
+     "summary": "Each clone's first make hooks-test after landing reruns every suite once (about 160 s, measured 2026-11-26), plus one extra launcher call per run.",
+     "class": "within",
+     "why": "This is a one-off cost of the fix, not a narrowing. The plan measured and labeled it."
+    },
+    {
+     "id": "seed-copies-drop-hooks-test",
+     "summary": "scripts/land-alone.sh and scripts/gates/review-tree.sh stop copying the common hooks-test/ into their tree's git dir.",
+     "class": "within",
+     "why": "Under the new layout that copy would fill the tree's store with the clone's renderings before the tree's own run, which is the same defect again, so removing it is part of the fix. Note: the search that showed nothing else read the copy (grep -rn hooks-test rust scripts tests) does not cover the Makefile. The plan covers the Makefile's recipe by a separate statement (it reads the stamps from the common directory since d7456c4c8d). Even if a missed reader existed, dropping the copy could only cost reruns, never a wrong verdict."
+    },
+    {
+     "id": "found-and-left-none-and-not-performance",
+     "summary": "Nothing is found and left. The task is classed as not performance work.",
+     "class": "within",
+     "why": "No known defect is deferred. The shared-stamp saving is kept rather than added to, so calling it a correctness fix is accurate."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -39932,6 +40058,62 @@
     ],
     "verdict": "BLOCKED"
    }
+  },
+  "T281": {
+   "section_sha256": "1589c31963661c2e40ca483c9f2130a653b13d8ff1a99083e34963e0251c0c64",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "store-per-tree",
+     "summary": "Rendered guard messages are kept in each tree's own git dir (hooks-test/messages/), found by one resolver (l7r-guard messages store, git rev-parse --absolute-git-dir) that both the hooks-test and guard-messages recipes use.",
+     "class": "within",
+     "why": "This is the task line's own fix (reproduce with two worktrees, then key the store by tree), and it corrects a defect: a check reading another tree's renderings tells a builder nothing is owed when wordings are owed, or turns red on a guard the tree does not hold."
+    },
+    {
+     "id": "reviewed-record-shared",
+     "summary": "dev/guard-messages.tsv, the reviewed record, stays one tracked file.",
+     "class": "within",
+     "why": "The reviewed record is tracked content, not run state. Keeping it as one file leaves 451 T170's rule (every rendered wording reviewed or baselined) as it was, and narrows nothing."
+    },
+    {
+     "id": "roster-bound-reader",
+     "summary": "The tree's store is made to match this run's roster: a file of no suite on the run's list is removed, so a rendering from a guard the tree no longer holds is not judged.",
+     "class": "within",
+     "why": "This fixes the second fault the plan found (messages::corpus read every .jsonl in the directory, not the run's roster), which is a check passing or refusing on the wrong input. It is red first in test-parts.3.sh."
+    },
+    {
+     "id": "stamps-stay-shared-with-keyed-renderings",
+     "summary": "Suite freshness stamps stay shared across worktrees (stamps per tree was priced and not taken). A green job also writes <common dir>/hooks-test/rendered/<job>@<key>.jsonl, and a suite is skipped only where a rendering at its stamp's key exists. A gather step fills a skipped suite's files from that keyed rendering.",
+     "class": "within",
+     "why": "This keeps the existing measured saving (commit d7456c4c8d, 5 of 46 suites rerun, 83 s against 151 s) and stops it from defeating the per-tree store. Declining per-tree stamps leaves existing behavior that works as it is. It carves nothing out of the fix, because each tree is still judged on its own content's renderings."
+    },
+    {
+     "id": "gone-rendering-fails-by-name",
+     "summary": "If a skipped suite's keyed rendering was replaced by another tree's run between the skip and the gather, the run fails by name and names the fix (make hooks-test again, which reruns that suite).",
+     "class": "within",
+     "why": "This is a loud, self-healing failure in a narrow race, not a wrong outcome. The run never judges stale or foreign renderings, so the defect the task fixes is not carried forward. Rerunning the suite automatically instead is a design choice, not a fidelity question."
+    },
+    {
+     "id": "one-time-full-rerun",
+     "summary": "Each clone's first make hooks-test after landing reruns every suite once (about 160 s, measured 2026-11-26), plus one extra launcher call per run.",
+     "class": "within",
+     "why": "This is a one-off cost of the fix, not a narrowing. The plan measured and labeled it."
+    },
+    {
+     "id": "seed-copies-drop-hooks-test",
+     "summary": "scripts/land-alone.sh and scripts/gates/review-tree.sh stop copying the common hooks-test/ into their tree's git dir.",
+     "class": "within",
+     "why": "Under the new layout that copy would fill the tree's store with the clone's renderings before the tree's own run, which is the same defect again, so removing it is part of the fix. Note: the search that showed nothing else read the copy (grep -rn hooks-test rust scripts tests) does not cover the Makefile. The plan covers the Makefile's recipe by a separate statement (it reads the stamps from the common directory since d7456c4c8d). Even if a missed reader existed, dropping the copy could only cost reruns, never a wrong verdict."
+    },
+    {
+     "id": "found-and-left-none-and-not-performance",
+     "summary": "Nothing is found and left. The task is classed as not performance work.",
+     "class": "within",
+     "why": "No known defect is deferred. The shared-stamp saving is kept rather than added to, so calling it a correctness fix is accurate."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

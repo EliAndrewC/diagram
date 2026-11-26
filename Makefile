@@ -331,6 +331,8 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	export HOOKS_SHIM="$$("$$root/scripts/hooks/l7r-guard.sh" trace shim "$$gitdir" 2>/dev/null)" HOOKS_ROOT="$$root"; \
 	: "THE LAUNCHERS' BINARIES BUILT AND CHECKED ONCE A RUN (feature 449 T205): each call of l7r-gate.sh or l7r-guard.sh walked its Rust sources to see whether to build, about 1,400 and 2,000 paths, and under the read recorder each path was a line of the suite's log - sync-with-main's run wrote 1,260,877 lines; with the fresh binaries named here a call skips the walk and hookrun.sh records the sources once a suite (an empty name, where a build failed, leaves every call to walk as before)"; \
 	export L7R_GATE_FRESH="$$(L7R_GATE_PRINT_FRESH=1 "$$root/scripts/gates/l7r-gate.sh" 2>/dev/null </dev/null)" L7R_GUARD_FRESH="$$(L7R_GUARD_PRINT_FRESH=1 "$$root/scripts/hooks/l7r-guard.sh" 2>/dev/null </dev/null)"; \
+	: "THIS TREE'S STORE OF RENDERED MESSAGES (feature 451 T281), under its own git directory: a green job writes it (hookrun.sh), the check below reads it"; \
+	HOOKS_MESSAGES="$$("$$root/scripts/hooks/l7r-guard.sh" messages store "$$root")"; export HOOKS_MESSAGES; [ -n "$$HOOKS_MESSAGES" ] || { echo "hooks-test: no store of rendered messages (l7r-guard messages store $$root said nothing)" >&2; exit 1; }; \
 	: "A SPLIT SUITE'S SHARDS ARE KEYED TOO (feature 451 T20, plan D17): deps seeds a guard's key from test-<name>.sh, which a split suite no longer has, so each shard is keyed as a name of its own and the suite's sha is its guard's key and its shards' keys hashed together - an edited shard reruns the suite"; \
 	shards=$$(for f in "$$root"/tests/hooks/test-*.[0-9]*.sh; do [ -f "$$f" ] && basename "$$f"; done); \
 	keys=$$("$$root/scripts/hooks/l7r-guard.sh" deps --keys $$roster $$shards); \
@@ -348,12 +350,14 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	    fail="$$fail $$b"; continue; \
 	  fi; \
 	  : "A SUITE IS SKIPPED ONLY WITH ITS MESSAGES KEPT (feature 451 T170): the budget check reads each suite's last green renderings, so a suite with none reruns"; \
-	  kept=; ls "$$gitdir/hooks-test/messages/$$b."*jsonl >/dev/null 2>&1 && kept=1; \
-	  case "$$traced" in *" $$b "*) if [ -n "$$kept" ] && { [ "$$jobs" = "$$t" ] || [ "$$(cat "$$gitdir/hooks-test/$$b.jobs" 2>/dev/null | tr '\n' ' ')" = "$$jobs " ]; }; then skipped=$$((skipped+1)); continue; fi ;; esac; \
+	  : "... AND KEPT AT THE KEY ITS STAMP HOLDS (feature 451 T281): the stamps are every worktree's, the store of renderings each tree's own (one store in the common git directory let a tree's run replace another's renderings, and judged a tree on a guard only another holds), so a skipped suite's renderings are the ones a green job left beside the stamp, named by its key (hookrun.sh), which messages gather copies into this tree's store after the fan-out"; \
+	  st=$$(cat "$$gitdir/hooks-test/$$b" 2>/dev/null); kept=; for f in "$$gitdir/hooks-test/rendered/$$b@$$st.jsonl" "$$gitdir/hooks-test/rendered/$$b".[0-9]*"@$$st.jsonl"; do [ -n "$$st" ] && [ -f "$$f" ] && kept=1; done; \
+	  case "$$traced" in *" $$b "*) if [ -n "$$kept" ] && { [ "$$jobs" = "$$t" ] || [ "$$(cat "$$gitdir/hooks-test/$$b.jobs" 2>/dev/null | tr '\n' ' ')" = "$$jobs " ]; }; then skipped=$$((skipped+1)); printf '%s %s\n' "$$b" "$$st" >> "$$work/held"; continue; fi ;; esac; \
 	  sha=$$(printf '%s\n' "$$keys" | awk -v b="$$b" '$$1 == b { print $$2 }'); mkdir -p "$$gitdir/hooks-test"; \
 	  [ -n "$$sha" ] || sha=unkeyed-$$RANDOM; \
 	  if [ "$$jobs" != "$$t" ]; then sha=$$( { echo "$$sha"; for j in $$jobs; do printf '%s\n' "$$keys" | awk -v b="$$j" '$$1 == b { print $$2 }'; done; } | sha256sum | cut -c1-16); fi; \
-	  if [ -z "$(HOOKS_ALL)" ] && [ -n "$$kept" ] && [ "$$(cat "$$gitdir/hooks-test/$$b" 2>/dev/null)" = "$$sha" ]; then skipped=$$((skipped+1)); continue; fi; \
+	  if [ -z "$(HOOKS_ALL)" ] && [ -n "$$kept" ] && [ "$$st" = "$$sha" ]; then skipped=$$((skipped+1)); printf '%s %s\n' "$$b" "$$st" >> "$$work/held"; continue; fi; \
+	  printf '%s\n' "$$b" >> "$$work/held"; \
 	  n=$$((n+1)); for j in $$jobs; do printf '%s %s %s\n' "$$b" "$$j" "$$sha" >> "$$work/todo"; done; \
 	  [ "$$jobs" = "$$t" ] || printf '%s %s %s\n' "$$b" "$$sha" "$$jobs" >> "$$work/close"; \
 	done; \
@@ -391,7 +395,8 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	: "NO SHELL FILE PIPES INTO AN EARLY-EXIT GREP (feature 451 T253): under pipefail the writer died of SIGPIPE when grep -q exited on its match, and a present line read absent - every suite and script, here where no unchanged suite skips it"; \
 	if ! "$$root/scripts/gates/l7r-gate.sh" check pipe-race --root "$$root"; then fail="$$fail pipe-race"; fi; \
 	: "EVERY GUARD MESSAGE WITHIN ITS BUDGET AND REVIEWED (feature 451 T170): the suites' renderings against dev/guard-messages.tsv"; \
-	if ! "$$root/scripts/hooks/l7r-guard.sh" messages check "$$gitdir/hooks-test/messages" "$$root/dev/guard-messages.tsv"; then fail="$$fail guard-messages"; fi; \
+	if ! "$$root/scripts/hooks/l7r-guard.sh" messages gather "$$gitdir/hooks-test/rendered" "$$HOOKS_MESSAGES" "$$work/held"; then fail="$$fail guard-messages-store"; fi; \
+	if ! "$$root/scripts/hooks/l7r-guard.sh" messages check "$$HOOKS_MESSAGES" "$$root/dev/guard-messages.tsv"; then fail="$$fail guard-messages"; fi; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \
 	"$$root/scripts/gates/l7r-gate.sh" stamp --write hooks; \
 	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"; \
@@ -399,7 +404,7 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	[ -z "$$ran" ] || printf 'hooks-test: ran %s\n' "$$ran"
 
 guard-messages: ## [tests] the guard messages the suites rendered that owe a review or a cut (451 T170); BUNDLE=1 writes message-check's units; KEY= VERDICT=PASS|FAIL BY="<agent id>" [OVER="<why>"] records a verdict, VERDICT=BASELINE BY="<its measured characters a session>" leaves a newly rendered wording unreviewed under T177's break-even (451 T174); REHEAD=1 writes every stored head again with its paths masked, no other column moved   [BUNDLE=1] [KEY= VERDICT= BY= OVER=] [REHEAD=1]
-	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --path-format=absolute --git-common-dir); g="$$root/scripts/hooks/l7r-guard.sh"; c="$$gitdir/hooks-test/messages"; r="$$root/dev/guard-messages.tsv"; \
+	@root=$$(git rev-parse --show-toplevel); g="$$root/scripts/hooks/l7r-guard.sh"; c=$$("$$g" messages store "$$root") || exit 1; r="$$root/dev/guard-messages.tsv"; \
 	if [ -n "$$KEY" ]; then "$$g" messages verdict "$$c" "$$r" "$$KEY" "$(VERDICT)" "$$BY" $${OVER:+"$$OVER"}; \
 	elif [ -n "$(BUNDLE)" ]; then mkdir -p /tmp/l7r-check/guard-messages && "$$g" messages owed "$$c" "$$r" /tmp/l7r-check/guard-messages/MANIFEST.md; \
 	elif [ -n "$(REHEAD)" ]; then "$$g" messages rehead "$$c" "$$r"; \

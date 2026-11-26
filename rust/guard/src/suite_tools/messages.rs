@@ -19,6 +19,8 @@
 //! l7r-guard messages baseline <corpus dir> <record> <why>   the first record: every message rendered, BASELINE, unreviewed
 //! l7r-guard messages rehead <corpus dir> <record>           every stored head written again, its paths masked; no other column moves
 //! ```
+//!
+//! The corpus directory is the TREE's own store, never one the clone's worktrees share (451 T281): [`store`].
 
 use std::collections::BTreeMap;
 use std::fmt::Write as _;
@@ -399,11 +401,20 @@ pub fn cli(args: &[String]) -> Reply {
     let usage = || {
         reply(
             String::new(),
-            "usage: l7r-guard messages check|owed|verdict|baseline|rehead <corpus dir> <record> ...\n"
+            "usage: l7r-guard messages check|owed|verdict|baseline|rehead <corpus dir> <record> ... | store <dir> | gather <rendered dir> <tree store> <list>\n"
                 .to_owned(),
             64,
         )
     };
+    // the tree's store (451 T281): where it is, and its filling after a run's suites
+    match a.as_slice() {
+        ["store", dir] => return store::store_cli(dir),
+        ["gather", rendered, tree, list] => {
+            return store::gather(Path::new(rendered), Path::new(tree), Path::new(list))
+        }
+        ["store" | "gather", ..] => return usage(),
+        _ => {}
+    }
     let (Some(verb), Some(dir), Some(path)) = (a.first(), a.get(1), a.get(2)) else {
         return usage();
     };
@@ -546,6 +557,7 @@ fn written(path: &Path, rows: &BTreeMap<String, Row>, said: &str) -> Reply {
     }
 }
 
+pub mod store;
 pub mod worst;
 
 #[cfg(test)]

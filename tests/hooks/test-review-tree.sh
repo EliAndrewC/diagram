@@ -86,7 +86,12 @@ wait_state() { for _ in $(seq 1 200); do [ "$(gate_rec "$1" state)" != running ]
 
 echo "1. the review commit holds the bundle's files alone, the clone untouched"
 printf 'building-review--c\n' > "$S/owed"
+# the clone's kept results: its crates' are seeded, its hooks-test directory is not (451 T281 - the review tree's own
+# hooks-test/messages is its store of rendered guard messages, which the copy filled with the clone's renderings)
+mkdir -p "$C/.git/rust-checks" "$C/.git/hooks-test/messages"; : > "$C/.git/rust-checks/kept"; : > "$C/.git/hooks-test/messages/theirs.sh.jsonl"
 rc=$(run)
+wgd=$(git -C "$WT" rev-parse --absolute-git-dir 2>/dev/null)
+[ -e "$wgd/rust-checks/kept" ] && [ ! -e "$wgd/hooks-test" ] && ok "the clone's crate results are seeded, its rendered guard messages are not" || no "the seed" "$(ls "$wgd" 2>&1)"
 commit=$(cat "$C/.git/review-trees/current" 2>/dev/null)
 [ "$rc" = 0 ] && [ -n "$commit" ] && ok "started (commit ${commit:0:10})" || { no "did not start" "$(cat "$T/out")"; }
 [ "$(git -C "$C" show "$commit:a.txt" 2>/dev/null)" = "a1 the bundle" ] && ok "the bundle's edit is in it" || no "the bundle's edit is missing"

@@ -560,7 +560,9 @@ say "worktree $WT at ${head:0:10} ($(lap) s)"
 gd=$(git -C "$WT" rev-parse --absolute-git-dir) || exit 2
 # review-verdicts too: the review gate reads them from the worktree's own git dir, and each is keyed by its engine key, so a verdict
 # the tree no longer matches is still refused (2026-11-22: 449's batch landing refused three reviews the clone held as unrecorded)
-for d in rust-checks hooks-test review-verdicts; do
+# NOT hooks-test (451 T281): the suites' stamps are read from the common git dir, so nothing read the copy (since commit d7456c4c8d),
+# and the tree's own hooks-test/messages is now its store of rendered guard messages - the copy would fill it with the clone's
+for d in rust-checks review-verdicts; do
   [ -d "$COMMON/$d" ] && mkdir -p "$gd/$d" && cp -a -u "$COMMON/$d/." "$gd/$d/"
 done
 [ -f "$COMMON/approach-owed.json" ] && cp -a "$COMMON/approach-owed.json" "$gd/"

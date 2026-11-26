@@ -105,7 +105,7 @@ trap 'pkill -P $$ 2>/dev/null; exit 143' TERM
 # it, so a green suite's reads are kept (`l7r-guard trace`): a fixture's copy of scripts/ counts as the file it copies,
 # the fixture's cp does not
 # feature 451 T170: every message the suite's guards render is kept (`protocol::keep`), and a green suite's set replaces its last in
-# <git dir>/hooks-test/messages/, which `make hooks-test` holds to the budget and the review (`l7r-guard messages check`)
+# the tree's store (below, 451 T281), which `make hooks-test` holds to the budget and the review (`l7r-guard messages check`)
 rm -rf "$WORK/$ID.messages"
 export L7R_MESSAGE_CORPUS="$WORK/$ID.messages"
 if [ -n "${HOOKS_SHIM:-}" ] && [ -n "${HOOKS_ROOT:-}" ]; then
@@ -141,7 +141,14 @@ if [ "$rc" -eq 0 ] && [ -n "${HOOKS_SHIM:-}" ] && grep -q "$(printf '\tc-tree\t'
   done >> "$WORK/$ID.reads"
 fi
 if [ "$rc" -eq 0 ]; then
-  mkdir -p "$GITDIR/hooks-test/messages" && cat "$WORK/$ID.messages/messages.jsonl" > "$GITDIR/hooks-test/messages/$ID.jsonl" 2>/dev/null || : > "$GITDIR/hooks-test/messages/$ID.jsonl"
+  # feature 451 T281: the rendering goes to the TREE's store (HOOKS_MESSAGES, `l7r-guard messages store`; one in the common git
+  # directory was every worktree's, each tree's run replacing the others' renderings) and, named by the key the job ran at, beside
+  # the SHARED stamp, where a tree that skips the suite on this stamp fills its own store from it (`l7r-guard messages gather`).
+  # One keyed rendering a job, written before the stamp that names its key and moved into place whole.
+  M=${HOOKS_MESSAGES:-$GITDIR/hooks-test/messages}; R=$GITDIR/hooks-test/rendered
+  mkdir -p "$M" "$R" && cat "$WORK/$ID.messages/messages.jsonl" > "$M/$ID.jsonl" 2>/dev/null || : > "$M/$ID.jsonl"
+  cp "$M/$ID.jsonl" "$R/.$ID.$$.part" && mv -f "$R/.$ID.$$.part" "$R/$ID@$SHA.jsonl"
+  for f in "$R/$ID@"*.jsonl; do [ "$f" = "$R/$ID@$SHA.jsonl" ] || rm -f "$f"; done
   # a shard stamps nothing: its suite is stamped by --close once every shard is green
   [ -n "$K" ] || { mkdir -p "$GITDIR/hooks-test" && printf '%s' "$SHA" > "$GITDIR/hooks-test/$GUARD"; }
   [ -z "$K" ] && [ -n "${HOOKS_SHIM:-}" ] && "$HERE/../../scripts/hooks/l7r-guard.sh" trace stamp "$GITDIR" "$GUARD" "$WORK/$ID.reads" "$HOOKS_ROOT" >/dev/null 2>&1

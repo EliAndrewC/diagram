@@ -145,7 +145,9 @@ say "worktree $WT at ${commit:0:10} ($(lap) s)"
 
 # (5) the clone's kept results, where newer: each is keyed by its inputs' contents, so the clone's runs on the same files serve here
 gd=$(git -C "$WT" rev-parse --absolute-git-dir) || exit 2
-for d in rust-checks hooks-test; do
+# NOT hooks-test (451 T281): the suites' stamps are read from the common git dir, so nothing read the copy (since commit d7456c4c8d),
+# and the tree's own hooks-test/messages is now its store of rendered guard messages - the copy would fill it with the clone's
+for d in rust-checks; do
   [ -d "$COMMON/$d" ] && mkdir -p "$gd/$d" && cp -a -u "$COMMON/$d/." "$gd/$d/"
 done
 # NOT the clone's generation cache (measured 2026-11-22): an entry is keyed by its engine binary's build id, and each tree's binary embeds its
