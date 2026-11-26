@@ -25,6 +25,9 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
 - A task expected to edit more than about three files, or needing a measurement first, is SPLIT into builders that hand results
   along, a measuring agent first: its report (the figures, the paths, the commands) is the next builder's brief.
 - A one-turn edit is yours, the coordinating session's, not a builder's.
+- A builder ENDS at its report and is not kept for follow-up (the GM 2026-11-26): what a successor needs is in its plan
+  section, its commit and its report, and a later fix - a gate failure, even a design that proved wrong - goes to a fresh
+  agent briefed from those. A message to a builder is for a question it asked before it reported.
 - A builder's commit reaches the clone by `make carry FROM=<its worktree>` run in the clone (451 T292), never a hand `git cherry-pick`: `make land` refuses a carry-over left unfinished.
 - TWO code builders at once, each in a REUSED worktree (its build cache warm); three or four at once only for batches that
   compile nothing (`docs/process-decisions.md`, "Two code builders at once"; `dev/audits/parallel-builder-count.md`).
