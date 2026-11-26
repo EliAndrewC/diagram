@@ -256,6 +256,36 @@ fn a_statement_that_nothing_waits_on_the_gm_is_no_ask() {
     assert_eq!(classify("I can't say if it helps.").1.len(), 0);
 }
 
+/// 451 T272: `what's waiting on you` as one item of a list of contents (the handoff-file row of 2026-11-25's final message, refused three
+/// times) names a kind of content and puts nothing to the GM; the same words naming the thing that waits still do, and so does a
+/// statement marked `for you to confirm` (2026-11-26's, which escalation-check kept as an offer: a true positive, pinned).
+#[test]
+fn what_is_waiting_on_the_gm_as_a_listed_content_is_no_ask() {
+    let statements = [
+        "| Where things stand and what's next | this conversation | a morning handoff file in the repo: what landed, what's open, what was measured, what's waiting on you. Enough for a session with no memory of today. |",
+        "The handoff file says what landed, what was measured and what is waiting on you.",
+        "| handoff | what landed, what\u{2019}s still waiting on you, and what\u{2019}s next |",
+        "It lists what landed, what was waiting for you and what is open.",
+    ];
+    for s in statements {
+        assert_eq!(classify(s), (Vec::new(), Vec::new()), "{s}");
+    }
+    let asks = [
+        "Here is what's waiting on you: the budget answer.",
+        "What's waiting on you is the budget answer.",
+        "The budget answer is what's waiting on you.",
+        "| T22 | what landed, and what's waiting on you: the budget's words |",
+        "Two things landed, and what's waiting on you is the split.",
+        "It lists what landed, what's waiting on you, the budget answer.",
+        "It lists what landed and what's waiting on your budget answer.",
+        "It lists what landed and what's waiting on you (the budget answer).",
+        "- **The two-builders rule is marked provisional, for you to confirm.** I'd recorded it as closed under your pre-approval. Your condition included peak memory under a margin, and memory was never measured.",
+    ];
+    for s in asks {
+        assert_eq!(classify(s).0.len(), 1, "{s}");
+    }
+}
+
 #[test]
 fn a_question_owes_the_filter_once_and_a_dispatch_since_the_gm_answers_it() {
     let d = world("ask");

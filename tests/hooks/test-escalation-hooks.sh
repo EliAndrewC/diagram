@@ -193,6 +193,9 @@ for s in 'Nothing is waiting on you.' 'Nothing else is waiting on you. Page sess
 done
 rc=0; final_stop '**Waiting on you:** the removal command from my earlier message has not been run.' || rc=$?
 [ "$rc" -eq 2 ] && grep -q "QUESTION UNFILTERED" "$HOOK_ERR" && ok "...while a decision waiting on the GM still owes the filter" || no "a waiting decision passed" "(rc=$rc)"
+# 451 T272: `what's waiting on you` as one of a list of contents is no ask (the asks beside it are the Rust test's: a refusal quoting a new line is a new guard message)
+rc=0; final_stop '| Where things stand | this conversation | a morning handoff file in the repo: what landed, what'"'"'s open, what was measured, what'"'"'s waiting on you. Enough for a session with no memory of today. |' || rc=$?
+[ "$rc" -eq 0 ] && ok "a table row listing what's waiting on you among a file's contents passes" || no "a listed content was refused as a question" "(rc=$rc)"
 rc=0; final_stop 'If you agree, I'"'"'ll file it as a 451 task.' || rc=$?
 [ "$rc" -eq 2 ] && grep -q "OFFER UNFILTERED" "$HOOK_ERR" && ok "...and an offer on the GM's agreement owes it as an offer" || no "an if-you-agree offer passed" "(rc=$rc)"
 rm -f "$TR"

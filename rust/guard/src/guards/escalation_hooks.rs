@@ -84,6 +84,19 @@ static SENTENCE_START: LazyLock<Regex> = LazyLock::new(|| re(r"(^|[.!?]\s+)[\s*_
 static NAME_OF: LazyLock<Regex> = LazyLock::new(|| re(r"(?i)^[*_]*\s+(is|was|were)\b"));
 static CELL: LazyLock<Regex> = LazyLock::new(|| re(r"\|\s*$"));
 static LABEL: LazyLock<Regex> = LazyLock::new(|| re(r"^[^.|]*:"));
+/// `what's waiting on you` as one item of a list of contents (451 T272: `a morning handoff file in the repo: what landed, what's open,
+/// what was measured, what's waiting on you.`, a table row refused three times on 2026-11-25) names a kind of content, no decision:
+/// the `what` clause follows a list's `,` `;` `:` or `and`/`or`, and its own clause ends there or goes on to a sibling `what`. Naming
+/// the thing that waits is still an ask (`what's waiting on you: the budget`, `what's waiting on you is the split`, `what's waiting
+/// on your budget answer`, `what's waiting on you (the budget)`), and so is the clause with no list before it (`Here is what's
+/// waiting on you.`).
+static LISTED: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r"(?i)([,;:]\s*((and|or)\s+)?|\b(and|or)\s+)what(['\u{2019}]s|\s+is|\s+was|\s+were)\s+(still\s+)?$",
+    )
+});
+static LIST_GOES_ON: LazyLock<Regex> =
+    LazyLock::new(|| re(r"(?i)^[*_]*\s*([.|]|$|,?\s*((and|or)\s+)?what\b)"));
 static OFFER: LazyLock<Regex> = LazyLock::new(|| {
     re(
         r"(?i)\b(if you('d| would)? (want|like|prefer|rather)|if you agree|let me know if|happy to|say so and I'll|easy to (revert|reverse|undo)|I can (also |easily )?(revert|reverse|undo|switch|change|restore|raise|add|drop|re-?run|put (it|them) back))\b",
@@ -97,12 +110,17 @@ static ADDRESSED: LazyLock<Regex> = LazyLock::new(|| re(r"\b(you|your|I)\b"));
 fn stated_ask(s: &str) -> bool {
     STATED.find_iter(s).map_while(Result::ok).any(|m| {
         let (before, after) = (&s[..m.start()], &s[m.end()..]);
-        let named = m.as_str().to_lowercase().starts_with("waiting")
+        let words = m.as_str().to_lowercase();
+        let named = words.starts_with("waiting")
             && matches_any(&SENTENCE_START, before)
             && (matches_any(&NAME_OF, after)
                 || (matches_any(&CELL, before) && !matches_any(&LABEL, after)));
+        let listed = words.starts_with("waiting")
+            && words.ends_with("you")
+            && matches_any(&LISTED, before)
+            && matches_any(&LIST_GOES_ON, after);
         let negated = matches_any(&NEGATED, before) && !matches_any(&EXCEPTED, after);
-        !(named || negated || matches_any(&MEASURED, before))
+        !(named || listed || negated || matches_any(&MEASURED, before))
     })
 }
 

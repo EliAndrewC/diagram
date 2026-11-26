@@ -1896,6 +1896,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T272 (the Stop hook's QUESTION UNFILTERED was refused three times on 2026-11-25 for a table row of session c6fd72d1's final message that lists a handoff file's contents, `what's waiting on you` among them: 451 T235's remaining false positive, observed 2026-11-26, method: every `QUESTION UNFILTERED` refusal in that session's transcript, counted by its quoted line)": {
+   "sha256": "d6a576ac559a0ec3b381cf7e4c6a99d8ea6d78b0330ac9ca7f0eb78a8162acf0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T272 Approach (checklist part A)": {
+   "sha256": "b50b8602b2c3011577be5bb4f1b7a8661fe2681273fd3c391dbc139a17f13055",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -24126,6 +24138,92 @@
      "why": "It carries FR-009's form (why, filed id, order), and the count gives its method, the check's own patterns over every non-claim line. It is filed and ordered, not dropped."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T272 (the Stop hook's QUESTION UNFILTERED was refused three times on 2026-11-25 for a table row of session c6fd72d1's final message that lists a handoff file's contents, `what's waiting on you` among them: 451 T235's remaining false positive, observed 2026-11-26, method: every `QUESTION UNFILTERED` refusal in that session's transcript, counted by its quoted line)",
+    "### T272 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T272-rule",
+     "summary": "stated_ask reads a `what's/what is/what was/what were (still) waiting on/for you` as listed content, no ask, when a list separator or and/or precedes the what-clause and the clause ends (., |, line end) or a sibling what-clause follows",
+     "class": "within",
+     "why": "Stops a false firing of the Stop hook's QUESTION UNFILTERED on a message that asks the GM nothing, which is what the GM's 2026-11-25 words on the escalation check's cost asked for (the session's levers began with 'stop the false firings') and what feature 429 FR-002's narrow detector requires. The exempted form names contents, not a decision, so no ask FR-002 covers is dropped."
+    },
+    {
+     "id": "T272-bounds",
+     "summary": "the exemption is bounded on both sides: no list before it, or the waiting thing named after it (`: X`, `is X`, `, X`, `(X)`, `waiting on your X`), stays an ask",
+     "class": "within",
+     "why": "Keeps FR-002's recall: every sentence that says what waits on the GM still owes the filter. Pinned by nine asks in the new test, green before and after."
+    },
+    {
+     "id": "T272-no-status-cell",
+     "summary": "no status-cell exemption; T235's table asks (`Waiting on your budget answer`, `yours to decide`) still fire",
+     "class": "within",
+     "why": "Declines a broader exemption that would undo T235's pinned true positives; it keeps the check as it was rather than narrowing it."
+    },
+    {
+     "id": "T272-confirm-pin",
+     "summary": "`for you to confirm` judged a true positive and left firing, pinned as an ask",
+     "class": "within",
+     "why": "The phrase puts a confirmation to the GM; leaving the rule unchanged for it is FR-002 as written. A test that fails only if this ask stops firing enforces the requirement."
+    },
+    {
+     "id": "T272-measure",
+     "summary": "the fix is measured on T235's 112-firing labeled corpus (82 fire: 74 T, 8 B; 0 of 30 F) and red-first on the real row (Rust 521/1 -> 522/0, suite 55/1 -> 56/0)",
+     "class": "within",
+     "why": "Verification that no ask is lost and the false positive is gone; each figure carries its date and method."
+    },
+    {
+     "id": "T272-scope",
+     "summary": "one landing, tooling only, no map changes, nothing found and left",
+     "class": "within",
+     "why": "Scope matches the task line; no unrequested behavior rides in."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T272 (the Stop hook's QUESTION UNFILTERED was refused three times on 2026-11-25 for a table row of session c6fd72d1's final message that lists a handoff file's contents, `what's waiting on you` among them: 451 T235's remaining false positive, observed 2026-11-26, method: every `QUESTION UNFILTERED` refusal in that session's transcript, counted by its quoted line)",
+    "### T272 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 listed-content form",
+     "summary": "stated_ask treats `waiting (on|for) you` as listed, no ask, only when bounded on both sides: a `what's/what is/what was/what were` clause following a list separator before it, and a clause end or sibling `what` clause after it",
+     "class": "within",
+     "why": "FR-002 asks for a narrow detector of messages that put a question or decision to the GM; the row (a handoff file's contents) asks him nothing, so refusing it is a check refusing correct work (a defect), and the GM's 2026-11-25 words on the escalation check's cost are what T235's 'stop the false firings' answers. Every form that names the thing waiting, or has no list before it, still fires, so nothing FR-002 requires is narrowed."
+    },
+    {
+     "id": "D2 `for you to confirm` stays an ask",
+     "summary": "the 2026-11-26 two-builders line is ruled a true positive; the rule is unchanged for it and it is pinned as an ask",
+     "class": "within",
+     "why": "It puts a confirmation to the GM, which is exactly what FR-002 must refuse unfiltered; keeping and pinning it preserves the requirement."
+    },
+    {
+     "id": "D3 no status-cell exemption",
+     "summary": "T235's table asks (`Waiting on your budget answer`, `yours to decide`) still fire; no blanket table-cell exemption is built",
+     "class": "within",
+     "why": "Declining the broader exemption keeps real asks caught; it is the narrower fix, not a narrowing of what was asked."
+    },
+    {
+     "id": "D4 test placement",
+     "summary": "red-first Rust test pins the real row, three siblings and nine asks; the hook suite carries only the statement case (case 12), the ask cases kept in the Rust test alone to avoid a new guard message owing review (451 T170)",
+     "class": "within",
+     "why": "Both the exemption and the asks it must not swallow are enforced by tests that fail when the behavior is absent; where a test lives is design, not fidelity."
+    },
+    {
+     "id": "D5 classification",
+     "summary": "Found and left: none; performance work: no",
+     "class": "within",
+     "why": "Nothing known is left unfixed; the scheduling label does not change what the task builds."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -38312,6 +38410,44 @@
      "summary": "22 prose lines in docs/buildings.md and docs/building-programs.md naming a GM ruling with no pointer are deferred: filed as T276, lands before T264",
      "class": "within",
      "why": "It carries FR-009's form (why, filed id, order), and the count gives its method, the check's own patterns over every non-claim line. It is filed and ordered, not dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T272": {
+   "section_sha256": "202a0819250d13348ce7e735cb62fdbacf85d77afe70dcf53679cc5531315632",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 listed-content form",
+     "summary": "stated_ask treats `waiting (on|for) you` as listed, no ask, only when bounded on both sides: a `what's/what is/what was/what were` clause following a list separator before it, and a clause end or sibling `what` clause after it",
+     "class": "within",
+     "why": "FR-002 asks for a narrow detector of messages that put a question or decision to the GM; the row (a handoff file's contents) asks him nothing, so refusing it is a check refusing correct work (a defect), and the GM's 2026-11-25 words on the escalation check's cost are what T235's 'stop the false firings' answers. Every form that names the thing waiting, or has no list before it, still fires, so nothing FR-002 requires is narrowed."
+    },
+    {
+     "id": "D2 `for you to confirm` stays an ask",
+     "summary": "the 2026-11-26 two-builders line is ruled a true positive; the rule is unchanged for it and it is pinned as an ask",
+     "class": "within",
+     "why": "It puts a confirmation to the GM, which is exactly what FR-002 must refuse unfiltered; keeping and pinning it preserves the requirement."
+    },
+    {
+     "id": "D3 no status-cell exemption",
+     "summary": "T235's table asks (`Waiting on your budget answer`, `yours to decide`) still fire; no blanket table-cell exemption is built",
+     "class": "within",
+     "why": "Declining the broader exemption keeps real asks caught; it is the narrower fix, not a narrowing of what was asked."
+    },
+    {
+     "id": "D4 test placement",
+     "summary": "red-first Rust test pins the real row, three siblings and nine asks; the hook suite carries only the statement case (case 12), the ask cases kept in the Rust test alone to avoid a new guard message owing review (451 T170)",
+     "class": "within",
+     "why": "Both the exemption and the asks it must not swallow are enforced by tests that fail when the behavior is absent; where a test lives is design, not fidelity."
+    },
+    {
+     "id": "D5 classification",
+     "summary": "Found and left: none; performance work: no",
+     "class": "within",
+     "why": "Nothing known is left unfixed; the scheduling label does not change what the task builds."
     }
    ],
    "verdict": "CLEAR"
