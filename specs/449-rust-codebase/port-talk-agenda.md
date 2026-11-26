@@ -228,6 +228,8 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
     already have my pre-approval if the metrics we gather demonstrate their effectiveness, and I also pre-approve Sonnet if
     your measurements show that it is just as effective." The output style: "I affirm the decision to keep the current output
     style given how little it appears to matter."
+    Decided (the builders' report format): 2026-11-26, adopted on its measurement - shorter (55% to 98% of fourteen reports'
+    length) with no used item lost; the saving is small, under 1% of the session's input (`docs/process-decisions.md`).
 
 ## How each item closes (the GM, 2026-11-25) - its decision is recorded in `docs/process-decisions.md`
 

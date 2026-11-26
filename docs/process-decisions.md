@@ -82,6 +82,33 @@ This file is loaded on demand, so a declined option recorded here costs no auto-
 
 ## Decided
 
+### The builders' report has a fixed format (decided 2026-11-26)
+
+**Question.** A builder's report enters the coordinating session's context and is re-read on every later turn (the talk's item
+14). Would a fixed short format be shorter with nothing lost?
+
+**Decided** - adopted: `scripts/container/builder-report-format.md`, read by a builder at its stop point. The GM, 2026-11-25:
+*"Yes I pre-approve the items in the table above, so that you can close them out after implementing whatever the measurements
+say make sense."* (item 14's report format, adopted if shorter with nothing lost), and 2026-11-26: *"The first two already
+have my pre-approval if the metrics we gather demonstrate their effectiveness"*.
+
+**Measurement** (2026-11-26, read-only over the coordinating session's transcript; `dev/measurements/2026-11-26/report-format/`,
+`m14r-results.md` the tables, `m14r-reports.py` and the scripts beside it the method): 38 builder reports of 2026-11-25/26,
+median 4,415 characters (about 1,100 tokens at four characters a token, uncalibrated), range 1,459 to 14,469 - the agenda's
+"2k-5k tokens" was high. By what the session went on to USE: the state, what was built, the plan review's verdict and open
+objections, candidates (16 of 19 filed) and caveats were used; the list of modified paths never was (0 of 32: `git add -u`),
+nor a passing check's own line (0 of 26), nor "how to test" (0 of 5). Fourteen reports re-expressed in the format: the eight
+longest came to 55% of their length, four typical to 69%, two short to 98%; no used item lost after one correction (a first
+draft's six-row table cap lost rows the session had relayed to the GM, so the first table is kept whole). The saving is small:
+each report is re-read over a median 204 turns, the 38 cost 2.0% of the session's input tokens, and the format saves about
+0.74% of input raw, a tenth of that weighted for cached reads. Pasted into every brief it would cost about half its saving,
+which is why it is one file read once.
+
+**What followed.** The builder brief's "Then report" line points at the file. **Falsifier:** a report in the format from
+which the session lacked something it needed (a successor's brief written without an objection, a file left out of a commit,
+a candidate unfiled) - counted over the next twenty reports; one such loss in twenty reopens the capped fields.
+
+
 ### Two tiers of checking: a fast one in the builder's tree, the full gate once where work reaches main (TRIAL, from 2026-11-26)
 
 **Question.** Where does the full rigor run - at a builder's tree, at the session clone, or where work reaches main?

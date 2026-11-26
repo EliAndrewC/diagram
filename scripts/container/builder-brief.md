@@ -57,8 +57,8 @@ STOP POINT. Your work ends when ALL of these hold, and not before:
  - the plan section is written, `make decide` passes, and spec-fidelity MODE 4 is CLEAR (`make plan-delta F=<n>`);
  - `make claims-triage` has run (it is mechanical) and you have NOT dispatched `claims-triage` or `impl-drift` yourself;
  - the Occasions line is written and `scripts/gates/l7r-gate.sh reviews owed --root "$PWD" --check-drawn` is silent.
-Then report: what you built and measured, the claims you touched or restated (keys), what `make claims-owed` lists, and
-the exact paths to commit. The coordinating session runs the claims round (the claims-triage agent, make claims-bundle,
+Then report in the FIXED FORMAT of `scripts/container/builder-report-format.md` - read that file now, at your stop point,
+and use its fields in its order. The coordinating session runs the claims round (the claims-triage agent, make claims-bundle,
 impl-drift, make claims-checked) as its own dispatch; a DRIFTED fix: claim comes back to a small builder.
 Prefix every scratch file you write with your task id (`t<n>-`): builders share one scratchpad (451 T271).
 Do NOT stage, commit, land or push. Never rewrite history.

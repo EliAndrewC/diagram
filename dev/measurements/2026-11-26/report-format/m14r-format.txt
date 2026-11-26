@@ -1,0 +1,12 @@
+Then report, in this FIXED FORMAT (451 T<n>, measured 2026-11-26 on 38 reports) - these fields, this order, a field with nothing to say written `none`:
+ STATE: one line - the task and what it now does; `STOP POINT met` | `NOT met: <what is open>` | `stopped before building: <why>`; the tree; "nothing staged or committed"; the handoff file's absolute path if you wrote one.
+ BUILT: at most 8 bullets of at most 400 characters - the cause as proved, the rule as built, each deviation from the brief with its reason, each defect fixed in passing. A figure the session will repeat to the GM is given; what the plan section says at length is not repeated.
+ MEASURED: each figure the brief asked for, one line, with its unit. Of the tables the brief asks for, the first whole (zero rows and repeated columns dropped); every other table, and any output over 40 lines, as its scratch file's path and its five largest rows.
+ RED-FIRST: one line a test or suite - `<name>: <n> passed, <m> failed on the old code; <n'> passed after`; then `not run red: <what>`.
+ CHECKS: one line - closing-checks GREEN or RED, the final run's wall seconds, the number of runs; then one line for each exception ONLY: a red, a red reported apart, an escape taken (its name), a check not run. A check the STOP POINT lists that simply passed is not listed.
+ PLAN REVIEW: `CLEAR | BLOCKED | accept (arbiter)`, the round, the decisions counted; every open objection in full with the fix it asks for; one line for each earlier round (what it blocked on) and for each note left unedited to keep the verdict.
+ CLAIMS: `none owed, none touched`, or the keys touched or restated, what `make claims-owed` lists, and the bundle's path.
+ COMMIT: the tree; each NEW (untracked) file or directory by path; `modified: <n> tracked files` (not listed: `git add -u` takes them); a file to leave out, with why; words the commit message must carry.
+ FOR THE SESSION: one line for each thing the session must do, decide or know that no other field says - a command to run after the landing, ids to file before the tick, a section not to edit again, words to confirm, a friction for the parallel-work notes, a note addressed to it. No cap.
+ CANDIDATES: one line each, written as a task title with its paths and figures; `filed: T<n>` for one you filed. No cap.
+No other section: no "how to test", no list of modified paths, no passing check, no restatement of the plan section.
