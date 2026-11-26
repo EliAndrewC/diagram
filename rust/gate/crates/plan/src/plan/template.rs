@@ -51,3 +51,56 @@ pub const PERFORMANCE: &str = r"
    time with the host's load - evidence, not a pass>
 6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 ";
+
+/// The unfilled section `make task-add` writes for `task`, in its two forms: with the performance checklist (`PERF=1`), the longer
+/// and so the first, and without. THE ONE STUB TEST (feature 451 T359): `make task-withdraw` removes a section only where it is one
+/// of these byte for byte, and the plan gate owes nothing for a withdrawn task's removed block only where it was a block of one
+/// ([`stub_block`]) - a section somebody filled in is a decision, whatever form its task's box takes.
+#[must_use]
+pub fn stubs(task: &str) -> [String; 2] {
+    [format!("{TEMPLATE}{PERFORMANCE}"), TEMPLATE.to_owned()].map(|t| t.replace("{T}", task))
+}
+
+/// Is `block` - a heading line and the text to the next heading - a block of `task`'s unfilled stub ([`stubs`]), byte for byte? The
+/// newlines that end it aside: a stub's last block ends where its section does, and a plan's runs on to the next heading.
+#[must_use]
+pub fn stub_block(task: &str, block: &str) -> bool {
+    let bare = |text: &str| text.trim_end_matches('\n').to_owned();
+    let stubs = stubs(task);
+    let mut theirs = stubs.iter().flat_map(|s| l7r_shared::plan_text::blocks(s));
+    theirs.any(|(key, body, _)| key != "preamble" && bare(&body) == bare(block))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{stub_block, stubs, PERFORMANCE, TEMPLATE};
+
+    #[test]
+    fn a_stub_s_blocks_are_the_template_s_with_the_id_filled() {
+        let [perf, plain] = stubs("T07");
+        assert_eq!(plain, TEMPLATE.replace("{T}", "T07"));
+        assert_eq!(
+            perf,
+            format!("{plain}{}", PERFORMANCE.replace("{T}", "T07"))
+        );
+        let head = "### T07 Approach (checklist part A)";
+        let block = &plain[plain.find(head).unwrap()..];
+        assert!(stub_block("T07", block) && stub_block("T07", &format!("{block}\n\n")));
+        // the performance form's own block, and the template's last block as that form holds it
+        let checklist = &perf[perf.find("### T07 Performance checklist").unwrap()..];
+        assert!(
+            stub_block("T07", checklist)
+                && stub_block(
+                    "T07",
+                    &perf[perf.find(head).unwrap()..perf.find("\n### T07 Performance").unwrap()]
+                )
+        );
+        // another task's stub, a block filled in, a heading alone and the empty text before a stub's first heading are none
+        assert!(!stub_block("T08", block));
+        assert!(!stub_block(
+            "T07",
+            &block.replace("<the place as it should be>", "the wells drawn")
+        ));
+        assert!(!stub_block("T07", head) && !stub_block("T07", ""));
+    }
+}

@@ -95,3 +95,63 @@ fn each_tree_keeps_its_own_mark() {
     let blocked = json!({"feature": "6-w", "task": "T1"});
     assert!(write(&common, &at, blocked, "x").is_err());
 }
+
+/// RED FIRST (451 T359): a start and the `unstart` row after it read as no start - EVERY earlier start of that feature and task in
+/// that tree (the mark is the truth: one mark a task, gone at the unstart, however many times the task was started), another tree's
+/// and a later one kept - and every other line stays as written.
+#[test]
+fn a_start_and_its_unstart_read_as_no_start() {
+    use super::{live_starts, starts_text, STARTS};
+    let start = |f: &str, t: &str, tree: &str| {
+        format!(
+            "{{\"feature\": \"{f}\", \"task\": \"{t}\", \"utc\": \"u\", \"tree\": \"{tree}\"}}\n"
+        )
+    };
+    let undo = |f: &str, t: &str, tree: &str| {
+        format!("{{\"tree\": \"{tree}\", \"unstart\": {{\"feature\": \"{f}\", \"task\": \"{t}\"}}, \"utc\": \"u\"}}\n")
+    };
+    // no undo: the text as written, a line that is no JSON among it
+    let plain = format!("{}not json\n", start("9-x", "T1", "/a"));
+    assert_eq!(live_starts(&plain), plain);
+    // every earlier start of the task in the tree gone - started twice there, and once before rows named their tree (any tree's);
+    // another tree's, another task's and another feature's kept
+    let old = "{\"feature\": \"9-x\", \"task\": \"T1\", \"utc\": \"old\"}\n";
+    let text = [
+        old.to_owned(),
+        start("9-x", "T1", "/a"),
+        start("9-x", "T1", "/a"),
+        start("9-x", "T1", "/b"),
+        start("9-x", "T2", "/a"),
+        start("8-y", "T1", "/a"),
+        "not json\n".to_owned(),
+        undo("9-x", "T1", "/a"),
+    ]
+    .concat();
+    let want = [
+        start("9-x", "T1", "/b"),
+        start("9-x", "T2", "/a"),
+        start("8-y", "T1", "/a"),
+        "not json\n".to_owned(),
+    ]
+    .concat();
+    assert_eq!(live_starts(&text), want);
+    // a second undo finds nothing of its own left and takes no other tree's
+    let twice = format!("{text}{}", undo("9-x", "T1", "/a"));
+    assert_eq!(live_starts(&twice), want);
+    // an undo with nothing to answer, a row whose `unstart` is no object, and a start made again after the undo
+    assert_eq!(live_starts(&undo("9-x", "T7", "/a")), "");
+    let no_object = "{\"unstart\": 1, \"feature\": \"9-x\", \"task\": \"T1\"}\n";
+    assert_eq!(live_starts(no_object), no_object);
+    let again = [
+        start("9-x", "T1", "/a"),
+        undo("9-x", "T1", "/a"),
+        start("9-x", "T1", "/a"),
+    ]
+    .concat();
+    assert_eq!(live_starts(&again), start("9-x", "T1", "/a"));
+    // the log read under a directory, "" where there is none
+    let d = TempDir::new("guard-marks-starts");
+    assert_eq!(starts_text(&d), "");
+    std::fs::write(d.join(STARTS), &again).unwrap();
+    assert_eq!(starts_text(&d), start("9-x", "T1", "/a"));
+}

@@ -304,6 +304,23 @@ fn no_feature_begun_or_only_the_gms_box_passes() {
     assert_eq!(open_boxes(TASKS).len(), 2);
 }
 
+/// 451 T359: a start undone by `make task-unstart` is no start - with one left the feature is still begun, with none it is not, and
+/// the turn ends unasked.
+#[test]
+fn a_feature_whose_every_start_was_undone_is_not_begun() {
+    let (_dir, c, tr) = world("unstarted", "no");
+    let undo = |t: &str| {
+        format!("{{\"unstart\": {{\"feature\": \"385-x\", \"task\": \"{t}\"}}, \"tree\": \"/t\", \"utc\": \"u\"}}\n")
+    };
+    let log = c.join(".git/task-starts.jsonl");
+    std::fs::write(&log, format!("{START}{}", undo("T02"))).unwrap();
+    assert!(said(&c, &tr)
+        .unwrap()
+        .contains("feature 385-x has 2 open task(s)"));
+    std::fs::write(&log, format!("{START}{}{}", undo("T02"), undo("T03"))).unwrap();
+    assert_eq!(said(&c, &tr), None);
+}
+
 #[test]
 fn a_read_error_lets_the_turn_end_recorded() {
     let (_dir, c, tr) = world("error", "no");

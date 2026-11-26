@@ -143,8 +143,8 @@ pub fn cli(args: &[String]) -> Reply {
         Some("impl-check") => claims::impl_check::cli(&args[1..], &top()),
         Some("claims") => claims::cli(&args[1..]),
         Some(
-            verb @ ("tick" | "task-start" | "task-add" | "set-down" | "phase-read" | "builder-tree"
-            | "builder-brief"),
+            verb @ ("tick" | "task-start" | "task-unstart" | "task-withdraw" | "task-add"
+            | "set-down" | "phase-read" | "builder-tree" | "builder-brief"),
         ) => l7r_gate_task::cli(
             verb,
             &args[1..],
@@ -278,6 +278,8 @@ mod tests {
             "trial-review",
             "patch",
             "task-add",
+            "task-unstart",
+            "task-withdraw",
             "set-down",
         ] {
             assert_eq!(ask(&[verb]).code, 2, "{verb}");

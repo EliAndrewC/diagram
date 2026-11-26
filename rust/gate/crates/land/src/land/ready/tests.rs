@@ -149,6 +149,23 @@ fn a_task_not_ready_stays_held_and_says_why() {
         .land
         .export_ready(&quiet.root.join("specs/449-x"), &["T1".to_owned()])
         .unwrap();
+    // unstarted since (`make task-unstart`, 451 T359): it is no started task, and cannot land beside one
+    let log = quiet.root.join(".git/task-starts.jsonl");
+    let undo = "{\"unstart\": {\"feature\": \"449-x\", \"task\": \"T1\"}, \"tree\": \"/t\", \"utc\": \"u\"}\n";
+    let rows = std::fs::read_to_string(&log).unwrap();
+    put(
+        &quiet.root,
+        ".git/task-starts.jsonl",
+        &format!("{rows}{undo}"),
+    );
+    let why = quiet
+        .land
+        .not_ready(&quiet.root.join("specs/449-x"), &["T1".to_owned()])
+        .unwrap();
+    assert_eq!(
+        why,
+        ["T1 was never started in this clone (make task-start F=449 T=T1)"]
+    );
     assert!(!quiet
         .land
         .exported
@@ -199,6 +216,25 @@ fn the_readings_take_what_the_ruling_needs_and_pass_over_the_rest() {
         ["T1"]
     );
     assert!(started_tasks(&dir.join("none.jsonl"), "449-x").is_empty());
+    // a task started twice in a tree and unstarted once (`make task-unstart`, 451 T359) has no mark, and is not started here either;
+    // another tree's start of it, and a start made after the undo, stand
+    let start = |t: &str, tree: &str| {
+        format!("{{\"feature\": \"449-x\", \"task\": \"{t}\", \"tree\": \"{tree}\"}}\n")
+    };
+    let undo = "{\"unstart\": {\"feature\": \"449-x\", \"task\": \"T1\"}, \"tree\": \"/a\", \"utc\": \"u\"}\n";
+    let twice = [start("T1", "/a"), start("T1", "/a"), start("T4", "/a")].concat();
+    put(&dir, "undone.jsonl", &format!("{twice}{undo}"));
+    let live = |rel: &str| started_tasks(&dir.join(rel), "449-x");
+    assert_eq!(live("undone.jsonl").into_iter().collect::<Vec<_>>(), ["T4"]);
+    put(
+        &dir,
+        "other.jsonl",
+        &format!("{twice}{}{undo}{}", start("T1", "/b"), start("T5", "/a")),
+    );
+    assert_eq!(
+        live("other.jsonl").into_iter().collect::<Vec<_>>(),
+        ["T1", "T4", "T5"]
+    );
     let open =
         open_tasks("- [ ] T1 one\n- [x] T2 two\n  - [ ] T3 under\n- [ ] GM review\n- [ ] \n");
     assert_eq!(open.into_iter().collect::<Vec<_>>(), ["T1", "T3"]);

@@ -77,7 +77,7 @@ fn derivation_of(root: &Path, block: &str) -> String {
 }
 
 /// `Path(<common dir>) / STATE`, the common directory read from `root`.
-fn state_path(root: &Path) -> PathBuf {
+pub(crate) fn state_path(root: &Path) -> PathBuf {
     PathBuf::from(common_text(root)).join(STATE)
 }
 

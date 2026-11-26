@@ -460,3 +460,27 @@ fn the_hold_outside_a_repository_and_without_a_delta_is_none() {
     git(&at, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
     assert!(holding(&d).unwrap().is_empty());
 }
+
+/// 451 T359: the box of a withdrawn task is a ticked one carrying ` Withdrawn YYYY-MM-DD: ` - at any indent, either case of the
+/// tick - and nothing else is: an open box, the word with no date, a date that is no date, or a line cut short of its why.
+#[test]
+fn a_withdrawn_box_is_ticked_and_dated() {
+    for yes in [
+        "- [x] T06 the wells Withdrawn 2026-11-26: a duplicate of T05",
+        "  - [X] T06 said 'Withdrawn: <why>' Withdrawn 2026-11-26: no defect",
+    ] {
+        assert!(withdrawn_box(yes), "{yes}");
+    }
+    for no in [
+        "- [ ] T06 the wells Withdrawn 2026-11-26: a duplicate of T05",
+        "- [x] T06 the wells",
+        "- [x] T06 ticked with 'Withdrawn: <why>'",
+        "- [x] T06 the wells Withdrawn 2026-11-26",
+        "- [x] T06 the wells Withdrawn 2026/11/26: a duplicate",
+        "- [x] T06 the wells Withdrawn 2026-1a-26: a duplicate",
+        "- [x] T06 the wells Withdrawn 20261-1-26: a duplicate",
+        "- [x] T06 the wells Withdrawn 2026-11-26 - a duplicate",
+    ] {
+        assert!(!withdrawn_box(no), "{no}");
+    }
+}

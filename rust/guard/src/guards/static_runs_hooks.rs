@@ -15,7 +15,8 @@
 //! - SINCE the task's last landing that succeeded - a landing's `end` line (feature 451 T06) whose `landed` is true and whose `tasks`
 //!   names it, whatever its exit code (3 with its ticks standing is a landing; a refused landing is not) - else since its FIRST
 //!   `task-starts.jsonl` entry for the feature (a later `make task-start` resets nothing: 48 of the clone's 498 started tasks have more
-//!   than one entry, R6), else every line of it;
+//!   than one entry, R6; nor does a `make task-unstart` between two starts - the count reads the raw log, where every other reader
+//!   takes a start and its undo as no start, 451 T359 D9b), else every line of it;
 //! - the knob [`STATIC_RUNS_A_TASK`] such runs pass; the next is refused. `STATIC_OK="<reason>"` escapes, recorded.
 //!
 //! A call whose line carries no task is passed, the pass recorded as `no-task` (plan D10's precedent): there is nothing to count by.
@@ -229,8 +230,13 @@ fn judge(
         return Some(Said::NoTask);
     };
     let lines = read_jsonl(&log).unwrap_or_default();
-    let starts = std::fs::read_to_string(common_git_dir(&root).join("task-starts.jsonl"))
-        .unwrap_or_default();
+    // THE COUNT READS THE RAW LOG, every start as written (451 T359, D9b): an unstart resets no count - the runs since the task's last
+    // landing are counted from its FIRST start whatever unstarts lie between, where the filtered view every other reader takes
+    // (`marks::live_starts`) would date the count from the start made after the undo, an escape with no reason recorded. An
+    // `unstart` row names its feature and task under `unstart`, so `runs` reads it as no start of any task.
+    let starts =
+        std::fs::read_to_string(common_git_dir(&root).join(crate::shared::speckit::marks::STARTS))
+            .unwrap_or_default();
     let runs = runs(
         &lines,
         &starts,

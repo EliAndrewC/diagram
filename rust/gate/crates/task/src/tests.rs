@@ -124,6 +124,12 @@ fn the_binary_s_three_verbs_are_dispatched() {
     assert!(crate::cli("task-start", &[], &root)
         .stderr
         .starts_with("usage: task_start.py"));
+    assert!(crate::cli("task-unstart", &[], &root)
+        .stderr
+        .starts_with("usage: make task-unstart"));
+    assert!(crate::cli("task-withdraw", &[], &root)
+        .stderr
+        .starts_with("usage: make task-withdraw"));
     assert!(crate::cli("phase-read", &[], &root)
         .stderr
         .starts_with("usage: phase_sources.py"));

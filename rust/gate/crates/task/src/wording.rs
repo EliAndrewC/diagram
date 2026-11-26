@@ -28,7 +28,7 @@ static FREE: LazyLock<Regex> =
     LazyLock::new(|| re(r"^(specs/|dev/|l7r/diagram/interactive/assets/glossary/[^/]+\.json$)"));
 
 /// The UTC of the task's last `make task-start`, from `task-starts.jsonl`; "" when it has none (a row's `utc` as Python's `str` gives it).
-fn started(root: &Path, feature: &str, task: &str) -> Raise<Value> {
+pub(crate) fn started(root: &Path, feature: &str, task: &str) -> Raise<Value> {
     let common = common_text(root);
     let mut last = Value::from("");
     if common.is_empty() {
@@ -38,7 +38,10 @@ fn started(root: &Path, feature: &str, task: &str) -> Raise<Value> {
     if !log.is_file() {
         return Ok(last);
     }
-    for line in splitlines(&read_strict(&log)?) {
+    // a start and its `make task-unstart` read as no start (451 T359)
+    for line in splitlines(&l7r_shared::speckit::marks::live_starts(&read_strict(
+        &log,
+    )?)) {
         let Ok(row) = serde_json::from_str::<Value>(line) else {
             continue;
         };

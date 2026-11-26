@@ -214,8 +214,8 @@ fn spec_dir(tree: &Path, feature: &str) -> Option<PathBuf> {
 /// The task has a start in the clone's `task-starts.jsonl` and an open box in its tasks.md.
 fn started_and_open(tree: &Path, dir: &Path, task: &str) -> bool {
     let name = dir.file_name().and_then(|n| n.to_str()).unwrap_or("");
-    let starts =
-        std::fs::read_to_string(common_git_dir(tree).join("task-starts.jsonl")).unwrap_or_default();
+    // a start and its `make task-unstart` read as no start (451 T359)
+    let starts = crate::shared::speckit::marks::starts_text(&common_git_dir(tree));
     let started = starts
         .lines()
         .filter_map(|l| serde_json::from_str::<Value>(l).ok())

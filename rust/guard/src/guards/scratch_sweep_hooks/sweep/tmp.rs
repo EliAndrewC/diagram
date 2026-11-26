@@ -87,7 +87,10 @@ pub(super) fn landed(
     starts: &Path,
     now: SystemTime,
 ) -> (Vec<(PathBuf, &'static str)>, Vec<u64>) {
-    let text = std::fs::read_to_string(starts).unwrap_or_default();
+    // a start and its `make task-unstart` read as no start (451 T359)
+    let text = crate::shared::speckit::marks::live_starts(
+        &std::fs::read_to_string(starts).unwrap_or_default(),
+    );
     let since = now
         .checked_sub(SAME_NUMBER)
         .and_then(|t| t.duration_since(SystemTime::UNIX_EPOCH).ok())

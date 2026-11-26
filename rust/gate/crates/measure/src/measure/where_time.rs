@@ -588,7 +588,8 @@ fn starts(root: &Path, name: &str, since: &str) -> Result<Vec<(f64, String)>, Ra
     )?;
     let common = strip(&common);
     let path = Path::new(if common.is_empty() { "." } else { common }).join("task-starts.jsonl");
-    let text = super::events::text_if_file(&path)?;
+    // a start and its `make task-unstart` read as no start (451 T359)
+    let text = l7r_shared::speckit::marks::live_starts(&super::events::text_if_file(&path)?);
     let mut out: Vec<(f64, String)> = Vec::new();
     let mut last_before: Option<(f64, String)> = None;
     for x in py_lines(&text).into_iter().filter(|x| !strip(x).is_empty()) {

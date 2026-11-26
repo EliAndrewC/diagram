@@ -319,6 +319,28 @@ pub fn closes(status: &str) -> bool {
     CLOSING.iter().any(|w| lower.starts_with(w))
 }
 
+/// Is `line` the box of a task closed by `make task-withdraw` (feature 451 T359): ticked, and carrying ` Withdrawn YYYY-MM-DD: ` - the
+/// word a spec's status closes on ([`CLOSING`]), the day and a colon, as that command appends them to the task's line? THE ONE RULE OF
+/// THE FORM: its writer's test holds its line to it, and a reader that must tell a withdrawn task from a landed one asks here (the
+/// plan gate's scope: a withdrawn task decided nothing, so it owes no plan review). The word alone, or with no date, is no
+/// withdrawal: a task's own title may say it (451 T359's quotes `'Withdrawn: <why>'`).
+#[must_use]
+pub fn withdrawn_box(line: &str) -> bool {
+    let boxed = line.trim_start();
+    let day = |(i, b): (usize, &u8)| {
+        (i == 4 || i == 7) == (*b == b'-') && (*b == b'-' || b.is_ascii_digit())
+    };
+    let dated = |rest: &[u8]| {
+        rest.len() > 11 && rest[..10].iter().enumerate().all(day) && &rest[10..12] == b": "
+    };
+    let ticked = boxed.starts_with("- [x] ") || boxed.starts_with("- [X] ");
+    let words = boxed.match_indices(" Withdrawn ");
+    ticked
+        && words
+            .into_iter()
+            .any(|(at, word)| dated(&boxed.as_bytes()[at + word.len()..]))
+}
+
 /// The number before a directory name's first `-`.
 fn number_of(name: &str) -> &str {
     name.split('-').next().unwrap_or_default()
@@ -585,8 +607,7 @@ pub fn holding_with(d: &Path, ticks: &str) -> Result<Vec<String>, String> {
     let events = Some(crate::env::var("L7R_EVENTS_DIR"))
         .filter(|e| !e.is_empty())
         .map_or_else(|| common.join("l7r-events"), PathBuf::from);
-    let starts: Vec<Value> = std::fs::read_to_string(common.join("task-starts.jsonl"))
-        .unwrap_or_default()
+    let starts: Vec<Value> = marks::starts_text(&common)
         .lines()
         .filter_map(|l| serde_json::from_str(l).ok())
         .chain(all)

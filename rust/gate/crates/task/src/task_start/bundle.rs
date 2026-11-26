@@ -67,7 +67,7 @@ pub(super) fn mark(common: &Path, d: &Path, name: &str, tasks: &[&str]) -> Raise
     )?;
     // ...AND WHEN, for the report's per-task split (feature 385 T02, plan D10): a bundle's other members first, its first task last
     // ...each row naming its tree, so a reader asking for this tree's task in force reads only its own (451 T254)
-    let starts = common.join("task-starts.jsonl");
+    let starts = common.join(l7r_shared::speckit::marks::STARTS);
     let mut rows = String::new();
     let tree = top.to_string_lossy();
     for t in tasks.iter().skip(1).chain(tasks.first()) {

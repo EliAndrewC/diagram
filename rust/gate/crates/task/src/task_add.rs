@@ -326,7 +326,7 @@ const LOCK_WAIT_S: f64 = 120.0;
 /// The feature's filing lock (feature 451 T84), held from the id's read to quick's last run: an `flock` on
 /// `task-add-<feature>.lock` in the git common directory (`<root>/.git` where git names none), waited for up to [`LOCK_WAIT_S`];
 /// refused past it with nothing written, naming the lock file.
-fn lock(root: &Path, d: &Path, env: Env) -> Result<std::fs::File, Reply> {
+pub(crate) fn lock(root: &Path, d: &Path, env: Env) -> Result<std::fs::File, Reply> {
     let name = d.file_name().unwrap_or_default().to_string_lossy();
     let path = common_git_dir(root)
         .unwrap_or(root.join(".git"))

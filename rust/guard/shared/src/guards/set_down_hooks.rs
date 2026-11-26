@@ -74,7 +74,8 @@ fn rows(path: &Path) -> Result<Vec<Value>, String> {
         return Ok(Vec::new());
     }
     let text = std::fs::read_to_string(path).map_err(|e| e.to_string())?;
-    Ok(text
+    // the start log's rows, a start and its `make task-unstart` read as no start (451 T359); no other log holds an `unstart` row
+    Ok(crate::speckit::marks::live_starts(&text)
         .lines()
         .filter_map(|l| serde_json::from_str(l).ok())
         .collect())

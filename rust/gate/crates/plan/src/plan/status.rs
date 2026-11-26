@@ -284,15 +284,32 @@ pub(super) fn judge(
     judge_in(plan, review_text, history, done, None)
 }
 
+/// What a judgment answers for: the tasks in its scope, and those of them closed by `make task-withdraw` ([`scope_of`]).
+pub(super) struct Scope {
+    tasks: BTreeSet<String>,
+    withdrawn: BTreeSet<String>,
+}
+
 /// The tasks a tick of `asked` answers for (feature 451 T84): `asked` and every task ticked before it - a `[x]` box of `tasks`, the
-/// feature's tasks.md and tasks-done.md joined.
-pub(super) fn scope_of(tasks: &str, asked: &[&str]) -> BTreeSet<String> {
-    TICKED
-        .captures_iter(tasks)
-        .map_while(Result::ok)
-        .map(|c| c[1].to_owned())
-        .chain(asked.iter().map(|t| (*t).to_owned()))
-        .collect()
+/// feature's tasks.md and tasks-done.md joined. A box ticked by `make task-withdraw` (`Withdrawn YYYY-MM-DD:`, 451 T359) is among
+/// them and named apart: nothing was decided in its section, so its removed stub - where a review had recorded it - holds no tick
+/// and no push ([`in_scope`]), while a block that names it and has no other owner is answered for as any ticked task's is, and so
+/// is a removed block of its own that was NOT the unfilled stub (a box written by hand in that form, its filled section deleted).
+pub(super) fn scope_of(tasks: &str, asked: &[&str]) -> Scope {
+    let ticked = |l: &str| TICKED.captures(l).ok().flatten().map(|c| c[1].to_owned());
+    let boxes = tasks.lines().filter_map(|l| ticked(l).map(|t| (t, l)));
+    let (mut all, mut withdrawn) = (BTreeSet::new(), BTreeSet::new());
+    for (task, line) in boxes {
+        if l7r_shared::speckit::withdrawn_box(line) {
+            withdrawn.insert(task.clone());
+        }
+        all.insert(task);
+    }
+    all.extend(asked.iter().map(|t| (*t).to_owned()));
+    Scope {
+        tasks: all,
+        withdrawn,
+    }
 }
 
 /// [`owed`] for a tick of `asked` alone (feature 451 T84): the blocks outside every task's section, and the sections of `asked` and of
@@ -324,7 +341,8 @@ pub(super) fn held_for(spec_dir: &Path, asked: &[&str]) -> Option<Held> {
 /// The keys a judgment `scope` answers for (feature 451 T84, D60's blocks read per task): a block outside every task's section always;
 /// a block of a task's section only where `scope` holds the task; a `(removed)` block of a task's own (its heading opens with the id,
 /// a filled template's old heading among them) only where `scope` holds the task and its section carries no CLEAR task verdict, which
-/// answers for every block it had. WHY: measured 2026-11-21 (feature 451's 16 landings of 2026-11-20/21, each replayed on its tick's
+/// answers for every block it had - and never where the task was withdrawn and the block was a block of its unfilled stub (451 T359,
+/// `template::stub_block`; its earlier text unread, it is owed). WHY: measured 2026-11-21 (feature 451's 16 landings of 2026-11-20/21, each replayed on its tick's
 /// tree): 14 were refused on the whole feature, 6 of them on other open tasks' sections or a filled template's old heading alone - an
 /// open task's section is reviewed when its own task is decided (feature 375 FR-003a), not before another task's tick. A heading that
 /// only names a task makes it the owner of no block inside another task's own section (451 T180).
@@ -332,8 +350,17 @@ fn in_scope(
     keys: Vec<String>,
     review: &Value,
     plan: &str,
-    scope: &BTreeSet<String>,
+    held: &Scope,
+    history: Option<&History>,
 ) -> Vec<String> {
+    let scope = &held.tasks;
+    let have = reviewed_blocks(review);
+    // was the removed block a block of the task's unfilled stub (`template::stub_block`, the test `make task-withdraw` removes a
+    // section by)? Its earlier text unread - no kept text, no history at its digest - it is not known to be one, and is owed
+    let stub_of = |gone: &str, t: &str| {
+        let was = have.get(gone).and_then(|e| earlier_text(e, gone, history));
+        was.is_some_and(|text| super::template::stub_block(t, &text))
+    };
     // each section's place, and whether it is its task's own (its first heading opens with the id) or a heading that only names it
     let spans: Vec<(String, bool, (usize, usize))> = task_sections(plan)
         .into_iter()
@@ -357,7 +384,13 @@ fn in_scope(
             if let Some(gone) = key.strip_prefix(REMOVED) {
                 let title = heading_text(gone);
                 let own = leading_tasks(&title);
-                return own.is_empty() || own.iter().any(|t| scope.contains(*t) && !cleared(t));
+                // a withdrawn task's removed block that was its unfilled stub: nothing decided, nothing owed (451 T359). The box's
+                // form alone exempts nothing (D15b): a filled block removed beside a hand-written `Withdrawn` box is a decision
+                let owes = |t: &&str| {
+                    let stub = held.withdrawn.contains(*t) && stub_of(gone, t);
+                    scope.contains(*t) && !cleared(t) && !stub
+                };
+                return own.is_empty() || own.iter().any(owes);
             }
             // a block inside no task's section always; inside several (a bundle's, 451 T141) where `scope` holds any of them; inside a
             // task's own section, never for a task a heading there only names (451 T180: 449 T377's heading names T351, whose section
@@ -383,7 +416,7 @@ pub(super) fn judge_in(
     review_text: Option<&str>,
     history: Option<&History>,
     done: &str,
-    scope: Option<&BTreeSet<String>>,
+    scope: Option<&Scope>,
 ) -> Option<(&'static str, String)> {
     judge_held(plan, review_text, history, done, scope).map(|(rule, reason, _)| (rule, reason))
 }
@@ -399,7 +432,7 @@ pub(super) fn judge_held(
     review_text: Option<&str>,
     history: Option<&History>,
     done: &str,
-    scope: Option<&BTreeSet<String>>,
+    scope: Option<&Scope>,
 ) -> Option<Held> {
     let Some(plan) = plan else {
         return Some(("plan-missing", format!("no plan.md - the plan stage is owed before its review can be (spec D5); then {HOW}"), Vec::new()));
@@ -433,8 +466,8 @@ pub(super) fn judge_held(
     let ruled = ruled_tasks(&review, &text, history);
     let (mut owed_keys, mut blocked) = block_status(&review, &text, &ruled, history, done);
     if let Some(scope) = scope {
-        owed_keys = in_scope(owed_keys, &review, &text, scope);
-        blocked = in_scope(blocked, &review, &text, scope);
+        owed_keys = in_scope(owed_keys, &review, &text, scope, history);
+        blocked = in_scope(blocked, &review, &text, scope, history);
     }
     if !owed_keys.is_empty() {
         let shown: Vec<String> = owed_keys

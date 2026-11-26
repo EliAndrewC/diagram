@@ -538,6 +538,13 @@ fn a_line_with_no_t_carries_the_agents_task_else_the_clones() {
     .unwrap();
     assert_eq!(task(&call(None)), Some(json!("T03")));
     assert_eq!(task(&call(Some("ab1"))), Some(json!("T07")));
+    // the last start undone (`make task-unstart`, 451 T359): the start in force is the one before it
+    let starts = d.join(".git/task-starts.jsonl");
+    let written = std::fs::read_to_string(&starts).unwrap();
+    let undo = json!({"unstart": {"feature": "999-a", "task": "T03"}, "tree": "/t", "utc": "2026-11-20T02:30:00Z"});
+    std::fs::write(&starts, format!("{written}{undo}\n")).unwrap();
+    assert_eq!(task(&call(None)), Some(json!("T02")));
+    std::fs::write(&starts, written).unwrap();
     // an agent whose brief names no task carries none, never the clone's mark (451 T161: the mark is the main session's own)
     for aid in ["nodesc", "bad", "missing"] {
         assert_eq!(task(&call(Some(aid))), None, "{aid}");

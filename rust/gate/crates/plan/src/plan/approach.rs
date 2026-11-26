@@ -324,7 +324,10 @@ fn in_flight(root: &Path, dir: &Path, active: &str) -> Vec<String> {
         .join("task-starts.jsonl");
     let name = dir.file_name().unwrap_or_default().to_string_lossy();
     let mut out = vec![active.to_owned()];
-    for raw in std::fs::read_to_string(path).unwrap_or_default().lines() {
+    // a start and its `make task-unstart` read as no start (451 T359)
+    let starts =
+        l7r_shared::speckit::marks::live_starts(&std::fs::read_to_string(path).unwrap_or_default());
+    for raw in starts.lines() {
         let row: Value = serde_json::from_str(raw).unwrap_or(Value::Null);
         let task = row["task"].as_str().unwrap_or("");
         let open = re(&format!(r"(?m)^- \[ \] {}\b", fancy_regex::escape(task)));

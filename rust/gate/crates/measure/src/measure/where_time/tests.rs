@@ -731,3 +731,24 @@ fn a_builders_stop_inside_a_call_keeps_the_call() {
         .collect();
     assert_eq!(got, [600.0, 1.0]);
 }
+
+/// 451 T359: a start undone by `make task-unstart` is no start of the feature - no window opens on it.
+#[test]
+fn a_start_undone_opens_no_window() {
+    let d = tree("measure-where-unstart");
+    put(
+        &d,
+        ".git/task-starts.jsonl",
+        &format!(
+            "{}\n{}\n{}\n",
+            json!({"feature": "901-s", "task": "T04", "utc": at("06:00:00")}),
+            json!({"feature": "901-s", "task": "T05", "utc": at("07:00:00")}),
+            json!({"unstart": {"feature": "901-s", "task": "T05"}, "tree": "/t", "utc": at("07:01:00")})
+        ),
+    );
+    let live = starts(&d, "901-s", "").unwrap();
+    assert_eq!(
+        live.iter().map(|s| s.1.as_str()).collect::<Vec<_>>(),
+        ["T04"]
+    );
+}

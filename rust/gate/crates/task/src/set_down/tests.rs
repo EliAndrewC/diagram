@@ -187,6 +187,11 @@ fn under_the_usage_cap_the_set_down_waits_on_a_set_down_ruling() {
     )
     .unwrap();
     assert_eq!(down(&root, &session).code, 2);
+    // a later row of an earlier time, undone (`make task-unstart`, 451 T359), is no start: the start of the 19th is still the last
+    let undone = "{\"feature\": \"9001-x\", \"task\": \"T02\", \"utc\": \"2026-10-17T00:00:00Z\"}\n{\"unstart\": {\"feature\": \"9001-x\", \"task\": \"T02\"}, \"tree\": \"/t\", \"utc\": \"u\"}\n";
+    let before = std::fs::read_to_string(&starts).unwrap();
+    std::fs::write(&starts, format!("{before}{undone}")).unwrap();
+    assert_eq!(down(&root, &session).code, 2);
     std::fs::write(&arbiter, "{\"trigger\": \"ask:other\", \"utc\": \"2026-10-20T00:00:00Z\"}\n{\"trigger\": \"ask:set-down-9001\", \"utc\": \"2026-10-20T00:00:00Z\"}\n[1]\n").unwrap();
     assert_eq!(down(&root, &session).code, 0);
     std::fs::write(&arbiter, "[1]\n").unwrap();

@@ -728,6 +728,15 @@ task-start:     ## [project] name the task you are starting, so its checks wait 
 	$(if $(HOLD_OK),$(LOGESCAPE) HOLD_OK "$$HOLD_OK",@:)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" task-start "$(F)" "$(T)"
 
+task-unstart:   ## [project] undo a make task-start made by mistake in THIS tree: its mark removed and an unstart row logged, which every reader of the start log takes with its start as no start; another tree's mark refused, naming the command to run there; a bundle goes whole under its first task (451 T359)   F=451 T=T13
+	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make task-unstart: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" task-unstart "$(F)" "$(T)"
+
+task-withdraw: export TASK_WHY = $(WHY)
+task-withdraw:  ## [project] close a filed task found to be a duplicate or no defect, with no landing: its box ticked with ' Withdrawn <date>: <why>' appended, its UNFILLED plan stub removed, who and why in the feature's event log; nothing committed, the changed paths printed; refused, all reasons together, for a task started in any tree, already ticked, with a filled or reviewed plan section, with a commit of its own since origin/main, or the feature's last open box (451 T359)   F=451 T="T322 T323" WHY="<two words or more>"
+	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make task-withdraw: F=<feature>, T=<task id(s)> and WHY="<reason>" are required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" task-withdraw "$(F)" "$(T)"
+
 decide:         ## [project] the spec-fidelity dispatch that rules on one task's plan section before its checks (feature 375); a found-and-left deferral without its reason, filed task and order, or naming no open task, refused, escape DEFER_FORM_OK="<reason>" (451 T17); T=a,b,c decides a bundle's one section in one dispatch (451 T141)   F=375 T=T13 (or T=T13,T14,T15)
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make decide: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan decide "$(F)" "$(T)"
@@ -1190,7 +1199,7 @@ builder-status:  ## [project] each builder of an open task the session reads as 
 	  "$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --builder-status "$$t"
 
 .PHONY: builder-status
-.PHONY: review-yield cohort-seeds task-add set-down where-time task-time task-progress land-batch fix-yield
+.PHONY: review-yield cohort-seeds task-add task-unstart task-withdraw set-down where-time task-time task-progress land-batch fix-yield
 review-yield:     ## [performance] each review check's passes, findings acted on / dismissed / deferred, author-missed, hours and tokens, from the ledger   [SINCE=2026-09-26]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure review-yield $(if $(SINCE),--since $(SINCE),)
 

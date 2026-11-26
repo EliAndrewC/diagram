@@ -78,7 +78,10 @@ pub fn starts(root: &Path, clones: &Path) -> BTreeMap<Key, f64> {
     // a record read twice (a tree that is another's) changes no first start
     for base in bases(root, clones) {
         let p = common_git_dir(&base).join("task-starts.jsonl");
-        let text = std::fs::read_to_string(&p).unwrap_or_default();
+        // a start and its `make task-unstart` read as no start (451 T359)
+        let text = l7r_shared::speckit::marks::live_starts(
+            &std::fs::read_to_string(&p).unwrap_or_default(),
+        );
         for v in text
             .lines()
             .filter_map(|l| serde_json::from_str::<Value>(l).ok())

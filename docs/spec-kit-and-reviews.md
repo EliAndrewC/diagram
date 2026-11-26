@@ -185,6 +185,23 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
 - Decide first, then check (feature 375): a task's decisions carry a verdict before its checks run - the plan-stage review,
   or `make decide F= T=` on a plan section naming the task (`make task-start` names the task). A tripwire is not the session's
   to judge: its refusal names `make arbiter-bundle`, and an advisor asked about a loop is handed that MANIFEST too.
+- **The two ways back out of a task** (feature 451 T359; 2026-11-26: `make land` refused T322, T323, T356 and T358 for their
+  unfilled plan stubs, and a task started by mistake held every landing that carried its edits until its mark was moved by hand).
+  `make task-withdraw F= T="<task(s)>" WHY="<two words or more>"` closes a FILED task found to be a duplicate or no defect, with no
+  landing: its box is ticked with ` Withdrawn YYYY-MM-DD: <why>` appended to its line (a ticked box, so every reader of a closed
+  task takes it and the next tick archives it), its unfilled plan stub leaves plan.md, and who and why go to the feature's event
+  log as a `TaskWithdrawn` line; it commits nothing and prints the paths it changed. It refuses, every reason together, a task
+  started in any tree, already ticked, with a plan section filled in or reviewed, with a commit of its own since `origin/main`, with
+  an open research box under its line, or the feature's last open box - each of those is a landing or a tick, not a withdrawal.
+  `make task-unstart F= T=<task>` undoes a `make task-start` in THIS tree: the mark is removed and an `unstart` row appended to
+  `task-starts.jsonl`, which every reader of that file takes, with every earlier start of that task in that tree, as no start
+  (the mark is one a task and the log agrees with it) - but for the static-runs guard's count, which reads every start as written:
+  an unstart and a new start reset no count of `make static` runs; another tree's mark is refused with the command to run there, and a
+  bundle is unstarted whole under its first task. `make task-withdraw` also refuses a task a builder holds a pool tree for
+  (`make builder-tree-release` first, 451 T366), and a withdrawn box's removed stub owes no plan review: where a box is
+  ticked `Withdrawn YYYY-MM-DD:` (`speckit::withdrawn_box`) and its removed block was a block of the unfilled template
+  (`plan::template::stub_block`, the test the command removes a section by), the plan gate's scope passes over it, so it holds no
+  later tick or push; a FILLED block removed beside a box written by hand in that form is answered for as any ticked task's is.
 - **A bundle of small tasks pays the fixed cost once** (feature 451 T141; the GM 2026-11-22: *"let's do that then, and not bother
   cutting back on new tasks filed. It sounds like we canfilenew tasksjust as fast as we are now if we bundle them together when fixing
   them."*). Open tasks tiny enough to be worked at the same time go as one: `make task-start F= T=Ta,Tb,Tc` (commas or spaces) marks

@@ -131,4 +131,9 @@ fn a_landed_task_s_own_scratch_goes_unless_another_feature_started_that_number_w
     // no record at all: every landed number's own goes
     let (gone, shared) = landed(&c, "451", &[160], &base.join("none"), now);
     assert!(names(&gone, t) == ["t160"] && shared.is_empty());
+    // a start undone (`make task-unstart`, 451 T359) is no start: the number is shared with nobody
+    let undo = r#"{"unstart": {"feature": "449-rust", "task": "T160"}, "tree": "/t", "utc": "u"}"#;
+    std::fs::write(&starts, format!("{}\n{undo}\n", lines[1])).unwrap();
+    let (gone, shared) = landed(&c, "451", &[160], &starts, now);
+    assert!(names(&gone, t) == ["t160"] && shared.is_empty());
 }

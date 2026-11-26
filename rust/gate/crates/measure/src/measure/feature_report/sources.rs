@@ -264,7 +264,8 @@ pub fn task_starts(root: &Path, name: &str) -> Result<Vec<(String, f64)>, Raised
         return Ok(out);
     }
     let path = Path::new(common).join("task-starts.jsonl");
-    let text = super::super::events::text_if_file(&path)?;
+    // a start and its `make task-unstart` read as no start (451 T359)
+    let text = l7r_shared::speckit::marks::live_starts(&super::super::events::text_if_file(&path)?);
     for raw in py_lines(&text) {
         let Ok(row) = serde_json::from_str::<Value>(raw) else {
             continue;

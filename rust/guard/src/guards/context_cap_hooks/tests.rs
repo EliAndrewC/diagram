@@ -879,3 +879,24 @@ fn a_call_from_the_mirror_names_the_handoff_in_the_sessions_clone() {
     );
     assert!(ask(f.bash("builder", "make quick")).is_empty());
 }
+
+/// 451 T359: a start undone by `make task-unstart` is not the start in force at a builder's dispatch - the one before it is.
+#[test]
+fn a_start_undone_is_not_the_start_in_force_at_a_dispatch() {
+    let f = resumed("r-undone", 120_000, "a builder");
+    f.events(&[]);
+    f.tasks("- [x] T05 a\n- [ ] T06 b\n");
+    let mut row = call(120_000);
+    row["timestamp"] = json!("2026-11-20T10:31:00.000Z");
+    f.transcript(AID, &[row]);
+    f.starts(&[
+        ("T05", "2026-11-20T10:00:00Z"),
+        ("T06", "2026-11-20T10:30:00Z"),
+    ]);
+    assert_eq!(sent(&f.send(AID, "go on")), None);
+    let log = f.clone().join(".git/task-starts.jsonl");
+    let undo = json!({"unstart": {"feature": "451-x", "task": "T06"}, "tree": "/t", "utc": "2026-11-20T10:30:30Z"});
+    let text = std::fs::read_to_string(&log).unwrap();
+    std::fs::write(&log, format!("{text}{undo}\n")).unwrap();
+    assert_eq!(sent(&f.send(AID, "go on")), Some(landed("T05")));
+}

@@ -278,3 +278,22 @@ fn a_bundle_s_builder_is_held_on_its_first_member() {
     let said = w.judged(&w.input("done"), 1, NOT_DECIDED);
     assert!(matches!(&said, Said::Held(..)), "{said:?}");
 }
+
+/// 451 T359: a builder whose task was started - twice - and then unstarted (`make task-unstart`) is no builder of a started task: its
+/// stop passes unasked, where the same stop was held while the start stood.
+#[test]
+fn a_task_started_and_unstarted_holds_no_stop() {
+    let w = World::new("unstarted");
+    let held = |_: &Path, _: &[&str]| (1, NOT_DECIDED.to_owned());
+    assert!(matches!(
+        judge(&w.input("done"), &w.tree, None, &held),
+        Said::Held(..)
+    ));
+    let start = "{\"feature\": \"451-x\", \"task\": \"T84\", \"tree\": \"/t\"}\n";
+    let undo = "{\"unstart\": {\"feature\": \"451-x\", \"task\": \"T84\"}, \"tree\": \"/t\", \"utc\": \"u\"}\n";
+    put(
+        &w.tree.join(".git/task-starts.jsonl"),
+        &format!("{start}{start}{undo}"),
+    );
+    assert_eq!(judge(&w.input("done"), &w.tree, None, &held), Said::Quiet);
+}

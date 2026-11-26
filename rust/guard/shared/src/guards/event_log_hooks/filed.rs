@@ -305,8 +305,8 @@ pub fn every_start(root: &Path) -> Vec<Start> {
 }
 
 fn starts_where(root: &Path, keep: &dyn Fn(&Value) -> bool) -> Vec<Start> {
-    std::fs::read_to_string(common_git_dir(root).join("task-starts.jsonl"))
-        .unwrap_or_default()
+    // a start and its `make task-unstart` read as no start (451 T359)
+    crate::speckit::marks::starts_text(&common_git_dir(root))
         .lines()
         .filter_map(|l| serde_json::from_str::<Value>(l.trim()).ok())
         .filter(|e| keep(e))

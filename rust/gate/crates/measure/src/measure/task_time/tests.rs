@@ -254,6 +254,22 @@ fn a_landed_task_started_before_the_read_back_is_named() {
         all.contains("## 451-x T1 (landed 10:06)\n")
             && all.contains("`BACK=` reads further): none - ")
     );
+    // a start undone (`make task-unstart`, 451 T359) is no start: the task's first start is the one made after it
+    let undo = ev(
+        &json!({"unstart": {"feature": "451-x", "task": "T1"}, "tree": "/t", "utc": "2026-11-25T09:00:00Z"}),
+    );
+    put(
+        &d,
+        "root/.git/task-starts.jsonl",
+        &[
+            line("451-x", "T1", "2026-11-25T08:00:00Z"),
+            undo,
+            line("451-x", "T1", "2026-11-25T09:30:00Z"),
+        ],
+    );
+    let first = starts(Path::new(&root), &clones);
+    let key = ("451-x".to_owned(), "T1".to_owned());
+    assert_eq!(first.get(&key).copied(), ts("2026-11-25T09:30:00Z").ok());
 }
 
 #[test]

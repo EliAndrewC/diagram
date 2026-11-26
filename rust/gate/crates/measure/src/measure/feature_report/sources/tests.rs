@@ -104,6 +104,22 @@ fn the_spec_tasks_and_starts_are_read() {
         ),
     );
     assert_eq!(task_starts(&d, "901-s").unwrap().len(), 1);
+    // a start undone (`make task-unstart`, 451 T359) is no start
+    put(
+        &d,
+        ".git/task-starts.jsonl",
+        &format!(
+            "{}\n{}\n{}\n",
+            json!({"feature": "901-s", "task": "T01", "utc": "2026-11-01T08:00:00Z"}),
+            json!({"feature": "901-s", "task": "T02", "utc": "2026-11-01T09:00:00Z"}),
+            json!({"unstart": {"feature": "901-s", "task": "T02"}, "tree": "/t", "utc": "u"})
+        ),
+    );
+    let live = task_starts(&d, "901-s").unwrap();
+    assert_eq!(
+        live.iter().map(|s| s.0.as_str()).collect::<Vec<_>>(),
+        ["T01"]
+    );
     for bad in [
         "[1]",
         r#"{"feature": "901-s", "task": "T1"}"#,

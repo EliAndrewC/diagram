@@ -21,6 +21,54 @@ pub const DIR: &str = "task-marks";
 /// The one mark of before T254, read as the main worktree's oldest.
 pub const LEGACY: &str = "active-task";
 
+/// The log of every start, in the git common directory: a row a start (`{"feature", "task", "utc", "tree"}`) and a row an undo
+/// (`make task-unstart`'s, `{"unstart": {"feature", "task"}, "tree", "utc"}`).
+pub const STARTS: &str = "task-starts.jsonl";
+
+/// The start log's text as every reader takes it: each `unstart` row gone, and with it EVERY start row before it of its feature and
+/// task in its tree (a start row from before rows named their tree is any tree's). So a start and its undo read as no start
+/// (feature 451 T359: `make task-unstart`), and every other line stays as written, a line that is no JSON among them, for the
+/// reader's own rule on it. WHY EVERY EARLIER START, not the latest alone: a tree holds one mark a task, which a second start
+/// overwrites and the unstart removes, so a task started twice and unstarted once has no mark - and the log, read by the landing's
+/// "was it started" (`land/ready.rs`) and the closing order, must say what the mark says. Its cost: the time breakdown loses the
+/// earlier start of a task worked, unstarted and never started again; a start made after the undo is kept and dates it.
+/// ONE READER TAKES THE RAW LOG INSTEAD, on purpose (T359-D9b): `static_runs_hooks`' count of a task's `make static` runs since its
+/// last landing, which no unstart resets - read through this filter, an unstart and a new start would restart it unrecorded.
+#[must_use]
+pub fn live_starts(text: &str) -> String {
+    if !text.contains("\"unstart\"") {
+        return text.to_owned();
+    }
+    let lines: Vec<&str> = text.split_inclusive('\n').collect();
+    let rows: Vec<Value> = lines
+        .iter()
+        .map(|l| serde_json::from_str(l.trim()).unwrap_or(Value::Null))
+        .collect();
+    let mut keep = vec![true; lines.len()];
+    for (i, row) in rows.iter().enumerate() {
+        let undone = &row["unstart"];
+        if !undone.is_object() {
+            continue;
+        }
+        keep[i] = false;
+        for (j, s) in rows.iter().enumerate().take(i) {
+            let answered = s["task"].is_string()
+                && s["task"] == undone["task"]
+                && s["feature"] == undone["feature"]
+                && (s["tree"].is_null() || s["tree"] == row["tree"]);
+            keep[j] = keep[j] && !answered;
+        }
+    }
+    let kept = lines.iter().zip(keep).filter(|(_, k)| *k);
+    kept.map(|(l, _)| *l).collect()
+}
+
+/// [`live_starts`] of the log under `common`, "" where there is none or it cannot be read.
+#[must_use]
+pub fn starts_text(common: &Path) -> String {
+    live_starts(&std::fs::read_to_string(common.join(STARTS)).unwrap_or_default())
+}
+
 /// The git common directory and the top of the tree holding `dir`, as git names them; none outside a repository.
 #[must_use]
 pub fn places(dir: &Path) -> Option<(PathBuf, PathBuf)> {

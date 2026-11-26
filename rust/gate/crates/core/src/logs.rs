@@ -213,7 +213,7 @@ fn land_tooling(args: &[String], root: &Path) -> Result<(), String> {
         (Some(tree), Some(top)) => l7r_shared::speckit::marks::same_tree(Path::new(tree), top),
         _ => true,
     };
-    let starts = std::fs::read_to_string(dir.join("task-starts.jsonl")).unwrap_or_default();
+    let starts = l7r_shared::speckit::marks::starts_text(dir);
     let last: Value = starts
         .lines()
         .rev()

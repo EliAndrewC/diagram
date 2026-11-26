@@ -668,3 +668,28 @@ fn the_crates_are_those_of_the_tree_the_make_runs_in() {
     let want = "make quick   (the tree this make runs in changes no Rust crate against origin/main's merge base, its uncommitted edits read)";
     assert!(text.contains(want), "{text}");
 }
+
+/// 451 T359 (D9b): an unstart resets no count. A start undone by `make task-unstart` is no start of the tree's - with nothing started
+/// after it the call carries no task - but the runs a task made since its last landing are counted whatever unstarts lie between: a
+/// start, two runs, an unstart and a new start, and the next run is still the third.
+#[test]
+fn an_unstart_and_a_new_start_restart_no_count() {
+    let d = clone("undone", &[("T06", "2026-11-20T10:00:00Z")], &two_runs());
+    assert_eq!(said(&d, "make static"), Some(refused()));
+    let rows = [
+        json!({"feature": F, "task": "T06", "utc": "2026-11-20T10:00:00Z"}),
+        json!({"unstart": {"feature": F, "task": "T06"}, "tree": "/t", "utc": "2026-11-20T10:02:30Z"}),
+        json!({"feature": F, "task": "T06", "utc": "2026-11-20T10:03:00Z"}),
+    ];
+    // unstarted and not started again: the tree has no task, so no count and no closing order is owed of it
+    std::fs::write(d.join(".git/task-starts.jsonl"), jsonl(&rows[..2])).unwrap();
+    assert_eq!(said(&d, "make static"), Some(Said::NoTask));
+    // started again: the two runs under the undone start are still its runs
+    std::fs::write(d.join(".git/task-starts.jsonl"), jsonl(&rows)).unwrap();
+    assert_eq!(said(&d, "make static"), Some(refused()));
+    // and a landing between resets it, as it always did
+    let mut landed = two_runs();
+    landed.push(end("2026-11-20T10:02:10.000Z", &["T06"], true, 0));
+    write_log(&d, &landed);
+    assert_eq!(said(&d, "make static"), None);
+}

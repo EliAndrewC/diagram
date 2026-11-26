@@ -297,6 +297,15 @@ fn a_trigger_charges_every_task_in_flight_not_only_the_last_started() {
     let msg = ruled(&root, "hour:999-x@3", Some("2026-10-17T21:40:00Z")).unwrap();
     assert!(msg.contains("T02 owes") && msg.contains("T01 owes"));
     assert_eq!(owed_entries(&root).len(), 2);
+    // a start undone (`make task-unstart`, 451 T359) is no start: T01 is in flight no longer
+    let undo =
+        json!({"unstart": {"feature": "999-x", "task": "T01"}, "tree": "/t", "utc": stamp(90)});
+    std::fs::write(
+        root.join(".git/task-starts.jsonl"),
+        format!("not json\n{rows}{undo}\n"),
+    )
+    .unwrap();
+    assert_eq!(in_flight(&root, &dir, "T02"), ["T02"]);
 }
 
 #[test]

@@ -258,5 +258,10 @@ pub(crate) fn cli_with(args: &[String], cwd: &Path, env: crate::tick::Env) -> Re
 
 mod bundle;
 
+/// The tasks a `T=` names ([`bundle::members`]), for the commands beside this one.
+pub(crate) fn members(words: &str) -> Vec<String> {
+    bundle::members(words)
+}
+
 #[cfg(test)]
 mod tests;

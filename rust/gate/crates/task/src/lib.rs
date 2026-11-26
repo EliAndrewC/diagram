@@ -6,6 +6,8 @@
 //! sources by command is asked in process, each the function its command runs. `l7r-gate task-add` (`make task-add`, [`task_add`]) and
 //! `l7r-gate set-down` (`make set-down`, [`set_down`]) are `scripts/task-add.py` and `set-down.py`, ported whole by T135. `l7r-gate builder-tree` ([`builder_tree`], 451 T285) is the builder
 //! pool, and `l7r-gate builder-brief` ([`builder_brief`], 451 T334) the standing block of a builder's brief, sized, on a pool tree.
+//! `l7r-gate task-withdraw` ([`task_withdraw`]) and `l7r-gate task-unstart` ([`task_unstart`]) are the two ways back out of a task (451
+//! T359): a filed task closed as withdrawn, and a start undone.
 
 pub mod builder_brief;
 pub mod builder_tree;
@@ -16,6 +18,8 @@ mod research_boxes;
 pub mod set_down;
 pub mod task_add;
 pub mod task_start;
+pub mod task_unstart;
+pub mod task_withdraw;
 pub mod tick;
 mod wording;
 
@@ -25,7 +29,7 @@ use std::process::Command;
 use l7r_gate_core::Reply;
 use l7r_shared::py_text::strip;
 
-/// `l7r-gate tick|task-start|task-add|set-down|phase-read|builder-tree|builder-brief <args>` from `cwd`, as the binary dispatches them.
+/// `l7r-gate tick|task-start|task-unstart|task-withdraw|task-add|set-down|phase-read|builder-tree|builder-brief <args>` from `cwd`, as the binary dispatches them.
 #[must_use]
 pub fn cli(verb: &str, args: &[String], cwd: &Path) -> Reply {
     match verb {
@@ -33,6 +37,10 @@ pub fn cli(verb: &str, args: &[String], cwd: &Path) -> Reply {
         "builder-tree" => builder_tree::cli(args, cwd),
         "tick" => tick::cli(args, cwd),
         "task-start" => task_start::cli(args, cwd),
+        "task-unstart" => task_unstart::cli(args, cwd),
+        "task-withdraw" => {
+            task_withdraw::cli(args, cwd, &std::env::var("TASK_WHY").unwrap_or_default())
+        }
         "task-add" => task_add::cli(args, cwd, &std::env::var("TASK_TITLE").unwrap_or_default()),
         "set-down" => set_down::cli(args, cwd),
         _ => phase_sources::cli(args, cwd),

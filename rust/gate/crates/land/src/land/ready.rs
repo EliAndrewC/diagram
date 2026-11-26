@@ -163,8 +163,7 @@ impl Land {
                 .1,
         );
         // the edit lines name each tree's own paths - the clone's, a worktree builder's (451 T254) - so each tree is read
-        let starts: Vec<Value> = std::fs::read_to_string(common.join("task-starts.jsonl"))
-            .unwrap_or_default()
+        let starts: Vec<Value> = l7r_shared::speckit::marks::starts_text(common)
             .lines()
             .filter_map(|l| serde_json::from_str(l).ok())
             .chain(l7r_shared::speckit::marks::all(common))
@@ -187,8 +186,8 @@ impl Land {
 
 /// The tasks `task-starts.jsonl` records started for `feature`.
 fn started_tasks(path: &Path, feature: &str) -> BTreeSet<String> {
-    std::fs::read_to_string(path)
-        .unwrap_or_default()
+    // a start and its `make task-unstart` read as no start (451 T359)
+    l7r_shared::speckit::marks::live_starts(&std::fs::read_to_string(path).unwrap_or_default())
         .lines()
         .filter_map(|l| serde_json::from_str::<Value>(l).ok())
         .filter(|v| v["feature"].as_str() == Some(feature))

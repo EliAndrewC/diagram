@@ -150,6 +150,7 @@ pub(super) fn write_json(dir: &Path, name: &str, value: &Value) -> String {
 
 mod bundle;
 mod mention;
+mod withdrawn;
 
 #[test]
 fn the_record_verbs_resolve_a_feature_and_report() {

@@ -199,8 +199,12 @@ fn unruled(root: &Path, feature: &str) -> Result<Option<String>, String> {
 fn since_start(root: &Path, feature: &str) -> Result<String, String> {
     let gd = git_dir(root);
     let mut last = String::new();
-    for raw in lines_of(&gd.join("task-starts.jsonl"))? {
-        let Some(row) = row_of(&raw)? else {
+    // a start and its `make task-unstart` read as no start (451 T359)
+    let live = l7r_shared::speckit::marks::live_starts(
+        &lines_of(&gd.join("task-starts.jsonl"))?.join("\n"),
+    );
+    for raw in live.lines() {
+        let Some(row) = row_of(raw)? else {
             continue;
         };
         if row.get("feature").is_some_and(|f| f == feature) {

@@ -208,6 +208,20 @@ fn a_landing_names_the_task_last_started() {
     assert_eq!(last["outcome"], "push-exit-0");
     assert!(last["log"].as_str().unwrap().ends_with("/land-tooling.log"));
     assert_eq!(log_cli(&words(&["land-tooling", &there]), &dir).code, 1);
+    // the last start undone (`make task-unstart`, 451 T359): the task last started is the one before it
+    let starts = std::fs::read_to_string(dir.join("task-starts.jsonl")).unwrap();
+    let undo = json!({"unstart": {"feature": "449", "task": "T069"}, "tree": "/t", "utc": "u"});
+    std::fs::write(dir.join("task-starts.jsonl"), format!("{starts}{undo}\n")).unwrap();
+    assert_eq!(
+        log_cli(&words(&["land-tooling", &there, "a", "died"]), &dir).code,
+        0
+    );
+    let text = std::fs::read_to_string(dir.join("land-tooling.jsonl")).unwrap();
+    let last: Value = serde_json::from_str(text.lines().last().unwrap()).unwrap();
+    assert_eq!(
+        (&last["feature"], &last["task"]),
+        (&json!("1"), &json!("T1"))
+    );
     let bare = crate::checks::scratch("logs-land-bare");
     assert_eq!(
         log_cli(

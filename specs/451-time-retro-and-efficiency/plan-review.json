@@ -2280,6 +2280,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T359 (a filed task found a duplicate or no defect had no way out but a full landing, and a task started by mistake no way out but moving its mark by hand: on 2026-11-26 `make land` refused T322, T323, T356 and T358 for their unfilled plan stubs)": {
+   "sha256": "3e91777ce515f52eed3e4c0b4ffab3eaf3ab6df1ba97d647e6ab5e98f26b6404",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T359 Approach (checklist part A)": {
+   "sha256": "e0de8d62065bf5df884928489ad17f717ca5e9d0c552e0b8f0deea43883a233e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -28925,6 +28937,291 @@
      "why": "Crate-scoped checks run in the builder's tree and the full gate runs at the landing. That matches the GM's two tiers of checking (2026-11-26, T308: full rigor deferred to the session clone's gate). It is the procedure for checking the work and does not change what was asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T359 (a filed task found a duplicate or no defect had no way out but a full landing, and a task started by mistake no way out but moving its mark by hand: on 2026-11-26 `make land` refused T322, T323, T356 and T358 for their unfilled plan stubs)",
+    "### T359 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Approach",
+     "summary": "Two commands, make task-withdraw and make task-unstart, and the four filed tasks (T322 T323 T356 T358) withdrawn with the first",
+     "class": "within",
+     "why": "Process tooling filed by the coordinating session from two observations of 2026-11-26. The GM's words name neither command, but nothing in request.md is narrowed by having them. The GM's approval asks for real enforcement, and both commands refuse rather than instruct."
+    },
+    {
+     "id": "T359-D1",
+     "summary": "A withdrawn box is ticked and carries ' Withdrawn YYYY-MM-DD: <why>'. The date is added to the form the task line gave.",
+     "class": "within",
+     "why": "A tooling form. The deviation is from the coordinating session's task line, not from the GM's words."
+    },
+    {
+     "id": "T359-D2",
+     "summary": "Only a stub that is the template byte for byte is removed. A filled section is refused.",
+     "class": "within",
+     "why": "Keeps decided work on the landing path, so it narrows nothing."
+    },
+    {
+     "id": "T359-D3",
+     "summary": "A task with an entry in plan-review.json's tasks is refused",
+     "class": "within",
+     "why": "Keeps reviewed work on the landing path."
+    },
+    {
+     "id": "T359-D4",
+     "summary": "Code carried means a commit in origin/main..HEAD whose subject head names the feature and the task",
+     "class": "within",
+     "why": "A tooling convention for which commits count as carrying the task's code. Narrows nothing the GM asked."
+    },
+    {
+     "id": "T359-D5",
+     "summary": "Two refusals beyond the brief: a box with an open box under it, and the feature's last open boxes",
+     "class": "within",
+     "why": "Added refusals narrow nothing."
+    },
+    {
+     "id": "T359-D6",
+     "summary": "Every refusal is printed together, nothing is written while one stands, the filing lock is held, and the id stays reserved",
+     "class": "within",
+     "why": "Tooling convention."
+    },
+    {
+     "id": "T359-D7",
+     "summary": "A TaskWithdrawn event line through the hooks' own writer",
+     "class": "within",
+     "why": "Records who withdrew the task and why. This is consistent with the GM's ask that the time data be kept."
+    },
+    {
+     "id": "T359-D8",
+     "summary": "The unstart row's shape, with feature and task nested",
+     "class": "within",
+     "why": "Tooling convention."
+    },
+    {
+     "id": "T359-D9a",
+     "summary": "An unstart cancels every earlier start of its feature and task in its tree, so the start log agrees with the tree's mark",
+     "class": "within",
+     "why": "Makes every reader agree with the one mark. It narrows nothing."
+    },
+    {
+     "id": "T359-D9b",
+     "summary": "An unstart followed by a new start resets the task's count of make static runs, and task-unstart takes no WHY",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-007, which carries the GM's approved improvement 2, refuses a third make static in one task since its last landing. FR-012 requires every escape from that refusal to carry a recorded reason of two words or more. Under D9 a session can run static, static, then task-unstart and task-start, and its next static is the first of a fresh count, though no landing came between. That makes task-unstart an escape from FR-007 with no reason recorded. 'The unstart's row in the log is the record of it' is a record, not a reason, and the GM's approval asked for real enforcement, not instructions. Nothing makes the rule impossible to keep, and nothing in the GM's words implies the carve-out. It should read one of two ways: (a) static_runs_hooks counts the task's runs since its last landing whatever unstarts lie between, which is FR-007's own words; or (b) task-unstart takes WHY= of two words or more, and an unstart that resets the count is recorded in the escape log as FR-012 requires. The rest of D9 stands: a task unstarted and never started again owes no closing order."
+    },
+    {
+     "id": "T359-D9c",
+     "summary": "A task worked, then unstarted and never started again, loses its earlier start in the time breakdown",
+     "class": "within",
+     "why": "The command exists for a mistaken start, where the minutes were not that task's work. The unstart row stays in the log. The GM's definition of the breakdown says it 'doesn't have to be 100% exact', since the aim is a broad understanding of where the time goes. The cost is stated in the plan, and the minutes are not silently dropped from the window."
+    },
+    {
+     "id": "T359-D10",
+     "summary": "A bundle is unstarted whole under its first task",
+     "class": "within",
+     "why": "Follows 451 T141's one mark per bundle."
+    },
+    {
+     "id": "T359-D11",
+     "summary": "The legacy one-mark file is unstarted as its own tree's mark, and a phase hold is lifted along with the start",
+     "class": "within",
+     "why": "Tooling convention."
+    },
+    {
+     "id": "T359-D12",
+     "summary": "Another tree's mark is refused, and the refusal names make -C <that tree>",
+     "class": "within",
+     "why": "A refusal that names the compliant command."
+    },
+    {
+     "id": "T359-D13",
+     "summary": "The live_starts filter is used by all sixteen readers, where the brief named one crate",
+     "class": "within",
+     "why": "Wider than the brief, which is the coordinating session's text. Every reader agreeing narrows nothing. The search space is stated: one search for the log's name over rust/, scripts/ and the Makefile."
+    },
+    {
+     "id": "T359-D14",
+     "summary": "T366 is covered here: a withdrawal is refused when a builder holds a pool tree for the task, and the refusal names make builder-tree-release",
+     "class": "within",
+     "why": "An added refusal that names its compliant command."
+    },
+    {
+     "id": "T359-D15a",
+     "summary": "The removal of a withdrawn task's unfilled template stub owes no plan review",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The plan-stage gate exists so that a plan's decisions do not reach a tick without an independent verdict. A byte-for-byte template stub holds no decisions, and its removal decides nothing. Requiring a verdict on it asks for a review of nothing, and exempting it does not weaken what the gate is for."
+    },
+    {
+     "id": "T359-D15b",
+     "summary": "As worded, the exemption reaches any (removed) block whose own task's box carries ' Withdrawn YYYY-MM-DD: ', in tasks.md or tasks-done.md. It is not bounded to a block that was the template, or to a line written by the command.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "One justification is stretched over two unlike things. 'Nothing was decided in it' is true of the template stub (D15a) and false of a filled or reviewed section. The block's own control row shows that a box can be ticked by hand and that this gate is what catches it. Under D15 as worded, a hand-written ' Withdrawn 2026-11-26: x' on a box, with its filled section deleted, passes the tick and the push's plan check with no verdict. D2 and D3 refuse that case only inside make task-withdraw, not at the gate. That is the plan-stage gate's purpose gutted for a case the argument does not reach. It contradicts the GM's 'let's make sure all of the enforcement is real enforcement and not just instructions'. In the exemption, in_scope should owe nothing only for a (removed) block whose earlier text is the template stub, by D2's own test (plan::template::TEMPLATE with the id filled in, with or without the performance checklist). A removed block of any other text still owes its verdict, whatever its box says. A red fixture should be pinned beside the existing test: a Withdrawn-form box whose filled block was removed is still answered for."
+    },
+    {
+     "id": "Found-and-left T369",
+     "summary": "The second-tree overwrite of a task's mark is deferred to T369, which lands before T302",
+     "class": "within",
+     "why": "The deferral states why it is not fixed here, its filed id and its order, as FR-009 asks. Nothing is narrowed."
+    },
+    {
+     "id": "Performance work",
+     "summary": "Not performance work by FR-013's test",
+     "class": "within",
+     "why": "The tooling speeds no engine, check, gate, landing or builder's loop, and measures no time. So FR-013's ordering applies to it as written."
+    }
+   ],
+   "tasks": [
+    "T359"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T359 (a filed task found a duplicate or no defect had no way out but a full landing, and a task started by mistake no way out but moving its mark by hand: on 2026-11-26 `make land` refused T322, T323, T356 and T358 for their unfilled plan stubs)",
+    "### T359 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Approach",
+     "summary": "Two commands, make task-withdraw and make task-unstart, and the four filed tasks (T322 T323 T356 T358) withdrawn with the first. Now built in two halves.",
+     "class": "within",
+     "why": "Process tooling filed by the coordinating session from two observations of 2026-11-26. The GM's words name neither command, and having them narrows nothing in request.md. The GM's approval asks for real enforcement, and both commands refuse rather than instruct. Splitting the build in two halves is the order of the work, not a scope decision."
+    },
+    {
+     "id": "T359-D1",
+     "summary": "A withdrawn box is ticked and carries ' Withdrawn YYYY-MM-DD: <why>'. The date is added to the form the task line gave.",
+     "class": "within",
+     "why": "Unchanged since round 1. A tooling form. It deviates from the coordinating session's task line, not from the GM's words."
+    },
+    {
+     "id": "T359-D2",
+     "summary": "Only a stub that is the template byte for byte is removed, by the one stub test plan::template::stubs that the plan gate also uses. A filled section is refused.",
+     "class": "within",
+     "why": "Round 1 ruled it within. The only change is that without_stub now uses the same stub test as the plan gate (T359-D15). One test serving both places narrows nothing."
+    },
+    {
+     "id": "T359-D3",
+     "summary": "A task with an entry in plan-review.json's tasks is refused",
+     "class": "within",
+     "why": "Unchanged. It keeps reviewed work on the landing path."
+    },
+    {
+     "id": "T359-D4",
+     "summary": "Code carried means a commit in origin/main..HEAD whose subject head names the feature and the task",
+     "class": "within",
+     "why": "Unchanged. A tooling convention."
+    },
+    {
+     "id": "T359-D5",
+     "summary": "Two refusals beyond the brief: a box with an open box under it, and the feature's last open boxes",
+     "class": "within",
+     "why": "Unchanged. Adding refusals narrows nothing."
+    },
+    {
+     "id": "T359-D6",
+     "summary": "Every refusal is printed together, nothing is written while one stands, the filing lock is held, and the id stays reserved",
+     "class": "within",
+     "why": "Unchanged. A tooling convention."
+    },
+    {
+     "id": "T359-D7",
+     "summary": "A TaskWithdrawn event line through the hooks' own writer",
+     "class": "within",
+     "why": "Unchanged. It records who withdrew the task and why."
+    },
+    {
+     "id": "T359-D8",
+     "summary": "The unstart row's shape, with feature and task nested",
+     "class": "within",
+     "why": "Unchanged. A tooling convention."
+    },
+    {
+     "id": "T359-D9a",
+     "summary": "An unstart cancels every earlier start of its feature and task in its tree, so the filtered start log agrees with the tree's mark",
+     "class": "within",
+     "why": "Unchanged in substance. Every filtered reader agrees with the one mark, and that narrows nothing."
+    },
+    {
+     "id": "T359-D9b",
+     "summary": "An unstart followed by a new start resets no count of make static runs: static_runs_hooks reads the raw log for the count and counts the runs since the task's last landing from its first start, whatever unstarts lie between. STATIC_OK=\"<reason>\" stays the one escape.",
+     "class": "within",
+     "why": "Round 1's item is answered. This is round 1's option (a), which is FR-007's own wording ('a third make static in one task since its last landing'): the count no longer restarts at an unstart, so task-unstart is no longer an escape from FR-007 without a recorded reason, and the one escape left is STATIC_OK with its reason (FR-012). Item 1 restates the goal to match. The test an_unstart_and_a_new_start_restart_no_count pins it, and item 9 reports it red first (rust/guard 550 passed, 1 failed, then 551 passed). The test cases are: start, the allowed runs, unstart, new start, next run refused; and a landing between resets the count. This was re-classed within because the narrowing is gone."
+    },
+    {
+     "id": "T359-D9c",
+     "summary": "A task worked, then unstarted and never started again, loses its earlier start in the time breakdown",
+     "class": "within",
+     "why": "Unchanged since round 1. The unstart row stays in the log, and the GM's definition of the breakdown does not ask it to be exact."
+    },
+    {
+     "id": "T359-D9d",
+     "summary": "Newly stated: a task unstarted and not started again 'carries no task, so it has no count and owes no closing order'. The guard's reading of whose task a call is uses the filtered view.",
+     "class": "within",
+     "why": "Weighed for one sequence: start, two runs, unstart, N runs while no task is started, start again. The N runs in the gap are not refused by FR-007. That is FR-007's own scope, which is runs 'in one task'. Leaving the started state by command is not new: D12 cites make set-down, which already clears a tree's mark. Once the task is started again it meets its full count, and the runs before the unstart still count (D9b). Neither the GM's words nor FR-007 ask for a count of runs made while no task is started. So this case opens no route past FR-007 that the no-task state did not already have. Nothing in the bundle shows that the no-task state was unreachable mid-work before T359. If it was, this entry would need to be reopened."
+    },
+    {
+     "id": "T359-D10",
+     "summary": "A bundle is unstarted whole under its first task",
+     "class": "within",
+     "why": "Unchanged."
+    },
+    {
+     "id": "T359-D11",
+     "summary": "The legacy one-mark file is unstarted as its own tree's mark, and a phase hold is lifted along with the start",
+     "class": "within",
+     "why": "Unchanged."
+    },
+    {
+     "id": "T359-D12",
+     "summary": "Another tree's mark is refused, and the refusal names make -C <that tree>",
+     "class": "within",
+     "why": "Unchanged."
+    },
+    {
+     "id": "T359-D13",
+     "summary": "The filter is used by every reader but one (fifteen call sites in seven crates). static_runs_hooks reads the raw log for its count of runs on purpose.",
+     "class": "within",
+     "why": "This was restated from 'all sixteen readers'. The one raw reader is the mechanism that enforces FR-007 (D9b), and the task it counts for is still taken through the filtered filed.rs. The list counts to fifteen, with land/ready.rs's two reads counted separately, across seven crates. The search space is stated in item 7: one search for the log's name over rust/, scripts/ and the Makefile. Each reader has a test in item 9's table."
+    },
+    {
+     "id": "T359-D14",
+     "summary": "T366 is covered here: a withdrawal is refused when a builder holds a pool tree for the task, and the refusal names make builder-tree-release",
+     "class": "within",
+     "why": "Unchanged. An added refusal that names its compliant command."
+    },
+    {
+     "id": "T359-D15a",
+     "summary": "A withdrawn task's removed block owes no plan review only where its earlier text is a block of that task's template stub byte for byte, by the one stub test, with the trailing newlines aside",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is round 1's LEGITIMATE narrowing, now bounded as round 1 required. The plan-stage gate exists so that decisions do not reach a tick without an independent verdict. A block that is the unfilled template holds no decisions. Matching per block, with the trailing newlines aside, still decides nothing, because a filled block of the same section remains owed on its own. Round 1's case (a)-(b) did not depend on whether the stub is compared whole or by its blocks."
+    },
+    {
+     "id": "T359-D15b",
+     "summary": "The exemption is narrowed: the Withdrawn form of a box alone exempts nothing. A Withdrawn-form box whose filled section was deleted is answered for at the tick and at the push. A removed block whose earlier text cannot be read is owed.",
+     "class": "within",
+     "why": "Round 1's item is answered. The exemption now requires both a Withdrawn-form box and earlier text that is the stub byte for byte. That earlier text is read from the kept record or from the plan's history at the recorded digest, the same way removed_blocks reads it. So the hand-written case round 1 described (a box ticked by hand in the Withdrawn form, its filled section deleted) is caught at the gate, not only inside make task-withdraw. Unreadable earlier text is treated as owed, which fails closed. The red fixture round 1 asked for is pinned: a_withdrawn_form_box_whose_filled_block_was_removed_is_still_answered_for. Item 9 reports it red first (rust/gate/crates/plan 195 passed, 1 failed, then 197 passed). The case of a live block under a withdrawn heading that has no other owner stays owed. This entry narrows nothing, so it carries no ruling."
+    },
+    {
+     "id": "Found-and-left T369",
+     "summary": "The second-tree overwrite of a task's mark is deferred to T369, which lands before T302",
+     "class": "within",
+     "why": "Unchanged. It states why it is not fixed here, its filed id and its order, as FR-009 asks."
+    },
+    {
+     "id": "Performance work",
+     "summary": "Not performance work by FR-013's test",
+     "class": "within",
+     "why": "Unchanged. The tooling speeds nothing that FR-013 names and measures no time."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -45624,6 +45921,147 @@
      "summary": "One landing. Crate-scoped builder-checks on rust/guard/shared and rust/guard plus tests/hooks/test-parts.2.sh in the builder's tree, then the full gate at landing. Red-first tests are recorded.",
      "class": "within",
      "why": "Crate-scoped checks run in the builder's tree and the full gate runs at the landing. That matches the GM's two tiers of checking (2026-11-26, T308: full rigor deferred to the session clone's gate). It is the procedure for checking the work and does not change what was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T359": {
+   "section_sha256": "bc03f57bbf670138d747a63e0db0c6a553878bb1b03f1bc844e188f4d0542821",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach",
+     "summary": "Two commands, make task-withdraw and make task-unstart, and the four filed tasks (T322 T323 T356 T358) withdrawn with the first. Now built in two halves.",
+     "class": "within",
+     "why": "Process tooling filed by the coordinating session from two observations of 2026-11-26. The GM's words name neither command, and having them narrows nothing in request.md. The GM's approval asks for real enforcement, and both commands refuse rather than instruct. Splitting the build in two halves is the order of the work, not a scope decision."
+    },
+    {
+     "id": "T359-D1",
+     "summary": "A withdrawn box is ticked and carries ' Withdrawn YYYY-MM-DD: <why>'. The date is added to the form the task line gave.",
+     "class": "within",
+     "why": "Unchanged since round 1. A tooling form. It deviates from the coordinating session's task line, not from the GM's words."
+    },
+    {
+     "id": "T359-D2",
+     "summary": "Only a stub that is the template byte for byte is removed, by the one stub test plan::template::stubs that the plan gate also uses. A filled section is refused.",
+     "class": "within",
+     "why": "Round 1 ruled it within. The only change is that without_stub now uses the same stub test as the plan gate (T359-D15). One test serving both places narrows nothing."
+    },
+    {
+     "id": "T359-D3",
+     "summary": "A task with an entry in plan-review.json's tasks is refused",
+     "class": "within",
+     "why": "Unchanged. It keeps reviewed work on the landing path."
+    },
+    {
+     "id": "T359-D4",
+     "summary": "Code carried means a commit in origin/main..HEAD whose subject head names the feature and the task",
+     "class": "within",
+     "why": "Unchanged. A tooling convention."
+    },
+    {
+     "id": "T359-D5",
+     "summary": "Two refusals beyond the brief: a box with an open box under it, and the feature's last open boxes",
+     "class": "within",
+     "why": "Unchanged. Adding refusals narrows nothing."
+    },
+    {
+     "id": "T359-D6",
+     "summary": "Every refusal is printed together, nothing is written while one stands, the filing lock is held, and the id stays reserved",
+     "class": "within",
+     "why": "Unchanged. A tooling convention."
+    },
+    {
+     "id": "T359-D7",
+     "summary": "A TaskWithdrawn event line through the hooks' own writer",
+     "class": "within",
+     "why": "Unchanged. It records who withdrew the task and why."
+    },
+    {
+     "id": "T359-D8",
+     "summary": "The unstart row's shape, with feature and task nested",
+     "class": "within",
+     "why": "Unchanged. A tooling convention."
+    },
+    {
+     "id": "T359-D9a",
+     "summary": "An unstart cancels every earlier start of its feature and task in its tree, so the filtered start log agrees with the tree's mark",
+     "class": "within",
+     "why": "Unchanged in substance. Every filtered reader agrees with the one mark, and that narrows nothing."
+    },
+    {
+     "id": "T359-D9b",
+     "summary": "An unstart followed by a new start resets no count of make static runs: static_runs_hooks reads the raw log for the count and counts the runs since the task's last landing from its first start, whatever unstarts lie between. STATIC_OK=\"<reason>\" stays the one escape.",
+     "class": "within",
+     "why": "Round 1's item is answered. This is round 1's option (a), which is FR-007's own wording ('a third make static in one task since its last landing'): the count no longer restarts at an unstart, so task-unstart is no longer an escape from FR-007 without a recorded reason, and the one escape left is STATIC_OK with its reason (FR-012). Item 1 restates the goal to match. The test an_unstart_and_a_new_start_restart_no_count pins it, and item 9 reports it red first (rust/guard 550 passed, 1 failed, then 551 passed). The test cases are: start, the allowed runs, unstart, new start, next run refused; and a landing between resets the count. This was re-classed within because the narrowing is gone."
+    },
+    {
+     "id": "T359-D9c",
+     "summary": "A task worked, then unstarted and never started again, loses its earlier start in the time breakdown",
+     "class": "within",
+     "why": "Unchanged since round 1. The unstart row stays in the log, and the GM's definition of the breakdown does not ask it to be exact."
+    },
+    {
+     "id": "T359-D9d",
+     "summary": "Newly stated: a task unstarted and not started again 'carries no task, so it has no count and owes no closing order'. The guard's reading of whose task a call is uses the filtered view.",
+     "class": "within",
+     "why": "Weighed for one sequence: start, two runs, unstart, N runs while no task is started, start again. The N runs in the gap are not refused by FR-007. That is FR-007's own scope, which is runs 'in one task'. Leaving the started state by command is not new: D12 cites make set-down, which already clears a tree's mark. Once the task is started again it meets its full count, and the runs before the unstart still count (D9b). Neither the GM's words nor FR-007 ask for a count of runs made while no task is started. So this case opens no route past FR-007 that the no-task state did not already have. Nothing in the bundle shows that the no-task state was unreachable mid-work before T359. If it was, this entry would need to be reopened."
+    },
+    {
+     "id": "T359-D10",
+     "summary": "A bundle is unstarted whole under its first task",
+     "class": "within",
+     "why": "Unchanged."
+    },
+    {
+     "id": "T359-D11",
+     "summary": "The legacy one-mark file is unstarted as its own tree's mark, and a phase hold is lifted along with the start",
+     "class": "within",
+     "why": "Unchanged."
+    },
+    {
+     "id": "T359-D12",
+     "summary": "Another tree's mark is refused, and the refusal names make -C <that tree>",
+     "class": "within",
+     "why": "Unchanged."
+    },
+    {
+     "id": "T359-D13",
+     "summary": "The filter is used by every reader but one (fifteen call sites in seven crates). static_runs_hooks reads the raw log for its count of runs on purpose.",
+     "class": "within",
+     "why": "This was restated from 'all sixteen readers'. The one raw reader is the mechanism that enforces FR-007 (D9b), and the task it counts for is still taken through the filtered filed.rs. The list counts to fifteen, with land/ready.rs's two reads counted separately, across seven crates. The search space is stated in item 7: one search for the log's name over rust/, scripts/ and the Makefile. Each reader has a test in item 9's table."
+    },
+    {
+     "id": "T359-D14",
+     "summary": "T366 is covered here: a withdrawal is refused when a builder holds a pool tree for the task, and the refusal names make builder-tree-release",
+     "class": "within",
+     "why": "Unchanged. An added refusal that names its compliant command."
+    },
+    {
+     "id": "T359-D15a",
+     "summary": "A withdrawn task's removed block owes no plan review only where its earlier text is a block of that task's template stub byte for byte, by the one stub test, with the trailing newlines aside",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is round 1's LEGITIMATE narrowing, now bounded as round 1 required. The plan-stage gate exists so that decisions do not reach a tick without an independent verdict. A block that is the unfilled template holds no decisions. Matching per block, with the trailing newlines aside, still decides nothing, because a filled block of the same section remains owed on its own. Round 1's case (a)-(b) did not depend on whether the stub is compared whole or by its blocks."
+    },
+    {
+     "id": "T359-D15b",
+     "summary": "The exemption is narrowed: the Withdrawn form of a box alone exempts nothing. A Withdrawn-form box whose filled section was deleted is answered for at the tick and at the push. A removed block whose earlier text cannot be read is owed.",
+     "class": "within",
+     "why": "Round 1's item is answered. The exemption now requires both a Withdrawn-form box and earlier text that is the stub byte for byte. That earlier text is read from the kept record or from the plan's history at the recorded digest, the same way removed_blocks reads it. So the hand-written case round 1 described (a box ticked by hand in the Withdrawn form, its filled section deleted) is caught at the gate, not only inside make task-withdraw. Unreadable earlier text is treated as owed, which fails closed. The red fixture round 1 asked for is pinned: a_withdrawn_form_box_whose_filled_block_was_removed_is_still_answered_for. Item 9 reports it red first (rust/gate/crates/plan 195 passed, 1 failed, then 197 passed). The case of a live block under a withdrawn heading that has no other owner stays owed. This entry narrows nothing, so it carries no ruling."
+    },
+    {
+     "id": "Found-and-left T369",
+     "summary": "The second-tree overwrite of a task's mark is deferred to T369, which lands before T302",
+     "class": "within",
+     "why": "Unchanged. It states why it is not fixed here, its filed id and its order, as FR-009 asks."
+    },
+    {
+     "id": "Performance work",
+     "summary": "Not performance work by FR-013's test",
+     "class": "within",
+     "why": "Unchanged. The tooling speeds nothing that FR-013 names and measures no time."
     }
    ],
    "verdict": "CLEAR"

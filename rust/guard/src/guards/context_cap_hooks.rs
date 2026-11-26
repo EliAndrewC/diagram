@@ -410,8 +410,8 @@ fn task_landed(
         .or_else(|| first_timestamp(own));
     let in_force = || {
         let d = dispatch.as_deref()?;
-        std::fs::read_to_string(common_git_dir(root).join("task-starts.jsonl"))
-            .unwrap_or_default()
+        // a start and its `make task-unstart` read as no start (451 T359)
+        crate::shared::speckit::marks::starts_text(&common_git_dir(root))
             .lines()
             .filter_map(|l| serde_json::from_str::<Value>(l.trim()).ok())
             .filter(|e| {
