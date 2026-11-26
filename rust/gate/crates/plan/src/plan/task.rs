@@ -108,7 +108,7 @@ pub(super) fn task_refusal(root: &Path, feature: &str, task: &str) -> String {
     {
         whys.push(format!("its plan section carries no current CLEAR verdict - run `make decide F={number} T={task}` and dispatch the MODE 4 review it prints yourself, then fix what it finds"));
     }
-    let deferrals: Vec<_> = lint::decide_findings(&dir, &section)
+    let deferrals: Vec<_> = lint::decide_findings(&dir, &section, &[])
         .into_iter()
         .filter(lint::Finding::deferral)
         .collect();

@@ -123,6 +123,17 @@ run "make decide F=451 T=T06"
 printf '{"t":"2026-11-20T10:02:00.000Z","ev":"PreToolUse","tool":"Bash","id":"c2","sid":"t","make":"closing-checks"}\n{"t":"2026-11-20T10:02:00.000Z","ev":"PostToolUse","tool":"Bash","id":"c2","sid":"t","make":"closing-checks","bg":"b2"}\n' >> "$LOG"
 run "make decide F=451 T=T06"
 [ "$RC" -eq 0 ] && [ -z "$OUT" ] && ok "...silent once closing-checks has started since" || no "a notice after closing-checks started" "(rc=$RC: $OUT)"
+fresh  # feature 451 T308: a builder (a caller with an agent_id) is told the first tier's run, and its start silences the notice
+runby() {  # runby <command>: the same backgrounded call made by the builder a1
+  OUT=$(jq -nc '{"hook_event_name":"PreToolUse","session_id":"t","agent_id":"a1","tool_name":"Bash","tool_use_id":"toolu_now","cwd":$ARGS.positional[1],"tool_input":{"command":$ARGS.positional[0],"run_in_background":true}}' --args -- "$1" "$C" \
+        | "$HOOK" pretool 2>&1); RC=$?
+}
+printf '{"t":"2026-11-20T10:01:00.000Z","ev":"PostToolUse","tool":"Edit","id":"e","sid":"t","by":"a1","path":"%s/rust/guard/src/x.rs"}\n' "$C" >> "$LOG"
+runby "make decide F=451 T=T06"
+[ "$RC" -eq 0 ] && seen OUT -q 'additionalContext' && seen OUT -q 'make builder-checks CRATE=' && ok "a builder's decide after its code edit: told the first tier's run" || no "no first-tier order notice" "(rc=$RC: $OUT)"
+printf '{"t":"2026-11-20T10:02:00.000Z","ev":"PreToolUse","tool":"Bash","id":"c3","sid":"t","by":"a1","make":"builder-checks"}\n{"t":"2026-11-20T10:02:00.000Z","ev":"PostToolUse","tool":"Bash","id":"c3","sid":"t","by":"a1","make":"builder-checks","bg":"b3"}\n' >> "$LOG"
+runby "make decide F=451 T=T06"
+[ "$RC" -eq 0 ] && [ -z "$OUT" ] && ok "...silent once its builder-checks has started since" || no "a notice after builder-checks started" "(rc=$RC: $OUT)"
 fresh  # feature 451 T64: a code edit its task's landing went out after is landed, never told again
 printf '{"t":"2026-11-20T15:48:51.173Z","ev":"PostToolUse","tool":"Edit","id":"e","sid":"t","path":"%s/Makefile","task":"T12"}\n' "$C" >> "$LOG"
 landing 2026-11-20T15:55:22.200Z false 0 '["T12"]'

@@ -213,6 +213,7 @@ key	verdict	chars	guard	kind	by	over	head
 974f9a8422813f72	BASELINE	598	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `source-applicability` dispatch points the agent at files IN the repository.
 97b5f076ac22fe50	BASELINE	820	agent-prefix-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: N characters of this prompt repeat an earlier `modal-form` dispatch's, from
 98a1c8880e11bdbf	PASS	890	agent-model-hooks	refuse	ac1df8d661090ad85		BLOCKED: this `Explore` agent names `opus`, which would not follow the session's
+98e73f0f6180bcbd	PASS	407	static-runs-hooks	notice	aa86dee860377ba8a		TN order: your last code edit not landed (<path>, N-N-NTN:N:N.NZ) has no
 99e961bdba354607	BASELINE	193	clone-sync-hooks	notice	unreviewed - stood before 451 T170		clone-sync: <path> has a make run going (a gate or a roll)
 9b88f0df15ae7ca1	BASELINE	577	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (no-poll): a periodic report kept as a backgrounded watcher loses its
 9bf843d0b4680c84	BASELINE	798	claims-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: the research claims sheet is not opened by hand (Edit). Ask

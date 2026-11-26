@@ -67,13 +67,15 @@ fn a_decide_after_a_code_edit_with_no_closing_checks_started_since_is_told_the_o
     )];
     assert!(matches!(decide_said(&lines, "a1"), Some(Told::Decide(_))));
     let text = said_text(decide_said(&lines, "a1"));
+    for want in ["run_in_background", "rust/guard/src/x.rs", "make decide"] {
+        assert!(text.contains(want), "{want} in {text}");
+    }
+    // a builder is told the first tier's run beside it (451 T308): its tree runs `make builder-checks`, the full gate once at the landing
     for want in [
-        // the caller's own closing run (451 T86): a bare `make closing-checks` judges the whole clone, another task's red counted
-        "start `make closing-checks T=T55 F=451` now",
-        "run_in_background",
-        "rust/guard/src/x.rs",
-        "make decide",
-        "make quick",
+        "has no check run started after it",
+        "T55 order: your last code edit not landed",
+        "under FIRST TIER (your brief says so) `make builder-checks CRATE=\"<the crates you changed>\"`",
+        "otherwise `make closing-checks T=T55 F=451`",
     ] {
         assert!(text.contains(want), "{want} in {text}");
     }
@@ -84,6 +86,51 @@ fn a_decide_after_a_code_edit_with_no_closing_checks_started_since_is_told_the_o
     ];
     assert!(matches!(decide_said(&main, ""), Some(Told::Decide(_))));
     assert!(decide_said(&main, "a1").is_none());
+    // the main session builds under no tier: it is told the closing run alone
+    let text = said_text(decide_said(&main, ""));
+    assert!(
+        text.contains("has no `make closing-checks` started after it"),
+        "{text}"
+    );
+    // the caller's own closing run (451 T86): a bare `make closing-checks` judges the whole clone, another task's red counted
+    assert!(
+        text.contains("start `make closing-checks T=T55 F=451` now"),
+        "{text}"
+    );
+    assert!(text.contains("make quick"), "{text}");
+    assert!(!text.contains("builder-checks"), "{text}");
+}
+
+/// A builder's `make builder-checks` started since its last code edit is the first tier's check run (451 T308): the notice is silent,
+/// where it told a first-tier builder at every `make decide` to start the closing checks its brief forbids. The main session's is not.
+#[test]
+fn a_builder_checks_run_started_since_a_builders_last_code_edit_silences_it() {
+    let mut lines = vec![edit(
+        "2026-11-26T10:00:00.000Z",
+        "a1",
+        "/c/rust/guard/src/x.rs",
+    )];
+    lines.extend(bash(
+        "2026-11-26T10:01:00.000Z",
+        "a1",
+        "k1",
+        "builder-checks",
+        true,
+    ));
+    assert!(decide_said(&lines, "a1").is_none());
+    lines.push(edit("2026-11-26T10:02:00.000Z", "a1", "/c/Makefile"));
+    assert!(decide_said(&lines, "a1").is_some());
+    let mut main = vec![
+        json!({"t": "2026-11-26T10:00:00.000Z", "ev": "PostToolUse", "tool": "Write", "id": "w", "sid": "s", "path": "/c/Makefile"}),
+    ];
+    main.extend(bash(
+        "2026-11-26T10:01:00.000Z",
+        "",
+        "k2",
+        "builder-checks",
+        true,
+    ));
+    assert!(decide_said(&main, "").is_some());
 }
 
 #[test]

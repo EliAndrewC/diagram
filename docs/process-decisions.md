@@ -289,6 +289,37 @@ implementation begins") and needs his explicit word and a measurement of first s
 of BLOCKED rounds that reverse built work passing about one in five - then the wait is cheaper than the rework and the old
 order comes back.
 
+### A plan review's later rounds: what a script can see is refused at decide; the verdict stays on the whole section (decided 2026-11-26)
+
+**Question.** Under two tiers nothing runs beside a plan review round, and more than half of the tasks took two or more. What is
+each later round owed for, which causes can `make decide` refuse before a review is dispatched, and can a verdict be kept across a
+section edit that changes no decision (a digest over the decisions rather than the section)?
+
+**Decided** (feature 451 T308's plan-review part; the builder's, on the measurement, the plan review ruling on it). Built: decide
+refuses the GM's words quoted on the task's own line of tasks.md that request.md does not hold, and two figure forms the lint did
+not read (a `k`/`M`-suffixed count, "N-odd <unit>"); it says, with the dispatch, which later edits void the verdict - any edit of
+a reviewed section not yet committed, a typo-scale one kept only once it is (proved by a test; the tolerance for an uncommitted
+section is filed as 451 T337); the T55 order notice names `make builder-checks` to a builder. DECLINED: the digest over decisions, and "N of M" read as a count.
+
+**Reasoning.** Of 56 later rounds (169 minutes), 26 were a real objection (78.6 minutes), the review doing its job; 16 followed an
+edit after a CLEAR (31.5); 8 a NOT-REVIEWABLE return (40.6, and 20.6 more in the unreviewable rounds themselves); 4 an unfiled
+found-and-left id (11.0; 8 rounds, 23.0 minutes, counting every round with that root, closed since by 451 T289); 2 a section edited while it was reviewed
+(7.4). The mechanical share is the NOT-REVIEWABLE one: today's decide refused none of those sections. The digest over decisions
+was declined because none of the 132 reviewed sections marks a decision in a form a script can read (no `**D<n> - ` line, no
+Decisions block), so a kept verdict could cover a changed decision - the one thing the plan gate promises cannot happen - and
+because it would have saved at most 5 rounds, 6.1 minutes (the touch-ups and the filed ids; 9 of the 16 were real changes). "N of
+M" was declined on its replay: 47 unlabeled sentences in 26 of 124 reviewed sections, of which the reviews objected to 1. What
+would reopen the digest: sections that mark their decisions, so a test can show a changed decision line voids the verdict.
+
+The task-line refusal, replayed as built over the 77 tasks' first-round sections, refuses 11: 6 whose first review said his
+words were missing, 3 whose words stood uncommitted in the builder's request.md (the replay's artifact) and 2 false refusals,
+each cured by correcting the task line - accepted against a round of minutes for each of the 6.
+
+**How it was measured.** 2026-11-26, from the coordinating session's `spec-fidelity` subagent transcripts for feature 451,
+2026-11-24 to 26 (135 rounds over 79 units), each later round classed by hand from the round before it; each candidate rule replayed
+over the sections those reviews read. The record, its scripts and every round's row: `dev/measurements/2026-11-26/plan-review-rounds/`
+(`t308-results.md`).
+
 ### The builders' context cap stays at 300k, builders stay, and briefs are sized (decided 2026-11-25)
 
 **Question.** Builders kept hitting the 300k context cap and handing off, each handoff a fresh builder's re-read (the talk's

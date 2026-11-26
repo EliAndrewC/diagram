@@ -466,7 +466,7 @@ fn a_finding_is_placed_by_its_plan_line() {
     let told = super::decide_refusal(
         plan,
         joined,
-        &super::decide_findings(&dir, joined),
+        &super::decide_findings(&dir, joined, &[]),
         Some("the approach gate's words".to_owned()),
     );
     assert!(told.starts_with("3 findings"), "{told}");
@@ -479,7 +479,7 @@ fn a_finding_is_placed_by_its_plan_line() {
     let told = super::decide_refusal(
         plan,
         &sections["T02"],
-        &super::decide_findings(&dir, &sections["T02"]),
+        &super::decide_findings(&dir, &sections["T02"], &[]),
         None,
     );
     assert!(told.contains("plan.md:9: It takes 9 s."), "{told}");
@@ -600,5 +600,100 @@ fn a_count_spelled_as_a_word_needs_a_label() {
         "Fivefold the captions.\n",
     ] {
         assert_eq!(first(unlabeled_count(fine)), "", "{fine}");
+    }
+}
+
+/// The GM's words on a task's own line of tasks.md are in request.md before a review is asked (feature 451 T308): the T285 form, a
+/// single-quoted span after "the GM", an apostrophe inside it, and each way a span is not his or is too short to be a request.
+#[test]
+fn the_gms_words_on_a_task_line_are_in_the_request_or_refused() {
+    let dir = scratch("t308-task-line");
+    let words = "we should make it so that whatever tooling we use doesn't leave room for this kind of mistake";
+    let line = format!("- [ ] T285 builder worktrees (the GM, 2026-11-26: '{words}'; he calls a term 'other' and said \"yes do that\"): the pool, which keeps every tree it hands out warm between one builder and the next and names them, 'never a workspace for anything here'.\n- [x] T28 done (the GM: 'this one was asked for and is not in it')\n- [ ] T2850 another (the GM: 'a different task and its own words')\n");
+    std::fs::write(dir.join("tasks.md"), &line).unwrap();
+    std::fs::write(dir.join("request.md"), "# the request\n").unwrap();
+    let section = "### T285 (the pool)\n\nIt holds trees.\n";
+    let t285 = ["T285".to_owned()];
+    let told = super::decide_refusal(
+        section,
+        section,
+        &super::decide_findings(&dir, section, &t285),
+        None,
+    );
+    holds(
+        &told,
+        &[
+            "1 finding ",
+            "the task's own line of tasks.md quotes the GM with words request.md does not hold",
+            "NOT-REVIEWABLE",
+            "(<feature number> T<n>)",
+            "a quoted span of 4 words or more",
+            "within 80 characters",
+            &format!("plan.md:1: T285's line of tasks.md: '{words}'"),
+        ],
+    );
+    // a term in quotes, a short reply, a quote past the reach and another task's line are not read as T285's request
+    for not_his in [
+        "other",
+        "yes do that",
+        "never a workspace",
+        "a different task",
+    ] {
+        assert!(!told.contains(&format!("'{not_his}")), "{not_his}: {told}");
+    }
+    // his words in the request, an ellipsis where the line cuts them, case and punctuation aside: nothing
+    std::fs::write(
+        dir.join("request.md"),
+        format!(
+            "## 2026-11-26: builder worktrees (451 T285)\n\n> {}\n",
+            words.to_uppercase().replace("TOOLING", "tooling,")
+        ),
+    )
+    .unwrap();
+    assert_eq!(super::decide_findings(&dir, section, &t285), []);
+    // a ticked box's line is read as an open one's, a double-quoted span as a single-quoted one, a quote said twice once, and a
+    // quote never closed is none; a task with no line owes nothing
+    std::fs::write(dir.join("tasks.md"), "- [x] T28 done (the GM: 'this one was asked for and is not in it'; the GM again: 'this one was asked for and is not in it', and the GM said \"these words are missing from it too\"; the GM: 'an open quote that never ends\n").unwrap();
+    let both = super::task_line::missing(&dir, &["T28".to_owned(), "T99".to_owned()]);
+    assert_eq!(
+        both,
+        [
+            (
+                "T28".to_owned(),
+                "this one was asked for and is not in it".to_owned()
+            ),
+            (
+                "T28".to_owned(),
+                "these words are missing from it too".to_owned()
+            ),
+        ]
+    );
+}
+
+/// A count with a thousands suffix and a rounded figure with a unit are figures (feature 451 T308): the two sentences that passed the
+/// lint and each drew a NOT-REVIEWABLE plan review, T235's and T259's.
+#[test]
+fn a_suffixed_count_and_a_rounded_unit_figure_need_a_label() {
+    let t235 = "12. **Before any fix.** The finding: the hook refused turns that asked the GM nothing, about 70k tokens and a turn each.\n";
+    let found = first(unlabeled_count(t235));
+    assert!(found.contains("about 70k tokens"), "{found}");
+    let t259 = "- T259-D8: a missing entry is refused before the gate's 20-odd minutes, not after them at the push.\n";
+    let found = first(unlabeled_unit_figure(t259));
+    assert!(found.contains("20-odd minutes"), "{found}");
+    for fine in [
+        "About 70k tokens a turn (observed 2026-11-25, method: the transcript's usage lines).\n",
+        "The 70k-token turn.\n",
+        // a rule's threshold stays a limit, not a measurement, with the suffix as without it
+        "A builder past 300k tokens hands off.\n",
+        "No brief of over 1.5M tokens.\n",
+        "No file over 1,000 lines.\n",
+    ] {
+        assert_eq!(first(unlabeled_count(fine)), "", "{fine}");
+    }
+    for fine in [
+        "The gate's 20-odd minutes (measured 2026-11-25 (`make where-time`)).\n",
+        "An odd 20 of them.\n",
+    ] {
+        assert_eq!(first(unlabeled_unit_figure(fine)), "", "{fine}");
     }
 }

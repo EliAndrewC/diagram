@@ -246,7 +246,7 @@ fn decide(
         .to_owned();
     // every finding of the lint and the approach gate's refusal in one report (feature 451 T25), where the first stopped the run;
     // the deferral's form taken for a reason, recorded so `make plan-delta` takes it too (feature 451 T17, D15)
-    let mut found = lint::decide_findings(&dir, &section);
+    let mut found = lint::decide_findings(&dir, &section, &members);
     let taken = match defer::taken(env, "decide") {
         Err(thin) => return fail(thin, 2),
         Ok(taken) => taken,
@@ -282,10 +282,26 @@ fn decide(
         bundle::task_prompt(&dir, out_root, &lead)
     };
     match prompt {
-        Ok(text) => reply(text + "\n", triage_hint(&top, claims), 0),
+        Ok(text) => {
+            let kept = if wording_only(&section) { "" } else { KEPT };
+            reply(
+                text + "\n",
+                format!("{}{kept}", triage_hint(&top, claims)),
+                0,
+            )
+        }
         Err(why) => fail(why + "\n", 1),
     }
 }
+
+/// What `make decide` says of the verdict it asks for (feature 451 T308): which later edits void it. WHY: the verdict is recorded
+/// against the section's digest and kept across a typo alone ([`sections::typo_only`], `status::task_current`) only where git holds
+/// the reviewed text (`History::section`; `record_task` keeps none - pinned by
+/// `status::tests::a_task_verdict_survives_a_typo_only_once_its_reviewed_section_is_committed`), which no builder was
+/// told - of feature 451's 56 later plan review rounds from 2026-11-24 to 26, 16 were owed for a section edited after its CLEAR and 2
+/// for one edited while its review ran, and 8 of the 135 rounds had their record refused for that (observed 2026-11-26, method:
+/// `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts).
+const KEPT: &str = "decide: the verdict will stand for THIS text of the section. Until the reviewed section is COMMITTED, ANY edit of it VOIDS the verdict and owes another round - a comma or a re-wrap too; only an edit outside the section is kept. (Once committed, kept across: whitespace, re-wrapping, case, punctuation, up to 3 words respelled, none holding a digit.) An edit while the review runs gets its record refused. So write it all first - each figure and its label, item 9's result, each `Filed as T<n>` - dispatch once, and leave the section alone.\n";
 
 /// The tasks `T=` names, split at commas and spaces, each once (451 T141; `make land`'s form, 451 T18).
 fn bundle_members(words: &str) -> Vec<String> {

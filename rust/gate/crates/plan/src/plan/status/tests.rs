@@ -536,3 +536,35 @@ fn a_typo_since_an_accept_is_forgiven_before_the_accepted_text_is_committed() {
         Some(&history)
     ));
 }
+
+#[test]
+fn a_task_verdict_survives_a_typo_only_once_its_reviewed_section_is_committed() {
+    // PINS TODAY'S BEHAVIOR, which decide's notice states (feature 451 T308): `record_task` keeps the section's digest and no text, and
+    // `History::section` reads plan.md's committed versions only, so a typo fixed in a section reviewed and not yet committed - a
+    // builder's tree, always - has no earlier text to be a typo from and voids the verdict. The tolerance that would flip the first
+    // assertion is filed as its own task.
+    let plan = "# plan\n\n## T17 - x\n\n### T17 Decisions\n\n**D1** the rule of teh 3 ways.\n";
+    let dir = feature(Some(plan), None);
+    let root = dir.parent().unwrap().parent().unwrap().to_owned();
+    git(&root, &["init", "-q", "-b", "main"]);
+    let sha = digest(task_sections(plan)["T17"].as_bytes());
+    super::super::record::record_task(
+        &dir,
+        "T17",
+        &json!({"section_sha256": sha, "decisions": [within()]}),
+        "spec-fidelity",
+        None,
+    )
+    .unwrap();
+    let plan_path = dir.join("plan.md");
+    let (typo, digit) = (plan.replace("teh", "the"), plan.replace("3 ways", "4 ways"));
+    let current = |text: &str| {
+        let history = History::new(&plan_path, "HEAD");
+        task_current(&read_review(&dir), text, "T17", Some(&history))
+    };
+    assert!(current(plan));
+    assert!(!current(&typo) && !current(&digit));
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "the reviewed section"]);
+    assert!(current(&typo) && !current(&digit));
+}

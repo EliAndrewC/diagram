@@ -3399,31 +3399,57 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T308 (<why: the finding or measurement that files it>)
+### T308 (the plan review's later rounds, one part of the task: of feature 451's 135 plan review rounds from 2026-11-24 to 26, 56 were not the first for their task, 169 minutes of the 373 (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: this section is ONE PART of T308, its ALSO on the plan review's rounds; the task is not ticked from this landing.
+  - **T308's remainder, not built here and still open on the task's box**: the two tiers built into the tooling (the builder's brief block of `scripts/container/builder-brief.md`, whose STOP POINT still names `make closing-checks`; the batch gate; the trial's measurement against round one) and the changed crate's coverage run tried beside the review.
+  - **The measurement, whole before any rule.** Each later round was classed from the round before it - its NOT LEGITIMATE rulings or its reply, and the section's diff between the two rounds. The record, with every round's row, is `dev/measurements/2026-11-26/plan-review-rounds/t308-results.md`.
+
+    | class | what the round was owed for | rounds | minutes |
+    |---|---|---|---|
+    | (a) | a found-and-left item with no filed task id | 4 | 11.0 |
+    | (b) | NOT-REVIEWABLE: an unlabeled figure, or the GM's words missing from request.md | 8 | 40.6 |
+    | (c) | the section edited after its CLEAR | 16 | 31.5 |
+    | (d) | a real objection to a decision | 26 | 78.6 |
+    | (e) | the round before unrecorded: the section edited while it was reviewed | 2 | 7.4 |
+
+    The table's label: observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts.
+  - **What the classes hold.** In (b) the GM's words were missing in 6 rounds and a figure alone was unlabeled in 2, and the unreviewable rounds before them took another 20.6 minutes (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts). In (c) a real change accounts for 9 rounds, the filed ids written in for 2, a touch-up that changed no decision for 3, a caveat the review asked for for 1 and results restated for 1 (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts). An id nobody had filed is the root of 8 rounds counted every way: the 4 of (a), 2 of (d) where it blocked beside a real objection, and the 2 of (c) (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts). T285's fifth round was first classed (d) and is (a): the round before it blocked on one item left with no filed id, and its cure was the filing; the table, the record and `scripts/container/builder-brief.md`'s count moved with it.
+  - **What today's decide already refuses: none of them.** Replayed, HEAD's `make decide` passes the section before each of the 8 (b) rounds, and refuses 16 of 124 sections on the deferral form alone, an artifact of the scratch tree's tasks.md or a section dispatched under `DEFER_FORM_OK` (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-replay.py`, HEAD's `plan decide` over each section in a scratch tree).
+  - **T308-D1, built: the GM's words on the task's own line are in request.md, or decide refuses.** A plan review reads request.md and never tasks.md, so words relayed onto the task line and nowhere else come back NOT-REVIEWABLE. `lint/task_line.rs` reads each quoted span that follows "the GM" on the box line of each task `make decide` names, in single or double quotes, and refuses one that request.md does not hold, naming the heading form to append it under. Its two constants are GUESS knobs: a span shorter than `MIN_WORDS` = 4 is a term in quotes, and a single quote opens within `REACH` = 80 characters. It catches 3 of the 6 rounds (T243, T245, T285); the other 3 cited him by reference, which no script follows (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts). Replayed as built over the first-round sections of the 77 tasks reviewed, against request.md as committed before each task's first round, it refuses 11: 6 whose first review itself said his words were missing (those three, T246, T298 and T316), 3 whose words stood uncommitted in the builder's own request.md, which the replay could not see and a builder's `make decide` would have, and 2 false refusals, T241 and T235, where the line quotes words request.md does not hold and the review raised nothing about them (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-d1replay.py`, `l7r-gate plan decide` over each section in a scratch tree, read beside each round-1 reply). The 2 are accepted: the refusal's second remedy, correcting the task line, cures each in one edit, against a round of minutes for each of the 6. It is judged at `make decide` only: `make plan-delta` reads blocks, and two blocks of one task would report it twice.
+  - **T308-D2, built: two figure forms the lint did not read.** A count's numeral takes a `k`, `K` or `M` suffix (T235's `about 70k tokens`) and a rounded figure with a unit is a figure (T259's `20-odd minutes`). A rule's threshold reads the same numeral, so `past 300k tokens` stays the limit it was and not a count. Each flags its one sentence and no other in the 124 reviewed sections (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-figures.py` over the reviewed sections).
+  - **T308-D3, built: decide says which later edits void the verdict.** On a section owed a review, `make decide` ends with the rule as the code has it: until the reviewed section is committed, any edit of it voids the verdict and owes another round, an edit outside the section alone being kept; once it is committed the verdict is kept across whitespace, re-wrapping, case, punctuation and a typo-scale respelling (`sections::typo_only`, unchanged); and an edit while the review runs gets its record refused. It refuses nothing. The first half is what a builder meets, since a builder's tree never commits: `record_task` keeps the section's digest and no text, and the earlier text a typo is told from is read from plan.md's committed versions only, which `status::tests::a_task_verdict_survives_a_typo_only_once_its_reviewed_section_is_committed` pins as today's behavior. The notice first said the typo-scale edits were kept, which that test showed false for an uncommitted section; the notice was made true and the tolerance left to its own task (Found and left, below). Of the 135 rounds 8 had their record refused for an edit while the review ran (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts).
+  - **T308-D4, NOT built: a digest over the decisions rather than the section.** None of the 132 task sections reviewed holds a `**D<n> - ` line or a Decisions block, so there is no machine-readable decision to take a digest over (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts). The census looked for those two forms only: a section that labels its decisions another way, as this one does (`**T308-D<n>, built:`), has no line it counts, and no two sections share such a form. Of the 132 sections read, the 124 the replay could rebuild at their reviewed digest are the ones T308-D2 and T308-D5 were replayed over. At most 5 of the 16 (c) rounds changed no decision, 6.1 minutes (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts). A rule that kept a verdict across a prose edit could keep it across a decision, which is the promise the plan gate makes; the test asked for (a changed decision line voids the verdict) cannot be written where no line is a decision line. What would reopen it: sections that mark their decisions.
+  - **T308-D5, NOT built: "N of M" read as a count.** It flags 47 unlabeled sentences in 26 of the 124 sections, and the reviews objected to 1 of them (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-figures.py` over the reviewed sections). The other unlabeled figures the reviews named ("589 s" beside a GUESS in its sentence, "load median 42", "six more profiles") are judgment, not a pattern.
+  - **T308-D6, built: the T55 order notice names the first tier to a builder.** `static_runs_hooks/order.rs` told a first-tier builder at every `make decide` to start `make closing-checks`, which its brief forbids. A caller with an `agent_id` is now told `make builder-checks CRATE="<the crates you changed>"` first and the closing run as the other tier's, and a `builder-checks` it started since its last code edit silences the notice as a `closing-checks` does. The main session, which builds under no tier, is told what it was. The notice stays a notice. Its wording is the one `message-check` asked for (two feature references cut), and the hook suite now renders it, which it did not: with no suite case `make guard-messages` could not see the new wording to owe it a review.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the task line's GM words (T308-D1) | `lint::tests::the_gms_words_on_a_task_line_are_in_the_request_or_refused`, `tests::the_decide_commands_and_the_guard_that_waits_for_them` | n/a: tooling | none | n/a |
+| the two figure forms and the threshold's numeral (T308-D2) | `lint::tests::a_suffixed_count_and_a_rounded_unit_figure_need_a_label` | n/a: tooling | none | n/a |
+| decide's notice (T308-D3) | `tests::the_decide_commands_and_the_guard_that_waits_for_them`, `status::tests::a_task_verdict_survives_a_typo_only_once_its_reviewed_section_is_committed` | n/a: tooling | none | n/a |
+| the order notice (T308-D6) | `order::tests::a_builder_checks_run_started_since_a_builders_last_code_edit_silences_it`, `order::tests::a_decide_after_a_code_edit_with_no_closing_checks_started_since_is_told_the_order`, `tests/hooks/test-static-runs-hooks.sh` case 8 | n/a: tooling | none | n/a |
 
 ### T308 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A plan review is dispatched once: what a script can see is refused at `make decide` in seconds, and a builder knows before it dispatches which edits will cost it another round.
+2. **The constraints.** FR-013 (performance work first); feature 375's decision preflight and its promise that a decision cannot change under a kept verdict; feature 239's figures contract; the two-tier trial of `docs/process-decisions.md`, "Two tiers of checking"; no check refuses good work (constitution XIV), so each new refusal is replayed over the reviewed sections first.
+3. **Where each comes from.** G: the GM's words of 2026-11-26 on T308's line, now in request.md under "2026-11-26: two tiers of checking, and the plan review's later rounds (451 T308)"; the ALSO on the plan review's rounds is the coordinating session's build of them, as that section says. O: the measurement above and `dev/measurements/2026-11-26/split-reproduction/m16-results.md`.
+4. **Do they describe the world here?** Yes: the later rounds were counted and classed from the reviews' own transcripts, and each candidate rule was replayed over the sections those reviews read, as the Approach above states with its labels.
+5. **The order.** After T289 (a builder files what it finds); before T308's remainder and before T302.
+6. **The exits.** Green: the new tests green, red with the rules off, and `make builder-checks` green on both crates. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: each rule was written from the sentences that drew a NOT-REVIEWABLE return and then replayed over every reviewed section; "N of M" failed that replay and was dropped.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, observed 2026-11-26, method: the three decide rules switched off in place and `make rust-test CRATE=rust/gate/crates/plan` run, `190 passed; 3 failed`, the three tests of the table, then the order notice's tests before its change under `make rust-test CRATE=rust/guard`, `538 passed; 2 failed`, its two. Then the threshold's assertions, added before its numeral took the suffix, observed 2026-11-26, method: `make rust-test CRATE=rust/gate/crates/plan`, `193 passed; 1 failed`, the figure test at `A builder past 300k tokens hands off.` After, observed 2026-11-26, method: `make builder-checks CRATE="rust/gate/crates/plan rust/guard"`, green with `194 passed` and `540 passed`, and `bash tests/hooks/test-static-runs-hooks.sh`, `40 passed, 0 failed`. Not seen red: the figure test's second assertion (the rounded figure), since the test stops at its first; the test of the verdict across a typo, which pins what the code does today and was written to learn it; and the hook suite's two new cases, whose rule the crate's own tests were red for.
+10. **Before moving a constant.** n/a: `MIN_WORDS` and `REACH` are new GUESS knobs, no claim's.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes. The checks it changes: `make decide` passed a section whose review then returned NOT-REVIEWABLE, a check passing what its own next step refuses; and the order notice told a builder to start a run its brief forbids.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- Three of the six rounds owed for the GM's words cited him by reference to a record the bundle does not hold, which T308-D1 cannot see; the review still returns NOT-REVIEWABLE there, a round spent. Not fixed here: it needs the bundle to carry the task's line or a rule over references, a design of its own. Filed as T333; lands before T302.
+- A CLEAR does not survive a typo-scale edit of a section not yet committed (T308-D3), so in a builder's tree a comma owes a round where a committed section would keep its verdict. Not fixed here: it changes what `record_task` keeps and what `History::section` reads, the plan gate's own promise, a build with its own red-first test, and this part's brief was to make the notice true by its smallest change. Filed as T337; lands before T302.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the builders' loop faster); not an engine-speed task, so the performance checklist's engine items do not apply.
 
 
 <!-- plan-archive: T309 to T272 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
@@ -4041,6 +4067,86 @@ engine speed, so no checklist.
 |---|---|---|---|---|
 
 ### T334 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T333 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T333 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T337 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T337 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T338 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T338 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

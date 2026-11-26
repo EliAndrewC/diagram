@@ -330,3 +330,20 @@ GM, 2026-11-26, as the coordinating session recorded his words on T316's line in
 line by T316's builder, who did not hear them; the question is all the line holds):
 
 > would it make sense to begin compiling immediately within a work tree builder?
+## 2026-11-26: two tiers of checking, and the plan review's later rounds (451 T308)
+
+The full checks ran twice a task, once in the builder's worktree and once at the landing's gate in the session clone. The GM,
+2026-11-26, as the coordinating session recorded his words on T308's line in `tasks.md` (copied here from that line by the builder
+of T308's plan-review part, who did not hear them; each ellipsis is that line's):
+
+> we are undergoing extremely rigorous checks at the point where a builder in a work tree is bending over backwards to make sure that absolutely nothing wrong can land in the session clone, when in fact the correct place for that level of rigor is checking whether something in the session clone can land back in the main checkout and in the main branch on GitHub ... session clones to be a place where already tested things get staged, but where the full level of rigor gets deferred until the session clone itself has gone through that set of gates
+
+On whether a builder is kept after its report:
+
+> being able to close out builders as they complete has some advantages from a simplicity and design perspective. So I want to be wary of needing to keep them around for any reason ... that reason has to outweigh the costs. Not only the costs of tokens or memory or whatever, but the cost of complexity and edge cases and such
+
+> Is that something that the original builder needs all of that context in order to be able to fix?
+
+The rest of T308's line is the coordinating session's build of them, not his words: the trial's shape, what it is measured against,
+and its ALSO of 2026-11-26 - that under two tiers nothing runs beside a plan review round, so what each second round was owed for
+is measured and the mechanical causes are removed at `make decide` before the review is dispatched.

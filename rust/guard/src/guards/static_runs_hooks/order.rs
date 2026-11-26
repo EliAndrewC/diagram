@@ -17,6 +17,9 @@
 //!   yet landed. Replayed over 451's log to 2026-11-21T08:09Z (211 decides; measured 2026-11-21, `/tmp/claude-T64/replay.py`), the
 //!   rule fires on 127, keyed on the decide's task still 127, keyed on the edit's task 105: the 22 it drops are all the main session's
 //!   on edits landed, and the main session's 3 left are within 4 min of their edit, before its landing.
+//!   A BUILDER (a caller with an `agent_id`) is told both tiers' runs, the first tier's `make builder-checks` first, and a
+//!   `builder-checks` it started since its last code edit is a start as `closing-checks` is (451 T308); the main session, which
+//!   builds under no tier, is told the closing run alone.
 //! - a foreground `make static`, `make hooks-test` or `make closing-checks` (no `run_in_background`) is REFUSED, naming
 //!   `run_in_background` and `make closing-checks`, recorded `blocked`; [`TOKEN`] with a reason escapes, recorded. It reads no log.
 //!
@@ -66,6 +69,10 @@ pub(super) enum Told {
 
 /// The checks a closing run runs together, and the target that runs them.
 const CLOSING: [&str; 3] = ["static", "hooks-test", "closing-checks"];
+/// The first tier's check run, a builder's in its own tree (451 T308, the two-tier trial of 2026-11-26): tests, lint and format of the
+/// crates it changed, the full gate run once at the landing. WHY IT COUNTS AS THE START: a first-tier builder's brief forbids
+/// `make closing-checks`, so the notice told it at every `make decide` to start a run it may not start.
+const FIRST_TIER: &str = "builder-checks";
 
 /// Is `path` code a closing check checks: inside the clone `root`, and not its plan or tasks (`specs/`), a Markdown document or
 /// anything under `.git/` (a handoff file)?
@@ -140,10 +147,12 @@ fn decide(input: &Value, root: &str, lines: &[Value], run: &dyn Fn() -> String) 
             && landed.get(text(l, "task")).is_none_or(|went| went < at)
     })?;
     let after = &lines[at + 1..];
+    // a builder's check run is the first tier's too (451 T308); the main session builds under no tier
+    let builder = !by.is_empty();
     let started = after.iter().any(|l| {
         text(l, "ev") == "PreToolUse"
             && mine(l)
-            && names(l, "closing-checks")
+            && (names(l, "closing-checks") || (builder && names(l, FIRST_TIER)))
             && after
                 .iter()
                 .any(|p| text(p, "ev") == "PostToolUse" && text(p, "id") == text(l, "id"))
@@ -151,14 +160,21 @@ fn decide(input: &Value, root: &str, lines: &[Value], run: &dyn Fn() -> String) 
     (!started).then(|| {
         let path = text(edit, "path");
         let rel = path.strip_prefix(root).unwrap_or(path).trim_start_matches('/');
-        Told::Decide(format!(
-            "T55 order (feature 451): your last code edit not landed ({rel}, {}) has no `make closing-checks` started after it. Neither needs the \
-             other's result: start `{}` now with run_in_background: true (it runs make static, make hooks-test and make \
-             quick at once), and write the plan section and run `make decide` while it runs. When it ends, if you edited the section after \
-             it started, `make quick` (seconds) covers the section.",
-            text(edit, "t"),
-            run()
-        ))
+        let (at, run) = (text(edit, "t"), run());
+        Told::Decide(if builder {
+            format!(
+                "T55 order: your last code edit not landed ({rel}, {at}) has no check run started after it. Neither needs the other's \
+                 result: start one now with run_in_background: true - under FIRST TIER (your brief says so) `make {FIRST_TIER} \
+                 CRATE=\"<the crates you changed>\"`, otherwise `{run}` - and write the plan section and run `make decide` while it runs."
+            )
+        } else {
+            format!(
+                "T55 order (feature 451): your last code edit not landed ({rel}, {at}) has no `make closing-checks` started after it. \
+                 Neither needs the other's result: start `{run}` now with run_in_background: true (it runs make static, make hooks-test \
+                 and make quick at once), and write the plan section and run `make decide` while it runs. When it ends, if you edited \
+                 the section after it started, `make quick` (seconds) covers the section."
+            )
+        })
     })
 }
 

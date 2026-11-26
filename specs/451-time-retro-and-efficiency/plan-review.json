@@ -2112,6 +2112,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T308 (the plan review's later rounds, one part of the task: of feature 451's 135 plan review rounds from 2026-11-24 to 26, 56 were not the first for their task, 169 minutes of the 373 (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts))": {
+   "sha256": "0f45fd16e088bc477808ec6bc3559839eeda96d1d7df5ec0012379a5c21c9ff6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T308 Approach (checklist part A)": {
+   "sha256": "05b01a52300b4cbececc7a96cd094fbcf5fafa1df17301b7098b905db9ac1fff",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -26976,6 +26988,172 @@
      "why": "The audit entry is what the GM's T259 register asks for. The [perf] tag is FR-013's definition (it makes the builders' loop faster). The exits are the project's two tiers."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T308 (the plan review's later rounds, one part of the task: of feature 451's 135 plan review rounds from 2026-11-24 to 26, 56 were not the first for their task, 169 minutes of the 373 (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts))",
+    "### T308 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "part-and-remainder",
+     "summary": "This landing builds only T308's ALSO on the plan review's later rounds; the two tiers built into tooling, the trial's measurement and the coverage run are T308's remainder, still open, and the task is not ticked from this landing.",
+     "class": "within",
+     "why": "Nothing of T308 is dropped: the remainder is named and stays on the task's open box. Splitting a task into parts that land in turn narrows nothing the GM asked for."
+    },
+    {
+     "id": "measurement-first",
+     "summary": "The 56 later rounds are classed (a)-(e) from the reviews' transcripts, and every candidate rule is replayed over the reviewed sections before it is built.",
+     "class": "within",
+     "why": "request.md's T308 section says the ALSO measures 'what each second round was owed for' before removing its mechanical causes. Measurement counts as performance work (FR-013, the GM 2026-11-20). The class sums check: 3+8+16+27+2=56 rounds, 169.1 minutes, (c)'s parts 9+2+3+1+1=16."
+    },
+    {
+     "id": "T308-D1",
+     "summary": "make decide refuses a task whose box line quotes the GM in words that request.md does not hold, naming the heading to append them under.",
+     "class": "within",
+     "why": "This removes a mechanical cause of class (b) at make decide, before dispatch, which is what the ALSO's wording asks for. Enforcement by refusal matches the GM's 2026-11-19 'real enforcement and not just instructions'. The section it refuses would come back NOT-REVIEWABLE anyway, so the refusal does not refuse good work."
+    },
+    {
+     "id": "T308-D1-knobs",
+     "summary": "MIN_WORDS = 4 and REACH = 80 characters are new GUESS knobs.",
+     "class": "within",
+     "why": "They are labeled GUESS and are not claims. They are tuning inside D1's mechanism and do not narrow its scope."
+    },
+    {
+     "id": "T308-D1-decide-only",
+     "summary": "D1 is judged at make decide only, not at make plan-delta.",
+     "class": "within",
+     "why": "The ALSO names make decide as the place the mechanical causes are removed ('removed at make decide before the review is dispatched'). A task section's review is dispatched through decide, so limiting D1 to decide is the request's own scope."
+    },
+    {
+     "id": "T308-D2",
+     "summary": "The figure lint reads a count with a k/K/M suffix and a rounded figure with a unit as figures that need a label.",
+     "class": "within",
+     "why": "It removes the two figure-only (b) causes. Replayed over the 124 reviewed sections, each form flags only its own sentence, so it refuses no good work (constitution XIV)."
+    },
+    {
+     "id": "T308-D3",
+     "summary": "On a section owed a review, make decide says which edits keep the verdict (sections::typo_only, unchanged) and which void it, and that an edit made while the review runs gets its record refused. It refuses nothing.",
+     "class": "within",
+     "why": "It addresses classes (c) and (e). The rules it describes are already enforced mechanically (the digest voids the verdict, and the record is refused). The notice tells the builder about enforcement that already exists rather than standing in for it, so 'real enforcement' holds. An edit after a CLEAR that changes a decision is owed its re-review, so a refusal there would refuse good work."
+    },
+    {
+     "id": "T308-D4",
+     "summary": "NOT built: a digest over the decisions rather than the whole section, which would keep a verdict across prose-only edits.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The ALSO asks to remove the mechanical causes, and (c)'s no-decision rounds (at most 5, 6.1 minutes) are a candidate. Keeping a verdict across every edit outside author-marked decision lines would protect only what the author chose to label. A decision written in prose, or one the author did not see as a decision, could then change under a kept CLEAR. That defeats the plan gate's purpose (feature 243, the GM 2026-09-13: tasks are not ticked while a plan's decisions lack a recorded verdict). The ruling rests on that purpose and not on the section's census: 'none of the 132 sections holds a **D<n> - line' searched one spelling and would not match this section's own '**T308-D<n>, built:' labels. The census also counts 132 sections where D2 and D5 count 124 reviewed sections, a discrepancy that changes no ruling. What would reopen it is named."
+    },
+    {
+     "id": "T308-D5",
+     "summary": "NOT built: reading 'N of M' as a count that needs a label.",
+     "class": "within",
+     "why": "Replayed, it flags 47 unlabelled sentences in 26 sections, and the reviews objected to 1 of them. Building it would refuse good work (constitution XIV). No (b) round is left unaddressed by declining it, because D2 already covers both figure-only rounds. Declining a rule the replay shows is not a mechanical cause narrows nothing that was asked."
+    },
+    {
+     "id": "T308-D6",
+     "summary": "The T55 order notice tells a first-tier builder to run make builder-checks CRATE=... rather than make closing-checks. A builder-checks run since the last code edit silences it. The main session is told what it was told before. The notice stays a notice.",
+     "class": "within",
+     "why": "It serves the GM's T308 words directly: full rigor deferred to the session clone, not a builder in a worktree 'bending over backwards'. It fixes a wrong outcome, a notice that told a builder to start a run its brief forbids. The main-session case is not a carve-out: the main session builds in the session clone, where the GM put the full rigor. Enforcing the tiers is T308's remainder, which is still open, so keeping this a notice leaves no requested enforcement out."
+    },
+    {
+     "id": "order",
+     "summary": "Lands after T289 and before T308's remainder and T302.",
+     "class": "within",
+     "why": "This is [perf] work under FR-013. The order narrows nothing."
+    },
+    {
+     "id": "found-and-left-T333",
+     "summary": "Three of the six GM's-words rounds cited the GM by reference, which D1 cannot see. Not fixed here; filed as T333, which lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a check passing what its next step refuses (the section's own item 12), so it is a defect left in this part. The section's reason, 'a design of its own', is a cost argument and would not carry the ruling by itself. The ruling rests on sequencing, not exclusion: T308 is not ticked from this part, its remainder stays open, and the deferral carries FR-009's form (why, a filed id, an order before T302). The fix is therefore still made before the next step. T333's existence as a filed task is taken on make decide's own FR-009 check; this review cannot see tasks.md."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T308 (the plan review's later rounds, one part of the task: of feature 451's 135 plan review rounds from 2026-11-24 to 26, 56 were not the first for their task, 169 minutes of the 373 (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts))",
+    "### T308 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T308-part",
+     "summary": "This section is one part of T308 (the plan review's later rounds). The two tiers, the batch gate, the trial's measurement and the coverage run stay open on the task's box, which is not ticked from this landing.",
+     "class": "within",
+     "why": "Nothing of T308 is dropped: the remainder is named and stays open on the task. Splitting a task's landings is scheduling. It does not narrow the GM's two-tier words (2026-11-26) or the approved improvement 4, 'Fewer plan re-rounds' (2026-11-19 approval)."
+    },
+    {
+     "id": "T308-measure",
+     "summary": "Every later round is classed (a)-(e) from the round before it, before any rule is written. The record is kept under dev/measurements/2026-11-26/plan-review-rounds/.",
+     "class": "within",
+     "why": "This serves the request directly. The GM asked for actual numbers before process changes ('I'd like to see some actual numbers', 2026-11-19) and wants everything measured (2026-11-22). The class counts sum to the heading's 56 rounds and to its 169 minutes (169.1, rounded). T285's move from (d) to (a) is carried through the table and the 'root of 8' sentence (4+2+2)."
+    },
+    {
+     "id": "T308-D1",
+     "summary": "make decide refuses a task whose box line quotes words after 'the GM' that request.md does not hold, and names the heading to append them under. MIN_WORDS=4 and REACH=80 are GUESS knobs. It runs at make decide only, not at plan-delta.",
+     "class": "within",
+     "why": "It removes a measured mechanical cause of later rounds (class b, the GM's words missing) at decide, before dispatch. That is what improvement 4 and T308's line ask. Running it at decide only is design: the rule is per task line, and plan-delta reads blocks. The rule was replayed over the reviewed sections before it was kept, which is constraint 2."
+    },
+    {
+     "id": "T308-D1-false-refusals",
+     "summary": "Replayed over 77 tasks, the rule refuses 11. 6 are true, 3 are the replay's artifact, and 2 (T241, T235) are refusals that no review raised. The 2 are accepted, cured by one edit each.",
+     "class": "within",
+     "why": "These 2 are not refusals of good work. Each line attributes quoted words to the GM that his recorded request does not hold. The GM's T233 section (2026-11-24) says a ruling attributed to him names his recorded words: 'I never made a ruling that ... That was never at any point something that I said'. Its audit counted 74 of 180 such attributions as the defect. A quote with no record behind it is that defect, whether or not a review happened to raise it. So refusing it enforces the GM's own standing rule, and the cure is to record the words or correct the line. This is not a check refusing correct work under constitution XIV, so it needs no ruling."
+    },
+    {
+     "id": "T308-D2",
+     "summary": "The figure lint reads a k/K/M-suffixed numeral and a rounded figure with a unit ('20-odd minutes') as figures. A threshold's suffixed numeral ('past 300k tokens') stays a limit.",
+     "class": "within",
+     "why": "It removes a measured cause of NOT-REVIEWABLE rounds (class b). The threshold reading keeps the lint from refusing correct work, since a stated limit is not a count. It is not an exception to anything the GM asked. In the replay, each form flags one sentence over the 124 sections."
+    },
+    {
+     "id": "T308-D3",
+     "summary": "decide's notice states the verdict-voiding rule as the code has it. For an uncommitted reviewed section, any edit voids the verdict. For a committed one, typo-scale edits are kept. An edit during review gets its record refused. The notice refuses nothing.",
+     "class": "within",
+     "why": "It serves the section's goal that 'a builder knows before it dispatches which edits will cost it another round'. A test found the earlier wording false, and it was made true. It describes a rule the plan gate already enforces, so there is no enforcement to add (the GM's 'real enforcement and not just instructions', 2026-11-19, is not engaged)."
+    },
+    {
+     "id": "T308-D3-left (T337)",
+     "summary": "A CLEAR is voided by a typo-scale edit of a section not yet committed. That tolerance is not built here. It is filed as T337 and lands before T302.",
+     "class": "within",
+     "why": "This is a found defect: a needless round in a builder's tree. It pre-existed this part and was found by this part's own test, not introduced by it. Nothing the GM asked for leaves the feature. It is filed in this feature in FR-009's own deferral form, with why, the T337 id and 'lands before T302'. The GM endorsed filing found defects and bundling them ('not bother cutting back on new tasks filed', 2026-11-22). The convergence rules (2026-11-23), that only a claim-changing edit triggers review, govern page and pop-up cascades. The plan gate already applies that idea to committed sections, and T337 extends it on schedule. The 'fix all known bugs in each step' rule (2026-11-18) is about port steps, and the order 'before T302' honors it anyway. So this is not a narrowing that needs a ruling."
+    },
+    {
+     "id": "T308-D4",
+     "summary": "NOT built: a digest over decisions rather than the section. None of the 132 sections marks a decision line. At most 5 of the 16 (c) rounds (6.1 min) changed no decision. A prose-tolerant digest could keep a verdict across a changed decision.",
+     "class": "within",
+     "why": "The GM never asked for a decision digest. It was a candidate in the coordinating session's build. It is declined on measurement: no machine-readable decision line exists. It is also declined because building it would break feature 375's standing promise that a decision cannot change under a kept verdict. The decision not to build is recorded with its reopening condition, which honors the GM's 'record decisions about what NOT to implement' (2026-11-25, T259)."
+    },
+    {
+     "id": "T308-D5",
+     "summary": "NOT built: reading 'N of M' as a count. In the replay it flags 47 sentences in 26 of the 124 sections, and reviews objected to 1.",
+     "class": "within",
+     "why": "A rule that refuses 46 sentences the reviews accepted would refuse good work, so dropping it after the replay is within the request. The GM did not ask for this pattern, and the decline is recorded in the plan with its measurement."
+    },
+    {
+     "id": "T308-D6",
+     "summary": "The T55 order notice tells a builder (agent_id present) to run make builder-checks first and names the closing run as the other tier's. A builder-checks run since the last edit silences it. The main session is told what it was told before. It stays a notice, and the hook suite gains cases that render it.",
+     "class": "within",
+     "why": "It serves the GM's two-tier words: 'the correct place for that level of rigor is checking whether something in the session clone can land back in the main checkout'. Until now the notice told a first-tier builder to start the run its brief forbids. The closing run's rigor is enforced at the session clone's gates, so the notice adds no refusal that the 'real enforcement' words would require. The new hook-suite cases only make the new wording visible to guard-messages, which is enforcement of what was asked, not new behavior."
+    },
+    {
+     "id": "T308-left (T333)",
+     "summary": "Three of the six GM's-words rounds cited him by reference, which D1 cannot see. It is left, filed as T333, and lands before T302.",
+     "class": "within",
+     "why": "It is a different class from D1's quoted span on the line: a reference to a record the bundle does not carry. So one argument is not stretched over two unlike things. It stays inside the feature, filed in FR-009's form (why, id, order), and the GM endorsed filing found work (2026-11-22). Nothing the GM asked leaves the feature."
+    },
+    {
+     "id": "T308-order-exits",
+     "summary": "After T289, before T308's remainder and T302. One landing. Green: the new tests green and red with the rules off, plus builder-checks on both crates. Red: recorded and set down, with a claim that it cannot be done sent to the arbiter.",
+     "class": "within",
+     "why": "This is scheduling and exits, and nothing of the request is narrowed. The red-first counts and the items not seen red are stated. Those are test quality, not fidelity."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -42423,6 +42601,86 @@
      "summary": "dev/audits/builder-prewarm.md (measurement, falsifier, cost), rustc/task rows of rust/gate/CLAUDE.md, builder-tree help; tagged [perf] under FR-013; performance-checklist not applied (not engine speed); exits by the first tier here and the full gate in the clone",
      "class": "within",
      "why": "The audit entry is what the GM's T259 register asks for. The [perf] tag is FR-013's definition (it makes the builders' loop faster). The exits are the project's two tiers."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T308": {
+   "section_sha256": "28c0a585b3814103a0c844ffbc2fccd713a29be483979ea040b1785693d29351",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T308-part",
+     "summary": "This section is one part of T308 (the plan review's later rounds). The two tiers, the batch gate, the trial's measurement and the coverage run stay open on the task's box, which is not ticked from this landing.",
+     "class": "within",
+     "why": "Nothing of T308 is dropped: the remainder is named and stays open on the task. Splitting a task's landings is scheduling. It does not narrow the GM's two-tier words (2026-11-26) or the approved improvement 4, 'Fewer plan re-rounds' (2026-11-19 approval)."
+    },
+    {
+     "id": "T308-measure",
+     "summary": "Every later round is classed (a)-(e) from the round before it, before any rule is written. The record is kept under dev/measurements/2026-11-26/plan-review-rounds/.",
+     "class": "within",
+     "why": "This serves the request directly. The GM asked for actual numbers before process changes ('I'd like to see some actual numbers', 2026-11-19) and wants everything measured (2026-11-22). The class counts sum to the heading's 56 rounds and to its 169 minutes (169.1, rounded). T285's move from (d) to (a) is carried through the table and the 'root of 8' sentence (4+2+2)."
+    },
+    {
+     "id": "T308-D1",
+     "summary": "make decide refuses a task whose box line quotes words after 'the GM' that request.md does not hold, and names the heading to append them under. MIN_WORDS=4 and REACH=80 are GUESS knobs. It runs at make decide only, not at plan-delta.",
+     "class": "within",
+     "why": "It removes a measured mechanical cause of later rounds (class b, the GM's words missing) at decide, before dispatch. That is what improvement 4 and T308's line ask. Running it at decide only is design: the rule is per task line, and plan-delta reads blocks. The rule was replayed over the reviewed sections before it was kept, which is constraint 2."
+    },
+    {
+     "id": "T308-D1-false-refusals",
+     "summary": "Replayed over 77 tasks, the rule refuses 11. 6 are true, 3 are the replay's artifact, and 2 (T241, T235) are refusals that no review raised. The 2 are accepted, cured by one edit each.",
+     "class": "within",
+     "why": "These 2 are not refusals of good work. Each line attributes quoted words to the GM that his recorded request does not hold. The GM's T233 section (2026-11-24) says a ruling attributed to him names his recorded words: 'I never made a ruling that ... That was never at any point something that I said'. Its audit counted 74 of 180 such attributions as the defect. A quote with no record behind it is that defect, whether or not a review happened to raise it. So refusing it enforces the GM's own standing rule, and the cure is to record the words or correct the line. This is not a check refusing correct work under constitution XIV, so it needs no ruling."
+    },
+    {
+     "id": "T308-D2",
+     "summary": "The figure lint reads a k/K/M-suffixed numeral and a rounded figure with a unit ('20-odd minutes') as figures. A threshold's suffixed numeral ('past 300k tokens') stays a limit.",
+     "class": "within",
+     "why": "It removes a measured cause of NOT-REVIEWABLE rounds (class b). The threshold reading keeps the lint from refusing correct work, since a stated limit is not a count. It is not an exception to anything the GM asked. In the replay, each form flags one sentence over the 124 sections."
+    },
+    {
+     "id": "T308-D3",
+     "summary": "decide's notice states the verdict-voiding rule as the code has it. For an uncommitted reviewed section, any edit voids the verdict. For a committed one, typo-scale edits are kept. An edit during review gets its record refused. The notice refuses nothing.",
+     "class": "within",
+     "why": "It serves the section's goal that 'a builder knows before it dispatches which edits will cost it another round'. A test found the earlier wording false, and it was made true. It describes a rule the plan gate already enforces, so there is no enforcement to add (the GM's 'real enforcement and not just instructions', 2026-11-19, is not engaged)."
+    },
+    {
+     "id": "T308-D3-left (T337)",
+     "summary": "A CLEAR is voided by a typo-scale edit of a section not yet committed. That tolerance is not built here. It is filed as T337 and lands before T302.",
+     "class": "within",
+     "why": "This is a found defect: a needless round in a builder's tree. It pre-existed this part and was found by this part's own test, not introduced by it. Nothing the GM asked for leaves the feature. It is filed in this feature in FR-009's own deferral form, with why, the T337 id and 'lands before T302'. The GM endorsed filing found defects and bundling them ('not bother cutting back on new tasks filed', 2026-11-22). The convergence rules (2026-11-23), that only a claim-changing edit triggers review, govern page and pop-up cascades. The plan gate already applies that idea to committed sections, and T337 extends it on schedule. The 'fix all known bugs in each step' rule (2026-11-18) is about port steps, and the order 'before T302' honors it anyway. So this is not a narrowing that needs a ruling."
+    },
+    {
+     "id": "T308-D4",
+     "summary": "NOT built: a digest over decisions rather than the section. None of the 132 sections marks a decision line. At most 5 of the 16 (c) rounds (6.1 min) changed no decision. A prose-tolerant digest could keep a verdict across a changed decision.",
+     "class": "within",
+     "why": "The GM never asked for a decision digest. It was a candidate in the coordinating session's build. It is declined on measurement: no machine-readable decision line exists. It is also declined because building it would break feature 375's standing promise that a decision cannot change under a kept verdict. The decision not to build is recorded with its reopening condition, which honors the GM's 'record decisions about what NOT to implement' (2026-11-25, T259)."
+    },
+    {
+     "id": "T308-D5",
+     "summary": "NOT built: reading 'N of M' as a count. In the replay it flags 47 sentences in 26 of the 124 sections, and reviews objected to 1.",
+     "class": "within",
+     "why": "A rule that refuses 46 sentences the reviews accepted would refuse good work, so dropping it after the replay is within the request. The GM did not ask for this pattern, and the decline is recorded in the plan with its measurement."
+    },
+    {
+     "id": "T308-D6",
+     "summary": "The T55 order notice tells a builder (agent_id present) to run make builder-checks first and names the closing run as the other tier's. A builder-checks run since the last edit silences it. The main session is told what it was told before. It stays a notice, and the hook suite gains cases that render it.",
+     "class": "within",
+     "why": "It serves the GM's two-tier words: 'the correct place for that level of rigor is checking whether something in the session clone can land back in the main checkout'. Until now the notice told a first-tier builder to start the run its brief forbids. The closing run's rigor is enforced at the session clone's gates, so the notice adds no refusal that the 'real enforcement' words would require. The new hook-suite cases only make the new wording visible to guard-messages, which is enforcement of what was asked, not new behavior."
+    },
+    {
+     "id": "T308-left (T333)",
+     "summary": "Three of the six GM's-words rounds cited him by reference, which D1 cannot see. It is left, filed as T333, and lands before T302.",
+     "class": "within",
+     "why": "It is a different class from D1's quoted span on the line: a reference to a record the bundle does not carry. So one argument is not stretched over two unlike things. It stays inside the feature, filed in FR-009's form (why, id, order), and the GM endorsed filing found work (2026-11-22). Nothing the GM asked leaves the feature."
+    },
+    {
+     "id": "T308-order-exits",
+     "summary": "After T289, before T308's remainder and T302. One landing. Green: the new tests green and red with the rules off, plus builder-checks on both crates. Red: recorded and set down, with a claim that it cannot be done sent to the arbiter.",
+     "class": "within",
+     "why": "This is scheduling and exits, and nothing of the request is narrowed. The red-first counts and the items not seen red are stated. Those are test quality, not fidelity."
     }
    ],
    "verdict": "CLEAR"

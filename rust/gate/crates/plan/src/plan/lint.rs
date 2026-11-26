@@ -10,6 +10,7 @@ use fancy_regex::{Captures, Regex};
 use super::sections::re;
 
 mod deferral;
+mod task_line;
 use crate::checks::{figure_pattern, one_shot_pattern};
 
 // The red exit the hint quotes: the template's own (feature 449 T135, one text where this held a copy).
@@ -61,6 +62,15 @@ static MULTIPLE: LazyLock<Regex> = LazyLock::new(|| re(r"(?<![\w.])\d[\d,]*(?:\.
 static MULTIPLE_RULE: LazyLock<Regex> = LazyLock::new(|| {
     re(
         r"(?i)\b(?:over|under|at most|at least|past|beyond|exceeds?|up to|within|than|to)\s+\d[\d,]*(?:\.\d+)?[x×](?!\w)|\d[\d,]*(?:\.\d+)?[x×]\s+(?:rule|leeway|cap|ceiling|limit|raise)\b",
+    )
+});
+/// A rounded figure with a unit, "20-odd minutes", is a figure too (feature 451 T308): T259's "before the gate's 20-odd minutes" passed
+/// the lint unlabeled and drew a NOT-REVIEWABLE plan review, 2026-11-26, since the shared figure pattern asks a numeral right before
+/// its unit; replayed over the 124 reviewed sections of 451 from 2026-11-24 to 26 it flags that sentence and no other (observed
+/// 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-figures.py`).
+static ODD: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r"(?<![\w.-])\d[\d,]*-odd\s+(?:seconds?|minutes?|hours?|days?|s|ms|min|KB|MB|GB|KiB|MiB|GiB)\b",
     )
 });
 static FENCE: LazyLock<Regex> = LazyLock::new(|| re(r"(?ms)^```.*?^```"));
@@ -163,6 +173,8 @@ pub(super) struct Finding {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Kind {
     GmQuote,
+    /// The GM's words on the task's own line of tasks.md that request.md does not hold (feature 451 T308).
+    TaskLine,
     Item4,
     UnitFigure,
     Differential,
@@ -239,14 +251,17 @@ fn gm_quotes_missing(section: &str, request: &str) -> Vec<(usize, String)> {
     let req = folded(request);
     gm_quotes(section)
         .into_iter()
-        .filter(|(_, q)| {
-            let pieces = q.split("...").flat_map(|p| p.split('\u{2026}'));
-            !folded(q).trim().is_empty()
-                && !pieces
-                    .filter(|p| !folded(p).trim().is_empty())
-                    .all(|p| req.contains(&folded(p)))
-        })
+        .filter(|(_, q)| absent(q, &req))
         .collect()
+}
+
+/// Whether a quote's words are missing from the request, `req` folded: each piece between its ellipses is looked for as a run.
+fn absent(quote: &str, req: &str) -> bool {
+    let pieces = quote.split("...").flat_map(|p| p.split('\u{2026}'));
+    !folded(quote).trim().is_empty()
+        && !pieces
+            .filter(|p| !folded(p).trim().is_empty())
+            .all(|p| req.contains(&folded(p)))
 }
 
 /// Every figure an Approach item 4 states whose own sentence carries no label (feature 385 T86): (its span, its sentence). Every item 4
@@ -309,7 +324,8 @@ fn unlabeled_unit_figure(section: &str) -> Vec<((usize, usize), String)> {
         let multiple = MULTIPLE
             .is_match(&MULTIPLE_RULE.replace_all(&bare, " "))
             .unwrap_or(false);
-        if (figure_pattern().is_match(&bare).unwrap_or(false) || multiple) && !labeled {
+        let odd = ODD.is_match(&bare).unwrap_or(false);
+        if (figure_pattern().is_match(&bare).unwrap_or(false) || multiple || odd) && !labeled {
             out.push((text.span(sentence), shown(sentence)));
         }
     }
@@ -321,17 +337,21 @@ fn unlabeled_unit_figure(section: &str) -> Vec<((usize, usize), String)> {
 // project's plans count by measuring; the plan's own parts ("14 decisions", "two tasks", "11 recipes") name, not measure, and stay out.
 static COUNT: LazyLock<Regex> = LazyLock::new(|| {
     re(&format!(
-        r"(?:(?<![\w.-])\d[\d,]*(?:\.\d+)?|(?<![\w-]){NUMBER_WORDS})\s*(?:captions?|lines?|cases?|files?|pages?|calls?|callers?|crates?|suites?|tests?|rows?|keys?|entries|entry|findings?|differences?|mismatches?|runs?|sites?|commits?|bytes?|KB|KiB|tokens?|questions?|sources?|modules?|functions?|mutations?|outputs?|hits?|fragments?|footnotes?|URLs?|domains?|processes|process|invocations?)(?![\w-])"
+        r"(?:(?<![\w.-])\d[\d,]*(?:\.\d+)?[kKM]?|(?<![\w-]){NUMBER_WORDS})\s*(?:captions?|lines?|cases?|files?|pages?|calls?|callers?|crates?|suites?|tests?|rows?|keys?|entries|entry|findings?|differences?|mismatches?|runs?|sites?|commits?|bytes?|KB|KiB|tokens?|questions?|sources?|modules?|functions?|mutations?|outputs?|hits?|fragments?|footnotes?|URLs?|domains?|processes|process|invocations?)(?![\w-])"
     ))
 });
+// A count's numeral takes a `k`, `K` or `M` (feature 451 T308): T235's "about 70k tokens and a turn each" passed the lint unlabeled and
+// drew a NOT-REVIEWABLE plan review, 2026-11-25; replayed over the 124 reviewed sections of 451 from 2026-11-24 to 26 the suffix flags
+// that sentence and no other (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-figures.py`).
 // A count is split into sentences only, where a unit figure is split at ";" too: over the sixteen reviewed sections of 449 (T121-T145),
 // the ";" split flagged 8 counts their reviews had passed, the sentence split 3, each a count no label reached (feature 449 T159).
 static SPLIT_SENTENCE: LazyLock<Regex> =
     LazyLock::new(|| re(r"(?<=\.)\s+|\n\s*\n|\n(?=\s*(?:[-*] |\d+\. |#|\|))"));
-// A rule's threshold ("no file over 1,000 lines") states a limit, not a measurement.
+// A rule's threshold ("no file over 1,000 lines") states a limit, not a measurement. Its numeral reads what COUNT's does - the decimal
+// and the `k`/`M` suffix (feature 451 T308): with the suffix read by COUNT alone, "past 300k tokens" stopped being a threshold.
 static THRESHOLD: LazyLock<Regex> = LazyLock::new(|| {
     re(&format!(
-        r"(?i)\b(?:over|under|at most|at least|past|beyond|exceeds?|up to)\s+(?:\d[\d,]*|{NUMBER_WORDS})\s+[a-z]+"
+        r"(?i)\b(?:over|under|at most|at least|past|beyond|exceeds?|up to)\s+(?:\d[\d,]*(?:\.\d+)?[km]?|{NUMBER_WORDS})\s+[a-z]+"
     ))
 });
 
@@ -526,6 +546,7 @@ pub(super) fn findings(spec_dir: &Path, section: &str) -> Vec<Finding> {
 fn told(kind: Kind) -> String {
     match kind {
         Kind::GmQuote => "the section quotes the GM with words request.md does not hold - add the GM's words to request.md verbatim, or correct the quote (feature 385 T84). The unit: a double-quoted span is read as the GM's when it follows \"the GM\" before that sentence ends - `.`, `!` or `?` then a space or a line break - or the paragraph does, at a blank line; a bullet list with no blank line between its items is one paragraph, so a bullet naming the GM with no full stop runs on into the next bullets' quotes: end that bullet with a full stop where the quote is not his".to_owned(),
+        Kind::TaskLine => format!("the task's own line of tasks.md quotes the GM with words request.md does not hold - a plan review judges the section against his words in request.md and never reads tasks.md, so it comes back NOT-REVIEWABLE, a round spent (feature 451 T308): append his words verbatim to request.md under `## <YYYY-MM-DD>: <what they are about> (<feature number> T<n>)`, an ellipsis where the task line cuts them, or correct the task line. The unit: a quoted span of {} words or more, in single or double quotes, that follows \"the GM\" on the task's box line of tasks.md - a single quote opens within {} characters of \"the GM\" or of the quote before it and closes at a `'` no letter follows; each piece between its ellipses is looked for in request.md, case and punctuation aside", task_line::MIN_WORDS, task_line::REACH),
         Kind::Item4 => "Approach item 4 states a figure whose sentence carries no `measured <YYYY-MM-DD> (<method>)` or `m:<key>` - label it where it stands (feature 385 T86). The unit: item 4 of every Approach block (part A or B) in the section, each from its `4. **` line to the next numbered bold item or heading, cut into sentences after each `.` and whitespace (a space or a line break) and at each line that starts in column one (an unindented wrapped line starts a new sentence); the label sits in the figure's own sentence, and only those two forms count here - `observed <YYYY-MM-DD>, method: ...` and a research label, which pass elsewhere in the section, do not pass in item 4".to_owned(),
         Kind::UnitFigure => "a figure with a unit whose sentence carries no label (a multiple, `704x`, is one: feature 449 T203) - a measurement `measured <YYYY-MM-DD> (<method>)`, `observed <YYYY-MM-DD>, method: ...` or `m:<key>`; a decided size its research label (GUESS, CONVENTION, ...), its page or its knob - label it where it stands (feature 430 D5). The unit: the clause - a sentence is cut after each `.` or `;` and whitespace (a space or a line break), even inside a code span, at a blank line, and where a bullet, a numbered item, a heading or a table row starts (a fenced block is skipped), so a label at a sentence's end does not cover a figure in a clause before its `;`: label each clause, or join them with a comma".to_owned(),
         Kind::Differential => "a differential's case count that cites no verify report - run `make diff-run CASES=<cases file> VERIFY=1` (every case's new side rerun against the kept old sides) and cite the report it writes, `<cases>.diff-run/reports/diff-run-verify-<UTC>.json`, in the sentence beside its label, as in \"16 cases, 0 differing (measured 2026-11-16 (`make diff-run ... VERIFY=1`, `t161/cases.diff-run/reports/diff-run-verify-20261116T120000Z.json`))\"; a hand-written loop's or an incremental run's count does not stand (feature 449 T161). The unit: the sentence, cut after a `.` and whitespace (a space or a line break) outside a code span, at a blank line, and where a bullet, a numbered item, a heading or a table row starts".to_owned(),
@@ -555,6 +576,7 @@ pub(super) fn render(
     let mut n = 0;
     for kind in [
         Kind::GmQuote,
+        Kind::TaskLine,
         Kind::Item4,
         Kind::UnitFigure,
         Kind::Differential,
@@ -622,9 +644,23 @@ pub(super) fn plan_lines(plan: &str, section: &str) -> Vec<usize> {
         .collect()
 }
 
-/// Every finding `make decide` makes of `section`: the lint's, and the deferrals to a task not open now (D15: judged at the decision).
-pub(super) fn decide_findings(spec_dir: &Path, section: &str) -> Vec<Finding> {
+/// Every finding `make decide` makes of `section`, the plan of `tasks`: the lint's, the GM's words on each task's own line that
+/// request.md lacks (feature 451 T308), and the deferrals to a task not open now (D15: judged at the decision).
+pub(super) fn decide_findings(spec_dir: &Path, section: &str, tasks: &[String]) -> Vec<Finding> {
     let mut out = findings(spec_dir, section);
+    out.extend(
+        task_line::missing(spec_dir, tasks)
+            .into_iter()
+            .map(|(task, quote)| Finding {
+                kind: Kind::TaskLine,
+                start: 0,
+                end: 0,
+                text: format!(
+                    "{task}'s line of tasks.md: '{}'",
+                    quote.trim().chars().take(160).collect::<String>()
+                ),
+            }),
+    );
     let boxes = deferral::boxes(spec_dir);
     out.extend(
         deferral::closed(section, &boxes)

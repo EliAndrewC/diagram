@@ -43,8 +43,10 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
 - A builder FILES what it found, from its own tree (451 T289; the block's `FILE what you find` line): `make task-add` allots the
   id under the feature's lock from the reservations every worktree of the clone shares (451 T255), and `make carry` keeps both
   sides where two trees each appended a task's box and its plan stub. Measured 2026-11-26: four candidates left unfiled until the
-  GM asked, and six plan reviews BLOCKED in round 1 on a found-and-left item with no filed id (T250, T265, T295, T305, T309,
-  T285), each costing a filing by the session, an edit of the builder's section and a second round. Do not write "do not file
+  GM asked, and eight later plan review rounds, 23.0 minutes, rooted in a found-and-left item with no filed id - four reviews
+  BLOCKED on it alone (T250, T305, T309, T285's fourth), two beside a real objection (T295, T316), and two sections edited after
+  their CLEAR only to write the ids in (T251, T265) - each costing a filing by the session, an edit of the builder's section and
+  another round (`dev/measurements/2026-11-26/plan-review-rounds/t308-results.md`). Do not write "do not file
   tasks" into a brief.
 - A builder's tree comes from `make builder-tree T=<task> [F=<feature>]` and nothing else: it prints the tree's path for the brief, `make land` releases it, and a hand `git worktree add` is refused (451 T285).
 

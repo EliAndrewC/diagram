@@ -282,6 +282,36 @@ fn the_decide_commands_and_the_guard_that_waits_for_them() {
         .unwrap()
         .contains("TASK=T05"));
     assert_eq!(run(&root, &["decide", "375", "T99"]).code, 2);
+    // the dispatch says which later edits void the verdict it asks for (feature 451 T308)
+    for said in [
+        "decide: the verdict will stand for THIS text of the section.",
+        "Until the reviewed section is COMMITTED, ANY edit of it VOIDS the verdict and owes another round",
+        "only an edit outside the section is kept.",
+        "(Once committed, kept across: whitespace, re-wrapping, case, punctuation, up to 3 words respelled",
+        "An edit while the review runs gets its record refused.",
+    ] {
+        assert!(decided.stderr.contains(said), "{said}: {}", decided.stderr);
+    }
+    // his words on the task's own line, in no request.md, refuse it before any dispatch (feature 451 T308)
+    std::fs::write(
+        dir.join("tasks.md"),
+        "- [ ] T05 the bath (the GM, 2026-11-26: 'the bath should stand where the well is')\n- [ ] T06 the wells\n",
+    )
+    .unwrap();
+    let unheld = run(&root, &["decide", "375", "T05"]);
+    assert_eq!(unheld.code, 2, "{}", unheld.stdout);
+    assert!(
+        unheld
+            .stderr
+            .contains("T05's line of tasks.md: 'the bath should stand where the well is'"),
+        "{}",
+        unheld.stderr
+    );
+    std::fs::write(
+        dir.join("tasks.md"),
+        "- [ ] T05 the bath\n- [ ] T06 the wells\n",
+    )
+    .unwrap();
     std::fs::create_dir_all(root.join(".specify")).unwrap();
     std::fs::write(
         root.join(".specify/feature.json"),
