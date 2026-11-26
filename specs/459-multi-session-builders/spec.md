@@ -35,6 +35,13 @@ of automated tooling-based way".
 - With more than one session main moves under a session's staged work, so how long a batch waits for its gate matters as it
   does not with one (trial 458's continuous gate).
 
+## What it need not cover (the GM, 2026-11-26)
+
+Two sessions never work the same feature: *"every circumstance under which I would have multiple sessions running is one in
+which they would be working different features."* So two sessions appending to one feature's `tasks.md` and `plan.md` - the
+merge conflict a session's own builders meet and `make carry` resolves (451 T289) - is not a case this feature has to handle,
+and no merge driver for those files is owed for it.
+
 ## To settle when the feature is worked (not decided here)
 
 - One machine-wide count of builders: where it is kept, how a session takes and returns a place, and what a session does when
