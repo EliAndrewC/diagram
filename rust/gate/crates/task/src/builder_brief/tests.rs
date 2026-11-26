@@ -29,6 +29,7 @@ fn env(dir: &Path) -> Env {
         reason: String::new(),
         guard_secs: "5".to_owned(),
         prewarm: false,
+        sampler: Vec::new(),
     }
 }
 
