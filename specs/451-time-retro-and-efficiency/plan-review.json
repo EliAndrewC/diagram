@@ -2196,6 +2196,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T339 (451 T315's measurement of 2026-11-26: most of every run of `rust/guard/shared`'s suite is one test of the idle check waiting real seconds, and two more wait a second each)": {
+   "sha256": "331cff4d9c9f02294bfd7a797065cb007f5f202708c8e0b59eed431f79a5157f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T339 Approach (checklist part A)": {
+   "sha256": "8bcdb05e4f73a42302e9b0beffddf98ff9ec5dee2198506b4df8955a6f0b1c53",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T339 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "01c394e2f769832ea3e3f818d3acc18e935f9e949ad19ee5f33c1a2e335dcc7d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -28423,6 +28441,65 @@
      "why": "It is the project's recorded-escape pattern. FR-012's two-word minimum binds FR-006..FR-013 refusals, not this one."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T339 (451 T315's measurement of 2026-11-26: most of every run of `rust/guard/shared`'s suite is one test of the idle check waiting real seconds, and two more wait a second each)",
+    "### T339 Approach (checklist part A)",
+    "### T339 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T339-clock-route",
+     "summary": "Of the brief's two routes, a clock the test drives is taken over knobs in fractions or milliseconds",
+     "class": "within",
+     "why": "Both routes are the brief's own; the reasons given (a constant second past a crossing, a whole-number bound printed in the notice, waits left open to load) keep the production path and every guard message unchanged. It serves FR-013 (the builders' loop faster) and the GM's T104 words on the test that fails under load. It narrows nothing that was asked."
+    },
+    {
+     "id": "T339-procs-clock",
+     "summary": "Procs gains now() and sleep() with default bodies (Instant::now, thread::sleep); the check's four clock uses go through them; Blind and the guard crate's Ctx define neither, so production makes the same calls; stalls::stalled's SystemTime read unchanged; no file outside rust/guard/shared changes",
+     "class": "within",
+     "why": "This is the mechanism for the chosen route. The production behavior, its looks, budget and hand-on (451 T193/T201) are unchanged, and the plan states that and pins it (Blind's clock tested against the machine's)."
+    },
+    {
+     "id": "T339-stand-in-table",
+     "summary": "The tests' Table notes each wait, advances a stand-in time, runs a meanwhile (it backdates the builder's transcript, appends turns), and fails past 50 waits",
+     "class": "within",
+     "why": "A test fixture that makes the idle tests independent of load and turns a check that never stops looking into a red test, not a hang. It is enforcement of the existing behavior, not new behavior."
+    },
+    {
+     "id": "T339-test-pins",
+     "summary": "The idle tests are rewritten to exact counts of looks and waits; the old budget-of-one case is kept as budget zero; the crossing case uses the shipped ten-minute bound in place of two seconds; the reply-during-wait test has no thread or timing",
+     "class": "within",
+     "why": "Every behavior the old tests proved is still proved, more strictly: exact counts in place of elapsed wall time, and the five breaks of idle.rs each turn a test red, measured 2026-11-26. The ten-minute bound is the shipped value, so it narrows no coverage, and the plan gives the reason (the real-clock read of the transcript). The old one-second case's meaning is kept as budget zero."
+    },
+    {
+     "id": "T339-long-text",
+     "summary": "The spelling test's text goes from 50,000 to 40,000 repeats (LONG_TEXT, a CONVENTION knob), 8% past the old million-step limit, with the test's own assertion proving the limit fires; CPU_BOUND_NS is not moved",
+     "class": "within",
+     "why": "What the test pins (451 T81, 449 T185) is that the text is past the old limit, and its own assertion still proves that on every run. Cutting a test's own text length changes no behavior and no claim. Leaving the bound alone loosens nothing."
+    },
+    {
+     "id": "T339-next-slowest-left",
+     "summary": "The next slowest tests (the context test at 1.57 s, two at 0.47 s) are read and left; the context test is real work, not a wait; nothing filed",
+     "class": "within",
+     "why": "The task is the waits T315 measured, and the brief bounds the read. Slow work that gives correct results is not a defect (a wrong outcome) under constitution XIV, so leaving it defers no known defect. No GM request asks for every test in the crate to be shortened."
+    },
+    {
+     "id": "T339-exits",
+     "summary": "Green is builder-checks and crate-checks in the builder's tree, with the full gate at the landing; red is recorded and set down, and a claim of cannot-be-done goes through make arbiter-ask",
+     "class": "within",
+     "why": "This follows the two-tier checking the GM asked for (451 T308): the full rigor is at the landing's gate. It skips no check."
+    },
+    {
+     "id": "T339-perf-class",
+     "summary": "The task is classed [perf] under FR-013, as builders'-loop speed",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop faster' as performance work in words, and this task cuts the shared guard crate's test run from about 8.3 s to about 2.9 s, measured 2026-11-26."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -44650,6 +44727,62 @@
      "summary": "SIZING_OK=\"<reason>\" is logged by the Makefile's LOGESCAPE.",
      "class": "within",
      "why": "It is the project's recorded-escape pattern. FR-012's two-word minimum binds FR-006..FR-013 refusals, not this one."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T339": {
+   "section_sha256": "4d57938c0adc0ef0d989170d21cc9744bdaa0df4ac8cbe60ad9f1a032091a7e4",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T339-clock-route",
+     "summary": "Of the brief's two routes, a clock the test drives is taken over knobs in fractions or milliseconds",
+     "class": "within",
+     "why": "Both routes are the brief's own; the reasons given (a constant second past a crossing, a whole-number bound printed in the notice, waits left open to load) keep the production path and every guard message unchanged. It serves FR-013 (the builders' loop faster) and the GM's T104 words on the test that fails under load. It narrows nothing that was asked."
+    },
+    {
+     "id": "T339-procs-clock",
+     "summary": "Procs gains now() and sleep() with default bodies (Instant::now, thread::sleep); the check's four clock uses go through them; Blind and the guard crate's Ctx define neither, so production makes the same calls; stalls::stalled's SystemTime read unchanged; no file outside rust/guard/shared changes",
+     "class": "within",
+     "why": "This is the mechanism for the chosen route. The production behavior, its looks, budget and hand-on (451 T193/T201) are unchanged, and the plan states that and pins it (Blind's clock tested against the machine's)."
+    },
+    {
+     "id": "T339-stand-in-table",
+     "summary": "The tests' Table notes each wait, advances a stand-in time, runs a meanwhile (it backdates the builder's transcript, appends turns), and fails past 50 waits",
+     "class": "within",
+     "why": "A test fixture that makes the idle tests independent of load and turns a check that never stops looking into a red test, not a hang. It is enforcement of the existing behavior, not new behavior."
+    },
+    {
+     "id": "T339-test-pins",
+     "summary": "The idle tests are rewritten to exact counts of looks and waits; the old budget-of-one case is kept as budget zero; the crossing case uses the shipped ten-minute bound in place of two seconds; the reply-during-wait test has no thread or timing",
+     "class": "within",
+     "why": "Every behavior the old tests proved is still proved, more strictly: exact counts in place of elapsed wall time, and the five breaks of idle.rs each turn a test red, measured 2026-11-26. The ten-minute bound is the shipped value, so it narrows no coverage, and the plan gives the reason (the real-clock read of the transcript). The old one-second case's meaning is kept as budget zero."
+    },
+    {
+     "id": "T339-long-text",
+     "summary": "The spelling test's text goes from 50,000 to 40,000 repeats (LONG_TEXT, a CONVENTION knob), 8% past the old million-step limit, with the test's own assertion proving the limit fires; CPU_BOUND_NS is not moved",
+     "class": "within",
+     "why": "What the test pins (451 T81, 449 T185) is that the text is past the old limit, and its own assertion still proves that on every run. Cutting a test's own text length changes no behavior and no claim. Leaving the bound alone loosens nothing."
+    },
+    {
+     "id": "T339-next-slowest-left",
+     "summary": "The next slowest tests (the context test at 1.57 s, two at 0.47 s) are read and left; the context test is real work, not a wait; nothing filed",
+     "class": "within",
+     "why": "The task is the waits T315 measured, and the brief bounds the read. Slow work that gives correct results is not a defect (a wrong outcome) under constitution XIV, so leaving it defers no known defect. No GM request asks for every test in the crate to be shortened."
+    },
+    {
+     "id": "T339-exits",
+     "summary": "Green is builder-checks and crate-checks in the builder's tree, with the full gate at the landing; red is recorded and set down, and a claim of cannot-be-done goes through make arbiter-ask",
+     "class": "within",
+     "why": "This follows the two-tier checking the GM asked for (451 T308): the full rigor is at the landing's gate. It skips no check."
+    },
+    {
+     "id": "T339-perf-class",
+     "summary": "The task is classed [perf] under FR-013, as builders'-loop speed",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop faster' as performance work in words, and this task cuts the shared guard crate's test run from about 8.3 s to about 2.9 s, measured 2026-11-26."
     }
    ],
    "verdict": "CLEAR"

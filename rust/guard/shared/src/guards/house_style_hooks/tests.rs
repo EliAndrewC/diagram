@@ -328,7 +328,10 @@ fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {
 /// limit by the limit firing on it (451 T81), so a shorter text cannot leave this passing over a scan the limit would cut short.
 #[test]
 fn a_spelling_past_a_million_steps_is_corrected() {
-    let text = format!("{}the {WORD}", "plain words of a long text ".repeat(50_000));
+    let text = format!(
+        "{}the {WORD}",
+        "plain words of a long text ".repeat(LONG_TEXT)
+    );
     let old_limit = crate::regex::builder(&format!(r"(?i)\b{WORD}\b"))
         .backtrack_limit(1_000_000)
         .build()
@@ -336,6 +339,12 @@ fn a_spelling_past_a_million_steps_is_corrected() {
     assert!(old_limit.is_match(&text).is_err());
     assert!(within(move || super::americanize(&text)).ends_with(&format!("the {WORD_FIXED}")));
 }
+
+/// How many times [`a_spelling_past_a_million_steps_is_corrected`] repeats its 27 characters: 40,000, a CONVENTION and a knob (451
+/// T339). The old limit fires from 38,000 repeats and not at 37,000 (a step a character: 1,000,000 / 27 = 37,037), and the scan's
+/// time is the text's length - 2.4 s at 38,000, 3.5 s at the 50,000 this was, measured 2026-11-26 in the test binary at load 5 - so
+/// the text is the shortest round figure past the limit, and the test's own assertion fails it should the limit's count ever move.
+const LONG_TEXT: usize = 40_000;
 
 /// A heredoc body this guard leaves unblanked (`<<\EOF`, which `HEREDOC_BODY` does not read and the walk carries out) holding `text`
 /// and then a quote no later quote closes before forty escapes: 2^40 tries for the backtracking search of a quoted string (451 T108).

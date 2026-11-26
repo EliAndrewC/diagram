@@ -4406,42 +4406,53 @@ engine speed, so no checklist.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T339 (<why: the finding or measurement that files it>)
+### T339 (451 T315's measurement of 2026-11-26: most of every run of `rust/guard/shared`'s suite is one test of the idle check waiting real seconds, and two more wait a second each)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the idle check's clock is asked of its `Procs` (`rust/guard/shared/src/guards/set_down_hooks/idle.rs`), the tests' table steps a stand-in clock in place of waiting, and the spelling test's text is cut to the shortest round length past the old limit.
+  - **Where the 8 s went**, observed 2026-11-26, method: the test and `idle.rs`'s `watched` read side by side: two rechecks of 1 s (`L7R_IDLE_RECHECK_SECS=1`), then two waits of about 3 s each, a builder's 2 s bound (`L7R_STALL_SECS=2`) and the second `watched` adds past a crossing. All four are `std::thread::sleep`.
+  - **Why not a knob in fractions.** The brief gave two routes: (a) the knobs taking fractions or milliseconds, (b) a clock the test drives. (a) cannot reach tens of milliseconds with production unchanged: the second added past a crossing is a constant, not a knob, so each crossing wait stays over 1 s; the bound is a whole number printed in the notice (`silent >{bound} s`), so a fraction there is a message change, which this task makes none of; and waits that stay real stay open to load. Chosen by this builder under the brief's instruction ("choose by what keeps the production path identical and the test still proving looks again until its budget").
+  - **The rule as built.** `Procs` gains two methods with bodies of their own: `now()`, `Instant::now()`, and `sleep(time)`, `std::thread::sleep(time)`. The check's four uses of the clock go through them: its first wait (`L7R_IDLE_CHECK_SECS`), the budget's deadline, the comparison of the next look against it, and the wait before that look. The two tables that answer for production - `Blind`, and the guard crate's `Ctx` in `finished_run_hooks.rs` - define neither method, so both run the bodies above: the production path makes the same calls it made, and no file outside `rust/guard/shared` changes. `stalls::stalled` still reads the machine's `SystemTime` against a transcript's modified time; it is not changed.
+  - **The stand-in clock.** The tests' `Table` (`tests/stalls.rs`) notes each wait asked, tells a time moved on by their sum, waits none, and runs a `meanwhile` given the time waited so far: the crossing case backdates the builder's transcript by it (so `stalled`'s real clock reads the builder as that much quieter), the turn cases append the session's turn. Past 50 waits it fails its test, so a check that never stops looking is red, not a hang.
+  - **What the test pins now.** `the_idle_check_looks_again_until_its_budget`: three looks and two waits of exactly one second each for a watch that ends at the third; for a watch that never ends under a budget of three seconds, four looks, three waits of one second each and then the hand-on, twice (stronger than before: the old case, a budget of one second against a recheck of one, proved only that a check with no room for one recheck hands on at once, kept here as a budget of zero: one look, no wait); a builder crossing its bound named after one wait of what was left of the bound and a second, the bound here the shipped ten minutes where the old test's was two seconds (the builder's silence is still read off the machine's clock, so a bound of seconds would let a slow first look find it already past: the old test, asserting only that two seconds of wall time had passed, bore that, and an exact count of waits would not); a turn during that wait silent after one wait. `the_idle_check_waits_its_seconds`: one wait of exactly the knob's seven seconds before the block is said, and `Blind`'s own clock is the machine's (a sleep of twenty milliseconds takes that long by `Instant` and by `Blind.now()`), which is what meets the two new bodies. `a_reply_during_the_idle_check_s_wait_silences_it`: the reply written as the stand-in wait passes, no thread and no timing.
+  - **Red first**, measured 2026-11-26 (`make rust-test CRATE=rust/guard/shared`, one change to `idle.rs` at a time, each restored from a copy): the recheck dropped - 504 passed, 1 failed, the budget test's "three looks" reading 1 for 3; the budget stop one second late - 504 and 1, "a look each second of its three" reading 5 for 4; the crossing look dropped - 504 and 1, the set-down block said where the stalled builder's notice was wanted; the turn's read after the wait dropped - 504 and 1, "a turn while it waits" given the stalled builder's notice for nothing; the first wait slept on the machine's clock in place of the table's - 503 and 2, both idle tests. With the code as landed, 505 of 505. The old tests against the new code do not build (a `Table` literal without its clock's fields), so there is no run of them.
+  - **The spelling test** (`house_style_hooks/tests.rs`, `a_spelling_past_a_million_steps_is_corrected`): its time is work, the correction's scan over its own text, and grows with the text's length, measured 2026-11-26 (a loop inside the test over eight lengths, each timed around `americanize`, load 5): 1.44 s at 20,000 repeats of its 27 characters, 2.38 s at 37,000, 2.44 s at 38,000, 3.28 s at 40,000 (one reading, with 2.91 s at 45,000 in the same loop, so noise), 3.53 s at the 50,000 it had. What it pins is that the text is past the old limit of a million steps, which its own assertion proves on each run: the old limit did not fire at 37,000 and fired from 38,000 (a step a character, 1,000,000 / 27 = 37,037). The text is now 40,000 repeats (`LONG_TEXT`, a CONVENTION and a knob, its why beside it), 8% past the limit; should the limit's count ever move, the assertion fails it. Alone the test now takes 2.00 s against the task line's 3.42 s, measured 2026-11-26 (`make test-times CRATE=rust/guard/shared`, best of three). `CPU_BOUND_NS` is not moved: it is a bound, and wider now.
+  - **The next slowest, read and left**, measured 2026-11-26 (`make test-times CRATE=rust/guard/shared`, each test alone, best of three, 22 of 505 over its bar): `context::tests::the_context_is_the_last_assistant_rows_usage` 1.57 s, `shape::tests::quotes::the_scan_finds_the_quoted_strings_the_pattern_found` 0.47 s, `checks::handle::tests::a_later_batch_whose_moves_left_the_page_alone_keeps_the_count` 0.47 s. Only the first passes the brief's half second, and it is work (it writes and reads a file longer than the tail the reader takes), no wait: left as the brief says.
+  - **Before and after**, measured 2026-11-26 (`make rust-test CRATE=rust/guard/shared FRESH=1`, the test binary's own `finished in`, three runs each in the pool tree `diagram-backlog-t269`): before 8.36, 8.34 and 8.33 s at load 1.2, 3.9 and 3.4, and after 2.99, 2.87 and 2.97 s at load 7.7, 7.9 and 7.6. The floor is the spelling test's scan.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the idle check looks again each recheck until its budget, then hands on | `the_idle_check_looks_again_until_its_budget`, red with the recheck dropped and with the stop a second late | n/a: tooling | none | n/a |
+| a builder crossing its bound is looked at again then, a turn silences the wait | the same test, red with the crossing look dropped and with the turn's read dropped | n/a: tooling | none | n/a |
+| the first wait is the knob's, asked of the check's clock | `the_idle_check_waits_its_seconds` and `a_reply_during_the_idle_check_s_wait_silences_it`, red with the wait off the clock | n/a: tooling | none | n/a |
+| the spelling text is past the old limit | `a_spelling_past_a_million_steps_is_corrected`, its own assertion | n/a: tooling | none | n/a |
 
 ### T339 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder that touches a guard waits for the shared guard crate's tests about a third as long as before, and the idle check's tests prove the same looks, exactly, whatever the load.
+2. **The constraints.** FR-013 (the builders' loop faster). 451 T193 and T201 (the idle check's looks, its budget and the hand-on are unchanged). 451 T81 and 449 T185 (the spelling test's text is past the old limit by the limit firing on it). No guard message changes.
+3. **Where each comes from.** G: the task line and the coordinating session's brief of 2026-11-26. O: T315's timings and this task's runs above.
+4. **Do they describe the world here?** Yes: the suite timed three times before and after in this tree, and each test alone by `make test-times`, 2026-11-26 (above).
+5. **The order.** Before T302. Independent of T340, T341, T342, T344 and T347.
+6. **The exits.** Green: `make builder-checks CRATE="rust/guard/shared"` green in the builder's tree (the first tier, the trial of 2026-11-26) and the crate's cover step clean (`make crate-checks CRATE="rust/guard/shared"`, its cover build and tests 26.4 s of the command's 28 s at load 6.4, measured 2026-11-26 (the step's own phase lines and `date` around the command)); the full gate is the landing's. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The crate's test binary finishes in 2.87 to 2.99 s against 8.33 to 8.36 s, measured 2026-11-26 (above), and each of five breaks of the behavior turns its test red.
+10. **Before moving a constant.** `LONG_TEXT`, 50,000 to 40,000: a test's own text, a CONVENTION no claim states; the old limit's firing is asserted on it.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No defect: nothing a hook says or does changes, and no map changes. The finding is time: most of every run of the crate's tests was one test's waiting, observed 2026-11-26, method: T315's timings in the task line.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none. The tests read above and left (the context test and the two under half a second) are work with no visible effect beyond their own time, so no defect and not filed.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a `[perf]` task, 451 FR-013 - it makes the builders' loop faster, the shared guard crate's test run, and is no engine-speed task, so the checklist below answers for a test suite.
 
 ### T339 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+1. **Where does the time go?** Three tests asleep on the machine's clock (8.06 s, 1.01 s and 1.01 s, run side by side, so 8.06 s of wall) and one test's scan of 1.35 million characters (3.42 s), measured 2026-11-26 (T315's timings, the task line).
+2. **Removes work, or only moves it?** Removes it: the waits are not waited at all, and the scan reads a text a fifth shorter. No engine stage and no counted operation is involved.
+3. **What do you expect it to save, and why?** Most of the run: it falls to its longest remaining test, the spelling scan.
+4. **How does the work grow with the settlement?** n/a: a test suite's wall time; it does not grow with any map.
+5. **What did the before and after show, and under what conditions?** 8.36, 8.34 and 8.33 s before at load 1.2 to 3.9 and 2.99, 2.87 and 2.97 s after at load 7.6 to 7.9, measured 2026-11-26 (`make rust-test CRATE=rust/guard/shared FRESH=1`, three runs each).
+6. **Did any map move, and does it still keep the research?** None can: no engine code changes.
 
 
 ### T340 (<why: the finding or measurement that files it>)

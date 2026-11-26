@@ -3,10 +3,10 @@
 //! ended at 20:39 and the Stop's `background_tasks` stopped naming it, but its notice reached the builder's transcript only after the
 //! coordinator's message at 21:35, and the idle check stayed silent under 451's hold ("451 starts no new task").
 
-use std::cell::Cell;
+use std::cell::{Cell, RefCell};
 use std::collections::HashMap;
 use std::path::Path;
-use std::time::{Duration, SystemTime};
+use std::time::{Duration, Instant, SystemTime};
 
 use serde_json::json;
 
@@ -36,8 +36,13 @@ fn builder(tr: &Path, id: &str, watch: &str) {
 
 /// Agent `id`'s own transcript and meta, last written `ago` seconds before now.
 fn age(tr: &Path, id: &str, ago: u64) {
+    aged(tr, id, Duration::from_secs(ago));
+}
+
+/// [`age`], by any length of time.
+fn aged(tr: &Path, id: &str, ago: Duration) {
     let dir = tr.with_extension("").join("subagents");
-    let at = SystemTime::now() - Duration::from_secs(ago);
+    let at = SystemTime::now() - ago;
     std::fs::File::options()
         .append(true)
         .open(dir.join(format!("agent-{id}.jsonl")))
@@ -247,13 +252,48 @@ fn a_listed_run_still_lets_a_stalled_agent_be_named_but_no_list_names_none() {
     crate::env::unset("SET_DOWN_ROOT");
 }
 
-/// A stand-in process table: the writers each look sees, in turn (the last repeated), and the dead-producer waiters.
-struct Table {
+/// A stand-in process table: the writers each look sees, in turn (the last repeated), and the dead-producer waiters. Its clock is a
+/// stand-in too (451 T339): a wait asked of it is noted and passes at once, the time it tells moved on by that much.
+pub(super) struct Table {
     looks: Vec<Option<HashMap<String, Vec<u32>>>>,
     seen: Cell<usize>,
     stale: Vec<(u32, String)>,
     /// The live command lines, each with its pid.
     cmds: Vec<(u32, String)>,
+    /// When the table was made, by the machine's clock.
+    made: Instant,
+    /// Each wait the idle check asked for, in order.
+    pub(super) waits: RefCell<Vec<Duration>>,
+    /// What happens while a wait passes, given the whole time waited so far.
+    meanwhile: Box<dyn Fn(Duration)>,
+}
+
+/// The waits past which a stand-in clock fails its test: a check that never stops looking must fail, not spin (a CONVENTION).
+const MOST_WAITS: usize = 50;
+
+impl Table {
+    fn of(looks: Vec<Option<HashMap<String, Vec<u32>>>>, stale: Vec<(u32, String)>) -> Self {
+        Self {
+            looks,
+            seen: Cell::new(0),
+            stale,
+            cmds: Vec::new(),
+            made: Instant::now(),
+            waits: RefCell::new(Vec::new()),
+            meanwhile: Box::new(|_| ()),
+        }
+    }
+
+    /// The whole time waited so far.
+    fn waited(&self) -> Duration {
+        self.waits.borrow().iter().sum()
+    }
+
+    /// This table, `meanwhile` happening while each of its waits passes.
+    pub(super) fn meanwhile(mut self, meanwhile: impl Fn(Duration) + 'static) -> Self {
+        self.meanwhile = Box::new(meanwhile);
+        self
+    }
 }
 
 impl Procs for Table {
@@ -272,11 +312,20 @@ impl Procs for Table {
             .map(|(p, _)| *p)
             .collect()
     }
+    fn now(&self) -> Instant {
+        self.made + self.waited()
+    }
+    fn sleep(&self, time: Duration) {
+        self.waits.borrow_mut().push(time);
+        let asked = self.waits.borrow().len();
+        assert!(asked <= MOST_WAITS, "it never stops looking");
+        (self.meanwhile)(self.waited());
+    }
 }
 
-fn table(looks: &[&[(&str, u32)]], stale: &[(u32, &str)]) -> Table {
-    Table {
-        looks: looks
+pub(super) fn table(looks: &[&[(&str, u32)]], stale: &[(u32, &str)]) -> Table {
+    Table::of(
+        looks
             .iter()
             .map(|l| {
                 Some(
@@ -286,10 +335,8 @@ fn table(looks: &[&[(&str, u32)]], stale: &[(u32, &str)]) -> Table {
                 )
             })
             .collect(),
-        seen: Cell::new(0),
-        stale: stale.iter().map(|(p, f)| (*p, (*f).to_owned())).collect(),
-        cmds: Vec::new(),
-    }
+        stale.iter().map(|(p, f)| (*p, (*f).to_owned())).collect(),
+    )
 }
 
 /// [`table`], with live command lines.
@@ -335,12 +382,7 @@ fn a_watch_that_ended_after_the_stop_leaves_its_builder_named_with_no_later_stop
         kept.starts_with("IDLE CHECK: ") && !kept.contains("STALLED"),
         "the list as the Stop gave it: {kept}"
     );
-    let blind = Table {
-        looks: vec![None],
-        seen: Cell::new(0),
-        stale: Vec::new(),
-        cmds: Vec::new(),
-    };
+    let blind = Table::of(vec![None], Vec::new());
     // the watch still live: the builder is not named, the watch handed on (451 T201)
     let kept = |said: Option<String>, why: &str| {
         let said = said.unwrap_or_default();
@@ -382,9 +424,13 @@ fn a_watch_that_ended_after_the_stop_leaves_its_builder_named_with_no_later_stop
 /// While it waits (`L7R_IDLE_WAIT_SECS`), the idle check looks again: at the moment a quiet builder crosses the bound, and each
 /// `L7R_IDLE_RECHECK_SECS` while a builder's own run still goes - so a watch that ends after the first look, or a builder that goes
 /// quiet as the session's last Stop is written, is named with no Stop after; a turn of the session's own during the wait silences it,
-/// and past the budget a run still going is handed on (451 T201).
+/// and past the budget a run still going is handed on (451 T201). The seconds are a stand-in clock's (451 T339, [`Table`]): each
+/// wait is read as asked, and none is waited.
 #[test]
 fn the_idle_check_looks_again_until_its_budget() {
+    let secs = |waits: &[u64]| -> Vec<Duration> {
+        waits.iter().map(|s| Duration::from_secs(*s)).collect()
+    };
     let (_dir, c, tr) = world("stall-wait", "no");
     crate::env::set("SET_DOWN_ROOT", &c);
     crate::env::set("L7R_IDLE_CHECK_SECS", "0");
@@ -397,12 +443,16 @@ fn the_idle_check_looks_again_until_its_budget() {
     let text = idle_check_with(&input, &ends).expect("named once its watch ends, a look later");
     assert!(text.contains("a676"), "{text}");
     assert_eq!(ends.seen.get(), 3, "three looks");
-    // the budget spent with the watch still going: the check hands the watch on (451 T201) - one short wake, its Stop arming the
-    // next check - each time, never said once only, since each wake is a check of its own
-    crate::env::set("L7R_IDLE_WAIT_SECS", "1");
+    assert_eq!(*ends.waits.borrow(), secs(&[1, 1]), "a recheck apart");
+    // the budget spent with the watch still going: a look each recheck while the next still ends within the budget - at 0, 1, 2 and
+    // 3 s of 3 - then the check hands the watch on (451 T201) - one short wake, its Stop arming the next check - each time, never
+    // said once only, since each wake is a check of its own
+    crate::env::set("L7R_IDLE_WAIT_SECS", "3");
     for _ in 0..2 {
-        let text =
-            idle_check_with(&input, &table(&[&[("bx5", 40)]], &[])).expect("handed on, not silent");
+        let goes_on = table(&[&[("bx5", 40)]], &[]);
+        let text = idle_check_with(&input, &goes_on).expect("handed on, not silent");
+        assert_eq!(goes_on.seen.get(), 4, "a look each second of its three");
+        assert_eq!(*goes_on.waits.borrow(), secs(&[1, 1, 1]));
         assert!(
             text.starts_with("IDLE CHECK: 1 builder(s) still working past its wait."),
             "{text}"
@@ -416,39 +466,51 @@ fn the_idle_check_looks_again_until_its_budget() {
             "{text}"
         );
     }
-    // a builder that crosses the bound during the wait: named
+    // a budget shorter than one recheck: one look, no wait
+    crate::env::set("L7R_IDLE_WAIT_SECS", "0");
+    let short = table(&[&[("bx5", 40)]], &[]);
+    assert!(idle_check_with(&input, &short).is_some_and(|t| t.starts_with("IDLE CHECK: ")));
+    assert_eq!((short.seen.get(), short.waits.borrow().len()), (1, 0));
+    // a builder that crosses the bound during the wait: looked at again a second past its crossing, and named. The bound is the
+    // shipped 600 s, far past any time this test takes on the machine's clock, by which a transcript's silence is read
     let (_dir2, c2, tr2) = world("stall-cross", "no");
     crate::env::set("SET_DOWN_ROOT", &c2);
-    crate::env::set("L7R_IDLE_WAIT_SECS", "10");
-    crate::env::set("L7R_STALL_SECS", "2");
+    crate::env::set("L7R_IDLE_WAIT_SECS", "1000");
+    crate::env::set("L7R_STALL_SECS", "600");
     waiting_builder(&tr2, 0);
     let quiet = json!({"transcript_path": tr2.to_string_lossy(), "cwd": c2.to_string_lossy(), "session_id": "s-cross",
                        "background_tasks": []});
-    let at = std::time::Instant::now();
-    let text = idle_check(&quiet).expect("named as it crosses the bound");
-    assert!(
-        text.contains("silent >2 s") && at.elapsed() >= Duration::from_secs(2),
-        "{text}"
-    );
+    let crosses = {
+        let tr2 = tr2.clone();
+        table(&[&[]], &[]).meanwhile(move |waited| aged(&tr2, "a676", waited))
+    };
+    let text = idle_check_with(&quiet, &crosses).expect("named as it crosses the bound");
+    assert!(text.contains("silent >600 s"), "{text}");
+    let waits = crosses.waits.borrow().clone();
+    assert_eq!(waits.len(), 1, "one wait, to its crossing: {waits:?}");
+    // what was left of its bound, and a second
+    let (bound, past) = (Duration::from_secs(600), Duration::from_secs(601));
+    assert!(waits[0] > bound && waits[0] <= past, "{waits:?}");
     // the session's own turn during that wait: silent
     let (_dir3, c3, tr3) = world("stall-turn", "no");
     crate::env::set("SET_DOWN_ROOT", &c3);
-    crate::env::set("L7R_IDLE_WAIT_SECS", "10");
+    crate::env::set("L7R_IDLE_WAIT_SECS", "1000");
     waiting_builder(&tr3, 0);
     let turned = json!({"transcript_path": tr3.to_string_lossy(), "cwd": c3.to_string_lossy(), "session_id": "s-turn",
                         "background_tasks": []});
-    let writer = {
+    let turns = {
         let tr3 = tr3.clone();
-        std::thread::spawn(move || {
-            std::thread::sleep(Duration::from_millis(500));
+        table(&[&[]], &[]).meanwhile(move |waited| {
+            aged(&tr3, "a676", waited);
             append(
                 &tr3,
                 r#"{"type":"user","message":{"role":"user","content":"go on"}}"#,
             );
         })
     };
-    assert_eq!(idle_check(&turned), None, "a turn while it waits");
-    writer.join().unwrap();
+    let said = idle_check_with(&turned, &turns);
+    assert_eq!(said, None, "a turn while it waits");
+    assert_eq!(turns.waits.borrow().len(), 1);
     for k in [
         "L7R_STALL_SECS",
         "L7R_IDLE_WAIT_SECS",

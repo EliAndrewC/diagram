@@ -62,8 +62,18 @@ pub(super) const WAIT_SECS: u64 = MONITOR_SECS + stalls::STALL_SECS;
 const RECHECK_SECS: u64 = 60;
 
 /// What the idle check asks of the process table (451 T193): the guard's `finished_run_hooks` answers from `/proc`; [`idle_check`]
-/// asks nothing of it, and keeps the Stop's list as given.
+/// asks nothing of it, and keeps the Stop's list as given. Its clock is asked here too (451 T339: [`Procs::now`] and
+/// [`Procs::sleep`], the machine's own unless a test's table steps one, so the suite waits none of the check's seconds - the tests of
+/// its waits took 8.06 s, 1.01 s and 1.01 s of the crate's 8.4 s run, measured 2026-11-26).
 pub trait Procs {
+    /// The time now, by which the wait's budget is held.
+    fn now(&self) -> Instant {
+        Instant::now()
+    }
+    /// Wait `time` before the next look.
+    fn sleep(&self, time: Duration) {
+        std::thread::sleep(time);
+    }
     /// Each background task of session `session` some live process writes - its `<session>/tasks/<id>.output` on that process's
     /// stdout or stderr, which the harness's shell holds for its whole run (measured 2026-11-23 on a backgrounded `sleep`) - with
     /// those pids; None where the table cannot be read.
@@ -144,7 +154,7 @@ pub fn idle_check_with(input: &Value, procs: &dyn Procs) -> Option<String> {
     }
     let secs = secs_of("L7R_IDLE_CHECK_SECS", IDLE_SECS);
     if secs > 0 {
-        std::thread::sleep(Duration::from_secs(secs));
+        procs.sleep(Duration::from_secs(secs));
     }
     if turned_since(transcript, start) {
         return None;
@@ -335,7 +345,7 @@ fn watched(
     let bound = secs_of("L7R_STALL_SECS", stalls::STALL_SECS);
     let bound_for = Duration::from_secs(bound);
     let recheck = Duration::from_secs(secs_of("L7R_IDLE_RECHECK_SECS", RECHECK_SECS));
-    let deadline = Instant::now() + Duration::from_secs(secs_of("L7R_IDLE_WAIT_SECS", WAIT_SECS));
+    let deadline = procs.now() + Duration::from_secs(secs_of("L7R_IDLE_WAIT_SECS", WAIT_SECS));
     let said = crate::once::file(
         &crate::guards::event_log_hooks::common_git_dir(&root),
         &event.input,
@@ -388,7 +398,7 @@ fn watched(
         .into_iter()
         .flatten()
         .min();
-        let Some(next) = next.filter(|n| Instant::now() + *n <= deadline) else {
+        let Some(next) = next.filter(|n| procs.now() + *n <= deadline) else {
             // LIVE WORK OUTLASTING THE WAIT IS HANDED ON (451 T201): the check wakes the session only by its own exit, held under the
             // hook's `timeout`, so a builder's run or child still live at the deadline would be named only at a later Stop, and with
             // none, never. One short wake, said every time (each is a check of its own, not a repeat), whose Stop arms the next check
@@ -405,7 +415,7 @@ fn watched(
             }
             return Watched::Quiet(now_listed);
         };
-        std::thread::sleep(next);
+        procs.sleep(next);
         if turned_since(transcript, start) {
             return Watched::Turned;
         }

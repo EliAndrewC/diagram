@@ -7,7 +7,8 @@ use std::path::Path;
 use serde_json::json;
 
 use super::super::holds::held;
-use super::super::idle_check;
+use super::super::{idle_check, idle_check_with};
+use super::stalls::table;
 use super::{agent, append, said, world};
 
 /// A ruling row of `feature`'s `arbiter.jsonl`.
@@ -258,12 +259,12 @@ fn a_reply_during_the_idle_check_s_wait_silences_it() {
     crate::env::set("L7R_IDLE_CHECK_SECS", "1");
     let input = json!({"transcript_path": tr.to_string_lossy(), "background_tasks": []});
     let at = tr.clone();
-    let writer = std::thread::spawn(move || {
-        std::thread::sleep(std::time::Duration::from_millis(200));
+    // the reply is written as the wait passes, on the table's stand-in clock (451 T339)
+    let replied = table(&[&[]], &[]).meanwhile(move |_| {
         append(&at, r#"{"type": "assistant", "message": {"content": []}}"#);
     });
-    assert_eq!(idle_check(&input), None);
-    writer.join().unwrap();
+    assert_eq!(idle_check_with(&input, &replied), None);
+    assert_eq!(replied.waits.borrow().len(), 1);
     crate::env::unset("L7R_IDLE_CHECK_SECS");
     crate::env::unset("SET_DOWN_ROOT");
 }
@@ -280,16 +281,26 @@ fn only_the_session_s_own_dispatch_is_session_dispatched() {
     assert!(!super::super::session_dispatched(&dir, "none"));
 }
 
-/// The wait is the knob's: one second, timed.
+/// The wait is the knob's: seven seconds asked of the clock, once, before the block is said - and the clock, unless a test's table
+/// stands in for it, is the machine's own, its wait a real one (451 T339).
 #[test]
 fn the_idle_check_waits_its_seconds() {
+    use super::super::Procs as _;
+    use std::time::{Duration, Instant};
     let (_dir, c, tr) = world("waits", "no");
     crate::env::set("SET_DOWN_ROOT", &c);
-    crate::env::set("L7R_IDLE_CHECK_SECS", "1");
+    crate::env::set("L7R_IDLE_CHECK_SECS", "7");
     let input = json!({"transcript_path": tr.to_string_lossy(), "background_tasks": []});
-    let t0 = std::time::Instant::now();
-    assert!(idle_check(&input).is_some());
-    assert!(t0.elapsed() >= std::time::Duration::from_secs(1));
+    let clock = table(&[&[]], &[]);
+    assert!(idle_check_with(&input, &clock).is_some());
+    assert_eq!(*clock.waits.borrow(), [Duration::from_secs(7)]);
+    let real = super::super::idle::Blind;
+    let t0 = Instant::now();
+    let before = real.now();
+    real.sleep(Duration::from_millis(20));
+    assert!(t0.elapsed() >= Duration::from_millis(20));
+    assert!(real.now() - before >= Duration::from_millis(20));
+    assert!(before >= t0);
     crate::env::unset("L7R_IDLE_CHECK_SECS");
     crate::env::unset("SET_DOWN_ROOT");
 }
