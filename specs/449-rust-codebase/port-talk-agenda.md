@@ -62,6 +62,12 @@ agents, 251 on background commands, 148 on nothing; agents used 2,147 agent-minu
    the code direction (backed work out) versus asked for a measurement or wording, across 449 and 451's plan reviews; and
    which reviews block work today (a builder's closing plan review, which already follows the code, vs a spec-kit feature's
    spec and plan review before any task starts, and the decide-first guard, which holds the CHECKS, not the code).
+   Measured 2026-11-25 (a read-only pass over dev/review-ledger.md's MODE 4 spec-fidelity rows since 2026-11-19, the verdict
+   JSONs, plan-done notes and plan.md diffs; method and table in the session scratchpad, reversals/): of 301 tasks with a
+   task-level plan review, 224 (74%) were CLEAR on the first round; of the 69 blocked tasks whose first BLOCKED round could be
+   read, 6 asked for a measurement, 13 for wording or form only, 45 for code that built on what was there, and 5 (about 7%,
+   all of low or medium confidence: 451 T79, T186, T46, T102, T197) reversed built work; 18 more could not be read (the
+   verdict files are overwritten). So building before the review clears would rarely be thrown away.
 
 Items 1-4 share one root: one writable clone per session (docs/session-clones.md).
 7. Every other block that could overlap with the next round of work (the GM: "places where we currently block on things where
@@ -78,6 +84,10 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
    unless shared - measure), and the .git/ state files the tooling keeps per clone (.git/l7r-events, page-sessions,
    closing-checks, handoffs). Price both: creation time, disk, the first build's time, and which guards and gates assume
    one writer per clone.
+   Measured 2026-11-25: a fresh `git clone` of /diagram took 3.0 s and 615 MB; a worktree 2.2 s and 288 MB, its history
+   shared; either way a cold Rust build cache is 13-14 GB, which dwarfs both - the choice that matters is whether copies share
+   one build cache.
+
 9. The tooling's own run time, every part of it (the GM: "whether there are additional improvements that we need to make to
    the time it takes for any of our tooling to run, whether that is compiling or running tests or generating maps or
    performing landings or performing git actions or our hooks ... in total, we do spend more than 50% of our time in our
