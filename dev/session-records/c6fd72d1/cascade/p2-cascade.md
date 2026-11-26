@@ -59,7 +59,7 @@ Bundle B, PAGES = 0059 drawing:
   effect: none [§7]"
 - `driver.rs::BROOK_TAP_RUN#the brook's course` (cites 0054 only) **MISLABELED** - "the 70 ft is exactly the figure the 0059
   drawing page §7 records as a GUESS ... The claim points instead to 0054's drawing page and to the deleted `consts_water.py`,
-  and it lists slew, skirt and wander, which this constant does not set. The label should be GUESS research/questions/0059-...
+  and it lists slew, skirt and wander, which this constant does not set. The label should be GUESS question 0059 (abbreviated in the session record)
   drawing.html (the tap's stride, ~70 ft)"
 - `field/brook.rs::brook#outside the crop` (cites no page) **CANNOT-TELL**, HELD by T218 (not recorded, not filed) - ""out at
   once below a shoulder intake" applies inside the tap stride too (`want` outward sets `x = want` before the `tap_run` test),
@@ -220,7 +220,7 @@ Cost: 4 dispatches, about 152k subagent tokens, under 5 minutes of agent time; 0
 3. `rust/phases/src/field/brook.rs::brook#the tap's stride` (DRIFTED, fix: claim) - no longer "silent": "GUESS
    question 0059 (abbreviated in the session record): the brook holds the intake's line about 70 ft below a shoulder intake, the page's
    guess; the plan's tap stride, none in toward the flank's line across it". Cite 0059 drawing item `brook-line-below-intake`.
-4. `rust/phases/src/driver.rs::BROOK_TAP_RUN#the brook's course` (MISLABELED) - relabel `GUESS research/questions/0059-...
+4. `rust/phases/src/driver.rs::BROOK_TAP_RUN#the brook's course` (MISLABELED) - relabel `GUESS question 0059 (abbreviated in the session record)
    drawing.html` for the 70 ft (item `brook-line-below-intake`); the slew, skirt, wander and station constants' "as
    `BROOK_TAP_RUN`'s" then need their own account (0054 silent on them), since the lead claim no longer speaks for them.
 5. `rust/phases/src/field/brook.rs::brook#outside the crop` (CANNOT-TELL, held, unrecorded) - make "out at once below a shoulder
