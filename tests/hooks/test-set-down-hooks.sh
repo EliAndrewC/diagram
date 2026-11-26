@@ -6,6 +6,7 @@
 # a feature's `tasks.md`, and a transcript in the harness's JSONL form, whose background launches and task notifications say
 # what is still running.
 set -uo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/set-down-hooks.sh"
 SETDOWN="$HERE/../../scripts/gates/l7r-gate.sh"  # `l7r-gate set-down`, set-down.py's port (feature 449 T135)
@@ -72,7 +73,7 @@ echo "5. make set-down: a reason of two words or more, recorded; it counts after
 ( cd "$C" && SET_DOWN_WHY="waiting" "$SETDOWN" set-down 385 >/dev/null 2>&1 ); [ $? -ne 0 ] && ok "a one-word reason is refused" || no "one-word reason"
 printf '{"feature": "385-x", "why": "an old one", "utc": "2026-10-18T22:00:00Z"}\n' > "$G/set-downs.jsonl"
 [ "$(stop)" = 2 ] && ok "a set-down before the task-start does not count" || no "old set-down"
-( cd "$C" && SET_DOWN_WHY="awaiting the GM on the cohort" "$SETDOWN" set-down 385 ) | grep -q "385-x set down" && ok "make set-down records it" || no "set-down records"
+o=$(cd "$C" && SET_DOWN_WHY="awaiting the GM on the cohort" "$SETDOWN" set-down 385) && seen o -q "385-x set down" && ok "make set-down records it" || no "set-down records"
 [ "$(stop)" = 0 ] && ok "set down: the turn ends" || no "set down"
 
 echo "6. only the GM's review box open: the turn ends"
@@ -137,7 +138,7 @@ printf '{"feature": "444-x", "task": "T29", "utc": "2026-11-21T10:00:00Z"}\n' > 
 rc=$(printf '{"cwd": "%s", "transcript_path": "%s"}' "$P" "$T/tr9.jsonl" | SET_DOWN_ROOT="$P" "$HOOK" stop 2>"$T/err"; echo $?)
 [ "$rc" = 2 ] && grep -q "Stop before homesteads, and talk first" "$T/err" && ! grep -q "task-start F=444 T=T30" "$T/err" && ok "the ruling named, no stage task to start" || no "parked stop" "rc=$rc $(cat "$T/err")"
 printf '{"seven_day": 50}' > "$T/cap/latest-s-9.json"
-out=$(cd "$P" && CLAUDE_CODE_SESSION_ID=s-9 SET_DOWN_WHY="the parked stages wait for the GM" "$SETDOWN" set-down 444 2>&1) && echo "$out" | grep -q "the stop the GM asked for" && ok "set down under the cap, naming the ruling" || no "parked set-down" "$out"
+out=$(cd "$P" && CLAUDE_CODE_SESSION_ID=s-9 SET_DOWN_WHY="the parked stages wait for the GM" "$SETDOWN" set-down 444 2>&1) && seen out -q "the stop the GM asked for" && ok "set down under the cap, naming the ruling" || no "parked set-down" "$out"
 
 echo "11. builders running: the Stop is silent, and a report back names no free slot (451 T183's MODE 4, D10: a free slot is named only by the idle check, once nothing runs)"
 L="$T/land"; mkdir -p "$L/specs/449-x" "$L/scripts"; git -C "$L" init -q

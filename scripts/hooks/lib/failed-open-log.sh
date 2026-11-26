@@ -118,7 +118,7 @@ _fo_surrogates() {
 _fo_utf8() {
   if command -v iconv >/dev/null 2>&1; then printf '%s' "$1" | iconv -f UTF-8 -t UTF-8 >/dev/null 2>&1; return; fi
   [[ "$1" == *$'\xef\xbf\xbd'* ]] && return 0
-  ! printf '%s' "$1" | jq -c '..|strings' 2>/dev/null | grep -q $'\xef\xbf\xbd'
+  ! grep -q $'\xef\xbf\xbd' < <(jq -c '..|strings' 2>/dev/null <<< "$1")
 }
 
 # failed_open_log <detail> <tree>: the entry, as `guard_log l7r-guard failed-open <detail> failed-open` wrote it with $INPUT and $SID

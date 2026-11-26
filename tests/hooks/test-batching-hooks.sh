@@ -2,6 +2,7 @@
 # Tests for batching-hooks.sh. Simulates PreToolUse/PostToolUse event sequences and asserts when a
 # block fires. Run: tests/hooks/test-batching-hooks.sh   (exit 0 = all green)
 set -uo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/batching-hooks.sh"
 PASS=0; FAIL=0
@@ -107,7 +108,7 @@ serial_turn; serial_turn                       # window "11" - one turn below th
 tick 750                                     # a NEW turn: without the gap this is call 2 of the last one
 NOTICE=$("$HOOK" pretool <<<"$(ev Read)" 2>/dev/null); RC=$?
 check "the turn below the bar is still allowed" ok $RC
-printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and it carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  no notice one turn before the block"; FAIL=$((FAIL+1)); }
+seen NOTICE -q "BATCHING NOTICE" && { echo "  ok    ...and it carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  no notice one turn before the block"; FAIL=$((FAIL+1)); }
 printf '%s' "$NOTICE" | jq empty 2>/dev/null && { echo "  ok    ...as valid JSON"; PASS=$((PASS+1)); } || { echo "  FAIL  the notice is not valid JSON"; FAIL=$((FAIL+1)); }
 # GUARD_EDIT_OK: ...AND IT IS RECORDED (2026-09-13). The notice fired correctly from the day it landed
 # and wrote nothing down, so the log held 700 batching entries, all of them `blocked`, and the GM's
@@ -119,7 +120,7 @@ grep -rhq '"event": *"reminded"' "$GUARD_LOG_ROOT" 2>/dev/null || grep -rhq 'rem
 teardown
 setup
 QUIET=$("$HOOK" pretool <<<"$(ev Read)" 2>/dev/null)
-printf '%s' "$QUIET" | grep -q "BATCHING NOTICE" && { echo "  FAIL  a notice on the first turn of all"; FAIL=$((FAIL+1)); } || { echo "  ok    a quiet session gets no notice"; PASS=$((PASS+1)); }
+seen QUIET -q "BATCHING NOTICE" && { echo "  FAIL  a notice on the first turn of all"; FAIL=$((FAIL+1)); } || { echo "  ok    a quiet session gets no notice"; PASS=$((PASS+1)); }
 teardown
 }
 
@@ -135,7 +136,7 @@ serial_turn; serial_turn                       # window "11" - one below the bar
 tick 750
 NOTICE=$("$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"grep -n a f; grep -n b g"}}' 2>/dev/null); RC=$?
 check "the folded call is allowed" ok $RC
-printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and it carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  a folded call one below the bar got no notice"; FAIL=$((FAIL+1)); }
+seen NOTICE -q "BATCHING NOTICE" && { echo "  ok    ...and it carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  a folded call one below the bar got no notice"; FAIL=$((FAIL+1)); }
 teardown
 }
 case_05() {  # 1 s measured alone 2026-10-12
@@ -145,7 +146,7 @@ serial_turn; serial_turn
 tick 750
 NOTICE=$("$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"make done","run_in_background":true}}' 2>/dev/null); RC=$?
 check "the backgrounded call is allowed" ok $RC
-printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and it carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  a backgrounded call one below the bar got no notice"; FAIL=$((FAIL+1)); }
+seen NOTICE -q "BATCHING NOTICE" && { echo "  ok    ...and it carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  a backgrounded call one below the bar got no notice"; FAIL=$((FAIL+1)); }
 teardown
 }
 
@@ -160,8 +161,8 @@ fold >/dev/null; fold >/dev/null; fold >/dev/null; fold >/dev/null
 serial_turn; check "four folded turns then a bare read: allowed" ok $?
 serial_turn; check "...and a second bare read (window holds two)" ok $?
 NOTICE=$(fold); check "a folded call one below the bar is allowed" ok $?
-printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  no notice one below the bar"; FAIL=$((FAIL+1)); }
-printf '%s' "$NOTICE" | grep -q "folded command does not count" && { echo "  ok    ...saying a folded command does not count"; PASS=$((PASS+1)); } || { echo "  FAIL  the notice does not say folding is exempt"; FAIL=$((FAIL+1)); }
+seen NOTICE -q "BATCHING NOTICE" && { echo "  ok    ...and carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  no notice one below the bar"; FAIL=$((FAIL+1)); }
+seen NOTICE -q "folded command does not count" && { echo "  ok    ...saying a folded command does not count"; PASS=$((PASS+1)); } || { echo "  FAIL  the notice does not say folding is exempt"; FAIL=$((FAIL+1)); }
 serial_turn; check "a third bare read reaches the bar, allowed" ok $?
 tick 750; OUT=$("$HOOK" pretool <<<"$(ev Read)" 2>"$BT_ERR"); check "a fourth bare read is refused" blocked $?
 [ -z "$OUT" ] && { echo "  ok    ...with no notice printed alongside the refusal"; PASS=$((PASS+1)); } || { echo "  FAIL  a refused call also printed the notice"; FAIL=$((FAIL+1)); }

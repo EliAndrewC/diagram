@@ -8,6 +8,7 @@
 # normal routine, which is precisely how the documented-override workaround became habitual in the
 # feature that motivated this one. A false positive here is a worse outcome than a false negative.
 set -uo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/make-only-hooks.sh"
 # GUARD_EDIT_OK: feature 164 - this guard RECORDS its firings now (feature 162's log), so the suite
@@ -348,7 +349,7 @@ refused_because "a module nothing wraps lists what is" "python3 -m l7r.diagram.t
 refused_because "...and the list names a wrapped module" "python3 -m l7r.diagram.tools.scatter_audit pool/hamlets/x" "make switches"
 refused_because "arguments the recipe cannot carry" "python3 -m l7r.diagram.switches --nonsense" "cannot carry"
 refused_because "a multi-line recipe (REF_FIRST) does not wrap" "python3 -m l7r.diagram.hamletgen --seed 4" "no make target wraps"
-ev "python3 -m l7r.diagram.switches show" | "$HOOK" pretool 2>/dev/null | grep -q "make switches" \
+o=$(ev "python3 -m l7r.diagram.switches show" | "$HOOK" pretool 2>/dev/null) && seen o -q "make switches" \
   && { echo "  ok      the context names the module and the target"; PASS=$((PASS+1)); } \
   || { echo "  FAIL    the entry-point rewrite's context is silent"; FAIL=$((FAIL+1)); }
 
@@ -456,7 +457,7 @@ dead_make_names() {   # dead_make_names ROOT: "file:line: make NAME" for each na
       awk -v F="$f" '/^[ \t]*#\[cfg\(test\)\]/ { exit } /^[ \t]*\/\// { next } { print F ":" NR ": " $0 }' "$r/$f"
     done
     ( cd "$r" && ls .claude/agents/*.md ) | while read -r f; do
-      head -3 "$r/$f" | grep -qE '^description: DORMANT' && continue
+      grep -qE '^description: DORMANT' <<< "$(head -3 "$r/$f")" && continue
       grep -nEiv '(left with|retired|gone|deleted|dormant|removed|went with|no longer|has no rule|does not exist)' "$r/$f" | sed "s|^|$f:|"
     done
   } | grep -oE "^[^:]+:[0-9]+:|([\`\"']|run:? |then |try )make( +(-[A-Za-z-]+|[A-Z_]+=[^ ]*))* +[a-z][a-z0-9-]*([^a-z0-9*<-]|$)" \

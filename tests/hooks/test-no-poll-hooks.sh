@@ -2,6 +2,7 @@
 # Tests for no-poll-hooks.sh. Feeds the hook a PreToolUse payload for a Bash command and asserts
 # whether it blocks. Run: tests/hooks/test-no-poll-hooks.sh   (exit 0 = all green)
 set -uo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # feature 449 T009: the guard is Rust - the link `no-poll-hooks.sh` beside this suite runs `l7r-guard --only no-poll-hooks`
 HOOK="$HERE/no-poll-hooks.sh"
@@ -54,7 +55,7 @@ bgcheck() { # label, expected, command, background(1|0)
 backgrounded() { # label, command
   local out; out=$(bgrun "$2" 0 2>/dev/null); local rc=$?
   local flag; flag=$(printf '%s' "$out" | jq -r '.hookSpecificOutput.updatedInput.run_in_background // empty' 2>/dev/null)
-  if [ "$rc" -eq 0 ] && [ "$flag" = "true" ] && printf '%s' "$out" | grep -q "BACKGROUNDED"; then
+  if [ "$rc" -eq 0 ] && [ "$flag" = "true" ] && seen out -q "BACKGROUNDED"; then
     echo "  ok      $1"; PASS=$((PASS+1))
   else
     echo "  FAIL    $1 (rc=$rc, run_in_background='${flag:-<unset>}')"; FAIL=$((FAIL+1))
@@ -70,7 +71,7 @@ bgrewritten() { # label, command, background(1|0), the text the corrected comman
 }
 untouched() { # label, command, background(1|0) - permitted with NO rewrite at all
   local out; out=$(bgrun "$2" "$3" 2>/dev/null); local rc=$?
-  if [ "$rc" -eq 0 ] && ! printf '%s' "$out" | grep -q updatedInput; then
+  if [ "$rc" -eq 0 ] && ! seen out -q updatedInput; then
     echo "  ok      $1"; PASS=$((PASS+1))
   else
     echo "  FAIL    $1 (rc=$rc, out='${out:-<nothing>}')"; FAIL=$((FAIL+1))
@@ -79,7 +80,7 @@ untouched() { # label, command, background(1|0) - permitted with NO rewrite at a
 ceiled_only() { # label, command, background(1|0)
   local out; out=$(bgrun "$2" "$3" 2>/dev/null)
   local got; got=$(printf '%s' "$out" | jq -r '.hookSpecificOutput.updatedInput.command // empty' 2>/dev/null | sed -E 's/ (\|\||&&) \{ \[ "\$SECONDS" -(ge|lt) [0-9]+ \] (&&|\|\|) \{ echo "WAIT TIMED OUT[^"]*"; exit 4; \}; \}//g')
-  if [ "$got" = "$2" ] && printf '%s' "$out" | grep -q "WAIT TIMED OUT"; then echo "  ok      $1"; PASS=$((PASS+1));
+  if [ "$got" = "$2" ] && seen out -q "WAIT TIMED OUT"; then echo "  ok      $1"; PASS=$((PASS+1));
   else echo "  FAIL    $1 (got '${got:-<nothing>}')"; FAIL=$((FAIL+1)); fi
 }
 alive() { # label, expected(alive|dead), args...
@@ -137,8 +138,8 @@ echo "2. the block explains the fault and the alternative"
 # GUARD_EDIT_OK: feature 164 - the self-match is CORRECTED now, so its explanation travels as the
 # rewrite's own context rather than as a refusal. The busy-wait block below still owes its message.
 SELF=$(run 'pgrep -f "cherryd"' 2>/dev/null)
-printf '%s' "$SELF" | grep -q "finds the searching shell itself" && { echo "  ok      the correction names the self-match fault"; PASS=$((PASS+1)); } || { echo "  FAIL    self-match not explained"; FAIL=$((FAIL+1)); }
-printf '%s' "$SELF" | grep -q "was bracketed for you" && { echo "  ok      ...and says it was corrected for you (451 T170: the history behind it is the code's comment)"; PASS=$((PASS+1)); } || { echo "  FAIL    the correction does not say it was made"; FAIL=$((FAIL+1)); }
+seen SELF -q "finds the searching shell itself" && { echo "  ok      the correction names the self-match fault"; PASS=$((PASS+1)); } || { echo "  FAIL    self-match not explained"; FAIL=$((FAIL+1)); }
+seen SELF -q "was bracketed for you" && { echo "  ok      ...and says it was corrected for you (451 T170: the history behind it is the code's comment)"; PASS=$((PASS+1)); } || { echo "  FAIL    the correction does not say it was made"; FAIL=$((FAIL+1)); }
 run 'while :; do sleep 5; done' >/dev/null
 grep -q "completion notification" "$HOOK_ERR" && { echo "  ok      a real busy-wait still points at the notification"; PASS=$((PASS+1)); } || { echo "  FAIL    no alternative offered"; FAIL=$((FAIL+1)); }
 run 'while :; do sleep 5; done' >/dev/null
@@ -201,7 +202,7 @@ bgcheck "a foreground NETWORK wait is still refused" blocked "until curl -sf htt
 bgcheck "a foreground PROCESS wait is still refused" blocked "until pgrep -f '[m]ake done'; do sleep 5; done" 0
 bgcheck "a backgrounded NETWORK wait" blocked "until curl -sf https://host/x; do sleep 5; done" 1
 bgcheck "...even with an output redirect (a redirect is not a file read)" blocked "until curl -sf https://host/x > /tmp/out; do sleep 5; done" 1
-bgcheck "a backgrounded PROCESS check through a pipe" blocked "until ps aux | grep -q make; do sleep 5; done" 1
+bgcheck "a backgrounded PROCESS check through a pipe" blocked "until ps aux | grep -q make; do sleep 5; done" 1  # pipe-ok: a guard's payload, never run here
 bgcheck "a command substitution in the condition" blocked "until [ -n \"\$(pgrep -f make)\" ]; do sleep 5; done" 1
 bgcheck "an output redirect on an otherwise real file watch" blocked "until grep -q x /tmp/a.log >/dev/null; do sleep 5; done" 1
 bgcheck "a disguised bare sleep, backgrounded" blocked "command sleep 30" 1
@@ -269,14 +270,14 @@ check "an escaped wait with a bracketed pattern is untouched" ok 'until ! pgrep 
 # escape permits the wait but does not fix the pattern - rendered here so the message budget check holds that wording
 ESC_LIT='until ! pgrep -f "cherryd" >/dev/null; do sleep 5; done  # POLL_OK: a daemon another session started'
 rewritten "an escaped wait with a literal pattern is bracketed" "$ESC_LIT" '[c]herryd'
-run "$ESC_LIT" 2>/dev/null | grep -q "it does not fix the pattern" && { echo "  ok      ...and the notice says the escape does not fix the pattern"; PASS=$((PASS+1)); } || { echo "  FAIL    the escaped bracket's notice is missing"; FAIL=$((FAIL+1)); }
+o=$(run "$ESC_LIT" 2>/dev/null) && seen o -q "it does not fix the pattern" && { echo "  ok      ...and the notice says the escape does not fix the pattern"; PASS=$((PASS+1)); } || { echo "  FAIL    the escaped bracket's notice is missing"; FAIL=$((FAIL+1)); }
 rewritten "two literal patterns are BOTH bracketed" 'pgrep -f "cherryd"; pgrep -f "resvg"' '[r]esvg'
 rewritten "...and the first of them too" 'pgrep -f "cherryd"; pgrep -f "resvg"' '[c]herryd'
 rewritten "two make-run waits are BOTH scoped" 'pgrep -f "make done"; pgrep -f "make quick"' 'l7r-gate.sh own-make quick'
 rewritten "...and the first of them too" 'pgrep -f "make done"; pgrep -f "make quick"' 'l7r-gate.sh own-make done'
 rewritten "a kill is not a wait: pkill is bracketed, not scoped" 'pkill -f "make done"' 'pkill -f "[m]ake done"'
 SCOPED=$(run 'pgrep -f "make done"' 2>/dev/null)
-printf '%s' "$SCOPED" | grep -q "scoped to this working tree" && { echo "  ok      the scoping says why"; PASS=$((PASS+1)); } || { echo "  FAIL    the scoping is not explained"; FAIL=$((FAIL+1)); }
+seen SCOPED -q "scoped to this working tree" && { echo "  ok      the scoping says why"; PASS=$((PASS+1)); } || { echo "  FAIL    the scoping is not explained"; FAIL=$((FAIL+1)); }
 grep -rlq 'self-match-scoped' "$GUARD_LOG_ROOT" && { echo "  ok      the scoping is recorded under its own rule slug"; PASS=$((PASS+1)); } || { echo "  FAIL    no self-match-scoped entry"; FAIL=$((FAIL+1)); }
 
 }
@@ -313,7 +314,7 @@ NP_DEAD=$(mktemp); touch -d "2 hours ago" "$NP_DEAD"
 for np_shape in "until grep -q DONE $NP_DEAD; do sleep 1; done; echo FALSE-SUCCESS" "while [ ! -s $NP_DEAD ]; do sleep 1; done; echo FALSE-SUCCESS"; do
   np_cmd=$(bgrun "$np_shape" 1 2>/dev/null | jq -r '.hookSpecificOutput.updatedInput.command // empty' 2>/dev/null)
   np_out=$(timeout 20 bash -c "$np_cmd" 2>/dev/null); np_rc=$?
-  if [ "$np_rc" -eq 3 ] && ! printf '%s' "$np_out" | grep -q FALSE-SUCCESS; then echo "  ok      a dead writer ends the whole wait with status 3 - nothing after the loop runs (${np_shape%% *})"; PASS=$((PASS+1));
+  if [ "$np_rc" -eq 3 ] && ! seen np_out -q FALSE-SUCCESS; then echo "  ok      a dead writer ends the whole wait with status 3 - nothing after the loop runs (${np_shape%% *})"; PASS=$((PASS+1));
   else echo "  FAIL    a dead writer let the command go on (${np_shape%% *}: rc=$np_rc, out='$np_out', cmd='$np_cmd')"; FAIL=$((FAIL+1)); fi
 done
 rm -f "$NP_DEAD"
@@ -363,7 +364,7 @@ rewritten "the real one: a make wait with a PATH in its target is scoped, so the
 NP_NEVER=$(mktemp)
 np_cmd=$(bgrun "until grep -q NEVER-WRITTEN $NP_NEVER; do sleep 1; done; echo FALSE-SUCCESS" 1 2>/dev/null | jq -r '.hookSpecificOutput.updatedInput.command // empty' 2>/dev/null)
 np_out=$(exec 9>>"$NP_NEVER"; SECONDS_AT=6000 timeout 20 bash -c "SECONDS=6000; $np_cmd" 2>/dev/null); np_rc=$?
-if [ "$np_rc" -eq 4 ] && printf '%s' "$np_out" | grep -q "WAIT TIMED OUT" && ! printf '%s' "$np_out" | grep -q FALSE-SUCCESS; then
+if [ "$np_rc" -eq 4 ] && seen np_out -q "WAIT TIMED OUT" && ! seen np_out -q FALSE-SUCCESS; then
   echo "  ok      past the ceiling the wait ends with status 4 and says so - nothing after the loop runs"; PASS=$((PASS+1))
 else echo "  FAIL    the ceiling did not end the wait (rc=$np_rc, out='$np_out', cmd='$np_cmd')"; FAIL=$((FAIL+1)); fi
 rm -f "$NP_NEVER"
@@ -484,7 +485,7 @@ rm -rf "$P_DIR"
 echo "--- feature 295: an inserted clause fits the quoting it lands in; a sleep outside every loop is no busy-wait ---"
 Q_CMD='setsid --fork bash -c "L=/tmp/q295.log; until grep -q X \$L; do sleep 5; done" </dev/null >/dev/null 2>&1'
 Q_OUT=$(run_bg "POLL_OK=\"feature 295 quoting case\" $Q_CMD" | jq -r '.hookSpecificOutput.updatedInput.command // empty')
-printf '%s' "$Q_OUT" | grep -q 'WAIT TIMED OUT' && bash -n <(printf '%s\n' "$Q_OUT") 2>/dev/null \
+seen Q_OUT -q 'WAIT TIMED OUT' && bash -n <(printf '%s\n' "$Q_OUT") 2>/dev/null \
   && { echo "  ok      a wait inside bash -c \"...\" gains its ceiling and still parses"; PASS=$((PASS+1)); } \
   || { echo "  FAIL    the ceiling inside double quotes broke the command: $Q_OUT"; FAIL=$((FAIL+1)); }
 # ...and so does its proof of life, escaped for the double quotes: a unit test of `shared::wait::proof_of_life` now

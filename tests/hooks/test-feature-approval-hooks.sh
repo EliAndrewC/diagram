@@ -5,6 +5,7 @@
 # Every case drives the REAL hook with a REAL payload over a REAL git tree and a fixture transcript, because a grep
 # proves a call site exists and not that it fires.
 set -uo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/feature-approval-hooks.sh"
 PASS=0; FAIL=0
@@ -55,13 +56,13 @@ echo "1. a new feature with no approval line is refused, at add and at commit"
 spec 378-widget-cache ""
 run "git add -A"
 [ "$RC" -eq 2 ] && ok "git add -A of a new 378 with no line is blocked" || no "add not blocked" "(rc=$RC)"
-printf '%s' "$OUT" | grep -q "specs/378-widget-cache/spec.md: no approval line" && ok "...naming the file and the failed check" || no "the refusal names neither"
-printf '%s' "$OUT" | grep -q '\*\*Approved\*\*: the GM, [0-9-]*, "<the GM' && ok "...and giving the exact line to add" || no "the line's form is missing"
-printf '%s' "$OUT" | grep -qi "escape" && printf '%s' "$OUT" | grep -q "There is no escape variable" && ok "...and saying there is no escape" || no "the no-escape sentence is missing"
-! printf '%s' "$OUT" | grep -q "before the command" && ok "...with no write-then-land note when the command touches no spec.md" || no "the note fired on a plain add"
+seen OUT -q "specs/378-widget-cache/spec.md: no approval line" && ok "...naming the file and the failed check" || no "the refusal names neither"
+seen OUT -q '\*\*Approved\*\*: the GM, [0-9-]*, "<the GM' && ok "...and giving the exact line to add" || no "the line's form is missing"
+seen OUT -qi "escape" && seen OUT -q "There is no escape variable" && ok "...and saying there is no escape" || no "the no-escape sentence is missing"
+! seen OUT -q "before the command" && ok "...with no write-then-land note when the command touches no spec.md" || no "the note fired on a plain add"
 # GUARD_EDIT_OK: feature 383, the round arbiter's tooling fix on hour:383@6 - a command that writes the line and lands in one go
 run "printf '**Approved**: x\n' >> specs/378-widget-cache/spec.md && git add -A"
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "before the command" && printf '%s' "$OUT" | grep -q "approval line in its own" && ok "a command that writes the spec.md and adds in one go is told the guard read the file before it ran, and the fix" || no "the write-then-land note is missing" "(rc=$RC)"
+[ "$RC" -eq 2 ] && seen OUT -q "before the command" && seen OUT -q "approval line in its own" && ok "a command that writes the spec.md and adds in one go is told the guard read the file before it ran, and the fix" || no "the write-then-land note is missing" "(rc=$RC)"
 git -C "$FIX" add -A >/dev/null 2>&1
 run "git commit -m wip"
 [ "$RC" -eq 2 ] && ok "git commit of the staged spec is blocked too" || no "commit not blocked" "(rc=$RC)"
@@ -72,10 +73,10 @@ clean
 echo "2. the quote must be the GM's, from this session, and three words or more"
 spec 378-widget-cache '**Approved**: the GM, 2026-10-10, "Yes"'
 run "git add specs"
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "under three words" && ok "a one-word quote is refused as too short" || no "a short quote passed" "(rc=$RC)"
+[ "$RC" -eq 2 ] && seen OUT -q "under three words" && ok "a one-word quote is refused as too short" || no "a short quote passed" "(rc=$RC)"
 spec 378-widget-cache '**Approved**: the GM, 2026-10-10, "please file a feature for the gadget"'
 run "git add specs"
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "in no message the GM wrote" && ok "words the GM never wrote are refused" || no "a foreign quote passed" "(rc=$RC)"
+[ "$RC" -eq 2 ] && seen OUT -q "in no message the GM wrote" && ok "words the GM never wrote are refused" || no "a foreign quote passed" "(rc=$RC)"
 spec 378-widget-cache '**Approved**: the GM, 2026-10-10, "File a feature for the gizmo audit."'
 run "git add specs"
 [ "$RC" -eq 2 ] && ok "a headless session's prompt (promptSource sdk) is not the GM's" || no "an sdk prompt counted as the GM" "(rc=$RC)"
@@ -114,7 +115,7 @@ echo "2b. the GM's standing approval (2026-10-18) stands for an issue gm-assista
 STAND='**Approved**: the GM, 2026-10-18, "you should treat features that I have asked to be filed as automatic approval"'
 spec 378-widget-cache "$STAND"
 run "git add specs"
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'quote them on the line' && ok "the standing quote with no request.md is refused, and the refusal names the gm-assistant route" || no "the standing quote passed alone, or the tip is missing" "(rc=$RC)"
+[ "$RC" -eq 2 ] && seen OUT -q 'quote them on the line' && ok "the standing quote with no request.md is refused, and the refusal names the gm-assistant route" || no "the standing quote passed alone, or the tip is missing" "(rc=$RC)"
 printf '# Request: EliAndrewC/diagram#20, three questions\n\nplease work these\n' > "$FIX/specs/378-widget-cache/request.md"
 run "git add specs"
 [ "$RC" -eq 2 ] && ok "...and with a request.md that is no gm-assistant body" || no "a request with no gm-assistant body passed" "(rc=$RC)"
@@ -210,8 +211,8 @@ commit() { git -C "$FIX" add -A >/dev/null 2>&1; git -C "$FIX" commit -qm "$1" >
 push() { run "scripts/sync-with-main.sh done"; }
 sed -i 's/^\*\*Status\*\*: Done.*/**Status**: Filed - more work found/' "$FIX/specs/300-closed-by-status/spec.md"; commit reopen
 push
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "specs/300-closed-by-status/spec.md: closed before, and this push lands it OPEN" && ok "a status reopen left open is refused at the push, naming the feature" || no "a reopen left open landed" "(rc=$RC) $OUT"
-printf '%s' "$OUT" | grep -q "needs no approval: finish the work and close the feature" && ok "...and the refusal names finishing and closing first, no approval needed" || no "the reopen-is-fine sentence is missing"
+[ "$RC" -eq 2 ] && seen OUT -q "specs/300-closed-by-status/spec.md: closed before, and this push lands it OPEN" && ok "a status reopen left open is refused at the push, naming the feature" || no "a reopen left open landed" "(rc=$RC) $OUT"
+seen OUT -q "needs no approval: finish the work and close the feature" && ok "...and the refusal names finishing and closing first, no approval needed" || no "the reopen-is-fine sentence is missing"
 [ "$(printf '%s' "$OUT" | grep -n "finish the work and close" | cut -d: -f1)" -lt "$(printf '%s' "$OUT" | grep -n "A feature is filed only when" | cut -d: -f1)" ] && ok "...before the approval route" || no "the approval route comes first"
 run "cd $FIX && scripts/sync-with-main.sh push"
 [ "$RC" -eq 2 ] && ok "...also as cd <clone> && sync-with-main.sh push" || no "the cd form was not read" "(rc=$RC)"
@@ -226,10 +227,10 @@ push
 git -C "$FIX" update-ref refs/remotes/origin/main HEAD
 printf -- '- [ ] T02 the next thing\n' >> "$FIX/specs/301-closed-by-tasks/tasks.md"; commit "reopen by a task"
 push
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "301-closed-by-tasks" && ok "a feature closed by its ticked tasks, reopened by a new task, is refused too" || no "a task reopen landed" "(rc=$RC)"
+[ "$RC" -eq 2 ] && seen OUT -q "301-closed-by-tasks" && ok "a feature closed by its ticked tasks, reopened by a new task, is refused too" || no "a task reopen landed" "(rc=$RC)"
 printf '\n**Approved**: the GM, 2026-10-10, "please file a feature for the gadget"\n' >> "$FIX/specs/301-closed-by-tasks/spec.md"; commit "foreign approval"
 push
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "quotes words the GM did not write" && ok "...and an added approval in words the GM never wrote does not let it land" || no "a foreign approval let a reopen land" "(rc=$RC)"
+[ "$RC" -eq 2 ] && seen OUT -q "quotes words the GM did not write" && ok "...and an added approval in words the GM never wrote does not let it land" || no "a foreign approval let a reopen land" "(rc=$RC)"
 printf '\n**Approved**: the GM, 2026-10-10, "Yes, please go ahead and file this as a feature"\n' >> "$FIX/specs/301-closed-by-tasks/spec.md"; commit "the GM's approval"
 push
 [ "$RC" -eq 0 ] && ok "...but the GM's own words, added in the delta, do" || no "the GM's approval did not let the reopen land" "(rc=$RC) $OUT"
@@ -240,11 +241,11 @@ push
 git -C "$FIX" update-ref refs/remotes/origin/main HEAD
 printf -- '- [ ] T01 hidden work\n' > "$FIX/specs/300-closed-by-status/tasks.md"; commit "a task under Done"
 push
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "300-closed-by-status/spec.md: an unticked task added under a status line that still says closed" && ok "FR-012: an unticked task added under a Done status is refused" || no "hidden open work landed" "(rc=$RC) $OUT"
+[ "$RC" -eq 2 ] && seen OUT -q "300-closed-by-status/spec.md: an unticked task added under a status line that still says closed" && ok "FR-012: an unticked task added under a Done status is refused" || no "hidden open work landed" "(rc=$RC) $OUT"
 [ "$(printf '%s' "$OUT" | grep -n "do the work and tick the task" | cut -d: -f1)" -lt "$(printf '%s' "$OUT" | grep -n "A feature is filed only when" | cut -d: -f1)" ] && ok "...its refusal, too, leads with doing the work (tick the task) before the approval route" || no "FR-012's refusal leads with the approval"
 printf '\n**Approved**: the GM, 2026-10-10, "please file a feature for the gadget"\n' >> "$FIX/specs/300-closed-by-status/spec.md"; commit "foreign approval under Done"
 push
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "a task added under a closed status; the approval line it adds quotes words" && ok "...and a foreign approval gets FR-012's own wording, not 'reopened'" || no "FR-012's not-found wording is wrong" "(rc=$RC) $OUT"
+[ "$RC" -eq 2 ] && seen OUT -q "a task added under a closed status; the approval line it adds quotes words" && ok "...and a foreign approval gets FR-012's own wording, not 'reopened'" || no "FR-012's not-found wording is wrong" "(rc=$RC) $OUT"
 git -C "$FIX" reset -q --hard HEAD~1
 sed -i 's/^- \[ \] T01/- [x] T01/' "$FIX/specs/300-closed-by-status/tasks.md"; commit "ticked"
 push
@@ -255,7 +256,7 @@ git -C "$FIX" update-ref refs/remotes/origin/main HEAD
 sed -i 's/^- \[ \] T02/- [x] T02/' "$FIX/specs/300-closed-by-status/tasks.md"
 printf -- '- [ ] T03 new work slipped in\n' >> "$FIX/specs/300-closed-by-status/tasks.md"; commit "tick one, add one"
 push
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "300-closed-by-status" && ok "ticking a leftover box and adding a new one (the count unchanged) is still refused" || no "tick-one-add-one landed hidden work" "(rc=$RC)"
+[ "$RC" -eq 2 ] && seen OUT -q "300-closed-by-status" && ok "ticking a leftover box and adding a new one (the count unchanged) is still refused" || no "tick-one-add-one landed hidden work" "(rc=$RC)"
 sed -i 's/^- \[ \] T03/- [x] T03/' "$FIX/specs/300-closed-by-status/tasks.md"; commit "T03 done"
 git -C "$FIX" update-ref refs/remotes/origin/main HEAD
 # GUARD_EDIT_OK: feature 375 amendment 8 - the GM-review box `make accept` writes is tracked by make gm-review, not hidden work

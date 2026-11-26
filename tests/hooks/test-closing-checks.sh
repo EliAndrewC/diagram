@@ -70,13 +70,10 @@ run() { : > "$T/events"; OUT=$("$SCRIPT" 2>&1); RC=$?; }
 # the run directory a run's table names (its static row's log), and a wait on a line of the events file
 run_dir() { local l; l=$(grep -Eo "$T/logs/[^ ]*/static\.log" "$1" | head -1); printf '%s' "${l%/static.log}"; }
 wait_for() { for _ in $(seq 1 400); do grep -q "$1" "$T/events" 2>/dev/null && return 0; sleep 0.05; done; return 1; }
-# A RUN'S TEXT IS GREPPED FROM A HERE-STRING, NEVER A PIPE (451 T252): under pipefail, `seen OUT -q` failed when grep
-# matched an early line and exited while printf (bash writes its stdout a line at a time) still had lines to write - printf died of
-# SIGPIPE, the pipeline returned 141, and a row the printed output showed GREEN was reported FAIL (T249's builder, 2026-11-25, case 1's
-# static row, the first row, so the most text behind it; 1 in 3,000 at real size pinned to one CPU, the load of a closing run beside
-# it opening the window; nothing on disk was shared). A negated check turned the same race into a false pass. `seen VAR <grep args>`
-# greps the variable's text with no writer process to kill.
-seen() { local v=$1; shift; grep "$@" <<< "${!v}"; }
+# A RUN'S TEXT IS GREPPED FROM A HERE-STRING, NEVER A PIPE (451 T252): T249's builder saw case 1's static row, the first row, read FAIL while
+# the output it printed showed it GREEN (2026-11-25) - the pipe's writer died of SIGPIPE when grep -q exited on its match; nothing on
+# disk was shared. `seen VAR <grep args>` (seen.sh, the one definition since 451 T253) greps the text with no writer to kill.
+source "$HERE/seen.sh"
 
 echo "0. a run's text is grepped whole: a match early in a long text is a match, under pipefail (451 T252)"
 # the forced interleaving: the matching row first, then more than a pipe holds, so the old pipe's writer is always still writing when
@@ -84,10 +81,8 @@ echo "0. a run's text is grepped whole: a match early in a long text is a match,
 LONG=$(printf '  static      GREEN\n'; seq 200000)
 seen LONG -Eq '^  static +GREEN' && ok "a row before a pipe's worth of text: found" || no "a row before a long text read as absent"
 ! seen LONG -q '^  static' && no "a negated check passed on a row that is there" || ok "a negated check on a row that is there: still false"
-printf '%s' "$LONG" | grep -Eq '^  static +GREEN' && no "the forcing no longer forces: the old pipe found the row" || ok "the forcing holds: the old pipe form reads it absent"
-# no check of this suite greps a variable through a pipe (the comment lines above excepted)
-grep -nE '^[^#]*(printf|echo) [^|#]*"\$[A-Za-z_]+" *\| *grep' "${BASH_SOURCE[0]}" | grep -v 'the forcing' > "$T/piped"
-[ -s "$T/piped" ] && no "a check pipes a variable into grep - use \`seen VAR -q <pattern>\`:" "$(cat "$T/piped")" || ok "no check pipes a variable into grep"
+printf '%s' "$LONG" | grep -Eq '^  static +GREEN' && no "the forcing no longer forces: the old pipe found the row" || ok "the forcing holds: the old pipe form reads it absent"  # pipe-ok: the forcing line, the old form on purpose
+# no check pipes into an early-exit grep: `l7r-gate check pipe-race`, run by every make hooks-test over every shell file (451 T253)
 
 echo "1. all three green: one combined result, side by side"
 rm -f "$T"/*.rc; run

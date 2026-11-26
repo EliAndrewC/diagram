@@ -4,6 +4,7 @@
 #
 # Every case drives the REAL hook with a REAL payload and a fixture transcript.
 set -uo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/budget-change-hooks.sh"
 PASS=0; FAIL=0
@@ -33,13 +34,13 @@ run "make budget-program OPS_AT_40=1000000 EXPONENT=1.2 WORDS='that one is fine'
 
 echo "2. no words, short words, words the GM did not write: refused"
 run "make budget-change PHASE=web TO=40"
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "no WORDS= given" && ok "no WORDS is refused, saying so" || no "no WORDS passed" "(rc=$RC)"
+[ "$RC" -eq 2 ] && seen OUT -q "no WORDS= given" && ok "no WORDS is refused, saying so" || no "no WORDS passed" "(rc=$RC)"
 run 'make budget-change PHASE=web TO=40 WORDS="fine"'
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "under three words" && ok "a one-word quote is refused" || no "short passed" "(rc=$RC)"
+[ "$RC" -eq 2 ] && seen OUT -q "under three words" && ok "a one-word quote is refused" || no "short passed" "(rc=$RC)"
 run 'make budget-change PHASE=homesteads TO=90 WORDS="raise the homesteads budget to 90"'
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "no message the GM wrote" && ok "words only a headless prompt holds are refused" || no "sdk words passed" "(rc=$RC)"
-printf '%s' "$OUT" | grep -q 'make budget-change PHASE=<stage>' && ok "...the refusal names the compliant command" || no "no compliant form named"
-ls "$LOGROOT" | grep -q . && ok "...and the firing is logged" || no "no guard-log record"
+[ "$RC" -eq 2 ] && seen OUT -q "no message the GM wrote" && ok "words only a headless prompt holds are refused" || no "sdk words passed" "(rc=$RC)"
+seen OUT -q 'make budget-change PHASE=<stage>' && ok "...the refusal names the compliant command" || no "no compliant form named"
+[ -n "$(ls "$LOGROOT")" ] && ok "...and the firing is logged" || no "no guard-log record"
 
 echo "3. a mention is not an invocation; budget-set needs no words"
 run "git commit -m 'the make budget-change target, filed'"

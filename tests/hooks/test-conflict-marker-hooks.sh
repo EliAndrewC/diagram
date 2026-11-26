@@ -5,6 +5,7 @@
 # Every case drives the REAL hook with a REAL payload over a REAL git tree, because a grep proves a call
 # site exists and not that it fires - the rule tests/tooling/test_guard_firing_log.py enforces.
 set -uo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/conflict-marker-hooks.sh"
 DETECT="$HERE/../../scripts/gates/l7r-gate.sh"
@@ -38,7 +39,7 @@ printf '%s HEAD\na\n%s\nb\n%s other\n' "$O" "$M" "$X" > "$FIX/untracked.md"
 printf 'changed\n' >> "$FIX/clean.md"
 run "git add -A"
 [ "$RC" -eq 2 ] && ok "git add -A with two conflicted files is blocked" || no "add -A not blocked" "(rc=$RC)"
-printf '%s' "$OUT" | grep -q "tracked.md" && printf '%s' "$OUT" | grep -q "untracked.md" && ok "...naming the tracked one AND the untracked one" || no "the files are not named"
+seen OUT -q "tracked.md" && seen OUT -q "untracked.md" && ok "...naming the tracked one AND the untracked one" || no "the files are not named"
 run "git commit -am wip"
 [ "$RC" -eq 2 ] && ok "git commit -am is blocked too" || no "commit -am not blocked" "(rc=$RC)"
 run "git add clean.md"
@@ -118,7 +119,7 @@ git -C "$FIX" commit -qm "the incident: a conflict committed" >/dev/null 2>&1
 # captured rather than piped: the detector exits 1 BY DESIGN when it finds one, and `pipefail` would
 # report that as the pipeline's status even when grep matched - which is what this line did at first
 BOUT=$("$DETECT" check conflict --tracked "$FIX" 2>&1 || true)
-printf '%s' "$BOUT" | grep -q "tracked.md" && ok "...naming the file" || no "the backstop does not name the file"
+seen BOUT -q "tracked.md" && ok "...naming the file" || no "the backstop does not name the file"
 printf 'resolved\n' > "$FIX/tracked.md"; git -C "$FIX" add -A >/dev/null 2>&1
 git -C "$FIX" commit -qm resolved >/dev/null 2>&1
 "$DETECT" check conflict --tracked "$FIX" >/dev/null 2>&1 && ok "and a clean tree passes it" || no "the backstop fired on a clean tree"

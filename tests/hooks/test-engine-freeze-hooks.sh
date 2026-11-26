@@ -92,7 +92,7 @@ touch "$SESSION/stall-ack/a5"
 printf 'def f():\n    return 1\n' > "$ENG"
 # a roll is waited for until /proc names it, never a fixed sleep: under a full hook run's load the subshell had not yet exec'd as the
 # roll after 0.5 s, the guard saw no roll and three cases failed (feature 449, 2026-11-12, the suites run longest first); 5 s bound
-rolling() { for _ in $(seq 50); do tr '\0' ' ' < "/proc/$1/cmdline" 2>/dev/null | grep -q "$2" && return 0; sleep 0.1; done; return 1; }
+rolling() { for _ in $(seq 50); do grep -q "$2" <<< "$(tr '\0' ' ' < "/proc/$1/cmdline" 2>/dev/null)" && return 0; sleep 0.1; done; return 1; }
 (cd "$C" && exec -a python3 bash -c 'sleep 30; :' l7r.diagram.tools.rust_gate) & ROLL=$!
 rolling "$ROLL" l7r.diagram.tools.rust_gate
 edit2 "$ENG" "return 1" "return 2";           check "a Rust gate rolling in the clone refuses an engine edit" 2 "$RC"

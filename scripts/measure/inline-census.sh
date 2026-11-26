@@ -21,8 +21,8 @@ inputs=0 later_n=0 caller_n=0 outside=""
 while IFS= read -r site; do
   [ -n "$site" ] || continue
   text=${site#*:*:}
-  if printf '%s\n' "$site" | grep -qE "$later"; then later_n=$((later_n + 1))
-  elif printf '%s\n' "$site" | grep -qE "$caller"; then caller_n=$((caller_n + 1))
+  if grep -qE "$later" <<< "$site"; then later_n=$((later_n + 1))
+  elif grep -qE "$caller" <<< "$site"; then caller_n=$((caller_n + 1))
   elif grep -qxF -- "$text" "$listed"; then inputs=$((inputs + 1))
   else outside+="$site"$'\n'
   fi

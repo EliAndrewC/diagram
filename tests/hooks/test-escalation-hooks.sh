@@ -5,6 +5,7 @@
 # Every case drives the REAL hook with a REAL payload, because a grep proves a call site exists and
 # not that it fires - the rule `tests/tooling/test_guard_firing_log.py` was written to enforce.
 set -uo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/escalation-hooks.sh"
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
@@ -41,8 +42,8 @@ returned() { # returned <subagent_type> <id> [spawnDepth] -> its SubagentStop, i
 echo "1. a review dispatch ARMS the requirement, and says so for free"
 out=$(agent settlement-review "DELTA review of Inashiro")
 [ "$(armed_by)" = "settlement-review" ] && ok "settlement-review arms it" || no "settlement-review did not arm it"
-printf '%s' "$out" | grep -q additionalContext && ok "...and the dispatch carries the context, costing no round trip" || no "no additionalContext on the dispatch"
-printf '%s' "$out" | grep -q "escalation-check" && ok "...naming the filter to dispatch" || no "the context does not name the filter"
+seen out -q additionalContext && ok "...and the dispatch carries the context, costing no round trip" || no "no additionalContext on the dispatch"
+seen out -q "escalation-check" && ok "...naming the filter to dispatch" || no "the context does not name the filter"
 
 echo "1b. a builder's own review dispatch arms nothing (451 T183: 2026-11-23's FINDINGS UNFILTERED for a builder's building-review)"
 ( cd "$FIX" && "$HOOK" disarm "$FIX" >/dev/null 2>&1 )

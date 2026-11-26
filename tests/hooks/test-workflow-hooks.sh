@@ -22,7 +22,7 @@ SEEN="$T/seen.jsonl"
 cat > "$T/stub.sh" <<EOF
 #!/bin/bash
 p="\$(cat)"; printf '%s\n' "\$p" >> "$SEEN"
-printf '%s' "\$p" | grep -q 'REFUSE-ME' && { echo "BLOCKED by the stub guard: its own words" >&2; exit 2; }
+grep -q 'REFUSE-ME' <<< "\$p" && { echo "BLOCKED by the stub guard: its own words" >&2; exit 2; }
 [ "\${L7R_WAVE_UNIT:-}" = 1 ] || { echo "the unit came without L7R_WAVE_UNIT" >&2; exit 2; }
 exit 0
 EOF

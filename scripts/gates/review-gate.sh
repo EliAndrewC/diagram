@@ -77,9 +77,9 @@ fail=""
 claim_only=""
 spec_dirs=$(printf '%s\n' "$changed" | sed -n 's|^\(specs/[^/]*\)/.*|\1|p' | sort -u)
 if [ -n "$spec_dirs" ] && [ "$(printf '%s\n' "$spec_dirs" | wc -l)" -eq 1 ] \
-   && ! printf '%s\n' "$changed" | grep -qv '^specs/' \
-   && ! git diff --name-status "$RANGE" -- "$spec_dirs" 2>/dev/null | awk '{print $1}' | grep -qv '^A$' \
-   && git diff --name-status "$RANGE" -- "$spec_dirs/spec.md" 2>/dev/null | grep -q '^A'; then
+   && ! grep -qv '^specs/' <<< "$changed" \
+   && ! grep -qv '^A$' < <(git diff --name-status "$RANGE" -- "$spec_dirs" 2>/dev/null | awk '{print $1}') \
+   && grep -q '^A' < <(git diff --name-status "$RANGE" -- "$spec_dirs/spec.md" 2>/dev/null); then
   # THE SPEC ITSELF MUST BE ONE OF THE NEW FILES. "every changed file is an addition" is not enough:
   # adding only `tasks.md` to a spec directory that already exists in main satisfies that too, and
   # that is the IMPLEMENTATION push, which owes the verdict. The suite caught this shape.

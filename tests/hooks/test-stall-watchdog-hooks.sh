@@ -103,14 +103,14 @@ check "a retry line with NO live runner exempts nothing" yes "$(has "$("$HOOK" o
 bash -c 'sleep 600; :' page_session_runner.py --work "$RL" </dev/null >/dev/null 2>&1 & OLD=$!; PIDS+=("$OLD")
 # its own argv waited for, not a fixed 0.5 s (451 T111): before its exec the process is a copy of this suite, and the check below,
 # that it exempts nothing, passes on that copy whatever the hook makes of the old form
-for _ in $(seq 300); do tr '\0' ' ' < "/proc/$OLD/cmdline" 2>/dev/null | grep -q 'page_session_runner.py --work' && break; sleep 0.1; done
+for _ in $(seq 300); do grep -q 'page_session_runner.py --work' <<< "$(tr '\0' ' ' < "/proc/$OLD/cmdline" 2>/dev/null)" && break; sleep 0.1; done
 check "...nor does a process in the Python runner's old form (feature 449 T137)" yes "$(has "$("$HOOK" once)" 'stalled name-orphan')"
 # the runner itself, as `page-session.sh` starts it (the gate binary's `page-session --work`, feature 449 T137), held on a `then:` step
 # that sleeps, so its argv is the queue's own
 printf '#!/bin/sh\nexec sleep 600\n' > "$T/hold.sh"; chmod +x "$T/hold.sh"
 "$HERE/../../scripts/gates/l7r-gate.sh" page-session --work "$T/lone" n '[]' "[{\"then\": \"$T/hold.sh\"}]" "$RL" </dev/null >/dev/null 2>&1 & RUNNER=$!; PIDS+=("$RUNNER")
 # the wrapper execs the binary (after a build, where its sources moved): wait for the runner's own argv, then for its step
-for _ in $(seq 3000); do tr '\0' ' ' < "/proc/$RUNNER/cmdline" 2>/dev/null | grep -q '/l7r-gate page-session --work' && pgrep -P "$RUNNER" >/dev/null && break; sleep 0.1; done
+for _ in $(seq 3000); do grep -q '/l7r-gate page-session --work' <<< "$(tr '\0' ' ' < "/proc/$RUNNER/cmdline" 2>/dev/null)" && pgrep -P "$RUNNER" >/dev/null && break; sleep 0.1; done
 check "a live runner and a current retry line: the queue's session is not a stall" no "$(has "$("$HOOK" once)" 'stalled name-orphan')"
 touch -d "30 minutes ago" "$RL"
 check "...a retry line older than its wait plus five minutes exempts nothing" yes "$(has "$("$HOOK" once)" 'stalled name-orphan')"

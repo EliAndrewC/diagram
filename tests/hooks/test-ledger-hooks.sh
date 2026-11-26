@@ -3,6 +3,7 @@
 # (GUARD_EDIT_OK: the companion of a NEW guard, feature 294.) Every case drives the REAL hook with a REAL payload over a
 # REAL git tree.
 set -uo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/ledger-hooks.sh"
 PASS=0; FAIL=0
@@ -42,8 +43,8 @@ echo "1. it fires on a staged ledger with a short row, and names the line"
 printf '%s%s\n' "$HEAD_TXT" "$SHORT" > "$FIX/dev/review-ledger.md"; git -C "$FIX" add dev/review-ledger.md
 run "git commit -m rows"
 [ "$RC" -eq 2 ] && ok "a short row blocks the commit" || no "not blocked" "(rc=$RC)"
-printf '%s' "$OUT" | grep -q "line 7" && ok "...naming the row by line" || no "no line named" "$OUT"
-printf '%s' "$OUT" | grep -q "make review-cost" && ok "...and the command that fills the cost" || no "no command named"
+seen OUT -q "line 7" && ok "...naming the row by line" || no "no line named" "$OUT"
+seen OUT -q "make review-cost" && ok "...and the command that fills the cost" || no "no command named"
 run "git -C $FIX commit -m rows"
 [ "$RC" -eq 2 ] && ok "a commit through git -C is read the same" || no "git -C missed" "(rc=$RC)"
 git -C "$FIX" reset -q

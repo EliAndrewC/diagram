@@ -5,6 +5,7 @@
 # the sessions directory and the command run are injected through the IDLE_* seams, which the
 # hook honors only inside a fixture (proved below too).
 set -u
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HOOK="$(cd "$(dirname "$0")" && pwd)/idle-tests-hooks.sh"
 pass=0 fail=0
 ok() { pass=$((pass+1)); }
@@ -90,14 +91,14 @@ check "record written after the wait" 'wait_for "$CA/dev/idle-log/*-sess-a.json"
 for _ in $(seq "$WAIT_TRIES"); do [ ! -f "$CA/.git/idle-tests.json" ] && break; sleep 0.1; done
 check "arming consumed" '[ ! -f "$CA/.git/idle-tests.json" ]'
 check "the run happened once, in the clone" '[ "$(grep -c "^start" "$RUNLOG")" = 1 ] && grep -q "$CA" "$RUNLOG"'
-hook prompt "$CA"; check "verdict surfaced at the next prompt" 'printf "%s" "$OUT" | grep -q "idle-tests: ran .* clean"'
-hook prompt "$CA"; check "surfaced once only" '! printf "%s" "$OUT" | grep -q "idle-tests: ran"'
+hook prompt "$CA"; check "verdict surfaced at the next prompt" 'seen OUT -q "idle-tests: ran .* clean"'
+hook prompt "$CA"; check "surfaced once only" '! seen OUT -q "idle-tests: ran"'
 # --- 4b. D10: a new arming on a clone unchanged since that green run rolls nothing and records the skip
 hook stop "$CA"
 # the wait is an upper bound, so a green run pays nothing for it: 10 s timed out in land-tooling's worktree under load (feature 449 T065)
 check "second record (the skip)" 'wait_count "$CA/dev/idle-log/*-sess-a.json" 2 30'
 check "no second run on unchanged content" '[ "$(grep -c "^start" "$RUNLOG")" = 1 ] && grep -q "skipped" "$(ls -t "$CA"/dev/idle-log/*-sess-a.json | head -1)"'
-hook prompt "$CA"; check "the skip surfaces" 'printf "%s" "$OUT" | grep -q "skipped - unchanged"'
+hook prompt "$CA"; check "the skip surfaces" 'seen OUT -q "skipped - unchanged"'
 # a change to the clone makes the next arming roll again
 git -C "$CA" -c user.email=t@t -c user.name=t commit -q --allow-empty -m change
 hook stop "$CA"; sleep 0.2
@@ -224,14 +225,14 @@ hook prompt "$CA"; sleep 0.5
 # 2026-11-11, the land-tooling worktree's run of this suite)
 wait_for "$CA/dev/idle-log/*.json" 8
 check "the run was aborted on the prompt" '! grep -q "^end" "$RUNLOG" && [ ! -f "$CA/.git/idle-tests.running" ]'
-check "an aborted record exists and surfaces" 'grep -q "aborted" "$CA"/dev/idle-log/*.json && printf "%s" "$OUT" | grep -q "aborted on your prompt"'
+check "an aborted record exists and surfaces" 'grep -q "aborted" "$CA"/dev/idle-log/*.json && seen OUT -q "aborted on your prompt"'
 sleep 3; check "no end line ever" '! grep -q "^end" "$RUNLOG"'
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null; export IDLE_RUN="$RUNNER"
 
 # --- 10. seams are refused outside a fixture: the real tree ignores them and says so
 REAL=$(cd "$(dirname "$HOOK")/../.." && pwd)
 out=$(cd "$REAL" && IDLE_FIXTURE=1 IDLE_ROOT="$REAL" IDLE_WAIT_MIN=1 IDLE_WAIT_SPAN=0 "$HOOK" stagger sess-a 2>&1)
-check "seams ignored in the repository's own tree" 'printf "%s" "$out" | grep -q "ignored" && [ "$(printf "%s" "$out" | tail -1)" -ge 60 ]'
+check "seams ignored in the repository's own tree" 'seen out -q "ignored" && [ "$(printf "%s" "$out" | tail -1)" -ge 60 ]'
 
 # --- 11. THE GM'S DISABLE (2026-09-06). Two properties, because "disabled" has to mean both halves:
 # arming does nothing, and everything else is untouched. Proven by DELETING the guard line and

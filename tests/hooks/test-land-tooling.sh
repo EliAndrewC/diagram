@@ -73,7 +73,7 @@ ok "the lint step is timed in the log" 'grep "^land-tooling: step lint [0-9.]* s
 printf 'y = 1\n' > "$C/scripts/e.py"; git -C "$C" add -A; git -C "$C" commit -qm "another script"
 LAND_TOOLING_LINT=false LAND_TOOLING_TOOLING="touch $T/tests-ran" LAND_TOOLING_GUARDS="touch $T/guards-ran" land scripts/e.py; rc=$?
 ok "a lint failure stops before the tests and the guard suites start (385 T67)" '[ "$rc" -ne 0 ] && [ ! -e "$T/tests-ran" ] && [ ! -e "$T/guards-ran" ]'
-ok "...and the run leaves its record, failed, for make tick (385 T79)" 'tail -1 "$C/.git/land-tooling.jsonl" | jq -e ".outcome | startswith(\"failed: \")" >/dev/null && tail -1 "$C/.git/land-tooling.jsonl" | grep -q "scripts/e.py"'
+ok "...and the run leaves its record, failed, for make tick (385 T79)" 'tail -1 "$C/.git/land-tooling.jsonl" | jq -e ".outcome | startswith(\"failed: \")" >/dev/null && grep -q "scripts/e.py" <<< "$(tail -1 "$C/.git/land-tooling.jsonl")"'
 LAND_TOOLING_LINT=true land scripts/e.py; rc=$?
 ok "...and a landed run records landed" '[ "$rc" -eq 0 ] && tail -1 "$C/.git/land-tooling.jsonl" | jq -e ".outcome == \"landed\"" >/dev/null'
 printf 'z = (\n' > "$C/scripts/f.py"; git -C "$C" add -A; git -C "$C" commit -qm "a script that does not parse"
@@ -99,7 +99,7 @@ ok "main keeps the other session's work" '[ "$(on_main other.txt)" = "other" ]'
 ok "the worktree is gone" '[ ! -e "$T/m/.clones/c-tooling" ] && ! git -C "$C" worktree list | grep c-tooling >/dev/null'
 ok "each step is timed in the log (383 amendment 2, FR-017)" 'for s in prepare worktree patch guard-suites tooling-tests checks push; do grep -q "^land-tooling: step $s [0-9.]* s$" "$C/.git/land-tooling.log" || exit 1; done'
 ok "...and the landing's steps are one JSON line" 'tail -1 "$C/.git/land-tooling-steps.jsonl" | jq -e ".outcome == \"push-exit-0\" and (.steps | keys) == [\"checks\", \"guard-suites\", \"lint\", \"patch\", \"prepare\", \"push\", \"tooling-tests\", \"worktree\"]" >/dev/null'
-ok "the clone keeps its own commits and has merged main back (the GM 2026-10-30)" 'git -C "$C" merge-base --is-ancestor "a guard fix" HEAD 2>/dev/null || git -C "$C" log --format=%s | grep -qx "a guard fix"; git -C "$C" merge-base --is-ancestor origin/main HEAD && grep -q "merged main back into the clone" "$T/out"'
+ok "the clone keeps its own commits and has merged main back (the GM 2026-10-30)" 'git -C "$C" merge-base --is-ancestor "a guard fix" HEAD 2>/dev/null || grep -qx "a guard fix" <<< "$(git -C "$C" log --format=%s)"; git -C "$C" merge-base --is-ancestor origin/main HEAD && grep -q "merged main back into the clone" "$T/out"'
 git -C "$C" pull -q --no-rebase --no-edit origin main >"$T/out" 2>&1; rc=$?
 ok "the clone's next merge of main is clean" '[ "$rc" -eq 0 ] && [ "$(cat "$C/l7r/e.py")" = "e = 2" ]'
 
@@ -114,7 +114,7 @@ echo "2a2. a conflict with the clone's own earlier landing (the merge back skipp
 setup
 printf 'v1\n' > "$C/scripts/new.sh"; git -C "$C" add -A; git -C "$C" commit -qm "new tool"
 land scripts/new.sh
-git -C "$C" reset -q --hard HEAD~1 2>/dev/null; git -C "$C" log --format=%s -1 | grep -q "new tool" || git -C "$C" reset -q --hard "$(git -C "$C" log --format=%H --grep='^new tool$' -1)"
+git -C "$C" reset -q --hard HEAD~1 2>/dev/null; grep -q "new tool" <<< "$(git -C "$C" log --format=%s -1)" || git -C "$C" reset -q --hard "$(git -C "$C" log --format=%H --grep='^new tool$' -1)"
 printf 'v3\n' > "$C/scripts/new.sh"; git -C "$C" commit -qam "new tool, a third time"
 land scripts/new.sh; rc=$?
 ok "landed, the clone's side kept and named" '[ "$rc" -eq 0 ] && [ "$(on_main scripts/new.sh)" = "v3" ] && grep -q "keeping the clone.s side of its own earlier landing: scripts/new.sh" "$T/out"'

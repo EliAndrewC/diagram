@@ -194,7 +194,7 @@ blocked() {
   hit=$(printf '%s\n' "$named" | cut -f2 | sort -u | theirs)
   # BLOCKED only on a named file of another task's for every line: an empty or unmatched attribution is the caller's
   [ -n "$hit" ] || return 0
-  printf '%s\n' "$hit" | grep -q '^-' && return 0
+  grep -q '^-' <<< "$hit" && return 0
   case $(printf '%s\n' "$named" | cut -f1 | sort -u | paste -sd' ' -) in
     e) what="every error $1 printed"; why="nothing of yours was judged there, so it stays red: re-run once they compile" ;;
     c) what="every line no test reaches that $1 printed"; why="yours are covered, so it stays red: re-run once their tests reach them" ;;

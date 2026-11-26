@@ -1704,6 +1704,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T253 (451 T252's found-and-left: the other pipefail guard suites grep a run's text through a pipe, 98 sites, observed 2026-11-25, method: T252's grep over the suites that set pipefail)": {
+   "sha256": "c8d7ea1a416420a0df2842f2616c8400ed96545e2390c4e242ec33f4641058a1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T253 Approach (checklist part A)": {
+   "sha256": "a2d115e22a41085a842cf7ee84dafa70ef90e98eff4bbb3548d90cf9df6f1c42",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -22137,6 +22149,208 @@
      "why": "T252's task is the one suite; the other suites are not dropped but filed with a reason, a task id and an order, the shape FR-009 sets for a found-and-left defect, and ordered before the task whose suite would otherwise carry the flake. The census states its search space (the grep pattern over the suites that set pipefail), and restricting it to pipefail suites and grep -q matches the mechanism (without pipefail, or without an early-exiting grep, the pipeline's status cannot be the writer's SIGPIPE). Aside, not a ruling: the space is tests/hooks/ only; T253 may wish to state whether pipefail scripts outside tests/hooks/ (other test directories, scripts/gates/) use the same form, and early-exit readers other than grep -q (grep -m, head)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T253 (451 T252's found-and-left: the other pipefail guard suites grep a run's text through a pipe, 98 sites, observed 2026-11-25, method: T252's grep over the suites that set pipefail)",
+    "### T253 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T253-D1",
+     "summary": "Scope is every tracked shell file under tests/ and scripts/ (149), pipefail or not; the 4 files without pipefail (24 sites) change form too.",
+     "class": "within",
+     "why": "Widens rather than narrows: a sourced file runs under its caller's pipefail, so the fix reaches every place the defect can occur. (The block's D-ids are its own; the spec's D1-D6 in spec-cited.md are unrelated event-log decisions.)"
+    },
+    {
+     "id": "T253-D2a",
+     "summary": "The refused form is a pipe into grep with any early-exit flag (-q/-l/-m and the long forms), whatever the writer.",
+     "class": "within",
+     "why": "Names the defect's mechanism (the reader exiting early under pipefail) rather than one spelling of it."
+    },
+    {
+     "id": "T253-D2b",
+     "summary": "head readers are not refused or changed.",
+     "class": "within",
+     "why": "Measured in item 9: 31 pipes over the 149 files, none whose status is read (a grep of | head, then of the ones &&, ||, if or set -e would read). Leaving a pipe whose status nothing reads leaves no wrong outcome, so no defect is left (constitution XIV)."
+    },
+    {
+     "id": "T253-D2c",
+     "summary": "sed q readers are not refused or changed, on the claim that every one feeds a failure message or an unchecked assignment.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "D2 says this is 'counted in item 9', but item 9 counts only | head (31 pipes, with its method). Nothing records how many sed ... q pipe readers the 149 files hold or whether any has its status read, so the exclusion of a defect class rests on a state nobody measured (FR-009: a fix naming a class of defect says how every instance was found, with its method). If one of them sits in an if, && or || under pipefail, a scheduling-dependent verdict is left in place, and that is the defect the task exists to remove. Fix: record a measured count of sed q pipe readers over the 149 files and which of them have a read status (zero is an answer), with the method, and fix any whose status is read or have the check refuse them."
+    },
+    {
+     "id": "T253-D3a",
+     "summary": "Fix by form: a variable becomes seen V <args>; a command or argument list is captured first, o=$(cmd) && seen o <args>; one seen definition in tests/hooks/seen.sh, sourced by each suite that greps, with T252's definition moved there.",
+     "class": "within",
+     "why": "Removes the pipe, and the && keeps the writer's success that pipefail used to demand, so the verdict comes from the text alone. Not blocking: 'unless the site's own logic never read it' and the -v/-c/empty-text sites 'read for a changed answer' state no count or outcome. Item 9's own list shows 26 tests/hooks files with hits but 22 suites sourcing seen.sh; the gap is presumably the variable-free command sites or the escaped lines, and is not stated."
+    },
+    {
+     "id": "T253-D3b",
+     "summary": "scripts/ greps a here-string inline instead of using the shared helper.",
+     "class": "within",
+     "why": "The GM's request and the spec ask for the defect fixed, not for a particular helper. The 11 script sites are fixed, and D4's check covers scripts/ with the rest. This departs from the block's own constraint in item 2 ('fix every one with one shared helper'), which the plan states openly. Where the helper lives is a design choice, not fidelity."
+    },
+    {
+     "id": "T253-D4",
+     "summary": "l7r-gate check pipe-race over tests/ and scripts/, run in make hooks-test's unconditional tail, names each line and its fix and exits 1; continued lines are joined; the escape is a '# pipe-ok: <reason>' comment of two or more words, for text never run as a pipe; T252's self-grep is replaced by it.",
+     "class": "within",
+     "why": "Moves T252's self-check to where every suite runs, as the task asks, and makes it real enforcement (the GM, 2026-11-19: 'real enforcement and not just instructions'). The escape is limited to text that is not executed as a pipe (a guard's payload, the forcing line), and both escaped lines are counted in item 9. Its reach is the defect's own scope, no wider."
+    },
+    {
+     "id": "T253-D5",
+     "summary": "Red first by the forced race per form (the matching line, then seq 200000), 50 runs each; the check's tests run each form through bash once on the forced text.",
+     "class": "within",
+     "why": "Each form and the negated false-pass is shown red before the fix and green after (measured 2026-11-25), which is the red-first proof the task names."
+    },
+    {
+     "id": "T253-D6",
+     "summary": "T139's no-poll flake is not this race: the case judges writer-alive.sh's exit code through alive(), with no grep pipe.",
+     "class": "within",
+     "why": "Answers the question the task asks, from a reading of the suite and T139's own measurement, and leaves T139 its own task. It is not a decision to leave a defect."
+    },
+    {
+     "id": "T253-order",
+     "summary": "Lands after T252 and before T139; one landing; not performance work.",
+     "class": "within",
+     "why": "Ordering and budget only; nothing the request or spec fixes is narrowed."
+    },
+    {
+     "id": "T253-found-and-left",
+     "summary": "Found and left: none.",
+     "class": "within",
+     "why": "Correct as stated only once D2c is measured: if any sed q reader has a read status and is not fixed here, it becomes a found-and-left item and FR-009 applies to it."
+    }
+   ],
+   "tasks": [
+    "T253"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T253 (451 T252's found-and-left: the other pipefail guard suites grep a run's text through a pipe, 98 sites, observed 2026-11-25, method: T252's grep over the suites that set pipefail)",
+    "### T253 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T253-D1",
+     "summary": "Scope is every tracked shell file under tests/ and scripts/ (149), pipefail or not, including sourced files and the 4 files without pipefail.",
+     "class": "within",
+     "why": "Request.md holds no GM words on T253; it is a found-and-left defect fix under fix-as-we-go (constitution XIV). The scope covers the task line's tests/ and scripts/ and widens it to files without pipefail (sourced files run under their caller's pipefail). Widening leaves no wrong outcome, so it narrows nothing. The search space is stated (git ls-files, .sh or sh/bash shebang). It does not reach Makefile recipes; see the aside."
+    },
+    {
+     "id": "T253-D2",
+     "summary": "Only a pipe into grep with an early-exit flag (-q/-l/-m and long forms) is refused; head, sed q and awk exit readers are not.",
+     "class": "within",
+     "why": "A defect is a wrong outcome. For grep -q/-l/-m the status is the answer, so the race corrupts the verdict. For head the output is the point, and the block measured (2026-11-25, grep over the 149 files and the && / || / if / set -e readers) 31 head pipes, none whose status is read, and no sed-q or awk-exit pipe. No verdict moves, so nothing defective is left and no ruling is needed."
+    },
+    {
+     "id": "T253-D3",
+     "summary": "The fix by form: seen V <args> for a variable, o=$(cmd) && seen o for a command where the writer's success mattered (14 lines), the writer's status dropped where a failed writer answers as the failed pipe did (14 lines plus pair's 12), inline here-strings in scripts/ and four suites, one seen.sh defining the helper.",
+     "class": "within",
+     "why": "This is the fix itself. The inline <<< in scripts/ and in four suites is the same fix written without the wrapper, and the pipe-race check (D4) enforces the result everywhere, so the purpose of one shared helper is met. Not blocking: the premise that a failing writer gives empty text is labeled '(the diff)', and a diff cannot show it. A writer that prints and then fails would now match where pipefail said no. No instance is known, so no defect is left, but the claim is unmeasured."
+    },
+    {
+     "id": "T253-D4",
+     "summary": "The l7r-gate check pipe-race Rust check, run in make hooks-test's unconditional tail, names each line with its fix, reads trailing-| continuations, takes a # pipe-ok: escape of two words or more, and replaces T252's self-grep (section 0 kept).",
+     "class": "within",
+     "why": "It enforces the requested fix. It moves T252's self-check to where every suite runs, as the task line asks, and follows the project's guard rules (named fix, recorded escape of two words or more). It refuses only the form being fixed, so its reach goes no further than the fix."
+    },
+    {
+     "id": "T253-D5",
+     "summary": "Red first by the forced race (matching line plus seq 200000), 50 runs per form; the check's tests run each form through bash once on the forced text.",
+     "class": "within",
+     "why": "The red-first proof the task line asks for, one representative per form, measured 2026-11-25."
+    },
+    {
+     "id": "T253-D6",
+     "summary": "T139's no-poll flake is not this race: the failing case judges writer-alive.sh's exit code through alive(), not a grep pipe, and reproduced only with a slowed tee.",
+     "class": "within",
+     "why": "Answers the question the task line asks, by reading the suite's alive() and T139's task line (2026-11-25). It leaves T139 to its own task and is not a carve-out."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T253 (451 T252's found-and-left: the other pipefail guard suites grep a run's text through a pipe, 98 sites, observed 2026-11-25, method: T252's grep over the suites that set pipefail)",
+    "### T253 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T253-D1",
+     "summary": "Scope is every tracked shell file under tests/ and scripts/ (149), pipefail or not.",
+     "class": "within",
+     "why": "Fixes a known defect (a check whose verdict depends on scheduling, a wrong outcome under constitution XIV) in every place the task names. Taking in files without pipefail widens the fix and does not narrow it: sourced files inherit the caller's pipefail. FR-009's how-found line is there (git ls-files, 2026-11-25)."
+    },
+    {
+     "id": "T253-D2a",
+     "summary": "The 31 '| head' pipes (and zero sed-q / awk-exit pipes) are left unconverted.",
+     "class": "within",
+     "why": "Censused with a stated method: none has its status read by &&, ||, if or set -e. So no verdict moves and no wrong outcome is left. Under XIV a non-defect left as it is stays within and needs no ruling. 'Found and left? none' agrees with FR-009 because nothing deferred is a defect."
+    },
+    {
+     "id": "T253-D2b",
+     "summary": "The pipe-race check refuses only a pipe into an early-exit grep, not head / sed q / awk exit readers.",
+     "class": "within",
+     "why": "The block states the ask as: recount every early-exit form (done, with a method), fix every instance (every defect instance is grep), and move T252's self-check, which is a grep check, to make hooks-test. Its reach matches that self-check, and the same fix spreads it over all 149 files. Nothing the GM or the spec asked for requires refusing reader forms that hold no defect."
+    },
+    {
+     "id": "T253-D3",
+     "summary": "Fix by form: seen V for printed variables, o=$(cmd) && seen o for commands, here-string inline in scripts/; the writer's status is kept by && on 14 lines and analyzed where it is dropped.",
+     "class": "within",
+     "why": "This is a design choice of the fix. Each place the writer's status is dropped is analyzed site by site with a method, and no verdict becomes wrong. The one change (grep -rl now counts the matches it printed) is the right answer, not a regression, under XIII and XIV."
+    },
+    {
+     "id": "T253-D3b (unlabeled)",
+     "summary": "Four suites (engine-freeze, land-tooling, stall-watchdog, workflow) and all of scripts/ grep a here-string inline rather than through the shared seen helper.",
+     "class": "within",
+     "why": "Every instance of the defect is still fixed, so this is design, not fidelity. 'One shared helper' is the task line's wording, not the GM's request or the spec. The Approach paragraph says the suites use seen while item 9 says four do not; that is a wording inconsistency the builder should reconcile, not a narrowing."
+    },
+    {
+     "id": "T253-D4",
+     "summary": "l7r-gate check pipe-race in make hooks-test's unconditional tail replaces T252's self-grep; escape '# pipe-ok: <reason>' of two words or more.",
+     "class": "within",
+     "why": "This is the enforcement the task asks for (T252's self-check moved to where every suite runs), so it is enforcement of the requested fix, not unrequested scope. Its two escaped uses are judged separately. (a) A guard's payload text is never run as a pipe, so no race exists there. (b) T252's forcing line exists to produce the race on purpose for the red test. Neither hides a defect."
+    },
+    {
+     "id": "T253-D5",
+     "summary": "Red first by a forced race (matching line plus seq 200000) on each form, 50 runs each; the check's tests run each form once on the forced text.",
+     "class": "within",
+     "why": "This is the task's own red-first requirement, met for one representative of each form, with a stated method."
+    },
+    {
+     "id": "T253-D6",
+     "summary": "T139's no-poll flake is not this race.",
+     "class": "within",
+     "why": "This answers the question the task asked, with a stated method. T139 stays open and is ordered after T253, so nothing is narrowed."
+    },
+    {
+     "id": "T253-set-lines (unlabeled)",
+     "summary": "The suites keep their set lines (pipefail stays).",
+     "class": "within",
+     "why": "The race is removed at the grep, so pipefail's protection of writers stays. Nothing asked for removing it."
+    },
+    {
+     "id": "T253-scope-roots (unlabeled)",
+     "summary": "The census and the check cover tests/ and scripts/; the Approach says the check refuses the pipe form 'anywhere'.",
+     "class": "within",
+     "why": "tests/ and scripts/ are the roots the task text names, and the census follows them. 'Anywhere' is read as anywhere in that scope. The builder could word it so; this is not a fidelity finding."
+    },
+    {
+     "id": "T253-order-perf (unlabeled)",
+     "summary": "Lands after T252 and before T139; 'Performance work? no'.",
+     "class": "within",
+     "why": "The order is a dependency: T139's suite is one of those changed. The task makes checks deterministic and does not make them faster, so 'not performance work' is a plain classification and no exception to FR-013."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -35382,6 +35596,80 @@
      "summary": "The same pipe-into-grep -q form in the other 17 pipefail suites of tests/hooks/ (98 sites, observed 2026-11-25 with the stated grep) is not fixed here; filed as T253, landing before T139 (whose suite test-no-poll-hooks.sh is one of the 17).",
      "class": "within",
      "why": "T252's task is the one suite; the other suites are not dropped but filed with a reason, a task id and an order, the shape FR-009 sets for a found-and-left defect, and ordered before the task whose suite would otherwise carry the flake. The census states its search space (the grep pattern over the suites that set pipefail), and restricting it to pipefail suites and grep -q matches the mechanism (without pipefail, or without an early-exiting grep, the pipeline's status cannot be the writer's SIGPIPE). Aside, not a ruling: the space is tests/hooks/ only; T253 may wish to state whether pipefail scripts outside tests/hooks/ (other test directories, scripts/gates/) use the same form, and early-exit readers other than grep -q (grep -m, head)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T253": {
+   "section_sha256": "40cc71049cb4b58c2a6cc660d3613a449505c4d850d51b7e29aae25fb6b23033",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T253-D1",
+     "summary": "Scope is every tracked shell file under tests/ and scripts/ (149), pipefail or not.",
+     "class": "within",
+     "why": "Fixes a known defect (a check whose verdict depends on scheduling, a wrong outcome under constitution XIV) in every place the task names. Taking in files without pipefail widens the fix and does not narrow it: sourced files inherit the caller's pipefail. FR-009's how-found line is there (git ls-files, 2026-11-25)."
+    },
+    {
+     "id": "T253-D2a",
+     "summary": "The 31 '| head' pipes (and zero sed-q / awk-exit pipes) are left unconverted.",
+     "class": "within",
+     "why": "Censused with a stated method: none has its status read by &&, ||, if or set -e. So no verdict moves and no wrong outcome is left. Under XIV a non-defect left as it is stays within and needs no ruling. 'Found and left? none' agrees with FR-009 because nothing deferred is a defect."
+    },
+    {
+     "id": "T253-D2b",
+     "summary": "The pipe-race check refuses only a pipe into an early-exit grep, not head / sed q / awk exit readers.",
+     "class": "within",
+     "why": "The block states the ask as: recount every early-exit form (done, with a method), fix every instance (every defect instance is grep), and move T252's self-check, which is a grep check, to make hooks-test. Its reach matches that self-check, and the same fix spreads it over all 149 files. Nothing the GM or the spec asked for requires refusing reader forms that hold no defect."
+    },
+    {
+     "id": "T253-D3",
+     "summary": "Fix by form: seen V for printed variables, o=$(cmd) && seen o for commands, here-string inline in scripts/; the writer's status is kept by && on 14 lines and analyzed where it is dropped.",
+     "class": "within",
+     "why": "This is a design choice of the fix. Each place the writer's status is dropped is analyzed site by site with a method, and no verdict becomes wrong. The one change (grep -rl now counts the matches it printed) is the right answer, not a regression, under XIII and XIV."
+    },
+    {
+     "id": "T253-D3b (unlabeled)",
+     "summary": "Four suites (engine-freeze, land-tooling, stall-watchdog, workflow) and all of scripts/ grep a here-string inline rather than through the shared seen helper.",
+     "class": "within",
+     "why": "Every instance of the defect is still fixed, so this is design, not fidelity. 'One shared helper' is the task line's wording, not the GM's request or the spec. The Approach paragraph says the suites use seen while item 9 says four do not; that is a wording inconsistency the builder should reconcile, not a narrowing."
+    },
+    {
+     "id": "T253-D4",
+     "summary": "l7r-gate check pipe-race in make hooks-test's unconditional tail replaces T252's self-grep; escape '# pipe-ok: <reason>' of two words or more.",
+     "class": "within",
+     "why": "This is the enforcement the task asks for (T252's self-check moved to where every suite runs), so it is enforcement of the requested fix, not unrequested scope. Its two escaped uses are judged separately. (a) A guard's payload text is never run as a pipe, so no race exists there. (b) T252's forcing line exists to produce the race on purpose for the red test. Neither hides a defect."
+    },
+    {
+     "id": "T253-D5",
+     "summary": "Red first by a forced race (matching line plus seq 200000) on each form, 50 runs each; the check's tests run each form once on the forced text.",
+     "class": "within",
+     "why": "This is the task's own red-first requirement, met for one representative of each form, with a stated method."
+    },
+    {
+     "id": "T253-D6",
+     "summary": "T139's no-poll flake is not this race.",
+     "class": "within",
+     "why": "This answers the question the task asked, with a stated method. T139 stays open and is ordered after T253, so nothing is narrowed."
+    },
+    {
+     "id": "T253-set-lines (unlabeled)",
+     "summary": "The suites keep their set lines (pipefail stays).",
+     "class": "within",
+     "why": "The race is removed at the grep, so pipefail's protection of writers stays. Nothing asked for removing it."
+    },
+    {
+     "id": "T253-scope-roots (unlabeled)",
+     "summary": "The census and the check cover tests/ and scripts/; the Approach says the check refuses the pipe form 'anywhere'.",
+     "class": "within",
+     "why": "tests/ and scripts/ are the roots the task text names, and the census follows them. 'Anywhere' is read as anywhere in that scope. The builder could word it so; this is not a fidelity finding."
+    },
+    {
+     "id": "T253-order-perf (unlabeled)",
+     "summary": "Lands after T252 and before T139; 'Performance work? no'.",
+     "class": "within",
+     "why": "The order is a dependency: T139's suite is one of those changed. The task makes checks deterministic and does not make them faster, so 'not performance work' is a plain classification and no exception to FR-013."
     }
    ],
    "verdict": "CLEAR"

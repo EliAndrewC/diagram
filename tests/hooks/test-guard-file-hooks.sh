@@ -7,6 +7,7 @@
 # was removed as unrequested - editing an agent cannot start an expensive run, so a prompt there
 # guards nothing and obstructs this project's own procedure for improving review subagents.
 set -uo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/guard-file-hooks.sh"
 # GUARD_EDIT_OK: feature 164 - this guard RECORDS its firings now (feature 162's log), so the suite
@@ -119,14 +120,14 @@ check blocked "$ROSTER" "x" "Write"
 check ok "$ROSTER" "GUARD_EDIT_OK: adding a roll row to the roster"
 check ok "$ROOT/tests/test_rolls.py"   # the roster's TEST is ordinary source
 ctx=$(ev "$ROSTER" "" "Read" | "$HOOK" pretool 2>/dev/null)
-if ! printf '%s' "$ctx" | grep -q "roll-audit" && printf '%s' "$ctx" | grep -q "constitution VI" && printf '%s' "$ctx" | grep -q "tests/soak/"; then
+if ! seen ctx -q "roll-audit" && seen ctx -q "constitution VI" && seen ctx -q "tests/soak/"; then
   echo "  ok      the Read of the roster names the doctrine and the exits, and no deleted command (feature 449 T225)"; PASS=$((PASS+1))
 else echo "  FAIL    the roster's Read-time context is missing the doctrine or the command: $ctx"; FAIL=$((FAIL+1)); fi
 # 451 T174: a guard file that is neither the Makefile nor the roster, since the Makefile takes its own context and so this case never
 # rendered the generic one, which sessions read most (153 times over the coordinator's builders, observed 2026-11-23)
 ctx=$(ev "$ROOT/scripts/hooks/make-only-hooks.sh" "" "Read" | "$HOOK" pretool 2>/dev/null)
-if printf '%s' "$ctx" | grep -q "GUARD_EDIT_OK" && printf '%s' "$ctx" | grep -q 'make guard-edit FILE=' \
-   && ! printf '%s' "$ctx" | grep -qi "root Makefile\|roll-audit\|ROSTER"; then
+if seen ctx -q "GUARD_EDIT_OK" && seen ctx -q 'make guard-edit FILE=' \
+   && ! seen ctx -qi "root Makefile\|roll-audit\|ROSTER"; then
   echo "  ok      another guard's Read keeps the generic context"; PASS=$((PASS+1))
 else echo "  FAIL    the generic Read context changed: $ctx"; FAIL=$((FAIL+1)); fi
 # GUARD_EDIT_OK: feature 329 - the project Makefile is the one at the repository root; a Makefile below it is not the guard
@@ -171,7 +172,7 @@ L7R_PERMIT_NOW=$T0 "$HOOK" permit grant "$FIX/Makefile" "x" >/dev/null 2>&1 && {
 L7R_PERMIT_NOW=$T0 "$HOOK" permit grant "$FIX/Makefile" "adding a target for a new operation" >/dev/null
 rm -rf "$GUARD_LOG_ROOT"/*
 case8 "a live permit: the same edit is accepted" ok "$FIX/Makefile" "a" "b" "$((T0 + 60))"
-grep -rl guard-permit "$GUARD_LOG_ROOT" 2>/dev/null | xargs -r grep -l "adding a target for a new operation" | grep -q . \
+[ -n "$(grep -rl guard-permit "$GUARD_LOG_ROOT" 2>/dev/null | xargs -r grep -l "adding a target for a new operation")" ] \
   && { echo "  ok      it is recorded as a guard-permit escape with the permit's reason"; PASS=$((PASS+1)); } || { echo "  FAIL    the permit's escape was not recorded with its reason"; FAIL=$((FAIL+1)); }
 case8 "a permit for another file does not stand in" blocked "$FIX/scripts/hooks/x-hooks.sh" "a" "b" "$((T0 + 60))"
 case8 "an expired permit is refused" blocked "$FIX/Makefile" "a" "b" "$((T0 + 3601))"
@@ -180,7 +181,7 @@ grep -q 'takes none' "$HOOK_ERR" && { echo "  ok      that refusal says why and 
 case8 "an edit keeping a marker it replaces is not refused for it" ok "$FIX/Makefile" "# GUARD_EDIT_OK: old reason here" "# GUARD_EDIT_OK: old reason here, reworded" "$((T0 + 60))"
 case8 "another guard file still takes the in-file marker" ok "$FIX/scripts/hooks/x-hooks.sh" "a" "# GUARD_EDIT_OK: a reason given in the file" "$T0"
 ctx=$(ev "$FIX/Makefile" "" "Read" | "$HOOK" pretool 2>/dev/null)
-printf '%s' "$ctx" | grep -q "make guard-edit FILE=Makefile" && { echo "  ok      the root Makefile's Read names make guard-edit"; PASS=$((PASS+1)); } || { echo "  FAIL    the root Makefile's Read context: $ctx"; FAIL=$((FAIL+1)); }
+seen ctx -q "make guard-edit FILE=Makefile" && { echo "  ok      the root Makefile's Read names make guard-edit"; PASS=$((PASS+1)); } || { echo "  FAIL    the root Makefile's Read context: $ctx"; FAIL=$((FAIL+1)); }
 
 echo
 echo "9. A GUARD FILE'S NAME IN SCRATCH IS NO GUARD FILE (451 T87): under /tmp or \$TMPDIR, outside every project tree"

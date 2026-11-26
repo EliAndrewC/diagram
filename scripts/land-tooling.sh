@@ -77,17 +77,17 @@ fi
 # GUARD_EDIT_OK: feature 383, the GM 2026-10-13 ("those are on disk, so it definitely can see them, right?") - THE LEDGER COMES
 # WITH ITS PASSES, unasked: a session that named only its scripts had the push refuse its own review passes against main's
 # ledger, and then escaped it with LEDGER_ROWS_OK. When the clone's commits change the ledger, it lands beside FILES.
-if ! printf '%s\n' "$@" | grep -qx 'dev/review-ledger.md' && ! git -C "$ROOT" diff --quiet "$base" HEAD -- dev/review-ledger.md 2>/dev/null; then
+if ! grep -qx 'dev/review-ledger.md' <<< "$(printf '%s\n' "$@")" && ! git -C "$ROOT" diff --quiet "$base" HEAD -- dev/review-ledger.md 2>/dev/null; then
   set -- "$@" dev/review-ledger.md
   printf 'land-tooling: dev/review-ledger.md lands too - the push answers this clone'"'"'s check passes from it\n' >&2
 fi
 # GUARD_EDIT_OK: feature 385 T46 (the round arbiter's fix on hour:385-approach-checklist@17) - A LANDED MAKEFILE BRINGS ITS PAGE: the
 # worktree regenerates main's make-targets page, but the clone's own copy stayed stale, and the clone's next push refused it. So a
 # Makefile in FILES lands only with the clone's page current, and that page lands beside it.
-if printf '%s\n' "$@" | grep -qx 'Makefile'; then
+if grep -qx 'Makefile' <<< "$(printf '%s\n' "$@")"; then
   ( cd "$ROOT" && eval "${LAND_TOOLING_DOCS_CHECK:-scripts/gates/l7r-gate.sh make-docs . --check}" ) >/dev/null 2>&1 \
     || die "docs/make-targets.html is stale against the clone's Makefile - run \`make docs\`, commit the page, and land again"
-  if ! printf '%s\n' "$@" | grep -qx 'docs/make-targets.html' && ! git -C "$ROOT" diff --quiet "$base" HEAD -- docs/make-targets.html 2>/dev/null; then
+  if ! grep -qx 'docs/make-targets.html' <<< "$(printf '%s\n' "$@")" && ! git -C "$ROOT" diff --quiet "$base" HEAD -- docs/make-targets.html 2>/dev/null; then
     set -- "$@" docs/make-targets.html
     printf 'land-tooling: docs/make-targets.html lands too - the page generated from the Makefile\n' >&2
   "$(dirname "${BASH_SOURCE[0]}")/gates/l7r-gate.sh" log usage --tool land-tooling-docs --kind step --outcome changed 2>/dev/null || true  # feature 406 T03 (D162); 449 T129

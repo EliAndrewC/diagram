@@ -2,6 +2,7 @@
 # test-finished-run-hooks.sh - prove a finished run is surfaced once, and never mistaken for a running one.
 # (GUARD_EDIT_OK: the companion of a NEW guard, feature 170 - constitution XVIII.)
 set -uo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/finished-run-hooks.sh"
 PASS=0; FAIL=0
@@ -84,7 +85,7 @@ cat > "$LV/Makefile" <<'MK'
 sleeper:
 	@sleep 12
 MK
-( cd "$LV" && make sleeper >/dev/null 2>&1 & ) ; settle '"$HOOK" live "$LV" | grep -q sleeper'
+( cd "$LV" && make sleeper >/dev/null 2>&1 & ) ; settle 'o=$("$HOOK" live "$LV") && seen o -q sleeper'
 check "a live make in the clone is found, with its target" yes "$(has "$("$HOOK" live "$LV")" sleeper)"
 
 lstop() { printf '{"session_id":"t","cwd":"%s"%s}' "$LV" "${1:-}" | "$HOOK" stop >/dev/null 2>"$T/fr.err"; }
@@ -126,7 +127,7 @@ mkdir -p "$T/tasks"; cp "$(command -v bash)" "$T/claude"
 # subshell that exits at once; started bare, its parent is this suite, whose ancestor is the REAL harness, and the
 # judge reports it tracked - correctly); and `bash -c "... && make x"` execs INTO its last command, so the
 # `claude`-named shell vanished and left the make with no ancestor at all - the trailing `; :` keeps it a parent.
-( "$T/claude" -c "cd $LV && make sleeper; :" > "$T/tasks/t1.output" 2>&1 & ) ; settle '"$HOOK" live "$LV" | grep -q sleeper'
+( "$T/claude" -c "cd $LV && make sleeper; :" > "$T/tasks/t1.output" 2>&1 & ) ; settle 'o=$("$HOOK" live "$LV") && seen o -q sleeper'
 check "the judge sees the run as tracked" yes "$(has "$("$HOOK" judge "$LV")" ' sleeper tracked ')"
 OUT=$(printf '{"session_id":"t","cwd":"%s"}' "$LV" | "$HOOK" stop 2>"$T/fr.err"); RC=$?
 check "stop lets a tracked run through" 0 "$RC"
@@ -137,7 +138,7 @@ for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; 
 echo "--- 6c. a detached run with a WAITER on its log is let through; one on another file is not ---"
 rm -f "$LV/.git/live-run.told"
 ( setsid nohup bash -c "cd $LV && exec make sleeper" </dev/null > "$T/run.log" 2>&1 & )
-settle '"$HOOK" live "$LV" | grep -q sleeper'
+settle 'o=$("$HOOK" live "$LV") && seen o -q sleeper'
 check "detached and unwatched: the judge says so, naming the log" yes "$(has "$("$HOOK" judge "$LV")" " unwatched $T/run.log")"
 setsid nohup bash -c "until grep -q $NEVER $T/other.log 2>/dev/null; do sleep 3; done" </dev/null >/dev/null 2>&1 &
 settle 'pgrep -f "grep -q $NEVER $T/other.log" >/dev/null'
@@ -175,14 +176,14 @@ rm -f "$LV/.git/live-run.told"
 mkdir -p "$T/v"
 ( setsid nohup bash -c "cd $LV && exec make sleeper" </dev/null > "$T/v/maps.log" 2>&1 & )
 setsid nohup bash -c "S=$T/v; until grep -q $NEVER \$S/maps.log; do sleep 3; done" </dev/null >/dev/null 2>&1 &
-settle '"$HOOK" live "$LV" | grep -q sleeper && pgrep -f "maps.log; do sleep" >/dev/null'
+settle 'o=$("$HOOK" live "$LV") && seen o -q sleeper && pgrep -f "maps.log; do sleep" >/dev/null'
 check "S=<dir>; ... \$S/maps.log: the judge sees the run as watched" yes "$(has "$("$HOOK" judge "$LV")" " sleeper watched ")"
 lstop; check "...and the turn closes" 0 "$?"
 pkill -f "$NEVER" 2>/dev/null; for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; settle '[ -z "$("$HOOK" live "$LV")" ] && ! pgrep -f "$NEVER" >/dev/null'
 rm -f "$LV/.git/live-run.told" "$T/v/b.log"
 ( setsid nohup bash -c "cd $LV && make sleeper > $T/v/a.log 2>&1; make sleeper > $T/v/b.log 2>&1; echo $NEVER-DONE >> $T/v/b.log" </dev/null >/dev/null 2>&1 & )
 setsid nohup bash -c "until grep -q $NEVER-DONE $T/v/b.log 2>/dev/null; do sleep 3; done" </dev/null >/dev/null 2>&1 &
-settle '"$HOOK" live "$LV" | grep -q sleeper && pgrep -f "$NEVER-DONE $T/v/b.log" >/dev/null'
+settle 'o=$("$HOOK" live "$LV") && seen o -q sleeper && pgrep -f "$NEVER-DONE $T/v/b.log" >/dev/null'
 check "a chain's first make, its waiter on the chain's last log (not there yet): watched" yes "$(has "$("$HOOK" judge "$LV")" " sleeper watched ")"
 lstop; check "...and the turn closes" 0 "$?"
 pkill -f "$NEVER" 2>/dev/null; for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; settle '[ -z "$("$HOOK" live "$LV")" ] && ! pgrep -f "$NEVER" >/dev/null'
@@ -196,7 +197,7 @@ NEST=$LV/.clones/other; mkdir -p "$NEST"; git init -q "$NEST"; printf 'sleeper:\
 SIB=${LV}2; mkdir -p "$SIB"; git init -q "$SIB"; printf 'sleeper:\n\t@sleep 12\n' > "$SIB/Makefile"
 ( setsid nohup bash -c "cd $NEST && exec make sleeper" </dev/null >"$T/nest.log" 2>&1 & )
 ( setsid nohup bash -c "cd $SIB && exec make sleeper" </dev/null >"$T/sib.log" 2>&1 & )
-settle '"$HOOK" live "$NEST" | grep -q sleeper && "$HOOK" live "$SIB" | grep -q sleeper'
+settle 'o=$("$HOOK" live "$NEST") && seen o -q sleeper && o=$("$HOOK" live "$SIB") && seen o -q sleeper'
 check "a run in a clone NESTED under this tree is not live here" "" "$("$HOOK" live "$LV")"
 check "...nor judged here" "" "$("$HOOK" judge "$LV")"
 check "...but is live in its own clone" yes "$(has "$("$HOOK" live "$NEST")" sleeper)"
@@ -277,7 +278,7 @@ echo "--- 9. a verify gate's refusal names make verify-wait (feature 385: the lo
 # GUARD_EDIT_OK: feature 385 - a new case for the verify-gate branch of the refusal; nothing existing loosened
 rm -f "$LV/.git/live-run.told"
 ( setsid nohup bash -c "cd $LV && exec make sleeper" </dev/null > "$T/verify-gate-1.log" 2>&1 & )
-settle '"$HOOK" judge "$LV" | grep -q "unwatched $T/verify-gate-1.log"'
+settle 'o=$("$HOOK" judge "$LV") && seen o -q "unwatched $T/verify-gate-1.log"'
 lstop; check "a detached verify gate: refused" 2 "$?"
 check "...and the refusal names make verify-wait, not a loop" yes "$(has "$(cat "$T/fr.err")" 'make verify-wait')"
 for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; settle '[ -z "$("$HOOK" live "$LV")" ]'
@@ -290,7 +291,7 @@ rm -f "$LV/.git/live-run.told"
 mkdir -p "$T/v" "$T/ev" "$T/tmp/-diagram/s/tasks"; cp "$(command -v bash)" "$T/v/2.1.325"
 TO="$T/tmp/-diagram/s/tasks/bt85.output"
 ( exec -a "claude bg-spare" "$T/v/2.1.325" -c "bash -c 'cd $LV && make sleeper; :' > $TO 2>&1; :" </dev/null >/dev/null 2>&1 & )
-settle '"$HOOK" live "$LV" | grep -q sleeper'
+settle 'o=$("$HOOK" live "$LV") && seen o -q sleeper'
 check "a harness named by its version: the judge sees its run as tracked" yes "$(has "$("$HOOK" judge "$LV")" ' sleeper tracked ')"
 TR="$T/session.jsonl"; : > "$TR"
 vstop() { printf '{"session_id":"t","cwd":"%s","transcript_path":"%s"}' "$LV" "$TR" | L7R_EVENTS_DIR="$T/ev" "$HOOK" stop 2>"$T/fr.err"; }
@@ -313,7 +314,7 @@ echo "--- 11. a run is its starter's to wait on: another session's, a builder's 
 # and the same refusal again is said in one line.
 rm -f "$LV/.git/live-run.told"
 ( exec -a "claude bg-spare" "$T/v/2.1.325" -c "bash -c 'cd $LV && make sleeper; :' > $TO 2>&1; :" </dev/null >/dev/null 2>&1 & )
-settle '"$HOOK" live "$LV" | grep -q sleeper'
+settle 'o=$("$HOOK" live "$LV") && seen o -q sleeper'
 : > "$TR"
 printf '{"t":"T","sid":"page","ev":"PostToolUse","tool":"Bash","id":"u","by":"apage","ms":4,"bg":"bt85"}\n' > "$T/ev/451-x.jsonl"
 OUT=$(vstop); RC=$?

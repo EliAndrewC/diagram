@@ -2,6 +2,7 @@
 # Tests for gate-hooks.sh. Feeds PreToolUse events and asserts when quick-and-done is combined and GATE_OK is honored.
 # Run: tests/hooks/test-gate-hooks.sh   (exit 0 = all green)
 set -uo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # feature 449 T007: the guard is Rust - the link `gate-hooks.sh` beside this suite runs `l7r-guard --only gate-hooks`
 HOOK="$HERE/gate-hooks.sh"
@@ -67,7 +68,7 @@ rewrote() { # command, expected rewritten command
 }
 untouched() { # a command the rewrite must NOT touch
   got=$("$HOOK" pretool <<<"$(bash_ev "$1")" 2>/dev/null)
-  if printf '%s' "$got" | grep -q updatedInput; then echo "  FAIL  rewrote a command it should have left alone: $1"; FAIL=$((FAIL+1));
+  if seen got -q updatedInput; then echo "  FAIL  rewrote a command it should have left alone: $1"; FAIL=$((FAIL+1));
   else echo "  ok    left alone: $1"; PASS=$((PASS+1)); fi
 }
 rewrote 'make quick && make done' 'make done'

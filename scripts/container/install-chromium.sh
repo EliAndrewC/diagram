@@ -40,4 +40,4 @@ if [ ! -x "$BIN" ]; then
     unzip -q -o "$tmp/shell.zip" -d "$DEST"
 fi
 # the proof it launches: the version it reports is the pinned one
-"$BIN" --version | grep -q "$CHROMIUM_VERSION" || { echo "install-chromium: $BIN does not report $CHROMIUM_VERSION" >&2; exit 1; }
+v=$("$BIN" --version) && grep -q "$CHROMIUM_VERSION" <<< "$v" || { echo "install-chromium: $BIN does not report $CHROMIUM_VERSION" >&2; exit 1; }

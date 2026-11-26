@@ -388,6 +388,8 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	fi; \
 	if ! "$$root/scripts/gates/l7r-gate.sh" check tool-signals; then fail="$$fail check-tool-signals"; fi; \
 	if ! "$$root/scripts/gates/l7r-gate.sh" check rust-tooling --root "$$root"; then fail="$$fail rust-tooling"; fi; \
+	: "NO SHELL FILE PIPES INTO AN EARLY-EXIT GREP (feature 451 T253): under pipefail the writer died of SIGPIPE when grep -q exited on its match, and a present line read absent - every suite and script, here where no unchanged suite skips it"; \
+	if ! "$$root/scripts/gates/l7r-gate.sh" check pipe-race --root "$$root"; then fail="$$fail pipe-race"; fi; \
 	: "EVERY GUARD MESSAGE WITHIN ITS BUDGET AND REVIEWED (feature 451 T170): the suites' renderings against dev/guard-messages.tsv"; \
 	if ! "$$root/scripts/hooks/l7r-guard.sh" messages check "$$gitdir/hooks-test/messages" "$$root/dev/guard-messages.tsv"; then fail="$$fail guard-messages"; fi; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \

@@ -6,6 +6,7 @@
 # Every case drives the REAL hook with a REAL payload against a fixture clone, because a grep proves a
 # call site exists and not that it fires (`tests/tooling/test_guard_firing_log.py`'s rule).
 set -uo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/review-round-hooks.sh"
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
@@ -84,23 +85,23 @@ out=$(agent spec-fidelity "$ORIG")
 printf '%s' "$out" | jq empty 2>/dev/null && ok "...with valid JSON on stdout" || no "stdout is not valid JSON" "(${out:0:80})"
 P=$(printf '%s' "$out" | prompt_of 2>/dev/null)
 case "$P" in "MODE 3 (VERIFY) - round 2 of feature 301-fixture"*) ok "...the prompt opens with the MODE 3 preamble naming round 2";; *) no "the preamble is missing or names the wrong round" "(${P:0:80})";; esac
-printf '%s' "$P" | grep -q '^+\*\*FR-002' && ok "...carrying the diff of the change" || no "the diff does not show FR-002 added"
-printf '%s' "$P" | grep -q 'FR-001 is vague' && ok "...and the previous verdict verbatim from the transcript" || no "the previous verdict is not in the preamble"
-printf '%s' "$P" | grep -q 'SIBLING-VERDICT' && no "a sibling feature's review was taken as this feature's verdict" || ok "...never a newer review of another feature that only mentions it"
-printf '%s' "$P" | grep -q 'VERBATIM from the reviewer' && ok "...marked as the reviewer's own words" || no "the verdict is not marked verbatim"
+seen P -q '^+\*\*FR-002' && ok "...carrying the diff of the change" || no "the diff does not show FR-002 added"
+seen P -q 'FR-001 is vague' && ok "...and the previous verdict verbatim from the transcript" || no "the previous verdict is not in the preamble"
+seen P -q 'SIBLING-VERDICT' && no "a sibling feature's review was taken as this feature's verdict" || ok "...never a newer review of another feature that only mentions it"
+seen P -q 'VERBATIM from the reviewer' && ok "...marked as the reviewer's own words" || no "the verdict is not marked verbatim"
 tail_ok=$(case "$P" in *"=== The session's prompt follows ==="$'\n'"$ORIG") echo yes ;; *) echo no ;; esac)
 [ "$tail_ok" = yes ] && ok "...and ends with the session's prompt unchanged" || no "the session's prompt was altered or lost"
-printf '%s' "$out" | grep -q '"additionalContext"' && ok "...with a context line saying so" || no "no additionalContext on the rewrite"
+seen out -q '"additionalContext"' && ok "...with a context line saying so" || no "no additionalContext on the rewrite"
 logged mode-3-preamble && ok "...recorded rewrote/mode-3-preamble" || no "mode-3-preamble not recorded"
 [ "$(state 301-fixture)" = "round=2 snapshot=yes" ] && ok "...state advanced to round 2" || no "state did not advance" "($(state 301-fixture))"
-printf '%s' "$P" | grep -q 'plan review' && ok "the MODE 3 prompt that mentions plan review, exception and plan.md was still rewritten (round 2's own shape)" || no "the mention-words case did not carry through"
+seen P -q 'plan review' && ok "the MODE 3 prompt that mentions plan review, exception and plan.md was still rewritten (round 2's own shape)" || no "the mention-words case did not carry through"
 
 echo "4. the snapshot advances: a third dispatch diffs against the second, not the first"
 printf '\n**FR-003 - the third.**\n' >> "$FIX/specs/301-fixture/spec.md"
 out=$(agent spec-fidelity "MODE 3 round 3 of specs/301-fixture")
 P=$(printf '%s' "$out" | prompt_of 2>/dev/null)
-printf '%s' "$P" | grep -q '^+\*\*FR-003' && ok "the third dispatch shows FR-003" || no "FR-003 missing from the diff"
-printf '%s' "$P" | grep -q '^+\*\*FR-002' && no "FR-002 is still in the diff - the snapshot did not advance" || ok "...and not FR-002: the snapshot advanced"
+seen P -q '^+\*\*FR-003' && ok "the third dispatch shows FR-003" || no "FR-003 missing from the diff"
+seen P -q '^+\*\*FR-002' && no "FR-002 is still in the diff - the snapshot did not advance" || ok "...and not FR-002: the snapshot advanced"
 [ "$(state 301-fixture)" = "round=3 snapshot=yes" ] && ok "...round 3" || no "round did not advance to 3" "($(state 301-fixture))"
 
 echo "5. a recovered FAITHFUL starts a new pass at round 1"
@@ -109,8 +110,8 @@ printf '\n**FR-004 - an amendment after acceptance.**\n' >> "$FIX/specs/301-fixt
 out=$(agent spec-fidelity "MODE 3 amendment review of specs/301-fixture")
 P=$(printf '%s' "$out" | prompt_of 2>/dev/null)
 case "$P" in "MODE 3 (VERIFY) - round 1 of feature 301-fixture"*) ok "the round restarts at 1 after a FAITHFUL" ;; *) no "the round did not restart" "(${P:0:70})";; esac
-printf '%s' "$P" | grep -q 'NEW PASS' && ok "...and the preamble says it is a new pass" || no "no new-pass line"
-printf '%s' "$P" | grep -q 'Aside: none' && ok "...with the FAITHFUL verdict verbatim (the last verdict word decides)" || no "the FAITHFUL transcript was not the one recovered"
+seen P -q 'NEW PASS' && ok "...and the preamble says it is a new pass" || no "no new-pass line"
+seen P -q 'Aside: none' && ok "...with the FAITHFUL verdict verbatim (the last verdict word decides)" || no "the FAITHFUL transcript was not the one recovered"
 # GUARD_EDIT_OK: feature 250 D20 - the explicit verdict line wins over a later mention of another verdict word
 V=$("$HOOK" verdict-of "$(printf '%b' '**Verdict: CHANGES REQUIRED.** Three items.\n\nThat line does not contain "FAITHFUL", so the gate refuses.')")
 [ "$V" = "CHANGES REQUIRED" ] && ok "an explicit Verdict line wins over a later mention of FAITHFUL" || no "the verdict was misread" "(got $V)"
@@ -119,19 +120,19 @@ echo "6. no transcript answers: the Review history is the fallback, marked as th
 agent spec-fidelity "MODE 2 review of specs/302-history" "$T/other.jsonl" >/dev/null   # first sight, with history
 logged history-without-snapshot && ok "a spec with history and no snapshot is told (reminded/history-without-snapshot)" || no "history-without-snapshot not recorded"
 out=$(agent spec-fidelity "MODE 2 review of specs/302-history" "$T/other.jsonl")
-printf '%s' "$out" | grep -q 'no earlier' && no "the second dispatch still says no snapshot" || ok "...once only: the snapshot now exists"
+seen out -q 'no earlier' && no "the second dispatch still says no snapshot" || ok "...once only: the snapshot now exists"
 printf '\nmore\n' >> "$FIX/specs/302-history/spec.md"
 out=$(agent spec-fidelity "MODE 3 round 2 of specs/302-history" "$T/other.jsonl")
 P=$(printf '%s' "$out" | prompt_of 2>/dev/null)
-printf '%s' "$P" | grep -q "as the SESSION recorded it" && ok "the fallback is marked as the session's summary" || no "the fallback is not marked" "(${P:0:200})"
-printf '%s' "$P" | grep -q 'FR-001 restated' && ok "...and carries the history entry" || no "the history entry is missing"
+seen P -q "as the SESSION recorded it" && ok "the fallback is marked as the session's summary" || no "the fallback is not marked" "(${P:0:200})"
+seen P -q 'FR-001 restated' && ok "...and carries the history entry" || no "the history entry is missing"
 
 echo "7. the first dispatch on a spec WITH history carries the context line"
 out=$(agent spec-fidelity "MODE 2 review of specs/302-history" "$T/third.jsonl")
 rm -rf "$FIX/.git/review-round/302-history"
 out=$(agent spec-fidelity "MODE 2 review of specs/302-history" "$T/third.jsonl")
-printf '%s' "$out" | grep -q 'no earlier snapshot' && ok "...the line names the missing snapshot" || no "the context line is missing" "(${out:0:80})"
-printf '%s' "$out" | grep -q '"updatedInput"' && no "the history-without-snapshot case rewrote the prompt" || ok "...and does not rewrite"
+seen out -q 'no earlier snapshot' && ok "...the line names the missing snapshot" || no "the context line is missing" "(${out:0:80})"
+seen out -q '"updatedInput"' && no "the history-without-snapshot case rewrote the prompt" || ok "...and does not rewrite"
 
 echo "8. the escape"
 out=$(agent spec-fidelity 'MODE 3 of specs/301-fixture REVIEW_ROUND_OK="the spec was restructured, read it whole"')
@@ -140,7 +141,7 @@ logged review-round-ok && ok "...recorded escaped/review-round-ok" || no "the es
 printf '\n**FR-005**\n' >> "$FIX/specs/301-fixture/spec.md"
 out=$(agent spec-fidelity "MODE 3 of specs/301-fixture")
 P=$(printf '%s' "$out" | prompt_of 2>/dev/null)
-printf '%s' "$P" | grep -q '^+\*\*FR-004' && no "the escape did not refresh the snapshot" || ok "...and refreshed the snapshot (FR-004 no longer in the next diff)"
+seen P -q '^+\*\*FR-004' && no "the escape did not refresh the snapshot" || ok "...and refreshed the snapshot (FR-004 no longer in the next diff)"
 out=$(agent spec-fidelity 'MODE 3 of specs/301-fixture REVIEW_ROUND_OK')
 [ "$(rc)" -ne 0 ] && ok "a bare REVIEW_ROUND_OK is refused" || no "a bare token was allowed"
 grep -q 'no reason' "$T/err" && ok "...saying it needs a reason" || no "the refusal does not ask for a reason"
@@ -154,12 +155,12 @@ printf '\n**FR-006**\n' >> "$FIX/specs/301-fixture/spec.md"
 out=$(agent spec-fidelity "MODE 3 of specs/301-fixture")
 [ "$(printf '%s' "$out" | type_of 2>/dev/null)" = "spec-fidelity-verify" ] && ok "a rewritten spec-fidelity round carries the twin's subagent_type" || no "the rewrite did not route to the twin" "(${out:0:120})"
 printf '%s' "$out" | jq -e '.hookSpecificOutput.updatedInput.description == "x"' >/dev/null && ok "...with every other field of the dispatch kept" || no "the rewrite dropped a field of the dispatch"
-printf '%s' "$out" | grep -q 'ROUTED to' && ok "...and the context line says it was routed" || no "the context line does not mention the routing"
+seen out -q 'ROUTED to' && ok "...and the context line says it was routed" || no "the context line does not mention the routing"
 printf '\n**FR-007**\n' >> "$FIX/specs/301-fixture/spec.md"
 out=$(agent spec-fidelity-verify "Round N of specs/301-fixture, dispatched by hand")
 P=$(printf '%s' "$out" | prompt_of 2>/dev/null)
-printf '%s' "$P" | grep -q '^+\*\*FR-007' && ok "a HAND dispatch of the twin gets the preamble and the diff" || no "the twin's own dispatch was not rewritten" "(${out:0:120})"
-printf '%s' "$P" | grep -q '^+\*\*FR-006' && no "the twin's diff reaches back past the previous round" || ok "...diffed against the previous round's snapshot"
+seen P -q '^+\*\*FR-007' && ok "a HAND dispatch of the twin gets the preamble and the diff" || no "the twin's own dispatch was not rewritten" "(${out:0:120})"
+seen P -q '^+\*\*FR-006' && no "the twin's diff reaches back past the previous round" || ok "...diffed against the previous round's snapshot"
 [ "$(printf '%s' "$out" | type_of 2>/dev/null)" = "spec-fidelity-verify" ] && ok "...and stays the twin" || no "the twin's type was changed"
 grep -q 'FR-007' "$FIX/.git/review-round/301-fixture/snapshot/spec.md" && ok "...and the snapshot was refreshed, so the round after it has something to diff against" || no "the twin's dispatch did not refresh the snapshot"
 out=$(agent settlement-review "look at specs/301-fixture")

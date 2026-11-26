@@ -3,6 +3,7 @@
 # archive holds is refused with the archived text's path; the same actor's second fetch passes; a page the archive does
 # not hold, another tool, and another actor each behave as they should. Real hook, real payload, a fixture archive.
 set -uo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/archive-first-hooks.sh"
 PASS=0; FAIL=0
@@ -26,8 +27,8 @@ fetch() {  # fetch <url> <agent_id> [tool]
 
 echo "1. the first fetch of a held page is refused with the archived text's path"
 fetch "$URL" agent-a
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "captured 2026-10-02" && printf '%s' "$OUT" | grep -q "20261002T120000Z/text.txt" && ok "refused, naming the text and its capture date" || no "the held page was fetched" "(rc=$RC) $OUT"
-printf '%s' "$OUT" | grep -q "fetch the same URL again" && ok "...and saying how to get the live page" || no "the second-fetch route is not named"
+[ "$RC" -eq 2 ] && seen OUT -q "captured 2026-10-02" && seen OUT -q "20261002T120000Z/text.txt" && ok "refused, naming the text and its capture date" || no "the held page was fetched" "(rc=$RC) $OUT"
+seen OUT -q "fetch the same URL again" && ok "...and saying how to get the live page" || no "the second-fetch route is not named"
 fetch "$URL" agent-a
 [ "$RC" -eq 0 ] && ok "the same agent's second fetch passes - it wants the live page" || no "the second fetch was refused" "(rc=$RC)"
 fetch "$URL" agent-b

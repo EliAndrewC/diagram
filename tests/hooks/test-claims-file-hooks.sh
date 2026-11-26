@@ -2,6 +2,7 @@
 # Tests for claims-file-hooks.sh (feature 376 FR-002): every hand route to the research claims sheet is refused with
 # the FR-001 commands; the commands themselves pass. Every case drives the REAL hook with a REAL payload.
 set -uo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/claims-file-hooks.sh"
 PASS=0; FAIL=0
@@ -18,11 +19,11 @@ echo "1. every hand route to the sheet is refused, naming the tool"
 for c in "cat $SHEET" "grep -n 0060 $SHEET" "tail -5 $SHEET" "echo 'x | 376 | Q=0060' >> $SHEET" "sed -i 's/a/b/' $SHEET" \
          "make lines FILE=$SHEET KEY=homesteads" "make append FILE=$SHEET LINE='x | 376 | Q=0060'"; do
   bash_cmd "$c"
-  [ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'make research-claims Q=' && ok "refused: ${c:0:40}" || no "passed: $c" "(rc=$RC)"
+  [ "$RC" -eq 2 ] && seen OUT -q 'make research-claims Q=' && ok "refused: ${c:0:40}" || no "passed: $c" "(rc=$RC)"
 done
 for t in Read Edit Write; do
   file_tool "$t" "$SHEET"
-  [ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "make research-claim Q=" && ok "refused: the $t tool on the sheet" || no "the $t tool passed" "(rc=$RC)"
+  [ "$RC" -eq 2 ] && seen OUT -q "make research-claim Q=" && ok "refused: the $t tool on the sheet" || no "the $t tool passed" "(rc=$RC)"
 done
 
 echo "2. the tool's own commands, and everything else, pass"

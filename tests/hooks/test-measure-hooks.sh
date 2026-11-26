@@ -4,6 +4,7 @@
 # Tests for measure-hooks.sh. Feeds PreToolUse events and asserts when an expensive measurement is
 # blocked. Run: tests/hooks/test-measure-hooks.sh   (exit 0 = all green)
 set -uo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # feature 449 T008: the guard is Rust - the link `measure-hooks.sh` beside this suite runs `l7r-guard --only measure-hooks`
 HOOK="$HERE/measure-hooks.sh"
@@ -123,12 +124,12 @@ teardown
 echo "9. the REMINDER arrives on the FIRST successful measurement, not at the first failure"
 setup
 FIRST=$("$HOOK" pretool <<<"$(bash_ev 'make done FULL=1')" 2>/dev/null)
-printf '%s' "$FIRST" | grep -q '"additionalContext"' && { echo "  ok    the first run carries a reminder"; PASS=$((PASS+1)); } || { echo "  FAIL  no reminder on the first run"; FAIL=$((FAIL+1)); }
+seen FIRST -q '"additionalContext"' && { echo "  ok    the first run carries a reminder"; PASS=$((PASS+1)); } || { echo "  FAIL  no reminder on the first run"; FAIL=$((FAIL+1)); }
 printf '%s' "$FIRST" | jq empty 2>/dev/null && { echo "  ok    ...as valid JSON on stdout"; PASS=$((PASS+1)); } || { echo "  FAIL  the reminder is not valid JSON"; FAIL=$((FAIL+1)); }
-printf '%s' "$FIRST" | grep -q 'make static' && { echo "  ok    ...naming the command that answers the usual question"; PASS=$((PASS+1)); } || { echo "  FAIL  the reminder does not name make static"; FAIL=$((FAIL+1)); }
-printf '%s' "$FIRST" | grep -q 'make cov-file' && { echo "  FAIL  the reminder names make cov-file, deleted with pytest"; FAIL=$((FAIL+1)); } || { echo "  ok    ...and no deleted target"; PASS=$((PASS+1)); }
+seen FIRST -q 'make static' && { echo "  ok    ...naming the command that answers the usual question"; PASS=$((PASS+1)); } || { echo "  FAIL  the reminder does not name make static"; FAIL=$((FAIL+1)); }
+seen FIRST -q 'make cov-file' && { echo "  FAIL  the reminder names make cov-file, deleted with pytest"; FAIL=$((FAIL+1)); } || { echo "  ok    ...and no deleted target"; PASS=$((PASS+1)); }
 SECOND=$("$HOOK" pretool <<<"$(bash_ev 'make done FULL=1')" 2>/dev/null || true)
-printf '%s' "$SECOND" | grep -q '"additionalContext"' && { echo "  FAIL  the reminder repeated on the blocked run"; FAIL=$((FAIL+1)); } || { echo "  ok    it is not repeated - a reminder that repeats is skimmed"; PASS=$((PASS+1)); }
+seen SECOND -q '"additionalContext"' && { echo "  FAIL  the reminder repeated on the blocked run"; FAIL=$((FAIL+1)); } || { echo "  ok    it is not repeated - a reminder that repeats is skimmed"; PASS=$((PASS+1)); }
 CHEAP=$("$HOOK" pretool <<<"$(bash_ev 'make quick')" 2>/dev/null)
 [ -z "$CHEAP" ] && { echo "  ok    the cheap loop gets no reminder at all"; PASS=$((PASS+1)); } || { echo "  FAIL  make quick was given a reminder"; FAIL=$((FAIL+1)); }
 teardown
@@ -205,7 +206,7 @@ teardown
 echo "8. status reports the count"
 setup
 run "$(bash_ev 'make done FULL=1')"
-"$HOOK" status <<<"$(bash_ev 'x')" | grep -q "measurements_since_reset=1" && { echo "  ok    status"; PASS=$((PASS+1)); } || { echo "  FAIL  status"; FAIL=$((FAIL+1)); }
+o=$("$HOOK" status <<<"$(bash_ev 'x')") && seen o -q "measurements_since_reset=1" && { echo "  ok    status"; PASS=$((PASS+1)); } || { echo "  FAIL  status"; FAIL=$((FAIL+1)); }
 teardown
 
 echo

@@ -3,6 +3,7 @@
 # override, and does NOT fire on a mention of the commands it guards.
 # (GUARD_EDIT_OK: the companion of a NEW guard, feature 151, GM 2026-08-29)
 set -u
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 # feature 449 T006: the guard is Rust now - the link `pair-hooks.sh` beside this suite runs `l7r-guard --only pair-hooks` through
 # the wrapper (tests/hooks/guard-shim.sh), and every case below replays against it unchanged
 HOOK="$(cd "$(dirname "$0")" && pwd)/pair-hooks.sh"
@@ -98,14 +99,14 @@ MAPDIR_G="$SKILL/pool/hamlets/othermap"
 ONE=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"UNIT: settlement-review--testmap\nreview /x/.git/review-snapshot/settlement-review--testmap/clone against main - unlike othermap, which its own agent has"}')
 permitted_with() { # label, payload, text the context must carry
   local out; out=$(run_pretool "$2"); local rc=$?
-  if [ "$rc" -eq 0 ] && printf '%s' "$out" | grep -q "REVIEW CHECKS OWED" && printf '%s' "$out" | grep -q -- "$3" \
-     && ! printf '%s' "$out" | grep -q "updatedInput"; then ok; else bad "$1 (rc=$rc: $out)"; fi
+  if [ "$rc" -eq 0 ] && seen out -q "REVIEW CHECKS OWED" && seen out -q -- "$3" \
+     && ! seen out -q "updatedInput"; then ok; else bad "$1 (rc=$rc: $out)"; fi
 }
 verdict() { mkdir -p "$VERDICTS"; printf '{"map":"testmap","engine_key":"%s","verdict":"%s","findings":%s}' "${3:-$KEY}" "$1" "$2" > "$VERDICTS/settlement-review--testmap.json"; }
 reset_prereq() { rm -rf "$VERDICTS" "$CLONE/.git/review-dispositions" "$CLONE/specs" "$CLONE/.git/stub-gate-green" "$CLONE/.git/pairing-state.json"; }
 refused_for() { # label, payload, text the refusal must carry
   local out; out=$(run_pretool "$2"); local rc=$?
-  if [ "$rc" -eq 2 ] && printf '%s' "$out" | grep -q -- "$3"; then ok; else bad "$1 (rc=$rc: $out)"; fi
+  if [ "$rc" -eq 2 ] && seen out -q -- "$3"; then ok; else bad "$1 (rc=$rc: $out)"; fi
 }
 green() { touch "$CLONE/.git/stub-gate-green"; }
 moved_two() { moved; mkdir -p "$MAPDIR_G"; printf '{"meta":{"name":"othermap"}}' > "$MAPDIR_G/othermap.json"; printf '# othermap\n' > "$MAPDIR_G/othermap.notes.md"; for ext in svg png html spec.json; do : > "$MAPDIR_G/othermap.$ext"; done; cached; }
@@ -122,12 +123,12 @@ reset_prereq
 # verify`, no permit naming owed units, and NO review lookup at all - the trace of the hook's run never reaches `l7r-gate reviews owed` (449 T89; was review_owed.py).
 # A review comes due at the checkpoint (`make tick`'s hold) or at the landing (review-gate.sh).
 check "the gate runs as typed with a review owed" '[ "$(rc_pretool "$GATE")" -eq 0 ]'
-check "...is not rewritten into make verify" '! run_pretool "$GATE" | grep -q "updatedInput"'
+check "...is not rewritten into make verify" '! grep -q "updatedInput" <<< "$(run_pretool "$GATE")"'
 check "...says nothing" '[ -z "$(run_pretool "$GATE")" ]'
 check "...and records the gate key for the pairing" 'grep -q "gate_key" "$CLONE/.git/pairing-state.json"'
-check "...and asks no review lookup (SC-004)" '! ( cd "$CLONE" && printf "%s" "$GATE" | bash -x "$HOOK" pretool 2>&1 ) | grep -q "reviews owed"'
+check "...and asks no review lookup (SC-004)" '! grep -q "reviews owed" <<< "$(cd "$CLONE" && printf "%s" "$GATE" | bash -x "$HOOK" pretool 2>&1)"'
 for shape in "$GATE_FULL" "$(stdin_for Bash '{"command":"make done FULL=1 2>&1 | tail -60"}')" "$(stdin_for Bash '{"command":"setsid nohup make done > /tmp/done.log 2>&1 &"}')" "$(stdin_for Bash '{"command":"make done","run_in_background":true}')"; do
-  check "every gate shape runs as typed: $(printf '%s' "$shape" | cut -c1-60)" '[ "$(rc_pretool "$shape")" -eq 0 ] && ! run_pretool "$shape" | grep -q "updatedInput"'
+  check "every gate shape runs as typed: $(printf '%s' "$shape" | cut -c1-60)" '[ "$(rc_pretool "$shape")" -eq 0 ] && ! grep -q "updatedInput" <<< "$(run_pretool "$shape")"'
 done
 rm -f "$CLONE/.git/pairing-state.json"
 check "a settlement-review alone is refused" '[ "$(rc_pretool "$REVIEW")" -eq 2 ]'
@@ -193,14 +194,14 @@ printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"; tou
 rm -f "$CLONE/.git/pairing-state.json"
 ( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); FIRST=$?
 check "stop is quiet on a green gate with a review owed" '[ "$FIRST" -eq 0 ]'
-check "...and asks no review lookup (SC-004)" '! ( cd "$CLONE" && printf "%s" "$STOP" | bash -x "$HOOK" stop 2>&1 ) | grep -q "reviews owed"'
+check "...and asks no review lookup (SC-004)" '! grep -q "reviews owed" <<< "$(cd "$CLONE" && printf "%s" "$STOP" | bash -x "$HOOK" stop 2>&1)"'
 }
 
 case_07() {  # 2 s of its chain, measured as one 2026-10-12
 # --- 7. a gate with PAIR_OK still runs (feature 383: the waiver is retired with the stop branch, its only reader) -----
 rm -f "$CLONE/.git/pairing-state.json"
 WAIVE=$(stdin_for Bash '{"command":"PAIR_OK=\"the review read these exact maps and nothing moved\" make done"}')
-check "a gate carrying PAIR_OK runs as typed" '[ "$(rc_pretool "$WAIVE")" -eq 0 ] && ! run_pretool "$WAIVE" | grep -q "updatedInput"'
+check "a gate carrying PAIR_OK runs as typed" '[ "$(rc_pretool "$WAIVE")" -eq 0 ] && ! grep -q "updatedInput" <<< "$(run_pretool "$WAIVE")"'
 }
 
 
@@ -359,7 +360,7 @@ printf 'review testmap only\n' > "$CLONE/.git/review-snapshot/testmap/dispatch.m
 printf 'review othermap only\n' > "$CLONE/.git/review-snapshot/othermap/dispatch.md"
 TWO=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"review the maps testmap and othermap, the delta only"}')
 refused_for "a dispatch naming two maps is refused before the agent starts" "$TWO" "one unit per agent"
-check "...and hands back each map's prompt file" 'run_pretool "$TWO" | grep -q "review-snapshot/testmap/dispatch.md" && run_pretool "$TWO" | grep -q "review-snapshot/othermap/dispatch.md"'
+check "...and hands back each map's prompt file" 'grep -q "review-snapshot/testmap/dispatch.md" <<< "$(run_pretool "$TWO")" && grep -q "review-snapshot/othermap/dispatch.md" <<< "$(run_pretool "$TWO")"'
 check "...recorded under its own rule" 'grep -rl "review-multi-map" "$GUARD_LOG_ROOT" >/dev/null'
 TWO_SNAP=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"read /x/.git/review-snapshot/settlement-review--testmap/clone and /x/.git/review-snapshot/settlement-review--othermap/clone"}')
 refused_for "...two snapshot directories count as two maps" "$TWO_SNAP" "one unit per agent"
@@ -481,10 +482,10 @@ moved
 check "a claimed-but-uncreated clone's gate runs as typed, saying nothing" '[ -z "$(note_says "$GHOST")" ]'
 GHOSTREV=$(printf '{"tool_name":"Agent","tool_input":{"subagent_type":"settlement-review","prompt":"review it"},"transcript_path":"%s","session_id":"ghost","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$MIRROR")
 rm -f "$MIRROR/.git/pairing-state.json" "$MIRROR/.git/verification-state.json"
-check "the review refusal discloses the fallback" 'note_says "$GHOSTREV" | grep -q "could not be resolved"'
-check "...says the verdict was judged against main" 'note_says "$GHOSTREV" | grep -q "judged against MAIN"'
-check "...and names the remedy" 'note_says "$GHOSTREV" | grep -q "rename"'
-check "a RESOLVED clone adds nothing" '! run_pretool "$GATE_FULL" | grep -q "could not be resolved"'
+check "the review refusal discloses the fallback" 'grep -q "could not be resolved" <<< "$(note_says "$GHOSTREV")"'
+check "...says the verdict was judged against main" 'grep -q "judged against MAIN" <<< "$(note_says "$GHOSTREV")"'
+check "...and names the remedy" 'grep -q "rename" <<< "$(note_says "$GHOSTREV")"'
+check "a RESOLVED clone adds nothing" '! grep -q "could not be resolved" <<< "$(run_pretool "$GATE_FULL")"'
 QUIET_ONE=$(printf '{"tool_name":"Bash","tool_input":{"command":"make quick"},"transcript_path":"%s","session_id":"ghost","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$MIRROR")
 check "...and a branch that says nothing today still says nothing" '[ -z "$(note_says "$QUIET_ONE")" ]'
 check "the disclosure is ONE string, not five copies" '[ "$(cat "$(dirname "$HOOK")"/../../rust/guard/src/guards/pair_hooks.rs "$(dirname "$HOOK")"/../../rust/guard/src/guards/pair_hooks/review.rs "$(dirname "$HOOK")"/../../rust/guard/src/guards/pair_hooks/state.rs | grep -c "could not be resolved")" -eq 1 ]'
@@ -513,17 +514,17 @@ started() { jq -nc '{"t": (now - ($ARGS.positional[0]|tonumber) | todate), "ev":
 started 600; green
 early=$(stdin_for Agent '{"subagent_type":"glyph-check","prompt":"UNIT: glyph-check--kiln--glyphmap\nDECIDE_OK=\"a fixture feature with no plan\"\njudge it"}')
 out="$(run_pretool "$early")"
-check "a glyph check before the feature's hour is refused, naming when it comes due" 'printf "%s" "$out" | grep -q "not yet due" && [ "$(rc_pretool "$early")" -eq 2 ]'
+check "a glyph check before the feature's hour is refused, naming when it comes due" 'seen out -q "not yet due" && [ "$(rc_pretool "$early")" -eq 2 ]'
 esc=$(stdin_for Agent '{"subagent_type":"glyph-check","prompt":"UNIT: glyph-check--kiln--glyphmap\nDECIDE_OK=\"a fixture feature with no plan\"\nGLYPH_DUE_OK=\"the GM asked for this one now\"\njudge it"}')
 out="$(run_pretool "$esc")"
-check "...GLYPH_DUE_OK with a reason passes the hour" '! printf "%s" "$out" | grep -q "not yet due"'
+check "...GLYPH_DUE_OK with a reason passes the hour" '! seen out -q "not yet due"'
 rm -f "$CLONE/.git/glyph-clock.json" "$CLONE/.git/pairing-state.json"; started 7200; green
 out="$(run_pretool "$early")"
-check "...on the feature's hour it passes" '! printf "%s" "$out" | grep -q "not yet due"'
+check "...on the feature's hour it passes" '! seen out -q "not yet due"'
 rm -f "$CLONE/.git/glyph-clock.json" "$CLONE/.git/pairing-state.json"; started 600; green
 "$REAL_GATE" reviews owed --root "$CLONE" --landing-mark on >/dev/null 2>&1
 out="$(run_pretool "$early")"
-check "...and once a push was refused for it (the landing mark) it passes without the escape" '! printf "%s" "$out" | grep -q "not yet due"'
+check "...and once a push was refused for it (the landing mark) it passes without the escape" '! seen out -q "not yet due"'
 rm -rf "$gm" "$CLONE/specs/999-g" "$CLONE/.specify/feature.json" "$CLONE/.git/l7r-events/999-g.jsonl" "$CLONE/.git/glyph-clock.json" "$CLONE/.git/glyph-landing"
 ( cd "$CLONE" && git rm -rq --cached pool/hamlets/glyphmap >/dev/null 2>&1; git -c user.email=t@t -c user.name=t commit -qm unglyph >/dev/null 2>&1; git update-ref refs/remotes/origin/main HEAD )
 reset_prereq

@@ -9,6 +9,7 @@
 # rust/guard/src/guards/context_cap_hooks/payloads.json (captured from Claude Code 2.1.325), their cwd and transcript path moved to a
 # fixture clone and session; the handoff's Write runs through the WHOLE chain too, since it is the cap's one exit.
 set -uo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's text grepped from a here-string, never a pipe (451 T253)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO="$(cd "$HERE/../.." && pwd)"
 HOOK="$HERE/context-cap-hooks.sh"
@@ -42,9 +43,9 @@ bash_in() { jq -nc --arg c "$1" '{command: $c}'; }
 echo "1. a builder past the cap is refused, every tool, naming its handoff and the next step"
 context 310000
 run builder Bash "$(bash_in 'make quick')"
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q '310000 tokens, past the cap of 300000' && ok "a Bash call past the cap is refused" || no "the call passed" "(rc=$RC: $OUT)"
-printf '%s' "$OUT" | grep -qF "$H" && printf '%s' "$OUT" | grep -q 'Stop, and reply with that path' && ok "...naming the handoff file and the next step" || no "the refusal names no handoff" "($OUT)"
-ls "$GUARD_LOG_DIR" 2>/dev/null | grep -q . && grep -lq 'past-cap' "$GUARD_LOG_DIR"/* && ok "...and the firing is logged" || no "no guard-log record"
+[ "$RC" -eq 2 ] && seen OUT -q '310000 tokens, past the cap of 300000' && ok "a Bash call past the cap is refused" || no "the call passed" "(rc=$RC: $OUT)"
+seen OUT -qF "$H" && seen OUT -q 'Stop, and reply with that path' && ok "...naming the handoff file and the next step" || no "the refusal names no handoff" "($OUT)"
+[ -n "$(ls "$GUARD_LOG_DIR" 2>/dev/null)" ] && grep -lq 'past-cap' "$GUARD_LOG_DIR"/* && ok "...and the firing is logged" || no "no guard-log record"
 run builder Edit "$(jq -nc --arg f "$C/x.rs" '{file_path: $f, old_string: "a", new_string: "b"}')"
 [ "$RC" -eq 2 ] && ok "an Edit past the cap is refused" || no "the Edit passed" "(rc=$RC)"
 
@@ -58,7 +59,7 @@ OUT=$(payload builder Write "$WRITE" | "$REPO/scripts/hooks/l7r-guard.sh" PreToo
 OUT=$(payload builder Write "$(jq -nc --arg f "$C/.git/l7r-handoffs/T12-$AID.md" '{file_path: $f, content: "done; left"}')" | "$REPO/scripts/hooks/l7r-guard.sh" PreToolUse 2>&1); RC=$?
 [ "$RC" -eq 0 ] && ok "...and so does the task-named handoff a real builder is given (T<n>-<agent id>.md)" || no "a guard of the chain refused the task-named handoff" "(rc=$RC: $OUT)"
 OUT=$(payload builder Write "$(jq -nc --arg f "$C/notes.md" '{file_path: $f, content: "x"}')" | "$REPO/scripts/hooks/l7r-guard.sh" PreToolUse 2>&1); RC=$?
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'past the cap' && ok "...while the chain refuses any other Write (the guard is registered)" || no "the chain let another Write through" "(rc=$RC: $OUT)"
+[ "$RC" -eq 2 ] && seen OUT -q 'past the cap' && ok "...while the chain refuses any other Write (the guard is registered)" || no "the chain let another Write through" "(rc=$RC: $OUT)"
 run builder Write "$(jq -nc --arg f "$C/.git/l7r-handoffs/a0000000000000000.md" '{file_path: $f, content: "x"}')"
 [ "$RC" -eq 2 ] && ok "another agent's handoff is refused" || no "another agent's handoff passed" "(rc=$RC)"
 
@@ -80,7 +81,7 @@ run builder Bash "$(bash_in 'CONTEXT_OK="the landing needs it" make land')"
 [ "$RC" -eq 0 ] && ok "CONTEXT_OK with a reason passes" || no "the escape was refused" "(rc=$RC: $OUT)"
 [ "$(ls "$GUARD_LOG_DIR" | wc -l)" -gt "$before" ] && grep -lq 'the landing needs it' "$GUARD_LOG_DIR"/* && ok "...and is recorded" || no "the escape left no record"
 run builder Bash "$(bash_in 'make quick CONTEXT_OK')"
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'CONTEXT_OK with no reason' && ok "a bare CONTEXT_OK is refused" || no "a bare escape passed" "(rc=$RC)"
+[ "$RC" -eq 2 ] && seen OUT -q 'CONTEXT_OK with no reason' && ok "a bare CONTEXT_OK is refused" || no "a bare escape passed" "(rc=$RC)"
 
 echo "6. a SendMessage resuming a builder (D10): past the cap or landed refused, the escape in its summary"
 META="$T/proj/sess/subagents/agent-$AID.meta.json"
@@ -89,7 +90,7 @@ send() { jq -nc --arg to "$AID" --arg s "$1" '{to: $to, summary: $s, message: "g
 meta general-purpose "451 T05: build it"
 context 310000
 run main SendMessage "$(send 'go on')"
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "resuming builder $AID: its context is 310000 tokens" && printf '%s' "$OUT" | grep -q "make context-ok AID=$AID" && ok "a resume past the cap is refused, naming the fresh dispatch and the permit" || no "the resume passed" "(rc=$RC: $OUT)"
+[ "$RC" -eq 2 ] && seen OUT -q "resuming builder $AID: its context is 310000 tokens" && seen OUT -q "make context-ok AID=$AID" && ok "a resume past the cap is refused, naming the fresh dispatch and the permit" || no "the resume passed" "(rc=$RC: $OUT)"
 grep -lq 'resume-past-cap' "$GUARD_LOG_DIR"/* && ok "...recorded" || no "no record of the refused resume"
 run main SendMessage "$(send 'CONTEXT_OK="one pass to write its handoff" go on')"
 [ "$RC" -eq 0 ] && grep -lq 'one pass to write its handoff' "$GUARD_LOG_DIR"/* && ok "CONTEXT_OK in the summary passes, recorded" || no "the summary's escape refused" "(rc=$RC: $OUT)"
@@ -98,7 +99,7 @@ printf '{"feature_directory": "specs/451-x"}' > "$C/.specify/feature.json"
 printf -- '- [x] T05 a\n' > "$C/specs/451-x/tasks.md"
 context 120000
 run main SendMessage "$(send 'go on')"
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'T05 has landed or is ticked' && ok "a resume of a builder whose task is ticked is refused" || no "the landed resume passed" "(rc=$RC: $OUT)"
+[ "$RC" -eq 2 ] && seen OUT -q 'T05 has landed or is ticked' && ok "a resume of a builder whose task is ticked is refused" || no "the landed resume passed" "(rc=$RC: $OUT)"
 printf -- '- [ ] T05 a\n' > "$C/specs/451-x/tasks.md"
 run main SendMessage "$(send 'go on')"
 [ "$RC" -eq 0 ] && ok "a resume under the cap, its task open, passes" || no "an open resume refused" "(rc=$RC: $OUT)"
@@ -122,10 +123,10 @@ run main SendMessage "$(send 'CONTEXT_OK="one pass to write its handoff" go on')
 run builder Bash "$(bash_in 'make quick')"
 [ "$RC" -eq 2 ] && ok "...its next call still refused before the permit" || no "the call passed with no permit" "(rc=$RC)"
 OUT=$(make -s -f "$REPO/Makefile" -C "$C" context-ok AID= WHY="x y" 2>&1); RC=$?
-[ "$RC" -ne 0 ] && printf '%s' "$OUT" | grep -q 'Usage: make context-ok AID=' && ok "make context-ok with no AID prints its usage" || no "a bare make context-ok" "(rc=$RC: $OUT)"
+[ "$RC" -ne 0 ] && seen OUT -q 'Usage: make context-ok AID=' && ok "make context-ok with no AID prints its usage" || no "a bare make context-ok" "(rc=$RC: $OUT)"
 OUT=$(make -s -f "$REPO/Makefile" -C "$C" context-ok AID="$AID" WHY="the resumed builder finishes its step" 2>&1); RC=$?
 [ "$RC" -eq 0 ] && grep -q "context-cap:$AID" "$C/.git/l7r-guard-permits.jsonl" && ok "make context-ok grants the agent's permit in the clone's store" || no "the grant failed" "(rc=$RC: $OUT)"
-printf '%s' "$OUT" | grep -q "^context-ok: agent $AID may pass the context cap until .* - the resumed builder finishes its step" && ok "...saying so in its own words" || no "the grant's wording" "($OUT)"
+seen OUT -q "^context-ok: agent $AID may pass the context cap until .* - the resumed builder finishes its step" && ok "...saying so in its own words" || no "the grant's wording" "($OUT)"
 run builder Bash "$(bash_in 'make quick')"
 [ "$RC" -eq 0 ] && grep -lq 'context-ok-permit' "$GUARD_LOG_DIR"/* && ok "...and the builder's next call past the cap passes, recorded" || no "the permitted call refused" "(rc=$RC: $OUT)"
 
@@ -138,7 +139,7 @@ agent_in() { jq -nc --arg t "$1" --arg p "${2:-Triage the claims bundle}" '{suba
 CODE=$'Build feature 451 task T05 in the clone.\n\nSTOP POINT. Your work ends when ALL of these hold:\n - make claims-triage has run'
 brief "$CODE" 120000
 run builder Agent "$(agent_in claims-triage)"
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'STOP POINT' && printf '%s' "$OUT" | grep -q 'make claims-owed' && ok "a code builder's claims-triage dispatch is refused, naming the stop point and what to report" || no "the claims-triage dispatch passed" "(rc=$RC: $OUT)"
+[ "$RC" -eq 2 ] && seen OUT -q 'STOP POINT' && seen OUT -q 'make claims-owed' && ok "a code builder's claims-triage dispatch is refused, naming the stop point and what to report" || no "the claims-triage dispatch passed" "(rc=$RC: $OUT)"
 grep -lq 'builder-split' "$GUARD_LOG_DIR"/* && ok "...recorded" || no "no record of the split's refusal"
 run builder Agent "$(agent_in impl-drift)"
 [ "$RC" -eq 2 ] && ok "...and its impl-drift dispatch" || no "the impl-drift dispatch passed" "(rc=$RC: $OUT)"
@@ -149,7 +150,7 @@ run builder Workflow '{"name":"check-wave","args":{"agentType":"impl-drift","uni
 run builder Agent "$(agent_in impl-drift 'SPLIT_OK="the GM asked for it" Judge the bundle')"
 [ "$RC" -eq 0 ] && grep -lq 'the GM asked for it' "$GUARD_LOG_DIR"/* && ok "SPLIT_OK with a reason in the prompt passes, recorded" || no "the split's escape" "(rc=$RC: $OUT)"
 run builder Agent "$(agent_in impl-drift 'Judge the bundle SPLIT_OK')"
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'SPLIT_OK with no reason' && ok "a bare SPLIT_OK is refused" || no "a bare SPLIT_OK" "(rc=$RC: $OUT)"
+[ "$RC" -eq 2 ] && seen OUT -q 'SPLIT_OK with no reason' && ok "a bare SPLIT_OK is refused" || no "a bare SPLIT_OK" "(rc=$RC: $OUT)"
 brief $'Run the claims round for feature 449 task T431 in the clone.\nSTOP POINT. quoted from the builder brief' 120000
 run builder Agent "$(agent_in claims-triage)"
 [ "$RC" -eq 0 ] && ok "a claims-round dispatch passes, a STOP POINT line quoted in it or not" || no "the claims round refused" "(rc=$RC: $OUT)"
@@ -162,10 +163,10 @@ echo "9. the cap's handoff names the split for a code builder, and only for one"
 rm -f "$C/.git/l7r-guard-permits.jsonl"  # case 7's permit would let the call through
 brief "$CODE" 310000
 run builder Bash "$(bash_in 'make quick')"
-[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'does not run the claims round' && ok "a code builder past the cap is told it hands off at its stop point" || no "the handoff names no split" "(rc=$RC: $OUT)"
+[ "$RC" -eq 2 ] && seen OUT -q 'does not run the claims round' && ok "a code builder past the cap is told it hands off at its stop point" || no "the handoff names no split" "(rc=$RC: $OUT)"
 brief 'Run the claims round for feature 449 task T431' 310000
 run builder Bash "$(bash_in 'make quick')"
-[ "$RC" -eq 2 ] && ! printf '%s' "$OUT" | grep -q 'claims round' && ok "...and a claims-round dispatch past it is not" || no "the claims round's handoff" "(rc=$RC: $OUT)"
+[ "$RC" -eq 2 ] && ! seen OUT -q 'claims round' && ok "...and a claims-round dispatch past it is not" || no "the claims round's handoff" "(rc=$RC: $OUT)"
 
 echo
 echo "context-cap-hooks: $PASS passed, $FAIL failed"
