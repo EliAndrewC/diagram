@@ -202,3 +202,9 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T275 state files joined onto <root>/.git break or are passed over in a linked worktree, as claims-searched.json did (451 T267's census, unmeasured): the reviews crate (prereq.rs, prereq/scoped.rs, prereq/tree.rs, snapshot.rs), the gate's record, owed, arbiter, cohort, ci and trials paths, the guard's idle-tests, finished-run, review-round, escalation, pair and stall-watchdog state, and the .join('.git').is_dir() probes (clone_sync_hooks.rs, archive/store.rs) - run each in a worktree, then resolve the git dir where it fails
       research: rendering
+- [ ] T276 docs/buildings.md and docs/building-programs.md carry 22 GM-tagged prose lines with no pointer (11 each) that l7r-gate check gm-attributions does not read (451 T265): search each, cite the record or relabel, then widen the check to the procedure docs' prose lines
+      research: rendering
+- [ ] T277 0222's drawing page states Inari as a village shrine's ordinary dedication in a visible sentence with no label item (451 T265; the knob is UNRESEARCHED): run the search pass on a village shrine's usual dedication and label the sentence in a page session
+      research: rendering
+- [ ] T278 the cargo-variant sweep keeps 16 incremental variants a crate and prunes only after 12 idle hours, so cover-gate holds 44 GB where a fresh one is 2.65 GB (measured 2026-11-26, dev/measurements/2026-11-26/build-levers): measure a smaller keep and an earlier prune for coverage builds against rebuild time, and adopt what loses no time
+      research: rendering

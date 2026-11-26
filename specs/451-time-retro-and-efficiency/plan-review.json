@@ -1892,7 +1892,7 @@
    "declared": "spec-fidelity"
   },
   "### T265 Approach (checklist part A)": {
-   "sha256": "59696520944688a4f7af13287b9d8dae7fc77b7e98793ed1135018bd379035ce",
+   "sha256": "6438555f7fefa0398de337aabc704459a8a995cf09b928c68c483ee528933c5e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
@@ -24044,6 +24044,88 @@
      "why": "This is an unaudited group of lines, not known defects. The block shows none of the 22 to be false, and some are backed a line away. T233's design treats exactly such a group (the 'about 60 unaudited near-twins') as baseline, fixed as pages are edited and waiting for the research switch. T265 does not change the check's scope over prose, which T233 set. The item has to be filed (task numbers from one writer, so by the coordinating session), and filing it carries the GM's T233 purpose forward."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T265 (451 T251's and T250's \"Found and left\", 2026-11-26: `docs/building-programs.md`'s dedication knob named a ruling of the GM's that no record holds, in wording the gm-attributions check did not read, and it and 0222's drawing-page comment cited each other; and the check took four kinds of record where his verbatim words also stand in a fifth)",
+    "### T265 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "relabel-claim",
+     "summary": "docs/building-programs.md's dedication-knob claim CANON -> UNRESEARCHED (not GUESS), its account saying whose default it is",
+     "class": "within",
+     "why": "The 2026-11-24 amendment: an attribution to the GM names his recorded words, and he never ruled what a session told him. The search found no words of his, so the label says it is this project's default and unsearched. That is the request's purpose carried out."
+    },
+    {
+     "id": "relabel-knob3-prose",
+     "summary": "knob 3's prose drops '(GM 2026-09-20)' and 'on the GM's word', and says the default is this project's and the Bishamon credit is the notes file's",
+     "class": "within",
+     "why": "The same purpose applied to the prose beside the claim. No credit to him stands without recorded words."
+    },
+    {
+     "id": "relabel-0222-comment",
+     "summary": "0222's drawing-page comment says UNRESEARCHED and lists the search; the visible sentence is unchanged",
+     "class": "within",
+     "why": "It corrects the attribution in the comment. Leaving the visible sentence is declared as found-and-left and filed (T277), not hidden."
+    },
+    {
+     "id": "knob-default-kept",
+     "summary": "the knob still defaults to Inari; no map or sheet changes",
+     "class": "within",
+     "why": "The GM 2026-10-25: where research is silent, make it a knob or do what is algorithmically easier. The default staying in place is not a defect, only its label was wrong."
+    },
+    {
+     "id": "names-a-gm-ruling",
+     "summary": "the check's NAMES read 'a GM ruling|...' as they read 'the GM's ...'",
+     "class": "within",
+     "why": "It enforces the 2026-11-24 request on the wording that let this attribution slip through, and it is red-first. Enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "broader-form-not-taken",
+     "summary": "'GM ruling' bare and 'the GM rules' are not added to NAMES",
+     "class": "within",
+     "why": "The forms the request's build names are all still read. The measured broader forms caught only non-attributions (statements that he has not ruled), so leaving them out drops nothing the request covers."
+    },
+    {
+     "id": "dated-rulings-file-pointer",
+     "summary": "specs/<NNN>/rulings-YYYY-MM-DD.md is accepted as a record; only the dated name",
+     "class": "within",
+     "why": "The request is that an attribution names his RECORDED words. These two files hold his rulings verbatim as block quotations, in the form of a request.md, so accepting them serves that purpose. The undated name stays refused."
+    },
+    {
+     "id": "second-hand-files-refused",
+     "summary": "audit.md, tasks.md and commit messages are not records",
+     "class": "within",
+     "why": "Stricter, and on the request's purpose: those files are a session's sentences quoting him second-hand, which is exactly the 0006 failure. T251's brook claim is the measured instance."
+    },
+    {
+     "id": "t250-comments-counted-not-swept",
+     "summary": "8 comments that name a rulings file and 18 that name tasks/audit files are counted and left as worded",
+     "class": "within",
+     "why": "The request's build has fixing comments as page work waiting on the research switch, and the GM deferred queued research on 2026-11-25. They are left as plainly-worded mentions, not attributions, so the check is not weakened."
+    },
+    {
+     "id": "claims-round-elsewhere",
+     "summary": "the baseline stays zero bytes; impl-drift on the owed claims is dispatched by the coordinating session, not this builder",
+     "class": "within",
+     "why": "The claims round still runs, it is only routed to its owner, so nothing is narrowed."
+    },
+    {
+     "id": "found-left-0222-visible-sentence",
+     "summary": "0222's visible sentence with no label item is deferred: filed as T277, lands before T264",
+     "class": "within",
+     "why": "It now carries FR-009's form: why it is not fixed here (page work in fresh page sessions, and research deferred by the GM 2026-11-25), its filed id, and its order. It is ordered inside the feature, before the next dependent task, and the claim is on research-backlog."
+    },
+    {
+     "id": "found-left-22-prose-lines",
+     "summary": "22 prose lines in docs/buildings.md and docs/building-programs.md naming a GM ruling with no pointer are deferred: filed as T276, lands before T264",
+     "class": "within",
+     "why": "It carries FR-009's form (why, filed id, order), and the count gives its method, the check's own patterns over every non-claim line. It is filed and ordered, not dropped."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -38155,76 +38237,81 @@
    "verdict": "CLEAR"
   },
   "T265": {
-   "section_sha256": "3181b50bfcd2ea8dd405a01c597ca2f9cd317096489d5df5a64f91fcc1193bfc",
+   "section_sha256": "16ff48f6c33832c1006da4f7b8a60eb16dd12da15dd9606e7e716599308bffe8",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D1 relabel the dedication knob CANON -> UNRESEARCHED",
-     "summary": "docs/building-programs.md's dedication-knob claim line goes from CANON to UNRESEARCHED (not GUESS), saying whose default it is, that no record of his words holds it, where the date came from, and that only the Fortune's name is from his notes; the knob still defaults to Inari",
+     "id": "relabel-claim",
+     "summary": "docs/building-programs.md's dedication-knob claim CANON -> UNRESEARCHED (not GUESS), its account saying whose default it is",
      "class": "within",
-     "why": "This applies the GM's T233 words ('I never made a ruling ... That is what a session told me') to one more such attribution: no recorded words back it, so it is not called his. UNRESEARCHED is the label the GM defined on 2026-11-25 ('unresearched would mean that we know we have not yet checked'), and the block shows that the question itself was never searched. Keeping Inari as a best guess pending the backlog is exactly what that rule says, and it also fits his 2026-10-25 words on choices the research does not settle. The research search is deferred by his words of 2026-11-25 and the research switch."
+     "why": "The 2026-11-24 amendment: an attribution to the GM names his recorded words, and he never ruled what a session told him. The search found no words of his, so the label says it is this project's default and unsearched. That is the request's purpose carried out."
     },
     {
-     "id": "D2 knob 3 prose: the default is this project's, the Bishamon credit is the notes file's",
-     "summary": "knob 3's '(GM 2026-09-20)' tag and 'on the GM's word of the same day' are rewritten: the default is this project's and UNRESEARCHED, and the Bishamon choice is credited to the notes file. Otsuki's Obsidian Portal record (gm-assistant's) was not read",
+     "id": "relabel-knob3-prose",
+     "summary": "knob 3's prose drops '(GM 2026-09-20)' and 'on the GM's word', and says the default is this project's and the Bishamon credit is the notes file's",
      "class": "within",
-     "why": "This is the GM's 'NOT a ruling' rule: say whose it is. The new wording claims only what the repository's records show, which is that the notes file makes the credit. It does not say he never said it, so it stays accurate whatever the unread Portal record holds. Nothing the GM asked for is narrowed: drawing Bishamon on Hoshigaoka is unchanged, and only the attribution moves."
+     "why": "The same purpose applied to the prose beside the claim. No credit to him stands without recorded words."
     },
     {
-     "id": "D3 0222 drawing-page comment relabeled, visible sentence unchanged",
-     "summary": "the comment stops citing the doc as its record, says UNRESEARCHED and lists where his words were searched for; the visible sentence is not edited",
+     "id": "relabel-0222-comment",
+     "summary": "0222's drawing-page comment says UNRESEARCHED and lists the search; the visible sentence is unchanged",
      "class": "within",
-     "why": "The comment was the attribution that had no record behind it, and fixing it carries out T233's purpose. The visible sentence already says 'which this project takes as', which credits no one falsely. See D10 for leaving that sentence as it is."
+     "why": "It corrects the attribution in the comment. Leaving the visible sentence is declared as found-and-left and filed (T277), not hidden."
     },
     {
-     "id": "D4 the check reads 'a GM ruling'; the broader form is not taken",
-     "summary": "gm_attributions NAMES gains 'a GM <noun>' for the nouns it took after 'the GM's'. Bare 'GM ruling' and 'the GM rules' are not taken: measured, they added four hits and none was an attribution",
+     "id": "knob-default-kept",
+     "summary": "the knob still defaults to Inari; no map or sheet changes",
      "class": "within",
-     "why": "Reading the wording that let this attribution slip past enforces exactly what T233 asked for (a red-first test, and the real line refused). Not taking the broader form narrows nothing: the GM's words and T233's task line name no such form, and the four comments it would have read were not attributions. Refusing them would be a check refusing good work."
+     "why": "The GM 2026-10-25: where research is silent, make it a knob or do what is algorithmically easier. The default staying in place is not a defect, only its label was wrong."
     },
     {
-     "id": "D5 a dated rulings file (specs/<NNN>/rulings-YYYY-MM-DD.md) is accepted as a record",
-     "summary": "POINTER takes specs/<NNN-slug>/rulings-YYYY-MM-DD.md as a fifth kind of record. There are two, 269's and 280's, both headed verbatim and holding his rulings as block quotations in request.md's form. Only the dated name is taken",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "This widens what the guard lets pass, past the three kinds of record in T233's task line, which is the coordinating session's build and not the GM's words. Tested against the purpose of his words (a ruling credited to him must stand on what he actually said), the files qualify. These files hold his verbatim words as block quotations with the session's notes under their own headings, the same form as the request.md the check already takes (and this feature's request.md itself carries session notes in parentheses). Refusing a pointer at his verbatim words would be a check refusing correct work. The seam is the block's own reason for excluding tasks.md: the check never compares words, so file kind is the only safeguard. Taking only the dated name, which is the verbatim kind, keeps that safeguard, and second-hand files stay out (D6). Applied literally, the three-kind list would defeat the request's purpose, because it would refuse attributions that are properly backed."
+     "id": "names-a-gm-ruling",
+     "summary": "the check's NAMES read 'a GM ruling|...' as they read 'the GM's ...'",
+     "class": "within",
+     "why": "It enforces the 2026-11-24 request on the wording that let this attribution slip through, and it is red-first. Enforcement of the request, not unrequested scope."
     },
     {
-     "id": "D6 audit.md, tasks.md and commit messages are not records; no docs/gm-rulings.md entry is minted for them",
-     "summary": "second-hand files stay refused as pointers. A comment whose words stand only there names them in plain words and does not call them a ruling. No gm-rulings.md entry is created to turn such a quote into a pointer",
+     "id": "broader-form-not-taken",
+     "summary": "'GM ruling' bare and 'the GM rules' are not added to NAMES",
      "class": "within",
-     "why": "This keeps the check as strict as T233 asked. T251's brook claim (marsh-edge words moved onto a brook) is the failure the GM's words describe. Creating a gm-rulings.md entry from a second-hand quote would be the same failure laundered into a record. Naming the file plainly, without calling its words a ruling, is the 'say whose it is' rule."
+     "why": "The forms the request's build names are all still read. The measured broader forms caught only non-attributions (statements that he has not ruled), so leaving them out drops nothing the request covers."
     },
     {
-     "id": "D7 T250's worded-around comments are counted, not swept",
-     "summary": "8 comments name a rulings file and 18 name a tasks.md or audit file; all stay as worded, and the 8 may now name their pointer plainly",
+     "id": "dated-rulings-file-pointer",
+     "summary": "specs/<NNN>/rulings-YYYY-MM-DD.md is accepted as a record; only the dated name",
      "class": "within",
-     "why": "None of them makes a false attribution: they already name the file that holds the words, so leaving them is a difference in wording, not a defect. T233's own design leaves unaudited comments in its baseline, to be fixed by page work as pages are edited."
+     "why": "The request is that an attribution names his RECORDED words. These two files hold his rulings verbatim as block quotations, in the form of a request.md, so accepting them serves that purpose. The undated name stays refused."
     },
     {
-     "id": "D8 the baseline stays zero bytes; the check is silent on the tree after the relabel",
-     "summary": "dev/gm-attribution-baseline.jsonl stays 0 bytes, and the check returns rc 0 after the relabel",
+     "id": "second-hand-files-refused",
+     "summary": "audit.md, tasks.md and commit messages are not records",
      "class": "within",
-     "why": "The baseline only shrinks, as T233 asked, and nothing is added to it to hide the new refusal: the line was fixed instead."
+     "why": "Stricter, and on the request's purpose: those files are a session's sentences quoting him second-hand, which is exactly the 0006 failure. T251's brook claim is the measured instance."
     },
     {
-     "id": "D9 the claims round is not run by this builder",
-     "summary": "claims-owed and claims-triage are run; impl-drift for the relabeled knob and the 2 claims sent to it are left to the coordinating session to dispatch",
+     "id": "t250-comments-counted-not-swept",
+     "summary": "8 comments that name a rulings file and 18 that name tasks/audit files are counted and left as worded",
      "class": "within",
-     "why": "The GM said 2026-11-25 ('a builder's claims round split off ... sounds good please do that ASAP'). The round is owed and handed off, not skipped."
+     "why": "The request's build has fixing comments as page work waiting on the research switch, and the GM deferred queued research on 2026-11-25. They are left as plainly-worded mentions, not attributions, so the check is not weakened."
     },
     {
-     "id": "D10 found and left: 0222's visible sentence has no label item",
-     "summary": "the visible sentence 'which this project takes as the ordinary dedication of a country shrine' is left without a label item. The comment and the doc say UNRESEARCHED, the claim is on make research-backlog, and the item is to be filed by the coordinating session",
+     "id": "claims-round-elsewhere",
+     "summary": "the baseline stays zero bytes; impl-drift on the owed claims is dispatched by the coordinating session, not this builder",
      "class": "within",
-     "why": "The sentence is true: it credits the choice to this project, not to the GM, and the default is the project's best guess, which the 2026-11-25 backlog rule allows. A missing label item on a sentence that is already accurate is a gap no reader is misled by, not a wrong outcome. The search that would settle it is deferred by his 2026-11-25 words and the research switch, and the backlog tracks it."
+     "why": "The claims round still runs, it is only routed to its owner, so nothing is narrowed."
     },
     {
-     "id": "D11 found and left: 22 procedure-doc prose lines with GM tags and no pointer",
-     "summary": "11 lines in docs/buildings.md and 11 in docs/building-programs.md name a GM ruling or carry '(GM <date>)' with no pointer on the line, and the check reads only claim lines. They are not searched here; the coordinating session is to file them",
+     "id": "found-left-0222-visible-sentence",
+     "summary": "0222's visible sentence with no label item is deferred: filed as T277, lands before T264",
      "class": "within",
-     "why": "This is an unaudited group of lines, not known defects. The block shows none of the 22 to be false, and some are backed a line away. T233's design treats exactly such a group (the 'about 60 unaudited near-twins') as baseline, fixed as pages are edited and waiting for the research switch. T265 does not change the check's scope over prose, which T233 set. The item has to be filed (task numbers from one writer, so by the coordinating session), and filing it carries the GM's T233 purpose forward."
+     "why": "It now carries FR-009's form: why it is not fixed here (page work in fresh page sessions, and research deferred by the GM 2026-11-25), its filed id, and its order. It is ordered inside the feature, before the next dependent task, and the claim is on research-backlog."
+    },
+    {
+     "id": "found-left-22-prose-lines",
+     "summary": "22 prose lines in docs/buildings.md and docs/building-programs.md naming a GM ruling with no pointer are deferred: filed as T276, lands before T264",
+     "class": "within",
+     "why": "It carries FR-009's form (why, filed id, order), and the count gives its method, the check's own patterns over every non-claim line. It is filed and ordered, not dropped."
     }
    ],
    "verdict": "CLEAR"

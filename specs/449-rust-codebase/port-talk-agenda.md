@@ -123,6 +123,9 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
     records, each minute assigned to one cause), tooling execution was 39%, model turns 45%, waiting 14% and review agents 2%.
     Top blocking targets: make closing-checks 105 min, make land 97, make rust-test 77; compile 145 as a category. The
     earlier "about 8%" read from a provisional run is superseded.
+    Decided (the disk and time levers): 2026-11-26, on the GM's pre-approval - none adopted; lighter debug info was already
+    in (451 T246), incremental-off, a shared compiler cache and an eager drop of coverage builds declined on measurement,
+    stale coverage variants to be pruned sooner (451 T278) (`docs/process-decisions.md`, "Declined so far").
 10. Long-running features against small spec-kit features filed and closed (the GM: "whether to have long-running features
     like the ones that we have been working for the last few weeks, or whether it is better to have small SpecKit features
     that get filed and then completely closed out ... there are real implications ... for which tooling gets run and what

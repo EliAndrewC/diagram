@@ -431,15 +431,15 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#dedication knob": {
-  "body": "ac6bdec997dbc2ce",
-  "claim": "dedication knob - CANON: Inari the ordinary rural dedication, a GM ruling of 2026-09-20",
-  "code": "4c454168be4aa829",
-  "core": "cb352ec458edb72f",
-  "date": "2026-11-24",
-  "note": "carried at its last recorded verdict (the GM's ruling is named) under the arbiter's accept",
+  "body": "17366a3fa896e8a9",
+  "claim": "dedication knob - UNRESEARCHED: Inari the default dedication of a country shrine, this project's default and not yet searched: no page says which dedication was ordinary for a village shrine (0218's Inari default is a GUESS for an office compound's shrine, on one post), and no record holds words of the GM's on it - this line once credited him, dated 2026-09-20, the day a session wrote \"Inari stays the default\" (commit bdcde5a5ef); only Inari as the Fortune of rice is his notes' (l7r.md, \"The Fox Clan's economy\")",
+  "code": "5e83e4232426d536",
+  "core": "ab21262557357806",
+  "date": "2026-11-26",
+  "note": "Inari is the default unless a plan says otherwise, as knob 3 says. No finding in the bundle says which dedication was ordinary for a village shrine. 0222's drawing page records the Inari default only as what \"this project takes as the ordinary dedication\", with no source, so UNRESEARCHED is the right label. Dropping the GM's credit fits what the cited material holds.",
   "pages": {},
   "research": "",
-  "section": "cb352ec458edb72f",
+  "section": "ab21262557357806",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#donated stonework": {
@@ -671,16 +671,16 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#grove and burial side knob": {
-  "body": "4bf0a94a3c578646",
+  "body": "17366a3fa896e8a9",
   "claim": "grove and burial side knob - CANON: follows the declared map, the GM's ruling of 2026-09-20 (specs/257-sheet-matches-map/request.md: \"we shouldn't put any trees or graveyard on the shrine diagram if those are not in correspnding places on the village map\")",
   "code": "c6faa3d5142b16c1",
-  "core": "cb352ec458edb72f",
+  "core": "ab21262557357806",
   "date": "2026-11-26",
-  "note": "CANON names the ruling, quotes the GM's words and gives the request.md that holds them; knob 4 draws the grove and burial ground only where the map has them; no cited page answers this",
+  "note": "CANON: the claim names and quotes the GM's 2026-09-20 ruling, and knob 4 does what it says: on a map, a grove or burial ground is drawn only where the map has one, on the map's side. No cited page sets a sheet-to-map matching rule, and the off-map yard-or-apart roll and the hill rule fall under the section's other claims",
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "cb352ec458edb72f",
+  "section": "ab21262557357806",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#grove form knob": {
@@ -754,17 +754,21 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#hall-and-dwelling form knob": {
-  "body": "ac6bdec997dbc2ce",
+  "body": "17366a3fa896e8a9",
   "claim": "hall-and-dwelling form knob - DEVIATION the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri: one roof default, set against the sources' rare on the GM's word",
   "code": "5ce044ba1631268b",
-  "core": "cb352ec458edb72f",
-  "date": "2026-11-24",
-  "note": "carried at its last recorded verdict (one roof is \"unusual\" in the source; 0221's drawing page records the default as the project's choice) under the arbiter's accept",
+  "core": "ab21262557357806",
+  "date": "2026-11-26",
+  "note": "knob 1 offers one roof (the default) or two buildings. Both forms are attested: the one-roof form once, at Kaie-ji, \"unusual\", and the two-building form as the ordinary kuri. The drawing page records the one-roof default as this project's choice against \"accurate but rare\", and the procedure quotes the GM's 2026-09-19 words for it",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c"
   },
   "research": "f7696f7745e7b6c1",
-  "section": "cb352ec458edb72f",
+  "rests": [
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:8fedbcfb447d4dc1"
+  ],
+  "section": "ab21262557357806",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall": {

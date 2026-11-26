@@ -53,6 +53,25 @@ This file is loaded on demand, so a declined option recorded here costs no auto-
 - **Shallow clones** (not adopted 2026-11-25: a clone's git history is 404 MB; the disk was the build caches). Reopens if the
   object store grows past a gigabyte or so.
 
+- **Three build levers for disk and time** (declined 2026-11-26 on measurement, the talk's item 9; the GM's pre-approval of
+  2026-11-25 adopts a lever only where no build or test time is lost beyond noise). Measured on a worktree of main, 22 cores,
+  the gate family (28 crates) and the guard family, cold and a one-file warm rebuild, median of 3:
+  `dev/measurements/2026-11-26/build-levers/` (`m9-results.md` the table and each command, `m9-run.sh` the runner).
+  - *Line-table debug info* in place of today's none (`rust/Cargo.toml` `[profile.dev] debug = 0`, 451 T246, already the
+    lighter setting): cold +12-14%, warm +1-25%, target disk +76-114%. Reopens if a tool comes to need DWARF (coverage does
+    not: it instruments).
+  - *Incremental builds off* (`CARGO_INCREMENTAL=0`): target disk -81%, cold -5-9%, but a one-file rebuild 55 s to 363 s
+    (gate) and 24 s to 100 s (guard). Reopens only for a tree that builds once and is thrown away.
+  - *A shared compiler cache* (sccache 0.13.0, installed, unused): 0 hits of 18 cacheable calls in a fresh target directory
+    after priming, cold +23%, no disk saved (guard family only). Reopens if a run shows hits across worktrees - why a fresh
+    directory misses was not found.
+  - *Dropping a tree's coverage build at each landing*: free for a worktree that ends at its landing (the sweep already takes a
+    removed worktree's build directory, 451 T245); for a tree that lands again each drop costs a cold coverage build, up to
+    512 s against 123 s warm, to free about 41 GB (the session clone) and 24 GB (the landing tree). Declined under the
+    pre-approval; the trade - about 6 minutes a landing for about 65 GB - is the GM's if the disk presses again. What the
+    measurement found instead: 20 of cover-gate's 21 GB of incremental data is stale variants (the sweep keeps 16 a crate,
+    after 12 idle hours); pruning them sooner is 451 T278.
+
 ## Decided
 
 ### What counts as blocking time (decided 2026-11-25)

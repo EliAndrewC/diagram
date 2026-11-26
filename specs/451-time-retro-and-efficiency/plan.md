@@ -2692,8 +2692,8 @@ engine speed, so no checklist.
 12. **Before any fix.** No map and no sheet changes: the knob still defaults to Inari. The finding it answers: a rule credited to the GM with no recorded words became code once (0006 and `field/dry.rs`, 2026-11-24), and this one was the default of every country shrine.
 
 **Found and left?**
-- 0222's drawing page states the default in a visible sentence ("which this project takes as the ordinary dedication of a country shrine") with no label item; its comment and the procedure now say UNRESEARCHED. The research finding at risk: a rendering decision whose label a reader of the built page cannot see (constitution XII, every decision labeled in `research/`). The claim is on `make research-backlog` (1 line names the dedication knob, measured 2026-11-26), so the search itself is tracked. Not fixed here: a visible sentence or a label item is page work, written and checked in two fresh page sessions, and the search pass that would settle GUESS or attested is not one of this brief's three jobs. Not filed by this builder: the brief forbids filing, and the coordinating session files it from the report (`DEFER_FORM_OK`).
-- The two procedure docs' prose carries 22 lines (11 in `docs/buildings.md`, 11 in `docs/building-programs.md`) that name a ruling of the GM's or tag "(GM <date>)" with no pointer on the line, observed 2026-11-26, method: the check's own `NAMES` and `POINTER` patterns run over every non-claim line of the two files; the check reads only their claim lines. The research finding at risk: the tag on knob 3's prose was one of these, and it outlived its claim line's wording by being unread. Some are backed a line away (the sheet-follows-its-map rule), so each needs the search T251 gave the claims. Not fixed here: 22 searches are a task of their own, past this brief's three jobs. Not filed by this builder, as above.
+- 0222's drawing page states the default in a visible sentence ("which this project takes as the ordinary dedication of a country shrine") with no label item; its comment and the procedure now say UNRESEARCHED. The research finding at risk: a rendering decision whose label a reader of the built page cannot see (constitution XII, every decision labeled in `research/`). The claim is on `make research-backlog` (1 line names the dedication knob, measured 2026-11-26), so the search itself is tracked. Not fixed here: a visible sentence or a label item is page work, written and checked in two fresh page sessions, and the search pass that would settle GUESS or attested is not one of this brief's three jobs. Filed as T277; lands before T264.
+- The two procedure docs' prose carries 22 lines (11 in `docs/buildings.md`, 11 in `docs/building-programs.md`) that name a ruling of the GM's or tag "(GM <date>)" with no pointer on the line, observed 2026-11-26, method: the check's own `NAMES` and `POINTER` patterns run over every non-claim line of the two files; the check reads only their claim lines. The research finding at risk: the tag on knob 3's prose was one of these, and it outlived its claim line's wording by being unread. Some are backed a line away (the sheet-follows-its-map rule), so each needs the search T251 gave the claims. Not fixed here: 22 searches are a task of their own, past this brief's three jobs. Filed as T276; lands before T264.
 
 **Performance work?** no: a check's pattern and doc lines; nothing runs faster.
 
@@ -2923,6 +2923,87 @@ engine speed, so no checklist.
 |---|---|---|---|---|
 
 ### T275 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T276 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T276 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T277 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T277 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T278 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T278 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

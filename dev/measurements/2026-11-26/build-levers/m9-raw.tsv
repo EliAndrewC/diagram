@@ -1,0 +1,54 @@
+base	guard	test	cold	rc=0	91.0s	0.68GB	load=4.23	
+base	guard	test	warm	rc=0	25.7s	0.68GB	load=8.84	
+base	guard	test	keep	rc=0	17.5s	0.68GB	load=11.69	
+base	guard	test	warm	rc=0	41.9s	0.68GB	load=16.20	
+base	guard	test	warm	rc=0	24.3s	0.68GB	load=20.89	
+baseg	gate	test	cold	rc=0	542.4s	2.86GB	load=14.82	
+baseg	gate	test	keep	rc=0	93.0s	2.86GB	load=32.67	
+baseg	gate	test	keep	rc=0	144.3s	2.86GB	load=38.96	
+baseg	gate	test	warm	rc=0	133.2s	2.83GB	load=29.63	
+baseg	gate	test	warm	rc=0	83.8s	2.83GB	load=24.24	
+baseg	gate	test	warm	rc=0	55.9s	2.83GB	load=25.51	
+lt	guard	test	cold	rc=0	103.8s	1.20GB	load=15.96	CARGO_PROFILE_DEV_DEBUG=line-tables-only CARGO_PROFILE_TEST_DEBUG=line-tables-only
+lt	guard	test	keep	rc=0	14.7s	1.20GB	load=12.73	CARGO_PROFILE_DEV_DEBUG=line-tables-only CARGO_PROFILE_TEST_DEBUG=line-tables-only
+lt	guard	test	warm	rc=0	24.6s	1.19GB	load=11.24	CARGO_PROFILE_DEV_DEBUG=line-tables-only CARGO_PROFILE_TEST_DEBUG=line-tables-only
+lt	guard	test	warm	rc=0	24.0s	1.19GB	load=10.73	CARGO_PROFILE_DEV_DEBUG=line-tables-only CARGO_PROFILE_TEST_DEBUG=line-tables-only
+lt	guard	test	warm	rc=0	24.0s	1.19GB	load=7.48	CARGO_PROFILE_DEV_DEBUG=line-tables-only CARGO_PROFILE_TEST_DEBUG=line-tables-only
+inc0	guard	test	cold	rc=0	86.3s	0.13GB	load=5.74	CARGO_INCREMENTAL=0
+inc0	guard	test	keep	rc=0	14.6s	0.13GB	load=7.63	CARGO_INCREMENTAL=0
+inc0	guard	test	warm	rc=0	100.4s	0.13GB	load=6.18	CARGO_INCREMENTAL=0
+inc0	guard	test	warm	rc=0	106.6s	0.13GB	load=7.49	CARGO_INCREMENTAL=0
+inc0	guard	test	warm	rc=0	99.9s	0.13GB	load=10.05	CARGO_INCREMENTAL=0
+base2	guard	test	cold	rc=0	90.8s	0.68GB	load=6.29	
+base2	guard	test	keep	rc=0	14.6s	0.68GB	load=10.55	
+base2	guard	test	warm	rc=0	23.8s	0.68GB	load=8.72	
+base2	guard	test	warm	rc=0	23.7s	0.68GB	load=7.97	
+base2	guard	test	warm	rc=0	23.8s	0.68GB	load=6.07	
+ltg	gate	test	cold	rc=0	366.8s	6.13GB	load=5.26	CARGO_PROFILE_DEV_DEBUG=line-tables-only CARGO_PROFILE_TEST_DEBUG=line-tables-only
+ltg	gate	test	keep	rc=0	24.4s	6.13GB	load=7.27	CARGO_PROFILE_DEV_DEBUG=line-tables-only CARGO_PROFILE_TEST_DEBUG=line-tables-only
+ltg	gate	test	warm	rc=0	68.6s	6.05GB	load=9.28	CARGO_PROFILE_DEV_DEBUG=line-tables-only CARGO_PROFILE_TEST_DEBUG=line-tables-only
+ltg	gate	test	warm	rc=0	67.9s	6.05GB	load=8.11	CARGO_PROFILE_DEV_DEBUG=line-tables-only CARGO_PROFILE_TEST_DEBUG=line-tables-only
+ltg	gate	test	warm	rc=0	75.8s	6.05GB	load=8.23	CARGO_PROFILE_DEV_DEBUG=line-tables-only CARGO_PROFILE_TEST_DEBUG=line-tables-only
+baseg2	gate	test	cold	rc=0	327.1s	2.86GB	load=6.02	
+baseg2	gate	test	keep	rc=0	24.5s	2.86GB	load=11.46	
+baseg2	gate	test	warm	rc=0	55.6s	2.83GB	load=15.66	
+baseg2	gate	test	warm	rc=0	54.8s	2.83GB	load=11.75	
+baseg2	gate	test	warm	rc=0	54.9s	2.83GB	load=8.09	
+inc0g	gate	test	cold	rc=0	298.7s	0.54GB	load=6.15	CARGO_INCREMENTAL=0
+inc0g	gate	test	keep	rc=0	25.1s	0.54GB	load=7.90	CARGO_INCREMENTAL=0
+inc0g	gate	test	warm	rc=0	363.1s	0.54GB	load=7.94	CARGO_INCREMENTAL=0
+sc1	guard	test	cold	rc=0	109.9s	0.68GB	load=9.42	RUSTC_WRAPPER=sccache
+sc2	guard	test	cold	rc=0	112.0s	0.68GB	load=11.69	RUSTC_WRAPPER=sccache
+sc2	guard	test	warm	rc=0	25.6s	0.68GB	load=14.61	RUSTC_WRAPPER=sccache
+sc2	guard	test	warm	rc=0	53.8s	0.68GB	load=12.95	RUSTC_WRAPPER=sccache
+sc2	guard	test	warm	rc=0	84.5s	0.68GB	load=40.57	RUSTC_WRAPPER=sccache
+sc3	guard	test	cold	rc=0	215.0s	0.68GB	load=49.60	RUSTC_WRAPPER=sccache
+sc4	guard	test	cold	rc=0	316.8s	0.13GB	load=27.65	RUSTC_WRAPPER=sccache CARGO_INCREMENTAL=0
+sc5	guard	test	cold	rc=0	220.9s	0.13GB	load=54.11	RUSTC_WRAPPER=sccache CARGO_INCREMENTAL=0
+sc5	guard	test	warm	rc=0	94.1s	0.13GB	load=31.74	RUSTC_WRAPPER=sccache CARGO_INCREMENTAL=0
+sc5	guard	test	warm	rc=0	94.0s	0.13GB	load=15.16	RUSTC_WRAPPER=sccache CARGO_INCREMENTAL=0
+sc5	guard	test	warm	rc=0	125.5s	0.13GB	load=10.34	RUSTC_WRAPPER=sccache CARGO_INCREMENTAL=0
+sc6	guard	test	cold	rc=0	307.0s	0.13GB	load=18.71	RUSTC_WRAPPER=sccache CARGO_INCREMENTAL=0
+cov	guard	cover	cold	rc=0	282.0s	0.56GB	load=50.07	L7R_RUST_COVER_WORK=/home/agent/.cache/l7r-cargo-target/diagram-backlog-m9-cov
+covg	gate	cover	cold	rc=0	512.1s	2.65GB	load=47.82	L7R_RUST_COVER_WORK=/home/agent/.cache/l7r-cargo-target/diagram-backlog-m9-covg
+covg	gate	cover	warm	rc=0	123.1s	2.63GB	load=64.53	L7R_RUST_COVER_WORK=/home/agent/.cache/l7r-cargo-target/diagram-backlog-m9-covg
