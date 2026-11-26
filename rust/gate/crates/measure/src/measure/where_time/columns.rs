@@ -334,11 +334,20 @@ impl Run {
     }
 }
 
+/// The time a compiling cargo call waited for one of the machine's build slots (feature 451 T284): a category of its own, so `make
+/// task-time` shows what the slot costs beside the compile it spreads out.
+pub const SLOT_WAIT: &str = "waiting on a build slot";
+
 /// THE CATEGORIES A PHASE IS BOOKED TO (feature 451 T153; the GM 2026-11-22: "we want everything measured so we know where our time goes,
 /// especially for compiling, running tests, and generating maps"), first first: a second two phases hold goes to the first - compile
 /// before all (D4: a hook suite or a map run that compiles is compiling), the hook suites and map generation before the tests that hold
 /// them (`make done`'s hooks-test), and a landing's gate last, less all of them (T08's rule).
-pub const PHASE_COLUMNS: [&str; 7] = [
+///
+/// A WAIT ON A BUILD SLOT is before compile (feature 451 T284, `rustc/slot.rs`): a cargo call that waited for one of the machine's
+/// slots writes its wait as a `slot-wait` line, and the step it was part of (a lint, a test build) spans it, so the wait is taken out
+/// first and the step's own category holds only what ran.
+pub const PHASE_COLUMNS: [&str; 8] = [
+    SLOT_WAIT,
     "compile",
     "hook suites",
     "map generation",
@@ -357,6 +366,7 @@ pub const PHASE_COLUMNS: [&str; 7] = [
 pub fn category(p: &Event) -> Option<&'static str> {
     let (src, step) = (or_s(p, "src"), or_s(p, "step"));
     Some(match (src.as_str(), step.as_str()) {
+        ("rust", "slot-wait") => SLOT_WAIT,
         (_, "build" | "cover-build") => "compile",
         ("rust", "test" | "cover-run")
         | ("quick" | "preflight", _)

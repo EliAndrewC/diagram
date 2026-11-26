@@ -11,7 +11,7 @@ use l7r_shared::guards::event_log_hooks::now_stamp;
 
 /// Every `Phase` line in the tree's event logs, in the order written (the log a line is filed in is the process's feature's, so every
 /// log is read).
-fn phases(root: &Path) -> Vec<Value> {
+pub(super) fn phases(root: &Path) -> Vec<Value> {
     let mut logs: Vec<PathBuf> = std::fs::read_dir(root.join(".git/l7r-events"))
         .into_iter()
         .flatten()

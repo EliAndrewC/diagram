@@ -174,6 +174,25 @@ pub fn by_cat(l: &Ledger) -> HashMap<String, (f64, f64, f64)> {
     out
 }
 
+/// A cargo call that waited for a build slot (feature 451 T284) wrote its wait as a `slot-wait` phase: `make static`'s lint waited
+/// from 00:35, and its test build, booked from 00:40, got the slot at 00:45. The wait is a category of its own, taken out ahead of the
+/// compile whose span holds its last five seconds, and blocking as the run it was part of.
+#[test]
+fn a_wait_on_a_build_slot_is_booked_under_its_own_name_ahead_of_the_compile() {
+    let (stream, mut aside, commands) = day();
+    aside.insert(
+        0,
+        line(
+            &json!({"t": at("00:45"), "ev": "Phase", "src": "rust", "step": "slot-wait", "t0": at("00:35"), "t1": at("00:45"), "make": "static", "sid": "s"}),
+        ),
+    );
+    let got = by_cat(&booked(&stream, &aside, &commands, &[]));
+    assert_eq!(got[columns::SLOT_WAIT], (10.0, 10.0, 10.0));
+    // the build's 20 s less the 5 s of it that were the wait; the run's other 35 s its tests, beside the builder's 120
+    assert_eq!(got["compile"], (15.0, 15.0, 15.0));
+    assert_eq!(got["tests"], (155.0, 146.0, 36.0));
+}
+
 #[test]
 fn every_second_of_the_day_is_booked_by_what_it_was() {
     let (stream, aside, commands) = day();

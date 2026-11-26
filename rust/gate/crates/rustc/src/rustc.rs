@@ -28,6 +28,7 @@ mod kept;
 mod phase;
 mod runlock;
 mod side;
+mod slot;
 mod times;
 use cover::uncovered_each;
 #[cfg(test)]
@@ -62,6 +63,8 @@ pub struct World {
     cover_work: Option<PathBuf>,
     /// The run's make target, which each step's phase line names (feature 451 T05, `phase.rs`).
     make: String,
+    /// The machine's build slots, one held around each cargo call that compiles (feature 451 T284, `slot.rs`).
+    slots: slot::Slots,
 }
 
 struct Ran {
@@ -173,6 +176,8 @@ fn cargo_in(
     if let Some(tmp) = tmp {
         env.insert("TMPDIR".to_owned(), tmp.display().to_string());
     }
+    // every cargo call that compiles holds a build slot for its length (feature 451 T284); `cargo fmt` compiles nothing
+    let _slot = (args.first() != Some(&"fmt")).then(|| slot::around(world, &all, &mut env));
     run_in(Some(&world.root), &world.cargo, &all, &env)
 }
 
@@ -776,7 +781,9 @@ fn world_here(make: String) -> World {
         .into_owned();
     let cargo_bin = home.join(".cargo/bin/cargo");
     let var = |k: &str| std::env::var(k).unwrap_or_default();
+    let root = l7r_shared::env::Rooted::process(tree);
     World {
+        slots: slot::Slots::of(root.reader(), &home),
         target: home.join(".cache/l7r-cargo-target").join(name),
         cargo: cargo_exe(&cargo_bin),
         path_dir: home.join(".cargo/bin"),
@@ -793,7 +800,7 @@ fn world_here(make: String) -> World {
         hamlet_spec: var("HAMLET_SPEC"),
         cover_work: std::env::var_os("L7R_RUST_COVER_WORK").map(PathBuf::from),
         make,
-        root: l7r_shared::env::Rooted::process(tree),
+        root,
     }
 }
 

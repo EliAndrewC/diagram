@@ -396,6 +396,7 @@ fn a_phase_s_category_by_its_tool_and_step() {
         ("rust", "cover-build"),
         ("rust", "cover-run"),
         ("rust", "lint"),
+        ("rust", "slot-wait"),
         ("hooks", "suite"),
         ("map", "page"),
         ("cohort", "cohort"),
@@ -417,6 +418,8 @@ fn a_phase_s_category_by_its_tool_and_step() {
         Some("compile"),
         Some("tests"),
         None,
+        // a cargo call's wait for a build slot, a category of its own (feature 451 T284)
+        Some(SLOT_WAIT),
         Some("hook suites"),
         Some("map generation"),
         Some("map generation"),

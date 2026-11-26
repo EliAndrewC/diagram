@@ -43,9 +43,10 @@ const GM_AWAY: &str = "the GM away";
 // are a past log's cats of a line with no `make`. `compile` is the phases a call holds (D4), split out of its gap.
 /// The column of the time the session spent in another feature's turn between this one's (T09's plan review, 2026-11-21).
 const ANOTHER: &str = "another feature";
-const BUCKET: [(&str, &str); 31] = [
+const BUCKET: [(&str, &str); 32] = [
     ("tests", "tests"),
     ("compile", "compile"),
+    (columns::SLOT_WAIT, columns::SLOT_WAIT),
     // a phase's category (451 T153, `columns::PHASE_COLUMNS`), split out of a call's gap as compile is
     ("hook suites", "hook suites"),
     ("map generation", "map generation"),
@@ -88,10 +89,11 @@ const RECORD: [&str; 9] = [
     "entry-drift",
     "research-pass",
 ];
-const COLUMNS: [&str; 23] = [
+const COLUMNS: [&str; 24] = [
     "model",
     "tests",
     "compile",
+    columns::SLOT_WAIT,
     "hook suites",
     "map generation",
     "gate",

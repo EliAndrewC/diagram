@@ -48,7 +48,7 @@ fn taker(run: u64, ceiling_ms: u64) -> Taker {
 /// A clock that moves only when slept on, by the sleep (feature 451 T35): a wait's lines are counted against the ceiling over the
 /// poll, not against how long the host took to run them. A wait that never ends reads it past `READS` and panics, not hangs.
 #[derive(Default)]
-struct Stepped {
+pub(super) struct Stepped {
     at_ns: AtomicU64,
     reads: AtomicU64,
 }

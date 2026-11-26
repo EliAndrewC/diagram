@@ -4,6 +4,8 @@
 //! (`side.rs`, or a `cargo test` after its own `--no-run` build, `stepped`), a family's `cover-build` and each crate's `cover-run`
 //! (`cover.rs`), and a crate's `lint` and `format`. A kept result ran nothing and writes none; `dead`, `hamlet` and `test-times` write
 //! none either (no cargo; a stage run; a timing tool of its own). The readers book the `build` and `cover-build` spans as compile (T08).
+//! A cargo call that waited for a build slot writes its wait as `slot-wait` (feature 451 T284, `slot.rs`), which the readers book as
+//! waiting, ahead of the step whose span holds it.
 
 use std::path::Path;
 use std::time::SystemTime;

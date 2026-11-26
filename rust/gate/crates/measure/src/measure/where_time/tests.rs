@@ -34,6 +34,8 @@ fn categories_go_to_buckets_and_gaps_to_tasks() {
         ("quick test", "tests"),
         ("gate", "gate"),
         ("compile", "compile"),
+        // a cargo call's wait for a build slot is a column of its own (feature 451 T284)
+        ("waiting on a build slot", "waiting on a build slot"),
     ] {
         assert_eq!(bucket(cat), want, "{cat}");
     }
@@ -632,10 +634,10 @@ fn the_columns_book_make_runs_compile_and_until() {
     assert_eq!(r.code, 0, "{}", r.stderr);
     let out = &r.stdout;
     for want in [
-        "| task | total | model | tests | compile | hook suites | map generation | gate | land | review | docs | spec-kit step | tools | background run |",
+        "| task | total | model | tests | compile | waiting on a build slot | hook suites | map generation | gate | land | review | docs | spec-kit step | tools | background run |",
         // the wait from the 08:06:40 `Stop` (no `inflight`: before the field) booked to the session's own runs in flight (T09): the
         // landing to its `BgEnd` at 08:12, outranking the `rust-test` beside it, the rest to the last line (08:19) held by none
-        "| T05 | 20 | 1 | 2 | 4 | 0 | 0 | 0 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 | 0 | 0 | 0 |",
+        "| T05 | 20 | 1 | 2 | 4 | 0 | 0 | 0 | 0 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 | 0 | 0 | 0 |",
         "a background shell 5 min, an agent 0 min, a monitor alone 0 min, none 7 min (feature 451 T09)",
         "| task | runs | minutes | tests | compile | hook suites | map generation | gate | land | review | docs | spec-kit step | other | in the background |",
         "| T05 | 3 | 14.5 | 4.8 | 4.0 | 0.0 | 0.0 | 0.0 | 5.7 | 0.0 | 0.0 | 0.0 | 0.0 | 8.5 |",

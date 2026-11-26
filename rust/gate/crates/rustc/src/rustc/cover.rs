@@ -163,14 +163,19 @@ fn build(
     for name in group.iter().filter_map(|m| package_name(m)) {
         args.extend(["-p".to_owned(), name]);
     }
+    // the coverage build is the compile the build slot was made for (feature 451 T284, `slot.rs`): taken before the phase's clock
+    // starts, so a wait is its own line, and let go before a failed group is asked again a crate at a time
+    let mut env = env.clone();
+    let slot = super::slot::around(world, &args, &mut env);
     let at = std::time::SystemTime::now();
-    let built = run_in(Some(&world.root), &world.cargo, &args, env);
+    let built = run_in(Some(&world.root), &world.cargo, &args, &env);
+    drop(slot);
     super::phase::wrote(world, "cover-build", group, at, built.code);
     said.push_str(&took(&format!("build of {} crate(s)", group.len()), began));
     if built.code != 0 && group.len() > 1 {
         return group
             .iter()
-            .flat_map(|m| build(world, env, &[m], said))
+            .flat_map(|m| build(world, &env, &[m], said))
             .collect();
     }
     let binaries = test_binaries(&built.stdout);

@@ -289,3 +289,11 @@ the reused-worktrees rule of `docs/process-decisions.md`, "Two code builders at 
 recorded his words on T285's line in `tasks.md` (commit 26b12e37f1; copied here from that line by T285's builder, who did not hear them):
 
 > Okay, so we should definitely not rely on you remembering to do the correct thing with worktrees, and we should make it so that whatever tooling we use to create worktrees automatically enforces and performs the correct behavior without the opportunity for this kind of mistake in the future.
+
+## 2026-11-26: a build slot instead of a builder cap (451 T284)
+
+The coordinating session had set the builder count at two so that their compiles and a landing's gate would not coincide. The GM,
+2026-11-26, as the coordinating session recorded his words on T284's line in `tasks.md` and in `docs/process-decisions.md`, "Two code
+builders at once" (copied here from those by T284's builder, who did not hear them; the fragment is all they hold):
+
+> wouldn't it be better to address that with some synchronization rather than pre-emptively limiting builders just in case?

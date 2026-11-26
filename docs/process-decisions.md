@@ -267,6 +267,21 @@ here: shmem 0 (`/tmp` is on disk), unreclaimable slab 0; the rest of `memory.cur
 What three builders do cost is PROCESSOR: load median 42 and peak 94 on 22 cores, up to 46 compilers at once, and a first
 closing-checks run of 14 to 30 minutes in those cold trees (about a minute warm and alone).
 
+The build slot (451 T284, 2026-11-26; audited as `dev/audits/build-slot.md`). What coincides at those peaks was then read from
+the same samples joined with the checks' `Phase` lines (`dev/measurements/2026-11-26/builder-count/slot-coincide.py`): all
+twelve of the highest memory samples and seven of the eight highest compiler counts fell where all three trees were in a
+COVERAGE BUILD at once, the machine ran three compiling steps at once for 1,396 of the run's 2,602 s, and one tree's own closing
+checks never ran two compiling cargo calls at once. So each cargo call of the checks that compiles (a coverage build, a test
+build, a `cargo test`, clippy, a stage's `cargo run`; not `cargo fmt`) now holds one of `L7R_BUILD_SLOTS` machine-wide slots
+(`rust/gate/crates/rustc/src/rustc/slot.rs`: a `flock` under `~/.cache/l7r-build-slots/`, freed when its holder dies, no
+daemon), a builder's checks and a landing's gate alike, and a wait is booked by `make task-time` as `waiting on a build slot`.
+The count is 2, a GUESS: the third coinciding compile is the measured peak and added load, not throughput, on 22 cores. Chosen by
+the building session under the GM's words above; not yet measured is whether it shortens three builders' closing checks, which
+is the re-measurement this entry owes at three and four builders (falsifier: slot waits plus compile exceeding the unslotted
+compile minutes, or closing checks at three builders no faster with it than at `L7R_BUILD_SLOTS=0`). Not covered: the wrapper's
+own tool build and a hook suite's guard build, which were not at the peaks (at most 2.6 GiB and 13 compilers where no check's
+phase ran).
+
 **What followed.** `scripts/container/builder-brief.md`'s SIZING paragraph names the count; the frictions of running several
 were fixed by 451 T245-T247 and T252-T257, with T271 (shared scratch and plan-review bundle directory) open. 451 T274 keeps the sampler as
 tooling (the first run was a hand-started loop). The audit entry is

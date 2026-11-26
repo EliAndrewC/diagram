@@ -1992,6 +1992,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T284 (2026-11-26: nothing kept two trees' compiles apart, so the builder count was capped by the chance that they coincide - three builders' anonymous memory peaked at 6.4 GiB of the container's 10 and load at 94 on 22 cores, measured 2026-11-26, `docs/process-decisions.md`, \"Two code builders at once\")": {
+   "sha256": "bfe47b0a036ee5c00f91a8d4162b92f13532566f32bea62fbe3babd399df582d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T284 Approach (checklist part A)": {
+   "sha256": "d81f82197a4fe74cecb5896ea6e531f944db6a0721225751a0f2da19a50d6e94",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -25396,6 +25408,199 @@
      "why": "No known defect is deferred. The shared-stamp saving is kept rather than added to, so calling it a correctness fix is accurate."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T284 (2026-11-26: nothing kept two trees' compiles apart, so the builder count was capped by the chance that they coincide - three builders' anonymous memory peaked at 6.4 GiB of the container's 10 and load at 94 on 22 cores, measured 2026-11-26, `docs/process-decisions.md`, \"Two code builders at once\")",
+    "### T284 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T284-what-takes-a-slot",
+     "summary": "Every compiling cargo call of the checks takes a slot (clippy, test builds, cargo test, test --doc, test-times' build, hamlet's cargo run, the coverage build); cargo fmt, llvm-cov show-env/report, cargo --version and direct test-binary runs take none",
+     "class": "within",
+     "why": "Which calls the synchronization covers is a mechanism choice inside the GM's 'some synchronization'; the calls left out do not compile, so nothing the request is about is excluded."
+    },
+    {
+     "id": "T284-flock-slot",
+     "summary": "A slot is the flock of a file slot-<i> under ~/.cache/l7r-build-slots/, signed with its holder, freed when the holder dies; no daemon",
+     "class": "within",
+     "why": "This is the synchronization the GM asked for in place of a builder cap."
+    },
+    {
+     "id": "T284-count-default-2",
+     "summary": "L7R_BUILD_SLOTS, default 2, labeled GUESS; it caps compiling cargo calls at once, not builders; 0 means no slot",
+     "class": "within",
+     "why": "It caps coinciding compiles, not builders. Extra builders edit, test and run coverage freely and queue only where their compile would coincide, which is the opposite of 'pre-emptively limiting builders'. The 0 switch only turns the mechanism off."
+    },
+    {
+     "id": "T284-poll-and-notice",
+     "summary": "Poll every 0.5 s (GUESS); a waiter says it waits each minute, naming the holders",
+     "class": "within",
+     "why": "These are mechanism parameters, and the waiter's notice makes a wait visible."
+    },
+    {
+     "id": "T284-nested-no-slot",
+     "summary": "A cargo started by a holder carries L7R_BUILD_SLOT_HELD and a gate run under it takes no slot",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Holding a slot for a nested run is physically impossible without deadlock: the inner run would wait on the slot its own parent cargo test holds. Its compiles already sit inside the parent's slot, so nothing goes unsynchronized."
+    },
+    {
+     "id": "T284-fail-open",
+     "summary": "A slot directory that cannot be made, a slot file that cannot be opened or a flock that cannot start lets the call run without a slot, said on stderr",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Synchronization is physically impossible when the lock cannot be had at all. Refusing would turn a throughput control into a red gate, and waiting would hang every tree. A caveat: the block writes the code-1 slot-wait line for a wait that ended without a slot, so a call that fell open with no wait may show only on stderr. Writing that line here too would let the audit's one-a-week reopening see it."
+    },
+    {
+     "id": "T284-ceiling-900s",
+     "summary": "A waiter past L7R_BUILD_SLOT_CEILING (900 s, GUESS) runs without a slot, said on stderr and written as a slot-wait line of code 1; dev/audits/build-slot.md reopens the count on one such line in a week",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In the hung-holder case the block names, holding the rule literally defeats the request's purpose: one hung cargo would stop every tree's checks for good, which is worse than the builder cap the slot replaces. Rejected alternatives were priced: wait without end, or refuse as the run lock does. The block's sentence 'a waiter passes it only when both slots stay held for 900 s on end, which is two holders each longer than the longest compile measured' overclaims, and the claim is unmeasured. Waiters are not served in arrival order. Each 0.5 s poller races the others, and a tree that releases a slot and starts its next compiling cargo call at once tries again immediately. So under sustained contention (four or more builders, cold trees) a turning-over queue can keep one waiter out for 900 s with no holder hung. This is not ruled a defect: such a pass yields one extra compile, three at once, the measured peak level, with no wrong outcome; it is recorded as code 1 and reopens the count. The sentence should be restated to say so. Counting the ceiling only while the slots' holder signatures stay unchanged would confine the pass to a hung holder; that is offered as an option, not required."
+    },
+    {
+     "id": "T284-wrapper-tool-build-unslotted",
+     "summary": "The wrapper's own tool build (scripts/gates/l7r-gate.sh build) takes no slot",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "'Shell, writes no Phase line' is a cost argument and is not credited. The ground credited is measured: where no check's phase ran, the samples top out at 2.6 GiB and 13 rustc, against 5.9-6.4 GiB where three coverage builds coincided. So this build is not the coincidence the request addresses, and no wrong outcome has been shown. The falsifier is stated: the owed re-measurement showing one at a peak. A caveat: that 2.6 GiB is one joint figure for both unslotted builds, taken at three builders only, so the four-builder re-measurement is what confirms it."
+    },
+    {
+     "id": "T284-guard-build-unslotted",
+     "summary": "The hook suites' guard build takes no slot",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled separately from the wrapper build, on the same measured ground: the joint 2.6 GiB / 13 rustc ceiling where no check's phase ran, against 5.9-6.4 GiB at the coinciding coverage builds. No wrong outcome has been shown, and the re-measurement at three and four builders, owed by T284's own line, is the named falsifier. Unlike the wrapper build, nothing physically prevents a shell flock here, so this ruling rests on the measurement alone and should be revisited if the re-measurement shows one at a peak."
+    },
+    {
+     "id": "T284-remeasure-deferred",
+     "summary": "The re-measurement at three and four builders, the rest of T284's line, is not done in this landing; the coordinating session runs it with the slot landed and records the count in docs/process-decisions.md",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A re-measurement 'with it' physically cannot run until the slot is live in every tree, which means after this landing, and dispatching three or four builders is the coordinating session's work. Recording it as owed in process-decisions.md keeps it alive. An aside: the block says no other task carries it, and the builder cap stays at two until someone runs it, so filing it as its own line would keep it from being lost when T284 is ticked."
+    },
+    {
+     "id": "T284-wait-booked",
+     "summary": "A call that waited writes one Phase line (step slot-wait, code 1 where it ran without a slot); columns::category books it as 'waiting on a build slot' first of PHASE_COLUMNS; a lint's or test build's phase span includes its wait and the readers subtract it",
+     "class": "within",
+     "why": "Booking the wait as its own category keeps the feature's 'everything measured' purpose. Leaving the wait inside lint's and test build's clocks, with the readers subtracting it, is a mechanism choice whose cost the block states."
+    },
+    {
+     "id": "T284-coverage-releases-before-retry",
+     "summary": "The coverage build lets its slot go before a failed group is asked again a crate at a time",
+     "class": "within",
+     "why": "This avoids holding one slot while waiting for a second, part of the no-deadlock mechanism."
+    },
+    {
+     "id": "T284-test-world-no-slots",
+     "summary": "A test's world has no slots (Slots::off()); the slot's own tests name a scratch directory",
+     "class": "within",
+     "why": "This isolates the tests from the shared ~/.cache; the mechanism itself is still tested."
+    },
+    {
+     "id": "T284-landing-same-slot",
+     "summary": "A landing's gate takes the same slot as a builder's, the directory being under the home outside every tree",
+     "class": "within",
+     "why": "The request names a landing's gate coinciding with builders' compiles, and this covers it."
+    },
+    {
+     "id": "T284-record-no-target-no-guard",
+     "summary": "Recorded in dev/audits/build-slot.md, a paragraph in docs/process-decisions.md and the rustc row of rust/gate/CLAUDE.md; no make target, no guard",
+     "class": "within",
+     "why": "The slot enforces itself mechanically, so nothing it does is a refusal needing FR-012's escape or a guard. The audit entry carries its measurement and falsifier."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T284 (2026-11-26: nothing kept two trees' compiles apart, so the builder count was capped by the chance that they coincide - three builders' anonymous memory peaked at 6.4 GiB of the container's 10 and load at 94 on 22 cores, measured 2026-11-26, `docs/process-decisions.md`, \"Two code builders at once\")",
+    "### T284 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "slot-mechanism",
+     "summary": "Synchronize the checks' compiling cargo calls through a counted set of machine-wide flock slots under ~/.cache/l7r-build-slots/, freed when the holder dies, no daemon; the builder count itself is not capped",
+     "class": "within",
+     "why": "This is the GM's request as written (2026-11-26): 'address that with some synchronization rather than pre-emptively limiting builders just in case'. A counted lock on the coinciding compiles is that synchronization, and builders past the count queue only for the compile."
+    },
+    {
+     "id": "what-takes-a-slot",
+     "summary": "Every cargo call through cargo_in except cargo fmt, plus cover.rs's coverage build, takes a slot; fmt, llvm-cov show-env/report, cargo --version and direct test-binary runs do not",
+     "class": "within",
+     "why": "'That' in the GM's words is the compiles coinciding. Leaving out the calls that do not compile drops nothing the request reaches, and the measurement puts the peaks in coinciding cover-builds."
+    },
+    {
+     "id": "count-default-2",
+     "summary": "L7R_BUILD_SLOTS defaults to 2 (labeled GUESS) and caps compiling calls at once, not builders; 0 means no slot",
+     "class": "within",
+     "why": "A semaphore has to have a count. The default comes from the measured peak (three compiles at once, about 15 rustc each on 22 cores) rather than from a builder cap, and the 0 escape and the knob keep it a tunable piece of synchronization, not a pre-emptive limit on builders."
+    },
+    {
+     "id": "fail-open-unavailable",
+     "summary": "If the slot directory cannot be made, a slot file cannot be opened or flock cannot start, the call runs without a slot and says so on stderr",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible case: when the lock primitive is missing there is nothing to synchronize on. The alternatives are refusing, which is a red gate for a throughput control (nothing in request.md asks for that), or hanging. The stderr notice keeps it visible."
+    },
+    {
+     "id": "fail-open-ceiling",
+     "summary": "A wait past L7R_BUILD_SLOT_CEILING (900 s, GUESS) runs the call without a slot, written as a slot-wait line of code 1 with an audit reopen on one such line in a week",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Purpose ground: the request is for synchronization that lets more builders work, and an endless wait would let one hung cargo stop every tree's checks for good, which defeats that purpose concretely. The plan states the cost, prices the alternatives and names a falsifier. Aside, non-blocking: 'a pass is then one more compile at once, three' holds for a single pass only. Several starved waiters passing at once under four or five builders are not bounded by it; the slot-wait code-1 lines and the audit's reopen are what would show that."
+    },
+    {
+     "id": "nested-no-slot",
+     "summary": "Cargo started by a holder carries L7R_BUILD_SLOT_HELD, and a gate run under it takes no slot; a call holds one slot and never waits for a second; the run lock is taken first and the slot inside it",
+     "class": "within",
+     "why": "This is deadlock avoidance inside the mechanism. The nested run is already counted under its parent's slot, so no compile goes unsynchronized and the request's reach is not narrowed."
+    },
+    {
+     "id": "uncovered-wrapper-tool-build",
+     "summary": "The wrapper's own tool build (scripts/gates/l7r-gate.sh build) takes no slot",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The bootstrap argument does not hold, because the slot is a flock program call that shell can make. 'Shell, no Phase line' is implementation cost and is no ground either. The one ground that survives is the measurement: where no check's phase ran, the samples top out at 2.6 GiB and 13 rustc, against 5.9-6.4 GiB where coverage builds coincide (measured 2026-11-26). So leaving this build unslotted does not bring back the coincidence the request is about. The limits are real. The figure is joint with the guard build and comes from one three-builder run, and this is a compile whose coincidence still grows with the builder count. The ruling stands on that measurement and falls with it: the plan's own reopen condition (the re-measurement showing one at a peak) is the right trigger, and the candidate it names should be filed if that happens."
+    },
+    {
+     "id": "uncovered-guard-build",
+     "summary": "The hook suites' guard build takes no slot",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled on its own, on the same and only surviving ground: the measured ceiling of the no-phase samples (2.6 GiB and 13 rustc, measured 2026-11-26) bounds this build too, well below the coinciding-cover-build peaks. Shell-only is cost, not a ground. This ruling also falls with that measurement, and the three- and four-builder re-measurement is what tests it."
+    },
+    {
+     "id": "remeasurement-deferred",
+     "summary": "T284's line's re-measurement of three and four code builders with the slot is not done in this task; the coordinating session runs it once the slot has landed, and docs/process-decisions.md records it as owed",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physical ground: measuring several builders 'with it' needs the slot in every builder's tree, which only a landing gives, so the task cannot do it before it lands. FR-009's filed-task-id rule covers deferred defects, and this is not one. But the payoff of the GM's request (builders no longer pre-emptively limited) arrives only with this re-measurement. Landing T284 alone leaves the builder cap of two in place until it is run and recorded."
+    },
+    {
+     "id": "wait-booked",
+     "summary": "A wait writes one Phase line, step slot-wait, read as its own category ('waiting on a build slot', first of PHASE_COLUMNS) in make task-time and make where-time, with a notice each minute naming the holders; a lint, test build or test run's phase spans its wait and the readers subtract it, while a coverage build's slot is taken before its clock starts",
+     "class": "within",
+     "why": "This serves the GM's standing 2026-11-22 words: 'we want everything measured so we know where our time goes, especially for compiling'. A new wait that went unbooked would go against that. Where the clock boundary falls is design, and the readers take the wait out."
+    },
+    {
+     "id": "test-world-and-landing",
+     "summary": "Tests run with Slots::off() and the slot's own tests use a scratch directory; a landing's gate takes the same slot as a builder's",
+     "class": "within",
+     "why": "The landing's gate is part of what the cap was protecting ('their compiles and a landing's gate would not coincide'), so covering it keeps the request whole. Tests keeping off ~/.cache is hygiene and narrows nothing."
+    },
+    {
+     "id": "record-no-target-no-guard",
+     "summary": "Recorded in dev/audits/build-slot.md (measurement, falsifier, cost, alternatives), docs/process-decisions.md and rust/gate/CLAUDE.md; no make target and no guard added",
+     "class": "within",
+     "why": "The audit entry with a falsifier answers the GM's 2026-11-25 register words ('what we would look at that would falsify the notion that this is a good idea'). Adding no target or guard adds nothing the request did not ask for."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -40111,6 +40316,91 @@
      "summary": "Nothing is found and left. The task is classed as not performance work.",
      "class": "within",
      "why": "No known defect is deferred. The shared-stamp saving is kept rather than added to, so calling it a correctness fix is accurate."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T284": {
+   "section_sha256": "52c13d15e3704b8c6419243e919ac62f3692cdac30d58f720edd4ca6220531bb",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "slot-mechanism",
+     "summary": "Synchronize the checks' compiling cargo calls through a counted set of machine-wide flock slots under ~/.cache/l7r-build-slots/, freed when the holder dies, no daemon; the builder count itself is not capped",
+     "class": "within",
+     "why": "This is the GM's request as written (2026-11-26): 'address that with some synchronization rather than pre-emptively limiting builders just in case'. A counted lock on the coinciding compiles is that synchronization, and builders past the count queue only for the compile."
+    },
+    {
+     "id": "what-takes-a-slot",
+     "summary": "Every cargo call through cargo_in except cargo fmt, plus cover.rs's coverage build, takes a slot; fmt, llvm-cov show-env/report, cargo --version and direct test-binary runs do not",
+     "class": "within",
+     "why": "'That' in the GM's words is the compiles coinciding. Leaving out the calls that do not compile drops nothing the request reaches, and the measurement puts the peaks in coinciding cover-builds."
+    },
+    {
+     "id": "count-default-2",
+     "summary": "L7R_BUILD_SLOTS defaults to 2 (labeled GUESS) and caps compiling calls at once, not builders; 0 means no slot",
+     "class": "within",
+     "why": "A semaphore has to have a count. The default comes from the measured peak (three compiles at once, about 15 rustc each on 22 cores) rather than from a builder cap, and the 0 escape and the knob keep it a tunable piece of synchronization, not a pre-emptive limit on builders."
+    },
+    {
+     "id": "fail-open-unavailable",
+     "summary": "If the slot directory cannot be made, a slot file cannot be opened or flock cannot start, the call runs without a slot and says so on stderr",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible case: when the lock primitive is missing there is nothing to synchronize on. The alternatives are refusing, which is a red gate for a throughput control (nothing in request.md asks for that), or hanging. The stderr notice keeps it visible."
+    },
+    {
+     "id": "fail-open-ceiling",
+     "summary": "A wait past L7R_BUILD_SLOT_CEILING (900 s, GUESS) runs the call without a slot, written as a slot-wait line of code 1 with an audit reopen on one such line in a week",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Purpose ground: the request is for synchronization that lets more builders work, and an endless wait would let one hung cargo stop every tree's checks for good, which defeats that purpose concretely. The plan states the cost, prices the alternatives and names a falsifier. Aside, non-blocking: 'a pass is then one more compile at once, three' holds for a single pass only. Several starved waiters passing at once under four or five builders are not bounded by it; the slot-wait code-1 lines and the audit's reopen are what would show that."
+    },
+    {
+     "id": "nested-no-slot",
+     "summary": "Cargo started by a holder carries L7R_BUILD_SLOT_HELD, and a gate run under it takes no slot; a call holds one slot and never waits for a second; the run lock is taken first and the slot inside it",
+     "class": "within",
+     "why": "This is deadlock avoidance inside the mechanism. The nested run is already counted under its parent's slot, so no compile goes unsynchronized and the request's reach is not narrowed."
+    },
+    {
+     "id": "uncovered-wrapper-tool-build",
+     "summary": "The wrapper's own tool build (scripts/gates/l7r-gate.sh build) takes no slot",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The bootstrap argument does not hold, because the slot is a flock program call that shell can make. 'Shell, no Phase line' is implementation cost and is no ground either. The one ground that survives is the measurement: where no check's phase ran, the samples top out at 2.6 GiB and 13 rustc, against 5.9-6.4 GiB where coverage builds coincide (measured 2026-11-26). So leaving this build unslotted does not bring back the coincidence the request is about. The limits are real. The figure is joint with the guard build and comes from one three-builder run, and this is a compile whose coincidence still grows with the builder count. The ruling stands on that measurement and falls with it: the plan's own reopen condition (the re-measurement showing one at a peak) is the right trigger, and the candidate it names should be filed if that happens."
+    },
+    {
+     "id": "uncovered-guard-build",
+     "summary": "The hook suites' guard build takes no slot",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled on its own, on the same and only surviving ground: the measured ceiling of the no-phase samples (2.6 GiB and 13 rustc, measured 2026-11-26) bounds this build too, well below the coinciding-cover-build peaks. Shell-only is cost, not a ground. This ruling also falls with that measurement, and the three- and four-builder re-measurement is what tests it."
+    },
+    {
+     "id": "remeasurement-deferred",
+     "summary": "T284's line's re-measurement of three and four code builders with the slot is not done in this task; the coordinating session runs it once the slot has landed, and docs/process-decisions.md records it as owed",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physical ground: measuring several builders 'with it' needs the slot in every builder's tree, which only a landing gives, so the task cannot do it before it lands. FR-009's filed-task-id rule covers deferred defects, and this is not one. But the payoff of the GM's request (builders no longer pre-emptively limited) arrives only with this re-measurement. Landing T284 alone leaves the builder cap of two in place until it is run and recorded."
+    },
+    {
+     "id": "wait-booked",
+     "summary": "A wait writes one Phase line, step slot-wait, read as its own category ('waiting on a build slot', first of PHASE_COLUMNS) in make task-time and make where-time, with a notice each minute naming the holders; a lint, test build or test run's phase spans its wait and the readers subtract it, while a coverage build's slot is taken before its clock starts",
+     "class": "within",
+     "why": "This serves the GM's standing 2026-11-22 words: 'we want everything measured so we know where our time goes, especially for compiling'. A new wait that went unbooked would go against that. Where the clock boundary falls is design, and the readers take the wait out."
+    },
+    {
+     "id": "test-world-and-landing",
+     "summary": "Tests run with Slots::off() and the slot's own tests use a scratch directory; a landing's gate takes the same slot as a builder's",
+     "class": "within",
+     "why": "The landing's gate is part of what the cap was protecting ('their compiles and a landing's gate would not coincide'), so covering it keeps the request whole. Tests keeping off ~/.cache is hygiene and narrows nothing."
+    },
+    {
+     "id": "record-no-target-no-guard",
+     "summary": "Recorded in dev/audits/build-slot.md (measurement, falsifier, cost, alternatives), docs/process-decisions.md and rust/gate/CLAUDE.md; no make target and no guard added",
+     "class": "within",
+     "why": "The audit entry with a falsifier answers the GM's 2026-11-25 register words ('what we would look at that would falsify the notion that this is a good idea'). Adding no target or guard adds nothing the request did not ask for."
     }
    ],
    "verdict": "CLEAR"

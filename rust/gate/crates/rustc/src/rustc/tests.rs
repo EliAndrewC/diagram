@@ -20,6 +20,7 @@ mod kept;
 mod phases;
 mod runlock;
 mod side;
+mod slot;
 mod times;
 
 /// `dirname` and `basename` as the shell's own functions: a fake's every `$(dirname "$0")` started the program, about a millisecond each,
@@ -54,6 +55,7 @@ fn world_with(root: &Path, body: &str) -> Held<World> {
         hamlet_spec: "spec.json".to_owned(),
         cover_work: None,
         make: "static".to_owned(),
+        slots: super::slot::Slots::off(),
         target: target.to_path_buf(),
     };
     target.hold(world)
@@ -579,6 +581,7 @@ fn the_real_cargo_tests_a_real_crate() {
         hamlet_spec: "spec.json".to_owned(),
         cover_work: None,
         make: "static".to_owned(),
+        slots: super::slot::Slots::off(),
         target: target.to_path_buf(),
     };
     let got = answer(&world, "test", &[], false);
