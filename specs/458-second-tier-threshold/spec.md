@@ -34,6 +34,11 @@ size setting itself - be better, or is it not needed?
 
 Not before 2026-11-28 (the GM: "after a day or two"), over the batches gated since 2026-11-26:
 
+(From its first hour the pipeline ran ROLLING - a freed pool tree handed straight to the next task, three builders at work
+at any moment - so it never drained as the threshold's wording supposes: the gate ran when a few tasks stood staged and no
+carry was in progress. Read the threshold as it was run, and say what trigger a rolling pipeline wants; 451 T313 has the
+tooling propose it.)
+
 - per batch: the tasks in it, minutes from the first carry to the green gate, the gate's own seconds, its failures by kind
   (format, lint, coverage, a suite or test, a flake) and what each cost to repair and by whom (the tooling, the session, a
   fresh fixer) - from the landing logs and `make task-time`;
