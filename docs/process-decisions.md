@@ -188,6 +188,20 @@ not interact, and the one real cost, work standing only on this machine, is met 
 gain by waiting past a moment when the gate is free. With several sessions main moves under the staged work, and a gate that
 runs continuously on a snapshot may be the better form (trial 458 weighs it; feature 459 is the several-sessions arrangement).
 
+**Amended the same evening: the builder's closing step also runs coverage on the crates it changed** (decided 2026-11-26 by the
+session, under the GM's standing pre-approval of what the measurements support - *"I thought I already pre-approved whatever
+number and arrangement of parallel builders our measurements support"* covers the arrangement; this is the session's reading,
+his to overturn). Under the first tier as first built, 4 of the first 9 batch gates failed on lines no test reached (an
+assertion's message on a line of its own, a closure no fixture drove), each costing a fixer or a hand repair and a second gate,
+5 to 15 minutes. From 21:40 UTC each builder's brief added `make crate-checks CRATE="<its crates>"` after its first tier was
+green: 7 to 111 s a builder (a warm crate 7 to 28 s; eight crates 88.5 s), and the next 6 batch gates had no coverage failure
+(T274, T334 with T339 and T336, T340, T347; two of those builders' own runs caught a line the gate would have). What the
+batch gate still catches is what only integration shows: a field one task added that another task's test did not set, a
+recipe a hook suite the first tier does not run refuses, a test that fails only beside four other crates' tests. DECLINED
+with it: the first tier flagging a multi-line assertion message (T343's first half) - coverage names those lines and more.
+Falsifier: a batch gate failing on an unreached line of a crate whose builder ran its coverage, twice in a week; or the
+coverage step passing a median of 3 minutes a builder. Built into the brief's block by 451 T381.
+
 **Measurement it rests on** (2026-11-26, one tier): the full checks ran twice a task (a builder's closing checks, two to four
 runs, then the landing's gate); closing checks were 63% of a small task's builder clock
 (`dev/measurements/2026-11-26/task-route/m11-results.md`); of a three-builder run's compile minutes coverage builds were 57.9
