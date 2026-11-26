@@ -34,6 +34,9 @@ docs/process-decisions.md, and an option the measurement declines gets its decli
     after 451 T244, T228 and T234 build side by side, each in its own worktree; recorded per trial - what broke (guards
     keyed on the clone's path, the started-task mark, landings of one feature back to back), a second copy's start cost (the
     cold build), and the wall clock saved; if it holds, the rest of the queue runs two or three at a time and adds data.
+    Decided: 2026-11-26, on the GM's pre-approval - two code builders at once in reused worktrees, three or four only for
+    work that compiles nothing; memory at each count still to be sampled (`docs/process-decisions.md`, "Two code builders at
+    once").
     Trial 1, measured 2026-11-25 (451 T228 and T234, one builder each in its own worktree, landed together as 4cd58860ab;
     the builders' logs were in the session scratchpad, summarized here): each builder about 44 min, side by side, against
     about 88 min one after the other - about 40 min of wall clock saved. Costs and frictions: a worktree in 2 s and 288 MB, but

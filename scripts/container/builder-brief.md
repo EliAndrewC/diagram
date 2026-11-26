@@ -20,6 +20,8 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
 - A task expected to edit more than about three files, or needing a measurement first, is SPLIT into builders that hand results
   along, a measuring agent first: its report (the figures, the paths, the commands) is the next builder's brief.
 - A one-turn edit is yours, the coordinating session's, not a builder's.
+- TWO code builders at once, each in a REUSED worktree (its build cache warm); three or four at once only for batches that
+  compile nothing (`docs/process-decisions.md`, "Two code builders at once"; `dev/audits/parallel-builder-count.md`).
 
 Why: of 97 builders briefed since 2026-11-24, a brief of 4 or more jobs handed off 52% of the time against 16-22% at 1-3 jobs;
 4 or more files edited, 39-45% against 22% at three or fewer; a brief that began with a measurement, 46% against 25%. A one-turn edit by the

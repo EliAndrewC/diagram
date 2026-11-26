@@ -157,3 +157,42 @@ cannot count without firing on correct work. The cap's guard and constant are un
 figures). **Falsifier:** over a week of builders briefed under the rule, measured by the M1 method, the handoff rate not
 falling below about one in five (it was 28%) - then sizing the brief is not the lever, and the task's own size or the cap is
 looked at again.
+
+### Two code builders at once, in reused worktrees; three or four only for work that compiles nothing (decided 2026-11-26)
+
+**Question.** How many builders run at once, each in its own worktree, landings still one at a time through main (the talk's
+items 1-5 and 7)?
+
+**Decided** - two code builders at once, in worktrees that are REUSED so their build caches are warm; three or four at once
+only for batches that compile nothing (comment and doc edits, page work). The GM, 2026-11-25: *"Yes I pre-approve the items in
+the table above, so that you can close them out after implementing whatever the measurements say make sense."* (items 1-5 and
+7 as pre-approved: the standard count is the largest that the 1-4 test shows still shortens total time with peak memory under
+a margin).
+
+**Reasoning.** Two is the largest count the data supports, and only weakly: tasks landed per wall hour rose from 1.71 with one
+builder to 2.02 with two (1.18x), while pace per builder was between level and 1.6x depending on the measure. Most of what a
+builder lost at two was not the second builder but its fresh worktree - 21 of 22 code builders at two ran in a new, cold tree
+against 1 of 16 at one - and contention itself was about 1.2x on a later closing-checks run. So the lever beside the count is
+the warm tree. Three and four were not tested on comparable work (52 wall minutes, 8 of 10 builders on comment or doc edits),
+so they are allowed only where nothing compiles. Memory is the unmeasured half of the pre-approval's condition: the container's
+limit is 10 GiB with no swap (cgroup `memory.max`; `free` shows the host's 15 GB), `memory.peak` has touched it at some time in
+30 hours with no OOM kill, and the peak during the 3- and 4-at-once runs was not recorded. Alternatives weighed: one at a time
+(the queue is the cost: 385 of a day's minutes waiting on builders, the agenda's context) and three code builders as the
+standard (untested, and unsafe to adopt blind against a 10 GiB limit).
+
+**How it was measured.** 2026-11-26, read-only, over this session's builder dispatches from 2026-11-25 12:00 to 2026-11-26
+06:10 UTC, each builder's concurrency taken from the other builders alive across its life, with the make targets' spans from the
+guard's event log: `python3 dev/measurements/2026-11-26/builder-count/m1-concurrency.py -v` (the table and caveats:
+`m1-results.md` beside it). Under load at two: hook suites 1.67x, rust lint 2.3x, rust test and coverage runs 1.27x; a
+builder worktree's first closing-checks run 142 s against 62 s (one builder) and 76 s (two) for a later run. Caveats: small
+groups; tasks differ in size; the one-builder baseline is 8 landings; both code builders at three ran a different model from
+every builder at one; one builder alone in a fresh tree against one in a warm tree (the control that separates cold cache from
+contention) was not run.
+
+**What followed.** `scripts/container/builder-brief.md`'s SIZING paragraph names the count; the frictions of running several
+were fixed by 451 T245-T247 and T252-T257, with T271 (shared scratch and plan-review bundle directory) open. A memory sampler
+at dispatch is owed before any count is certified on memory (filed with this entry). The audit entry is
+`dev/audits/parallel-builder-count.md`. **Falsifiers:** down to one - over the next 20 code tasks at two in warm trees, tasks
+landed per wall hour at or under 1.71, or a later closing-checks run over 1.5x its one-builder median; up to three - a planned
+run of six or more compile tasks at three landing more per wall hour than at two, pace per 10k output tokens within 15% of the
+pace at two, and anonymous memory's peak at or under 7 GiB of the 10.

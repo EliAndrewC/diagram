@@ -198,3 +198,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T273 449 T428's tick note states a bend measurement that was never made: make the measurement or restate the note (found 2026-11-25)
       research: rendering
+- [ ] T274 a memory sampler runs while builders are dispatched (cgroup anon, memory.current, memory pressure and load every 10 s into the tree's l7r-events), so the parallel builder count is certified against the container's 10 GiB limit (docs/process-decisions.md, 'Two code builders at once'; the peak at 3-4 builders was never recorded)
+      research: rendering
