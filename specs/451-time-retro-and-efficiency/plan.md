@@ -2702,31 +2702,36 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T267 (<why: the finding or measurement that files it>)
+### T267 (`make claims-checked` failed with "File exists (os error 17)" in a linked worktree whenever a reply line was held, observed 2026-11-26 in a builder's worktree)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: The held searches are kept in the tree's own git directory, found from `root/.git` itself.
+  - **The cause, confirmed.** `silent::SEARCHED` was the path `.git/claims-searched.json`, joined onto the root at `commands.rs:384`. In a linked worktree `.git` is a file (`gitdir: <clone>/.git/worktrees/<name>`), so the write under it failed creating the directory. Reproduced 2026-11-26 by a new test on the old path (`make rust-test CRATE=rust/gate/crates/claims`): `l7r-gate claims record` exited 1 with "File exists (os error 17)" where 3 (a held line) was due.
+  - **The fix** (`rust/gate/crates/claims/src/claims/silent.rs`). `SEARCHED` is now the file's name alone, and `silent::kept_at(root)` gives its place: where `root/.git` is a file naming a `gitdir:`, that directory (a relative name read against the root); otherwise `root/.git`. No git process is run. `record_cmd` asks it; `hold`'s signature is unchanged. A plain clone's file stays where it was, so nothing is migrated.
+  - **Per tree, not the clone's common directory - the choice and its reason.** A search is kept under its claim's key, and every worktree of a clone has the same keys. `hold` also forgets every kept search whose pages its bundle holds, and overwrites a key it holds again. In one shared file a second tree's round on the same claim would answer, overwrite or forget the first tree's search, and the first tree's line would be held a second time or passed unread - against 451 T218's "read the nearest three, then file". The crate's other state under git, the in-flight marks (`flight.rs`), stays in the common directory: each mark is named by its bundle's own path, so two trees never meet there, and it already asks git for the directory (its `root.join(".git")` is only the fallback when git answers nothing).
+  - **The census** (observed 2026-11-26, method: `grep -rnE 'join\("\.git"\)|"\.git/[a-zA-Z]'` over `rust/gate` and `rust/guard`, tests and fixtures left out, each hit read). In the claims crate the one direct path was `silent.rs`, fixed here; `flight.rs:49` is the fallback named above. In other crates the hits fall in three classes: probes of a root (`.join(".git").exists()`), which a `.git` file satisfies; fallbacks after a git call; and state paths joined straight onto `.git`, the same shape as this one. The third class is listed for the coordinating session as candidates, none of them run in a worktree here: the gate's `reviews` (`prereq.rs` 68, 72, 227, 665; `prereq/scoped.rs:48`; `prereq/tree.rs` 49, 84; `snapshot.rs:238`), `record` (`stale_terms.rs:508`, `merge_answers.rs` 132, 140), `owed` (`owed/answers.rs:422`), `arbiter` (`bundle/sections.rs:430`), `cohort` (`speckit_todo/report.rs:179`), `ci` (`switches.rs:312`), `trials` (`model_trial/case.rs` 237, 463); the guard's `idle_tests_hooks.rs`, `finished_run_hooks.rs` (156, 333), `review_round_hooks.rs` (712, 765, 851), `escalation_hooks.rs:333`, `pair_hooks/state.rs` and `pair_hooks/review.rs`, `stall_watchdog_hooks/pass.rs` (280, 457); and the `.is_dir()` probes that pass a worktree over in silence (`clone_sync_hooks.rs` 335, 354, 552; `archive/store.rs:161`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a - tooling, no engine step | n/a | n/a | none | n/a |
 
 ### T267 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A claims round run in a builder's linked worktree holds a silent finding and names its pages, as it does in a clone, and that tree's search is its own.
+2. **The constraints.** T267's line in tasks.md. Feature 451 T218: a finding that says the pages are silent is held until the record's nearest pages (`silent::NEAREST` of them) are read, then filed - kept, and the reason for a file per tree. Feature 451 T254: a tree's state is its own where two trees would otherwise move each other's.
+3. **Where each comes from.** O: the crash in a worktree, 2026-11-26 (T267's line), and the red test here. The T218 and T254 rules are the plan's own sections of those tasks (`plan-done.md`).
+4. **Do they describe the world here?** Yes: the new test makes a real linked worktree of the fixture (`git worktree add --detach`) and runs `claims record` in it.
+5. **The order.** No order with another task; it lands alone.
+6. **The exits.** Green: `make closing-checks T=T267 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST: with `kept_at` returning the old `root/.git/claims-searched.json`, the claims crate gave 201 passed and 1 failed, the new test `a_silent_finding_is_held_in_a_linked_worktree_and_its_search_kept_in_that_tree_s_git_dir`, its failure the command's "File exists (os error 17)", measured 2026-11-26 (`make rust-test CRATE=rust/gate/crates/claims`). With the fix, 202 passed and 0 failed, measured 2026-11-26 (the same command). The test asserts the file under `<clone>/.git/worktrees/linked/`, none in `<clone>/.git/`, and the clone's own path unchanged. Logs are in the session scratchpad (`t267-red-kept.log`, `t267-green.log`).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The check it breaks: `make claims-checked` exits 1 with a traceback in a linked worktree, so a held line is never told to its session and nothing of the reply is recorded. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none measured. The census's third class above is paths of the same shape in other crates; none was run in a worktree in this task, so none is a measured defect, and the list goes to the coordinating session as candidates to file (this builder's brief: it files no task).
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T268 (<why: the finding or measurement that files it>)

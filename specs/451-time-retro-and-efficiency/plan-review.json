@@ -1872,6 +1872,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "round-arbiter"
+  },
+  "### T267 (`make claims-checked` failed with \"File exists (os error 17)\" in a linked worktree whenever a reply line was held, observed 2026-11-26 in a builder's worktree)": {
+   "sha256": "4c92fe104fa871b163d28bb414cf8de9405f1bad8ac542924c39ef905babd28f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T267 Approach (checklist part A)": {
+   "sha256": "daf56396f690dca453b4648fb1a33c2ed0bcbf98455dd73906a343fe870a8961",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -23902,6 +23914,47 @@
    "tasks": [
     "T250"
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T267 (`make claims-checked` failed with \"File exists (os error 17)\" in a linked worktree whenever a reply line was held, observed 2026-11-26 in a builder's worktree)",
+    "### T267 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T267-fix",
+     "summary": "silent::SEARCHED becomes a bare file name; silent::kept_at(root) places it in the gitdir a .git file names (a relative name read against the root), else root/.git; no git process; hold's signature unchanged",
+     "class": "within",
+     "why": "Removes the observed crash (make claims-checked exiting with os error 17 in a linked worktree) so a held line is told to its session as in a clone - the task's own outcome. The red-first test on a real linked worktree (201/1 red, 202/0 green, dated with method) shows the mechanism reaches the case it names."
+    },
+    {
+     "id": "T267-per-tree",
+     "summary": "the held searches are kept per worktree (its own gitdir), not in the clone's common directory",
+     "class": "within",
+     "why": "Chosen so T218's held-until-read rule holds: one shared file keyed by claim would let a second tree overwrite, answer or forget the first tree's search. Keeps a tree's state its own as T254 does for parallel builders (request: 'before three parallel builders'). Narrows nothing a clone already did."
+    },
+    {
+     "id": "T267-no-migration",
+     "summary": "a plain clone's file stays at root/.git/claims-searched.json; nothing is migrated",
+     "class": "within",
+     "why": "Where .git is a directory kept_at returns the old place, so no existing state moves and no clone's behavior changes."
+    },
+    {
+     "id": "T267-flight-unchanged",
+     "summary": "the in-flight marks (flight.rs) stay in the common directory, unchanged",
+     "class": "within",
+     "why": "They already ask git for the directory with root/.git only as the fallback, and each mark is named by its bundle's own path, so two trees never meet there; no defect is shown and leaving working code as it is narrows nothing."
+    },
+    {
+     "id": "T267-census-left",
+     "summary": "state paths of the same shape (joined straight onto .git) in other crates of rust/gate and rust/guard, and the .is_dir() probes that pass a worktree over, are listed from a stated grep census as candidates for the coordinating session to measure and file, not fixed here; 'Found and left: none measured'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops at the one path the task observed failing while naming a wider class. Legitimate on the GM's own words: a defect is a wrong outcome (constitution XIV v2.36.0, GM 2026-11-19, 'don't spend a lot of time fixing things which are not actually wrong'), and none of these candidates was run in a worktree or shown to do anything wrong, so none is a known defect that FIX AS WE GO would require fixed now. The census states its method and search space (FR-009's class clause), every hit was read and classed, and the list is routed to the session that files tasks, because this builder's brief files none. If the coordinating session measures any of them failing in a worktree, it is a known defect from then on and must be filed with an order (FR-009)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -37972,6 +38025,45 @@
     ],
     "verdict": "BLOCKED"
    }
+  },
+  "T267": {
+   "section_sha256": "6260b58e3994aff5d8feda990f7ac38972f68fa10b759b9e16acae911c73181b",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T267-fix",
+     "summary": "silent::SEARCHED becomes a bare file name; silent::kept_at(root) places it in the gitdir a .git file names (a relative name read against the root), else root/.git; no git process; hold's signature unchanged",
+     "class": "within",
+     "why": "Removes the observed crash (make claims-checked exiting with os error 17 in a linked worktree) so a held line is told to its session as in a clone - the task's own outcome. The red-first test on a real linked worktree (201/1 red, 202/0 green, dated with method) shows the mechanism reaches the case it names."
+    },
+    {
+     "id": "T267-per-tree",
+     "summary": "the held searches are kept per worktree (its own gitdir), not in the clone's common directory",
+     "class": "within",
+     "why": "Chosen so T218's held-until-read rule holds: one shared file keyed by claim would let a second tree overwrite, answer or forget the first tree's search. Keeps a tree's state its own as T254 does for parallel builders (request: 'before three parallel builders'). Narrows nothing a clone already did."
+    },
+    {
+     "id": "T267-no-migration",
+     "summary": "a plain clone's file stays at root/.git/claims-searched.json; nothing is migrated",
+     "class": "within",
+     "why": "Where .git is a directory kept_at returns the old place, so no existing state moves and no clone's behavior changes."
+    },
+    {
+     "id": "T267-flight-unchanged",
+     "summary": "the in-flight marks (flight.rs) stay in the common directory, unchanged",
+     "class": "within",
+     "why": "They already ask git for the directory with root/.git only as the fallback, and each mark is named by its bundle's own path, so two trees never meet there; no defect is shown and leaving working code as it is narrows nothing."
+    },
+    {
+     "id": "T267-census-left",
+     "summary": "state paths of the same shape (joined straight onto .git) in other crates of rust/gate and rust/guard, and the .is_dir() probes that pass a worktree over, are listed from a stated grep census as candidates for the coordinating session to measure and file, not fixed here; 'Found and left: none measured'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops at the one path the task observed failing while naming a wider class. Legitimate on the GM's own words: a defect is a wrong outcome (constitution XIV v2.36.0, GM 2026-11-19, 'don't spend a lot of time fixing things which are not actually wrong'), and none of these candidates was run in a worktree or shown to do anything wrong, so none is a known defect that FIX AS WE GO would require fixed now. The census states its method and search space (FR-009's class clause), every hit was read and classed, and the list is routed to the session that files tasks, because this builder's brief files none. If the coordinating session measures any of them failing in a worktree, it is a known defect from then on and must be filed with an order (FR-009)."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

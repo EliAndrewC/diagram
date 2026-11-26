@@ -381,7 +381,7 @@ fn record_cmd(
         &units,
         &root.join(QUESTIONS),
         &bundle_dir,
-        &root.join(super::silent::SEARCHED),
+        &super::silent::kept_at(root),
     )?;
     for h in &held {
         let _ = writeln!(o.err, "claims-checked: {h}");

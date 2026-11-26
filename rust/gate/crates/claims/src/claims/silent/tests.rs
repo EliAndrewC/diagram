@@ -2,7 +2,7 @@ use std::path::Path;
 
 use serde_json::{json, Map, Value};
 
-use super::{hold, SEARCHED};
+use super::{hold, kept_at};
 
 fn put(root: &Path, rel: &str, text: &str) {
     let p = root.join(rel);
@@ -60,7 +60,7 @@ const ROW_210: &str = "- docs/building-programs.md | required-items table, `kitc
 #[test]
 fn a_silent_finding_waits_for_the_record_s_nearest_pages() {
     let root = record("claims-silent-held");
-    let (q, store) = (root.join("research/questions"), root.join(SEARCHED));
+    let (q, store) = (root.join("research/questions"), kept_at(&root));
     let b = bundle(&root, &[GENKAN, HOUSES]);
     let reply = format!("VERDICT a::b#c IN-STEP - fine [§1]\n\n## OUTSIDE THE CHANGE\n{ROW_210}\n");
     let (kept, held) = hold(&reply, &units(), &q, &b, &store).unwrap();
@@ -86,7 +86,7 @@ fn a_silent_finding_waits_for_the_record_s_nearest_pages() {
     // the second reading dropped the finding (0107 says it): the search is forgotten all the same, so a later silent line on
     // that file is searched for its own words
     let fresh = record("claims-silent-dropped");
-    let (q, store) = (fresh.join("research/questions"), fresh.join(SEARCHED));
+    let (q, store) = (fresh.join("research/questions"), kept_at(&fresh));
     let lacking = bundle(&fresh, &[GENKAN, HOUSES]);
     assert_eq!(
         hold(&reply, &units(), &q, &lacking, &store)
@@ -111,7 +111,7 @@ fn a_silent_finding_waits_for_the_record_s_nearest_pages() {
 #[test]
 fn a_truly_silent_finding_is_recorded_once_the_nearest_pages_were_read() {
     let root = record("claims-silent-true");
-    let (q, store) = (root.join("research/questions"), root.join(SEARCHED));
+    let (q, store) = (root.join("research/questions"), kept_at(&root));
     // 449 T411 (452 T011): no page gives the grave marker's 2 by 1 ft
     let reply = "VERDICT docs/buildings.md::Graves#the marker's size NEEDS-RESEARCH - 0235's drawing page calls the rows of markers a convention and gives no size [§]\n";
     let bare = bundle(&root, &[]);
@@ -125,7 +125,7 @@ fn a_truly_silent_finding_is_recorded_once_the_nearest_pages_were_read() {
 #[test]
 fn only_a_finding_that_says_the_pages_are_silent_is_held() {
     let root = record("claims-silent-not");
-    let (q, store) = (root.join("research/questions"), root.join(SEARCHED));
+    let (q, store) = (root.join("research/questions"), kept_at(&root));
     let b = bundle(&root, &[]);
     let reply = [
         // a pass, a drift that names what a page says, a claim of another bundle (refused by the vet), and a silent drift

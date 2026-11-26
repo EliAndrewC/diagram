@@ -6,7 +6,7 @@ use std::path::Path;
 use serde_json::{json, Value};
 
 use super::{backfill_sections, path_text};
-use crate::claims::tests::{claims, commit_as_origin, fixture, record_all};
+use crate::claims::tests::{claims, commit_as_origin, fixture, fixture_with, record_all};
 use crate::record::testkit::put;
 
 fn index(root: &Path) -> Value {
@@ -98,6 +98,54 @@ fn a_bundle_of_units_is_recorded_and_reported() {
             && manifest.contains("```rust\n"),
     );
     record_and_report(&root, &out);
+}
+
+/// Feature 451 T267: in a linked worktree `.git` is a file, so the held searches joined onto `<root>/.git/` failed with "File exists
+/// (os error 17)". They are kept in the tree's own git directory, `<clone>/.git/worktrees/<name>/`, never the clone's.
+#[test]
+fn a_silent_finding_is_held_in_a_linked_worktree_and_its_search_kept_in_that_tree_s_git_dir() {
+    let main = fixture_with("claims-cmd-silent-worktree", &|root| {
+        owed_units(root);
+        put(
+            root,
+            "research/questions/0003-households.html",
+            "<h1>Households</h1>\n<p>A hamlet's helper serves three households.</p>\n",
+        );
+    });
+    let root = main.join("linked");
+    crate::record::testkit::git(
+        &main,
+        &["worktree", "add", "-q", "--detach", &root.to_string_lossy()],
+    );
+    assert!(root.join(".git").is_file());
+    let key = "rust/phases/src/owed.rs::assist#help";
+    let o = main.join("b").to_string_lossy().into_owned();
+    assert_eq!(
+        claims(&root, &["bundle", "--units", key, "--out", &o]).code,
+        0
+    );
+    let r = reply(
+        &main,
+        &format!(
+            "VERDICT {key} NEEDS-RESEARCH - no page says how many households a helper serves [§]\n"
+        ),
+    );
+    let got = claims(&root, &["record", "--bundle", &o, "--reply", &r]);
+    assert_eq!(got.code, 3, "{}{}", got.stdout, got.stderr);
+    assert!(
+        got.stderr.contains("claims-checked: HELD line"),
+        "{}",
+        got.stderr
+    );
+    let kept = main.join(".git/worktrees/linked/claims-searched.json");
+    assert!(std::fs::read_to_string(&kept).unwrap().contains(key));
+    assert!(!main.join(".git/claims-searched.json").exists());
+    assert_eq!(crate::claims::silent::kept_at(&root), kept);
+    // the clone's own tree keeps its searches where it always did
+    assert_eq!(
+        crate::claims::silent::kept_at(&main),
+        main.join(".git/claims-searched.json")
+    );
 }
 
 /// Feature 451 T218: a reply that says the pages are silent is not recorded until the record's nearest pages for its words are in

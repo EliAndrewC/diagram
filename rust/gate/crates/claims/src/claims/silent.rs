@@ -10,7 +10,7 @@
 //! nearest three, then file", never a threshold.
 
 use std::collections::{BTreeMap, BTreeSet, HashMap};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
@@ -22,8 +22,9 @@ use super::reply::{bare, VERDICT};
 use crate::record::repo::Fail;
 use crate::record::units::re;
 
-/// The searches the clone has asked for and not yet seen read: `{a claim's key, or an outside line's file: [pages]}`.
-pub const SEARCHED: &str = ".git/claims-searched.json";
+/// The searches a tree has asked for and not yet seen read: `{a claim's key, or an outside line's file: [pages]}`, a file of
+/// that tree's own git directory ([`kept_at`]).
+pub const SEARCHED: &str = "claims-searched.json";
 /// How many of the record's nearest pages a silent finding is read against.
 pub const NEAREST: usize = 3;
 
@@ -45,6 +46,22 @@ const STOP: &str = "page pages cited claim claims code says said does this that 
     should would section block bundle finding effect none drifted mislabeled research needs verdict outside change label guess \
     drawing question questions html also than then them they into each such what when were will these those here about gives give \
     given names name named line lines note notes cite cites record recorded records silent sheet tool";
+
+/// Where `root`'s searches are kept: [`SEARCHED`] in that tree's OWN git directory, read off `root/.git` without running git. A linked
+/// worktree's `.git` is a file naming it (`gitdir: <clone>/.git/worktrees/<name>`), and joining onto that file was the crash "File
+/// exists (os error 17)" (feature 451 T267). Per tree, never the clone's common directory: a search is kept under its claim's key,
+/// which every worktree of a clone shares, and [`hold`] forgets each search whose pages its bundle holds - so in one shared file a
+/// second tree's round would answer, overwrite or forget the first's, and the first's line would be held again or never held. (The
+/// in-flight marks of `flight.rs` are the clone's: each is named by its bundle's own path, so no two trees meet.)
+#[must_use]
+pub fn kept_at(root: &Path) -> PathBuf {
+    let dot = root.join(".git");
+    let named = std::fs::read_to_string(&dot).ok().and_then(|text| {
+        let dir = text.trim().strip_prefix("gitdir:")?;
+        Some(root.join(dir.trim()))
+    });
+    named.unwrap_or(dot).join(SEARCHED)
+}
 
 /// A text's subject words: lowercase runs of four letters or more, a plural's `s` dropped, the finding voice's own words out.
 fn tokens(text: &str) -> BTreeSet<String> {
