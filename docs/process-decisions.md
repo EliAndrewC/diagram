@@ -21,6 +21,28 @@ The questions raised by the GM on 2026-11-25 (fourteen that day), are listed wit
 T243) and `make where-time`. When the talk decides an item, its entry moves here, and the agenda keeps one line pointing
 at it.
 
+## Decisions NOT to do something are recorded the same way (the GM, 2026-11-25)
+
+The GM: *"We should also make sure our processes record decisions about what NOT to implement for future reference in the
+same way we record decisions about the processes and tooling we DO implement."* An option weighed and declined gets an entry
+here like any decision: the question, the option, the GM's words or the measurement that declined it (dated, with its
+reproducing command), and **what would reopen it** - the measurement or change that would make it worth doing (the declined
+option's falsifier). A later session that wants the option starts from its entry and shows the reopening condition holds.
+This file is loaded on demand, so a declined option recorded here costs no auto-loaded context (the user-level rule to drop
+"we considered X" from auto-loaded docs still holds for those files).
+
+### Declined so far
+
+- **Raising the builders' context cap to 600k** (declined 2026-11-25 on measurement: across 61,271 builder turns since
+  2026-11-19, time a wash at every size from 300k to 800k and tokens favoring the handoff, 33% fewer at 300k; method in
+  specs/449-rust-codebase/port-talk-agenda.md item 12). Reopens if the handoffs' re-read minutes exceed the slow-turn minutes
+  they save by more than noise AND tokens stop favoring the handoff.
+- **A terse output style for the main session** (not adopted 2026-11-25: the main session is about 8% of output tokens, most of
+  it reasoning, briefs and commands, and the GM likes the conversational style). Reopens if the main session's visible reply
+  tokens become a significant share of the day's output.
+- **Shallow clones** (not adopted 2026-11-25: a clone's git history is 404 MB; the disk was the build caches). Reopens if the
+  object store grows past a gigabyte or so.
+
 ## Decided
 
 ### What counts as blocking time (decided 2026-11-25)

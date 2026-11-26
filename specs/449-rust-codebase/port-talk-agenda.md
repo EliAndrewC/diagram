@@ -15,6 +15,16 @@ items' changes (451 T259), so each optimization arrives with its entry and falsi
 context cap and handoff, delegating to builders at all, the disk budget and its trigger, the blocking definition, the research
 switch, and the parallel-builder fixes (451 T254-T257).
 
+
+**Pre-approved 2026-11-25 (the GM: "Yes I pre-approve the items in the table above, so that you can close them out after
+implementing whatever the measurements say make sense."):** item 6 (adopt building a new feature's first task while its
+reviews run); items 1-5 and 7 (the standard builder count is the largest that the 1-4 test shows still shortens total time,
+peak memory under a safety margin); item 9 and the disk levers (adopt each lever whose measurement shows no build or test time
+lost beyond noise); item 12 (the cap stays at 300k; builders stay unless the coordinator doing the work itself costs fewer
+minutes and tokens per landed task); item 14 (the builder report format if it shortens reports with nothing needed lost; the
+escalation check's narrower bundle if its verdicts do not change). Each closes with its Decided: entry in
+docs/process-decisions.md, and an option the measurement declines gets its declined entry there too.
+
 1. Several builders at once, each in its own working copy (a worktree per builder), landings still one at a time through
    main. The largest: most of the 385 min waiting on agents was builders run one at a time, because two writers in one
    clone collided (2026-11-24 parallel builders; 2026-11-25 a landing beside a builder, 451 T242).
