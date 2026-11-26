@@ -62,11 +62,25 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 - NOT an answer of his: 0142 now reasons the Emperor's granaries' siting from Imperial oversight, which his notes
   (`budgets.md`) state; the brigands reasoning was this project's writing.
 
-## For the GM, small (each to pass `escalation-check` before it is put to him)
+## For the GM, small (read by `escalation-check` 2026-11-26: 2 kept, 2 rewritten as below, none cut)
 
-- 0141's aqueduct banks are drawn "darker and wider than life" as a labeled drawing convention; his true-size ruling says a
-  feature that seems too small is raised with him. No record shows it was.
-- 0181's "2.8% outside the wall" carries a setting-canon label with no recorded words.
+- **Builders at once (an offer, not a question).** Two at once is the working default. Total time favors it (1.71 tasks landed
+  per hour at one builder, 2.02 at two). It closes under his pre-approval once 451 T274's sampler shows peak memory under a
+  margin against the container's 10 GiB limit, which has been touched once with no out-of-memory kill. Separately the session
+  added three or four at once for work that compiles nothing; that is outside what he approved, and is dropped if he would
+  rather.
+- **A disk trade (his to weigh).** Dropping the gate's coverage build at every landing frees about 65 GB for about 6 minutes a
+  landing; declined under his pre-approval, his to take if the disk presses again.
+- **0141's aqueduct banks.** The water is drawn true size; the bank outline is enlarged, about 2 px each side, as a labeled
+  drawing convention dated 2026-08-09 and once credited to him with no recorded words. The rulings entry "To scale means true
+  size" (2026-07-21; his quoted words: "I do not want that. We're trying to be perfectly to scale, remember?") says an
+  illegibly small feature is raised with him, never silently inflated. Does he accept the wider banks as a convention, or
+  are they drawn true size? BRING to the question what the true bank width comes to at fit zoom, or a crop of both - without
+  it he chooses blind.
+- **0181's share outside the wall.** On 2026-08-10 a session chose 2.8% (60 of 2,160 households, the wharf hamlet only) from
+  three answers (57%, 30%, 2.8%). The page labels it setting canon, but none of his words are recorded (commits 1e07eaba8 and
+  4a9b1b951 hold a session's paraphrase; the August request files of 283 and 303 were not searched for it). Does he accept
+  it as canon? If not, it is relabeled as this project's choice.
 
 ## What landed overnight in 451 (tooling and the record)
 
