@@ -1,0 +1,28 @@
+rust/gate/crates/measure warm (rust/gate/crates/measure/src/measure/where_time/columns.rs, 1 file(s)) load=6.41 cg_anon=653 MiB: rc=0 wall=17.19 samples=777 peak_anon=718MiB peak_rss=1206MiB hwm_sum=2895MiB max_rustc=6 max_linkers=3
+  run         17.17 s  anon   718 MiB  rss  1206 MiB  hwm_sum  2895 MiB  rustc 6  linkers 3  max gap 31 ms
+  build       15.93 s  anon   718 MiB  rss  1206 MiB  hwm_sum  2336 MiB  rustc 6  linkers 3  max gap 31 ms
+  test         0.65 s  anon    39 MiB  rss   141 MiB  hwm_sum   544 MiB  rustc 0  linkers 0  max gap 28 ms
+rust/gate/crates/measure all (rust/gate/crates/measure/src/lib.rs, 52 file(s)) load=7.67 cg_anon=599 MiB: rc=0 wall=20.25 samples=840 peak_anon=1107MiB peak_rss=1367MiB hwm_sum=763MiB max_rustc=2 max_linkers=3
+  run         20.23 s  anon  1107 MiB  rss  1367 MiB  hwm_sum   763 MiB  rustc 2  linkers 3  max gap 51 ms
+  build       18.97 s  anon  1107 MiB  rss  1367 MiB  hwm_sum   243 MiB  rustc 2  linkers 3  max gap 51 ms
+  test         0.62 s  anon    42 MiB  rss   118 MiB  hwm_sum   507 MiB  rustc 0  linkers 0  max gap 27 ms
+rust/guard warm (rust/guard/src/guards/review_round_hooks.rs, 1 file(s)) load=8.52 cg_anon=622 MiB: rc=0 wall=13.08 samples=591 peak_anon=484MiB peak_rss=730MiB hwm_sum=2098MiB max_rustc=2 max_linkers=3
+  run         13.06 s  anon   484 MiB  rss   730 MiB  hwm_sum  2098 MiB  rustc 2  linkers 3  max gap 31 ms
+  build        4.93 s  anon   484 MiB  rss   730 MiB  hwm_sum  1343 MiB  rustc 2  linkers 3  max gap 30 ms
+  test         5.55 s  anon   275 MiB  rss   364 MiB  hwm_sum   659 MiB  rustc 0  linkers 0  max gap 31 ms
+rust/guard all (rust/guard/src/guards.rs, 85 file(s)) load=8.67 cg_anon=616 MiB: rc=0 wall=27.18 samples=1175 peak_anon=1093MiB peak_rss=1380MiB hwm_sum=998MiB max_rustc=2 max_linkers=3
+  run         27.16 s  anon  1093 MiB  rss  1380 MiB  hwm_sum   998 MiB  rustc 2  linkers 3  max gap 38 ms
+  build       18.88 s  anon  1093 MiB  rss  1380 MiB  hwm_sum   171 MiB  rustc 2  linkers 3  max gap 38 ms
+  test         5.56 s  anon   275 MiB  rss   376 MiB  hwm_sum   738 MiB  rustc 0  linkers 0  max gap 35 ms
+rust/mode_a warm (rust/mode_a/src/page/held/cases.rs, 1 file(s)) load=11.16 cg_anon=616 MiB: rc=0 wall=31.39 samples=1376 peak_anon=772MiB peak_rss=902MiB hwm_sum=1641MiB max_rustc=4 max_linkers=3
+  run         31.36 s  anon   772 MiB  rss   902 MiB  hwm_sum  1641 MiB  rustc 4  linkers 3  max gap 37 ms
+  build       22.84 s  anon   772 MiB  rss   902 MiB  hwm_sum  1479 MiB  rustc 4  linkers 3  max gap 37 ms
+  test         5.84 s  anon   435 MiB  rss   460 MiB  hwm_sum    64 MiB  rustc 0  linkers 0  max gap 24 ms
+rust/mode_a 1 (rust/mode_a/src/page/held/cases.rs, 1 file(s)) load=11.16 cg_anon=756 MiB: rc=0 wall=12.91 samples=601 peak_anon=448MiB peak_rss=606MiB hwm_sum=101MiB max_rustc=1 max_linkers=3
+  run         12.89 s  anon   448 MiB  rss   606 MiB  hwm_sum   101 MiB  rustc 1  linkers 3  max gap 25 ms
+  build        6.23 s  anon   403 MiB  rss   606 MiB  hwm_sum     5 MiB  rustc 1  linkers 3  max gap 24 ms
+  test         6.17 s  anon   448 MiB  rss   474 MiB  hwm_sum    68 MiB  rustc 0  linkers 0  max gap 25 ms
+rust/mode_a all (rust/mode_a/src/audit.rs, 100 file(s)) load=9.91 cg_anon=714 MiB: rc=0 wall=33.41 samples=1440 peak_anon=1417MiB peak_rss=1780MiB hwm_sum=368MiB max_rustc=2 max_linkers=3
+  run         33.39 s  anon  1417 MiB  rss  1780 MiB  hwm_sum   368 MiB  rustc 2  linkers 3  max gap 38 ms
+  build       26.61 s  anon  1417 MiB  rss  1780 MiB  hwm_sum   331 MiB  rustc 2  linkers 3  max gap 38 ms
+  test         6.08 s  anon   464 MiB  rss   489 MiB  hwm_sum     4 MiB  rustc 0  linkers 0  max gap 28 ms

@@ -1,0 +1,2 @@
+rust/gate/crates/land cold load=17.52 cg_anon=1025 MiB: rc=0 wall=69.95 samples=2653 peak_anon=1171MiB peak_rss=1967MiB hwm_sum=4467MiB max_rustc=12 max_linkers=6
+  run         69.92 s  anon  1171 MiB  rss  1967 MiB  hwm_sum  4467 MiB  rustc 12  linkers 6  max gap 100 ms
