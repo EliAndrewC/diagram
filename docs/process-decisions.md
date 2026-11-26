@@ -179,15 +179,15 @@ figures). **Falsifier:** over a week of builders briefed under the rule, measure
 falling below about one in five (it was 28%) - then sizing the brief is not the lever, and the task's own size or the cap is
 looked at again.
 
-### Two code builders at once, in reused worktrees; three or four only for work that compiles nothing (PROVISIONAL, 2026-11-26)
+### Two code builders at once, in reused worktrees; three or four only for work that compiles nothing (decided 2026-11-26)
 
 **Question.** How many builders run at once, each in its own worktree, landings still one at a time through main (the talk's
 items 1-5 and 7)?
 
-**Provisional, for the GM to confirm at the talk** - the working default is two code builders at once, in worktrees that are
-REUSED so their build caches are warm; three or four at once only for batches that compile nothing (comment and doc edits,
-page work). It is NOT closed under the pre-approval: the pre-approval's condition has a memory half that was not measured
-(below), and the three-or-four rule is this session's addition, not in the pre-approved items. Items 2-5 and 7 (a landing,
+**Decided** - two code builders at once, in worktrees that are REUSED so their build caches are warm. Both halves of the
+pre-approval's condition are measured: total time (below) and peak memory under a margin (the memory paragraph below). Three or four
+at once only for batches that compile nothing (comment and doc edits, page work) is this session's addition, NOT in the
+pre-approved items: offered to the GM through escalation-check on 2026-11-26 and his to keep or drop. Items 2-5 and 7 (a landing,
 a claims round, a page session or a plan review beside the next build) were run this way through the night and are covered
 by the same default; none has a measurement of its own. The GM, 2026-11-25: *"Yes I pre-approve the items in
 the table above, so that you can close them out after implementing whatever the measurements say make sense."* (items 1-5 and
@@ -214,9 +214,16 @@ groups; tasks differ in size; the one-builder baseline is 8 landings; both code 
 every builder at one; one builder alone in a fresh tree against one in a warm tree (the control that separates cold cache from
 contention) was not run.
 
+Memory, measured 2026-11-26 12:39-13:19 UTC with two code builders compiling and testing the guard crate (451 T268 and
+T272) and a landing's gate beside them for part of it, sampled every 10 s from the container's cgroup (236 samples,
+`dev/measurements/2026-11-26/builder-count/mem-samples-two-builders.log`): anonymous memory median 1.9 GiB, 95th percentile
+5.7, peak 6.3 GiB against the 10 GiB limit - no sample over the 7 GiB margin, no OOM kill, 4.4 s of memory stall in 40
+minutes; `memory.current` reached 9.5 GiB, which is page cache and is given back. Load median 32 and peak 67 on 22 cores. A
+third code builder was NOT run: two and a landing already peak at 6.3 GiB, so three compiling at once would pass the margin.
+
 **What followed.** `scripts/container/builder-brief.md`'s SIZING paragraph names the count; the frictions of running several
-were fixed by 451 T245-T247 and T252-T257, with T271 (shared scratch and plan-review bundle directory) open. A memory sampler
-at dispatch is owed before any count is certified on memory (filed with this entry). The audit entry is
+were fixed by 451 T245-T247 and T252-T257, with T271 (shared scratch and plan-review bundle directory) open. 451 T274 keeps the sampler as
+tooling (the first run was a hand-started loop). The audit entry is
 `dev/audits/parallel-builder-count.md`. **Falsifiers:** down to one - over the next 20 code tasks at two in warm trees, tasks
 landed per wall hour at or under 1.71, or a later closing-checks run over 1.5x its one-builder median; up to three - a planned
 run of six or more compile tasks at three landing more per wall hour than at two, pace per 10k output tokens within 15% of the

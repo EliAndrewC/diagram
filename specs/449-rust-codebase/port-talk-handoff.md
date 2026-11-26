@@ -41,11 +41,10 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 - **Item 12**: the builders' context cap stays 300k, builders stay, briefs are sized (decided 2026-11-25).
 - **Item 9, the disk and time levers**: none adopted - lighter debug info was already in (451 T246); incremental-off, a
   shared compiler cache and an eager drop of coverage builds declined on measurement; stale coverage variants are 451 T278.
-- **Still open of the pre-approved set - items 1-5 and 7**: a PROVISIONAL working default, for the GM to confirm - two code
-  builders at once in REUSED worktrees, three or four only for work that compiles nothing (that second rule is the session's
-  addition, not in the pre-approval). Landed per wall hour 1.71 at one builder and 2.02 at two; three and four untested on
-  comparable work. The pre-approval's memory condition is NOT met: memory was not measured, the container's limit is 10 GiB
-  with no swap and its peak has touched it (451 T274 is the sampler). Items 2-5 and 7 have no measurement of their own.
+- **Items 1-5 and 7**: two code builders at once in REUSED worktrees (decided 2026-11-26). Landed per wall hour 1.71 at one
+  builder, 2.02 at two; memory measured that morning - two builders and a landing peaked at 6.3 GiB anonymous against the
+  container's 10 GiB limit, no sample over the 7 GiB margin, no OOM kill; three code builders were not run, the headroom too
+  small. Load is the other limit (median 32, peak 67 on 22 cores). Items 2-5 and 7 have no measurement of their own.
 - **Still open of the pre-approved set - item 14** (the builder report format; escalation-check on a narrower bundle; a
   Sonnet-tier seeded test): not measured overnight. Each closes with a Decided entry and an audit entry.
 
@@ -62,11 +61,8 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 
 ## For the GM, small (read by `escalation-check` 2026-11-26: 2 kept, 2 rewritten as below, none cut)
 
-- **Builders at once (an offer, not a question).** Two at once is the working default. Total time favors it (1.71 tasks landed
-  per hour at one builder, 2.02 at two). It closes under his pre-approval once 451 T274's sampler shows peak memory under a
-  margin against the container's 10 GiB limit, which has been touched once with no out-of-memory kill. Separately the session
-  added three or four at once for work that compiles nothing; that is outside what he approved, and is dropped if he would
-  rather.
+- **Three or four builders for work that compiles nothing (an offer).** The session added that rule beside the decided two;
+  it is outside what he pre-approved, and is dropped if he would rather.
 - ANSWERED 2026-11-26, the disk trade: time over disk - the coverage builds stay (`docs/process-decisions.md`, "Declined so
   far", his words).
 - ANSWERED 2026-11-26, 0141's aqueduct banks: 2 px wider for legibility is fine, anything else to scale
