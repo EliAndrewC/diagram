@@ -185,8 +185,6 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T266 HTML comments count toward a research question's 20,000-byte size cap, so a comment-only fix can trip it (0068, 0072, 0241 and 0242 sit within 20 bytes after 451 T250): measure what the cap protects and count visible prose only, or say why comments count
       research: rendering
-- [ ] T268 the clone-sync notice reads 'mirror refresh FAILED: ' with nothing after the colon when the script cannot start, because ask drops the spawn error (found by 451 T263): carry the error text into the notice
-      research: rendering
 - [ ] T269 the audit-register delta check does not see a script newly called from make land's recipe (451 T258's state-sync.sh landed with no entry asked): cover a recipe's new callee, proved red-first on that case
       research: rendering
 - [ ] T270 make audit classifies a plan-gate escape by its reason text; classify by the record's held field so an escape with nothing held is told from one with blocks held (451 T261's false finding came from the reason wording)

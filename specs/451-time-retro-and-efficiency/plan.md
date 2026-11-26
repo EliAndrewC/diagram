@@ -2678,44 +2678,8 @@ engine speed, so no checklist.
 
 
 <!-- plan-archive: T267 to T267 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
-### T268 (451 T263's forced red, 2026-11-26: a sync script that cannot START left the clone-sync notice ending `mirror refresh FAILED: ` with nothing after the colon)
-
-- **Approach**: the guard's runs of the clone's `scripts/sync-with-main.sh` (the mid-task mirror refresh and the clean clone's sync-in) go through one helper that tells a script that could not be started from one that ran and failed, and says the system's reason for the first.
-  - **The cause.** `ask` (`rust/guard/shared/src/tool.rs`) answers a program that cannot be spawned with code -1 and no output, dropping the spawn's error; `refresh_mirror` and the clean clone's sync-in (`rust/guard/src/guards/clone_sync_hooks.rs`) print the tail of that empty output after `FAILED: `. Observed 2026-11-26, method: both call sites read, and the red run below.
-  - **`ask_started`**, new in `tool.rs`: `ask`'s body returning `std::io::Result<Said>`, the error the spawn's own. `ask` is `ask_started(...)` with an error answered -1 with nothing, so its contract and its every other caller are unchanged (the module's header says so and names the new function). `Said` gains no field: `layout_carry.sh`'s caller prints a non-empty `err`, so an error carried there would add a line to the sync notice.
-  - **Not inferred from the code.** "-1 and no output" is also what a script a signal killed answers, so the notice says "could not be started" only when the spawn itself failed.
-  - **`sync_script`**, new in `clone_sync_hooks.rs`: runs the script with the caller's arguments and returns its output, or for a failure the words after the notice's colon - the output's last lines as before (two for the sync-in, one for the refresh), or `scripts/sync-with-main.sh could not be started (<the system's reason>)`. The script is named because a bare "No such file or directory" does not say which file. Its why is beside it.
-  - **The two notices, in the unstartable case**, as the test reads them: `... - clone merge skipped; mirror refresh FAILED: scripts/sync-with-main.sh could not be started (Permission denied (os error 13))` and `clone-sync: auto sync-in FAILED in <clone> - resolve before modifying the repo: scripts/sync-with-main.sh could not be started (No such file or directory (os error 2))`. A script that ran and failed says what it said before (the existing tests' `FAILED: said`).
-  - **A script that ran, failed and said nothing** (the plan review's block, 2026-11-26: the same empty tail by another road, in the helper being written) says its exit: `scripts/sync-with-main.sh exited 7 and said nothing`, or, with no exit code, `scripts/sync-with-main.sh said nothing and gave no exit code (a signal ended it?)` - a question because `ask` answers -1 both for a signal and for a wait that failed. A failure with output says its output, unchanged. After this no failure of the script leaves the colon bare.
-  - **The sync-in notice is fixed too**: the brief names the mirror refresh; the clean clone's sync-in runs the same script through the same `ask` and had the same empty tail (constitution XIV, fixed where found).
-  - **Scope.** Only this guard's runs of the sync script changed. The other callers of `ask` across the guards were not surveyed for a notice with an empty tail.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| a sync script that cannot start is said as that, with the reason, in both notices | red first 2026-11-26 (item 9); pinned by `a_sync_script_that_cannot_start_is_said_with_the_reason` (the script not executable, then missing - no race) | n/a: tooling | none | n/a |
-| a script that fails silently says its exit, or that it gave none | the same test: the fake rewritten to `exit 7`, then to `kill -9 $$` | n/a: tooling | none | n/a |
-| `ask_started` returns the spawn's error; `ask` unchanged | pinned by `a_tool_that_cannot_start_says_why_and_one_that_ran_answers_as_asked` in `tool.rs` and the existing `ask` test | n/a: tooling | none | n/a |
-
-### T268 Approach (checklist part A)
-
-1. **The goal, in the world.** A session whose clone-sync notice says the sync failed can read WHY from the notice: that the script could not be started and the system's reason, or what the script said.
-2. **The constraints.** T268's line in tasks.md: carry the error text into the notice. The brief: say the script could not be started, which is different from a script that ran and failed; red first with a script made unstartable without a race; 100% line coverage of new code. CLAUDE.md "What is enforced": a guard's message names what its reader needs.
-3. **Where each comes from.** O: T263's forced red of 2026-11-26 (`plan-done.md`, T263 item 9), which printed the notice with nothing after its colon; O: the red run of item 9 here.
-4. **Do they describe the world here?** Yes, measured 2026-11-26: the new test on the unfixed guard printed `... has a make run going (a gate or a roll) - clone merge skipped; mirror refresh FAILED: ` with nothing after it.
-5. **The order.** Any time; nothing waits on it.
-6. **The exits.** Green: `make closing-checks T=T268`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none.
-8. **The budget.** One landing.
-9. **Done, measured.** RED FIRST, 2026-11-26, the test written before the fix: `make rust-test CRATE=rust/guard FRESH=1 REASON=...` gave 521 passed and 1 failed, the failure `a_sync_script_that_cannot_start_is_said_with_the_reason` at its first assertion, printing the empty-tailed notice of item 4. With the fix, the same command: 522 passed, 0 failed. `rust/guard/shared`'s own test of `ask_started` runs under `make closing-checks T=T268`.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-12. **Before any fix.** The finding it breaks: a notice that tells its reader the sync FAILED and to resolve it, with no reason to resolve it by (T263 reconstructed its failing notice by forcing, because the notice itself said nothing). No map changes.
-
-**Found and left?** none.
-
-**Performance work?** no.
-
-
+<!-- plan-archive: T268 to T263 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+<!-- plan-archive: T268 to T268 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 ### T269 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
