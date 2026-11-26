@@ -30,7 +30,7 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
   along, a measuring agent first: its report (the figures, the paths, the commands) is the next builder's brief.
 - A one-turn edit is yours, the coordinating session's, not a builder's.
 - Tell a builder: an assertion's failure MESSAGE stays on the assertion's own line or is left out - on a line of its own it is
-  never reached while the assertion holds, and the batch gate's coverage refuses it (three gates in a row, 2026-11-26; 451 T339).
+  never reached while the assertion holds, and the batch gate's coverage refuses it (three gates in a row, 2026-11-26; 451 T343).
 - TWO TIERS (a trial from 2026-11-26; `docs/process-decisions.md`, "Two tiers of checking"): a builder's tree runs the FIRST
   tier only - `make builder-checks CRATE="<the crates it changed>"` (tests, lint, format) and a changed guard's own hook suite
   - and NOT `make closing-checks`, `make static`, `make hooks-test` or a coverage run; the full gate runs once in the clone
