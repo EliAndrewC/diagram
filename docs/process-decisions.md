@@ -188,7 +188,20 @@ not interact, and the one real cost, work standing only on this machine, is met 
 gain by waiting past a moment when the gate is free. With several sessions main moves under the staged work, and a gate that
 runs continuously on a snapshot may be the better form (trial 458 weighs it; feature 459 is the several-sessions arrangement).
 
-**Amended the same evening: the builder's closing step also runs coverage on the crates it changed** (decided 2026-11-26 by the
+**REVERSED the same night - coverage stays in the second tier only.** The paragraph below records an amendment the session
+made on its own reading and the GM then questioned: *"Why is a builder's closing step also running coverage? Like, isn't the
+whole point of running coverage later that it's not really that much of a problem if we have a few coverage failures that we
+have to fix later? I mean, our goal is not to minimize that happening. Our goal is to maximize task throughput."* The session
+had decided on the wrong number: it counted batch gates that failed, where the goal is tasks through. By that goal the
+amendment costs each builder 7 to 111 s on its own critical path (about a minute of a 17 to 35 minute run, on every builder),
+to save repairs that block no builder: a failed batch gate delays the landing on main, while the builders go on from the
+clone's HEAD, which already holds the carried work. What a gate failure does cost - a fixer's tokens and the session's turns -
+was not measured against that minute, and is not throughput unless the session is the bottleneck, which was not shown. So:
+the first tier is tests, lint and format, as adopted; a builder runs no coverage; 451 T381 is withdrawn. Reopens only on a
+measurement that the repairs after a gate hold builders back (trees idle waiting on the session) by more than the coverage
+step would cost them.
+
+**The amendment as the session recorded it (reversed, kept for its figures): the builder's closing step also runs coverage on the crates it changed** (recorded 2026-11-26 by the
 session, under the GM's standing pre-approval of what the measurements support - *"I thought I already pre-approved whatever
 number and arrangement of parallel builders our measurements support"* covers the arrangement; this is the session's reading,
 his to overturn). Under the first tier as first built, 4 of the first 9 batch gates failed on lines no test reached (an
