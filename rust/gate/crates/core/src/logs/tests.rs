@@ -228,6 +228,30 @@ fn a_landing_names_the_task_last_started() {
 }
 
 #[test]
+fn a_landing_names_its_own_trees_last_start_not_another_worktrees() {
+    let root = repo("logs-land-tree");
+    let top = l7r_shared::speckit::marks::places(&root).unwrap().1;
+    let other = root.join("elsewhere");
+    std::fs::write(
+        root.join("task-starts.jsonl"),
+        format!(
+            "{}\n{}\n",
+            json!({"feature": "451", "task": "T1", "tree": top.display().to_string()}),
+            json!({"feature": "451", "task": "T2", "tree": other.display().to_string()})
+        ),
+    )
+    .unwrap();
+    let there = root.display().to_string();
+    assert_eq!(
+        log_cli(&words(&["land-tooling", &there, "a", "died"]), &root).code,
+        0
+    );
+    let text = std::fs::read_to_string(root.join("land-tooling.jsonl")).unwrap();
+    let last: Value = serde_json::from_str(text.lines().last().unwrap()).unwrap();
+    assert_eq!(last["task"], "T1");
+}
+
+#[test]
 fn a_field_is_its_text_or_a_dash() {
     let d = crate::checks::scratch("logs-field");
     let f = d.join("r.json");

@@ -80,8 +80,19 @@ pub fn delta_of(d: &Path, rel: &str) -> Option<Delta> {
     }
     let base = git(d, &["merge-base", "origin/main", "HEAD"])?;
     let base = base.trim();
-    let landed = last_changes(&git(d, &["log", "--format=@%ct", "--name-only", LANDED_SINCE, base])?);
-    let committed = last_changes(&git(d, &["log", "--format=@%ct", "--name-only", &format!("{base}..HEAD")])?);
+    let landed = last_changes(&git(
+        d,
+        &["log", "--format=@%ct", "--name-only", LANDED_SINCE, base],
+    )?);
+    let committed = last_changes(&git(
+        d,
+        &[
+            "log",
+            "--format=@%ct",
+            "--name-only",
+            &format!("{base}..HEAD"),
+        ],
+    )?);
     Some(Delta {
         judged,
         landed,
@@ -208,3 +219,6 @@ pub fn edit_lines(events: &Path, feature: &str) -> Vec<(String, (f64, String), S
     }
     out
 }
+
+#[cfg(test)]
+mod tests;

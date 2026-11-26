@@ -212,10 +212,8 @@ expect_out "the claim), allowed"
 ( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "a later docs push from the same clone: the delta no longer touches the spec dir -> the pointer decides" 0 $?
 ( cd "$D/main/.clones/c" && mkdir -p .specify && echo '{"feature_directory": "specs/140-x"}' > .specify/feature.json && echo more > note.md && git add -A && git commit -qm docs2 )
-# feature 451 T254: the started task's files decide - none of T01's edits in this push, it lands; its edit of note.md in it, refused
-OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: the pointer names a feature whose started task's edits this push does not carry -> lands" 0 $?
-( cd "$D/main/.clones/c" && echo more2 > note.md && git add -A && git commit -qm docs3 ); start "$D"
-OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the pointer names a feature whose started task's edit this push carries -> refused even for docs" 1 $?
+# feature 451 T254's plan review, round 2: this clone's own started task holds its push whatever the push carries (405 T32 D4 kept)
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the pointer names a feature with open tasks -> refused even for docs" 1 $?
 ( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md && git add -A && git commit -qm done )
 # GUARD_EDIT_OK: feature 243 - a ticked feature now also owes its plan review at the push, so this finished
 # feature proves the plan gate is WIRED into the push (refused without the record) before it lands with one.

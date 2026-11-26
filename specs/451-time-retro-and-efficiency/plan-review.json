@@ -1752,6 +1752,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T254 (the parallel trials of 2026-11-25, `specs/449-rust-codebase/port-talk-agenda.md` item 1: one `active-task` mark in the shared .git, a second worktree's start overwrote the first's, and a push of one task was refused while the other was started)": {
+   "sha256": "626d289235717bf13a52ff6763b707c694b2f95b137d2f7b8de55369a91bf477",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "round-arbiter"
+  },
+  "### T254 Approach (checklist part A)": {
+   "sha256": "4cd9c639d69f02248aec9c11be9b9569948de0bfa2c39047dc2fa02a2c76c7e9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -22536,6 +22548,131 @@
      "why": "Ordering only; nothing is deferred or left (Found and left: none)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T254 (the parallel trials of 2026-11-25, `specs/449-rust-codebase/port-talk-agenda.md` item 1: one `active-task` mark in the shared .git, a second worktree's start overwrote the first's, and a push of one task was refused while the other was started)",
+    "### T254 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "marks-per-task",
+     "summary": "make task-start writes <common git dir>/task-marks/<feature>/<task>.json (feature, task, bundle tasks, tree, time); no start overwrites another task's mark",
+     "class": "within",
+     "why": "This is the fix the GM approved by name: 'a started-task mark per task' (request.md, 2026-11-25, 'sounds good, please start with that'), answering trial 1's overwritten mark."
+    },
+    {
+     "id": "of-tree",
+     "summary": "a tree's own task is the newest mark that tree wrote (marks::of_tree)",
+     "class": "within",
+     "why": "The per-task mark needs a rule for which mark is a tree's own. Before, the one mark was the clone's, so reading it per tree keeps what it meant with one builder per tree."
+    },
+    {
+     "id": "legacy-mark",
+     "summary": "the main worktree reads the old active-task file as its oldest mark; that tree's next start removes it",
+     "class": "within",
+     "why": "A migration that keeps a start made before the change counting. It narrows nothing asked."
+    },
+    {
+     "id": "mark-removal",
+     "summary": "a mark goes when its task lands (the landed sweep, by task ids as given) or when its feature is set down in its own tree (marks::clear); other trees' marks stay; a ticked task's stale mark holds nothing",
+     "class": "narrowing",
+     "why": "This narrows 451 T29: a set-down used to clear its feature's mark, and now clears only the marks this tree wrote. The ground is the request's purpose. With per-task marks, a set-down that cleared other trees' marks would wipe a parallel builder's started task, and that brings back the very failure the request fixes (trial 1, one start removing another tree's mark). When there was one mark, it was always the clone's own, so T29's scope in effect is unchanged. A ticked task's leftover mark holding nothing follows from every reader asking for an open box.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "starts-name-tree",
+     "summary": "each task-starts.jsonl row names its tree",
+     "class": "within",
+     "why": "The data the per-tree readers need. It adds no behavior beyond the fix."
+    },
+    {
+     "id": "hold-other-trees",
+     "summary": "another tree's started task (its box open, not ticked by this landing) holds this push, make land or CI merge only when the push's delta carries one of its edits (T101's rule in speckit/touch.rs, read against every tree's prefix); L7R_LAND_READY still not held; a mark that is not an object fails closed",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows feature 405 D4 ('the active task holds, nothing else'). The plan turns D4 into every started task of any tree holding the push, so taken literally a push from any of the three worktrees would be refused while another builder's task was started. That is the exact refusal the trials recorded (port-talk-agenda item 1: 'a push of one task was refused while the other was started'). It would defeat the purpose of the GM's 2026-11-25 approval, which is three parallel builders, so the rule applied literally defeats the request. A push that carries another tree's edits is still refused, which is broader than D4 ever was, so the hold's purpose of keeping an unfinished task's work out of main is kept across trees."
+    },
+    {
+     "id": "hold-own-tree",
+     "summary": "the pushing tree's OWN started task (a mark this tree wrote, box open, not ticked by this landing) no longer holds a push whose delta carries none of its edits; before T254 it held the push whatever the push carried (the section's own constraints item 2; feature 405 D4)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The section justifies the narrowing as 'the fix the trials asked for - a push of one builder's task refused while another builder's was started'. That covers another tree's task only: the trials' refusal came from a different worktree's start. The GM's words in request.md ('a started-task mark per task' ... 'sounds good, please start with that') approve per-task marks so three builders can work side by side. Nothing in those words, and nothing in that purpose, needs a tree's OWN open started task to stop holding its own push. Keeping D4's hold for the tree's own task is possible, the GM's words do not contradict it, and it does not defeat three parallel builders: each builder's tree lands its own task(s), and that landing ticks them, so they do not hold it. The rest of the plan's case comes from text outside the request. One is consistency with 451 T101's landing rule, which is cited by paraphrase only and is not in spec-cited.md. The other is that a push without the task's edits carries none of its work. Neither is a ground under this review: they show the exception does no harm, not that the request needs it. One justification is stretched over two unlike cases, and only one of them is needed. Cure: keep D4's hold for the started tasks this tree wrote, so one of them holds this tree's push while its box is open and the landing does not tick it, whatever the delta carries. Apply the carried-edits rule only to other trees' marks. Restate goal item 1 and constraints item 2 to match, and add a test that a tree's own open started task still refuses a push that does not carry its edits. Or bring the GM's words approving the own-tree case."
+    },
+    {
+     "id": "prefix-fault",
+     "summary": "edit lines read against every tree (git's worktrees, the trees marks and starts name, the clone), longest first, a nested worktree read as its own",
+     "class": "within",
+     "why": "Fixes a known defect: T101's rule skipped every edit a worktree builder made. Fixing it in this task is what the GM's fix-as-we-go rule asks for."
+    },
+    {
+     "id": "readers-own-mark",
+     "summary": "speckit::active_task, the plan crate's task::active_task and their callers (declared placement, decide's refusal, approach tripwire, plan door active-task) read this tree's mark",
+     "class": "within",
+     "why": "What a one-mark reader meant (this builder's task), carried over to per-task marks."
+    },
+    {
+     "id": "readers-own-starts",
+     "summary": "event-log booking (filed.rs::starts), context cap fallback, and land-tooling's log line read their own tree's starts; a row with no tree read as before",
+     "class": "within",
+     "why": "The same per-tree reading. land_tooling was round 1's note and is now per tree, fixed with a red-first test."
+    },
+    {
+     "id": "readers-every-mark",
+     "summary": "stall check and the hold read every mark",
+     "class": "within",
+     "why": "The stall check serves the coordinator over all trees. The hold is ruled above."
+    },
+    {
+     "id": "readers-clone-wide",
+     "summary": "Stop hook started/idle, events-refile, measure reports (task_time, where_time, feature_report) stay clone-wide on purpose",
+     "class": "within",
+     "why": "These serve the coordinating session and the GM's task time breakdown across every task. Leaving them clone-wide is no defect and narrows nothing asked."
+    },
+    {
+     "id": "readers-unchanged",
+     "summary": "readers that already take the task from an argument or per-task row (ready.rs started_tasks, builder_stop, static_runs, closing-checks, wording, the Makefile sweep, check_bundle own, approach in_flight, whose.rs) unchanged",
+     "class": "within",
+     "why": "They were never tied to the one mark. Unchanged is within the request."
+    },
+    {
+     "id": "lettered-sweep",
+     "summary": "the landed sweep removes marks by task ids as given, so lettered ids (T07b) are removed",
+     "class": "within",
+     "why": "Fixes a known defect found while building. Fixed here, not deferred."
+    },
+    {
+     "id": "order-and-exits",
+     "summary": "lands with T255 before the first three-builder batch; green by closing-checks, red set down and ruled through arbiter-ask",
+     "class": "within",
+     "why": "This is the order the GM approved: the fixes before three builders."
+    }
+   ],
+   "tasks": [
+    "T254"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T254 (the parallel trials of 2026-11-25, `specs/449-rust-codebase/port-talk-agenda.md` item 1: one `active-task` mark in the shared .git, a second worktree's start overwrote the first's, and a push of one task was refused while the other was started)",
+    "### T254 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T254@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T254's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T254"
+   ]
   }
  ],
  "tasks": {
@@ -35973,6 +36110,120 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T254": {
+   "section_sha256": "f65baee55550e0aa9c734346b53c7116c91781e54ea868d60175823272dbe4a4",
+   "reviewed": "2026-11-26",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T254@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T254's section as it stands"
+    }
+   ],
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "9e3d3f8b3bb8fa35f4a83dd9ba65e65064b549a5cca390c3537fe8bc9311ebae",
+    "reviewed": "2026-11-26",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "marks-per-task",
+      "summary": "make task-start writes <common git dir>/task-marks/<feature>/<task>.json (feature, task, bundle tasks, tree, time); no start overwrites another task's mark",
+      "class": "within",
+      "why": "This is the fix the GM approved by name: 'a started-task mark per task' (request.md, 2026-11-25, 'sounds good, please start with that'), answering trial 1's overwritten mark."
+     },
+     {
+      "id": "of-tree",
+      "summary": "a tree's own task is the newest mark that tree wrote (marks::of_tree)",
+      "class": "within",
+      "why": "The per-task mark needs a rule for which mark is a tree's own. Before, the one mark was the clone's, so reading it per tree keeps what it meant with one builder per tree."
+     },
+     {
+      "id": "legacy-mark",
+      "summary": "the main worktree reads the old active-task file as its oldest mark; that tree's next start removes it",
+      "class": "within",
+      "why": "A migration that keeps a start made before the change counting. It narrows nothing asked."
+     },
+     {
+      "id": "mark-removal",
+      "summary": "a mark goes when its task lands (the landed sweep, by task ids as given) or when its feature is set down in its own tree (marks::clear); other trees' marks stay; a ticked task's stale mark holds nothing",
+      "class": "narrowing",
+      "why": "This narrows 451 T29: a set-down used to clear its feature's mark, and now clears only the marks this tree wrote. The ground is the request's purpose. With per-task marks, a set-down that cleared other trees' marks would wipe a parallel builder's started task, and that brings back the very failure the request fixes (trial 1, one start removing another tree's mark). When there was one mark, it was always the clone's own, so T29's scope in effect is unchanged. A ticked task's leftover mark holding nothing follows from every reader asking for an open box.",
+      "ruling": "LEGITIMATE"
+     },
+     {
+      "id": "starts-name-tree",
+      "summary": "each task-starts.jsonl row names its tree",
+      "class": "within",
+      "why": "The data the per-tree readers need. It adds no behavior beyond the fix."
+     },
+     {
+      "id": "hold-other-trees",
+      "summary": "another tree's started task (its box open, not ticked by this landing) holds this push, make land or CI merge only when the push's delta carries one of its edits (T101's rule in speckit/touch.rs, read against every tree's prefix); L7R_LAND_READY still not held; a mark that is not an object fails closed",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "This narrows feature 405 D4 ('the active task holds, nothing else'). The plan turns D4 into every started task of any tree holding the push, so taken literally a push from any of the three worktrees would be refused while another builder's task was started. That is the exact refusal the trials recorded (port-talk-agenda item 1: 'a push of one task was refused while the other was started'). It would defeat the purpose of the GM's 2026-11-25 approval, which is three parallel builders, so the rule applied literally defeats the request. A push that carries another tree's edits is still refused, which is broader than D4 ever was, so the hold's purpose of keeping an unfinished task's work out of main is kept across trees."
+     },
+     {
+      "id": "hold-own-tree",
+      "summary": "the pushing tree's OWN started task (a mark this tree wrote, box open, not ticked by this landing) no longer holds a push whose delta carries none of its edits; before T254 it held the push whatever the push carried (the section's own constraints item 2; feature 405 D4)",
+      "class": "narrowing",
+      "ruling": "NOT LEGITIMATE",
+      "why": "The section justifies the narrowing as 'the fix the trials asked for - a push of one builder's task refused while another builder's was started'. That covers another tree's task only: the trials' refusal came from a different worktree's start. The GM's words in request.md ('a started-task mark per task' ... 'sounds good, please start with that') approve per-task marks so three builders can work side by side. Nothing in those words, and nothing in that purpose, needs a tree's OWN open started task to stop holding its own push. Keeping D4's hold for the tree's own task is possible, the GM's words do not contradict it, and it does not defeat three parallel builders: each builder's tree lands its own task(s), and that landing ticks them, so they do not hold it. The rest of the plan's case comes from text outside the request. One is consistency with 451 T101's landing rule, which is cited by paraphrase only and is not in spec-cited.md. The other is that a push without the task's edits carries none of its work. Neither is a ground under this review: they show the exception does no harm, not that the request needs it. One justification is stretched over two unlike cases, and only one of them is needed. Cure: keep D4's hold for the started tasks this tree wrote, so one of them holds this tree's push while its box is open and the landing does not tick it, whatever the delta carries. Apply the carried-edits rule only to other trees' marks. Restate goal item 1 and constraints item 2 to match, and add a test that a tree's own open started task still refuses a push that does not carry its edits. Or bring the GM's words approving the own-tree case."
+     },
+     {
+      "id": "prefix-fault",
+      "summary": "edit lines read against every tree (git's worktrees, the trees marks and starts name, the clone), longest first, a nested worktree read as its own",
+      "class": "within",
+      "why": "Fixes a known defect: T101's rule skipped every edit a worktree builder made. Fixing it in this task is what the GM's fix-as-we-go rule asks for."
+     },
+     {
+      "id": "readers-own-mark",
+      "summary": "speckit::active_task, the plan crate's task::active_task and their callers (declared placement, decide's refusal, approach tripwire, plan door active-task) read this tree's mark",
+      "class": "within",
+      "why": "What a one-mark reader meant (this builder's task), carried over to per-task marks."
+     },
+     {
+      "id": "readers-own-starts",
+      "summary": "event-log booking (filed.rs::starts), context cap fallback, and land-tooling's log line read their own tree's starts; a row with no tree read as before",
+      "class": "within",
+      "why": "The same per-tree reading. land_tooling was round 1's note and is now per tree, fixed with a red-first test."
+     },
+     {
+      "id": "readers-every-mark",
+      "summary": "stall check and the hold read every mark",
+      "class": "within",
+      "why": "The stall check serves the coordinator over all trees. The hold is ruled above."
+     },
+     {
+      "id": "readers-clone-wide",
+      "summary": "Stop hook started/idle, events-refile, measure reports (task_time, where_time, feature_report) stay clone-wide on purpose",
+      "class": "within",
+      "why": "These serve the coordinating session and the GM's task time breakdown across every task. Leaving them clone-wide is no defect and narrows nothing asked."
+     },
+     {
+      "id": "readers-unchanged",
+      "summary": "readers that already take the task from an argument or per-task row (ready.rs started_tasks, builder_stop, static_runs, closing-checks, wording, the Makefile sweep, check_bundle own, approach in_flight, whose.rs) unchanged",
+      "class": "within",
+      "why": "They were never tied to the one mark. Unchanged is within the request."
+     },
+     {
+      "id": "lettered-sweep",
+      "summary": "the landed sweep removes marks by task ids as given, so lettered ids (T07b) are removed",
+      "class": "within",
+      "why": "Fixes a known defect found while building. Fixed here, not deferred."
+     },
+     {
+      "id": "order-and-exits",
+      "summary": "lands with T255 before the first three-builder batch; green by closing-checks, red set down and ruled through arbiter-ask",
+      "class": "within",
+      "why": "This is the order the GM approved: the fixes before three builders."
+     }
+    ],
+    "verdict": "BLOCKED"
+   }
   }
  }
 }

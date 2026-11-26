@@ -150,7 +150,7 @@ fn release(d: &Path, tid: &str) {
     let kept: String = text
         .lines()
         .filter(|l| *l != line)
-        .map(|l| format!("{l}\n"))
+        .flat_map(|l| [l, "\n"])
         .collect();
     let _ = std::fs::write(&path, kept);
 }

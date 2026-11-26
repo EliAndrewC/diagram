@@ -56,7 +56,8 @@ fn a_three_task_bundle_starts_closes_decides_and_lands_as_one() {
     // START: the bundle marked under its first task
     let start = l7r_gate_task::task_start::cli(&tasks(&["449", "T1,T2,T3"]), &root);
     assert_eq!(start.code, 0, "{}", start.stderr);
-    let mark = std::fs::read_to_string(root.join(".git/task-marks/449-x/T1.json")).unwrap_or_default();
+    let mark =
+        std::fs::read_to_string(root.join(".git/task-marks/449-x/T1.json")).unwrap_or_default();
     assert!(
         mark.contains("\"task\": \"T1\", \"tasks\": [\"T1\", \"T2\", \"T3\"]"),
         "{mark}"

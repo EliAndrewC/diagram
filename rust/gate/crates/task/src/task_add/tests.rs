@@ -629,7 +629,13 @@ fn two_worktrees_never_take_one_id() {
     let other = dir.join("other");
     let (code, _) = crate::git(
         &root,
-        &["worktree", "add", "-q", "--detach", &other.to_string_lossy()],
+        &[
+            "worktree",
+            "add",
+            "-q",
+            "--detach",
+            &other.to_string_lossy(),
+        ],
     );
     assert_eq!(code, Some(0));
     let first = cli(&words(&["9001"]), &root, "the first tree's");
@@ -643,4 +649,17 @@ fn two_worktrees_never_take_one_id() {
     crate::git(&root, &["commit", "-qam", "the first tree's filing"]);
     crate::git(&other, &["checkout", "-q", "--", "specs"]);
     assert_eq!(next_id(&other.join("specs/9001-x")).unwrap(), "T11");
+}
+
+/// The reservation's two edges (451 T255): a tree git does not know keeps none and gives none back, and a reservation file that
+/// cannot be written refuses the filing by its path.
+#[test]
+fn a_tree_outside_git_reserves_nothing_and_an_unwritable_reservation_is_named() {
+    let outside = l7r_gate_core::ci::fixtures::scratch("task-add-no-git");
+    assert_eq!(super::reserve(&outside, "T1"), Ok(()));
+    super::release(&outside, "T1");
+    let (_dir, root) = quick_repo("task-add-unwritable");
+    std::fs::create_dir_all(root.join(".git").join(super::RESERVED)).unwrap();
+    let refused = super::reserve(&root.join("specs/9001-x"), "T1").unwrap_err();
+    assert!(refused.contains(super::RESERVED), "{refused}");
 }

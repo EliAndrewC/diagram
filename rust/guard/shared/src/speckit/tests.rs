@@ -253,14 +253,18 @@ fn git(at: &Path, args: &[&str]) -> String {
 
 /// A task's edit of `tree`/`rel`, half a second after `at`'s HEAD was committed: what the event log writer files for an Edit.
 fn edited(at: &Path, tree: &Path, feature: &str, task: &str, rel: &str) {
-    let secs: u64 = git(at, &["log", "-1", "--format=%ct"]).trim().parse().unwrap();
+    let secs: u64 = git(at, &["log", "-1", "--format=%ct"])
+        .trim()
+        .parse()
+        .unwrap();
     let (y, m, d, h, mi, sec) = crate::log::civil(secs);
     let line = json!({"ev": "PostToolUse", "cat": "edit", "task": task,
         "t": format!("{y:04}-{m:02}-{d:02}T{h:02}:{mi:02}:{sec:02}.500Z"), "path": tree.join(rel).to_string_lossy()});
     let log = at.join(format!(".git/l7r-events/{feature}.jsonl"));
     std::fs::create_dir_all(log.parent().unwrap()).unwrap();
     let mut text = std::fs::read_to_string(&log).unwrap_or_default();
-    text += &format!("{}\n", serde_json::to_string(&line).unwrap());
+    text.push_str(&serde_json::to_string(&line).unwrap());
+    text.push('\n');
     std::fs::write(log, text).unwrap();
 }
 
@@ -275,10 +279,27 @@ fn mark(at: &Path, tree: &Path, feature: &str, task: &str, utc: &str) {
     .unwrap();
 }
 
-/// RED FIRST (feature 451 T254): only the STARTED tasks whose files the push's delta touches hold it - in this tree or another
-/// worktree's - and a landing that ticks a task, or rules its tasks ready (451 T101), is not held by it.
+/// A commit of what is staged in `at`, by a fixed author.
+fn commit_all(at: &Path, message: &str) {
+    git(
+        at,
+        &[
+            "-c",
+            "user.email=t@t",
+            "-c",
+            "user.name=t",
+            "commit",
+            "-qm",
+            message,
+        ],
+    );
+}
+
+/// RED FIRST (feature 451 T254, its plan review's round 2): this tree's STARTED task holds its push whatever the delta carries, another
+/// worktree's only by the files of its the push carries, and a landing that ticks a task, or rules its tasks ready (451 T101), is not
+/// held by it.
 #[test]
-fn only_a_started_task_whose_edits_the_push_carries_holds_it() {
+fn this_trees_started_task_holds_and_another_trees_only_by_the_edits_the_push_carries() {
     let (_d, at) = repo("holding");
     let d = at.join("specs/007-x");
     std::fs::create_dir_all(&d).unwrap();
@@ -288,22 +309,22 @@ fn only_a_started_task_whose_edits_the_push_carries_holds_it() {
         "tasks.md",
         "- [ ] T7701 the open one\n- [x] T7702 ticked\n  some text\n  - [ ] a pass under it\n- [x] T7703 ticked\n\n  - [ ] after a blank\n- [x] T7704 last\n  - [x] done under it\n- [ ] T7707 the other tree's\n",
     );
-    git(&at, &["-c", "user.email=t@t", "-c", "user.name=t", "add", "-A"]);
-    git(&at, &["-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "base"]);
+    git(&at, &["add", "-A"]);
+    commit_all(&at, "base");
     git(&at, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
-    // a task started, but the delta holds none of its files: no hold (the push of before T254 was refused here)
+    // THIS TREE'S started task holds its push though the delta holds none of its files (feature 405 T32's D4, kept by 451 T254's
+    // plan review, round 2)
     mark(&at, &at, "007-x", "T7701", "2026-11-25T10:00:00Z");
     assert_eq!(active_task(&d).unwrap(), "T7701");
+    let own = ["T7701 the open one  <- the active task (make task-start), open: land it with make land F=7 T=T7701"];
+    assert_eq!(holding(&d).unwrap(), own);
     put(&at, "a.rs", "fn a() {}\n");
     git(&at, &["add", "-A"]);
-    git(&at, &["-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "its work"]);
-    assert!(holding(&d).unwrap().is_empty());
-    // its edit of a file the delta carries: held
+    commit_all(&at, "its work");
+    assert_eq!(holding(&d).unwrap(), own);
+    // ...and with its edit of a file the delta carries, held the same way
     edited(&at, &at, "007-x", "T7701", "a.rs");
-    assert_eq!(
-        holding(&d).unwrap(),
-        ["T7701 the open one  <- started (make task-start), its edit of a.rs in this push: land it with make land F=7 T=T7701"]
-    );
+    assert_eq!(holding(&d).unwrap(), own);
     crate::env::set("L7R_LAND_TICKS", "T7700 T7701");
     assert!(holding(&d).unwrap().is_empty());
     crate::env::unset("L7R_LAND_TICKS");
@@ -325,22 +346,43 @@ fn only_a_started_task_whose_edits_the_push_carries_holds_it() {
     mark(&at, &at, "007-x", "T7702", "2026-11-25T11:00:00Z");
     assert_eq!(
         holding(&d).unwrap(),
-        ["a pass under it (open under T7702)  <- started (make task-start), its edit of a.rs in this push: land it with make land F=7 T=T7702"]
+        ["a pass under it (open under T7702)  <- the active task (make task-start), open: land it with make land F=7 T=T7702"]
     );
     marks::remove(&at.join(".git"), "007", &["T7702".to_owned()]);
     // ANOTHER WORKTREE'S started task: its start moves no mark of this tree, and it holds this push only by its own files, its edit
     // lines naming its own tree's paths
     let other = at.join("other");
-    git(&at, &["worktree", "add", "-q", "--detach", &other.to_string_lossy()]);
+    git(
+        &at,
+        &[
+            "worktree",
+            "add",
+            "-q",
+            "--detach",
+            &other.to_string_lossy(),
+        ],
+    );
     mark(&at, &other, "007-x", "T7707", "2026-11-25T12:00:00Z");
     assert_eq!(active_task(&other.join("specs/007-x")).unwrap(), "T7707");
     assert_eq!(active_task(&d).unwrap(), "");
     assert!(holding(&d).unwrap().is_empty());
     put(&at, "b.rs", "fn b() {}\n");
     git(&at, &["add", "b.rs"]);
-    git(&at, &["-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "carried over"]);
+    commit_all(&at, "carried over");
     edited(&at, &other, "007-x", "T7707", "b.rs");
-    assert!(holding(&d).unwrap()[0].contains("its edit of b.rs in this push"));
+    assert_eq!(
+        holding(&d).unwrap(),
+        ["T7707 the other tree's  <- started (make task-start), its edit of b.rs in this push: land it with make land F=7 T=T7707"]
+    );
+    // a mark naming no tree is read as this tree's: the hold fails closed
+    let bare = at.join(".git/task-marks/007-x/T7701.json");
+    std::fs::write(
+        &bare,
+        r#"{"feature": "007-x", "task": "T7701", "utc": "2026-11-25T12:30:00Z"}"#,
+    )
+    .unwrap();
+    assert_eq!(holding(&d).unwrap().len(), 2);
+    std::fs::remove_file(bare).unwrap();
     let e = at.join("specs/000-y");
     put(&e, "tasks.md", "- [ ] T7705 x\n");
     mark(&at, &at, "000-y", "T7705", "2026-11-25T13:00:00Z");
@@ -351,7 +393,6 @@ fn only_a_started_task_whose_edits_the_push_carries_holds_it() {
     mark(&at, &at, "draft-y", "T7706", "2026-11-25T13:00:00Z");
     edited(&at, &at, "draft-y", "T7706", "b.rs");
     assert!(holding(&n).unwrap()[0].ends_with("F=draft-y T=T7706"));
-
 }
 
 #[test]
@@ -382,4 +423,40 @@ fn a_broken_vocabulary_above_the_directory_fails_its_state() {
     put(&at, AFFECTS, "not json");
     assert!(state(&d).unwrap_err().contains("JSONDecodeError"));
     assert_eq!(state_given_vocabulary(&d).unwrap(), "closed");
+}
+
+/// 451 T254's edges of the hold: a feature outside any repository holds nothing, another tree's started task holds nothing where git
+/// cannot say what the push carries (no `origin/main`), and the starts file's rows name trees the edit lines are read against.
+#[test]
+fn the_hold_outside_a_repository_and_without_a_delta_is_none() {
+    let outside = TempDir::new("guard-speckit-no-repo");
+    put(&outside, "specs/7-x/tasks.md", "- [ ] T1 x\n");
+    assert!(holding(&outside.join("specs/7-x")).unwrap().is_empty());
+    let (_d, at) = repo("hold-no-delta");
+    let d = at.join("specs/7-x");
+    put(&at, "specs/7-x/tasks.md", "- [ ] T1 x\n");
+    let other = at.join("other");
+    mark(&at, &other, "7-x", "T1", "2026-11-25T10:00:00Z");
+    put(
+        &at,
+        ".git/task-starts.jsonl",
+        "{\"feature\": \"7-x\", \"task\": \"T1\", \"tree\": \"/gone\"}\nnot json\n",
+    );
+    assert!(holding(&d).unwrap().is_empty());
+    git(
+        &at,
+        &[
+            "-c",
+            "user.email=t@t",
+            "-c",
+            "user.name=t",
+            "commit",
+            "-q",
+            "--allow-empty",
+            "-m",
+            "a",
+        ],
+    );
+    git(&at, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    assert!(holding(&d).unwrap().is_empty());
 }

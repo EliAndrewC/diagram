@@ -392,7 +392,12 @@ fn cli_with(args: &[String], cwd: &Path, env: Env) -> Reply {
     if let Err(e) = written {
         return raised("set-down", String::new(), "", &e.to_string());
     }
-    let cleared = clear_mark(Path::new(&common_text(cwd)), &crate::toplevel_or_dot(cwd), hit).map_or_else(String::new, |t| {
+    let cleared = clear_mark(
+        Path::new(&common_text(cwd)),
+        &crate::toplevel_or_dot(cwd),
+        hit,
+    )
+    .map_or_else(String::new, |t| {
         format!("; its started-task mark ({t}) cleared")
     });
     let stop = if parked {

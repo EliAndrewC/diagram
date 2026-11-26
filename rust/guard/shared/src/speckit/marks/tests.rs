@@ -29,38 +29,47 @@ fn each_tree_keeps_its_own_mark() {
     let other = at.join("other");
     git(
         &at,
-        &["worktree", "add", "-q", "--detach", &other.to_string_lossy()],
+        &[
+            "worktree",
+            "add",
+            "-q",
+            "--detach",
+            &other.to_string_lossy(),
+        ],
     );
     let common = at.join(".git");
     assert!(of_tree(&at).unwrap().is_null());
     assert!(of_tree(Path::new("/no/such/dir")).unwrap().is_null());
     std::fs::write(common.join(LEGACY), r#"{"feature": "9-x", "task": "T01"}"#).unwrap();
     assert_eq!(of_tree(&at).unwrap()["task"], "T01");
-    assert!(
-        of_tree(&other).unwrap().is_null(),
-        "the legacy mark is the main worktree's"
-    );
+    // the legacy mark is the main worktree's
+    assert!(of_tree(&other).unwrap().is_null());
     let theirs = json!({"feature": "9-x", "task": "T02"});
     write(&common, &other, theirs, "2026-11-25T10:00:00Z").unwrap();
     assert_eq!(of_tree(&at).unwrap()["task"], "T01");
     assert_eq!(of_tree(&other).unwrap()["task"], "T02");
     let bundle = json!({"feature": "9-x", "task": "T03", "tasks": ["T03", "T04"]});
     write(&common, &at, bundle, "2026-11-25T10:00:01Z").unwrap();
-    assert!(
-        !common.join(LEGACY).exists(),
-        "the main worktree's start replaces the legacy mark"
-    );
+    // the main worktree's start replaces the legacy mark
+    assert!(!common.join(LEGACY).exists());
     assert_eq!(of_tree(&at).unwrap()["task"], "T03");
     assert_eq!(of_tree(&other).unwrap()["task"], "T02");
     let tasks: Vec<Vec<String>> = all(&common).iter().map(tasks_of).collect();
     assert_eq!(
         tasks,
-        [vec!["T02".to_owned()], vec!["T03".to_owned(), "T04".to_owned()]]
+        [
+            vec!["T02".to_owned()],
+            vec!["T03".to_owned(), "T04".to_owned()]
+        ]
     );
     // a set-down clears its own tree's marks of the feature, not another worktree's
     assert_eq!(clear(&common, &at, "8-y"), None);
     assert_eq!(clear(&common, &at, "9-x").as_deref(), Some("T03"));
     assert_eq!(of_tree(&other).unwrap()["task"], "T02");
+    // ...and another worktree's set-down leaves the legacy mark, the main worktree's, where it is
+    std::fs::write(common.join(LEGACY), r#"{"feature": "9-x", "task": "T09"}"#).unwrap();
+    assert_eq!(clear(&common, &other, "8-y"), None);
+    assert!(common.join(LEGACY).exists());
     std::fs::write(common.join(LEGACY), r#"{"feature": "9-x"}"#).unwrap();
     assert_eq!(clear(&common, &at, "9-x").as_deref(), Some("None"));
     // a landing removes its tasks' marks, its feature named by number

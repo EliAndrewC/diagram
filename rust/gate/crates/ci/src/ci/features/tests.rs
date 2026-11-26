@@ -41,8 +41,6 @@ fn only_the_held_box_counts_and_a_missing_verdict_is_named_beside_it() {
         ".git/active-task",
         r#"{"feature": "9-x", "task": "T01"}"#,
     );
-    // started, and its edit in the push (451 T254): held
-    super::super::fixtures::edited(&dir, "9-x", "T01", "a.rs");
     let st = feature_status(&dir, Some("9-x"));
     assert!(st.exists && !st.faithful && !st.complete());
     assert_eq!(st.open_tasks, ["T01 open and held"]);

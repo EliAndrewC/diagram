@@ -589,6 +589,14 @@ fn a_resumed_builders_task_is_its_first_line_or_the_start_at_its_dispatch() {
     row["timestamp"] = json!("2026-11-20T10:31:00.000Z");
     f.transcript(AID, &[row]);
     assert_eq!(sent(&f.send(AID, "go on")), None);
+    // a later start another worktree's builder made is passed over, this tree's own read (451 T254)
+    let rows = [
+        json!({"feature": "451-x", "task": "T06", "utc": "2026-11-20T10:30:00Z", "tree": f.clone()}),
+        json!({"feature": "451-x", "task": "T05", "utc": "2026-11-20T10:30:30Z", "tree": "/another/tree"}),
+    ];
+    let text = rows.map(|r| r.to_string()).join("\n");
+    std::fs::write(f.clone().join(".git/task-starts.jsonl"), text).unwrap();
+    assert_eq!(sent(&f.send(AID, "go on")), None);
     // the brief's own `T<n>` is read first
     f.meta(AID, "general-purpose", "451 T05: x");
     assert_eq!(sent(&f.send(AID, "go on")), Some(landed("T05")));

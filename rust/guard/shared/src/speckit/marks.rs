@@ -8,7 +8,7 @@
 //!   reviews' declared placement): the newest mark the tree itself wrote. The main worktree also reads the one-mark file of before
 //!   (`active-task`, [`LEGACY`]) as its oldest mark, so a start made before this change still counts; its next start removes it.
 //! - EVERY STARTED TASK ([`all`]): each mark, the legacy one as the main worktree's - what the push's hold asks
-//!   (`speckit::holding_with`, the started tasks whose files the delta touches) and the stall check reads.
+//!   (`speckit::holding_with`: this tree's started tasks, and another tree's whose files the delta touches) and the stall check reads.
 //! - A mark goes when its task lands ([`remove`], `make land`'s sweep) or its feature is set down in its tree ([`clear`]). A mark
 //!   of a ticked task left behind holds nothing: every reader asks for an open box.
 
@@ -125,7 +125,8 @@ pub fn all(common: &Path) -> Vec<Value> {
 #[must_use]
 pub fn tasks_of(mark: &Value) -> Vec<String> {
     let mut out: Vec<String> = Vec::new();
-    let named = std::iter::once(&mark["task"]).chain(mark["tasks"].as_array().into_iter().flatten());
+    let named =
+        std::iter::once(&mark["task"]).chain(mark["tasks"].as_array().into_iter().flatten());
     for t in named.filter_map(Value::as_str).filter(|t| !t.is_empty()) {
         if !out.iter().any(|o| o == t) {
             out.push(t.to_owned());
@@ -191,9 +192,16 @@ pub fn clear(common: &Path, top: &Path, feature: &str) -> Option<String> {
 /// The marks of `tasks` of `feature` - its directory name, or its number as `make land`'s `F=` gives it - removed once they land
 /// (`make land`'s sweep); a mark that is not there is no error.
 pub fn remove(common: &Path, feature: &str, tasks: &[String]) {
-    let dirs = std::fs::read_dir(common.join(DIR)).into_iter().flatten().flatten();
+    let dirs = std::fs::read_dir(common.join(DIR))
+        .into_iter()
+        .flatten()
+        .flatten();
     for dir in dirs.map(|e| e.path()) {
-        let name = dir.file_name().unwrap_or_default().to_string_lossy().into_owned();
+        let name = dir
+            .file_name()
+            .unwrap_or_default()
+            .to_string_lossy()
+            .into_owned();
         if name != feature && !name.starts_with(&format!("{feature}-")) {
             continue;
         }

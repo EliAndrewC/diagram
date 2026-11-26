@@ -13,8 +13,8 @@
 //! required for both towns and cities, then it is owed at the towns stage"*). An `**Owed at**:` line naming a stage overrides it.
 //!
 //! WHAT HOLDS A LANDING (feature 405 T32, D4; the GM, 2026-10-20: "I do not want each landing to owe a lands open line"). A feature in
-//! progress holds a landing only through the tasks being worked - each started task (`make task-start`, its own mark, [`marks`], 451
-//! T254) whose files the push's delta touches ([`touch`]) - while that task is open and the landing does not tick it (`L7R_LAND_TICKS`, the ids `make land` sets). A task nobody has started holds
+//! progress holds a landing only through the tasks being worked - the started task of the pushing tree (`make task-start`, its own
+//! mark, [`marks`], 451 T254), and another tree's started task only where the push's delta carries its edits ([`touch`]) - while that task is open and the landing does not tick it (`L7R_LAND_TICKS`, the ids `make land` sets). A task nobody has started holds
 //! nothing, nor does the GM-review box. NOR DOES IT HOLD A LANDING THAT RULED ITS OWN TASKS READY (feature 451 T101): with builders
 //! rolling (T88) the mark names whichever task started last, so a finished task was refused "held by" a task started after it - T81,
 //! T88 and T93, each CLEAR, at 18:32:27Z on 2026-11-21, the mark moved by hand to land them and back after. `make land` rules each of
@@ -482,8 +482,9 @@ pub fn gm_rows(d: &Path) -> Result<usize, String> {
 }
 
 /// The open boxes that hold the landing: each started task of this feature (a mark of any tree, [`marks::all`]), open, not ticked by
-/// the landing (`L7R_LAND_TICKS`) nor ruled ready beside them (`L7R_LAND_READY`, 451 T101), whose files the push's delta touches
-/// ([`touch`], 451 T254); every other open box holds nothing (feature 405 D4).
+/// the landing (`L7R_LAND_TICKS`) nor ruled ready beside them (`L7R_LAND_READY`, 451 T101) - this tree's own whatever the delta
+/// carries (feature 405 D4), another tree's only where the push's delta carries its edits ([`touch`], 451 T254); every other open
+/// box holds nothing.
 ///
 /// # Errors
 /// A file that cannot be read, or an active-task mark that is not an object.
@@ -504,7 +505,7 @@ pub fn holding_with(d: &Path, ticks: &str) -> Result<Vec<String>, String> {
     }
     // a mark this tree reads that is not an object fails the hold closed, as the one mark of before did
     active_task(d)?;
-    let Some((common, _)) = marks::places(d) else {
+    let Some((common, here)) = marks::places(d) else {
         return Ok(Vec::new());
     };
     let name = py_name(d);
@@ -516,10 +517,24 @@ pub fn holding_with(d: &Path, ticks: &str) -> Result<Vec<String>, String> {
         return Ok(Vec::new());
     }
     let all = marks::all(&common);
+    // each started task, and whether THIS tree started it: a mark naming no tree is read as this tree's, so the hold fails closed
     let mut started: Vec<String> = Vec::new();
-    for m in all.iter().filter(|m| m["feature"].as_str() == Some(name.as_str())) {
+    let mut own: Vec<String> = Vec::new();
+    for m in all
+        .iter()
+        .filter(|m| m["feature"].as_str() == Some(name.as_str()))
+    {
+        let ours = m["tree"]
+            .as_str()
+            .is_none_or(|t| t.is_empty() || marks::same_tree(Path::new(t), &here));
         for t in marks::tasks_of(m) {
-            if !ticked.contains(&t.as_str()) && !started.contains(&t) {
+            if ticked.contains(&t.as_str()) {
+                continue;
+            }
+            if ours && !own.contains(&t) {
+                own.push(t.clone());
+            }
+            if !started.contains(&t) {
                 started.push(t);
             }
         }
@@ -535,25 +550,6 @@ pub fn holding_with(d: &Path, ticks: &str) -> Result<Vec<String>, String> {
     if open.is_empty() {
         return Ok(Vec::new());
     }
-    // ONLY THE STARTED TASKS WHOSE FILES THE DELTA TOUCHES HOLD IT (451 T254): a task started in another worktree, or in this one, holds
-    // a push only where the push would carry its edits (`touch`, T101's rule)
-    let top = py_parent(&py_parent(d));
-    let rel = py_name(&py_parent(d)) + "/" + &name;
-    let Some(delta) = touch::delta_of(d, &rel) else {
-        return Ok(Vec::new());
-    };
-    let events = Some(crate::env::var("L7R_EVENTS_DIR"))
-        .filter(|e| !e.is_empty())
-        .map_or_else(|| common.join("l7r-events"), PathBuf::from);
-    let starts: Vec<Value> = std::fs::read_to_string(common.join("task-starts.jsonl"))
-        .unwrap_or_default()
-        .lines()
-        .filter_map(|l| serde_json::from_str(l).ok())
-        .chain(all)
-        .collect();
-    let prefixes = touch::prefixes(&top, &common, &starts);
-    let wanted = |t: &str| open.iter().any(|(o, _)| o == t);
-    let touched = touch::touched(&events, &name, &prefixes, &delta, &wanted);
     let number = number_of(&name);
     // `int(number) if number.isdigit()`: an ASCII run of digits, its leading zeros dropped
     let shown = if !number.is_empty() && number.chars().all(|c| c.is_ascii_digit()) {
@@ -566,9 +562,40 @@ pub fn holding_with(d: &Path, ticks: &str) -> Result<Vec<String>, String> {
     } else {
         shown
     };
-    let mut out = Vec::new();
-    for (task, line) in open {
-        let Some(file) = touched.iter().find(|(_, (t, _))| *t == task).map(|(f, _)| f) else {
+    // THIS TREE'S OWN STARTED TASK HOLDS AS BEFORE (feature 405 T32's D4, kept by the plan review of 451 T254, round 2): open and
+    // not ticked by this landing, it holds the push whatever the delta carries
+    let mut out: Vec<String> = open
+        .iter()
+        .filter(|(t, _)| own.contains(t))
+        .map(|(task, line)| {
+            format!("{line}  <- the active task (make task-start), open: land it with make land F={shown} T={task}")
+        })
+        .collect();
+    let others: Vec<&(String, String)> = open.iter().filter(|(t, _)| !own.contains(t)).collect();
+    if others.is_empty() {
+        return Ok(out);
+    }
+    // ANOTHER TREE'S started task holds it only where the push carries its edits (451 T254: a builder in its own worktree holds no
+    // other tree's push by being started; `touch`, T101's rule)
+    let top = py_parent(&py_parent(d));
+    let rel = py_name(&py_parent(d)) + "/" + &name;
+    let Some(delta) = touch::delta_of(d, &rel) else {
+        return Ok(out);
+    };
+    let events = Some(crate::env::var("L7R_EVENTS_DIR"))
+        .filter(|e| !e.is_empty())
+        .map_or_else(|| common.join("l7r-events"), PathBuf::from);
+    let starts: Vec<Value> = std::fs::read_to_string(common.join("task-starts.jsonl"))
+        .unwrap_or_default()
+        .lines()
+        .filter_map(|l| serde_json::from_str(l).ok())
+        .chain(all)
+        .collect();
+    let prefixes = touch::prefixes(&top, &common, &starts);
+    let wanted = |t: &str| others.iter().any(|(o, _)| o == t);
+    let touched = touch::touched(&events, &name, &prefixes, &delta, &wanted);
+    for (task, line) in others {
+        let Some(file) = touched.iter().find(|(_, (t, _))| t == task).map(|(f, _)| f) else {
             continue;
         };
         out.push(format!(

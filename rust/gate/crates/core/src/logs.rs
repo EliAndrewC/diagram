@@ -200,17 +200,25 @@ fn gate_bypass(args: &[String], root: &Path) -> Result<(), String> {
     std::fs::write(file, indented(&record)).map_err(crate::measure::text_err)
 }
 
-/// `log land-tooling <git-dir> <files> <outcome>`: one line for a `make land-tooling`, naming the task the session had started.
-fn land_tooling(args: &[String]) -> Result<(), String> {
+/// `log land-tooling <git-dir> <files> <outcome>`: one line for a `make land-tooling`, naming the task the session had started - the
+/// last start of the tree at `root` (451 T254: a start row naming another worktree is that tree's builder's, so it never labels this
+/// tree's landing; a row naming no tree is from before rows named theirs, read as before; outside a repository every row is read).
+fn land_tooling(args: &[String], root: &Path) -> Result<(), String> {
     let [git_dir, files, outcome] = args else {
         return Err("usage: l7r-gate log land-tooling <git-dir> <files> <outcome>".to_owned());
     };
     let dir = Path::new(git_dir);
+    let top = l7r_shared::speckit::marks::places(root).map(|(_, top)| top);
+    let ours = |row: &Value| match (row["tree"].as_str(), &top) {
+        (Some(tree), Some(top)) => l7r_shared::speckit::marks::same_tree(Path::new(tree), top),
+        _ => true,
+    };
     let starts = std::fs::read_to_string(dir.join("task-starts.jsonl")).unwrap_or_default();
     let last: Value = starts
         .lines()
-        .next_back()
-        .and_then(|l| serde_json::from_str(l).ok())
+        .rev()
+        .filter_map(|l| serde_json::from_str::<Value>(l).ok())
+        .find(ours)
         .unwrap_or_else(|| json!({}));
     let names: Vec<&str> = files.split_whitespace().collect();
     let line = json!({"feature": last["feature"].as_str().unwrap_or(""), "task": last["task"].as_str().unwrap_or(""), "files": names, "outcome": outcome,
@@ -229,7 +237,7 @@ pub fn log_cli(args: &[String], root: &Path) -> Reply {
         Some("run") => run_record(rest, &RunEnv::read(), root),
         Some("bypass") => bypass(rest, root),
         Some("gate-bypass") => gate_bypass(rest, root),
-        Some("land-tooling") => land_tooling(rest),
+        Some("land-tooling") => land_tooling(rest, root),
         _ => Err(
             "usage: l7r-gate log run | bypass | gate-bypass | land-tooling | usage | goals | guard ..."
                 .to_owned(),

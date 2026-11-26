@@ -71,7 +71,11 @@ pub(super) fn mark(common: &Path, d: &Path, name: &str, tasks: &[&str]) -> Raise
     let mut rows = String::new();
     let tree = top.to_string_lossy();
     for t in tasks.iter().skip(1).chain(tasks.first()) {
-        let row = dumps(&json!({"feature": name, "task": t, "utc": utc, "tree": tree}), None, true);
+        let row = dumps(
+            &json!({"feature": name, "task": t, "utc": utc, "tree": tree}),
+            None,
+            true,
+        );
         let _ = writeln!(rows, "{row}");
     }
     std::fs::OpenOptions::new()

@@ -881,3 +881,25 @@ fn a_dispatch_or_a_command_carries_its_blocks_clue() {
     }
     assert_eq!(super::blocks_line("x\nBlocks: T3"), Some("T3".to_owned()));
 }
+
+/// 451 T254: a tree's starts pass over a row another worktree's builder wrote; a row naming this tree, or none, is read, and
+/// `make events-refile`'s reading takes every row.
+#[test]
+fn a_trees_starts_pass_over_another_worktrees_and_the_refile_reads_every_one() {
+    let d = clone("starts-tree");
+    let here = d.to_string_lossy().into_owned();
+    std::fs::write(
+        d.join(".git/task-starts.jsonl"),
+        [
+            json!({"feature": "9-x", "task": "T1", "utc": "2026-11-25T01:00:00Z"}),
+            json!({"feature": "9-x", "task": "T2", "utc": "2026-11-25T02:00:00Z", "tree": "/no/other/tree"}),
+            json!({"feature": "9-x", "task": "T3", "utc": "2026-11-25T03:00:00Z", "tree": here}),
+        ]
+        .map(|v| v.to_string())
+        .join("\n"),
+    )
+    .unwrap();
+    let tasks = |s: Vec<super::filed::Start>| s.into_iter().map(|(_, t, _)| t).collect::<Vec<_>>();
+    assert_eq!(tasks(super::filed::starts(&d)), ["T1", "T3"]);
+    assert_eq!(tasks(super::filed::every_start(&d)), ["T1", "T2", "T3"]);
+}

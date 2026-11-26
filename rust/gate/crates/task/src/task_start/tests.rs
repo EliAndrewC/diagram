@@ -29,7 +29,9 @@ fn a_task_started_is_marked_named_and_logged() {
     // the task's own mark, naming its tree (451 T254)
     let mark = std::fs::read_to_string(root.join(".git/task-marks/9001-x/T01.json")).unwrap();
     let tree = root.to_string_lossy();
-    let head = format!("{{\"feature\": \"9001-x\", \"task\": \"T01\", \"tree\": \"{tree}\", \"utc\": \"20");
+    let head = format!(
+        "{{\"feature\": \"9001-x\", \"task\": \"T01\", \"tree\": \"{tree}\", \"utc\": \"20"
+    );
     assert!(mark.starts_with(&head), "{mark}");
     assert_eq!(
         std::fs::read_to_string(root.join(".specify/feature.json")).unwrap(),
@@ -37,7 +39,12 @@ fn a_task_started_is_marked_named_and_logged() {
     );
     let starts = std::fs::read_to_string(root.join(".git/task-starts.jsonl")).unwrap();
     assert!(starts.starts_with("{\"feature\": \"9001-x\", \"task\": \"T01\", \"utc\": \"20"));
-    assert!(starts.trim_end().ends_with(&format!("\"tree\": \"{tree}\"}}")), "{starts}");
+    let tail = format!("\"tree\": \"{tree}\"}}");
+    let last = starts.trim_end();
+    assert_eq!(
+        last.get(last.len().saturating_sub(tail.len())..),
+        Some(tail.as_str())
+    );
     // by path, from below the root, the tree read where the wrapper did not say
     let by_path = format!("{}/", root.join("specs/9001-x").display());
     let again = cli(&words(&[&by_path, "T02"]), &root);

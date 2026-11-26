@@ -28,12 +28,8 @@ fn a_bundle_is_marked_under_its_first_task_with_every_member_logged() {
     let lands = first.contains("make land F=9001 T=T01,T02,T03");
     assert!(opens && names && lands, "{first}");
     let mark = std::fs::read_to_string(root.join(".git/task-marks/9001-x/T01.json")).unwrap();
-    assert!(
-        mark.starts_with(
-            "{\"feature\": \"9001-x\", \"task\": \"T01\", \"tasks\": [\"T01\", \"T02\", \"T03\"], \"tree\": "
-        ),
-        "{mark}"
-    );
+    let head = "{\"feature\": \"9001-x\", \"task\": \"T01\", \"tasks\": [\"T01\", \"T02\", \"T03\"], \"tree\": ";
+    assert_eq!(mark.get(..head.len()), Some(head));
     let starts = std::fs::read_to_string(root.join(".git/task-starts.jsonl")).unwrap();
     let order: Vec<String> = starts
         .lines()

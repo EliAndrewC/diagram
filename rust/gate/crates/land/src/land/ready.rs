@@ -206,8 +206,5 @@ fn open_tasks(text: &str) -> BTreeSet<String> {
         .collect()
 }
 
-
-
-
 #[cfg(test)]
 mod tests;

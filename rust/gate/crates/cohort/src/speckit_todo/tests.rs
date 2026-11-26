@@ -172,12 +172,10 @@ fn the_single_answers_come_first_in_mains_order() {
         ".git/active-task",
         r#"{"feature": "3-going", "task": "T2"}"#,
     );
-    // started, its edit in the push (451 T254)
-    l7r_gate_core::ci::fixtures::edited(&dir, "3-going", "T2", "a.rs");
     let held = run(&dir, &["--holding", &at, "--check", "--state", &at]);
     assert_eq!(
         held.stdout,
-        "T2 b  <- started (make task-start), its edit of a.rs in this push: land it with make land F=3 T=T2\n"
+        "T2 b  <- the active task (make task-start), open: land it with make land F=3 T=T2\n"
     );
     assert_eq!(run(&dir, &["--closed-by-status", &at]).stdout, "no\n");
     let done = dir.join("specs/4-done").to_string_lossy().into_owned();
@@ -452,9 +450,8 @@ fn the_landing_asks_the_holding_box_in_process() {
         ".git/active-task",
         r#"{"feature": "3-going", "task": "T2"}"#,
     );
-    l7r_gate_core::ci::fixtures::edited(&dir, "3-going", "T2", "a.rs");
     let held = super::holding_reply(&at, "T9", &dir);
-    assert!(held.stdout.contains("<- started (make task-start)"), "{held:?}");
+    assert!(held.stdout.contains("<- the active task"), "{held:?}");
     assert_eq!(super::holding_reply(&at, "T2 T9", &dir).stdout, "");
     let usage = std::fs::read_to_string(dir.join(".git/tool-usage.jsonl")).unwrap();
     assert!(usage.contains("\"speckit-todo\""));
