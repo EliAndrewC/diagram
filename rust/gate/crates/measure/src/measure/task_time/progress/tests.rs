@@ -55,9 +55,9 @@ fn phase(
 }
 
 /// The moment 20:30:00: tree b1 held by T1, its builder `aaaaaaaa1` in a foreground `make builder-checks` since 20:28 whose build
-/// phase ended 20:29 (the line mis-tasked T9, as 451 T332 finds them); tree b2 held by T2, its builder `bbbbbbbb2` stopped at 20:20
+/// phase ended 20:29 and test phase 20:29:30 (the lines mis-tasked T9, as 451 T332 finds them); tree b2 held by T2, its builder `bbbbbbbb2` stopped at 20:20
 /// with its `spec-fidelity` child running; tree b3 free; b4 held by T8, no builder; a `make land` of T3 in the background since
-/// 20:25, its cheap phase ended 20:26; T4 carried from b2 at 20:05 (before T2 took the tree) and never landed; a `spec-fidelity`
+/// 20:25, its claims phase ended 20:25:50 and its cheap phase 20:26; T4 carried from b2 at 20:05 (before T2 took the tree) and never landed; a `spec-fidelity`
 /// cut off at 20:02.
 #[expect(clippy::too_many_lines, reason = "one moment's whole world, listed")]
 fn world() -> l7r_shared::tempdir::TempDir {
@@ -125,6 +125,15 @@ fn world() -> l7r_shared::tempdir::TempDir {
             call("PreToolUse", "28:00", "Bash", "bc", "aaaaaaaa1", "T1"),
             &json!({"make": "builder-checks"}),
         ),
+        // the later of its two finished phases, listed first: the last is the latest END, not the last line
+        phase(
+            "rust",
+            "test",
+            ("29:00", "29:30"),
+            "b1",
+            "builder-checks",
+            "T9",
+        ),
         phase(
             "rust",
             "build",
@@ -143,6 +152,8 @@ fn world() -> l7r_shared::tempdir::TempDir {
             "T1",
         ),
         phase("land", "cheap", ("25:01", "26:00"), "root", "land", "T3"),
+        // a phase of the landing that ended sooner, listed later: never its last finished one
+        phase("land", "claims", ("25:05", "25:50"), "root", "land", "T3"),
         // after the moment: never shown
         phase("land", "gate", ("26:00", "31:00"), "root", "land", "T3"),
         call("PreToolUse", "31:00", "Read", "late", "aaaaaaaa1", "T1"),
@@ -202,7 +213,7 @@ fn a_builder_mid_compile_shows_its_open_run_its_last_phase_and_its_categories() 
     let a = &b.agents[0];
     assert!(a.running && !a.resumed && a.stop.is_none());
     assert_eq!(a.ctx, Some((210_000, "its transcript's last call")));
-    assert_eq!(b.steps, ["aaaaaaaa now: make builder-checks, 2.0 min in; its last finished phase: rust build, ended 20:29:00"]);
+    assert_eq!(b.steps, ["aaaaaaaa now: make builder-checks, 2.0 min in; its last finished phase: rust test, ended 20:29:30"]);
     let row = |cat: &str| b.rows.iter().find(|r| r.0 == cat).map(|r| r.1);
     // the tree's own build phase, whatever task its line names (451 T332); the other tree's 40 s is not in it
     assert_eq!(row("compile"), Some(60.0));
@@ -373,7 +384,8 @@ fn the_command_line() {
 }
 
 /// The moment 20:30:00, the arms `world()` leaves: tree c1 held by T1, carried twice (20:05:00 and 20:08:30), its builder
-/// `cccccccc1` cut off (no stop, and the session's `Stop` at 20:25:30 does not name it) and a landing naming T1 red at 20:12; tree c2
+/// `cccccccc1` cut off (no stop, and the session's `Stop` at 20:25:30 does not name it), a landing of T1 landed at 20:07 between
+/// the two carries and a later one naming T1 red at 20:12; tree c2
 /// held by T2, its builder `dddddddd2` in an open Read with a `make builder-checks` of its own in the background; tree c4 free, a
 /// phase of it naming T6; a builder `eeeeeeee3` of T6 no tree is held for, in a foreground `make builder-checks` whose build phase
 /// its own checkout wrote; and the session's foreground `make land` of T3 open, its end line already written.
@@ -392,6 +404,8 @@ fn gaps() -> l7r_shared::tempdir::TempDir {
         json!({"t": at("00:00"), "sid": "s", "ev": "UserPromptSubmit", "task": "T1"}),
         make(by("PreToolUse", "04:00", "carry1", "", "T1"), "carry"),
         make(by("PostToolUse", "05:00", "carry1", "", "T1"), "carry"),
+        // landed between its two carries: it answers the first carry, never the latest
+        end(("06:00", "07:00"), "T1", true),
         make(by("PreToolUse", "08:00", "carry2", "", "T1"), "carry"),
         make(by("PostToolUse", "08:30", "carry2", "", "T1"), "carry"),
         builder("cccccccc1", "10:00", "T1"),
@@ -470,7 +484,7 @@ fn a_cut_off_builder_a_carried_tree_and_a_landing_gone_red() {
     assert_eq!(b.holder, "451 T1");
     assert!(!b.agents[0].running && b.agents[0].stop.is_none());
     assert_eq!(b.steps, ["cccccccc now: nothing of its is in flight: it waits on the session (a carry, a landing, or its closing builder)"]);
-    // the LATEST of its two carries
+    // the LATEST of its two carries, which the landing of 20:07 came before: T1 is staged still, its red landing the one named
     assert_eq!(b.carried, Some(ts(&at("08:30")).unwrap()));
     assert_eq!(v.staged, ["451 T1: carried 20:08:30, 21.5 min ago; a landing naming it went red at 20:12:00 and none has run since"]);
     let empty = |l: &String| {
@@ -536,4 +550,28 @@ fn nothing_running_and_a_stop_that_names_no_list() {
     put(&d, "root/.git/l7r-events/451-x.jsonl", &[start, stop]);
     let v = seen(&d);
     assert!(v.blocks[0].agents[0].running);
+}
+
+#[test]
+fn with_no_read_back_given_the_lines_are_read_from_the_earliest_held_tree() {
+    let d = crate::checks::scratch("task-progress-held");
+    std::fs::create_dir_all(d.join("root/.git")).unwrap();
+    // h1 held longer than BACK_H hours; f1 free for longer still, and no free tree moves the read-back
+    let pool = json!({"trees": [
+        {"tree": "/c/h1", "feature": "451", "tasks": ["T1"], "since": "2026-11-26T17:00:00Z"},
+        {"tree": "/c/f1", "feature": "", "tasks": [], "since": "2026-11-26T15:00:00Z"}]});
+    std::fs::write(d.join("root/.git/builder-pool.json"), pool.to_string()).unwrap();
+    let now = ts(&at("30:00")).unwrap();
+    let v = view(
+        &d.join("root"),
+        (&d.join("home"), &d.join("clones")),
+        now,
+        None,
+    )
+    .unwrap();
+    assert_eq!(v.span, (ts("2026-11-26T17:00:00Z").unwrap(), now));
+    assert_eq!(v.blocks[0].holder, "451 T1");
+    let text = render::render(&v);
+    let head = "# The tasks in flight at 20:30:00 UTC (lines read from 17:00:00)";
+    assert!(text.contains(head), "{text}");
 }
