@@ -2680,28 +2680,42 @@ engine speed, so no checklist.
 <!-- plan-archive: T261 to T84 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T261 to T261 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 ### T262 (<why: the finding or measurement that files it>)
+=======
+### T262 (451 T261's builder, 2026-11-26: PLAN_REVIEW_OK rode pushes where the plan gate owed nothing in 7 of 12 escape records replayed at their commits, and 155 of 160 records name a cause the gate never had)
+>>>>>>> 9ef44e60c3 (451 T262: a plan-gate escape is not honored where the gate owes nothing (the tick and the push say 'the plan gate owes nothing - drop PLAN_REVIEW_OK' and write no record; the push now asks the gate before honoring the escape), and an honored escape's record carries the blocks the gate held; its audit-register entry and falsifier (built in a parallel worktree))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the gate is asked before the escape is read, at the tick and at the push, and an honored escape's record says what was held.
+  - **The tick** (`tick_gate`, `rust/gate/crates/plan/src/plan.rs`). Where the gate owes nothing for the task and `PLAN_REVIEW_OK` is set, the tick proceeds and prints one line, `tick: the plan gate owes nothing - drop PLAN_REVIEW_OK`. No bypass record and no guard-log event is written (before: nothing was said). `make land` runs this tick, so it prints the line too.
+  - **The push** (`scripts/gates/plan-gate.sh`, run by `sync-with-main.sh` and by `make land`'s cheap refusals). It honored the escape BEFORE asking the gate, which is how a clean push got a record. It now asks `l7r-gate plan push` first; where that lists nothing and the escape is set it prints `plan-gate: the plan gate owes nothing - drop PLAN_REVIEW_OK` and exits 0, with no record and no guard-log event.
+  - **A bare token on a clean gate** (`PLAN_REVIEW_OK=x`) is told the same line and is not asked for a reason: no escape is being taken, so there is nothing for a reason to explain.
+  - **The record** (`bypass_record`). Where the escape is honored, the record in `dev/bypass-log/` gains `held`: a list of `{feature, rule, blocks}`, one row per feature the gate held. `blocks` is every block key the judgment listed, whole (a block's key is its heading line; `(removed) <heading>` for a recorded block the plan no longer has; `preamble` for the text above the first heading): the keys owed a review under `plan-review-stale`, the BLOCKED keys under `plan-review-blocked`, and none under `plan-review-missing` and `plan-missing`, where the gate lists no block. The refusal's own text shows only its first keys, each cut short (`judge_held`'s `take(5)` and `take(60)`, observed 2026-11-26, method: `plan/status.rs` read); the record takes the full list from `status::judge_held`, which `judge_in`, `owed_for` and `push_owed` now wrap. The push's record is written by `l7r-gate plan door bypass-record <root> push <why> <range>`, which computes what is held over the range itself.
+  - **"Checked against what the gate held"** (the task's title) is built as the task's body says it: the record carries what was held beside the reason, so a reader compares them. The reason's wording is not parsed or refused: no word list decides whether a sentence names a block.
+  - **`make audit` is not changed.** Its Bypasses listing still prints each record's reason. The task's line says the record carries the blocks "so make audit and the measurements classify escapes by what was held"; this task builds the record they will read, and no listing or measurement over `held` (the brief scopes the build to the rule and the record; a count by `held` is a title in the builder's report, not filed here).
+  - **`DEFER_FORM_OK`'s record** (`plan/defer.rs`, the same writer) carries no `held`: it is another escape, of the decide lint, not of the plan gate.
+  - **The audit-register entry** is `dev/audits/plan-gate-escape.md`: falsifier, honored escapes per landing staying above about 0.3 over a week once 449 T439's review lands (GUESS), counted from the records that carry `held`. Measured 2026-11-26, method `grep -l '"target": "plan-gate ' dev/bypass-log/2026-11/2026112[56]T*` and `git log --since=2026-11-25T00:00:00Z --until=2026-11-26T03:41:00Z --oneline | wc -l`: 158 plan-gate escape records (102 push, 56 tick) against 354 commits on main.
+  - `docs/guards.md`'s plan-gate row states the rule.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a clean gate honors no escape, at the tick and the push | `plan::tests::an_escape_is_dropped_where_the_gate_owes_nothing_and_its_record_carries_what_was_held` and cases 5b of `tests/hooks/test-plan-gate.sh`, red on HEAD's code (2026-11-26) | n/a: tooling | none | n/a |
+| an honored escape's record carries what was held | the same test's `held` assertions and case 6b of the suite, red on HEAD's code (2026-11-26) | n/a: tooling | none | n/a |
 
 ### T262 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A session that carries `PLAN_REVIEW_OK` on a tick or push the plan gate would pass anyway is told to drop it and leaves no escape record; an escape that is honored leaves a record saying which features and blocks were held.
+2. **The constraints.** T262's line in tasks.md. Feature 243: the escape takes a reason of two words and is recorded, unchanged where the gate holds something. 451 T84: what the gate judges at the tick and the push (`in_scope`), unchanged.
+3. **Where each comes from.** O: 451 T261's builder's replay of 12 plan-gate escape records at their commits with the push's scope (2026-11-26; T261's line in tasks.md): nothing owed in 7, other blocks held in the rest, 155 of 160 records carrying a standing reason.
+4. **Do they describe the world here?** Yes. `plan-gate.sh` on HEAD leaves on the escape before it runs `plan push`, and `tick_gate` on HEAD returns before reading the escape where nothing is owed (no record there, and no word either), measured 2026-11-26 (both files read at HEAD, and the red runs of item 9).
+5. **The order.** Before 449 T439's review of the blocks the gate truly held, so the escapes left after it are counted by `held`.
+6. **The exits.** Green: `make closing-checks T=T262`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, 2026-11-26. With the tests written and the code as on HEAD: `make rust-test CRATE=rust/gate/crates/plan` gave 189 passed and 1 failed (the tick said nothing: `(true, "")` against the line), and `bash tests/hooks/test-plan-gate.sh` gave 14 passed and 5 failed (BYPASSED printed on a clean gate, a bare token refused, one bypass record and two guard-log events on a clean gate, no `held` in the record). With the change: 190 passed and 0 failed, and 19 passed and 0 failed (the same commands, 2026-11-26). `scripts/gates/l7r-gate.sh check audit-register --delta "$PWD"` is clean with the new entry, measured 2026-11-26 (the command run in the worktree).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: escape records naming a cause the gate never had (7 of 12 replays owed nothing), so the escape count and its reasons could not say what the gate holds. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 

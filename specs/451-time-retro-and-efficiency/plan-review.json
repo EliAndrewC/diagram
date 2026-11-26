@@ -1844,7 +1844,13 @@
    "declared": "spec-fidelity"
   },
   "### T262 Approach (checklist part A)": {
-   "sha256": "30187fcd1a3c3644406e8f0785bab1943d9923f1917d6c7c2608bfb98f35760a",
+   "sha256": "1f8e1b8ea22eedda4a0a4b5071da01ccef01e3c9f35438f0e0c555d3878c43ff",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T262 (451 T261's builder, 2026-11-26: PLAN_REVIEW_OK rode pushes where the plan gate owed nothing in 7 of 12 escape records replayed at their commits, and 155 of 160 records name a cause the gate never had)": {
+   "sha256": "ff1dc87126626536361a641a7afad2915cac53730d4ba67ae92df2f8b9c18082",
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
@@ -23287,6 +23293,76 @@
      "why": "A placeholder decides nothing; each is judged when its task's section is written and decided."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T262 (451 T261's builder, 2026-11-26: PLAN_REVIEW_OK rode pushes where the plan gate owed nothing in 7 of 12 escape records replayed at their commits, and 155 of 160 records name a cause the gate never had)",
+    "### T262 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "tick-clean-gate",
+     "summary": "At the tick, where the plan gate owes nothing and PLAN_REVIEW_OK is set, the tick proceeds, prints 'drop PLAN_REVIEW_OK', and writes no bypass record or guard-log event; make land's tick prints it too.",
+     "class": "within",
+     "why": "No gate is passed by the escape, so nothing is escaped and nothing is weakened: the gate still refuses wherever it owes something, whether or not the session obeys the line (real enforcement, the GM 2026-11-19). Feature 243's recorded escape is unchanged where the gate holds something."
+    },
+    {
+     "id": "push-asks-gate-first",
+     "summary": "plan-gate.sh asks l7r-gate plan push before honoring the escape; on an empty list with the escape set it prints the drop line and exits 0 with no record.",
+     "class": "within",
+     "why": "Corrects the order that made clean pushes write escape records; the gate's scope (451 T84 in_scope) and its refusal are untouched, so enforcement does not depend on the instruction being followed."
+    },
+    {
+     "id": "bare-token-clean-gate",
+     "summary": "A bare PLAN_REVIEW_OK token on a clean gate is told the drop line and not asked for a reason.",
+     "class": "within",
+     "why": "The two-word reason rule applies to an escape taken; here none is taken. Where the gate holds something the reason is still required (feature 243 unchanged). FR-012's escape rule covers FR-006 to FR-013 and is not narrowed."
+    },
+    {
+     "id": "record-held",
+     "summary": "An honored escape's record gains held: rows of {feature, rule, blocks}, the full key list from status::judge_held (stale keys, BLOCKED keys, none under plan-review-missing and plan-missing, where the gate lists no block); the push's record computed over the range by a new door subcommand.",
+     "class": "within",
+     "why": "Adds data to the record; empty blocks under missing/plan-missing reflects that the gate itself names no block there, not an omission. Serves the GM's audit-register request (what would falsify an optimization) and his ask that time and process be measured."
+    },
+    {
+     "id": "checked-by-reader-not-parser",
+     "summary": "'Checked against what the gate held' is built as the record carrying held beside the reason for a reader to compare; the reason's wording is not parsed or refused.",
+     "class": "within",
+     "why": "No clause of request.md and no FR in the spec asks for a reason to be machine-checked against the held blocks; a word-list check that refuses reasons would be new refusing behavior the GM did not ask for. The block's reading of T262's task line (title and body) could not be verified from the bundle, which does not carry the task line; judged against the GM's request and spec, which is the standard, it narrows nothing."
+    },
+    {
+     "id": "make-audit-unchanged",
+     "summary": "make audit's Bypasses listing is not changed and no listing or measurement over held is built or filed here; a count by held is a title in the builder's report.",
+     "class": "within",
+     "why": "Neither request.md nor the spec asks for make audit to classify plan-gate escapes; the line asking it is the session's task line, not the GM's, and is not in the bundle, so the block's reading of it could not be verified. Not building the listing leaves no wrong outcome (no defect): the data is recorded and countable. The aside: if T262's own line promises the classification, the builder's report title should be filed so the line's purpose is not silently dropped - a tasks matter, not a fidelity narrowing of the GM's request."
+    },
+    {
+     "id": "defer-form-no-held",
+     "summary": "DEFER_FORM_OK's record, by the same writer, carries no held.",
+     "class": "within",
+     "why": "It escapes the decide lint, not the plan gate; there is nothing the plan gate held to record."
+    },
+    {
+     "id": "audit-register-entry",
+     "summary": "dev/audits/plan-gate-escape.md with falsifier 'honored escapes per landing above about 0.3 over a week after 449 T439' (GUESS), baseline 158 escape records against 354 commits measured 2026-11-26 by stated commands.",
+     "class": "within",
+     "why": "Directly serves the GM's 2026-11-25 audit-register request (logic, measurements, and what would falsify it). Figures carry date and method. Note only: the falsifier is per landing while the baseline is per commit on main."
+    },
+    {
+     "id": "guards-doc-row",
+     "summary": "docs/guards.md's plan-gate row states the rule.",
+     "class": "within",
+     "why": "Documents the enforced rule; no scope change."
+    },
+    {
+     "id": "not-performance-work",
+     "summary": "The section marks the task 'Performance work? no'.",
+     "class": "within",
+     "why": "The task changes a guard's escape handling and its record; it is not measurement of where time goes in the GM's 2026-11-20 sense (FR-013's full text is not in the bundle). The classification affects scheduling only and narrows nothing the GM asked for in this task."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -37070,6 +37146,74 @@
      "summary": "Found and left, not a defect: check audit-register's detectors do not see a script newly called from a landing recipe; the entry is written by hand, and a task title is handed to the coordinating session",
      "class": "within",
      "why": "The GM's own T259 words expect misses and say how they are handled: 'after the initial backfill, we can backfill as we go, as we find things that we missed'. This entry is that backfill, so no mechanism goes unregistered. The detector's reach is left as it was, and the title is passed on so the miss can be filed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T262": {
+   "section_sha256": "3b42672181840d0ad954f8b08ac0530c4567248b92deaf6e464f29da6c5a6e4a",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "tick-clean-gate",
+     "summary": "At the tick, where the plan gate owes nothing and PLAN_REVIEW_OK is set, the tick proceeds, prints 'drop PLAN_REVIEW_OK', and writes no bypass record or guard-log event; make land's tick prints it too.",
+     "class": "within",
+     "why": "No gate is passed by the escape, so nothing is escaped and nothing is weakened: the gate still refuses wherever it owes something, whether or not the session obeys the line (real enforcement, the GM 2026-11-19). Feature 243's recorded escape is unchanged where the gate holds something."
+    },
+    {
+     "id": "push-asks-gate-first",
+     "summary": "plan-gate.sh asks l7r-gate plan push before honoring the escape; on an empty list with the escape set it prints the drop line and exits 0 with no record.",
+     "class": "within",
+     "why": "Corrects the order that made clean pushes write escape records; the gate's scope (451 T84 in_scope) and its refusal are untouched, so enforcement does not depend on the instruction being followed."
+    },
+    {
+     "id": "bare-token-clean-gate",
+     "summary": "A bare PLAN_REVIEW_OK token on a clean gate is told the drop line and not asked for a reason.",
+     "class": "within",
+     "why": "The two-word reason rule applies to an escape taken; here none is taken. Where the gate holds something the reason is still required (feature 243 unchanged). FR-012's escape rule covers FR-006 to FR-013 and is not narrowed."
+    },
+    {
+     "id": "record-held",
+     "summary": "An honored escape's record gains held: rows of {feature, rule, blocks}, the full key list from status::judge_held (stale keys, BLOCKED keys, none under plan-review-missing and plan-missing, where the gate lists no block); the push's record computed over the range by a new door subcommand.",
+     "class": "within",
+     "why": "Adds data to the record; empty blocks under missing/plan-missing reflects that the gate itself names no block there, not an omission. Serves the GM's audit-register request (what would falsify an optimization) and his ask that time and process be measured."
+    },
+    {
+     "id": "checked-by-reader-not-parser",
+     "summary": "'Checked against what the gate held' is built as the record carrying held beside the reason for a reader to compare; the reason's wording is not parsed or refused.",
+     "class": "within",
+     "why": "No clause of request.md and no FR in the spec asks for a reason to be machine-checked against the held blocks; a word-list check that refuses reasons would be new refusing behavior the GM did not ask for. The block's reading of T262's task line (title and body) could not be verified from the bundle, which does not carry the task line; judged against the GM's request and spec, which is the standard, it narrows nothing."
+    },
+    {
+     "id": "make-audit-unchanged",
+     "summary": "make audit's Bypasses listing is not changed and no listing or measurement over held is built or filed here; a count by held is a title in the builder's report.",
+     "class": "within",
+     "why": "Neither request.md nor the spec asks for make audit to classify plan-gate escapes; the line asking it is the session's task line, not the GM's, and is not in the bundle, so the block's reading of it could not be verified. Not building the listing leaves no wrong outcome (no defect): the data is recorded and countable. The aside: if T262's own line promises the classification, the builder's report title should be filed so the line's purpose is not silently dropped - a tasks matter, not a fidelity narrowing of the GM's request."
+    },
+    {
+     "id": "defer-form-no-held",
+     "summary": "DEFER_FORM_OK's record, by the same writer, carries no held.",
+     "class": "within",
+     "why": "It escapes the decide lint, not the plan gate; there is nothing the plan gate held to record."
+    },
+    {
+     "id": "audit-register-entry",
+     "summary": "dev/audits/plan-gate-escape.md with falsifier 'honored escapes per landing above about 0.3 over a week after 449 T439' (GUESS), baseline 158 escape records against 354 commits measured 2026-11-26 by stated commands.",
+     "class": "within",
+     "why": "Directly serves the GM's 2026-11-25 audit-register request (logic, measurements, and what would falsify it). Figures carry date and method. Note only: the falsifier is per landing while the baseline is per commit on main."
+    },
+    {
+     "id": "guards-doc-row",
+     "summary": "docs/guards.md's plan-gate row states the rule.",
+     "class": "within",
+     "why": "Documents the enforced rule; no scope change."
+    },
+    {
+     "id": "not-performance-work",
+     "summary": "The section marks the task 'Performance work? no'.",
+     "class": "within",
+     "why": "The task changes a guard's escape handling and its record; it is not measurement of where time goes in the GM's 2026-11-20 sense (FR-013's full text is not in the bundle). The classification affects scheduling only and narrows nothing the GM asked for in this task."
     }
    ],
    "verdict": "CLEAR"
