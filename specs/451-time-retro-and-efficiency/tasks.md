@@ -258,3 +258,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T311 left from 451 T303 and T305 (2026-11-26): scripts/gates/closing-checks.sh still carries an embedded Python block although the repository holds no Python - port the splitter to the gate's task crate; whose.rs leaves a check pass while its task is 'not ticked' rather than having an open line, so a withdrawn task's pass is left for ever (451 T231 fixed this for plan reviews only)
       research: rendering
+- [ ] T312 tests that default to the machine's live state, left by 451 T309 (2026-11-26, by grep, not run): the bundle crate's marks::reply_of and record/bundle/modal.rs:384 default to the live transcripts under ~/.claude/projects; the task crate's task_add/quick/tests.rs:152 reads ~/.claude/guard-log; the land, plan and task crates set GUARD_LOG_DIR process-wide - give each a test default that is a fixture or the empty path, as the arbiter crate's transcripts_base() now does; and let an empty-HOME coverage proof reuse the warm build cache
+      research: rendering
