@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-26T00:54:44Z",
+  "target": "plan-gate push",
+  "commit": "2943b6dd57",
+  "why": "T227's Approach block changed after its CLEAR only by the coordinating session renumbering its follow-up T247 to T248 (the clone's T247 was taken by a parallel builder); no decision moved"
+}
