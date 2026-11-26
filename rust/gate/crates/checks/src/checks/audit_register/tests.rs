@@ -395,6 +395,92 @@ fn a_landing_refusal_added_is_refused_by_its_number() {
     assert!(super::detect::refusal_items("stops.push(a);", "").is_empty());
 }
 
+/// T258's case (451 T269): `make land`'s rule as it stood, to which T258 added one recipe line calling a script no entry names.
+const LAND: &str = "LAND_RUN = \"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh\" land\nland: export LAND_NOTE = $(NOTE)\nland:           ## [project] land one task\n\t@$(LAND_RUN) \"$(F)\" \"$(T)\"; rc=$$?; \\\n";
+const LAND_END: &str = "\t  $(SCRATCH_TREES); exit $$rc\n";
+const T258: &str = "\t  if [ $$rc = 0 ] || [ $$rc = 3 ]; then \"$$(git rev-parse --show-toplevel)/scripts/state-sync.sh\" push --detach || :; fi; \\\n";
+
+#[test]
+fn a_script_newly_called_from_make_lands_recipe_is_refused_until_an_entry_covers_it() {
+    let dir = base("callee");
+    put(&dir, "Makefile", &format!("{MAKE}{LAND}{LAND_END}"));
+    commit(&dir);
+    assert_eq!(judged(&dir).code, 0);
+    put(&dir, "Makefile", &format!("{MAKE}{LAND}{T258}{LAND_END}"));
+    let said = judged(&dir);
+    assert_eq!(said.code, 1, "{said:?}");
+    assert!(
+        said.stderr
+            .contains("adds a landing script `landing script scripts/state-sync.sh`"),
+        "{}",
+        said.stderr
+    );
+    assert!(
+        said.stderr
+            .contains("covers: landing script scripts/state-sync.sh"),
+        "{}",
+        said.stderr
+    );
+    assert!(!said.stderr.contains("l7r-gate.sh"), "{}", said.stderr);
+    put(
+        &dir,
+        "dev/audits/x.md",
+        &ENTRY.replace(
+            "rust/guard/src/guards/new_hooks.rs",
+            "landing script scripts/state-sync.sh",
+        ),
+    );
+    assert_eq!(judged(&dir).code, 0);
+}
+
+#[test]
+fn a_landing_script_is_read_through_a_variable_and_the_push_scripts_by_name_over_them_all() {
+    let dir = base("callee-forms");
+    // another target's roster names a script no landing calls, and no landing recipe expands UNUSED
+    let other =
+        "roster:\n\t@for h in scripts/roster-only.sh; do :; done\n\nUNUSED := scripts/unused.sh\n";
+    put(
+        &dir,
+        "Makefile",
+        &format!("{MAKE}{LAND}{LAND_END}{other}land-tooling:\n\t@scripts/moved.sh\n"),
+    );
+    put(
+        &dir,
+        "scripts/land-tooling.sh",
+        "# calls scripts/commented.sh\n",
+    );
+    commit(&dir);
+    assert_eq!(judged(&dir).code, 0);
+    // a call moved from a recipe into the push's script adds nothing; a variable's value held over two lines, a variable that one
+    // expands, a recipe after a blank line and the push scripts' own lines are each read; a recipe after a comment, a glob, a
+    // directory, a path with a variable in it and a comment name no script
+    let vars = "SCRATCH_TREES = \"$$root/scripts/sweep.sh\" \\\n  $(DEEP) $(DEEP) $(NONE)\nDEEP ?= scripts/deep.sh.\n";
+    put(
+        &dir,
+        "Makefile",
+        &format!("{MAKE}{LAND}{LAND_END}{other}{vars}land-tooling:\n\n\t@scripts/land-tooling.sh\n# after\n\t@scripts/after-a-comment.sh\n"),
+    );
+    put(
+        &dir,
+        "scripts/land-tooling.sh",
+        "# calls scripts/commented.sh\nscripts/moved.sh\ncase x in scripts/*|scripts/gates/) \"$ROOT/scripts/gates/$g.sh\";; esac\n",
+    );
+    put(
+        &dir,
+        "scripts/sync-with-main.sh",
+        "\"$ROOT/scripts/hooks/new-push.sh\" --go\n",
+    );
+    let said = judged(&dir);
+    assert_eq!(said.code, 1, "{said:?}");
+    let named: Vec<&str> = said
+        .stderr
+        .lines()
+        .filter_map(|l| l.strip_prefix("covers: landing script "))
+        .collect();
+    let want = "scripts/deep.sh scripts/hooks/new-push.sh scripts/land-tooling.sh scripts/sweep.sh";
+    assert_eq!(named.join(" "), want, "{}", said.stderr);
+}
+
 #[test]
 fn a_tooling_crates_threshold_is_read() {
     let dir = base("tooling-const");

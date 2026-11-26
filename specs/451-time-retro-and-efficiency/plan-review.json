@@ -1944,6 +1944,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T269 (451 T258, 2026-11-25: `scripts/state-sync.sh`, newly called from `make land`'s and `make land-tooling`'s recipes, landed with the audit register's check asking no entry - `dev/audits/tooling-state.md` says so in its own words)": {
+   "sha256": "dd25218907fa5ec8ad91321a14aa4ee7ca49a72b7f4828d3d7b8ed802259a332",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T269 Approach (checklist part A)": {
+   "sha256": "90f114bb2a8a1f193f7bddf722530ce604b520681ae7a0fa9d0bcab672aa0a1e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -24473,6 +24485,84 @@
      "why": "A dependency order; narrows nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T269 (451 T258, 2026-11-25: `scripts/state-sync.sh`, newly called from `make land`'s and `make land-tooling`'s recipes, landed with the audit register's check asking no entry - `dev/audits/tooling-state.md` says so in its own words)",
+    "### T269 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T269-item-form",
+     "summary": "The delta check reads one more form of landing step, a script newly called from a landing recipe, named `landing script scripts/<path>` the way the other landing steps are named; the kinds stay five.",
+     "class": "within",
+     "why": "The GM's register (request.md, 2026-11-25, the audit register) asks that each optimization and process carry its logic, measurements and falsifier, and that what was missed be backfilled 'as we find things that we missed'. A landing step the check could not see (T258's state-sync.sh) is that kind of miss, and making it visible enforces the request without adding to it."
+    },
+    {
+     "id": "T269-what-is-read",
+     "summary": "Read the recipe lines of land, land-batch and land-tooling, the Makefile variables they expand (recursively), and the two push scripts whole. Do not read the whole gate chain's recipes, whose hook roster names scripts it does not call.",
+     "class": "within",
+     "why": "Neither the GM's request nor the spec says how far the detector reaches. This covers the three things the task line and brief name (make land, make land-tooling, the push), and the roster lines it leaves out are not calls. Steps the gate chain runs are already items of their own: `$(MAKE)` edges through make_graph, and l7r-gate's gates as STEPS."
+    },
+    {
+     "id": "T269-script-names",
+     "summary": "A script's name is a `scripts/<path>` ending in a file extension, with a trailing full stop cut and `#` lines skipped. Globs, directories and variable paths name no script.",
+     "class": "within",
+     "why": "How names are parsed is a design choice inside the request. It follows T259-D1 as the block states it (read paths and names, never prose)."
+    },
+    {
+     "id": "T269-new-by-name",
+     "summary": "A script is new by name across all the read sources together, base against head. A moved call, or a script already called elsewhere, adds nothing.",
+     "class": "within",
+     "why": "A script the landing already ran is no new mechanism, so the register owes it no new entry. This is T259-D3's shape as the block states it."
+    },
+    {
+     "id": "T269-rule-refactor",
+     "summary": "Rule-line reading becomes one shared function `rule` used by make_graph and landing_recipes, so a target-specific variable line is not a rule. make_graph's behavior and tests are unchanged.",
+     "class": "within",
+     "why": "An internal refactor that changes no behavior. Nothing in the request touches it."
+    },
+    {
+     "id": "T269-tooling-state-entry-and-docs",
+     "summary": "dev/audits/tooling-state.md gains `covers: landing script scripts/state-sync.sh`, its prose drops the claim that the check cannot see the script, and guards.md, process-decisions.md and audit-register.md describe the new reading and its replay.",
+     "class": "within",
+     "why": "This records the register's own entry for the mechanism the fix covers, which is what the GM asked the register to hold."
+    },
+    {
+     "id": "T269-limit-nested-callees",
+     "summary": "Accepted miss: a script that a called script calls in turn is not followed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Test it against the purpose. T258's failure one level down would be a new script that state-sync.sh or l7r-gate.sh starts calling, and this limit would miss it. Even so, the limit is legitimate. The GM's own words expect a detector that does not see everything and is grown as misses are found: 'after the initial backfill, we can backfill as we go, as we find things that we missed'. The block names no such nested case today (observed 2026-11-26, the replay over 40 landings found only state-sync.sh), so this leaves no known defect, only a possible future miss handled the way the GM prescribed. Following calls literally would ask entries for every script l7r-gate.sh and the guard launcher name, which is beyond the landing steps the task covers. The limit is written beside the rule in detect.rs, where a later miss would reopen it."
+    },
+    {
+     "id": "T269-limit-unprefixed-path",
+     "summary": "Accepted miss: a script reached by a path not written `scripts/...`. One exists today, sync-with-main.sh's dirname call of state-sync.sh at sync-in.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The one instance today is state-sync.sh, and this task gives that script a `covers:` line. Since a script is new by name across all the read sources, that instance owes nothing more, and nothing the register needs is missed. Reading `)/name.ext` would misread make land's `.../task-starts.jsonl` as a script, and the GM's backfill-as-we-go words cover any future case."
+    },
+    {
+     "id": "T269-limit-l7r-gate-land",
+     "summary": "Not read: what `l7r-gate land` itself runs.",
+     "class": "within",
+     "why": "Those gates are already detected as STEPS (`landing gate <name>`), so nothing is left uncovered."
+    },
+    {
+     "id": "T269-possible-false-fire",
+     "summary": "Accepted: a message in the push scripts that newly names a script reads as a call. No shell reader is built. The escape is AUDIT_ENTRY_OK and the reopener is a false fire in the guard log.",
+     "class": "within",
+     "why": "This narrows nothing the GM asked for. It is a design trade-off in the check's precision, priced on a measured replay (0 such cases in 40 landings, 2026-11-26) and given a falsifier. It is a hypothetical, not a known defect left in place. None of the accepted limits has a case today, which is why 'Found and left? none' holds."
+    },
+    {
+     "id": "T269-backfill-to-T260",
+     "summary": "The six scripts the landing already calls with no entry go into T260's backfill (make audits' BACKFILL 254 -> 260) rather than being written here. T260's line keeps its dated 254.",
+     "class": "within",
+     "why": "The GM's request plans for an initial backfill, and T260 is that task, so routing the six there carries out the request rather than deferring a defect of T269. T269's fix makes the six visible, and item 5 asks for T269 to land before T260 writes its backfill. Keeping a dated figure as dated is fine."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -38842,6 +38932,82 @@
      "summary": "After 451 T262 (the held field), before the audit of the plan-gate-escape entry",
      "class": "within",
      "why": "A dependency order; narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T269": {
+   "section_sha256": "e5d7b9f0cef75623ce1436a3bda24539f84495e0089a8d55c548ddb26bd1feb4",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T269-item-form",
+     "summary": "The delta check reads one more form of landing step, a script newly called from a landing recipe, named `landing script scripts/<path>` the way the other landing steps are named; the kinds stay five.",
+     "class": "within",
+     "why": "The GM's register (request.md, 2026-11-25, the audit register) asks that each optimization and process carry its logic, measurements and falsifier, and that what was missed be backfilled 'as we find things that we missed'. A landing step the check could not see (T258's state-sync.sh) is that kind of miss, and making it visible enforces the request without adding to it."
+    },
+    {
+     "id": "T269-what-is-read",
+     "summary": "Read the recipe lines of land, land-batch and land-tooling, the Makefile variables they expand (recursively), and the two push scripts whole. Do not read the whole gate chain's recipes, whose hook roster names scripts it does not call.",
+     "class": "within",
+     "why": "Neither the GM's request nor the spec says how far the detector reaches. This covers the three things the task line and brief name (make land, make land-tooling, the push), and the roster lines it leaves out are not calls. Steps the gate chain runs are already items of their own: `$(MAKE)` edges through make_graph, and l7r-gate's gates as STEPS."
+    },
+    {
+     "id": "T269-script-names",
+     "summary": "A script's name is a `scripts/<path>` ending in a file extension, with a trailing full stop cut and `#` lines skipped. Globs, directories and variable paths name no script.",
+     "class": "within",
+     "why": "How names are parsed is a design choice inside the request. It follows T259-D1 as the block states it (read paths and names, never prose)."
+    },
+    {
+     "id": "T269-new-by-name",
+     "summary": "A script is new by name across all the read sources together, base against head. A moved call, or a script already called elsewhere, adds nothing.",
+     "class": "within",
+     "why": "A script the landing already ran is no new mechanism, so the register owes it no new entry. This is T259-D3's shape as the block states it."
+    },
+    {
+     "id": "T269-rule-refactor",
+     "summary": "Rule-line reading becomes one shared function `rule` used by make_graph and landing_recipes, so a target-specific variable line is not a rule. make_graph's behavior and tests are unchanged.",
+     "class": "within",
+     "why": "An internal refactor that changes no behavior. Nothing in the request touches it."
+    },
+    {
+     "id": "T269-tooling-state-entry-and-docs",
+     "summary": "dev/audits/tooling-state.md gains `covers: landing script scripts/state-sync.sh`, its prose drops the claim that the check cannot see the script, and guards.md, process-decisions.md and audit-register.md describe the new reading and its replay.",
+     "class": "within",
+     "why": "This records the register's own entry for the mechanism the fix covers, which is what the GM asked the register to hold."
+    },
+    {
+     "id": "T269-limit-nested-callees",
+     "summary": "Accepted miss: a script that a called script calls in turn is not followed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Test it against the purpose. T258's failure one level down would be a new script that state-sync.sh or l7r-gate.sh starts calling, and this limit would miss it. Even so, the limit is legitimate. The GM's own words expect a detector that does not see everything and is grown as misses are found: 'after the initial backfill, we can backfill as we go, as we find things that we missed'. The block names no such nested case today (observed 2026-11-26, the replay over 40 landings found only state-sync.sh), so this leaves no known defect, only a possible future miss handled the way the GM prescribed. Following calls literally would ask entries for every script l7r-gate.sh and the guard launcher name, which is beyond the landing steps the task covers. The limit is written beside the rule in detect.rs, where a later miss would reopen it."
+    },
+    {
+     "id": "T269-limit-unprefixed-path",
+     "summary": "Accepted miss: a script reached by a path not written `scripts/...`. One exists today, sync-with-main.sh's dirname call of state-sync.sh at sync-in.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The one instance today is state-sync.sh, and this task gives that script a `covers:` line. Since a script is new by name across all the read sources, that instance owes nothing more, and nothing the register needs is missed. Reading `)/name.ext` would misread make land's `.../task-starts.jsonl` as a script, and the GM's backfill-as-we-go words cover any future case."
+    },
+    {
+     "id": "T269-limit-l7r-gate-land",
+     "summary": "Not read: what `l7r-gate land` itself runs.",
+     "class": "within",
+     "why": "Those gates are already detected as STEPS (`landing gate <name>`), so nothing is left uncovered."
+    },
+    {
+     "id": "T269-possible-false-fire",
+     "summary": "Accepted: a message in the push scripts that newly names a script reads as a call. No shell reader is built. The escape is AUDIT_ENTRY_OK and the reopener is a false fire in the guard log.",
+     "class": "within",
+     "why": "This narrows nothing the GM asked for. It is a design trade-off in the check's precision, priced on a measured replay (0 such cases in 40 landings, 2026-11-26) and given a falsifier. It is a hypothetical, not a known defect left in place. None of the accepted limits has a case today, which is why 'Found and left? none' holds."
+    },
+    {
+     "id": "T269-backfill-to-T260",
+     "summary": "The six scripts the landing already calls with no entry go into T260's backfill (make audits' BACKFILL 254 -> 260) rather than being written here. T260's line keeps its dated 254.",
+     "class": "within",
+     "why": "The GM's request plans for an initial backfill, and T260 is that task, so routing the six there carries out the request rather than deferring a defect of T269. T269's fix makes the six visible, and item 5 asks for T269 to land before T260 writes its backfill. Keeping a dated figure as dated is fine."
     }
    ],
    "verdict": "CLEAR"

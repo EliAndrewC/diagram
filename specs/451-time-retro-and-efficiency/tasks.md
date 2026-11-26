@@ -61,6 +61,7 @@ seen red, then the check deleted and the test seen red again (FR-012).
 - none: T272 - tooling only: the escalation guard's Stop rule (`rust/guard/src/guards/escalation_hooks.rs`'s `stated_ask`: `what's waiting on you` as one item of a list of contents is no ask), its tests and its suite; no map feature, sheet, glyph, placement rule or research page changes.
 - none: T271 - tooling only: the plan tool's changed-blocks bundle directory keyed by its tree (`rust/gate/crates/plan/src/plan/bundle.rs`'s `delta_prompt`, its test) and the builder brief's scratch-name line (`scripts/container/builder-brief.md`); no map feature, sheet, glyph, placement rule or research page changes.
 - none: T270 - tooling only: `make audit`'s count of the plan gate's escapes by what each record held (`rust/gate/crates/measure/src/measure/audit.rs`, `audit/held.rs`, their test), its audit-register entry and `rust/gate/CLAUDE.md`'s row; no map feature, sheet, glyph, placement rule or research page changes
+- none: T269 - tooling only: the audit register's delta check reads a script newly called from a landing recipe as a landing step (`rust/gate/crates/checks/src/checks/audit_register/detect.rs`, its tests, `audit_register.rs`'s header), with `dev/audits/tooling-state.md`'s `covers:` line, `dev/audits/audit-register.md`, `docs/guards.md` and `docs/process-decisions.md`; no map feature, sheet, glyph, placement rule or research page changes.
 
 ## Dependencies
 

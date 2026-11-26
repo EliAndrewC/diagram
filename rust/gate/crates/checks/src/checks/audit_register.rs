@@ -9,7 +9,8 @@
 //! processes and tooling we DO implement."). `l7r-gate check audit-register`:
 //!
 //! - `--delta ROOT` (`make static` and the push): every entry well formed, and each guard module, numeric threshold, gate-chain make
-//!   target and agent file the delta adds (`detect.rs`) named by an entry's `covers:` line; else refused with the entry to write.
+//!   target, landing step (a script newly called from a landing recipe among them, 451 T269) and agent file the delta adds
+//!   (`detect.rs`) named by an entry's `covers:` line; else refused with the entry to write.
 //!   `AUDIT_ENTRY_OK="<reason>"` passes it, recorded in the guard log;
 //! - `--range BASE HEAD [--root R] [--empty-register]`: the same over a past delta, the register read from HEAD (or none) - the replay
 //!   that measures whether it fires on correct work;

@@ -14,7 +14,14 @@
 //!   calls in recipes, transitively, in the Makefile as it stands and not at the base (a target wired into the chain counts, new or not);
 //! - an AGENT FILE: `.claude/agents/<name>.md` added against the base;
 //! - a LANDING STEP: a push check, a landing phase or a landing gate script newly named where `STEPS` says they are named, or a
-//!   landing refusal, `make land`'s first pass's unnamed `stops.push(` calls, by their count (`REFUSALS`).
+//!   landing refusal, `make land`'s first pass's unnamed `stops.push(` calls, by their count (`REFUSALS`), or a LANDING SCRIPT: a
+//!   `scripts/<path>.<ext>` newly written in a landing recipe (`LANDING_TARGETS`' recipes in the Makefile, the Makefile variables they
+//!   expand, and the push's own scripts, `LANDING_SCRIPTS`) - a new callee is a landing step (451 T269: T258's `scripts/state-sync.sh`,
+//!   called from `make land`'s recipe, landed with no entry asked). New is by name over all of them together, so a call moved from a
+//!   recipe into the push script adds nothing. Known misses: a script a called script calls in its turn, a script reached by a path
+//!   not written `scripts/...` (`"$(dirname "$0")/x.sh"`), and what `l7r-gate land` runs (its gates are `STEPS`'). Known false fire: a
+//!   script the landing's scripts newly NAME without calling it (a message's `run scripts/x.sh`) reads as called, where nothing of
+//!   them named it before - none in the replay over the last 40 landings (2026-11-26).
 
 use std::collections::{BTreeSet, VecDeque};
 use std::path::Path;
@@ -203,6 +210,32 @@ pub(super) fn const_names(text: &str) -> BTreeSet<String> {
         .collect()
 }
 
+/// The targets a rule line names and what follows its colon (its help cut), or None: a comment, an indented line, an assignment
+/// and a target-specific variable (no prerequisites, and no recipe follows it) are no rule line.
+fn rule(line: &str) -> Option<(Vec<&str>, &str)> {
+    if line.starts_with('#') || line.starts_with(' ') {
+        return None;
+    }
+    let (left, right) = line.split_once(':')?;
+    let names: Vec<&str> = left.split_whitespace().collect();
+    let plain = |n: &&str| {
+        !n.starts_with('.')
+            && n.chars()
+                .all(|c| c.is_ascii_alphanumeric() || "_-".contains(c))
+    };
+    if names.is_empty()
+        || !names.iter().all(plain)
+        || right.starts_with('=')
+        || right.starts_with(':')
+    {
+        return None;
+    }
+    let right = right.split_once("##").map_or(right, |(r, _)| r);
+    let word = right.split_whitespace().next().unwrap_or_default();
+    (!right.contains('=') && !["export", "unexport", "override", "private"].contains(&word))
+        .then_some((names, right))
+}
+
 /// The targets a Makefile's rule lines define, and each one's edges: its prerequisites and the targets its recipe runs by `$(MAKE)`.
 pub(super) fn make_graph(text: &str) -> Vec<(String, Vec<String>)> {
     let mut rules: Vec<(String, Vec<String>)> = Vec::new();
@@ -219,31 +252,9 @@ pub(super) fn make_graph(text: &str) -> Vec<(String, Vec<String>)> {
             continue;
         }
         current.clear();
-        if line.starts_with('#') || line.starts_with(' ') {
-            continue;
-        }
-        let Some((left, right)) = line.split_once(':') else {
+        let Some((names, right)) = rule(line) else {
             continue;
         };
-        let names: Vec<&str> = left.split_whitespace().collect();
-        let plain = |n: &&str| {
-            !n.starts_with('.')
-                && n.chars()
-                    .all(|c| c.is_ascii_alphanumeric() || "_-".contains(c))
-        };
-        if names.is_empty()
-            || !names.iter().all(plain)
-            || right.starts_with('=')
-            || right.starts_with(':')
-        {
-            continue;
-        }
-        let right = right.split_once("##").map_or(right, |(r, _)| r);
-        let word = right.split_whitespace().next().unwrap_or_default();
-        if right.contains('=') || ["export", "unexport", "override", "private"].contains(&word) {
-            // a target-specific variable: no prerequisites, and no recipe follows it
-            continue;
-        }
         let prereqs: Vec<String> = right
             .split_whitespace()
             .filter(|w| !w.starts_with('$') && !w.starts_with('|'))
@@ -453,6 +464,84 @@ pub(super) fn refusal_items(before: &str, after: &str) -> Vec<Item> {
         .collect()
 }
 
+/// The make targets whose recipes are a landing: what they call is a landing step.
+const LANDING_TARGETS: [&str; 3] = ["land", "land-batch", "land-tooling"];
+
+/// The push's own scripts, read whole: what `make land-tooling`'s recipe runs, and the push every landing ends with.
+const LANDING_SCRIPTS: [&str; 2] = ["scripts/land-tooling.sh", "scripts/sync-with-main.sh"];
+
+/// The recipe lines of `LANDING_TARGETS` in a Makefile, with the value of each Makefile variable they expand (`$(LAND_RUN)`), and of
+/// each those expand in turn, after them.
+pub(super) fn landing_recipes(makefile: &str) -> String {
+    let (mut text, mut vars) = (String::new(), Vec::new());
+    let (mut landing, mut held): (bool, Option<&str>) = (false, None);
+    for line in makefile.lines() {
+        if let Some(name) = held {
+            // a variable's value carried over a `\`-ended line
+            vars.push((name, line));
+            held = line.ends_with('\\').then_some(name);
+        } else if let Some(recipe) = line.strip_prefix('\t') {
+            if landing {
+                text.push_str(recipe);
+                text.push('\n');
+            }
+        } else if !line.trim().is_empty() {
+            // as `make_graph` reads it: a blank line keeps the rule, any other line that is no rule's ends it
+            landing = rule(line)
+                .is_some_and(|(names, _)| names.iter().any(|n| LANDING_TARGETS.contains(n)));
+            if let Some((name, value)) = line.split_once('=') {
+                let name = name.trim_end_matches([' ', ':', '?', '+']);
+                vars.push((name, value));
+                held = line.ends_with('\\').then_some(name);
+            }
+        }
+    }
+    let (mut seen, mut from) = (BTreeSet::new(), 0);
+    while let Some(at) = text[from..].find("$(") {
+        from += at + 2;
+        let name: String = text[from..]
+            .chars()
+            .take_while(|c| c.is_ascii_alphanumeric() || *c == '_')
+            .collect();
+        if text[from + name.len()..].starts_with(')') && seen.insert(name.clone()) {
+            for (_, value) in vars.iter().filter(|(n, _)| *n == name) {
+                text.push_str(value);
+                text.push('\n');
+            }
+        }
+    }
+    text
+}
+
+/// The scripts `text` names: each `scripts/<path>` that ends in a file's extension, a `#` line's not read (a glob, a directory and
+/// a path with a variable in it, `scripts/gates/$g.sh`, name no one script).
+pub(super) fn script_names(text: &str) -> BTreeSet<String> {
+    let mut out = BTreeSet::new();
+    for line in text.lines().filter(|l| !l.trim_start().starts_with('#')) {
+        for (at, _) in line.match_indices("scripts/") {
+            let path = &line[at..];
+            let end = path
+                .find(|c: char| !(c.is_ascii_alphanumeric() || "_./-".contains(c)))
+                .unwrap_or(path.len());
+            let path = path[..end].trim_end_matches('.');
+            if !path.ends_with('/') && Path::new(path).extension().is_some() {
+                out.insert(path.to_owned());
+            }
+        }
+    }
+    out
+}
+
+/// The scripts the landing's recipes and the push's scripts name at `rev` (None: the working tree).
+fn landing_scripts(root: &Path, rev: Option<&str>) -> BTreeSet<String> {
+    let mut text = landing_recipes(&file_at(root, rev, "Makefile"));
+    for path in LANDING_SCRIPTS {
+        text.push_str(&file_at(root, rev, path));
+        text.push('\n');
+    }
+    script_names(&text)
+}
+
 /// Everything `head` adds against `base` that owes an entry, in order.
 pub(super) fn items(root: &Path, base: &str, head: &Head<'_>) -> Vec<Item> {
     let rev = match head {
@@ -499,6 +588,15 @@ pub(super) fn items(root: &Path, base: &str, head: &Head<'_>) -> Vec<Item> {
         &file_at(root, Some(base), REFUSALS.0),
         &file_at(root, rev, REFUSALS.0),
     ));
+    let before = landing_scripts(root, Some(base));
+    out.extend(
+        landing_scripts(root, rev)
+            .difference(&before)
+            .map(|n| Item {
+                kind: "landing script",
+                name: format!("landing script {n}"),
+            }),
+    );
     out.sort();
     out
 }

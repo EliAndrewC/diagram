@@ -28,7 +28,8 @@ Every optimization or procedure that costs time or tokens has an entry under `de
 for, the measurement that justified it with its date and command, its falsifier and threshold, its cost source in `make task-time`,
 when it was last audited and its cadence). `make audits` lists them, the overdue first. A decision here that adds such a mechanism
 adds its entry; the push refuses a new guard module, threshold constant, gate-chain target, landing step (a push check, a
-`make land` phase, a landing gate script or one more first-pass refusal) or agent file without one. An option declined (the next section) gets a
+`make land` phase, a landing gate script, one more first-pass refusal, or a script newly called from `make land`'s or
+`make land-tooling`'s recipe or the push's scripts, 451 T269) or agent file without one. An option declined (the next section) gets a
 `kind: declined` entry, its falsifier what would reopen it, audited on its cadence like the rest; the mechanisms in force that
 no entry names yet are `make audits`' BACKFILL list (451 T260).
 

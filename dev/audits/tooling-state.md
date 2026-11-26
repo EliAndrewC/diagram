@@ -10,6 +10,7 @@ threshold: a landing's push past 60 s or 5 MB sent as the median of the log's la
 cost: no session time (detached; 0.03 s at the landing); 3 to 10 s of one core a landing and 0.1 to 0.7 MB sent; 29 MB of disk a clone for the mirror; one fetch at a fresh clone's first sync-in
 last-audited: 2026-11-25
 cadence-days: 30
+covers: landing script scripts/state-sync.sh
 ---
 
 451 T258, the GM 2026-11-25: "I created https://github.com/EliAndrewC/diagram-tooling-state for the tooling state". The repository is
@@ -24,6 +25,6 @@ nears GitHub's 100 MB limit, which 449's 38.6 MB log was on its way to.
 
 Known limits, accepted (this builder, 2026-11-25): a detached push's failure is said at the NEXT landing, not the one that started it
 (the alternative, a foreground push, delays every landing 3 to 10 s); a landing's push sends the grown logs' last segments whole
-(0.1 to 0.7 MB) where a delta would be a few KB - git's thin pack found no base for them, not pursued at this size; the audit
-register's check does not see this step (a script called from a recipe is none of its five detectors), so this entry carries no
-`covers:` line.
+(0.1 to 0.7 MB) where a delta would be a few KB - git's thin pack found no base for them, not pursued at this size. The audit
+register's check did not see this step when it landed (a script called from a recipe was none of its detectors); since 451 T269 a
+script newly called from a landing recipe is a landing step, and this entry's `covers:` line names it.
