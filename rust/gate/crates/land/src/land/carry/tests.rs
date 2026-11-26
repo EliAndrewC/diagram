@@ -83,10 +83,78 @@ fn a_clean_carry_is_verified_and_says_so_in_one_line() {
     assert_eq!(out.lines().count(), 1);
     has(&out, " - verified: nothing in progress, nothing unmerged, nothing staged, its 1 non-spec file(s) in HEAD\n");
     assert_eq!(git(&root, &["log", "-1", "--format=%s"]), "T270: code");
-    // carried twice: already there
-    let (code, out, _) = carried(&root, &builder);
-    assert_eq!(code, 0);
+}
+
+#[test]
+fn a_commit_carried_twice_changes_nothing_and_leaves_no_pick_standing() {
+    // RED FIRST (451 T304, 2026-11-26): before `skipped_empty`, the second carry here exits 2 with CHERRY_PICK_HEAD standing, every
+    // run. The clone holds a commit the builder's tree lacks, as a real clone does, so the pick's sha is never the builder's; the
+    // test this replaces had both on one parent and passed only while the commit and its pick fell in one wall second
+    let (_dir, root, builder) = trees("carry-twice");
+    commit(
+        &root,
+        "the clone's own",
+        &[("rust/own.rs", "fn own() {}\n")],
+    );
+    commit(
+        &builder,
+        "T270: code",
+        &[
+            ("rust/held.rs", "fn held() {}\n"),
+            (TASKS_MD, &with_line("T270")),
+        ],
+    );
+    assert_eq!(carried(&root, &builder).0, 0);
+    let head = git(&root, &["rev-parse", "HEAD"]);
+    assert_ne!(head, git(&builder, &["rev-parse", "HEAD"]));
+    let (code, out, err) = carried(&root, &builder);
+    assert_eq!((code, err.as_str()), (0, ""), "{out}");
+    assert_eq!(out.lines().count(), 1);
+    has(&out, " already holds its changes - nothing to carry - verified: nothing in progress, nothing unmerged, nothing staged, its 1 non-spec file(s) in HEAD\n");
+    assert_eq!(refusals(&root), Ok(Vec::new()));
+    assert_eq!(git(&root, &["rev-parse", "HEAD"]), head);
+    assert_eq!(git(&root, &["status", "--porcelain"]), "");
+}
+
+#[test]
+fn a_commit_in_heads_history_is_not_picked() {
+    let (_dir, root, builder) = trees("carry-history");
+    commit(
+        &builder,
+        "T270: code",
+        &[("rust/held.rs", "fn held() {}\n")],
+    );
+    git(&root, &["merge", "-q", "--ff-only", "builder"]);
+    let (code, out, err) = carried(&root, &builder);
+    assert_eq!((code, err.as_str()), (0, ""));
     has(&out, "'s history - nothing to carry\n");
+}
+
+#[test]
+fn lines_kept_from_both_sides_that_equal_ours_end_as_an_empty_pick_skipped() {
+    // RED FIRST (451 T304): before `skipped_empty` this exits 2, "its continue failed", the pick standing. The builder's one line
+    // is already the clone's, beside another the clone added at the same place: both kept is ours, so the continue has nothing
+    let (_dir, root, builder) = trees("carry-ours");
+    commit(&builder, "T269", &[(TASKS_MD, &with_line("T269"))]);
+    let ours = TASKS.replace(
+        "tooling only\n",
+        "tooling only\n- none: T270 - tooling only\n- none: T269 - tooling only\n",
+    );
+    commit(&root, "both lines here", &[(TASKS_MD, &ours)]);
+    let head = git(&root, &["rev-parse", "HEAD"]);
+    let (code, out, err) = carried(&root, &builder);
+    assert_eq!((code, err.as_str()), (0, ""), "{out}");
+    has(
+        &out,
+        " already holds its changes - nothing to carry - verified: ",
+    );
+    has(
+        &out,
+        "its 0 non-spec file(s) in HEAD; both sides kept in specs/451-x/tasks.md\n",
+    );
+    assert_eq!(refusals(&root), Ok(Vec::new()));
+    assert_eq!(git(&root, &["rev-parse", "HEAD"]), head);
+    assert_eq!(std::fs::read_to_string(root.join(TASKS_MD)).unwrap(), ours);
 }
 
 #[test]

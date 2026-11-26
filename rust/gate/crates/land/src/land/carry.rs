@@ -24,6 +24,9 @@
 //! progress, nothing unmerged, nothing staged, and each non-spec file of the carried commit in HEAD - changed by the carry (HEAD
 //! against the commit before it names the path) or already holding the carried commit's content. Its last line says so.
 //!
+//! A commit whose changes HEAD already holds - carried before under another sha, or its lines kept from both sides equal to ours -
+//! makes an EMPTY pick: it is skipped, verified the same way, and said to change nothing (exit 0, nothing left in progress; T304).
+//!
 //! Exit: 0 carried and verified (or already in HEAD's history), 2 refused or stopped (the stop leaves the pick in progress), 1 the
 //! end's verification failed.
 
@@ -302,6 +305,18 @@ fn missing(root: &Path, sha: &str, before: &str) -> Result<(usize, Vec<String>),
     Ok((own.len(), lacks))
 }
 
+/// A pick that came out EMPTY - `CHERRY_PICK_HEAD` standing, nothing unmerged, nothing staged: every change of the commit is already
+/// in HEAD - is skipped (`git cherry-pick --skip`), so nothing is left in progress; whether it was one. WHY (451 T304): a commit
+/// carried a second time is in HEAD's history only where its first pick reproduced its sha - the same parent, author, message AND
+/// committer second - so a second `make carry` of a carried commit, in a real clone always under another sha, stopped at exit 2
+/// with a pick standing that `make land` then refused; the test of it passed only while the builder's commit and its pick fell in one
+/// wall second (3 red of 100 loops alone, 2026-11-26). A pick that refused to start leaves no marker and is no empty pick.
+fn skipped_empty(root: &Path) -> Result<bool, String> {
+    let empty = git_dir(root)?.join("CHERRY_PICK_HEAD").exists()
+        && git(root, &["diff", "--cached", "--quiet"])?.0 == 0;
+    Ok(empty && git(root, &["cherry-pick", "--skip"])?.0 == 0)
+}
+
 /// The carry, after its arguments: what it printed and its exit code.
 fn carry(root: &Path, from: &Path, commit: &str, said: &mut Said) -> Result<i32, String> {
     let tree = root.display();
@@ -359,7 +374,10 @@ fn carry(root: &Path, from: &Path, commit: &str, said: &mut Said) -> Result<i32,
             Ok(2)
         };
         if unmerged.is_empty() {
-            // nothing to resolve: the pick refused to start (a local edit in its way) or came out empty
+            if skipped_empty(root)? {
+                return end(root, &sha, &before, &kept, said);
+            }
+            // nothing to resolve and nothing standing: the pick refused to start (a local edit in its way)
             let why = lines(&out).join(" | ");
             return stopped(said, &format!("git cherry-pick said: {why}"));
         }
@@ -376,7 +394,7 @@ fn carry(root: &Path, from: &Path, commit: &str, said: &mut Said) -> Result<i32,
             Ok(paths) => kept = paths,
         }
         let (rc, out) = git(root, &CONTINUE.split(' ').collect::<Vec<_>>())?;
-        if rc != 0 {
+        if rc != 0 && !skipped_empty(root)? {
             let why = lines(&out).join(" | ");
             return stopped(said, &format!("its continue failed: {why}"));
         }
@@ -420,7 +438,13 @@ fn end(
     } else {
         format!("; both sides kept in {}", kept.join(", "))
     };
-    said.say(&format!("carry: {short} carried into {tree} as {head} - verified: nothing in progress, nothing unmerged, nothing staged, its {count} non-spec file(s) in HEAD{both}\n"));
+    // HEAD where the carry found it: the pick came out empty and was skipped
+    let how = if before.starts_with(&head) {
+        format!("changes nothing in {tree}, whose HEAD {head} already holds its changes - nothing to carry")
+    } else {
+        format!("carried into {tree} as {head}")
+    };
+    said.say(&format!("carry: {short} {how} - verified: nothing in progress, nothing unmerged, nothing staged, its {count} non-spec file(s) in HEAD{both}\n"));
     Ok(0)
 }
 

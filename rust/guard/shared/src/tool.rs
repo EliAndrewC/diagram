@@ -25,6 +25,22 @@ impl Said {
     }
 }
 
+/// `program`, as every asker here starts it: with `GIT_OPTIONAL_LOCKS=0`, so that a `git status` a guard asks - and one the script
+/// or gate it asks runs in turn - only READS the index. WHY (451 T304): `git status` takes `<git dir>/index.lock` for as long as it
+/// refreshes the index, to write the refreshed stat data back, and a `git add` or `git commit` that meets the lock dies ("Unable
+/// to create ... index.lock: File exists"). The guards ask `git -C <the session clone> status --porcelain` from every agent's calls
+/// (`clone_sync_hooks`' `dirty`, on each Bash call naming `make`), so three builders' hooks met the session's own commits three
+/// times on 2026-11-26; in a clone of this repository, three loops of that status beside 200 rounds of add and commit refused 190
+/// of them, and 0 with the variable. A lock a command NEEDS (an add, a commit, a merge) is still taken: the variable names only
+/// the optional ones. NOT covered: `git diff` against the work tree, which in git 2.53 writes its refresh back whatever the
+/// variable says, where a file's stat data is stale and its content unchanged (142 of 200 rounds refused with it, 154 without).
+/// The guards' direct `Command::new("git")` calls refresh no index (`rev-parse`, `for-each-ref`, a tree-to-tree diff).
+fn command(program: &str) -> Command {
+    let mut asked = Command::new(program);
+    asked.env("GIT_OPTIONAL_LOCKS", "0");
+    asked
+}
+
 /// Run `program args` in `dir`, `stdin` written to it.
 #[must_use]
 pub fn ask(dir: &Path, program: &str, args: &[&str], stdin: &str) -> Said {
@@ -42,7 +58,7 @@ pub fn ask(dir: &Path, program: &str, args: &[&str], stdin: &str) -> Said {
 ///
 /// The program could not be started: what the spawn said (a missing file, one not executable, one open for writing).
 pub fn ask_started(dir: &Path, program: &str, args: &[&str], stdin: &str) -> std::io::Result<Said> {
-    let mut child = Command::new(program)
+    let mut child = command(program)
         .args(args)
         .current_dir(dir)
         .stdin(Stdio::piped())
@@ -71,7 +87,7 @@ pub fn ask_started(dir: &Path, program: &str, args: &[&str], stdin: &str) -> std
 /// 2026-11-08 on `sh -c 'exit 1'`, five runs each; T013).
 #[must_use]
 pub fn within(dir: &Path, program: &str, args: &[&str], limit: Duration) -> bool {
-    let Ok(mut child) = Command::new(program)
+    let Ok(mut child) = command(program)
         .args(args)
         .current_dir(dir)
         .stdin(Stdio::null())
@@ -105,7 +121,7 @@ pub fn within(dir: &Path, program: &str, args: &[&str], limit: Duration) -> bool
 /// (`subprocess.run(timeout=)`'s use here, without coreutils `timeout`'s 100 ms a call, measured in T013).
 #[must_use]
 pub fn ask_within(dir: &Path, program: &str, args: &[&str], limit: Duration) -> Said {
-    let Ok(mut child) = Command::new(program)
+    let Ok(mut child) = command(program)
         .args(args)
         .current_dir(dir)
         .stdin(Stdio::null())
@@ -210,6 +226,42 @@ mod tests {
     use std::time::Duration;
 
     use super::{ask, ask_started, ask_within, within};
+
+    /// RED FIRST (451 T304): with a bare `Command::new`, each asker's `git status` rewrites the index it refreshed - under
+    /// `index.lock`, which a commit beside it dies on. The file is rewritten with its own content and another mtime, so the index's
+    /// stat data for it is stale and a status that may lock writes it back.
+    #[test]
+    fn a_git_asked_takes_no_optional_lock_so_a_status_leaves_the_index_as_it_was() {
+        let dir = crate::tempdir::TempDir::new("tool-optional-locks");
+        let repo = dir.path();
+        let limit = Duration::from_secs(30);
+        let index = || std::fs::read(repo.join(".git/index")).unwrap();
+        assert!(ask(repo, "git", &["init", "-q"], "").ok());
+        std::fs::write(repo.join("a"), "a\n").unwrap();
+        assert!(ask(repo, "git", &["add", "a"], "").ok());
+        let before = index();
+        let old = std::time::SystemTime::UNIX_EPOCH + Duration::from_secs(1_000_000_000);
+        std::fs::File::options()
+            .write(true)
+            .open(repo.join("a"))
+            .unwrap()
+            .set_modified(old)
+            .unwrap();
+        let status = ["status", "--porcelain"];
+        assert_eq!(ask(repo, "git", &status, "").out, "A  a");
+        assert_eq!(ask_within(repo, "git", &status, limit).out, "A  a");
+        assert!(within(repo, "git", &status, limit));
+        assert!(index() == before, "a status asked here rewrote the index");
+        // the fixture does go stale: a status that may lock rewrites this index
+        let bare = std::process::Command::new("git")
+            .args(status)
+            .current_dir(repo)
+            .env_remove("GIT_OPTIONAL_LOCKS")
+            .output()
+            .unwrap();
+        assert!(bare.status.success());
+        assert!(index() != before, "the fixture's index was never stale");
+    }
 
     #[test]
     fn a_tool_asked_within_a_limit_answers_or_is_killed() {

@@ -72,6 +72,7 @@ seen red, then the check deleted and the test seen red again (FR-012).
 - none: T159 - tests only: three test-only (`cfg(test)`) files of `rust/mode_a` (`audit/armory/tests.rs`, `pool_sweep.rs`, `page/held.rs`) read each pool sheet as the sweep does, a generated exception composed in process in place of its gitignored svg on disk; nothing that is drawn, no map feature, sheet, glyph, placement rule or research page changes
 - none: T289 - tooling only: what `make carry` keeps both sides of (`rust/gate/crates/land/src/land/carry.rs` and its tests: a filed task's box by block, a plan section stub), a test of `make task-add` across two worktrees (`rust/gate/crates/task/src/task_add/tests.rs`), and the builders' brief and report format (`scripts/container/builder-brief.md`, `builder-report-format.md`); no map feature, sheet, glyph, placement rule or research page changes.
 - none: T104 - tooling only: the idle-tests guard's suite (`tests/hooks/test-idle-tests-hooks.sh`: case 6's contention by a gate, case 9's start waited for, a red wait's timer state) and the guard's one writer of its state file and records (`rust/guard/src/guards/idle_tests_hooks.rs`, its test); no map feature, sheet, glyph, placement rule or research page changes
+- none: T304 - tooling only: `make carry`'s empty pick skipped (`rust/gate/crates/land/src/land/carry.rs`, its tests) and the guards' asked programs run with no optional git lock (`rust/guard/shared/src/tool.rs`, its test); no map feature, sheet, glyph, placement rule or research page changes
 
 ## Dependencies
 

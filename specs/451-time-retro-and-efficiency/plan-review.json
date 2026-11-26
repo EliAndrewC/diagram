@@ -2076,6 +2076,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T304 (451 T281's census, 2026-11-26: a carry test red under load, and the session clone's `index.lock` met by the session's own commits while builders ran; the stamps of the task's line are its remainder)": {
+   "sha256": "44f60cc54d0bc2b1ef2f20f8120f7e512ced1ea0700a897c49a228967beb18a0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T304 Approach (checklist part A)": {
+   "sha256": "c38e67a6a3ce9e2b7a7d82bb6b0ecb40ee2cc60a0448070865639fc223a00bd1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -26625,6 +26637,58 @@
      "why": "Nothing the block reports is a defect left: the standing over-bar composing test is a timing difference, not a wrong outcome, and the gate/pool tests pass in a clean tree; the task makes a verdict tree-independent and speeds nothing, so 'no' is the plain reading."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T304 (451 T281's census, 2026-11-26: a carry test red under load, and the session clone's `index.lock` met by the session's own commits while builders ran; the stamps of the task's line are its remainder)",
+    "### T304 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 empty pick skipped",
+     "summary": "make carry treats a failed pick or failed --continue that leaves CHERRY_PICK_HEAD with nothing unmerged and nothing staged as an empty pick: git cherry-pick --skip, then the END verification (nothing in progress/unmerged/staged, non-spec files in HEAD), exit 0. A pick that never started, or a continue a hook refused, still stops.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a second carry of a carried commit stopped with a pick standing, which make land refuses), as constitution XIV and fix-as-we-go require. The carry still ends verified, never assumed (T292); the stop cases that hold real unfinished work are kept and pinned. Nothing asked is narrowed."
+    },
+    {
+     "id": "D2 tests off the clock",
+     "summary": "The clean-carry test ends at its first carry; three tests replace its second half (the clone given its own commit so the pick sha differs; history reached by fast-forward; the kept-equal-ours continue door), red first with skipped_empty off.",
+     "class": "within",
+     "why": "Makes the test exercise the case that happens in a real clone rather than the same-second sha collision; enforcement of the fix, not new scope."
+    },
+    {
+     "id": "D3 GIT_OPTIONAL_LOCKS=0 on every asked program",
+     "summary": "shared::tool's three askers start their program through command, which sets GIT_OPTIONAL_LOCKS=0 for every program a guard asks (git and the scripts/gate it runs, which inherit it); locks a command needs are still taken. The per-call --no-optional-locks flag was priced and rejected because it reaches neither the scripts nor the gate.",
+     "class": "within",
+     "why": "Carries the brief's instruction (make the hooks' read-only git calls take no optional locks) at the one place every such call passes through. Reaching the scripts and gate a guard asks is reaching the hooks' own calls by the route they take, not a new behavior: only optional locks are dropped, the cost (a stale entry re-read by each such status) is stated."
+    },
+    {
+     "id": "D4 direct git spawns read and left",
+     "summary": "The guard crates' direct Command::new(\"git\") calls (rev-parse, for-each-ref, worktree remove, a tree-to-tree diff, a suite tool's own tree) are left, none refreshing an index.",
+     "class": "within",
+     "why": "None of the listed verbs writes an index refresh, so leaving them leaves no part of the lock fix undone. (Its count is noted in the report: the sentence says five calls and lists six files and about eight verbs.)"
+    },
+    {
+     "id": "D5 stamps remainder sequenced",
+     "summary": "The hooks-test suite stamps, gate-green-<area> stamps and semantic-id-cache-2.json (single-valued in the common git dir, overwritten by every worktree; a suite reruns though its tree last passed) are left to a later builder as T304's remainder, before T302; this landing does not tick T304.",
+     "class": "within",
+     "why": "Not dropped: the work stays in T304, which this landing does not tick, ordered before T302 with why it is not fixed here (FR-009's three parts). Its visible effect is reruns (time), not a false pass, and it is to be measured before it changes."
+    },
+    {
+     "id": "D6 guards' git diff lock left as remainder",
+     "summary": "The guards' git diff calls against a work tree (delta_crates, changed_lines, stages_ledger, conflict_marker_hooks) still take index.lock where a stale entry stands (142 of 200 with the variable); left as T304's remainder, lands before T302.",
+     "class": "within",
+     "why": "This is a wrong outcome that can still occur, so it is weighed as the only candidate narrowing; it is not one, because it is sequenced, not excluded: T304 is not ticked by this landing, the remainder is filed under T304 and ordered before T302, and the reason the uniform mechanism cannot reach it is measured (diff writes its refresh whatever GIT_OPTIONAL_LOCKS says; diff.autoRefreshIndex=false changes what it lists). The unmeasured premise that none reaches the session clone from a builder's tree carries nothing here and must not be used to tick T304 without that measurement or the fix."
+    },
+    {
+     "id": "D7 order and exits",
+     "summary": "Lands before T302; builder-checks for the two crates green in the builder's tree; full gate and coverage at landing; red recorded and set down, a can't-be-done claim through make arbiter-ask.",
+     "class": "within",
+     "why": "Process order and exits under the project's standing landing rules; nothing asked is narrowed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -41856,6 +41920,56 @@
      "summary": "nothing deferred; the task is not classed as performance work",
      "class": "within",
      "why": "Nothing the block reports is a defect left: the standing over-bar composing test is a timing difference, not a wrong outcome, and the gate/pool tests pass in a clean tree; the task makes a verdict tree-independent and speeds nothing, so 'no' is the plain reading."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T304": {
+   "section_sha256": "bf54d16548b753e02edebaa0bf41b38e6588279adab3054634dad37e8bf37022",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 empty pick skipped",
+     "summary": "make carry treats a failed pick or failed --continue that leaves CHERRY_PICK_HEAD with nothing unmerged and nothing staged as an empty pick: git cherry-pick --skip, then the END verification (nothing in progress/unmerged/staged, non-spec files in HEAD), exit 0. A pick that never started, or a continue a hook refused, still stops.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a second carry of a carried commit stopped with a pick standing, which make land refuses), as constitution XIV and fix-as-we-go require. The carry still ends verified, never assumed (T292); the stop cases that hold real unfinished work are kept and pinned. Nothing asked is narrowed."
+    },
+    {
+     "id": "D2 tests off the clock",
+     "summary": "The clean-carry test ends at its first carry; three tests replace its second half (the clone given its own commit so the pick sha differs; history reached by fast-forward; the kept-equal-ours continue door), red first with skipped_empty off.",
+     "class": "within",
+     "why": "Makes the test exercise the case that happens in a real clone rather than the same-second sha collision; enforcement of the fix, not new scope."
+    },
+    {
+     "id": "D3 GIT_OPTIONAL_LOCKS=0 on every asked program",
+     "summary": "shared::tool's three askers start their program through command, which sets GIT_OPTIONAL_LOCKS=0 for every program a guard asks (git and the scripts/gate it runs, which inherit it); locks a command needs are still taken. The per-call --no-optional-locks flag was priced and rejected because it reaches neither the scripts nor the gate.",
+     "class": "within",
+     "why": "Carries the brief's instruction (make the hooks' read-only git calls take no optional locks) at the one place every such call passes through. Reaching the scripts and gate a guard asks is reaching the hooks' own calls by the route they take, not a new behavior: only optional locks are dropped, the cost (a stale entry re-read by each such status) is stated."
+    },
+    {
+     "id": "D4 direct git spawns read and left",
+     "summary": "The guard crates' direct Command::new(\"git\") calls (rev-parse, for-each-ref, worktree remove, a tree-to-tree diff, a suite tool's own tree) are left, none refreshing an index.",
+     "class": "within",
+     "why": "None of the listed verbs writes an index refresh, so leaving them leaves no part of the lock fix undone. (Its count is noted in the report: the sentence says five calls and lists six files and about eight verbs.)"
+    },
+    {
+     "id": "D5 stamps remainder sequenced",
+     "summary": "The hooks-test suite stamps, gate-green-<area> stamps and semantic-id-cache-2.json (single-valued in the common git dir, overwritten by every worktree; a suite reruns though its tree last passed) are left to a later builder as T304's remainder, before T302; this landing does not tick T304.",
+     "class": "within",
+     "why": "Not dropped: the work stays in T304, which this landing does not tick, ordered before T302 with why it is not fixed here (FR-009's three parts). Its visible effect is reruns (time), not a false pass, and it is to be measured before it changes."
+    },
+    {
+     "id": "D6 guards' git diff lock left as remainder",
+     "summary": "The guards' git diff calls against a work tree (delta_crates, changed_lines, stages_ledger, conflict_marker_hooks) still take index.lock where a stale entry stands (142 of 200 with the variable); left as T304's remainder, lands before T302.",
+     "class": "within",
+     "why": "This is a wrong outcome that can still occur, so it is weighed as the only candidate narrowing; it is not one, because it is sequenced, not excluded: T304 is not ticked by this landing, the remainder is filed under T304 and ordered before T302, and the reason the uniform mechanism cannot reach it is measured (diff writes its refresh whatever GIT_OPTIONAL_LOCKS says; diff.autoRefreshIndex=false changes what it lists). The unmeasured premise that none reaches the session clone from a builder's tree carries nothing here and must not be used to tick T304 without that measurement or the fix."
+    },
+    {
+     "id": "D7 order and exits",
+     "summary": "Lands before T302; builder-checks for the two crates green in the builder's tree; full gate and coverage at landing; red recorded and set down, a can't-be-done claim through make arbiter-ask.",
+     "class": "within",
+     "why": "Process order and exits under the project's standing landing rules; nothing asked is narrowed."
     }
    ],
    "verdict": "CLEAR"
