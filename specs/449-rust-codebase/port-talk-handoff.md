@@ -1,14 +1,19 @@
 # Morning handoff: the talk before the port resumes (written 2026-11-26, overnight)
 
-For the FRESH session that holds the talk with the GM (449 T437). Everything below is on GitHub `main`; nothing lives only
-in the old container. Read this, then `specs/449-rust-codebase/port-talk-agenda.md` (the 14 items with their measurements)
+For the FRESH session that holds the talk with the GM (449 T437). Everything below is on GitHub `main`, and the tooling state is in its private repository (step 2). What does NOT outlive the
+old container: the sessions' transcripts under `~/.claude/projects/` (the measurement scripts that read them keep their
+result tables beside them in `dev/measurements/`) and the build caches. Read this, then `specs/449-rust-codebase/port-talk-agenda.md` (the 14 items with their measurements)
 and `docs/process-decisions.md` (what is already decided, and declined, with the numbers and what would reopen each).
 
 ## To pick up in a new container
 
 1. Clone into `/diagram/.clones/<session-name>` as `docs/session-clones.md` says; `scripts/sync-with-main.sh sync-in`.
-2. `make state-restore` - the tooling state (event logs `make task-time` reads, handoffs, records) from the private
-   `EliAndrewC/diagram-tooling-state` (never link or copy it anywhere public; the same for `EliAndrewC/diagram-research`).
+2. `make state-restore FROM=diagram-backlog` - the old session clone's tooling state (the check answers and the event logs
+   `make task-time` reads) from the private `EliAndrewC/diagram-tooling-state` (never link or copy it anywhere public; the
+   same for `EliAndrewC/diagram-research`). The state is kept per clone NAME, so a bare `make state-restore` in a clone of
+   another name restores nothing. Rehearsed 2026-11-26 in a throwaway clone: 2,755 answers and 578,276 log lines restored
+   in 8 s, and `make task-time SINCE=24h` then read 47 landed tasks. NOT in the saved state: the page sessions' handoff
+   files (`.git/l7r-handoffs/`; P16-P18's are spent, their results on main) and the sessions' transcripts.
 3. `make switches` - the research switch is OPEN (the GM, 2026-11-25: "We can also handle those open research tasks
    overnight as well, whenever it is convenient."); the claims switch is at `report`.
 4. `make speckit-todo`, `make audits` (the register, the overdue first), `make task-time SINCE=48h` (the task time breakdown).
@@ -36,31 +41,46 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 
 - **Item 6**: building begins while a feature's plan review runs (decided 2026-11-25).
 - **Item 12**: the builders' context cap stays 300k, builders stay, briefs are sized (decided 2026-11-25).
-- **Items 1-5 and 7**: two code builders at once in REUSED worktrees; three or four only for work that compiles nothing
-  (decided 2026-11-26; landed-per-hour 1.71 at one, 2.02 at two; memory NOT yet measured - the container's limit is 10 GiB
-  with no swap and has been touched; 451 T274 is the sampler).
 - **Item 9, the disk and time levers**: none adopted - lighter debug info was already in (451 T246); incremental-off, a
   shared compiler cache and an eager drop of coverage builds declined on measurement; stale coverage variants are 451 T278.
+- **Still open of the pre-approved set - items 1-5 and 7**: a PROVISIONAL working default, for the GM to confirm - two code
+  builders at once in REUSED worktrees, three or four only for work that compiles nothing (that second rule is the session's
+  addition, not in the pre-approval). Landed per wall hour 1.71 at one builder and 2.02 at two; three and four untested on
+  comparable work. The pre-approval's memory condition is NOT met: memory was not measured, the container's limit is 10 GiB
+  with no swap and its peak has touched it (451 T274 is the sampler). Items 2-5 and 7 have no measurement of their own.
 - **Still open of the pre-approved set - item 14** (the builder report format; escalation-check on a narrower bundle; a
   Sonnet-tier seeded test): not measured overnight. Each closes with a Decided entry and an audit entry.
 
-## The GM's canon answers of 2026-11-26 (recorded in `docs/gm-rulings.md`)
+## The GM's canon answers (recorded in `docs/gm-rulings.md`), and what the record did with them
 
-- Ryusei had no provincial lineages until the Lion/Unicorn war and has since acquired some (0138 and 0140 restated).
-- Burakumin neighborhoods stand inside a city's walls, at the edge. The search he asked for found a quarter inside the wall
+- 2026-11-26: Ryusei had no provincial lineages until the Lion/Unicorn war and has since acquired some (0138 and 0140 restated).
+- 2026-11-26: burakumin neighborhoods stand inside a city's walls, at the edge. The search he asked for found a quarter inside the wall
   attested for China (Zhending 1551, Shaoxing) and outside by a gate elsewhere; Japan at the edge or beyond. 0156 and 0193 no
   longer call the placement a deviation; the siege reason is labeled the setting's own. The maps did not move.
-- Earlier the same night: a provincial city's 3,000 include the samurai country estates (0173 restated); the Emperor's
-  granaries' siting reasoned from Imperial oversight (0142).
+- 2026-11-24 (not a new answer; applied overnight): a provincial city's 3,000 include the samurai country estates (0173
+  restated by P16; 0001 and 0174 by P18).
+- NOT an answer of his: 0142 now reasons the Emperor's granaries' siting from Imperial oversight, which his notes
+  (`budgets.md`) state; the brigands reasoning was this project's writing.
 
-## For the GM, small (each to pass `escalation-check` before it is put to him)
+## For the GM, small (read by `escalation-check` 2026-11-26: 2 kept, 2 rewritten as below, none cut)
 
-- 0141's aqueduct banks are drawn "darker and wider than life" as a labeled drawing convention; his true-size ruling says a
-  feature that seems too small is raised with him. No record shows it was.
-- 0238's visible sentence says monks perform funeral rites "in the countryside and in many cities"; his recorded words are
-  "quite a lot of the funerary rites in the cities" (a share of the rites, not a count of cities). A wording fix for a page
-  session, his words in `specs/273-hamlet-graveyards/request.md`.
-- 0181's "2.8% outside the wall" carries a setting-canon label with no recorded words.
+- **Builders at once (an offer, not a question).** Two at once is the working default. Total time favors it (1.71 tasks landed
+  per hour at one builder, 2.02 at two). It closes under his pre-approval once 451 T274's sampler shows peak memory under a
+  margin against the container's 10 GiB limit, which has been touched once with no out-of-memory kill. Separately the session
+  added three or four at once for work that compiles nothing; that is outside what he approved, and is dropped if he would
+  rather.
+- **A disk trade (his to weigh).** Dropping the gate's coverage build at every landing frees about 65 GB for about 6 minutes a
+  landing; declined under his pre-approval, his to take if the disk presses again.
+- **0141's aqueduct banks.** The water is drawn true size; the bank outline is enlarged, about 2 px each side, as a labeled
+  drawing convention dated 2026-08-09 and once credited to him with no recorded words. The rulings entry "To scale means true
+  size" (2026-07-21; his quoted words: "I do not want that. We're trying to be perfectly to scale, remember?") says an
+  illegibly small feature is raised with him, never silently inflated. Does he accept the wider banks as a convention, or
+  are they drawn true size? BRING to the question what the true bank width comes to at fit zoom, or a crop of both - without
+  it he chooses blind.
+- **0181's share outside the wall.** On 2026-08-10 a session chose 2.8% (60 of 2,160 households, the wharf hamlet only) from
+  three answers (57%, 30%, 2.8%). The page labels it setting canon, but none of his words are recorded (commits 1e07eaba8 and
+  4a9b1b951 hold a session's paraphrase; the August request files of 283 and 303 were not searched for it). Does he accept
+  it as canon? If not, it is relabeled as this project's choice.
 
 ## What landed overnight in 451 (tooling and the record)
 
@@ -69,7 +89,8 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
   `dev/gm-attribution-baseline.jsonl` stays as an EMPTY file on purpose.
 - **T251** (the 10 claims), **T265** (the dedication knob relabeled UNRESEARCHED; the check accepts dated
   `rulings-YYYY-MM-DD.md` files), **T263** (a flaky guard test: its fixture), **T267** (claims-checked in a worktree).
-- Page sessions P16 and P17 (the canon fixes above), every owed check answered.
+- Page sessions P16, P17 and P18 (the canon fixes above; P18 also 0140's "provincial chancellors" and 0238's monks'
+  funerary rites, from his recorded words), every owed check answered.
 - Earlier the same day: T226-T249, T252-T259, T262 (see `git log` and `make task-time`).
 
 ## Open in 451, by kind (none blocks the talk)
@@ -80,6 +101,8 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 - T159: a fresh worktree's gate is red on one `rust/mode_a` test (missing gitignored renders) - every parallel builder meets it.
 - The research backlog: `make research-backlog` (UNRESEARCHED decisions; the switch is open).
 - Feature 455 (research beside the build) is the GM's to work; untouched.
+- Stale, harmless: T251's archived plan section says T264 and T265 "land before T250" (T250 landed first; T265 has landed).
+  The branch `backup/diagram-backlog-land` on GitHub holds one superseded ledger-row commit whose rows are on main.
 
 ## Records
 
