@@ -14,7 +14,12 @@
 # It is deliberately coarse, like review-gate.sh: it checks that the review was RECORDED and current,
 # never that it was good. The judgment is `spec-fidelity`'s, in its PLAN REVIEW mode.
 #
-# ESCAPE: PLAN_REVIEW_OK with a reason, recorded to the guard log and dev/bypass-log/.
+# ESCAPE: PLAN_REVIEW_OK with a reason, recorded to the guard log and dev/bypass-log/ with what the gate held.
+#
+# THE GATE IS ASKED BEFORE THE ESCAPE IS READ (feature 451 T262). The escape was honored first, so a standing reason carried from
+# push to push was recorded where the gate owed nothing: 7 of 12 escape records replayed at their commits (451 T261's builder,
+# 2026-11-26), and 155 of the 160 records of 2026-11-25/26 named a cause the gate never had. A clean gate now says so in one line,
+# passes and records nothing; an honored escape's record carries each feature held, its rule and the blocks listed.
 set -uo pipefail
 
 # GUARD_EDIT_OK: three dots, the merge base - see review-gate.sh; another session's push is not this clone's delta
@@ -26,6 +31,12 @@ PG_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 . "$PG_HERE/../hooks/lib/guardlog.sh"
 
+OWED="$("$PG_HERE/l7r-gate.sh" plan push "$RANGE")"
+if [ -z "$OWED" ]; then
+  [ -n "${PLAN_REVIEW_OK:-}" ] && printf 'plan-gate: the plan gate owes nothing - drop PLAN_REVIEW_OK\n'
+  exit 0
+fi
+
 if [ -n "${PLAN_REVIEW_OK:-}" ]; then
   if ! "$PG_HERE/l7r-gate.sh" escape reason-ok <<<"$PLAN_REVIEW_OK" >/dev/null; then
     guard_log plan-gate blocked "$PLAN_REVIEW_OK" PLAN_REVIEW_OK-no-reason
@@ -34,14 +45,11 @@ if [ -n "${PLAN_REVIEW_OK:-}" ]; then
     exit 1
   fi
   guard_log plan-gate escaped "$PLAN_REVIEW_OK" plan-review-ok
-  "$PG_HERE/l7r-gate.sh" plan door bypass-record "$ROOT" push "$PLAN_REVIEW_OK" >/dev/null || true
+  "$PG_HERE/l7r-gate.sh" plan door bypass-record "$ROOT" push "$PLAN_REVIEW_OK" "$RANGE" >/dev/null || true
   printf 'plan-gate: BYPASSED - %s\n' "$PLAN_REVIEW_OK"
   printf '  recorded in dev/bypass-log/ - `make audit` lists it\n'
   exit 0
 fi
-
-OWED="$("$PG_HERE/l7r-gate.sh" plan push "$RANGE")"
-[ -z "$OWED" ] && exit 0
 
 while IFS=$'\t' read -r feature rule _; do
   guard_log plan-gate blocked "$feature" "$rule"

@@ -90,8 +90,17 @@ fn guard_log(event: &str, detail: &str, rule: &str) {
     });
 }
 
-/// The reason ships with the push: `dev/bypass-log/` is in the repository and `make audit` lists it.
-fn bypass_record(root: &Path, place: &str, why: &str) {
+/// What the plan gate held when an escape was honored, as its record carries it: each feature, its rule and the blocks listed (their
+/// headings; none where the plan or its record is missing).
+fn held_row(feature: &str, rule: &str, blocks: &[String]) -> Value {
+    json!({"feature": feature, "rule": rule, "blocks": blocks})
+}
+
+/// The reason ships with the push: `dev/bypass-log/` is in the repository and `make audit` lists it. `held` is what the plan gate
+/// listed where `PLAN_REVIEW_OK` was honored ([`held_row`]). WHY (feature 451 T262, measured 2026-11-26 by 451 T261's builder,
+/// replaying 12 escape records at their commits): the reason is the session's wording, a standing one carried from push to push,
+/// and 155 of the 160 records of 2026-11-25/26 named a cause the gate never had - so a reader classifies an escape by `held`.
+fn bypass_record(root: &Path, place: &str, why: &str, held: Option<Value>) {
     let dev = root.join("dev");
     if !dev.is_dir() {
         return;
@@ -100,7 +109,10 @@ fn bypass_record(root: &Path, place: &str, why: &str) {
     let dir = dev.join(format!("bypass-log/{y:04}-{mo:02}"));
     let _ = std::fs::create_dir_all(&dir);
     let commit = git_line(root, &["rev-parse", "--short", "HEAD"]);
-    let entry = json!({"utc": now_utc(), "target": format!("plan-gate {place}"), "commit": commit, "why": why});
+    let mut entry = json!({"utc": now_utc(), "target": format!("plan-gate {place}"), "commit": commit, "why": why});
+    if let Some(held) = held {
+        entry["held"] = held;
+    }
     let mut out = Vec::new();
     let mut writer = serde_json::Serializer::with_formatter(
         &mut out,
@@ -117,7 +129,8 @@ fn bypass_record(root: &Path, place: &str, why: &str) {
     );
 }
 
-/// FR-001, FR-005 and FR-008 for `make tick` of `task`: (may tick, what to print) - the bypass recorded when `escaped` is a reason; the
+/// FR-001, FR-005 and FR-008 for `make tick` of `task`: (may tick, what to print) - the bypass recorded, with what was held, when
+/// `escaped` is a reason and the gate holds something, and an escape told to go where it holds nothing (feature 451 T262); the
 /// plan judged for `task`, the tasks ticked before it and the blocks outside every task's section (feature 451 T84, [`status::owed_for`]). Public since
 /// feature 449 T131: the tick's port (`l7r-gate tick`, the task gate's crate) asks it in process, where `tick-task.py` asked the door.
 #[must_use]
@@ -127,8 +140,15 @@ pub fn tick_gate(
     escaped: Option<&str>,
     task: &str,
 ) -> (bool, String) {
-    let Some((rule, reason)) = status::owed_for(spec_dir, &[task]) else {
-        return (true, String::new());
+    let Some((rule, reason, blocks)) = status::held_for(spec_dir, &[task]) else {
+        // AN ESCAPE THE GATE HAS NOTHING TO HONOR IS DROPPED, NEVER RECORDED (feature 451 T262): the tick proceeds on the gate's own
+        // answer, so no reason is asked of it and nothing is written to the guard log or dev/bypass-log/
+        let said = escaped
+            .filter(|e| !e.is_empty())
+            .map_or_else(String::new, |_| {
+                "tick: the plan gate owes nothing - drop PLAN_REVIEW_OK".to_owned()
+            });
+        return (true, said);
     };
     let name = spec_dir.file_name().unwrap_or_default().to_string_lossy();
     let Some(why) = escaped.filter(|e| !e.is_empty()) else {
@@ -140,7 +160,8 @@ pub fn tick_gate(
         return (false, "tick: PLAN_REVIEW_OK needs a REASON, not just a value - two words and eight characters.".to_owned());
     }
     guard_log("escaped", &format!("{name}: {why}"), "plan-review-ok");
-    bypass_record(root, &format!("tick {name}"), why);
+    let held = json!([held_row(&format!("specs/{name}"), rule, &blocks)]);
+    bypass_record(root, &format!("tick {name}"), why, Some(held));
     (
         true,
         format!("tick: plan gate BYPASSED - {why} (recorded in dev/bypass-log/)"),
@@ -465,7 +486,8 @@ pub fn owe_in_flight(root: &Path, trigger: &str, part: &str) -> Option<String> {
     approach::owe_in_flight(root, trigger, part, None)
 }
 
-/// `l7r-gate plan door bypass-record <root> <place> <why>` (`plan-gate.sh`'s record of a push's `PLAN_REVIEW_OK`) and `plan door
+/// `l7r-gate plan door bypass-record <root> <place> <why> [range]` (`plan-gate.sh`'s record of a push's `PLAN_REVIEW_OK`, with what
+/// the gate holds over `range` - feature 451 T262) and `plan door
 /// active-task <root>` (the review-round guard's question, `review_round_hooks.rs`): the two verbs left of the door `scripts/plan_door.py`
 /// called. Its other verbs left with that file and its last callers, `make tick` and `make task-start`, which ask the plan gate in
 /// process since feature 449 T131 (`ask:449-phase3-remainder`, `ask:449-T066-scope`: the door goes with its last caller).
@@ -473,7 +495,14 @@ fn door(words: &[String]) -> crate::Reply {
     let word = |i: usize| words.get(i).map_or("", String::as_str);
     match word(0) {
         "bypass-record" => {
-            bypass_record(Path::new(word(1)), word(2), word(3));
+            let root = Path::new(word(1));
+            let held = words.get(4).map(|range| {
+                task::push_held(root, range, "HEAD")
+                    .iter()
+                    .map(|(feature, rule, _, blocks)| held_row(feature, rule, blocks))
+                    .collect()
+            });
+            bypass_record(root, word(2), word(3), held);
             said("")
         }
         "active-task" => {
@@ -484,7 +513,7 @@ fn door(words: &[String]) -> crate::Reply {
             ))
         }
         _ => fail(
-            "usage: l7r-gate plan door bypass-record <root> <place> <why> | active-task <root>\n",
+            "usage: l7r-gate plan door bypass-record <root> <place> <why> [range] | active-task <root>\n",
             2,
         ),
     }

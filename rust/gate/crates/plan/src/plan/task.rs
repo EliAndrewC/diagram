@@ -10,7 +10,7 @@ use serde_json::Value;
 use super::history::History;
 use super::lint;
 use super::sections::{leading_tasks, ordered_sections, re, task_sections, wording_only, TASK_ID};
-use super::status::{judge_in, owed, owed_for, scope_of, section_clear, task_current, RECORD};
+use super::status::{judge_held, owed, owed_for, scope_of, section_clear, task_current, RECORD};
 use super::today;
 
 fn read(path: &Path) -> String {
@@ -324,6 +324,18 @@ pub(super) fn push_owed(
     range: &str,
     reference: &str,
 ) -> Vec<(String, &'static str, String)> {
+    push_held(root, range, reference)
+        .into_iter()
+        .map(|(feature, rule, reason, _)| (feature, rule, reason))
+        .collect()
+}
+
+/// [`push_owed`] with the blocks each feature's judgment listed, which the record of a push's honored escape carries (451 T262).
+pub(super) fn push_held(
+    root: &Path,
+    range: &str,
+    reference: &str,
+) -> Vec<(String, &'static str, String, Vec<String>)> {
     let mut out = Vec::new();
     for feature in touched_features(root, range) {
         let Some(tasks) = show(root, reference, &format!("{feature}/tasks.md")) else {
@@ -345,14 +357,14 @@ pub(super) fn push_owed(
         let done = show(root, reference, &format!("{feature}/plan-done.md")).unwrap_or_default();
         let history = History::new(&root.join(&feature).join("plan.md"), reference);
         // the push answers for the ticked tasks' sections and the shared blocks, never an open task's (feature 451 T84)
-        if let Some((rule, reason)) = judge_in(
+        if let Some((rule, reason, blocks)) = judge_held(
             plan.as_deref(),
             review.as_deref(),
             Some(&history),
             &String::from_utf8_lossy(&done),
             Some(&scope_of(&tasks, &[])),
         ) {
-            out.push((feature, rule, reason));
+            out.push((feature, rule, reason, blocks));
         }
     }
     out

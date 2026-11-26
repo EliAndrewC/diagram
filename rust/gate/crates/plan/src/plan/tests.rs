@@ -553,6 +553,102 @@ fn a_tick_is_refused_then_escaped_only_with_a_reason_and_recorded() {
     assert_eq!(ask(None), (true, String::new()));
 }
 
+/// The bypass records of `root`, oldest first.
+fn bypass_records(root: &Path) -> Vec<Value> {
+    let mut files: Vec<PathBuf> = std::fs::read_dir(root.join("dev/bypass-log"))
+        .into_iter()
+        .flatten()
+        .flatten()
+        .flat_map(|month| std::fs::read_dir(month.path()).unwrap().flatten())
+        .map(|e| e.path())
+        .collect();
+    files.sort();
+    files
+        .iter()
+        .map(|f| serde_json::from_str(&std::fs::read_to_string(f).unwrap()).unwrap())
+        .collect()
+}
+
+#[test]
+fn an_escape_is_dropped_where_the_gate_owes_nothing_and_its_record_carries_what_was_held() {
+    // feature 451 T262: 155 of 160 escape records of 2026-11-25/26 named a cause the gate never had (a standing reason carried on
+    // pushes where it owed nothing in 7 of 12 replays), so a clean gate honors no escape and an honored one records what was held
+    let root = repo();
+    std::fs::create_dir_all(root.join("dev")).unwrap();
+    std::fs::write(root.join("README"), "x").unwrap();
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "base"]);
+    let base = git(&root, &["rev-parse", "HEAD"]);
+    let dir = feature_at(&root, Some(PLAN_TASKS), None, "375-x");
+    let top = root.display().to_string();
+    let spec = dir.display().to_string();
+    let src = write_json(&root, "w.json", &current(&[], "CLEAR", PLAN_TASKS));
+    assert_eq!(
+        run(&root, &["record", &spec, &src, "--as", "spec-fidelity"]).code,
+        0
+    );
+    std::fs::write(
+        dir.join("tasks.md"),
+        "- [x] T05 the bath
+",
+    )
+    .unwrap();
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "reviewed"]);
+    let range = format!("{base}..HEAD");
+    let ask = |escaped: &str| super::tick_gate(&dir, &root, Some(escaped), "T05");
+    // clean: a standing reason and a bare token alike are told to go, the tick proceeds and nothing is recorded
+    for carried in ["unfilled template sections of tasks not started", "x"] {
+        assert_eq!(
+            ask(carried),
+            (
+                true,
+                "tick: the plan gate owes nothing - drop PLAN_REVIEW_OK".to_owned()
+            )
+        );
+    }
+    assert_eq!(
+        super::tick_gate(&dir, &root, Some(""), "T05"),
+        (true, String::new())
+    );
+    assert_eq!(bypass_records(&root), Vec::<Value>::new());
+    // held: the bath's section changed after its review, at the tick and at the push
+    std::fs::write(
+        dir.join("plan.md"),
+        PLAN_TASKS.replace("10 x 8 ft", "30 x 20 ft with a second tub"),
+    )
+    .unwrap();
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "edited"]);
+    assert!(ask("the bath is superseded by 380").1.contains("BYPASSED"));
+    assert_eq!(
+        run(
+            &root,
+            &[
+                "door",
+                "bypass-record",
+                &top,
+                "push",
+                "the bath is superseded",
+                &range
+            ]
+        )
+        .code,
+        0
+    );
+    let held = json!([{"feature": "specs/375-x", "rule": "plan-review-stale", "blocks": ["## T05 the bath (amendment 1)"]}]);
+    let records = bypass_records(&root);
+    assert_eq!(records.len(), 2);
+    for record in &records {
+        assert_eq!(record["held"], held, "{record}");
+    }
+    // a feature held on no block of its own (no record of a review) lists none
+    std::fs::remove_file(dir.join("plan-review.json")).unwrap();
+    assert!(ask("the record is rebuilt next").1.contains("BYPASSED"));
+    assert!(bypass_records(&root).iter().any(|r| r["held"]
+        == json!([{"feature": "specs/375-x", "rule": "plan-review-missing", "blocks": []}])));
+}
+
 #[test]
 fn the_door_keeps_only_the_push_s_bypass_record_and_the_tick_s_asks_are_public() {
     // feature 449 T131: `plan_door.py` left with its last callers; `plan-gate.sh`'s bypass record and the review-round guard's active
@@ -625,7 +721,7 @@ fn the_records_are_written_with_one_space_and_a_newline() {
 #[test]
 fn a_tree_with_no_dev_directory_records_no_bypass_and_triage_is_named_when_owed() {
     let root = scratch("nodev");
-    super::bypass_record(&root, "push", "a reason given");
+    super::bypass_record(&root, "push", "a reason given", None);
     assert!(!root.join("dev").exists());
     assert!(super::hint_of("x\n3\n").contains("claims owed a triage: 3"));
     assert_eq!(super::hint_of("0\n"), "");

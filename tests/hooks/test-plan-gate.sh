@@ -42,9 +42,23 @@ grep -lq '"rule": "plan-review-missing"' "$GUARD_LOG_DIR"/*.json 2>/dev/null; ok
 review CLEAR; commit clear
 ok "$(run)" 0 "a current CLEAR review passes"
 
+# 5b. an escape carried where the gate owes nothing is not honored (feature 451 T262: a standing reason rode pushes that owed
+# nothing in 7 of 12 replays, so 155 of 160 records named a cause the gate never had): one line, the push proceeds, no record
+said="$(cd "$FIX/repo" && PLAN_REVIEW_OK='unfilled template sections of tasks not started' "$GATE" "$BASE..HEAD" 2>&1)"; ok $? 0 "a clean gate with an escape passes"
+ok "$said" "plan-gate: the plan gate owes nothing - drop PLAN_REVIEW_OK" "the escape is told to go"
+ok "$(run_with x)" 0 "a bare token on a clean gate is told the same, not asked for a reason"
+ok "$(find "$FIX/repo/dev/bypass-log/" -name '*.json' 2>/dev/null | wc -l)" 0 "no bypass record on a clean gate"
+ok "$(grep -l 'plan-review-ok\|PLAN_REVIEW_OK-no-reason' "$GUARD_LOG_DIR"/*.json 2>/dev/null | wc -l)" 0 "no escape in the guard log on a clean gate"
+
 # 6. a plan edited after its review refuses (FR-004)
 printf '# plan\n\n**P9 - a later narrowing.**\n' > "$D/plan.md"; commit edit
 ok "$(run)" 1 "a stale review refuses"
+# 6b. an honored escape's record carries what the gate held: the feature, its rule and the blocks' headings (feature 451 T262)
+printf '# plan\n\n## The bath house\n\n**P9 - a later narrowing.**\n' > "$D/plan.md"; commit heading
+ok "$(run_with 'the later narrowing is withdrawn next')" 0 "a stale review is escaped with a reason"
+record="$(find "$FIX/repo/dev/bypass-log/" -name '*.json' | head -1)"
+grep -q '"feature": "specs/243-x"' "$record" && grep -q '"rule": "plan-review-stale"' "$record" && grep -q '"## The bath house"' "$record"; ok $? 0 "the record names the feature, the rule and the block held"
+
 
 # 7. a current BLOCKED review refuses (FR-005)
 review BLOCKED; commit blocked

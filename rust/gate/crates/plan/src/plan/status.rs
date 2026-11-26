@@ -298,6 +298,11 @@ pub(super) fn scope_of(tasks: &str, asked: &[&str]) -> BTreeSet<String> {
 /// [`owed`] for a tick of `asked` alone (feature 451 T84): the blocks outside every task's section, and the sections of `asked` and of
 /// the tasks ticked before it ([`scope_of`]).
 pub(super) fn owed_for(spec_dir: &Path, asked: &[&str]) -> Option<(&'static str, String)> {
+    held_for(spec_dir, asked).map(|(rule, reason, _)| (rule, reason))
+}
+
+/// [`owed_for`] with the blocks the judgment listed ([`judge_held`]), which an honored escape's record carries (feature 451 T262).
+pub(super) fn held_for(spec_dir: &Path, asked: &[&str]) -> Option<Held> {
     let plan_path = spec_dir.join("plan.md");
     let plan = std::fs::read(&plan_path).ok();
     let review = std::fs::read_to_string(spec_dir.join(RECORD)).ok();
@@ -307,7 +312,7 @@ pub(super) fn owed_for(spec_dir: &Path, asked: &[&str]) -> Option<(&'static str,
         &std::fs::read_to_string(spec_dir.join(l7r_shared::speckit::tasks::DONE))
             .unwrap_or_default(),
     );
-    judge_in(
+    judge_held(
         plan.as_deref(),
         review.as_deref(),
         Some(&History::new(&plan_path, "HEAD")),
@@ -380,16 +385,37 @@ pub(super) fn judge_in(
     done: &str,
     scope: Option<&BTreeSet<String>>,
 ) -> Option<(&'static str, String)> {
+    judge_held(plan, review_text, history, done, scope).map(|(rule, reason, _)| (rule, reason))
+}
+
+/// (rule, reason, the blocks the judgment listed): every key owed a review under `plan-review-stale`, every BLOCKED key under
+/// `plan-review-blocked`, none where the plan or its record is missing. The reason shows five keys cut to 60 characters; these are
+/// all of them, whole, for the record of an honored escape (feature 451 T262).
+pub(super) type Held = (&'static str, String, Vec<String>);
+
+/// [`judge_in`] with the blocks it listed.
+pub(super) fn judge_held(
+    plan: Option<&[u8]>,
+    review_text: Option<&str>,
+    history: Option<&History>,
+    done: &str,
+    scope: Option<&BTreeSet<String>>,
+) -> Option<Held> {
     let Some(plan) = plan else {
-        return Some(("plan-missing", format!("no plan.md - the plan stage is owed before its review can be (spec D5); then {HOW}")));
+        return Some(("plan-missing", format!("no plan.md - the plan stage is owed before its review can be (spec D5); then {HOW}"), Vec::new()));
     };
     let Some(review_text) = review_text else {
-        return Some(("plan-review-missing", format!("no {RECORD} - {HOW}")));
+        return Some((
+            "plan-review-missing",
+            format!("no {RECORD} - {HOW}"),
+            Vec::new(),
+        ));
     };
     let Ok(mut review) = serde_json::from_str::<Value>(review_text) else {
         return Some((
             "plan-review-missing",
             format!("{RECORD} is not JSON - {HOW}"),
+            Vec::new(),
         ));
     };
     let text = String::from_utf8_lossy(plan).into_owned();
@@ -421,7 +447,7 @@ pub(super) fn judge_in(
         } else {
             String::new()
         };
-        return Some(("plan-review-stale", format!("{} block(s) of plan.md changed since their review by more than a typo (feature 375 FR-043): {}{more} - `make plan-delta F=<n>` builds the review of those blocks alone", owed_keys.len(), shown.join(", "))));
+        return Some(("plan-review-stale", format!("{} block(s) of plan.md changed since their review by more than a typo (feature 375 FR-043): {}{more} - `make plan-delta F=<n>` builds the review of those blocks alone", owed_keys.len(), shown.join(", ")), owed_keys));
     }
     let whole_not_clear = !matches!(review.get("verdict"), None | Some(Value::Null))
         && text_of(&review, "verdict") != Some("CLEAR")
@@ -442,7 +468,7 @@ pub(super) fn judge_in(
         } else {
             narrowing.join(", ")
         };
-        return Some(("plan-review-blocked", format!("the plan review is BLOCKED ({named} ruled NOT LEGITIMATE) - withdraw or overrule the decision in plan.md, then {HOW}")));
+        return Some(("plan-review-blocked", format!("the plan review is BLOCKED ({named} ruled NOT LEGITIMATE) - withdraw or overrule the decision in plan.md, then {HOW}"), blocked));
     }
     None
 }

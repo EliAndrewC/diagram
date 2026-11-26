@@ -34,7 +34,7 @@ pub(super) fn taken(env: Env<'_>, verb: &str) -> Result<Option<String>, String> 
 pub(super) fn record(root: &Path, dir: &Path, what: &str, why: &str) {
     let name = dir.file_name().unwrap_or_default().to_string_lossy();
     guard_log("escaped", &format!("{name} {what}: {why}"), RULE);
-    bypass_record(root, &format!("decide-defer {name} {what}"), why);
+    bypass_record(root, &format!("decide-defer {name} {what}"), why, None);
 }
 
 /// The tasks of `dir`'s feature decided under the escape, from the guard log: each entry of the plan gate's rule whose detail names
