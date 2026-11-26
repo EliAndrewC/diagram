@@ -30755,38 +30755,44 @@
   "claim": "what each tier is - the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital",
   "code": "8c496892bdfc03ed",
   "core": "9312727f26714e10",
-  "date": "2026-11-18",
-  "note": "the tier texts are in place.json's kinds.what and population_note, which the bundle does not show; the formatted 1,296/216/40% match. I need those texts to judge",
+  "date": "2026-11-26",
+  "note": "loads each tier's noun, description, houses noun, excludes_farms flag, population note and default population from the place card. The restated §17 (a city's about 3,000 counts the households within the walls and the samurai country estates around it, not the county's farmers) matches the city's excludes_farms and the sibling CANON claim. Towns count their own farmers (§12, §13) and cities count none (§18), which fits a per-tier flag.",
   "pages": {
-   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html": "44a3744ac1eacfe3"
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html": "ec3b3d98430d222b"
   },
   "ported": "l7r/diagram/interactive/place.py::KINDS#what each tier is",
-  "research": "f86a0d6160742f02",
+  "research": "6bdac761d7428b3e",
   "rests": [
-   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:5f7443597d96e66d",
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:41cc929ee6734ab7",
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:583ab77f0130a108",
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:5e8294e105ec3729",
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:612944d6c4611880",
    "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:a076ee4305246961",
    "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:ae7bccfe6787b993",
    "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:c2190bb4d95182e9",
    "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:cfe6d8edf88a4f67",
-   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:d20abbc9f00c12ee"
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:dd237a2751aa6230",
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:e853e7bbe6802977"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/place.rs::lane_default#connector leads to the district's village": {
   "body": "853bfdd9a66247fe",
   "claim": "connector leads to the district's village - the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital: the district a hamlet belongs to is named for the village its lanes lead to",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "7227c57387e82205",
   "core": "95bc96907a196034",
   "date": "2026-11-18",
   "note": "hamlet only, toward its district's village",
   "pages": {
-   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html": "44a3744ac1eacfe3"
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html": "ec3b3d98430d222b"
   },
   "ported": "l7r/diagram/interactive/place.py::lane_default#connector leads to the district's village",
-  "research": "f86a0d6160742f02",
+  "research": "6bdac761d7428b3e",
   "rests": [
    "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:79f9bd3068f6d5c8"
   ],
+  "triaged": "2026-11-26",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/place.rs::length#card plumbing": {
