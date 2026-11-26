@@ -17,7 +17,7 @@ threshold and the continuous gate).
 ## Why
 
 The parallel arrangement measured on 2026-11-26 is one session's: its pool of builder trees (capped per clone,
-`L7R_BUILDER_POOL`), its staging clone, its gate. The GM wants to run several sessions at once again in the future, and
+`L7R_BUILDER_POOL`), its staging clone, its gate. The GM wants to be able to run several sessions at once in the future, and
 whatever number of simultaneous builders is best for the machine must then be shared between them by the tooling - in his
 words, "if the optimal number of simultaneous builders was 4, then the two sessions could coordinate about that in some kind
 of automated tooling-based way".
@@ -29,7 +29,9 @@ of automated tooling-based way".
 - The push to main is serialized across sessions by the cross-session lock (`.clones/.sync.lock`), and each session has its
   own clone.
 - The builder pool's cap is per clone: two sessions could each hand out four trees. Memory and processor were measured for
-  one session only (three warm builders: 3.9 GiB anonymous of a 10 GiB container, load median 16 on 22 cores).
+  one session only: the sample log `dev/measurements/2026-11-26/builder-count/mem-samples-round1-three-warm.log` (one
+  sample every 10 s of the container's cgroup, 2026-11-26 15:43-16:36 UTC; three builders in warm pool trees were alive until
+  about 16:15) and `docs/process-decisions.md`, "Two code builders at once", which states its figures and their windows.
 - With more than one session main moves under a session's staged work, so how long a batch waits for its gate matters as it
   does not with one (trial 458's continuous gate).
 
@@ -41,3 +43,9 @@ of automated tooling-based way".
   models' own concurrency may be the real limits.
 - The second tier with several sessions: each session's gate against a main the others move, and the continuous gate.
 - What is measured first: two sessions side by side, each with builders, the sampler running.
+
+## Review history
+
+- spec-fidelity round 1 (2026-11-26, MODE 2): CHANGES REQUIRED, 1 item - the three-warm-builders memory and load figures in "What already crosses sessions" carried no source or method, are not in the decision entry cited, and the load median did not reproduce from the round-one sample log as written; the request, the Status and Approved quotes, the open questions and the slot, push-lock and pool-cap facts were faithful. Fixed the same day: the figures are replaced by the sample log's path and window and a pointer to the decision entry, which now states round one's figures with their statistic and window; "again" (not his word) is dropped from Why.
+- spec-fidelity round 2 (2026-11-26, MODE 3 by hand): CHANGES REQUIRED, 1 item - the source-and-method half of round 1's item is confirmed (the bullet names the log, its sampling and window, and points at "Two code builders at once", whose ROUND ONE paragraph is there; "again" is gone), and the paragraph's figures re-derived from the sample log reproduce except the load median over the samples while all three builders were alive, which the paragraph gave from one sample more than the count it names. Fixed the same day: the paragraph's load median is the value of the count it names; the spec text needed no change.
+- spec-fidelity round 3 (2026-11-26, MODE 3): FAITHFUL - round 2's item is resolved: the ROUND ONE paragraph of "Two code builders at once" now gives the load median of the samples while all three builders were alive as the value the log reproduces. The paragraph's other figures still reproduce, and no stale value remains in the decision entry or the feature directory.

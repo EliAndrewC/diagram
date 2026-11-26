@@ -310,6 +310,13 @@ here: shmem 0 (`/tmp` is on disk), unreclaimable slab 0; the rest of `memory.cur
 What three builders do cost is PROCESSOR: load median 42 and peak 94 on 22 cores, up to 46 compilers at once, and a first
 closing-checks run of 14 to 30 minutes in those cold trees (about a minute warm and alone).
 
+ROUND ONE, three builders in WARM pool trees, one tier of checking, no build slot (2026-11-26, 451 T281, T284 and T295;
+`mem-samples-round1-three-warm.log` beside the others, one sample every 10 s, 317 samples 15:43-16:36 UTC): over the 190
+samples to 16:15, while all three builders were alive, anonymous memory median 1.1 GiB and peak 3.9 GiB, load median 16.0 and
+peak 52.2, at most 22 compilers at once, no OOM kill, 15 s of memory stall; over the whole file the load median is 13.8 and
+the anonymous median 1.0. A builder's first closing-checks run took 191 to 531 s and its final one 55 to 74 s. Against the
+cold run above, warm trees roughly halved memory and load.
+
 The build slot (451 T284, 2026-11-26; audited as `dev/audits/build-slot.md`). What coincides at those peaks was then read from
 the same samples joined with the checks' `Phase` lines (`dev/measurements/2026-11-26/builder-count/slot-coincide.py`): all
 twelve of the highest memory samples and seven of the eight highest compiler counts fell where all three trees were in a
