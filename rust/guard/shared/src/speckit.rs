@@ -13,8 +13,8 @@
 //! required for both towns and cities, then it is owed at the towns stage"*). An `**Owed at**:` line naming a stage overrides it.
 //!
 //! WHAT HOLDS A LANDING (feature 405 T32, D4; the GM, 2026-10-20: "I do not want each landing to owe a lands open line"). A feature in
-//! progress holds a landing only through the task being worked - the clone's active task (`make task-start`, `.git/active-task`) - while
-//! that task is open and the landing does not tick it (`L7R_LAND_TICKS`, the ids `make land` sets). A task nobody has started holds
+//! progress holds a landing only through the tasks being worked - each started task (`make task-start`, its own mark, [`marks`], 451
+//! T254) whose files the push's delta touches ([`touch`]) - while that task is open and the landing does not tick it (`L7R_LAND_TICKS`, the ids `make land` sets). A task nobody has started holds
 //! nothing, nor does the GM-review box. NOR DOES IT HOLD A LANDING THAT RULED ITS OWN TASKS READY (feature 451 T101): with builders
 //! rolling (T88) the mark names whichever task started last, so a finished task was refused "held by" a task started after it - T81,
 //! T88 and T93, each CLEAR, at 18:32:27Z on 2026-11-21, the mark moved by hand to land them and back after. `make land` rules each of
@@ -31,7 +31,6 @@
 //! the command prints as the traceback did.
 
 use std::path::{Component, Path, PathBuf};
-use std::process::Command;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
@@ -39,7 +38,9 @@ use serde_json::Value;
 
 use crate::py_text::{split, strip, SPACE_CLASS};
 
+pub mod marks;
 pub mod tasks;
+pub mod touch;
 
 /// What a `**Status**:` value begins with when a feature is closed without every task ticked (plan D1, D3).
 pub const CLOSING: [&str; 3] = ["done", "superseded by", "withdrawn"];
@@ -429,18 +430,6 @@ pub fn closed_by_status(d: &Path) -> Result<bool, String> {
     Ok(closes(&status_of(&read_text(&spec)?)))
 }
 
-/// A git command's trimmed output in `dir`, or None where it failed or printed nothing.
-fn git_line(dir: &Path, args: &[&str]) -> Option<String> {
-    let out = Command::new("git")
-        .arg("-C")
-        .arg(dir)
-        .args(args)
-        .output()
-        .ok()?;
-    let line = strip(&String::from_utf8_lossy(&out.stdout)).to_owned();
-    (out.status.success() && !line.is_empty()).then_some(line)
-}
-
 /// Python's `str()` of a JSON value, and whether it is truthy.
 fn py_str(v: &Value) -> (String, bool) {
     match v {
@@ -456,30 +445,15 @@ fn py_str(v: &Value) -> (String, bool) {
     }
 }
 
-/// The clone's active task (`make task-start`) when it is this feature's, else "".
+/// The tree's started task (`make task-start`, this tree's newest mark, [`marks::of_tree`]) when it is this feature's, else "".
 ///
 /// # Errors
-/// The mark naming a value that is not an object, which the Python's `.get` raised on.
+/// The mark naming a value that is not an object, which the Python's `.get` raised on, or a legacy mark that cannot be read.
 pub fn active_task(d: &Path) -> Result<String, String> {
-    let Some(common) = git_line(
-        d,
-        &["rev-parse", "--path-format=absolute", "--git-common-dir"],
-    ) else {
-        return Ok(String::new());
-    };
-    let mark = PathBuf::from(common).join("active-task");
-    if !mark.is_file() {
+    let got = marks::of_tree(d)?;
+    if got.is_null() {
         return Ok(String::new());
     }
-    let Ok(text) = std::fs::read(&mark).map(|b| String::from_utf8(b).map_err(|_| ())) else {
-        return Err(format!("{}: unreadable", mark.display()));
-    };
-    let Some(got) = text
-        .ok()
-        .and_then(|t| serde_json::from_str::<Value>(&t).ok())
-    else {
-        return Ok(String::new());
-    };
     let Value::Object(got) = got else {
         return Err("AttributeError: the active task is not an object".to_owned());
     };
@@ -507,8 +481,9 @@ pub fn gm_rows(d: &Path) -> Result<usize, String> {
         .count())
 }
 
-/// The open box that holds the landing: the clone's active task of this feature, open and not ticked by the landing
-/// (`L7R_LAND_TICKS`) nor ruled ready beside it (`L7R_LAND_READY`, 451 T101); every other open box holds nothing (feature 405 D4).
+/// The open boxes that hold the landing: each started task of this feature (a mark of any tree, [`marks::all`]), open, not ticked by
+/// the landing (`L7R_LAND_TICKS`) nor ruled ready beside them (`L7R_LAND_READY`, 451 T101), whose files the push's delta touches
+/// ([`touch`], 451 T254); every other open box holds nothing (feature 405 D4).
 ///
 /// # Errors
 /// A file that cannot be read, or an active-task mark that is not an object.
@@ -524,22 +499,61 @@ pub fn holding(d: &Path) -> Result<Vec<String>, String> {
 /// A file that cannot be read, or an active-task mark that is not an object.
 pub fn holding_with(d: &Path, ticks: &str) -> Result<Vec<String>, String> {
     let tasks = d.join("tasks.md");
-    let task = if tasks.is_file() {
-        active_task(d)?
-    } else {
-        String::new()
-    };
-    if task.is_empty() || split(ticks).contains(&task.as_str()) {
+    if !tasks.is_file() {
         return Ok(Vec::new());
     }
-    // ...or the landing ruled every task it ticks ready beside the mark's (451 T101): its own rule, made in `l7r-gate land`
+    // a mark this tree reads that is not an object fails the hold closed, as the one mark of before did
+    active_task(d)?;
+    let Some((common, _)) = marks::places(d) else {
+        return Ok(Vec::new());
+    };
+    let name = py_name(d);
+    let ticked = split(ticks);
+    // ...the landing ruled every task it ticks ready beside the started ones (451 T101): its own rule, made in `l7r-gate land`
     let ready = crate::env::var("L7R_LAND_READY");
     let ready = split(&ready);
-    let ticked = split(ticks);
     if !ticked.is_empty() && ticked.iter().all(|t| ready.contains(t)) {
         return Ok(Vec::new());
     }
-    let name = py_name(d);
+    let all = marks::all(&common);
+    let mut started: Vec<String> = Vec::new();
+    for m in all.iter().filter(|m| m["feature"].as_str() == Some(name.as_str())) {
+        for t in marks::tasks_of(m) {
+            if !ticked.contains(&t.as_str()) && !started.contains(&t) {
+                started.push(t);
+            }
+        }
+    }
+    if started.is_empty() {
+        return Ok(Vec::new());
+    }
+    let text = read_text(&tasks)?;
+    let open: Vec<(String, String)> = started
+        .iter()
+        .filter_map(|t| open_line(&text, t).map(|line| (t.clone(), line)))
+        .collect();
+    if open.is_empty() {
+        return Ok(Vec::new());
+    }
+    // ONLY THE STARTED TASKS WHOSE FILES THE DELTA TOUCHES HOLD IT (451 T254): a task started in another worktree, or in this one, holds
+    // a push only where the push would carry its edits (`touch`, T101's rule)
+    let top = py_parent(&py_parent(d));
+    let rel = py_name(&py_parent(d)) + "/" + &name;
+    let Some(delta) = touch::delta_of(d, &rel) else {
+        return Ok(Vec::new());
+    };
+    let events = Some(crate::env::var("L7R_EVENTS_DIR"))
+        .filter(|e| !e.is_empty())
+        .map_or_else(|| common.join("l7r-events"), PathBuf::from);
+    let starts: Vec<Value> = std::fs::read_to_string(common.join("task-starts.jsonl"))
+        .unwrap_or_default()
+        .lines()
+        .filter_map(|l| serde_json::from_str(l).ok())
+        .chain(all)
+        .collect();
+    let prefixes = touch::prefixes(&top, &common, &starts);
+    let wanted = |t: &str| open.iter().any(|(o, _)| o == t);
+    let touched = touch::touched(&events, &name, &prefixes, &delta, &wanted);
     let number = number_of(&name);
     // `int(number) if number.isdigit()`: an ASCII run of digits, its leading zeros dropped
     let shown = if !number.is_empty() && number.chars().all(|c| c.is_ascii_digit()) {
@@ -552,24 +566,32 @@ pub fn holding_with(d: &Path, ticks: &str) -> Result<Vec<String>, String> {
     } else {
         shown
     };
-    let how = format!("land it with make land F={shown} T={task}");
-    let text = read_text(&tasks)?;
-    let lines = splitlines(&text);
+    let mut out = Vec::new();
+    for (task, line) in open {
+        let Some(file) = touched.iter().find(|(_, (t, _))| *t == task).map(|(f, _)| f) else {
+            continue;
+        };
+        out.push(format!(
+            "{line}  <- started (make task-start), its edit of {file} in this push: land it with make land F={shown} T={task}"
+        ));
+    }
+    Ok(out)
+}
+
+/// The open line of `task` in a tasks.md: its own box's title where open, else the first open box nested under its line (a research
+/// pass: the task is not done, feature 330's indented rule); none where neither is open.
+fn open_line(text: &str, task: &str) -> Option<String> {
+    let lines = splitlines(text);
     for (i, line) in lines.iter().enumerate() {
         let Some(m) = TASK_LINE.captures(line).ok().flatten() else {
             continue;
         };
-        if &m[3] != task.as_str() {
+        if &m[3] != task {
             continue;
         }
         if &m[2] == " " {
-            let title = line.split_once("] ").map_or("", |(_, t)| t);
-            return Ok(vec![format!(
-                "{}  <- the active task (make task-start), open: {how}",
-                strip(title)
-            )]);
+            return Some(strip(line.split_once("] ").map_or("", |(_, t)| t)).to_owned());
         }
-        // ...or a box nested under its line still open (a research pass): the task is not done (feature 330's indented rule)
         let indent = &m[1];
         for below in &lines[i + 1..] {
             let under = below.starts_with(&format!("{indent} "))
@@ -578,14 +600,11 @@ pub fn holding_with(d: &Path, ticks: &str) -> Result<Vec<String>, String> {
                 break;
             }
             if let Some(n) = OPEN_LINE.captures(below).ok().flatten() {
-                return Ok(vec![format!(
-                    "{}  <- open under the active task {task}: {how}",
-                    strip(&n[1])
-                )]);
+                return Some(format!("{} (open under {task})", strip(&n[1])));
             }
         }
     }
-    Ok(Vec::new())
+    None
 }
 
 /// The feature directories of `specs`, sorted by name; none where `specs` is not a directory.

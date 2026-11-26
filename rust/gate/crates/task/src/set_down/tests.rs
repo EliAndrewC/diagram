@@ -357,10 +357,15 @@ fn a_set_down_clears_its_feature_s_started_task_mark_and_a_later_start_sets_it_a
         crate::task_start::cli_with(&words(&["9001", "T01"]), &root, &env).code,
         0
     );
-    assert_eq!(
-        std::fs::read_to_string(&mark).unwrap(),
-        "{\"feature\": \"9001-x\", \"task\": \"T01\"}\n"
-    );
+    // ...as the task's own mark (451 T254), which a set-down of its feature in this tree clears again
+    let own = root.join(".git/task-marks/9001-x/T01.json");
+    assert!(std::fs::read_to_string(&own)
+        .unwrap()
+        .starts_with("{\"feature\": \"9001-x\", \"task\": \"T01\", \"tree\": "));
+    assert!(down(&root, &[])
+        .stdout
+        .contains("its started-task mark (T01) cleared"));
+    assert!(!own.exists());
 }
 
 /// The stop before the parked stages (feature 449 T244): under the cap, with no ruling, a feature whose open tasks are all a parked

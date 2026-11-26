@@ -12,7 +12,6 @@ use super::lint;
 use super::sections::{leading_tasks, ordered_sections, re, task_sections, wording_only, TASK_ID};
 use super::status::{judge_in, owed, owed_for, scope_of, section_clear, task_current, RECORD};
 use super::today;
-use crate::codeid::common_git_dir;
 
 fn read(path: &Path) -> String {
     std::fs::read_to_string(path).unwrap_or_default()
@@ -22,8 +21,9 @@ fn review_of(dir: &Path) -> Value {
     serde_json::from_str(&read(&dir.join(RECORD))).unwrap_or(serde_json::json!({}))
 }
 
-/// (the active feature's directory, its active task): `.git/active-task` when it names this feature and its box is open, else the
-/// first open task of `.specify/feature.json`'s feature.
+/// (the active feature's directory, its active task): this tree's started-task mark (`speckit::marks::of_tree`, 451 T254: its own
+/// newest, never another worktree's) when it names this feature and its box is open, else the first open task of
+/// `.specify/feature.json`'s feature.
 pub(super) fn active_task(root: &Path) -> (Option<PathBuf>, String) {
     let parsed: Value =
         serde_json::from_str(&read(&root.join(".specify/feature.json"))).unwrap_or(Value::Null);
@@ -35,9 +35,7 @@ pub(super) fn active_task(root: &Path) -> (Option<PathBuf>, String) {
     if named.is_empty() || !dir.join("tasks.md").is_file() {
         return (None, String::new());
     }
-    let mark: Value = common_git_dir(root).map_or(Value::Null, |c| {
-        serde_json::from_str(&read(&c.join("active-task"))).unwrap_or(Value::Null)
-    });
+    let mark: Value = l7r_shared::speckit::marks::of_tree(root).unwrap_or(Value::Null);
     let tasks = read(&dir.join("tasks.md"));
     let name = dir.file_name().unwrap_or_default().to_string_lossy();
     if let Some(task) = mark["task"]

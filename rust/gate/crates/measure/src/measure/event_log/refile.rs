@@ -133,7 +133,7 @@ impl Facts {
             projects: projects.to_path_buf(),
             specs,
             ids: HashMap::new(),
-            starts: writer::starts(root),
+            starts: writer::every_start(root),
             briefs: HashMap::new(),
             task_box: re(r"^- \[[ xX]\] (T\d+[a-z]?)\b"),
             task_named: re(r"\b(T\d+[a-z]?)\b"),

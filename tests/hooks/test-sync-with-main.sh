@@ -71,7 +71,17 @@ rref() { git -C "$1/github.git" rev-parse -q --verify "refs/heads/$2"; }
 # T106: a case that holds the mirror lock in the background waits until it IS held, not a fixed 0.3 s (10 s at most)
 lock_held() { local i; for i in $(seq 1 1000); do flock -n "$1" true 2>/dev/null || return 0; sleep 0.01; done; }
 # feature 405 T32 (D4): only the task being worked holds a landing - the clone's active task (`make task-start`)
-start() { printf '{"feature": "140-x", "task": "%s"}\n' "${2:-T01}" > "$1/main/.clones/c/.git/active-task"; }
+# feature 451 T254: a started task holds a push only by its files the delta carries - so a start here also files the task's Edit of
+# each file of HEAD's commit on the feature's event log, half a second after it, as the writer would have
+start() {
+  local c="$1/main/.clones/c" task="${2:-T01}" t top
+  printf '{"feature": "140-x", "task": "%s"}\n' "$task" > "$c/.git/active-task"
+  t=$(date -u -d "@$(git -C "$c" log -1 --format=%ct)" +%Y-%m-%dT%H:%M:%S).500Z; top=$(cd "$c" && pwd -P)
+  mkdir -p "$c/.git/l7r-events"
+  git -C "$c" diff-tree --no-commit-id --name-only -r HEAD | while read -r f; do
+    printf '{"ev":"PostToolUse","cat":"edit","task":"%s","t":"%s","path":"%s/%s"}\n' "$task" "$t" "$top" "$f"
+  done >> "$c/.git/l7r-events/140-x.jsonl"
+}
 in_progress() { # $1 = topology dir: a feature with an open task being worked plus an unrelated file, so a stop is refused
   ( cd "$1/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md \
     && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n' > specs/140-x/spec.md \
@@ -202,7 +212,10 @@ expect_out "the claim), allowed"
 ( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "a later docs push from the same clone: the delta no longer touches the spec dir -> the pointer decides" 0 $?
 ( cd "$D/main/.clones/c" && mkdir -p .specify && echo '{"feature_directory": "specs/140-x"}' > .specify/feature.json && echo more > note.md && git add -A && git commit -qm docs2 )
-OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the pointer names a feature with open tasks -> refused even for docs" 1 $?
+# feature 451 T254: the started task's files decide - none of T01's edits in this push, it lands; its edit of note.md in it, refused
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: the pointer names a feature whose started task's edits this push does not carry -> lands" 0 $?
+( cd "$D/main/.clones/c" && echo more2 > note.md && git add -A && git commit -qm docs3 ); start "$D"
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the pointer names a feature whose started task's edit this push carries -> refused even for docs" 1 $?
 ( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md && git add -A && git commit -qm done )
 # GUARD_EDIT_OK: feature 243 - a ticked feature now also owes its plan review at the push, so this finished
 # feature proves the plan gate is WIRED into the push (refused without the record) before it lands with one.

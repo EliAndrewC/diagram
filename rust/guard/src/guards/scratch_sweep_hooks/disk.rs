@@ -238,6 +238,15 @@ pub(super) fn landed(c: &Config, args: &[String], now: SystemTime) -> Reply {
         .filter(|n| !shared.contains(n))
         .collect();
     let git = Path::new(starts).parent().unwrap_or(Path::new(""));
+    // ...and their started-task marks, beside it (451 T254): a landed task is no longer being worked in any tree
+    let ids: Vec<String> = args[2..]
+        .iter()
+        .flat_map(|a| a.split([',', ' ']))
+        .map(str::trim)
+        .filter(|t| t.starts_with('T'))
+        .map(str::to_owned)
+        .collect();
+    crate::shared::speckit::marks::remove(git, feature, &ids);
     let removed: Vec<Item> = gone
         .into_iter()
         .chain(sweep::landed_leftovers(c, git, &ours))

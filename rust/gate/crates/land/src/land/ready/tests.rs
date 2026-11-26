@@ -4,7 +4,8 @@
 use l7r_gate_core::ci::fixtures::put;
 
 use super::super::tests::{fx, has, Fx, NOTE};
-use super::{edit_lines, last_changes, open_tasks, started_tasks};
+use super::{open_tasks, started_tasks};
+use l7r_shared::speckit::touch::{edit_lines, last_changes};
 
 const HELD: &str =
     "T2 two  <- the active task (make task-start), open: land it with make land F=449 T=T2\n";

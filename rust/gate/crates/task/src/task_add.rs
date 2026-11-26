@@ -63,25 +63,96 @@ static CLOSE: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^## T[0-9]+ - the clos
 /// One more than the highest id of the feature's own tasks - its boxes and its plan's `## T<n>` sections - zero-padded as its ids are.
 /// Never an id a title or a section merely QUOTES (feature 405 T31, D3): 405's moved titles name "(385 T147)", and reading every
 /// `T<n>` gave its new tasks T148 on.
+///
+/// ONE WRITER ACROSS TREES (feature 451 T255; the parallel trials of 2026-11-25: builders in two worktrees each filed T247, then
+/// T248, renumbered by hand): the id is also past every id of the same four files on `main` and `origin/main` as last fetched
+/// (`git show <ref>:./<file>`, no fetch under the lock), and past every id [`RESERVED`] records for the feature - the file every
+/// worktree of the clone shares, written under the filing lock ([`lock`], already in the git common directory) before the box goes
+/// in ([`reserve`]). A filing withdrawn gives its id back ([`release`]), so the next filing takes it, as before.
 fn next_id(d: &Path) -> Result<String, String> {
     let mut text = String::new();
-    for name in [
-        "tasks.md",
-        l7r_shared::speckit::tasks::DONE,
-        "plan.md",
-        "plan-done.md",
-    ] {
+    for name in FILES {
         if d.join(name).is_file() {
             text += &read_strict(&d.join(name))?;
+        }
+        for r in ["main", "origin/main"] {
+            let (code, out) = crate::git(d, &["show", &format!("{r}:./{name}")]);
+            if code == Some(0) {
+                text += &String::from_utf8_lossy(&out);
+            }
         }
     }
     let top = ID
         .captures_iter(&text)
         .map_while(Result::ok)
         .filter_map(|c| c[1].parse::<u128>().ok())
+        .chain(reserved(d).into_iter().map(|(n, _)| n))
         .max()
         .unwrap_or(0);
     Ok(format!("T{:02}", top + 1))
+}
+
+/// The files whose ids are taken: the feature's tasks, its ticked ones (feature 449 T142) and its plan's sections.
+const FILES: [&str; 4] = [
+    "tasks.md",
+    l7r_shared::speckit::tasks::DONE,
+    "plan.md",
+    "plan-done.md",
+];
+
+/// The reservation file in the git common directory: one line an id handed out, `<feature> T<n>`, never rewritten but by
+/// [`release`] under the lock. A tree git does not know has no other worktree to clash with, and keeps none.
+const RESERVED: &str = "task-ids.txt";
+
+/// The reservation file of the repository holding `d`, none outside git.
+fn reserved_path(d: &Path) -> Option<std::path::PathBuf> {
+    common_git_dir(d).map(|c| c.join(RESERVED))
+}
+
+/// The ids [`RESERVED`] holds for `d`'s feature, as numbers with their lines; none where it cannot be read.
+fn reserved(d: &Path) -> Vec<(u128, String)> {
+    let name = d.file_name().unwrap_or_default().to_string_lossy();
+    reserved_path(d)
+        .and_then(|p| std::fs::read_to_string(p).ok())
+        .unwrap_or_default()
+        .lines()
+        .filter_map(|l| {
+            let (f, t) = l.split_once(' ')?;
+            let n = t.strip_prefix('T')?.parse().ok()?;
+            (f == name).then(|| (n, l.to_owned()))
+        })
+        .collect()
+}
+
+/// `tid` recorded as handed out for `d`'s feature, under the filing lock.
+fn reserve(d: &Path, tid: &str) -> Result<(), String> {
+    use std::io::Write as _;
+    let Some(path) = reserved_path(d) else {
+        return Ok(());
+    };
+    let name = d.file_name().unwrap_or_default().to_string_lossy();
+    std::fs::OpenOptions::new()
+        .append(true)
+        .create(true)
+        .open(&path)
+        .and_then(|mut f| writeln!(f, "{name} {tid}"))
+        .map_err(|e| format!("{}: {e}", path.display()))
+}
+
+/// `tid` given back: a withdrawn filing's id is the next filing's again. A file that cannot be rewritten leaves a gap, never a clash.
+fn release(d: &Path, tid: &str) {
+    let Some(path) = reserved_path(d) else {
+        return;
+    };
+    let name = d.file_name().unwrap_or_default().to_string_lossy();
+    let line = format!("{name} {tid}");
+    let text = std::fs::read_to_string(&path).unwrap_or_default();
+    let kept: String = text
+        .lines()
+        .filter(|l| *l != line)
+        .map(|l| format!("{l}\n"))
+        .collect();
+    let _ = std::fs::write(&path, kept);
 }
 
 /// What one filing puts into one file: `text` at byte `at` of the text it read.
@@ -397,6 +468,7 @@ fn checked(
         &format!("{name} {tid}: {}", listed.trim()),
         "quick-red",
     );
+    release(filing.d, tid);
     let number = name.split('-').next().unwrap_or_default();
     Ok(reply(String::new(), format!("{err}task-add: refused - {tid} withdrawn, its box and section taken out of tasks.md and plan.md: make quick's checks fail on what it wrote and not without it (feature 451 FR-011):\n{listed}Fix the title or the section and file it again: make task-add F={number} TITLE=\"...\" - or file it anyway: make task-add F={number} TITLE=\"...\" QUICK_OK=\"<reason>\" (recorded)\n"), 2))
 }
@@ -429,6 +501,7 @@ fn file<'a>(
         physical,
         section: text,
     };
+    reserve(d, &filing.tid).map_err(fail)?;
     let placed = filing.put_in().map_err(fail)?;
     let rel = d.strip_prefix(root).map_err(|_| {
         fail(format!(

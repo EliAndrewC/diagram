@@ -7,6 +7,13 @@ use l7r_gate_plan::plan::template::TEMPLATE;
 use super::{cli, lacks_red_exit, next_id, Insert};
 use crate::tests::{repo, root_of};
 
+/// The test's files committed and pushed, so `main` and `origin/main` hold the ids its tree does (451 T255 reads both).
+fn landed(root: &std::path::Path) {
+    crate::git(root, &["add", "-A"]);
+    crate::git(root, &["commit", "-qm", "the test's files"]);
+    crate::git(root, &["push", "-q", "origin", "main"]);
+}
+
 fn words(a: &[&str]) -> Vec<String> {
     a.iter().map(|s| (*s).to_owned()).collect()
 }
@@ -40,6 +47,7 @@ fn a_task_takes_the_next_id_and_its_box_and_section_land_in_place() {
         "specs/9001-x/plan-done.md",
         "  - [X] T07b archived\n",
     );
+    landed(&root);
     assert_eq!(next_id(&d).unwrap(), "T08");
     // an id archived in tasks-done.md is taken (feature 449 T142)
     put(&root, "specs/9001-x/tasks-done.md", "- [x] T09 archived\n");
@@ -217,6 +225,7 @@ fn perf_1_and_a_perf_title_each_file_a_task_the_reader_calls_performance_work() 
     let d = root.join("specs/9001-x");
     put(&root, "specs/9001-x/tasks.md", "- [x] T01 done\n");
     put(&root, "specs/9001-x/plan.md", "");
+    landed(&root);
     let title_of = |id: &str| {
         let tasks = std::fs::read_to_string(d.join("tasks.md")).unwrap();
         let line = tasks
@@ -606,4 +615,32 @@ fn a_tree_outside_git_locks_in_its_own_git_directory() {
     assert_eq!(filed.code, 0, "{}", filed.stderr);
     assert!(root.join(".git/task-add-9001-x.lock").is_file());
     assert_eq!(own_lines(&root, "T02", "a line"), (1, 1));
+}
+
+/// RED FIRST (feature 451 T255; the parallel trials of 2026-11-25, T247 and T248 each filed twice): two worktrees of one clone, each
+/// filing a task of one feature with nothing committed between, take two ids - the second tree reads the first's reservation in the
+/// shared git directory, not only its own tasks.md. A withdrawn filing gives its id back; an id only `main` holds is taken too.
+#[test]
+fn two_worktrees_never_take_one_id() {
+    let (dir, root) = quick_repo("task-add-two-trees");
+    put(&root, "Makefile", "quick:\n\t@true\n");
+    crate::git(&root, &["add", "-A"]);
+    crate::git(&root, &["commit", "-qm", "quick"]);
+    let other = dir.join("other");
+    let (code, _) = crate::git(
+        &root,
+        &["worktree", "add", "-q", "--detach", &other.to_string_lossy()],
+    );
+    assert_eq!(code, Some(0));
+    let first = cli(&words(&["9001"]), &root, "the first tree's");
+    assert!(first.stdout.contains("T10 filed"), "{}", first.stdout);
+    let second = cli(&words(&["9001"]), &other, "the second tree's");
+    assert!(second.stdout.contains("T11 filed"), "{}", second.stdout);
+    // the reservation of a filing withdrawn is given back, and one main holds counts though no file of this tree has it
+    super::release(&root.join("specs/9001-x"), "T11");
+    assert_eq!(next_id(&root.join("specs/9001-x")).unwrap(), "T11");
+    std::fs::remove_file(root.join(".git").join(super::RESERVED)).unwrap();
+    crate::git(&root, &["commit", "-qam", "the first tree's filing"]);
+    crate::git(&other, &["checkout", "-q", "--", "specs"]);
+    assert_eq!(next_id(&other.join("specs/9001-x")).unwrap(), "T11");
 }

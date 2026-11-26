@@ -98,8 +98,8 @@ fn age(file: &Path, now: SystemTime) -> Option<Duration> {
 /// parked, 449 set down at 2026-11-23T10:34:24Z after the task's start at 2026-11-22T06:12:24Z - both named only because their boxes
 /// were open). A task is in progress where its box is open (`specs/<number>-*/tasks.md`'s `- [ ]` lines), it is STARTED since its
 /// last landing - a `task-starts.jsonl` row of its own later than that landing (the feature's event log, [`landings`]), or the
-/// clone's active mark (`make task-start`'s `active-task`) naming it - and nothing holds it: no unmet `(waits: ...)` ([`waits`], the
-/// reading the nothing-running refusal shares), no binding ruling holding it by name ([`holds::named`]), no `make set-down` of its
+/// clone's marks (`make task-start`'s, one a task in any tree, 451 T254) naming it - and nothing holds it: no unmet `(waits: ...)`
+/// ([`waits`], the reading the nothing-running refusal shares), no binding ruling holding it by name ([`holds::named`]), no `make set-down` of its
 /// feature at or after its last start (`active`'s set-down test). A ruling that holds NEW work ([`holds::held`]) does not hold it: it
 /// holds the tasks not yet started (T183), and T184's builder - started 2026-11-23T19:22:55Z under 451's hold, after a page
 /// session's set-down at 11:06:29 - is the one T193 was built to name. A log that cannot be read starts nothing: it fails toward
@@ -108,10 +108,7 @@ fn in_progress(root: &Path, number: &str, ids: &[String]) -> bool {
     let git = crate::guards::event_log_hooks::common_git_dir(root);
     let starts = rows(&git.join("task-starts.jsonl")).unwrap_or_default();
     let downs = rows(&git.join("set-downs.jsonl")).unwrap_or_default();
-    let mark = std::fs::read_to_string(git.join("active-task"))
-        .ok()
-        .and_then(|t| serde_json::from_str::<Value>(&t).ok())
-        .unwrap_or(Value::Null);
+    let marks = crate::speckit::marks::all(&git);
     let mut lands = HashMap::new();
     crate::speckit::feature_dirs(&root.join("specs"))
         .iter()
@@ -137,10 +134,10 @@ fn in_progress(root: &Path, number: &str, ids: &[String]) -> bool {
                         .filter(|r| mine(r, id))
                         .map(|r| field(r, "utc"))
                         .max();
-                    let marked = field(&mark, "feature") == feature
-                        && mark["tasks"]
-                            .as_array()
-                            .is_some_and(|t| t.iter().any(|t| t == id.as_str()));
+                    let marked = marks.iter().any(|m| {
+                        field(m, "feature") == feature
+                            && crate::speckit::marks::tasks_of(m).contains(id)
+                    });
                     let since_landing = start
                         .and_then(instant)
                         .is_some_and(|at| landed.get(id).is_none_or(|l| at > *l));

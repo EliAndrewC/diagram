@@ -2686,58 +2686,73 @@ engine speed, so no checklist.
 <!-- plan-archive: T253 to T252 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T253 to T253 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 
-### T254 (<why: the finding or measurement that files it>)
+### T254 (the parallel trials of 2026-11-25, `specs/449-rust-codebase/port-talk-agenda.md` item 1: one `active-task` mark in the shared .git, a second worktree's start overwrote the first's, and a push of one task was refused while the other was started)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: A mark per task, and a hold by the files a push carries.
+  - **The marks** (`rust/guard/shared/src/speckit/marks.rs`). `make task-start` writes `<git common dir>/task-marks/<feature>/<task>.json`: feature, task, a bundle's `tasks`, the tree that started it, and the time. No start overwrites another task's mark. A tree's own task (`marks::of_tree`) is the newest mark that tree wrote. The main worktree also reads the old one-mark file, `active-task`, as its oldest mark, so a start made before this change still counts. That tree's next start removes the old file. A mark is removed when its task lands (`make land`'s sweep, `--scratch-sweep landed`) or when its feature is set down in its own tree (`marks::clear`). Another tree's marks stay. A ticked task's mark that is left behind holds nothing, because every reader asks for an open box. Each `task-starts.jsonl` row now names its tree too.
+  - **The hold** (`speckit::holding_with`, which the push, `make land` and the CI merge ask). Each started task of the feature, a mark of any tree, holds the push only while three things are true: its box is open (or an open box is nested under it), the landing does not tick it, and the push's delta carries one of its edits. "Carries an edit" is 451 T101's rule, moved to `speckit/touch.rs` so the push and `land/ready.rs` share one reader: a delta file, other than the feature's sectioned files and the review ledger, holds a write of the task's on the event log, made after the file last landed and before the delta's last commit of it. A landing that rules its tasks ready (`L7R_LAND_READY`) is still not held. If a mark this tree reads is not an object, the hold fails closed, as before.
+  - **The prefix fault, fixed here.** T101's rule stripped only the clone's path from an edit line, so every edit a worktree's builder made was passed over. The edit lines are now read against every tree: the worktrees git lists, the trees the marks and starts name, and the clone, longest first. A worktree nested inside the tree is read as its own.
+  - **The readers, by what they ask.**
+    - Changed to this tree's mark (`marks::of_tree`): `speckit::active_task`, and through it the reviews' declared placement (`reviews/owed/declared.rs`); and the plan crate's `task::active_task`, and through it decide's refusal, the approach tripwire (`approach.rs`) and the review-round guard's `plan door active-task`.
+    - Changed to read a tree's own starts, a row naming another tree passed over and a row naming none read as before: the event log's booking of a line by the task in force (`event_log_hooks/filed.rs::starts`), and the context cap's in-force fallback (`context_cap_hooks.rs`).
+    - Changed to every mark: the stall check (`set_down_hooks/stalls.rs`) and the hold.
+    - Changed in what it removes: `make set-down` (`set_down.rs` through `marks::clear`) and the landed sweep (`scratch_sweep_hooks/disk.rs`).
+    - Already read the task from their own argument or a per-task row, so unchanged: `land/ready.rs`'s `started_tasks`, `builder_stop_hooks::started_and_open`, `static_runs_hooks` (the task its filing names), `closing-checks.sh` (`CLOSING_TASK`), `wording.rs`, the Makefile's landed sweep, `check_bundle_hooks/own.rs` (the check's own task since 449 T258), `approach.rs::in_flight` (every in-flight task of the feature, the GM's 2026-10-21 rule), and the ledger's `whose.rs`.
+    - Read clone-wide on purpose, unchanged: the Stop hook's started features and idle check (`set_down_hooks.rs::started`, `idle.rs`), which serve the coordinating session over every tree; `make events-refile` (`every_start`, its reading kept as it was); `logs.rs::land_tooling` (the last start, a log line's label); and the measure crates' reports (`task_time`, `where_time`, `feature_report`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a mark per task, a tree's own read | `speckit::marks::tests::each_tree_keeps_its_own_mark` red with HEAD's one mark stood in (2026-11-25, `make rust-test CRATE=rust/guard/shared`: "the legacy mark is the main worktree's") | n/a: tooling | none | n/a |
+| the hold by the edits the push carries, every tree's paths | `speckit::tests::only_a_started_task_whose_edits_the_push_carries_holds_it` red with the one mark (the other worktree's T7707 read as this tree's); `tests/hooks/test-sync-with-main.sh` case 7d (cont) "the pointer names a feature whose started task's edits this push does not carry -> lands" | n/a: tooling | none | n/a |
 
 ### T254 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Three builders, each in its own worktree, start their tasks without moving each other's mark. A push or landing is refused only for a task being landed, or a started task whose edits the push carries.
+2. **The constraints.** T254's line in tasks.md. 405 T32 (D4): a task nobody has started holds nothing. 451 T101: a ready task lands beside a started one. 451 T29: a set-down clears its feature's mark.
+3. **Where each comes from.** G: the GM's approval of 2026-11-25, quoted in T254's line of tasks.md. O: the trial records in `port-talk-agenda.md` item 1 (trials 1-5, 2026-11-25).
+4. **Do they describe the world here?** Yes. The suites play two worktrees of one repository: `marks/tests.rs`, the holding test's second worktree, and `test-sync-with-main.sh`, whose `start` now also files the task's edit lines, as the event log writer would.
+5. **The order.** Before the first port batch at three builders. It lands with T255 (`make land F=451 T="T254 T255"`).
+6. **The exits.** Green: `make closing-checks T="T254 T255" F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST. With HEAD's one mark stood in (`write` to `active-task`, `of_tree` reading only it), the shared crate gave 486 passed and 2 failed, the two tests above, measured 2026-11-25 (`make rust-test CRATE=rust/guard/shared`). With the change it gave 488 passed and 0 failed, measured 2026-11-25 (the same command). `test-sync-with-main.sh` passed 150 checks, measured 2026-11-25 (`bash tests/hooks/test-sync-with-main.sh`). The suites of set-down, review-gate, review-round, static-runs, builder-stop and closing-checks passed unchanged, and so did the crates task, plan, land, measure, guard, cohort, ci, core and reviews, measured 2026-11-25 (each suite's script and `make rust-test CRATE=`). Logs are in the session scratchpad.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The findings: a builder's start overwrote another worktree's mark, and a push was refused by a task whose files it did not carry. Both were measured in the trials. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- T101's edit-line prefix was the clone's alone, so a worktree builder's edits never held a landing beside it. Effect: a landing could carry another worktree task's files unseen. Fixed here (`touch::prefixes`), observed 2026-11-25, method: the `strip_prefix` in `land/ready.rs` and the edit lines' absolute paths.
+- The landed sweep reads its tasks as numbers, so a lettered task's mark (`T07b`) would not have been removed on landing. Fixed here: the marks are removed by the task ids as given.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T255 (<why: the finding or measurement that files it>)
+### T255 (the parallel trials of 2026-11-25: builders in two worktrees each ran `make task-add` and filed T247, then T248, twice; renumbered by hand)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `make task-add` (`rust/gate/crates/task/src/task_add.rs`) already held a filing lock per feature in the git common directory (451 T84), which every worktree shares. What clashed was the number: `next_id` read only its own tree's tasks.md, tasks-done.md, plan.md and plan-done.md. The number is now one past the highest id of these sources: those files in this tree; the same files on `main` and on `origin/main` as last fetched (`git show <ref>:./<file>`, with no fetch under the lock); and the reservation file `<git common dir>/task-ids.txt`, which holds one `<feature> T<n>` line per id handed out. The id is written to the reservation file under the lock, before the box goes in. A filing that `make quick` withdraws gives its id back, so the next filing takes that id, as before. A tree that git does not know has no other worktree, and keeps no reservation.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the id past every tree's reservation and main's files | `task_add::tests::two_worktrees_never_take_one_id` red on HEAD's numbering (2026-11-25, `make rust-test CRATE=rust/gate/crates/task`: the second worktree filed T10, the first's id) | n/a: tooling | none | n/a |
 
 ### T255 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Two builders in two worktrees run `make task-add` on one feature, uncommitted, and get two ids.
+2. **The constraints.** T255's line in tasks.md. 451 T84: one filing at a time, and only its own text taken out. 449 T142: an id in tasks-done.md is taken.
+3. **Where each comes from.** O: the trials' T247/T248 collisions (`port-talk-agenda.md` item 1, trials 2-5, 2026-11-25).
+4. **Do they describe the world here?** Yes. The test uses two worktrees of one repository (`git worktree add`): one files, and the other files with nothing committed between.
+5. **The order.** Before the first port batch at three builders. It lands with T254.
+6. **The exits.** Green: `make closing-checks T="T254 T255" F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST. On HEAD's numbering (no reservation and no read of main, stood in), the task crate gave 89 passed and 1 failed, the second tree filing T10, measured 2026-11-25 (`make rust-test CRATE=rust/gate/crates/task`). With the change it gave 90 passed and 0 failed, measured 2026-11-25 (the same command). Two earlier tests now commit their files first (`landed`), because main's ids count. Logs are in the session scratchpad.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: two tasks filed under one id, measured in the trials. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 <!-- plan-archive: T256 to T256 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->

@@ -36,6 +36,25 @@ pub fn commit(dir: &Path, rel: &str, text: &str) {
     git(dir, &["commit", "-qm", "c"]);
 }
 
+/// `rel` committed in `dir` and `task`'s Edit of it on `feature`'s event log, half a second after the commit: a started task's
+/// work the push carries, which is what holds it (feature 451 T254, `shared::speckit::touch`).
+///
+/// # Panics
+///
+/// Where the fixture cannot be made, which fails the test that asked for it.
+pub fn edited(dir: &Path, feature: &str, task: &str, rel: &str) {
+    commit(dir, rel, &format!("{task}'s edit\n"));
+    let secs: u64 = git(dir, &["log", "-1", "--format=%ct"]).parse().unwrap();
+    let (y, m, d, h, mi, s) = l7r_shared::log::civil(secs);
+    let path = std::fs::canonicalize(dir).unwrap().join(rel);
+    let line = serde_json::json!({"ev": "PostToolUse", "cat": "edit", "task": task,
+        "t": format!("{y:04}-{m:02}-{d:02}T{h:02}:{mi:02}:{s:02}.500Z"), "path": path.to_string_lossy()});
+    let log = dir.join(format!(".git/l7r-events/{feature}.jsonl"));
+    let mut text = std::fs::read_to_string(&log).unwrap_or_default();
+    text += &format!("{line}\n");
+    put(dir, &format!(".git/l7r-events/{feature}.jsonl"), &text);
+}
+
 /// A scratch directory of the test, removed when it is dropped.
 pub fn scratch(tag: &str) -> l7r_shared::tempdir::TempDir {
     l7r_shared::tempdir::TempDir::new(&format!("gate-ci-{tag}"))

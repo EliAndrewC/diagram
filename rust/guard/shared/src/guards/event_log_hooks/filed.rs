@@ -284,14 +284,32 @@ fn prompt_head(payload: &Value) -> &str {
 /// One task start: its feature, its task, its epoch seconds where its `utc` parses.
 pub type Start = (String, String, Option<f64>);
 
-/// The clone's task starts in file order; a line that does not parse is skipped, a missing file is none. The one reader of
+/// The task starts made in the tree at `root`, in file order: a row naming another tree is another worktree's builder's (451 T254,
+/// the parallel trials of 2026-11-25: a line of one worktree was booked under the other's start), and a row naming none is from
+/// before rows named their tree, read as before. A line that does not parse is skipped, a missing file is none. The one reader of
 /// `task-starts.jsonl` the writer and `make events-refile` share (451 T56), with [`in_force`] and [`started`].
 #[must_use]
 pub fn starts(root: &Path) -> Vec<Start> {
+    starts_where(root, &|e: &Value| {
+        e.get("tree")
+            .and_then(Value::as_str)
+            .is_none_or(|t| crate::speckit::marks::same_tree(Path::new(t), root))
+    })
+}
+
+/// Every task start of the clone, whichever tree made it: `make events-refile`'s reading, kept as it was before T254 (a re-file by
+/// each line's own tree is not built here; the writer files a line by its tree as it is written).
+#[must_use]
+pub fn every_start(root: &Path) -> Vec<Start> {
+    starts_where(root, &|_: &Value| true)
+}
+
+fn starts_where(root: &Path, keep: &dyn Fn(&Value) -> bool) -> Vec<Start> {
     std::fs::read_to_string(common_git_dir(root).join("task-starts.jsonl"))
         .unwrap_or_default()
         .lines()
         .filter_map(|l| serde_json::from_str::<Value>(l.trim()).ok())
+        .filter(|e| keep(e))
         .map(|e| {
             let at = crate::iso::parse(&text_of(e.get("utc")));
             (text_of(e.get("feature")), text_of(e.get("task")), at)

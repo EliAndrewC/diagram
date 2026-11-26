@@ -418,6 +418,10 @@ fn task_landed(
                 text(e, "feature") == feature
                     && !text(e, "task").is_empty()
                     && stamp(text(e, "utc")).as_str() <= d
+                    // this tree's start, not another worktree's builder's (451 T254); a row naming no tree is from before
+                    && e.get("tree").and_then(Value::as_str).is_none_or(|t| {
+                        crate::shared::speckit::marks::same_tree(Path::new(t), root)
+                    })
             })
             .next_back()
             .map(|e| text(&e, "task").to_owned())

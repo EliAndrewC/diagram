@@ -244,8 +244,41 @@ fn the_active_task_is_the_marks_when_it_names_this_feature() {
     assert!(active_task(&d).is_err());
 }
 
+/// `git <args>` in `at`, its stdout; the test fails where git does.
+fn git(at: &Path, args: &[&str]) -> String {
+    let said = ask(at, "git", args, "");
+    assert!(said.ok(), "git {args:?}: {}", said.err);
+    said.out
+}
+
+/// A task's edit of `tree`/`rel`, half a second after `at`'s HEAD was committed: what the event log writer files for an Edit.
+fn edited(at: &Path, tree: &Path, feature: &str, task: &str, rel: &str) {
+    let secs: u64 = git(at, &["log", "-1", "--format=%ct"]).trim().parse().unwrap();
+    let (y, m, d, h, mi, sec) = crate::log::civil(secs);
+    let line = json!({"ev": "PostToolUse", "cat": "edit", "task": task,
+        "t": format!("{y:04}-{m:02}-{d:02}T{h:02}:{mi:02}:{sec:02}.500Z"), "path": tree.join(rel).to_string_lossy()});
+    let log = at.join(format!(".git/l7r-events/{feature}.jsonl"));
+    std::fs::create_dir_all(log.parent().unwrap()).unwrap();
+    let mut text = std::fs::read_to_string(&log).unwrap_or_default();
+    text += &format!("{}\n", serde_json::to_string(&line).unwrap());
+    std::fs::write(log, text).unwrap();
+}
+
+/// A mark as `make task-start` writes it, in `tree`.
+fn mark(at: &Path, tree: &Path, feature: &str, task: &str, utc: &str) {
+    marks::write(
+        &at.join(".git"),
+        tree,
+        json!({"feature": feature, "task": task}),
+        utc,
+    )
+    .unwrap();
+}
+
+/// RED FIRST (feature 451 T254): only the STARTED tasks whose files the push's delta touches hold it - in this tree or another
+/// worktree's - and a landing that ticks a task, or rules its tasks ready (451 T101), is not held by it.
 #[test]
-fn only_the_active_task_holds_and_a_landing_that_ticks_it_does_not() {
+fn only_a_started_task_whose_edits_the_push_carries_holds_it() {
     let (_d, at) = repo("holding");
     let d = at.join("specs/007-x");
     std::fs::create_dir_all(&d).unwrap();
@@ -253,61 +286,72 @@ fn only_the_active_task_holds_and_a_landing_that_ticks_it_does_not() {
     put(
         &d,
         "tasks.md",
-        "- [ ] T7701 the open one\n- [x] T7702 ticked\n  some text\n  - [ ] a pass under it\n- [x] T7703 ticked\n\n  - [ ] after a blank\n- [x] T7704 last\n  - [x] done under it\n",
+        "- [ ] T7701 the open one\n- [x] T7702 ticked\n  some text\n  - [ ] a pass under it\n- [x] T7703 ticked\n\n  - [ ] after a blank\n- [x] T7704 last\n  - [x] done under it\n- [ ] T7707 the other tree's\n",
     );
-    put(
-        &at,
-        ".git/active-task",
-        r#"{"feature": "007-x", "task": "T7701"}"#,
-    );
+    git(&at, &["-c", "user.email=t@t", "-c", "user.name=t", "add", "-A"]);
+    git(&at, &["-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "base"]);
+    git(&at, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    // a task started, but the delta holds none of its files: no hold (the push of before T254 was refused here)
+    mark(&at, &at, "007-x", "T7701", "2026-11-25T10:00:00Z");
+    assert_eq!(active_task(&d).unwrap(), "T7701");
+    put(&at, "a.rs", "fn a() {}\n");
+    git(&at, &["add", "-A"]);
+    git(&at, &["-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "its work"]);
+    assert!(holding(&d).unwrap().is_empty());
+    // its edit of a file the delta carries: held
+    edited(&at, &at, "007-x", "T7701", "a.rs");
     assert_eq!(
         holding(&d).unwrap(),
-        ["T7701 the open one  <- the active task (make task-start), open: land it with make land F=7 T=T7701"]
+        ["T7701 the open one  <- started (make task-start), its edit of a.rs in this push: land it with make land F=7 T=T7701"]
     );
-    for (task, want) in [("T7702", 1), ("T7703", 0), ("T7704", 0), ("T7799", 0)] {
-        put(
-            &at,
-            ".git/active-task",
-            &format!(r#"{{"feature": "007-x", "task": "{task}"}}"#),
-        );
-        assert_eq!(holding(&d).unwrap().len(), want, "{task}");
-    }
-    put(
-        &at,
-        ".git/active-task",
-        r#"{"feature": "007-x", "task": "T7702"}"#,
-    );
-    assert_eq!(
-        holding(&d).unwrap(),
-        ["a pass under it  <- open under the active task T7702: land it with make land F=7 T=T7702"]
-    );
-    // the test thread's own environment (feature 451 T32), not the process's, which raced every other holding test
-    crate::env::set("L7R_LAND_TICKS", "T7700 T7702");
+    crate::env::set("L7R_LAND_TICKS", "T7700 T7701");
     assert!(holding(&d).unwrap().is_empty());
     crate::env::unset("L7R_LAND_TICKS");
-    // 451 T101: a landing of another task is held by the mark's, unless the landing ruled every task it ticks ready beside it
+    // 451 T101: a landing of another task is held by it, unless the landing ruled every task it ticks ready beside it
     assert_eq!(holding_with(&d, "T7703").unwrap().len(), 1);
     crate::env::set("L7R_LAND_READY", "T7703");
     assert!(holding_with(&d, "T7703").unwrap().is_empty());
     assert_eq!(holding_with(&d, "T7703 T7704").unwrap().len(), 1);
     assert_eq!(holding_with(&d, "").unwrap().len(), 1);
     crate::env::unset("L7R_LAND_READY");
+    // a ticked task with an open box under it is still in progress; one with none, or no box, holds nothing
+    for (task, want) in [("T7702", 1), ("T7703", 0), ("T7704", 0), ("T7799", 0)] {
+        marks::remove(&at.join(".git"), "007-x", &["T7701".to_owned()]);
+        mark(&at, &at, "007-x", task, "2026-11-25T11:00:00Z");
+        edited(&at, &at, "007-x", task, "a.rs");
+        assert_eq!(holding(&d).unwrap().len(), want, "{task}");
+        marks::remove(&at.join(".git"), "007-x", &[task.to_owned()]);
+    }
+    mark(&at, &at, "007-x", "T7702", "2026-11-25T11:00:00Z");
+    assert_eq!(
+        holding(&d).unwrap(),
+        ["a pass under it (open under T7702)  <- started (make task-start), its edit of a.rs in this push: land it with make land F=7 T=T7702"]
+    );
+    marks::remove(&at.join(".git"), "007", &["T7702".to_owned()]);
+    // ANOTHER WORKTREE'S started task: its start moves no mark of this tree, and it holds this push only by its own files, its edit
+    // lines naming its own tree's paths
+    let other = at.join("other");
+    git(&at, &["worktree", "add", "-q", "--detach", &other.to_string_lossy()]);
+    mark(&at, &other, "007-x", "T7707", "2026-11-25T12:00:00Z");
+    assert_eq!(active_task(&other.join("specs/007-x")).unwrap(), "T7707");
+    assert_eq!(active_task(&d).unwrap(), "");
+    assert!(holding(&d).unwrap().is_empty());
+    put(&at, "b.rs", "fn b() {}\n");
+    git(&at, &["add", "b.rs"]);
+    git(&at, &["-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "carried over"]);
+    edited(&at, &other, "007-x", "T7707", "b.rs");
+    assert!(holding(&d).unwrap()[0].contains("its edit of b.rs in this push"));
     let e = at.join("specs/000-y");
     put(&e, "tasks.md", "- [ ] T7705 x\n");
-    put(
-        &at,
-        ".git/active-task",
-        r#"{"feature": "000-y", "task": "T7705"}"#,
-    );
+    mark(&at, &at, "000-y", "T7705", "2026-11-25T13:00:00Z");
+    edited(&at, &at, "000-y", "T7705", "b.rs");
     assert!(holding(&e).unwrap()[0].ends_with("F=0 T=T7705"));
     let n = at.join("specs/draft-y");
     put(&n, "tasks.md", "- [ ] T7706 x\n");
-    put(
-        &at,
-        ".git/active-task",
-        r#"{"feature": "draft-y", "task": "T7706"}"#,
-    );
+    mark(&at, &at, "draft-y", "T7706", "2026-11-25T13:00:00Z");
+    edited(&at, &at, "draft-y", "T7706", "b.rs");
     assert!(holding(&n).unwrap()[0].ends_with("F=draft-y T=T7706"));
+
 }
 
 #[test]

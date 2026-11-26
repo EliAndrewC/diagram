@@ -44,13 +44,12 @@ pub(super) fn mark(common: &Path, d: &Path, name: &str, tasks: &[&str]) -> Raise
     } else {
         json!({"feature": name, "task": lead})
     };
-    write(
-        &common.join("active-task"),
-        &format!("{}\n", dumps(&value, None, true)),
-    )?;
+    // THE TASK'S OWN MARK, in the tree that started it (451 T254): no start moves another task's or another worktree's
+    let top = py_parent(&py_parent(d));
+    let utc = utc_text(now_secs());
+    l7r_shared::speckit::marks::write(common, &top, value, &utc)?;
     // ...AND THE FEATURE NAMED where `active_task` reads it (405 T106): a mark naming another feature than `.specify/feature.json` is
     // ignored, so a session that started 405's task with 415 still named there had the cohort and `claims-carry` charge 405's work to 415
-    let top = py_parent(&py_parent(d));
     let specify = top.join(".specify");
     if !specify.is_dir() {
         std::fs::create_dir(&specify).map_err(|e| format!("{}: {e}", specify.display()))?;
@@ -67,11 +66,12 @@ pub(super) fn mark(common: &Path, d: &Path, name: &str, tasks: &[&str]) -> Raise
         ),
     )?;
     // ...AND WHEN, for the report's per-task split (feature 385 T02, plan D10): a bundle's other members first, its first task last
+    // ...each row naming its tree, so a reader asking for this tree's task in force reads only its own (451 T254)
     let starts = common.join("task-starts.jsonl");
-    let utc = utc_text(now_secs());
     let mut rows = String::new();
+    let tree = top.to_string_lossy();
     for t in tasks.iter().skip(1).chain(tasks.first()) {
-        let row = dumps(&json!({"feature": name, "task": t, "utc": utc}), None, true);
+        let row = dumps(&json!({"feature": name, "task": t, "utc": utc, "tree": tree}), None, true);
         let _ = writeln!(rows, "{row}");
     }
     std::fs::OpenOptions::new()

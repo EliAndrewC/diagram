@@ -179,7 +179,7 @@ The full spec and every failure mode: `docs/session-clones.md`.
   counts, a comment's too, since 449 T247) -> GATED on a green local `make done`. **`make land F= T=<task(s)> NOTE=` lands a task and ticks it**: every
   cheap refusal first and together, then `make done` and `make cohort-landing` only where needed (side by side, 405 T48) with the claims round beside them, the
   tick and ONE push carrying both (405 T50, T51).
-  Only the task being worked (`make task-start`'s mark) holds a landing, and a started task whose plan section is CLEAR and whose files are its own lands while the mark names another (451 T101); a task nobody has started holds nothing. A feature's TOOLING
+  A started task (`make task-start`, one mark a task in its own tree, 451 T254) holds a push only where the push carries its edits, and a started task whose plan section is CLEAR and whose files are its own lands beside another (451 T101); a task nobody has started holds nothing. A feature's TOOLING
   also lands alone: `make land-tooling FILES="<paths>"` lands the named `scripts/`,
   `tests/`, agent-instruction, Makefile or settings files as a new commit on main, so a guard fix made mid-feature reaches
   every session's hooks (feature 379; an arbiter's fix is not done until it has).

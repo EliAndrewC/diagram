@@ -392,7 +392,7 @@ fn cli_with(args: &[String], cwd: &Path, env: Env) -> Reply {
     if let Err(e) = written {
         return raised("set-down", String::new(), "", &e.to_string());
     }
-    let cleared = clear_mark(Path::new(&common_text(cwd)), hit).map_or_else(String::new, |t| {
+    let cleared = clear_mark(Path::new(&common_text(cwd)), &crate::toplevel_or_dot(cwd), hit).map_or_else(String::new, |t| {
         format!("; its started-task mark ({t}) cleared")
     });
     let stop = if parked {
@@ -406,21 +406,14 @@ fn cli_with(args: &[String], cwd: &Path, env: Env) -> Reply {
     reply(format!("set-down: {hit} set down ({why}){cleared}; a turn may end with its tasks open until the next make task-start{stop}\n"), String::new(), 0)
 }
 
-/// THE STARTED-TASK MARK GOES WITH ITS FEATURE (feature 451 T29, found landing T06, 2026-11-20): `.git/active-task` names the task the
-/// clone is working, and the push's holding box (`speckit-todo --holding`) holds every push touching that feature's specs as its task's.
-/// 449 was set down with T241 parked while the mark still named 449 T241, so T06's landing was refused and its ticks reverted. The mark
-/// is removed, after the set-down's row is written, when it names this feature; another feature's mark, or one that cannot be read,
-/// stays as it is - a failed clear fails nothing. The next `make task-start` writes it again. The task it named, or none.
-fn clear_mark(common: &Path, feature: &str) -> Option<String> {
-    let mark = common.join("active-task");
-    let text = std::fs::read_to_string(&mark).ok()?;
-    let row = serde_json::from_str::<Value>(&text).ok()?;
-    let named = row.get("feature").and_then(Value::as_str)?;
-    if named != feature {
-        return None;
-    }
-    std::fs::remove_file(&mark).ok()?;
-    Some(row.get("task").map_or_else(|| "None".to_owned(), py_str))
+/// THE STARTED-TASK MARK GOES WITH ITS FEATURE (feature 451 T29, found landing T06, 2026-11-20): a mark names a task being worked, and
+/// the push's holding box (`speckit-todo --holding`) holds a push that carries its edits. 449 was set down with T241 parked while the
+/// mark still named 449 T241, so T06's landing was refused and its ticks reverted. The marks of this feature that this tree wrote - and
+/// the main worktree's one-mark file of before, where it names this feature (451 T254, `speckit::marks::clear`) - are removed after the
+/// set-down's row is written; another feature's, another worktree's, or one that cannot be read, stay as they are - a failed clear
+/// fails nothing. The next `make task-start` writes one again. The task it named, or none.
+fn clear_mark(common: &Path, top: &Path, feature: &str) -> Option<String> {
+    l7r_shared::speckit::marks::clear(common, top, feature)
 }
 
 #[cfg(test)]

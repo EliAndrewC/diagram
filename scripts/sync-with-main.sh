@@ -295,8 +295,9 @@ push_cmd() {
     # words `l7r-gate speckit-todo` states once, Rust since feature 449 T118). The exemption fails closed: an error or no answer
     # counts as not closed.
     # GUARD_EDIT_OK: feature 405 T32 (D4; the GM 2026-10-20: "I do not want each landing to owe a lands open line") - only the
-    # task being worked holds a landing: `l7r-gate speckit-todo --holding` names the clone's active task (`make task-start`) while it
-    # is open and `L7R_LAND_TICKS` (set by `make land`) does not name it; a task nobody has started holds nothing.
+    # task being worked holds a landing: `l7r-gate speckit-todo --holding` names each started task (`make task-start`, a mark per task,
+    # any worktree's - GUARD_EDIT_OK: feature 451 T254) whose edits this delta carries, while it is open and `L7R_LAND_TICKS` (set by
+    # `make land`) does not name it; a task nobody has started holds nothing.
     if [ -n "$f" ] && [ -f "$ROOT/$f/tasks.md" ] && [ -n "$("$ROOT/scripts/gates/l7r-gate.sh" speckit-todo --holding "$ROOT/$f" 2>/dev/null || echo fail-closed)" ]; then
       [ "$("$ROOT/scripts/gates/l7r-gate.sh" speckit-todo --closed-by-status "$ROOT/$f" 2>/dev/null)" = yes ] || active="$active $f"
     fi

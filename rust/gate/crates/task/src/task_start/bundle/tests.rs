@@ -27,10 +27,12 @@ fn a_bundle_is_marked_under_its_first_task_with_every_member_logged() {
         && first.contains("make decide F=9001 T=T01,T02,T03");
     let lands = first.contains("make land F=9001 T=T01,T02,T03");
     assert!(opens && names && lands, "{first}");
-    let mark = std::fs::read_to_string(root.join(".git/active-task")).unwrap();
-    assert_eq!(
-        mark,
-        "{\"feature\": \"9001-x\", \"task\": \"T01\", \"tasks\": [\"T01\", \"T02\", \"T03\"]}\n"
+    let mark = std::fs::read_to_string(root.join(".git/task-marks/9001-x/T01.json")).unwrap();
+    assert!(
+        mark.starts_with(
+            "{\"feature\": \"9001-x\", \"task\": \"T01\", \"tasks\": [\"T01\", \"T02\", \"T03\"], \"tree\": "
+        ),
+        "{mark}"
     );
     let starts = std::fs::read_to_string(root.join(".git/task-starts.jsonl")).unwrap();
     let order: Vec<String> = starts
@@ -41,7 +43,7 @@ fn a_bundle_is_marked_under_its_first_task_with_every_member_logged() {
     // the space form, as `make land` takes it
     let spaced = cli_with(&words(&["9001", "T02 T01"]), &root, &env);
     assert_eq!(spaced.code, 0, "{}", spaced.stderr);
-    let again = std::fs::read_to_string(root.join(".git/active-task")).unwrap();
+    let again = std::fs::read_to_string(root.join(".git/task-marks/9001-x/T02.json")).unwrap();
     let listed = again.contains("\"task\": \"T02\", \"tasks\": [\"T02\", \"T01\"]");
     assert!(listed, "{again}");
 }

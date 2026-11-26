@@ -26,16 +26,18 @@ fn a_task_started_is_marked_named_and_logged() {
     let said = cli_with(&words(&["9001", "T01"]), &root, &env);
     assert_eq!(said.code, 0, "{}", said.stderr);
     assert_eq!(said.stdout, "task-start: 9001-x T01 is the active task - its checks need its decisions ruled first (make decide)\n");
-    assert_eq!(
-        std::fs::read_to_string(root.join(".git/active-task")).unwrap(),
-        "{\"feature\": \"9001-x\", \"task\": \"T01\"}\n"
-    );
+    // the task's own mark, naming its tree (451 T254)
+    let mark = std::fs::read_to_string(root.join(".git/task-marks/9001-x/T01.json")).unwrap();
+    let tree = root.to_string_lossy();
+    let head = format!("{{\"feature\": \"9001-x\", \"task\": \"T01\", \"tree\": \"{tree}\", \"utc\": \"20");
+    assert!(mark.starts_with(&head), "{mark}");
     assert_eq!(
         std::fs::read_to_string(root.join(".specify/feature.json")).unwrap(),
         "{\n  \"feature_directory\": \"specs/9001-x\"\n}\n"
     );
     let starts = std::fs::read_to_string(root.join(".git/task-starts.jsonl")).unwrap();
     assert!(starts.starts_with("{\"feature\": \"9001-x\", \"task\": \"T01\", \"utc\": \"20"));
+    assert!(starts.trim_end().ends_with(&format!("\"tree\": \"{tree}\"}}")), "{starts}");
     // by path, from below the root, the tree read where the wrapper did not say
     let by_path = format!("{}/", root.join("specs/9001-x").display());
     let again = cli(&words(&[&by_path, "T02"]), &root);
@@ -64,7 +66,7 @@ fn a_held_feature_s_task_is_refused_and_a_raise_keeps_what_was_printed() {
     let held = cli_with(&words(&["9001", "T01"]), &root, &env);
     assert_eq!(held.code, 2);
     assert!(held.stderr.contains("is ON HOLD until 9003-y closes"));
-    assert!(!root.join(".git/active-task").exists());
+    assert!(!root.join(".git/task-marks").exists());
     // an unreadable plan raises before anything is written
     std::fs::write(root.join("specs/9001-x/plan.md"), [0xff]).unwrap();
     assert_eq!(cli_with(&words(&["9001", "T01"]), &root, &env).code, 1);
@@ -75,7 +77,7 @@ fn a_held_feature_s_task_is_refused_and_a_raise_keeps_what_was_printed() {
     put(&root, ".specify", "x");
     let raised = cli_with(&words(&["9001", "T01"]), &root, &env);
     assert_eq!(raised.code, 1);
-    assert!(root.join(".git/active-task").exists());
+    assert!(root.join(".git/task-marks").exists());
     // the start log not writable: the mark and the name written, then the raise
     std::fs::remove_file(root.join(".specify")).unwrap();
     std::fs::rename(root.join(".git/task-starts.jsonl"), root.join(".git/kept")).ok();
@@ -188,7 +190,7 @@ fn a_task_that_is_not_performance_work_waits_for_an_open_one() {
         "{}",
         refused.stderr
     );
-    assert!(!root.join(".git/active-task").exists());
+    assert!(!root.join(".git/task-marks").exists());
     // the performance task itself starts
     assert_eq!(cli_with(&words(&["9001", "T02"]), &root, &env).code, 0);
     // the escape: a reason of two words, recorded; one word refused
@@ -292,7 +294,7 @@ fn a_parked_stage_s_task_is_refused_until_the_gm_s_words_resume_it() {
     assert!(ok2, "{err}");
     let ok3 = err.contains("GM_RESUMED=\"<the GM's words resuming it>\"");
     assert!(ok3, "{err}");
-    assert!(!root.join(".git/active-task").exists());
+    assert!(!root.join(".git/task-marks").exists());
     // a stage that is not parked is no part of it
     let seat = cli_with(&words(&["9001", "T29"]), &root, &env);
     assert!(!seat.stderr.contains("parked"), "{}", seat.stderr);
