@@ -1,5 +1,5 @@
 {
- "captured": "2026-10-18T23:19:37+00:00",
+ "captured": "2026-11-26T05:10:44+00:00",
  "final_url": "https://github.com/EliAndrewC/l7r/blob/master/setting/l7r.md",
  "first": "b8/b8fdbcdbdae2/20261002T183226Z",
  "gm_copies": [],
@@ -19,13 +19,15 @@
   "l7r-justice",
   "l7r-geisha-houses",
   "l7r-estates-toward-capital",
-  "l7r-money"
+  "l7r-money",
+  "l7r-bounties",
+  "l7r-lineages"
  ],
  "notes": [],
  "outcome": "archived",
- "path": "b8/b8fdbcdbdae2/20261018T231935Z",
+ "path": "b8/b8fdbcdbdae2/20261126T051038Z",
  "reason": "",
  "revision": "",
- "sha256": "3dc5effac3f17d07139686c2cadbe1cb5656863110de3bf69e914e0c46bc14af",
+ "sha256": "68f1b9ca335cb695858df8477af00ba4cb138a03d3b6d71bc1c63c1c68259281",
  "url": "https://github.com/EliAndrewC/l7r/blob/master/setting/l7r.md"
 }

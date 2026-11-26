@@ -20022,5 +20022,26 @@
   "variants": [
    "furigana"
   ]
+ },
+ "stewardship province": {
+  "def": "In the setting, a province whose governor is appointed by the daimyo.",
+  "variants": [
+   "stewardship province",
+   "stewardship provinces"
+  ]
+ },
+ "dynasty province": {
+  "def": "In the setting, a province whose governorship is hereditary in practice.",
+  "variants": [
+   "dynasty province",
+   "dynasty provinces"
+  ]
+ },
+ "Unicorn Clan": {
+  "def": "One of the setting's Great Clans, as the Lion Clan and the Crane Clan are.",
+  "variants": [
+   "Unicorn Clan",
+   "Unicorn"
+  ]
  }
 }

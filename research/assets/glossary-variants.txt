@@ -1064,6 +1064,8 @@ dunhuang	Dunhuang
 dutch learning	Dutch learning
 duty of water	water duty
 dwarf bamboo	sasa
+dynasty province	dynasty province
+dynasty provinces	dynasty province
 dōba	dōba
 dōsojin	dosojin
 ear mound	ear mound
@@ -4478,6 +4480,8 @@ stem density	stem density
 stem family	stem family
 steward	steward
 stewards	steward
+stewardship province	stewardship province
+stewardship provinces	stewardship province
 still room	still-room
 still-room	still-room
 still-room maid	still-room
@@ -5078,6 +5082,8 @@ unhair	unhair
 unhaired	unhair
 unhairing	unhair
 unhairs	unhair
+unicorn	Unicorn Clan
+unicorn clan	Unicorn Clan
 unjo-gura	levy storehouse
 unno	Unno
 unno-juku	Unno
