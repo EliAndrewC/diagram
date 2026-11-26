@@ -675,6 +675,9 @@
 - [x] T268 the clone-sync notice reads 'mirror refresh FAILED: ' with nothing after the colon when the script cannot start, because ask drops the spawn error (found by 451 T263): carry the error text into the notice
       research: rendering
       verify: DONE. landed: the clone-sync notices say why: a sync script that cannot start reads 'could not be started (<the error>)' and one that failed silently 'exited N and said nothing'; red-first on a non-executable and a missing script (521 passed 1 failed, then 522); five changed wordings message-checked PASS; T283 filed from it
+- [x] T271 parallel builders share one scratchpad and one plan-review bundle directory: key the plan review bundle by tree and have the builder brief's scratch names carry the task id (found in the 2026-11-25 parallel trials)
+      research: rendering
+      verify: DONE. landed: the changed-blocks plan bundle is keyed by tree (two worktrees owing the same blocks named one directory; red-first with two fixture trees, 190 passed 1 failed then 191); the per-task bundle left as is, measured to collide only if two trees decide one task; the builder brief names the scratch-file prefix
 - [x] T272 the Stop hook's question detector still fires on a statement inside a table row ('waiting on you' mid row; 451 T235's remaining false positive): add the case red-first
       research: rendering
       verify: DONE. landed: the Stop hook's question detector no longer reads 'what's waiting on you' as an ask when it is one item of a listed content; 'for you to confirm' is a true ask and stays one, pinned; red-first on the real row (521 passed 1 failed, then 522); T235's corpus re-run loses no ask

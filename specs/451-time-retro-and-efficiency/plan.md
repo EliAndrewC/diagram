@@ -2734,43 +2734,7 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T271 (the 2026-11-25 parallel trials, `specs/449-rust-codebase/port-talk-agenda.md` item 1: builders in worktrees of one feature write their plan review bundles under one directory, `/tmp/l7r-check`, and their scratch files into one session scratchpad)
-
-- **Approach**: the changed-blocks bundle's directory is keyed by its tree; the builder brief tells a builder to prefix its scratch files with its task id.
-  - **Which bundles two trees collide on, measured 2026-11-26.** The plan tool writes two bundles (`rust/gate/crates/plan/src/plan/bundle.rs`). A task's own, `plan-<feature>-<task>` (`make decide`), is named by its task: two trees share it only when both decide the same task, and a task has one builder, so two builders never do. The changed-blocks one, `plan-<feature>-blocks-<tasks>-<8 hex>` (`make plan-delta`), took its 8 hex from the owed blocks' keys and digests alone: two trees whose plans owe the same blocks at the same text got one directory. Method: the new test, on HEAD's code, built both bundles from two fixture trees holding the same plan into one bundles directory - both changed-blocks prompts named `plan-999-x-blocks-plan-e3172c58`, the second build having removed and rewritten the first, its MANIFEST's `Built from the tree` line and its `make -C <tree> plan-verdict` command the second tree's. In the real trees the same day, `l7r-gate plan owed specs/451-time-retro-and-efficiency` listed the same 34 owed blocks in the session's clone and in this task's worktree (both at 38a5d147f5; the T269 and T270 worktrees stand at the same commit), so a `make plan-delta` in each would have named one directory. Two trees that owe different blocks, or the same blocks at different text, already differed by the 8 hex and by the task ids in the name.
-  - **The fix.** `delta_prompt` hashes the tree's path (`tree_of`, 451 T257's, the path the MANIFEST names) with the blocks' digests. The name keeps its shape, `blocks-<tasks>-<8 hex>`, so every reader of it follows unchanged: the plan hold's pattern (`rust/guard/shared/src/checks/planhold.rs`), the plan-round cap's subject (`rust/guard/src/guards/review_round_hooks.rs`, which reads the feature and the task ids, never the hex), the ledger's subject (`ledger_passes/rows.rs`, the directory's whole name) and the Agent guards' bundle patterns (`check_bundle_hooks.rs`, `pair_hooks`), found 2026-11-26 by `grep -rn "blocks-\|l7r-check" --include=*.rs rust`. `plan-verdict` reads no bundle path: it takes the reviewer's JSON and the tree it runs in. One tree's rebuild of the same blocks is the same directory, as before.
-  - **The task's own bundle is left as it is**: a decision narrower than the task line's words ("key the plan review bundle by tree"), taken on the measurement above. Its directory ends `-T<n>`, which the plan hold's pattern reads the task from; keying it by tree would change that shape for a collision two builders cannot have.
-  - **The brief.** `scripts/container/builder-brief.md`'s pasted block gains one line: prefix every scratch file with the task id. The coordinating session added it by hand to each brief since the trials.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| two trees owing the same blocks get a bundle each | `two_trees_owing_the_same_blocks_get_a_bundle_each_and_one_tree_keeps_its_own` (`rust/gate/crates/plan/src/plan/bundle/tests.rs`), red on HEAD | n/a: tooling | none | n/a |
-| one tree's rebuild keeps its directory, the name its shape | the same test: the first tree built again names the first directory, its name ending in 8 hex | n/a: tooling | none | n/a |
-| a task's own bundle stays named by its task | the same test: `plan-999-x-T02` from either tree | n/a: tooling | none | n/a |
-| the brief's scratch line | read in `scripts/container/builder-brief.md`; a document, no test | n/a: tooling | none | n/a |
-
-### T271 Approach (checklist part A)
-
-1. **The goal, in the world.** Two builders of one feature each run `make plan-delta` and each reviewer reads the bundle its own tree built, records in that tree, and no builder's scratch file overwrites another's.
-2. **The constraints.** The T271 task line. 451 T257: a bundle names the tree it was built from and the verdict records there. Feature 375 FR-043: the changed-blocks review on its lean bundle. The readers of the bundle's name keep working.
-3. **Where each comes from.** O: the 2026-11-25 trials' record (`specs/449-rust-codebase/port-talk-agenda.md`, item 1, trials 1 and 2-5) and the measurement above. G: none of the GM's words name this task. It serves the two-builders default decided 2026-11-26 (`docs/process-decisions.md`, the entry on two code builders at once).
-4. **Do they describe the world here?** Yes: the collision was reproduced with two fixture trees on HEAD's code, and the real trees' owed blocks compared, both 2026-11-26.
-5. **The order.** No dependency.
-6. **The exits.** Green: `make closing-checks T=T271`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none.
-8. **The budget.** One landing.
-9. **Done, measured.** RED FIRST, measured 2026-11-26 (`make rust-test CRATE=rust/gate/crates/plan`): on HEAD's code the new test failed at its first assertion, both trees' bundles one directory (190 passed, 1 failed); after the fix 191 passed, 0 failed.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-12. **Before any fix.** The wrong outcome: a reviewer reads a bundle another tree rewrote under it and records its verdict in that other tree, or is refused because the text it judged is not the tree's. No map changes.
-
-**Found and left?** none.
-
-**Performance work?** no: it removes a collision between two builders; nothing runs faster.
-
-
-<!-- plan-archive: T272 to T235 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
-<!-- plan-archive: T272 to T272 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+<!-- plan-archive: T271 to T271 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 ### T273 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
