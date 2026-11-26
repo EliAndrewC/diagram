@@ -3146,31 +3146,49 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T298 (<why: the finding or measurement that files it>)
+### T298 (the task line's count, observed 2026-11-26, method: the day's report as the coordinating session read it: a day's task time report was 2,294 lines in 38 per-task tables with no table of the window, the GM had to remember the period to ask for, and a batch landing's gate was booked to whichever of its tasks the mark or the command line named)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `make task-time` opens with one table of the window and one line a landed task, books every `make land` to a batch that is no task's, drops four booking faults, and takes `SINCE=last`. The code is `rust/gate/crates/measure/src/measure/task_time/`: `top.rs` (the opening), `tiers.rs` (the batches and carries read from the logs), `book/tier.rs` (the second tier's rule), `book/cats.rs` (the category names, split out of `book.rs`, which had passed the file-scale bar) and `asked.rs` (the marker).
+  - **How a batch landing was booked before** (the task's first question), measured 2026-11-26 (method: the report of HEAD's build over 2026-11-26T17:00:00Z to 18:58:30Z on the clone's logs, 364 lines, its per-task make-target tables read for `make land`): to ONE task, and not the same way twice. The T303 T305 batch's run was T303's (`make land | landing | 1 | 3.9` min) and its blocking T305's (`make land | landing | 0 | 0.0 | 2.9` blocking); the T309 T289 batch's first run, red, was T309's and its re-run T289's, 8.2 and 7.8 min, measured 2026-11-26 (the same report's two tables). The run went to the first task its command line started and its blocking to the task the session's mark named. Nothing was split and nothing counted twice.
+  - **The window table and the task lines** (decision, labeled `map drawing convention`: a report's layout, no claim states it). The report opens with `## The window, every category` (minutes, blocking, each as a percentage of the working time) and `## The landed tasks, one line each` (landed, builders, builder minutes, minutes, blocking, where its own table ends). Builder minutes are the builder's span in the event log, start to stop, never its report's account; a resumed builder's later spans are not in it yet (found and left, below).
+  - **The second tier, booked apart** (decision, the GM's second message in `request.md`'s T298 section). Every `make land` is a batch, of one task or several: its key is `(feature, "second tier: <tasks>")`, a task of no one's. In the window table it is ONE category, `the second tier (a batch's gate, repairs and push)`; it has its own section, one line a batch (tasks, landed, gate runs, re-runs, gate minutes, each failure and what its repair cost, minutes, blocking) and its time by what it was. A batch is read from the landing's `Phase` lines; a `make land` run with no end line is an attempt still in flight or stopped, its tasks read from the command's `T=`.
+  - **A task's own table ends at its carry** (the task line's words). The carry is the `make carry FROM=<tree>` whose tree the pool's log (`<git common dir>/builder-pool.log`) says the task held. With no carry found (a task built in the clone, a carry no transcript holds) the table ends where the batch's first attempt starts, and the task's line says which: a GUESS, a knob (`Batch::from` in `book/tier.rs`), labeled so in the module's doc. After its landing a main session's line that names the task only because the mark never moved is the session's own (`-`).
+  - **The second tier's blocking: GUESS defaults, a knob, not a target.** The GM's third message of 2026-11-26 (`request.md`, the T298 section) expects the second tier to be "almost or completely in the category of non-blocking time that is never a bottleneck", since "new tasks beginning is not something that blocks on it". The task line turns that into a line of the report in the coordinating session's own words, not his: blocking minutes on their own line, expected near zero, a rise being the signal that something has begun to wait on the gate (a carry behind a running gate, a repair, a build slot). No log line says what waits on a gate, so the rule is a default like 451 T243's others, at about the same accuracy, stated in `docs/process-decisions.md` ("The second tier's blocking (451 T298)") and in `book/tier.rs`'s doc: a gate in flight blocks nothing while any task's own blocking work is in flight, and nothing beside the session's own turn; it blocks the batch, no task, where the session waits on it alone, where it ran in the foreground, and through a repair (the session's turns from a task's carry to the landing, and what they waited on). Each of the three is a GUESS: searched for a signal in the event log (2026-11-26, its line kinds listed for the window), which holds none for "what the session's next step needs". A builder whose brief says `Blocks: none` leaves the gate waited on alone, and the two builders in flight through the T309 T289 batch's waits, T104's and T159's, both said so, as did 9 of the window's 12 dispatches that carry a clue (measured 2026-11-26, method: the `blocks` field of the window's `PreToolUse` `Agent` lines in the 451 event log, counted by value), so on that day a wait during a gate counted as the gate's. This default is what most of the second tier's blocking rests on, and it is the first knob to turn if the line reads high. Two of the GM's three named signals, the carry behind a running gate and the build slot, are not told apart (found and left, below).
+  - **A defect found on the real window and fixed here: 12.1 min of a batch's blocking read `wait loops`.** Measured 2026-11-26 (method: a trace line, since removed, in `book_cand`'s wait arm for a wait loop booked as blocking a batch, run over the same window): the two waits were the session's own, stopped while the T309 T289 batch's gate ran - 18:24:59Z to 18:29:30Z through the first run, red, and 18:31:25Z to 18:38:57Z through the re-run and its push, 4.5 and 7.5 min. They were booked to a wait loop because the piece's critical work was taken to be whatever in flight ended last, and what ended last was the T304 builder's background measuring loop (shell `bbtk4lw9l`, started 17:49:28Z, still running at 19:08Z), which the session's `Stop` lines list in `inflight` beside the landing. It was not the session's memory sampler (shell `bcyxodh19`, 17:37:39Z to 19:07:49Z): a session's own detached wait loop already blocks nothing. The rule as fixed (`each_task` in `book.rs`): where a batch's own landing run is in flight, the wait is booked to it - its gate, its tests, its push - whatever else in flight ends later. On the same window after the fix the batch's 17.7 min of blocking is unchanged, its `wait loops` blocking is 0.0 min, and the 12.1 min read as hook suites, landing, tests, gate and compile, measured 2026-11-26 (the final build's report of that window, the second tier's table).
+  - **The booking faults** (the task line's four; decisions, each a default of the same GUESS kind). A main session's background command under the mark alone is no task's (`-`), and a wait loop of that kind blocks nothing: the memory sampler's 80.9 min left T305's table, measured 2026-11-26 (T305's make-target table in the before report against the after report's). The session's own `make quick` or `make done` under the mark alone is the batch's whose span holds it, else the session's own. `make builder-checks` books to tests, `make builder-tree`, `make builder-tree-release` and `make builder-trees` (a fifth, found in the final run's second tier) to `builder pool (a tree handed out, freed or listed)`, `make carry` to `carry into the clone`, and a carry is the carried task's whatever the mark said. A builder's minutes come from the event log. `prewarm` (451 T316, not landed) is untouched, and `waiting on a build slot` is as it was.
+  - **`SINCE=last`** (the GM's first message in `request.md`'s T298 section). The marker is an append-only log, `<git common dir>/l7r-events/task-time-asked.log`, read as the greatest `until` in it: state-sync pushes every file of `l7r-events/` and merges by appended lines, so two sessions' asks merge without a conflict, and a `.log` is not read as an event log. Only a `SINCE=last` run writes it, after its report; the report's first line says the window it used. With no marker it falls back to 24 hours and says so.
+  - **Before and after on the real window**, measured 2026-11-26 (method: HEAD's build and this task's final build, each run once with `--since 2026-11-26T17:00:00Z --until 2026-11-26T18:58:30Z` on the clone's logs, the before report 364 lines and the after report 439): minutes 735.4 before and 735.3 after, so nothing is lost, blocking 134.8 and 128.7 min, the four landed tasks' blocking 83.1 and 8.3 min. The second tier, measured 2026-11-26 (the after report's own section), is 27.9 min and 24.8 min of blocking, 23.2% of the window's working blocking: the T303 T305 batch one gate run, 2.3 gate min, 4.9 min and 3.9 min of blocking, the T309 T289 batch two runs, 10.8 gate min, red at 18:29 after 8.1 min and re-run 1.8 min later, 19.5 min and 17.7 min of blocking. The task lines, measured 2026-11-26 (the after report's second table): T303 7.7 min and 0.1 blocking, T305 26.1 and 3.9, T309 22.2 and 1.7, T289 21.2 and 2.6. The before-and-after comparison of two-tier checking reads the second tier's line; this task does not make it.
+  - **Red first**, measured 2026-11-26 (method: `scripts/gates/l7r-gate.sh rust test --crate rust/gate/crates/measure` with HEAD's `task_time.rs`, `book.rs`, `book/clue.rs`, `book/window.rs` and both `tests.rs` put back, the five new source files moved out and `tier_tests.rs` alone added): 235 passed and 4 failed, the four of `tier_tests.rs`, each on its assertion (no window table, no second tier section, a sampler in T1's table, `Invalid isoformat string: 'last'`). The fifth, the wait-loop defect's, was written against this task's own build before its fix: 240 passed and 1 failed (`wait loops ... 0.8` blocking in the batch's table). After: 241 of 241. Last, with the loop listed before the landing, as the real log lists it, and a `make builder-trees` line added to that test, measured 2026-11-26 (the same command before the pool's arm and its category's new name): 239 passed and 2 failed, and 241 of 241 after.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the report opens with the window's table and a line a landed task | `the_report_opens_with_the_window_s_table_and_a_line_a_landed_task`, red on HEAD | n/a: tooling | none | n/a |
+| a batch landing is the second tier's and no task's; a task's table ends at its carry | `a_batch_landing_is_booked_to_the_second_tier_and_to_no_task`, red on HEAD | n/a: tooling | none | n/a |
+| the session's own runs are no task's; the pool's and first tier's targets are named | `the_session_s_own_runs_are_no_task_s_and_the_pool_s_targets_are_named`, red on HEAD | n/a: tooling | none | n/a |
+| `SINCE=last` reads the last report's end and writes this one's | `since_last_reads_the_last_report_s_end_and_writes_this_one_s`, red on HEAD | n/a: tooling | none | n/a |
+| a gate waited on beside another task's wait loop is the gate's blocking | `a_gate_waited_on_beside_a_builder_s_wait_loop_is_the_gate_s_blocking`, red before its fix | n/a: tooling | none | n/a |
 
 ### T298 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The GM asks for the time since he last asked without naming a period, reads where the window's time went in one table and one line a task, and sees the second tier's time and blocking on lines of their own, against no task.
+2. **The constraints.** 451 T243 (blocking is by task and dependency, its defaults stated, its accuracy bar the one `docs/process-decisions.md` records under what counts as blocking time); 451 T308 and the two-tier trial (`docs/process-decisions.md`, "Two tiers of checking"); 451 T285 and T292 (the pool's log, `make carry`); the state-sync of `l7r-events/`; minutes conserved.
+3. **Where each comes from.** G: his three messages of 2026-11-26 in `request.md`'s T298 section; the task line's other words are the coordinating session's. O: the before and after reports and the trace above.
+4. **Do they describe the world here?** Yes: the clone's event log, pool log and transcripts for the window from 17:00Z, read 2026-11-26 with both builds (above).
+5. **The order.** Before the before-and-after comparison of two-tier checking, which reads its second tier line. 451 T316 (`prewarm`) lands after it and extends `columns::category` itself.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/measure"` green in the builder's tree (the first tier, the trial of 2026-11-26); the full gate and the coverage run are the landing's. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The five tests red before and green after, and the real window's minutes conserved (735.4 and 735.3), measured 2026-11-26 (above).
+10. **Before moving a constant.** n/a: no claim's number moves; the second tier's blocking defaults are new GUESS knobs, stated above.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The findings: a batch's gate booked to one of its tasks, a 80.9 min sampler in T305's table, four make targets in `Makefile targets the guard's table does not book`, and 12.1 min of a batch's gate waits read as a wait loop, each observed 2026-11-26 in the reports above. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A `make carry` held or refused while a gate runs, and another run's build-slot wait while the gate holds a slot, are not attributed to the gate, and a carried task that no `make land` has yet named has no batch: two of the three signals the task line names for the second tier's blocking read as zero whatever happened. Not fixed here: each needs a signal the logs do not yet carry (the carry's refusal, the slot's holder), a build of its own. Filed as T319; lands before T302.
+- The event-log reader keeps one start and one stop an agent, so a resumed builder's later spans are dropped: the task lines' builder minutes read 7.6 of T303's 7.9 min, 13.9 of T309's 15.2 and 8.8 of T289's 13.7 (measured 2026-11-26, method: the 451 log's start and stop lines for each builder against the report's column). Not fixed here: the reader (`events.rs`, `load_all`) is shared with `make where-time` and `make feature-report`, and keying its lines by their second as well broke a test that pins two stops a second apart as one and moved other reports' figures, so it was reverted and is a task of its own. Filed as T324; lands before T302.
+- `wait loops (held open, no work)` is still 25.6 min of the window's 128.7 min of blocking, its largest category, in tasks' own tables (measured 2026-11-26, the after report above); the defect fixed here shows one way such a minute is not a wait the task was held by - a builder's leftover background loop named in the session's `inflight`, blocking the waiter's task by 451 T243's default for a run with no clue. Not fixed here: outside a batch there is no landing run to prefer, and which of those loops held a task up has to be measured loop by loop first. Filed as T328; lands before T302.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: it changes what a report shows and where time is booked; nothing runs faster.
 
 
 ### T299 (<why: the finding or measurement that files it>)
@@ -3732,4 +3750,166 @@ engine speed, so no checklist.
 5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
    time with the host's load - evidence, not a pass>
 6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+
+
+### T319 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T319 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T322 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T322 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T323 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T323 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T324 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T324 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T328 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T328 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T331 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T331 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 

@@ -2088,6 +2088,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T298 (the task line's count, observed 2026-11-26, method: the day's report as the coordinating session read it: a day's task time report was 2,294 lines in 38 per-task tables with no table of the window, the GM had to remember the period to ask for, and a batch landing's gate was booked to whichever of its tasks the mark or the command line named)": {
+   "sha256": "76b4f09984b5d3fb4cfa83dfc8ca47345b736424b7d8995a72622febd6cb2d30",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T298 Approach (checklist part A)": {
+   "sha256": "be9b969a06989522ea921d0b8f6774b13532eaff24e2632c01fa1f083393e7b0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -26689,6 +26701,89 @@
      "why": "Process order and exits under the project's standing landing rules; nothing asked is narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T298 (the task line's count, observed 2026-11-26, method: the day's report as the coordinating session read it: a day's task time report was 2,294 lines in 38 per-task tables with no table of the window, the GM had to remember the period to ask for, and a batch landing's gate was booked to whichever of its tasks the mark or the command line named)",
+    "### T298 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "window-table-and-task-lines",
+     "summary": "The report opens with one table of the window (minutes, blocking, each as a percentage of the working time) and one line per landed task; builder minutes are the builder's event-log span.",
+     "class": "within",
+     "why": "This is how the report is laid out. It keeps T243's percentages of working time ((i)) and the breakdown the GM asked for. The table and the lines are the coordinating session's task-line words, and they narrow nothing he asked."
+    },
+    {
+     "id": "second-tier-booked-apart",
+     "summary": "Every make land is a batch keyed (feature, 'second tier: <tasks>'), owned by no task, with one category in the window table and its own section of one line per batch.",
+     "class": "within",
+     "why": "This is the GM's second message nearly word for word: 'move batched landing stuff that happens as the second tier of checks into its own separate category rather than counting it against any individual task.' Under the two-tier trial a single-task make land is also the second tier, so keying every landing as a batch matches his words."
+    },
+    {
+     "id": "task-table-ends-at-carry",
+     "summary": "A task's own table ends at its make carry, found through the pool's log. With no carry found it ends where the batch's first attempt starts, a labeled GUESS knob (Batch::from).",
+     "class": "within",
+     "why": "This puts the GM's second message into effect: the second tier's time is not counted against a task. The fallback is a stated default of the kind (l) allows ('it doesn't have to be 100% exact'), and it is labeled where it is used."
+    },
+    {
+     "id": "second-tier-blocking-default",
+     "summary": "GUESS defaults for the second tier's blocking. A gate blocks nothing while any task's own blocking work is in flight. It blocks the batch (never a task) (a) when the session waits on it alone, (b) when it runs in the foreground, and (c) through a repair. A builder dispatched with Blocks: none leaves the gate waited on alone.",
+     "class": "within",
+     "why": "Each part was judged on its own. (c) A repair stops the batch from landing until the repair is done, which is (l)'s 'waiting on it to be done before it can be started' exactly. (b) A foreground run holds the session's next step by construction. (a) This is the weakest part: the T303 T305 batch had one green run and no repair, yet 3.9 of its 4.9 min books as blocking, while the GM said 'new tasks beginning is not something that blocks on it.' His third message, though, is an expectation that ends in 'Right?', not a rule that the line must read zero. (l) allows stated defaults at about 90% accuracy. Building his expected answer into the default would rig the instrument to agree with him and defeat its purpose, which is to find where the bottlenecks are. The plan calls the rule a knob and not a target, says what most of the line rests on, and names it the first knob to turn. The first measurement (24.8 of 27.9 min blocking) runs against his expectation and rests on default (a). That is a difference to report, not a defect."
+    },
+    {
+     "id": "wait-loop-defect-fix",
+     "summary": "When a batch's own landing run is in flight, a wait is booked to that run, whatever else in flight ends later. This moves 12.1 min out of wait loops.",
+     "class": "within",
+     "why": "This fixes a wrong outcome as it was found. A builder's leftover loop was booked as the cause of a session's wait on a gate. Minutes are unchanged by the fix."
+    },
+    {
+     "id": "booking-faults",
+     "summary": "The task line's four booking faults, and a fifth target name found: a main session's background command under the mark alone belongs to no task; the session's own quick or done goes to the batch whose span holds it; the builder-* targets and make carry get named categories; a carry belongs to the carried task. prewarm is left to T316.",
+     "class": "within",
+     "why": "These are the task line's own items, each a stated default. The fifth target (make builder-trees) is the same fault class, fixed as it was found."
+    },
+    {
+     "id": "since-last-marker",
+     "summary": "SINCE=last reads the greatest 'until' from an append-only l7r-events/task-time-asked.log. Only a SINCE=last run writes the marker, after its report. With no marker the window is 24 hours and the report says so. The window used is stated on the report's first line.",
+     "class": "within",
+     "why": "This is the GM's first message: 'keep track of whenever I last asked, so that I don't have to remember the period.' Only SINCE=last runs write the marker so that the session's own measuring runs, such as this task's --since runs, do not move it. That serves his purpose. A gap is noted to the caller and not ruled: if he names a period himself, that ask is not recorded."
+    },
+    {
+     "id": "found-left-T319-carry-and-slot-signals",
+     "summary": "A carry held behind a running gate and another run's wait for a build slot are not attributed to the gate, and neither is a carried task that no make land has named yet. Two of the three signals the task line names read zero. Filed as T319, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "All of the GM's own words are delivered: a category of its own, never counted against a task, its blocking on a line of its own. The three signals appear only in the coordinating session's relay, which request.md marks as 'the coordinating session's, not his'. The missing two cannot be attributed from this report's inputs, because no log line records a carry's refusal or a slot's holder. The deferral takes FR-009's form: why, the filed id, and 'lands before T302', and T302 is the comparison that reads this line. It does not defeat the purpose: the line already reads well above zero, so it is not hiding a bottleneck behind a forced zero."
+    },
+    {
+     "id": "found-left-T324-resumed-builder-spans",
+     "summary": "The shared event-log reader keeps one start and one stop per agent, so a resumed builder's later spans are dropped and builder minutes read low (8.8 of T289's 13.7). Filed as T324, lands before T302.",
+     "class": "within",
+     "why": "None of the GM's three messages, and no part of the T243 request, asks for builder minutes per task. The column is the session's own addition, and the plan states its shortfall where it introduces the column. The defect is in a shared reader that predates this task, and the deferral takes FR-009's form (why, filed id, lands before T302). It narrows nothing the GM asked."
+    },
+    {
+     "id": "found-left-T328-wait-loops",
+     "summary": "Wait loops are still 25.6 min of the window's blocking in tasks' own tables. Whether those loops held tasks up must be measured loop by loop first. Filed as T328, lands before T302.",
+     "class": "within",
+     "why": "This is a suspicion still to be measured, not a known wrong outcome. The defect that was established, inside a batch, is fixed in this task. It narrows nothing in the T298 request."
+    },
+    {
+     "id": "order-and-exits",
+     "summary": "T298 lands before the before-and-after comparison of two-tier checking, which it does not make. The green exit is make builder-checks in the builder's tree, with the full gate at landing. T316 extends columns::category afterwards.",
+     "class": "within",
+     "why": "This is ordering and the two-tier trial's exits as docs/process-decisions.md records them. Nothing the GM asked is left out."
+    },
+    {
+     "id": "cats-split",
+     "summary": "The category names are split out of book.rs into book/cats.rs because book.rs passed the file-scale bar.",
+     "class": "within",
+     "why": "This is code layout and carries no fidelity content."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -41970,6 +42065,87 @@
      "summary": "Lands before T302; builder-checks for the two crates green in the builder's tree; full gate and coverage at landing; red recorded and set down, a can't-be-done claim through make arbiter-ask.",
      "class": "within",
      "why": "Process order and exits under the project's standing landing rules; nothing asked is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T298": {
+   "section_sha256": "cf7a06da638c6b92f201f4fef955e9b81cfd3ac177e8fa675c385bbb89abeb26",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "window-table-and-task-lines",
+     "summary": "The report opens with one table of the window (minutes, blocking, each as a percentage of the working time) and one line per landed task; builder minutes are the builder's event-log span.",
+     "class": "within",
+     "why": "This is how the report is laid out. It keeps T243's percentages of working time ((i)) and the breakdown the GM asked for. The table and the lines are the coordinating session's task-line words, and they narrow nothing he asked."
+    },
+    {
+     "id": "second-tier-booked-apart",
+     "summary": "Every make land is a batch keyed (feature, 'second tier: <tasks>'), owned by no task, with one category in the window table and its own section of one line per batch.",
+     "class": "within",
+     "why": "This is the GM's second message nearly word for word: 'move batched landing stuff that happens as the second tier of checks into its own separate category rather than counting it against any individual task.' Under the two-tier trial a single-task make land is also the second tier, so keying every landing as a batch matches his words."
+    },
+    {
+     "id": "task-table-ends-at-carry",
+     "summary": "A task's own table ends at its make carry, found through the pool's log. With no carry found it ends where the batch's first attempt starts, a labeled GUESS knob (Batch::from).",
+     "class": "within",
+     "why": "This puts the GM's second message into effect: the second tier's time is not counted against a task. The fallback is a stated default of the kind (l) allows ('it doesn't have to be 100% exact'), and it is labeled where it is used."
+    },
+    {
+     "id": "second-tier-blocking-default",
+     "summary": "GUESS defaults for the second tier's blocking. A gate blocks nothing while any task's own blocking work is in flight. It blocks the batch (never a task) (a) when the session waits on it alone, (b) when it runs in the foreground, and (c) through a repair. A builder dispatched with Blocks: none leaves the gate waited on alone.",
+     "class": "within",
+     "why": "Each part was judged on its own. (c) A repair stops the batch from landing until the repair is done, which is (l)'s 'waiting on it to be done before it can be started' exactly. (b) A foreground run holds the session's next step by construction. (a) This is the weakest part: the T303 T305 batch had one green run and no repair, yet 3.9 of its 4.9 min books as blocking, while the GM said 'new tasks beginning is not something that blocks on it.' His third message, though, is an expectation that ends in 'Right?', not a rule that the line must read zero. (l) allows stated defaults at about 90% accuracy. Building his expected answer into the default would rig the instrument to agree with him and defeat its purpose, which is to find where the bottlenecks are. The plan calls the rule a knob and not a target, says what most of the line rests on, and names it the first knob to turn. The first measurement (24.8 of 27.9 min blocking) runs against his expectation and rests on default (a). That is a difference to report, not a defect."
+    },
+    {
+     "id": "wait-loop-defect-fix",
+     "summary": "When a batch's own landing run is in flight, a wait is booked to that run, whatever else in flight ends later. This moves 12.1 min out of wait loops.",
+     "class": "within",
+     "why": "This fixes a wrong outcome as it was found. A builder's leftover loop was booked as the cause of a session's wait on a gate. Minutes are unchanged by the fix."
+    },
+    {
+     "id": "booking-faults",
+     "summary": "The task line's four booking faults, and a fifth target name found: a main session's background command under the mark alone belongs to no task; the session's own quick or done goes to the batch whose span holds it; the builder-* targets and make carry get named categories; a carry belongs to the carried task. prewarm is left to T316.",
+     "class": "within",
+     "why": "These are the task line's own items, each a stated default. The fifth target (make builder-trees) is the same fault class, fixed as it was found."
+    },
+    {
+     "id": "since-last-marker",
+     "summary": "SINCE=last reads the greatest 'until' from an append-only l7r-events/task-time-asked.log. Only a SINCE=last run writes the marker, after its report. With no marker the window is 24 hours and the report says so. The window used is stated on the report's first line.",
+     "class": "within",
+     "why": "This is the GM's first message: 'keep track of whenever I last asked, so that I don't have to remember the period.' Only SINCE=last runs write the marker so that the session's own measuring runs, such as this task's --since runs, do not move it. That serves his purpose. A gap is noted to the caller and not ruled: if he names a period himself, that ask is not recorded."
+    },
+    {
+     "id": "found-left-T319-carry-and-slot-signals",
+     "summary": "A carry held behind a running gate and another run's wait for a build slot are not attributed to the gate, and neither is a carried task that no make land has named yet. Two of the three signals the task line names read zero. Filed as T319, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "All of the GM's own words are delivered: a category of its own, never counted against a task, its blocking on a line of its own. The three signals appear only in the coordinating session's relay, which request.md marks as 'the coordinating session's, not his'. The missing two cannot be attributed from this report's inputs, because no log line records a carry's refusal or a slot's holder. The deferral takes FR-009's form: why, the filed id, and 'lands before T302', and T302 is the comparison that reads this line. It does not defeat the purpose: the line already reads well above zero, so it is not hiding a bottleneck behind a forced zero."
+    },
+    {
+     "id": "found-left-T324-resumed-builder-spans",
+     "summary": "The shared event-log reader keeps one start and one stop per agent, so a resumed builder's later spans are dropped and builder minutes read low (8.8 of T289's 13.7). Filed as T324, lands before T302.",
+     "class": "within",
+     "why": "None of the GM's three messages, and no part of the T243 request, asks for builder minutes per task. The column is the session's own addition, and the plan states its shortfall where it introduces the column. The defect is in a shared reader that predates this task, and the deferral takes FR-009's form (why, filed id, lands before T302). It narrows nothing the GM asked."
+    },
+    {
+     "id": "found-left-T328-wait-loops",
+     "summary": "Wait loops are still 25.6 min of the window's blocking in tasks' own tables. Whether those loops held tasks up must be measured loop by loop first. Filed as T328, lands before T302.",
+     "class": "within",
+     "why": "This is a suspicion still to be measured, not a known wrong outcome. The defect that was established, inside a batch, is fixed in this task. It narrows nothing in the T298 request."
+    },
+    {
+     "id": "order-and-exits",
+     "summary": "T298 lands before the before-and-after comparison of two-tier checking, which it does not make. The green exit is make builder-checks in the builder's tree, with the full gate at landing. T316 extends columns::category afterwards.",
+     "class": "within",
+     "why": "This is ordering and the two-tier trial's exits as docs/process-decisions.md records them. Nothing the GM asked is left out."
+    },
+    {
+     "id": "cats-split",
+     "summary": "The category names are split out of book.rs into book/cats.rs because book.rs passed the file-scale bar.",
+     "class": "within",
+     "why": "This is code layout and carries no fidelity content."
     }
    ],
    "verdict": "CLEAR"

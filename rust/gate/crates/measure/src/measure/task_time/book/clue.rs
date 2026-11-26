@@ -1,6 +1,6 @@
 //! The `Blocks:` clue read and each piece's blocked task (451 T243, amendment (l); the defaults are `book`'s doc).
 
-use super::{review_cat, Cand, Ix, Key, PAGES};
+use super::{review_cat, Blocks, Cand, Ix, Key, PAGES};
 
 impl Ix<'_> {
     /// A clue read as the task it blocks: `none` none; `<feature> T<n>` that task (a feature's number read as the feature it opens);
@@ -27,7 +27,16 @@ impl Ix<'_> {
     /// one; else a page session or research pass none, a builder its own task (else the waiter's), a run or review agent the waiter's.
     pub(super) fn target(&self, c: Cand, piece: (f64, f64), blocked: Option<&Key>) -> Option<Key> {
         match c {
-            Cand::Run(i) => self.resolve(&self.run_clue[i], blocked, &self.run_key[i].0),
+            Cand::Run(i) => {
+                // with no clue: its waiter's task, but a landing its batch, a session's own check or background command the
+                // session's own, and a detached wait loop none (451 T298)
+                let default = match &self.run_blocks[i] {
+                    Blocks::Waiter => blocked,
+                    Blocks::Nothing => None,
+                    Blocks::Task(k) => Some(k),
+                };
+                self.resolve(&self.run_clue[i], default, &self.run_key[i].0)
+            }
             Cand::Agent(i) => {
                 let a = &self.w.agents[i];
                 let own = &self.agent_key[i];

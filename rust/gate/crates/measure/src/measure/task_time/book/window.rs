@@ -83,3 +83,21 @@ pub(super) fn span_minutes(w: &World, ix: &Ix, l: &mut Ledger) {
         );
     }
 }
+
+/// Each task's builders' seconds in the window and their count: every agent that is no review agent, under the task its lines name
+/// (its own, before any batch takes its later time; 451 T298).
+pub(super) fn builder_minutes(w: &World, ix: &Ix, l: &mut Ledger) {
+    let (lo, hi) = w.window;
+    for (i, a) in w.agents.iter().enumerate() {
+        let secs: f64 = a
+            .spans
+            .iter()
+            .map(|s| (s.1.min(hi) - s.0.max(lo)).max(0.0))
+            .sum();
+        if review_cat(&a.kind).is_none() && secs > 0.0 {
+            let e = l.builders.entry(ix.agent_own[i].clone()).or_default();
+            e.0 += secs;
+            e.1 += 1;
+        }
+    }
+}

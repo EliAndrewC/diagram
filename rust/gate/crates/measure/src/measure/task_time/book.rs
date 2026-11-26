@@ -29,56 +29,13 @@
 
 use std::collections::{HashMap, HashSet};
 
-use l7r_shared::guards::event_log_hooks::{agent_category, bucket_of};
-
 use super::super::events::{get, is, or_s, t_of, Event, Raised, IDLE_CAP_S};
-use l7r_shared::make::{invoked, DEFAULT_GOAL};
 
-use super::super::where_time::columns::{Agent, Run, Runs, PRECEDENCE};
+use super::super::where_time::columns::{Agent, Runs};
 use super::program;
 
 /// (feature, task): task ids collide across features.
 pub type Key = (String, String);
-
-/// A main session's time with nothing in flight: the prefix of its classes, each named by what came just before and after the gap
-/// (the GM 2026-11-25: "as long as that automatically gets broken down in the future"), the rest named unexplained.
-pub const NOTHING: &str = "waiting: nothing in flight";
-/// A gap while a detached page session ran with no monitor on it: the session was waiting on a queue it did not track.
-pub const NOTHING_PAGES: &str =
-    "waiting: nothing in flight - a page session running, no monitor on it";
-/// A gap after the work its `Stop` named had ended: the wake came after the thing waited on was done.
-pub const NOTHING_ENDED: &str =
-    "waiting: nothing in flight - after the work its Stop named had ended";
-/// A `Stop` naming nothing, then a notification or reminder (a prompt not the GM's) woke the session.
-pub const NOTHING_WOKEN: &str =
-    "waiting: nothing in flight - until a notification or reminder woke it";
-/// A `Stop` naming nothing, then the session started again (a resume, a compaction or a clear).
-pub const NOTHING_RESTART: &str = "waiting: nothing in flight - until the session started again";
-/// A main session's wait with only a monitor in flight and no page session running.
-pub const MONITOR: &str = "waiting: a monitor alone";
-/// A detached page session's phases and the research-pass agents.
-pub const PAGES: &str = "research and page sessions";
-/// The record and pop-up checks' agents.
-const RECORD: &str = "record and pop-up checks: agents";
-/// A builder's time inside its span that no line of its accounts for.
-/// Generating maps: a map, sheet or cohort run's remainder, its phases' column, and a builder's scratch sweep (the GM's "generating maps").
-pub const MAPS: &str = "map generation";
-
-/// The targets that draw maps or sheets: the guard's table books them tests (`map`, `hamlet`, `compound`, `sheet-render`, the dev
-/// loop's own run) or gate (`cohort`, `cohort-landing`, the sweep a landing reads); the breakdown books them all to [`MAPS`].
-const MAP_TARGETS: [&str; 7] = [
-    "map",
-    "hamlet",
-    "compound",
-    "sheet-render",
-    "maps-moved",
-    "cohort",
-    "cohort-landing",
-];
-pub const UNLINED: &str = "builders: inside its span, no line of its";
-/// A command no transcript holds.
-pub const UNREAD: &str = "commands no transcript holds";
-const BOOKED_ELSEWHERE: &str = "Makefile targets the guard's table does not book";
 
 /// One (key, category, target) cell.
 #[derive(Debug, Default, Clone, Copy, PartialEq)]
@@ -106,6 +63,9 @@ pub struct Ledger {
     /// Seconds of the window with 0, 1, 2 and 3 or more actors working at once (a main session's own turns and runs, each agent's
     /// span, each page-session phase): the overlap the minutes hide.
     pub at_once: [f64; 4],
+    /// (feature, task) -> its builders' seconds in the window and how many they were: each builder's spans from its start and stop
+    /// lines (a resumed one's later spans are dropped by the reader before they reach here, 451 T324), never from its report (451 T298: three reports said 30, 75 and 45 min for 9.5, 17.8 and 17.0).
+    pub builders: HashMap<Key, (f64, usize)>,
 }
 
 impl Ledger {
@@ -149,6 +109,10 @@ pub struct World<'a> {
     pub pages: &'a [Page],
     /// The window, `[lo, hi]` in UTC seconds.
     pub window: (f64, f64),
+    /// The batches: each `make land`'s tasks and attempts ([`tier`]).
+    pub batches: &'a [Batch],
+    /// A `make carry` run's tool-use id -> the task it carried, as a clue reads (`451 T309`).
+    pub carried: &'a HashMap<String, String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -182,6 +146,11 @@ struct Seg {
     what: What,
 }
 
+/// Whether an event's task is the mark's alone (the writer's `fallback`), not one its own line named.
+fn fallback(e: &Event) -> bool {
+    get(e, "fallback").as_bool() == Some(true)
+}
+
 /// An event's (feature, task).
 fn key_of(e: &Event) -> Key {
     let task = or_s(e, "task");
@@ -195,119 +164,6 @@ fn key_of(e: &Event) -> Key {
     )
 }
 
-/// The review kind an agent's whole span is booked to, `None` for a builder (451 T243 (f)).
-#[must_use]
-pub fn review_cat(kind: &str) -> Option<&'static str> {
-    Some(match kind {
-        "claims-triage" => "claims round: agents",
-        "modal-triage" | "source-filter" | "size-exception" => RECORD,
-        "escalation-check" => "the GM's filter: agents (escalation-check)",
-        "research-pass" => PAGES,
-        "work-budget" | "message-check" | "perf-audit" => {
-            "other review agents (work-budget, message-check)"
-        }
-        _ => match agent_category(kind, "") {
-            "claims check" => "claims round: agents",
-            "record check" => RECORD,
-            "review check" => "map and building reviews: agents",
-            "spec review" => "plan review: agents",
-            "round arbiter" => "arbiter: agents",
-            _ => return None,
-        },
-    })
-}
-
-/// A model turn's or a tool's category for actor `who` (`main session` or `builders`), by the tool (`""` the reply).
-#[must_use]
-pub fn tool_cat(who: &str, tool: &str) -> String {
-    let what = match tool {
-        "Read" | "Grep" | "Glob" => "reading code".to_owned(),
-        "Edit" | "Write" | "NotebookEdit" | "MultiEdit" => "writing code".to_owned(),
-        "Bash" => "running a command (the model's turn)".to_owned(),
-        "Agent" | "Task" => "dispatching an agent".to_owned(),
-        "" => "writing its reply".to_owned(),
-        other => format!("other tools ({other})"),
-    };
-    format!("{who}: {what}")
-}
-
-/// The review bucket's kind by target (451 T243 (e)).
-fn review_kind(target: &str) -> &'static str {
-    match target {
-        "decide" | "plan-delta" | "plan-verdict" => "plan review: commands",
-        t if t.starts_with("claims-") || t == "impl-check" => "claims round: commands",
-        t if t.starts_with("arbiter-") => "arbiter: commands",
-        "check-bundle" | "modal-bundle" | "record-owed" | "modal-triage" | "modal-triaged"
-        | "modal-prepass" | "translation-owed" | "record-checked" | "record-prepass"
-        | "style-prepass" | "quote-verbatim" => "record and pop-up checks: commands",
-        _ => "review: other commands",
-    }
-}
-
-/// A run's category (its phases apart) and its label in the per-target table.
-#[must_use]
-#[expect(clippy::implicit_hasher, reason = "the map `read_subagents` makes")]
-pub fn run_cat(r: &Run, commands: &HashMap<String, String>) -> (String, String) {
-    // a line that logged no target (a past log, a detector since fixed): the targets its command RUNS, never one it mentions
-    let found: Vec<String>;
-    let (makes, bucket) = if r.makes.is_empty() {
-        found = commands.get(&r.id).map_or_else(Vec::new, |c| {
-            invoked(c)
-                .into_iter()
-                .filter(|t| t != DEFAULT_GOAL)
-                .collect()
-        });
-        let buckets: Vec<&str> = found.iter().map(|m| bucket_of(m)).collect();
-        let first = PRECEDENCE.iter().find(|b| buckets.contains(b));
-        (&found[..], first.copied().unwrap_or("other"))
-    } else {
-        (&r.makes[..], r.bucket)
-    };
-    if bucket != "other" {
-        let t = makes
-            .iter()
-            .find(|m| bucket_of(m) == bucket)
-            .map_or("", String::as_str);
-        let cat = match bucket {
-            _ if MAP_TARGETS.contains(&t) => MAPS,
-            "review" => review_kind(t),
-            "docs" => "record builds and docs",
-            "land" => "landing",
-            b => b,
-        };
-        return (cat.to_owned(), format!("make {t}"));
-    }
-    if let Some(m) = makes.first() {
-        let cat = match m.as_str() {
-            "crate-checks" => "tests",
-            _ => BOOKED_ELSEWHERE,
-        };
-        return (cat.to_owned(), format!("make {m}"));
-    }
-    match commands.get(&r.id) {
-        Some(c) => {
-            let (cat, label) = program::class(c);
-            (cat.to_owned(), label)
-        }
-        None => (
-            UNREAD.to_owned(),
-            "a command no transcript holds".to_owned(),
-        ),
-    }
-}
-
-fn phase_cat(col: &str) -> &str {
-    match col {
-        "docs" => "record builds and docs",
-        "review" => PAGES,
-        c => c,
-    }
-}
-
-fn is_wait(cat: &str) -> bool {
-    cat == program::WAIT || cat == program::PAGE_WAIT
-}
-
 /// The booking's indexes over the world.
 struct Ix<'a> {
     w: &'a World<'a>,
@@ -316,6 +172,8 @@ struct Ix<'a> {
     run_cats: Vec<(String, String)>,
     agent_of: HashMap<&'a str, usize>,
     agent_key: Vec<Key>,
+    /// Each agent's own key, as its lines name it: a builder's minutes are its task's wherever its later time is booked.
+    agent_own: Vec<Key>,
     /// Each run's and each agent's `Blocks:` clue, "" where none was given.
     run_clue: Vec<String>,
     agent_clue: Vec<String>,
@@ -324,6 +182,10 @@ struct Ix<'a> {
     /// actor -> its own background runs and the agents it dispatched.
     owned: HashMap<String, Vec<Cand>>,
     segs: HashMap<String, Vec<Seg>>,
+    /// Each run's batch, where it is a batch's own landing.
+    tier_run: Vec<Option<usize>>,
+    /// What each run blocks when waited on with no clue ([`tier::Blocks`]).
+    run_blocks: Vec<Blocks>,
 }
 
 /// An actor's name: a main session's `s:<sid>`, an agent's id.
@@ -338,7 +200,7 @@ fn actor(e: &Event) -> String {
 
 impl<'a> Ix<'a> {
     fn new(w: &'a World<'a>) -> Self {
-        let mut pre_key: HashMap<&str, Key> = HashMap::new();
+        let mut pre_key: HashMap<&str, (Key, bool)> = HashMap::new();
         let mut clue: HashMap<String, String> = HashMap::new();
         let mut features: Vec<String> = Vec::new();
         let mut agent_feature: HashMap<String, String> = HashMap::new();
@@ -352,7 +214,7 @@ impl<'a> Ix<'a> {
         for e in w.stream {
             if let Some(id) = get(e, "id").as_str() {
                 if is(e, "ev", "PreToolUse") {
-                    pre_key.insert(id, key_of(e));
+                    pre_key.insert(id, (key_of(e), fallback(e)));
                 }
             }
             let (f, blocks) = (or_s(e, "feature"), or_s(e, "blocks"));
@@ -382,15 +244,6 @@ impl<'a> Ix<'a> {
                 features.push(p.key.0.clone());
             }
         }
-        let run_key: Vec<Key> = w
-            .runs
-            .runs
-            .iter()
-            .map(|r| {
-                let k = pre_key.get(r.id.as_str()).cloned().unwrap_or_default();
-                (k.0, r.task.clone())
-            })
-            .collect();
         for (i, r) in w.runs.runs.iter().enumerate().filter(|(_, r)| r.bg) {
             let who = if r.by.is_empty() {
                 format!("s:{}", r.sid)
@@ -399,7 +252,7 @@ impl<'a> Ix<'a> {
             };
             owned.entry(who).or_default().push(Cand::Run(i));
         }
-        let agent_key = w
+        let agent_own: Vec<Key> = w
             .agents
             .iter()
             .map(|a| {
@@ -410,7 +263,7 @@ impl<'a> Ix<'a> {
                 )
             })
             .collect();
-        Ix {
+        let mut ix = Ix {
             w,
             run_clue: w
                 .runs
@@ -432,12 +285,17 @@ impl<'a> Ix<'a> {
                 .map(|(i, r)| (r.id.as_str(), i))
                 .collect(),
             run_cats: w.runs.runs.iter().map(|r| run_cat(r, w.commands)).collect(),
-            run_key,
+            run_key: Vec::new(),
             agent_of,
-            agent_key,
+            agent_key: Vec::new(),
+            agent_own,
             owned,
             segs: HashMap::new(),
-        }
+            tier_run: Vec::new(),
+            run_blocks: Vec::new(),
+        };
+        ix.book_keys(&pre_key);
+        ix
     }
 
     fn span(&self, c: Cand) -> (f64, f64) {
@@ -549,7 +407,7 @@ impl<'a> Ix<'a> {
             if y <= x {
                 continue;
             }
-            let key = key_of(a);
+            let key = self.tiered(key_of(a), x, fallback(a));
             let what = if let Some(stop) = between {
                 self.after_stop(who, stop, b, y - x)
             } else if let Some(o) = open.last() {
@@ -737,11 +595,19 @@ impl<'a> Ix<'a> {
             if skip == Some(&k) {
                 continue;
             }
+            // a batch's own landing run is what its wait is on, whatever else in flight ends later: another task's leftover
+            // background loop named in the session's `inflight` took the T309 T289 batch's 12.1 min of gate waits as wait loops
+            // (2026-11-26, the window from 17:00Z)
+            let rank = |x: Cand| (self.is_landing(x), self.span(x).1);
             match by_task.iter_mut().find(|(t, _)| *t == k) {
-                Some(e) if self.span(c).1 > self.span(e.1).1 => e.1 = c,
+                Some(e) if rank(c) > rank(e.1) => e.1 = c,
                 Some(_) => {}
                 None => by_task.push((k, c)),
             }
+        }
+        // a gate in flight beside a task's own blocking work blocks nothing: "no new task waits on the gate" (`tier`'s doc)
+        if by_task.iter().any(|(k, _)| !is_tier(k)) {
+            by_task.retain(|(k, _)| !is_tier(k));
         }
         for (k, c) in &by_task {
             self.book_cand(l, *c, (x, y), Some(k), depth);
@@ -799,7 +665,8 @@ impl<'a> Ix<'a> {
             .copied()
             .filter(|c| {
                 let (a, b) = self.span(*c);
-                a < y && x < b
+                // never a landing: a gate running beside the session's own turn holds nothing up (`tier`'s doc)
+                a < y && x < b && !self.is_landing(*c)
             })
             .collect();
         if owned.is_empty() || depth >= 8 {
@@ -864,6 +731,11 @@ impl<'a> Ix<'a> {
                 self.beside(l, &s.who, piece, blocked, depth);
             }
             What::Run(i) => {
+                // a landing run in the foreground holds its batch up, a session's own check what it is booked to
+                let blocked = match &self.run_blocks[*i] {
+                    Blocks::Task(k) => Some(k),
+                    _ => blocked,
+                };
                 self.book_run(l, *i, piece, As::Blocking(blocked), true);
                 self.beside(l, &s.who, piece, blocked, depth);
             }
@@ -968,6 +840,7 @@ pub fn book(w: &World) -> Result<Ledger, Raised> {
         }
     }
     span_minutes(w, &ix, &mut l);
+    builder_minutes(w, &ix, &mut l);
     l.at_once = at_once(w, &ix, &order, &paged);
     // BLOCKING: each main session's own time, descended
     for who in order
@@ -984,9 +857,14 @@ pub fn book(w: &World) -> Result<Ledger, Raised> {
     Ok(l)
 }
 
+mod cats;
 mod clue;
+pub mod tier;
+pub use cats::*;
 mod window;
-use window::{at_once, span_minutes};
+use tier::Blocks;
+pub use tier::{is_tier, Attempt, Batch, SECOND_TIER};
+use window::{at_once, builder_minutes, span_minutes};
 
 #[cfg(test)]
 pub mod tests;

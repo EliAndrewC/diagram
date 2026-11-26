@@ -7,7 +7,7 @@ use std::collections::HashMap;
 use serde_json::{json, Value};
 
 use super::super::super::events::{ts, Event};
-use super::super::super::where_time::columns::{self, Window};
+use super::super::super::where_time::columns::{self, Run, Window};
 use super::*;
 
 fn at(ms: &str) -> String {
@@ -150,6 +150,8 @@ fn booked_to(
         agents: &flight.agents,
         pages,
         window: (ts(from).unwrap(), end),
+        batches: &[],
+        carried: &HashMap::new(),
     };
     book(&world).unwrap()
 }
@@ -362,7 +364,7 @@ fn the_kinds_and_the_runs_are_named() {
         ),
         (
             "review",
-            &["claims-owed", "land"][..],
+            &["claims-owed", "claims-bundle"][..],
             ("claims round: commands", "make claims-owed"),
         ),
         (
@@ -570,6 +572,8 @@ fn a_wait_past_the_depth_bound_is_booked_to_its_fallback() {
         agents: &[],
         pages: &[],
         window: (0.0, 10.0),
+        batches: &[],
+        carried: &HashMap::new(),
     };
     let ix = Ix::new(&world);
     let key = ("451-x".to_owned(), "T1".to_owned());
@@ -630,6 +634,8 @@ fn a_wait_with_nothing_in_flight_is_classed_by_what_came_before_and_after_it() {
         agents: &[],
         pages: &pages,
         window: (0.0, 10.0),
+        batches: &[],
+        carried: &HashMap::new(),
     };
     let ix = Ix::new(&world);
     let stop =
@@ -704,6 +710,8 @@ fn a_page_session_blocks_only_the_task_its_brief_names() {
             agents: &agents,
             pages,
             window: (0.0, 10.0),
+            batches: &[],
+            carried: &HashMap::new(),
         };
         let ix = Ix::new(&world);
         let mut l = Ledger::default();
@@ -796,6 +804,8 @@ fn blocking_follows_each_default_and_each_clue() {
         agents: &agents,
         pages: &[],
         window: (0.0, 10.0),
+        batches: &[],
+        carried: &HashMap::new(),
     };
     let ix = Ix::new(&world);
     let waiter = ("451-x".to_owned(), "T1".to_owned());
@@ -876,6 +886,8 @@ fn each_task_with_blocking_work_in_flight_gets_its_own_piece() {
         agents: &agents,
         pages: &[],
         window: (0.0, 10.0),
+        batches: &[],
+        carried: &HashMap::new(),
     };
     let ix = Ix::new(&world);
     let t5 = ("451-x".to_owned(), "T5".to_owned());
@@ -932,5 +944,38 @@ fn each_task_with_blocking_work_in_flight_gets_its_own_piece() {
         let sum: f64 =
             l.cells.values().map(|c| c.block).sum::<f64>() + l.free.values().sum::<f64>();
         assert!(sum >= 10.0);
+    }
+}
+
+/// A landing is a landing whatever its command line ran first, and the first tier's and the pool's targets are named (451 T298).
+#[test]
+fn a_landing_the_first_tier_and_the_pool_are_named() {
+    for (bucket, makes, want) in [
+        (
+            "review",
+            &["claims-owed", "land"][..],
+            ("landing", "make land"),
+        ),
+        ("tests", &["format", "land"][..], ("landing", "make land")),
+        (
+            "other",
+            &["builder-checks"][..],
+            ("tests", "make builder-checks"),
+        ),
+        ("other", &["builder-tree"][..], (POOL, "make builder-tree")),
+        (
+            "other",
+            &["builder-tree-release", "builder-tree"][..],
+            (POOL, "make builder-tree-release"),
+        ),
+        ("other", &["carry"][..], (CARRY, "make carry")),
+        (
+            "other",
+            &["guard-edit"][..],
+            (BOOKED_ELSEWHERE, "make guard-edit"),
+        ),
+    ] {
+        let got = run_cat(&run(bucket, makes, "z"), &HashMap::new());
+        assert_eq!(got, (want.0.to_owned(), want.1.to_owned()));
     }
 }

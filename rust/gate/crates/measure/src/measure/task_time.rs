@@ -30,10 +30,13 @@ use super::reply;
 use super::where_time::columns::{self, spent};
 use crate::Reply;
 
+pub mod asked;
 pub mod book;
 pub mod program;
+pub mod tiers;
+mod top;
 
-use book::{Cell, Key, Ledger, Page};
+use book::{is_tier, Batch, Cell, Key, Ledger, Page};
 
 /// Every event log of every clone (and the mirror's), each once: (feature, path), the feature its file's stem.
 #[must_use]
@@ -400,12 +403,37 @@ fn tables(
     out.push('\n');
 }
 
-/// The report (the module's doc): the window, the biggest blocking categories and whether each could run in parallel, each landed
-/// task's tables, the rest of the window's, and the footnote naming what could not be booked.
+/// The header's two lines beside the totals: what was waited on that blocked no task, and how many actors worked at once.
+fn beside(out: &mut String, l: &Ledger) {
+    let mut free: Vec<(&String, &f64)> = l.free.iter().collect();
+    free.sort_by(|a, b| b.1.total_cmp(a.1).then(a.0.cmp(b.0)));
+    let _ = writeln!(
+        out,
+        "Waited on, blocking no task (a page session or research pass whose brief names none, work whose clue is `Blocks: none`): {} min{}.\n",
+        m(l.free.values().sum()),
+        free.iter().fold(String::new(), |mut o, (c, x)| {
+            let _ = write!(o, " - {c} {}", m(**x));
+            o
+        })
+    );
+    let n = l.at_once;
+    let _ = writeln!(
+        out,
+        "Working at once (main sessions in their own turns and runs, agents, page sessions), minutes of the window: none {}, one {}, two {}, three or more {}.\n",
+        m(n[0]),
+        m(n[1]),
+        m(n[2]),
+        m(n[3])
+    );
+}
+
+/// The report (the module's doc): the window, its one table of every category, a line a landed task and the second tier's section
+/// (451 T298, `top`), the biggest blocking categories and whether each could run in parallel, each landed task's tables, the rest of
+/// the window's, and the footnote naming what could not be booked.
 #[must_use]
 pub fn render(
     (l, whole): (&Ledger, &Ledger),
-    landed: &[(f64, Key)],
+    (landed, batches): (&[(f64, Key)], &[Batch]),
     (window, from, starts): ((f64, f64), f64, &BTreeMap<Key, f64>),
     runs: &columns::Runs,
 ) -> String {
@@ -431,26 +459,10 @@ pub fn render(
         m(work.min),
         m(work.block)
     );
-    let mut free: Vec<(&String, &f64)> = l.free.iter().collect();
-    free.sort_by(|a, b| b.1.total_cmp(a.1).then(a.0.cmp(b.0)));
-    let _ = writeln!(
-        out,
-        "Waited on, blocking no task (a page session or research pass whose brief names none, work whose clue is `Blocks: none`): {} min{}.\n",
-        m(l.free.values().sum()),
-        free.iter().fold(String::new(), |mut o, (c, x)| {
-            let _ = write!(o, " - {c} {}", m(**x));
-            o
-        })
-    );
-    let n = l.at_once;
-    let _ = writeln!(
-        out,
-        "Working at once (main sessions in their own turns and runs, agents, page sessions), minutes of the window: none {}, one {}, two {}, three or more {}.\n",
-        m(n[0]),
-        m(n[1]),
-        m(n[2]),
-        m(n[3])
-    );
+    beside(&mut out, l);
+    top::window_table(&mut out, l);
+    top::task_lines(&mut out, whole, landed, batches);
+    top::second_tier(&mut out, l, batches, window, (all, work));
     out.push_str("## The biggest blocking, and whether it could run in parallel\n\n");
     let mut by_block = all_c.clone();
     by_block.sort_by(|a, b| b.1.block.total_cmp(&a.1.block));
@@ -501,9 +513,9 @@ pub fn render(
         tables(&mut out, &c, &tg, (all, work));
     }
     out.push_str(
-        "## The rest of the window: tasks not landed in it, and time under no task (`-`)\n\n",
+        "## The rest of the window: tasks not landed in it, and time under no task (`-`); the second tier's is in its own section\n\n",
     );
-    let (c, tg) = sums(l, &|x| !keys.contains(&x));
+    let (c, tg) = sums(l, &|x| !keys.contains(&x) && !is_tier(x));
     tables(&mut out, &c, &tg, (all, work));
     out.push_str("## The whole window\n\n");
     tables(&mut out, &all_c, &all_t, (all, work));
@@ -564,7 +576,7 @@ fn cut_note(start: Option<f64>, from: f64) -> String {
     }
 }
 
-/// The report over the clones' logs, with the transcripts under `projects`.
+/// The report over the clones' logs, with the transcripts under `projects`, and the end of the window it used.
 ///
 /// # Errors
 ///
@@ -574,7 +586,7 @@ pub fn run(
     (since, until, back_h): (&str, &str, f64),
     only: &str,
     (projects, clones): (&Path, &Path),
-) -> Result<String, Raised> {
+) -> Result<(String, f64), Raised> {
     let logs = all_logs(root, clones);
     // read `back_h` hours before the window, so a landed task's tables carry its time before it (a knob: `BACK=`)
     let lo = ts(since)?;
@@ -606,6 +618,12 @@ pub fn run(
     spent::clip(&mut flight.agents, got.window);
     spent::clip(&mut inside, window);
     let pages = pages(&got.aside)?;
+    let carried = tiers::carries(&runs, &subs.commands, &tiers::takes(&bases(root, clones)));
+    let batches = tiers::batches((&got.stream, &got.aside), &runs, &subs.commands, &carried)?;
+    let carry_of: HashMap<String, String> = carried
+        .iter()
+        .map(|(id, _, detail)| (id.clone(), detail.clone()))
+        .collect();
     let world = |agents, window| book::World {
         stream: &got.stream,
         runs: &runs,
@@ -613,18 +631,22 @@ pub fn run(
         agents,
         pages: &pages,
         window,
+        batches: &batches,
+        carried: &carry_of,
     };
     let whole = book::book(&world(&flight.agents, got.window))?;
     let l = book::book(&world(&inside, window))?;
-    Ok(render(
+    let text = render(
         (&l, &whole),
-        &landed(&got.aside, window, only)?,
+        (&landed(&got.aside, window, only)?, &batches),
         (window, got.window.0, &starts(root, clones)),
         &runs,
-    ))
+    );
+    Ok((text, window.1))
 }
 
 /// `l7r-gate measure task-time [--since S] [--until U] [--feature F] [--root R]`, `now` the time `--since <N>h` counts back from.
+/// `--since last` (451 T298, [`asked`]) runs from the end of the last report it made and moves the marker to this one's end.
 #[must_use]
 pub fn cli(args: &[String], projects: &Path, clones: &Path, now: f64) -> Reply {
     let specs = [
@@ -636,7 +658,7 @@ pub fn cli(args: &[String], projects: &Path, clones: &Path, now: f64) -> Reply {
     ];
     let p = match parse_with(args, &specs, 0) {
         Ok(p) => p,
-        Err(why) => return reply(String::new(), format!("usage: l7r-gate measure task-time [--since 24h|ISO] [--until ISO] [--feature F] [--back 48h]\n{why}\n"), 2),
+        Err(why) => return reply(String::new(), format!("usage: l7r-gate measure task-time [--since 24h|last|ISO] [--until ISO] [--feature F] [--back 48h]\n{why}\n"), 2),
     };
     // GUESS, a knob: two days back covers most tasks' start; each hour read costs about 1.3 s (`make task-time` took 55 s for
     // SINCE=24h and 238 s for SINCE=168h, measured 2026-11-25)
@@ -645,19 +667,52 @@ pub fn cli(args: &[String], projects: &Path, clones: &Path, now: f64) -> Reply {
     let Some(back_h) = back_h else {
         return reply(String::new(), format!("task-time: BACK={back}: <N>h\n"), 1);
     };
-    let done = since_of(p.text("--since", "24h"), now).and_then(|since| {
+    let root = Path::new(p.text("--root", "."));
+    let marker = asked::marker(root);
+    let asked_last = p.text("--since", "24h") == "last";
+    let (since, from) = match (asked_last, asked::last(&marker)) {
+        (false, _) => (p.text("--since", "24h").to_owned(), String::new()),
+        (true, Some(at)) => (at.clone(), format!("from the end of the last report, {at}")),
+        (true, None) => (
+            "24h".to_owned(),
+            "no earlier report is recorded, so the last 24 hours".to_owned(),
+        ),
+    };
+    let done = since_of(&since, now).and_then(|since| {
         run(
-            Path::new(p.text("--root", ".")),
+            root,
             (&since, p.text("--until", ""), back_h),
             p.text("--feature", ""),
             (projects, clones),
         )
     });
     match done {
-        Ok(text) => reply(text, String::new(), 0),
+        Ok((text, _)) if !asked_last => reply(text, String::new(), 0),
+        // the marker moves only once its report is made, and only for `SINCE=last`
+        Ok((text, end)) => {
+            let until = iso_of(end);
+            let said = format!(
+                "SINCE=last: {from}, to {until}; the next `make task-time SINCE=last` starts there (the marker: {}).\n\n",
+                marker.display()
+            );
+            match asked::mark(&marker, &until, &iso_of(now)) {
+                Ok(()) => reply(format!("{said}{text}"), String::new(), 0),
+                Err(why) => reply(
+                    text,
+                    format!(
+                        "task-time: the marker {} was not written ({why}), so the next SINCE=last starts where this one did - make its \
+                         directory writable, or ask again with SINCE={until}\n",
+                        marker.display()
+                    ),
+                    1,
+                ),
+            }
+        }
         Err(why) => reply(String::new(), format!("{why}\n"), 1),
     }
 }
 
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod tier_tests;

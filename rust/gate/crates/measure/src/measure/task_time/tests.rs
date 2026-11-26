@@ -114,7 +114,8 @@ fn one_table_across_features_each_landed_task_its_own() {
     ] {
         assert!(out.contains(want), "{want}\n---\n{out}");
     }
-    assert!(!out.contains("T7"), "a refused landing lands nothing");
+    // a refused landing lands nothing: its batch is named in the second tier's section, not landed, and no task's section is its
+    assert!(out.contains("| 451-x T7 | not landed | 1 | 0 | ") && !out.contains("## 451-x T7"));
     let only = cli(
         &args(&[
             "--root",
@@ -172,18 +173,22 @@ fn a_landed_task_carries_its_time_before_the_window() {
     let r = late("1h");
     for want in [
         "minutes 5.6 (machine, overlapping), blocking 3.8 (by task and dependency",
-        "the landed tasks' 3.8)",
-        "Its whole time, from 2026-11-25T09:03:00Z: 8.9 min, 6.8 min blocking; inside the window 4.8 min (53.5% of it), 3.8 min blocking (55.6%);",
+        // T1's own table ends where its landing starts (no carry found): the session's last 45 s are the second tier's (451 T298)
+        "the landed tasks' 3.0)",
+        "Its whole time, from 2026-11-25T09:03:00Z: 8.1 min, 6.0 min blocking; inside the window 4.0 min (49.2% of it), 3.0 min blocking (50.0%);",
     ] {
         assert!(r.stdout.contains(want), "{want}\n---\n{}", r.stdout);
     }
     // read nothing back: the task's whole time is its time inside, and a wait begun before the window (its `Stop` unread) is lost to
     // the window's own figures too - 0.8 min of its 3.8
     let z = late("0h").stdout;
-    assert!(
-        z.contains("blocking 0.8 (by task and dependency")
-            && z.contains("inside the window 2.8 min (100.0% of it), 0.8 min blocking (100.0%)")
-    );
+    // (those 0.8 min, the session's time from the landing's start, are the second tier's since 451 T298)
+    for want in [
+        "blocking 0.8 (by task and dependency",
+        "inside the window 2.0 min (100.0% of it), 0.0 min blocking (-)",
+    ] {
+        assert!(z.contains(want), "{want}\n---\n{z}");
+    }
     let bad = late("x");
     assert_eq!(
         (bad.code, bad.stderr.as_str()),
@@ -317,7 +322,7 @@ fn waited_on_work_blocking_no_task_is_named_apart() {
     l.free.insert("plan review: agents".to_owned(), 120.0);
     let text = render(
         (&l, &Ledger::default()),
-        &[],
+        (&[], &[]),
         ((0.0, 3600.0), 0.0, &BTreeMap::new()),
         &columns::Runs::default(),
     );

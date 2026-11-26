@@ -305,3 +305,21 @@ on 2026-11-21 for two of its cases, was still open. The GM, 2026-11-26, as the c
 builder's brief (copied here from the brief by that builder, who did not hear them; the sentence is all the brief holds):
 
 > I agree with prioritizing the test that fails under load being fixed.
+
+## 2026-11-26: the task time breakdown remembers when he last asked, and the second tier is booked apart (451 T298)
+
+The GM asked for the breakdown "since the last time I asked, whenever that was", then for the second tier of checking to be a category
+of its own, then said what he expects of its blocking. His three messages of 2026-11-26, copied whole by T298's closing builder from
+the coordinating session's transcript (its queued-message and user records at 15:36:16Z, 17:21:17Z and 17:24:27Z; the builder did not
+hear them):
+
+> I suppose this might mean that we might want an additional capability in the time task breakdown to keep track of whenever I last asked, so that I don't have to remember the period of time to ask for when I want the new data.
+
+> Yeah, so for what it's worth, I do think that we should probably move batched landing stuff that happens as the second tier of checks into its own separate category rather than counting it against any individual task.
+
+> Another thing to keep in mind about that is that that separate category in general is rarely going to be blocking anything, right? I mean, one of the things that we're trying to measure with the task time breakdown is where our bottlenecks are. But I would expect that our measurements will consistently show that our second tier of landing checks is pretty much never going to be the bottleneck in terms of running or completing tasks, because it's something that we do after tasks have already landed. And new tasks beginning is not something that blocks on it, so although there is some reason to want to make sure that it is optimized, and isn't eating up too much CPU or disk space or whatever, because that kind of thing can interfere with our tasks, it probably will be almost or completely in the category of non-blocking time that is never a bottleneck, rather than in the category of things that we are waiting to be done before we can proceed with more work. Right?
+
+The rest of T298's line in `tasks.md` is the coordinating session's, not his: the window table and the line a landed task, "a
+task's own table ends at its carry into the clone", the one line a batch, the four booking faults it found reading two-tier tasks'
+tables, and its relay of the third message as blocking minutes on their own line, "expected near zero since no new task waits on
+the gate - a rise is the signal that something has begun to wait on it (a carry behind a running gate, a repair, a build slot)".

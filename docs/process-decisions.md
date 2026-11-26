@@ -231,6 +231,18 @@ nothing working anywhere (it hides research a decision truly waits on whenever u
 DEPENDENCY: work blocks a task when that task's next step waits on its result. Research run beside other work to clarify
 wording or labels blocks nothing; research a choice of implementation waits on blocks that task.
 
+**The second tier's blocking (451 T298)** - the GM, 2026-11-26, on booking a batch landing apart: the second tier's blocking
+minutes stand on their own line, expected near zero since no new task waits on the gate - a rise is the signal that something
+has begun to wait on it (a carry behind a running gate, a repair, a build slot); the words are the task line's, relaying him. So a batch's gate in flight blocks nothing
+while any task's own work in flight blocks that task, and nothing beside the session's own turn; it blocks the batch - no task -
+where the session waits on it alone, where it ran in the foreground, and through a repair (the session's time from a task's
+carry to the landing, and what that waited on). A builder whose brief says `Blocks: none` does not make a wait on the gate
+any less a wait on it alone, and where a batch's own landing run is in flight the wait is booked to it - its gate, its push -
+whatever else in flight ends later (another task's leftover background loop took 12.1 min of one batch's gate waits as `wait
+loops` on 2026-11-26, the window from 17:00Z, before that rule). These are defaults like the others, a GUESS at about the same accuracy; a carry
+held behind a running gate and a build slot the gate holds are not yet told apart (451 T319). The rule is
+`rust/gate/crates/measure/src/measure/task_time/book/tier.rs`.
+
 **How it is measured.** The tooling cannot know the dependency from a make target, so the data carries a clue where the
 session knows it: a `Blocks: <feature> T<n>` or `Blocks: none` line in a dispatch (builder, page-session brief, research pass,
 review agent) and an `L7R_BLOCKS` variable on a make run; where none is given, stated defaults decide (a builder's foreground
