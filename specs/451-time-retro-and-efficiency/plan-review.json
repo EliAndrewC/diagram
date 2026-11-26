@@ -1854,6 +1854,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T263 (449/451's landing gate, 2026-11-26: `an_unchanged_mid_task_notice_is_said_once_then_in_one_line` failed once on its first assertion and passed 4 of 4 repeats)": {
+   "sha256": "182505329b932905c7f1d7d4a4d84c0f634ae75c068b7f2ccb60f2c12b79a8b5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T263 Approach (checklist part A)": {
+   "sha256": "effe0ad89408b1155c80c0de9195af5131199c96eceebf31381815507194d366",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -23363,6 +23375,108 @@
      "why": "The task changes a guard's escape handling and its record; it is not measurement of where time goes in the GM's 2026-11-20 sense (FR-013's full text is not in the bundle). The classification affects scheduling only and narrows nothing the GM asked for in this task."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T263 (449/451's landing gate, 2026-11-26: `an_unchanged_mid_task_notice_is_said_once_then_in_one_line` failed once on its first assertion and passed 4 of 4 repeats)",
+    "### T263 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T263-cause",
+     "summary": "The flake's cause is the fixture's in-process std::fs::copy of the fake scripts (a forked child inherits the write descriptor, exec gives ETXTBSY), not 451 T258's state restore; the empty-reason notice is reconstructed by forcing, not recovered.",
+     "class": "within",
+     "why": "Finding the cause is what T263's line asks. The block labels the reconstruction as such and names the other mechanism that would give the same notice (a refused fork). Its reason for picking the descriptor race is that this fixture makes it possible and its neighbors do not. The forced red reproduces exactly this assertion's failure."
+    },
+    {
+     "id": "T263-fix-cp",
+     "summary": "copy() becomes one `cp -a <template>/. <world>` child, covering all four fakes at once, with its why and a 'do not copy in-process again' beside it.",
+     "class": "within",
+     "why": "This fixes the cause rather than adding a retry, which is what the brief asks. Which mechanism to use is a design choice, not a fidelity question."
+    },
+    {
+     "id": "T263-assert-prints",
+     "summary": "The first assertion prints the notice it read (\"{full}\").",
+     "class": "within",
+     "why": "It serves the task's goal that a red first assertion shows what was said. It only makes a failure readable and adds no behavior."
+    },
+    {
+     "id": "T263-no-kept-pin",
+     "summary": "No kept test forces the race; red-first was a scratch stub in the unfixed copy (520 passed, 1 failed, then 521 passed with the fix).",
+     "class": "within",
+     "why": "T263's line asks for red-first by forcing the interleaving, and item 9 records that forcing with its command and result. Once the fixed copy is in place there is no descriptor left to hand a child, so a kept test of the race would be testing the kernel. FR-012's kept red-first tests cover FR-006 to FR-009, FR-011 and FR-013's refusals, and this fixture is none of them."
+    },
+    {
+     "id": "T263-guard-unchanged",
+     "summary": "The guard is unchanged; a refresh that cannot start its script still says 'mirror refresh FAILED: ' with nothing after it; 'Found and left? none'.",
+     "class": "within",
+     "why": "By the defect rule this is not a wrong outcome. The notice correctly says the refresh failed, says so every time, and takes the same branch as a failing script. A missing reason after the colon is a diagnostic gap, not a wrong answer. Leaving it is therefore within what was asked, and 'Found and left? none' does not hide a defect."
+    },
+    {
+     "id": "T263-siblings",
+     "summary": "The class (a file the test process writes, then execs, while other test threads fork) is declared to have no other instance, on a census of `set_permissions`, `0o755` and `fs::copy` under rust/guard, and the step table states 'a world's scripts are written by no descriptor of the test process'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The block names a class of defect: the hazard write_executable already names, and the fixture's copy 'outside it'. FR-009 therefore requires a line saying how every instance was found, and the census's method cannot see one form of the class. A test that rewrites a world's script in-process after the copy (fs::write, File::create or OpenOptions over a path cp -a has already made executable) needs no set_permissions, no 0o755 and no fs::copy, so the grep is blind to it. Such a rewrite recreates the same race, in this fixture's own tests or elsewhere under rust/guard. A mode other than the literal 0o755 (0o700, 0o775, 0o777) is also missed. Nothing makes the narrower census necessary: it is not impossible, not implied by any GM words, and the full search does not defeat the task's purpose. It IS the purpose, since a missed instance leaves the landing gate flaky. This ruling does not assert that such an instance exists. FIX: either widen the Siblings line to cover in-process writes (fs::write, File::create, OpenOptions, any 0o7 mode or from_mode) to any path a test later runs, at least across the guard crate's test fixtures, and state the result as an observation with its method; or cut the claim back to what the method saw, i.e. 'no test writes a file it marks executable with 0o755 or copies one with fs::copy'. Either is followed by fixing any instance found."
+    }
+   ],
+   "tasks": [
+    "T263"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T263 (449/451's landing gate, 2026-11-26: `an_unchanged_mid_task_notice_is_said_once_then_in_one_line` failed once on its first assertion and passed 4 of 4 repeats)",
+    "### T263 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T263-fix",
+     "summary": "Fix the flake at its cause in the test fixture: World::new's in-process std::fs::copy of the template is replaced by one `cp -a <template>/. <world>` child, so no descriptor of the test process writes a world's fakes and no fork can inherit one. The why and a 'do not copy in-process again' sit at copy, and the module header is corrected.",
+     "class": "within",
+     "why": "T263's line as relayed in the block (find the race, make the test deterministic, fix the cause and not a retry) asks for exactly this. It removes the cause rather than retrying, and covers every fake the template carries at once."
+    },
+    {
+     "id": "T263-cause",
+     "summary": "The cause is attributed to ETXTBSY from a descriptor inherited across another thread's fork during the fixture's copy. 451 T258's state restore is excluded because the fixture runs a three-line fake sync. The failing notice is reconstructed by forcing, not recovered from the red gate.",
+     "class": "within",
+     "why": "This is a finding, not a scope choice. The block itself says the attribution rests on a forced reproduction and a fixture read rather than recovered output, and the first-assertion print hedges a misattribution. Whether the mechanism is right is a design and correctness question, not a fidelity one."
+    },
+    {
+     "id": "T263-assert-prints",
+     "summary": "The first assertion prints the notice it read (\"{full}\"), so a future failure shows what was said.",
+     "class": "within",
+     "why": "It serves 'find the race' for any recurrence. The test checks the same thing and only says more when it fails."
+    },
+    {
+     "id": "T263-guard-unchanged",
+     "summary": "The guard's code is not changed. A refresh that cannot START its script still says `mirror refresh FAILED: ` with nothing after the colon.",
+     "class": "within",
+     "why": "Measured against the wrong-outcome definition (constitution XIV v2.36.0), this is not a defect. The notice says truthfully that the refresh failed, it is said in full every time, and it is the same branch a failing script takes. In a real clone the script is a git-written file that this process never holds open, so the cause cannot occur there. A sparser message than one might like is a difference, not a wrong outcome, so leaving it needs no ruling."
+    },
+    {
+     "id": "T263-no-kept-pin",
+     "summary": "No kept test forces the race. The red-first was a one-shot stub on the unfixed copy: a sleep-3 child handed the copied script's write handle. It gave 520 passed and 1 failed at this test's first assertion, then 521 passed with the stub removed and 521 passed with the fix.",
+     "class": "within",
+     "why": "The relayed task line asks for red-first by forcing the interleaving, and the forced red answers that. Nothing in the GM's request or the task line asks for a kept regression pin of this race, so leaving it out narrows nothing that was asked. The plan's impossibility argument covers a behavioural pin only, since the fixed copy holds no descriptor to race. A structural pin, such as a lint on in-process copies in the fixture, would be possible, but it is not required by anything asked."
+    },
+    {
+     "id": "T263-siblings-scope",
+     "summary": "The sibling census of ways a rust/guard test could directly run a file its own process wrote names its forms (from_mode, set_permissions, 0o literals, .mode(0o, chmod children, fs::copy, and fs::write/File::create/OpenOptions on .sh or scripts/bin/hooks paths), reads every hit, and finds no other instance. Crates outside rust/guard were not searched.",
+     "class": "within",
+     "why": "The search space is stated with its method, as FR-009 and the enumeration rule require. The boundary is drawn openly at this guard's crate, which is where the task lies, and no known defect is carried forward, so it is not a narrowing under the fix-as-we-go rule."
+    },
+    {
+     "id": "T263-order-budget",
+     "summary": "Order: any time, nothing waits on it. Budget: one landing. Performance work: no. Exits: closing-checks green, or red recorded and ruled through arbiter-ask.",
+     "class": "within",
+     "why": "The only GM words that bear on these are the 2026-11-20 performance-first order and the 2026-11-22 bundling note, and neither is narrowed. Classing a flake fix as non-performance leaves FR-013's ordering to apply to it as the GM set it."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -37214,6 +37328,56 @@
      "summary": "The section marks the task 'Performance work? no'.",
      "class": "within",
      "why": "The task changes a guard's escape handling and its record; it is not measurement of where time goes in the GM's 2026-11-20 sense (FR-013's full text is not in the bundle). The classification affects scheduling only and narrows nothing the GM asked for in this task."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T263": {
+   "section_sha256": "e4595e4943f5bbef69994737de5cdc2d1c39b88882c225eb67c126093bcf3596",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T263-fix",
+     "summary": "Fix the flake at its cause in the test fixture: World::new's in-process std::fs::copy of the template is replaced by one `cp -a <template>/. <world>` child, so no descriptor of the test process writes a world's fakes and no fork can inherit one. The why and a 'do not copy in-process again' sit at copy, and the module header is corrected.",
+     "class": "within",
+     "why": "T263's line as relayed in the block (find the race, make the test deterministic, fix the cause and not a retry) asks for exactly this. It removes the cause rather than retrying, and covers every fake the template carries at once."
+    },
+    {
+     "id": "T263-cause",
+     "summary": "The cause is attributed to ETXTBSY from a descriptor inherited across another thread's fork during the fixture's copy. 451 T258's state restore is excluded because the fixture runs a three-line fake sync. The failing notice is reconstructed by forcing, not recovered from the red gate.",
+     "class": "within",
+     "why": "This is a finding, not a scope choice. The block itself says the attribution rests on a forced reproduction and a fixture read rather than recovered output, and the first-assertion print hedges a misattribution. Whether the mechanism is right is a design and correctness question, not a fidelity one."
+    },
+    {
+     "id": "T263-assert-prints",
+     "summary": "The first assertion prints the notice it read (\"{full}\"), so a future failure shows what was said.",
+     "class": "within",
+     "why": "It serves 'find the race' for any recurrence. The test checks the same thing and only says more when it fails."
+    },
+    {
+     "id": "T263-guard-unchanged",
+     "summary": "The guard's code is not changed. A refresh that cannot START its script still says `mirror refresh FAILED: ` with nothing after the colon.",
+     "class": "within",
+     "why": "Measured against the wrong-outcome definition (constitution XIV v2.36.0), this is not a defect. The notice says truthfully that the refresh failed, it is said in full every time, and it is the same branch a failing script takes. In a real clone the script is a git-written file that this process never holds open, so the cause cannot occur there. A sparser message than one might like is a difference, not a wrong outcome, so leaving it needs no ruling."
+    },
+    {
+     "id": "T263-no-kept-pin",
+     "summary": "No kept test forces the race. The red-first was a one-shot stub on the unfixed copy: a sleep-3 child handed the copied script's write handle. It gave 520 passed and 1 failed at this test's first assertion, then 521 passed with the stub removed and 521 passed with the fix.",
+     "class": "within",
+     "why": "The relayed task line asks for red-first by forcing the interleaving, and the forced red answers that. Nothing in the GM's request or the task line asks for a kept regression pin of this race, so leaving it out narrows nothing that was asked. The plan's impossibility argument covers a behavioural pin only, since the fixed copy holds no descriptor to race. A structural pin, such as a lint on in-process copies in the fixture, would be possible, but it is not required by anything asked."
+    },
+    {
+     "id": "T263-siblings-scope",
+     "summary": "The sibling census of ways a rust/guard test could directly run a file its own process wrote names its forms (from_mode, set_permissions, 0o literals, .mode(0o, chmod children, fs::copy, and fs::write/File::create/OpenOptions on .sh or scripts/bin/hooks paths), reads every hit, and finds no other instance. Crates outside rust/guard were not searched.",
+     "class": "within",
+     "why": "The search space is stated with its method, as FR-009 and the enumeration rule require. The boundary is drawn openly at this guard's crate, which is where the task lies, and no known defect is carried forward, so it is not a narrowing under the fix-as-we-go rule."
+    },
+    {
+     "id": "T263-order-budget",
+     "summary": "Order: any time, nothing waits on it. Budget: one landing. Performance work: no. Exits: closing-checks green, or red recorded and ruled through arbiter-ask.",
+     "class": "within",
+     "why": "The only GM words that bear on these are the 2026-11-20 performance-first order and the 2026-11-22 bundling note, and neither is narrowed. Classing a flake fix as non-performance leaves FR-013's ordering to apply to it as the GM set it."
     }
    ],
    "verdict": "CLEAR"

@@ -1,6 +1,6 @@
 //! The decider on the suite's shapes (`tests/hooks/test-clone-sync-hooks.sh`, replayed through the shim, is the verdict). Each world
-//! is a mirror with one commit and a clone of it, copied in-process from one template so a test starts no `git clone`; the tree's
-//! tools are `sh` fakes, steered by marker files.
+//! is a mirror with one commit and a clone of it, copied from one template by one `cp -a` so a test starts no `git clone` and this
+//! process never holds a world's script open for writing (451 T263, at `copy`); the tree's tools are `sh` fakes, steered by marker files.
 
 use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
@@ -37,16 +37,22 @@ fn script(p: &Path, body: &str) {
     crate::guards::write_executable(p, &format!("#!/bin/sh\n{body}\n"));
 }
 
+/// `from`'s contents copied into `to` by one `cp -a`, a child of its own, never by this process.
+///
+/// WHY (451 T263): the copy was `std::fs::copy` a file, which holds each destination open for writing in THIS process while it is
+/// written. A thread that forks in another test copies every open descriptor until its child execs (`write_executable`'s hazard), so a
+/// child forked during the copy of `scripts/sync-with-main.sh` and slow to its exec still held the script open for writing when the hook
+/// ran it: the run failed with "Text file busy", `ask` gave code -1 and no output, and the mid-task notice ended `mirror refresh FAILED: `
+/// with nothing after it, where the test read `mirror refreshed from GitHub main` (once in 449/451's landing gate, 2026-11-26; forced red
+/// that day by a `sleep` child handed the copied script open for append). `cp` holds the only descriptors that write a world's files,
+/// and it has exited by the time this returns. Do not copy a world's scripts in-process again.
 fn copy(from: &Path, to: &Path) {
-    std::fs::create_dir_all(to).unwrap();
-    for e in std::fs::read_dir(from).unwrap().filter_map(Result::ok) {
-        let (src, dst) = (e.path(), to.join(e.file_name()));
-        if e.file_type().unwrap().is_dir() {
-            copy(&src, &dst);
-        } else {
-            std::fs::copy(&src, &dst).unwrap();
-        }
-    }
+    let done = std::process::Command::new("cp")
+        .arg("-a")
+        .arg(from.join("."))
+        .arg(to)
+        .status();
+    assert!(done.unwrap().success());
 }
 
 /// The template, made once: `diagram` (one commit, `origin/main` at it) and its clone `.clones/mine`, the fakes beside them.
@@ -579,7 +585,7 @@ fn an_unchanged_mid_task_notice_is_said_once_then_in_one_line() {
     w.claim("s", &w.clone);
     std::fs::write(w.clone.join("wip.txt"), "mid-task").unwrap();
     let full = w.prompt("s", "");
-    assert!(full.contains("has uncommitted work (mid-task) - clone merge skipped; mirror refreshed from GitHub main. Finish and run"));
+    assert!(full.contains("has uncommitted work (mid-task) - clone merge skipped; mirror refreshed from GitHub main. Finish and run"), "{full}");
     let again = w.prompt("s", "");
     let first = again.lines().next().unwrap();
     let short = first.starts_with("clone-sync: still mid-task since ")
