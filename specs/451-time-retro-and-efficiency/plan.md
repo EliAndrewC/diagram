@@ -2898,8 +2898,46 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-<!-- plan-archive: T281 to T285 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
-<!-- plan-archive: T281 to T281 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+### T281 (the store of rendered guard messages lay in the git common directory, one for every worktree of a clone: on 2026-11-26 a builder's `make guard-messages BUNDLE=1` said "nothing owed" for wordings its own red hooks-test had just named, and 451 T292's last hooks-test went red on the wordings of a guard only T285's tree held)
+
+- **Approach**: the renderings are kept a tree at a time, and a keyed copy sits beside the shared stamps so the stamps can stay shared.
+  - **Both effects reproduced first**, 2026-11-26, with two worktree fixtures (a fixture repository of stub guards, a linked worktree beside its main one) through the real `make hooks-test` and `make guard-messages` recipes on HEAD's code, method: `tests/hooks/test-parts.3.sh` before the fix, 11 passed, 4 failed. (a) Tree B changes a wording and its run names it unreviewed; tree A, at the old wording, runs; B's `make guard-messages` then names nothing. (b) B gains a guard A does not hold; A's `make guard-messages` and A's `make hooks-test` name that guard's wording unreviewed. The fourth red is the same reader fault in one tree: a rendering left in the store by a guard the tree no longer holds is judged for good.
+  - **The cause, two faults.** `tests/hooks/hookrun.sh` wrote `<common dir>/hooks-test/messages/<job>.jsonl`, one file a job for every tree; and `messages::corpus` reads every `.jsonl` of the directory, never the run's roster.
+  - **The tree's store.** `<the tree's own git dir>/hooks-test/messages/`, found by `l7r-guard messages store <dir>` (`git rev-parse --absolute-git-dir`, since a linked worktree's `.git` is a file, as T254 and T267 did), the one resolver the hooks-test recipe (which hands it to `hookrun.sh` as `HOOKS_MESSAGES`) and the `guard-messages` recipe (its check, `BUNDLE=1`, `KEY=`, `REHEAD=1`) both ask. `dev/guard-messages.tsv`, the reviewed record, stays one tracked file.
+  - **Why a store by tree alone is not enough.** The suites' stamps are shared on purpose: a fresh worktree off main reran 5 suites of 46 where it had rerun all, 83 s against 151 s (measured 2026-10-12, commit d7456c4c8d's message). The skip trusts a stamp plus "its messages are kept". With the stamps shared and the store per tree, a fresh tree holds no messages, so it would rerun every suite, the saving undone, and a tree whose content moves to a key another tree has stamped would skip holding its own stale rendering. Stamps per tree was priced and not taken, since it undoes the same saving.
+  - **The keyed rendering.** A green job also leaves `<common dir>/hooks-test/rendered/<job>@<key>.jsonl`, the key the one its stamp will hold, written before the stamp and moved into place whole, one a job (`hookrun.sh`). A suite is skipped only where a rendering at the stamp's key exists. After the fan-out one call, `l7r-guard messages gather <rendered> <tree store> <list>`, makes the tree's store this run's: a skipped suite's files are replaced by the renderings at its stamp's key (what this tree's own run would render, the key being the suite's inputs), a suite that ran keeps what its job wrote, and a file of no suite on the run's roster is removed. A skipped suite whose keyed rendering is gone by then (another tree's run replaced it in between) fails the run by name with the fix, `make hooks-test` again, which reruns it.
+  - **What it costs.** Each clone's first `make hooks-test` after this lands reruns every suite once, since no keyed rendering exists yet (one full run of the suites, 160 s inside this task's first closing checks beside two other builders, measured 2026-11-26 (`make closing-checks T=T281`, its hooks-test line)). One more launcher call a run (`messages store`), and one fewer `ls` a suite in the loop.
+  - **The landing's and the review tree's seed.** `scripts/land-alone.sh` and `scripts/gates/review-tree.sh` copied the common `hooks-test/` into their tree's own git directory beside the crates' kept results. Nothing read that copy (the recipe reads the stamps from the common directory since commit d7456c4c8d; observed 2026-11-26, method: `grep -rn hooks-test rust scripts tests` for a reader of a tree's own `hooks-test/`, none but the two copies), and with the tree's store now at `hooks-test/messages` it would fill that store with the clone's renderings before the tree's own run. Both copies no longer take `hooks-test`; fixed here (MODE 4's finding on this section's first round).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| (a) another tree's run leaves this tree's renderings | `test-parts.3.sh` "(a) another tree's run leaves this tree's unreviewed wording owed", red on HEAD | n/a: tooling | none | n/a |
+| (b) a tree is judged on its own roster | `test-parts.3.sh` both "(b)" cases and "a rendering of a guard the tree does not hold is not judged, and goes", red on HEAD; `a_skipped_suite_is_filled_from_its_key_and_a_file_of_no_suite_on_the_list_goes` | n/a: tooling | none | n/a |
+| the shared stamps still serve a fresh tree | `test-parts.3.sh` "a fresh worktree of the same content runs no suite", "... and its own store holds every wording", green on HEAD and after | n/a: tooling | none | n/a |
+| a skip on another tree's stamp reads that key's rendering | `test-parts.3.sh` "... and its rendering at that stamp's key is the one judged, not the tree's stale one"; `a_skipped_suite_whose_rendering_is_gone_fails_the_run_with_the_fix_and_keeps_its_files` | n/a: tooling | none | n/a |
+| a landing or review tree's store is not seeded from the clone | `tests/hooks/test-review-tree.sh` "the clone's crate results are seeded, its rendered guard messages are not"; `land-alone.sh`'s loop is the same line, read | n/a: tooling | none | n/a |
+| one resolver | `each_worktree_has_its_own_store_and_a_directory_outside_a_repository_none` | n/a: tooling | none | n/a |
+
+### T281 Approach (checklist part A)
+
+1. **The goal, in the world.** Two builders in two worktrees of one clone each see, from `make hooks-test` and `make guard-messages`, the wordings their own tree's guards render, whatever the other tree ran in between.
+2. **The constraints.** The T281 task line (reproduce with two worktrees, then key the store by tree). 451 T170: every rendered wording is reviewed or baselined. Commit d7456c4c8d: the suites' freshness caches are shared between a clone's worktrees. `dev/guard-messages.tsv` stays one file.
+3. **Where each comes from.** O: the three reports of 2026-11-26 (T268's and T272's builders, T292's last run) and the reproduction above. O: d7456c4c8d's measurement, the figures above.
+4. **Do they describe the world here?** Yes: both effects reproduced through the real recipes on HEAD, measured 2026-11-26 (`tests/hooks/test-parts.3.sh`, 4 red).
+5. **The order.** No dependency.
+6. **The exits.** Green: `make closing-checks T=T281 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, measured 2026-11-26: `tests/hooks/test-parts.3.sh` on HEAD's code 11 passed, 4 failed (the (a) case, both (b) cases, the left-behind rendering); after the fix 15 passed, 0 failed. The three Rust tests of `messages/store/tests.rs` cover every line of `store.rs`.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: a builder was told nothing was owed for wordings its red run had named, and a tree's gate went red on another tree's guard. No map changes.
+
+**Found and left?** none.
+
+**Performance work?** no: it corrects which renderings a tree's check reads; the shared stamps' saving is kept, not added to.
+
+
 ### T282 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.

@@ -206,6 +206,8 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T280 two true statements whose footnotes do not quote their line of the GM's notes (page session P18, 2026-11-26): 0140's drawing note l7r-lineages-3 for 'each lineage is headed by a chancellor' (l7r.md 1148, 'the lineage chancellors who sit on the House council'; the arbiter allows one scoped quote-check and source-reader round) and 0001's l7r-budgets-4 for '600 households' (budgets.md, the Provincial city table's Total row) - add each passage in a page session; and source-reader's optional sharpening of 0001's 'which this passage leaves out'
       research: rendering
+- [ ] T281 the guard-messages store sits in the git common dir, so parallel worktrees overwrite each other's renderings and make guard-messages BUNDLE=1 can miss the keys a red hooks-test just named (seen twice 2026-11-26, by 451 T268's and T272's builders; cause not proven): reproduce with two worktrees, then key the store by tree
+      research: rendering
 - [ ] T282 an escalation refusal quotes the offending line, so every new true-positive case in the hook suite is a new guard message owing a message-check, and a report that quotes or describes an ask is read as one (451 T272, 2026-11-26): key the refusal with the quoted line masked, and measure the quoting case
       research: rendering
 - [ ] T283 the clone-sync silent-failure notices are rendered by no hook-suite case, test-clone-sync-hooks.sh's main4 fixtures have no sync script and assert through a failed refresh, and other callers of ask across the guards may print an empty failure tail (451 T268's candidates): add the cases and survey the callers
