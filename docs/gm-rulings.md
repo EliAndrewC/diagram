@@ -107,3 +107,23 @@ The research record attributed these to the GM with no recorded words (the audit
 4. Hirameki stood unwalled and was walled in haste during the Lion/Crane war, which excuses its shortfall in housing (0002).
 
 Each is CANON, and a comment or claim that names it cites this entry.
+
+## Ryusei's provincial lineages are recent (2026-11-26)
+
+Canon. The GM's notes (`gm-assistant/setting/lineages.md`, "in Ryusei lands, all of the lineages are \"cosmopolitan
+lineages\" and there are no \"provincial lineages\"") and research page 0138's worked example (one of Ryusei's six
+chancellor lineages a provincial one) seemed to disagree. The GM, 2026-11-26: *"the Ryusei domain had no provincial lineages
+until their recent involvement in the Lion/Unicorn war, at which point they expanded and acquired some provincial lineages,
+hence the apparent contradiction"*. So both hold: the notes describe Ryusei before the war, and a present-day Ryusei capital
+may seat a provincial lineage's chancellor. Applied on 0138's and 0140's drawing pages (the worked example keeps its
+provincial lineage, said to be newly acquired).
+
+## Burakumin neighborhoods stand inside a city's walls, at the edge (2026-11-26)
+
+Canon. The GM, 2026-11-26: *"burakumin neighborhoods are indeed inside city walls, at the edge as our research says - I don't
+remember any of our research indicating that they were always entirely outside the city walls. If I am wrong about that, and
+they were historically outside the walls instead of inside the walls, then I completely support moving them there, but I
+didn't think that was a deviation."* So the setting's placement is inside the wall at the edge; whether that DEPARTS from the
+history is the record's question (research page 0156 labeled it a deliberate deviation): a search pass settles whether the
+historical quarters stood inside or outside the walls, and the page's label follows it - and, by his words, if the history
+puts them outside, the maps move them there.
