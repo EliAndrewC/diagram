@@ -7858,6 +7858,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/audit/armory/tests.rs::a_generated_sheet_with_its_armory_off_its_roll_is_refused#the armory site's test yards": {
+  "body": "bde61173ac9e60aa",
+  "claim": "the armory site's test yards - NONE: test sheets, deciding nothing about a building",
+  "code": "01eff73418e39c0e",
+  "core": "1a46f34e15b11051",
+  "date": "2026-11-26",
+  "note": "this is a test that builds a sheet from a fixture (the spec's armory moved from x 0 to x 92.5 in the hall's east half) and checks that the audit refuses it; it decides nothing about a building that would be drawn",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/audit/armory/tests.rs::a_range_in_a_north_south_wall_flanks_its_passage#the armory site's test yards": {
   "body": "6c0f503d727add4d",
   "claim": "the armory site's test yards - NONE: test sheets, deciding nothing about a building",
@@ -7908,15 +7920,15 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/armory/tests.rs::every_pool_magistracy_draws_its_armory_where_its_seed_rolls_it#the armory site's test yards": {
-  "body": "52e9983517a1f40e",
+  "body": "fdd6d4cbf43b7351",
   "claim": "the armory site's test yards - NONE: test sheets, deciding nothing about a building",
-  "code": "d7dc2ff0ef6a4533",
-  "core": "6e37d032e9f0bcea",
-  "date": "2026-11-22",
-  "note": "assertions over the pool sheets; Ubame's gate-range room and no pool store agree with the drawing page",
+  "code": "04443c773f13887e",
+  "core": "75c8c6ef46dd2ba0",
+  "date": "2026-11-26",
+  "note": "the test only reads each sheet through the sweep and checks the drawn range, site and end against fixed answers; it decides nothing about a building",
   "pages": {},
   "research": "",
-  "triaged": "2026-11-23",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/armory/tests.rs::the_end_bay_is_rolled_from_the_seed#the armory site's test yards": {
@@ -26982,12 +26994,12 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/page/held.rs::outcomes#the page writer's held cases": {
-  "body": "66e8315910e828e3",
+  "body": "b966b748bd892c62",
   "claim": "the page writer's held cases - NONE: the port's answers compared with the Python's, deciding nothing about a building",
-  "code": "c216c813554b1847",
-  "core": "7424040ab413ef56",
-  "date": "2026-11-18",
-  "note": "lockstep assertions",
+  "code": "9bbb6e4570b4a801",
+  "core": "2925ecd0b818f65d",
+  "date": "2026-11-26",
+  "note": "plumbing: it runs the held cases and writes a page for each (path, text) pair, then counts the census and the embedded images; it decides nothing physical",
   "pages": {},
   "research": "",
   "rests": [],
@@ -31262,16 +31274,15 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/pool_sweep.rs::the_pages_and_the_country_shrine_are_drawn_end_to_end#the Mode A pool sweep": {
-  "body": "96cdcfbdf9a89a8e",
+  "body": "7828db24ccad4b40",
   "claim": "the Mode A pool sweep - NONE: the pool's sheets put through the registered checks, deciding nothing about a building",
-  "code": "4b76ddf709303c6a",
-  "core": "0894f1ec6f81a056",
-  "date": "2026-11-19",
-  "note": "end-to-end assertions",
+  "code": "b270d06e9dcc4065",
+  "core": "f01689fc33ae571a",
+  "date": "2026-11-26",
+  "note": "plumbing: it gives the pool's in-process sheet texts to the page writer and puts the shrine through the hand-sheet path; the counts it checks (at least 6 sheets, 2 generated, more than 200 cases) are figures about the test, not about any place",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-21",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/pool_sweep.rs::the_pool_notes_type_what_their_sheets_draw_and_their_census_blocks_are_fresh#the Mode A pool sweep": {
