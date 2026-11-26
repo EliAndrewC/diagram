@@ -1,0 +1,206 @@
+error: linking with `cc` failed: exit status: 1
+  |
+  = note:  "cc" "-m64" "/tmp/rustcNiKXoQ/symbols.o" "<257 object files omitted>" "-Wl,--as-needed" "-Wl,-Bstatic" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib/{libtest-*,libgetopts-*,libunicode_width-*,librustc_std_workspace_std-*}.rlib" "/home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/{libl7r_shared-568b7abd369c500b.rlib,libserde-bc7fc6e06f3a9862.rlib,libunicode_normalization-fcf394a2eca853b9.rlib,libtinyvec-a79c368843083522.rlib,libserde_json-36d1da640d2f870f.rlib,libfoldhash-2dc6a969be0b1c60.rlib,libzmij-29354573ac811fb7.rlib,libitoa-4eae8820353b1234.rlib,libindexmap-3e47dca815fcaa12.rlib,libequivalent-54a0d6bfacc66941.rlib,libhashbrown-f8c30ae7a0aef9ba.rlib,libserde_core-317fa8661e3b04b8.rlib,libfancy_regex-4c51e6ef4244c5b5.rlib,libbit_set-a3d4b508d5c69f08.rlib,libbit_vec-eb80ea2978140d18.rlib,libregex_automata-ac27d7b16f70f4f5.rlib,libaho_corasick-ded16ad26f3f1e3d.rlib,libmemchr-1817270265c69dac.rlib,libregex_syntax-4e0f7793de93fb4f.rlib}.rlib" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,libcfg_if-*,liblibc-*,liballoc-*,librustc_std_workspace_core-*,libcore-*,libcompiler_builtins-*}.rlib" "-Wl,-Bdynamic" "-lgcc_s" "-lutil" "-lrt" "-lpthread" "-lm" "-ldl" "-lc" "-L" "/tmp/rustcNiKXoQ/raw-dylibs" "-Wl,--eh-frame-hdr" "-Wl,-z,noexecstack" "-L" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib" "-o" "/home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9" "-Wl,--gc-sections" "-pie" "-Wl,-z,relro,-z,now" "-Wl,-O1" "-Wl,--strip-debug" "-nodefaultlibs" "-fuse-ld=lld" "-B<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld" "-fuse-ld=lld" "-B<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: rust-lld: error: undefined hidden symbol: core::ptr::drop_in_place$LT$serde_json..value..Value$GT$::hc38063c3035aa57e (.llvm.9995559262620451236)
+          >>> referenced by 0blrv74vh1jc1u6tcfroeg56n
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.0blrv74vh1jc1u6tcfroeg56n.rcgu.o:(core::ptr::drop_in_place$LT$serde_json..value..Value$GT$::hc38063c3035aa57e)
+          >>> referenced by 0blrv74vh1jc1u6tcfroeg56n
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.0blrv74vh1jc1u6tcfroeg56n.rcgu.o:(core::ptr::drop_in_place$LT$serde_json..value..Value$GT$::hc38063c3035aa57e)
+          >>> referenced by 0blrv74vh1jc1u6tcfroeg56n
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.0blrv74vh1jc1u6tcfroeg56n.rcgu.o:(core::ptr::drop_in_place$LT$$LP$$RF$$u5b$$RF$str$u5d$$C$serde_json..value..Value$RP$$GT$::hffe8cd50eb782b03)
+          >>> referenced 5569 more times
+          
+          rust-lld: error: undefined hidden symbol: anon.36d764f35bd352b3351c6ec24b65957a.1.llvm.3627406771655004948
+          >>> referenced by 03dvbulp51gt25lvmyywnq9nf
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.03dvbulp51gt25lvmyywnq9nf.rcgu.o:(core::str::pattern::simd_contains::_$u7b$$u7b$closure$u7d$$u7d$::hb14fae688f291ad9)
+          >>> referenced by 0blrv74vh1jc1u6tcfroeg56n
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.0blrv74vh1jc1u6tcfroeg56n.rcgu.o:(core::str::pattern::simd_contains::_$u7b$$u7b$closure$u7d$$u7d$::hb14fae688f291ad9)
+          >>> referenced by 0s5pr714y259ldxtlg4mdheef
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.0s5pr714y259ldxtlg4mdheef.rcgu.o:(core::str::pattern::simd_contains::_$u7b$$u7b$closure$u7d$$u7d$::hb14fae688f291ad9)
+          >>> referenced 117 more times
+          
+          rust-lld: error: undefined hidden symbol: anon.c8648b58f3eee6e0bee2b5af79a1b86d.3.llvm.2751769074007988156
+          >>> referenced by 000irhau2or5eq6vu9jhssoh7
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.000irhau2or5eq6vu9jhssoh7.rcgu.o:(l7r_guard::guards::scratch_sweep_hooks::disk::df::h190c7d1f87947797)
+          >>> referenced by 000irhau2or5eq6vu9jhssoh7
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.000irhau2or5eq6vu9jhssoh7.rcgu.o:(l7r_guard::guards::scratch_sweep_hooks::disk::free::hbaaaaa307928c716)
+          >>> referenced by 0blrv74vh1jc1u6tcfroeg56n
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.0blrv74vh1jc1u6tcfroeg56n.rcgu.o:(l7r_guard::guards::clone_sync_hooks::tests::git::h1cb753c4a30279b9)
+          >>> referenced 101 more times
+          
+          rust-lld: error: undefined hidden symbol: anon.cc7fe3137d841eb387fe44b1415491ef.4.llvm.11163604744306217740
+          >>> referenced by 0blrv74vh1jc1u6tcfroeg56n
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.0blrv74vh1jc1u6tcfroeg56n.rcgu.o:(l7r_guard::guards::clone_sync_hooks::tests::World::new::h29e6e74dfb1cd8ab (.llvm.6463778400477434510))
+          >>> referenced by el15jjz1zqn80x52k8fzekg32
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.el15jjz1zqn80x52k8fzekg32.rcgu.o:(l7r_guard::guards::scratch_sweep_hooks::start::h130f259918061f6a)
+          >>> referenced by eeeaif7njxegeamy8r43uo1pg
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.eeeaif7njxegeamy8r43uo1pg.rcgu.o:(l7r_guard::guards::scratch_sweep_hooks::tests::a_day_passes_between_sweeps_and_one_sweep_holds_the_lock::hcb2748ed19dd9b61)
+          >>> referenced 6 more times
+          
+          rust-lld: error: undefined hidden symbol: anon.d1597a9c5c2b9021f9e305faf924f597.5.llvm.2017882819534920702
+          >>> referenced by 16ahr4b1w0gv4s04ok2j6bsmu
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.16ahr4b1w0gv4s04ok2j6bsmu.rcgu.o:(l7r_guard::guards::clone_sync_hooks::solo::tests::fake::h35299315dca29248)
+          >>> referenced by 0blrv74vh1jc1u6tcfroeg56n
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.0blrv74vh1jc1u6tcfroeg56n.rcgu.o:(l7r_guard::guards::clone_sync_hooks::tests::World::new::h29e6e74dfb1cd8ab (.llvm.6463778400477434510))
+          >>> referenced by 0s5pr714y259ldxtlg4mdheef
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.0s5pr714y259ldxtlg4mdheef.rcgu.o:(l7r_guard::guards::pair_hooks::tests::Fixture::new::hd58464cac46ee0ff)
+          >>> referenced 378 more times
+          
+          rust-lld: error: undefined hidden symbol: anon.3eccccfbe8e3c63baba6a1bc0cab37f6.7.llvm.9995559262620451236
+          >>> referenced by 000irhau2or5eq6vu9jhssoh7
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.000irhau2or5eq6vu9jhssoh7.rcgu.o:(l7r_guard::guards::scratch_sweep_hooks::disk::floor::h35878db00ba78ec2)
+          >>> referenced by 000irhau2or5eq6vu9jhssoh7
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.000irhau2or5eq6vu9jhssoh7.rcgu.o:(l7r_guard::guards::scratch_sweep_hooks::disk::landed::hb7ffec5daa9eb366)
+          >>> referenced by eyuz81zho54k0kfricojm9g0v
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.eyuz81zho54k0kfricojm9g0v.rcgu.o:(l7r_guard::guards::scratch_sweep_hooks::sweep::aged::h11767c2dc375379e)
+          >>> referenced 52 more times
+          
+          rust-lld: error: undefined hidden symbol: anon.5aa7779e23cbc19a8669324254833af9.18.llvm.17690437002059707703
+          >>> referenced by 000irhau2or5eq6vu9jhssoh7
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.000irhau2or5eq6vu9jhssoh7.rcgu.o:(l7r_guard::guards::scratch_sweep_hooks::disk::floor::h35878db00ba78ec2)
+          >>> referenced by 0s5pr714y259ldxtlg4mdheef
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.0s5pr714y259ldxtlg4mdheef.rcgu.o:(l7r_guard::guards::pair_hooks::tests::Fixture::ruling::he4a85cdd9207ced0 (.llvm.2096393172184911307))
+          >>> referenced by 01kl7wlcdpla0coobig11wd8d
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.01kl7wlcdpla0coobig11wd8d.rcgu.o:(l7r_guard::guards::context_cap_hooks::tests::the_context_is_the_last_assistant_rows_usage::h4d3db5065738da63)
+          >>> referenced 47 more times
+          
+          rust-lld: error: undefined hidden symbol: anon.eada83d6ae8605453aa2bae5571f49d8.3.llvm.16988687939680622867
+          >>> referenced by 0s5pr714y259ldxtlg4mdheef
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.0s5pr714y259ldxtlg4mdheef.rcgu.o:(l7r_guard::guards::pair_hooks::tests::Fixture::new::hd58464cac46ee0ff)
+          >>> referenced by 000irhau2or5eq6vu9jhssoh7
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.000irhau2or5eq6vu9jhssoh7.rcgu.o:(l7r_guard::guards::scratch_sweep_hooks::disk::landed::hb7ffec5daa9eb366)
+          >>> referenced by 000irhau2or5eq6vu9jhssoh7
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.000irhau2or5eq6vu9jhssoh7.rcgu.o:(l7r_guard::guards::scratch_sweep_hooks::disk::landed::hb7ffec5daa9eb366)
+          >>> referenced 760 more times
+          
+          rust-lld: error: undefined hidden symbol: anon.272e08a801a779b8a3b13ae4037ed583.33.llvm.315937796648361257
+          >>> referenced by 000irhau2or5eq6vu9jhssoh7
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.000irhau2or5eq6vu9jhssoh7.rcgu.o:(l7r_guard::guards::scratch_sweep_hooks::disk::floor::h35878db00ba78ec2)
+          >>> referenced by eyuz81zho54k0kfricojm9g0v
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.eyuz81zho54k0kfricojm9g0v.rcgu.o:(l7r_guard::guards::scratch_sweep_hooks::sweep::budgeted::hc9c14895c1e807e0)
+          >>> referenced by el15jjz1zqn80x52k8fzekg32
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.el15jjz1zqn80x52k8fzekg32.rcgu.o:(l7r_guard::guards::scratch_sweep_hooks::report::hc4412a39ec5319fe)
+          >>> referenced 3 more times
+          
+          rust-lld: error: undefined hidden symbol: anon.5aa7779e23cbc19a8669324254833af9.36.llvm.17690437002059707703
+          >>> referenced by 000irhau2or5eq6vu9jhssoh7
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.000irhau2or5eq6vu9jhssoh7.rcgu.o:(l7r_guard::guards::scratch_sweep_hooks::disk::landed::hb7ffec5daa9eb366)
+          >>> referenced by exo86fiuk14ak6r59w41l94j7
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.exo86fiuk14ak6r59w41l94j7.rcgu.o:(serde_json::lexical::bhcomp::bhcomp::h365b945efa02f403)
+          >>> referenced by exo86fiuk14ak6r59w41l94j7
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.exo86fiuk14ak6r59w41l94j7.rcgu.o:(serde_json::lexical::bhcomp::bhcomp::h68b48c940cf2eace)
+          >>> referenced 28 more times
+          
+          rust-lld: error: undefined hidden symbol: core::ptr::drop_in_place$LT$std..sys..pal..unix..fd..FileDesc$GT$::h19bc00f8b9e624cc (.llvm.9995559262620451236)
+          >>> referenced by 0wpvgtu6avr9kpp1iu2yi75li
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.0wpvgtu6avr9kpp1iu2yi75li.rcgu.o:(l7r_guard::guards::engine_freeze_hooks::review_tree::h0e5ac99f63590ebe)
+          >>> referenced by 0wpvgtu6avr9kpp1iu2yi75li
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.0wpvgtu6avr9kpp1iu2yi75li.rcgu.o:(l7r_guard::guards::engine_freeze_hooks::review_tree::h0e5ac99f63590ebe)
+          >>> referenced by 0wpvgtu6avr9kpp1iu2yi75li
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.0wpvgtu6avr9kpp1iu2yi75li.rcgu.o:(l7r_guard::guards::engine_freeze_hooks::review_tree::h0e5ac99f63590ebe)
+          >>> referenced 73 more times
+          
+          rust-lld: error: undefined hidden symbol: anon.3eccccfbe8e3c63baba6a1bc0cab37f6.11.llvm.9995559262620451236
+          >>> referenced by 0wpvgtu6avr9kpp1iu2yi75li
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.0wpvgtu6avr9kpp1iu2yi75li.rcgu.o:(l7r_guard::guards::engine_freeze_hooks::review_tree::h0e5ac99f63590ebe)
+          >>> referenced by an1fz5ay02dtu44qos4g3ch79
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.an1fz5ay02dtu44qos4g3ch79.rcgu.o:(l7r_guard::guards::context_cap_hooks::split::code_builder::h0283abee1c082985)
+          >>> referenced by 5xebgudas20geaw7aufd84tfc
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.5xebgudas20geaw7aufd84tfc.rcgu.o:(l7r_guard::guards::wakeup_hooks::read::h1fb912917bd79079)
+          
+          rust-lld: error: undefined hidden symbol: core::ptr::drop_in_place$LT$l7r_shared..protocol..Answer$GT$::hdd7e06febef7e9bb (.llvm.9995559262620451236)
+          >>> referenced by 156yf0d3s2lj21k6zq42r14b9
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.156yf0d3s2lj21k6zq42r14b9.rcgu.o:(l7r_guard::guards::agent_model_hooks::tests::a_dispatch_with_no_model_and_no_file_is_refused_with_the_rule::h70655de06a41afef)
+          >>> referenced by 156yf0d3s2lj21k6zq42r14b9
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.156yf0d3s2lj21k6zq42r14b9.rcgu.o:(l7r_guard::guards::agent_model_hooks::tests::a_dispatch_with_no_model_and_no_file_is_refused_with_the_rule::h70655de06a41afef)
+          >>> referenced by 156yf0d3s2lj21k6zq42r14b9
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.156yf0d3s2lj21k6zq42r14b9.rcgu.o:(l7r_guard::guards::agent_model_hooks::tests::a_dispatch_with_no_model_and_no_file_is_refused_with_the_rule::h70655de06a41afef)
+          >>> referenced 956 more times
+          
+          rust-lld: error: undefined hidden symbol: anon.5aa7779e23cbc19a8669324254833af9.37.llvm.17690437002059707703
+          >>> referenced by 0blrv74vh1jc1u6tcfroeg56n
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.0blrv74vh1jc1u6tcfroeg56n.rcgu.o:(l7r_guard::guards::clone_sync_hooks::tests::a_parked_background_job_shares_its_parkers_clone::hc10f831f43c89d4e)
+          >>> referenced by exo86fiuk14ak6r59w41l94j7
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.exo86fiuk14ak6r59w41l94j7.rcgu.o:(serde_json::lexical::bhcomp::bhcomp::h365b945efa02f403)
+          >>> referenced by exo86fiuk14ak6r59w41l94j7
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.exo86fiuk14ak6r59w41l94j7.rcgu.o:(serde_json::lexical::bhcomp::bhcomp::h68b48c940cf2eace)
+          
+          rust-lld: error: undefined hidden symbol: anon.5aa7779e23cbc19a8669324254833af9.52.llvm.17690437002059707703
+          >>> referenced by eyuz81zho54k0kfricojm9g0v
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.eyuz81zho54k0kfricojm9g0v.rcgu.o:(l7r_guard::guards::scratch_sweep_hooks::sweep::aged::h11767c2dc375379e)
+          >>> referenced by eyuz81zho54k0kfricojm9g0v
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.eyuz81zho54k0kfricojm9g0v.rcgu.o:(l7r_guard::guards::scratch_sweep_hooks::sweep::targets::hcc2f7f3016a63fec)
+          >>> referenced by eyuz81zho54k0kfricojm9g0v
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.eyuz81zho54k0kfricojm9g0v.rcgu.o:(l7r_guard::guards::scratch_sweep_hooks::sweep::clean_trees::hb8fac9b7c80fd680)
+          >>> referenced 41 more times
+          
+          rust-lld: error: undefined hidden symbol: anon.6a2436f8853089277f040925df075750.6.llvm.5316606483455796108
+          >>> referenced by f4nhbeboatymqkocid0edgrcf
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.f4nhbeboatymqkocid0edgrcf.rcgu.o:(l7r_guard::guards::guard_file_hooks::held::hb38bea6833b881bb)
+          >>> referenced by c883enwuuio0i4cn71w97n87w
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.c883enwuuio0i4cn71w97n87w.rcgu.o:(_$LT$F$u20$as$u20$fancy_regex..replacer..Replacer$GT$::replace_append::haa361a1f4689b894)
+          >>> referenced by a51em7zukk4g32lj3mtlblls9
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.a51em7zukk4g32lj3mtlblls9.rcgu.o:(l7r_guard::suite_tools::deps::Tree::text::h14ef880d345b393e)
+          >>> referenced 5 more times
+          
+          rust-lld: error: undefined hidden symbol: anon.c2fd1cec698812f717a2888706882804.7.llvm.13914197800218707722
+          >>> referenced by e8tro3bg2h6sa3id8hczy53tk
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.e8tro3bg2h6sa3id8hczy53tk.rcgu.o:(l7r_guard::guards::ledger_hooks::commit_root::h8a0ca10bc6bdd382)
+          
+          rust-lld: error: undefined hidden symbol: anon.5aa7779e23cbc19a8669324254833af9.19.llvm.17690437002059707703
+          >>> referenced by e36uwucrdl02ekhclike8w7ri
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.e36uwucrdl02ekhclike8w7ri.rcgu.o:(std::sync::mpmc::zero::Channel$LT$T$GT$::recv::hb4b94a521ce391f4)
+          >>> referenced by e36uwucrdl02ekhclike8w7ri
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.e36uwucrdl02ekhclike8w7ri.rcgu.o:(std::sync::mpmc::zero::Channel$LT$T$GT$::recv::hbc191e0beebde837)
+          >>> referenced by e36uwucrdl02ekhclike8w7ri
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.e36uwucrdl02ekhclike8w7ri.rcgu.o:(std::sync::mpmc::zero::Channel$LT$T$GT$::send::h556ee478b3a8efe3)
+          >>> referenced 4 more times
+          
+          rust-lld: error: undefined hidden symbol: anon.c2fd1cec698812f717a2888706882804.1.llvm.13914197800218707722
+          >>> referenced by e8tro3bg2h6sa3id8hczy53tk
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.e8tro3bg2h6sa3id8hczy53tk.rcgu.o:(l7r_guard::guards::ledger_hooks::commit_root::h8a0ca10bc6bdd382)
+          
+          rust-lld: error: undefined hidden symbol: anon.c8648b58f3eee6e0bee2b5af79a1b86d.0.llvm.2751769074007988156
+          >>> referenced by d7b6g3243kf36czvbjrj0k51s
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.d7b6g3243kf36czvbjrj0k51s.rcgu.o:(core::slice::sort::unstable::quicksort::quicksort::hcbdafa89028241ff)
+          >>> referenced by d7b6g3243kf36czvbjrj0k51s
+          >>>               /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9.d7b6g3243kf36czvbjrj0k51s.rcgu.o:(core::slice::sort::unstable::quicksort::quicksort::hd071022dac729657)
+          
+          rust-lld: error: too many errors emitted, stopping now (use --error-limit=0 to see all errors)
+          collect2: error: ld returned 1 exit status
+          
+
+error: could not compile `l7r_guard` (lib test) due to 1 previous error
+prewarm: 33 crate(s) whose build moved since 6809bde8be26bafad199b64082a8f06398bd4083
+prewarm: rust/guard/shared - its test build is warm (18.7 s)
+prewarm: rust/browser - its test build is warm (3.5 s)
+prewarm: rust/embed - cut short, its slot given back
+prewarm: rust/embed - cut short, its slot given back
+prewarm: rust/embed - cut short, its slot given back
+prewarm: rust/embed - cut short, its slot given back
+prewarm: rust/embed - its test build is warm (27.4 s)
+prewarm: rust/gate/crates/core - its test build is warm (5.6 s)
+prewarm: rust/guard - cut short, its slot given back
+prewarm: rust/guard - cut short, its slot given back
+prewarm: rust/guard - cargo test --no-run exited 101; left to the builder's own run, which says why
+prewarm: rust/gate/crates/author - its test build is warm (5.6 s)
+prewarm: rust/gate/crates/diffrun - its test build is warm (6.6 s)
+prewarm: rust/gate/crates/downloads - its test build is warm (4.0 s)
+prewarm: rust/gate/crates/pool - its test build is warm (4.0 s)
+prewarm: rust/gate/crates/research - its test build is warm (14.3 s)
+prewarm: rust/gate/crates/tree - its test build is warm (3.6 s)
+prewarm: rust/gate/crates/plan - its test build is warm (5.5 s)
+prewarm: rust/gate/crates/registry - its test build is warm (4.5 s)
+prewarm: rust/gate/crates/reviews - its test build is warm (20.4 s)
+prewarm: rust/gate/crates/rustc - its test build is warm (7.6 s)
+prewarm: rust/gate/crates/archive - its test build is warm (15.2 s)
+prewarm: rust/gate/crates/owed - its test build is warm (12.1 s)
+prewarm: rust/gate/crates/pages - its test build is warm (5.0 s)
+prewarm: rust/gate/crates/semantic - its test build is warm (6.6 s)
+prewarm: rust/gate/crates/uncited - its test build is warm (5.1 s)
+prewarm: rust/mode_a - its test build is warm (38.5 s)
+prewarm: rust/gate/crates/bundle - its test build is warm (14.7 s)
+prewarm: rust/gate/crates/cohort - its test build is warm (7.1 s)
+prewarm: rust/gate/crates/trials - cut short, its slot given back
+prewarm: a run of the checks started in this tree and has the build from here - 10 crate(s) left to it

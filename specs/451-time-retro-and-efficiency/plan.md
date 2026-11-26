@@ -4219,31 +4219,50 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T336 (<why: the finding or measurement that files it>)
+### T336 (a pool tree's first test build after its pre-warm failed to link, `rust-lld: undefined hidden symbol`, twice on code that was right (2026-11-26, `diagram-backlog-t270`, found by 451 T299's builder); the cause is proved by the measurement under `dev/measurements/2026-11-26/prewarm-link/`: a test build killed past rustc's front end, as the pre-warm's cut killed it)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: two fixes the measurement supports. The pre-warm never cuts a build in flight (`rust/gate/crates/rustc/src/rustc/prewarm.rs`), and the gate's test build heals this one linker error once (`rust/gate/crates/rustc/src/rustc/stale.rs`, called from `stepped` in `rustc.rs`).
+  - **The cause, as measured** (the measuring builder, 2026-11-26, method: in the pool tree `diagram-backlog-t270`, `cargo test --no-run --quiet --manifest-path rust/guard/Cargo.toml`, the pre-warm's own words, one cargo at a time under a build slot, eight guard source files changed before each try, the build left to finish or killed at a drawn moment, then built once more; `t336-harness.py`, its rows in `t336-results.jsonl` and `t336-results-late.jsonl`, tabulated by `t336-tabulate.py`). Of 54 tries in which a build was cut, 29 then failed to link; of 20 tries left to finish, 0 did. By signal: SIGTERM 16 of 31, SIGKILL 7 of 10, SIGINT 6 of 13. Every failure followed a cut that had written into the crate's FINISHED incremental session (same inode, new size or time), and none of the 11 tries whose cuts wrote nothing failed, and cuts in the first 3 s of an 11 s build never failed, measured 2026-11-26 (the same rows). Shown: a cut build changes files of the finished session in place. Inferred, not read in rustc: that the working session's files are hard links of the finished one's. The day's own record shows the sequence with no reproduction: `rust/guard` cut by the pre-warm at 16.2 s and again at 2.5 s, then built by the pre-warm itself, exit 101 with the link error, before any real run, observed 2026-11-26, method: the tree's `prewarm.log` of that day, kept as `t336-prewarm-2026-11-26.log`.
+  - **Fix 1: the pre-warm yields between crates only.** `build`'s loop no longer kills its cargo: a real run starting in the tree, the last slot taken or the ceiling passing while a crate builds is noted with its time and the build runs to its end, its slot held until then. `run`'s loop head, before the next crate, ends the pre-warm on a real run or the ceiling and starts nothing while no slot is spare, as before. `End::Cut` and the 130 code go; the crate's line in `prewarm.log` says the seconds it ran on past the moment the first form would have cut it. Why no narrower rule: any kill past the front end can break the session, by any of the three signals, and no safe moment is visible from outside the rustc.
+  - **A reading of the brief, said.** The brief's sentence has the pre-warm END before the next crate on "a real run in its tree or no spare slot". It ends on a real run; on no spare slot it WAITS at the loop's head, as T316 built it and as the handoff recommends, because ending there would leave every later crate cold whenever two trees compile for a moment. Nothing waits behind a pre-warm that holds no slot.
+  - **What never cutting costs, accepted.** A real run started in the tree waits on cargo's lock of the build directory, and a compile of another tree can wait in the slots' queue, for the REST OF ONE CRATE, where T316's promise was a poll. Of the 160 crates pre-warmed on 2026-11-26 the median took 2.0 s, nine in ten under 13.0 s, and the longest 82.7 s (`rust/mode_a`), measured 2026-11-26 (method: every `prewarm` `Phase` line of that day with code 0, the measuring builder's count). Chosen by this task's builders on the measurement, at the brief's direction. The alternatives priced, measured 2026-11-26 (the measuring builder's table in the handoff and `t336-inc0-fresh.log`): cut, then drop the crate's incremental directories (a 22 to 44 s rebuild of `rust/guard` from nothing against its 11 s incremental build: more than the pre-warm buys), give the slot back and keep compiling (a third compile at once, the memory peak the slots exist to stop), heal only (every cut still risks a from-nothing rebuild: 29 of 54), `CARGO_INCREMENTAL=0` for the pre-warm (0 of 20 broke a session, but it is another artifact set: 36.2 s to build, and the real build after it still compiled 12.2 s against 0.08 s for a fresh one).
+  - **Fix 2: the test build heals this link error once.** `stepped`'s `--no-run` build is now one call, `stale::built`: where cargo fails and its words carry `undefined hidden symbol`, it reads the units the linker names (`<crate>-<hash>.<unit>.rcgu.o`, as a path under `<profile>/deps/` or as a member of an rlib), and under cargo's own `.cargo-lock` of that build directory drops EVERY incremental directory of each named crate (`<profile>/incremental/<crate>-*`) and each named build's fingerprint, then asks the build once more. It never asks a third: the second build's answer is the crate's, under a line saying what was dropped (a heal that linked says its line on the gate's own stderr, since `stepped` goes on to the run and keeps nothing a green build said). Where the linker names nothing under the tree's target directory, names a crate with no incremental directory, or another cargo holds the lock past 120 s (GUESS, the knob `LOCK_S`), nothing is dropped and the failure comes back with the repair named.
+  - **The scope of the drop, and its evidence.** The whole crate's incremental directories, not the one holding the named unit: all 29 failing tries built green once the guard's incremental directories were moved away, measured 2026-11-26 (the harness's repair step, 22 to 44 s a rebuild), while the one-directory removal healed once on the day (T299's builder) and was not measured. The launcher's retry (T142) drops the one directory holding the unit; this one is wider on purpose and says so in `stale.rs`. A fingerprint is dropped only beside an incremental directory: alone it would rebuild from the same session.
+  - **Counted.** A heal writes one `Phase` line, step `link-heal`, with the second build's code, spanning the drop and that build, inside the `build` line's span, so its seconds stay booked as compile and its lines can be counted in `.git/l7r-events/`. `columns::category` names no category for it.
+  - **What of T146 remains.** This is T146's `make rust-test` half. Left to T146: the guard launcher's own incremental build (`scripts/hooks/l7r-guard.sh`). The coverage build's link is T206's.
+  - **Red first, and the fix run live**: item 9.
+  - **The record**: `dev/audits/builder-prewarm.md` (the cut's removal, the accepted cost, the falsifier and threshold restated), the `rustc` row of `rust/gate/CLAUDE.md`, `make builder-tree`'s help line, the headers of `prewarm.rs`, `stale.rs`, `phase.rs`, `slot.rs` and `task/src/builder_tree.rs`, one line of `scripts/container/builder-brief.md`.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a real run starting in the tree mid-crate does not cut the crate: it finishes, then the pre-warm ends | pinned by `a_real_run_in_its_tree_ends_it_once_the_build_in_flight_is_done` | n/a: tooling | none | n/a |
+| the last slot taken mid-crate does not cut the crate, and the next crate waits for a spare slot | pinned by `it_starts_a_crate_only_while_a_slot_is_spare_and_never_cuts_the_one_in_flight` | n/a: tooling | none | n/a |
+| the ceiling passing mid-crate ends the pre-warm after that crate | pinned by `the_ceiling_passing_mid_build_ends_it_after_that_build` | n/a: tooling | none | n/a |
+| a test build whose link fails on `undefined hidden symbol` drops the named crates' incremental directories and the named fingerprints, builds once more and writes a `link-heal` line | pinned by `a_link_on_a_mixed_session_drops_the_named_crates_sessions_and_builds_once_more` | n/a: tooling | none | n/a |
+| a second failed link is the answer: no third build | pinned by `a_second_failed_link_is_the_builds_answer_and_no_third_build_is_asked` | n/a: tooling | none | n/a |
+| any other failure, a link naming nothing of the tree or no incremental directory, and a held build directory drop nothing | pinned by `any_other_result_and_a_link_that_names_nothing_of_the_tree_come_back_unbuilt` | n/a: tooling | none | n/a |
 
 ### T336 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder handed a warm pool tree never meets a test build red on a link its own code did not cause: the pre-warm cannot leave one, and a build killed any other way is healed by the next `make rust-test` itself, once, and said.
+2. **The constraints.** T336's line in tasks.md. The brief: fix 1 yields between crates only and a crate once started runs to its end, its cost stated; fix 2 heals this exact linker error once, never loops, logs a `link-heal` `Phase` line, and is one call in `stepped` (T347 edits that function next); red-first tests for both; one live confirmation of at most 10 tries; the measurement not repeated; the first tier, then real coverage for the changed crate.
+3. **Where each comes from.** G: T316's line carries the GM's question the pre-warm answers; nothing here changes what he asked for. O: the measurement of 2026-11-26 in the Approach and the handoff `T336-measure.md`.
+4. **Do they describe the world here?** Yes, measured 2026-11-26 (the Approach's first bullet): 29 of 54 cut tries failed to link in this tree and 0 of 20 uncut.
+5. **The order.** After T316 (the pre-warm) and T142 (the launcher's retry this mirrors); before T347, which edits `stepped` next, and before T302. Pool handouts carry `L7R_PREWARM=0` until this lands.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/rustc rust/gate/crates/task"` and `make crate-checks CRATE="rust/gate/crates/rustc"` here (the first tier and the changed crate's coverage; the full gate runs once in the clone over the batch). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-26 (method: `prewarm.rs` put back as HEAD holds it and `stepped`'s build asked through the plain `cargo` call, the new tests in place, `make rust-test CRATE=rust/gate/crates/rustc FRESH=1`): `101 passed; 5 failed` - the three pre-warm tests, each at the look that finds a `prewarm` line already written while the build should still run, and the two `stale` tests that go through `stepped` (one build asked, exit 101); the third `stale` test drives `healed` alone and passed. Both restored: `106 passed; 0 failed`, lint and format clean, measured 2026-11-26 (`make builder-checks CRATE="rust/gate/crates/rustc rust/gate/crates/task"`, 9.6 s wall; `task`: `99 passed`). COVERAGE, measured 2026-11-26 (`make crate-checks CRATE="rust/gate/crates/rustc"`): clean, 6.7 s wall, on its third run, the first two (13.5 s and 6.7 s) having each named one line of `stale.rs` no test reached, which the first tier had passed - a closure in a function generic over its second build, since made a plain `&mut dyn FnMut`. THE AUDIT REGISTER, observed 2026-11-26 (`l7r-gate check audit-register --delta`): the delta's one mechanism, `LOCK_S`, named by the pre-warm's entry. LIVE, measured 2026-11-26 (method: `t336-live.py run 5 336 HEAD~2` in this tree with both fixes built - the real `l7r-gate rust prewarm --since HEAD~2`, which moves `rust/guard` alone, over changed guard sources, and `make rust-test CRATE=rust/guard` started 0.55 to 7.36 s into the guard's rustc, a rustc of the guard alive at that moment each time, its rows in `t336-live-results.jsonl`, load average 4 to 8): 5 of 5 pre-warms finished the crate, exit 0 in 10.5 to 11.0 s, their lines saying 3.0 to 10.0 s of it ran on after the run started - the moment the first form killed it - and no build was cut, and the real run passed 5 of 5 with no link error (one built and ran the suite, 15.7 s, and four found their kept result and built nothing, 2.1 to 3.0 s, so the wait on cargo's lock was met once). A last `make rust-test CRATE=rust/guard FRESH=1` linked and passed, `542 passed`, measured 2026-11-26 (18.7 s wall), with no guard source left changed. NOT run live: the heal on a really broken cache (T362).
+10. **Before moving a constant.** n/a: no constant moves. New knobs, each labeled GUESS beside it: `LOCK_S` = 120 s (`stale.rs`: the wait for cargo's lock of a build directory, past the longest crate measured, 82.7 s) and, in `dev/audits/builder-prewarm.md`, the bounds that reopen the pre-warm (one real run's wait past 90 s behind a pre-warm's crate, or more than one in ten past 13 s).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect of a map: no map changes. The wrong outcome fixed: a test build red on code that was right, twice on 2026-11-26 for T299's builder, until an incremental directory was removed by hand.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+- `make task-time` does not count a heal: the `link-heal` `Phase` lines are in the event log and `columns::category` names no category for them. Visible effect: the report shows neither how often a heal ran nor its seconds apart from the compile that holds them; they are read from the raw lines of `.git/l7r-events/`. Not fixed here: it is the readers' work in the `measure` crate, a job of its own beside two fixes. Filed as T361; lands before T302.
+- The heal has not been run on a really broken cache. Visible effect: should the linker's real words read otherwise than the fixture's (which follow the kept example, `dev/measurements/2026-11-26/prewarm-link/t336-example-link-failure.err`), a builder would get the failure back with the repair named instead of a healed build. Not fixed here: breaking a cache takes cut builds, a run that loads the machine, and this task's one live run was fix 1's by its brief. Filed as T362; lands before T302.
+
+**Performance work?** yes: a measurement and a fix of a performance mechanism, counted as performance work by the GM's words of 2026-11-20 (request.md "on measurement work": *"I would also like for this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first."*); not an engine-speed task, so `docs/performance-checklist.md` does not apply.
 
 
 ### T343 (<why: the finding or measurement that files it>)
@@ -4883,6 +4902,59 @@ engine speed, so no checklist.
 |---|---|---|---|---|
 
 ### T360 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T361 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T361 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T362 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T362 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

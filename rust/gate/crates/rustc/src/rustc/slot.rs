@@ -183,10 +183,11 @@ fn holders(slots: &Slots) -> String {
         .join("; ")
 }
 
-/// Is a slot free at this instant (feature 451 T316)? Looked at, never held and never signed: what the pre-warm asks while it holds
-/// one itself (`prewarm.rs`) - with none spare the next compile of any tree would wait behind it, so it lets its own go. Every
-/// tree's holders are seen, whatever slot code they run: the lock is the file's. The look holds the slot for the length of one
-/// `flock` start, so a call looking at that instant may wait a poll more.
+/// Is a slot free at this instant (feature 451 T316)? Looked at, never held and never signed: what the pre-warm asks before it
+/// starts a crate, and while it holds a slot itself (`prewarm.rs`) - with none spare it starts no further crate, the one in flight
+/// finished first (feature 451 T336: a build is never cut). Every tree's holders are seen, whatever slot code they run: the lock
+/// is the file's. The look holds the slot for the length of one `flock` start, so a call looking at that instant may wait a poll
+/// more.
 pub(super) fn spare(slots: &Slots) -> bool {
     (0..slots.count).any(|i| {
         std::fs::OpenOptions::new()

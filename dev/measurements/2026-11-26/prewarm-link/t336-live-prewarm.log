@@ -1,0 +1,2 @@
+prewarm: 1 crate(s) whose build moved since HEAD~2
+prewarm: rust/guard - its test build is warm (10.5 s, 7.0 s of it finishing after a run started, no slot was spare or the ceiling passed)

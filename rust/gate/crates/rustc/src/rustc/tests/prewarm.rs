@@ -1,6 +1,7 @@
 //! The pre-warm of a pool tree (feature 451 T316): the test builds of the crates the commits since a handout moved, asked as a real
-//! run asks them; ended by a real run in its tree, cut short once no slot is spare, never in the slots' queue, off at
-//! `L7R_PREWARM=0`, one a tree, and exit 0 whatever cargo said.
+//! run asks them; ended by a real run in its tree and starting nothing while no slot is spare, each only once the build in flight
+//! is done - a build is never cut (feature 451 T336) - never in the slots' queue, off at `L7R_PREWARM=0`, one a tree, and exit 0
+//! whatever cargo said.
 
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -128,25 +129,38 @@ fn the_moved_crates_test_builds_are_asked_as_a_real_run_asks_them_a_crate_before
     );
 }
 
+/// The pre-warm's build in flight has gone on for a while with nothing written of it: no phase line, so no cut.
+fn still_building(root: &Path) {
+    std::thread::sleep(Duration::from_millis(150));
+    assert!(codes(root).is_empty(), "{:?}", codes(root));
+}
+
 #[test]
-fn a_real_run_in_its_tree_ends_it_at_once() {
+fn a_real_run_in_its_tree_ends_it_once_the_build_in_flight_is_done() {
     let (root, from) = moved_tree("a");
     let world = world_with(&root, SLOW);
     std::fs::write(world.target.join("slow"), "").unwrap();
-    let began = Instant::now();
     let done = std::thread::scope(|s| {
         let going = s.spawn(|| run(&world, &since(&from), &knobs(600_000)));
-        // cargo is in the first crate's build when a run of the checks joins the tree's record
+        // cargo is in the first crate's build when a run of the checks joins the tree's record: the build is not cut (a rustc
+        // killed mid-write leaves a session no later build links from, feature 451 T336)
         until_calls(&world, 1);
         stage(&world.target, 4242, me().start);
+        still_building(&root);
+        std::fs::remove_file(world.target.join("slow")).unwrap();
         going.join().unwrap()
     });
-    assert!(began.elapsed() < Duration::from_secs(120));
     assert_eq!(done.code, 0);
-    assert!(done.stdout.contains("prewarm: rust/a - cut short, its slot given back\nprewarm: a run of the checks started in this tree and has the build from here - 2 crate(s) left to it\n"), "{}", done.stdout);
-    // the build was killed, booked as cut, and the second crate never asked
+    let said = &done.stdout;
+    let after = " s of it finishing after a run started, no slot was spare or the ceiling passed)\nprewarm: a run of the checks started in this tree and has the build from here - 1 crate(s) left to it\n";
+    assert!(
+        said.contains("prewarm: rust/a - its test build is warm ("),
+        "{said}"
+    );
+    assert!(said.contains(after), "{said}");
+    // the build ended as cargo ended it, and the second crate was never asked
     assert_eq!(builds(&world).len(), 1);
-    assert_eq!(codes(&root), [130]);
+    assert_eq!(codes(&root), [0]);
     // and one started while a run is at work asks cargo nothing
     let again = run(&world, &since(&from), &knobs(600_000));
     let said = again.stdout;
@@ -156,8 +170,8 @@ fn a_real_run_in_its_tree_ends_it_at_once() {
 }
 
 #[test]
-fn it_holds_a_slot_only_while_another_is_spare_and_builds_the_crate_again_after() {
-    let (root, from) = moved_tree("b");
+fn it_starts_a_crate_only_while_a_slot_is_spare_and_never_cuts_the_one_in_flight() {
+    let (root, from) = moved_tree("a");
     let mut world = world_with(&root, SLOW);
     let slots = scratch("prewarm-slots");
     world.slots = Slots::at(slots.to_path_buf(), 2);
@@ -171,25 +185,54 @@ fn it_holds_a_slot_only_while_another_is_spare_and_builds_the_crate_again_after(
             signed.contains("pre-warm): cargo test --no-run"),
             "{signed}"
         );
-        // a real compile takes the last slot: the pre-warm's build is cut and its slot given back
+        // a real compile takes the last slot: the build in flight goes on, its slot held, and ends as cargo ends it
         let real = take(&world.slots, "a real run\n", &mut |_| {});
         assert!(real.hold.is_some() && real.waited.is_none());
+        still_building(&root);
+        assert!(!spare(&world.slots));
+        std::fs::remove_file(world.target.join("slow")).unwrap();
         let began = Instant::now();
-        while codes(&root).is_empty() || !spare(&world.slots) {
+        while codes(&root).is_empty() {
             assert!(began.elapsed().as_secs() < 60);
             std::thread::sleep(Duration::from_millis(5));
         }
-        // and while that compile lasts it asks cargo nothing more
-        std::fs::remove_file(world.target.join("slow")).unwrap();
+        // and while that compile lasts the next crate is not asked
         std::thread::sleep(Duration::from_millis(100));
         assert_eq!(builds(&world).len(), 1);
         drop(real);
         going.join().unwrap()
     });
     let said = done.stdout;
-    assert!(said.contains("prewarm: rust/b - cut short, its slot given back\nprewarm: rust/b - its test build is warm ("), "{said}");
+    let after = " s of it finishing after a run started, no slot was spare or the ceiling passed)\nprewarm: rust/b - its test build is warm (";
+    assert!(
+        said.contains(after) && !said.contains("cut short"),
+        "{said}"
+    );
     assert_eq!(builds(&world).len(), 2);
-    assert_eq!(codes(&root), [130, 0]);
+    assert_eq!(codes(&root), [0, 0]);
+}
+
+#[test]
+fn the_ceiling_passing_mid_build_ends_it_after_that_build() {
+    let (root, from) = moved_tree("a");
+    let world = world_with(&root, SLOW);
+    std::fs::write(world.target.join("slow"), "").unwrap();
+    let done = std::thread::scope(|s| {
+        let going = s.spawn(|| run(&world, &since(&from), &knobs(50)));
+        until_calls(&world, 1);
+        still_building(&root);
+        std::fs::remove_file(world.target.join("slow")).unwrap();
+        going.join().unwrap()
+    });
+    let said = done.stdout;
+    let stopped =
+        "prewarm: stopped at its ceiling of 0 s (L7R_PREWARM_CEILING) - 1 crate(s) not built";
+    assert!(
+        said.contains("prewarm: rust/a - its test build is warm ("),
+        "{said}"
+    );
+    assert!(said.contains(stopped), "{said}");
+    assert_eq!((builds(&world).len(), codes(&root)), (1, vec![0]));
 }
 
 #[test]

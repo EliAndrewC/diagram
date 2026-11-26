@@ -1,0 +1,3 @@
+"$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust test --crate "rust/guard"
+rust-checks: test unchanged on rust/guard - its last green result stands
+rust-checks: test clean on 1 crate(s)

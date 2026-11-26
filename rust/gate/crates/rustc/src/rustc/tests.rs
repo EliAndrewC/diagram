@@ -22,6 +22,7 @@ mod prewarm;
 mod runlock;
 mod side;
 mod slot;
+mod stale;
 mod times;
 
 /// `dirname` and `basename` as the shell's own functions: a fake's every `$(dirname "$0")` started the program, about a millisecond each,

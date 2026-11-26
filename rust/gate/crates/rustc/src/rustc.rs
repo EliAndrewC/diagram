@@ -30,6 +30,7 @@ mod prewarm;
 mod runlock;
 mod side;
 mod slot;
+mod stale;
 mod times;
 use cover::uncovered_each;
 #[cfg(test)]
@@ -502,7 +503,8 @@ fn stepped(world: &World, cmd: &str, manifest: &Path, formatting_check: bool, bu
         let words = test_args(cmd, manifest, true);
         let args: Vec<&str> = words.iter().map(String::as_str).collect();
         let began = std::time::SystemTime::now();
-        let built = cargo(world, &args, manifest, &[]);
+        // a link on a session a killed build left mixed is healed and asked once more (`stale.rs`, feature 451 T336)
+        let built = stale::built(world, &args, manifest);
         phase::wrote(world, "build", &[manifest], began, built.code);
         if built.code != 0 {
             return built;

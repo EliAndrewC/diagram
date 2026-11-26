@@ -83,6 +83,7 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
   another round (`dev/measurements/2026-11-26/plan-review-rounds/t308-results.md`). Do not write "do not file
   tasks" into a brief.
 - A builder's tree comes from `make builder-tree T=<task> [F=<feature>]` and nothing else: it prints the tree's path for the brief, `make land` releases it, and a hand `git worktree add` is refused (451 T285).
+- A warm handout's pre-warm no longer cuts a build (451 T336): it finishes the crate in flight and yields between crates, so hand trees out with it on (no `L7R_PREWARM=0`); a builder's first run can wait for the rest of one crate (median 2.0 s, longest measured 82.7 s), and a link failure after a killed build (`undefined hidden symbol`) is healed once by `make rust-test` itself.
 
 Why: of 97 builders briefed since 2026-11-24, a brief of 4 or more jobs handed off 52% of the time against 16-22% at 1-3 jobs;
 4 or more files edited, 39-45% against 22% at three or fewer; a brief that began with a measurement, 46% against 25%. A one-turn edit by the

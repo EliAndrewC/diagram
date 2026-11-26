@@ -9,13 +9,25 @@
 //!   build is the one a real run asks first (`stepped`, 449 T93's `binary_key`): `cargo test --no-run`, its words and environment from
 //!   the builder every cargo call of the checks uses (`cargo_call`), so the run then finds it fresh. Nothing is run and no result is
 //!   kept: a kept result is a real run's alone. The lint's build (clippy's own artifacts) and a coverage build are not warmed.
-//! - IT YIELDS. It is the one compile nobody waits on, so it holds a slot only while another is SPARE: it takes one only where one
-//!   is free at that instant (`slot::free_now`) and a second is free beside it (`slot::spare`), never waits in the slots' queue,
-//!   and looks every poll while its cargo runs - a real run of the checks in ITS tree (a live member of the run lock's record,
-//!   `runlock::busy`; the pre-warm joins none) ends it, that run having the build from there; and once no slot is spare - a compile
-//!   of any tree took the last - it kills its cargo, gives its slot back and tries the crate again when two are free. So the next
-//!   compile to start, of any tree and whatever slot code that tree runs, finds a slot: none waits behind a pre-warm for more than
-//!   a poll. With one slot on the machine it never builds. What cargo finished stays built.
+//! - IT YIELDS BETWEEN CRATES. It is the one compile nobody waits on, so it STARTS a crate only while a slot is SPARE: it takes one
+//!   only where one is free at that instant (`slot::free_now`) and a second is free beside it (`slot::spare`), and never waits in
+//!   the slots' queue. A real run of the checks in ITS tree (a live member of the run lock's record, `runlock::busy`; the pre-warm
+//!   joins none) ends it, that run having the build from there, and so does its ceiling; with no slot spare it starts nothing more
+//!   until two are free. With one slot on the machine it never builds.
+//! - IT NEVER CUTS A BUILD IN FLIGHT (feature 451 T336). The first form killed its cargo, and the rustc under it, the moment a real
+//!   run started or the last slot was taken. A test build killed while its rustc is past the front end can leave the crate's last
+//!   FINISHED incremental session - the one the next build starts from - written into, and every later link of that crate then
+//!   fails (`rust-lld: error: undefined hidden symbol ... .llvm.<n>`) until the crate's incremental directories are removed.
+//!   Measured 2026-11-26 on `rust/guard`: of 54 tries with a build cut, 29 then failed to link (SIGTERM 16 of 31, SIGKILL 7 of 10,
+//!   SIGINT 6 of 13) - each of them a cut that had changed files of the finished session in place, none a cut in the build's
+//!   first 3 s - and none of 20 tries left to finish did (`dev/measurements/2026-11-26/prewarm-link/`). (Inferred, not read in
+//!   rustc: the working session's files are hard links of the finished one's, written in place under the dev profile's
+//!   `opt-level = 2`.) No moment safe to kill at is visible from outside, so the crate in flight is always finished, its slot held
+//!   until then: a real run's cargo waits on cargo's own lock of the build directory for the rest of that one crate, and a compile
+//!   of another tree can wait in the slots' queue as long (of 160 crates pre-warmed on 2026-11-26 the median took 2.0 s, nine in
+//!   ten under 13.0 s, the longest, `rust/mode_a`, 82.7 s; the limitation accepted and the alternatives priced in
+//!   `dev/audits/builder-prewarm.md`). Do not bring the kill back to shorten that wait: a failed link costs its builder a
+//!   from-nothing rebuild (`stale.rs` heals it once), and the wait is bounded by one crate.
 //! - IT NEVER FAILS ANYTHING: nothing waits on it, it exits 0 whatever cargo said (a crate that does not build is the builder's own
 //!   run's to report), one pre-warm a tree at a time (`prewarm.lock` in the target directory), and it stops at its ceiling.
 //!   `L7R_PREWARM=0` is no pre-warm.
@@ -42,11 +54,9 @@ const CEILING: &str = "L7R_PREWARM_CEILING";
 /// THE CEILING (GUESS, a knob: `L7R_PREWARM_CEILING` seconds): fifteen minutes, the build slot's own ceiling - past the 4.6 to 5.7
 /// minutes a builder reads before its first edit, so a pre-warm nobody cut short is never left running under a tree for long.
 const CEILING_S: u64 = 900;
-/// How often it looks for a real run or for no slot spare (GUESS: the slot's and the run lock's own half second - the longest a real run's
-/// cargo call waits on the pre-warm's).
+/// How often it looks whether its cargo is done, and for a spare slot before it starts a crate (GUESS: the slot's and the run lock's
+/// own half second).
 const POLL: Duration = Duration::from_millis(500);
-/// The code a `Phase` line carries for a build cut short (a shell's own for an interrupted program).
-const CUT: i32 = 130;
 const USAGE: &str = "usage: l7r-gate rust prewarm --since <commit>\n";
 
 /// What a pre-warm reads the time by.
@@ -76,10 +86,11 @@ impl Knobs {
     }
 }
 
-/// How one crate's build ended: cargo's own exit, or cut short.
-enum End {
-    Built(i32),
-    Cut,
+/// How one crate's build ended: cargo's own exit, and how long it ran on after the moment the pre-warm would yield - a real run in
+/// its tree, no slot spare, the ceiling - where there was one (what never cutting a build costs, said on the crate's line).
+struct End {
+    code: i32,
+    past: Option<Duration>,
 }
 
 /// The machine has slots and none is free: the next compile to start would wait behind this one.
@@ -109,9 +120,10 @@ fn moved(world: &World, since: &str) -> Vec<PathBuf> {
     found.into_iter().map(|(_, m)| m).collect()
 }
 
-/// One crate's test build, under `hold` where the machine has slots: watched every poll, and cut short - cargo and what it started
-/// killed as one process group - once a real run starts in the tree, no slot is spare or the ceiling passes. Its `Phase` line
-/// is written either way.
+/// One crate's test build, under `hold` where the machine has slots, ALWAYS to its end (the module's "never cuts"): a real run
+/// starting in the tree, the last slot taken or the ceiling passing while it runs is noted, with the time, and the build goes on.
+/// Cargo is its own process group, so a signal sent to the pre-warm's group - a terminal's, a caller's timeout - does not reach
+/// a rustc mid-write either. Its `Phase` line carries cargo's own code.
 fn build(
     world: &World,
     manifest: &Path,
@@ -134,29 +146,27 @@ fn build(
         .stdout(Stdio::null())
         .process_group(0)
         .spawn();
-    let how = match started {
-        Err(_) => End::Built(127),
+    let mut asked: Option<Instant> = None;
+    let code = match started {
+        Err(_) => 127,
         Ok(mut child) => loop {
             if let Some(status) = child.try_wait().ok().flatten() {
-                break End::Built(status.code().unwrap_or(1));
+                break status.code().unwrap_or(1);
             }
-            if real_run(world, knobs) || crowded(world) || Instant::now() >= until {
-                let _ = Command::new("kill")
-                    .args(["-TERM", "--", &format!("-{}", child.id())])
-                    .status();
-                let _ = child.wait();
-                break End::Cut;
+            if asked.is_none()
+                && (real_run(world, knobs) || crowded(world) || Instant::now() >= until)
+            {
+                asked = Some(Instant::now());
             }
             std::thread::sleep(knobs.poll);
         },
     };
     drop(hold);
-    let code = match how {
-        End::Built(code) => code,
-        End::Cut => CUT,
-    };
     phase::wrote(world, STEP, &[manifest], began, code);
-    how
+    End {
+        code,
+        past: asked.map(|at| at.elapsed()),
+    }
 }
 
 fn said(stdout: String, code: i32) -> Reply {
@@ -223,24 +233,24 @@ pub(super) fn run(world: &World, args: &[String], knobs: &Knobs) -> Reply {
         }
         let began = Instant::now();
         let name = shown(world, &manifest);
-        match build(world, &manifest, knobs, hold, until) {
-            End::Built(0) => {
-                let secs = began.elapsed().as_secs_f64();
-                let _ = writeln!(
-                    out,
-                    "prewarm: {name} - its test build is warm ({secs:.1} s)"
-                );
-                todo.pop_front();
-            }
-            End::Built(code) => {
-                let _ = writeln!(out, "prewarm: {name} - cargo test --no-run exited {code}; left to the builder's own run, which says why");
-                todo.pop_front();
-            }
-            // the loop's head says why, or waits for a spare slot and builds the crate again
-            End::Cut => {
-                let _ = writeln!(out, "prewarm: {name} - cut short, its slot given back");
-            }
+        let end = build(world, &manifest, knobs, hold, until);
+        let secs = began.elapsed().as_secs_f64();
+        // what the loop's head then does - ends the pre-warm, or waits for a spare slot - it does after this crate, never during it
+        let past = end.past.map_or_else(String::new, |p| {
+            format!(
+                ", {:.1} s of it finishing after a run started, no slot was spare or the ceiling passed",
+                p.as_secs_f64()
+            )
+        });
+        if end.code == 0 {
+            let _ = writeln!(
+                out,
+                "prewarm: {name} - its test build is warm ({secs:.1} s{past})"
+            );
+        } else {
+            let _ = writeln!(out, "prewarm: {name} - cargo test --no-run exited {}; left to the builder's own run, which says why", end.code);
         }
+        todo.pop_front();
     }
     said(out, 0)
 }

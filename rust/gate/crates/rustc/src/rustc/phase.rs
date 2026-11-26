@@ -5,7 +5,9 @@
 //! (`cover.rs`), and a crate's `lint` and `format`. A kept result ran nothing and writes none; `dead`, `hamlet` and `test-times` write
 //! none either (no cargo; a stage run; a timing tool of its own). The readers book the `build` and `cover-build` spans as compile (T08).
 //! A cargo call that waited for a build slot writes its wait as `slot-wait` (feature 451 T284, `slot.rs`), which the readers book as
-//! waiting, ahead of the step whose span holds it.
+//! waiting, ahead of the step whose span holds it. A test build whose link was healed (feature 451 T336, `stale.rs`) writes the drop
+//! and its second build as `link-heal`, inside its `build` line's span: the readers book it to no category, so its seconds stay the
+//! build's and its lines are there to count.
 
 use std::path::Path;
 use std::time::SystemTime;

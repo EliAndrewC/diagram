@@ -2214,6 +2214,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T336 (a pool tree's first test build after its pre-warm failed to link, `rust-lld: undefined hidden symbol`, twice on code that was right (2026-11-26, `diagram-backlog-t270`, found by 451 T299's builder); the cause is proved by the measurement under `dev/measurements/2026-11-26/prewarm-link/`: a test build killed past rustc's front end, as the pre-warm's cut killed it)": {
+   "sha256": "b8b07d9110572c21eaed94b7595aee1b5f9180b3b60ca7eb08058cfb2e61b658",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T336 Approach (checklist part A)": {
+   "sha256": "00026bedcc46ee44d1ef4e2df1066be3145b36e1faf8dce03158fd1f443531de",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -28500,6 +28512,82 @@
      "why": "FR-013 names 'the builders' loop faster' as performance work in words, and this task cuts the shared guard crate's test run from about 8.3 s to about 2.9 s, measured 2026-11-26."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T336 (a pool tree's first test build after its pre-warm failed to link, `rust-lld: undefined hidden symbol`, twice on code that was right (2026-11-26, `diagram-backlog-t270`, found by 451 T299's builder); the cause is proved by the measurement under `dev/measurements/2026-11-26/prewarm-link/`: a test build killed past rustc's front end, as the pre-warm's cut killed it)",
+    "### T336 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T336-fix1",
+     "summary": "The pre-warm never cuts a crate in flight: a real run, the last slot taken or the ceiling passing mid-crate is noted and the crate runs to its end, slot held; End::Cut and code 130 go",
+     "class": "within",
+     "why": "Fixes a measured wrong outcome (a test build red on right code, 29 of 54 cut tries vs 0 of 20 uncut) in T316's mechanism. The GM's T316 words ask only whether to begin compiling at once; the cut was T316's design, not his. Holding the slot until the crate ends is synchronization, as his T284 words prefer. Nothing he asked is narrowed."
+    },
+    {
+     "id": "T336-brief-reading",
+     "summary": "On no spare slot the pre-warm WAITS at the loop head rather than ending, departing from the brief's sentence, stated",
+     "class": "within",
+     "why": "The brief is the coordinating session's, not the GM's; the behavior is T316's as built and keeps the pre-warm doing what the GM's T316 question is for (compile ahead). Stated openly, nothing of request.md or the spec narrowed."
+    },
+    {
+     "id": "T336-cost-accepted",
+     "summary": "A real run may wait on cargo's lock, and another tree's compile in the slot queue, for the rest of one crate (median 2.0 s, p90 13.0 s, max 82.7 s, measured 2026-11-26); alternatives priced and rejected; reopening bounds GUESS 90 s / one in ten past 13 s",
+     "class": "within",
+     "why": "A design tradeoff chosen on a labeled measurement; no GM words promise a real run pre-empts a pre-warm within a poll - that was T316's promise. Not a fidelity matter."
+    },
+    {
+     "id": "T336-fix2",
+     "summary": "stepped's --no-run build becomes one call, stale::built: on 'undefined hidden symbol' it drops every incremental directory of each named crate and each named fingerprint under cargo's lock, builds once more, never a third; nothing dropped when the linker names nothing of the tree, no incremental dir, or the lock is held past LOCK_S (120 s, GUESS)",
+     "class": "within",
+     "why": "Heals the same wrong outcome for builds killed any other way, the make rust-test half of the already filed T146; fix-as-we-go of a known defect. Scope wider than T142's one-directory retry is a design choice backed by the harness's measured repair (29 of 29 green)."
+    },
+    {
+     "id": "T336-counted",
+     "summary": "A heal writes one Phase line step link-heal inside the build line's span, seconds booked as compile, countable in .git/l7r-events/",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-22 'we want everything measured so we know where our time goes, especially for compiling': the heal is logged and its seconds are booked as the compile they are."
+    },
+    {
+     "id": "T336-left-T361",
+     "summary": "make task-time does not show heals apart (columns::category names no category for link-heal); filed T361, lands before T302",
+     "class": "within",
+     "why": "Not a defect by the constitution's definition: the report answers truly (the heal's seconds are compile, inside the build span) and the raw lines exist, so nothing goes unmeasured or misbooked. A separate heal column is a refinement, filed with reason, id and order as FR-009 asks."
+    },
+    {
+     "id": "T336-left-T362",
+     "summary": "The heal is not run live on a really broken cache; the fixture follows the kept real link-failure text; filed T362, lands before T302",
+     "class": "within",
+     "why": "A verification gap, not a known defect: the tests pin the heal against the kept example of the real error, and should real words differ the failure returns with the repair named - no worse outcome than today. Filed with reason, id and order."
+    },
+    {
+     "id": "T336-T146-T206-remainder",
+     "summary": "The guard launcher's own incremental build stays with T146; the coverage build's link stays with T206",
+     "class": "within",
+     "why": "Both are existing open tasks for their own mechanisms; fix 1 removes the pre-warm cause for all of them, and this task's brief is the pool tree's pre-warm and make rust-test. Leaving already-filed separate work with its owners narrows nothing the GM asked."
+    },
+    {
+     "id": "T336-order-and-interim",
+     "summary": "After T316 and T142, before T347 and T302; pool handouts carry L7R_PREWARM=0 until this lands",
+     "class": "within",
+     "why": "Scheduling and an interim that stops the defect recurring; nothing of the request narrowed."
+    },
+    {
+     "id": "T336-exits",
+     "summary": "Green is the first tier (make builder-checks over rustc and task) plus the changed crate's coverage; the full gate runs once in the clone over the batch",
+     "class": "within",
+     "why": "The two-tier arrangement the GM asked for on 2026-11-26 (T308): full rigor deferred to the session clone's gate."
+    },
+    {
+     "id": "T336-performance",
+     "summary": "Counted as performance work for scheduling",
+     "class": "within",
+     "why": "The GM's 2026-11-20 words count measurement and performance-mechanism work as performance work, first in order (FR-013)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -44783,6 +44871,80 @@
      "summary": "The task is classed [perf] under FR-013, as builders'-loop speed",
      "class": "within",
      "why": "FR-013 names 'the builders' loop faster' as performance work in words, and this task cuts the shared guard crate's test run from about 8.3 s to about 2.9 s, measured 2026-11-26."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T336": {
+   "section_sha256": "04f21ff4e56f66d4f299155f1cc1aefe79578ef36a606b58ae1ed64f87026d05",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T336-fix1",
+     "summary": "The pre-warm never cuts a crate in flight: a real run, the last slot taken or the ceiling passing mid-crate is noted and the crate runs to its end, slot held; End::Cut and code 130 go",
+     "class": "within",
+     "why": "Fixes a measured wrong outcome (a test build red on right code, 29 of 54 cut tries vs 0 of 20 uncut) in T316's mechanism. The GM's T316 words ask only whether to begin compiling at once; the cut was T316's design, not his. Holding the slot until the crate ends is synchronization, as his T284 words prefer. Nothing he asked is narrowed."
+    },
+    {
+     "id": "T336-brief-reading",
+     "summary": "On no spare slot the pre-warm WAITS at the loop head rather than ending, departing from the brief's sentence, stated",
+     "class": "within",
+     "why": "The brief is the coordinating session's, not the GM's; the behavior is T316's as built and keeps the pre-warm doing what the GM's T316 question is for (compile ahead). Stated openly, nothing of request.md or the spec narrowed."
+    },
+    {
+     "id": "T336-cost-accepted",
+     "summary": "A real run may wait on cargo's lock, and another tree's compile in the slot queue, for the rest of one crate (median 2.0 s, p90 13.0 s, max 82.7 s, measured 2026-11-26); alternatives priced and rejected; reopening bounds GUESS 90 s / one in ten past 13 s",
+     "class": "within",
+     "why": "A design tradeoff chosen on a labeled measurement; no GM words promise a real run pre-empts a pre-warm within a poll - that was T316's promise. Not a fidelity matter."
+    },
+    {
+     "id": "T336-fix2",
+     "summary": "stepped's --no-run build becomes one call, stale::built: on 'undefined hidden symbol' it drops every incremental directory of each named crate and each named fingerprint under cargo's lock, builds once more, never a third; nothing dropped when the linker names nothing of the tree, no incremental dir, or the lock is held past LOCK_S (120 s, GUESS)",
+     "class": "within",
+     "why": "Heals the same wrong outcome for builds killed any other way, the make rust-test half of the already filed T146; fix-as-we-go of a known defect. Scope wider than T142's one-directory retry is a design choice backed by the harness's measured repair (29 of 29 green)."
+    },
+    {
+     "id": "T336-counted",
+     "summary": "A heal writes one Phase line step link-heal inside the build line's span, seconds booked as compile, countable in .git/l7r-events/",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-22 'we want everything measured so we know where our time goes, especially for compiling': the heal is logged and its seconds are booked as the compile they are."
+    },
+    {
+     "id": "T336-left-T361",
+     "summary": "make task-time does not show heals apart (columns::category names no category for link-heal); filed T361, lands before T302",
+     "class": "within",
+     "why": "Not a defect by the constitution's definition: the report answers truly (the heal's seconds are compile, inside the build span) and the raw lines exist, so nothing goes unmeasured or misbooked. A separate heal column is a refinement, filed with reason, id and order as FR-009 asks."
+    },
+    {
+     "id": "T336-left-T362",
+     "summary": "The heal is not run live on a really broken cache; the fixture follows the kept real link-failure text; filed T362, lands before T302",
+     "class": "within",
+     "why": "A verification gap, not a known defect: the tests pin the heal against the kept example of the real error, and should real words differ the failure returns with the repair named - no worse outcome than today. Filed with reason, id and order."
+    },
+    {
+     "id": "T336-T146-T206-remainder",
+     "summary": "The guard launcher's own incremental build stays with T146; the coverage build's link stays with T206",
+     "class": "within",
+     "why": "Both are existing open tasks for their own mechanisms; fix 1 removes the pre-warm cause for all of them, and this task's brief is the pool tree's pre-warm and make rust-test. Leaving already-filed separate work with its owners narrows nothing the GM asked."
+    },
+    {
+     "id": "T336-order-and-interim",
+     "summary": "After T316 and T142, before T347 and T302; pool handouts carry L7R_PREWARM=0 until this lands",
+     "class": "within",
+     "why": "Scheduling and an interim that stops the defect recurring; nothing of the request narrowed."
+    },
+    {
+     "id": "T336-exits",
+     "summary": "Green is the first tier (make builder-checks over rustc and task) plus the changed crate's coverage; the full gate runs once in the clone over the batch",
+     "class": "within",
+     "why": "The two-tier arrangement the GM asked for on 2026-11-26 (T308): full rigor deferred to the session clone's gate."
+    },
+    {
+     "id": "T336-performance",
+     "summary": "Counted as performance work for scheduling",
+     "class": "within",
+     "why": "The GM's 2026-11-20 words count measurement and performance-mechanism work as performance work, first in order (FR-013)."
     }
    ],
    "verdict": "CLEAR"

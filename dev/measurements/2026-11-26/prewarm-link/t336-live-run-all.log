@@ -1,0 +1,10 @@
+run base 0 2.81
+run 0 final 0 link_fail 0 ['prewarm: rust/guard - its test build is warm (11.0 s, 10.0 s of it finishing after a run started, no slot was spare or the ceiling passed)']
+run 1 final 0 link_fail 0 ['prewarm: rust/guard - its test build is warm (10.6 s, 4.0 s of it finishing after a run started, no slot was spare or the ceiling passed)']
+run 2 final 0 link_fail 0 ['prewarm: rust/guard - its test build is warm (10.6 s, 3.0 s of it finishing after a run started, no slot was spare or the ceiling passed)']
+run 3 final 0 link_fail 0 ['prewarm: rust/guard - its test build is warm (11.0 s, 9.0 s of it finishing after a run started, no slot was spare or the ceiling passed)']
+run 4 final 0 link_fail 0 ['prewarm: rust/guard - its test build is warm (10.5 s, 7.0 s of it finishing after a run started, no slot was spare or the ceiling passed)']
+
+real	1m5.201s
+user	8m18.406s
+sys	0m27.876s

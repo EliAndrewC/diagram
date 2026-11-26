@@ -10,11 +10,11 @@
 //!   tree's first closing checks died on the hook wrapper's 45 s build limit under load); at the cap, who holds each.
 //! - THE PRE-WARM (451 T316; the GM, 2026-11-26: "would it make sense to begin compiling immediately within a work tree builder?"):
 //!   a warm handout starts, detached, the tree's own `scripts/gates/l7r-gate.sh rust prewarm --since <commit>` - the test builds of
-//!   the crates the commits since the tree's LAST HANDOUT moved, built while the builder reads (`rustc/prewarm.rs`: it yields its
-//!   build slot, and ends when a real run starts in the tree). The commit is the one the tree was last handed out at, kept in the
-//!   tree's own git directory (`prewarm-base`): a release brings the tree to HEAD too, so its HEAD at the next handout is no
-//!   measure of what its cache last built. Its output is `prewarm.log` there; a pre-warm that cannot start is said and the handout
-//!   stands; `L7R_PREWARM=0` starts none.
+//!   the crates the commits since the tree's LAST HANDOUT moved, built while the builder reads (`rustc/prewarm.rs`: it starts a
+//!   crate only while a build slot is spare, and ends when a real run starts in the tree, the crate in flight finished first,
+//!   451 T336). The commit is the one the tree was last handed out at, kept in the tree's own git directory (`prewarm-base`): a
+//!   release brings the tree to HEAD too, so its HEAD at the next handout is no measure of what its cache last built. Its output
+//!   is `prewarm.log` there; a pre-warm that cannot start is said and the handout stands; `L7R_PREWARM=0` starts none.
 //! - THE SAMPLER (451 T274): every handout asks `l7r-gate measure sampler start` for the clone's memory and load sampler, which
 //!   starts one where none is running, so the samples the builder count is certified from never wait on a session remembering
 //!   to start them (the three- and four-at-once batches of 2026-11-26 ran unsampled). What it says is said; nothing it does
