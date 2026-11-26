@@ -96,7 +96,8 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 ## Open in 451, by kind (none blocks the talk)
 
 - Found overnight: T264 (restated: probably nothing to change), T266 (comments count toward the page size cap; five pages
-  within 20 bytes), T268-T273, T274 (memory sampler), T275 (`.git` state paths in a worktree), T276-T278.
+  within 20 bytes), T268-T273, T274 (memory sampler), T275 (`.git` state paths in a worktree), T276-T278, T279 (the restore's two rough edges),
+  T280 (two footnotes that do not yet quote their line of his notes).
 - T260: the audit register's backfill (254 mechanisms with no entry; `make audits` lists them), by cost order, small builders.
 - T159: a fresh worktree's gate is red on one `rust/mode_a` test (missing gitignored renders) - every parallel builder meets it.
 - The research backlog: `make research-backlog` (UNRESEARCHED decisions; the switch is open).
