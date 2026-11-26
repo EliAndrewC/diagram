@@ -32,6 +32,11 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 - DECIDED 2026-11-26, the output style: the conversational style stays (his words in the declined entry).
 - **Item 10** long-running against small features: trial `specs/456-feature-size-friction/` re-measures it, not before
   2026-11-28, on the landings since the fixes.
+- **Two tiers of checking** (adopted as a trial 2026-11-26; `docs/process-decisions.md`): round two of the worktree fixes
+  runs under it, at three builders and then a batch at four. Trial `specs/458-second-tier-threshold/` reads the second tier's
+  threshold again, and weighs the continuous gate, not before 2026-11-28.
+- **Several sessions at once**: feature `specs/459-multi-session-builders/`, filed to be thought about, not worked before the
+  port resumes (his words).
 - **The builders' context cap and brief sizing**: trial `specs/457-builder-handoff-rate/` re-measures the handoff rate, not
   before 2026-11-28 (7% on 2026-11-26 against 28% before sizing; the rule tightened that day). The GM wants both trials
   talked about before the port resumes.

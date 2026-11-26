@@ -82,6 +82,49 @@ This file is loaded on demand, so a declined option recorded here costs no auto-
 
 ## Decided
 
+### Two tiers of checking: a fast one in the builder's tree, the full gate once where work reaches main (TRIAL, from 2026-11-26)
+
+**Question.** Where does the full rigor run - at a builder's tree, at the session clone, or where work reaches main?
+
+**Adopted as a trial, round two of the worktree fixes** - the GM, 2026-11-26: *"we are undergoing extremely rigorous checks at
+the point where a builder in a work tree is bending over backwards to make sure that absolutely nothing wrong can land in the
+session clone, when in fact the correct place for that level of rigor is checking whether something in the session clone can
+land back in the main checkout and in the main branch on GitHub"*; and, asked whether round two runs under it and at what
+count: *"Yes, I agree that round two should run under two-tier checking as described. And yes, I agree that we should start it
+at 3 builders with a batch of 4 if the first goes well."*
+
+**The arrangement.** FIRST TIER, in a builder's pool tree: `make builder-checks CRATE="..."` - the changed crates' tests, lint
+and format; a changed guard's own hook suite; no coverage build, no hook-suite fan-out. The builder ENDS at its report and is
+not kept (*"being able to close out builders as they complete has some advantages from a simplicity and design perspective. So
+I want to be wary of needing to keep them around for any reason"*). STAGING: `make carry` brings each finished commit into the
+session clone, and `scripts/sync-with-main.sh backup` pushes the clone's head to `backup/<session>` after every carry, deleted
+when its work lands on main (*"pushing to a `diagram-backlog` branch to ensure work is not lost"*). SECOND TIER: `make land`
+over the batch - one full gate, one push. A gate failure is repaired in the clone by whoever is cheapest (the tooling for
+format, the session or a small fresh agent for a lint finding or an uncovered line, a fresh builder briefed from the plan
+section, the commit and the failure for anything larger). The plan review stays where it is.
+
+**The second tier's threshold** (the GM: *"your suggestion for the threshold seems sensible for now"*): the gate runs when the
+pipeline DRAINS - a batch of builders has reported and been carried in - with the next batch started beside it; always before
+the session stops; and at a ceiling of about six tasks or ninety minutes staged without a gate (GUESS knobs). Reasoning: with
+one session, waiting costs little that grows - the deferred checks name their file, repairs grow in step with the batch and do
+not interact, and the one real cost, work standing only on this machine, is met by the backup branch - but there is nothing to
+gain by waiting past a moment when the gate is free. With several sessions main moves under the staged work, and a gate that
+runs continuously on a snapshot may be the better form (trial 458 weighs it; feature 459 is the several-sessions arrangement).
+
+**Measurement it rests on** (2026-11-26, one tier): the full checks ran twice a task (a builder's closing checks, two to four
+runs, then the landing's gate); closing checks were 63% of a small task's builder clock
+(`dev/measurements/2026-11-26/task-route/m11-results.md`); of a three-builder run's compile minutes coverage builds were 57.9
+and coverage runs 19.8 against lint 33.2 and test builds 6.2, every memory and compiler peak falling where three trees were in
+a coverage build at once (`dev/measurements/2026-11-26/builder-count/slot-coincide.py`); in round one (three warm builders,
+one tier) five landing attempts failed on something other than the task landed. Two fresh builders that day closed out others'
+work, coverage gaps among them, in 8 and 22 minutes.
+
+**What followed.** `make builder-checks` (the Makefile); the builder brief's TWO TIERS paragraph; 451 T308 builds what the
+trial shows is wanted; trial 458 reads the threshold again not before 2026-11-28. **Falsifier:** against round one - builder
+minutes a task and tasks landed a wall hour no better, or gate failures a batch costing more to repair than the closing checks
+they replaced, or a defect reaching main that a builder's closing checks would have caught.
+
+
 ### Clones for sessions, pooled worktrees for builders (decided 2026-11-26)
 
 **Question.** Worktrees against clones as the working copies (the talk's item 8).

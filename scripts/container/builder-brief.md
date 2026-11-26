@@ -25,6 +25,11 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
 - A task expected to edit more than about three files, or needing a measurement first, is SPLIT into builders that hand results
   along, a measuring agent first: its report (the figures, the paths, the commands) is the next builder's brief.
 - A one-turn edit is yours, the coordinating session's, not a builder's.
+- TWO TIERS (a trial from 2026-11-26; `docs/process-decisions.md`, "Two tiers of checking"): a builder's tree runs the FIRST
+  tier only - `make builder-checks CRATE="<the crates it changed>"` (tests, lint, format) and a changed guard's own hook suite
+  - and NOT `make closing-checks`, `make static`, `make hooks-test` or a coverage run; the full gate runs once in the clone
+  over the batch (`make land T="<tasks>"`), after `make carry` and `scripts/sync-with-main.sh backup` for each. Say so in the
+  brief, in place of the closing checks.
 - A builder ENDS at its report and is not kept for follow-up (the GM 2026-11-26): what a successor needs is in its plan
   section, its commit and its report, and a later fix - a gate failure, even a design that proved wrong - goes to a fresh
   agent briefed from those. A message to a builder is for a question it asked before it reported.

@@ -1216,6 +1216,16 @@ crate-checks:    ## [static] a task's crate-scoped checks while iterating - test
 	@g="$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh"; rc=0; \
 	for step in test lint "format --check" cover; do "$$g" rust $$step $(foreach c,$(CRATE),--crate "$(c)") || rc=1; done; exit $$rc
 
+# THE FIRST TIER (feature 451 T308, the GM 2026-11-26: the full rigor belongs where work reaches main, not where a builder's tree
+# reaches the session clone). A builder's tree runs this and nothing heavier: the changed crates' tests, lint and format - no coverage
+# build, no hook-suite fan-out. Measured 2026-11-26: of a three-builder run's compile minutes coverage builds were 57.9 and coverage
+# runs 19.8 against lint 33.2 and test builds 6.2, and every memory and compiler peak fell where three trees were in a coverage build
+# at once. The second tier is the landing's gate (make land), once over the batch carried into the clone.
+builder-checks:  ## [static] the FIRST TIER, a builder's checks in its own tree - test, lint and format --check over every crate CRATE= names, all reported, red if any is; no coverage and no hook suites: those run once at the landing's gate over the batch (451 T308)   CRATE="<dir> ..."
+	@if [ -z "$(CRATE)" ]; then printf 'make builder-checks: CRATE="<crate dir> ..." is required - e.g. make builder-checks CRATE="rust/guard rust/guard/shared"\n' >&2; exit 2; fi
+	@g="$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh"; rc=0; \
+	for step in test lint "format --check"; do "$$g" rust $$step $(foreach c,$(CRATE),--crate "$(c)") || rc=1; done; exit $$rc
+
 # FR-008's timer (feature 449 T169): T99's method - each test alone, best of three, a fresh TMPDIR, timed around the process - which
 # T160, T164, T167 and T168 each ran by hand. It reports and never refuses: time is never a gate (the GM's performance rule).
 test-times:      ## [project] each test of a crate timed alone by T99's method (best of three, a fresh TMPDIR, around the process), those over FR-008's tenth of a second listed, a declared end-to-end test marked; reports, never refuses (449 T169)   CRATE=<dir>
