@@ -20,6 +20,10 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
 - A NEW GUARD (with its suite) or a NEW COMMAND is a builder of its own: it is several jobs' size, whatever it counts as
   (2026-11-26: the pool task, three such jobs, reached the cap at 307k; the landing refusals, two, finished at 296k; fifteen
   other builders that day ended at 122k to 174k).
+- A NEW MECHANISM (a command, a guard, a background step that is measured before and after) is TWO builders from the start:
+  the first measures, builds and tests and writes a handoff; the second writes the plan section, takes the review and
+  reports. Three of three such tasks under two tiers reached the cap before closing (T285, T298, T316, 2026-11-26).
+- A task that must LOAD the machine runs ALONE in its batch, bounded (451 T321; feature 460).
 - A brief of more than one job NAMES THE ORDER and the stop: "if these will not fit, finish <job> whole, stop, and report
   the rest as not started" - so a builder near its cap stops at a job's boundary and its successor takes up a whole job.
 - A task expected to edit more than about three files, or needing a measurement first, is SPLIT into builders that hand results

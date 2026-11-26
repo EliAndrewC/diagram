@@ -5,15 +5,23 @@ this one). The GM's ordering, 2026-11-26: *"putting the ones most likely to give
 line, followed by the ones most likely to increase our task throughput"*. A task is taken from the top whose files do not
 overlap a task in flight; `files` is the expected crates or files, a guess until the builder reports.
 
-## In flight (2026-11-26)
+## In flight (2026-11-26, 20:10 UTC)
 
-- T304 (two parts: the carry test under load, the index lock) - files: `rust/gate/crates/land` tests, the guards' git spawn.
-- T316 the pool tree pre-warmed at handout - files: `rust/gate/crates/task` (`builder_tree.rs`), `rust/gate/crates/rustc`.
-- T298 the task time breakdown's window table, second tier apart, booking faults, SINCE=last - files: `rust/gate/crates/measure`.
+- T308 (one part: why plan reviews take a second round; the mechanical causes refused at `make decide`) - files:
+  `rust/gate/crates/plan`, `rust/guard` static-runs order.
+- T299 with T282's detector part (the Stop hook's question detector's false positives; moved to the front on the GM's word,
+  2026-11-26: "I would prefer not to see these messages about false positives") - files: `rust/guard` escalation hooks.
+- T315 where a test run's seconds go (a measurement) - files: none expected.
+
+RULES learned running it: a task that must LOAD the machine (reproducing a failure under load) runs ALONE in its batch and
+under 451 T321's bounded helper once that exists - two such tasks on 2026-11-26 held the load at 240 to 400 for over an hour
+each, slowed three batch gates and froze the host's desktop (feature 460). A NEW MECHANISM is two builders from the start: one
+measures, builds and tests and writes a handoff; a second writes the plan section, takes the review and reports (three of
+three such tasks reached the context cap before closing: T285, T298, T316).
 
 ## 1. Better measurements
 
-1. T298 - in flight. Everything below is judged by its report.
+1. T298 - LANDED. Everything below is judged by its report.
 2. T315 what a single-crate rebuild spends its seconds on (compile, link, run) - a MEASUREMENT, wants a quiet machine: run it
    alone, between batches. files: none.
 3. T301 part 1 only: why one target directory holds 20-29 hashes of a crate (are builds recompiled that need not be) - a
@@ -24,7 +32,10 @@ overlap a task in flight; `files` is the expected crates or files, a guess until
 
 ## 2. Throughput
 
-6. T316 - in flight.
+6. T316 - LANDED (it buys the first run's test build, about 7 s; not the lint or the coverage builds).
+6a. T325 one feature set for a family's test and coverage builds (the one place compile time is spent twice: 17 of 75
+    compiler runs after a core change) - files: `rust/gate/crates/rustc`.
+6b. T321 the bounded load helper - before any further load-reproduction task (T314, T329).
 7. T308 the second review round's mechanical causes removed at `make decide`, and the review's wait put to use; the tooling's
    one-tier order nudge retired. files: `rust/gate/crates/plan`, `rust/guard` static-runs order.
 8. T313 the tooling keeps the pool full (this queue read by a check at a builder's end and at Stop). files: `rust/guard` Stop
@@ -47,4 +58,5 @@ overlap a task in flight; `files` is the expected crates or files, a guess until
 
 ## Landed from this queue
 
-T303, T305 (the pre-round); T309, T289; T104 and T159 staged for the next gate.
+T303, T305 (the pre-round); T309, T289; T104, T159; T298, T316. Carried and landed with their tasks still open: T304 (two
+parts; its remainder is in group 2), T301 part 1 (its finding: nothing is rebuilt needlessly; the one duplication is 451 T325).
