@@ -328,3 +328,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T357 a test process of l7r_shared outlives its run (found by T347, 2026-11-26): pid 3826180, debug/deps/l7r_shared-fa25c4500bd2932c --exact tempdir::tests::an_int_or_a_term_removes_the_process_s_directories, was alive 66 minutes after it started under ~/.cache/l7r-cargo-target/diagram-backlog-t269 with no run of the tree's going (2.9 MiB resident) - the test in rust/guard/shared/src/tempdir starts a copy of its own binary and one was never reaped or never ended; find whether the child waits on a signal that a killed parent never sends and make it end with its parent
       research: rendering
+- [ ] T358 withdrawn at filing by the session: T356 (a coverage pass of the measure crate red in a pool tree where the landing was green) is the tree's age, not where it ran - the tree diagram-backlog-t269 stood at f59ed63fbe, before the fixer's tests for those five lines (fd4f9c9c30) were carried; nothing to fix
+      research: rendering
