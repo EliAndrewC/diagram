@@ -286,6 +286,81 @@ fn what_is_waiting_on_the_gm_as_a_listed_content_is_no_ask() {
     }
 }
 
+/// 451 T299 and T282: the statements of 2026-11-26's firings - a report that describes an ask's wording, a check described by the
+/// question it asks, a checklist's own questions listed, and a figure of the time spent waiting on the GM - put nothing to him; the
+/// ask beside each still fires.
+#[test]
+fn a_report_of_an_ask_a_check_s_question_or_a_figure_is_no_ask() {
+    const CHECKLIST: &str = "`docs/performance-checklist.md`, from late October. It has six questions that a performance change answers in its plan:\n1. Where does the time go?\n2. Does the change remove work, or only move it?\n3. What do you expect to save?\n4. How does the work grow?\n\nEvery task marked as performance work gets those questions.";
+    let statements = [
+        "- **The other case was not a false positive.** `for you to confirm` does ask you for a confirmation, so the hook was right to stop me this morning.",
+        "- **The other case was not a false positive.** \"For you to confirm\" does ask you for a confirmation, so the hook was right.",
+        "The phrase \u{201c}your call\u{201d} did ask you for a decision, and the hook read it so.",
+        "- **A check when a builder finishes, and again when I try to end a turn.** It asks: is a pool tree free, and does the queue hold a task that waits on nothing and doesn't overlap the files of the tasks in flight?",
+        "When I end a turn the hook asks whether a pool tree is free, and whether the queue holds a ready task?",
+        "I added a seventh. It asks if the decision was recorded, and where?",
+        CHECKLIST,
+        "The checklist's last two:\n\n- What do you expect to save?\n- Where does the time I measured go?",
+        "**Your wait is reported apart, as you asked:** 485 minutes of blocking were waiting on you, 27% of the window's blocking. About half of that was overnight, while you were away.",
+        "About 40% of the window was waiting on you.",
+        "Of the blocking, 2.5 hours were spent waiting on you; the rest was builds.",
+        "| overnight | 242 minutes were waiting for you |",
+        "From 17:00 to 19:43, six tasks landed. Blocking minutes, with waiting on you kept separate:",
+        "Every percentage below is of working time, with waiting on you counted apart.",
+    ];
+    for s in statements {
+        assert_eq!(classify(s), (Vec::new(), Vec::new()), "{s}");
+    }
+    let asks = [
+        "**The two-builders rule is marked provisional, for you to confirm.**",
+        "Do you accept the wider banks as a convention, or should they be drawn true size?",
+        "What needs your word: whether round two runs under two-tier checking",
+        // an ask in the session's own voice beside a quoted phrase, and a quoted phrase that is not the subject
+        "On \"the wide banks\" I do ask you for a ruling.",
+        "`make land` refused it, so I must ask you which task goes first.",
+        // a reported question that is put to him, and a question of the session's own after a reported one
+        "The review asks: are the wider banks acceptable to you?",
+        "The reviewer asks whether your budget covers the wider banks?",
+        "The check asks whether a tree is free. Can I hand it to T300?",
+        "What do you make of the check? It asks: is a tree free?",
+        "Two hours of review are waiting on you.",
+        "It asks: is a tree free? And may I hand it to T300?",
+        // a count of things that wait, a figure with the thing that waits named, and a duration something has waited
+        "3 questions were waiting on you.",
+        "485 minutes of blocking were waiting on you: the budget's words.",
+        "485 minutes of blocking were waiting on you, the budget answer.",
+        "40 minutes were waiting on your budget answer.",
+        "The sheet has been 40 minutes waiting on you.",
+        "Two tasks are waiting on you, kept separate below.",
+        "Blocking minutes, with waiting on you: the budget's words.",
+    ];
+    for s in asks {
+        assert_eq!(classify(s).0.len(), 1, "{s}");
+    }
+    // a list of questions is a checklist's only where its lead-in says so, every item is a question, and none is put to him
+    let lists = [
+        ("Two questions for you:\n1. What width do you want for the banks?\n2. Where do I draw the ford?", 2),
+        ("Open questions:\n- What do you expect to save?\n- Where do I draw the ford?", 2),
+        ("I have two questions on the checklist:\n1. What do you expect to save?\n2. Where do I draw the ford?", 2),
+        ("The checklist has two items:\n1. Measure first.\n2. What do you expect to save?", 1),
+        ("The checklist has one question:\n1. What do you expect to save?", 1),
+        ("It has two questions.\n\nWhat do you expect to save?", 1),
+        ("1. What do you expect to save?\n2. Did any map move?", 1),
+        ("The checklist asks two questions:\n1. Should I redraw the three sheets?\n2. Did any map move?", 1),
+        ("The checklist has two questions:\n1. Did any map move?\n2. What do you expect to save?\nWhat do you make of it?", 1),
+    ];
+    for (s, n) in lists {
+        assert_eq!(classify(s).0.len(), n, "{s}");
+    }
+    let offers = [
+        "If you'd rather it be plain `diagram-backlog`, that's a one-line change.",
+        "- **Three or four at once stays only for work that compiles nothing,** and only if you want that rule kept.",
+    ];
+    for s in offers {
+        assert_eq!(classify(s).1.len(), 1, "{s}");
+    }
+}
+
 #[test]
 fn a_question_owes_the_filter_once_and_a_dispatch_since_the_gm_answers_it() {
     let d = world("ask");

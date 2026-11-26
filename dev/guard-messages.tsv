@@ -174,6 +174,7 @@ key	verdict	chars	guard	kind	by	over	head
 7c0d5d62024a1dae	BASELINE	507	review-round-hooks	notice	unreviewed - stood before 451 T170		review-round: this dispatch was rewritten into MODE N round N of <path>
 7d05da583094338a	PASS	706	blocked-fetch-hooks	notice	message-check a02a48f6090388186		attempts: https:/<path> - N earlier attempt(s) (date Q question: outcome - what
 7d9bd0b5ed61a5ce	PASS	1227	review-round-hooks	refuse	ace1afc5bc6430da1		BLOCKED: <path> still carries the OLD value of something this change moved
+7dd4088ec3ff42c4	PASS	479	escalation-hooks	refuse	a28640a2714965908		QUESTION UNFILTERED: your final message puts something to the GM and no
 7dea326f0e784fb9	BASELINE	184	clone-sync-hooks	notice	unreviewed - stood before 451 T170		clone-sync: <path> has uncommitted work (mid-task) - clone merge skipped; mirror refresh
 7e51fc38a8b4398c	BASELINE	1318	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has
 7e8cc888b57fb2c2	PASS	585	static-runs-hooks	refuse	round-arbiter	arbiter ask:t295-static-runs-message: round 2's remaining cuts (the crate list, the measured-tree words) declined; the list is make crate-checks' own argument, the words are T295's point	BLOCKED: TN of N-x has run `make static` N times since its
@@ -338,6 +339,7 @@ e6845fff5c1b8c74	BASELINE	356	gate-write-hooks	refuse	unreviewed - stood before 
 e6dd99b13dc7ec31	BASELINE	524	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: `impl-drift` is not owed on this bundle. Its MANIFEST (<path>) owes:
 e74b40c554993d0c	FAIL	498	workflow-hooks	refuse	a3f4533b308fc243f		BLOCKED: an ad-hoc agent() call names the model `opus`: agent('is it right',
 e77d44e0d21b8458	PASS	244	check-bundle-hooks	refuse	a321d8220347ee8b7		BLOCKED: `quote-check` is already in q:N's round and that round has a
+e8301989f2d8f60f	PASS	494	escalation-hooks	refuse	a28640a2714965908		OFFER UNFILTERED: your final message offers a decision back to the GM
 e8344ec7dfd385ef	PASS	374	builder-pool-hooks	refuse	message-check a03efa643feb992b5		BLOCKED (builder-pool): don't make a worktree under the clones directory by hand.
 e8de0c1ac6270bcf	BASELINE	991	shell-check-hooks	refuse	unreviewed - shell-check's backtick refusal, a family of 2 keys: 7 shown a session, 6,944 characters, under 2 x 31,680 - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		BLOCKED: a backtick span that bash will EXECUTE: `make done`. Inside double
 ea1dad7c47624b11	PASS	406	context-cap-hooks	refuse	a92ea34b3fbbcb36f		BLOCKED: a code builder does not dispatch impl-drift; the claims round is

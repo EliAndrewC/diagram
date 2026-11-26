@@ -62,7 +62,7 @@ static ASK: LazyLock<Regex> = LazyLock::new(|| {
 /// `NAMED`) - 451 T235: "Nothing is waiting on you.", "442 minutes of waiting on you", "**Waiting on you** is still reported".
 static STATED: LazyLock<Regex> = LazyLock::new(|| {
     re(
-        r"(?i)\b(your call|for you to (decide|approve|choose|pick|confirm|rule)|ask (of )?you|needs your (words|approval|decision|ruling|go-ahead|call|answer)|waiting (on|for) (you|your)|yours to (decide|call|choose))\b",
+        r"(?i)\b(your call|for you to (decide|approve|choose|pick|confirm|rule)|ask (of )?you|needs your (words?|approval|decision|ruling|go-ahead|call|answer)|waiting (on|for) (you|your)|yours to (decide|call|choose))\b",
     )
 });
 /// The text before a stated ask, when its clause negates it: a `nothing`-like subject, or a `not` within two words of it, with no
@@ -97,6 +97,53 @@ static LISTED: LazyLock<Regex> = LazyLock::new(|| {
 });
 static LIST_GOES_ON: LazyLock<Regex> =
     LazyLock::new(|| re(r"(?i)^[*_]*\s*([.|]|$|,?\s*((and|or)\s+)?what\b)"));
+/// A FIGURE of the time spent waiting on the GM (451 T299: `485 minutes of blocking were waiting on you, 27% of the window's blocking.`,
+/// a task time breakdown's line of 2026-11-26) is a measurement: a count of minutes, hours or a share is the subject of `was`/`were`
+/// before it (never `is`/`are`: `Two hours of review are waiting on you.` is work put to him), and its clause ends after it or goes on to another figure. A count of things that wait (`3 questions were waiting on
+/// you`), a duration something has waited (`has been 40 minutes waiting on you`) and the thing that waits named after it (`: the
+/// budget's words`, `, the budget answer`) are still asks.
+static FIGURE: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r"(?i)\b\d[\d.,]*\s*(%|(percent|minutes?|mins?|hours?|hrs?|seconds?|days?)\b)(\s+of\s+[^.;:!?,]*)?\s+(was|were)\s+$",
+    )
+});
+static FIGURE_ENDS: LazyLock<Regex> =
+    LazyLock::new(|| re(r"(?i)^[*_]*\s*([.;|)]|$|,\s+(about\s+)?\d)"));
+/// `waiting on you` as a category of a breakdown set apart from the others (451 T299: `Blocking minutes, with waiting on you kept
+/// separate:`, 2026-11-26): `with` before it and the setting apart after it.
+static WITH: LazyLock<Regex> = LazyLock::new(|| re(r"(?i)\bwith\s+$"));
+static SET_APART: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r"(?i)^\s+(kept|counted|reported|shown|listed|left|held)\s+(separate(ly)?|apart|aside|out)\b",
+    )
+});
+/// A report of an ask's own WORDING (451 T282: `"For you to confirm" does ask you for a confirmation, so the hook was right`,
+/// 2026-11-26): a quoted or backticked phrase is the subject of `does`/`did ask you`. Read before the spans are blanked, since the span
+/// is what tells it from the session's own `I do ask you`.
+static DESCRIBED: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        "(?i)(`[^`\\n]*`|\"[^\"\\n]*\"|\u{201c}[^\u{201d}\\n]*\u{201d})\\s+(does|did)\\s+ask\\s+(of\\s+)?you\\b",
+    )
+});
+/// A check described by the question it asks (451 T299: `It asks: is a pool tree free, and does the queue hold a task ...?`,
+/// 2026-11-26): the line's last sentence runs from `asks:` / `asks whether` / `asks if` to its `?` and names no `you` or `your`. A
+/// reported question that is put to him (`The review asks: are the wider banks acceptable to you?`) and a question of the session's
+/// own before or after it (`What do you make of the check? It asks: is a tree free?`, `... asks whether a tree is free. Can I hand it
+/// over?`) are still asks: the line's one `?` is the reported question's.
+static REPORTED: LazyLock<Regex> =
+    LazyLock::new(|| re(r"(?i)^[^?]*\basks(:|\s+(whether|if)\b)((?!\b(you|your)\b)[^.!?])*\?$"));
+/// A CHECKLIST'S OWN QUESTIONS, listed (451 T299: `3. What do you expect to save?` under `It has six questions that a performance
+/// change answers in its plan:`, 2026-11-26): an item of a list of two or more whose every item is a question, under a lead-in ending
+/// `:` that names a checklist, or questions something `has`, `asks`, `holds`, `lists`, `poses`, `carries` or `answers`, and names
+/// neither the GM nor the session (`OWN`). Never every list: `Two questions for you:`, `Open questions:` and `I have two questions:`
+/// put their items to him, and an item in a question's own words (`ASK`, `STATED`) fires wherever it stands.
+static ITEM: LazyLock<Regex> = LazyLock::new(|| re(r"^(\d+[.)]|[-*])\s+\S"));
+static CHECKLIST: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r"(?i)\b(checklist\b|(has|asks|holds|lists|poses|carries|answers)\b[^.?!]*\bquestions\b)[^.?!]*:$",
+    )
+});
+static OWN: LazyLock<Regex> = LazyLock::new(|| re(r"(?i)\b(you|your|I|my|me|we|our)\b"));
 static OFFER: LazyLock<Regex> = LazyLock::new(|| {
     re(
         r"(?i)\b(if you('d| would)? (want|like|prefer|rather)|if you agree|let me know if|happy to|say so and I'll|easy to (revert|reverse|undo)|I can (also |easily )?(revert|reverse|undo|switch|change|restore|raise|add|drop|re-?run|put (it|them) back))\b",
@@ -115,12 +162,12 @@ fn stated_ask(s: &str) -> bool {
             && matches_any(&SENTENCE_START, before)
             && (matches_any(&NAME_OF, after)
                 || (matches_any(&CELL, before) && !matches_any(&LABEL, after)));
-        let listed = words.starts_with("waiting")
-            && words.ends_with("you")
-            && matches_any(&LISTED, before)
-            && matches_any(&LIST_GOES_ON, after);
+        let you = words.starts_with("waiting") && words.ends_with("you");
+        let listed = you && matches_any(&LISTED, before) && matches_any(&LIST_GOES_ON, after);
+        let figure = you && matches_any(&FIGURE, before) && matches_any(&FIGURE_ENDS, after);
+        let apart = you && matches_any(&WITH, before) && matches_any(&SET_APART, after);
         let negated = matches_any(&NEGATED, before) && !matches_any(&EXCEPTED, after);
-        !(named || listed || negated || matches_any(&MEASURED, before))
+        !(named || listed || figure || apart || negated || matches_any(&MEASURED, before))
     })
 }
 
@@ -141,24 +188,41 @@ fn short(line: &str) -> String {
     line.chars().take(200).collect()
 }
 
+/// Is line `at` one of a checklist's own questions (`CHECKLIST`)?
+fn checklist_item(lines: &[String], at: usize) -> bool {
+    let item = |l: &String| matches_any(&ITEM, l);
+    let Some(first) = (0..=at).rev().take_while(|i| item(&lines[*i])).last() else {
+        return false;
+    };
+    let block: Vec<&String> = lines[first..].iter().take_while(|l| item(l)).collect();
+    let lead = lines[..first].iter().rev().find(|l| !l.is_empty());
+    block.len() > 1
+        && block.iter().all(|l| l.ends_with('?'))
+        && lead.is_some_and(|l| matches_any(&CHECKLIST, l) && !matches_any(&OWN, l))
+}
+
 /// (the lines that ASK the reader, the lines that only OFFER): an ask wins over an offer on the same line.
 pub(crate) fn classify(text: &str) -> (Vec<String>, Vec<String>) {
     let (mut asks, mut offers) = (Vec::new(), Vec::new());
     let body = blank(&FENCE, text);
-    for raw in lines_kept(&body) {
-        let line = raw.trim();
-        if line.starts_with('>') {
+    let lines: Vec<String> = lines_kept(&body)
+        .into_iter()
+        .map(|raw| blank(&QUOTED, &blank(&CODE, &blank(&DESCRIBED, raw.trim()))))
+        .collect();
+    for (at, s) in lines.iter().enumerate() {
+        if s.starts_with('>') {
             continue;
         }
-        let s = blank(&QUOTED, &blank(&CODE, line));
-        let offer = matches_any(&OFFER, &s) || matches_any(&SAY_IF, &s);
-        if matches_any(&ASK, &s)
-            || stated_ask(&s)
-            || (!offer && s.ends_with('?') && matches_any(&ADDRESSED, &s))
-        {
-            asks.push(short(&s));
+        let offer = matches_any(&OFFER, s) || matches_any(&SAY_IF, s);
+        let question = !offer
+            && s.ends_with('?')
+            && matches_any(&ADDRESSED, s)
+            && !matches_any(&REPORTED, s)
+            && !checklist_item(&lines, at);
+        if matches_any(&ASK, s) || stated_ask(s) || question {
+            asks.push(short(s));
         } else if offer {
-            offers.push(short(&s));
+            offers.push(short(s));
         }
     }
     (asks, offers)
@@ -502,9 +566,9 @@ fn ask_unfiltered(event: &Event, session: &Session, clone: &Path) -> Vec<Answer>
     }
     write_fields(clone, &[("asked_told", key)]);
     if what == "offer" {
-        return refuse_stop(event, session, "offer-unfiltered", format!("OFFER UNFILTERED: your final message offers a decision back to the GM and no escalation-check has read it:\n  {line}\nAn offer is fine, and is not a question, but only for a decision that might otherwise have been floated as one.\nDispatch `escalation-check` with the draft as its prompt: it keeps the significant offers and cuts the routine."));
+        return refuse_stop(event, session, "offer-unfiltered", format!("OFFER UNFILTERED: your final message offers a decision back to the GM and no escalation-check has read it:\n  {line}\nAn offer is fine, and is not a question, but only for a decision that might otherwise have been floated as one.\nDispatch `escalation-check` with the draft as its prompt: it keeps the significant offers and cuts the routine.\nIf the line offers him nothing, go on and say nothing of this to him."));
     }
-    refuse_stop(event, session, "question-unfiltered", format!("QUESTION UNFILTERED: your final message puts something to the GM and no escalation-check has read it:\n  {line}\nDispatch `escalation-check` with the draft as its prompt and send what it keeps. A question the record or the\nresearch answers is not his (root CLAUDE.md, \"Research\"); his are taste and genuine forks."))
+    refuse_stop(event, session, "question-unfiltered", format!("QUESTION UNFILTERED: your final message puts something to the GM and no escalation-check has read it:\n  {line}\nDispatch `escalation-check` with the draft as its prompt and send what it keeps. A question the record or the\nresearch answers is not his (root CLAUDE.md, \"Research\"); his are taste and genuine forks.\nIf the line puts nothing to him, go on and say nothing of this to him."))
 }
 
 fn stop(event: &Event, session: &Session, clone: &Path) -> Vec<Answer> {

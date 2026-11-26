@@ -347,3 +347,13 @@ On whether a builder is kept after its report:
 The rest of T308's line is the coordinating session's build of them, not his words: the trial's shape, what it is measured against,
 and its ALSO of 2026-11-26 - that under two tiers nothing runs beside a plan review round, so what each second round was owed for
 is measured and the mechanical causes are removed at `make decide` before the review is dispatched.
+
+## 2026-11-26: the Stop hook's false questions are not reported to him (451 T299)
+
+The Stop hook's question and offer detector fired 12 times on 2026-11-26 and about half were statements; the session had been telling
+the GM of each false firing. The GM, 2026-11-26, as the coordinating session's brief to T299's builder relays his words (copied here
+by that builder, who did not hear them):
+
+> I would prefer not to see these messages about false positives
+
+> I am okay with some number of false positives. I just don't want to see the explanation of the false positives reach me. Though it probably is worth asking whether the number of false positives is within what we should consider an acceptable range.

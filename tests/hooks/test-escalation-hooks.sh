@@ -193,11 +193,39 @@ for s in 'Nothing is waiting on you.' 'Nothing else is waiting on you. Page sess
 done
 rc=0; final_stop '**Waiting on you:** the removal command from my earlier message has not been run.' || rc=$?
 [ "$rc" -eq 2 ] && grep -q "QUESTION UNFILTERED" "$HOOK_ERR" && ok "...while a decision waiting on the GM still owes the filter" || no "a waiting decision passed" "(rc=$rc)"
-# 451 T272: `what's waiting on you` as one of a list of contents is no ask (the asks beside it are the Rust test's: a refusal quoting a new line is a new guard message)
+# 451 T272: `what's waiting on you` as one of a list of contents is no ask (the asks beside it were the Rust test's alone until 451 T282 masked the quoted line in the key: a refusal quoting a new line was a new guard message)
 rc=0; final_stop '| Where things stand | this conversation | a morning handoff file in the repo: what landed, what'"'"'s open, what was measured, what'"'"'s waiting on you. Enough for a session with no memory of today. |' || rc=$?
 [ "$rc" -eq 0 ] && ok "a table row listing what's waiting on you among a file's contents passes" || no "a listed content was refused as a question" "(rc=$rc)"
 rc=0; final_stop 'If you agree, I'"'"'ll file it as a 451 task.' || rc=$?
 [ "$rc" -eq 2 ] && grep -q "OFFER UNFILTERED" "$HOOK_ERR" && ok "...and an offer on the GM's agreement owes it as an offer" || no "an if-you-agree offer passed" "(rc=$rc)"
+rm -f "$TR"
+
+echo "13. a report of an ask, a check's own question, a checklist's questions and a figure are no question (451 T299, T282: 2026-11-26's misfirings)"
+: > "$TR"; gm_said "carry on"
+for s in '- **The other case was not a false positive.** `for you to confirm` does ask you for a confirmation, so the hook was right to stop me this morning.' \
+  '- **A check when a builder finishes, and again when I try to end a turn.** It asks: is a pool tree free, and does the queue hold a task that waits on nothing and doesn'"'"'t overlap the files of the tasks in flight?' \
+  'It has six questions that a performance change answers in its plan:
+1. Where does the time go?
+2. Does the change remove work, or only move it?
+3. What do you expect to save?' \
+  '485 minutes of blocking were waiting on you, 27% of the window'"'"'s blocking.' \
+  'From 17:00 to 19:43, six tasks landed. Blocking minutes, with waiting on you kept separate:'; do
+  rc=0; final_stop "$s" || rc=$?
+  [ "$rc" -eq 0 ] && ok "a statement passes: ${s:0:50}" || no "a statement was refused as a question" "(rc=$rc) $s"
+done
+# each one's twin that puts something to the GM (the refusal's quoted line is masked in its message's key, so these are no new messages: 451 T282)
+for s in '**The two-builders rule is marked provisional, for you to confirm.**' 'The review asks: are the wider banks acceptable to you?' \
+  'Two questions for you:
+1. Where do I draw the ford?
+2. What do you expect to save?' \
+  '485 minutes of blocking were waiting on you: the budget'"'"'s words.' 'What needs your word: whether round two runs under two-tier checking' \
+  'Do you accept the wider banks as a convention, or should they be drawn true size?'; do
+  rc=0; final_stop "$s" || rc=$?
+  [ "$rc" -eq 2 ] && grep -q "QUESTION UNFILTERED" "$HOOK_ERR" && ok "its twin still owes the filter: ${s:0:50}" || no "an ask passed" "(rc=$rc) $s"
+done
+grep -q "say nothing of this to him" "$HOOK_ERR" && ok "...and the refusal says a line that puts nothing to him is no word to him" || no "the refusal does not say how a false firing ends" "$(cat "$HOOK_ERR")"
+rc=0; final_stop 'If you'"'"'d rather it be plain `diagram-backlog`, that'"'"'s a one-line change.' || rc=$?
+[ "$rc" -eq 2 ] && grep -q "OFFER UNFILTERED" "$HOOK_ERR" && grep -q "say nothing of this to him" "$HOOK_ERR" && ok "an offer, routine or not, owes it as an offer, and is told the same" || no "an offer passed" "(rc=$rc)"
 rm -f "$TR"
 
 echo "8. outside a work tree the hook does nothing"

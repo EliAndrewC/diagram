@@ -23,6 +23,63 @@ fn run(args: &[&str]) -> crate::protocol::Reply {
     cli(&args.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>())
 }
 
+/// 451 T282: the line an escalation refusal quotes from the session's message is the case under test, not the guard's wording - two
+/// quoted lines are one message, a changed sentence of the guard's is another, and no other text's key moves.
+#[test]
+fn the_line_an_escalation_refusal_quotes_does_not_move_its_key() {
+    let d = TempDir::new("messages-quoted");
+    let c = d.join("c");
+    let said = |head: &str, line: &str, tail: &str| {
+        (
+            "escalation-hooks",
+            "refuse",
+            format!("{head} UNFILTERED: your final message puts it to the GM:\n  {line}\n{tail}"),
+        )
+    };
+    put(
+        &c,
+        "a.jsonl",
+        &[
+            said("QUESTION", "Shall I file it?", "Dispatch the check."),
+            said(
+                "QUESTION",
+                "It is waiting on your budget answer, the longer line.",
+                "Dispatch the check.",
+            ),
+            said("OFFER", "I can revert it.", "Dispatch the check."),
+            said(
+                "OFFER",
+                "Say if you want them moved.",
+                "Dispatch the check.",
+            ),
+            said(
+                "QUESTION",
+                "Shall I file it?",
+                "Dispatch the check, then go on.",
+            ),
+            (
+                "g-hooks",
+                "refuse",
+                "KEPT: these are his:\n  Shall I file it?\nName each.".to_owned(),
+            ),
+            (
+                "g-hooks",
+                "refuse",
+                "KEPT: these are his:\n  I can revert it.\nName each.".to_owned(),
+            ),
+        ],
+    );
+    let got = corpus(&c);
+    assert_eq!(got.len(), 5, "{got:?}");
+    assert!(got.values().any(|m| m.text.contains("the longer line")));
+    let masks = super::Masks::new();
+    assert_eq!(
+        masks
+            .wording("QUESTION UNFILTERED: no check has read it:\n  Shall I file 3?\nDispatch it."),
+        "QUESTION UNFILTERED: no check has read it: <the line> Dispatch it."
+    );
+}
+
 #[test]
 fn a_fixtures_paths_ids_and_numbers_do_not_move_a_wording_and_its_longest_rendering_is_kept() {
     let d = TempDir::new("messages-corpus");

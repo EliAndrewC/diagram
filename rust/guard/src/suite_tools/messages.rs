@@ -80,6 +80,7 @@ struct Masks {
     digits: Regex,
     space: Regex,
     relative: Regex,
+    quoted: Regex,
 }
 
 impl Masks {
@@ -96,6 +97,9 @@ impl Masks {
             relative: b(
                 r"(?<![\w.@+~*$/<>-])(?=[\w.@+~*$/-]*[a-z])[\w.@+~*$-]+/(?:[\w.@+~*$-]+/)*[\w.@+~*$-]*",
             ),
+            // the line of the session's own message that the escalation guard's two refusals quote (451 T282): the message under
+            // test, not the guard's wording, so each new case of its suite was a new message owing a review
+            quoted: b(r"^((?:QUESTION|OFFER) UNFILTERED:[^\n]*\n) {2}[^\n]*"),
         }
     }
 
@@ -110,6 +114,7 @@ impl Masks {
     /// changes and a guard's author does not.
     fn wording(&self, text: &str) -> String {
         let t = self.ansi.replace_all(text, "");
+        let t = self.quoted.replace(&t, "${1}  <the line>");
         let t = self.path.replace_all(&t, "<path>");
         // an id and a number are one mask, so a pid of 7 digits and one of 1 are the same wording
         let t = self.hex.replace_all(&t, "N");

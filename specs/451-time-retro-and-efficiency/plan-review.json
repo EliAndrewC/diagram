@@ -2124,6 +2124,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T299 (the Stop hook's question and offer detector read statements as asks: 12 firings on 2026-11-26, 7 of them statements, and 16 the day before, 9 of them statements; the GM, 2026-11-26: \"I would prefer not to see these messages about false positives\" and \"I am okay with some number of false positives. I just don't want to see the explanation of the false positives reach me. Though it probably is worth asking whether the number of false positives is within what we should consider an acceptable range.\"; built with 451 T282's two parts, the described ask and the refusal's key)": {
+   "sha256": "5dc76193ff75e357b3c28f7281de1646785e3797bc2fbecc50735b0c63d9965d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T299 Approach (checklist part A)": {
+   "sha256": "af22b2e4c16b9450aaed96dbe428555416225743449d652b551fdaed2bf1e984",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T299, T282 (bundle) (the Stop hook's question and offer detector read statements as asks: 12 firings on 2026-11-26, 7 of them statements, and 16 the day before, 9 of them statements; the GM, 2026-11-26: \"I would prefer not to see these messages about false positives\" and \"I am okay with some number of false positives. I just don't want to see the explanation of the false positives reach me. Though it probably is worth asking whether the number of false positives is within what we should consider an acceptable range.\"; T282 is what T272's builder found in the same guard on 2026-11-26 - a report describing an ask's wording read as an ask, and each refused suite case a new guard message - built here whole, in the same files)": {
+   "sha256": "ce5f9e032c34eab1e4a5f756aa9a25dab92aba09ce41cdbd56ae2493673d7f6c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T299, T282 Approach (checklist part A)": {
+   "sha256": "971ea1b5a5acec844579b6cfcbdc9c0c7dc5576e5e09ea674c7d6e6ea7a96acb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -27154,6 +27178,216 @@
      "why": "This is scheduling and exits, and nothing of the request is narrowed. The red-first counts and the items not seen red are stated. Those are test quality, not fidelity."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T299 (the Stop hook's question and offer detector read statements as asks: 12 firings on 2026-11-26, 7 of them statements, and 16 the day before, 9 of them statements; the GM, 2026-11-26: \"I would prefer not to see these messages about false positives\" and \"I am okay with some number of false positives. I just don't want to see the explanation of the false positives reach me. Though it probably is worth asking whether the number of false positives is within what we should consider an acceptable range.\"; built with 451 T282's two parts, the described ask and the refusal's key)",
+    "### T299 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T299-rules-a-e",
+     "summary": "classify and stated_ask gain five bounded statement forms (described ask, reported check question, checklist under a non-addressing lead-in, a figure of waiting on you, a set-apart category); every earlier ask and offer kept, each bound pinned by a test",
+     "class": "within",
+     "why": "Fewer false firings mean fewer refusals whose explanation could reach the GM (2026-11-26: 'I would prefer not to see these messages about false positives'), and the 2026-11-25 amendment named stopping the false firings as the lever. Each form excludes lines naming you/your (and, for checklists, I/my/we) so a line put to him still fires, as feature 429 FR-002 requires; measured on both corpora (28 and 112) with no T lost. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T299-needs-your-word",
+     "summary": "STATED gains 'needs your word' (words?), a true ask HEAD's guard missed",
+     "class": "within",
+     "why": "A detector that passes a decision put to the GM is a defect against feature 429 FR-002; fixing it as found widens detection and narrows nothing."
+    },
+    {
+     "id": "T299-kept-offer-not-built",
+     "summary": "the restated kept offer still fires; recognising an ad-hoc escalation-check's verdict needs a new record, filed as T335, lands before T302",
+     "class": "within",
+     "why": "Under FR-002 as written the line is an offer with no escalation-check since the GM's last message, so the firing follows the rule and is not a wrong outcome; the GM accepted 'some number of false positives', and the new refusal sentence keeps its explanation from reaching him. The leftover is filed with id, reason and order as FR-009 asks. No requested behavior is cut."
+    },
+    {
+     "id": "T299-acceptable-range",
+     "summary": "the GM's range question answered: the brief's aim of under about one false firing in five with no true ask lost; 8% (1 of 13) measured on the two days, with the stated limit that a firings-only corpus cannot show a newly dropped ask",
+     "class": "within",
+     "why": "Answers the question he raised ('worth asking whether the number of false positives is within ... an acceptable range') with a measured rate, and attributes the threshold to the brief, not to him; it settles nothing in his name."
+    },
+    {
+     "id": "T299-refusal-sentence",
+     "summary": "both refusals gain one sentence telling the session that a line putting nothing to him ends with saying nothing of it to him; both wordings sent to message-check",
+     "class": "within",
+     "why": "Carries the request's central clause directly: 'I just don't want to see the explanation of the false positives reach me.' Review by message-check follows 451 T170."
+    },
+    {
+     "id": "T299-T282-key-mask",
+     "summary": "T282 built in the same landing: the quoted line of the two refusals masked in the message key, anchored on the two heads so no other key moves",
+     "class": "within",
+     "why": "Bundling small open tasks in the same files follows the GM's 2026-11-22 approval of bundling (T141); the mask is confined to these two refusals and changes no behavior asked for elsewhere."
+    },
+    {
+     "id": "T299-link-failure-left",
+     "summary": "a pre-warm incremental-dir link failure seen in the builder's tree is left, filed as T336, lands before T302",
+     "class": "within",
+     "why": "A defect in another task's mechanism (T316's pre-warm), outside this request; filed with reason, id and order per FR-009. It narrows nothing T299 was asked to do."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T299, T282 (bundle) (the Stop hook's question and offer detector read statements as asks: 12 firings on 2026-11-26, 7 of them statements, and 16 the day before, 9 of them statements; the GM, 2026-11-26: \"I would prefer not to see these messages about false positives\" and \"I am okay with some number of false positives. I just don't want to see the explanation of the false positives reach me. Though it probably is worth asking whether the number of false positives is within what we should consider an acceptable range.\"; T282 is what T272's builder found in the same guard on 2026-11-26 - a report describing an ask's wording read as an ask, and each refused suite case a new guard message - built here whole, in the same files)",
+    "### T299, T282 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T282 rule (a) DESCRIBED",
+     "summary": "A quoted or backticked phrase that is the subject of 'does/did ask you' is blanked with its verb before spans are blanked; the session's own 'I do ask you' still fires.",
+     "class": "within",
+     "why": "T282: a report describing an ask's wording was read as an ask. Removing a statement the detector misread serves the GM's 2026-11-26 words ('I would prefer not to see these messages about false positives') and FR-002's narrow detector. The rule is bounded by the span, and the true-ask twin is pinned. Nothing FR-002 or amendment 1 owes the filter is exempted."
+    },
+    {
+     "id": "T299 rule (b) REPORTED",
+     "summary": "The '?' rule skips a last sentence running from 'asks:'/'asks whether'/'asks if' to its '?' with no you/your and no other '?' on the line.",
+     "class": "within",
+     "why": "It removes the check-described-by-its-question false firing from the corpus. Four twins that put something to him still fire and are pinned, including a reported question addressed to 'you' and a second question on the line. Only statements leave the detector's reach."
+    },
+    {
+     "id": "T299 rule (c) CHECKLIST",
+     "summary": "The '?' rule skips items of a 2+ item all-'?' list under a lead-in naming a checklist, or naming what something has/asks/holds/lists/poses/carries/answers, when the lead-in names neither the GM nor the session.",
+     "class": "within",
+     "why": "It removes the listed-checklist false firing. Lists put to him all still fire and are pinned: 'Two questions for you:', 'Open questions:', 'I have two questions...', a mixed list, a single item, no lead-in, and question-word items with suite case 9 kept. This is precision on statements and does not narrow FR-002's asks."
+    },
+    {
+     "id": "T299 rule (d) FIGURE",
+     "summary": "'waiting (on|for) you' is a measurement when a time count or share is the past-tense subject of was/were and the clause ends or goes on to another figure.",
+     "class": "within",
+     "why": "It removes the two time-breakdown figure firings. Work put to him ('Two hours of review are waiting on you', 'waiting on your budget answer', present tense, count of things) still fires and is pinned in the Rust test. It is bounded on both sides."
+    },
+    {
+     "id": "T299 rule (e) SET APART",
+     "summary": "'with waiting on you kept/counted/... separate/apart/...' names a breakdown category.",
+     "class": "within",
+     "why": "It removes the 'Blocking minutes, with waiting on you kept separate:' firing. The twins 'Two tasks are waiting on you, kept separate below.' and 'with waiting on you: the budget's words.' still fire. It reaches statements only."
+    },
+    {
+     "id": "T299 needs-your-word fix",
+     "summary": "STATED's 'needs your words' becomes 'words?' so 'What needs your word: ...' is caught; pinned in both suites.",
+     "class": "within",
+     "why": "This is a widening: a true ask HEAD's guard passed (a check passing bad work, a defect). Fixing it enforces FR-002 and narrows nothing. It was measured on both corpora: no T235 firing changes, and one already-firing message's quoted line moves."
+    },
+    {
+     "id": "T299 refusal sentence",
+     "summary": "Both refusals gain 'If the line puts nothing to him (offers him nothing), go on and say nothing of this to him.'; reviewed by message-check.",
+     "class": "within",
+     "why": "This sentence directly carries 'I just don't want to see the explanation of the false positives reach me'. FR-002's obligation attaches only to a message that asks or puts a decision to him, and amendment 1 adds offers. A line that puts nothing to him owed the filter nothing, so 'go on' restates FR-002's scope and is no carve-out from it. The GM's words take as given that sessions recognize false firings; what he struck is their explanation reaching him. Goal item 1 keeps every true ask refused until filtered. The new wording went to message-check (T170)."
+    },
+    {
+     "id": "T299 kept offer not built (T335)",
+     "summary": "The restated morning offer still fires; recognizing an ad-hoc escalation-check's kept verdict needs a new record and is filed as T335, landing before T302.",
+     "class": "within",
+     "why": "Under FR-002 the firing is arguably not false. The GM wrote after the 08:10Z ad-hoc check, so 'no escalation-check dispatched since his last message' holds. The restatement is an offer (amendment 1) in new words, and no gm-review.jsonl row records it as kept. Read most harshly as a residual false firing, it is one of 13, which 'I am okay with some number of false positives' covers. It is filed with an id, an order and the reason it is not fixed here (FR-009)."
+    },
+    {
+     "id": "T299 acceptable-range answer",
+     "summary": "The GM's question is answered with the measured rate, 33% before and 8% after on the 28 firings with no T lost, against 'under about one false firing in five'.",
+     "class": "within",
+     "why": "It answers 'it probably is worth asking whether the number of false positives is within ... an acceptable range' with numbers he can judge. The one-in-five threshold comes from the coordinating session's brief, not from the GM. The plan names it as 'the brief's aim' and does not attribute it to him, so the range stays his to accept. The plan also states that a firings-only corpus cannot show a newly dropped ask, and points to the pinned bounds instead."
+    },
+    {
+     "id": "T282 key mask",
+     "summary": "suite_tools::messages masks the quoted second line after a 'QUESTION UNFILTERED:'/'OFFER UNFILTERED:' head, so each refused suite case is not a new guard message.",
+     "class": "within",
+     "why": "T282's defect: each refused suite case created a new message key to review. The mask covers only the quoted user text under the two heads. The refusals' own wording is still keyed, so a change to it is still reviewed (451 T170), and no other message's key moves. A red-with-the-mask-off test pins it."
+    },
+    {
+     "id": "T299/T282 T336 found and left",
+     "summary": "A rust-lld link failure after the pool tree's pre-warm is filed as T336, landing before T302, to be reproduced first.",
+     "class": "within",
+     "why": "This build-tooling defect lies outside this section's request (T316's pre-warm). It is filed with an id, an order and the reason it is not fixed here, so nothing asked of T299 or T282 is left undone."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T299, T282 (bundle) (the Stop hook's question and offer detector read statements as asks: 12 firings on 2026-11-26, 7 of them statements, and 16 the day before, 9 of them statements; the GM, 2026-11-26: \"I would prefer not to see these messages about false positives\" and \"I am okay with some number of false positives. I just don't want to see the explanation of the false positives reach me. Though it probably is worth asking whether the number of false positives is within what we should consider an acceptable range.\"; T282 is what T272's builder found in the same guard on 2026-11-26 - a report describing an ask's wording read as an ask, and each refused suite case a new guard message - built here whole, in the same files)",
+    "### T299, T282 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T282 rule (a) DESCRIBED",
+     "summary": "A quoted or backticked phrase that is the subject of 'does/did ask you' is blanked with its verb before spans are blanked; the session's own 'I do ask you' still fires.",
+     "class": "within",
+     "why": "T282: a report describing an ask's wording was read as an ask. Removing a statement the detector misread serves the GM's 2026-11-26 words ('I would prefer not to see these messages about false positives') and FR-002's narrow detector. The rule is bounded by the span, and the true-ask twin is pinned. Nothing FR-002 or amendment 1 owes the filter is exempted."
+    },
+    {
+     "id": "T299 rule (b) REPORTED",
+     "summary": "The '?' rule skips a last sentence running from 'asks:'/'asks whether'/'asks if' to its '?' with no you/your and no other '?' on the line.",
+     "class": "within",
+     "why": "It removes the check-described-by-its-question false firing from the corpus. Four twins that put something to him still fire and are pinned, including a reported question addressed to 'you' and a second question on the line. Only statements leave the detector's reach."
+    },
+    {
+     "id": "T299 rule (c) CHECKLIST",
+     "summary": "The '?' rule skips items of a 2+ item all-'?' list under a lead-in naming a checklist, or naming what something has/asks/holds/lists/poses/carries/answers, when the lead-in names neither the GM nor the session.",
+     "class": "within",
+     "why": "It removes the listed-checklist false firing. Lists put to him all still fire and are pinned: 'Two questions for you:', 'Open questions:', 'I have two questions...', a mixed list, a single item, no lead-in, and question-word items with suite case 9 kept. This is precision on statements and does not narrow FR-002's asks."
+    },
+    {
+     "id": "T299 rule (d) FIGURE",
+     "summary": "'waiting (on|for) you' is a measurement when a time count or share is the past-tense subject of was/were and the clause ends or goes on to another figure.",
+     "class": "within",
+     "why": "It removes the two time-breakdown figure firings. Work put to him ('Two hours of review are waiting on you', 'waiting on your budget answer', present tense, count of things) still fires and is pinned in the Rust test. It is bounded on both sides."
+    },
+    {
+     "id": "T299 rule (e) SET APART",
+     "summary": "'with waiting on you kept/counted/... separate/apart/...' names a breakdown category.",
+     "class": "within",
+     "why": "It removes the 'Blocking minutes, with waiting on you kept separate:' firing. The twins 'Two tasks are waiting on you, kept separate below.' and 'with waiting on you: the budget's words.' still fire. It reaches statements only."
+    },
+    {
+     "id": "T299 needs-your-word fix",
+     "summary": "STATED's 'needs your words' becomes 'words?' so 'What needs your word: ...' is caught; pinned in both suites.",
+     "class": "within",
+     "why": "This is a widening: a true ask HEAD's guard passed (a check passing bad work, a defect). Fixing it enforces FR-002 and narrows nothing. It was measured on both corpora: no T235 firing changes, and one already-firing message's quoted line moves."
+    },
+    {
+     "id": "T299 refusal sentence",
+     "summary": "Both refusals gain 'If the line puts nothing to him (offers him nothing), go on and say nothing of this to him.'; reviewed by message-check.",
+     "class": "within",
+     "why": "This sentence directly carries 'I just don't want to see the explanation of the false positives reach me'. FR-002's obligation attaches only to a message that asks or puts a decision to him, and amendment 1 adds offers. A line that puts nothing to him owed the filter nothing, so 'go on' restates FR-002's scope and is no carve-out from it. The GM's words take as given that sessions recognize false firings; what he struck is their explanation reaching him. Goal item 1 keeps every true ask refused until filtered. The new wording went to message-check (T170)."
+    },
+    {
+     "id": "T299 kept offer not built (T335)",
+     "summary": "The restated morning offer still fires; recognizing an ad-hoc escalation-check's kept verdict needs a new record and is filed as T335, landing before T302.",
+     "class": "within",
+     "why": "Under FR-002 the firing is arguably not false. The GM wrote after the 08:10Z ad-hoc check, so 'no escalation-check dispatched since his last message' holds. The restatement is an offer (amendment 1) in new words, and no gm-review.jsonl row records it as kept. Read most harshly as a residual false firing, it is one of 13, which 'I am okay with some number of false positives' covers. It is filed with an id, an order and the reason it is not fixed here (FR-009)."
+    },
+    {
+     "id": "T299 acceptable-range answer",
+     "summary": "The GM's question is answered with the measured rate, 33% before and 8% after on the 28 firings with no T lost, against 'under about one false firing in five'.",
+     "class": "within",
+     "why": "It answers 'it probably is worth asking whether the number of false positives is within ... an acceptable range' with numbers he can judge. The one-in-five threshold comes from the coordinating session's brief, not from the GM. The plan names it as 'the brief's aim' and does not attribute it to him, so the range stays his to accept. The plan also states that a firings-only corpus cannot show a newly dropped ask, and points to the pinned bounds instead."
+    },
+    {
+     "id": "T282 key mask",
+     "summary": "suite_tools::messages masks the quoted second line after a 'QUESTION UNFILTERED:'/'OFFER UNFILTERED:' head, so each refused suite case is not a new guard message.",
+     "class": "within",
+     "why": "T282's defect: each refused suite case created a new message key to review. The mask covers only the quoted user text under the two heads. The refusals' own wording is still keyed, so a change to it is still reviewed (451 T170), and no other message's key moves. A red-with-the-mask-off test pins it."
+    },
+    {
+     "id": "T299/T282 T336 found and left",
+     "summary": "A rust-lld link failure after the pool tree's pre-warm is filed as T336, landing before T302, to be reproduced first.",
+     "class": "within",
+     "why": "This build-tooling defect lies outside this section's request (T316's pre-warm). It is filed with an id, an order and the reason it is not fixed here, so nothing asked of T299 or T282 is left undone."
+    },
+    {
+     "id": "T299 no-ask-lost evidence",
+     "summary": "The plan shows no ask is lost with two firings-only corpora (the 28 of 2026-11-25/26 and T235's labeled 112) through the fixed guard, plus pinned true-ask twins for every rule, and does not run a fresh recall sample.",
+     "class": "within",
+     "why": "FR-002 (429) asks for a detector measured for hit rate, a sample of hits, and recall on an independently labeled sample. Rules (a)-(e) only remove firings; the needs-your-word change only adds them. So any ask the new rules drop would have fired on HEAD, and the two corpora cover HEAD's firings in their windows. All 12 T of the two-day corpus and all 74 T and 8 B of T235's independently labeled corpus still fire. Asks outside those windows are covered by the bounded twins pinned in both suites, and the block states that limit itself. On the two-day corpus the builder's labels are not independent. I relabeled the five F lines the block quotes from the line alone and agree each is a statement (a report of a hook's reading, a check described by its question, a checklist item listed, two time figures). The whole messages are not in the bundle. This keeps FR-002's measured-detector standard and does not narrow it."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -42681,6 +42915,166 @@
      "summary": "After T289, before T308's remainder and T302. One landing. Green: the new tests green and red with the rules off, plus builder-checks on both crates. Red: recorded and set down, with a claim that it cannot be done sent to the arbiter.",
      "class": "within",
      "why": "This is scheduling and exits, and nothing of the request is narrowed. The red-first counts and the items not seen red are stated. Those are test quality, not fidelity."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T299": {
+   "section_sha256": "4c7720d536f12d056884982b95c33857517f3eb98a22817caa6a38bd46e6ba32",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T282 rule (a) DESCRIBED",
+     "summary": "A quoted or backticked phrase that is the subject of 'does/did ask you' is blanked with its verb before spans are blanked; the session's own 'I do ask you' still fires.",
+     "class": "within",
+     "why": "T282: a report describing an ask's wording was read as an ask. Removing a statement the detector misread serves the GM's 2026-11-26 words ('I would prefer not to see these messages about false positives') and FR-002's narrow detector. The rule is bounded by the span, and the true-ask twin is pinned. Nothing FR-002 or amendment 1 owes the filter is exempted."
+    },
+    {
+     "id": "T299 rule (b) REPORTED",
+     "summary": "The '?' rule skips a last sentence running from 'asks:'/'asks whether'/'asks if' to its '?' with no you/your and no other '?' on the line.",
+     "class": "within",
+     "why": "It removes the check-described-by-its-question false firing from the corpus. Four twins that put something to him still fire and are pinned, including a reported question addressed to 'you' and a second question on the line. Only statements leave the detector's reach."
+    },
+    {
+     "id": "T299 rule (c) CHECKLIST",
+     "summary": "The '?' rule skips items of a 2+ item all-'?' list under a lead-in naming a checklist, or naming what something has/asks/holds/lists/poses/carries/answers, when the lead-in names neither the GM nor the session.",
+     "class": "within",
+     "why": "It removes the listed-checklist false firing. Lists put to him all still fire and are pinned: 'Two questions for you:', 'Open questions:', 'I have two questions...', a mixed list, a single item, no lead-in, and question-word items with suite case 9 kept. This is precision on statements and does not narrow FR-002's asks."
+    },
+    {
+     "id": "T299 rule (d) FIGURE",
+     "summary": "'waiting (on|for) you' is a measurement when a time count or share is the past-tense subject of was/were and the clause ends or goes on to another figure.",
+     "class": "within",
+     "why": "It removes the two time-breakdown figure firings. Work put to him ('Two hours of review are waiting on you', 'waiting on your budget answer', present tense, count of things) still fires and is pinned in the Rust test. It is bounded on both sides."
+    },
+    {
+     "id": "T299 rule (e) SET APART",
+     "summary": "'with waiting on you kept/counted/... separate/apart/...' names a breakdown category.",
+     "class": "within",
+     "why": "It removes the 'Blocking minutes, with waiting on you kept separate:' firing. The twins 'Two tasks are waiting on you, kept separate below.' and 'with waiting on you: the budget's words.' still fire. It reaches statements only."
+    },
+    {
+     "id": "T299 needs-your-word fix",
+     "summary": "STATED's 'needs your words' becomes 'words?' so 'What needs your word: ...' is caught; pinned in both suites.",
+     "class": "within",
+     "why": "This is a widening: a true ask HEAD's guard passed (a check passing bad work, a defect). Fixing it enforces FR-002 and narrows nothing. It was measured on both corpora: no T235 firing changes, and one already-firing message's quoted line moves."
+    },
+    {
+     "id": "T299 refusal sentence",
+     "summary": "Both refusals gain 'If the line puts nothing to him (offers him nothing), go on and say nothing of this to him.'; reviewed by message-check.",
+     "class": "within",
+     "why": "This sentence directly carries 'I just don't want to see the explanation of the false positives reach me'. FR-002's obligation attaches only to a message that asks or puts a decision to him, and amendment 1 adds offers. A line that puts nothing to him owed the filter nothing, so 'go on' restates FR-002's scope and is no carve-out from it. The GM's words take as given that sessions recognize false firings; what he struck is their explanation reaching him. Goal item 1 keeps every true ask refused until filtered. The new wording went to message-check (T170)."
+    },
+    {
+     "id": "T299 kept offer not built (T335)",
+     "summary": "The restated morning offer still fires; recognizing an ad-hoc escalation-check's kept verdict needs a new record and is filed as T335, landing before T302.",
+     "class": "within",
+     "why": "Under FR-002 the firing is arguably not false. The GM wrote after the 08:10Z ad-hoc check, so 'no escalation-check dispatched since his last message' holds. The restatement is an offer (amendment 1) in new words, and no gm-review.jsonl row records it as kept. Read most harshly as a residual false firing, it is one of 13, which 'I am okay with some number of false positives' covers. It is filed with an id, an order and the reason it is not fixed here (FR-009)."
+    },
+    {
+     "id": "T299 acceptable-range answer",
+     "summary": "The GM's question is answered with the measured rate, 33% before and 8% after on the 28 firings with no T lost, against 'under about one false firing in five'.",
+     "class": "within",
+     "why": "It answers 'it probably is worth asking whether the number of false positives is within ... an acceptable range' with numbers he can judge. The one-in-five threshold comes from the coordinating session's brief, not from the GM. The plan names it as 'the brief's aim' and does not attribute it to him, so the range stays his to accept. The plan also states that a firings-only corpus cannot show a newly dropped ask, and points to the pinned bounds instead."
+    },
+    {
+     "id": "T282 key mask",
+     "summary": "suite_tools::messages masks the quoted second line after a 'QUESTION UNFILTERED:'/'OFFER UNFILTERED:' head, so each refused suite case is not a new guard message.",
+     "class": "within",
+     "why": "T282's defect: each refused suite case created a new message key to review. The mask covers only the quoted user text under the two heads. The refusals' own wording is still keyed, so a change to it is still reviewed (451 T170), and no other message's key moves. A red-with-the-mask-off test pins it."
+    },
+    {
+     "id": "T299/T282 T336 found and left",
+     "summary": "A rust-lld link failure after the pool tree's pre-warm is filed as T336, landing before T302, to be reproduced first.",
+     "class": "within",
+     "why": "This build-tooling defect lies outside this section's request (T316's pre-warm). It is filed with an id, an order and the reason it is not fixed here, so nothing asked of T299 or T282 is left undone."
+    },
+    {
+     "id": "T299 no-ask-lost evidence",
+     "summary": "The plan shows no ask is lost with two firings-only corpora (the 28 of 2026-11-25/26 and T235's labeled 112) through the fixed guard, plus pinned true-ask twins for every rule, and does not run a fresh recall sample.",
+     "class": "within",
+     "why": "FR-002 (429) asks for a detector measured for hit rate, a sample of hits, and recall on an independently labeled sample. Rules (a)-(e) only remove firings; the needs-your-word change only adds them. So any ask the new rules drop would have fired on HEAD, and the two corpora cover HEAD's firings in their windows. All 12 T of the two-day corpus and all 74 T and 8 B of T235's independently labeled corpus still fire. Asks outside those windows are covered by the bounded twins pinned in both suites, and the block states that limit itself. On the two-day corpus the builder's labels are not independent. I relabeled the five F lines the block quotes from the line alone and agree each is a statement (a report of a hook's reading, a check described by its question, a checklist item listed, two time figures). The whole messages are not in the bundle. This keeps FR-002's measured-detector standard and does not narrow it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T282": {
+   "section_sha256": "4c7720d536f12d056884982b95c33857517f3eb98a22817caa6a38bd46e6ba32",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T282 rule (a) DESCRIBED",
+     "summary": "A quoted or backticked phrase that is the subject of 'does/did ask you' is blanked with its verb before spans are blanked; the session's own 'I do ask you' still fires.",
+     "class": "within",
+     "why": "T282: a report describing an ask's wording was read as an ask. Removing a statement the detector misread serves the GM's 2026-11-26 words ('I would prefer not to see these messages about false positives') and FR-002's narrow detector. The rule is bounded by the span, and the true-ask twin is pinned. Nothing FR-002 or amendment 1 owes the filter is exempted."
+    },
+    {
+     "id": "T299 rule (b) REPORTED",
+     "summary": "The '?' rule skips a last sentence running from 'asks:'/'asks whether'/'asks if' to its '?' with no you/your and no other '?' on the line.",
+     "class": "within",
+     "why": "It removes the check-described-by-its-question false firing from the corpus. Four twins that put something to him still fire and are pinned, including a reported question addressed to 'you' and a second question on the line. Only statements leave the detector's reach."
+    },
+    {
+     "id": "T299 rule (c) CHECKLIST",
+     "summary": "The '?' rule skips items of a 2+ item all-'?' list under a lead-in naming a checklist, or naming what something has/asks/holds/lists/poses/carries/answers, when the lead-in names neither the GM nor the session.",
+     "class": "within",
+     "why": "It removes the listed-checklist false firing. Lists put to him all still fire and are pinned: 'Two questions for you:', 'Open questions:', 'I have two questions...', a mixed list, a single item, no lead-in, and question-word items with suite case 9 kept. This is precision on statements and does not narrow FR-002's asks."
+    },
+    {
+     "id": "T299 rule (d) FIGURE",
+     "summary": "'waiting (on|for) you' is a measurement when a time count or share is the past-tense subject of was/were and the clause ends or goes on to another figure.",
+     "class": "within",
+     "why": "It removes the two time-breakdown figure firings. Work put to him ('Two hours of review are waiting on you', 'waiting on your budget answer', present tense, count of things) still fires and is pinned in the Rust test. It is bounded on both sides."
+    },
+    {
+     "id": "T299 rule (e) SET APART",
+     "summary": "'with waiting on you kept/counted/... separate/apart/...' names a breakdown category.",
+     "class": "within",
+     "why": "It removes the 'Blocking minutes, with waiting on you kept separate:' firing. The twins 'Two tasks are waiting on you, kept separate below.' and 'with waiting on you: the budget's words.' still fire. It reaches statements only."
+    },
+    {
+     "id": "T299 needs-your-word fix",
+     "summary": "STATED's 'needs your words' becomes 'words?' so 'What needs your word: ...' is caught; pinned in both suites.",
+     "class": "within",
+     "why": "This is a widening: a true ask HEAD's guard passed (a check passing bad work, a defect). Fixing it enforces FR-002 and narrows nothing. It was measured on both corpora: no T235 firing changes, and one already-firing message's quoted line moves."
+    },
+    {
+     "id": "T299 refusal sentence",
+     "summary": "Both refusals gain 'If the line puts nothing to him (offers him nothing), go on and say nothing of this to him.'; reviewed by message-check.",
+     "class": "within",
+     "why": "This sentence directly carries 'I just don't want to see the explanation of the false positives reach me'. FR-002's obligation attaches only to a message that asks or puts a decision to him, and amendment 1 adds offers. A line that puts nothing to him owed the filter nothing, so 'go on' restates FR-002's scope and is no carve-out from it. The GM's words take as given that sessions recognize false firings; what he struck is their explanation reaching him. Goal item 1 keeps every true ask refused until filtered. The new wording went to message-check (T170)."
+    },
+    {
+     "id": "T299 kept offer not built (T335)",
+     "summary": "The restated morning offer still fires; recognizing an ad-hoc escalation-check's kept verdict needs a new record and is filed as T335, landing before T302.",
+     "class": "within",
+     "why": "Under FR-002 the firing is arguably not false. The GM wrote after the 08:10Z ad-hoc check, so 'no escalation-check dispatched since his last message' holds. The restatement is an offer (amendment 1) in new words, and no gm-review.jsonl row records it as kept. Read most harshly as a residual false firing, it is one of 13, which 'I am okay with some number of false positives' covers. It is filed with an id, an order and the reason it is not fixed here (FR-009)."
+    },
+    {
+     "id": "T299 acceptable-range answer",
+     "summary": "The GM's question is answered with the measured rate, 33% before and 8% after on the 28 firings with no T lost, against 'under about one false firing in five'.",
+     "class": "within",
+     "why": "It answers 'it probably is worth asking whether the number of false positives is within ... an acceptable range' with numbers he can judge. The one-in-five threshold comes from the coordinating session's brief, not from the GM. The plan names it as 'the brief's aim' and does not attribute it to him, so the range stays his to accept. The plan also states that a firings-only corpus cannot show a newly dropped ask, and points to the pinned bounds instead."
+    },
+    {
+     "id": "T282 key mask",
+     "summary": "suite_tools::messages masks the quoted second line after a 'QUESTION UNFILTERED:'/'OFFER UNFILTERED:' head, so each refused suite case is not a new guard message.",
+     "class": "within",
+     "why": "T282's defect: each refused suite case created a new message key to review. The mask covers only the quoted user text under the two heads. The refusals' own wording is still keyed, so a change to it is still reviewed (451 T170), and no other message's key moves. A red-with-the-mask-off test pins it."
+    },
+    {
+     "id": "T299/T282 T336 found and left",
+     "summary": "A rust-lld link failure after the pool tree's pre-warm is filed as T336, landing before T302, to be reproduced first.",
+     "class": "within",
+     "why": "This build-tooling defect lies outside this section's request (T316's pre-warm). It is filed with an id, an order and the reason it is not fixed here, so nothing asked of T299 or T282 is left undone."
+    },
+    {
+     "id": "T299 no-ask-lost evidence",
+     "summary": "The plan shows no ask is lost with two firings-only corpora (the 28 of 2026-11-25/26 and T235's labeled 112) through the fixed guard, plus pinned true-ask twins for every rule, and does not run a fresh recall sample.",
+     "class": "within",
+     "why": "FR-002 (429) asks for a detector measured for hit rate, a sample of hits, and recall on an independently labeled sample. Rules (a)-(e) only remove firings; the needs-your-word change only adds them. So any ask the new rules drop would have fired on HEAD, and the two corpora cover HEAD's firings in their windows. All 12 T of the two-day corpus and all 74 T and 8 B of T235's independently labeled corpus still fire. Asks outside those windows are covered by the bounded twins pinned in both suites, and the block states that limit itself. On the two-day corpus the builder's labels are not independent. I relabeled the five F lines the block quotes from the line alone and agree each is a statement (a report of a hook's reading, a check described by its question, a checklist item listed, two time figures). The whole messages are not in the bundle. This keeps FR-002's measured-detector standard and does not narrow it."
     }
    ],
    "verdict": "CLEAR"
