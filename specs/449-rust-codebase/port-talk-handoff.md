@@ -43,8 +43,11 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
   shared compiler cache and an eager drop of coverage builds declined on measurement; stale coverage variants are 451 T278.
 - **Items 1-5 and 7**: two code builders at once in REUSED worktrees (decided 2026-11-26). Landed per wall hour 1.71 at one
   builder, 2.02 at two; memory measured that morning - two builders and a landing peaked at 6.3 GiB anonymous against the
-  container's 10 GiB limit, no sample over the 7 GiB margin, no OOM kill; three code builders were not run, the headroom too
-  small. Load is the other limit (median 32, peak 67 on 22 cores). Items 2-5 and 7 have no measurement of their own.
+  container's 10 GiB limit, no sample over the 7 GiB margin, no OOM kill; three code builders, run later that day, peaked at 6.4 GiB,
+  the same, so memory does not cap the count. Processor does: load median 42, peak 94 on 22 cores at three, and a cold
+  worktree's first closing checks took 14 to 30 minutes. Two is the measured default until the warm worktree pool (451 T285,
+  the GM's instruction that the tooling enforce reuse) and the build slot (451 T284, his synchronization point) are in; then
+  three and four are re-measured. Items 2-5 and 7 have no measurement of their own.
 - **Still open of the pre-approved set - item 14**: its cost is measured (the agenda's item 14: 26 escalation-check runs,
   1.85M tokens in), but neither pre-approved lever has been - a shorter builder report format (adopt if shorter with nothing
   lost) and escalation-check on a narrower bundle (adopt if its verdicts do not change). A Sonnet-tier seeded test was

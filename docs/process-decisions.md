@@ -185,7 +185,11 @@ looked at again.
 **Question.** How many builders run at once, each in its own worktree, landings still one at a time through main (the talk's
 items 1-5 and 7)?
 
-**Decided** - two code builders at once, in worktrees that are REUSED so their build caches are warm. Both halves of the
+**Decided, and to be re-measured** - two code builders at once is what was measured to shorten total time, in worktrees
+that are REUSED so their build caches are warm. Two is NOT a memory cap (three fit; below) and not the conclusion: the GM,
+2026-11-26, *"wouldn't it be better to address that with some synchronization rather than pre-emptively limiting builders just
+in case?"* - so the count is re-measured at three and four once the warm pool (451 T285) and the build slot (451 T284) are in,
+and the number recorded then is the largest that still shortens total time. Both halves of the
 pre-approval's condition are measured: total time (below) and peak memory under a margin (the memory paragraph below). Three or four
 at once only for batches that compile nothing (comment and doc edits, page work) is the arrangement beside it. The session
 first recorded that second rule as outside the pre-approval; the GM, 2026-11-26: *"I thought I already pre-approved whatever number and arrangement of parallel builders our measurements support."* So the
@@ -223,8 +227,15 @@ Memory, measured 2026-11-26 12:39-13:19 UTC with two code builders compiling and
 T272) and a landing's gate beside them for part of it, sampled every 10 s from the container's cgroup (236 samples,
 `dev/measurements/2026-11-26/builder-count/mem-samples-two-builders.log`): anonymous memory median 1.9 GiB, 95th percentile
 5.7, peak 6.3 GiB against the 10 GiB limit - no sample over the 7 GiB margin, no OOM kill, 4.4 s of memory stall in 40
-minutes; `memory.current` reached 9.5 GiB, which is page cache and is given back. Load median 32 and peak 67 on 22 cores. A
-third code builder was NOT run: two and a landing already peak at 6.3 GiB, so three compiling at once would pass the margin.
+minutes; `memory.current` reached 9.5 GiB, which is page cache and is given back. Load median 32 and peak 67 on 22 cores. Three
+code builders were then run the same day (13:37-14:27 UTC; 451 T269, T270 and T271, each cold-compiling in a fresh worktree,
+two landings' gates beside them; 292 samples, `mem-samples-three-builders.log` beside the other): anonymous memory median 2.5
+GiB, peak 6.4 GiB - the same peak as two, no sample over 7, no OOM kill, 6.1 s of memory stall. The session had first
+concluded, without running it, that a third builder would pass the margin; the run says otherwise: the peak follows how many
+heavy compiles coincide, not the number of builders. Checked 2026-11-26 from `memory.stat` that anonymous is the in-use figure
+here: shmem 0 (`/tmp` is on disk), unreclaimable slab 0; the rest of `memory.current` is page cache, which is given back.
+What three builders do cost is PROCESSOR: load median 42 and peak 94 on 22 cores, up to 46 compilers at once, and a first
+closing-checks run of 14 to 30 minutes in those cold trees (about a minute warm and alone).
 
 **What followed.** `scripts/container/builder-brief.md`'s SIZING paragraph names the count; the frictions of running several
 were fixed by 451 T245-T247 and T252-T257, with T271 (shared scratch and plan-review bundle directory) open. 451 T274 keeps the sampler as

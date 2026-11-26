@@ -14,11 +14,13 @@ cadence-days: 14
 
 Decided under the GM's pre-approval of 2026-11-25, both halves of its condition measured (total time; memory - two builders
 and a landing peaked at 6.3 GiB anonymous against the 10 GiB limit, 2026-11-26, no sample over 7 GiB, no OOM kill; three code
-builders not run, the headroom being too small). The three-or-four rule for work that compiles nothing is covered by the same
+builders, run the same day, peaked at 6.4 GiB, the same - memory does not cap the count; processor does, load median 42 and
+peak 94 on 22 cores). The three-or-four rule for work that compiles nothing is covered by the same
 pre-approval (the GM, 2026-11-26: *"I thought I already pre-approved whatever number and arrangement of parallel builders our measurements support."*), on weak
 measurement - 52 wall minutes of comment batches, 2.44 landed per wall hour, memory unsampled - and is re-measured at the next
 such batch. Recorded (`docs/process-decisions.md`, "Two code builders at once, in
 reused worktrees; three or four only for work that compiles nothing"). The rule is in `scripts/container/builder-brief.md`'s SIZING
 paragraph; no guard enforces it.
 
-Not measured: one builder in a fresh worktree against one in a warm tree; memory at three code builders (not run on purpose). The audit re-runs the command over the builders dispatched since 2026-11-26.
+Not measured: three and four code builders in WARM trees with the build slot (451 T284, T285) - the re-measurement that sets
+the number; one builder in a fresh worktree against one in a warm tree. The audit re-runs the command over the builders dispatched since 2026-11-26.
