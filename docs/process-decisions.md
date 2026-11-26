@@ -80,6 +80,47 @@ This file is loaded on demand, so a declined option recorded here costs no auto-
     measurement found instead: 20 of cover-gate's 21 GB of incremental data is stale variants (the sweep keeps 16 a crate,
     after 12 idle hours); pruning them sooner is 451 T278.
 
+- **Building the fix beside its reproduction** (declined 2026-11-26 on measurement; the GM's question that day: *"whether
+  the tasks that we are looking at, where we have a known failure, are things where we already have enough information to be
+  working on the fix ... while a different worktree is reproducing"*). Over 47 defect fixes of 2026-11-24..26 (42 builder
+  chains; `dev/measurements/2026-11-26/split-reproduction/m16-results.md`, its scripts beside it): the diagnosis in the brief was
+  confirmed in 18, narrowed or widened in 13, wrong in 8 and no defect in 3; the reproduction is 2 to 4 minutes of a 34-minute
+  median; a split would have saved 4 to 38 wall minutes of 1,440 builder-minutes (0.3% to 2.6%) for about 480 extra
+  builder-minutes, about 200 of them thrown away. A brief that states its cause as fact was still wrong one time in six; the
+  15 tasks whose cause an earlier builder had measured were never wrong but had the least reproduction to skip. What the
+  measurement found instead: 65% of builder-minutes fall after the fix is first written (the plan section, review rounds,
+  checks, rework) - 451 T308. Reopens if reproduction comes to be a large share of a task (a class of defect that takes tens of
+  minutes to reproduce) - then for that class only, and only where the cause is already measured.
+- **The escalation check on Sonnet** (not adopted 2026-11-26 on its trial; the GM had pre-approved it *"if your measurements
+  show that it is just as effective"*). By the project's model-trial method, four recorded drafts replayed three times a tier
+  (`dev/measurements/2026-11-26/escalation-levers/m14-results.md`): Sonnet cut a question the recorded verdict had sent to the
+  GM, and that he did answer (the aqueduct's banks), in 3 of 3 runs - the strict rule is no such miss - and it was not cheaper:
+  2.7 times the input tokens and 2.7 times the seconds. Reopens on a new trial after the check itself is made steadier (next
+  entry's finding), with drafts that hold several recorded CUTs.
+- **The escalation check on a narrower bundle** (not adopted 2026-11-26 on the same trial; pre-approved *"if the metrics we
+  gather demonstrate their effectiveness"*, the rule being that its verdicts do not change). Input fell 42% and 69% on the two
+  drafts tried, and item rulings were no further from the recorded verdict than the full-repository control, but three catches
+  the full runs made were lost in every bundle run (two of them gaps in how the bundle was built). Reopens with a bundle
+  builder that takes whole heading sections and always includes the decision entry and the pre-approval paragraph, tried again.
+  THE FINDING THAT MATTERS MORE, open for the GM: on its pinned tier the check agreed with its own recorded rulings on 53% of
+  items across twelve replays and cut something the recorded verdict had sent to him in 5 of 12 runs - the filter that decides
+  what reaches him varies run to run.
+- **A merge driver for a feature's `tasks.md` and `plan.md`, and one file a task** (declined 2026-11-26 by the GM: *"every
+  circumstance under which I would have multiple sessions running is one in which they would be working different features"*).
+  Within one session `make carry` keeps both sides (451 T289); across sessions no two append to one feature's files. One file a
+  task stays a question of how features are laid out, for the structural discussion, not of conflicts.
+- **A session's own edits in a pool tree ("worktrees always")** (declined 2026-11-26, talked through with the GM): the rule is
+  one writer a tree, not everything in a worktree - the clone is the session's tree and must exist as the place work is carried
+  into and landed from; a tree for a one-line edit would add a handout, a carry and a release to the cheapest changes; the
+  danger was two writers in one tree, which one writer a tree removes (451 T302). Reopens if the session's own edits come to
+  collide with carries or gates in the clone.
+- **Keeping a builder alive for follow-up** (declined 2026-11-26 by the GM: *"being able to close out builders as they
+  complete has some advantages from a simplicity and design perspective. So I want to be wary of needing to keep them around for
+  any reason"*): a later fix, a gate failure or even a design that proved wrong, goes to a fresh agent briefed from the plan
+  section, the commit and the report. That day two fresh builders closed out others' work in 8 and 22 minutes while the
+  originals had ended at 230k to 296k of their 300k. Reopens if a fresh builder is measured to cost markedly more than the
+  original would have on a class of follow-up.
+
 ## Decided
 
 ### The builders' report has a fixed format (decided 2026-11-26)

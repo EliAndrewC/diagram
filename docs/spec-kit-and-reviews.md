@@ -138,6 +138,7 @@ finding and raises no false alarm. The tier each check runs on is `rust/gate/cra
 | check | tried | when | result | record |
 |---|---|---|---|---|
 | record-format | Sonnet (the alias at the time), medium and high | 2026-09-19 | missed findings; stays Opus | `specs/251-tiered-subagent-checks/research.md` R5, R7 |
+| escalation-check | Sonnet, at the agent's pinned effort; four recorded drafts, three runs a tier | 2026-11-26 | cut a question the recorded verdict sent to the GM in 3 of 3 runs, and 2.7 times the tokens and seconds; stays on its pinned tier | `dev/measurements/2026-11-26/escalation-levers/m14-results.md` |
 | source-reader | Sonnet (the alias at the time), high | 2026-09-19 | missed findings; stays Opus | 251 R5 |
 | spec-fidelity-verify | Opus at medium effort | 2026-09-19 | missed findings; stays high | 251 R5 |
 | quote-check, entry-drift, escalation-check | Opus at medium effort | 2026-09-19 | held; medium | 251 R5 |
