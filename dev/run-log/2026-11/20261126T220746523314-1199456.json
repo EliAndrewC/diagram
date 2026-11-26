@@ -1,0 +1,43 @@
+{
+  "utc": "2026-11-26T22:07:46Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 209,
+  "result": "failed: static hooks-test",
+  "commit": "91c982599e",
+  "first_failure_s": 62.9,
+  "last_failure_s": 198.8,
+  "host": {
+    "load": [
+      6.65,
+      2.67
+    ],
+    "mem_avail_mb": [
+      11717,
+      11955
+    ],
+    "cpu_temp_c": [
+      58.0,
+      50.0
+    ],
+    "stall_s": {
+      "cpu": 4.2,
+      "io": 3.6,
+      "io_full": 3.1,
+      "memory": 0.4
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  },
+  "phases": {
+    "preflight": 10.0,
+    "reference": 0.0,
+    "hooks-test": 62.0,
+    "counters-inert": 32.0,
+    "static": 199.0,
+    "format": 3.0,
+    "seeds": 7.0
+  }
+}
