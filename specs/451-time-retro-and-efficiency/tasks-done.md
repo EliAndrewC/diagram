@@ -630,3 +630,6 @@
 - [x] T252 tests/hooks/test-closing-checks.sh case 1's static-row check failed once while its printed output showed the static row GREEN, then passed on the next two runs (451 T249's builder in a parallel worktree, 2026-11-25): find the race or the read that makes it flaky (two closing-checks runs side by side on one machine are the likely shared state) and make it deterministic, red-first on a forced interleaving
       research: rendering
       verify: DONE. landed: the closing-checks suite's flake was a pipefail SIGPIPE race; here-string checks, a forced-race pin and a self-check; red-first; CLEAR; T253 filed
+- [x] T253 the other 17 pipefail guard suites under tests/hooks/ grep a run's text through a pipe (`printf '%s' "$OUT" | grep -q`, 98 sites, counted 2026-11-25 by T252's grep): grep -q exits on an early match while bash's printf still writes, SIGPIPE makes the pipeline 141 under pipefail, a present line reads FAIL and a negated check passes falsely (T252: 1 in 3,000 at real size on one CPU); move each to a here-string helper as test-closing-checks.sh's `seen` and lift its self-grep into a check over every suite
+      research: rendering
+      verify: DONE. landed: the pipe race removed from 158 lines in 32 files, refused by a new check in hooks-test; six real membership defects in two scripts; red-first by a forced race; CLEAR
