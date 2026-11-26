@@ -639,7 +639,30 @@ land:           ## [project] land one task or several and tick them: every cheap
 	@$(LAND_RUN) "$(F)" "$(T)"; rc=$$?; \
 	  if [ $$rc = 0 ]; then "$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep landed "$(F)" "$$(git rev-parse --path-format=absolute --git-common-dir)/task-starts.jsonl" $(T) </dev/null; fi; \
 	  if [ $$rc = 0 ] || [ $$rc = 3 ]; then "$$(git rev-parse --show-toplevel)/scripts/state-sync.sh" push --detach || :; fi; \
+	  if [ $$rc = 0 ] || [ $$rc = 3 ]; then "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" builder-tree landed "$(F)" $(T) || printf 'make land: the landed task'"'"'s pool tree was not released (the landing stands) - make builder-tree-release T="$(T)"\n' >&2; fi; \
 	  $(SCRATCH_TREES); exit $$rc
+
+# THE BUILDER POOL (feature 451 T285, the GM 2026-11-26: "whatever tooling we use to create worktrees automatically enforces and
+# performs the correct behavior"): a builder's worktree is one of the clone's standing pool, so its build cache is warm (a cold
+# tree's first closing checks: 14-30 minutes against about one, 2026-11-26). `rust/gate/crates/task/src/builder_tree.rs`; a hand
+# `git worktree add` under the clones directory, and the removal of a pool tree or its cache, are refused by `builder_pool_hooks`.
+.PHONY: builder-tree builder-trees builder-tree-release builder-tree-adopt builder-tree-drop
+builder-tree: export DISCARD := $(DISCARD)
+builder-tree:   ## [project] a builder's worktree from the clone's standing pool: a free tree brought to the clone's HEAD and held by the task, its path printed; none free, ONE more made up to the cap (L7R_BUILDER_POOL, 4), said to be cold, its guard built; make land releases it (feature 451 T285)   T=<task(s)> [F=<feature>] [DISCARD="<why a free tree's uncommitted work may go>"]
+	@if [ -z "$(T)" ]; then printf 'make builder-tree: T=<task> is required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" builder-tree take "$(T)" "$(or $(F),$(SPECIFY_FEATURE))"
+builder-trees:  ## [project] the builder pool: each tree, the task holding it, since when, its build cache's size (feature 451 T285)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" builder-tree list
+builder-tree-release:  ## [project] free the pool tree a task holds, the tree and its build cache left in place - what make land does for a landed task (feature 451 T285)   T=<task(s)> [F=<feature>]
+	@if [ -z "$(T)" ]; then printf 'make builder-tree-release: T=<task> is required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" builder-tree release "$(T)" "$(F)"
+builder-tree-adopt:  ## [project] a builder's worktree made before the pool joins it under its own name, its build cache as warm as it was (a rename chills it: 0.1 s to 66 s, 2026-11-26; feature 451 T285)   TREE=<path> [T=<task holding it>] [F=<feature>]
+	@if [ -z "$(TREE)" ]; then printf 'make builder-tree-adopt: TREE=<path> is required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" builder-tree adopt "$(TREE)" "$(T)" "$(or $(F),$(SPECIFY_FEATURE))"
+builder-tree-drop: export REASON := $(REASON)
+builder-tree-drop:  ## [project] the ONE way a pool tree and its build cache are removed, the reason on the pool's log (feature 451 T285)   TREE=<path> REASON="<two words or more>"
+	@if [ -z "$(TREE)" ]; then printf 'make builder-tree-drop: TREE=<path> and REASON="<why>" are required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" builder-tree drop "$(TREE)"
 
 coverage-exempt: ## [tests] the engine files the Rust port replaces, exempt from the coverage floor (dev/coverage-exempt.json; feature 448, the GM 2026-11-02); PRUNE=1 drops the stale entries   [PRUNE=1]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coverage-exempt list $(if $(PRUNE),--prune,)
@@ -658,7 +681,9 @@ land-stop:       ## [project] stop this tree's running `make land` cleanly - its
 land-batch: export LAND_NOTE = $(NOTE)
 land-batch:     ## [project] the same command as make land (feature 385 T117's name, kept)   F=385 T="T106 T108" NOTE="what was verified"
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make land-batch: F=<feature> and T="<task ids>" are required\n' >&2; exit 2; fi
-	@$(LAND_RUN) "$(F)" "$(T)"
+	@$(LAND_RUN) "$(F)" "$(T)"; rc=$$?; \
+	  if [ $$rc = 0 ] || [ $$rc = 3 ]; then "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" builder-tree landed "$(F)" $(T) || printf 'make land-batch: the landed tasks'"'"' pool trees were not released (the landing stands) - make builder-tree-release T="$(T)"\n' >&2; fi; \
+	  exit $$rc
 
 phase-read:     ## [project] let ONE of a started phase task's held old-code files be read for ten minutes (to replace the stage's thin Python function, say), the reason logged - the phase-source guard's escape for the Read tool (feature 444)   FILE=<path> WHY="<reason>"
 	@if [ -z "$(FILE)" ] || [ -z "$$WHY" ]; then printf 'make phase-read: FILE=<path> and WHY="<reason>" are required\n' >&2; exit 2; fi

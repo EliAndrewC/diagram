@@ -117,3 +117,21 @@ fn a_tree_a_live_process_works_in_is_active_however_old_its_head() {
     assert_eq!(all.last().map(String::as_str), Some("idle/cover-gate"));
     assert_eq!(all[0], "busy-land/debug");
 }
+
+/// A builder pool tree's build directory is never the budget's (451 T285): free, it is idle, and its cache is what the pool keeps.
+#[test]
+fn a_pool_tree_s_profiles_are_never_taken() {
+    let (_base, c) = world();
+    let before = names(&choose(&c, u64::MAX, cutoff(), &[]), &c);
+    assert!(before.iter().any(|n| n.starts_with("idle/")), "{before:?}");
+    let tree = crate::shared::builder_pool::Tree {
+        tree: c.clones.join("idle"),
+        feature: String::new(),
+        tasks: Vec::new(),
+        since: String::new(),
+    };
+    crate::shared::builder_pool::write(&c.clones.join("busy/.git"), &[tree]).unwrap();
+    let after = names(&choose(&c, u64::MAX, cutoff(), &[]), &c);
+    let idle = after.iter().filter(|n| n.starts_with("idle/")).count();
+    assert!(idle == 0 && !after.is_empty(), "{after:?}");
+}

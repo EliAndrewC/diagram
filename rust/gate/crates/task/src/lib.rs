@@ -6,6 +6,7 @@
 //! sources by command is asked in process, each the function its command runs. `l7r-gate task-add` (`make task-add`, [`task_add`]) and
 //! `l7r-gate set-down` (`make set-down`, [`set_down`]) are `scripts/task-add.py` and `set-down.py`, ported whole by T135.
 
+pub mod builder_tree;
 pub mod phase_sources;
 mod plan_hold;
 #[cfg(test)]
@@ -22,10 +23,11 @@ use std::process::Command;
 use l7r_gate_core::Reply;
 use l7r_shared::py_text::strip;
 
-/// `l7r-gate tick|task-start|task-add|set-down|phase-read <args>` from `cwd`, as the binary dispatches them.
+/// `l7r-gate tick|task-start|task-add|set-down|phase-read|builder-tree <args>` from `cwd`, as the binary dispatches them.
 #[must_use]
 pub fn cli(verb: &str, args: &[String], cwd: &Path) -> Reply {
     match verb {
+        "builder-tree" => builder_tree::cli(args, cwd),
         "tick" => tick::cli(args, cwd),
         "task-start" => task_start::cli(args, cwd),
         "task-add" => task_add::cli(args, cwd, &std::env::var("TASK_TITLE").unwrap_or_default()),

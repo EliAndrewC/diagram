@@ -207,7 +207,7 @@ looked at again.
 items 1-5 and 7)?
 
 **Decided, and to be re-measured** - two code builders at once is what was measured to shorten total time, in worktrees
-that are REUSED so their build caches are warm. Two is NOT a memory cap (three fit; below) and not the conclusion: the GM,
+that are REUSED so their build caches are warm. The reuse is now the tooling's (451 T285): `make builder-tree` hands a builder a tree of the clone's standing pool, `make land` frees it with its cache in place, and a guard refuses a hand-made worktree and the removal of a pool tree or its cache. Two is NOT a memory cap (three fit; below) and not the conclusion: the GM,
 2026-11-26, *"wouldn't it be better to address that with some synchronization rather than pre-emptively limiting builders just
 in case?"* - so the count is re-measured at three and four once the warm pool (451 T285) and the build slot (451 T284) are in,
 and the number recorded then is the largest that still shortens total time. Both halves of the

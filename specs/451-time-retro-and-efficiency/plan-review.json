@@ -1968,6 +1968,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T285 (2026-11-26: the coordinating session made each builder a fresh worktree by hand and deleted it and its build cache after the landing, against the reused-worktrees rule of `docs/process-decisions.md`, \"Two code builders at once\" - a cold tree's first closing checks took 14-30 minutes against about a minute warm, measured 2026-11-26 (the day's closing-checks runs, that entry's figures))": {
+   "sha256": "da148f86588e207c97e2ba429b5fe61d4b2aed21049960154fc358d1ac0d9857",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "round-arbiter"
+  },
+  "### T285 Approach (checklist part A)": {
+   "sha256": "b45e146db595d77111ac2be5f2da888eb60dc4f91cec719a8390cf5b9a5da201",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -24828,6 +24840,436 @@
      "why": "Enforces the GM's audit register words (2026-11-25: document each process with its measurements and falsifier) on this refusal, which the check otherwise missed; enforcement of what was asked, not new scope."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T285 (2026-11-26: the coordinating session made each builder a fresh worktree by hand and deleted it and its build cache after the landing, against the reused-worktrees rule of `docs/process-decisions.md`, \"Two code builders at once\" - a cold tree's first closing checks took 14-30 minutes against about a minute warm, measured 2026-11-26 (the day's closing-checks runs, that entry's figures))",
+    "### T285 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1 registry",
+     "summary": "The pool is a registry in the clone's common git directory (.git/builder-pool.json) with an event log beside it; membership is the registry, never a name's shape; new trees are <clone>-b<N>.",
+     "class": "within",
+     "why": "Bookkeeping a pool needs so the tooling, not the session, owns builder trees: serves the GM's reuse of the build cache (request.md 2026-11-22) and real enforcement (2026-11-19)."
+    },
+    {
+     "id": "D2 take",
+     "summary": "make builder-tree hands out the task's held tree, else the first free tree brought to HEAD, else one cold tree made under the cap with its guard binary prebuilt (1800 s GUESS knob, L7R_BUILDER_GUARD_SECS), said to be COLD.",
+     "class": "within",
+     "why": "The handout is the mechanism of reuse; making a new tree only when none is free, and saying so, is the request's reuse, not a narrowing of it."
+    },
+    {
+     "id": "D3 dirty refusal",
+     "summary": "A free tree holding uncommitted paths whose content is not HEAD's is refused (paths named), with DISCARD=<reason> to take it over; the tool never passes such a tree over for a new cold one; paths identical to HEAD (landed work) are no hold.",
+     "class": "within",
+     "why": "Refusing rather than making a cold tree keeps the outcome the task exists for; the escape is the project's reasoned-escape form. Nothing in it narrows reuse."
+    },
+    {
+     "id": "D4a release on make land",
+     "summary": "make builder-tree-release and make land's post-step free the tree, leave it and its cache in place, bring it to HEAD where nothing holds it; the release never fails a landing.",
+     "class": "within",
+     "why": "Freeing without deleting is the reuse asked for; a release that cannot fail a landing protects the landing and narrows nothing."
+    },
+    {
+     "id": "D4b land-batch releases nothing",
+     "summary": "make land-batch has none of make land's post-steps and releases no tree; its trees are freed only by a hand make builder-tree-release.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The block never says take treats a tree held by an already-landed task as free, so after a land-batch every builder tree stays held and the next handout makes a COLD tree (under the cap) or is refused (at it) - the wrong outcome the task exists to end, the block's own D3 reasoning ('the cold tree is the failure the task exists to end, so the tool refuses rather than hide it') here inverted. The only reason given is that land-batch has no post-steps today, which is consistency with existing code and does not carry an exception; a hand release step is an instruction, not the real enforcement the GM asked for on 2026-11-19. What must hold: a tree whose holding tasks have landed by any landing path is free at the next handout without a hand step (land-batch releases as land does, or take frees a tree whose holders are landed), pinned by a test on the land-batch path."
+    },
+    {
+     "id": "D5 list, drop, adopt",
+     "summary": "make builder-trees lists trees, holders, ages, cache sizes; builder-tree-drop is the one removal (reason required, held tree refused); builder-tree-adopt joins a pre-pool worktree under its own name.",
+     "class": "within",
+     "why": "Visibility and a single logged removal path are the enforcement of reuse; adoption brings the existing warm trees in."
+    },
+    {
+     "id": "D6 adopt by name, not rename",
+     "summary": "The three trees of 2026-11-26 are adopted under their own names because a measured rename rebuilt every workspace crate (66.5 s / 41.7 s against 0.11 s / 0.08 s warm).",
+     "class": "within",
+     "why": "Decided by measurement in favor of keeping caches warm, which is the request's purpose; naming is not something the request settles."
+    },
+    {
+     "id": "D7 cap",
+     "summary": "builder_pool::CAP = 4 (L7R_BUILDER_POOL), a GUESS knob; at the cap a handout is refused naming each holder.",
+     "class": "within",
+     "why": "A bound on standing caches answers the GM's disk words (2026-11-22 'clean up after ourselves', 2026-11-25 T245) beside reuse; it is a labeled knob set at the largest count ever run, and the count worth running is left to T284's measurement."
+    },
+    {
+     "id": "D8 guard",
+     "summary": "A guard refuses git worktree add under <mirror>/.clones/, git worktree remove or move of a pool tree, and rm of a pool tree, its cache or a directory holding either; BUILDER_TREE_OK with a reason escapes; the tooling's own trees are exempt by call site (inside scripts), not by name.",
+     "class": "within",
+     "why": "This is the real enforcement the GM asked for (2026-11-19) of reusing worktrees: it refuses exactly the hand forms of the incident in the task header. Refusing move is justified by the measured rename chill."
+    },
+    {
+     "id": "D9a /usr/bin/git not read",
+     "summary": "The shared walk reads git only by bare name, so a path-qualified git passes this guard as it passes every tree guard.",
+     "class": "within",
+     "why": "The failure in the task header is hand git worktree commands in their ordinary bare form, which the guard refuses; nothing in the bundle shows a path-qualified git in use, so this leaves no observed wrong outcome. It is the shared walk's limit across every tree guard, not a narrowing of this task's reach."
+    },
+    {
+     "id": "D9b cp -a / git clone not read",
+     "summary": "A tree under the clones directory made by cp -a or git clone is not a worktree and is not read by the guard.",
+     "class": "within",
+     "why": "Not the hand form of the incident (fresh worktrees by git worktree add); nothing in the bundle shows those forms used for builder trees."
+    },
+    {
+     "id": "D9c cache budget may evict pool trees",
+     "summary": "The cache budget's eviction (scratch_sweep_hooks/sweep/evict.rs, 100 GB knob L7R_CACHE_BUDGET_GB) may still evict an idle pool tree's profiles past the budget; the cache was observed over 150 GB on 2026-11-26; the budget is left unchanged as 'the GM's T245 rule'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The block's own goal (Approach item 1) is a builder starting warm 'every time'; with the cache measured at over 150 GB against a 100 GB budget, the sweep is past its budget now, and idle pool trees - every free tree between builders - are what it evicts, so a free tree can be handed out with an emptied cache: the cold builder the task exists to end, left in place and not listed under 'Found and left?' (which reads 'none'; FR-009). The justification fails at its seam: the GM's T245 words (request.md 2026-11-25) ask for an audit of disk use and an automatic trigger below a free-space percentage; 'idle trees' targets evicted past the budget' is in the parenthesis marked as the coordinating session's build, not his words, and the 100 GB is a knob. His 2026-11-22 words ask for both cleanup and reuse of the build cache. What must hold: a free pool tree is not handed out cold because of the budget sweep - the plan decides how the budget and the pool coexist (for instance the sweep evicts other caches or profiles before a pool tree's, or the budget is re-set with a measurement), or, if the two asks truly cannot both hold, the conflict goes to the round arbiter rather than being accepted as a limit."
+    },
+    {
+     "id": "D9d cold cache not seeded",
+     "summary": "A new cold tree's cache is not seeded from a warm one.",
+     "class": "within",
+     "why": "Seeding is an optimization nobody asked for, and the block's rename measurement indicates a moved cache rebuilds anyway; a cold tree is made only when no tree is free and under the cap."
+    }
+   ],
+   "tasks": [
+    "T285"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T285 (2026-11-26: the coordinating session made each builder a fresh worktree by hand and deleted it and its build cache after the landing, against the reused-worktrees rule of `docs/process-decisions.md`, \"Two code builders at once\" - a cold tree's first closing checks took 14-30 minutes against about a minute warm, measured 2026-11-26 (the day's closing-checks runs, that entry's figures))",
+    "### T285 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1 registry",
+     "summary": "Pool membership is a registry at <clone>/.git/builder-pool.json with an event log beside it; new trees are <clones>/<clone>-b<N>.",
+     "class": "within",
+     "why": "This is how the tool knows which trees to reuse. It is the mechanism the GM asked for ('tooling ... automatically enforces and performs the correct behavior'), and nothing in it narrows that."
+    },
+    {
+     "id": "D2 take",
+     "summary": "make builder-tree hands out the tree the task already holds, else the first free tree brought to HEAD, else one new cold tree while under the cap; at the cap it refuses and names each holder.",
+     "class": "within",
+     "why": "Reuse comes first and a cold tree is made only when every tree is held. That is the reused-worktrees rule performed by the tool. A refusal at the cap creates no cold tree."
+    },
+    {
+     "id": "D3 cold guard build",
+     "summary": "A new cold tree has its guard binary built before handout, limit 1800 s (GUESS knob L7R_BUILDER_GUARD_SECS), not the wrapper's 45 s.",
+     "class": "within",
+     "why": "This is an implementation detail of making the one cold tree the pool allows. It narrows nothing that was asked, and the knob is labeled GUESS."
+    },
+    {
+     "id": "D4 dirty refusal",
+     "summary": "A free tree with uncommitted paths whose content is not HEAD's is refused for handout and names those paths. DISCARD=<reason> takes it over. Such a tree is never passed over for a new cold one.",
+     "class": "within",
+     "why": "It forbids exactly the outcome T285 exists to end, a cold tree made past a reusable one. The cost is a refusal plus one hand step, not a route to a fresh tree. The block says plainly that this was the builder's decision."
+    },
+    {
+     "id": "D5 release and land",
+     "summary": "Release frees the tree and leaves the tree and its cache in place. make land and make land-batch call 'landed' after a landing, and a failed release never fails the landing.",
+     "class": "within",
+     "why": "This is the second half of the GM's correct behavior: no tree or cache is deleted after a landing. If a release does not run, D6 frees the tree at the next handout, so the safety net does not make a cold tree."
+    },
+    {
+     "id": "D6 any-route freeing",
+     "summary": "At every handout, a tree whose every holding task is ticked in tasks.md or archived in tasks-done.md is freed first, so a hand tick or a skipped release owes no hand step.",
+     "class": "within",
+     "why": "It closes the route by which a landing that skipped make land would leave a tree held and force a cold one. That is 'automatically ... performs the correct behavior'."
+    },
+    {
+     "id": "D6a featureless hold",
+     "summary": "'A hold that names no feature is read by nothing there and waits for its release.' F= is optional on make builder-tree and on make builder-tree-adopt, so such holds arise from the pool's own advertised forms.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is a carve-out from D6's own promise that 'no hand step is owed', and the block gives no reason for it. It leaves a route to the exact failure the GM named. A builder takes a tree with T= and no F=. Its task is then ticked by hand, or its landing's release does not run. The tree stays held for good, and the next take makes a new COLD tree while a reusable one sits idle. That is a wrong outcome (a cold builder, the tool answering wrongly), not a mere difference. Following the rule here is not physically impossible, the GM's words do not imply the exception, and following it does not defeat the request. Fix: make F= required on take and adopt (or derive it from the task's line in the clone's tasks.md, refusing when it cannot be found), so every hold is one D6's sweep reads. Pin the hand-tick case for that form in the any-route test."
+    },
+    {
+     "id": "D7 adopt not rename",
+     "summary": "The three trees of 2026-11-26 (-t269, -t270, -t271) are adopted under their own names, because a measured rename rebuilt every workspace crate (66.5 s and 41.7 s against 0.11 s and 0.08 s warm).",
+     "class": "within",
+     "why": "Renaming would chill the caches, which is the failure being fixed. Membership is by registry, not by name shape, so the old names are full pool members. The figures carry a date and a method."
+    },
+    {
+     "id": "D8 cap",
+     "summary": "CAP = 4 (L7R_BUILDER_POOL), a GUESS read from the sizing rule. The count worth running is left to T284 to measure.",
+     "class": "within",
+     "why": "A cap refuses past it and creates no cold tree. The number is labeled GUESS and its measurement is assigned to the task that owns it."
+    },
+    {
+     "id": "D9 guard forms",
+     "summary": "The guard refuses git worktree add under <mirror>/.clones/, git worktree remove or move of a pool tree, and rm of a pool tree, its cache, or a directory holding either. Each refusal names the pool's command, and BUILDER_TREE_OK with a reason escapes.",
+     "class": "within",
+     "why": "This is the 'enforces ... without the opportunity for this kind of mistake' half. It refuses exactly the hand forms of 2026-11-26: a fresh tree made by hand, and a tree and cache deleted after a landing. move is refused because the measurement shows it chills the cache just as a removal does. The escape follows the project's guard rules."
+    },
+    {
+     "id": "D9a tooling exempt by call site",
+     "summary": "land-alone.sh, land-tooling.sh, review-tree.sh and the pool tool call git inside a program, so the hook never sees those calls. A hand 'git worktree add .../<clone>-land' is refused like any other, and the suite pins both cases.",
+     "class": "within",
+     "why": "The exemption is by call site, not by name, so no hand form escapes through a tooling tree's name. The call-site census states its search space (a grep of 'worktree add' over scripts/ and rust/)."
+    },
+    {
+     "id": "D9b guard reads only .clones/",
+     "summary": "Refusal (a) reads only worktree-add targets under <mirror>/.clones/. Scratch worktrees elsewhere pass.",
+     "class": "within",
+     "why": "The trees the process rule and the pool define as builder trees live under the clones directory, and that is where the 2026-11-26 mistake was made. A worktree elsewhere is a scratch tree, not a builder tree made by mistake. Reaching one would mean a session relocating its tree after a refusal had named the pool, which is the same class as the recorded escape, not the inadvertent mistake the GM named. Recorded so a later round can check it: the dispatch and the brief are what put builders in pool trees, and nothing in this block checks a builder's tree outside .clones/."
+    },
+    {
+     "id": "D10a path-qualified git",
+     "summary": "The shared walk reads git only by its bare name, so '/usr/bin/git worktree add ...' passes.",
+     "class": "within",
+     "why": "Not ruled as a legitimate exception: the block's stated reason, that every tree guard behaves this way, is consistency with existing code and could not legitimate a narrowing. It is within because it is not a route the GM's 'this kind of mistake' takes. The mistake was a session using the ordinary form, which is refused and pointed at the pool. Spelling out a path-qualified git is a deliberate bypass of the same class as the escape. A PreToolUse hook cannot see git called from inside a program anyway."
+    },
+    {
+     "id": "D10b copies are not worktrees",
+     "summary": "A tree under the clones directory made by cp -a or git clone is not read.",
+     "class": "within",
+     "why": "The GM's words are 'whatever tooling we use to create worktrees'. A copy or a clone is not a worktree and is not how builder trees were or are made, so the request does not reach it."
+    },
+    {
+     "id": "D10c no seeding",
+     "summary": "A new cold tree's cache is not seeded from a warm one.",
+     "class": "within",
+     "why": "Seeding is an optimization the request does not ask for. The request is that existing trees be reused and not deleted, and the pool makes a new tree only when every tree is held."
+    },
+    {
+     "id": "D11 budget skips pool trees",
+     "summary": "The cache budget's eviction (evict.rs choose) skips a registered pool tree's build directory. The pool's share is bounded by cap x tree cache (about 40 GB, a GUESS from three measured sizes), shown by make builder-trees and returned by make builder-tree-drop.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows T245's budget, which holds every build directory. Two grounds legitimate it. First, applying the budget literally would defeat this request's purpose, as the block shows concretely: the cache was over its 100 GB budget at over 150 GB, a free pool tree ranks idle, so the sweep would empty it between builders and the next handout would be cold while called warm. Second, the GM's own words of 2026-11-22 imply it ('your points about reusing the same build cache and whatnot are well taken'). His concern then, space eaten 'without us realizing it', is answered by a bounded share that is priced, listed and reclaimable. Not confirmed from the block: whether T245's low-free-space automatic eviction also goes through choose and so skips pool trees, and whether make disk-audit names the pool's share. Neither blocks this ruling."
+    }
+   ],
+   "tasks": [
+    "T285"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T285 (2026-11-26: the coordinating session made each builder a fresh worktree by hand and deleted it and its build cache after the landing, against the reused-worktrees rule of `docs/process-decisions.md`, \"Two code builders at once\" - a cold tree's first closing checks took 14-30 minutes against about a minute warm, measured 2026-11-26 (the day's closing-checks runs, that entry's figures))",
+    "### T285 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1 registry",
+     "summary": "A clone's builder trees are a pool recorded in <clone>/.git/builder-pool.json with a log beside it; membership is the registry, never a name's shape; new trees are <clone>-b<N>.",
+     "class": "within",
+     "why": "The GM asked that the tooling that creates worktrees perform the correct behavior, which is reused worktrees. A registry the tool hands trees out of is that mechanism."
+    },
+    {
+     "id": "D2 take",
+     "summary": "make builder-tree hands out the task's own tree, else the first free tree brought to HEAD, else makes one cold tree under the cap with its guard binary prebuilt (1800 s GUESS knob).",
+     "class": "within",
+     "why": "This is reuse performed automatically. A cold tree is made only when no tree exists to reuse, and the tool says it is cold."
+    },
+    {
+     "id": "D3 dirty refusal and DISCARD",
+     "summary": "A free tree holding uncommitted content that is not HEAD's is refused with each path named. DISCARD=<reason> takes it over, logged. The tool never makes a cold tree past such a tree.",
+     "class": "within",
+     "why": "The request settles nothing about leftover edits, and this narrows nothing in it. Refusing rather than making a cold tree past the held one keeps reuse, which is the request's purpose. The other choices, silently destroying work or silently making a cold tree, would each be worse against the request. The extra step is an implementation cost, which is not a fidelity matter."
+    },
+    {
+     "id": "D4 release, land and freeing by any route",
+     "summary": "release and make land/land-batch free the tree and keep it and its cache. The release never fails a landing. At every handout a tree whose tasks are all ticked or archived is freed. A hold with no feature is refused.",
+     "class": "within",
+     "why": "This is the 'performs the correct behavior' half: the tree and cache survive the landing with no hand step. The feature-required refusal exists only so that the freeing step can read every hold."
+    },
+    {
+     "id": "D5 list, drop and adopt",
+     "summary": "make builder-trees lists the pool. builder-tree-drop is the one removal: it needs a two-word reason, refuses a held tree and is logged. builder-tree-adopt joins pre-pool trees (the landing, tooling and review trees refused).",
+     "class": "within",
+     "why": "The drop is the form nearest the original mistake. It is not on the landing path, refuses a held tree and needs a recorded reason, which is the project's escape convention. The GM's disk words of 2026-11-22 and 2026-11-25 need some way to give space back. Deleting after every landing now takes a deliberate, logged act, not a habit."
+    },
+    {
+     "id": "D6 adoption under own names",
+     "summary": "The three 2026-11-26 trees are adopted under their own names, not renamed, because a rename was measured as cold (66.5 s and 41.7 s against 0.11 s and 0.08 s warm).",
+     "class": "within",
+     "why": "Renaming would chill the caches the request exists to keep warm. Membership is by registry, so the names do not matter."
+    },
+    {
+     "id": "D7 cap",
+     "summary": "CAP = 4 (L7R_BUILDER_POOL), GUESS. At the cap a new tree is refused and each holder is named.",
+     "class": "within",
+     "why": "The cap bounds how many trees are made. It narrows no reuse, and it is labeled GUESS with its source."
+    },
+    {
+     "id": "D8 guard scope and tooling exemption by call site",
+     "summary": "The guard refuses a hand git worktree add under .clones/, a worktree remove or move of a pool tree, and an rm of a pool tree, its cache or a parent of either. BUILDER_TREE_OK takes a reason. The tooling's own git calls are inside programs and so are never seen. A hand add of a -land tree is refused.",
+     "class": "within",
+     "why": "This is the 'enforces' half, aimed at the exact forms of the mistake (hand creation, hand deletion of tree and cache). Refusing move is justified by the rename measurement. The exemption is structural, not a named carve-out, and a hand form of the tooling's paths is still refused."
+    },
+    {
+     "id": "D9a absolute-path git passes the guard",
+     "summary": "'Limits accepted': the shared walk reads git only by its bare name, so /usr/bin/git worktree add under .clones/ passes. This was observed in the guard's test and the case was removed from the test. 'Found and left?' says none.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A builder tree made by hand under .clones/ is the GM's 'this kind of mistake' however git is spelled: it is just as cold, and the request is 'without the opportunity'. The reason given, that every tree guard shares the limit, is consistency with existing code, which is not a ground. It is not impossible (matching git by its basename in the walk is plainly doable). The GM's words do not imply it. Covering it would not defeat the request's purpose. The section also observed the guard passing this form (a check that passes bad work, a defect), deleted the test case that showed it, and records 'Found and left? none', so the defect is left without FR-009's why, filed task id and order. To clear it, preferably fix the walk (or the guard) so a path-qualified git is read and pin the case back in the suite. Otherwise carry it under 'Found and left?' as FR-009 requires: why it is not fixed here, a filed task id and 'lands before ...'."
+    },
+    {
+     "id": "D9b cp -a and git clone not read",
+     "summary": "A tree under .clones/ made by cp -a or git clone is not a worktree and is not read by the guard.",
+     "class": "within",
+     "why": "The request is about the tooling that creates worktrees, and the mistake was a worktree. git clone under .clones/ is how clones themselves are made, so refusing it would block legitimate work. This is outside the request, not carved out of it."
+    },
+    {
+     "id": "D9c new cold tree's cache not seeded",
+     "summary": "A newly made tree's build cache is not copied from a warm one.",
+     "class": "within",
+     "why": "Seeding was not asked for. The block's own rename measurement (fingerprints hold the absolute path) shows a copied cache would not be warm, so leaving it out loses nothing the request asked for."
+    },
+    {
+     "id": "D10 the cache budget never evicts a pool tree's build directory",
+     "summary": "The sweep's choose skips a build directory named for a registered pool tree. The pool's share is bounded by cap times tree cache (about 40 GB GUESS, 174 GB free) and is given back only by builder-tree-drop.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows T245's cache budget, whose 100 GB and idle-tree eviction are the session's design, not the GM's words. Applying the budget literally would defeat T285's purpose: it would empty each free pool tree between builders, so the next handout would be cold while called warm. The GM's own words of 2026-11-22 ('your points about reusing the same build cache and whatnot are well taken') support keeping the cache. His 'without us realizing it' still holds because the pool's share is bounded and visible in make builder-trees. Aside: the block does not say whether the low-free-space trigger shares choose. If it does, the pool is exempt there too, which is the same reasoning but worth one sentence in the block."
+    }
+   ],
+   "tasks": [
+    "T285"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T285 (2026-11-26: the coordinating session made each builder a fresh worktree by hand and deleted it and its build cache after the landing, against the reused-worktrees rule of `docs/process-decisions.md`, \"Two code builders at once\" - a cold tree's first closing checks took 14-30 minutes against about a minute warm, measured 2026-11-26 (the day's closing-checks runs, that entry's figures))",
+    "### T285 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1 registry",
+     "summary": "the pool's registry at <clone>/.git/builder-pool.json with its log; membership by registry, never by a name's shape; new trees <clones>/<clone>-b<N>",
+     "class": "within",
+     "why": "how the tooling records the reused trees the GM asked it to keep; settles nothing the request left open against it"
+    },
+    {
+     "id": "D2 take",
+     "summary": "make builder-tree hands out the task's tree, else the first free tree at HEAD, else ONE new cold tree under the cap with its guard binary built (1800 s GUESS knob); at the cap refused naming holders",
+     "class": "within",
+     "why": "the tooling performing the reuse ('automatically ... performs the correct behavior'); a cold tree is made only when no warm one exists, and is said to be cold"
+    },
+    {
+     "id": "D3 dirty refusal",
+     "summary": "a free tree with uncommitted content not in HEAD holds it: the handout is refused naming the paths, DISCARD with a reason takes it over; a held free tree is never passed over for a new cold one",
+     "class": "within",
+     "why": "refusing rather than making a cold tree past a warm one is the request's rule enforced, not narrowed; DISCARD is the project's reasoned, logged escape (FR-012's pattern)"
+    },
+    {
+     "id": "D4 release and land",
+     "summary": "builder-tree-release and make land / land-batch free the tree and leave it and its cache in place; a release never fails a landing",
+     "class": "within",
+     "why": "the deletion after landing was the mistake; the landing now performs the correct step itself"
+    },
+    {
+     "id": "D4b freed by any route",
+     "summary": "at every handout a tree whose holding tasks are ticked or archived is freed first",
+     "class": "within",
+     "why": "removes a hand step on which reuse would otherwise depend - 'without the opportunity for this kind of mistake'"
+    },
+    {
+     "id": "D4c every hold names its feature",
+     "summary": "a handout or adoption with a task and no feature is refused",
+     "class": "within",
+     "why": "makes D4b able to read every hold; serves the same clause"
+    },
+    {
+     "id": "D5 list, drop, adopt",
+     "summary": "make builder-trees lists; builder-tree-drop is the one removal (reason, logged, held tree refused); builder-tree-adopt joins a pre-pool worktree under its own name, the tooling's trees refused",
+     "class": "within",
+     "why": "drop is a deliberate, logged give-back of disk that the GM's disk words (2026-11-22, 2026-11-25) keep necessary, not the unthinking deletion after every landing; adopt keeps the three existing warm trees"
+    },
+    {
+     "id": "D6 adopt by name, not rename",
+     "summary": "the three trees of 2026-11-26 adopted under their names because a moved tree rebuilt every workspace crate (66.5 s / 41.7 s against 0.11 s / 0.08 s warm, measured 2026-11-26 with method)",
+     "class": "within",
+     "why": "the measured choice that keeps the caches warm, which is the request's purpose"
+    },
+    {
+     "id": "D7 cap",
+     "summary": "CAP = 4 (L7R_BUILDER_POOL), a GUESS knob from the sizing rule; T284 measures the count",
+     "class": "within",
+     "why": "a bound on the pool's size; refusing at the cap makes no hand route to a cold tree, and the request sets no count"
+    },
+    {
+     "id": "D8a guard reach bounded to the clones directory",
+     "summary": "the guard refuses `git worktree add` only for a path under <mirror>/.clones/; scratch worktrees elsewhere pass",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Test: is the refused act a builder tree made by hand. The clones directory is where every builder tree lives (the pool's own trees, the hand trees of the mistake, -t269/-t270/-t271), so under it the guard reaches exactly the mistake's class. A worktree elsewhere is a scratch tree whose correct behavior is to be made and removed; refusing it would reach work the GM did not ask to stop (UNREQUESTED reach), and a hook cannot tell a scratch tree from a builder's except by where it lands. Taking the bound literally away would defeat no part of the request's purpose that the pool does not already serve."
+    },
+    {
+     "id": "D8b guard refusals and escape",
+     "summary": "refuses worktree remove/move of a pool tree and rm of a pool tree, its cache or a directory holding either; BUILDER_TREE_OK with a reason escapes, checked first",
+     "class": "within",
+     "why": "the deletion half of the mistake, refused; move refused because it was measured to chill the cache; the reasoned escape is the accepted spec's guard pattern (FR-012)"
+    },
+    {
+     "id": "D8c tooling trees exempt by call site",
+     "summary": "land-alone.sh, land-tooling.sh, review-tree.sh and the pool tool call git inside a program, which a hook does not read; a hand `git worktree add .../<clone>-land` is refused",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "physically impossible otherwise: a PreToolUse hook reads only the tool call, not git calls inside a program; and these are the tooling the GM asked to perform the behavior, while the hand form of the same tree is still refused, so the exemption guts nothing"
+    },
+    {
+     "id": "L1 cp -a into the clones directory",
+     "summary": "a tree under the clones directory made by `cp -a` is not a worktree and not read (limit accepted)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Same test as D8a: under the clones directory any tree made by hand is a builder tree of the mistake's class, whatever command made it. 'Not a worktree' is the word-level argument; the purpose ('without the opportunity for this kind of mistake') is that no builder starts in a hand-made cold tree, and a copied tree is cold (the cache is keyed by the tree's name; D6 measured that a moved tree is not warm). The block's own goal (part A item 1, 'the only way to get a builder's tree is the pool') is contradicted by it. None of the three tests is met: it is not impossible to read a cp whose destination is a new directory directly under <mirror>/.clones/, nothing in the request implies it, and the literal reading defeats no stated purpose. A guard that passes bad work is a defect: either refuse it in T285 (same escape, red first), or carry it under 'Found and left?' with a filed task and its order, as T295 is carried."
+    },
+    {
+     "id": "L2 git clone into the clones directory",
+     "summary": "a tree under the clones directory made by `git clone` is not a worktree and not read (limit accepted)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Judged on its own: a `git clone` to <mirror>/.clones/<name> handed to a builder is a fresh, cold, hand-made builder tree in the place builder trees live, which is the mistake the GM asked to have no opportunity for; the registry would not even hold it. The exemption rests on the word 'worktree', not on the request's purpose, and is not impossible to guard (a clone's destination under the clones directory is read from the command like a worktree's). Remedy as L1: refuse it in T285 with the same reasoned escape, or carry it as a filed defect with an order under FR-009's form."
+    },
+    {
+     "id": "L3 a new cold tree's cache not seeded",
+     "summary": "a newly made pool tree's cache is not seeded from a warm one",
+     "class": "within",
+     "why": "not asked for; and the rename measurement (D6) shows a cache at a different absolute path rebuilds anyway, so seeding would not make a new tree warm"
+    },
+    {
+     "id": "T295 path-qualified git deferred",
+     "summary": "/usr/bin/git worktree add passes the shared walk; filed as T295, fixed across every tree guard, lands before T284",
+     "class": "within",
+     "why": "a defect carried in FR-009's form: why not here (the shared walk every tree guard asks), filed id T295, order (lands before T284, the next work that relies on warm trees) - a scheduled fix, not a carve-out"
+    },
+    {
+     "id": "D9c the budget never takes a pool tree's build directory",
+     "summary": "the cache budget's eviction skips a registered pool tree's build directory; the pool's share is bounded by cap x tree cache (about 40 GB, GUESS) and given back by builder-tree-drop",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "a carve-out from the disk budget of T245, but implied by the GM's own words on the build caches (2026-11-22: 'your points about reusing the same build cache and whatnot are well taken'), and without it the sweep would empty every free pool tree between builders, defeating T285's purpose (handouts cold while called warm). The GM's disk concern ('without us realizing it') is met: the share is bounded and visible in make builder-trees, and drop returns it. Note for the builder: the block does not say whether the low-free-space trigger also skips pool trees; if it does, say so, since that is the place the GM asked for automatic action."
+    }
+   ],
+   "tasks": [
+    "T285"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T285 (2026-11-26: the coordinating session made each builder a fresh worktree by hand and deleted it and its build cache after the landing, against the reused-worktrees rule of `docs/process-decisions.md`, \"Two code builders at once\" - a cold tree's first closing checks took 14-30 minutes against about a minute warm, measured 2026-11-26 (the day's closing-checks runs, that entry's figures))",
+    "### T285 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T285-plan-review-limits",
+     "class": "within",
+     "summary": "the round arbiter accepted T285's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T285"
+   ]
   }
  ],
  "tasks": {
@@ -39362,6 +39804,134 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T285": {
+   "section_sha256": "cd003fa2da872e8d93c3c01772f5486bdda26fd028842bd7a3ef770715a24f57",
+   "reviewed": "2026-11-26",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T285-plan-review-limits",
+     "class": "within",
+     "summary": "the round arbiter accepted T285's section as it stands"
+    }
+   ],
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "cd003fa2da872e8d93c3c01772f5486bdda26fd028842bd7a3ef770715a24f57",
+    "reviewed": "2026-11-26",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "D1 registry",
+      "summary": "the pool's registry at <clone>/.git/builder-pool.json with its log; membership by registry, never by a name's shape; new trees <clones>/<clone>-b<N>",
+      "class": "within",
+      "why": "how the tooling records the reused trees the GM asked it to keep; settles nothing the request left open against it"
+     },
+     {
+      "id": "D2 take",
+      "summary": "make builder-tree hands out the task's tree, else the first free tree at HEAD, else ONE new cold tree under the cap with its guard binary built (1800 s GUESS knob); at the cap refused naming holders",
+      "class": "within",
+      "why": "the tooling performing the reuse ('automatically ... performs the correct behavior'); a cold tree is made only when no warm one exists, and is said to be cold"
+     },
+     {
+      "id": "D3 dirty refusal",
+      "summary": "a free tree with uncommitted content not in HEAD holds it: the handout is refused naming the paths, DISCARD with a reason takes it over; a held free tree is never passed over for a new cold one",
+      "class": "within",
+      "why": "refusing rather than making a cold tree past a warm one is the request's rule enforced, not narrowed; DISCARD is the project's reasoned, logged escape (FR-012's pattern)"
+     },
+     {
+      "id": "D4 release and land",
+      "summary": "builder-tree-release and make land / land-batch free the tree and leave it and its cache in place; a release never fails a landing",
+      "class": "within",
+      "why": "the deletion after landing was the mistake; the landing now performs the correct step itself"
+     },
+     {
+      "id": "D4b freed by any route",
+      "summary": "at every handout a tree whose holding tasks are ticked or archived is freed first",
+      "class": "within",
+      "why": "removes a hand step on which reuse would otherwise depend - 'without the opportunity for this kind of mistake'"
+     },
+     {
+      "id": "D4c every hold names its feature",
+      "summary": "a handout or adoption with a task and no feature is refused",
+      "class": "within",
+      "why": "makes D4b able to read every hold; serves the same clause"
+     },
+     {
+      "id": "D5 list, drop, adopt",
+      "summary": "make builder-trees lists; builder-tree-drop is the one removal (reason, logged, held tree refused); builder-tree-adopt joins a pre-pool worktree under its own name, the tooling's trees refused",
+      "class": "within",
+      "why": "drop is a deliberate, logged give-back of disk that the GM's disk words (2026-11-22, 2026-11-25) keep necessary, not the unthinking deletion after every landing; adopt keeps the three existing warm trees"
+     },
+     {
+      "id": "D6 adopt by name, not rename",
+      "summary": "the three trees of 2026-11-26 adopted under their names because a moved tree rebuilt every workspace crate (66.5 s / 41.7 s against 0.11 s / 0.08 s warm, measured 2026-11-26 with method)",
+      "class": "within",
+      "why": "the measured choice that keeps the caches warm, which is the request's purpose"
+     },
+     {
+      "id": "D7 cap",
+      "summary": "CAP = 4 (L7R_BUILDER_POOL), a GUESS knob from the sizing rule; T284 measures the count",
+      "class": "within",
+      "why": "a bound on the pool's size; refusing at the cap makes no hand route to a cold tree, and the request sets no count"
+     },
+     {
+      "id": "D8a guard reach bounded to the clones directory",
+      "summary": "the guard refuses `git worktree add` only for a path under <mirror>/.clones/; scratch worktrees elsewhere pass",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "Test: is the refused act a builder tree made by hand. The clones directory is where every builder tree lives (the pool's own trees, the hand trees of the mistake, -t269/-t270/-t271), so under it the guard reaches exactly the mistake's class. A worktree elsewhere is a scratch tree whose correct behavior is to be made and removed; refusing it would reach work the GM did not ask to stop (UNREQUESTED reach), and a hook cannot tell a scratch tree from a builder's except by where it lands. Taking the bound literally away would defeat no part of the request's purpose that the pool does not already serve."
+     },
+     {
+      "id": "D8b guard refusals and escape",
+      "summary": "refuses worktree remove/move of a pool tree and rm of a pool tree, its cache or a directory holding either; BUILDER_TREE_OK with a reason escapes, checked first",
+      "class": "within",
+      "why": "the deletion half of the mistake, refused; move refused because it was measured to chill the cache; the reasoned escape is the accepted spec's guard pattern (FR-012)"
+     },
+     {
+      "id": "D8c tooling trees exempt by call site",
+      "summary": "land-alone.sh, land-tooling.sh, review-tree.sh and the pool tool call git inside a program, which a hook does not read; a hand `git worktree add .../<clone>-land` is refused",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "physically impossible otherwise: a PreToolUse hook reads only the tool call, not git calls inside a program; and these are the tooling the GM asked to perform the behavior, while the hand form of the same tree is still refused, so the exemption guts nothing"
+     },
+     {
+      "id": "L1 cp -a into the clones directory",
+      "summary": "a tree under the clones directory made by `cp -a` is not a worktree and not read (limit accepted)",
+      "class": "narrowing",
+      "ruling": "NOT LEGITIMATE",
+      "why": "Same test as D8a: under the clones directory any tree made by hand is a builder tree of the mistake's class, whatever command made it. 'Not a worktree' is the word-level argument; the purpose ('without the opportunity for this kind of mistake') is that no builder starts in a hand-made cold tree, and a copied tree is cold (the cache is keyed by the tree's name; D6 measured that a moved tree is not warm). The block's own goal (part A item 1, 'the only way to get a builder's tree is the pool') is contradicted by it. None of the three tests is met: it is not impossible to read a cp whose destination is a new directory directly under <mirror>/.clones/, nothing in the request implies it, and the literal reading defeats no stated purpose. A guard that passes bad work is a defect: either refuse it in T285 (same escape, red first), or carry it under 'Found and left?' with a filed task and its order, as T295 is carried."
+     },
+     {
+      "id": "L2 git clone into the clones directory",
+      "summary": "a tree under the clones directory made by `git clone` is not a worktree and not read (limit accepted)",
+      "class": "narrowing",
+      "ruling": "NOT LEGITIMATE",
+      "why": "Judged on its own: a `git clone` to <mirror>/.clones/<name> handed to a builder is a fresh, cold, hand-made builder tree in the place builder trees live, which is the mistake the GM asked to have no opportunity for; the registry would not even hold it. The exemption rests on the word 'worktree', not on the request's purpose, and is not impossible to guard (a clone's destination under the clones directory is read from the command like a worktree's). Remedy as L1: refuse it in T285 with the same reasoned escape, or carry it as a filed defect with an order under FR-009's form."
+     },
+     {
+      "id": "L3 a new cold tree's cache not seeded",
+      "summary": "a newly made pool tree's cache is not seeded from a warm one",
+      "class": "within",
+      "why": "not asked for; and the rename measurement (D6) shows a cache at a different absolute path rebuilds anyway, so seeding would not make a new tree warm"
+     },
+     {
+      "id": "T295 path-qualified git deferred",
+      "summary": "/usr/bin/git worktree add passes the shared walk; filed as T295, fixed across every tree guard, lands before T284",
+      "class": "within",
+      "why": "a defect carried in FR-009's form: why not here (the shared walk every tree guard asks), filed id T295, order (lands before T284, the next work that relies on warm trees) - a scheduled fix, not a carve-out"
+     },
+     {
+      "id": "D9c the budget never takes a pool tree's build directory",
+      "summary": "the cache budget's eviction skips a registered pool tree's build directory; the pool's share is bounded by cap x tree cache (about 40 GB, GUESS) and given back by builder-tree-drop",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "a carve-out from the disk budget of T245, but implied by the GM's own words on the build caches (2026-11-22: 'your points about reusing the same build cache and whatnot are well taken'), and without it the sweep would empty every free pool tree between builders, defeating T285's purpose (handouts cold while called warm). The GM's disk concern ('without us realizing it') is met: the share is bounded and visible in make builder-trees, and drop returns it. Note for the builder: the block does not say whether the low-free-space trigger also skips pool trees; if it does, say so, since that is the place the GM asked for automatic action."
+     }
+    ],
+    "verdict": "BLOCKED"
+   }
   }
  }
 }

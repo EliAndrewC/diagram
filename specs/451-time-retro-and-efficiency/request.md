@@ -281,3 +281,11 @@ On its order:
 On the three-way measurement (agenda item 12):
 
 > we should make sure to measure whether the complexity of the handoffs actually saves time and/or tokens relative to either letting the builders grow or not using them in the first place
+
+## 2026-11-26: builder worktrees (451 T285)
+
+The coordinating session had made each builder a fresh worktree by hand and deleted it and its build cache after the landing, against
+the reused-worktrees rule of `docs/process-decisions.md`, "Two code builders at once". The GM, 2026-11-26, as the coordinating session
+recorded his words on T285's line in `tasks.md` (commit 26b12e37f1; copied here from that line by T285's builder, who did not hear them):
+
+> Okay, so we should definitely not rely on you remembering to do the correct thing with worktrees, and we should make it so that whatever tooling we use to create worktrees automatically enforces and performs the correct behavior without the opportunity for this kind of mistake in the future.

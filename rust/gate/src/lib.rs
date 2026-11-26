@@ -142,13 +142,14 @@ pub fn cli(args: &[String]) -> Reply {
         Some("close-check") => close_check::cli(&args[1..], claims::impl_check::missing_each),
         Some("impl-check") => claims::impl_check::cli(&args[1..], &top()),
         Some("claims") => claims::cli(&args[1..]),
-        Some(verb @ ("tick" | "task-start" | "task-add" | "set-down" | "phase-read")) => {
-            l7r_gate_task::cli(
-                verb,
-                &args[1..],
-                &std::env::current_dir().unwrap_or_default(),
-            )
-        }
+        Some(
+            verb
+            @ ("tick" | "task-start" | "task-add" | "set-down" | "phase-read" | "builder-tree"),
+        ) => l7r_gate_task::cli(
+            verb,
+            &args[1..],
+            &std::env::current_dir().unwrap_or_default(),
+        ),
         Some("land") => land::cli(&args[1..], &std::env::current_dir().unwrap_or_default()),
         Some("tunables") => claims::tunables_cli(&args[1..]),
         Some("research-backlog") => claims::backlog::backlog_cli(&args[1..]),

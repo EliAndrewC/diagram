@@ -7,7 +7,8 @@
 //! The rule: past the budget (or, from the low-disk trigger, short of the free-space share), whole PROFILES of live trees' build
 //! directories go - `debug/`, `cover-gate/`, `tool/`, each a child directory, never the build directory's own files (the guard's kept
 //! `l7r-guard.good`, the run lock and record) - least recently built first, until the shortfall is met, and only a profile:
-//! - not of the mirror's build directory (the guard hook runs its kept binary), and not in a build directory in use (`cargo::in_use`:
+//! - not of the mirror's build directory (the guard hook runs its kept binary), not of a builder pool tree's (451 T285: a free
+//!   pool tree is idle, and its warm cache is what the pool keeps), and not in a build directory in use (`cargo::in_use`:
 //!   a live process holds a path under it, or its run record names a live member);
 //! - idle past `L7R_CACHE_IDLE_HOURS` (12, the variants' knob): nothing in it changed since;
 //! - its tree's ranked: a tree IDLE first - none of its trees exists (a landing tree between landings, a name the suites build into), or
@@ -51,9 +52,22 @@ pub(super) fn choose(
         .mirror
         .file_name()
         .map(|n| n.to_string_lossy().into_owned());
+    // A POOL TREE'S BUILD DIRECTORY IS NEVER THE BUDGET'S (451 T285, its plan review of 2026-11-26): a free pool tree is idle
+    // by this rule's own ranking, so past the budget its profiles went first and the next builder was handed a cold tree - the
+    // failure the pool exists to end. The pool's share is bounded apart: its cap of trees (`builder_pool::CAP`), about 9 GB
+    // each, measured 2026-11-26 (`du -sh` of the three trees' build directories); `make builder-tree-drop` gives one back.
+    let pool: Vec<String> = crate::shared::builder_pool::pools(&c.clones)
+        .iter()
+        .filter_map(|t| t.tree.file_name())
+        .map(|n| n.to_string_lossy().into_owned())
+        .collect();
     let mut found = Vec::new();
     for (target, name, meta) in children(&c.cargo) {
-        if !meta.is_dir() || Some(&name) == mirror.as_ref() || in_use(&target, held, &c.proc) {
+        if !meta.is_dir()
+            || Some(&name) == mirror.as_ref()
+            || pool.contains(&name)
+            || in_use(&target, held, &c.proc)
+        {
             continue;
         }
         let rank = u8::from(active(c, &name, cutoff, held));

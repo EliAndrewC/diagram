@@ -109,6 +109,7 @@ key	verdict	chars	guard	kind	by	over	head
 47792da72a670863	BASELINE	285	clone-sync-hooks	notice	unreviewed - stood before 451 T170		clone-sync: <path> is behind main, but a make runs in it -
 47a0eb4e06fc6945	BASELINE	661	guard-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this edit puts a COMMAND SUBSTITUTION inside a recipe comment of
 499f388d45183dbe	PASS	409	context-cap-hooks	refuse	a92ea34b3fbbcb36f		BLOCKED: a code builder does not dispatch claims-triage; the claims round is
+4b1b7f2cb23ee16e	PASS	435	builder-pool-hooks	refuse	message-check a03efa643feb992b5		BLOCKED (builder-pool): don't remove or move a pool tree or its build
 4bd89a7e45c8662f	BASELINE	1036	context-cap-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: resuming builder N: its context is N tokens, past the cap
 4c1474e8a0b0167a	BASELINE	743	phase-source-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this search over <path> prints lines of <path> - the old
 4d2d2ad728c095cd	BASELINE	385	gate-write-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (gate-write): a shell write of . (`git apply <path>`) while this
@@ -289,6 +290,7 @@ c5c0d558225473ba	BASELINE	992	shell-check-hooks	refuse	unreviewed - shell-check'
 c66cb761549bd6cb	BASELINE	937	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has
 c6ae74345c595a5e	BASELINE	736	download-copy-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: writing the GM's copy of the download list. <path> is the
 c88131f36c3d5677	BASELINE	775	repo-safety-hooks	refuse	unreviewed - repo-safety's history-rewrite refusal: 0 shown a session - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		BLOCKED: a history rewrite (rebase, pull --rebase, merge --squash, or commit --amend).
+c8e40c8703abdd5b	BASELINE	543	builder-pool-hooks	refuse	unreviewed - 543 characters, shown only when the escape is typed with no reason		BLOCKED: BUILDER_TREE_OK with no reason given. An escape is a workaround, and
 c916d77692a2f8db	BASELINE	1246	main-tree-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: your shell is standing in <path>, inside <path> - the MIRROR
 c91b3477e0191643	BASELINE	276	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this make call sets Q twice, and make silently keeps only
 c997198336fec401	BASELINE	256	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: check-wave unit N - a guard of its type refused it:
@@ -333,6 +335,7 @@ e6845fff5c1b8c74	BASELINE	356	gate-write-hooks	refuse	unreviewed - stood before 
 e6dd99b13dc7ec31	BASELINE	524	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: `impl-drift` is not owed on this bundle. Its MANIFEST (<path>) owes:
 e74b40c554993d0c	FAIL	498	workflow-hooks	refuse	a3f4533b308fc243f		BLOCKED: an ad-hoc agent() call names the model `opus`: agent('is it right',
 e77d44e0d21b8458	PASS	244	check-bundle-hooks	refuse	a321d8220347ee8b7		BLOCKED: `quote-check` is already in q:N's round and that round has a
+e8344ec7dfd385ef	PASS	374	builder-pool-hooks	refuse	message-check a03efa643feb992b5		BLOCKED (builder-pool): don't make a worktree under the clones directory by hand.
 e8de0c1ac6270bcf	BASELINE	991	shell-check-hooks	refuse	unreviewed - shell-check's backtick refusal, a family of 2 keys: 7 shown a session, 6,944 characters, under 2 x 31,680 - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		BLOCKED: a backtick span that bash will EXECUTE: `make done`. Inside double
 ea1dad7c47624b11	PASS	406	context-cap-hooks	refuse	a92ea34b3fbbcb36f		BLOCKED: a code builder does not dispatch impl-drift; the claims round is
 ea631dc60c21494e	BASELINE	1072	context-cap-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: resuming builder N: its task TN has landed or is ticked

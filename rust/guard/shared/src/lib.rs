@@ -4,6 +4,8 @@
 
 pub mod attempts;
 pub mod blocked;
+// GUARD_EDIT_OK: feature 451 T285 - adding an operation, the builder pool's registry
+pub mod builder_pool;
 pub mod checks;
 pub mod cited_url;
 pub mod consulted;

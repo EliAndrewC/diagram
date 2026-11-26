@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-26T15:19:07Z",
+  "target": "plan-gate decide-defer 451-time-retro-and-efficiency T285",
+  "commit": "4999514e32",
+  "why": "T295 is an open box of the clone's tasks.md at commit 0ba9440cdc; this pool tree's HEAD is older and does not hold the line yet"
+}
