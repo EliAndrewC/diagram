@@ -201,3 +201,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T274 a memory sampler runs while builders are dispatched (cgroup anon, memory.current, memory pressure and load every 10 s into the tree's l7r-events), so the parallel builder count is certified against the container's 10 GiB limit (docs/process-decisions.md, 'Two code builders at once'; the peak at 3-4 builders was never recorded)
       research: rendering
+- [ ] T275 state files joined onto <root>/.git break or are passed over in a linked worktree, as claims-searched.json did (451 T267's census, unmeasured): the reviews crate (prereq.rs, prereq/scoped.rs, prereq/tree.rs, snapshot.rs), the gate's record, owed, arbiter, cohort, ci and trials paths, the guard's idle-tests, finished-run, review-round, escalation, pair and stall-watchdog state, and the .join('.git').is_dir() probes (clone_sync_hooks.rs, archive/store.rs) - run each in a worktree, then resolve the git dir where it fails
+      research: rendering
