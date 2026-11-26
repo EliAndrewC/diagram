@@ -8,8 +8,12 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 ## To pick up in a new container
 
 1. Clone into `/diagram/.clones/<session-name>` as `docs/session-clones.md` says; `scripts/sync-with-main.sh sync-in`.
-2. `make state-restore` - the tooling state (event logs `make task-time` reads, handoffs, records) from the private
-   `EliAndrewC/diagram-tooling-state` (never link or copy it anywhere public; the same for `EliAndrewC/diagram-research`).
+2. `make state-restore FROM=diagram-backlog` - the old session clone's tooling state (the check answers and the event logs
+   `make task-time` reads) from the private `EliAndrewC/diagram-tooling-state` (never link or copy it anywhere public; the
+   same for `EliAndrewC/diagram-research`). The state is kept per clone NAME, so a bare `make state-restore` in a clone of
+   another name restores nothing. Rehearsed 2026-11-26 in a throwaway clone: 2,755 answers and 578,276 log lines restored
+   in 8 s, and `make task-time SINCE=24h` then read 47 landed tasks. NOT in the saved state: the page sessions' handoff
+   files (`.git/l7r-handoffs/`; P16-P18's are spent, their results on main) and the sessions' transcripts.
 3. `make switches` - the research switch is OPEN (the GM, 2026-11-25: "We can also handle those open research tasks
    overnight as well, whenever it is convenient."); the claims switch is at `report`.
 4. `make speckit-todo`, `make audits` (the register, the overdue first), `make task-time SINCE=48h` (the task time breakdown).

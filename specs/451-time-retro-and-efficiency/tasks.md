@@ -206,3 +206,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T278 the cargo-variant sweep keeps 16 incremental variants a crate and prunes only after 12 idle hours, so cover-gate holds 44 GB where a fresh one is 2.65 GB (measured 2026-11-26, dev/measurements/2026-11-26/build-levers): measure a smaller keep and an earlier prune for coverage builds against rebuild time, and adopt what loses no time
       research: rendering
+- [ ] T279 make state-restore into a fresh clone prints 'scripts/state-sync.sh: line 115: .git/l7r-events/_unassigned.jsonl: No such file or directory' before it restores (rehearsed 2026-11-26; the restore itself succeeded), and a bare restore in a clone of another name says only 'no branch <name>': create the directory first, and have the no-branch message list the branches the repository does hold with the FROM= form
+      research: rendering
