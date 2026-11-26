@@ -2052,6 +2052,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T289 (2026-11-26: a builder listed what it found as candidates and the coordinating session filed them from memory - four went unfiled until the GM asked, and six plan reviews BLOCKED in round 1 on a found-and-left item with no filed task id: T250, T265, T295, T305, T309 and T285's limit, counted by the coordinating session from that day's reviews and given in this task's brief)": {
+   "sha256": "35840fb55a7b35caa0ac9005c713e489aa44779ccd6ab8d0a4c122df2e5aa459",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T289 Approach (checklist part A)": {
+   "sha256": "598918c0d24ef84a12ebe2e51ee21d90f3aa22478b39a810c89f8243973c5f2f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -26190,6 +26202,96 @@
      "why": "The task's goal is the arbiter crate's tests and coverage; these are other crates whose effect is unmeasured, so whether each is a defect at all (a wrong outcome, not a difference) is not yet known and measuring first is this project's standing rule. The item carries FR-009's form - why not here, filed id T312, order lands before T302 - and does not reach back into the arbiter crate's own fix."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T289 (2026-11-26: a builder listed what it found as candidates and the coordinating session filed them from memory - four went unfiled until the GM asked, and six plan reviews BLOCKED in round 1 on a found-and-left item with no filed task id: T250, T265, T295, T305, T309 and T285's limit, counted by the coordinating session from that day's reviews and given in this task's brief)",
+    "### T289 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "no command that reads a builder's report; the builder files what it finds itself with the existing make task-add, at the find",
+     "class": "within",
+     "why": "The report-reading command is the task line's design, not the GM's: no GM words in request.md and no requirement in spec-index.md name a command over a report or candidates file (grepped for candidate/report/file). The replacement serves the task's purpose more fully - an id exists before the plan section, which FR-009's deferral refusal needs in round 1 - and leaves nothing the task line asked for undone; a refused filing is reported as NOT filed with the refusal, not dropped."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "make task-add unchanged; the cross-tree id allotment (451 T255's shared task-ids.txt under the common-dir flock) measured already safe, the test kept as the record",
+     "class": "within",
+     "why": "The brief asked for the allotment to be safe across trees; it was measured (2026-11-26, a new test, green on the old code) and the existing mechanism kept. Nothing asked for is left out."
+    },
+    {
+     "id": "Decision 3",
+     "summary": "make carry keeps both sides' additions by block: tasks.md blocks (a list line with its continuations) kept ours-then-theirs, plan.md whole ### T<n> sections kept, a section written differently by both sides stops",
+     "class": "within",
+     "why": "A defect found in this task (a second tree's filed task stopped on plan.md, or lost its research line) that the approach cannot work without; fixed here, red-first on each fault, T292's stop-on-the-rest kept. Fixing a found defect in the task is what the project's rules ask."
+    },
+    {
+     "id": "Decision 4",
+     "summary": "the brief and report-format words: FILE what you find, CANDIDATES as filed: T<n> or NOT filed: <refusal>, the 'do not file tasks' brief instruction withdrawn in the brief file; no guard change",
+     "class": "within",
+     "why": "Words that carry Decision 1; the absence of the instruction in the repository and of any guard refusing a builder's task-add are labeled observations with their method. The GM's 'real enforcement and not just instructions' (2026-11-19) was said of the six approved improvements and four data ideas, not this task, and the mechanical backstop for the costly case (a deferral with no filed id) is FR-009's existing make decide refusal."
+    },
+    {
+     "id": "Found and left? none",
+     "summary": "nothing found and left; the carry's line-by-line fault fixed here",
+     "class": "within",
+     "why": "The NOT filed path is a runtime outcome of a future builder's report, not an item this task finds and leaves."
+    },
+    {
+     "id": "Performance work? no",
+     "summary": "the task is classed not performance work because 'no check, gate, engine or landing runs faster', although it removes a filing by hand and blocked plan-review rounds",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The plan's test (a tool runs faster) is narrower than the GM's. On 2026-11-19 he approved six improvements 'ranked by minutes they'd have saved', item 4 being 'Fewer plan re-rounds: about 10 min', which makes no tool faster; on 2026-11-20 he asked to 'prioritize those remaining improvement fixes ... doing those first makes everything after them faster' and 'in general priotitize performance improvements going forward', and counted measurement work as performance 'even if the task itself doesn't improve performance'. The plan's reading would exclude his own approved item 4; T289's stated payoff (six round-1 BLOCKs and four unfiled candidates in one day, removed) is of exactly that class. FR-013's full definition is cut at [...] in this bundle and was not read; if it defines performance work as only a faster tool, that definition is itself narrower than these words. Fix: answer yes, as process-time work that removes re-rounds and hand filing, and carry what FR-013 and the register (451 T259) owe such work."
+    }
+   ],
+   "tasks": [
+    "T289"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T289 (2026-11-26: a builder listed what it found as candidates and the coordinating session filed them from memory - four went unfiled until the GM asked, and six plan reviews BLOCKED in round 1 on a found-and-left item with no filed task id: T250, T265, T295, T305, T309 and T285's limit, counted by the coordinating session from that day's reviews and given in this task's brief)",
+    "### T289 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "No command that reads a builder's report; the builder files what it finds and leaves itself with the existing make task-add, at the find, so its plan section carries the filed id in round 1.",
+     "class": "within",
+     "why": "The replaced design (a report-reading command) is the session's task line, not the GM's words; request.md holds nothing on T289 beyond the approved improvement 4, 'Fewer plan re-rounds', and the GM's 2026-11-22 'not bother cutting back on new tasks filed'. Filing at the find serves both costs the task names (unfiled candidates, round-1 BLOCKs on a deferral with no filed id) more fully than the command would, since a command run on the finished report comes after the plan review that needs the id. Nothing the GM asked for is dropped."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "make task-add left unchanged: cross-worktree id allotment already holds (451 T255's flock in the common git dir and the shared task-ids.txt), measured by a new kept test that passed on the old code.",
+     "class": "within",
+     "why": "A measured premise (observed 2026-11-26 with its method), not an assumption; the brief's concern is answered and the test is kept as the guard. Leaving correct code unchanged narrows nothing."
+    },
+    {
+     "id": "Decision 3",
+     "summary": "make carry resolves plan.md and keeps both sides' added blocks (tasks.md list line plus continuation lines; plan.md whole ### T<n> sections), ours first then theirs, and still stops on any real choice between the two sides (451 T292's Occasions case unchanged).",
+     "class": "within",
+     "why": "A defect found by this task and reproduced red-first on each fault: a second tree's filed task stopped the carry, or lost its research line, which would break the approach of Decision 1. Fixing it here follows the fix-as-we-go rule; the carry still stops wherever keeping both is not provably the answer, so no resolution is widened beyond what both sides only added."
+    },
+    {
+     "id": "Decision 4",
+     "summary": "Builder brief gains the FILE-what-you-find line and withdraws 'do not file tasks'; the report format's CANDIDATES lists each item as filed: T<n> or NOT filed: <refusal>; Makefile, gate CLAUDE.md and module text updated for plan.md.",
+     "class": "within",
+     "why": "Documentation of Decisions 1 and 3; the 'do not file' instruction was the session's own brief wording (grep with method recorded), and no guard refuses a builder's task-add. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "Performance classification",
+     "summary": "Tagged [perf] as a builders'-loop saving under the GM-approved 'Fewer plan re-rounds'; no engine-speed checklist and no before/after timing owed.",
+     "class": "within",
+     "why": "The saving is exactly improvement 4 the GM approved on 2026-11-19; no tool is claimed faster, so no timing claim is left unmeasured."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -41246,6 +41348,44 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "The task's goal is the arbiter crate's tests and coverage; these are other crates whose effect is unmeasured, so whether each is a defect at all (a wrong outcome, not a difference) is not yet known and measuring first is this project's standing rule. The item carries FR-009's form - why not here, filed id T312, order lands before T302 - and does not reach back into the arbiter crate's own fix."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T289": {
+   "section_sha256": "3c0c7754e93eeb487867b5491feb3e5e5a16e5240960224f5a696d148528635f",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "No command that reads a builder's report; the builder files what it finds and leaves itself with the existing make task-add, at the find, so its plan section carries the filed id in round 1.",
+     "class": "within",
+     "why": "The replaced design (a report-reading command) is the session's task line, not the GM's words; request.md holds nothing on T289 beyond the approved improvement 4, 'Fewer plan re-rounds', and the GM's 2026-11-22 'not bother cutting back on new tasks filed'. Filing at the find serves both costs the task names (unfiled candidates, round-1 BLOCKs on a deferral with no filed id) more fully than the command would, since a command run on the finished report comes after the plan review that needs the id. Nothing the GM asked for is dropped."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "make task-add left unchanged: cross-worktree id allotment already holds (451 T255's flock in the common git dir and the shared task-ids.txt), measured by a new kept test that passed on the old code.",
+     "class": "within",
+     "why": "A measured premise (observed 2026-11-26 with its method), not an assumption; the brief's concern is answered and the test is kept as the guard. Leaving correct code unchanged narrows nothing."
+    },
+    {
+     "id": "Decision 3",
+     "summary": "make carry resolves plan.md and keeps both sides' added blocks (tasks.md list line plus continuation lines; plan.md whole ### T<n> sections), ours first then theirs, and still stops on any real choice between the two sides (451 T292's Occasions case unchanged).",
+     "class": "within",
+     "why": "A defect found by this task and reproduced red-first on each fault: a second tree's filed task stopped the carry, or lost its research line, which would break the approach of Decision 1. Fixing it here follows the fix-as-we-go rule; the carry still stops wherever keeping both is not provably the answer, so no resolution is widened beyond what both sides only added."
+    },
+    {
+     "id": "Decision 4",
+     "summary": "Builder brief gains the FILE-what-you-find line and withdraws 'do not file tasks'; the report format's CANDIDATES lists each item as filed: T<n> or NOT filed: <refusal>; Makefile, gate CLAUDE.md and module text updated for plan.md.",
+     "class": "within",
+     "why": "Documentation of Decisions 1 and 3; the 'do not file' instruction was the session's own brief wording (grep with method recorded), and no guard refuses a builder's task-add. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "Performance classification",
+     "summary": "Tagged [perf] as a builders'-loop saving under the GM-approved 'Fewer plan re-rounds'; no engine-speed checklist and no before/after timing owed.",
+     "class": "within",
+     "why": "The saving is exactly improvement 4 the GM approved on 2026-11-19; no tool is claimed faster, so no timing claim is left unmeasured."
     }
    ],
    "verdict": "CLEAR"

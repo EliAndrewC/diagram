@@ -663,3 +663,45 @@ fn a_tree_outside_git_reserves_nothing_and_an_unwritable_reservation_is_named() 
     let refused = super::reserve(&root.join("specs/9001-x"), "T1").unwrap_err();
     assert!(refused.contains(super::RESERVED), "{refused}");
 }
+
+/// THE MEASUREMENT OF 451 T289 (2026-11-26), kept as a test: two worktrees of one clone filing AT ONCE - the second starts while the
+/// first holds the filing lock through its slow quick - take two ids, and each writes its box and its section into its own tree only.
+/// Green on the code as T255 left it (the lock and the reservations are both in the git common directory), so T289 changed nothing
+/// here: a builder's `make task-add` from its pool tree already takes an id no other tree of the clone can.
+#[test]
+fn two_worktrees_filing_at_once_take_two_ids_each_in_its_own_tree() {
+    let (dir, root) = quick_repo("task-add-two-trees-at-once");
+    put(&root, "Makefile", "quick:\n\t@sh slow.sh\n");
+    put(&root, "slow.sh", "touch running; sleep 0.3\n");
+    crate::git(&root, &["add", "-A"]);
+    crate::git(&root, &["commit", "-qm", "a slow quick"]);
+    let other = dir.join("other");
+    let (code, _) = crate::git(
+        &root,
+        &[
+            "worktree",
+            "add",
+            "-q",
+            "--detach",
+            &other.to_string_lossy(),
+        ],
+    );
+    assert_eq!(code, Some(0));
+    let first = {
+        let root = root.clone();
+        std::thread::spawn(move || cli(&words(&["9001"]), &root, "the first tree's"))
+    };
+    let started = std::time::Instant::now();
+    while !root.join("running").exists() {
+        assert!(started.elapsed().as_secs() < 20, "quick never ran");
+        std::thread::sleep(std::time::Duration::from_millis(5));
+    }
+    let second = cli(&words(&["9001"]), &other, "the second tree's");
+    let first = first.join().unwrap();
+    assert!(first.stdout.contains("T10 filed"), "{}", first.stdout);
+    assert!(second.stdout.contains("T11 filed"), "{}", second.stdout);
+    assert_eq!(own_lines(&root, "T10", "the first tree's"), (1, 1));
+    assert_eq!(own_lines(&other, "T11", "the second tree's"), (1, 1));
+    assert_eq!(own_lines(&root, "T11", "the second tree's"), (0, 0));
+    assert_eq!(own_lines(&other, "T10", "the first tree's"), (0, 0));
+}

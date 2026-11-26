@@ -69,6 +69,7 @@ seen red, then the check deleted and the test seen red again (FR-012).
 - none: T303 - tooling only: how `make closing-checks T=` finds its task's feature and what it refuses (`scripts/gates/closing-checks.sh`, its suite `tests/hooks/test-closing-checks.sh`, the Makefile's help line); no map feature, sheet, glyph, placement rule or research page changes.
 - none: T309 - tooling only: the arbiter crate's tests closed to the machine's clock, transcripts, check state and guard log (`rust/gate/crates/arbiter/src/arbiter/bundle/reviews.rs` and `reviews/tests.rs`, `arbiter/bundle.rs`, `checks_door.rs` and `checks_door/tests.rs`); no map feature, sheet, glyph, placement rule or research page changes.
 - none: T305 - tooling only: whose a ledger row is (`rust/gate/crates/reviews/src/reviews/ledger_passes/left.rs`, `left/whose.rs`, the new `left/pool.rs`, `ledger_passes.rs`'s landing write, their tests) and the landing's write arguments (`rust/gate/crates/land/src/land/cheap.rs`, its test); no map feature, sheet, glyph, placement rule or research page changes
+- none: T289 - tooling only: what `make carry` keeps both sides of (`rust/gate/crates/land/src/land/carry.rs` and its tests: a filed task's box by block, a plan section stub), a test of `make task-add` across two worktrees (`rust/gate/crates/task/src/task_add/tests.rs`), and the builders' brief and report format (`scripts/container/builder-brief.md`, `builder-report-format.md`); no map feature, sheet, glyph, placement rule or research page changes.
 
 ## Dependencies
 
@@ -221,7 +222,7 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T288 the per-task plan bundle (/tmp/l7r-check/plan-<feature>-<task>) is shared when the coordinating clone decides a task a builder's worktree also decides (451 T271, measured to collide only then): key it by tree or refuse the second; and the scratch-file prefix is an instruction only - measure how often a builder writes an unprefixed scratch file before guarding it
       research: rendering
-- [ ] T289 a builder's report lists 'candidates to file' and the coordinating session files them from memory - on 2026-11-26 four went unfiled until the GM asked: a command that takes a builder's report (or its candidates file) and files each listed title, so a reported candidate cannot be left unfiled, and the builder brief's report form names the file it writes them to
+- [ ] T289 [perf] a builder's report lists 'candidates to file' and the coordinating session files them from memory - on 2026-11-26 four went unfiled until the GM asked: a command that takes a builder's report (or its candidates file) and files each listed title, so a reported candidate cannot be left unfiled, and the builder brief's report form names the file it writes them to
       research: rendering
 - [ ] T290 the audit-register check does not see a gate added to the push's gates=(...) array in scripts/sync-with-main.sh (a path with a variable in it is skipped), a script called by a path not written scripts/... ($(dirname ...)/state-sync.sh), or a script that a called script calls in turn (451 T269's candidates): cover each, red-first; and T260's line says 254 of 267 where BACKFILL is now 260 with six landing scripts - restate it
       research: rendering

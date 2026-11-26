@@ -17,6 +17,6 @@ Then report, in this FIXED FORMAT (agenda item 14, measured 2026-11-26 on 38 rep
  PLAN REVIEW: `CLEAR | BLOCKED | accept (arbiter)`, the round, the decisions counted; every open objection in full with the fix it asks for; one line for each earlier round (what it blocked on) and for each note left unedited to keep the verdict.
  CLAIMS: `none owed, none touched`, or the keys touched or restated, what `make claims-owed` lists, and the bundle's path.
  COMMIT: the tree; each NEW (untracked) file or directory by path; `modified: <n> tracked files` (not listed: `git add -u` takes them); a file to leave out, with why; words the commit message must carry.
- FOR THE SESSION: one line for each thing the session must do, decide or know that no other field says - a command to run after the landing, ids to file before the tick, a section not to edit again, words to confirm, a friction for the parallel-work notes, a note addressed to it. No cap.
- CANDIDATES: one line each, written as a task title with its paths and figures; `filed: T<n>` for one you filed. No cap.
+ FOR THE SESSION: one line for each thing the session must do, decide or know that no other field says - a command to run after the landing, a section not to edit again, words to confirm, a friction for the parallel-work notes, a note addressed to it. No cap.
+ CANDIDATES: one line for each thing you found and left, which YOU FILED from your tree (`make task-add F=<feature> TITLE="..."`, 451 T289: its id is one no other tree of the clone can take) - `filed: T<n>`, then its title with its paths and figures. One the command refused is `NOT filed: <its refusal>`, then the title. No cap.
 No other section: no "how to test", no list of modified paths, no passing check, no restatement of the plan section.

@@ -10,7 +10,7 @@ use serde_json::{json, Value};
 use super::super::tests::has;
 use super::super::unfinished::tests::{repo, TASKS};
 use super::super::unfinished::{self, refusals};
-use super::{cli, end, keep_both, missing, Said};
+use super::{cli, end, keep_both, missing, Kind, Said};
 
 const REVIEW: &str = "specs/451-x/plan-review.json";
 const TASKS_MD: &str = "specs/451-x/tasks.md";
@@ -156,7 +156,7 @@ fn a_code_conflict_stops_with_the_pick_standing_and_nothing_resolved() {
     let (code, out, err) = carried(&root, &builder);
     assert_eq!((code, out.as_str()), (2, ""));
     has(&err, "carry: STOPPED - ");
-    has(&err, "a conflict this command does not resolve, in rust/lib.rs (not a tasks.md or plan-review.json of a feature) - nothing was resolved\n");
+    has(&err, "a conflict this command does not resolve, in rust/lib.rs (not a tasks.md, plan.md or plan-review.json of a feature) - nothing was resolved\n");
     has(&err, "  a cherry-pick is in progress in ");
     has(
         &err,
@@ -223,20 +223,145 @@ fn keep_both_takes_only_list_lines_both_sides_added() {
     let hunk = |ours: &str, base: &str, theirs: &str| {
         format!("top\n<<<<<<< a\n{ours}||||||| o\n{base}=======\n{theirs}>>>>>>> b\nend\n")
     };
+    let tasks = |text: &str| keep_both(text, Kind::Tasks);
     // theirs' line ours already holds is not doubled; a continuation line and a blank are list lines
     assert_eq!(
-        keep_both(&hunk("- a\n      verify: x\n", "", "- a\n\n- b\n")),
+        tasks(&hunk("- a\n      verify: x\n", "", "- a\n\n- b\n")),
         Ok("top\n- a\n      verify: x\n\n- b\nend\n".to_owned())
     );
+    // RED FIRST (451 T289): theirs' continuation line stays with its own list line though ours holds the same words under another
     assert_eq!(
-        keep_both(&hunk("- a\n", "- old\n", "- b\n")),
+        tasks(&hunk(
+            "- [ ] T10 a\n      research: rendering\n",
+            "",
+            "      orphan\n- [ ] T11 b\n      research: rendering\n"
+        )),
+        Ok("top\n- [ ] T10 a\n      research: rendering\n      orphan\n- [ ] T11 b\n      research: rendering\nend\n".to_owned())
+    );
+    assert_eq!(
+        tasks(&hunk("- a\n", "- old\n", "- b\n")),
         Err("a hunk both sides changed, not only added to".to_owned())
     );
     assert_eq!(
-        keep_both(&hunk("- a\n", "", "A paragraph.\n")),
+        tasks(&hunk("- a\n", "", "A paragraph.\n")),
         Err("an added line that is no list line: A paragraph.".to_owned())
     );
-    assert_eq!(keep_both("no conflict\n"), Ok("no conflict\n".to_owned()));
+    // one list line with different lines under it on each side is a choice, left to a hand; blank lines apart are not
+    assert_eq!(
+        tasks(&hunk(
+            "- a\n      verify: x\n",
+            "",
+            "- a\n      verify: y\n"
+        )),
+        Err("both sides added one list line with different lines under it: - a".to_owned())
+    );
+    assert_eq!(
+        tasks(&hunk("- a\n\n      x\n", "", "- a\n\n      y\n")),
+        Ok("top\n- a\n\n      x\n\n      y\nend\n".to_owned())
+    );
+    assert_eq!(tasks("no conflict\n"), Ok("no conflict\n".to_owned()));
+}
+
+#[test]
+fn keep_both_takes_whole_plan_sections_both_sides_added() {
+    let hunk = |ours: &str, theirs: &str| {
+        format!("top\n<<<<<<< a\n{ours}||||||| o\n=======\n{theirs}>>>>>>> b\nend\n")
+    };
+    let plan = |text: &str| keep_both(text, Kind::Plan);
+    // each side's stub whole, the lines they share kept in both; a section both hold whole is not doubled
+    assert_eq!(
+        plan(&hunk(
+            "\n### T10 (a)\n\nsame words\n\n### T10 Approach\n\n1. same\n\n",
+            "\n### T10 (a)\n\nsame words\n\n### T11 (b)\n\nsame words\n\n### T11 Approach\n\n1. same\n\n"
+        )),
+        Ok("top\n\n### T10 (a)\n\nsame words\n\n### T10 Approach\n\n1. same\n\n### T11 (b)\n\nsame words\n\n### T11 Approach\n\n1. same\n\nend\n".to_owned())
+    );
+    // one task's section written by both, differently: a choice, left to a hand
+    assert_eq!(
+        plan(&hunk("### T10 (a)\n\nours\n", "### T10 (a)\n\ntheirs\n")),
+        Err("both sides wrote T10's section, differently".to_owned())
+    );
+    // prose that is no section, and a heading that names no task
+    for theirs in ["A paragraph.\n", "### Notes\n", "### Tx\n"] {
+        assert_eq!(
+            plan(&hunk("### T10 (a)\n", theirs)),
+            Err(format!(
+                "an added block that is no `### T<n>` section: {}",
+                theirs.trim_end()
+            ))
+        );
+    }
+    // a heading that ends at its id, and a side of blank lines only
+    assert_eq!(
+        plan(&hunk("### T10\n", "\n")),
+        Ok("top\n### T10\n\nend\n".to_owned())
+    );
+}
+
+/// A task filed in `tree` by the real `make task-add` and committed: what it printed.
+fn filed(tree: &Path, title: &str) -> String {
+    let said = l7r_gate_task::task_add::cli(&["451".to_owned()], tree, title);
+    assert_eq!(said.code, 0, "{}", said.stderr);
+    git(tree, &["add", "-A"]);
+    git(tree, &["commit", "-qm", title]);
+    said.stdout
+}
+
+/// RED FIRST (451 T289, 2026-11-26): two builders' trees each file a task they found with `make task-add` - two ids, by the
+/// reservation both read (451 T255) - each appending its box to the end of tasks.md and its section stub to the end of plan.md, as
+/// feature 451's files take them. Carried one after the other, the second conflicts in both files. On the old code the carry stopped
+/// on plan.md ("not a tasks.md or plan-review.json of a feature"); with plan.md let through, the second box came out without its
+/// research line, dropped as a line the first box already held.
+#[test]
+fn two_trees_filed_tasks_are_carried_with_both_boxes_and_both_stubs() {
+    let (dir, root) = repo("carry-filed");
+    commit(
+        &root,
+        "a plan and a quick",
+        &[
+            ("Makefile", "quick:\n\t@true\n"),
+            (
+                "specs/451-x/plan.md",
+                "# Plan\n\n### T9 (nine)\n\nIts words.\n",
+            ),
+        ],
+    );
+    let trees: Vec<PathBuf> = ["one", "two"]
+        .iter()
+        .map(|name| {
+            let tree = dir.join(name);
+            git(
+                &root,
+                &["worktree", "add", "-q", "-b", name, &tree.to_string_lossy()],
+            );
+            tree
+        })
+        .collect();
+    has(&filed(&trees[0], "the first tree's find"), "T10 filed");
+    has(&filed(&trees[1], "the second tree's find"), "T11 filed");
+    let (code, out, err) = carried(&root, &trees[0]);
+    assert_eq!((code, err.as_str()), (0, ""), "{out}");
+    let (code, out, err) = carried(&root, &trees[1]);
+    assert_eq!((code, err.as_str()), (0, ""), "{out}");
+    has(
+        &out,
+        "both sides kept in specs/451-x/plan.md, specs/451-x/tasks.md\n",
+    );
+    let tasks = std::fs::read_to_string(root.join(TASKS_MD)).unwrap();
+    assert!(
+        tasks.ends_with(
+            "- [ ] T9 nine\n- [ ] T10 the first tree's find\n      research: rendering\n- [ ] T11 the second tree's find\n      research: rendering\n"
+        ),
+        "{tasks}"
+    );
+    let plan = std::fs::read_to_string(root.join("specs/451-x/plan.md")).unwrap();
+    let stub = |t: &str| l7r_gate_plan::plan::template::TEMPLATE.replace("{T}", t);
+    for t in ["T10", "T11"] {
+        assert_eq!(plan.matches(stub(t).trim_end()).count(), 1, "{t}: {plan}");
+    }
+    assert!(plan.find("### T10 (").unwrap() < plan.find("### T11 (").unwrap());
+    assert_eq!(plan.matches("8. **The budget.** One landing.").count(), 2);
+    assert_eq!(git(&root, &["status", "--porcelain"]), "");
 }
 
 #[test]

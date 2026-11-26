@@ -10,6 +10,12 @@
 //!   added line is a list line, its continuation or blank - an Occasions line, a task's line appended: ours, then theirs' lines ours
 //!   lacks. Two tasks' Occasions lines added after the same line is the conflict of every parallel carry-over (2026-11-26: 20347702fc
 //!   against be3f3a248b's parent).
+//!   A task `make task-add` filed in each tree is the same conflict, each box with its research line: theirs is kept by BLOCK - a
+//!   list line with its continuation lines - never line by line (451 T289: the second box's research line, the same words as the
+//!   first's, was dropped).
+//! - `specs/*/plan.md`, where every conflicting hunk is one both sides only added to and each side's addition opens with a
+//!   `### T<n>` heading - the section stub `make task-add` appends, one filed in each tree (451 T289: a builder files what it
+//!   found): ours, then theirs' sections ours lacks; one task's section written differently on both sides stops.
 //! - `specs/*/plan-review.json`, merged three-way by the record's own merge (`plan merge-record`, 451 T256), asked in process where
 //!   the tree's git config defines no driver.
 //!
@@ -64,18 +70,113 @@ fn spec_file(path: &str, name: &str) -> bool {
     parts.len() == 3 && parts[0] == "specs" && parts[2] == name
 }
 
-/// A line both sides may add at one place and keep: a list line (an Occasions line, a task's line), its continuation, or a blank.
+/// A line both sides may add at one place of a tasks.md and keep: a list line (an Occasions line, a task's line), its continuation,
+/// or a blank.
 fn listed(line: &str) -> bool {
     line.starts_with("- ") || line.starts_with([' ', '\t']) || line.trim().is_empty()
 }
 
-/// A diff3 merge (`git merge-file -p --diff3`) with every conflict resolved by keeping both sides - ours, then theirs' lines ours
-/// lacks - or why not: a hunk with base lines between its sides (both changed something), or an added line that is no list line.
-fn keep_both(merged: &str) -> Result<String, String> {
+/// The file whose conflict is kept both: what each side may add at one place, and what of theirs ours already holds.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Kind {
+    /// `specs/*/tasks.md`: list lines, each with its continuation lines - an Occasions line, a task's box with its research line.
+    Tasks,
+    /// `specs/*/plan.md`: whole `### T<n>` sections - the stub `make task-add` appends (451 T289).
+    Plan,
+}
+
+/// The digits of the task a plan heading `### T<n> ...` names.
+fn section_id(line: &str) -> Option<&str> {
+    let rest = line.strip_prefix("### T")?;
+    let digits = rest
+        .find(|c: char| !c.is_ascii_digit())
+        .unwrap_or(rest.len());
+    (digits > 0).then(|| &rest[..digits])
+}
+
+/// One side's added lines as its blocks: in a tasks.md a list line with its continuation lines (a blank its own block), in a plan.md
+/// a `### ` heading with the lines under it.
+fn blocks(lines: &[&str], kind: Kind) -> Vec<String> {
+    let mut out: Vec<String> = Vec::new();
+    for line in lines {
+        let opens = match kind {
+            Kind::Tasks => line.starts_with("- ") || line.trim().is_empty(),
+            Kind::Plan => line.starts_with("### "),
+        };
+        match out.last_mut() {
+            Some(last) if !opens => last.push_str(line),
+            _ => out.push((*line).to_owned()),
+        }
+    }
+    out
+}
+
+/// A block's first line.
+fn head(block: &str) -> &str {
+    block.split_inclusive('\n').next().unwrap_or("")
+}
+
+/// One conflicting hunk both sides only added to, kept both: ours, then the blocks of theirs ours lacks - or why it is left to a hand.
+///
+/// BY BLOCK, NEVER BY LINE (451 T289, measured 2026-11-26 on two worktrees' `make task-add`): theirs' lines were dropped one by one
+/// where ours held the same line, so the second of two filed boxes lost its `      research: rendering` line - the first box has the
+/// same one. A block of theirs is dropped where ours has it whole - in a tasks.md also where theirs is the bare list
+/// line of a block ours has (ours' continuation kept) - and one list line with different lines under it on each side stops, as one
+/// task's plan section written differently by both does: either is a choice between the sides, not an addition.
+fn both(ours: &[&str], theirs: &[&str], kind: Kind) -> Result<String, String> {
+    for side in [ours, theirs] {
+        let odd = match kind {
+            Kind::Tasks => side
+                .iter()
+                .find(|l| !listed(l))
+                .map(|l| ("line", "list line", l)),
+            // a side opens with a section's heading, so what it added is whole sections and nothing of another's
+            Kind::Plan => side
+                .iter()
+                .find(|l| !l.trim().is_empty())
+                .filter(|l| section_id(l).is_none())
+                .map(|l| ("block", "`### T<n>` section", l)),
+        };
+        if let Some((what, wanted, line)) = odd {
+            return Err(format!(
+                "an added {what} that is no {wanted}: {}",
+                line.trim_end()
+            ));
+        }
+    }
+    let held = blocks(ours, kind);
+    let mut out: String = ours.concat();
+    for block in blocks(theirs, kind) {
+        // ours has it whole, or has the list line theirs adds bare
+        let same_line = kind == Kind::Tasks && held.iter().any(|h| head(h) == head(&block));
+        if held.contains(&block) || (same_line && block == head(&block)) {
+            continue;
+        }
+        // one list line with different lines under it on each side is a choice between them, as one task's section is below
+        if same_line && !head(&block).trim().is_empty() {
+            return Err(format!(
+                "both sides added one list line with different lines under it: {}",
+                head(&block).trim_end()
+            ));
+        }
+        // two trees each writing one task's section is a choice between them, not an addition
+        if let Some(id) = section_id(&block)
+            .filter(|id| kind == Kind::Plan && held.iter().any(|h| section_id(h) == Some(id)))
+        {
+            return Err(format!("both sides wrote T{id}'s section, differently"));
+        }
+        out += &block;
+    }
+    Ok(out)
+}
+
+/// A diff3 merge (`git merge-file -p --diff3`) with every conflict resolved by keeping both sides ([`both`]) - or why not: a hunk
+/// with base lines between its sides (both changed something), or a side that added what `kind` does not keep.
+fn keep_both(merged: &str, kind: Kind) -> Result<String, String> {
     let mut out = String::new();
     // 0 outside a conflict, 1 in ours, 2 in the base, 3 in theirs
     let mut part = 0;
-    let mut ours: Vec<&str> = Vec::new();
+    let (mut ours, mut theirs): (Vec<&str>, Vec<&str>) = (Vec::new(), Vec::new());
     for line in merged.split_inclusive('\n') {
         match (part, line.get(..7)) {
             (0, Some("<<<<<<<")) => part = 1,
@@ -83,25 +184,14 @@ fn keep_both(merged: &str) -> Result<String, String> {
             (2, Some("=======")) => part = 3,
             (3, Some(">>>>>>>")) => {
                 part = 0;
+                out += &both(&ours, &theirs, kind)?;
                 ours.clear();
+                theirs.clear();
             }
             (0, _) => out += line,
+            (1, _) => ours.push(line),
             (2, _) => return Err("a hunk both sides changed, not only added to".to_owned()),
-            (_, _) if !listed(line) => {
-                return Err(format!(
-                    "an added line that is no list line: {}",
-                    line.trim_end()
-                ))
-            }
-            (1, _) => {
-                ours.push(line);
-                out += line;
-            }
-            (_, _) => {
-                if !ours.contains(&line) {
-                    out += line;
-                }
-            }
+            (_, _) => theirs.push(line),
         }
     }
     Ok(out)
@@ -110,9 +200,15 @@ fn keep_both(merged: &str) -> Result<String, String> {
 /// One unmerged path resolved by keeping both sides: its merged text, or why it is left to a hand. Its three stages are written under
 /// `scratch` and merged there.
 fn resolved(root: &Path, scratch: &Path, path: &str) -> Result<String, String> {
-    let tasks = spec_file(path, "tasks.md");
-    if !tasks && !spec_file(path, "plan-review.json") {
-        return Err("not a tasks.md or plan-review.json of a feature".to_owned());
+    let kind = if spec_file(path, "tasks.md") {
+        Some(Kind::Tasks)
+    } else if spec_file(path, "plan.md") {
+        Some(Kind::Plan)
+    } else {
+        None
+    };
+    if kind.is_none() && !spec_file(path, "plan-review.json") {
+        return Err("not a tasks.md, plan.md or plan-review.json of a feature".to_owned());
     }
     let mut files = Vec::new();
     for stage in ["1", "2", "3"] {
@@ -124,7 +220,7 @@ fn resolved(root: &Path, scratch: &Path, path: &str) -> Result<String, String> {
         std::fs::write(&file, text).map_err(super::io)?;
         files.push(file.to_string_lossy().into_owned());
     }
-    if tasks {
+    if let Some(kind) = kind {
         let (_, merged) = git(
             root,
             &[
@@ -136,7 +232,7 @@ fn resolved(root: &Path, scratch: &Path, path: &str) -> Result<String, String> {
                 &files[2],
             ],
         )?;
-        return keep_both(&merged);
+        return keep_both(&merged, kind);
     }
     let said = l7r_gate_plan::plan::merge_files(
         Path::new(&files[0]),

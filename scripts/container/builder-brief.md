@@ -36,6 +36,12 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
 - A builder's commit reaches the clone by `make carry FROM=<its worktree>` run in the clone (451 T292), never a hand `git cherry-pick`: `make land` refuses a carry-over left unfinished.
 - TWO code builders at once, each in a REUSED worktree (its build cache warm); three or four at once only for batches that
   compile nothing (`docs/process-decisions.md`, "Two code builders at once"; `dev/audits/parallel-builder-count.md`).
+- A builder FILES what it found, from its own tree (451 T289; the block's `FILE what you find` line): `make task-add` allots the
+  id under the feature's lock from the reservations every worktree of the clone shares (451 T255), and `make carry` keeps both
+  sides where two trees each appended a task's box and its plan stub. Measured 2026-11-26: four candidates left unfiled until the
+  GM asked, and six plan reviews BLOCKED in round 1 on a found-and-left item with no filed id (T250, T265, T295, T305, T309,
+  T285), each costing a filing by the session, an edit of the builder's section and a second round. Do not write "do not file
+  tasks" into a brief.
 - A builder's tree comes from `make builder-tree T=<task> [F=<feature>]` and nothing else: it prints the tree's path for the brief, `make land` releases it, and a hand `git worktree add` is refused (451 T285).
 
 Why: of 97 builders briefed since 2026-11-24, a brief of 4 or more jobs handed off 52% of the time against 16-22% at 1-3 jobs;
@@ -61,5 +67,8 @@ Then report in the FIXED FORMAT of `scripts/container/builder-report-format.md` 
 and use its fields in its order. The coordinating session runs the claims round (the claims-triage agent, make claims-bundle,
 impl-drift, make claims-checked) as its own dispatch; a DRIFTED fix: claim comes back to a small builder.
 Prefix every scratch file you write with your task id (`t<n>-`): builders share one scratchpad (451 T271).
+FILE what you find and leave, yourself, from your tree: `make task-add F=<feature> TITLE="<title, its paths and figures>"` prints
+its id; write `Not fixed here: <why>. Filed as T<n>; lands before T<m>.` in your plan section's item, and list it in the report's
+CANDIDATES as `filed: T<n>` (451 T289). Never leave a found item for the coordinating session to file.
 Do NOT stage, commit, land or push. Never rewrite history.
 ```

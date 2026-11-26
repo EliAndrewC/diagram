@@ -676,7 +676,7 @@ coverage-exempt: ## [tests] the engine files the Rust port replaces, exempt from
 # A BUILDER'S WORK REACHES THE CLONE BY ONE COMMAND (451 T292): three landings ran over a hand cherry-pick left unfinished on a
 # conflict (451 T235, T262, T270), which `make land` now refuses; this carries the commit, keeps both sides of the conflicts every
 # parallel carry-over met (a tasks.md list line each side added, plan-review.json), stops on any other, and verifies its end.
-carry:           ## [project] carry a builder worktree's HEAD commit (or COMMIT=) into this tree by cherry-pick: both sides kept where each only added a specs/*/tasks.md list line or a plan-review.json entry, any other conflict stopped with the files and the next command; ends verified - nothing in progress, unmerged or staged, the commit's non-spec files in HEAD (451 T292)   FROM=<builder's worktree> [COMMIT=<sha>]
+carry:           ## [project] carry a builder worktree's HEAD commit (or COMMIT=) into this tree by cherry-pick: both sides kept where each only added a specs/*/tasks.md list line (a filed task's box whole), a specs/*/plan.md `### T<n>` section (451 T289) or a plan-review.json entry, any other conflict stopped with the files and the next command; ends verified - nothing in progress, unmerged or staged, the commit's non-spec files in HEAD (451 T292)   FROM=<builder's worktree> [COMMIT=<sha>]
 	@if [ -z "$(FROM)" ]; then printf 'make carry: FROM=<the builder worktree> is required   [COMMIT=<sha>; its HEAD otherwise]\n' >&2; exit 2; fi
 	@$(LAND_RUN) --carry "$(abspath $(FROM))" $(COMMIT)
 
