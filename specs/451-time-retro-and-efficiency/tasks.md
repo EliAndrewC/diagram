@@ -188,8 +188,6 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T266 HTML comments count toward a research question's 20,000-byte size cap, so a comment-only fix can trip it (0068, 0072, 0241 and 0242 sit within 20 bytes after 451 T250): measure what the cap protects and count visible prose only, or say why comments count
       research: rendering
-- [ ] T269 the audit-register delta check does not see a script newly called from make land's recipe (451 T258's state-sync.sh landed with no entry asked): cover a recipe's new callee, proved red-first on that case
-      research: rendering
 - [ ] T273 449 T428's tick note states a bend measurement that was never made: make the measurement or restate the note (found 2026-11-25)
       research: rendering
 - [ ] T274 a memory sampler runs while builders are dispatched (cgroup anon, memory.current, memory pressure and load every 10 s into the tree's l7r-events), so the parallel builder count is certified against the container's 10 GiB limit (docs/process-decisions.md, 'Two code builders at once'; the peak at 3-4 builders was never recorded)

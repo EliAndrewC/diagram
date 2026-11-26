@@ -675,6 +675,9 @@
 - [x] T268 the clone-sync notice reads 'mirror refresh FAILED: ' with nothing after the colon when the script cannot start, because ask drops the spawn error (found by 451 T263): carry the error text into the notice
       research: rendering
       verify: DONE. landed: the clone-sync notices say why: a sync script that cannot start reads 'could not be started (<the error>)' and one that failed silently 'exited N and said nothing'; red-first on a non-executable and a missing script (521 passed 1 failed, then 522); five changed wordings message-checked PASS; T283 filed from it
+- [x] T269 the audit-register delta check does not see a script newly called from make land's recipe (451 T258's state-sync.sh landed with no entry asked): cover a recipe's new callee, proved red-first on that case
+      research: rendering
+      verify: DONE. landed: audit-register reads a script newly called from a landing recipe as a landing step owing an entry; red-first on T258's case (193 passed 2 failed, then 195); replayed over the last 40 landings, one detection and no false fire; BACKFILL 254 to 260 with six landing scripts; T290 filed from it
 - [x] T270 make audit classifies a plan-gate escape by its reason text; classify by the record's held field so an escape with nothing held is told from one with blocks held (451 T261's false finding came from the reason wording)
       research: rendering
       verify: DONE. landed: make audit counts the plan gate's escapes by each record's held list, never by the reason; red-first (233 passed 1 failed, then 234); over the real log all 1281 records are 'held not recorded' (they predate T262), the other classes shown on fixtures; T286 and T287 filed from it

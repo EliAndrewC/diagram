@@ -13785,3 +13785,45 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 
 
 <!-- plan-archive: T271 to T271 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-26 -->
+### T269 (451 T258, 2026-11-25: `scripts/state-sync.sh`, newly called from `make land`'s and `make land-tooling`'s recipes, landed with the audit register's check asking no entry - `dev/audits/tooling-state.md` says so in its own words)
+
+- **Approach**: the audit register's delta check (`rust/gate/crates/checks/src/checks/audit_register/detect.rs`) reads one more form of LANDING STEP: a script newly called from a landing recipe. The kinds stay five; an item is `landing script scripts/<path>`, the name an entry's `covers:` line gives it, as the other landing steps are named (`push check <name>`, `landing gate <name>`).
+  - **The cause.** `detect::items` read a Makefile only for its `$(MAKE) <target>` edges (`make_graph`), and the landing only where `STEPS` and `REFUSALS` name it in the Rust; a recipe line that runs a script was read by nothing. Observed 2026-11-26, method: the function as written, and the red run of item 9.
+  - **What is read** (`landing_scripts`): the recipe lines of `land`, `land-batch` and `land-tooling` (`LANDING_TARGETS`) in the Makefile, the value of each Makefile variable those lines expand and of each that one expands in turn (`landing_recipes`: `$(LAND_RUN)` IS the landing, `$(DISK_FLOOR)` and `$(SCRATCH_TREES)` hold a script each), and the push's own two scripts whole, `scripts/land-tooling.sh` and `scripts/sync-with-main.sh` (`LANDING_SCRIPTS`) - the three the brief names, make land, make land-tooling and the push script. NOT the whole gate chain's recipes: the Makefile's hook roster (its `for h in ... scripts/state-sync.sh ...` lines of `make hooks-test`) names scripts it does not call, and a reader over every chain recipe would fire on a roster line.
+  - **What a script's name is** (`script_names`): each `scripts/<path>` over the characters of a path that ends in a file's extension, a trailing sentence stop cut, a `#` line not read. So `scripts/*`, `scripts/gates/` and `scripts/gates/$g.sh` name no script.
+  - **New is by name over all of them together**, the base against the head (the shape of T259-D3 for constants): a call moved from a recipe into the push script, or a script the landing already calls somewhere, adds nothing.
+  - **The Makefile's rule-line reading is one function now** (`rule`), which `make_graph` and `landing_recipes` both ask, so a target-specific variable line (`land: export LAND_NOTE = ...`) is no rule to either. `make_graph`'s behavior is unchanged (its tests as they were).
+  - **`dev/audits/tooling-state.md` gains `covers: landing script scripts/state-sync.sh`**, and its prose no longer says the check cannot see it; `docs/guards.md`'s row, `docs/process-decisions.md`'s register paragraph and `dev/audits/audit-register.md`'s measurement say the new reading and its replay.
+  - **Limits accepted** (this builder, 2026-11-26; each written beside the rule in `detect.rs`). Misses: a script a called script calls in its turn (following calls would bring in every script `l7r-gate.sh` and the guard launcher name, none of them a landing's step); a script reached by a path not written `scripts/...` - one today, `sync-with-main.sh`'s `"$(dirname "${BASH_SOURCE[0]}")/state-sync.sh"` at sync-in, which is not a landing step (reading `)/name.ext` would also read `.../task-starts.jsonl` in `make land`'s recipe as a script); what `l7r-gate land` itself runs (its gates are `STEPS`'). One possible false fire: a message in the push's scripts that newly NAMES a script nothing of the landing named before (`run scripts/x.sh`) reads as a call. Telling a call from a mention needs a shell reader; priced against the replay below (0 such in 40 landings) and the escape `AUDIT_ENTRY_OK`, not built. What would reopen it: one false fire of this form in the guard log (`make guard-log GUARD=audit-register`).
+  - **The backfill grows by six**: `make audits`' BACKFILL is 260 on 2026-11-26 (method: its own line; it was 254), the six scripts the landing already called and no entry names - `scripts/gates/l7r-gate.sh`, `scripts/git-askpass-token.sh`, `scripts/hooks/l7r-guard.sh`, `scripts/hooks/lib/guardlog.sh`, `scripts/land-tooling.sh`, `scripts/sync-with-main.sh` - T260's to write, by its own rule (every mechanism the list names). T260's line in tasks.md keeps its dated 254.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a script newly called from `make land`'s recipe is refused without an entry, and passes with a `covers:` line | red first 2026-11-26 (item 9); pinned by `a_script_newly_called_from_make_lands_recipe_is_refused_until_an_entry_covers_it` (T258's own recipe line) | n/a: tooling | none | n/a |
+| a script reached through a Makefile variable, or called in the push's scripts, is read; a moved call, another target's roster, a glob, a directory, a variable path and a comment are not | pinned by `a_landing_script_is_read_through_a_variable_and_the_push_scripts_by_name_over_them_all` | n/a: tooling | none | n/a |
+| the real tree stays silent | `--delta` over this task's delta: 0 mechanisms, exit 0; the replay of item 9 | n/a: tooling | none | n/a |
+
+<!-- plan-archive: archived 2026-11-26 -->
+### T269 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing that makes `make land`, `make land-tooling` or the push run one more script is asked for that script's audit entry - its measurement and its falsifier - as it is for a new push check or landing gate.
+2. **The constraints.** T269's line in tasks.md (cover a recipe's new callee, proved red-first on T258's case). `docs/process-decisions.md`, "The audit register": the push refuses a new landing step without an entry. T259-D1: detectors read paths and names, never prose, because a check that fires on correct work teaches a session to escape every check. The brief: a new callee is a landing step; the real tree stays silent; 100% line coverage of new code.
+3. **Where each comes from.** G: the GM 2026-11-25, agenda item 13, as T259 quotes him ("when we make this kind of optimization, then we should be documenting the logic behind it, the measurements that we took, and then also crucially what we would look at that would falsify the notion that this is a good idea"). O: T258's landing, which the check passed; the replay of item 9.
+4. **Do they describe the world here?** Yes, measured 2026-11-26: `scripts/gates/l7r-gate.sh check audit-register --range 91f1f4d96f^ 91f1f4d96f --root "$PWD"` (T258's own commit) with the fix prints `1 item(s)`, `landing script: landing script scripts/state-sync.sh`, and refuses, exit 1; the unfixed check passed the same recipe line in the fixture (item 9).
+5. **The order.** Any time; before T260's backfill is written is better, since it adds to that list (the Approach's backfill figure).
+6. **The exits.** Green: `make closing-checks T=T269`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, 2026-11-26, both tests run with the detector written but not yet read by `items` (`make rust-test CRATE=rust/gate/crates/checks`): 193 passed, 2 failed, T258's fixture answered `0 entries well formed; the delta's 0 mechanism(s) each named by one`, exit 0, where the test wants the refusal. With the detector read: 195 passed, 0 failed. THE REAL TREE, 2026-11-26: `--delta "$PWD"` over this task's delta, `19 entries well formed; the delta's 0 mechanism(s) each named by one`, exit 0; T258's range as item 4; the replay over the last 40 landings on main (each `ticked (make land)` commit against the one before, `--range <previous> <landing> --empty-register`, the lines naming a landing script kept): 1 detection, `scripts/state-sync.sh` at the landing that carried T258, no other.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding it breaks: `docs/process-decisions.md` says the push refuses a new landing step without its entry, and T258 added one - a script run after every landing - that the check did not ask an entry for. No map changes.
+
+**Found and left?** none
+
+**Performance work?** no
+
+
+<!-- plan-archive: T270 to T262 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+<!-- plan-archive: T270 to T270 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
