@@ -37370,25 +37370,55 @@
   "siblings": "161d2970637010d2",
   "verdict": "MISLABELED"
  },
+ "rust/phases/src/driver.rs::settlement_ground#each farm's grove inside the band": {
+  "body": "bbe2f1bfbaf1209d",
+  "claim": "each farm's grove inside the band - UNRESEARCHED: the record does not say how much ground behind a row's or a scattered farm's house its own grove takes, so none is kept past the band (the algorithmically easier route); the groves are drawn by 449 T438, inside the homestead ground the band is sized by",
+  "code": "c3a347624be561dc",
+  "core": "860ef2222e08f9a7",
+  "date": "2026-11-25",
+  "note": "nothing is kept past the band when `belt` is off; the cited pages do not give how deep a farm's grove reaches behind the house; 0349 §106 gives room per farm only, for fitting, \"not a finding\"",
+  "pages": {},
+  "reads": "49dfcd9410aae564",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver.rs::settlement_ground#no belt's ground for a row or a scattered settlement": {
+  "body": "bbe2f1bfbaf1209d",
+  "claim": "no belt's ground for a row or a scattered settlement - clustered-and-scattered-villages-shuson-sanson.drawing: where farms carry their own groves no village shelter belt is drawn, a grove at each farm instead, so a row's or a scattered settlement's ground (`Frame::belt` off) is the band alone, from the margin to its back, with no belt swept and no strip behind it, and the dry hem may stand at the band's back (449 T417)",
+  "code": "c3a07d891817363d",
+  "core": "860ef2222e08f9a7",
+  "date": "2026-11-25",
+  "note": "`belt` 0 gives a depth of `STANDOFF_FT + 2*band.1` from the anchor, and it returns before `belt_swept`; this matches \"Where farms carry their own groves, no village shelter belt is drawn\"",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
+   "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
+  },
+  "reads": "49dfcd9410aae564",
+  "research": "0d613c94817b1ce5",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver.rs::settlement_ground#the back strip a belt's depth whatever the wind": {
-  "body": "95ec56bb0fcacda0",
-  "claim": "the back strip a belt's depth whatever the wind - GUESS: the record is silent on the ground behind a village whose back is off the wind; the strip behind the band reaches `BELT_FAR_FT` on every seat, a polder's whose back is its landward shore too (Kuwabata's, back to the east under a northwest wind), so the dry hem stands a belt's depth behind the houses where no belt stands (the algorithmically easier route: one strip for every seat)",
-  "code": "f0e7dfaec9b15eca",
-  "core": "a2f63d816917321f",
-  "date": "2026-11-22",
-  "note": "`deep` is `STANDOFF_FT + 2*band.1 + BELT_FAR_FT` on every seat and `wind` reaches only `belt_swept`, as the claim says; the cited pages put the hem behind the houses but give no depth for the ground behind, so GUESS is the right label",
+  "body": "bbe2f1bfbaf1209d",
+  "claim": "the back strip a belt's depth whatever the wind - GUESS: the record is silent on the ground behind a clustered village whose back is off the wind; the strip behind the band reaches `BELT_FAR_FT` on every clustered village's seat, a polder's whose back is its landward shore too (Kuwabata's, back to the east under a northwest wind), so the dry hem stands a belt's depth behind the houses where no belt stands (the algorithmically easier route: one strip for every clustered seat)",
+  "code": "7a126bdae326b5cb",
+  "core": "860ef2222e08f9a7",
+  "date": "2026-11-25",
+  "note": "the strip is `BELT_FAR_FT` on every seat with `s.belt` set, whatever the wind; the cited pages do not give the ground behind a cluster whose back is off the wind (0072 §37 places only the belt, to windward)",
   "pages": {},
   "reads": "49dfcd9410aae564",
   "research": "",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::settlement_ground#the belt's ground kept": {
-  "body": "95ec56bb0fcacda0",
+  "body": "bbe2f1bfbaf1209d",
   "claim": "the belt's ground kept - shelter-belts-on-a-villages-windward-side-bofurin.drawing: a clustered village shelters behind one belt along its windward edge, so its ground reaches past the band to the belt on the band's windward faces - behind it where its back faces the wind, round its windward end where the wind falls obliquely (Inashiro's and Mizuguchi's belts 52 and 54 percent outside the old strip, measured 2026-11-22, 449 T294), between it and the field where a declared fall into the wind backs it to the hill (GUESS, clustered-and-scattered-villages-shuson-sanson.drawing), on the margin's dry side alone (GUESS, `margins::belt_swept`)",
-  "code": "e840545d429b2f43",
-  "core": "a2f63d816917321f",
+  "code": "16fe0befbd931785",
+  "core": "860ef2222e08f9a7",
   "date": "2026-11-25",
-  "note": "hull reaches the belt on the map's own wind; the belt stays to windward under the hill-backed seat, a GUESS 0031 §85 records",
+  "note": "the belt's reach behind the band and `belt_swept` on the windward faces, clipped to the margin's dry side, now kept only where `s.belt` is set, i.e. a clustered village's one windward belt; the GUESS for a fall into the wind matches the drawing page's \"its belt to windward, a GUESS\"",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "1fc6cc6d67ef44a0",
@@ -37397,10 +37427,13 @@
   "reads": "49dfcd9410aae564",
   "research": "f4343aef8ccd2050",
   "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ab8b682cb0eace93",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:4b8db97a0ad26796",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:5e9ac2daf3925f70",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:70e1d65dbf9cecc4"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:70e1d65dbf9cecc4",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4"
   ],
   "verdict": "IN-STEP"
  },
@@ -37408,8 +37441,8 @@
   "body": "95ec56bb0fcacda0",
   "claim": "the settlement's ground - dry-fields-and-their-crops-hatake.drawing: the houses between the canal and the dry fields, so the hem keeps off the band where they stand",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "3a169a918cb0f6f1",
-  "core": "a2f63d816917321f",
+  "code": "fe75e8af4eda5983",
+  "core": "860ef2222e08f9a7",
   "date": "2026-11-22",
   "note": "the band from the canal-side anchor out past the houses keeps the hem behind them",
   "pages": {
@@ -37496,8 +37529,8 @@
  "rust/phases/src/driver.rs::stage_seat#the seat's back to the wind": {
   "body": "d063e9711cc57f9a",
   "claim": "the seat's back to the wind - shelter-belts-on-a-villages-windward-side-bofurin.drawing: the settlement laid out with its back to the wind - on a comb, but where a declared fall runs into the wind (the seat backs the hill, the claim at `seat::seat`; its belt still windward, at `margins::ranked`); a polder hands its landward shore as the way the back faces (`Ground::back`, the claim at `polder::landward`), its belt's room still asked of the map's own wind (`SeatIn::belt_wind`, the claim at `polder::roll_polder`)",
-  "code": "c721bf584bd4d8c6",
-  "core": "4db0ce2096eb0099",
+  "code": "c46d5c3fdb710680",
+  "core": "c080a3b51dfa1859",
   "date": "2026-11-22",
   "note": "the back is the wind, or a polder's shore through `g.back`; on a polder the belt's wind is the map's own through `belt_wind`",
   "pages": {
@@ -37514,8 +37547,8 @@
  "rust/phases/src/driver.rs::stage_seat#the way out's walls": {
   "body": "4a4ad08f8d33eacf",
   "claim": "the way out's walls - village-lanes.drawing: a track keeps off wet ground and runs off the map - the wet toe and the reed fringe grown by the lane's width, the field, the pond at its berth; the drain's run and every watercourse lines it may not cross",
-  "code": "2bf3a76f0d3a0ce2",
-  "core": "4db0ce2096eb0099",
+  "code": "21f50d6ba9c52f19",
+  "core": "c080a3b51dfa1859",
   "date": "2026-11-25",
   "note": "the cut toe grown by the lane's width, the reeds, the field, the pond at its berth and the lines are walled; with the toe cut at the corners the track leaves past the wet ground's ends, as §46 says",
   "pages": {
@@ -37527,6 +37560,7 @@
    "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:48cdd569d493520c"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::stage_sink#where the runoff goes": {
@@ -38680,14 +38714,33 @@
  "rust/phases/src/driver/plan.rs::canvas_side#the canvas": {
   "body": "244c0b487bf6faba",
   "claim": "the canvas - GUESS: a fan fills about 40% of its own box (the deleted `canvas_for`), the span doubled and rounded to 50 ft; working ground the crop cuts away",
-  "code": "a5d8617bd53b759c",
-  "core": "28b9e299540cc055",
+  "code": "6f145ef14763a046",
+  "core": "db7baa40ed24faa3",
   "date": "2026-11-07",
   "note": "the 40% fill, the doubled span and the 50 ft rounding are as the claim says",
   "pages": {},
   "reads": "be12c748b8f7d055",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-25",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/plan.rs::keeps_belt#the belt a clustered village's alone": {
+  "body": "2f1bf6619766df52",
+  "claim": "the belt a clustered village's alone - clustered-and-scattered-villages-shuson-sanson.drawing: where farms carry their own groves no village shelter belt is drawn - a scattered or a row settlement draws a grove at each farm, a clustered village shelters behind one belt at its edge; a form this table does not name (a hand-written spec's) keeps the belt, the stage's behavior before 449 T417",
+  "code": "1ad034d0dbf2937f",
+  "core": "ba0813222fab6a7f",
+  "date": "2026-11-25",
+  "note": "only \"linear\" and \"dispersed\" drop the belt, and any other form keeps it; this matches the scattered and row forms' grove at each farm, and 0072 §38 says Kashikawa and Mizuguchi draw no village belt",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
+   "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
+  },
+  "research": "0d613c94817b1ce5",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3197321e78d71dc5",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::offtakes_for#delivery-ditch count and fractions": {
@@ -38724,8 +38777,8 @@
  "rust/phases/src/driver/plan.rs::plan#a declared bearing off a rolled fall": {
   "body": "60bf74156f126d98",
   "claim": "a declared bearing off a rolled fall - GUESS: which-way-water-flows-and-how-channels-bend-and-join.drawing silent on which yields when a hamlet declares its bearing, leaves its fall to the roll, and the roll lands 90 degrees or more off it; the bearing yields and the water runs down the rolled fall, so the page's bound holds (no water with a net uphill run) and the hamlet is still drawn - the easier route, taken over rolling a fall to fit (a polder under a northwest wind admits two falls, east and north, and a bearing to the southwest fits neither, so a second rule would still be owed) and over refusing a spec for what its seed rolled; no pool spec declares a bearing and all five declare their fall, so the case meets no map (measured 2026-11-24, feature 449 T416)",
-  "code": "2a3eb7b3c5a128e9",
-  "core": "938073f82ef5b7f4",
+  "code": "65d21f251f27ed32",
+  "core": "ee017d27608e8575",
   "date": "2026-11-24",
   "note": "0054 does not say which one yields; `.filter(follows).unwrap_or(down_deg)` keeps the strict 90-degree bound",
   "pages": {
@@ -38737,14 +38790,15 @@
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#no brook knobs on a polder": {
   "body": "60bf74156f126d98",
   "claim": "no brook knobs on a polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a polder diked out of standing water has no brook, so no intake or brook side is rolled",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "81d1a8fdd285362a",
-  "core": "938073f82ef5b7f4",
+  "code": "897910be0613a178",
+  "core": "ee017d27608e8575",
   "date": "2026-11-24",
   "note": "on a polder the brook knobs (`intake`, `brook_side`) are switched off. The page feeds a polder from its wild pond along a feeder to the inlet sluice, so it has no brook",
   "pages": {
@@ -38756,14 +38810,14 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:0fbfef4e578bd457",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#regional wind": {
   "body": "9b5e4221af4c0298",
   "claim": "regional wind - shelter-belts-on-a-villages-windward-side-bofurin.drawing: the northwest unless declared",
-  "code": "3bf5b6e3db649242",
-  "core": "938073f82ef5b7f4",
+  "code": "ffa3566ae0715e2a",
+  "core": "ee017d27608e8575",
   "date": "2026-11-22",
   "note": "windward defaults to NW unless the spec declares one",
   "pages": {
@@ -38775,13 +38829,14 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:0c9dba0334c6fdfb",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:70e1d65dbf9cecc4"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#the fall backs the wind": {
   "body": "60bf74156f126d98",
   "claim": "the fall backs the wind - DEVIATION clustered-and-scattered-villages-shuson-sanson.drawing: a rolled fall only from the falls that leave a windward margin (`water_frame::admitted`)",
-  "code": "b1779106d65d39d1",
-  "core": "938073f82ef5b7f4",
+  "code": "af8a48f8c247d30b",
+  "core": "ee017d27608e8575",
   "date": "2026-11-25",
   "note": "falls are rolled only from `admitted` (away from the wind or square across it), the deviation 0031 records",
   "pages": {
@@ -38794,14 +38849,15 @@
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:5d63bab526a39b1d",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ab8b682cb0eace93"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#the field's archetype": {
   "body": "9b5e4221af4c0298",
   "claim": "the field's archetype - DEVIATION polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a polder drawn only when the map asks for one, only the valley fan dealt at random - the polder and the dike-pond attested, their random dealing a known gap",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "f44d7dde36b57a0e",
-  "core": "938073f82ef5b7f4",
+  "code": "f060c88d47819534",
+  "core": "ee017d27608e8575",
   "date": "2026-11-09",
   "note": "polder only when asked, the recorded known gap",
   "pages": {
@@ -38812,14 +38868,14 @@
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:268186083f3ceadf"
   ],
-  "triaged": "2026-11-24",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#water flow follows the fall": {
   "body": "60bf74156f126d98",
   "claim": "water flow follows the fall - DEVIATION which-way-water-flows-and-how-channels-bend-and-join.drawing: a hamlet's bearing taken from its land's fall unless the hamlet declares one (`Spec::water_flow`), a declared one standing only within the page's strict 90 degrees of the fall (`spec::follows`); against a declared fall the spec is refused (`spec::parse`), against a rolled one see the next claim",
-  "code": "65160ad94084838b",
-  "core": "938073f82ef5b7f4",
+  "code": "42d7a8db8c8f85e6",
+  "core": "ee017d27608e8575",
   "date": "2026-11-24",
   "note": "the bearing is taken from the fall unless declared, which the page records as a deviation; strict under 90; `parse` refuses a declared pair that breaks it",
   "pages": {
@@ -38832,15 +38888,46 @@
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:875dbf8076221ba9",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
   ],
+  "triaged": "2026-11-25",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/plan.rs::rolled_or#the knob's form": {
+  "body": "594870328825a9e9",
+  "claim": "the knob's form - NONE: a lookup of what was rolled",
+  "code": "02b73da6f7848679",
+  "core": "aa2d16a9462f7150",
+  "date": "2026-11-25",
+  "note": "a map lookup with a fallback, plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/plan.rs::seat_room#no belt's reach for a row or a scattered settlement": {
+  "body": "baa8755f2bc3302a",
+  "claim": "no belt's reach for a row or a scattered settlement - clustered-and-scattered-villages-shuson-sanson.drawing: no village shelter belt is drawn where farms carry their own groves, so the canvas keeps no belt's reach round its seat (`keeps_belt`, 449 T417); the windward fringe alone, the same GUESS bound without the belt",
+  "code": "d9cc19f6e40320be",
+  "core": "f33de6fc0e3d6524",
+  "date": "2026-11-25",
+  "note": "`reach` is 0 when `belt` is off, leaving the same GUESS bound without the belt's reach",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
+   "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
+  },
+  "reads": "4a176154d5480210",
+  "research": "0d613c94817b1ce5",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::seat_room#the seat's room": {
-  "body": "37fc05ea770999d4",
+  "body": "baa8755f2bc3302a",
   "claim": "the seat's room - GUESS: a closed-form bound from the seat's own quantities - its depth and standoff, then the farther of its half-length and its windward fringe plus the belt's reach",
-  "code": "e997722987d09db3",
-  "core": "6505d5cc19d99e73",
-  "date": "2026-11-07",
-  "note": "dep + standoff + max(lat, cos45*lat + dep + reach), as the claim says",
+  "code": "86d1d473a809fc26",
+  "core": "f33de6fc0e3d6524",
+  "date": "2026-11-25",
+  "note": "the closed-form bound is as stated: depth plus standoff plus the farther of the half-length and the fringe plus the depth plus the reach; the reach is zeroed when `belt` is off, which the claim on it already checked covers",
   "pages": {},
   "reads": "4a176154d5480210",
   "research": "",
@@ -40284,8 +40371,8 @@
  "rust/phases/src/driver/polder/tests.rs::the_waterside_strips_hold_their_points#the polder's tests": {
   "body": "e17f548784cd30e8",
   "claim": "the polder's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
-  "code": "58696afe59374e13",
-  "core": "a705c40093c0251a",
+  "code": "6f269780c66cca66",
+  "core": "ace1ce55d04454ce",
   "date": "2026-11-22",
   "note": "fixtures and assertions only",
   "pages": {},
@@ -41113,6 +41200,19 @@
   "date": "2026-11-24",
   "note": "a fixture and assertions only; the rule it tests is claimed at rice_pond",
   "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/tests.rs::a_row_or_a_scattered_hamlet_keeps_no_clustered_village_s_belt#the driver's tests": {
+  "body": "d955b8cfc3fc8f70",
+  "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "33db9bb8dc92aa27",
+  "core": "ec66db171157d650",
+  "date": "2026-11-25",
+  "note": "fixtures and assertions only",
+  "pages": {},
+  "reads": "49dfcd9410aae564",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -49065,20 +49165,21 @@
  "rust/phases/src/seat.rs::Frame#the seat": {
   "body": "2518e7f0e72478eb",
   "claim": "the seat - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
-  "code": "589d436299efa460",
-  "core": "06165d2693f8cd73",
+  "code": "c10600b5fd6f99f9",
+  "core": "a26ed9b17f7e8223",
   "date": "2026-11-04",
   "note": "a data record, decides nothing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat.rs::SeatIn#the seat": {
   "body": "4e2774bca688dc14",
   "claim": "the seat - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
-  "code": "3526d2f9211dd16d",
-  "core": "c61623634795eaa3",
+  "code": "c2420c6adff5b2af",
+  "core": "30c26a171226d934",
   "date": "2026-11-04",
   "note": "the stage's inputs, its figures are set and claimed elsewhere",
   "pages": {},
@@ -50098,8 +50199,8 @@
  "rust/phases/src/seat/margins.rs::ranked#band on the canvas": {
   "body": "63b59b2fe8d6d8b8",
   "claim": "band on the canvas - CONVENTION: the seat center at least the band's half-length inside the frame",
-  "code": "8f75d3bd2c3c8190",
-  "core": "47f72db54e940ba7",
+  "code": "72d3f9db993a7763",
+  "core": "b0241e8d837487a4",
   "date": "2026-11-22",
   "note": "the center, led out where the belt needs room, is kept lat inside the frame",
   "pages": {},
@@ -50112,8 +50213,8 @@
  "rust/phases/src/seat/margins.rs::ranked#brook across the band": {
   "body": "285c51de3ab5fcc0",
   "claim": "brook across the band - villages-beside-their-stream-one-bank-or-both.drawing: \"A hamlet site the brook does not cross is preferred when two sites are otherwise equally good\", the brook's share the tie-break, never refused",
-  "code": "ebac6274ae70886e",
-  "core": "47f72db54e940ba7",
+  "code": "297b30f3cde4ab91",
+  "core": "b0241e8d837487a4",
   "date": "2026-11-04",
   "note": "the brook's share only breaks ties after tier and score, and never refuses a seat",
   "pages": {
@@ -50128,11 +50229,29 @@
   "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/seat/margins.rs::ranked#no belt's room for a row or a scattered settlement": {
+  "body": "84e2cf9b503e71be",
+  "claim": "no belt's room for a row or a scattered settlement - clustered-and-scattered-villages-shuson-sanson.drawing: where farms carry their own groves no village shelter belt is drawn - a scattered or a row settlement draws a grove at each farm, a clustered village one belt at its edge - so where `SeatIn::belt` is off no margin is refused or scored down for a belt's room off the canvas and no band is stood off a windward field for one (449 T417)",
+  "code": "9c8f7c7d0434aeef",
+  "core": "b0241e8d837487a4",
+  "date": "2026-11-25",
+  "note": "`lead` and `off` are both gated on `inp.belt`, so with no belt `off` is 0: no refusal past `BELT_ROOM_MAX_OFF`, no `WEIGHTS.belt` score term, and no stand-off; `Frame::belt` passes the flag on",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
+   "0349-how-our-maps-keep-a-scattered-farm-within-reach-of-its-rice.drawing.html": "8871da6c3db7927e"
+  },
+  "reads": "6288a6585a296fd3",
+  "research": "0d613c94817b1ce5",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/seat/margins.rs::ranked#no drain rule at the seat": {
   "body": "c613a2b6d5428e57",
   "claim": "no drain rule at the seat - ground-too-wet-to-build-on.drawing: the ground below a drain kept only from dispersed farmsteads, not a nucleated cluster",
-  "code": "4a46093fdb8844d2",
-  "core": "47f72db54e940ba7",
+  "code": "8df7579125bf83c1",
+  "core": "b0241e8d837487a4",
   "date": "2026-11-24",
   "note": "`ranked` has no test below the drain; the edited 0058 page still scopes that rule to dispersed farmsteads, not to a cluster placed as one block [0058 §216, §219, §220, §222]",
   "pages": {
@@ -50146,8 +50265,8 @@
  "rust/phases/src/seat/margins.rs::ranked#not in the reed fringe": {
   "body": "c613a2b6d5428e57",
   "claim": "not in the reed fringe - CANON: the GM's ruling of 2026-08-28, refused centered in a pond's reed fringe, scored down at an end; it departs from ground-too-wet-to-build-on.drawing, which does not count the fringe as marsh",
-  "code": "fb92ce1d92b26912",
-  "core": "47f72db54e940ba7",
+  "code": "2df5ca9b3bda1373",
+  "core": "b0241e8d837487a4",
   "date": "2026-11-24",
   "note": "CANON naming the GM's ruling of 2026-08-28; the code refuses a center inside a fringe (`stopped[4]`) and scores the band's wet share down (`WEIGHTS.reeds * wet`); the edited 0058 page still does not count the fringe as marsh, so the departure the claim states is true [0058 §212, §221]",
   "pages": {
@@ -50161,8 +50280,8 @@
  "rust/phases/src/seat/margins.rs::ranked#not on the wet toe": {
   "body": "22e31579ef2cf91d",
   "claim": "not on the wet toe - ground-too-wet-to-build-on.drawing, marshes-and-wetlands-shitchi.drawing: nothing is built on the marsh below the fields - the seat, its margin's midpoint and every sample of its band off it, and where the toe stops at the fields' lower corners (a comb's) the band's corners and its ends' middles too (449 T432: the two points alone passed a band at the fields' lower corner swung under their foot); a polder's toe, spanning its ring and 90 ft up beside it, is asked at the samples alone, its rim refusing 654 of 6,000 polders (measured 2026-11-25)",
-  "code": "a2d7555232235604",
-  "core": "47f72db54e940ba7",
+  "code": "7de1094d8bfa3d34",
+  "core": "b0241e8d837487a4",
   "date": "2026-11-25",
   "note": "center, midpoint, samples and (on a comb) the band's rim are all kept off the toe; nothing is built on the marsh",
   "pages": {
@@ -50176,13 +50295,14 @@
    "0057-marshes-and-wetlands-shitchi.drawing.html:a4e9ac2645ac3ea0",
    "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#seat on the field's margin": {
   "body": "22e31579ef2cf91d",
   "claim": "seat on the field's margin - clustered-and-scattered-villages-shuson-sanson.drawing: higher, drier ground beside the paddy, scored upslope",
-  "code": "9eeda596b290e0e9",
-  "core": "47f72db54e940ba7",
+  "code": "712c267b6917fcce",
+  "core": "b0241e8d837487a4",
   "date": "2026-11-25",
   "note": "beside the paddy and scored upslope",
   "pages": {
@@ -50194,13 +50314,14 @@
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ab8b682cb0eace93"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#the back's width": {
   "body": "63b59b2fe8d6d8b8",
   "claim": "the back's width - GUESS: no page sizes the ground behind a seat; one half-depth across the margin's midpoint, the strip behind the band's middle, which the belt cannot bend away from",
-  "code": "82548e3167ea30e5",
-  "core": "47f72db54e940ba7",
+  "code": "50daa08887444541",
+  "core": "b0241e8d837487a4",
   "date": "2026-11-22",
   "note": "±0.5*dep across the middle, moving with the band",
   "pages": {},
@@ -50213,8 +50334,8 @@
  "rust/phases/src/seat/margins.rs::ranked#the band on open ground": {
   "body": "22e31579ef2cf91d",
   "claim": "the band on open ground - clustered-and-scattered-villages-shuson-sanson.drawing: beside its paddy, the band's points off the field, and no corner of the field's outline deeper in the band than `FIELD_IN_BAND_MAX` of its depth - a margin whose band holds one is refused with those on the field (449 T423: the nine points alone passed a band with the paddy's corner between them), and none of the band's four corners past that dip on the field, nor any edge of the field across a side of the band past the dip (449 T435: a margin shorter than the band, the field's next edge rising across the band's end, 574 of 41,000 sweep rolls)",
-  "code": "0f399503316b4ddc",
-  "core": "47f72db54e940ba7",
+  "code": "3becb74699bb9581",
+  "core": "b0241e8d837487a4",
   "date": "2026-11-25",
   "note": "samples, field corners past the tenth, band corners and edge crossings are all refused on the field",
   "pages": {
@@ -50226,15 +50347,16 @@
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ab8b682cb0eace93"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#the belt between the houses and a windward field": {
-  "body": "22e31579ef2cf91d",
+  "body": "84e2cf9b503e71be",
   "claim": "the belt between the houses and a windward field - GUESS clustered-and-scattered-villages-shuson-sanson.drawing: where a declared fall into the wind backs the cluster to the hill (`belt_wind`, the map's own wind), the belt still stands on the windward side (shelter-belts-on-a-villages-windward-side-bofurin.drawing: the wind decides the side), so a margin whose field lies within 45 degrees of the wind stands its band the belt's far edge (`BELT_BAND`) further off it, the belt's ground between the houses and the paddy, and every sample of the band moves with it; a wind along the band leaves the belt at a band end, no room added; the belt's room on the canvas is asked of the map's own wind",
-  "code": "d1c64c312e8ae3e6",
-  "core": "47f72db54e940ba7",
+  "code": "10d5447052a4c855",
+  "core": "b0241e8d837487a4",
   "date": "2026-11-25",
-  "note": "`lead` applies only under the hill-backed `belt_wind` with the field within 45 degrees of the wind, so the belt stands to windward between the houses and the paddy",
+  "note": "`lead = BELT_BAND.1` only where the field lies within `back_min_dot` (45 degrees) of the declared wind (`belt_wind`), now also gated on `inp.belt`, so it stays a clustered village's belt to windward; the room on the canvas is asked of the map's own wind",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "bd52d74fae125d66",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "1fc6cc6d67ef44a0",
@@ -50243,6 +50365,7 @@
   "reads": "6288a6585a296fd3",
   "research": "11096c10297e176b",
   "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ab8b682cb0eace93",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:4b8db97a0ad26796",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:70e1d65dbf9cecc4"
@@ -50250,24 +50373,23 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#the dry hem's reach": {
-  "body": "63b59b2fe8d6d8b8",
+  "body": "84e2cf9b503e71be",
   "claim": "the dry hem's reach - GUESS: no source could speak to it, a value of ours; a dry plot within two band half-depths of where the band's room starts - the margin, or the belt's room past it where the band is stood out for the belt - the band's own depth, scores the seat down",
-  "code": "c6cff95aeda28bfd",
-  "core": "47f72db54e940ba7",
-  "date": "2026-11-22",
-  "note": "the hem is measured from band_pt(0.0, 0.0), which is the margin plus `lead` (BELT_BAND.1 only when the band is stood out for the belt), and reaches 2.0*dep. Here dep is the band's half-depth (center at dep+STANDOFF, samples to 2*dep), so the reach is the band's own depth. The penalty (1 - hem/(2dep)) scores a nearer dry plot down. The cited pages say nothing about this reach, so GUESS is the right label",
+  "code": "3e91ad7c21960bd7",
+  "core": "b0241e8d837487a4",
+  "date": "2026-11-25",
+  "note": "`ground.hem(band_pt(0.0, 0.0), 2.0 * dep)` measures from the margin, or from the margin plus `lead` where the band stands out for the belt, over the band's full depth (two half-depths); with no belt it starts at the margin, as the claim says",
   "pages": {},
   "reads": "6288a6585a296fd3",
   "research": "",
   "rests": [],
-  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#the ladder": {
   "body": "22e31579ef2cf91d",
   "claim": "the ladder - clustered-and-scattered-villages-shuson-sanson.drawing: a hamlet never splits, so the margins it falls back to are whole seats, ranked",
-  "code": "65110cffd227fd79",
-  "core": "47f72db54e940ba7",
+  "code": "67690c8c7e550a70",
+  "core": "b0241e8d837487a4",
   "date": "2026-11-25",
   "note": "whole seats ranked, never split",
   "pages": {
@@ -50279,6 +50401,7 @@
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685"
   ],
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/tests.rs::a_band_a_tongue_of_the_field_crosses_is_refused#the seat's tests": {
@@ -50369,14 +50492,14 @@
  "rust/phases/src/seat/tests.rs::a_flank_turns_its_back_and_a_notch_or_a_cramped_belt_is_refused#the seat's tests": {
   "body": "a39db3c581d94784",
   "claim": "the seat's tests - NONE: fixtures and assertions, deciding nothing about the place",
-  "code": "0823222d1415919d",
-  "core": "6bc96555209abdf0",
+  "code": "6fe158d63770212b",
+  "core": "a010e21656abf99a",
   "date": "2026-11-04",
   "note": "fixture outlines and assertions on what is refused; it decides nothing",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/tests.rs::a_margin_that_breaks_a_rule_is_refused_and_a_site_with_none_named#the seat's tests": {
@@ -50430,8 +50553,8 @@
  "rust/phases/src/seat/tests.rs::inp#the seat's tests": {
   "body": "13f15e5caa2b5218",
   "claim": "the seat's tests - NONE: fixtures and assertions, deciding nothing about the place",
-  "code": "fc0edffdb798dc03",
-  "core": "b3dbe905f674b81b",
+  "code": "58cdccbb0679bfc5",
+  "core": "19803ec3c369a36d",
   "date": "2026-11-04",
   "note": "its band, ford and wind values are test inputs, not figures the generator uses",
   "pages": {},
@@ -50443,14 +50566,14 @@
  "rust/phases/src/seat/tests.rs::only_a_fall_toward_the_wind_backs_the_hill#the seat's tests": {
   "body": "4e655a46d3ad5bb0",
   "claim": "the seat's tests - NONE: fixtures and assertions, deciding nothing about the place",
-  "code": "6f51a0f5c40d6546",
-  "core": "46eefa4602fcffa1",
+  "code": "2c1b5b27ff0c94fc",
+  "core": "f877927a75b7e2a5",
   "date": "2026-11-22",
   "note": "test fixtures and assertions; decides nothing about the place",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-22",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/tests.rs::square#the seat's tests": {
