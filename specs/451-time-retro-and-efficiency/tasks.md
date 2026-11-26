@@ -206,3 +206,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T278 the cargo-variant sweep keeps 16 incremental variants a crate and prunes only after 12 idle hours, so cover-gate holds 44 GB where a fresh one is 2.65 GB (measured 2026-11-26, dev/measurements/2026-11-26/build-levers): measure a smaller keep and an earlier prune for coverage builds against rebuild time, and adopt what loses no time
       research: rendering
+- [ ] T280 two true statements whose footnotes do not quote their line of the GM's notes (page session P18, 2026-11-26): 0140's drawing note l7r-lineages-3 for 'each lineage is headed by a chancellor' (l7r.md 1148, 'the lineage chancellors who sit on the House council'; the arbiter allows one scoped quote-check and source-reader round) and 0001's l7r-budgets-4 for '600 households' (budgets.md, the Provincial city table's Total row) - add each passage in a page session; and source-reader's optional sharpening of 0001's 'which this passage leaves out'
+      research: rendering
