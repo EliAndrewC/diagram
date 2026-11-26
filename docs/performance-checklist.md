@@ -49,6 +49,14 @@ the time, and it costs readability. Combining functions to lower the count is po
    full sweep (`FULL=1`) once before landing. A wider run with no quick one of the same engines is refused.
 6. **Did any map move, and does it still keep the research?** Speed work may move maps (the GM, 2026-10-18); hold them to the
    rules and the research claims, never to identical output.
+7. **What was decided, and where is it recorded?** (the GM, 2026-11-26: *"the stuff that we have decided not to do ... is
+   getting captured somewhere that we are able to look it up later, right? ... we should incorporate this step into that
+   checklist-based process"*.) Whichever way it went - adopted, declined, or left for more data - the decision has its entry
+   in `docs/process-decisions.md` (the question, the GM's words if he decided it, the measurement with its date and command,
+   the alternatives weighed, and its falsifier: what would reopen it) and its `dev/audits/` entry (`kind: adopted` or
+   `declined`), written in the same landing as the measurement. An option DECLINED is recorded the same way as one adopted;
+   a measurement saved under `dev/measurements/` with no entry naming it is unfinished work (451 T320 has the push refuse it).
+   This holds for a tooling or process tweak as for engine speed work.
 
 ## Tools
 
