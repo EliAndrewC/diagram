@@ -2226,6 +2226,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T340 (451 T315's measurement of 2026-11-26: the guard crate's test run goes on waiting after its tests end, on processes the tests leave behind)": {
+   "sha256": "873b71538cc4d1119a3ad2ce35309cf07c5b87abdfd3da356b08c72c14f4fc1b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T340 Approach (checklist part A)": {
+   "sha256": "32aee0c1b25421a350bfba79901be033b1dfdd80c415a5b3ebf5ef4940fe581d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T340 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "0a35cfe35589839af3b9ddf7d459a2e6994279b8aa42c4942480fa4b8115a51f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -28588,6 +28606,67 @@
      "why": "The GM's 2026-11-20 words count measurement and performance-mechanism work as performance work, first in order (FR-013)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T340 (451 T315's measurement of 2026-11-26: the guard crate's test run goes on waiting after its tests end, on processes the tests leave behind)",
+    "### T340 Approach (checklist part A)",
+    "### T340 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T340-approach",
+     "summary": "The clone check's stand-in sessions become sh -c 'read _' <args> on a pipe the test holds, in place of sh -c 'sleep 5; :' whose sleep child outlived kill+wait; only the one test file changes, no guard code or message.",
+     "class": "within",
+     "why": "A [perf] task under FR-013 (the GM 2026-11-20, 'priotitize performance improvements'): removes 3.2 s of post-test waiting and nine leftover processes per run (measured 2026-11-26). The three tests keep a live process whose cmdline names claude, so what they prove is unchanged; read is a builtin, so nothing forks, and the pipe ends the stand-in if a test panics. Followed literally it does what it says (0 alive after, pipe end = exit)."
+    },
+    {
+     "id": "T340-alternatives",
+     "summary": "Chosen over closing the sleep's output and over killing the shell's process group.",
+     "class": "within",
+     "why": "A design choice among ways to the same goal; closing output would leave the processes alive, so the chosen fix is the one that removes the leak. Not a fidelity matter."
+    },
+    {
+     "id": "T340-red-first",
+     "summary": "New test a_stand_in_session_starts_no_process_of_its_own reads /proc/<pid>/task/<pid>/children of a stand-in; red on the old stand-in (1 of 549, 20 of 20 alone), green on the new.",
+     "class": "within",
+     "why": "Enforcement of the fix itself (fails only when the stand-in forks a child); serves the task, not unrequested scope."
+    },
+    {
+     "id": "T340-gate-reader-left",
+     "summary": "The gate's run_in (Command::output, returning at pipe end rather than binary exit) is not changed; filed T364, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured after the fix: pipe end and exit coincide (2.14/2.39/2.29 s vs exit 2.14/2.39/2.28 s), so with the leak removed it is no wrong outcome today - a latent cost, not a defect under constitution XIV's definition; the coordinating session's brief scoped the gate reader to 'filed and not changed unless it is the narrower fix', and it is not the narrower fix (it changes every crate's output reading). The found-and-left item states why, its filed id and its order (FR-009), and it lands before T302, so nothing known is carried past the next step."
+    },
+    {
+     "id": "T340-general-leak-pin-left",
+     "summary": "The task line's ask for a pin that a crate's test run leaves no process behind is met for this stand-in only (the new test); a check over every crate's run, a new gate mechanism in rust/gate/crates/rustc, is filed as T363, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated against purpose: the purpose (FR-013, the builders' loop faster; the leak gone) is achieved here and pinned for the cause found; the absent general pin is a check that would pass a future leak, so it is a defect, but it is not dropped - it is split into its own task ordered before T302, which satisfies fix-as-we-go (defects fixed before the next step begins). The split is implied by the GM's own words on builder sizing (2026-11-26, T334, the sizing rules of builder-brief.md that the session must follow, and 2026-11-25 on one builder doing too much): a new gate mechanism in another crate is a builder's job of its own. The task line is the coordinating session's, not the GM's (block's item 3: G none). FR-009's why / id / order are all present."
+    },
+    {
+     "id": "T340-tmpdir-slowness-left",
+     "summary": "The guard test binary runs 5.3-6.0 s under the default TMPDIR vs 2.0 s under an empty one; cause not found, gate does not pay it; filed T365, lands before T302.",
+     "class": "within",
+     "why": "A separate finding outside this task's subject (the gate's run, which uses a fresh TMPDIR and so does not pay it); filed with why, id and order. Leaving an unrelated found issue to its own filed task narrows nothing the GM or the spec asked of T340."
+    },
+    {
+     "id": "T340-shared-and-T357",
+     "summary": "rust/guard/shared looked at once and found free of this leak; T357's orphaned self-copy in tempdir tests is a different cause, left to T357.",
+     "class": "within",
+     "why": "T357 is an existing filed task with its own cause; recording that this fix does not cover it is scoping by fact (measured 2026-11-26), not a narrowing of what T340 was asked."
+    },
+    {
+     "id": "T340-exits-and-order",
+     "summary": "Exits: builder-checks first tier, the clone-sync hook suite, the crate's cover step; full gate at landing; one landing; before T302 and independent of T339/T341/T342/T344/T347/T357.",
+     "class": "within",
+     "why": "Follows the GM's two-tier checking (2026-11-26, T308: the rigor belongs at the landing) and FR-013's ordering; settles nothing the spec left open against the request."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -44945,6 +45024,64 @@
      "summary": "Counted as performance work for scheduling",
      "class": "within",
      "why": "The GM's 2026-11-20 words count measurement and performance-mechanism work as performance work, first in order (FR-013)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T340": {
+   "section_sha256": "2165cebafd9f0fb4d4f1ac77ee0cb27c625bcaf04ca22ff7de2de6f89ce26d65",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T340-approach",
+     "summary": "The clone check's stand-in sessions become sh -c 'read _' <args> on a pipe the test holds, in place of sh -c 'sleep 5; :' whose sleep child outlived kill+wait; only the one test file changes, no guard code or message.",
+     "class": "within",
+     "why": "A [perf] task under FR-013 (the GM 2026-11-20, 'priotitize performance improvements'): removes 3.2 s of post-test waiting and nine leftover processes per run (measured 2026-11-26). The three tests keep a live process whose cmdline names claude, so what they prove is unchanged; read is a builtin, so nothing forks, and the pipe ends the stand-in if a test panics. Followed literally it does what it says (0 alive after, pipe end = exit)."
+    },
+    {
+     "id": "T340-alternatives",
+     "summary": "Chosen over closing the sleep's output and over killing the shell's process group.",
+     "class": "within",
+     "why": "A design choice among ways to the same goal; closing output would leave the processes alive, so the chosen fix is the one that removes the leak. Not a fidelity matter."
+    },
+    {
+     "id": "T340-red-first",
+     "summary": "New test a_stand_in_session_starts_no_process_of_its_own reads /proc/<pid>/task/<pid>/children of a stand-in; red on the old stand-in (1 of 549, 20 of 20 alone), green on the new.",
+     "class": "within",
+     "why": "Enforcement of the fix itself (fails only when the stand-in forks a child); serves the task, not unrequested scope."
+    },
+    {
+     "id": "T340-gate-reader-left",
+     "summary": "The gate's run_in (Command::output, returning at pipe end rather than binary exit) is not changed; filed T364, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured after the fix: pipe end and exit coincide (2.14/2.39/2.29 s vs exit 2.14/2.39/2.28 s), so with the leak removed it is no wrong outcome today - a latent cost, not a defect under constitution XIV's definition; the coordinating session's brief scoped the gate reader to 'filed and not changed unless it is the narrower fix', and it is not the narrower fix (it changes every crate's output reading). The found-and-left item states why, its filed id and its order (FR-009), and it lands before T302, so nothing known is carried past the next step."
+    },
+    {
+     "id": "T340-general-leak-pin-left",
+     "summary": "The task line's ask for a pin that a crate's test run leaves no process behind is met for this stand-in only (the new test); a check over every crate's run, a new gate mechanism in rust/gate/crates/rustc, is filed as T363, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated against purpose: the purpose (FR-013, the builders' loop faster; the leak gone) is achieved here and pinned for the cause found; the absent general pin is a check that would pass a future leak, so it is a defect, but it is not dropped - it is split into its own task ordered before T302, which satisfies fix-as-we-go (defects fixed before the next step begins). The split is implied by the GM's own words on builder sizing (2026-11-26, T334, the sizing rules of builder-brief.md that the session must follow, and 2026-11-25 on one builder doing too much): a new gate mechanism in another crate is a builder's job of its own. The task line is the coordinating session's, not the GM's (block's item 3: G none). FR-009's why / id / order are all present."
+    },
+    {
+     "id": "T340-tmpdir-slowness-left",
+     "summary": "The guard test binary runs 5.3-6.0 s under the default TMPDIR vs 2.0 s under an empty one; cause not found, gate does not pay it; filed T365, lands before T302.",
+     "class": "within",
+     "why": "A separate finding outside this task's subject (the gate's run, which uses a fresh TMPDIR and so does not pay it); filed with why, id and order. Leaving an unrelated found issue to its own filed task narrows nothing the GM or the spec asked of T340."
+    },
+    {
+     "id": "T340-shared-and-T357",
+     "summary": "rust/guard/shared looked at once and found free of this leak; T357's orphaned self-copy in tempdir tests is a different cause, left to T357.",
+     "class": "within",
+     "why": "T357 is an existing filed task with its own cause; recording that this fix does not cover it is scoping by fact (measured 2026-11-26), not a narrowing of what T340 was asked."
+    },
+    {
+     "id": "T340-exits-and-order",
+     "summary": "Exits: builder-checks first tier, the clone-sync hook suite, the crate's cover step; full gate at landing; one landing; before T302 and independent of T339/T341/T342/T344/T347/T357.",
+     "class": "within",
+     "why": "Follows the GM's two-tier checking (2026-11-26, T308: the rigor belongs at the landing) and FR-013's ordering; settles nothing the spec left open against the request."
     }
    ],
    "verdict": "CLEAR"

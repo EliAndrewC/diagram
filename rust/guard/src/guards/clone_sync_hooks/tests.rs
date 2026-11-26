@@ -268,16 +268,7 @@ fn a_forbidden_name_or_another_sessions_clone_is_refused() {
 #[test]
 fn a_clone_another_live_session_claims_is_refused() {
     let w = World::new("live");
-    let mut other = std::process::Command::new("sh")
-        .args(["-c", "sleep 5; :", "claude"])
-        .spawn()
-        .unwrap();
-    // a spawned process carries the parent's command line until it execs: wait for its own, or a loaded host reads "not claude"
-    let cmdline = format!("/proc/{}/cmdline", other.id());
-    let _ = (0..1000).find(|_| {
-        std::thread::sleep(std::time::Duration::from_millis(2));
-        std::fs::read_to_string(&cmdline).is_ok_and(|c| c.contains("claude"))
-    });
+    let mut other = fake(&["claude"]);
     std::fs::write(
         w.sessions.join(format!("{}.json", other.id())),
         json!({"sessionId": "them"}).to_string(),
@@ -302,12 +293,18 @@ fn a_clone_another_live_session_claims_is_refused() {
     assert!(w.edit("", "", &w.clone.join("a.txt")).is_empty());
 }
 
-/// A process running `sh -c 'sleep 5; :' <args...>` once its own command line shows (a spawned child carries its parent's until it
-/// execs).
+/// A stand-in session: a process running `sh -c 'read _' <args...>`, returned once its own command line shows (a spawned child
+/// carries its parent's until it execs: on a loaded host the guard would read "not claude").
+///
+/// It waits on a pipe this test holds, in the shell itself, and so ends at the test's `kill`, or with the pipe when a test panics
+/// before it. Do not make it wait in a `sleep` again (451 T340): `sh -c 'sleep 5; :'` kept the arguments by not exec'ing, so the
+/// `sleep` was the shell's child, and a `kill` of the shell left it behind with the test binary's stdout and stderr - nine a run,
+/// each holding the gate's read of the run open until its 5 s were up, where the tests end in 2.
 fn fake(args: &[&str]) -> std::process::Child {
     let child = std::process::Command::new("sh")
-        .args(["-c", "sleep 5; :"])
+        .args(["-c", "read _"])
         .args(args)
+        .stdin(std::process::Stdio::piped())
         .spawn()
         .unwrap();
     let cmdline = format!("/proc/{}/cmdline", child.id());
@@ -316,6 +313,18 @@ fn fake(args: &[&str]) -> std::process::Child {
         std::fs::read_to_string(&cmdline).is_ok_and(|c| c.contains("claude"))
     });
     child
+}
+
+/// A stand-in session starts no process of its own (451 T340): one that did (`sleep 5; :`, nine a run) left it behind at the kill,
+/// holding the test run's output open for 5 s where the tests end in 2.
+#[test]
+fn a_stand_in_session_starts_no_process_of_its_own() {
+    let mut session = fake(&["claude"]);
+    let pid = session.id();
+    let children = std::fs::read_to_string(format!("/proc/{pid}/task/{pid}/children"));
+    let _ = session.kill();
+    let _ = session.wait();
+    assert_eq!(children.unwrap(), "");
 }
 
 #[test]
