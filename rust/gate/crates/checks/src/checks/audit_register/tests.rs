@@ -392,7 +392,33 @@ fn a_landing_refusal_added_is_refused_by_its_number() {
         said.stderr
     );
     assert!(!said.stderr.contains("#1"), "{}", said.stderr);
-    assert!(super::detect::refusal_items("stops.push(a);", "").is_empty());
+    assert!(super::detect::refusal_items("land/cheap.rs", "stops.push(a);", "").is_empty());
+}
+
+#[test]
+fn a_refusal_before_the_first_pass_is_a_landing_refusal_too() {
+    // RED FIRST (2026-11-26, 451 T292): the landing's refusal of an unfinished carry-over stands in `land/unfinished.rs`, before the
+    // first pass, and the check read `land/cheap.rs` alone - this delta answered 0 mechanisms, exit 0
+    let dir = base("refusals-unfinished");
+    let unfinished = "rust/gate/crates/land/src/land/unfinished.rs";
+    put(
+        &dir,
+        "rust/gate/crates/land/src/land/cheap.rs",
+        "stops.push(a);\n",
+    );
+    commit(&dir);
+    put(&dir, unfinished, "stops.push(a);\nstops.push(b);\n");
+    let said = judged(&dir);
+    assert_eq!(said.code, 1, "{}", said.stderr);
+    for k in [1, 2] {
+        assert!(
+            said.stderr
+                .contains(&format!("`landing refusal land/unfinished.rs #{k}`")),
+            "{}",
+            said.stderr
+        );
+    }
+    assert!(!said.stderr.contains("land/cheap.rs"), "{}", said.stderr);
 }
 
 /// T258's case (451 T269): `make land`'s rule as it stood, to which T258 added one recipe line calling a script no entry names.

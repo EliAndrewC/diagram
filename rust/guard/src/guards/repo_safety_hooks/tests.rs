@@ -37,6 +37,28 @@ fn a_history_rewrite_is_refused_and_the_flag_forbidding_it_is_not() {
         assert_eq!(v(cmd), Some("history-rewrite"), "{cmd}");
     }
     assert_eq!(v("git pull --no-rebase origin main"), None);
+    // its abort rewrites nothing (451 T292: the landing's refusal of a rebase in progress prints it) - alone, never with more after it
+    assert_eq!(v("git -C x rebase --abort"), None);
+    // ...and every other command that refusal prints (`rust/gate/crates/land/src/land/unfinished.rs`) is no rewrite
+    for cmd in [
+        "git -C x am --abort",
+        "git -C x -c core.editor=true cherry-pick --continue",
+        "git -C x -c core.editor=true merge --continue",
+        "git -C x -c core.editor=true revert --continue",
+        "git -C x cherry-pick --abort",
+        "git -C x add -- a b",
+        "git -C x restore --staged -- a",
+    ] {
+        assert_eq!(v(cmd), None, "{cmd}");
+    }
+    assert_eq!(v("git rebase --abort && git push"), None);
+    for cmd in [
+        "git rebase --abort main",
+        "git rebase --abort; git rebase main",
+        "git rebase --continue",
+    ] {
+        assert_eq!(v(cmd), Some("history-rewrite"), "{cmd}");
+    }
 }
 
 #[test]

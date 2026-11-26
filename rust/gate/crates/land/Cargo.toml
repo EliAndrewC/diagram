@@ -10,6 +10,8 @@ fancy-regex = { workspace = true }
 l7r_gate_claims = { path = "../claims" }
 l7r_gate_cohort = { path = "../cohort" }
 l7r_gate_core = { path = "../core" }
+# a carried plan-review.json is merged in process (451 T292)
+l7r_gate_plan = { path = "../plan" }
 l7r_gate_reviews = { path = "../reviews" }
 l7r_gate_task = { path = "../task" }
 l7r_shared = { path = "../../../guard/shared" }
@@ -18,8 +20,6 @@ serde_json = { workspace = true }
 
 [dev-dependencies]
 l7r_gate_core = { path = "../core", features = ["testkit"] }
-# the bundle's end-to-end test decides and records its section in process (451 T141)
-l7r_gate_plan = { path = "../plan" }
 
 [lints]
 workspace = true

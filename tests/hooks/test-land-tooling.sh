@@ -215,6 +215,19 @@ setup
 LEDGER_ROWS_OK="for the push" LAND_TOOLING_CHECKS='[ -z "${LEDGER_ROWS_OK:-}" ]' LAND_TOOLING_PUSH='echo "push=${LEDGER_ROWS_OK:-none}" >&2; exit 1' land scripts/a.sh; rc=$?
 ok "the checks saw no escape, the push saw it" '[ "$rc" -ne 0 ] && grep -q "push=for the push" "$T/out"'
 
+echo "8. an unfinished carry-over in the clone lands nothing, and its refusal gives the command (451 T292)"
+# red first (2026-11-26): without the check, T270's state - a cherry-pick stopped, its code staged - landed scripts/a.sh from HEAD
+setup
+git -C "$C" checkout -qb builder HEAD~1; printf 'x\nbuilder\n' > "$C/scripts/b.sh"; printf 'c\n' > "$C/scripts/c.sh"; git -C "$C" add -A; git -C "$C" commit -qm "a builder's"; git -C "$C" checkout -q main
+printf 'x\nmine\n' > "$C/scripts/b.sh"; git -C "$C" commit -qam "the clone's"
+git -C "$C" cherry-pick builder >/dev/null 2>&1
+land scripts/a.sh; rc=$?
+ok "a stopped cherry-pick is refused, nothing landed" '[ "$rc" -eq 2 ] && [ "$(on_main scripts/a.sh)" = "$(printf "one\ntwo")" ]'
+ok "...with the command that finishes it" 'grep "unfinished: a cherry-pick is in progress in" "$T/out" | grep "resolve 1 unmerged path(s) (scripts/b.sh)" | grep -e "-c core.editor=true cherry-pick --continue" >/dev/null'
+git -C "$C" cherry-pick --abort
+land scripts/a.sh; rc=$?
+ok "taken back, the tooling lands" '[ "$rc" -eq 0 ] && [ "$(on_main scripts/a.sh)" = "$(printf "one\nTWO")" ]'
+
 echo "5. outside a session clone it refuses"
 ( cd "$T/seed" && "$LAND" scripts/a.sh ) >"$T/out" 2>&1; rc=$?
 ok "not under .clones/" '[ "$rc" -ne 0 ] && grep -q "not a session clone" "$T/out"'

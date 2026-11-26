@@ -689,6 +689,31 @@ OUT=$(cd "$c" && git cherry-pick other 2>&1); check "the pick merges clean" 0 $?
 [ "$(jq '.block_reviews|length' "$c/specs/451-x/plan-review.json")" = 2 ] && yes_ || no_ "both rows kept"
 }
 
+case_32() {  # 2 s
+echo "Z3. the push refuses an unfinished carry-over with the command that finishes it (451 T292)"
+# red first (2026-11-26): without the check a merge standing with nothing left to stage (MERGE_HEAD, a clean status) was pushed,
+# its merge never concluded; a stopped cherry-pick met only "uncommitted changes - commit first", which names no command
+D=$(topology uf)
+local c=$D/main/.clones/c
+git -C "$c" checkout -qb side && echo side > "$c/s" && git -C "$c" add -A && git -C "$c" commit -qm side && git -C "$c" checkout -q main
+echo ours > "$c/o" && git -C "$c" add -A && git -C "$c" commit -qm ours
+git -C "$c" merge -q -s ours --no-commit side
+[ -f "$c/.git/MERGE_HEAD" ] && [ -z "$(git -C "$c" status --porcelain)" ] && yes_ || no_ "the fixture: a merge standing, the status clean"
+OUT=$(syncmain "$D" push); check "a merge in progress is refused" 1 $?
+expect_out "unfinished: a merge is in progress in"
+expect_out "-c core.editor=true merge --continue"
+git -C "$c" -c core.editor=true merge --continue >/dev/null 2>&1
+# T270's state: a cherry-pick stopped on a conflict, the code staged
+git -C "$c" checkout -qb builder HEAD~1 2>/dev/null && echo theirs > "$c/f" && echo code > "$c/code" && git -C "$c" add -A && git -C "$c" commit -qm builder && git -C "$c" checkout -q main
+echo mine > "$c/f" && git -C "$c" commit -qam mine
+git -C "$c" cherry-pick builder >/dev/null 2>&1
+OUT=$(syncmain "$D" push); check "a stopped cherry-pick is refused" 1 $?
+expect_out "unfinished: a cherry-pick is in progress in"
+expect_out "resolve 1 unmerged path(s) (f)"
+expect_out "-c core.editor=true cherry-pick --continue"
+case "$OUT" in *"uncommitted changes - commit first"*) no_ "the refusal with the command comes first" ;; *) yes_ ;; esac
+}
+
 # GUARD_EDIT_OK: feature 375 amendment 4 (FR-022) - THE CASES RUN IN PARALLEL PARTS. This suite is held to the whole scripts
 # tree (feature 172: its push path reaches scripts at run time), so every script change re-runs it, and at 202-230 s it was
 # the long pole of a parallel hooks-test (specs/375-enforced-wave-process/research.md R3). Each case builds its own fixture
@@ -696,8 +721,8 @@ OUT=$(cd "$c" && git cherry-pick other 2>&1); check "the pick merges clean" 0 $?
 # longest first onto the lightest part (the times are the measured ones beside each case; a new case without one counts
 # 10 s), each part a subshell with its own $T, HOME and guard log. Every check still runs and is counted; a part that ends
 # before a case reports fails the suite and names the case. SYNC_PARTS=1 runs them one after another, as before.
-CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_11b case_11c case_11d case_12 case_13 case_14 case_15 case_16 case_17 case_18 case_19 case_20 case_21 case_22 case_23 case_24 case_25 case_26 case_27 case_27b case_28 case_29 case_30 case_31)
-declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=1 [case_06]=1 [case_07]=1 [case_08]=1 [case_09]=1 [case_10]=1 [case_11]=1 [case_11b]=1 [case_11c]=2 [case_11d]=3 [case_12]=1 [case_13]=1 [case_14]=1 [case_15]=2 [case_16]=1 [case_17]=2 [case_18]=1 [case_19]=1 [case_20]=1 [case_21]=2 [case_22]=1 [case_23]=1 [case_24]=1 [case_25]=1 [case_26]=1 [case_27]=1 [case_27b]=1 [case_28]=1 [case_29]=1 [case_30]=1 [case_31]=2)  # seconds, each case alone less the suite's start and template (about 0.85 s), measured 2026-11-19 (feature 449 T205; case_17 6.6 s before its lock holder was killed whole)
+CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_11b case_11c case_11d case_12 case_13 case_14 case_15 case_16 case_17 case_18 case_19 case_20 case_21 case_22 case_23 case_24 case_25 case_26 case_27 case_27b case_28 case_29 case_30 case_31 case_32)
+declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=1 [case_06]=1 [case_07]=1 [case_08]=1 [case_09]=1 [case_10]=1 [case_11]=1 [case_11b]=1 [case_11c]=2 [case_11d]=3 [case_12]=1 [case_13]=1 [case_14]=1 [case_15]=2 [case_16]=1 [case_17]=2 [case_18]=1 [case_19]=1 [case_20]=1 [case_21]=2 [case_22]=1 [case_23]=1 [case_24]=1 [case_25]=1 [case_26]=1 [case_27]=1 [case_27b]=1 [case_28]=1 [case_29]=1 [case_30]=1 [case_31]=2 [case_32]=2)  # seconds, each case alone less the suite's start and template (about 0.85 s), measured 2026-11-19 (feature 449 T205; case_17 6.6 s before its lock holder was killed whole)
 # SYNC_CASES="case_11 case_17" runs only those cases - to time one case where it lives (feature 383 amendment 3, plan D27); the
 # runner itself is tests/hooks/parts.sh since amendment 4 (plan D28), shared by every split suite
 [ -n "${SYNC_CASES:-}" ] && PARTS_CASES=$SYNC_CASES

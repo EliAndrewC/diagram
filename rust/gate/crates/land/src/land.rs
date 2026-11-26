@@ -27,6 +27,7 @@
 //! ([`l7r_gate_cohort::cohort::is_landing_engine`]).
 
 mod alone;
+mod carry;
 mod cheap;
 mod claims_wait;
 mod inproc;
@@ -35,6 +36,7 @@ mod memory;
 mod phase;
 mod ready;
 mod stop;
+pub mod unfinished;
 mod writers;
 
 use l7r_shared::env::Rooted;
@@ -322,6 +324,16 @@ impl Land {
     fn land(&self, d: &Path, tasks: &[String], note: &str) -> Result<i32, String> {
         self.landing_tasks.replace(tasks.to_vec());
         self.landing_feature.replace(name_of(d));
+        // AN UNFINISHED CARRY-OVER LANDS NOTHING (451 T292, [`unfinished`]): asked before the dirty clone is sent to land alone - which
+        // landed T270's HEAD without its staged code - and before the first pass, whose own commits would conclude a stopped pick
+        let unfinished = unfinished::refusals(&self.root)?;
+        if !unfinished.is_empty() {
+            self.warn(&format!(
+                "land: refused before anything ran - nothing landed, nothing ticked. Every refusal:\n  {}",
+                unfinished.join("\n  ")
+            ));
+            return Ok(2);
+        }
         if self.alone_owed()? {
             return self.alone(d, tasks);
         }
@@ -754,6 +766,16 @@ fn finish(done: Result<i32, String>, cwd: &Path) -> Reply {
 /// Run from `cwd`, the process's working directory, where the run is recorded.
 #[must_use]
 pub fn cli(args: &[String], cwd: &Path) -> Reply {
+    // what stands unfinished in a tree, asked by the push's scripts, and a builder's commit carried into this one (451 T292): neither
+    // is a landing, so neither is recorded as one
+    match args.first().map(String::as_str) {
+        Some("--unfinished") if args.len() <= 2 => {
+            let tree = args.get(1).map_or(cwd, |t| Path::new(t));
+            return unfinished::cli(&l7r_gate_task::tick::repo_root(tree));
+        }
+        Some("--carry") => return carry::cli(&args[1..], &l7r_gate_task::tick::repo_root(cwd)),
+        _ => {}
+    }
     let done = if args == ["--stop"] {
         stop::stop(
             &l7r_gate_task::tick::repo_root(cwd),

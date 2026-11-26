@@ -1956,6 +1956,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T292 (2026-11-26, 451 T270: `make land` ticked and pushed a task whose code was not in the delta - commit 0526d8b7df, the code landed after it as 83f65718d7 - over a `git cherry-pick` left unfinished on a tasks.md conflict; the third landing over an unfinished carry-over, after T235 and T262)": {
+   "sha256": "6f6c6e0e96a4db5720b7a41183fc49ac4f08dd68081fe35a0242546e2a5a5feb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T292 Approach (checklist part A)": {
+   "sha256": "5a948347b39dab035684a6fb344fd3182f90e985bcfd2df74a5ba2c96e8077a6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -24563,6 +24575,259 @@
      "why": "The GM's request plans for an initial backfill, and T260 is that task, so routing the six there carries out the request rather than deferring a defect of T269. T269's fix makes the six visible, and item 5 asks for T269 to land before T260 writes its backfill. Keeping a dated figure as dated is fine."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T292 (2026-11-26, 451 T270: `make land` ticked and pushed a task whose code was not in the delta - commit 0526d8b7df, the code landed after it as 83f65718d7 - over a `git cherry-pick` left unfinished on a tasks.md conflict; the third landing over an unfinished carry-over, after T235 and T262)",
+    "### T292 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Approach",
+     "summary": "One check (unfinished.rs) asked first by every landing door, and one command, make carry, in place of the hand cherry-pick.",
+     "class": "within",
+     "why": "This is the task's own two jobs as the block quotes them (step 2). request.md has no GM words on this design. The task was filed from the T270 incident, and its goal is that a task is never ticked without its code. The task line and brief are not in the bundle, so this reading rests on the block's own quotes of them."
+    },
+    {
+     "id": "T292-D1",
+     "summary": "Three refusals: an operation in progress (CHERRY_PICK_HEAD, MERGE_HEAD, REVERT_HEAD, rebase-merge, rebase-apply in the tree's own git dir), unmerged paths with nothing in progress, and staged changes with nothing in progress. Each prints its finishing command.",
+     "class": "within",
+     "why": "These are the refusals the brief asks for, with the linked-worktree git dir of 451 T267. Two gaps in what it reads are ruled separately below as LIMIT-sequencer and LIMIT-am-rebase."
+    },
+    {
+     "id": "T292-D2",
+     "summary": "The unfinished refusal runs first and apart. The first pass's other refusals are not asked of such a tree, although the brief said 'together with its other first-pass refusals'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the brief's 'together', not anything the GM wrote. Purpose test: the first pass commits on its way (records_on_the_way). A git commit while a pick stands concludes the pick with whatever is staged, which is the very wrong outcome the refusal exists to stop. Measured 2026-11-26 in a scratch repo: after `git commit` during a stopped `git cherry-pick`, CHERRY_PICK_HEAD was gone. So running the existing pass alongside would defeat the refusal's purpose. The cost is only that a second refusal shows on the next make land. No work lands wrong."
+    },
+    {
+     "id": "T292-D3",
+     "summary": "Staged changes are refused even with nothing in progress.",
+     "class": "within",
+     "why": "The block says the task's line asks for this. It leaves T88's dirty-clone landing alone for unstaged work. 'It fires on no correct work' is labeled UNMEASURED, and the audit entry's falsifier names it. That is not a narrowing."
+    },
+    {
+     "id": "T292-D4",
+     "summary": "No escape on the unfinished refusal.",
+     "class": "within",
+     "why": "This narrows nothing asked. It is stricter enforcement, in line with the GM's 2026-11-19 'real enforcement and not just instructions'. FR-012's escape rule covers FR-006 to FR-013's refusals, not this one. Its justification, that every refusal prints a command which finishes the work, fails in one branch, which is ruled as LIMIT-am-rebase."
+    },
+    {
+     "id": "T292-D5",
+     "summary": "One copy: l7r-gate land --unfinished, asked by sync-with-main.sh's push_cmd before its uncommitted check and by land-tooling.sh before its fetch.",
+     "class": "within",
+     "why": "These are the brief's three doors (make land, make land-tooling, sync-with-main done), answered by one check."
+    },
+    {
+     "id": "T292-D6",
+     "summary": "make carry FROM= [COMMIT=]: refuses unfinished work, says so and exits 0 where the commit is already in HEAD, cherry-picks, resolves all unmerged paths or none, stops with exit 2 otherwise, and verifies its end.",
+     "class": "within",
+     "why": "The brief's 'make carry with its keep-both cases, its stop and its verified end'."
+    },
+    {
+     "id": "T292-D6-keep-both",
+     "summary": "Keep-both only where a diff3 merge's hunks have an empty base and only list lines were added (tasks.md), or through plan::merge_files (plan-review.json). A rewrite of one task line by both sides, or prose added by each, stops.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is narrower than 'any tasks.md conflict'. Keeping both sides of a line both rewrote cannot be shown correct: it leaves two versions of one task's line, a wrong record. The stop is the brief's own other ending, with the next command named and the pick left standing, so no wrong outcome results. The incident's shape, two Occasions lines both added, is kept and is the fixture."
+    },
+    {
+     "id": "LIMIT-sequencer",
+     "summary": "Limits accepted: a multi-commit pick paused between commits (sequencer/ with no *_HEAD) is not read.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "MEASURED 2026-11-26 in a scratch repo, method: `git cherry-pick A B`, a conflict on A, resolved with `git add` and a plain `git commit`. Result: .git held `sequencer/` and no CHERRY_PICK_HEAD, `git status --short` was empty, and B's file was absent from the tree (`git status` itself said 'Cherry-pick currently in progress'). D1 (a), (b) and (c) all pass that tree, so make land ticks a task without part of its code. That is the wrong outcome this task exists to end: step 1's goal and step 12's defect, and 'a check that passes bad work' by the defect definition. It is reachable because make carry carries one commit, so a builder with several commits invites a hand range pick, and only doc lines steer a session away from that (the GM 2026-11-19: 'real enforcement and not just instructions'). The rule itself is not impossible here: it is one more path in D1's list. The block gives no reason for the limit, and it records 'Found and left? none' while carrying it, against FR-009. Required: read the tree's own `sequencer/`, refuse with `git -C <tree> cherry-pick --continue` (or revert --continue) or --abort, and add a red-first test of this state."
+    },
+    {
+     "id": "LIMIT-am-rebase",
+     "summary": "Limits accepted: a git am is named a rebase. D1 (a) prints the rebase's --abort as its only command.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "MEASURED 2026-11-26: this project's PreToolUse history guard refused `git -C <dir> rebase --abort` twice ('BLOCKED: a history rewrite ... No escape hatch'). So for a rebase-apply or rebase-merge tree the refusal prints a command no session can run, and D4 gives it no escape. A tree that cannot be landed and is handed an unrunnable instruction is a tool answering wrongly. It also defeats D4's own premise that each refusal prints the command that finishes the work. Whether `git rebase --abort` would even undo a stopped `git am` is UNMEASURED. Required: tell an am (rebase-apply/applying) apart and print `git -C <tree> am --abort`, and for a rebase print a command the project's guards let a session run. Test each printed command through the guard, not only through git."
+    },
+    {
+     "id": "LIMIT-one-commit",
+     "summary": "Limits accepted: make carry carries one commit.",
+     "class": "within",
+     "why": "No wrong outcome on its own: several commits are several make carry runs, each verified. The danger in the hand range pick a session might use instead is LIMIT-sequencer's, and fixing that closes it."
+    },
+    {
+     "id": "LIMIT-audit-register",
+     "summary": "The audit register's check does not see this refusal (it counts stops.push( in land/cheap.rs), so the entry was written unasked.",
+     "class": "within",
+     "why": "The entry exists (dev/audits/unfinished-carry-over.md), so nothing is left unrecorded and no wrong outcome results. The register check's narrow search space is a separate matter, which this task does not have to settle."
+    }
+   ],
+   "tasks": [
+    "T292"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T292 (2026-11-26, 451 T270: `make land` ticked and pushed a task whose code was not in the delta - commit 0526d8b7df, the code landed after it as 83f65718d7 - over a `git cherry-pick` left unfinished on a tasks.md conflict; the third landing over an unfinished carry-over, after T235 and T262)",
+    "### T292 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T292-D1",
+     "summary": "Three refusals (operation in progress incl. sequencer/todo, rebase, am, read from the tree's own git dir; unmerged with nothing in progress; staged with nothing in progress), each naming the command that finishes it; a rebase only ever aborted.",
+     "class": "within",
+     "why": "The task's refusal as asked, read for a linked worktree as the brief names (451 T267); the extra states (sequencer, rebase, am) are more of the same unfinished-carry-over class, and a rebase offered only --abort follows constitution VI. Nothing asked is left out."
+    },
+    {
+     "id": "T292-D2",
+     "summary": "The refusal is asked first and apart from the first pass's list, not together with its other refusals.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the brief's 'together with its other first-pass refusals' (the coordinating session's words, not the GM's). By the plan's account (code not read in this review), literal placement would defeat the task's own purpose two ways: the first pass commits on its way, and a commit while a pick or merge stands concludes it with whatever is staged - the very failure; and a dirty clone is sent to land-alone.sh before that pass runs, so T270's tree would never have met the refusal at all. It stays first and cheap (0.06 s, measured), and the three kinds are said together; the only cost is meeting a second, unrelated refusal one run later."
+    },
+    {
+     "id": "T292-D3",
+     "summary": "Staged changes are refused with nothing in progress.",
+     "class": "within",
+     "why": "The plan says the task's line asks for it. That it refuses no correct work is argued by the plan's reading of the code (the landing and land-alone.sh never leave the index staged, builders do not stage) and is labeled UNMEASURED, because no record of a clone's index exists to measure; the audit entry's falsifier names it. 451 T88's dirty-clone landing still runs for unstaged work."
+    },
+    {
+     "id": "T292-D4",
+     "summary": "No escape on the unfinished-carry-over refusal.",
+     "class": "within",
+     "why": "FR-012's escape requirement covers FR-006 to FR-009, FR-011 and FR-013, not this refusal. Every refusal prints the command that finishes the work, and landing over a stopped pick is never right, so there is no correct work for an escape to let through. Stricter enforcement serves 'real enforcement and not just instructions'."
+    },
+    {
+     "id": "T292-D5",
+     "summary": "One copy (l7r-gate land --unfinished) asked by sync-with-main.sh's push_cmd before its uncommitted check, and by land-tooling.sh before its fetch.",
+     "class": "within",
+     "why": "The brief names make land, make land-tooling and sync-with-main.sh done as the doors. One implementation used by all three is how that is built, not a change to it."
+    },
+    {
+     "id": "T292-D6",
+     "summary": "make carry FROM= [COMMIT=]: refuses unfinished work, cherry-picks, resolves all conflicts or none, keeps both sides only where provable (tasks.md both-added list hunks, plan-review.json by its own merge), stops otherwise with D1's line, and ends by verifying the carried non-spec files are in HEAD.",
+     "class": "within",
+     "why": "The brief's second job: make carry with its keep-both cases, its stop and its verified end, and the goal of one command that either finishes verified or stops saying what to run next."
+    },
+    {
+     "id": "keep-both-narrower",
+     "summary": "The tasks.md keep-both rule covers only conflicts where both sides only added list lines; a rewrite of one line, or prose each side added, stops.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrower than 'any tasks.md conflict'. Keeping both sides of two rewrites of one task line would put two contradicting versions of that task on main, a wrong outcome from the very command meant to carry work correctly. So the literal broad reading defeats the purpose, and the narrow rule still covers the 2026-11-26 incident's shape (both added after the same line), which is the test fixture. Anything it does not resolve stops visibly with the next command and is never silently landed."
+    },
+    {
+     "id": "T292-D7",
+     "summary": "The history guard lets exactly `git rebase --abort` through; every other rebase form is still refused.",
+     "class": "within",
+     "why": "Without it, the command D1 prints for a standing rebase could not be run: a refusal with no way out. An abort puts the branch back where the rebase began and rewrites nothing, so constitution VI still holds. The guard is opened for exactly that one command and nothing else, and its test pins every command D1 prints."
+    },
+    {
+     "id": "limit-one-commit",
+     "summary": "make carry carries one commit per run; several are carried one COMMIT= at a time, oldest first.",
+     "class": "within",
+     "why": "The goal names 'a builder worktree's commit'. Several commits are still carried, each run verified, and a range picked by hand and left paused is refused by D1, so no landing over unfinished work follows. This is a limit, not a wrong outcome."
+    },
+    {
+     "id": "limit-audit-register-blind",
+     "summary": "The audit register's check (it counts stops.push( in land/cheap.rs) does not see this refusal; the entry dev/audits/unfinished-carry-over.md is written by hand.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A defect left, not a limit. The plan states the audit register's check counts stops.push( in land/cheap.rs, and this task puts a new landing refusal in a new file, unfinished.rs, outside that reach. With dev/audits/unfinished-carry-over.md deleted, or another refusal added to unfinished.rs, the check stays green: a check that passes bad work. The GM's 'backfill as we go, as we find things that we missed' (2026-11-25) covers a missing entry found and written; it does not cover a detector this task's own change has made blind. T269 (be3f3a248b) fixed this same check's blind spot as a defect. Here the block says 'Found and left? none' while listing the gap under 'Limits accepted', so FR-009's why, filed task id and order are absent too. To clear it: bring unfinished.rs's refusals within audit-register's reach in this task, red first (the entry removed, the check red); or record it as a found-and-left item with why it is not fixed here, its filed task id and 'lands before ...'."
+    }
+   ],
+   "tasks": [
+    "T292"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T292 (2026-11-26, 451 T270: `make land` ticked and pushed a task whose code was not in the delta - commit 0526d8b7df, the code landed after it as 83f65718d7 - over a `git cherry-pick` left unfinished on a tasks.md conflict; the third landing over an unfinished carry-over, after T235 and T262)",
+    "### T292 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T292-D1a",
+     "summary": "an operation in progress (CHERRY_PICK_HEAD, MERGE_HEAD, REVERT_HEAD, sequencer/todo, rebase-merge, rebase-apply incl. am) read in the tree's own git directory refuses the landing, naming the unmerged paths and the continue or abort",
+     "class": "within",
+     "why": "Ends the wrong outcome the section names (main said T270 landed while its code was not on main); no GM words or spec requirement bear on it, and the block says the task line asks for it (the task line is not in the bundle). Reading the linked worktree's own git dir is what makes the check reach the case at all."
+    },
+    {
+     "id": "T292-D1a-rebase",
+     "summary": "a standing rebase is offered only --abort, never --continue",
+     "class": "within",
+     "why": "Follows constitution VI (no history rewrite) cited in the constraints; nothing asked for continuing a rebase."
+    },
+    {
+     "id": "T292-D1b",
+     "summary": "unmerged paths with nothing in progress are refused, naming resolve, add, commit",
+     "class": "within",
+     "why": "Same purpose as D1a; refuses a tree whose carried work is not committed."
+    },
+    {
+     "id": "T292-D1c/D3",
+     "summary": "staged changes with nothing in progress are refused (unmeasured over past landings; falsifier in the audit entry)",
+     "class": "within",
+     "why": "The block says the task line asks it. The premise that no correct work stages is by reading, not measured, but it leaves no defect: every exit printed (commit, or restore --staged) loses no work, so a false fire costs one command; T88's dirty-clone landing alone still holds for unstaged work."
+    },
+    {
+     "id": "T292-D2",
+     "summary": "the refusal runs first and apart from the first pass's other refusals, not in their list",
+     "class": "within",
+     "why": "A departure from the coordinating session's brief ('together with its other first-pass refusals'), not from the GM's request or the spec, which say nothing on it. Its reason holds on purpose grounds: the first pass commits on its way, and a commit while a pick or merge stands concludes it with whatever is staged - the very failure the task ends. Its cost (a second refusal met on the next make land) loses nothing. The coordinating session should note it departs from its brief."
+    },
+    {
+     "id": "T292-D4",
+     "summary": "no escape on the refusal",
+     "class": "within",
+     "why": "FR-012's escape requirement covers FR-006 to FR-009, FR-011 and FR-013 refusals only, not this one; every refusal prints a lossless command that finishes the state, so no correct work is left without a way through. Consistent with 'real enforcement and not just instructions' (GM 2026-11-19)."
+    },
+    {
+     "id": "T292-D5",
+     "summary": "one copy, l7r-gate land --unfinished, asked by sync-with-main.sh push_cmd before its uncommitted-changes message and by land-tooling.sh before its fetch",
+     "class": "within",
+     "why": "Extends the same refusal to the other landing doors so the wrong outcome cannot reach main by another route."
+    },
+    {
+     "id": "T292-D6",
+     "summary": "make carry FROM= [COMMIT=]: refuses unfinished trees, fetches the commit, says so if already in history, cherry-picks, resolves all or none, verifies at the end",
+     "class": "within",
+     "why": "The block says the task line and brief ask for make carry in place of the hand cherry-pick; its verified end serves the goal that a carried commit's code is in HEAD before anything lands."
+    },
+    {
+     "id": "T292-D6-allornone",
+     "summary": "on a conflict make carry resolves every unmerged path or none, else stops with the pick standing and D1's line as the next command",
+     "class": "within",
+     "why": "A partial resolution would leave a tree D1 must refuse anyway; stopping whole keeps the chained make land refused, which is the task's purpose."
+    },
+    {
+     "id": "T292-keepboth",
+     "summary": "keep-both only for tasks.md hunks with empty base whose added lines are list lines, and plan-review.json via plan::merge_files; rewrites of one line or added prose stop",
+     "class": "within",
+     "why": "Nothing in the GM's request or spec asks for automatic conflict resolution at all; the narrower rule stops where keeping both sides would produce two versions of one task line (a wrong outcome), and a stop prints the next command, so nothing is lost. The 2026-11-26 conflict's shape is covered and pinned."
+    },
+    {
+     "id": "T292-onecommit",
+     "summary": "make carry carries one commit; several are carried one COMMIT= at a time, oldest first",
+     "class": "within",
+     "why": "No loss of function: every commit can still be carried, and a hand-picked range left paused is refused by D1 (sequencer/todo)."
+    },
+    {
+     "id": "T292-D7",
+     "summary": "the history guard lets `git rebase --abort` through (exact form only); every other rebase form still refused",
+     "class": "within",
+     "why": "Loosens an existing guard by one exact command that rewrites no history (it restores the branch to where the rebase began), so constitution VI is untouched; without it D1 would print a command no session can run, and a refusal must name a compliant command. Its reach is no wider than that command."
+    },
+    {
+     "id": "T292-D8",
+     "summary": "the audit register's check counts refusals in land/unfinished.rs beside land/cheap.rs; the entry's covers: lines name them",
+     "class": "within",
+     "why": "Enforces the GM's audit register words (2026-11-25: document each process with its measurements and falsifier) on this refusal, which the check otherwise missed; enforcement of what was asked, not new scope."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -39008,6 +39273,92 @@
      "summary": "The six scripts the landing already calls with no entry go into T260's backfill (make audits' BACKFILL 254 -> 260) rather than being written here. T260's line keeps its dated 254.",
      "class": "within",
      "why": "The GM's request plans for an initial backfill, and T260 is that task, so routing the six there carries out the request rather than deferring a defect of T269. T269's fix makes the six visible, and item 5 asks for T269 to land before T260 writes its backfill. Keeping a dated figure as dated is fine."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T292": {
+   "section_sha256": "70816a5385acbb9c353178ad250dd1ad948336cf0e89ba97b616abc3824be49a",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T292-D1a",
+     "summary": "an operation in progress (CHERRY_PICK_HEAD, MERGE_HEAD, REVERT_HEAD, sequencer/todo, rebase-merge, rebase-apply incl. am) read in the tree's own git directory refuses the landing, naming the unmerged paths and the continue or abort",
+     "class": "within",
+     "why": "Ends the wrong outcome the section names (main said T270 landed while its code was not on main); no GM words or spec requirement bear on it, and the block says the task line asks for it (the task line is not in the bundle). Reading the linked worktree's own git dir is what makes the check reach the case at all."
+    },
+    {
+     "id": "T292-D1a-rebase",
+     "summary": "a standing rebase is offered only --abort, never --continue",
+     "class": "within",
+     "why": "Follows constitution VI (no history rewrite) cited in the constraints; nothing asked for continuing a rebase."
+    },
+    {
+     "id": "T292-D1b",
+     "summary": "unmerged paths with nothing in progress are refused, naming resolve, add, commit",
+     "class": "within",
+     "why": "Same purpose as D1a; refuses a tree whose carried work is not committed."
+    },
+    {
+     "id": "T292-D1c/D3",
+     "summary": "staged changes with nothing in progress are refused (unmeasured over past landings; falsifier in the audit entry)",
+     "class": "within",
+     "why": "The block says the task line asks it. The premise that no correct work stages is by reading, not measured, but it leaves no defect: every exit printed (commit, or restore --staged) loses no work, so a false fire costs one command; T88's dirty-clone landing alone still holds for unstaged work."
+    },
+    {
+     "id": "T292-D2",
+     "summary": "the refusal runs first and apart from the first pass's other refusals, not in their list",
+     "class": "within",
+     "why": "A departure from the coordinating session's brief ('together with its other first-pass refusals'), not from the GM's request or the spec, which say nothing on it. Its reason holds on purpose grounds: the first pass commits on its way, and a commit while a pick or merge stands concludes it with whatever is staged - the very failure the task ends. Its cost (a second refusal met on the next make land) loses nothing. The coordinating session should note it departs from its brief."
+    },
+    {
+     "id": "T292-D4",
+     "summary": "no escape on the refusal",
+     "class": "within",
+     "why": "FR-012's escape requirement covers FR-006 to FR-009, FR-011 and FR-013 refusals only, not this one; every refusal prints a lossless command that finishes the state, so no correct work is left without a way through. Consistent with 'real enforcement and not just instructions' (GM 2026-11-19)."
+    },
+    {
+     "id": "T292-D5",
+     "summary": "one copy, l7r-gate land --unfinished, asked by sync-with-main.sh push_cmd before its uncommitted-changes message and by land-tooling.sh before its fetch",
+     "class": "within",
+     "why": "Extends the same refusal to the other landing doors so the wrong outcome cannot reach main by another route."
+    },
+    {
+     "id": "T292-D6",
+     "summary": "make carry FROM= [COMMIT=]: refuses unfinished trees, fetches the commit, says so if already in history, cherry-picks, resolves all or none, verifies at the end",
+     "class": "within",
+     "why": "The block says the task line and brief ask for make carry in place of the hand cherry-pick; its verified end serves the goal that a carried commit's code is in HEAD before anything lands."
+    },
+    {
+     "id": "T292-D6-allornone",
+     "summary": "on a conflict make carry resolves every unmerged path or none, else stops with the pick standing and D1's line as the next command",
+     "class": "within",
+     "why": "A partial resolution would leave a tree D1 must refuse anyway; stopping whole keeps the chained make land refused, which is the task's purpose."
+    },
+    {
+     "id": "T292-keepboth",
+     "summary": "keep-both only for tasks.md hunks with empty base whose added lines are list lines, and plan-review.json via plan::merge_files; rewrites of one line or added prose stop",
+     "class": "within",
+     "why": "Nothing in the GM's request or spec asks for automatic conflict resolution at all; the narrower rule stops where keeping both sides would produce two versions of one task line (a wrong outcome), and a stop prints the next command, so nothing is lost. The 2026-11-26 conflict's shape is covered and pinned."
+    },
+    {
+     "id": "T292-onecommit",
+     "summary": "make carry carries one commit; several are carried one COMMIT= at a time, oldest first",
+     "class": "within",
+     "why": "No loss of function: every commit can still be carried, and a hand-picked range left paused is refused by D1 (sequencer/todo)."
+    },
+    {
+     "id": "T292-D7",
+     "summary": "the history guard lets `git rebase --abort` through (exact form only); every other rebase form still refused",
+     "class": "within",
+     "why": "Loosens an existing guard by one exact command that rewrites no history (it restores the branch to where the rebase began), so constitution VI is untouched; without it D1 would print a command no session can run, and a refusal must name a compliant command. Its reach is no wider than that command."
+    },
+    {
+     "id": "T292-D8",
+     "summary": "the audit register's check counts refusals in land/unfinished.rs beside land/cheap.rs; the entry's covers: lines name them",
+     "class": "within",
+     "why": "Enforces the GM's audit register words (2026-11-25: document each process with its measurements and falsifier) on this refusal, which the check otherwise missed; enforcement of what was asked, not new scope."
     }
    ],
    "verdict": "CLEAR"

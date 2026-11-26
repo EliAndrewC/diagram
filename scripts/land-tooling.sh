@@ -55,6 +55,9 @@ step() { # <name>: the time since the last step, under that name
 steps_done() { # <outcome>
   printf '{"at": "%s", "outcome": "%s", "load": "%s", "steps": {%s}}\n' "$(date -u +%FT%TZ)" "$1" "$(cut -d' ' -f1 /proc/loadavg 2>/dev/null)" "$steps_json" >> "$ROOT/.git/land-tooling-steps.jsonl"
 }
+# AN UNFINISHED CARRY-OVER LANDS NOTHING (451 T292; the land crate's unfinished.rs, the one copy of the check): a cherry-pick, merge,
+# revert or rebase in progress, an unmerged path or a staged change in the clone is refused first, with the command that finishes it
+"$LT_GATE" land --unfinished "$ROOT" >&2 || die "unfinished work in the clone (above) - finish it with the command its line gives, then land" 2
 git -C "$ROOT" fetch -q origin 2>/dev/null || true
 # feature 385 T91's lint first, in the clone (`python3 -m ruff check` on the .py files given), deleted by 449 T247
 # (`ask:449-T247-python-starts`): no Python is started for a landing, and no tracked .py file is left outside specs/ to land

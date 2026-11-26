@@ -91,8 +91,10 @@ pub(super) fn merge_records(base: &str, ours: &str, theirs: &str) -> Result<Valu
     Ok(keyed(Some(&b), Some(&o), Some(&t), 0).unwrap_or_default())
 }
 
-/// `l7r-gate plan merge-record %O %A %B`: the merge written to `%A`, git's contract; exit 1 leaves `%A` as it was, unmerged.
-pub(super) fn merge_files(base: &Path, ours: &Path, theirs: &Path) -> crate::Reply {
+/// `l7r-gate plan merge-record %O %A %B`: the merge written to `%A`, git's contract; exit 1 leaves `%A` as it was, unmerged. Asked in
+/// process by `make carry` (the `land` crate's `carry.rs`, 451 T292), where a tree's git config defines no driver.
+#[must_use]
+pub fn merge_files(base: &Path, ours: &Path, theirs: &Path) -> crate::Reply {
     let read = |p: &Path| std::fs::read_to_string(p).unwrap_or_default();
     match merge_records(&read(base), &read(ours), &read(theirs)) {
         Ok(v) => match std::fs::write(ours, pretty(&v)) {

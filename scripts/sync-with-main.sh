@@ -258,6 +258,11 @@ clone_page_refresh() {
 }
 
 push_cmd() {
+  # AN UNFINISHED CARRY-OVER PUSHES NOTHING (451 T292; the land crate's unfinished.rs holds T270's landing and the one copy of the
+  # check): a cherry-pick, merge, revert or rebase in progress, an unmerged path or a staged change is refused here, each line
+  # ending in the command that finishes it - before the dirty-tree line below, which names no command, and which a merge standing
+  # with nothing left to stage passes.
+  "$ROOT/scripts/gates/l7r-gate.sh" land --unfinished "$ROOT" >&2 || die "unfinished work in the clone (above) - finish it with the command its line gives, then push"
   [ -z "$(git status --porcelain)" ] || die "uncommitted changes - commit first (the procedure never writes your commit for you)"
   git fetch -q origin 2>/dev/null && refuse_unrelated_history
   # GUARD_EDIT_OK: feature 385 T72 (plan D92) - the plan reviews' ledger rows, which their agents' `make plan-verdict` recorded, are

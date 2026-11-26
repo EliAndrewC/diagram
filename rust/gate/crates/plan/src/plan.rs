@@ -14,6 +14,7 @@ mod engine_edit;
 mod history;
 mod lint;
 mod merge;
+pub use merge::merge_files;
 mod record;
 pub use record::{feature_task, task_ids, Accepted};
 mod sections;

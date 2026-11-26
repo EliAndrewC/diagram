@@ -47,7 +47,9 @@ static FORCE: LazyLock<[Regex; 2]> = LazyLock::new(|| {
 });
 static REWRITE: LazyLock<[Regex; 4]> = LazyLock::new(|| {
     [
-        at_pos(r"git\b(?:\s+-C\s+\S+|\s+-\S+)*\s+rebase\b"),
+        // ...but its `--abort`, which rewrites nothing: the one way out of a rebase started outside this guard, and the command the
+        // landing's refusal of one prints (451 T292: the refusal's command was refused here, "No escape hatch")
+        at_pos(r"git\b(?:\s+-C\s+\S+|\s+-\S+)*\s+rebase\b(?!\s+--abort\s*(?:$|[;&|\n]))"),
         at_pos(r"git\b[^\n;|&]*\bpull\b[^\n;|&]*(?<![\w-])--rebase\b"),
         at_pos(r"git\b[^\n;|&]*\bmerge\b[^\n;|&]*--squash"),
         at_pos(r"git\b[^\n;|&]*\bcommit\b[^\n;|&]*--amend"),

@@ -14,7 +14,8 @@
 //!   calls in recipes, transitively, in the Makefile as it stands and not at the base (a target wired into the chain counts, new or not);
 //! - an AGENT FILE: `.claude/agents/<name>.md` added against the base;
 //! - a LANDING STEP: a push check, a landing phase or a landing gate script newly named where `STEPS` says they are named, or a
-//!   landing refusal, `make land`'s first pass's unnamed `stops.push(` calls, by their count (`REFUSALS`), or a LANDING SCRIPT: a
+//!   landing refusal, `make land`'s unnamed `stops.push(` calls - its first pass's and, before it, `land/unfinished.rs`'s (451 T292) -
+//!   by their count (`REFUSALS`), or a LANDING SCRIPT: a
 //!   `scripts/<path>.<ext>` newly written in a landing recipe (`LANDING_TARGETS`' recipes in the Makefile, the Makefile variables they
 //!   expand, and the push's own scripts, `LANDING_SCRIPTS`) - a new callee is a landing step (451 T269: T258's `scripts/state-sync.sh`,
 //!   called from `make land`'s recipe, landed with no entry asked). New is by name over all of them together, so a call moved from a
@@ -450,12 +451,21 @@ pub(super) fn step_names(text: &str, opener: &str) -> BTreeSet<String> {
 /// with no name of its own, so they are counted - the k-th is the item `landing refusal land/cheap.rs #k`, and a delta that raises
 /// the count adds the new numbers (measured 2026-11-26, the count at each of the last 21 landings on main: 6 every time, so the count
 /// moves only when a refusal is added or removed).
-const REFUSALS: (&str, &str) = ("rust/gate/crates/land/src/land/cheap.rs", "stops.push(");
+///
+/// And the refusals BEFORE that pass (451 T292): `land/unfinished.rs` refuses an unfinished carry-over ahead of the landing alone and
+/// the first pass, through the same call, so its file is counted the same way - the check read `cheap.rs` alone, and T292's refusal
+/// would have landed asking no entry.
+const REFUSALS: ([&str; 2], &str) = (
+    [
+        "rust/gate/crates/land/src/land/cheap.rs",
+        "rust/gate/crates/land/src/land/unfinished.rs",
+    ],
+    "stops.push(",
+);
 
 /// The refusal items `head` adds: the numbers past the base's count up to the head's.
-pub(super) fn refusal_items(before: &str, after: &str) -> Vec<Item> {
-    let (path, call) = REFUSALS;
-    let file = path.rsplit_once("/src/").map_or(path, |(_, f)| f);
+pub(super) fn refusal_items(file: &str, before: &str, after: &str) -> Vec<Item> {
+    let call = REFUSALS.1;
     (before.matches(call).count() + 1..=after.matches(call).count())
         .map(|k| Item {
             kind: "landing refusal",
@@ -584,10 +594,14 @@ pub(super) fn items(root: &Path, base: &str, head: &Head<'_>) -> Vec<Item> {
                 }),
         );
     }
-    out.extend(refusal_items(
-        &file_at(root, Some(base), REFUSALS.0),
-        &file_at(root, rev, REFUSALS.0),
-    ));
+    for path in REFUSALS.0 {
+        let file = path.rsplit_once("/src/").map_or(path, |(_, f)| f);
+        out.extend(refusal_items(
+            file,
+            &file_at(root, Some(base), path),
+            &file_at(root, rev, path),
+        ));
+    }
     let before = landing_scripts(root, Some(base));
     out.extend(
         landing_scripts(root, rev)
