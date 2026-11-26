@@ -115,8 +115,9 @@ lineages\" and there are no \"provincial lineages\"") and research page 0138's w
 chancellor lineages a provincial one) seemed to disagree. The GM, 2026-11-26: *"the Ryusei domain had no provincial lineages
 until their recent involvement in the Lion/Unicorn war, at which point they expanded and acquired some provincial lineages,
 hence the apparent contradiction"*. So both hold: the notes describe Ryusei before the war, and a present-day Ryusei capital
-may seat a provincial lineage's chancellor. Applied on 0138's and 0140's drawing pages (the worked example keeps its
-provincial lineage, said to be newly acquired).
+may seat a provincial lineage's chancellor. Applied on 0138's drawing page, which says the notes count the worked example's lineages as all cosmopolitan and
+that the domain has since gained provincial lineages of its own in that war (it does not say which, or whether one holds a
+Chancellery seat: his words do not).
 
 ## Burakumin neighborhoods stand inside a city's walls, at the edge (2026-11-26)
 

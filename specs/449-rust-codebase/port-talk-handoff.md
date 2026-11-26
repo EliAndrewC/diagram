@@ -1,7 +1,8 @@
 # Morning handoff: the talk before the port resumes (written 2026-11-26, overnight)
 
-For the FRESH session that holds the talk with the GM (449 T437). Everything below is on GitHub `main`; nothing lives only
-in the old container. Read this, then `specs/449-rust-codebase/port-talk-agenda.md` (the 14 items with their measurements)
+For the FRESH session that holds the talk with the GM (449 T437). Everything below is on GitHub `main`, and the tooling state is in its private repository (step 2). What does NOT outlive the
+old container: the sessions' transcripts under `~/.claude/projects/` (the measurement scripts that read them keep their
+result tables beside them in `dev/measurements/`) and the build caches. Read this, then `specs/449-rust-codebase/port-talk-agenda.md` (the 14 items with their measurements)
 and `docs/process-decisions.md` (what is already decided, and declined, with the numbers and what would reopen each).
 
 ## To pick up in a new container
@@ -36,30 +37,31 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 
 - **Item 6**: building begins while a feature's plan review runs (decided 2026-11-25).
 - **Item 12**: the builders' context cap stays 300k, builders stay, briefs are sized (decided 2026-11-25).
-- **Items 1-5 and 7**: two code builders at once in REUSED worktrees; three or four only for work that compiles nothing
-  (decided 2026-11-26; landed-per-hour 1.71 at one, 2.02 at two; memory NOT yet measured - the container's limit is 10 GiB
-  with no swap and has been touched; 451 T274 is the sampler).
 - **Item 9, the disk and time levers**: none adopted - lighter debug info was already in (451 T246); incremental-off, a
   shared compiler cache and an eager drop of coverage builds declined on measurement; stale coverage variants are 451 T278.
+- **Still open of the pre-approved set - items 1-5 and 7**: a PROVISIONAL working default, for the GM to confirm - two code
+  builders at once in REUSED worktrees, three or four only for work that compiles nothing (that second rule is the session's
+  addition, not in the pre-approval). Landed per wall hour 1.71 at one builder and 2.02 at two; three and four untested on
+  comparable work. The pre-approval's memory condition is NOT met: memory was not measured, the container's limit is 10 GiB
+  with no swap and its peak has touched it (451 T274 is the sampler). Items 2-5 and 7 have no measurement of their own.
 - **Still open of the pre-approved set - item 14** (the builder report format; escalation-check on a narrower bundle; a
   Sonnet-tier seeded test): not measured overnight. Each closes with a Decided entry and an audit entry.
 
-## The GM's canon answers of 2026-11-26 (recorded in `docs/gm-rulings.md`)
+## The GM's canon answers (recorded in `docs/gm-rulings.md`), and what the record did with them
 
-- Ryusei had no provincial lineages until the Lion/Unicorn war and has since acquired some (0138 and 0140 restated).
-- Burakumin neighborhoods stand inside a city's walls, at the edge. The search he asked for found a quarter inside the wall
+- 2026-11-26: Ryusei had no provincial lineages until the Lion/Unicorn war and has since acquired some (0138 and 0140 restated).
+- 2026-11-26: burakumin neighborhoods stand inside a city's walls, at the edge. The search he asked for found a quarter inside the wall
   attested for China (Zhending 1551, Shaoxing) and outside by a gate elsewhere; Japan at the edge or beyond. 0156 and 0193 no
   longer call the placement a deviation; the siege reason is labeled the setting's own. The maps did not move.
-- Earlier the same night: a provincial city's 3,000 include the samurai country estates (0173 restated); the Emperor's
-  granaries' siting reasoned from Imperial oversight (0142).
+- 2026-11-24 (not a new answer; applied overnight): a provincial city's 3,000 include the samurai country estates (0173
+  restated by P16; 0001 and 0174 by P18).
+- NOT an answer of his: 0142 now reasons the Emperor's granaries' siting from Imperial oversight, which his notes
+  (`budgets.md`) state; the brigands reasoning was this project's writing.
 
 ## For the GM, small (each to pass `escalation-check` before it is put to him)
 
 - 0141's aqueduct banks are drawn "darker and wider than life" as a labeled drawing convention; his true-size ruling says a
   feature that seems too small is raised with him. No record shows it was.
-- 0238's visible sentence says monks perform funeral rites "in the countryside and in many cities"; his recorded words are
-  "quite a lot of the funerary rites in the cities" (a share of the rites, not a count of cities). A wording fix for a page
-  session, his words in `specs/273-hamlet-graveyards/request.md`.
 - 0181's "2.8% outside the wall" carries a setting-canon label with no recorded words.
 
 ## What landed overnight in 451 (tooling and the record)
@@ -69,7 +71,8 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
   `dev/gm-attribution-baseline.jsonl` stays as an EMPTY file on purpose.
 - **T251** (the 10 claims), **T265** (the dedication knob relabeled UNRESEARCHED; the check accepts dated
   `rulings-YYYY-MM-DD.md` files), **T263** (a flaky guard test: its fixture), **T267** (claims-checked in a worktree).
-- Page sessions P16 and P17 (the canon fixes above), every owed check answered.
+- Page sessions P16, P17 and P18 (the canon fixes above; P18 also 0140's "provincial chancellors" and 0238's monks'
+  funerary rites, from his recorded words), every owed check answered.
 - Earlier the same day: T226-T249, T252-T259, T262 (see `git log` and `make task-time`).
 
 ## Open in 451, by kind (none blocks the talk)
@@ -80,6 +83,8 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 - T159: a fresh worktree's gate is red on one `rust/mode_a` test (missing gitignored renders) - every parallel builder meets it.
 - The research backlog: `make research-backlog` (UNRESEARCHED decisions; the switch is open).
 - Feature 455 (research beside the build) is the GM's to work; untouched.
+- Stale, harmless: T251's archived plan section says T264 and T265 "land before T250" (T250 landed first; T265 has landed).
+  The branch `backup/diagram-backlog-land` on GitHub holds one superseded ledger-row commit whose rows are on main.
 
 ## Records
 

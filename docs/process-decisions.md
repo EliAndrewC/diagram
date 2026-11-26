@@ -178,13 +178,17 @@ figures). **Falsifier:** over a week of builders briefed under the rule, measure
 falling below about one in five (it was 28%) - then sizing the brief is not the lever, and the task's own size or the cap is
 looked at again.
 
-### Two code builders at once, in reused worktrees; three or four only for work that compiles nothing (decided 2026-11-26)
+### Two code builders at once, in reused worktrees; three or four only for work that compiles nothing (PROVISIONAL, 2026-11-26)
 
 **Question.** How many builders run at once, each in its own worktree, landings still one at a time through main (the talk's
 items 1-5 and 7)?
 
-**Decided** - two code builders at once, in worktrees that are REUSED so their build caches are warm; three or four at once
-only for batches that compile nothing (comment and doc edits, page work). The GM, 2026-11-25: *"Yes I pre-approve the items in
+**Provisional, for the GM to confirm at the talk** - the working default is two code builders at once, in worktrees that are
+REUSED so their build caches are warm; three or four at once only for batches that compile nothing (comment and doc edits,
+page work). It is NOT closed under the pre-approval: the pre-approval's condition has a memory half that was not measured
+(below), and the three-or-four rule is this session's addition, not in the pre-approved items. Items 2-5 and 7 (a landing,
+a claims round, a page session or a plan review beside the next build) were run this way through the night and are covered
+by the same default; none has a measurement of its own. The GM, 2026-11-25: *"Yes I pre-approve the items in
 the table above, so that you can close them out after implementing whatever the measurements say make sense."* (items 1-5 and
 7 as pre-approved: the standard count is the largest that the 1-4 test shows still shortens total time with peak memory under
 a margin).
