@@ -213,3 +213,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T283 the clone-sync silent-failure notices are rendered by no hook-suite case, test-clone-sync-hooks.sh's main4 fixtures have no sync script and assert through a failed refresh, and other callers of ask across the guards may print an empty failure tail (451 T268's candidates): add the cases and survey the callers
       research: rendering
+- [ ] T284 heavy build phases take a machine-wide slot, so the number of builders is not capped by the chance that their compiles and a landing's gate coincide (the GM, 2026-11-26: 'wouldn't it be better to address that with some synchronization rather than pre-emptively limiting builders just in case?'): measured 2026-11-26, two builders and a landing peak at 6.3 GiB anonymous of 10 only when compiles coincide (median 1.9) and load runs 32-67 on 22 cores - a slot count on the gate's cargo build, test and coverage runs across trees (a lock directory or cargo's job limit, whichever measures better), sized from the three-builder run's samples; then re-measure three and four code builders with it
+      research: rendering
