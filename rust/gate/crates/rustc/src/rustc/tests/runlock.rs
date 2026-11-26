@@ -18,7 +18,7 @@ use crate::rustc::runlock::{
 const OVERLAP: &str = "d=\"$(dirname \"$0\")\"\nif mkdir \"$d/busy\" 2>/dev/null; then sleep 0.1; rmdir \"$d/busy\"; else echo overlap >> \"$d/overlaps\"; sleep 0.1; fi\nexit 0";
 
 /// This process: its pid and its start, read as the lock reads them.
-fn me() -> Proc {
+pub(super) fn me() -> Proc {
     let pid = u64::from(std::process::id());
     let text = std::fs::read_to_string(format!("/proc/{pid}/stat")).unwrap();
     let start = text[text.rfind(')').unwrap() + 1..]
@@ -72,7 +72,7 @@ impl Clock for Stepped {
 }
 
 /// A live member of run `run` written into `dir`'s record: this process, as another run's check would be.
-fn stage(dir: &Path, run: u64, start: u64) {
+pub(super) fn stage(dir: &Path, run: u64, start: u64) {
     let m = me();
     std::fs::write(
         dir.join(RECORD),

@@ -2100,6 +2100,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T316 (a pool tree is warm for what it last built, and the commits others landed since are compiled by the builder's first test run, after a median 4.6 to 5.7 minutes of reading in which the tree compiles nothing, measured 2026-11-26 (`dev/measurements/2026-11-26/split-reproduction`))": {
+   "sha256": "af4856031a8369f490f015f8dc58246d37a44ffa2c97f6d387b433bd5444da5e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T316 Approach (checklist part A)": {
+   "sha256": "3d118eb2f726e2b664c01b2a09a394c5517bd09a2ce00f6f57a5fec446d0306b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -26784,6 +26796,186 @@
      "why": "This is code layout and carries no fidelity content."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T316 (a pool tree is warm for what it last built, and the commits others landed since are compiled by the builder's first test run, after a median 4.6 to 5.7 minutes of reading in which the tree compiles nothing, measured 2026-11-26 (`dev/measurements/2026-11-26/split-reproduction`))",
+    "### T316 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1 detached pre-warm at a warm handout",
+     "summary": "A warm handout starts, detached, `l7r-gate rust prewarm --since <commit>` so the moved crates' test builds compile while the builder reads.",
+     "class": "within",
+     "why": "It serves the request: 2026-11-19 ('how much time are we spending on recompiling things? ... efficiency improvements'), 2026-11-20 ('prioritize performance improvements'), and FR-013, whose performance work covers 'the builders' loop'. T316's line and the GM's 2026-11-26 question it is said to carry are not in the bundle, so this is grounded in request.md and FR-013 alone."
+    },
+    {
+     "id": "D2 measured from the tree's last handout (prewarm-base), not its HEAD",
+     "summary": "The base commit is kept in the tree's git directory at each handout, because a release brings the tree to HEAD and the brief's sketch (since the tree's previous HEAD) would then see nothing moved.",
+     "class": "within",
+     "why": "It differs from the brief's sketch, but the brief is not in the bundle and is not the GM's words. It widens what is warmed rather than narrowing it, and without it the mechanism could not reach the case it names after a release. Grounded in the same request.md lines as D1."
+    },
+    {
+     "id": "D3 a cold tree's first handout starts nothing",
+     "summary": "A tree whose whole cache is cold records its base and starts no pre-warm; a tree with no base on record but a warm cache is measured from where it stood before the handout.",
+     "class": "within",
+     "why": "A cold tree has no warm cache to bring up to date, so pre-warming it would be a full build that nothing in request.md asks for, and its coldness is already reported. Aside, not a ruling: the summary table's first row says none starts 'for a tree with no handout on record', while the prose says such a tree is measured from where it stood before the handout. Every existing pool tree has no record at landing, so both statements cannot hold. Correct the one the pinning test does not match."
+    },
+    {
+     "id": "D4 which crates, and in what order",
+     "summary": "It starts only when a file under rust/ or .cargo/ changed. It builds each crate whose build reads a changed file, found by Kept::reads_any over Reads::Source, with the fewest dependencies first.",
+     "class": "within",
+     "why": "This is the mechanism of D1 and adds no scope."
+    },
+    {
+     "id": "D5 the same build as a real run's, nothing kept",
+     "summary": "It runs one `cargo test --no-run` per crate through cargo_call (now shared with cargo_in), using the tree's own target dir and with the handout's environment taken out. It keeps no result.",
+     "class": "within",
+     "why": "Only a build identical to the real run's is found fresh by that run, which is what makes it save time (measured: 0.1 s against 7.7 s). Keeping no result means no test result is recorded that a real run did not produce."
+    },
+    {
+     "id": "D6 yields its slot: free_now, POLL 0.5 s, ended by a real run in its tree, pre-empted by any tree's waiter, a new waiting-<pid>-<n> mark",
+     "summary": "It takes a slot only when one is free right then, and is ended by a real run in its tree. It kills its cargo for a waiter in any tree and rebuilds after. slot.rs gains a waiting marker so that waiters can be seen.",
+     "class": "within",
+     "why": "A pre-warm that delays real work would defeat the request's purpose (2026-11-20, 'doing those first makes everything after them faster'). The GM chose synchronization over a builder cap for exactly this kind of contention (2026-11-26, T284: 'wouldn't it be better to address that with some synchronization'). The waiting mark is the least this needs. The brief's wording is not in the bundle."
+    },
+    {
+     "id": "D7 the pre-warm runs during the rollout, while other trees' waiters are unseen",
+     "summary": "Trees still running the old slot code leave no waiting mark. During the 402 s pre-warm, two real runs of such trees waited 39.3 s and 25.2 s on a slot it held. The plan accepts this until every tree carries the new code, and the yield to such waiters is pinned only by its test.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Seeing an old tree's waiter is impossible, but not holding a slot against one is not: the pre-warm could stay off or take no slot while any pool tree runs the old slot code, for example by checking each tree's HEAD for the marking commit or by defaulting to off until the rollout ends. So the rule is not physically impossible. Nothing in request.md implies leaving it, and honoring it defeats no purpose; it only delays a gain of a few seconds per handout. The measured cost runs against the request's purpose: 64.5 s of other trees' real-run waiting during one pre-warm. The plan names this as the mechanism's own falsifier ('a pre-warm would hold one of the machine's two slots through a whole build while another tree's real run waited'). Shipping it while that falsifier is observed to hold carries a known wrong outcome forward. Required: keep the pre-warm from holding a slot while any tree that could wait runs the pre-mark slot code, or show that the window is empty."
+    },
+    {
+     "id": "D8 it fails nothing; one per tree; CEILING_S 900 s GUESS; L7R_PREWARM=0 off",
+     "summary": "It runs detached in its own process group, its output goes to prewarm.log, it exits 0 whatever happens, it holds a per-tree lock, and it has a ceiling knob and an off switch.",
+     "class": "within",
+     "why": "A speed-up that could fail or stall a handout would defeat its purpose. The ceiling and poll interval are labeled GUESS. The 2026-11-19 approval's 'real enforcement' concerns refusals, and this task adds none."
+    },
+    {
+     "id": "D9 booked apart; task-time shows no prewarm category until T317",
+     "summary": "Each cargo call writes a `prewarm` Phase line that is booked to no call. The make task-time category is filed as T317, which lands before T302.",
+     "class": "within",
+     "why": "The seconds are measured (2026-11-22: 'we want everything measured so we know where our time goes, especially for compiling'), since the Phase lines are in the event log. Booking them to no call keeps them out of a builder's blocking compile: nothing waits on a pre-warm, and under the GM's definition (2026-11-25, (l)) a minute blocks only when something waits on it. Breaking down its minutes by task is the readers' work. It is filed as T317 with an id and an order, which is what (j) asks ('automatically gets broken down in the future'). The plan says the report does not show them, so nothing is silently booked as 'other' ((c))."
+    },
+    {
+     "id": "D10 the lint build is not warmed (T318)",
+     "summary": "Clippy's artifacts are a separate build, so the first builder-checks lint still compiles what moved (4.8 s for land). This is filed as T318, which lands before T302.",
+     "class": "within",
+     "why": "Nothing in request.md asks for the lint to be pre-warmed, and the work is filed with an order and a measured reason to size it first. The plan's premise, that T316's line asks for the test builds only, could not be checked: that line is not in the bundle."
+    },
+    {
+     "id": "D11 the one real-run test failure seen during the live yield runs is left unexplained, unlisted and unfiled",
+     "summary": "One of the nine real `make rust-test CRATE=rust/gate/crates/land FRESH=1` runs started beside a pre-warm failed in its tests (code 101, 1.7 s in, build green) and passed when re-run. Its output was not kept, and seven later tries did not repeat it. The plan reports this inside the Approach and moves on. It is not in 'Found and left?', and no task is filed.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A test that fails on good work is a wrong outcome (constitution XIV v2.36.0: a check that refuses good work). The GM ruled on this case the same day: 'I agree with prioritizing the test that fails under load being fixed' (2026-11-26, T104). Fix-as-we-go asks that a step's known defects be fixed, or at the least filed with an order. This failure was seen while the new mechanism ran in the same tree (a cargo killed mid-build, a real run starting beside it), so the plan cannot rule this mechanism out as its cause. None of the three grounds holds: recording or filing it is not impossible, the GM's words do not imply leaving it, and doing so defeats no purpose. Required: either show the failure is not this mechanism's and not a defect (for example, identify the test and an existing task that covers it), or list it under 'Found and left?' with its visible effect, why it is not fixed here, a filed task id and 'lands before ...'."
+    },
+    {
+     "id": "D12 the record and the [perf] tag",
+     "summary": "dev/audits/builder-prewarm.md with its measurement, falsifier and cost; the rows in rust/gate/CLAUDE.md; a help line; the task tagged as performance work under FR-013.",
+     "class": "within",
+     "why": "The audit-register entry follows the GM's 2026-11-25 rule ('documenting the logic behind it, the measurements that we took, and ... what we would look at that would falsify'). The [perf] tag is FR-013's own definition."
+    },
+    {
+     "id": "D13 new files: prewarm.log, prewarm-base, prewarm.lock, waiting-<pid>-<n>",
+     "summary": "Small files in the tree's git directory, its target directory and beside the slot files. The builds go into the tree's existing target directory.",
+     "class": "within",
+     "why": "Weighed against the GM's 2026-11-25 disk words (T245, T246): no new build cache is created, since the pre-warm fills the tree's existing target, and the files are a log, a commit id, a lock and a mark of a live wait. They live inside places the disk audit already covers. Nothing here narrows or departs from those words."
+    }
+   ],
+   "tasks": [
+    "T316"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T316 (a pool tree is warm for what it last built, and the commits others landed since are compiled by the builder's first test run, after a median 4.6 to 5.7 minutes of reading in which the tree compiles nothing, measured 2026-11-26 (`dev/measurements/2026-11-26/split-reproduction`))",
+    "### T316 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 detached pre-warm at handout",
+     "summary": "a warm handout starts, detached, the test builds of the crates whose build moved, so they compile while the builder reads",
+     "class": "within",
+     "why": "This is the GM's question of 2026-11-26 ('would it make sense to begin compiling immediately within a work tree builder?') answered in the form T316's line records; measured first, as the project requires."
+    },
+    {
+     "id": "D2 measured from the tree's last handout (prewarm-base)",
+     "summary": "the moved range starts at the commit the tree was last handed out at, not its HEAD; a tree with none on record from where it stood before the handout; a cold tree's first handout starts nothing",
+     "class": "within",
+     "why": "Departs from the brief's sketch, not from the GM: a release brings the tree to HEAD, so a HEAD-based range would find nothing moved and defeat the request's purpose. The base is the one that makes 'compile what others landed' happen. A cold tree has nothing warm to extend, and the handout already reports it cold."
+    },
+    {
+     "id": "D3 which crates",
+     "summary": "only commits touching rust/ or .cargo/ start anything; each crate whose build reads a changed file, through Kept::reads_any, fewest dependencies first",
+     "class": "within",
+     "why": "This picks out the crates the request is about. Building them in dependency order is how the mechanism works and narrows nothing."
+    },
+    {
+     "id": "D4 the same build as a real run's",
+     "summary": "cargo test --no-run per crate through cargo_call (now shared with cargo_in), the tree's own target dir; nothing run, no result kept",
+     "class": "within",
+     "why": "A pre-warm only helps if its build is the one a real run then finds fresh. Measured: 7.7 s to 0.1 s for the first test build after the core crate moved. Keeping no result keeps a kept result a real run's alone, so the gate is untouched."
+    },
+    {
+     "id": "D5 the spare rule",
+     "summary": "it takes a slot only when a second is free beside it, never queues, kills its cargo group and rebuilds later once none is spare; builds nothing at L7R_BUILD_SLOTS=1, builds freely at 0",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows 'begin compiling immediately' to when a slot is spare, which on the two-slot machine means both slots free, and it covers two cases. (a) Two or more slots: the ruling rests on the GM's T284 words ('address that with some synchronization rather than pre-emptively limiting builders'). Those words make real compiles of any tree the thing the slots serve, and a pre-warm holding the last free slot would make a real compile wait behind speculative work. The block shows the yield live against a slot held by hand, but a real compile of another tree starting beside a pre-warm is shown only by the test. How often a handout finds a spare slot is not measured. The earlier waiter's-mark form was measured holding a slot while two real runs waited 39.3 s and 25.2 s, and was replaced. (b) One slot (L7R_BUILD_SLOTS=1): the pre-warm builds nothing. Its only slot would be the one every real compile needs, so building would break the same T284 synchronization. This is a knob setting, not this machine's two slots."
+    },
+    {
+     "id": "D6 ended by a real run in its tree",
+     "summary": "a live member of the tree's run lock ends the pre-warm",
+     "class": "within",
+     "why": "The builder's own run takes over the build. The pre-warm exists to serve that run, so it gives way to it. Measured live nine times."
+    },
+    {
+     "id": "D7 it fails nothing; knobs",
+     "summary": "never waited on by the handout, own process group, logged to prewarm.log, exits 0, one per tree, ceiling 900 s (GUESS, L7R_PREWARM_CEILING), POLL 0.5 s (GUESS), off at L7R_PREWARM=0",
+     "class": "within",
+     "why": "These are the safety limits of a speculative background build. The knobs are labeled GUESS and recorded in the audit register (the GM's T259 register asks for this). Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "D8 booked apart; task-time category deferred to T317",
+     "summary": "each cargo call writes a prewarm Phase line booked to no call; make task-time does not yet show it as a category, filed T317, lands before T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM asked that everything be measured (2026-11-22) and that the breakdown name every minute (2026-11-25 (c)). The seconds ARE measured, one Phase line per cargo call in the event log. Booking them to no call is correct, because a detached run is no builder call's compile, and charging it to one would misstate the breakdown. Only the report's reading of them by task is deferred. That is the measure crate's readers' work, filed under FR-009's form with its order before T302. The measuring the GM asked for is not removed."
+    },
+    {
+     "id": "D9 the lint's build not warmed; T318",
+     "summary": "only the test build is warmed; clippy's build (4.8 s for land on the measured handout) is filed as T318, lands before T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's word is 'compiling', and the lint compiles too, so this narrows it. It is a sequencing, not a carve-out. It is filed with its order before T302 and kept in scope, and the stated reason is measured: a second build per crate doubles how long the pre-warm holds a slot, which runs into the T284 synchronization the GM asked for. Measuring first is the project's rule. Leaving it is not a wrong outcome, since the first lint compiles as it did before this task."
+    },
+    {
+     "id": "D10 one red test run in nine; T329",
+     "summary": "one of nine real runs that ended a pre-warm failed in its tests (code 101, build green) and passed on rerun; its output was not kept and eight further tries did not repeat it; filed T329, lands before T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A possible red run on good work would be a defect, so leaving it needs a ruling. The cause is not known: the block names the killed cargo, the guard's rebuild under the suite and the land suite itself, and none is excluded. The ground is impossibility. Fixing needs a cause, and there is none to act on: the output was not kept, and eight further tries, three by the same recipe, did not reproduce it. What can be done now is to reproduce it with its output kept, and that is the filed T329. It carries its order before T302, so under the FIX AS WE GO rule and the GM's T104 priority on tests that fail good work, it is fixed before the work moves on, not left."
+    },
+    {
+     "id": "D11 a pre-warm ended early leaves crates unbuilt; T330",
+     "summary": "prewarm-base is written when the pre-warm starts, so crates a cut-short pre-warm never built are not counted at the next handout; filed T330, lands before T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In one case a builder's first run still compiles crates others moved, so this narrows the request's purpose. The block states, by its mechanism, that this is no worse than no pre-warm: those crates are compiled by the builder's own run, as before this task. That is a smaller gain, not a wrong outcome. The fix (writing the base when a pre-warm finishes) is named and filed under FR-009's form with its order before T302."
+    },
+    {
+     "id": "D12 record and tier",
+     "summary": "dev/audits/builder-prewarm.md (measurement, falsifier, cost), rustc/task rows of rust/gate/CLAUDE.md, builder-tree help; tagged [perf] under FR-013; performance-checklist not applied (not engine speed); exits by the first tier here and the full gate in the clone",
+     "class": "within",
+     "why": "The audit entry is what the GM's T259 register asks for. The [perf] tag is FR-013's definition (it makes the builders' loop faster). The exits are the project's two tiers."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -42146,6 +42338,91 @@
      "summary": "The category names are split out of book.rs into book/cats.rs because book.rs passed the file-scale bar.",
      "class": "within",
      "why": "This is code layout and carries no fidelity content."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T316": {
+   "section_sha256": "bf9f66ee40bc2a0d59673d7cbabf47c8971811528783c683baa3bd00165ab2f8",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 detached pre-warm at handout",
+     "summary": "a warm handout starts, detached, the test builds of the crates whose build moved, so they compile while the builder reads",
+     "class": "within",
+     "why": "This is the GM's question of 2026-11-26 ('would it make sense to begin compiling immediately within a work tree builder?') answered in the form T316's line records; measured first, as the project requires."
+    },
+    {
+     "id": "D2 measured from the tree's last handout (prewarm-base)",
+     "summary": "the moved range starts at the commit the tree was last handed out at, not its HEAD; a tree with none on record from where it stood before the handout; a cold tree's first handout starts nothing",
+     "class": "within",
+     "why": "Departs from the brief's sketch, not from the GM: a release brings the tree to HEAD, so a HEAD-based range would find nothing moved and defeat the request's purpose. The base is the one that makes 'compile what others landed' happen. A cold tree has nothing warm to extend, and the handout already reports it cold."
+    },
+    {
+     "id": "D3 which crates",
+     "summary": "only commits touching rust/ or .cargo/ start anything; each crate whose build reads a changed file, through Kept::reads_any, fewest dependencies first",
+     "class": "within",
+     "why": "This picks out the crates the request is about. Building them in dependency order is how the mechanism works and narrows nothing."
+    },
+    {
+     "id": "D4 the same build as a real run's",
+     "summary": "cargo test --no-run per crate through cargo_call (now shared with cargo_in), the tree's own target dir; nothing run, no result kept",
+     "class": "within",
+     "why": "A pre-warm only helps if its build is the one a real run then finds fresh. Measured: 7.7 s to 0.1 s for the first test build after the core crate moved. Keeping no result keeps a kept result a real run's alone, so the gate is untouched."
+    },
+    {
+     "id": "D5 the spare rule",
+     "summary": "it takes a slot only when a second is free beside it, never queues, kills its cargo group and rebuilds later once none is spare; builds nothing at L7R_BUILD_SLOTS=1, builds freely at 0",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows 'begin compiling immediately' to when a slot is spare, which on the two-slot machine means both slots free, and it covers two cases. (a) Two or more slots: the ruling rests on the GM's T284 words ('address that with some synchronization rather than pre-emptively limiting builders'). Those words make real compiles of any tree the thing the slots serve, and a pre-warm holding the last free slot would make a real compile wait behind speculative work. The block shows the yield live against a slot held by hand, but a real compile of another tree starting beside a pre-warm is shown only by the test. How often a handout finds a spare slot is not measured. The earlier waiter's-mark form was measured holding a slot while two real runs waited 39.3 s and 25.2 s, and was replaced. (b) One slot (L7R_BUILD_SLOTS=1): the pre-warm builds nothing. Its only slot would be the one every real compile needs, so building would break the same T284 synchronization. This is a knob setting, not this machine's two slots."
+    },
+    {
+     "id": "D6 ended by a real run in its tree",
+     "summary": "a live member of the tree's run lock ends the pre-warm",
+     "class": "within",
+     "why": "The builder's own run takes over the build. The pre-warm exists to serve that run, so it gives way to it. Measured live nine times."
+    },
+    {
+     "id": "D7 it fails nothing; knobs",
+     "summary": "never waited on by the handout, own process group, logged to prewarm.log, exits 0, one per tree, ceiling 900 s (GUESS, L7R_PREWARM_CEILING), POLL 0.5 s (GUESS), off at L7R_PREWARM=0",
+     "class": "within",
+     "why": "These are the safety limits of a speculative background build. The knobs are labeled GUESS and recorded in the audit register (the GM's T259 register asks for this). Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "D8 booked apart; task-time category deferred to T317",
+     "summary": "each cargo call writes a prewarm Phase line booked to no call; make task-time does not yet show it as a category, filed T317, lands before T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM asked that everything be measured (2026-11-22) and that the breakdown name every minute (2026-11-25 (c)). The seconds ARE measured, one Phase line per cargo call in the event log. Booking them to no call is correct, because a detached run is no builder call's compile, and charging it to one would misstate the breakdown. Only the report's reading of them by task is deferred. That is the measure crate's readers' work, filed under FR-009's form with its order before T302. The measuring the GM asked for is not removed."
+    },
+    {
+     "id": "D9 the lint's build not warmed; T318",
+     "summary": "only the test build is warmed; clippy's build (4.8 s for land on the measured handout) is filed as T318, lands before T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's word is 'compiling', and the lint compiles too, so this narrows it. It is a sequencing, not a carve-out. It is filed with its order before T302 and kept in scope, and the stated reason is measured: a second build per crate doubles how long the pre-warm holds a slot, which runs into the T284 synchronization the GM asked for. Measuring first is the project's rule. Leaving it is not a wrong outcome, since the first lint compiles as it did before this task."
+    },
+    {
+     "id": "D10 one red test run in nine; T329",
+     "summary": "one of nine real runs that ended a pre-warm failed in its tests (code 101, build green) and passed on rerun; its output was not kept and eight further tries did not repeat it; filed T329, lands before T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A possible red run on good work would be a defect, so leaving it needs a ruling. The cause is not known: the block names the killed cargo, the guard's rebuild under the suite and the land suite itself, and none is excluded. The ground is impossibility. Fixing needs a cause, and there is none to act on: the output was not kept, and eight further tries, three by the same recipe, did not reproduce it. What can be done now is to reproduce it with its output kept, and that is the filed T329. It carries its order before T302, so under the FIX AS WE GO rule and the GM's T104 priority on tests that fail good work, it is fixed before the work moves on, not left."
+    },
+    {
+     "id": "D11 a pre-warm ended early leaves crates unbuilt; T330",
+     "summary": "prewarm-base is written when the pre-warm starts, so crates a cut-short pre-warm never built are not counted at the next handout; filed T330, lands before T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In one case a builder's first run still compiles crates others moved, so this narrows the request's purpose. The block states, by its mechanism, that this is no worse than no pre-warm: those crates are compiled by the builder's own run, as before this task. That is a smaller gain, not a wrong outcome. The fix (writing the base when a pre-warm finishes) is named and filed under FR-009's form with its order before T302."
+    },
+    {
+     "id": "D12 record and tier",
+     "summary": "dev/audits/builder-prewarm.md (measurement, falsifier, cost), rustc/task rows of rust/gate/CLAUDE.md, builder-tree help; tagged [perf] under FR-013; performance-checklist not applied (not engine speed); exits by the first tier here and the full gate in the clone",
+     "class": "within",
+     "why": "The audit entry is what the GM's T259 register asks for. The [perf] tag is FR-013's definition (it makes the builders' loop faster). The exits are the project's two tiers."
     }
    ],
    "verdict": "CLEAR"

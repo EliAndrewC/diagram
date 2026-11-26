@@ -209,6 +209,13 @@ fn live(dir: &Path, proc_root: &Path) -> Vec<Value> {
         .collect()
 }
 
+/// Is a run of the checks at work in `dir` - a live member in its record (feature 451 T316)? What the pre-warm of a tree asks before
+/// and while it builds: it joins no run, so any member is a real run's, and that run has the build from there. Read without the
+/// record's lock: a record caught half-written reads as no member, and the next look, a poll later, finds it.
+pub(super) fn busy(dir: &Path, proc_root: &Path) -> bool {
+    !live(dir, proc_root).is_empty()
+}
+
 fn write(dir: &Path, members: &[Value]) {
     let _ = std::fs::write(dir.join(RECORD), json!({ "members": members }).to_string());
 }

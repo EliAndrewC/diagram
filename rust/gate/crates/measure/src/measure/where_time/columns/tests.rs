@@ -409,6 +409,7 @@ fn a_phase_s_category_by_its_tool_and_step() {
         ("record", "site"),
         ("page-session", "check"),
         ("gate", "hooks-test"),
+        ("rust", "prewarm"),
     ]
     .iter()
     .map(|(a, b)| of(a, b))
@@ -431,6 +432,8 @@ fn a_phase_s_category_by_its_tool_and_step() {
         None,
         Some("docs"),
         Some("review"),
+        None,
+        // a pool tree's pre-warm (feature 451 T316, `rustc/prewarm.rs`): a build nobody waited on, in no call's compile
         None,
     ];
     assert_eq!(got, want);

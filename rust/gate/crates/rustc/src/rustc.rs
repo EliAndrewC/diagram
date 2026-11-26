@@ -26,6 +26,7 @@ mod cover;
 mod fmtfile;
 mod kept;
 mod phase;
+mod prewarm;
 mod runlock;
 mod side;
 mod slot;
@@ -153,14 +154,16 @@ fn cargo(world: &World, args: &[&str], manifest: &Path, after: &[&str]) -> Ran {
     cargo_in(world, args, manifest, after, None)
 }
 
-/// `cargo`, its tests' `TMPDIR` set to `tmp` where one is given (`leak_checked`).
-fn cargo_in(
+/// A cargo call's words and its environment, as every cargo call of the checks has them: the manifest named, the tree's own target
+/// directory, its tests' `TMPDIR` set to `tmp` where one is given. One builder of both (feature 451 T316), so the pre-warm's test build
+/// (`prewarm.rs`) is the build a real run then finds fresh: a word or a variable apart and cargo would build the crate twice.
+fn cargo_call(
     world: &World,
     args: &[&str],
     manifest: &Path,
     after: &[&str],
     tmp: Option<&Path>,
-) -> Ran {
+) -> (Vec<String>, BTreeMap<String, String>) {
     let mut all = own(args);
     all.push("--manifest-path".to_owned());
     all.push(manifest.display().to_string());
@@ -176,6 +179,18 @@ fn cargo_in(
     if let Some(tmp) = tmp {
         env.insert("TMPDIR".to_owned(), tmp.display().to_string());
     }
+    (all, env)
+}
+
+/// `cargo`, its tests' `TMPDIR` set to `tmp` where one is given (`leak_checked`).
+fn cargo_in(
+    world: &World,
+    args: &[&str],
+    manifest: &Path,
+    after: &[&str],
+    tmp: Option<&Path>,
+) -> Ran {
+    let (all, mut env) = cargo_call(world, args, manifest, after, tmp);
     // every cargo call that compiles holds a build slot for its length (feature 451 T284); `cargo fmt` compiles nothing
     let _slot = (args.first() != Some(&"fmt")).then(|| slot::around(world, &all, &mut env));
     run_in(Some(&world.root), &world.cargo, &all, &env)
@@ -861,8 +876,14 @@ fn locked_dispatch(world: &World, args: &[String], taker: &runlock::Taker) -> Re
 /// `l7r-gate rust <cmd> [--crate DIR]... [--check]`.
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
-    let taker = runlock::Taker::here();
     let cmd = args.first().map_or("", String::as_str);
+    // the pre-warm (feature 451 T316, `prewarm.rs`) is no run of the checks: it joins no run's lock - a real run in its tree is what
+    // ends it - and its phase lines name it, never the `make builder-tree` that started it and is gone
+    if cmd == prewarm::STEP {
+        let world = world_here(prewarm::STEP.to_owned());
+        return prewarm::run(&world, &args[1..], &prewarm::Knobs::of(&world));
+    }
+    let taker = runlock::Taker::here();
     let world = world_here(phase::run_target(&taker.run_what, cmd));
     let reply = locked_dispatch(&world, args, &taker);
     crate::stamp::record_for(

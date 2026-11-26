@@ -135,7 +135,7 @@ fn hash_file(path: &Path) -> String {
     sha256::hex(&std::fs::read(path).unwrap_or_default())
 }
 
-fn git_z(root: &Path, args: &[&str]) -> Vec<String> {
+pub(super) fn git_z(root: &Path, args: &[&str]) -> Vec<String> {
     let done = Command::new("git").arg("-C").arg(root).args(args).output();
     let out = done.map(|o| o.stdout).unwrap_or_default();
     String::from_utf8_lossy(&out)
@@ -770,6 +770,12 @@ impl Kept {
         key_inputs(root, manifest, cmd, self.reads, &self.all, &self.ids, views)
             .iter()
             .any(|(p, _)| files.contains(*p))
+    }
+
+    /// How many of the workspace's crates `manifest` builds from, its dependencies' own counted: the pre-warm builds the crate with
+    /// the fewest first (feature 451 T316), so a crate is built before the crates that build on it.
+    pub(super) fn builds_from(&self, root: &Path, manifest: &Path) -> usize {
+        depended(root, manifest, &self.all).len()
     }
 }
 

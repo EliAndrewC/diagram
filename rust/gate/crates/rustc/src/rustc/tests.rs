@@ -18,6 +18,7 @@ mod cover;
 mod fmtfile;
 mod kept;
 mod phases;
+mod prewarm;
 mod runlock;
 mod side;
 mod slot;

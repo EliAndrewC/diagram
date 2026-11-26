@@ -323,3 +323,10 @@ The rest of T298's line in `tasks.md` is the coordinating session's, not his: th
 task's own table ends at its carry into the clone", the one line a batch, the four booking faults it found reading two-tier tasks'
 tables, and its relay of the third message as blocking minutes on their own line, "expected near zero since no new task waits on
 the gate - a rise is the signal that something has begun to wait on it (a carry behind a running gate, a repair, a build slot)".
+## 2026-11-26: a pool tree pre-warmed at its handout (451 T316)
+
+A warm pool tree's first checks run compiled what other builders had landed since the tree last built, in the builder's own time. The
+GM, 2026-11-26, as the coordinating session recorded his words on T316's line in `tasks.md` (commit 25787db43f; copied here from that
+line by T316's builder, who did not hear them; the question is all the line holds):
+
+> would it make sense to begin compiling immediately within a work tree builder?

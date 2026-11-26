@@ -8,6 +8,13 @@
 //!   clone's HEAD (detached) and marked held, its path on stdout; with none free, ONE more made (`<clone>-b<N>`) up to the cap
 //!   (`L7R_BUILDER_POOL`, `builder_pool::CAP`), said to be cold, its guard binary built before it is handed out (451 T286: a fresh
 //!   tree's first closing checks died on the hook wrapper's 45 s build limit under load); at the cap, who holds each.
+//! - THE PRE-WARM (451 T316; the GM, 2026-11-26: "would it make sense to begin compiling immediately within a work tree builder?"):
+//!   a warm handout starts, detached, the tree's own `scripts/gates/l7r-gate.sh rust prewarm --since <commit>` - the test builds of
+//!   the crates the commits since the tree's LAST HANDOUT moved, built while the builder reads (`rustc/prewarm.rs`: it yields its
+//!   build slot, and ends when a real run starts in the tree). The commit is the one the tree was last handed out at, kept in the
+//!   tree's own git directory (`prewarm-base`): a release brings the tree to HEAD too, so its HEAD at the next handout is no
+//!   measure of what its cache last built. Its output is `prewarm.log` there; a pre-warm that cannot start is said and the handout
+//!   stands; `L7R_PREWARM=0` starts none.
 //! - WHAT HOLDS A FREE TREE: an uncommitted path - modified, deleted or untracked - whose content is not the clone's HEAD's. A
 //!   builder never commits and its work is carried to the clone, so a released tree still holds the landed edits; those are in
 //!   HEAD and are no work to lose, so the tree is brought to HEAD over them. Anything else refuses, each path named;
@@ -27,6 +34,7 @@
 
 use std::fmt::Write as _;
 use std::io::Write as _;
+use std::os::unix::process::CommandExt as _;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 
@@ -58,6 +66,8 @@ pub(crate) struct Env {
     pub reason: String,
     /// The seconds a new tree's guard build may take.
     pub guard_secs: String,
+    /// A warm handout starts the tree's pre-warm (`L7R_PREWARM` not `0`).
+    pub prewarm: bool,
 }
 
 impl Env {
@@ -80,6 +90,7 @@ impl Env {
             reason: var("REASON"),
             // GUESS: a cold guard build was 19 s with every core busy (449 T004); thirty minutes is past any load seen
             guard_secs: or("L7R_BUILDER_GUARD_SECS", "1800"),
+            prewarm: var("L7R_PREWARM") != "0",
         }
     }
 }
@@ -270,6 +281,73 @@ fn landed(p: &Pool, tree: &Tree) -> bool {
     !tree.free() && !tree.feature.is_empty() && tree.tasks.iter().all(ticked)
 }
 
+/// Where a tree keeps the commit it was last handed out at, and its pre-warm's log: its own git directory.
+fn tree_git_dir(tree: &Path) -> PathBuf {
+    PathBuf::from(text(&git(tree, &["rev-parse", "--absolute-git-dir"]).1))
+}
+
+const BASE: &str = "prewarm-base";
+const PREWARM_LOG: &str = "prewarm.log";
+/// What a crate's build reads: the crates and the workspace's manifests, cargo's configuration and the toolchain's pin.
+const BUILT_FROM: [&str; 4] = ["rust", ".cargo", "rust-toolchain", "rust-toolchain.toml"];
+
+/// The commit `tree`'s build cache was last warm for - the one it was last handed out at, else `was`, its HEAD before this handout
+/// brought it on - and this handout's, `head`, kept for the next.
+fn last_handout(tree: &Path, was: &str, head: &str) -> String {
+    let at = tree_git_dir(tree).join(BASE);
+    let kept = std::fs::read_to_string(&at).unwrap_or_default();
+    let _ = std::fs::write(&at, format!("{head}\n"));
+    Some(kept.trim().to_owned())
+        .filter(|k| !k.is_empty())
+        .unwrap_or_else(|| was.to_owned())
+}
+
+/// THE PRE-WARM, STARTED (451 T316): where the commits `base..head` moved a file a crate's build reads, the tree's own gate starts
+/// `rust prewarm --since <base>` in a process group of its own, its output to the tree's `prewarm.log`, and is not waited for - the
+/// handout returns at once. The line said of it; nothing here fails the handout.
+fn prewarm(p: &Pool, tree: &Path, base: &str, env: &Env) -> String {
+    if !env.prewarm {
+        return "builder-tree: no pre-warm (L7R_PREWARM=0)\n".to_owned();
+    }
+    let mut diff = vec!["diff", "--name-only", base, &p.head, "--"];
+    diff.extend(BUILT_FROM);
+    if text(&git(tree, &diff).1).is_empty() {
+        return format!(
+            "builder-tree: nothing to pre-warm - no crate's build moved since the tree's last handout ({})\n",
+            base.get(..10).unwrap_or(base)
+        );
+    }
+    let log = tree_git_dir(tree).join(PREWARM_LOG);
+    let started = std::fs::File::create(&log).and_then(|out| {
+        Command::new(tree.join("scripts/gates/l7r-gate.sh"))
+            .args(["rust", "prewarm", "--since", base])
+            .current_dir(tree)
+            // the handout's own tree, target directory and make are not the pre-warm's: it builds in the tree it warms, as that
+            // tree's checks will, and outlives the make that started it
+            .env_remove("L7R_GATE_TREE")
+            .env_remove("CARGO_TARGET_DIR")
+            .env_remove("MAKEFLAGS")
+            .env_remove("MFLAGS")
+            .env_remove("MAKELEVEL")
+            .stdin(Stdio::null())
+            .stdout(out.try_clone()?)
+            .stderr(out)
+            .process_group(0)
+            .spawn()
+    });
+    match started {
+        Ok(child) => {
+            note(p, env, "prewarm", tree, &format!("since {base}, pid {}", child.id()));
+            format!(
+                "builder-tree: pre-warming it in the background - the test builds of the crates moved since its last handout ({}); log {} (L7R_PREWARM=0 for none)\n",
+                base.get(..10).unwrap_or(base),
+                log.display()
+            )
+        }
+        Err(e) => format!("builder-tree: its pre-warm did not start ({e}) - the handout stands, and the builder's first run compiles what moved\n"),
+    }
+}
+
 fn refused(why: String) -> Reply {
     reply(String::new(), why, 2)
 }
@@ -316,6 +394,7 @@ fn take(p: &Pool, tasks: &[String], feature: &str, env: &Env) -> Reply {
             let _ = writeln!(notes, "builder-tree: {} is in the pool and gone from disk - make builder-tree-drop TREE={} REASON=\"<why>\"", tree.display(), tree.display());
             continue;
         }
+        let was = text(&git(&tree, &["rev-parse", "HEAD"]).1);
         let lost = bring(&tree, &p.head, !env.discard.is_empty());
         if !lost.is_empty() {
             blocked = true;
@@ -337,6 +416,9 @@ fn take(p: &Pool, tasks: &[String], feature: &str, env: &Env) -> Reply {
             p.head.get(..10).unwrap_or(&p.head)
         );
         notes.push_str(&save(p, &trees));
+        drop(turn);
+        let base = last_handout(&tree, &was, &p.head);
+        notes.push_str(&prewarm(p, &tree, &base, env));
         return reply(format!("{}\n", tree.display()), notes, 0);
     }
     if blocked {
@@ -396,6 +478,8 @@ fn make_cold(
     notes.push_str(&save(p, &trees));
     note(p, env, "make", &tree, &trees[trees.len() - 1].holder());
     drop(turn);
+    // a new tree's cache is warm for nothing: its first handout is what the next one's pre-warm is measured from
+    last_handout(&tree, &p.head, &p.head);
     let _ = writeln!(notes, "builder-tree: {tree_text} is NEW and held by {}: COLD - its build cache is empty, so its first closing checks compile everything (14-30 minutes measured 2026-11-26); no pool tree was free ({} of {} now)", trees[trees.len() - 1].holder(), trees.len(), env.cap);
     if build_guard(&tree, &env.guard_secs) {
         notes.push_str("builder-tree: its guard binary is built\n");

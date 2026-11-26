@@ -24,6 +24,7 @@ fn env(dir: &Path) -> Env {
         discard: String::new(),
         reason: String::new(),
         guard_secs: "5".to_owned(),
+        prewarm: true,
     }
 }
 
@@ -417,4 +418,117 @@ fn a_tree_whose_tasks_landed_by_any_route_is_free_at_the_next_handout() {
     assert_eq!(gone.code, 0, "{}", gone.stderr);
     assert!(gone.stdout.contains("GONE from disk"), "{}", gone.stdout);
     assert!(pool_of(&root)[1].free());
+}
+
+/// The fixture's clone with a gate wrapper too, which notes its words in `<tree>.prewarm` beside the tree it runs from.
+fn warm_world(tag: &str) -> (l7r_shared::tempdir::TempDir, PathBuf) {
+    let (dir, root) = world(tag);
+    std::fs::create_dir_all(root.join("scripts/gates")).unwrap();
+    write_executable(
+        &root.join("scripts/gates/l7r-gate.sh"),
+        "#!/bin/sh\necho \"$@ in $(pwd)\" >> \"$(cd \"$(dirname \"$0\")/../..\" && pwd).prewarm\"\n",
+    );
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "the gate wrapper"]);
+    (dir, root)
+}
+
+/// The pre-warms the pool's log says were started.
+fn prewarms(root: &Path) -> usize {
+    std::fs::read_to_string(root.join(".git/builder-pool.log"))
+        .unwrap()
+        .lines()
+        .filter(|l| l.contains("\"event\":\"prewarm\""))
+        .count()
+}
+
+#[test]
+fn a_warm_handout_starts_the_pre_warm_of_what_moved_since_the_tree_s_last_handout() {
+    let (dir, root) = warm_world("pool-prewarm");
+    let mut e = env(&dir);
+    let b1 = dir.join("repo-b1");
+    // a cold tree: nothing to warm it for, and its handout is what the next is measured from
+    let cold = run(&words(&["take", "T01", "9001"]), &root, &e);
+    assert!(!cold.stderr.contains("pre-warm"), "{}", cold.stderr);
+    let first = git(&root, &["rev-parse", "HEAD"]);
+    // others land a crate's edit; the release brings the tree to it, so the tree's HEAD at the next handout says nothing moved
+    commit(&root, "rust/a/src/lib.rs", "//! x\n");
+    run(&words(&["release", "T01", "9001"]), &root, &e);
+    assert_eq!(
+        git(&b1, &["rev-parse", "HEAD"]),
+        git(&root, &["rev-parse", "HEAD"])
+    );
+    let warm = run(&words(&["take", "T02", "9001"]), &root, &e);
+    assert_eq!(
+        (warm.code, warm.stdout.as_str()),
+        (0, format!("{}\n", b1.display()).as_str())
+    );
+    let log = root.join(".git/worktrees/repo-b1/prewarm.log");
+    assert!(warm.stderr.contains(&format!("builder-tree: pre-warming it in the background - the test builds of the crates moved since its last handout ({}); log {} (L7R_PREWARM=0 for none)", &first[..10], log.display())), "{}", warm.stderr);
+    assert_eq!(prewarms(&root), 1);
+    // the tree's own gate was started in the tree, told the commit, and was not waited for
+    let marker = dir.join("repo-b1.prewarm");
+    let began = std::time::Instant::now();
+    while std::fs::read_to_string(&marker)
+        .unwrap_or_default()
+        .is_empty()
+    {
+        assert!(began.elapsed().as_secs() < 60);
+        std::thread::sleep(std::time::Duration::from_millis(5));
+    }
+    assert_eq!(
+        std::fs::read_to_string(&marker).unwrap(),
+        format!("rust prewarm --since {first} in {}\n", b1.display())
+    );
+    assert!(log.is_file());
+    // a handout after commits that moved no crate's build starts none
+    commit(&root, "docs/a.md", "words\n");
+    run(&words(&["release", "T02", "9001"]), &root, &e);
+    let same = run(&words(&["take", "T03", "9001"]), &root, &e);
+    assert!(same.stderr.contains("builder-tree: nothing to pre-warm - no crate's build moved since the tree's last handout ("), "{}", same.stderr);
+    assert_eq!(prewarms(&root), 1);
+    // off at the knob: none, whatever moved
+    commit(&root, "rust/a/src/lib.rs", "//! y\n");
+    run(&words(&["release", "T03", "9001"]), &root, &e);
+    e.prewarm = false;
+    let off = run(&words(&["take", "T04", "9001"]), &root, &e);
+    assert!(
+        off.code == 0
+            && off
+                .stderr
+                .contains("builder-tree: no pre-warm (L7R_PREWARM=0)"),
+        "{}",
+        off.stderr
+    );
+    assert_eq!(prewarms(&root), 1);
+    e.prewarm = true;
+    // a tree with no handout on record is measured from where it stood: brought on by its release, nothing
+    commit(&root, "rust/a/src/lib.rs", "//! z\n");
+    run(&words(&["release", "T04", "9001"]), &root, &e);
+    std::fs::remove_file(root.join(".git/worktrees/repo-b1/prewarm-base")).unwrap();
+    let unknown = run(&words(&["take", "T05", "9001"]), &root, &e);
+    assert!(
+        unknown.stderr.contains("nothing to pre-warm"),
+        "{}",
+        unknown.stderr
+    );
+    // a pre-warm that cannot start - the tree has no gate wrapper - fails no handout
+    std::fs::remove_file(root.join("scripts/gates/l7r-gate.sh")).unwrap();
+    git(&root, &["add", "-A"]);
+    commit(&root, "rust/a/src/lib.rs", "//! w\n");
+    run(&words(&["release", "T05", "9001"]), &root, &e);
+    let broken = run(&words(&["take", "T06", "9001"]), &root, &e);
+    assert_eq!(
+        (broken.code, broken.stdout.as_str()),
+        (0, format!("{}\n", b1.display()).as_str())
+    );
+    assert!(
+        broken
+            .stderr
+            .contains("builder-tree: its pre-warm did not start (")
+            && broken.stderr.contains("the handout stands"),
+        "{}",
+        broken.stderr
+    );
+    assert_eq!(prewarms(&root), 1);
 }

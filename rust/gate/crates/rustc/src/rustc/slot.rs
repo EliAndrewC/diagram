@@ -183,6 +183,31 @@ fn holders(slots: &Slots) -> String {
         .join("; ")
 }
 
+/// Is a slot free at this instant (feature 451 T316)? Looked at, never held and never signed: what the pre-warm asks while it holds
+/// one itself (`prewarm.rs`) - with none spare the next compile of any tree would wait behind it, so it lets its own go. Every
+/// tree's holders are seen, whatever slot code they run: the lock is the file's. The look holds the slot for the length of one
+/// `flock` start, so a call looking at that instant may wait a poll more.
+pub(super) fn spare(slots: &Slots) -> bool {
+    (0..slots.count).any(|i| {
+        std::fs::OpenOptions::new()
+            .read(true)
+            .write(true)
+            .create(true)
+            .truncate(false)
+            .open(slot_file(slots, i))
+            .is_ok_and(|file| matches!(try_lock(&slots.flock, &file), Try::Got))
+    })
+}
+
+/// A slot where one is free at this instant, never a wait (feature 451 T316, the pre-warm's take): none where every
+/// one is held or there is none to ask.
+pub(super) fn free_now(slots: &Slots, who: &str) -> Option<Hold> {
+    first_free(slots, who)
+        .ok()
+        .flatten()
+        .map(|file| Hold { _file: file })
+}
+
 /// Take a slot for `who`, waiting while every one is held (said through `say` each `notice`); without one where there are none to
 /// take or the wait passes the ceiling, said too.
 pub(super) fn take(slots: &Slots, who: &str, say: &mut dyn FnMut(&str)) -> Taken {

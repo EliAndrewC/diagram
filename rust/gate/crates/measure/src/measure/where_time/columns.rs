@@ -376,6 +376,9 @@ pub fn category(p: &Event) -> Option<&'static str> {
         ("land", "gate" | "cohort") => "gate",
         ("record", _) | ("page-session", "write") => "docs",
         ("page-session", _) => "review",
+        // A POOL TREE'S PRE-WARM IS NO CALL'S COMPILE (feature 451 T316, `rustc/prewarm.rs`): its step is `prewarm`, never `build`, so
+        // a pre-warm whose span falls inside a builder's own call is not booked to that call. Its seconds are the `Phase` lines' own
+        // until a category shows them (T317).
         _ => return None,
     })
 }

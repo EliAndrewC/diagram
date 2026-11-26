@@ -3633,14 +3633,227 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T316 (<why: the finding or measurement that files it>)
+### T316 (a pool tree is warm for what it last built, and the commits others landed since are compiled by the builder's first test run, after a median 4.6 to 5.7 minutes of reading in which the tree compiles nothing, measured 2026-11-26 (`dev/measurements/2026-11-26/split-reproduction`))
+
+- **Approach**: a warm handout starts, detached, the test builds of the crates whose build moved since the tree's last handout (`rust/gate/crates/task/src/builder_tree.rs` starts it; `rust/gate/crates/rustc/src/rustc/prewarm.rs` is it, `l7r-gate rust prewarm --since <commit>`), so they compile while the builder reads.
+  - **What was measured first** (2026-11-26, method: in the pool tree `diagram-backlog-t269`, handed out at 18:51:20 UTC, `make rust-test CRATE=rust/gate/crates/land` twice in a row, the `build` and `test` `Phase` lines of `.git/l7r-events/` read beside the wall time; load average 248). The handout's commits (`7500146fb3..8c1d4c69bb`, 14 commits) changed Rust files in three crates, `arbiter`, `land` and `task`, observed 2026-11-26, method: `git diff --name-only` over that range. The first run took 18.6 s, of which 7.2 s the test build and 10.7 s the tests, measured 2026-11-26 (the `Phase` lines of `.git/l7r-events/` and the wall time, in `diagram-backlog-t269`). The second took 0.32 s, its kept result standing, measured 2026-11-26 (the `Phase` lines of `.git/l7r-events/` and the wall time, in `diagram-backlog-t269`). The first `make builder-checks` lint of the same crate took 4.8 s, measured 2026-11-26 (the `Phase` lines of `.git/l7r-events/` and the wall time, in `diagram-backlog-t269`). So on that handout a pre-warm had the test build's 7.2 s of one crate's first run to give and nothing of its lint, measured 2026-11-26 (the `Phase` lines of `.git/l7r-events/` and the wall time, in `diagram-backlog-t269`).
+  - **What a pre-warm buys follows what moved.** (Measured 2026-11-26, method: in the same tree the core crate's `lib.rs` was given a new modification time, so cargo rebuilds it and every crate that builds on it, then `make rust-test CRATE=rust/gate/crates/land FRESH=1`, its `build` `Phase` line read - once with no pre-warm, once after `l7r-gate rust prewarm --since 6fdcf55e5b~1` had finished; load average 26 and 17, measured 2026-11-26 (`uptime` before each run).) Without a pre-warm the first run's test build took 7.7 s of 25.6 s of wall time, and after a finished pre-warm 0.1 s of 9.2 s, measured 2026-11-26 (the `Phase` lines of `.git/l7r-events/` and the wall time, in `diagram-backlog-t269`): the build is found fresh, so the pre-warm's words and environment are a real run's. The wall time fell by more than the build because the wrapper's own tool build, which reads the core crate too and writes no phase line, was done by the pre-warm's start as well. That pre-warm built 34 crates (its range moved almost every crate) in 402 s beside two other trees' work, the longest `rust/mode_a` at 82.7 s and `rust/embed` at 39.6 s, measured 2026-11-26 (its own log, a line a crate). The 191 to 531 s first closing-checks runs of the task's line, measured 2026-11-26 (T316's line of `tasks.md`), were coverage builds and lint beside the tests, which a test build does not warm, and a builder's tree no longer runs the coverage (the two tiers): the gain to expect is the test build's seconds, and the lint's once T318 is in.
+  - **The end by a real run, run live.** A pre-warm was started in this tree and `make rust-test CRATE=rust/gate/crates/land FRESH=1` started 1.5 to 13 s into it, nine times, and the real run ended the pre-warm each time, eight of them cutting a build short, measured 2026-11-26 (each pre-warm's own log, whose last line reads `a run of the checks started in this tree and has the build from here`). One of the nine real runs failed in its tests, code 101 and 1.7 s into them with its build green, and passed when run again, measured 2026-11-26 (its `test` `Phase` line), its output was not kept and eight further tries did not repeat it: Found and left, below.
+  - **The spare rule, run live.** Two whole pre-warms were run in this tree by hand under the spare rule (`l7r-gate rust prewarm --since 6fdcf55e5b~1`), each over 34 crates, observed 2026-11-26, method: the first line of each run's log. The first ran with both of the machine's slots free throughout and warmed all 34 crates in 61.3 s with none cut short, measured 2026-11-26 (its own log, a line a crate, and the wall time). In the second, one of the two slots was taken by hand 6 s in and held for 12 s (`flock` on the slot's own file, as a compile of another tree takes it): the pre-warm's build of `rust/gate/crates/author` was cut 0.09 s after the slot was taken, code 130, nothing was built while the slot was held, the crate was asked again 0.2 s after the slot was let go, and all 34 crates were warm 61.2 s after the start, measured 2026-11-26 (the pre-warm's own log and its `prewarm` `Phase` lines of `.git/l7r-events/`, beside the times the hand-held slot was taken and let go). No other tree wrote a `slot-wait` line in either span, and none compiled in either, observed 2026-11-26 (the `Phase` lines of every tree in `.git/l7r-events/` over the two spans): so the yield to a slot taken is shown live, and a real compile of another tree starting beside a pre-warm is shown by the test alone (`it_holds_a_slot_only_while_another_is_spare_and_builds_the_crate_again_after`), not live. Both runs were over a cache almost wholly warm (most crates a poll or two), so their seconds say nothing of a pre-warm's length on a cold range.
+  - **Measured from the tree's LAST HANDOUT, not its HEAD.** A release (`make land`'s too) brings the tree to the clone's HEAD, as the handout does, so at the next handout the tree's HEAD says nothing moved while its cache still holds the build of the commit it was handed out at. The handout keeps that commit in the tree's own git directory (`prewarm-base`) and the next one starts the pre-warm from it; a tree with none on record is measured from where it stood before the handout brought it on. A cold tree's first handout writes it and starts nothing: its whole cache is cold, which the handout already says. Decided by this builder from reading `release`; the brief's sketch named the commits since the tree's previous HEAD.
+  - **Which crates.** `builder-tree` asks only whether the commits since changed a file under `rust/` or `.cargo/`; with none it starts nothing and says so. The pre-warm then takes each crate whose build reads a changed file - its own files, a crate's it builds from by path, the workspace's manifests - through the kept keys' own reader (`Kept::reads_any` over `Reads::Source`), fewest dependencies first, so a crate is built before those that build on it.
+  - **The same build as a real run's.** One `cargo test --no-run --quiet --manifest-path <crate>` a crate, the words `stepped` asks first (449 T93's "builds the test binary first"), through `cargo_call`, the one builder of a cargo call's words and environment that `cargo_in` now uses too, from the tree's root with the tree's own target directory. Nothing is run and no result is kept: a kept result is a real run's alone. `builder-tree` starts the tree's own wrapper from the tree, with the handout's `L7R_GATE_TREE`, `CARGO_TARGET_DIR` and make variables taken out of its environment.
+  - **It holds a slot only while another is spare** (the brief: "never hold a slot while the tree's own builder (or anyone) waits on one more than briefly"). It never goes through `slot::around`: it takes a slot only where one is free at that instant (`slot::free_now`) and a second is free beside it (`slot::spare`, which looks at each slot's lock and holds none), else looks again a poll later, and so writes no `slot-wait` line. While its cargo runs it looks every half second (`POLL`, a GUESS, the slot's own) for a real run in its tree - a live member of the run lock's record of the tree's target directory (`runlock::busy`; the pre-warm joins no run) - which ends it, and for the machine's slots: once none is spare, a compile of some tree having taken the last, it kills its cargo, with what cargo started, as one process group, gives its slot back, and builds the crate again when two are free. So the next compile to start, of any tree, finds a slot free. The rule reads the slots' own locks, which every tree's holders take whatever slot code that tree runs, so it holds from the first pre-warm, with no tree left unseen. With one slot on the machine (`L7R_BUILD_SLOTS=1`) it builds nothing; with none (`0`) it builds freely, as every compile does.
+  - **A waiter's mark was built first and replaced** (plan review round 1). The first form let the pre-warm build beside a real compile and yield when a waiting call left a file beside the slot files. Run live it held a slot while two real runs of other trees waited 39.3 s and 25.2 s, measured 2026-11-26 (their `slot-wait` `Phase` lines beside the pre-warm's): those trees ran the slot code from before this task and left no mark. A rule that needs every tree's code to be new fails for as long as one is not, so the mark was taken out and the spare rule above built in its place.
+  - **It fails nothing.** The handout does not wait for it: the process is started in its own process group with its input closed and its output to `prewarm.log` in the tree's git directory, and a pre-warm that cannot start is one line of the handout's notes. It exits 0 whatever cargo said (a crate that does not build is the builder's own run's to report), runs one a tree (`prewarm.lock` in the target directory), and stops at a ceiling of 900 s (`CEILING_S`, a GUESS knob, `L7R_PREWARM_CEILING`). `L7R_PREWARM=0` starts none, and stops one that was started by hand.
+  - **Booked apart.** Each cargo call of a pre-warm writes one `Phase` line, step `prewarm`, make target `prewarm`, code 130 where it was cut short. `columns::category` names that step and books it to no call, so a pre-warm whose span falls inside a builder's own Bash call is not that call's compile. `make task-time` does not yet show its seconds as a category: the lines are in the event log, and T317 books them by the task that held the tree.
+  - **The record**: `dev/audits/builder-prewarm.md` (measurement, falsifier, cost), the `rustc` and `task` rows of `rust/gate/CLAUDE.md`, `make builder-tree`'s help line.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a handout starts the pre-warm where a crate's build moved since the tree's last handout - after a release that brought the tree on too - and none where nothing moved or at `L7R_PREWARM=0`; a tree with no handout on record is measured from where it stood before the handout (nothing, where its release had brought it on); one that cannot start fails no handout | pinned by `a_warm_handout_starts_the_pre_warm_of_what_moved_since_the_tree_s_last_handout` (task) | n/a: tooling | none | n/a |
+| the moved crates' test builds, asked as a real run asks them, a crate before its dependents, a `prewarm` line each | pinned by `the_moved_crates_test_builds_are_asked_as_a_real_run_asks_them_a_crate_before_its_dependents` (rustc) | n/a: tooling | none | n/a |
+| a real run in its tree ends it | pinned by `a_real_run_in_its_tree_ends_it_at_once` | n/a: tooling | none | n/a |
+| it holds a slot only while another is spare: a real compile taking the last cuts its build, and the crate is built again after | pinned by `it_holds_a_slot_only_while_another_is_spare_and_builds_the_crate_again_after` | n/a: tooling | none | n/a |
+| never in the slots' queue, nothing built with one slot or with none spare, the ceiling | pinned by `it_never_waits_in_the_slots_queue_and_stops_at_its_ceiling` | n/a: tooling | none | n/a |
+| off at the knob, one a tree, a failing build fails nothing, the command line | pinned by `it_is_off_at_the_knob_one_a_tree_and_a_crate_that_does_not_build_fails_nothing` | n/a: tooling | none | n/a |
+| a `prewarm` phase is no call's compile | pinned by `a_phase_s_category_by_its_tool_and_step` (measure) | n/a: tooling | none | n/a |
+
+### T316 Approach (checklist part A)
+
+1. **The goal, in the world.** A builder handed a warm pool tree finds, at its first test run, the crates others moved already built, so that run compiles its own edit alone; and no compile of any tree finds every slot held because a pre-warm holds one, for more than a poll.
+2. **The constraints.** T316's line in tasks.md. The brief: measured first; started detached at the handout, after the tree is at HEAD and held; the test builds through the gate's own path (the slot, the target directory, the words of a real run); a slot only where one is free, never held while anyone waits on one more than briefly, the pre-warm ended by a real run in its tree; logged to the tree's git directory; never failing the handout; off at `L7R_PREWARM=0`; a `prewarm` `Phase` line; red-first tests; 100% line coverage of new Rust; an audit-register entry.
+3. **Where each comes from.** G: T316's line of `tasks.md`, which carries his question of 2026-11-26. O: the measurements in the Approach.
+4. **Do they describe the world here?** Yes for the mechanism, measured 2026-11-26 (the Approach's first two bullets): a handout's moved crates are compiled by the first run. The size of the gain is what moved: the test build's 7.2 s on the handout, measured 2026-11-26 (its `build` `Phase` line), more where a crate many build on moved.
+5. **The order.** After T284 (the slot) and T285 (the pool); before T302.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/rustc rust/gate/crates/task rust/gate/crates/measure"` here (the first tier; the full gate runs once in the clone over the batch). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, 2026-11-26, method: the handout's call of `prewarm` taken out of `take`, `make rust-test CRATE=rust/gate/crates/task`: `98 passed; 1 failed`, the new test; `moved` made to return no crate, `make rust-test CRATE=rust/gate/crates/rustc`: `97 passed; 5 failed`, the five of `rustc::tests::prewarm` as they then stood (one since rewritten for the spare rule, round 1); both restored, `99 passed` and `102 passed`, and `rust/gate/crates/measure` `235 passed`. THE FIRST TEST BUILD after the core crate moved: 7.7 s without the pre-warm and 0.1 s after it had finished, measured 2026-11-26 (the Approach's second bullet). `make builder-checks` over the crates changed, green.
+10. **Before moving a constant.** n/a: new knobs, `CEILING_S` = 900 s and `POLL` = 0.5 s, each labeled GUESS beside it and in `dev/audits/builder-prewarm.md`.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect of a map: no map changes. The measurement it answers: a warm tree's first checks run compiles what others landed, in the builder's own time.
+
+**Found and left?**
+
+- The pre-warm's seconds are in no category of `make task-time`: its `Phase` lines are booked to no call on purpose, and nothing yet books a detached run's lines by task but a page session's. Visible effect: a pre-warm's cost is read from the raw `Phase` lines of `.git/l7r-events/`, not from the report. Not fixed here: it is the readers' work in the `measure` crate (`columns.rs`'s `tie`, `task_time/book.rs`), a job of its own beside this one. Filed as T317; lands before T302.
+- The lint's build is not warmed: clippy's artifacts are another build than `cargo test --no-run`'s, and the first `make builder-checks` after a handout compiles them (4.8 s for `land` on the handout measured 2026-11-26, method: the `lint` `Phase` line of `make builder-checks CRATE=rust/gate/crates/land` in `diagram-backlog-t269`). Visible effect: a builder's first lint still compiles what others moved. Not fixed here: the task's line asks for the test builds, and a second build a crate doubles what a pre-warm holds a slot for, so it is measured on a deep crate first. Filed as T318; lands before T302.
+
+- One real test run of nine that ended a pre-warm failed in its tests and passed when run again (the Approach, "The end by a real run, run live"). Visible effect: a builder's first run after a handout could go red on good work, once in nine here. Whether the killed cargo, the guard's rebuild under the suite (the recipe touched `rust/guard/shared`, which the guard's wrapper rebuilds on) or the `land` suite itself caused it is not known: the output was not kept and eight further tries, three by the same recipe, passed. Not fixed here: there is nothing yet to fix, only a failure to reproduce with its output kept. Filed as T329; lands before T302.
+- A pre-warm that a real run ends early leaves crates unbuilt, and the next handout no longer counts them as moved, because the handout's commit is recorded when the pre-warm starts. Visible effect: where the builder's own runs never built those crates, a later builder's first run compiles them with no pre-warm, as before this task. Not fixed here: it is no worse than no pre-warm, and the fix (the base written when a pre-warm finishes) changes who writes the record. Filed as T330; lands before T302.
+
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the builders' loop faster); not an engine-speed task, so `docs/performance-checklist.md` does not apply.
+
+### T317 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T316 Approach (checklist part A)
+### T317 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T318 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T318 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T326 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T326 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T327 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T327 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T329 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T329 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T330 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T330 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T332 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T332 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
