@@ -120,6 +120,15 @@ This file is loaded on demand, so a declined option recorded here costs no auto-
   section, the commit and the report. That day two fresh builders closed out others' work in 8 and 22 minutes while the
   originals had ended at 230k to 296k of their 300k. Reopens if a fresh builder is measured to cost markedly more than the
   original would have on a class of follow-up.
+- **Five levers on a builder's test run** (declined 2026-11-26 on 451 T315's measurement; the session's reading, on the GM's
+  standing rule that a lever is built where the numbers show it pays): the tests' temp files on an in-memory disk (at most
+  0.3 s a run of the `land` crate, and the container's `/dev/shm` is `noexec`), an empty git template (under 0.02 s), a shared
+  fixture repository copied per test (0.04 to 0.13 s), more test threads (already 22; no gain at 44) and a faster linker (under
+  0.25 s of a build). Alone, a gate crate's tests run in 0.8 to 1.9 s and its build after a one-line edit in 0.8 to 2.9 s; the
+  seconds a builder loses are elsewhere - a 2.3 to 4.0 s build waited up to 57.3 s for a build slot beside two builders (filed
+  as T347), and the guard crates lose 5 to 7 s a run to a timer test, stray processes and the tool's own start (T339, T340,
+  T341). This CORRECTS the session's earlier reading that the tests' own run time dominates a builder's test run. Reopens for
+  a crate whose tests pass about 10 s alone with most of it in repository setup. Audit: `dev/audits/declined-test-run-levers.md`.
 
 ## Decided
 
