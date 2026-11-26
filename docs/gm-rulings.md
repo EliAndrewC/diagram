@@ -128,3 +128,12 @@ didn't think that was a deviation."* So the setting's placement is inside the wa
 history is the record's question (research page 0156 labeled it a deliberate deviation): a search pass settles whether the
 historical quarters stood inside or outside the walls, and the page's label follows it - and, by his words, if the history
 puts them outside, the maps move them there.
+
+## The aqueduct's banks drawn 2 px wider for legibility are fine (2026-11-26)
+
+Research page 0141 draws the capital's aqueduct with its water at true size and its bank outline about 2 px wider each side
+than life, a labeled drawing convention of 2026-08-09 that no record showed was ever raised with the GM, as "To scale means
+true size" above requires. Asked, the GM, 2026-11-26: *"If the aqueduct is being made 2px larger to make it more legible on
+the map then that's fine. Otherwise I'd want it shown to scale."* It is for legibility - the page's own reason is that the
+true banks of so narrow a channel would vanish on the page - so the convention stands, now with his words. The bound is his:
+an enlargement that is not for legibility is drawn to scale.

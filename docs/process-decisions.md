@@ -69,7 +69,8 @@ This file is loaded on demand, so a declined option recorded here costs no auto-
   - *Dropping a tree's coverage build at each landing*: free for a worktree that ends at its landing (the sweep already takes a
     removed worktree's build directory, 451 T245); for a tree that lands again each drop costs a cold coverage build, up to
     512 s against 123 s warm, to free about 41 GB (the session clone) and 24 GB (the landing tree). Declined under the
-    pre-approval; the trade - about 6 minutes a landing for about 65 GB - is the GM's if the disk presses again. What the
+    pre-approval, and by the GM's own word, 2026-11-26: *"I agree that time is more important than disk space, and we
+    definitely want those extra 6 minutes more than we want the 65G"*. Reopens only on his word. What the
     measurement found instead: 20 of cover-gate's 21 GB of incremental data is stale variants (the sweep keeps 16 a crate,
     after 12 idle hours); pruning them sooner is 451 T278.
 

@@ -34,8 +34,6 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 - **The terse output style** (declined so far; the GM's to reopen).
 - **Extending the early build to the SPEC review** (constitution XVI would need his word; `docs/process-decisions.md`,
   "Building begins before a new feature's plan review returns").
-- **A disk trade**: dropping the gate's coverage build at every landing frees about 65 GB for about 6 minutes a landing
-  (declined under his pre-approval, his to take if the disk presses; `docs/process-decisions.md`, "Declined so far").
 
 ## Closed overnight under the GM's pre-approval of 2026-11-25
 
@@ -69,14 +67,10 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
   margin against the container's 10 GiB limit, which has been touched once with no out-of-memory kill. Separately the session
   added three or four at once for work that compiles nothing; that is outside what he approved, and is dropped if he would
   rather.
-- **A disk trade (his to weigh).** Dropping the gate's coverage build at every landing frees about 65 GB for about 6 minutes a
-  landing; declined under his pre-approval, his to take if the disk presses again.
-- **0141's aqueduct banks.** The water is drawn true size; the bank outline is enlarged, about 2 px each side, as a labeled
-  drawing convention dated 2026-08-09 and once credited to him with no recorded words. The rulings entry "To scale means true
-  size" (2026-07-21; his quoted words: "I do not want that. We're trying to be perfectly to scale, remember?") says an
-  illegibly small feature is raised with him, never silently inflated. Does he accept the wider banks as a convention, or
-  are they drawn true size? BRING to the question what the true bank width comes to at fit zoom, or a crop of both - without
-  it he chooses blind.
+- ANSWERED 2026-11-26, the disk trade: time over disk - the coverage builds stay (`docs/process-decisions.md`, "Declined so
+  far", his words).
+- ANSWERED 2026-11-26, 0141's aqueduct banks: 2 px wider for legibility is fine, anything else to scale
+  (`docs/gm-rulings.md`, "The aqueduct's banks drawn 2 px wider for legibility are fine").
 - **0181's share outside the wall.** On 2026-08-10 a session chose 2.8% (60 of 2,160 households, the wharf hamlet only) from
   three answers (57%, 30%, 2.8%). The page labels it setting canon, but none of his words are recorded (commits 1e07eaba8 and
   4a9b1b951 hold a session's paraphrase; the August request files of 283 and 303 were not searched for it). Does he accept
