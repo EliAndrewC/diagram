@@ -19,7 +19,8 @@ re-measures with the same command before arguing for a change.
 The questions raised by the GM on 2026-11-25 (fourteen that day), are listed with their context and the measurements each needs in
 `specs/449-rust-codebase/port-talk-agenda.md`. The figures come from `make task-time` (the task time breakdown, 451
 T243) and `make where-time`. When the talk decides an item, its entry moves here, and the agenda keeps one line pointing
-at it.
+at it. The fresh session that holds the talk starts from `specs/449-rust-codebase/port-talk-handoff.md` (what landed
+overnight, what is closed under the pre-approval, what is the GM's to decide, how to restore a new container).
 
 ## The audit register (451 T259)
 
