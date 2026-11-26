@@ -675,6 +675,9 @@
 - [x] T268 the clone-sync notice reads 'mirror refresh FAILED: ' with nothing after the colon when the script cannot start, because ask drops the spawn error (found by 451 T263): carry the error text into the notice
       research: rendering
       verify: DONE. landed: the clone-sync notices say why: a sync script that cannot start reads 'could not be started (<the error>)' and one that failed silently 'exited N and said nothing'; red-first on a non-executable and a missing script (521 passed 1 failed, then 522); five changed wordings message-checked PASS; T283 filed from it
+- [x] T270 make audit classifies a plan-gate escape by its reason text; classify by the record's held field so an escape with nothing held is told from one with blocks held (451 T261's false finding came from the reason wording)
+      research: rendering
+      verify: DONE. landed: make audit counts the plan gate's escapes by each record's held list, never by the reason; red-first (233 passed 1 failed, then 234); over the real log all 1281 records are 'held not recorded' (they predate T262), the other classes shown on fixtures; T286 and T287 filed from it
 - [x] T271 parallel builders share one scratchpad and one plan-review bundle directory: key the plan review bundle by tree and have the builder brief's scratch names carry the task id (found in the 2026-11-25 parallel trials)
       research: rendering
       verify: DONE. landed: the changed-blocks plan bundle is keyed by tree (two worktrees owing the same blocks named one directory; red-first with two fixture trees, 190 passed 1 failed then 191); the per-task bundle left as is, measured to collide only if two trees decide one task; the builder brief names the scratch-file prefix

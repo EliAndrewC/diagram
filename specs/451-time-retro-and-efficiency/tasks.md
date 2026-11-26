@@ -188,8 +188,6 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T269 the audit-register delta check does not see a script newly called from make land's recipe (451 T258's state-sync.sh landed with no entry asked): cover a recipe's new callee, proved red-first on that case
       research: rendering
-- [ ] T270 make audit classifies a plan-gate escape by its reason text; classify by the record's held field so an escape with nothing held is told from one with blocks held (451 T261's false finding came from the reason wording)
-      research: rendering
 - [ ] T273 449 T428's tick note states a bend measurement that was never made: make the measurement or restate the note (found 2026-11-25)
       research: rendering
 - [ ] T274 a memory sampler runs while builders are dispatched (cgroup anon, memory.current, memory pressure and load every 10 s into the tree's l7r-events), so the parallel builder count is certified against the container's 10 GiB limit (docs/process-decisions.md, 'Two code builders at once'; the peak at 3-4 builders was never recorded)
