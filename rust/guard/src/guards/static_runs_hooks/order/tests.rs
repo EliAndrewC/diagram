@@ -88,15 +88,9 @@ fn a_decide_after_a_code_edit_with_no_closing_checks_started_since_is_told_the_o
     assert!(decide_said(&main, "a1").is_none());
     // the main session builds under no tier: it is told the closing run alone
     let text = said_text(decide_said(&main, ""));
-    assert!(
-        text.contains("has no `make closing-checks` started after it"),
-        "{text}"
-    );
+    assert!(text.contains("has no `make closing-checks` started after it"));
     // the caller's own closing run (451 T86): a bare `make closing-checks` judges the whole clone, another task's red counted
-    assert!(
-        text.contains("start `make closing-checks T=T55 F=451` now"),
-        "{text}"
-    );
+    assert!(text.contains("start `make closing-checks T=T55 F=451` now"));
     assert!(text.contains("make quick"), "{text}");
     assert!(!text.contains("builder-checks"), "{text}");
 }
