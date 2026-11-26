@@ -3,7 +3,7 @@
 //! command a timeout ended with TERM, left every `TempDir` it held. The first `TempDir` of a process catches INT and TERM: the handler
 //! only writes the signal's number to a pipe, which a signal handler may do, and a thread waiting on that pipe removes every `TempDir`
 //! the process still holds and exits as the signal would have (128 + its number). A signal the process was started ignoring - a
-//! background job's INT - stays ignored. Only a SIGKILL, which no process can catch, leaves them to the next `TempDir` of their tag
+//! background job's INT - stays ignored. Only a SIGKILL, which no process can catch, leaves them to the next process's first `TempDir`
 //! (`sweep_dead`).
 //!
 //! The crate's one use of `unsafe`: `pipe(2)`, `write(2)` and `signal(2)` from the C library std already links, there being no safe

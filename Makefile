@@ -373,7 +373,8 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	  mkdir -p "$$gitdir/hooks-test"; \
 	  ns=$$(wc -l < "$$work/todo"); [ "$$ns" -gt $(HOOKS_JOBS) ] && ns=$(HOOKS_JOBS); pm=$$(( $(CPU_COUNT) / (ns > 0 ? ns : 1) )); \
 	  [ "$$pm" -gt 8 ] && pm=8; [ "$$pm" -lt 1 ] && pm=1; export PARTS_MAX=$$pm; \
-	  xargs -P $(HOOKS_JOBS) -L1 -a "$$work/todo" "$$root/tests/hooks/hookrun.sh" "$$work" "$$gitdir" || true; \
+	  : "KILLED RUNNERS' LEFTOVERS SWEPT ONCE A RUN, BEFORE THE FAN-OUT (feature 451 T372): each job globbed the whole temp directory for them, 16.5 ms a suite under a /tmp of 5,443 entries, 4,051 suite runs on 2026-11-26; the jobs are told (--swept) and list nothing"; \
+	  "$$root/tests/hooks/hookrun.sh" --sweep; xargs -P $(HOOKS_JOBS) -L1 -a "$$work/todo" "$$root/tests/hooks/hookrun.sh" --swept "$$work" "$$gitdir" || true; \
 	  if [ -s "$$work/close" ]; then while read -r b sha js; do "$$root/tests/hooks/hookrun.sh" --close "$$work" "$$gitdir" "$$b" "$$sha" $$js; done < "$$work/close"; fi; \
 	  : "EACH SUITE'S PHASE LINE, ONE CALL FOR ALL (feature 451 T153; the GM 2026-11-22: \"make the hook suites measure their time so they won't be missing\"): hookrun.sh leaves each job's span, and the one Phase writer writes them all in one process (one a suite cost 6.9 s for 57, 2026-11-20); they feed the task time breakdown (make task-time, 451 T243)"; \
 	  spans=$$(for f in "$$work"/*.span; do [ -f "$$f" ] || continue; read -r a b c < "$$f"; printf 'suite:%s:%s:%s:%s ' "$$a" "$$b" "$$c" "$$(basename "$$f" .span)"; done); \

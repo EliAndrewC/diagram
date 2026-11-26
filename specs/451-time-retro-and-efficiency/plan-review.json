@@ -2262,6 +2262,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T370, T372 (bundle) (T365's measurement, dev/measurements/2026-11-26/tmp-clutter/t365-results.md, levers A and C: the whole temp directory was listed at every `TempDir::new` and globbed before every hook suite, 14 to 16.5 ms each under a `/tmp` of 5,443 entries, measured 2026-11-26 (T365's timing loops))": {
+   "sha256": "3fde1eca132a07c66c90a0ab85b80c48bee1d77d41863ff1cdc56d8004b29bdb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T370, T372 Approach (checklist part A)": {
+   "sha256": "b5504239cf5b0a3aa6c1d6d6d217a17b76f36679543b38839ecf78d0512d971a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T370, T372 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "6920ab80379feb582190a667c74c87b953b5c12736a0f020cf04c16520cccd4b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -28836,6 +28854,77 @@
      "why": "Inside the crate's existing practice. The citation is wrong: this feature's FR-008 is the background-run and poll-interval guard and says nothing of a tenth of a second; the plan should name the rule it means. A citation error, not a narrowing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T370, T372 (bundle) (T365's measurement, dev/measurements/2026-11-26/tmp-clutter/t365-results.md, levers A and C: the whole temp directory was listed at every `TempDir::new` and globbed before every hook suite, 14 to 16.5 ms each under a `/tmp` of 5,443 entries, measured 2026-11-26 (T365's timing loops))",
+    "### T370, T372 Approach (checklist part A)",
+    "### T370, T372 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T370-once",
+     "summary": "TempDir::new runs sweep_dead inside a std::sync::Once: the process's first TempDir lists the temp directory, no later one does.",
+     "class": "within",
+     "why": "Performance work the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?'). It is T365's lever A as measured. It removes repeated listings and keeps the removal rule: dead pid, three-hour age, directory test."
+    },
+    {
+     "id": "T370-every-tag",
+     "summary": "sweep_dead takes no tag and reads the name from its end (l7r-, anything, -p<pid>, -<seq>), so one listing takes every tag's leftovers, hyphenated tags included (the 29 l7r-gate-ci-stop-handler leftovers).",
+     "class": "within",
+     "why": "This stays within what was asked. The section says it removes the same set of names as before, taken over all tags, and sooner. The guards that protect work are unchanged: dead pid, three-hour age, directory test. It serves the GM's disk words (2026-11-22: 'clean up after ourselves in terms of the file system'; 2026-11-25: 'this container specifically is leaving artifacts sitting around'). No GM words in the bundle protect a dead process's l7r-<x>-p<pid>-<seq> directory older than three hours. So the wider reach (leftovers of tags this process never makes) is not a narrowing and needs no ruling. The search-space gap in the '.keep()' grep is reported apart from this verdict, as a finding for the builder; it does not block."
+    },
+    {
+     "id": "T370-keep-set",
+     "summary": "Kept and pinned in a_gone_process_s_directories_go_with_the_next_process_of_any_tag: the pre-T101 form, hook-suite directories, l7r-test-scratch, files, a live pid's, anything changed within three hours, untagged names and names not opening l7r-.",
+     "class": "within",
+     "why": "This keeps the constraints the section reports from the GM's 2026-11-11 words as tempdir.rs quotes them: a leftover younger than three hours, and the form before T101, are not touched. Those words are not in this bundle, so this ruling rests on the section's report of them. It also keeps T365's rule that nothing a later run could reuse is deleted."
+    },
+    {
+     "id": "T370-timing-edge",
+     "summary": "A leftover now goes at the next process's first TempDir of any tag, which is sooner. A process that changes its TMPDIR after its first TempDir does not sweep the second directory.",
+     "class": "within",
+     "why": "Cleanup comes sooner in the common case. In the TMPDIR edge the leftover is still removed by a later process whose first TempDir is there, so nothing is lost. A difference from the old behavior is not a defect (constitution XIV), and no caller is said to do this."
+    },
+    {
+     "id": "T372-route",
+     "summary": "Of the task line's two routes, the plan takes the cleanup once a run: hookrun.sh --sweep on the Makefile's fan-out line before xargs. It does not move the suites' directories under one subdirectory.",
+     "class": "within",
+     "why": "The section says the task line offers two routes; the task line itself is not in the bundle. Either route is performance work the GM asked to come first (2026-11-20), and the GM gave no instruction on which to take. The route chosen moves no path, and the grep the section cites (with its method) shows three places that know the path's shape."
+    },
+    {
+     "id": "T372-mark",
+     "summary": "The cleanup loop becomes the function sweep_gone, with unchanged removal. --sweep runs it and exits; --swept skips it; a job without the mark sweeps as before. The mark is a command word, not an exported variable, so nested runners in test-parts.2/3 still sweep.",
+     "class": "within",
+     "why": "This is a mechanism for doing the cleanup once a run. What it removes is unchanged, and a job run by hand or by a test keeps its old behavior."
+    },
+    {
+     "id": "T372-lone-suite-paths",
+     "summary": "A suite run alone stays untouched, and a suite's TMPDIR stays <temp>/l7r-hooks-suite-<guard>-p<pid>.<x>.",
+     "class": "within",
+     "why": "No behavior or path changes for a lone suite or for a guard that reads a fixture by its /tmp path."
+    },
+    {
+     "id": "T372-cost",
+     "summary": "A killed runner's leftover now waits for the next make hooks-test run that has a suite to run, where before it waited for the next suite of any run.",
+     "class": "within",
+     "why": "The section says the task line names this cost; the task line is not in the bundle. A killed runner's leftover waits for the next make hooks-test run that has a suite to run. That is the same event as before except in a run where every suite is skipped, and such a run makes no directory. Nothing is left unswept and no GM words are departed from, so no defect is left and no ruling is needed."
+    },
+    {
+     "id": "T370-T372-residual",
+     "summary": "Each process's first listing stays (the leak pin in rustc.rs, file-scale --selftest's one listing, the ledger and gate-write guards' TempDir per event), left to the already-filed T371 or T377.",
+     "class": "within",
+     "why": "Listing once a process is what T370 is. The remaining first listings are performance not yet taken, not a defect, and filed tasks own them. The hook suites' glob is taken here by T372. Found-and-left is truthfully 'none'."
+    },
+    {
+     "id": "T370-T372-exits",
+     "summary": "One landing. Crate-scoped builder-checks on rust/guard/shared and rust/guard plus tests/hooks/test-parts.2.sh in the builder's tree, then the full gate at landing. Red-first tests are recorded.",
+     "class": "within",
+     "why": "Crate-scoped checks run in the builder's tree and the full gate runs at the landing. That matches the GM's two tiers of checking (2026-11-26, T308: full rigor deferred to the session clone's gate). It is the procedure for checking the work and does not change what was asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -45399,6 +45488,142 @@
      "summary": "No test of the new module split: slowest 0.57 s, none near a second; all over a 'tenth of a second' attributed to FR-008.",
      "class": "within",
      "why": "Inside the crate's existing practice. The citation is wrong: this feature's FR-008 is the background-run and poll-interval guard and says nothing of a tenth of a second; the plan should name the rule it means. A citation error, not a narrowing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T370": {
+   "section_sha256": "d3738c022117035030e410cb3f87ad19eaadb1a5af5264c10df534ed3e36fa1d",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T370-once",
+     "summary": "TempDir::new runs sweep_dead inside a std::sync::Once: the process's first TempDir lists the temp directory, no later one does.",
+     "class": "within",
+     "why": "Performance work the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?'). It is T365's lever A as measured. It removes repeated listings and keeps the removal rule: dead pid, three-hour age, directory test."
+    },
+    {
+     "id": "T370-every-tag",
+     "summary": "sweep_dead takes no tag and reads the name from its end (l7r-, anything, -p<pid>, -<seq>), so one listing takes every tag's leftovers, hyphenated tags included (the 29 l7r-gate-ci-stop-handler leftovers).",
+     "class": "within",
+     "why": "This stays within what was asked. The section says it removes the same set of names as before, taken over all tags, and sooner. The guards that protect work are unchanged: dead pid, three-hour age, directory test. It serves the GM's disk words (2026-11-22: 'clean up after ourselves in terms of the file system'; 2026-11-25: 'this container specifically is leaving artifacts sitting around'). No GM words in the bundle protect a dead process's l7r-<x>-p<pid>-<seq> directory older than three hours. So the wider reach (leftovers of tags this process never makes) is not a narrowing and needs no ruling. The search-space gap in the '.keep()' grep is reported apart from this verdict, as a finding for the builder; it does not block."
+    },
+    {
+     "id": "T370-keep-set",
+     "summary": "Kept and pinned in a_gone_process_s_directories_go_with_the_next_process_of_any_tag: the pre-T101 form, hook-suite directories, l7r-test-scratch, files, a live pid's, anything changed within three hours, untagged names and names not opening l7r-.",
+     "class": "within",
+     "why": "This keeps the constraints the section reports from the GM's 2026-11-11 words as tempdir.rs quotes them: a leftover younger than three hours, and the form before T101, are not touched. Those words are not in this bundle, so this ruling rests on the section's report of them. It also keeps T365's rule that nothing a later run could reuse is deleted."
+    },
+    {
+     "id": "T370-timing-edge",
+     "summary": "A leftover now goes at the next process's first TempDir of any tag, which is sooner. A process that changes its TMPDIR after its first TempDir does not sweep the second directory.",
+     "class": "within",
+     "why": "Cleanup comes sooner in the common case. In the TMPDIR edge the leftover is still removed by a later process whose first TempDir is there, so nothing is lost. A difference from the old behavior is not a defect (constitution XIV), and no caller is said to do this."
+    },
+    {
+     "id": "T372-route",
+     "summary": "Of the task line's two routes, the plan takes the cleanup once a run: hookrun.sh --sweep on the Makefile's fan-out line before xargs. It does not move the suites' directories under one subdirectory.",
+     "class": "within",
+     "why": "The section says the task line offers two routes; the task line itself is not in the bundle. Either route is performance work the GM asked to come first (2026-11-20), and the GM gave no instruction on which to take. The route chosen moves no path, and the grep the section cites (with its method) shows three places that know the path's shape."
+    },
+    {
+     "id": "T372-mark",
+     "summary": "The cleanup loop becomes the function sweep_gone, with unchanged removal. --sweep runs it and exits; --swept skips it; a job without the mark sweeps as before. The mark is a command word, not an exported variable, so nested runners in test-parts.2/3 still sweep.",
+     "class": "within",
+     "why": "This is a mechanism for doing the cleanup once a run. What it removes is unchanged, and a job run by hand or by a test keeps its old behavior."
+    },
+    {
+     "id": "T372-lone-suite-paths",
+     "summary": "A suite run alone stays untouched, and a suite's TMPDIR stays <temp>/l7r-hooks-suite-<guard>-p<pid>.<x>.",
+     "class": "within",
+     "why": "No behavior or path changes for a lone suite or for a guard that reads a fixture by its /tmp path."
+    },
+    {
+     "id": "T372-cost",
+     "summary": "A killed runner's leftover now waits for the next make hooks-test run that has a suite to run, where before it waited for the next suite of any run.",
+     "class": "within",
+     "why": "The section says the task line names this cost; the task line is not in the bundle. A killed runner's leftover waits for the next make hooks-test run that has a suite to run. That is the same event as before except in a run where every suite is skipped, and such a run makes no directory. Nothing is left unswept and no GM words are departed from, so no defect is left and no ruling is needed."
+    },
+    {
+     "id": "T370-T372-residual",
+     "summary": "Each process's first listing stays (the leak pin in rustc.rs, file-scale --selftest's one listing, the ledger and gate-write guards' TempDir per event), left to the already-filed T371 or T377.",
+     "class": "within",
+     "why": "Listing once a process is what T370 is. The remaining first listings are performance not yet taken, not a defect, and filed tasks own them. The hook suites' glob is taken here by T372. Found-and-left is truthfully 'none'."
+    },
+    {
+     "id": "T370-T372-exits",
+     "summary": "One landing. Crate-scoped builder-checks on rust/guard/shared and rust/guard plus tests/hooks/test-parts.2.sh in the builder's tree, then the full gate at landing. Red-first tests are recorded.",
+     "class": "within",
+     "why": "Crate-scoped checks run in the builder's tree and the full gate runs at the landing. That matches the GM's two tiers of checking (2026-11-26, T308: full rigor deferred to the session clone's gate). It is the procedure for checking the work and does not change what was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T372": {
+   "section_sha256": "d3738c022117035030e410cb3f87ad19eaadb1a5af5264c10df534ed3e36fa1d",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T370-once",
+     "summary": "TempDir::new runs sweep_dead inside a std::sync::Once: the process's first TempDir lists the temp directory, no later one does.",
+     "class": "within",
+     "why": "Performance work the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?'). It is T365's lever A as measured. It removes repeated listings and keeps the removal rule: dead pid, three-hour age, directory test."
+    },
+    {
+     "id": "T370-every-tag",
+     "summary": "sweep_dead takes no tag and reads the name from its end (l7r-, anything, -p<pid>, -<seq>), so one listing takes every tag's leftovers, hyphenated tags included (the 29 l7r-gate-ci-stop-handler leftovers).",
+     "class": "within",
+     "why": "This stays within what was asked. The section says it removes the same set of names as before, taken over all tags, and sooner. The guards that protect work are unchanged: dead pid, three-hour age, directory test. It serves the GM's disk words (2026-11-22: 'clean up after ourselves in terms of the file system'; 2026-11-25: 'this container specifically is leaving artifacts sitting around'). No GM words in the bundle protect a dead process's l7r-<x>-p<pid>-<seq> directory older than three hours. So the wider reach (leftovers of tags this process never makes) is not a narrowing and needs no ruling. The search-space gap in the '.keep()' grep is reported apart from this verdict, as a finding for the builder; it does not block."
+    },
+    {
+     "id": "T370-keep-set",
+     "summary": "Kept and pinned in a_gone_process_s_directories_go_with_the_next_process_of_any_tag: the pre-T101 form, hook-suite directories, l7r-test-scratch, files, a live pid's, anything changed within three hours, untagged names and names not opening l7r-.",
+     "class": "within",
+     "why": "This keeps the constraints the section reports from the GM's 2026-11-11 words as tempdir.rs quotes them: a leftover younger than three hours, and the form before T101, are not touched. Those words are not in this bundle, so this ruling rests on the section's report of them. It also keeps T365's rule that nothing a later run could reuse is deleted."
+    },
+    {
+     "id": "T370-timing-edge",
+     "summary": "A leftover now goes at the next process's first TempDir of any tag, which is sooner. A process that changes its TMPDIR after its first TempDir does not sweep the second directory.",
+     "class": "within",
+     "why": "Cleanup comes sooner in the common case. In the TMPDIR edge the leftover is still removed by a later process whose first TempDir is there, so nothing is lost. A difference from the old behavior is not a defect (constitution XIV), and no caller is said to do this."
+    },
+    {
+     "id": "T372-route",
+     "summary": "Of the task line's two routes, the plan takes the cleanup once a run: hookrun.sh --sweep on the Makefile's fan-out line before xargs. It does not move the suites' directories under one subdirectory.",
+     "class": "within",
+     "why": "The section says the task line offers two routes; the task line itself is not in the bundle. Either route is performance work the GM asked to come first (2026-11-20), and the GM gave no instruction on which to take. The route chosen moves no path, and the grep the section cites (with its method) shows three places that know the path's shape."
+    },
+    {
+     "id": "T372-mark",
+     "summary": "The cleanup loop becomes the function sweep_gone, with unchanged removal. --sweep runs it and exits; --swept skips it; a job without the mark sweeps as before. The mark is a command word, not an exported variable, so nested runners in test-parts.2/3 still sweep.",
+     "class": "within",
+     "why": "This is a mechanism for doing the cleanup once a run. What it removes is unchanged, and a job run by hand or by a test keeps its old behavior."
+    },
+    {
+     "id": "T372-lone-suite-paths",
+     "summary": "A suite run alone stays untouched, and a suite's TMPDIR stays <temp>/l7r-hooks-suite-<guard>-p<pid>.<x>.",
+     "class": "within",
+     "why": "No behavior or path changes for a lone suite or for a guard that reads a fixture by its /tmp path."
+    },
+    {
+     "id": "T372-cost",
+     "summary": "A killed runner's leftover now waits for the next make hooks-test run that has a suite to run, where before it waited for the next suite of any run.",
+     "class": "within",
+     "why": "The section says the task line names this cost; the task line is not in the bundle. A killed runner's leftover waits for the next make hooks-test run that has a suite to run. That is the same event as before except in a run where every suite is skipped, and such a run makes no directory. Nothing is left unswept and no GM words are departed from, so no defect is left and no ruling is needed."
+    },
+    {
+     "id": "T370-T372-residual",
+     "summary": "Each process's first listing stays (the leak pin in rustc.rs, file-scale --selftest's one listing, the ledger and gate-write guards' TempDir per event), left to the already-filed T371 or T377.",
+     "class": "within",
+     "why": "Listing once a process is what T370 is. The remaining first listings are performance not yet taken, not a defect, and filed tasks own them. The hook suites' glob is taken here by T372. Found-and-left is truthfully 'none'."
+    },
+    {
+     "id": "T370-T372-exits",
+     "summary": "One landing. Crate-scoped builder-checks on rust/guard/shared and rust/guard plus tests/hooks/test-parts.2.sh in the builder's tree, then the full gate at landing. Red-first tests are recorded.",
+     "class": "within",
+     "why": "Crate-scoped checks run in the builder's tree and the full gate runs at the landing. That matches the GM's two tiers of checking (2026-11-26, T308: full rigor deferred to the session clone's gate). It is the procedure for checking the work and does not change what was asked."
     }
    ],
    "verdict": "CLEAR"

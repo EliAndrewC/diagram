@@ -5,6 +5,8 @@
 #        hookrun.sh --jobs <dir> <suite>...                              each suite's job files: `<suite> <job>...` a line
 #        hookrun.sh --orphans <dir> <suite>...                           every shard whose suite is none of these (exit 1 if any)
 #        hookrun.sh --close <work-dir> <gitdir> <guard> <sha> <shard>... stamp a split suite green when every shard's job is
+#        hookrun.sh --sweep                                              remove killed runners' leftover directories, once a run
+#        hookrun.sh --swept <work-dir> <gitdir> <guard> <suite> <sha>   a job of a run that has swept: it lists no temp directory
 #
 # WHY THIS EXISTS: `hooks-test` ran its 21 suites one after another - 94 s, against 17 s for the
 # entire 2,286-test Python suite, which pytest runs in parallel. When a shared helper changes, the
@@ -26,6 +28,19 @@ set -uo pipefail
 # sha, its trace and its shard list - only when every shard's job is ok: one stamp a suite, as `trace stamp` rewrites its trace whole.
 # No fork per name: `make hooks-test` asks --jobs for every suite before the fan-out, so one call takes them all;
 # one call per suite cost 6.9 s for 57 suites on a loaded host, measured 2026-11-20 (57 single-suite --jobs calls beside a full run).
+# ONCE A RUN, NOT ONCE A SUITE (feature 451 T372): the glob below reads the whole temp directory - 16.5 ms a suite under a /tmp of 5,443
+# entries (200 globs 3.30 s, 0.00 s in an empty directory), 4,051 suite runs on 2026-11-26. `make hooks-test` runs it once before its
+# fan-out (`--sweep`) and marks its jobs `--swept`; a job run without the mark, by hand or by a test, sweeps itself as before. A mark
+# on the command line, not an exported variable: a suite that runs this runner itself (test-parts) would inherit a variable.
+sweep_gone() {
+  local d p
+  for d in "${TMPDIR:-/tmp}"/l7r-hooks-suite-*-p[0-9]*.*; do
+    p=${d##*-p}; p=${p%%.*}
+    case $p in '' | *[!0-9]*) continue ;; esac
+    [ -d "$d" ] && [ ! -e "/proc/$p" ] && [ -n "$(find "$d" -maxdepth 0 -mmin +180)" ] && rm -rf "$d"
+  done
+  return 0
+}
 shard_k() { SK=${1%.sh}; SK=${SK##*.}; case $SK in '' | *[!0-9]*) return 1 ;; esac; }
 shards_of() { local f; local -a by=(); for f in "$1/${2%.sh}".*.sh; do [ -f "$f" ] && shard_k "$f" && by[10#$SK]=${f##*/}; done; SH="${by[*]}"; }
 case ${1:-} in
@@ -68,7 +83,9 @@ case ${1:-} in
     "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../scripts/hooks/l7r-guard.sh" trace stamp "$GITDIR" "$GUARD" "$WORK/$GUARD.reads" "$HOOKS_ROOT" >/dev/null 2>&1
   fi
   exit 0 ;;
+--sweep) sweep_gone; exit 0 ;;
 esac
+SWEPT=""; if [ "${1:-}" = --swept ]; then SWEPT=1; shift; fi
 
 WORK=${1:?work dir}; GITDIR=${2:?gitdir}; GUARD=${3:?guard}; SUITE=${4:?suite}; SHA=${5:?sha}
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -92,11 +109,7 @@ export PARTS_MAX=${PARTS_MAX:-2}
 # directory to the next run, which removes every l7r-hooks-suite-*-p<pid>.* whose pid is gone and which has not changed in three hours
 # (the GM 2026-11-11: "don't touch dirs younger than a few hours (a running gate may own them)" - a killed runner's suite can still be
 # running in it); directories of the form before T101 are left to the GM's laptop session.
-for d in "${TMPDIR:-/tmp}"/l7r-hooks-suite-*-p[0-9]*.*; do
-  p=${d##*-p}; p=${p%%.*}
-  case $p in '' | *[!0-9]*) continue ;; esac
-  [ -d "$d" ] && [ ! -e "/proc/$p" ] && [ -n "$(find "$d" -maxdepth 0 -mmin +180)" ] && rm -rf "$d"
-done
+[ -n "$SWEPT" ] || sweep_gone
 SUITE_TMP=$(mktemp -d "${TMPDIR:-/tmp}/l7r-hooks-suite-$GUARD-p$$.XXXXXX")
 trap 'rm -rf "$SUITE_TMP"' EXIT
 trap 'pkill -P $$ 2>/dev/null; exit 130' INT

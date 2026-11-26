@@ -20,10 +20,25 @@ fn a_new_directory_is_named_by_its_tag_and_this_process() {
     assert!(format!("{dir:?}").contains("tempdir-name"));
 }
 
-/// A process stopped by a signal leaves its directories (no `Drop` runs): the next `TempDir` of the tag removes those of a gone pid,
-/// keeps a live process's, another tag's, a file, a name not of the form, and a directory the checks left before T101.
+/// The whole temp directory is listed once a process, whatever the number of `TempDir`s and tags (feature 451 T370: one listing a
+/// call was 14 to 16 ms under a `/tmp` of 5,443 entries, 509 of them in a run of the guard crate's tests).
 #[test]
-fn a_gone_process_s_directories_go_with_the_next_of_their_tag() {
+fn the_temp_directory_is_listed_once_a_process() {
+    let made = [
+        TempDir::new("tempdir-once"),
+        TempDir::new("tempdir-once-b"),
+        TempDir::new("tempdir-once"),
+    ];
+    assert!(made.iter().all(|d| d.is_dir()));
+    let listings = super::SWEEPS.load(std::sync::atomic::Ordering::Relaxed);
+    assert_eq!(listings, 1);
+}
+
+/// A process stopped by a signal leaves its directories (no `Drop` runs): the next process's sweep removes those of a gone pid,
+/// whatever their tag (feature 451 T370), and keeps a live process's, a file, a name not of the form, a hook suite's directory and a
+/// directory the checks left before T101.
+#[test]
+fn a_gone_process_s_directories_go_with_the_next_process_of_any_tag() {
     use super::sweep_dead;
     let parent = TempDir::new("tempdir-sweep");
     let proc = TempDir::new("tempdir-sweep-proc");
@@ -39,14 +54,23 @@ fn a_gone_process_s_directories_go_with_the_next_of_their_tag() {
     std::fs::create_dir_all(parent.join("l7r-t-p99999993-0")).unwrap(); // gone, but changed within the hours: kept
     make("l7r-t-p99999991-0"); // gone: removed
     make("l7r-t-p77-3"); // live: kept
-    make("l7r-u-p99999991-0"); // another tag: kept
+    make("l7r-u-p99999991-0"); // another tag, gone: removed
+    make("l7r-gate-ci-stop-handler-p99999991-71"); // a tag with hyphens, gone: removed
+    make("l7r-a-p5-p99999991-2"); // a tag that ends as a pid would, gone: removed
+    make("l7r-a-p5-p77-2"); // the same tag, live: kept
     make("l7r-t-99999991-0"); // the form before T101, the GM's pile: kept
+    make("l7r-gate-check-p5-99999991-0"); // that form under a tag ending `-p5`: kept
+    make("l7r-gate-check-99999991-0-name"); // that form with its name: kept
+    make("l7r-hooks-suite-x-hooks.sh-p99999991.AbCdEf"); // a hook suite's directory, its runner's to remove: kept
+    make("l7r-p99999991-0"); // no tag: kept
+    make("l7r-test-scratch"); // what a test process shares: kept
+    make("other-t-p99999991-0"); // not the helper's: kept
     make("l7r-t-px-0"); // not a pid: kept
     make("l7r-t-p99999991-x"); // not a sequence: kept
     make("l7r-t-p99999991"); // no sequence: kept
     std::fs::write(parent.join("l7r-t-p99999992-0"), "a file").unwrap(); // kept
     let three_hours_ago = SystemTime::now() - Duration::from_secs(3 * 3600);
-    sweep_dead(&parent, "t", &proc, three_hours_ago);
+    sweep_dead(&parent, &proc, three_hours_ago);
     let mut left: Vec<String> = std::fs::read_dir(&*parent)
         .unwrap()
         .flatten()
@@ -56,6 +80,11 @@ fn a_gone_process_s_directories_go_with_the_next_of_their_tag() {
     assert_eq!(
         left,
         [
+            "l7r-a-p5-p77-2",
+            "l7r-gate-check-99999991-0-name",
+            "l7r-gate-check-p5-99999991-0",
+            "l7r-hooks-suite-x-hooks.sh-p99999991.AbCdEf",
+            "l7r-p99999991-0",
             "l7r-t-99999991-0",
             "l7r-t-p77-3",
             "l7r-t-p99999991",
@@ -63,10 +92,11 @@ fn a_gone_process_s_directories_go_with_the_next_of_their_tag() {
             "l7r-t-p99999992-0",
             "l7r-t-p99999993-0",
             "l7r-t-px-0",
-            "l7r-u-p99999991-0"
+            "l7r-test-scratch",
+            "other-t-p99999991-0"
         ]
     );
-    sweep_dead(&parent.join("missing"), "t", &proc, three_hours_ago);
+    sweep_dead(&parent.join("missing"), &proc, three_hours_ago);
 }
 
 /// The step a signaled test process runs before its exit: the signal's number beside its note.

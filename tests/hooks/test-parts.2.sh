@@ -32,6 +32,19 @@ pid=$!
 for _ in $(seq 100); do [ -n "$(ls -A "$H/tmp2")" ] && break; timeout 0.05 tail -f /dev/null; done
 kill -TERM "$pid"; wait "$pid"
 check "a TERM of the runner leaves nothing" '[ -z "$(ls -A "$H/tmp2")" ]'
+# feature 451 T372: make hooks-test sweeps ONCE a run, before its fan-out (`--sweep`), and its jobs (`--swept`) list no temp directory -
+# the glob read all of /tmp before every suite, 16.5 ms each for 4,051 suite runs a day; a job run without `--swept` sweeps as above
+mkdir -p "$H/tmp3/l7r-hooks-suite-x-p99999991.abc/in" "$H/tmp3/l7r-hooks-suite-x-p$$.abc" "$H/tmp3/l7r-hooks-suite-x.abc" \
+  "$H/tmp3/l7r-hooks-suite-x-p99999992.abc"
+touch -d '4 hours ago' "$H/tmp3/l7r-hooks-suite-x-p99999991.abc" "$H/tmp3/l7r-hooks-suite-x-p$$.abc" "$H/tmp3/l7r-hooks-suite-x.abc"
+rm -f "$H/w/ok.rc"
+TMPDIR="$H/tmp3" bash "$H/hookrun.sh" --swept "$H/w" "$H/g" ok ok.sh sha
+check "a job of a swept run runs its suite" '[ "$(cat "$H/w/ok.rc" 2>/dev/null)" = ok ]'
+check "a job of a swept run sweeps nothing: a gone runner's directory stays, its own goes" '[ -d "$H/tmp3/l7r-hooks-suite-x-p99999991.abc" ] && [ "$(ls -A "$H/tmp3" | wc -l)" -eq 4 ]'
+TMPDIR="$H/tmp3" bash "$H/hookrun.sh" --sweep; swept=$?
+check "the run's one sweep removes a gone runner's directory" '[ "$swept" -eq 0 ] && [ ! -e "$H/tmp3/l7r-hooks-suite-x-p99999991.abc" ]'
+check "the run's one sweep keeps a recent one, a live runner's and the form before T101" '[ -d "$H/tmp3/l7r-hooks-suite-x-p99999992.abc" ] && [ -d "$H/tmp3/l7r-hooks-suite-x-p$$.abc" ] && [ -d "$H/tmp3/l7r-hooks-suite-x.abc" ] && [ "$(ls -A "$H/tmp3" | wc -l)" -eq 3 ]'
+check "make hooks-test sweeps once, before its fan-out, and tells its jobs" 'grep -q "hookrun.sh\" --sweep; .*xargs .*hookrun.sh\" --swept \"\$\$work\"" "$(dirname "$P")/../../Makefile"'
 
 # GUARD_EDIT_OK: feature 449 T205 - hookrun.sh expands a launcher's `c-tree` lines (its sources' roots, written where the run's fresh
 # binary skipped the walk) into every path under them, as the walk's reads were recorded: a directory listed and stat'ed, a file

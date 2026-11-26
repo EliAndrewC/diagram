@@ -4912,43 +4912,53 @@ engine speed, so no checklist.
 6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 
 
-### T370 (<why: the finding or measurement that files it>)
+### T370, T372 (bundle) (T365's measurement, dev/measurements/2026-11-26/tmp-clutter/t365-results.md, levers A and C: the whole temp directory was listed at every `TempDir::new` and globbed before every hook suite, 14 to 16.5 ms each under a `/tmp` of 5,443 entries, measured 2026-11-26 (T365's timing loops))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: each of the two listings runs once where it ran once a call, and removes exactly what it removed.
+  - **T370, the rule.** `TempDir::new` (`rust/guard/shared/src/tempdir.rs`) runs `sweep_dead` inside a `std::sync::Once`: the process's first `TempDir` lists the temp directory, no later one does. `sweep_dead` no longer takes a tag: it reads a name from its end - `l7r-`, anything, `-p<pid>`, `-<seq>` - so the one listing takes every tag's leftovers, a tag with hyphens of its own included (`l7r-gate-ci-stop-handler-p<pid>-<seq>`, the 29 leftovers T365 found). The dead-pid test, the three-hour age and the directory test are unchanged.
+  - **T370, what it removes.** The same set of names as before, taken over all tags: a name the old rule matched for some tag `T` is `l7r-T-p<pid>-<seq>` with a pid and a sequence that hold no hyphen, which is what the new rule reads from the end. Pinned in `a_gone_process_s_directories_go_with_the_next_process_of_any_tag`: kept are the form before 449 T101 (`l7r-t-<pid>-<seq>`, with a name after it, and under a tag ending `-p5`), a hook suite's `l7r-hooks-suite-<guard>-p<pid>.<x>`, `l7r-test-scratch`, a file, a live pid's, one changed within three hours, a name with no tag and one not opening `l7r-`. Nothing a later run reuses goes: a dead process's `-p<pid>-` directory is read by nothing, and the one path that outlives its process on purpose (`TempDir::keep`) has no caller outside the helper's own tests, read 2026-11-26 (`grep -rn "\.keep()" rust`).
+  - **T370, what changes for a leftover.** It went at the next `TempDir` of its own tag; it now goes at the first `TempDir` of the next process of any tag, so sooner. A process that changes its own `TMPDIR` after its first `TempDir` does not sweep the second directory; no caller does that (the runners set `TMPDIR` for a child).
+  - **T370, the figures.** The guard crate's test binary run by hand from `rust/guard` with `TMPDIR` unset, the old build's binary kept as a copy and the two alternated: before 6.22, 5.74, 6.06 s and after 2.02, 2.06, 2.04 s, at load 8.7 to 12.4 on 22 cores with other builders running, 549 tests each run, measured 2026-11-26 (each run's `finished in`). `l7r-gate check file-scale --selftest`, the tool binary run by hand with `TMPDIR` unset, old build and new alternated: before 64.9, 57.3, 51.4, 46.0, 72.3 ms (median 57.3) and after 33.2, 33.8, 31.2, 31.8, 61.8 ms (median 33.2), at load 11.8, measured 2026-11-26 (wall by `EPOCHREALTIME` around each call). The self-test makes two `TempDir`s in one process and now lists once.
+  - **T372, the route.** Of the task line's two, the clean-up once a run: `make hooks-test` starts every job from one `xargs` line of its recipe, so the sweep goes on that line, before the fan-out, and no path moves. The other route (the suites' directories under one subdirectory) would move every suite's `TMPDIR` one level down, and three places know its shape, observed 2026-11-26, method: `grep -rn l7r-hooks-suite` over the tree outside `specs/` and `dev/`: `make_only_hooks/tests.rs` (a command writing under such a path), `scratch_sweep_hooks/sweep/cargo.rs` (a comment naming a fixture clone's build log under it) and `tests/hooks/test-parts.2.sh`.
+  - **T372, the rule.** `tests/hooks/hookrun.sh`'s clean-up loop is the function `sweep_gone`, unchanged in what it removes. `hookrun.sh --sweep` runs it and exits; a job started `hookrun.sh --swept <work-dir> ...` skips it; a job started without the mark, by hand or by a test, runs it as before. The Makefile's fan-out line is `hookrun.sh --sweep; xargs ... hookrun.sh --swept ...`. The mark is a word of the command and not an exported variable, because a suite that runs the runner itself (`test-parts.2.sh`, `test-parts.3.sh`) would inherit a variable and stop sweeping in its own fixture.
+  - **T372, a lone suite and the `/tmp/` paths.** `tests/hooks/test-<x>.sh` run alone never went through the runner and is untouched. A suite's `TMPDIR` is still `<temp>/l7r-hooks-suite-<guard>-p<pid>.<x>`, so a guard that knows a fixture by its `/tmp/` path reads the same path.
+  - **T372, the cost named in the task line.** A killed runner's leftover waits for the next `make hooks-test` run that has a suite to run (the sweep sits with the fan-out, inside the recipe's `todo` branch), where it waited for the next suite of any run: the same event unless every suite of a run is skipped, and a skipped run makes no directory.
+  - **T372, the figures.** 200 clean-ups in one bash with `TMPDIR` unset, the old loop as HEAD has it against the job's line after the change (`[ -n "$SWEPT" ] || sweep_gone` with the mark set), alternated three times: before 3.886, 3.915, 2.766 s (13.8 to 19.6 ms each) and after 0.014, 0.011, 0.010 s, with `/tmp` at 5,297 entries and load 4.9 to 5.4, measured 2026-11-26 (wall by `EPOCHREALTIME` around each bash). The run's one `hookrun.sh --sweep`, a process of its own, took 24.6, 27.4, 31.2 ms, measured 2026-11-26 (the same clock, three calls). The day's saving is T365's estimate, 4,051 suite runs a day at 16.5 ms or 67 s of process time, less about 25 ms for each `make hooks-test` run that runs a suite, the number of such runs not counted here, measured 2026-11-26 (T365's event-log count and glob timing, and the sweep's timing above).
+  - **What is left of T371 and T377.** T370 saves only the second and later listings of one process. Each process's FIRST listing stands: the test runner's leak pin (`rustc.rs`'s `leak_checked`, one `TempDir` under `/tmp` a crate run), the one listing left in `file-scale --selftest`, and the ledger and gate-write guards' one `TempDir` an event. By T365 those are 2,483 crate runs and an estimated 40 s a day at the leak pin and at most 8 s a day at the two guards, measured 2026-11-26 (T365's event-log counts and per-listing timing), and little at the self-test, whose median here is 33.2 ms where T365 had 36.6 ms under an empty `TMPDIR` through the wrapper, measured 2026-11-26 (this section's timing and T365's). That is what T371 (the helper's directories under one subdirectory) or T377 (a stamp every process reads) would still save, one of the two, as their lines say. T371's line already says the once-a-process sweep saves nothing further once it is built. Neither is needed for the hook suites, whose glob T372 takes.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the sweep once a process | `the_temp_directory_is_listed_once_a_process`, red on the old code (271 listings where 1) | n/a: tooling | none | n/a |
+| every tag in the one listing, nothing else | `a_gone_process_s_directories_go_with_the_next_process_of_any_tag` | n/a: tooling | none | n/a |
+| the suites' clean-up once a run | `tests/hooks/test-parts.2.sh`'s T372 cases, red on the old runner | n/a: tooling | none | n/a |
 
-### T370 Approach (checklist part A)
+### T370, T372 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A test binary run by hand under the default temp directory takes what it takes under an empty one, and a hook suite's job lists no temp directory; a killed process's or runner's leftover directory is still removed, by the same rule.
+2. **The constraints.** Feature 449 T101's leak pins and the GM's words of 2026-11-11 kept in the code beside them (a leftover younger than three hours is not touched; the form before T101 is not touched); no guard message changes; T365's disk principle - nothing a later run could reuse is deleted.
+3. **Where each comes from.** O: T365's measurement (levers A and C, its cost function and its counts). G: the GM's words of 2026-11-11 as `tempdir.rs` and `hookrun.sh` already quote them, unchanged here.
+4. **Do they describe the world here?** Yes: both listings were timed again in this tree before the change, measured 2026-11-26 (the figures above), and agree with T365's.
+5. **The order.** No dependency. T371 and T377 stay open after it for each process's first listing.
+6. **The exits.** Green: `make builder-checks CRATE="rust/guard/shared rust/guard"` and `tests/hooks/test-parts.2.sh` in the builder's tree, the full gate at the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-26. With the count beside the old per-call sweep, `make rust-test CRATE=rust/guard/shared`: 506 passed, 1 failed (`the_temp_directory_is_listed_once_a_process`, 271 listings where 1); after, 507 passed. `tests/hooks/test-parts.2.sh` with the new cases on the old runner: 25 passed, 4 failed; after, 29 passed, 0 failed. The changed runner ran `test-make-only-hooks.sh` (144 passed), `test-guard-file-hooks.sh` (79 passed) and `test-parts.3.sh` (15 passed), 0 failed each, as jobs of a swept run with a scratch work directory and stamp directory, and `/tmp` held the 5,297 entries it had before, measured 2026-11-26 (`hookrun.sh --swept` on each, the job's `.rc` and its log's last line, `ls /tmp | wc -l` before and after).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: T365's - 509 listings of `/tmp` in one run of the guard crate's tests (5.3 s against 2.1 s) and one glob of it before each of 4,051 suite runs a day, measured 2026-11-26 (T365's shim counts, wall times and event-log count). No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: the builders' loop and the gate's hook suites. Before and after: the guard crate's test binary by hand with `TMPDIR` unset 6.22, 5.74, 6.06 s to 2.02, 2.06, 2.04 s, `file-scale --selftest` a median 57.3 ms to 33.2 ms, and 200 of the suites' clean-ups 3.886, 3.915, 2.766 s to 0.014, 0.011, 0.010 s with one 25 to 31 ms sweep a run, measured 2026-11-26 (the Approach's timings, old build and new alternated).
 
-### T370 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+### T370, T372 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
-
+1. **Where does the time go?** In listing the temp directory: one `read_dir` a `TempDir::new` and one shell glob a suite, each reading all of `/tmp`'s 21.9 MB directory file, 14 to 16 ms a listing alone and 161 ms with 22 threads listing at once, measured 2026-11-26 (T365's cost function and shim).
+2. **Removes work, or only moves it?** Removes it: 508 of the guard test binary's 509 listings, measured 2026-11-26 (T365's shim count, not counted again here), the shared crate's own test binary from 271 at its test's assertion to 1, measured 2026-11-26 (the red test's message), and every suite's glob but one a run.
+3. **What do you expect it to save, and why?** About 4 s a day at the self-test and 67 s a day at the suites, of process time and not of anyone's waiting, and 3.3 s for each by-hand run of the guard crate's tests, which are not logged, measured 2026-11-26 (T365's estimate from its event-log counts).
+4. **How does the work grow with the settlement?** n/a: no engine stage. It grew with the number of `TempDir`s a process makes and with the entries of `/tmp`; it is now one listing a process and one a run, whatever the first number.
+5. **What did the before and after show, and under what conditions?** The figures of the Approach, old build and new alternated under one load: 8.7 to 12.4 for the test binary, 11.8 for the self-test, 4.9 to 5.4 for the clean-ups, on 22 cores with other builders running, measured 2026-11-26 (`/proc/loadavg` at each run).
+6. **Did any map move, and does it still keep the research?** No map is drawn by either file.
 
 ### T371 (<why: the finding or measurement that files it>)
 
@@ -4977,44 +4987,6 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 ### T371 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
-
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
-
-
-### T372 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T372 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-### T372 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
 1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
 2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,

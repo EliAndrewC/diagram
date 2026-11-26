@@ -4,7 +4,7 @@
 //! crate or suite with its own `TMPDIR` and fail on anything left in it, so a site that keeps a bare path again goes red.
 //!
 //! An INT or a TERM removes them too ([`signals`]); only a SIGKILL (or `std::process::exit` before the guard is dropped) leaves them, to
-//! the next `TempDir` of their tag ([`sweep_dead`]) and the runners, which remove the per-run `TMPDIR` too.
+//! the next process's first `TempDir`, whatever its tag ([`sweep_dead`]), and the runners, which remove the per-run `TMPDIR` too.
 
 mod signals;
 
@@ -12,6 +12,7 @@ use std::ffi::OsStr;
 use std::ops::Deref;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::Once;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 /// INT and TERM caught for the rest of the process, `then` run with the signal's number first - before every held directory is removed
@@ -21,6 +22,9 @@ pub fn before_exit(then: fn(i32)) {
     signals::before_exit(then);
 }
 
+/// How many times this process has listed its temp directory for dead processes' leftovers ([`sweep_dead`]): what a test counts.
+pub(crate) static SWEEPS: AtomicUsize = AtomicUsize::new(0);
+
 /// A directory of this process, removed on drop.
 #[derive(Debug)]
 #[must_use = "the directory is removed as soon as this value is dropped"]
@@ -29,15 +33,24 @@ pub struct TempDir {
 }
 
 impl TempDir {
-    /// A new empty directory `l7r-{tag}-p{pid}-{seq}` under `std::env::temp_dir()` (which honors `TMPDIR`), after removing every
-    /// `l7r-{tag}-p{pid}-{seq}` there whose process is gone ([`sweep_dead`]).
+    /// A new empty directory `l7r-{tag}-p{pid}-{seq}` under `std::env::temp_dir()` (which honors `TMPDIR`); the process's first removes
+    /// every `l7r-{any tag}-p{pid}-{seq}` there whose process is gone ([`sweep_dead`]).
+    ///
+    /// ONCE A PROCESS, EVERY TAG (feature 451 T370): the sweep lists the whole temp directory, and ran at every call - 14 to 16 ms a
+    /// listing of a `/tmp` of 5,443 entries (161 ms each with 22 test threads at once), 509 of them in one run of the guard crate's
+    /// tests, 5.3 s by hand against 2.1 s under an empty `TMPDIR` (2026-11-26, `dev/measurements/2026-11-26/tmp-clutter/`). One
+    /// listing takes every tag's leftovers, so a tag this process never makes is not left waiting for a process that does.
     pub fn new(tag: &str) -> Self {
         static SEQ: AtomicUsize = AtomicUsize::new(0);
+        static SWEPT: Once = Once::new();
         let parent = std::env::temp_dir();
-        let hours_ago = SystemTime::now()
-            .checked_sub(Duration::from_secs(3 * 3600))
-            .unwrap_or(UNIX_EPOCH);
-        sweep_dead(&parent, tag, Path::new("/proc"), hours_ago);
+        SWEPT.call_once(|| {
+            let hours_ago = SystemTime::now()
+                .checked_sub(Duration::from_secs(3 * 3600))
+                .unwrap_or(UNIX_EPOCH);
+            SWEEPS.fetch_add(1, Ordering::Relaxed);
+            sweep_dead(&parent, Path::new("/proc"), hours_ago);
+        });
         let path = parent.join(format!(
             "l7r-{tag}-p{}-{}",
             std::process::id(),
@@ -161,20 +174,24 @@ impl AsRef<Path> for TempDir {
 }
 
 /// A process killed by SIGKILL never runs its `Drop` or its INT and TERM handler ([`signals`]), so its directories outlive it. The next
-/// `TempDir` of the same tag removes them: every `l7r-{tag}-p{pid}-{seq}` in `parent` whose pid has no `/proc` entry and which has not
+/// process's first `TempDir` removes them: every `l7r-{tag}-p{pid}-{seq}` in `parent`, of any tag (read from the name's end - the
+/// sequence, then `-p` and the pid - so a tag keeps its own hyphens), whose pid has no `/proc` entry and which has not
 /// changed since `before`, three hours ago - the GM, 2026-11-11: "don't touch dirs younger than a few hours (a running gate may own
 /// them)", since a killed process's children can still be working in its directory. Only that form, which `TempDir` alone writes (the
 /// `p` before the pid), so the directories the checks left before feature 449 T101, `l7r-{tag}-{pid}-{seq}`, are never touched: they are
 /// the GM's laptop session's to delete. A pid reused by a live process keeps its directory, the safe way to be wrong; every process
 /// sharing this `/tmp` is in this container's one pid namespace.
-pub(crate) fn sweep_dead(parent: &Path, tag: &str, proc: &Path, before: SystemTime) {
-    let lead = format!("l7r-{tag}-p");
+pub(crate) fn sweep_dead(parent: &Path, proc: &Path, before: SystemTime) {
     let Ok(entries) = std::fs::read_dir(parent) else {
         return;
     };
     for entry in entries.flatten() {
         let name = entry.file_name().to_string_lossy().into_owned();
-        let Some((pid, seq)) = name.strip_prefix(&lead).and_then(|r| r.split_once('-')) else {
+        let Some((pid, seq)) = name
+            .strip_prefix("l7r-")
+            .and_then(|r| r.rsplit_once('-'))
+            .and_then(|(r, seq)| Some((r.rsplit_once("-p")?.1, seq)))
+        else {
             continue;
         };
         let numbered = pid.parse::<u32>().is_ok() && seq.parse::<u64>().is_ok();
