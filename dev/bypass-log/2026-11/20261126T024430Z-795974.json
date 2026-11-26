@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-26T02:44:30Z",
+  "target": "plan-gate push",
+  "commit": "740a1d37c2",
+  "why": "449's stale blocks are the 17 tasks moved to feature 452 and unfilled template sections (T417 building, T437, T438); 451's are template sections of tasks not started; this push carries docs and the agenda"
+}
