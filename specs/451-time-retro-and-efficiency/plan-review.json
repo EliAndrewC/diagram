@@ -1932,6 +1932,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T270 (451 T261's builder, measured 2026-11-26 (12 escape records replayed at their commits, against the reading by reason in T261's line): escapes read by their reason gave a false finding, 60% counted as unstarted tasks' stubs and none of the 12 records replayed holding one, and 451 T262 gave the record a `held` list nothing yet counts)": {
+   "sha256": "895f2c3e58b519882d7230d647ed316666a7d40ce00dbe258d1d7be560c03ce5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T270 Approach (checklist part A)": {
+   "sha256": "c3a5866c18ea97d9328849f5fd637194585814aae7063dfe40a844b3d2d8d6a5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -24397,6 +24409,70 @@
      "why": "The GM's 2026-11-20 words make performance work and measurement work go first. Fixing a correctness collision in review plumbing is neither, so this classification does not move T271 in FR-013's order against anything the GM asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T270 (451 T261's builder, measured 2026-11-26 (12 escape records replayed at their commits, against the reading by reason in T261's line): escapes read by their reason gave a false finding, 60% counted as unstarted tasks' stubs and none of the 12 records replayed holding one, and 451 T262 gave the record a `held` list nothing yet counts)",
+    "### T270 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "count-under-listing",
+     "summary": "make audit's Bypasses section gains a count of plan-gate escapes by each record's held list, printed after the existing 15-bypass listing, which is unchanged; prints nothing where there is none; in a new module audit/held.rs called from runs()",
+     "class": "within",
+     "why": "Serves the audit register the GM asked for (2026-11-25: document measurements and what would falsify an optimization, re-audit them); the plan-gate-escape entry needs a count of what escapes actually held. Placement and module are design. Neither request.md nor the spec says anything about held, escapes or bypass counts beyond FR-012's recorded escapes, so nothing asked is narrowed."
+    },
+    {
+     "id": "whole-log-scope",
+     "summary": "The count runs over every record in dev/bypass-log/ whose target is 'plan-gate push' or opens 'plan-gate tick ', not just the last 15 listed",
+     "class": "within",
+     "why": "Wider than the listing, not narrower; a census of the gate's escapes is what the audit entry's threshold needs."
+    },
+    {
+     "id": "five-classes-by-shape",
+     "summary": "Five classes read from the record's shape: held not recorded; nothing held; plan or review record missing with no block; blocks held at a push; blocks held at a tick",
+     "class": "within",
+     "why": "The class scheme is not settled by the request or the spec; it is read from the writer (bypass_record, held_row, tick_gate), so each class says what the record says. Labels that gloss classes 1, 4 and 5 (pre-T262, T84's scope) are wording, not a ruling."
+    },
+    {
+     "id": "by-place-not-by-owner",
+     "summary": "Blocks held are classed by where the gate judged (push or tick), not split into ticked tasks' blocks against the asked task's blocks; a count by owning task would need the tick record to carry the task id, left as a title in the builder's report and not built",
+     "class": "within",
+     "why": "Grepped request.md and spec-index.md for held, escape, bypass, ticked, asked, plan-gate and PLAN_REVIEW: nothing asks for a by-owner count, so declining one narrows nothing asked. The by-owner split appears only as the block's own framing of its task line, which the bundle does not carry and this review could not read. Leaving it unbuilt is not a defect: no wrong outcome follows, since each class states only what the record holds."
+    },
+    {
+     "id": "decide-defer-excluded",
+     "summary": "plan-gate decide-defer records (DEFER_FORM_OK, the decide lint's escape) are not counted although their target opens with plan-gate",
+     "class": "within",
+     "why": "A different escape (the decide lint's, not PLAN_REVIEW_OK), with no held list; counting it would permanently pad the 'held not recorded' class with records that can never say what was held."
+    },
+    {
+     "id": "no-reclass-by-reason",
+     "summary": "The 1281 existing records, none carrying held, are counted as 'held not recorded' and are neither replayed nor classed by their reason text",
+     "class": "within",
+     "why": "The task exists because reading escapes by reason gave a false finding (60% put in a class none of 12 replayed records held); counting what the record does not say as not saying is the request-serving reading, and a backfill was not asked."
+    },
+    {
+     "id": "fixture-proof",
+     "summary": "Classes 2 to 5 are shown on fixture records only, since the real log has no held record yet; red-first test in measure::audit::tests",
+     "class": "within",
+     "why": "The real log physically contains no record with held (measured 2026-11-26 by grep and jq); fixtures are the only way to prove those classes now. A test that enforces the requested count is enforcement, not scope."
+    },
+    {
+     "id": "register-entry-update",
+     "summary": "dev/audits/plan-gate-escape.md is updated to name this count and its classes instead of calling it a reader's query",
+     "class": "within",
+     "why": "Keeps the GM's audit register accurate about its own measurement."
+    },
+    {
+     "id": "order",
+     "summary": "After 451 T262 (the held field), before the audit of the plan-gate-escape entry",
+     "class": "within",
+     "why": "A dependency order; narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -38704,6 +38780,68 @@
      "summary": "'Performance work? no: it removes a collision between two builders; nothing runs faster'",
      "class": "within",
      "why": "The GM's 2026-11-20 words make performance work and measurement work go first. Fixing a correctness collision in review plumbing is neither, so this classification does not move T271 in FR-013's order against anything the GM asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T270": {
+   "section_sha256": "6f40a145fe403752e59f0a641f8eb1bb1f020d4979a0eff910bbdb0011678579",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "count-under-listing",
+     "summary": "make audit's Bypasses section gains a count of plan-gate escapes by each record's held list, printed after the existing 15-bypass listing, which is unchanged; prints nothing where there is none; in a new module audit/held.rs called from runs()",
+     "class": "within",
+     "why": "Serves the audit register the GM asked for (2026-11-25: document measurements and what would falsify an optimization, re-audit them); the plan-gate-escape entry needs a count of what escapes actually held. Placement and module are design. Neither request.md nor the spec says anything about held, escapes or bypass counts beyond FR-012's recorded escapes, so nothing asked is narrowed."
+    },
+    {
+     "id": "whole-log-scope",
+     "summary": "The count runs over every record in dev/bypass-log/ whose target is 'plan-gate push' or opens 'plan-gate tick ', not just the last 15 listed",
+     "class": "within",
+     "why": "Wider than the listing, not narrower; a census of the gate's escapes is what the audit entry's threshold needs."
+    },
+    {
+     "id": "five-classes-by-shape",
+     "summary": "Five classes read from the record's shape: held not recorded; nothing held; plan or review record missing with no block; blocks held at a push; blocks held at a tick",
+     "class": "within",
+     "why": "The class scheme is not settled by the request or the spec; it is read from the writer (bypass_record, held_row, tick_gate), so each class says what the record says. Labels that gloss classes 1, 4 and 5 (pre-T262, T84's scope) are wording, not a ruling."
+    },
+    {
+     "id": "by-place-not-by-owner",
+     "summary": "Blocks held are classed by where the gate judged (push or tick), not split into ticked tasks' blocks against the asked task's blocks; a count by owning task would need the tick record to carry the task id, left as a title in the builder's report and not built",
+     "class": "within",
+     "why": "Grepped request.md and spec-index.md for held, escape, bypass, ticked, asked, plan-gate and PLAN_REVIEW: nothing asks for a by-owner count, so declining one narrows nothing asked. The by-owner split appears only as the block's own framing of its task line, which the bundle does not carry and this review could not read. Leaving it unbuilt is not a defect: no wrong outcome follows, since each class states only what the record holds."
+    },
+    {
+     "id": "decide-defer-excluded",
+     "summary": "plan-gate decide-defer records (DEFER_FORM_OK, the decide lint's escape) are not counted although their target opens with plan-gate",
+     "class": "within",
+     "why": "A different escape (the decide lint's, not PLAN_REVIEW_OK), with no held list; counting it would permanently pad the 'held not recorded' class with records that can never say what was held."
+    },
+    {
+     "id": "no-reclass-by-reason",
+     "summary": "The 1281 existing records, none carrying held, are counted as 'held not recorded' and are neither replayed nor classed by their reason text",
+     "class": "within",
+     "why": "The task exists because reading escapes by reason gave a false finding (60% put in a class none of 12 replayed records held); counting what the record does not say as not saying is the request-serving reading, and a backfill was not asked."
+    },
+    {
+     "id": "fixture-proof",
+     "summary": "Classes 2 to 5 are shown on fixture records only, since the real log has no held record yet; red-first test in measure::audit::tests",
+     "class": "within",
+     "why": "The real log physically contains no record with held (measured 2026-11-26 by grep and jq); fixtures are the only way to prove those classes now. A test that enforces the requested count is enforcement, not scope."
+    },
+    {
+     "id": "register-entry-update",
+     "summary": "dev/audits/plan-gate-escape.md is updated to name this count and its classes instead of calling it a reader's query",
+     "class": "within",
+     "why": "Keeps the GM's audit register accurate about its own measurement."
+    },
+    {
+     "id": "order",
+     "summary": "After 451 T262 (the held field), before the audit of the plan-gate-escape entry",
+     "class": "within",
+     "why": "A dependency order; narrows nothing."
     }
    ],
    "verdict": "CLEAR"

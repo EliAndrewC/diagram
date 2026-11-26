@@ -2707,31 +2707,44 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T270 (<why: the finding or measurement that files it>)
+### T270 (451 T261's builder, measured 2026-11-26 (12 escape records replayed at their commits, against the reading by reason in T261's line): escapes read by their reason gave a false finding, 60% counted as unstarted tasks' stubs and none of the 12 records replayed holding one, and 451 T262 gave the record a `held` list nothing yet counts)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `make audit`'s Bypasses section ends with a count of the plan gate's escapes by what each record's `held` list says, never by its reason.
+  - **Where.** A new module, `rust/gate/crates/measure/src/measure/audit/held.rs` (`class`, `lines`), called by `runs()` in `audit.rs` after the listing of the last 15 bypasses. The count is over every record in `dev/bypass-log/` whose `target` is `plan-gate push` or opens `plan-gate tick `; it prints nothing where there is none.
+  - **What `make audit` did before.** It classified nothing: the listing prints each record's reason (`why`), and a reader grouped the reasons. The task's line calls that classifying by reason text; the listing is unchanged, and the count is added under it.
+  - **The classes, named from the record's shape** (read 2026-11-26: `bypass_record`, `held_row`, `tick_gate` and the door's `bypass-record` in `rust/gate/crates/plan/src/plan.rs`):
+    1. `held not recorded (a record before 451 T262)` - no `held` key, or one that is no list. A push recorded with no range has none either; `plan-gate.sh` always passes the range.
+    2. `nothing held` - `held` is an empty list: the gate listed no feature.
+    3. `a plan or its review record missing, no block listed` - rows, none with a block (`plan-missing`, `plan-review-missing`).
+    4. `at a push: blocks held, of ticked tasks or outside every task` - a row with a block, target `plan-gate push`.
+    5. `at a tick: blocks held, of the asked task, of tasks ticked before it or outside every task` - a row with a block, target `plan-gate tick <feature>`.
+  - **Why the classes are by place and not "ticked tasks' blocks" against "asked tasks' blocks".** The record names the place and the feature, not the task asked for, and a block key is a heading, not an owner. What it does carry is where the gate judged, and 451 T84 fixes what is judged there: at a push the ticked tasks' sections, at a tick the asked task's and those ticked before it, at both the blocks outside every task's section. So classes 4 and 5 say exactly that and no more. A count by owning task needs the tick's record to carry the task id: a title in the builder's report, not built here.
+  - **`plan-gate decide-defer`** records (`DEFER_FORM_OK`, the decide lint's escape) are not counted: another escape, with no `held`.
+  - **The real log, measured 2026-11-26** (method: `scripts/gates/l7r-gate.sh measure audit runs` in the worktree at 38a5d147f5): 1281 plan-gate escape records (642 at the push, 639 at the tick, by `jq` over `target`), all 1281 `held not recorded`, 0 in each other class. The newest is dated 2026-11-26T03:41:00Z, before T262 landed; no escape has been honored since, so no record carries `held` yet (`grep -rl '"held"' dev/bypass-log` lists none). Those 1281 are not classed by their reasons: the count says the record does not say.
+  - **The audit-register entry** `dev/audits/plan-gate-escape.md` said the count by `held` was a reader's query; it now names this count and its classes.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a plan-gate escape is classed by its record's `held` list | `measure::audit::tests::a_plan_gate_escape_is_classed_by_what_its_record_says_was_held`, fixture records of each class all carrying one standing reason, red on HEAD's code (2026-11-26) | n/a: tooling | none | n/a |
 
 ### T270 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A reader of `make audit` sees how many `PLAN_REVIEW_OK` escapes were honored with nothing held, with a plan or record missing, and with blocks held at a push or at a tick, from the gate's own answer; a record that does not say what was held is counted as not saying.
+2. **The constraints.** T270's line in tasks.md. 451 T262: the record's `held` list, `{feature, rule, blocks}` a row, unchanged here. 451 T84: what the gate judges at the tick and at the push. `make audit`'s existing lines unchanged.
+3. **Where each comes from.** O: 451 T261's builder's replay of 12 escape records at their commits (2026-11-26; T262's section in plan-done.md), measured 2026-11-26 (each record's commit checked out and the push's scope asked): nothing owed in 7, no unstarted task's stub held in any, against a reading by reason that put 60% in that class.
+4. **Do they describe the world here?** Yes for the shape, measured 2026-11-26 by reading the writer (`bypass_record` and its two callers). The real log has no record with `held` yet (the Approach's count), so the four classes that read it are shown on fixture records only.
+5. **The order.** After 451 T262 (the field). Before the audit of `dev/audits/plan-gate-escape.md`, whose threshold is counted from the records that carry `held`.
+6. **The exits.** Green: `make closing-checks T=T270`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, 2026-11-26. With the test written and the code as on HEAD, measured 2026-11-26 (the command run in the worktree): `make rust-test CRATE=rust/gate/crates/measure` gave 233 passed and 1 failed (no count printed: the text after `  PLAN_REVIEW_OK escapes` was empty against the six lines). With the change: 234 passed and 0 failed (the same command, 2026-11-26). The count over the real log is the Approach's.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: an escape's class read from its reason named a cause the gate never had (451 T261, withdrawn on it), so no count of escapes could say what the gate holds. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 <!-- plan-archive: T271 to T271 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
