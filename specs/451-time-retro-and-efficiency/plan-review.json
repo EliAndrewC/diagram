@@ -1616,9 +1616,9 @@
    "declared": "spec-fidelity"
   },
   "### T227 Approach (checklist part A)": {
-   "sha256": "dae57b684e177e47d15b7d1844f2f8c586e87b0ee99622fb0bd77987b489306f",
+   "sha256": "299367127efb2eff45cf73ef43063eed431600cea5a32f9a627f3f050acbe5a8",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-25",
+   "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
   },
   "### T247 (451 T229's builder in a parallel worktree: the tool target's l7r-gate rebuilt inside a cover run's environment after a gate source edit, and 21 tests of clone-sync-hooks.sh and sync-with-main.sh then failed on 'uncommitted changes' from the default_*.profraw files in their fixture clones, observed 2026-11-25, method: T229's builder's hook-suite run; seen by T235's, T231's and T229's builders)": {
@@ -1785,6 +1785,66 @@
   },
   "### T258 Approach (checklist part A)": {
    "sha256": "d8d6b4fcff6af7a110c8a74d921d9a58962eea98b5054e195784876a34516b4a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T250 (<why: the finding or measurement that files it>)": {
+   "sha256": "0d7a73695ddd1f7880d0b6f627ab10313aa7a8db5de89da85d468fa2c011a732",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T250 Approach (checklist part A)": {
+   "sha256": "f621cbbd4d12a4395618cdc577b7a0bbf3035a2e76d99fa5efe6be922ecbbf81",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T251 (<why: the finding or measurement that files it>)": {
+   "sha256": "11134ab01e318241265b71ff64c8caf50813fba07f704af43c0272b2a6e30117",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T251 Approach (checklist part A)": {
+   "sha256": "decb5ef731005835de30be2fada7b3f782b0de87c52e016d6c8a55ee25e77e37",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T260 (<why: the finding or measurement that files it>)": {
+   "sha256": "c1e4b0b1f1e3a2b34e62e92787a0f735ace0a89769813f05e2745b631a4e084b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T260 Approach (checklist part A)": {
+   "sha256": "430ff294f2e596a3a76559a2b2aae8e7e194bc3dea34292a45136f6c4515bfe0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T261 (withdrawn: its premise false - the plan gate has not counted an unstarted task's stub since 451 T84; measured by its builder 2026-11-26)": {
+   "sha256": "242243faf4ae6945c45751e5f32c184b878d00afa13245b20cf9589d022adf26",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T261 Approach (checklist part A)": {
+   "sha256": "816d4f32edae58fc33e96fdd7f924615097b07ea8320e95108f6ab72ba426d81",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T262 (<why: the finding or measurement that files it>)": {
+   "sha256": "6cf757eb0af2ae969d8cd37684b4e3ceea31fcae42a55c51cbd0cd1111e364cc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T262 Approach (checklist part A)": {
+   "sha256": "30187fcd1a3c3644406e8f0785bab1943d9923f1917d6c7c2608bfb98f35760a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
@@ -23188,6 +23248,43 @@
      "summary": "Found and left, not a defect: check audit-register's detectors do not see a script newly called from a landing recipe; the entry is written by hand, and a task title is handed to the coordinating session",
      "class": "within",
      "why": "The GM's own T259 words expect misses and say how they are handled: 'after the initial backfill, we can backfill as we go, as we find things that we missed'. This entry is that backfill, so no mechanism goes unregistered. The detector's reach is left as it was, and the title is passed on so the miss can be filed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T227 Approach (checklist part A)",
+    "### T250 (<why: the finding or measurement that files it>)",
+    "### T250 Approach (checklist part A)",
+    "### T251 (<why: the finding or measurement that files it>)",
+    "### T251 Approach (checklist part A)",
+    "### T260 (<why: the finding or measurement that files it>)",
+    "### T260 Approach (checklist part A)",
+    "### T261 (withdrawn: its premise false - the plan gate has not counted an unstarted task's stub since 451 T84; measured by its builder 2026-11-26)",
+    "### T261 Approach (checklist part A)",
+    "### T262 (<why: the finding or measurement that files it>)",
+    "### T262 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T227-renumber",
+     "summary": "T227's deferred batch-rule item (the count restarting on any origin/main move) now names its follow-up task T248 instead of T247; nothing else in the block changed against the text judged CLEAR (earlier.md compared line by line).",
+     "class": "within",
+     "why": "A bookkeeping renumbering after a parallel builder took T247. The deferral keeps D15's form (why it is not fixed here, filed as T248, lands before T22) and defers the same defect in the same order; it narrows nothing of the request or of the FR-010/FR-011 round cap that T227 serves."
+    },
+    {
+     "id": "T261-withdrawn",
+     "summary": "T261 is withdrawn before any code: its builder measured on 2026-11-26, by replaying 12 escape records, that the plan gate already drops an unstarted task's stub at the tick and the push (451 T84's in_scope), so the briefed change would be a no-op.",
+     "class": "within",
+     "why": "The task was session-filed; no clause of request.md asks for it (the request mentions neither stubs nor T84's scope). Withdrawing work whose goal already holds leaves no defect and no part of what the GM asked undone, so nothing is narrowed. The figure carries its date and method (a one-shot label)."
+    },
+    {
+     "id": "T250-T251-T260-T262-stubs",
+     "summary": "Four filed, unstarted tasks' sections are the template's placeholders only.",
+     "class": "within",
+     "why": "A placeholder decides nothing; each is judged when its task's section is written and decided."
     }
    ]
   }
