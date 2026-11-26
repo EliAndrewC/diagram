@@ -348,12 +348,9 @@ fn two_trees_filed_tasks_are_carried_with_both_boxes_and_both_stubs() {
         "both sides kept in specs/451-x/plan.md, specs/451-x/tasks.md\n",
     );
     let tasks = std::fs::read_to_string(root.join(TASKS_MD)).unwrap();
-    assert!(
-        tasks.ends_with(
-            "- [ ] T9 nine\n- [ ] T10 the first tree's find\n      research: rendering\n- [ ] T11 the second tree's find\n      research: rendering\n"
-        ),
-        "{tasks}"
-    );
+    assert!(tasks.ends_with(
+        "- [ ] T9 nine\n- [ ] T10 the first tree's find\n      research: rendering\n- [ ] T11 the second tree's find\n      research: rendering\n"
+    ));
     let plan = std::fs::read_to_string(root.join("specs/451-x/plan.md")).unwrap();
     let stub = |t: &str| l7r_gate_plan::plan::template::TEMPLATE.replace("{T}", t);
     for t in ["T10", "T11"] {
