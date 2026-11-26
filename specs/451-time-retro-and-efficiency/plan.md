@@ -3227,31 +3227,74 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T301 (<why: the finding or measurement that files it>)
+### T301 (the host's scan of 2026-11-26: one cargo target directory holds 20 to 31 hashes of one crate, and the GM asking that day why a builder's repeated test runs could not reuse more of their compilation; PART 1 of the task's four, the measurement of why - the task stays open for parts 2 to 4)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a measurement, no code changed. This is PART 1 of T301 (why the hashes); its parts 2 (what to evict), 3 (the scratch sweep's patterns) and 4 (the loose profraw files) are later builders'. Scripts kept in `dev/measurements/2026-11-26/cargo-hashes/` (`fingerprints.py`, `eras.py`, `gate-call.sh`); every read of the session clone's cache was read-only, every build was in the pool tree `diagram-backlog-t271`'s own target directory.
+  - **The verdict.** No setting flips between the gate's cargo calls and forces a crate to be rebuilt: each call run again with nothing changed is all `Fresh`, before and after every other step. The hashes are NOT source history either - a source edit rebuilds in place under the same hash. They are (a) the build CONFIGURATIONS that live side by side by design (a test build against clippy's check, a crate's own features on and off), (b) those multiplied by every past value of the profile (CONFIG history: `debug = "line-tables-only"` became `debug = 0` on 2026-11-25, 451 T246), and (c) siblings that differ only in a DEPENDENCY's hash, which come from which features a dependency gets from the packages one call selects, and from past edits of a manifest's dependency list. (c) is real compile time and is filed (T325); (a) and (b) cost disk only.
+  - **A hash is not a source state**, measured 2026-11-26 (`gate-call.sh`: the gate's `cargo test --no-run --message-format=json` with `-v` for `--quiet`, from the tree's root into the tree's target): `rust/gate/crates/registry/src/lib.rs` touched twice and rebuilt twice, `.fingerprint/l7r_gate_registry-*` 9 directories before and 9 after; `rust/gate/crates/core/src/lib.rs` touched and all 28 gate manifests rebuilt, the workspace's fingerprint directories 214 before and 214 after. Cargo's `-<hash>` is its metadata hash - package, features, profile, mode, the dependencies' hashes, the compiler - and a path crate's source content is not in it.
+  - **How the gate invokes cargo** (read 2026-11-26: `rust/gate/crates/rustc/src/rustc.rs`, `rustc/kept.rs`, `rustc/side.rs`, `rustc/cover.rs`, `rustc/times.rs`, `scripts/gates/l7r-gate.sh`, `scripts/hooks/l7r-guard.sh`, the Makefile). Every call runs from the tree's root, so `.cargo/config.toml`'s rustflags are the same for all. `<cache>` is `~/.cache/l7r-cargo-target/<tree's name>`.
+
+    | call | target directory | profile and mode | packages selected | features |
+    |---|---|---|---|---|
+    | the test build: `cargo test --no-run --message-format=json --quiet` (`kept.rs` `binary_key`; `rustc.rs` `test_args`; `times.rs`) | `<cache>/debug` | dev and test, build | ONE manifest a call | default; `--all-features` for `test-counters`; every feature but `counters` for `test-no-counters` |
+    | the doctests: `cargo test --doc --quiet` (`side.rs`) | `<cache>/debug` | dev and test, build | one manifest | as the test build |
+    | lint: `cargo clippy --quiet --all-targets`, then the same with `--all-features` | `<cache>/debug` | dev and test, CHECK | one manifest | default, then all |
+    | the counting run: `cargo run --quiet [--features F] --bin B` with `HAMLET_DEV` | `<cache>/debug` | dev, build, no dev-dependencies | one manifest | as asked |
+    | the engine: `cargo run --release --quiet` (`rustc.rs` `hamlet`; the Makefile's `HAMLET_RUN`) | `<cache>/release` | release | one manifest | as asked |
+    | coverage: `cargo test --no-run --lib --quiet --message-format=json-render-diagnostics -p <each OWED crate of the family>` (`cover.rs` `build`) | `<cache>/cover-<family>/target/debug` | dev and test, build, under `cargo llvm-cov show-env`'s environment with the coverage flags moved to a `RUSTC_WORKSPACE_WRAPPER` | the owed crates, a set that changes run to run | default |
+    | the tools: `cargo build --profile tool --quiet -p <one of l7r_gate, l7r_gate_rustc, l7r_browser, l7r_embed, l7r_mode_a, l7r_phases>` (`l7r-gate.sh`, flag variables cleared; a failed link once more with `CARGO_INCREMENTAL=0`) and `-p l7r_guard` (`l7r-guard.sh`) | `<cache>/tool` | tool (incremental release) | one package of seven | default |
+
+    So `debug/` is shared by five kinds of call in two modes and three feature forms, each selecting one manifest; `tool/` by seven package selections; a family's coverage directory by one call whose `-p` set varies.
+  - **What cargo fingerprints that does NOT vary**, measured 2026-11-26 (every `.fingerprint/*/*.json` of the session clone's `diagram-backlog/debug`, `cover-gate/target/debug` and `tool`: 1,514, 528 and 697 files): one `rustc` value, one `rustflags` value and one `compile_kind` in each. No RUSTFLAGS, toolchain or target difference made any of the hashes.
+  - **Three crates, hash by hash**, measured 2026-11-26 (`fingerprints.py` over the session clone's cache: each fingerprint's unit, `features`, `profile` and dependency hashes, and its mode read from `deps/` - an `.rlib` a build, an `.rmeta` alone a check, a bare name a test executable).
+    - `debug`, `l7r_mode_a`, 29 directories: four units (the library 9, its test 7, the binary 6, its test 7). Per unit: build against check, times `counters` off and on, times two profile values (by their dates, before and after 451 T246's `debug = 0` of 2026-11-25: the one profile edit in `git log` of `rust/Cargo.toml` in the cache's life; the hash itself does not say which setting moved). 16 of the 29 carry the old profile; 12 are the live mode-and-feature configurations; 1 is a sibling by a dependency's features (`l7r_gate_core`, `registry` and `research` vary 6 ways where the outside crates vary 4).
+    - `cover-gate`, `l7r_gate_measure`, 23 directories: the library 12, its test 11, ONE mode and ONE feature set throughout. 16 carry the old profile. Within one profile value every hash differs from the next only in its dependencies' hashes - `l7r_gate_trials` and `l7r_gate_cohort` under it, and under those `l7r_gate_owed` (15 hashes, `testkit` off and on) and `l7r_gate_registry` (12, off and on).
+    - `debug`, `l7r_gate_core`, 24 directories (the library 17, its test 7): check against build, `testkit` off and on, three profile values (the two above and one seen only on 2026-11-22 from 01:27 to 02:06 - not identified; the night of 451 T142, when a session exported `CARGO_INCREMENTAL=0`, which is its own profile hash), and `l7r_shared` under it with `test-env` off and on.
+  - **Counted over every workspace crate**, measured 2026-11-26 (`eras.py`: a fingerprint whose profile value no build in the day-old `diagram-backlog-t271` cache produced for that unit is counted as config history - an upper bound, since that tree has built no test of the guard, `mode_a` or `phases` and no counting form, so their live hashes are counted as history too; sizes are the `deps/` files of that hash). This split is a COUNT, not an eviction list: part 2 must derive what no live configuration can produce from the configurations themselves, since evicting a live one costs its build again. The incremental caches, the host's 90 GB, follow the same explanation: `incremental/` holds one directory a workspace fingerprint directory (153 and 153 in `diagram-backlog-t271/debug` before these runs, 214 and 214 after, 72 and 72 in its `cover-gate`, measured 2026-11-26 by `ls`), under a hash of its own, so its bytes are not attributed to a row here.
+
+    | target directory | workspace fingerprint directories | config history (a profile value no build at HEAD made) | current profile: distinct unit, mode and own features | current profile: siblings by a dependency's hash only | explained by source content | explained by a flag, toolchain or environment flip | label |
+    |---|---|---|---|---|---|---|---|
+    | `diagram-backlog/debug` | 681 | 520 (5.8 of 6.0 GB of `deps/`) | 131 | 30 | 0 | 0 | measured 2026-11-26 (`eras.py`) |
+    | `diagram-backlog/cover-gate` | 448 | 320 (12.8 of 14.0 GB) | 61 | 67 | 0 | 0 | measured 2026-11-26 (`eras.py`) |
+    | `diagram-backlog-land/debug` | 410 | 378 (1.1 of 1.2 GB) | 30 | 2 | 0 | 0 | measured 2026-11-26 (`eras.py`) |
+    | `diagram-backlog-t271/debug` (a day old, after this measurement's builds; the reference) | 214 | 0 | 178 | 36 | 0 | 0 | measured 2026-11-26 (`eras.py`) |
+
+    `tool/` was counted more coarsely: `diagram-backlog/tool` 282 directories for 41 units and 80 distinct (unit, features, profile), `diagram-backlog-t271/tool` 47 for 39.
+  - **The dependency-feature axis, shown without compiling**, measured 2026-11-26 (`cargo tree --offline -e normal,dev -f '{p} [{f}]'` over `rust/Cargo.toml`): `-p l7r_gate_claims` resolves `l7r_gate_owed []`, `l7r_gate_research []`, `l7r_gate_registry []`; adding `-p l7r_gate_bundle` makes it `owed [testkit]`, `research [testkit]`; adding `-p l7r_gate_owed` instead makes it `registry [testkit]`; adding `-p l7r_gate_semantic`, `archive [testkit]`, `research [testkit]`; `-p l7r_gate_core` alone resolves `core []` where every other gate crate's tests resolve `core [testkit]`. Five gate crates carry a `testkit` feature a dev-dependency turns on (`core`, `research`, `registry`, `owed`, `archive`; `l7r_shared`'s `test-env` is the guard's), so a crate below them is built once for each combination the selected packages ask for.
+  - **The reproduction in the pool tree**, measured 2026-11-26 (`gate-call.sh` in `/diagram/.clones/diagram-backlog-t271`, load average 6 to 18 of 22 cores; the replica held to the gate - after `l7r-gate.sh rust test --crate rust/gate/crates/measure` and `rust lint` of it, the hand calls found 12 of 12 packages `Fresh`).
+    - The test build of `owed` twice, nothing changed: the second 0.4 s, 0 rustc runs, 5 of 5 `Fresh`, measured 2026-11-26 (`gate-call.sh`).
+    - `registry/src/lib.rs` touched, then each step: the test build of `registry` (3.9 s, 2 rustc runs), of `owed` (1.2 s, 3), lint of `registry` plain (0.7 s, 2) and with all features (0.7 s, 2), lint of `owed` plain (1.5 s, 2) and with all features (1.4 s, 2), measured 2026-11-26 (`gate-call.sh`); then the test build of `registry`, of `owed` and the lint of `registry` again: 0.1 s, 0.1 s, 0.2 s, 0 rustc runs, all `Fresh`, measured 2026-11-26 (`gate-call.sh`). One edit of `registry` compiled its library four times - a build with `testkit` off (its own tests), a build with it on (under `owed`'s tests), a check off, a check on - and nothing twice in one configuration.
+    - Every `Dirty` reason cargo gave, verbatim: "the file `gate/crates/registry/src/lib.rs` has changed", "the dependency l7r_gate_registry was rebuilt", "the dependency l7r_gate_core was rebuilt", "the dependency l7r_gate_owed was rebuilt", "the dependency l7r_gate_claims was rebuilt", "the file `gate/crates/measure/src/lib.rs` has changed". None names a flag, a feature, a profile or an environment variable.
+    - `core/src/lib.rs` touched, then the 28 gate manifests' test builds in turn: 75 rustc runs for 58 distinct targets, so 17 (23%) were a library compiled again in another configuration - `l7r_gate_owed` 4 times, `bundle`, `archive` and `registry` 3, `claims`, `arbiter`, `research`, `core`, `semantic`, `uncited`, `trials` and `record` twice, measured 2026-11-26 (`gate-call.sh`); 34.5 s in all, measured 2026-11-26 (`gate-call.sh`) (a touch changes no content, so rustc's incremental cache answers most of it: a floor, not an edit's cost).
+    - A real one-line edit of `rust/gate/crates/measure/src/lib.rs` (a constant appended, then removed): 2.4 s and 2.0 s, 2 rustc runs each (the library and its test), and unchanged 0.1 s, measured 2026-11-26 (`gate-call.sh`).
+    - A configuration this tree had never built compiles from nothing with NO `Dirty` line: the first test build of `owed` here took 20.0 s for 3 rustc runs, and bringing all 28 gate manifests' test builds up took 246 s and 67 rustc runs, of which 9 were `Dirty` and 58 first builds (`measure` 19.5 s, `reviews` 21.5 s, `record` 21.9 s, `arbiter` 19.6 s), measured 2026-11-26 (`gate-call.sh`). The tree had been handed out WARM, and was: for the lint and the coverage builds its earlier tasks ran. Of the five workspace crates with the most hashes in its `debug/` before these runs, one (`l7r_shared`) had a plain test executable; the likely reason, not measured, is that until the two-tier trial of 2026-11-26 a builder's tests ran inside the coverage build, whose green keeps the plain tests' too.
+  - **What this says to the GM's question** (a builder's test runs of about 19 s each, as the brief relays it), every figure measured 2026-11-26 (`gate-call.sh`, the bullets above): a run that changes one crate compiles that crate's library and test, 2 to 4 s for a large gate crate at this load, a run that changes nothing compiles nothing (0.1 to 0.4 s of cargo), and about 19 s is what the FIRST plain test build of a large gate crate costs in a tree that has not built it, or it is the tests' own run time, which no compile cache holds: `dev/measurements/2026-11-26/build-levers/m9-results.md` has the guard family's test run with nothing to compile at 14.6 s and at 23.8 s after a touch of its root library, a band about 19 s sits in. `make task-time` splits a run's `build` from its `test` (451 T05) and says which.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| no code changed: a measurement, its scripts in `dev/measurements/2026-11-26/cargo-hashes/` | n/a: nothing fixed | n/a: tooling | none | n/a |
 
 ### T301 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** The session knows why a target directory holds 20 to 31 hashes of one crate, and whether any of the gate's builds is repeated needlessly, before any cache is swept.
+2. **The constraints.** The GM's rule that disk work begins later and that time saved outranks disk (the task line's restatement of 2026-11-26): nothing deleted, the session clone's cache read only. 451 T278 (the variant sweep) and T301's part 2 read this record.
+3. **Where each comes from.** G: the task line and the GM's question of 2026-11-26 about a builder's repeated test runs, as the coordinating session's brief relays it. O: the host's report `~/.claude/disk-report-from-host-2026-11-26.txt` and the measurements above.
+4. **Do they describe the world here?** Yes: the host's counts were found again from inside (`l7r_gate_pool` 31 and `l7r_mode_a` 29 fingerprint directories in `diagram-backlog/debug`, `l7r_gate_measure` 23 in `cover-gate`), measured 2026-11-26 (`fingerprints.py`).
+5. **The order.** Before T301's part 2 (what to evict) and before T278; T325, filed here, before either sweep is tuned, since it changes how many hashes are live.
+6. **The exits.** Green: each crate's hashes explained field by field, and the pool tree's re-runs all `Fresh`, measured 2026-11-26 (`fingerprints.py`, `gate-call.sh`). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing, of this section, the three scripts and T325's line; the task is not ticked.
+9. **Done, measured.** 0 of 1,539 workspace fingerprint directories in three target directories explained by source content or by a flag flip, at most 1,218 by config history, the rest by live configurations and dependency-feature siblings, and every unchanged re-run 0 rustc runs, measured 2026-11-26 (`eras.py`, `gate-call.sh`, above).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing is fixed here: no call rebuilds what it built, so there is no flipping setting to fix. The one cost found - a library compiled 2 to 4 times, once a feature combination - is a design choice between two forms that each need measuring, filed as T325. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A crate below a `testkit` crate is compiled once for each feature combination the selected packages ask for: 17 of 75 rustc runs after a touch of `core` across the 28 gate test builds, measured 2026-11-26 (`gate-call.sh`), and in the coverage build a `-p` set never asked before must compile its downstream crates instrumented from nothing - inferred from the fingerprints and `cargo tree`, no coverage build was run to time it (67 of `diagram-backlog/cover-gate`'s 128 current-profile hashes differ from another only in a dependency's hash); visible effect: seconds of every test and coverage build below `core`, `research`, `registry`, `owed` or `archive`, and the sibling hashes the sweeps then keep. `rust/Cargo.toml`'s "ONE FEATURE SET FOR EVERY GATE CRATE" comment says testing one crate never rebuilds what another built with other features, which holds for outside crates only. Not fixed here: the fix is a choice between naming the whole family in every test and coverage build and compiling the test helpers always, each to be measured, and it changes `kept.rs`, `side.rs` and `cover.rs` - a builder of its own by the sizing rule. Filed as T325; lands before T278.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+- A pool tree handed out WARM compiles from nothing each configuration its earlier tasks never built: 58 first builds, 246 s for all 28 gate manifests' plain test builds in `diagram-backlog-t271`, measured 2026-11-26 (`gate-call.sh`). Not a defect and not filed: nothing is built twice, the cost is paid once a tree and a crate, and the builds are kept, and it is recorded here because it is one reading of the test runs the GM asked about.
+
+**Performance work?** no: a measurement; what it found to make faster is T325's, a `[perf]` task.
 
 
 ### T302 (<why: the finding or measurement that files it>)
@@ -3651,4 +3694,42 @@ engine speed, so no checklist.
 **Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T325 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T325 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T325 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
+2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
+   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
+3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
+4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
+5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
+   time with the host's load - evidence, not a pass>
+6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 
