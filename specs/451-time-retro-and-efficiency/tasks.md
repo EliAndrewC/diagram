@@ -203,8 +203,6 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T273 449 T428's tick note states a bend measurement that was never made: make the measurement or restate the note (found 2026-11-25)
       research: rendering
-- [ ] T274 a memory sampler runs while builders are dispatched (cgroup anon, memory.current, memory pressure and load every 10 s into the tree's l7r-events), so the parallel builder count is certified against the container's 10 GiB limit (docs/process-decisions.md, 'Two code builders at once'; the peak at 3-4 builders was never recorded)
-      research: rendering
 - [ ] T275 state files joined onto <root>/.git break or are passed over in a linked worktree, as claims-searched.json did (451 T267's census, unmeasured): the reviews crate (prereq.rs, prereq/scoped.rs, prereq/tree.rs, snapshot.rs), the gate's record, owed, arbiter, cohort, ci and trials paths, the guard's idle-tests, finished-run, review-round, escalation, pair and stall-watchdog state, and the .join('.git').is_dir() probes (clone_sync_hooks.rs, archive/store.rs) - run each in a worktree, then resolve the git dir where it fails
       research: rendering
 - [ ] T276 docs/buildings.md and docs/building-programs.md carry 22 GM-tagged prose lines with no pointer (11 each) that l7r-gate check gm-attributions does not read (451 T265): search each, cite the record or relabel, then widen the check to the procedure docs' prose lines
