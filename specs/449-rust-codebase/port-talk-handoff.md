@@ -37,6 +37,17 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 - **Extending the early build to the SPEC review**: his (it amends constitution XVI); a measurement of how often a first spec
   review reverses work is owed before it is put to him.
 
+## Before the port resumes (the GM, 2026-11-26)
+
+- "I agree that all of our tooling fixes around work trees need to land before we resume the port." The set: 451 T159, T275,
+  T281, T284, T286, T288, T294, T295, T296, T297, T301 (landed already: T285 the warm pool, T292 the landing refusals and
+  `make carry`).
+- The sequence he approved ("Your proposed sequence ... sounds right to me, so yes, please proceed with that"): (1) the pool
+  lands - done; (2) round one, three builders at once in warm pool trees with no build slot yet, on T284, T295 and T281, the
+  memory and load sampler running; (3) the numbers are looked at together and the builder count settled, with the file-overlap
+  measurement (`dev/measurements/2026-11-26/file-overlap/m15-results.md`); (4) round two, the rest of the worktree fixes at the
+  settled count with the build slot in.
+
 ## Closed overnight under the GM's pre-approval of 2026-11-25
 
 - **Item 6**: building begins while a feature's plan review runs (decided 2026-11-25).
