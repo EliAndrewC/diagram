@@ -212,3 +212,9 @@ Told that page 0006's drawing page carries, in a comment, "the GM's ruling, 2026
 > I never made a ruling that dry plots are rectangles laid out against the canal. That was never at any point something that I said was true about these maps. That is what a session told me the research showed. But if that is not what the research shows, then we shouldn't do it.
 
 So the comment misattributes: the rule is the record's (0006 labels "strips square to a canal" a reconstruction, from the line of the Edo Musashino villages along their canals), not a ruling. What the research shows of a dry plot's shape, and of a strip at a canal's bend, is a research question, and the drawing follows its answer.
+
+## 2026-11-25: T417 split - the belt now, the groves with the homesteads stage
+
+The GM, 2026-11-25 (verbatim; voice substitutions: "seed stage" in his preceding question meant the seat stage):
+
+> And I want to wait until tomorrow morning to do the talk and resumption of the porting in general.  And it sounds like we want to wait to work that second part of T417 until then as well, but if we can work the workable half of T417 overnight then we might as well do that and split the other part off into a separate task.

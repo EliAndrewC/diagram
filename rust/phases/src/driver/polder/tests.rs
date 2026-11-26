@@ -702,7 +702,9 @@ fn plain_bands(s: &crate::field::staged::PolderStage, strips: &[Vec<Pt>]) -> Vec
 
 /// THE REEDS LAID AS THEY WERE (449 T250): each roll's waterside strips, their points and a weighted sum of them, on Kuwabata, the
 /// budget run's grid polders and grid polders falling off the axes, as the fringe laid them before its dike corners were filed once
-/// for all the flanks - filing them once moves no reed; Kuwabata re-pinned by 449 T431 (its feeder and run 6.2 ft).
+/// for all the flanks - filing them once moves no reed; Kuwabata re-pinned by 449 T431 (its feeder and run 6.2 ft); seeds 5, 11 and 19
+/// re-pinned by 449 T417, a row or a scattered settlement's canvas keeping no belt's reach, every strip and point as before, each
+/// carried 150 ft (each sum moved by its points times 2.3 times 150 ft, the canvas 300 ft smaller).
 #[test]
 fn the_waterside_strips_hold_their_points() {
     let mut rolls = bank_rolls();
@@ -735,12 +737,12 @@ fn the_waterside_strips_hold_their_points() {
         "Inashiro at 90: ['W', 'S'], 4 strips, 111 points, 810452.957",
         "Inashiro at 90: ['W', 'S'], 4 strips, 111 points, 810400.342",
         "Inashiro at 90: ['W', 'S'], 4 strips, 111 points, 804339.444",
-        "R at 30: ['S', 'E'], 3 strips, 100 points, 697298.551",
+        "R at 30: ['S', 'E'], 3 strips, 100 points, 662798.551",
         "R at 0: ['S', 'E'], 4 strips, 96 points, 657993.993",
-        "R at 135: ['W', 'S'], 3 strips, 100 points, 604248.322",
+        "R at 135: ['W', 'S'], 3 strips, 100 points, 569748.322",
         "R at 210: ['N', 'W'], 3 strips, 100 points, 546248.438",
         "R at 300: ['E', 'N'], 3 strips, 101 points, 635830.374",
-        "R at 255: ['E', 'N'], 5 strips, 116 points, 744315.705",
+        "R at 255: ['E', 'N'], 5 strips, 116 points, 704295.705",
     ]
     .map(str::to_owned)
     .to_vec();

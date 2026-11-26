@@ -2010,6 +2010,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-25",
    "declared": "spec-fidelity"
+  },
+  "### T417 (found by 449 T415, spec-fidelity 2026-11-24: the live seat stage kept a clustered village's belt ground on every settlement form, so the pool's two row hamlets, Kashikawa and Mizuguchi, were seated with a belt's ground kept, where 0031's drawing page has a row or a scattered settlement draw a grove at each farm and no village belt; split by the GM 2026-11-25 - the groves are T438; observed 2026-11-24, method: T415's spec-fidelity read of the seat stage against 0031's drawing page)": {
+   "sha256": "8158a347c920456ecd61367723e93c67497159058b5a3dfa847511143cf0a0a0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T417 Approach (checklist part A)": {
+   "sha256": "8ba7638628d7212f1330212c7e371b6653488b231c26c744e2b97adc49118d00",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -27229,6 +27241,53 @@
      "summary": "Before T158, after T434",
      "class": "within",
      "why": "GM 2026-11-24: real defects in hamlet generation fixed before moving forward with new code."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T417 (found by 449 T415, spec-fidelity 2026-11-24: the live seat stage kept a clustered village's belt ground on every settlement form, so the pool's two row hamlets, Kashikawa and Mizuguchi, were seated with a belt's ground kept, where 0031's drawing page has a row or a scattered settlement draw a grove at each farm and no village belt; split by the GM 2026-11-25 - the groves are T438; observed 2026-11-24, method: T415's spec-fidelity read of the seat stage against 0031's drawing page)",
+    "### T417 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "approach",
+     "summary": "the seat stage reads the settlement form through one predicate plan::keeps_belt, read once in stage_seat into SeatIn::belt and handed to every frame, so ranked, settlement_ground, seat_room, the dry hem, the placeholder and the map checks dry_on_settlement / seat_on_dike / seat_on_canal all see one ground; a row or scattered settlement keeps no belt room, ground or reach",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a row or scattered hamlet seated with a clustered village's belt ground, against 0031's drawing page), which the GM asked be fixed before new code (2026-11-24, 'if there are real defects, then I do want to find them and fix them'; 2026-11-18, 'fix all known bugs in each step'). A check reading the corrected ground changes as fixed (FIX AS WE GO), not a regression. Clustered rolls are identical before and after."
+    },
+    {
+     "id": "groves-split",
+     "summary": "the farm groves a row or scattered settlement draws are left to T438 (with the homesteads stage); T417 removes the belt only",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A grove stands at each farm, and the farms are the homesteads stage, which the GM parked (2026-11-21, T244: 'When you get to the point where ... we're ready to go back to homesteads, then don't actually proceed'); drawing the groves now would mean proceeding into the parked stage, so the literal 'fix the whole defect now' is barred by the GM's own words. The defect T417 owns - ground kept for a belt the settlement never draws - is fixed whole. The split is also cited as the GM's of 2026-11-25 at T438, though that quote is not in this bundle's request.md."
+    },
+    {
+     "id": "a",
+     "summary": "no ground kept past the band for a row's or scattered farm's own grove (UNRESEARCHED, the easier route); the band is sized by HOMESTEAD_GROUND_FT, in which T438 draws the groves; a knob for T438",
+     "class": "within",
+     "why": "The record is silent on the grove's depth behind a farm, the choice is labeled UNRESEARCHED in the claim, and it leaves no wrong outcome on a map now (no groves are drawn until T438). Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "b",
+     "summary": "a form the settlement-form table does not name keeps the belt (the stage's behavior before this task)",
+     "class": "within",
+     "why": "0031 rules out the belt for the linear and dispersed forms only; an unnamed form has no research rule and no pool spec or roll produces one, so keeping the earlier behavior leaves no wrong outcome on any map. Not a carve-out from the request."
+    },
+    {
+     "id": "c",
+     "summary": "BACK_DEPTHS (2.6 band depths, 'the cluster and its belt') left alone because the live driver hands the seat no dry plots, so the back's share is never read",
+     "class": "within",
+     "why": "A value read by nothing produces no wrong outcome (constitution XIV v2.36.0: a defect is a wrong outcome), so leaving it is not a known defect carried forward."
+    },
+    {
+     "id": "constants-and-claims",
+     "summary": "BELT_REACH, BELT_BAND and BELT_FAR_FT keep their figures, now applying to a clustered village alone, with their claims restated to say so; the canvas shrinks for row and scattered rolls, measured 0 of 20,256 refused, so no room is owed back",
+     "class": "within",
+     "why": "Consequences of the fix; restating the claims to the new scope is what the rule asks, and no reader-visible outcome is made wrong."
     }
    ]
   }
@@ -55691,6 +55750,51 @@
      "summary": "Before T158, after T434",
      "class": "within",
      "why": "GM 2026-11-24: real defects in hamlet generation fixed before moving forward with new code."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T417": {
+   "section_sha256": "ce0dcc922d2301b9c56f4dcbd881f9bf4d26ed25d7cdfc0dfa905ccdf688963c",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "approach",
+     "summary": "the seat stage reads the settlement form through one predicate plan::keeps_belt, read once in stage_seat into SeatIn::belt and handed to every frame, so ranked, settlement_ground, seat_room, the dry hem, the placeholder and the map checks dry_on_settlement / seat_on_dike / seat_on_canal all see one ground; a row or scattered settlement keeps no belt room, ground or reach",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a row or scattered hamlet seated with a clustered village's belt ground, against 0031's drawing page), which the GM asked be fixed before new code (2026-11-24, 'if there are real defects, then I do want to find them and fix them'; 2026-11-18, 'fix all known bugs in each step'). A check reading the corrected ground changes as fixed (FIX AS WE GO), not a regression. Clustered rolls are identical before and after."
+    },
+    {
+     "id": "groves-split",
+     "summary": "the farm groves a row or scattered settlement draws are left to T438 (with the homesteads stage); T417 removes the belt only",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A grove stands at each farm, and the farms are the homesteads stage, which the GM parked (2026-11-21, T244: 'When you get to the point where ... we're ready to go back to homesteads, then don't actually proceed'); drawing the groves now would mean proceeding into the parked stage, so the literal 'fix the whole defect now' is barred by the GM's own words. The defect T417 owns - ground kept for a belt the settlement never draws - is fixed whole. The split is also cited as the GM's of 2026-11-25 at T438, though that quote is not in this bundle's request.md."
+    },
+    {
+     "id": "a",
+     "summary": "no ground kept past the band for a row's or scattered farm's own grove (UNRESEARCHED, the easier route); the band is sized by HOMESTEAD_GROUND_FT, in which T438 draws the groves; a knob for T438",
+     "class": "within",
+     "why": "The record is silent on the grove's depth behind a farm, the choice is labeled UNRESEARCHED in the claim, and it leaves no wrong outcome on a map now (no groves are drawn until T438). Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "b",
+     "summary": "a form the settlement-form table does not name keeps the belt (the stage's behavior before this task)",
+     "class": "within",
+     "why": "0031 rules out the belt for the linear and dispersed forms only; an unnamed form has no research rule and no pool spec or roll produces one, so keeping the earlier behavior leaves no wrong outcome on any map. Not a carve-out from the request."
+    },
+    {
+     "id": "c",
+     "summary": "BACK_DEPTHS (2.6 band depths, 'the cluster and its belt') left alone because the live driver hands the seat no dry plots, so the back's share is never read",
+     "class": "within",
+     "why": "A value read by nothing produces no wrong outcome (constitution XIV v2.36.0: a defect is a wrong outcome), so leaving it is not a known defect carried forward."
+    },
+    {
+     "id": "constants-and-claims",
+     "summary": "BELT_REACH, BELT_BAND and BELT_FAR_FT keep their figures, now applying to a clustered village alone, with their claims restated to say so; the canvas shrinks for row and scattered rolls, measured 0 of 20,256 refused, so no room is owed back",
+     "class": "within",
+     "why": "Consequences of the fix; restating the claims to the new scope is what the rule asks, and no reader-visible outcome is made wrong."
     }
    ],
    "verdict": "CLEAR"

@@ -1113,31 +1113,47 @@ One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (th
 
 <!-- plan-archive: T415 to T415 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
 <!-- plan-archive: T416 to T416 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
-### T417 (<why: the finding or measurement that files it>)
+### T417 (found by 449 T415, spec-fidelity 2026-11-24: the live seat stage kept a clustered village's belt ground on every settlement form, so the pool's two row hamlets, Kashikawa and Mizuguchi, were seated with a belt's ground kept, where 0031's drawing page has a row or a scattered settlement draw a grove at each farm and no village belt; split by the GM 2026-11-25 - the groves are T438; observed 2026-11-24, method: T415's spec-fidelity read of the seat stage against 0031's drawing page)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the seat stage reads the settlement form. One predicate, `plan::keeps_belt` (a `nucleated` form, or a form the table does not name, keeps the belt; `linear` and `dispersed` do not), is read once in `stage_seat` (the comb's and the polder's seat alike) into `SeatIn::belt`, and the seat hands it on to every frame (`Frame::belt`), so every reader of the settlement's ground - the dry hem, the placeholder drawn, the map checks `dry_on_settlement`, `seat_on_dike` and `seat_on_canal` - sees the same ground. Where the belt is off: `margins::ranked` asks no belt's room (no `belt_off` refusal, no score against it) and stands no band off a windward field for one (the hill-backed `lead`); `settlement_ground` is the band alone, from the margin to its back, with no belt swept and no strip behind it; `seat_room` keeps no `BELT_REACH`, so the canvas is smaller. Measured 2026-11-25 with a throwaway sweep mode of the hamlet binary run through `make cohort` (T426's 41,000 rolls: 20,000 cohort combs from 10,000,000, 300,000,000, 555,555,000, 777,000,000 and 941,239,000; 6,000 polders, 1,000 of each form from 10,000,000, 300,000,000 and 555,555,000; seeds 1 to 1,500 at T426's ten size and fall pairs), one line a roll - its form, canvas, refusal, broken checks, band share on the paddy, the nearest dry plot to the band and the seat's center - before = HEAD, after = the code as built; the sweep mode is removed.
+  - **Before and after, over the 41,000 rolls** (20,744 clustered, 12,269 scattered, 7,987 row), measured 2026-11-25 (the sweep):
+
+    | | refused | a map check broken | bands on the paddy (worst share) | canvas, mean side (row / scattered) | seats moved | nearest dry plot to the band moved |
+    |---|---|---|---|---|---|---|
+    | before, measured 2026-11-25 (the sweep) | 0 | 0 | 6,790 (3.69 percent) | 5,562 / 5,572 ft | - | - |
+    | after, measured 2026-11-25 (the sweep) | 0 | 0 | 6,790 (3.69 percent) | 5,280 / 5,291 ft | 1,018 (405 row, 613 scattered), all declared falls into the wind (725 at 225 degrees, 268 at 200, 21 at 270, 4 at 180), each 145 to 147 ft nearer its field | 3,449 rolls (1,375 row, 2,074 scattered), a median 40 ft nearer, the most 215 ft |
+
+  - **The clustered villages are untouched**: all 20,744 clustered rolls' lines are identical before and after (canvas, seat, hem, checks), measured 2026-11-25 (the sweep).
+  - **The seats that moved** are the hill-backed seats of a row or a scattered settlement on a declared fall into the wind: before, the band stood the belt's far edge (146 ft, `BELT_BAND`'s GUESS) further off a windward field for a belt the settlement never draws, measured 2026-11-25 (the sweep); now it stands at the standoff, as every other seat does. No other seat moved once the canvas's shift is taken out: no margin had been refused for a belt's room alone on these rolls, measured 2026-11-25 (the sweep, each seat's center less half the canvas's change).
+  - **The pool**, measured 2026-11-25 (`make map` on each, before and after, the records and the renders compared): Kashikawa (seed 3, row) and Mizuguchi (seed 23, row) regenerated in the foreground: the canvas 6,450 to 6,250 ft and 5,050 to 4,750 ft, the seat on the same margin at the same place on its field, the settlement's ground the band alone (Kashikawa's strip behind it 146 ft shorter; Mizuguchi's belt wrapped round the band's windward end gone), the dry hem as before - neither's hem stood in the strip, measured 2026-11-25 (the renders compared). Crops: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/kashikawa-before-after.png`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/mizuguchi-before-after.png`. Inashiro (pinned nucleated), Sawada and Kuwabata roll clustered and do not move.
+  - **The work budget**: `make work-budget` is identical to HEAD's on every stage (seat 20,809 / 29,141 / 42,701 / 68,507 ops, hem 7,541 / 11,760 / 18,465 / 30,411), measured 2026-11-25 (HEAD's in a detached worktree): the budget's reference hamlet pins `nucleated`, so no stage moves and no step is owed; the row and scattered path is not in the budget's counts (it does less work - no `belt_off`, no swept ground).
+  - `make seeds`: the pool empty, 600 fresh seeds of the three forms, 0 failed, measured 2026-11-25.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the seat reads the form: no belt's room, ground or reach for a row or a scattered settlement | red first: `driver::tests::a_row_or_a_scattered_hamlet_keeps_no_clustered_village_s_belt` failed on HEAD's code ("linear: the ground reaches 392.7 ft out, its band's back 246.7"), green after, measured 2026-11-25 (`make rust-test CRATE=rust/phases`); `seat::tests` pin the belt-off margin kept and no band stood off for a belt; `plan` tests pin the smaller room | n/a: no repair step deleted; the 41,000 rolls above, 0 refused before and after | Kashikawa and Mizuguchi (`.driver.json`, `.driver.svg`, gitignored renders) | n/a |
 
 ### T417 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A row or a scattered hamlet is seated and drawn with no clustered village's shelter belt: no ground kept for one behind or round its houses, no band stood off its field for one, no canvas widened for one; a clustered village keeps all three as before.
+2. **The constraints.** 0031's drawing page ("Where farms carry their own groves, no village shelter belt is drawn"); 0072's drawing page for the clustered village's belt, unchanged; constitution XIV (a wrong outcome fixed); the GM's split of 2026-11-25 (the groves are T438).
+3. **Where each comes from.** R: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html; G: the GM's split of 2026-11-25, recorded at T438 in tasks.md; O: the sweep and the pool regenerations above.
+4. **Do they describe the world here?** Yes: 0031 rules by form, and the plan's `settlement_form` knob is that form (half clustered, three in ten scattered, two in ten rows, 0031's shares); the pool's two row hamlets roll `linear`, measured 2026-11-25 (their records).
+5. **The order.** After T415 (which found it); before T438 (the groves, with the homesteads stage) and T158.
+6. **The exits.** Green: no row or scattered roll keeps belt ground, every clustered roll unchanged, no roll refused or breaking a check over the 41,000. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the research switch is deferred (no research pass); 0031 states the rule, and the one choice it is silent on is labeled UNRESEARCHED below.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The sweep's after row above: 0 refused, 0 checks broken, clustered lines identical, no belt ground on 20,256 row and scattered rolls, measured 2026-11-25 (the sweep) (the test pins it on a constructed row and scattered spec).
+10. **Before moving a constant.** No constant moves: `BELT_REACH`, `BELT_BAND` and `BELT_FAR_FT` keep their figures and now apply to a clustered village alone; their claims restated to say so (`seat_room`, `settlement_ground`'s back strip, `ranked`'s belt claims).
+11. **Before fitting things into room.** The canvas shrinks by the belt's reach for a row or a scattered settlement; measured that no roll is refused for it (0 of 20,256, the sweep), so no room is owed back.
+12. **Before any fix.** A reader of a row or a scattered hamlet's map sees the settlement's dashed ground as the band alone - no strip a belt's depth behind it, no wrap round its windward end - and, on a fall into the wind, the band 146 ft (`BELT_BAND`'s GUESS) nearer its field, measured 2026-11-25 (the sweep); the dry hem may stand up to the band's back (40 ft nearer on the median roll that moved, measured 2026-11-25 (the sweep)). It breaks 0031's drawing page's rule no longer.
+    - **Decision (a): how much ground a row's or a scattered farm's own grove keeps past the band - none (UNRESEARCHED, the algorithmically easier route).** The record does not say how deep behind a farm its own grove stands; the band is sized by the homestead ground (`HOMESTEAD_GROUND_FT`), which T438 draws the groves in. Labeled UNRESEARCHED in the claim at `settlement_ground`; a knob for T438 if its groves need more.
+    - **Decision (b): a form the table does not name keeps the belt.** `keeps_belt` names the two forms 0031 rules out; any other (a hand-written spec's typo, the empty string) keeps the stage's behavior before this task. The easier route, and no spec in the pool names another.
+    - **Decision (c): `BACK_DEPTHS` (2.6 band depths, "the cluster and its belt") is left alone**: the live driver hands the seat no dry plots (`plots: Vec::new()`, the hem laid after it), so the back's share is never read; it acts on nothing here.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 <!-- plan-archive: T418 to T416 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->

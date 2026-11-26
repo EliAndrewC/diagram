@@ -432,6 +432,7 @@ pub const FIELD_IN_BAND_MAX: f64 = 0.1;
 ///     the back's width - GUESS: no page sizes the ground behind a seat; one half-depth across the margin's midpoint, the strip behind the band's middle, which the belt cannot bend away from
 ///     the dry hem's reach - GUESS: no source could speak to it, a value of ours; a dry plot within two band half-depths of where the band's room starts - the margin, or the belt's room past it where the band is stood out for the belt - the band's own depth, scores the seat down
 ///     the ladder - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a hamlet never splits, so the margins it falls back to are whole seats, ranked
+///     no belt's room for a row or a scattered settlement - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: where farms carry their own groves no village shelter belt is drawn - a scattered or a row settlement draws a grove at each farm, a clustered village one belt at its edge - so where `SeatIn::belt` is off no margin is refused or scored down for a belt's room off the canvas and no band is stood off a windward field for one (449 T417)
 ///     the belt between the houses and a windward field - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: where a declared fall into the wind backs the cluster to the hill (`belt_wind`, the map's own wind), the belt still stands on the windward side (research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the wind decides the side), so a margin whose field lies within 45 degrees of the wind stands its band the belt's far edge (`BELT_BAND`) further off it, the belt's ground between the houses and the paddy, and every sample of the band moves with it; a wind along the band leaves the belt at a band end, no room added; the belt's room on the canvas is asked of the map's own wind
 #[expect(
     clippy::too_many_lines,
@@ -461,7 +462,11 @@ pub fn ranked(
         let along = (-n.1, n.0);
         // THE BELT'S ROOM ON A WINDWARD FIELD (449 T277): the band stood the belt's far edge further out, where the field below
         // the margin lies to windward of the houses, so the belt has its ground between them
-        let lead = if belt_wind.is_some() && -(n.0 * wind.0 + n.1 * wind.1) >= inp.back_min_dot {
+        // ...a clustered village's alone: a row or a scattered settlement keeps no village belt (449 T417)
+        let lead = if inp.belt
+            && belt_wind.is_some()
+            && -(n.0 * wind.0 + n.1 * wind.1) >= inp.back_min_dot
+        {
             BELT_BAND.1
         } else {
             0.0
@@ -486,7 +491,13 @@ pub fn ranked(
             continue;
         }
         refusal += 8;
-        let off = belt_off(center, along, n, inp.band, wind, inp.canvas, mid);
+        // NO BELT'S ROOM ASKED OF A ROW OR A SCATTERED SETTLEMENT (449 T417): it draws no village belt, so none is refused or
+        // scored down for one off the canvas
+        let off = if inp.belt {
+            belt_off(center, along, n, inp.band, wind, inp.canvas, mid)
+        } else {
+            0.0
+        };
         if off > BELT_ROOM_MAX_OFF {
             stopped[1] += 1;
             continue;
@@ -628,6 +639,7 @@ pub fn ranked(
             band: (lat, dep),
             anchor: mid,
             offwind: n.0 * inp.wind.0 + n.1 * inp.wind.1 < inp.back_min_dot,
+            belt: inp.belt,
         };
         kept.push((score, on_brook, tier, frame));
     }

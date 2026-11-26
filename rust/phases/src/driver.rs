@@ -457,6 +457,7 @@ fn stage_seat(p: &Plan, g: &Ground) -> Result<Seated, Refused> {
         fall: (rad.cos(), rad.sin()),
         wind: g.back.unwrap_or_else(|| wind(&p.windward)),
         belt_wind: g.back.map(|_| wind(&p.windward)),
+        belt: plan::keeps_belt(p.knob("settlement_form")),
         back_min_dot: plan::WIND_BACK_MIN_DOT,
         outline: g.ring.to_vec(),
         band: plan::band_extent(p.households, p.knob("cluster_shape")),
@@ -500,16 +501,23 @@ type Segment = ((f64, f64), (f64, f64), f64);
 /// Research:
 ///     the settlement's ground - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the houses between the canal and the dry fields, so the hem keeps off the band where they stand
 ///     the belt's ground kept - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a clustered village shelters behind one belt along its windward edge, so its ground reaches past the band to the belt on the band's windward faces - behind it where its back faces the wind, round its windward end where the wind falls obliquely (Inashiro's and Mizuguchi's belts 52 and 54 percent outside the old strip, measured 2026-11-22, 449 T294), between it and the field where a declared fall into the wind backs it to the hill (GUESS, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html), on the margin's dry side alone (GUESS, `margins::belt_swept`)
-///     the back strip a belt's depth whatever the wind - GUESS: the record is silent on the ground behind a village whose back is off the wind; the strip behind the band reaches `BELT_FAR_FT` on every seat, a polder's whose back is its landward shore too (Kuwabata's, back to the east under a northwest wind), so the dry hem stands a belt's depth behind the houses where no belt stands (the algorithmically easier route: one strip for every seat)
+///     the back strip a belt's depth whatever the wind - GUESS: the record is silent on the ground behind a clustered village whose back is off the wind; the strip behind the band reaches `BELT_FAR_FT` on every clustered village's seat, a polder's whose back is its landward shore too (Kuwabata's, back to the east under a northwest wind), so the dry hem stands a belt's depth behind the houses where no belt stands (the algorithmically easier route: one strip for every clustered seat)
+///     no belt's ground for a row or a scattered settlement - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: where farms carry their own groves no village shelter belt is drawn, a grove at each farm instead, so a row's or a scattered settlement's ground (`Frame::belt` off) is the band alone, from the margin to its back, with no belt swept and no strip behind it, and the dry hem may stand at the band's back (449 T417)
+///     each farm's grove inside the band - UNRESEARCHED: the record does not say how much ground behind a row's or a scattered farm's house its own grove takes, so none is kept past the band (the algorithmically easier route); the groves are drawn by 449 T438, inside the homestead ground the band is sized by
 fn settlement_ground(s: &crate::seat::Frame, wind: (f64, f64)) -> Vec<(f64, f64)> {
     let ((ax, ay), (ox, oy), (lx, ly)) = (s.anchor, s.out, s.along);
-    let (lat, deep) = (s.band.0, STANDOFF_FT + 2.0 * s.band.1 + BELT_FAR_FT);
+    // A ROW OR A SCATTERED SETTLEMENT KEEPS NO VILLAGE BELT (449 T417): its ground is the band from the margin to its back
+    let belt = if s.belt { BELT_FAR_FT } else { 0.0 };
+    let (lat, deep) = (s.band.0, STANDOFF_FT + 2.0 * s.band.1 + belt);
     let mut pts = vec![
         (ax - lx * lat, ay - ly * lat),
         (ax + lx * lat, ay + ly * lat),
         (ax + lx * lat + ox * deep, ay + ly * lat + oy * deep),
         (ax - lx * lat + ox * deep, ay - ly * lat + oy * deep),
     ];
+    if !s.belt {
+        return pts;
+    }
     pts.extend(crate::seat::margins::belt_swept(
         s.center,
         s.along,

@@ -29,6 +29,7 @@ fn inp() -> SeatIn {
         fall: (0.0, 1.0),
         wind: (-s, -s),
         belt_wind: None,
+        belt: true,
         back_min_dot: std::f64::consts::FRAC_1_SQRT_2,
         outline: field.clone(),
         band: (150.0, 300.0),
@@ -377,7 +378,11 @@ fn a_flank_turns_its_back_and_a_notch_or_a_cramped_belt_is_refused() {
     i.walls = vec![(i.outline.clone(), 0.0)];
     // the west margin's belt runs off the canvas: refused, the north one seats
     let s = seat(&i).unwrap();
-    assert!(s.frames.iter().all(|f| f.out.1 < 0.0));
+    assert!(s.frames.iter().all(|f| f.out.1 < 0.0 && f.belt));
+    // a row or a scattered settlement keeps no village belt (0031; 449 T417): no belt's room is asked, so the west margin seats
+    i.belt = false;
+    let s = seat(&i).unwrap();
+    assert!(s.frames.iter().any(|f| f.out.0 < 0.0) && s.frames.iter().all(|f| !f.belt));
 }
 
 /// THE BAND HOLDS NO CORNER OF THE FIELD (449 T423): a tooth of the field 40 ft wide stands 150 ft into the band of each north
@@ -520,6 +525,12 @@ fn only_a_fall_toward_the_wind_backs_the_hill() {
         .frames
         .iter()
         .any(|f| -(f.out.0 * i.wind.0 + f.out.1 * i.wind.1) >= i.back_min_dot));
+    // ...a clustered village's alone: a row or a scattered settlement keeps no belt, so no band is stood off for one (449 T417)
+    i.belt = false;
+    for f in &seat(&i).unwrap().frames {
+        let off = (f.center.0 - f.anchor.0) * f.out.0 + (f.center.1 - f.anchor.1) * f.out.1;
+        assert!((off - (STANDOFF + f.band.1)).abs() < 1e-6, "{off}");
+    }
 }
 
 #[test]

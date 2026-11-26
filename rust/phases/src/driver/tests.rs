@@ -414,3 +414,34 @@ fn a_dike_pond_block_s_ponds_hold_their_banks_and_no_bush_stands_in_one() {
         }
     }
 }
+
+#[test]
+fn a_row_or_a_scattered_hamlet_keeps_no_clustered_village_s_belt() {
+    // 449 T417: 0031's drawing page has a row or a scattered settlement draw a grove at each farm and no village belt, so neither
+    // keeps a belt's ground - the settlement's ground ends at its band's back, the dry hem is not held a belt's depth off, and the
+    // canvas keeps no belt's reach round the seat; a clustered village keeps all three (the same seed, its form pinned)
+    let at = |form: &str| {
+        roll(&parse(&format!(r#"{{"name": "Kashikawa", "seed": 3, "households": 20, "down_deg": 315, "water_sink": "offmap", "brook_side": -1, "settlement_form": "{form}"}}"#)).unwrap()).unwrap()
+    };
+    let reach = |r: &super::Rolled| {
+        let f = &r.seated.as_ref().unwrap().frames[0];
+        let ground = super::settlement_ground(f, super::wind(&r.plan.windward));
+        let past = ground
+            .iter()
+            .map(|p| (p.0 - f.anchor.0) * f.out.0 + (p.1 - f.anchor.1) * f.out.1)
+            .fold(f64::MIN, f64::max);
+        (past, super::STANDOFF_FT + 2.0 * f.band.1)
+    };
+    let clustered = at("nucleated");
+    let (past, back) = reach(&clustered);
+    let belt = back + super::BELT_FAR_FT - 1e-6;
+    assert!(past >= belt, "{past:.1} of {belt:.1}");
+    for form in ["linear", "dispersed"] {
+        let r = at(form);
+        assert_eq!(r.plan.knob("settlement_form"), form);
+        let ((past, back), w) = (reach(&r), (r.plan.w, clustered.plan.w));
+        assert!(past <= back + 1e-6, "{form}: out {past:.1}, back {back:.1}");
+        assert!(w.0 < w.1, "{form}: canvas {w:?}");
+        assert_eq!(super::check::check(&r), Vec::<String>::new(), "{form}");
+    }
+}

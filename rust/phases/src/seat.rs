@@ -40,6 +40,9 @@ pub struct SeatIn {
     /// The map's own wind where the back is handed another way than `wind` (a polder's landward shore): the wind the belt's room is
     /// asked of; none where the back is the wind's (449 T292).
     pub belt_wind: Option<Pt>,
+    /// Whether the settlement shelters behind a village belt (a clustered village's), so the seat asks room for it; a row or a
+    /// scattered settlement keeps none (449 T417).
+    pub belt: bool,
     /// The dot of a margin's back with the wind at or past which the back faces it (Python's `WIND_BACK_MIN_DOT`).
     pub back_min_dot: f64,
     /// The field's outline.
@@ -84,6 +87,8 @@ pub struct Frame {
     pub anchor: Pt,
     /// Whether the back is off the wind.
     pub offwind: bool,
+    /// Whether the settlement keeps a village belt's ground behind the band (`SeatIn::belt`, 449 T417).
+    pub belt: bool,
 }
 
 /// What the seat decided (D1): the chosen frame and its ladder, the fords, and the watercourses every later way is routed

@@ -221,14 +221,26 @@ pub fn band_extent(households: u32, shape: &str) -> (f64, f64) {
     (dep, lat)
 }
 
-/// The room the canvas keeps beyond the fan on every side, for the seat with its belt.
+/// Whether a settlement of this form shelters behind a village belt: a clustered village does; a row or a scattered settlement,
+/// its farms each in a grove of its own, does not (449 T417).
+///
+/// Research:
+///     the belt a clustered village's alone - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: where farms carry their own groves no village shelter belt is drawn - a scattered or a row settlement draws a grove at each farm, a clustered village shelters behind one belt at its edge; a form this table does not name (a hand-written spec's) keeps the belt, the stage's behavior before 449 T417
+#[must_use]
+pub fn keeps_belt(form: &str) -> bool {
+    !matches!(form, "linear" | "dispersed")
+}
+
+/// The room the canvas keeps beyond the fan on every side, for the seat with its belt where the settlement keeps one.
 ///
 /// Research:
 ///     the seat's room - GUESS: a closed-form bound from the seat's own quantities - its depth and standoff, then the farther of its half-length and its windward fringe plus the belt's reach
+///     no belt's reach for a row or a scattered settlement - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: no village shelter belt is drawn where farms carry their own groves, so the canvas keeps no belt's reach round its seat (`keeps_belt`, 449 T417); the windward fringe alone, the same GUESS bound without the belt
 #[must_use]
-pub fn seat_room(households: u32, shape: &str) -> f64 {
+pub fn seat_room(households: u32, shape: &str, belt: bool) -> f64 {
     let (dep, lat) = band_extent(households, shape);
-    dep + SEAT_STANDOFF + lat.max(WIND_BACK_MIN_DOT * lat + dep + BELT_REACH)
+    let reach = if belt { BELT_REACH } else { 0.0 };
+    dep + SEAT_STANDOFF + lat.max(WIND_BACK_MIN_DOT * lat + dep + reach)
 }
 
 /// The canvas's side (ft): the field's square from its acreage, the fan's overhang and the seat's room all round, to 50 ft.
@@ -236,10 +248,19 @@ pub fn seat_room(households: u32, shape: &str) -> f64 {
 /// Research:
 ///     the canvas - GUESS: a fan fills about 40% of its own box (the deleted `canvas_for`), the span doubled and rounded to 50 ft; working ground the crop cuts away
 #[must_use]
-pub fn canvas_side(households: u32, shape: &str) -> f64 {
+pub fn canvas_side(households: u32, shape: &str, belt: bool) -> f64 {
     let field = f64::from(households) * crate::field::ACRES_PER_HOUSEHOLD * 43_560.0;
     let span = ((field / 0.40).sqrt() * 2.0 / 50.0).round() * 50.0;
-    ((span * (1.0 + 2.0 * FAN_OVERHANG) + 2.0 * seat_room(households, shape)) / 50.0).round() * 50.0
+    ((span * (1.0 + 2.0 * FAN_OVERHANG) + 2.0 * seat_room(households, shape, belt)) / 50.0).round()
+        * 50.0
+}
+
+/// A rolled knob's form, or `or` where it was not rolled.
+///
+/// Research:
+///     the knob's form - NONE: a lookup of what was rolled
+fn rolled_or<'a>(rolled: &'a BTreeMap<String, String>, name: &str, or: &'a str) -> &'a str {
+    rolled.get(name).map_or(or, String::as_str)
 }
 
 /// The plan from the spec.
@@ -325,9 +346,8 @@ pub fn plan(spec: &Spec) -> Plan {
     let fry_form = form(&None, "fry_form", &FRY_FORMS, "none");
     let side = canvas_side(
         spec.households,
-        rolled
-            .get("cluster_shape")
-            .map_or("crescent", String::as_str),
+        rolled_or(&rolled, "cluster_shape", "crescent"),
+        keeps_belt(rolled_or(&rolled, "settlement_form", "")),
     );
     Plan {
         name: spec.name.clone(),
@@ -359,7 +379,7 @@ pub fn plan(spec: &Spec) -> Plan {
 
 #[cfg(test)]
 mod tests {
-    use super::{band_extent, canvas_side, offtakes_for, plan, seat_room};
+    use super::{band_extent, canvas_side, keeps_belt, offtakes_for, plan, seat_room};
     use crate::driver::spec::parse;
 
     #[test]
@@ -370,9 +390,19 @@ mod tests {
         let (dep, lat) = band_extent(15, "round");
         assert!((112.0..=300.0).contains(&dep) && (240.0..=1100.0).contains(&lat));
         assert!(band_extent(15, "elongated").0 < dep);
-        assert!(seat_room(15, "round") > lat);
-        let side = canvas_side(15, "round");
+        assert!(seat_room(15, "round", true) > lat);
+        let side = canvas_side(15, "round", true);
         assert!(side > 0.0 && (side / 50.0).fract() == 0.0);
+        // a row or a scattered settlement keeps no belt, so its canvas keeps no belt's reach round the seat (449 T417)
+        assert!(
+            keeps_belt("nucleated")
+                && keeps_belt("")
+                && !keeps_belt("linear")
+                && !keeps_belt("dispersed")
+        );
+        let bare = seat_room(15, "round", false);
+        assert!(bare > lat && bare < seat_room(15, "round", true));
+        assert!(canvas_side(15, "round", false) < side);
     }
 
     #[test]
