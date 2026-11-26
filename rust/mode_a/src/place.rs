@@ -376,7 +376,7 @@ pub fn size_sentence(kind: &Kind, meta: &Map<String, Value>, houses: i64) -> Res
 /// district; a village IS its district and is never said to belong to one (the GM, 2026-08-29: "there is no reason to ever say what
 /// village district a village belongs to"); the Imperial road's sentence says where the road LIES, not how it runs.
 ///
-/// Research: where a place sits - CANON: the GM 2026-08-29, a village is its district and a town its county's seat; the rest is the map's notes in their own words
+/// Research: where a place sits - CANON: the GM 2026-08-29 (specs/156-place-card-and-notes/request.md: "the name of the village is always the name of the village district"), a village is its district; l7r.md's "Demographics", the county town being its county's seat; the rest is the map's notes in their own words
 #[must_use]
 pub fn where_sentences(scale: &str, place: &Dict) -> Vec<String> {
     let mut out = Vec::new();

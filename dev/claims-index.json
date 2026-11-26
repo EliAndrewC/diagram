@@ -410,14 +410,15 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#grove and burial side knob": {
-  "body": "ac6bdec997dbc2ce",
-  "claim": "grove and burial side knob - CANON: follows the declared map, the GM's ruling of 2026-09-20 (the diagram view matches what the larger map shows)",
-  "code": "6f329b2a3eb03828",
+  "body": "4bf0a94a3c578646",
+  "claim": "grove and burial side knob - CANON: follows the declared map, the GM's ruling of 2026-09-20 (specs/257-sheet-matches-map/request.md: \"we shouldn't put any trees or graveyard on the shrine diagram if those are not in correspnding places on the village map\")",
+  "code": "c6faa3d5142b16c1",
   "core": "cb352ec458edb72f",
-  "date": "2026-11-24",
-  "note": "carried at its last recorded verdict (the GM's ruling of 2026-09-20 is named) under the arbiter's accept",
+  "date": "2026-11-26",
+  "note": "CANON names the ruling, quotes the GM's words and gives the request.md that holds them; knob 4 draws the grove and burial ground only where the map has them; no cited page answers this",
   "pages": {},
   "research": "",
+  "rests": [],
   "section": "cb352ec458edb72f",
   "verdict": "IN-STEP"
  },
@@ -2354,15 +2355,16 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#sheet follows its map": {
-  "code": "9c65b7a62ee667f2",
-  "core": "98c24242ed8d6f1b",
-  "date": "2026-10-10",
-  "note": "the claim names the GM's ruling (2026-09-20, feature 257)",
+  "body": "4d4add44368601e8",
+  "claim": "sheet follows its map - CANON: the GM's ruling of 2026-09-20 (specs/257-sheet-matches-map/request.md: \"we shold make the diagram view match what is shown on the larger map\"), a sheet of a place a settlement map already draws follows the map",
+  "code": "e2501ec489e3c7a3",
+  "core": "97e8e96ab63205cf",
+  "date": "2026-11-26",
+  "note": "CANON names the 2026-09-20 ruling and quotes it from specs/257's request.md; the section's rule is what the ruling says",
   "pages": {},
   "research": "",
   "rests": [],
   "section": "97e8e96ab63205cf",
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#subject sized from the record": {
@@ -2901,6 +2903,7 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#a bath's tub judged by no door": {
+  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "0c3d863ef0b30825",
   "core": "6c077f80b364c895",
   "date": "2026-10-10",
@@ -2912,13 +2915,14 @@
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3bdb4664ace5320c"
   ],
-  "section": "01640859548eec3c",
-  "triaged": "2026-11-19",
+  "section": "07fb8f97484af7a3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#a short face's tub round the corner nearest its door": {
   "body": "c8cadee1fe7341d3",
   "claim": "a short face's tub round the corner nearest its door - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P4, 2026-10-25); a 12 ft face leaves no seat beside a 6 ft door and its held approach, so the tub stands on the face round the nearer corner, still within the 10.5 ft",
+  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "dafb0e1baec7c8be",
   "core": "6c077f80b364c895",
   "date": "2026-10-25",
@@ -2926,13 +2930,14 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "01640859548eec3c",
-  "triaged": "2026-11-19",
+  "section": "07fb8f97484af7a3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#a tub never on a well glyph; moved to the door's other side": {
   "body": "c8cadee1fe7341d3",
   "claim": "a tub never on a well glyph; moved to the door's other side - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P4, 2026-10-25); the two point glyphs would smear into one blob, so a tub is moved to the door's other side, or round the corner nearest it",
+  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "ac24d8b35fa62b3f",
   "core": "6c077f80b364c895",
   "date": "2026-10-25",
@@ -2940,13 +2945,14 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "01640859548eec3c",
-  "triaged": "2026-11-19",
+  "section": "07fb8f97484af7a3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#a tub that does not fit a narrow alley moved to open ground": {
   "body": "c8cadee1fe7341d3",
   "claim": "a tub that does not fit a narrow alley moved to open ground - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P4, 2026-10-25); a 7.6 px tub does not fit a 9 px alley between two buildings, so it is moved to the door's other side or a seat facing open ground",
+  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "a36342e8c2eedfce",
   "core": "6c077f80b364c895",
   "date": "2026-10-25",
@@ -2954,11 +2960,12 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "01640859548eec3c",
-  "triaged": "2026-11-19",
+  "section": "07fb8f97484af7a3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#every wooden building with a tub draws a door": {
+  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "4922b4745e522e5b",
   "core": "6c077f80b364c895",
   "date": "2026-10-10",
@@ -2970,11 +2977,12 @@
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3bdb4664ace5320c"
   ],
-  "section": "01640859548eec3c",
-  "triaged": "2026-11-19",
+  "section": "07fb8f97484af7a3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#kitchen weighting": {
+  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "edd9727f3e781d2c",
   "core": "6c077f80b364c895",
   "date": "2026-10-10",
@@ -2988,11 +2996,12 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
   ],
-  "section": "01640859548eec3c",
-  "triaged": "2026-11-19",
+  "section": "07fb8f97484af7a3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#no tub at the plaster kura": {
+  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "1d6dc3727c294090",
   "core": "6c077f80b364c895",
   "date": "2026-10-10",
@@ -3006,15 +3015,17 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fe5bcc892cab35bf"
   ],
-  "section": "01640859548eec3c",
-  "triaged": "2026-11-19",
+  "section": "07fb8f97484af7a3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#no tub on the roof": {
-  "code": "c29db470a48f5e11",
-  "core": "6c077f80b364c895",
-  "date": "2026-10-10",
-  "note": "roof water attested and recorded as not drawn",
+  "body": "98cb431528875e66",
+  "claim": "no tub on the roof - DEVIATION fire-and-the-fireproof-storehouses-dozo.drawing: water was kept on the roof too, not drawn - no tub stands inside a building's outline (this project's rule, \"tub clear of the footprint\" below), so the entrance is the one seat",
+  "code": "597c245ab172be62",
+  "core": "07fb8f97484af7a3",
+  "date": "2026-11-26",
+  "note": "the drawing page records the departure: water kept \"at the entrance and on the roof\", and \"The roof, where water was kept too, is not drawn: no tub stands inside a building's outline on our plans\"; the pointer to the neighboring claim is correct",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc"
   },
@@ -3023,11 +3034,11 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3bdb4664ace5320c",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f"
   ],
-  "section": "01640859548eec3c",
-  "triaged": "2026-11-19",
+  "section": "07fb8f97484af7a3",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#one tub per wooden building": {
+  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "7c231deb50153043",
   "core": "6c077f80b364c895",
   "date": "2026-10-10",
@@ -3041,12 +3052,12 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
   ],
-  "section": "01640859548eec3c",
-  "triaged": "2026-11-19",
+  "section": "07fb8f97484af7a3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#the reception's shoe stone is its entrance": {
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
+  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "f595fd29dd336ee4",
   "core": "6c077f80b364c895",
   "date": "2026-10-11",
@@ -3060,11 +3071,12 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3bdb4664ace5320c",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:7e1a102957652671"
   ],
-  "section": "01640859548eec3c",
-  "triaged": "2026-11-23",
+  "section": "07fb8f97484af7a3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#tub against its wall": {
+  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "87c6724d42e0242c",
   "core": "6c077f80b364c895",
   "date": "2026-10-10",
@@ -3077,24 +3089,32 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3bdb4664ace5320c",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f"
   ],
-  "section": "01640859548eec3c",
-  "triaged": "2026-11-19",
+  "section": "07fb8f97484af7a3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#tub clear of the footprint": {
-  "code": "489642c78b6bb7ac",
-  "core": "6c077f80b364c895",
-  "date": "2026-10-10",
-  "note": "the GM's ruling, named, which the drawing page records as \"no tub stands inside a building's outline\"",
-  "pages": {},
-  "research": "",
-  "section": "01640859548eec3c",
-  "triaged": "2026-11-19",
+  "body": "98cb431528875e66",
+  "claim": "tub clear of the footprint - fire-and-the-fireproof-storehouses-dozo.drawing: no tub stands inside a building's outline on our plans - no part of a tub glyph in a building's footprint (the downspout discharges and the bucket line forms outside the wall); this project's rule, not canon: the procedure dates it 2026-07-25, tightened 2026-07-26, as the GM's, and no record holds a sentence of his for it (451 T251)",
+  "code": "1470435aaabcc89f",
+  "core": "07fb8f97484af7a3",
+  "date": "2026-11-26",
+  "note": "0100's drawing page states the rule, \"no tub stands inside a building's outline on our plans\"; the downspout and bucket-line reasons are given as the project's reasoning, not as a finding",
+  "pages": {
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc"
+  },
+  "research": "9fd73eb86394c59a",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3bdb4664ace5320c",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f"
+  ],
+  "section": "07fb8f97484af7a3",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#tub glyph": {
-  "code": "5b48130fb53d6bf0",
-  "core": "6c077f80b364c895",
+  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
+  "code": "255db2bc23cacec6",
+  "core": "07fb8f97484af7a3",
   "date": "2026-10-10",
   "note": "2.5 ft, recorded as a guess",
   "pages": {
@@ -3104,11 +3124,12 @@
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:4530579a74e75485"
   ],
-  "section": "01640859548eec3c",
-  "triaged": "2026-11-19",
+  "section": "07fb8f97484af7a3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#tub glyph colors": {
+  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "1094ef5d2a8a1b28",
   "core": "6c077f80b364c895",
   "date": "2026-10-10",
@@ -3116,11 +3137,12 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "01640859548eec3c",
-  "triaged": "2026-11-19",
+  "section": "07fb8f97484af7a3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#tub seat off the wall": {
+  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "49b682d81a251f5d",
   "core": "6c077f80b364c895",
   "date": "2026-10-10",
@@ -3128,13 +3150,14 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "01640859548eec3c",
-  "triaged": "2026-11-19",
+  "section": "07fb8f97484af7a3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#tub within 10.5 ft of a door": {
   "body": "0146f940ae0de55f",
   "claim": "tub within 10.5 ft of a door - fire-and-the-fireproof-storehouses-dozo.drawing: within about 10 ft, a CONVENTION of this project - the kitchen's two tubs side by side at one 6 ft door put the far one ~10.2 ft off (`TUB_DOOR_MAX_FT`, `rust/mode_a/src/compound.rs`)",
+  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "6c6e244e5e515c93",
   "core": "6c077f80b364c895",
   "date": "2026-11-19",
@@ -3146,8 +3169,8 @@
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3bdb4664ace5320c"
   ],
-  "section": "01640859548eec3c",
-  "triaged": "2026-11-19",
+  "section": "07fb8f97484af7a3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Historical grounding#grounding pointer": {
@@ -5855,23 +5878,20 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#buildings at true size": {
-  "body": "790b96362bb8bc8d",
-  "claim": "buildings at true size - CANON: the GM's ruling of 2026-07-21, buildings drawn at true size; the-size-of-a-compound-and-the-rank-of-its-buildings bears only on the proportion ranking, the kitchen, stable and shrine ranks being this project's reading",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "848e8b136af5253e",
+  "body": "59301a460cad06a5",
+  "claim": "buildings at true size - CANON: the GM's ruling of 2026-07-21 (docs/gm-rulings.md, \"To scale means true size\": \"We're trying to be perfectly to scale, remember?\"), buildings drawn at true size; the-size-of-a-compound-and-the-rank-of-its-buildings bears only on the proportion ranking, the kitchen, stable and shrine ranks being this project's reading",
+  "code": "086bbf04cee314c0",
   "core": "576af448bf1e8cac",
-  "date": "2026-11-22",
-  "note": "names the GM's ruling of 2026-07-21; 0116 bears only on the ranking and calls the kitchen, stable and shrine ranks this project's reading",
+  "date": "2026-11-26",
+  "note": "CANON names the 2026-07-21 ruling and quotes it from docs/gm-rulings.md; 0116 is correctly limited to the ranking, which it calls \"this project's reading\"",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html": "cabe03303ad641cc"
   },
   "research": "7effcb6ab942d400",
   "rests": [
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:69620b1e79461ecf",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:d89c58633b72e2d1"
   ],
   "section": "576af448bf1e8cac",
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#caption placement": {
@@ -6053,18 +6073,6 @@
  },
  "docs/buildings.md::Walls and gates#cart gate in the side gate's band": {
   "body": "cfc5ee21246b8f86",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "claim": "cart gate in the side gate's band - GUESS moving-goods-carts-packhorses-and-river-landings-kashi.drawing: a compound that ships or receives bulk goods has a cart gate and a 6 ft cart lane over the hand cart's 2.5 ft bed; no page gives a cart gate's width (the research pass of 2026-11-22, 449 T341), so it is drawn in the side gate's 5-8 ft band, Hayakawa's two and Ubame's two at 8 ft",
   "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "54ba31a9929be61f",
@@ -6080,23 +6088,11 @@
    "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html:ba5f7c109389b42f",
    "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html:cae772605b4340ee"
   ],
-  "section": "8f8393df8a3597af",
-  "triaged": "2026-11-24",
+  "section": "9fbcc788f612aba3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#compound wall stroke": {
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "9da8d6927fa1de44",
   "core": "260aa1c5e1ce4172",
@@ -6110,23 +6106,11 @@
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html:aef4a5069500ea83",
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html:bbba3419b31507b3"
   ],
-  "section": "8f8393df8a3597af",
-  "triaged": "2026-11-24",
+  "section": "9fbcc788f612aba3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#divider wall": {
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "ff3f1033da51222d",
   "core": "260aa1c5e1ce4172",
@@ -6139,24 +6123,12 @@
   "rests": [
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html:346b45d1eddd4966"
   ],
-  "section": "8f8393df8a3597af",
-  "triaged": "2026-11-24",
+  "section": "9fbcc788f612aba3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#divider wall between the courts": {
   "body": "cfc5ee21246b8f86",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "claim": "divider wall between the courts - magistrates-compounds-jinya-and-yamen.drawing: two courts, the office in front and the residence behind, with a gate between them dividing the office from the home (the wall itself at compound-walls-neribei-and-tsuijibei.drawing)",
   "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "5c42ace4f9676ac8",
@@ -6173,24 +6145,12 @@
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
-  "section": "8f8393df8a3597af",
-  "triaged": "2026-11-24",
+  "section": "9fbcc788f612aba3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#gatehouse": {
   "body": "12ad0b0a907bc728",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "claim": "gatehouse - the-main-gate-and-its-gatekeepers-nagaya-mon, the-main-gate-and-its-gatekeepers-nagaya-mon.drawing: freestanding beside the opening or behind it, a knob (0093's Kita-in guardroom, both seats attested), ~40 x 12 ft (Ochiba), or the guardroom in the gate range (Hayakawa, Ubame), both 2 ken (~12 ft) deep; the 40 ft a GUESS",
   "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "87c8491ec06e7f19",
@@ -6211,24 +6171,12 @@
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:7962493012310fe7",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:cd57d3fd287dbd8e"
   ],
-  "section": "8f8393df8a3597af",
-  "triaged": "2026-11-24",
+  "section": "9fbcc788f612aba3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#main gate forms": {
   "body": "c68f2e0d2124de7a",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "claim": "main gate forms - the-main-gate-and-its-gatekeepers-nagaya-mon: yakuimon 6-8.5 ft or nagaya-mon ~12 ft, rolled per plan, as the-main-gate-and-its-gatekeepers-nagaya-mon.drawing draws them",
   "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "b392c553fd5bc467",
@@ -6247,24 +6195,12 @@
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:04ac23f9653e01fb",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:ba58f3e359358d5e"
   ],
-  "section": "8f8393df8a3597af",
-  "triaged": "2026-11-24",
+  "section": "9fbcc788f612aba3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#main gate on the south wall": {
   "body": "c24e7aaaab931a8c",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "claim": "main gate on the south wall - the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing: where nothing else decides it the gate faces south, the Qing office's formal orientation used on both models; a sheet has no town to front, so its main gate is in the south wall (the Joge post's gate stood at its east wall, the-main-gate-and-its-gatekeepers-nagaya-mon)",
   "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "1d017934dfc07a8b",
@@ -6281,24 +6217,12 @@
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:298b9fa8aca26da7",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:e116904d37e71942"
   ],
-  "section": "8f8393df8a3597af",
-  "triaged": "2026-11-24",
+  "section": "9fbcc788f612aba3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#main gate posts": {
   "body": "cfc5ee21246b8f86",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "claim": "main gate posts - CONVENTION: a main gate's posts drawn outside its passage, its inner face on the passage, about 2 ft square on the hand sheets; on the generated plans every gate's posts 2 ft along the wall by about 4.3 ft across it, standing past the wall's ink on both faces (0093's drawing page; feature 374 wave 133, where they were ~2.7-5.3 x 4.7 ft; 449 T349, T365)",
   "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "2ea95dce87d46722",
@@ -6307,23 +6231,11 @@
   "note": "posts outside the passage, about 2 ft square on hand sheets, 2 ft by about 4.3 ft past the wall's ink on generated plans; 0093's drawing page records this as a map drawing convention",
   "pages": {},
   "research": "",
-  "section": "8f8393df8a3597af",
-  "triaged": "2026-11-24",
+  "section": "9fbcc788f612aba3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#no salt wards at gates": {
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "8e475da5914062cc",
   "core": "260aa1c5e1ce4172",
@@ -6336,23 +6248,11 @@
   "rests": [
    "0240-salt-heaps-at-doorways-morijio.drawing.html:a33f241183e741d5"
   ],
-  "section": "8f8393df8a3597af",
-  "triaged": "2026-11-24",
+  "section": "9fbcc788f612aba3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#opening ink width": {
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "80033e95c2473225",
   "core": "3c216ad7c4b56d44",
@@ -6361,24 +6261,12 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "8f8393df8a3597af",
-  "triaged": "2026-11-24",
+  "section": "9fbcc788f612aba3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#side gate passage": {
   "body": "c68f2e0d2124de7a",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "claim": "side gate passage - GUESS: 5-8 ft clear, the size-audit's anchor of 2026-11-22 (Okamoto ura-mon 2.0 m, Nakamori 1.8 m, Kusaka 2.4 m, bunka.go.jp), not yet in the record; 0101 and 0093 are silent on its size - 0101's fujomon gives the rear gate's purpose, and 0093 sizes only the main gate (449 T340)",
   "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "ebf9fdc308219866",
@@ -6387,24 +6275,12 @@
   "note": "a 5-8 ft guess; 0101's drawing page records its own 6 ft side gate as a guess inside that band",
   "pages": {},
   "research": "",
-  "section": "8f8393df8a3597af",
-  "triaged": "2026-11-24",
+  "section": "9fbcc788f612aba3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#structures abut walls": {
   "body": "12ad0b0a907bc728",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "claim": "structures abut walls - compound-walls-neribei-and-tsuijibei.drawing: a foot or two clear of the wall's face (~2.5-3.5 ft from a compound wall's centerline, ~2-3 ft from a divider's), privies and curbs included; the spacing the page's GUESS",
   "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "12b55df43019a15c",
@@ -6420,24 +6296,12 @@
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html:bbba3419b31507b3",
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html:f335f68a1e164a0e"
   ],
-  "section": "8f8393df8a3597af",
-  "triaged": "2026-11-24",
+  "section": "9fbcc788f612aba3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#the gatehouse behind the gate": {
   "body": "03eee540300f51da",
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
   "claim": "the gatehouse behind the gate - the-main-gate-and-its-gatekeepers-nagaya-mon: the behind seat is attested (a plan of 1841 draws the Kita-in guardroom inside, behind the gate); no page gives how far behind or to which side, so its setback past the gate's held approach and its side of the way in are a GUESS on the record's silence (449 T398)",
   "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
   "code": "22cf246deb916c9f",
@@ -6452,33 +6316,21 @@
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:7962493012310fe7",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:cd57d3fd287dbd8e"
   ],
-  "section": "8f8393df8a3597af",
-  "triaged": "2026-11-24",
+  "section": "9fbcc788f612aba3",
+  "triaged": "2026-11-25",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#threshold stones": {
-  "build": {
-   "commit": "1b064aa0defd81fae1f8bfce12967c8790b1f132",
-   "dirty": {
-    "rust/gate/CLAUDE.md": "2df02a896ea5f1c5a532fa7c591717afd346cd8e",
-    "rust/gate/crates/claims/src/claims/commands/tests.rs": "b79c9fd31257f3c755998d6cc7aefa5fa67caa99",
-    "rust/gate/crates/claims/src/claims/index.rs": "2937a045a8d42f88de44fcc0d54722327bbcf975",
-    "rust/gate/crates/core/Cargo.toml": "55d42eedc1bf1273245fe8e3745e7bf7c469a219",
-    "rust/gate/crates/core/src/build.rs": "27a47d7d49525d4c9ae60c68c0f392e6060352b9",
-    "rust/gate/crates/owed/src/record/owed/answers.rs": "831fc30601ccd73a48c02992fb17605dba70e5e5",
-    "rust/gate/crates/owed/src/record/owed/tests.rs": "f543ca0a28f83e94d34c8457b1b494f39805cfb0"
-   }
-  },
-  "cleared": "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)",
-  "code": "ff0c23745aa2fa47",
-  "core": "260aa1c5e1ce4172",
-  "date": "2026-10-10",
-  "note": "both GM rulings are named",
+  "body": "2a1417d3c9e1e609",
+  "claim": "threshold stones - CANON: l7r.md's Vermillion Threshold Stones (\"The Imperial Road Through Minami\"), the Fox road-warding the County Magistrate of Ochiba maintains, river-stones the size of two fists painted with cinnabar; the pair flanking the road outside the opening and never in the passage, and the ~3.3x4.7 ft stone at Ochiba (larger than the canon's two fists), are this project's drawing rules, not canon: the procedure dates them 2026-07-25 and 2026-09-26 as the GM's, and no record holds a sentence of his for either (451 T251)",
+  "code": "6f11da21bda182e0",
+  "core": "9fbcc788f612aba3",
+  "date": "2026-11-26",
+  "note": "CANON names l7r.md's Vermillion Threshold Stones for the stones themselves; the paired placement and the larger stone at Ochiba are openly stated as the project's drawing rules, not canon, and no cited page sizes or places them",
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "8f8393df8a3597af",
-  "triaged": "2026-11-24",
+  "section": "9fbcc788f612aba3",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#a fourth well only for very large compounds": {
@@ -22201,14 +22053,19 @@
  },
  "rust/mode_a/src/compound/parts.rs::tubs#tub clear of the footprint": {
   "body": "443dbd4825e47227",
-  "claim": "tub clear of the footprint - CANON: the GM's ruling of 2026-07-25, tightened 2026-07-26, no part of a tub glyph in a building's footprint",
-  "code": "b145779663ff54a8",
+  "claim": "tub clear of the footprint - fire-and-the-fireproof-storehouses-dozo.drawing: no tub stands inside a building's outline on our plans - no part of a tub glyph in a building's footprint; this project's rule, not canon (docs/buildings.md dates it 2026-07-25/26 as the GM's, and no record holds a sentence of his for it, 451 T251)",
+  "code": "08a77a81cfc54e7a",
   "core": "2e48373f0ba3b7f4",
-  "date": "2026-11-19",
-  "note": "seated 0.73 ft off the face",
-  "pages": {},
+  "date": "2026-11-26",
+  "note": "the tub's seat is a strip TUB_OFF outside its own building's face (face_strip), and part_rule keeps a 0.3 ft gap from every other building, so no part of the glyph lands in any footprint, as 0100's drawing page requires",
+  "pages": {
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc"
+  },
   "reads": "d8d570e64fb55492",
-  "research": "",
+  "research": "9fd73eb86394c59a",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3bdb4664ace5320c"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/parts.rs::tubs_owed#kitchen weighting": {
@@ -30438,11 +30295,11 @@
  },
  "rust/mode_a/src/place.rs::where_sentences#where a place sits": {
   "body": "9c9b40db4ad86e7d",
-  "claim": "where a place sits - CANON: the GM 2026-08-29, a village is its district and a town its county's seat; the rest is the map's notes in their own words",
-  "code": "fd5723f33e05dc7d",
+  "claim": "where a place sits - CANON: the GM 2026-08-29 (specs/156-place-card-and-notes/request.md: \"the name of the village is always the name of the village district\"), a village is its district; l7r.md's \"Demographics\", the county town being its county's seat; the rest is the map's notes in their own words",
+  "code": "bffdd244bef087a5",
   "core": "4f12c2b760d1e06f",
-  "date": "2026-11-18",
-  "note": "the GM's ruling is named",
+  "date": "2026-11-26",
+  "note": "CANON names the 2026-08-29 ruling and quotes it from specs/156's request.md, plus l7r.md's Demographics; at village scale the code adds no district sentence, and a town is \"the seat of {county} county\"",
   "pages": {},
   "research": "",
   "rests": [],
@@ -41826,11 +41683,11 @@
  },
  "rust/phases/src/field/brook.rs::AXIS_OFF_DEG#no screen axis": {
   "body": "479f72df9bf207aa",
-  "claim": "no screen axis - CANON: the GM, 2026-08-26, on a brook drawn level along the frame: \"appears to run exactly east to west parallel to the edge of the map. that makes it look like a mistake\"; the brook rules refuse 1.6 degrees, and this keeps a margin past it, 2",
-  "code": "b4bfb5a9efc13ea1",
+  "claim": "no screen axis - CONVENTION: a line laid exactly along the frame reads as a drawing mistake - this project's extension to the brook of what the GM said of Inashiro's marsh edge, never of a brook (\"appears to run exactly east to west parallel to the edge of the map. that makes it look like a mistake\", 2026-08-26, quoted in specs/133-reference-hamlet-acceptance/tasks.md T30); the brook rules refuse 1.6 degrees, and this keeps a margin past it, 2",
+  "code": "dc117a17dcd2e023",
   "core": "09102438e8027b02",
-  "date": "2026-10-31",
-  "note": "names the GM's 2026-08-26 ruling; 2 deg is a margin past the rules' 1.6",
+  "date": "2026-11-26",
+  "note": "CONVENTION fits: keeping a line off parallel to the map's edge is about how the map reads, not how a brook ran; 2.0 degrees clears the rules' 1.6",
   "pages": {},
   "research": "",
   "rests": [],
@@ -42171,11 +42028,11 @@
  },
  "rust/phases/src/field/brook.rs::off_axis#no screen axis": {
   "body": "70bebf1964853cc9",
-  "claim": "no screen axis - CANON: the GM, 2026-08-26: \"appears to run exactly east to west parallel to the edge of the map. that makes it look like a mistake\"; the brook rules refuse a segment within 1.6 degrees of an axis, so each is laid at least `AXIS_OFF_DEG` off",
-  "code": "2a03ea913f3c04a7",
+  "claim": "no screen axis - CONVENTION: a line laid exactly along the frame reads as a drawing mistake - this project's extension to the brook of what the GM said of Inashiro's marsh edge, never of a brook (\"appears to run exactly east to west parallel to the edge of the map. that makes it look like a mistake\", 2026-08-26, quoted in specs/133-reference-hamlet-acceptance/tasks.md T30); the brook rules refuse a segment within 1.6 degrees of an axis, so each is laid at least `AXIS_OFF_DEG` off",
+  "code": "7131d831c3afb7bb",
   "core": "e43bcfa388f5b29c",
-  "date": "2026-11-01",
-  "note": "GM ruling named; segments within AXIS_OFF_DEG of an axis are pushed off",
+  "date": "2026-11-26",
+  "note": "CONVENTION fits: a segment within AXIS_OFF_DEG of an axis is pushed 2.5 degrees off, a matter of how the map reads",
   "pages": {},
   "reads": "9d0f2503552a0299",
   "research": "",
@@ -50263,18 +50120,22 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#not in the reed fringe": {
-  "body": "c613a2b6d5428e57",
-  "claim": "not in the reed fringe - CANON: the GM's ruling of 2026-08-28, refused centered in a pond's reed fringe, scored down at an end; it departs from ground-too-wet-to-build-on.drawing, which does not count the fringe as marsh",
-  "code": "2df5ca9b3bda1373",
+  "body": "84e2cf9b503e71be",
+  "claim": "not in the reed fringe - ground-too-wet-to-build-on.drawing: houses keep to dry ground, and reading a pond's reed fringe as wet ground no cluster is seated in is this project's reading, extended from what the GM said of farmhouses on marshland (\"I see multiple farmhouses on that map that appear to overlap with marshland ... looks like a mistake to me\", 2026-08-28, quoted in specs/150-kuwabata-dike-pond-hamlet/tasks.md T50; he names no fringe); refused centered in a pond's reed fringe, scored down at an end; the page leaves the fringe out of the marsh for sacred and funerary ground alone",
+  "code": "7f09c8c43ddbe76a",
   "core": "b0241e8d837487a4",
-  "date": "2026-11-24",
-  "note": "CANON naming the GM's ruling of 2026-08-28; the code refuses a center inside a fringe (`stopped[4]`) and scores the band's wet share down (`WEIGHTS.reeds * wet`); the edited 0058 page still does not count the fringe as marsh, so the departure the claim states is true [0058 §212, §221]",
+  "date": "2026-11-26",
+  "note": "restated as a plain question claim: houses keep to dry ground per the record, the fringe read as wet ground is marked as this project's reading, and the page's fringe exemption is correctly scoped to sacred and funerary ground; the code refuses a center in a fringe and scores down by the wet share, as claimed",
   "pages": {
    "0058-ground-too-wet-to-build-on.drawing.html": "f91787095acd06d1"
   },
   "reads": "6288a6585a296fd3",
   "research": "8a406c56299151e7",
-  "triaged": "2026-11-25",
+  "rests": [
+   "0058-ground-too-wet-to-build-on.drawing.html:0a7edc2c78add98c",
+   "0058-ground-too-wet-to-build-on.drawing.html:b1d674ad9da16c31",
+   "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#not on the wet toe": {

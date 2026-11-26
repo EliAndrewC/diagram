@@ -28,7 +28,7 @@ pub const MEANDER_WAVE_FT: f64 = 80.0;
 /// The least lean a brook segment keeps off the screen's axes (degrees): past the brook rules' 1.6.
 ///
 /// Research:
-///     no screen axis - CANON: the GM, 2026-08-26, on a brook drawn level along the frame: "appears to run exactly east to west parallel to the edge of the map. that makes it look like a mistake"; the brook rules refuse 1.6 degrees, and this keeps a margin past it, 2
+///     no screen axis - CONVENTION: a line laid exactly along the frame reads as a drawing mistake - this project's extension to the brook of what the GM said of Inashiro's marsh edge, never of a brook ("appears to run exactly east to west parallel to the edge of the map. that makes it look like a mistake", 2026-08-26, quoted in specs/133-reference-hamlet-acceptance/tasks.md T30); the brook rules refuse 1.6 degrees, and this keeps a margin past it, 2
 pub const AXIS_OFF_DEG: f64 = 2.0;
 /// How far off the fall a brook fed into the head's middle swings out to its flank below the intake (degrees).
 ///
@@ -218,7 +218,7 @@ pub fn brook(fan: &Fan, side: f64, b: BrookIn, place: (bool, bool), canvas: Pt) 
 /// so the segment leans the same way) until it leans that far off. The station laid, and the intake, never move.
 ///
 /// Research:
-///     no screen axis - CANON: the GM, 2026-08-26: "appears to run exactly east to west parallel to the edge of the map. that makes it look like a mistake"; the brook rules refuse a segment within 1.6 degrees of an axis, so each is laid at least `AXIS_OFF_DEG` off
+///     no screen axis - CONVENTION: a line laid exactly along the frame reads as a drawing mistake - this project's extension to the brook of what the GM said of Inashiro's marsh edge, never of a brook ("appears to run exactly east to west parallel to the edge of the map. that makes it look like a mistake", 2026-08-26, quoted in specs/133-reference-hamlet-acceptance/tasks.md T30); the brook rules refuse a segment within 1.6 degrees of an axis, so each is laid at least `AXIS_OFF_DEG` off
 ///     the push - CONVENTION: half a degree past `AXIS_OFF_DEG`, so one push clears the bar
 fn off_axis(laid: Pt, new: Pt, out: Pt, sign: f64) -> Pt {
     let deg = (new.1 - laid.1)

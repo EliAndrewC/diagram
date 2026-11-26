@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-26T04:43:16Z",
+  "target": "plan-gate decide-defer 451-time-retro-and-efficiency T251",
+  "commit": "205938ebc3",
+  "why": "the builder's brief forbids filing tasks from a parallel worktree; the coordinating session files the reed-fringe and dedication-knob items and writes their ids here before the tick, as it did T233's two"
+}

@@ -215,7 +215,7 @@ Each item names the Mode A kind it is (feature 262): the sheet's own `data-kind`
 <!-- Research: strength stones set beside the approach - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: strength stones beside the approach, gifts of the parish -->
 <!-- Research: fire-water tub size about 2.5 ft across - GUESS: no page sizes a fire-water tub -->
 <!-- Research: privy size 5 ft square - GUESS: no page sizes a shrine dwelling's privy -->
-<!-- Research: grove and burial side knob - CANON: follows the declared map, the GM's ruling of 2026-09-20 (the diagram view matches what the larger map shows) -->
+<!-- Research: grove and burial side knob - CANON: follows the declared map, the GM's ruling of 2026-09-20 (specs/257-sheet-matches-map/request.md: "we shouldn't put any trees or graveyard on the shrine diagram if those are not in correspnding places on the village map") -->
 <!-- Research: burial ground off a map - research/questions/0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html: rolls in the yard or apart, save on a hill (the hill shrine's claim, 0236) -->
 <!-- Research: wealth knob - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: donated stonework -->
 <!-- Research: wealth knob roofing - GUESS: searched, the record silent (feature 417 T36 pass P4, 2026-10-25); thatch against tile by wealth -->

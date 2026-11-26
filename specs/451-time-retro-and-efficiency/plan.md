@@ -2614,31 +2614,50 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T251 (<why: the finding or measurement that files it>)
+### T251 (451 T233's "Found and left", 2026-11-25: the gm-attributions baseline's 10 walked CANON claims named a ruling of the GM's with no pointer to his words; `docs/gm-rulings.md`, "NOT a ruling", is what such a claim cost once)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: each of the 10 claim lines is searched for his recorded words, then given the record's path or relabeled to what backs it; the baseline is pruned. Claim comments and doc lines only: no code, no page, no map.
+  - **Where it was searched**, 2026-11-25, method: `grep -rniE` of each claim's subject words and dates over `specs/*/request.md`, `specs/*/gm-request.md`, `docs/gm-rulings.md` and the `gm_words` of `specs/*/gm-review.jsonl` (343 files), then `make canon TERMS=` over the GM's notes, then the same words over `specs/*/tasks.md`, `pool/**/*.notes.md` and `research/questions/` to find where an unrecorded one came from.
+  - **Five claims have a record and now name it** (the class stays CANON):
+    - `docs/buildings.md` "buildings at true size": `docs/gm-rulings.md`, "To scale means true size (2026-07-21)".
+    - `docs/buildings.md` "sheet follows its map" and `docs/building-programs.md` "grove and burial side knob": `specs/257-sheet-matches-map/request.md` (2026-09-20, "make the diagram view match what is shown on the larger map").
+    - `rust/mode_a/src/place.rs` "where a place sits": `specs/156-place-card-and-notes/request.md` (2026-08-29) for the village half. The town half ("its county's seat") is not in that request; it is `l7r.md`'s "Demographics" (the county town, "the remote county seat", `make canon TERMS="county seat"`), and the line now says so.
+    - `docs/buildings.md` "threshold stones": the stones are `l7r.md`'s Vermillion Threshold Stones ("The Imperial Road Through Minami", line 7284), so the class stays CANON and cites the notes as the other `CANON: l7r.md's ...` lines do. The two dated rulings it named (the pair's placement 2026-07-25, the Ochiba size 2026-09-26) have no record; the line now calls them this project's drawing rules and says no record holds a sentence of his.
+  - **Five claims have no record and are relabeled**:
+    - "tub clear of the footprint", `docs/buildings.md` and `rust/mode_a/src/compound/parts.rs`: CANON -> a pointer at `research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html`, which states it ("no tub stands inside a building's outline on our plans"). The neighboring "no tub on the roof" DEVIATION claim named the same ruling in its account; it now names the claim instead.
+    - "no screen axis", `rust/phases/src/field/brook.rs` twice: CANON -> CONVENTION. The quoted words are his and are of 2026-08-26, but they are quoted only in `specs/133-reference-hamlet-acceptance/tasks.md` T30 (not a record the check takes) and he said them of Inashiro's marsh edge, never of a brook. The old line said "on a brook"; the new one says whose extension it is and where the words sit.
+    - "not in the reed fringe", `rust/phases/src/seat/margins.rs`: CANON -> `DEVIATION research/questions/0058-ground-too-wet-to-build-on.drawing.html`. His words of 2026-08-28 (quoted in `specs/150-kuwabata-dike-pond-hamlet/tasks.md` T50) are of farmhouses on marshland and name no fringe; 0058 says a pond's reed fringe is not marsh, and the code departs from it. GUESS was tried first and `make claims-owed` refused it as a form problem (claims-label: an account that says the code departs from a page is `DEVIATION <page>`).
+  - **No docs/gm-rulings.md entry was minted** for the brook's or the fringe's words to make a pointer of them: that file holds what was kept only in session memories, and his words there back a different subject than the claim.
+  - **The baseline**: 351 -> 341 lines, its claim entries 10 -> 0, measured 2026-11-25 (`wc -l`, `grep -c '"kind":"claim"'` before and after `scripts/gates/l7r-gate.sh check gm-attributions --prune`); the check plain is then silent, rc 0.
+  - **The claims round is not run here.** `make claims-triage` says no claim is owed a triage; `make claims-owed` lists 11 claims in 6 files as "code changed" (the 10 and "no tub on the roof"), with no form problem, measured 2026-11-25 (both commands on this tree after the edits). The coordinating session dispatches impl-drift. Each relabel is a MISLABELED for it to judge: feature 328 moved the tub and threshold-stone claims TO CANON on the procedure's date tags (`specs/328-match-the-research/claims-followup.md` lines 42 and 424), which is the attribution this task finds no record for.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the 10 claims name a record or say whose rule it is | before the edits the check listed all 10 as baseline entries; after them it refused each as "no longer found" until pruned, then silent (rc 0), 2026-11-25 | n/a: comments and doc lines | none | n/a |
+| the generated doc keeps its claim line | `make building-programs CHECK=1`: current, before and after the edit, 2026-11-25 | n/a | none | n/a |
 
 ### T251 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No engine claim or procedure line calls a rule the GM's ruling unless it names where his words are recorded; one with no record says whose rule it is.
+2. **The constraints.** `docs/gm-rulings.md` "NOT a ruling" (never invent his words); the claims grammar (`rust/gate/crates/claims/src/claims/grammar.rs`, `CLASSES`); 451 T233's check (`rust/gate/crates/checks/src/checks/gm_attributions.rs`: a pointer is a request.md, gm-request.md, `docs/gm-rulings.md` or gm-review.jsonl path that exists); the brief: claim-comment and doc-line edits only, no claims round dispatched, no task filed.
+3. **Where each comes from.** G: the GM 2026-11-24 in `docs/gm-rulings.md` ("NOT a ruling") and `specs/449-rust-codebase/request.md`. R: 0100's and 0058's drawing pages. O: the searches above, 2026-11-25.
+4. **Do they describe the world here?** Yes: the baseline's 10 claim entries matched the 10 lines found by `grep ' - CANON'` over the six files at 205938ebc3, measured 2026-11-25 (`grep -n ' - CANON'` filtered by the check's pattern, set beside the baseline's CANON entries).
+5. **The order.** After T233 (landed). T250 edits the page comments four of these share (0039, 0058, 0100, 0222) and must reach the same answer.
+6. **The exits.** Green: `make closing-checks T=T251 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The baseline holds no claim entry and the check is silent on the tree, measured 2026-11-25 (`grep -c '"kind":"claim"' dev/gm-attribution-baseline.jsonl`: 0; `scripts/gates/l7r-gate.sh check gm-attributions`: rc 0).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map and no sheet changes. The finding it answers: an attribution with no recorded words became a rule code enforced (0006 and `field/dry.rs`, 2026-11-24).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The page comments of 0100 ("the GM's ruling of 2026-07-25/26: no part of a tub glyph in a footprint") and 0039 (true size) name the same rulings as these claims. 0100's has no record (this task's search); 0039's is `docs/gm-rulings.md`. The research finding at risk: a page comment that names a ruling nobody recorded. Not fixed here: a page edit is T250's. Filed as T250; lands before T251's claims round closes.
+- `docs/buildings.md`'s prose carried the same unrecorded date tags beside the two relabeled claims: "GM 2026-09-26" and "GM 2026-07-25" on the threshold stone, "GM rule 2026-07-25" on the tub. A reader takes them for his rulings, and the claim beside each now says no record holds them. Fixed here: each reads "this project's rule of <date>, which no record of the GM's words backs", observed 2026-11-25, method: `grep -nE 'GM (rule )?2026-0[79]-2[56]' docs/buildings.md`, every hit.
+- `rust/phases/src/seat/margins.rs` refuses a seat centered in a pond's reed fringe, and 0058's drawing page says a pond's reed fringe does not count as marsh ("this project does not extend the rule to it"). The research finding it breaks: the code enforces a rule the page turns down, and its only backing was a ruling the GM never recorded, the shape of 0006 and `field/dry.rs`; his test of 2026-11-24 applies ("if that is not what the research shows, then we shouldn't do it"). Visible effect: a hamlet whose best margin lies in a pond's fringe is seated elsewhere. Observed 2026-11-25, method: the claim's own account set beside 0058's drawing page, items 11 and 23. Not fixed here: removing the refusal is engine code and moves maps, and this task's brief is comments and doc lines; the claim now says DEVIATION from 0058 so the claims round lists it. Filed as T264; lands before T250.
+- `docs/building-programs.md`'s "dedication knob - CANON: Inari the ordinary rural dedication, a GM ruling of 2026-09-20" is worded so the check's pattern ("the GM's ruling") does not read it, and no request.md holds those words, observed 2026-11-25, method: `grep -iE 'inari|dedicat' specs/25[3-7]*/request.md` (257's header alone). 0222's drawing-page comment quotes this line as its record, so a claim and a page each cite the other. The research finding at risk: the default dedication of every country shrine rests on a ruling nobody recorded. Not fixed here: the pattern is the check's code, and the brief limits this task to comments and doc lines, the baseline's entries, and forbids filing. Filed as T265; lands before T250.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: comments and doc lines; nothing runs faster.
 
 
 <!-- plan-archive: T252 to T252 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->

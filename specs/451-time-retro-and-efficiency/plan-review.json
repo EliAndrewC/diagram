@@ -1808,7 +1808,7 @@
    "declared": "spec-fidelity"
   },
   "### T251 Approach (checklist part A)": {
-   "sha256": "decb5ef731005835de30be2fada7b3f782b0de87c52e016d6c8a55ee25e77e37",
+   "sha256": "677a1ae6d8a1f8af532c5e924b435708aef77205388749b93507c2789de4d7a9",
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
@@ -1863,6 +1863,12 @@
   },
   "### T263 Approach (checklist part A)": {
    "sha256": "effe0ad89408b1155c80c0de9195af5131199c96eceebf31381815507194d366",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T251 (451 T233's \"Found and left\", 2026-11-25: the gm-attributions baseline's 10 walked CANON claims named a ruling of the GM's with no pointer to his words; `docs/gm-rulings.md`, \"NOT a ruling\", is what such a claim cost once)": {
+   "sha256": "ca3f396696c2dfc33753e9105e76dca4886bd440f3caa00d17b7d0f4c0a0391e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
@@ -23477,6 +23483,263 @@
      "why": "The only GM words that bear on these are the 2026-11-20 performance-first order and the 2026-11-22 bundling note, and neither is narrowed. Classing a flake fix as non-performance leaves FR-013's ordering to apply to it as the GM set it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T251 (451 T233's \"Found and left\", 2026-11-25: the gm-attributions baseline's 10 walked CANON claims named a ruling of the GM's with no pointer to his words; `docs/gm-rulings.md`, \"NOT a ruling\", is what such a claim cost once)",
+    "### T251 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "search",
+     "summary": "Each of the 10 claims searched for the GM's recorded words over request.md, gm-request.md, docs/gm-rulings.md, gm-review.jsonl gm_words, make canon, then tasks/notes/questions for provenance",
+     "class": "within",
+     "why": "The means of the T233 request (2026-11-24): an attribution names his recorded words; the search space is stated with its method and date."
+    },
+    {
+     "id": "five-recorded",
+     "summary": "Five claims (true size, sheet follows map, grove/burial knob, where a place sits, threshold stones) keep CANON and name their record; the place.rs town half and the threshold stones cite l7r.md; the stones' two dated drawing rules are restated as this project's rules with no record",
+     "class": "within",
+     "why": "Exactly what the request asks: a claim attributed to the GM names where his words are; what has no record is not called his (docs/gm-rulings.md 'NOT a ruling'). The dated drawing rules restated as the project's own sit on the GM 2026-10-25 words (research silent: a knob or whatever is easier)."
+    },
+    {
+     "id": "tub",
+     "summary": "'tub clear of the footprint' CANON -> pointer at research page 0100, which states it; the 'no tub on the roof' DEVIATION account names the claim instead of the ruling",
+     "class": "within",
+     "why": "A rule backed by a research page rather than by his words is what the 2026-11-24 request asks for. It stands on T250 landing first: 0100's own comment carries the same unrecorded attribution, and the plan orders T250 before T251's claims round closes."
+    },
+    {
+     "id": "brook",
+     "summary": "'no screen axis' in field/brook.rs CANON -> CONVENTION: his 2026-08-26 words were of Inashiro's marsh edge, never a brook, and are recorded only in a tasks.md",
+     "class": "within",
+     "why": "An extension of his words to a case he did not speak of is the project's rule, which the GM 2026-10-25 permits where research is silent; the line now says whose rule it is."
+    },
+    {
+     "id": "fringe",
+     "summary": "'not in the reed fringe' in seat/margins.rs CANON -> DEVIATION 0058: his 2026-08-28 words were of farmhouses on marshland and name no fringe; 0058 says a pond's reed fringe is not marsh and the code departs from it; the code is left as it is, with no Found-and-left entry",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request section this task answers holds both of the GM's tests: research silent -> a knob or whatever is easier (2026-10-25); a rule wrongly called his that the research does not show -> 'if that is not what the research shows, then we shouldn't do it' (2026-11-24). By the plan's own label the fringe rule is the second case (the code departs from 0058), and its only backing was an attribution the GM never made - the same shape as the 0006/dry.rs finding the plan's item 12 says it answers. The plan keeps the behavior and says nothing of it: no reason it is not a wrong outcome, no filed task, no order. 'The brief is comments only' is the session's limit, not the GM's, and the claims round judging the label does not ask whether the departure should stand. Remedy (no code change needed here): either a Found-and-left line in FR-009's form - why it is not fixed in this task, its filed task id, its order - for making the code follow 0058 or showing research that supports keeping houses out of the fringe; or an observation with its method that the code does not contradict 0058 (no wrong outcome), in which case DEVIATION is the wrong label and the claim is relabeled to what it is."
+    },
+    {
+     "id": "no-minted-ruling",
+     "summary": "No docs/gm-rulings.md entry minted for the brook's or the fringe's words",
+     "class": "within",
+     "why": "docs/gm-rulings.md 'NOT a ruling': never invent his words; his words there would back a different subject than the claim."
+    },
+    {
+     "id": "baseline-prune",
+     "summary": "The gm-attributions baseline pruned 351 -> 341 lines, its claim entries 10 -> 0, the check silent (rc 0), measured 2026-11-25 with method",
+     "class": "within",
+     "why": "The T233 baseline is meant to shrink as its entries are answered; figures carry date and method."
+    },
+    {
+     "id": "claims-round-split",
+     "summary": "The claims round is not run in this task; the coordinating session dispatches impl-drift for the 11 claims owed, each relabel a MISLABELED to judge",
+     "class": "within",
+     "why": "The GM 2026-11-25: a builder's claims round split off by default ('sounds good please do that ASAP')."
+    },
+    {
+     "id": "buildings-prose-tags",
+     "summary": "docs/buildings.md prose 'GM 2026-09-26', 'GM 2026-07-25', 'GM rule 2026-07-25' restated as this project's rule of <date>, which no record of the GM's words backs; every hit of a stated grep",
+     "class": "within",
+     "why": "The same attribution in a doc line beside the claims; fixed here with the search that found every instance."
+    },
+    {
+     "id": "pages-0100-0039-to-T250",
+     "summary": "The page comments of 0100 and 0039 that name the same rulings are left to T250, which lands before T251's claims round closes",
+     "class": "within",
+     "why": "A page edit is T250's existing work, ordered before this task's claims round closes; nothing the request asks is dropped."
+    },
+    {
+     "id": "dedication-knob",
+     "summary": "docs/building-programs.md's dedication knob 'a GM ruling of 2026-09-20' (no request.md holds it), its mutual citation with 0222's comment, and the check's pattern that misses 'a GM ruling', deferred together to a task 'filed as T<n> by the coordinating session', landing before T250",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Of the three parts, the check's pattern is check code and 0222's comment is a page edit, both outside this task's reach; the claim line itself is a doc line of the kind this task edits, but it and 0222 each cite the other as record, so relabeling the line alone would leave the page citing a claim that no longer holds the attribution - the plan states that coupling. Deferred, not dropped, to one task in the same feature ordered before T250. But 'T<n>' is not a filed id: FR-009 asks for the filed task id, and the plan must carry the real one before any tick."
+    }
+   ],
+   "tasks": [
+    "T251"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T251 (451 T233's \"Found and left\", 2026-11-25: the gm-attributions baseline's 10 walked CANON claims named a ruling of the GM's with no pointer to his words; `docs/gm-rulings.md`, \"NOT a ruling\", is what such a claim cost once)",
+    "### T251 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 five claims name their record",
+     "summary": "buildings at true size, sheet follows its map, grove and burial side knob, where a place sits (village half), threshold stones: each claim now names the request.md / docs/gm-rulings.md / l7r.md that backs it; class stays CANON",
+     "class": "within",
+     "why": "The request (2026-11-24, T233): a ruling attributed to the GM names his recorded words. Pointing each claim at the record found is that rule applied."
+    },
+    {
+     "id": "D2 place.rs town half cited to l7r.md",
+     "summary": "the county-seat half is backed by the GM's notes (Demographics), not by 156's request, and the line says so",
+     "class": "within",
+     "why": "Names what actually backs the claim instead of stretching one request over two halves; the purpose of T233."
+    },
+    {
+     "id": "D3 threshold stones' dated rulings restated as this project's drawing rules",
+     "summary": "the stones stay CANON on l7r.md; the two unrecorded dated rulings are said to be the project's rules with no record of his words",
+     "class": "within",
+     "why": "Exactly 'never invent his words' (docs/gm-rulings.md NOT a ruling) and says whose rule it is."
+    },
+    {
+     "id": "D4 tub clear of the footprint -> pointer at 0100's drawing page",
+     "summary": "CANON relabeled to the research page that states it; the neighboring DEVIATION names the claim instead of the ruling",
+     "class": "within",
+     "why": "The claim is backed by research, not by recorded words of his; relabeling to its real backing is the request."
+    },
+    {
+     "id": "D5 no screen axis CANON -> CONVENTION",
+     "summary": "his words of 2026-08-26 sit only in a tasks.md and were said of a marsh edge, not a brook; the line now says whose extension it is",
+     "class": "within",
+     "why": "An extension of his words to a different subject is not his ruling; labeling it as the project's convention is the request."
+    },
+    {
+     "id": "D6 reed fringe CANON -> DEVIATION 0058",
+     "summary": "the claim is relabeled to say the code departs from 0058",
+     "class": "within",
+     "why": "Truthful label of what backs (and contradicts) the code; it puts the departure on the claims round's list. The code itself is D12."
+    },
+    {
+     "id": "D7 no docs/gm-rulings.md entry minted",
+     "summary": "his words of the brook and the fringe are not turned into pointers",
+     "class": "within",
+     "why": "Minting an entry for words said of a different subject would invent a ruling, the failure docs/gm-rulings.md 'NOT a ruling' and the 2026-11-24 request forbid."
+    },
+    {
+     "id": "D8 baseline pruned 10 -> 0 claim entries",
+     "summary": "the gm-attributions baseline loses the 10 claim entries; the check is silent",
+     "class": "within",
+     "why": "T233's line: the baseline shrinks as attributions are fixed."
+    },
+    {
+     "id": "D9 claims round not run by this builder",
+     "summary": "impl-drift dispatched by the coordinating session; each relabel a MISLABELED to judge",
+     "class": "within",
+     "why": "The GM 2026-11-25: 'a builder's claims round split off ... sounds good please do that ASAP'."
+    },
+    {
+     "id": "D10 docs/buildings.md prose date tags reworded",
+     "summary": "'GM 2026-09-26', 'GM 2026-07-25', 'GM rule 2026-07-25' read as this project's rule with no record of his words; every grep hit",
+     "class": "within",
+     "why": "Same rule applied to the prose beside the claims; fixed here, not deferred."
+    },
+    {
+     "id": "D11 0100's page comment left to T250",
+     "summary": "0100's comment names an unrecorded ruling; 0039's has a record; the page edit is T250's, which lands before T251's claims round closes",
+     "class": "within",
+     "why": "The request's T233 build places page comments as page work ('fixing them page work'); T250 is that task, filed, and ordered. Not a narrowing of what was asked."
+    },
+    {
+     "id": "D12 seat/margins.rs reed-fringe refusal left, deferred to a filed task",
+     "summary": "the code refuses a seat in a pond's reed fringe against 0058, on a ruling nobody recorded; not removed here (engine code, moves maps, outside a comments-and-doc-lines task); deferred with why, a title, and order 'lands before T250'; the task id written by the coordinating session",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real defect (a research finding contradicted; the GM 2026-11-24: 'if that is not what the research shows, then we shouldn't do it'), and it is deferred, not left, in the project's deferral form (FR-009): why (removing the refusal is engine code that moves maps, in a task scoped to attributions in comments and doc lines), a filed task whose title carries both resolutions (drop the refusal, or a research pass that amends 0058), and an order ('lands before T250', the task that edits these pages' comments). The id is left to the coordinating session because task numbers come from one writer, among the four fixes the GM approved on 2026-11-25 ('sounds good, please start with that'). Holds only once a real id replaces 'T<n>' before the tick."
+    },
+    {
+     "id": "D13 dedication knob's 'a GM ruling of 2026-09-20' left, deferred to a filed task",
+     "summary": "the check's pattern does not read 'a GM ruling', and no request.md searched holds those words; the claim and 0222's comment cite each other; deferred with the check's pattern, ordered before T250; id written by the coordinating session",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Two halves, ruled apart. (a) The check's pattern missing 'a GM ruling' is a check that passes bad work; its fix is check code, outside this task, and is what finds every other line of the class: deferral legitimate. (b) The doc line itself is the kind of edit this task made ten times; the section leaves it on the brief's limit to the baseline's entries. Legitimate because it is not left but deferred, with 0222's drawing-page comment that cites it, to one filed task whose title carries the record search ('his recorded words or whose rule it is'), ordered before T250, so the claim and the page settle together rather than one being relabeled while the other still cites it. Same id condition as D12."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T251 (451 T233's \"Found and left\", 2026-11-25: the gm-attributions baseline's 10 walked CANON claims named a ruling of the GM's with no pointer to his words; `docs/gm-rulings.md`, \"NOT a ruling\", is what such a claim cost once)",
+    "### T251 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 five claims name their record",
+     "summary": "buildings at true size -> docs/gm-rulings.md; sheet follows its map and grove/burial knob -> specs/257 request.md; place.rs village half -> specs/156 request.md, town half -> l7r.md Demographics; threshold stones -> l7r.md Vermillion Threshold Stones, the two dated rulings with no record restated as this project's drawing rules",
+     "class": "within",
+     "why": "Exactly what the 2026-11-24 request asks (an attribution to the GM points at where his words are recorded). The two mixed-backing claims name a source for each half and say which half has none, rather than stretching one record over both."
+    },
+    {
+     "id": "D2 tub clear of the footprint -> pointer at 0100",
+     "summary": "CANON relabeled to a pointer at research/questions/0100 drawing page, which states the rule; the neighbouring no-tub-on-the-roof DEVIATION account names the claim instead of the ruling",
+     "class": "within",
+     "why": "The claim stops attributing anything to the GM, which is what was asked. 0100's own comment still names the same unrecorded ruling (this block says so), so the pointer only becomes clean once T250 fixes that comment; T250 is ordered before T251's claims round closes, so this converges and does not block."
+    },
+    {
+     "id": "D3 no screen axis -> CONVENTION",
+     "summary": "brook.rs twice: CANON -> CONVENTION; his 2026-08-26 words were of Inashiro's marsh edge, quoted only in a tasks.md, never of a brook",
+     "class": "within",
+     "why": "Removes an attribution his recorded words do not support and says whose extension the rule is; invents nothing."
+    },
+    {
+     "id": "D4 not in the reed fringe -> DEVIATION 0058",
+     "summary": "margins.rs: CANON -> DEVIATION research/questions/0058 (GUESS tried first, refused by claims-owed as a form problem)",
+     "class": "within",
+     "why": "An honest label for code that departs from its page, per the claims grammar; whether the departure is a defect is T264's (D10)."
+    },
+    {
+     "id": "D5 no gm-rulings.md entry minted",
+     "summary": "his brook and fringe words are not turned into a docs/gm-rulings.md entry to make a pointer",
+     "class": "within",
+     "why": "Directly the GM's 2026-11-24 instruction and docs/gm-rulings.md 'NOT a ruling': his words back a different subject, and minting an entry would invent a ruling."
+    },
+    {
+     "id": "D6 baseline pruned",
+     "summary": "gm-attributions baseline 351 -> 341 lines, claim entries 10 -> 0, check silent rc 0",
+     "class": "within",
+     "why": "The T233 baseline is meant to shrink as attributions are fixed; the figures carry date and method."
+    },
+    {
+     "id": "D7 docs/buildings.md prose date tags",
+     "summary": "'GM 2026-09-26', 'GM 2026-07-25', 'GM rule 2026-07-25' beside the relabeled claims restated as this project's rule of <date> with no record of his words",
+     "class": "within",
+     "why": "Same class as the claims, in the same file, with a stated every-hit grep; removes reader-facing attributions with no record."
+    },
+    {
+     "id": "D8 claims round not run here",
+     "summary": "impl-drift claims round left to the coordinating session; each relabel framed as a MISLABELED for it to judge",
+     "class": "within",
+     "why": "The GM's 2026-11-25 approval of splitting the claims round off builders ('sounds good please do that ASAP')."
+    },
+    {
+     "id": "D9 0100 and 0039 page comments deferred to T250",
+     "summary": "page comments naming the same rulings left for T250, which lands before T251's claims round closes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Not left: moved to a named task with an order inside this feature, and it closes before this task's claims round, so no claim here settles while its page still carries the unrecorded attribution. 0039's has a record (no defect); 0100's is the defect. Conditional on T250 existing as filed."
+    },
+    {
+     "id": "D10 margins.rs reed-fringe refusal deferred to T264",
+     "summary": "the code enforcing a rule 0058 declines is labeled DEVIATION and its removal filed as T264, lands before T250",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruling only on the deferral: the work is engine code that moves maps, outside a comments-and-doc-lines task, and is moved to a named task with an order rather than left. Whether the refusal is a wrong outcome or a claim to restate (constitution XIV v2.36.0) is T264's question under the GM's 'if that is not what the research shows, then we shouldn't do it'. Conditional on T264 existing as filed."
+    },
+    {
+     "id": "D11a check pattern misses 'a GM ruling of <date>' -> T265",
+     "summary": "the gm-attributions check does not read the Inari dedication line's wording; fixing the pattern deferred to T265, lands before T250",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A check that passes bad work is a defect, but changing the check's code is outside this task's comments-and-doc-lines scope, and it is moved to a named task with an order. Conditional on T265 existing as filed."
+    },
+    {
+     "id": "D11b the Inari dedication line itself left unrelabeled -> T265",
+     "summary": "docs/building-programs.md 'Inari the ordinary rural dedication, a GM ruling of 2026-09-20' not relabeled here",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled apart from D11a, because 'the pattern is the check's code' does not explain leaving a doc line this task already edits. The reason that does hold is the brief's limit to the baseline's entries, and leaving the line invents no words. The defect is moved to T265 with an order, not left. Two conditions: T265 must carry relabeling the line, not only the pattern. And its 'no record' premise must be searched again over the same space as the other ten (request.md, gm-request.md, docs/gm-rulings.md, gm-review.jsonl, make canon), because this block's grep covered only five request.md files."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -37378,6 +37641,90 @@
      "summary": "Order: any time, nothing waits on it. Budget: one landing. Performance work: no. Exits: closing-checks green, or red recorded and ruled through arbiter-ask.",
      "class": "within",
      "why": "The only GM words that bear on these are the 2026-11-20 performance-first order and the 2026-11-22 bundling note, and neither is narrowed. Classing a flake fix as non-performance leaves FR-013's ordering to apply to it as the GM set it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T251": {
+   "section_sha256": "8e64be402879b0fb0345775ceacd5dedd41a5ae3ec3decf46bbdf7bd28715167",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 five claims name their record",
+     "summary": "buildings at true size -> docs/gm-rulings.md; sheet follows its map and grove/burial knob -> specs/257 request.md; place.rs village half -> specs/156 request.md, town half -> l7r.md Demographics; threshold stones -> l7r.md Vermillion Threshold Stones, the two dated rulings with no record restated as this project's drawing rules",
+     "class": "within",
+     "why": "Exactly what the 2026-11-24 request asks (an attribution to the GM points at where his words are recorded). The two mixed-backing claims name a source for each half and say which half has none, rather than stretching one record over both."
+    },
+    {
+     "id": "D2 tub clear of the footprint -> pointer at 0100",
+     "summary": "CANON relabeled to a pointer at research/questions/0100 drawing page, which states the rule; the neighbouring no-tub-on-the-roof DEVIATION account names the claim instead of the ruling",
+     "class": "within",
+     "why": "The claim stops attributing anything to the GM, which is what was asked. 0100's own comment still names the same unrecorded ruling (this block says so), so the pointer only becomes clean once T250 fixes that comment; T250 is ordered before T251's claims round closes, so this converges and does not block."
+    },
+    {
+     "id": "D3 no screen axis -> CONVENTION",
+     "summary": "brook.rs twice: CANON -> CONVENTION; his 2026-08-26 words were of Inashiro's marsh edge, quoted only in a tasks.md, never of a brook",
+     "class": "within",
+     "why": "Removes an attribution his recorded words do not support and says whose extension the rule is; invents nothing."
+    },
+    {
+     "id": "D4 not in the reed fringe -> DEVIATION 0058",
+     "summary": "margins.rs: CANON -> DEVIATION research/questions/0058 (GUESS tried first, refused by claims-owed as a form problem)",
+     "class": "within",
+     "why": "An honest label for code that departs from its page, per the claims grammar; whether the departure is a defect is T264's (D10)."
+    },
+    {
+     "id": "D5 no gm-rulings.md entry minted",
+     "summary": "his brook and fringe words are not turned into a docs/gm-rulings.md entry to make a pointer",
+     "class": "within",
+     "why": "Directly the GM's 2026-11-24 instruction and docs/gm-rulings.md 'NOT a ruling': his words back a different subject, and minting an entry would invent a ruling."
+    },
+    {
+     "id": "D6 baseline pruned",
+     "summary": "gm-attributions baseline 351 -> 341 lines, claim entries 10 -> 0, check silent rc 0",
+     "class": "within",
+     "why": "The T233 baseline is meant to shrink as attributions are fixed; the figures carry date and method."
+    },
+    {
+     "id": "D7 docs/buildings.md prose date tags",
+     "summary": "'GM 2026-09-26', 'GM 2026-07-25', 'GM rule 2026-07-25' beside the relabeled claims restated as this project's rule of <date> with no record of his words",
+     "class": "within",
+     "why": "Same class as the claims, in the same file, with a stated every-hit grep; removes reader-facing attributions with no record."
+    },
+    {
+     "id": "D8 claims round not run here",
+     "summary": "impl-drift claims round left to the coordinating session; each relabel framed as a MISLABELED for it to judge",
+     "class": "within",
+     "why": "The GM's 2026-11-25 approval of splitting the claims round off builders ('sounds good please do that ASAP')."
+    },
+    {
+     "id": "D9 0100 and 0039 page comments deferred to T250",
+     "summary": "page comments naming the same rulings left for T250, which lands before T251's claims round closes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Not left: moved to a named task with an order inside this feature, and it closes before this task's claims round, so no claim here settles while its page still carries the unrecorded attribution. 0039's has a record (no defect); 0100's is the defect. Conditional on T250 existing as filed."
+    },
+    {
+     "id": "D10 margins.rs reed-fringe refusal deferred to T264",
+     "summary": "the code enforcing a rule 0058 declines is labeled DEVIATION and its removal filed as T264, lands before T250",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruling only on the deferral: the work is engine code that moves maps, outside a comments-and-doc-lines task, and is moved to a named task with an order rather than left. Whether the refusal is a wrong outcome or a claim to restate (constitution XIV v2.36.0) is T264's question under the GM's 'if that is not what the research shows, then we shouldn't do it'. Conditional on T264 existing as filed."
+    },
+    {
+     "id": "D11a check pattern misses 'a GM ruling of <date>' -> T265",
+     "summary": "the gm-attributions check does not read the Inari dedication line's wording; fixing the pattern deferred to T265, lands before T250",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A check that passes bad work is a defect, but changing the check's code is outside this task's comments-and-doc-lines scope, and it is moved to a named task with an order. Conditional on T265 existing as filed."
+    },
+    {
+     "id": "D11b the Inari dedication line itself left unrelabeled -> T265",
+     "summary": "docs/building-programs.md 'Inari the ordinary rural dedication, a GM ruling of 2026-09-20' not relabeled here",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled apart from D11a, because 'the pattern is the check's code' does not explain leaving a doc line this task already edits. The reason that does hold is the brief's limit to the baseline's entries, and leaving the line invents no words. The defect is moved to T265 with an order, not left. Two conditions: T265 must carry relabeling the line, not only the pattern. And its 'no record' premise must be searched again over the same space as the other ten (request.md, gm-request.md, docs/gm-rulings.md, gm-review.jsonl, make canon), because this block's grep covered only five request.md files."
     }
    ],
    "verdict": "CLEAR"
