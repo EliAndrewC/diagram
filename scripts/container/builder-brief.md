@@ -12,6 +12,21 @@ Enforced (451 T237, `rust/guard/src/guards/context_cap_hooks/split.rs`): a build
 context-cap handoff says it stops there; keep that line in every code builder's brief. A claims-round dispatch's prompt opens
 `Run the claims round for feature ...` and is never held.
 
+SIZING, before you write the brief (the GM 2026-11-25, pre-approving the talk's item 12; `docs/process-decisions.md`, "The
+builders' context cap stays at 300k, builders stay, and briefs are sized"; audited as `dev/audits/builder-brief-sizing.md`):
+
+- ONE task a builder.
+- At most THREE jobs in a brief. A measurement or sweep, a build, a found defect's fix and written content each count as one.
+- A task expected to edit more than about three files, or needing a measurement first, is SPLIT into builders that hand results
+  along, a measuring agent first: its report (the figures, the paths, the commands) is the next builder's brief.
+- A one-turn edit is yours, the coordinating session's, not a builder's.
+
+Why: of 97 builders briefed since 2026-11-24, a brief of 4 or more jobs handed off 52% of the time against 16-22% at 1-3 jobs;
+4 or more files edited, 39-45% against 22% at three or fewer; a brief that began with a measurement, 46% against 25%. A one-turn edit by the
+coordinator costs about half a small builder's tokens (0.3-0.4M against 0.65M); past 5 minutes or several files it costs about
+1.5M, so that work goes to a builder (`dev/measurements/2026-11-25/talk-measures/`, `m1b.txt` and `m2b.txt`). The three-job and three-file
+limits are GUESS knobs set where the measured rate steps up.
+
 The block's first line, `Blocks:` (451 T243, the GM 2026-11-25: "a minute should count as blocking. When something else is
 waiting on it to be done before it can be started"), is written on the dispatch's event-log line and read by `make task-time`:
 the task named is the one this builder's time blocks; with none, the builder's own task. A command takes the same clue as

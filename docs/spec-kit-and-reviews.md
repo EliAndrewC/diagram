@@ -209,7 +209,18 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   GM's request verbatim; if it agrees, carry on and raise it with the GM once the implementation
   works.
 - A spec is reviewed against the GM's own words by `spec-fidelity` before implementation
-  (`scripts/gates/review-gate.sh` refuses the push otherwise): up to five rounds on the initial acceptance,
+  (`scripts/gates/review-gate.sh` refuses the push otherwise). **Building may begin before the PLAN review returns** (the GM
+  2026-11-25, pre-approving the talk's item 6: *"if our plan review takes, let's say, 4 minutes, then we could probably just do
+  the first 4 minutes of implementation ... and then we can adjust"*): once the spec is FAITHFUL, a new feature's first task may
+  be BUILT while its plan review runs, the builder adjusting the code to the verdict when it comes; the spec review still comes
+  before implementation, and what the plan review gates is the TICK and the landing, and neither moves. Why: of 301 task-level plan reviews since 2026-11-19, 224 (74%) were CLEAR on the first
+  round, and of the 69 blocked tasks read 5 (about 7%) reversed built work
+  (`dev/measurements/2026-11-25/reversals/summary.txt`), so work begun early is rarely thrown away; the decision, its falsifier
+  and its audit are `docs/process-decisions.md` ("Building begins before a new feature's plan review returns") and
+  `dev/audits/building-before-review-clears.md`. A plan block is still held from edits while its own review runs
+  (`rust/guard/shared/src/checks/planhold.rs`): the code moves, the block under review does not. Constitution XVI is unchanged and
+  governs: its sentence ("reviewed against the GM's own words before implementation begins") still holds for the spec review. The
+  rounds: up to five rounds on the initial acceptance,
   then the round arbiter rules (a sixth round waits for it; feature 379); an amendment after acceptance resets the counter. A plan's decisions are
   reviewed by the same agent before a task is ticked (`make tick`, `scripts/gates/plan-gate.sh`) - block by block since 375
   amendment 11: a changed block owes `make plan-delta F=<n>` (a review of that block alone, on a lean bundle), never the whole

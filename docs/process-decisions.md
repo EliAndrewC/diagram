@@ -84,3 +84,76 @@ what we're looking for here is just a broad understanding of where our time goes
 line. **Falsifier:** a sample of tasks read by hand where the booked blocking disagrees with what actually waited more than
 about one time in ten - then the clues or the defaults are wrong.
 
+
+### Building begins before a new feature's plan review returns (decided 2026-11-25)
+
+**Question.** A spec-kit feature's plan review ran before any task started, and the session waited on it. May
+the first task be built while it runs, once the spec review is FAITHFUL (the talk's item 6)?
+
+**Decided** - adopted. The GM, 2026-11-25, raising it: *"if our plan review takes, let's say, 4 minutes, then we could probably
+just do the first 4 minutes of implementation ... and then we can adjust ... maybe we will need to undo or change some aspects
+... but that this will still save time"*; and pre-approving the item on its measurement: *"Yes I pre-approve the items in the
+table above, so that you can close them out after implementing whatever the measurements say make sense."*
+
+**Reasoning.** The wait buys nothing unless a plan review's verdict throws built work away, and it rarely does: three plan reviews in
+four are CLEAR on their first round, and a BLOCKED round mostly asks for a measurement, for wording, or for code that builds on
+what is there. The alternative weighed was the rule as it stood (no code before the reviews return), which pays the whole wait
+every time to save a reversal about once in fourteen blocked rounds. What the reviews protect - nothing unreviewed is ticked or
+reaches main - does not depend on when the code was written, so the review still gates the TICK and the landing.
+
+**How it was measured.** 2026-11-25, a read-only pass over `dev/review-ledger.md`'s MODE 4 spec-fidelity rows since 2026-11-19,
+the verdict files, the plan-done notes and the `plan.md` diffs (features 449 and 451): of 301 tasks with a task-level plan
+review, 224 (74%) were CLEAR on the first round; of the 69 blocked tasks whose first BLOCKED round could be read, 6 asked for a
+measurement, 13 for wording or form only, 45 for code that built on what was there, and 5 (about 7%; 451 T79, T186, T46, T102
+and T197, each of low or medium confidence) reversed built work; 18 more could not be read, their verdict files overwritten.
+The scripts and the table are `dev/measurements/2026-11-25/reversals/` (`summary.txt` the counts, `table.tsv` each blocked task's class). Its limit: these are task-level plan reviews, where the code already preceded the review; a
+feature's first plan review is taken to behave alike, and the falsifier is what tests that.
+
+**What followed.** The root `CLAUDE.md`'s "Development workflow" line and its full text in `docs/spec-kit-and-reviews.md` now say
+a spec is reviewed before implementation, the plan review gates ticks and landings, and that once the spec is FAITHFUL a feature's first task may be BUILT while its plan review runs, the
+builder adjusting to the verdict. No guard refused building before the review, so none changed: `scripts/gates/review-gate.sh`
+refuses the PUSH, `make tick` and `scripts/gates/plan-gate.sh` the TICK, decide-first (`rust/guard/src/guards/pair_hooks/review.rs`)
+holds a task's CHECKS and not its code, and the plan hold (`rust/guard/shared/src/checks/planhold.rs`) holds the plan block under
+review and not the code. Open question for the GM: extending the early build to the SPEC review would amend constitution XVI ("reviewed against the GM's own words before
+implementation begins") and needs his explicit word and a measurement of first spec reviews (ruled by spec-fidelity 2026-11-25). The audit entry is `dev/audits/building-before-review-clears.md`. **Falsifier:** on a later sample, the share
+of BLOCKED rounds that reverse built work passing about one in five - then the wait is cheaper than the rework and the old
+order comes back.
+
+### The builders' context cap stays at 300k, builders stay, and briefs are sized (decided 2026-11-25)
+
+**Question.** Builders kept hitting the 300k context cap and handing off, each handoff a fresh builder's re-read (the talk's
+item 12). Raise the cap, drop builders for the coordinating session's own hands, or change what a builder is given?
+
+**Decided** - the cap stays at 300k, builders stay, and a builder's brief is sized. The GM, 2026-11-25: *"Yes I pre-approve the
+items in the table above, so that you can close them out after implementing whatever the measurements say make sense."* (item
+12 as pre-approved: the cap stays at 300k; builders stay unless the coordinator doing the work itself costs fewer minutes and
+tokens per landed task). Raising the cap to 600k is the declined entry above ("Declined so far").
+
+**Reasoning.** The cap is not what costs: from 300k to 800k the time is a wash and the tokens favor the handoff, so a higher
+cap buys nothing. What predicts a handoff is the size of the brief - the jobs in it, the files it will edit, a measurement at
+its head - so the lever is the brief. And the coordinator's own hands are cheaper than a builder only for the smallest work: a
+one-turn edit, and no further, because everything the coordinator writes is re-read on each of its later turns. So three
+rules: one task a builder and at most three jobs a brief; a task past about three files or opening on a measurement split into
+builders that hand results along, a measuring agent first; and a one-turn edit done by the coordinating session itself.
+
+**How it was measured.** 2026-11-25. The cap: across 61,271 builder turns since 2026-11-19 (634 general-purpose builder
+transcripts since 2026-11-18), time a wash at every context from 300k to 800k (within 2.5 min) and tokens favoring the handoff,
+33% fewer at 300k and 62% fewer at 800k (`dev/measurements/2026-11-25/ctxcap/`). The brief (the M1 method,
+`dev/measurements/2026-11-25/talk-measures/` `m1.py` and `m1b.py`: the 97 general-purpose builders dispatched since 2026-11-24,
+each brief's jobs counted and its transcript read for a handoff - refused at the cap, a handoff written, or context at 290k or
+more; 27 of the 97, 28%): a brief of 4 or more jobs handed off 52% of the time (12 of 23) against 16% at 1-2 jobs (4 of 25) and
+22% at 3 (11 of 49); 4 to 8 files edited 39% and 9 or more 45%, against 22% at three or fewer; a brief that began with a measurement 46%
+(6 of 13) against 25%. The coordinator (the same directory, `m2b.txt`): a one-turn edit costs about half a small builder's tokens, 0.3-0.4M against
+0.65M with the brief and the report counted; past 5 minutes or several files it costs about 1.5M. Caveats: the six one-job
+briefs handed off half the time (3 of 6), so the job count is a rule of thumb and not a law; the groups are
+small; and whether builders beat no builders PER LANDED TASK - the condition in the pre-approval - is still unmeasured as
+such (`dev/audits/delegating-to-builders.md` stays open, its three-way comparison owed), builders staying on the one-turn
+figures alone.
+
+**What followed.** `scripts/container/builder-brief.md` gained its SIZING rule, read before a brief is written, and the root
+`CLAUDE.md` one line pointing at it. No guard: the rule is the coordinating session's judgment of a task's size, which a hook
+cannot count without firing on correct work. The cap's guard and constant are unchanged. The audit entries are
+`dev/audits/builder-brief-sizing.md` (new) and `dev/audits/builders-context-cap.md` (its measurement brought up to these
+figures). **Falsifier:** over a week of builders briefed under the rule, measured by the M1 method, the handoff rate not
+falling below about one in five (it was 28%) - then sizing the brief is not the lever, and the task's own size or the cap is
+looked at again.
