@@ -686,6 +686,17 @@ sampler-stop:   ## [project] stop the clone's memory and load sampler, its sampl
 sampler-report: ## [project] the samples of a window as a table, a row for each count of pool trees held: anonymous memory median / 95th / peak against memory.max, samples over the margin (L7R_MEM_MARGIN_GIB, 7: a GUESS knob), memory and CPU stall seconds, load against the cores, rustc max, OOM kills; LOG= reads sample logs instead, the hand logs of 2026-11-26 too (dev/measurements/2026-11-26/builder-count/mem-samples-*.log), a table a file (feature 451 T274)   [SINCE=<ISO UTC>] [UNTIL=<ISO UTC>] [LOG="<file> ..."]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure sampler report $(if $(SINCE),--since "$(SINCE)",) $(if $(UNTIL),--until "$(UNTIL)",) $(if $(LOG),--log "$(LOG)",)
 
+# THE STANDING PART OF A BUILDER'S BRIEF COMES FROM THE TOOLING (feature 451 T334, the GM 2026-11-26: "I just want to make sure that
+# we're putting the instructions in the right place"): the sizing rules of scripts/container/builder-brief.md were broken five times
+# on 2026-11-26 with nothing refusing. `rust/gate/crates/task/src/builder_brief.rs` sizes the brief, takes the pool tree and prints the
+# block; `builder_brief_hooks` refuses a builder's dispatch without the block's marker.
+.PHONY: builder-brief
+builder-brief: export SIZING_OK := $(SIZING_OK)
+builder-brief:  ## [project] the standing block of a builder's brief, printed to paste at the brief's head: sized first (JOBS at most 3, a measurement's MEASURES at most 6, a new mechanism never one fix - each refusal naming the commands to run instead), then the task's pool tree taken as make builder-tree takes it, a bundle T=a,b briefed as one builder on the one tree held for it; its first line is the marker the builder-brief guard holds a dispatch to (feature 451 T334)   T=<task(s)> KIND=fix|measurement|build-half|closing-half [F=<feature>] [JOBS=<n>] [MEASURES=<things measured>] [CRATE="<crate dirs>"] [BLOCKS="<feature> T<n>"] [LOAD=1] [SIZING_OK="<why a fix whose line names a mechanism is one builder>"]
+	@if [ -z "$(T)" ] || [ -z "$(KIND)" ]; then printf 'make builder-brief: T=<task(s)> and KIND=fix|measurement|build-half|closing-half are required   [F=<feature>] [JOBS=<n>] [MEASURES=<n>] [CRATE="<crate dirs>"] [BLOCKS="<feature> T<n>"] [LOAD=1]\n' >&2; exit 2; fi
+	$(if $(SIZING_OK),$(LOGESCAPE) SIZING_OK "$$SIZING_OK",@:)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" builder-brief "$(T)" "$(or $(F),$(SPECIFY_FEATURE))" "$(KIND)" "$(JOBS)" "$(MEASURES)" "$(CRATE)" "$(BLOCKS)" "$(LOAD)"
+
 coverage-exempt: ## [tests] the engine files the Rust port replaces, exempt from the coverage floor (dev/coverage-exempt.json; feature 448, the GM 2026-11-02); PRUNE=1 drops the stale entries   [PRUNE=1]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coverage-exempt list $(if $(PRUNE),--prune,)
 

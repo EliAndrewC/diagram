@@ -8,6 +8,8 @@ pub mod archive_first_hooks;
 pub mod batching_hooks;
 pub mod blocked_fetch_hooks;
 pub mod budget_change_hooks;
+// GUARD_EDIT_OK: feature 451 T334 - adding a guard, the builder brief's
+pub mod builder_brief_hooks;
 // GUARD_EDIT_OK: feature 451 T285 - adding a guard, the builder pool's
 pub mod builder_pool_hooks;
 pub mod check_bundle_hooks;

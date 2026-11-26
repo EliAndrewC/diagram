@@ -371,3 +371,14 @@ coordinating session recorded his words on T315's line in `tasks.md` (commit 70b
 who did not hear them; the line frames them as his asking why, and the quoted words are all it holds of his):
 
 > more of the compilation was not able to be cached
+
+## 2026-11-26: a builder is dispatched through the tooling (451 T334)
+
+On 2026-11-26 the coordinating session broke the sizing rules of `scripts/container/builder-brief.md` in its own briefs with nothing
+refusing. The GM, 2026-11-26, as the coordinating session recorded his words on T334's line in `tasks.md` (copied here from that
+line by T334's closing builder, who did not hear them; the elision is the line's):
+
+> is this also part of our checklist-based process for kicking off and managing builders? Or do we not have such a checklist? ... I just want to make sure that we're putting the instructions in the right place
+
+The rest of T334's line is the coordinating session's: the command's name and its kinds, what its block holds, and the list of what
+the check on a builder's dispatch refuses.

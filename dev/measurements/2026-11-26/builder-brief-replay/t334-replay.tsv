@@ -1,0 +1,110 @@
+2026-11-26T00:17:28.441Z	-	pass	Measure plan-review reversals
+2026-11-26T00:47:32.788Z	-	no-marker	Build 451 T254+T255 mark and numbers
+2026-11-26T00:47:42.517Z	-	no-marker	Build 451 T256+T257 review record and tree
+2026-11-26T00:47:54.848Z	escalation-check	pass	Escalation check: repo name answer
+2026-11-26T01:23:59.937Z	-	no-marker	Finish 451 T254 review and checks
+2026-11-26T02:12:26.598Z	-	pass	Build 451 T259 audit register
+2026-11-26T02:15:20.579Z	escalation-check	pass	Escalation check: overnight plan draft
+2026-11-26T02:38:40.281Z	-	no-marker	Build 449 T417 belt removal
+2026-11-26T02:38:48.034Z	escalation-check	pass	Escalation check: closeable items list
+2026-11-26T02:50:07.820Z	-	no-marker	Finish 451 T259 audit register
+2026-11-26T03:07:50.062Z	-	pass	Claims round for 449 T417
+2026-11-26T03:17:59.087Z	-	no-marker	Build 451 T258 tooling-state push and restore
+2026-11-26T03:18:15.075Z	-	pass	Measure handoffs, arm (c), features, per-target
+2026-11-26T03:28:24.318Z	-	pass	Record talk measurements in the repo
+2026-11-26T03:28:39.053Z	-	pass	Close agenda items 6 and 12 with rule changes
+2026-11-26T03:28:50.635Z	-	no-marker	Build 451 T261 plan gate templates
+2026-11-26T03:38:11.133Z	spec-fidelity	pass	Spec-fidelity: does pre-approval cover XVI
+2026-11-26T03:39:22.374Z	-	pass	Narrow decision A per spec-fidelity ruling
+2026-11-26T03:43:46.050Z	-	no-marker	Do 449 T439 plan sections review
+2026-11-26T03:43:56.379Z	-	no-marker	Build 451 T262 escape refused when unowed
+2026-11-26T04:01:40.925Z	spec-fidelity	pass	Plan review of 451's changed blocks
+2026-11-26T04:23:10.164Z	-	no-marker	Build 451 T251 CANON claims' records
+2026-11-26T04:23:23.897Z	-	no-marker	T250 probe and first batch of comments
+2026-11-26T04:23:33.637Z	-	no-marker	Build 451 T263 clone-sync test flake
+2026-11-26T04:39:56.655Z	-	no-marker	T250 batch 2 of comment fixes
+2026-11-26T04:40:04.712Z	-	pass	T250 batch 3 of comment fixes
+2026-11-26T04:48:41.965Z	escalation-check	pass	Escalation check: canon questions
+2026-11-26T05:05:00.287Z	-	no-marker	Finish T251: ids, review, claims round
+2026-11-26T05:15:57.557Z	-	no-marker	T250 batch 4: pages up to 0139
+2026-11-26T05:16:05.894Z	-	pass	T250 batch 5: pages 0140 and up
+2026-11-26T05:23:09.593Z	-	no-marker	T250 batch 6: pages 0030 to 0139
+2026-11-26T05:25:50.963Z	-	pass	T250 batch 7: pages 0190 and up
+2026-11-26T05:32:38.137Z	-	pass	T250 batch 8: pages 0228 and up
+2026-11-26T05:33:51.395Z	research-pass	pass	Research pass: outcaste quarters and city walls
+2026-11-26T05:34:31.744Z	-	no-marker	T250 batch 9: pages 0068 to 0139
+2026-11-26T05:42:33.871Z	quote-check	pass	quote-check 0138 drawing
+2026-11-26T05:42:35.514Z	record-format	pass	record-format 0138
+2026-11-26T05:43:14.955Z	round-arbiter	pass	Arbiter: three round triggers
+2026-11-26T05:45:36.657Z	quote-check	pass	quote-check 0138 drawing
+2026-11-26T05:45:38.735Z	record-format	pass	record-format 0138
+2026-11-26T05:55:37.591Z	-	no-marker	T250 last five comments
+2026-11-26T05:58:00.796Z	-	pass	Measure build disk/time levers
+2026-11-26T05:58:14.887Z	-	pass	Measure builder concurrency 1-4
+2026-11-26T06:57:47.848Z	round-arbiter	pass	Arbiter: 0156 third rounds
+2026-11-26T06:59:34.605Z	source-applicability	pass	source-applicability chiu-2015-yuehu
+2026-11-26T07:03:09.297Z	spec-fidelity	pass	Plan review T250 round 3
+2026-11-26T07:03:23.782Z	round-arbiter	pass	Arbiter: T250 plan review round 3
+2026-11-26T07:06:20.399Z	-	no-marker	Build 451 T265
+2026-11-26T07:06:28.008Z	-	no-marker	Build 451 T267
+2026-11-26T07:54:37.007Z	spec-fidelity	pass	Plan review T265
+2026-11-26T07:54:39.023Z	impl-drift	pass	impl-drift T265 claims
+2026-11-26T07:55:53.614Z	impl-drift	pass	impl-drift T265 claims
+2026-11-26T07:56:44.560Z	impl-drift	pass	impl-drift shrine knobs
+2026-11-26T08:10:53.636Z	escalation-check	pass	Escalation check: items for the GM
+2026-11-26T08:30:59.848Z	round-arbiter	pass	Arbiter: source-reader 0140 round 3
+2026-11-26T08:33:56.790Z	impl-drift	pass	impl-drift place.rs kinds
+2026-11-26T12:39:29.307Z	-	no-marker	Build 451 T268
+2026-11-26T12:39:38.428Z	-	no-marker	Build 451 T272
+2026-11-26T13:28:31.072Z	escalation-check	pass	Escalation check: closing status list
+2026-11-26T13:37:14.431Z	-	no-marker	Build 451 T269
+2026-11-26T13:37:22.951Z	-	no-marker	Build 451 T270
+2026-11-26T13:37:32.327Z	-	no-marker	Build 451 T271
+2026-11-26T14:34:15.643Z	-	no-marker	Build 451 T285 worktree pool
+2026-11-26T14:34:31.316Z	-	no-marker	Build 451 T292 landing refusals
+2026-11-26T14:57:08.904Z	escalation-check	pass	Escalation check: agenda findings
+2026-11-26T15:04:43.569Z	-	no-marker	Finish 451 T285 pool
+2026-11-26T15:24:31.624Z	-	pass	Measure task-route overhead vs tweak
+2026-11-26T15:24:48.920Z	-	pass	Measure file overlap between tasks
+2026-11-26T15:43:18.987Z	-	no-marker	Build 451 T284 build slot
+2026-11-26T15:43:31.359Z	-	no-marker	Build 451 T295 wrong-tree guards
+2026-11-26T15:43:42.263Z	-	no-marker	Build 451 T281 guard-message store
+2026-11-26T16:37:11.154Z	-	no-marker	Finish 451 T295 closing
+2026-11-26T17:13:09.299Z	spec-fidelity	pass	Spec review of feature 459
+2026-11-26T17:13:29.233Z	-	no-marker	Build 451 T305 ledger rows by task
+2026-11-26T17:13:42.135Z	-	no-marker	Build 451 T303 false green
+2026-11-26T17:17:51.458Z	spec-fidelity	pass	Spec review of 459, round 2
+2026-11-26T17:19:51.367Z	spec-fidelity-verify	pass	Verify 459 spec round 3
+2026-11-26T17:32:03.959Z	spec-fidelity	pass	Plan review T305 round 2
+2026-11-26T17:34:08.473Z	-	pass	Trial: escalation-check tier and bundle
+2026-11-26T17:34:24.578Z	-	pass	Measure builder report format
+2026-11-26T17:37:51.196Z	-	no-marker	Build 451 T104 load-sensitive suite
+2026-11-26T17:38:02.295Z	-	no-marker	Build 451 T309 arbiter coverage flake
+2026-11-26T17:38:16.758Z	-	no-marker	Build 451 T304 carry flake and index lock
+2026-11-26T17:58:02.143Z	spec-fidelity	pass	Plan review T309 round 2
+2026-11-26T18:01:23.142Z	-	no-marker	Build 451 T289 file builder candidates
+2026-11-26T18:21:01.936Z	-	no-marker	Build 451 T159 fresh tree gate red
+2026-11-26T18:24:24.685Z	-	pass	Measure reproduce-then-fix split
+2026-11-26T18:51:40.065Z	-	no-marker	Build 451 T316 pre-warm at handout
+2026-11-26T18:57:38.277Z	-	no-marker	Build 451 T298 time breakdown summary
+2026-11-26T18:57:40.558Z	impl-drift	pass	impl-drift T159 new claim
+2026-11-26T18:57:43.237Z	impl-drift	pass	impl-drift T159 triaged claims
+2026-11-26T19:19:46.243Z	-	no-marker	Measure 451 T301 part 1 cache churn
+2026-11-26T19:26:39.189Z	spec-fidelity	pass	Spec review of feature 460
+2026-11-26T19:28:23.568Z	-	no-marker	Finish 451 T298 closing
+2026-11-26T19:31:13.093Z	spec-fidelity-verify	pass	Verify 460 spec round 2
+2026-11-26T19:31:20.423Z	spec-fidelity-verify	pass	Verify 460 spec round 2
+2026-11-26T19:38:20.159Z	-	no-marker	Finish 451 T316 closing
+2026-11-26T19:41:14.033Z	-	no-marker	Build 451 T308 review rounds
+2026-11-26T19:59:30.054Z	-	no-marker	Build 451 T299 detector false positives
+2026-11-26T20:04:38.049Z	-	no-marker	Measure 451 T315 where a test run's seconds go
+2026-11-26T20:05:54.397Z	-	no-marker	Finish 451 T308 review-rounds part
+2026-11-26T20:24:56.997Z	-	no-marker	Build half: 451 T293 live view
+2026-11-26T20:27:32.281Z	-	no-marker	Measure 451 T336 pre-warm link failure
+2026-11-26T20:40:06.084Z	-	no-marker	Build half: 451 T274 memory sampler
+2026-11-26T20:51:24.279Z	-	no-marker	Closing half: 451 T293 live view
+2026-11-26T21:03:12.281Z	spec-fidelity	pass	Plan review round 2: 451 T315
+2026-11-26T21:13:35.125Z	-	no-marker	Fix: 451 T293 five uncovered lines
+2026-11-26T21:14:45.859Z	-	no-marker	Measure then fix: 451 T347 slot wait
+2026-11-26T21:15:49.899Z	-	no-marker	Closing half: 451 T274 sampler
+2026-11-26T21:19:37.484Z	-	no-marker	Build half: 451 T334 dispatch tooling

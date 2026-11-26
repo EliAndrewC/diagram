@@ -4050,31 +4050,67 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T334 (<why: the finding or measurement that files it>)
+### T334 (the coordinating session's own briefs of 2026-11-26 broke the sizing rules of `scripts/container/builder-brief.md` five times with nothing refusing - T285, T298, T316 and T308 each reached the 300k cap, T315 ended at 308k - and carried no STOP POINT line; the GM asked that day whether the instructions were in the right place)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the standing part of a builder's brief is printed by a command that sizes the brief first, and a guard holds a builder's dispatch to the block's first line. Built in two halves: the build half wrote the command, the guard and their tests and ended at a handoff; this closing half made the one change the coordinating session ruled (T334-D7), reached every line with a test, took the message checks and wrote this section.
+  - **What is built.** `make builder-brief T=<task(s)> KIND=fix|measurement|build-half|closing-half [F=] [JOBS=] [MEASURES=] [CRATE=] [BLOCKS=] [LOAD=1]` (`rust/gate/crates/task/src/builder_brief.rs`) refuses an oversized brief from its caller's own words, then takes the task's tree from the pool by `builder_tree::run` in process and prints the block: the marker line `BUILDER-BRIEF <feature> <task> KIND= JOBS= TREE=`, `Blocks:`, the tree and its exports, the kind's STOP POINT, the checks of its tier, the filing and report lines, and where asked the order-and-stop sentence and the "runs ALONE" line. `builder-brief-hooks` (`rust/guard/src/guards/builder_brief_hooks.rs`, PreToolUse on Agent) refuses a builder's dispatch with no marker line, with a marker of an unknown kind or of more jobs than `JOBS_MAX`, with a marker whose tree the pool does not hold for its task, or a `KIND=measurement` brief with a job line that orders a source edit; each refusal prints the command that makes the brief. The marker's one format is `rust/guard/shared/src/builder_brief.rs`, written by the command and read by the guard. `scripts/container/builder-brief.md` lost its pasted block and keeps what a prompt cannot show: each rule with its incident.
+  - **T334-D1, built, a DEVIATION from the task's line: the kinds are `fix|measurement|build-half|closing-half`.** The line wrote `fix|measurement|mechanism-build|closing`. Label: CONVENTION (a naming of the tooling; no research claim). Reason: the coordinating session's dispatch brief for the build, written after the line, named the kinds this way, and `build-half` and `closing-half` are the words `builder-brief.md` already used for the two builders of a mechanism.
+  - **T334-D2, built, a DEVIATION from the task's line: an unsplit mechanism is refused by the COMMAND, not by the PreToolUse check.** The line lists "a mechanism not split into its build and closing halves" among the check's refusals. Label: CONVENTION (where a rule of the tooling lives). Reason: whether a task is a mechanism is read from its line in `tasks.md`, which the command reads once, before a tree is taken (`mechanism()`: one of the phrases "a new command", "a new guard", "a guard refuses", "a PreToolUse check", or a `make <target>` with a hyphen that the clone's Makefile does not define); the guard would read `tasks.md` on every Agent call to make a second copy of a check the command has already made, and a builder cannot be dispatched with a marker except by running the command. `KIND=fix` on such a line is refused with the two commands to run; `SIZING_OK="<reason>"` passes this one refusal for a line that names a guard or command the task only repairs, logged by the Makefile's `LOGESCAPE`. The guard still refuses a marker of more than `JOBS_MAX` jobs, which only a hand-edited marker can carry.
+  - **T334-D3, built: a builder's dispatch is known by the pool's registry, not by a name's shape.** An `Agent` call of type none, `general-purpose` or `claude` whose prompt names a path some clone's pool registry holds (ended at a character that is no part of a name), or carries a marker line. A defined agent, `Explore` and `Plan` are never one, and a prompt opening `Run the claims round` is exempt as `context_cap_hooks/split.rs` reads it. Label: CONVENTION. Reason: a check agent is told the builder's tree to read it, and a guard that fires on correct work teaches a session to bypass it.
+  - **T334-D4, built: the marker and the escape count only on a LINE OF THEIR OWN.** T334's own build brief named both in a sentence; replayed, it is refused for no marker and takes no escape. A reason that starts `<` (the refusal's placeholder pasted back) is no reason. Label: CONVENTION. The shared `escape_or_refuse` was not used: it reads a token anywhere in a command, and a prompt is prose.
+  - **T334-D5, built: the escape `BUILDER_BRIEF_OK: <reason of two words or more>` is checked after "is this a builder's dispatch" and before every refusal**, so a dispatch that is no builder's records nothing and every escape taken is logged. Label: CONVENTION.
+  - **T334-D6, built, a DEVIATION from the dispatch brief: `KIND=measurement` REQUIRES `MEASURES`.** The brief wrote it optional. Label: CONVENTION. Reason: left optional, the bound never fires on a caller who did not think to count, which is T315's case.
+  - **T334-D7, built on the coordinating session's ruling of 2026-11-26: a BUNDLE is briefed as one builder.** The build half refused more than one task in `T=`; the ruling: `make builder-brief T=a,b` is allowed where `make builder-tree T=a,b` allows it - one builder, one tree, the marker naming both - because T299 and T282 were built as one bundle that day and an escape on every bundle would spend the audit's falsifier. Label: CONVENTION. As built: the tasks are joined by commas in the marker (a space would end the marker's task word), each task's line is read and a mechanism among them still refuses `KIND=fix`, the handoff is `<a>-<b>-build.md`, scratch files take the first task's prefix, and the guard holds the tree to every task the marker names. The pool hands a bundle the tree that ONE of its tasks already holds; the command refuses that case, naming the brief for what holds the tree and the brief for the other task, since the guard would refuse the block made on it.
+  - **T334-D8, built: every sizing refusal runs before the pool's handout**, so a refused brief holds no tree (asserted in `a_brief_is_sized_before_any_tree_is_taken`). Label: CONVENTION.
+  - **T334-D9, built: `MEASURES_MAX` is 6 and `JOBS_MAX` is 3, both GUESS knobs.** `JOBS_MAX` is the sizing rule's own limit, set where the measured hand-off rate steps up (`builder-brief.md`, "Why"). `MEASURES_MAX` is a GUESS: T315's brief counted as one job, timed seven crates and priced eight levers and ended at 308k of context (observed 2026-11-26, method: T315's builder report and its record `dev/measurements/2026-11-26/test-run-split/`); no brief was ever sized by this count, so the bound sits under the smaller of the two and is a knob to move on the first measurement builders it sizes. Both are in `dev/audits/builder-brief-command.md`'s `covers:` lines.
+  - **T334-D10, built NARROW, and said to be: the measurement rule reads a line opening `Job <n>`, `Part <n>` or `Step <n>` that holds `fix`, `fixes`, `implement`, `patch`, `build it` or `red-first`.** The task's line says "a KIND=measurement brief that names a source edit"; a guard that read every sentence for an edit would refuse correct measurement briefs. Label: GUESS (the word list and the three openings). What it misses and its one false-positive form are at the head of the guard's file and under Found and left.
+  - **T334-D11, built: the block is under 2,000 characters and carries no rule text.** `agent-prefix-hooks` refuses a prompt that repeats 2,000 characters of an earlier dispatch of its type, and every builder is one type, so the block names `builder-brief.md` instead of quoting it (pinned in `each_kind_s_block_opens_with_its_marker_and_stays_short`). Every kind's block holds a line opening `STOP POINT (`, which `split.rs` knows a code builder by. Label: CONVENTION.
+  - **T334-D12, built: the build half's handoff is `<git common dir>/l7r-handoffs/<task>-build.md`**; a closing half asked for before it exists gets a note on stderr, not a refusal. Label: CONVENTION.
+  - **The replay.** The table's label: observed 2026-11-26, method: `dev/measurements/2026-11-26/builder-brief-replay/t334-replay.py` - every Agent call of the coordinating session's transcript dated 2026-11-26 UTC piped through the built guard by `tests/hooks/builder-brief-hooks.sh`, on a fixture pool of the trees the prompts name, all free.
+
+    | verdict | dispatches | which |
+    |---|---|---|
+    | refused, no marker | 56 | every one a builder's dispatch into a pool tree, T334's own build brief among them |
+    | refused, any other rule | 0 | none carried a marker |
+    | passed, defined agents | 36 | the checks |
+    | passed, ad-hoc, no pool tree named | 17 | measuring agents, and builders that worked in the clone itself |
+    | passed, the claims round | 1 | exempt by its opening words |
+    | no builder's dispatch, refused | 0 | the escape was needed for none |
+
+    The record, with the second table - the five oversized briefs given a truthful caller - is `dev/measurements/2026-11-26/builder-brief-replay/t334-results.md`. Beyond "no marker", the command's sizing takes T285 (a mechanism as one fix), T298 (`JOBS=4`) and T315 (`MEASURES=7`) from the caller's own words, and neither T316 nor T308 (observed 2026-11-26, method: the command run on a scratch fixture repository holding the real `tasks.md`, `L7R_BUILDER_POOL=0`, and `t334-replay2.py` for the guard's rule). The detectors were not tuned until they fired. The `tree-not-held` rule was not replayed: the pool's holders of each moment of that day are not recoverable.
+  - **The guard's messages.** Its refusals were judged by `message-check` from the suite's rendering, copied into this tree's store by hand as 451 T338's line describes: the no-marker text and the too-many-jobs text each failed BREVITY once (a rationale and a hand-off rate, cut) and passed reworded; the other refusals passed as written. Every builder-brief wording has its PASS in `dev/guard-messages.tsv`.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the command's sizing, before any tree (T334-D2, D6, D8, D9) | `builder_brief::tests::a_brief_is_sized_before_any_tree_is_taken` | n/a: tooling | none | n/a |
+| each kind's block, its marker, its length and its STOP POINT line (T334-D11, D12) | `builder_brief::tests::each_kind_s_block_opens_with_its_marker_and_stays_short` | n/a: tooling | none | n/a |
+| the mechanism test and the task's line | `builder_brief::tests::a_task_s_line_names_a_new_mechanism_by_a_phrase_or_an_unknown_target`, `builder_brief::tests::a_feature_is_found_by_its_number_and_an_archived_task_by_its_line` | n/a: tooling | none | n/a |
+| a bundle (T334-D7) | `builder_brief::tests::a_bundle_is_briefed_as_one_builder_on_the_tree_held_for_it`, `builder_brief_hooks::tests::a_marker_is_held_to_its_kind_its_jobs_and_the_pool` | n/a: tooling | none | n/a |
+| the marker's one format | `l7r_shared::builder_brief::tests::a_marker_round_trips_and_a_mention_is_none` | n/a: tooling | none | n/a |
+| the guard (T334-D3, D4, D5, D10) | `builder_brief_hooks::tests`, `tests/hooks/test-builder-brief-hooks.sh` | n/a: tooling | none | n/a |
 
 ### T334 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder's brief is sized before it is written and opens with a block the tooling printed; a brief that breaks the sizing rules, or a builder sent into a pool tree without the block, is refused with the command to run.
+2. **The constraints.** The sizing rules of `scripts/container/builder-brief.md` (one task or one bundle, at most three jobs, a mechanism as two builders, a measurement sized by what it measures); the pool of 451 T285 (a tree comes from `make builder-tree` alone); `agent-prefix-hooks`' block of 2,000 repeated characters; `split.rs`' STOP POINT line; a guard that fires on correct work teaches a session to bypass every guard (root `CLAUDE.md`, "What is enforced").
+3. **Where each comes from.** G: the GM's words of 2026-11-26 on T334's line, in request.md under "2026-11-26: a builder is dispatched through the tooling (451 T334)"; what to build from them is the coordinating session's, as that section says. O: the replay above; `dev/measurements/2026-11-25/talk-measures/` for the three-job limit.
+4. **Do they describe the world here?** Yes for the dispatches replayed: the guard refuses every builder's dispatch of the day and no other. Not wholly for the sizing: it rests on the caller's own count of jobs and things measured, and misses two of the five briefs it was built for (Found and left).
+5. **The order.** After T285 (the pool) and T289 (a builder files what it finds); before T352, T353, T354 and T360, and before T302.
+6. **The exits.** Green: the changed crates' tests, lint, format and coverage clean, the guard's suite and its two neighbors green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the mechanism test and the measurement rule were written from the day's briefs and then replayed over all of them once; what they missed is reported, not tuned away.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, observed 2026-11-26, method: `bash tests/hooks/test-builder-brief-hooks.sh` with the guard's `decide` returning at its prefilter, `14 passed, 13 failed`; restored, `27 passed, 0 failed`. Not seen red: the command's tests and the marker's test, new code with no older behavior to fail on. After, observed 2026-11-26, method: `make crate-checks CRATE="rust/guard rust/guard/shared rust/gate/crates/task rust/gate"`, green - tests (guard `548 passed`, shared `506 passed`, task `104 passed`, gate `8 passed`), lint, format and `cover clean on 4 crate(s)`, 110 s of wall time; `bash tests/hooks/test-builder-pool-hooks.sh`, `17 passed, 0 failed`, and `bash tests/hooks/test-agent-model-hooks.sh`, `40 passed, 0 failed`. To see it by hand: `make builder-brief T=T334 F=451 KIND=build-half` prints the block; `make builder-brief T=T334 F=451 KIND=fix` is refused with two commands.
+10. **Before moving a constant.** n/a: `MEASURES_MAX` and `JOBS_MAX` are GUESS knobs, no claim's.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes. The check it adds: a builder's dispatch that broke the brief's sizing rules, or carried no standing block, went out with nothing refusing.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A build half that reaches the context cap cannot write the handoff its closing half is told to read: the cap's one exit lets through only a file named `<task>-<agent_id>.md`, so the closing half's block names a file that does not exist and the command only notes it on stderr. Not fixed here: it changes `context_cap_hooks.rs`' exit, another guard's rule with its own red-first test. Filed as T352; lands before T302.
+- A builder briefed to work in the session clone itself, naming no pool tree, passes the guard with no marker and no sizing: 17 ad-hoc dispatches of the replay's day named none, some of them builders (observed 2026-11-26, method: `dev/measurements/2026-11-26/builder-brief-replay/t334-replay.py`). Not fixed here: which of them edit source is unmeasured, and a rule that read "names the clone and orders an edit" from prose would refuse readers. Filed as T353; lands before T302.
+- A measurement and a build briefed as two jobs - T316's and T308's shape - is caught by nothing reliable: the command passes both, and the guard's measurement rule fires on T308's brief only by a word of its measurement line and not on T316's numbered list (observed 2026-11-26, method: `dev/measurements/2026-11-26/builder-brief-replay/t334-replay2.py`). Not fixed here: whether `JOBS` over 1 on a measurement is refused outright is a decision to take from a week of briefs the command made, not from five. Filed as T354; lands before T302.
+- A builder sent from a Workflow script's `agent()` call is not seen: the guard matches the Agent tool, and `workflow_hooks.rs` holds a Workflow to the model rule alone. Not fixed here: no builder was sent that way on the replay's day, and it needs `workflow_hooks.rs` to put a workflow's `agent()` call through this guard's verdict, that guard's change with its own test. Filed as T360; lands before T302.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes, by FR-013's own test (the GM 2026-11-20: "can we in general priotitize performance improvements going forward?"): it makes the builders' loop faster, since each brief the command refuses is a builder that would have reached the context cap and handed off, a fresh builder's re-reading each time (`builder-brief.md`, its paragraph on why builders stop where they do). Its line carries no `[perf]` tag; that tag is the coordinating session's to add. Not an engine-speed task, so the performance checklist's engine items do not apply.
 
 ### T333 (<why: the finding or measurement that files it>)
 
@@ -4729,6 +4765,113 @@ engine speed, so no checklist.
 |---|---|---|---|---|
 
 ### T359 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T352 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T352 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T353 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T353 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T354 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T354 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T360 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T360 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

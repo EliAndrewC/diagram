@@ -14,7 +14,9 @@ cadence-days: 7
 
 Decided by the GM, 2026-11-25 (pre-approved on its measurement; `docs/process-decisions.md`, "The builders' context cap stays at
 300k, builders stay, and briefs are sized"). The rule is the SIZING paragraph of `scripts/container/builder-brief.md`, with one line
-in the root `CLAUDE.md`; no guard enforces it, because a task's size is the coordinating session's judgment.
+in the root `CLAUDE.md`. Until 451 T334 no guard enforced it, a task's size being the coordinating session's judgment; since then
+`make builder-brief` refuses a brief its caller's own words size past the rule, and a guard refuses a builder's dispatch without
+the command's block (`dev/audits/builder-brief-command.md`) - the judgment of what a job is stays the session's.
 
 Caveats the audit carries: the six one-job briefs handed off half the time (3 of 6), so the job count alone does not
 predict; the groups are small. Whether builders beat no builders per landed task is `delegating-to-builders.md`'s question, still

@@ -77,7 +77,7 @@ pub(crate) struct Env {
 }
 
 impl Env {
-    fn live() -> Self {
+    pub(crate) fn live() -> Self {
         let var = |n: &str| std::env::var(n).unwrap_or_default();
         let or = |n: &str, d: &str| {
             Some(var(n))
@@ -183,7 +183,7 @@ fn save(p: &Pool, trees: &[Tree]) -> String {
 }
 
 /// A feature as the registry keys it: its number (`451` of `451`, `451-slug` or `specs/451-slug/`), else the word given.
-fn feature_key(f: &str) -> String {
+pub(crate) fn feature_key(f: &str) -> String {
     let name = f
         .trim()
         .trim_end_matches('/')
@@ -199,7 +199,7 @@ fn feature_key(f: &str) -> String {
 }
 
 /// The tasks of a `T=` value: commas or spaces between them.
-fn task_list(t: &str) -> Vec<String> {
+pub(crate) fn task_list(t: &str) -> Vec<String> {
     t.split([',', ' '])
         .filter(|w| !w.is_empty())
         .map(str::to_owned)

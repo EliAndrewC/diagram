@@ -121,7 +121,8 @@ Spec-driven under `.specify/memory/constitution.md`. One line each here; the ful
   step is a measurement. A PROCESS stop goes to the round arbiter (`make arbiter-ask`), what to build to the GM.
 - Do the literal thing (constitution XVI); an exception goes to `spec-fidelity` with the GM's words.
 - A spec is reviewed by `spec-fidelity` against the GM's words before implementation begins (constitution XVI); a plan's changed blocks (`make plan-delta F=<n>`) are reviewed before ticks and landings, and once the spec is FAITHFUL a feature's first task may be BUILT while its plan review runs, the builder adjusting to the verdict (the GM 2026-11-25).
-- A builder's brief is SIZED - one task, at most three jobs (`scripts/container/builder-brief.md`); a one-turn edit is the session's own.
+- A builder's brief is SIZED - one task, at most three jobs - and opens with the block `make builder-brief T= F= KIND=` prints
+  (`scripts/container/builder-brief.md`); a one-turn edit is the session's own.
 - No known regressions (XIII), measured in a detached worktree; fix defects where you find them (XIV).
 - Review checks run ON THEIR OCCASION (`docs/reviews.md`), one unit per agent; every pass is a ledger row with its cost
   (`make review-cost`); findings for the GM go through `escalation-check` first; to improve a check, add the general rule,
