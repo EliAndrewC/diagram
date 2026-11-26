@@ -92,8 +92,13 @@ static BLOCK_TASK: LazyLock<Regex> = LazyLock::new(|| re(r"^#+ (T\d+)\b"));
 
 const TOO_LONG: usize = 40;
 
+/// A task section's own decision label, `T256-D1` (451 T257's review, 2026-11-25): not the spec's D1, which `IDS` read in it - the `-` is a
+/// word boundary - so every task-section bundle carried the spec's D1 to D5 as cited; the label is dropped before the ids are read.
+static TASK_LABEL: LazyLock<Regex> = LazyLock::new(|| re(r"\bT\d+[a-z]?-D\d+[a-z]?\b"));
+
 /// `text` with each cited requirement or decision range written out id by id (at most 40 ids a range; a longer one is left as it is).
 fn expand_ranges(text: &str) -> String {
+    let text = &TASK_LABEL.replace_all(text, "");
     let first = RANGE.replace_all(text, |c: &Captures<'_>| {
         let (a, b): (usize, usize) = (c[2].parse().unwrap_or(0), c[3].parse().unwrap_or(0));
         if b > a && b - a <= TOO_LONG {
@@ -244,7 +249,9 @@ fn answered(under: &[(String, String)], spec: &str) -> Option<u32> {
             .flatten()
             .or(BODY_AMEND.captures(body).ok().flatten())
             .map(|c| c[1].parse().unwrap_or(0));
-        let joined = format!("{key}\n{body}");
+        let joined = TASK_LABEL
+            .replace_all(&format!("{key}\n{body}"), "")
+            .into_owned();
         let ns: Vec<u32> = named
             .into_iter()
             .chain(
@@ -798,8 +805,20 @@ pub(super) fn build(
         format!("# Each changed block's text when last judged, with that verdict\n\n{before}"),
     );
     let manifest = out.join("MANIFEST.md");
-    let _ = std::fs::write(&manifest, format!("# Plan review bundle - {feature}, {name}\n\nA MODE 4 plan review of the blocks in `blocks.md` and nothing else of the plan (feature 375 amendment 11). Read the files beside\nthis MANIFEST and nothing in the repository: `request.md` is the GM's words verbatim - the original request and every amendment\nfrom the one these blocks answer on, the earlier ones indexed in `request-index.md`; `spec-cited.md` holds every requirement,\ndecision and `m:` measurement the blocks name, in full; `rulings.md` the round arbiter's ruling, why, what and tooling fix, verbatim, for every `ask:`\nruling the blocks cite; `spec-index.md` every other requirement's first sentence on one line, a long one cut and marked `[...]` - grep it for one the blocks\nshould have named; `earlier.md` what a changed block said when last judged, and the verdict it got.\n\nFind each decision in the blocks, class it `within` or `narrowing`, and rule on each narrowing (LEGITIMATE / NOT LEGITIMATE).\n\n{how}\n"));
+    let _ = std::fs::write(&manifest, format!("# Plan review bundle - {feature}, {name}\n\nA MODE 4 plan review of the blocks in `blocks.md` and nothing else of the plan (feature 375 amendment 11). Read the files beside\nthis MANIFEST and nothing in the repository: `request.md` is the GM's words verbatim - the original request and every amendment\nfrom the one these blocks answer on, the earlier ones indexed in `request-index.md`; `spec-cited.md` holds every requirement,\ndecision and `m:` measurement the blocks name, in full; `rulings.md` the round arbiter's ruling, why, what and tooling fix, verbatim, for every `ask:`\nruling the blocks cite; `spec-index.md` every other requirement's first sentence on one line, a long one cut and marked `[...]` - grep it for one the blocks\nshould have named; `earlier.md` what a changed block said when last judged, and the verdict it got.\n\nBuilt from the tree `{tree}`: record the verdict there, by the command below (451 T257).\n\nFind each decision in the blocks, class it `within` or `narrowing`, and rule on each narrowing (LEGITIMATE / NOT LEGITIMATE).\n\n{how}\n", tree = tree_of(spec_dir)));
     Ok(manifest)
+}
+
+/// The tree a bundle is built from (451 T257): the spec directory's, absolute, where the reviewed text is and where its verdict records.
+pub(super) fn tree_of(spec_dir: &Path) -> String {
+    let root = spec_dir
+        .parent()
+        .and_then(Path::parent)
+        .unwrap_or(Path::new("."));
+    std::path::absolute(root)
+        .unwrap_or_default()
+        .display()
+        .to_string()
 }
 
 fn review_of(spec_dir: &Path) -> Value {
@@ -831,7 +850,7 @@ pub(super) fn task_prompt(spec_dir: &Path, out_root: &Path, task: &str) -> Resul
         .filter(|s| !s.is_empty())
         .and_then(|s| History::new(&plan, "HEAD").section(task, s));
     let n = number_of(spec_dir);
-    let how = format!("Record it: the JSON is `{{\"section_sha256\": \"{}\", \"decisions\": [...]}}`, written under /tmp, then `make plan-verdict F={n} TASK={task} FILE=<it> AS=spec-fidelity`.", digest(section.as_bytes()));
+    let how = format!("Record it: the JSON is `{{\"section_sha256\": \"{}\", \"decisions\": [...]}}`, written under /tmp, then `make -C {} plan-verdict F={n} TASK={task} FILE=<it> AS=spec-fidelity`.", digest(section.as_bytes()), tree_of(spec_dir));
     let earlier: Vec<(String, String, String)> = was
         .into_iter()
         .map(|t| {
@@ -900,7 +919,7 @@ pub(super) fn delta_prompt(
             .map(|k| format!("{}: \"removed\"", ascii_json(&format!("{REMOVED}{k}")))),
     );
     let shas = format!("{{{}}}", shas.join(", "));
-    let how = format!("Record it: the JSON is `{{\"blocks\": {shas}, \"decisions\": [...]}}`, written under /tmp, then `make plan-verdict F={n} BLOCKS=1 FILE=<it> AS=spec-fidelity`.");
+    let how = format!("Record it: the JSON is `{{\"blocks\": {shas}, \"decisions\": [...]}}`, written under /tmp, then `make -C {} plan-verdict F={n} BLOCKS=1 FILE=<it> AS=spec-fidelity`.", tree_of(spec_dir));
     let tasks: BTreeSet<String> = under
         .iter()
         .filter_map(|(k, _)| {

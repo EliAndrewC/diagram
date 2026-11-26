@@ -2740,58 +2740,69 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T256 (<why: the finding or measurement that files it>)
+### T256 (the parallel trials, 2026-11-25: every carry-over of a worktree's task into the session clone conflicted on specs/451-time-retro-and-efficiency/plan-review.json and was merged by hand as JSON, both sides' entries kept)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a git merge driver for `specs/*/plan-review.json`, registered in `.gitattributes` (`merge=plan-review`) and defined in the clone's git config by `scripts/sync-with-main.sh`'s `ensure_git_config` on every sync-in, runs `l7r-gate plan merge-record %O %A %B`: a three-way merge of the record's JSON that keeps both sides' entries, written through the recorder's own `pretty`. Measured 2026-11-25 (a scratch repo holding the real record, two branches each adding a task's verdict, `git cherry-pick`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the merge driver | the merge's tests: two sides each adding a task's verdict merge with both kept; a cherry-pick through the registered driver merges clean where git's text merge left 3 conflict hunks (measured 2026-11-25) | n/a: no engine code | none | n/a |
 
 ### T256 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Two builders in two worktrees each record their task's plan review; carrying both tasks into the session clone (a cherry-pick or a merge) takes both verdicts with no hand merge, and every reader of `plan-review.json` reads it as before.
+2. **The constraints.** The task line (tasks.md T256): each task's verdicts in their own file, or the record merged by a git merge driver; `make plan-verdict` and every reader unchanged in what they read; red-first on two branches each adding a task's verdict, then merging; before the first port batch at three builders.
+3. **Where each comes from.** G: the task line and its brief (the cheaper sound route, measured). O: the measurements of item 4 and item 9.
+4. **Do they describe the world here?** Yes. THE DECISIONS:
+   - T256-D1 THE ROUTE IS THE MERGE DRIVER: it touches 4 files where per-task files touch about 39, measured 2026-11-25 (a grep of `plan-review.json` and the plan crate's `RECORD` over `rust/` and `scripts/`): per-task files move 10 reading files outside the plan crate (the arbiter's bundle, research pointers, the landing's ready check, the feature report, stale terms, the ledger's plan rows, the review-round guard, `plan-gate.sh`, `land-alone.sh` with 6 sites) and 5 plan-crate modules, about 24 test files that write the record, and a migration of 173 records; and `land/ready.rs` and `land-alone.sh` are the push refusal the T254 builder is editing in parallel. Per-task files would still leave the plan's shared blocks (`## Summary`, `## Decisions`) and the `block_reviews` log in one file, so their merges would still conflict. The driver is a new module and its tests, its verb in `plan.rs`, a `.gitattributes` line and `ensure_git_config`'s registration, and no reader changes.
+   - T256-D2 THE MERGE IS THREE-WAY AND AN ENTRY IS WHOLE: the record's top level and its `blocks` and `tasks` maps are merged key by key against the base. A key one side changed and the other left is that side's. A key both sides removed, or only one side removed while the other left it, is removed. A key one side removed and the other changed keeps the changed entry. An entry (a block's or a task's verdict) is never merged field by field: a mix of one side's digest and the other's verdict could read CLEAR on a text nobody cleared. Where both sides changed one key to different entries, the one with the later `reviewed` day wins, and on a tie the incoming side's (`%B`). Each entry carries its own digest, so a wrong pick leaves a block owed a review again and never a false CLEAR: the gate compares the digest with the merged plan's text.
+   - T256-D3 `block_reviews` KEEPS EVERY ROW: it is an append-only log (no writer removes a row, measured 2026-11-25, a read of `record.rs`, `history.rs` and `task.rs`). The merge is our side's rows, then each of the incoming side's rows that the base does not hold and our side does not already hold. The review-round guard counts a task's trailing non-CLEAR rows (`review_round_hooks.rs`'s `rev().take_while`), so each side's rows keep their order.
+   - T256-D4 REGISTRATION IS TOOLING: a merge driver's command is local git config, which no clone carries. `ensure_git_config` sets `merge.plan-review.driver` on the session clone (its worktrees share the clone's config) at every sync-in, idempotently, saying so the first time. The command runs the gate with `L7R_GATE_STALE_OK=1`: mid-pick, a Rust source may hold conflict markers, and a rebuild then would fail the merge; the stale binary merges as well as a fresh one. Unregistered, or with a binary older than the verb, git falls back to its text merge: today's conflict, no worse.
+   - T256-D5 A RECORD THAT DOES NOT PARSE IS LEFT TO THE HAND MERGE: a side that is not JSON fails the merge with our side untouched, and the message names the file and says to merge it by hand as JSON, both sides' entries kept.
+5. **The order.** Beside T257 (same builder); before the first port batch at three builders; T254's carry-over into the session clone is the first pick it serves, so the clone's sync-in must have run first.
+6. **The exits.** Green: `make closing-checks T=T256`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-25 (a scratch repo with the real 2.8 MB record as base, branches `a` and `b` each adding a task's entry, a block's entry and a `block_reviews` row, `git cherry-pick b` onto `a`): git's text merge left the file unmerged with 3 conflict hunks, one per map and one in the log. With the driver registered and the pick run from a linked worktree of that repo, measured 2026-11-25: the pick merged clean, both tasks', both blocks' and both rows kept (303 rows to 305), and the picked commit's diff is its own 21 lines, the record's form unchanged. `tests/hooks/test-sync-with-main.sh` case Z2 pins it: sync-in defines the driver once, and a pick of another task's verdict in the fixture clone merges clean with both kept. The merge's unit tests (`plan/merge/tests.rs`) cover each rule of D2, D3 and D5.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: every carry-over of a worktree's task stopped on a conflict that a session merged by hand. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: it removes a hand step from the builders' loop, and runs only at a merge.
 
 
-### T257 (<why: the finding or measurement that files it>)
+### T257 (the parallel trials, 2026-11-25: spec-fidelity ran make plan-verdict from the session clone, where a worktree task's section is still the template, and was refused on a section-hash mismatch in five tasks)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the MODE 4 bundle's MANIFEST (`plan/bundle.rs`'s `build`, both its task and its blocks form) names the tree it was built from and gives the recording command as `make -C <that tree> plan-verdict ...`; `make plan-verdict`'s two section checks (`record_task`'s section digest and `record_blocks`' `check_named`), on a mismatch, look in the other trees `git worktree list` names for the one whose plan holds the reviewed text, and the refusal names it with the command to run there. `.claude/agents/spec-fidelity.md`'s "run from the clone's root" becomes "from the tree the MANIFEST names". Measured 2026-11-25 (the tests of item 9).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the MANIFEST's tree and the refusal's | the plan crate's tests: the MANIFEST names its tree and the `make -C` command; a recording from a tree whose section differs refuses naming the worktree that holds the reviewed text (measured 2026-11-25) | n/a: no engine code | none | n/a |
 
 ### T257 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A plan reviewer dispatched on a worktree's task records its verdict in that worktree, at the first try, because the bundle told it where; one that records from another tree is told which tree holds the text it reviewed.
+2. **The constraints.** The task line (tasks.md T257): the review bundle's MANIFEST names the tree and the exact recording command with its root; `make plan-verdict` refuses a tree whose section differs naming the right one; red-first; before the first port batch at three builders.
+3. **Where each comes from.** G: the task line and its brief. O: the tests of item 9.
+4. **Do they describe the world here?** Yes. THE DECISIONS:
+   - T257-D1 THE TREE IS THE SPEC DIRECTORY'S: the bundle is built from `<tree>/specs/<feature>/`, and the MANIFEST names `<tree>` made absolute; the command is `make -C <tree> plan-verdict F=<n> TASK=<task> FILE=<it> AS=spec-fidelity` (or `BLOCKS=1`), since a reviewer's shell starts wherever its session's did and `make -C` needs no `cd`.
+   - T257-D2 THE TREES SEARCHED ARE THE CLONE'S WORKTREES: `git -C <tree> worktree list --porcelain` names the session clone and every worktree made from it, measured 2026-11-25 (run from `diagram-backlog-t256`: the clone and its 4 worktrees). A tree whose `specs/<feature>/plan.md` gives the reviewed digest for the task's section (or, on the blocks route, for the block refused) is the one named; with none, the refusal is today's message. The search runs only on a refusal, so a recording that matches costs nothing more.
+   - T257-D3 BOTH SECTION CHECKS: the task route (`make decide`'s bundle) and the blocks route (`make plan-delta`'s bundle) are the same fault; the whole-plan route is not a bundle's and keeps its message.
+5. **The order.** Beside T256 (same builder); before the first port batch at three builders.
+6. **The exits.** Green: `make closing-checks T=T257`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-25: the new tests written first failed on the unfixed code - the MANIFEST named no tree and gave `make plan-verdict` with no root, and a recording from a clone whose worktree held the reviewed section was refused with no tree named. After the fix they pass, the old message kept where no tree holds the text.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: five plan reviews were refused and re-recorded by hand. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- the review bundle read a task section's own decision label (`T256-D1`) as the spec's decision `D1` (the `-` is a word boundary to `IDS`), so a task-section bundle's `spec-cited.md` carried the spec's D1 to D5 as cited, decisions the section never named - a reviewer reads text the section did not cite as if it did, observed 2026-11-25, method: the T256 bundle's review, then the census of every hyphen-prefixed decision id in `specs/*/plan.md` and `plan-done.md` (a task label `T<n>-D<n>` 14 times, a range `D<n>-D<n>` 107 times, no other form). fixed here: `plan/bundle.rs` drops a `T<n>-D<n>` label before the ids are read (in `expand_ranges`, which every id reading of a block passes through, and in `answered`), the ranges untouched; pinned by the bundle's test `a_task_s_own_decision_label_is_not_the_spec_s_decision`.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: it saves a refused recording and a re-dispatch, not compute.
 
 
 ### T258 (<why: the finding or measurement that files it>)

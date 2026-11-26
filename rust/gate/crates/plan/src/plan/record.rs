@@ -9,6 +9,7 @@ use l7r_shared::guards::house_style_hooks::americanize_json;
 use serde_json::{json, Map, Value};
 
 use super::approach::{checklist, owe};
+use super::elsewhere::hint;
 use super::history::{keep, History};
 use super::sections::{
     block_digest, blocks, digest, heading_text, leading_task, re, task_sections, typo_only, TASK_ID,
@@ -172,7 +173,13 @@ pub(super) fn record_task(
         .or(text_of(review, "plan_sha256"))
         .unwrap_or("");
     if sha != digest(section.as_bytes()) {
-        return refused(format!("section_sha256 does not match {task}'s section - it changed while it was being reviewed"));
+        let holds = |p: &str| {
+            task_sections(p)
+                .get(task)
+                .is_some_and(|s| digest(s.as_bytes()) == sha)
+        };
+        let there = hint(spec_dir, &format!("TASK={task}"), &holds);
+        return refused(format!("section_sha256 does not match {task}'s section - it changed while it was being reviewed, or this is not the tree it was reviewed in{there}"));
     }
     let Some(decisions) = house_style(review.get("decisions")) else {
         return refused("decisions must be a list");
@@ -340,22 +347,36 @@ fn redecided_tasks(
 }
 
 /// Each named block is in plan.md at the digest the review read.
-fn check_named(named: &Map<String, Value>, now: &[(String, String, usize)]) -> Result<(), Stop> {
+fn check_named(
+    spec_dir: &Path,
+    named: &Map<String, Value>,
+    now: &[(String, String, usize)],
+) -> Result<(), Stop> {
     for (key, sha) in named {
         if key.starts_with(REMOVED) && sha == "removed" {
             continue;
         }
+        let want = sha.as_str().unwrap_or("");
+        // ...AND THE TREE THAT HOLDS IT (451 T257): a block absent or changed here may be a worktree's, still the template in the clone
+        let holds = |p: &str| {
+            blocks(p)
+                .iter()
+                .any(|(k, b, _)| k == key && block_digest(b) == want)
+        };
+        let there = || hint(spec_dir, "BLOCKS=1", &holds);
         let Some((_, body, _)) = now.iter().find(|(k, ..)| k == key) else {
             return refused(format!(
-                "plan.md has no block {}",
-                crate::checks::py_repr(&Value::from(key.as_str()))
+                "plan.md has no block {}{}",
+                crate::checks::py_repr(&Value::from(key.as_str())),
+                there()
             ));
         };
-        if block_digest(body) != sha.as_str().unwrap_or("") {
-            let short: String = sha.as_str().unwrap_or("").chars().take(12).collect();
+        if block_digest(body) != want {
+            let short: String = want.chars().take(12).collect();
             return refused(format!(
-                "{} changed while it was being reviewed - its digest is not {short}",
-                crate::checks::py_repr(&Value::from(key.as_str()))
+                "{} changed while it was being reviewed - its digest is not {short}{}",
+                crate::checks::py_repr(&Value::from(key.as_str())),
+                there()
             ));
         }
     }
@@ -384,7 +405,7 @@ pub(super) fn record_blocks(
     let plan = spec_dir.join("plan.md");
     let text = std::fs::read_to_string(&plan).unwrap_or_default();
     let now = blocks(&text);
-    check_named(named, &now)?;
+    check_named(spec_dir, named, &now)?;
     let Some(decisions) = house_style(review.get("decisions")) else {
         return refused("decisions must be a list (empty when the blocks decide nothing)");
     };

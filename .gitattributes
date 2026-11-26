@@ -14,3 +14,7 @@ dev/deferred-reviews.jsonl merge=union
 dev/claims-section-words.jsonl merge=union
 # the notes a check listed and did not file (451 T229): every clone's recording command appends, so union keeps both sides' lines
 specs/*/noted.jsonl merge=union
+# a plan review record (451 T256): every carry-over of a worktree's task conflicted here and was merged by hand as JSON; the driver,
+# `l7r-gate plan merge-record`, merges it three-way keeping both sides' entries, defined in the clone's git config by
+# scripts/sync-with-main.sh (a driver's command is local config); undefined, git's text merge runs as before
+specs/*/plan-review.json merge=plan-review

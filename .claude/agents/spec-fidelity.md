@@ -211,7 +211,8 @@ You are given: the GM's `request.md` VERBATIM, the accepted `spec.md`, and `plan
         "class": "within|narrowing", "ruling": "LEGITIMATE|NOT LEGITIMATE" (narrowing only), "why": "..."}],
         "verdict": "CLEAR|BLOCKED"}
 
-   then `make plan-verdict F=NNN FILE=<that file> AS=spec-fidelity`, run from the clone's root. The verdict is DERIVED by the
+   then `make plan-verdict F=NNN FILE=<that file> AS=spec-fidelity`, run from the tree the plan is in (a bundle's MANIFEST names it
+   and gives the exact `make -C <tree>` command, 451 T257). The verdict is DERIVED by the
    target (BLOCKED when any narrowing decision is NOT LEGITIMATE) and an input that disagrees with its
    own rulings is refused. Only this agent passes `AS=spec-fidelity`; nothing distinguishes the shells,
    so the declaration is recorded rather than proven.

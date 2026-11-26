@@ -9,9 +9,11 @@
 mod approach;
 mod bundle;
 mod defer;
+mod elsewhere;
 mod engine_edit;
 mod history;
 mod lint;
+mod merge;
 mod record;
 pub use record::{feature_task, task_ids, Accepted};
 mod sections;
@@ -560,6 +562,8 @@ fn answer(
                 _ => plan_delta(&dir, out_root, claims, env),
             }
         }
+        // GIT'S MERGE DRIVER FOR THE RECORD (451 T256): `%O %A %B`, the merge written to `%A`
+        ("merge-record", 4) => merge::merge_files(Path::new(&words[1]), Path::new(&words[2]), Path::new(&words[3])),
         ("owed", 2) => match owed(Path::new(&words[1])) {
             Some((rule, reason)) => reply(format!("{rule}\t{reason}\n"), String::new(), 1),
             None => said(""),
@@ -571,7 +575,7 @@ fn answer(
             let lines = lines.concat();
             reply(lines, String::new(), i32::from(!found.is_empty()))
         }
-        _ => fail("usage: l7r-gate plan owed <dir> | push [range] | record | record-task | record-blocks | delta | archive | slim | decide | decided | section-sha | arbiter-accept | approach | door | engine-edit\n", 2),
+        _ => fail("usage: l7r-gate plan owed <dir> | push [range] | merge-record <base> <ours> <theirs> | record | record-task | record-blocks | delta | archive | slim | decide | decided | section-sha | arbiter-accept | approach | door | engine-edit\n", 2),
     }
 }
 

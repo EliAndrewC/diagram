@@ -1716,6 +1716,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T257 (the parallel trials, 2026-11-25: spec-fidelity ran make plan-verdict from the session clone, where a worktree task's section is still the template, and was refused on a section-hash mismatch in five tasks)": {
+   "sha256": "c3ca214f32d184f0c0af45eb51d27f0c4f0c3b638dd842057bea7facfd101bc6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T257 Approach (checklist part A)": {
+   "sha256": "317d48d0a97f2fd9e748aa1c3f99943e941fbfcf23b0025ab576660e52175da0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T256 (the parallel trials, 2026-11-25: every carry-over of a worktree's task into the session clone conflicted on specs/451-time-retro-and-efficiency/plan-review.json and was merged by hand as JSON, both sides' entries kept)": {
+   "sha256": "1512db7cbf87c541a15fe8469c1af3ae822370934585a641b1acb590509c4d76",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T256 Approach (checklist part A)": {
+   "sha256": "e99b85d726166cfa6528b4e52a89f4981be2df00b25735b6a65aa53c6f7e9a78",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -22351,6 +22375,109 @@
      "why": "The order is a dependency: T139's suite is one of those changed. The task makes checks deterministic and does not make them faster, so 'not performance work' is a plain classification and no exception to FR-013."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T257 (the parallel trials, 2026-11-25: spec-fidelity ran make plan-verdict from the session clone, where a worktree task's section is still the template, and was refused on a section-hash mismatch in five tasks)",
+    "### T257 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T257-D1",
+     "summary": "The bundle's MANIFEST names the tree the bundle was built from (<tree>/specs/<feature>/, made absolute) and gives the recording command as `make -C <tree> plan-verdict F= TASK=|BLOCKS=1 FILE= AS=spec-fidelity`, in both bundle forms; spec-fidelity.md's 'run from the clone's root' becomes 'from the tree the MANIFEST names'.",
+     "class": "within",
+     "why": "This is the task line's first constraint word for word ('the review bundle's MANIFEST names the tree and the exact recording command with its root'). `make -C` is a means of giving the root, not a change of what is asked, and the agent-file wording only points the reviewer at what the MANIFEST now states. Nothing is excepted."
+    },
+    {
+     "id": "T257-D2",
+     "summary": "On a section-digest mismatch, make plan-verdict searches the trees `git -C <tree> worktree list --porcelain` names (the session clone and every worktree of it) for one whose plan gives the reviewed digest for the task's section or the refused block, and names it with the command to run there; with none, the refusal keeps today's message; the search runs only on a refusal.",
+     "class": "within",
+     "why": "Carries the task line's second constraint ('refuses a tree whose section differs naming the right one'). The worktree set is where a worktree task's section can live relative to the clone it was made from, and it contains the observed failure (a reviewer recording from the session clone while the worktree held the text). The 'none found' fallback is the case where no tree holds the reviewed text, so there is no right one to name; it removes no case the task asks to cover. Running the search only on a refusal changes cost, not behavior."
+    },
+    {
+     "id": "T257-D3",
+     "summary": "Both section checks are fixed - the task route (make decide's bundle, record_task) and the blocks route (make plan-delta's bundle, record_blocks/check_named); the whole-plan route, which is not a bundle's, keeps its message.",
+     "class": "within",
+     "why": "The task line is about the review BUNDLE's MANIFEST and a SECTION that differs. Both bundle routes are covered, which is the full reach of that wording. The whole-plan route records against plan_sha256 with no bundle and no section, so the constraint as written does not reach it; leaving it alone keeps the task to what was asked rather than carving a case out of it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T256 (the parallel trials, 2026-11-25: every carry-over of a worktree's task into the session clone conflicted on specs/451-time-retro-and-efficiency/plan-review.json and was merged by hand as JSON, both sides' entries kept)",
+    "### T256 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T256-D1",
+     "summary": "The route is a git merge driver for specs/*/plan-review.json (l7r-gate plan merge-record), not per-task verdict files; no reader changes.",
+     "class": "within",
+     "why": "The task line offers exactly these two routes ('each task's verdicts in their own file, or the record merged by a git merge driver') and requires make plan-verdict and every reader unchanged in what they read; choosing the driver is a choice between the offered routes, and it is the one that leaves the readers untouched. The cost comparison is labeled measured 2026-11-25 with its method."
+    },
+    {
+     "id": "T256-D2",
+     "summary": "Three-way, key-by-key merge of the top level and the blocks and tasks maps; an entry is taken whole, never field by field; a both-changed key goes to the later 'reviewed' day, a tie to the incoming side.",
+     "class": "within",
+     "why": "This is how the requested driver keeps both sides' entries. Taking an entry whole means no verdict ends up paired with a digest nobody cleared. The tie-break covers only the case where both sides changed the same key, which the goal (two builders each adding their own task's verdict) does not produce. Even a wrong pick only leaves a block owed a review again, because the gate re-compares the digest. Nothing asked for is dropped."
+    },
+    {
+     "id": "T256-D3",
+     "summary": "block_reviews is merged as an append-only log: ours, then the incoming rows not in base and not already in ours, order kept.",
+     "class": "within",
+     "why": "Keeps both sides' rows (measured 303 to 305) and keeps each side's order, which the review-round guard's trailing count reads. That serves 'both verdicts with no hand merge' and 'every reader unchanged'."
+    },
+    {
+     "id": "T256-D4",
+     "summary": "Registration via sync-with-main.sh ensure_git_config at every sync-in, idempotent; the driver runs with L7R_GATE_STALE_OK=1; if it is unregistered or the binary is older than the verb, git falls back to its text merge.",
+     "class": "within",
+     "why": "A merge driver's command lives only in local git config, so registering it is how the task line's route works at all. It is registered on the session clone that the goal names, and its worktrees share that config. The fallback is the state from before the task, not an exception to it. Item 5 orders sync-in before the first carry-over it serves."
+    },
+    {
+     "id": "T256-D5",
+     "summary": "A side that does not parse as JSON fails the merge with our side untouched, and the message says to merge it by hand as JSON, both sides' entries kept.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a case the driver leaves to a hand merge. It is legitimate on the physically-impossible ground: a structured JSON merge cannot run on a side that is not JSON. It also does not gut the purpose. A record written by make plan-verdict through the recorder's own pretty writer parses, so the two-builder carry-over the task exists for is always handled by the driver. Only a corrupt or hand-broken file falls out, and it gets today's hand merge with a message naming it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T257 (the parallel trials, 2026-11-25: spec-fidelity ran make plan-verdict from the session clone, where a worktree task's section is still the template, and was refused on a section-hash mismatch in five tasks)",
+    "### T257 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T257-D1",
+     "summary": "The MANIFEST names the tree the bundle was built from (the spec directory's tree, made absolute) and gives the recording command as make -C <tree> plan-verdict ..., on both the task and the blocks form.",
+     "class": "within",
+     "why": "This is the task line's own constraint (the MANIFEST names the tree and the exact recording command with its root); make -C is the means, chosen because a reviewer's shell starts wherever its session's did. Serves the request's purpose of removing measured rework (refused recordings and re-dispatches)."
+    },
+    {
+     "id": "T257-D2",
+     "summary": "On a section-digest refusal, make plan-verdict searches the trees git worktree list names (the clone and its worktrees) for the one whose plan gives the reviewed digest and names it with the command to run there; with none, today's message; the search runs only on a refusal.",
+     "class": "within",
+     "why": "The task line asks that a refusal from a tree whose section differs name the right one; searching the clone's worktrees is how the right one is found, and keeping the old message where no tree holds the text drops nothing asked for. The worktree count is labeled as observed 2026-11-25 with its method."
+    },
+    {
+     "id": "T257-D3",
+     "summary": "Both section checks are fixed (the task route, record_task, and the blocks route, record_blocks' check_named); the whole-plan route keeps its message.",
+     "class": "within",
+     "why": "The task line names a section mismatch and a bundle MANIFEST; the whole-plan route records a plan digest, has no section and no bundle MANIFEST naming a tree, so leaving its message alone narrows nothing the task asked for. Covering both bundle routes is the fault's full reach, not added scope."
+    },
+    {
+     "id": "T257-found-and-left-1",
+     "summary": "Fixed in this task: plan/bundle.rs drops a task's own decision label T<n>-D<n> before decision ids are read (in expand_ranges, which every id reading of a block passes through, and in answered), ranges D<n>-D<n> untouched; pinned by a_task_s_own_decision_label_is_not_the_spec_s_decision.",
+     "class": "within",
+     "why": "A defect found in the review tooling (a bundle's spec-cited.md carried spec decisions the section never cited, so a reviewer read uncited text as cited), fixed in the task that found it rather than deferred, which the project's fix-as-we-go rule asks. It names a class of id forms and carries how every instance was found (the census of hyphen-prefixed decision ids in specs/*/plan.md and plan-done.md: T<n>-D<n> 14 times, D<n>-D<n> 107 times, no other form), labeled observed 2026-11-25 with its method, as FR-009 requires. It leaves no defect: the range form the fix leaves alone is the legitimate citation form. Not a narrowing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -35670,6 +35797,77 @@
      "summary": "Lands after T252 and before T139; 'Performance work? no'.",
      "class": "within",
      "why": "The order is a dependency: T139's suite is one of those changed. The task makes checks deterministic and does not make them faster, so 'not performance work' is a plain classification and no exception to FR-013."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T257": {
+   "section_sha256": "0f851af1764b4c367fc28442f6e6fadfeef5df04ee646283363627c32c1db80e",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T257-D1",
+     "summary": "The MANIFEST names the tree the bundle was built from (the spec directory's tree, made absolute) and gives the recording command as make -C <tree> plan-verdict ..., on both the task and the blocks form.",
+     "class": "within",
+     "why": "This is the task line's own constraint (the MANIFEST names the tree and the exact recording command with its root); make -C is the means, chosen because a reviewer's shell starts wherever its session's did. Serves the request's purpose of removing measured rework (refused recordings and re-dispatches)."
+    },
+    {
+     "id": "T257-D2",
+     "summary": "On a section-digest refusal, make plan-verdict searches the trees git worktree list names (the clone and its worktrees) for the one whose plan gives the reviewed digest and names it with the command to run there; with none, today's message; the search runs only on a refusal.",
+     "class": "within",
+     "why": "The task line asks that a refusal from a tree whose section differs name the right one; searching the clone's worktrees is how the right one is found, and keeping the old message where no tree holds the text drops nothing asked for. The worktree count is labeled as observed 2026-11-25 with its method."
+    },
+    {
+     "id": "T257-D3",
+     "summary": "Both section checks are fixed (the task route, record_task, and the blocks route, record_blocks' check_named); the whole-plan route keeps its message.",
+     "class": "within",
+     "why": "The task line names a section mismatch and a bundle MANIFEST; the whole-plan route records a plan digest, has no section and no bundle MANIFEST naming a tree, so leaving its message alone narrows nothing the task asked for. Covering both bundle routes is the fault's full reach, not added scope."
+    },
+    {
+     "id": "T257-found-and-left-1",
+     "summary": "Fixed in this task: plan/bundle.rs drops a task's own decision label T<n>-D<n> before decision ids are read (in expand_ranges, which every id reading of a block passes through, and in answered), ranges D<n>-D<n> untouched; pinned by a_task_s_own_decision_label_is_not_the_spec_s_decision.",
+     "class": "within",
+     "why": "A defect found in the review tooling (a bundle's spec-cited.md carried spec decisions the section never cited, so a reviewer read uncited text as cited), fixed in the task that found it rather than deferred, which the project's fix-as-we-go rule asks. It names a class of id forms and carries how every instance was found (the census of hyphen-prefixed decision ids in specs/*/plan.md and plan-done.md: T<n>-D<n> 14 times, D<n>-D<n> 107 times, no other form), labeled observed 2026-11-25 with its method, as FR-009 requires. It leaves no defect: the range form the fix leaves alone is the legitimate citation form. Not a narrowing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T256": {
+   "section_sha256": "a83a39ece814cf47634bc7a8d0f6b8c9c644b4de32a66c99acda9556493ee08c",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T256-D1",
+     "summary": "The route is a git merge driver for specs/*/plan-review.json (l7r-gate plan merge-record), not per-task verdict files; no reader changes.",
+     "class": "within",
+     "why": "The task line offers exactly these two routes ('each task's verdicts in their own file, or the record merged by a git merge driver') and requires make plan-verdict and every reader unchanged in what they read; choosing the driver is a choice between the offered routes, and it is the one that leaves the readers untouched. The cost comparison is labeled measured 2026-11-25 with its method."
+    },
+    {
+     "id": "T256-D2",
+     "summary": "Three-way, key-by-key merge of the top level and the blocks and tasks maps; an entry is taken whole, never field by field; a both-changed key goes to the later 'reviewed' day, a tie to the incoming side.",
+     "class": "within",
+     "why": "This is how the requested driver keeps both sides' entries. Taking an entry whole means no verdict ends up paired with a digest nobody cleared. The tie-break covers only the case where both sides changed the same key, which the goal (two builders each adding their own task's verdict) does not produce. Even a wrong pick only leaves a block owed a review again, because the gate re-compares the digest. Nothing asked for is dropped."
+    },
+    {
+     "id": "T256-D3",
+     "summary": "block_reviews is merged as an append-only log: ours, then the incoming rows not in base and not already in ours, order kept.",
+     "class": "within",
+     "why": "Keeps both sides' rows (measured 303 to 305) and keeps each side's order, which the review-round guard's trailing count reads. That serves 'both verdicts with no hand merge' and 'every reader unchanged'."
+    },
+    {
+     "id": "T256-D4",
+     "summary": "Registration via sync-with-main.sh ensure_git_config at every sync-in, idempotent; the driver runs with L7R_GATE_STALE_OK=1; if it is unregistered or the binary is older than the verb, git falls back to its text merge.",
+     "class": "within",
+     "why": "A merge driver's command lives only in local git config, so registering it is how the task line's route works at all. It is registered on the session clone that the goal names, and its worktrees share that config. The fallback is the state from before the task, not an exception to it. Item 5 orders sync-in before the first carry-over it serves."
+    },
+    {
+     "id": "T256-D5",
+     "summary": "A side that does not parse as JSON fails the merge with our side untouched, and the message says to merge it by hand as JSON, both sides' entries kept.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a case the driver leaves to a hand merge. It is legitimate on the physically-impossible ground: a structured JSON merge cannot run on a side that is not JSON. It also does not gut the purpose. A record written by make plan-verdict through the recorder's own pretty writer parses, so the two-builder carry-over the task exists for is always handled by the driver. Only a corrupt or hand-broken file falls out, and it gets today's hand merge with a message naming it."
     }
    ],
    "verdict": "CLEAR"

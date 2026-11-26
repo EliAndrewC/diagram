@@ -655,6 +655,29 @@ OUT=$(cd "$D/main/.clones/c" && CLONE_MAIN="$D/main" CLONE_GITHUB="$D/github.git
 grep -q '^FAILED .* exit [1-9]' "$D/main/.clones/.render-sync.status" 2>/dev/null && yes_ || no_ "the runner's status after a failed render: $(cat "$D/main/.clones/.render-sync.status" 2>/dev/null)"
 }
 
+case_31() {  # 2 s
+echo "Z2. sync-in defines the plan-review.json merge driver, and a pick of another task's verdict merges clean (451 T256)"
+# red first (2026-11-25): with no driver, git's text merge left the record unmerged with 3 conflict hunks on the same pick
+D=$(topology mr)
+OUT=$(syncmain "$D" sync-in); check "sync-in" 0 $?
+expect_out "set the plan-review.json merge driver"
+OUT=$(syncmain "$D" sync-in)
+case "$OUT" in *"merge driver"*) no_ "the driver set again on a second sync-in" ;; *) yes_ ;; esac
+local c=$D/main/.clones/c
+add() { # $1 = task: its verdict, its block and its row, as record_task's CLEAR path writes them
+  jq --indent 1 --arg t "$1" '.tasks[$t]={"section_sha256":"s","reviewed":"2026-11-26","verdict":"CLEAR"} | .blocks["### "+$t]={"sha256":"b","verdict":"CLEAR","reviewed":"2026-11-26"} | .block_reviews += [{"reviewed":"2026-11-26","blocks":["### "+$t],"verdict":"CLEAR"}]' \
+    "$c/specs/451-x/plan-review.json" > "$c/j" && mv "$c/j" "$c/specs/451-x/plan-review.json"
+}
+mkdir -p "$c/specs/451-x" && printf '{\n "feature": "451-x",\n "blocks": {},\n "block_reviews": [],\n "tasks": {}\n}\n' > "$c/specs/451-x/plan-review.json"
+echo 'specs/*/plan-review.json merge=plan-review' > "$c/.gitattributes"
+git -C "$c" add -A && git -C "$c" commit -qm record
+git -C "$c" checkout -qb other && add T02 && git -C "$c" commit -qam T02 && git -C "$c" checkout -q main
+add T01 && git -C "$c" commit -qam T01
+OUT=$(cd "$c" && git cherry-pick other 2>&1); check "the pick merges clean" 0 $?
+[ "$(jq -r '.tasks|keys|join(",")' "$c/specs/451-x/plan-review.json")" = "T01,T02" ] && yes_ || no_ "both tasks' verdicts kept: $(cat "$c/specs/451-x/plan-review.json")"
+[ "$(jq '.block_reviews|length' "$c/specs/451-x/plan-review.json")" = 2 ] && yes_ || no_ "both rows kept"
+}
+
 # GUARD_EDIT_OK: feature 375 amendment 4 (FR-022) - THE CASES RUN IN PARALLEL PARTS. This suite is held to the whole scripts
 # tree (feature 172: its push path reaches scripts at run time), so every script change re-runs it, and at 202-230 s it was
 # the long pole of a parallel hooks-test (specs/375-enforced-wave-process/research.md R3). Each case builds its own fixture
@@ -662,8 +685,8 @@ grep -q '^FAILED .* exit [1-9]' "$D/main/.clones/.render-sync.status" 2>/dev/nul
 # longest first onto the lightest part (the times are the measured ones beside each case; a new case without one counts
 # 10 s), each part a subshell with its own $T, HOME and guard log. Every check still runs and is counted; a part that ends
 # before a case reports fails the suite and names the case. SYNC_PARTS=1 runs them one after another, as before.
-CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_11b case_11c case_11d case_12 case_13 case_14 case_15 case_16 case_17 case_18 case_19 case_20 case_21 case_22 case_23 case_24 case_25 case_26 case_27 case_27b case_28 case_29 case_30)
-declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=1 [case_06]=1 [case_07]=1 [case_08]=1 [case_09]=1 [case_10]=1 [case_11]=1 [case_11b]=1 [case_11c]=2 [case_11d]=3 [case_12]=1 [case_13]=1 [case_14]=1 [case_15]=2 [case_16]=1 [case_17]=2 [case_18]=1 [case_19]=1 [case_20]=1 [case_21]=2 [case_22]=1 [case_23]=1 [case_24]=1 [case_25]=1 [case_26]=1 [case_27]=1 [case_27b]=1 [case_28]=1 [case_29]=1 [case_30]=1)  # seconds, each case alone less the suite's start and template (about 0.85 s), measured 2026-11-19 (feature 449 T205; case_17 6.6 s before its lock holder was killed whole)
+CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_11b case_11c case_11d case_12 case_13 case_14 case_15 case_16 case_17 case_18 case_19 case_20 case_21 case_22 case_23 case_24 case_25 case_26 case_27 case_27b case_28 case_29 case_30 case_31)
+declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=1 [case_06]=1 [case_07]=1 [case_08]=1 [case_09]=1 [case_10]=1 [case_11]=1 [case_11b]=1 [case_11c]=2 [case_11d]=3 [case_12]=1 [case_13]=1 [case_14]=1 [case_15]=2 [case_16]=1 [case_17]=2 [case_18]=1 [case_19]=1 [case_20]=1 [case_21]=2 [case_22]=1 [case_23]=1 [case_24]=1 [case_25]=1 [case_26]=1 [case_27]=1 [case_27b]=1 [case_28]=1 [case_29]=1 [case_30]=1 [case_31]=2)  # seconds, each case alone less the suite's start and template (about 0.85 s), measured 2026-11-19 (feature 449 T205; case_17 6.6 s before its lock holder was killed whole)
 # SYNC_CASES="case_11 case_17" runs only those cases - to time one case where it lives (feature 383 amendment 3, plan D27); the
 # runner itself is tests/hooks/parts.sh since amendment 4 (plan D28), shared by every split suite
 [ -n "${SYNC_CASES:-}" ] && PARTS_CASES=$SYNC_CASES

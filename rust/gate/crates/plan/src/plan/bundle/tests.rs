@@ -211,6 +211,17 @@ fn a_list_of_this_feature_s_ids_is_not_read_as_another_feature_s() {
 }
 
 #[test]
+fn a_task_s_own_decision_label_is_not_the_spec_s_decision() {
+    // 451 T257's review (2026-11-25): T256's section labeled its decisions T256-D1 to D5, and its bundle carried the spec's D1 to D5
+    let n = super::named(
+        "- T256-D1 THE ROUTE: as D3 says, and FR-002; T12a-D2b beside it.\n",
+        "999",
+    );
+    assert_eq!(super::ids_in(&n.bare), ["D3", "FR-002"]);
+    assert_eq!(expand_ranges("T256-D1 and D1-D2"), " and D1, D2");
+}
+
+#[test]
 fn every_written_form_of_a_decision_is_read() {
     let plan = "**D83 - a knot gathered.** body\n\n- **D96 - the tread off a wall.** body\n\n- **D121** The rows released.\n\n- **D7 The placed-house index**: body\n\n**D8.** `make hooks-test` body\n\n**Dx** not one\n- D9 - THE BINARY FROM ITS OWN TREE: body\n  its second line\n- D10 - NEXT: body\n- D11 is not a decision\n";
     let got = paragraphs(plan, &DECISION);
@@ -429,6 +440,11 @@ fn a_task_prompt_shows_the_section_s_earlier_text() {
         read(&b, "earlier.md").contains("verdict BLOCKED")
             && read(&b, "MANIFEST.md").contains("TASK=T02")
     );
+    // THE TREE IT WAS BUILT FROM (451 T257): named, and the recording command run there
+    let tree = std::fs::canonicalize(&root).unwrap().display().to_string();
+    let manifest = read(&b, "MANIFEST.md");
+    assert!(manifest.contains(&format!("Built from the tree `{tree}`")));
+    assert!(manifest.contains(&format!("make -C {tree} plan-verdict F=999 TASK=T02 FILE=")));
 }
 
 #[test]
@@ -473,6 +489,9 @@ fn a_delta_prompt_carries_earlier_text_and_removed_blocks_and_each_block_set_its
         read(&b, "MANIFEST.md").contains("BLOCKS=1")
             && read(&b, "MANIFEST.md").contains("\"(removed) ## Gone\": \"removed\"")
     );
+    let tree = std::fs::canonicalize(&root).unwrap().display().to_string();
+    assert!(read(&b, "MANIFEST.md")
+        .contains(&format!("make -C {tree} plan-verdict F=999 BLOCKS=1 FILE=")));
     let plain = delta_prompt(&dir, &out, &["## Notes".to_owned()]).unwrap();
     assert!(plain.contains("blocks-plan-"));
     std::fs::write(dir.join("plan.md"), format!("{PLAN}\n### T02 extra\n\nz\n")).unwrap();
@@ -550,7 +569,13 @@ fn the_bundle_is_lean_and_each_block_set_has_its_own_directory() {
         .flatten()
         .map(|e| e.metadata().unwrap().len())
         .sum();
-    assert!(size < (SPEC2.len() + PLAN.len() + 2000) as u64);
+    // the MANIFEST names its tree twice, the line and the recording command (451 T257)
+    let tree = std::fs::canonicalize(dir.parent().unwrap().parent().unwrap())
+        .unwrap()
+        .display()
+        .to_string()
+        .len();
+    assert!(size < (SPEC2.len() + PLAN.len() + 2000 + 2 * tree) as u64);
     std::fs::write(
         dir.join("plan.md"),
         PLAN.replace(

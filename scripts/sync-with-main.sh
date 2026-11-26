@@ -111,6 +111,15 @@ ensure_git_config() {
       echo "sync-with-main: set committer identity on $tree to '$name <$email>' (from main's tip author - no ~/.claude/gitconfig found)"
     fi
   done
+  # THE PLAN REVIEW RECORD'S MERGE DRIVER (451 T256): `.gitattributes` names `merge=plan-review` for specs/*/plan-review.json, but a
+  # driver's command is local git config, which no clone carries; set on the session clone, whose worktrees share its config. The stale
+  # binary runs (L7R_GATE_STALE_OK): mid-pick a Rust source may hold conflict markers, and a rebuild then would fail the merge.
+  local driver='L7R_GATE_STALE_OK=1 scripts/gates/l7r-gate.sh plan merge-record %O %A %B'
+  if [ "$(git -C "$ROOT" config --get merge.plan-review.driver || true)" != "$driver" ]; then
+    git -C "$ROOT" config merge.plan-review.name "plan-review.json, three-way, both sides' verdicts kept (451 T256)"
+    git -C "$ROOT" config merge.plan-review.driver "$driver"
+    echo "sync-with-main: set the plan-review.json merge driver on $ROOT (451 T256)"
+  fi
 }
 ensure_git_config
 
