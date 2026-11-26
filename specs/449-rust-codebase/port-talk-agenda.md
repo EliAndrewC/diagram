@@ -8,6 +8,13 @@ Measured context (2026-11-25, `make where-time` F=449 and F=451 over 24 hours): 
 agents, 251 on background commands, 148 on nothing; agents used 2,147 agent-minutes, builders and coordinators 1,692 of them
 (79%), plan review 131 (6%), the round arbiter 24 (1%).
 
+
+**Order (the GM, 2026-11-25: "should we move that item up to or near the front, so it can apply to all of the other
+optimizations we're building at the moment?"):** item 13, the audit register, comes first and is built before the other
+items' changes (451 T259), so each optimization arrives with its entry and falsifier. Its first entries: the builders'
+context cap and handoff, delegating to builders at all, the disk budget and its trigger, the blocking definition, the research
+switch, and the parallel-builder fixes (451 T254-T257).
+
 1. Several builders at once, each in its own working copy (a worktree per builder), landings still one at a time through
    main. The largest: most of the 385 min waiting on agents was builders run one at a time, because two writers in one
    clone collided (2026-11-24 parallel builders; 2026-11-25 a landing beside a builder, 451 T242).
@@ -131,6 +138,8 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
     little time and costs tokens; the lever is the re-read (handoffs that name what to read; tasks sized to finish). Caveats:
     the band past 300k is small and survivor-biased (the guard refuses there), and long-context builders run the heaviest
     tasks. The session's recommendation to move the stop to 600k was withdrawn on these numbers.
+    Three-way measurement (the GM, 2026-11-25: "we should make sure to measure whether the complexity of the handoffs actually saves time and/or tokens relative to either letting the builders grow or not using them in the first place"): three arms, each in minutes (blocking and total) and tokens per landed task, from the task time breakdown and the transcripts: (a) builders capped at 300k with handoffs (today's way); (b) builders let grow past the cap (no handoff); (c) no builders - the coordinating session builds in its own context. Arm (a) against (b) has a first measurement (2026-11-25: time a wash, tokens favor the handoff); arm (c) has none, and its cost lands on the coordinator's own context, re-read every turn. Also the handoff's own overhead: writing the handoff, the brief, the coordinator's reading of the report.
+
 13. An audit register for every optimization and procedure that costs time or tokens (the GM: "when we make this kind of
     optimization, then we should be documenting the logic behind it, the measurements that we took, and then also crucially
     what we would look at that would falsify the notion that this is a good idea ... a list of all of the auditable
