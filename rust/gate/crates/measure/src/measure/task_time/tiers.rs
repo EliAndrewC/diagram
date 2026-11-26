@@ -27,7 +27,8 @@ static TASKS: LazyLock<Regex> =
 /// One tree handed to a task: (when, the tree's directory name, `<feature number> <task> ...`).
 pub type Take = (f64, String, String);
 
-fn dir_name(path: &str) -> String {
+/// A path's last part: a tree's directory name.
+pub(super) fn dir_name(path: &str) -> String {
     path.trim_end_matches('/')
         .rsplit('/')
         .next()

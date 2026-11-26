@@ -33,6 +33,7 @@ use crate::Reply;
 pub mod asked;
 pub mod book;
 pub mod program;
+pub mod progress;
 pub mod tiers;
 mod top;
 

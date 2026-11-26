@@ -357,3 +357,9 @@ by that builder, who did not hear them):
 > I would prefer not to see these messages about false positives
 
 > I am okay with some number of false positives. I just don't want to see the explanation of the false positives reach me. Though it probably is worth asking whether the number of false positives is within what we should consider an acceptable range.
+## 2026-11-26: a live view of the tasks in flight (451 T293)
+
+> does their tooling that we have already built allow you to see while a task is in progress where the time is going? ... I think that we should be able to see that kind of thing
+
+The rest of T293's line is the coordinating session's: the command's name, what it lists, and the measurement of what the
+existing reports showed of a task not yet landed.

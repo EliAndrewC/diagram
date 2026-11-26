@@ -189,7 +189,7 @@ struct Ix<'a> {
 }
 
 /// An actor's name: a main session's `s:<sid>`, an agent's id.
-fn actor(e: &Event) -> String {
+pub(super) fn actor(e: &Event) -> String {
     let by = or_s(e, "by");
     if by.is_empty() {
         format!("s:{}", or_s(e, "sid"))

@@ -2148,6 +2148,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T293 (the GM asked on 2026-11-26 whether the tooling shows where a task's time is going while it is in progress, his words in `request.md` under \"2026-11-26: a live view of the tasks in flight (451 T293)\"; it did not: `make task-time` books a task's categories when it lands)": {
+   "sha256": "783d055513996dff24c02f7e0419740b1be42c94bd986aee2dcdee78b796aebc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T293 Approach (checklist part A)": {
+   "sha256": "840f0484adc88d60a5dde2c1234c4743c2413959596e6bcf22ef18e65aac80a8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -27388,6 +27400,166 @@
      "why": "FR-002 (429) asks for a detector measured for hit rate, a sample of hits, and recall on an independently labeled sample. Rules (a)-(e) only remove firings; the needs-your-word change only adds them. So any ask the new rules drop would have fired on HEAD, and the two corpora cover HEAD's firings in their windows. All 12 T of the two-day corpus and all 74 T and 8 B of T235's independently labeled corpus still fire. Asks outside those windows are covered by the bounded twins pinned in both suites, and the block states that limit itself. On the two-day corpus the builder's labels are not independent. I relabeled the five F lines the block quotes from the line alone and agree each is a statement (a report of a hook's reading, a check described by its question, a checklist item listed, two time figures). The whole messages are not in the bundle. This keeps FR-002's measured-detector standard and does not narrow it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T293 (the GM asked on 2026-11-26 whether the tooling shows where a task's time is going while it is in progress, his words in `request.md` under \"2026-11-26: a live view of the tasks in flight (451 T293)\"; it did not: `make task-time` books a task's categories when it lands)",
+    "### T293 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T293-Approach",
+     "summary": "a new read-only make task-progress showing held trees' builders, landings in flight, page sessions, review agents, free trees and staged tasks; no booking rule and no make task-time output changed",
+     "class": "within",
+     "why": "The GM asked (request.md, 2026-11-26, 451 T293) that 'we should be able to see while a task is in progress where the time is going'. A read-only view in the landed report's own categories does exactly that and changes nothing he did not ask to change."
+    },
+    {
+     "id": "T293-D1",
+     "summary": "the code is a submodule of task_time with its own subcommand",
+     "class": "within",
+     "why": "Where code lives. No request text bears on it."
+    },
+    {
+     "id": "T293-D2",
+     "summary": "a builder's minutes come from the landed report's booking run over its family alone, summed over every key by category",
+     "class": "within",
+     "why": "It shows where the time is going in the same categories the task time breakdown (T243) uses, with no second booking that could drift from it."
+    },
+    {
+     "id": "T293-D3",
+     "summary": "one block per held pool tree, then one per running builder no tree is held for",
+     "class": "within",
+     "why": "It shows the tasks in progress, including a builder that has stopped while it waits on its plan review. The method is labeled an observation with its method."
+    },
+    {
+     "id": "T293-D4",
+     "summary": "RUNNING is two tests (no stop or own lines after it, and named inflight by the latest Stop or later than it)",
+     "class": "within",
+     "why": "It decides which work is in progress. The measured case is labeled. A Stop that predates the field is taken as running, so the view shows more rather than less."
+    },
+    {
+     "id": "T293-D5",
+     "summary": "the step now is the open make run with its last finished phase; the phase running now sits in the run's category until its line lands, and the header says so",
+     "class": "within",
+     "why": "It departs from the coordinating session's task line, not from the GM's words, which ask where the time is going and never ask for the open phase. The running phase's minutes are still shown, in their run's category, so no time drops out of the view, and the output states its limit. The plan's reason for adding no start marker is a cost reason, but no ruling is owed because nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T293-D6",
+     "summary": "an open call is closed at the moment of the view by a line made in memory, never written",
+     "class": "within",
+     "why": "Mechanism. It lets the existing booking count in-progress time, which is what the request asks to see."
+    },
+    {
+     "id": "T293-D7",
+     "summary": "the model turn open now is a row of its own, its tool not yet known",
+     "class": "within",
+     "why": "The open turn's time is named rather than dropped, consistent with the breakdown's rule that every minute is named (T243 amendment (c))."
+    },
+    {
+     "id": "T293-D8",
+     "summary": "context is read live from the transcript by the context-cap guard's reader, else from the stop line's ctx, else said to be not known, each figure naming its source",
+     "class": "within",
+     "why": "It is extra information about a task in progress, with its sources stated. It narrows nothing."
+    },
+    {
+     "id": "T293-D9",
+     "summary": "a pool tree's Phase lines are re-tasked from builder-pool.log, and runs are tied by clone (a workaround for the open T332)",
+     "class": "within",
+     "why": "It makes the view assign time to the right task where the shared writer would mislabel it. The workaround is stated openly and the writer's defect is filed as T332."
+    },
+    {
+     "id": "T293-D10",
+     "summary": "a resumed builder is shown RUNNING on the in-flight test alone, its minutes headed AT LEAST (a workaround for the open T324)",
+     "class": "within",
+     "why": "The view states a floor and says that it is a floor, and that the builder may have stopped again. That matches the GM's 'broad understanding of where our time goes' and 'doesn't have to be 100% exact' (T243 (l)). The event-log reader's limit is shared with every report and is filed as T324, landing before T22."
+    },
+    {
+     "id": "T293-D11",
+     "summary": "a landing in flight is an open session make land run that passes the in-flight test; its tasks come from tiers::batches, its phase is the last finished land Phase, its minutes are the same booking",
+     "class": "within",
+     "why": "It shows a landing in progress and where its time is going. The fallback names the landing by its call's task rather than dropping it."
+    },
+    {
+     "id": "T293-D12",
+     "summary": "staged is each task's latest carry with no landed batch after it and no landing in flight",
+     "class": "within",
+     "why": "Part of what is in progress. It narrows nothing."
+    },
+    {
+     "id": "T293-D13",
+     "summary": "a page session is one line (the run log since the read-back without ALL DONE, the brief it is in, how many briefs have ended) with no minutes by category; the categories are deferred to T350, filed to land before T22",
+     "class": "within",
+     "why": "Of all request.md's text, only the coordinating session's task line puts page sessions, broken down like a builder, in this view (request.md line 355: 'what it lists' is the session's). The GM's words ask where a task in progress spends its time. In the landed breakdown, a page session is one category of a task's time ('research and page sessions', T243), not a family broken down by category. So one line showing that a page session is running and how far it has got gives at least the granularity the GM's existing breakdown gives. The deferral departs from the session's own line, not from the GM's request. The build-cost reason given would not carry a narrowing, but no ruling is owed. The fuller breakdown is filed (T350) with an order."
+    },
+    {
+     "id": "T293-D14",
+     "summary": "the read-back is the earliest held tree's take or BACK_H (GUESS 2.0 h, a knob), whichever is earlier; AT= gives a past moment",
+     "class": "within",
+     "why": "A labeled GUESS knob with an override. It narrows nothing."
+    },
+    {
+     "id": "T293-D15",
+     "summary": "the minutes shown are machine minutes; blocking minutes are not shown in the live view; the header says a block's minutes can pass its clock",
+     "class": "within",
+     "why": "The GM's T293 words ask 'where the time is going'. In T243 he separated that (the minutes and percentage spent doing a thing) from the minutes spent blocking on it. The live view answers the first. Blocking stays in the landed make task-time, which T293 leaves untouched, so nothing the GM was given is taken away. The header states the limit."
+    },
+    {
+     "id": "T293-fix-carry",
+     "summary": "landings() kept the earliest of two carries on a held tree's block; it now keeps the latest, pinned by a test that was red before the fix",
+     "class": "within",
+     "why": "It fixes a wrong outcome in this command's own build half, found by its test. That is fix-as-we-go and narrows nothing."
+    },
+    {
+     "id": "T293-fix-phony",
+     "summary": "the Makefile's .PHONY line ran task-progress and land-batch together; it is split so both are phony",
+     "class": "within",
+     "why": "A defect fix in the build half's own edit."
+    },
+    {
+     "id": "T293-left-T324",
+     "summary": "a resumed builder's later start and stop lines are not read (the shared event-log reader); filed T324, lands before T22",
+     "class": "within",
+     "why": "A defect of the shared reader that every report uses, not of this command's new code. The view says so on its output. It carries a reason, a filed id and an order (FR-009)."
+    },
+    {
+     "id": "T293-left-T332",
+     "summary": "a Phase line written from a pool tree can name another task; this view re-tasks it, make task-time does not; filed T332, lands before T22",
+     "class": "within",
+     "why": "The defect belongs to the build tools' writer and the landed report. This view works around it in the open. Filed with a reason and an order."
+    },
+    {
+     "id": "T293-left-T345",
+     "summary": "make task-time books the gap between a builder's stop and its resumed next line as the builder's model turn; filed T345, lands before T22",
+     "class": "within",
+     "why": "A defect of the landed report, outside this read-only view's scope, found and filed with a reason and an order. T293 changes no booking, as its approach states."
+    },
+    {
+     "id": "T293-left-T346",
+     "summary": "a carry is booked to the task that took the tree in the carry's last second, so the staged list can name the wrong task (seen: T308 for T301's carry); filed T346, lands before T22",
+     "class": "within",
+     "why": "A wrong-outcome defect in the shared tiers::carries booking, which the landed batch tables also use. It is not new behavior of this view. Fixing it changes make task-time's tables, which belongs to a task of its own. It is filed with a reason and an order, and it lands inside the feature."
+    },
+    {
+     "id": "T293-left-T348",
+     "summary": "a compound command is named by its first make target alone (book::run_cat, shared with the landed report); filed T348, lands before T22",
+     "class": "within",
+     "why": "Shared naming behavior of the landed report, which the view inherits. Within the GM's 'broad understanding ... doesn't have to be 100% exact' (T243 (l)). Filed with a reason and an order."
+    },
+    {
+     "id": "T293-left-T350",
+     "summary": "a page session has no minutes by category; filed T350, lands before T22",
+     "class": "within",
+     "why": "See T293-D13. It departs from the coordinating session's line, not from the GM's words. Filed with a reason and an order."
+    },
+    {
+     "id": "T293-left-T349",
+     "summary": "a builder's background run whose shell died silently stays listed as in the background, and one ending during the read is dropped from its builder's line; filed T349, lands before T22",
+     "class": "within",
+     "why": "An edge case of this view's own output with no in-flight list to test against. It is transient or rare, and the run is still shown or ends within seconds. It does not misstate where a task's time has gone in its categories, and it sits within the GM's 90%-correct tolerance (T243 (l)). Filed with a reason and an order."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -43075,6 +43247,164 @@
      "summary": "The plan shows no ask is lost with two firings-only corpora (the 28 of 2026-11-25/26 and T235's labeled 112) through the fixed guard, plus pinned true-ask twins for every rule, and does not run a fresh recall sample.",
      "class": "within",
      "why": "FR-002 (429) asks for a detector measured for hit rate, a sample of hits, and recall on an independently labeled sample. Rules (a)-(e) only remove firings; the needs-your-word change only adds them. So any ask the new rules drop would have fired on HEAD, and the two corpora cover HEAD's firings in their windows. All 12 T of the two-day corpus and all 74 T and 8 B of T235's independently labeled corpus still fire. Asks outside those windows are covered by the bounded twins pinned in both suites, and the block states that limit itself. On the two-day corpus the builder's labels are not independent. I relabeled the five F lines the block quotes from the line alone and agree each is a statement (a report of a hook's reading, a check described by its question, a checklist item listed, two time figures). The whole messages are not in the bundle. This keeps FR-002's measured-detector standard and does not narrow it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T293": {
+   "section_sha256": "c1d3efd6bdf4a67a5939c0c97b1aefb3ab56d2ea67b0a34f017389e8ec4501a3",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T293-Approach",
+     "summary": "a new read-only make task-progress showing held trees' builders, landings in flight, page sessions, review agents, free trees and staged tasks; no booking rule and no make task-time output changed",
+     "class": "within",
+     "why": "The GM asked (request.md, 2026-11-26, 451 T293) that 'we should be able to see while a task is in progress where the time is going'. A read-only view in the landed report's own categories does exactly that and changes nothing he did not ask to change."
+    },
+    {
+     "id": "T293-D1",
+     "summary": "the code is a submodule of task_time with its own subcommand",
+     "class": "within",
+     "why": "Where code lives. No request text bears on it."
+    },
+    {
+     "id": "T293-D2",
+     "summary": "a builder's minutes come from the landed report's booking run over its family alone, summed over every key by category",
+     "class": "within",
+     "why": "It shows where the time is going in the same categories the task time breakdown (T243) uses, with no second booking that could drift from it."
+    },
+    {
+     "id": "T293-D3",
+     "summary": "one block per held pool tree, then one per running builder no tree is held for",
+     "class": "within",
+     "why": "It shows the tasks in progress, including a builder that has stopped while it waits on its plan review. The method is labeled an observation with its method."
+    },
+    {
+     "id": "T293-D4",
+     "summary": "RUNNING is two tests (no stop or own lines after it, and named inflight by the latest Stop or later than it)",
+     "class": "within",
+     "why": "It decides which work is in progress. The measured case is labeled. A Stop that predates the field is taken as running, so the view shows more rather than less."
+    },
+    {
+     "id": "T293-D5",
+     "summary": "the step now is the open make run with its last finished phase; the phase running now sits in the run's category until its line lands, and the header says so",
+     "class": "within",
+     "why": "It departs from the coordinating session's task line, not from the GM's words, which ask where the time is going and never ask for the open phase. The running phase's minutes are still shown, in their run's category, so no time drops out of the view, and the output states its limit. The plan's reason for adding no start marker is a cost reason, but no ruling is owed because nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T293-D6",
+     "summary": "an open call is closed at the moment of the view by a line made in memory, never written",
+     "class": "within",
+     "why": "Mechanism. It lets the existing booking count in-progress time, which is what the request asks to see."
+    },
+    {
+     "id": "T293-D7",
+     "summary": "the model turn open now is a row of its own, its tool not yet known",
+     "class": "within",
+     "why": "The open turn's time is named rather than dropped, consistent with the breakdown's rule that every minute is named (T243 amendment (c))."
+    },
+    {
+     "id": "T293-D8",
+     "summary": "context is read live from the transcript by the context-cap guard's reader, else from the stop line's ctx, else said to be not known, each figure naming its source",
+     "class": "within",
+     "why": "It is extra information about a task in progress, with its sources stated. It narrows nothing."
+    },
+    {
+     "id": "T293-D9",
+     "summary": "a pool tree's Phase lines are re-tasked from builder-pool.log, and runs are tied by clone (a workaround for the open T332)",
+     "class": "within",
+     "why": "It makes the view assign time to the right task where the shared writer would mislabel it. The workaround is stated openly and the writer's defect is filed as T332."
+    },
+    {
+     "id": "T293-D10",
+     "summary": "a resumed builder is shown RUNNING on the in-flight test alone, its minutes headed AT LEAST (a workaround for the open T324)",
+     "class": "within",
+     "why": "The view states a floor and says that it is a floor, and that the builder may have stopped again. That matches the GM's 'broad understanding of where our time goes' and 'doesn't have to be 100% exact' (T243 (l)). The event-log reader's limit is shared with every report and is filed as T324, landing before T22."
+    },
+    {
+     "id": "T293-D11",
+     "summary": "a landing in flight is an open session make land run that passes the in-flight test; its tasks come from tiers::batches, its phase is the last finished land Phase, its minutes are the same booking",
+     "class": "within",
+     "why": "It shows a landing in progress and where its time is going. The fallback names the landing by its call's task rather than dropping it."
+    },
+    {
+     "id": "T293-D12",
+     "summary": "staged is each task's latest carry with no landed batch after it and no landing in flight",
+     "class": "within",
+     "why": "Part of what is in progress. It narrows nothing."
+    },
+    {
+     "id": "T293-D13",
+     "summary": "a page session is one line (the run log since the read-back without ALL DONE, the brief it is in, how many briefs have ended) with no minutes by category; the categories are deferred to T350, filed to land before T22",
+     "class": "within",
+     "why": "Of all request.md's text, only the coordinating session's task line puts page sessions, broken down like a builder, in this view (request.md line 355: 'what it lists' is the session's). The GM's words ask where a task in progress spends its time. In the landed breakdown, a page session is one category of a task's time ('research and page sessions', T243), not a family broken down by category. So one line showing that a page session is running and how far it has got gives at least the granularity the GM's existing breakdown gives. The deferral departs from the session's own line, not from the GM's request. The build-cost reason given would not carry a narrowing, but no ruling is owed. The fuller breakdown is filed (T350) with an order."
+    },
+    {
+     "id": "T293-D14",
+     "summary": "the read-back is the earliest held tree's take or BACK_H (GUESS 2.0 h, a knob), whichever is earlier; AT= gives a past moment",
+     "class": "within",
+     "why": "A labeled GUESS knob with an override. It narrows nothing."
+    },
+    {
+     "id": "T293-D15",
+     "summary": "the minutes shown are machine minutes; blocking minutes are not shown in the live view; the header says a block's minutes can pass its clock",
+     "class": "within",
+     "why": "The GM's T293 words ask 'where the time is going'. In T243 he separated that (the minutes and percentage spent doing a thing) from the minutes spent blocking on it. The live view answers the first. Blocking stays in the landed make task-time, which T293 leaves untouched, so nothing the GM was given is taken away. The header states the limit."
+    },
+    {
+     "id": "T293-fix-carry",
+     "summary": "landings() kept the earliest of two carries on a held tree's block; it now keeps the latest, pinned by a test that was red before the fix",
+     "class": "within",
+     "why": "It fixes a wrong outcome in this command's own build half, found by its test. That is fix-as-we-go and narrows nothing."
+    },
+    {
+     "id": "T293-fix-phony",
+     "summary": "the Makefile's .PHONY line ran task-progress and land-batch together; it is split so both are phony",
+     "class": "within",
+     "why": "A defect fix in the build half's own edit."
+    },
+    {
+     "id": "T293-left-T324",
+     "summary": "a resumed builder's later start and stop lines are not read (the shared event-log reader); filed T324, lands before T22",
+     "class": "within",
+     "why": "A defect of the shared reader that every report uses, not of this command's new code. The view says so on its output. It carries a reason, a filed id and an order (FR-009)."
+    },
+    {
+     "id": "T293-left-T332",
+     "summary": "a Phase line written from a pool tree can name another task; this view re-tasks it, make task-time does not; filed T332, lands before T22",
+     "class": "within",
+     "why": "The defect belongs to the build tools' writer and the landed report. This view works around it in the open. Filed with a reason and an order."
+    },
+    {
+     "id": "T293-left-T345",
+     "summary": "make task-time books the gap between a builder's stop and its resumed next line as the builder's model turn; filed T345, lands before T22",
+     "class": "within",
+     "why": "A defect of the landed report, outside this read-only view's scope, found and filed with a reason and an order. T293 changes no booking, as its approach states."
+    },
+    {
+     "id": "T293-left-T346",
+     "summary": "a carry is booked to the task that took the tree in the carry's last second, so the staged list can name the wrong task (seen: T308 for T301's carry); filed T346, lands before T22",
+     "class": "within",
+     "why": "A wrong-outcome defect in the shared tiers::carries booking, which the landed batch tables also use. It is not new behavior of this view. Fixing it changes make task-time's tables, which belongs to a task of its own. It is filed with a reason and an order, and it lands inside the feature."
+    },
+    {
+     "id": "T293-left-T348",
+     "summary": "a compound command is named by its first make target alone (book::run_cat, shared with the landed report); filed T348, lands before T22",
+     "class": "within",
+     "why": "Shared naming behavior of the landed report, which the view inherits. Within the GM's 'broad understanding ... doesn't have to be 100% exact' (T243 (l)). Filed with a reason and an order."
+    },
+    {
+     "id": "T293-left-T350",
+     "summary": "a page session has no minutes by category; filed T350, lands before T22",
+     "class": "within",
+     "why": "See T293-D13. It departs from the coordinating session's line, not from the GM's words. Filed with a reason and an order."
+    },
+    {
+     "id": "T293-left-T349",
+     "summary": "a builder's background run whose shell died silently stays listed as in the background, and one ending during the read is dropped from its builder's line; filed T349, lands before T22",
+     "class": "within",
+     "why": "An edge case of this view's own output with no in-flight list to test against. It is transient or rare, and the run is still shown or ends within seconds. It does not misstate where a task's time has gone in its categories, and it sits within the GM's 90%-correct tolerance (T243 (l)). Filed with a reason and an order."
     }
    ],
    "verdict": "CLEAR"

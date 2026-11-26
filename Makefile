@@ -532,6 +532,9 @@ events-refile:  ## [project] re-file the event-log lines written before 451 T26 
 task-time:      ## [project] the task time breakdown: each task landed in the window, across features, by category and by make target or program - minutes and blocking minutes, each % of the task and of the window; a landed task's tables carry its whole time, read BACK hours before the window (451 T243); it opens with the window's one table, a line a landed task and the second tier's section, a batch landing booked to no task; SINCE=last runs from the end of the last report SINCE=last made and moves that marker, a plain SINCE= does not (451 T298)   [SINCE=24h|<N>h|last|<ISO UTC>] [UNTIL=<ISO UTC>] [F=<feature>] [BACK=48h]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure task-time --root "$$(git rev-parse --show-toplevel)" --since "$(or $(SINCE),24h)" $(if $(UNTIL),--until "$(UNTIL)",) $(if $(F),--feature "$(F)",) $(if $(BACK),--back "$(BACK)",)
 
+task-progress:  ## [project] the tasks in flight NOW: a block each pool tree's builders - task, tree, minutes since dispatch, context against the 300k cap, the step open at this moment (the open make run and its last finished phase, else a model turn) and their minutes so far by the task time breakdown's categories - a block each landing in flight, a line each page session, free tree and task carried but not landed; reads only (451 T293)   [BACK=<N>h] [AT=<ISO UTC>]
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure task-progress --root "$$(git rev-parse --show-toplevel)" $(if $(BACK),--back "$(BACK)",) $(if $(AT),--at "$(AT)",)
+
 where-time:     ## [project] where a feature's time went, by task: the time by bucket and the agents by kind (feature 385 T77); BY=tick books each tick-to-tick window (T115); feeds the task time breakdown (make task-time)   F=<feature> [SINCE=<ISO UTC>] [UNTIL=<ISO UTC>] [BY=tick]
 	@if [ -z "$(F)" ]; then printf 'make where-time: F=<feature> is required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure where-time "$(F)" $(if $(SINCE),--since "$(SINCE)",) $(if $(UNTIL),--until "$(UNTIL)",) $(if $(filter tick,$(BY)),--by-tick,)
@@ -1161,7 +1164,7 @@ builder-status:  ## [project] each builder of an open task the session reads as 
 	  "$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --builder-status "$$t"
 
 .PHONY: builder-status
-.PHONY: review-yield cohort-seeds task-add set-down where-time task-time land-batch fix-yield
+.PHONY: review-yield cohort-seeds task-add set-down where-time task-time task-progress land-batch fix-yield
 review-yield:     ## [performance] each review check's passes, findings acted on / dismissed / deferred, author-missed, hours and tokens, from the ledger   [SINCE=2026-09-26]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure review-yield $(if $(SINCE),--since $(SINCE),)
 

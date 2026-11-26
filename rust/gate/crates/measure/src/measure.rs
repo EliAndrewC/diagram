@@ -60,6 +60,7 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
             Path::new(events::CLONES),
         ),
         Some("task-time") => task_time::cli(rest, &home().join(".claude/projects"), Path::new(events::CLONES), tool_yield::now()),
+        Some("task-progress") => task_time::progress::cli(rest, &home().join(".claude/projects"), Path::new(events::CLONES), tool_yield::now()),
         Some("where-time") => where_time::cli(rest, &home().join(".claude/projects"), Path::new(events::CLONES)),
         Some("event-log") => event_log::cli(rest, &mut std::io::stdin()),
         // T83's fourth slice (feature 449 T120): the step-back bundle and the yield reports, the step-back reading the reviews crate in
@@ -134,6 +135,7 @@ mod tests {
         assert_eq!(ask(&["fresh-tally", "--log", &there]), 0);
         assert_eq!(ask(&["feature-report"]), 2);
         assert_eq!(ask(&["where-time"]), 2);
+        assert_eq!(ask(&["task-progress", "--nope"]), 2);
         assert_eq!(ask(&["event-log"]), 2);
         assert_eq!(ask(&["step-back"]), 2);
         assert_eq!(ask(&["fix-yield"]), 2);
