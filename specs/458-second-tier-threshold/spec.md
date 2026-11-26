@@ -38,6 +38,8 @@ Not before 2026-11-28 (the GM: "after a day or two"), over the batches gated sin
   (format, lint, coverage, a suite or test, a flake) and what each cost to repair and by whom (the tooling, the session, a
   fresh fixer) - from the landing logs and `make task-time`;
 - how often the ceiling fired, and how long staged work stood unpushed (and whether the backup branch held it throughout);
+- the second tier's BLOCKING minutes (the GM, 2026-11-26: it "is rarely going to be blocking anything" - no new task waits on
+  it): expected near zero; what did wait on a gate, if anything - a carry behind a running gate, a repair, a build slot;
 - what waiting cost that the threshold was meant to avoid: a failure hard to attribute to its task, a later task built on a
   defect a gate would have caught, a flake re-running a large batch;
 - builder minutes a task and tasks landed a wall hour against round one's (2026-11-26, one tier);
