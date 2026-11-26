@@ -36,8 +36,8 @@ docs/process-decisions.md, and an option the measurement declines gets its decli
     cold build), and the wall clock saved; if it holds, the rest of the queue runs two or three at a time and adds data.
     Decided: 2026-11-26, on the GM's pre-approval - two code builders at once in reused worktrees (landed per hour 1.71 at
     one, 2.02 at two; memory at two with a landing beside them peaked at 6.3 GiB of the 10 GiB limit, no sample over 7); three
-    code builders not run, the headroom too small; three or four for work that compiles nothing is the session's addition, his
-    to keep or drop; items 2-5 and 7 ran under the same default with no measurement of their own (`docs/process-decisions.md`, "Two code builders at
+    code builders not run, the headroom too small; three or four for work that compiles nothing is covered by the same pre-approval (the GM, 2026-11-26) on
+    weak measurement, re-measured at the next such batch; items 2-5 and 7 ran under the same default with no measurement of their own (`docs/process-decisions.md`, "Two code builders at
     once").
     Trial 1, measured 2026-11-25 (451 T228 and T234, one builder each in its own worktree, landed together as 4cd58860ab;
     the builders' logs were in the session scratchpad, summarized here): each builder about 44 min, side by side, against

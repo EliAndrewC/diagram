@@ -14,8 +14,10 @@ cadence-days: 14
 
 Decided under the GM's pre-approval of 2026-11-25, both halves of its condition measured (total time; memory - two builders
 and a landing peaked at 6.3 GiB anonymous against the 10 GiB limit, 2026-11-26, no sample over 7 GiB, no OOM kill; three code
-builders not run, the headroom being too small). The three-or-four rule for work that compiles nothing is the session's
-addition, his to keep or drop. Recorded (`docs/process-decisions.md`, "Two code builders at once, in
+builders not run, the headroom being too small). The three-or-four rule for work that compiles nothing is covered by the same
+pre-approval (the GM, 2026-11-26: *"I thought I already pre-approved whatever number and arrangement of parallel builders our measurements support."*), on weak
+measurement - 52 wall minutes of comment batches, 2.44 landed per wall hour, memory unsampled - and is re-measured at the next
+such batch. Recorded (`docs/process-decisions.md`, "Two code builders at once, in
 reused worktrees; three or four only for work that compiles nothing"). The rule is in `scripts/container/builder-brief.md`'s SIZING
 paragraph; no guard enforces it.
 

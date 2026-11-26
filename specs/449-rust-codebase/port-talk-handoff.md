@@ -65,8 +65,9 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 
 ## For the GM, small (read by `escalation-check` 2026-11-26: 2 kept, 2 rewritten as below, none cut)
 
-- **Three or four builders for work that compiles nothing (an offer).** The session added that rule beside the decided two;
-  it is outside what he pre-approved, and is dropped if he would rather.
+- ANSWERED 2026-11-26, three or four builders for work that compiles nothing: covered by his pre-approval ("I thought I
+  already pre-approved whatever number and arrangement of parallel builders our measurements support."); it stands on weak
+  measurement and is re-measured, with memory sampled, at the next such batch (`docs/process-decisions.md`).
 - ANSWERED 2026-11-26, the disk trade: time over disk - the coverage builds stay (`docs/process-decisions.md`, "Declined so
   far", his words).
 - ANSWERED 2026-11-26, 0141's aqueduct banks: 2 px wider for legibility is fine, anything else to scale

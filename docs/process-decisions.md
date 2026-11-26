@@ -179,15 +179,19 @@ figures). **Falsifier:** over a week of builders briefed under the rule, measure
 falling below about one in five (it was 28%) - then sizing the brief is not the lever, and the task's own size or the cap is
 looked at again.
 
-### Two code builders at once, in reused worktrees (decided 2026-11-26); three or four for work that compiles nothing is an offer
+### Two code builders at once, in reused worktrees; three or four only for work that compiles nothing (decided 2026-11-26)
 
 **Question.** How many builders run at once, each in its own worktree, landings still one at a time through main (the talk's
 items 1-5 and 7)?
 
 **Decided** - two code builders at once, in worktrees that are REUSED so their build caches are warm. Both halves of the
 pre-approval's condition are measured: total time (below) and peak memory under a margin (the memory paragraph below). Three or four
-at once only for batches that compile nothing (comment and doc edits, page work) is this session's addition, NOT in the
-pre-approved items: offered to the GM through escalation-check on 2026-11-26 and his to keep or drop. Items 2-5 and 7 (a landing,
+at once only for batches that compile nothing (comment and doc edits, page work) is the arrangement beside it. The session
+first recorded that second rule as outside the pre-approval; the GM, 2026-11-26: *"I thought I already pre-approved whatever number and arrangement of parallel builders our measurements support."* So the
+arrangement is covered too, as far as the measurements support it - and for three or four they support it only weakly: on
+2026-11-26 the comment batches ran three and four at once for 52 wall minutes with nothing failing and 2.44 tasks landed per
+wall hour (three and four together, against 2.02 at two), on work not comparable to code tasks, with memory unsampled. It
+stands on that, with its own falsifier below. Items 2-5 and 7 (a landing,
 a claims round, a page session or a plan review beside the next build) were run this way through the night and are covered
 by the same default; none has a measurement of its own. The GM, 2026-11-25: *"Yes I pre-approve the items in
 the table above, so that you can close them out after implementing whatever the measurements say make sense."* (items 1-5 and
@@ -227,4 +231,5 @@ tooling (the first run was a hand-started loop). The audit entry is
 `dev/audits/parallel-builder-count.md`. **Falsifiers:** down to one - over the next 20 code tasks at two in warm trees, tasks
 landed per wall hour at or under 1.71, or a later closing-checks run over 1.5x its one-builder median; up to three - a planned
 run of six or more compile tasks at three landing more per wall hour than at two, pace per 10k output tokens within 15% of the
-pace at two, and anonymous memory's peak at or under 7 GiB of the 10.
+pace at two, and anonymous memory's peak at or under 7 GiB of the 10; three or four on non-compiling work - the next such
+batch, sampled (451 T274), passing 7 GiB anonymous or landing no more per wall hour than two at once.
