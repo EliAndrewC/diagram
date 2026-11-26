@@ -1,0 +1,28 @@
+rust/gate/crates/land split-e1 rc=0 load=2.60 wall/user/sys=10.36 24.31 21.05 phases: build=5.24 test=4.68 before=0.31 after=0.02 
+    rustc l7r_shared 1.28 s;    rustc l7r_gate_pool 0.36 s;    rustc l7r_gate_core 0.36 s;    rustc l7r_gate_tree 0.26 s;    rustc l7r_gate_reviews 0.78 s;    rustc l7r_gate_research 0.83 s;    rustc l7r_gate_plan 0.47 s;    rustc l7r_gate_registry 0.41 s;    rustc l7r_gate_cohort 0.41 s;    rustc l7r_gate_owed 0.73 s;    rustc l7r_gate_trials 0.73 s;    rustc l7r_gate_claims 1.09 s;    rustc l7r_gate_task 0.31 s;    rustc l7r_gate_land 0.51 s;    rustc l7r_gate_land 1.79 s;    linker 0.20 s;    tool build 3.11 s (l7r_gate);    rustc l7r_gate_author 0.31 s;    rustc l7r_gate_pool 0.31 s;    rustc l7r_gate_diffrun 0.36 s;    rustc l7r_gate_downloads 0.36 s;    rustc l7r_gate_plan 0.47 s;    rustc l7r_gate_research 0.78 s;    rustc l7r_gate_reviews 0.73 s;    rustc l7r_gate_archive 0.31 s;    rustc l7r_gate_registry 0.31 s;    rustc l7r_gate_pages 0.36 s;    rustc l7r_gate_cohort 0.41 s;    rustc l7r_gate_uncited 0.26 s;    rustc l7r_gate_semantic 0.26 s;    rustc l7r_gate_checks 0.42 s;    rustc l7r_gate_owed 0.47 s;    rustc l7r_gate_bundle 0.30 s;    rustc l7r_gate_trials 0.56 s;    rustc l7r_gate_claims 0.77 s;    rustc l7r_gate_record 0.46 s;    rustc l7r_gate_measure 1.03 s;    rustc l7r_gate_arbiter 0.37 s;    rustc l7r_gate_task 0.37 s;    rustc l7r_gate_land 0.31 s;    rustc l7r_gate_ci 0.15 s;    rustc l7r_gate 0.11 s;    rustc l7r_gate 0.36 s;    linker 0.26 s;
+rust/gate/crates/land split-e2 rc=0 load=2.67 wall/user/sys=1.32 1.20 0.80 phases: build=0.87 before=0.31 after=0.14 
+    rustc l7r_gate_land 0.25 s;    rustc l7r_gate_land 0.76 s;    linker 0.25 s;
+rust/gate/crates/reviews split-e1 rc=0 load=2.62 wall/user/sys=3.03 6.39 14.14 phases: build=1.32 test=1.32 before=0.29 after=0.03 
+    rustc l7r_gate_reviews 0.66 s;    rustc l7r_gate_reviews 1.17 s;    linker 0.15 s;
+rust/gate/crates/reviews split-e2 rc=0 load=2.62 wall/user/sys=1.78 1.93 0.98 phases: build=1.36 before=0.32 after=0.11 
+    rustc l7r_gate_reviews 0.66 s;    rustc l7r_gate_reviews 1.27 s;    linker 0.15 s;
+rust/gate/crates/measure split-e1 rc=0 load=2.57 wall/user/sys=4.02 5.61 5.94 phases: build=2.90 test=0.59 before=0.37 after=0.03 
+    rustc l7r_gate_reviews 0.66 s;    rustc l7r_gate_cohort 0.30 s;    rustc l7r_gate_measure 1.07 s;    rustc l7r_gate_measure 2.04 s;    linker 0.25 s;
+rust/gate/crates/measure split-e2 rc=0 load=2.52 wall/user/sys=2.64 3.12 1.16 phases: build=2.10 before=0.38 after=0.17 
+    rustc l7r_gate_measure 0.91 s;    rustc l7r_gate_measure 2.03 s;    linker 0.25 s;
+rust/gate/crates/plan split-e1 rc=0 load=2.52 wall/user/sys=2.04 3.30 2.58 phases: build=0.97 test=0.70 before=0.29 after=0.02 
+    rustc l7r_gate_plan 0.40 s;    rustc l7r_gate_plan 0.91 s;    linker 0.10 s;
+rust/gate/crates/plan split-e2 rc=0 load=2.80 wall/user/sys=1.30 1.30 0.76 phases: build=0.92 before=0.30 after=0.09 
+    rustc l7r_gate_plan 0.35 s;    rustc l7r_gate_plan 0.82 s;    linker 0.10 s;
+rust/gate/crates/task split-e1 rc=0 load=2.80 wall/user/sys=3.81 5.34 8.00 phases: build=1.65 test=1.71 before=0.33 after=0.02 
+    rustc l7r_gate_plan 0.41 s;    rustc l7r_gate_claims 0.56 s;    rustc l7r_gate_task 0.31 s;    rustc l7r_gate_task 0.71 s;    linker 0.15 s;
+rust/gate/crates/task split-e2 rc=0 load=4.98 wall/user/sys=1.19 1.15 0.77 phases: build=0.77 before=0.32 after=0.12 
+    rustc l7r_gate_task 0.30 s;    rustc l7r_gate_task 0.66 s;    linker 0.20 s;
+rust/guard split-e1 rc=0 load=4.98 wall/user/sys=11.86 16.91 10.80 phases: build=3.87 test=5.53 before=2.30 after=0.02 
+    tool build 0.10 s (l7r-rust);    rustc l7r_shared 1.13 s;    rustc l7r_guard 1.23 s;    rustc l7r_guard 2.62 s;    rustc l7r_guard 0.16 s;    linker 0.05 s;    linker 0.16 s;
+rust/guard split-e2 rc=0 load=6.15 wall/user/sys=4.99 5.61 1.46 phases: build=2.59 before=2.26 after=0.16 
+    tool build 0.10 s (l7r-rust);    rustc l7r_guard 1.18 s;    rustc l7r_guard 2.51 s;    rustc l7r_guard 0.10 s;    linker 0.05 s;    linker 0.16 s;
+rust/guard/shared split-e1 rc=0 load=5.81 wall/user/sys=15.76 18.57 6.58 phases: build=2.73 test=8.70 before=4.21 after=0.02 
+    tool build 2.04 s (l7r-rust);    rustc l7r_shared 1.23 s;    rustc l7r_gate_core 0.36 s;    rustc l7r_gate_tree 0.25 s;    rustc l7r_gate_rustc 0.31 s;    rustc l7r_rust 0.10 s;    linker 0.05 s;    rustc l7r_shared 1.27 s;    rustc l7r_shared 2.60 s;    linker 0.10 s;
+rust/guard/shared split-e2 rc=0 load=4.94 wall/user/sys=6.84 7.27 2.40 phases: build=2.52 before=4.19 after=0.14 
+    tool build 1.94 s (l7r-rust);    rustc l7r_shared 1.12 s;    rustc l7r_gate_core 0.30 s;    rustc l7r_gate_tree 0.26 s;    rustc l7r_gate_rustc 0.41 s;    rustc l7r_rust 0.15 s;    linker 0.10 s;    rustc l7r_shared 1.28 s;    rustc l7r_shared 2.40 s;    linker 0.15 s;

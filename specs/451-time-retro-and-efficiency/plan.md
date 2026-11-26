@@ -3570,31 +3570,126 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T315 (<why: the finding or measurement that files it>)
+### T315 (the GM, 2026-11-26, on 451 T305's repeated slow test runs: why more of a builder's test run could not be cached, T301 part 1 having answered the compile side and T316 having timed one run of `rust/gate/crates/land` on a heavily loaded machine)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a measurement, no code changed. Scripts and raw results are kept in `dev/measurements/2026-11-26/test-run-split/` (`gate-run.sh`, `edit-probe.sh`, `edit-split.sh`, `body-edit.sh`, `ps-sample.py`, `run.py`, `count-shim.c`, `shares.py`, `phase-history.py`, `slot-waits.py`, `git-fixture-bench.py`; `slowest-tests.txt`, the `.jsonl` and `.txt` results). Everything ran in the pool tree `diagram-backlog-t269`, one run at a time, on 22 cores (observed 2026-11-26, method: `nproc`) beside two other builders; each row carries its load. `strace` and `perf` are refused in the container, so file calls were counted by an `LD_PRELOAD` shim (`count-shim.c`) and processes by sampling `/proc` (`ps-sample.py`).
+  - **The verdict.** The slow runs the GM asked about were BUILD, not tests, and beside other builders a build's seconds are now mostly a queue. T305's own runs, in this tree, are in the event log: five `make rust-test` runs of `reviews` whose builds took 24.4, 5.6, 8.0, 5.4 and 7.9 s and whose tests 1.1 to 2.8 s, the third beside `land`'s build of 8.7 s and its tests of 11.4 s, observed 2026-11-26, method: the `Phase` lines of `.git/l7r-events/451-time-retro-and-efficiency.jsonl` naming `diagram-backlog-t269` between the tree's take and release for T305 in `.git/builder-pool.log`, 17:13 to 17:37 UTC. This task's first run in the tree, after its handout, was the same shape: 27.6 s of wall, 7.5 s build, 1.6 s tests and 18.5 s before the first phase line, the checks' own tools rebuilding after the commits the handout brought (T316's subject), measured 2026-11-26 (`make rust-test CRATE=rust/gate/crates/land FRESH=1` timed, its `Phase` lines read, load 11). A real edit - a statement at the head of a function body, in one file and in three files of `reviews` - compiled in 2.3, 3.2, 3.9 and 4.0 s at load 25 to 28, after WAITING 57.3, 18.2, 2.5 and 34.9 s for one of the machine's two build slots behind other builders' compiles, measured 2026-11-26 (`body-edit.sh`: the `build` line less the `slot-wait` line inside it), and the slot landed that afternoon (451 T284), T305's runs carrying no such line. Filed as T347. Alone, no gate crate's edit-and-test run takes the 19 s the task's line gives for T305's (observed 2026-11-26, method: T315's line in `tasks.md`, the coordinating session's figure): a one-line edit of `land`, `reviews`, `measure`, `plan` or `task` rebuilds in 0.8 to 2.1 s and its tests run in 0.8 to 1.9 s, measured 2026-11-26 (`edit-probe.sh`, `gate-run.sh`, load 3 to 12). Runs of that length were the same work on a loaded machine and first builds after other landings: the recorded test phases of `land` on 2026-11-25/26 were 4.2 s at the median and 18.3 s at the 90th centile of 57, measured 2026-11-26 (`phase-history.py`), against 1.6 to 1.7 s alone, and T316's 10.7 s of tests was taken at load 248, measured 2026-11-26 (T316's plan section). The suites are already parallel and their time is processes and files, not waiting - except in the two guard crates, where three things that are not the tests' work cost 5 to 7 s of every run and are filed (T339, T340, T341), measured 2026-11-26 (`gate-run.sh`, `run.py`, `ps-sample.py`). No lever on where the tests write, how they make a repository, the linker or the thread count is worth a task.
+  - **The split, crate by crate, alone.** A FRESH gate run three times each with nothing changed (`gate-run.sh`: `make rust-test CRATE= FRESH=1`, the `build` and `test` `Phase` lines and the wall); the one-line edit is a constant appended to the crate's `lib.rs`, then taken out, through the same command (`edit-probe.sh`); the linker's seconds are the life of the `cc` process that runs rust-lld, sampled (`edit-split.sh`); the binary's own run is the test executable run as the gate runs it (the crate's directory, cargo's variables, a `TMPDIR` of its own) three times (`run.py`), its processor time `user + sys` of the process and its children.
+
+    | crate | lines of Rust | tests | build, nothing changed | build after a one-line edit | of it the linker | the gate's `test` phase | the binary's own run | its processor time | processor time over wall | label |
+    |---|---|---|---|---|---|---|---|---|---|---|
+    | `rust/gate/crates/land` | 8,753 | 128 | 0.07-0.09 s | 0.8-1.1 s | 0.20-0.25 s | 1.65-1.70 s | 1.43-1.54 s | 21 s | 14 | measured 2026-11-26 (`gate-run.sh`, `edit-probe.sh`, `edit-split.sh`, `run.py`; load 3-7) |
+    | `rust/gate/crates/reviews` | 20,974 | 209 | 0.08-0.09 s | 1.3-1.4 s | 0.15 s | 1.45-1.54 s | 1.19-1.44 s | 18 s | 13-15 | measured 2026-11-26 (the same; load 5-9) |
+    | `rust/gate/crates/measure` | 27,694 | 241 | 0.08-0.09 s | 1.9-2.1 s | 0.25 s | 0.75-0.80 s | 0.43-0.62 s (a first run 1.73 s) | 6.2 s | 10-14 | measured 2026-11-26 (the same; load 4-11) |
+    | `rust/gate/crates/plan` | 11,648 | 191 | 0.08 s | 0.9-1.0 s | 0.10 s | 0.77-0.83 s | 0.61-0.63 s (one run 1.14 s) | 3.8 s | 6 | measured 2026-11-26 (the same; load 4-10) |
+    | `rust/gate/crates/task` | 8,186 | 99 | 0.07-0.08 s | 0.75-0.8 s | 0.15-0.20 s | 1.83-1.90 s | 1.61-1.62 s | 10.4 s | 6.4 | measured 2026-11-26 (the same; load 4-10) |
+    | `rust/guard` | 45,763 | 539 | 0.09-0.11 s | 2.4-2.8 s | 0.16-0.20 s | 5.3-6.2 s | 2.05-2.07 s | 18.5 s | 9 | measured 2026-11-26 (the same; load 5-12) |
+    | `rust/guard/shared` | 43,362 | 505 | 0.08-0.09 s | 2.5-2.9 s | 0.10-0.15 s | 8.8-8.9 s | 8.36-8.38 s | 15.3 s | 1.8 | measured 2026-11-26 (the same; load 4-12) |
+
+    With the test executable deleted and no source changed the build took 0.74 s (`task`) to 2.5 s (`rust/guard/shared`), within 0.45 s of the one-line edit's in every crate, measured 2026-11-26 (`edit-probe.sh`, its `probe-link` rows): a small edit's rebuild is rustc starting, reading its incremental cache and writing the binary again, not compiling the edit, and the link proper is a tenth of it. A run whose edit leaves the test binary's bytes as they were (an unused constant's value) builds and runs no test: the kept result is keyed on the binary, measured 2026-11-26 (`edit-split.sh`, its `e2` rows: a `build` line of 0.8 to 2.6 s and no `test` line).
+  - **A builder's whole command after a one-line edit**, without `FRESH` as a builder runs it, measured 2026-11-26 (`edit-split.sh`, its `e1` rows, load 3-6): `reviews` 3.0 s (0.3 s before the build, 1.3 s build, 1.3 s tests), `plan` 2.0 s (0.3, 1.0, 0.7), `rust/guard` 11.9 s (2.3, 3.9, 5.5), `rust/guard/shared` 15.8 s (4.2, 2.7, 8.7). `FRESH=1` adds a REASON check through the whole `l7r-gate` tool, which is rebuilt first where any gate source moved: 1.1 to 2.8 s more before the build after an edit of a gate crate, measured 2026-11-26 (`edit-probe.sh` with `gate-run.sh`'s `before` figure, 1.4 to 3.1 s against 0.3 s) - the escape's cost, not a builder's run's.
+  - **What the recorded runs took**, measured 2026-11-26 (`phase-history.py` over the clone's `.git/l7r-events/*.jsonl`: every `build` and `test` `Phase` line of 2026-11-25/26 that names one crate and passed, a line under 0.5 s being a build found fresh and is left out of the centiles):
+
+    | crate | step | lines | not found fresh | median | 90th centile | longest | label |
+    |---|---|---|---|---|---|---|---|
+    | `rust/gate/crates/land` | build | 71 | 58 | 3.3 s | 18.3 s | 63.4 s | measured 2026-11-26 (`phase-history.py`) |
+    | `rust/gate/crates/land` | test | 57 | 57 | 4.2 s | 18.3 s | 79.4 s | measured 2026-11-26 (`phase-history.py`) |
+    | `rust/gate/crates/reviews` | build | 37 | 30 | 6.1 s | 20.5 s | 101.2 s | measured 2026-11-26 (`phase-history.py`) |
+    | `rust/gate/crates/reviews` | test | 27 | 27 | 1.5 s | 2.5 s | 6.5 s | measured 2026-11-26 (`phase-history.py`) |
+    | `rust/gate/crates/measure` | build | 100 | 91 | 15.1 s | 23.8 s | 76.1 s | measured 2026-11-26 (`phase-history.py`) |
+    | `rust/gate/crates/measure` | test | 62 | 62 | 0.7 s | 1.4 s | 4.5 s | measured 2026-11-26 (`phase-history.py`) |
+    | `rust/gate/crates/plan` | build | 48 | 39 | 5.9 s | 19.3 s | 76.5 s | measured 2026-11-26 (`phase-history.py`) |
+    | `rust/gate/crates/plan` | test | 40 | 40 | 0.8 s | 2.8 s | 19.4 s | measured 2026-11-26 (`phase-history.py`) |
+    | `rust/gate/crates/task` | build | 50 | 41 | 2.7 s | 13.0 s | 48.2 s | measured 2026-11-26 (`phase-history.py`) |
+    | `rust/gate/crates/task` | test | 39 | 39 | 1.8 s | 6.5 s | 31.9 s | measured 2026-11-26 (`phase-history.py`) |
+    | `rust/guard` | build | 104 | 94 | 14.9 s | 59.0 s | 178.7 s | measured 2026-11-26 (`phase-history.py`) |
+    | `rust/guard` | test | 83 | 83 | 5.5 s | 7.4 s | 45.5 s | measured 2026-11-26 (`phase-history.py`) |
+    | `rust/guard/shared` | build | 86 | 78 | 15.9 s | 50.5 s | 132.4 s | measured 2026-11-26 (`phase-history.py`) |
+    | `rust/guard/shared` | test | 64 | 64 | 8.9 s | 12.2 s | 24.8 s | measured 2026-11-26 (`phase-history.py`) |
+
+    The test medians are the alone figures above except `land`'s (4.2 s against 1.7 s), measured 2026-11-26 (`phase-history.py`, `gate-run.sh`); the build medians are 3 to 8 times a one-line edit's alone. The log does not say which builds were a builder's own edit and which the first build after others' landings (T316's subject) or a build beside two others', so the gap is not split here; T301 part 1 measured a first build of a large gate crate at about 20 s, measured 2026-11-26 (T301 part 1's section, `gate-call.sh`).
+  - **The ten slowest tests of each crate** are listed whole in `dev/measurements/2026-11-26/test-run-split/slowest-tests.txt` (libtest's own per-test seconds, the suite running whole on its 22 threads, so each is a time beside its neighbors and not alone), measured 2026-11-26 (`run.py --report`). What they do, read in their sources 2026-11-26:
+    - `land` (the ten 0.83 to 1.48 s, 10.9 s of the 27.0 s the tests sum to): all `land::alone::tests`, each a pair of throwaway clones with an origin, driven through the real `scripts/land-alone.sh` and shell lines of git add, commit and push, measured 2026-11-26 (`run.py --report`).
+    - `reviews` (0.55 to 1.27 s, 6.7 of 27.1 s): `reviews::owed` and `reviews::prereq::scoped` tests, each a throwaway repository with several commits read back through `git rev-parse`, `diff`, `log`, `ls-tree` and `merge-base`, measured 2026-11-26 (`run.py --report`).
+    - `measure` (0.20 to 0.36 s, 2.5 of 9.3 s): the command-line tests of `feature_report`, `maps_moved`, `work_budget_review` and `fix_yield`, each a throwaway repository and several git reads, measured 2026-11-26 (`run.py --report`).
+    - `plan` (0.11 to 0.47 s, 1.7 of 5.7 s): the slowest is in memory (`the_label_search_is_linear_in_its_sentence`, a 240,000-word sentence), as are the two megabyte-plan tests, measured 2026-11-26 (`run.py --report`); the rest make a repository.
+    - `task` (0.31 to 1.45 s, 6.2 of 15.7 s): `task_add::tests::two_filings_at_once_keep_both_boxes_and_both_sections` runs two filings on threads against a `make quick` stand-in that sleeps 0.3 s, measured 2026-11-26 (`run.py --report`); the rest are repositories with worktrees and pushes.
+    - `rust/guard` (0.38 to 1.91 s, 7.9 of 25.9 s): `context_cap_hooks`' transcript test writes and reads transcripts of hundreds of thousands of bytes, `no_poll_hooks`' frozen corpora and the case tables are in memory over recorded commands, and the two `scratch_sweep_hooks::disk` tests at 1.04 s each build fixture cache directories, measured 2026-11-26 (`run.py --report`).
+    - `rust/guard/shared` (0.44 to 8.06 s, 17.8 of 27.3 s): `guards::set_down_hooks::tests::stalls::the_idle_check_looks_again_until_its_budget` WAITS 8.06 s of real seconds and is the suite's whole wall, measured 2026-11-26 (`run.py --report`); `house_style_hooks`' `a_spelling_past_a_million_steps_is_corrected` is 3.42 s of processor time over a text of 1.35 million characters, measured 2026-11-26 (`run.py --report`); two idle tests wait 1.01 s each, measured 2026-11-26 (`run.py --report`). Filed as T339.
+  - **How much of a run is tests that start git or another program** (the brief's part 2). A test is counted as starting git where it fails with a `git` first on `PATH` that exits 127, and as starting any program where it fails with `PATH=/nonexistent`; its seconds are the good run's. A lower bound: a test that starts a program by its full path, or does not check what it started, passes both.
+
+    | crate | tests | the tests' seconds, summed | start git | start any program | start none | label |
+    |---|---|---|---|---|---|---|
+    | `land` | 128 | 27.0 s | 110 tests, 26.8 s (99%) | 113, 26.9 s (100%) | 15, 0.1 s | measured 2026-11-26 (`shares.py`) |
+    | `reviews` | 209 | 27.1 s | 138, 26.8 s (99%) | 139, 26.8 s (99%) | 70, 0.4 s (1%) | measured 2026-11-26 (`shares.py`) |
+    | `measure` | 241 | 9.3 s | 73, 8.4 s (90%) | 80, 8.7 s (93%) | 161, 0.7 s (7%) | measured 2026-11-26 (`shares.py`) |
+    | `plan` | 191 | 5.7 s | 79, 4.2 s (73%) | 79, 4.2 s (73%) | 112, 1.5 s (27%) | measured 2026-11-26 (`shares.py`) |
+    | `task` | 99 | 15.7 s | 75, 14.0 s (89%) | 77, 14.0 s (89%) | 22, 1.7 s (11%) | measured 2026-11-26 (`shares.py`) |
+    | `rust/guard` | 539 | 25.9 s | 126, 9.6 s (37%) | 207, 16.3 s (63%) | 332, 9.6 s (37%) | measured 2026-11-26 (`shares.py`) |
+    | `rust/guard/shared` | 505 | 27.3 s | 117, 16.2 s (59%) | 134, 16.5 s (60%) | 371, 10.8 s (40%) | measured 2026-11-26 (`shares.py`) |
+
+    So the gate crates' test time is git almost wholly, and what it costs is processes: in `land`, 13 of the 21 s of processor time are the kernel's (`sys`), measured 2026-11-26 (`run.py`).
+  - **What a run writes** (the brief's part 2, and the figures feature 460 asks for first). The gate gives each crate's run its own `TMPDIR`, `/tmp/l7r-rust-tests-<crate>-...` (`rust/gate/crates/rustc/src/rustc.rs`, `leak_checked`), and every `TempDir` and the shared `l7r-test-scratch` directory root there (`rust/guard/shared/src/tempdir.rs`: `std::env::temp_dir()`), so the tests' files are under that one directory, on the container's own disk. One run of each binary with the counting shim, a wrapper logging every `git`, and the directory walked as it ran (`run.py --count --gitlog --sample`; the wrapper's own process and file a git call are taken out of the counts below). The peak is a SAMPLED peak, a lower bound; the bytes dirtied are `write_bytes` of `/proc/<pid>/io`, which counts a file deleted before it reaches the disk too.
+
+    | crate | processes started | of them git | `git init` | files created | directories made | files removed | directories removed | `fsync`, `fdatasync`, `sync_file_range` | peak in the `TMPDIR` | bytes dirtied | label |
+    |---|---|---|---|---|---|---|---|---|---|---|---|
+    | `land` | 4,177 | 2,533 | 55 | 14,220 | 8,980 | 14,519 | 8,309 | 0 | 8.1-8.4 MB in 1,937-2,022 files and 1,577-1,584 directories (three samplings) | 43 MB | measured 2026-11-26 (`run.py`, `count-shim.c`) |
+    | `reviews` | 5,567 | 4,366 | 180 | 11,868 | 8,848 | 11,575 | 6,108 | 0 | 5.5 MB, 1,298 files, 1,185 directories | 40 MB | measured 2026-11-26 (`run.py`, `count-shim.c`) |
+    | `measure` | 1,631 | 1,195 | 81 | 6,799 | 4,774 | 6,877 | 3,550 | 5 | 4.9 MB, 1,165 files, 1,006 directories | 22 MB | measured 2026-11-26 (`run.py`, `count-shim.c`) |
+    | `plan` | 638 | 634 | 84 | 3,855 | 1,832 | 3,565 | 1,596 | 2 | 3.5 MB, 521 files, 316 directories | 16 MB | measured 2026-11-26 (`run.py`, `count-shim.c`) |
+    | `task` | 2,569 | 1,577 | under 8 (not among its twelve commonest git words) | 8,180 | 6,677 | 9,406 | 5,814 | 0 | 5.4 MB, 1,154 files, 1,233 directories | 21 MB | measured 2026-11-26 (`run.py`, `count-shim.c`) |
+    | `rust/guard` | 2,883 | 1,244 | 111 | 11,777 | 9,563 | 8,243 | 6,263 | 0 | 23.3 MB, 1,522 files, 690 directories | 65 MB | measured 2026-11-26 (`run.py`, `count-shim.c`) |
+    | `rust/guard/shared` | 1,381 | 953 | 145 | 6,849 | 5,262 | 5,973 | 3,597 | 0 | 19.5-19.7 MB, 650-694 files | 41 MB | measured 2026-11-26 (`run.py`, `count-shim.c`) |
+
+    The seven sampled peaks sum to 71 MB, were all seven suites to run at one moment, measured 2026-11-26 (`run.py --sample --count`); one copy of the `land` suite holds 8.4 MB, measured 2026-11-26 (`run.py --sample --count`). The tests' git runs with no `core.fsync` setting (none in the container's git configuration, read 2026-11-26 by `git config --get-regexp`), and seven runs made 7 sync calls between them: the writes are directory churn (about 63,500 files created and 45,900 directories made over the seven suites), not syncs, so no git sync setting would change them, measured 2026-11-26 (`run.py --sample --count`).
+  - **The levers, each priced.**
+
+    | lever | what was measured | seconds a run | verdict | label |
+    |---|---|---|---|---|
+    | the tests' `TMPDIR` on `/dev/shm` | it fits by size (`land`'s peak 8.2 MB and `rust/guard`'s 23.3 MB of 62.5 MB, nothing else in it) and FAILS by its mount: `/dev/shm` is `noexec`, and 72 of `land`'s 128 tests and 22 of `rust/guard`'s 539 fail there, 70 of `land`'s 72 with `Permission denied` on a script they write and run, measured 2026-11-26 (`run.py --tmp-parent`, `git-fixture-bench.py`); no other memory-backed directory in the container is writable and executable and a mount is refused, so the whole suite could not be timed on one. In its place: a repository made, one file committed and the repository removed, 60 at a time, three rounds, on each - 12.3 + 1.1 ms on `/tmp` against 10.2 + 0.4 ms on `/dev/shm` | not timed on a whole suite, and ESTIMATED instead: a repository's making and removing is a fifth faster there (10.6 against 13.4 ms), so at most about 0.3 s of `land`'s 1.5 s, were its whole run that work, measured 2026-11-26 (`git-fixture-bench.py`) | NO task for time. For feature 460's question the size is: 8.4 MB a copy of `land`, 71 MB for the seven suites at once, so 128 MB holds them with room, and the directory must be mounted with `exec` | measured 2026-11-26 (`run.py --tmp-parent`, `git-fixture-bench.py`; load 3-6) |
+    | `git init` with an empty template | end to end: `GIT_TEMPLATE_DIR` an empty directory for a whole `land` run (it reached git: 914 fewer files created, 13,306 against 14,220) - 2.4 to 3.7 s with it against 2.1 to 6.6 s without, four and three runs taken in turn while the load rose from 4 to 16: not shown to differ, measured 2026-11-26 (`run.py --env`, `git-fixture-bench.py`). Per repository 0.9 ms (4.2 against 3.3 ms) | 0.05 to 0.16 s of PROCESSOR time a run (55 to 180 inits), under 0.02 s of wall on 22 threads | NO task | measured 2026-11-26 (`run.py --env`, `git-fixture-bench.py`) |
+    | a shared fixture repository copied per test | a committed repository (27 files, 15 directories) copied in process 2.5 ms, by `cp -r` 3.5 ms, against 12.3 ms made by `git init`, `add` and `commit` | about 10 ms of processor time a repository: 0.5 s (`land`, 55) to 1.8 s (`reviews`, 180) of processor time a run, 0.04 to 0.13 s of wall at the measured 14 processors in use, measured 2026-11-26 (`git-fixture-bench.py`). An estimate: the tests' repositories differ and most of their git calls come after the first commit (`land`: 2,533 git processes for 55 inits) | NO task | measured 2026-11-26 (`git-fixture-bench.py`; load 3) |
+    | the tests' thread count | the suite is already parallel: libtest's default is a thread a core, 22, and the gate passes none (`run_built`, `test_args`). `land` at 1, 4, 8, 22 and 44 threads: 16.5, 4.5, 2.2-3.1, 1.4-1.9 and 2.0 s, measured 2026-11-26 (`run.py --threads`); `reviews` 20.3, 14.0, 3.0-5.6, 1.2-3.4, 5.2; `rust/guard` 23.6, 6.6, 2.3-2.7, 2.1, 2.3; `rust/guard/shared` 24.9, 10.7, 8.7-8.8, 8.5, 9.1 (one or two runs each, at load 17 to 29 as other builders worked) | nothing to gain: 44 threads no faster than 22 | NO task | measured 2026-11-26 (`run.py --threads`) |
+    | only the tests a change reaches | the checks' tool takes a crate and nothing narrower (`rust/gate/crates/rustc/src/rustc.rs`, `parse`: `--crate` and `--check` alone). `land` filtered to one module by hand: `land::phase` (18 tests) 0.16-0.18 s of wall and 1.2 s of processor time, `land::unfinished` (7) 0.2-0.8 s and 0.8-1.4 s, `land::alone::tests::takeback` (4 of the ten slowest) 1.1-3.4 s, against 1.4-1.5 s and 21 s whole (load 15-17) | alone at most 1.3 s a run of `land`, less for the others, measured 2026-11-26 (`run.py -- <filter>`); on a loaded machine its processor time, a twentieth, is what counts, and that is not measured | a task whose first step is that measurement: T342 | measured 2026-11-26 (`run.py -- <filter>`) |
+    | a faster linker | the link is already rust-lld (`.cargo/config.toml`, 449 T96) and lives 0.10 to 0.25 s of a 0.8 to 2.9 s rebuild | under 0.25 s were it free | NO task | measured 2026-11-26 (`edit-split.sh`, `ps-sample.py`) |
+    | a check-only pass before the test build | not run: T301 part 1 measured a check of an edited gate crate at 0.7 s beside its test build of 1.2 to 3.9 s, measured 2026-11-26 (T301 part 1's section, `gate-call.sh`); a check first adds its seconds to every run that compiles and saves the difference only on one that does not | none on a run that compiles | NO task | cited: T301 part 1, measured 2026-11-26 (`gate-call.sh`) |
+    | a smaller crate | the one-line rebuild follows the crate's size, 0.75 s at 8,186 lines to 2.9 s at 43,362 (the table above) | about 1 s a run for halving the largest gate crate, `measure` | NO task: a split costs every caller's imports for a second | measured 2026-11-26 (`edit-probe.sh`) |
+    | the shared guard crate's waiting test | the suite run without `the_idle_check_looks_again_until_its_budget`: 3.6, 5.4 and 4.6 s, measured 2026-11-26 (`run.py -- --skip`); without it and the spelling test: 2.4, 2.1 and 2.5 s, measured 2026-11-26 (`run.py -- --skip`); whole: 8.4 s (load 15-18 for the first two, 4-9 for the whole) | about 5 s, and the second test's 3.4 s is then the suite's floor, which may not shorten (its text is as long as the old limit's firing needs) | T339 | measured 2026-11-26 (`run.py -- --skip`) |
+    | the guard crate's orphaned processes | the binary run by hand into a pipe exited at 2.03 s and the pipe closed at 5.16 s, nine or more `sleep 5` processes of parent 1 alive between, measured 2026-11-26 (`gate-run.sh`, `run.py`); under the gate the binary stands as a zombie through 14 samples of 0.2 s, measured 2026-11-26 (`gate-run.sh`, `run.py`); the gate's `test` phase 5.3-6.2 s against the binary's 2.05-2.07 s | 3.2 s | T340 | measured 2026-11-26 (`gate-run.sh`, `run.py`, a process listing during each) |
+    | the tool's 2.0 s before an edited guard crate's build | `l7r-rust` alone on one thread from 0.36 s to 2.33 s of the command, between its `git ls-files` and its first cargo call, measured 2026-11-26 (`ps-sample.py`, `edit-split.sh`); 0.3 s for an edited gate crate, and where in the tool is not measured (the kept result's key over the guard's sources is a guess) | 2.0 s (`rust/guard`), 2.2 s (`rust/guard/shared`, beside 2.0 s of the tool's own rebuild, which builds from that crate) | T341 | measured 2026-11-26 (`ps-sample.py`, `edit-split.sh`) |
+
+  - **What this says to the GM's question.** The build is cached as far as it can be (T301 part 1) and a one-line edit's rebuild is 1 to 3 s, measured 2026-11-26 (the tables above); the tests' own run is not cacheable and is 1 to 2 s for a gate crate alone, measured 2026-11-26 (the tables above). T305's runs were builds of 5 to 24 s with tests of 1 to 3 s beside them: a real edit's rebuild is 2 to 4 s of compiling, longer beside other builders, 24 s the first time after a handout (T316 now warms it), and since T284 it also waits for a build slot, the largest single cost measured here (T347), measured 2026-11-26 (the verdict's figures, above). Where a test phase itself ran long (`land`'s 11.4 s in T305's third run), it is that crate's 21 s of processor time - 4,177 processes, 2,533 of them git - sharing 22 cores with other builders' compiles: the tests' run is all processes, so it stretches with the load where a cached build does not, measured 2026-11-26 (the tables above). What shortens it is fewer processes in a run (T342, a builder running the tests its change reaches) and fewer compiles beside it; nothing about where the tests write or how they make a repository does.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| no code changed: a measurement, its scripts and results in `dev/measurements/2026-11-26/test-run-split/` | n/a: nothing fixed | n/a: tooling | none | n/a |
 
 ### T315 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** The session knows where a builder's test run of the crates builders change most spends its seconds, and which levers on it are worth building, before any is built.
+2. **The constraints.** No load generator and no copies of a suite run together (the brief, after the host's freeze of 2026-11-26, feature 460); one run at a time in the pool tree; nothing T301 part 1 or T316 measured is measured again.
+3. **Where each comes from.** G: the GM's question of 2026-11-26 about T305's repeated test runs, as the task line and the brief relay it. O: T301 part 1's and T316's plan sections, `dev/measurements/2026-11-26/build-levers/m9-results.md`, and the measurements above.
+4. **Do they describe the world here?** The length the task's line gives for T305's runs was not found again alone: `land`'s whole edit-and-test command is under 5 s at load 3 to 7, and the recorded runs reach 18.3 s at their 90th centile, measured 2026-11-26 (`phase-history.py`).
+5. **The order.** After T301 part 1 and T316, whose figures it starts from. T339, T340, T341, T342, T344 and T347, filed here, are independent of each other; T342's first step is a measurement.
+6. **The exits.** Green: each of the seven crates' runs split into build, link and tests, its writes counted, and each lever priced by a measurement or cited, measured 2026-11-26 (the scripts above). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing, of this section, the scripts and results, the six filed tasks' lines and feature 460's one pointer line.
+9. **Done, measured.** Seven crates' runs split and counted, eleven levers priced, six tasks filed, measured 2026-11-26 (the tables above).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing is fixed here. The three costs found in the guard crates are test and tool code a measurement builder was not briefed to change, each with its own red-first proof to write. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- One test of `rust/guard/shared` waits 8.06 s of real seconds and is the suite's whole 8.4 s of wall, measured 2026-11-26 (`run.py --report`); visible effect: about 5 s of every test run of that crate, 64 recorded on 2026-11-25/26, measured 2026-11-26 (`phase-history.py`). Not fixed here: the test's waits are the guard's own knobs and the fix is a clock the test steps, a change with its own proof. Filed as T339; lands before T302.
+- Tests of `rust/guard` leave `sleep 5` processes that hold the test binary's output pipe open after it exits, measured 2026-11-26 (the binary run into a pipe: exit at 2.03 s, the pipe closed at 5.16 s); visible effect: 3.2 s of every test run of that crate, 83 recorded on 2026-11-25/26, measured 2026-11-26 (`phase-history.py`), and processes left running after a suite ends. Not fixed here: which tests start them is not found, and the pin belongs with the fix. Filed as T340; lands before T302.
+- The checks' tool spends 2.0 s on one thread before the build of an edited guard crate where a gate crate's takes 0.3 s, measured 2026-11-26 (`ps-sample.py`, `edit-split.sh`); visible effect: 2 s of every test run of an edited `rust/guard` or `rust/guard/shared`, measured 2026-11-26 (`ps-sample.py`, `edit-split.sh`). Not fixed here: where in the tool it is spent is not measured (`perf` and `strace` are refused in the container). Filed as T341; lands before T302.
+- The checks' tool cannot run a part of a crate's tests, so a builder's every run of `land` starts 4,177 processes for 21 s of processor time, measured 2026-11-26 (`run.py --count`); visible effect: the 4.2 s median and 18.3 s 90th centile of that crate's recorded test phases beside other builders, measured 2026-11-26 (`phase-history.py`), against 1.7 s alone. Not fixed here: what it saves on a loaded machine must be measured first, and it is a new option of a command. Filed as T342; lands before T302.
+- A builder's test build waits for one of the machine's two build slots behind other builders' compiles: 57.3, 18.2, 2.5 and 34.9 s of waiting for compiles of 2.3 to 4.0 s in four runs at load 25 to 28, measured 2026-11-26 (`body-edit.sh`, the `slot-wait` and `build` `Phase` lines), and twelve such waits of 0.5 to 57.3 s in the day's event log, observed 2026-11-26, method: every `slot-wait` `Phase` line of `.git/l7r-events/*.jsonl` listed (`slot-waits.py`); visible effect: a builder's edit-and-test run of a gate crate takes 9 to 64 s where its work is 4 to 7 s, measured 2026-11-26 (`body-edit.sh`, the wall of each run). Not fixed here: the slot is 451 T284's memory guard and its count a knob to retune from a measurement of what a one-crate build needs. Filed as T347; lands before T302.
+- All 179 `Phase` lines of this task's runs in the pool tree `diagram-backlog-t269` carry task `T285`, as every `Phase` line of the tree has since 14:00 UTC through its handouts to T284, T305, T104, T316 and T315 (`.git/builder-pool.log`), observed 2026-11-26, method: the `Phase` lines of `.git/l7r-events/451-time-retro-and-efficiency.jsonl` naming that tree from 20:07 UTC on, counted by their `task` field; visible effect: `make task-time` books those tasks' build and test seconds to T285. Not fixed here: the handout and the event line's task are `builder-tree`'s and the log's code, outside a measurement. Filed as T344; lands before T302.
+- `/dev/shm` in the container is `noexec` and 62.5 MB, so the suites cannot run there as it is (72 of `land`'s 128 tests fail), measured 2026-11-26 (`run.py --tmp-parent /dev/shm/t315`). Not a defect and not filed: nothing uses it, and it is the measurement feature 460 asked for, to which that spec now points.
+- A `land` test run after a gate source edit rebuilt the whole `l7r-gate` tool inside its `test` phase (3.1 s of a 4.7 s phase, once), because a test runs the tree's own wrapper, observed 2026-11-26, method: `ps-sample.py` over one run after `rust/guard/shared/src/lib.rs` had been edited and put back. Not a defect and not filed: the tool is rebuilt once an edit by whichever command next needs it, so the seconds move and are not added; tests that read the machine's live state are 451 T312's and T143's.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a measurement task, counted as performance work for scheduling and coming first (the GM, 2026-11-20: "I would also like for this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first"); it changes no code and is no engine-speed task, so docs/performance-checklist.md's questions have nothing to answer here. What it found to make faster is T339's, T340's, T341's, T342's and T347's, each a `[perf]` task.
 
 
 <!-- plan-archive: T316 to T316 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
@@ -4360,4 +4455,220 @@ engine speed, so no checklist.
 **Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T339 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T339 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T339 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
+2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
+   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
+3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
+4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
+5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
+   time with the host's load - evidence, not a pass>
+6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+
+
+### T340 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T340 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T340 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
+2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
+   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
+3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
+4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
+5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
+   time with the host's load - evidence, not a pass>
+6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+
+
+### T341 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T341 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T341 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
+2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
+   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
+3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
+4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
+5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
+   time with the host's load - evidence, not a pass>
+6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+
+
+### T342 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T342 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T342 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
+2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
+   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
+3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
+4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
+5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
+   time with the host's load - evidence, not a pass>
+6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+
+
+### T344 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T344 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T347 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T347 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T347 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
+2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
+   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
+3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
+4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
+5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
+   time with the host's load - evidence, not a pass>
+6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 

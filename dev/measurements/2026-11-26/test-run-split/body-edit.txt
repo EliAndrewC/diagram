@@ -1,0 +1,5 @@
+# body-edit.sh, 2026-11-26, the pool tree diagram-backlog-t269 beside two working builders; `build` includes the `slot-wait` before it
+rust/gate/crates/reviews body1-1 (one file) rc=0 load=26.35 wall/user/sys=63.51 8.85 15.25 phases: slot-wait=57.31 build=59.58 test=1.69 before=2.14 after=0.02
+rust/gate/crates/reviews body1-2 (one file) rc=0 load=25.38 wall/user/sys=24.58 10.73 16.06 phases: slot-wait=18.25 build=21.42 test=2.59 before=0.35 after=0.05
+rust/gate/crates/reviews body3-1 (three files) rc=0 load=27.81 wall/user/sys=8.88 20.28 14.94 phases: slot-wait=2.52 build=6.40 test=1.44 before=0.95 after=0.02
+rust/gate/crates/reviews body3-2 (three files) rc=0 load=26.57 wall/user/sys=40.66 20.32 14.50 phases: slot-wait=34.94 build=38.91 test=1.30 before=0.35 after=0.02

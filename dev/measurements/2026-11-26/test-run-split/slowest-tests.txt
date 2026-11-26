@@ -1,0 +1,77 @@
+land
+  1.48 land::alone::tests::takeback::a_file_the_task_edited_and_put_back_is_not_its_own
+  1.44 land::alone::tests::the_script_refuses_its_own_uncommitted_files_and_moves_nothing_on_a_conflict
+  1.35 land::alone::tests::takeback::an_append_only_log_appended_on_both_sides_keeps_both
+  1.24 land::alone::tests::takeback::a_replace_all_edit_put_back_is_not_its_own
+  1.13 land::alone::tests::the_script_lands_the_clone_s_head_alone_and_the_clone_takes_the_tip
+  0.91 land::alone::tests::two_tasks_sections_in_one_plan_land_only_the_landing_task_s
+  0.86 land::alone::tests::takeback::an_archive_mark_the_clone_changed_only_by_a_blank_line_is_taken_from_main
+  0.86 land::alone::tests::take::a_section_both_sides_changed_otherwise_still_gives_up_naming_it
+  0.84 land::alone::tests::take::the_clone_takes_a_landing_that_wrote_its_rows_and_archived_beside_its_edits
+  0.83 land::alone::tests::take::t113_s_landing_is_taken_beside_the_clone_s_new_sections
+reviews
+  1.27 reviews::prereq::scoped::tests::an_error_fix_or_an_unclean_scoped_round_owes_the_full_round
+  0.66 reviews::owed::redrawn::tests::the_compound_engines_marks_owe_their_kinds_on_the_compound
+  0.64 reviews::owed::redrawn::tests::a_change_to_the_drivers_placement_is_refused_until_an_occasion_is_declared
+  0.64 reviews::owed::tests::declared::only_a_line_naming_the_started_task_answers_the_delta
+  0.63 reviews::owed::redrawn::tests::where_the_elements_cannot_be_told_the_whole_legend_is_owed
+  0.62 reviews::owed::tests::declared::verify_judges_its_own_bundle_not_the_clones_shared_mark
+  0.61 reviews::owed::deferred::tests::a_pool_hamlet_the_port_moved_owes_its_settlement_review_at_the_throw_back
+  0.55 reviews::owed::redrawn::tests::where_the_code_cannot_tell_the_kinds_whose_marks_differ_are_owed
+  0.55 reviews::owed::redrawn::tests::a_changed_line_naming_its_kind_owes_that_kind_alone
+  0.55 reviews::owed::deferred::tests::a_unit_set_aside_and_landed_is_owed_at_the_throw_back_until_its_review_is_recorded
+measure
+  0.36 measure::feature_report::tests::the_command_line_prints_writes_and_refuses
+  0.30 measure::maps_moved::tests::a_sheets_reads_and_a_skipped_picture
+  0.27 measure::work_budget_review::tests::every_held_stage_within_passes_printing_its_counts_and_what_it_could_not_count
+  0.25 measure::maps_moved::tests::what_it_cannot_tell_is_not_compared_never_unchanged
+  0.23 measure::work_budget_review::tests::the_pipeline_is_held_per_tree_and_recounted_when_a_folder_gains_a_render
+  0.23 measure::spec::runs::tests::the_triage_route_is_replayed_over_the_window
+  0.23 measure::maps_moved::tests::a_drawing_the_same_as_the_mirrors_is_unchanged
+  0.22 measure::fix_yield::tests::the_command_line
+  0.21 measure::feature_report::tests::a_feature_with_nothing_logged_still_reports
+  0.20 measure::feature_report::tests::the_report_shows_where_times_columns_for_the_feature
+plan
+  0.47 plan::lint::tests::the_label_search_is_linear_in_its_sentence
+  0.19 plan::task::tests::the_push_judges_every_touched_feature_with_a_tick_at_head
+  0.16 plan::defer::tests::a_section_decided_under_the_escape_keeps_it_when_its_block_changes
+  0.15 plan::bundle::tests::a_decision_past_a_megabyte_of_plan_is_read
+  0.15 plan::lint::tests::an_approach_block_past_a_megabyte_of_plan_done_is_found
+  0.14 plan::status::tests::a_verdict_survives_a_typo_and_nothing_more
+  0.13 plan::defer::tests::a_decided_section_is_not_refused_later_because_its_task_landed
+  0.12 plan::approach::tests::a_trigger_owes_a_block_stamped_after_it
+  0.11 plan::approach::tests::a_trigger_charges_every_task_in_flight_not_only_the_last_started
+  0.11 plan::tests::bundle::a_bundle_s_one_verdict_is_each_task_s
+task
+  1.45 task_add::tests::two_filings_at_once_keep_both_boxes_and_both_sections
+  0.84 research_boxes::every_ticked_physical_task_has_its_research_boxes_ticked
+  0.81 task_add::tests::two_worktrees_filing_at_once_take_two_ids_each_in_its_own_tree
+  0.68 builder_tree::tests::work_not_in_head_holds_a_free_tree_and_no_cold_one_is_made_past_it
+  0.56 builder_tree::tests::a_warm_handout_starts_the_pre_warm_of_what_moved_since_the_tree_s_last_handout
+  0.46 task_add::tests::the_next_id_and_the_anchors_are_read_past_a_megabyte
+  0.42 task_add::tests::each_refusal_and_raise
+  0.32 task_add::tests::perf_1_and_a_perf_title_each_file_a_task_the_reader_calls_performance_work
+  0.32 task_add::tests::a_task_takes_the_next_id_and_its_box_and_section_land_in_place
+  0.31 set_down::tests::an_owed_part_b_holds_the_set_down_until_the_arbiter_rules
+guard
+  1.91 guards::context_cap_hooks::tests::the_context_is_the_last_assistant_rows_usage
+  1.26 guards::no_poll_hooks::tests::the_frozen_corpora_through_the_pace_check
+  1.04 guards::scratch_sweep_hooks::disk::tests::the_cleanup_takes_the_idle_dead_targets_alone_and_never_while_a_build_runs_or_another_sweep_holds_the_lock
+  1.04 guards::scratch_sweep_hooks::disk::low::tests::a_build_holds_the_eviction_and_the_next_prompt_tries_again
+  0.58 guards::case_tables::the_make_only_rows_of_the_refusal_corpus_keep_their_verdicts
+  0.49 guards::idle_tests_hooks::tests::a_state_file_being_rewritten_is_read_whole
+  0.44 guards::no_poll_hooks::tests::the_shell_strings_are_the_ones_the_pattern_found
+  0.40 guards::phase_source_hooks::tests::a_search_over_a_parent_of_the_held_code_is_refused_unless_it_leaves_it_out
+  0.39 guards::make_only_hooks::tests::the_mask_finds_the_quoted_strings_the_pattern_found
+  0.38 guards::gate_write_hooks::tests::a_running_gate_lets_through_what_writes_outside_the_tree
+shared
+  8.06 guards::set_down_hooks::tests::stalls::the_idle_check_looks_again_until_its_budget
+  3.42 guards::house_style_hooks::tests::a_spelling_past_a_million_steps_is_corrected
+  1.78 context::tests::the_context_is_the_last_assistant_rows_usage
+  1.01 guards::set_down_hooks::tests::idle::the_idle_check_waits_its_seconds
+  1.01 guards::set_down_hooks::tests::idle::a_reply_during_the_idle_check_s_wait_silences_it
+  0.69 checks::handle::tests::a_later_batch_whose_moves_left_the_page_alone_keeps_the_count
+  0.53 shape::tests::quotes::the_scan_finds_the_quoted_strings_the_pattern_found
+  0.45 checks::handle::tests::a_later_batch_whose_page_another_session_moved_starts_a_fresh_count
+  0.44 tree::tests::quotes::the_scan_reads_each_quoted_string_as_the_pattern_read_it
+  0.44 shape::tests::triples::the_scan_finds_the_triple_quoted_strings_the_pattern_found

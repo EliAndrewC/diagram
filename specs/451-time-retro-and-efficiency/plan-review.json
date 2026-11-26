@@ -2160,6 +2160,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T315 (the GM, 2026-11-26, on 451 T305's repeated slow test runs: why more of a builder's test run could not be cached, T301 part 1 having answered the compile side and T316 having timed one run of `rust/gate/crates/land` on a heavily loaded machine)": {
+   "sha256": "ff4885e4c65506583e2af0b784076c7b7941200bc65d90071d3884cdd90b645d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T315 Approach (checklist part A)": {
+   "sha256": "e55346e3002a08bcc16f4405f060ab35c5fdff19f06f216ea59e118d680eebde",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -27560,6 +27572,234 @@
      "why": "An edge case of this view's own output with no in-flight list to test against. It is transient or rare, and the run is still shown or ends within seconds. It does not misstate where a task's time has gone in its categories, and it sits within the GM's 90%-correct tolerance (T243 (l)). Filed with a reason and an order."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T315 (the GM, 2026-11-26, on 451 T305's repeated slow test runs: why more of a builder's test run could not be cached, T301 part 1 having answered the compile side and T316 having timed one run of `rust/gate/crates/land` on a heavily loaded machine)",
+    "### T315 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "approach-measurement",
+     "summary": "T315 is a measurement, no code changed: it answers the GM's why with build/link/test splits, write counts and priced levers",
+     "class": "within",
+     "why": "The GM's words (request.md, 2026-11-26, T315) ask why more of the compilation could not be cached. A measurement that answers why is the request itself; it builds nothing he did not ask for."
+    },
+    {
+     "id": "verdict-answer",
+     "summary": "The answer: the slow runs were build, not tests; the build is cached as far as it can be; the first build after a handout is T316's; a build-slot wait (T347) is the largest single cost; the 4-to-8 s gap in T305's builds is left unsplit because the log cannot tell edits from first builds",
+     "class": "within",
+     "why": "It answers his sentence about compilation directly. T305's own 5.4-8.0 s builds are not fully explained: the slot wait came later (T284), and the plan says openly that the gap is not split. That is a stated limit on an answer, not a narrowing of the question."
+    },
+    {
+     "id": "constraint-no-load-generator",
+     "summary": "No load generator and no suite copies run together (the brief, the host freeze, feature 460); one run at a time; nothing T301 part 1 or T316 measured is measured again",
+     "class": "within",
+     "why": "These are limits on how the measurement is taken. They do not narrow the question. Where the limit leaves something unmeasured (T342's saving under load), the plan files a task whose first step is that measurement, rather than claiming a result."
+    },
+    {
+     "id": "lever-dev-shm",
+     "summary": "TMPDIR on /dev/shm: NO task for time (estimated at most about 0.3 s; /dev/shm is noexec)",
+     "class": "within",
+     "why": "A lever priced and declined. The GM asked why, not for this lever. It also reports the size feature 460 asked for."
+    },
+    {
+     "id": "lever-empty-template",
+     "summary": "git init with an empty template: NO task",
+     "class": "within",
+     "why": "Priced, under 0.02 s of wall a run. The GM did not ask for it."
+    },
+    {
+     "id": "lever-shared-fixture",
+     "summary": "A shared fixture repository copied per test: NO task",
+     "class": "within",
+     "why": "Priced at 0.04 to 0.13 s of wall a run. The GM did not ask for it."
+    },
+    {
+     "id": "lever-thread-count",
+     "summary": "Test thread count: NO task",
+     "class": "within",
+     "why": "Measured: 44 threads are no faster than 22. The GM did not ask for it."
+    },
+    {
+     "id": "lever-linker",
+     "summary": "A faster linker: NO task",
+     "class": "within",
+     "why": "The link is already rust-lld and under 0.25 s. The GM did not ask for it."
+    },
+    {
+     "id": "lever-check-first",
+     "summary": "A check-only pass before the test build: NO task",
+     "class": "within",
+     "why": "Cited from T301 part 1's measurement. It saves nothing on a run that compiles."
+    },
+    {
+     "id": "lever-smaller-crate",
+     "summary": "Splitting a large crate: NO task (about 1 s a run)",
+     "class": "within",
+     "why": "A cost judgment on a lever the GM did not ask for. Design and cost are not fidelity findings."
+    },
+    {
+     "id": "found-T339",
+     "summary": "rust/guard/shared's 8.06 s real-time waiting test: deferred to T339, lands before T302",
+     "class": "within",
+     "why": "A defect deferred under FR-009's form: why it is not fixed here (a stepped clock with its own proof), the filed id and its order are all stated."
+    },
+    {
+     "id": "found-T340",
+     "summary": "Orphaned sleep 5 processes hold rust/guard's output pipe open, 3.2 s a run: deferred to T340, lands before T302",
+     "class": "within",
+     "why": "FR-009's form: why (the tests that start them are not found), the id and the order are all stated."
+    },
+    {
+     "id": "found-T341",
+     "summary": "The checks' tool spends 2.0 s before an edited guard crate's build: deferred to T341, lands before T302",
+     "class": "within",
+     "why": "FR-009's form: why (where the time goes is unmeasured; perf and strace are refused), the id and the order are all stated."
+    },
+    {
+     "id": "found-T342",
+     "summary": "The checks' tool cannot run part of a crate's tests: deferred to T342, measurement first, lands before T302",
+     "class": "within",
+     "why": "FR-009's form: why (the saving under load must be measured first, and it is a new option of a command), the id and the order are all stated."
+    },
+    {
+     "id": "found-T344",
+     "summary": "The pool tree's Phase lines all carry task T285, so make task-time misbooks: deferred to T344, lands before T302",
+     "class": "within",
+     "why": "FR-009's form: why (builder-tree's and the log's code, outside a measurement), the id and the order are all stated. Booking time correctly serves the feature's own request that everything be measured."
+    },
+    {
+     "id": "found-T347",
+     "summary": "A builder's test build waits up to 57 s for one of two build slots: deferred to T347, lands before T302",
+     "class": "within",
+     "why": "FR-009's form: why (the slot count is T284's knob, retuned from a measurement), the id and the order are all stated."
+    },
+    {
+     "id": "not-defect-dev-shm",
+     "summary": "/dev/shm being noexec and 62.5 MB: not a defect, not filed",
+     "class": "within",
+     "why": "No wrong outcome: nothing uses /dev/shm. It is reported to feature 460 as the measurement that feature asked for."
+    },
+    {
+     "id": "not-defect-tool-rebuild-in-test",
+     "summary": "One land test phase rebuilt l7r-gate inside it (3.1 s once): not a defect, not filed",
+     "class": "within",
+     "why": "The rebuild happens once whichever command comes first, so the seconds move and are not added. Tests that read the machine's live state are already 451 T312's and T143's."
+    },
+    {
+     "id": "budget-460-pointer",
+     "summary": "The one landing includes feature 460's one pointer line to these measurements",
+     "class": "within",
+     "why": "A pointer, not behavior. The size figures are ones the block says 460 asked for first."
+    },
+    {
+     "id": "performance-work-no",
+     "summary": "The 'Performance work?' line answers 'no: a measurement', with the perf work booked only to the filed tasks",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This contradicts the GM's verbatim words (request.md, 2026-11-20, on measurement work): 'I would also like for this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first ... even if the task itself doesn't improve performance.' The block's reason ('a measurement'; the speed-ups belong to the filed tasks) is exactly the argument he answered. Nothing in the bundle shows the field asks anything other than FR-013's class: the block does not cite FR-013, and its text in spec-index.md is cut. Two ways to clear it: answer 'yes: a measurement task, counted as performance (the GM 2026-11-20)', or cite FR-013 so its full text shows that this field means something other than FR-013's class."
+    }
+   ],
+   "tasks": [
+    "T315"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T315 (the GM, 2026-11-26, on 451 T305's repeated slow test runs: why more of a builder's test run could not be cached, T301 part 1 having answered the compile side and T316 having timed one run of `rust/gate/crates/land` on a heavily loaded machine)",
+    "### T315 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "approach",
+     "summary": "T315 is a measurement only: no code changed, scripts and raw results kept in dev/measurements/2026-11-26/test-run-split/.",
+     "class": "within",
+     "why": "The GM's words (request.md, 2026-11-26, T315) are a why-question: 'more of the compilation was not able to be cached'. Measuring and answering it is what was asked; his 2026-11-20 words make a measurement task a performance task in its own right."
+    },
+    {
+     "id": "verdict-compile-side",
+     "summary": "Answers the caching question: the build is cached as far as it can be, a one-line edit rebuilds in 1-3 s (rustc start, incremental cache read and binary rewrite, not the edit; probe-link and e2 rows); T305's slow runs were builds (first build after a handout, load) and now a build-slot queue, not tests.",
+     "class": "within",
+     "why": "Directly answers his words about compilation caching with this task's own measurements (probe-link rows, e2 rows, body-edit.sh, T305's own event-log Phase lines). The compile-cache ceiling also cites T301 part 1, which is not in the bundle and was not checked here; the block's own figures carry the answer without it."
+    },
+    {
+     "id": "build-gap-unsplit",
+     "summary": "The recorded build medians (3-8x a one-line edit alone) are not split into own-edit, first-build-after-landings and beside-other-builds, because the event log does not record which.",
+     "class": "within",
+     "why": "A stated limit of the data, labeled as such, not a narrowing of the question: the answer to 'why not cached' still stands on the alone measurements and T305's own lines, and the first-build cause is T316's subject (already a GM-asked task)."
+    },
+    {
+     "id": "constraint-no-load-generator",
+     "summary": "No load generator and no concurrent copies of a suite (the brief, after the host freeze, feature 460); one run at a time; nothing T301 part 1 or T316 measured is re-measured.",
+     "class": "within",
+     "why": "Tested against purpose: T305's runs were under load, and the block still covers loaded behavior from T305's own event-log Phase lines, the 2026-11-25/26 phase history (57-104 lines a crate) and body-edit.sh at load 25-28 beside real builders. Not re-measuring prior tasks' figures narrows nothing the GM asked."
+    },
+    {
+     "id": "scope-test-run-and-writes",
+     "summary": "The section also splits the tests' own run (which tests start git or programs, what a run writes, sampled TMPDIR peaks) per the brief's part 2 and gives feature 460 its /dev/shm size figure.",
+     "class": "within",
+     "why": "Widens, does not narrow: measurement only, no behavior added, and it serves the GM's question of where T305's repeated test runs spent their seconds. Feature 460's figure is that feature's own ask, recorded as one pointer line."
+    },
+    {
+     "id": "levers-no-task",
+     "summary": "Seven levers priced and given NO task: /dev/shm TMPDIR, empty git template, shared fixture repository, thread count, faster linker, check-only pass, smaller crate.",
+     "class": "within",
+     "why": "Each priced by a labeled measurement or a citation and found worth under about 1 s a run; none is a defect (no wrong outcome), so declining to build them leaves nothing the GM asked undone."
+    },
+    {
+     "id": "T342-filed",
+     "summary": "Running only the tests a change reaches filed as T342, first step a measurement of its saving under load.",
+     "class": "within",
+     "why": "A new option of a command, out of a measurement's brief; filed with reason, id and order ('lands before T302'), the FR-009 form."
+    },
+    {
+     "id": "T339-deferred",
+     "summary": "rust/guard/shared's idle test waits 8.06 s of real time, the suite's whole wall; filed as T339, lands before T302.",
+     "class": "within",
+     "why": "A speed cost in test code, not a wrong outcome; the measurement builder was not briefed to change test code and the fix needs its own red-first proof. FR-009 form complete: why, id, order. T302 itself not checked (outside the bundle)."
+    },
+    {
+     "id": "T340-deferred",
+     "summary": "rust/guard tests leave sleep 5 processes holding the output pipe 3.2 s past the binary's exit; filed as T340, lands before T302.",
+     "class": "within",
+     "why": "Leftover processes are arguably a defect; deferred with why (the tests that start them not yet found, the pin belongs with the fix), id and order, per FR-009. A measurement task carrying it to a filed, ordered task is within; no GM words require a measurement task to fix what it finds."
+    },
+    {
+     "id": "T341-deferred",
+     "summary": "The checks' tool spends 2.0 s on one thread before an edited guard crate's build; filed as T341, lands before T302.",
+     "class": "within",
+     "why": "Speed cost whose site is unmeasured (perf and strace refused); FR-009 form complete."
+    },
+    {
+     "id": "T344-deferred",
+     "summary": "Every Phase line of the pool tree since 14:00 UTC carries task T285, so make task-time books T284/T305/T104/T316/T315's seconds to T285; filed as T344, lands before T302.",
+     "class": "within",
+     "why": "Unlike the others this is a wrong outcome (time booked to the wrong task), a true defect in builder-tree and the event log, outside this measurement's brief. It is not left: it is filed with why, id and an order that lands it before the next work (FR-009). Within."
+    },
+    {
+     "id": "T347-deferred",
+     "summary": "A builder's build waits up to 57.3 s for one of two build slots (451 T284); filed as T347 to retune the slot count from a measurement, lands before T302.",
+     "class": "within",
+     "why": "The slot is T284's GM-asked synchronization; retuning its count is a knob change needing its own measurement. FR-009 form complete."
+    },
+    {
+     "id": "not-defects-unfiled",
+     "summary": "/dev/shm being noexec and 62.5 MB, and a land test run rebuilding l7r-gate inside its test phase once, are recorded as not defects and not filed.",
+     "class": "within",
+     "why": "Neither is a wrong outcome: /dev/shm is unused, and the rebuild moves seconds rather than adding them; tests reading live machine state are cited to 451 T312 and T143 (not checked, outside the bundle). Constitution XIV: a difference that works is not a defect."
+    },
+    {
+     "id": "perf-classification",
+     "summary": "T315 counted as performance work for scheduling.",
+     "class": "within",
+     "why": "The GM's own words, 2026-11-20: 'I would also like for this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first.'"
+    }
+   ]
   }
  ],
  "tasks": {
@@ -43405,6 +43645,98 @@
      "summary": "a builder's background run whose shell died silently stays listed as in the background, and one ending during the read is dropped from its builder's line; filed T349, lands before T22",
      "class": "within",
      "why": "An edge case of this view's own output with no in-flight list to test against. It is transient or rare, and the run is still shown or ends within seconds. It does not misstate where a task's time has gone in its categories, and it sits within the GM's 90%-correct tolerance (T243 (l)). Filed with a reason and an order."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T315": {
+   "section_sha256": "ae8a66e34e009573e28b2137152414a8134316ed03c356270d3dfe50a9478a28",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "approach",
+     "summary": "T315 is a measurement only: no code changed, scripts and raw results kept in dev/measurements/2026-11-26/test-run-split/.",
+     "class": "within",
+     "why": "The GM's words (request.md, 2026-11-26, T315) are a why-question: 'more of the compilation was not able to be cached'. Measuring and answering it is what was asked; his 2026-11-20 words make a measurement task a performance task in its own right."
+    },
+    {
+     "id": "verdict-compile-side",
+     "summary": "Answers the caching question: the build is cached as far as it can be, a one-line edit rebuilds in 1-3 s (rustc start, incremental cache read and binary rewrite, not the edit; probe-link and e2 rows); T305's slow runs were builds (first build after a handout, load) and now a build-slot queue, not tests.",
+     "class": "within",
+     "why": "Directly answers his words about compilation caching with this task's own measurements (probe-link rows, e2 rows, body-edit.sh, T305's own event-log Phase lines). The compile-cache ceiling also cites T301 part 1, which is not in the bundle and was not checked here; the block's own figures carry the answer without it."
+    },
+    {
+     "id": "build-gap-unsplit",
+     "summary": "The recorded build medians (3-8x a one-line edit alone) are not split into own-edit, first-build-after-landings and beside-other-builds, because the event log does not record which.",
+     "class": "within",
+     "why": "A stated limit of the data, labeled as such, not a narrowing of the question: the answer to 'why not cached' still stands on the alone measurements and T305's own lines, and the first-build cause is T316's subject (already a GM-asked task)."
+    },
+    {
+     "id": "constraint-no-load-generator",
+     "summary": "No load generator and no concurrent copies of a suite (the brief, after the host freeze, feature 460); one run at a time; nothing T301 part 1 or T316 measured is re-measured.",
+     "class": "within",
+     "why": "Tested against purpose: T305's runs were under load, and the block still covers loaded behavior from T305's own event-log Phase lines, the 2026-11-25/26 phase history (57-104 lines a crate) and body-edit.sh at load 25-28 beside real builders. Not re-measuring prior tasks' figures narrows nothing the GM asked."
+    },
+    {
+     "id": "scope-test-run-and-writes",
+     "summary": "The section also splits the tests' own run (which tests start git or programs, what a run writes, sampled TMPDIR peaks) per the brief's part 2 and gives feature 460 its /dev/shm size figure.",
+     "class": "within",
+     "why": "Widens, does not narrow: measurement only, no behavior added, and it serves the GM's question of where T305's repeated test runs spent their seconds. Feature 460's figure is that feature's own ask, recorded as one pointer line."
+    },
+    {
+     "id": "levers-no-task",
+     "summary": "Seven levers priced and given NO task: /dev/shm TMPDIR, empty git template, shared fixture repository, thread count, faster linker, check-only pass, smaller crate.",
+     "class": "within",
+     "why": "Each priced by a labeled measurement or a citation and found worth under about 1 s a run; none is a defect (no wrong outcome), so declining to build them leaves nothing the GM asked undone."
+    },
+    {
+     "id": "T342-filed",
+     "summary": "Running only the tests a change reaches filed as T342, first step a measurement of its saving under load.",
+     "class": "within",
+     "why": "A new option of a command, out of a measurement's brief; filed with reason, id and order ('lands before T302'), the FR-009 form."
+    },
+    {
+     "id": "T339-deferred",
+     "summary": "rust/guard/shared's idle test waits 8.06 s of real time, the suite's whole wall; filed as T339, lands before T302.",
+     "class": "within",
+     "why": "A speed cost in test code, not a wrong outcome; the measurement builder was not briefed to change test code and the fix needs its own red-first proof. FR-009 form complete: why, id, order. T302 itself not checked (outside the bundle)."
+    },
+    {
+     "id": "T340-deferred",
+     "summary": "rust/guard tests leave sleep 5 processes holding the output pipe 3.2 s past the binary's exit; filed as T340, lands before T302.",
+     "class": "within",
+     "why": "Leftover processes are arguably a defect; deferred with why (the tests that start them not yet found, the pin belongs with the fix), id and order, per FR-009. A measurement task carrying it to a filed, ordered task is within; no GM words require a measurement task to fix what it finds."
+    },
+    {
+     "id": "T341-deferred",
+     "summary": "The checks' tool spends 2.0 s on one thread before an edited guard crate's build; filed as T341, lands before T302.",
+     "class": "within",
+     "why": "Speed cost whose site is unmeasured (perf and strace refused); FR-009 form complete."
+    },
+    {
+     "id": "T344-deferred",
+     "summary": "Every Phase line of the pool tree since 14:00 UTC carries task T285, so make task-time books T284/T305/T104/T316/T315's seconds to T285; filed as T344, lands before T302.",
+     "class": "within",
+     "why": "Unlike the others this is a wrong outcome (time booked to the wrong task), a true defect in builder-tree and the event log, outside this measurement's brief. It is not left: it is filed with why, id and an order that lands it before the next work (FR-009). Within."
+    },
+    {
+     "id": "T347-deferred",
+     "summary": "A builder's build waits up to 57.3 s for one of two build slots (451 T284); filed as T347 to retune the slot count from a measurement, lands before T302.",
+     "class": "within",
+     "why": "The slot is T284's GM-asked synchronization; retuning its count is a knob change needing its own measurement. FR-009 form complete."
+    },
+    {
+     "id": "not-defects-unfiled",
+     "summary": "/dev/shm being noexec and 62.5 MB, and a land test run rebuilding l7r-gate inside its test phase once, are recorded as not defects and not filed.",
+     "class": "within",
+     "why": "Neither is a wrong outcome: /dev/shm is unused, and the rebuild moves seconds rather than adding them; tests reading live machine state are cited to 451 T312 and T143 (not checked, outside the bundle). Constitution XIV: a difference that works is not a defect."
+    },
+    {
+     "id": "perf-classification",
+     "summary": "T315 counted as performance work for scheduling.",
+     "class": "within",
+     "why": "The GM's own words, 2026-11-20: 'I would also like for this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first.'"
     }
    ],
    "verdict": "CLEAR"

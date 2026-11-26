@@ -71,6 +71,7 @@ host session runs it while a candidate fix is under load.
 - 449 T101's leak pin (`rust/gate/crates/rustc/src/rustc.rs`, `leak_checked`) already gives each crate's gate-run tests their
   own `TMPDIR` under `/tmp`: the place a memory-backed test directory would change, though a binary run directly bypasses it.
 - 451 T312 and T143 (open): tests that read or write the machine's live state.
+- 451 T315 (2026-11-26, a measurement): where seven suites' tests write their temporary files, the sampled peak size and file count of one run of each, the file and sync calls of a run counted, and what the container's `/dev/shm` does to a suite run there - `specs/451-time-retro-and-efficiency/plan.md`, section T315, "What a run writes" and the first row of "The levers, each priced"; its scripts and raw results are `dev/measurements/2026-11-26/test-run-split/`. One copy of a suite alone was measured, never the load of `host-findings.md`, "What happened".
 
 ## To settle when the feature is worked (not decided here)
 

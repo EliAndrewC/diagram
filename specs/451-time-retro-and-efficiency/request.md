@@ -363,3 +363,11 @@ by that builder, who did not hear them):
 
 The rest of T293's line is the coordinating session's: the command's name, what it lists, and the measurement of what the
 existing reports showed of a task not yet landed.
+
+## 2026-11-26: what a builder's test run spends its seconds on (451 T315)
+
+A builder (451 T305) ran its tests five times, about 19 s a run as the coordinating session's line has it. The GM, 2026-11-26, as the
+coordinating session recorded his words on T315's line in `tasks.md` (commit 70b11ff7a8; copied here from that line by T315's builder,
+who did not hear them; the line frames them as his asking why, and the quoted words are all it holds of his):
+
+> more of the compilation was not able to be cached
