@@ -218,7 +218,7 @@ Cost: 4 dispatches, about 152k subagent tokens, under 5 minutes of agent time; 0
    the upper edge and one down the brook's flank - canal A along the head and down the far flank, canal B (the 4.0 ft one) down
    the brook's flank"; drop "the page's far-edge canal". Same 0068 row.
 3. `rust/phases/src/field/brook.rs::brook#the tap's stride` (DRIFTED, fix: claim) - no longer "silent": "GUESS
-   research/questions/0059-...drawing.html: the brook holds the intake's line about 70 ft below a shoulder intake, the page's
+   question 0059 (abbreviated in the session record): the brook holds the intake's line about 70 ft below a shoulder intake, the page's
    guess; the plan's tap stride, none in toward the flank's line across it". Cite 0059 drawing item `brook-line-below-intake`.
 4. `rust/phases/src/driver.rs::BROOK_TAP_RUN#the brook's course` (MISLABELED) - relabel `GUESS research/questions/0059-...
    drawing.html` for the 70 ft (item `brook-line-below-intake`); the slew, skirt, wander and station constants' "as

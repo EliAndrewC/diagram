@@ -47,7 +47,7 @@ Paid dispatches: 1 arbiter, 3 impl-drift, 1 modal-triage, 8 modal-depiction = 13
   ±0.6 matches §116 ... fix: claim".
 - `seat/margins.rs::SQUARE_EPS#the square end in` MISLABELED (directed; recorded, was IN-STEP): "a bare GUESS, but ... 0031 §20 admits a fall
   'across' the wind, and §21 seats such a hamlet at 'the windward corner at the head of its fields' ... label should be `GUESS
-  research/questions/0031-...drawing.html`".
+  question 0031 (abbreviated in the session record)`".
 - `field/dry.rs::hem#a column's climb ends` DRIFTED (directed; recorded): "0006's drawing page now says it: 'Where a strip's lower or
   upper edge would run under half a plot's length, that strip is not drawn' ... fix: claim (cite 0006 drawing §158 ...; 0011 §166 for
   the climb); effect: none".
@@ -146,7 +146,7 @@ record-format third round went to the arbiter and was accepted without a run.
 - `field/dry.rs::pinched#the pinch`: the same citation of `dry-plot-taper-at-bend`.
 - `field/dry.rs::hem#a column's climb ends`: cite 0006 drawing `dry-plot-taper-at-bend` for the pinch at half a plot's length, with
   0011 drawing for the climb.
-- `field/dry.rs::hem#the last band from the canal's start`: "GUESS research/questions/0011-...drawing.html (the clearing starts from
+- `field/dry.rs::hem#the last band from the canal's start`: "GUESS question 0011 (abbreviated in the session record) (the clearing starts from
   the plots nearest the toe): from the toe end of the canal, up along it, until the need is met".
 - `seat.rs::open_at_an_end`: the GUESS cites 0035 wrongly. Cite 0031 drawing (its track leaves by the open bank) and 0081 drawing (six-tenths
   to each end, `BAND_EXITS`).

@@ -90,7 +90,7 @@ Not restatements, left alone: T001-T006 (research and drawing), T18-T20 (latent 
 | buildings.md kitchen garden at the dwelling | DRIFTED known 11-23 | ALREADY FIXED on the sheet; REAL doc edit | see above |
 | buildings.md modest compound shrine | MISLABELED 11-23 | REAL, small | = T012 |
 | palette.rs ROLE_NAMES the palette's table | MISLABELED 11-17 | ALREADY FIXED | palette.rs l.42-44 now carry "the tax archive drawn as a kura - 0100.drawing", "a storehouse drawn as a kura - GUESS", "the granary's two forms - 0098.drawing" - the three claims the finding asked for, each IN-STEP in the index dated 11-18, a day after this verdict |
-| grounds.rs shrine_tree | MISLABELED 11-23 | ALREADY FIXED | l.494 now "GUESS research/questions/0218-...drawing.html#shrine-tree"; the index still holds the old text, and the report says `owed 0` |
+| grounds.rs shrine_tree | MISLABELED 11-23 | ALREADY FIXED | l.494 now "GUESS question 0218 (abbreviated in the session record)#shrine-tree"; the index still holds the old text, and the report says `owed 0` |
 | fixtures.rs tree | MISLABELED 11-23 | ALREADY FIXED | l.201 now "GUESS ...#shrine-tree" |
 | layout.rs TREE_ROOM | MISLABELED 11-23 | ALREADY FIXED | l.71 now "GUESS ...#shrine-tree" |
 | sun.rs SMALL_BUILDING_FT | DRIFTED known 11-17 | REAL, small (page + claim) | see above |
