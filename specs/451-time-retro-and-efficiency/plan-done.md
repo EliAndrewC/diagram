@@ -13393,3 +13393,47 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 
 
 <!-- plan-archive: T262 to T261 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-26 -->
+### T263 (449/451's landing gate, 2026-11-26: `an_unchanged_mid_task_notice_is_said_once_then_in_one_line` failed once on its first assertion and passed 4 of 4 repeats)
+
+- **Approach**: the cause is the test fixture's copy, and the fix is in the fixture (`rust/guard/src/guards/clone_sync_hooks/tests.rs`); no code of the guard changes.
+  - **Not 451 T258's state restore.** The fixture clone's `scripts/sync-with-main.sh` is a three-line `sh` fake (`template()`, the `script(&clone.join("scripts/sync-with-main.sh"), ...)` call): the real sync-in and its detached `state-sync.sh restore` never run in a clone-sync test. Observed 2026-11-26, method: the fixture read.
+  - **The cause.** `World::new` copied the template with `copy()`, `std::fs::copy` a file, so THIS process held each world's script open for writing while it wrote it. A thread forking in another test copies every open descriptor until its child execs - the hazard `write_executable` (`rust/guard/src/guards.rs`) already names and avoids for the scripts a test writes; the fixture's copy of them was outside it. A child forked during the copy of the fake and slow to its exec (the gate's load) still holds the script open for writing when the hook runs it: the kernel refuses the exec ("Text file busy"), `ask` returns code -1 with no output, and `refresh_mirror` takes its failed branch.
+  - **The notice in the failing case** is `clone-sync: <clone> has uncommitted work (mid-task) - clone merge skipped; mirror refresh FAILED: ` with nothing after the colon. This is RECONSTRUCTED by forcing (below), not recovered: the red gate's record (`fc74a396a0`) keeps the result, not the test's output, and the assertion printed no text. Any failure to start the script (the descriptor race, or a fork refused under load) gives this same notice; the descriptor race is the one this fixture makes possible that its neighbors do not, and the one forced.
+  - **The fix.** `copy()` is one `cp -a <template>/. <world>`: `cp`, a child, holds the only descriptors that write a world's files and has exited when `copy` returns, so no fork of this process can inherit one. All four fakes (the clone's sync, the tree's `l7r-gate.sh` and `layout_carry.sh`) are covered at once, where a fix a script would leave the next one added exposed. The why is at `copy` with "do not copy a world's scripts in-process again"; the module's header no longer says "copied in-process".
+  - **The first assertion prints the notice** (`"{full}"`), so a failure of it shows what was said.
+  - **No kept test forces the race.** `std::fs::copy` has no point between its open and its close a test can stop at, and the fixed copy holds no descriptor to hand a child; the forcing below was a stub in the unfixed copy, kept as a diff in the builder's scratch and described here. A kept test that hands the script to a child and reads `FAILED: ` would pin the kernel's "Text file busy", not this code.
+  - **The guard is not changed.** In a real clone the script is a tracked file git wrote, never one this process holds open, so the notice cannot differ there for this reason. That a refresh which cannot START its script says `FAILED: ` with nothing after it is left as it is: it is the same branch a failing script takes, and it is said in full every time.
+  - **Time**: measured 2026-11-26 (`<test binary> clone_sync_hooks`, the 27 clone-sync tests in one process, the harness's own `finished in`, on a machine other sessions were loading), 0.20 s on one run before and 0.15 to 0.51 s over five runs after, the copy now one child a world where it was a copy a file in-process. No figure here is a target.
+  - **Siblings: every way a test of `rust/guard` could run a file its own process wrote**, observed 2026-11-26, method: `grep -rn` over `rust/guard/**/*.rs` for each form, every hit read. The kernel refuses only a file run DIRECTLY (the program a `Command` names, or a `#!` script) while it is open for writing; a file handed to `bash` as an argument is only read. So an instance needs a file made executable or copied executable in-process, or an executable one rewritten in-process:
+    - made executable in-process (`from_mode(`, `set_permissions`, any `0o` mode literal, `.mode(0o`, a `chmod` child): `finished_run_hooks/runs/tests.rs` marks its files `0o755` and only parses their names, never runs them; the scratch-sweep tests restore a directory's mode; `tool.rs` opens a lock file `0o644`; every `chmod` hit is a command line under test as text. No instance.
+    - copied in-process (`fs::copy`): the fixture's `copy`, fixed here; `review_round_hooks.rs` copies plan files it never runs. No other instance.
+    - an executable rewritten in-process (`fs::write`, `File::create`, `OpenOptions` on a path ending `.sh` or under a `scripts/`, `bin/` or `hooks/` directory): the clone-sync tests write none of the template's fakes (they change one only through `script`, which is `write_executable`); `ledger_hooks/tests.rs`, `finished_run_hooks/tests.rs` and `runs/tests.rs`, `record_edit_gate/tests.rs` and `wait/tests.rs` write plain files with no mode and no `#!`, which their guards run as `bash <file>` or only read. No instance.
+    - the fakes a test does run directly are written by `write_executable` (`install`, a child), `script` here and `exe` in `suite_tools/bench/tests.rs` among them.
+    The crates outside `rust/guard` were not searched: the task is this guard's test.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the clone-sync fixture's worlds are copied by no descriptor of the test process | forced red on the unfixed copy by the stub of item 9 (2026-11-26); fixed at `copy`, its why and "do not" beside it; no kept pin, for the reason above | n/a: tooling | none | n/a |
+| a failed first assertion shows the notice | the assertion's `"{full}"`, seen in the forced red's output (2026-11-26) | n/a: tooling | none | n/a |
+
+### T263 Approach (checklist part A)
+
+1. **The goal, in the world.** The clone-sync tests give the same verdict on a loaded machine as on an idle one: a landing gate is not turned red by a fixture's own descriptors, and a red first assertion shows the notice it read.
+2. **The constraints.** T263's line in tasks.md: find the race, make the test deterministic, red-first by forcing the interleaving; the brief: fix the cause, not a retry. Constitution XIV: fix the defect where it is found.
+3. **Where each comes from.** O: the gate's red run of 2026-11-26 (`fc74a396a0`, `failed: static`) and the 4 of 4 green repeats, in T263's line; O: the forced red of item 9.
+4. **Do they describe the world here?** Yes for the failure and its mechanism: the stub of item 9 turns exactly this test's first assertion red, every run, measured 2026-11-26. The task's likeliest actor (T258's restore) does not describe it: the fixture runs a fake sync (the fixture read, 2026-11-26).
+5. **The order.** Any time; nothing waits on it.
+6. **The exits.** Green: `make closing-checks T=T263`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none. One probe did not reproduce it unforced, measured 2026-11-26 (a 110 s loop over the unfixed test binary, `clone_sync_hooks --test-threads 64`, beside 66 busy loops on 22 cores): 0 failures in 37 runs of the 27 clone-sync tests. The race needs a child stalled between its fork and its exec for as long as a world's copy takes to reach its first prompt, which CPU load alone rarely gives.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, 2026-11-26, on the unfixed `copy` with the assertion's `"{full}"`: a stub after the copy of `scripts/sync-with-main.sh` in the world `midtask-once` opened the copied script for append and gave the handle to a `sleep 3` child as its stdout - the stand-in for another thread's child forked during the copy and not yet at its exec. `make rust-test CRATE=rust/guard FRESH=1 REASON=...` gave 520 passed and 1 failed, the failure this test at its first assertion, printing `clone-sync: <world>/diagram/.clones/mine has uncommitted work (mid-task) - clone merge skipped; mirror refresh FAILED: `. The stub removed and the code still unfixed: 521 passed. With the fix (no stub can be placed: the process opens no world file for writing): 521 passed and 0 failed (the same command, 2026-11-26).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The check it breaks: a landing's `make done` went red on work that was sound (451 T262's first gate), costing a second gate. No map changes.
+
+**Found and left?** none.
+
+**Performance work?** no.
+
+
