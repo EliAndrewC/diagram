@@ -85,7 +85,7 @@ I ran the pass read-only: archive first, then the web. Every page I read is on t
 - "The land is divided up by streams into tiny pieces which are called yu. Each yu is surrounded by water."
 - "A big trench has therefore to be constructed in the lowest part of the whole dish-shaped yu."
 - "Along the margin of each yu, ten to thirty metres of land is left for plantation of mulberry trees."
-- **Reading:** the drain is at the centre and the bounding water is natural stream. There is no ring at the inside foot.
+- **Reading:** the drain is at the center and the bounding water is natural stream. There is no ring at the inside foot.
 
 **King, Pearl delta (as in E):** gate canals with head channels "at right angles", fields "in long straight lands".
 
@@ -112,7 +112,7 @@ None supports 1.2–2.5 ft. The narrowest delta figure is 6–8 ft. For whether 
 
 **Second question: SILENT** on the form of a ring canal at the inside foot of the dike. No source names one:
 - Jia Dan puts the bounding channels outside the dike, cut straight and chessboard-fashion.
-- Fei (1936) puts the drain at the centre.
+- Fei (1936) puts the drain at the center.
 - Shen Kuo's interior is a ruled grid of 溝/澮, 「直曲相望」. The phrase admits both straight and bent stretches "by rule", so it supports neither "waver gently" nor "square corners" decisively.
 - Only the 1950s dike-pond 河涌 are described as winding (Tian), and those are creeks, not a ring.
 
