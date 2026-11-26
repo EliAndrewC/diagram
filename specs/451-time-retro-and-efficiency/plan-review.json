@@ -1908,6 +1908,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T268 (451 T263's forced red, 2026-11-26: a sync script that cannot START left the clone-sync notice ending `mirror refresh FAILED: ` with nothing after the colon)": {
+   "sha256": "6f42aa7eaa4673a63b10432af5c5f7ca268bcd02f2679da924941d2591c5e255",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T268 Approach (checklist part A)": {
+   "sha256": "91913c38c13ab8f77e826cbbea5008ad6e58a0413ec0f236870272dfa073b03d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -24224,6 +24236,120 @@
      "why": "Nothing known is left unfixed; the scheduling label does not change what the task builds."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T268 (451 T263's forced red, 2026-11-26: a sync script that cannot START left the clone-sync notice ending `mirror refresh FAILED: ` with nothing after the colon)",
+    "### T268 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "ask_started",
+     "summary": "A new ask_started in tool.rs returns the spawn's io::Error; ask becomes ask_started with an error answered -1 and no output, so its contract and every other caller are unchanged.",
+     "class": "within",
+     "why": "This is how the error text reaches the notice, which is what T268's task line asks for (as the plan relays it; tasks.md is not in the bundle). It narrows nothing."
+    },
+    {
+     "id": "Said-no-field",
+     "summary": "Said gains no field, because layout_carry.sh's caller prints a non-empty err and would add a line to the sync notice.",
+     "class": "within",
+     "why": "This is an implementation choice that keeps the existing notices as they were. The fix still delivers everything it promised."
+    },
+    {
+     "id": "not-inferred",
+     "summary": "The notice says 'could not be started' only when the spawn itself failed, never inferred from -1 and no output.",
+     "class": "within",
+     "why": "It makes the new wording true by construction. That serves the brief, which asks that a script that cannot start be told apart from one that ran and failed."
+    },
+    {
+     "id": "sync_script-names-script",
+     "summary": "A new sync_script helper returns the output, or the words after the notice's colon: the output's last lines as before, or 'scripts/sync-with-main.sh could not be started (<reason>)'.",
+     "class": "within",
+     "why": "Naming the script is what makes the system's reason readable, which is the task's purpose (approach item 1)."
+    },
+    {
+     "id": "sync-in-fixed-too",
+     "summary": "The clean clone's sync-in notice is fixed along with the mirror refresh that the brief names.",
+     "class": "within",
+     "why": "The same defect at a second site of the same script through the same ask is fixed where found (fix as we go; constitution XIV). That widens the work and does not narrow it. The plan gives no search command for the count of two call sites; it is not judged here (bundle only), and this is an aside, not a ruling."
+    },
+    {
+     "id": "red-first-no-race",
+     "summary": "The red test makes the script not executable and then missing, with no race; ask_started has its own test in tool.rs.",
+     "class": "within",
+     "why": "The test enforces the requested behavior. The figures 521/1 and 522/0 carry their date and command."
+    },
+    {
+     "id": "other-ask-callers-unsurveyed",
+     "summary": "Only this guard's runs of the sync script change. Other callers of ask across the guards were not surveyed for a notice with an empty tail.",
+     "class": "within",
+     "why": "The task is the clone-sync notice, and the block states no wrong outcome at any other caller. An unsurveyed site with no known defect is not a defect left. The plan's Scope bullet says plainly what was not searched."
+    },
+    {
+     "id": "ran-failed-silent-left-empty",
+     "summary": "sync_script answers every failure that is not a spawn failure with 'the output's last lines as before'. So a script that ran, failed and printed nothing (an exit with no output, or the signal-killed case the block itself names as '-1 and no output') still prints 'FAILED: ' with nothing after the colon. 'Found and left?' says none.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The task's own goal (approach item 1) is that a session reading a FAILED notice can read WHY from it. Its item 12 names the defect as a notice that says FAILED with no reason to resolve it by. The block knows a second route to that same empty tail (its 'Not inferred from the code' bullet) and keeps it inside the helper it is rewriting. That leaves a known wrong outcome of exactly the task's class, and it is not recorded. Covering it is not impossible: for example, when the tail is empty, say the script ended with its exit code (or signal) and no output. To clear: cover the case in sync_script and pin it, or record it under 'Found and left?' with why it is not fixed here, its filed task id and its order, per FR-009."
+    }
+   ],
+   "tasks": [
+    "T268"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T268 (451 T263's forced red, 2026-11-26: a sync script that cannot START left the clone-sync notice ending `mirror refresh FAILED: ` with nothing after the colon)",
+    "### T268 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "ask_started",
+     "summary": "A new ask_started in tool.rs returns the spawn's io::Error; ask becomes ask_started with an error mapped to -1 and no output, so ask's contract and its other callers are unchanged; Said gains no field.",
+     "class": "within",
+     "why": "This is how the fix carries the spawn's error to the notice, which is what T268 asks for. Leaving ask's other callers alone does not narrow anything: the task covers the clone-sync notice, and an extra err would add a line to layout_carry.sh's notice."
+    },
+    {
+     "id": "not-inferred",
+     "summary": "The notice says 'could not be started' only when the spawn itself failed, never inferred from -1 and empty output (a signal answers the same).",
+     "class": "within",
+     "why": "The brief requires telling an unstartable script from one that ran and failed. This makes that distinction true rather than guessed."
+    },
+    {
+     "id": "sync_script",
+     "summary": "One helper in clone_sync_hooks.rs runs the script for both call sites and returns the text after the colon: the output's last lines as before (two for the sync-in, one for the refresh), or 'scripts/sync-with-main.sh could not be started (<reason>)', naming the script.",
+     "class": "within",
+     "why": "It carries the system's reason into the notice, as asked. A failure that has output reads exactly as before, so existing behavior is kept wherever it worked."
+    },
+    {
+     "id": "silent-failure",
+     "summary": "A script that ran, failed and said nothing reports its exit code, or with no exit code says it gave none (a signal?), so no failure leaves the colon bare.",
+     "class": "within",
+     "why": "This is the same defect (an empty tail after FAILED:) reached another way, through the helper being written. Closing it serves the task's goal and widens nothing the GM asked for."
+    },
+    {
+     "id": "sync-in-too",
+     "summary": "The clean clone's sync-in notice is fixed as well as the mirror refresh the brief names.",
+     "class": "within",
+     "why": "It runs the same script through the same ask and has the same empty tail, so it is a known defect of the same kind, fixed where found (constitution XIV, fix as we go). It widens the brief rather than narrowing it."
+    },
+    {
+     "id": "scope-other-ask-callers",
+     "summary": "Only this guard's runs of the sync script change. Ask's other callers across the guards were not surveyed for an empty-tailed notice, and the plan says so.",
+     "class": "within",
+     "why": "Neither the task line nor any request text asks for ask's other callers. No defect in them is known, only unsurveyed, so no known defect is left unfixed. The plan states the limit openly instead of implying a survey. A fix naming a class of defect (FR-009) is not claimed."
+    },
+    {
+     "id": "tests-and-red",
+     "summary": "Red first, with the script made non-executable and then missing (no race), then exit 7, then kill -9; plus a tool.rs test of ask_started; green through make closing-checks T=T268.",
+     "class": "within",
+     "why": "These tests enforce the requested behavior and match the brief's red-first, race-free requirement."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -38448,6 +38574,56 @@
      "summary": "Found and left: none; performance work: no",
      "class": "within",
      "why": "Nothing known is left unfixed; the scheduling label does not change what the task builds."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T268": {
+   "section_sha256": "150e62e70a5271e6f7ec4ccc5014dad70b39e32b81a98f9f14ce9a1d51be87d7",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "ask_started",
+     "summary": "A new ask_started in tool.rs returns the spawn's io::Error; ask becomes ask_started with an error mapped to -1 and no output, so ask's contract and its other callers are unchanged; Said gains no field.",
+     "class": "within",
+     "why": "This is how the fix carries the spawn's error to the notice, which is what T268 asks for. Leaving ask's other callers alone does not narrow anything: the task covers the clone-sync notice, and an extra err would add a line to layout_carry.sh's notice."
+    },
+    {
+     "id": "not-inferred",
+     "summary": "The notice says 'could not be started' only when the spawn itself failed, never inferred from -1 and empty output (a signal answers the same).",
+     "class": "within",
+     "why": "The brief requires telling an unstartable script from one that ran and failed. This makes that distinction true rather than guessed."
+    },
+    {
+     "id": "sync_script",
+     "summary": "One helper in clone_sync_hooks.rs runs the script for both call sites and returns the text after the colon: the output's last lines as before (two for the sync-in, one for the refresh), or 'scripts/sync-with-main.sh could not be started (<reason>)', naming the script.",
+     "class": "within",
+     "why": "It carries the system's reason into the notice, as asked. A failure that has output reads exactly as before, so existing behavior is kept wherever it worked."
+    },
+    {
+     "id": "silent-failure",
+     "summary": "A script that ran, failed and said nothing reports its exit code, or with no exit code says it gave none (a signal?), so no failure leaves the colon bare.",
+     "class": "within",
+     "why": "This is the same defect (an empty tail after FAILED:) reached another way, through the helper being written. Closing it serves the task's goal and widens nothing the GM asked for."
+    },
+    {
+     "id": "sync-in-too",
+     "summary": "The clean clone's sync-in notice is fixed as well as the mirror refresh the brief names.",
+     "class": "within",
+     "why": "It runs the same script through the same ask and has the same empty tail, so it is a known defect of the same kind, fixed where found (constitution XIV, fix as we go). It widens the brief rather than narrowing it."
+    },
+    {
+     "id": "scope-other-ask-callers",
+     "summary": "Only this guard's runs of the sync script change. Ask's other callers across the guards were not surveyed for an empty-tailed notice, and the plan says so.",
+     "class": "within",
+     "why": "Neither the task line nor any request text asks for ask's other callers. No defect in them is known, only unsurveyed, so no known defect is left unfixed. The plan states the limit openly instead of implying a survey. A fix naming a class of defect (FR-009) is not claimed."
+    },
+    {
+     "id": "tests-and-red",
+     "summary": "Red first, with the script made non-executable and then missing (no race), then exit 7, then kill -9; plus a tool.rs test of ask_started; green through make closing-checks T=T268.",
+     "class": "within",
+     "why": "These tests enforce the requested behavior and match the brief's red-first, race-free requirement."
     }
    ],
    "verdict": "CLEAR"

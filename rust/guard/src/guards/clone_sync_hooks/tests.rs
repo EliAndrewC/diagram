@@ -626,6 +626,47 @@ fn an_unchanged_mid_task_notice_is_said_once_then_in_one_line() {
         .is_empty());
 }
 
+/// A sync script that cannot START is said as that, with the reason the system gave (451 T268): the notice ended `FAILED: ` with
+/// nothing after it, the same words a script that ran and failed without output gets. The script is made unstartable with no race:
+/// not executable, then missing.
+#[test]
+fn a_sync_script_that_cannot_start_is_said_with_the_reason() {
+    use std::os::unix::fs::PermissionsExt as _;
+    let w = World::new("unstartable");
+    w.claim("s", &w.clone);
+    let script = w.clone.join("scripts/sync-with-main.sh");
+    std::fs::set_permissions(&script, std::fs::Permissions::from_mode(0o644)).unwrap();
+    std::fs::write(w.clone.join(".making"), "").unwrap();
+    // what the notice says after the clone's path and its ` - `
+    let after = || {
+        let said = w.prompt("s", "");
+        said.split_once(" - ").unwrap().1.to_owned()
+    };
+    assert_eq!(
+        after(),
+        "clone merge skipped; mirror refresh FAILED: scripts/sync-with-main.sh could not be started (Permission denied (os error 13))"
+    );
+    std::fs::remove_file(w.clone.join(".making")).unwrap();
+    // a script that ran, failed and said nothing says its exit, and one a signal ended that it gave none
+    let resolve = "resolve before modifying the repo: scripts/sync-with-main.sh";
+    std::fs::remove_file(&script).unwrap();
+    self::script(&script, "exit 7");
+    assert_eq!(after(), format!("{resolve} exited 7 and said nothing"));
+    std::fs::remove_file(&script).unwrap();
+    self::script(&script, "kill -9 $$");
+    assert_eq!(
+        after(),
+        format!("{resolve} said nothing and gave no exit code (a signal ended it?)")
+    );
+    std::fs::remove_file(&script).unwrap();
+    let said = w.prompt("s", "");
+    assert!(said.starts_with("clone-sync: auto sync-in FAILED in "));
+    assert_eq!(
+        after(),
+        format!("{resolve} could not be started (No such file or directory (os error 2))")
+    );
+}
+
 #[test]
 fn a_mid_task_prompt_refreshes_only_the_mirror() {
     let w = World::new("midtask");

@@ -20,7 +20,7 @@ use crate::shared::log;
 use crate::shared::make::targets;
 use crate::shared::session::Session;
 use crate::shared::state::field;
-use crate::shared::tool::{ask, within, Said};
+use crate::shared::tool::{ask, ask_started, within, Said};
 
 /// The guard.
 /// The tools it takes: an edit, for the routing and the stale base, and a Bash call, for the behind-main notice. The shell was wired
@@ -629,20 +629,19 @@ fn sync(cx: &Ctx, clone: &Path) -> Vec<String> {
     } else {
         ""
     };
-    let script = "scripts/sync-with-main.sh";
     if !midtask.is_empty() {
         return refresh_mirror(cx, clone, midtask);
     }
     // a sync: the mid-task notice, when it comes back, is said in full
     crate::shared::once::clear(said(cx, clone).as_deref(), GUARD.name);
-    let out = ask(clone, script, &["sync-in", "--background-render"], "");
-    let text = both(&out);
-    if !out.ok() {
-        return vec![format!(
-            "clone-sync: auto sync-in FAILED in {c} - resolve before modifying the repo: {}",
-            tail(&text, 2)
-        )];
-    }
+    let text = match sync_script(clone, &["sync-in", "--background-render"], 2) {
+        Ok(text) => text,
+        Err(why) => {
+            return vec![format!(
+                "clone-sync: auto sync-in FAILED in {c} - resolve before modifying the repo: {why}"
+            )]
+        }
+    };
     let mut lines = vec![format!("clone-sync: auto-synced {c} with main (git)")];
     let root = clone.to_string_lossy();
     // the merge recorded as an automatic step, in process by the one writer, where `usage_log.py` was run by path (feature 449 T129)
@@ -674,24 +673,47 @@ fn both(out: &Said) -> String {
         .join("\n")
 }
 
+/// The clone's sync script run with `args`: what it said, or for a failure what the notice says after its colon - its last `keep`
+/// lines, or that it could not be STARTED and why.
+///
+/// WHY (451 T268): a script the kernel refuses to run (missing, not executable, "Text file busy" - T263's forced red) said nothing, so
+/// the notice ended `FAILED: ` with no reason, the same words as a script that ran and failed silently. The two are different faults
+/// with different fixes (the file, against what the script does), so the notice names which, with the system's own reason.
+fn sync_script(clone: &Path, args: &[&str], keep: usize) -> Result<String, String> {
+    let script = "scripts/sync-with-main.sh";
+    let out = ask_started(clone, script, args, "")
+        .map_err(|why| format!("{script} could not be started ({why})"))?;
+    let text = both(&out);
+    if out.ok() {
+        return Ok(text);
+    }
+    // a script that ran, failed and said nothing leaves the same empty tail: its exit is the one reason there is (-1: it gave no
+    // exit code, as a script a signal ended does)
+    Err(match (tail(&text, keep), out.code) {
+        (said, _) if !said.is_empty() => said,
+        (_, -1) => format!("{script} said nothing and gave no exit code (a signal ended it?)"),
+        (_, code) => format!("{script} exited {code} and said nothing"),
+    })
+}
+
 /// Mid-task: the clone is left alone and only the mirror refreshed.
 fn refresh_mirror(cx: &Ctx, clone: &Path, midtask: &str) -> Vec<String> {
     let c = clone.display();
-    let out = ask(
+    let ran = sync_script(
         clone,
-        "scripts/sync-with-main.sh",
         &["sync-in", "--mirror-only", "--background-render"],
-        "",
+        1,
     );
-    let text = both(&out);
     let record = said(cx, clone);
-    if !out.ok() {
-        crate::shared::once::clear(record.as_deref(), GUARD.name);
-        return vec![format!(
-            "clone-sync: {c} {midtask} - clone merge skipped; mirror refresh FAILED: {}",
-            tail(&text, 1)
-        )];
-    }
+    let text = match ran {
+        Ok(text) => text,
+        Err(why) => {
+            crate::shared::once::clear(record.as_deref(), GUARD.name);
+            return vec![format!(
+                "clone-sync: {c} {midtask} - clone merge skipped; mirror refresh FAILED: {why}"
+            )];
+        }
+    };
     // AN UNCHANGED MID-TASK NOTICE IS SAID ONCE (451 T170): in full, then in one line until it changes, a sync or a failed refresh
     // comes between, or a compaction forgets it; the coordinator's 1,870 prompts each carried its 172 characters, measured
     // 2026-11-23 over its transcript (`/tmp/t170/rank.py`)

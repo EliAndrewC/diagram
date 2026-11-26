@@ -1,6 +1,6 @@
 //! Asking a tool the guards consult (plan T006 decision (a)): a program run in a directory, its stdin given, its exit code and its
 //! stdout and stderr kept - the shell's `$(...)`, which strips the trailing newlines, and its `$?`. A program that cannot start
-//! answers -1 with nothing, as a guard's `2>/dev/null || true` did.
+//! answers -1 with nothing, as a guard's `2>/dev/null || true` did; `ask_started` says why it could not (451 T268).
 
 use std::fs::File;
 use std::io::{Read, Write};
@@ -28,24 +28,32 @@ impl Said {
 /// Run `program args` in `dir`, `stdin` written to it.
 #[must_use]
 pub fn ask(dir: &Path, program: &str, args: &[&str], stdin: &str) -> Said {
-    let Ok(mut child) = Command::new(program)
+    ask_started(dir, program, args, stdin).unwrap_or(Said {
+        code: -1,
+        ..Said::default()
+    })
+}
+
+/// [`ask`], for a caller that tells a program that could not START from one that ran and failed (451 T268): `ask` answers both -1
+/// with nothing, so the clone-sync notice of a sync script the kernel refused to run ("Text file busy", T263) ended `FAILED: ` with
+/// no reason after it. A code of -1 with no output is not the test for it: a program a signal killed answers the same.
+///
+/// # Errors
+///
+/// The program could not be started: what the spawn said (a missing file, one not executable, one open for writing).
+pub fn ask_started(dir: &Path, program: &str, args: &[&str], stdin: &str) -> std::io::Result<Said> {
+    let mut child = Command::new(program)
         .args(args)
         .current_dir(dir)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
-        .spawn()
-    else {
-        return Said {
-            code: -1,
-            ..Said::default()
-        };
-    };
+        .spawn()?;
     if let Some(mut pipe) = child.stdin.take() {
         let _ = pipe.write_all(stdin.as_bytes());
     }
     let text = |b: &[u8]| String::from_utf8_lossy(b).trim_end_matches('\n').to_owned();
-    child.wait_with_output().map_or(
+    Ok(child.wait_with_output().map_or(
         Said {
             code: -1,
             ..Said::default()
@@ -55,7 +63,7 @@ pub fn ask(dir: &Path, program: &str, args: &[&str], stdin: &str) -> Said {
             out: text(&done.stdout),
             err: text(&done.stderr),
         },
-    )
+    ))
 }
 
 /// Whether `program args`, run quiet in `dir`, exits 0 within `limit` - `timeout <limit> program args >/dev/null 2>&1`, its own
@@ -201,7 +209,7 @@ mod tests {
     use std::path::Path;
     use std::time::Duration;
 
-    use super::{ask, ask_within, within};
+    use super::{ask, ask_started, ask_within, within};
 
     #[test]
     fn a_tool_asked_within_a_limit_answers_or_is_killed() {
@@ -254,5 +262,20 @@ mod tests {
         );
         assert!(ask(Path::new("/"), "true", &[], "").ok());
         assert_eq!(ask(Path::new("/"), "/no/such/program", &[], "").code, -1);
+    }
+
+    #[test]
+    fn a_tool_that_cannot_start_says_why_and_one_that_ran_answers_as_asked() {
+        let why = ask_started(Path::new("/"), "/no/such/program", &[], "").unwrap_err();
+        assert_eq!(why.to_string(), "No such file or directory (os error 2)");
+        // not executable: the refusal is the exec's, as "Text file busy" is
+        assert_eq!(
+            ask_started(Path::new("/"), "/etc/hostname", &[], "")
+                .unwrap_err()
+                .kind(),
+            std::io::ErrorKind::PermissionDenied
+        );
+        let ran = ask_started(Path::new("/"), "sh", &["-c", "cat; exit 3"], "in").unwrap();
+        assert_eq!((ran.code, ran.out.as_str()), (3, "in"));
     }
 }
