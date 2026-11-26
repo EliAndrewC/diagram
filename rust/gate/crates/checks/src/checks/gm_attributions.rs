@@ -10,8 +10,15 @@
 //! What is checked: an HTML comment of a research page (`research/questions/*.html`) and a CANON claim line (`<label> - CANON...`, in
 //! the Rust under `rust/` the claims walk reads, `rust/parked` included, and in the two procedure docs) that names a ruling of the
 //! GM's ([`NAMES`]) must name, in the same comment or line, a record that holds his words and exists: `specs/<NNN-slug>/request.md`
-//! (or the `gm-request.md` gm-assistant opens for him), `docs/gm-rulings.md`, or `specs/<NNN-slug>/gm-review.jsonl` (a
-//! `make gm-reviewed` row, which carries `gm_words`). Whether the record named really holds those words is not checked: the
+//! (or the `gm-request.md` gm-assistant opens for him), `docs/gm-rulings.md`, `specs/<NNN-slug>/gm-review.jsonl` (a
+//! `make gm-reviewed` row, which carries `gm_words`), or a feature's dated rulings file, `specs/<NNN-slug>/rulings-YYYY-MM-DD.md`
+//! (451 T265: the two there are, 269's and 280's, are headed "verbatim" and hold his rulings as block quotations, the form of a
+//! `request.md`). NOT a record: a `tasks.md`, an `audit.md` or a commit message that quotes him. Each is a session's file that
+//! quotes a sentence of his second-hand, beside the session's own sentences and for the session's purpose, and since the words are
+//! not checked (below) a pointer at one would pass on a session's sentence, the failure this check was built on. 451 T251's brook
+//! claim is the instance: his words of 2026-08-26, quoted in feature 133's `tasks.md`, were of a marsh edge and never of a brook.
+//! A comment whose words stand only in such a file names the file in plain words, without calling them a ruling, as 451 T250's do.
+//! Whether the record named really holds those words is not checked: the
 //! comments paraphrase rather than quote, so a mechanical match of words would refuse most correct pointers; a pointer to the wrong
 //! record passes, and is the reviewers' to catch (an accepted limitation, the builder's choice under the record's "where the record
 //! is silent, take the algorithmically easier route", 451 T233's plan section).
@@ -39,22 +46,23 @@ const PAGES: &str = "research/questions";
 const PROCEDURES: [&str; 2] = ["docs/buildings.md", "docs/building-programs.md"];
 /// The trees under `rust/` that hold no research claim: the tooling, whose tests write attributions as fixtures.
 const NOT_CLAIMS: [&str; 5] = ["gate", "guard", "browser", "embed", "target"];
-const FIX: &str = "name the record that holds his words - specs/<NNN-slug>/request.md, docs/gm-rulings.md or specs/<NNN-slug>/gm-review.jsonl (a make gm-reviewed row); with none, it is not his ruling: say whose it is (docs/gm-rulings.md, 'NOT a ruling', the GM 2026-11-24)";
+const FIX: &str = "name the record that holds his words - specs/<NNN-slug>/request.md, docs/gm-rulings.md, specs/<NNN-slug>/gm-review.jsonl (a make gm-reviewed row) or a dated specs/<NNN-slug>/rulings-YYYY-MM-DD.md; with none, it is not his ruling: say whose it is (docs/gm-rulings.md, 'NOT a ruling', the GM 2026-11-24)";
 
 fn compiled(pattern: &str) -> Regex {
     l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 /// The words that name a ruling of the GM's: the four of the task ("the GM's ruling|catch|word|decision", singular or plural), "the
-/// GM ruled", "GM <date>" (with or without a comma), and the audit's near-twins ("the GM's rule|doctrine|correction").
+/// GM ruled", "GM <date>" (with or without a comma), the audit's near-twins ("the GM's rule|doctrine|correction"), and the same
+/// nouns after "a GM" (451 T265: "a GM ruling of 2026-09-20" stood unread on `docs/building-programs.md`'s dedication knob).
 pub(super) static NAMES: LazyLock<Regex> = LazyLock::new(|| {
     compiled(
-        r"(?i)\bthe GM's (?:ruling|catch|word|decision|rule|doctrine|correction)s?\b|\bthe GM ruled\b|\bGM,? \d{4}-\d{2}",
+        r"(?i)\b(?:the GM's|a GM) (?:ruling|catch|word|decision|rule|doctrine|correction)s?\b|\bthe GM ruled\b|\bGM,? \d{4}-\d{2}",
     )
 });
 static POINTER: LazyLock<Regex> = LazyLock::new(|| {
     compiled(
-        r"specs/[A-Za-z0-9._-]+/(?:gm-)?request\.md|docs/gm-rulings\.md|specs/[A-Za-z0-9._-]+/gm-review\.jsonl",
+        r"specs/[A-Za-z0-9._-]+/(?:gm-)?request\.md|docs/gm-rulings\.md|specs/[A-Za-z0-9._-]+/gm-review\.jsonl|specs/[A-Za-z0-9._-]+/rulings-\d{4}-\d{2}-\d{2}\.md",
     )
 });
 static COMMENT: LazyLock<Regex> = LazyLock::new(|| compiled(r"(?s)<!--.*?-->"));

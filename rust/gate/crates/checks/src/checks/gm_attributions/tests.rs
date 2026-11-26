@@ -43,7 +43,7 @@ fn an_attribution_with_no_record_is_refused_where_it_stands() {
     )));
     assert!(out.stderr.contains(&format!("{RUST}:2: a claim")));
     assert!(out.stderr.contains(
-        "specs/<NNN-slug>/request.md, docs/gm-rulings.md or specs/<NNN-slug>/gm-review.jsonl"
+        "specs/<NNN-slug>/request.md, docs/gm-rulings.md, specs/<NNN-slug>/gm-review.jsonl (a make gm-reviewed row) or a dated specs/<NNN-slug>/rulings-YYYY-MM-DD.md"
     ));
     assert_eq!(out.stderr.lines().count(), 2);
 }
@@ -69,6 +69,62 @@ fn a_pointer_that_resolves_backs_it_and_one_that_does_not_is_named() {
     assert_eq!(run(&root, &[]).code, 0);
 }
 
+/// 451 T265: his verbatim words also stand in a feature's dated rulings file; a file that quotes him second-hand backs nothing.
+#[test]
+fn a_dated_rulings_file_backs_it_and_a_second_hand_file_does_not() {
+    let root = tree("gma-rulings");
+    put(&root, RUST, "");
+    for held in [
+        "audit.md",
+        "tasks.md",
+        "rulings-notes.md",
+        "rulings-2026-09-28.md",
+    ] {
+        put(&root, &format!("specs/269-b/{held}"), "> his words");
+    }
+    for second_hand in ["audit.md", "tasks.md", "rulings-notes.md"] {
+        put(
+            &root,
+            PAGE,
+            &format!("<!-- the GM's ruling (specs/269-b/{second_hand}) -->\n"),
+        );
+        let out = run(&root, &[]);
+        assert_eq!(out.code, 1, "{second_hand}");
+        assert!(!out.stderr.contains("does not exist"), "{second_hand}");
+    }
+    put(
+        &root,
+        PAGE,
+        "<!-- the GM's ruling (specs/270-c/rulings-2026-09-28.md) -->\n",
+    );
+    assert!(run(&root, &[])
+        .stderr
+        .contains("(specs/270-c/rulings-2026-09-28.md does not exist)"));
+    put(
+        &root,
+        PAGE,
+        "<!-- the GM's ruling (specs/269-b/rulings-2026-09-28.md) -->\n",
+    );
+    assert_eq!(run(&root, &[]).code, 0);
+}
+
+/// 451 T265: the wording that slipped past the pattern, on a claim line as `docs/building-programs.md` carried it.
+#[test]
+fn a_gm_ruling_is_read_as_the_gms_ruling_is() {
+    let root = tree("gma-a");
+    put(&root, PAGE, "");
+    put(
+        &root,
+        RUST,
+        "///     dedication knob - CANON: Inari the ordinary rural dedication, a GM ruling of 2026-09-20\n",
+    );
+    let out = run(&root, &[]);
+    assert_eq!(out.code, 1);
+    assert!(out.stderr.contains(&format!(
+        "{RUST}:1: a claim names a ruling of the GM's (\"a GM ruling\")"
+    )));
+}
+
 #[test]
 fn each_naming_form_is_matched_and_a_plain_mention_is_not() {
     for said in [
@@ -81,10 +137,12 @@ fn each_naming_form_is_matched_and_a_plain_mention_is_not() {
         "the GM's rule of",
         "the GM's doctrine",
         "the GM's correction",
+        "a GM ruling of 2026-09-20",
+        "A GM decision",
     ] {
         assert!(NAMES.is_match(said).unwrap(), "{said}");
     }
-    for said in ["the GM's notes", "asked the GM", "GM review"] {
+    for said in ["the GM's notes", "asked the GM", "GM review", "a GM review"] {
         assert!(!NAMES.is_match(said).unwrap(), "{said}");
     }
 }
