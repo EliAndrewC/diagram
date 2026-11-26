@@ -72,7 +72,11 @@ This file is loaded on demand, so a declined option recorded here costs no auto-
     removed worktree's build directory, 451 T245); for a tree that lands again each drop costs a cold coverage build, up to
     512 s against 123 s warm, to free about 41 GB (the session clone) and 24 GB (the landing tree). Declined under the
     pre-approval, and by the GM's own word, 2026-11-26: *"I agree that time is more important than disk space, and we
-    definitely want those extra 6 minutes more than we want the 65G"*. Reopens only on his word. What the
+    definitely want those extra 6 minutes more than we want the 65G"*. Reopens only on his word.
+  - THE PRINCIPLE, for every disk rule (the GM, 2026-11-26, on an idle cache the host session's scan had found): *"the guiding
+    principle is still time saved is more important than disk usage. So we definitely don't want to clean things up if it is
+    going to cost us time later."* A cache is evicted for being unreusable (its tree removed, its hashes no live build
+    configuration can produce) or under real disk pressure (below 20% free), never for being idle (451 T278, T301). What the
     measurement found instead: 20 of cover-gate's 21 GB of incremental data is stale variants (the sweep keeps 16 a crate,
     after 12 idle hours); pruning them sooner is 451 T278.
 
@@ -195,7 +199,12 @@ figures alone.
 
 **What followed.** `scripts/container/builder-brief.md` gained its SIZING rule, read before a brief is written, and the root
 `CLAUDE.md` one line pointing at it. No guard: the rule is the coordinating session's judgment of a task's size, which a hook
-cannot count without firing on correct work. The cap's guard and constant are unchanged. The audit entries are
+cannot count without firing on correct work. Tightened 2026-11-26 on the GM's word ("go ahead and make whatever
+tweaks you think are necessary there to the process of handing things off based on these measurements, findings, and
+guesses"): a new guard or a new command is a builder of its own, and a brief of more than one job names the order and where to
+stop. The day's figures: one of about fifteen builders reached the cap (the pool task, 307k, three jobs of that size) and one
+ended at 296k (two), the rest at 122k to 174k - about 7% against the 28% before sizing; the two additions are a judgment from
+those two cases, labeled GUESS, and trial 457 re-measures the rate. The cap's guard and constant are unchanged. The audit entries are
 `dev/audits/builder-brief-sizing.md` (new) and `dev/audits/builders-context-cap.md` (its measurement brought up to these
 figures). **Falsifier:** over a week of builders briefed under the rule, measured by the M1 method, the handoff rate not
 falling below about one in five (it was 28%) - then sizing the brief is not the lever, and the task's own size or the cap is

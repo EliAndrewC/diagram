@@ -20,4 +20,5 @@ Caveats the audit carries: the six one-job briefs handed off half the time (3 of
 predict; the groups are small. Whether builders beat no builders per landed task is `delegating-to-builders.md`'s question, still
 unmeasured. The cap itself is `builders-context-cap.md`.
 
-The audit re-runs `m1.py` and `m1b.py` over the builders dispatched since the rule (2026-11-25) and compares the handoff rate with 28%.
+Tightened 2026-11-26 (a new guard or command is a builder of its own; a several-job brief names its order and stop), a GUESS
+from two cases; trial `specs/457-builder-handoff-rate/` re-measures the handoff rate. The audit re-runs `m1.py` and `m1b.py` over the builders dispatched since the rule (2026-11-25) and compares the handoff rate with 28%.

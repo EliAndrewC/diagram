@@ -17,6 +17,11 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
 
 - ONE task a builder.
 - At most THREE jobs in a brief. A measurement or sweep, a build, a found defect's fix and written content each count as one.
+- A NEW GUARD (with its suite) or a NEW COMMAND is a builder of its own: it is several jobs' size, whatever it counts as
+  (2026-11-26: the pool task, three such jobs, reached the cap at 307k; the landing refusals, two, finished at 296k; fifteen
+  other builders that day ended at 122k to 174k).
+- A brief of more than one job NAMES THE ORDER and the stop: "if these will not fit, finish <job> whole, stop, and report
+  the rest as not started" - so a builder near its cap stops at a job's boundary and its successor takes up a whole job.
 - A task expected to edit more than about three files, or needing a measurement first, is SPLIT into builders that hand results
   along, a measuring agent first: its report (the figures, the paths, the commands) is the next builder's brief.
 - A one-turn edit is yours, the coordinating session's, not a builder's.

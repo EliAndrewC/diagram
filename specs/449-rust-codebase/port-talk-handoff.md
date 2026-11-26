@@ -32,6 +32,9 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 - DECIDED 2026-11-26, the output style: the conversational style stays (his words in the declined entry).
 - **Item 10** long-running against small features: trial `specs/456-feature-size-friction/` re-measures it, not before
   2026-11-28, on the landings since the fixes.
+- **The builders' context cap and brief sizing**: trial `specs/457-builder-handoff-rate/` re-measures the handoff rate, not
+  before 2026-11-28 (7% on 2026-11-26 against 28% before sizing; the rule tightened that day). The GM wants both trials
+  talked about before the port resumes.
 - **Item 11** whether everything must be a spec-kit feature: a measurement of what the task route adds over a direct tweak was
   started 2026-11-26 (its result in `dev/measurements/2026-11-26/` when done).
 - **Extending the early build to the SPEC review**: his (it amends constitution XVI); a measurement of how often a first spec
@@ -40,7 +43,8 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 ## Before the port resumes (the GM, 2026-11-26)
 
 - "I agree that all of our tooling fixes around work trees need to land before we resume the port." The set: 451 T159, T275,
-  T281, T284, T286, T288, T294, T295, T296, T297, T300 (landed already: T285 the warm pool, T292 the landing refusals and
+  T281, T284, T286, T288, T294, T295, T296, T297, T300, and the disk follow-ups T278 and T301 ("we should make sure to fix all of this as part of our
+  tasking that we are doing before resuming our port. But after we talk about the most efficient way to parallelize") (landed already: T285 the warm pool, T292 the landing refusals and
   `make carry`).
 - The sequence he approved ("Your proposed sequence ... sounds right to me, so yes, please proceed with that"): (1) the pool
   lands - done; (2) round one, three builders at once in warm pool trees with no build slot yet, on T284, T295 and T281, the
