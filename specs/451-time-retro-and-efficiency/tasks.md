@@ -183,3 +183,19 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T265 docs/building-programs.md's dedication knob cites 'a GM ruling of 2026-09-20' no record holds, and it and 0222's drawing-page comment cite each other (451 T251 and T250 batch 3, 2026-11-26; only features 253-257's requests were searched): repeat the search over every request.md, gm-request.md and gm-review.jsonl and the GM's notes, then cite the record or relabel both; and l7r-gate check gm-attributions reads the wording 'a GM ruling' (its pattern misses it today)
       research: rendering
+- [ ] T266 HTML comments count toward a research question's 20,000-byte size cap, so a comment-only fix can trip it (0068, 0072, 0241 and 0242 sit within 20 bytes after 451 T250): measure what the cap protects and count visible prose only, or say why comments count
+      research: rendering
+- [ ] T267 make claims-checked crashes with 'File exists (os error 17)' in a linked worktree when a reply line is held: silent::SEARCHED joins .git/claims-searched.json onto the root (rust/gate/crates/claims/src/claims/commands.rs:384) and .git is a file there - resolve the git dir as the other state files do
+      research: rendering
+- [ ] T268 the clone-sync notice reads 'mirror refresh FAILED: ' with nothing after the colon when the script cannot start, because ask drops the spawn error (found by 451 T263): carry the error text into the notice
+      research: rendering
+- [ ] T269 the audit-register delta check does not see a script newly called from make land's recipe (451 T258's state-sync.sh landed with no entry asked): cover a recipe's new callee, proved red-first on that case
+      research: rendering
+- [ ] T270 make audit classifies a plan-gate escape by its reason text; classify by the record's held field so an escape with nothing held is told from one with blocks held (451 T261's false finding came from the reason wording)
+      research: rendering
+- [ ] T271 parallel builders share one scratchpad and one plan-review bundle directory: key the plan review bundle by tree and have the builder brief's scratch names carry the task id (found in the 2026-11-25 parallel trials)
+      research: rendering
+- [ ] T272 the Stop hook's question detector still fires on a statement inside a table row ('waiting on you' mid row; 451 T235's remaining false positive): add the case red-first
+      research: rendering
+- [ ] T273 449 T428's tick note states a bend measurement that was never made: make the measurement or restate the note (found 2026-11-25)
+      research: rendering
