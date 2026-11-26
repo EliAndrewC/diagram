@@ -103,8 +103,8 @@ fn a_new_constant_name_is_refused_a_moved_or_local_one_is_not() {
     );
     put(
         &dir,
-        "rust/gate/crates/other/src/a.rs",
-        "const OUT_OF_SCOPE: u64 = 9;\n",
+        "rust/mode_a/src/a.rs",
+        "const ENGINE_MAX_FT: u64 = 9;\n",
     );
     assert_eq!(judged(&dir).code, 0, "{:?}", judged(&dir));
     put(
@@ -120,7 +120,9 @@ fn a_new_constant_name_is_refused_a_moved_or_local_one_is_not() {
         said.stderr
     );
     assert!(
-        !said.stderr.contains("OLD_CAP") && !said.stderr.contains("TEST_CAP"),
+        !said.stderr.contains("OLD_CAP")
+            && !said.stderr.contains("TEST_CAP")
+            && !said.stderr.contains("ENGINE_MAX_FT"),
         "{}",
         said.stderr
     );
@@ -372,6 +374,36 @@ fn a_landing_step_newly_named_is_refused() {
         assert!(said.stderr.contains(&format!("`{name}`")), "{name}");
     }
     assert!(!said.stderr.contains("push check old"));
+}
+
+#[test]
+fn a_landing_refusal_added_is_refused_by_its_number() {
+    let dir = base("refusals");
+    let cheap = "rust/gate/crates/land/src/land/cheap.rs";
+    put(&dir, cheap, "stops.push(a);\n");
+    commit(&dir);
+    assert_eq!(judged(&dir).code, 0);
+    put(&dir, cheap, "stops.push(a);\nstops.push(b);\n");
+    let said = judged(&dir);
+    assert_eq!(said.code, 1);
+    assert!(
+        said.stderr.contains("`landing refusal land/cheap.rs #2`"),
+        "{}",
+        said.stderr
+    );
+    assert!(!said.stderr.contains("#1"), "{}", said.stderr);
+    assert!(super::detect::refusal_items("stops.push(a);", "").is_empty());
+}
+
+#[test]
+fn a_tooling_crates_threshold_is_read() {
+    let dir = base("tooling-const");
+    put(
+        &dir,
+        "rust/gate/crates/pages/src/x.rs",
+        "const BUNDLE_TOKENS: usize = 9;\n",
+    );
+    assert!(judged(&dir).stderr.contains("`BUNDLE_TOKENS`"));
 }
 
 #[test]

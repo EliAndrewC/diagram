@@ -1764,6 +1764,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "round-arbiter"
+  },
+  "### T259 (the GM 2026-11-25, `specs/449-rust-codebase/port-talk-agenda.md` item 13 and its \"Order\" paragraph: \"should we move that item up to or near the front, so it can apply to all of the other optimizations we're building at the moment?\")": {
+   "sha256": "a0d05b16554262144482195f2c32ac7d69d7b031e0af2100ea696ba9bbc3760f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "round-arbiter"
+  },
+  "### T259 Approach (checklist part A)": {
+   "sha256": "9656ee2ff5da77c9d59872339b8a417338af1029fd3beb39c0a9a7f04cad6442",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -22790,6 +22802,281 @@
    "tasks": [
     "T259"
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T259 (the GM 2026-11-25, `specs/449-rust-codebase/port-talk-agenda.md` item 13 and its \"Order\" paragraph: \"should we move that item up to or near the front, so it can apply to all of the other optimizations we're building at the moment?\")",
+    "### T259 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T259-D1-prose",
+     "summary": "The check does not detect prose rules (a CLAUDE.md or docs/ line to wait, serialize or always do a step), a new mandatory round of an existing agent, or a standing order added to the builder brief; they are added as found and audit-register.md names the gap.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is about the check's reach over FUTURE additions only. These have no form in a delta that a check can tell from correct prose, and the GM's own words expect such misses: 'something like this limit on builder token window context size might not even show up as an optimization ... after the initial backfill, we can backfill as we go, as we find things that we missed'. The gap is recorded. Whether the EXISTING instances belong in the initial backfill is ruled under T259-backfill."
+    },
+    {
+     "id": "T259-D1-stops",
+     "summary": "A refusal that make land's first pass adds inside an existing step (a stops.push(...) call in land/cheap.rs, 6 today, measured) is not detected, grouped with the prose kinds under 'none has a form a check can tell from correct work'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "One reason is stretched over unlike things. The other three are prose. This one is code, and the block found it with a grep and counted it (6), so it does have a form: the count of stops.push( calls in rust/gate/crates/land/src/ rising against the base. A refusal at landing is the task line's 'mandatory check', and it costs every builder time, which is the same class round 1's D1b found missing. For it to be legitimate the block must SHOW that the count-rise form false-fires, by replaying it over the same 20 landings. Otherwise detect it. Either way the six existing refusals belong in the backfill (T259-backfill)."
+    },
+    {
+     "id": "T259-D1-guardname",
+     "summary": "A guard module is a file named <name>_hooks.rs or <name>_gate.rs (guard or shared crate) added as A; a rename adds nothing; a submodule is not a module.",
+     "class": "within",
+     "why": "The guard crates name their modules this way, and the whole-tree run finds 50, so this detects the task line's 'a guard' as it exists. Renames and submodules add no mechanism."
+    },
+    {
+     "id": "T259-D2-widen",
+     "summary": "The constant scope is widened from the checks crate to rust/guard/ and the gate's checks, land and cohort crates, and Duration joins the numeric types.",
+     "class": "within",
+     "why": "This closes round 1's D2 finding: CLAIMS_WAIT_S and the other nine landing knobs (measured 2026-11-26) are now read, and so is a wait written as a Duration."
+    },
+    {
+     "id": "T259-D2-rest",
+     "summary": "The rest of rust/gate/ stays out of the constant scope ('74 names there pass the filter, many of them knobs of the research tooling (CHASE_CHARS, PASSAGE_CHARS) that cost a builder nothing'), so those constants are neither checked on a delta nor listed in the backfill.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "(1) The test the scope applies is 'the crates whose constants hold a builder's or a landing's time'. That is narrower than the GM's 'a list of all of the auditable optimizations and processes and procedures', and nothing in request.md limits the register to builder time. (2) 'cost a builder nothing' is asserted, never measured. A passage or chase size cap sets what a reader gets in its context, and size caps are exactly what the GM asked to have audited on 2026-11-23 ('if those size limitations are causing us to cut details ... an audit-based process ... so that we record a new limit for this specific entry'). (3) These names PASS the block's own threshold filter, so in the guard crates they would count as thresholds and are dropped here by crate alone. (4) The 74 was measured on 2026-11-25, when the scope was the checks crate alone, so it may still include the ten land and cohort names now in scope. Only 'many of them' are described, and the rest are not named. (5) 'Corrections the agenda excludes' cites the agenda, which is not the GM's words in request.md, and a cap is not a pure correction. It would be legitimate if a current measurement NAMED the excluded constants and showed each is not a cap or threshold of the GM's kind. Otherwise read those crates with the same filter, and their names join the backfill."
+    },
+    {
+     "id": "T259-col0",
+     "summary": "Only module-level constants (column 0) are read. A threshold constant inside a function, an impl or an inline test module is not.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Leaving out inline test modules is right, because a test's constant is no mechanism. A const inside an impl block or a function is still a knob (an associated MAX or TIMEOUT_S, for example). The block gives no count of how many threshold-named constants sit there in the scope's non-test files, so the exclusion and its effect on the 'list of all' are unmeasured. It would be legitimate if a measured count, with its method, showed none, or showed that any it finds are named in the backfill. Otherwise read them."
+    },
+    {
+     "id": "T259-D3",
+     "summary": "A constant is new by NAME over the whole scope, not by file, so a move or a 1,000-line split adds nothing. Stated miss: a new threshold reusing a name already present (a second CAP) is not seen.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Comparing by name to avoid false fires on moves and splits is sound for the check, and that part needs no change. Two parts are not: (a) the miss is not forced. Counting a name's lines across the scope and refusing when the count rises would catch a second CAP without firing on a move or a split, and the block does not say why it rejected that. (b) The same rule shapes the BACKFILL: the whole-tree run counts by name, so two existing modules that both hold CAP collapse into one item, and one covers: CAP answers for both. How many names appear more than once is not measured, so the 'list of all' undercounts by an unknown amount. It would be legitimate if a measured count showed no name in the scope appears more than once, or if items were keyed so that duplicates appear separately (in the backfill at least) and a reason were given for not counting lines."
+    },
+    {
+     "id": "T259-D4",
+     "summary": "The name filter: a constant counts if a part of its name is a threshold word and the name is not unit words alone. On the widened scope it keeps 69 of 105 names (34 dropped, plus 2 dropped as units).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The filter was measured and its drops examined: of the first scope's 84 names it keeps every knob the agenda names, and it drops display sizes and fixed facts (LARGEST, SHOWN, CHUNK, SIGTERM, DAY, MICROS) and units. The replay showed the unfiltered check firing on GB and LARGEST, which cost no time and refuse nothing. Firing on those would be firing on correct work. Aside, not a finding: the seven land and cohort names the filter drops are counted but not named."
+    },
+    {
+     "id": "T259-D5",
+     "summary": "The gate chain is the targets the eight fixed roots (detect::CHAIN) reach transitively, through prerequisites and $(MAKE) calls. A target-specific variable line is no rule.",
+     "class": "within",
+     "why": "This detects the task line's 'a gate step', and the replay found closing-checks and _quick, both real additions."
+    },
+    {
+     "id": "T259-D5b-steps",
+     "summary": "A landing step is a new push-table row, a make land phase or a GATES script name, each compared against the base text of the same file.",
+     "class": "within",
+     "why": "This closes round 1's D1b: push rows and land phases are now detected, and the re-run found T233's gm-attributions push check."
+    },
+    {
+     "id": "T259-D6",
+     "summary": "An entry counts only whole: all eleven fields are checked on every run, and unmeasured is allowed only with first-audit.",
+     "class": "within",
+     "why": "This enforces what was asked (the logic, the measurements, the falsifier, the last audit) and stops a stub from silencing the check."
+    },
+    {
+     "id": "T259-D7",
+     "summary": "One Markdown file per entry, with key-value front matter, parsed without a new dependency.",
+     "class": "within",
+     "why": "The task line asks for one file per entry, and the form is a design choice inside that."
+    },
+    {
+     "id": "T259-D8",
+     "summary": "The check runs in make static and in the push. The push row needs dev/audits, so a fixture push without a register stays silent.",
+     "class": "within",
+     "why": "Running in both places refuses a missing entry earlier. The real tree holds dev/audits, so nothing the GM asked for is exempted."
+    },
+    {
+     "id": "T259-D9",
+     "summary": "The escape AUDIT_ENTRY_OK with a recorded reason. Each escape is logged escaped and each refusal blocked.",
+     "class": "within",
+     "why": "This follows the project's guard rules, and the log lets the check be audited against its own falsifier."
+    },
+    {
+     "id": "T259-D10",
+     "summary": "Cadences, and any threshold no record states, are GUESS knobs; never-audited entries get the shortest cadence.",
+     "class": "within",
+     "why": "The GM asked for each entry to know its last audit and be re-audited. Labeling the unmeasured knobs GUESS is the project's rule."
+    },
+    {
+     "id": "T259-D11",
+     "summary": "A declined option is an entry of kind declined in the same register: its evidence, a falsifier and threshold that would reopen it, and a cadence. The three options in process-decisions.md become entries.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-25 words directly: 'record decisions about what NOT to implement ... in the same way'."
+    },
+    {
+     "id": "T259-first-entries",
+     "summary": "Thirteen first entries: ten adopted (among them T254-T257's mechanisms and the check itself) and three declined.",
+     "class": "within",
+     "why": "The task line asks for the first entries, and the agenda's 'Order' paragraph puts T254-T257's entries here."
+    },
+    {
+     "id": "T259-backfill",
+     "summary": "Found and left: the initial backfill is T260's list, which is defined as make audits' BACKFILL section, the five detectors' output (181, measured). The kinds the detectors cannot see are left to 'as found', with audit-register.md naming the gap.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Round 1's item is half closed: the kinds left out are now listed (D1), and the 181 has a count and a method. But no sentence puts into the INITIAL backfill the mechanisms that are already known or measurable and that the detectors leave out: the six stops.push refusals (counted in D1), the constants of the rest of rust/gate (D2-rest), any constants in functions or impls (col0), the second holders of a duplicated name (D3), and the standing procedures already written in CLAUDE.md, docs/ and the builder brief. The GM's 'backfill as we go, as we find things that we missed' comes AFTER 'the initial backfill' and covers things nobody has found. It does not cover a set the block has itself counted or could list by reading. It would be legitimate if the deferral to T260 named these sources as part of its initial backfill, each with how its instances will be found, or if each source left out carried a measured showing that it holds nothing of the GM's kind."
+    }
+   ],
+   "tasks": [
+    "T259"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T259 (the GM 2026-11-25, `specs/449-rust-codebase/port-talk-agenda.md` item 13 and its \"Order\" paragraph: \"should we move that item up to or near the front, so it can apply to all of the other optimizations we're building at the moment?\")",
+    "### T259 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T259-D1-prose",
+     "summary": "The check does not detect prose rules (a CLAUDE.md or docs/ line to wait, serialize or always do a step), a new mandatory round of an existing agent, or a standing order added to the builder brief; they are added as found and audit-register.md names the gap.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is about the check's reach over FUTURE additions only. These have no form in a delta that a check can tell from correct prose, and the GM's own words expect such misses: 'something like this limit on builder token window context size might not even show up as an optimization ... after the initial backfill, we can backfill as we go, as we find things that we missed'. The gap is recorded. Whether the EXISTING instances belong in the initial backfill is ruled under T259-backfill."
+    },
+    {
+     "id": "T259-D1-stops",
+     "summary": "A refusal that make land's first pass adds inside an existing step (a stops.push(...) call in land/cheap.rs, 6 today, measured) is not detected, grouped with the prose kinds under 'none has a form a check can tell from correct work'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "One reason is stretched over unlike things. The other three kinds left out are prose, which no check can tell from correct prose. This one is code: the block found it with a grep and counted 6 instances, and it does not show that these lack a form a check can read (a rise in the count of stops.push( calls in rust/gate/crates/land/src/ against the base, for example). A refusal at landing is the task line's 'mandatory check' and costs every builder time, the same class round 1's D1b found missing. For it to be legitimate the block must show that such a form would false-fire, by replaying it over the same 20 landings. Otherwise detect it. Either way the six existing refusals belong in the initial backfill (T259-backfill)."
+    },
+    {
+     "id": "T259-D1-guardname",
+     "summary": "A guard module is a file named <name>_hooks.rs or <name>_gate.rs (guard or shared crate) added as A; a rename adds nothing; a submodule is not a module.",
+     "class": "within",
+     "why": "The guard crates name their modules this way, and the whole-tree run finds 50, so this detects the task line's 'a guard' as it exists. Renames and submodules add no mechanism."
+    },
+    {
+     "id": "T259-D2-widen",
+     "summary": "The constant scope is widened from the checks crate to rust/guard/ and the gate's checks, land and cohort crates, and Duration joins the numeric types.",
+     "class": "within",
+     "why": "This closes round 1's D2 finding: CLAIMS_WAIT_S and the other nine landing knobs (measured 2026-11-26) are now read, and so is a wait written as a Duration."
+    },
+    {
+     "id": "T259-D2-rest",
+     "summary": "The rest of rust/gate/ stays out of the constant scope ('74 names there pass the filter, many of them knobs of the research tooling (CHASE_CHARS, PASSAGE_CHARS) that cost a builder nothing'), so those constants are neither checked on a delta nor listed in the backfill.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "(1) The test the scope applies is 'the crates whose constants hold a builder's or a landing's time'. That is narrower than the GM's 'a list of all of the auditable optimizations and processes and procedures', and narrower than the block's own goal line ('Every optimization or procedure that costs time or tokens'). Nothing in request.md limits the register to a builder's time. (2) 'cost a builder nothing' is asserted, never measured, and it does not say whether these constants cost tokens. (3) These names PASS the block's own threshold filter, so in the guard crates they would count as thresholds and are dropped here by crate alone. (4) The 74 was measured on 2026-11-25, when the scope was the checks crate alone, so it may still include the ten land and cohort names now in scope. Only 'many of them' are described, and the rest are not named. (5) 'Corrections the agenda excludes' is not shown: the block names no excluded constant that is a pure correction costing nothing. It would be legitimate if a current measurement NAMED the excluded constants and showed each costs neither time nor tokens and is no cap or threshold. Otherwise read those crates with the same filter, and their names join the initial backfill."
+    },
+    {
+     "id": "T259-col0",
+     "summary": "Only module-level constants (column 0) are read. A threshold constant inside a function, an impl or an inline test module is not.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Leaving out inline test modules is right. For functions and impls, the bundle shows no threshold constant there that is being missed, and skipping them keeps the detector simple and free of false fires. Like D3's miss, any found later are backfilled as the GM's route allows. Aside, not a finding: the block should count the threshold-named constants inside functions and impls in the scope's non-test files."
+    },
+    {
+     "id": "T259-D3",
+     "summary": "A constant is new by NAME over the whole scope, not by file, so a move or a 1,000-line split adds nothing. Stated miss: a new threshold reusing a name already present (a second CAP) is not seen.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Comparing by name keeps the check from firing on a constant moved or a file split by the 1,000-line bar, which would be firing on correct work. The miss it states (a second CAP) is the kind of thing the GM's words expect to be found later: 'after the initial backfill, we can backfill as we go, as we find things that we missed'. Aside, not a finding: counting a name's lines would also catch a second CAP, and it would help to measure how many names in the scope appear more than once."
+    },
+    {
+     "id": "T259-D4",
+     "summary": "The name filter: a constant counts if a part of its name is a threshold word and the name is not unit words alone. On the widened scope it keeps 69 of 105 names (34 dropped, plus 2 dropped as units).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The filter was measured and its drops examined: of the first scope's 84 names it keeps every knob the agenda names, and it drops display sizes and fixed facts (LARGEST, SHOWN, CHUNK, SIGTERM, DAY, MICROS) and units. The replay showed the unfiltered check firing on GB and LARGEST, which cost no time and refuse nothing. Firing on those would be firing on correct work. Aside, not a finding: the seven land and cohort names the filter drops are counted but not named."
+    },
+    {
+     "id": "T259-D5",
+     "summary": "The gate chain is the targets the eight fixed roots (detect::CHAIN) reach transitively, through prerequisites and $(MAKE) calls. A target-specific variable line is no rule.",
+     "class": "within",
+     "why": "This detects the task line's 'a gate step', and the replay found closing-checks and _quick, both real additions."
+    },
+    {
+     "id": "T259-D5b-steps",
+     "summary": "A landing step is a new push-table row, a make land phase or a GATES script name, each compared against the base text of the same file.",
+     "class": "within",
+     "why": "This closes round 1's D1b: push rows and land phases are now detected, and the re-run found T233's gm-attributions push check."
+    },
+    {
+     "id": "T259-D6",
+     "summary": "An entry counts only whole: all eleven fields are checked on every run, and unmeasured is allowed only with first-audit.",
+     "class": "within",
+     "why": "This enforces what was asked (the logic, the measurements, the falsifier, the last audit) and stops a stub from silencing the check."
+    },
+    {
+     "id": "T259-D7",
+     "summary": "One Markdown file per entry, with key-value front matter, parsed without a new dependency.",
+     "class": "within",
+     "why": "The task line asks for one file per entry, and the form is a design choice inside that."
+    },
+    {
+     "id": "T259-D8",
+     "summary": "The check runs in make static and in the push. The push row needs dev/audits, so a fixture push without a register stays silent.",
+     "class": "within",
+     "why": "Running in both places refuses a missing entry earlier. The real tree holds dev/audits, so nothing the GM asked for is exempted."
+    },
+    {
+     "id": "T259-D9",
+     "summary": "The escape AUDIT_ENTRY_OK with a recorded reason. Each escape is logged escaped and each refusal blocked.",
+     "class": "within",
+     "why": "This follows the project's guard rules, and the log lets the check be audited against its own falsifier."
+    },
+    {
+     "id": "T259-D10",
+     "summary": "Cadences, and any threshold no record states, are GUESS knobs; never-audited entries get the shortest cadence.",
+     "class": "within",
+     "why": "The GM asked for each entry to know its last audit and be re-audited. Labeling the unmeasured knobs GUESS is the project's rule."
+    },
+    {
+     "id": "T259-D11",
+     "summary": "A declined option is an entry of kind declined in the same register: its evidence, a falsifier and threshold that would reopen it, and a cadence. The three options in process-decisions.md become entries.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-25 words directly: 'record decisions about what NOT to implement ... in the same way'."
+    },
+    {
+     "id": "T259-first-entries",
+     "summary": "Thirteen first entries: ten adopted (among them T254-T257's mechanisms and the check itself) and three declined.",
+     "class": "within",
+     "why": "The task line asks for the first entries, and the agenda's 'Order' paragraph puts T254-T257's entries here."
+    },
+    {
+     "id": "T259-backfill",
+     "summary": "Found and left: the initial backfill is T260's list, which is defined as make audits' BACKFILL section, the five detectors' output (181, measured). The kinds the detectors cannot see are left to 'as found', with audit-register.md naming the gap.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Round 1's item is half closed: the kinds left out are now listed (D1), and the 181 has a count and a method. But the block's constraint 2 says agenda item 13 names 'the backfill's sources', and the found-and-left item defines T260's list as the detectors' BACKFILL output alone. No sentence puts into the INITIAL backfill the mechanisms that are already known and that the detectors leave out: the six stops.push refusals counted in D1, whatever D2-rest leaves out, and the agenda's backfill sources beyond the detectors. The GM's 'backfill as we go, as we find things that we missed' comes AFTER 'the initial backfill' and covers things nobody has found. It does not cover a set the block has itself counted or that the agenda names as a source. It would be legitimate if the deferral to T260 said T260 takes item 13's backfill sources, the six stops.push refusals and what D2-rest leaves out, each with how its instances will be found."
+    }
+   ],
+   "tasks": [
+    "T259"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T259 (the GM 2026-11-25, `specs/449-rust-codebase/port-talk-agenda.md` item 13 and its \"Order\" paragraph: \"should we move that item up to or near the front, so it can apply to all of the other optimizations we're building at the moment?\")",
+    "### T259 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T259@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T259's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T259"
+   ]
   }
  ],
  "tasks": {
@@ -36343,116 +36630,140 @@
    }
   },
   "T259": {
-   "section_sha256": "d83ed6b2f40b33058bf0d8e799c5ffd7ef6b24c9a1323aa480bb21541fa1d487",
+   "section_sha256": "d9c27910fd2b1adc1bd45871466c8b4e64508161f497d539a6524109e21acabd",
    "reviewed": "2026-11-26",
-   "declared": "spec-fidelity",
+   "declared": "round-arbiter",
    "decisions": [
     {
-     "id": "T259-D1a",
-     "summary": "Prose mechanisms are not detected: a rule line in a CLAUDE.md or docs/ file, a new mandatory round of an existing agent, a standing order in the builder brief. They are backfilled as found, and audit-register.md names the gap.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "The GM's own words carry this exception: 'something like this limit on builder token window context size might not even show up as an optimization ... after the initial backfill, we can backfill as we go, as we find things that we missed'. He separated the easy-to-identify mechanisms from the hidden ones and sent the hidden ones to backfill-as-found. A new imperative sentence in prose has no form that tells it from correct documentation, so a detector would fire on correct work. The plan's own replay shows the cost: of 7 register-worthy landings in its sample of 20, the detectors caught 3. T254-T257 detect nothing, yet each gets an entry. That is the hidden class the GM described, and the entries written for them are his route, not a gutting of his purpose."
-    },
-    {
-     "id": "T259-D1b",
-     "summary": "Not detected: a new row of the push's checks table, or a new step of make land's Rust code. The stated reason is 'none has a form a check can tell from correct work'.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "Two unlike classes share one sentence with the prose kinds. A push row is a mandatory check, and a land phase is a landing step. These are the very kinds the plan's constraints list, and they sit in the GM's 'easy to identify as a measurable and auditable part of our tooling' class, not his hidden class. The premise that they have no diffable form was never measured. The plan's own test 'push::tests::the_table_lists_its_rows_...' (26 rows) treats the push table as a list of named rows, which points the other way. The register is moved to the front 'so it can apply to all of the other optimizations we're building at the moment', and those are landing and push machinery. As written, a check that passes such a landing passes bad work. Fix: measure whether push rows and land phases carry a name that a base-vs-HEAD comparison can read. If they do, detect them as D3 does for constants. If they do not, record that measurement (date, method) as the reason and keep the gap in audit-register.md."
-    },
-    {
-     "id": "T259-D2",
-     "summary": "Threshold constants are read only in rust/guard/ and the gate's checks crate. Other gate crates are excluded, the land crate's CLAIMS_WAIT_S among them.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "'The brief's words' is a session's scope, not the GM's, so it cannot make a narrowing legitimate. The measurement given is over the whole rest of rust/gate/: 74 names, 'many of them knobs of the research tooling'. That argument does not reach the landing crates. The plan's own named miss, CLAIMS_WAIT_S, is a landing wait that costs every builder time: an optimization of exactly the kind the register exists for, and one being built now. The detector applies to those crates unchanged (a module-level const line), so this is neither impossible nor implied by the GM's words. Fix: extend the constant scope to the landing and push crates (at least rust/gate/crates/land and the cohort crate the push lives in), with D4's filter measured over them, or measure those crates separately and show their passing names cost nothing."
-    },
-    {
-     "id": "T259-D3",
-     "summary": "A constant is new only if its name is absent from the whole scope at the base. Known miss: a second constant that reuses a name already held elsewhere.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "A per-file comparison would refuse correct work on every split the 1,000-line bar forces and on every move, which is a check refusing good work. The stated miss is narrow, and it falls under the GM's 'backfill as we go, as we find things that we missed'. It does not defeat the request's purpose."
-    },
-    {
-     "id": "T259-D4",
-     "summary": "A name filter keeps names with a threshold word (55 of 84) and drops display sizes, fixed facts and unit-only names (29).",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "The GM's subject is 'this kind of optimization' and 'auditable optimizations and processes and procedures', not every constant. A display size such as LARGEST or a unit such as GB is neither. The filter was measured (2026-11-25, 84 = 55 + 27 + 2) and keeps every knob the agenda names. The pre-filter replay fired on T245's GB and LARGEST, so the unfiltered rule refuses correct work. A threshold whose name holds no listed word is a miss for backfill-as-found."
-    },
-    {
-     "id": "T259-carveouts",
-     "summary": "Detector edges: only column-0 const lines are read; only integer and float types; a guard's submodule is not a module; a rename (R) adds nothing.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "A rename or a submodule is not a new mechanism, so excluding them is correct rather than a loss. The column-0 and numeric-type limits miss some thresholds (a function-local const, a Duration-typed one), but these are stated edges of a path-and-name detector, not known mechanisms left out. The GM's backfill-as-found covers them."
-    },
-    {
-     "id": "T259-backfill",
-     "summary": "The initial backfill is ten named entries. Their sources are given (agenda items 1, 12 and 13, plan-done.md T244-T246 and T254-T257, process-decisions.md), but no search space is stated and no list of known mechanisms left out.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The GM asked for 'a list of all of the auditable optimizations and processes and procedures', with backfill-as-we-go only 'after the initial backfill', for 'things that we missed'. The plan's own census in D4 names known, enumerated knobs that no listed entry visibly covers: STATIC_RUNS_A_TASK (feature 451's own FR-007 improvement), the round caps PLAN_ROUND_CAP and SPEC_ROUND_CAP, and POLL_CHECK_S. Feature 451's other approved improvements (the background-run guard, the 60 s poll, the hook-suite split) are among 'the other optimizations we're building at the moment'. The check fires only on mechanisms absent at the base, so no landing will ever ask for these. Without the initial backfill they are never registered. Things already found are not 'missed', so the GM's backfill-as-found route does not reach them. Fix: state the initial backfill's search space, for example the four detectors run over the whole tree against an empty register, plus the feature 451 improvements. Either give every mechanism found an entry or a covers: line (unmeasured with first-audit where no measurement exists), or name each one left out under Found-and-left with its filed task and its order."
-    },
-    {
-     "id": "T259-D6",
-     "summary": "Every entry's ten fields are checked on every run, and a malformed entry refuses whatever the delta adds.",
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T259@3",
      "class": "within",
-     "why": "This enforces the GM's 'documenting the logic behind it, the measurements that we took, and ... what we would look at that would falsify' against stub entries."
-    },
-    {
-     "id": "T259-D6u",
-     "summary": "An entry may say 'unmeasured' only if it names its first audit in first-audit: (for example, delegating to builders at all).",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "A measurement that was never taken cannot be recorded, so requiring one is impossible. Saying so and naming the measurement that will be the first audit serves the GM's falsifier and re-audit purpose. It is also where his item-12 ask lands: 'we should make sure to measure whether the complexity of the handoffs actually saves time'."
-    },
-    {
-     "id": "T259-threeway",
-     "summary": "Agenda item 12's three-way handoff measurement is not performed in T259. It is carried as the delegation and context-cap entries' first audit, and the never-audited entries are listed first.",
-     "class": "within",
-     "why": "The GM asked that it be measured, not that T259 measure it. Registering it as a first audit at the shortest cadence makes sure it is done. Item 12 is its own agenda item."
-    },
-    {
-     "id": "T259-D5",
-     "summary": "Gate-chain targets are found transitively from eight fixed roots, through prerequisites and $(MAKE) calls.",
-     "class": "within",
-     "why": "This is how 'a gate or landing step' is read off the Makefile. The replay found make closing-checks and make _quick, both real additions."
-    },
-    {
-     "id": "T259-D7",
-     "summary": "Each entry is a Markdown file with key: value front matter, one file per entry.",
-     "class": "within",
-     "why": "This is the form the task line asks for (one file per entry). Markdown over JSON is a design choice the GM's words do not decide."
-    },
-    {
-     "id": "T259-D8",
-     "summary": "The check runs in make static and in the push, and the push row needs dev/audits.",
-     "class": "within",
-     "why": "This is enforcement of the register at the points a builder and a landing pass through."
-    },
-    {
-     "id": "T259-D9",
-     "summary": "The escape is AUDIT_ENTRY_OK with a reason, recorded escaped or blocked in the guard log.",
-     "class": "within",
-     "why": "This is the project's standing guard form, and it lets the check be audited against its own falsifier."
-    },
-    {
-     "id": "T259-D10",
-     "summary": "Cadences and every threshold no record states are GUESS knobs, and never-audited entries get the shortest cadence.",
-     "class": "within",
-     "why": "The GM gave no cadence. 'Each one would know the last time that it was audited' is served by this."
-    },
-    {
-     "id": "T259-fields-list",
-     "summary": "There are ten front-matter fields where the task line says six, and make audits orders entries never audited, then overdue, then by due date.",
-     "class": "within",
-     "why": "The added fields (command, threshold, cost, cadence) serve the GM's measurement, falsifier and re-audit asks, and the ordering serves 're-audit to see if they still make sense'."
+     "summary": "the round arbiter accepted T259's section as it stands"
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "f324e7043be9b616f03e2d78f415e150b0c614287b3d407d7c3aa04646db01d3",
+    "reviewed": "2026-11-26",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "T259-D1-prose",
+      "summary": "The check does not detect prose rules (a CLAUDE.md or docs/ line to wait, serialize or always do a step), a new mandatory round of an existing agent, or a standing order added to the builder brief; they are added as found and audit-register.md names the gap.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "This is about the check's reach over FUTURE additions only. These have no form in a delta that a check can tell from correct prose, and the GM's own words expect such misses: 'something like this limit on builder token window context size might not even show up as an optimization ... after the initial backfill, we can backfill as we go, as we find things that we missed'. The gap is recorded. Whether the EXISTING instances belong in the initial backfill is ruled under T259-backfill."
+     },
+     {
+      "id": "T259-D1-stops",
+      "summary": "A refusal that make land's first pass adds inside an existing step (a stops.push(...) call in land/cheap.rs, 6 today, measured) is not detected, grouped with the prose kinds under 'none has a form a check can tell from correct work'.",
+      "class": "narrowing",
+      "ruling": "NOT LEGITIMATE",
+      "why": "One reason is stretched over unlike things. The other three kinds left out are prose, which no check can tell from correct prose. This one is code: the block found it with a grep and counted 6 instances, and it does not show that these lack a form a check can read (a rise in the count of stops.push( calls in rust/gate/crates/land/src/ against the base, for example). A refusal at landing is the task line's 'mandatory check' and costs every builder time, the same class round 1's D1b found missing. For it to be legitimate the block must show that such a form would false-fire, by replaying it over the same 20 landings. Otherwise detect it. Either way the six existing refusals belong in the initial backfill (T259-backfill)."
+     },
+     {
+      "id": "T259-D1-guardname",
+      "summary": "A guard module is a file named <name>_hooks.rs or <name>_gate.rs (guard or shared crate) added as A; a rename adds nothing; a submodule is not a module.",
+      "class": "within",
+      "why": "The guard crates name their modules this way, and the whole-tree run finds 50, so this detects the task line's 'a guard' as it exists. Renames and submodules add no mechanism."
+     },
+     {
+      "id": "T259-D2-widen",
+      "summary": "The constant scope is widened from the checks crate to rust/guard/ and the gate's checks, land and cohort crates, and Duration joins the numeric types.",
+      "class": "within",
+      "why": "This closes round 1's D2 finding: CLAIMS_WAIT_S and the other nine landing knobs (measured 2026-11-26) are now read, and so is a wait written as a Duration."
+     },
+     {
+      "id": "T259-D2-rest",
+      "summary": "The rest of rust/gate/ stays out of the constant scope ('74 names there pass the filter, many of them knobs of the research tooling (CHASE_CHARS, PASSAGE_CHARS) that cost a builder nothing'), so those constants are neither checked on a delta nor listed in the backfill.",
+      "class": "narrowing",
+      "ruling": "NOT LEGITIMATE",
+      "why": "(1) The test the scope applies is 'the crates whose constants hold a builder's or a landing's time'. That is narrower than the GM's 'a list of all of the auditable optimizations and processes and procedures', and narrower than the block's own goal line ('Every optimization or procedure that costs time or tokens'). Nothing in request.md limits the register to a builder's time. (2) 'cost a builder nothing' is asserted, never measured, and it does not say whether these constants cost tokens. (3) These names PASS the block's own threshold filter, so in the guard crates they would count as thresholds and are dropped here by crate alone. (4) The 74 was measured on 2026-11-25, when the scope was the checks crate alone, so it may still include the ten land and cohort names now in scope. Only 'many of them' are described, and the rest are not named. (5) 'Corrections the agenda excludes' is not shown: the block names no excluded constant that is a pure correction costing nothing. It would be legitimate if a current measurement NAMED the excluded constants and showed each costs neither time nor tokens and is no cap or threshold. Otherwise read those crates with the same filter, and their names join the initial backfill."
+     },
+     {
+      "id": "T259-col0",
+      "summary": "Only module-level constants (column 0) are read. A threshold constant inside a function, an impl or an inline test module is not.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "Leaving out inline test modules is right. For functions and impls, the bundle shows no threshold constant there that is being missed, and skipping them keeps the detector simple and free of false fires. Like D3's miss, any found later are backfilled as the GM's route allows. Aside, not a finding: the block should count the threshold-named constants inside functions and impls in the scope's non-test files."
+     },
+     {
+      "id": "T259-D3",
+      "summary": "A constant is new by NAME over the whole scope, not by file, so a move or a 1,000-line split adds nothing. Stated miss: a new threshold reusing a name already present (a second CAP) is not seen.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "Comparing by name keeps the check from firing on a constant moved or a file split by the 1,000-line bar, which would be firing on correct work. The miss it states (a second CAP) is the kind of thing the GM's words expect to be found later: 'after the initial backfill, we can backfill as we go, as we find things that we missed'. Aside, not a finding: counting a name's lines would also catch a second CAP, and it would help to measure how many names in the scope appear more than once."
+     },
+     {
+      "id": "T259-D4",
+      "summary": "The name filter: a constant counts if a part of its name is a threshold word and the name is not unit words alone. On the widened scope it keeps 69 of 105 names (34 dropped, plus 2 dropped as units).",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "The filter was measured and its drops examined: of the first scope's 84 names it keeps every knob the agenda names, and it drops display sizes and fixed facts (LARGEST, SHOWN, CHUNK, SIGTERM, DAY, MICROS) and units. The replay showed the unfiltered check firing on GB and LARGEST, which cost no time and refuse nothing. Firing on those would be firing on correct work. Aside, not a finding: the seven land and cohort names the filter drops are counted but not named."
+     },
+     {
+      "id": "T259-D5",
+      "summary": "The gate chain is the targets the eight fixed roots (detect::CHAIN) reach transitively, through prerequisites and $(MAKE) calls. A target-specific variable line is no rule.",
+      "class": "within",
+      "why": "This detects the task line's 'a gate step', and the replay found closing-checks and _quick, both real additions."
+     },
+     {
+      "id": "T259-D5b-steps",
+      "summary": "A landing step is a new push-table row, a make land phase or a GATES script name, each compared against the base text of the same file.",
+      "class": "within",
+      "why": "This closes round 1's D1b: push rows and land phases are now detected, and the re-run found T233's gm-attributions push check."
+     },
+     {
+      "id": "T259-D6",
+      "summary": "An entry counts only whole: all eleven fields are checked on every run, and unmeasured is allowed only with first-audit.",
+      "class": "within",
+      "why": "This enforces what was asked (the logic, the measurements, the falsifier, the last audit) and stops a stub from silencing the check."
+     },
+     {
+      "id": "T259-D7",
+      "summary": "One Markdown file per entry, with key-value front matter, parsed without a new dependency.",
+      "class": "within",
+      "why": "The task line asks for one file per entry, and the form is a design choice inside that."
+     },
+     {
+      "id": "T259-D8",
+      "summary": "The check runs in make static and in the push. The push row needs dev/audits, so a fixture push without a register stays silent.",
+      "class": "within",
+      "why": "Running in both places refuses a missing entry earlier. The real tree holds dev/audits, so nothing the GM asked for is exempted."
+     },
+     {
+      "id": "T259-D9",
+      "summary": "The escape AUDIT_ENTRY_OK with a recorded reason. Each escape is logged escaped and each refusal blocked.",
+      "class": "within",
+      "why": "This follows the project's guard rules, and the log lets the check be audited against its own falsifier."
+     },
+     {
+      "id": "T259-D10",
+      "summary": "Cadences, and any threshold no record states, are GUESS knobs; never-audited entries get the shortest cadence.",
+      "class": "within",
+      "why": "The GM asked for each entry to know its last audit and be re-audited. Labeling the unmeasured knobs GUESS is the project's rule."
+     },
+     {
+      "id": "T259-D11",
+      "summary": "A declined option is an entry of kind declined in the same register: its evidence, a falsifier and threshold that would reopen it, and a cadence. The three options in process-decisions.md become entries.",
+      "class": "within",
+      "why": "This is the GM's 2026-11-25 words directly: 'record decisions about what NOT to implement ... in the same way'."
+     },
+     {
+      "id": "T259-first-entries",
+      "summary": "Thirteen first entries: ten adopted (among them T254-T257's mechanisms and the check itself) and three declined.",
+      "class": "within",
+      "why": "The task line asks for the first entries, and the agenda's 'Order' paragraph puts T254-T257's entries here."
+     },
+     {
+      "id": "T259-backfill",
+      "summary": "Found and left: the initial backfill is T260's list, which is defined as make audits' BACKFILL section, the five detectors' output (181, measured). The kinds the detectors cannot see are left to 'as found', with audit-register.md naming the gap.",
+      "class": "narrowing",
+      "ruling": "NOT LEGITIMATE",
+      "why": "Round 1's item is half closed: the kinds left out are now listed (D1), and the 181 has a count and a method. But the block's constraint 2 says agenda item 13 names 'the backfill's sources', and the found-and-left item defines T260's list as the detectors' BACKFILL output alone. No sentence puts into the INITIAL backfill the mechanisms that are already known and that the detectors leave out: the six stops.push refusals counted in D1, whatever D2-rest leaves out, and the agenda's backfill sources beyond the detectors. The GM's 'backfill as we go, as we find things that we missed' comes AFTER 'the initial backfill' and covers things nobody has found. It does not cover a set the block has itself counted or that the agenda names as a source. It would be legitimate if the deferral to T260 said T260 takes item 13's backfill sources, the six stops.push refusals and what D2-rest leaves out, each with how its instances will be found."
+     }
+    ],
+    "verdict": "BLOCKED"
+   }
   }
  }
 }

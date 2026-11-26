@@ -270,6 +270,10 @@ On the hidden ones:
 
 > some things are easy to identify as a measurable and auditable part of our tooling ... something like this limit on builder token window context size might not even show up as an optimization ... after the initial backfill, we can backfill as we go, as we find things that we missed
 
+On the decisions not to build something (2026-11-25, which the register's `kind: declined` entries answer):
+
+> We should also make sure our processes record decisions about what NOT to implement for future reference in the same way we record decisions about the processes and tooling we DO implement.
+
 On its order:
 
 > should we move that item up to or near the front, so it can apply to all of the other optimizations we're building at the moment?

@@ -26,7 +26,10 @@ at it.
 Every optimization or procedure that costs time or tokens has an entry under `dev/audits/` (one Markdown file each: what it is
 for, the measurement that justified it with its date and command, its falsifier and threshold, its cost source in `make task-time`,
 when it was last audited and its cadence). `make audits` lists them, the overdue first. A decision here that adds such a mechanism
-adds its entry; the push refuses a new guard module, threshold constant, gate-chain target or agent file without one.
+adds its entry; the push refuses a new guard module, threshold constant, gate-chain target, landing step (a push check, a
+`make land` phase, a landing gate script or one more first-pass refusal) or agent file without one. An option declined (the next section) gets a
+`kind: declined` entry, its falsifier what would reopen it, audited on its cadence like the rest; the mechanisms in force that
+no entry names yet are `make audits`' BACKFILL list (451 T260).
 
 ## Decisions NOT to do something are recorded the same way (the GM, 2026-11-25)
 

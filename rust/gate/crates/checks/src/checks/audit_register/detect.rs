@@ -6,14 +6,15 @@
 //!   that git lists as added against the base - a rename (`git diff -M`) is no addition, and a submodule of a guard (`<name>_hooks/x.rs`)
 //!   is its guard's own;
 //! - a NUMERIC CONSTANT: a module-level `const NAME: <integer or float type> =` (at column 0, so a constant inside a function, an `impl`
-//!   or an inline `#[cfg(test)]` module is not read) under `rust/guard/` or the gate's checks (`rust/gate/crates/checks/src/`), whose
+//!   or an inline `#[cfg(test)]` module is not read) in the tooling (`CONST_SCOPE`: the guard, the gate, the browser, the embedder), whose
 //!   name reads as a threshold's or a knob's (`THRESHOLD_WORDS`, a unit's alone not) and is held by no such line anywhere in that scope at the base - a constant moved between files, or a file split by the
 //!   1,000-line bar, adds no name; a test file (`tests.rs`, `*_tests.rs`, a `tests/` or `testkit` directory) is not read. Known miss: a
 //!   new threshold whose name the scope already holds elsewhere is not seen;
 //! - a MAKE TARGET newly in the gate or landing chain: a target reached from `CHAIN`'s roots through prerequisites and `$(MAKE) <target>`
 //!   calls in recipes, transitively, in the Makefile as it stands and not at the base (a target wired into the chain counts, new or not);
 //! - an AGENT FILE: `.claude/agents/<name>.md` added against the base;
-//! - a LANDING STEP: a push check, a landing phase or a landing gate script newly named where `STEPS` says they are named.
+//! - a LANDING STEP: a push check, a landing phase or a landing gate script newly named where `STEPS` says they are named, or a
+//!   landing refusal, `make land`'s first pass's unnamed `stops.push(` calls, by their count (`REFUSALS`).
 
 use std::collections::{BTreeSet, VecDeque};
 use std::path::Path;
@@ -32,16 +33,13 @@ pub(super) const CHAIN: [&str; 8] = [
     "land-tooling",
 ];
 
-/// The scope whose numeric constants are read: the guard, the gate's checks, and the landing's crates - the land crate, and the
-/// cohort crate where the push's checks live, whose waits and polls cost every landing time (measured 2026-11-26, a grep of their
-/// non-test files: 10 of their 17 module-level numeric names pass the word filter, each a knob - `CLAIMS_WAIT_S`, `COMMIT_TRIES`,
-/// `HANDOFF_FRESH_S`, ...).
-const CONST_SCOPE: [&str; 4] = [
-    "rust/guard/",
-    "rust/gate/crates/checks/src/",
-    "rust/gate/crates/land/src/",
-    "rust/gate/crates/cohort/src/",
-];
+/// The scope whose numeric constants are read: the tooling - the guard, every gate crate, the browser and the embedder - whose
+/// waits, caps, retries and bundle sizes cost a session time or tokens (measured 2026-11-26, a grep of the gate's crates beyond
+/// checks, land and cohort: 68 more names pass the word filter, among them the run lock's `CEILING_S` and `MUTEX_S`, `LOCK_WAIT_S`,
+/// `IDLE_S`, `BUNDLE_TOKENS`, `TRIAGE_SKIP_MAX`; the browser's 4 are its waits). The engine's crates (`rust/mode_a`, `rust/phases`,
+/// `rust/parked`) are not read: their 64 passing names are drawing rules (`MIN_TURN_DEG`, `GATE_MAX_FT`), held by the research claims
+/// and `make tunables`, not process costs.
+const CONST_SCOPE: [&str; 4] = ["rust/guard/", "rust/gate/", "rust/browser/", "rust/embed/"];
 
 /// The types a threshold constant is declared with: the integers, the floats and `Duration`.
 const NUMERIC: [&str; 15] = [
@@ -401,8 +399,7 @@ fn file_at(root: &Path, rev: Option<&str>, path: &str) -> String {
 
 /// Where a landing's named steps are written, the text that opens a step's name there, and the kind: the push's checks table
 /// (`Row("<name>"`), the landing's phases (`self.phase("<name>"`) and the gate scripts its first pass runs (`GATES`, every quoted name
-/// on its line). A refusal `make land`'s first pass adds inside an existing step (`stops.push(...)`, 6 of them, observed 2026-11-26,
-/// method: a grep of `land/cheap.rs`) carries no name, so it is not read.
+/// on its line). A refusal `make land`'s first pass adds inside an existing step carries no name, so `REFUSALS` counts them.
 const STEPS: [(&str, &str, &str); 3] = [
     (
         "rust/gate/crates/cohort/src/push.rs",
@@ -436,6 +433,24 @@ pub(super) fn step_names(text: &str, opener: &str) -> BTreeSet<String> {
         }
     }
     out
+}
+
+/// The landing's unnamed refusals: `make land`'s first pass refuses through `stops.push(` in `land/cheap.rs`, each call one refusal
+/// with no name of its own, so they are counted - the k-th is the item `landing refusal land/cheap.rs #k`, and a delta that raises
+/// the count adds the new numbers (measured 2026-11-26, the count at each of the last 21 landings on main: 6 every time, so the count
+/// moves only when a refusal is added or removed).
+const REFUSALS: (&str, &str) = ("rust/gate/crates/land/src/land/cheap.rs", "stops.push(");
+
+/// The refusal items `head` adds: the numbers past the base's count up to the head's.
+pub(super) fn refusal_items(before: &str, after: &str) -> Vec<Item> {
+    let (path, call) = REFUSALS;
+    let file = path.rsplit_once("/src/").map_or(path, |(_, f)| f);
+    (before.matches(call).count() + 1..=after.matches(call).count())
+        .map(|k| Item {
+            kind: "landing refusal",
+            name: format!("landing refusal {file} #{k}"),
+        })
+        .collect()
 }
 
 /// Everything `head` adds against `base` that owes an entry, in order.
@@ -480,6 +495,10 @@ pub(super) fn items(root: &Path, base: &str, head: &Head<'_>) -> Vec<Item> {
                 }),
         );
     }
+    out.extend(refusal_items(
+        &file_at(root, Some(base), REFUSALS.0),
+        &file_at(root, rev, REFUSALS.0),
+    ));
     out.sort();
     out
 }

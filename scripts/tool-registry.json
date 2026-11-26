@@ -47,7 +47,7 @@
     },
     "check-audit-register": {
       "kind": "check",
-      "what": "rust/gate/crates/checks/src/checks/audit_register.rs (`l7r-gate check audit-register`, a step of make static and the push, and make audits' lister, 451 T259) - a refusing check: a guard module, threshold constant, gate-chain make target or agent file the delta adds with no entry under dev/audits/, or a malformed entry; each run recorded passed or refused"
+      "what": "rust/gate/crates/checks/src/checks/audit_register.rs (`l7r-gate check audit-register`, a step of make static and the push, and make audits' lister, 451 T259) - a refusing check: a guard module, threshold constant, gate-chain make target, landing step (push check, land phase, landing gate, landing refusal by count) or agent file the delta adds with no entry under dev/audits/, or a malformed entry; each run recorded passed or refused"
     },
     "check-guard-deps": {
       "kind": "check",
