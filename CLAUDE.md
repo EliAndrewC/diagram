@@ -139,7 +139,8 @@ full").
 
 - Everything runs through `make`: `make quick` while iterating, `make done` once at the end, backgrounded, never polled.
 - **The task time breakdown** is `make task-time [SINCE=24h]`: each landed task's minutes and blocking minutes by category and make
-  target, with percentages; every place that gathers timings feeds it (451 T243).
+  target, with percentages; every place that gathers timings feeds it (451 T243). `SINCE=last` runs from where the last report so
+  asked ended; it opens with the window's table and a line a task, a batch landing (the second tier) booked to no task (451 T298).
 - `make done` reports every failure together: fix them all, re-run once.
 - **A task's closing step, in order** (451 T55): the code done, `make closing-checks T=<task>` (static, hooks-test and quick at once;
   T= judges that task's files and crates, another task's red in the clone reported apart, 451 T86) with `run_in_background`; the
