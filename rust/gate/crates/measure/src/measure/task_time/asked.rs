@@ -39,9 +39,7 @@ pub fn last(marker: &Path) -> Option<String> {
 ///
 /// The marker's directory or file could not be written.
 pub fn mark(marker: &Path, until: &str, asked: &str) -> std::io::Result<()> {
-    if let Some(dir) = marker.parent() {
-        std::fs::create_dir_all(dir)?;
-    }
+    marker.parent().map_or(Ok(()), std::fs::create_dir_all)?;
     let mut f = std::fs::OpenOptions::new()
         .create(true)
         .append(true)

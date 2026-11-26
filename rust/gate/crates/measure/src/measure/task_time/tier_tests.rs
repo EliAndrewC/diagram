@@ -320,8 +320,7 @@ fn the_report_opens_with_the_window_s_table_and_a_line_a_landed_task() {
     assert!(
         place("## The window, every category") < place("## The landed tasks, one line each")
             && place("## The landed tasks, one line each") < place("## The second tier")
-            && place("## The second tier") < place("## 451-x T1 (landed"),
-        "{out}"
+            && place("## The second tier") < place("## 451-x T1 (landed")
     );
     // the GM's wait stays apart, outside every other percentage's denominator
     has(&out, &["Waiting on the GM: 0.0 min blocking"]);
@@ -352,10 +351,7 @@ fn a_batch_landing_is_booked_to_the_second_tier_and_to_no_task() {
     // T1's own tables hold no landing, no gate and no `make quick`: they end at its carry
     let own =
         &out[out.find("## 451-x T1 (landed").unwrap()..out.find("## 451-x T2 (landed").unwrap()];
-    assert!(
-        !own.contains("make land") && !own.contains("| gate |") && !own.contains("make quick"),
-        "{own}"
-    );
+    assert!(!own.contains("make land") && !own.contains("| gate |") && !own.contains("make quick"));
     has(own, &["| make carry | carry into the clone | 1 | 0.2 | "]);
     // the carry is T1's, never the stale mark's task
     assert!(!out.contains("T9"), "{out}");
