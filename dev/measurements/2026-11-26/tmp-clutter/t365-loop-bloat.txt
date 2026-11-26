@@ -1,0 +1,11 @@
+dirsize emptied=20365312 entries=0
+mode=new n=300 entries=0 tmp=t365-syn/bloat330k-emptied mean_ms=2.924 median_ms=2.734 p90_ms=3.457 min_ms=2.286 max_ms=7.865
+mode=new n=300 entries=0 tmp=t365-syn/bloat330k mean_ms=10.640 median_ms=8.498 p90_ms=13.132 min_ms=5.692 max_ms=536.275
+mode=new n=300 entries=0 tmp=t365-syn/n5400 mean_ms=2.287 median_ms=2.187 p90_ms=2.443 min_ms=2.143 max_ms=12.793
+mode=new n=300 entries=0 tmp=/tmp mean_ms=18.121 median_ms=14.402 p90_ms=28.978 min_ms=12.362 max_ms=67.089
+mode=list n=300 entries=5443 tmp=/tmp mean_ms=14.652 median_ms=14.203 p90_ms=16.442 min_ms=12.003 max_ms=21.298
+mode=new n=300 entries=0 tmp=t365-syn/bloat330k-emptied mean_ms=2.527 median_ms=2.447 p90_ms=2.840 min_ms=2.094 max_ms=6.104
+mode=new n=300 entries=0 tmp=t365-syn/bloat330k mean_ms=7.383 median_ms=7.209 p90_ms=8.442 min_ms=5.668 max_ms=13.642
+mode=new n=300 entries=0 tmp=t365-syn/n5400 mean_ms=2.229 median_ms=2.197 p90_ms=2.221 min_ms=2.166 max_ms=4.605
+mode=new n=300 entries=0 tmp=/tmp mean_ms=15.706 median_ms=16.043 p90_ms=17.235 min_ms=12.426 max_ms=28.472
+mode=list n=300 entries=5443 tmp=/tmp mean_ms=14.866 median_ms=14.741 p90_ms=16.963 min_ms=11.213 max_ms=24.181

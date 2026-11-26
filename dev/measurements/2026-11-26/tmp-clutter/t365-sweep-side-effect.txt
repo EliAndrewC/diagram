@@ -1,0 +1,2 @@
+87 356352 bytes ('/tmp/claude-1000/<slug>/<session>', "a finished task's output, idle") e.g. /tmp/claude-1000/-diagram/a2348fda-6d6e-4045-bff1-b656ae7bcaf1/tasks/bxz4k5e0n.output
+5 221184 bytes ('/tmp/claude-1000/<slug>/<session>', 'its transcript idle, nothing inside changed') e.g. /tmp/claude-1000/-diagram--clones-diagram-backlog/1886a57a-3623-49f6-9503-46ae756d0c61

@@ -1,0 +1,2 @@
+bash glob of /tmp x200: 3.30 s wall
+bash glob of /tmp/t365-tmp/e x200: 0.00 s wall

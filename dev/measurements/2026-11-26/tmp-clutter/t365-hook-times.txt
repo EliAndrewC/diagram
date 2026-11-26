@@ -1,0 +1,9 @@
+hook-PreToolUse-Bash default n=20 median_ms=31.6 p90_ms=41.3 min_ms=28.7 max_ms=43.6
+hook-PreToolUse-Bash empty   n=20 median_ms=30.5 p90_ms=38.1 min_ms=28.0 max_ms=40.1
+hook-PreToolUse-Bash load1 min=2.87 max=2.95 exit_codes=[0] left_in_empty=['l7r-test-scratch']
+hook-PostToolUse-Bash default n=20 median_ms=20.8 p90_ms=24.5 min_ms=18.9 max_ms=32.7
+hook-PostToolUse-Bash empty   n=20 median_ms=20.5 p90_ms=22.2 min_ms=19.2 max_ms=25.2
+hook-PostToolUse-Bash load1 min=2.87 max=2.87 exit_codes=[0] left_in_empty=['l7r-test-scratch']
+hook-PreToolUse-Edit default n=20 median_ms=342.2 p90_ms=362.0 min_ms=330.5 max_ms=374.2
+hook-PreToolUse-Edit empty   n=20 median_ms=346.4 p90_ms=365.6 min_ms=330.9 max_ms=378.2
+hook-PreToolUse-Edit load1 min=2.75 max=2.87 exit_codes=[0] left_in_empty=['l7r-test-scratch']

@@ -1,0 +1,1 @@
+pid=2450199 exe=/home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/tool/l7r-rust listings=1 readdir=5445 listing_ms=21.625 other_opendir=643 proc_pid_stat=0 mkdir=10

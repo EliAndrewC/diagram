@@ -1,0 +1,2 @@
+pid=2209474 exe=/home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9 listings=1 readdir=23 listing_ms=0.050 other_opendir=0 proc_pid_stat=0 mkdir=2
+pid=2207266 exe=/home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/debug/deps/l7r_guard-060b6c99872292e9 listings=508 readdir=10577 listing_ms=102.708 other_opendir=4546 proc_pid_stat=25 mkdir=6766

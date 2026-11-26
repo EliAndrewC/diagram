@@ -1,0 +1,6 @@
+gate-builder-tree-list default n=20 median_ms=946.2 p90_ms=1008.4 min_ms=915.5 max_ms=1702.3
+gate-builder-tree-list empty   n=20 median_ms=948.9 p90_ms=1022.5 min_ms=859.7 max_ms=1139.5
+gate-builder-tree-list load1 min=14.39 max=23.1 exit_codes=[0] left_in_empty=['l7r-test-scratch']
+gate-check-file-scale-selftest default n=20 median_ms=76.4 p90_ms=81.9 min_ms=68.3 max_ms=83.5
+gate-check-file-scale-selftest empty   n=20 median_ms=36.6 p90_ms=38.2 min_ms=33.3 max_ms=38.9
+gate-check-file-scale-selftest load1 min=13.39 max=14.39 exit_codes=[0] left_in_empty=['l7r-test-scratch']

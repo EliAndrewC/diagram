@@ -1,0 +1,1 @@
+pid=2450008 exe=/usr/bin/bash listings=1 readdir=0 listing_ms=20.770 other_opendir=0 proc_pid_stat=0 mkdir=0

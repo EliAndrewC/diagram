@@ -1,0 +1,4 @@
+hook events logged (one guard process each; Stop runs two entries): {'PostToolUse': 6880, 'PreToolUse': 7073, 'UserPromptSubmit': 333, 'SubagentStop': 416, 'SubagentStart': 411, 'Stop': 296, 'PostToolUseFailure': 54}
+total hook events 15463 guard processes 15759
+Bash calls naming a make target (PreToolUse with make key): 1421
+Phase steps: {'suite': 4051, 'lint': 1363, 'cover-run': 1329, 'build': 1218, 'test': 1154, 'format': 1019, 'cached': 673, 'quick': 425, 'cover-build': 306, 'prewarm': 236, 'check': 72, 'render': 66}

@@ -1,0 +1,2 @@
+default threads=1 wall=24.85 user=8.05 sys=14.83
+empty threads=1 wall=15.04 user=7.57 sys=5.87
