@@ -254,9 +254,9 @@
    "declared": "spec-fidelity"
   },
   "### T104 Approach (checklist part A)": {
-   "sha256": "28fcc63cc001c1377e5bba2c4efb8b03f0ca51b0cdc7f595c38ba401fa0e36c1",
+   "sha256": "d29e2429d97bfdf9a13e81065b531de03f7c352b01f4cb189e2f177ed916cfa7",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
+   "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
   },
   "### T107 (<why: the finding or measurement that files it>)": {
@@ -2061,6 +2061,12 @@
   },
   "### T289 Approach (checklist part A)": {
    "sha256": "598918c0d24ef84a12ebe2e51ee21d90f3aa22478b39a810c89f8243973c5f2f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T104 (the idle-tests suite failed a landing gate on good work, 2026-11-26 16:19Z, `make land` for T281 with two builders' checks beside it: `HOOK TESTS FAILED: idle-tests-hooks.sh`, green on the rerun unchanged; T99 had found two of its cases able to do that, case 6 red in 1 of 64 copies at a load of 133.7 and case 4b red 3 of 34 once, measured 2026-11-21 (T99's `many.sh`); the GM, 2026-11-26: \"I agree with prioritizing the test that fails under load being fixed.\")": {
+   "sha256": "e204a734b9eebef413aa68bd46cb744195e52c5114df30979f74ad3283c6c2b5",
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
@@ -26292,6 +26298,210 @@
      "why": "The saving is exactly improvement 4 the GM approved on 2026-11-19; no tool is claimed faster, so no timing claim is left unmeasured."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T104 (the idle-tests suite failed a landing gate on good work, 2026-11-26 16:19Z, `make land` for T281 with two builders' checks beside it: `HOOK TESTS FAILED: idle-tests-hooks.sh`, green on the rerun unchanged; T99 had found two of its cases able to do that, case 6 red in 1 of 64 copies at a load of 133.7 and case 4b red 3 of 34 once, measured 2026-11-21 (T99's `many.sh`); the GM, 2026-11-26: \"I agree with prioritizing the test that fails under load being fixed.\")",
+    "### T104 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T104-D1 failed case unrecoverable, fix every reproduced cause",
+     "summary": "The gate's failing case cannot be recovered from logs, so the task reproduces and fixes every case able to fail the suite under load (6, 4b, 9) rather than guessing one.",
+     "class": "within",
+     "why": "The GM asked for 'the test that fails under load being fixed'; when the failing case is unknowable, fixing each case reproduced red under load is the request itself, not an addition."
+    },
+    {
+     "id": "T104-D2 case 6 contends by a gate on the guard's deferral lines",
+     "summary": "Case 6's run holds the lock while a gate file stands, released only once two timers have logged the deferral and the winner has started; the check asks 2 deferrals instead of 1; record waits 12 s to 90 s upper bounds; the sleep 0.3 before the overlap check removed; stand-in sleeps 0.3 s after the gate.",
+     "class": "within",
+     "why": "Replaces a timing-dependent contention (red 8 of 8 under a 1.0 s stall on HEAD) with a condition, which is the fix asked for; the assertion is strengthened, not weakened, and the case still goes red on a guard that takes no lock (measured)."
+    },
+    {
+     "id": "T104-D3 case 4b fixed in the guard: write_json writes beside and renames",
+     "summary": "The torn read of .git/idle-tests.json (rewritten in place while the new timer reads it) is fixed in the one writer, write_json, so the state file and every record are written whole; red-first unit test a_state_file_being_rewritten_is_read_whole.",
+     "class": "within",
+     "why": "The test failed under load because the guard has a real defect (an armed timer vanishing with no record, a wrong outcome under constitution XIV); fixing the cause rather than masking the test is what fixing the test means. Records gaining atomic writes is the same function, not a separate scope."
+    },
+    {
+     "id": "T104-D4 case 9 start wait made a checked 90 s condition",
+     "summary": "Case 9's unchecked 8 s wait for the run's start, found red 1 of 64 under load, becomes a check with a 90 s bound.",
+     "class": "within",
+     "why": "A third case of the suite failing under load, found by this task's own load runs; the request is to fix the suite's failure under load, which this is."
+    },
+    {
+     "id": "T104-D5 timer_state printed on a red wait",
+     "summary": "When a record wait runs out in cases 4, 4b, 6, 7 and 9, the suite prints each clone's arming, timer liveness and timer log.",
+     "class": "within",
+     "why": "A diagnostic whose only effect is that a future red under load names its cause (4b's left none); it serves the fix and changes no behavior of the guard."
+    },
+    {
+     "id": "T104-D6 wait_consumed between cases 5, 6 and 7",
+     "summary": "Each case waits for the arming to go (to the suite's 30 s deadline) before the next case's Stop, closing a gap the removed sleep 0.3 had hidden.",
+     "class": "within",
+     "why": "Consequence of D2's removal of a sleep; closes an ordering race that would otherwise let the suite fail under load. Part of the requested fix."
+    },
+    {
+     "id": "T104-D7 case 4's short bound kept",
+     "summary": "Case 4's 'record written after the wait' keeps its short bound on a condition wait; recorded as found-and-left, not a defect, red in none of the task's copies; its red now prints the timer's state.",
+     "class": "within",
+     "why": "Not observed failing in any of the 320+ copies under load (258 to 401) or under the lagged shell, so it is not a wrong outcome (constitution XIV) and not 'the test that fails under load'. Leaving a non-defect is within what was asked; if it ever goes red, D5 names why."
+    },
+    {
+     "id": "T104-D8 verification set",
+     "summary": "Exits measured as: HEAD case 6 red 8/8 under the stall vs final green 8/8; 0 red in 320 copies under load; 8/8 green under lagged sleep and date; broken lock and broken abort each red; builder-checks for rust/guard green; second tier run once in the session clone.",
+     "class": "within",
+     "why": "Tests that only fail when the requested fix is absent; enforcement of the request, not unrequested scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T104 (the idle-tests suite failed a landing gate on good work, 2026-11-26 16:19Z, `make land` for T281 with two builders' checks beside it: `HOOK TESTS FAILED: idle-tests-hooks.sh`, green on the rerun unchanged; T99 had found two of its cases able to do that, case 6 red in 1 of 64 copies at a load of 133.7 and case 4b red 3 of 34 once, measured 2026-11-21 (T99's `many.sh`); the GM, 2026-11-26: \"I agree with prioritizing the test that fails under load being fixed.\")",
+    "### T104 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 case 6 contends by condition",
+     "summary": "Case 6's run holds the lock while a gate file stands; the gate opens only once the guard's own deferral line stands in two timers' logs and the winner's run has written its start; the check asks 2 deferrals where it asked 1; the sleep 0.3 before the overlap check removed; record waits 12 s -> 90 s upper bounds.",
+     "class": "within",
+     "why": "The GM asked for the test that fails under load to be fixed. This replaces a clock race (a fixed 0.6 s hold, reproduced red 8 of 8 under a 1.0 s stall) with a wait on a condition, and the check gets stricter (2 deferrals, not 1), not looser. The broken-lock guard is still red on it (measured). Nothing is narrowed."
+    },
+    {
+     "id": "D2 case 4b guard defect: state file and records written whole",
+     "summary": "write_json, the one writer of .git/idle-tests.json and of every record, writes beside the file and renames over it, so a timer never reads a truncated arming and exits silently; red-first unit test a_state_file_being_rewritten_is_read_whole.",
+     "class": "within",
+     "why": "Reproduction traced case 4b's red to a real guard defect (an armed timer vanishing with no record: a wrong outcome under constitution XIV), measured on the old guard and absent on the fixed one. Fixing the cause in the guard is fixing the test that fails under load at its root; covering the records too goes through the same single writer, so it is the same fix, not extra scope."
+    },
+    {
+     "id": "D3 case 9 start wait made a check",
+     "summary": "Case 9's unchecked 8 s wait for the run's start becomes a check, 'the run started before the prompt', with a 90 s upper bound.",
+     "class": "within",
+     "why": "Found red under load (1 of 64 beside burners) and was able to pass a green 'aborted' on a run that never was. The GM's words name the test that fails under load; the gate's failing case could not be recovered, so fixing every case reproduced failing under load is what the request asks. The check is stricter than before."
+    },
+    {
+     "id": "D4 case 4 record wait 8 s -> 90 s",
+     "summary": "Case 4's condition wait on its record raised from an 8 s to a 90 s upper bound.",
+     "class": "within",
+     "why": "Reproduced red 6 of 8 under a loaded minute; an upper bound a green run never pays does not weaken what the case checks (feature 427 T03: a timing is never a gate)."
+    },
+    {
+     "id": "D5 between-case wait_consumed",
+     "summary": "Cases 5, 6 and 7 end by waiting for the arming to go, so the next case's Stop never meets the last one's timer alive.",
+     "class": "within",
+     "why": "Closes a gap the removed sleep 0.3 had hidden by chance; a direct consequence of D1's fix, inside the same suite."
+    },
+    {
+     "id": "D6 red waits print the timer's state",
+     "summary": "timer_state prints each clone's arming, the timer's liveness and its log when a wait runs out in cases 4, 4b, 6, 7 and 9.",
+     "class": "within",
+     "why": "Diagnostic output on a red only; it changes no verdict and serves the request by letting the next load failure name its cause, which the gate's failure on 2026-11-26 could not."
+    },
+    {
+     "id": "D7 the gate's failing case named as not recoverable",
+     "summary": "The plan does not name which case failed the 16:19Z gate (its output was overwritten or removed) and fixes instead every way reproduction showed the suite going red on good work, with the final suite 0 red in 320 copies under load and 8 of 8 under the stall.",
+     "class": "within",
+     "why": "Not a narrowing: the request is to fix the test that fails under load, and the plan fixes every case reproduced failing and shows the whole suite green under load, rather than fixing only one presumed case. The unrecoverability is measured (search of logs, .git and transcript, 2026-11-26), not assumed."
+    },
+    {
+     "id": "D8 lost red hook-suite output left, named as a candidate",
+     "summary": "A red hook suite's output being lost once its landing is rerun is left unfixed here, judged not a defect of this task's files (a missing record, no wrong outcome), and named in the builder's report for the coordinating session to file.",
+     "class": "within",
+     "why": "Outside what the GM asked (the idle-tests suite failing under load) and outside this task's files; it is not a defect left in the thing being fixed, so leaving it is within scope. Whether it is a defect under XIV for FR-009's found-and-left rule is for make decide's mechanical check, not a fidelity narrowing."
+    },
+    {
+     "id": "D9 checks run and order",
+     "summary": "First-tier checks (make builder-checks CRATE=rust/guard, the suite alone) in the task; the second tier once over the batch in the session clone; independent of other open tasks, before T22.",
+     "class": "within",
+     "why": "Process and ordering inside the brief; nothing the GM asked is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T104 (the idle-tests suite failed a landing gate on good work, 2026-11-26 16:19Z, `make land` for T281 with two builders' checks beside it: `HOOK TESTS FAILED: idle-tests-hooks.sh`, green on the rerun unchanged; T99 had found two of its cases able to do that, case 6 red in 1 of 64 copies at a load of 133.7 and case 4b red 3 of 34 once, measured 2026-11-21 (T99's `many.sh`); the GM, 2026-11-26: \"I agree with prioritizing the test that fails under load being fixed.\")",
+    "### T104 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 case 6 contends by condition",
+     "summary": "Case 6's run holds the lock while a gate file stands; the gate opens only once the guard's own deferral line stands in two timers' logs and the winner's run has written its start; the check asks 2 deferrals where it asked 1; the sleep 0.3 before the overlap check removed; record waits 12 s -> 90 s upper bounds.",
+     "class": "within",
+     "why": "The GM asked for the test that fails under load to be fixed. This replaces a clock race (a fixed 0.6 s hold, reproduced red 8 of 8 under a 1.0 s stall) with a wait on a condition, and the check gets stricter (2 deferrals, not 1), not looser. The broken-lock guard is still red on it (measured). Nothing is narrowed."
+    },
+    {
+     "id": "D2 case 4b guard defect: state file and records written whole",
+     "summary": "write_json, the one writer of .git/idle-tests.json and of every record, writes beside the file and renames over it, so a timer never reads a truncated arming and exits silently; red-first unit test a_state_file_being_rewritten_is_read_whole.",
+     "class": "within",
+     "why": "Reproduction traced case 4b's red to a real guard defect (an armed timer vanishing with no record: a wrong outcome under constitution XIV), measured on the old guard and absent on the fixed one. Fixing the cause in the guard is fixing the test that fails under load at its root; covering the records too goes through the same single writer, so it is the same fix, not extra scope."
+    },
+    {
+     "id": "D3 case 9 start wait made a check",
+     "summary": "Case 9's unchecked 8 s wait for the run's start becomes a check, 'the run started before the prompt', with a 90 s upper bound.",
+     "class": "within",
+     "why": "Found red under load (1 of 64 beside burners) and was able to pass a green 'aborted' on a run that never was. The GM's words name the test that fails under load; the gate's failing case could not be recovered, so fixing every case reproduced failing under load is what the request asks. The check is stricter than before."
+    },
+    {
+     "id": "D4 case 4 record wait 8 s -> 90 s",
+     "summary": "Case 4's condition wait on its record raised from an 8 s to a 90 s upper bound.",
+     "class": "within",
+     "why": "Reproduced red 6 of 8 under a loaded minute; the bound is an upper bound a green run never pays, and the case's check is unchanged, so what it verifies is not weakened."
+    },
+    {
+     "id": "D5 between-case wait_consumed",
+     "summary": "Cases 5, 6 and 7 end by waiting for the arming to go, so the next case's Stop never meets the last one's timer alive.",
+     "class": "within",
+     "why": "Closes a gap the removed sleep 0.3 had hidden by chance; a direct consequence of D1's fix, inside the same suite."
+    },
+    {
+     "id": "D6 red waits print the timer's state",
+     "summary": "timer_state prints each clone's arming, the timer's liveness and its log when a wait runs out in cases 4, 4b, 6, 7 and 9.",
+     "class": "within",
+     "why": "Diagnostic output on a red only; it changes no verdict and serves the request by letting the next load failure name its cause, which the gate's failure on 2026-11-26 could not."
+    },
+    {
+     "id": "D7 the gate's failing case named as not recoverable",
+     "summary": "The plan does not name which case failed the 16:19Z gate (its output was overwritten or removed) and fixes instead every way reproduction showed the suite going red on good work, with the final suite 0 red in 320 copies under load and 8 of 8 under the stall.",
+     "class": "within",
+     "why": "Not a narrowing: the request is to fix the test that fails under load, and the plan fixes every case reproduced failing and shows the whole suite green under load, rather than fixing only one presumed case. The unrecoverability is measured (search of logs, .git and transcript, 2026-11-26), not assumed."
+    },
+    {
+     "id": "D8 lost red hook-suite output left, named as a candidate",
+     "summary": "A red hook suite's output being lost once its landing is rerun is left unfixed here, judged not a defect of this task's files (a missing record, no wrong outcome), and named in the builder's report for the coordinating session to file.",
+     "class": "within",
+     "why": "Outside what the GM asked (the idle-tests suite failing under load) and outside this task's files; it is not a defect left in the thing being fixed, so leaving it is within scope. Whether it is a defect under XIV for FR-009's found-and-left rule is for make decide's mechanical check, not a fidelity narrowing."
+    },
+    {
+     "id": "D9 checks run and order",
+     "summary": "First-tier checks (make builder-checks CRATE=rust/guard, the suite alone) in the task; the second tier once over the batch in the session clone; independent of other open tasks, before T22.",
+     "class": "within",
+     "why": "Process and ordering inside the brief; nothing the GM asked is dropped."
+    },
+    {
+     "id": "D10 new checks never seen red",
+     "summary": "Case 9's new check 'the run started before the prompt' and the between-case wait_consumed are stated never seen red on a broken guard.",
+     "class": "within",
+     "why": "Neither the GM's request nor the spec requires a red-first proof of these (FR-012's red-first rule covers the refusals of FR-006 to FR-009, FR-011 and FR-013, not a hook suite's waits); the suite's own regressions (no lock, no abort) are shown red. Nothing asked is dropped."
+    },
+    {
+     "id": "D11 case 10 counted apart in shadow runs",
+     "summary": "In t104-shadow.sh copies case 10 ('seams ignored in the repository's own tree') is red by construction (the shadow's hook stands outside the repository) and is excluded from the 8-of-8 counts.",
+     "class": "within",
+     "why": "A measurement-method choice about a harness artifact, stated openly; the non-shadow batches (320 + 64 copies) run case 10 normally and count it. Nothing in the request is narrowed."
+    },
+    {
+     "id": "D12 case 4b's bar met on the pre-final suite",
+     "summary": "Case 4b's 0-red-in-200 bar is met on the 320 copies run before case 4's bound was raised; the suite as it lands has 64 more copies plus 8 under the stall.",
+     "class": "within",
+     "why": "Raising case 4's upper bound cannot make case 4b red, and the landing suite was also run under load green; the evidence covers what is landing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -41386,6 +41596,86 @@
      "summary": "Tagged [perf] as a builders'-loop saving under the GM-approved 'Fewer plan re-rounds'; no engine-speed checklist and no before/after timing owed.",
      "class": "within",
      "why": "The saving is exactly improvement 4 the GM approved on 2026-11-19; no tool is claimed faster, so no timing claim is left unmeasured."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T104": {
+   "section_sha256": "dc65473e8ff3fbf5ead274757ac1ce9eeecb6d4bec314b2bec0494e8091defc9",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 case 6 contends by condition",
+     "summary": "Case 6's run holds the lock while a gate file stands; the gate opens only once the guard's own deferral line stands in two timers' logs and the winner's run has written its start; the check asks 2 deferrals where it asked 1; the sleep 0.3 before the overlap check removed; record waits 12 s -> 90 s upper bounds.",
+     "class": "within",
+     "why": "The GM asked for the test that fails under load to be fixed. This replaces a clock race (a fixed 0.6 s hold, reproduced red 8 of 8 under a 1.0 s stall) with a wait on a condition, and the check gets stricter (2 deferrals, not 1), not looser. The broken-lock guard is still red on it (measured). Nothing is narrowed."
+    },
+    {
+     "id": "D2 case 4b guard defect: state file and records written whole",
+     "summary": "write_json, the one writer of .git/idle-tests.json and of every record, writes beside the file and renames over it, so a timer never reads a truncated arming and exits silently; red-first unit test a_state_file_being_rewritten_is_read_whole.",
+     "class": "within",
+     "why": "Reproduction traced case 4b's red to a real guard defect (an armed timer vanishing with no record: a wrong outcome under constitution XIV), measured on the old guard and absent on the fixed one. Fixing the cause in the guard is fixing the test that fails under load at its root; covering the records too goes through the same single writer, so it is the same fix, not extra scope."
+    },
+    {
+     "id": "D3 case 9 start wait made a check",
+     "summary": "Case 9's unchecked 8 s wait for the run's start becomes a check, 'the run started before the prompt', with a 90 s upper bound.",
+     "class": "within",
+     "why": "Found red under load (1 of 64 beside burners) and was able to pass a green 'aborted' on a run that never was. The GM's words name the test that fails under load; the gate's failing case could not be recovered, so fixing every case reproduced failing under load is what the request asks. The check is stricter than before."
+    },
+    {
+     "id": "D4 case 4 record wait 8 s -> 90 s",
+     "summary": "Case 4's condition wait on its record raised from an 8 s to a 90 s upper bound.",
+     "class": "within",
+     "why": "Reproduced red 6 of 8 under a loaded minute; the bound is an upper bound a green run never pays, and the case's check is unchanged, so what it verifies is not weakened."
+    },
+    {
+     "id": "D5 between-case wait_consumed",
+     "summary": "Cases 5, 6 and 7 end by waiting for the arming to go, so the next case's Stop never meets the last one's timer alive.",
+     "class": "within",
+     "why": "Closes a gap the removed sleep 0.3 had hidden by chance; a direct consequence of D1's fix, inside the same suite."
+    },
+    {
+     "id": "D6 red waits print the timer's state",
+     "summary": "timer_state prints each clone's arming, the timer's liveness and its log when a wait runs out in cases 4, 4b, 6, 7 and 9.",
+     "class": "within",
+     "why": "Diagnostic output on a red only; it changes no verdict and serves the request by letting the next load failure name its cause, which the gate's failure on 2026-11-26 could not."
+    },
+    {
+     "id": "D7 the gate's failing case named as not recoverable",
+     "summary": "The plan does not name which case failed the 16:19Z gate (its output was overwritten or removed) and fixes instead every way reproduction showed the suite going red on good work, with the final suite 0 red in 320 copies under load and 8 of 8 under the stall.",
+     "class": "within",
+     "why": "Not a narrowing: the request is to fix the test that fails under load, and the plan fixes every case reproduced failing and shows the whole suite green under load, rather than fixing only one presumed case. The unrecoverability is measured (search of logs, .git and transcript, 2026-11-26), not assumed."
+    },
+    {
+     "id": "D8 lost red hook-suite output left, named as a candidate",
+     "summary": "A red hook suite's output being lost once its landing is rerun is left unfixed here, judged not a defect of this task's files (a missing record, no wrong outcome), and named in the builder's report for the coordinating session to file.",
+     "class": "within",
+     "why": "Outside what the GM asked (the idle-tests suite failing under load) and outside this task's files; it is not a defect left in the thing being fixed, so leaving it is within scope. Whether it is a defect under XIV for FR-009's found-and-left rule is for make decide's mechanical check, not a fidelity narrowing."
+    },
+    {
+     "id": "D9 checks run and order",
+     "summary": "First-tier checks (make builder-checks CRATE=rust/guard, the suite alone) in the task; the second tier once over the batch in the session clone; independent of other open tasks, before T22.",
+     "class": "within",
+     "why": "Process and ordering inside the brief; nothing the GM asked is dropped."
+    },
+    {
+     "id": "D10 new checks never seen red",
+     "summary": "Case 9's new check 'the run started before the prompt' and the between-case wait_consumed are stated never seen red on a broken guard.",
+     "class": "within",
+     "why": "Neither the GM's request nor the spec requires a red-first proof of these (FR-012's red-first rule covers the refusals of FR-006 to FR-009, FR-011 and FR-013, not a hook suite's waits); the suite's own regressions (no lock, no abort) are shown red. Nothing asked is dropped."
+    },
+    {
+     "id": "D11 case 10 counted apart in shadow runs",
+     "summary": "In t104-shadow.sh copies case 10 ('seams ignored in the repository's own tree') is red by construction (the shadow's hook stands outside the repository) and is excluded from the 8-of-8 counts.",
+     "class": "within",
+     "why": "A measurement-method choice about a harness artifact, stated openly; the non-shadow batches (320 + 64 copies) run case 10 normally and count it. Nothing in the request is narrowed."
+    },
+    {
+     "id": "D12 case 4b's bar met on the pre-final suite",
+     "summary": "Case 4b's 0-red-in-200 bar is met on the 320 copies run before case 4's bound was raised; the suite as it lands has 64 more copies plus 8 under the stall.",
+     "class": "within",
+     "why": "Raising case 4's upper bound cannot make case 4b red, and the landing suite was also run under load green; the evidence covers what is landing."
     }
    ],
    "verdict": "CLEAR"

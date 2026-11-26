@@ -257,8 +257,16 @@ pub(crate) fn judge(event: &Event, c: &Config, pwd: &str) -> Vec<Answer> {
         .collect()
 }
 
+/// A state file or a record, written WHOLE: beside the file under this process's own name, then renamed over it, so a reader
+/// sees the old document or the new and never an empty or cut one (451 T104, a guard that failed correct work).
+/// The arming rewrote its state file in place, to add the timer's pid, while the timer it had just started read it; a timer that
+/// read it truncated took the arming for gone and exited with no record and no word (4 timers gone so of fewer than 960 armings
+/// beside 22 burners with the arming at idle priority, 2026-11-26; the suite's case 4b red 3 of 34 on 2026-11-21 has this shape:
+/// no record ever, the next Stop arming afresh over the dead pid). Do not write either file in place again.
 fn write_json(path: &Path, v: &Value) {
-    let _ = std::fs::write(path, serde_json::to_string_pretty(v).unwrap_or_default());
+    let tmp = path.with_extension(format!("tmp{}", std::process::id()));
+    let _ = std::fs::write(&tmp, serde_json::to_string_pretty(v).unwrap_or_default())
+        .and_then(|()| std::fs::rename(&tmp, path));
 }
 
 /// ARM: the state file and a detached timer; a no-op while one is armed and alive.

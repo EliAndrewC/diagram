@@ -7,7 +7,7 @@ use serde_json::json;
 
 use super::{
     cksum, cli, decide, failures, judge, launch, locate, make_in, sid_is_live, state_of, timer,
-    verdict, Config, Timer, DEF_ARM,
+    verdict, write_json, Config, Timer, DEF_ARM,
 };
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
@@ -460,4 +460,37 @@ fn the_command_line_and_the_entry() {
     assert!(decide(&e, &Session::from_input(&e.input)).is_empty());
     let d = dir("nostate");
     assert_eq!(state_of(&d.join("x"), "k"), "");
+}
+
+/// THE STATE FILE IS NEVER SEEN HALF-WRITTEN (451 T104): the arming rewrites it, to add the timer's pid, while the timer it just
+/// started reads it, and a timer that reads it empty takes the arming for gone and exits with no record. A reader spinning beside
+/// 2,000 rewrites (a GUESS: the count that made the truncating write red in every run measured) reads the whole document each time.
+#[test]
+fn a_state_file_being_rewritten_is_read_whole() {
+    use std::sync::atomic::{AtomicBool, Ordering};
+    let (clone, _c) = world("whole");
+    let sf = clone.join(".git/idle-tests.json");
+    let state = json!({"session": "sess", "session_id": "sid", "armed_at": 1000, "wait_min": 60, "timer_pid": 4_000_000});
+    write_json(&sf, &state);
+    let done = AtomicBool::new(false);
+    let torn = std::thread::scope(|s| {
+        let reader = s.spawn(|| {
+            let mut torn = 0_u32;
+            while !done.load(Ordering::Relaxed) {
+                torn += u32::from(state_of(&sf, "armed_at") != "1000");
+            }
+            torn
+        });
+        for _ in 0..2000 {
+            write_json(&sf, &state);
+        }
+        done.store(true, Ordering::Relaxed);
+        reader.join().unwrap_or(u32::MAX)
+    });
+    assert_eq!(torn, 0, "a reader saw the state file empty or cut short");
+    let left = std::fs::read_dir(clone.join(".git")).unwrap().count();
+    assert_eq!(left, 1, "the rewrite leaves no file of its own behind");
+    // a path that cannot be written is left alone, as before
+    write_json(Path::new("/no/such/dir/state.json"), &state);
+    assert!(!Path::new("/no/such/dir").exists());
 }

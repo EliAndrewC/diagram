@@ -297,3 +297,11 @@ The coordinating session had set the builder count at two so that their compiles
 builders at once" (copied here from those by T284's builder, who did not hear them; the fragment is all they hold):
 
 > wouldn't it be better to address that with some synchronization rather than pre-emptively limiting builders just in case?
+
+## 2026-11-26: the idle-tests suite's cases that fail under load (451 T104)
+
+The idle-tests guard's suite failed a landing's gate on good work (2026-11-26 16:19Z, green on the rerun unchanged), and T104, filed
+on 2026-11-21 for two of its cases, was still open. The GM, 2026-11-26, as the coordinating session gave his words in T104's
+builder's brief (copied here from the brief by that builder, who did not hear them; the sentence is all the brief holds):
+
+> I agree with prioritizing the test that fails under load being fixed.

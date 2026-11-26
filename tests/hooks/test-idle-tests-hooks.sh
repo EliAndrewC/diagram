@@ -9,8 +9,19 @@ source "$(dirname "${BASH_SOURCE[0]}")/seen.sh"  # seen VAR <grep args>: a run's
 HOOK="$(cd "$(dirname "$0")" && pwd)/idle-tests-hooks.sh"
 pass=0 fail=0
 ok() { pass=$((pass+1)); }
-bad() { fail=$((fail+1)); echo "FAIL: $1"; }
+bad() { fail=$((fail+1)); echo "FAIL: $1"; return 1; }
 check() { if eval "$2"; then ok; else bad "$1"; fi; }
+# WHAT A TIMER WAS DOING WHEN A WAIT FOR IT RAN OUT (451 T104): a red wait names each clone's arming, its timer's liveness and the
+# timer's own log, so the next red says which it was - a timer still waiting, or one gone with no record (the torn read of its
+# state file, fixed in the guard by the same task, left exactly that and nothing to tell it by).
+timer_state() {
+  local c p
+  for c in "$@"; do
+    p=$(jq -r '.timer_pid // "none"' "$c/.git/idle-tests.json" 2>/dev/null)
+    if [ -f "$c/.git/idle-tests.json" ]; then echo "  ${c##*/}: arming stands, timer ${p:-unread} $([ -d "/proc/${p:-none}" ] && echo alive || echo gone)"; else echo "  ${c##*/}: arming consumed"; fi
+    echo "  ${c##*/}: timer log: $(tr '\n' '|' < "$c/.git/idle-tests.log" 2>/dev/null)"
+  done
+}
 
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
@@ -59,6 +70,10 @@ wait_grep() { # wait_grep <pattern> <file> <seconds>
 # fails. The deadline, WAIT_TRIES of 0.1 s (30 s), is a GUESS only a red run pays (a killed process measured gone in at most
 # 0.059 s at a load of 16-17, 451 T111).
 WAIT_TRIES=300
+# A CASE ENDS WITH ITS ARMINGS CONSUMED (451 T104): a timer writes its record and THEN removes its arming, and every case below
+# waits for the record. A Stop landing between the two finds the old arming's timer alive and arms nothing, and the next case
+# waits for a run that never comes; so the case that follows a record waits here first (to the same deadline, a red run's cost).
+wait_consumed() { local c; for c in "$@"; do for _ in $(seq "$WAIT_TRIES"); do [ ! -f "$c/.git/idle-tests.json" ] && break; sleep 0.1; done; done; }
 # a clock that advances by itself while a timer waits: every 0.1 s adds 1 "second"
 ticker() { while [ -f "$TMP/ticking" ]; do tick_clock 1; sleep 0.1; done; }
 
@@ -86,7 +101,9 @@ check "prompt disarms and the timer exits" '[ ! -f "$CA/.git/idle-tests.json" ] 
 # --- 4. the wait runs the tests once, records, surfaces once, does not re-arm
 export IDLE_WAIT_S=0.3; : > "$RUNLOG"; touch "$TMP/ticking"; ticker & TK=$!
 hook stop "$CA"
-check "record written after the wait" 'wait_for "$CA/dev/idle-log/*-sess-a.json" 8'
+# an upper bound a green run never pays: at 8 s it was red in 6 of 8 copies of the suite in one loaded minute (451 T104, 2026-11-26,
+# a load of 272), the shape cases 7 and 9 had; 90 s as theirs
+check "record written after the wait" 'wait_for "$CA/dev/idle-log/*-sess-a.json" 90' || timer_state "$CA"
 # the timer removes the arming file after its record, its last step
 for _ in $(seq "$WAIT_TRIES"); do [ ! -f "$CA/.git/idle-tests.json" ] && break; sleep 0.1; done
 check "arming consumed" '[ ! -f "$CA/.git/idle-tests.json" ]'
@@ -96,7 +113,10 @@ hook prompt "$CA"; check "surfaced once only" '! seen OUT -q "idle-tests: ran"'
 # --- 4b. D10: a new arming on a clone unchanged since that green run rolls nothing and records the skip
 hook stop "$CA"
 # the wait is an upper bound, so a green run pays nothing for it: 10 s timed out in land-tooling's worktree under load (feature 449 T065)
-check "second record (the skip)" 'wait_count "$CA/dev/idle-log/*-sess-a.json" 2 30'
+# (case 4b's one red, 3 of 34 on 2026-11-21, was never reproduced in the suite: 0 of T99's 472 copies. Its shape - no record ever, the
+# next Stop arming afresh - is a timer that read its state file while the arming rewrote it, a guard defect fixed by 451 T104 in
+# `write_json`; the bound stays, and a red here now prints the timer's state.)
+check "second record (the skip)" 'wait_count "$CA/dev/idle-log/*-sess-a.json" 2 30' || timer_state "$CA"
 check "no second run on unchanged content" '[ "$(grep -c "^start" "$RUNLOG")" = 1 ] && grep -q "skipped" "$(ls -t "$CA"/dev/idle-log/*-sess-a.json | head -1)"'
 hook prompt "$CA"; check "the skip surfaces" 'seen OUT -q "skipped - unchanged"'
 # a change to the clone makes the next arming roll again
@@ -179,19 +199,38 @@ check "the run started a FULL wait after the last jump the timer saw (jump $seen
 owed=$(awk -v w="$IDLE_WAIT_S" -v t="$IDLE_TICK" 'BEGIN { printf "%d", 2 * w / t + 0.5 }')
 ticks=$(awk -v c=$(( c0 + B * ((1 << seen) - 1) )) -v s="$t_start" '$1 == "t" && $2 >= c { if (hit) { if (s != "" && $3 < s) n++ } else hit = 1 } END { print n + 0 }' "$READS")
 check "the timer counted a FULL wait of ticks after that jump ($ticks reads, $owed owed)" '[ "$seen" -ge 1 ] && [ "$ticks" -ge "$owed" ]'
-export IDLE_CLOCK="$CLOCK"
+export IDLE_CLOCK="$CLOCK"; wait_consumed "$CA"
 
 # --- 6. one runner at a time: three sessions armed together never overlap, losers defer and still run
+# THE CONTENTION IS MADE BY A CONDITION, NOT BY THREE ARMINGS LANDING CLOSE (451 T104). The three were armed one after another and
+# each run held the lock a fixed 0.6 s, so a loser met the lock only if its wait ended inside the winner's 0.6 s: with the suite's
+# shell 1.0 s late after each arming, 8 of 8 copies "the losers deferred (0)" (2026-11-26, at a load of 242), and 1 of 64 beside 22
+# burners at a load of 133.7 (T99, 2026-11-21) - the case green or red without ever having tested deferral. Now the case's run
+# HOLDS the lock while a gate file stands, and the gate goes only once the guard's own line "another session's idle run holds the
+# lock: deferring" stands in two of the three timers' logs (each log is made new at its arming): whoever wins, and however far
+# apart the armings land, both losers have met the held lock before any run ends. So both must have deferred (2 at least, where
+# the old check asked 1 of a race), and a guard that takes no lock leaves the wait unmet and the three runs overlapping. The
+# waits are upper bounds only a red run pays (90 s, a GUESS, the bound cases 4b and 7 hold for a loaded host).
 export IDLE_WAIT_S=0.2 IDLE_DEFER_S=0.2; : > "$RUNLOG"
 for c in "$CA" "$CB" "$CC"; do rm -f "$c"/dev/idle-log/*.json; done
+GATE6="$TMP/run.gate"; RUN6="$TMP/run6.sh"; touch "$GATE6"
+printf '#!/bin/sh\necho "start $(date +%%s.%%N) $PWD" >> %s; while [ -f %s ]; do sleep 0.02; done; sleep 0.3; echo "end $(date +%%s.%%N) $PWD" >> %s; echo FAKE-OK\n' "$RUNLOG" "$GATE6" "$RUNLOG" > "$RUN6"; chmod +x "$RUN6"
+export IDLE_RUN="$RUN6"
 touch "$TMP/ticking"; ticker & TK=$!
 hook stop "$CA"; hook stop "$CB"; hook stop "$CC"
-check "three records" 'wait_for "$CA/dev/idle-log/*.json" 12 && wait_for "$CB/dev/idle-log/*.json" 12 && wait_for "$CC/dev/idle-log/*.json" 12'
-sleep 0.3
-check "no two runs overlapped" 'sort -k2,2n -k1,1 "$RUNLOG" | awk "\$1 == \"start\" { d++ } \$1 != \"start\" { d-- } d > 1 { exit 1 }"'
+met_lock() { local c n=0; for c in "$CA" "$CB" "$CC"; do grep -q "holds the lock: deferring" "$c/.git/idle-tests.log" 2>/dev/null && n=$((n+1)); done; [ "$n" -ge 2 ]; }
+# ...and the winner's run has written its start: a loser can defer while the winner, the lock already its own, is still on its way
+# to the run (5 of 64 copies red on a check that read the run log at the second deferral, 2026-11-26)
+for _ in $(seq 900); do met_lock && grep -q "^start" "$RUNLOG" && break; sleep 0.1; done
+check "both losers met the lock the winner's run holds" 'met_lock && [ "$(grep -c "^start" "$RUNLOG")" = 1 ] && ! grep -q "^end" "$RUNLOG"' || timer_state "$CA" "$CB" "$CC"
+rm -f "$GATE6"
+check "three records" 'wait_for "$CA/dev/idle-log/*.json" 90 && wait_for "$CB/dev/idle-log/*.json" 90 && wait_for "$CC/dev/idle-log/*.json" 90' || timer_state "$CA" "$CB" "$CC"
+# a record is written after its run's end line, so the three records are the three runs whole: no sleep to let a line land
+check "three runs, no two overlapped" '[ "$(grep -c "^start" "$RUNLOG")" = 3 ] && [ "$(grep -c "^end" "$RUNLOG")" = 3 ] && sort -k2,2n -k1,1 "$RUNLOG" | awk "\$1 == \"start\" { d++ } \$1 != \"start\" { d-- } d > 1 { exit 1 }"'
 defs=$(cat "$CA"/dev/idle-log/*.json "$CB"/dev/idle-log/*.json "$CC"/dev/idle-log/*.json | jq -s 'map(.deferrals // 0) | add // 0')
-check "the losers deferred ($defs)" '[ "$defs" -ge 1 ]'
-rm -f "$TMP/ticking"; wait $TK 2>/dev/null
+check "both losers deferred ($defs)" '[ "$defs" -ge 2 ]'
+wait_consumed "$CA" "$CB" "$CC"
+rm -f "$TMP/ticking"; wait $TK 2>/dev/null; export IDLE_RUN="$RUNNER"
 
 # --- 7. a make running in the clone defers the run (FR-006b b)
 export IDLE_WAIT_S=0.2 IDLE_DEFER_S=0.2 IDLE_BUSY_CMD="$TMP/busy.sh"; printf '#!/bin/sh\n[ -f %s/busyflag ]\n' "$TMP" > "$TMP/busy.sh"; chmod +x "$TMP/busy.sh"
@@ -201,7 +240,8 @@ check "no run while a make runs" '[ ! -s "$RUNLOG" ]'
 rm -f "$TMP/busyflag"
 # an upper bound, so a green run pays nothing for it: 8 s was red in 3 of 64 copies run at once beside 22 CPU burners (a load of
 # 79.7, feature 451 T99, 2026-11-21), and 4b's background roll already owns 90 s for the same load
-check "runs once the make is gone" 'wait_for "$CA/dev/idle-log/*.json" 90'
+check "runs once the make is gone" 'wait_for "$CA/dev/idle-log/*.json" 90' || timer_state "$CA"
+wait_consumed "$CA"
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null; export IDLE_BUSY_CMD="false"
 
 # --- 8. the session is gone: the timer exits without running
@@ -219,13 +259,19 @@ rm -f "$TMP/ticking"; wait $TK 2>/dev/null; rm -f "$CA/.git/idle-tests.json"
 SLOW="$TMP/slow.sh"; printf '#!/bin/sh\necho "start $(date +%%s.%%N) $PWD" >> %s; sleep 3; echo "end $(date +%%s.%%N) $PWD" >> %s\n' "$RUNLOG" "$RUNLOG" > "$SLOW"; chmod +x "$SLOW"
 export IDLE_WAIT_S=0.2 IDLE_RUN="$SLOW"; : > "$RUNLOG"; rm -f "$CA"/dev/idle-log/*.json
 touch "$TMP/ticking"; ticker & TK=$!
-hook stop "$CA"; wait_grep "^start" "$RUNLOG" 8; sleep 0.3
+# THE RUN'S START IS WAITED FOR AND CHECKED (451 T104): the wait was 8 s and unchecked, so a run that had not started by then - a
+# timer slower than that, or one gone at its arming; the log could not say which - met the prompt with nothing to abort: "the run
+# was aborted" green of a run that never was, and "an aborted record exists" red, 1 of 64 copies beside 22 burners (2026-11-26, a
+# load of 275 to 343). An upper bound a green run never pays, 90 s as case 7's.
+hook stop "$CA"
+check "the run started before the prompt" 'wait_grep "^start" "$RUNLOG" 90' || timer_state "$CA"
+sleep 0.3
 hook prompt "$CA"; sleep 0.5
 # the aborted record is written as the run dies: waited for, not slept on (a landing's parallel suites made 0.5 s too short,
 # 2026-11-11, the land-tooling worktree's run of this suite)
 wait_for "$CA/dev/idle-log/*.json" 8
 check "the run was aborted on the prompt" '! grep -q "^end" "$RUNLOG" && [ ! -f "$CA/.git/idle-tests.running" ]'
-check "an aborted record exists and surfaces" 'grep -q "aborted" "$CA"/dev/idle-log/*.json && seen OUT -q "aborted on your prompt"'
+check "an aborted record exists and surfaces" 'grep -q "aborted" "$CA"/dev/idle-log/*.json && seen OUT -q "aborted on your prompt"' || { timer_state "$CA"; echo "  the prompt said: $OUT"; echo "  the records: $(ls "$CA/dev/idle-log" 2>/dev/null | tr '\n' ' ')"; }
 sleep 3; check "no end line ever" '! grep -q "^end" "$RUNLOG"'
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null; export IDLE_RUN="$RUNNER"
 
