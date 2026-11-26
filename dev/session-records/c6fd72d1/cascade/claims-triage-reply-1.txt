@@ -1,0 +1,5 @@
+TOUCHES rust/phases/src/driver.rs::roll#the stages in order - stage_hem_fed now feeds the field's output back after the seat (the winter crop may be rolled again and the hem laid again)
+TOUCHES rust/phases/src/field/build.rs::build#the hem's line - the line's construction moved out of build into the new hem_in
+TOUCHES rust/phases/src/field/build.rs::build#the brook's flank unhemmed - the far flank (-brook_side) is now set in hem_in, and barley_instead lays the hem again
+TOUCHES rust/phases/src/field/build.rs::build#barley on the drained paddy - the new barley_instead turns a short bare winter to barley, with the dry need cut by what drains
+TOUCHES rust/phases/src/field/build.rs::build#the climb's order - dry.rs hem now ends a column's climb where it pinches or laps another column, which may change the measured Inashiro depths

@@ -1,0 +1,4 @@
+claims-triage: 270 claim(s) were last answered by an l7r-gate built with other builders' uncommitted code: each is read at its answer before that one and triaged again by this build (451 T223)
+claims-triage: 147 claim(s) cleared by the tool - no edit of the text each rests on is claim-bearing (feature 451 T191: comments, markup, links, marks and moves; a rewritten or removed sentence only where the claim repeats its changed words)
+/tmp/l7r-check/claims-triage/MANIFEST.md
+claims-triage: 49 claim(s); dispatch the `claims-triage` agent on the MANIFEST (a session started before 2026-10-17's amendment 6 landed: restart to load it), save its reply, then `make claims-triaged BUNDLE=<dir> REPLY=<file>`

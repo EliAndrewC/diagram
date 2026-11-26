@@ -1,0 +1,27 @@
+band 0 n 58646 s/1kout wtd 7.26 med 4.01 mean out/turn 714 cw/turn 2243 s/turn 5.18
+band 300000 n 1950 s/1kout wtd 7.80 med 5.99 mean out/turn 1033 cw/turn 3923 s/turn 8.05
+band 500000 n 539 s/1kout wtd 9.07 med 7.42 mean out/turn 924 cw/turn 1540 s/turn 8.38
+band 800000 n 136 s/1kout wtd 6.87 med 7.72 mean out/turn 1041 cw/turn 14577 s/turn 7.15
+handoffs total (any) since1119 135 cap-hit (old ctx>=290k) 107
+with measurable reread 83
+reread min median 3.7 mean 5.1 p90 12.5 total 421
+reread cost(k) median 326 mean 453 total(M) 37.6
+reread turns median 22
+fresh builders post-edit s/1kout 6.03 (turn-latency only), median ctx 163340
+R remaining out: median 90467 p90 164876 mean 87996
+est minutes old builder would have paid extra (slow-fresh) per handoff: median 2.7 total 215 ; slow=7.80
+net minutes lost(reread) - saved: total 205
+fresh ctx at first edit median 87361
+growth/turn 3044 out/turn 727 cw/turn 2318
+
+break-even: C, R | continue min, cost(k) | handoff min, cost(k) | dmin, dcost(k)
+median R=90467 C=300k | 12.7 6909 | 12.8 4587 | +0.1 -2322
+median R=90467 C=400k | 13.2 8154 | 12.8 4587 | -0.4 -3567
+median R=90467 C=500k | 13.0 9400 | 12.8 4587 | -0.2 -4813
+median R=90467 C=600k | 12.1 10645 | 12.8 4587 | +0.7 -6058
+median R=90467 C=800k | 10.4 13135 | 12.8 4587 | +2.4 -8548
+p90 R=164876 C=300k | 22.2 16130 | 20.2 11630 | -2.0 -4500
+p90 R=164876 C=400k | 21.9 18399 | 20.2 11630 | -1.7 -6769
+p90 R=164876 C=500k | 21.5 20669 | 20.2 11630 | -1.3 -9039
+p90 R=164876 C=600k | 20.6 22938 | 20.2 11630 | -0.3 -11308
+p90 R=164876 C=800k | 18.9 27477 | 20.2 11630 | +1.4 -15847

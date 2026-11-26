@@ -1,0 +1,74 @@
+modal-form: 3 pop-ups - 6 findings (2 FIX, 4 NOTE)
+
+---
+
+unit: modal-form:sheet/barracks f24f7ce5c768b8e9
+
+modal-form: barracks - 2 findings (0 FIX, 2 NOTE)
+
+This is a later round, so I judged only the two pairs changed since round 2. Round 2's APPLIED M16 fix still holds: "one row has earth walls as it stands today".
+
+NOTE M2 - The changed sentence now runs "A country jin'ya's rows could be thatched, as Sayama's were, and so was a foot soldiers' row built in 1842, and a gate rowhouse tiled". After "and so was ...", the short "and a gate rowhouse tiled" can be read as part of the "so was" clause. Putting the verb back makes it read as its own clause. The held wording, which runs up to "built in 1842,", stays as it is.
+EDIT l7r/diagram/interactive/assets/modals/sheet/barracks.md
+<<<
+and a gate rowhouse tiled; one row has earth walls as it stands today
+===
+and a gate rowhouse could be tiled; one row has earth walls as it stands today
+>>>
+
+NOTE M5/D1 - The new size sentence says "The rowhouses measured ran about 80 to 300 ft long". Two problems:
+- M5.3 asks for a typical figure with an ordinary low and high, not the records. The 300 ft comes from castle guards' and town constables' rows. The record gives no typical length for an office's staff row, so About cannot be reworded to give one.
+- The map still draws a barracks no longer than about 145 ft. The drawing page now calls that a deliberate limit and a GUESS ("barracks-length-ceiling"). A reader who reads "300 ft" and then sees a short barracks is told nothing on the Depiction tab. The second guess bullet ("and so how long the barracks runs") only partly covers this.
+
+No edit - the size sentence is held wording, and adding the 145 ft ceiling to Depiction or Guesses adds a fact. That is for modal-research and the session to decide.
+
+---
+
+unit: modal-form:sheet/karo-s-house 3675c38b00e70eb0
+
+modal-form: karo's house - 3 findings (2 FIX, 1 NOTE)
+
+The prepass's 361 words are within the band. This is a building (M5). Its look and its size are each said plainly to be unrecorded, and the size is a guess bullet, so M5 and M8 pass.
+
+FIX M2 - The first paragraph never says what the thing on the map is. It opens "The karo, the 'house elder', was a lord's chief retainer". It then gives the Rokugan staff list and the Saigo family's 38-room mansion. A reader who stops there pictures a daimyo's karo mansion, not the small house or long-house bay on the plan. Naming the house in the opening clause fixes this without adding a fact.
+EDIT l7r/diagram/interactive/assets/modals/sheet/karo-s-house.md
+<<<
+About: The karo, the "house elder", was a lord's chief retainer.
+===
+About: The karo's house was the home of the karo, the "house elder", a lord's chief retainer.
+>>>
+
+FIX M18 - "(koya)" is a Japanese term the reader never meets again, and "small houses" already says what it is. "nagaya" stays, because the sibling pop-ups and the References use it.
+EDIT l7r/diagram/interactive/assets/modals/sheet/karo-s-house.md
+<<<
+inside the compound's walls, in small houses (koya) and long-houses (nagaya),
+===
+inside the compound's walls, in small houses and long-houses (nagaya),
+>>>
+
+NOTE M18 - This pop-up calls the nagaya a "long-house" throughout. The barracks, the retainers' quarters and the References entry ("Staff rowhouses and barracks (nagaya)") call it a "rowhouse". A reader moving between the pop-ups meets two English names for one thing.
+
+No edit - "long-houses inside its grounds" is held wording. Changing only the other occurrences would leave the pop-up inconsistent with itself, so the session should decide whether to raise this with the research round.
+
+---
+
+unit: modal-form:sheet/retainers--quarters da2a586347378304
+
+modal-form: retainers' quarters - 1 finding (0 FIX, 1 NOTE)
+
+This is a later round, so I judged only the four changed pairs. Moving the thatch-and-walls sentence into the look paragraph keeps it at four sentences (M3), and the size paragraph is also at four. Round 2's applied fix holds.
+
+NOTE M2/D2 - The added clause "those of highest standing seemingly in a block of just two dwellings" causes two problems:
+- It puts a shape and size detail into the paragraph about where the retainers lived.
+- It sits awkwardly with the Depiction's "long and narrow, never a square block". The drawing page now records that the Sakai block was squat.
+
+A reader may take the About and the Depiction as contradicting each other.
+
+No edit - the sentence is held wording. Saying on the Depiction tab that the map does not draw that squat form would add a fact, so it is for the session.
+
+---
+
+Bundles judged:
+- /tmp/l7r-check/p7c-modal-form/01-sheet-barracks/MANIFEST.md
+- /tmp/l7r-check/p7c-modal-form/02-sheet-karo-s-house/MANIFEST.md
+- /tmp/l7r-check/p7c-modal-form/03-sheet-retainers-quarters/MANIFEST.md

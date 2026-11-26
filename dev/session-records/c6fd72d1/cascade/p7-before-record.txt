@@ -1,0 +1,3 @@
+  [answered] modal-references:sheet/guest-quarters  - its About, Guesses or Entry changed
+Answer each with `make record-checked CHECK=<check> BUNDLE=<its bundle> RESULT="<counts>"` when its check returns.
+Apply a round's own EDITs with `make apply-edits FROM=<the agent's reply or its transcript>` - its unit then settles, owing no round to re-read its own words - the same command settles an EDIT you alr

@@ -1,0 +1,3 @@
+Population: 301 tasks (449+451) with >=1 MODE 4 task-level plan-review row in dev/review-ledger.md since 2026-11-19 (575 rows; 56 rows had no task id and are excluded).
+First round CLEAR 224 (74.4%), first round BLOCKED 74 (24.6%), other 3. Ever BLOCKED 87 (13 were CLEAR first, BLOCKED later).
+Classes of the first BLOCKED round over the 87: a=6 b=13 c=45 d=5 unrecoverable=18. See table.tsv.

@@ -1,0 +1,3 @@
+impl-drift: 1 claim - IN-STEP 1; UNCLAIMED 0
+
+VERDICT rust/phases/src/driver.rs::roll#the stages in order IN-STEP - plan() fixes the fall and the water's bearing (down_deg, water_flow) before anything is placed; the field is built from them through field_in, and the sink, the seat and the hem follow in that order. The page says these declared figures are the only terrain, and that a hamlet takes its water's bearing from its fall and draws one field on one slope [§1, §3]

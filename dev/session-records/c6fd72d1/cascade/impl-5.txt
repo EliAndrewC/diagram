@@ -1,0 +1,9 @@
+impl-drift: 4 claims - IN-STEP 4, DRIFTED 0, NEEDS-RESEARCH 0, MISLABELED 0, CANNOT-TELL 0; UNCLAIMED 0
+
+VERDICT rust/phases/src/field/build.rs::build#barley on the drained paddy IN-STEP - the drained area (field area less the wet low row and the rested plots) is taken acre for acre off the need when the winter crop is barley, as the page finds and guesses [§26, §27]
+VERDICT rust/phases/src/field/build.rs::build#the brook's flank unhemmed IN-STEP - the cited page does not say which flank the dry plots take; the code passes only the first field to `hem_in`, which matches the claim [§28, §31]
+VERDICT rust/phases/src/field/build.rs::build#the climb's order IN-STEP - toe-first is the page's own guess; band by band away from the canal until the need is held, deepest at the foot, fits "plot by plot, out as far from the canal as the ground runs ... and no further"; `dry_need` is passed on to the hem stage [§28, §29]
+VERDICT rust/phases/src/field/build.rs::build#the hem's line IN-STEP - `hem_in` gets wild-middle, barley and `dry_need`: a wild middle with a bare winter climbs into the middle, barley stays on the toe, and a cleared middle gets one hem band along the whole canal, always with barley (odds 1.0) [§25, §26, §28, §31]
+
+NOTED, NOT FILED
+- rust/phases/src/field/build.rs | build | where the middle is cleared and the winter crop is pinned bare (not barley), only the one hem band is drawn, while the page says "a bare winter paddy is drawn only where the fan's dry ground can grow the hamlet's whole grain need". The bundle shows no spec that sets this pin, so no map is shown to have this problem.

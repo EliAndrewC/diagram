@@ -1,0 +1,3 @@
+impl-drift: 1 claim - IN-STEP 1; UNCLAIMED 0
+
+VERDICT docs/buildings.md::Outer court (administrative / public)#barracks IN-STEP - every part of the claim is backed by 0097: the rowhouse on the grounds, split into dwellings of a few men each with no bunks; 12 to 24 ft deep and never squat; the ~145 ft ceiling, which the drawing page records as a GUESS; and the 48 x 24 ft quarters. The county example's 22 x 60 ft barracks falls inside the depth band and under the ceiling. The servants' common room stays a separate form. [§169, §187, §189, §193, §197, §200, §202, §203, §204, §205, §206, §207, §211, §214, §216]

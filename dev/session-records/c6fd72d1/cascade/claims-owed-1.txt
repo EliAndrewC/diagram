@@ -1,0 +1,246 @@
+stale figure: research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html states 0.5 (LIT_SHARE was 0.5 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html states 6 (SUN_BED_H was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0033-row-villages-resson.drawing.html states 6 (SUN_BED_H was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html states 6 (SUN_BED_H was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html states 6 (SUN_BED_H was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html states 6 (SUN_BED_H was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html states 6 (SUN_BED_H was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html states 6 (SUN_BED_H was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html states 6 (SUN_BED_H was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0033-row-villages-resson.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html states 6 (SMALL_BUILDING_FT was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0033-row-villages-resson.drawing.html states 6 (SMALL_BUILDING_FT was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html states 6 (SMALL_BUILDING_FT was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html states 6 (SMALL_BUILDING_FT was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html states 6 (SMALL_BUILDING_FT was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html states 6 (SMALL_BUILDING_FT was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html states 6 (SMALL_BUILDING_FT was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html states 6 (SMALL_BUILDING_FT was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html states 100 (SMALL_BUILDING_SQFT was 100.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html states 100 (SMALL_BUILDING_SQFT was 100.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html states 100 (SMALL_BUILDING_SQFT was 100.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html states 100 (SMALL_BUILDING_SQFT was 100.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html states 100 (SMALL_BUILDING_SQFT was 100.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html states 40 (NOTICE_BOARD_MAX_FT was 40.0 in rust/mode_a/src/compound.rs) - reword it, or check it still holds
+stale figure: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html states 4 (SUPPLY_W was (4.5, 4.0) in rust/phases/src/field/channels.rs) - reword it, or check it still holds
+stale figure: research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html states 4 (SUPPLY_W was (4.5, 4.0) in rust/phases/src/field/channels.rs) - reword it, or check it still holds
+stale figure: research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html states 4 (SUPPLY_W was (4.5, 4.0) in rust/phases/src/field/channels.rs) - reword it, or check it still holds
+stale figure: research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html states 4 (SUPPLY_W was (4.5, 4.0) in rust/phases/src/field/channels.rs) - reword it, or check it still holds
+stale figure: research/questions/0060-field-drains-akusuiro.drawing.html states 4.5 (SUPPLY_W was (4.5, 4.0) in rust/phases/src/field/channels.rs) - reword it, or check it still holds
+stale figure: research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html states 4.5 (SUPPLY_W was (4.5, 4.0) in rust/phases/src/field/channels.rs) - reword it, or check it still holds
+stale figure: research/questions/0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html states 4.5 (SUPPLY_W was (4.5, 4.0) in rust/phases/src/field/channels.rs) - reword it, or check it still holds
+stale figure: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html states 64 (MAX_BANDS was 64 in rust/phases/src/field/dry.rs) - reword it, or check it still holds
+claims-label: docs/buildings.md::Sacred features#hall shrine ceiling - a bare GUESS says no page speaks, but its account names 0116: cite the page if it states this, `GUESS <its .drawing.html>` if it records it as a guess, `DEVIATION <page>` if the code departs (or say the page is silent)
+claims-label: docs/buildings.md::Sacred features#hall shrine under half a residence - a bare GUESS says no page speaks, but its account names 0116: cite the page if it states this, `GUESS <its .drawing.html>` if it records it as a guess, `DEVIATION <page>` if the code departs (or say the page is silent)
+claims-label: docs/buildings.md::Sacred features#the whole sacred complex held to at most ~2/3 of the residence - a bare GUESS says no page speaks, but its account names 0116: cite the page if it states this, `GUESS <its .drawing.html>` if it records it as a guess, `DEVIATION <page>` if the code departs (or say the page is silent)
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#a bounty board outside the gate
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#a roof over about one well in three
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#alley behind the office hall
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#an indoor well hangs its pulley from the beams
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#border court as a garden
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#cart route to granary and stables
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#clerk positions flanking the dais
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#commuting clerks
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#dais band on the office hall's south face
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate on the axis
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate width
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#envelope moved in for a record-sized house
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#fire-water tubs
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#garden and stables wells
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#garrison emphasis knob
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#granary on the offices' side
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#granary weight knob
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#guest doors feed courts
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#inner-court postern
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#justice-front furniture knob
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#latrines by zone
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#mostly open compound
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#notice board at the gate
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#office hall dais band
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#office hall rooms
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#outer service gate
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#posting wealth knob
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#posting wealth's rich end
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#practice ground
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#practice ground placement and gear
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#prisoners by the formal gate
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#privy clear of any well
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#privy hatch through the wall
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#rear service strip
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#residence entrances
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#residence size
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#resident particulars knob
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#resident particulars other than the dojo
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#road checkpoint tier
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#sand hearing court
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#service buildings in the outer court
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#shrine smaller than the residence
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#staffing anchors
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#tenure character knob
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#the armory's share of the office hall
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#the armory's size band
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#the clerks' room's size
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#the family's privy apart
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#the gate drum not drawn
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#the granary at the head of an office-court column
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#the granary's cart gate
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#the magistrate's dais band
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#the official study and day office bands
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#the official study's seat
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#the shrine in a corner beside a tree
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#the writing and binding rooms
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#the writing rooms' band
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#tier knob
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#two-court zoning
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#universal shrine
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#upland granary contents
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#wall display
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#walled enclosure
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#well curb size about 4 ft
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#well depth by the ground
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#well gear about three in four by the water's depth
+section triage   docs/building-programs.md::Magistrate's manor (county magistracy)#wells by use
+section triage   docs/buildings.md::Inner court (private / sacred)#an enlarged bath as a resident particular
+section triage   docs/buildings.md::Inner court (private / sacred)#bath
+section triage   docs/buildings.md::Inner court (private / sacred)#door set wholly inside its building
+section triage   docs/buildings.md::Inner court (private / sacred)#engawa
+section triage   docs/buildings.md::Inner court (private / sacred)#formal reception room
+section triage   docs/buildings.md::Inner court (private / sacred)#genkan
+section triage   docs/buildings.md::Inner court (private / sacred)#inner garden
+section triage   docs/buildings.md::Inner court (private / sacred)#kamado range size
+section triage   docs/buildings.md::Inner court (private / sacred)#kitchen
+section triage   docs/buildings.md::Inner court (private / sacred)#kitchen abuts the house, no corridor
+section triage   docs/buildings.md::Inner court (private / sacred)#reception at one end
+section triage   docs/buildings.md::Inner court (private / sacred)#residence massing
+section triage   docs/buildings.md::Inner court (private / sacred)#residence of about six rooms
+section triage   docs/buildings.md::Inner court (private / sacred)#room order
+section triage   docs/buildings.md::Inner court (private / sacred)#senior retainers housed apart
+section triage   docs/buildings.md::Inner court (private / sacred)#suites as labeled zones
+section triage   docs/buildings.md::Inner court (private / sacred)#the karo's own house as a lodging block inside the compound
+section triage   docs/buildings.md::Inner court (private / sacred)#the residence along the north range
+section triage   docs/buildings.md::Outer court (administrative / public)#archery bank
+code changed     docs/buildings.md::Outer court (administrative / public)#barracks
+section triage   docs/buildings.md::Outer court (administrative / public)#barracks watch of ~10-20 men
+section triage   docs/buildings.md::Outer court (administrative / public)#cart yard as a charcoal fire gap
+section triage   docs/buildings.md::Outer court (administrative / public)#cell
+section triage   docs/buildings.md::Outer court (administrative / public)#cell kept well under the barracks
+section triage   docs/buildings.md::Outer court (administrative / public)#charcoal bales
+section triage   docs/buildings.md::Outer court (administrative / public)#charcoal weighing floor
+section triage   docs/buildings.md::Outer court (administrative / public)#clerk positions at the dais
+section triage   docs/buildings.md::Outer court (administrative / public)#forecourt
+section triage   docs/buildings.md::Outer court (administrative / public)#granary forms
+section triage   docs/buildings.md::Outer court (administrative / public)#granary kept under a residence block
+section triage   docs/buildings.md::Outer court (administrative / public)#granary label
+section triage   docs/buildings.md::Outer court (administrative / public)#granary size
+section triage   docs/buildings.md::Outer court (administrative / public)#hearing cart slot
+section triage   docs/buildings.md::Outer court (administrative / public)#hearing court
+section triage   docs/buildings.md::Outer court (administrative / public)#hearing court posts
+section triage   docs/buildings.md::Outer court (administrative / public)#hearing mat size
+section triage   docs/buildings.md::Outer court (administrative / public)#hearing mats
+section triage   docs/buildings.md::Outer court (administrative / public)#kura granary door on the apron
+section triage   docs/buildings.md::Outer court (administrative / public)#office hall
+section triage   docs/buildings.md::Outer court (administrative / public)#office hall room sizes
+section triage   docs/buildings.md::Outer court (administrative / public)#one storehouse at the office
+section triage   docs/buildings.md::Outer court (administrative / public)#practice ground
+section triage   docs/buildings.md::Outer court (administrative / public)#practice ground area
+section triage   docs/buildings.md::Outer court (administrative / public)#practice ground placement
+section triage   docs/buildings.md::Outer court (administrative / public)#practice ground shared with cart staging or muster
+section triage   docs/buildings.md::Outer court (administrative / public)#practice ground striking posts
+section triage   docs/buildings.md::Outer court (administrative / public)#practice ground weapon rack
+section triage   docs/buildings.md::Outer court (administrative / public)#stable below barracks
+section triage   docs/buildings.md::Outer court (administrative / public)#stable passage and grooms' quarters
+section triage   docs/buildings.md::Outer court (administrative / public)#stable stall width
+section triage   docs/buildings.md::Outer court (administrative / public)#stables
+section triage   docs/buildings.md::Outer court (administrative / public)#tax archive drawn with white-plaster fill, heavy stroke and dark door mark
+section triage   docs/buildings.md::Outer court (administrative / public)#tax archive size
+section triage   docs/buildings.md::Outer court (administrative / public)#the granary behind the offices
+section triage   docs/buildings.md::Outer court (administrative / public)#the granary below a barracks
+section triage   docs/buildings.md::Outer court (administrative / public)#the granary's seat in the office court
+section triage   docs/buildings.md::Outer court (administrative / public)#the kura granary's vents not drawn
+section triage   docs/buildings.md::Outer court (administrative / public)#the study's own door
+section triage   docs/buildings.md::Sacred features#approach width
+section triage   docs/buildings.md::Sacred features#arch in plan
+section triage   docs/buildings.md::Sacred features#bare precinct earth
+section triage   docs/buildings.md::Sacred features#burial ground beside the precinct
+section triage   docs/buildings.md::Sacred features#compound shrine arch
+section triage   docs/buildings.md::Sacred features#compound shrine tree
+section triage   docs/buildings.md::Sacred features#grove
+section triage   docs/buildings.md::Sacred features#grove crown size
+section triage   docs/buildings.md::Sacred features#hall and dwelling
+section triage   docs/buildings.md::Sacred features#hall and dwelling order
+section triage   docs/buildings.md::Sacred features#hall shrine ceiling
+section triage   docs/buildings.md::Sacred features#hall shrine under half a residence
+section triage   docs/buildings.md::Sacred features#more than one kami in a hall
+section triage   docs/buildings.md::Sacred features#precinct unenclosed
+section triage   docs/buildings.md::Sacred features#privy at the dwelling
+section triage   docs/buildings.md::Sacred features#sanctuary
+section triage   docs/buildings.md::Sacred features#shrine tree's crown and seat
+section triage   docs/buildings.md::Sacred features#shrine vermilion edging
+section triage   docs/buildings.md::Sacred features#the whole sacred complex held to at most ~2/3 of the residence
+section triage   docs/buildings.md::Sacred features#workshop colonnade
+section triage   docs/buildings.md::Walls and gates#cart gate in the side gate's band
+section triage   docs/buildings.md::Walls and gates#compound wall stroke
+section triage   docs/buildings.md::Walls and gates#divider wall
+section triage   docs/buildings.md::Walls and gates#divider wall between the courts
+section triage   docs/buildings.md::Walls and gates#gatehouse
+section triage   docs/buildings.md::Walls and gates#main gate forms
+section triage   docs/buildings.md::Walls and gates#main gate on the south wall
+section triage   docs/buildings.md::Walls and gates#main gate posts
+section triage   docs/buildings.md::Walls and gates#no salt wards at gates
+section triage   docs/buildings.md::Walls and gates#opening ink width
+section triage   docs/buildings.md::Walls and gates#side gate passage
+section triage   docs/buildings.md::Walls and gates#structures abut walls
+section triage   docs/buildings.md::Walls and gates#the gatehouse behind the gate
+section triage   docs/buildings.md::Walls and gates#threshold stones
+rests changed    rust/mode_a/src/audit/program_rules.rs::HIERARCHY#the cell under the barracks
+rests changed    rust/mode_a/src/compound/emit.rs::building#dwelling walls across the long side
+code triage      rust/phases/src/driver.rs::roll#the stages in order
+code triage      rust/phases/src/driver/polder.rs::draw_polder#the cut as wide as the water
+code triage      rust/phases/src/driver/polder.rs::draw_polder#the pocket pond's ring
+code triage      rust/phases/src/driver/polder.rs::roll_polder#its back to the landward shore
+code triage      rust/phases/src/driver/polder.rs::roll_polder#its belt to windward on the dry side
+code triage      rust/phases/src/driver/polder.rs::roll_polder#its lines and no pond
+code triage      rust/phases/src/driver/polder.rs::roll_polder#its wet ground
+code triage      rust/phases/src/driver/polder.rs::roll_polder#the strips after the seat
+code triage      rust/phases/src/driver/polder.rs::roll_polder#the village off its polder's dike
+code triage      rust/phases/src/field/build.rs::FieldOut#the stage's record
+code triage      rust/phases/src/field/build.rs::build#barley on a cleared middle
+code triage      rust/phases/src/field/build.rs::build#barley on the drained paddy
+code triage      rust/phases/src/field/build.rs::build#fields side by side
+code triage      rust/phases/src/field/build.rs::build#the brook's flank unhemmed
+code triage      rust/phases/src/field/build.rs::build#the climb's order
+code triage      rust/phases/src/field/build.rs::build#the fields under the cap
+code triage      rust/phases/src/field/build.rs::build#the grain owed
+code triage      rust/phases/src/field/build.rs::build#the hem on the first field
+code triage      rust/phases/src/field/build.rs::build#the hem's line
+code triage      rust/phases/src/field/dry.rs::hem#a band's strips
+code triage      rust/phases/src/field/dry.rs::hem#not steep ground
+code triage      rust/phases/src/field/dry.rs::hem#rows on the contour or down
+code triage      rust/phases/src/field/dry.rs::hem#the climb's bound
+code triage      rust/phases/src/field/dry.rs::hem#the hem's figures
+code triage      rust/phases/src/field/dry.rs::hem#the plot
+code triage      rust/phases/src/field/dry.rs::hem#the tracts apart
+code triage      rust/phases/src/seat.rs::seat#the fords before the seat
+code triage      rust/phases/src/seat/margins.rs::ranked#band on the canvas
+code triage      rust/phases/src/seat/margins.rs::ranked#brook across the band
+code triage      rust/phases/src/seat/margins.rs::ranked#no drain rule at the seat
+code triage      rust/phases/src/seat/margins.rs::ranked#not in the reed fringe
+code triage      rust/phases/src/seat/margins.rs::ranked#not on the wet toe
+code triage      rust/phases/src/seat/margins.rs::ranked#the back's width
+code triage      rust/phases/src/seat/margins.rs::ranked#the dry hem's reach
+code triage      rust/phases/src/seat/margins.rs::ranked#the ladder
+claims-owed: 3 claim(s) in 3 file(s) owe impl-drift; bundle per file with `make claims-bundle MODULE=<path>`, or OWED=1 for all
+claims-owed: 197 of the owed claims were last answered by an l7r-gate built with other builders' uncommitted code (rust/gate/CLAUDE.md, rust/gate/crates/bundle/src/record/bundle/check.rs, rust/gate/crates/claims/src/claims.rs, rust/gate/crates/claims/src/claims/bundle.rs, rust/gate/crates/claims/src/claims/carry.rs, rust/gate/crates/claims/src/claims/commands.rs, rust/gate/crates/claims/src/claims/commands/tests.rs, rust/gate/crates/claims/src/claims/drawn.rs, rust/gate/crates/claims/src/claims/index.rs, rust/gate/crates/claims/src/claims/index/tests.rs, rust/gate/crates/claims/src/claims/reply.rs, rust/gate/crates/claims/src/claims/reply/tests.rs, rust/gate/crates/claims/src/claims/silent.rs, rust/gate/crates/claims/src/claims/silent/tests.rs, rust/gate/crates/claims/src/claims/triage.rs, rust/gate/crates/claims/src/claims/triage/tests.rs, rust/gate/crates/core/src/record/effect.rs, rust/gate/crates/owed/src/record/owed/answers/cli.rs, rust/gate/crates/owed/src/record/owed/tests.rs, rust/gate/crates/reviews/src/reviews/prereq/tests.rs, rust/gate/crates/reviews/src/reviews/prereq/verdict.rs, rust/gate/crates/reviews/src/reviews/snapshot.rs, rust/gate/crates/reviews/src/reviews/snapshot/tests.rs), not this landing's: that answer is withdrawn and each is owed what this build finds since its answer before it - `L7R_LAND_ALONE=1 make claims-triage` clears again what the tool can and bundles the rest for the `claims-triage` agent (451 T223)
+claims-owed: 196 claim(s) owe only a TRIAGE of what changed on their pages or in their code - `make claims-triage` first; it sends on only the claims a change bears on

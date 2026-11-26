@@ -1,0 +1,3 @@
+impl-drift: 1 claims - IN-STEP 1; UNCLAIMED 0
+
+VERDICT rust/mode_a/src/audit/program_rules.rs::HIERARCHY#the cell under the barracks IN-STEP - no cited page ranks a cell against a barracks, and the sizes they give agree with the order. 0096 records the 12 by 10 ft cell (about 120 sq ft) as a GUESS. 0097 draws the barracks 12 to 24 ft deep, in bays about 12 to 18 ft wide. Even a single 12 ft bay is larger than the cell. 0116 §19 joins the two at Ochiba into one guard building but does not rank them. [§23, §25, §31, §34, §35, §19]

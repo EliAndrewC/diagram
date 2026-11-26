@@ -1,0 +1,121 @@
+**modal-research: 3 pop-ups. Barracks: 1 finding. Karo's house: 2 findings. Retainers' quarters: 2 findings. References are clean in all three.**
+
+The barracks and the retainers' quarters each have a "change since" section, so I judged only what changed. That change is mostly the research page 0097, which now records rows of about 270 to 300 ft and dwellings about 30 ft square. The karo's house has no such section, so I judged the whole pop-up, leaving out what round 1 settled.
+
+---
+
+unit: modal-accuracy:sheet/barracks b05d85b9c41fe37e
+unit: modal-references:sheet/barracks b05d85b9c41fe37e
+unit: modal-gaps:sheet/barracks b05d85b9c41fe37e
+
+modal-research: office.Barracks - ACCURACY 1 findings; REFERENCES 0; GAPS 0
+
+ACCURACY
+1. **M8: the 0097 change has made a passed statement wrong.**
+   - The pop-up says: "The rowhouses measured ran about 80 to 145 ft long and 12 to 24 ft deep". Round 2 passed this when 0097 said "The rowhouses that were measured run about 80 to 145 ft long".
+   - `entry/0097-...` (origin `research/questions/0097-staff-rowhouses-and-barracks-nagaya.html`) now limits that range: "The gate ranges and the foot soldiers' row that were measured run about 80 to 145 ft long and 12 to 24 ft deep, and a row of many dwellings could run to about 300 ft."
+   - It also says: "Rows longer than 145 ft are recorded twice: Matsusaka's castle guards' rows, ~298 and ~274 ft, and the Sakai doshin rows, about 270 and 290 ft".
+   - The same page says the Matsusaka dwellings are "5 ken of depth (~30 ft)". So 12 to 24 ft deep now holds only for the gate ranges and the foot soldiers' rows.
+   - The 145 ft limit now belongs to the map, not to history. It is the drawing page's guess, "The longest a barracks is drawn, about 145 ft".
+
+   EDIT l7r/diagram/interactive/assets/modals/sheet/barracks.md
+   <<<
+   The rowhouses measured ran about 80 to 145 ft long and 12 to 24 ft deep:
+   ===
+   The rowhouses measured ran about 80 to 300 ft long, and the gate and foot soldiers' rows 12 to 24 ft deep:
+   >>>
+
+REFERENCES
+clean. The roof statement ("as Sayama's were") now rests on 0338. 0097 lists it through its moved pointer, so it counts as listed.
+
+GAPS
+clean
+
+---
+
+unit: modal-accuracy:sheet/karo-s-house a5543623a973787d
+unit: modal-references:sheet/karo-s-house a5543623a973787d
+unit: modal-gaps:sheet/karo-s-house a5543623a973787d
+
+modal-research: household.KarosHouse - ACCURACY 1 findings; REFERENCES 0; GAPS 1
+
+ACCURACY
+1. **M8: a dwelling's size is stated more narrowly than the record now gives it.**
+   - The pop-up says: "a dwelling was about 12 to 18 ft wide and 12 to 24 ft deep, and a retainer of higher rank had a longer one, up to about 36 ft along the row."
+   - `entry/0097-...` (origin `research/questions/0097-staff-rowhouses-and-barracks-nagaya.html`) gives the 12 to 24 ft depth only for "The gate ranges and foot soldiers' rows measured".
+   - It now also records: "Matsusaka's castle guards ... built in 1863 as the homes of the Kishu domain's castle guards and their families ... on a standard of 5 ken of frontage and 5 ken of depth (~30 by 30 ft) to a dwelling." Those dwellings are deeper than the pop-up's upper limit.
+
+   EDIT l7r/diagram/interactive/assets/modals/sheet/karo-s-house.md
+   <<<
+   deep, and a retainer of higher rank had a longer one, up to about 36 ft along the row.
+   ===
+   deep, and a retainer of higher rank had a longer one, up to about 36 ft along the row; one castle's guards, housed with their families, had dwellings about 30 ft square.
+   >>>
+
+REFERENCES
+clean. The long-house paragraph's earth-floored entry rests on 0334 through 0097's moved pointer, so it counts as listed. 0115 supports the Saigo room groups, and 0331 supports Sakai and Omori.
+
+GAPS
+1. **M15 (M5.2 what it looked like, M5.3 how big): partly answered.**
+   - The pop-up says: "What a karo's own quarters at such an office looked like, how big they were ... is not recorded."
+   - `entry/0097-...` (origin `research/questions/0097-staff-rowhouses-and-barracks-nagaya.html`) gives the nearest case: "At the Sakai town magistracy, the retainers' rowhouse the author ranks highest in standing was, on the author's reading of the plan, a block of two dwellings".
+   - `entry/0331-...` places those retainers "beside the magistrate's residence ... inside the grounds".
+   - The quarters of a magistrate's highest-standing retainers inside the grounds are what a reader of this pop-up wants. They were not a bay in a long row.
+   - The page calls it the author's reading, so the edit keeps the pop-up's existing "seem to". It leaves out the size, which is this project's measurement and not the paper's.
+   - "Not recorded" for the karo's own quarters still stands.
+
+   EDIT l7r/diagram/interactive/assets/modals/sheet/karo-s-house.md
+   <<<
+   At the Sakai town magistracy the magistrate's own retainers seem to have lived in long-houses inside its grounds, while
+   ===
+   At the Sakai town magistracy the magistrate's own retainers seem to have lived in long-houses inside its grounds, those of highest standing in a block of just two dwellings, while
+   >>>
+
+---
+
+unit: modal-accuracy:sheet/retainers--quarters 04fa5dce9b1e0ecf
+unit: modal-references:sheet/retainers--quarters 04fa5dce9b1e0ecf
+unit: modal-gaps:sheet/retainers--quarters 04fa5dce9b1e0ecf
+
+modal-research: household.RetainersQuarters - ACCURACY 1 findings; REFERENCES 0; GAPS 1
+
+Round 3's applied fix holds: "Such rows could be thatched, a gate rowhouse tiled" now rests on `entry/0338-...` ("A country jin'ya's staff rows could be thatched ... A gate rowhouse could be tiled"), reached through 0097's moved pointer.
+
+ACCURACY
+1. **M8: the 0097 change has made a statement wrong.** This is the same defect as the barracks finding.
+   - The pop-up says: "A rowhouse ran about 80 to 145 ft long and 12 to 24 ft deep, built of bays about 12 to 18 ft wide."
+   - `entry/0097-...` (origin `research/questions/0097-staff-rowhouses-and-barracks-nagaya.html`) now says: "The gate ranges and the foot soldiers' row that were measured run about 80 to 145 ft long and 12 to 24 ft deep, and a row of many dwellings could run to about 300 ft."
+   - It also records the Matsusaka rows (~298 and ~274 ft, dwellings ~30 by 30 ft) and the Sakai doshin rows (about 270 and 290 ft).
+
+   EDIT l7r/diagram/interactive/assets/modals/sheet/retainers--quarters.md
+   <<<
+   A rowhouse ran about 80 to 145 ft long and 12 to 24 ft deep, built of bays about 12 to 18 ft wide.
+   ===
+   The rowhouses measured ran about 80 to 300 ft long; the gate and foot soldiers' rows were 12 to 24 ft deep, built of bays about 12 to 18 ft wide.
+   >>>
+
+REFERENCES
+clean. The lattice door rests on 0334 and the roofs and walls on 0338, both reached through 0097's moved pointers. 0090 supports the first guess bullet's "about ten retainers".
+
+GAPS
+1. **M15 (M5.2 what it looked like): a candidate holds a finding the pop-up's own subject needs, and the change brought it in.**
+   - This pop-up covers "the senior retainers' quarters". Its About says the form was "a long, narrow, single-story building".
+   - `entry/0097-...` (origin `research/questions/0097-staff-rowhouses-and-barracks-nagaya.html`) says: "At the Sakai town magistracy, the retainers' rowhouse the author ranks highest in standing was, on the author's reading of the plan, a block of two dwellings ... a squat block about one and a half times as long as deep".
+   - It is the one case on record of a magistrate's senior retainers' quarters, and it was not a long row. The page classes it as the author's reading, so the edit hedges it.
+
+   EDIT l7r/diagram/interactive/assets/modals/sheet/retainers--quarters.md
+   <<<
+   At Sakai's town magistracy the magistrate's own retainers are thought to have lodged in rowhouses inside its grounds.
+   ===
+   At Sakai's town magistracy the magistrate's own retainers are thought to have lodged in rowhouses inside its grounds, those of highest standing seemingly in a block of just two dwellings.
+   >>>
+
+OUTSIDE THE CHANGE
+The Depiction tab says the plan draws the quarters "never a square block". The Sakai block bears on that, but the Depiction tab is for `modal-depiction` to judge, not this check.
+
+---
+
+Bundles judged:
+- /tmp/l7r-check/p7c-modal-research/01-sheet-barracks/MANIFEST.md
+- /tmp/l7r-check/p7c-modal-research/02-sheet-karo-s-house/MANIFEST.md
+- /tmp/l7r-check/p7c-modal-research/03-sheet-retainers-quarters/MANIFEST.md

@@ -1,0 +1,50 @@
+stale figure: research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html states 0.5 (LIT_SHARE was 0.5 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html states 6 (SUN_BED_H was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0033-row-villages-resson.drawing.html states 6 (SUN_BED_H was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html states 6 (SUN_BED_H was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html states 6 (SUN_BED_H was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html states 6 (SUN_BED_H was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html states 6 (SUN_BED_H was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html states 6 (SUN_BED_H was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html states 6 (SUN_BED_H was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0033-row-villages-resson.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html states 3 (HALF_SHADE_BED_H was 3.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html states 6 (SMALL_BUILDING_FT was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0033-row-villages-resson.drawing.html states 6 (SMALL_BUILDING_FT was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html states 6 (SMALL_BUILDING_FT was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html states 6 (SMALL_BUILDING_FT was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html states 6 (SMALL_BUILDING_FT was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html states 6 (SMALL_BUILDING_FT was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html states 6 (SMALL_BUILDING_FT was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html states 6 (SMALL_BUILDING_FT was 6.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html states 100 (SMALL_BUILDING_SQFT was 100.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html states 100 (SMALL_BUILDING_SQFT was 100.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html states 100 (SMALL_BUILDING_SQFT was 100.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html states 100 (SMALL_BUILDING_SQFT was 100.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html states 100 (SMALL_BUILDING_SQFT was 100.0 in rust/mode_a/src/audit/sun.rs) - reword it, or check it still holds
+stale figure: research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html states 40 (NOTICE_BOARD_MAX_FT was 40.0 in rust/mode_a/src/compound.rs) - reword it, or check it still holds
+stale figure: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html states 4 (SUPPLY_W was (4.5, 4.0) in rust/phases/src/field/channels.rs) - reword it, or check it still holds
+stale figure: research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html states 4 (SUPPLY_W was (4.5, 4.0) in rust/phases/src/field/channels.rs) - reword it, or check it still holds
+stale figure: research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html states 4 (SUPPLY_W was (4.5, 4.0) in rust/phases/src/field/channels.rs) - reword it, or check it still holds
+stale figure: research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html states 4 (SUPPLY_W was (4.5, 4.0) in rust/phases/src/field/channels.rs) - reword it, or check it still holds
+stale figure: research/questions/0060-field-drains-akusuiro.drawing.html states 4.5 (SUPPLY_W was (4.5, 4.0) in rust/phases/src/field/channels.rs) - reword it, or check it still holds
+stale figure: research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html states 4.5 (SUPPLY_W was (4.5, 4.0) in rust/phases/src/field/channels.rs) - reword it, or check it still holds
+stale figure: research/questions/0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html states 4.5 (SUPPLY_W was (4.5, 4.0) in rust/phases/src/field/channels.rs) - reword it, or check it still holds
+stale figure: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html states 64 (MAX_BANDS was 64 in rust/phases/src/field/dry.rs) - reword it, or check it still holds
+code changed     docs/buildings.md::Outer court (administrative / public)#barracks
+rests changed    rust/mode_a/src/audit/program_rules.rs::HIERARCHY#the cell under the barracks
+rests changed    rust/mode_a/src/compound/emit.rs::building#dwelling walls across the long side
+code changed     rust/phases/src/driver.rs::roll#the stages in order
+code changed     rust/phases/src/field/build.rs::build#barley on the drained paddy
+code changed     rust/phases/src/field/build.rs::build#the brook's flank unhemmed
+code changed     rust/phases/src/field/build.rs::build#the climb's order
+code changed     rust/phases/src/field/build.rs::build#the hem's line
+claims-owed: 8 claim(s) in 5 file(s) owe impl-drift; bundle per file with `make claims-bundle MODULE=<path>`, or OWED=1 for all

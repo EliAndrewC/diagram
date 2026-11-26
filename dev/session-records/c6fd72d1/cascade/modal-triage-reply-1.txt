@@ -1,0 +1,5 @@
+TOUCHES sheet/barracks @ 0097-staff-rowhouses-and-barracks-nagaya.drawing.html - A: new "How long may the barracks run?" block records rows of about 270-298 ft against the stated 80 to 145 ft measured
+TOUCHES sheet/retainers--quarters @ 0097-staff-rowhouses-and-barracks-nagaya.drawing.html - A: changed form block adds the squat Sakai retainers' block (about 67 by 45 ft) against "never a square block" and drops the length limit
+TOUCHES sheet/barracks @ 0097-staff-rowhouses-and-barracks-nagaya.html - A: changed and new length blocks (Matsusaka, Sakai rows to about 300 ft; Kochi two-story row) against the stated 80 to 145 ft measured and one story
+TOUCHES sheet/retainers--quarters @ 0097-staff-rowhouses-and-barracks-nagaya.html - A: new length blocks (rows to about 300 ft) and the "ever short" block's squat Sakai retainers' block against the stated 80 to 145 ft long, narrow rowhouse
+TOUCHES sheet/karo-s-house @ 0097-staff-rowhouses-and-barracks-nagaya.html - A: "ever short" block's squat two-dwelling Sakai retainers' block against the stated long, narrow staff long-house

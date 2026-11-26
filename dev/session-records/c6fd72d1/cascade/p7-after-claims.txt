@@ -1,0 +1,10 @@
+triage           docs/building-programs.md::Magistrate's manor (county magistracy)#staff housing knob
+rests changed    docs/buildings.md::Outer court (administrative / public)#barracks
+triage           rust/mode_a/src/audit/program_rules.rs::COMMON_ROOM_KIND#the common room is the servants'
+rests changed    rust/mode_a/src/audit/program_rules.rs::HIERARCHY#the cell under the barracks
+triage           rust/mode_a/src/audit/program_rules.rs::ROW_KINDS#the row-form lodgings
+triage           rust/mode_a/src/audit/program_rules.rs::lodging_entrances#a door to each dwelling of a row
+triage           rust/mode_a/src/audit/program_rules.rs::lodging_entrances#a lodging entered from the ground
+rests changed    rust/mode_a/src/compound/emit.rs::building#dwelling walls across the long side
+claims-owed: 3 claim(s) in 3 file(s) owe impl-drift; bundle per file with `make claims-bundle MODULE=<path>`, or OWED=1 for all
+claims-owed: 5 claim(s) owe only a TRIAGE of what changed on their pages or in their code - `make claims-triage` first; it sends on only the claims a change bears on

@@ -1,0 +1,37 @@
+modal-depiction batch, 2 pop-ups: COVERAGE 0 findings; TRUTH 0; LINKS 0
+
+unit: modal-depiction:sheet/barracks 4055060edc109cee
+
+`modal-depiction: office.Barracks - COVERAGE 0 findings; TRUTH 0; LINKS 0`
+
+COVERAGE
+clean. The crop from Hayakawa shows a plain rowhouse. It is 105 by 47 units on the map, about 35 by 16 ft, which fits the page's 12 to 24 ft depth. Walls across its depth divide it into dwellings, and each dwelling has a small entry inset at the top wall. Nothing is drawn larger, bolder or in another color than the real thing (D2). 0097 calls the long, narrow form, the depth, the bay and the division into dwellings "accurate", so none of them is a convention the tab owes. The 145 ft ceiling, the 48 ft row and the number of men to a dwelling are recorded as GUESSES, not as conventions. Of those, the men to a dwelling is already on the Guesses tab ({0097#many-men-share-dwelling}), so D3 owes nothing. The only DEVIATION on 0116 that touches the barracks is the storehouses' fraction of the rowhouse, which belongs to the storehouses' pop-ups.
+
+TRUTH
+clean.
+- "lodges the office's staff on its grounds, in a barracks divided into dwellings": 0097 gives "On its grounds, by default", and the `#barracks` claim is IN-STEP ("the rowhouse on the grounds, split into dwellings").
+- "nothing in it is drawn as a bunk room": 0097 says "Nothing in the barracks is divided, labeled or drawn as a bunk room or a bunk."
+- "drawn smaller than the office hall and the residence, as Takayama's rowhouse was": 0116 says "Our maps rank the office hall largest of the halls, then the residence, then the staff's rowhouse. That is the order of the one intendant's office measured building by building, at Takayama". The `#size hierarchy` claim is IN-STEP.
+- No DRIFTED claim touches the barracks; the only DRIFTED row is the notice board. The tab has no record talk.
+
+LINKS
+clean. 0097 and 0116 both hold how the map draws and ranks the barracks, and both are listed. The CANDIDATE 0090 covers the compound as a whole (its two courts, scale, gates and layout checks) and says nothing about how the barracks is drawn, so it is not owed a link (D5).
+
+unit: modal-depiction:sheet/retainers--quarters ed4122660b431d6d
+
+`modal-depiction: household.RetainersQuarters - COVERAGE 0 findings; TRUTH 0; LINKS 0`
+
+COVERAGE
+clean. The crop from Ochiba shows the glyph at 152 by 52 units, about 51 by 17 ft: a long, narrow row of three dwellings, each with a door mark on its south face. No mark is exaggerated in size, weight or color (D2). 0097 records the form, the depth and the division into dwellings as accurate, not as conventions, so D3 owes no "why". The page now records one squat two-dwelling block at Sakai. About tells that block as history, but the page does not make "never squat" a deliberate convention, so the tab owes no statement about it.
+
+TRUTH
+clean.
+- "long and narrow, never a square block": 0097 says "never a square or squat block", and the claim `Outer court (administrative / public)#barracks` is IN-STEP ("12 to 24 ft deep and never squat").
+- "each with a door of its own": the claim `lodging_entrances#a door to each dwelling of a row` is IN-STEP, and the crop shows one door to each dwelling.
+- "nothing in it as a bunk or a bunk room": 0097 says the same.
+- No DRIFTED claim touches this kind; the only DRIFTED row is the notice board. The tab has no record talk.
+
+LINKS
+clean. 0097 is listed and is the page that draws this kind. The CANDIDATE 0090 says nothing about how rowhouses or retainers' quarters are drawn, so no link is owed (D5).
+
+Bundles: `/tmp/l7r-check/p7c-modal-depiction/01-sheet-barracks/MANIFEST.md`, `/tmp/l7r-check/p7c-modal-depiction/02-sheet-retainers-quarters/MANIFEST.md`

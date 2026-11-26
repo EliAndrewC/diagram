@@ -1,0 +1,122 @@
+record-owed: 87 unit(s) owed by the delta, 32 still unanswered
+  [answered] intro-check:0338  - the heading is new or changed
+  modal-accuracy:sheet/armory  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-accuracy:sheet/barracks  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-accuracy:sheet/door  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-accuracy:sheet/gatehouse  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-accuracy:sheet/granary  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  [answered] modal-accuracy:sheet/guest-quarters  - its About, Guesses or Entry changed
+  modal-accuracy:sheet/karo-s-house  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-accuracy:sheet/main-gate  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-accuracy:sheet/retainers--quarters  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-accuracy:sheet/servants--quarters  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-depiction:sheet/barracks  - a page its Drawing: names moved (0097-staff-rowhouses-and-barracks-nagaya.drawing.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-depiction:sheet/door  - a page its Drawing: names moved (0097-staff-rowhouses-and-barracks-nagaya.drawing.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-depiction:sheet/retainers--quarters  - a page its Drawing: names moved (0097-staff-rowhouses-and-barracks-nagaya.drawing.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-depiction:sheet/servants--quarters  - a page its Drawing: names moved (0097-staff-rowhouses-and-barracks-nagaya.drawing.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  [answered] modal-form:sheet/guest-quarters  - its About, Guesses or Entry changed
+  modal-gaps:sheet/armory  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-gaps:sheet/barracks  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-gaps:sheet/door  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-gaps:sheet/gatehouse  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-gaps:sheet/granary  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  [answered] modal-gaps:sheet/guest-quarters  - its About, Guesses or Entry changed
+  modal-gaps:sheet/karo-s-house  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-gaps:sheet/main-gate  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-gaps:sheet/retainers--quarters  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-gaps:sheet/servants--quarters  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-references:sheet/armory  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-references:sheet/barracks  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-references:sheet/door  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-references:sheet/gatehouse  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-references:sheet/granary  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  [answered] modal-references:sheet/guest-quarters  - its About, Guesses or Entry changed
+  modal-references:sheet/karo-s-house  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-references:sheet/main-gate  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-references:sheet/retainers--quarters  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  modal-references:sheet/servants--quarters  - a page its Entry names moved (0097-staff-rowhouses-and-barracks-nagaya.html 0338-what-a-staff-rowhouse-was-built-of.html)
+      make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)
+  [answered] quote-check:0097#edo-hantei-jawiki-2  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097#gojoban-yashiki-jawiki  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097#hikone-ashigaru-3  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097#jinya-kotobank-72  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097#kaibara-jinya-tamba  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097#kanra-ashigaru-nagaya-71  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097#mitamura-nagaya-tcpip  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097#omori-daikansho-kunishitei  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097#sakai-bugyosho-kachu-nagaya-takaya  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097#sakai-bugyosho-kachu-nagaya-takaya-92  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097#sakai-bugyosho-kachu-nagaya-takaya-93  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097#sayama-jinya-uematsu-100  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097#sayama-jinya-uematsu-98  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097#shibata-ashigaru-nagaya-71  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097#staff-rowhouses-and-barracks-nagaya-8  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097#tarumizu-onagaya-kagoshima  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097#unfootnoted  - a block with no note mark changed (an uncited claim?)
+  [answered] quote-check:0097#yamauchi-nagaya-enwiki  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097.drawing#gojoban-yashiki-jawiki  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097.drawing#how-our-maps-draw-staff-rowhouses-and-barracks-nagaya-5  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097.drawing#kanra-ashigaru-nagaya-71  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097.drawing#omori-daikansho-kunishitei  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097.drawing#sakai-bugyosho-kachu-nagaya-takaya  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097.drawing#sakai-bugyosho-kachu-nagaya-takaya-92  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097.drawing#sakai-bugyosho-kachu-nagaya-takaya-93  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097.drawing#sayama-jinya-uematsu-100  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097.drawing#sayama-jinya-uematsu-98  - a block carrying this note changed (SUPPORTS)
+  [answered] quote-check:0097.drawing#shibata-ashigaru-nagaya-71  - a block carrying this note changed (SUPPORTS)
+  record-format:0097  - visible words new or changed
+      make check-bundle Q=0097 FOR=record-format
+  [answered] source-applicability:gojoban-yashiki-jawiki  - the write-up is new or its visible words changed
+  [answered] source-applicability:tarumizu-onagaya-kagoshima  - the write-up is new or its visible words changed
+  [answered] source-applicability:yamauchi-nagaya-enwiki  - the write-up is new or its visible words changed
+  [answered] source-reader:0097#gojoban-yashiki-jawiki  - the note is new or changed
+  [answered] source-reader:0097#hikone-ashigaru-3  - the note is new or changed
+  [answered] source-reader:0097#sakai-bugyosho-kachu-nagaya-takaya-92  - the note is new or changed
+  [answered] source-reader:0097#sakai-bugyosho-kachu-nagaya-takaya-93  - the note is new or changed
+  [answered] source-reader:0097#sayama-jinya-uematsu-100  - the note is new or changed
+  [answered] source-reader:0097#tarumizu-onagaya-kagoshima  - the note is new or changed
+  [answered] source-reader:0097#yamauchi-nagaya-enwiki  - the note is new or changed
+  [answered] source-reader:0097.drawing#gojoban-yashiki-jawiki  - the note is new or changed
+  [answered] source-reader:0097.drawing#sakai-bugyosho-kachu-nagaya-takaya-92  - the note is new or changed
+  [answered] source-reader:0097.drawing#sakai-bugyosho-kachu-nagaya-takaya-93  - the note is new or changed
+  [answered] source-reader:0097.drawing#sayama-jinya-uematsu-100  - the note is new or changed
+  [answered] source-reader:0097.drawing#sayama-jinya-uematsu-98  - the note is new or changed
+  [answered] translation-check:0097#gojoban-yashiki-jawiki  - a translated quotation is new or changed
+  [answered] translation-check:0097#hikone-ashigaru-3  - a translated quotation is new or changed
+  [answered] translation-check:0097#tarumizu-onagaya-kagoshima  - a translated quotation is new or changed
+  [answered] translation-check:0097.drawing#gojoban-yashiki-jawiki  - a translated quotation is new or changed
+  [answered] translation-check:0097.drawing#sakai-bugyosho-kachu-nagaya-takaya-92  - a translated quotation is new or changed
+  [answered] translation-check:0097.drawing#sakai-bugyosho-kachu-nagaya-takaya-93  - a translated quotation is new or changed
+  [answered] translation-check:0097.drawing#sayama-jinya-uematsu-100  - a translated quotation is new or changed
+Answer each with `make record-checked CHECK=<check> BUNDLE=<its bundle> RESULT="<counts>"` when its check returns.
+Apply a round's own EDITs with `make apply-edits FROM=<the agent's reply or its transcript>` - its unit then settles, owing no round to re-read its own words - the same command settles an EDIT you already applied by hand, word for word (feature 385 T21).

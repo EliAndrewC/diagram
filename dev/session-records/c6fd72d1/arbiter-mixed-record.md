@@ -1,0 +1,19 @@
+# Measurement: 53 record-check answers re-owed at a landing by the build-identity rule (451 T197), 2026-11-24
+
+## What happened
+- After ask:mixed-build-241-claims (process-fault) its fix was built as 451 T223, committed (42c13774ac), and the landing's CLAIMS were re-judged by the clean build (73 owe nothing, 147 tool-cleared, 44 agent-cleared, 8 impl-drift IN-STEP; `L7R_LAND_ALONE=1 make claims-owed`: none owed).
+- The landing `make land F=451 T=T218..T223` then passed every gate and was refused at the push by the RECORD gate: 53 record-check answers "answered by an l7r-gate built with other builders' uncommitted code (...), not this landing's: re-judge it here (451 T197)" (rust/gate/crates/owed/src/record/owed/answers.rs). The ticks were reverted.
+- The 53: quote-check 28, source-reader 10, translation-check 7, source-applicability 3, intro-check 1 - page session P7's checks on research pages 0097 and 0338 (452 T003's write-up; 13 checks, two second rounds, 16 EDITs applied, the round arbiter's ACCEPT on record-format:0097) - and 4 modal checks on sheet/guest-quarters (452's doc restatement round).
+- The dirty files their builds recorded: for 49 of the 53, ONLY the claims crate and a doc - rust/gate/CLAUDE.md, rust/gate/crates/claims/src/claims.rs, claims/carry.rs, claims/commands.rs, claims/commands/tests.rs, claims/index.rs, claims/triage.rs, claims/triage/tests.rs (451 T223's work in progress); for 3, claims/bundle.rs, carry.rs, index.rs and the doc; for 1 (the guest-quarters set shares it), also rust/gate/crates/bundle/src/record/bundle/check.rs (451 T219's edit of the check bundle's MANIFEST wording about outside notes).
+
+## The measurement
+- A record-check answer is the check AGENT's verdict on a bundle, recorded by `make record-checked` (the `owed` crate) on a bundle built by `make check-bundle` (the `bundle` crate).
+- rust/gate/crates/owed/Cargo.toml depends on: l7r_gate_core, l7r_gate_registry, l7r_gate_research, l7r_shared. rust/gate/crates/bundle/Cargo.toml depends on: l7r_gate_core, l7r_gate_owed, l7r_gate_pool, l7r_gate_registry, l7r_gate_research, l7r_shared. NEITHER depends on the claims crate. So for the 52 answers whose dirty files are the claims crate's alone (and a Markdown doc), the uncommitted code could not have run in building the bundle or recording the answer.
+- The 4 guest-quarters modal answers' build also held bundle/check.rs dirty (the bundle crate, which builds the MANIFEST the agent read); that edit is T219's wording of the outside-note form in the MANIFEST.
+
+## Routes
+A. Re-run all 53 checks (P7's whole check session again: quote-check with live source fetches, source-reader, translation-check, source-applicability...) - about 20 minutes of agents and a second pass of EDITs on pages already checked and applied; changes nothing if the answers were right.
+B. RECORD_CHECKS_OK for the 49-52 claims-crate-only answers, the reason naming this measurement (the dirty code is outside the dependency closure of the commands that built and recorded them); re-run the 4 guest-quarters modal checks (their bundle's builder was dirty).
+C. A tooling fix first (the analogue of T223): an answer is mixed only when a dirty path lies in the dependency closure of the crate that recorded it or built its bundle; the rest of rust/gate does not count. Then re-land.
+
+The session's proposal: C is the right rule and small (the closure can be read from the crates' Cargo.toml at stamp time or as a fixed table with a test that fails when a dependency is added), but it is the third process fix in this landing's path today and each fix re-opens the same loop (a fix's own uncommitted code mixes the next answers). So: B now, with the measurement as its reason, and C filed as a 451 task to be built with nothing else running in the clone.

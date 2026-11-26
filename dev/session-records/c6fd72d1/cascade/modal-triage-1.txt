@@ -1,0 +1,2 @@
+/tmp/l7r-check/p7c-modal-triage/MANIFEST.md
+modal-triage: 20 unit(s) cleared by the tool; 11 unit(s) left; dispatch the `modal-triage` agent on the MANIFEST (a session started before 2026-10-17's amendment 6 landed: restart to load it), save its reply, then `make modal-triaged BUNDLE=<dir> REPLY=<file>`

@@ -1,0 +1,5 @@
+delta commits 33 base f7c105b4a0
+units listed 49
+answers whose every stamped dirty blob equals that path at a commit of this landing (or its base): 49 of 49
+not so: []
+paths whose stamped blob differs from HEAD today: {'rust/gate/CLAUDE.md': 49, 'rust/gate/crates/claims/src/claims.rs': 49, 'rust/gate/crates/claims/src/claims/carry.rs': 49, 'rust/gate/crates/claims/src/claims/commands.rs': 49, 'rust/gate/crates/claims/src/claims/commands/tests.rs': 49, 'rust/gate/crates/claims/src/claims/index.rs': 49, 'rust/gate/crates/claims/src/claims/triage.rs': 49, 'rust/gate/crates/claims/src/claims/triage/tests.rs': 49, 'rust/gate/crates/owed/src/record/owed/answers.rs': 49, 'rust/gate/crates/owed/src/record/owed/tests.rs': 49}
