@@ -55,6 +55,7 @@ seen red, then the check deleted and the test seen red again (FR-012).
 - none: T262 - tooling only: the plan gate's escape (`rust/gate/crates/plan/src/plan.rs`, `plan/status.rs`, `plan/task.rs`, `scripts/gates/plan-gate.sh`, their tests and suite), its audit-register entry and `docs/guards.md`'s row; no map feature, sheet, glyph, placement rule or research page changes
 - none: T263 - tooling only: the clone-sync guard's test fixture (`rust/guard/src/guards/clone_sync_hooks/tests.rs`: a world copied by one `cp -a`, the first assertion printing its notice); no map feature, sheet, glyph, placement rule or research page changes
 - none: T251 - claim comments and procedure-doc lines only: the 10 CANON claims of the gm-attributions baseline (`docs/buildings.md`, `docs/building-programs.md`, `rust/mode_a/src/place.rs`, `rust/mode_a/src/compound/parts.rs`, `rust/phases/src/field/brook.rs`, `rust/phases/src/seat/margins.rs`) given their record's path or relabeled, three prose date tags beside them, and `dev/gm-attribution-baseline.jsonl` pruned; no code, no map feature, sheet, glyph, size or page changes
+- none: T250 - research-page comments only: the 341 HTML comments of `research/questions/` that the gm-attributions baseline listed, each given the path of the record that holds the GM's words, the name of the file that holds them, or wording that says whose rule it is, and `dev/gm-attribution-baseline.jsonl` pruned to empty; no visible text, no note, no code, no map feature, sheet, glyph, size or placement rule changes
 
 ## Dependencies
 

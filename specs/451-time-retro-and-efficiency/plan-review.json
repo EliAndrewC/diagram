@@ -23740,6 +23740,149 @@
      "why": "Ruled apart from D11a, because 'the pattern is the check's code' does not explain leaving a doc line this task already edits. The reason that does hold is the brief's limit to the baseline's entries, and leaving the line invents no words. The defect is moved to T265 with an order, not left. Two conditions: T265 must carry relabeling the line, not only the pattern. And its 'no record' premise must be searched again over the same space as the other ten (request.md, gm-request.md, docs/gm-rulings.md, gm-review.jsonl, make canon), because this block's grep covered only five request.md files."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T250 (451 T233's \"Found and left\", 2026-11-25: the gm-attributions baseline listed 341 research-page comments that named a ruling of the GM's with no pointer to his words, 74 of them with no recorded words at all by the audit of 2026-11-24; `docs/gm-rulings.md`, \"NOT a ruling\", is what one such comment cost)",
+    "### T250 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "approach-a-c",
+     "summary": "Each listed comment either names the record that holds the GM's words (a) or, where no record holds words of his, is reworded to say whose rule it is with its reasoning kept (c).",
+     "class": "within",
+     "why": "This is what the GM's 2026-11-24 words in request.md ask for: a rule credited to him that he never made must not stand as his ('That is what a session told me the research showed'). Naming the record, or saying whose rule it is, carries that out exactly."
+    },
+    {
+     "id": "approach-b",
+     "summary": "Where his verbatim words stand only in a file the check does not accept (rulings-*.md, audit.md, tasks.md, commit messages), the comment names that file in wording the check passes.",
+     "class": "within",
+     "why": "Tested against the purpose: the comment still sends a reader to a file holding his verbatim words, so nobody builds on a ruling he never made. The accepted-record list is the coordinating session's build of T233 (request.md marks line 250 as not his words), so working around it in honest wording does not narrow anything he asked for. The check's resulting blind spot is a separate decision (T265)."
+    },
+    {
+     "id": "visible-text-defects-to-P16-P17",
+     "summary": "Visible sentences the sweep found contradicting his records are not edited here; P16 (6acb69f1e1) fixed 0173, 0138 and 0140, and 'the rest' are left to a page session P17 that the coordinating session names.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A visible sentence that contradicts the GM's records is a defect (a research finding contradicted / a page that reads wrong), and this task found it. 'Comments only' comes from the brief, and 'fixing them page work' at request.md line 250 is marked as the coordinating session's words, not his, so none of his words cover leaving these unfixed. Splitting the work off to a page session is fine; leaving the defect untracked is not. As written the deferral sits in the Approach rather than under 'Found and left?', so FR-009's check never sees it. It names a session (P17) rather than a filed task id, gives no 'lands before ...', and does not say which pages and sentences 'the rest' are or what search found them, although the block's own constraint 2 says such sentences are 'listed'. The cure: under 'Found and left?', list the remaining sentences by page, give the search that found them (labeled as an observation with its method), say why they are not fixed in T250, and give the filed task id and its order. T250 does not have to edit visible text."
+    },
+    {
+     "id": "T265-deferral",
+     "summary": "The check accepts only four kinds of record, so 47 comments whose record exists name it in passable wording and the check cannot tell them from a comment with no record; left to T265, landing before T264.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves a defect in the check (it refuses a correct pointer), so it needs a ruling. It meets FR-009: it says why it is not fixed here (the accepted list is the check's code and this task changes comments only), gives a filed id (T265) and gives an order (lands before T264). In the meantime no comment is wrongly credited to him, because each of the 47 names the file that holds his words. The deferral therefore does not gut the purpose; it is tracked work on a different artifact."
+    },
+    {
+     "id": "empty-baseline-kept",
+     "summary": "The empty baseline stays as a zero-byte file rather than being deleted, so --seed cannot re-admit new unbacked attributions.",
+     "class": "within",
+     "why": "This is an implementation choice that keeps the check from letting new unbacked attributions through. It enforces what T233 was asked for and narrows nothing."
+    },
+    {
+     "id": "misquotations",
+     "summary": "Four comments that quoted another party's sentence as his words now carry his recorded words or no quotation marks, and batch 5 dropped quotation marks from quotations no record holds.",
+     "class": "within",
+     "why": "docs/gm-rulings.md 'NOT a ruling' (never invent his words) applied directly. Figures: the four comes from the batch commits' own subjects, which are covered by the parent bullet's label (git log --grep=T250, read 2026-11-26)."
+    },
+    {
+     "id": "near-cap-trims",
+     "summary": "Where a page stood near its cap, the new comment wording was trimmed and the page's visible text was never cut.",
+     "class": "within",
+     "why": "The GM said on 2026-11-23 that 'no edit to maintain entry size should ever be substantive'. Here only the new attribution wording was kept short, the Approach keeps each comment's reasoning, and no claim or visible detail was cut."
+    },
+    {
+     "id": "size-cap-proximity-not-filed",
+     "summary": "Five drawing pages sit within 20 bytes of the 20,000-byte cap; this is not filed as a defect.",
+     "class": "within",
+     "why": "No page is over its cap (make question-sizes: 0 over, 2026-11-26), no reader sees a difference and no research finding breaks, so by the GM's 2026-11-19 definition this is not a defect. The figures carry a date and a method."
+    },
+    {
+     "id": "order-batches-exits",
+     "summary": "Runs after T233 and beside T251, in ten batches with one commit each. Green: closing-checks; red: arbiter-ask. Done means an empty baseline and a silent check.",
+     "class": "within",
+     "why": "This is sequencing and how 'done' is measured, and it narrows nothing. A note: 'the research switch reopened before the first batch' is the premise for starting, against his 2026-11-25 deferral 'until at least tomorrow', and it has no date or method. The bundle does not contradict it, but it should be labeled."
+    }
+   ],
+   "tasks": [
+    "T250"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T250 (451 T233's \"Found and left\", 2026-11-25: the gm-attributions baseline listed 341 research-page comments that named a ruling of the GM's with no pointer to his words, 74 of them with no recorded words at all by the audit of 2026-11-24; `docs/gm-rulings.md`, \"NOT a ruling\", is what one such comment cost)",
+    "### T250 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1 approach (a)/(b)/(c)",
+     "summary": "Each listed comment is searched for his recorded words, then points at the record, names a file the check does not take that holds them, or says whose rule it is; comments only.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-24 request as written (\"I never made a ruling that dry plots are rectangles... That is what a session told me\") and T233's build: no comment calls a rule his without his words behind it. Route (b) still points at his verbatim words, so the purpose (no session builds on a ruling he never made) is met. That the check cannot accept those files is filed as T265."
+    },
+    {
+     "id": "D2 misquotations and quotation marks",
+     "summary": "Four comments that quoted as his words a sentence from the retired rule file or a session now carry his recorded words or no quotation marks; batch 5 dropped the marks from quotations no record holds.",
+     "class": "within",
+     "why": "Directly serves the request, and docs/gm-rulings.md \"NOT a ruling\" (no quotation marks on words no record holds), which the request cites."
+    },
+    {
+     "id": "D3 batch 10's five dispositions",
+     "summary": "0138 points at specs/292/request.md; 0140 says it was a catch on a draft with no recorded words; 0173's two REMOVED comments say the entries were credited to the GM; 0173's paddies-first comment calls it this project's rule with no words of his recorded.",
+     "class": "within",
+     "why": "Each applies (a) or (c) to one comment. None claims a ruling with no words behind it, and 0140 and 0173 refuse to complete his thought."
+    },
+    {
+     "id": "D4 ten batches, one commit each",
+     "summary": "The 340 comments are fixed in ten worktree batches, each its own commit; 0006 was fixed before batch 1.",
+     "class": "within",
+     "why": "How the work is organized, not what it covers. The counts sum: 3x25 + 4x45 + 37 + 43 + 5 = 340, plus 0006 makes 341."
+    },
+    {
+     "id": "D5 empty baseline kept as a zero-byte file",
+     "summary": "The baseline is left as an empty file rather than deleted, so --seed refuses and the only-shrinks comparison holds new entries to an empty list.",
+     "class": "within",
+     "why": "Enforcement of the request: it keeps the T233 check refusing new unbacked attributions. Deleting the file would reopen the hole the request asked to close."
+    },
+    {
+     "id": "D6 visible sentences not edited by the comment batches; 0173/0138/0140/0142 fixed by P16",
+     "summary": "Visible sentences on four pages that contradicted his records were fixed within this task's span by page session P16 (landed 6acb69f1e1). The four canon statements (0220, 0155, 0185, 0002) stand, with comments naming his 2026-11-24 entry.",
+     "class": "within",
+     "why": "The request concerns rulings attributed to him. The contradicting visible sentences were found along the way, and every one of these was fixed (landed) or confirmed as his canon. Nothing is left on these pages."
+    },
+    {
+     "id": "D7 0156/0193 left with no filed task id and no order",
+     "summary": "The visible sentences on 0156 and 0193 that call the burakumin neighborhood a deliberate deviation, against his words of 2026-11-26, are deferred to P17's uncommitted rewrite. The block says 'No task of tasks.md holds it: the builder of this section may not file one'. No 'lands before' is given.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is a defect by the block's own account (a reader is told the opposite of his words). Routing its fix to P17 instead of T250 is reasonable. But the accepted spec's FR-009 requires a deferred defect to carry its filed task id and its order ('lands before ...'), and the fix-as-we-go rule exists so that a known defect is not lost. This item gives only the why. 'The builder may not file one' is a process limit, not an impossibility: the coordinating session can file it. A rewrite that stands uncommitted in another clone with no task holding it is the one most likely to be lost. The T265 and T266 items in the same section carry all three parts. Fix: the coordinating session files the task (or the section names the record that tracks P17's fix by id), and the item states that id and its 'lands before ...'."
+    },
+    {
+     "id": "D8 check's accepted record kinds deferred to T265",
+     "summary": "47 comments whose records are rulings-*.md, audit.md, tasks.md or commit messages cannot name them as pointers; widening the check is filed as T265, landing before T264.",
+     "class": "within",
+     "why": "A check that refuses good pointers is a defect in the check's code, outside this comments-only task. It is filed with a reason, an id and an order, as FR-009 requires."
+    },
+    {
+     "id": "D9 pages near the question cap; trims to comments only",
+     "summary": "Where a page stood near its 20,000-byte cap, the comment rewording was trimmed, never the visible text. Five pages within 20 bytes of the cap are filed as T266, landing before T264.",
+     "class": "within",
+     "why": "Every page is under its cap and nothing reads wrong, so this is not a defect today. It is a risk, filed anyway with an order. Keeping the visible text untouched follows the comments-only brief."
+    },
+    {
+     "id": "D10 order: after T233, beside T251, under the research switch reopened 2026-11-25",
+     "summary": "The task runs after T233 and beside T251, with the research switch reopened on 2026-11-25 on the GM's words of that day as dev/switches.json records them (commit 205938ebc3).",
+     "class": "within",
+     "why": "Ordering only. The bundle's request.md carries his deferral ('defer all of it until at least tomorrow') but not the reopening words, so the reopening was not verified here: it rests on dev/switches.json and 205938ebc3, which were not read. It does not decide fidelity either way: T250's searches are over the project's own records of his words, not the queued external research he deferred."
+    }
+   ],
+   "tasks": [
+    "T250"
+   ]
   }
  ],
  "tasks": {
@@ -37728,6 +37871,75 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T250": {
+   "section_sha256": "f56560aa4cce4dddd532e65f25c6397536707770e070390c7342b0e8f2d6257d",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 approach (a)/(b)/(c)",
+     "summary": "Each listed comment is searched for his recorded words, then points at the record, names a file the check does not take that holds them, or says whose rule it is; comments only.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-24 request as written (\"I never made a ruling that dry plots are rectangles... That is what a session told me\") and T233's build: no comment calls a rule his without his words behind it. Route (b) still points at his verbatim words, so the purpose (no session builds on a ruling he never made) is met. That the check cannot accept those files is filed as T265."
+    },
+    {
+     "id": "D2 misquotations and quotation marks",
+     "summary": "Four comments that quoted as his words a sentence from the retired rule file or a session now carry his recorded words or no quotation marks; batch 5 dropped the marks from quotations no record holds.",
+     "class": "within",
+     "why": "Directly serves the request, and docs/gm-rulings.md \"NOT a ruling\" (no quotation marks on words no record holds), which the request cites."
+    },
+    {
+     "id": "D3 batch 10's five dispositions",
+     "summary": "0138 points at specs/292/request.md; 0140 says it was a catch on a draft with no recorded words; 0173's two REMOVED comments say the entries were credited to the GM; 0173's paddies-first comment calls it this project's rule with no words of his recorded.",
+     "class": "within",
+     "why": "Each applies (a) or (c) to one comment. None claims a ruling with no words behind it, and 0140 and 0173 refuse to complete his thought."
+    },
+    {
+     "id": "D4 ten batches, one commit each",
+     "summary": "The 340 comments are fixed in ten worktree batches, each its own commit; 0006 was fixed before batch 1.",
+     "class": "within",
+     "why": "How the work is organized, not what it covers. The counts sum: 3x25 + 4x45 + 37 + 43 + 5 = 340, plus 0006 makes 341."
+    },
+    {
+     "id": "D5 empty baseline kept as a zero-byte file",
+     "summary": "The baseline is left as an empty file rather than deleted, so --seed refuses and the only-shrinks comparison holds new entries to an empty list.",
+     "class": "within",
+     "why": "Enforcement of the request: it keeps the T233 check refusing new unbacked attributions. Deleting the file would reopen the hole the request asked to close."
+    },
+    {
+     "id": "D6 visible sentences not edited by the comment batches; 0173/0138/0140/0142 fixed by P16",
+     "summary": "Visible sentences on four pages that contradicted his records were fixed within this task's span by page session P16 (landed 6acb69f1e1). The four canon statements (0220, 0155, 0185, 0002) stand, with comments naming his 2026-11-24 entry.",
+     "class": "within",
+     "why": "The request concerns rulings attributed to him. The contradicting visible sentences were found along the way, and every one of these was fixed (landed) or confirmed as his canon. Nothing is left on these pages."
+    },
+    {
+     "id": "D7 0156/0193 left with no filed task id and no order",
+     "summary": "The visible sentences on 0156 and 0193 that call the burakumin neighborhood a deliberate deviation, against his words of 2026-11-26, are deferred to P17's uncommitted rewrite. The block says 'No task of tasks.md holds it: the builder of this section may not file one'. No 'lands before' is given.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is a defect by the block's own account (a reader is told the opposite of his words). Routing its fix to P17 instead of T250 is reasonable. But the accepted spec's FR-009 requires a deferred defect to carry its filed task id and its order ('lands before ...'), and the fix-as-we-go rule exists so that a known defect is not lost. This item gives only the why. 'The builder may not file one' is a process limit, not an impossibility: the coordinating session can file it. A rewrite that stands uncommitted in another clone with no task holding it is the one most likely to be lost. The T265 and T266 items in the same section carry all three parts. Fix: the coordinating session files the task (or the section names the record that tracks P17's fix by id), and the item states that id and its 'lands before ...'."
+    },
+    {
+     "id": "D8 check's accepted record kinds deferred to T265",
+     "summary": "47 comments whose records are rulings-*.md, audit.md, tasks.md or commit messages cannot name them as pointers; widening the check is filed as T265, landing before T264.",
+     "class": "within",
+     "why": "A check that refuses good pointers is a defect in the check's code, outside this comments-only task. It is filed with a reason, an id and an order, as FR-009 requires."
+    },
+    {
+     "id": "D9 pages near the question cap; trims to comments only",
+     "summary": "Where a page stood near its 20,000-byte cap, the comment rewording was trimmed, never the visible text. Five pages within 20 bytes of the cap are filed as T266, landing before T264.",
+     "class": "within",
+     "why": "Every page is under its cap and nothing reads wrong, so this is not a defect today. It is a risk, filed anyway with an order. Keeping the visible text untouched follows the comments-only brief."
+    },
+    {
+     "id": "D10 order: after T233, beside T251, under the research switch reopened 2026-11-25",
+     "summary": "The task runs after T233 and beside T251, with the research switch reopened on 2026-11-25 on the GM's words of that day as dev/switches.json records them (commit 205938ebc3).",
+     "class": "within",
+     "why": "Ordering only. The bundle's request.md carries his deferral ('defer all of it until at least tomorrow') but not the reopening words, so the reopening was not verified here: it rests on dev/switches.json and 205938ebc3, which were not read. It does not decide fidelity either way: T250's searches are over the project's own records of his words, not the queued external research he deferred."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
