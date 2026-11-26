@@ -131,3 +131,41 @@ fn the_refusals_and_the_escape() {
     };
     assert!(decide(&bare, &Session::from_input(&bare.input)).is_empty());
 }
+
+/// 451 T295: git spelled by its path, behind a `\` or a wrapper is git; a program whose name only ends in git is not.
+#[test]
+fn git_is_read_however_it_is_spelled() {
+    for s in [
+        "/usr/bin/",
+        "\\",
+        "command ",
+        "env ",
+        "/usr/bin/env ",
+        "sudo /usr/bin/",
+        "exec ",
+        "sudo -u x ",
+        "env -i A=1 ",
+        "A=1 nice ",
+    ] {
+        for (rest, rule) in [
+            ("git push --force origin main", "force-push"),
+            ("git --force push", "force-push"),
+            ("git rebase main", "history-rewrite"),
+            ("git -C /x pull --rebase", "history-rewrite"),
+            ("git merge --squash b", "history-rewrite"),
+            ("git commit --amend", "history-rewrite"),
+            ("git -C /host-l7r-repo commit -a", "host-git-write"),
+        ] {
+            assert_eq!(v(&format!("{s}{rest}")), Some(rule), "{s}{rest}");
+            assert_eq!(v(&format!("ls && {s}{rest}")), Some(rule), "{s}{rest}");
+        }
+    }
+    for cmd in [
+        "/tmp/mygit rebase main",
+        "legit commit --amend",
+        "/tmp/git/run push --force",
+        "echo /usr/bin/git rebase main",
+    ] {
+        assert_eq!(v(cmd), None, "{cmd}");
+    }
+}

@@ -503,3 +503,18 @@ fn a_literal_handed_to_the_programs_own_function_is_blanked() {
     let named = "s.index(\"def f(\")\nt = 'f(' # f(\nopen('a.py')";
     assert_eq!(own_args(named), named);
 }
+
+/// 451 T295: a head's command is read past its wrappers and their options, by its name however spelled.
+#[test]
+fn a_head_is_read_past_its_wrappers_and_their_options() {
+    use super::head_of;
+    assert_eq!(head_of("timeout -k 5 60 make quick"), ("make", ""));
+    assert_eq!(head_of("env -i /usr/bin/make x"), ("make", ""));
+    assert_eq!(
+        head_of("sudo -u x \\git -C /x -c a=b commit -m y"),
+        ("git", "commit")
+    );
+    assert_eq!(head_of("/usr/bin/git status"), ("git", "status"));
+    assert_eq!(head_of("/tmp/mygit commit"), ("mygit", ""));
+    assert_eq!(head_of("env"), ("", ""));
+}

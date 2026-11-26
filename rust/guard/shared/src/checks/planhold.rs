@@ -64,8 +64,18 @@ fn unescape_key(key: &str) -> String {
     out
 }
 
-/// Record the hold a plan review's dispatch takes (at its `PreToolUse`), with `root`, the tree its call ran in: the plan the review
-/// reads, and the one tree its write-back runs in (451 T123).
+/// The tree a bundle's MANIFEST says it was built from (`Built from the tree`, 451 T257), or None where it names none.
+fn built_from(bundle: &str) -> Option<PathBuf> {
+    let text = std::fs::read_to_string(Path::new(bundle).join("MANIFEST.md")).ok()?;
+    let rest = text.split_once("Built from the tree `")?.1;
+    Some(PathBuf::from(rest.split_once('`')?.0))
+}
+
+/// Record the hold a plan review's dispatch takes (at its `PreToolUse`): its tree is the one its bundle was built from - the plan
+/// the review reads, and the one tree its write-back runs in (451 T123) - else `root`, the tree its call ran in. WHY the bundle's
+/// (451 T295): a builder's dispatch runs with the session's clone as its cwd and its bundle is built from its worktree, so the
+/// call's tree was the clone - a `make task-add` there was blamed for changing the worktree's reviewed section, and the clone's
+/// text of it written back over the clone's own plan (seen 2026-11-26, T292's review).
 pub fn hold(state: &mut Value, tid: &str, prompt: &str, now: f64, root: Option<&Path>) {
     let Ok(Some(m)) = BUNDLE.captures(prompt) else {
         return;
@@ -85,7 +95,7 @@ pub fn hold(state: &mut Value, tid: &str, prompt: &str, now: f64, root: Option<&
             .collect()
     };
     let mut h = json!({"feature": feature, "task": task.unwrap_or_default(), "blocks": keys, "t": now, "state": "pending"});
-    if let Some(r) = root {
+    if let Some(r) = built_from(&bundle).or_else(|| root.map(Path::to_path_buf)) {
         h["root"] = json!(r.to_string_lossy());
     }
     map_mut(state, "plan_holds").insert(tid.to_owned(), h);

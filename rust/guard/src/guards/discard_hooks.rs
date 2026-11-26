@@ -12,6 +12,7 @@ use crate::shared::escape::{escape_or_refuse, Escape};
 use crate::shared::log;
 use crate::shared::session::Session;
 pub(crate) use crate::shared::shape::shlex;
+use crate::shared::spelled::names;
 use crate::shared::state::field;
 use crate::shared::tool::{ask, ask_within};
 
@@ -42,7 +43,7 @@ fn in_merge(repo: &str) -> bool {
 fn targets(piece: &str, cwd: &str) -> Vec<(String, String)> {
     let toks =
         shlex(piece).unwrap_or_else(|| piece.split_whitespace().map(str::to_owned).collect());
-    let Some(g) = toks.iter().position(|t| t == "git") else {
+    let Some(g) = toks.iter().position(|t| names(t, "git")) else {
         return Vec::new();
     };
     let mut rest = &toks[g + 1..];

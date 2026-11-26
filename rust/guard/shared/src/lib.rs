@@ -31,6 +31,7 @@ pub mod sha1;
 pub mod sha256;
 pub mod shape;
 pub mod speckit;
+pub mod spelled;
 pub mod state;
 pub mod switches;
 pub mod tempdir;

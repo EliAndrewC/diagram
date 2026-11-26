@@ -13,6 +13,7 @@ use crate::shared::escape::{escape_or_refuse, Escape};
 use crate::shared::log;
 use crate::shared::session::Session;
 use crate::shared::shape::strip_heredocs;
+use crate::shared::spelled::{before, WRAPPER_WORDS};
 use crate::shared::state::field;
 
 /// The guard.
@@ -25,8 +26,8 @@ pub const GUARD: Guard = Guard {
 
 // Feature 178: the prefix group consumes the quoted placeholder, the only place it can legitimately stand before a command - `FOO="bar" git push
 // --force` otherwise walked past the anchor.
-const POS: &str =
-    r"(?:^|[\n;|]|&&|\|\|)\s*(?:timeout\s+\S+\s+|env\s+|QUOTED\s+|[A-Za-z_][A-Za-z0-9_]*=\S*\s+)*";
+const POS: &str = r"(?:^|[\n;|]|&&|\|\|)\s*";
+const PREFIX: &str = r"QUOTED\s+|[A-Za-z_][A-Za-z0-9_]*=\S*\s+";
 const HOST: &str = "/host-l7r-repo";
 const WRITES: &str = r"\b(?:commit|push|add|rm|mv|reset|revert|checkout|switch|restore|merge|rebase|cherry-pick|clean|stash|tag|am|apply)\b";
 
@@ -35,7 +36,12 @@ fn re(pattern: &str) -> Regex {
 }
 
 fn at_pos(tail: &str) -> Regex {
-    re(&format!("{POS}{tail}"))
+    // git by its name however spelled, behind any wrapper (451 T295: `/usr/bin/git rebase`, `\git push -f` and `command git commit
+    // --amend` stood at no command position this pattern knew, and passed)
+    re(&format!(
+        "{POS}(?:{WRAPPER_WORDS}|{PREFIX})*{}{tail}",
+        before("git")
+    ))
 }
 
 static QUOTED: LazyLock<Regex> = LazyLock::new(|| re(r#"'[^']*'|"[^"]*""#));

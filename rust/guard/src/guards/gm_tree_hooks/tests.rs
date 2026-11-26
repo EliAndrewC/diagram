@@ -137,3 +137,25 @@ fn no_mention_of_the_tree_is_no_business_of_this_guard() {
     let e = event("Bash", &json!({"command": "echo gm-assistant"}), "/tmp");
     assert!(decide(&e, &Session::from_input(&e.input)).is_empty());
 }
+
+/// 451 T295: a git command is left to the other guards however git is spelled - the walk now reads `/usr/bin/git` as git, and the
+/// exemption read the segment's first letters, so the path's spelling would have been refused where the bare one passes; a
+/// program whose name only ends in git is no git.
+#[test]
+fn a_git_command_is_exempt_however_git_is_spelled() {
+    for s in [
+        "/usr/bin/",
+        "\\",
+        "command ",
+        "A=1 ",
+        "timeout 5 ",
+        "env -i ",
+    ] {
+        let cmd = format!("{s}git -C {G} commit -m x");
+        assert!(bash(&cmd).is_empty(), "{cmd}");
+    }
+    assert!(refused(
+        &bash(&format!("cp /tmp/mygit {G}/b")),
+        "main working tree"
+    ));
+}

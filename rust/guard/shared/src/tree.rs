@@ -487,10 +487,18 @@ fn words(seg: &str) -> Vec<&str> {
     let mut toks: Vec<&str> = seg.split_whitespace().collect();
     while let Some(t) = toks.first() {
         // a loop's, an `if`'s or a `while`'s keyword leads its body's command (`bind::KEYWORDS`)
-        if WRAPPERS.contains(t) || ASSIGNMENT_WORD.is_match(t) || bind::KEYWORDS.contains(t) {
+        // a wrapper spelled by its path is the wrapper (`/usr/bin/env git`, 451 T295)
+        let name = crate::spelled::name_of(t);
+        if crate::spelled::lookup(name, toks.get(1).copied()) {
+            break;
+        }
+        if WRAPPERS.contains(&name) || name == "timeout" {
+            // with its own options (`env -i git`, `sudo -u x git`), and `timeout`'s duration (451 T295)
+            let own = 1 + crate::spelled::options(name, &toks[1..]);
+            let own = own + usize::from(name == "timeout" && toks.len() > own);
+            toks.drain(..own);
+        } else if ASSIGNMENT_WORD.is_match(t) || bind::KEYWORDS.contains(t) {
             toks.remove(0);
-        } else if *t == "timeout" && toks.len() > 1 {
-            toks.drain(..2);
         } else {
             break;
         }
@@ -603,8 +611,10 @@ fn writes_in(
     let mut found_writes = Vec::new();
     let toks = words(seg);
     if let Some(head) = toks.first() {
-        let base = head.rsplit('/').next().unwrap_or(head);
-        if *head == "git" {
+        // the program by its name, however the command spells it (451 T295: git was read by its bare word alone, so
+        // `/usr/bin/git worktree add` and `\git checkout` wrote nothing the walk saw, and every guard reading it passed them)
+        let base = crate::spelled::name_of(head);
+        if base == "git" {
             found_writes.extend(git::git_write(&toks, env, home, eff));
         } else if base == "make" {
             found_writes.push((eff.map(str::to_owned), "shell", Known::Shell));
@@ -904,9 +914,7 @@ fn walk_text(
 
 /// The wrappers a segment's command can stand behind, which a reader of its head reads past: the walk's own and `timeout`, with its
 /// duration (451 T79).
-pub const HEAD_WRAPPERS: [&str; 10] = [
-    "sudo", "nohup", "setsid", "env", "command", "exec", "time", "nice", "builtin", "timeout",
-];
+pub const HEAD_WRAPPERS: [&str; 10] = crate::spelled::WRAPPERS;
 
 /// A segment from its command on, cut at 120 characters: its leading `VAR=value` words dropped, among the wrappers too, which are
 /// kept (451 T90: T79's `L7R_FEATURE_DIRECTORY=... L7R_PAGE_SESSION=... make rust-test` lost its `make` to the segment's cut and
@@ -917,12 +925,12 @@ pub fn command_head(segment: &str) -> String {
     let mut rest = segment.trim_start();
     let mut duration = false;
     while let Some(w) = rest.split_whitespace().next() {
-        if duration || HEAD_WRAPPERS.contains(&w) {
+        if duration || HEAD_WRAPPERS.contains(&crate::spelled::name_of(w)) {
             kept.push(w);
         } else if !w.contains('=') {
             break;
         }
-        duration = w == "timeout";
+        duration = crate::spelled::name_of(w) == "timeout";
         rest = rest[w.len()..].trim_start();
     }
     kept.push(rest);

@@ -302,14 +302,11 @@ fn gate_refusal(event: &Event, c: &Ctx) -> Option<String> {
 /// It reads the target's `head`, not its `segment`, which the walk cuts at 120 characters (451 T90: a `make` behind more than that
 /// of `VAR=value` prefixes was refused as a shell write of `.`, measured 2026-11-21).
 fn head_of(head: &str) -> (&str, &str) {
-    let mut words = head.split_whitespace().peekable();
-    while let Some(w) = words.next_if(|w| crate::shared::tree::HEAD_WRAPPERS.contains(w)) {
-        if w == "timeout" {
-            words.next();
-        }
-    }
-    let head = words.next().unwrap_or("");
-    let head = head.rsplit('/').next().unwrap_or(head);
+    // the command word past its wrappers and their options, by its name however spelled (451 T295)
+    let all: Vec<&str> = head.split_whitespace().collect();
+    let at = crate::shared::spelled::command_at(&all);
+    let mut words = all.into_iter().skip(at);
+    let head = crate::shared::spelled::name_of(words.next().unwrap_or(""));
     if head != "git" {
         return (head, "");
     }

@@ -127,6 +127,10 @@ fn git_is_asked_what_would_be_staged() {
         "still carries a merge conflict"
     ));
     assert!(refused(&run("cd sub; git -C .. add -A", &at), "a.md"));
+    // git by its path or behind a `\\` is git; a name only ending in git is not (451 T295)
+    assert!(refused(&run("/usr/bin/git add -A", &at), "a.md"));
+    assert!(refused(&run("command \\git add -A", &at), "a.md"));
+    assert!(run("/tmp/mygit add -A", &at).is_empty());
     assert!(run("git add sub/ok.md", &at).is_empty());
     assert!(run("cd sub && git add .", &at).is_empty());
     git(&at, &["add", "a.md"]);

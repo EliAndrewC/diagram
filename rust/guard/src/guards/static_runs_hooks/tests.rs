@@ -83,7 +83,27 @@ fn guard_crate(_: &Path) -> Vec<String> {
 }
 
 fn said(d: &Path, cmd: &str) -> Option<Said> {
-    judge(&input(d, cmd), Path::new("/"), &none, &guard_crate)
+    untreed(judge(&input(d, cmd), Path::new("/"), &none, &guard_crate))
+}
+
+/// A verdict with the tree it measured left out: the count's tests compare the rest.
+fn untreed(said: Option<Said>) -> Option<Said> {
+    said.map(|s| match s {
+        Said::Refused {
+            feature,
+            task,
+            runs,
+            crates,
+            ..
+        } => Said::Refused {
+            feature,
+            task,
+            runs,
+            crates,
+            tree: String::new(),
+        },
+        other => other,
+    })
 }
 
 /// T06's refusal after its two runs.
@@ -93,6 +113,7 @@ fn refused() -> Said {
         task: "T06".to_owned(),
         runs: 2,
         crates: vec!["rust/guard".to_owned()],
+        tree: String::new(),
     }
 }
 
@@ -124,7 +145,7 @@ fn the_third_run_since_the_first_start_is_refused_naming_the_crates_checks() {
     for want in [
         "T06 of 451-x has run `make static` 2 times",
         "make crate-checks CRATE=\"rust/guard rust/gate/crates/land\"\n",
-        "STATIC_OK=\"<reason>\"",
+        "STATIC_OK=\"<reason, two words or more>\"",
     ] {
         assert!(text.contains(want), "{want} in {text}");
     }
@@ -329,7 +350,7 @@ fn a_builder_and_the_main_session_share_the_count_by_task() {
     builder["transcript_path"] = json!(d.join("s.jsonl").to_string_lossy());
     // the builder's call
     assert_eq!(
-        judge(&builder, Path::new("/"), &none, &guard_crate),
+        untreed(judge(&builder, Path::new("/"), &none, &guard_crate)),
         Some(refused())
     );
 }
@@ -591,4 +612,59 @@ fn through_the_guard_a_foreground_closing_check_is_refused_beside_the_count() {
         "FOREGROUND_OK=\"the next edit needs it\" make static",
     )));
     assert!(matches!(fg_ok.as_slice(), [t] if t.contains("has run `make static` 2 times")));
+}
+
+/// 451 T295: the crates are those of the tree the command's `make` runs in. A builder's call is filed in the session's clone (451
+/// T74) while its `cd <worktree> && make static` runs in its worktree, so the refusal read the CLONE's delta and said "changes no
+/// Rust crate" of a worktree whose crates were edited (seen 2026-11-26; the edits being uncommitted was not the cause: the delta
+/// reads the working tree and the untracked files). A call that names no other tree keeps the clone's.
+#[test]
+fn the_crates_are_those_of_the_tree_the_make_runs_in() {
+    let d = clone("worktree", &[("T06", "2026-11-20T10:00:00Z")], &two_runs());
+    let w = TempDir::new("guard-static-worktree-tree");
+    std::fs::create_dir_all(w.join("rust/a/src")).unwrap();
+    std::fs::write(w.join("rust/a/Cargo.toml"), "[package]\nname = \"a\"\n").unwrap();
+    std::fs::write(w.join("rust/a/src/lib.rs"), "// uncommitted\n").unwrap();
+    assert!(std::process::Command::new("git")
+        .arg("-C")
+        .arg(w.path())
+        .args(["init", "-q"])
+        .output()
+        .unwrap()
+        .status
+        .success());
+    let top = std::fs::canonicalize(w.path()).unwrap();
+    let ask = |cmd: &str| judge(&input(&d, cmd), Path::new("/"), &none, &delta_crates);
+    let in_tree = |crates: &[&str], tree: &Path| {
+        Some(Said::Refused {
+            feature: F.to_owned(),
+            task: "T06".to_owned(),
+            runs: 2,
+            crates: crates.iter().map(|c| (*c).to_owned()).collect(),
+            tree: tree.to_string_lossy().into_owned(),
+        })
+    };
+    for cmd in [
+        format!("cd {} && make static", w.display()),
+        format!("make -C {} static", w.display()),
+        format!("cd {} && make -C rust/a static", w.display()),
+        format!(
+            "cd {}/rust/a && A=1 timeout 900 /usr/bin/make closing-checks T=T06",
+            w.display()
+        ),
+    ] {
+        assert_eq!(ask(&cmd), in_tree(&["rust/a"], &top), "{cmd}");
+    }
+    // no other tree named, or a directory in no tree: the clone the call is filed in
+    let clone_top = std::fs::canonicalize(d.path()).unwrap();
+    for cmd in [
+        "make static".to_owned(),
+        "cd /proc && make static".to_owned(),
+    ] {
+        assert_eq!(ask(&cmd), in_tree(&[], &clone_top), "{cmd}");
+    }
+    // the refusal says what it measured where it found no crate
+    let text = refusal(F, "T06", 2, &[]);
+    let want = "make quick   (the tree this make runs in changes no Rust crate against origin/main's merge base, its uncommitted edits read)";
+    assert!(text.contains(want), "{text}");
 }

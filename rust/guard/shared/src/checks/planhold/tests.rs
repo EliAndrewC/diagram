@@ -695,3 +695,69 @@ fn a_hold_is_written_back_and_refused_in_its_own_tree_alone() {
     let in_other = there_heading.is_empty() && there_shared.is_empty();
     assert!(in_other, "{there_heading} | {there_shared}");
 }
+
+/// A hold is the tree's its bundle was built from (451 T295): a builder's dispatch runs with the session's clone as its cwd while
+/// its bundle is built from its worktree's plan, so the hold took the clone as its tree - a `make task-add` in the clone was blamed
+/// for changing the worktree's reviewed section and the clone's own text of it written back over the clone's plan (seen
+/// 2026-11-26, T292's review; the MANIFEST's `Built from the tree` line is 451 T257's). A bundle naming no tree keeps the call's.
+#[test]
+fn a_hold_is_the_tree_its_bundle_was_built_from() {
+    let clone = clone_at("built-clone");
+    let tree = clone_at("built-tree");
+    let ours = PLAN.to_owned();
+    let theirs = PLAN.replace("held body", "the worktree's body");
+    for (root, plan) in [(&clone, &ours), (&tree, &theirs)] {
+        std::fs::create_dir_all(root.join("specs/900-a")).unwrap();
+        std::fs::write(root.join("specs/900-a/plan.md"), plan).unwrap();
+    }
+    let d = dir("built-bundle");
+    let bundle = d.join("plan-900-a-T01");
+    std::fs::create_dir_all(&bundle).unwrap();
+    let prompt = format!("Read {}/MANIFEST.md", bundle.display());
+    let manifest = |text: &str| std::fs::write(bundle.join("MANIFEST.md"), text).unwrap();
+    // no MANIFEST, or one naming no tree: the call's tree
+    let mut state = json!({});
+    hold(&mut state, "a", &prompt, 990.0, Some(&clone));
+    manifest("# Plan review bundle\n\nno tree named\n");
+    hold(&mut state, "b", &prompt, 990.0, Some(&clone));
+    let want = json!(clone.to_string_lossy());
+    for id in ["a", "b"] {
+        assert_eq!(state["plan_holds"][id]["root"], want, "{id}");
+    }
+    // the tree the bundle was built from, whatever tree the dispatch ran in - and with none
+    manifest(&format!(
+        "# Plan review bundle\n\nBuilt from the tree `{}`: record the verdict there, by the command below (451 T257).\n",
+        tree.display()
+    ));
+    let mut state = json!({});
+    hold(&mut state, "h", &prompt, 990.0, Some(&clone));
+    hold(&mut state, "n", &prompt, 990.0, None);
+    let want = json!(tree.to_string_lossy());
+    for id in ["h", "n"] {
+        assert_eq!(state["plan_holds"][id]["root"], want, "{id}");
+    }
+    state["plan_holds"]
+        .as_object_mut()
+        .unwrap()
+        .shift_remove("n");
+    launched(&mut state, "h", "ag");
+    // a call in the clone that changes the clone's own section: nothing snapshotted, nothing blamed, nothing written back
+    snapshot(&mut state, Some(&clone), "c", 1000.0);
+    assert!(state.get("plan_snaps").is_none(), "{state}");
+    let changed = ours.replace("held body", "the clone's own edit");
+    std::fs::write(clone.join("specs/900-a/plan.md"), &changed).unwrap();
+    let said = restore(&mut state, Some(&clone), "c");
+    let kept = std::fs::read_to_string(clone.join("specs/900-a/plan.md")).unwrap();
+    assert!(said.is_empty() && kept == changed, "{said}");
+    // a call in the worktree that changes the reviewed section is written back there
+    snapshot(&mut state, Some(&tree), "w", 1000.0);
+    std::fs::write(
+        tree.join("specs/900-a/plan.md"),
+        theirs.replace("the worktree's body", "CHANGED"),
+    )
+    .unwrap();
+    let said = restore(&mut state, Some(&tree), "w");
+    let back = std::fs::read_to_string(tree.join("specs/900-a/plan.md")).unwrap();
+    let restored = said.contains("the held text is written back") && back == theirs;
+    assert!(restored, "{said}");
+}

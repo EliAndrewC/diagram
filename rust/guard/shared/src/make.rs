@@ -16,7 +16,8 @@ use super::shape::{strip_heredocs, strip_quotes};
 /// them - a further `(` or `{`, a shell keyword (`if`, `then`, `do`, `else`, `elif`, `while`, `until`, `!`), `timeout [opts] N`, `flock
 /// [opts] <file>`, `nice [-n N]`, `nohup`, `setsid [opts]`, `time [-p]`, `env [opts]` and `VAR=value` (feature 451 D1: the event log's
 /// writer took `(`, the keywords and `time`, the guards `timeout`, `env` and `VAR=`; `flock`, `nice`, `nohup`, `{` and a lone `&`
-/// neither; `setsid` added by T15).
+/// neither; `setsid` added by T15; `command [opts]`, `exec [opts]`, `builtin` and `sudo [opts]` by 451 T295, the wrappers the walk
+/// reads past - `command make static` and `sudo make done` ran targets no guard saw, measured 2026-11-26).
 pub const POS: &str = concat!(
     r#"(?:^|[\n;|&(]|\{\s|(?:^|[\s/])(?:ba|da|z)?sh\s+(?:-[a-z]+\s+)*-[a-z]*c\s+["'])\s*(?:"#,
     r"[({]\s*",
@@ -28,6 +29,12 @@ pub const POS: &str = concat!(
     r"|setsid\s+(?:-\S+\s+)*",
     r"|time\s+(?:-p\s+)?",
     r"|env\s+(?:-u\s*\S+\s+|-\S+\s+)*",
+    // `command -v make` looks make up and runs nothing: only its `-p` is read past
+    r"|command\s+(?:-p\s+)*",
+    r"|(?:exec|sudo)\s+(?:-\S+\s+)*",
+    r"|builtin\s+",
+    // a wrapper by its path or behind a `\` (`/usr/bin/env make static`): the path read past, the wrapper by the lines above
+    r#"|\\?(?:[^\s;&|()'"]*/)?(?=(?:timeout|flock|nice|nohup|setsid|time|env|command|exec|sudo)\s)(?<=[\\/])"#,
     r"|[A-Za-z_][A-Za-z0-9_]*=\S*\s+",
     r")*"
 );
@@ -39,10 +46,11 @@ fn re(pattern: &str) -> Regex {
 }
 
 // A call: make (or `$(MAKE)`) at a command position, its words read after it; or the gate's crate-scoped form
-// `l7r-gate.sh rust <cmd>`, which `make rust-<cmd>` runs (feature 451 D1).
+// `l7r-gate.sh rust <cmd>`, which `make rust-<cmd>` runs (feature 451 D1). make by its path or behind a `\` is make (451 T295:
+// `/usr/bin/make static` and `\make static` ran targets no guard saw; `/tmp/mymake` is another program).
 static CALL: LazyLock<Regex> = LazyLock::new(|| {
     re(&format!(
-        r"{POS}(?:(?:\$\(MAKE\)|make)(?=[\s;&|)`]|$)|(?:\S*/)?l7r-gate\.sh\s+rust\s+([a-z][\w-]*))"
+        r"{POS}(?:(?:\$\(MAKE\)|\\?(?:[^\s;&|()=]*/)?make)(?=[\s;&|)`]|$)|(?:\S*/)?l7r-gate\.sh\s+rust\s+([a-z][\w-]*))"
     ))
 });
 // The gate's path quoted whole (`"$root/scripts/gates/l7r-gate.sh" rust test`), unquoted before the quotes are blanked.

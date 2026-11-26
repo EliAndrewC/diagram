@@ -195,7 +195,7 @@ pub fn staged_by(cmd: &str, base: &str) -> BTreeSet<String> {
             here = joined(&here, &toks[1]);
             continue;
         }
-        let Some(g) = toks.iter().position(|t| t == "git") else {
+        let Some(g) = toks.iter().position(|t| crate::spelled::names(t, "git")) else {
             continue;
         };
         let mut rest = &toks[g + 1..];

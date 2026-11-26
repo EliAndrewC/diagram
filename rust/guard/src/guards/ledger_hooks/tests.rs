@@ -235,3 +235,17 @@ fn the_escape_needs_a_reason_and_the_entry_runs() {
     };
     assert!(decide(&e, &Session::from_input(&e.input)).is_empty());
 }
+
+/// 451 T295: git spelled by its path is git; a program whose name only ends in git is not.
+#[test]
+fn a_commit_is_read_however_git_is_spelled() {
+    assert_eq!(
+        commit_root("/usr/bin/git -C /x commit -m x").as_deref(),
+        Some("/x")
+    );
+    assert_eq!(
+        commit_root("command \\git commit -m x").as_deref(),
+        Some(".")
+    );
+    assert_eq!(commit_root("/tmp/mygit commit -m x"), None);
+}

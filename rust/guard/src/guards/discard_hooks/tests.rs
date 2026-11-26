@@ -160,3 +160,24 @@ fn a_checkout_of_many_modified_files_names_the_first_few_and_the_command_for_the
     assert!(refused(&got, "  and 7 more: `git status --short`"));
     assert!(refused(&got, "DISCARD_OK"));
 }
+
+/// 451 T295: git spelled by its path, behind a `\` or a wrapper is git; a program whose name only ends in git is not.
+#[test]
+fn git_is_read_however_it_is_spelled() {
+    let at = repo("spelled");
+    for cmd in [
+        "/usr/bin/git checkout -- dirty.py",
+        "\\git checkout -- dirty.py",
+        "command git restore dirty.py",
+        "env /usr/bin/git checkout dirty.py",
+    ] {
+        assert!(refused(&run(cmd, &at), "dirty.py"), "{cmd}");
+    }
+    for cmd in [
+        "/tmp/mygit checkout -- dirty.py",
+        "legit checkout -- dirty.py",
+        "/tmp/git/run checkout -- dirty.py",
+    ] {
+        assert!(run(cmd, &at).is_empty(), "{cmd}");
+    }
+}

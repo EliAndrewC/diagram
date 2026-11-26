@@ -43,7 +43,9 @@ pub(crate) fn offending(event: &Event, tree: &str, home: &str) -> Option<String>
         // a `python3 -c` program that only reads is a target marked "read", no write (451 T31); a stdin program that can write
         // is a write where the shell stands (451 T42)
         .find(|t| {
-            !t.segment.trim_start().starts_with("git") && t.class == "main" && t.how != "read"
+            crate::shared::spelled::program_of(&t.head) != "git"
+                && t.class == "main"
+                && t.how != "read"
         })
         .map(|t| t.path.unwrap_or_else(|| tree.to_owned()))
 }

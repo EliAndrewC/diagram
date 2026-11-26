@@ -17,6 +17,7 @@ use crate::shared::ledger::cost::last_cells;
 use crate::shared::ledger::problems;
 use crate::shared::log;
 use crate::shared::session::Session;
+use crate::shared::spelled::names;
 use crate::shared::state::field;
 use crate::shared::tool::ask;
 
@@ -63,7 +64,7 @@ impl Ctx {
 /// The directory a `git commit` in this command runs in, `.` for none named; None when the command commits nothing.
 pub(crate) fn commit_root(cmd: &str) -> Option<String> {
     let words = shlex(cmd).unwrap_or_default();
-    for (i, _) in words.iter().enumerate().filter(|(_, w)| *w == "git") {
+    for (i, _) in words.iter().enumerate().filter(|(_, w)| names(w, "git")) {
         let (mut j, mut place) = (i + 1, String::new());
         while j < words.len() && words[j].starts_with('-') {
             if words[j] == "-C" && j + 1 < words.len() {

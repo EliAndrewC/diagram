@@ -2004,6 +2004,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T295 (2026-11-26, found by 451 T285's and T292's builders and the session: three tree guards read the wrong tree or miss a spelling of the program they refuse - the fourth case of the task's line, the guard-messages store, is 451 T281's builder's and is not touched here)": {
+   "sha256": "3d826a015c25d6c65c491b0c856784c4d55dbb94fa58231baec87d2ae23c6d9d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T295 Approach (checklist part A)": {
+   "sha256": "08568ee26760c4cbe8cf34fec3dbb514e5ed15e5be7703887fac322a4bddba03",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -25601,6 +25613,200 @@
      "why": "The audit entry with a falsifier answers the GM's 2026-11-25 register words ('what we would look at that would falsify the notion that this is a good idea'). Adding no target or guard adds nothing the request did not ask for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T295 (2026-11-26, found by 451 T285's and T292's builders and the session: three tree guards read the wrong tree or miss a spelling of the program they refuse - the fourth case of the task's line, the guard-messages store, is 451 T281's builder's and is not touched here)",
+    "### T295 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T295-scope-T281",
+     "summary": "The fourth case on T295's line (the guard-messages store), and the review of D4's reworded message, are left to 451 T281's builder",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This moves the work to a task that is already filed and named (T281) and leaves no wrong outcome behind: an unreviewed message wording is not a check passing bad work or refusing good work. Two builders editing one store at once would conflict. Whether T281 exists, and whether its order relative to T295 keeps the gate green, cannot be checked from the bundle. That is named as a dependency, not a finding."
+    },
+    {
+     "id": "T295-D1",
+     "summary": "One spelling reader (spelled.rs): the program is the command word's last path part, read past a backslash, quotes, VAR= and the wrappers, and compared whole",
+     "class": "within",
+     "why": "It ends the wrong outcomes T295's line names: /usr/bin/git, \\git and command git getting past the guards that refuse writes to the tree and rewrites of history. This is the request's 'real enforcement and not just instructions' and the GM's 2026-11-26 'without the opportunity for this kind of mistake'. The whole-name comparison keeps other programs (mygit, legit) out."
+    },
+    {
+     "id": "T295-D1-callers",
+     "summary": "The reader is asked by the walk, builder-pool, discard, the ledger guard, conflict-marker, gate-write, the history guard, and gm-tree's git exemption",
+     "class": "within",
+     "why": "These are the guards that refuse by git's name. The gm-tree change stops D1 from creating a new refusal, a git called by its path refused where bare git passes. That keeps D1 from introducing a defect and does not widen it."
+    },
+    {
+     "id": "T295-D2",
+     "summary": "The make detector reads make by its path, a leading backslash, and the command, exec, builtin and sudo wrappers. /tmp/mymake and similar names stay other programs.",
+     "class": "within",
+     "why": "Measured by a census of ten spellings: six of them escaped static-runs, the gate guards and no-poll, which serve FR-007 and FR-008. Making those refusals fire is enforcing what was asked."
+    },
+    {
+     "id": "T295-census-exempting",
+     "summary": "Left alone: the git exemptions in claims-file (^\\s*git\\b) and in shared/parked.rs (git mv)",
+     "class": "within",
+     "why": "By the block's own account both readers grant an exemption and fail closed: a spelling they miss is refused, never let through, and the bare spelling stays exempt. Nothing in the bundle shows either one letting bad work through, or D1 creating a new refusal in them the way it did in gm-tree. No ruling is owed."
+    },
+    {
+     "id": "T295-census-readers",
+     "summary": "Left alone: phase-source's reader list, house-style's $(git grep ...), and shell-check's is_git_commit",
+     "class": "within",
+     "why": "The block names none of these as refusing a write to the tree, and they are outside T295's line. The bundle does not say which way each one fails when it misses a spelling, so this classing rests on the block's statement that none of them serves such a refusal. If any of them does refuse, it belongs with T295-census-bypasses."
+    },
+    {
+     "id": "T295-census-bypasses",
+     "summary": "Left unfixed and unfiled, reported only as candidates ('Found and left? none filed by this builder'): wrapper options (env -i git, sudo -u x git), xargs git and sh -c 'git ...' for every tree guard; a quoted \"git\" in the history and discard guards; a wrapper spelled by its path in the make detector; cargo in make-only and no-poll",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "These are the class T295's line names ('miss a spelling of the program they refuse'), in the guards T295 fixes. Each is a check letting through what it exists to refuse: sudo -u x git push -f or \"git\" push -f past the history guard, sh -c 'git worktree add ...' past builder-pool, a backgrounded cargo past FR-008's no-poll refusal. The census lead-in, 'none serving a refusal of a tree write', is false for every item in this group. Item 1 and the first table row claim that 'every spelling' is refused. FR-009 requires a deferred defect to state why it is not fixed in this task, its filed task id and its order, and the section gives none of them. The ground offered, that the coordinating session's brief says not to file, is a session's instruction and not the GM's: the block itself says no GM words bear on the design. None of MODE 1's grounds applies: these fixes are not impossible, nothing in the request implies them, and fixing them does not defeat its purpose. Remedy, either one: fix them in T295; or have the coordinating session file them and restate this item with, for each one, why it is not fixed here, its filed task id and its order ('lands before ...'), and correct the lead-in sentence and the 'every spelling' claims."
+    },
+    {
+     "id": "T295-D3",
+     "summary": "The plan hold is kept on the tree named by the bundle MANIFEST's 'Built from the tree' line, and reaches compares against that tree",
+     "class": "within",
+     "why": "It ends a measured wrong outcome: a hold on a worktree's section snapshotted the clone and wrote the clone's text into the clone's plan.md."
+    },
+    {
+     "id": "T295-D3-fallback",
+     "summary": "When the bundle names no tree (one built before T257), the hold uses the call's tree",
+     "class": "within",
+     "why": "Bundles built before T257 cannot name a tree, and this keeps their behavior as it was."
+    },
+    {
+     "id": "T295-D3-limit",
+     "summary": "Accepted: a builder's shell write of its worktree's held section, from a call whose cwd is the clone, is neither refused nor written back",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled on the outcome. Before D3 this case was never protected: it was judged against the wrong tree, and the clone was written into. D3 removes that wrong write, and nothing that worked before stops working. The outcome the hold protects, a verdict recorded only against the text that was reviewed, is still held, because make plan-verdict refuses a section that changed while it was reviewed. What is left costs time and produces no wrong outcome. That is why this ruling differs from the census items, which let bad work through."
+    },
+    {
+     "id": "T295-D4",
+     "summary": "static-runs reads its crate delta in the work tree of the directory where the command's first make static or make closing-checks runs (following the walk's cds), else the clone. The message says what it measured.",
+     "class": "within",
+     "why": "It ends item 12's wrong outcome: a builder whose task had edited crates was told it changes no crate and to use make quick. This makes FR-007's 'crates the task's delta changes' true."
+    },
+    {
+     "id": "T295-D4-count",
+     "summary": "The make static count stays in the clone's log: one count per task (T14), calls filed in the clone (T74)",
+     "class": "within",
+     "why": "It keeps FR-007's per-task count where T14 and T74 put it. Nothing that was asked is narrowed."
+    },
+    {
+     "id": "T295-D4-make-C",
+     "summary": "make -C <dir> is not read: its crates are taken from the clone's tree, as before",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "For make -C <worktree> static or closing-checks, item 12's wrong outcome comes back unchanged: crates are edited, the builder is told there are none, and it is sent to make quick. make -C <tree> is how this project runs a target in another tree; the bundle's own MANIFEST records its verdict that way (451 T257). 'The walk does not read it' and 'as before' are reasons of implementation cost, not one of MODE 1's grounds, and the census does not list this form. Remedy, either one: read -C <dir> (D2's make detector already parses the make call), or carry it as a found-and-left defect with FR-009's why, filed task id and order."
+    }
+   ],
+   "tasks": [
+    "T295"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T295 (2026-11-26, found by 451 T285's and T292's builders and the session: three tree guards read the wrong tree or miss a spelling of the program they refuse - the fourth case of the task's line, the guard-messages store, is 451 T281's builder's and is not touched here)",
+    "### T295 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T295-scope",
+     "summary": "The task line's fourth case (the guard-messages store) is left to 451 T281's builder; T295 does three jobs, and goes wider than the line where the same spelling defect sits in other readers (history guard, make detector, ledger, conflict-marker, gate-write, gm-tree).",
+     "class": "within",
+     "why": "No GM words name T295; the task line is the coordinating session's. Handing the guard-messages case to T281's builder is, on the block's own claim (not verified here: the bundle holds no T281 text), an assignment to the task that owns it rather than a defect left unowned; widening a defect fix to every reader with the same defect is what fix-as-we-go asks."
+    },
+    {
+     "id": "T295-D1",
+     "summary": "One shared reader (spelled.rs) names a program by its command word's last path part, past a backslash, quotes, VAR= words and wrappers with their options; the name compared whole; command -v/-V and VAR=/path/git are not runs of the program.",
+     "class": "within",
+     "why": "Ends a guard passing bad work (a git by its path or behind a wrapper ran past builder-pool and the history guard), which is the 2026-11-19 'real enforcement and not just instructions' and a defect under XIV; reading invocations and not mentions keeps the project's rule."
+    },
+    {
+     "id": "T295-D1-gm-tree",
+     "summary": "gm-tree's git exemption now also covers a git behind A=1 or timeout 5, which the old first-three-letters test refused.",
+     "class": "within",
+     "why": "The exemption is for git commands; refusing the same git command because of how its command word is spelled is a check refusing good work, a defect. It does not open any non-git command."
+    },
+    {
+     "id": "T295-D2",
+     "summary": "The one make detector (make.rs, invoked) reads make by its path, a backslash, or behind command/exec/builtin/sudo (with options, and a wrapper by its path); /tmp/mymake and the like stay other programs.",
+     "class": "within",
+     "why": "static-runs, the gate guards and no-poll never saw these spellings; FR-007 and FR-008 refusals are only real if the detector reads them."
+    },
+    {
+     "id": "T295-census-a",
+     "summary": "Readers that exempt a git command or rule no tree write (claims-file, parked.rs git mv, phase-source, house-style, shell-check) are not changed here; filed in T306, ordered before T302.",
+     "class": "within",
+     "why": "None is a tree guard passing a tree write; where an exemption misses a spelling the effect is an extra refusal of a rare spelling. Filed in T306 with an order before T302 (the block's 'lands before T302'), which meets FR-009's why, id and order and fix-as-we-go's 'fixed before the next step', while T306 keeps that order."
+    },
+    {
+     "id": "T295-left-xargs-sh-c",
+     "summary": "A program run by another (xargs git worktree add, sh -c 'git push -f') is read by no guard of the walk. Filed as T306, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "'Outside three jobs' is not by itself a ground. The ground is that the GM's words and the accepted spec allow a defect to be deferred with a why, a task id and an order (FR-009; fix-as-we-go's 'fixed before the next step's port begins'): the block gives the why (the walk would read another program's argument as a command, a change to what every walk guard sees), names T306 and orders it before T302. Not waived; holds only while T306 lands before T302."
+    },
+    {
+     "id": "T295-left-quoted-git",
+     "summary": "A quoted \"git\" passes the history guard and discard, two guards T295 itself edits; their quote blanking runs before the pattern. Filed as T306, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is D1's own class left in guards this task edits, so it is the weakest of the deferrals, and the block's goal and the test names ('however it is spelled') overstate what those two guards now read. It still carries FR-009's three parts (why: the fix is each guard's own blanking, not the shared reader; T306; before T302), and fix-as-we-go asks for it fixed before the next step, not within this task. Holds only while T306 lands before T302."
+    },
+    {
+     "id": "T295-left-cargo",
+     "summary": "cargo by its path or behind command, exec, sudo or builtin passes make-only and no-poll (FR-008's cargo refusal), their own patterns. Filed as T306, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A different program in different guards, touching FR-008's refusal of a backgrounded cargo run. Deferred with FR-009's why (their own patterns, not the shared reader), id and order before T302, as fix-as-we-go permits. Holds only while T306 lands before T302."
+    },
+    {
+     "id": "T295-left-shell-built",
+     "summary": "A name the shell builds ($GIT, g\\it) is read by no guard; T306 may only document it in docs/guards.md as a limit. Filed as T306, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The ground is impossibility, not scheduling: a static reader of the command text cannot know what $GIT expands to without running the shell. Saying so in docs/guards.md, as T306 is to, is the honest answer."
+    },
+    {
+     "id": "T295-D3",
+     "summary": "The plan hold takes its tree from the bundle MANIFEST's 'Built from the tree' line, falling back to the call's tree for a bundle that names none; write-back stays only in the hold's own tree (T123).",
+     "class": "within",
+     "why": "Ends a measured wrong outcome (the clone's plan.md written into from a hold on another tree's section); keeps T123's own rule."
+    },
+    {
+     "id": "T295-D3-limit",
+     "summary": "A shell write of the held section from a call whose cwd is the clone (cd <worktree> && sed -i ...) is neither refused nor written back; an Edit/Write by path is refused as before; the review is re-run when plan-verdict refuses the changed digest. Filed as T306, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The hold's purpose is that a verdict is recorded only on the text reviewed, and plan-verdict's digest refusal still holds that: the gap costs a re-run review and never lets a stale verdict through. The gap is filed with FR-009's why (reading the call's tree from the walk on every Bash call while a hold stands), T306 and an order before T302, so it is scheduled, not waived; holds only while T306 lands before T302."
+    },
+    {
+     "id": "T295-D4",
+     "summary": "static-runs reads the crates of the work tree the command's first make static/closing-checks runs in (its cd's and make -C), else the clone; the count stays in the clone's log (T14); the 'no crate' message says what it measured and the path goes to the guard log, not the message.",
+     "class": "within",
+     "why": "Ends the measured wrong outcome (a builder with edited crates told its task changes none). FR-007 asks the refusal to name the crate-scoped checks for the crates the task's delta changes, which needs the right tree; keeping the path out of the message keeps its guard-messages key stable."
+    },
+    {
+     "id": "T295-wording",
+     "summary": "The refusal wording is cut on message-check's two rounds; the crate list and the words on what was measured are kept, shortened, against round two; the escape reads STATIC_OK=\"<reason, two words or more>\"; a third round is left to the coordinating session with the round arbiter, so hooks-test stays red on the two wordings until a verdict is recorded.",
+     "class": "within",
+     "why": "FR-007 requires the refusal to name the crate-scoped checks for the task's crates, so the crate list is required, not optional; the GM's 2026-11-23 hook-length words ask for fewer tokens with no loss of fidelity, which keeping the shortened measured words honors; FR-012's two-word escape is met. Leaving hooks-test red and the third round to the arbiter is a stop for a ruling, not a narrowing: the exit is still green closing checks."
+    },
+    {
+     "id": "T295-left-other",
+     "summary": "Found-and-left items outside the task's subject: pool trees lacking the magistracy sheets (T159), a land test failing once under load (T304), the per-task bundle path shared between clone and builder tree (T288); each with why, task id and order before T302.",
+     "class": "within",
+     "why": "Defects in other crates or in make decide's bundle key, not part of what T295 fixes; each is filed and ordered before T302, which satisfies fix-as-we-go and FR-009's three parts. T288's case does not make D3 worse than before: a bundle rebuilt from the clone moves the hold to the clone, which was the old behavior."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -40401,6 +40607,103 @@
      "summary": "Recorded in dev/audits/build-slot.md (measurement, falsifier, cost, alternatives), docs/process-decisions.md and rust/gate/CLAUDE.md; no make target and no guard added",
      "class": "within",
      "why": "The audit entry with a falsifier answers the GM's 2026-11-25 register words ('what we would look at that would falsify the notion that this is a good idea'). Adding no target or guard adds nothing the request did not ask for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T295": {
+   "section_sha256": "f7164eaaee187248d8f7bc944d2cb2bf6e75d7b807f87f74c97373eea43ccd3d",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T295-scope",
+     "summary": "The task line's fourth case (the guard-messages store) is left to 451 T281's builder; T295 does three jobs, and goes wider than the line where the same spelling defect sits in other readers (history guard, make detector, ledger, conflict-marker, gate-write, gm-tree).",
+     "class": "within",
+     "why": "No GM words name T295; the task line is the coordinating session's. Handing the guard-messages case to T281's builder is, on the block's own claim (not verified here: the bundle holds no T281 text), an assignment to the task that owns it rather than a defect left unowned; widening a defect fix to every reader with the same defect is what fix-as-we-go asks."
+    },
+    {
+     "id": "T295-D1",
+     "summary": "One shared reader (spelled.rs) names a program by its command word's last path part, past a backslash, quotes, VAR= words and wrappers with their options; the name compared whole; command -v/-V and VAR=/path/git are not runs of the program.",
+     "class": "within",
+     "why": "Ends a guard passing bad work (a git by its path or behind a wrapper ran past builder-pool and the history guard), which is the 2026-11-19 'real enforcement and not just instructions' and a defect under XIV; reading invocations and not mentions keeps the project's rule."
+    },
+    {
+     "id": "T295-D1-gm-tree",
+     "summary": "gm-tree's git exemption now also covers a git behind A=1 or timeout 5, which the old first-three-letters test refused.",
+     "class": "within",
+     "why": "The exemption is for git commands; refusing the same git command because of how its command word is spelled is a check refusing good work, a defect. It does not open any non-git command."
+    },
+    {
+     "id": "T295-D2",
+     "summary": "The one make detector (make.rs, invoked) reads make by its path, a backslash, or behind command/exec/builtin/sudo (with options, and a wrapper by its path); /tmp/mymake and the like stay other programs.",
+     "class": "within",
+     "why": "static-runs, the gate guards and no-poll never saw these spellings; FR-007 and FR-008 refusals are only real if the detector reads them."
+    },
+    {
+     "id": "T295-census-a",
+     "summary": "Readers that exempt a git command or rule no tree write (claims-file, parked.rs git mv, phase-source, house-style, shell-check) are not changed here; filed in T306, ordered before T302.",
+     "class": "within",
+     "why": "None is a tree guard passing a tree write; where an exemption misses a spelling the effect is an extra refusal of a rare spelling. Filed in T306 with an order before T302 (the block's 'lands before T302'), which meets FR-009's why, id and order and fix-as-we-go's 'fixed before the next step', while T306 keeps that order."
+    },
+    {
+     "id": "T295-left-xargs-sh-c",
+     "summary": "A program run by another (xargs git worktree add, sh -c 'git push -f') is read by no guard of the walk. Filed as T306, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "'Outside three jobs' is not by itself a ground. The ground is that the GM's words and the accepted spec allow a defect to be deferred with a why, a task id and an order (FR-009; fix-as-we-go's 'fixed before the next step's port begins'): the block gives the why (the walk would read another program's argument as a command, a change to what every walk guard sees), names T306 and orders it before T302. Not waived; holds only while T306 lands before T302."
+    },
+    {
+     "id": "T295-left-quoted-git",
+     "summary": "A quoted \"git\" passes the history guard and discard, two guards T295 itself edits; their quote blanking runs before the pattern. Filed as T306, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is D1's own class left in guards this task edits, so it is the weakest of the deferrals, and the block's goal and the test names ('however it is spelled') overstate what those two guards now read. It still carries FR-009's three parts (why: the fix is each guard's own blanking, not the shared reader; T306; before T302), and fix-as-we-go asks for it fixed before the next step, not within this task. Holds only while T306 lands before T302."
+    },
+    {
+     "id": "T295-left-cargo",
+     "summary": "cargo by its path or behind command, exec, sudo or builtin passes make-only and no-poll (FR-008's cargo refusal), their own patterns. Filed as T306, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A different program in different guards, touching FR-008's refusal of a backgrounded cargo run. Deferred with FR-009's why (their own patterns, not the shared reader), id and order before T302, as fix-as-we-go permits. Holds only while T306 lands before T302."
+    },
+    {
+     "id": "T295-left-shell-built",
+     "summary": "A name the shell builds ($GIT, g\\it) is read by no guard; T306 may only document it in docs/guards.md as a limit. Filed as T306, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The ground is impossibility, not scheduling: a static reader of the command text cannot know what $GIT expands to without running the shell. Saying so in docs/guards.md, as T306 is to, is the honest answer."
+    },
+    {
+     "id": "T295-D3",
+     "summary": "The plan hold takes its tree from the bundle MANIFEST's 'Built from the tree' line, falling back to the call's tree for a bundle that names none; write-back stays only in the hold's own tree (T123).",
+     "class": "within",
+     "why": "Ends a measured wrong outcome (the clone's plan.md written into from a hold on another tree's section); keeps T123's own rule."
+    },
+    {
+     "id": "T295-D3-limit",
+     "summary": "A shell write of the held section from a call whose cwd is the clone (cd <worktree> && sed -i ...) is neither refused nor written back; an Edit/Write by path is refused as before; the review is re-run when plan-verdict refuses the changed digest. Filed as T306, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The hold's purpose is that a verdict is recorded only on the text reviewed, and plan-verdict's digest refusal still holds that: the gap costs a re-run review and never lets a stale verdict through. The gap is filed with FR-009's why (reading the call's tree from the walk on every Bash call while a hold stands), T306 and an order before T302, so it is scheduled, not waived; holds only while T306 lands before T302."
+    },
+    {
+     "id": "T295-D4",
+     "summary": "static-runs reads the crates of the work tree the command's first make static/closing-checks runs in (its cd's and make -C), else the clone; the count stays in the clone's log (T14); the 'no crate' message says what it measured and the path goes to the guard log, not the message.",
+     "class": "within",
+     "why": "Ends the measured wrong outcome (a builder with edited crates told its task changes none). FR-007 asks the refusal to name the crate-scoped checks for the crates the task's delta changes, which needs the right tree; keeping the path out of the message keeps its guard-messages key stable."
+    },
+    {
+     "id": "T295-wording",
+     "summary": "The refusal wording is cut on message-check's two rounds; the crate list and the words on what was measured are kept, shortened, against round two; the escape reads STATIC_OK=\"<reason, two words or more>\"; a third round is left to the coordinating session with the round arbiter, so hooks-test stays red on the two wordings until a verdict is recorded.",
+     "class": "within",
+     "why": "FR-007 requires the refusal to name the crate-scoped checks for the task's crates, so the crate list is required, not optional; the GM's 2026-11-23 hook-length words ask for fewer tokens with no loss of fidelity, which keeping the shortened measured words honors; FR-012's two-word escape is met. Leaving hooks-test red and the third round to the arbiter is a stop for a ruling, not a narrowing: the exit is still green closing checks."
+    },
+    {
+     "id": "T295-left-other",
+     "summary": "Found-and-left items outside the task's subject: pool trees lacking the magistracy sheets (T159), a land test failing once under load (T304), the per-task bundle path shared between clone and builder tree (T288); each with why, task id and order before T302.",
+     "class": "within",
+     "why": "Defects in other crates or in make decide's bundle key, not part of what T295 fixes; each is filed and ordered before T302, which satisfies fix-as-we-go and FR-009's three parts. T288's case does not make D3 worse than before: a bundle rebuilt from the clone moves the hold to the clone, which was the old behavior."
     }
    ],
    "verdict": "CLEAR"

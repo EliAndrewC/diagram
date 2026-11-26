@@ -49,7 +49,7 @@ run "make static"
 ran b 2026-11-20T10:02:00.000Z
 run "make static"
 [ "$RC" -eq 2 ] && seen OUT -q 'T06 of 451-x has run `make static` 2 times' && ok "two runs before: the third is refused" || no "the third passed" "(rc=$RC: $OUT)"
-seen OUT -q 'make quick' && seen OUT -q 'STATIC_OK="<reason>"' && ok "...naming the edit loop (no crate in this delta) and the escape" || no "the refusal names no check" "($OUT)"
+seen OUT -q 'make quick' && seen OUT -q 'STATIC_OK="<reason, two words or more>"' && ok "...naming the edit loop (no crate in this delta) and the escape" || no "the refusal names no check" "($OUT)"
 [ -n "$(ls "$GUARD_LOG_DIR" 2>/dev/null)" ] && ok "...and the firing is logged" || no "no guard-log record"
 run "make rust-test CRATE=rust/guard && make static"
 [ "$RC" -eq 2 ] && ok "a make static after another target is read" || no "the second target passed" "(rc=$RC)"

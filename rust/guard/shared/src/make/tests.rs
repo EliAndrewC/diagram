@@ -150,3 +150,41 @@ fn the_run_is_the_outermost_make_s_first_goal() {
     let none = [11, 12, 99].map(|pid| super::outermost_goal(p, pid));
     assert_eq!(none, [None, None, None]);
 }
+
+/// 451 T295: make spelled by its path, behind a `\` or a wrapper is make; a program whose name only ends in make is not.
+#[test]
+fn make_is_read_however_it_is_spelled() {
+    for cmd in [
+        "/usr/bin/make static",
+        "\\make static",
+        "command make static",
+        "command -p /usr/bin/make static",
+        "env make static",
+        "exec make static",
+        "nice make static",
+        "builtin make static",
+        "time make static",
+        "sudo make static",
+        "sudo -E \\make static",
+        "ls && exec ./make static",
+        "/usr/bin/env make static",
+        "\\sudo /usr/bin/nice -n 5 /usr/bin/make static",
+        "/usr/bin/timeout 60 make static",
+    ] {
+        assert_eq!(invoked(cmd), ["static"], "{cmd}");
+    }
+    for cmd in [
+        "/tmp/mymake static",
+        "mymake static",
+        "ls /usr/bin/make static",
+        "/tmp/make.sh static",
+        "/tmp/make/run static",
+        "/tmp/myenv make static",
+        "command -v make",
+        "command -V make static",
+        "X=/opt/make static",
+        "ls /usr/bin/env make static",
+    ] {
+        assert_eq!(invoked(cmd), Vec::<String>::new(), "{cmd}");
+    }
+}

@@ -154,6 +154,7 @@ key	verdict	chars	guard	kind	by	over	head
 6d2976c0aa5ea0cc	BASELINE	321	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an engine entry point run outside make - no make target
 6dc586b1423c80b9	BASELINE	622	guard-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this edit puts a COMMAND SUBSTITUTION inside a recipe comment of
 6e32d671cd4cb82c	BASELINE	509	archive-first-hooks	refuse	unreviewed - stood before 451 T170		The source archive already holds this page (captured N-N-N) - read it
+6f2059b7c3ad8fc8	PASS	1230	static-runs-hooks	refuse	round-arbiter	arbiter ask:t295-static-runs-message: round 2's remaining cuts (the crate list, the measured-tree words) declined; the list is make crate-checks' own argument, the words are T295's point	BLOCKED: TN of N-rust-codebase has run `make static` N times since its
 7019fd8b9a7cfc6a	BASELINE	821	agent-prefix-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: N characters of this prompt repeat an earlier `quote-check` dispatch's, from
 703147688254bc69	BASELINE	330	record-edit-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: <path> is ASSEMBLED from <path>, and the text this edit replaces
 707545913142ea13	BASELINE	486	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: source-reader on its prompt: decide first, then check (feature N FR-Na)
@@ -175,6 +176,7 @@ key	verdict	chars	guard	kind	by	over	head
 7d9bd0b5ed61a5ce	PASS	1227	review-round-hooks	refuse	ace1afc5bc6430da1		BLOCKED: <path> still carries the OLD value of something this change moved
 7dea326f0e784fb9	BASELINE	184	clone-sync-hooks	notice	unreviewed - stood before 451 T170		clone-sync: <path> has uncommitted work (mid-task) - clone merge skipped; mirror refresh
 7e51fc38a8b4398c	BASELINE	1318	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has
+7e8cc888b57fb2c2	PASS	585	static-runs-hooks	refuse	round-arbiter	arbiter ask:t295-static-runs-message: round 2's remaining cuts (the crate list, the measured-tree words) declined; the list is make crate-checks' own argument, the words are T295's point	BLOCKED: TN of N-x has run `make static` N times since its
 7ea3d0d4d20c1236	BASELINE	801	shell-check-hooks	refuse	unreviewed - shell-check's co-author refusal, a family of 2 keys: 0 shown a session - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		BLOCKED: a co-author trailer addressed to 'duplicate@anthropic.com'. The co-author address is <noreply@anthropic.com>.
 7f1008d6c5a732db	BASELINE	607	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (no-poll): a make or cargo run is started under nohup or
 7f548e9d32ddcf87	BASELINE	519	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: CRON_OK with no reason given. An escape is a workaround, and

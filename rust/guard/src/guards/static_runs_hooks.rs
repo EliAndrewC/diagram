@@ -21,7 +21,7 @@
 //! A call whose line carries no task is passed, the pass recorded as `no-task` (plan D10's precedent): there is nothing to count by.
 
 use std::collections::{BTreeSet, HashSet};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use serde_json::Value;
 
@@ -34,6 +34,7 @@ use crate::shared::log::fire;
 use crate::shared::make::invoked;
 use crate::shared::session::Session;
 use crate::shared::state::field;
+use crate::shared::tree::walk;
 
 mod order;
 
@@ -56,12 +57,13 @@ const TOKEN: &str = "STATIC_OK";
 enum Said {
     /// The call's line carries no task: passed, the pass recorded.
     NoTask,
-    /// Past the knob: refused, naming the task, its runs and the crates its delta changes.
+    /// Past the knob: refused, naming the task, its runs and the crates the delta of `tree` changes - the tree its `make` runs in.
     Refused {
         feature: String,
         task: String,
         runs: usize,
         crates: Vec<String>,
+        tree: String,
     },
     /// Past the knob, escaped by `STATIC_OK` and its reason.
     Escaped(String),
@@ -167,10 +169,11 @@ fn refusals(said: Option<Said>, log: &dyn Fn(&str, &str, &str)) -> Vec<Answer> {
             task,
             runs,
             crates,
+            tree,
         }) => {
             log(
                 "blocked",
-                &format!("{feature} {task}: {runs} runs"),
+                &format!("{feature} {task}: {runs} runs, crates read in {tree}"),
                 "third-static",
             );
             vec![Answer::Refuse(refusal(&feature, &task, runs, &crates))]
@@ -178,7 +181,36 @@ fn refusals(said: Option<Said>, log: &dyn Fn(&str, &str, &str)) -> Vec<Answer> {
     }
 }
 
-/// The verdict on one hook input: None to pass it silently. `crates` lists the crates a clone's delta changes, asked only to refuse.
+/// The tree a call's `make static` runs in (451 T295): the work tree of the directory its first such `make` stands in, as the walk
+/// reads the command's `cd`s; None where it stands in no work tree, or the walk finds no such `make`. WHY: a call is filed, and its
+/// runs counted, in the session's clone (451 T74), while a builder's `cd <worktree> && make closing-checks` runs in its worktree,
+/// so the refusal read the clone's delta and said "changes no Rust crate" of a worktree whose crates were edited (seen 2026-11-26;
+/// the edits being uncommitted was not the cause - `delta_crates` reads the working tree and the untracked files). `make -C <dir>`,
+/// the way a target is run in another tree, names its directory itself.
+fn run_tree(cmd: &str, start: &Path, home: &str) -> Option<PathBuf> {
+    let walk = walk(cmd, Some(&start.to_string_lossy()), "", home);
+    let dir = walk
+        .targets
+        .iter()
+        .find(|t| invoked(&t.head).iter().any(|g| is_run(g)))
+        .and_then(|t| {
+            // `make -C <dir>` runs in <dir>, read from where the make stands
+            let words: Vec<&str> = t.head.split_whitespace().collect();
+            let words = &words[crate::shared::spelled::command_at(&words)..];
+            let named = words
+                .iter()
+                .position(|w| *w == "-C")
+                .and_then(|at| words.get(at + 1));
+            let stands = t.path.clone()?;
+            Some(named.map_or(stands.clone(), |d| {
+                Path::new(&stands).join(d).to_string_lossy().into_owned()
+            }))
+        })?;
+    let top = git_stdout(Path::new(&dir), &["rev-parse", "--show-toplevel"]);
+    (!top.is_empty()).then(|| PathBuf::from(top))
+}
+
+/// The verdict on one hook input: None to pass it silently. `crates` lists the crates a tree's delta changes, asked only to refuse.
 fn judge(
     input: &Value,
     here: &Path,
@@ -212,12 +244,22 @@ fn judge(
     Some(match escape_or_refuse(cmd, TOKEN) {
         Escape::Escaped(why) => Said::Escaped(why),
         Escape::Refused(text) => Said::NoReason(text),
-        Escape::None => Said::Refused {
-            feature,
-            task,
-            runs,
-            crates: crates(&root),
-        },
+        Escape::None => {
+            let start = input
+                .get("cwd")
+                .and_then(Value::as_str)
+                .filter(|c| !c.is_empty())
+                .map_or(here, Path::new);
+            let home = env("HOME").unwrap_or_default();
+            let tree = run_tree(cmd, start, &home).unwrap_or(root);
+            Said::Refused {
+                feature,
+                task,
+                runs,
+                crates: crates(&tree),
+                tree: tree.to_string_lossy().into_owned(),
+            }
+        }
     })
 }
 
@@ -321,21 +363,21 @@ pub(crate) fn crates_of<'a>(root: &Path, paths: impl Iterator<Item = &'a str>) -
 /// The refusal: the count, the crate-scoped checks for the crates as ONE command, its list said once (`make crate-checks`, 451 T170:
 /// four lines a crate reached builders at up to 7,909 characters over 25 crates, 4,054 on average, measured 2026-11-23; held at its
 /// worst case, every crate of the workspace, by `suite_tools/messages/worst.rs`), `make static` once before the landing, the escape.
+/// Where it finds no crate it says what it measured (451 T295) - the tree itself is on the guard log's line, never in the message,
+/// whose key a path would change at every run.
 pub(crate) fn refusal(feature: &str, task: &str, runs: usize, crates: &[String]) -> String {
     let checks = if crates.is_empty() {
-        "  This task's delta changes no Rust crate (against origin/main's merge base): `make quick` is its edit loop.\n".to_owned()
+        "  make quick   (the tree this make runs in changes no Rust crate against origin/main's merge base, its uncommitted edits read)\n".to_owned()
     } else {
         format!("  make crate-checks CRATE=\"{}\"\n", crates.join(" "))
     };
     let run = order::closing_run(feature, Some(task));
     format!(
-        "\n\u{1b}[1mBLOCKED: {task} of {feature} has run `make static` {runs} times since its last landing (feature 451 FR-007).\u{1b}[0m\n\n\
-`make static` is the check before a landing, not the edit loop: it runs every crate's checks. While iterating, run the\n\
-test, lint, format and cover checks of the crates this task changes:\n\n{checks}\n\
+        "\n\u{1b}[1mBLOCKED: {task} of {feature} has run `make static` {runs} times since its last landing.\u{1b}[0m\n\n\
+`make static` is the pre-landing check, not the edit loop. While iterating, run:\n\n{checks}\n\
 then `make static` once, before `make land` (or `{run}` in the background: it runs make static, make hooks-test\n\
-and make quick at once, and is one run of `make static`) - a landing of {task} that goes out starts the count again; a later\n\
-`make task-start` does not.\n\n\
-Escape: {TOKEN}=\"<reason>\" in the command, recorded in the guard log.\n"
+and make quick at once, and is one run of `make static`). A landing resets the count.\n\n\
+Escape: {TOKEN}=\"<reason, two words or more>\" in the command.\n"
     )
 }
 

@@ -26,6 +26,7 @@ use crate::shared::escape::{escape_or_refuse, Escape};
 use crate::shared::log;
 use crate::shared::session::Session;
 use crate::shared::shape::shlex;
+use crate::shared::spelled;
 use crate::shared::state::field;
 use crate::shared::tree::walk;
 
@@ -51,8 +52,9 @@ Otherwise append `# BUILDER_TREE_OK: <reason, two words or more>`.";
 /// What a write's command does to a tree: `add`, `remove` (`git worktree remove` or `move`) or `rm`; None for any other.
 fn verb(head: &str) -> Option<&'static str> {
     let toks = shlex(head).unwrap_or_else(|| head.split_whitespace().map(str::to_owned).collect());
-    let name = |t: &String| t.rsplit('/').next().unwrap_or_default().to_owned();
-    match toks.first().map(name).as_deref() {
+    // the command word past its wrappers, by its name however spelled (451 T295: `command git worktree add` was read as `command`)
+    let toks = &toks[spelled::command_at(&toks)..];
+    match toks.first().map(|t| spelled::name_of(t)) {
         Some("rm") => Some("rm"),
         Some("git") => {
             let at = toks.iter().position(|t| t == "worktree")?;

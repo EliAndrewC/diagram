@@ -144,3 +144,39 @@ fn a_head_is_read_by_its_verb() {
     assert_eq!(super::verb("rm -rf 'unclosed"), Some("rm"));
     assert_eq!(super::verb("ls"), None);
 }
+
+/// 451 T295: git and rm are read by name however the command spells them - `/usr/bin/git worktree add` passed (the walk read git
+/// by its bare name alone), `command git` too (the head keeps its wrapper, read as the program) - and a program whose name only
+/// ends in git is another program.
+#[test]
+fn every_spelling_of_git_and_rm_is_refused_where_the_bare_one_is() {
+    let (_d, main) = world("spelled");
+    let m = main.to_string_lossy();
+    for s in [
+        "/usr/bin/",
+        "\\",
+        "command ",
+        "env ",
+        "/usr/bin/env ",
+        "sudo /usr/bin/",
+        "timeout 60 ",
+        "sudo -u x env -i ",
+        "nice \"",
+    ] {
+        let close = if s.ends_with('"') { "\"" } else { "" };
+        let add = format!("{s}git{close} worktree add --detach {m}/.clones/c-t286 HEAD");
+        assert_eq!(ask(&add, &main), Some(ADD), "{add}");
+        let remove = format!("{s}git{close} worktree remove --force {m}/.clones/c-t269");
+        assert_eq!(ask(&remove, &main), Some(REMOVE), "{remove}");
+        let rm = format!("{s}rm{close} -rf {m}/.clones/c-t269");
+        assert_eq!(ask(&rm, &main), Some(REMOVE), "{rm}");
+    }
+    for cmd in [
+        format!("/tmp/mygit worktree add --detach {m}/.clones/c-t286 HEAD"),
+        format!("legit worktree add {m}/.clones/c-t286"),
+        format!("/tmp/git/tool worktree add {m}/.clones/c-t286"),
+        format!("/tmp/myrm -rf {m}/.clones/c-t269"),
+    ] {
+        assert_eq!(ask(&cmd, &main), None, "{cmd}");
+    }
+}
