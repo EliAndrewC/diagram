@@ -21,6 +21,10 @@
 //! session's letter (`q-0123-quote-check-t330a`, read as T330a), and the reading stopped there, short of the brief's T330 - a 451
 //! landing refused on it (replayed 2026-11-23 on the landing's tree af418b90c5 and the pass log as it stood at 02:33Z).
 //!
+//! Since 451 T305 (`pool.rs`) a pass none of its own words ties is the task's that HELD THE POOL TREE it was dispatched from, when it
+//! was dispatched - before its builder and its page session are read - and that hold stands for the task's start: a pool builder's
+//! task is started in the clone only as it lands.
+//!
 //! A task named without its feature takes the feature that started it (`event_log_hooks::started`). The pass is left only where that
 //! task is STARTED (`task-starts.jsonl`) and ticked in neither of its feature's task files, and none of the tasks named is one this
 //! landing lands; a pass naming nothing, a task never started, a ticked one, or one of the landing's own still refuses here.
@@ -35,7 +39,8 @@ use serde_json::Value;
 
 use super::super::settle::Transcripts;
 use super::super::{text, Pass};
-use super::{re, ticked, Landing};
+use super::pool::{first_record, Holds};
+use super::{re, ticked, Landing, Side};
 
 /// A task id, and the feature number before it where one stands there (`own.rs`'s `NAMED`).
 static NAMED: LazyLock<Regex> = LazyLock::new(|| re(r"(?:\b(\d{3})\s+)?\b(T\d+[a-z]?)\b"));
@@ -48,6 +53,8 @@ static BRIEF_FILE: LazyLock<Regex> = LazyLock::new(|| re(r"^t(\d+[a-z]?)-"));
 struct Named {
     feature: Option<String>,
     tasks: Vec<String>,
+    /// read from the pool: the tasks held the tree the pass was dispatched from, which stands for their start (451 T305)
+    held: bool,
 }
 
 /// What a landing reads once to say whose each pass is.
@@ -56,6 +63,7 @@ pub(super) struct Clues<'a> {
     transcripts: Transcripts<'a>,
     starts: Vec<Start>,
     sessions: String,
+    pool: Holds,
 }
 
 impl<'a> Clues<'a> {
@@ -68,29 +76,33 @@ impl<'a> Clues<'a> {
             transcripts: Transcripts::new(transcripts),
             starts: starts(repo),
             sessions,
+            pool: Holds::read(&common_git_dir(repo)),
         }
     }
 
-    /// The started, open task (`<feature> <task>`) whose own landing or session owes this pass's row; None where it is owed here.
-    pub(super) fn left_to(&mut self, p: &Pass, landing: &Landing) -> Option<String> {
-        let (feature, named) = self.named(p)?;
+    /// Whose landing or session owes this pass's row: the landing asking, where a task it names is one of the landing's; another
+    /// started (or tree-holding), open task's (`<feature> <task>`); else nobody's, and it is owed here.
+    pub(super) fn side(&mut self, p: &Pass, landing: &Landing) -> Side {
+        let Some((feature, named)) = self.named(p) else {
+            return Side::Unowned;
+        };
         if landing.feature == feature
             && named
                 .tasks
                 .iter()
                 .any(|t| landing.tasks.contains(&t.as_str()))
         {
-            return None;
+            return Side::Own;
         }
         let open = |t: &&String| {
-            self.starts.iter().any(|(f, s, _)| *f == feature && s == *t)
+            (named.held || self.starts.iter().any(|(f, s, _)| *f == feature && s == *t))
                 && !ticked(self.repo, &feature, t)
         };
         named
             .tasks
             .iter()
             .find(open)
-            .map(|t| format!("{feature} {t}"))
+            .map_or(Side::Unowned, |t| Side::Left(format!("{feature} {t}")))
     }
 
     /// The feature a source's tasks are served in - its number's specs directory, else the feature that started its first task - where
@@ -100,10 +112,10 @@ impl<'a> Clues<'a> {
             Some(f) => self.feature_dir(f)?,
             None => started(&self.starts, n.tasks.first()?, None)?,
         };
-        let begun = n
-            .tasks
-            .iter()
-            .any(|t| self.starts.iter().any(|(f, s, _)| *f == feature && s == t));
+        let begun = n.held
+            || n.tasks
+                .iter()
+                .any(|t| self.starts.iter().any(|(f, s, _)| *f == feature && s == t));
         begun.then_some((feature, n))
     }
 
@@ -129,14 +141,35 @@ impl<'a> Clues<'a> {
         words(&field("description"))
             .and_then(|n| self.served(n))
             .or_else(|| {
+                self.pooled(p, &transcript, &dir, &field("parentAgentId"))
+                    .and_then(|n| self.served(n))
+            })
+            .or_else(|| {
                 builder_brief(&dir, &field("parentAgentId")).and_then(|(feature, tasks)| {
                     self.served(Named {
                         feature: Some(feature),
                         tasks,
+                        held: false,
                     })
                 })
             })
             .or_else(|| self.page_session(&dir).and_then(|n| self.served(n)))
+    }
+
+    /// The tasks that held, when the pass's transcript opens, the pool tree its subject names, else the one the first line of its
+    /// dispatching agent's brief names (451 T305, `pool.rs`); None where neither names a tree held then.
+    fn pooled(&self, p: &Pass, transcript: &Path, dir: &Path, parent: &str) -> Option<Named> {
+        let at = first_record(transcript).0?;
+        let brief = first_record(&dir.join(format!("agent-{parent}.jsonl"))).1;
+        let (feature, tasks) = self
+            .pool
+            .holder(text(p, "subject"), at)
+            .or_else(|| self.pool.holder(&brief, at))?;
+        Some(Named {
+            feature: Some(feature),
+            tasks,
+            held: true,
+        })
     }
 
     /// A feature number or directory name as this repository's specs directory.
@@ -181,6 +214,7 @@ impl<'a> Clues<'a> {
         Some(Named {
             feature: Some(feature),
             tasks: vec![task],
+            held: false,
         })
     }
 }
@@ -201,11 +235,13 @@ fn words(text: &str) -> Option<Named> {
         return Some(Named {
             feature: c.get(1).map(|m| m.as_str().to_owned()),
             tasks: vec![c[2].to_owned()],
+            held: false,
         });
     }
     group(&BUNDLE, text, 1).map(|n| Named {
         feature: None,
         tasks: vec![format!("T{n}")],
+        held: false,
     })
 }
 

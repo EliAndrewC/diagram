@@ -22,6 +22,9 @@
 //! ledger-owed --write-plan-reviews [--landing <feature dir> --tasks "<ids>"]
 //!                                                      append the row of each owed plan review that recorded its verdict (385 T72),
 //!                                                      but an open task's, its own landing's (451 T231, `left.rs`)
+//! ledger-owed --write specs/<feature dir>/ --landing <feature dir> --tasks "<ids>"
+//!                                                      the landing's write: its own tasks' passes and the feature's traced ones,
+//!                                                      but another open task's, its own landing's (451 T305, `left.rs`)
 //! ledger-owed --write ... --by-hand                    `make ledger-owed WRITE=`: the landing's own rows refused (451 T105, below)
 //! ledger-passes                                        the settled passes as JSON (what `measure feature-report` costs, in process)
 //! ```
@@ -427,9 +430,26 @@ fn write_owed(
     if let Some(num) = feat.as_deref().filter(|_| o.session.is_empty()) {
         // a page session's own passes are its feature's already
         let questions = trace::feature_questions(num, repo, env)?;
+        // A LANDING'S WRITE IS ITS OWN TASKS' (451 T305, `left.rs`): another open task's pass is left to that task's landing though
+        // the feature's trace reaches it, and its own tasks' pass is written though the trace does not; a write no landing asks
+        // (`--landing` not given) is the trace's alone, as before
+        let landing = left::Landing {
+            feature: o.landing,
+            tasks: o.tasks.split_whitespace().collect(),
+        };
+        let sides = if o.landing.is_empty() {
+            mine.into_iter().map(|p| (p, left::Side::Unowned)).collect()
+        } else {
+            left::sides(&mine, repo, transcripts, &landing)
+        };
         let mut kept = Vec::new();
-        for p in mine {
-            if trace::belongs(&p, num, &questions, repo, transcripts)? {
+        for (p, side) in sides {
+            let written = match side {
+                left::Side::Left(_) => false,
+                left::Side::Own => true,
+                left::Side::Unowned => trace::belongs(&p, num, &questions, repo, transcripts)?,
+            };
+            if written {
                 kept.push(p);
             }
         }

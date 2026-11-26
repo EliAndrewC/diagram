@@ -67,7 +67,17 @@ impl Land {
             "specs/{}/ (the records its checks wrote; make land)",
             name_of(d)
         );
-        self.ledger(&["--write", &at, "--ledger", &ledger]);
+        // ...and of the passes traced to the feature, its own tasks' and no other open task's (451 T305, `left.rs`)
+        self.ledger(&[
+            "--write",
+            &at,
+            "--ledger",
+            &ledger,
+            "--landing",
+            &feature,
+            "--tasks",
+            &ticks,
+        ]);
         if !self.dirty(&["dev/review-ledger.md"])?.is_empty() {
             self.run(
                 &[

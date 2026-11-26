@@ -462,6 +462,11 @@ fn every_cheap_refusal_is_said_together_and_nothing_runs_long() {
         .lines()
         .find(|l| l.starts_with("ledger --write-plan-reviews --ledger "));
     assert!(write.is_some_and(|l| l.ends_with("/dev/review-ledger.md --landing 449-x --tasks T1")));
+    // ...and of the passes traced to its feature, its own tasks' and no other open task's (451 T305)
+    let traced = asked
+        .lines()
+        .find(|l| l.starts_with("ledger --write specs/449-x/ "));
+    assert!(traced.is_some_and(|l| l.ends_with("/dev/review-ledger.md --landing 449-x --tasks T1")));
     assert!(err.contains("review-gate.sh: a review is owed"));
     assert!(!fx.log().contains("stamp --check"));
 }

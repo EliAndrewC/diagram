@@ -2028,6 +2028,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T305 (2026-11-26: the ledger-owed check refused 451 T272's landing once and the T281 and T284 landing three times, each on a message-check round another builder had run in its own tree for a different task)": {
+   "sha256": "f7081035c7419d198d6a5bbc4f893bce9230f7a475e14fbc990b118f2a520a0b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T305 Approach (checklist part A)": {
+   "sha256": "588f78e3b614d2858be36bb2ac5d875033d3b97b610844ffa4f939b13ab7612b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -25923,6 +25935,133 @@
      "why": "Each found defect is fixed in the task that found it, which is what fix-as-we-go asks; no known defect is carried on."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T305 (2026-11-26: the ledger-owed check refused 451 T272's landing once and the T281 and T284 landing three times, each on a message-check round another builder had run in its own tree for a different task)",
+    "### T305 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1 pool rung",
+     "summary": "A new rung of whose.rs (ledger_passes/left/pool.rs), after a pass's own words and before its builder and page session, ties a pass to the task that held the pool tree it was dispatched from.",
+     "class": "within",
+     "why": "Fixes a check refusing good work (another task's landing refused on a pass it did not run), a defect under constitution XIV, in tooling the GM's 2026-11-26 builder-worktree (T285) and build-slot (T284) words put in place; every pass still owes its row (FR-019)."
+    },
+    {
+     "id": "D2 which tree",
+     "summary": "The tree is the one the pass's subject names, else the one the first line of its dispatching agent's brief names.",
+     "class": "within",
+     "why": "Mechanism of D1; widens attribution, removes no owed row."
+    },
+    {
+     "id": "D3 log not registry",
+     "summary": "The holder is read from builder-pool.log at the time of the pass transcript's first record, not from builder-pool.json.",
+     "class": "within",
+     "why": "Measured reason given (t270 was T295's then T303's); keeps a pass with the task that ran it."
+    },
+    {
+     "id": "D4 hold stands for start",
+     "summary": "A pool hold stands for the task's start for this rung alone; T157/T167's started rule unchanged for every other source.",
+     "class": "within",
+     "why": "Confined to the new rung; no other attribution loosened."
+    },
+    {
+     "id": "D5 fallbacks",
+     "summary": "Task ticked, tree free at the time, hold naming no feature, or transcript with no time: the pass is owed by every push as before.",
+     "class": "within",
+     "why": "Keeps FR-019's refusal wherever the rung cannot tie the pass."
+    },
+    {
+     "id": "D6 write side",
+     "summary": "make land's ledger write carries --landing <feature> --tasks <its tasks>: another open task's pass is not written, its own tasks' is; writes no landing asks (make ledger-owed WRITE=, page sessions) unchanged.",
+     "class": "within",
+     "why": "The other task's row stays owed by its own landing; the landing's own row is now written from the record, as FR-019 asks, instead of by hand."
+    },
+    {
+     "id": "D7 untied passes hold",
+     "summary": "Passes tied to no task (199 coordinating-session dispatches, escalation-check passes, pre-pool subagent passes) hold the push as before.",
+     "class": "within",
+     "why": "Unchanged FR-019 behavior; the coordinating session's own passes owing rows is not a wrong outcome."
+    },
+    {
+     "id": "D8 hand-made tree shape",
+     "summary": "T272's hand-made-tree case (no pool log names it) is not reached by the rung.",
+     "class": "within",
+     "why": "Hand-made trees are refused since 451 T285, so the case cannot recur; nothing live is left."
+    },
+    {
+     "id": "D9 exits",
+     "summary": "Builder's exit is make builder-checks on the two crates (the first tier); the full gate and coverage run at the landing.",
+     "class": "within",
+     "why": "The two-tier trial adopted 2026-11-26; the full gate still runs before the push."
+    },
+    {
+     "id": "D10 event-log booking left",
+     "summary": "The block records that 'the event log's own booking failed the same way: the two dispatches' lines carry no task', counts 73 subagent-dispatched check lines with no task in three days, and states that the event log books by the same sources whose.rs reads; yet its steps and tests are ledger-only and Found-and-left says none.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Feature 451's request is time per task ('for each task that you've done ... a breakdown of where our time went'); a builder's check dispatch booked to no task is a wrong answer from where-time/feature-report, a defect by the block's own word ('failed'), and its stated causes are the same as the ledger's (builder_brief not reading 'Build 451 T295 ...' as a builder's, and T295 having no start row for its pool tree). FR-004's 'where its dispatch names one' does not settle it: the block itself says the booking should have found the task by the same sources and did not. Leaving a known defect unstated violates fix-as-we-go and FR-009's found-and-left form. Remedy, the author's choice: state and pin with a test that the event log's booking takes the new pool rung (so these lines carry T295), or carry it in Found and left with why it is not fixed here, its filed task id and its order."
+    }
+   ],
+   "tasks": [
+    "T305"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T305 (2026-11-26: the ledger-owed check refused 451 T272's landing once and the T281 and T284 landing three times, each on a message-check round another builder had run in its own tree for a different task)",
+    "### T305 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "pool-rung",
+     "summary": "whose.rs gains a pool rung after the pass's own words and before its builder and page session: the tree the subject or the dispatching brief's first line names, and its holder at the pass's first transcript record by builder-pool.log; the pass is that task's landing's while the task is not ticked",
+     "class": "within",
+     "why": "Fixes the wrong outcome the task line names (a landing refused on another task's builder's pass, four times on 2026-11-26); it serves the GM's 'synchronization' and builder-worktree requests (T284, T285) by making the pool's parallel builders not block each other's landings."
+    },
+    {
+     "id": "log-not-registry",
+     "summary": "the holder is read from the pool's log at the time of the pass, not from builder-pool.json now",
+     "class": "within",
+     "why": "Design choice inside the fix; the registry read would hand T295's pass to T303 (measured case), so the log is what makes the rule do what it is for."
+    },
+    {
+     "id": "hold-as-start-this-rung-only",
+     "summary": "a pool hold stands for the task's start for the pool rung alone; T157's and T167's started rule unchanged for every other source",
+     "class": "within",
+     "why": "Leaves other sources as they are; no wrong outcome is shown for them, so nothing is narrowed and no defect is left."
+    },
+    {
+     "id": "write-side",
+     "summary": "make land's ledger write carries --landing <feature> --tasks <its tasks>: another open task's pass not written, its own tasks' written, others as the trace; a write no landing asks unchanged",
+     "class": "within",
+     "why": "The second half of the same defect (the landing wrote another task's row and could not write its own); FR-019's write from the record is kept."
+    },
+    {
+     "id": "untied-still-holds",
+     "summary": "a pass tied to no task, and a ticked holder's, still hold the push; escalation-check passes (coordinating session's own, spawnDepth 1) unchanged",
+     "class": "within",
+     "why": "Preserves feature 371 / 385 FR-019 (every pass owes its row); the change only re-assigns passes a pool tree ties to a task, measured on the day's three escalation-check passes."
+    },
+    {
+     "id": "t272-hand-made-tree",
+     "summary": "the new rung reaches only passes from pool trees (log from 2026-11-26T14:57Z); T272's refusal, from a hand-made tree, is not reached and was not replayed",
+     "class": "within",
+     "why": "Hand-made trees are refused since 451 T285, so the cause cannot recur by that route; the rung covers every tree a builder can now be given. Not a defect left."
+    },
+    {
+     "id": "found-and-left-T310",
+     "summary": "the event log books a pool builder's check dispatch to no task (builder_brief's ^\\s*(\\d{3}) pattern misses 'Build 451 T295 ...'; the booking wants a start row a pool task lacks), so task-time and feature-report book that time to no task; shared reader with four callers (stalls.rs, builder_stop_hooks.rs, check_bundle_hooks/own.rs) not fixed here. Filed as T310; lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A wrong outcome against the GM's task time breakdown (every minute named, 2026-11-25), so it may not be dropped; round 1 blocked it for want of a filed task and an order, and it is now filed as T310 with an order (before T302), which is how a known defect is carried rather than abandoned. It is a separate mechanism (the guard's shared description reader and its hook suites) from this task's ledger reading, and this task's fix does not depend on it. The time is not silently lost meanwhile: it is booked to no task, which the breakdown reports as a remainder."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -40870,6 +41009,57 @@
      "summary": "Two found defects (the suite did not unset SPECIFY_FEATURE; the refusal listed set-apart files by task number alone) are fixed in this task; nothing is deferred.",
      "class": "within",
      "why": "Each found defect is fixed in the task that found it, which is what fix-as-we-go asks; no known defect is carried on."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T305": {
+   "section_sha256": "d41f0e7f7192d10aaab6b35826f1b316e4e87d5a82d0c39eba7be9524186410e",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "pool-rung",
+     "summary": "whose.rs gains a pool rung after the pass's own words and before its builder and page session: the tree the subject or the dispatching brief's first line names, and its holder at the pass's first transcript record by builder-pool.log; the pass is that task's landing's while the task is not ticked",
+     "class": "within",
+     "why": "Fixes the wrong outcome the task line names (a landing refused on another task's builder's pass, four times on 2026-11-26); it serves the GM's 'synchronization' and builder-worktree requests (T284, T285) by making the pool's parallel builders not block each other's landings."
+    },
+    {
+     "id": "log-not-registry",
+     "summary": "the holder is read from the pool's log at the time of the pass, not from builder-pool.json now",
+     "class": "within",
+     "why": "Design choice inside the fix; the registry read would hand T295's pass to T303 (measured case), so the log is what makes the rule do what it is for."
+    },
+    {
+     "id": "hold-as-start-this-rung-only",
+     "summary": "a pool hold stands for the task's start for the pool rung alone; T157's and T167's started rule unchanged for every other source",
+     "class": "within",
+     "why": "Leaves other sources as they are; no wrong outcome is shown for them, so nothing is narrowed and no defect is left."
+    },
+    {
+     "id": "write-side",
+     "summary": "make land's ledger write carries --landing <feature> --tasks <its tasks>: another open task's pass not written, its own tasks' written, others as the trace; a write no landing asks unchanged",
+     "class": "within",
+     "why": "The second half of the same defect (the landing wrote another task's row and could not write its own); FR-019's write from the record is kept."
+    },
+    {
+     "id": "untied-still-holds",
+     "summary": "a pass tied to no task, and a ticked holder's, still hold the push; escalation-check passes (coordinating session's own, spawnDepth 1) unchanged",
+     "class": "within",
+     "why": "Preserves feature 371 / 385 FR-019 (every pass owes its row); the change only re-assigns passes a pool tree ties to a task, measured on the day's three escalation-check passes."
+    },
+    {
+     "id": "t272-hand-made-tree",
+     "summary": "the new rung reaches only passes from pool trees (log from 2026-11-26T14:57Z); T272's refusal, from a hand-made tree, is not reached and was not replayed",
+     "class": "within",
+     "why": "Hand-made trees are refused since 451 T285, so the cause cannot recur by that route; the rung covers every tree a builder can now be given. Not a defect left."
+    },
+    {
+     "id": "found-and-left-T310",
+     "summary": "the event log books a pool builder's check dispatch to no task (builder_brief's ^\\s*(\\d{3}) pattern misses 'Build 451 T295 ...'; the booking wants a start row a pool task lacks), so task-time and feature-report book that time to no task; shared reader with four callers (stalls.rs, builder_stop_hooks.rs, check_bundle_hooks/own.rs) not fixed here. Filed as T310; lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A wrong outcome against the GM's task time breakdown (every minute named, 2026-11-25), so it may not be dropped; round 1 blocked it for want of a filed task and an order, and it is now filed as T310 with an order (before T302), which is how a known defect is carried rather than abandoned. It is a separate mechanism (the guard's shared description reader and its hook suites) from this task's ledger reading, and this task's fix does not depend on it. The time is not silently lost meanwhile: it is booked to no task, which the breakdown reports as a remainder."
     }
    ],
    "verdict": "CLEAR"

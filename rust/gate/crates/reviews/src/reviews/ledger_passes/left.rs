@@ -10,8 +10,8 @@
 //! `tasks.md` or `tasks-done.md` and is not one the landing lands (`--landing <feature dir> --tasks "<ids>"`); its own landing writes
 //! it (a feature's landing traces it, 385 T72's `--write-plan-reviews` takes it once its verdict is committed). A plan review whose
 //! subject names no task (a block review), whose task is ticked or whose feature has no specs directory here, and every other pass,
-//! still refuses: no landing is left to write it. The landing's two writes are unchanged - a feature's landing still writes every pass
-//! traced to it, another open task's among them.
+//! still refuses: no landing is left to write it. (The landing's two writes were unchanged by T147 - a feature's landing wrote every
+//! pass traced to it, another open task's among them - until 451 T231 and T305, below.)
 //!
 //! Since 451 T157 (`whose.rs`) a pass of any other check is left the same way where its own words, its builder or its page session's
 //! brief name another STARTED task, open, that the landing does not land: that task's landing or session writes its row.
@@ -28,6 +28,14 @@
 //! line only. A plan review's row belongs to the push that lands its task (`make land`, the commit carrying its tick); a recorded one
 //! whose task has no open line - ticked, withdrawn, a block review - to the next push, whichever it is.
 
+//!
+//! A PASS IS OWED BY THE LANDING OF THE TASK IT RAN FOR (451 T305, `pool.rs`). WHY: a builder's check round from its pool tree was
+//! tied to no task and refused every other task's landing (2026-11-26: T272's once, the T281 and T284 landing three times), and the
+//! landing's own write (`--write specs/<feature>/`) wrote every pass its feature's trace reached, another open task's of that feature
+//! among them. So `whose.rs` reads the pool tree a pass was dispatched from, and a landing's write (`--write ... --landing --tasks`,
+//! `land`'s `cheap.rs`) asks this split too: a pass left to another open task is not written, and a pass of the landing's own tasks
+//! is written whether or not the trace reaches it (a message-check's subject names no feature). A write no landing asks is unchanged.
+
 use std::path::Path;
 use std::sync::LazyLock;
 
@@ -35,6 +43,7 @@ use fancy_regex::Regex;
 
 use super::{text, Pass};
 
+mod pool;
 mod whose;
 
 fn re(pattern: &str) -> Regex {
@@ -88,23 +97,51 @@ fn open(repo: &Path, feature: &str, task: &str) -> bool {
     })
 }
 
-/// The open task whose landing writes this pass's row: a MODE 4 pass naming its feature and task, that task's line open in its
-/// feature's `tasks.md` here and not one this landing lands; any other pass, the started task `whose.rs` reads it as serving.
-fn left_to(p: &Pass, repo: &Path, clues: &mut whose::Clues, landing: &Landing) -> Option<String> {
+/// Whose an owed pass is, as a landing (or the push, a landing of nothing) asks.
+pub enum Side {
+    /// Another open task's (`<feature> <task>`): that task's landing or session writes its row.
+    Left(String),
+    /// One of the landing's own tasks'.
+    Own,
+    /// No open task's that can be read: owed here, whoever asks.
+    Unowned,
+}
+
+/// Whose `p` is: a MODE 4 pass naming its feature and task is that task's while its line is open in its feature's `tasks.md` here;
+/// any other pass, the task `whose.rs` reads it as serving.
+fn side(p: &Pass, repo: &Path, clues: &mut whose::Clues, landing: &Landing) -> Side {
     let subject = text(p, "subject");
     if !subject.starts_with(PLAN_REVIEW) {
-        return clues.left_to(p, landing);
+        return clues.side(p, landing);
     }
-    let (feature, task) = (group(&FEATURE, subject)?, group(&TASK, subject)?);
+    let (Some(feature), Some(task)) = (group(&FEATURE, subject), group(&TASK, subject)) else {
+        return Side::Unowned;
+    };
     if !open(repo, &feature, &task) {
-        return None;
+        return Side::Unowned;
     }
-    let landed = landing.feature == feature && landing.tasks.contains(&task.as_str());
-    (!landed).then(|| format!("{feature} {task}"))
+    if landing.feature == feature && landing.tasks.contains(&task.as_str()) {
+        return Side::Own;
+    }
+    Side::Left(format!("{feature} {task}"))
+}
+
+/// Each owed pass with whose it is; `transcripts` is where the passes' transcripts and meta files are found.
+#[must_use]
+pub fn sides(
+    owed: &[Pass],
+    repo: &Path,
+    transcripts: &Path,
+    landing: &Landing,
+) -> Vec<(Pass, Side)> {
+    let mut clues = whose::Clues::new(repo, transcripts);
+    owed.iter()
+        .map(|p| (p.clone(), side(p, repo, &mut clues, landing)))
+        .collect()
 }
 
 /// The owed passes a refusal counts, and the open tasks (`<feature> <task>`, once each, in order) whose landings or sessions write the
-/// rest; `transcripts` is where the passes' transcripts and meta files are found.
+/// rest.
 #[must_use]
 pub fn split(
     owed: &[Pass],
@@ -113,12 +150,11 @@ pub fn split(
     landing: &Landing,
 ) -> (Vec<Pass>, Vec<String>) {
     let (mut kept, mut left) = (Vec::new(), Vec::new());
-    let mut clues = whose::Clues::new(repo, transcripts);
-    for p in owed {
-        match left_to(p, repo, &mut clues, landing) {
-            Some(whose) if !left.contains(&whose) => left.push(whose),
-            Some(_) => {}
-            None => kept.push(p.clone()),
+    for (p, side) in sides(owed, repo, transcripts, landing) {
+        match side {
+            Side::Left(whose) if !left.contains(&whose) => left.push(whose),
+            Side::Left(_) => {}
+            Side::Own | Side::Unowned => kept.push(p),
         }
     }
     (kept, left)
