@@ -330,3 +330,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T358 withdrawn at filing by the session: T356 (a coverage pass of the measure crate red in a pool tree where the landing was green) is the tree's age, not where it ran - the tree diagram-backlog-t269 stood at f59ed63fbe, before the fixer's tests for those five lines (fd4f9c9c30) were carried; nothing to fix
       research: rendering
+- [ ] T359 make task-withdraw F= T= WHY=: a filed task found to be a duplicate or no defect has no way out but a full landing, which asks a plan section and a review of nothing (2026-11-26: make land refused T322, T323, T356 and T358 for unfilled plan stubs) - the command ticks the box with 'Withdrawn: <why>', removes its plan stub, and records who; and it withdraws those four: T322 and T323 duplicate T324, T356 is its tree's age (the pool tree stood before the tests for those lines were carried), T358 is a mis-filed note of T356's withdrawal
+      research: rendering
