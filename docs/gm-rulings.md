@@ -137,3 +137,15 @@ true size" above requires. Asked, the GM, 2026-11-26: *"If the aqueduct is being
 the map then that's fine. Otherwise I'd want it shown to scale."* It is for legibility - the page's own reason is that the
 true banks of so narrow a channel would vanish on the page - so the convention stands, now with his words. The bound is his:
 an enlargement that is not for legibility is drawn to scale.
+
+## 2.8% of a capital's row-house households live outside its wall (2026-11-26)
+
+Canon. Research page 0181's drawing page put about 2.8% of a capital's row-house commoner households outside the wall - 60 of
+2,160, some 300 inhabitants, the wharf hamlet only (the brokers, boatmen and porters who must live at the water they work)
+and the towpath shore - a session's choice of 2026-08-10 among three answers (57%, the overflow of a wall sized too small,
+never a decision; 30%, the share of the Chinese commercial cities, which would put about 1,800 inhabitants outside; and
+this), labeled setting canon with none of his words recorded. The reasons given him: the capital the maps draw, Shiro Daika,
+is a castle seat built for siege on the Crab clan's border, whose wall exists to keep its population inside, and it fits
+Japan's enclosed castle towns. The GM, 2026-11-26: *"yes I accept the 2.8% figure as canon for the reasons explained"*. The
+capital's samurai on country estates along the approaches (about 47 households, 15% of its samurai) are a separate line and
+are not part of this figure.

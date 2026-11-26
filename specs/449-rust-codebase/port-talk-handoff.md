@@ -71,10 +71,8 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
   far", his words).
 - ANSWERED 2026-11-26, 0141's aqueduct banks: 2 px wider for legibility is fine, anything else to scale
   (`docs/gm-rulings.md`, "The aqueduct's banks drawn 2 px wider for legibility are fine").
-- **0181's share outside the wall.** On 2026-08-10 a session chose 2.8% (60 of 2,160 households, the wharf hamlet only) from
-  three answers (57%, 30%, 2.8%). The page labels it setting canon, but none of his words are recorded (commits 1e07eaba8 and
-  4a9b1b951 hold a session's paraphrase; the August request files of 283 and 303 were not searched for it). Does he accept
-  it as canon? If not, it is relabeled as this project's choice.
+- ANSWERED 2026-11-26, 0181's share outside the wall: he accepts 2.8% as canon (`docs/gm-rulings.md`, "2.8% of a capital's
+  row-house households live outside its wall").
 
 ## What landed overnight in 451 (tooling and the record)
 
