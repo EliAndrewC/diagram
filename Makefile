@@ -17,7 +17,7 @@ FREE_TEXT = UNITS WITH KEYS KEY CLASS KIND SUBJECT REASON GROWTH_REASON SPREAD N
 	CHECK_ORDER_OK URLS MATCH NONE SHARD EXTRA IMAGES DIRS LAND SUITES PERF_LATER_OK DEFER_FORM_OK QUICK_OK BY OVER
 $(foreach v,$(FREE_TEXT),$(if $(filter command line environment,$(origin $(v))),$(eval override $(v) := $$(value $(v)))$(eval export $(v))))
 
-.PHONY: closing-checks modal-bundle modal-prepass done docs static format guard _reference _quick bypass-audit quick page-check tick claim speckit-todo audit guard-edit context-ok guard-log scratch-sweep cache-clean disk-audit hooks-test guard-messages citations fragment-move \
+.PHONY: closing-checks audits modal-bundle modal-prepass done docs static format guard _reference _quick bypass-audit quick page-check tick claim speckit-todo audit guard-edit context-ok guard-log scratch-sweep cache-clean disk-audit hooks-test guard-messages citations fragment-move \
 	 switches _switch research-deferred research-open \
 	 map maps cohort cohort-landing hamlet placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 pack-audit help \
@@ -436,6 +436,10 @@ scratch-sweep:  ## [project] remove finished sessions' scratch under /tmp/claude
 # what it freed.
 cache-clean:    ## [project] free the build cache (~/.cache/l7r-cargo-target): a build directory proven dead (no code path builds into its name, every tree its dep-info names gone), past the budget (L7R_CACHE_BUDGET_GB, 100) live trees' profiles idle HOURS (12), an idle tree's first, and a crate's variants past its newest 16; never while a build runs; names the scratch worktrees to remove (451 T158, T245)   [DRY=1] [HOURS=<n>]
 	@$(if $(HOURS),L7R_CACHE_IDLE_HOURS="$(HOURS)" ,)"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep $(if $(DRY),cache-dry,cache) </dev/null
+# THE AUDIT REGISTER (451 T259): one entry per optimization or procedure that costs time or tokens, each with its measurement and its
+# falsifier; `make static` and the push refuse a new guard module, threshold, gate-chain target or agent file that no entry names.
+audits:         ## [project] the audit register (dev/audits/): every entry, the overdue first by its cadence, each with its falsifier, threshold and last audit (451 T259)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check audit-register --list --root "$$(git rev-parse --show-toplevel)"
 disk-audit:     ## [project] every place this container writes - the build cache by tree, /tmp/claude-<uid> by session, /tmp/l7r-*, the rest of /tmp, this project's transcripts, the guard log, the clones, the mirror, ~/.cache, and within the clones their tasks' .git/t<N>, handoff folders, review snapshots and .gencache - each with its size, owner, age and budget, the total against the disk, the host's podman storage named as the host's, and what the low-disk eviction would free now; removes nothing (451 T245, T246)
 	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep audit </dev/null
 done land closing-checks: export DISK_OK := $(DISK_OK)
@@ -1147,6 +1151,8 @@ static:        ## [static] the static checks: file-scale, the Rust crates' check
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust dead
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check spec-lint --selftest
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check spec-lint --delta .
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check audit-register --selftest
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check audit-register --delta "$$(git rev-parse --show-toplevel)"
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check conflict --selftest
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check conflict --tracked .
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check guard-deps --root "$$(git rev-parse --show-toplevel)"

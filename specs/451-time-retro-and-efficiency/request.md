@@ -258,3 +258,22 @@ The GM, 2026-11-25 (verbatim, dictated), on the session's recommendation to star
 And on the private repository for the record-check answers and event logs:
 
 > I created https://github.com/EliAndrewC/diagram-tooling-state for the tooling state
+
+## 2026-11-25: the audit register (451 T259)
+
+The GM, 2026-11-25 (verbatim, dictated, as `specs/449-rust-codebase/port-talk-agenda.md` item 13 and its "Order" paragraph record
+them), on the register:
+
+> when we make this kind of optimization, then we should be documenting the logic behind it, the measurements that we took, and then also crucially what we would look at that would falsify the notion that this is a good idea ... a list of all of the auditable optimizations and processes and procedures, and then each one would know the last time that it was audited ... re-audit to see if they still make sense or if they need to be tweaked or redone or eliminated
+
+On the hidden ones:
+
+> some things are easy to identify as a measurable and auditable part of our tooling ... something like this limit on builder token window context size might not even show up as an optimization ... after the initial backfill, we can backfill as we go, as we find things that we missed
+
+On its order:
+
+> should we move that item up to or near the front, so it can apply to all of the other optimizations we're building at the moment?
+
+On the three-way measurement (agenda item 12):
+
+> we should make sure to measure whether the complexity of the handoffs actually saves time and/or tokens relative to either letting the builders grow or not using them in the first place

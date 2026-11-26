@@ -5,6 +5,7 @@ use std::process::Command;
 
 pub use l7r_gate_tree::checks::*;
 
+mod audit_register;
 mod conflict;
 #[cfg(test)]
 mod documents;
@@ -101,6 +102,7 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("stale-dirs") => (stale_dirs::USAGE_LOG_TOOL, stale_dirs::cli(rest)),
         Some("question-size") => (question_size::USAGE_LOG_TOOL, question_size::cli(rest, root)),
         Some("rust-tooling") => (rust_tooling::USAGE_LOG_TOOL, rust_tooling::cli(rest, root)),
+        Some("audit-register") => (audit_register::USAGE_LOG_TOOL, audit_register::cli(rest, root)),
         Some("guard-deps") => (guard_deps::USAGE_LOG_TOOL, guard_deps::cli(rest, root)),
         Some("research-pointers") => (research_pointers::USAGE_LOG_TOOL, research_pointers::cli(rest)),
         Some("house-style-delta") => (house_style_delta::USAGE_LOG_TOOL, house_style_delta::cli(rest)),
@@ -124,7 +126,7 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
             let code = needs(rest.first().map_or("", String::as_str), root);
             return crate::Reply { stdout: String::new(), stderr: String::new(), code };
         }
-        _ => return crate::Reply { stdout: String::new(), stderr: "usage: l7r-gate check file-scale | stale-dirs | question-size | rust-tooling | guard-deps | research-pointers | house-style-delta | gm-attributions | pipe-race [args]\n".to_owned(), code: 2 },
+        _ => return crate::Reply { stdout: String::new(), stderr: "usage: l7r-gate check file-scale | stale-dirs | question-size | rust-tooling | guard-deps | audit-register | research-pointers | house-style-delta | gm-attributions | pipe-race [args]\n".to_owned(), code: 2 },
     };
     crate::stamp::record_for(
         root,

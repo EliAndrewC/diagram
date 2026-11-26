@@ -359,7 +359,7 @@ fn a_tool_that_cannot_start_refuses() {
 
 #[test]
 fn the_table_lists_its_rows_and_the_arguments_are_checked() {
-    assert_eq!(CHECKS.len(), 24);
+    assert_eq!(CHECKS.len(), 26);
     let root = tree();
     let run = |words: &[&str]| {
         checks_cli(

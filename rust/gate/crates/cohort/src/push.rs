@@ -216,7 +216,7 @@ struct Row(
     &'static str,
 );
 
-const CHECKS: [Row; 24] = [
+const CHECKS: [Row; 26] = [
     Row("file-scale selftest", Tool::Gate, &["check", "file-scale", "--selftest"], "check-file-scale selftest failed - the guard itself is broken; fix rust/gate/crates/checks/src/checks/ before pushing", true, ""),
     Row("file-scale", Tool::Gate, &["check", "file-scale", "{root}"], "a Rust file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173", false, ""),
     Row("make-docs", Tool::InProcess(crate::make_docs::check), &["make-docs", "{root}", "--check"], "docs/make-targets.html is stale against the Makefile (above) - run `make docs` and commit the page; feature 385 FR-017", false, "docs/make-targets.html"),
@@ -231,6 +231,8 @@ const CHECKS: [Row; 24] = [
     Row("downloads", Tool::Gate, &["record", "downloads", "check"], "the canonical download list is not append-only against main (above) - feature 313; `make download-add FILE=<draft.md>` appends an entry", false, ""),
     Row("spec-lint selftest", Tool::Gate, &["check", "spec-lint", "--selftest"], "spec-lint selftest failed - the guard itself is broken; fix rust/gate/crates/checks/src/checks/spec_lint.rs before pushing", true, ""),
     Row("spec-lint", Tool::Gate, &["check", "spec-lint", "--delta", "{root}"], "spec-lint found something a review round would otherwise spend itself on (above) - feature 236, the GM: mistakes caught early and cheaply", false, ""),
+    Row("audit-register selftest", Tool::Gate, &["check", "audit-register", "--selftest"], "audit-register selftest failed - the check itself is broken; fix rust/gate/crates/checks/src/checks/audit_register.rs before pushing", true, "dev/audits"),
+    Row("audit-register", Tool::Gate, &["check", "audit-register", "--delta", "{root}"], "a guard module, threshold, gate-chain make target or agent file this push adds has no audit entry, or an entry is malformed (above) - 451 T259; write the entry the lines above give (dev/audits/<slug>.md), or AUDIT_ENTRY_OK=\"<reason>\" (recorded)", false, "dev/audits"),
     Row("speckit-todo check", Tool::Gate, &["speckit-todo", "--root", "{root}", "--check"], "an open feature does not say what it affects (above): add its **Affects** line - make speckit-todo CHECK=1 re-checks", false, ""),
     Row("conflict selftest", Tool::Gate, &["check", "conflict", "--selftest"], "conflict-marker selftest failed - the guard itself is broken; fix rust/guard/shared/src/guards/conflict_marker_hooks.rs before pushing", true, ""),
     Row("conflict", Tool::Gate, &["check", "conflict", "--tracked", "{root}"], "a tracked file still carries an unresolved merge conflict (above) - the history here is never rewritten, so resolve it before it lands, feature 241", false, ""),

@@ -21,6 +21,13 @@ The questions raised by the GM on 2026-11-25 (fourteen that day), are listed wit
 T243) and `make where-time`. When the talk decides an item, its entry moves here, and the agenda keeps one line pointing
 at it.
 
+## The audit register (451 T259)
+
+Every optimization or procedure that costs time or tokens has an entry under `dev/audits/` (one Markdown file each: what it is
+for, the measurement that justified it with its date and command, its falsifier and threshold, its cost source in `make task-time`,
+when it was last audited and its cadence). `make audits` lists them, the overdue first. A decision here that adds such a mechanism
+adds its entry; the push refuses a new guard module, threshold constant, gate-chain target or agent file without one.
+
 ## Decided
 
 ### What counts as blocking time (decided 2026-11-25)

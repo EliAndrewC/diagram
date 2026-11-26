@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 198 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 199 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -118,6 +118,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make archive-sources</td><td class=a>CONSULTED GM LIMIT REPORT WORKERS</td><td>archive every cited URL with no copy yet (resumable; run it in the background) - or REPORT=1, the coverage table without fetching; GM=1, the GM&#x27;s matched files copied in; CONSULTED=1, the uncited pages feature 312&#x27;s filter KEPT, and no other (features 309, 312)   [WORKERS=4] [REPORT=1] [GM=1] [CONSULTED=1 [LIMIT=&lt;n&gt;]]</td></tr>
 <tr><td class=n>make attempts</td><td class=a>KEY Q URL</td><td>what a source was tried for and what came of it, and the filter&#x27;s verdict on it - by URL, registry key, or question - BEFORE you read it again (feature 312)</td></tr>
 <tr><td class=n>make audit</td><td class=a>&ndash;</td><td>how the gate has actually been used - every run and every bypass</td></tr>
+<tr><td class=n>make audits</td><td class=a>&ndash;</td><td>the audit register (dev/audits/): every entry, the overdue first by its cadence, each with its falsifier, threshold and last audit (451 T259)</td></tr>
 <tr><td class=n>make backup</td><td class=a>&ndash;</td><td>save the clone&#x27;s commits to backup/&lt;clone&gt; on GitHub without landing them - no gate runs (the GM 2026-11-07: &quot;stop landing things until we&#x27;ve gotten this time down&quot;)</td></tr>
 <tr><td class=n>make builder-status</td><td class=a>TRANSCRIPT</td><td>each builder of an open task the session reads as running, said working or stalled, and each dead-producer waiter, by the idle check&#x27;s own reading: the session&#x27;s last Stop list, re-read now (451 T193) - the coordinator&#x27;s status of a builder, never its last message   [TRANSCRIPT=&lt;the session&#x27;s .jsonl; default the newest under ~/.claude/projects/-diagram&gt;]</td></tr>
 <tr><td class=n>make bypass-audit</td><td class=a>&ndash;</td><td>every escape token taken, with the reason its user gave   (the FULL prompt reads this)</td></tr>
