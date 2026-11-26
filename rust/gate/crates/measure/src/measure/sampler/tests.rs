@@ -223,13 +223,12 @@ fn a_second_start_says_one_is_running_and_a_stop_ends_it() {
         .starts_with(&format!("sampler: stopped (pid {pid})")));
     assert!(!env.common.join(PID).exists());
     // the process itself is ended: gone, or a zombie until this test's process reaps it
-    for _ in 0..50 {
-        if began(&env.proc, pid).is_none() {
-            break;
-        }
-        std::thread::sleep(std::time::Duration::from_millis(100));
-    }
-    assert_eq!(began(&env.proc, pid), None);
+    // (one look every 20 ms, for 5 s at most; no branch a quick ending leaves unreached)
+    let gone = (0..250).any(|_| {
+        std::thread::sleep(std::time::Duration::from_millis(20));
+        began(&env.proc, pid).is_none()
+    });
+    assert!(gone);
     assert_eq!(
         verb(&words(&["stop"]), &env).stderr,
         "sampler: none is running\n"
