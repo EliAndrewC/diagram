@@ -2172,6 +2172,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T274 (the number of builders at once is certified against the container's memory limit from samples, and on 2026-11-26 those samples were a shell loop the coordinating session started by hand, so the three- and four-at-once comment batches ran unsampled (`docs/process-decisions.md`, \"Two code builders at once\"))": {
+   "sha256": "9db3418f6c5b775828e2744dc7495636e50c2cd30f3c5c0f2f80e8b72cd7e18c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T274 Approach (checklist part A)": {
+   "sha256": "2bb55c896958774ebaf871665d06974c09808474cee2c44a9258458d4b285166",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -27800,6 +27812,301 @@
      "why": "The GM's own words, 2026-11-20: 'I would also like for this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first.'"
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T274 (the number of builders at once is certified against the container's memory limit from samples, and on 2026-11-26 those samples were a shell loop the coordinating session started by hand, so the three- and four-at-once comment batches ran unsampled (`docs/process-decisions.md`, \"Two code builders at once\"))",
+    "### T274 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Samples written to l7r-events/samples/mem-samples.jsonl, not the brief's l7r-events/mem-samples.jsonl; as a consequence state-sync's commit (which skips non-files) no longer carries the samples off the container",
+     "class": "within",
+     "why": "The GM's words say nothing about where samples live; the task line's 'into the tree's l7r-events' holds. The move avoids a stated wrong outcome at the brief's path (the launch lookup reading the samples first, the cohort report calling an idle clone active). The samples not reaching the tooling-state repo narrows nothing the GM asked: his T258 words name record-check answers and event logs, and the sampler's data is neither."
+    },
+    {
+     "id": "D2",
+     "summary": "Sampler is a module of the measure crate; task crate gains no dependency, runs the gate binary",
+     "class": "within",
+     "why": "Code placement; nothing asked settles it."
+    },
+    {
+     "id": "D3",
+     "summary": "The sampler writes and re-reads its own pid file; two starts converge on one; stop is file removal; duplicated line possible for one interval",
+     "class": "within",
+     "why": "Implements 'one sampler a clone' from the brief; the duplicate-line cost is stated."
+    },
+    {
+     "id": "D4",
+     "summary": "Alive is pid plus start time; a zombie is dead",
+     "class": "within",
+     "why": "Liveness mechanism; nothing asked settles it."
+    },
+    {
+     "id": "D5",
+     "summary": "Detached via setsid, streams on /dev/null, inherited descriptors close-on-exec",
+     "class": "within",
+     "why": "Implements 'detached' and 'never failing a handout' (a handout must not hang on a pipe or hold a build slot)."
+    },
+    {
+     "id": "D6",
+     "summary": "A second start exits 0",
+     "class": "within",
+     "why": "Follows from one sampler a clone and a start at every handout."
+    },
+    {
+     "id": "D7",
+     "summary": "Sampler ends at MAX_BYTES (4 MiB); next start moves the file to mem-samples.1.jsonl; report reads both",
+     "class": "within",
+     "why": "The brief's size bound, kept literal (the sampler ends); the rotation keeps the handout's start from silently ending sampling for good. Arithmetic re-done: 4,194,304/277 bytes x 10 s = 42 h."
+    },
+    {
+     "id": "D8",
+     "summary": "Each line carries max, cores, peak; report checks the sampled peak against memory.peak on every report",
+     "class": "within",
+     "why": "Serves the audit-register entry's falsifier, which the GM's T259 words ask for ('what we would look at that would falsify')."
+    },
+    {
+     "id": "D9",
+     "summary": "Median = middle sample (mean of middle two), p95 = nearest rank, labeled CONVENTION",
+     "class": "within",
+     "why": "Statistic convention chosen to reproduce the recorded figures; nothing asked settles it."
+    },
+    {
+     "id": "D10",
+     "summary": "Stall and OOM rises booked to the later sample's row; pairs >120 s apart (GAP_S, GUESS) or with a fallen counter booked to no row, counted as gaps",
+     "class": "within",
+     "why": "Report arithmetic; the knob is labeled GUESS."
+    },
+    {
+     "id": "D11",
+     "summary": "Report rows are pool trees HELD, caveat printed; rows by trees at work deferred to T351, lands before T302",
+     "class": "within",
+     "why": "The brief asks for a report by the count of builders, and a held tree is a builder's; the limit that a held-tree row cannot certify N builders compiling is stated and filed in the found-and-left form. The bundle does not show what T302 is; the deferral is sound only if T302 (or whatever certifies three and four builders) reads the report after T351 lands, which the ordering claims and the bundle cannot confirm. Not blocking."
+    },
+    {
+     "id": "D12",
+     "summary": "CPU stall read from /proc/pressure/cpu (the brief's file), possibly the host's, not compared to the cgroup's cpu.pressure",
+     "class": "within",
+     "why": "The brief's choice, its unmeasured limit stated honestly."
+    },
+    {
+     "id": "D13",
+     "summary": "Knobs L7R_MEM_MARGIN_GIB 7 (GUESS), L7R_SAMPLE_MAX_H 12 (GUESS), L7R_SAMPLE_S 10 (the hand loop's interval)",
+     "class": "within",
+     "why": "Values for the brief's ten-second interval and bounds; guesses labeled where they stand and in the audit entry."
+    },
+    {
+     "id": "D14a",
+     "summary": "builder-tree asks for the sampler after any handout exiting 0, including 'already holds it', and waits for the start's line",
+     "class": "within",
+     "why": "Implements 'started by make builder-tree'."
+    },
+    {
+     "id": "D14b",
+     "summary": "A sampler start failure is a line, never the handout's exit code",
+     "class": "within",
+     "why": "The brief's 'never failing a handout', literally."
+    },
+    {
+     "id": "D14c",
+     "summary": "L7R_SAMPLER=0 asks for no sampler",
+     "class": "within",
+     "why": "An opt-out switch that refuses, blocks or rewrites nothing; with it unset the sampler starts at every handout as the brief asks, and the GM's words do not speak to it."
+    },
+    {
+     "id": "D14d",
+     "summary": "On a cold handout the start comes after the new tree's guard build, so a clone's first guard compile (or the first after a sampler ended) goes unsampled",
+     "class": "within",
+     "why": "Neither the GM's words nor the brief as relayed settle when in the handout the start falls; the gap is stated. Read against the block's own goal ('whenever builders hold pool trees') it is a small hole that falls on the first compile of a batch, the one least likely to coincide with another; worth closing by starting before the guard build, but not a narrowing of anything asked."
+    },
+    {
+     "id": "D15",
+     "summary": "Sampler writes no Phase or event-log line; task-time shown not to break with the folder present",
+     "class": "within",
+     "why": "Keeps the task time breakdown's booking as it is; the GM's breakdown words are not narrowed."
+    },
+    {
+     "id": "D16",
+     "summary": "Samples folder made once at loop start; an append never recreates it",
+     "class": "within",
+     "why": "Mechanism for a sampler whose clone was deleted; nothing asked settles it."
+    },
+    {
+     "id": "D17",
+     "summary": "sampler_words split out of Env::live as its own function so its lines are tested regardless of the test runner's environment",
+     "class": "within",
+     "why": "Serves the brief's 100% line coverage of new Rust."
+    },
+    {
+     "id": "NOT-BUILT",
+     "summary": "No signal handler (a bare TERM leaves the pid file, the next start replaces it); no test starts the real detached binary (a stand-in shell does; real path run by hand twice); no-inherited-descriptor shown once by a pipe",
+     "class": "within",
+     "why": "The brief asks for tests with 100% line coverage of new Rust, which the cover step reports clean; a bare-TERM kill is recovered at the next start, so no wrong outcome is left."
+    },
+    {
+     "id": "RECORD",
+     "summary": "Audit entry dev/audits/memory-sampler.md; one line of builder-brief.md retiring the hand loop; process-decisions, CLAUDE.md, efficiency-tooling rows; slot-coincide.py reads the JSON lines",
+     "class": "within",
+     "why": "The audit entry is the brief's and the GM's T259 register. Retiring the hand loop follows from the sampler replacing it, the task line's own premise."
+    },
+    {
+     "id": "EXITS",
+     "summary": "Green is builder-checks over the two crates plus their cover step (first tier); the full gate runs once in the clone over the batch",
+     "class": "within",
+     "why": "The two-tier arrangement the GM's T308 words ask for; the brief's coverage is met by crate-checks."
+    },
+    {
+     "id": "PERF",
+     "summary": "'Performance work? no: a measurement tool; it makes nothing faster.'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM, 2026-11-20 (request.md): 'I would also like for this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first ... it should be counted as such even if the task itself doesn't improve performance.' T274 is a measurement task in that sense (it measures the machine to certify the builder count, a throughput lever), and the block's stated reason, 'it makes nothing faster', is the exact reason the GM ruled out. The bundle does not show that the field means anything other than FR-013's class (FR-013 and SC-006 use the same words, 'performance work'), and it bears on how T351, this task's deferral, is scheduled. None of the three tests holds: nothing makes the GM's classification impossible, nothing in his words implies an exception, and the literal reading defeats nothing. Fix: 'Performance work? yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself.'"
+    }
+   ],
+   "tasks": [
+    "T274"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T274 (the number of builders at once is certified against the container's memory limit from samples, and on 2026-11-26 those samples were a shell loop the coordinating session started by hand, so the three- and four-at-once comment batches ran unsampled (`docs/process-decisions.md`, \"Two code builders at once\"))",
+    "### T274 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "samples under l7r-events/samples/ rather than the brief's l7r-events/mem-samples.jsonl; a consequence disclosed: state-push skips the folder, so samples stay on the container",
+     "class": "within",
+     "why": "The path is the coordinating session's brief, not the GM's words (the bundle holds neither the task line nor the brief, so this was judged against request.md and the spec only). The task line's 'into the tree's l7r-events' holds. The GM's tooling-state repository (2026-11-25) is for 'record-check answers and event logs'; samples are neither, and no GM sentence asks for memory samples to be kept off the container. The reason (readers that take every .jsonl there as a feature log) was read from code and labeled as such."
+    },
+    {
+     "id": "D2",
+     "summary": "a module of the measure crate; task gains no dependency",
+     "class": "within",
+     "why": "Placement; nothing the GM asked turns on it."
+    },
+    {
+     "id": "D3",
+     "summary": "the sampler writes and re-reads its own pid file; two starts converge on one; stop is a file removal",
+     "class": "within",
+     "why": "Mechanism for the one-a-clone constraint; its one cost (a duplicated line for at most one interval) is stated."
+    },
+    {
+     "id": "D4",
+     "summary": "alive is pid plus start time; a zombie is dead",
+     "class": "within",
+     "why": "Mechanism."
+    },
+    {
+     "id": "D5",
+     "summary": "setsid, null streams, inherited descriptors close-on-exec",
+     "class": "within",
+     "why": "Serves 'never failing a handout' (no handout waits on a pipe or holds a build slot's flock); measured once, labeled."
+    },
+    {
+     "id": "D6",
+     "summary": "a second start exits 0",
+     "class": "within",
+     "why": "Mechanism for asking at every handout."
+    },
+    {
+     "id": "D7",
+     "summary": "ends at a 4 MiB bound; the next start moves the file to mem-samples.1.jsonl, keeping at most two files",
+     "class": "within",
+     "why": "Bounded in size as the brief says, and bounded on disk in line with the GM's 2026-11-22 and 2026-11-25 words on cleaning up after ourselves. The rotation keeps sampling from stopping silently. Figures checked: 18,036/65 = 277 B a line, 4 MiB / 277 B x 10 s = about 42 h, 4,320 lines about 1.2 MB."
+    },
+    {
+     "id": "D8",
+     "summary": "each line carries max, cores and peak; the report checks itself against memory.peak",
+     "class": "within",
+     "why": "Gives the audit entry its falsifier, which the GM asked for in the register (2026-11-25: 'what we would look at that would falsify')."
+    },
+    {
+     "id": "D9",
+     "summary": "median and nearest-rank 95th percentile, labeled CONVENTION",
+     "class": "within",
+     "why": "Chosen to reproduce the recorded hand-log figures; labeled, as the 2026-11-23 talk on labels asks."
+    },
+    {
+     "id": "D10",
+     "summary": "stall and OOM rises booked between consecutive samples; GAP_S 120 s, a GUESS knob",
+     "class": "within",
+     "why": "Arithmetic of the report, with its knob labeled."
+    },
+    {
+     "id": "D11",
+     "summary": "the report's rows are pool trees HELD, not builders compiling; refinement deferred as T351, lands before T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the purpose in the heading (certifying the builder count against memory): the block itself says a row for N trees held cannot certify N builders compiling and reads low on memory. Ruled on purpose, not wording. (1) The purpose the task exists for, samples taken without a hand-started loop so a three- or four-at-once batch is never unsampled again, is delivered in full. (2) What is deferred is how stored samples are attributed to rows. The fix named is a join with the event log's Phase lines, so a later reader can re-book the same stored samples; nothing is lost at sampling time. (3) The report prints the caveat and its rustc column, so no row silently claims to certify a compiling count. (4) The deferral has the form FR-009 asks for (why it is not fixed here, a filed id T351, an order 'lands before T302'), the GM-approved form for a deferral. Not verifiable from the bundle: what T302 is, whether T351 is an open unticked task, and whether the samples outlive T351's landing given D7's two-file rotation (about 84 h) and D1's samples staying on the container. make decide's open-task test covers the second."
+    },
+    {
+     "id": "D12",
+     "summary": "CPU stall read from /proc/pressure/cpu, which may be the host's and not the cgroup's; not compared",
+     "class": "within",
+     "why": "The brief names that file, and the certification is against memory, not CPU stall. The premise is unmeasured but stated plainly, and it is not a defect of the memory figures the task certifies. Noted for the audit entry rather than ruled."
+    },
+    {
+     "id": "D13",
+     "summary": "knobs: L7R_MEM_MARGIN_GIB 7 (GUESS), L7R_SAMPLE_MAX_H 12 (GUESS), L7R_SAMPLE_S 10 (the hand loop's interval)",
+     "class": "within",
+     "why": "Bounded in hours as the brief says; each guess is labeled beside its constant, in the help and in the audit entry."
+    },
+    {
+     "id": "D14",
+     "summary": "asks after any handout that exits 0; a sampler failure is a line, never the exit code; L7R_SAMPLER=0 opts out; a cold handout's guard compile runs before the start, so on a clone's first handout it goes unsampled",
+     "class": "within",
+     "why": "'Never failing a handout' is the constraint. The goal is sampling while builders HOLD trees, and during a cold handout's guard build no builder holds that tree yet. The unsampled first compile is stated. It is a gap in a reading, not a wrong outcome of the memory certification at N concurrent builders: on the first handout of a clone no sampler-covered batch is yet running."
+    },
+    {
+     "id": "D15",
+     "summary": "the sampler writes no Phase line and no event-log line",
+     "class": "within",
+     "why": "The GM's 2026-11-22 'we want everything measured so we know where our time goes' is about the time a task's work takes. A background monitor spends no task's time; its cost is measured separately (0.9 ms a sample, 7.2 MiB resident)."
+    },
+    {
+     "id": "D16",
+     "summary": "the samples folder is made once at loop start, never on append",
+     "class": "within",
+     "why": "Keeps a deleted clone from being recreated, which serves the GM's clean-up words of 2026-11-25."
+    },
+    {
+     "id": "D17",
+     "summary": "sampler_words split out as its own function so its test does not depend on the test runner's environment",
+     "class": "within",
+     "why": "Testability, serving the brief's 100% line coverage."
+    },
+    {
+     "id": "R1",
+     "summary": "not built: no signal handler (a bare TERM leaves a stale pid file, which the next start replaces), and no test starts the real detached binary (a stand-in shell instead, the real path run by hand twice)",
+     "class": "within",
+     "why": "Both are stated. The stale pid file is recovered by the next start (pinned by a test), so no wrong outcome is left. Coverage of new Rust is clean, which is what the brief asks of the tests."
+    },
+    {
+     "id": "R2",
+     "summary": "baseline read over the three kept hand logs, where the brief said four",
+     "class": "within",
+     "why": "An observation of what the directory holds, not a choice to leave one out. Two of the three reproduce the decision record's figures."
+    },
+    {
+     "id": "R3",
+     "summary": "exits: first-tier builder-checks and crate-checks here; the full gate runs once over the batch in the clone",
+     "class": "within",
+     "why": "The GM's two-tier ruling of 2026-11-26 (T308)."
+    },
+    {
+     "id": "R4",
+     "summary": "counted as performance work; order after T285 and T316, before T351",
+     "class": "within",
+     "why": "The GM, 2026-11-20: 'this kind of measurement task to be counted as a performance task'; FR-013."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -43737,6 +44044,141 @@
      "summary": "T315 counted as performance work for scheduling.",
      "class": "within",
      "why": "The GM's own words, 2026-11-20: 'I would also like for this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first.'"
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T274": {
+   "section_sha256": "1d469749e5cd51fbd7d64b0aadc38754fa004c36c4e2c9ce60eabc7c623d7b23",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "samples under l7r-events/samples/ rather than the brief's l7r-events/mem-samples.jsonl; a consequence disclosed: state-push skips the folder, so samples stay on the container",
+     "class": "within",
+     "why": "The path is the coordinating session's brief, not the GM's words (the bundle holds neither the task line nor the brief, so this was judged against request.md and the spec only). The task line's 'into the tree's l7r-events' holds. The GM's tooling-state repository (2026-11-25) is for 'record-check answers and event logs'; samples are neither, and no GM sentence asks for memory samples to be kept off the container. The reason (readers that take every .jsonl there as a feature log) was read from code and labeled as such."
+    },
+    {
+     "id": "D2",
+     "summary": "a module of the measure crate; task gains no dependency",
+     "class": "within",
+     "why": "Placement; nothing the GM asked turns on it."
+    },
+    {
+     "id": "D3",
+     "summary": "the sampler writes and re-reads its own pid file; two starts converge on one; stop is a file removal",
+     "class": "within",
+     "why": "Mechanism for the one-a-clone constraint; its one cost (a duplicated line for at most one interval) is stated."
+    },
+    {
+     "id": "D4",
+     "summary": "alive is pid plus start time; a zombie is dead",
+     "class": "within",
+     "why": "Mechanism."
+    },
+    {
+     "id": "D5",
+     "summary": "setsid, null streams, inherited descriptors close-on-exec",
+     "class": "within",
+     "why": "Serves 'never failing a handout' (no handout waits on a pipe or holds a build slot's flock); measured once, labeled."
+    },
+    {
+     "id": "D6",
+     "summary": "a second start exits 0",
+     "class": "within",
+     "why": "Mechanism for asking at every handout."
+    },
+    {
+     "id": "D7",
+     "summary": "ends at a 4 MiB bound; the next start moves the file to mem-samples.1.jsonl, keeping at most two files",
+     "class": "within",
+     "why": "Bounded in size as the brief says, and bounded on disk in line with the GM's 2026-11-22 and 2026-11-25 words on cleaning up after ourselves. The rotation keeps sampling from stopping silently. Figures checked: 18,036/65 = 277 B a line, 4 MiB / 277 B x 10 s = about 42 h, 4,320 lines about 1.2 MB."
+    },
+    {
+     "id": "D8",
+     "summary": "each line carries max, cores and peak; the report checks itself against memory.peak",
+     "class": "within",
+     "why": "Gives the audit entry its falsifier, which the GM asked for in the register (2026-11-25: 'what we would look at that would falsify')."
+    },
+    {
+     "id": "D9",
+     "summary": "median and nearest-rank 95th percentile, labeled CONVENTION",
+     "class": "within",
+     "why": "Chosen to reproduce the recorded hand-log figures; labeled, as the 2026-11-23 talk on labels asks."
+    },
+    {
+     "id": "D10",
+     "summary": "stall and OOM rises booked between consecutive samples; GAP_S 120 s, a GUESS knob",
+     "class": "within",
+     "why": "Arithmetic of the report, with its knob labeled."
+    },
+    {
+     "id": "D11",
+     "summary": "the report's rows are pool trees HELD, not builders compiling; refinement deferred as T351, lands before T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the purpose in the heading (certifying the builder count against memory): the block itself says a row for N trees held cannot certify N builders compiling and reads low on memory. Ruled on purpose, not wording. (1) The purpose the task exists for, samples taken without a hand-started loop so a three- or four-at-once batch is never unsampled again, is delivered in full. (2) What is deferred is how stored samples are attributed to rows. The fix named is a join with the event log's Phase lines, so a later reader can re-book the same stored samples; nothing is lost at sampling time. (3) The report prints the caveat and its rustc column, so no row silently claims to certify a compiling count. (4) The deferral has the form FR-009 asks for (why it is not fixed here, a filed id T351, an order 'lands before T302'), the GM-approved form for a deferral. Not verifiable from the bundle: what T302 is, whether T351 is an open unticked task, and whether the samples outlive T351's landing given D7's two-file rotation (about 84 h) and D1's samples staying on the container. make decide's open-task test covers the second."
+    },
+    {
+     "id": "D12",
+     "summary": "CPU stall read from /proc/pressure/cpu, which may be the host's and not the cgroup's; not compared",
+     "class": "within",
+     "why": "The brief names that file, and the certification is against memory, not CPU stall. The premise is unmeasured but stated plainly, and it is not a defect of the memory figures the task certifies. Noted for the audit entry rather than ruled."
+    },
+    {
+     "id": "D13",
+     "summary": "knobs: L7R_MEM_MARGIN_GIB 7 (GUESS), L7R_SAMPLE_MAX_H 12 (GUESS), L7R_SAMPLE_S 10 (the hand loop's interval)",
+     "class": "within",
+     "why": "Bounded in hours as the brief says; each guess is labeled beside its constant, in the help and in the audit entry."
+    },
+    {
+     "id": "D14",
+     "summary": "asks after any handout that exits 0; a sampler failure is a line, never the exit code; L7R_SAMPLER=0 opts out; a cold handout's guard compile runs before the start, so on a clone's first handout it goes unsampled",
+     "class": "within",
+     "why": "'Never failing a handout' is the constraint. The goal is sampling while builders HOLD trees, and during a cold handout's guard build no builder holds that tree yet. The unsampled first compile is stated. It is a gap in a reading, not a wrong outcome of the memory certification at N concurrent builders: on the first handout of a clone no sampler-covered batch is yet running."
+    },
+    {
+     "id": "D15",
+     "summary": "the sampler writes no Phase line and no event-log line",
+     "class": "within",
+     "why": "The GM's 2026-11-22 'we want everything measured so we know where our time goes' is about the time a task's work takes. A background monitor spends no task's time; its cost is measured separately (0.9 ms a sample, 7.2 MiB resident)."
+    },
+    {
+     "id": "D16",
+     "summary": "the samples folder is made once at loop start, never on append",
+     "class": "within",
+     "why": "Keeps a deleted clone from being recreated, which serves the GM's clean-up words of 2026-11-25."
+    },
+    {
+     "id": "D17",
+     "summary": "sampler_words split out as its own function so its test does not depend on the test runner's environment",
+     "class": "within",
+     "why": "Testability, serving the brief's 100% line coverage."
+    },
+    {
+     "id": "R1",
+     "summary": "not built: no signal handler (a bare TERM leaves a stale pid file, which the next start replaces), and no test starts the real detached binary (a stand-in shell instead, the real path run by hand twice)",
+     "class": "within",
+     "why": "Both are stated. The stale pid file is recovered by the next start (pinned by a test), so no wrong outcome is left. Coverage of new Rust is clean, which is what the brief asks of the tests."
+    },
+    {
+     "id": "R2",
+     "summary": "baseline read over the three kept hand logs, where the brief said four",
+     "class": "within",
+     "why": "An observation of what the directory holds, not a choice to leave one out. Two of the three reproduce the decision record's figures."
+    },
+    {
+     "id": "R3",
+     "summary": "exits: first-tier builder-checks and crate-checks here; the full gate runs once over the batch in the clone",
+     "class": "within",
+     "why": "The GM's two-tier ruling of 2026-11-26 (T308)."
+    },
+    {
+     "id": "R4",
+     "summary": "counted as performance work; order after T285 and T316, before T351",
+     "class": "within",
+     "why": "The GM, 2026-11-20: 'this kind of measurement task to be counted as a performance task'; FR-013."
     }
    ],
    "verdict": "CLEAR"

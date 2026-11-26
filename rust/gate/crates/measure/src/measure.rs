@@ -17,6 +17,7 @@ pub mod maps_moved;
 pub mod push_check_times;
 pub mod review_yield;
 pub mod runstats;
+pub mod sampler;
 pub mod spec;
 pub mod stepback_bundle;
 pub mod task_phases;
@@ -39,6 +40,7 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("gatecost") => gatecost::cli(rest, root),
         Some("ratchet") => ratchet::cli(rest, root),
         Some("runstats") => runstats::cli(rest),
+        Some("sampler") => sampler::cli(rest, root),
         Some("guard-log") => guard_log::cli(rest, &home()),
         Some("review-yield") => review_yield::cli(rest, root),
         Some("wave-report") => wave_report::cli(rest, &home()),
@@ -87,7 +89,7 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
         ),
         _ => reply(
             String::new(),
-            "usage: l7r-gate measure figures | gatecost | ratchet | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally | maps-moved | popup-rounds | work-budget | push-check-times | model-trial | depiction-replay | feature-report | where-time | event-log | step-back | fix-yield | tool-yield | turn-time | audit | spec\n"
+            "usage: l7r-gate measure figures | gatecost | ratchet | runstats | sampler | guard-log | review-yield | wave-report | subagent-cache | fresh-tally | maps-moved | popup-rounds | work-budget | push-check-times | model-trial | depiction-replay | feature-report | where-time | event-log | step-back | fix-yield | tool-yield | turn-time | audit | spec\n"
                 .to_owned(),
             2,
         ),
@@ -128,6 +130,7 @@ mod tests {
             .code
         };
         assert_eq!(ask(&["runstats"]), 2);
+        assert_eq!(ask(&["sampler", "status"]), 2);
         assert_eq!(ask(&["guard-log", "--dir", &there]), 0);
         assert_eq!(ask(&["review-yield"]), 0);
         assert_eq!(ask(&["wave-report", "--root", &there]), 1);

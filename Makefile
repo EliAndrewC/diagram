@@ -656,7 +656,7 @@ land:           ## [project] land one task or several and tick them: every cheap
 # `git worktree add` under the clones directory, and the removal of a pool tree or its cache, are refused by `builder_pool_hooks`.
 .PHONY: builder-tree builder-trees builder-tree-release builder-tree-adopt builder-tree-drop
 builder-tree: export DISCARD := $(DISCARD)
-builder-tree:   ## [project] a builder's worktree from the clone's standing pool: a free tree brought to the clone's HEAD and held by the task, its path printed; none free, ONE more made up to the cap (L7R_BUILDER_POOL, 4), said to be cold, its guard built; make land releases it (feature 451 T285); a warm handout pre-warms the tree in the background - the test builds of the crates moved since its last handout, holding a build slot only while another is spare, L7R_PREWARM=0 for none (451 T316)   T=<task(s)> [F=<feature>] [DISCARD="<why a free tree's uncommitted work may go>"]
+builder-tree:   ## [project] a builder's worktree from the clone's standing pool: a free tree brought to the clone's HEAD and held by the task, its path printed; none free, ONE more made up to the cap (L7R_BUILDER_POOL, 4), said to be cold, its guard built; make land releases it (feature 451 T285); a warm handout pre-warms the tree in the background - the test builds of the crates moved since its last handout, holding a build slot only while another is spare, L7R_PREWARM=0 for none (451 T316); every handout starts the clone's memory sampler where none runs, L7R_SAMPLER=0 for none (451 T274)   T=<task(s)> [F=<feature>] [DISCARD="<why a free tree's uncommitted work may go>"]
 	@if [ -z "$(T)" ]; then printf 'make builder-tree: T=<task> is required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" builder-tree take "$(T)" "$(or $(F),$(SPECIFY_FEATURE))"
 builder-trees:  ## [project] the builder pool: each tree, the task holding it, since when, its build cache's size (feature 451 T285)
@@ -671,6 +671,20 @@ builder-tree-drop: export REASON := $(REASON)
 builder-tree-drop:  ## [project] the ONE way a pool tree and its build cache are removed, the reason on the pool's log (feature 451 T285)   TREE=<path> REASON="<two words or more>"
 	@if [ -z "$(TREE)" ]; then printf 'make builder-tree-drop: TREE=<path> and REASON="<why>" are required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" builder-tree drop "$(TREE)"
+
+# THE MEMORY AND LOAD SAMPLER (feature 451 T274): the builder count is certified against the container's 10 GiB limit from samples,
+# and on 2026-11-26 those were a shell loop the session started by hand, so the three- and four-at-once batches ran unsampled. One
+# detached sampler a clone, started by every make builder-tree; `rust/gate/crates/measure/src/measure/sampler.rs`,
+# `dev/audits/memory-sampler.md`.
+.PHONY: sampler sampler-start sampler-stop sampler-report
+sampler:        ## [project] the clone's memory and load sampler: running or not, its samples file's lines and size, its log's last line (feature 451 T274)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure sampler status
+sampler-start:  ## [project] start the clone's memory and load sampler, detached, where none is running (make builder-tree does at every handout): a JSON line every L7R_SAMPLE_S seconds (10) to <git common dir>/l7r-events/samples/mem-samples.jsonl - cgroup anon, memory.current, memory.peak, memory.max, memory and CPU stall, load, OOM kills, rustc processes, who holds each pool tree; it ends after L7R_SAMPLE_MAX_H hours (12) or past 4 MiB, and a start past that bound begins a new file (feature 451 T274)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure sampler start
+sampler-stop:   ## [project] stop the clone's memory and load sampler, its samples left in place (feature 451 T274)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure sampler stop
+sampler-report: ## [project] the samples of a window as a table, a row for each count of pool trees held: anonymous memory median / 95th / peak against memory.max, samples over the margin (L7R_MEM_MARGIN_GIB, 7: a GUESS knob), memory and CPU stall seconds, load against the cores, rustc max, OOM kills; LOG= reads sample logs instead, the hand logs of 2026-11-26 too (dev/measurements/2026-11-26/builder-count/mem-samples-*.log), a table a file (feature 451 T274)   [SINCE=<ISO UTC>] [UNTIL=<ISO UTC>] [LOG="<file> ..."]
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure sampler report $(if $(SINCE),--since "$(SINCE)",) $(if $(UNTIL),--until "$(UNTIL)",) $(if $(LOG),--log "$(LOG)",)
 
 coverage-exempt: ## [tests] the engine files the Rust port replaces, exempt from the coverage floor (dev/coverage-exempt.json; feature 448, the GM 2026-11-02); PRUNE=1 drops the stale entries   [PRUNE=1]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coverage-exempt list $(if $(PRUNE),--prune,)

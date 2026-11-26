@@ -25,6 +25,7 @@ fn env(dir: &Path) -> Env {
         reason: String::new(),
         guard_secs: "5".to_owned(),
         prewarm: true,
+        sampler: Vec::new(),
     }
 }
 
@@ -531,4 +532,43 @@ fn a_warm_handout_starts_the_pre_warm_of_what_moved_since_the_tree_s_last_handou
         broken.stderr
     );
     assert_eq!(prewarms(&root), 1);
+}
+
+#[test]
+fn a_handout_asks_for_the_clone_s_sampler_and_never_fails_on_it() {
+    let (dir, root) = world("pool-sampler");
+    let mut e = env(&dir);
+    // the gate's `measure sampler start`, stood in for: it says where it ran, on standard error, and fails
+    let stub = dir.join("sampler-start");
+    write_executable(
+        &stub,
+        "#!/bin/sh\necho \"sampler: asked with $* in $(pwd)\" >&2\nexit 1\n",
+    );
+    e.sampler = words(&[&stub.to_string_lossy(), "measure", "sampler", "start"]);
+    let first = run(&words(&["take", "T01", "9001-x"]), &root, &e);
+    let said = format!(
+        "sampler: asked with measure sampler start in {}\n",
+        root.display()
+    );
+    assert_eq!(first.code, 0);
+    assert!(first.stderr.ends_with(&said), "{}", first.stderr);
+    // a handout that is refused asks for none
+    let none = run(&words(&["take", "T02", ""]), &root, &e);
+    assert_eq!((none.code, none.stderr.contains("sampler:")), (2, false));
+    // a program that is not there: said, and the handout stands
+    e.sampler = words(&["/no/such/gate"]);
+    let again = run(&words(&["take", "T01", "9001"]), &root, &e);
+    assert_eq!(again.code, 0);
+    let not_asked = "the memory sampler was not asked for (/no/such/gate: ";
+    assert!(again.stderr.contains(not_asked));
+    // the words: the gate binary's own `measure sampler start`; none at the knob's 0 or with no binary known
+    let gate = || Some(std::path::PathBuf::from("/x/l7r-gate"));
+    let asked = super::sampler_words(gate(), "");
+    assert_eq!(
+        asked,
+        words(&["/x/l7r-gate", "measure", "sampler", "start"])
+    );
+    assert_eq!(super::sampler_words(gate(), "1"), asked);
+    assert!(super::sampler_words(gate(), "0").is_empty());
+    assert!(super::sampler_words(None, "").is_empty());
 }

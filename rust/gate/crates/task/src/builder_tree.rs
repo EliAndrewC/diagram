@@ -15,6 +15,10 @@
 //!   tree's own git directory (`prewarm-base`): a release brings the tree to HEAD too, so its HEAD at the next handout is no
 //!   measure of what its cache last built. Its output is `prewarm.log` there; a pre-warm that cannot start is said and the handout
 //!   stands; `L7R_PREWARM=0` starts none.
+//! - THE SAMPLER (451 T274): every handout asks `l7r-gate measure sampler start` for the clone's memory and load sampler, which
+//!   starts one where none is running, so the samples the builder count is certified from never wait on a session remembering
+//!   to start them (the three- and four-at-once batches of 2026-11-26 ran unsampled). What it says is said; nothing it does
+//!   fails the handout; `L7R_SAMPLER=0` asks for none.
 //! - WHAT HOLDS A FREE TREE: an uncommitted path - modified, deleted or untracked - whose content is not the clone's HEAD's. A
 //!   builder never commits and its work is carried to the clone, so a released tree still holds the landed edits; those are in
 //!   HEAD and are no work to lose, so the tree is brought to HEAD over them. Anything else refuses, each path named;
@@ -68,6 +72,8 @@ pub(crate) struct Env {
     pub guard_secs: String,
     /// A warm handout starts the tree's pre-warm (`L7R_PREWARM` not `0`).
     pub prewarm: bool,
+    /// The program and arguments that start the clone's memory sampler where none runs; empty for none (`L7R_SAMPLER=0`).
+    pub sampler: Vec<String>,
 }
 
 impl Env {
@@ -91,8 +97,21 @@ impl Env {
             // GUESS: a cold guard build was 19 s with every core busy (449 T004); thirty minutes is past any load seen
             guard_secs: or("L7R_BUILDER_GUARD_SECS", "1800"),
             prewarm: var("L7R_PREWARM") != "0",
+            sampler: sampler_words(std::env::current_exe().ok(), &var("L7R_SAMPLER")),
         }
     }
+}
+
+/// The words that ask for the clone's sampler: the gate binary `exe` with `measure sampler start`; none where the knob
+/// (`L7R_SAMPLER`) is `0` or the binary is not known. Apart from [`Env::live`] so each case is a test's, whatever the
+/// environment a run of the tests has.
+fn sampler_words(exe: Option<PathBuf>, knob: &str) -> Vec<String> {
+    let Some(exe) = exe.filter(|_| knob != "0") else {
+        return Vec::new();
+    };
+    [&exe.to_string_lossy(), "measure", "sampler", "start"]
+        .map(str::to_owned)
+        .to_vec()
 }
 
 /// The clone a command runs in: its git common directory, its main worktree and that tree's HEAD.
@@ -345,6 +364,23 @@ fn prewarm(p: &Pool, tree: &Path, base: &str, env: &Env) -> String {
             )
         }
         Err(e) => format!("builder-tree: its pre-warm did not start ({e}) - the handout stands, and the builder's first run compiles what moved\n"),
+    }
+}
+
+/// THE SAMPLER, ASKED FOR (451 T274): the clone's memory and load sampler started where none is running, by the gate's own
+/// `measure sampler start` run in the clone. What it said, or that it could not be asked; never a failed handout.
+fn sampler(p: &Pool, env: &Env) -> String {
+    let Some((program, args)) = env.sampler.split_first() else {
+        return String::new();
+    };
+    let asked = Command::new(program)
+        .args(args)
+        .current_dir(&p.clone)
+        .stdin(Stdio::null())
+        .output();
+    match asked {
+        Ok(said) => format!("{}\n", text(&said.stderr)),
+        Err(e) => format!("builder-tree: the memory sampler was not asked for ({program}: {e}) - the handout stands; make sampler-start starts it\n"),
     }
 }
 
@@ -687,7 +723,13 @@ pub(crate) fn run(args: &[String], cwd: &Path, env: &Env) -> Reply {
         return refused(NO_FEATURE.to_owned());
     }
     match (arg(0), arg(1)) {
-        ("take", t) if !t.is_empty() => take(&p, &task_list(t), &feature_key(arg(2)), env),
+        ("take", t) if !t.is_empty() => {
+            let mut r = take(&p, &task_list(t), &feature_key(arg(2)), env);
+            if r.code == 0 {
+                r.stderr.push_str(&sampler(&p, env));
+            }
+            r
+        }
         ("release", t) if !t.is_empty() => release(&p, &task_list(t), &feature_key(arg(2)), env),
         ("landed", f) if args.len() > 2 => {
             let mut r = release(&p, &task_list(&args[2..].join(" ")), &feature_key(f), env);

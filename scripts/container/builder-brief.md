@@ -42,6 +42,8 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
 - A builder's commit reaches the clone by `make carry FROM=<its worktree>` run in the clone (451 T292), never a hand `git cherry-pick`: `make land` refuses a carry-over left unfinished.
 - TWO code builders at once, each in a REUSED worktree (its build cache warm); three or four at once only for batches that
   compile nothing (`docs/process-decisions.md`, "Two code builders at once"; `dev/audits/parallel-builder-count.md`).
+- The memory sampler starts with a handout: `make builder-tree` starts the clone's sampler where none runs, and the hand-started
+  shell loop of 2026-11-26 is retired - `make sampler` says whether it runs, `make sampler-report` reads a batch's window (451 T274).
 - A builder FILES what it found, from its own tree (451 T289; the block's `FILE what you find` line): `make task-add` allots the
   id under the feature's lock from the reservations every worktree of the clone shares (451 T255), and `make carry` keeps both
   sides where two trees each appended a task's box and its plan stub. Measured 2026-11-26: four candidates left unfiled until the

@@ -454,7 +454,8 @@ phase ran).
 
 **What followed.** `scripts/container/builder-brief.md`'s SIZING paragraph names the count; the frictions of running several
 were fixed by 451 T245-T247 and T252-T257, with T271 (shared scratch and plan-review bundle directory) open. 451 T274 keeps the sampler as
-tooling (the first run was a hand-started loop). The audit entry is
+tooling (the first run was a hand-started loop): every `make builder-tree` starts the clone's sampler where none runs, and
+`make sampler-report` gives a window's figures by the count of pool trees held (`dev/audits/memory-sampler.md`). The audit entry is
 `dev/audits/parallel-builder-count.md`. **Falsifiers:** down to one - over the next 20 code tasks at two in warm trees, tasks
 landed per wall hour at or under 1.71, or a later closing-checks run over 1.5x its one-builder median; up to three - a planned
 run of six or more compile tasks at three landing more per wall hour than at two, pace per 10k output tokens within 15% of the

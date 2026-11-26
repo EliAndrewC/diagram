@@ -26,6 +26,10 @@ def ts(s):
 
 S = []
 for l in open(SAMPLES):
+    if l.startswith("{"):  # the sampler's JSON line (make sampler-start, feature 451 T274), where the hand loop wrote key=value
+        r = json.loads(l)
+        S.append((ts(r["utc"]), r["anon"] / 2**30, r["load1"], r["rustc"]))
+        continue
     p = l.split()
     d = dict(x.split("=") for x in p[1:])
     S.append((ts(p[0]), int(d["anon"]) / 2**30, float(d["load"]), int(d["rustc"])))
