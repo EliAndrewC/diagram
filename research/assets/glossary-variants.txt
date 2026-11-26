@@ -267,6 +267,8 @@ bed load	bedload
 bed shear stress	bed shear stress
 bedload	bedload
 before modern times	modern times
+beggar household	beggar household
+beggar households	beggar household
 beile	beile
 beishan mianshui	beishan mianshui
 beitang	beitang
@@ -878,6 +880,8 @@ dead ground	dead ground
 dead space	dead ground
 deba	deba
 debased	debasement
+debased household	debased household
+debased households	debased household
 debasement	debasement
 deccan	Deccan
 deep paddies	shitsuden
@@ -1061,6 +1065,7 @@ dujiangyan	Dujiangyan
 dummy	dummy variable
 dummy variable	dummy variable
 dunhuang	Dunhuang
+duomin	beggar household
 dutch learning	Dutch learning
 duty of water	water duty
 dwarf bamboo	sasa
@@ -3166,6 +3171,11 @@ mushiko windows	mushiko
 mushiko-mado	mushiko
 mushiro	mushiro
 mushukunin	mushukunin
+music office	music office
+music offices	music office
+music-office	music office
+musician household	musician household
+musician households	musician household
 muster perimeter	muster perimeter
 muster perimeters	muster perimeter
 mutsu	Mutsu

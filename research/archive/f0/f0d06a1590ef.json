@@ -1,0 +1,16 @@
+{
+ "captured": "2026-11-26T06:05:55+00:00",
+ "final_url": "https://m.yunqi.qq.com/read/40667624/18",
+ "first": "f0/f0d06a1590ef/20261126T060552Z",
+ "gm_copies": [],
+ "keys": [
+  "xie-2021-duomin-ningbo"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "f0/f0d06a1590ef/20261126T060552Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "35e08e0f35904760ddcb3ccf33a1ed8926859bbc130f4303991476479286ceb4",
+ "url": "https://m.yunqi.qq.com/read/40667624/18"
+}

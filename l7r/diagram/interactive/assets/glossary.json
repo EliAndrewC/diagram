@@ -20043,5 +20043,35 @@
    "Unicorn Clan",
    "Unicorn"
   ]
+ },
+ "debased household": {
+  "def": "In Ming and Qing China, a household held by hereditary registration in a status below the commoners, kept from living mixed among them; the musician households and Zhejiang's beggar households are the cases this record cites.",
+  "variants": [
+   "debased household",
+   "debased households"
+  ]
+ },
+ "musician household": {
+  "def": "In Ming and Qing China, a hereditary registration of debased status whose households were musicians and entertainers; the Ming's official prostitutes came from among them.",
+  "variants": [
+   "musician household",
+   "musician households"
+  ]
+ },
+ "beggar household": {
+  "def": "In Zhejiang, a hereditary debased group, the duomin, who lived mostly by playing, singing and acting and served as attendants at weddings and funerals; at Ningbo they were barred from study, office and marriage outside their kind.",
+  "variants": [
+   "beggar household",
+   "beggar households",
+   "duomin"
+  ]
+ },
+ "music office": {
+  "def": "The Ming government office, one in each of the two capitals, that kept the hereditary musician households on its registers and called on them for music, entertainment and the official prostitutes of the Ming.",
+  "variants": [
+   "music office",
+   "music-office",
+   "music offices"
+  ]
  }
 }
