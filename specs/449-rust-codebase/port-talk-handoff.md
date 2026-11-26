@@ -26,14 +26,16 @@ and `docs/process-decisions.md` (what is already decided, and declined, with the
 
 ## What the talk decides (the GM's, not pre-approved)
 
-- **The porting process itself**: how the next stages run, given what follows.
-- **Item 8** worktrees against clones (measured: a clone 3.0 s and 615 MB, a worktree 2.2 s and 288 MB; builders already run
-  in worktrees; what assumes a clone is in the agenda and in 451 T275's census of `.git` paths).
-- **Item 10** long-running features against small ones; **item 11** whether everything must be a spec-kit feature
-  (the measurements are under each item; the plan-gate cause was corrected - see the agenda, and 451 T261's withdrawal).
-- **The terse output style** (declined so far; the GM's to reopen).
-- **Extending the early build to the SPEC review** (constitution XVI would need his word; `docs/process-decisions.md`,
-  "Building begins before a new feature's plan review returns").
+- **The porting process itself**, and before it a larger structural change to how development is done in this project that
+  the GM wants to discuss before the mapping work resumes (he will refer to trial 456 for it).
+- DECIDED 2026-11-26, item 8: clones for sessions, pooled worktrees for builders (`docs/process-decisions.md`).
+- DECIDED 2026-11-26, the output style: the conversational style stays (his words in the declined entry).
+- **Item 10** long-running against small features: trial `specs/456-feature-size-friction/` re-measures it, not before
+  2026-11-28, on the landings since the fixes.
+- **Item 11** whether everything must be a spec-kit feature: a measurement of what the task route adds over a direct tweak was
+  started 2026-11-26 (its result in `dev/measurements/2026-11-26/` when done).
+- **Extending the early build to the SPEC review**: his (it amends constitution XVI); a measurement of how often a first spec
+  review reverses work is owed before it is put to him.
 
 ## Closed overnight under the GM's pre-approval of 2026-11-25
 

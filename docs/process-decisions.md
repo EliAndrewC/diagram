@@ -51,7 +51,8 @@ This file is loaded on demand, so a declined option recorded here costs no auto-
   they save by more than noise AND tokens stop favoring the handoff.
 - **A terse output style for the main session** (not adopted 2026-11-25: the main session is about 8% of output tokens, most of
   it reasoning, briefs and commands, and the GM likes the conversational style). Reopens if the main session's visible reply
-  tokens become a significant share of the day's output.
+  tokens become a significant share of the day's output. The GM, 2026-11-26: *"I affirm the
+  decision to keep the current output style given how little it appears to matter."*
 - **Shallow clones** (not adopted 2026-11-25: a clone's git history is 404 MB; the disk was the build caches). Reopens if the
   object store grows past a gigabyte or so.
 
@@ -76,6 +77,26 @@ This file is loaded on demand, so a declined option recorded here costs no auto-
     after 12 idle hours); pruning them sooner is 451 T278.
 
 ## Decided
+
+### Clones for sessions, pooled worktrees for builders (decided 2026-11-26)
+
+**Question.** Worktrees against clones as the working copies (the talk's item 8).
+
+**Decided** - a session works in its own clone and its builders in worktrees of it, handed out from the standing pool (451
+T285). The GM, 2026-11-26: *"For the work trees versus clones, then I agree with your findings and conclusions about keeping
+clones for sessions and worktrees for builders"*.
+
+**Reasoning and measurement.** 2026-11-25: a fresh `git clone` of /diagram took 3.0 s and 615 MB, a worktree 2.2 s and 288
+MB with its history shared; a cold Rust build cache is 13-14 GB either way, which dwarfs both, so what matters is whether a
+copy's cache is warm, not which kind of copy it is. Converting sessions to worktrees would be a large change to tooling keyed
+on the clone (the session-clone guards, the sync script) for 300 MB and under a second. 2026-11-26: a warm pool tree's first
+closing checks took 43 s and 165 s against 14 to 30 minutes in cold worktrees; a renamed worktree's cache goes cold (0.11 s
+to 66.5 s), so trees keep their names.
+
+**What followed.** The defects of tooling that assumed a clone are fixed as found (451 T254-T257, T267, T271) or filed (451
+T159, T275, T281, T288, T295, T297). **Falsifier:** a class of worktree defect that cannot be fixed in the tooling at
+reasonable cost, or the object store sharing causing a lost or corrupted commit - then builders move to clones of their own.
+
 
 ### What counts as blocking time (decided 2026-11-25)
 

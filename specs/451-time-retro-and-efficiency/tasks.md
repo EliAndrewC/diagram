@@ -237,3 +237,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T296 the builder pool's follow-ups (451 T285's candidates): seed a new pool tree's build cache from a free warm one (registry crates stayed warm across a move); make builder-tree-hold TREE= T= to mark a registered tree held without editing the registry; each guard-message rewording costs a full make hooks-test to re-render before message-check can read it; make carry COMMITS=a..b for a range, oldest first
       research: rendering
+- [ ] T297 two builders dispatched at once on tasks that edit the same files cannot land independently - the second is held until the first lands (2026-11-26: 451 T292 held by T285 over the Makefile, docs/guards.md and the builder brief): at dispatch, name the overlap - make builder-tree compares the task's expected files (its task line and plan stub, or a FILES= list) with those of the tasks already holding a tree and says which overlap, so the coordinating session picks disjoint tasks or accepts the order; and verify once how a message sent to a builder in mid-work is delivered, recording it in the builder brief
+      research: rendering

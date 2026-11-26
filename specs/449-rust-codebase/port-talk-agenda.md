@@ -113,6 +113,7 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
    Measured 2026-11-25: a fresh `git clone` of /diagram took 3.0 s and 615 MB; a worktree 2.2 s and 288 MB, its history
    shared; either way a cold Rust build cache is 13-14 GB, which dwarfs both - the choice that matters is whether copies share
    one build cache.
+   Decided: 2026-11-26 - clones for sessions, pooled worktrees for builders (`docs/process-decisions.md`).
 
 9. The tooling's own run time, every part of it (the GM: "whether there are additional improvements that we need to make to
    the time it takes for any of our tooling to run, whether that is compiling or running tests or generating maps or
@@ -223,6 +224,10 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
     settlement-review and fix-check did); a terse output style (small: about 8%
     of output, the GM likes the conversational style); a fixed short report format for builders (their 2k-5k-token reports
     enter the coordinator's context, re-read every later turn).
+    The GM, 2026-11-26: "For those three levers on the escalation cost, then yes, please go ahead and run them. The first two
+    already have my pre-approval if the metrics we gather demonstrate their effectiveness, and I also pre-approve Sonnet if
+    your measurements show that it is just as effective." The output style: "I affirm the decision to keep the current output
+    style given how little it appears to matter."
 
 ## How each item closes (the GM, 2026-11-25) - its decision is recorded in `docs/process-decisions.md`
 
