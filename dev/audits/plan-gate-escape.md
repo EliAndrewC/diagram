@@ -19,5 +19,6 @@ cadence-days: 14
 
 What the audit reads: the records since the rule carry `held`, so it counts honored escapes by rule (`plan-review-stale`,
 `plan-review-blocked`, `plan-review-missing`, `plan-missing`) and by which task's blocks were held, and asks whether those blocks
-were ever reviewed. `make audit`'s listing still prints the reason alone; a count by `held` is a reader's query until a measurement
-is built on it. The commits-on-main figure is a stand-in for landings: the audit counts landings by `make land`'s tick commits.
+were ever reviewed. `make audit` counts them by what was held (451 T270, `measure/audit/held.rs`): held not recorded (a record before T262), nothing
+held, a plan or its review record missing, blocks held at a push, blocks held at a tick; its listing still prints each reason. The
+record names the place, not the asked task, so which task owns a block is read from the block keys. The commits-on-main figure is a stand-in for landings: the audit counts landings by `make land`'s tick commits.

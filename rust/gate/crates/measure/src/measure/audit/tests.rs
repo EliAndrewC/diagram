@@ -282,3 +282,67 @@ fn the_helpers_format_as_python_formats() {
         .unwrap_err()
         .contains("int indices"));
 }
+
+/// Feature 451 T270: a `PLAN_REVIEW_OK` record is classed by its `held` list (451 T262's field), never by its reason - every record
+/// here carries the one standing reason that 451 T261 read as a cause.
+#[test]
+fn a_plan_gate_escape_is_classed_by_what_its_record_says_was_held() {
+    let dir = scratch("audit-held");
+    let none = dir.join("none");
+    let record = |name: &str, target: &str, held: Option<&str>| {
+        let held = held.map_or_else(String::new, |h| format!(r#", "held": {h}"#));
+        put(
+            &dir,
+            &format!("dev/bypass-log/2026-11/{name}.json"),
+            &format!(
+                r#"{{"utc": "2026-11-26T0{name}", "target": "{target}", "why": "unstarted tasks' template stubs"{held}}}"#
+            ),
+        );
+    };
+    // another escape's record, and one whose target is no text, are no plan-gate escape: no class lines for them alone
+    record("0", "plan-gate decide-defer", None);
+    put(
+        &dir,
+        "dev/bypass-log/2026-11/00.json",
+        r#"{"utc": "2026-11-26T00", "target": 7, "why": "x"}"#,
+    );
+    assert!(!run(&["runs"], &dir, &none).stdout.contains("held"));
+    // written before 451 T262, or a `held` that is no list: nothing to class by
+    record("1", "plan-gate push", None);
+    record("2", "plan-gate tick 451-x", Some(r#""blocks""#));
+    // honored where the gate listed no feature
+    record("3", "plan-gate push", Some("[]"));
+    // a feature held with no block listed: its plan or its review record missing
+    record(
+        "4",
+        "plan-gate tick 451-x",
+        Some(
+            r#"[{"feature": "specs/451-x", "rule": "plan-missing", "blocks": []}, {"feature": "specs/9-y", "rule": "plan-review-missing"}]"#,
+        ),
+    );
+    // blocks held at a push (two records) and at a tick (three), one row of several carrying them
+    let blocks = r#"[{"feature": "specs/9-y", "rule": "plan-review-missing", "blocks": []}, {"feature": "specs/451-x", "rule": "plan-review-stale", "blocks": ["T1 (why)"]}]"#;
+    record("5", "plan-gate push", Some(blocks));
+    record("6", "plan-gate push", Some(blocks));
+    record("7", "plan-gate tick 451-x", Some(blocks));
+    record("8", "plan-gate tick 451-x", Some(blocks));
+    record("9", "plan-gate tick 9-y", Some(blocks));
+    let said = run(&["runs"], &dir, &none);
+    assert_eq!(said.code, 0);
+    let tail = said
+        .stdout
+        .split_once("  PLAN_REVIEW_OK escapes")
+        .map_or("", |(_, t)| t);
+    assert_eq!(
+        tail,
+        concat!(
+            " by what the plan gate held (each record's `held` list, never its reason) - 9 records\n",
+            "       2  held not recorded (a record before 451 T262)\n",
+            "       1  nothing held\n",
+            "       1  a plan or its review record missing, no block listed\n",
+            "       2  at a push: blocks held, of ticked tasks or outside every task\n",
+            "       3  at a tick: blocks held, of the asked task, of tasks ticked before it or outside every task\n",
+            "\n"
+        )
+    );
+}

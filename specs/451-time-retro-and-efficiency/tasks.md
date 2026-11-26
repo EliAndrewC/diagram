@@ -60,6 +60,7 @@ seen red, then the check deleted and the test seen red again (FR-012).
 - none: T265 - tooling, a procedure-doc claim and a research-page comment only: the gate's checks crate (`gm_attributions.rs` and its test: "a GM ruling" read, a dated `specs/<feature>/rulings-YYYY-MM-DD.md` taken as a record), `docs/building-programs.md`'s dedication knob relabeled CANON to UNRESEARCHED with knob 3's prose tag, and the comment on 0222's drawing page; no visible page text, no note, no code of the engine, no map feature, sheet, glyph, size or placement rule changes
 - none: T272 - tooling only: the escalation guard's Stop rule (`rust/guard/src/guards/escalation_hooks.rs`'s `stated_ask`: `what's waiting on you` as one item of a list of contents is no ask), its tests and its suite; no map feature, sheet, glyph, placement rule or research page changes.
 - none: T271 - tooling only: the plan tool's changed-blocks bundle directory keyed by its tree (`rust/gate/crates/plan/src/plan/bundle.rs`'s `delta_prompt`, its test) and the builder brief's scratch-name line (`scripts/container/builder-brief.md`); no map feature, sheet, glyph, placement rule or research page changes.
+- none: T270 - tooling only: `make audit`'s count of the plan gate's escapes by what each record held (`rust/gate/crates/measure/src/measure/audit.rs`, `audit/held.rs`, their test), its audit-register entry and `rust/gate/CLAUDE.md`'s row; no map feature, sheet, glyph, placement rule or research page changes
 
 ## Dependencies
 
@@ -221,4 +222,8 @@ landing on its own, each small; T22 last.
 - [ ] T288 the per-task plan bundle (/tmp/l7r-check/plan-<feature>-<task>) is shared when the coordinating clone decides a task a builder's worktree also decides (451 T271, measured to collide only then): key it by tree or refuse the second; and the scratch-file prefix is an instruction only - measure how often a builder writes an unprefixed scratch file before guarding it
       research: rendering
 - [ ] T289 a builder's report lists 'candidates to file' and the coordinating session files them from memory - on 2026-11-26 four went unfiled until the GM asked: a command that takes a builder's report (or its candidates file) and files each listed title, so a reported candidate cannot be left unfiled, and the builder brief's report form names the file it writes them to
+      research: rendering
+- [ ] T290 the audit-register check does not see a gate added to the push's gates=(...) array in scripts/sync-with-main.sh (a path with a variable in it is skipped), a script called by a path not written scripts/... ($(dirname ...)/state-sync.sh), or a script that a called script calls in turn (451 T269's candidates): cover each, red-first; and T260's line says 254 of 267 where BACKFILL is now 260 with six landing scripts - restate it
+      research: rendering
+- [ ] T291 the plan-review bundle's spec-cited.md was empty although the block cited T259-D1 and D3 (a reviewer's note at 451 T269): find why the cited decisions were not gathered
       research: rendering

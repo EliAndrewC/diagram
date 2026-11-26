@@ -6,6 +6,8 @@
 //!
 //! Each prints what its one-liner printed, ANSI bold and all, and fails where it raised: a record that is no JSON, one missing a field
 //! the line reads, a value Python cannot format - exit 1, what was printed before kept, a `Traceback` line and the reason after.
+//! The bypasses end, since feature 451 T270, with the plan gate's escapes counted by what each record says was held (`held.rs`), which
+//! no recipe printed.
 
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
@@ -304,6 +306,9 @@ fn runs(cwd: &Path, out: &mut Out) -> Result<(), String> {
     if last.is_empty() {
         out.line("  (none yet)");
     }
+    for line in held::lines(&bypasses) {
+        out.line(&line);
+    }
     out.line("");
     Ok(())
 }
@@ -597,6 +602,8 @@ pub fn guard_dir(value: Option<&str>, home: &Path) -> PathBuf {
         None => PathBuf::from(raw),
     }
 }
+
+mod held;
 
 #[cfg(test)]
 mod tests;
