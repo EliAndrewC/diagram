@@ -40,6 +40,16 @@
 # guard's and the gate's crates; the tree-wide steps fired on another task's file 0 times that night); a red whose every error names
 # another task's file is marked BLOCKED, still red. With no T= every file and crate is the caller's, as before. `make done` and a
 # landing never set it.
+#
+# THE TASK'S FEATURE (451 T303): a task number alone is several features' (449 and 451 each have a T281). Without F= the feature was the
+# last task-starts.jsonl row naming the number, whatever its feature, tree or age: 451 T281's builder's run of 2026-11-26T15:57:37Z, in a
+# pool tree, took 449's start of 2026-11-22 (the only T281 row then), set all 6 of its own files apart as "T281@451-..." and said GREEN
+# over its own lint and format red. The feature is now, in order: F=; SPECIFY_FEATURE; the pool registry's holder of this tree
+# (<git common dir>/builder-pool.json, 451 T285) where it holds one of the tasks; this tree's own started-task mark of one of the tasks
+# (task-marks/<feature>/<task>.json, 451 T254, the newest). None: REFUSED, exit 2, the command printed, before any check runs - never
+# another feature's or another tree's start. And a run that sets files apart while NO uncommitted file is one the task's own edits name
+# is REFUSED the same way (the wrong feature given, or the wrong task): it would judge none of the task's work, and its GREEN would read
+# as the task's. The verdict line repeats how many files were judged, how many of them the task's own edits name, and how many set apart.
 set -u
 mk=${CLOSING_MAKE:-make}
 base=${CLOSING_CHECKS_DIR:-$(git rev-parse --absolute-git-dir)/closing-checks}
@@ -61,12 +71,36 @@ done
 task=${CLOSING_TASK:-} caller=""
 if [ -n "$task" ]; then
   common=$(git rev-parse --path-format=absolute --git-common-dir)
-  if python3 -I - "$(git rev-parse --show-toplevel)" "${L7R_EVENTS_DIR:-$common/l7r-events}" "$common/task-starts.jsonl" \
-    "${CLOSING_FEATURE:-}" "$task" "$dir" > "$dir/split.txt" 2>&1 <<'PY'
+  python3 -I - "$(git rev-parse --show-toplevel)" "${L7R_EVENTS_DIR:-$common/l7r-events}" "$common" \
+    "${CLOSING_FEATURE:-}" "$task" "$dir" "${SPECIFY_FEATURE:-}" > "$dir/split.txt" 2>&1 <<'PY'
 import datetime, glob, json, os, re, subprocess, sys, time
-root, events, starts, feature, task, out = sys.argv[1:7]
+root, events, common, feature, task, out, exported = sys.argv[1:8]
 # a bundle, T=a,b,c (451 T141): its tasks' files judged together, as one task's
 tasks = set(re.split(r'[,\s]+', task.strip())) - {''}
+# the task's feature (451 T303, the header): F=, SPECIFY_FEATURE, the pool registry's holder of this tree, this tree's own start mark
+same = lambda p: isinstance(p, str) and p != '' and os.path.realpath(p) == os.path.realpath(root)
+def load(p):
+    try:
+        with open(p, errors='replace') as f:
+            d = json.load(f)
+    except (OSError, ValueError):
+        return {}
+    return d if isinstance(d, dict) else {}
+names = lambda d, *keys: [t for k in keys for t in (d.get(k) if isinstance(d.get(k), list) else [d.get(k)]) if isinstance(t, str)]
+pool = os.path.join(common, 'builder-pool.json')
+trees = load(pool).get('trees')
+held = next((t['feature'] for t in (trees if isinstance(trees, list) else []) if isinstance(t, dict) and same(t.get('tree'))
+             and isinstance(t.get('feature'), str) and t['feature'] and tasks & set(names(t, 'tasks'))), '')
+marks = [d for d in map(load, sorted(glob.glob(os.path.join(common, 'task-marks', '*', '*.json')))) if same(d.get('tree'))
+         and isinstance(d.get('feature'), str) and d['feature'] and tasks & set(names(d, 'task', 'tasks'))]
+marked = max(marks, key=lambda d: str(d.get('utc', '')))['feature'] if marks else ''
+feature, source = next(((f, s) for f, s in ((feature, 'F='), (exported, 'SPECIFY_FEATURE'), (held, "the pool registry's holder of this tree"),
+                                             (marked, "this tree's start mark")) if f), ('', ''))
+if not feature:
+    print(f"closing-checks: REFUSED - T={task} names no feature, and a task number alone is several features': no F=, no SPECIFY_FEATURE "
+          f"exported, {pool} holds this tree for no such task, and this tree has no start mark of it. Run:\n"
+          f"  make closing-checks T={task} F=<feature>")
+    sys.exit(3)
 git = lambda *a: subprocess.run(['git', '-C', root, *a], capture_output=True, text=True, check=True).stdout
 # the clone's uncommitted files: every task's work in flight (a builder never commits; its landing does)
 dirty, recs, i = set(), git('status', '--porcelain=v1', '-z', '-uall').split('\0'), 0
@@ -91,16 +125,8 @@ for l in git('log', '--since=7.days', '--format=@%ct %s', '--name-only').splitli
         last.setdefault(l, at)
 logs = sorted(glob.glob(os.path.join(events, '*.jsonl')))
 stem = lambda p: os.path.basename(p)[:-6]
-mine_f = next((stem(p) for p in logs if feature and (stem(p) == feature or stem(p).startswith(feature + '-'))), feature or None)
-if not feature and os.path.exists(starts):
-    for l in open(starts, errors='replace'):
-        try:
-            d = json.loads(l)
-        except ValueError:
-            continue
-        if d.get('task') in tasks:
-            mine_f = d.get('feature')
-mine = lambda c: c[1] in tasks and mine_f in (None, c[0])
+mine_f = next((stem(p) for p in logs if stem(p) == feature or stem(p).startswith(feature + '-')), feature)
+mine = lambda c: c[1] in tasks and c[0] == mine_f
 pre, claims = root.rstrip('/') + '/', {}
 for p in logs:
     for l in open(p, errors='replace'):
@@ -134,12 +160,34 @@ for r, c in sorted(others.items()):
     for _, t in c:
         by.setdefault(t, []).append(r)
 named = sum(r in claims for r in caller)
+listed = lambda by: ''.join(f"\n  {t}: {', '.join(rs[:6])}{' ...' if len(rs) > 6 else ''}" for t, rs in sorted(by.items()))
+apart = listed(by)
+if others and not named:
+    # each with its feature here: the same number under another feature is the likely cause
+    by = {}
+    for r, c in sorted(others.items()):
+        for ft, t in c:
+            by.setdefault(f'{t}@{ft}', []).append(r)
+    apart = listed(by)
+    # nothing of the task's own would be judged (451 T303, the header): refused before a check runs, never a GREEN over none of its files
+    print(f"closing-checks: REFUSED - no uncommitted file here is one {task}'s own edits name under feature {mine_f} (from {source}), while "
+          f"{len(others)} of the clone's {len(dirty)} are set apart as another task's:{apart}\n"
+          f"a run that judges none of the task's own files says nothing of it. If those are {task}'s under another feature, run:\n"
+          f"  make closing-checks T={task} F=<feature>\nor judge every file here as yours:\n  make closing-checks")
+    sys.exit(3)
+with open(os.path.join(out, 'feature'), 'w') as f:
+    f.write(feature + '\n')
+with open(os.path.join(out, 'judged'), 'w') as f:
+    f.write(f"{len(caller)} files judged as {task}'s of {mine_f}, {named} of them its own edits name; {len(others)} set apart as another task's\n")
 print(f"closing-checks: judged as {task}'s: {len(caller)} of the clone's {len(dirty)} uncommitted files ({named} its own edits name, "
-      f"{len(caller) - named} no task's edit); another task's, its red reported apart: {len(others)}"
-      + ''.join(f"\n  {t}: {', '.join(rs[:6])}{' ...' if len(rs) > 6 else ''}" for t, rs in sorted(by.items())))
+      f"{len(caller) - named} no task's edit); another task's, its red reported apart: {len(others)}; the task's feature: {mine_f} (from {source})"
+      + apart)
 PY
-  then caller=$dir/caller-files; cat "$dir/split.txt"
-  else printf 'closing-checks: could not tell T=%s files from another task'"'"'s, so every file is judged as yours:\n' "$task"; cat "$dir/split.txt"; fi
+  case $? in
+    0) caller=$dir/caller-files; cat "$dir/split.txt" ;;
+    3) cat "$dir/split.txt" >&2; exit 2 ;;
+    *) printf 'closing-checks: could not tell T=%s files from another task'"'"'s, so every file is judged as yours:\n' "$task"; cat "$dir/split.txt" ;;
+  esac
 else
   printf 'closing-checks: no T= - every crate and file in the clone is judged as yours; `make closing-checks T=<task>` judges your task'"'"'s alone, another task'"'"'s red reported apart (451 T86)\n'
 fi
@@ -232,10 +280,12 @@ done
 record() { "${CLOSING_GATE:-$(dirname "${BASH_SOURCE[0]}")/l7r-gate.sh}" log usage --tool closing-checks --kind check --outcome "$1" 2>/dev/null || true; }
 if [ "$red" -gt 0 ]; then
   # the rerun as the caller starts it (451 T86): a bare one judges the whole clone, another task's red counted
-  again="make closing-checks${task:+ T=$task}${CLOSING_FEATURE:+ F=$CLOSING_FEATURE}"
-  printf '\n\033[1mclosing-checks: RED\033[0m - %s of %s red; fix them all, then run `%s` once more (in the background).\n' "$red" "${#checks[@]}" "$again"
+  # the feature as this run resolved it (451 T303), so the rerun judges the same task
+  [ -n "$caller" ] && feature=$(cat "$dir/feature") || feature=${CLOSING_FEATURE:-}
+  again="make closing-checks${task:+ T=$task}${feature:+ F=$feature}"
+  printf '\n\033[1mclosing-checks: RED\033[0m - %s of %s red; fix them all, then run `%s` once more (in the background).%s\n' "$red" "${#checks[@]}" "$again" "${caller:+ ($(cat "$dir/judged"))}"
   record refused
   exit 1
 fi
 record passed
-printf '\n\033[1mclosing-checks: GREEN\033[0m - all three; a plan section edited after this run started is covered by `make quick` (seconds).\n'
+printf '\n\033[1mclosing-checks: GREEN\033[0m - all three%s; a plan section edited after this run started is covered by `make quick` (seconds).\n' "${caller:+ ($(cat "$dir/judged"))}"

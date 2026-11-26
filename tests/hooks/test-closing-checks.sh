@@ -10,7 +10,8 @@
 set -uo pipefail
 # THE CALLER'S OWN CLOSING RUN IS NOT THE FIXTURES' (found by 449 T243, 2026-11-22): `make closing-checks T= F=` runs make hooks-test
 # under CLOSING_TASK and CLOSING_FEATURE, and a fixture run inheriting them judged the wrong feature's task - 5 red in section 6
-unset CLOSING_TASK CLOSING_FEATURE
+# and SPECIFY_FEATURE, which the script reads as the task's feature when no F= is given (451 T303)
+unset CLOSING_TASK CLOSING_FEATURE SPECIFY_FEATURE
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPT="$HERE/../../scripts/gates/closing-checks.sh"
 PASS=0; FAIL=0
@@ -191,13 +192,19 @@ line() { printf '{"t":"%s","ev":"PostToolUse","tool":"Edit","cat":"edit","by":"a
   bashline PostToolUse "\"$C/docs/both.md\"" T84; bashline PostToolUse "\"$C/docs/both.md\"" T86
   printf '{"t":"%s","ev":"PostToolUse","tool":"Bash","cat":"other tool","writes":["%s/docs/reverted.md"],"task":"T77"}\n' "$later" "$C"; } > "$E/451-x.jsonl"
 line "$now" rust/other/src/extra.rs T86 > "$E/449-y.jsonl"
-printf '{"feature": "449-y", "task": "T86", "utc": "2026-11-01T00:00:00Z"}\n{"feature": "451-x", "task": "T86", "utc": "2026-11-21T00:00:00Z"}\n' > "$C/.git/task-starts.jsonl"
+# THE TASK'S FEATURE (451 T303): 451 T281's builder's run of 2026-11-26T15:57:37Z had no F=, and the last task-starts.jsonl row naming a
+# T281 was 449's, treeless, four days old - so 451's T281's six files were all "another task's" and the run GREEN over their red. The
+# rows here are that shape: another feature's start of the number the last one. This tree's own mark (451 T254) names 451-x.
+printf '{"feature": "451-x", "task": "T86", "utc": "2026-11-01T00:00:00Z"}\n{"feature": "449-y", "task": "T86", "utc": "2026-11-21T00:00:00Z"}\n' > "$C/.git/task-starts.jsonl"
+mark() { mkdir -p "$C/.git/task-marks/$1"; printf '{"feature": "%s", "task": "%s", "tree": "%s", "utc": "%s"%s}\n' "$1" "$2" "$3" "$4" "${5:-}" > "$C/.git/task-marks/$1/$2.json"; }
+pool() { printf '{"trees": [%s]}\n' "$1" > "$C/.git/builder-pool.json"; }
+mark 451-x T86 "$C" 2026-11-21T00:00:00Z
 c6() { : > "$T/events"; OUT=$(cd "$C" && STUB_DIR="$T/c6" L7R_EVENTS_DIR="$E" STUB_SLEEP=0.1 "$@" "$SCRIPT" 2>&1); RC=$?; }
 echo rust/other/src/lib.rs > "$T/c6/static.red"
 c6 env CLOSING_TASK=T86
 d6=$(run_dir <(printf '%s' "$OUT"))
 [ "$(cat "$d6/caller-files" 2>/dev/null | tr '\n' ' ')" = "docs/bash.md docs/both.md docs/landed.md docs/reverted.md docs/shared.md rust/mine/src/lib.rs rust/mine/src/new.rs " ] \
-  && ok "the caller's files: its own edit, a shared file, a Bash write no line names, a landed task's file, a fallback line's (the feature from its task-start), a file both tasks' Bash calls wrote, the files in a directory another's call names, a file a task's line names before that task landed" \
+  && ok "the caller's files: its own edit, a shared file, a Bash write no line names, a landed task's file, a fallback line's (the feature from this tree's start mark, never another feature's start of the number, 451 T303), a file both tasks' Bash calls wrote, the files in a directory another's call names, a file a task's line names before that task landed" \
   || no "the caller's files" "$(cat "$d6/caller-files" "$d6/split.txt" 2>&1)"
 [ "$(cut -f1 "$d6/others" 2>/dev/null | tr '\n' ' ')" = "docs/failed.md docs/sed.md rust/other/src/extra.rs rust/other/src/lib.rs " ] && grep -q 'T86@449-y' "$d6/others" && grep -q 'T84@451-x' "$d6/others" \
   && ok "another task's: T84's file, its Bash writes (a call's end and a failed end, 451 T93), and 449's T86's" || no "another task's files" "$(cat "$d6/others" 2>&1)"
@@ -207,11 +214,60 @@ seen OUT -q "another task's red.*reported apart and not counted" && seen OUT -q 
   && ok "the other's red named apart, with its task and file" || no "no apart section" "$OUT"
 seen OUT -q "judged as T86's: 7 of the clone's 11 uncommitted files (3 its own edits name, 4 no task's edit); another task's, its red reported apart: 4" \
   && ok "the split is printed" || no "the split line" "$OUT"
+seen OUT -q "reported apart: 4; the task's feature: 451-x (from this tree's start mark)" \
+  && seen OUT -q "closing-checks: GREEN.* - all three (7 files judged as T86's of 451-x, 3 of them its own edits name; 4 set apart as another task's);" \
+  && ok "the split names the feature and where it came from, and the verdict line how many files were judged, its own and apart (451 T303)" || no "the feature or the verdict's count" "$OUT"
+# the feature's sources, in order (451 T303): F=, SPECIFY_FEATURE, the pool registry's holder of this tree, this tree's start mark
+has() { grep -qx "$1" "$(run_dir <(printf '%s' "$OUT"))/caller-files" 2>/dev/null; }
+refused() { [ "$RC" -eq 2 ] && [ ! -s "$T/events" ] && ! seen OUT -q 'closing-checks: GREEN' && seen OUT -q "$1"; }
+c6 env CLOSING_TASK=T86 SPECIFY_FEATURE=449-y
+has rust/other/src/extra.rs && ! has rust/mine/src/lib.rs && seen OUT -q "the task's feature: 449-y (from SPECIFY_FEATURE)" \
+  && ok "SPECIFY_FEATURE names the feature before the registry and the mark" || no "SPECIFY_FEATURE (exit $RC)" "$OUT"
+c6 env CLOSING_TASK=T86 SPECIFY_FEATURE=449-y CLOSING_FEATURE=451
+has rust/mine/src/lib.rs && seen OUT -q "the task's feature: 451-x (from F=)" && ok "F= before SPECIFY_FEATURE" || no "F= over SPECIFY_FEATURE (exit $RC)" "$OUT"
+pool "{\"tree\": \"$T/elsewhere\", \"feature\": \"450\", \"tasks\": [\"T86\"]}, 7, {\"tree\": \"$C\", \"feature\": \"449\", \"tasks\": [\"T86\", \"T90\"], \"since\": \"2026-11-26T17:13:14Z\"}"
+c6 env CLOSING_TASK=T86
+has rust/other/src/extra.rs && seen OUT -q "the task's feature: 449-y (from the pool registry's holder of this tree)" \
+  && ok "the pool registry's holder of this tree names the feature before the mark, another tree's entry passed over" || no "the registry (exit $RC)" "$OUT"
+# a tree held for another task, a free tree and an unreadable registry name nothing: the mark is read
+for reg in "{\"tree\": \"$C\", \"feature\": \"449\", \"tasks\": [\"T90\"]}" "{\"tree\": \"$C\", \"feature\": \"\", \"tasks\": []}" 'not json'; do
+  pool "$reg"; [ "$reg" = 'not json' ] && echo '[1' > "$C/.git/builder-pool.json"
+  c6 env CLOSING_TASK=T86
+  has rust/mine/src/lib.rs && seen OUT -q "the task's feature: 451-x (from this tree's start mark)" || no "a registry that names no feature for the task ($reg) (exit $RC)" "$OUT"
+done
+echo '["a list"]' > "$C/.git/builder-pool.json"; c6 env CLOSING_TASK=T86
+has rust/mine/src/lib.rs && ok "a registry holding the tree for another task, a free tree's entry and an unreadable registry name nothing: the mark is read" || no "a registry that is a list (exit $RC)" "$OUT"
+rm -f "$C/.git/builder-pool.json"
+# the marks: the newest of this tree's that names the task (a bundle's by its members); another tree's, an unreadable one and a
+# featureless one passed over
+mark 449-y T86 "$C" 2026-11-22T00:00:00Z; echo 'not json' > "$C/.git/task-marks/449-y/T1.json"; mark '' T86 "$C" 2026-11-25T00:00:00Z
+c6 env CLOSING_TASK=T86
+has rust/other/src/extra.rs && seen OUT -q "the task's feature: 449-y (from this tree's start mark)" && ok "this tree's newest mark of the task" || no "the newest mark (exit $RC)" "$OUT"
+rm -rf "$C/.git/task-marks"; mark 449-y T86 "$T/elsewhere" 2026-11-22T00:00:00Z; mark 451-x T84 "$C" 2026-11-21T00:00:00Z ', "tasks": ["T84", "T86"]'
+c6 env CLOSING_TASK=T86
+has rust/mine/src/lib.rs && seen OUT -q "the task's feature: 451-x (from this tree's start mark)" \
+  && ok "a bundle's mark names its members; another tree's mark of the task is passed over" || no "the bundle's mark (exit $RC)" "$OUT"
+# THE WRONG-FEATURE CASE (451 T303): nothing names the feature but another feature's start row and another tree's mark - refused, no check run
+rm -rf "$C/.git/task-marks"; mark 449-y T86 "$T/elsewhere" 2026-11-22T00:00:00Z
+c6 env CLOSING_TASK=T86
+refused 'REFUSED - T=T86 names no feature' && seen OUT -q '^  make closing-checks T=T86 F=<feature>$' \
+  && ok "no F=, SPECIFY_FEATURE, registry entry or mark of this tree: REFUSED with the command, no check run - never another feature's start (red before 451 T303: 449-y's row read, GREEN)" \
+  || no "a T= with no feature was not refused (exit $RC)" "$OUT"
+# THE ZERO-OWN-FILES CASE (451 T303): files set apart and none the task's own edits name - refused, never GREEN over none of its files
+c6 env CLOSING_TASK=T86 CLOSING_FEATURE=450
+refused "REFUSED - no uncommitted file here is one T86's own edits name under feature 450 (from F=), while 7 of the clone's 11 are set apart" \
+  && seen OUT -q '^  T84@451-x: docs/both.md, docs/failed.md' && seen OUT -q '^  T86@451-x: docs/both.md, docs/shared.md, rust/mine/src/lib.rs$' && seen OUT -q '^  make closing-checks T=T86 F=<feature>$' && seen OUT -q '^  make closing-checks$' \
+  && ok "files set apart and none the task's own: REFUSED before any check, the files and both commands named (red before 451 T303: GREEN, 0 judged of its own)" \
+  || no "a run judging none of the task's own files was not refused (exit $RC)" "$OUT"
+rm -rf "$C/.git/task-marks"; mark 451-x T86 "$C" 2026-11-21T00:00:00Z
 echo rust/mine/src/lib.rs > "$T/c6/static.red"; c6 env CLOSING_TASK=T86 CLOSING_FEATURE=451
 [ "$RC" -eq 1 ] && seen OUT -Eq '^  static +RED' && ! seen OUT -q "another task's red" \
   && ok "the caller's own red still fails" || no "the caller's red (exit $RC)" "$OUT"
 seen OUT -q 'then run `make closing-checks T=T86 F=451` once more' \
   && ok "the red names the caller's own rerun, its T= and F=" || no "the rerun line drops T= (a bare one judges the whole clone)" "$OUT"
+c6 env CLOSING_TASK=T86
+seen OUT -q 'then run `make closing-checks T=T86 F=451-x` once more (in the background). (7 files judged as T86'"'"'s of 451-x, 3 of them' \
+  && ok "with no F= the rerun names the feature the run resolved, and the red line the files judged (451 T303)" || no "the rerun's resolved feature" "$OUT"
 c6 env CLOSING_TASK=T86 CLOSING_FEATURE=449
 d6=$(run_dir <(printf '%s' "$OUT"))
 grep -qx rust/other/src/extra.rs "$d6/caller-files" && ! grep -qx rust/mine/src/lib.rs "$d6/caller-files" && [ "$RC" -eq 0 ] \

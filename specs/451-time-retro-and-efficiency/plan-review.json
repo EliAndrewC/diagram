@@ -2016,6 +2016,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T303 (2026-11-26: 451 T281's builder ran `make closing-checks T=T281` with no F= in a pool tree; the run judged 0 of its 6 files, set all 6 apart as \"another task's\" and said GREEN over its own lint and format red, observed 2026-11-26, method: the run's own `split.txt`)": {
+   "sha256": "3d617e61f15239f453af0a024abf5dad52165355b011eee1c90ad7acbedb057d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T303 Approach (checklist part A)": {
+   "sha256": "4b6b2fd1a0e11fc56982a910d19477e29debb56358b3b572140e8f3ea4387f1d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -25807,6 +25819,110 @@
      "why": "Defects in other crates or in make decide's bundle key, not part of what T295 fixes; each is filed and ordered before T302, which satisfies fix-as-we-go and FR-009's three parts. T288's case does not make D3 worse than before: a bundle rebuilt from the clone moves the hold to the clone, which was the old behavior."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T303 (2026-11-26: 451 T281's builder ran `make closing-checks T=T281` with no F= in a pool tree; the run judged 0 of its 6 files, set all 6 apart as \"another task's\" and said GREEN over its own lint and format red, observed 2026-11-26, method: the run's own `split.txt`)",
+    "### T303 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T303-D1",
+     "summary": "The task's feature is resolved from F=, then SPECIFY_FEATURE, then the pool registry's holder of this tree (only where it holds one of the named tasks), then this tree's own start mark; the split line names the feature and its source.",
+     "class": "within",
+     "why": "Fixes a defect (a closing run judged 0 of 6 files under the wrong feature and said GREEN - a check passing work it never judged). The GM's 2026-11-21 closing-checks task and 2026-11-26 pool-worktree words (T285) are what the closing checks and the registry serve; the order narrows nothing he asked for, and T285/T254 are read, not changed."
+    },
+    {
+     "id": "T303-D2",
+     "summary": "Read the live start mark under task-marks/, and stop reading task-starts.jsonl; a pre-T254 tree with no SPECIFY_FEATURE is refused and told to give F=.",
+     "class": "within",
+     "why": "The kept rows were the defect's source (449's four-day-old T281/T303 row taken for 451's). Swapping an unreliable guess for a refusal that prints the command is not a wrong outcome and narrows no GM clause; the cost is stated, bounded to old trees, and has its way on."
+    },
+    {
+     "id": "T303-D3",
+     "summary": "No source names the feature: refused with exit 2 before any check runs, printing make closing-checks T=<task> F=<feature>; no fallback to any feature's task of that number.",
+     "class": "within",
+     "why": "Removes the fallback that produced the wrong verdict; the refusal names the compliant command, as the project's guard rules require."
+    },
+    {
+     "id": "T303-D4",
+     "summary": "Where files are set apart and none of the uncommitted files is one the task's own edits name, the run is refused before the checks (exit 2), listing the set-apart files by task and feature and printing both F= and the bare make closing-checks.",
+     "class": "within",
+     "why": "Its only reach is the defect case: a GREEN standing over a run that judged none of the task's files. The one extra case it also refuses (a task whose every change came from make-target writes, beside another task's files) is labeled UNMEASURED and keeps a stated way on (the bare command), so it refuses no work outright; no GM clause is narrowed."
+    },
+    {
+     "id": "T303-D5",
+     "summary": "With T=, the GREEN and RED lines end with the files judged, how many its own edits name, and how many were set apart; the RED line's rerun names the resolved feature.",
+     "class": "within",
+     "why": "Makes the verdict say what it judged, which is the defect's other half (the split line said 0 but the verdict said only GREEN). Within the closing-checks task."
+    },
+    {
+     "id": "builder-checks-unchanged",
+     "summary": "make builder-checks (CRATE=, not T=) is left as it is.",
+     "class": "within",
+     "why": "It has no T= and no feature resolution, so it never had this defect; leaving it as it is narrows nothing."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "Two found defects (the suite did not unset SPECIFY_FEATURE; the refusal listed set-apart files by task number alone) are fixed in this task; nothing is deferred.",
+     "class": "within",
+     "why": "Each found defect is fixed in the task that found it, which is what fix-as-we-go asks; no known defect is carried on."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T303 (2026-11-26: 451 T281's builder ran `make closing-checks T=T281` with no F= in a pool tree; the run judged 0 of its 6 files, set all 6 apart as \"another task's\" and said GREEN over its own lint and format red, observed 2026-11-26, method: the run's own `split.txt`)",
+    "### T303 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T303-D1",
+     "summary": "The task's feature is resolved from F=, then SPECIFY_FEATURE, then the pool registry's holder of this tree (only where it holds one of the named tasks), then this tree's own start mark; the split line names the feature and its source.",
+     "class": "within",
+     "why": "Fixes a defect (a closing run judged 0 of 6 files under the wrong feature and said GREEN - a check passing work it never judged). No GM words bear on this design (the section says so, and request.md holds none on closing-checks' feature resolution); the pool registry (T285) and start marks (T254) are read, not changed, and the order narrows nothing in the request."
+    },
+    {
+     "id": "T303-D2",
+     "summary": "Read the live start mark under task-marks/, and stop reading task-starts.jsonl; a pre-T254 tree with no SPECIFY_FEATURE is refused and told to give F=.",
+     "class": "within",
+     "why": "The kept rows were the defect's source (449's four-day-old T281/T303 row taken for 451's). Swapping an unreliable guess for a refusal that prints the command is not a wrong outcome and narrows no GM clause; the cost is stated, bounded to old trees, and has its way on. 'No longer read' is closing-checks.sh's reading only; the record itself, which SC-006 and T243's breakdown read, is not changed."
+    },
+    {
+     "id": "T303-D3",
+     "summary": "No source names the feature: refused with exit 2 before any check runs, printing make closing-checks T=<task> F=<feature>; no fallback to any feature's task of that number.",
+     "class": "within",
+     "why": "Removes the fallback that produced the wrong verdict; the refusal names the compliant command, as the project's guard rules require."
+    },
+    {
+     "id": "T303-D4",
+     "summary": "Where files are set apart and none of the uncommitted files is one the task's own edits name, the run is refused before the checks (exit 2), listing the set-apart files by task and feature and printing both F= and the bare make closing-checks.",
+     "class": "within",
+     "why": "Its reach is the defect case: a GREEN standing over a run that judged none of the task's files. It also newly refuses one case the old split judged (a task whose every change came from make-target writes, beside another task's files); that is labeled UNMEASURED and keeps a stated way on (the bare make closing-checks, which judges every file), so no work is refused outright. Nothing in request.md (the hook-output-length words are about hooks, not this script's lines) speaks to it; no GM clause is narrowed."
+    },
+    {
+     "id": "T303-D5",
+     "summary": "With T=, the GREEN and RED lines end with the files judged, how many its own edits name, and how many were set apart; the RED line's rerun names the resolved feature.",
+     "class": "within",
+     "why": "Makes the verdict say what it judged, which is the defect's other half (the split line said 0 but the verdict said only GREEN). Within the closing-checks task."
+    },
+    {
+     "id": "builder-checks-unchanged",
+     "summary": "make builder-checks (CRATE=, not T=) is left as it is.",
+     "class": "within",
+     "why": "It has no T= and no feature resolution, so it never had this defect; leaving it as it is narrows nothing."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "Two found defects (the suite did not unset SPECIFY_FEATURE; the refusal listed set-apart files by task number alone) are fixed in this task; nothing is deferred.",
+     "class": "within",
+     "why": "Each found defect is fixed in the task that found it, which is what fix-as-we-go asks; no known defect is carried on."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -40704,6 +40820,56 @@
      "summary": "Found-and-left items outside the task's subject: pool trees lacking the magistracy sheets (T159), a land test failing once under load (T304), the per-task bundle path shared between clone and builder tree (T288); each with why, task id and order before T302.",
      "class": "within",
      "why": "Defects in other crates or in make decide's bundle key, not part of what T295 fixes; each is filed and ordered before T302, which satisfies fix-as-we-go and FR-009's three parts. T288's case does not make D3 worse than before: a bundle rebuilt from the clone moves the hold to the clone, which was the old behavior."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T303": {
+   "section_sha256": "cf1bfa6b8a81b71ecafac0ecc04c53e5c11fdcff9dd655cacd2e8520a1c10cfd",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T303-D1",
+     "summary": "The task's feature is resolved from F=, then SPECIFY_FEATURE, then the pool registry's holder of this tree (only where it holds one of the named tasks), then this tree's own start mark; the split line names the feature and its source.",
+     "class": "within",
+     "why": "Fixes a defect (a closing run judged 0 of 6 files under the wrong feature and said GREEN - a check passing work it never judged). No GM words bear on this design (the section says so, and request.md holds none on closing-checks' feature resolution); the pool registry (T285) and start marks (T254) are read, not changed, and the order narrows nothing in the request."
+    },
+    {
+     "id": "T303-D2",
+     "summary": "Read the live start mark under task-marks/, and stop reading task-starts.jsonl; a pre-T254 tree with no SPECIFY_FEATURE is refused and told to give F=.",
+     "class": "within",
+     "why": "The kept rows were the defect's source (449's four-day-old T281/T303 row taken for 451's). Swapping an unreliable guess for a refusal that prints the command is not a wrong outcome and narrows no GM clause; the cost is stated, bounded to old trees, and has its way on. 'No longer read' is closing-checks.sh's reading only; the record itself, which SC-006 and T243's breakdown read, is not changed."
+    },
+    {
+     "id": "T303-D3",
+     "summary": "No source names the feature: refused with exit 2 before any check runs, printing make closing-checks T=<task> F=<feature>; no fallback to any feature's task of that number.",
+     "class": "within",
+     "why": "Removes the fallback that produced the wrong verdict; the refusal names the compliant command, as the project's guard rules require."
+    },
+    {
+     "id": "T303-D4",
+     "summary": "Where files are set apart and none of the uncommitted files is one the task's own edits name, the run is refused before the checks (exit 2), listing the set-apart files by task and feature and printing both F= and the bare make closing-checks.",
+     "class": "within",
+     "why": "Its reach is the defect case: a GREEN standing over a run that judged none of the task's files. It also newly refuses one case the old split judged (a task whose every change came from make-target writes, beside another task's files); that is labeled UNMEASURED and keeps a stated way on (the bare make closing-checks, which judges every file), so no work is refused outright. Nothing in request.md (the hook-output-length words are about hooks, not this script's lines) speaks to it; no GM clause is narrowed."
+    },
+    {
+     "id": "T303-D5",
+     "summary": "With T=, the GREEN and RED lines end with the files judged, how many its own edits name, and how many were set apart; the RED line's rerun names the resolved feature.",
+     "class": "within",
+     "why": "Makes the verdict say what it judged, which is the defect's other half (the split line said 0 but the verdict said only GREEN). Within the closing-checks task."
+    },
+    {
+     "id": "builder-checks-unchanged",
+     "summary": "make builder-checks (CRATE=, not T=) is left as it is.",
+     "class": "within",
+     "why": "It has no T= and no feature resolution, so it never had this defect; leaving it as it is narrows nothing."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "Two found defects (the suite did not unset SPECIFY_FEATURE; the refusal listed set-apart files by task number alone) are fixed in this task; nothing is deferred.",
+     "class": "within",
+     "why": "Each found defect is fixed in the task that found it, which is what fix-as-we-go asks; no known defect is carried on."
     }
    ],
    "verdict": "CLEAR"

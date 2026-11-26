@@ -1105,7 +1105,7 @@ _quick:
 # One run of `make static` for static-runs-hooks; FRESH=1 REASON= and HOOKS_ALL=1 reach the checks as on their own targets.
 # THE CALLER'S TASK (451 T86): T= (F= when two features share a task number) judges the files and crates that task changed, another
 # task's red in the same clone reported apart and not counted (the script's header); with no T= the whole clone, as before.
-closing-checks:  ## [tests] make static, make hooks-test and make quick at once, one combined result (each verdict and log; red if any is): start it with run_in_background once the code is done, then write the plan section and run make decide while it runs (451 T55); T= judges that task's files and crates, another task's red reported apart, not counted (451 T86); T=a,b,c judges a bundle's files as one task's (451 T141)   T=<task> [F=<feature>] [FRESH=1 REASON="..."] [HOOKS_ALL=1]
+closing-checks:  ## [tests] make static, make hooks-test and make quick at once, one combined result (each verdict and log; red if any is): start it with run_in_background once the code is done, then write the plan section and run make decide while it runs (451 T55); T= judges that task's files and crates, another task's red reported apart, not counted (451 T86); T=a,b,c judges a bundle's files as one task's (451 T141); without F= the task's feature is SPECIFY_FEATURE, else the pool registry's holder of this tree, else this tree's start mark, else refused with the command, as is a run that sets files apart while none is one the task's own edits name (451 T303)   T=<task> [F=<feature>] [FRESH=1 REASON="..."] [HOOKS_ALL=1]
 	$(DISK_FLOOR)
 	@CLOSING_TASK="$(T)" CLOSING_FEATURE="$(F)" "$$(git rev-parse --show-toplevel)/scripts/gates/closing-checks.sh"
 

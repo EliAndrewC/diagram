@@ -3364,32 +3364,44 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T303 (<why: the finding or measurement that files it>)
+### T303 (2026-11-26: 451 T281's builder ran `make closing-checks T=T281` with no F= in a pool tree; the run judged 0 of its 6 files, set all 6 apart as "another task's" and said GREEN over its own lint and format red, observed 2026-11-26, method: the run's own `split.txt`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the task's feature is resolved in `scripts/gates/closing-checks.sh` from four named sources in order, and refused where none names it; a run that sets files apart and judges none the task's own edits name is refused too.
+  - **The cause, proved** (2026-11-26, method: the run's own record, `<git dir of the tree diagram-backlog-t271>/closing-checks/20261126T155737Z-1607000/split.txt` and `others`, read beside `<git common dir>/task-starts.jsonl`). The builder's diagnosis was right. With no F=, the script took the feature of the LAST `task-starts.jsonl` row naming the task number, whatever its feature, tree or age. At 15:57:37Z the only T281 row was 449's, of 2026-11-22T13:58:20Z, with no tree; 451's T281 start came at 16:15:48Z. So the feature was `449-rust-codebase`, every edit line read `T281@451-time-retro-and-efficiency`, and all 6 files were another task's, observed 2026-11-26, method: the run's `others` file. The split line said so ("0 of the clone's 6 uncommitted files (0 its own edits name ...)"), but the verdict line said only GREEN. The next run, with `F=451`, judged 7 of 7.
+  - **Why a pool tree met it.** 451's start rows and marks name the CLONE as their tree: `make task-start` runs there, the builder works in a pool tree. So a start mark, even read per tree, would not have named the feature for a pool builder; the pool registry is the source that does. Reproduced on this tree, 2026-11-26 (method: HEAD's script and the fixed one, each run with `CLOSING_TASK=T303`, no feature, the checks stubbed to `/bin/true`): HEAD's script judged 0 of 2 and said GREEN, from 449's T303 start of 2026-11-22; the fixed one judged 2 of 2, "the task's feature: 451-time-retro-and-efficiency (from the pool registry's holder of this tree)".
+  - **T303-D1, the order of the sources**, as the task's brief gives it: `F=`; `SPECIFY_FEATURE`; the pool registry's holder of this tree (`<git common dir>/builder-pool.json`, 451 T285), only where it holds one of the tasks named; this tree's own start mark of one of the tasks (`<git common dir>/task-marks/<feature>/<task>.json`, 451 T254, a bundle's by its `tasks`, the newest). The split line names the feature and the source it came from.
+  - **T303-D2, the mark, not the start rows.** "This tree's own start mark" is read from `task-marks/`, and `task-starts.jsonl` is no longer read at all. Why (this builder, 2026-11-26): a mark is removed when its task lands or is set down, so a mark that stands is a live start; the rows are kept for ever, 449's T303 of four days ago among them, and a row with no tree (every row before T254) cannot be told from another tree's. Cost: a tree whose start predates T254 and whose session exports no `SPECIFY_FEATURE` is refused and must give F=. The refusal prints the command.
+  - **T303-D3, no source: refused, exit 2, before any check runs**, with `make closing-checks T=<task> F=<feature>`. No fallback to "any feature's task of that number", which was the code's behavior where no start row existed either.
+  - **T303-D4, zero own files: refused, not only said.** The brief leaves the choice. Where files are set apart and NO uncommitted file is one the task's own edits name, the run is refused before the checks start, exit 2, listing the files set apart by task and feature and printing both ways on: `make closing-checks T=<task> F=<feature>` and the bare `make closing-checks`, which judges every file. Why refuse (this builder, 2026-11-26): the checks are the builder's longest wait and their GREEN is read by a builder who has just finished code; a first line the builder must read to see that nothing was judged is the form that failed on 2026-11-26. The rule is keyed on the files its own edits name, not on the count judged: a generated file no edit names is judged as the caller's and would hide the case. What it refuses beside the wrong feature: a task whose every change was made by something the event log does not see (a `make` target's writes) while another task's files stand beside it. UNMEASURED how often that happens; the bare command is its way on, and the refusal names it.
+  - **T303-D5, the verdict line carries the count.** With T=, the GREEN and the RED line each end "(N files judged as T's of <feature>, M of them its own edits name; K set apart as another task's)". The rerun the RED line prints names the feature the run resolved, so the rerun judges the same task.
+  - **`make builder-checks`** takes CRATE=, not T=, and is unchanged.
+  - **Docs**: the script's header ("THE TASK'S FEATURE"); the Makefile's help line for `closing-checks`.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the feature from F=, SPECIFY_FEATURE, the registry, this tree's mark; else refused | `tests/hooks/test-closing-checks.sh` section 6, its start rows now the real shape (another feature's row last): 19 of 76 red on HEAD's script (2026-11-26, the suite run before the fix), "a T= with no feature was not refused (exit 0)" among them | n/a: tooling | none | n/a |
+| files set apart and none its own: refused | the same run: "a run judging none of the task's own files was not refused (exit 0)", HEAD's script printing "0 its own edits name" and GREEN | n/a: tooling | none | n/a |
 
 ### T303 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder who runs `make closing-checks T=<task>` gets a verdict on that task's own files, or a refusal saying what to run. A GREEN never stands over a run that judged none of them.
+2. **The constraints.** T303's line in tasks.md. The brief's order of sources and its two refusals. 451 T86 (the caller's files judged, another task's red apart), T93 and T141 (a Bash call's writes; a bundle) unchanged. 451 T254 (a mark per task and tree) and T285 (the pool registry) are read, not changed. The first tier only for this builder (the two-tier trial of 2026-11-26).
+3. **Where each comes from.** O: the run record of 2026-11-26T15:57:37Z and `task-starts.jsonl` (the cause above). The brief, the coordinating session's, 2026-11-26. No GM words bear on the design; the task was filed by the coordinating session from the two builders' reports.
+4. **Do they describe the world here?** Yes, measured 2026-11-26: the suite's fixture is the real shape (another feature's start of the number as the last row, this tree's mark naming the right feature), and the same fault was reproduced on this pool tree with HEAD's script (the Approach).
+5. **The order.** Any time; before the next builders run closing checks in pool trees is better.
+6. **The exits.** Green: `tests/hooks/test-closing-checks.sh` all passed, and the batch's gate in the clone. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, observed 2026-11-26, method: `tests/hooks/test-closing-checks.sh`'s result line with the new cases written and HEAD's script: 57 passed, 19 failed - the caller's files (5 of 11 judged, its own `rust/mine/src/lib.rs` set apart under 449-y's start row), "a T= with no feature was not refused (exit 0)" and "a run judging none of the task's own files was not refused (exit 0)" among them. With the fix, observed 2026-11-26, method: the same suite's result line: 73 passed, 0 failed, in 14 s; the same with `SPECIFY_FEATURE`, `CLOSING_TASK` and `CLOSING_FEATURE` exported around the suite, as a builder's shell has them: 73 passed. No Rust changed, so `make builder-checks CRATE=` had no crate to run; the suite is the changed script's own.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: a closing run said GREEN having judged none of its task's files, twice on 2026-11-26 (T281's and T284's builders). No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The suite did not unset `SPECIFY_FEATURE`, which the script now reads; a builder's shell exports it, so every featureless fixture case would have resolved to the builder's feature and gone red. Fixed here: the suite unsets it beside `CLOSING_TASK` and `CLOSING_FEATURE` (the 449 T243 precedent).
+- The refusal for zero own files listed the files set apart by task number alone, so 451's own T86 files read "T86: ..." under a run for T86. Effect: the message would not show the feature mix-up it reports. Fixed here: that list is by task and feature.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no.
 
 ### T304 (<why: the finding or measurement that files it>)
 
