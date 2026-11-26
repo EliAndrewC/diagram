@@ -248,3 +248,13 @@ The GM, 2026-10-25, on a choice the research does not settle (verbatim from `spe
 The research queued is deferred by his words of 2026-11-25 above ("I would like to essentially defer all of it until at least tomorrow"), `dev/switches.json`'s `research` switch.
 
 (the coordinating session's build of it, not his words, from the audit of 2026-11-24 that found 74 of 180 such comments with no recorded words behind them: T233's task line - a check that a research page's comment or a claim's CANON label naming "the GM's ruling|catch|word|decision", "the GM ruled" or "GM <date>" points at a request.md, `docs/gm-rulings.md` or a gm-reviewed row holding his words; the 74 and the about 60 unaudited near-twins its baseline, shrinking as pages are edited; fixing them page work, waiting for the research switch)
+
+## 2026-11-25: before three parallel builders (451 T254-T257) and the tooling-state repository (451 T258)
+
+The GM, 2026-11-25 (verbatim, dictated), on the session's recommendation to start the port's first batch at three builders after four fixes (a started-task mark per task, task numbers from one writer, the plan-review record no longer conflicting, a review recording in its own tree):
+
+> sounds good, please start with that while I make the new repo - what do you think the new repo name should be?
+
+And on the private repository for the record-check answers and event logs:
+
+> I created https://github.com/EliAndrewC/diagram-tooling-state for the tooling state
