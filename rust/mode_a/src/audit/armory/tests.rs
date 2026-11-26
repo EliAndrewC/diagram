@@ -1,4 +1,7 @@
-//! The armory site's tests (feature 449 T303): small yards drawing each site, and the pool's five magistracies.
+//! The armory site's tests (feature 449 T303): small yards drawing each site, and the pool's five magistracies - each read as the pool
+//! sweep reads it ([`crate::sweep::sheet`]): a hand sheet as tracked, a declared generated exception composed in process from its
+//! tracked `<map>.compound.json`, never read from its svg on disk, which git ignores and a tree that never drew it lacks (feature 451
+//! T159: a fresh worktree's run failed `NotFound` on the two generated sheets, observed 2026-11-22 and 2026-11-26).
 //!
 //! Research:
 //!     the armory site's test yards - NONE: test sheets, deciding nothing about a building
@@ -79,11 +82,11 @@ fn the_sites_and_the_pool_sheets_rolls() {
 fn every_pool_magistracy_draws_its_armory_where_its_seed_rolls_it() {
     let tree = tree();
     let sheets = [
-        ("ubame-magistracy", true, GATE_RANGE),
-        ("hayakawa-magistracy", true, HALL),
-        ("ochiba-magistracy", false, HALL),
-        ("ochiba-roundtrip-test", false, HALL),
-        ("county-magistracy-example", false, HALL),
+        ("ubame-magistracy", true, GATE_RANGE, false),
+        ("hayakawa-magistracy", true, HALL, false),
+        ("ochiba-magistracy", false, HALL, false),
+        ("ochiba-roundtrip-test", false, HALL, true),
+        ("county-magistracy-example", false, HALL, true),
     ];
     let ends = [
         ("ubame-magistracy", None),
@@ -92,17 +95,45 @@ fn every_pool_magistracy_draws_its_armory_where_its_seed_rolls_it() {
         ("ochiba-roundtrip-test", Some(EAST)),
         ("county-magistracy-example", Some(WEST)),
     ];
-    for ((sheet, range, site), (_, end)) in sheets.into_iter().zip(ends) {
-        let svg = tree.join(format!("pool/magistracies/{sheet}/{sheet}.svg"));
-        let text = std::fs::read_to_string(&svg).unwrap();
-        let plan = parse_svg(&text).unwrap();
-        let form = crate::audit::report::read_form(&svg.to_string_lossy()).unwrap();
+    let walked = l7r_gate_pool::walk(&tree);
+    for ((sheet, range, site, generated), (_, end)) in sheets.into_iter().zip(ends) {
+        // as the sweep reads it: a hand sheet's tracked svg, a generated exception composed from its spec (451 T159)
+        let read = crate::sweep::sheet(&tree, walked.folder(sheet).unwrap()).unwrap();
+        // the two generated sheets are composed here, so no sheet a tree happened to draw stands in for the generator's
+        assert_eq!(read.generated, generated, "{sheet}");
+        let plan = parse_svg(&read.text).unwrap();
+        let form = crate::audit::report::read_form(&read.svg.to_string_lossy()).unwrap();
         assert_eq!(gate_range_drawn(&plan), range, "{sheet}");
         assert_eq!(drawn_site(&plan).map(|(s, _)| s), Some(site), "{sheet}");
         assert_eq!(drawn_end(&plan), end, "{sheet}");
         let found = armory_site(&plan, sheet, form.as_deref());
         assert!(found.is_empty(), "{sheet}: {found:?}");
     }
+}
+
+/// The pool test goes red on a generated sheet whose armory is placed off its roll: the county example's spec with the armory moved
+/// to the hall's east end, composed as the pool's is, reads east where its seed rolls west, and the check refuses it (451 T159).
+#[test]
+fn a_generated_sheet_with_its_armory_off_its_roll_is_refused() {
+    let tree = tree();
+    let name = "county-magistracy-example";
+    let spec = format!("pool/magistracies/{name}/{name}.compound.json");
+    let real = std::fs::read_to_string(tree.join(&spec)).unwrap();
+    // the armory room as the spec places it, in the hall's west end bay, and the same room moved into the hall's east half, where it
+    // overlaps the official study: the generator composes overlapping rooms today, and a refusal of them would fail this at `compose`
+    let room = r#"{"kind": "armory", "caption": "armory", "x": 0, "y": 0, "w": 14, "h": 20}"#;
+    let moved = real.replace(room, &room.replace(r#""x": 0,"#, r#""x": 92.5,"#));
+    assert_ne!(moved, real);
+    let scratch = l7r_shared::tempdir::TempDir::new("mode-a-armory-off-roll");
+    let at = scratch.path().join(format!("{name}.compound.json"));
+    std::fs::write(&at, moved).unwrap();
+    let text = crate::sweep::compose(&tree, &at).unwrap();
+    let plan = parse_svg(&text).unwrap();
+    assert_eq!(drawn_site(&plan).map(|(s, _)| s), Some(HALL));
+    assert_eq!(drawn_end(&plan), Some(EAST));
+    let found = armory_site(&plan, name, None);
+    assert_eq!(found.len(), 1, "{found:?}");
+    assert!(found[0].contains("rolls \"west\""), "{found:?}");
 }
 
 /// The three sites read off a sheet, and the check passing each where the seed rolls it.

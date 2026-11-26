@@ -1915,31 +1915,53 @@ engine speed, so no checklist.
 <!-- plan-archive: T153 to T153 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
 <!-- plan-archive: T154 to T154 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T155 to T155 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
-### T159 (<why: the finding or measurement that files it>)
+### T159 (2026-11-22: 451 T154's trial ran the coverage gate in a new worktree and `rust/mode_a` came back 334 passed, 1 failed, NotFound; 2026-11-26: seven pool builders reported the same red "apart" on their full static runs, and two drew the sheets by hand to get past it)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the tests of `rust/mode_a` that read a pool sheet read it as the pool sweep does - a hand sheet as tracked, a declared generated exception composed in process from its tracked `<map>.compound.json` - so none reads a file git ignores. Three test-only files change; nothing that is drawn does.
+  - **Measured first: which tests read a gitignored generated file.** Three steps, each on 2026-11-26.
+    - The files git ignores that a worked tree holds, observed 2026-11-26, method: `git ls-files -o -i --exclude-standard --directory` in the coordinating clone: under `pool/` every `<map>.png` and `.html`, `pool/index.html`, each hamlet's `.driver.json` and `.driver.svg` (and a hamlet's own `.svg`), and the generated magistracy sheets' `.svg` (`ochiba-roundtrip-test`, `county-magistracy-example`), which `.gitignore` re-ignores by name; besides those `research/site/`, `dev/placement-stages/`, `dev/perf-raw/`, caches and `tests/fixtures/rust/fixture/Cargo.lock`.
+    - Every Rust source that names the tree outside its crate, by the rust checks' own definition (`rustc/kept.rs`: `CARGO_MANIFEST_DIR`, `top()`, `toplevel()`), observed 2026-11-26, method: `grep -rn` over `rust/**/*.rs`, each hit read for the path it joins: 69 `CARGO_MANIFEST_DIR` hits and 8 files naming `top()` or `toplevel()`.
+    - Every crate's declared reads (`[package.metadata.l7r] reads`), observed 2026-11-26, method: `grep` over each `Cargo.toml` under `rust/`, each declared path set against the ignored listing above: three crates' reads cover the pool's generated output, `rust/mode_a` and `rust/gate/crates/pool` (`pool/`, `legacy-hand-authored-pool/`) and `rust/gate/crates/checks` (`.`). The other crates' declared paths hold, of that listing, only caches (`__pycache__/` under `scripts/`, `tests/`, `specs/` and `l7r/diagram/`) and the fixture crate's `Cargo.lock`, whose reader (`rust/gate/crates/rustc`) copies three named tracked files; `rust/gate` declares `development-secrets.ini`, which git ignores and a tree may lack.
+    - A test can also reach the tree by a relative path or the working directory, observed 2026-11-26, method: `grep -rnE` for a `"../../` literal and `current_dir()` over `rust/**/*.rs`: no hit joins a path under `pool/`.
+    - The tests of those three crates and of `rust/gate` in a scratch clone of this tree's HEAD that holds no ignored file, measured 2026-11-26 (`git clone` into the scratchpad, the clone's own launcher `scripts/gates/l7r-gate.sh rust test --crate ...` with `L7R_RUST_FRESH=1`): `rust/mode_a` 360 passed, 1 failed - the armory's pool test, `Os { code: 2, kind: NotFound }` at its `read_to_string` - and `rust/gate/crates/pool` 54 passed, `rust/gate/crates/checks` 196 passed, `rust/gate` 8 passed. No other crate was run there: that no other reads generated output rests on the reading above.
+  - **What reads one**, of every test read in (2):
+
+    | test | the ignored file | a fresh tree has it | before | now |
+    |---|---|---|---|---|
+    | `rust/mode_a` `audit::armory::tests::every_pool_magistracy_draws_its_armory_where_its_seed_rolls_it` | the two generated sheets' `.svg` | no | red, NotFound | composes both from their specs |
+    | `rust/mode_a` `pool_sweep::the_pages_and_the_country_shrine_are_drawn_end_to_end` | the same two, behind `svg.is_file()` | no | green either way: four sheets paged in a fresh tree, six in one that drew the two, from whatever text stood on its disk | all six paged from the sweep's text |
+    | `rust/gate/crates/pool` `the_real_pool_is_walked_whole_and_nothing_in_it_is_unclassified`, `the_real_table_names_live_maps_and_covers_every_tier`, `the_real_pools_index_lists_every_map_of_both_trees` | the names of a map folder's files (`.svg`, `.png`, `.html`, a hamlet's `.driver.svg`), listed, never opened | some | green either way: each asserts folders, rows and names, a map's kind read from its tracked spec or sheet | unchanged |
+
+    No other test reads one: the rest of `rust/mode_a`'s real-tree tests read tracked files (the three hand magistracy sheets and the shrine's, every `.notes.md`, the hamlets' and the legacy pool's manifests, the specs, `tests/fixtures/`), and the pool sweep and the one-sheet sweep already composed (449 T211, T252); `rust/gate/crates/checks` and `rust/gate` passed in the scratch clone.
+  - **The fix.** `audit/armory/tests.rs`: the pool test walks the pool once and takes each sheet from `crate::sweep::sheet`, asserting which two were composed. `pool_sweep.rs`: the end-to-end test hands `page::held::outcomes` every pool sheet's path with its swept text, and asserts six sheets, two composed. `page/held.rs` (a `cfg(test)` module): `outcomes` takes `(path, text)` and reads no sheet; the path still names the page and finds the notes beside it.
+  - **Generate, not fixture or skip**: the engine's own entry was already in the crate, and a fixture or a sheet on disk cannot see a spec change. Its cost, measured 2026-11-26 (the built test binary run on a test alone, three runs each, `/usr/bin/time`'s user seconds, which the machine's load of about 250 moves little): the pool test 0.15 to 0.20 s with its two composes, the new red-case test 0.06 to 0.10 s with its compose, the crate's standing test that composes twice (`sweep::tests::a_generated_exception_is_composed_and_a_hand_sheet_read`) 0.14 to 0.22 s, and a test that reads nothing under 0.01 s. So the pool test is over feature 449 FR-008's bar and the red-case test at it, as the standing composing tests are; `make test-times` reports and never refuses. Wall clock on that machine, measured 2026-11-26 (the same runs, five each, the least given): 0.21 s and 0.22 s.
+  - **Red on a real defect**, measured 2026-11-26: with the county example's tracked spec edited so its armory room stands at x 92.5 in place of 0 (the hall's east half) and nothing else, the pool test failed at `drawn_end`, `left: Some("east")`, `right: Some("west")`; the spec restored, it passed. The test as it was read the svg on disk and could not see a spec change until a tree redrew the sheet. The same break is kept as a test, `a_generated_sheet_with_its_armory_off_its_roll_is_refused`: the moved spec composed in a scratch directory, the armory read in the east end, the check's one finding naming the roll.
+  - **The proof**, measured 2026-11-26 (this tree's diff of `rust/` applied to the scratch clone, then `make builder-checks CRATE="rust/mode_a"` there with `L7R_RUST_FRESH=1`, its build cache this tree's): green - 362 passed and none failed, lint clean, format clean - and `git status --ignored` in the clone listed no ignored file before the run or after it, so the tests drew nothing into the tree either. In this tree, which holds the two sheets an earlier builder drew, the same command was green with the same 362, measured 2026-11-26 (`make builder-checks CRATE="rust/mode_a"`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the armory's pool test reads no ignored file | `every_pool_magistracy_draws_its_armory_where_its_seed_rolls_it`, green in a clone with no generated sheet, red there before | n/a: tests only | none | n/a |
+| it still fails on an armory off its roll | `a_generated_sheet_with_its_armory_off_its_roll_is_refused`; the pool test red on the moved spec | n/a: tests only | none | n/a |
+| the end-to-end test pages the same six sheets in every tree | `the_pages_and_the_country_shrine_are_drawn_end_to_end` asserts six sheets, two composed | n/a: tests only | none | n/a |
 
 ### T159 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A tree that has drawn nothing passes `rust/mode_a`'s tests, and a tree that has drawn something is judged on the same sheets.
+2. **The constraints.** Feature 449 T211 and T252 (a generated exception is composed, never read from its svg on disk); the armory site's check and its rolls (449 T303, T367) unchanged; 449 FR-008 (a test's tenth of a second, reported by `make test-times`), which the pool test does not meet (above); the first tier only in a builder's tree.
+3. **Where each comes from.** G: the task line and the coordinating session's brief of 2026-11-26. O: the sweep over the Rust sources, the scratch clone's runs and the timings above.
+4. **Do they describe the world here?** Yes for the armory test, red as the task line says. The task line's "which tests read an ignored file" found a second, which was green and so unreported: the end-to-end test paged whichever sheets a tree's disk held.
+5. **The order.** No dependency.
+6. **The exits.** Green: the first tier green on a clone with no generated sheet, the pool test red on a moved armory. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The scratch clone's run red before and green after, and the pool test red on the moved spec, measured 2026-11-26 (above).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: a gate red in every tree that had not drawn two sheets, observed 2026-11-22 and 2026-11-26, and a test whose subject changed with the tree's disk. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none: the three real-pool tests of `rust/gate/crates/pool` list a folder's ignored files by name and assert nothing that depends on them (the table above), which is not a defect.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: it makes a check's verdict independent of the tree; nothing runs faster.
 
 
 <!-- plan-archive: T160 to T161 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->

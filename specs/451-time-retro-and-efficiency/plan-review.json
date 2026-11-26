@@ -644,9 +644,9 @@
    "declared": "spec-fidelity"
   },
   "### T159 Approach (checklist part A)": {
-   "sha256": "62d6696f0267b3d34ee30f2f4aadaeedfc4341d8ce3a68b2124d72ffd58204c7",
+   "sha256": "9776bf8512be5418e9d6ea60031b59adfda47a240d7f9d7bf133b7b2bb1bd049",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
+   "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
   },
   "### T163 (<why: the finding or measurement that files it>)": {
@@ -2067,6 +2067,12 @@
   },
   "### T104 (the idle-tests suite failed a landing gate on good work, 2026-11-26 16:19Z, `make land` for T281 with two builders' checks beside it: `HOOK TESTS FAILED: idle-tests-hooks.sh`, green on the rerun unchanged; T99 had found two of its cases able to do that, case 6 red in 1 of 64 copies at a load of 133.7 and case 4b red 3 of 34 once, measured 2026-11-21 (T99's `many.sh`); the GM, 2026-11-26: \"I agree with prioritizing the test that fails under load being fixed.\")": {
    "sha256": "e204a734b9eebef413aa68bd46cb744195e52c5114df30979f74ad3283c6c2b5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T159 (2026-11-22: 451 T154's trial ran the coverage gate in a new worktree and `rust/mode_a` came back 334 passed, 1 failed, NotFound; 2026-11-26: seven pool builders reported the same red \"apart\" on their full static runs, and two drew the sheets by hand to get past it)": {
+   "sha256": "a18a4ba076f77be409a4a81d7fc8a8591be383b160c6947dd6ce6828458799e7",
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
@@ -26502,6 +26508,123 @@
      "why": "Raising case 4's upper bound cannot make case 4b red, and the landing suite was also run under load green; the evidence covers what is landing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T159 (2026-11-22: 451 T154's trial ran the coverage gate in a new worktree and `rust/mode_a` came back 334 passed, 1 failed, NotFound; 2026-11-26: seven pool builders reported the same red \"apart\" on their full static runs, and two drew the sheets by hand to get past it)",
+    "### T159 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T159-approach",
+     "summary": "The rust/mode_a tests that read a pool sheet read it as the pool sweep does: a hand sheet as tracked, a declared generated exception composed in process from its tracked <map>.compound.json, so no test reads a gitignored file; three test-only files change, nothing drawn changes.",
+     "class": "within",
+     "why": "Fixes the observed defect the task line names (a gate red in every tree that had not drawn two sheets: rust/mode_a 1 failed NotFound in a fresh tree, observed 2026-11-22 and 2026-11-26) by the rule the crate already follows (449 T211/T252: a generated exception is composed, never read from its svg). Fixing a known defect in the step it is found in is what the GM asked (fix all known bugs as we go). No map, check or roll changes."
+    },
+    {
+     "id": "T159-census",
+     "summary": "Which tests read an ignored file is found by a stated search: git ls-files -o -i of the ignored files, grep over rust/**/*.rs for CARGO_MANIFEST_DIR/top()/toplevel() with each hit read, each Cargo.toml's declared reads, and every declaring crate's tests run in a scratch clone holding no ignored file.",
+     "class": "within",
+     "why": "The enumeration carries its search space and is derived from the mechanism (what a test reads, and what fails when the files are absent - the scratch-clone run), not from a name. Nothing is narrowed by it."
+    },
+    {
+     "id": "T159-end-to-end",
+     "summary": "The end-to-end test the_pages_and_the_country_shrine_are_drawn_end_to_end, green in either tree but paging four or six sheets from whatever stood on disk, is also changed to page all six from the sweep's text and assert six sheets, two composed.",
+     "class": "within",
+     "why": "Same defect class as the task line's (a test whose subject depends on ignored files on disk), found by the census the task asked for; making a check's subject independent of the tree is the fix itself, not unrequested scope. Test-only."
+    },
+    {
+     "id": "T159-held-outcomes",
+     "summary": "page/held.rs (a cfg(test) module): outcomes takes (path, text) and reads no sheet; the path still names the page and finds its notes.",
+     "class": "within",
+     "why": "The mechanism the end-to-end fix needs; test-only, no drawn or shipped behavior changes."
+    },
+    {
+     "id": "T159-generate-not-fixture",
+     "summary": "Generate (compose in process) rather than check in a fixture or skip; the composing tests measured 0.21-0.22 s (least of five, load average near 250), over 449 FR-008's tenth-of-a-second bar as measured there, reported by make test-times and not otherwise addressed.",
+     "class": "within",
+     "why": "Not a narrowing of 451's request or spec, neither of which carries 449 FR-008; weighed against it anyway: a fixture cannot see a spec change (the plan's red-on-a-real-defect run shows the old disk-reading test could not), a skip drops the check, and reading the disk is the defect, so composing is the only form that keeps the check doing its job and obeys 449 T211/T252; the crate's standing composing tests stand at 0.27 s and 0.40 s under the same load, and the timings were taken at load ~250 with no quiet-machine figure, so the over-the-bar state is not established. A test some tenths of a second slower is not a wrong outcome (constitution XIV's defect definition), so nothing known is left."
+    },
+    {
+     "id": "T159-red-case-test",
+     "summary": "A new test a_generated_sheet_with_its_armory_off_its_roll_is_refused keeps the measured break (armory moved to x 92.5 in a scratch compose, refused naming the roll); the pool test shown red on the moved spec and green restored.",
+     "class": "within",
+     "why": "Enforcement of the fix: its only effect is to prove the armory check still fails on an armory off its roll once it reads composed sheets. Serves the request; not unrequested scope."
+    },
+    {
+     "id": "T159-found-and-left",
+     "summary": "The three real-pool tests of rust/gate/crates/pool list ignored files by name and are left unchanged.",
+     "class": "within",
+     "why": "They are green in either tree, assert folders, rows and names with a map's kind read from tracked files, and passed in the scratch clone with no ignored file (54 passed, measured 2026-11-26): a difference from the others' form, not a wrong outcome, so not a defect and nothing known is carried forward."
+    },
+    {
+     "id": "T159-exits-proof",
+     "summary": "Exit green: the first tier green on a clone with no generated sheet (362 passed, lint and format clean, no ignored file before or after) and in this tree; red: recorded and set down, an impossibility claim ruled through make arbiter-ask; one landing, no dependency.",
+     "class": "within",
+     "why": "The done condition measures the task line's goal directly (a tree that has drawn nothing passes rust/mode_a's tests) and narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T159 (2026-11-22: 451 T154's trial ran the coverage gate in a new worktree and `rust/mode_a` came back 334 passed, 1 failed, NotFound; 2026-11-26: seven pool builders reported the same red \"apart\" on their full static runs, and two drew the sheets by hand to get past it)",
+    "### T159 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 compose, never read the ignored svg",
+     "summary": "rust/mode_a's armory pool test takes each pool sheet from crate::sweep::sheet (hand sheet as tracked, generated exception composed from its tracked compound.json), asserting which two were composed",
+     "class": "within",
+     "why": "Fixes the defect the task line names (a gate red in every tree that has not drawn two sheets: a check refusing good work) by the mechanism 449 T211/T252 already require; nothing drawn changes."
+    },
+    {
+     "id": "D2 the end-to-end test pages the sweep's text",
+     "summary": "pool_sweep's end-to-end test hands page::held::outcomes each pool sheet's path with its swept text and asserts six sheets, two composed; outcomes (cfg(test)) takes (path, text) and reads no sheet",
+     "class": "within",
+     "why": "Found by the task's own 'which tests read an ignored file' census: a test whose subject changed with the tree's disk is a check that answers differently on the same code, a defect of the same class, fixed in the task rather than left; test-only signature change."
+    },
+    {
+     "id": "D3 the red-case test",
+     "summary": "a_generated_sheet_with_its_armory_off_its_roll_is_refused: the county example's spec moved, composed in a scratch dir, the check's one finding naming the roll",
+     "class": "within",
+     "why": "Pins that the fixed test still catches what it exists to catch (constitution: a ported or changed check is shown to work by its red case); enforcement of the requested fix, not new behavior."
+    },
+    {
+     "id": "D4 generate, not fixture or skip",
+     "summary": "the generated sheets are composed in the test rather than kept as fixtures or skipped",
+     "class": "within",
+     "why": "A fixture cannot see a spec change (shown by the moved-spec run: the old disk-reading test could not), and a skip drops the two sheets from the check; generating is the only route that keeps the test's purpose."
+    },
+    {
+     "id": "D5 tests over 449 FR-008's tenth of a second",
+     "summary": "the pool test (two composes, 0.15-0.20 s user) lands over FR-008's bar and the red-case test (one compose, 0.06-0.10 s user) at it; make test-times reports, never refuses",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block's own two reasons (the standing composing tests are over too; test-times never refuses) are precedent and weak enforcement and carry no weight. What carries it: the compose is the thing the test exists to exercise, and one compose alone measures 0.06-0.10 s, so no test that judges a generated sheet as the sweep composes it is reliably under the bar; the only sub-bar routes are the disk read 449 T211/T252 forbid or a fixture the moved-spec run shows is blind, so the literal rule would defeat the test's purpose. Ruled per test: the pool test is over on two composes, the red-case test at the bar on one; the end-to-end test is FR-008's own end-to-end exception. The overrun is not a wrong outcome (constitution XIV's defect definition), and the plan states it openly with its measurements."
+    },
+    {
+     "id": "D6 the three rust/gate/crates/pool tests unchanged",
+     "summary": "the real-pool tests that list a folder's ignored files by name are left as they are",
+     "class": "within",
+     "why": "They assert folders, rows and names, a map's kind read from tracked files, and are green in a tree with no ignored file (54 passed in the clean clone); a difference that is not a defect, which fix-all-known-bugs does not reach."
+    },
+    {
+     "id": "D7 the census's reach",
+     "summary": "which crates read generated output rests on the Cargo.toml reads, the CARGO_MANIFEST_DIR/top()/toplevel() and relative-path/current_dir greps, and a clean-clone run of the three reading crates and rust/gate",
+     "class": "within",
+     "why": "The search space is named per step with its method; the one thing not run (other crates) is stated as resting on the reading, and those crates' declared reads hold only caches, a fixture lockfile whose reader copies tracked files, and rust/gate's development-secrets.ini (rust/gate green in the clean clone)."
+    },
+    {
+     "id": "D8 found and left none; performance work no",
+     "summary": "nothing deferred; the task is not classed as performance work",
+     "class": "within",
+     "why": "Nothing the block reports is a defect left: the standing over-bar composing test is a timing difference, not a wrong outcome, and the gate/pool tests pass in a clean tree; the task makes a verdict tree-independent and speeds nothing, so 'no' is the plain reading."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -41676,6 +41799,63 @@
      "summary": "Case 4b's 0-red-in-200 bar is met on the 320 copies run before case 4's bound was raised; the suite as it lands has 64 more copies plus 8 under the stall.",
      "class": "within",
      "why": "Raising case 4's upper bound cannot make case 4b red, and the landing suite was also run under load green; the evidence covers what is landing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T159": {
+   "section_sha256": "f65f8e81c6f1e104ed9f07fa6247709b5112100f8ccb48ecda5896e8c11a479a",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 compose, never read the ignored svg",
+     "summary": "rust/mode_a's armory pool test takes each pool sheet from crate::sweep::sheet (hand sheet as tracked, generated exception composed from its tracked compound.json), asserting which two were composed",
+     "class": "within",
+     "why": "Fixes the defect the task line names (a gate red in every tree that has not drawn two sheets: a check refusing good work) by the mechanism 449 T211/T252 already require; nothing drawn changes."
+    },
+    {
+     "id": "D2 the end-to-end test pages the sweep's text",
+     "summary": "pool_sweep's end-to-end test hands page::held::outcomes each pool sheet's path with its swept text and asserts six sheets, two composed; outcomes (cfg(test)) takes (path, text) and reads no sheet",
+     "class": "within",
+     "why": "Found by the task's own 'which tests read an ignored file' census: a test whose subject changed with the tree's disk is a check that answers differently on the same code, a defect of the same class, fixed in the task rather than left; test-only signature change."
+    },
+    {
+     "id": "D3 the red-case test",
+     "summary": "a_generated_sheet_with_its_armory_off_its_roll_is_refused: the county example's spec moved, composed in a scratch dir, the check's one finding naming the roll",
+     "class": "within",
+     "why": "Pins that the fixed test still catches what it exists to catch (constitution: a ported or changed check is shown to work by its red case); enforcement of the requested fix, not new behavior."
+    },
+    {
+     "id": "D4 generate, not fixture or skip",
+     "summary": "the generated sheets are composed in the test rather than kept as fixtures or skipped",
+     "class": "within",
+     "why": "A fixture cannot see a spec change (shown by the moved-spec run: the old disk-reading test could not), and a skip drops the two sheets from the check; generating is the only route that keeps the test's purpose."
+    },
+    {
+     "id": "D5 tests over 449 FR-008's tenth of a second",
+     "summary": "the pool test (two composes, 0.15-0.20 s user) lands over FR-008's bar and the red-case test (one compose, 0.06-0.10 s user) at it; make test-times reports, never refuses",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block's own two reasons (the standing composing tests are over too; test-times never refuses) are precedent and weak enforcement and carry no weight. What carries it: the compose is the thing the test exists to exercise, and one compose alone measures 0.06-0.10 s, so no test that judges a generated sheet as the sweep composes it is reliably under the bar; the only sub-bar routes are the disk read 449 T211/T252 forbid or a fixture the moved-spec run shows is blind, so the literal rule would defeat the test's purpose. Ruled per test: the pool test is over on two composes, the red-case test at the bar on one; the end-to-end test is FR-008's own end-to-end exception. The overrun is not a wrong outcome (constitution XIV's defect definition), and the plan states it openly with its measurements."
+    },
+    {
+     "id": "D6 the three rust/gate/crates/pool tests unchanged",
+     "summary": "the real-pool tests that list a folder's ignored files by name are left as they are",
+     "class": "within",
+     "why": "They assert folders, rows and names, a map's kind read from tracked files, and are green in a tree with no ignored file (54 passed in the clean clone); a difference that is not a defect, which fix-all-known-bugs does not reach."
+    },
+    {
+     "id": "D7 the census's reach",
+     "summary": "which crates read generated output rests on the Cargo.toml reads, the CARGO_MANIFEST_DIR/top()/toplevel() and relative-path/current_dir greps, and a clean-clone run of the three reading crates and rust/gate",
+     "class": "within",
+     "why": "The search space is named per step with its method; the one thing not run (other crates) is stated as resting on the reading, and those crates' declared reads hold only caches, a fixture lockfile whose reader copies tracked files, and rust/gate's development-secrets.ini (rust/gate green in the clean clone)."
+    },
+    {
+     "id": "D8 found and left none; performance work no",
+     "summary": "nothing deferred; the task is not classed as performance work",
+     "class": "within",
+     "why": "Nothing the block reports is a defect left: the standing over-bar composing test is a timing difference, not a wrong outcome, and the gate/pool tests pass in a clean tree; the task makes a verdict tree-independent and speeds nothing, so 'no' is the plain reading."
     }
    ],
    "verdict": "CLEAR"

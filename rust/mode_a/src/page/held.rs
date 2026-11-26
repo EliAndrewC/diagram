@@ -122,10 +122,10 @@ pub struct Outcomes {
 
 /// The crate's one end-to-end test's share (feature 449 T150): every case that reads the live tree run on it, each succeeding or refusing
 /// as it was written to, and each pool sheet's page written with its picture and id map drawn and its census clean - the Python's own
-/// standing demand of a generator's page. On the sheet's own text: its captions are placed by the labels' Python (the engine port's step
-/// 3), which a Rust test does not run.
+/// standing demand of a generator's page. On the sheet's own text, handed in beside its path (which names the page and finds its notes):
+/// a hand sheet's as tracked, a generated exception's as composed, so no sheet is read from a disk that may not hold it (451 T159).
 #[must_use]
-pub fn outcomes(sheets: &[std::path::PathBuf]) -> Outcomes {
+pub fn outcomes(sheets: &[(&Path, &str)]) -> Outcomes {
     let w = world(&real());
     let mut m = Outcomes::default();
     for case in all_cases(&w).iter().filter(|c| !pinned(c)) {
@@ -139,16 +139,13 @@ pub fn outcomes(sheets: &[std::path::PathBuf]) -> Outcomes {
         let w = &w;
         let handles: Vec<_> = sheets
             .iter()
-            .map(|path| {
-                scope.spawn(move || {
-                    let text = std::fs::read_to_string(path).unwrap();
-                    call::page_sheet(w, path, &text, false).unwrap()
-                })
+            .map(|&(path, text)| {
+                scope.spawn(move || call::page_sheet(w, path, text, false).unwrap())
             })
             .collect();
         handles.into_iter().map(|h| h.join().unwrap()).collect()
     });
-    for (path, page) in sheets.iter().zip(&pages) {
+    for (&(path, _), page) in sheets.iter().zip(&pages) {
         let census = &page["census"]["d"];
         let clean = (
             census[1][1].as_array().map(Vec::len),

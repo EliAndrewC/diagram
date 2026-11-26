@@ -309,7 +309,9 @@ fn the_pool_notes_type_what_their_sheets_draw_and_their_census_blocks_are_fresh(
     crate::census::pool_check::every_census_block_is_its_manifest_s(&tree());
 }
 
-/// FR-008's one end-to-end test (ask:449-T167-realtree): the page writer's cases that read the live tree, and each pool sheet on disk
+/// FR-008's one end-to-end test (ask:449-T167-realtree): the page writer's cases that read the live tree, and every pool sheet - a hand
+/// sheet as tracked, a generated exception as composed here, never the svg a tree may or may not have drawn (451 T159: the test paged
+/// four sheets in a fresh tree and six in one that had drawn the two, reading whatever stood on its disk) -
 /// with its page written, picture and id map drawn and census clean (`page::held::outcomes`, T150); and the country shrine drawn whole by
 /// the command its generator runs (T151), a copy beside this test's world so the pool is untouched, the picture skipped - its census
 /// clean, its placed text the placer's, the tracked sheet among the reads the generation cache is told of. The parse's lockstep held it
@@ -317,15 +319,15 @@ fn the_pool_notes_type_what_their_sheets_draw_and_their_census_blocks_are_fresh(
 #[test]
 fn the_pages_and_the_country_shrine_are_drawn_end_to_end() {
     let tree = tree();
-    let on_disk: Vec<PathBuf> = pool()
+    let sheets: Vec<(&Path, &str)> = pool()
         .iter()
-        .filter(|s| s.svg.is_file())
-        .map(|s| s.svg.clone())
+        .map(|s| (s.svg.as_path(), s.text.as_str()))
         .collect();
-    assert!(on_disk.len() >= 4);
-    let writer = crate::page::held::outcomes(&on_disk);
+    let generated = pool().iter().filter(|s| s.generated).count();
+    assert_eq!((sheets.len() >= 6, generated), (true, 2));
+    let writer = crate::page::held::outcomes(&sheets);
     let held = (writer.pages, writer.cases > 200, writer.refusals > 0);
-    assert_eq!(held, (on_disk.len(), true, true));
+    assert_eq!(held, (sheets.len(), true, true));
     let dir = l7r_shared::tempdir::TempDir::new("mode-a-end-to-end");
     let shrine = dir.path().join("hoshigaoka-shrine.svg");
     let tracked = tree.join("pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg");
