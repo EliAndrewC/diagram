@@ -36,6 +36,9 @@ three such tasks reached the context cap before closing: T285, T298, T316).
 6a. T325 one feature set for a family's test and coverage builds (the one place compile time is spent twice: 17 of 75
     compiler runs after a core change) - files: `rust/gate/crates/rustc`.
 6b. T321 the bounded load helper - before any further load-reproduction task (T314, T329).
+6c. T334 a builder is dispatched through the tooling, which writes the standing part of its brief and checks its shape -
+    four briefs broke the sizing rule on 2026-11-26 with nothing refusing. A mechanism: two builders. files: `rust/guard`
+    (a dispatch check), `rust/gate/crates/task`, `scripts/container/builder-brief.md`.
 7. T308 the second review round's mechanical causes removed at `make decide`, and the review's wait put to use; the tooling's
    one-tier order nudge retired. files: `rust/gate/crates/plan`, `rust/guard` static-runs order.
 8. T313 the tooling keeps the pool full (this queue read by a check at a builder's end and at Stop). files: `rust/guard` Stop
