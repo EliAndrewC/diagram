@@ -914,3 +914,44 @@ fn ids_in_a_clause_naming_another_feature_are_that_feature_s() {
     let mine = cited_of("T14", "D3 and FR-002 of feature 999.\n");
     assert!(mine.contains("D3 - the well.") && mine.contains("its lane") && !mine.contains("<!--"));
 }
+
+/// The bundle directory a dispatch prompt names.
+fn bundle_of(prompt: &str) -> std::path::PathBuf {
+    let manifest = prompt.split("read ").nth(1).unwrap();
+    let manifest = manifest.split(" and the files").next().unwrap();
+    Path::new(manifest).parent().unwrap().to_owned()
+}
+
+/// TWO TREES, ONE BUNDLES DIRECTORY (451 T271): two worktrees of one feature owe the same changed blocks whenever their plans
+/// agree, and the second `make plan-delta` rewrote the first's bundle - its tree line and recording command the other tree's - under
+/// the first's reviewer. The changed-blocks bundle is the tree's; a task's own bundle is its task's, one builder a task.
+#[test]
+fn two_trees_owing_the_same_blocks_get_a_bundle_each_and_one_tree_keeps_its_own() {
+    let ((one, dir_one), (two, dir_two)) = (feature(), feature());
+    let out = scratch("out");
+    let keys = ["## Notes".to_owned()];
+    let first = bundle_of(&delta_prompt(&dir_one, &out, &keys).unwrap());
+    let second = bundle_of(&delta_prompt(&dir_two, &out, &keys).unwrap());
+    assert_ne!(first, second);
+    // the first tree's bundle still names the first tree, the second's the second
+    for (root, bundle) in [(&one, &first), (&two, &second)] {
+        let tree = std::fs::canonicalize(root).unwrap().display().to_string();
+        assert!(read(bundle, "MANIFEST.md").contains(&format!("Built from the tree `{tree}`")));
+    }
+    // one tree's rebuild is the same directory, its name the shape every reader of it matches: `-blocks-<tasks>-<8 hex>`
+    assert_eq!(
+        bundle_of(&delta_prompt(&dir_one, &out, &keys).unwrap()),
+        first
+    );
+    let name = first.file_name().unwrap().to_string_lossy().into_owned();
+    let hex = name.strip_prefix("plan-999-x-blocks-plan-").unwrap();
+    let shaped = hex.len() == 8 && hex.chars().all(|c| c.is_ascii_hexdigit());
+    assert!(shaped, "{name}");
+    // a task's own bundle is named by its task in either tree: only the same task decided in two trees shares it
+    let task_one = bundle_of(&task_prompt(&dir_one, &out, "T02").unwrap());
+    assert_eq!(
+        task_one,
+        bundle_of(&task_prompt(&dir_two, &out, "T02").unwrap())
+    );
+    assert!(task_one.ends_with("plan-999-x-T02"));
+}

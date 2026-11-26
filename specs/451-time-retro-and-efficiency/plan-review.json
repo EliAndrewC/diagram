@@ -1920,6 +1920,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
+  },
+  "### T271 (the 2026-11-25 parallel trials, `specs/449-rust-codebase/port-talk-agenda.md` item 1: builders in worktrees of one feature write their plan review bundles under one directory, `/tmp/l7r-check`, and their scratch files into one session scratchpad)": {
+   "sha256": "a664288971b198fcbb1471440761e1c5f1144ea50ee43411b0976c062e5e2c20",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T271 Approach (checklist part A)": {
+   "sha256": "3895f7154fba7eda4e36cfacf6b1e1ab82b40ee19a95907b6b1ef264e3cb798c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -24350,6 +24362,41 @@
      "why": "These tests enforce the requested behavior and match the brief's red-first, race-free requirement."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T271 (the 2026-11-25 parallel trials, `specs/449-rust-codebase/port-talk-agenda.md` item 1: builders in worktrees of one feature write their plan review bundles under one directory, `/tmp/l7r-check`, and their scratch files into one session scratchpad)",
+    "### T271 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 changed-blocks bundle keyed by tree",
+     "summary": "delta_prompt hashes the tree's path (tree_of, 451 T257) with the owed blocks' digests into the 8 hex; the name keeps its shape blocks-<tasks>-<8 hex>; one tree's rebuild of the same blocks keeps its directory; pinned red-first by two_trees_owing_the_same_blocks_get_a_bundle_each_and_one_tree_keeps_its_own",
+     "class": "within",
+     "why": "This is the task line's fix for the collision the trials hit and the block reproduced on HEAD (two fixture trees, one directory, the second tree's MANIFEST and make -C command). It serves the GM's 2026-11-25 'a review recording in its own tree' fix before parallel builders. Keeping the name shape is a design choice inside the task. Aside, not blocking: the reader census grep covers *.rs under rust only, so a Makefile or script that matches the name as a string was not searched. The kept shape and the test make this a note, not a finding."
+    },
+    {
+     "id": "D2 task's own bundle left un-keyed",
+     "summary": "plan-<feature>-<task> (make decide) is not keyed by tree; the plan labels this narrower than the task line's 'key the plan review bundle by tree'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block's stated reason, that keying it would change the -T<n> shape the plan hold reads, is a cost argument and does not carry this ruling. The ruling rests on a different premise: leaving the name alone leaves no defect. The purpose of the task and of the GM's 2026-11-25 fix ('a review recording in its own tree') is that no reviewer reads a bundle another tree rewrote, or records in the wrong tree. That bundle's name already carries its task. Its MANIFEST already names its tree (T257), as this very bundle's does: diagram-backlog-t271. Each builder works in a worktree of its own task. The GM approved 'a started-task mark per task' (2026-11-25, the same four fixes) so that one task is not started twice. So two trees can only rebuild one task's own bundle if one task is decided in two trees at once, and that is the case the started mark exists to prevent. The block states 'a task has one builder' without measuring it. It holds as far as the started mark does, and no GM word asks for more. The task line's 'by tree' wording is the session's own, not the GM's. If a second tree is ever found deciding a builder's task (the coordinating clone, for example), that is a defect and would need this reopened."
+    },
+    {
+     "id": "D3 scratch-file collision fixed by a brief line",
+     "summary": "scripts/container/builder-brief.md's pasted block gains one line: prefix every scratch file with the task id; a document, no test",
+     "class": "within",
+     "why": "It answers the task line's second half (scratch files in one session scratchpad). The GM's 2026-11-19 'real enforcement and not just instructions' has as its antecedent the six improvements and four ideas approved that day, which FR-012 scopes to named refusals. Read plainly, it does not reach this 2026-11-25 trials task, and stretching it to T271 would be completing the GM's thought. For the caller to see, not blocking: goal 1 says 'no builder's scratch file overwrites another's', but the mechanism is an instruction. A builder that ignores it can still overwrite another's file, so the goal is aimed at, not guaranteed."
+    },
+    {
+     "id": "D4 not classed as performance work",
+     "summary": "'Performance work? no: it removes a collision between two builders; nothing runs faster'",
+     "class": "within",
+     "why": "The GM's 2026-11-20 words make performance work and measurement work go first. Fixing a correctness collision in review plumbing is neither, so this classification does not move T271 in FR-013's order against anything the GM asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -38624,6 +38671,39 @@
      "summary": "Red first, with the script made non-executable and then missing (no race), then exit 7, then kill -9; plus a tool.rs test of ask_started; green through make closing-checks T=T268.",
      "class": "within",
      "why": "These tests enforce the requested behavior and match the brief's red-first, race-free requirement."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T271": {
+   "section_sha256": "0a9555e5005ef50e61e6f85051afe1346514f88115eefeb98cd4cacd631e08ee",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 changed-blocks bundle keyed by tree",
+     "summary": "delta_prompt hashes the tree's path (tree_of, 451 T257) with the owed blocks' digests into the 8 hex; the name keeps its shape blocks-<tasks>-<8 hex>; one tree's rebuild of the same blocks keeps its directory; pinned red-first by two_trees_owing_the_same_blocks_get_a_bundle_each_and_one_tree_keeps_its_own",
+     "class": "within",
+     "why": "This is the task line's fix for the collision the trials hit and the block reproduced on HEAD (two fixture trees, one directory, the second tree's MANIFEST and make -C command). It serves the GM's 2026-11-25 'a review recording in its own tree' fix before parallel builders. Keeping the name shape is a design choice inside the task. Aside, not blocking: the reader census grep covers *.rs under rust only, so a Makefile or script that matches the name as a string was not searched. The kept shape and the test make this a note, not a finding."
+    },
+    {
+     "id": "D2 task's own bundle left un-keyed",
+     "summary": "plan-<feature>-<task> (make decide) is not keyed by tree; the plan labels this narrower than the task line's 'key the plan review bundle by tree'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block's stated reason, that keying it would change the -T<n> shape the plan hold reads, is a cost argument and does not carry this ruling. The ruling rests on a different premise: leaving the name alone leaves no defect. The purpose of the task and of the GM's 2026-11-25 fix ('a review recording in its own tree') is that no reviewer reads a bundle another tree rewrote, or records in the wrong tree. That bundle's name already carries its task. Its MANIFEST already names its tree (T257), as this very bundle's does: diagram-backlog-t271. Each builder works in a worktree of its own task. The GM approved 'a started-task mark per task' (2026-11-25, the same four fixes) so that one task is not started twice. So two trees can only rebuild one task's own bundle if one task is decided in two trees at once, and that is the case the started mark exists to prevent. The block states 'a task has one builder' without measuring it. It holds as far as the started mark does, and no GM word asks for more. The task line's 'by tree' wording is the session's own, not the GM's. If a second tree is ever found deciding a builder's task (the coordinating clone, for example), that is a defect and would need this reopened."
+    },
+    {
+     "id": "D3 scratch-file collision fixed by a brief line",
+     "summary": "scripts/container/builder-brief.md's pasted block gains one line: prefix every scratch file with the task id; a document, no test",
+     "class": "within",
+     "why": "It answers the task line's second half (scratch files in one session scratchpad). The GM's 2026-11-19 'real enforcement and not just instructions' has as its antecedent the six improvements and four ideas approved that day, which FR-012 scopes to named refusals. Read plainly, it does not reach this 2026-11-25 trials task, and stretching it to T271 would be completing the GM's thought. For the caller to see, not blocking: goal 1 says 'no builder's scratch file overwrites another's', but the mechanism is an instruction. A builder that ignores it can still overwrite another's file, so the goal is aimed at, not guaranteed."
+    },
+    {
+     "id": "D4 not classed as performance work",
+     "summary": "'Performance work? no: it removes a collision between two builders; nothing runs faster'",
+     "class": "within",
+     "why": "The GM's 2026-11-20 words make performance work and measurement work go first. Fixing a correctness collision in review plumbing is neither, so this classification does not move T271 in FR-013's order against anything the GM asked."
     }
    ],
    "verdict": "CLEAR"

@@ -935,7 +935,12 @@ pub(super) fn delta_prompt(
     } else {
         tasks.into_iter().collect::<Vec<_>>().join("-")
     };
-    let name = format!("blocks-{label}-{}", &digest(shas.as_bytes())[..8]);
+    // THE TREE'S OWN DIRECTORY (451 T271): every worktree writes under one bundles root, and two trees whose plans agree owe the
+    // same blocks at the same digests - the second `make plan-delta` rewrote the first's bundle, its tree line and recording command
+    // the other tree's, under the first's reviewer. The tree is hashed with the blocks, so the name keeps its shape
+    // (`blocks-<tasks>-<8 hex>`) for the readers that match it: the plan hold, the plan-round cap, the ledger's subject.
+    let keyed = format!("{shas}\n{}", tree_of(spec_dir));
+    let name = format!("blocks-{label}-{}", &digest(keyed.as_bytes())[..8]);
     let kept: Vec<(String, String, String)> = earlier
         .into_iter()
         .filter(|(_, t, _)| !t.is_empty())
