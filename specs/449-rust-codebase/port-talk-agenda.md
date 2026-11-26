@@ -18,7 +18,7 @@ switch, and the parallel-builder fixes (451 T254-T257).
 
 **Pre-approved 2026-11-25 (the GM: "Yes I pre-approve the items in the table above, so that you can close them out after
 implementing whatever the measurements say make sense."):** item 6 (adopt building a new feature's first task while its
-reviews run); items 1-5 and 7 (the standard builder count is the largest that the 1-4 test shows still shortens total time,
+reviews run - narrowed to the plan review by spec-fidelity's ruling, see item 6); items 1-5 and 7 (the standard builder count is the largest that the 1-4 test shows still shortens total time,
 peak memory under a safety margin); item 9 and the disk levers (adopt each lever whose measurement shows no build or test time
 lost beyond noise); item 12 (the cap stays at 300k; builders stay unless the coordinator doing the work itself costs fewer
 minutes and tokens per landed task); item 14 (the builder report format if it shortens reports with nothing needed lost; the
@@ -85,6 +85,9 @@ docs/process-decisions.md, and an option the measurement declines gets its decli
    read, 6 asked for a measurement, 13 for wording or form only, 45 for code that built on what was there, and 5 (about 7%,
    all of low or medium confidence: 451 T79, T186, T46, T102, T197) reversed built work; 18 more could not be read (the
    verdict files are overwritten). So building before the review clears would rarely be thrown away.
+   Decided 2026-11-25 (docs/process-decisions.md, "Building begins before a new feature's plan review returns"): adopted for
+   the PLAN review, once the spec is FAITHFUL. Spec-fidelity ruled the GM's words and the measurement cover the plan review
+   only; building during the SPEC review would amend constitution XVI and stays an open question for the GM.
 
 Items 1-4 share one root: one writable clone per session (docs/session-clones.md).
 7. Every other block that could overlap with the next round of work (the GM: "places where we currently block on things where
@@ -166,6 +169,9 @@ Items 1-4 share one root: one writable clone per session (docs/session-clones.md
     0.3-0.4M weighted tokens against 0.65M for a small builder and finishes in under a minute; past 5 minutes or several
     files it costs about 1.5M, where a builder's small context wins. Samples are unmatched (the tasks differ by arm).
     Three-way measurement (the GM, 2026-11-25: "we should make sure to measure whether the complexity of the handoffs actually saves time and/or tokens relative to either letting the builders grow or not using them in the first place"): three arms, each in minutes (blocking and total) and tokens per landed task, from the task time breakdown and the transcripts: (a) builders capped at 300k with handoffs (today's way); (b) builders let grow past the cap (no handoff); (c) no builders - the coordinating session builds in its own context. Arm (a) against (b) has a first measurement (2026-11-25: time a wash, tokens favor the handoff); arm (c) has none, and its cost lands on the coordinator's own context, re-read every turn. Also the handoff's own overhead: writing the handoff, the brief, the coordinator's reading of the report.
+    Decided 2026-11-25 (docs/process-decisions.md, "The builders' context cap stays at 300k, builders stay, and briefs are
+    sized"): the cap stays; builders stay; scripts/container/builder-brief.md carries the sizing rule (at most three jobs a
+    brief, a split past about three files, one-turn edits the coordinating session's own).
 
 13. An audit register for every optimization and procedure that costs time or tokens (the GM: "when we make this kind of
     optimization, then we should be documenting the logic behind it, the measurements that we took, and then also crucially
