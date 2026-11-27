@@ -50,3 +50,13 @@ to 451 is warned off whole reads.
   open here with its 451 number; `make speckit-todo` lists 451 as closed.
 - **SC-002** (FR-004): T536's before figure is recorded before T537 lands, and after it no reader named there reads a record whole.
 - **SC-003** (FR-005): when the process-reviewer feature is filed, its tasks named there are moved with a pointer.
+
+## Review history
+
+- 2026-11-27, round 1 (spec-fidelity, MODE 2 against request.md): CHANGES REQUIRED, 7 items - T519 and T527 into the closing set;
+  T535 kept, T533 and T534 moved, the set fixed for new filings; the 461 routing by part; the split and its readers' measurement
+  carried (451 T536, T537); the closing set credited to the session's approved list; the proposal and the split message recorded;
+  the Why's labels.
+- 2026-11-27, round 2 (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 1 item - the proposal's two cut sentences restored, FR-004's
+  reason for running the measurement in 451, the split message quoted whole.
+- 2026-11-27, round 3 (spec-fidelity-verify, MODE 3): FAITHFUL.
