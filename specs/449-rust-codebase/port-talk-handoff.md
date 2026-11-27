@@ -17,10 +17,14 @@ before they cost a gate.
 **Landed after those:** T478 T473 T353 T360 T482 T475 T479 T481 T310 T483 T480 T386 T485 T447 (fabc9c464e, about 13:30Z) -
 99 tasks on main overnight in all, in six batches.
 
-**Still building at about 13:30Z:** T387 (the plan hold's re-save of the 3 MB check state on every Bash call), T388 (where an
-Agent call's hooks spend their 150 ms - its first trace: a switched-off step-back check reading the whole 50 MB event log on
-every Agent call). Open and unbuilt in 451 besides those: T470, T486, T487, T363, and the GM-held T302, T405, T307 part 3, T321,
-T415, T308, T401, T354.
+**Landed after those:** T387 T388 T487 T486 (fccfc1fc72), then T491 T493 T489 T488 T495 T492 (32f1d09283) - 109 tasks on main
+in eight batches.
+
+**Still building:** T497 with T494 (review-round's one parse a dispatch; the guards' gate calls' launcher walk). Open and unbuilt
+in 451 besides: T470, T490, T496, T498, T499 (how much of the plan builders read into context), T363, and the GM-held T302, T405,
+T307 part 3, T321, T415, T308, T401, T354. T487 found that the two refused ticks of T475 earlier were an archive that left
+T475's Approach behind, not the removed verdict the session first blamed; T495 closed the merge tie that let a carry overwrite
+its verdict.
 
 **Two more of my mistakes, besides those listed below:** a red-gate trigger id derived by hand, 3 s off the guard's (an arbiter
 ruling under it discharged nothing; T477 now refuses such an id), and three coverage repairs reshaped without running coverage,
