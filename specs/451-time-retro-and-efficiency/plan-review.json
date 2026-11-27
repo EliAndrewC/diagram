@@ -2551,26 +2551,14 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T296 (<why: the finding or measurement that files it>)": {
-   "sha256": "7e5f41087c5a53e9a89170a6e4761f648205807a978c8e574a5cfafda404b531",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T296 Approach (checklist part A)": {
-   "sha256": "5357198c8244fcc9614410a06097ade99df3c514c215d8270a0f9e3fe304f62a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T297 (<why: the finding or measurement that files it>)": {
-   "sha256": "442be54d7aa1e2d57e7440a9131bafb2171678704257e16b41932e7ce90384dc",
+   "sha256": "4119af79e8941ae95a916e199ea60a49fed7d5d4d81e40ba32ad4881f056959e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### T297 Approach (checklist part A)": {
-   "sha256": "eee90798a87fcd06efb8a2b5bc70e627a06f9bc8de4a71ebc445e02c3b710b84",
+   "sha256": "6719657ad3ee3a06e051a334af4d979c7855634ba3ede718f496628d10301c99",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3933,6 +3921,18 @@
   },
   "### T446 Approach (checklist part A)": {
    "sha256": "f151262785cd772f04acbe146c760f3e86c535b4f3304093ac7324b7ee094efc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T296 (451 T285's report left four follow-ups for the builder pool: seed a new tree's build cache from a free warm one, a `make builder-tree-hold`, the full `make hooks-test` a guard-message rewording costs, and `make carry COMMITS=a..b`)": {
+   "sha256": "5cebdb23688bbe74f785cc62832e28a9d72b54b32ac69f1a78dad63daeaa4b06",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T297 (2026-11-26: two builders dispatched at once on tasks that edited the same files could not land independently - 451 T292 was held by T285 over the Makefile, `docs/guards.md` and the builder brief, the second held until the first landed)": {
+   "sha256": "bffca7a1d385758edb3cf307fe5b4dd98ce716f4766707ec7ce15e8272fb6026",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -35229,6 +35229,72 @@
      "summary": "both T446 blocks are the unfilled task-add template",
      "class": "within",
      "why": "They decide nothing, so no ruling is owed. They are owed review when filled, since their digests will change."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T296 (451 T285's report left four follow-ups for the builder pool: seed a new tree's build cache from a free warm one, a `make builder-tree-hold`, the full `make hooks-test` a guard-message rewording costs, and `make carry COMMITS=a..b`)",
+    "### T296 Approach (checklist part A)",
+    "### T297 (2026-11-26: two builders dispatched at once on tasks that edited the same files could not land independently - 451 T292 was held by T285 over the Makefile, `docs/guards.md` and the builder brief, the second held until the first landed)",
+    "### T297 Approach (checklist part A)",
+    "(removed) ### T296 (<why: the finding or measurement that files it>)",
+    "(removed) ### T297 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T296 DECISION (a)",
+     "summary": "Seeding a new pool tree's build cache from a warm one is declined, with its measurement (260.1 s cold vs 187.9 s seeded) and a reopen condition",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The follow-up asks to seed from a FREE warm tree. The block says make_cold is reached only when take found no free tree, so a free donor cannot exist at the moment a seed would run. A seed would copy a held tree's live cache, and its tool/ could carry a held tree's uncommitted sources. That makes the literal ask impossible in the one case it targets. Separately, one cold tree in about 35 hours of pool life makes the measured saving negligible against the request's purpose of throughput. The disk clause (3.3 GB against a 100 GB budget) is NOT relied on, because the GM's 2026-11-26 principle puts time saved above disk usage. The decline stands without that clause. The reasoning, figures and reopen condition are recorded, as the GM's 2026-11-25 words on declined decisions ask."
+    },
+    {
+     "id": "T296 DECISION (b)",
+     "summary": "make builder-tree-hold TREE= T= is declined: every way a hold is made or ended already has a command, and the pool log shows 0 states needing a hand edit",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The ground is purpose, not simplicity or cost. A hold command exists to make or end a pool state no other command can. The block lists a command for every such state (take, reuse, release, done, land, adopt). Read whole, the log shows none needing a hand edit, and the one case left (a hold released by mistake) is already refused by take. The GM's 2026-11-26 T285 words ask that the tooling perform the correct behavior without room for a mistake, and that is already met. The reopen condition is recorded."
+    },
+    {
+     "id": "T296 DECISION (c)",
+     "summary": "The full make hooks-test a guard-message rewording costs is left to open task 451 T338, which covers it whole",
+     "class": "within",
+     "why": "Nothing is dropped: the follow-up stays owed in the feature, carried whole by T338 (open, as the block states), with a reopen condition if T338 is withdrawn unbuilt."
+    },
+    {
+     "id": "T296 DECISION (d)",
+     "summary": "make carry COMMITS=a..b is declined: since T394 a builder's work is one done commit on its own base, so no a..b chain exists; one commit is carried by COMMIT= (T397 b), and several at landing by T397 (c), still open",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Since T394 a range names nothing that exists: done commits are siblings, never a chain. The need behind the range, carrying several tasks' work, is kept whole in open task T397 (c), as the block states. So no part of the request's purpose is cut. The reopen condition (work landing as a chain again) is recorded."
+    },
+    {
+     "id": "T296 found-and-left and performance classing",
+     "summary": "The seeded arm's unexplained 64.4 s land test run is left with no item since nothing seeds a cache; the task is classed as performance work as a measurement task",
+     "class": "within",
+     "why": "Nothing in the tooling seeds a cache, so the anomaly affects no dispatch and is not a defect by constitution XIV. The GM's 2026-11-20 words count a measurement task as performance work."
+    },
+    {
+     "id": "T297 first half, queue path",
+     "summary": "Naming file overlap at dispatch is built inside 451 T313's queue commands (make builder-next, make builder-done's first step), shown by T313's builder_queue tests; T297's box is ticked at T313's landing or after it",
+     "class": "within",
+     "why": "This is the asked behavior, built in the queue the GM asked the tooling to enforce (2026-11-26, T313). Ordering T297's tick after T313's landing keeps the box honest."
+    },
+    {
+     "id": "T297 first half, hand handout deferred to T408",
+     "summary": "A handout made outside make builder-next (make builder-tree, or make builder-brief T= picked by hand) names no overlap; this is left to filed task T408, which lands before T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block itself calls this path the task's own incident, so closing T297 leaves part of its first half unbuilt. The ground is FR-009's deferral form, not 'a build of its own': the item states why, names its filed task T408 and its order ('lands before T302'). The work stays owed in the feature and is not dropped. T408's filing and T313's DEVIATION are as the block states."
+    },
+    {
+     "id": "T297 second half",
+     "summary": "How a message to a builder in mid-work is delivered is measured once (220 of 229 sends located, none lost, delays over 60 s all advisor calls), its rule written into the builder brief, and no lever filed",
+     "class": "within",
+     "why": "This is the asked measurement, and the rule is placed in the brief's one copy. The GM's 2026-11-20 words count it as performance work. No lever is filed because the record shows no loss, so nothing asked is cut. 'None lost' with 9 of 229 sends unlocated is as the record states."
     }
    ]
   }

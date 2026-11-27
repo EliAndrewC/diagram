@@ -3056,58 +3056,68 @@ engine speed, so no checklist.
 <!-- plan-archive: T295 to T281 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T295 to T295 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 
-### T296 (<why: the finding or measurement that files it>)
+### T296 (451 T285's report left four follow-ups for the builder pool: seed a new tree's build cache from a free warm one, a `make builder-tree-hold`, the full `make hooks-test` a guard-message rewording costs, and `make carry COMMITS=a..b`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: no source changed. The build half judged each follow-up against what has landed since 451 T285 and built none; its handoff (`<the clone's git dir>/l7r-handoffs/T296-build.md`) holds the evidence, and every figure below is the handoff's. Each follow-up's disposition is a DECISION.
+  - **DECISION (a): seeding a new pool tree's build cache from a warm one is DECLINED** (label: measured, declined). Measured 2026-11-27 (01:10-01:18 UTC, `make builder-checks CRATE="rust/gate/crates/task rust/gate/crates/land"` in diagram-backlog-t271 with `L7R_RUST_FRESH=1` and `L7R_GATE_TARGET` and `CARGO_TARGET_DIR` set to a scratch target, one arm each): COLD, an empty target, 260.1 s, green, and SEEDED from diagram-backlog-t270's `debug/` and `tool/` (no `incremental/`, locks, run records or `cover-*`), 11.9 s to copy 3.3 GB and 176.0 s to build, 187.9 s in all, green - 72 s saved. The seeded arm's land crate test run took 64.4 s against 2.4 s cold, its cause not established (load alone does not explain it), and were it noise the saving would be at most about 135 s, measured 2026-11-27 (the build half's two `make builder-checks` arms). Only the registry crates' share can be saved, since the workspace crates rebuild at a new path, 66.5 s and 41.7 s, measured 2026-11-26 (T285's own, `/usr/bin/time` on its cargo builds after `git worktree move`, `plan-done.md` under "### T285"). Why it does not pay: a cold tree is rare - ONE `make` event in `builder-pool.log` over the pool's life of about 35 hours (diagram-backlog-b1, 2026-11-26T20:38:58Z), the pool at its cap of 4 since, observed 2026-11-27, method: the log read whole; there is NO FREE DONOR when one is made, since `make_cold` is reached only when `take` found no free tree, so a seed would copy a held tree's live cache; a seed of `tool/` could run a donor's `l7r-rust` built from a held tree's uncommitted sources (the tool is rebuilt only when its sources are newer), so `tool/` would have to be left out, which shrinks the saving; and each seed costs 3.3 GB more where the clone's build directories already hold about 205 GB against a 100 GB budget, observed 2026-11-27, method: `du -sh`. The cold figure the task rests on, a cold tree's first closing checks at 14 to 30 minutes, measured 2026-11-26 (T285's heading in `plan-done.md`, from `docs/process-decisions.md`, "Two code builders at once"), was for closing checks with coverage, which builders no longer run (two tiers, 451 T308 and T381). What would reopen it: the pool's cap raised, or trees dropped routinely, so that cold trees become common.
+  - **DECISION (b): `make builder-tree-hold TREE= T=` is DECLINED** (label: tooling convention). Every way a hold is made or ended has a command: take (`make builder-tree`, and `make builder-brief` through it), reuse (`take` returns the tree a task already holds), release (`make builder-tree-release`, `make builder-done`, `make land` and `make land-batch`, and the free at the next handout for ticked tasks), and an unregistered tree held (`make builder-tree-adopt`). The pool's log holds 3 adopt, 71 take, 70 release, 29 done, 1 landed and 0 discard events and no state needing a hand edit - 0 hand-explained states, observed 2026-11-27, method: `builder-pool.log` read whole by the build half; the three tasks taken on two trees (T304, T300, T307) each followed a deliberate release or a `done`, and T300's take and release in one minute was a mistaken take freed at once. A successor in the same tree is covered both ways: an uncommitted build half keeps its hold until the task lands, and after `make builder-done` the carry and `handout_waits` (451 T398) make any free tree right. The one case left, a hold released by mistake while its builder works, never happened, and `take` already refuses such a tree for its foreign work. What would reopen it: a state of the pool that no command can make or end, met in the log.
+  - **DECISION (c): the full `make hooks-test` a guard-message rewording costs is LEFT TO 451 T338** (label: tooling convention). T338 is the open task for it: a target that renders one guard's suite into the tree's message store, named in the first tier, and where a message built in Rust with no suite rendering is caught. Its line covers this follow-up whole, so nothing of it is built or filed here. What would reopen it here: T338 withdrawn without its build.
+  - **DECISION (d): `make carry COMMITS=a..b` is DECLINED** (label: tooling convention). Since 451 T394 a builder's work is ONE done commit: `make builder-done` commits everything once, a bundle too, keeps it under `refs/l7r/done/<feature>-<task>`, and refuses a second while one waits uncarried, so a tree never holds two in a row. Each done commit stands on its own base, the clone's HEAD at its handout, so several tasks' done commits are siblings and never an `a..b` chain a range could name; builders commit nothing else. `make carry COMMIT=<sha>` alone (451 T397 (b), built) is the whole need of one commit. Carrying several tasks' done commits in one go at landing is 451 T397 (c), still open. What would reopen it: a builder's work landing as a chain of commits again.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| no code changed: four follow-ups judged, none built, the evidence in the build half's handoff | n/a: nothing fixed | n/a: tooling | none | n/a |
 
 ### T296 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** Each of T285's four follow-ups is built only where it still pays against the pool as it now runs, and the box closes with the reason for each.
+2. **The constraints.** The pool's registry and log are 451 T285's; a done commit and its ref are 451 T394's and T397's; the two tiers (451 T308, T381) set what a builder runs; a lever priced is filed or declined with its figures (the builder brief, 451 T289).
+3. **Where each comes from.** O: the build half's measurement of 2026-11-27 and its reading of `builder-pool.log`. R: T285's section in `plan-done.md`. G: the GM's words of 2026-11-20 in `request.md`, which count a measurement as performance work.
+4. **Do they describe the world here?** Yes: the measurement built t271's sources at t271's path against t270's artifacts, and the seeded target's 0.9 GB growth (4.2 GB from 3.3 GB) shows the workspace crates rebuilding as they would in a new tree, measured 2026-11-27 (the build half's handoff, the seeded arm's target size). The cold arm is slightly pessimistic, since `make_cold` already builds the guard into `tool/`.
+5. **The order.** After 451 T285 (the pool), T394 (one done commit) and T397 (b) (`COMMIT=` alone); beside T338 and T397 (c), which hold (c) and (d)'s remainder.
+6. **The exits.** Green: each follow-up built, declined with its figures or pointed at its open home. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing, of this section.
+9. **Done, measured.** All four ruled: (a) 260.1 s cold against 187.9 s seeded, measured 2026-11-27 (the two `make builder-checks` arms above, both green), with one cold tree in the pool's life; (b) 0 hand-explained states in the pool's log, observed 2026-11-27, method: `builder-pool.log` read whole; (c) at T338; (d) no range exists since T394.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing is fixed here: no source changes. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the seeded arm's unexplained land test run (DECISION (a)) has no visible effect on any dispatch, since nothing seeds a cache.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
 
 
-### T297 (<why: the finding or measurement that files it>)
+### T297 (2026-11-26: two builders dispatched at once on tasks that edited the same files could not land independently - 451 T292 was held by T285 over the Makefile, `docs/guards.md` and the builder brief, the second held until the first landed)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: no source changed by this section. The task has two halves, each done elsewhere or by its own record; this section states both and closes the box.
+  - **DECISION, the first half - name the overlap at dispatch - was BUILT INSIDE 451 T313** (label: tooling convention). T313's section, "DECISION, the overlap rule (T297's first half)": crates and files are a single list of paths, and a pair of entries overlaps where a path of either equals or lies under a path of the other by whole components, asked against the entries in flight only; `make builder-next`, and `make builder-done`'s first step, name the next READY entry of `specs/<feature>/queue.txt` whose crates and files overlap none in flight, and each entry passed over with the in-flight task it overlaps (`rust/guard/shared/src/builder_queue.rs`, `overlap` and `next`). T313's section names T297 on no `Built here:` line, because only this half was built there: its DEVIATION says the overlap is named by the queue's commands, not by `make builder-tree` as the line asks, and a handout made by hand (`make builder-tree`, or `make builder-brief T=<a task picked by hand>`) names none. That remainder is T408's (Found and left, below).
+  - **DECISION, the second half - how a message sent to a builder in mid-work is delivered - was MEASURED ONCE and its rule recorded in the builder brief** (label: measured). The record is `dev/measurements/2026-11-27/message-delivery/results.md`, read-only over the coordinating session's transcript and each builder's own (`t297-delivery.py`, `t297-arrive.py`, `t297-sends.py` beside it). Every figure is the record's: of 229 `SendMessage` calls 2026-11-12 to 11-27, 220 were located in the builder and none was lost, measured 2026-11-27 (`t297-summary.txt`); a queued message (80 that moved nothing) arrived after the last tool result of the builder's round in a median 6.1 s, longest 199.8 s, and one that moved a running call to the background (14) in a median 1.5 s, measured 2026-11-27 (`t297-summary.txt`); a resumed builder (126 located) got it as a user turn in a median 0.2 s, measured 2026-11-27 (`t297-summary.txt`); every delay over 60 s, 10 of 10, was an advisor call, the longest such call 4 min 27 s, measured 2026-11-27 (`t297-all-sends.tsv`); and on 2026-11-26/27 builders took up 14 of 14 sends, 12 at their next step or the point named, measured 2026-11-27 (the record's table, each read by hand). The rule is `scripts/container/builder-brief.md`, "Re-scoping a builder in flight": do not resend a queued message, write a re-scope to survive an advisor call (a stop at the next boundary, or branches), and name any background agent or job to stop. The record files no lever: no message was lost, and delivery during an advisor call would save at most its length, seen ten times in 220.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the overlap named at dispatch by the queue's commands | T313's `builder_queue::tests` of `rust/guard/shared` and `rust/gate/crates/task` (T313's section) | n/a: tooling | none | n/a |
+| how a message to a builder in mid-work is delivered, and the brief's rule for it | n/a: a measurement, its scripts and tables in `dev/measurements/2026-11-27/message-delivery/` | n/a: tooling | none | n/a |
 
 ### T297 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** The coordinating session picks builders whose files do not overlap, or knows the order it accepts, from what the tooling names at dispatch; and it knows when a message to a builder at work arrives, so it writes a re-scope that holds.
+2. **The constraints.** The queue and its overlap rule are 451 T313's (`shared::builder_queue`); a dispatch is `make builder-brief` (451 T334); the brief's rules live in `scripts/container/builder-brief.md`, the one copy.
+3. **Where each comes from.** O: the incident of 2026-11-26 on the task line, and the delivery record of 2026-11-27. R: T313's section. G: the GM's words of 2026-11-20 in `request.md`, which count a measurement as performance work.
+4. **Do they describe the world here?** Yes: the record's 14 sends of 2026-11-26/27 are the builders of this pool, each arrival found in the builder's own transcript, measured 2026-11-27 (`t297-delivery.py`).
+5. **The order.** With or after 451 T313, whose section builds the first half (its box still open, so this box is ticked at T313's landing or after it); T408, which holds what T313 left of it, lands after this.
+6. **The exits.** Green: the overlap named by the queue's commands (T313's tests) and the delivery measured with its rule in the brief. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing, of this section.
+9. **Done, measured.** The first half by T313's tests, green in its builder's first tier (T313's section, item 9, its full gate owed at its batch's landing); the second by the record: 220 of 229 sends located and none lost, measured 2026-11-27 (`t297-summary.txt`), and the rule in the builder brief.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing is fixed here: no source changes. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A handout made outside `make builder-next` names no overlap (T313's DEVIATION). Its visible effect: `make builder-tree` or `make builder-brief T=<a task picked by hand>` hands a tree to a task whose queue entry overlaps a task in flight and says nothing, so the second cannot land until the first does - this task's own incident. Not fixed here: it is an edit of `rust/gate/crates/task/src/builder_tree.rs`'s take, a build of its own. Filed as T408; lands before T302.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
 
 
 <!-- plan-archive: T298 to T298 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
