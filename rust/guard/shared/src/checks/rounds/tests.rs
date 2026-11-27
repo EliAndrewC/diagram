@@ -606,6 +606,71 @@ fn a_wave_agent_is_paired_by_its_prompt() {
     pair_wave(&mut state, "ag4", "/no/such/transcript");
 }
 
+/// A wave agent's transcript carrying `prompt`, and the `wave` and `wave_len` its dispatch row records.
+fn wave_agent(d: &Path, name: &str, prompt: &str) -> (String, Value) {
+    let transcript = d.join(name);
+    let line = json!({"message": {"role": "user", "content": format!("The computed task text follows: {prompt}")}});
+    std::fs::write(&transcript, format!("{line}\n")).unwrap();
+    let row = json!({"wave": wave_key(prompt), "wave_len": prompt.chars().count()});
+    (transcript.to_string_lossy().into_owned(), row)
+}
+
+/// A wave's reading marks are applied as a single dispatch's launch applies them (451 T488): its seen sentences and notes read
+/// written, its fresh round's edits reset - for the whole run at its first return, so a later return of the run never wipes an
+/// earlier one's edits; another run's marks are left.
+#[test]
+fn a_wave_applies_its_reading_marks_once_for_its_run() {
+    let tmp = dir("wave-marks");
+    let (ta, wa) = wave_agent(&tmp, "a.jsonl", "unit a on q:0105");
+    let (tb, wb) = wave_agent(&tmp, "b.jsonl", "unit b on q:0105");
+    let (tc, wc) = wave_agent(&tmp, "c.jsonl", "unit c on q:0106");
+    let single_reply = tmp.join("single.md");
+    std::fs::write(
+        &single_reply,
+        "EDIT research/questions/0106-x.html\n<<<\nold\n===\nnew\n>>>\n",
+    )
+    .unwrap();
+    let single_reply = single_reply.to_string_lossy().into_owned();
+    let unit = "quote-check|q:0105";
+    let row = |w: &Value, fresh: &[&str], seen: &[&str], read: &[&str]| {
+        let mut out = json!({"check": "quote-check", "subjects": ["q:0105"], "state": "pending", "t": 1.0,
+            "marks": {"fresh": fresh, "seen": {unit: seen}, "read": {unit: read}}});
+        out["wave"] = w["wave"].clone();
+        out["wave_len"] = w["wave_len"].clone();
+        out
+    };
+    let mut state = json!({"edits": {"q:0105": [["p", "old round", "x"]], "q:0106": [["p", "old round", "y"], ["research/questions/0106-x.html", "old", "new"]]}, "dispatches": {
+        "wave:r1:a": row(&wa, &["q:0105"], &["k1"], &["n1"]),
+        "wave:r1:b": row(&wb, &[], &["k1"], &["n2"]),
+        "wave:r2:c": row(&wc, &["q:0106"], &[], &["n3"]),
+        "plain": row(&wa, &[], &["k9"], &["n9"]),
+        "single": {"check": "record-format", "subjects": ["q:0106"], "state": "returned", "aid": "ags", "t": 2.0, "reply": single_reply}
+    }});
+    state["dispatches"]["wave:r2:c"]["subjects"] = json!(["q:0106"]);
+    pair_wave(&mut state, "agb", &tb);
+    assert_eq!(state["dispatches"]["wave:r1:b"]["aid"], json!("agb"));
+    assert_eq!(state["edits"]["q:0105"], json!([]));
+    assert_eq!(state["seen"][unit], json!(["k1"]));
+    assert_eq!(state["notes_read"][unit], json!(["n1", "n2"]));
+    assert!(state["dispatches"]["wave:r1:a"].get("marks").is_none());
+    assert!(state["dispatches"]["wave:r2:c"].get("marks").is_some());
+    assert!(state["dispatches"]["plain"].get("marks").is_some());
+    // b's return records its edit; a's later return wipes nothing
+    state["edits"]["q:0105"] = json!([["p", "o", "b's edit"]]);
+    pair_wave(&mut state, "aga", &ta);
+    assert_eq!(state["dispatches"]["wave:r1:a"]["aid"], json!("aga"));
+    assert_eq!(state["edits"]["q:0105"], json!([["p", "o", "b's edit"]]));
+    assert_eq!(state["notes_read"][unit], json!(["n1", "n2"]));
+    // a check outside the run returned on q:0106 since: c's fresh reset keeps its block and drops the earlier round's
+    pair_wave(&mut state, "agc", &tc);
+    assert!(state["dispatches"]["wave:r2:c"].get("marks").is_none());
+    assert_eq!(
+        state["edits"]["q:0106"],
+        json!([["research/questions/0106-x.html", "old", "new"]])
+    );
+    assert_eq!(state["notes_read"][unit], json!(["n1", "n2", "n3"]));
+}
+
 #[test]
 fn drop_run_and_record_answer_rewrite_the_state_under_its_lock() {
     let root = clone_at("drop");
@@ -914,14 +979,18 @@ fn a_session_s_own_fixes_between_rounds_count_the_next_round() {
 fn a_rounded_dispatch_drops_what_only_its_return_read() {
     let row = |rounded: bool, aid: &str| {
         json!({"aid": aid, "check": "quote-check", "state": "running", "subjects": ["q:0105"],
-        "counted": ["quote-check|q:0105"], "quote_notes": {"0105.drawing#bath": "abc"}, "rounded": rounded, "t": 1.0})
+        "counted": ["quote-check|q:0105"], "quote_notes": {"0105.drawing#bath": "abc"}, "marks": {"fresh": []}, "rounded": rounded, "t": 1.0})
     };
     let mut state = json!({"dispatches": {"old": row(true, "a0"), "new": row(false, "a1"), "wait": row(false, "a2")}});
     returned(&mut state, "a1", "VERDICT: PASS", None);
     for (tid, kept) in [("old", false), ("new", false), ("wait", true)] {
         let d = &state["dispatches"][tid];
-        let had = (d.get("counted").is_some(), d.get("quote_notes").is_some());
-        assert_eq!(had, (kept, kept));
+        let had = (
+            d.get("counted").is_some(),
+            d.get("quote_notes").is_some(),
+            d.get("marks").is_some(),
+        );
+        assert_eq!(had, (kept, kept, kept));
     }
     assert_eq!(state["rounds"]["quote-check|q:0105"], json!(1));
 }

@@ -3082,6 +3082,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 <!-- plan-archive: T310 to T305 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T310 to T310 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T312 Approach (checklist part A)
 
 1. **The goal, in the world.** The bundle, task, land and plan crates' tests give one answer whatever the machine's home directory holds, and read none of its transcripts, guard log or git identity.
@@ -4239,6 +4240,7 @@ that batch; the red was not in its change.
 <!-- plan-archive: T359 to T359 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
 <!-- plan-archive: T353 to T334 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T354 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -4267,6 +4269,7 @@ that batch; the red was not in its change.
 
 
 <!-- plan-archive: T360 to T334 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T361 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -5008,6 +5011,7 @@ that batch; the red was not in its change.
 
 <!-- plan-archive: T387 to T373 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T388 to T373 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T390 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -6816,6 +6820,7 @@ that batch; the red was not in its change.
 
 <!-- plan-archive: T447 to T397 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T447 to T447 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T470 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -6850,6 +6855,7 @@ that batch; the red was not in its change.
 <!-- plan-archive: T475 to T475 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T480 to T468 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T480 to T480 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T484 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -6879,6 +6885,7 @@ that batch; the red was not in its change.
 <!-- plan-archive: T485 to T481 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T485 to T485 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T486 to T485 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T495 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -6905,58 +6912,76 @@ that batch; the red was not in its change.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T488 (<why: the finding or measurement that files it>)
+### T488 (found by 451 T387: a check-wave dispatch never applies its reading marks - `rounds::pair_wave` sets a wave row running without `apply_marks`, which only `rounds::launched` calls; 362 of the clone's 3,054 dispatches carried unapplied marks, observed 2026-11-27, method: counting rows with `marks` by `wave` and `state` in the clone's state)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `rounds::pair_wave` (`rust/guard/shared/src/checks/rounds.rs`), on pairing a wave agent, applies the reading marks - the fresh round's edits reset, the seen sentences, the notes read - of every row of the agent's `check-wave` run still carrying them (`same_run`: `wave:<run>:<tag>`), once; where a dispatch outside the run has returned on a fresh subject, the reset keeps the blocks that dispatch's kept reply holds and drops the rest (`outside_edits`). `rounds::returned` now also drops `marks` from a rounded row (T387's prune, which left it while this task was open).
+  - **Why the run, at its first return** (T488-D1). No `PostToolUse` launches a wave row - the Workflow replays each unit's `PreToolUse` and the agent is paired at its `SubagentStop` - so the pairing is the wave's launch. Applied per row at its own return, a fresh row returning after a sibling of its run had recorded its EDIT blocks on the same subject reset them, and the freeze (`freeze::edit_refusal`) then refuses the session's applying of that sibling's block: two units of one quote-check wave on one page, split by notes, are the shape.
+  - **Why not across runs** (T488-D2). The same reset at a run's first return would empty `edits[s]` that a check outside the run (record-format on the same `q:` page, the shape the wave units' `q:` pages pair, observed 2026-11-27, method: a Python read of the clone's `checks-open.json`, `dev/measurements/2026-11-27/t488-wave-marks/wave-units.txt`) recorded since the wave's dispatch, and the freeze would then refuse the applying of that check's blocks; where one has returned unanswered on the subject, the reset keeps the blocks its kept reply holds (`reply::blocks` of `reply::reply_file`, the reply `rounds::returned` keeps for every reply it records edits from) and drops the earlier round's.
+  - **What the 362 rows become** (observed 2026-11-27, method: as above). Their own counts do not move: a row's `counted` is fixed at its dispatch, observed 2026-11-27, method: reading `rounds::dispatch`. The unapplied marks only ever OVER-counted the next round: without `seen` or `notes_read`, `first_look` and `fresh_reading` are both false, so a later dispatch read as a repeat - early cap trips, never missed ones. The rows touch 27 units (13 modal-depiction pop-ups, 7 quote-check and 7 record-format questions), 37 runs from 2026-10-19 to 2026-11-22, observed 2026-11-27, method: a Python read of the clone's `checks-open.json`, `dev/measurements/2026-11-27/t488-wave-marks/wave-units.txt`; `rounds` holds none of the 27 today, so no live count moves. 341 of the 362 are rounded, and the next return drops their marks unapplied (applying a month-old reading now would be wrong); 21 never rounded keep theirs, inert. Observed 2026-11-27 on the clone's state (`dev/measurements/2026-11-27/t488-wave-marks/wave-units.txt`, a Python read of the clone's `checks-open.json`).
+  - **Did a past ruling read a wrong count?** Of the 15 arbiter rulings in `specs/*/arbiter.jsonl` on round triggers of the 27 units, 14 (2026-10-10 to 10-12) precede every wave row the state holds (its earliest dispatch 2026-10-10 21:08, its first wave row 2026-10-19), so read no wave's miscount. The 15th, `round:quote-check|q:0004@3` (449, 2026-11-22, `accept`), is the footnote-flag trip of `fixloop::hold` (a footnote flagged in rounds in a row, counted from replies), not the round cap: only its `@3` comes from the count. `arbiter-owed.json` holds no `round:` trigger. The `first_look` side is not replayed here: it would need each round's page text rebuilt from git history, and the one ruling in range is the footnote trip.
+  - **Red first**, 2026-11-27 (`make rust-test CRATE=rust/guard/shared ONLY="checks::rounds"`, the test only added): `a_wave_applies_its_reading_marks_once_for_its_run` failed, 19 passed of 20 (the fresh round's edits left at the pairing). Green after with the outside-run case added: 20 of 20; `make builder-checks CRATE="rust/guard/shared rust/guard"` 584 and 595 passed, lint and format clean; the hook suites checks-hooks 22, record-edit-gate 9, record-edit-hooks 14 passed.
+
+**T488-D1 - A wave's marks are applied for its whole run at its first return.** The brief: "apply them as the single dispatch's return does". A single dispatch applies them at its launch, before any return of its round records edits; a wave's only hooked moment per row is its return, so the run's marks are applied at the run's first, before any of its returns records edits. Rows of the run never paired (an agent with no return) have their `seen` and `read` applied anyway: the Workflow launched them. Chosen by the builder.
+
+**T488-D2 - A fresh reset keeps another check's returned edits.** At a run's first return, on a subject where a dispatch outside the run has returned unanswered, `edits` is cut to the EDIT blocks that dispatch's kept reply holds: reset whole, the freeze would refuse the applying of that check's blocks, a guard firing on correct work; left whole, an earlier round's edits would stay listed, which the fresh round is to drop. A block an earlier round proposed word for word again is kept, as the returned check proposed it too. Chosen by the builder.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a wave's reading marks applied for its run at its first return, a fresh reset keeping another check's returned blocks, a rounded row's `marks` pruned (`checks/rounds.rs`; tests `rounds/tests.rs`), red first 1 of 20, measured 2026-11-27 | n/a: tooling, no map drawn | n/a: tooling | none | n/a |
 
 ### T488 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A check wave's round is counted as a single dispatch's is: its sentences seen and its notes read count at the next round, and its fresh round starts with no earlier round's edits.
+2. **The constraints.** T488's line and the brief (red first; say what the unapplied rows' counts become and whether a past ruling read a wrong count; no guard message changed); feature 375 FR-003 (the freeze and its round's edits), 374 wave 120 and 451 T227 (`first_look`), 451 T387 (the prune); the two tiers.
+3. **Where each comes from.** O: the clone's state and `specs/*/arbiter.jsonl`, read 2026-11-27; this task's red-first run.
+4. **Do they describe the world here?** Yes: the counts are of the clone's own state, and the test drives `pair_wave` on the rows' own shape.
+5. **The order.** After T387, which found it; before T490.
+6. **The exits.** Green: the red-first test passing, both crates' first-tier checks and the three guards' suites clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** A wave row paired has no `marks` left and its run's `seen` and `notes_read` written; `make builder-checks CRATE="rust/guard/shared rust/guard"` clean, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows. The check it breaks at HEAD: the round cap, which read a wave's round as unread and so counted the next one early.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T489 (<why: the finding or measurement that files it>)
+### T489 (found by 451 T387: a running plan hold past its knob `HOLD_MAX_S` (1800 s, a GUESS) is never purged - `planhold::purge` drops only pending holds - so a review whose return never came keeps `plan_holds` non-empty, every Bash call of the clone loading the 3.0 MB state, and its held text refused without `PLAN_EDIT_OK`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `planhold::purge` (`rust/guard/shared/src/checks/planhold.rs`) drops every dead hold - a pending one past `PENDING_S`, as before, and now a running one past `HOLD_MAX_S` (`dead`). It runs in `snapshot`, at a call's `PreToolUse` whenever `plan_holds` is non-empty, and `handle` saves the state where the hold part moved (451 T387), so the first call after the limit purges and saves once, and `record_edit_gate`'s prefilter (`plan_holds` empty) sends every later call past the load.
+  - **It puts back nothing it does not own.** `prune_snaps` drops the purged hold's kept text with it, so a call begun under the hold and ending after the purge finds no kept text and writes nothing back; a call-keyed snapshot of an older build (T387-D2) is skipped for a hold gone (`restore` asks `plan_holds`). Said where it is purged: `purge`'s doc comment, and the escape column of `docs/guards.md`'s `record_edit_hooks.rs` row.
+  - **A late return is harmless.** The review's `SubagentStop` names no hold or dispatch, so `handle::concerns` books nothing and nothing is saved; `planhold::returned` would drop nothing. Its verdict is still checked by `make plan-verdict`, which refuses a section changed while it was reviewed.
+  - **The figures.** A Bash `true`'s `record-edit-hooks` `PreToolUse` with a running hold taken 4,000 s ago, CPU median of 20 interleaved, on a copy of the clone's state (2,994,673 bytes): 7.8 ms after against 95.4 ms on the clone's build from before 451 T387, its `checks-hooks` `PostToolUse` 5.4 against 6.8, state writes 0 of 20 against 20 of 20, measured 2026-11-27 (`dev/measurements/2026-11-27/t489-dead-hold/t489-time.py`, `results.txt`). A build with T387 and not T489 was not timed (no worktree for it); T387's own figure for a Bash call under a hold is 42.6 + 38.2 ms, measured 2026-11-27 (`t387-time.py`).
+  - **Red first**, 2026-11-27 (`make rust-test CRATE=rust/guard/shared ONLY="checks::handle::hold_writes"`, the test only added): `a_running_hold_past_its_limit_is_purged` failed, 5 passed of 6 (`plan_holds` still holding the hold). Green after: 6 of 6; `planhold/tests.rs`'s `a_hold_is_live_or_dead_by_its_age` now pins the running hold's purge, and `a_snapshot_is_written_back_when_held_text_changes` checks its kept-once case at a call inside the limit, where it read one far past it.
+
+**T489-D1 - Held text is editable without `PLAN_EDIT_OK` once its hold is past `HOLD_MAX_S`.** The task line: "a purge changes that refusal and needs its own ruling"; the brief: purge it. A review returns well inside the limit (`HOLD_MAX_S`'s own comment), and past it its hold already counted as dead and `PLAN_EDIT_OK` passed it, so the purge drops only the token's ceremony. What still guards a review that is merely late: `make plan-verdict` refuses a verdict on a section changed while it was reviewed. Chosen by the builder on the brief.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a running hold past `HOLD_MAX_S` purged with its kept text (`checks/planhold.rs`; tests `handle/hold_writes.rs`, `planhold/tests.rs`; `docs/guards.md`), red first 1 of 6, measured 2026-11-27 | n/a: tooling, no map drawn | n/a: tooling | none | n/a |
 
 ### T489 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A plan review whose return never came stops costing every Bash call of the clone a load of the check state, and stops holding its text, once it is past its limit.
+2. **The constraints.** T489's line and the brief (red first; nothing put back that the purge does not own, said where it is purged; a late return harmless; no guard message changed); feature 385 T85 and 451 T78, T80, T123, T387 (the hold, its write-back, its tree, its kept text); 451 FR-013; the two tiers.
+3. **Where each comes from.** O: T387's figures, measured 2026-11-26/27; this task's red-first run and `t489-time.py`, measured 2026-11-27.
+4. **Do they describe the world here?** Yes: the timing runs the real binaries' `--only record-edit-hooks` and `--only checks-hooks` on a copy of the clone's own state.
+5. **The order.** After T387, which found it; before T490.
+6. **The exits.** Green: the red-first test passing, both crates' first-tier checks and the three guards' suites clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** A Bash call after a dead running hold writes the state 0 of 20 times and its `PreToolUse` costs 7.8 ms of CPU, measured 2026-11-27 (`t489-time.py`); `make builder-checks CRATE="rust/guard/shared rust/guard"` clean.
+10. **Before moving a constant.** n/a: `HOLD_MAX_S` is unchanged.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows. The check it breaks at HEAD: the plan hold, which held a dead review's text and loaded the state on every Bash call for as long as no return or `TaskStop` named it.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `planhold::refusal`'s dead-hold escape - the `escaped && dead` pass and the "its dispatch looks dead: PLAN_EDIT_OK" tail - is reached now only by `planhold/tests.rs`'s direct calls: the purge runs in `snapshot` before `edit_mode`, so a hooked call never meets a dead hold. No wrong outcome, a message no hooked call shows. Not fixed here: retiring it changes a guard message, which the brief rules out. Filed as T496; lands before T490.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task, 451 FR-013): it makes the guards' hooks faster - a Bash call's `PreToolUse` under a dead running hold 95.4 ms of CPU on the build before T387 to 7.8, its state writes 20 of 20 to 0, measured 2026-11-27. Not an engine-speed task: no checklist answers owed.
 
 
 ### T490 (<why: the finding or measurement that files it>)
@@ -7139,6 +7164,32 @@ that batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T498 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T496 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T496 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

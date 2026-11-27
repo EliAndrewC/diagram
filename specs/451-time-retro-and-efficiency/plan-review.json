@@ -4368,6 +4368,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T488 (found by 451 T387: a check-wave dispatch never applies its reading marks - `rounds::pair_wave` sets a wave row running without `apply_marks`, which only `rounds::launched` calls; 362 of the clone's 3,054 dispatches carried unapplied marks, observed 2026-11-27, method: counting rows with `marks` by `wave` and `state` in the clone's state)": {
+   "sha256": "2ec2c6129b38382901816ea514257552744509f8ccd562648193cbcab852ce70",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T488 Approach (checklist part A)": {
+   "sha256": "48a966b79f55494c48c71ead1f04c1873953fbf475dade6b248e90b893133cbd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T489 (found by 451 T387: a running plan hold past its knob `HOLD_MAX_S` (1800 s, a GUESS) is never purged - `planhold::purge` drops only pending holds - so a review whose return never came keeps `plan_holds` non-empty, every Bash call of the clone loading the 3.0 MB state, and its held text refused without `PLAN_EDIT_OK`)": {
+   "sha256": "becb59e29ce70c30b116cc6202914579e3e18a3079e4f348c4665c4930c219d1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T489 Approach (checklist part A)": {
+   "sha256": "a573e802fdea540501ad62a0dd5a465873f4c1d5abae5a671a9f58e8be5e20a9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -40759,6 +40783,138 @@
      "summary": "Changed since the CLEAR verdict: item 9's timing provenance restated (the runs' end times), and the Performance work line no longer claims the 53 ms saving as measured for make done - stated as expected, 'not timed'",
      "class": "within",
      "why": "A correction that withdraws an unmeasured claim and labels it as such; it changes no decision and narrows nothing asked. Figures carry date and method (one-shot labels)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T470 (<why: the finding or measurement that files it>)",
+    "### T470 Approach (checklist part A)",
+    "### T484 (<why: the finding or measurement that files it>)",
+    "### T484 Approach (checklist part A)",
+    "### T488 (found by 451 T387: a check-wave dispatch never applies its reading marks - `rounds::pair_wave` sets a wave row running without `apply_marks`, which only `rounds::launched` calls; 362 of the clone's 3,054 dispatches carried unapplied marks, observed 2026-11-27, method: counting rows with `marks` by `wave` and `state` in the clone's state)",
+    "### T488 Approach (checklist part A)",
+    "### T489 (found by 451 T387: a running plan hold past its knob `HOLD_MAX_S` (1800 s, a GUESS) is never purged - `planhold::purge` drops only pending holds - so a review whose return never came keeps `plan_holds` non-empty, every Bash call of the clone loading the 3.0 MB state, and its held text refused without `PLAN_EDIT_OK`)",
+    "### T489 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T470/T484",
+     "summary": "Both sections are the unfilled template: no approach, no table row, every checklist item a placeholder.",
+     "class": "within",
+     "why": "They decide nothing; nothing to rule until they are written (they are judged again at make decide)."
+    },
+    {
+     "id": "T488 approach + T488-D1",
+     "summary": "pair_wave applies the reading marks (fresh-round edit reset, seen, notes_read) of every row of the agent's check-wave run once, at the run's first return; never-paired rows' seen/read applied too; rounds::returned drops marks from a rounded row (completing T387's prune).",
+     "class": "within",
+     "why": "The brief asks that a wave's marks be applied as a single dispatch's are; a single dispatch applies them at launch, before any of its round's returns, and the run's first pairing is the wave's only hooked moment before its returns record edits. The defect fixed is a check refusing good work (round cap tripping early). Red first recorded."
+    },
+    {
+     "id": "T488-D2 (a): an outside-run check's returned edits are not wiped",
+     "summary": "At a run's first return, edits recorded by a dispatch outside the run that has returned on the subject are kept.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the brief's own words: a single dispatch resets at launch and so never wipes edits a check outside its round records afterwards; wiping them here would make the freeze refuse the applying of that check's EDIT blocks, a guard refusing correct work (a new defect)."
+    },
+    {
+     "id": "T488-D2 (b): earlier-round edits left standing on that subject",
+     "summary": "On any subject where an outside-run dispatch has returned, the whole fresh reset is skipped, so an earlier round's edits stay in edits[s] (what the freeze admits), 'as at HEAD'; Found and left says none.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "D2's justification covers only the outside check's edits (half a); it does not reach the earlier round's edits, which are a different class and are exactly what the task's own red test treats as the failure ('the fresh round's edits left at the pairing') and what checklist item 1 states as the goal ('its fresh round starts with no earlier round's edits'). 'As at HEAD' is not a ground for an exception, and the block names the q: page / record-format pairing as THE shape of the wave units' pages, so the carve-out may be the common case, not a corner. The block calls the residual a 'cost' but neither shows it has no wrong outcome nor files it (D15 / FR-009). Fix: reset only the earlier round's edits on that subject while keeping the outside check's (e.g. by what recorded them or when), or state why that separation is impossible; or state, with an observation, that stale edits left in edits[s] change no outcome of the freeze (then Found and left: none stands); or, if they do, fix or file it as a D15 deferral."
+    },
+    {
+     "id": "T488 the 362 rows",
+     "summary": "No backfill: 341 rounded rows drop their marks unapplied at the next return, 21 never-rounded keep theirs inert; no live count moves; of 15 arbiter rulings 14 predate any wave row and the 15th is a footnote-flag trip, not the round cap.",
+     "class": "within",
+     "why": "The brief asked to say what the unapplied rows' counts become and whether a past ruling read a wrong count; both are answered with observed figures. The unlabeled 'first_look side cannot be replayed: the page text is gone' sits oddly with request.md 2026-11-24 ('page texts ... stay per clone, since git history holds them'), but it decides nothing: the one ruling in range was not driven by the count."
+    },
+    {
+     "id": "T489 approach",
+     "summary": "planhold::purge also drops a running hold past HOLD_MAX_S, with its kept text (prune_snaps); restore skips an old-build snapshot for a gone hold; a late return books nothing.",
+     "class": "within",
+     "why": "Fixes a found defect and a performance cost FR-013 puts first: a dead running hold kept every Bash call loading the 3.0 MB state (95.4 ms to 7.8 ms CPU, writes 20/20 to 0/20, measured 2026-11-27 with method). HOLD_MAX_S unchanged."
+    },
+    {
+     "id": "T489-D1",
+     "summary": "Held text becomes editable without PLAN_EDIT_OK once its hold is past HOLD_MAX_S (the task line says this refusal change needs its own ruling).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Past HOLD_MAX_S the hold already counted as dead and PLAN_EDIT_OK already passed it, so only the token's ceremony goes; the enforcement that protects a review's verdict stays mechanical - make plan-verdict refuses a verdict on a section changed while it was reviewed - so request line 13 ('real enforcement and not just instructions') is not weakened. This ruling does not rest on 'a review returns well inside the limit' (a comment on a constant the header calls a GUESS): a review that does outrun it costs at worst a refused verdict and a re-dispatch, never a verdict recorded on changed text. Keeping the refusal would keep the hold, and with it the per-call load this task removes."
+    },
+    {
+     "id": "T489 found-and-left (T496)",
+     "summary": "planhold::refusal's dead-hold escape is now reached only by direct test calls; retiring it deferred to T496, lands before T490.",
+     "class": "within",
+     "why": "No wrong outcome (a message no hooked call shows), so not a defect; filed anyway in D15's form, and the brief rules out changing a guard message."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T470 (<why: the finding or measurement that files it>)",
+    "### T470 Approach (checklist part A)",
+    "### T484 (<why: the finding or measurement that files it>)",
+    "### T484 Approach (checklist part A)",
+    "### T488 (found by 451 T387: a check-wave dispatch never applies its reading marks - `rounds::pair_wave` sets a wave row running without `apply_marks`, which only `rounds::launched` calls; 362 of the clone's 3,054 dispatches carried unapplied marks, observed 2026-11-27, method: counting rows with `marks` by `wave` and `state` in the clone's state)",
+    "### T488 Approach (checklist part A)",
+    "### T489 (found by 451 T387: a running plan hold past its knob `HOLD_MAX_S` (1800 s, a GUESS) is never purged - `planhold::purge` drops only pending holds - so a review whose return never came keeps `plan_holds` non-empty, every Bash call of the clone loading the 3.0 MB state, and its held text refused without `PLAN_EDIT_OK`)",
+    "### T489 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T488-D1",
+     "summary": "A wave's reading marks (fresh reset, seen, notes read) are applied once for its whole check-wave run at the run's first return, since the pairing is the wave's only hooked launch.",
+     "class": "within",
+     "why": "This is the fix the task asks for: a wave's round is counted the way a single dispatch's round is. A single dispatch applies its marks at launch, before any return records edits. Applying them at the run's first return is the nearest equivalent, and it stops a later sibling's reset from wiping a sibling's recorded EDIT blocks, which the freeze would then refuse. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T488-D1 (unpaired rows)",
+     "summary": "Rows of the run that never paired (no return) still get their seen and notes_read applied.",
+     "class": "within",
+     "why": "This is a separate case from D1 and is judged on its own. A single dispatch applies its marks at launch whether or not it returns, and the Workflow launched these rows. Applying them keeps a wave's count the same as a single dispatch's count, which is the task's goal. No wrong outcome results."
+    },
+    {
+     "id": "T488-D2",
+     "summary": "At a run's first return, on a subject where a dispatch outside the run returned unanswered, the fresh reset keeps that dispatch's kept-reply EDIT blocks and drops the rest of the earlier round's edits.",
+     "class": "within",
+     "why": "This now completes the reset; it no longer leaves stale edits in place. Keeping the returned check's proposed blocks is the exception that feature 375 FR-003(b) itself makes: the edits the returned checks proposed are applied in one pass. Without it the freeze would refuse correct work. The earlier round's edits are dropped, as the goal requires. Wording note, not blocking: the text says 'a dispatch ... that dispatch's kept reply' in the singular. Where two outside checks have returned unanswered on one subject, FR-003(b)'s plural requires that the blocks of both are kept. The bundle cannot show which the code does."
+    },
+    {
+     "id": "T488 old rows",
+     "summary": "The 341 rounded rows' month-old marks are dropped unapplied at the next return, and the 21 never-rounded rows keep theirs, which are inert.",
+     "class": "within",
+     "why": "No wrong outcome is left. The block reports that rounds holds none of the 27 units, so no live count moves. Applying a month-old reading now would itself miscount. Leaving inert marks is a difference from tidiness, not a defect (constitution XIV)."
+    },
+    {
+     "id": "T488 first_look not replayed",
+     "summary": "Whether a past ruling read a wrong count is answered by a census of the round-trigger rulings. The first_look side is not replayed from git history.",
+     "class": "within",
+     "why": "The question comes from the brief (the coordinating session), not the GM. The census answers it. 14 of the 15 rulings come before any wave row. The 15th is the footnote-flag trip of fixloop::hold, not the round cap. arbiter-owed holds no round trigger. A replay could only matter for a round-cap ruling in range, and there is none, so no defect is left. The new text also correctly drops the earlier false claim that the page text is gone."
+    },
+    {
+     "id": "T489-D1",
+     "summary": "Once a running plan hold is past HOLD_MAX_S, it is purged, and its held text is editable without PLAN_EDIT_OK.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the plan hold's refusal (feature 385 T85), so it gets a ruling. Tested on a review that is slow but alive past the limit, not on a dead one. Before this change, a hold past HOLD_MAX_S already counted as dead, and PLAN_EDIT_OK passed it. So the only protection removed is the token. A late review's verdict is still checked against the text's digest: make plan-verdict refuses a section that changed while it was reviewed, and per-block digests are recorded. The worst case is therefore a wasted review round, never a verdict landing on changed text. The purpose of the hold, that no verdict approves text it did not read, holds. Keeping the hold would leave a guard refusing correct work on text no live review can approve. It would also load the 3.0 MB state on every Bash call, against the GM's 'prioritize performance improvements' (2026-11-20). The premise that a review returns well inside the limit rests on a GUESS knob's comment, and this ruling does not rely on it. request.md holds nothing of the GM's on the plan hold."
+    },
+    {
+     "id": "T489 dead-hold escape left",
+     "summary": "planhold::refusal's dead-hold escape and its PLAN_EDIT_OK tail are now reachable only by direct test calls. They are left as they are and filed as T496, to land before T490.",
+     "class": "within",
+     "why": "This is not a defect. Only unreachable message text remains and no wrong outcome follows. It is filed anyway, in D15's form."
+    },
+    {
+     "id": "T489 baseline",
+     "summary": "The before figure is the build from before T387. A build with T387 but not T489 was not timed.",
+     "class": "within",
+     "why": "This is a measurement choice and is stated openly. FR-013 asks for no particular baseline, and the done measurement (0 of 20 writes, 7.8 ms) is the build's own figure."
     }
    ]
   }

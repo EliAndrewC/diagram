@@ -148,3 +148,28 @@ fn a_return_concerns_a_wave_row_that_waits_for_its_reply() {
         &ret
     ));
 }
+
+/// A running hold past `HOLD_MAX_S` is purged at the next call's start (451 T489): kept, every Bash call of the clone loaded the
+/// state and held text stayed refused without `PLAN_EDIT_OK`. Purged, it puts nothing back, and its review's late return books nothing.
+#[test]
+fn a_running_hold_past_its_limit_is_purged() {
+    let root = held("hold-purged");
+    assert_eq!(handle("edit", &bash(&root, "a"), Some(1000.0)), "");
+    let changed = PLAN.replace("body long", "CHANGED");
+    std::fs::write(root.join("specs/900-a/plan.md"), &changed).unwrap();
+    assert_eq!(handle("edit", &bash(&root, "b"), Some(3000.0)), "");
+    let s = load(&state_file(&root));
+    assert_eq!(s["plan_holds"], json!({}));
+    assert!(s.get("plan_snaps").is_none(), "{s}");
+    // a call begun under the hold ends after its purge: nothing is written back
+    assert_eq!(handle("after", &bash(&root, "a"), Some(3000.0)), "");
+    assert_eq!(plan(&root), changed);
+    let edit = json!({"cwd": root, "tool_name": "Edit", "tool_use_id": "e", "tool_input": {"file_path": root.join("specs/900-a/plan.md"), "old_string": "CHANGED", "new_string": "z"}});
+    assert_eq!(handle("edit", &edit, Some(3000.0)), "");
+    let purged = inode(&root);
+    let stop = json!({"cwd": root, "agent_id": "agh", "hook_event_name": "SubagentStop"});
+    assert_eq!(handle("returned", &stop, Some(3001.0)), "");
+    assert_eq!(handle("edit", &bash(&root, "c"), Some(3001.0)), "");
+    assert_eq!(handle("after", &bash(&root, "c"), Some(3001.0)), "");
+    assert_eq!(inode(&root), purged);
+}

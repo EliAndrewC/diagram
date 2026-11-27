@@ -186,11 +186,14 @@ pub fn live(h: &Value, now: f64) -> bool {
     text(h, "state") == "running" && !dead(h, now)
 }
 
-/// A pending hold past `PENDING_S` never launched and never will: it goes, so an empty state starts nothing; and the text kept for a
-/// hold gone.
+/// A dead hold goes - a pending one past `PENDING_S` never launched and never will, a running one past `HOLD_MAX_S` lost its return
+/// (a session killed, a stop no hook saw) - so an empty state starts nothing; and the text kept for a hold gone. WHY the running one too
+/// (451 T489): kept, it held `plan_holds` non-empty, so every Bash call of the clone paid the state's load (about 40 ms after 451 T387)
+/// and its held text stayed refused without `PLAN_EDIT_OK`. Purged, it puts nothing back: `prune_snaps` drops its kept text, so a call
+/// begun under it writes nothing back at its end, and its review's late return names no hold or dispatch and is booked by nothing.
 pub fn purge(state: &mut Value, now: f64) {
     if let Some(holds) = state.get_mut("plan_holds").and_then(Value::as_object_mut) {
-        holds.retain(|_, h| !(text(h, "state") == "pending" && now - t_of(h) > PENDING_S));
+        holds.retain(|_, h| !dead(h, now));
     }
     prune_snaps(state);
 }

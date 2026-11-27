@@ -80,8 +80,9 @@ fn a_hold_is_live_or_dead_by_its_age() {
     assert!(live(&running("T01", &[], 100.0), 1000.0));
     assert!(!live(&running("T01", &[], 0.0), 5000.0));
     assert!(!live(&json!({"state": "pending", "t": 0.0}), 10.0));
-    let mut state = json!({"plan_holds": {"a": {"state": "pending", "t": 0.0}, "b": {"state": "pending", "t": 950.0}, "c": {"state": "running", "t": 0.0}}});
+    let mut state = json!({"plan_holds": {"a": {"state": "pending", "t": 0.0}, "b": {"state": "pending", "t": 950.0}, "c": {"state": "running", "t": 0.0}, "d": {"state": "running", "t": -1000.0}}});
     purge(&mut state, 1000.0);
+    // a running hold past HOLD_MAX_S goes too (451 T489)
     let keys: Vec<&String> = state["plan_holds"].as_object().unwrap().keys().collect();
     assert_eq!(keys, ["b", "c"]);
     purge(&mut json!({}), 1.0);
@@ -102,7 +103,7 @@ fn a_snapshot_is_written_back_when_held_text_changes() {
     assert_eq!(state["plan_holds"].as_object().unwrap().len(), 3);
     // kept once a hold and tree (451 T387): a later call's start takes nothing, and an unchanged end keeps it while the hold is open
     let kept = state["plan_snaps"].clone();
-    snapshot(&mut state, Some(&root), 100_000.0);
+    snapshot(&mut state, Some(&root), 1500.0);
     assert_eq!(state["plan_snaps"], kept);
     assert_eq!(restore(&mut state, Some(&root), "unrelated"), "");
     let unchanged = restore(&mut state, Some(&root), "call");

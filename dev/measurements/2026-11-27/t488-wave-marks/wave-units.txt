@@ -1,0 +1,9 @@
+plan_holds {}
+wave rows with marks 362
+units touched 27
+fresh resets never applied 20
+units with a later dispatch 21 later dispatches 105
+units with a later COUNTED dispatch (counted kept, unrounded rows only) 20 73
+of those, counted although its notes were disjoint from the wave notes read before it 8 {'quote-check|q:0004': 3, 'quote-check|q:0090': 1, 'quote-check|q:0091': 2, 'quote-check|q:0220': 2}
+units in seen state 0 in notes_read 0
+wave units at rounds>=3 now 0 []

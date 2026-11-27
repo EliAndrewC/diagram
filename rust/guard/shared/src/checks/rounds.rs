@@ -289,16 +289,78 @@ pub fn pair_wave(state: &mut Value, agent_id: &str, transcript: &str) {
         })
         .collect();
     hits.sort_by(|a, b| b.1.cmp(&a.1).then(a.2.cmp(&b.2)).then(a.3.total_cmp(&b.3)));
-    for (tid, ..) in hits {
-        let d = &mut ds[&tid];
-        if text(d, "state") == "pending"
-            || (text(d, "state") == "returned" && falsy(d.get("reply")))
-        {
-            d["aid"] = json!(agent_id);
-            d["state"] = json!("running");
-            return;
+    let Some(tid) = hits.into_iter().map(|h| h.0).find(|tid| {
+        let state_of = text(&ds[tid], "state");
+        state_of == "pending" || (state_of == "returned" && falsy(ds[tid].get("reply")))
+    }) else {
+        return;
+    };
+    ds[&tid]["aid"] = json!(agent_id);
+    ds[&tid]["state"] = json!("running");
+    // ITS READING MARKS, as a single dispatch's launch applies them (451 T488): no `PostToolUse` launches a wave's row, so its fresh
+    // round's edits reset, seen sentences and notes read were never written - 362 of the clone's 3,054 rows, 2026-11-27 - and its
+    // sentences and notes read as unread at the next round's count. Every row of its run, at the run's first return: a row's own
+    // return would reset its fresh round's edits after a sibling of the run had recorded its own there (the freeze reads them).
+    let run: Vec<String> = ds
+        .iter()
+        .filter(|(k, d)| same_run(k, &tid) && d.get("marks").is_some())
+        .map(|(k, _)| k.clone())
+        .collect();
+    // and where a check outside the run has since returned on a fresh subject, the reset keeps that check's blocks (read from its kept
+    // reply) and drops the earlier round's: the freeze refuses the session's applying of any block it no longer lists
+    // (`freeze::edit_refusal`)
+    for k in run {
+        let mut d = state["dispatches"][&k]
+            .as_object()
+            .cloned()
+            .unwrap_or_default();
+        let fresh: Vec<String> = d
+            .get("marks")
+            .and_then(|m| m.get("fresh"))
+            .and_then(Value::as_array)
+            .into_iter()
+            .flatten()
+            .filter_map(|s| s.as_str().map(str::to_owned))
+            .collect();
+        let mut reset = Vec::new();
+        for s in fresh {
+            match outside_edits(state, &tid, &s) {
+                None => reset.push(json!(s)),
+                Some(keep) => array_mut(map_mut(state, "edits"), &s).retain(|e| keep.contains(e)),
+            }
         }
+        d["marks"]["fresh"] = json!(reset);
+        apply_marks(state, &mut d);
+        state["dispatches"][&k] = Value::Object(d);
     }
+}
+
+/// The EDIT blocks dispatches outside wave row `tid`'s run returned on `subject`, read from their kept replies, or None where none has
+/// returned there unanswered.
+fn outside_edits(state: &Value, tid: &str, subject: &str) -> Option<Vec<Value>> {
+    let theirs: Vec<&Value> = state
+        .get("dispatches")
+        .and_then(Value::as_object)
+        .into_iter()
+        .flatten()
+        .filter(|(k, d)| {
+            !same_run(k, tid) && text(d, "state") == "returned" && has_subject(d, subject)
+        })
+        .map(|(_, d)| d)
+        .collect();
+    (!theirs.is_empty()).then(|| {
+        theirs
+            .iter()
+            .flat_map(|d| reply::blocks(&reply::reply_file(text(d, "reply"))))
+            .map(|(p, o, n)| json!([p, o, n]))
+            .collect()
+    })
+}
+
+/// Whether two wave rows were dispatched by one `check-wave` run: `wave:<run>:<tag>`, the run its Workflow call's id.
+fn same_run(a: &str, b: &str) -> bool {
+    let run = |t: &str| t.match_indices(':').nth(1).map(|(i, _)| t[..i].to_owned());
+    a == b || run(a).is_some_and(|r| run(b) == Some(r))
 }
 
 /// A refused `check-wave` run's dispatches go: it launches nothing, so none of them may freeze a page.
@@ -779,10 +841,13 @@ pub fn returned(state: &mut Value, agent_id: &str, reply_text: &str, keep: Optio
             }
         }
         // a rounded dispatch's `counted` and `quote_notes` are read only above, before it rounds: pruned (451 T387, 281 KB of the
-        // 3.0 MB state on 2026-11-27; every other field has a reader - the arbiter's and the bundles' rounds, `settled`, the counts)
+        // 3.0 MB state on 2026-11-27; every other field has a reader - the arbiter's and the bundles' rounds, `settled`, the counts);
+        // and `marks`, which its launch or its wave's pairing applied before it returned, so one left is a wave row's from before
+        // 451 T488, never to be applied
         if let Some(m) = d.as_object_mut().filter(|m| !falsy(m.get("rounded"))) {
             m.shift_remove("counted");
             m.shift_remove("quote_notes");
+            m.shift_remove("marks");
         }
         state["dispatches"][&tid] = d;
     }

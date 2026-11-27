@@ -1,0 +1,5 @@
+# t489-time.py, 2026-11-27, 20 rounds interleaved, on a copy of the clone's checks-open.json (2,994,673 bytes) with one running hold taken 4,000 s ago.
+# before: the clone's l7r-guard.good built 06:33 EST from main before 451 T387 (and T489); after: this tree's build with T489 (07:03 EST).
+# A build with T387 and not T489 was not timed (no worktree for it); T387's own figure for a Bash call under a hold is 42.6 + 38.2 ms CPU (t387-time.py).
+before: pre 95.4 ms, post 6.8 ms CPU median of 20; writes 20 of 20; plan_holds at the end {"toolu_hold": {"aid": "a-hold", "blocks": [], "feature": "9
+after: pre 7.8 ms, post 5.4 ms CPU median of 20; writes 0 of 20; plan_holds at the end {}
