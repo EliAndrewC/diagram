@@ -498,11 +498,13 @@ fn versions(state: &mut Value, root: &Path, body: &str, t: f64) {
 
 fn cascade_check(state: &Value, root: &Path, t: f64) {
     let since = rounds::window_start(root);
-    let (n, lines) = (
-        rounds::dispatches_since(state, since),
-        rounds::changed_lines(root),
-    );
+    let n = rounds::dispatches_since(state, since);
     let (trigger, last) = arbiter::cascade_state(root, since);
+    // the minimum first (451 T492): under it the trip cannot fire, so the work-tree diff (40 to 79 ms, 451 T388) is not run
+    if !arbiter::cascade_can_trip(n, last) {
+        return;
+    }
+    let lines = rounds::changed_lines(root);
     if arbiter::cascade(n, lines, last) {
         let _ = arbiter::trip(
             root,

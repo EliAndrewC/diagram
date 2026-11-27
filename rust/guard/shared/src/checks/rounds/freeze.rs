@@ -178,9 +178,22 @@ pub fn dispatches_since(state: &Value, since: f64) -> u64 {
     u64::try_from(n).unwrap_or(0)
 }
 
+#[cfg(test)]
+thread_local! {
+    static COUNTED: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
+}
+
+/// How many times this thread has counted changed lines ([`changed_lines`], its work-tree diff), for the tests (451 T492).
+#[cfg(test)]
+pub(crate) fn counted() -> usize {
+    COUNTED.with(std::cell::Cell::get)
+}
+
 /// Hand-written lines the clone's delta changed against the merge base; the cascade ratio's base (FR-010).
 #[must_use]
 pub fn changed_lines(root: &Path) -> u64 {
+    #[cfg(test)]
+    COUNTED.with(|n| n.set(n.get() + 1));
     let merge = git_stdout(root, &["merge-base", "HEAD", "origin/main"]);
     let base = if merge.is_empty() {
         git_stdout(root, &["rev-parse", "HEAD"])

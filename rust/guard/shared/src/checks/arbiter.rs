@@ -425,7 +425,14 @@ pub fn reversal(events: &[Value], path: &str, old: &str, new: &str) -> bool {
 /// Past the ratio with at least `CASCADE_MIN` dispatches, counted since the last cascade ruling.
 #[must_use]
 pub fn cascade(dispatches: u64, lines: u64, last: u64) -> bool {
-    dispatches.saturating_sub(last) >= CASCADE_MIN && dispatches > CASCADE_RATIO * lines.max(1)
+    cascade_can_trip(dispatches, last) && dispatches > CASCADE_RATIO * lines.max(1)
+}
+
+/// At least `CASCADE_MIN` dispatches since the last cascade ruling: the half of [`cascade`] that needs no count of changed lines,
+/// asked first so a check under it runs no work-tree diff (451 T492).
+#[must_use]
+pub fn cascade_can_trip(dispatches: u64, last: u64) -> bool {
+    dispatches.saturating_sub(last) >= CASCADE_MIN
 }
 
 const SECONDS_A_DAY: i64 = 86_400;

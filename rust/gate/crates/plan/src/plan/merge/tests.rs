@@ -13,7 +13,13 @@ fn row(block: &str) -> Value {
 }
 
 fn merged(base: &Value, ours: &Value, theirs: &Value) -> Value {
-    merge_records(&base.to_string(), &ours.to_string(), &theirs.to_string()).unwrap()
+    merge_records(
+        &base.to_string(),
+        &ours.to_string(),
+        &theirs.to_string(),
+        None,
+    )
+    .unwrap()
 }
 
 fn base() -> Value {
@@ -131,11 +137,23 @@ fn a_map_one_side_lacks_is_merged_whole() {
 
 #[test]
 fn an_empty_side_is_an_empty_record_and_a_side_not_json_is_named() {
-    let got = merge_records("", &adding("T256").to_string(), &adding("T257").to_string()).unwrap();
+    let got = merge_records(
+        "",
+        &adding("T256").to_string(),
+        &adding("T257").to_string(),
+        None,
+    )
+    .unwrap();
     assert!(got["tasks"].get("T256").is_some() && got["tasks"].get("T257").is_some());
-    assert_eq!(merge_records("{", "{}", "{}").unwrap_err(), "the base");
-    assert_eq!(merge_records("{}", "<<<<<<<", "{}").unwrap_err(), "ours");
-    assert_eq!(merge_records("{}", "{}", "x").unwrap_err(), "theirs");
+    assert_eq!(
+        merge_records("{", "{}", "{}", None).unwrap_err(),
+        "the base"
+    );
+    assert_eq!(
+        merge_records("{}", "<<<<<<<", "{}", None).unwrap_err(),
+        "ours"
+    );
+    assert_eq!(merge_records("{}", "{}", "x", None).unwrap_err(), "theirs");
 }
 
 #[test]
@@ -145,14 +163,14 @@ fn the_driver_writes_ours_and_leaves_a_bad_side_unmerged() {
     std::fs::write(&b, base().to_string()).unwrap();
     std::fs::write(&o, adding("T256").to_string()).unwrap();
     std::fs::write(&t, adding("T257").to_string()).unwrap();
-    let got = merge_files(&b, &o, &t);
+    let got = merge_files(&b, &o, &t, None);
     assert_eq!(got.code, 0, "{}", got.stderr);
     let written = std::fs::read_to_string(&o).unwrap();
     assert!(written.starts_with("{\n \"feature\""));
     let v: Value = serde_json::from_str(&written).unwrap();
     assert!(v["tasks"].get("T257").is_some());
     std::fs::write(&t, "<<<<<<< ours").unwrap();
-    let got = merge_files(&b, &o, &t);
+    let got = merge_files(&b, &o, &t, None);
     assert_eq!(got.code, 1);
     assert!(
         got.stderr
@@ -162,7 +180,7 @@ fn the_driver_writes_ours_and_leaves_a_bad_side_unmerged() {
         got.stderr
     );
     assert_eq!(std::fs::read_to_string(&o).unwrap(), written);
-    let got = merge_files(&b, &dir.join("no-such-dir").join("A"), &o);
+    let got = merge_files(&b, &dir.join("no-such-dir").join("A"), &o, None);
     assert_eq!(got.code, 1);
     assert!(got.stderr.contains("cannot write"), "{}", got.stderr);
 }
@@ -184,4 +202,84 @@ fn the_verb_is_git_s_driver() {
     assert_eq!(got.code, 0, "{}", got.stderr);
     let v: Value = serde_json::from_str(&std::fs::read_to_string(&o).unwrap()).unwrap();
     assert!(v["tasks"].get("T256").is_some() && v["tasks"].get("T257").is_some());
+}
+
+/// The plan of 451 T487's trace in small: T05's Approach as the clone filled it, its section's digest, and the stub's block.
+const STUB: &str = "### T05 Approach (checklist part A)\n\n1. **The goal, in the world.** <the place as it should be>\n";
+const FILLED: &str = "### T05 Approach (checklist part A)\n\n1. **The goal, in the world.** A landing's ticks refuse only what plan-delta names.\n";
+const KEY: &str = "### T05 Approach (checklist part A)";
+
+fn plan(block: &str) -> String {
+    format!("# Plan\n\n### T05 (why)\n\n- **Approach**: x.\n\n{block}")
+}
+
+fn held(plan: &str) -> Value {
+    let (b, o, t) = tonight();
+    merge_records(&b.to_string(), &o.to_string(), &t.to_string(), Some(plan)).unwrap()
+}
+
+/// Ours (the clone): CLEAR on the filled block and on T05's filled section; theirs (a pool tree): a same-day verdict on the stub's,
+/// for both - the order of T310's carry, cec429b447.
+fn tonight() -> (Value, Value, Value) {
+    let digest = |s: &str| l7r_shared::sha256::hex(s.as_bytes());
+    let section = |block: &str| plan(block).trim_start_matches("# Plan\n\n").to_owned();
+    let (mut ours, mut theirs) = (base(), base());
+    ours["blocks"][KEY] = entry(&digest(FILLED), "CLEAR", "2026-11-27");
+    theirs["blocks"][KEY] = entry(&digest(STUB), "BLOCKED", "2026-11-27");
+    ours["tasks"]["T05"] = json!({"section_sha256": digest(&section(FILLED)), "verdict": "CLEAR", "reviewed": "2026-11-27"});
+    theirs["tasks"]["T05"] = json!({"section_sha256": digest(&section(STUB)), "verdict": "BLOCKED", "reviewed": "2026-11-27"});
+    (base(), ours, theirs)
+}
+
+#[test]
+fn the_entry_whose_digest_the_merged_plan_holds_wins_a_same_day_tie() {
+    // RED FIRST (451 T495): with no plan the tie is theirs' - the stub's verdict over the clone's CLEAR on the text there
+    let (b, o, t) = tonight();
+    let blind = merged(&b, &o, &t);
+    assert_eq!(blind["blocks"][KEY]["verdict"], "BLOCKED");
+    assert_eq!(blind["tasks"]["T05"]["verdict"], "BLOCKED");
+    let got = held(&plan(FILLED));
+    assert_eq!(got["blocks"][KEY], o["blocks"][KEY]);
+    assert_eq!(got["tasks"]["T05"], o["tasks"]["T05"]);
+    // the mirror: the merged plan holds the stub, so theirs' entry is the one on the text there
+    let got = held(&plan(STUB));
+    assert_eq!(got["blocks"][KEY], t["blocks"][KEY]);
+    assert_eq!(got["tasks"]["T05"], t["tasks"]["T05"]);
+}
+
+#[test]
+fn where_the_plan_holds_neither_or_both_the_newer_wins_a_tie_theirs() {
+    let other = plan("### T05 Approach (checklist part A)\n\nanother text\n");
+    let got = held(&other);
+    assert_eq!(got["blocks"][KEY]["verdict"], "BLOCKED");
+    let (b, mut o, t) = tonight();
+    o["blocks"][KEY]["reviewed"] = json!("2026-11-28");
+    let got = merge_records(&b.to_string(), &o.to_string(), &t.to_string(), Some(&other)).unwrap();
+    assert_eq!(got["blocks"][KEY]["verdict"], "CLEAR");
+    // a key the plan has no block for, and a map that is neither blocks nor tasks, keep the day rule
+    assert_eq!(held("# Plan\n")["tasks"]["T05"]["verdict"], "BLOCKED");
+    let (mut ob, mut tb) = (base(), base());
+    ob["other"] = json!({"k": {"sha256": "a", "reviewed": "2026-11-27"}});
+    tb["other"] = json!({"k": {"sha256": "b", "reviewed": "2026-11-27"}});
+    let got = merge_records(
+        &base().to_string(),
+        &ob.to_string(),
+        &tb.to_string(),
+        Some(&plan(FILLED)),
+    )
+    .unwrap();
+    assert_eq!(got["other"]["k"]["sha256"], "b");
+}
+
+#[test]
+fn the_driver_given_the_plan_merges_by_it() {
+    let dir = crate::checks::scratch("plan-merge-held");
+    let (b, o, t) = (dir.join("O"), dir.join("A"), dir.join("B"));
+    let (bv, ov, tv) = tonight();
+    std::fs::write(&b, bv.to_string()).unwrap();
+    std::fs::write(&o, ov.to_string()).unwrap();
+    std::fs::write(&t, tv.to_string()).unwrap();
+    assert_eq!(merge_files(&b, &o, &t, Some(&plan(FILLED))).code, 0);
+    let v: Value = serde_json::from_str(&std::fs::read_to_string(&o).unwrap()).unwrap();
+    assert_eq!(v["blocks"][KEY]["verdict"], "CLEAR");
 }

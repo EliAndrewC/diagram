@@ -907,6 +907,8 @@ use cap::cap_refusal;
 #[cfg(test)]
 use cap::record_store;
 mod freeze;
+#[cfg(test)]
+pub(crate) use freeze::counted;
 pub use freeze::{
     apply_refusal, changed_lines, close_dispatches, dispatches_since, edit_refusal, oscillation,
     window_start, Closed,

@@ -816,3 +816,30 @@ fn a_bash_call_is_placed_where_its_command_lands() {
     let edit = json!({"cwd": c.to_string(), "tool_name": "Edit", "tool_input": {"command": format!("cd {t}")}});
     assert_eq!(super::call_root(&edit), Some(clone.to_path_buf()));
 }
+
+/// `n` record-check dispatches, each made inside the window.
+fn dispatched(n: usize) -> Value {
+    let rows: serde_json::Map<String, Value> = (0..n)
+        .map(|i| (format!("d{i}"), json!({"t": 10.0})))
+        .collect();
+    json!({ "dispatches": rows })
+}
+
+#[test]
+fn a_count_below_the_cascade_minimum_runs_no_work_tree_diff() {
+    // RED FIRST (451 T492, 2026-11-27): the old check counted the changed lines - a work-tree `git diff --numstat`, 40 to 79 ms -
+    // before it asked whether the dispatches since the last ruling reach CASCADE_MIN, so 9 dispatches here counted once
+    let (root, _) = setup("cascade-cheap");
+    let before = crate::checks::rounds::counted();
+    super::cascade_check(&dispatched(9), &root, 20.0);
+    assert_eq!(crate::checks::rounds::counted() - before, 0);
+    assert!(!root.join(".git/arbiter-owed.json").exists());
+    // at the minimum the trip is unchanged: the lines counted, and 10 over none trips with its detail
+    super::cascade_check(&dispatched(10), &root, 20.0);
+    assert_eq!(crate::checks::rounds::counted() - before, 1);
+    let owed = std::fs::read_to_string(root.join(".git/arbiter-owed.json")).unwrap();
+    assert!(
+        owed.contains("cascade@1") && owed.contains("10 check dispatches over 0 changed lines"),
+        "{owed}"
+    );
+}

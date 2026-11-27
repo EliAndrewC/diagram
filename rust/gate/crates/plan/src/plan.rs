@@ -613,7 +613,7 @@ fn answer(
             }
         }
         // GIT'S MERGE DRIVER FOR THE RECORD (451 T256): `%O %A %B`, the merge written to `%A`
-        ("merge-record", 4) => merge::merge_files(Path::new(&words[1]), Path::new(&words[2]), Path::new(&words[3])),
+        ("merge-record", 4) => merge::merge_files(Path::new(&words[1]), Path::new(&words[2]), Path::new(&words[3]), None),
         ("owed", 2) => match owed(Path::new(&words[1])) {
             Some((rule, reason)) => reply(format!("{rule}\t{reason}\n"), String::new(), 1),
             None => said(""),

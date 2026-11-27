@@ -6886,31 +6886,34 @@ that batch; the red was not in its change.
 <!-- plan-archive: T485 to T485 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T486 to T485 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
-### T495 (<why: the finding or measurement that files it>)
+### T495 (a carry's record merge gave a same-day tie to the pool tree's verdict on a stub over the clone's CLEAR on the filled block, 451 T487)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the record's merge (`rust/gate/crates/plan/src/plan/merge.rs`) now takes the merged plan.md where it is known: where the two sides' entries for a key differ and the plan holds one's digest for that key and not the other's (`blocks` by the block's `sha256`, `tasks` by the section's `section_sha256`, both from `sections::digests::of`), that entry wins; else the old rule, the later `reviewed` day, a tie theirs. The merged plan is known only to `make carry`: git's driver (`merge-record %O %A %B`) is given none, and mid-merge the work tree holds ours' plan.md and no `CHERRY_PICK_HEAD` exists (probed 2026-11-27, method: a scratch repo whose driver dumped its env, `.git` and the work tree's plan.md during a `git cherry-pick`, git 2.53.0). So the carry (`rust/gate/crates/land/src/land/carry.rs`) runs its pick with `-c merge.plan-review.driver=false`: a record both sides changed stops unmerged, and `resolve_all` merges it after the other paths, given its feature's plan.md as this pass resolved it by section, or as the pick wrote it where it merged clean. The clone's driver is what merged T310's carry (the clone's git config defines it; no landing log names the record among a carry's resolved files).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the merge prefers the entry on the text the plan holds | `merge::tests::the_entry_whose_digest_the_merged_plan_holds_wins_a_same_day_tie` (and the mirror), `where_the_plan_holds_neither_or_both_the_newer_wins_a_tie_theirs` | n/a | none | a review of the block again |
+| the carry merges the record in process, beside the merged plan | `carry::tests::record::a_carry_keeps_the_verdict_on_the_text_the_merged_plan_holds`, `a_plan_both_sides_changed_is_merged_first_and_its_text_decides_the_record` | n/a | none | a review of the block again |
 
 ### T495 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A carry keeps, for each block and task, the verdict on the text its merged plan.md holds.
+2. **The constraints.** 451 T256's merge (an entry whole, never field by field; the log of rows append-only), kept; 451 T292's carry (one command, verified at its end); 451 FR-013 (landing speed).
+3. **Where each comes from.** O: 451 T487's trace of cec429b447 (its plan section); O: the driver probe above; G: the brief's words for T495.
+4. **Do they describe the world here?** Yes: the carry test, run on HEAD's `merge.rs`, `plan.rs` and `carry.rs` with the fixture's driver `cp %B %A` (the incoming side, as the real driver takes a same-day tie), failed with the record holding `BLOCKED` where `CLEAR` was owed, 1 of 1 run, measured 2026-11-27 (`make rust-test ONLY=land::carry::tests::record`); with the change the land crate's 44 carry tests and the plan crate's 12 merge tests pass, measured 2026-11-27 (`make rust-test ONLY=`).
+5. **The order.** After 451 T487; before T484.
+6. **The exits.** Green: the five new tests pass and the plan and land crates' first-tier checks are clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The fixture of tonight's order - the clone's CLEAR on a filled block, a pool tree's same-day verdict on its stub, the clone's driver defined - carries with the CLEAR kept.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A carry replaced a CLEAR with a verdict on text no longer in the plan, and the orphaned block refused a 12-task landing's ticks (451 T487).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- git's own merges of a record outside the carry (`scripts/sync-with-main.sh`'s pull) still take the day rule, since no merged plan reaches the driver; a wrong pick there owes a review again, as before (451 T256-D2). Not a defect: no wrong outcome measured; not filed.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 ### T488 (found by 451 T387: a check-wave dispatch never applies its reading marks - `rounds::pair_wave` sets a wave row running without `apply_marks`, which only `rounds::launched` calls; 362 of the clone's 3,054 dispatches carried unapplied marks, observed 2026-11-27, method: counting rows with `marks` by `wave` and `state` in the clone's state)
 
@@ -7043,31 +7046,32 @@ that batch; the red was not in its change.
 **Performance work?** yes: it takes 53 ms off every Agent call's PreToolUse (pair-hooks), measured 2026-11-27 (t491-time.py, 20 runs); a `make done` that pair-hooks gates asks the same `checkpoint due` and should save the same, not timed.
 
 
-### T492 (<why: the finding or measurement that files it>)
+### T492 (a record check's dispatch ran a work-tree diff for the cascade tripwire where it could not trip, 451 T388)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `cascade_check` (`rust/guard/shared/src/checks/handle.rs`) asks the cheap half of the trip first: `arbiter::cascade_can_trip(n, last)` (`arbiter.rs`, the `n - last >= CASCADE_MIN` that `cascade` now asks too, one predicate) from the dispatch count and the last cascade ruling, and only where it holds counts the changed lines (`rounds::changed_lines`, `freeze.rs`: a merge-base and a work-tree `git diff --numstat`). The trip is decided by the same numbers wherever it can fire. Both the sandbox's and the real clone's check state hold 0 dispatches since their window opened (3,054 rows, all older; observed 2026-11-27 07:17, method: `checks-open.json` read against `merge-base HEAD origin/main`'s commit time), and a landing reopens the window, so nearly every record check is under the minimum. A record check's (`rf`) PreToolUse, 20 runs each, the two builds alternated in blocks of 5, load 4.7 to 6.5: `--only check-bundle-hooks` 241.6 to 194.8 ms median (p90 266.6 to 220.5), every guard 343.9 to 284.2 (p90 406.2 to 305.9), measured 2026-11-27 (T388's sandbox and `t388-time.py`, its binary taken from `T492_BIN` and its raw values kept, HEAD's guard source against this task's, each built by `scripts/hooks/l7r-guard.sh`). 65 such dispatches a day x about 50 ms = about 3 s a day, measured 2026-11-27 (T388's dispatch count times the median above).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the minimum asked before the diff | `handle::tests::a_count_below_the_cascade_minimum_runs_no_work_tree_diff` | n/a | none | the old order (a slower dispatch, the same trip) |
 
 ### T492 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A record check's dispatch runs no git diff the cascade tripwire does not need.
+2. **The constraints.** Feature 375 FR-010 (the cascade: `CASCADE_MIN` 10, `CASCADE_RATIO` 1), unchanged; 451 FR-013; no guard message changes.
+3. **Where each comes from.** O: 451 T388's record (`dev/measurements/2026-11-27/agent-hook/results.md`, `t388-git.txt`); O: the timing above.
+4. **Do they describe the world here?** Yes: the red test, on HEAD's `cascade_check`, counted the changed lines once for 9 dispatches where 0 was owed (`left: 1, right: 0`), measured 2026-11-27 (`make rust-test ONLY=checks::handle::tests::a_count_below`); with the change it counts none for 9 and one for 10, which trips `cascade@1` with the detail `10 check dispatches over 0 changed lines` as before, measured 2026-11-27 (the same test).
+5. **The order.** After 451 T388; before T302.
+6. **The exits.** Green: the test passes, the shared crate's first-tier checks are clean, and the sandbox's dispatch is faster. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 46.8 ms off `check-bundle-hooks`' median and 59.7 off the whole PreToolUse, measured 2026-11-27 (the timing in the Approach).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader sees: the same trip, sooner.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a record check's dispatch hook, about 50 ms each, measured 2026-11-27 (the timing in the Approach; 451 FR-013).
 
 
 ### T493 (451 T388: review-round-hooks parsed the whole 4.7 MB `plan-review.json` into values on every plan review, for one task's round count - 40 ms of the guard's 82, measured 2026-11-27 (T388's shim))

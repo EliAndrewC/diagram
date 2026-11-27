@@ -4392,6 +4392,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T495 (a carry's record merge gave a same-day tie to the pool tree's verdict on a stub over the clone's CLEAR on the filled block, 451 T487)": {
+   "sha256": "12ba43c624610dcfaacefd180f04c04226d569aa11936a87a10bb49d70f545c4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T495 Approach (checklist part A)": {
+   "sha256": "1f35a995a841f01054edcf6035bbbeb88e1349fa9a01131e4804e22412208764",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T492 (a record check's dispatch ran a work-tree diff for the cascade tripwire where it could not trip, 451 T388)": {
+   "sha256": "41c862eafde609324806fe5237929fb6ec97ffc0bdf9772a88813b6f06fc51cf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T492 Approach (checklist part A)": {
+   "sha256": "d4b66742a46a21fc5095e8450fe9f20413b6f3cd49850e236d22ec4d8c787f95",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -40915,6 +40939,54 @@
      "summary": "The before figure is the build from before T387. A build with T387 but not T489 was not timed.",
      "class": "within",
      "why": "This is a measurement choice and is stated openly. FR-013 asks for no particular baseline, and the done measurement (0 of 20 writes, 7.8 ms) is the build's own figure."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T492 (a record check's dispatch ran a work-tree diff for the cascade tripwire where it could not trip, 451 T388)",
+    "### T492 Approach (checklist part A)",
+    "### T495 (a carry's record merge gave a same-day tie to the pool tree's verdict on a stub over the clone's CLEAR on the filled block, 451 T487)",
+    "### T495 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T495-A",
+     "summary": "The record's merge prefers, where the two sides' entries for a key differ, the entry whose digest the merged plan.md holds (blocks by sha256, tasks by section_sha256); else the old rule, the later reviewed day, a tie theirs.",
+     "class": "within",
+     "why": "Fixes a wrong outcome measured in 451 T487 (a carry kept a verdict on a stub over the CLEAR on the filled block, and the orphaned block refused a 12-task landing's ticks); serves the 2026-11-25 request words 'the plan-review record no longer conflicting' and FIX AS WE GO. 451 T256's entry-whole merge is kept."
+    },
+    {
+     "id": "T495-B",
+     "summary": "The carry runs its cherry-pick with merge.plan-review.driver=false so a record both sides changed stops unmerged, and resolve_all merges it in process after the other paths, given the feature's plan.md as resolved.",
+     "class": "within",
+     "why": "The means of A: the plan's probe (dated, method stated) shows git's driver is given no merged plan, so the carry is where the plan is known. No behavior outside the carry's record merge changes."
+    },
+    {
+     "id": "T495-C",
+     "summary": "Found and left: git's own merges of a record outside the carry (sync-with-main's pull) keep the day rule; not filed.",
+     "class": "within",
+     "why": "The plan states no wrong outcome measured on that path, and nothing in request.md or the spec reports one (grep of the bundle for sync-with-main/merge-record/T256/pull finds only the 2026-11-25 line). An unobserved exposure is not a known defect under constitution XIV's definition, so leaving it is not a narrowing. T256-D2's text, which the plan cites for 'as before', is not in the bundle; that does not change the class. Should a lost verdict on a pull be seen, it is a defect and owed a fix then."
+    },
+    {
+     "id": "T495-D",
+     "summary": "Not performance work; ordered after 451 T487 and before T484; one landing; exits green on five new tests and first-tier checks.",
+     "class": "within",
+     "why": "Ordering and exits settle nothing the request or FR-013 leaves to the GM; a defect fix of the landing tooling is ordered behind performance work as FR-013 says."
+    },
+    {
+     "id": "T492-A",
+     "summary": "cascade_check asks arbiter::cascade_can_trip(n, last) (the n - last >= CASCADE_MIN predicate, now shared with cascade) before counting changed lines with the work-tree git diff; CASCADE_MIN, CASCADE_RATIO and guard messages unchanged.",
+     "class": "within",
+     "why": "The skipped diff is only skipped where the trip cannot fire, so the tripwire of feature 375 FR-010 fires on the same numbers (the red test shows 10 dispatches still tripping cascade@1 with the same detail). Serves the GM's 2026-11-20 'prioritize performance improvements' and 451 FR-013: about 47 ms off the check's median, figures dated with method."
+    },
+    {
+     "id": "T492-B",
+     "summary": "Classed performance work; ordered after 451 T388 and before T302; one landing.",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the checks or the hooks faster as performance work, and the plan's timing (dated, method stated) shows it does."
     }
    ]
   }

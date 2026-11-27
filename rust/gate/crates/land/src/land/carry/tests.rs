@@ -682,4 +682,5 @@ fn the_arguments_are_checked() {
 }
 
 mod files;
+mod record;
 mod spec;

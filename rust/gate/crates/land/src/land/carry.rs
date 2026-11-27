@@ -21,8 +21,9 @@
 //! - `specs/*/request.md`, where every conflicting hunk is one both sides only added to and each side's addition opens with a
 //!   `## ` heading - a dated section of the GM's words, one written in each tree: ours, a blank line, then theirs' sections ours
 //!   lacks; one heading over different words on the two sides stops (451 T300).
-//! - `specs/*/plan-review.json`, merged three-way by the record's own merge (`plan merge-record`, 451 T256), asked in process where
-//!   the tree's git config defines no driver.
+//! - `specs/*/plan-review.json`, merged three-way by the record's own merge (`plan merge-record`, 451 T256), always in process: the
+//!   pick runs with the record's git driver failing, so the merge is given the merged plan.md and keeps the verdict on the text
+//!   there (451 T495).
 //!
 //! And outside a feature's spec files (451 T300, part 2 - the four carries of 2026-11-26 that still stopped after the rules above):
 //!
@@ -237,10 +238,34 @@ fn merge_file(root: &Path, files: &[String]) -> Result<String, String> {
 
 /// The page `make docs` generates from the Makefile: regenerated after a conflict, never merged.
 const PAGE: &str = "docs/make-targets.html";
+/// A feature's plan review record, merged beside its plan (451 T495).
+const RECORD: &str = "plan-review.json";
+/// The pick's record driver, failing: a record both sides changed stops unmerged and is merged in process, beside the merged plan.md
+/// git's driver is never given (451 T495; mid-merge the work tree holds ours' plan, probed 2026-11-27).
+const NO_DRIVER: &str = "merge.plan-review.driver=false";
+
+/// The merged plan.md beside the record at `path`: the one this pass resolved where it was unmerged, else the one the pick wrote.
+fn merged_plan(
+    root: &Path,
+    path: &str,
+    merged: &[&String],
+    texts: &[Option<Result<(String, &'static str), String>>],
+) -> Option<String> {
+    let plan = format!("{}plan.md", path.strip_suffix(RECORD)?);
+    match merged.iter().position(|p| **p == plan) {
+        Some(i) => texts[i].as_ref()?.as_ref().ok().map(|(t, _)| t.clone()),
+        None => std::fs::read_to_string(root.join(&plan)).ok(),
+    }
+}
 
 /// One unmerged path resolved by its file's rule: its merged text and the rule's name, or why it is left to a hand. Its three
 /// stages are written under `scratch` and merged there.
-fn resolved(root: &Path, scratch: &Path, path: &str) -> Result<(String, &'static str), String> {
+fn resolved(
+    root: &Path,
+    scratch: &Path,
+    path: &str,
+    plan: Option<&str>,
+) -> Result<(String, &'static str), String> {
     let spec = |name: &str| spec_file(path, name);
     let named = ["tasks.md", "plan.md", "request.md", "plan-review.json"]
         .iter()
@@ -295,6 +320,7 @@ fn resolved(root: &Path, scratch: &Path, path: &str) -> Result<(String, &'static
         Path::new(&files[0]),
         Path::new(&files[1]),
         Path::new(&files[2]),
+        plan,
     );
     if said.code != 0 {
         return Err("a side is not JSON".to_owned());
@@ -312,8 +338,18 @@ fn resolve_all(
     let scratch = git_dir(root)?.join("l7r-carry");
     std::fs::create_dir_all(&scratch).map_err(super::io)?;
     let merged: Vec<&String> = unmerged.iter().filter(|p| *p != PAGE).collect();
-    let texts: Vec<Result<(String, &'static str), String>> =
-        merged.iter().map(|p| resolved(root, &scratch, p)).collect();
+    // each record after the rest, beside its feature's merged plan.md: the one resolved here, else the one the pick wrote (451 T495)
+    let mut texts: Vec<Option<Result<(String, &'static str), String>>> = merged
+        .iter()
+        .map(|p| (!spec_file(p, RECORD)).then(|| resolved(root, &scratch, p, None)))
+        .collect();
+    for i in 0..merged.len() {
+        if texts[i].is_none() {
+            let plan = merged_plan(root, merged[i], &merged, &texts);
+            texts[i] = Some(resolved(root, &scratch, merged[i], plan.as_deref()));
+        }
+    }
+    let texts: Vec<Result<(String, &'static str), String>> = texts.into_iter().flatten().collect();
     let _ = std::fs::remove_dir_all(&scratch);
     let stops: Vec<String> = merged
         .iter()
@@ -496,7 +532,17 @@ fn carry(root: &Path, from: &Path, commit: &str, said: &mut Said) -> Result<i32,
         return Ok(0);
     }
     let before = git(root, &["rev-parse", "HEAD"])?.1.trim().to_owned();
-    let (rc, out) = git(root, &["-c", "core.editor=true", "cherry-pick", &sha])?;
+    let (rc, out) = git(
+        root,
+        &[
+            "-c",
+            "core.editor=true",
+            "-c",
+            NO_DRIVER,
+            "cherry-pick",
+            &sha,
+        ],
+    )?;
     let mut kept = Vec::new();
     if rc != 0 {
         let unmerged = lines(&git(root, &["diff", "--name-only", "--diff-filter=U"])?.1);
