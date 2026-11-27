@@ -66,10 +66,13 @@ pub(super) const AFTER_GATE: [&str; 2] = ["gate-stamp selftest", "gate-stamp"];
 pub(super) const OWN_FORM: [&str; 1] = ["ledger-owed"];
 
 impl Land {
-    /// `l7r-gate claims --root <root> <args>`, in process (`ask:449-T83-scope`).
+    /// `l7r-gate claims --root <root> --delta-base=<base> <args>`, in process (`ask:449-T83-scope`): the hand-in's base, else none
+    /// given empty (461 T38) - this process never sees the `L7R_DELTA_BASE` the gates are handed, so the carry, the known drifts and the
+    /// report read it from here, and an export of it never narrows a landing's own.
     pub(super) fn claims(&self, args: &[&str]) -> (i32, String) {
         let root = self.root.to_string_lossy().into_owned();
-        let mut all = vec!["--root".to_owned(), root];
+        let base = self.hand_in.borrow().clone().unwrap_or_default();
+        let mut all = vec!["--root".to_owned(), root, format!("--delta-base={base}")];
         all.extend(args.iter().map(|a| (*a).to_owned()));
         said(self.inproc.claims(&all))
     }

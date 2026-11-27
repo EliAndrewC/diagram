@@ -1721,31 +1721,91 @@ step faster and measures no time.
 **Performance work?** no.
 
 
-### T38 (<why: the finding or measurement that files it>)
+### T38 (T34's builder, 2026-11-27: the first pass's in-process claims calls never see the hand-in base; T40 built here)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: built in pool tree `diagram-backlog-t271` on main's 13ca98165b. The in-process claims calls take the base as an argument,
+  and at a hand-in the owed-with-no-flight refusal is scoped to the builder's own claims.
+  - **The door** (`land` `cheap.rs` `Land::claims`): every in-process claims call (the rekey, the carry, the known drifts, the report)
+    goes through it. It now passes `--delta-base=<base>`: the hand-in base at hand-in, an empty value at a landing.
+  - **The flag** (`claims` `claims.rs` `split_top`): a new top-level `--delta-base=`, `=` form only, so an empty value counts as a
+    value. Given, it runs the command inside `l7r_gate_core::delta_base::with`.
+  - **The reader** (`core` `delta_base.rs`): `with` exists in every build now, not only in test builds. A base given on the thread
+    wins over the process's `L7R_DELTA_BASE`, and an empty one given reads as no base. So a stray export never narrows an in-process
+    call at a landing. `with` restores the outer base after it. A test build still reads no process variable.
+  - **The sites that did not read the base**, now reading `delta_base::named` through `carry::delta_paths` (the working tree
+    against the base, plus untracked files; else the merge base, as before):
+    - `carry.rs` `touches_engine`, which picks the carry's target. From the merge base, another task's staged engine code sent a
+      builder's carries into its own feature rather than 405.
+    - `report.rs` `delta_form_problems`.
+  - **The task line's pointer, made precise**: report.rs 91 is `delta_form_problems`. The claims gate's child process calls it, not
+    the in-process `report`. That `report()` reads no base, and `open_claims_refusal` already scopes it by `delta_names()`, which
+    reads the hand-in base. At hand-in, `origin/main...HEAD` named every staged batch's files and none of the builder's uncommitted
+    ones, so a form problem the builder wrote passed and another task's refused (observed 2026-11-27, method: reading `gate_cmd` and
+    the fixture below). Fixed here.
+  - **T40, the owed claims at hand-in** (new `claims/hand_in.rs`, called by `carry.rs` `classified`): applies spec-fidelity's MODE 1
+    ruling of 2026-11-27 (LEGITIMATE, three bounds). It applies only where `delta_base::named` gives a base, never on `mb`'s merge-base
+    fallback. Each owed (key, why) is compared with the base tree that `classified` already extracts (its rows by `index::rows_of`).
+    - A claim counts as the landing's only if the base holds a row under the same key that matches the row now on everything an owed
+      reason reads: code, normalized claim text, research fingerprint (cited pages, followed), the unit's constant reads, its
+      siblings and its index row. For a DRAWN reason, the Mode A engine must match too.
+    - Anything else is the builder's, including a claim with no base row (added or moved). This is bound 1. Where in doubt, it refuses.
+    - The landing's claims go to the pre-existing warnings as `owed below the hand-in base, the landing's to ask (461 T40; <why>): <key>`.
+      The line never contains `owed (`, which `claims_wait::claims_cure` and the first pass's `lane_s` read as the builder's to cure.
+    - `owed()` itself, `owed_keys` (`ports::Before`), introduced findings, form problems and carries are unchanged (bound 3). A
+      landing gives an empty base, so it asks every owed claim. A base that names no commit gives None, so nothing is scoped (bound 2).
+    - A scoped pass is never stored for the landing to skip on: `push-gate pass claims` stores none while a judged path is
+      uncommitted, and at a phase-1 hand-in every path the gate judges is (observed 2026-11-27, method: reading `cohort`
+      `push.rs` `record_pass`).
+  - Built here: T40 - the hand-in's owed-with-no-flight refusal scoped to the claims the builder's delta touches, adds or moves (`claims/hand_in.rs`, `carry.rs` `classified`).
+  - **Red first** (observed 2026-11-27, method: `make rust-test CRATE=<crate> ONLY=<module>` with each line below broken in turn and
+    restored, by `t38-mutate.py` in the scratchpad):
+
+    | line broken | crate, ONLY | passed, failed | red |
+    |---|---|---|---|
+    | `classified` not scoping at a hand-in | claims, `claims::hand_in` | 2, 1 | at_a_hand_in_only_the_claims_its_work_touches_are_refused_owed |
+    | the flag parsed but not given | claims, same | 2, 1 | the same |
+    | `touches_engine` reading the merge base only | claims, same | 2, 1 | at_a_hand_in_the_engine_and_the_form_problems_are_the_work_s |
+    | `delta_form_problems` reading `origin/main...HEAD` | claims, same | 2, 1 | the same |
+    | `Land::claims` giving an empty base at hand-in | land, `land::cheap::tests::hand_in` | 6, 1 | the_checks_that_read_their_own_delta_are_handed_the_hand_in_base |
+    | `with` not restoring the outer base | core, `delta_base` | 0, 1 | a_named_commit_is_the_base_and_anything_else_is_none |
+
+    - The fixtures commit another task's staged batch above `origin/main` (`Thing.m`'s code changed, so its claim is owed), make that
+      commit the base, and leave the work uncommitted (`reach`'s code changed).
+    - At hand-in only `reach` is refused owed, and `Thing.m` is said as the landing's. With no base, an empty one or `no-such-rev`,
+      both are refused.
+    - Two assertions also hold on the old code, which refused everything, so they were not run red: bound 1's test (the work touches
+      `Thing.m` again and adds `helper`'s claim, and all three are refused) and the landing leg.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the hand-in base given to the in-process claims calls, and the owed claims scoped to the work at hand-in | n/a - no map | n/a | none | n/a |
 
 ### T38 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** At hand-in the claims checks judge the builder's own work. The in-process carry, the known drifts and
+   the form problems read the hand-in base, and an owed claim refuses only where the work touches, adds or moves it.
+2. **The constraints.** FR-002 (a builder's tree meets the refusals the builder can cure), FR-008 (a landing asks every owed claim),
+   D3, D4, T34's reader, and spec-fidelity's MODE 1 ruling of 2026-11-27 with its three bounds. Constitution XIII: with no base given,
+   every call reads as before.
+3. **Where each comes from.** G: the GM's request behind FR-002 (spec.md). R: the ruling's bounds (T40's line), T34's section. O: the
+   red-first table.
+4. **Do they describe the world here?** Yes: each fixture stands as a phase-1 hand-in tree does, with a staged commit above origin/main
+   as the base and the work uncommitted on it.
+5. **The order.** After T34, before T08, which wires the hand-in mode into `hand_in.rs`.
+6. **The exits.** Green: the tests and `make builder-checks` of core, claims and land. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The red-first table above. `make builder-checks CRATE="rust/gate/crates/core rust/gate/crates/claims
+   rust/gate/crates/land"` green, 2026-11-27 (core 86, claims 206, land 192 tests). Core is checked because `delta_base.rs` changed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Only a hand-in that names a base changes. It refuses fewer owed claims (other staged work's) and its own form
+   problems in place of other tasks'. With no base, or an empty one as at every landing and push, nothing changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none. The push table's other delta-scoped rows are T37's.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no. The scoping costs one `rows_of` over the base tree, and only at a hand-in with something owed. It was not
+timed: the base tree was already extracted, and the fixtures' gate calls stay inside the crate's test time.
 
 
 ### T36 (<why: the finding or measurement that files it>)

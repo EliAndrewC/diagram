@@ -251,7 +251,8 @@ fn a_rust_stage_s_checklist_and_open_claims_are_asked_of_the_applied_work() {
 }
 
 /// 461 T34: the checks that read their own delta - the push's table, `record-owed` behind `entry-gate.sh`, the claims gate - are
-/// handed the hand-in base, and the landing's pass hands them none, so an exported base never narrows a landing.
+/// handed the hand-in base, and the landing's pass hands them none, so an exported base never narrows a landing; and so are the first
+/// pass's in-process claims calls (461 T38).
 #[test]
 fn the_checks_that_read_their_own_delta_are_handed_the_hand_in_base() {
     let fx = fx("hand-in-base");
@@ -268,6 +269,9 @@ fn the_checks_that_read_their_own_delta_are_handed_the_hand_in_base() {
     assert!(pass(&fx, &["T1"]).is_empty());
     let handed = format!("base={base}\n");
     assert_eq!(fx.log().matches(&handed).count(), 3, "{}", fx.log());
+    // ...and its in-process claims calls are given it too: the rekey, the carry and the known drifts (461 T38)
+    let given = fx.answers.bases.take();
+    assert_eq!(given, vec![base.clone(); 3]);
     git(&fx.root, &["reset", "-q", "--", "scripts/work.sh"]);
     std::fs::remove_file(fx.root.join("scripts/work.sh")).unwrap();
     let d = fx.root.join("specs/449-x");
@@ -275,4 +279,5 @@ fn the_checks_that_read_their_own_delta_are_handed_the_hand_in_base() {
         .cheap_refusals(&d, &tasks(&["T1"]), NOTE, &Pass::Landing, None)
         .unwrap();
     assert_eq!(fx.log().matches("base=\n").count(), 3, "{}", fx.log());
+    assert_eq!(fx.answers.bases.take(), vec![String::new(); 3]);
 }

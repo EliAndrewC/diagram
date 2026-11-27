@@ -78,6 +78,8 @@ pub(super) struct Answers {
     pub flight_fails: RefCell<bool>,
     pub own: RefCell<Vec<String>>,
     pub asked: RefCell<Vec<String>>,
+    /// The `--delta-base=` each in-process claims call was given (461 T38).
+    pub bases: RefCell<Vec<String>>,
     /// A path the ledger write dirties, as a real write would.
     pub ledger_writes: RefCell<Option<PathBuf>>,
 }
@@ -94,6 +96,12 @@ fn reply(code: i32, stdout: &str) -> Reply {
 
 impl Inproc for Fake {
     fn claims(&self, args: &[String]) -> Reply {
+        // the base the landing gives its in-process claims (461 T38), kept apart from what it asked
+        let (bases, args): (Vec<&String>, Vec<&String>) =
+            args.iter().partition(|a| a.starts_with("--delta-base="));
+        let given = bases.iter().map(|b| &b["--delta-base=".len()..]);
+        self.0.bases.borrow_mut().extend(given.map(str::to_owned));
+        let args: Vec<String> = args.into_iter().cloned().collect();
         let verb = args.get(2).cloned().unwrap_or_default();
         self.0
             .asked

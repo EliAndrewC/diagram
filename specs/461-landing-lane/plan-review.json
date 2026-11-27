@@ -276,6 +276,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T38 (T34's builder, 2026-11-27: the first pass's in-process claims calls never see the hand-in base; T40 built here)": {
+   "sha256": "ab7ec32aabda020b99aeaf49c0a1112def57a116f9cb4cc29ac41fdb70661aa1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T38 Approach (checklist part A)": {
+   "sha256": "d633269d335d3d63e8208bfe0cc281c7bd63503600d44456a976b014216df567",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1702,6 +1714,86 @@
      "summary": "apply::told's wording is left for T09's command door; the hand-in uses its own words for a conflict.",
      "class": "within",
      "why": "Deferral of wording to a later task; nothing asked is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T38 (T34's builder, 2026-11-27: the first pass's in-process claims calls never see the hand-in base; T40 built here)",
+    "### T38 Approach (checklist part A)",
+    "(removed) ### T04 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T38-door-flag-reader",
+     "summary": "Land::claims passes --delta-base=<base> to every in-process claims call (hand-in base at hand-in, empty at a landing); claims gains a top-level --delta-base= flag run inside delta_base::with; with exists in every build, a thread base wins over L7R_DELTA_BASE, an empty one reads as no base, and with restores the outer base.",
+     "class": "within",
+     "why": "Mechanism only (the flag, the thread-local reader, restore, empty base as no base). The empty base at a landing makes a stray L7R_DELTA_BASE export unable to narrow a landing, which serves FR-008; with no base every call reads as before. What each call does with the base is ruled separately below."
+    },
+    {
+     "id": "T38-door-per-call",
+     "summary": "Through the door the rekey, the carry, the known drifts and the report now read the hand-in base at a hand-in.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled per call on the block's text. Carry and known drifts: at a hand-in they now judge the builder's delta rather than every staged batch above origin/main, the same purpose test as the form problems - item 2 has refusals fixed by the builder that has the context, in its own tree, and another task's carries or drifts are not in it; at a landing the empty base reads as before (FR-008). Report: the block states the in-process report() reads no base and was already scoped by delta_names(), so nothing changes there. Rekey: the bundle does not show what the rekey does with a base; the ruling rests on the block's statement that with no base, or an empty one as at every landing and push, nothing changes, so whatever it scopes at hand-in the landing still judges whole."
+    },
+    {
+     "id": "T38-touches-engine",
+     "summary": "carry.rs touches_engine reads delta_base::named via carry::delta_paths, so a builder's carries target the right feature rather than following another task's staged engine code.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (carries sent to the wrong feature) in the hand-in's first pass; narrows nothing the GM asked for and leaves the landing unchanged."
+    },
+    {
+     "id": "T38-form-problems",
+     "summary": "report.rs delta_form_problems reads the hand-in base rather than origin/main...HEAD: at hand-in the builder's own uncommitted form problems are refused and other staged tasks' are no longer refused there; at a landing (empty base) every form problem is still read as before.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Two parts adjudicated separately. Refusing the builder's own form problems, which previously passed, is a defect fix and within. Not refusing other staged tasks' form problems at hand-in narrows the literal 'runs the landing's first pass' (FR-002, SC-002), but applying it literally defeats the GM's stated purpose for item 2 - refusals 'get fixed by the builder that has the context, in its own tree': another task's form problem is not in this builder's tree or context, so it could neither cure it nor hand in. The landing still reads every form problem through the same gate (FR-008), so nothing escapes the landing."
+    },
+    {
+     "id": "T40-owed-scoped",
+     "summary": "At a hand-in with a named base, the owed-with-no-flight refusal covers only claims the builder's delta touches, adds or moves; a claim whose base row matches on everything an owed reason reads (code, normalized text, research fingerprint, constant reads, siblings, index row, Mode A engine for DRAWN) is reported as a warning for the landing; anything in doubt refuses; owed()/owed_keys/introduced findings/form problems/carries unchanged; empty or unresolvable base scopes nothing; the plan states a scoped pass is never stored for the landing to skip on.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same purpose test as the form problems: an owed claim in another staged task's work is not the builder's to cure, so refusing it at hand-in would block the hand-in on work the builder lacks the context for, defeating item 2's purpose. The bounds keep it from gutting the rule: it applies only with a named base (never on the merge-base fallback), the match test refuses in doubt and treats added or moved claims as the builder's, and the landing gives an empty base and asks every owed claim. The FR-008 leg also rests on the plan's dated premise (observed 2026-11-27 by reading cohort push.rs record_pass, for a phase-1 hand-in, with no red-first row) that push-gate pass claims stores no pass while a judged path is uncommitted, so no scoped pass is stored for the landing to skip; if that premise fails, this ruling's FR-008 leg fails with it. Ruled on the bundle's text; the earlier MODE 1 ruling T40 cites is not in the bundle."
+    },
+    {
+     "id": "T38-order-and-exits",
+     "summary": "T38 runs after T34 and before T08; exits are the named tests and make builder-checks of core, claims and land; budget one landing.",
+     "class": "within",
+     "why": "Sequencing and verification of the requested hand-in first pass; no scope change."
+    },
+    {
+     "id": "T04-removed",
+     "summary": "The T04 block, an unfilled template placeholder (no reason, no approach, an empty table), is deleted.",
+     "class": "within",
+     "why": "It held no decision or task content, so removing it narrows nothing asked."
+    },
+    {
+     "id": "T40-built-in-T38",
+     "summary": "T40 is built inside T38 rather than as its own pass.",
+     "class": "within",
+     "why": "Packaging of work; changes nothing that is asked."
+    },
+    {
+     "id": "T37-rows-left",
+     "summary": "The push table's other delta-scoped rows are left to T37 (Found and left: none).",
+     "class": "within",
+     "why": "Assigns work to another filed task; no known defect is dropped."
+    },
+    {
+     "id": "not-run-red",
+     "summary": "Two assertions (bound 1's test and the landing leg) hold on the old code, which refused everything, so they were not run red.",
+     "class": "within",
+     "why": "Verification detail; the old code could not fail them, and each is still asserted."
+    },
+    {
+     "id": "no-timing",
+     "summary": "The scoping cost (one rows_of over an already extracted base tree, only at a hand-in with something owed) is not timed.",
+     "class": "within",
+     "why": "No performance claim is made beyond the stated mechanism; nothing asked is narrowed."
     }
    ]
   }

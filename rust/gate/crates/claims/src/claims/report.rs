@@ -86,9 +86,14 @@ pub fn question_names(root: &Path) -> HashSet<String> {
         .collect()
 }
 
-/// Each form problem whose file changed since `base`; a form is fixed, never carried.
+/// Each form problem whose file changed since `base`; a form is fixed, never carried. At a hand-in, the files the working tree changes
+/// against the base it names (461 T38): `origin/main...HEAD` there named every staged batch's files and none of the builder's own
+/// uncommitted ones, so a form problem the builder wrote passed and another task's refused it.
 pub fn delta_form_problems(root: &Path, pairs: &[Pair]) -> Vec<String> {
-    let diff = git(root, &["diff", "--name-only", "origin/main...HEAD"]);
+    let diff = match l7r_gate_core::delta_base::named(root) {
+        Some(_) => super::carry::delta_paths(root).join("\n"),
+        None => git(root, &["diff", "--name-only", "origin/main...HEAD"]),
+    };
     let changed: HashSet<&str> = diff.split_whitespace().collect();
     if changed.is_empty() {
         return Vec::new();

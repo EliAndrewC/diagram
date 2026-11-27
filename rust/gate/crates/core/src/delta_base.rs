@@ -28,27 +28,34 @@ pub fn named(root: &Path) -> Option<String> {
     .filter(|s| !s.is_empty())
 }
 
-#[cfg(not(any(test, feature = "testkit")))]
-fn env() -> Option<String> {
-    std::env::var(VAR).ok()
-}
-
-#[cfg(any(test, feature = "testkit"))]
+// A base GIVEN on this thread, in place of the process's variable (461 T38): `make land` asks the claims in its own process, which
+// never sees the variable it hands its child processes, so the claims door takes the base as an argument and reads it here. An empty
+// value given is a base given as none - a landing's own ask - so a stray export never narrows what an in-process call judges.
 thread_local! {
     static GIVEN: std::cell::RefCell<Option<String>> = const { std::cell::RefCell::new(None) };
 }
 
-#[cfg(any(test, feature = "testkit"))]
 fn env() -> Option<String> {
-    GIVEN.with(|g| g.borrow().clone())
+    GIVEN.with(|g| g.borrow().clone()).or_else(process)
 }
 
-/// `f` run with [`VAR`] set to `base` on this thread only (a test's environment).
+#[cfg(not(any(test, feature = "testkit")))]
+fn process() -> Option<String> {
+    std::env::var(VAR).ok()
+}
+
+// a test build reads no process variable: each test names its base on its own thread
 #[cfg(any(test, feature = "testkit"))]
+fn process() -> Option<String> {
+    None
+}
+
+/// `f` run with the base given as `base` on this thread only, in place of [`VAR`]: the in-process door's (461 T38) and a test's
+/// environment. The base given before is restored after, so a call given one inside another leaves the outer one standing.
 pub fn with<R>(base: &str, f: impl FnOnce() -> R) -> R {
-    GIVEN.with(|g| *g.borrow_mut() = Some(base.to_owned()));
+    let prior = GIVEN.with(|g| g.borrow_mut().replace(base.to_owned()));
     let out = f();
-    GIVEN.with(|g| *g.borrow_mut() = None);
+    GIVEN.with(|g| *g.borrow_mut() = prior);
     out
 }
 
@@ -67,7 +74,9 @@ mod tests {
         assert_eq!(with(&format!(" {head}\n"), || named(root)), Some(head));
         assert_eq!(with("  ", || named(root)), None);
         assert_eq!(with("no-such-rev", || named(root)), None);
-        // set for the call alone
+        // set for the call alone, and an inner base given leaves the outer one standing after it (461 T38)
         assert_eq!(named(root), None);
+        let outer = with("HEAD", || (with("", || named(root)), named(root)));
+        assert_eq!(outer, (None, Some(git(root, &["rev-parse", "HEAD"]))));
     }
 }

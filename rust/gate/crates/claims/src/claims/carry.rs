@@ -47,18 +47,28 @@ fn git_lines(root: &Path, args: &[&str]) -> Vec<String> {
 
 /// Does this tree's delta change engine code, as the gate's one list decides it? Every engine path the delta names, untracked ones among
 /// them: a `.py` file whose docstring-blind content id held was left out, asked of `codeid.py`, until feature 449 T247 deleted it with the
-/// last `.py` file, so a `.py` file's change is engine code as any other's is.
+/// last `.py` file, so a `.py` file's change is engine code as any other's is. At a hand-in, from the base it names (461 T38): from the merge
+/// base, another task's staged engine code sent a builder's carries into its own feature, not the claims feature's.
 pub fn touches_engine(root: &Path) -> bool {
-    let base = git_lines(root, &["merge-base", "origin/main", "HEAD"])
-        .into_iter()
-        .next()
+    delta_paths(root).iter().any(|p| crate::delta::is_engine(p))
+}
+
+/// Every path the working tree changes against its base, untracked ones among them: the base a hand-in names (461 T34's
+/// `delta_base::named`), else the merge base with origin/main, else HEAD.
+pub fn delta_paths(root: &Path) -> Vec<String> {
+    let base = l7r_gate_core::delta_base::named(root)
+        .or_else(|| {
+            git_lines(root, &["merge-base", "origin/main", "HEAD"])
+                .into_iter()
+                .next()
+        })
         .unwrap_or_else(|| "HEAD".to_owned());
     let mut paths = git_lines(root, &["diff", "--name-only", &base]);
     paths.extend(git_lines(
         root,
         &["ls-files", "--others", "--exclude-standard"],
     ));
-    paths.iter().any(|p| crate::delta::is_engine(p))
+    paths
 }
 
 fn read_or_empty(path: &Path) -> Result<String, Fail> {
@@ -432,7 +442,8 @@ pub fn classified(root: &Path, at: &Reading) -> Result<Classified, Fail> {
     // a rebuilt file's old claims wait on what is owed under its `as` paths (ask:449-T152-rebuilt-claims)
     let owed_keys: Vec<String> = due.iter().map(|(k, _)| k.clone()).collect();
     // at a hand-in, the base it names (461 T34): a finding on another task's staged code below it is not the work's
-    let mut mb = l7r_gate_core::delta_base::named(root).unwrap_or_else(|| {
+    let hand_in = l7r_gate_core::delta_base::named(root);
+    let mut mb = hand_in.clone().unwrap_or_else(|| {
         l7r_shared::py_text::strip(&git(root, &["merge-base", "HEAD", "origin/main"])).to_owned()
     });
     if mb.is_empty() {
@@ -479,6 +490,18 @@ pub fn classified(root: &Path, at: &Reading) -> Result<Classified, Fail> {
         let answered = super::index::answered(&at.cur, &at.index, root)?;
         let deferred = load_deferred(&root.join(super::index::DEFERRED))?;
         let qdir = tmp.join("research").join("questions");
+        // ...and at a hand-in an owed claim the work leaves as the base held it is the landing's to ask (461 T40)
+        let due = if hand_in.is_some() && !due.is_empty() {
+            let rows = super::index::rows_of(pairs.clone(), &qdir)?;
+            let base = super::hand_in::Base {
+                rows: &rows,
+                index: &base_index,
+                tree: &tmp,
+            };
+            super::hand_in::split(root, due, &at.cur, &at.index, &base)
+        } else {
+            (due, Vec::new())
+        };
         let judged = classify(
             &at.cur,
             &at.index,
@@ -490,13 +513,17 @@ pub fn classified(root: &Path, at: &Reading) -> Result<Classified, Fail> {
                 answered: &answered,
             },
         )?;
-        Ok((judged, unported))
+        Ok((judged, unported, due))
     })();
-    let ((intro, pre, carried), unported) = judged?;
+    let ((intro, mut pre, carried), unported, (due, left)) = judged?;
     let mut refuse: Vec<String> = due
         .into_iter()
         .map(|(k, why)| format!("owed ({why}): {k}"))
         .collect();
+    // said as the base's, never as `owed (`: the first pass reads that as the builder's to cure (`claims_wait::claims_cure`)
+    pre.extend(left.into_iter().map(|(k, why)| {
+        format!("owed below the hand-in base, the landing's to ask (461 T40; {why}): {k}")
+    }));
     refuse.extend(unported);
     Ok((refuse, intro, pre, carried))
 }

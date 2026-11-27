@@ -21,6 +21,7 @@ mod counters;
 mod drawn;
 mod flight;
 mod grammar;
+mod hand_in;
 pub mod impl_check;
 mod index;
 pub mod item_labels;
@@ -173,13 +174,17 @@ fn specs(cmd: &str) -> Option<(Vec<Spec>, &'static [&'static str])> {
     })
 }
 
-/// The top level's `--root`, and the subcommand with its own arguments.
-fn split_top(args: &[String]) -> Result<(String, &str, &[String]), String> {
+/// The top level's `--root` and `--delta-base`, and the subcommand with its own arguments.
+fn split_top(args: &[String]) -> Result<Top<'_>, String> {
     let mut root = ".".to_owned();
+    let mut base = None;
     let mut i = 0;
     while i < args.len() {
         let a = &args[i];
-        if let Some(value) = a.strip_prefix("--root=") {
+        if let Some(value) = a.strip_prefix(DELTA_BASE) {
+            base = Some(value.to_owned());
+            i += 1;
+        } else if let Some(value) = a.strip_prefix("--root=") {
             value.clone_into(&mut root);
             i += 1;
         } else if a.len() > 2 && "--root".starts_with(a.as_str()) {
@@ -191,11 +196,21 @@ fn split_top(args: &[String]) -> Result<(String, &str, &[String]), String> {
         } else if a.starts_with('-') {
             return Err(format!("unrecognized arguments: {a}"));
         } else {
-            return Ok((root, a, &args[i + 1..]));
+            return Ok((root, base, a, &args[i + 1..]));
         }
     }
     Err("the following arguments are required: cmd".to_owned())
 }
+
+/// `--delta-base=<commit>`: the base a hand-in reads its delta from, given to a call in `make land`'s own process (461 T38). WHY: the
+/// first pass's in-process claims calls (the carry, the known drifts, the report) never saw `L7R_DELTA_BASE`, which the hand-in hands
+/// its child processes alone (461 T34), so they read the merge base with origin/main and judged every staged batch. Given, it stands in
+/// for the variable for the one call ([`l7r_gate_core::delta_base::with`]); given empty, as a landing gives it, the call reads no base
+/// even where the variable is exported. Only the `=` form: an empty value is a value.
+const DELTA_BASE: &str = "--delta-base=";
+
+/// The top level's root, its base given (None: none given), the subcommand and its arguments.
+type Top<'a> = (String, Option<String>, &'a str, &'a [String]);
 
 /// The repository `--root` names: its top level, or `--root` as given outside one.
 fn toplevel(root: &str) -> PathBuf {
@@ -238,7 +253,7 @@ static WARM: std::sync::LazyLock<()> = std::sync::LazyLock::new(|| {
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
     std::sync::LazyLock::force(&WARM);
-    let (root, cmd, rest) = match split_top(args) {
+    let (root, base, cmd, rest) = match split_top(args) {
         Ok(t) => t,
         Err(why) => return usage("l7r-gate claims", &why),
     };
@@ -268,7 +283,12 @@ pub fn cli(args: &[String]) -> Reply {
     }
     let root = toplevel(&root);
     let mut out = commands::Out::default();
-    let code = match commands::run(cmd, &parsed, &root, &mut out) {
+    let ran = |out: &mut commands::Out| commands::run(cmd, &parsed, &root, out);
+    let ran = match base {
+        Some(base) => l7r_gate_core::delta_base::with(&base, || ran(&mut out)),
+        None => ran(&mut out),
+    };
+    let code = match ran {
         Ok(code) => code,
         Err(why) => {
             let _ = write!(
