@@ -1,0 +1,35 @@
+# before the fix (the tree at 24bf17c721), the pre-warm ended
+same: calls=28 rustc-runs=0 targets=0 repeats=0 wall=5.9s load=13.42->12.83
+touch: calls=28 rustc-runs=75 targets=57 repeats=18 wall=42.6s load=12.83->9.95
+    l7r_gate_owed lib: 4 times, feature sets ['', 'testkit']
+    l7r_gate_archive lib: 3 times, feature sets ['', 'testkit']
+    l7r_gate_bundle lib: 3 times, feature sets ['']
+    l7r_gate_registry lib: 3 times, feature sets ['', 'testkit']
+    l7r_gate test: 2 times, feature sets ['']
+    l7r_gate_arbiter lib: 2 times, feature sets ['']
+    l7r_gate_claims lib: 2 times, feature sets ['']
+    l7r_gate_core lib: 2 times, feature sets ['', 'testkit']
+    l7r_gate_record lib: 2 times, feature sets ['']
+    l7r_gate_research lib: 2 times, feature sets ['', 'testkit']
+    l7r_gate_semantic lib: 2 times, feature sets ['']
+    l7r_gate_trials lib: 2 times, feature sets ['']
+    l7r_gate_uncited lib: 2 times, feature sets ['']
+touch-recounted: calls=28 rustc-runs=75 targets=58 repeats=17 wall=42.6s load=12.83->9.95
+    l7r_gate_owed lib (gate/crates/owed/src/lib.rs): 4 times, feature sets ['', 'testkit']
+    l7r_gate_archive lib (gate/crates/archive/src/lib.rs): 3 times, feature sets ['', 'testkit']
+    l7r_gate_bundle lib (gate/crates/bundle/src/lib.rs): 3 times, feature sets ['']
+    l7r_gate_registry lib (gate/crates/registry/src/lib.rs): 3 times, feature sets ['', 'testkit']
+    l7r_gate_arbiter lib (gate/crates/arbiter/src/lib.rs): 2 times, feature sets ['']
+    l7r_gate_claims lib (gate/crates/claims/src/lib.rs): 2 times, feature sets ['']
+    l7r_gate_core lib (gate/crates/core/src/lib.rs): 2 times, feature sets ['', 'testkit']
+    l7r_gate_record lib (gate/crates/record/src/lib.rs): 2 times, feature sets ['']
+    l7r_gate_research lib (gate/crates/research/src/lib.rs): 2 times, feature sets ['', 'testkit']
+    l7r_gate_semantic lib (gate/crates/semantic/src/lib.rs): 2 times, feature sets ['']
+    l7r_gate_trials lib (gate/crates/trials/src/lib.rs): 2 times, feature sets ['']
+    l7r_gate_uncited lib (gate/crates/uncited/src/lib.rs): 2 times, feature sets ['']
+
+# after the fix
+warm: calls=28 rustc-runs=53 targets=53 repeats=0 wall=200.1s load=15.18->13.64
+same: calls=28 rustc-runs=0 targets=0 repeats=0 wall=4.4s load=13.64->12.79
+touch: calls=28 rustc-runs=58 targets=58 repeats=0 wall=40.0s load=12.79->7.84
+same2: calls=28 rustc-runs=0 targets=0 repeats=0 wall=4.4s load=7.84->7.37

@@ -18,5 +18,10 @@ l7r_shared = { path = "../../../guard/shared" }
 serde = { workspace = true }
 serde_json = { workspace = true }
 
+# ITSELF, WITH `testkit` (feature 451 T325): every other crate's test build compiles this library with `testkit`, so its own names it
+# too and the library is built once for all of them (`checks`' `guard_deps/feature_sets.rs` holds every crate under `rust/` to it)
+[dev-dependencies]
+l7r_gate_core = { path = ".", features = ["testkit"] }
+
 [lints]
 workspace = true

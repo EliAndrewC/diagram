@@ -276,6 +276,20 @@ fn features(manifest: &Path) -> Vec<String> {
         .collect()
 }
 
+/// Does the crate name itself in its `[dev-dependencies]` (`path = "."`, feature 451 T325)? It does so to turn a test-only feature
+/// of its own on in its test build, which every pass of the lint that reads `[dev-dependencies]` then has on too.
+fn names_itself(manifest: &Path) -> bool {
+    let text = std::fs::read_to_string(manifest).unwrap_or_default();
+    let section = re(r"(?ms)^\[dev-dependencies\]\n(.*?)(?:^\[|\z)")
+        .captures(&text)
+        .ok()
+        .flatten()
+        .map_or(String::new(), |c| c[1].to_owned());
+    re(r#"(?m)^[\w-]+\s*=.*\bpath\s*=\s*"\.""#)
+        .is_match(&section)
+        .unwrap_or(false)
+}
+
 /// Each file's lines no test ran and the first line of each function no test called: the one reader of the floor (a closure never
 /// called counts though its line runs, as llvm-cov's `--fail-under-lines` summary counts it).
 fn lcov_missed(text: &str) -> BTreeMap<String, Vec<u32>> {
@@ -411,22 +425,26 @@ fn tail(text: &str) -> &str {
 fn check(world: &World, cmd: &str, manifest: &Path, formatting_check: bool) -> Ran {
     match cmd {
         "lint" => {
-            let plain = cargo(
-                world,
+            let mut passes: Vec<&[&str]> = vec![
                 &["clippy", "--quiet", "--all-targets"],
-                manifest,
-                &["-D", "warnings"],
-            );
-            if plain.code == 0 {
-                cargo(
-                    world,
-                    &["clippy", "--quiet", "--all-targets", "--all-features"],
-                    manifest,
-                    &["-D", "warnings"],
-                )
-            } else {
-                plain
+                &["clippy", "--quiet", "--all-targets", "--all-features"],
+            ];
+            // THE THIRD PASS (feature 451 T325): `--all-targets` reads `[dev-dependencies]`, so a crate that names itself there has
+            // its test-only feature on in both passes above, and its lines under that feature's `not(..)` - what the tools compile -
+            // would be linted by nothing. `--lib` reads no dev-dependency. Measured 2026-11-26 over the six such crates after a touch
+            // of `core` and `l7r_shared`: 7 check compiles and 12.8 s beside the two passes' 14 and 23.9 s
+            // (`dev/measurements/2026-11-26/feature-unify/lint-pass.sh`).
+            if names_itself(manifest) {
+                passes.push(&["clippy", "--quiet", "--lib"]);
             }
+            let mut ran = cargo(world, passes[0], manifest, &["-D", "warnings"]);
+            for words in &passes[1..] {
+                if ran.code != 0 {
+                    break;
+                }
+                ran = cargo(world, words, manifest, &["-D", "warnings"]);
+            }
+            ran
         }
         "test" | "test-counters" | "test-no-counters" => {
             let words = test_args(cmd, manifest, false);

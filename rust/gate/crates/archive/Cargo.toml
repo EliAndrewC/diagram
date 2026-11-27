@@ -26,6 +26,8 @@ testkit = ["l7r_gate_research/testkit"]
 [dev-dependencies]
 l7r_gate_core = { path = "../core", features = ["testkit"] }
 l7r_gate_research = { path = "../research", features = ["testkit"] }
+# one feature set a library in every test build (feature 451 T325, `checks`' `guard_deps/feature_sets.rs`): named for `testkit` alone
+l7r_gate_archive = { path = ".", features = ["testkit"] }
 
 [lints]
 workspace = true

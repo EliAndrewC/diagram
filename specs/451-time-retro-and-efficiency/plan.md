@@ -3850,42 +3850,70 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T325 (<why: the finding or measurement that files it>)
+### T325 (found by 451 T301 part 1, measured 2026-11-26: after a touch of `rust/gate/crates/core`, the 28 gate manifests' test builds ran rustc 75 times for 58 targets, 17 of them a library compiled again under another feature set, `dev/measurements/2026-11-26/cargo-hashes/gate-call.sh`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: every crate's `[dev-dependencies]` names the test-only feature on every crate of its build that has one, itself included, so cargo resolves ONE feature set for a library whichever crate a call selects; no word of a test or coverage call changes, and the lint gains one pass for the crates that name themselves (D6). Built in 19 manifests under `rust/` (41 lines, observed 2026-11-26, method: `git diff --stat -- rust` and the pin's red list), pinned by a test over the real tree, `rust/gate/crates/checks/src/checks/guard_deps/feature_sets.rs`, with the lint's third pass in `rust/gate/crates/rustc/src/rustc.rs`; `rust/Cargo.toml`'s ONE FEATURE SET comment restated as the task's line asks; `rust/Cargo.lock`, which is tracked, gains the workspace's own new edges and no outside crate. The record: `dev/measurements/2026-11-26/feature-unify/results.md`.
+  - **The cause, as measured.** The gate builds tests one manifest a call and coverage with `-p` for the owed crates, and cargo unifies features over what one call selects. `testkit` of `core`, `research`, `registry`, `owed` and `archive` was on only where the selected crate's `[dev-dependencies]` named it: over the 34 workspace crates' test builds, 6 crates resolved with more than one feature set and 41 root-and-crate pairs were short of the fullest, measured 2026-11-26 (`featsets.sh`: `cargo tree --offline -e normal,dev` a manifest, no compile).
+  - **T325-D1, the route is the manifests.** Measured, not chosen, each asked of cargo 1.87.0 on 2026-11-26 (`results.md`, "The routes not taken"): a feature named on the test call is refused for a crate reached only through another (`error: the package 'l7r_gate_measure' does not contain this feature: l7r_gate_owed/testkit`), and 20 of the 41 pairs are such; workspace feature unification is `-Z` only (`warning: ignoring resolver.feature-unification without -Zfeature-unification`). The task line's two candidates are both declined: the helpers always compiled would put the tests' seams into the tools, which the brief rules out (`owed`'s `entry_lines` would read a scratch record's `entry-lines.json` in place of the real report); the whole family named in every call would make a builder's check of one crate build all 28 crates' tests (observed 2026-11-26, method: `rust/gate/Cargo.toml` and `ls rust/gate/crates`).
+  - **T325-D2, a crate that is the root names itself** (`l7r_gate_core = { path = ".", features = ["testkit"] }`, and so `research`, `registry`, `owed`, `archive` and `l7r_shared`). CONVENTION (cargo's own form for a test-only feature of the crate under test): without it `core`'s own test build, and a coverage build selecting `core` alone, compile it without the feature every other call compiles it with.
+  - **T325-D3, the rule is what cargo resolves, and the fix it prints is the direct line.** CONVENTION: the pin reads each manifest's `[features]`, `[dependencies]` and `[dev-dependencies]` as resolver 2 does for the forms the workspace writes (a path dependency on one line), computes each crate's features in the test build of every root, and names each root short of the fullest set with the line to add. Its red list on the old manifests is cargo's own: 41 pairs, `research` 15, `registry` 12, `owed` 9, `archive` 3, `core` 1, `l7r_shared` 1, counted 2026-11-26 both ways (`red-problems.txt`; `featsets.sh`). It cannot see a feature named on a command line (`counters`) and does not judge one.
+  - **T325-D4, `l7r_shared`'s `test-env` stays apart: one set in the guard's family, not across the workspace.** DELIBERATE: the feature makes `env` read a test thread's own map, and `rust/guard/shared/Cargo.toml` says a gate crate's tests read the process's environment; turning it on for the 31 other crates that build on it would change what their tests read (observed 2026-11-26, method: `featsets.sh`'s roots). The pin holds `rust/guard` and `rust/guard/shared` to it (`APART`); the library is still built twice in a tree that tests both families, which costs one compile of `l7r_shared` an edit of it and is not a repeat a touch of a gate crate makes.
+  - **T325-D5, the pin is a test in `checks`, not a new command.** CONVENTION (the precedent of `checks/documents/`): `checks` declares `reads = ["."]`, so its tests run again whenever a manifest moves, and the failure prints every line to add.
+  - **T325-D6, the lint gains a third pass for a crate that names itself** (`rustc.rs`, `check`'s `lint` arm and `names_itself`). Measured, then built: `cargo clippy --all-targets` reads `[dev-dependencies]`, so with D2 both of the lint's passes had the root crate's test-only feature on, and its lines compiled only with the feature off - what the tools run - were linted by nothing. Shown with a seed, observed 2026-11-26, method: `if name.len() == 0` (clippy's `len_zero`) put into `core/src/build.rs`'s testkit-off `env`, to which `l7r-gate.sh rust lint --crate rust/gate/crates/core` answered `lint clean on 1 crate(s)`. The third pass is `cargo clippy --quiet --lib`, which reads no dev-dependency, run only for a crate whose `[dev-dependencies]` hold a `path = "."` line: with it the same lint seeded as `name.len() < 1` (another spelling, since the first seed's green was a kept result) fails the crate, exit 1, observed 2026-11-26, method: the same command through the rebuilt tool, the seed then removed. The lines it is for, observed 2026-11-26, method: `grep -rn 'feature = "testkit"\|feature = "test-env"\|feature = "counters"' rust --include=*.rs` and its `not(` hits read: `core/src/record/bundle.rs` 10 and 14, `core/src/build.rs` 92, `owed/src/record/owed.rs` 254, `rust/guard/shared/src/env.rs` 15 and `rust/guard/shared/src/checks/handle.rs` 82; `archive/src/lib.rs` 36 is feature-ON code, and every `counters`-off line (`phases`, `mode_a`, `pool`) is read by the plain pass as before, no dev-dependency naming `counters`. Its cost over the six crates that name themselves, after a touch of `core` and `l7r_shared`: 7 check compiles and 12.8 s, beside the two passes' 14 and 23.9 s, load 10 to 14, measured 2026-11-26 (`lint-pass.sh`); all six lint clean through the three passes, observed 2026-11-26, method: `L7R_RUST_FRESH=1 l7r-gate.sh rust lint` over the six, exit 0. Declined: moving the lines out from under the cfg, which would compile the tests' seams into the tools.
+  - **The small lane and the healed link** (T347, T336): no test build's words changed, so `kept/alone.rs`'s key holds the same words; the key also holds the workspace's manifests, the lockfile and each crate's own `Cargo.toml`, so every crate's first build after this lands is told wide once, as any manifest edit makes it. `stepped` and `stale::built` are not edited.
+  - **Measured, before and after**, all 2026-11-26 in the pool tree `diagram-backlog-b1`, one run at a time, another builder on the machine (`results.md`; `family.sh`, `rust-test.sh`, `phases.py`):
+
+    | what | before | after |
+    |---|---|---|
+    | after a touch of `core`, the 28 test builds: rustc runs / targets / repeats | 75 / 58 / 17 | 58 / 58 / 0, both measured 2026-11-26 (`family.sh`) |
+    | that pass, wall | 42.6 s, load 12.8 to 10.0 | 40.0 s, load 12.8 to 7.8, both measured 2026-11-26 (`family.sh`) |
+    | a constant appended to `core/src/lib.rs`, the checks' test step over the 28: wall | 171.1 s, load 50.5 to 26.4 | 51.6 s, load 23.1 to 17.6, both measured 2026-11-26 (`rust-test.sh`) |
+    | that run's `build` lines less its build-slot waits | 99.3 s (152.7 s less 53.4 s) | 42.5 s (no wait), both measured 2026-11-26 (`phases.py` over the run's `Phase` lines) |
+
+    The touch pass is the like-for-like one and moved 2.6 s, measured 2026-11-26 (`family.sh`): a touch changes no content and rustc's incremental cache answers a repeat quickly, the floor T301 part 1 named. The appended-constant runs are one sample each under different load; their difference is an upper bound, not a figure to repeat as the saving. The count is exact: 17 of 75 compiles (23%) were repeats and none of 58 is, measured 2026-11-26 (`family.sh`).
+  - **The coverage build** is reached by the same lines and was not compiled (a builder runs no coverage): `cargo tree` with `-p claims`, `-p claims -p bundle`, `-p claims -p owed`, `-p claims -p semantic`, `-p core` alone and all 28 together each resolve the five crates `[testkit]`, measured 2026-11-26 (`results.md`, "The coverage build"), where T301 part 1 found the set changing with the selection.
+  - **A production build compiles what it did**: `cargo tree --offline -e features,no-dev -p <package>` for the seven packages the launchers build, captured before the first edit and after the last, identical by `diff -r`, and none names `testkit` or `test-env`, measured 2026-11-26 (`results.md`).
+  - **What a test now runs differently.** `owed`'s `entry_lines` is the one place `testkit` changes what runs: eight crates (`gate`, `checks`, `ci`, `claims`, `land`, `measure`, `task`, `trials`) built `owed` without it and now get the seam - the use its own doc comment names ("this crate's tests, and those of the crates above it through the `testkit` feature") - observed 2026-11-26, method: `featsets.sh` before the edits and the pin's red list. All 28 gate crates' tests ran after the change and passed, observed 2026-11-26, method: `rust-test.sh`'s settle run, 28 `test` lines, exit 0.
+  - **What only the landing's gate can show**: the coverage verdicts of the 34 crates and lint over all of them, observed 2026-11-26, method: `featsets.sh`'s roots; here 9 crates were linted and `mode_a`'s tests run (`make rust-test CRATE=rust/mode_a`: 362 passed), its manifest having gained one line, `research` with `testkit`, which adds a public module.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a library gets one feature set in every crate's test build | red first 2026-11-26 (item 9); pinned by `every_test_build_under_rust_compiles_a_library_with_one_feature_set` | n/a: tooling | none | n/a |
+| a root short of a feature is told the line to add, itself by `path = "."` | pinned by `a_root_that_gets_fewer_features_is_told_its_line` (new code, not run red) | n/a: tooling | none | n/a |
+| `test-env` is held in the guard's family alone | pinned by `a_feature_held_apart_is_one_set_in_its_own_family_alone` (new code, not run red) | n/a: tooling | none | n/a |
+| a crate that names itself is linted a third time, no dev-dependency read | red first 2026-11-26 (item 9); pinned by `a_crate_that_names_itself_is_linted_a_third_time_with_no_dev_dependency_read` | n/a: tooling | none | n/a |
 
 ### T325 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A gate crate's library is compiled once for an edit, whichever crate's tests or coverage are asked next: the same features for it in every test build and in the coverage build, and the tools built as before.
+2. **The constraints.** T325's line in `tasks.md`: measure, then build the cheaper route, and restate `rust/Cargo.toml`'s comment. The coordinating session's brief: nothing a production build compiles in may change; T347's small lane and T336's healed link keep working; red-first where a test can pin it; the re-measurement T301 part 1's way, one run at a time, no load generator.
+3. **Where each comes from.** G: none - T325's line holds no words of the GM; the question behind T301 is his of 2026-11-26, as T301's section relays it. O: T301 part 1's section and the measurements of the Approach.
+4. **Do they describe the world here?** Yes: T301 part 1's 75 runs for 58 targets were found again in this tree before any edit, measured 2026-11-26 (`family.sh`, the run after the tree's pre-warm ended).
+5. **The order.** After T301 part 1 (the finding), T336 and T347 (whose calls it leaves alone). Before T301's part 2 and T278, as T301's section says: it changes how many hashes are live. T389 was filed here for the lint's lost reach before the plan review ruled it this task's to mend; D6 mends it, and nothing of T389 is left to do.
+6. **The exits.** Green: the pin test green and the touch pass at 58 runs for 58 targets, measured 2026-11-26 (`family.sh`), then the landing's gate. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, observed 2026-11-26, method: `make rust-test CRATE=rust/gate/crates/checks`'s result line with the test file added and the manifests as they were: 198 passed, 1 failed (`every_test_build_under_rust_compiles_a_library_with_one_feature_set`, naming 41 lines); with the manifests edited, 199 passed. The module's other two tests exercise code the old tree does not have and were not run red (observed 2026-11-26, method: the module read). THE LINT'S PASS, observed 2026-11-26, method: `make rust-test CRATE=rust/gate/crates/rustc`'s result line with `names_itself` and the test added and the lint arm as it was: 116 passed, 1 failed (`a_crate_that_names_itself_is_linted_a_third_time_with_no_dev_dependency_read`, two passes where three were asked); with the arm changed, 117 passed. After: `featsets.sh` shows 1 crate with more than one feature set (`l7r_shared`, D4) where it showed 6, and the touch pass 58 rustc runs for 58 targets, measured 2026-11-26 (`family.sh`).
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect of a map: no map changes. The wrong outcome it answers: 17 of 75 compiles after a touch of `core` were a library built a second, third or fourth time, measured 2026-11-26 (`family.sh`).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- With a crate naming itself in `[dev-dependencies]`, both lint passes had its test-only feature on and its feature-off lines went unlinted (D6); visible effect: a seeded `len_zero` in `core/src/build.rs` passed the lint. `fixed here` (the third pass; observed 2026-11-26, method: the `grep` D6 names, every `not(` hit of the three features read). T389, filed for it before the review, has nothing left to do and is the session's to withdraw.
+- The tree's pre-warm compiled beside the first "before" pass with the same words and three manifests found their build done (72 rustc runs for 54 targets), observed 2026-11-26, method: `ps` (`l7r-rust prewarm`, started 18:41) and the pass run again after it ended. Not a defect and not filed: it is the pre-warm doing its job; a measurement of a tree's builds waits for it to end, as `results.md` says.
+- Three comments of `rust/Cargo.toml` (its lines on the roxmltree, geo and resvg pins) say `rust/Cargo.lock` is not tracked, and `git ls-files rust/Cargo.lock` names it, observed 2026-11-26, method: that command and `grep -n "not tracked" rust/Cargo.toml`. Not a defect and not filed: a comment's wording with no outcome wrong - the pins hold either way - and outside this task's lines of the file.
+- `l7r_shared` is still built under two feature sets in a tree that tests both the guard and the gate (D4). Not a defect and not filed: the two sets read the environment differently on purpose.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a `[perf]` task of the checks and the builders' loop: after a touch of `core`, the 28 gate manifests' test builds ran rustc 75 times for 58 targets before and 58 times for 58 after (17 repeats to none), 42.6 s and 40.0 s at load 13, and after a one-line edit of `core` the checks' test step over the 28 took 171.1 s at load 50 before and 51.6 s at load 23 after, one sample each, measured 2026-11-26 (`dev/measurements/2026-11-26/feature-unify/results.md`). Not an engine-speed task: the checklist below is answered for the checks, and no map is drawn.
 
 ### T325 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+1. **Where does the time go?** In compiles of one library under several feature sets: 17 of the 75 rustc runs after a touch of `core`, `owed` 4 times, `archive`, `bundle` and `registry` 3, measured 2026-11-26 (`family.sh`).
+2. **Removes work, or only moves it?** Removes it: the 17 repeated compiles are not made. It adds the lint's third pass for six crates, 7 check compiles and 12.8 s after a touch of `core` and `l7r_shared`, measured 2026-11-26 (`lint-pass.sh`). It adds a one-time rebuild in each tree, 53 rustc runs and 200.1 s for the 28 test builds at load 15, measured 2026-11-26 (`family.sh`, the warm pass).
+3. **What do you expect it to save, and why?** A fifth of the compiles after an edit of a crate many build on; in seconds, between the 2.6 s of the touch pass (incremental cache answering) and the 56.8 s between the two appended-constant runs' compile spans, which also holds their load difference, measured 2026-11-26 (`results.md`). GUESS until `make task-time` is read for a day after the landing.
+4. **How does the work grow with the settlement?** n/a: no map is drawn. The repeats grew with the number of crates above a testkit crate; there are none now.
+5. **What did the before and after show, and under what conditions?** 75 runs for 58 targets before, 58 for 58 after, load 12.8 at the start of both; the appended-constant runs 171.1 s at load 50.5 to 26.4 and 51.6 s at load 23.1 to 17.6, measured 2026-11-26 (`results.md`) - evidence, with the loads beside it, not a pass.
+6. **Did any map move, and does it still keep the research?** No map is drawn by the checks; none moved.
 
 
 ### T319 (<why: the finding or measurement that files it>)
@@ -5323,6 +5351,60 @@ engine speed, so no checklist.
 |---|---|---|---|---|
 
 ### T382 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T389 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T389 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T390 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T390 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

@@ -1,0 +1,14 @@
+# before
+settle: rc=0 wall=103.4s load=14.43->50.49
+appended: rc=0 wall=171.1s load=50.49->26.42
+removed: rc=0 wall=9.5s load=26.42->26.81
+appended window 2026-11-26T23:57:09Z..2026-11-27T00:00:01Z (the output files' times): build: 27 lines 152.7s  slot-small: 1 lines 0.0s  slot-tell: 27 lines 0.7s  slot-wait: 3 lines 53.4s  test: 1 lines 7.6s
+# after
+settle began 2026-11-27T00:07:58.000Z
+settle: rc=0 wall=28.2s load=6.68->23.13
+appended began 2026-11-27T00:08:26.000Z
+appended: rc=0 wall=51.6s load=23.13->17.60
+removed began 2026-11-27T00:09:18.000Z
+removed: rc=0 wall=4.2s load=17.60->16.43
+settle: build: 28 lines 2.5s  slot-tell: 28 lines 0.2s  test: 28 lines 64.9s
+appended: build: 28 lines 42.5s  slot-small: 1 lines 0.0s  slot-tell: 28 lines 0.2s  test: 1 lines 2.1s

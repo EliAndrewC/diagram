@@ -2304,6 +2304,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T325 (found by 451 T301 part 1, measured 2026-11-26: after a touch of `rust/gate/crates/core`, the 28 gate manifests' test builds ran rustc 75 times for 58 targets, 17 of them a library compiled again under another feature set, `dev/measurements/2026-11-26/cargo-hashes/gate-call.sh`)": {
+   "sha256": "07602bd6aa27a3af99f8cc3f53b3c9dcbc13b85165c533d1f25c3421d1be222a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T325 Approach (checklist part A)": {
+   "sha256": "047c738a4c3fff2e28ba70276e195fa16c1bf1ff0809d3c06237d6cd4907a417",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T325 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "538b9f05642970b8ab3931dbe07ca8d8d18a4169a83a90532be9786afc14709f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -29400,6 +29418,171 @@
      "why": "These are tasks already filed for other mechanisms, not defects this section found or was asked to fix. Saying what they distort in the published figures keeps those figures honest. Leaving a separately filed task to its own order is the bundling the GM described on 2026-11-22."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T325 (found by 451 T301 part 1, measured 2026-11-26: after a touch of `rust/gate/crates/core`, the 28 gate manifests' test builds ran rustc 75 times for 58 targets, 17 of them a library compiled again under another feature set, `dev/measurements/2026-11-26/cargo-hashes/gate-call.sh`)",
+    "### T325 Approach (checklist part A)",
+    "### T325 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T325-D1",
+     "summary": "The route is the manifests: each crate's [dev-dependencies] names the test-only feature, no cargo call's words change. The task line's two candidates (helpers always compiled; the whole family named in every call) are declined.",
+     "class": "within",
+     "why": "The task line is the coordinating session's, not the GM's. It asks for measurement and then the cheaper route, and the plan does that. The command-line route is measured as refused by cargo 1.87 and workspace unification is -Z only. Always-compiled helpers would put test seams into the tools, which the brief forbids. Naming the whole family in every call inflates every builder check. Choosing among routes to the same outcome narrows nothing the GM asked."
+    },
+    {
+     "id": "T325-D2",
+     "summary": "A crate that is the root names itself with path = \".\" and its test-only feature (core, research, registry, owed, archive, l7r_shared).",
+     "class": "within",
+     "why": "This is an implementation form for the one-feature-set goal and is cargo's own convention. It removes no part of the request."
+    },
+    {
+     "id": "T325-D3",
+     "summary": "The pin computes resolver-2 features from the manifests for the forms the workspace writes, prints the line to add, and does not see or judge a feature named on a command line (counters).",
+     "class": "within",
+     "why": "The pin is enforcement of the requested outcome, a test that fails only when a library is compiled under two feature sets. Its blind spot for command-line features does not narrow the outcome: no cargo call's words change, and the touch pass is measured at 58 runs for 58 targets."
+    },
+    {
+     "id": "T325-D4",
+     "summary": "l7r_shared's test-env stays apart: one feature set within the guard's family, not across the workspace, so the library is still built twice in a tree that tests both families.",
+     "class": "within",
+     "why": "No GM word asks for one feature set across every family. Unifying test-env would change what 31 crates' tests read (thread map in place of the process environment), which would be a wrong outcome. The leftover is one compile of l7r_shared after an edit of it, a cost and not a wrong outcome, so under constitution XIV it is not a defect left."
+    },
+    {
+     "id": "T325-D5",
+     "summary": "The pin is a test in checks (reads = [\".\"]), not a new command.",
+     "class": "within",
+     "why": "Where the enforcement lives is a design choice and narrows nothing."
+    },
+    {
+     "id": "T325-accepted-clippy",
+     "summary": "Accepted: once core and owed resolve with testkit in both clippy passes, the 11 cfg(not(any(test, feature = \"testkit\"))) production lines are compiled by the tool build and linted by nothing (a seeded len_zero answered 'lint clean'). The choice of mend (a third --lib clippy pass for core and owed, or moving the lines out from under the cfg) is deferred to T389, 'lands before T302'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This task creates the defect: the block's own seeded lint shows a check answering clean on bad work, and that is a defect under constitution XIV (a check that passes bad work). The GM's standing rule is to fix known defects in the step that finds them, and his approval asked that enforcement be real. None of the three grounds holds. (1) A fix is not impossible: two mends are named. (2) No GM word implies leaving production lines unlinted. (3) Fixing it here does not defeat the task's purpose. The obstacle given for the third pass (it 'brings back' a lib build without testkit, but in check mode, which is not the test-build repeat this task measured and removed) is marked 'not measured'. Moving the lines is given no obstacle at all. 'Which is cheaper is a measurement' is a cost reason, and that measurement can be made in this task. FR-009's form (why, filed id, order) is what make decide checks mechanically; it does not make the deferral legitimate. 'Before T302' cannot be checked from the bundle. The census is also short: the 11 lines come from one literal grep for cfg(not(any(test, feature = \"testkit\"))). That search misses other spellings (cfg(not(feature = \"testkit\")), cfg(not(test)) paired with a feature) and the test-env off-branches of l7r_shared, which D2 now has naming itself with that feature, so its own lint pass may have lost reach too. Required: restore lint reach over every testkit-off and test-env-off line in this task (measure the third pass or move the lines), from a census whose search space is stated and covers every cfg spelling. Or show by measurement that no reach was lost."
+    },
+    {
+     "id": "T325-coverage-not-compiled",
+     "summary": "The coverage build is resolved with cargo tree for six selections and not compiled. Coverage verdicts, lint over all 34 crates and mode_a's tests are left to the landing's gate.",
+     "class": "within",
+     "why": "Under the GM's two tiers of 2026-11-26 (T308), full rigor runs at the landing's gate. This moves where those checks run; it does not reduce what they reach. The resolution evidence covers the requested outcome."
+    },
+    {
+     "id": "T325-pin-tests-not-red",
+     "summary": "Two of the pin's three tests exercise code the old tree lacks and were not run red. The main pin was run red (41 lines) and then green.",
+     "class": "within",
+     "why": "The test that enforces the outcome was run red first. FR-012's red-first rule covers the refusals of FR-006 to FR-009, FR-011 and FR-013, not this pin. Nothing the GM asked is dropped."
+    },
+    {
+     "id": "T325-owed-seam",
+     "summary": "owed's entry_lines testkit seam is now live in the tests of eight crates that built owed without it.",
+     "class": "within",
+     "why": "This is the seam's own documented use. All 28 gate crates' tests ran and passed, so everything works, and a differing test-time path is not a regression (constitution XIII)."
+    },
+    {
+     "id": "T325-small-lane-key",
+     "summary": "The small lane's key (T347) holds the manifests and the lockfile, so every crate's first build after landing is told wide once. stepped and stale::built are not edited.",
+     "class": "within",
+     "why": "This is the existing mechanism working as designed after a manifest edit. Nothing requested is dropped."
+    },
+    {
+     "id": "T325-left-cargo-comments",
+     "summary": "Three rust/Cargo.toml comments that say Cargo.lock is not tracked are left as they are and not filed.",
+     "class": "within",
+     "why": "Comment wording with no wrong outcome is not a defect under constitution XIV, and leaving it narrows nothing."
+    },
+    {
+     "id": "T325-left-prewarm",
+     "summary": "The pre-warm's overlap with the first before-pass is not filed.",
+     "class": "within",
+     "why": "The pre-warm doing its job is not a defect. The measurement was redone after it ended."
+    },
+    {
+     "id": "T325-left-l7r_shared",
+     "summary": "l7r_shared is still built under two feature sets across the families and is not filed.",
+     "class": "within",
+     "why": "Same as D4: the difference is deliberate and costs a compile; there is no wrong outcome."
+    }
+   ],
+   "tasks": [
+    "T325"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T325 (found by 451 T301 part 1, measured 2026-11-26: after a touch of `rust/gate/crates/core`, the 28 gate manifests' test builds ran rustc 75 times for 58 targets, 17 of them a library compiled again under another feature set, `dev/measurements/2026-11-26/cargo-hashes/gate-call.sh`)",
+    "### T325 Approach (checklist part A)",
+    "### T325 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T325-D1",
+     "summary": "Fix the repeated compiles through the manifests' [dev-dependencies], declining the task line's two candidates (helpers always compiled; whole family named in every call) after measuring that a call-level feature and workspace feature unification are refused or -Z only.",
+     "class": "within",
+     "why": "The goal is the one asked: compile less after an edit (the GM's 'more of the compilation was not able to be cached', and FR-013's performance-first). The route is a mechanism, measured rather than assumed; the candidates it declines came from the task line, not the GM, and declining them reduces nothing he asked for - the plan states the cost each would carry (test seams compiled into the tools; one crate's check building all 28)."
+    },
+    {
+     "id": "T325-D2",
+     "summary": "A crate that is the root of its build names its own test-only feature in [dev-dependencies] (path = \".\").",
+     "class": "within",
+     "why": "A mechanism needed for the one-feature-set goal in the crate's own test and coverage builds; narrows nothing."
+    },
+    {
+     "id": "T325-D3",
+     "summary": "The pin computes resolver-2 feature sets from the manifests and names each short root with the line to add; it does not judge a feature named on a command line (counters).",
+     "class": "within",
+     "why": "A test whose only effect is to keep the requested result (one feature set per library) in place - enforcement of what was asked, not new scope. Not seeing command-line features leaves no test-only dev-dependency feature unchecked; counters is not of that kind."
+    },
+    {
+     "id": "T325-D4",
+     "summary": "l7r_shared's test-env is held to one set within the guard's family, not across the workspace; l7r_shared still compiles twice in a tree that tests both families.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Applying the one-feature-set rule literally here would turn test-env on for the 31 gate crates that build on l7r_shared, so their tests would read a thread map where their manifest says they read the process environment - changing what tests check, which defeats the purpose (faster builds of tests that still do their job). The cost left is one extra compile of l7r_shared on an edit of it, not a wrong outcome, so no defect is carried forward; a touch of a gate crate repeats nothing."
+    },
+    {
+     "id": "T325-D5",
+     "summary": "The pin is a test in the checks crate, not a new command.",
+     "class": "within",
+     "why": "Placement of the enforcing test; follows the checks/documents precedent and adds no behavior."
+    },
+    {
+     "id": "T325-D6",
+     "summary": "The lint gains a third pass (cargo clippy --lib, no dev-dependencies) for a crate that names itself, so its feature-off lines are linted again.",
+     "class": "within",
+     "why": "D2 made both existing lint passes compile with the test-only feature on, leaving the tools' own feature-off lines unlinted (shown with a seeded len_zero passing). The third pass restores the lint's reach the change would otherwise remove - keeping an existing check doing its job, not new scope. Its cost (12.8 s over six crates) is measured and stated beside the saving."
+    },
+    {
+     "id": "T325-coverage-and-production",
+     "summary": "The coverage build is verified by cargo tree, not compiled; the production builds are verified unchanged by cargo tree diff; the coverage verdicts and full lint are left to the landing's gate.",
+     "class": "within",
+     "why": "Verification of the brief's constraints by the routes available to a builder; the gate still runs the full checks. Nothing asked is dropped."
+    },
+    {
+     "id": "T325-test-behavior",
+     "summary": "Eight gate crates' tests now build owed with testkit and so get entry_lines' test seam; all 28 crates' tests pass.",
+     "class": "within",
+     "why": "A differing test configuration is not a regression where everything works; the seam is the use owed's own doc comment names, and the tests pass."
+    },
+    {
+     "id": "T325-small-lane-and-link",
+     "summary": "T347's small lane and T336's healed link are left unedited; every crate's first build after landing is told wide once.",
+     "class": "within",
+     "why": "Keeps the brief's constraint; the one-time wide build is the ordinary effect of a manifest edit."
+    },
+    {
+     "id": "T325-found-and-left",
+     "summary": "Left unfiled: the pre-warm overlapping the first measurement, three Cargo.toml comments saying the lockfile is untracked, and l7r_shared's two feature sets (D4). T389 is to be withdrawn as mended by D6.",
+     "class": "within",
+     "why": "None is a wrong outcome under constitution XIV's definition: the pre-warm is doing its job, the comments' wording changes no outcome and lies outside the task's lines, and D4 is ruled above. T389's work is done by D6, so withdrawing it drops nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -46402,6 +46585,75 @@
      "summary": "T346 (a carry booked to the task that retook the tree) and T332/T344 (a pool tree's Phase lines carrying an old task) stay open and separate. The section states which columns they distort in its figures and that neither touches the builder-minutes column or the builders' turn rows",
      "class": "within",
      "why": "These are tasks already filed for other mechanisms, not defects this section found or was asked to fix. Saying what they distort in the published figures keeps those figures honest. Leaving a separately filed task to its own order is the bundling the GM described on 2026-11-22."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T325": {
+   "section_sha256": "d54cbd5b69670143c507ecb7677387f3fd35d04c5f6cd026f63646b1db303c82",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T325-D1",
+     "summary": "Fix the repeated compiles through the manifests' [dev-dependencies], declining the task line's two candidates (helpers always compiled; whole family named in every call) after measuring that a call-level feature and workspace feature unification are refused or -Z only.",
+     "class": "within",
+     "why": "The goal is the one asked: compile less after an edit (the GM's 'more of the compilation was not able to be cached', and FR-013's performance-first). The route is a mechanism, measured rather than assumed; the candidates it declines came from the task line, not the GM, and declining them reduces nothing he asked for - the plan states the cost each would carry (test seams compiled into the tools; one crate's check building all 28)."
+    },
+    {
+     "id": "T325-D2",
+     "summary": "A crate that is the root of its build names its own test-only feature in [dev-dependencies] (path = \".\").",
+     "class": "within",
+     "why": "A mechanism needed for the one-feature-set goal in the crate's own test and coverage builds; narrows nothing."
+    },
+    {
+     "id": "T325-D3",
+     "summary": "The pin computes resolver-2 feature sets from the manifests and names each short root with the line to add; it does not judge a feature named on a command line (counters).",
+     "class": "within",
+     "why": "A test whose only effect is to keep the requested result (one feature set per library) in place - enforcement of what was asked, not new scope. Not seeing command-line features leaves no test-only dev-dependency feature unchecked; counters is not of that kind."
+    },
+    {
+     "id": "T325-D4",
+     "summary": "l7r_shared's test-env is held to one set within the guard's family, not across the workspace; l7r_shared still compiles twice in a tree that tests both families.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Applying the one-feature-set rule literally here would turn test-env on for the 31 gate crates that build on l7r_shared, so their tests would read a thread map where their manifest says they read the process environment - changing what tests check, which defeats the purpose (faster builds of tests that still do their job). The cost left is one extra compile of l7r_shared on an edit of it, not a wrong outcome, so no defect is carried forward; a touch of a gate crate repeats nothing."
+    },
+    {
+     "id": "T325-D5",
+     "summary": "The pin is a test in the checks crate, not a new command.",
+     "class": "within",
+     "why": "Placement of the enforcing test; follows the checks/documents precedent and adds no behavior."
+    },
+    {
+     "id": "T325-D6",
+     "summary": "The lint gains a third pass (cargo clippy --lib, no dev-dependencies) for a crate that names itself, so its feature-off lines are linted again.",
+     "class": "within",
+     "why": "D2 made both existing lint passes compile with the test-only feature on, leaving the tools' own feature-off lines unlinted (shown with a seeded len_zero passing). The third pass restores the lint's reach the change would otherwise remove - keeping an existing check doing its job, not new scope. Its cost (12.8 s over six crates) is measured and stated beside the saving."
+    },
+    {
+     "id": "T325-coverage-and-production",
+     "summary": "The coverage build is verified by cargo tree, not compiled; the production builds are verified unchanged by cargo tree diff; the coverage verdicts and full lint are left to the landing's gate.",
+     "class": "within",
+     "why": "Verification of the brief's constraints by the routes available to a builder; the gate still runs the full checks. Nothing asked is dropped."
+    },
+    {
+     "id": "T325-test-behavior",
+     "summary": "Eight gate crates' tests now build owed with testkit and so get entry_lines' test seam; all 28 crates' tests pass.",
+     "class": "within",
+     "why": "A differing test configuration is not a regression where everything works; the seam is the use owed's own doc comment names, and the tests pass."
+    },
+    {
+     "id": "T325-small-lane-and-link",
+     "summary": "T347's small lane and T336's healed link are left unedited; every crate's first build after landing is told wide once.",
+     "class": "within",
+     "why": "Keeps the brief's constraint; the one-time wide build is the ordinary effect of a manifest edit."
+    },
+    {
+     "id": "T325-found-and-left",
+     "summary": "Left unfiled: the pre-warm overlapping the first measurement, three Cargo.toml comments saying the lockfile is untracked, and l7r_shared's two feature sets (D4). T389 is to be withdrawn as mended by D6.",
+     "class": "within",
+     "why": "None is a wrong outcome under constitution XIV's definition: the pre-warm is doing its job, the comments' wording changes no outcome and lies outside the task's lines, and D4 is ruled above. T389's work is done by D6, so withdrawing it drops nothing."
     }
    ],
    "verdict": "CLEAR"

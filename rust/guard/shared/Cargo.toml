@@ -35,6 +35,11 @@ fancy-regex = "0.14"
 # a URL's host read as CPython's `urlsplit` reads it, NFKC included (feature 449 T148, `url_host`): the workspace's pin, Unicode 16.0
 unicode-normalization = "=0.1.24"
 
+# ITSELF, WITH `test-env` (feature 451 T325): the guard's test build compiles this library with `test-env`, so its own names it too,
+# and a coverage build of the two together compiles this crate's tests as a build of it alone does (`checks`' `guard_deps/feature_sets.rs`)
+[dev-dependencies]
+l7r_shared = { path = ".", features = ["test-env"] }
+
 [lints.clippy]
 all = { level = "deny", priority = -1 }
 pedantic = { level = "deny", priority = -1 }

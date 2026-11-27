@@ -27,6 +27,10 @@ serde_json = { workspace = true }
 
 [dev-dependencies]
 l7r_gate_core = { path = "../core", features = ["testkit"] }
+# one feature set a library in every test build (feature 451 T325, `checks`' `guard_deps/feature_sets.rs`): named for `testkit` alone
+l7r_gate_owed = { path = "../owed", features = ["testkit"] }
+l7r_gate_registry = { path = "../registry", features = ["testkit"] }
+l7r_gate_research = { path = "../research", features = ["testkit"] }
 
 [lints]
 workspace = true

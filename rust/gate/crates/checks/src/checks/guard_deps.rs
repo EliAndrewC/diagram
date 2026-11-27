@@ -177,4 +177,6 @@ pub(super) fn cli(args: &[String], root: &Path) -> Outcome {
 }
 
 #[cfg(test)]
+mod feature_sets;
+#[cfg(test)]
 mod tests;

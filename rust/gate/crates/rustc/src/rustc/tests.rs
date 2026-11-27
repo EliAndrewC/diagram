@@ -18,6 +18,7 @@ mod caller;
 mod cover;
 mod fmtfile;
 mod kept;
+mod lint;
 mod phases;
 mod prewarm;
 mod runlock;

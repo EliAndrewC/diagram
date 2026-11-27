@@ -10,9 +10,14 @@
 members = ["phases", "guard", "guard/shared", "gate", "gate/crates/*", "browser", "embed", "mode_a"]
 resolver = "2"
 
-# ONE FEATURE SET FOR EVERY GATE CRATE (feature 449 T92): a gate crate names an outside dependency only as `{ workspace = true }`, so
-# testing one crate never rebuilds what another built with other features. A crate of the gate names another by its `path`,
+# ONE FEATURE SET FOR EVERY OUTSIDE CRATE (feature 449 T92): a gate crate names an outside dependency only as `{ workspace = true }`, so
+# testing one crate never rebuilds an OUTSIDE crate another built with other features. A crate of the gate names another by its `path`,
 # which the Rust checks read to know what a crate depends on (`l7r-gate rust`, `rustc.rs`).
+# ONE FEATURE SET FOR EVERY WORKSPACE CRATE TOO, IN A TEST BUILD (feature 451 T325): this table never covered a path crate's own
+# features, and `testkit` - on where a dev-dependency named it, off elsewhere - had a library compiled again for each combination
+# (after a touch of `core`, 75 rustc runs for the 58 targets of the 28 gate manifests' test builds, measured 2026-11-26,
+# `dev/measurements/2026-11-26/feature-unify/`). Each crate's `[dev-dependencies]` now names that feature on every crate of its
+# build that has one, itself included; `checks`' test `guard_deps/feature_sets.rs` fails, with the line to add, on a crate that does not.
 [workspace.dependencies]
 fancy-regex = "0.14"
 serde = "1"
