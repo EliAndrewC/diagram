@@ -1,0 +1,515 @@
+# Implementation Plan: the landing lane - a thin coordinator, builders that hand in ready work, a merge queue of its own
+
+**Branch**: none (main, in the session clone `diagram-backlog`) | **Date**: 2026-11-27 | **Spec**: `specs/461-landing-lane/spec.md`
+
+**Input**: `spec.md` (FAITHFUL at round 5), `request.md` (the GM's words and the sketch he called "very sensible"),
+`research.md` (R1 the reuse decision FR-009 asks for, R2 the code as it stands, R3 the baseline), `data-model.md`,
+`quickstart.md`, `contracts/lane-cli.md`.
+
+## Summary
+
+The night of 2026-11-27 measured integration, not building, as the bottleneck: the coordinating session carried 93 commits,
+ran 50 landing attempts in its own clone (18 landed), resolved 15 conflicts and repaired every red gate in its own turns, its
+context growing about 100k tokens an hour (spec, Why). This plan moves integration out of the coordinator in three parts, each
+usable on its own:
+
+1. **The hand-in** (US2, FR-002): `make builder-done` applies the builder's work onto current `origin/main` with the carry's own
+   merge rules and runs the landing's first pass there, in the builder's tree, before it commits. No coverage.
+2. **The lane** (US3, FR-003, FR-005): a detached runner in a worktree of its own takes the hand-ins in order, runs the existing
+   `make land` there, pushes, and wakes the coordinator once a batch with one status line.
+3. **The red batch** (US4, US5, FR-004): attribution from the gate's own record first, halving only where it names no change; the
+   failing change ejected and returned as a repair entry a FRESH builder takes; the rest landed.
+
+Nothing outside is taken whole: every candidate's merge queue is a rule we borrow (R1). The runner reuses this project's own
+detached-runner pattern; the wake-up is Claude Code's background command.
+
+## Technical Context
+
+**Language/Version**: Rust (the workspace's pinned toolchain, `rust/Cargo.toml`), bash for the Makefile and `sync-with-main.sh`.
+
+**Primary Dependencies**: the gate's crates - `land` (the landing, `carry.rs`), `task` (`builder_done.rs`, `builder_tree.rs`,
+`builder_queue.rs`), `tree` (`state.rs`'s tripwire), `measure` (`preflight.rs`), the guard's `shared::builder_queue`. One new
+crate, `rust/gate/crates/lane/`. No outside dependency is added.
+
+**Storage**: files in the clone's git common directory: `l7r-lane/lane.jsonl` (the lane's log), `l7r-lane/attempts/` (one
+output file per gate attempt), `l7r-lane/repairs.jsonl` (repair entries), `l7r-lane/read-mark` (the coordinator's place), the
+done refs `refs/l7r/done/*` as today and the hand-in's scratch refs `refs/l7r/hand-in/*`. Shapes: `data-model.md`.
+
+**Testing**: each crate's own tests at 100% line coverage (`make rust-test CRATE=...`), red first; the guard's hook suites
+(`tests/hooks/test-gate-write-hooks.sh`); an end-to-end test of hand-in, lane batch, red, eject and land on a scratch clone with a
+local bare `origin` (the land crate's `carry/tests.rs` already builds such a world).
+
+**Target Platform**: the Linux container the sessions run in.
+
+**Project Type**: the project's own tooling (gate binary, Makefile targets).
+
+**Performance Goals**: the spec's Success measure, over a like window (FR-010) against the night: landed tasks per hour of
+builder work at least the night's, read beside task size (FR-007); the cross-blocking row no higher than 32.3 minutes over 130
+tasks; total tokens per landed task no higher (FR-006).
+
+**Constraints**: no history rewritten (no `git rebase`, amend, squash or force push: the "rebase" of FR-002 is a new application
+of the builder's diff, D3); every change lands through today's gate and push checks (FR-008); the push's lock and route
+unchanged (FR-003); a builder runs no coverage (`docs/process-decisions.md`, REVERSED 2026-11-26); no builder is kept past its
+report (451 T308).
+
+**Scale/Scope**: one session, three builders (`L7R_BUILDERS` = 3), about 130 tasks a 12-hour window (R3). Several sessions
+sharing builders is feature 459, out of scope.
+
+**Single-artifact target**: N/A - no generator change; nothing draws a map. The two-step rule's analogue here is phase 2's: the
+lane is proven on one batch of the feature's own tasks before it is the route for every landing (phase 4).
+
+**Performance bookends**: N/A - no engine stage with a work budget is touched (`make work-budget` counts the hamlet stages).
+The lane's own costs are the FR-006 and FR-007 measurement (D12), taken before (R3) and after (phase 5).
+
+## Constitution Check
+
+- **I, II**: N/A - no UI in this repository.
+- **III, VII, VIII, IX, XI**: N/A - no pool content, no setting prose, no kanji.
+- **IV, V**: PASS - no SOURCE block is added or moved; the GM's words stay in `request.md`'s blocks, which this plan quotes and no
+  task edits.
+- **VI**: PASS - every phase names its verification (each phase's "Verify" line below): the changed crates' tests red first, the
+  guard suites for a guard, `make land`'s gate at each landing, the end-to-end scratch-clone test, and for phases 2 and 3 a real
+  batch of this feature's own tasks through the lane, its lane log read.
+- **X**: PASS, with the file-scale plan of D15: new code owes 100% of its lines from its own tests; no function past 100 lines;
+  `land.rs` (873 lines), `land/tests.rs` (908) and the shared `builder_queue.rs` (915) gain no more than a dispatch arm, new code
+  going to new files; `carry.rs` (661) gains the no-commit form only. Every knob is a named constant or variable with its label
+  (`make tunables` does not walk the tooling crates, so each is recorded beside its rule, as 451 D14 did).
+- **XII**: N/A - nothing a generator asserts about the world; every task is `research: rendering`. Each tooling decision below is
+  labeled (measured / convention / GUESS knob / the easier route).
+- **XIII**: PASS - the baseline before the first edit, in a detached worktree (`git worktree add --detach`): `make rust-test
+  CRATE="rust/gate/crates/land rust/gate/crates/task rust/gate/crates/tree rust/guard"` and `make hooks-test HOOKS_ALL=1`, its
+  counts recorded in phase 1's first task. The process baseline is R3. What each change is held to: its tests, its callers (the
+  coordinator's commands, `make task-time`'s readers of the landing's Phase and `end` lines, which the lane's `make land` still
+  writes), the guard suites; a different landing log is not a regression.
+- **XIV**: PASS - found while reading: the `land` help text and the gate's line still say the changed modules' coverage runs
+  (R2), fixed in phase 0; the night's lost causes (attempts overwriting one log) are fixed by the attempt files (D8).
+- **XV**: PASS - each phase is usable alone, so a blocked phase does not stop the ones before it.
+- **XVI**: PASS, with three readings named for spec-fidelity's plan review: (a) D7 routes US5's "fresh agent dispatched for that
+  batch" through the queue as a repair entry a fresh builder takes, not an agent the lane launches; (b) D6 narrows the red-gate
+  tripwire inside the lane to a second red of the SAME change set, since a halving is red runs in a row by design; (c) D3 reads
+  FR-002's "rebases" as applying the builder's diff onto `origin/main` with the carry's rules, because the project forbids
+  `git rebase`. Each is the literal ask under a constraint the GM set; none drops a requirement.
+- **XVII**: N/A - no README.
+- **XVIII**: PASS - each new refusal (the hand-in's first pass, the handout's unpushed-filing refusal D13, `make land` outside the
+  lane tree D11, the Stop rule that keeps the wake-up armed D9) ships with a test that fails when the refusal is deleted, and the gate runs it.
+- **XIX**: N/A - nothing placed on a map.
+
+## Design decisions
+
+Each: the decision, why, its label, the alternatives priced.
+
+### D1 - the lane's tree: the existing landing worktree, adopted into the pool as the lane's reserved tree
+
+**Decision.** The lane runs in `<clone>-land`, the persistent worktree `land-alone.sh` lands in today, joined to the builder pool
+by `make builder-tree-adopt` under a reserved holder `lane` that no handout takes and the pool's cap (`L7R_BUILDER_POOL`, 4) does
+not count. The tree is the tool's: nobody's work lives there, and the lane brings it to `origin/main` at each batch's start
+(`land-alone.sh` step 4's rule, kept). Knob `L7R_LANE_TREE` names another tree.
+
+**Why.** The spec leaves it to the plan (b1 or a tree of its own). Three candidates, priced:
+
+| tree | cache for a gate | pool | cost |
+|---|---|---|---|
+| `<clone>-land`, adopted | its own target directory, 39 GB, built by past landings' gates (coverage builds included); its warmth against today's main unmeasured | adopted as is (a rename chills a cache, 0.1 s to 66 s, Makefile's adopt help, measured 2026-11-26) | keeps the 37 GB T302 part 4 would have dropped; that cache is needed by whatever tree gates |
+| b1 | 16 GB of test builds and lint only: builders run no coverage (two tiers), so a gate's coverage build starts cold there | already a pool tree | takes the fourth pool slot: a fourth builder needs the cap raised |
+| a new tree | cold: 14 to 30 minutes for a first full check (`docs/process-decisions.md`, "Two code builders at once") | made by the pool | a third cache on disk |
+
+The sizes and the tree's existence: `git worktree list` holds `/diagram/.clones/diagram-backlog-land`, and the target directories
+under `~/.cache/l7r-cargo-target/` are 39 GB (`-land`), 16 GB (`-b1`) and 104 GB (the clone's own) (observed 2026-11-27, method:
+`git worktree list` and `du -sh ~/.cache/l7r-cargo-target/*`). The adopted tree is the easier route: the tree, its cache and the
+pool's mechanics all exist. Label: the easier route, a knob.
+The measurement that could move it: the lane's first gate minutes in phase 2 against b1's, the cache sizes from `make
+builder-trees`. The clone's own target directory, where every gate ran until now, stops being a gate's cache once the lane is
+the route; whether to drop it is measured then (D11), not assumed.
+
+### D2 - what drives the lane: a detached runner of our own, `l7r-gate lane --work`
+
+**Decision.** A new crate `rust/gate/crates/lane/` and the commands of `contracts/lane-cli.md`. `make lane-start` (and every
+hand-in, idempotently) starts ONE detached process per clone - `l7r-gate lane --work`, in a session and process group of its
+own, as `make page-session`'s runner starts `page-session --work` - holding `l7r-lane/lane.lock` with `flock` so a second start
+is a no-op that says the first's pid. Its loop: wait for a hand-in, form a batch (D5), run it (D6), log every transition (D8),
+write the coordinator's status line (D9). It stops after `LANE_IDLE_S` = 3600 s with no hand-in (GUESS knob: a stopped runner
+costs one restart at the next hand-in, a running idle one a sleeping process) and on `make lane-stop`. It is restartable: its state
+is the refs and its log, never a memory (data-model.md, "Recovery").
+
+**Why.** Each step of the lane is a shell command (`git`, `make land`), and the spec asks for it "driven by tooling rather than
+the coordinator's turns" (US3). Label: convention (this project's runner pattern). Alternatives priced (R1): the Workflow tool -
+"No direct filesystem or shell access from the workflow itself", so every step would be an agent's turn, and "the run doesn't
+continue on its own" when the session is backgrounded; a loop the coordinator starts - its turns, which US3's acceptance forbids
+("no coordinator turn between the hand-ins and the push"); Gas Town's Refinery - a standing tmux-hosted agent (US5 rules out a
+standing integrator). The stall watchdog (`stall_watchdog_hooks`) learns the runner's argv as it knows the page session's.
+
+### D3 - the hand-in's "rebase": the builder's diff applied onto `origin/main` with the carry's rules, then the first pass, then the commit
+
+**Decision.** `make builder-done` becomes `l7r-gate land --hand-in` (the land crate, `land/hand_in.rs`), which, in the builder's
+pool tree:
+
+1. asks today's refusals (`builder_done::unready`, in process: `land` builds on `task`);
+2. commits the work as a SCRATCH commit on the tree's base, kept at `refs/l7r/hand-in/<feature>-<task>` (deleted at step 6);
+3. `git fetch origin`, detaches the tree at `origin/main` and applies the scratch commit there with `carry.rs`'s rules in a new
+   NO-COMMIT form (`git cherry-pick -n`; plan.md by section, tasks.md by box, request.md by dated section, the `.jsonl` records,
+   prose by words). Where the carry stops on a conflict, the tree is left with it and the refusal names the files; the builder
+   resolves them and runs `make builder-done` again, which sees the scratch ref and resumes at step 4;
+4. runs the landing's first pass in its hand-in form (D4) over the tree as it now stands; a refusal prints every reason with its
+   fixing command and nothing is committed;
+5. commits the tree (parent `origin/main`), keeps it at the done ref, logs the `done` line with `"handed_in": true` (data-model),
+   releases the tree, starts the lane if none runs (D2);
+6. deletes the scratch ref and prints the next dispatch (the queue's, as today) and `handed in to the lane` in place of today's
+   `make land` line.
+
+**The base by phase** (`HAND_IN_BASE`, a knob): in phase 1 the coordinator still carries into its clone, so the clone's HEAD is
+where work lands and is ahead of `origin/main` for the length of every staged batch; the hand-in applies onto the clone's HEAD
+then (`clone`). From phase 2, when landings leave the clone, it is `origin/main` (`origin`) and D13 starts with it. Applying onto
+`origin/main` in phase 1 would build on a main without the staged work the tree was handed out on, and D13 in phase 1 would
+refuse every handout while a batch stood staged.
+
+**The no-commit form's own verified end.** `carry.rs`'s verified end asks "nothing staged" (its doc, R2), which a no-commit apply
+contradicts by design; the form ends verified on nothing in progress, nothing unmerged and each non-spec file of the scratch
+commit present in the working tree. To confirm in phase 1's first task, with a test.
+
+**Why.** FR-002 asks for the rebase, the first pass, then the commit, in that order, and for a refusal to name its fix. Label: the
+literal order, under the no-rewrite rule. Which main, from phase 2: `origin/main` after a fetch, the "current main" of FR-002 and Zuul's "tip of
+the branch exactly as it is going to be merged" (R1). Alternatives priced: `git rebase` (forbidden: rewrites history); a `git
+stash` and pop (loses the carry's merge rules, which resolved most of the night's 15 conflicts); the lane's tip as the base (a
+hand-in would build on work the lane may yet eject); the clone's HEAD (today's, holding the coordinator's unpushed filings, D13).
+Cost moved to the builder: one fetch, one carry and the first pass - the push's table alone took 7.01 to 14.27 s (R2) - and its
+conflict turns, which were the coordinator's (FR-006 counts them where they land).
+
+### D4 - the first pass at hand-in: what a builder can answer is asked; what is the lane's is not
+
+**Decision.** `cheap_refusals` takes a mode. In the hand-in mode it reads the delta as the working tree against `origin/main`
+(`git diff --name-only origin/main`, not `origin/main...HEAD`), writes its records into the tree uncommitted, so step 5 commits
+them with the work, and asks:
+
+| asked at hand-in (the builder's to answer) | not asked at hand-in (the lane's, asked again when it lands) |
+|---|---|
+| each task's tick check, `landed=false` (plan review owed, audit entry, ledger row, the GM's words), the phase checklist, open claims, the named files (451 T294) | another writer's changes (`writer_refusal`): the tree is the builder's own |
+| the stale coverage-exempt entry; the ledger rows owed | the mark's hold (`ready.rs`): another task's start is the lane's ordering |
+| `review-gate.sh`, `plan-gate.sh`, `entry-gate.sh` | the red-gate tripwire (`arbiter gate-held`): a process stop, never a builder's |
+| `claims-gate.sh`, with an owed claim with no check in flight a refusal naming the bundle to dispatch | a claims round in flight: the lane's landing waits on it, as today (`claims_wait.rs`); whether `claims::flight_live`, which `in_flight` asks of the tree's root, sees a round dispatched from a builder's tree when asked from the lane's is to confirm in phase 1's first task |
+| the push's table (`push-checks --every`): file size, pointers, spec lint, make-targets page | the gate's stamp rows (they need the gate) |
+
+No coverage runs (FR-002; the first pass holds none, R2). **Why.** The night's 19 refusals before a gate were plan review owed 6,
+audit entry 5, tripwire 4, ledger row 3, unclear 2 (spec): all but the tripwire are in the left column. Label: measured (the
+night's refusal kinds), the split by who can answer. Alternative priced: the whole first pass unchanged in the builder's tree -
+refused there by `writer_refusal` and the hold for reasons no builder can cure.
+
+### D5 - when the lane starts a batch, and what it holds (FR-004, 451 T415)
+
+**Decision.** The lane starts a batch as soon as it is idle and a hand-in waits: every waiting hand-in of the oldest hand-in's
+feature, oldest first, up to `LANE_MAX` = 6, after `LANE_WAIT_S` = 0 s. One feature a batch, because `make land` takes one `F=`.
+A repair's hand-in is ordered by its own hand-in time. This replaces T415's printed `make land` line: the lane runs it.
+
+**Why.** The spec seeds the knob from trial 458's finding, and trial 458 has none yet (not read before 2026-11-28; its spec says
+the pipeline ran rolling, so the gate ran "when a few tasks stood staged"). So both are GUESS knobs, seeded: 6 is the two-tier
+threshold's ceiling of "about six tasks" (`docs/process-decisions.md`), and an immediate start is the trial's "stronger
+version" (a continuous gate whose batch is whatever arrived while the last ran), which a lane of its own makes free. Mergify's
+default 30 s wait was priced: with a gate of minutes, hand-ins gather behind a running batch anyway. The night's reading - smaller
+batches landed on the first or second try after 10:00Z, the 63-task batch took 14 attempts - argues for the cap. Trial 458's
+verdict resets both; the lane log gives it the batch sizes it asks for.
+
+### D6 - a red batch: attribute, else halve; eject; land the rest (US4)
+
+**Decision.**
+
+1. **Each attempt's output is its own file** (`l7r-lane/attempts/<batch>-<n>.log`), never overwritten.
+2. **Attribution from the gate's own record**: the red `test`, `lint`, `cover-build`, `cover-run` and `build` Phase lines in the
+   attempt's span name their `crates` (R2); a red hook suite is named in the attempt's output (`test-<name>-hooks.sh`); a red
+   first-pass row names its file. Each red unit maps to the batch changes whose delta touches it: a crate by its directory, a suite
+   by its own file and its guard's sources (`rust/guard/src/guards/<name>_hooks*`), a row by its file. One candidate: it is
+   ejected and the rest runs again. Several: the halving runs over those candidates only, the others riding with the first half.
+   None (a red the record does not place: a test that fails only beside other crates' tests): the halving runs over the batch.
+3. **The halving, landing as it goes.** The candidates in hand-in order; the first half runs as a batch of its own. A green half
+   is pushed at once: it was gated exactly as it lands, on the main it lands on (Zuul's rule, R1). A red half is halved again. When
+   every change but one has landed green, the one left is ejected without a run of its own: everything else in the red batch is
+   on main, so the red belonged to it alone or to its meeting with them, and its repair builder's hand-in re-tests it on that main.
+4. **The tripwire inside the lane.** Each lane attempt runs `make land` with `L7R_LANE_SET` = the sorted short shas of its changes;
+   `tree/state.rs`'s `second_red_gate` fires there only on a second red of the same set. Outside the lane it is unchanged. A set
+   red twice stops the lane and owes the round arbiter (`make arbiter-ask`), which wakes the coordinator (D9).
+5. **No retry of a flake** (`LANE_RETRY` = 0, GUESS knob; Gas Town's `retry_flaky_tests` priced): a flake costs one halving step.
+
+Runs after the batch's first red run, one bad change, the last survivors' gate counted (FR-008: nothing pushes ungated):
+
+| n | where the bad change is | runs (sets run) | US4's bound ceil(log2 n) + 1 |
+|---|---|---|---|
+| any | attributed by the record | 1 (the rest) | - |
+| 4 | first half [A B] | 3: [A B] red, [A] green, [C D] green; B ejected | 3 |
+| 4 | second half [C D] | 2: [A B] green, [C] green; D ejected (or [C] red: C ejected, [D] green, 3) | 3 |
+| 6 | first half [A B C] | 4: [A B C] red, [A] green, [B] green, [D E F] green; C ejected | 4 |
+| 6 | second half [D E F] | 3 or 4: [A B C] green, [D] green, [E] green, F ejected; or [E] red, [F] green | 4 |
+
+**Why.** US4 and FR-004, literally: "first by the gate's own report ... by bisection only where that names none". Label: borrowed
+rule (bors, Gas Town, R1); the attribution map is the easier route. A re-run of a subset costs less than a whole gate because a
+crate's kept result is reused where its key did not move (`rust/gate/CLAUDE.md`); each run's minutes go on the lane log, so the
+cost is measured, not assumed. Alternatives priced: GitHub's remove-and-retest of the one failing PR (needs attribution, which is
+step 2); a separate run of each change (n runs where halving needs about log2 n); the tripwire unchanged (the second step of any
+halving would stop the lane), or an `ARBITER_OK` on every lane run (an escape on every run teaches every run to escape).
+
+**By phase.** Attribution (step 2) and the tripwire by change set (step 4) come in phase 2, with the lane itself: in phase 2 an
+attributed red ejects its change and runs the rest, and a red the record cannot place ejects the WHOLE batch as one repair entry
+naming every change (so no batch is formed again from the same hand-ins, and no gate runs twice on one set). The halving (step 3)
+comes in phase 3 and replaces that whole-batch ejection.
+
+### D7 - the repair: a queue entry a fresh builder takes (US4, US5)
+
+**Decision.** An ejected change becomes a repair entry in `l7r-lane/repairs.jsonl`: its task, kind `fix`, the ejected done
+commit, why (the attempt file, the red units, or the carry's conflict), and its batch. `make queue` and `make builder-next` read
+these entries before `queue.txt`'s (`builder_queue/repairs.rs`, a new module of the shared queue), so the next free tree goes to
+a repair first (`LANE_REPAIR_FIRST` = 1, a knob). The repair's `make builder-brief` carries the task's plan section, the ejected
+commit and the attempt file's path (T308's rule: what a successor needs is durable when a builder ends). Its handout applies the
+ejected commit onto `origin/main` without committing (D3's no-commit carry), so the fix is made on top; its hand-in SUPERSEDES the
+ejected done ref. A conflict the lane's carry cannot merge (main moved after the hand-in) is a repair entry too, "conflict-
+resolution task" in Gas Town's words (R1).
+
+**Why.** US4: "The repair goes to a FRESH builder given the gate's output; no builder is kept past its report"; US5: "never a
+standing integrator, never the coordinator's context". The coordinator dispatches the entry as any other, so its context gets one
+queue line, not the conflict or the gate output. Label: borrowed rule (`assign_back`, R1); XVI reading (a) named for spec-fidelity.
+Alternative priced: the lane launching a fresh headless agent itself through `page-session`'s launcher - a second launcher the
+Agent guards never see (`agent_prefix_hooks` fires on Agent calls), its tokens booked to nothing (451 T513), and an unattended
+permission surface; what would reopen it: repairs that queue behind builder work for longer than a builder's dispatch.
+Where the repair entries live: a file in the common git directory, not `queue.txt` in the clone, so the lane never writes in the
+coordinator's tree (FR-001's purpose) - the easier route.
+
+### D8 - the lane's states and its log
+
+**Decision.** States are computed, never typed, from the done refs, the hand-in scratch refs, `origin/main` and the lane's log,
+as the queue's are (`builder_queue.rs`): a hand-in is `waiting`, `in batch <b>`, `landed`, `ejected -> repair <r>` or
+`superseded`; a batch is `forming`, `carrying`, `gating <n>`, `halving`, `pushing`, `landed`, `stopped`. One JSON line a
+transition in `l7r-lane/lane.jsonl` (shapes: `data-model.md`). The done ref of a landed change is deleted by the lane after its
+push; "carried" (`builder_done::uncarried`) is asked against `origin/main` instead of the clone's HEAD once the lane is the route,
+so `make builder-trees` lists what waits on the lane.
+
+**Why.** The night's causes were "partly inferred: several attempts overwrote one log" (spec). Label: convention (the pool's log
+and the queue's computed states). Alternative priced: a state file the runner rewrites (lost or stale on a crash, which a log
+replayed is not).
+
+### D9 - the coordinator's wake-up: one background command, one status line a batch (FR-005)
+
+**Decision.** `make lane-wait`, run by the coordinator with `run_in_background: true`, blocks until the lane writes a line owed
+to the coordinator past its read mark - a batch landed, a repair entry, a US5 stop, an arbiter owed, the runner dead - prints
+those lines and moves the mark; the session's next prompt carries the notification. A landed batch's line is one line: `lane: 461
+batch 7 landed T12 T14 (2 runs, 11.4 min); T13 ejected -> repair r3 (rust/gate/crates/land test)`. It has no ceiling of its own,
+so it wakes the session only for what FR-005 lists. `make lane` prints the same status on demand.
+
+**The re-arm is the tooling's, not a remembered step.** The pool-idle Stop guard (`rust/guard/src/guards/pool_idle_hooks.rs`)
+gains a rule: the main session's stop is refused while the lane holds a waiting hand-in or an open batch and no `make lane-wait`
+of this clone runs, its message the exact command to start with `run_in_background: true`; it ships with its suite case and its
+quiet case (XVIII). The prompt hook, which already runs `sync-in` each turn, prints any unread lane lines, so a wake-up command
+killed early loses nothing.
+
+**Why.** FR-005: "once per landed batch with a short status, and otherwise only for US5's cases". Label: TAKE (R1, the platform's
+background command). Unknown, so measured in phase 2: how long a background command outlives the turn that started it; if the
+platform ends it at a time limit, the Stop rule and the prompt hook above catch it, and a ceiling (`LANE_WAIT_MAX`, GUESS) would
+be priced then as a wake FR-005 does not list, under XVI. Cost: each wake re-reads the coordinator's context (540k to 966k tokens
+a call on the night, the spec's Why), one per batch, the floor the spec sets. Monitor priced: a wake per output line, a watch at
+most 30 minutes.
+
+### D10 - FR-001's gate-write guard and 451 T405's tree check, by construction plus a fixture
+
+**Decision.** Once landings run only in the lane tree (D11), no gate runs in the coordinator's clone, so FR-001 holds by where
+gates run. The guard's reach is already right (451 T307 part 1, T406, T430: a write is held by the tree it lands in); this
+feature adds the fixture that pins it for two trees - a commit, an Edit and a `make task-add` in the clone while the lane tree's
+gate runs are let through, and the same aimed into the lane tree are held - in `gate_write_hooks/tests.rs` and the suite. T405
+closes by its own option (C), "every landing gated in the landing worktree at its commit, the clone free to write": a test that
+the lane's gate is not voided by the clone's plan stub, a measurement record's commit, or a fetch log's append in the clone. Its
+options (A) and (B) are not built: neither is needed when nothing but the landing writes in the gated tree.
+
+**Why.** Label: measured (T405's priced table, 451 plan). The lane's own writes during its gate: none - the runner waits on
+`make land` and the landing's own records are already excused or committed by the landing.
+
+### D11 - what retires, and when (451 T302 parts 1 and 4)
+
+**Decision.** In phase 0, T302 part 1 is confirmed by reading: `alone_owed` is asked only by `make land`, and `land-alone.sh` is
+run only by `alone.rs` (a `grep` over `rust/`, `scripts/` and the Makefile, recorded). In phase 4, after the lane has carried a
+like window's landings (phase 3 in use): `make land` outside the lane tree is refused, naming `make lane-start`, escape
+`LAND_HERE_OK="<reason>"` (recorded, for the lane's own failure); the dirty-clone route is retired - `alone.rs` and
+`land-alone.sh`'s steps 1 to 6, among them its step 2 (the task's own sections committed apart) and step 3 (the attribution of
+uncommitted files by the event log, the part T302 part 4 names) - and `make land` refuses an unclean tree, naming each file (T302
+part 4). `land/writers.rs` STAYS: it is 451 T242's refusal of another writer's changes and the put-back of a tick whose commit
+failed (its doc), which every landing, the lane's included, still needs (FR-008). The landing worktree itself is not dropped with
+land-alone: D1 adopts it as the lane's tree. KEPT from `land-alone.sh`: its step 7, the clone taking a tip with its uncommitted work kept piece by piece,
+moved to `scripts/take-tip.sh` and run by `sync-in` where `git pull` would stop on a dirty sectioned file, because the
+coordinator's clone still takes main after every lane push. The clone's own target directory is dropped only once phase 2's
+measurement shows no gate builds in it (D1). `make carry` stays for a hand carry; `make land-tooling` is unchanged (out of scope).
+
+**Why.** T302 part 4 retires land-alone; read whole, its step 7 is the one piece the clone still needs (`sync-in` is a plain
+`git pull --no-rebase`, R2). Label:
+the easier route. Retiring before the lane has carried real landings would leave no route at all.
+
+### D12 - the measurement (FR-006, FR-007, FR-010)
+
+**Decision.** One measurement script under `dev/measurements/<date>/landing-lane/`, of the kind `tree-idle.py` is, reads the same
+sources over both windows:
+
+| figure | source | night (R3) |
+|---|---|---|
+| tasks landed, builder hours, landed per builder hour | `make task-time` header; pool log's held spans | 130 tasks; tree hours from the busy shares 93/98/83% |
+| cross-blocking row (US1) | `make task-time` tasks' side | 32.3 min over 130 tasks |
+| landings' side blocking | `make task-time` | 569.1 of 772.5 min |
+| landings refused before a gate (US2) | lane log (after); update note (before) | 19 of 50 |
+| tokens per landed task, by kind and actor (FR-006) | every transcript in the window summed by actor (builders, repair builders, review agents, the coordinator), over tasks landed; the per-task T512 booking a cross-check only | coordinator 0.58M output / 616M cache read; booked to tasks 6,179k output / 1,147M cache read (04:30Z on) |
+| task size beside each per-task figure (FR-007) | T512's test and non-test lines, median and total | from the kept table |
+| concurrency (FR-010) | trees held time-weighted from the pool log; load median from `make sampler-report` | three trees, 93/98/83% busy |
+
+A window is LIKE when it holds eight hours or more of builder work and its time-weighted trees held is within 0.5 of the
+night's (GUESS knob); otherwise both concurrencies are printed beside every figure. **Why.** FR-006 counts a cost "where it
+lands", and 451 T513 showed the coordinator's calls are booked to no task, so only window totals over every actor can count it.
+T512's fill starts at 04:30Z, so the token comparison is over 04:30Z to 14:29Z of the night, said with the figure. The script is
+written and run over the night IN PHASE 0, while the night's transcripts are on disk, so the before figure exists in the form the
+after figure will take; the coordinator's 0.58M / 616M (02:00Z to 15:00Z, another agent's read) is a cross-check, not the
+baseline. Label:
+measured sources; the likeness band a GUESS. Alternative priced: a new `make lane-report` target (a report crate for a one-off
+comparison; it reopens if the process reviewer, the next feature, wants it standing).
+
+### D13 - the coordinator's own commits go out before a builder builds on them
+
+**Decision.** `make builder-tree` refuses a handout while the clone's HEAD holds commits `origin/main` lacks, printing
+`scripts/sync-with-main.sh done` (the DIRECT route for spec-only commits: a locked fast-forward push, no gate). The handout base
+is then `origin/main` and the clone's HEAD alike.
+
+**Why.** A builder fills a plan stub `make task-add` wrote; if that stub is only in the clone's unpushed commit, the hand-in's
+apply onto `origin/main` (D3) meets a section main lacks. Pushing the coordinator's filings DIRECT waits on no gate (US1: "nothing
+it writes waits on a gate"). Label: the easier route. Alternative priced: the hand-in applying onto `origin/main` plus the clone's
+unpushed commits (it would carry the coordinator's commits into the builder's done commit, landing them under another task's
+name). The coordinator's own code changes go to a builder; it does not push engine code from its clone. In force from phase 2
+(D3's base by phase).
+
+**A premise this moves.** The coverage reversal of 2026-11-26 rests on builders going on "from the clone's HEAD, which already
+holds the carried work" (`docs/process-decisions.md`). Under the lane, staged work sits in the lane, not the clone: a closing half
+still builds on its first half (D14), but a queue entry with `waits=T<n>` on ANOTHER task waits until T<n> lands (the queue reads
+"neither ticked nor carried", `builder_queue.rs`, and carried now means landed). That wait is a tree idle on a landing - the
+cross-blocking row - and is the reversal's own reopening measurement ("repairs after a gate hold builders back"); phase 5 reports
+it apart, the entries that waited named. Label: measured where it lands; not built around before it is seen.
+
+### D14 - done refs, successors and repairs
+
+**Decision.** A task's next handout (a closing half, a repair) no longer waits for its earlier done commit to be carried
+(`handout_waits`): the handout applies that commit onto the base without committing, so the successor builds on it, and the
+successor's hand-in supersedes the earlier ref (the lane logs `superseded`). One ref a task, so the rule where the earlier commit
+sits in an OPEN batch: a batch reads its changes' shas when it forms (its `batch` line), so a later hand-in moving the ref changes
+no batch; the later hand-in waits until that batch ends - if it landed the earlier commit, the later one is carried on top (its
+earlier half already on main, the carry's empty hunks skipped as today); if it ejected it, the later one supersedes and the
+ejected one's repair entry closes as superseded (`data-model.md`). **Why.** Under the lane "carried" means landed, which
+may be a batch away; a closing half held for it would idle a tree. Label: the easier route (D3's no-commit carry reused).
+
+### D15 - where the code lives
+
+**Decision.** `rust/gate/crates/lane/` (builds on `land`, `task`, `core`): `lane.rs` (the command line), `runner.rs` (the loop),
+`batch.rs` (D5), `attribute.rs` and `halve.rs` (D6), `log.rs` (D8), `wake.rs` (D9), `repairs.rs` (D7's writer). `land/hand_in.rs`
+(D3, D4) with its tests in `land/hand_in/tests.rs`; `carry.rs` gains the no-commit form; `land.rs` gains the `--hand-in` arm only.
+The shared queue reads repairs in `builder_queue/repairs.rs`. `rust/gate/CLAUDE.md` gets the crate's row; the Makefile the targets
+`lane-start`, `lane`, `lane-wait`, `lane-stop`, and `builder-done` pointed at the hand-in.
+
+## The phases - each usable on its own
+
+The session lands by hand today; each phase leaves it a working route.
+
+**Phase 0 - the record (no engine code).** R3's baseline kept (`baseline-task-time.txt`), D12's script written and run over the
+night (the token totals by actor while the transcripts exist), the load median read from `make sampler-report` over the night
+(the sampler's file holds 4,647 samples stamped 02:00Z to 14:59Z of 2026-11-27, observed 2026-11-27, method: `grep -c` over
+`l7r-events/samples/mem-samples.jsonl` in the common git directory), T302 part 1 confirmed by reading (D11), the stale coverage words fixed in the Makefile's `land`
+help and `long_runs.rs`'s line. Verify: the record's commands re-run; `make quick`. Usable: nothing changes for the session.
+
+**Phase 1 - the hand-in (US2, FR-002; D3, D4, D14).** `make builder-done` applies the work onto the clone's HEAD (`HAND_IN_BASE`
+= `clone`, D3) and runs the first pass before it commits. The coordinator still runs `make land` by hand, but every hand-in
+arrives on what it lands on, with its conflicts and its bookkeeping answered by the builder. Verify: red first - a hand-in whose plan review is owed, whose ledger row is owed, or that conflicts with
+main is refused with its command, in the land crate's scratch-clone tests; a fixture shows no coverage runs; one real hand-in of
+this feature's next task. Measured: landings refused before a gate, against the night's 19 of 50.
+
+**Phase 2 - the lane (US3, FR-003, FR-005; D1, D2, D6 steps 1, 2 and 4, D7, D8, D9, D13).** The runner, the adopted tree,
+batches of hand-ins run through `make land` there, the one status line, the Stop rule that keeps `make lane-wait` armed;
+`HAND_IN_BASE` = `origin` and D13 switched on. A red batch: an attributed change is ejected as a repair entry and the rest runs
+again; a red the record cannot place ejects the whole batch as one repair entry (D6, "By phase"), so no batch re-forms from the
+same hand-ins and the tripwire by change set never sees one set twice. The coordinator dispatches repair entries like any other
+and repairs nothing itself, so US1 holds from here. Verify: the end-to-end test (two hand-ins, one batch, one push, the refs
+deleted, the status line; an attributed red ejects one change and lands the other); a real batch of this feature's tasks;
+measured: the lane tree's first gate minutes (D1), a background command's lifetime (D9).
+
+**Phase 3 - the whole red path (US4, US5, FR-004; D5, D6 step 3, D7's conflict entries, 451 T415).** The halving in place of the
+whole-batch ejection, a carry conflict as a repair entry, the batch knobs. Verify: red first - a batch whose red the record
+cannot place lands its good changes in at most ceil(log2 n) + 1 further runs (n = 4 and 6, D6's table); a carry conflict becomes a
+repair entry; the tripwire fires on a second red of one set and not on a halving's steps.
+
+**Phase 4 - the one route (FR-001, FR-008; D10, D11, 451 T302 part 4, T307, T405).** The guard fixture over two trees, T405's
+option (C) test, `make land` refused outside the lane tree, the dirty-clone route retired, step 7 kept as `take-tip.sh`, the
+taken-over 451 tasks closed in 451 with a pointer here. Verify: the guard suite; `make hooks-test`; a landing refused in the clone
+with its command; the lane's next batch green.
+
+**Phase 5 - the after-measurement (FR-006, FR-007, FR-010; D12).** Over the first like window after phase 3 is the route: every
+figure of D12's table beside the night's, with its concurrency. Verify: the figures re-derived from their recorded command
+outputs; the GM reads the comparison.
+
+## What retires (451 T302 part 4) and when
+
+| what | when | why then |
+|---|---|---|
+| `make builder-done`'s `make land` line and `make carry` as the usual route | phase 2 | the lane takes them |
+| T415's proposed `make land` line | phase 3 | the lane runs the batch itself (D5) |
+| `alone.rs`, `land-alone.sh` steps 1-6 (its attribution of uncommitted files, step 3, among them) | phase 4 | a clean-tree landing in the lane's tree is the only route |
+| `make land` in a session clone | phase 4 | refused, `LAND_HERE_OK` for a broken lane |
+| the clone's own target directory | after phase 2's measurement | only if no gate builds there |
+
+## The 451 parts this feature takes over
+
+T302 parts 1 and 4 (D11), T307 parts 1-3 (part 1's guard built, its fixture D10; part 2's push table already in the first pass,
+kept in both forms D4; part 3's one gate for several ready tasks is the lane's batch D5), T308's two-tier split (D3, D4: the fast
+tier stays the builder's, the full gate the lane's; its "repaired by whoever is cheapest" replaced by D7, its builder coverage
+replaced by none), T405 (D10), T415 (D5). Each is closed in 451 with a pointer here when this feature's tasks are written.
+
+## Risks
+
+- **Two writers of main.** The lane's pushes and the coordinator's DIRECT pushes meet under the one lock; a `tasks.md` the
+  coordinator filed into while the lane ticked can make the push's pull conflict, and the push then reverts its ticks (today's
+  behavior). The lane fetches, brings its tree to the new main and runs the batch again once; a second failure wakes the
+  coordinator. Measured in phase 2 by the lane log.
+- **The hand-in moves cost onto builders** (fetch, apply, first pass, conflict turns). FR-006 and FR-007 judge it; if builder
+  minutes a task rise past what the coordinator saved, phase 5 says so.
+- **A wrong attribution** ejects a good change: its repair builder's hand-in then passes at once, costing one builder dispatch;
+  counted on the lane log as a repair whose hand-in changed nothing.
+
+## Found and left
+
+- The Makefile's `land` help and `long_runs.rs`'s gate line say the changed modules' coverage runs beside the gate, which
+  `long_runs.rs`'s own doc says is gone. Visible effect: a reader is told a check runs that does not. Fixed in phase 0.
+
+## Project Structure
+
+```text
+specs/461-landing-lane/
+├── spec.md, request.md
+├── plan.md                 # this file
+├── research.md             # R1 reuse, R2 code, R3 baseline
+├── baseline-task-time.txt  # R3's recorded command output
+├── data-model.md           # the lane's entries, batches, states, log line
+├── quickstart.md           # the coordinator's and a builder's use, and how to test
+└── contracts/lane-cli.md   # the commands and their exits
+
+rust/gate/crates/lane/src/{lib.rs, lane.rs, runner.rs, batch.rs, attribute.rs, halve.rs, log.rs, wake.rs, repairs.rs}
+rust/gate/crates/land/src/land/{hand_in.rs, hand_in/tests.rs, carry.rs (no-commit form), cheap.rs (the mode)}
+rust/gate/crates/task/src/{builder_done.rs (uncarried against origin/main), builder_tree.rs (D13, D14)}
+rust/gate/crates/tree/src/state.rs (the tripwire by change set)
+rust/guard/shared/src/builder_queue/repairs.rs; rust/guard/src/guards/gate_write_hooks/tests.rs (D10)
+scripts/take-tip.sh (land-alone.sh step 7); Makefile (lane targets, builder-done)
+```
+
+**Structure Decision**: one new gate crate for the lane, the hand-in in the land crate (it builds on `task`), no new outside
+dependency.
+
+## Complexity Tracking
+
+No Constitution Check violation; the three XVI readings above go to spec-fidelity's plan review.
+
+## Knobs this plan takes (the record could not settle them)
+
+| knob | value | label |
+|---|---|---|
+| `L7R_LANE_TREE` | `<clone>-land`, adopted | the easier route (D1) |
+| `LANE_MAX` | 6 | GUESS, seeded from the two-tier ceiling; trial 458 resets it (D5) |
+| `LANE_WAIT_S` | 0 | GUESS (D5) |
+| `LANE_RETRY` | 0 | GUESS (D6) |
+| `LANE_IDLE_S` | 3600 | GUESS (D2) |
+| `HAND_IN_BASE` | `clone` in phase 1, `origin` from phase 2 | the easier route by phase (D3) |
+| `LANE_WAIT_MAX` | none (no ceiling) | priced only if phase 2 measures a time limit on background commands (D9) |
+| `LANE_REPAIR_FIRST` | 1 | GUESS (D7) |
+| like-window band | trees held within 0.5 | GUESS (D12) |
+
+D9's Stop rule (the coordinator's turn not closed while a lane line it owes is unread) lives in the guard's `pool_idle_hooks.rs`, with a case in its suite.
