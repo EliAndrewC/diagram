@@ -1,0 +1,36 @@
+builders mapped to a tree: 98
+diagram-backlog-b1 busy 117 min of 261
+diagram-backlog-t268 busy 0 min of 480
+diagram-backlog-t269 busy 401 min of 480
+diagram-backlog-t270 busy 373 min of 480
+diagram-backlog-t271 busy 330 min of 480
+diagram-backlog-t272 busy 0 min of 480
+  00:18 t269 idle   6.1  {'session stopped, its turn ended': 0.2, 'session in its own turn': 2.5, 'a landing running': 3.5}
+  00:29 g-b1 idle  30.8  {'session stopped, its turn ended': 0.3, 'session in its own turn': 17.7, 'a landing running': 12.8}
+  00:37 t271 idle  22.4  {'a landing running': 7.5, 'session in its own turn': 14.9}
+  00:40 t270 idle  19.6  {'a landing running': 4.7, 'session in its own turn': 14.9}
+  17:00 t268 idle 480.0  {'session stopped, its turn ended': 205.7, 'session in its own turn': 154.5, 'a landing running': 119.8}
+  17:00 t269 idle  13.5  {'session stopped, its turn ended': 9.0, 'session in its own turn': 4.5}
+  17:00 t270 idle  13.7  {'session stopped, its turn ended': 9.0, 'session in its own turn': 4.7}
+  17:00 t271 idle  38.3  {'session stopped, its turn ended': 9.0, 'session in its own turn': 25.5, 'a landing running': 3.8}
+  17:00 t272 idle 480.0  {'session stopped, its turn ended': 205.7, 'session in its own turn': 154.5, 'a landing running': 119.8}
+  17:23 t270 idle  14.8  {'session in its own turn': 11.0, 'a landing running': 3.8}
+  17:31 t269 idle   6.6  {'session in its own turn': 2.8, 'a landing running': 3.8}
+  17:54 t270 idle   3.6  {'session stopped, its turn ended': 0.2, 'session in its own turn': 3.5}
+  19:16 t271 idle   3.4  {'a landing running': 1.5, 'session stopped, its turn ended': 0.2, 'session in its own turn': 1.8}
+  19:49 t270 idle  10.2  {'session in its own turn': 3.7, 'a landing running': 6.5}
+  19:57 t269 idle   7.0  {'session in its own turn': 2.0, 'a landing running': 4.5, 'session stopped, its turn ended': 0.5}
+  21:03 t269 idle  11.9  {'session stopped, its turn ended': 1.8, 'session in its own turn': 7.4, 'a landing running': 2.7}
+  21:05 t271 idle   8.5  {'session stopped, its turn ended': 0.2, 'session in its own turn': 5.5, 'a landing running': 2.8}
+  21:15 t271 idle   4.5  {'session stopped, its turn ended': 0.2, 'session in its own turn': 1.4, 'a landing running': 3.0}
+  21:30 t270 idle  11.3  {'session stopped, its turn ended': 4.0, 'session in its own turn': 1.8, 'a landing running': 5.5}
+  21:34 g-b1 idle 109.7  {'session stopped, its turn ended': 69.7, 'session in its own turn': 20.7, 'a landing running': 19.3}
+  21:38 t269 idle   3.4  {'a landing running': 2.2, 'session in its own turn': 1.2}
+  22:01 t271 idle  28.1  {'session in its own turn': 16.1, 'session stopped, its turn ended': 1.0, 'a landing running': 11.0}
+  22:05 t269 idle  23.3  {'a landing running': 8.7, 'session in its own turn': 14.1, 'session stopped, its turn ended': 0.5}
+  22:06 t270 idle  22.7  {'a landing running': 7.8, 'session in its own turn': 14.4, 'session stopped, its turn ended': 0.5}
+  22:50 t270 idle   3.4  {'session stopped, its turn ended': 0.2, 'session in its own turn': 0.6, 'a landing running': 2.7}
+  23:27 t269 idle   4.7  {'session stopped, its turn ended': 0.2, 'session in its own turn': 1.7, 'a landing running': 2.8}
+  23:44 t271 idle  39.8  {'a landing running': 17.5, 'session in its own turn': 12.8, 'session stopped, its turn ended': 9.5}
+tree-idle minutes by what the session was doing: {'session in its own turn': 530, 'a landing running': 381, 'session stopped, its turn ended': 529} total 1440
+landing runs total min 119, count 19
