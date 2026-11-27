@@ -94,6 +94,31 @@ fn here() -> String {
     crate::env::opt("PWD").unwrap_or_else(|| "/nonexistent-l7r-test-cwd".to_owned())
 }
 
+/// The tree a call's work is in, which the plan hold snapshots, judges and writes back (451 T306, T295's D3 limit): a Bash call's
+/// is where its command lands as the walk reads its `cd`s and `-C`s - its first write's tree, else the tree it ends in - so a
+/// builder's `cd <worktree> && sed -i ... plan.md`, run with the session's clone as its cwd, is judged in the worktree, where it was
+/// neither refused nor written back. A command naming no `cd` or `-C` lands in its cwd and is not walked; any other tool's call is
+/// its cwd's tree.
+pub(crate) fn call_root(payload: &Value) -> Option<std::path::PathBuf> {
+    let cwd = cwd_of(payload);
+    let input = tool_input(payload);
+    let command = text(&input, "command");
+    if text(payload, "tool_name") == "Bash" && (command.contains("cd ") || command.contains("-C "))
+    {
+        let home = crate::env::var("HOME");
+        let walk = crate::tree::walk_judged(command, Some(&cwd), "", &home);
+        let landed = walk
+            .targets
+            .iter()
+            .find_map(|t| t.path.as_deref())
+            .or(walk.final_dir.as_deref());
+        if let Some(root) = landed.and_then(clone_root) {
+            return Some(root);
+        }
+    }
+    clone_root(&cwd)
+}
+
 /// The directory of the call `payload` describes: its `cwd`, else [`here`].
 #[must_use]
 pub fn cwd_of(payload: &Value) -> String {
@@ -209,7 +234,7 @@ fn handle_locked(mode: &str, payload: &Value, path: &Path, t: f64) -> String {
     if mode == "edit" && !falsy(state.get("plan_holds")) {
         planhold::snapshot(
             &mut state,
-            clone_root(&cwd_of(payload)).as_deref(),
+            call_root(payload).as_deref(),
             text(payload, "tool_use_id"),
             t,
         );
@@ -244,7 +269,7 @@ fn handle_locked(mode: &str, payload: &Value, path: &Path, t: f64) -> String {
             book_keep(mode, tool, &mut state, payload, &ti, path);
         }
         ("after", _) => {
-            let root = clone_root(&cwd_of(payload));
+            let root = call_root(payload);
             let msg = planhold::restore(&mut state, root.as_deref(), text(payload, "tool_use_id"));
             let _ = save(path, &state);
             if !msg.is_empty() {
@@ -508,7 +533,7 @@ fn edit_mode(state: &Value, payload: &Value, ti: &Value, tool: &str, t: f64) -> 
     let root = clone_root(&cwd_of(payload));
     let held = planhold::refusal(
         state,
-        root.as_deref(),
+        call_root(payload).as_deref(),
         tool,
         ti,
         t,

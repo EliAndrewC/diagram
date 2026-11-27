@@ -16,7 +16,7 @@ fn writes(cmd: &str, at: &str, m: &str) -> Vec<Place> {
         .collect()
 }
 
-const SPELLINGS: [&str; 13] = [
+const SPELLINGS: [&str; 16] = [
     "env -i ",
     "sudo -E -u x ",
     "nice -n 5 /usr/bin/",
@@ -30,6 +30,10 @@ const SPELLINGS: [&str; 13] = [
     "sudo \\",
     "timeout 60 /usr/bin/",
     "A=1 /usr/local/bin/",
+    // 451 T306: a program `xargs` runs, past its own options and their values
+    "xargs -0 ",
+    "xargs -I {} ",
+    "/usr/bin/xargs -r -n 50 ",
 ];
 
 #[test]

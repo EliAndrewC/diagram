@@ -6,13 +6,15 @@
 //! A program is named by its word's last path part, past a leading `\` (which skips an alias) and its quotes: `/usr/bin/git`,
 //! `\git`, `"git"` and `'/usr/bin/git'` are git, and `/tmp/mygit`, `legit`, `git.sh` and `/tmp/git/run` are not - the name is
 //! compared whole. A wrapper's own options are read past (`env -i git`, `sudo -u x git`, `nice -n 5 git`: [`options`]). What it
-//! does not read: a name built by the shell (`g\it`, `$GIT`, `$(which git)`) and a program run by another (`xargs git`,
-//! `sh -c 'git ...'`).
+//! does not read: a name built by the shell (`g\it`, `$GIT`, `$(which git)`) and a program a shell runs from its string
+//! (`sh -c 'git ...'`); a program `xargs` runs is read past its options (451 T306).
 
 /// The wrappers a command can stand behind, which a reader of its command word reads past (`tree::HEAD_WRAPPERS`, with `timeout`
-/// and its duration).
-pub const WRAPPERS: [&str; 10] = [
+/// and its duration). `xargs` runs the program after its own options with words from its input appended (451 T306: `xargs -0 git
+/// add --`, five times in the week's commands to 2026-11-27, was a write no reader saw); what it appends is unknown to every reader.
+pub const WRAPPERS: [&str; 11] = [
     "sudo", "nohup", "setsid", "env", "command", "exec", "time", "nice", "builtin", "timeout",
+    "xargs",
 ];
 
 /// The pattern text that stands before `program`'s name at a command position: a leading `\` or quote, the path's directories,
@@ -26,11 +28,32 @@ pub fn before(program: &str) -> String {
 /// The pattern text of the wrappers a command can stand behind, each with its options and the space after it, `timeout` with its
 /// duration: for a pattern's prefix group, beside its own `VAR=value` words. An option that takes a value is read with it
 /// ([`VALUED`]'s letters, for every wrapper alike: a pattern cannot ask which wrapper it follows).
-pub const WRAPPER_WORDS: &str = r"(?:\S*/)?(?:sudo|nohup|setsid|env|command|exec|time|nice|builtin)\s+(?:-[ugCDRThpnaS]\s+\S+\s+|-\S+\s+)*|(?:\S*/)?timeout\s+(?:-[ks]\s+\S+\s+|-\S+\s+)*\S+\s+";
+pub const WRAPPER_WORDS: &str = r"(?:\S*/)?(?:sudo|nohup|setsid|env|command|exec|time|nice|builtin|xargs)\s+(?:-[ugCDRThpnaSILPdEs]\s+\S+\s+|-\S+\s+)*|(?:\S*/)?timeout\s+(?:-[ks]\s+\S+\s+|-\S+\s+)*\S+\s+";
 
 /// Each wrapper's options that take the next word as their value (read from each one's manual, 2026-11-26: sudo 1.9, coreutils
-/// 9 `env`, `nice` and `timeout`, bash's `exec`); an option written `--name=value` or `-n5` is one word.
-const VALUED: [(&str, &[&str]); 5] = [
+/// 9 `env`, `nice` and `timeout`, bash's `exec`; findutils 4.9 `xargs`, 2026-11-27); an option written `--name=value` or `-n5` is
+/// one word.
+const VALUED: [(&str, &[&str]); 6] = [
+    (
+        "xargs",
+        &[
+            "-I",
+            "-n",
+            "-P",
+            "-L",
+            "-d",
+            "-E",
+            "-s",
+            "-a",
+            "--max-args",
+            "--max-procs",
+            "--max-lines",
+            "--delimiter",
+            "--eof",
+            "--max-chars",
+            "--arg-file",
+        ],
+    ),
     (
         "sudo",
         &[

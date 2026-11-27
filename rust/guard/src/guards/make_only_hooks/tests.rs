@@ -793,3 +793,23 @@ fn a_write_into_a_project_repositorys_worktree_in_scratch_is_a_guard_write() {
     let beside = v(&format!("printf x > {}/Makefile", s.display()));
     assert_eq!(beside, "ok");
 }
+
+/// 451 T306, measured on the code as T295 left it: `cargo` by its path, behind a `\` or behind `command`, `exec`, `sudo` or `builtin`
+/// is a bare cargo run, as T295's census held it was not - `CARGO`'s `(?:\S*/)?` reads the path and `POS` has read the four wrappers
+/// since T295's D2, so the claim is restated and the code stands.
+#[test]
+fn cargo_is_read_however_it_is_spelled() {
+    for cmd in [
+        "/usr/bin/cargo test",
+        "$HOME/.cargo/bin/cargo build",
+        "\\cargo test",
+        "command cargo test",
+        "exec cargo build",
+        "sudo -E cargo test",
+        "builtin cargo test",
+        "bash -c 'cargo check -q'",
+    ] {
+        assert_eq!(v(cmd), "bare-cargo", "{cmd}");
+    }
+    assert_eq!(v("/tmp/mycargo test"), "ok");
+}

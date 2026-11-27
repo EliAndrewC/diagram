@@ -91,7 +91,8 @@ lazy!(
 lazy!(
     CARGO,
     format!(
-        r"{POS}(?:\S*/)?cargo\s+(?:\+\S+\s+)?(?:build|test|run|clippy|check|fmt|llvm-cov|bench|nextest)\b"
+        // by its path or behind a `\` (451 T306: `\cargo test` passed)
+        r"{POS}\\?(?:\S*/)?cargo\s+(?:\+\S+\s+)?(?:build|test|run|clippy|check|fmt|llvm-cov|bench|nextest)\b"
     )
 );
 lazy!(

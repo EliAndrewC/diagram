@@ -3416,31 +3416,41 @@ parallelizing and is ordered by time saved, never by disk freed.
 <!-- plan-archive: T305 to T284 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T305 to T305 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 
-### T306 (<why: the finding or measurement that files it>)
+### T306 (2026-11-26, left by 451 T295's builder and filed by the coordinating session: six spellings of a program the tree guards did not read)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: each spelling measured first, then fixed red-first or recorded as a limit; the used ones fixed whole.
+  - **The measurement** (observed 2026-11-27, method: every Bash `tool_use` of the session transcripts under `~/.claude/projects/-diagram*` since 2026-11-20, deduplicated by its id, 71,565 calls, then each spelling at a command position read by hand; the brief's event logs under `.git/l7r-events/` keep no command text, so the transcripts stand in): (1) a program run by another - `xargs ... git add` 5 real calls (writes), `xargs git log/show` 2 (reads), `xargs sed -i` 21 (no files named, so no write the walk can place either way); `sh -c`/`bash -c` with git 1 real call (a `/tmp` probe of `git worktree add $UNSET`), with cargo 3 (make-only already reads a shell's `-c` string); (2) a quoted `"git"` as the command word: 0; (3) cargo by its path 213 calls (`~/.cargo/bin/cargo` 160), behind `command`/`exec`/`sudo`/`builtin` 0, detached by its path 0; (4) git spelled otherwise at the readers' places (claims-file, `git mv`, a commit, phase-source's readers by path over `rust/phases`): 0 each; (5) a plan verdict refused as "changed while it was being reviewed": 23 tool results in the week, cause not attributed, beside builders' `cd <worktree> && ...plan.md` shell edits run from the clone; (6) `$GIT`, `g\it`: 0.
+  - **T306-D1, `xargs` is a wrapper** (`rust/guard/shared/src/spelled.rs`: `WRAPPERS`, `VALUED` with findutils' valued options, `WRAPPER_WORDS`; `shared/src/tree.rs` `words`): the program after its options is the command word for every reader of `spelled` and the walk, so `xargs -0 git add --` writes in its tree, `xargs -I {} git worktree add <clones>/x` is refused by builder-pool, and `xargs git push -f` by the history guard. What xargs appends from its input stays unknown, as before.
+  - **T306-D2, the plan hold places a Bash call where its command lands** (`shared/src/checks/handle.rs` `call_root`, asked by the snapshot, the write-back and the refusal): its first write's tree as the walk reads its `cd`s and `-C`s, else the tree it ends in, else its cwd's; a command with no `cd ` or `-C ` is not walked (its cwd's, as before), and the Agent dispatch's hold keeps D3's bundle tree. T295's D3 limit (a builder's shell write of its worktree's held section neither refused nor written back) ends here; the arbiter's `make done` check in `edit_mode` still reads the cwd's clone.
+  - **T306-D3, cargo by a `\`** (`make_only_hooks.rs` `CARGO`) and **by its path or a `\` at no-poll** (`no_poll_hooks.rs` `RUNNER`). Measured red: make-only already read a path and the four wrappers (T295's census was wrong there; restated, constitution XIV) and missed only `\cargo`; no-poll missed `~/.cargo/bin/cargo build &`. Unused (0 each) but one pattern each.
+  - **Limits recorded** in `docs/guards.md` ("A program is read by its name ..."), with their counts: a shell-built name (0); a shell's `-c` string at the walk (1); a quoted `"git"` at the history guard (0); the exempting readers on the bare name (0 each). Discard was not measured red for a quoted `"git"`: its `targets` reads `shlex`'s words, which drop the quotes.
+  - No refusal text changed, so no message-check is owed.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a program xargs runs is read past xargs' options | red first 2026-11-27 (item 9); pinned by `xargs_runs_the_program_after_its_own_options`, `the_pattern_texts_read_the_spellings_the_reader_reads`, `git_spelled_by_a_path_a_backslash_or_behind_a_wrapper_writes_what_git_writes` and `a_file_tool_and_make_are_read_the_same_way`, builder-pool's and the history guard's spelling tests | n/a: tooling | none | n/a |
+| a Bash call is placed where its command lands for the plan hold | red first 2026-11-27 (item 9); pinned by `a_bash_call_is_placed_where_its_command_lands` | n/a: tooling | none | n/a |
+| cargo by a `\` at make-only, by its path or a `\` at no-poll | red first 2026-11-27 (item 9); pinned by `cargo_is_read_however_it_is_spelled`, `a_detached_cargo_is_read_however_it_is_spelled` | n/a: tooling | none | n/a |
 
 ### T306 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A tree guard reads a program `xargs` runs as it reads the bare one; the plan hold judges and writes back a builder's shell edit in the tree it edits; a detached or bare cargo is read however it is spelled; what no guard reads is said, with its count.
+2. **The constraints.** T306's line; 451 T295's section (D1-D3); the brief's order by measured use; a guard matches invocations, not mentions; 100% line coverage of new Rust.
+3. **Where each comes from.** O: the measurement above and T295's Found and left. No GM words bear on the design.
+4. **Do they describe the world here?** Measured 2026-11-27 (item 9's red run): five of the six as filed; make-only's cargo by its path and behind the four wrappers was already read (restated), discard's quoted `"git"` not shown missed.
+5. **The order.** Before T302, as T295 filed it.
+6. **The exits.** Green: the result lines below and the changed guards' suites. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, observed 2026-11-27, method: `make rust-test CRATE=<crate>`'s result line with the new tests on the old code (`call_root` added first as the old reading, the cwd's clone): `rust/guard/shared` 540 passed, 5 failed (the call-root test, two `spelled` tests, the walk's two `SPELLINGS` tests); `rust/guard` 566 passed, 4 failed (builder-pool's, make-only's `\cargo`, no-poll's, the history guard's). GREEN, observed 2026-11-27, method: `make builder-checks CRATE="rust/guard rust/guard/shared"`: 545 and 570 passed, lint and format clean; the suites of builder-pool, checks, gate-write, gm-tree, main-tree, make-only, no-poll, record-edit and repo-safety each green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The wrong outcomes they end: `xargs git worktree add <clones>/x` made a cold tree past the pool guard and `xargs git push -f` passed the history guard; a builder's shell edit of its held section went unrefused and unrestored, a verdict then refused as changed; `~/.cargo/bin/cargo build &` detached past no-poll. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A shell's `-c` string is not walked, a quoted `"git"` passes the history guard, and the exempting readers (claims-file, `parked.rs` `git mv`, phase-source, house-style, `is_git_commit`) read the bare name; visible effect: `sh -c 'git worktree add <clones>/x'` makes a cold tree past builder-pool, `"git" push -f` passes the history guard. Not fixed here: measured unused (1, 0, 0 each) and recorded as limits in `docs/guards.md`, per the brief's order. Filed as T453; lands before T302.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - guards' gaps
 
 
 ### T307 (part 1 of the task, the gate and the clone's other writers: on 2026-11-26 07:51 UTC the session, standing in the clone while its gate ran, was refused the commit of a builder's worktree, `cd /diagram/.clones/diagram-backlog-t265 && ... git add -u; ... git commit` (observed 2026-11-26, method: `make guard-log GUARD=gate-write SINCE=2026-11-26 FULL=1`, 3 firings: this one, a Write of a handoff under `.git` at 01:22, and that Write's escape at 01:22))
@@ -7591,6 +7601,32 @@ batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T451 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T453 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T453 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

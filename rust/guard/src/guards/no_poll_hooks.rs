@@ -67,9 +67,12 @@ static PGREP_F: LazyLock<Regex> = LazyLock::new(|| {
 });
 
 // A make or cargo run at a command position (D12): `invoked` names a make run's targets, so a goal it cannot read (`make $t`) names
-// none, and a cargo run is no make's.
-static RUNNER: LazyLock<Regex> =
-    LazyLock::new(|| re(&format!(r"{POS}(?:\$\(MAKE\)|make|cargo)(?:[\s;&|)]|$)")));
+// none, and a cargo run is no make's; cargo by its path or behind a `\` too (451 T306: `~/.cargo/bin/cargo build &` passed).
+static RUNNER: LazyLock<Regex> = LazyLock::new(|| {
+    re(&format!(
+        r"{POS}(?:\$\(MAKE\)|make|\\?(?:[^\s;&|()]*/)?cargo)(?:[\s;&|)]|$)"
+    ))
+});
 // A simple command started under nohup or setsid, its options passed over: what follows is what it runs.
 static STARTER: LazyLock<Regex> =
     LazyLock::new(|| re(&format!(r"\A{POS}(?:nohup|setsid)\s+(?:-\S+\s+)*")));

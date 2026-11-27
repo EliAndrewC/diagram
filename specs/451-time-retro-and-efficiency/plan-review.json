@@ -2575,14 +2575,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T306 (<why: the finding or measurement that files it>)": {
-   "sha256": "942db1d9a6eed6a27108af86080db7ebfbe926a1c8568aac6cfc83f288b5415c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T306 Approach (checklist part A)": {
-   "sha256": "11385c468c09fb6ee9ef3b8557672d50c5c247fabcfd4d44fa5ea93d7107634f",
+   "sha256": "8051df5674a63ce2572e571ed4fdfe591828137dbe782a5d46fc3e15fe28823f",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3994,6 +3988,24 @@
   "### T451 Approach (checklist part A)": {
    "sha256": "12e0615563812f88c6507b9cd746fdc939d86416da2474e863530e09b9224e29",
    "verdict": "BLOCKED",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T306 (2026-11-26, left by 451 T295's builder and filed by the coordinating session: six spellings of a program the tree guards did not read)": {
+   "sha256": "ddab8eeaaa1bd5a015981b5d54e07c5f3af4f1d23637750936572ba917fdf1ee",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T453 (<why: the finding or measurement that files it>)": {
+   "sha256": "eb71a208aa0116c0dc8e7546706aca7c43afddea20ceb00f757043218685bd79",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T453 Approach (checklist part A)": {
+   "sha256": "e537aa33df82971a4b0f8aeceaff497710175b6bf3362746783a5586bfa42613",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   }
@@ -35811,6 +35823,61 @@
    ],
    "tasks": [
     "T286"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T306 (2026-11-26, left by 451 T295's builder and filed by the coordinating session: six spellings of a program the tree guards did not read)",
+    "### T306 Approach (checklist part A)",
+    "### T453 (<why: the finding or measurement that files it>)",
+    "### T453 Approach (checklist part A)",
+    "(removed) ### T306 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T306-D1",
+     "summary": "xargs is read as a wrapper in shared spelled.rs/tree.rs: the program after xargs' own options is the command word for every reader of `spelled` and for the walk, so `xargs ... git add` writes in its tree, `xargs git worktree add <clones>/x` meets builder-pool and `xargs git push -f` the history guard; what xargs appends from stdin stays unknown.",
+     "class": "within",
+     "why": "Closes a spelling by which existing, approved guards were bypassed (the GM 2026-11-19: 'make sure all of the enforcement is real enforcement and not just instructions'; 2026-11-26 T285: tooling that 'automatically enforces ... without the opportunity for this kind of mistake'). It adds no new refusal kind: each guard refuses what it already refused, read past one more wrapper. Measured use first (5 xargs git add writes, 2 reads), red-first tests named."
+    },
+    {
+     "id": "T306-D2",
+     "summary": "The plan hold places a Bash call where its command lands (call_root: the first write's tree from its cd/-C, else the tree it ends in, else its cwd's), for the snapshot, write-back and refusal; commands with no cd/-C keep the cwd's; the Agent dispatch hold keeps D3's bundle tree. Ends T295's D3 limit. The arbiter's `make done` check in edit_mode still reads the cwd's clone.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a builder's shell edit of its held section neither refused nor restored, then a verdict refused as changed while reviewed - 23 such results measured) in the plan hold the feature already built. The make-done note is a stated boundary of what this decision touches, not a deferred defect: no wrong outcome is claimed for it, so it does not owe a Found-and-left item."
+    },
+    {
+     "id": "T306-D3",
+     "summary": "cargo spelled `\\cargo` is read at make-only, and cargo by its path or `\\cargo` at no-poll (`~/.cargo/bin/cargo build &` detached past no-poll).",
+     "class": "within",
+     "why": "Directly FR-008 (a guard refuses a cargo run put in the background inside a Bash call) and the GM-approved improvement 3; reading the program however spelled is FR-008 doing its job. Cargo by path is the dominant spelling measured (213 calls)."
+    },
+    {
+     "id": "T306-restate",
+     "summary": "T295's census claimed make-only missed cargo by path and behind the four wrappers; measured red, it did not, so the claim is restated rather than code changed.",
+     "class": "within",
+     "why": "Constitution XIV: a claim the measurement contradicts is restated; nothing the GM asked is dropped."
+    },
+    {
+     "id": "T306-deferral-T453",
+     "summary": "A shell's -c string at the walk (1 call), a quoted \"git\" at the history guard (0), and the exempting readers on the bare name (0 each) are recorded as limits in docs/guards.md with their counts and deferred as T453, landing before T302; discard's quoted \"git\" was not shown missed (shlex drops quotes).",
+     "class": "within",
+     "why": "Not a narrowing of what was asked: the defects (visible effects stated: `sh -c 'git worktree add ...'` past builder-pool, `\"git\" push -f` past the history guard) are not left, they are filed as an open task in the spec's own deferral form (FR-009 / D15: why, filed id, 'lands before'), bound by the same order T306 itself holds (before T302), so no known defect is carried past the point T306 was due. The 'limits' text in docs/guards.md documents the interim state, not a permanent carve-out. T453's own section is owed its review when filled."
+    },
+    {
+     "id": "T306-removed-template",
+     "summary": "The template heading block '### T306 (<why...>)' is removed, replaced by the filled T306 heading block.",
+     "class": "within",
+     "why": "The placeholder renamed as it was filled; nothing of substance was removed (its earlier text was the empty template)."
+    },
+    {
+     "id": "T453-template",
+     "summary": "T453's section and Approach are the unfilled template.",
+     "class": "within",
+     "why": "A just-filed task's placeholders decide nothing; its decisions are judged when the section is written."
+    }
    ]
   }
  ],

@@ -777,3 +777,40 @@ fn a_later_batch_whose_page_another_session_moved_starts_a_fresh_count() {
     assert!(answered_round(&root, &prompt, "r5", 1004.0)
         .contains("round 5 of `record-format` on q:0097 passes its cap of 4"));
 }
+
+/// 451 T306 (T295's D3 limit): a Bash call is placed in the tree its command lands in, as the walk reads its `cd`s and `-C`s, so a
+/// builder's `cd <worktree> && sed -i ... plan.md`, run with the session's clone as its cwd, is judged and written back in the
+/// worktree; a call that moves nowhere, and any other tool's, stays in its cwd's tree.
+#[test]
+fn a_bash_call_is_placed_where_its_command_lands() {
+    let clone = clone_at("lands-clone");
+    let tree = clone_at("lands-tree");
+    let (c, t) = (clone.display(), tree.display());
+    let bash = |cmd: String| json!({"cwd": c.to_string(), "tool_name": "Bash", "tool_input": {"command": cmd}});
+    for cmd in [
+        format!("cd {t} && sed -i s/a/b/ specs/900-a/plan.md"),
+        format!("cd {t} && make task-add F=900 TITLE=x"),
+        format!("git -C {t} add -A"),
+        format!("make -C {t} decide"),
+    ] {
+        let (got, want) = (
+            super::call_root(&bash(cmd.clone())),
+            Some(tree.to_path_buf()),
+        );
+        assert_eq!(got, want, "{cmd}");
+    }
+    for cmd in [
+        "sed -i s/a/b/ specs/900-a/plan.md".to_owned(),
+        "ls /x".to_owned(),
+        // a command that lands in no tree stays in its cwd's
+        "cd /proc && ls".to_owned(),
+    ] {
+        let (got, want) = (
+            super::call_root(&bash(cmd.clone())),
+            Some(clone.to_path_buf()),
+        );
+        assert_eq!(got, want, "{cmd}");
+    }
+    let edit = json!({"cwd": c.to_string(), "tool_name": "Edit", "tool_input": {"command": format!("cd {t}")}});
+    assert_eq!(super::call_root(&edit), Some(clone.to_path_buf()));
+}

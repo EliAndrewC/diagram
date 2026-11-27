@@ -146,6 +146,8 @@ fn git_is_read_however_it_is_spelled() {
         "sudo -u x ",
         "env -i A=1 ",
         "A=1 nice ",
+        "xargs -0 ",
+        "xargs -I {} ",
     ] {
         for (rest, rule) in [
             ("git push --force origin main", "force-push"),

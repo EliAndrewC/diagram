@@ -162,6 +162,8 @@ fn every_spelling_of_git_and_rm_is_refused_where_the_bare_one_is() {
         "timeout 60 ",
         "sudo -u x env -i ",
         "nice \"",
+        "xargs -0 ",
+        "xargs -I {} ",
     ] {
         let close = if s.ends_with('"') { "\"" } else { "" };
         let add = format!("{s}git{close} worktree add --detach {m}/.clones/c-t286 HEAD");

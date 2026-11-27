@@ -883,3 +883,18 @@ fn each_rewrite_notice_says_what_was_done_and_what_to_do_in_few_words() {
         assert!(fits, "{n} > {most}: {said}");
     }
 }
+
+/// 451 T306: a cargo run detached by its path or behind a `\` is the bare one's (the week's commands ran cargo by its path 213 times,
+/// none detached); a name only ending in cargo is another program.
+#[test]
+fn a_detached_cargo_is_read_however_it_is_spelled() {
+    for cmd in [
+        "~/.cargo/bin/cargo build &",
+        "nohup /usr/bin/cargo test",
+        "\\cargo test & echo x",
+        "command cargo test &",
+    ] {
+        assert!(detach_refused(cmd), "{cmd}");
+    }
+    assert!(!detach_refused("/tmp/mycargo test &"));
+}

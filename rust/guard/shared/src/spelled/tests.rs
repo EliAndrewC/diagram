@@ -82,6 +82,9 @@ fn the_pattern_texts_read_the_spellings_the_reader_reads() {
         "sudo -E -u x git x",
         "env -i /usr/bin/git x",
         "timeout -k 5 60 nice -n 5 git x",
+        "xargs -0 git x",
+        "xargs -I {} git x",
+        "/usr/bin/xargs -r -n 50 git x",
     ] {
         assert!(re.is_match(cmd).unwrap(), "{cmd}");
     }
@@ -96,4 +99,21 @@ fn the_pattern_texts_read_the_spellings_the_reader_reads() {
     ] {
         assert!(!re.is_match(cmd).unwrap(), "{cmd}");
     }
+}
+
+/// 451 T306: `xargs` runs the program after its own options, each with its value where it takes one (`-I {}`, `-n 50`, `-a list`;
+/// `-n50` and `--max-args=5` are one word): `printf '%s\0' a b | xargs -0 git add --`, five times in the week's commands, was a
+/// write no reader of the command word saw.
+#[test]
+fn xargs_runs_the_program_after_its_own_options() {
+    assert_eq!(program_of("xargs -0 git add --"), "git");
+    assert_eq!(program_of("xargs -I {} git show {}"), "git");
+    assert_eq!(program_of("xargs -r -n 50 /usr/bin/git log"), "git");
+    assert_eq!(program_of("xargs -r -n50 git log"), "git");
+    assert_eq!(program_of("xargs --max-args=5 -a list rm -f"), "rm");
+    assert_eq!(
+        program_of("/usr/bin/xargs -P 4 -L 1 -d , -E x -s 99 git add"),
+        "git"
+    );
+    assert_eq!(program_of("xargs"), "");
 }

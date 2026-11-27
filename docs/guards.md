@@ -122,6 +122,18 @@ behavioral principles XII/XIV/XV.
 
 ## Writing a guard
 
+**A PROGRAM IS READ BY ITS NAME, HOWEVER IT IS SPELLED, BY ONE READER, AND WHAT IT CANNOT READ IS A LIMIT ACCEPTED** (451 T295,
+T306). `rust/guard/shared/src/spelled.rs` names a command's program by its word's last path part, past a `\`, its quotes, its
+`VAR=` words and its wrappers with their options - `xargs` among them since T306, past `-I {}`, `-n 50` and the rest (`xargs -0
+git add --` ran five times in the week to 2026-11-27 and was a write no reader saw); a guard that asks "is this git" asks it there.
+What no guard reads, each accepted as a limit with its count over the 71,565 Bash calls of 2026-11-20 to 11-27 (the session
+transcripts; the event logs keep no command text): a name the shell builds (`$GIT`, `g\it`, `$(which git)`), 0 uses - reading it
+means running the shell; a program a shell runs from its `-c` string (`sh -c 'git ...'`), 1 use, a probe under `/tmp`, for the
+walk's guards (make-only and no-poll read the string); a quoted `"git"` as the command word at the history guard, 0 uses; and the
+exempting or read-only readers still on the bare name (claims-file, `shared/parked.rs`'s `git mv`, phase-source's readers,
+house-style's `$(git grep ...)`, shell-check's `is_git_commit`), 0 uses each, where a missed spelling is refused or changes no
+tree write. The last three are filed as 451 T453.
+
 **A MESSAGE COSTS ITS READER EVERY CHARACTER, SO EACH IS HELD TO A BUDGET AND REVIEWED** (feature 451 T170; the GM 2026-11-23,
 451's request.md "on hook output length": *"could we accomplish the same thing with no loss of fidelity and fewer tokens? ...
 Maybe even something mechanically enforced"*). A per-hook comment giving its word count and its reviewer was the GM's sketch; a

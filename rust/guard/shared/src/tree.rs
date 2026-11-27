@@ -493,7 +493,8 @@ fn words(seg: &str) -> Vec<&str> {
         if crate::spelled::lookup(name, toks.get(1).copied()) {
             break;
         }
-        if WRAPPERS.contains(&name) || name == "timeout" {
+        // `xargs` too, past its options (451 T306: `xargs -0 git add --` was no write)
+        if WRAPPERS.contains(&name) || name == "timeout" || name == "xargs" {
             // with its own options (`env -i git`, `sudo -u x git`), and `timeout`'s duration (451 T295)
             let own = 1 + crate::spelled::options(name, &toks[1..]);
             let own = own + usize::from(name == "timeout" && toks.len() > own);
@@ -936,7 +937,7 @@ fn walk_text(
 
 /// The wrappers a segment's command can stand behind, which a reader of its head reads past: the walk's own and `timeout`, with its
 /// duration (451 T79).
-pub const HEAD_WRAPPERS: [&str; 10] = crate::spelled::WRAPPERS;
+pub const HEAD_WRAPPERS: [&str; 11] = crate::spelled::WRAPPERS;
 
 /// A segment from its command on, cut at 120 characters: its leading `VAR=value` words dropped, among the wrappers too, which are
 /// kept (451 T90: T79's `L7R_FEATURE_DIRECTORY=... L7R_PAGE_SESSION=... make rust-test` lost its `make` to the segment's cut and
