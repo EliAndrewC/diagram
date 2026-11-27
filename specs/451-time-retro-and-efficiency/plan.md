@@ -6987,57 +6987,64 @@ that batch; the red was not in its change.
 **Performance work?** yes: a plan-delta review of N tasks reads the 4.7 MB file once rather than N times, about 18 ms a task saved past the first, measured 2026-11-27 (the heading's figure, the reads counted by the red test).
 
 
-### T498 (<why: the finding or measurement that files it>)
+### T498 (451 T491: with the step-back switched on, `checkpoint due` read the feature's whole event log twice - `state_in` called `gm_waits` and `idle`, each calling `events` - 50 MB, about 50 ms a read on T388's sandbox, measured 2026-11-27 (451 T388's sandbox arms))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `rust/gate/crates/reviews/src/reviews/checkpoint.rs` `state_in` reads `events(root, &feature)` once, inside the `!off &&` branch, and hands the one list to `gm_waits(&[(f64, Value)], since, at)` and `idle(&[(f64, Value)], since, at)`, which take the events in place of a root and a feature. Each answer is unchanged: the two walks are the same loops over the same list. While `dev/step-back.json` is off, `due` skips `state_in` (451 T491) and `state_in` itself reads no log while off (the `!off &&` short-circuit), so the change costs nothing there.
+  - **Red first**, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/reviews ONLY="reviews::checkpoint"`, the test and its counter only added): `checkpoint::tests::the_state_reads_the_event_log_once` failed, 12 passed, 1 failed (`left: 2, right: 1`: two whole reads of the log for one `state_in` with the switch on). The counter is a test-only thread-local, `READS`, bumped by `events` under `#[cfg(test)]`. Green after: 13 of 13. `make builder-checks CRATE="rust/guard/shared rust/gate/crates/reviews rust/guard"`: the reviews crate 217 passed, 0 failed, lint and format clean, measured 2026-11-27.
+  - **Not timed**: the saving is one read of the log while the switch is on, about 50 ms on T388's sandbox for the clone's 50 MB log (451 T388's figure, measured 2026-11-26/27); the switch has been off since 2026-10-21, so no call today saves it.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| `state_in` reads the event log once for `gm_waits` and `idle` (`checkpoint.rs`; test `checkpoint/tests.rs`), red first 1 of 13, measured 2026-11-27 | n/a: gate tooling, no map | n/a: tooling | none | n/a |
 
 ### T498 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** With the step-back on, a `checkpoint due` (every Agent call's pair-hooks and every `make done`) reads the feature's event log once, not twice.
+2. **The constraints.** T498's line and the brief (read once for both, each answer unchanged, red first with a read count of 2 before and 1 after); 451 T491 (the off switch read nothing, kept); feature 383's checkpoint rules (the hour less the GM waits and the idle gaps); 451 FR-013; the two tiers.
+3. **Where each comes from.** O: 451 T388's record (`dev/measurements/2026-11-27/agent-hook/results.md`) and T491's section. R: `checkpoint.rs`. O: this task's red-first run.
+4. **Do they describe the world here?** Yes: the test drives `state_in` on a scratch repository with the switch on and an hour's worked events, the shape the clone has when the switch is on.
+5. **The order.** After 451 T491, which found it. Independent of T496, with which it is built in one tree.
+6. **The exits.** Green: the red-first test passing and the crate's first-tier checks clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** One whole read of the event log for a `state_in` with the switch on, against two before (`the_state_reads_the_event_log_once`, measured 2026-11-27); `make builder-checks` clean on the reviews crate, 217 passed, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader sees: every answer is the same; only the second read goes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task, 451 FR-013): with the step-back switched on it takes one whole read of the 50 MB event log, about 50 ms on T388's sandbox, measured 2026-11-27 (451 T388's sandbox arms, not timed again here), off every `checkpoint due`; while `dev/step-back.json` is off, as it has been since 2026-10-21, it costs and saves nothing, since `due` and `state_in` read no log then (451 T491). Not an engine-speed task: no checklist answers owed.
 
-### T496 (<why: the finding or measurement that files it>)
+### T496 (found by 451 T489: `planhold::refusal`'s dead-hold escape - the `escaped && dead` pass and the "its dispatch looks dead: PLAN_EDIT_OK" tail - is reached only by `planhold/tests.rs`'s direct calls, since `purge` runs in `snapshot` before `edit_mode` and leaves no dead hold at a hooked call)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `rust/guard/shared/src/checks/planhold.rs` `refusal` loses its `escaped` parameter, the "its dispatch looks dead: PLAN_EDIT_OK=..." tail and the escaped-and-dead pass; it now skips every dead hold (`dead`: pending past `PENDING_S` or any hold past `HOLD_MAX_S`) as `purge` would have dropped it, which folds the old `never` test (a pending hold past `PENDING_S`) into the same line. Its one caller, `checks/handle.rs` `edit_mode`, no longer reads `PLAN_EDIT_OK`. `docs/guards.md`'s `record_edit_hooks.rs` row says a held plan has no escape and a dead hold refuses nothing; the module comment and the shared-text comment in `refusal` say the same. `handle/tests.rs`'s Bash call under a hold drops the token from its command (it tested a plain `ls`).
+  - **T496-D1 - A dead hold met by a direct caller refuses nothing.** The task line offers "retire them, or keep them for a caller that does not purge". `refusal` has one caller, `edit_mode`, reached only after `snapshot`'s purge (451 T489), so no caller meets a dead hold. Skipping it, not refusing it with no escape, matches what the purge does to it and fires on no correct work. Chosen by the builder on the brief.
+  - **Red first**, measured 2026-11-27 (`make rust-test CRATE=rust/guard/shared ONLY="checks::planhold"`, the tests only changed): 11 passed, 2 failed - `a_write_to_held_text_is_refused` (a dead hold's Edit returned the refusal with the `PLAN_EDIT_OK` tail where `""` was asserted) and `a_shell_write_on_shared_text_is_refused_only_where_nothing_writes_it_back` (the dead hold's case refused, `left: [4]`). Green after: `checks::planhold checks::handle`, 36 of 36. `make builder-checks CRATE="rust/guard/shared rust/gate/crates/reviews rust/guard"`: shared 586 passed, guard 597 passed, lint and format clean, measured 2026-11-27. The suites `tests/hooks/test-record-edit-hooks.sh` 14 passed, `test-checks-hooks.sh` 22 passed, `test-record-edit-gate.sh` 9 passed, measured 2026-11-27.
+  - **The message check.** No suite renders the plan hold's refusal: the three suites run under `L7R_MESSAGE_CORPUS` into the tree's store rendered 21 record-edit-hooks and 4 check-bundle-hooks messages, none of them `the plan review of ...`, and `make guard-messages` read 23 wordings, each reviewed or baselined and within its budget, observed 2026-11-27, method: the suites run with the store as corpus, then `grep` of the store's `messages.jsonl`. The live refusal's words are unchanged and the removed tail was never rendered, so no wording is owed `message-check` and none was dispatched.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the plan hold's dead-hold escape retired, a dead hold skipped (`checks/planhold.rs`, `checks/handle.rs`; tests `planhold/tests.rs`, `handle/tests.rs`; `docs/guards.md`), red first 2 of 13, measured 2026-11-27 | n/a: tooling, no map drawn | n/a: tooling | none | n/a |
 
 ### T496 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The plan hold's refusal offers no escape no call can use: a live review's held text waits for its return, and a dead hold, which the purge drops, refuses nothing.
+2. **The constraints.** T496's line and the brief (red first; `docs/guards.md`'s row to match; a changed guard message owes its message check); feature 385 T85 (the hold), 451 T489 (the purge before the refusal); 451 FR-013; the two tiers.
+3. **Where each comes from.** O: 451 T489's found-and-left item and its plan review's ruling; R: `planhold.rs`, `handle.rs`; O: this task's red-first run and the message store read.
+4. **Do they describe the world here?** Yes: `grep` finds `refusal`'s one caller, `edit_mode`, and `snapshot` calls `purge` first (observed 2026-11-27, method: `grep -rn "planhold::refusal" rust/guard`).
+5. **The order.** After 451 T489; before T490. Built in one tree with T498.
+6. **The exits.** Green: the two red tests passing, the crates' first-tier checks and the three guards' suites clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `PLAN_EDIT_OK` read nowhere in `rust/` (observed 2026-11-27, method: `grep -rn PLAN_EDIT_OK rust`: three doc comments left, the module comment naming its retirement and two of 451 T489's history); `make builder-checks` clean, 2026-11-27.
+10. **Before moving a constant.** n/a: `HOLD_MAX_S` and `PENDING_S` are unchanged.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows, and no hooked call answers differently: the purge already left no dead hold at one. Not a defect; a message no call shows retired.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T499 (found by the GM's question of 2026-11-27, whether builders pull the 824,251-byte plan.md and 3,131,453-byte plan-done.md into context: no figure said)

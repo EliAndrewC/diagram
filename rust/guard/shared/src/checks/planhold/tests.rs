@@ -214,21 +214,17 @@ fn a_write_to_held_text_is_refused() {
         .to_string_lossy()
         .into_owned();
     let state = json!({"plan_holds": {"h": running("T01", &[], 900.0)}});
-    let check = |tool: &str, ti: Value, escaped: bool, at: f64| {
-        refusal(&state, Some(&root), tool, &ti, at, escaped)
-    };
-    assert_eq!(refusal(&state, None, "Edit", &json!({}), 1.0, false), "");
+    let check = |tool: &str, ti: Value, at: f64| refusal(&state, Some(&root), tool, &ti, at);
+    assert_eq!(refusal(&state, None, "Edit", &json!({}), 1.0), "");
     assert!(check(
         "Edit",
         json!({"file_path": plan, "old_string": "held body"}),
-        false,
         1000.0
     )
     .contains("(agent ag)"));
     assert!(check(
         "Edit",
         json!({"file_path": plan, "old_string": "body of the"}),
-        false,
         1000.0
     )
     .contains("running"));
@@ -236,25 +232,18 @@ fn a_write_to_held_text_is_refused() {
         check(
             "Edit",
             json!({"file_path": plan, "old_string": "other text"}),
-            false,
             1000.0
         ),
         ""
     );
     assert_eq!(
-        check(
-            "Edit",
-            json!({"file_path": plan, "old_string": ""}),
-            false,
-            1000.0
-        ),
+        check("Edit", json!({"file_path": plan, "old_string": ""}), 1000.0),
         ""
     );
     assert_eq!(
         check(
             "Edit",
             json!({"file_path": "/elsewhere", "old_string": "held body"}),
-            false,
             1000.0
         ),
         ""
@@ -262,33 +251,25 @@ fn a_write_to_held_text_is_refused() {
     let writes = check(
         "Write",
         json!({"file_path": plan, "content": "new"}),
-        false,
         1000.0,
     );
     assert!(writes.contains("T01's section"));
     let keep = format!("x{PLAN}");
     assert_eq!(
-        check(
-            "Write",
-            json!({"file_path": plan, "content": keep}),
-            false,
-            1000.0
-        ),
+        check("Write", json!({"file_path": plan, "content": keep}), 1000.0),
         ""
     );
     assert!(check(
         "MultiEdit",
         json!({"file_path": plan, "old_string": "held body"}),
-        false,
         1000.0
     )
     .contains("running"));
-    assert_eq!(check("Bash", json!({"command": "ls"}), false, 1000.0), "");
+    assert_eq!(check("Bash", json!({"command": "ls"}), 1000.0), "");
     assert_eq!(
         check(
             "Bash",
             json!({"command": "sed -i s/a/b/ specs/900-a/plan.md"}),
-            false,
             1000.0
         ),
         ""
@@ -296,42 +277,24 @@ fn a_write_to_held_text_is_refused() {
     assert!(check(
         "Bash",
         json!({"command": "sed -i 's/## T01 the bath/x/' specs/900-a/plan.md"}),
-        false,
         1000.0
     )
     .contains("running"));
     assert!(check(
         "Bash",
         json!({"command": "tee specs/900-a/plan.md # held body of the section stands here"}),
-        false,
         1000.0
     )
     .contains("running"));
-    assert!(check("Bash", json!({"command": "python3 -c 'open(\"x\", \"w\")' specs/900-a/plan.md \"held body of the\""}), false, 1000.0).contains("running"));
-    assert_eq!(check("Read", json!({"file_path": plan}), false, 1000.0), "");
+    assert!(check("Bash", json!({"command": "python3 -c 'open(\"x\", \"w\")' specs/900-a/plan.md \"held body of the\""}), 1000.0).contains("running"));
+    assert_eq!(check("Read", json!({"file_path": plan}), 1000.0), "");
     let late = check(
         "Edit",
         json!({"file_path": plan, "old_string": "held body"}),
-        false,
         3000.0,
     );
-    assert!(late.contains("its dispatch looks dead"));
-    assert_eq!(
-        check(
-            "Edit",
-            json!({"file_path": plan, "old_string": "held body"}),
-            true,
-            3000.0
-        ),
-        ""
-    );
-    assert!(check(
-        "Edit",
-        json!({"file_path": plan, "old_string": "held body"}),
-        true,
-        1000.0
-    )
-    .contains("running"));
+    // a dead hold refuses nothing and offers no escape: `purge` drops it at a hooked call's start (451 T489, T496)
+    assert_eq!(late, "");
     let pending = json!({"plan_holds": {"h": {"feature": "900-a", "task": "T01", "t": 999.0, "state": "pending"}}});
     let said = refusal(
         &pending,
@@ -339,7 +302,6 @@ fn a_write_to_held_text_is_refused() {
         "Edit",
         &json!({"file_path": plan, "old_string": "held body"}),
         1000.0,
-        false,
     );
     assert!(said.contains("a dispatch not yet launched"));
     let never = json!({"plan_holds": {"h": {"feature": "900-a", "task": "T01", "t": 0.0, "state": "pending"}}});
@@ -350,7 +312,6 @@ fn a_write_to_held_text_is_refused() {
             "Edit",
             &json!({"file_path": plan, "old_string": "held body"}),
             1000.0,
-            false
         ),
         ""
     );
@@ -362,7 +323,6 @@ fn a_write_to_held_text_is_refused() {
             "Edit",
             &json!({"file_path": plan, "old_string": "held body"}),
             1000.0,
-            false
         ),
         ""
     );
@@ -373,11 +333,10 @@ fn a_write_to_held_text_is_refused() {
         "Edit",
         &json!({"file_path": plan, "old_string": "held body"}),
         1000.0,
-        false
     )
     .contains("1 block(s)"));
     assert_eq!(
-        refusal(&json!({}), Some(&root), "Edit", &json!({}), 1.0, false),
+        refusal(&json!({}), Some(&root), "Edit", &json!({}), 1.0),
         ""
     );
 }
@@ -400,7 +359,6 @@ fn an_edit_is_held_only_where_it_overlaps_the_section() {
             "Edit",
             &json!({"file_path": plan, "old_string": old}),
             1000.0,
-            false,
         )
     };
     // (old_string, refused): the end and the start themselves are outside; the last held byte, a start before it running in, a start
@@ -449,7 +407,7 @@ fn a_shell_write_on_shared_text_is_refused_only_where_nothing_writes_it_back() {
         ),
         (running("T01", &[], 900.0), shared.as_str(), true, true),
         (pending.clone(), shared.as_str(), false, true),
-        (dead, shared.as_str(), false, true),
+        (dead, shared.as_str(), false, false),
         (running("T01", &[], 900.0), unique, false, true),
         (
             running("", &["## T01 the bath"], 900.0),
@@ -466,7 +424,7 @@ fn a_shell_write_on_shared_text_is_refused_only_where_nothing_writes_it_back() {
             let (h, cmd, bg, refused) = &cases[i];
             let state = json!({"plan_holds": {"h": h}});
             let ti = json!({"command": cmd, "run_in_background": bg});
-            refusal(&state, Some(&root), "Bash", &ti, 1000.0, false).is_empty() == *refused
+            refusal(&state, Some(&root), "Bash", &ti, 1000.0).is_empty() == *refused
         })
         .collect();
     assert_eq!(misjudged, Vec::<usize>::new());
@@ -483,7 +441,6 @@ fn a_shell_write_on_shared_text_is_refused_only_where_nothing_writes_it_back() {
         "Bash",
         &json!({"command": shared}),
         1000.0,
-        false
     )
     .is_empty());
     std::fs::remove_file(root.join("specs/900-a/plan.md")).unwrap();
@@ -671,7 +628,6 @@ fn a_hold_is_written_back_and_refused_in_its_own_tree_alone() {
         "Edit",
         &edit(&other, "the other tree's body"),
         1000.0,
-        false,
     );
     let held = refusal(
         &rooted_state,
@@ -679,7 +635,6 @@ fn a_hold_is_written_back_and_refused_in_its_own_tree_alone() {
         "Edit",
         &edit(&clone, "held body"),
         1000.0,
-        false,
     );
     let today = refusal(
         &old,
@@ -687,7 +642,6 @@ fn a_hold_is_written_back_and_refused_in_its_own_tree_alone() {
         "Edit",
         &edit(&other, "the other tree's body"),
         1000.0,
-        false,
     );
     let judged = own.is_empty() && !held.is_empty() && !today.is_empty();
     assert!(judged, "{own} | {held} | {today}");
@@ -696,8 +650,7 @@ fn a_hold_is_written_back_and_refused_in_its_own_tree_alone() {
     let shared =
         json!({"command": format!("printf '%s\\n' '{budget}' | tee -a specs/900-a/plan.md")});
     let heading = json!({"command": "sed -i '/## T01 the bath/a x' specs/900-a/plan.md"});
-    let shell =
-        |root: &Path, ti: &Value| refusal(&rooted_state, Some(root), "Bash", ti, 1000.0, false);
+    let shell = |root: &Path, ti: &Value| refusal(&rooted_state, Some(root), "Bash", ti, 1000.0);
     let (here_heading, here_shared) = (shell(&clone, &heading), shell(&clone, &shared));
     let (there_heading, there_shared) = (shell(&other, &heading), shell(&other, &shared));
     let in_clone = !here_heading.is_empty() && here_shared.is_empty();

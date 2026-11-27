@@ -4452,6 +4452,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T490 (<why: the finding or measurement that files it>)": {
+   "sha256": "a80cca2d4b77f3b7a46e983189c47eb1c6e216b6678ebcda9db8a9acf40b90c3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T490 Approach (checklist part A)": {
+   "sha256": "911393973811015973e41b39f753892c28bd1e8daa73991b296fa2edecd5aa82",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T498 (451 T491: with the step-back switched on, `checkpoint due` read the feature's whole event log twice - `state_in` called `gm_waits` and `idle`, each calling `events` - 50 MB, about 50 ms a read on T388's sandbox, measured 2026-11-27 (451 T388's sandbox arms))": {
+   "sha256": "2a818d73f8d8970a9bb9f494d714454353b1f0638d128b46f870aa41fd31766e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T498 Approach (checklist part A)": {
+   "sha256": "0a4f2b2366fb2d2bb4e9068c35c100f1e4d6e25720d390796f4753b2233d5fe0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T496 (found by 451 T489: `planhold::refusal`'s dead-hold escape - the `escaped && dead` pass and the \"its dispatch looks dead: PLAN_EDIT_OK\" tail - is reached only by `planhold/tests.rs`'s direct calls, since `purge` runs in `snapshot` before `edit_mode` and leaves no dead hold at a hooked call)": {
+   "sha256": "aa164cd29dfa9d131e79d39b241a7f35e3261c45a59329084aba7225752bd2f8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T496 Approach (checklist part A)": {
+   "sha256": "f01000a07e8d36a81790d84f9ac679109bdff4bc6c5245dd1a80788a347dead7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -41105,6 +41141,62 @@
      "summary": "plan_cap_refusal reads plan-review.json once per dispatch and asks plan_cap_held lazily per task in dispatch order, with rounds_in(doc, task) counting exactly as before; plan_rounds kept as the tests' entry",
      "class": "within",
      "why": "Performance work under FR-013 that changes no count, cap, bundle rule (T141), stub rule (T462), first-tripping task or message, shown by the red test (4 reads to 1) and the unchanged differential. Not timing it on the sandbox is stated with its reason (the sandbox's bundle name names no task), and the read count is measured; nothing asked is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T490 (<why: the finding or measurement that files it>)",
+    "### T490 Approach (checklist part A)",
+    "### T496 (found by 451 T489: `planhold::refusal`'s dead-hold escape - the `escaped && dead` pass and the \"its dispatch looks dead: PLAN_EDIT_OK\" tail - is reached only by `planhold/tests.rs`'s direct calls, since `purge` runs in `snapshot` before `edit_mode` and leaves no dead hold at a hooked call)",
+    "### T496 Approach (checklist part A)",
+    "### T498 (451 T491: with the step-back switched on, `checkpoint due` read the feature's whole event log twice - `state_in` called `gm_waits` and `idle`, each calling `events` - 50 MB, about 50 ms a read on T388's sandbox, measured 2026-11-27 (451 T388's sandbox arms))",
+    "### T498 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T490-stub",
+     "summary": "T490's two blocks are the unfilled template: every field a placeholder, no approach, no step row.",
+     "class": "within",
+     "why": "A block of placeholders decides nothing, so there is nothing to narrow; its decisions are owed review when the section is written."
+    },
+    {
+     "id": "T498-A",
+     "summary": "state_in reads events() once, inside the !off branch, and passes the one list to gm_waits and idle, which take &[(f64, Value)] instead of a root and a feature; each answer unchanged.",
+     "class": "within",
+     "why": "A performance task (FR-013; the GM 2026-11-20 'prioritize performance improvements') that removes a duplicate read with the same walks over the same list; the off switch's read-nothing path (T491) is kept."
+    },
+    {
+     "id": "T498-B",
+     "summary": "Red first through a test-only thread-local READS counter bumped by events under #[cfg(test)]: 2 reads before, 1 after.",
+     "class": "within",
+     "why": "A test whose only effect is to show the requested saving happens and stays; enforcement of the task, no behavior added."
+    },
+    {
+     "id": "T498-C",
+     "summary": "The saving is not timed again: it cites T388's dated sandbox figure (about 50 ms a read of the 50 MB log) and notes the switch is off since 2026-10-21, so no call saves it today.",
+     "class": "within",
+     "why": "The figure carries its date and method; the task's done-measure is the read count, which was measured. Not timing a path that runs on no call today does not narrow what was asked."
+    },
+    {
+     "id": "T496-D1",
+     "summary": "refusal skips every dead hold (as purge would drop it) instead of refusing it with or without an escape; its escaped parameter, the escaped-and-dead pass and the PLAN_EDIT_OK tail are retired.",
+     "class": "within",
+     "why": "One of the two options the task line itself offers ('retire them, or keep them for a caller that does not purge'); refusal's one caller is edit_mode after snapshot's purge (grep observed 2026-11-27), so no hooked call answers differently and no correct work is refused. A live hold had no escape before and has none now."
+    },
+    {
+     "id": "T496-B",
+     "summary": "edit_mode stops reading PLAN_EDIT_OK; docs/guards.md's record_edit_hooks.rs row, the module comment and refusal's shared-text comment say a held plan has no escape and a dead hold refuses nothing; handle/tests.rs drops the token from a plain-ls command.",
+     "class": "within",
+     "why": "The consequences of D1 carried to the caller, the docs row the brief names, and a test fixture; nothing beyond the task."
+    },
+    {
+     "id": "T496-C",
+     "summary": "No message-check dispatched: the live refusal's words are unchanged, the removed tail was never rendered by any suite (message store read, observed 2026-11-27), and make guard-messages read 23 wordings within budget.",
+     "class": "within",
+     "why": "The brief's condition is a changed guard message; no message any call renders changed, and the claim carries its observation and method. This is not a carve-out from the brief but its plain scope."
     }
    ]
   }

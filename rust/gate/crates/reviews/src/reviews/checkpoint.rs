@@ -31,6 +31,12 @@ const IDLE_S: f64 = 20.0 * 60.0;
 const SAME_MESSAGE_S: f64 = 5.0;
 const ADMITTED: &str = "checkpoint-admitted";
 
+#[cfg(test)]
+thread_local! {
+    /// The event log's whole reads on this thread, for the test that holds `state_in` to one (451 T498).
+    static READS: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
+}
+
 fn clock(root: &Path) -> (Option<PathBuf>, Map<String, Value>) {
     let path = gitdir(root).map(|g| g.join(CLOCK));
     let clock = path
@@ -85,6 +91,8 @@ fn throw(root: &Path, state: &str, why: &str, at: f64) -> Result<Map<String, Val
 /// The feature's event log, each event with its time; an unreadable line skipped, and a line no hook wrote passed over before its time
 /// is read (`glyph::ASIDE`, feature 451 T05).
 fn events(root: &Path, feature: &str) -> Vec<(f64, Value)> {
+    #[cfg(test)]
+    READS.with(|c| c.set(c.get() + 1));
     let Some(path) = gitdir(root).map(|g| g.join("l7r-events").join(format!("{feature}.jsonl")))
     else {
         return Vec::new();
@@ -105,10 +113,10 @@ fn ev(e: &Value) -> &str {
 }
 
 /// Seconds between `since` and `now` the session spent waiting on the GM: each gap from a Stop to the GM's next prompt, clipped.
-fn gm_waits(root: &Path, feature: &str, since: f64, at: f64) -> f64 {
+fn gm_waits(events: &[(f64, Value)], since: f64, at: f64) -> f64 {
     let (mut waited, mut stop): (f64, Option<f64>) = (0.0, None);
-    for (t, e) in events(root, feature) {
-        match ev(&e) {
+    for &(t, ref e) in events {
+        match ev(e) {
             "Stop" => stop = Some(stop.unwrap_or(t)),
             "UserPromptSubmit" if stop.is_some() => {
                 if e.get("gm") == Some(&json!(true)) {
@@ -124,9 +132,9 @@ fn gm_waits(root: &Path, feature: &str, since: f64, at: f64) -> f64 {
 }
 
 /// Seconds between `since` and `now` the feature was not worked on: each gap longer than `IDLE_S`, less `IDLE_S`, unless it opens with a Stop.
-fn idle(root: &Path, feature: &str, since: f64, at: f64) -> f64 {
+fn idle(events: &[(f64, Value)], since: f64, at: f64) -> f64 {
     let (mut gone, mut last, mut stopped): (f64, Option<f64>, bool) = (0.0, None, false);
-    for (t, e) in events(root, feature) {
+    for &(t, ref e) in events {
         if let Some(l) = last {
             if !stopped {
                 let (lo, hi) = (l.max(since), t.min(at));
@@ -135,7 +143,7 @@ fn idle(root: &Path, feature: &str, since: f64, at: f64) -> f64 {
                 }
             }
         }
-        let kind = ev(&e);
+        let kind = ev(e);
         stopped = kind == "Stop" || (stopped && !matches!(kind, "UserPromptSubmit" | "PreToolUse"));
         last = Some(t);
     }
@@ -170,9 +178,11 @@ pub fn state_in(root: &Rooted, at: Option<f64>) -> Map<String, Value> {
     };
     let since = start.max(as_float(mine.get("checkpoint_at")));
     let off = !suspended(root).is_empty();
-    let due = !off
-        && at - since - gm_waits(root, &feature, since, at) - idle(root, &feature, since, at)
-            >= GLYPH_HOUR_S;
+    // the log read once for the waits and the idle gaps (451 T498: twice, 50 MB each in the clone), and not at all while off
+    let due = !off && {
+        let log = events(root, &feature);
+        at - since - gm_waits(&log, since, at) - idle(&log, since, at) >= GLYPH_HOUR_S
+    };
     let hour = mine
         .get("checkpoints")
         .map_or(0, |v| int_of(as_float(Some(v))))

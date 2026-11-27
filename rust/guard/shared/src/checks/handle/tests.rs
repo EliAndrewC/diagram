@@ -342,7 +342,7 @@ fn the_round_arbiter_and_budget_and_plan_holds_are_handled() {
     assert!(std::fs::read_to_string(root.join(".git/tool-usage.jsonl"))
         .unwrap()
         .contains("planhold-restore"));
-    let edit2 = json!({"cwd": root, "tool_name": "Bash", "tool_use_id": "e2", "tool_input": {"command": "PLAN_EDIT_OK=\"a dead hold here\" ls"}});
+    let edit2 = json!({"cwd": root, "tool_name": "Bash", "tool_use_id": "e2", "tool_input": {"command": "ls"}});
     assert_eq!(handle("edit", &edit2, Some(1000.0)), "");
     let empty_after = handle(
         "after",

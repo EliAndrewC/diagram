@@ -1,4 +1,5 @@
-//! A plan section or block is held while its review runs (feature 385 T85, from `hm_planhold.py`): a write that would change held text is refused, naming the running review; a `PLAN_EDIT_OK` passes only a dead hold.
+//! A plan section or block is held while its review runs (feature 385 T85, from `hm_planhold.py`): a write that would change held text is refused, naming the running review, with no escape; a dead hold refuses nothing
+//! (`purge` drops it at a hooked call's start, 451 T489, so 451 T496 retired the `PLAN_EDIT_OK` that passed one).
 //! A hold is the tree's it was taken in (451 T123): a clone's worktrees share its check state (`state_path` reads the common dir, by
 //! design), so a hold taken in the clone was written back - and refused - on the landing worktree's or a scratch worktree's own plan.
 
@@ -529,15 +530,9 @@ fn bash_hits(cmd: &str, feature: &str, texts: &[String], rest: Option<&str>) -> 
             .any(|q| held_only(q) && texts.iter().any(|t| t.contains(q)))
 }
 
-/// Why this write is refused while a plan review holds what it would change, or "".
-pub fn refusal(
-    state: &Value,
-    root: Option<&Path>,
-    tool: &str,
-    ti: &Value,
-    now: f64,
-    escaped: bool,
-) -> String {
+/// Why this write is refused while a plan review holds what it would change, or "". A dead hold is skipped, as `purge` would
+/// have dropped it (451 T496).
+pub fn refusal(state: &Value, root: Option<&Path>, tool: &str, ti: &Value, now: f64) -> String {
     let Some(root) = root else {
         return String::new();
     };
@@ -552,8 +547,7 @@ pub fn refusal(
         let tree = taken_in(&h).unwrap_or_else(|| root.to_path_buf());
         let plan = tree.join("specs").join(text(&h, "feature")).join("plan.md");
         let texts = held(&tree, &h);
-        let never = text(&h, "state") == "pending" && now - t_of(&h) > PENDING_S;
-        if texts.is_empty() || never || (escaped && dead(&h, now)) {
+        if texts.is_empty() || dead(&h, now) {
             continue;
         }
         let hit = if matches!(tool, "Edit" | "Write" | "MultiEdit")
@@ -574,8 +568,8 @@ pub fn refusal(
             // `make plan-verdict` refuses.
             // A live hold's foreground call is written back when it ends (`snapshot` keeps live holds alone; `restore` runs on its
             // PostToolUse or PostToolUseFailure), so for it only text standing in the held section alone names a write there: text
-            // every section shares named a write to ANOTHER section, 7 of the 18 replayed refusals (451 T78). A pending or dead hold
-            // and a background call have no write-back behind them, and shared text still refuses them. A foreground call moved to
+            // every section shares named a write to ANOTHER section, 7 of the 18 replayed refusals (451 T78). A pending hold and
+            // a background call have no write-back behind them, and shared text still refuses them. A foreground call moved to
             // the background at its timeout gets its one PostToolUse at the move (measured 2026-11-21), so what it writes after
             // the move is written back by nothing, nor what a writer it detaches writes after the shell returns: accepted (451 T78's
             // plan section, priced there), the cost a verdict `make plan-verdict` refuses as changed while reviewed, the review run again
@@ -597,13 +591,8 @@ pub fn refusal(
             } else {
                 format!("agent {}", text(&h, "aid"))
             };
-            let tail = if dead(&h, now) {
-                "; its dispatch looks dead: PLAN_EDIT_OK=\"<reason>\" passes it"
-            } else {
-                ""
-            };
             return format!(
-                "the plan review of {} in specs/{}/plan.md is running ({who}) - an edit now voids its verdict; wait for it to return (feature 385 T85){tail}",
+                "the plan review of {} in specs/{}/plan.md is running ({who}) - an edit now voids its verdict; wait for it to return (feature 385 T85)",
                 describe(&h),
                 text(&h, "feature")
             );

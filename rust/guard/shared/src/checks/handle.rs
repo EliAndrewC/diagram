@@ -578,14 +578,7 @@ pub fn batch_said(check: &str, kinds: &[String]) -> String {
 
 fn edit_mode(state: &Value, payload: &Value, ti: &Value, tool: &str, t: f64) -> String {
     let root = clone_root(&cwd_of(payload));
-    let held = planhold::refusal(
-        state,
-        call_root(payload).as_deref(),
-        tool,
-        ti,
-        t,
-        escaped("PLAN_EDIT_OK", &str_values(ti)),
-    );
+    let held = planhold::refusal(state, call_root(payload).as_deref(), tool, ti, t);
     if !held.is_empty() {
         return held;
     }

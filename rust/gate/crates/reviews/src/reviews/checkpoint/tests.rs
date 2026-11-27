@@ -145,10 +145,11 @@ fn the_state_counts_the_hour_less_the_waits_and_the_idle_gaps() {
     );
     let st = state(&r, None);
     assert_eq!(st["due"], json!(true));
-    assert!((gm_waits(&r, "900-x", 0.0, now()) - 3000.0).abs() < 2.0);
-    assert!((idle(&r, "900-x", 0.0, now()) - 540.0).abs() < 2.0);
+    assert!((gm_waits(&events_log(&r, "900-x"), 0.0, now()) - 3000.0).abs() < 2.0);
+    assert!((idle(&events_log(&r, "900-x"), 0.0, now()) - 540.0).abs() < 2.0);
     assert!(
-        gm_waits(&r, "nolog", 0.0, 1.0).abs() < 1e-9 && idle(&r, "nolog", 0.0, 1.0).abs() < 1e-9
+        gm_waits(&events_log(&r, "nolog"), 0.0, 1.0).abs() < 1e-9
+            && idle(&events_log(&r, "nolog"), 0.0, 1.0).abs() < 1e-9
     );
     let nogit = super::super::tests::dir("events");
     assert!(events_of(&nogit).is_empty());
@@ -198,12 +199,24 @@ fn a_phase_or_a_bgend_line_never_splits_an_idle_stretch() {
             (60, "PreToolUse", false),
         ],
     );
-    assert!((idle(&r, "900-x", 0.0, now()) - 1740.0).abs() < 2.0);
+    assert!((idle(&events_log(&r, "900-x"), 0.0, now()) - 1740.0).abs() < 2.0);
     let kinds: Vec<String> = events_log(&r, "900-x")
         .iter()
         .map(|(_, e)| ev(e).to_owned())
         .collect();
     assert_eq!(kinds, ["PreToolUse", "PreToolUse"]);
+}
+
+/// With the step-back on, the state reads the feature's event log once for the waits and the idle gaps together (451 T498): it read
+/// the whole log, 50 MB in the clone, once for each.
+#[test]
+fn the_state_reads_the_event_log_once() {
+    let r = repo("one-read");
+    feature(&r, "900-x", "- [ ] T1\n");
+    worked(&r, 7200);
+    READS.with(|c| c.set(0));
+    assert_eq!(state(&r, None)["due"], json!(true));
+    assert_eq!(READS.with(std::cell::Cell::get), 1);
 }
 
 fn events_of(root: &Path) -> Vec<(f64, Value)> {
