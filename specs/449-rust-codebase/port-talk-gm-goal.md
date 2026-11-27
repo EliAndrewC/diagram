@@ -122,3 +122,16 @@ memory and load sampler (451 T274, `make sampler-start` / `make sampler-report`)
 and no disk; `make disk-audit` reports disk SPACE by area against its budgets when run, keeping no history (it found the build
 cache at 246.8 GB against 100 GB that day, filed as 451 T515); nothing records disk WRITES, I/O wait or the journal's contention
 (jbd2), though the journal was the contended resource on earlier days; CPU is seen only as the load average.
+
+## His seventh message (2026-11-27, the afternoon after): every measurement says HOW MUCH WAS GOING ON - compare like with like
+
+<!-- SOURCE: GM NOTES -->
+> Okay, that sounds great. And yeah, good catch on the coverage in the builders, because that was not something that I realized had somehow slipped back in. I mean, I am obviously reading what you're sending to me, but there's a lot of stuff, and so I am liable to miss things. So I'm glad that that was caught rather than us redoing a costly mistake. I do look forward to seeing the final numbers after we are done putting everything together and I guess we should make sure when we're measuring performance that we are kind of like generally how much is going on at the time, you know, like we don't want to do anything silly like capture performance metrics when only one builder is running, and then capture performance metrics when four builders are running, and then compare them without noting how much was happening at the time, because that sort of thing could cause us to think that things are getting better or worse when actually all that's happening is that we are looking at the system when it is implementing different numbers of tasks. Of course, this is something that I would hope that a process reviewer would be smart enough to see, and indeed the entire purpose of having an intelligent process reviewer is to not fall into this kind of trap. But we still want to clear away as many pitfalls as we can think of in advance to minimize the chances of having the process reviewer step on those rakes, so to speak.
+<!-- END SOURCE -->
+
+What the session knows today of where concurrency is and is not recorded (2026-11-27; a starting point, not a design): the pool's
+log (`builder-pool.log` in the git common directory) records every handout and release, so the trees held at any second can be
+rebuilt; `make task-time` prints a "Working at once" line (how many actors worked together) for the window, not per task or per
+figure; the memory sampler's report (451 T274) has a row for each count of pool trees held; the machine's load average is sampled
+but not joined to any task's figures; no figure in `make task-time`, `make review-cost` or `make where-time` carries the
+concurrency it was measured under, so two windows can be compared without it.
