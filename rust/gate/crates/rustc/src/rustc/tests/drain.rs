@@ -67,7 +67,9 @@ fn a_green_crate_whose_run_left_a_holder_names_it() {
     let took = began.elapsed();
     let left = std::fs::read_to_string(world.target.join("left")).unwrap();
     let _ = Command::new("kill").args(left.split_whitespace()).status();
-    assert!(done.code == 0 && took < std::time::Duration::from_secs(2));
+    // the bound is the holder's 30 s, not a speed: a coverage build on a loaded host took past 2 s here (2026-11-27)
+    assert_eq!(done.code, 0);
+    assert!(took < std::time::Duration::from_secs(15), "{took:?}");
     assert!(
         done.stderr.contains("rust/a: rust-checks: HELD: ") && done.stderr.contains("(sleep 30)")
     );
