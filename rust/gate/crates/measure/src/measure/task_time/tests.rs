@@ -24,11 +24,11 @@ fn ev(v: &Value) -> Event {
     v.as_object().unwrap().clone()
 }
 
-fn args(list: &[&str]) -> Vec<String> {
+pub(super) fn args(list: &[&str]) -> Vec<String> {
     list.iter().map(|s| (*s).to_owned()).collect()
 }
 
-fn world() -> (l7r_shared::tempdir::TempDir, String) {
+pub(super) fn world() -> (l7r_shared::tempdir::TempDir, String) {
     let d = crate::checks::scratch("task-time");
     let (stream, mut aside, _) = day();
     let end = |t: &str, tasks: &[&str], landed: bool| {
@@ -346,6 +346,7 @@ fn waited_on_work_blocking_no_task_is_named_apart() {
         (&[], &[]),
         ((0.0, 3600.0), 0.0, &BTreeMap::new()),
         (&columns::Runs::default(), &super::cross::Cross::default()),
+        &beside::Extra::default(),
     );
     let want = "blocking no task (a page session or research pass whose brief names none, work whose clue is `Blocks: none`): 12.0 min \
                 - research and page sessions 10.0 - plan review: agents 2.0.\n";

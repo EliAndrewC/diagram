@@ -69,6 +69,14 @@ pub struct Ledger {
     /// lines - a resumed one's every span (451 T324), the time it was stopped between them left out, its lines that run on after a stop with no start line a span too (451 T382) - never from its report (451
     /// T298: three reports said 30, 75 and 45 min for 9.5, 17.8 and 17.0).
     pub builders: HashMap<Key, (f64, usize)>,
+    /// (key, phase category) -> how many phases of it its runs held, counted where its runs are (451 T512: test runs and compiles
+    /// beside their minutes).
+    pub phases: HashMap<(Key, String), usize>,
+    /// (key, category, target) -> its OWN-PATH seconds (451 T512, the GM 2026-11-27): each builder's own clock, each second booked
+    /// once to what its next step waited on by the descent the main session's blocking takes, its background work minutes only.
+    pub own: HashMap<(Key, String, String), f64>,
+    /// The same, each builder's STOPPED stretches (outside its spans), booked by the same descent beside its own path, never in it.
+    pub stopped: HashMap<(Key, String, String), f64>,
 }
 
 impl Ledger {
@@ -873,6 +881,11 @@ pub fn book(w: &World) -> Result<Ledger, Raised> {
             *l.runs
                 .entry((ix.run_key[i].clone(), ix.run_cats[i].1.clone()))
                 .or_default() += 1;
+            for (col, n) in &r.split.counts {
+                *l.phases
+                    .entry((ix.run_key[i].clone(), (*col).to_owned()))
+                    .or_default() += n;
+            }
         }
         l.books_to
             .insert(ix.run_cats[i].1.clone(), ix.run_cats[i].0.clone());
@@ -905,6 +918,7 @@ pub fn book(w: &World) -> Result<Ledger, Raised> {
     span_minutes(w, &ix, &mut l);
     builder_minutes(w, &ix, &mut l);
     l.at_once = at_once(w, &ix, &order, &paged);
+    (l.own, l.stopped) = own_path(w, &ix, &order);
     // BLOCKING: each main session's own time, descended
     for who in order
         .iter()
@@ -927,7 +941,7 @@ pub use cats::*;
 mod window;
 use tier::Blocks;
 pub use tier::{is_tier, Attempt, Batch};
-use window::{at_once, builder_minutes, span_minutes};
+use window::{at_once, builder_minutes, own_path, span_minutes};
 
 #[cfg(test)]
 mod resumed_tests;

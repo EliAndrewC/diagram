@@ -6915,31 +6915,62 @@ that batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T512 (<why: the finding or measurement that files it>)
+### T512 (the GM 2026-11-27, request.md: a landed task's size, test runs, compiles, turns and tokens beside its minutes, to eyeball how reasonable its time looks, never a backfill past the overnight window from 2026-11-27T04:30Z; then its percentages, and its own path)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `make task-time` prints, read back from git and the transcripts it already reads, with no new writer (`rust/gate/crates/measure/src/measure/task_time.rs`; new `task_time/sized.rs`, `turns.rs`, `beside.rs`; `book.rs`, `book/window.rs`, `top.rs`, `where_time/columns.rs`, `columns/spent.rs`).
+  - **T512-D1, the size table.** One row a landed task, under `## The landed tasks' size, counts, turns and tokens`, each figure with its share of the task's own whole. LINES come from one `git log --numstat` since the read-back's start, each commit whose subject names the task (`451 T510:`, `451 T470 T363:`, `451: T490's coverage repair`). A bundle's commit is whole under each task it names, marked shared; a tick commit is left out. Lines are test (`tests/`, `tests.rs`, `*_tests.rs`), prose (`specs/`, `.md`) or non-test; an inline `#[cfg(test)]` block counts non-test, and the task's section counts its files that hold one. TEST RUNS and COMPILES are the `tests` and `compile` Phase lines its runs held, counted as the minutes are booked (`Split::counts`, `Ledger::phases`). MAKE RUNS are its targets' runs. TURNS are model calls, each message id once. TOKENS are those calls' usage. The one `SOURCES` line names each source and what it cannot see.
+  - **T512-D2, percentages** (the GM's words asking for them are in request.md as of the session's commit 1da544e1dc, not yet in this tree's copy). Every new figure carries its share. The per-task target table gains a `% of runs` column.
+  - **T512-D3, the grouped tables.** Each landed task's minutes in seven groups of the report's own categories (builder thinking, code read/write, tests, compile, review, session, other), each cell `min (% of the task)`. There are two tables, machine minutes and OWN PATH, each with a last row for the window's tasks' side.
+  - **T512-D4, the own path.** The session reported the GM's worry, which request.md does not yet hold in his words: a category can look like a bottleneck in machine minutes when it ran beside other work and rarely blocked. The own path is each BUILDER's own clock, descended as the main session's blocking is (`Ix::book_seg`). Each second is booked once, to what its next step waited on. It is clipped to the builder's `Agent::spans` and booked to the builder's own task (`agent_own`), as `builder_minutes` counts them, so the path sums to the builder minutes. A line of a bundle's builder that names the bundle's other task is still its own task's.
+    - **The stopped stretches, beside the path.** A builder's STOPPED stretches (outside its spans) are booked by the same descent, to the same task, into a third table, `stopped minutes`. Each second goes to what was in flight (its own background test, compile or review, a shell read) or to `waiting to be resumed`. Each task's section prints the same as one line. This follows the GM's blocking (request.md, 2026-11-25 (l)), under which a builder stopped on its own review is waiting on it, and FR-002, which books a wait between turns to the background run in flight. They are kept beside the path, not in it, so the path stays the builder's own clock. The report cannot tell whether the builder's next step needed that work, and the table's line says so (T512's plan review, round 2).
+    - The build half's own path left out both rules. Over the overnight window its 83 tasks read 1,947.3 own-path minutes against 1,728.3 builder minutes (+12.7%), and T455 read 62.4 against 20.5, measured 2026-11-27 (`make task-time SINCE=2026-11-27T04:30:00Z`, the build half's run).
+    - Re-run after the fix, own path equals builder minutes on every one of the 88 tasks that have a builder: 2,011.5 against 2,011.5, none over, T455 20.5 against 20.5. Measured 2026-11-27 (`make task-time SINCE=2026-11-27T04:30:00Z`, window ends 15:50:59Z and 16:07:06Z, the report's per-task own-path line against its builder-minutes column, compared by a script). The same tasks' stopped stretches total 379.3 minutes, the largest T313 71.7, T304 71.0 and T455 42.2 (T455's all `shell reads and file edits`), measured 2026-11-27 (the 16:07:06Z run, the same script).
+  - **T512-D5, the session's calls.** Each session call is booked to the task its next own event-log line names. A mark-only (`fallback`) line, or a call past the task's carry, books to no task. A page session's transcript is no main session's calls (`turns::Read::paged`, as `book` leaves its lines out). The calls booked to no task print their tokens beside their count: 2,382 calls and 1,304,036.3k tokens, 1,297,079.5k of them cache read, measured 2026-11-27 (the 16:07:06Z run). That is the largest token figure in the report, and filed as T513.
+  - **T512-D6, the overnight figures**, measured 2026-11-27 (`make task-time SINCE=2026-11-27T04:30:00Z`, read-only, 122 tasks landed to 16:07:06Z). The report took 62.8 s, 88.8 s and 82.8 s on three runs on a loaded machine, against the build half's 57.8 s before and 74.6-81.8 s after, measured 2026-11-27 (each run timed around the command). The time the session transcripts' read adds was not measured apart. The window's tasks' side, each % of its own row's total:
+
+| figure | total min | builder thinking | code read/write | tests | compile | review | session | other | source |
+|---|---|---|---|---|---|---|---|---|---|
+| machine minutes | 2323.3 | 918.2 (39.5%) | 364.9 (15.7%) | 238.2 (10.3%) | 171.5 (7.4%) | 357.4 (15.4%) | 21.1 (0.9%) | 251.8 (10.8%) | measured 2026-11-27 (`make task-time SINCE=2026-11-27T04:30:00Z`) |
+| own path | 1806.1 | 943.4 (52.2%) | 280.6 (15.5%) | 187.2 (10.4%) | 155.7 (8.6%) | 90.4 (5.0%) | 0.0 (0.0%) | 149.0 (8.2%) | measured 2026-11-27 (`make task-time SINCE=2026-11-27T04:30:00Z`) |
+| stopped, beside the path | 239.9 | 1.1 (0.5%) | 47.1 (19.6%) | 12.0 (5.0%) | 1.9 (0.8%) | 138.9 (57.9%) | 0.0 (0.0%) | 39.0 (16.3%) | measured 2026-11-27 (`make task-time SINCE=2026-11-27T04:30:00Z`) |
+
+    - Review is 357.4 machine minutes, 90.4 on the builders' own path and 138.9 with a builder stopped on it, measured 2026-11-27 (`make task-time SINCE=2026-11-27T04:30:00Z`). So 229.3 of review's minutes had a builder waiting on it, on its path or stopped, and the rest ran with no builder waiting. The own path covers builders only. The main session's waits on its own reviews are in the existing blocking column, not in this table.
+    - The largest size rows, by changed lines:
+      - T365: +12,768 non-test lines (91.6%), shared with T373 and T420, 21 test runs and 5 compiles, 120 builder turns, 16,314.7k cache read (97.3% of its tokens), measured 2026-11-27 (`make task-time SINCE=2026-11-27T04:30:00Z`).
+      - T313: +1,520 -35 test, +1,611 -69 non-test, 365 builder and 33 review-agent turns, 73,929.1k cache read (97.4%), measured 2026-11-27 (`make task-time SINCE=2026-11-27T04:30:00Z`).
+      - T373: +1,249 non-test, shared, measured 2026-11-27 (`make task-time SINCE=2026-11-27T04:30:00Z`).
+      - T417: +831 -445 test (59.6%), 28 test runs and 19 compiles, 33 make runs, measured 2026-11-27 (`make task-time SINCE=2026-11-27T04:30:00Z`).
+      - T465 and T474: one shared commit, +673 test and +629 -86 non-test, T465 with 27 test runs and 27 compiles and T474 none (T514), measured 2026-11-27 (`make task-time SINCE=2026-11-27T04:30:00Z`).
+    - Cache read is about 97-98% of every builder task's tokens, and output is under 1%, measured 2026-11-27 (`make task-time SINCE=2026-11-27T04:30:00Z`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the size, counts, turns and tokens table and the grouped tables | `sized_tests::a_landed_task_carries_its_size_counts_turns_and_tokens_with_their_shares`: red with `named`, `turns::of` and `Split::counts` switched off (55 passed, 2 failed), measured 2026-11-27 (the build half's `make rust-test CRATE=rust/gate/crates/measure ONLY="task_time"`) | n/a, a report's text | none | n/a |
+| the own path clipped to the builder's spans and booked to its own task, its stopped stretches beside it | `resumed_tests::a_builders_own_path_is_its_spans_not_its_stopped_stretches`: B's three spans are its whole path, 109 s, and its stopped stretches are its own test's 60 s and waiting to be resumed 30 s, measured 2026-11-27 (the fixture's own times); its edit's lines name T9 and stay T1's own path. Red with the clip off (56 passed, 2 failed, the other an `at_once` the switch also reached) and with the key `s.key` (1 failed), measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/measure ONLY=...`) | n/a | none | n/a |
+| an untasked agent, a page session's transcript, the unbooked calls' tokens, a non-`.jsonl` transcript | `sized_tests::an_untasked_agent_a_page_session_and_the_unbooked_calls_tokens` | n/a | none | n/a |
 
 ### T512 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A reader of `make task-time` sees each landed task's size, counts, turns and tokens beside its minutes, each with its share. They see each task's minutes in seven groups, both as machine minutes and on its builders' own path.
+2. **The constraints.** The GM's words (request.md, 2026-11-27): his Goodhart caution, which the session reads as raw figures only, with no ratio of lines to minutes and no ranking; and no backfill before the overnight window. The minutes' booking (451 T298, T345, T403, T510) is unchanged.
+3. **Where each comes from.** G: *"how large each of the tasks ended up being in terms of the total number of lines added / deleted / modified in the diff. Maybe also breaking that down by test lines and non-test lines"*, *"the number of times that the tests were run. Same for things like the number of times we had to recompile"*, *"Also things like the number of turns"*. G: his words asking for percentages, request.md as of commit 1da544e1dc. The own path's worry is the session's report of the GM, not his words. O: the overnight window (D4-D6).
+4. **Do they describe the world here?** Yes. The own path reconciles with the builder minutes on every task to 0.1 minute, measured 2026-11-27 (D4).
+5. **The order.** After T510, whose sides the grouped tables' last row reads. Before T513 and T514, which change what the turns are booked to.
+6. **The exits.** Green: the tests above, and the overnight figures in D6. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The overnight report prints the size table, the three grouped tables and each task's own path with its stopped stretches beside it, and own path <= builder minutes on every task (D4, D6).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Before the fix, the reader saw a builder's own path past its own clock: T455 at 62.4 minutes on a 20.5-minute builder, measured 2026-11-27 (the build half's `make task-time SINCE=2026-11-27T04:30:00Z`). Its stopped stretches were mixed into its path with nothing to say which seconds the builder was working. It now reads 20.5 on its path, with its 42.2 stopped minutes beside it, measured 2026-11-27 (the 16:07:06Z run). The reader also sees which review minutes had a builder waiting on them (D6).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A builder's stopped wait on its own background review or test was not shown (plan review round 2). Fixed here: the stopped table beside the path (D4). T516, filed for it, is withdrawn.
+- The main session's calls are mostly booked to no task: 2,382 calls and 1,304,036.3k tokens over the overnight window, measured 2026-11-27 (D5). Not fixed here: it needs a writer that tags the session's event-log line with the task its command names, a second job beside this report. Filed as T513; lands before T319.
+- A bundle's second task reads 0 turns, counts and tokens (T474 beside T465, T428 beside T427). Not fixed here: it is the bundle's agent booked to every task its brief names, a change to the booking. Filed as T514; lands before T319.
+- T313's machine minutes are 0.5 while its builders' minutes and own path are 114.7: its own table ends at a carry at 01:36Z booked to it, before its own commit of 04:44Z, measured 2026-11-27 (D6 and `git log`). That is likely the carry attribution T511 holds, though whose carry it was is not verified. Not fixed here: the carry's attribution to a task is T511's job, a change to `tiers::carries` outside this report's figures. Filed as T511; lands before T319.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a measurement of where the time and tokens go, counted as performance work by the GM's words of 2026-11-20
 
 
 ### T515 (<why: the finding or measurement that files it>)
@@ -6994,4 +7025,58 @@ that batch; the red was not in its change.
 **Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T513 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T513 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T514 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T514 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
 

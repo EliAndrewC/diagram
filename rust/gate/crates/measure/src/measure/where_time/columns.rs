@@ -216,6 +216,10 @@ pub struct Subagents {
     pub queued: HashMap<String, f64>,
     /// agent id -> its tokens inside the window (T10, `spent::tokens`).
     pub tokens: HashMap<String, spent::Tok>,
+    /// agent id -> its model calls inside the window, each message id once (451 T512).
+    pub calls: HashMap<String, usize>,
+    /// session id -> its own model calls inside the window, each (time, tokens), in time order (451 T512).
+    pub session: HashMap<String, Vec<(f64, spent::Tok)>>,
     /// tool-use id -> a Bash call's command, the session's and its subagents': the program a call running no make target is listed by
     /// (451 T243, the task time breakdown - the event log keeps no command).
     pub commands: HashMap<String, String>,
@@ -289,6 +293,8 @@ pub fn read_subagents(sids: &[String], projects: &Path, window: (f64, f64)) -> S
     Subagents {
         stopped: out,
         queued,
+        calls: tokens.calls(),
+        session: tokens.session(),
         tokens: tokens.sums(),
         commands,
     }
@@ -427,6 +433,8 @@ pub type Parts = Vec<(&'static str, Vec<(f64, f64)>)>;
 pub struct Split {
     /// (category, its spans), first first.
     pub parts: Parts,
+    /// (category, how many phases of it the call held), first first: a `make task-time` count beside its minutes (451 T512).
+    pub counts: Vec<(&'static str, usize)>,
 }
 
 impl Split {
@@ -441,6 +449,11 @@ impl Split {
                 .collect(),
         );
         let mut parts = Vec::new();
+        let counts = PHASE_COLUMNS
+            .iter()
+            .map(|col| (*col, held.iter().filter(|(c, _)| c == col).count()))
+            .filter(|(_, n)| *n > 0)
+            .collect();
         for col in PHASE_COLUMNS {
             let spans: Vec<(f64, f64)> = held
                 .iter()
@@ -454,7 +467,7 @@ impl Split {
             taken = union(taken.into_iter().chain(own.iter().copied()).collect());
             parts.push((col, own));
         }
-        Self { parts }
+        Self { parts, counts }
     }
 
     /// One category's spans, none where it holds none.

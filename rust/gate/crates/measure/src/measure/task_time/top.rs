@@ -103,14 +103,19 @@ pub(super) fn window_table(out: &mut String, l: &Ledger, d: &Sides, cross: &Cros
     );
 }
 
+/// When a landed task's own table ends: its carry into the clone, else its landing's start (451 T512 reads it for the session's turns).
+pub(super) fn end_of(batches: &[Batch], key: &Key, landed: f64) -> f64 {
+    batches
+        .iter()
+        .filter(|b| b.feature == key.0 && b.tasks.contains(&key.1))
+        .map(|b| b.from(&key.1))
+        .fold(landed, f64::min)
+}
+
 /// Where a landed task's own table ends: its carry into the clone, else its landing's start.
 fn ends(batches: &[Batch], key: &Key, landed: f64) -> String {
     let mine = |b: &&Batch| b.feature == key.0 && b.tasks.contains(&key.1);
-    let from = batches
-        .iter()
-        .filter(mine)
-        .map(|b| b.from(&key.1))
-        .fold(landed, f64::min);
+    let from = end_of(batches, key, landed);
     if batches
         .iter()
         .filter(mine)

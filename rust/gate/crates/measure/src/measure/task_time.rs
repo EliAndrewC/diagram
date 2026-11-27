@@ -33,13 +33,16 @@ use super::where_time::columns::{self, spent};
 use crate::Reply;
 
 pub mod asked;
+pub mod beside;
 pub mod book;
 pub mod cross;
 pub mod held;
 pub mod program;
 pub mod progress;
+pub mod sized;
 pub mod tiers;
 mod top;
+pub mod turns;
 
 use book::{is_tier, Batch, Cell, Key, Ledger, Page, CARRY};
 
@@ -454,11 +457,16 @@ fn tables(
         m(me_w.block),
         pct(mine.block, work.block)
     );
-    out.push_str("| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |\n|---|---|---|---|---|---|---|---|---|\n");
+    out.push_str("| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window | % of runs |\n|---|---|---|---|---|---|---|---|---|---|\n");
+    // each target's runs as a share of the table's runs (451 T512)
+    #[expect(clippy::cast_precision_loss, reason = "run counts")]
+    let runs = targets.iter().map(|x| x.2).sum::<usize>() as f64;
     for (t, cat, n, c) in targets {
+        #[expect(clippy::cast_precision_loss, reason = "a run count")]
+        let of_runs = pct(*n as f64, runs);
         let _ = writeln!(
             out,
-            "| {t} | {cat} | {n} | {} | {} | {} | {} | {} | {} |",
+            "| {t} | {cat} | {n} | {} | {} | {} | {} | {} | {} | {of_runs} |",
             m(c.min),
             pct(c.min, me_w.min),
             pct(c.min, side(cat).min),
@@ -503,6 +511,7 @@ pub fn render(
     (landed, batches): (&[(f64, Key)], &[Batch]),
     (window, from, starts): ((f64, f64), f64, &BTreeMap<Key, f64>),
     (runs, cross): (&columns::Runs, &cross::Cross),
+    more: &beside::Extra,
 ) -> String {
     let all_c = sums(l, &|_| true).0;
     let (all, work) = (total(&all_c), working(&all_c));
@@ -535,6 +544,8 @@ pub fn render(
     beside(&mut out, l);
     top::window_table(&mut out, l, &d, cross);
     top::task_lines(&mut out, whole, landed, batches);
+    beside::table(&mut out, whole, landed, more);
+    beside::groups(&mut out, (whole, l), landed);
     top::second_tier(&mut out, l, batches, window, &d);
     out.push_str(
         "## The biggest blocking on the tasks' side, and whether it could run in parallel\n\n",
@@ -586,6 +597,9 @@ pub fn render(
             m(inside.block),
             pct(inside.block, w.block)
         );
+        out.push_str(&beside::line(whole, k, &c, more));
+        out.push('\n');
+        beside::own_table(&mut out, whole, k);
         tables(&mut out, &c, &tg, &d, false);
     }
     out.push_str(
@@ -731,13 +745,49 @@ pub fn run(
     let refused = cross::refusals(&records, window.1);
     let cap = cross::cap_of(std::env::var("L7R_BUILDERS").ok().as_deref());
     let waited = cross::measure(&held::of(root, clones), &batches, &refused, window, cap);
+    let landed = landed(&got.aside, window, only)?;
+    let x = extra(
+        root,
+        (&got, &flight.agents, &pages),
+        &subs,
+        (&landed, &batches),
+    );
     let text = render(
         (&l, &whole),
-        (&landed(&got.aside, window, only)?, &batches),
+        (&landed, &batches),
         (window, got.window.0, &starts(root, clones)),
         (&runs, &waited),
+        &x,
     );
     Ok((text, window.1))
+}
+
+/// What the report prints beside each landed task's minutes (451 T512): its size from git since the read-back's start, its turns
+/// and tokens from the transcripts already read.
+fn extra(
+    root: &Path,
+    (got, agents, pages): (&Loaded, &[columns::Agent], &[Page]),
+    subs: &columns::Subagents,
+    (landed, batches): (&[(f64, Key)], &[Batch]),
+) -> beside::Extra {
+    let keys: Vec<Key> = landed.iter().map(|(_, k)| k.clone()).collect();
+    let ends: HashMap<Key, f64> = landed
+        .iter()
+        .map(|(t, k)| (k.clone(), top::end_of(batches, k, *t)))
+        .collect();
+    let read = turns::Read {
+        calls: &subs.calls,
+        tokens: &subs.tokens,
+        session: &subs.session,
+        // a page session's own transcript is no main session's calls, as `book` leaves its lines out
+        paged: &pages.iter().map(|p| p.sid.clone()).collect(),
+    };
+    let (turns, unbooked) = turns::of(&got.stream, agents, &read, &ends);
+    beside::Extra {
+        sizes: sized::sizes(root, &iso_of(got.window.0), &keys),
+        turns,
+        unbooked,
+    }
 }
 
 /// `l7r-gate measure task-time [--since S] [--until U] [--feature F] [--root R]`, `now` the time `--since <N>h` counts back from.
@@ -811,6 +861,8 @@ pub fn cli(args: &[String], projects: &Path, clones: &Path, now: f64) -> Reply {
 mod cross_tests;
 #[cfg(test)]
 mod pool_tests;
+#[cfg(test)]
+mod sized_tests;
 #[cfg(test)]
 mod tests;
 #[cfg(test)]

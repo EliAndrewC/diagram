@@ -126,7 +126,8 @@ impl Tok {
     }
 
     /// The two summed, their advisor tokens the sum of those counted.
-    fn plus(self, o: Self) -> Self {
+    #[must_use]
+    pub fn plus(self, o: Self) -> Self {
         let adv = match (self.adv, o.adv) {
             (Some(a), Some(b)) => Some(Adv {
                 input: a.input + b.input,
@@ -144,42 +145,80 @@ impl Tok {
     }
 }
 
-/// The agents' transcripts' usage rows, each agent's by message id, the first row of an id kept (a message is written once per block).
+/// The agents' transcripts' usage rows, each agent's by message id, the first row of an id kept (a message is written once per block:
+/// a message id's first row and its last carried the same usage on each of the 305 ids of a builder's transcript, measured 2026-11-27,
+/// 451 T512); and a main session's own transcript's rows (`<sid>.jsonl`), each with its time (451 T512).
 #[derive(Debug, Default)]
 pub struct Tokens {
     by_aid: HashMap<String, HashMap<String, Tok>>,
+    by_sid: HashMap<String, HashMap<String, (f64, Tok)>>,
+}
+
+/// A transcript's usage rows inside the window: (message id, time, tokens).
+fn usage_rows(text: &str, (lo, hi): (f64, f64)) -> Vec<(String, f64, Tok)> {
+    let mut out = Vec::new();
+    for line in text.lines().filter(|l| l.contains("\"usage\"")) {
+        let Ok(row) = serde_json::from_str::<Value>(line) else {
+            continue;
+        };
+        let (Some(id), Some(u), Some(Ok(at))) = (
+            row.pointer("/message/id").and_then(Value::as_str),
+            row.pointer("/message/usage"),
+            row.get("timestamp").and_then(Value::as_str).map(ts),
+        ) else {
+            continue;
+        };
+        if (lo..=hi).contains(&at) {
+            out.push((id.to_owned(), at, Tok::of_usage(u)));
+        }
+    }
+    out
 }
 
 impl Tokens {
-    /// The rows of `text`, `path`'s, inside `window`, where `path` is a subagent's transcript (`subagents/agent-<aid>.jsonl`).
-    pub fn read(&mut self, path: &Path, text: &str, (lo, hi): (f64, f64)) {
+    /// The rows of `text`, `path`'s, inside `window`: a subagent's transcript (`subagents/agent-<aid>.jsonl`) under its agent, a
+    /// session's own (`<sid>.jsonl`) under its session.
+    pub fn read(&mut self, path: &Path, text: &str, window: (f64, f64)) {
         let name = path
             .file_name()
             .and_then(|n| n.to_str())
             .unwrap_or_default();
-        let Some(aid) = name
-            .strip_prefix("agent-")
-            .and_then(|n| n.strip_suffix(".jsonl"))
-        else {
+        let Some(stem) = name.strip_suffix(".jsonl") else {
             return;
         };
-        let msgs = self.by_aid.entry(aid.to_owned()).or_default();
-        for line in text.lines().filter(|l| l.contains("\"usage\"")) {
-            let Ok(row) = serde_json::from_str::<Value>(line) else {
-                continue;
-            };
-            let (Some(id), Some(u), Some(Ok(at))) = (
-                row.pointer("/message/id").and_then(Value::as_str),
-                row.pointer("/message/usage"),
-                row.get("timestamp").and_then(Value::as_str).map(ts),
-            ) else {
-                continue;
-            };
-            if (lo..=hi).contains(&at) {
-                msgs.entry(id.to_owned())
-                    .or_insert_with(|| Tok::of_usage(u));
+        if let Some(aid) = stem.strip_prefix("agent-") {
+            let msgs = self.by_aid.entry(aid.to_owned()).or_default();
+            for (id, _, tok) in usage_rows(text, window) {
+                msgs.entry(id).or_insert(tok);
+            }
+        } else {
+            let msgs = self.by_sid.entry(stem.to_owned()).or_default();
+            for (id, at, tok) in usage_rows(text, window) {
+                msgs.entry(id).or_insert((at, tok));
             }
         }
+    }
+
+    /// agent id -> its model calls inside the window, each message id once (451 T512).
+    #[must_use]
+    pub fn calls(&self) -> HashMap<String, usize> {
+        self.by_aid
+            .iter()
+            .map(|(aid, m)| (aid.clone(), m.len()))
+            .collect()
+    }
+
+    /// session id -> its own model calls inside the window, each (time, tokens), in time order (451 T512).
+    #[must_use]
+    pub fn session(&self) -> HashMap<String, Vec<(f64, Tok)>> {
+        self.by_sid
+            .iter()
+            .map(|(sid, m)| {
+                let mut rows: Vec<(f64, Tok)> = m.values().copied().collect();
+                rows.sort_by(|a, b| a.0.total_cmp(&b.0));
+                (sid.clone(), rows)
+            })
+            .collect()
     }
 
     /// agent id -> its tokens, an agent with no row inside the window left out.

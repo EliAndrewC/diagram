@@ -107,6 +107,7 @@ fn a_stop_naming_none_books_the_sessions_own_runs() {
             ("compile", vec![(41.0, 43.0)]),
             ("gate", vec![(50.0, 51.0)]),
         ],
+        ..Split::default()
     };
     let got = f.book("s", None, 40.0, 60.0);
     assert_eq!(

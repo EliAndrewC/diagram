@@ -236,3 +236,56 @@ fn a_start_after_a_line_of_its_own_is_a_resumption() {
     assert_eq!(got["builders: reading code"], (10.0, 0.0, 0.0));
     assert_eq!(got["builders: writing its reply"], (10.0, 0.0, 0.0));
 }
+
+/// 451 T512's own path is clipped to the builder's spans: of the session's wait on B, 00:11 to 03:30, its three spans' 109 s are B's
+/// path and none of its stopped stretches (the test it waited on while stopped, 01:00 to 02:00, nor 02:00 to 02:10 and 02:40 to
+/// 03:00) - a builder's own path never past its builder minutes (unclipped, the overnight window read T455 at 62.4 own-path minutes
+/// against 20.5 builder minutes). Its edit's lines name a bundle's other task, T9: its machine minutes go there, its own path stays
+/// its builder's own task's, as its builder minutes do (the overnight window's T428).
+#[test]
+fn a_builders_own_path_is_its_spans_not_its_stopped_stretches() {
+    let (mut stream, aside) = builder_day();
+    for e in stream.iter_mut().filter(|e| or_s(e, "id") == "e1") {
+        e.insert("task".to_owned(), json!("T9"));
+    }
+    let l = booked_to(
+        &stream,
+        &aside,
+        &HashMap::new(),
+        &[],
+        (&at("00:00"), &at("04:10")),
+    );
+    let key = ("451-x".to_owned(), "T1".to_owned());
+    let mut own: HashMap<String, f64> = HashMap::new();
+    for ((k, cat, _), s) in &l.own {
+        assert_eq!(k, &key);
+        *own.entry(cat.clone()).or_default() += s;
+    }
+    let want: HashMap<String, f64> = [
+        ("builders: running a command (the model's turn)", 19.0),
+        // the test's launch, 00:30 to 00:31, inside the first span; its run while B was stopped is no part of B's path
+        ("tests", 1.0),
+        ("builders: reading code", 11.0),
+        ("builders: writing its reply", 67.0),
+        ("builders: writing code", 11.0),
+    ]
+    .into_iter()
+    .map(|(k, v)| (k.to_owned(), v))
+    .collect();
+    assert_eq!(own, want);
+    assert!((own.values().sum::<f64>() - l.builders[&key].0).abs() < 1e-6);
+    // beside it, its stopped stretches by what was in flight: its own test, 01:00 to 02:00, and nothing, 02:00 to 02:10 and 02:40 to
+    // 03:00, all its own task's
+    let mut stopped: HashMap<String, f64> = HashMap::new();
+    for ((k, cat, _), s) in &l.stopped {
+        assert_eq!(k, &key);
+        *stopped.entry(cat.clone()).or_default() += s;
+    }
+    let want: HashMap<String, f64> = [("tests", 60.0), (STOPPED, 30.0)]
+        .into_iter()
+        .map(|(k, v)| (k.to_owned(), v))
+        .collect();
+    assert_eq!(stopped, want);
+    let t9 = ("451-x".to_owned(), "T9".to_owned());
+    assert!(l.cells.keys().any(|(k, _, _)| k == &t9));
+}
