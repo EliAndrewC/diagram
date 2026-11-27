@@ -14,6 +14,8 @@
 //!   booked, at each instant, to each task's thing in flight that ends last (that task's critical one), descending into a builder's own
 //!   time the same way: its turns, its foreground commands, and its waits on its own background runs and agents. A wait with nothing in
 //!   flight is booked as that, named.
+//! - A BUILDER STOPPED (451 T345) - from a `SubagentStop` of its to its next line - is no turn of its model: it has no minutes, and
+//!   a wait on it there is booked to its own work in flight, else `builders: stopped, waiting to be resumed` ([`STOPPED`]).
 //! - BLOCKING IS BY TASK AND DEPENDENCY (the GM 2026-11-25: "a minute should count as blocking. When something else is waiting on it to
 //!   be done before it can be started ... that research would be blocking even if there was a different unrelated task happening in a
 //!   different subagent at the same time"): each piece is booked to the task whose next step waited on it. A CLUE given with the data
@@ -64,7 +66,8 @@ pub struct Ledger {
     /// span, each page-session phase): the overlap the minutes hide.
     pub at_once: [f64; 4],
     /// (feature, task) -> its builders' seconds in the window and how many they were: each builder's spans from its start and stop
-    /// lines (a resumed one's later spans are dropped by the reader before they reach here, 451 T324), never from its report (451 T298: three reports said 30, 75 and 45 min for 9.5, 17.8 and 17.0).
+    /// lines - a resumed one's every span (451 T324), the time it was stopped between them left out, a floor where its lines run on after a stop with no start line (451 T382) - never from its report (451
+    /// T298: three reports said 30, 75 and 45 min for 9.5, 17.8 and 17.0).
     pub builders: HashMap<Key, (f64, usize)>,
 }
 
@@ -316,12 +319,12 @@ impl<'a> Ix<'a> {
         }
     }
 
-    /// Whether `c` is in flight over all of `[x, y]`.
+    /// Whether `[x, y]` is inside `c`'s span, or one of them: a resumed agent has a span a start (451 T324).
     #[expect(
         clippy::many_single_char_names,
         reason = "an interval's ends `x`/`y` beside its run, agent or segment, as the module's doc names them"
     )]
-    fn active(&self, c: Cand, x: f64, y: f64) -> bool {
+    fn inside(&self, c: Cand, x: f64, y: f64) -> bool {
         match c {
             Cand::Run(i) => {
                 let r = &self.w.runs.runs[i];
@@ -330,6 +333,51 @@ impl<'a> Ix<'a> {
             Cand::Agent(i) => self.w.agents[i].spans.iter().any(|s| s.0 <= x && y <= s.1),
             Cand::Pages => self.w.pages.iter().any(|p| p.t0 <= x && y <= p.t1),
         }
+    }
+
+    /// Whether `c` is in flight over all of `[x, y]`: inside a span of its own - and a BUILDER from its first start to its last stop,
+    /// since between two of its spans it has stopped, not ended (451 T345): its waiter still waits on it, and the piece is booked by
+    /// the builder's own segment there, its stop's wait. A review agent between two rounds waits on whoever resumes it, and is not.
+    fn active(&self, c: Cand, x: f64, y: f64) -> bool {
+        let (first, last) = self.span(c);
+        let builder = matches!(c, Cand::Agent(i) if review_cat(&self.w.agents[i].kind).is_none());
+        self.inside(c, x, y) || (builder && first <= x && y <= last)
+    }
+
+    /// Whether `c` is a builder stopped over `[x, y]` with nothing of its own in flight: outside its every span, and no run or agent
+    /// it started inside one of theirs. A wait is booked to it only where nothing else in flight blocks the task (451 T345): the
+    /// session waiting on a claims round beside a builder it will resume later waits on the round.
+    fn stopped(&self, c: Cand, x: f64, y: f64) -> bool {
+        let own = |aid: &String| {
+            self.owned
+                .get(aid)
+                .is_some_and(|o| o.iter().any(|o| self.inside(*o, x, y)))
+        };
+        matches!(c, Cand::Agent(i) if !self.inside(c, x, y) && !own(&self.w.agents[i].aid))
+    }
+
+    /// Each end of each span of `c`.
+    fn ends(&self, c: Cand) -> Vec<f64> {
+        match c {
+            Cand::Agent(i) => self.w.agents[i]
+                .spans
+                .iter()
+                .flat_map(|s| [s.0, s.1])
+                .collect(),
+            other => <[f64; 2]>::from(self.span(other)).to_vec(),
+        }
+    }
+
+    /// The times at which `c`'s being in flight, or what a wait on it is booked to, can change: each end of its every span (a wait
+    /// cut only at an agent's first start and last stop read a resumed one as not in flight wherever a piece crossed its stop, 451
+    /// T324), and each end of what an agent started (a stopped builder's piece is its own work in flight).
+    fn edges(&self, c: Cand) -> Vec<f64> {
+        let mut out = self.ends(c);
+        if let Cand::Agent(i) = c {
+            let own = self.owned.get(&self.w.agents[i].aid).into_iter().flatten();
+            out.extend(own.flat_map(|o| self.ends(*o)));
+        }
+        out
     }
 
     /// The candidates a `Stop` names in flight; with no list, every one the actor owns.
@@ -410,6 +458,14 @@ impl<'a> Ix<'a> {
             let key = self.tiered(key_of(a), x, fallback(a));
             let what = if let Some(stop) = between {
                 self.after_stop(who, stop, b, y - x)
+            } else if ev == "SubagentStop" || is(b, "ev", "SubagentStart") {
+                // a builder's stop to its next line - its resumption's start, or its next call where no log read holds that start -
+                // and its last line before a start, where none holds the stop, is the builder STOPPED, never its model's turn (451 T345: booked by the tool its next call was, 21 resumed
+                // builders' gaps summed to 67.7 min of turns on 2026-11-26): a wait on its own work in flight, else on being resumed
+                What::Wait(
+                    self.owned.get(who).cloned().unwrap_or_default(),
+                    STOPPED.to_owned(),
+                )
             } else if let Some(o) = open.last() {
                 let tool = or_s(o, "tool");
                 match self.run_of.get(or_s(o, "id").as_str()) {
@@ -508,10 +564,6 @@ impl<'a> Ix<'a> {
 
     /// The blocking of `[x, y]`, a wait on `cands` by a waiter blocking `blocked`: each instant, for each task, to its work in flight that blocks it
     /// and ends last (the critical one); with none blocking a task, the one ending last, as waited-on time; with none, `fallback`.
-    #[expect(
-        clippy::many_single_char_names,
-        reason = "an interval's ends `x`/`y` beside its run, agent or segment, as the module's doc names them"
-    )]
     fn descend(
         &self,
         l: &mut Ledger,
@@ -525,8 +577,7 @@ impl<'a> Ix<'a> {
         // a gap with nothing in flight is split where a page session starts or ends, so its piece under one is named so
         let nothing = fallback.starts_with(NOTHING);
         for c in cands {
-            let (a, b) = self.span(*c);
-            cuts.extend([a, b].into_iter().filter(|t| x < *t && *t < y));
+            cuts.extend(self.edges(*c).into_iter().filter(|t| x < *t && *t < y));
         }
         if nothing || cands.contains(&Cand::Pages) {
             for p in self.w.pages {
@@ -545,12 +596,13 @@ impl<'a> Ix<'a> {
                 continue;
             }
             // nothing in flight blocks a task: the one ending last, waited on and blocking none
+            let rank = |c: Cand| (!self.stopped(c, px, py), self.span(c).1);
             let best = cands
                 .iter()
                 .copied()
                 .filter(|c| self.active(*c, px, py))
                 .map(|c| (self.target(c, (px, py), blocked), c))
-                .max_by(|a, b| self.span(a.1).1.total_cmp(&self.span(b.1).1));
+                .reduce(|a, b| if rank(a.1) > rank(b.1) { a } else { b });
             let class = if !nothing {
                 fallback
             } else if self.w.pages.iter().any(|p| p.t0 <= px && py <= p.t1) {
@@ -598,7 +650,8 @@ impl<'a> Ix<'a> {
             // a batch's own landing run is what its wait is on, whatever else in flight ends later: another task's leftover
             // background loop named in the session's `inflight` took the T309 T289 batch's 12.1 min of gate waits as wait loops
             // (2026-11-26, the window from 17:00Z)
-            let rank = |x: Cand| (self.is_landing(x), self.span(x).1);
+            // and a stopped builder with nothing of its own in flight is what a wait is on only where nothing else is (451 T345)
+            let rank = |c: Cand| (self.is_landing(c), !self.stopped(c, x, y), self.span(c).1);
             match by_task.iter_mut().find(|(t, _)| *t == k) {
                 Some(e) if rank(c) > rank(e.1) => e.1 = c,
                 Some(_) => {}
@@ -674,8 +727,7 @@ impl<'a> Ix<'a> {
         }
         let mut cuts = vec![x, y];
         for c in &owned {
-            let (a, b) = self.span(*c);
-            cuts.extend([a, b].into_iter().filter(|t| x < *t && *t < y));
+            cuts.extend(self.edges(*c).into_iter().filter(|t| x < *t && *t < y));
         }
         cuts.sort_by(f64::total_cmp);
         cuts.dedup();
@@ -866,5 +918,7 @@ use tier::Blocks;
 pub use tier::{is_tier, Attempt, Batch, SECOND_TIER};
 use window::{at_once, builder_minutes, span_minutes};
 
+#[cfg(test)]
+mod resumed_tests;
 #[cfg(test)]
 pub mod tests;

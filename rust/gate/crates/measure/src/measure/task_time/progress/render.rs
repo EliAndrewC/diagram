@@ -47,7 +47,7 @@ fn table(out: &mut String, rows: &[(String, f64)]) {
 /// One builder's line: its state, its dispatch, its context against the cap and how long since its last line.
 fn agent(out: &mut String, a: &AgentNow, now: f64) {
     let state = match (a.running, a.resumed, a.stop) {
-        (true, true, _) => "RUNNING, resumed after a stop (its later start and stop lines are not read, 451 T324: it may have stopped again since its last line)".to_owned(),
+        (true, true, _) => "RUNNING, resumed after a stop".to_owned(),
         (true, ..) => "RUNNING".to_owned(),
         (false, _, Some(t)) => format!("stopped {}", hms(t)),
         (false, ..) => "not running: no stop line, and its session's latest Stop does not name it in flight (cut off)".to_owned(),
@@ -105,15 +105,7 @@ fn block(out: &mut String, b: &Block, now: f64) {
             m(now - at)
         );
     }
-    let _ = writeln!(
-        out,
-        "\nIts minutes so far{}, from its builders' dispatch:\n",
-        if b.at_least {
-            ", AT LEAST (a resumed builder's later spans are not read, 451 T324)"
-        } else {
-            ""
-        }
-    );
+    out.push_str("\nIts minutes so far, from its builders' dispatch:\n\n");
     table(out, &b.rows);
 }
 

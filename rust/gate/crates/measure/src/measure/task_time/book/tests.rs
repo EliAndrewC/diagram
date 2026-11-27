@@ -10,18 +10,18 @@ use super::super::super::events::{ts, Event};
 use super::super::super::where_time::columns::{self, Run, Window};
 use super::*;
 
-fn at(ms: &str) -> String {
+pub(super) fn at(ms: &str) -> String {
     format!("2026-11-25T10:{ms}Z")
 }
 
-fn line(v: &Value) -> Event {
+pub(super) fn line(v: &Value) -> Event {
     let mut e = v.as_object().unwrap().clone();
     e.insert("feature".to_owned(), json!("451-x"));
     e.entry("task").or_insert(json!("T1"));
     e
 }
 
-fn pre(t: &str, tool: &str, id: &str, by: &str, extra: &Value) -> Event {
+pub(super) fn pre(t: &str, tool: &str, id: &str, by: &str, extra: &Value) -> Event {
     let mut v = json!({"t": at(t), "sid": "s", "ev": "PreToolUse", "tool": tool, "id": id});
     if !by.is_empty() {
         v["by"] = json!(by);
@@ -32,7 +32,7 @@ fn pre(t: &str, tool: &str, id: &str, by: &str, extra: &Value) -> Event {
     line(&v)
 }
 
-fn post(t: &str, tool: &str, id: &str, by: &str, extra: &Value) -> Event {
+pub(super) fn post(t: &str, tool: &str, id: &str, by: &str, extra: &Value) -> Event {
     let mut e = pre(t, tool, id, by, extra);
     e.insert("ev".to_owned(), json!("PostToolUse"));
     e
@@ -120,7 +120,7 @@ pub fn booked(
 }
 
 /// The day booked to `until`.
-fn booked_to(
+pub(super) fn booked_to(
     stream: &[Event],
     aside: &[Event],
     commands: &HashMap<String, String>,

@@ -521,11 +521,17 @@ pub fn with_turns(stream: &[Event], turns: Vec<Event>) -> Vec<Event> {
 /// review, 2026-11-21 - left out, the session's two hours on 449's turns between 451's were booked 451's waits).
 pub const FOREIGN: &str = "another feature";
 
-/// An event's identity across its sources: by the call's id where it has one, its agent's id otherwise, else its session, kind and second.
+/// An event's identity across its sources: by the call's id where it has one; an agent's own start or stop (its agent's id, no call's)
+/// by the agent, kind and second; else its session, kind and second. WHY the second (feature 451 T324): a resumed agent starts and
+/// stops again under its id, and keyed by the agent alone every start and stop after its first was dropped - a builder resumed after
+/// its plan review kept its first span only (21 of the 94 agents the 451 log started from 2026-11-26T08:00Z were resumed; T303's
+/// builder read 7.6 of its 7.9 min, T309's 13.9 of 15.2, T289's 8.8 of 13.7, measured 2026-11-26 from the log's start and stop
+/// lines against `make task-time`). The second, as a turn line's, still keeps a line two logs hold once.
 #[derive(Hash, PartialEq, Eq)]
 enum Key {
     Two(String, String),
     Three(String, String, String),
+    Agent(String, String, String),
 }
 
 fn key_text(v: &Value) -> String {
@@ -615,7 +621,7 @@ pub fn load_all(
         let key = if on(&e, "id") {
             Key::Two(ev, key_text(get(&e, "id")))
         } else if on(&e, "aid") {
-            Key::Two(ev, key_text(get(&e, "aid")))
+            Key::Agent(key_text(get(&e, "aid")), ev, head(&t, 19).to_owned())
         } else {
             Key::Three(key_text(get(&e, "sid")), ev, head(&t, 19).to_owned())
         };

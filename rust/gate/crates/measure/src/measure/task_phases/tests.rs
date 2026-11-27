@@ -66,6 +66,12 @@ fn a_subagent_call_is_told_by_its_transcript_hook_or_window() {
         json!({"t": at("08:00:09"), "sid": "s", "ev": "Stop", "aid": "", "tool": ""}),
         json!({"t": at("08:00:09"), "sid": "s", "ev": "UserPromptSubmit", "aid": "zz"}),
         json!({"t": at("08:00:09"), "sid": "s", "ev": "SubagentStop", "aid": "w9", "tool": "x"}),
+        // w1 is resumed at :11 (feature 451 T324: the reader now keeps a resumed agent's later starts and stops): the session's
+        // own call at :10, between its two runs, is inside neither window
+        json!({"t": at("08:00:10"), "sid": "s", "ev": "PreToolUse", "tool": "Read", "id": "gap"}),
+        json!({"t": at("08:00:11"), "sid": "s", "ev": "SubagentStart", "aid": "w1"}),
+        json!({"t": at("08:00:12"), "sid": "s", "ev": "PreToolUse", "tool": "Read", "id": "again"}),
+        json!({"t": at("08:00:13"), "sid": "s", "ev": "SubagentStop", "aid": "w1"}),
     ]);
     let out = attribute(events, &calls, &found).unwrap();
     let marks: Vec<(String, String)> = out
@@ -77,10 +83,12 @@ fn a_subagent_call_is_told_by_its_transcript_hook_or_window() {
     assert_eq!(marks[5], ("w1".to_owned(), "window".to_owned()));
     assert_eq!(marks[6], (String::new(), String::new()));
     assert_eq!(marks[7], (String::new(), String::new()));
+    assert_eq!(marks[14], (String::new(), String::new()));
+    assert_eq!(marks[16], ("w1".to_owned(), "window".to_owned()));
     let how = attribution(&out);
     assert_eq!(how.items().len(), 3);
-    assert_eq!(session_events(&out).len(), 11);
-    assert_eq!(call_counts(&out), (2, 3));
+    assert_eq!(session_events(&out).len(), 14);
+    assert_eq!(call_counts(&out), (3, 4));
     let bad = evs(&[json!({"t": "x", "ev": "SubagentStart", "aid": "q"})]);
     assert!(attribute(bad, &HashMap::new(), &HashSet::new()).is_err());
     let bad = evs(&[json!({"t": "x", "ev": "PreToolUse", "tool": "Read"})]);

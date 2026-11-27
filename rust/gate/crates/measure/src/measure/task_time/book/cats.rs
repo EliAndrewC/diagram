@@ -22,6 +22,9 @@ pub const NOTHING_WOKEN: &str =
     "waiting: nothing in flight - until a notification or reminder woke it";
 /// A `Stop` naming nothing, then the session started again (a resume, a compaction or a clear).
 pub const NOTHING_RESTART: &str = "waiting: nothing in flight - until the session started again";
+/// A builder between a stop and its resumption with nothing of its own in flight (451 T345): waiting on whoever resumes it - the
+/// session's message, or the notification of work that had already ended.
+pub const STOPPED: &str = "builders: stopped, waiting to be resumed";
 /// A main session's wait with only a monitor in flight and no page session running.
 pub const MONITOR: &str = "waiting: a monitor alone";
 /// A detached page session's phases and the research-pass agents.

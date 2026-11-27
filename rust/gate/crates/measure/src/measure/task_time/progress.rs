@@ -25,9 +25,10 @@
 //! its last FINISHED phase, and the phase running at this moment sits in the run's own category until its line lands.
 //!
 //! THE KNOWN GAPS, said in the output and not hidden:
-//! - A RESUMED builder (451 T324, open): the reader keeps one start and one stop an agent, so a builder resumed after its first stop
-//!   reads as stopped. It is told by its own lines after that stop, shown as running on the in-flight test alone, and its minutes are
-//!   marked "at least".
+//! - A RESUMED builder is no gap since 451 T324 and T345: every start and stop of an agent is read, so it is running where a start
+//!   or a call of its own follows its last stop, and stopped at its last stop otherwise; its minutes are its turns and runs in every
+//!   span, the time it was stopped between them a wait and no turn. (Before, the reader kept one start and one stop an agent, and
+//!   such a builder's minutes were headed "at least".)
 //! - A pool tree's `Phase` lines can name another task (451 T332, open): each is booked here to the task the pool's log
 //!   (`builder-pool.log`) says held its tree at that time ([`retask`]), and a builder's family reads only its own tree's lines.
 //!
@@ -70,11 +71,11 @@ pub struct AgentNow {
     pub kind: String,
     /// Its dispatch: its first start in the lines read.
     pub t0: f64,
-    /// Its stop, where the reader kept one.
+    /// Its last stop, where no line of its follows it.
     pub stop: Option<f64>,
     /// Its last own line.
     pub last: f64,
-    /// Its own lines run on after its stop (451 T324).
+    /// It stopped and ran on: a start or a call of its own after a stop.
     pub resumed: bool,
     /// Whether it is running now (the module's doc).
     pub running: bool,
@@ -95,8 +96,6 @@ pub struct Block {
     pub steps: Vec<String>,
     /// Its minutes so far: (category, seconds), the largest first.
     pub rows: Vec<(String, f64)>,
-    /// A builder of it was resumed: the rows are a floor (451 T324).
-    pub at_least: bool,
     /// When its task was carried into the clone, where it was.
     pub carried: Option<f64>,
 }
@@ -336,7 +335,6 @@ fn block(
             render::short(aid),
             doing.join("; and ")
         ));
-        out.at_least |= s.resumed;
         out.agents.push(AgentNow {
             aid: aid.clone(),
             kind: s.kind.clone(),

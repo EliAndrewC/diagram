@@ -203,6 +203,10 @@ fn put(dir: &Path, name: &str, text: &str) -> PathBuf {
     p
 }
 
+/// A line with a call's id is kept once an id, a session's turn line once a second - and an agent's start or stop once a SECOND of
+/// that agent (feature 451 T324): a resumed agent stops again under its id, so its two stops a second apart are two lines (keyed by
+/// the agent alone, the second was dropped and with it every span but the agent's first), while the same stop read from two logs,
+/// in one second, is still one.
 #[test]
 fn events_load_deduplicated_and_in_time_order() {
     let d = crate::checks::scratch("measure-events-load");
@@ -217,6 +221,8 @@ fn events_load_deduplicated_and_in_time_order() {
             r#"{"t": "2026-11-01T08:00:01Z", "ev": "SubagentStop", "aid": "q"}"#,
             "\n",
             r#"{"t": "2026-11-01T08:00:02Z", "ev": "SubagentStop", "aid": "q"}"#,
+            "\n",
+            r#"{"t": "2026-11-01T08:00:02.7Z", "ev": "SubagentStop", "aid": "q"}"#,
             "\n",
             r#"{"t": "2026-11-01T08:00:00.1Z", "ev": "Stop", "sid": "s"}"#,
             "\n",
@@ -241,6 +247,7 @@ fn events_load_deduplicated_and_in_time_order() {
             "2026-11-01T07:00:00Z",
             "2026-11-01T08:00:00.1Z",
             "2026-11-01T08:00:01Z",
+            "2026-11-01T08:00:02Z",
             "2026-11-01T08:00:03Z"
         ]
     );

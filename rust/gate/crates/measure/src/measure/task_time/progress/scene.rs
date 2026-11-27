@@ -22,11 +22,11 @@ pub struct Seen {
     pub sid: String,
     /// Its first line read.
     pub t0: f64,
-    /// Its stop, where one was kept (the reader keeps the first, 451 T324).
+    /// Its last stop, where no line of its follows it: a start or a call after a stop is the agent resumed, running again.
     pub stop: Option<f64>,
     /// Its last own line.
     pub last: f64,
-    /// Its own lines run on after its stop.
+    /// It stopped and ran on: a start, or a call of its own where no log read holds that start, after a stop.
     pub resumed: bool,
     /// The agent that dispatched it, "" for a session.
     pub parent: String,
@@ -127,8 +127,9 @@ impl Scene {
                 if ev == "SubagentStop" {
                     a.stop = Some(t);
                     a.ctx = get(e, "ctx").as_u64();
-                } else if ev != "SubagentStart" {
-                    a.resumed |= a.stop.is_some();
+                } else {
+                    // every start and stop of an agent is read (451 T324): a line after its stop is the agent resumed
+                    a.resumed |= a.stop.take().is_some();
                 }
                 a.last = a.last.max(t);
             }
@@ -181,11 +182,11 @@ impl Scene {
         }
     }
 
-    /// Whether agent `aid` is running now (`progress`'s doc): no stop, or resumed after it, and in flight.
+    /// Whether agent `aid` is running now (`progress`'s doc): no stop since its last line, and in flight.
     pub fn running(&self, aid: &str) -> bool {
         self.seen
             .get(aid)
-            .is_some_and(|a| (a.stop.is_none() || a.resumed) && self.in_flight(&a.sid, aid, a.last))
+            .is_some_and(|a| a.stop.is_none() && self.in_flight(&a.sid, aid, a.last))
     }
 
     /// `mine` and every agent they dispatched, and those dispatched.

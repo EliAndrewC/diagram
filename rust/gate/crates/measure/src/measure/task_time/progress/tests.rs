@@ -220,7 +220,7 @@ fn a_builder_mid_compile_shows_its_open_run_its_last_phase_and_its_categories() 
     // the open run's other minute: the phase running now has no line yet
     assert_eq!(row("tests"), Some(60.0));
     assert_eq!(row("builders: reading code"), Some(40.0));
-    assert!(row(OPEN_TURN).is_none() && !b.at_least);
+    assert!(row(OPEN_TURN).is_none());
 }
 
 #[test]
@@ -279,7 +279,7 @@ fn a_landing_a_free_tree_a_staged_task_and_no_cut_off_agent() {
 }
 
 #[test]
-fn a_resumed_builder_is_at_least_and_a_model_turn_is_a_row() {
+fn a_resumed_builder_runs_its_stopped_time_no_turn_and_a_model_turn_is_a_row() {
     let d = crate::checks::scratch("task-progress-resumed");
     put(
         &d,
@@ -324,7 +324,11 @@ fn a_resumed_builder_is_at_least_and_a_model_turn_is_a_row() {
     .unwrap();
     // no pool: the builder has a block of its own, no tree
     let b = &v.blocks[0];
-    assert!(b.tree.is_none() && b.at_least && b.agents[0].running && b.agents[0].resumed);
+    assert!(b.tree.is_none() && b.agents[0].running && b.agents[0].resumed);
+    // its stop is behind it; and 15:00 to 20:00 it was stopped, no turn of its model (451 T345): its reading is the call's 30 s
+    assert_eq!(b.agents[0].stop, None);
+    let reading = b.rows.iter().find(|r| r.0 == "builders: reading code");
+    assert_eq!(reading.map(|r| r.1), Some(30.0));
     assert_eq!(b.holder, "451 T5");
     assert_eq!(b.agents[0].ctx, None);
     assert_eq!(
@@ -349,9 +353,9 @@ fn a_resumed_builder_is_at_least_and_a_model_turn_is_a_row() {
     let text = render::render(&v);
     for part in [
         "## 451 T5 - no pool tree is held for it",
-        "RUNNING, resumed after a stop (its later start and stop lines are not read, 451 T324",
+        "(general-purpose): RUNNING, resumed after a stop; dispatched",
         "context not known",
-        "Its minutes so far, AT LEAST (a resumed builder's later spans are not read, 451 T324)",
+        "Its minutes so far, from its builders' dispatch:",
         "No landing is in flight.",
         "- none: every task carried has landed",
     ] {
@@ -574,4 +578,40 @@ fn with_no_read_back_given_the_lines_are_read_from_the_earliest_held_tree() {
     let text = render::render(&v);
     let head = "# The tasks in flight at 20:30:00 UTC (lines read from 17:00:00)";
     assert!(text.contains(head), "{text}");
+}
+
+/// Every start and stop of an agent is read (feature 451 T324): resumed by a start it is running, with no stop behind it, and its
+/// second stop is the one it stands stopped at - the reader kept the first of each, and such a builder read as stopped at 12:00.
+#[test]
+fn a_resumed_agent_is_read_to_its_last_stop() {
+    let line = |v: Value| v.as_object().unwrap().clone();
+    let mut lines = vec![
+        line(agent(
+            "SubagentStart",
+            "10:00",
+            "x",
+            "general-purpose",
+            "T6",
+        )),
+        line(agent("SubagentStop", "12:00", "x", "general-purpose", "T6")),
+        line(agent(
+            "SubagentStart",
+            "14:00",
+            "x",
+            "general-purpose",
+            "T6",
+        )),
+    ];
+    let s = Scene::of(&lines).unwrap();
+    assert!(s.running("x") && s.seen["x"].resumed && s.seen["x"].stop.is_none());
+    lines.push(line(agent(
+        "SubagentStop",
+        "16:00",
+        "x",
+        "general-purpose",
+        "T6",
+    )));
+    let s = Scene::of(&lines).unwrap();
+    assert!(!s.running("x") && s.seen["x"].resumed);
+    assert_eq!(s.seen["x"].stop, Some(ts(&at("16:00")).unwrap()));
 }

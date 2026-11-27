@@ -106,9 +106,10 @@ pub(super) fn task_lines(
         );
     }
     out.push_str(
-        "\n(builder minutes are each builder's span in the event log, start to stop, never its report's account - a RESUMED builder's later \
-         spans are not in it yet, 451 T324; minutes and blocking are the task's whole time, read back before the window, to where its \
-         own table ends)\n\n",
+        "\n(builder minutes are each builder's spans in the event log, each start to its stop, never its report's account - a resumed \
+         builder's every span, the time it was stopped between them left out, and a floor where its lines run on after a stop with no \
+         start line logged, 451 T382; minutes and blocking are the task's whole time, read back \
+         before the window, to where its own table ends)\n\n",
     );
 }
 

@@ -83,7 +83,9 @@ pub fn subagent_calls(
     (out, found)
 }
 
-/// sid -> (start, stop, aid) of every subagent run logged with both ends, sorted (`_windows`).
+/// sid -> (start, stop, aid) of every subagent run logged with both ends, sorted (`_windows`). A stop ENDS its run (feature 451
+/// T324): a resumed agent stops again under its id, and with its first start kept for every later stop, each later window ran from
+/// that first start - across the time between its runs, where a call is the session's own.
 fn windows(events: &[Event]) -> Result<HashMap<String, Vec<Span>>, Raised> {
     let mut started: HashMap<String, f64> = HashMap::new();
     let mut out: HashMap<String, Vec<Span>> = HashMap::new();
@@ -96,10 +98,8 @@ fn windows(events: &[Event]) -> Result<HashMap<String, Vec<Span>>, Raised> {
             let t = t_of(e)?;
             started.entry(aid).or_insert(t);
         } else if is(e, "ev", "SubagentStop") {
-            if let Some(a) = started.get(&aid) {
-                out.entry(s(e, "sid"))
-                    .or_default()
-                    .push((*a, t_of(e)?, aid));
+            if let Some(a) = started.remove(&aid) {
+                out.entry(s(e, "sid")).or_default().push((a, t_of(e)?, aid));
             }
         }
     }
