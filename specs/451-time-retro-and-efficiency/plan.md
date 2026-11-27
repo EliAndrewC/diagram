@@ -3634,6 +3634,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 
 <!-- plan-archive: T314 to T314 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T315 (the GM, 2026-11-26, on 451 T305's repeated slow test runs: why more of a builder's test run could not be cached, T301 part 1 having answered the compile side and T316 having timed one run of `rust/gate/crates/land` on a heavily loaded machine)
 
 - **Approach**: a measurement, no code changed. Scripts and raw results are kept in `dev/measurements/2026-11-26/test-run-split/` (`gate-run.sh`, `edit-probe.sh`, `edit-split.sh`, `body-edit.sh`, `ps-sample.py`, `run.py`, `count-shim.c`, `shares.py`, `phase-history.py`, `slot-waits.py`, `git-fixture-bench.py`; `slowest-tests.txt`, the `.jsonl` and `.txt` results). Everything ran in the pool tree `diagram-backlog-t269`, one run at a time, on 22 cores (observed 2026-11-26, method: `nproc`) beside two other builders; each row carries its load. `strace` and `perf` are refused in the container, so file calls were counted by an `LD_PRELOAD` shim (`count-shim.c`) and processes by sampling `/proc` (`ps-sample.py`).
@@ -5188,6 +5189,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 <!-- plan-archive: T367 to T355 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T367 to T367 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T368 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -5724,35 +5726,6 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T404 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T404 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-<!-- plan-archive: T394 to T394 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-<!-- plan-archive: T391 to T393 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-
 ### T410 (five plan reviews of 2026-11-26/27 blocked a round on a section answering no to performance work of a measurement - T315, T274, T301 and two the session headed off by brief - against FR-013's measurement clause; built with T308's part 2 as its T308-D10)
 
 - **Approach**: built in T308's part 2, in the same code and the same landing: `### T308 part 2`, T308-D10, holds the template's new wording, the refusal at `make decide` (`rust/gate/crates/plan/src/plan/lint/perf_line.rs`), why the old stubs are still matched, and the replay over the committed plans.
@@ -5914,34 +5887,6 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T419 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T419 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-<!-- plan-archive: T414 to T314 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-<!-- plan-archive: T414 to T414 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 ### T413 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -6005,6 +5950,67 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 |---|---|---|---|---|
 
 ### T424 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T419, T404 (bundle)
+
+- **Approach**: two changes to `make carry` (`rust/gate/crates/land/src/land/carry.rs`) and the words that cause the first's stop. The session's hand version of job 1 (`resolve-heads.py`, copied to `dev/measurements/2026-11-27/carry-heads/`) was read as the specification by example.
+  - **(a) A plan merged by HEADING** (`carry/sections.rs`, T419): each `### T<n>` heading line is a section of its own, keyed by the whole line (unique where a task id is not); T300's rules are applied per heading (a side's change taken, a removal kept where the other side left the section alone); a section only the builder has goes after the last section of its own task, else at the end; then each task's sections are put together where its first stands, ordered heading, Approach, performance checklist, then each `part <n>`'s, then `part B` ones. A heading of another kind (`Decisions`, `notes`) keeps its place after the section before it: older plans write those after their Approach (features 385, 405, 406). A section joined to the one it followed on the clone's side keeps its bytes; one in a new place gets the blank line a heading needs. The first build changed 9 plans that needed nothing, measured 2026-11-27 (the same survey as below): 3 reordered by ranking those headings as a task's heading (385, 405, 406), 6 by a blank line put between every two sections (426, 427, 430, 434, 451, 454). It stops where both sides changed one section, where both added one heading differently, where one removed what the other changed, where both changed the opening, where a side holds one heading twice, and - the stop the hand script lacked - where both sides replaced one base section with different headings (a stub filled on both sides), which the script would have kept as two main sections. "Two places" is no longer a stop.
+  - **No tidy plan moves**, measured 2026-11-27 (`sections::merged(p, p, p)` over all 285 `specs/*/plan.md` by a scratch test since removed; `dev/measurements/2026-11-27/carry-heads/t419-noop.txt`): 281 come out byte-identical; the 4 that do not are plans the old merge stopped on - 3 hold a task's sections apart (417, 444, 449) and are put together, and 452 holds 16 headings twice and stops. The 451 plan at the replays' three sides: the two holding a part B apart (`72f7684524`, `cdac635559`) are put together, `a6bebcb623` comes out byte-identical.
+  - **The two real carries replayed** (`dev/measurements/2026-11-27/carry-heads/t419-replay.sh`, in a scratch clone of the clone, the carry built from this tree): T355's commit `51dec6f1ba` onto `72f7684524`, the clone before the session moved T399's part B by hand (`c067fc1d27`; the commit's recorded parent `b991ec95f5~1` is that hand move, so the stop is reproduced one commit earlier), and T308's `1fb7ffff9b` onto its clone commit's parent `a6bebcb623`. Before (`t419-before.txt`): both exit 2, "the clone's side holds T399's sections in two places" and "the carried commit's parent holds T394's sections in two places", the stops of 2026-11-27. After (`t419-after.txt`): both carry and verify. Against the session's commits: T355's (`b991ec95f5`) differs by one blank line in `plan.md`, the carry's before `### T410`, where the hand left an archive comment against the heading; T308's (`3012655340`) `plan.md` holds the same lines but blank ones (`diff` with blank lines dropped: none) - the hand script rewrote every section to end in a blank line, 47 more than the clone's own text, which the carry keeps - and `request.md` one blank line more, T300's rule (c) as it was.
+  - **(b) The cause** (`plan/approach.rs`): the owed block's words - `make arbiter-ruled`'s and the cohort's `approach owed:` line (`owe`) and `make tick`'s refusal (`refusal`) - now say to add it directly after the task's other sections, never at the plan's end; and `make decide` (`plan.rs`, through `approach::apart`) refuses a `part B` section of a task it decides whose preceding `### T<n>` heading names another task (a bundle's part B is its first task's), naming each and where it goes, beside the section's other findings. Only the tasks decided: a builder cannot move another task's section. Over the 451 plan the one part B (T399's) stands in place.
+  - **(c) A done ref kept outside the clone** (`carry.rs`, `spent`, T404): refs are shared by every worktree, so a carry's verified end in a linked worktree deleted the ref of a done commit the clone still lacked. The ref is now deleted only where the carry ran in the clone's main worktree (`marks::main_top` of the tree's git common directory, compared by `marks::same_tree`); elsewhere the carry keeps it and says `; still waiting on its carry into <clone>, which this tree is not: <ref> kept`, at both ends that spend one (carried, and already in history). Not `builder_done`'s author-time-and-subject test: an empty pick leaves no such commit in HEAD, and its ref is spent in the clone all the same (T397's case, whose test passes unchanged).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a plan merged by heading | `a_plan_whose_tasks_sections_stand_apart_is_merged_by_heading_and_put_together` (exit 2 on the old code, the T308 stop), `a_tasks_sections_are_put_in_their_order_and_a_tidy_plan_is_left_as_it_is`, `a_long_heading_is_named_by_its_first_sixty_characters`, red on the old code; `sections_merged_takes_each_side_s_change_and_stops_on_a_choice`, `a_plan_section_both_sides_changed_stops` restated for the heading's words - 5 of 154 land tests red on the old code | n/a: tooling | none | none |
+| the owed block's words and decide's refusal | `a_trigger_owes_a_block_stamped_after_it` (the two messages), `a_part_b_apart_from_its_tasks_sections_is_named` | n/a: tooling | none | none |
+| a done ref kept outside the clone | `a_carry_outside_the_clone_keeps_the_done_ref_the_clone_still_waits_on`, red on the old code (1 of 155); `a_done_commit_is_carried_by_its_ref_after_its_tree_went_to_the_next_task` unchanged | n/a: tooling | none | none |
+
+### T419, T404 Approach (checklist part A)
+
+1. **The goal, in the world.** A carry never stops because a task's sections stand in two places on any side, and no carry outside the clone hides a done commit the clone still waits on.
+2. **The constraints.** T300's: all of a pick's conflicts or none; the end verified; a choice between the sides never made for the session. Added: a tidy plan is never reordered by a carry.
+3. **Where each comes from.** O: the two stopped carries of 2026-11-27, replayed; O: `resolve-heads.py`, the session's resolution; O: `builder_done.rs`'s carried test, read; G: the brief's words for T419 and T404, the session's.
+4. **Do they describe the world here?** Yes: the real carries replayed and compared with the session's commits, and every plan in the repository merged against itself.
+5. **The order.** After T300 (its rules restated per heading); before T400 and T423.
+6. **The exits.** Green: the land and plan crates' tests and both replays carried. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One probe dropped: the first build changed 9 plans that needed nothing (above); an unknown heading now keeps its place, and a join the clone had keeps its bytes.
+8. **The budget.** One landing.
+9. **Done, measured.** Both stopped carries of 2026-11-27 carry untouched (2 of 2, where 0 did); 281 of 285 plans unchanged by a merge against themselves, the 4 others ones the old merge stopped on.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The session resolves no plan.md by hand for a part B written apart, and a builder's or scratch carry leaves `make builder-trees` listing the done commits the clone lacks.
+
+**Found and left?**
+- `specs/452-building-plan-followups/plan.md` holds 16 heading lines twice (the stubs of T001 to T008 with their Approach headings), so a carry whose plan conflicts there stops; observed 2026-11-27, method: the merge of every plan against itself above. Not fixed here: another feature's plan, which of each pair is kept is that feature's reading. Filed as T423; lands before T400.
+
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the builders' loop faster - a stopped carry is the session's turns while trees stand idle, `dev/measurements/2026-11-27/tree-idle/results.md`); no engine speed, so no checklist.
+
+### T423 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T423 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

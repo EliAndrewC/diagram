@@ -256,10 +256,11 @@ fn decide(
     if taken.is_some() {
         found.retain(|f| !f.deferral());
     }
-    let checklist: Vec<String> = members
+    let mut checklist: Vec<String> = members
         .iter()
         .filter_map(|t| approach::refusal(&dir, &top, t))
         .collect();
+    checklist.extend(approach::apart(&plan, &members));
     let why = lint::decide_refusal(
         &plan,
         &section,

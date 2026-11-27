@@ -608,6 +608,50 @@ fn a_done_commit_is_carried_by_its_ref_after_its_tree_went_to_the_next_task() {
     );
 }
 
+/// RED FIRST (451 T404): a carry run in a linked worktree - a pool tree, a builder's scratch - kept the ref of a done commit the
+/// clone still waits on only until its verified end, which deleted it in every worktree (refs are shared), so `make builder-trees`
+/// lost sight of the commit. It is spent only where the carry runs in the clone.
+#[test]
+fn a_carry_outside_the_clone_keeps_the_done_ref_the_clone_still_waits_on() {
+    let (dir, root, builder) = trees("carry-elsewhere");
+    git(&builder, &["checkout", "-q", "--detach"]);
+    hold(&root, &builder, "T01");
+    put(&builder, "rust/held.rs", "fn held() {}\n");
+    let sha = done(&root, "T01", "9001 T01: the build half");
+    let scratch = dir.join("scratch");
+    git(
+        &root,
+        &[
+            "worktree",
+            "add",
+            "-q",
+            "--detach",
+            &scratch.to_string_lossy(),
+        ],
+    );
+    let kept = format!(
+        "still waiting on its carry into {}, which this tree is not: refs/l7r/done/9001-T01 kept\n",
+        root.display()
+    );
+    // carried into the scratch tree, then found in its history: the ref stays both times
+    for said in [
+        cli(&[String::new(), sha.clone()], &scratch),
+        cli(&[String::new(), sha.clone()], &scratch),
+    ] {
+        assert_eq!((said.code, said.stderr.as_str()), (0, ""));
+        has(&said.stdout, &kept);
+    }
+    assert_eq!(waiting(&root), "refs/l7r/done/9001-T01");
+    // the carry in the clone spends it
+    let said = cli(&[String::new(), sha], &root);
+    assert_eq!((said.code, said.stderr.as_str()), (0, ""));
+    has(
+        &said.stdout,
+        "; no longer waiting on its carry: refs/l7r/done/9001-T01\n",
+    );
+    assert_eq!(waiting(&root), "");
+}
+
 #[test]
 fn the_arguments_are_checked() {
     let (dir, root, builder) = trees("carry-args");

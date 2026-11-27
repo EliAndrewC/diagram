@@ -8,8 +8,8 @@ use serde_json::json;
 
 use super::super::tests::{git, repo};
 use super::{
-    best, future_refusal, future_stamps, in_flight, owe, owed_entries, parse_utc, part_items,
-    refusal, ruled, split_items, unanswered,
+    apart, best, future_refusal, future_stamps, in_flight, owe, owed_entries, parse_utc,
+    part_items, refusal, ruled, split_items, unanswered,
 };
 
 const CHECKLIST: &str = "# Checklist\n\n## A. At task start\n\n1. **The goal.** x\n2. **The constraints.** y\n3. **Where from.** z\n\n## B. When the work resists\n\n1. **What refuses.** a\n2. **Again.** b\n\n## C. Habits\n\n1. **Edit once.** c\n";
@@ -82,6 +82,7 @@ fn a_trigger_owes_a_block_stamped_after_it() {
     assert!(
         msg.contains("part B - when the work resists")
             && msg.contains("`### T01 part B (2026-10-17T21:40Z)`")
+            && msg.contains("plan.md directly after T01's other sections (never at the plan's end")
     );
     owe(
         &root,
@@ -93,6 +94,8 @@ fn a_trigger_owes_a_block_stamped_after_it() {
     );
     assert_eq!(owed_entries(&root).len(), 1);
     assert!(why(&dir, &root, "T01").contains("no block stamped after it"));
+    assert!(why(&dir, &root, "T01")
+        .contains("stamped at or after it, directly after T01's other sections"));
     std::fs::write(
         dir.join("plan.md"),
         format!("{PLAN}\n### T01 part B (2026-10-17T21:00Z)\n\n1. x\n2. y\n"),
@@ -351,4 +354,21 @@ fn a_row_for_another_task_is_not_this_task_s() {
         Some("2026-10-17T21:40:00Z"),
     );
     assert_eq!(refusal(&dir, &root, "T01"), None);
+}
+
+/// 451 T419: a part B standing apart from its task's other sections refused at `make decide`, a bundle's its first task's, and
+/// only for the tasks decided.
+#[test]
+fn a_part_b_apart_from_its_tasks_sections_is_named() {
+    let tasks = |t: &[&str]| t.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>();
+    let tidy = "# P\n\n### T1 (a)\n\n### T1 part B (x)\n\n### T2, T3 (bundle)\n\n### T2, T3 part B (y)\n\n### T2 part B (z)\n";
+    assert_eq!(apart(tidy, &tasks(&["T1", "T2"])), None);
+    let late = format!("{tidy}\n### T4 (b)\n\n### T1 part B (late)\n\n### T2, T3 part B (late)\n");
+    assert_eq!(apart(&late, &tasks(&["T4"])), None);
+    let told = apart(&late, &tasks(&["T1", "T2"])).unwrap();
+    let head = "`### T1 part B (late)`, `### T2, T3 part B (late)` stand(s) apart";
+    assert!(told.starts_with(head));
+    assert!(told.contains("move each to directly after them"));
+    // a part B before any task's heading stands apart too
+    assert!(apart("### T1 part B (x)\n", &tasks(&["T1"])).is_some());
 }

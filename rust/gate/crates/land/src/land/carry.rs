@@ -15,8 +15,9 @@
 //!   A task `make task-add` filed in each tree is the same conflict, each box with its research line: theirs is kept by BLOCK - a
 //!   list line with its continuation lines - never line by line (451 T289: the second box's research line, the same words as the
 //!   first's, was dropped), and a bare open box is given back the lines a side holds under it ([`boxes`], 451 T300).
-//! - `specs/*/plan.md`, by SECTION from its three whole sides ([`sections`], 451 T300): the builder's filled stub taken, the stub
-//!   it removed dropped, the clone's sections kept, the builder's new ones appended; one section both sides changed stops.
+//! - `specs/*/plan.md`, by SECTION from its three whole sides ([`sections`], 451 T300), each keyed by its whole heading line (451
+//!   T419): the builder's filled stub taken, the stub it removed dropped, the clone's sections kept, the builder's new ones placed
+//!   after its task's last, then each task's sections put together in their order; one section both sides changed stops.
 //! - `specs/*/request.md`, where every conflicting hunk is one both sides only added to and each side's addition opens with a
 //!   `## ` heading - a dated section of the GM's words, one written in each tree: ours, a blank line, then theirs' sections ours
 //!   lacks; one heading over different words on the two sides stops (451 T300).
@@ -42,7 +43,8 @@
 //!
 //! A commit whose changes HEAD already holds - carried before under another sha, or its lines kept from both sides equal to ours -
 //! makes an EMPTY pick: it is skipped, verified the same way, and said to change nothing (exit 0, nothing left in progress; T304).
-//! At that verified end, empty or not, the ref `make builder-done` kept the commit under is deleted ([`spent`], 451 T397).
+//! At that verified end, empty or not, the ref `make builder-done` kept the commit under is deleted ([`spent`], 451 T397) - where
+//! the carry ran in the clone's main worktree; a carry in a linked worktree keeps it, said, the clone still waiting (451 T404).
 //!
 //! Exit: 0 carried and verified (or already in HEAD's history), 2 refused or stopped (the stop leaves the pick in progress), 1 the
 //! end's verification failed.
@@ -51,6 +53,7 @@ use std::path::Path;
 
 use l7r_gate_core::Reply;
 use l7r_gate_task::builder_done::REFS as DONE_REFS;
+use l7r_shared::speckit::marks;
 
 use super::unfinished::{git, git_dir, lines, refusals};
 
@@ -409,6 +412,12 @@ fn skipped_empty(root: &Path) -> Result<bool, String> {
 /// review of T394, 2026-11-27): `make builder-trees` and `make builder-tree` tell a carried commit by its author's time and
 /// subject in HEAD, which an empty pick never leaves there, so its ref stayed and the task was refused its next tree though
 /// its work was in HEAD.
+///
+/// ONLY IN THE CLONE (451 T404): refs are shared by every worktree of a clone, so a carry run in a linked worktree - a pool tree, a
+/// builder's scratch - would delete the ref of a done commit the clone's HEAD still lacks, and `make builder-trees` would list it no
+/// more. A carry that ran anywhere but the clone's main worktree keeps the ref and says so. The main worktree, not "the clone's
+/// HEAD holds a commit of its author's time and subject" (`builder_done`'s test): an empty pick leaves no such commit, and its
+/// ref is spent in the clone all the same (451 T397).
 fn spent(root: &Path, sha: &str) -> Result<String, String> {
     let listed = git(
         root,
@@ -421,14 +430,24 @@ fn spent(root: &Path, sha: &str) -> Result<String, String> {
         ],
     )?;
     let refs = lines(&listed.1);
+    if refs.is_empty() {
+        return Ok(String::new());
+    }
+    let clone = marks::places(root).map(|(common, _)| marks::main_top(&common));
+    if let Some(clone) = clone.filter(|c| !marks::same_tree(c, root)) {
+        return Ok(format!(
+            "; still waiting on its carry into {}, which this tree is not: {} kept",
+            clone.display(),
+            refs.join(", ")
+        ));
+    }
     for name in &refs {
         git(root, &["update-ref", "-d", name])?;
     }
-    Ok(if refs.is_empty() {
-        String::new()
-    } else {
-        format!("; no longer waiting on its carry: {}", refs.join(", "))
-    })
+    Ok(format!(
+        "; no longer waiting on its carry: {}",
+        refs.join(", ")
+    ))
 }
 
 /// The carry, after its arguments: what it printed and its exit code.

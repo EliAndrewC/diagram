@@ -3666,6 +3666,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T419, T404 (bundle)": {
+   "sha256": "e05427d56473d0188a57a2af72540a5ca101240222c5689e0d3831147f36dace",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T419, T404 Approach (checklist part A)": {
+   "sha256": "119971e4960f832f74af0005957faa7379588bac6e497e00df96ff11d52ec2a2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -33089,6 +33101,65 @@
      "why": "Its earlier text was a placeholder that decided nothing (verdict CLEAR); removing a finished task's empty section drops no decision and narrows nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T419, T404 (bundle)",
+    "### T419, T404 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T419 (a) merge by heading",
+     "summary": "T419: make carry merges plan.md per '### T<n>' heading line (keyed by the whole line), T300's rules applied per heading, a builder-only section placed after its task's last section, each task's sections put together in a fixed order; 'two places' is no longer a stop",
+     "class": "within",
+     "why": "Serves the goal the block states and the GM's standing words that tooling, not the session's memory, performs the correct behavior (T285, 2026-11-26) and that throughput is the goal (T308): it replaces the session's hand resolution (resolve-heads.py) of the two carries stopped on 2026-11-27. It widens what carries; nothing asked is narrowed."
+    },
+    {
+     "id": "T419 (a) stops kept and one added",
+     "summary": "T419: the merge still stops where both sides changed one section, both added one heading differently, one removed what the other changed, both changed the opening, a side holds a heading twice, and newly where both replaced one base section with different headings",
+     "class": "within",
+     "why": "T300's constraint that a choice between the sides is never made for the session, restated per heading. The added stop closes a case the hand script would have resolved wrongly (two main sections); it refuses no case the request asks to carry."
+    },
+    {
+     "id": "T419 (a) other headings and tidy plans",
+     "summary": "T419: a heading of another kind (Decisions, notes) keeps its place after the section before it; a join the clone already had keeps its bytes; a tidy plan is never reordered (281 of 285 plans byte-identical when merged against themselves, the other 4 ones the old merge stopped on)",
+     "class": "within",
+     "why": "Design choices that keep the merge from touching plans that need nothing (the first build's 9 needless changes, dropped). Leaving existing formatting as it is narrows nothing the GM asked."
+    },
+    {
+     "id": "T419 (b) the owed block's words",
+     "summary": "T419: make arbiter-ruled's and the cohort's 'approach owed:' line and make tick's refusal now say to add the block directly after the task's other sections, never at the plan's end",
+     "class": "within",
+     "why": "Removes the cause of the stop the carry hit; serves the same goal and the GM's T285 words that tooling enforce the correct behavior."
+    },
+    {
+     "id": "T419 (b) decide refuses a part B apart (unlabeled by the author as a decision)",
+     "summary": "T419: make decide gains a new refusal - a 'part B' section of a task it decides whose preceding '### T<n>' heading names another task - limited to the tasks being decided, no escape stated",
+     "class": "within",
+     "why": "A new refusal, but its whole reach is the thing the task exists to prevent (a task's sections written apart), and it is limited to the tasks decided, so it reaches no other agent, command or default. It is not one of FR-012's enumerated refusals (FR-006 to FR-009, FR-011, FR-013), so FR-012's escape-and-red-test rule does not bind it; it sits beside decide's other findings. The limit to decided tasks narrows nothing: the merge in (a) already puts other tasks' apart sections together."
+    },
+    {
+     "id": "T404 (c) done ref kept outside the clone",
+     "summary": "T404: a carry deletes a done commit's ref only when it ran in the clone's main worktree (marks::main_top / marks::same_tree); elsewhere it keeps the ref and says so, at both ends that spend one; builder_done's author-time-and-subject test deliberately not used",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a linked worktree's carry deleted the shared ref of a done commit the clone still lacked, hiding it from make builder-trees). It serves the 'make land carrying by commit' of T394's line and the GM's T285 words that worktree tooling perform the correct behavior. Not using builder_done's test is a mechanism choice that keeps T397's empty-pick case passing unchanged."
+    },
+    {
+     "id": "T419 found-and-left: 452's duplicate headings (T423)",
+     "summary": "T419: specs/452-building-plan-followups/plan.md holds 16 heading lines twice, so a carry whose plan conflicts there stops; not fixed here, filed as T423, lands before T400",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The stop on a heading held twice is correct behavior under T300's constraint, not a defect of this task's tooling: which copy of each pair is kept is a reading of 452's own content, a choice between texts the carry must not make for the session and that belongs to that feature. It differs from 417, 444 and 449, whose sections are only reordered with no choice of content. FR-009's three requirements are met: why it is not fixed here, the filed id (T423), and the order (lands before T400). Nothing carries the defect past a step: it is filed and ordered."
+    },
+    {
+     "id": "T419/T404 [perf] tag",
+     "summary": "T419, T404: tagged performance work under FR-013 (the builders' loop made faster: a stopped carry costs the session's turns while trees stand idle); no engine speed, so no checklist",
+     "class": "within",
+     "why": "FR-013 counts work that makes the landings or the builders' loop faster as performance work; a carry that no longer stops is that."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -51316,6 +51387,120 @@
      "summary": "The order is independent of the queue and lands with any batch; the Performance line says no (the task keeps a defect's evidence, makes nothing faster and measures no time).",
      "class": "within",
      "why": "The GM's 2026-11-20 rule counts measurement-of-where-time-goes tasks as performance. This task records which test case failed, not time, so 'no' is a fair reading and the task's content is not narrowed. The phase line gains a log field but no time measure."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T419": {
+   "section_sha256": "01e4f6500919122510feaefc7cef3dcb810fa011a6eba44e3863c06e60b6d245",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T419 (a) merge by heading",
+     "summary": "T419: make carry merges plan.md per '### T<n>' heading line (keyed by the whole line), T300's rules applied per heading, a builder-only section placed after its task's last section, each task's sections put together in a fixed order; 'two places' is no longer a stop",
+     "class": "within",
+     "why": "Serves the goal the block states and the GM's standing words that tooling, not the session's memory, performs the correct behavior (T285, 2026-11-26) and that throughput is the goal (T308): it replaces the session's hand resolution (resolve-heads.py) of the two carries stopped on 2026-11-27. It widens what carries; nothing asked is narrowed."
+    },
+    {
+     "id": "T419 (a) stops kept and one added",
+     "summary": "T419: the merge still stops where both sides changed one section, both added one heading differently, one removed what the other changed, both changed the opening, a side holds a heading twice, and newly where both replaced one base section with different headings",
+     "class": "within",
+     "why": "T300's constraint that a choice between the sides is never made for the session, restated per heading. The added stop closes a case the hand script would have resolved wrongly (two main sections); it refuses no case the request asks to carry."
+    },
+    {
+     "id": "T419 (a) other headings and tidy plans",
+     "summary": "T419: a heading of another kind (Decisions, notes) keeps its place after the section before it; a join the clone already had keeps its bytes; a tidy plan is never reordered (281 of 285 plans byte-identical when merged against themselves, the other 4 ones the old merge stopped on)",
+     "class": "within",
+     "why": "Design choices that keep the merge from touching plans that need nothing (the first build's 9 needless changes, dropped). Leaving existing formatting as it is narrows nothing the GM asked."
+    },
+    {
+     "id": "T419 (b) the owed block's words",
+     "summary": "T419: make arbiter-ruled's and the cohort's 'approach owed:' line and make tick's refusal now say to add the block directly after the task's other sections, never at the plan's end",
+     "class": "within",
+     "why": "Removes the cause of the stop the carry hit; serves the same goal and the GM's T285 words that tooling enforce the correct behavior."
+    },
+    {
+     "id": "T419 (b) decide refuses a part B apart (unlabeled by the author as a decision)",
+     "summary": "T419: make decide gains a new refusal - a 'part B' section of a task it decides whose preceding '### T<n>' heading names another task - limited to the tasks being decided, no escape stated",
+     "class": "within",
+     "why": "A new refusal, but its whole reach is the thing the task exists to prevent (a task's sections written apart), and it is limited to the tasks decided, so it reaches no other agent, command or default. It is not one of FR-012's enumerated refusals (FR-006 to FR-009, FR-011, FR-013), so FR-012's escape-and-red-test rule does not bind it; it sits beside decide's other findings. The limit to decided tasks narrows nothing: the merge in (a) already puts other tasks' apart sections together."
+    },
+    {
+     "id": "T404 (c) done ref kept outside the clone",
+     "summary": "T404: a carry deletes a done commit's ref only when it ran in the clone's main worktree (marks::main_top / marks::same_tree); elsewhere it keeps the ref and says so, at both ends that spend one; builder_done's author-time-and-subject test deliberately not used",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a linked worktree's carry deleted the shared ref of a done commit the clone still lacked, hiding it from make builder-trees). It serves the 'make land carrying by commit' of T394's line and the GM's T285 words that worktree tooling perform the correct behavior. Not using builder_done's test is a mechanism choice that keeps T397's empty-pick case passing unchanged."
+    },
+    {
+     "id": "T419 found-and-left: 452's duplicate headings (T423)",
+     "summary": "T419: specs/452-building-plan-followups/plan.md holds 16 heading lines twice, so a carry whose plan conflicts there stops; not fixed here, filed as T423, lands before T400",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The stop on a heading held twice is correct behavior under T300's constraint, not a defect of this task's tooling: which copy of each pair is kept is a reading of 452's own content, a choice between texts the carry must not make for the session and that belongs to that feature. It differs from 417, 444 and 449, whose sections are only reordered with no choice of content. FR-009's three requirements are met: why it is not fixed here, the filed id (T423), and the order (lands before T400). Nothing carries the defect past a step: it is filed and ordered."
+    },
+    {
+     "id": "T419/T404 [perf] tag",
+     "summary": "T419, T404: tagged performance work under FR-013 (the builders' loop made faster: a stopped carry costs the session's turns while trees stand idle); no engine speed, so no checklist",
+     "class": "within",
+     "why": "FR-013 counts work that makes the landings or the builders' loop faster as performance work; a carry that no longer stops is that."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T404": {
+   "section_sha256": "01e4f6500919122510feaefc7cef3dcb810fa011a6eba44e3863c06e60b6d245",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T419 (a) merge by heading",
+     "summary": "T419: make carry merges plan.md per '### T<n>' heading line (keyed by the whole line), T300's rules applied per heading, a builder-only section placed after its task's last section, each task's sections put together in a fixed order; 'two places' is no longer a stop",
+     "class": "within",
+     "why": "Serves the goal the block states and the GM's standing words that tooling, not the session's memory, performs the correct behavior (T285, 2026-11-26) and that throughput is the goal (T308): it replaces the session's hand resolution (resolve-heads.py) of the two carries stopped on 2026-11-27. It widens what carries; nothing asked is narrowed."
+    },
+    {
+     "id": "T419 (a) stops kept and one added",
+     "summary": "T419: the merge still stops where both sides changed one section, both added one heading differently, one removed what the other changed, both changed the opening, a side holds a heading twice, and newly where both replaced one base section with different headings",
+     "class": "within",
+     "why": "T300's constraint that a choice between the sides is never made for the session, restated per heading. The added stop closes a case the hand script would have resolved wrongly (two main sections); it refuses no case the request asks to carry."
+    },
+    {
+     "id": "T419 (a) other headings and tidy plans",
+     "summary": "T419: a heading of another kind (Decisions, notes) keeps its place after the section before it; a join the clone already had keeps its bytes; a tidy plan is never reordered (281 of 285 plans byte-identical when merged against themselves, the other 4 ones the old merge stopped on)",
+     "class": "within",
+     "why": "Design choices that keep the merge from touching plans that need nothing (the first build's 9 needless changes, dropped). Leaving existing formatting as it is narrows nothing the GM asked."
+    },
+    {
+     "id": "T419 (b) the owed block's words",
+     "summary": "T419: make arbiter-ruled's and the cohort's 'approach owed:' line and make tick's refusal now say to add the block directly after the task's other sections, never at the plan's end",
+     "class": "within",
+     "why": "Removes the cause of the stop the carry hit; serves the same goal and the GM's T285 words that tooling enforce the correct behavior."
+    },
+    {
+     "id": "T419 (b) decide refuses a part B apart (unlabeled by the author as a decision)",
+     "summary": "T419: make decide gains a new refusal - a 'part B' section of a task it decides whose preceding '### T<n>' heading names another task - limited to the tasks being decided, no escape stated",
+     "class": "within",
+     "why": "A new refusal, but its whole reach is the thing the task exists to prevent (a task's sections written apart), and it is limited to the tasks decided, so it reaches no other agent, command or default. It is not one of FR-012's enumerated refusals (FR-006 to FR-009, FR-011, FR-013), so FR-012's escape-and-red-test rule does not bind it; it sits beside decide's other findings. The limit to decided tasks narrows nothing: the merge in (a) already puts other tasks' apart sections together."
+    },
+    {
+     "id": "T404 (c) done ref kept outside the clone",
+     "summary": "T404: a carry deletes a done commit's ref only when it ran in the clone's main worktree (marks::main_top / marks::same_tree); elsewhere it keeps the ref and says so, at both ends that spend one; builder_done's author-time-and-subject test deliberately not used",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a linked worktree's carry deleted the shared ref of a done commit the clone still lacked, hiding it from make builder-trees). It serves the 'make land carrying by commit' of T394's line and the GM's T285 words that worktree tooling perform the correct behavior. Not using builder_done's test is a mechanism choice that keeps T397's empty-pick case passing unchanged."
+    },
+    {
+     "id": "T419 found-and-left: 452's duplicate headings (T423)",
+     "summary": "T419: specs/452-building-plan-followups/plan.md holds 16 heading lines twice, so a carry whose plan conflicts there stops; not fixed here, filed as T423, lands before T400",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The stop on a heading held twice is correct behavior under T300's constraint, not a defect of this task's tooling: which copy of each pair is kept is a reading of 452's own content, a choice between texts the carry must not make for the session and that belongs to that feature. It differs from 417, 444 and 449, whose sections are only reordered with no choice of content. FR-009's three requirements are met: why it is not fixed here, the filed id (T423), and the order (lands before T400). Nothing carries the defect past a step: it is filed and ordered."
+    },
+    {
+     "id": "T419/T404 [perf] tag",
+     "summary": "T419, T404: tagged performance work under FR-013 (the builders' loop made faster: a stopped carry costs the session's turns while trees stand idle); no engine speed, so no checklist",
+     "class": "within",
+     "why": "FR-013 counts work that makes the landings or the builders' loop faster as performance work; a carry that no longer stops is that."
     }
    ],
    "verdict": "CLEAR"

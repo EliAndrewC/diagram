@@ -33,7 +33,8 @@
 //! tasks, "after T316", "LANDED"), which no code can read without guessing; 451 T313 is the machine-readable queue's home.
 //!
 //! WHAT IS CARRIED ([`uncarried`], which `make builder-trees` lists after the trees): a done commit waits while its ref stands
-//! and the clone's HEAD holds no commit of its AUTHOR'S TIME and SUBJECT. `make carry` deletes the ref at its verified end -
+//! and the clone's HEAD holds no commit of its AUTHOR'S TIME and SUBJECT. `make carry` in the clone (one in a linked worktree keeps it,
+//! 451 T404) deletes the ref at its verified end -
 //! carried, or an empty pick skipped because HEAD holds the changes already (451 T397) - so the ref alone would do for a commit
 //! carried by that command; the second test covers a commit that reached HEAD another way (a carry stopped on a conflict and
 //! finished by hand): a carry is a cherry-pick, so the carried commit has another id and `git branch --contains` never names it,

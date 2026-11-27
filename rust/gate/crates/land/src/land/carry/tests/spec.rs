@@ -82,7 +82,7 @@ fn a_plan_section_both_sides_changed_stops() {
     assert_eq!(code, 2);
     has(
         &err,
-        "specs/451-x/plan.md (both sides changed T2's section) - nothing was resolved",
+        "specs/451-x/plan.md (both sides changed the section `### T2 (task 2's title)`) - nothing was resolved",
     );
 }
 
@@ -260,39 +260,45 @@ fn sections_merged_takes_each_side_s_change_and_stops_on_a_choice() {
         (
             one("ours"),
             one("theirs"),
-            "both sides changed T1's section",
+            "both sides changed the section `### T1 (task 1's title)`",
         ),
         (
             one("ours"),
             less.clone(),
-            "the builder removed T1's section, which the clone changed",
+            "the builder removed the section `### T1 (task 1's title)`, which the clone changed",
         ),
         (
             less,
             one("theirs"),
-            "the builder changed T1's section, which the clone removed",
+            "the builder changed the section `### T1 (task 1's title)`, which the clone removed",
         ),
         (
             base.clone() + "### T8\n\nours\n",
             base.clone() + "### T8\n\ntheirs\n",
-            "both sides wrote T8's section, differently",
+            "both sides wrote the section `### T8`, differently",
         ),
         (
-            base.clone() + "### T1 (again)\n",
+            base.clone() + "### T1 (task 1's title)\n",
             base.clone(),
-            "the clone's side holds T1's sections in two places",
+            "the clone's side holds the heading `### T1 (task 1's title)` twice",
         ),
         (
             base.clone(),
-            base.clone() + "### T1 (again)\n",
-            "the builder's side holds T1's sections in two places",
+            base.clone() + "### T1 (task 1's title)\n",
+            "the builder's side holds the heading `### T1 (task 1's title)` twice",
+        ),
+        // a stub both sides filled, each under its own heading
+        (
+            p(&[("1", "a"), ("2", "b"), ("3", "c")]).replace("(task 1's title)", "(ours)"),
+            p(&[("1", "a"), ("2", "b"), ("3", "c")]).replace("(task 1's title)", "(theirs)"),
+            "both sides replaced the section `### T1 (task 1's title)`, differently",
         ),
     ] {
         assert_eq!(stop(&base, &ours, &theirs), why);
     }
     assert_eq!(
-        stop(&(base.clone() + "### T1 (again)\n"), &base, &base),
-        "the carried commit's parent holds T1's sections in two places"
+        stop(&(base.clone() + "### T1 (task 1's title)\n"), &base, &base),
+        "the carried commit's parent holds the heading `### T1 (task 1's title)` twice"
     );
 }
 
@@ -373,6 +379,137 @@ fn a_tasks_git_merged_cleanly_beside_a_conflict_keeps_its_boxes_lines_too() {
     );
     assert_eq!(read(&root, other), boxes(&["1", "5"], &[]));
     assert_eq!(read(&root, PLAN), stubs(&["1", "4"]));
+}
+
+/// A plan of the `### ` headings named, each section's body its heading's last word.
+fn headed(heads: &[&str]) -> String {
+    let mut out = "# Plan\n\n".to_owned();
+    for head in heads {
+        let word = head.rsplit(' ').next().unwrap_or_default();
+        let _ = write!(out, "### {head}\n\n{word}\n\n");
+    }
+    out
+}
+
+#[test]
+fn a_plan_whose_tasks_sections_stand_apart_is_merged_by_heading_and_put_together() {
+    // RED FIRST (451 T419, 2026-11-27): before the merge keyed by heading this carry exits 2, "the carried commit's parent holds
+    // T1's sections in two places" - the stop of T308's carry (T394's part B at the plan's end on its commit's parent), and with
+    // the parent's in place, the clone's (T355's: T399's part B appended at the end) and the builder's, each a task's part B
+    // written after a round arbiter's ruling where its other sections are not
+    let (_dir, root, builder) = trees("carry-plan-apart");
+    let base = headed(&[
+        "T1 (one)",
+        "T1 Approach",
+        "T2 (<why: stub>)",
+        "T2 Approach",
+        "T3 (three)",
+        "T1 part B (01:51Z)",
+    ]);
+    commit(&root, "the plan", &[(PLAN, &base)]);
+    git(&builder, &["merge", "-q", "--ff-only", "main"]);
+    // the builder fills T2's stub (a new heading line), writes T2's part B at the end and files T5
+    let theirs = headed(&[
+        "T1 (one)",
+        "T1 Approach",
+        "T2 (filled)",
+        "T2 Approach",
+        "T3 (three)",
+        "T1 part B (01:51Z)",
+        "T2 part B (02:00Z)",
+        "T5 (<why: stub>)",
+    ]);
+    commit(
+        &builder,
+        "T2: built",
+        &[("rust/held.rs", "fn held() {}\n"), (PLAN, &theirs)],
+    );
+    // the clone files T4 and writes T3's part B at the end
+    let ours = headed(&[
+        "T1 (one)",
+        "T1 Approach",
+        "T2 (<why: stub>)",
+        "T2 Approach",
+        "T3 (three)",
+        "T4 (<why: stub>)",
+        "T1 part B (01:51Z)",
+        "T3 part B (01:52Z)",
+    ]);
+    commit(&root, "T4 filed", &[(PLAN, &ours)]);
+    let (code, out, err) = carried(&root, &builder);
+    assert_eq!((code, err.as_str()), (0, ""), "{out}");
+    has(&out, "; resolved specs/451-x/plan.md (by section)");
+    assert_eq!(
+        read(&root, PLAN),
+        headed(&[
+            "T1 (one)",
+            "T1 Approach",
+            "T1 part B (01:51Z)",
+            "T2 (filled)",
+            "T2 Approach",
+            "T2 part B (02:00Z)",
+            "T3 (three)",
+            "T3 part B (01:52Z)",
+            "T4 (<why: stub>)",
+            "T5 (<why: stub>)",
+        ])
+    );
+}
+
+#[test]
+fn a_tasks_sections_are_put_in_their_order_and_a_tidy_plan_is_left_as_it_is() {
+    let ok = |base: &str, ours: &str, theirs: &str| sections::merged(base, ours, theirs).unwrap();
+    let tidy = headed(&[
+        "T1 (one)",
+        "T1 notes",
+        "T1 Approach",
+        "T1 Performance checklist",
+        "T1 part 2 (two)",
+        "T1 part 2 Approach",
+        "T1 part 3 (three)",
+        "T1 part B (a)",
+        "T1 part B (b)",
+        "T2, T3 (bundle)",
+        "T2, T3 Approach",
+        "T2, T3 Performance checklist",
+        "T2, T3 part B (c)",
+        "T4",
+    ]);
+    assert_eq!(ok(&tidy, &tidy, &tidy), tidy);
+    // the clone's side shuffled within each task: put back in order, each kind in the order it stood
+    let shuffled = headed(&[
+        "T1 part B (a)",
+        "T1 part 3 (three)",
+        "T1 part 2 Approach",
+        "T1 Performance checklist",
+        "T1 (one)",
+        "T1 notes",
+        "T2, T3 part B (c)",
+        "T1 Approach",
+        "T4",
+        "T1 part 2 (two)",
+        "T2, T3 Performance checklist",
+        "T2, T3 (bundle)",
+        "T2, T3 Approach",
+        "T1 part B (b)",
+    ]);
+    assert_eq!(ok(&tidy, &shuffled, &tidy), tidy);
+}
+
+#[test]
+fn a_long_heading_is_named_by_its_first_sixty_characters() {
+    let long = format!("T1 ({})", "x".repeat(80));
+    let base = headed(&[&long]);
+    let stop = sections::merged(
+        &base,
+        &(base.clone() + "ours\n"),
+        &(base.clone() + "theirs\n"),
+    );
+    let cut: String = format!("### {long}").chars().take(60).collect();
+    assert_eq!(
+        stop.unwrap_err(),
+        format!("both sides changed the section `{cut}...`")
+    );
 }
 
 #[test]

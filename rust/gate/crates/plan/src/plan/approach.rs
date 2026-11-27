@@ -19,6 +19,10 @@ pub(super) const USAGE_LOG_TOOL: &str = "approach_gate";
 const DEFAULT: &str = "docs/approach-checklist.md";
 const OWED: &str = "approach-owed.json";
 const RULED_PREFIXES: [&str; 2] = ["hour:", "red-gate@"];
+/// Why an owed block goes beside its task's other sections (451 T419): on 2026-11-27 three part B sections appended at the plan's
+/// end stopped two carries, one on a commit's parent, which no later edit can fix; `make decide` refuses one standing apart.
+const PLACE: &str =
+    "a task's sections stand together, and `make decide` refuses a part B standing apart";
 
 static STAMP: LazyLock<Regex> =
     LazyLock::new(|| re(r"(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d)(?::(\d\d))?Z"));
@@ -246,7 +250,41 @@ pub(super) fn owe(
     } else {
         format!("### {task} Approach (re-answered {minute}Z)")
     };
-    format!("approach owed: {trigger} - {task} owes the checklist's {}, answered before the next attempt: add `{head}` to specs/{feature}/plan.md, every item of part {part} numbered; `make tick` refuses {task} until it is there", part_title(part))
+    format!("approach owed: {trigger} - {task} owes the checklist's {}, answered before the next attempt: add `{head}` to specs/{feature}/plan.md directly after {task}'s other sections (never at the plan's end: {PLACE}), every item of part {part} numbered; `make tick` refuses {task} until it is there", part_title(part))
+}
+
+static TASK_HEAD: LazyLock<Regex> = LazyLock::new(|| re(r"^### (T\d+)"));
+static PART_B_HEAD: LazyLock<Regex> = LazyLock::new(|| re(r"^### (T\d+)(?:,\s*T\d+)*\s+part B\b"));
+
+/// Why `make decide` refuses `tasks` for a part B section of theirs standing apart from its task's other sections (451 T419), or
+/// None: the `### T<n>` heading before it names another task (a bundle's part B is its first task's). WHY: [`PLACE`].
+pub(super) fn apart(plan: &str, tasks: &[String]) -> Option<String> {
+    let first = |r: &Regex, line: &str| {
+        r.captures(line)
+            .ok()
+            .flatten()
+            .and_then(|c| c.get(1))
+            .map(|m| m.as_str().to_owned())
+    };
+    let mut before: Option<String> = None;
+    let mut found = Vec::new();
+    for line in plan.lines() {
+        let Some(id) = first(&TASK_HEAD, line) else {
+            continue;
+        };
+        if first(&PART_B_HEAD, line).is_some_and(|b| tasks.contains(&b))
+            && before.as_ref() != Some(&id)
+        {
+            found.push(format!("`{line}`"));
+        }
+        before = Some(id);
+    }
+    (!found.is_empty()).then(|| {
+        format!(
+            "{} stand(s) apart from its task's other sections - move each to directly after them ({PLACE}; 451 T419)",
+            found.join(", ")
+        )
+    })
 }
 
 /// Why `make tick` may not tick `task` (D8 and D9), or None.
@@ -292,7 +330,7 @@ pub(super) fn refusal(spec_dir: &Path, root: &Path, task: &str) -> Option<String
             } else {
                 "no block stamped after it".to_owned()
             };
-            return Some(format!("{} at {utc} owes {task} the checklist's {}: {what} - add `### {task} {} (<UTC>)` stamped at or after it (feature 385 D9)", row["trigger"].as_str().unwrap_or("None"), part_title(part), heads(part)));
+            return Some(format!("{} at {utc} owes {task} the checklist's {}: {what} - add `### {task} {} (<UTC>)` stamped at or after it, directly after {task}'s other sections (feature 385 D9; {PLACE})", row["trigger"].as_str().unwrap_or("None"), part_title(part), heads(part)));
         }
     }
     None
