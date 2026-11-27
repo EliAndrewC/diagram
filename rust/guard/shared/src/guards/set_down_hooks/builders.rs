@@ -38,14 +38,26 @@ pub(super) fn asks_the_gm(root: &Path, feature: &str, id: &str) -> Result<bool, 
 /// transcript (`Feature 449, a bundle of nine ...: T254, T255, ...`). WHY (449 T268, the session's note 2026-11-22: "A builder started
 /// under a bundle mark ... must count as running for its bundle's tasks"): the old `<feature> T<n>` brief matched neither live bundle
 /// description, so the Stop hook counted 1 of 3 builders running while three ran. `builder_stop_hooks` (451 T84) reads it too.
+/// A POOL builder's prompt holds the marker `make builder-brief` prints (`BUILDER-BRIEF 451 T340 KIND=fix ... TREE=...`, 451 T334),
+/// read first by its one reader (`crate::builder_brief::parse`): its feature and its task word's ids (`T370,T372`); a marker naming
+/// no id falls to the description. WHY (451 T310): the pool's builders are described `Fix: 451 T340 orphaned sleeps`, which the
+/// leading-number test refuses, so every one read as no builder and 140 of the 1,408 lines of the checks they launched carried no
+/// task, observed 2026-11-27 (method: the 451 log's last 24 h of lines whose agent's parent is a builder, counted by task).
 #[must_use]
 pub fn builder_brief(dir: &Path, id: &str) -> Option<(String, Vec<String>)> {
     let description = dispatched(dir, id)?;
+    let prompt = prompt_text(&dir.join(format!("agent-{id}.jsonl")));
+    if let Some(marker) = crate::builder_brief::parse(&prompt) {
+        let tasks = task_ids(&marker.task);
+        if !tasks.is_empty() {
+            return Some((marker.feature, tasks));
+        }
+    }
     let number = BRIEF.captures(&description).ok().flatten()?[1].to_owned();
     let head = description.split(':').next().unwrap_or_default();
     let mut tasks = task_ids(head);
     if tasks.is_empty() {
-        tasks = task_ids(&prompt_head(&dir.join(format!("agent-{id}.jsonl"))));
+        tasks = task_ids(prompt.lines().next().unwrap_or_default());
     }
     (!tasks.is_empty()).then_some((number, tasks))
 }
@@ -170,8 +182,8 @@ pub(super) fn task_ids(text: &str) -> Vec<String> {
     out
 }
 
-/// The first line of an agent's prompt: its own transcript's first record's text, "" where it has none.
-fn prompt_head(transcript: &Path) -> String {
+/// An agent's prompt: its own transcript's first record's text, "" where it has none.
+fn prompt_text(transcript: &Path) -> String {
     let Ok(file) = File::open(transcript) else {
         return String::new();
     };
@@ -189,5 +201,5 @@ fn prompt_head(transcript: &Path) -> String {
         },
         |t| t,
     );
-    text.lines().next().unwrap_or_default().to_owned()
+    text.to_owned()
 }

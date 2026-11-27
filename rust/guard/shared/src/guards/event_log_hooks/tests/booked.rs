@@ -242,3 +242,67 @@ fn a_bundle_builder_is_corrected_from_its_builder_readings_task() {
     w.booked(&send, &none);
     assert_eq!(w.booked(&w.edit(Some("abun")), &none), at(Some("T07")));
 }
+
+/// One more agent of the world: its meta, and its prompt as its transcript's first record.
+fn agent(w: &World, aid: &str, meta: &str, prompt: &str) {
+    session_files(&w.d, aid, meta);
+    let first = json!({"type": "user", "message": {"role": "user", "content": [{"type": "text", "text": prompt}]}});
+    std::fs::write(
+        w.d.join(format!("projects/s1/subagents/agent-{aid}.jsonl")),
+        format!("{first}\n"),
+    )
+    .unwrap();
+}
+
+/// 451 T310: a POOL builder is read by its brief's marker line (`BUILDER-BRIEF 451 T340 KIND=... TREE=...`, 451 T334), so a check it
+/// launches whose own description names no task is booked to the builder's task. WHY: tonight's builders are described `Fix: 451
+/// T340 orphaned sleeps`, which the builder reading's leading-number test refused, and 140 of the 1,408 lines of their 133 checks
+/// (15 checks, each described as `Plan review of 451 changed blocks` or `message-check two guard messages`) carried no task,
+/// observed 2026-11-27 (method: the 451 log's lines of the last 24 h whose agent's meta names a builder as its parent, counted by
+/// their task field).
+#[test]
+fn a_pool_builders_check_is_booked_by_its_brief_marker() {
+    let w = World::new("booked-marker");
+    let meta = |d: &str| json!({"description": d, "spawnDepth": 1}).to_string();
+    agent(
+        &w,
+        "apool",
+        &meta("Fix: 451 T340 orphaned sleeps"),
+        "BUILDER-BRIEF 451 T340 KIND=fix JOBS=1 TREE=/c/diagram-backlog-t270\nBlocks: none\nT09 is another's",
+    );
+    agent(
+        &w,
+        "aplan",
+        r#"{"description":"Plan review of 451 changed blocks","spawnDepth":2,"parentAgentId":"apool"}"#,
+        "Review the changed blocks",
+    );
+    agent(
+        &w,
+        "apair",
+        &meta("Fix: 451 T370 T372 temp directory listings"),
+        "the brief\n  BUILDER-BRIEF 451 T370,T372 KIND=fix JOBS=2 TREE=/c/b1\n",
+    );
+    let dir = w.d.join("projects/s1/subagents");
+    let one = Some(("451".to_owned(), vec!["T340".to_owned()]));
+    assert_eq!(agent_builder(&dir, "apool"), one);
+    assert_eq!(agent_builder(&dir, "aplan"), one);
+    let pair = vec!["T370".to_owned(), "T372".to_owned()];
+    assert_eq!(agent_builder(&dir, "apair"), Some(("451".to_owned(), pair)));
+    assert_eq!(w.booked(&w.edit(Some("aplan")), &none), at(Some("T340")));
+    // a marker only mentioned, or naming no task, is no marker: the description's reading, which refuses `Fix: ...`
+    agent(
+        &w,
+        "asaid",
+        &meta("Fix: 451 T5 x"),
+        "read `BUILDER-BRIEF 451 T5 KIND=fix JOBS=1 TREE=/c/x` first",
+    );
+    assert_eq!(agent_builder(&dir, "asaid"), None);
+    agent(
+        &w,
+        "anone",
+        &meta("451 T7: the old form"),
+        "BUILDER-BRIEF 451 x KIND=fix JOBS=1 TREE=/c/x",
+    );
+    let seven = Some(("451".to_owned(), vec!["T7".to_owned()]));
+    assert_eq!(agent_builder(&dir, "anone"), seven);
+}

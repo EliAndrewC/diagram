@@ -3080,31 +3080,42 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 <!-- plan-archive: T309 to T272 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 
-### T310 (<why: the finding or measurement that files it>)
+### T310 (451 T305, 2026-11-26: 73 of three days' 272 untied check dispatches were subagent-dispatched; re-read against what landed since, 2026-11-27: of its three halves one still holds, measured below)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the builder reading (`builder_brief`, `rust/guard/shared/src/guards/set_down_hooks/builders.rs`) reads a pool builder's brief marker first, through the marker's one reader (`l7r_shared::builder_brief::parse`, 451 T334), and falls to its old description reading only where the prompt holds no marker naming a task.
+  - **(a) The reader - HOLDS, fixed here.** The brief no longer opens `Build 451 T<n>`: since T334 it opens `BUILDER-BRIEF 451 T<n>[,T<m>] KIND= JOBS= TREE=`, and the session describes the dispatch `Fix: 451 T340 orphaned sleeps`, `Build half: ...`, `Measure: ...`. The old reading wants the description to open with the feature number (`BRIEF`, `^\s*(\d{3})\b`), so it refused every one: all 103 depth-1 agents of the session's `subagents/` whose prompt opens with the marker are described `<Kind>: 451 T<n> ...` (`Fix`, `Build half`, `Closing half`, `Measure`, `Close`), none with a leading number, observed 2026-11-27 (method: each meta's `description` against its transcript's first record, the session c6fd72d1). Every pool builder read as no builder, for every caller: the event log's booking (`event_log_hooks/filed.rs`), the Stop hook's stall check (`set_down_hooks/stalls.rs`), the builder's own Stop (`builder_stop_hooks.rs`), a check's own task (`check_bundle_hooks/own.rs`) and the ledger's left passes (`reviews/ledger_passes/left/whose.rs`, which had found the tree by T305's pool reading instead).
+  - **(b) The booking of a builder's checks - HOLDS, fixed by (a).** The dispatch line itself is booked: 133 of the 134 Agent `PreToolUse` lines the pool's builders wrote in the 24 h to 2026-11-27T11:00Z carry a task (121 `spec review`, 13 `other subagent`, the one untied a `spec-fidelity` dispatch by T463's builder), because the dispatching builder's own lines read its `Fix: 451 T<n>` description for the task, observed 2026-11-27, method: the 451 log's Agent `PreToolUse` lines whose `by` is a marker-briefed builder, counted by their `task` field. What is untied is the CHECK's own lines: of the 133 agents those builders launched (one dispatch of the 134 left no agent meta, not traced further), 15 had lines with no task - 140 of their 1,408 lines - each a check whose own description names none (`Plan review of 451 changed blocks`, `451 plan-delta review`, `message-check two guard messages`), so the booking fell to the builder reading of its parent, which refused, observed 2026-11-27 (method: the 451 and 449 logs' lines of the last 24 h whose `by` agent's meta names a marker-briefed builder as `parentAgentId`, counted by their `task` field). The lines' `ms` is tool time, not the check's duration, so no minutes are claimed here. With (a), such a line is booked to the parent's marker task and its feature (`filed`'s `theirs`).
+  - **(c) The start row and mark of a handed-out tree - NO LONGER HOLDS, not built.** 451 T332/T344 answered it by the pool's registry instead: a line written in a pool tree takes the task the registry says holds the tree (`pool_task`, `filed.rs`), and that doc comment records why a handout writes no start - the start log's other readers (the landing's "was it started", the stall check, the time breakdown's first start, the undo at release) would read a start nobody made as one. The marks are per tree since T254/T369, so a mark made in the clone no longer stands for a builder's tree, and since T437 a mark of a gone tree is inert. With (a) a builder's check is booked by its parent's marker, so it needs no start row either.
+  - **The callers that change.** Each now reads a pool builder as one; each keeps its own further test: the stall check and the builder's own Stop act only on a task with a start in `task-starts.jsonl` (and an open box), so a two-tier pool builder that never runs `make task-start` stays quiet in both, and one that does is held as T84 and T268 meant; `own.rs` names the check's task, which it named nothing for before. No guard message changes.
+  - **The cost.** The prompt's first record is now read for every depth-1 agent the reader is asked about, where before only for one whose description held no id: one line of one file. Its callers ask it per running agent (`stalls.rs`, the session's live agents), per Stop (`builder_stop_hooks`), per check dispatch (`own.rs`), per pass's parent (`whose.rs`), and per event-log line only where no earlier link named the task.
+  - **Red first**, measured 2026-11-27 (`make rust-test CRATE=rust/guard/shared ONLY="guards::event_log_hooks::tests::booked"` on the old code, the test only added): 6 passed, 1 failed of 7 - `a_pool_builders_check_is_booked_by_its_brief_marker`, `agent_builder` of a builder described `Fix: 451 T340 orphaned sleeps` read None where `("451", [T340])` was owed. Green after: 7 of 7, and `make builder-checks CRATE="rust/guard/shared rust/gate/crates/task rust/guard rust/gate/crates/reviews"` clean (573, 146, 587, 214 passed), with the set-down, event-log, builder-stop and check-bundle hook suites (46, 25, 7, 38 passed).
+
+**T310-D1 - The marker read first, its task word's ids; a marker naming none falls to the description.** The marker is what `make builder-brief` prints and the guard checks, so it is the brief's own statement of its task, where the description is the session's free text. Reading it first means a pool builder whose description happens to open with a number still reads by its marker. A marker whose task word holds no `T<n>` is malformed for this purpose, and falling through keeps the 449-era description and first-line readings as they were (pinned by the test's `anone`). Chosen by the builder.
+
+**T310-D2 - The whole prompt to `parse`, not its first line.** The guard (`builder_brief_hooks.rs`) accepts a marker on any line of its own, indented or not, so the reader takes the same text the guard did; a marker only mentioned in a sentence is no marker (`parse`'s rule, pinned by the test's `asaid`). The old first-line reading of a bundle brief is kept on the prompt's first line.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the builder reading takes the brief's marker first (`set_down_hooks/builders.rs`), red first 1 of 7, measured 2026-11-27 | n/a: tooling, no map drawn | n/a: tooling | none | n/a |
 
 ### T310 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A check a pool builder launches is booked by `make task-time` to the builder's task, and every reader of "which task does this agent build" answers for a pool builder as it does for a hand-briefed one.
+2. **The constraints.** T310's line and the brief (re-read against T334, T254, T369, T437; red first; through the marker's one reader; no guard message changes); 451 T161 (a line is its editor's), T332/T344 (the pool's registry for a tree's own lines); the two tiers.
+3. **Where each comes from.** O: the session's 103 marker-briefed builders' descriptions; O: the 451 log's builder-dispatched lines, 133 of 134 dispatches booked and 140 of 1,408 check lines untied, measured 2026-11-27; R: `pool_task`'s doc comment for (c).
+4. **Do they describe the world here?** Yes: the test's fixtures copy tonight's shapes - a builder described by its kind and task, the marker as its first record's first line, a depth-2 plan review child naming no task, a bundle marker - measured 2026-11-27 (the session's subagent metas and first records, read).
+5. **The order.** After T334 (the marker) and T332/T344 (the pool's registry booking).
+6. **The exits.** Green: the red-first test passing and the first-tier checks clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The red-first test fails on the old code and passes on the new, the changed crates' first-tier checks and the changed guards' hook suites clean, measured 2026-11-27 (the runs in this section's red-first item).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows: the time breakdown books a pool builder's checks to its task instead of to none, and the stall check, the builder's Stop and a check's own task read a pool builder as one.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the 6 builder dispatch lines booked to a task outside the builder's marker (T410 twice under T308, T405 under T367/T411, T423 under T427/T428, T435 under T275, and in the 449 log T399 under T300), observed 2026-11-27, method: the same 24 h of Agent `PreToolUse` lines by a marker-briefed builder, their `task` field against the marker's, name the task in the dispatch's own description, a review of a related or absorbed task, which is the booking's rule (the call's own words first) and no defect.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - measurement work (451 FR-013: the event log's data, which `make task-time` and `make where-time` read; the GM 2026-11-20, a measurement task counts as a performance task for scheduling): it books a pool builder's checks to its task. Not an engine-speed task: no checklist answers owed.
 
 
 <!-- plan-archive: T311 to T305 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
