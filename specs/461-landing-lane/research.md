@@ -49,7 +49,7 @@ means its rule is reimplemented in the existing Rust, and NOT means it is not us
   after a final response, until it exits, is stopped, or reaches its time limit" (the limit is not stated). **Monitor**: "Runs a
   command in the background and feeds each output line back to Claude"; "Every watch Claude starts has a deadline: 5 minutes by
   default, at most 30 minutes". **Worktree isolation**: "By default, the copy branches from your default branch rather than the
-  parent session's `HEAD`."
+  parent session's `HEAD`." (observed 2026-11-27, method: the vendors' documented defaults, read by the planner)
 
 ### The decision, part by part
 
@@ -64,7 +64,7 @@ means its rule is reimplemented in the existing Rust, and NOT means it is not us
 | the lane's runner | NOT the Workflow tool; NOT a Gas Town agent role; KEEP the detached-runner pattern of `make page-session` (`rust/gate/crates/pages/src/runner.rs`) | Workflow: "No direct filesystem or shell access from the workflow itself" and "the run doesn't continue on its own" (tool) - every lane step is a shell command, so each would be an agent's turn (tokens, FR-006), and the lane would stop when the session is backgrounded. Gas Town's Refinery is a tmux-hosted Claude session: a standing integrator, which the spec rules out (US5) and current practice dropped (Cursor, A4 of the 449 note) |
 | the coordinator's wake-up | TAKE Claude Code's background command: `make lane-wait` run with `run_in_background`, which wakes the session once when it exits | "A background subagent's results reach Claude as a completion notification in a later turn" and the command form's "keeps running ... until it exits" (tool). NOT Monitor as the main route: it wakes per output line and a watch dies at "at most 30 minutes" (tool). Its lifetime is unmeasured: plan phase 2 measures it (D9) |
 | the lane's tree | KEEP our worktrees and the builder pool; NOT `isolation: worktree` | the tool's worktree "branches from your default branch rather than the parent session's HEAD" (tool) and is "auto-cleaned", so its build cache is cold each time; a cold tree's first checks took 14-30 minutes (`docs/process-decisions.md`, "Two code builders at once") |
-| integration judgment (US5) | BORROW Gas Town's "creates a conflict-resolution task": the queue gets a repair entry a fresh builder takes | as above; plan D7 prices a headless agent the lane launches itself |
+| integration judgment (US5) | BORROW Gas Town's "creates a conflict-resolution task": the queue gets a repair entry a fresh builder takes | as above; plan D7 prices a headless agent the lane launches itself | (observed 2026-11-27, method: the vendors' documented limits, read by the planner)
 
 Nothing is TAKEN whole except the platform's background command. Gas Town is the closest design and was read first, as the GM
 asked; what it would give us - batch, bisect, assign back - is the rule, and its own docs say the bisection is not yet built.
@@ -113,7 +113,7 @@ asked; what it would give us - batch, bisect, assign back - is the rule, and its
 - **The detached runner** (`rust/gate/crates/pages/src/runner.rs`): `page-session` starts itself again as `page-session --work` in
   a session of its own; the stall watchdog knows the queue by that argv.
 - **`sync-with-main.sh`**: `sync-in` is `git pull --no-rebase origin main` in the clone (a dirty clone's overlapping file stops
-  it); `done` is the locked push (`flock .clones/.sync.lock`), DIRECT or GATED by the delta.
+  it); `done` is the locked push (`flock .clones/.sync.lock`), DIRECT or GATED by the delta. (observed 2026-11-27, method: the planner's read of the code and the event log's Phase lines)
 
 ## R3 - the baseline (FR-006, FR-007, FR-010), measured before any edit
 
