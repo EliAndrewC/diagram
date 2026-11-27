@@ -1,0 +1,2 @@
+t386-old	n=20	median=267.5	p90=528.8	load=19.2-19.7	rc=0	out=b''	err=b''
+t386-new	n=20	median=144.9	p90=196.7	load=19.2-19.7	rc=0	out=b''	err=b''

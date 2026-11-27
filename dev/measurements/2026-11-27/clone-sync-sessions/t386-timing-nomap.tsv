@@ -1,0 +1,2 @@
+empty-map	t386-new	n=20	median=202.1	p90=504.2	load=15.7-14.8	rc=0	out=b''	err=b''
+full-map	t386-new	n=20	median=124.6	p90=136.4	load=14.8-14.1	rc=0	out=b''	err=b''

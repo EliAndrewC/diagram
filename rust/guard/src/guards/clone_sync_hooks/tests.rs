@@ -8,7 +8,7 @@ use std::sync::OnceLock;
 use serde_json::{json, Value};
 
 use super::{
-    both, decide, forbidden, forked_from, judge, notes, parked_by, sid_is_live, tail, Ctx,
+    both, decide, forbidden, forked_from, judge, notes, parked_by, sid_is_live, tail, Ctx, Sessions,
 };
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
@@ -289,7 +289,11 @@ fn a_clone_another_live_session_claims_is_refused() {
         &got,
         "already occupied by another live session (them)"
     ));
-    assert!(!sid_is_live("nopid", &w.sessions) && !sid_is_live("them", Path::new("/nowhere")));
+    let (here, nowhere) = (
+        Sessions::read(&w.sessions),
+        Sessions::read(Path::new("/nowhere")),
+    );
+    assert!(!sid_is_live("nopid", &here) && !sid_is_live("them", &nowhere));
     assert!(w.edit("", "", &w.clone.join("a.txt")).is_empty());
 }
 
@@ -351,9 +355,9 @@ fn a_forked_background_session_shares_its_launchers_clone() {
     // the stranger first: the forked session's own edit claims the clone for it too
     let not_forked = w.edit("t", "", &w.clone.join("a.txt"));
     let forked = w.edit("s", "", &w.clone.join("a.txt"));
-    assert_eq!(forked_from("s", &w.sessions), "them");
-    assert_eq!(forked_from("t", &w.sessions), "");
-    assert_eq!(forked_from("nobody", &w.sessions), "");
+    assert_eq!(forked_from("s", &Sessions::read(&w.sessions)), "them");
+    assert_eq!(forked_from("t", &Sessions::read(&w.sessions)), "");
+    assert_eq!(forked_from("nobody", &Sessions::read(&w.sessions)), "");
     for p in [&mut parent, &mut child, &mut stranger] {
         let _ = p.kill();
         let _ = p.wait();
@@ -407,13 +411,13 @@ fn a_parked_background_job_shares_its_parkers_clone() {
     let parked_elsewhere = w.edit("t", "", &w.clone.join("a.txt"));
     let parked_by_none = w.edit("v", "", &w.clone.join("a.txt"));
     let parked = w.edit("s", "", &w.clone.join("a.txt"));
-    assert_eq!(parked_by("s", &w.sessions), "them");
-    assert_eq!(parked_by("t", &w.sessions), "u");
+    assert_eq!(parked_by("s", &Sessions::read(&w.sessions)), "them");
+    assert_eq!(parked_by("t", &Sessions::read(&w.sessions)), "u");
     // no one parked j3; `them` has no job, and an empty job must not match the records that parked nothing
     for sid in ["v", "them", "nobody", ""] {
-        assert_eq!(parked_by(sid, &w.sessions), "", "{sid}");
+        assert_eq!(parked_by(sid, &Sessions::read(&w.sessions)), "", "{sid}");
     }
-    assert_eq!(parked_by("s", Path::new("/nowhere")), "");
+    assert_eq!(parked_by("s", &Sessions::read(Path::new("/nowhere"))), "");
     for p in &mut procs {
         let _ = p.kill();
         let _ = p.wait();
@@ -454,6 +458,50 @@ fn a_dirty_clones_edit_reads_no_transcript() {
     assert!(edit_reads(&w, &me) >= 1);
     std::fs::write(w.clone.join("wip.txt"), "x").unwrap();
     assert_eq!(edit_reads(&w, &me), 0);
+}
+
+/// The listings of the sessions directory one Edit of `a.txt` by `s` in the clean clone makes, and its answers.
+fn edit_listings(w: &World, transcript: &str) -> (u32, Vec<Answer>) {
+    super::LISTINGS.with(|n| n.set(0));
+    let got = w.edit("s", transcript, &w.clone.join("a.txt"));
+    (super::LISTINGS.with(std::cell::Cell::get), got)
+}
+
+/// 451 T386: a clean clone's Edit lists the sessions directory once, however many dead sessions claim the clone (it listed it once
+/// for the dispatcher's fork, once for its parking and once again for each claim of the clone: 9,546 opens, 147 ms, on 2,871 claim
+/// files, measured 2026-11-26), and an empty claim file is passed by its size; a live session claiming the clone is still refused.
+#[test]
+fn a_clean_clones_edit_lists_the_sessions_directory_once() {
+    let w = World::new("listings");
+    let me = w.titled("mine");
+    for dead in ["d1", "d2", "d3"] {
+        w.claim(dead, &w.clone);
+        std::fs::write(
+            w.sessions.join(format!("{dead}.json")),
+            json!({"sessionId": dead}).to_string(),
+        )
+        .unwrap();
+    }
+    w.claim("elsewhere", &w.main.join(".clones/other"));
+    let map = w.main.join(".clones/.session-clones");
+    std::fs::write(map.join("e1"), "").unwrap();
+    std::fs::write(map.join("e2"), "").unwrap();
+    let (listed, got) = edit_listings(&w, &me);
+    assert!(got.is_empty(), "{got:?}");
+    assert_eq!(listed, 1);
+    let mut other = fake(&["claude"]);
+    std::fs::write(
+        w.sessions.join(format!("{}.json", other.id())),
+        json!({"sessionId": "them"}).to_string(),
+    )
+    .unwrap();
+    w.claim("them", &w.clone);
+    let (listed, got) = edit_listings(&w, &me);
+    let _ = other.kill();
+    let _ = other.wait();
+    let occupied = "already occupied by another live session (them)";
+    assert!(refused(&got, occupied), "{got:?}");
+    assert_eq!(listed, 1);
 }
 
 #[test]

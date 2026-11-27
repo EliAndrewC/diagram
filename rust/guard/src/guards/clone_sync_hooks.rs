@@ -162,24 +162,56 @@ fn forbidden(path: &Path, main: &Path) -> bool {
             .is_some_and(|m| m.to_string_lossy() == name)
 }
 
-/// The pid of the process backing session `sid`: its sessions json names it, and the json's file name is the pid.
-fn pid_of(sid: &str, sessions_dir: &Path) -> Option<String> {
-    let entries = std::fs::read_dir(sessions_dir).ok()?;
-    entries
-        .filter_map(Result::ok)
-        .map(|e| e.path())
-        .filter(|p| p.extension().is_some_and(|x| x == "json"))
-        .find_map(|p| {
-            let d: Value = serde_json::from_str(&std::fs::read_to_string(&p).ok()?).ok()?;
-            let ids = ["id", "sessionId", "session_id"]
-                .map(|k| d.get(k).and_then(Value::as_str).unwrap_or(""));
-            ids.contains(&sid).then(|| {
-                p.file_stem()
-                    .map(|s| s.to_string_lossy().into_owned())
-                    .unwrap_or_default()
-            })
-        })
-        .filter(|p| !p.is_empty() && p.chars().all(|c| c.is_ascii_digit()))
+thread_local! {
+    /// The listings of the sessions directory made on this thread, for the test that pins them (451 T386).
+    static LISTINGS: std::cell::Cell<u32> = const { std::cell::Cell::new(0) };
+}
+
+/// The sessions directory as one decision reads it: each parsed record with its file's stem, in the listing's order.
+///
+/// WHY (451 T386): `pid_of` listed and parsed the directory on each call, and a clean clone's edit called it for the dispatcher's
+/// fork, `parked_by` listed it again, and `pid_of` again for each claim of the clone - 131 claims, 9,546 opens, 147 ms a clean
+/// edit, measured 2026-11-26 (`dev/measurements/2026-11-26/edit-hook/t373-results.md`, lever D). One listing a decision, every
+/// verdict as before: the first record naming a session still gives its pid. Do not list the directory per claim again.
+struct Sessions(Vec<(String, Value)>);
+
+impl Sessions {
+    fn read(dir: &Path) -> Self {
+        LISTINGS.with(|n| n.set(n.get() + 1));
+        Self(
+            std::fs::read_dir(dir)
+                .into_iter()
+                .flatten()
+                .filter_map(Result::ok)
+                .map(|e| e.path())
+                .filter(|p| p.extension().is_some_and(|x| x == "json"))
+                .filter_map(|p| {
+                    let d = serde_json::from_str(&std::fs::read_to_string(&p).ok()?).ok()?;
+                    let stem = p.file_stem().unwrap_or_default().to_string_lossy();
+                    Some((stem.into_owned(), d))
+                })
+                .collect(),
+        )
+    }
+
+    /// The pid of the process backing session `sid`: its record names it, and the record's file name is the pid.
+    fn pid_of(&self, sid: &str) -> Option<String> {
+        self.0
+            .iter()
+            .find(|(_, d)| ids(d).iter().any(|i| i == sid))
+            .map(|(p, _)| p.clone())
+            .filter(|p| !p.is_empty() && p.chars().all(|c| c.is_ascii_digit()))
+    }
+}
+
+/// A record's field `k` as text, "" where it is missing.
+fn text(d: &Value, k: &str) -> String {
+    d.get(k).and_then(Value::as_str).unwrap_or("").to_owned()
+}
+
+/// A record's three session ids, "" for each it lacks.
+fn ids(d: &Value) -> [String; 3] {
+    ["id", "sessionId", "session_id"].map(|k| text(d, k))
 }
 
 /// A process's arguments, or none when it has ended.
@@ -196,16 +228,19 @@ fn args_of(pid: &str) -> Vec<String> {
 }
 
 /// Whether a live process backs session `sid` (`sid_is_live`): its sessions json's file name is its pid, and that pid runs claude.
-fn sid_is_live(sid: &str, sessions_dir: &Path) -> bool {
-    pid_of(sid, sessions_dir).is_some_and(|p| args_of(&p).join(" ").contains("claude"))
+fn sid_is_live(sid: &str, sessions: &Sessions) -> bool {
+    sessions
+        .pid_of(sid)
+        .is_some_and(|p| args_of(&p).join(" ").contains("claude"))
 }
 
 /// The session `sid` was forked from, or "": a background job Claude Code starts from an interactive session runs as
 /// `--fork-session --resume <the parent's transcript or id>`, and the parent - still live, and claiming the same clone - is its
 /// dispatcher, as `L7R_DISPATCHER` names a page session's (feature 449 T162: T147's port agent was refused in its own clone by
 /// the interactive session that launched it, which nothing had named).
-fn forked_from(sid: &str, sessions_dir: &Path) -> String {
-    let args = pid_of(sid, sessions_dir)
+fn forked_from(sid: &str, sessions: &Sessions) -> String {
+    let args = sessions
+        .pid_of(sid)
         .map(|p| args_of(&p))
         .unwrap_or_default();
     if !args.iter().any(|a| a == "--fork-session") {
@@ -227,25 +262,14 @@ fn forked_from(sid: &str, sessions_dir: &Path) -> String {
 /// T62: the job's builders, its in-process subagents carrying its session id, were refused on the first edit of a clean clone by the
 /// interactive session that parked it, measured 2026-11-21). One pass over the records; a `jobId` or `parkedJobId` that is empty
 /// matches nothing, or every session that parked nothing would be every other's dispatcher.
-fn parked_by(sid: &str, sessions_dir: &Path) -> String {
-    let text = |d: &Value, k: &str| d.get(k).and_then(Value::as_str).unwrap_or("").to_owned();
-    let ids = |d: &Value| ["id", "sessionId", "session_id"].map(|k| text(d, k));
-    let records: Vec<Value> = std::fs::read_dir(sessions_dir)
-        .into_iter()
-        .flatten()
-        .filter_map(Result::ok)
-        .map(|e| e.path())
-        .filter(|p| p.extension().is_some_and(|x| x == "json"))
-        .filter_map(|p| serde_json::from_str(&std::fs::read_to_string(p).ok()?).ok())
-        .collect();
-    let jobs: Vec<String> = records
-        .iter()
+fn parked_by(sid: &str, sessions: &Sessions) -> String {
+    let records = || sessions.0.iter().map(|(_, d)| d);
+    let jobs: Vec<String> = records()
         .filter(|d| !sid.is_empty() && ids(d).iter().any(|i| i == sid))
         .map(|d| text(d, "jobId"))
         .filter(|j| !j.is_empty())
         .collect();
-    records
-        .iter()
+    records()
         .find(|d| jobs.contains(&text(d, "parkedJobId")))
         .and_then(|d| ids(d).into_iter().find(|i| !i.is_empty()))
         .unwrap_or_default()
@@ -415,20 +439,24 @@ working tree (the 2026-07-22 collision). Work in {c} - if it does not exist: git
         )));
     }
     // `shared::env`: a test reads its own environment, never a session's export (feature 451 T32)
+    // the sessions directory listed at most once a decision, and only when asked (451 T386: `Sessions`' WHY)
+    let sessions = std::cell::OnceCell::new();
+    let listed = || sessions.get_or_init(|| Sessions::read(&cx.session.sessions_dir));
     let mut dispatcher = crate::shared::env::var("L7R_DISPATCHER");
     if dispatcher.is_empty() {
-        dispatcher = forked_from(sid, &cx.session.sessions_dir);
+        dispatcher = forked_from(sid, listed());
     }
     if dispatcher.is_empty() {
-        dispatcher = parked_by(sid, &cx.session.sessions_dir);
+        dispatcher = parked_by(sid, listed());
     }
     let entries = (!sid.is_empty())
         .then(|| std::fs::read_dir(cx.mapdir()).ok())
         .flatten()?;
+    // an empty claim file (1,581 of 2,871, measured 2026-11-26) names no clone, so it is passed by its size, unopened (451 T386)
     let other = entries
         .filter_map(Result::ok)
         .map(|e| e.path())
-        .filter(|p| p.is_file())
+        .filter(|p| std::fs::metadata(p).is_ok_and(|m| m.is_file() && m.len() > 0))
         .find(|m| {
             let other = base(m);
             !other.starts_with('.')
@@ -436,7 +464,7 @@ working tree (the 2026-07-22 collision). Work in {c} - if it does not exist: git
                 && (dispatcher.is_empty() || other != dispatcher)
                 && std::fs::read_to_string(m).ok().as_deref()
                     == Some(clone.to_string_lossy().as_ref())
-                && sid_is_live(&other, &cx.session.sessions_dir)
+                && sid_is_live(&other, listed())
         })?;
     cx.block("live-claim", clone);
     Some(Answer::Refuse(format!(

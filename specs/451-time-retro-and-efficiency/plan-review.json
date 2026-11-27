@@ -3103,14 +3103,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T386 (<why: the finding or measurement that files it>)": {
-   "sha256": "a9df19c4d1a66618d98c097caee31c7da29bd56b31404b703227bd4475e86f9f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T386 Approach (checklist part A)": {
-   "sha256": "4b8f8d00ee59a884206af1bf0c7036d9f7707d0213d553f271cf1004b7a77179",
+   "sha256": "64590228fcce8a04298f12b272f3f8f297feb38b4c2365f4191de05f16c8bd61",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4281,6 +4275,12 @@
   },
   "### T483 Approach (checklist part A)": {
    "sha256": "3ab10080ef0bc69b1d81854d437737c1f397de573b4942923b59e75392202a41",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T386 (T373's lever D: clone-sync's clean path listed the sessions directory once per claim of the clone)": {
+   "sha256": "d34de02685489000010173dd07a2fd873cb34f7320cc4126742fff60261c5fa6",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -40246,6 +40246,66 @@
      "summary": "The template-only T480 section removed, replaced by the filled section.",
      "class": "within",
      "why": "A placeholder with no content replaced by the section it stood for; nothing asked is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T386 (T373's lever D: clone-sync's clean path listed the sessions directory once per claim of the clone)",
+    "### T386 Approach (checklist part A)",
+    "(removed) ### T386 (<why: the finding or measurement that files it>)",
+    "(removed) ### T475 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T386-D1",
+     "summary": "Read ~/.claude/sessions at most once per clone-sync decision (a Sessions value behind a OnceCell in misrouted), passed to pid_of, sid_is_live, forked_from and parked_by; pid_of keeps its first-record, all-digit-stem rule",
+     "class": "within",
+     "why": "A speed change to the hook on every clean-clone Edit/Write, every verdict and message kept and pinned by a red-first listing-count test; serves the GM's 2026-11-20 'prioritize performance improvements' (FR-013) and the 2026-11-27 'maximize productivity'."
+    },
+    {
+     "id": "T386-D2",
+     "summary": "The claim-map walk passes a zero-size claim file by its metadata (following links as is_file did) before opening it",
+     "class": "within",
+     "why": "An empty claim file names no clone, so no verdict can move; a pure cost cut inside the same performance request."
+    },
+    {
+     "id": "T386-D3",
+     "summary": "Every clone-sync verdict and message unchanged; constraint is constitution XIII",
+     "class": "within",
+     "why": "Keeps existing behavior while speeding it; nothing the GM asked to change is preserved against him."
+    },
+    {
+     "id": "T386-D4",
+     "summary": "Pruning dead claim files is not done here and not filed, on a 2026-11-27 measurement showing no saving above load noise once empty files are passed by size",
+     "class": "within",
+     "why": "The GM never asked for claim-file pruning; it deletes data, and his 2026-11-26 principle is time saved over disk usage, and the measurement shows no time to save. Leaving dead claim files is no wrong outcome (no verdict or reader-visible effect), so it is not a defect left unfixed and needs no deferral."
+    },
+    {
+     "id": "T386-D5",
+     "summary": "Classed not a defect (a speed change) and tagged [perf] under FR-013, no engine checklist",
+     "class": "within",
+     "why": "Matches FR-013's definition (makes the gate/hooks faster) and constitution XIV's definition of a defect; it is not an engine-speed task."
+    },
+    {
+     "id": "T386-D6",
+     "summary": "Exits: green on the clone-sync tests and the hook suite with one listing a decision; red recorded and set down, an impossibility claim through make arbiter-ask",
+     "class": "within",
+     "why": "The standard exits; decide nothing the spec left open."
+    },
+    {
+     "id": "removed-T386-template",
+     "summary": "The empty T386 template section removed, replaced by the filled T386 block",
+     "class": "within",
+     "why": "The removed text held only placeholders; its content is now the filled section."
+    },
+    {
+     "id": "removed-T475-template",
+     "summary": "An empty T475 template section removed",
+     "class": "within",
+     "why": "The removed text held only placeholders and decided nothing; deleting it narrows nothing asked for."
     }
    ]
   }

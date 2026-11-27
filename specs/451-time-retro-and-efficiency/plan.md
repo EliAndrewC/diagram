@@ -5111,31 +5111,62 @@ that batch; the red was not in its change.
 
 <!-- plan-archive: T384 to T373 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
-### T386 (<why: the finding or measurement that files it>)
+### T386 (T373's lever D: clone-sync's clean path listed the sessions directory once per claim of the clone)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `rust/guard/src/guards/clone_sync_hooks.rs`: `pid_of` listed and parsed `~/.claude/sessions` on every call, and
+  `misrouted` (a clean clone's edit, the path T384 made the one that pays) called it through `forked_from`, listed it again in
+  `parked_by`, then once more through `sid_is_live` for each claim file naming the clone. A new `Sessions` (each parsed record
+  with its file's stem, in the listing's order) is read at most once a decision, lazily through a `OnceCell` in `misrouted`, and
+  `pid_of`, `sid_is_live`, `forked_from` and `parked_by` take it; `pid_of` is the first record naming the session, its stem all
+  digits, as before. The claim-map walk passes a file whose size is 0 by its `metadata` (it follows a link, as `is_file` did) before
+  opening it: an empty file names no clone, so no verdict moves. Every message unchanged. Red-first, measured 2026-11-27:
+  `a_clean_clones_edit_lists_the_sessions_directory_once` (its tests.rs; three dead claims of the clone, two empty claim files, one
+  of another clone, then a live claimant) counts the listings through a thread-local `LISTINGS` - 5 on the old code (`left: 5,
+  right: 1`; 30 passed, 1 failed), 1 now on both the let-through and the live-claim refusal (31 of 31).
+- **The figures**, measured 2026-11-27 in a scratch of the live state (a no-checkout mirror of /diagram, a checked-out clean clone,
+  the live claim map copied - 2,868 files, 1,580 empty, the 130 non-live claims of `diagram-backlog` rewritten to the scratch clone,
+  its one live claimant dropped - and `~/.claude/sessions` copied, 72 json records), the old binary the clone's hook build at the
+  same `clone_sync_hooks.rs` commit (07ca2aa5b4), the new this tree's: opens under T373's preload shim (`t386-opens.txt`) 12,728 to
+  1,818 - session json 9,402 to 72, claim files 2,868 to 1,288; time (`dev/measurements/2026-11-27/clone-sync-sessions/t386-time.py`,
+  20 runs an arm, arms interleaved after one warm-up, load 17 to 20 on 22 cores), median / 90th centile ms:
+
+| run | before | after |
+|---|---|---|
+| 1 (`t386-timing-run1.tsv`) | 267.5 / 528.8 | 144.9 / 196.7 |
+| 2 (`t386-timing-run2.tsv`) | 219.7 / 300.8 | 122.3 / 382.1 |
+
+- **Pruning dead claim files is NOT this task**: it deletes, and wants its own rule, priced: measured 2026-11-27 (`t386-timing-nomap.tsv`),
+  the new binary with an empty claim map 202.1 / 504.2 ms against 124.6 / 136.4 with the full one, back to back at load 14 to 16 -
+  no saving above the load's noise once empty files are passed by size, so it is not filed.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the sessions directory read once a decision, empty claim files passed by size | n/a: no `alone` switch | `Sessions`, its callers' signatures, the claim walk's size filter, the new test, the old tests' calls | none: a guard, no map | none |
 
 ### T386 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A clean session clone's Edit or Write lists the sessions directory once, however many dead sessions
+   claim the clone, and still refuses a live session's claim.
+2. **The constraints.** Every clone-sync verdict and message unchanged (the brief); constitution XIII (no regression).
+3. **Where each comes from.** O: T373's lever D (`dev/measurements/2026-11-26/edit-hook/t373-results.md`); O: this task's shim
+   counts and timing above.
+4. **Do they describe the world here?** Yes: the live claim map and sessions directory copied as they stood on 2026-11-27, the
+   listing count pinned by the test.
+5. **The order.** After T384 (landed), which put the session-name read on the clean path; independent of the dirty path.
+6. **The exits.** Green: the clone-sync tests and `tests/hooks/test-clone-sync-hooks.sh` pass, one listing a decision. Red: what
+   failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The test's count (5 to 1 for three claims) and the clean Edit 219.7-267.5 to 122.3-144.9 ms median,
+   measured 2026-11-27 (`t386-time.py`, two runs).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect (no wrong outcome): a speed change, every verdict kept.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a `[perf]` task (451 FR-013): it makes every Edit and Write in a clean session clone faster (about
+100 ms a call median, measured 2026-11-27 (`t386-time.py`, two runs)); no engine timing, so no checklist
 
 
 ### T387 (<why: the finding or measurement that files it>)

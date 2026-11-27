@@ -1,0 +1,14 @@
+t386: opens of one clean clone's Edit, `l7r-guard --only clone-sync-hooks PreToolUse`, under T373's LD_PRELOAD shim
+(dev/measurements/2026-11-26/edit-hook/t373-shim.c; strace is refused in the container), 2026-11-27, the scratch of t386-time.py:
+the live claim map copied (2,868 files, 1,580 empty, 130 claiming the clone with no live session), ~/.claude/sessions copied
+(143 entries, 72 of them parsed json records).
+
+binary     all reads   session json opens   claim-map opens
+old        12,728      9,402                2,868
+new         1,818         72                1,288
+
+old: 9,402 / 72 = one listing for the dispatcher's fork, one for its parking, one per claim of the clone.
+new: one listing a decision; the 1,580 empty claim files passed by their size (a stat, no open).
+
+Pruning priced (t386-timing-nomap.tsv): the new binary with an EMPTY claim map 202.1 / 504.2 ms median / p90 against 124.6 / 136.4
+with the full map, back to back, load 14 to 16 on 22 cores - no saving above the load's noise, so no task is filed for it.
