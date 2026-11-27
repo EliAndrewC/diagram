@@ -15,7 +15,7 @@ use super::super::where_time::columns::spent::Tok;
 use super::super::where_time::columns::SLOT_WAIT;
 use super::book::{Cell, Key, Ledger};
 use super::sized::{Lines, Size};
-use super::turns::Turns;
+use super::turns::{Turns, Unbooked};
 use super::{is_gm, m, pct, CARRY};
 
 /// What the report prints beside the minutes.
@@ -25,8 +25,83 @@ pub struct Extra {
     pub sizes: HashMap<Key, Size>,
     /// Each task's turns and tokens.
     pub turns: HashMap<Key, Turns>,
-    /// The main session's model calls booked to no task, and their tokens.
-    pub unbooked: (usize, Tok),
+    /// The main session's model calls booked to no task inside the window, their tokens, and why.
+    pub unbooked: Unbooked,
+    /// A bundle's task -> every task of its bundle, itself among them, in the handout's order (451 T514, [`bundles`]).
+    pub bundles: HashMap<Key, Vec<Key>>,
+}
+
+/// THE BUNDLES (451 T514): each landed task a pool tree was handed out for together with another (`make builder-tree T=a,b`, the
+/// pool's log read by [`held`](super::held)) -> every task of that handout under the landed task's feature, itself among them,
+/// each once; a task of several such handouts takes all their tasks. WHY: a bundle's builder is filed under its brief's first task,
+/// so the second read 0 turns, counts and tokens beside the commit they share (T404 beside T419's 89 builder turns, observed
+/// 2026-11-27, method: `make task-time SINCE=2026-11-27T04:30:00Z`). The report shows the bundle as ONE figure, whole under each of
+/// its tasks and marked, never split, as a shared commit's lines already are: no record says which of one builder's calls served
+/// which task, and the minutes stay booked as they were, so no sum of the report counts them twice. A task BUILT INSIDE another's
+/// tree - no builder of its own, its commit shared with the task whose builder filed and built it (T474 in T465's, `451 T465 T474:`,
+/// observed 2026-11-27, method: `builder-pool.log`'s handouts of T465, none naming T474) - joins that commit's tasks the same way;
+/// tasks sharing a commit that each had a builder stay apart.
+#[must_use]
+#[expect(clippy::implicit_hasher, reason = "the report's own maps, one hasher")]
+pub fn bundles(
+    holds: &[super::held::Hold],
+    landed: &[(f64, Key)],
+    (sizes, turns): (&HashMap<Key, Size>, &HashMap<Key, Turns>),
+) -> HashMap<Key, Vec<Key>> {
+    let mut out: HashMap<Key, Vec<Key>> = HashMap::new();
+    let join = |out: &mut HashMap<Key, Vec<Key>>, k: &Key, ms: &[Key]| {
+        let group = out.entry(k.clone()).or_default();
+        for m in std::iter::once(k).chain(ms) {
+            if !group.contains(m) {
+                group.push(m.clone());
+            }
+        }
+    };
+    for (_, k) in landed {
+        let number = k.0.split('-').next().unwrap_or_default();
+        for h in holds
+            .iter()
+            .filter(|h| h.tasks.len() > 1 && h.feature == number && h.tasks.contains(&k.1))
+        {
+            let ms: Vec<Key> = h.tasks.iter().map(|t| (k.0.clone(), t.clone())).collect();
+            join(&mut out, k, &ms);
+        }
+    }
+    let builderless = |k: &Key| turns.get(k).is_none_or(|t| t.builders == 0);
+    for (_, k) in landed {
+        let shared: Vec<Key> = sizes
+            .get(k)
+            .map(|s| s.shared.iter().map(|t| (k.0.clone(), t.clone())).collect())
+            .unwrap_or_default();
+        if !shared.is_empty() && (builderless(k) || shared.iter().any(builderless)) {
+            // the partners' handout bundles come along: a task's group is every task its figures are whole with
+            let more: Vec<Key> = shared
+                .iter()
+                .flat_map(|m| out.get(m).cloned().unwrap_or_default())
+                .collect();
+            join(&mut out, k, &[shared, more].concat());
+        }
+    }
+    out
+}
+
+/// The tasks whose counts, turns and tokens `key`'s row reads: its bundle's, else its own (451 T514).
+fn members(key: &Key, x: &Extra) -> Vec<Key> {
+    x.bundles
+        .get(key)
+        .cloned()
+        .unwrap_or_else(|| vec![key.clone()])
+}
+
+/// The mark a bundle's figures carry, empty for a task in none.
+fn bundle_mark(key: &Key, x: &Extra) -> String {
+    x.bundles.get(key).map_or_else(String::new, |g| {
+        let ids: Vec<&str> = g.iter().map(|k| k.1.as_str()).collect();
+        format!(
+            " (bundle {}: its counts, turns and tokens the bundle's, whole)",
+            ids.join(" ")
+        )
+    })
 }
 
 /// The minutes per run of `n` runs that held `secs` seconds, `-` for no run (451 T521).
@@ -84,13 +159,19 @@ fn all(t: &Tok) -> f64 {
 /// The ledger's counts for `key` (its counted lines, 451 T522, [`counts`]) and its make runs.
 #[must_use]
 pub fn counts(l: &Ledger, key: &Key) -> (Counts, usize) {
+    counts_of(l, std::slice::from_ref(key))
+}
+
+/// The ledger's counts and make runs over the tasks `keys`, each counted once (a bundle's, 451 T514).
+fn counts_of(l: &Ledger, keys: &[Key]) -> (Counts, usize) {
     let makes = l
         .runs
         .iter()
-        .filter(|((k, t), _)| k == key && t.starts_with("make "))
+        .filter(|((k, t), _)| keys.contains(k) && t.starts_with("make "))
         .map(|(_, n)| n)
         .sum();
-    (ran::counts(l.ran.get(key).into_iter().flatten()), makes)
+    let rans = keys.iter().filter_map(|k| l.ran.get(k)).flatten();
+    (ran::counts(rans), makes)
 }
 
 /// A count of lines and the minutes each of their own spans held on average, `-` minutes for none (451 T521, T522).
@@ -112,8 +193,12 @@ fn compiles(c: &Counts) -> String {
 /// The size, count, turn and token cells of one task, in the summary table's order.
 fn cells(whole: &Ledger, k: &Key, x: &Extra) -> Vec<String> {
     let s = x.sizes.get(k).cloned().unwrap_or_default();
-    let t = x.turns.get(k).copied().unwrap_or_default();
-    let (counted, makes) = counts(whole, k);
+    let group = members(k, x);
+    let t = group
+        .iter()
+        .filter_map(|m| x.turns.get(m))
+        .fold(Turns::default(), Turns::plus);
+    let (counted, makes) = counts_of(whole, &group);
     let tok = t.tok();
     let every = all(&tok);
     let shared = if s.shared.is_empty() {
@@ -159,9 +244,10 @@ pub fn table(out: &mut String, whole: &Ledger, landed: &[(f64, Key)], x: &Extra)
     for (_, k) in landed {
         let _ = writeln!(
             out,
-            "| {} {} | {} |",
+            "| {} {}{} | {} |",
             k.0,
             k.1,
+            bundle_mark(k, x),
             cells(whole, k, x).join(" | ")
         );
     }
@@ -170,11 +256,17 @@ pub fn table(out: &mut String, whole: &Ledger, landed: &[(f64, Key)], x: &Extra)
         "\n(a share only of time and of tokens: each token kind's % is of the task's tokens, and the last column each actor's share \
          of them; a count and a line class carry none (451 T521): unit-test runs, coverage runs and compiles carry the minutes \
          each of their own lines' spans held (451 T522), a make target's runs its own row's minutes per run in the task's target table, lines and \
-         turns are counts alone) {SOURCES} The main session's calls booked to no task: {}, their tokens {} (output {}, cache read {}).\n",
-        x.unbooked.0,
-        kilo(all(&x.unbooked.1)),
-        kilo(x.unbooked.1.out),
-        kilo(x.unbooked.1.cached)
+         turns are counts alone) {SOURCES} The main session's calls booked to no task: {}, their tokens {} (output {}, cache read {}); \
+         {} replies with no tool call, {} whose tool calls name no task, {} naming a task with no line of theirs, {} after their task's \
+         carry (the second tier's).\n",
+        x.unbooked.calls,
+        kilo(all(&x.unbooked.tok)),
+        kilo(x.unbooked.tok.out),
+        kilo(x.unbooked.tok.cached),
+        x.unbooked.replies,
+        x.unbooked.unnamed,
+        x.unbooked.unlogged,
+        x.unbooked.carried
     );
 }
 
@@ -190,9 +282,11 @@ pub const SOURCES: &str = "Sources: LINES from git, each commit whose subject na
      cargo finding every crate fresh (a GUESS from its span: the line does not say); a `make quick` or preflight line, which holds \
      its own cargo calls' lines, is counted in none. A pool tree's line goes only to a run of its holder's tasks. MAKE RUNS are its `make` targets' runs. TURNS \
      are model calls, each message id once: a builder's and a review agent's from its transcript over the read-back (the agent under \
-     the task its lines name), the main session's from its transcript, each call booked to the task its next own event-log line \
-     names, a line carrying only the session's `make task-start` mark booked to none, a call after the task's carry the second \
-     tier's. TOKENS are those calls' usage, the advisor's own calls not in them.";
+     the task its lines name), the main session's from its transcript, each call booked to the first task its own tool calls name \
+     (451 T513: its line's `names` - a command's `T=`, a done ref, a dispatch's description, marker or `Blocks:` line - else the same \
+     reading of the transcript's call), never the session's `make task-start` mark, a call after the task's carry the second tier's. TOKENS are those calls' usage, the advisor's own calls not in them. A BUNDLE's tasks (one pool tree handed out \
+     for several, 451 T514) each read the bundle's counts, make runs, turns and tokens whole, marked `(bundle ...)`, never split; its \
+     minutes and its listed lines stay where they were booked.";
 
 /// The seven groups of the per-task minutes table, in its order.
 pub const GROUPS: [&str; 7] = [
@@ -390,17 +484,23 @@ pub fn own_table(out: &mut String, whole: &Ledger, key: &Key) {
 /// with the minutes each, its size, its turns and its tokens, a share only of its tokens (451 T521).
 #[must_use]
 pub fn line(whole: &Ledger, key: &Key, cats: &[(String, Cell)], x: &Extra) -> String {
-    let (n, _) = counts(whole, key);
-    let rans = whole.ran.get(key).map_or(&[][..], Vec::as_slice);
+    let group = members(key, x);
+    let (n, _) = counts_of(whole, &group);
+    let rans: Vec<&ran::Ran> = group
+        .iter()
+        .filter_map(|k| whole.ran.get(k))
+        .flatten()
+        .collect();
     let step = |s: &str| rans.iter().filter(|r| r.step == s).count();
     let c = cells(whole, key, x);
     let inline = x.sizes.get(key).map_or(0, |s| s.inline);
     format!(
-        "Beside its minutes (451 T512): `tests` {} min, `compile` {} min; its counted lines (451 T522, listed under its tables): {} \
+        "Beside its minutes (451 T512){}: `tests` {} min, `compile` {} min; its counted lines (451 T522, listed under its tables): {} \
          unit-test runs{}, {} coverage runs{}, {} compiles ({} of {} s or more){} - {} builds, {} coverage builds, {} lint passes, {} pre-warm builds; {} make \
          runs (each target's in the runs column below, with its minutes per run); {} commits: test {}, non-test {}, prose {}, \
          {inline} of its non-test `.rs` files holding an inline test block; turns: builders {}, review agents {}, session {}; tokens: \
          output {}, fresh input {}, cache read {}, cache write {}; by actor (builders / review agents / session) {}.\n",
+        bundle_mark(key, x),
         m(secs(cats, "tests")),
         m(secs(cats, "compile")),
         n.unit.0,

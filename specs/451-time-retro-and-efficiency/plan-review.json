@@ -4555,14 +4555,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T514 (<why: the finding or measurement that files it>)": {
-   "sha256": "16f2db62572626d95ae313362d167bf84e65bc5bffffa9026b321116e82b4a64",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T514 Approach (checklist part A)": {
-   "sha256": "f87f7ec61a65c867486a2a3af999184eb6699864cf4b5299666aca77e04ee470",
+   "sha256": "cab3e6e27be3b98de6cd5486c67a07aa6624ff696eb6baa39ae4fa4dc2668ef9",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4659,6 +4653,24 @@
   },
   "### T529 (451 T522-D5: a pool tree's `Phase` lines filed in `_unassigned.jsonl` with no task, so `make where-time F=451` missed them)": {
    "sha256": "f85ef0e43e2ec0b465f34f0fe1895abf6fb2f2657a66bc4bc7cbf5cf00f0705f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T513 (T512-D5's finding: the main session's calls were booked by the next own event-log line, which named only the session's `make task-start` mark - 2,682 calls read back from 2026-11-27T04:30Z to no task, observed 2026-11-27, method: `make task-time SINCE=2026-11-27T04:30:00Z` before this task)": {
+   "sha256": "06b9949321059a252fb6f3ec9fb41c14472b19c527ae5319627ab6d6efea070f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T513 Approach (checklist part A)": {
+   "sha256": "68c9268c06cb6c9889ff87358fb3d02f2d1d973c34622b9fefcc4f46ff34d7fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T514 (T512's finding: a bundle's second task read 0 turns, counts and tokens beside the commit it shares - T419 89 builder turns and T404 0, T465 24 unit-test runs and T474 0, observed 2026-11-27, method: `make task-time SINCE=2026-11-27T04:30:00Z` before this task)": {
+   "sha256": "2ffe78362de6108bb500f98ded0f6f24e1106bb1fa7a7b172d51edf72a7b3950",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -43871,6 +43883,103 @@
      "summary": "The template-only T529 block is replaced by the filled T529 block under its real heading.",
      "class": "within",
      "why": "The removed text was an unfilled template carrying no decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T513 (T512-D5's finding: the main session's calls were booked by the next own event-log line, which named only the session's `make task-start` mark - 2,682 calls read back from 2026-11-27T04:30Z to no task, observed 2026-11-27, method: `make task-time SINCE=2026-11-27T04:30:00Z` before this task)",
+    "### T513 Approach (checklist part A)",
+    "### T514 (T512's finding: a bundle's second task read 0 turns, counts and tokens beside the commit it shares - T419 89 builder turns and T404 0, T465 24 unit-test runs and T474 0, observed 2026-11-27, method: `make task-time SINCE=2026-11-27T04:30:00Z` before this task)",
+    "### T514 Approach (checklist part A)",
+    "(removed) ### T514 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T513-D1",
+     "summary": "One shared function, session_names, says which tasks a session call names: T= values outside a heredoc, else done refs; for an Agent call the description's, else the brief marker's, else the Blocks: line's; a call naming several is booked to the first.",
+     "class": "within",
+     "why": "This is how the GM's per-task breakdown (2026-11-27, T512's words: 'on a per task basis ... what each task spent its time doing') is fed. It reads only what the call itself records, which is the evidence (l) asks the tooling to be passed. Booking a multi-task call to its first task matches how a bundle's builder is filed, and T514 shows the bundle whole, so nothing the GM asked for is dropped."
+    },
+    {
+     "id": "T513-D2",
+     "summary": "A new 'names' field on the main session's own PreToolUse/PostToolUse lines; a builder's line carries none; 'task' is unchanged.",
+     "class": "within",
+     "why": "The GM asked to 'update our tooling to make sure that we are gathering this kind of data'. T512's 'no new writer' was that task's own scope, not the GM's. Leaving names off builder lines keeps a builder's read of another task's section from booking its own work there. That is correctness, not a carve-out of the request."
+    },
+    {
+     "id": "T513-D3",
+     "summary": "The reader books a session call to the first task its own tool calls name: the line's names by tool-use id, else session_names over the transcript for older lines. Each call's tool calls are kept across every row of its message id.",
+     "class": "within",
+     "why": "This is the mechanism for the per-task breakdown. The fallback for lines written before the field covers the overnight window, which the GM asked to be re-run ('update whatever stored statistics we have just from our overnight runs'). It widens what is booked rather than narrowing it."
+    },
+    {
+     "id": "T513-D4",
+     "summary": "Defect fixed: the old reader booked a session call to the next no-'by' line in time, which put calls on builders' Phase lines, subagents' lines and the session's mark.",
+     "class": "within",
+     "why": "This was a wrong outcome: calls booked to the wrong task (constitution XIV's sense of a defect). It is fixed here, as the fix-as-we-go rule requires."
+    },
+    {
+     "id": "T513-D5",
+     "summary": "Defect fixed: the unbooked count now covers only calls from SINCE, not the read-back BACK hours before it. A call before SINCE is still booked to a landed task it names.",
+     "class": "within",
+     "why": "The old figure (2,682) exceeded the window's own session calls, so the report answered wrongly. That is a defect. Booking a pre-SINCE call to a landed task it names keeps that task's work whole and narrows nothing."
+    },
+    {
+     "id": "T513-D6",
+     "summary": "What stays unbooked is printed by class: replies with no tool call, tool calls naming no task, a task named with no line to file it, and calls after their task's carry (T512-D5's second-tier rule, kept). No call inherits a task from the call before it.",
+     "class": "within",
+     "why": "Amendment (c) of 2026-11-25 asks that every minute be named, or the remainder be reported with what it is and why it could not be booked, never as a silent 'other'. D6 does exactly that, class by class. Keeping post-carry calls apart is the GM's own 2026-11-26/27 rule that the second tier is its own category. Declining to infer a task from the previous call narrows nothing: the GM tolerated inexact booking in (l) but never asked for inheritance. The rationale in Approach item 2 that the Goodhart caution forbids inferred booking is a misattribution: the GM's Goodhart passage is about size tracking, and (l) welcomes approximate booking. That misattribution is noted, not ruled."
+    },
+    {
+     "id": "T513-D7",
+     "summary": "Before and after figures over the same window: 2,682 unbooked before (including the read-back), 919 after (258 / 594 / 0 / 67).",
+     "class": "within",
+     "why": "This is the measurement that lands the task, and it decides no scope. One figure note: D4 says 1,278 session calls in the window and D5 says 1,267, by different methods, unreconciled. Also, '2,682 to 919' is not like-for-like by D5's own account: within the window the old rule left 791 unbooked (D4), and the gain is in correct bookings, 151 before against 348 now (1,267 - 919)."
+    },
+    {
+     "id": "T513-Approach",
+     "summary": "Checklist part A for T513: goal, constraints, exits, budget, found-and-left (both defects fixed here), performance work yes.",
+     "class": "within",
+     "why": "Counting this as performance work follows the GM's 2026-11-20 words, verified in request.md ('this kind of measurement task to be counted as a performance task'). Nothing is deferred."
+    },
+    {
+     "id": "T514-D1",
+     "summary": "A bundle is a pool handout for several tasks (make builder-tree T=a,b), read from the pool log by held::of. A commit naming two tasks with no shared handout is not a bundle.",
+     "class": "within",
+     "why": "This defines the unit that the GM's bundling (2026-11-22, T141) creates, so the per-task breakdown can show it. Within."
+    },
+    {
+     "id": "T514-D2",
+     "summary": "Each bundle member's size row and its line beside its minutes read the bundle's counts, turns and tokens whole, marked '(bundle ...)'. Nothing is booked twice or split. The minutes, grouped tables, own path and listed lines stay where they were booked.",
+     "class": "within",
+     "why": "The brief left the choice open. Showing the figures whole and marked follows T512-D1's existing rule for a shared commit and keeps every sum honest (own path equals builder minutes). Splitting would invent a division no record backs. Keeping the minutes where they were booked preserves the totals the GM reads. The mark says the counts are the bundle's, so a member's own minutes are not misread as the bundle's work. This fixes the reported 0-turn defect without moving any total."
+    },
+    {
+     "id": "T514-D3",
+     "summary": "A landed task with no builder turns of its own that shares a commit joins that commit's tasks as a bundle (the T474-in-T465's-tree case). Tasks sharing a commit that each had a builder stay apart.",
+     "class": "within",
+     "why": "This extends D1 to the second instance the finding names (T465/T474), so it covers the case rather than carving it out. Tasks that each had a builder already have their own figures, so joining them would book twice. Within."
+    },
+    {
+     "id": "T514-D4",
+     "summary": "Before and after: T404 moves from 0/0/0/0 to the bundle's 12 / 29 / 16 / 89 turns, marked. The window's side and own-path totals are unchanged to 0.1 minute.",
+     "class": "within",
+     "why": "This is the measurement that lands the task. One figure note: the T514 heading names T474, but D4's after-run measures only T404, and T474 rests on the D3 test ('once D3 is built'). That is a verification gap to watch at the claims round, not a narrowing."
+    },
+    {
+     "id": "T514-Approach",
+     "summary": "Checklist part A for T514, filled from the earlier empty template (which was CLEAR).",
+     "class": "within",
+     "why": "This is the template completed. Its constraints restate T512-D1 and T512-D4, its found-and-left is none, and its performance-work claim follows the GM's 2026-11-20 words. Within."
+    },
+    {
+     "id": "T514-removed-template",
+     "summary": "The empty template heading '### T514 (<why: ...>)' is removed, replaced by the filled T514 block.",
+     "class": "within",
+     "why": "This is a placeholder replaced by its content, and nothing the GM asked for is dropped. Within."
     }
    ]
   }

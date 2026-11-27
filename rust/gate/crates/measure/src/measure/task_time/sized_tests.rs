@@ -137,9 +137,14 @@ fn an_untasked_agent_a_page_session_and_the_unbooked_calls_tokens() {
     .map(|v| v.as_object().unwrap().clone())
     .collect();
     let at = ts("2026-11-25T10:00:05Z").unwrap();
+    let call = |tok| spent::Call {
+        at,
+        tok,
+        uses: Vec::new(),
+    };
     let session = HashMap::from([
-        ("s".to_owned(), vec![(at, tok(10.0, 1000.0))]),
-        ("p".to_owned(), vec![(at, tok(99.0, 0.0))]),
+        ("s".to_owned(), vec![call(tok(10.0, 1000.0))]),
+        ("p".to_owned(), vec![call(tok(99.0, 0.0))]),
     ]);
     let read = turns::Read {
         calls: &HashMap::from([("A".to_owned(), 3)]),
@@ -147,9 +152,12 @@ fn an_untasked_agent_a_page_session_and_the_unbooked_calls_tokens() {
         session: &session,
         paged: &std::collections::HashSet::from(["p".to_owned()]),
     };
-    let (got, unbooked) = turns::of(&stream, &agents, &read, &HashMap::new());
+    let (got, unbooked) = turns::of(&stream, &agents, &read, (&HashMap::new(), 0.0));
     assert_eq!(got[&("451-x".to_owned(), "-".to_owned())].builders, 3);
-    assert_eq!(unbooked, (1, tok(10.0, 1000.0)));
+    assert_eq!(
+        (unbooked.calls, unbooked.tok, unbooked.replies),
+        (1, tok(10.0, 1000.0), 1)
+    );
     let mut t = spent::Tokens::default();
     t.read(
         Path::new("s/subagents/agent-A.meta.json"),
@@ -181,6 +189,14 @@ fn usage(id: &str, t: &str, (out, fresh, cached, created): (u64, u64, u64, u64))
     )
 }
 
+/// A usage row whose message makes one Bash call, `id` running `command`.
+fn usage_with(id: &str, t: &str, n: (u64, u64, u64, u64), tool: &str, command: &str) -> String {
+    let mut row: Value = serde_json::from_str(usage(id, t, n).trim()).unwrap();
+    row["message"]["content"] =
+        json!([{"type": "tool_use", "id": tool, "name": "Bash", "input": {"command": command}}]);
+    format!("{row}\n")
+}
+
 fn append(p: &Path, text: &str) {
     let mut t = std::fs::read_to_string(p).unwrap_or_default();
     t.push_str(text);
@@ -189,8 +205,7 @@ fn append(p: &Path, text: &str) {
 
 /// The red-first fixture: 451-x T1 lands with a test-and-source diff, a bundle's commit naming it and T9, a tick commit and another
 /// feature's repair of its own T1; its `make static` run holds a build and two test runs; its builder made two calls (one written
-/// twice), its plan review one, and the session three - one before its own line, one after the task's own table ended, one after
-/// its last line.
+/// twice), its plan review one, and the session three - one running its `make static T=T1` (451 T513), and two replies.
 #[test]
 #[expect(
     clippy::too_many_lines,
@@ -249,7 +264,8 @@ fn a_landed_task_carries_its_size_counts_turns_and_tokens_with_their_shares() {
     append(
         &home.join("s.jsonl"),
         &[
-            usage("m4", "00:09", (50, 0, 0, 0)),
+            // the call that ran `b1`, a line before `names`: booked by the transcript's own command (451 T513)
+            usage_with("m4", "00:09", (50, 0, 0, 0), "b1", "make static T=T1"),
             usage("m5", "06:08", (10, 0, 0, 0)),
             usage("m6", "06:49", (10, 0, 0, 0)),
         ]
@@ -274,10 +290,11 @@ fn a_landed_task_carries_its_size_counts_turns_and_tokens_with_their_shares() {
     let out = got.stdout;
     for want in [
         // 9 changed lines: test 2, non-test 6 (the inline block's among them), prose 1; the tick left out, the bundle shared
-        "| 451-x T1 | 2 (shared with T9) | +2 -0 | +6 -0 | +1 -0 | 2, 0.1 min each | 0 | 1 (1 of 1.0 s or more), 0.3 min each | 2 | 2 | 1 | 1 | 0.3k (10.9%) | 0.0k (0.4%) | 2.4k (87.3%) | 0.0k (1.5%) | 80.4% / 17.8% / 1.8% |",
+        "| 451-x T1 (bundle T1 T9: its counts, turns and tokens the bundle's, whole) | 2 (shared with T9) | +2 -0 | +6 -0 | +1 -0 | 2, 0.1 min each | 0 | 1 (1 of 1.0 s or more), 0.3 min each | 2 | 2 | 1 | 1 | 0.3k (10.9%) | 0.0k (0.4%) | 2.4k (87.3%) | 0.0k (1.5%) | 80.4% / 17.8% / 1.8% |",
         // the other feature's T1: its repair only
         "| 449-z T1 | 1 | +2 -0 | +0 -0 | +0 -0 |",
-        "The main session's calls booked to no task: 2, their tokens 0.0k (output 0.0k, cache read 0.0k).",
+        "The main session's calls booked to no task: 2, their tokens 0.0k (output 0.0k, cache read 0.0k); 2 replies with no tool \
+         call, 0 whose tool calls name no task, 0 naming a task with no line of theirs, 0 after their task's carry (the second tier's).",
         super::beside::SOURCES,
         "## Each landed task's minutes by group, each its % of the task (451 T512)",
         super::beside::GROUPING,

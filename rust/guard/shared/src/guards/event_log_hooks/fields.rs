@@ -48,6 +48,69 @@ fn blocks_env(command: &str) -> Option<String> {
     Some(v.replace(':', " ").trim().to_owned())
 }
 
+pattern!(T_ARGS, r#"\bT=(?:"([^"]*)"|'([^']*)'|(\S+))"#);
+pattern!(DONE_REF, r"\brefs/l7r/done/\d+[\w-]*?-(T\d+[a-z]?)\b");
+
+/// THE TASKS A MAIN-SESSION CALL NAMES ITSELF (451 T513), in order, each once: a Bash command's every `T=` value outside its heredocs
+/// (`T=T5`, `T=T5,T6`, `T="T5 T6"`), else the done refs it names (`refs/l7r/done/451-T5`, how `make carry COMMIT=` is fed); an
+/// Agent call's description's task ids, else its prompt's first line's (the `BUILDER-BRIEF 451 T5,T6` marker), else its `Blocks:`
+/// line's. None for a call naming none, and for any other tool. The writer puts them on the session's own line as `names`, and
+/// `make task-time` reads a call's tasks back from it - from the transcript's call by this same function, for a line written before
+/// the field. WHY: the orchestrating session's lines carried only its `make task-start` mark, so 2,682 of its calls read back from
+/// 2026-11-27T04:30Z were booked to no task, observed 2026-11-27, method: `make task-time SINCE=2026-11-27T04:30:00Z`. Read only for
+/// the main session's own calls: a builder's `make plan-section T=<another>` reads another's section for its own task.
+#[must_use]
+pub fn session_names(tool: &str, input: &Value) -> Vec<String> {
+    let field = |k: &str| text_of(input.get(k));
+    let ids = |text: &str| -> Vec<String> {
+        super::TASK_NAMED
+            .captures_iter(text)
+            .map_while(Result::ok)
+            .filter_map(|c| c.get(1).map(|m| m.as_str().to_owned()))
+            .collect()
+    };
+    let named: Vec<String> = match tool {
+        "Bash" => {
+            let command = crate::shape::strip_heredocs(&field("command"));
+            let given: Vec<String> = T_ARGS
+                .captures_iter(&command)
+                .map_while(Result::ok)
+                .filter_map(|c| (1..=3).find_map(|i| c.get(i)).map(|m| ids(m.as_str())))
+                .flatten()
+                .collect();
+            if given.is_empty() {
+                DONE_REF
+                    .captures_iter(&command)
+                    .map_while(Result::ok)
+                    .filter_map(|c| c.get(1).map(|m| m.as_str().to_owned()))
+                    .collect()
+            } else {
+                given
+            }
+        }
+        "Agent" => {
+            let prompt = field("prompt");
+            let head = prompt.lines().next().unwrap_or_default();
+            [
+                ids(&field("description")),
+                ids(head),
+                blocks_line(&prompt).map_or_else(Vec::new, |b| ids(&b)),
+            ]
+            .into_iter()
+            .find(|v| !v.is_empty())
+            .unwrap_or_default()
+        }
+        _ => Vec::new(),
+    };
+    let mut out: Vec<String> = Vec::new();
+    for t in named {
+        if !out.contains(&t) {
+            out.push(t);
+        }
+    }
+    out
+}
+
 /// The fields a tool's own call adds to its line.
 pub(super) fn tool_fields(
     out: &mut Map<String, Value>,
@@ -55,6 +118,13 @@ pub(super) fn tool_fields(
     ti: &Map<String, Value>,
     payload: &Value,
 ) {
+    // the main session's own call: the tasks it names itself (451 T513, [`session_names`]), beside `task`, which stays the filing's
+    if !payload.get("agent_id").is_some_and(truthy) {
+        let names = session_names(tool, &Value::Object(ti.clone()));
+        if !names.is_empty() {
+            out.insert("names".into(), Value::from(names));
+        }
+    }
     if tool == "Bash" {
         let command = text_of(ti.get("command"));
         // EVERY TARGET, where the call runs more than one (feature 451 T14): `make` is the first alone, so `make rust-test CRATE=x &&

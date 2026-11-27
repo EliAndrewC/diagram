@@ -41,6 +41,7 @@
 use std::collections::HashMap;
 use std::path::Path;
 
+use l7r_shared::guards::event_log_hooks::session_names;
 use serde_json::Value;
 
 use super::super::super::events::{fixed, get, hhmm, is, or_s, t_of, ts, Event, Raised};
@@ -151,11 +152,40 @@ impl Tok {
 #[derive(Debug, Default)]
 pub struct Tokens {
     by_aid: HashMap<String, HashMap<String, Tok>>,
-    by_sid: HashMap<String, HashMap<String, (f64, Tok)>>,
+    by_sid: HashMap<String, HashMap<String, Call>>,
 }
 
-/// A transcript's usage rows inside the window: (message id, time, tokens).
-fn usage_rows(text: &str, (lo, hi): (f64, f64)) -> Vec<(String, f64, Tok)> {
+/// One of a main session's model calls (451 T512, T513): its time, its tokens, and each tool call it made - its tool-use id and the
+/// tasks its input names itself (`event_log_hooks::session_names`), every row of its message id read, since each content block is a
+/// row of its own.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct Call {
+    /// Its first row's time.
+    pub at: f64,
+    /// Its first row's usage.
+    pub tok: Tok,
+    /// Its tool calls, in order: (tool-use id, the tasks its input names).
+    pub uses: Vec<(String, Vec<String>)>,
+}
+
+/// A transcript row's tool calls: (tool-use id, the tasks its input names), in order.
+fn uses_of(row: &Value) -> Vec<(String, Vec<String>)> {
+    let blocks = row.pointer("/message/content").and_then(Value::as_array);
+    blocks
+        .into_iter()
+        .flatten()
+        .filter(|b| b.get("type").and_then(Value::as_str) == Some("tool_use"))
+        .filter_map(|b| {
+            let id = b.get("id").and_then(Value::as_str)?;
+            let name = b.get("name").and_then(Value::as_str).unwrap_or_default();
+            let input = b.get("input").cloned().unwrap_or(Value::Null);
+            Some((id.to_owned(), session_names(name, &input)))
+        })
+        .collect()
+}
+
+/// A transcript's usage rows inside the window: (message id, time, tokens, the row itself).
+fn usage_rows(text: &str, (lo, hi): (f64, f64)) -> Vec<(String, f64, Tok, Value)> {
     let mut out = Vec::new();
     for line in text.lines().filter(|l| l.contains("\"usage\"")) {
         let Ok(row) = serde_json::from_str::<Value>(line) else {
@@ -169,7 +199,8 @@ fn usage_rows(text: &str, (lo, hi): (f64, f64)) -> Vec<(String, f64, Tok)> {
             continue;
         };
         if (lo..=hi).contains(&at) {
-            out.push((id.to_owned(), at, Tok::of_usage(u)));
+            let tok = Tok::of_usage(u);
+            out.push((id.to_owned(), at, tok, row));
         }
     }
     out
@@ -188,13 +219,18 @@ impl Tokens {
         };
         if let Some(aid) = stem.strip_prefix("agent-") {
             let msgs = self.by_aid.entry(aid.to_owned()).or_default();
-            for (id, _, tok) in usage_rows(text, window) {
+            for (id, _, tok, _) in usage_rows(text, window) {
                 msgs.entry(id).or_insert(tok);
             }
         } else {
             let msgs = self.by_sid.entry(stem.to_owned()).or_default();
-            for (id, at, tok) in usage_rows(text, window) {
-                msgs.entry(id).or_insert((at, tok));
+            for (id, at, tok, row) in usage_rows(text, window) {
+                let call = msgs.entry(id).or_insert(Call {
+                    at,
+                    tok,
+                    uses: Vec::new(),
+                });
+                call.uses.extend(uses_of(&row));
             }
         }
     }
@@ -208,14 +244,14 @@ impl Tokens {
             .collect()
     }
 
-    /// session id -> its own model calls inside the window, each (time, tokens), in time order (451 T512).
+    /// session id -> its own model calls inside the window, in time order (451 T512, T513).
     #[must_use]
-    pub fn session(&self) -> HashMap<String, Vec<(f64, Tok)>> {
+    pub fn session(&self) -> HashMap<String, Vec<Call>> {
         self.by_sid
             .iter()
             .map(|(sid, m)| {
-                let mut rows: Vec<(f64, Tok)> = m.values().copied().collect();
-                rows.sort_by(|a, b| a.0.total_cmp(&b.0));
+                let mut rows: Vec<Call> = m.values().cloned().collect();
+                rows.sort_by(|a, b| a.at.total_cmp(&b.at));
                 (sid.clone(), rows)
             })
             .collect()

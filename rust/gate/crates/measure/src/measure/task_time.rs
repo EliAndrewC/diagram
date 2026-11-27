@@ -684,7 +684,8 @@ pub fn run(
     let lo = ts(since)?;
     let mut got = load(&logs, &iso_of(lo - back_h * 3600.0), until)?;
     // a pool tree's phases by the task that held the tree, before the runs are tied to them (451 T391)
-    held::retask(&mut got.aside, &held::of(root, clones), "");
+    let holds = held::of(root, clones);
+    held::retask(&mut got.aside, &holds, "");
     let window = (lo, got.window.1);
     let mut sids: Vec<String> = got.stream.iter().map(|e| s(e, "sid")).collect();
     sids.sort();
@@ -743,13 +744,14 @@ pub fn run(
     };
     let refused = cross::refusals(&records, window.1);
     let cap = cross::cap_of(std::env::var("L7R_BUILDERS").ok().as_deref());
-    let waited = cross::measure(&held::of(root, clones), &batches, &refused, window, cap);
+    let waited = cross::measure(&holds, &batches, &refused, window, cap);
     let landed = landed(&got.aside, window, only)?;
     let x = extra(
         root,
         (&got, &flight.agents, &pages),
         &subs,
-        (&landed, &batches),
+        (&landed, &batches, window.0),
+        &holds,
     );
     let text = render(
         (&l, &whole),
@@ -767,7 +769,8 @@ fn extra(
     root: &Path,
     (got, agents, pages): (&Loaded, &[columns::Agent], &[Page]),
     subs: &columns::Subagents,
-    (landed, batches): (&[(f64, Key)], &[Batch]),
+    (landed, batches, lo): (&[(f64, Key)], &[Batch], f64),
+    holds: &[held::Hold],
 ) -> beside::Extra {
     let keys: Vec<Key> = landed.iter().map(|(_, k)| k.clone()).collect();
     let ends: HashMap<Key, f64> = landed
@@ -781,9 +784,11 @@ fn extra(
         // a page session's own transcript is no main session's calls, as `book` leaves its lines out
         paged: &pages.iter().map(|p| p.sid.clone()).collect(),
     };
-    let (turns, unbooked) = turns::of(&got.stream, agents, &read, &ends);
+    let (turns, unbooked) = turns::of(&got.stream, agents, &read, (&ends, lo));
+    let sizes = sized::sizes(root, &iso_of(got.window.0), &keys);
     beside::Extra {
-        sizes: sized::sizes(root, &iso_of(got.window.0), &keys),
+        bundles: beside::bundles(holds, landed, (&sizes, &turns)),
+        sizes,
         turns,
         unbooked,
     }
@@ -866,3 +871,5 @@ mod sized_tests;
 mod tests;
 #[cfg(test)]
 mod tier_tests;
+#[cfg(test)]
+mod turns_tests;

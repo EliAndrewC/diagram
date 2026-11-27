@@ -2423,59 +2423,73 @@ that batch; the red was not in its change.
 <!-- plan-archive: T515 to T515 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T517 to T515 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T519 to T519 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T513 (<why: the finding or measurement that files it>)
+### T513 (T512-D5's finding: the main session's calls were booked by the next own event-log line, which named only the session's `make task-start` mark - 2,682 calls read back from 2026-11-27T04:30Z to no task, observed 2026-11-27, method: `make task-time SINCE=2026-11-27T04:30:00Z` before this task)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
+- **Approach**: the writer tags the main session's own line with the tasks its call names, and the report books each session call by its own tool calls, not by the next line in time (`rust/guard/shared/src/guards/event_log_hooks/fields.rs`, `rust/gate/crates/measure/src/measure/where_time/columns/spent.rs`, `task_time/turns.rs`, `task_time/beside.rs`, `task_time.rs`).
+  - **T513-D1, what a call names.** One function, `event_log_hooks::session_names`, read by both the writer and the report. For a Bash call it is every `T=` value outside a heredoc (`T=T5`, `T=T5,T6`, `T="T5 T6"`), else each done ref the command names (`refs/l7r/done/451-T462`, which is how `make carry COMMIT=` is fed). For an Agent call it is the description's task ids, else the prompt's first line's (the `BUILDER-BRIEF` marker), else its `Blocks:` line's. Each task is named once, in order. A call naming several is booked to the first, as a bundle's builder is (T514 shows the bundle whole).
+  - **T513-D2, the writer.** The main session's own `PreToolUse` and `PostToolUse` lines carry `names`, a new field. A builder's line carries none: a builder's `make plan-section T=<another>` reads another task's section for its own. `task` is unchanged. Widening it would move the line's filing, the re-numbering, the static-run count and the closing split.
+  - **T513-D3, the reader.** A session call is booked to the first task its tool calls name. The names come from the call's own `PreToolUse` line by tool-use id (its `names`), else, for a line written before the field, from `session_names` over the transcript's call. The line's log gives the feature. The transcript reader now keeps each session call's tool calls across every row of its message id (`spent::Call`).
+  - **T513-D4, a defect fixed in the old reader.** It booked a call to the next no-`by` line in time. Pool trees' check runs share the session's id with no `by`. Of the session's 1,278 calls in the window, the old rule booked 150 to a builder's `Phase` line, 10 to a subagent's start or stop line and 176 to the mark T312; it booked 151 to a task the line named, and left 791 unbooked before the carry filter, observed 2026-11-27, method: the session transcript's calls joined to the next no-`by` line of the 451, 461, 462 and `_unassigned` logs, a script (`t513/sim.py` in the shared scratchpad).
+  - **T513-D5, a second defect fixed: the unbooked figure's window.** The 2,682 counted every session call of the read-back, which runs `BACK` hours before SINCE, and not only those of the window: the window holds 1,267 session calls, observed 2026-11-27, method: the transcript's message ids timestamped from 04:30Z counted. Unbooked calls are now counted from SINCE only. A call before SINCE is still booked to a landed task it names.
+  - **T513-D6, what stays unbooked, and why.** It is printed by class: a reply with no tool call, tool calls naming no task (the session's own `grep`, `sed`, `git` reads), a task named with no own line to file it, and a call after its task's carry, which is the second tier's (T512-D5's rule, kept). No call inherits a task from the call before it. That would be a convention no record backs.
+  - **T513-D7, before and after**, measured 2026-11-27 (`make task-time SINCE=2026-11-27T04:30:00Z UNTIL=2026-11-27T19:22:17Z`, read-only, the same window both times). Before: 2,682 calls booked to no task, their tokens 1,436,284.4k, measured 2026-11-27 (the command above, before this task). That figure includes the read-back before SINCE (D5). After: 919 of the window's calls booked to no task, their tokens 483,389.7k (cache read 481,720.5k). They are 258 replies, 594 tool calls naming no task, 0 named with no line, and 67 after their task's carry. With no UNTIL, the report to 19:41:13Z reads 930 (264, 599, 0, 67), measured 2026-11-27 (`make task-time SINCE=2026-11-27T04:30:00Z`).
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the writer's `names` | `event_log_hooks::tests::named::a_session_call_names_the_tasks_its_command_or_dispatch_names`: with the field's write switched off, 0 passed and 1 failed (`left: None, right: Some(["T5"])`); 1 passed after, observed 2026-11-27, method: `make rust-test CRATE=rust/guard/shared ONLY="guards::event_log_hooks::tests::named"` | n/a, a log field | none | n/a |
+| the reader: a call's own tool calls, the line's names before the transcript's, the window | `task_time::turns_tests::a_session_call_books_to_the_task_its_own_tool_calls_name`: with the line's names ignored, 1 failed (T5's calls `left: 1, right: 3`); with the window's start ignored, 1 failed (6 unbooked against 5); 1 passed after, observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/measure ONLY="measure::task_time::turns_tests"`. The size fixture's session call is now booked by its transcript's `make static T=T1` (`sized_tests`) | n/a | none | n/a |
 
 ### T513 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A reader of `make task-time` sees the orchestrating session's calls under the tasks they served, where the call itself names one. The rest is counted by why, inside the window.
+2. **The constraints.** T512-D5's rule that a call after its task's carry is the second tier's. T512's "no new writer" covered T512 only; this task's brief asks for the writer. The GM's Goodhart caution: raw counts, no inferred booking.
+3. **Where each comes from.** O: D4, D5 and D7. The brief: "tag the session's line with the task its command or dispatch names ... and read it back".
+4. **Do they describe the world here?** Yes. The overnight window's session calls were read call by call against their lines (D4).
+5. **The order.** After T512 and T522, which built the report this reads into. Beside T514, the same files.
+6. **The exits.** Green: the tests above and D7's run. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The window's unbooked session calls fall from 2,682 to 919, each printed with its class (D7). The old rule booked at most 151 of the window's calls to a task their line named (D4).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The reader saw 2,682 unbooked calls, a figure past the window's own 1,267 calls, observed 2026-11-27, method: D5's. 336 of the calls it did book went to a builder's line, a subagent's line or the session's mark (D4). It now sees 919, each with its class.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The old reader booked session calls to builders' `Phase` lines and to the mark (D4). Fixed here.
+- The unbooked figure counted the read-back before SINCE (D5). Fixed here.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a measurement of where the time and tokens go, counted as performance work by the GM's words of 2026-11-20
 
 
-### T514 (<why: the finding or measurement that files it>)
+### T514 (T512's finding: a bundle's second task read 0 turns, counts and tokens beside the commit it shares - T419 89 builder turns and T404 0, T465 24 unit-test runs and T474 0, observed 2026-11-27, method: `make task-time SINCE=2026-11-27T04:30:00Z` before this task)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the bundle is shown as ONE figure, whole under each of its tasks and marked. Nothing is booked twice and nothing is split (`rust/gate/crates/measure/src/measure/task_time/beside.rs`, `task_time.rs`, `task_time/turns.rs`).
+  - **T514-D1, what a bundle is.** A pool tree handed out for several tasks at once (`make builder-tree T=a,b`). It is read from the pool's log by `held::of`, the reading `held_for` already takes (`beside::bundles`). Each landed task of such a handout maps to every task of it under its own feature, itself among them. A task of two such handouts takes both handouts' tasks. A commit naming two tasks with no shared handout is not a bundle: its lines are shared, as before.
+  - **T514-D2, why one figure, not booking to each.** The brief left the choice to the builder. The bundle's builder is filed under its brief's first task, and no record says which of its calls, runs or tokens served which task. Booking each to every member would count them once per member in each sum the report makes: the own path, which equals the builder minutes (T512-D4), and the window's tasks' side. Splitting them would invent a division. So each member's size row and its line beside its minutes read the bundle's unit-test runs, coverage runs, compiles, make runs, turns and tokens summed over its tasks. The row carries `(bundle T419 T404: its counts, turns and tokens the bundle's, whole)`. This is how the same table already shows a bundle's shared commit (T512-D1). The minutes, the grouped tables, the own path and each task's listed lines stay where they were booked.
+  - **T514-D3, a task built inside another's tree.** T474 was filed and built by T465's builder, in a tree handed out for T465 alone. Its commit is `451 T465 T474:` (observed 2026-11-27, method: `builder-pool.log`'s handouts naming T465 or T474, and `git log --grep`). A landed task with no builder turns of its own that shares a commit joins that commit's tasks in the same way. Tasks sharing a commit that each had a builder stay apart (T365, T373, T420).
+  - **T514-D4, before and after**, measured 2026-11-27 (`make task-time SINCE=2026-11-27T04:30:00Z`, read-only). Before: T404 read 0 unit-test runs, 0 compiles, 0 make runs, 0 turns and 0.0k tokens beside T419's 12, 29, 16, 89 builder turns and 15,246.8k cache read, measured 2026-11-27 (the command above, before this task). After: both rows read `12, 0.1 min each | 0 | 29 (29 of 1.0 s or more) | 16 | 89 | 0 | 3`, 16,012.1k cache read, each marked `(bundle T419 T404 ...)`. The 3 session turns are T513's. T474 reads T465's bundle the same way once D3 is built (its test, below). At one window end, 2026-11-27T19:22:17Z, the window's tasks' side moved by at most 0.1 minute in one cell (review 456.1 to 456.2, own-path builder thinking 1147.5 to 1147.4), measured 2026-11-27 (the same command with `UNTIL=2026-11-27T19:22:17Z`). That is lines written into the window after the first run. Every task's own-path line is identical, measured 2026-11-27 (the same command with `UNTIL=2026-11-27T19:22:17Z`, both runs' side rows and `Its own path` lines diffed).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a bundle's tasks, and a task built inside another's tree, read its counts, turns and tokens whole, marked | `task_time::turns_tests::a_bundles_tasks_each_read_the_bundles_counts_turns_and_tokens_whole`: with each row reading its own task alone, 63 passed and 1 failed; 64 passed after, observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/measure ONLY="measure::task_time"`. The size fixture's T1, whose bundle commit names T9 with no builder, now carries the mark (`sized_tests`) | n/a, a report's text | none | n/a |
 
 ### T514 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A reader of a bundle's second task sees the work its builder did, marked as the bundle's, not zero.
+2. **The constraints.** T512-D1's rule for a shared commit: whole under each task, marked, never split. T512-D4's own path equals the builder minutes. The GM's Goodhart caution: raw figures only.
+3. **Where each comes from.** O: T512's finding, D3 and D4. The brief: "book to every task the marker names, or show the bundle as one row, your call, said with why".
+4. **Do they describe the world here?** Yes: D4's run over the overnight window.
+5. **The order.** After T513, whose session calls a bundle's row also sums.
+6. **The exits.** Green: the test above and D4's run. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** T404's row reads its bundle's 89 builder turns, marked. The window's tasks' side and own-path totals are unchanged to 0.1 minute, measured 2026-11-27 (D4's run).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The reader saw T404 at 0 turns, 0 counts and 0 tokens beside a commit it shares with T419, measured 2026-11-27 (D4's before run). Now its row reads the bundle's figures, marked.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** yes: a measurement of where the time and tokens go, counted as performance work by the GM's words of 2026-11-20
 
 
 <!-- plan-archive: T520 to T515 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
