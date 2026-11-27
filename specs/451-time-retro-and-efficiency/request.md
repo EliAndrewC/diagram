@@ -515,3 +515,7 @@ The GM on T512's figures, 2026-11-27, reading T417's row (+831 -445 (59.6%), +36
 And, on the same row's percentages:
 
 > which first of all probably should also not get percentages, because when I talked about percentages, I think I only really care about that for time and tokens. And I don't know that it makes sense to be tracking percentages for things like lines added versus lines removed or whatever.
+
+The GM, 2026-11-27, on the cache's remaining options (T520, T526):
+
+> I agree that time continues to be more important than disk space, thanks.  Glad to hear that things are still in progress, I just wanted to make sure.
