@@ -102,10 +102,6 @@ fn a_session_call_books_to_the_task_its_own_tool_calls_name() {
 /// tasks it shares a commit with; tasks sharing a commit that each had a builder, a task in no bundle, and another feature's task of
 /// the same id read their own.
 #[test]
-#[expect(
-    clippy::too_many_lines,
-    reason = "one fixture's bundles and the rows they print, each beside the one before"
-)]
 fn a_bundles_tasks_each_read_the_bundles_counts_turns_and_tokens_whole() {
     use super::super::where_time::columns::ran::{Kind, Ran};
     use super::beside::{self, Extra};
