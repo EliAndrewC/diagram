@@ -37,6 +37,18 @@ const STALE_S: f64 = 90.0 * 60.0;
 const PENDING_S: f64 = 120.0;
 /// A `check-wave` unit's dispatch waits longer for its agent: a long wave queues behind the workflow's cap (a design number to move).
 const WAVE_PENDING_S: f64 = 30.0 * 60.0;
+/// How long after its dispatch a `check-wave` row still waits for an agent to pair (`pair_wave`): pending, or returned with no reply.
+/// A GUESS knob (451 T505): the 30-minute queue above plus the longest wave agent's run, 585 s of 362 measured 2026-11-27
+/// (`check-passes.jsonl`'s wall cells), many times over. Unbounded, 14 rows returned empty 861 to 863 hours before had every
+/// `SubagentStop` book and rewrite the whole 2.6 MB state, 92 to 95 ms of CPU a stop. A reply later than this is not paired: its
+/// round is not counted and its blocks are not booked as the row's edits, as for any agent no row names.
+const WAVE_WAIT_S: f64 = 6.0 * 3600.0;
+
+/// Whether a wave row in `state`, with or without a `reply`, dispatched at `t`, still waits for an agent at `now`.
+#[must_use]
+pub fn wave_waits(state: &str, reply: bool, t: f64, now: f64) -> bool {
+    (state == "pending" || (state == "returned" && !reply)) && now - t < WAVE_WAIT_S
+}
 /// The answers one `modal-research` dispatch is recorded as.
 const RESEARCH_UNITS: [&str; 3] = ["modal-accuracy", "modal-references", "modal-gaps"];
 /// How much of a dropped block's words a later block must carry to be that block back.
@@ -261,7 +273,7 @@ fn prefix_hash(t: &str, n: usize) -> String {
 }
 
 /// A workflow agent no `PostToolUse` gave an id to: matched to the wave dispatch its task text begins with, and launched there.
-pub fn pair_wave(state: &mut Value, agent_id: &str, transcript: &str) {
+pub fn pair_wave(state: &mut Value, agent_id: &str, transcript: &str, now: f64) {
     if agent_id.is_empty() || dispatches(state).iter().any(|d| text(d, "aid") == agent_id) {
         return;
     }
@@ -290,8 +302,8 @@ pub fn pair_wave(state: &mut Value, agent_id: &str, transcript: &str) {
         .collect();
     hits.sort_by(|a, b| b.1.cmp(&a.1).then(a.2.cmp(&b.2)).then(a.3.total_cmp(&b.3)));
     let Some(tid) = hits.into_iter().map(|h| h.0).find(|tid| {
-        let state_of = text(&ds[tid], "state");
-        state_of == "pending" || (state_of == "returned" && falsy(ds[tid].get("reply")))
+        let d = &ds[tid];
+        wave_waits(text(d, "state"), !falsy(d.get("reply")), t_of(d), now)
     }) else {
         return;
     };

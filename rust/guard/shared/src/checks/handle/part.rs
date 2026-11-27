@@ -17,13 +17,15 @@ use crate::checks::{falsy, parsed, text};
 /// The top-level keys left unparsed until a call reads them: no `edit`, `after`, plain launch or return reads them.
 const ROWS: [&str; 3] = ["dispatches", "versions", "seen"];
 
-/// What `concerns` reads of one dispatch or hold: its agent, its state, and whether its `wave` and `reply` are set (not `falsy`).
-#[derive(Debug, Default, PartialEq, Eq)]
+/// What `concerns` reads of one dispatch or hold: its agent, its state, whether its `wave` and `reply` are set (not `falsy`), and
+/// its dispatch time `t` (a number, else 0), which bounds a wave row's wait (451 T505).
+#[derive(Debug, Default, PartialEq)]
 pub(super) struct Row {
     pub(super) aid: String,
     pub(super) state: String,
     pub(super) wave: bool,
     pub(super) reply: bool,
+    pub(super) t: f64,
 }
 
 impl Row {
@@ -34,8 +36,14 @@ impl Row {
             state: text(d, "state").to_owned(),
             wave: !falsy(d.get("wave")),
             reply: !falsy(d.get("reply")),
+            t: time_of(d.get("t")),
         }
     }
+}
+
+/// A row's `t` as `rounds::t_of` reads it: a number, else 0.
+fn time_of(v: Option<&Value>) -> f64 {
+    v.and_then(Value::as_f64).unwrap_or(0.0)
 }
 
 /// The state read in part.
@@ -182,7 +190,7 @@ impl<'de> Visitor<'de> for Rows {
     }
 }
 
-/// One dispatch: `aid` and `state` as values, `wave` and `reply` as their truth, every other field scanned.
+/// One dispatch: `aid`, `state` and `t` as values, `wave` and `reply` as their truth, every other field scanned.
 struct OneRow;
 
 impl<'de> DeserializeSeed<'de> for OneRow {
@@ -205,6 +213,7 @@ impl<'de> Visitor<'de> for OneRow {
                 "state" => row.state = text_of(m.next_value()?),
                 "wave" => row.wave = m.next_value_seed(Skip)?,
                 "reply" => row.reply = m.next_value_seed(Skip)?,
+                "t" => row.t = time_of(Some(&m.next_value()?)),
                 _ => {
                     m.next_value_seed(Skip)?;
                 }
@@ -224,7 +233,8 @@ fn text_of(v: Value) -> String {
 
 /// Any value scanned through `deserialize_any`, never made one, answering whether it is set (not `falsy`). Not `IgnoredAny`'s own
 /// scan, which takes a number past f64 the whole parse refuses (451 T493's `1e400`): this one parses every token as `Value` does,
-/// so a text it takes is one the whole parse takes.
+/// so a text it takes is one the whole parse takes. `IgnoredAny` in its place was measured and left (451 T506): -2.1 to 1.2 ms a
+/// hook, inside the noise, on a copy of the clone's 2.6 MB state, 2026-11-27.
 struct Skip;
 
 impl<'de> DeserializeSeed<'de> for Skip {

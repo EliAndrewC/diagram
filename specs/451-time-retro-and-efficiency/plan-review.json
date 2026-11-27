@@ -4536,6 +4536,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T505 (451 T490: every SubagentStop booked and rewrote the whole 2.6 MB check state, 92 to 95 ms of CPU a stop and 22 of 22 writing, because 14 check-wave rows `returned` with no reply, 861 to 863 hours old, still counted as waiting for an agent, measured 2026-11-27 (`t490-time.py`'s agent-stop arm, 20 runs))": {
+   "sha256": "a56fb95525678b9e8e2fbb72febe2309fb03967f7dc2614ade8a5a33a91d4693",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T505 Approach (checklist part A)": {
+   "sha256": "45613b9e5887bd1eefe3362346ab55e4e1559b81c8863f69551ac7e96c9da501",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T506 (451 T490: the check state's partial read scans its skipped rows exactly, and serde's `IgnoredAny` scan was priced at about 5 to 8 ms a hook cheaper, measured 2026-11-27 (T490's `t490-pricing2.txt`))": {
+   "sha256": "06ed5b6bec0b2353bd5c60eac5a37925537b0eea2469f7f803a829e536cabd5d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T506 Approach (checklist part A)": {
+   "sha256": "e86325e3da92baef6e3082e14b25ef9596ff4362a0b733fc93acaeba7e47707f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -41757,6 +41781,154 @@
      "why": "Unchanged since the CLEAR verdict; it is the fix the T363 line asks for: a run that leaves a process behind no longer passes silently."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T505 (451 T490: every SubagentStop booked and rewrote the whole 2.6 MB check state, 92 to 95 ms of CPU a stop and 22 of 22 writing, because 14 check-wave rows `returned` with no reply, 861 to 863 hours old, still counted as waiting for an agent, measured 2026-11-27 (`t490-time.py`'s agent-stop arm, 20 runs))",
+    "### T505 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T505 Approach",
+     "summary": "A wave row waits for an agent only for WAVE_WAIT_S after its dispatch; both readers of the wait (handle::concerns, rounds::pair_wave) ask wave_waits; Row keeps t for concerns.",
+     "class": "within",
+     "why": "Performance work (FR-013, the GM 2026-11-20 'can we in general priotitize performance improvements going forward?'), taking ~75-80 ms CPU and a 2.6 MB write off every SubagentStop no row names. No request clause or requirement is narrowed; no guard message changed."
+    },
+    {
+     "id": "T505-D1",
+     "summary": "WAVE_WAIT_S = 6 hours, a GUESS knob timed from the dispatch t, also ending a pending row's wait; WAVE_PENDING_S unchanged.",
+     "class": "within",
+     "why": "A tuning choice inside the performance fix, labeled GUESS and listed in make tunables, set far above the longest measured wave agent run (585 s of 362). Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T505 late reply",
+     "summary": "An agent paired after the wait is treated as an agent no row names: its reply, round and EDIT blocks are not booked; the row stays returned with no reply, read by running and open_round as before; stated in the knob's doc comment.",
+     "class": "within",
+     "why": "A stated, bounded consequence of the bound (only a unit retried hours after its wave's dispatch meets it), not a carve-out from any GM clause or spec requirement; no requirement in the spec governs check-wave booking. No defect is left: the 14 rows it affects were 861-863 hours old and reply-less."
+    },
+    {
+     "id": "T505 age vs save-on-change",
+     "summary": "Bound the wait by age rather than saving only where a booking changed a row, since save-on-change needs the full parse (the 55 ms clone and compare T387 replaced).",
+     "class": "within",
+     "why": "A design choice between two ways of doing the requested performance work; fidelity does not judge which is better."
+    },
+    {
+     "id": "T505 order",
+     "summary": "After T490, before T302; one landing; red-first test and before/after timings on a copy of the clone's state.",
+     "class": "within",
+     "why": "Performance work ordered first per FR-013; verification only of the fix itself."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T506 (451 T490: the check state's partial read scans its skipped rows exactly, and serde's `IgnoredAny` scan was priced at about 5 to 8 ms a hook cheaper, measured 2026-11-27 (T490's `t490-pricing2.txt`))",
+    "### T506 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T506-D1",
+     "summary": "IgnoredAny for the partial read's skipped rows was built, timed against T505's build on a copy of the clone's state, and reverted: it saves about 1 ms a hook, inside the noise, not the 5 to 8 ms the task line priced; the exact scan (Skip) stays",
+     "class": "within",
+     "why": "The brief makes building conditional on the saving T490 measured; the measurement shows the 5 to 8 ms was the gap to the no-dispatches arm, not the scan's cost, so taking the else branch carries out the task as written. Nothing the GM asked for is narrowed: his request is to put performance first (2026-11-20), and a change that buys no measurable time while giving up exact reads of a skipped number past f64 or a lone surrogate is not a performance improvement. No wrong outcome is left in place. Note, not a ruling: the stated range '-0.3 to 1.2 ms' does not match the block's own rows. agent-post run 1 went 27.2 -> 29.3, which is -2.1, so across five cases and two runs the range is -2.1 to 1.2. That only strengthens the conclusion, but items 'D1' and '9. Done, measured' should state it as measured."
+    },
+    {
+     "id": "T506-doc",
+     "summary": "No code moves except Skip's doc comment, which records that IgnoredAny was measured and left; no red test because nothing was built",
+     "class": "within",
+     "why": "FR-012's red-first tests cover the refusals of FR-006 to FR-009, FR-011 and FR-013. This task adds no refusal and no behavior, so no test is owed. A doc comment recording the measured outcome is the brief's 'else record why not'."
+    },
+    {
+     "id": "T506-left",
+     "summary": "The partial read's remaining 5 to 8 ms of CPU a hot hook (bash-pre 17.0 to 18.6 against 10.9) is left with its cause unpriced, and profiling it is filed as T507 to land before T302",
+     "class": "within",
+     "why": "Slowness that still gives correct answers is not a defect (constitution XIV: a defect is a wrong outcome), so 'fix all known bugs' does not reach it. The time is not dropped: it is filed as its own measurement task with an order, and the item gives the why, the id and the order that FR-009 asks of a found-and-left item. Under FR-013 and the GM's 2026-11-20 words, measuring where time goes counts as performance work and is scheduled first, so T507 should carry [perf] on its line. This bundle does not show that line, so the tag could not be checked here."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T506 (451 T490: the check state's partial read scans its skipped rows exactly, and serde's `IgnoredAny` scan was priced at about 5 to 8 ms a hook cheaper, measured 2026-11-27 (T490's `t490-pricing2.txt`))",
+    "### T506 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T506-D1",
+     "summary": "IgnoredAny priced in place of the exact Skip scan for the partial read's skipped rows, found to save about 1 ms a hook (-2.1 to 1.2 ms, inside the noise) rather than 5 to 8, and not built; the exact scan stays and its doc comment records the measurement.",
+     "class": "within",
+     "why": "The task's brief made building conditional on the saving T490 priced; the measurement says the condition is not met, and the brief's own else branch (record why not) is taken. Nothing the GM asked is narrowed: his performance-first rule (FR-013) is served by measuring, and leaving a change that saves nothing measurable while keeping exact parsing is not leaving a defect (no wrong outcome: every answer reads as the whole parse reads it). Figures carry dated method labels."
+    },
+    {
+     "id": "T506-no-red-test",
+     "summary": "No red test, since no code but a doc comment moved.",
+     "class": "within",
+     "why": "FR-012's red-first tests are owed by refusals of FR-006 to FR-009, FR-011 and FR-013; this task builds no refusal and changes no behavior."
+    },
+    {
+     "id": "T506-order",
+     "summary": "Runs after T490 and T505 (the build it was timed against), before T302; one landing.",
+     "class": "within",
+     "why": "Ordering and budget the spec leaves open; consistent with FR-013's performance-first ordering."
+    },
+    {
+     "id": "T506-found-and-left",
+     "summary": "The partial read's remaining 5 to 8 ms of CPU a hot hook over the no-dispatches arm is left to T507 (a profile to find its cause), landing before T302.",
+     "class": "within",
+     "why": "A hook's CPU cost is not a wrong outcome under constitution XIV's definition of a defect, and its cause is outside this task's brief (the scan, which was priced). It is not dropped: filed as T507 with its reason and its order ('lands before T302'), as FR-009 requires of a deferral, and as measurement-of-where-time-goes work it counts as performance work under FR-013 and so is scheduled first."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T505 (451 T490: every SubagentStop booked and rewrote the whole 2.6 MB check state, 92 to 95 ms of CPU a stop and 22 of 22 writing, because 14 check-wave rows `returned` with no reply, 861 to 863 hours old, still counted as waiting for an agent, measured 2026-11-27 (`t490-time.py`'s agent-stop arm, 20 runs))",
+    "### T505 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T505-approach",
+     "summary": "Bound how long a check-wave row waits for an agent (WAVE_WAIT_S after its dispatch), asked by both readers of the wait (handle::concerns, rounds::pair_wave), with Row keeping t for concerns, so a SubagentStop no row names neither books nor rewrites the 2.6 MB check state.",
+     "class": "within",
+     "why": "Performance work on the checks' tooling is what the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?'; FR-013), and this one is measured before and after (89.6/94.3 -> 14.1/14.3 ms CPU, writes 22 of 22 -> 0 of 22). It takes cost off every subagent stop and narrows nothing the request or spec asks for."
+    },
+    {
+     "id": "T505-D1",
+     "summary": "WAVE_WAIT_S is 6 hours, a GUESS knob labeled in its doc comment as HOLD_MAX_S is, timed from the dispatch t; a pending row past it stops waiting too; WAVE_PENDING_S unchanged.",
+     "class": "within",
+     "why": "Picking the knob's value and what it is timed from is a design choice inside the perf fix. 6 h is many times the longest wave agent measured (585 s over 362 agents), so no wave inside its own run is affected. A pending row is already dead to live after WAVE_PENDING_S (30 min), so a pending row that stops waiting at 6 h changes nothing anyone relies on. Nothing in the request sets this value."
+    },
+    {
+     "id": "T505-late-reply",
+     "summary": "An agent paired after the wait is treated as one no row names: its reply, round and EDIT blocks are not booked; the row stays returned-with-no-reply as before; said in the doc comment.",
+     "class": "within",
+     "why": "This is the cost of the age bound, stated and not hidden. It only reaches a wave unit retried more than 6 h after its wave's dispatch, against a measured longest run of 585 s, and it leaves the row as it stood before the late agent came. That is not a wrong outcome on any path the request or the spec names, so it is not a defect left and not a narrowing of what was asked."
+    },
+    {
+     "id": "T505-age-not-save-on-change",
+     "summary": "Choose the age bound over saving only when a booking changed a row, because comparing needs the whole parse (the 55 ms clone and compare T387 removed).",
+     "class": "within",
+     "why": "Choosing between two ways to make the same perf improvement is design, not fidelity. Neither option narrows the request."
+    },
+    {
+     "id": "T505-red-first-and-tests",
+     "summary": "Red-first test a_wave_row_past_its_wait_is_not_booked (1 of 9 failing on the old code), two existing tests extended to pin the past-the-wait cases, part tests reading t; crate-scoped builder checks green.",
+     "class": "within",
+     "why": "These tests only enforce the change this task makes, so they serve the request. They add no behavior of their own."
+    },
+    {
+     "id": "T505-no-message-changed",
+     "summary": "No guard message is changed; the brief's constraints are kept.",
+     "class": "within",
+     "why": "Nothing is removed or narrowed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -62136,6 +62308,82 @@
      "summary": "Counted as performance work for scheduling",
      "class": "within",
      "why": "FR-013's measurement clause (the GM 2026-11-20: measurement tasks count as performance tasks for scheduling)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T505": {
+   "section_sha256": "436742c5e1cd77329160070dcf588cabd5c06a4dba4fa2b8a81b7d5869210136",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T505-approach",
+     "summary": "Bound how long a check-wave row waits for an agent (WAVE_WAIT_S after its dispatch), asked by both readers of the wait (handle::concerns, rounds::pair_wave), with Row keeping t for concerns, so a SubagentStop no row names neither books nor rewrites the 2.6 MB check state.",
+     "class": "within",
+     "why": "Performance work on the checks' tooling is what the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?'; FR-013), and this one is measured before and after (89.6/94.3 -> 14.1/14.3 ms CPU, writes 22 of 22 -> 0 of 22). It takes cost off every subagent stop and narrows nothing the request or spec asks for."
+    },
+    {
+     "id": "T505-D1",
+     "summary": "WAVE_WAIT_S is 6 hours, a GUESS knob labeled in its doc comment as HOLD_MAX_S is, timed from the dispatch t; a pending row past it stops waiting too; WAVE_PENDING_S unchanged.",
+     "class": "within",
+     "why": "Picking the knob's value and what it is timed from is a design choice inside the perf fix. 6 h is many times the longest wave agent measured (585 s over 362 agents), so no wave inside its own run is affected. A pending row is already dead to live after WAVE_PENDING_S (30 min), so a pending row that stops waiting at 6 h changes nothing anyone relies on. Nothing in the request sets this value."
+    },
+    {
+     "id": "T505-late-reply",
+     "summary": "An agent paired after the wait is treated as one no row names: its reply, round and EDIT blocks are not booked; the row stays returned-with-no-reply as before; said in the doc comment.",
+     "class": "within",
+     "why": "This is the cost of the age bound, stated and not hidden. It only reaches a wave unit retried more than 6 h after its wave's dispatch, against a measured longest run of 585 s, and it leaves the row as it stood before the late agent came. That is not a wrong outcome on any path the request or the spec names, so it is not a defect left and not a narrowing of what was asked."
+    },
+    {
+     "id": "T505-age-not-save-on-change",
+     "summary": "Choose the age bound over saving only when a booking changed a row, because comparing needs the whole parse (the 55 ms clone and compare T387 removed).",
+     "class": "within",
+     "why": "Choosing between two ways to make the same perf improvement is design, not fidelity. Neither option narrows the request."
+    },
+    {
+     "id": "T505-red-first-and-tests",
+     "summary": "Red-first test a_wave_row_past_its_wait_is_not_booked (1 of 9 failing on the old code), two existing tests extended to pin the past-the-wait cases, part tests reading t; crate-scoped builder checks green.",
+     "class": "within",
+     "why": "These tests only enforce the change this task makes, so they serve the request. They add no behavior of their own."
+    },
+    {
+     "id": "T505-no-message-changed",
+     "summary": "No guard message is changed; the brief's constraints are kept.",
+     "class": "within",
+     "why": "Nothing is removed or narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T506": {
+   "section_sha256": "891576e295f9bbab9cbdb8966f8af2a4bd59bc4d7bbe0a338ac26569389e387e",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T506-D1",
+     "summary": "IgnoredAny priced in place of the exact Skip scan for the partial read's skipped rows, found to save about 1 ms a hook (-2.1 to 1.2 ms, inside the noise) rather than 5 to 8, and not built; the exact scan stays and its doc comment records the measurement.",
+     "class": "within",
+     "why": "The task's brief made building conditional on the saving T490 priced; the measurement says the condition is not met, and the brief's own else branch (record why not) is taken. Nothing the GM asked is narrowed: his performance-first rule (FR-013) is served by measuring, and leaving a change that saves nothing measurable while keeping exact parsing is not leaving a defect (no wrong outcome: every answer reads as the whole parse reads it). Figures carry dated method labels."
+    },
+    {
+     "id": "T506-no-red-test",
+     "summary": "No red test, since no code but a doc comment moved.",
+     "class": "within",
+     "why": "FR-012's red-first tests are owed by refusals of FR-006 to FR-009, FR-011 and FR-013; this task builds no refusal and changes no behavior."
+    },
+    {
+     "id": "T506-order",
+     "summary": "Runs after T490 and T505 (the build it was timed against), before T302; one landing.",
+     "class": "within",
+     "why": "Ordering and budget the spec leaves open; consistent with FR-013's performance-first ordering."
+    },
+    {
+     "id": "T506-found-and-left",
+     "summary": "The partial read's remaining 5 to 8 ms of CPU a hot hook over the no-dispatches arm is left to T507 (a profile to find its cause), landing before T302.",
+     "class": "within",
+     "why": "A hook's CPU cost is not a wrong outcome under constitution XIV's definition of a defect, and its cause is outside this task's brief (the scan, which was priced). It is not dropped: filed as T507 with its reason and its order ('lands before T302'), as FR-009 requires of a deferral, and as measurement-of-where-time-goes work it counts as performance work under FR-013 and so is scheduled first."
     }
    ],
    "verdict": "CLEAR"

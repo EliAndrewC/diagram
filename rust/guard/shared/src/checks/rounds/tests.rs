@@ -581,29 +581,37 @@ fn a_wave_agent_is_paired_by_its_prompt() {
         "t1": {"wave": key.clone(), "wave_len": len, "state": "pending", "t": 5.0, "check": "c"},
         "t2": {"wave": key.clone(), "wave_len": len, "state": "pending", "t": 1.0, "check": "c"}
     }});
-    pair_wave(&mut tied, "agt", &transcript.to_string_lossy());
+    pair_wave(&mut tied, "agt", &transcript.to_string_lossy(), 10.0);
     assert_eq!(tied["dispatches"]["t2"]["aid"], json!("agt"));
     let mut state = json!({"dispatches": {
         "w1": {"wave": key, "wave_len": len, "state": "pending", "t": 2.0, "check": "c"},
         "w2": {"wave": wave_key(&long), "wave_len": long.chars().count(), "state": "pending", "t": 1.0, "check": "c"},
         "w3": {"check": "c"}
     }});
-    pair_wave(&mut state, "", &transcript.to_string_lossy());
+    pair_wave(&mut state, "", &transcript.to_string_lossy(), 10.0);
     assert!(state["dispatches"]["w1"].get("aid").is_none());
-    pair_wave(&mut state, "ag1", &transcript.to_string_lossy());
+    pair_wave(&mut state, "ag1", &transcript.to_string_lossy(), 10.0);
     assert_eq!(state["dispatches"]["w1"]["aid"], json!("ag1"));
     assert_eq!(state["dispatches"]["w1"]["state"], json!("running"));
-    pair_wave(&mut state, "ag1", &transcript.to_string_lossy());
+    pair_wave(&mut state, "ag1", &transcript.to_string_lossy(), 10.0);
     state["dispatches"]["w1"]["state"] = json!("returned");
     state["dispatches"]["w1"]["aid"] = json!("other");
-    pair_wave(&mut state, "ag2", &transcript.to_string_lossy());
+    // past its wait (451 T505) a row returned with no reply is paired no more
+    pair_wave(
+        &mut state,
+        "ag2",
+        &transcript.to_string_lossy(),
+        2.0 + 6.0 * 3600.0,
+    );
+    assert_eq!(state["dispatches"]["w1"]["aid"], json!("other"));
+    pair_wave(&mut state, "ag2", &transcript.to_string_lossy(), 10.0);
     assert_eq!(state["dispatches"]["w1"]["aid"], json!("ag2"));
     state["dispatches"]["w1"]["state"] = json!("returned");
     state["dispatches"]["w1"]["reply"] = json!("r");
     state["dispatches"]["w1"]["aid"] = json!("x");
-    pair_wave(&mut state, "ag3", &transcript.to_string_lossy());
+    pair_wave(&mut state, "ag3", &transcript.to_string_lossy(), 10.0);
     assert_eq!(state["dispatches"]["w1"]["aid"], json!("x"));
-    pair_wave(&mut state, "ag4", "/no/such/transcript");
+    pair_wave(&mut state, "ag4", "/no/such/transcript", 10.0);
 }
 
 /// A wave agent's transcript carrying `prompt`, and the `wave` and `wave_len` its dispatch row records.
@@ -647,7 +655,7 @@ fn a_wave_applies_its_reading_marks_once_for_its_run() {
         "single": {"check": "record-format", "subjects": ["q:0106"], "state": "returned", "aid": "ags", "t": 2.0, "reply": single_reply}
     }});
     state["dispatches"]["wave:r2:c"]["subjects"] = json!(["q:0106"]);
-    pair_wave(&mut state, "agb", &tb);
+    pair_wave(&mut state, "agb", &tb, 10.0);
     assert_eq!(state["dispatches"]["wave:r1:b"]["aid"], json!("agb"));
     assert_eq!(state["edits"]["q:0105"], json!([]));
     assert_eq!(state["seen"][unit], json!(["k1"]));
@@ -657,12 +665,12 @@ fn a_wave_applies_its_reading_marks_once_for_its_run() {
     assert!(state["dispatches"]["plain"].get("marks").is_some());
     // b's return records its edit; a's later return wipes nothing
     state["edits"]["q:0105"] = json!([["p", "o", "b's edit"]]);
-    pair_wave(&mut state, "aga", &ta);
+    pair_wave(&mut state, "aga", &ta, 10.0);
     assert_eq!(state["dispatches"]["wave:r1:a"]["aid"], json!("aga"));
     assert_eq!(state["edits"]["q:0105"], json!([["p", "o", "b's edit"]]));
     assert_eq!(state["notes_read"][unit], json!(["n1", "n2"]));
     // a check outside the run returned on q:0106 since: c's fresh reset keeps its block and drops the earlier round's
-    pair_wave(&mut state, "agc", &tc);
+    pair_wave(&mut state, "agc", &tc, 10.0);
     assert!(state["dispatches"]["wave:r2:c"].get("marks").is_none());
     assert_eq!(
         state["edits"]["q:0106"],

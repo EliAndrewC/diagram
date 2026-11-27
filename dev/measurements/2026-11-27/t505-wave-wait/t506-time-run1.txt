@@ -1,0 +1,12 @@
+# load at start 2.8, state 2618222 bytes, 20 counted runs a case and binary
+before	bash-pre	wall median 18.1	p90 20.8	min 13.5	cpu median 17.7	writes 0/22	state 2618671
+after	bash-pre	wall median 17.5	p90 19.3	min 14.9	cpu median 17.0	writes 0/22	state 2618669
+before	bash-post	wall median 15.2	p90 16.2	min 12.5	cpu median 14.9	writes 1/22	state 2618642
+after	bash-post	wall median 14.0	p90 15.4	min 12.0	cpu median 13.7	writes 1/22	state 2618640
+before	agent-post	wall median 27.7	p90 35.9	min 23.8	cpu median 27.2	writes 0/22	state 2618642
+after	agent-post	wall median 29.8	p90 35.6	min 23.2	cpu median 29.3	writes 0/22	state 2618640
+before	agent-pre	wall median 10.1	p90 11.3	min 8.7	cpu median 9.8	writes 0/22	state 2618642
+after	agent-pre	wall median 9.0	p90 10.0	min 7.9	cpu median 8.7	writes 0/22	state 2618640
+before	agent-stop	wall median 12.7	p90 14.6	min 11.3	cpu median 12.3	writes 0/22	state 2618642
+after	agent-stop	wall median 11.9	p90 13.4	min 10.8	cpu median 11.5	writes 0/22	state 2618640
+# load at end 2.7

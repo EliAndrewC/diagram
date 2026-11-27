@@ -173,7 +173,15 @@ fn str_values(ti: &Value) -> String {
 }
 
 /// A launch's or a return's bookkeeping, the state saved by the caller.
-fn book_keep(mode: &str, tool: &str, state: &mut Value, payload: &Value, ti: &Value, path: &Path) {
+fn book_keep(
+    mode: &str,
+    tool: &str,
+    state: &mut Value,
+    payload: &Value,
+    ti: &Value,
+    path: &Path,
+    t: f64,
+) {
     match (mode, tool) {
         ("launched", "Agent") => {
             let resp = payload
@@ -214,6 +222,7 @@ fn book_keep(mode: &str, tool: &str, state: &mut Value, payload: &Value, ti: &Va
                 state,
                 text(payload, "agent_id"),
                 text(payload, "agent_transcript_path"),
+                t,
             );
             let reply_text = super::reply::reply_of(
                 text(payload, "agent_transcript_path"),
@@ -256,10 +265,10 @@ fn handle_locked(mode: &str, payload: &Value, path: &Path, t: f64) -> String {
         ("launched", "Agent" | "TaskStop") | ("returned", _) => {
             // a launch or return no dispatch or hold names changes nothing: neither booked nor saved (451 T387: 98 ms on every Agent
             // call's end; a clone and compare of the 3.0 MB state to find that out cost 55 ms of it, measured 2026-11-27)
-            if !switched && !concerns(mode, tool, &st, payload) {
+            if !switched && !concerns(mode, tool, &st, payload, t) {
                 return out;
             }
-            book_keep(mode, tool, st.whole(), payload, &ti, path);
+            book_keep(mode, tool, st.whole(), payload, &ti, path, t);
         }
         ("after", _) => {
             let root = call_root(payload);
@@ -324,9 +333,10 @@ fn hold_part(state: &Value) -> (Option<Value>, Option<Value>) {
 }
 
 /// Whether a launch or a return books anything: an Agent launch whose call id is a dispatch's or a hold's; a return whose agent is
-/// a dispatch's or a hold's, or that a wave dispatch still waiting for its agent could be paired with (`rounds::pair_wave`); a
+/// a dispatch's or a hold's, or that a wave dispatch still waiting for its agent at `now` could be paired with (`rounds::pair_wave`,
+/// its wait bounded by `rounds::wave_waits`, 451 T505); a
 /// `TaskStop`, always (451 T387).
-fn concerns(mode: &str, tool: &str, st: &Part, payload: &Value) -> bool {
+fn concerns(mode: &str, tool: &str, st: &Part, payload: &Value, now: f64) -> bool {
     // the dispatches' rows as the partial read keeps them (451 T490), and the holds', read the same way
     let holds: Vec<(&String, Row)> = st
         .value()
@@ -345,9 +355,7 @@ fn concerns(mode: &str, tool: &str, st: &Part, payload: &Value) -> bool {
         return true;
     }
     let aid = text(payload, "agent_id");
-    rows.any(|(_, d)| {
-        d.aid == aid || (d.wave && (d.state == "pending" || (d.state == "returned" && !d.reply)))
-    })
+    rows.any(|(_, d)| d.aid == aid || (d.wave && rounds::wave_waits(&d.state, d.reply, d.t, now)))
 }
 
 /// A REFUSED dispatch saves nothing of what it counted - but the footnote hold's own record must outlive its refusal: the trigger

@@ -36,7 +36,7 @@ fn a_row_s_truths_are_the_whole_parse_s() {
     ];
     for v in values {
         let text = format!(
-            r#"{{"dispatches": {{"t": {{"aid": "a", "state": 1, "wave": {v}, "reply": {v}, "owed": {v}}}}}}}"#
+            r#"{{"dispatches": {{"t": {{"aid": "a", "state": 1, "wave": {v}, "reply": {v}, "t": {v}, "owed": {v}}}}}}}"#
         );
         let part = Part::parse(text.clone(), true);
         let whole: Value = serde_json::from_str(&text).unwrap();

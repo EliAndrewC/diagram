@@ -124,32 +124,41 @@ fn an_agent_launch_no_check_or_hold_names_writes_nothing() {
     assert_ne!(inode(&root), waiting);
 }
 
+/// A wave row that waits past its limit is waited on no more (451 T505): 14 rows `returned` with no reply, 861 to 863 hours old,
+/// had every `SubagentStop` of the clone book and rewrite the whole 2.6 MB state. A return no row names then writes nothing; a row
+/// inside the limit is still booked.
+#[test]
+fn a_wave_row_past_its_wait_is_not_booked() {
+    let root = held("wave-aged");
+    let mut s = load(&state_file(&root));
+    s["dispatches"]["wave:r:0"] = json!({"check": "impl-drift", "state": "returned", "aid": "old", "wave": "abc", "wave_len": 3, "t": 1000.0});
+    s["dispatches"]["wave:p:0"] = json!({"check": "impl-drift", "state": "pending", "wave": "abd", "wave_len": 3, "t": 1000.0});
+    save(&state_file(&root), &s).unwrap();
+    let before = inode(&root);
+    let stop = json!({"cwd": root, "agent_id": "agx", "hook_event_name": "SubagentStop"});
+    assert_eq!(handle("returned", &stop, Some(1000.0 + 6.0 * 3600.0)), "");
+    assert_eq!(inode(&root), before);
+    assert_eq!(handle("returned", &stop, Some(1000.0 + 5.0 * 3600.0)), "");
+    assert_ne!(inode(&root), before);
+}
+
 /// A return concerns the state where a wave's row still waits: pending, or returned with no reply yet (451 T387's `concerns`).
 #[test]
 fn a_return_concerns_a_wave_row_that_waits_for_its_reply() {
     let row = |state: &str, reply: Value| {
-        let s = json!({"dispatches": {"t1": {"aid": "x", "wave": true, "state": state, "reply": reply}}});
+        let s = json!({"dispatches": {"t1": {"aid": "x", "wave": true, "state": state, "reply": reply, "t": 1000.0}}});
         super::Part::parse(s.to_string(), true)
     };
     let ret = json!({"agent_id": "y"});
-    assert!(super::concerns(
-        "returned",
-        "Agent",
-        &row("pending", Value::Null),
-        &ret
-    ));
-    assert!(super::concerns(
-        "returned",
-        "Agent",
-        &row("returned", Value::Null),
-        &ret
-    ));
-    assert!(!super::concerns(
-        "returned",
-        "Agent",
-        &row("returned", json!("done")),
-        &ret
-    ));
+    let at = |state: &str, reply: Value, now: f64| {
+        super::concerns("returned", "Agent", &row(state, reply), &ret, now)
+    };
+    assert!(at("pending", Value::Null, 1000.0));
+    assert!(at("returned", Value::Null, 1000.0));
+    assert!(!at("returned", json!("done"), 1000.0));
+    // past the wave's wait (451 T505), neither waits
+    assert!(!at("pending", Value::Null, 1000.0 + 6.0 * 3600.0));
+    assert!(!at("returned", Value::Null, 1000.0 + 6.0 * 3600.0));
 }
 
 /// A call that reads no row parses no row (451 T490): a Bash call under a hold, its end, an Agent call no check or hold names and
