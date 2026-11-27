@@ -1595,31 +1595,41 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 <!-- plan-archive: T43 to T08 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T44 to T43 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T45 to T13 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T46 (<why: the finding or measurement that files it>)
+### T46 (T13's found-and-left: the builder-tree help lines said nothing of the lane)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: three `##` help lines of the root Makefile (through `make guard-edit FILE=Makefile`, a guard file) restated to
+  what the code does now, read 2026-11-27 in `rust/gate/crates/task/src/builder_tree.rs` and T13's, T49's and T50's sections:
+  `builder-tree-adopt` - the lane's tree (`L7R_LANE_TREE`, else `<clone>-land`) joins as the lane's, held by the reserved holder
+  `lane`, no handout takes it, the cap does not count it, a `T=` or a second lane refused; the runner's `l7r-gate builder-tree
+  lane` (no make target) brings it to `origin/main` at each batch's start and makes it again at its path, its cache kept, when it
+  is gone from disk (T13, T50); `builder-tree-drop` - takes the lane's tree too, refused while the lane's runner lives (`make
+  lane-stop` first) or a batch of its log is open (`make lane-start` runs it to its landing or its stop) (T49); `builder-trees` -
+  lists the lane's tree, held by `lane`, apart from the cap (T13, the list header's `, and the lane's tree`). `make docs`
+  regenerated `docs/make-targets.html` (224 targets, 0 undocumented). No code changed. Red first: none applies - no test pins
+  these help lines' words (grep of `tests/` and `rust/` for the three target names, 2026-11-27: only the builder-pool guard's
+  REMOVE message and the crate's own stdout, both unchanged).
 
 ### T46 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A reader of `make help` or `docs/make-targets.html` adopting `<clone>-land` is told it becomes the
+   lane's tree, how the lane brings it to `origin/main` and re-makes it, and how it is dropped.
+2. **The constraints.** T13 (the lane holder, the cap, the reserved word, `builder-tree lane`), T49 (the lane's drop), T50 (the
+   re-make), T12's hold on the Makefile (landed before this).
+3. **Where each comes from.** R: tasks.md T46's line, T13's, T49's and T50's plan sections; O: `builder_tree.rs`, read 2026-11-27.
+4. **Do they describe the world here?** Yes: each clause matches a message the crate's lane tests pin (`builder_tree/tests/lane.rs`).
+5. **The order.** After T12, T13, T49 and T50; before T22.
+6. **The exits.** Green: `make docs` writes the page with 0 undocumented. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the three targets found by one grep of the Makefile.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make help` and `docs/make-targets.html` carry the lane's adoption, `builder-tree lane`, the re-make and the
+   lane's drop.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reader of the help lines is told the lane's rules; nothing else changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 ### T47 (<why: the finding or measurement that files it>)
 

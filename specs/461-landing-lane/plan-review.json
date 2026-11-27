@@ -534,6 +534,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T46 (T13's found-and-left: the builder-tree help lines said nothing of the lane)": {
+   "sha256": "2268750fec4a2cf5d018275143966735d7d541b277cabb04161e050cd7fe23c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T46 Approach (checklist part A)": {
+   "sha256": "66c8a4b524966d6f73df1f49c520157dab560a1bd5969cf1b76d97646b2c194a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3270,6 +3282,40 @@
      "why": "The classification only places T14 behind open performance tasks in make task-start's ordering; it lets nothing escape an obligation and narrows no requirement of 461."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T46 (T13's found-and-left: the builder-tree help lines said nothing of the lane)",
+    "### T46 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T46-help-lines",
+     "summary": "Restate the ## help lines of builder-tree-adopt, builder-tree-drop and builder-trees in the root Makefile (via make guard-edit) to describe the lane's tree as T13/T49/T50 built it, and regenerate docs/make-targets.html with make docs",
+     "class": "within",
+     "why": "Documents the landing lane's own worktree (FR-003, the GM's 'a landing lane of its own ... in its own worktree' sketch item 1) as already built; adds no behavior and narrows nothing the request or spec asks for."
+    },
+    {
+     "id": "T46-no-code",
+     "summary": "No code changes; the lines are restated to what builder_tree.rs does now, read 2026-11-27",
+     "class": "within",
+     "why": "A documentation-only correction of a found-and-left gap; the code's behavior is the spec's, and leaving it unchanged removes nothing asked for."
+    },
+    {
+     "id": "T46-no-red-test",
+     "summary": "No red-first test, since no test pins the help lines' words (grep of tests/ and rust/ for the three target names, 2026-11-27, search space stated)",
+     "class": "within",
+     "why": "Not adding a test for help text drops no requested behavior or check (FR-008 concerns the gate and push checks, untouched); the exit is make docs reporting 0 undocumented."
+    },
+    {
+     "id": "T46-order",
+     "summary": "Runs after T12, T13, T49 and T50 (T12 holds the Makefile) and before T22",
+     "class": "within",
+     "why": "Sequencing only; describes the lane after its parts land, narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -3790,6 +3836,38 @@
      "summary": "Measured done is the red-then-green tests now; in use, the lane's first real batch (T23) with a later hand-in left waiting and its left line in the attempt file.",
      "class": "within",
      "why": "A verification schedule for the requested behavior; defers no requested part and leaves no known defect (Found and left: none)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T46": {
+   "section_sha256": "258c7d4dc9d38c3331f4f2eb80d64c316fb6b4478bcb033a1671fb369bc41e76",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T46-help-lines",
+     "summary": "Restate the ## help lines of builder-tree-adopt, builder-tree-drop and builder-trees in the root Makefile (via make guard-edit) to describe the lane's tree as T13/T49/T50 built it, and regenerate docs/make-targets.html with make docs",
+     "class": "within",
+     "why": "Documents the landing lane's own worktree (FR-003, the GM's 'a landing lane of its own ... in its own worktree' sketch item 1) as already built; adds no behavior and narrows nothing the request or spec asks for."
+    },
+    {
+     "id": "T46-no-code",
+     "summary": "No code changes; the lines are restated to what builder_tree.rs does now, read 2026-11-27",
+     "class": "within",
+     "why": "A documentation-only correction of a found-and-left gap; the code's behavior is the spec's, and leaving it unchanged removes nothing asked for."
+    },
+    {
+     "id": "T46-no-red-test",
+     "summary": "No red-first test, since no test pins the help lines' words (grep of tests/ and rust/ for the three target names, 2026-11-27, search space stated)",
+     "class": "within",
+     "why": "Not adding a test for help text drops no requested behavior or check (FR-008 concerns the gate and push checks, untouched); the exit is make docs reporting 0 undocumented."
+    },
+    {
+     "id": "T46-order",
+     "summary": "Runs after T12, T13, T49 and T50 (T12 holds the Makefile) and before T22",
+     "class": "within",
+     "why": "Sequencing only; describes the lane after its parts land, narrows nothing."
     }
    ],
    "verdict": "CLEAR"
