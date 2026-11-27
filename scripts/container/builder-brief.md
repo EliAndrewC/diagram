@@ -137,3 +137,20 @@ A builder FILES what it finds and leaves, itself, from its tree (451 T289): `mak
 figures>"` prints its id; it writes `Not fixed here: <why>. Filed as T<n>; lands before T<m>.` in its plan section's item and lists
 it in the report's CANDIDATES as `filed: T<n>`. Scratch files carry the task id's prefix (`t<n>-`): builders share one scratchpad
 (451 T271).
+
+## Re-scoping a builder in flight (for the coordinating session)
+
+A message sent to a builder with `SendMessage` reaches it. None was lost of the 220 located, 2026-11-12 to 11-27. It arrives
+at one of two moments, and the result's first words say which. "Resuming agent" means the builder's turn had ended: it was
+waiting on a background job, stopped by a usage limit, or done. It gets the message as a user turn within about a second.
+"Message queued for delivery ... at its next tool round" means the builder is mid-turn. The message is attached after the
+last tool result of its current round: median 6 s, and 1.5 s when the result says a running call was moved to the
+background. An advisor call holds it until the call ends, up to about 4.5 minutes (all 10 delays over a minute). On
+2026-11-26/27 builders took up 14 of 14: 12 at their next step or at the point the message named, one already doing it, one
+already done. So do not resend a queued message: the result itself says, if the builder finishes first, "wait for that
+notification before resending". Write a re-scope to survive an advisor call's few minutes: as a stop at the next boundary, or
+as branches the builder picks from what it has built ("if job 2 is not yet built, do not start it"), never as "stop what you
+are doing now". A withdrawal stops the builder's own edits, but not an agent or job it already launched in the background
+(T381's plan review ran on after TaskStop), so name what to stop and expect a late notice from it. A message after the
+builder's report resumes a finished builder, which the brief's "ends at its report" rule keeps for a question it asked.
+Measured in `dev/measurements/2026-11-27/message-delivery/results.md` (451 T297).
