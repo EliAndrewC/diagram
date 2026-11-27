@@ -46,6 +46,10 @@ pub(super) const IDLE_HOURS: f64 = 12.0;
 /// research archive's 3 GB - a working set near 80 GB, and 20 over it for a cold build in flight. The other 37 GB that day was dead
 /// trees' targets and old variants.
 pub(super) const BUDGET_GB: f64 = 100.0;
+/// How long before its profile's last use a crate's build inside a live profile goes unread before the prune takes it (GUESS, a knob:
+/// `L7R_CACHE_STALE_HOURS`, 451 T515; floored at 25 h, `sweep/prune.rs`): two days, twice the day a `relatime` atime can lag a read.
+/// Measured 2026-11-27 on the real cache, stat alone: 30 h would take 111.6 GB, 48 h 85.0 GB, 72 h 76.5 GB.
+pub(super) const STALE_HOURS: f64 = 48.0;
 /// How long a `/tmp` scratch entry or a task output sits idle before the sweep takes it (GUESS, a knob: `SCRATCH_SWEEP_TMP_HOURS`,
 /// `SCRATCH_SWEEP_OUTPUT_HOURS`): a day - the host's measurement split 63 GB of scratch at "idle over a day" (27 GB), and a builder
 /// back at a trial's scratch after a night still finds it.
@@ -137,17 +141,19 @@ fn refusal(c: &Config, free: u64, now: SystemTime) -> String {
         ));
     }
     let cutoff = now.checked_sub(c.cache_age).unwrap_or(UNIX_EPOCH);
-    out.push(match sweep::cache_plan(c, cutoff, now, 0) {
-        Ok(plan) => format!(
-            "make cache-clean frees {} now ({} entries idle {} h or more; DRY=1 lists them, HOURS=<n> moves the threshold).",
-            gb(plan.iter().map(|i| i.bytes).sum()),
-            plan.len(),
-            c.cache_age.as_secs() / 3600
-        ),
-        Err(build) => format!(
-            "make cache-clean waits for the build that runs now ({build}); run it once that build ends."
-        ),
-    });
+    let (plan, build) = sweep::cache_plan(c, cutoff, now, 0);
+    out.push(format!(
+        "make cache-clean frees {} now ({} entries idle {} h or more, or stale in a live profile; DRY=1 lists them, HOURS=<n> moves \
+         the threshold).",
+        gb(plan.iter().map(|i| i.bytes).sum()),
+        plan.len(),
+        c.cache_age.as_secs() / 3600
+    ));
+    if let Some(build) = build {
+        out.push(format!(
+            "The rest waits for the build that runs now ({build}); run make cache-clean again once that build ends."
+        ));
+    }
     out.extend(trees(c, now));
     out.push(
         "Free space (make cache-clean; a scratch worktree by the command above), then run this again. Past the floor knowingly: \
@@ -161,10 +167,10 @@ fn refusal(c: &Config, free: u64, now: SystemTime) -> String {
 /// the lock; each removal and the total on the guard log; the scratch worktrees named after.
 pub(super) fn cache(c: &Config, now: SystemTime, dry: bool) -> Reply {
     let cutoff = now.checked_sub(c.cache_age).unwrap_or(UNIX_EPOCH);
-    let run = || -> Result<String, String> {
-        let plan = sweep::cache_plan(c, cutoff, now, 0)?;
+    let run = || -> (String, Option<String>) {
+        let (plan, build) = sweep::cache_plan(c, cutoff, now, 0);
         if dry {
-            return Ok(report(&plan, "would remove"));
+            return (report(&plan, "would remove"), build);
         }
         let removed: Vec<Item> = plan.into_iter().filter(|i| sweep::take(c, i)).collect();
         let input = json!({ "session_id": c.keep });
@@ -187,20 +193,22 @@ pub(super) fn cache(c: &Config, now: SystemTime, dry: bool) -> Reply {
             ),
             json!({ "count": removed.len(), "bytes": total, "by": "cache-clean" }),
         );
-        Ok(report(&removed, "removed"))
+        (report(&removed, "removed"), build)
     };
     let result = if dry { Some(run()) } else { locked_by(c, run) };
     let tail: String = trees(c, now).into_iter().map(|t| t + "\n").collect();
     match result {
-        Some(Ok(text)) => Reply {
+        Some((text, None)) => Reply {
             stdout: text + &tail,
             stderr: String::new(),
             code: 0,
         },
-        Some(Err(build)) => Reply {
-            stdout: tail,
+        // the prune inside live profiles runs beside a build elsewhere (451 T515); the rest waits for it
+        Some((text, Some(build))) => Reply {
+            stdout: text + &tail,
             stderr: format!(
-                "cache-clean: a build runs ({build}), so nothing was removed: run it again once that build ends\n"
+                "cache-clean: a build runs ({build}), so only the stale builds in live profiles were taken: run it again once \
+                 that build ends\n"
             ),
             code: 1,
         },

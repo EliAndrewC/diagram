@@ -109,7 +109,7 @@ fn below_the_share_free_a_prompt_starts_one_eviction_an_hour_and_says_once_what_
 }
 
 #[test]
-fn a_build_holds_the_eviction_and_the_next_prompt_tries_again() {
+fn a_build_holds_the_eviction_s_cache_share_but_not_its_age_shares_or_the_prune() {
     let (_base, mut c) = world();
     c.exe = "/bin/true".into();
     c.space = Some((1000, 100));
@@ -130,8 +130,8 @@ fn a_build_holds_the_eviction_and_the_next_prompt_tries_again() {
     assert!(evict(&c, now, false)
         .stdout
         .starts_with("evict: a build runs"));
-    // its stamp gone: the next prompt tries again
-    assert!(trigger(&c, "sid", now));
+    // its stamp kept (451 T515: the prune ran beside the build, and each retry walks the whole cache): not again within the hour
+    assert!(!trigger(&c, "sid", now));
     // another sweep holds the lock
     std::fs::remove_dir_all(c.proc.join("8")).unwrap();
     let lock = File::create(c.state.join("lock")).unwrap();

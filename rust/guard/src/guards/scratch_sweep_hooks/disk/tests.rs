@@ -321,3 +321,123 @@ fn a_landing_removes_its_tasks_own_scratch_and_says_which_number_it_left() {
     let blind = with(&args(&["landed", "451", &s, "T161"]), &mut c, now());
     assert!(blind.stdout.is_empty() && c.tmp.join("t161").exists());
 }
+
+/// Write `path` (and its parents up to `top`) built `m` hours ago, the file last read `a` hours ago (451 T515).
+fn put_times(top: &Path, path: &Path, m: u64, a: u64) {
+    put(top, path, m);
+    let at = |h: u64| now() - Duration::from_secs(h * HOUR);
+    let times = std::fs::FileTimes::new()
+        .set_modified(at(m))
+        .set_accessed(at(a));
+    File::options()
+        .write(true)
+        .open(path)
+        .unwrap()
+        .set_times(times)
+        .unwrap();
+}
+
+/// A pool tree's `debug/` profile (451 T515): `foo` built two ways, the old unread 100 h; `bar` built two ways, the old one's
+/// fingerprint read an hour ago by a no-op build and the older's only by a scan of its `.json`; `baz` built once, 100 h ago; two
+/// incremental directories of `foo`, one stale; the profile last used an hour ago.
+fn stale_profile(c: &Config) -> PathBuf {
+    let p = c.cargo.join("pool-tree/debug");
+    let k = &c.cargo;
+    for (f, m, a) in [
+        (".fingerprint/foo-aaaa/lib-foo", 100, 100),
+        ("deps/libfoo-aaaa.rlib", 100, 100),
+        ("deps/foo-aaaa.d", 100, 100),
+        (".fingerprint/foo-bbbb/lib-foo", 1, 1),
+        ("deps/libfoo-bbbb.rlib", 1, 1),
+        (".fingerprint/bar-cccc/lib-bar", 100, 1),
+        ("deps/libbar-cccc.rlib", 100, 100),
+        (".fingerprint/bar-dddd/lib-bar", 120, 120),
+        (".fingerprint/bar-dddd/lib-bar.json", 120, 1),
+        (".fingerprint/baz-eeee/lib-baz", 100, 100),
+        ("incremental/foo-x1/s-1/f", 100, 100),
+        ("incremental/foo-x2/s-2/f", 1, 1),
+    ] {
+        put_times(k, &p.join(f), m, a);
+    }
+    p
+}
+
+const STALE: [&str; 5] = [
+    ".fingerprint/foo-aaaa (",
+    "deps/libfoo-aaaa.rlib (",
+    "deps/foo-aaaa.d (",
+    ".fingerprint/bar-dddd (",
+    "incremental/foo-x1 (",
+];
+const KEPT: [&str; 5] = [
+    "foo-bbbb",
+    "bar-cccc",
+    "baz-eeee",
+    "incremental/foo-x2",
+    "pool-tree/debug (",
+];
+
+#[test]
+fn the_cleanup_prunes_a_live_profile_s_stale_builds_keeping_its_newest_and_what_a_no_op_build_read()
+{
+    let (_base, c) = world();
+    stale_profile(&c);
+    // a dead build directory going whole is listed once, never its stale builds again
+    for (f, m) in [("foo-aaaa/lib-foo", 100), ("foo-bbbb/lib-foo", 1)] {
+        put_times(
+            &c.cargo,
+            &c.cargo.join("t42-scratch/debug/.fingerprint").join(f),
+            m,
+            m,
+        );
+    }
+    let dry = cache(&c, now(), true).stdout;
+    assert!(
+        dry.contains("t42-scratch (") && !dry.contains("t42-scratch/debug/"),
+        "{dry}"
+    );
+    for s in STALE {
+        assert!(dry.contains(&format!("pool-tree/debug/{s}")), "{s}\n{dry}");
+    }
+    for k in KEPT {
+        assert!(!dry.contains(k), "{k}\n{dry}");
+    }
+}
+
+#[test]
+fn a_build_elsewhere_holds_no_prune_and_one_in_the_profile_holds_it_all() {
+    let (base, c) = world();
+    let p = stale_profile(&c);
+    // a cargo builds another tree: the prune still runs (451 T515), the cache's other shares wait
+    std::fs::create_dir_all(c.proc.join("9")).unwrap();
+    std::fs::write(c.proc.join("9/comm"), "cargo\n").unwrap();
+    let elsewhere = base.join("elsewhere");
+    std::fs::create_dir_all(&elsewhere).unwrap();
+    std::os::unix::fs::symlink(&elsewhere, c.proc.join("9/cwd")).unwrap();
+    let dry = cache(&c, now(), true);
+    assert!(
+        dry.stdout
+            .contains("pool-tree/debug/.fingerprint/foo-aaaa ("),
+        "{}{}",
+        dry.stdout,
+        dry.stderr
+    );
+    assert!(dry.stderr.contains("a build runs"), "{}", dry.stderr);
+    // taken while that build runs, unless a build read it since the plan
+    let item = |p: PathBuf| crate::guards::scratch_sweep_hooks::sweep::Item {
+        path: p,
+        bytes: 0,
+        why: crate::guards::scratch_sweep_hooks::sweep::PRUNED,
+    };
+    let take = |p: PathBuf| crate::guards::scratch_sweep_hooks::sweep::take(&c, &item(p));
+    let gone = p.join("incremental/foo-x1");
+    assert!(take(gone.clone()) && !gone.exists());
+    let read = p.join("deps/libfoo-aaaa.rlib");
+    put_times(&c.cargo, &read, 100, 0);
+    assert!(!take(read.clone()) && read.exists());
+    // a cargo holding the profile's lock holds the whole profile
+    std::fs::create_dir_all(c.proc.join("9/fd")).unwrap();
+    std::os::unix::fs::symlink(p.join(".cargo-lock"), c.proc.join("9/fd/3")).unwrap();
+    let held = cache(&c, now(), true);
+    assert!(!held.stdout.contains("pool-tree/debug/"), "{}", held.stdout);
+}

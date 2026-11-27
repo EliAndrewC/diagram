@@ -13,6 +13,9 @@ use super::Config;
 mod cargo;
 mod evict;
 pub(crate) mod leftovers;
+mod prune;
+#[cfg(test)]
+pub(crate) use prune::WHY as PRUNED;
 mod tmp;
 mod trees;
 
@@ -35,7 +38,22 @@ pub(crate) fn plan(c: &Config, now: SystemTime) -> Vec<Item> {
         let (cut, budget) = budgeted(c, cutoff, now, 0);
         out.extend(cargo::plan(c, cut, &live, budget));
     }
-    items(out, &live)
+    items(merge(out, prune::plan(c, &live)), &live)
+}
+
+/// The prune's entries (451 T515, `prune.rs`) beside a plan, those at or under one of its paths left out (a dead build directory
+/// going whole, a profile evicted, a variant listed already).
+fn merge(
+    mut out: Vec<(PathBuf, &'static str)>,
+    pruned: Vec<(PathBuf, &'static str)>,
+) -> Vec<(PathBuf, &'static str)> {
+    let planned: std::collections::BTreeSet<PathBuf> = out.iter().map(|(p, _)| p.clone()).collect();
+    out.extend(
+        pruned
+            .into_iter()
+            .filter(|(p, _)| !p.ancestors().any(|a| planned.contains(a))),
+    );
+    out
 }
 
 /// The age shares alone, held by no live process (451 T246: the low-disk trigger runs them too, a build running or not).
@@ -169,28 +187,38 @@ fn items(found: Vec<(PathBuf, &'static str)>, live: &[PathBuf]) -> Vec<Item> {
         .collect()
 }
 
-/// `make cache-clean`'s share alone (451 T158): the cargo target cache's entries idle since `cutoff`, none while a build runs
-/// anywhere (Err names it) or where `/proc` cannot be read (Ok, nothing).
+/// `make cache-clean`'s share alone (451 T158): the cargo target cache's entries idle since `cutoff`, and the build that holds the
+/// rest - the prune inside live profiles (451 T515) is planned while a build runs elsewhere, every other share waits for none to run;
+/// nothing where `/proc` cannot be read.
 pub(crate) fn cache_plan(
     c: &Config,
     cutoff: SystemTime,
     now: SystemTime,
     short: u64,
-) -> Result<Vec<Item>, String> {
-    if let Some(build) = building(&c.proc) {
-        return Err(build);
-    }
+) -> (Vec<Item>, Option<String>) {
     let Some(live) = live_paths(&c.proc) else {
-        return Ok(Vec::new());
+        return (Vec::new(), None);
     };
-    let (cut, budget) = budgeted(c, cutoff, now, short);
-    Ok(items(cargo::plan(c, cut, &live, budget), &live))
+    let build = building(&c.proc);
+    let rest = if build.is_none() {
+        let (cut, budget) = budgeted(c, cutoff, now, short);
+        cargo::plan(c, cut, &live, budget)
+    } else {
+        Vec::new()
+    };
+    (items(merge(rest, prune::plan(c, &live)), &live), build)
 }
 
 /// Remove one entry of the plan unless a build has started since it was made (451 T245: an eviction walks for seconds, and a build
-/// begun meanwhile holds its profile from the moment it starts); whether it went.
+/// begun meanwhile holds its profile from the moment it starts); the prune's entry (451 T515) unless a build read or wrote it since;
+/// whether it went.
 pub(crate) fn take(c: &Config, item: &Item) -> bool {
-    (!item.path.starts_with(&c.cargo) || building(&c.proc).is_none()) && remove(item)
+    let free = if item.why == prune::WHY {
+        prune::still_stale(c, &item.path, SystemTime::now())
+    } else {
+        !item.path.starts_with(&c.cargo) || building(&c.proc).is_none()
+    };
+    free && remove(item)
 }
 
 /// The first live cargo, rustc or clippy process (`/proc/<pid>/comm`), as `<pid> <name>`: a build runs, so the cache's share waits

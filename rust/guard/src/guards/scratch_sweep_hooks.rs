@@ -66,6 +66,9 @@ pub(crate) struct Config {
     pub floor: u64,
     /// Idle longer than this and `make cache-clean` takes a build directory or a variant (`L7R_CACHE_IDLE_HOURS`, 451 T158).
     pub cache_age: Duration,
+    /// Unread this long before its profile's last use and a crate's build inside a live profile is stale (`L7R_CACHE_STALE_HOURS`,
+    /// 451 T515, `sweep/prune.rs`).
+    pub stale: Duration,
     /// Past this many bytes in all, the cache's share takes what is not in use whatever its age (`L7R_CACHE_BUDGET_GB`, 451 T158).
     pub budget: u64,
     /// Where a builder's scratch and a `mktemp -d` land (`/tmp`, `SCRATCH_SWEEP_TMP`), and how long one sits idle before it goes
@@ -135,6 +138,9 @@ impl Config {
             )]
             floor: (floor_gb * 1e9) as u64,
             cache_age: Duration::from_secs_f64(cache_hours * 3600.0),
+            stale: Duration::from_secs_f64(
+                knob("L7R_CACHE_STALE_HOURS", disk::STALE_HOURS) * 3600.0,
+            ),
             #[expect(
                 clippy::cast_possible_truncation,
                 clippy::cast_sign_loss,

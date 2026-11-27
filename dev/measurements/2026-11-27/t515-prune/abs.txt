@@ -1,0 +1,52 @@
+profile	units_GB	units	incr_GB	incr_dirs	stores_GB	profile_idle_h
+diagram-backlog-b1/cover-gate/target/debug	0.00	0	0.00	0	1.32	14.1
+diagram-backlog-b1/cover-guard/target/debug	0.00	0	0.00	0	0.57	16.3
+diagram-backlog-b1/debug	0.00	0	0.00	0	11.49	5.6
+diagram-backlog-b1/tool	0.00	0	0.00	0	3.08	5.6
+diagram-backlog-land/cover-gate/target/debug	11.94	356	12.41	237	27.81	11.8
+diagram-backlog-land/debug	2.67	836	3.76	272	9.07	11.8
+diagram-backlog-land/release	0.00	0	0.00	0	0.00	11.8
+diagram-backlog-land/tool	0.85	179	1.40	63	4.18	11.9
+diagram-backlog-t269/cover-browser/target/debug	0.00	0	0.00	0	0.20	24.7
+diagram-backlog-t269/cover-embed/target/debug	0.00	0	0.00	0	0.42	24.7
+diagram-backlog-t269/cover-gate/target/debug	0.00	0	0.00	0	4.76	16.3
+diagram-backlog-t269/cover-guard/target/debug	0.00	0	0.00	0	0.75	17.8
+diagram-backlog-t269/cover-mode_a/target/debug	0.00	0	0.00	0	0.76	24.6
+diagram-backlog-t269/cover-phases/target/debug	0.00	0	0.00	0	0.07	25.5
+diagram-backlog-t269/debug	0.00	0	0.00	0	12.56	0.0
+diagram-backlog-t269/tool	0.00	0	0.00	0	3.42	0.0
+diagram-backlog-t270/cover-browser/target/debug	0.00	0	0.00	0	0.20	16.8
+diagram-backlog-t270/cover-embed/target/debug	0.00	0	0.00	0	0.42	16.7
+diagram-backlog-t270/cover-gate/target/debug	0.00	0	0.00	0	5.21	16.7
+diagram-backlog-t270/cover-guard/target/debug	0.00	0	0.00	0	0.76	16.7
+diagram-backlog-t270/cover-mode_a/target/debug	0.00	0	0.00	0	0.77	16.7
+diagram-backlog-t270/cover-phases/target/debug	0.00	0	0.00	0	0.07	25.5
+diagram-backlog-t270/debug	0.00	0	0.00	0	13.09	0.1
+diagram-backlog-t270/tool	0.00	0	0.00	0	3.42	0.0
+diagram-backlog-t271/cover-browser/target/debug	0.00	0	0.00	0	0.20	23.8
+diagram-backlog-t271/cover-embed/target/debug	0.00	0	0.00	0	0.42	23.8
+diagram-backlog-t271/cover-gate/target/debug	0.00	0	0.00	0	3.85	16.2
+diagram-backlog-t271/cover-guard/target/debug	0.00	0	0.00	0	0.57	16.2
+diagram-backlog-t271/cover-mode_a/target/debug	0.00	0	0.00	0	0.76	23.7
+diagram-backlog-t271/cover-phases/target/debug	0.00	0	0.00	0	0.07	25.6
+diagram-backlog-t271/debug	0.00	0	0.00	0	12.54	2.7
+diagram-backlog-t271/tool	0.00	0	0.00	0	3.42	2.6
+diagram-backlog/cover-browser/target/debug	0.12	17	0.22	3	1.33	1.2
+diagram-backlog/cover-embed/target/debug	0.16	12	0.26	3	1.97	1.2
+diagram-backlog/cover-gate/target/debug	16.08	449	11.28	203	48.75	1.2
+diagram-backlog/cover-guard/target/debug	0.55	86	1.30	3	4.44	1.3
+diagram-backlog/cover-mode_a/target/debug	0.60	42	1.49	12	5.19	1.2
+diagram-backlog/cover-phases/target/debug	0.03	2	0.16	2	0.26	6.8
+diagram-backlog/debug	11.44	930	9.90	331	38.34	1.2
+diagram-backlog/release	0.15	44	0.00	0	0.37	5.5
+diagram-backlog/tool	1.55	432	0.44	10	5.18	0.7
+diagram/release	0.06	9	0.00	0	0.23	383.5
+diagram/tool	0.87	178	2.46	109	6.52	1.1
+TREE diagram 3.4 GB
+TREE diagram-backlog-t270 0.0 GB
+TREE diagram-backlog 55.7 GB
+TREE diagram-backlog-t271 0.0 GB
+TREE diagram-backlog-b1 0.0 GB
+TREE diagram-backlog-land 33.0 GB
+TREE diagram-backlog-t269 0.0 GB
+TOTAL 92.2 GB

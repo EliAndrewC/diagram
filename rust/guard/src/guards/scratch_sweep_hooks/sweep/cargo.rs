@@ -207,7 +207,7 @@ pub(super) fn in_use(target: &Path, held: &[PathBuf], proc: &Path) -> bool {
     held.iter().any(|h| h.starts_with(target)) || run_member_alive(target, 3, proc)
 }
 
-fn run_member_alive(dir: &Path, depth: usize, proc: &Path) -> bool {
+pub(super) fn run_member_alive(dir: &Path, depth: usize, proc: &Path) -> bool {
     let record = std::fs::read_to_string(dir.join("rust-checks-run.json")).unwrap_or_default();
     let v: serde_json::Value = serde_json::from_str(&record).unwrap_or_default();
     let members = v["members"].as_array().map_or(&[][..], Vec::as_slice);

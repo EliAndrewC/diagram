@@ -1,0 +1,15 @@
+prune list: 760 entries
+copy A: 6304 MB
+A-unpruned	-p l7r_gate	rc=0	0.4 s	fresh=47	compiling=0
+A-unpruned	-p l7r_guard	rc=0	0.1 s	fresh=20	compiling=0
+A-unpruned	-p l7r_mode_a	rc=0	0.5 s	fresh=127	compiling=0
+A-unpruned	-p l7r_phases --bin hamlet	rc=0	0.2 s	fresh=1	compiling=0
+copy B: 760 entries pruned, 3123 MB
+B-pruned	-p l7r_gate	rc=0	0.2 s	fresh=47	compiling=0
+B-pruned	-p l7r_guard	rc=0	0.6 s	fresh=20	compiling=0
+B-pruned	-p l7r_mode_a	rc=0	0.1 s	fresh=127	compiling=0
+B-pruned	-p l7r_phases --bin hamlet	rc=0	0.1 s	fresh=1	compiling=0
+B-again	-p l7r_gate	rc=0	0.1 s	fresh=47	compiling=0
+B-again	-p l7r_guard	rc=0	0.1 s	fresh=20	compiling=0
+B-again	-p l7r_mode_a	rc=0	0.1 s	fresh=127	compiling=0
+B-again	-p l7r_phases --bin hamlet	rc=0	0.1 s	fresh=1	compiling=0

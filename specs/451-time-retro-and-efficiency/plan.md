@@ -6973,14 +6973,74 @@ that batch; the red was not in its change.
 **Performance work?** yes: a measurement of where the time and tokens go, counted as performance work by the GM's words of 2026-11-20
 
 
-### T515 (<why: the finding or measurement that files it>)
+### T515 (the disk back over 80% with the build cache at 246.9 GB against its 100 GB budget and the low-disk eviction freeing 0.0 GB, observed 2026-11-27, method: `make disk-audit`)
+
+- **Approach**: a new share of the cache's sweep, `rust/guard/src/guards/scratch_sweep_hooks/sweep/prune.rs`, prunes INSIDE every live profile (a directory holding `.fingerprint/`), pool trees' and the mirror's included: a UNIT (a crate's `.fingerprint/<crate>-<hash>/`, its `deps/` files of that hash and `build/<crate>-<hash>/`) and an `incremental/<crate>-<id>/` directory go when unread in `L7R_CACHE_STALE_HOURS` (48, a GUESS knob floored at 25 for `relatime`; `disk::STALE_HOURS`) before the PROFILE's own last use and not the newest of its kind (a unit: crate and fingerprint kind; an incremental directory: crate). "Last use" is the newest mtime in the entry and the newest atime of any file in it but a `.json`: chosen against mtime alone and every atime on the real cache, stat alone (85.0 GB taken against 86.9 by mtime, which takes units no-op builds still read, and 69.6 counting `.json` atimes, which one scan of 2026-11-26 14:31 moved for every unit), observed 2026-11-27, method: `dev/measurements/2026-11-27/t515-prune/t515-measure.sh`; the dep-info `.d` names sources, never a hash, so it cannot tell a stale one. A profile a live process holds a path under, or a build directory whose run record names a live member, is skipped whole (`cargo::in_use` at the profile); a build running ELSEWHERE holds the prune nowhere (`sweep::plan`, `cache_plan` now `(items, the build that held the rest)`, `take` re-checking a prune entry's own last use at removal in place of the global hold), while the cache's other shares still wait for no build anywhere. Per tree today, the built rule dry: the clone 53.7 GB, the landing tree 26.3, the mirror 3.3, each pool tree 0.0 (profiles under two days old), 83.3 GB in all and 19.9 s of walk, observed 2026-11-27, method: `make cache-clean DRY=1` from this tree (the prototype's 85.0 GB, `sig-nojson.txt`). At removal a unit's `deps/` or `build/` path is kept once its fingerprint was read since the plan (a freshness check reads the fingerprint, never the artifacts), and the low-disk eviction keeps its hourly stamp when a build held the rest (the prune walked the cache, and a retry at every prompt would walk it again). A warm build stays warm: on a copy of the mirror's `tool` profile, pruned from 6,304 to 3,123 MB, every package it serves built 0 units compiled, all fresh, 0.1-0.6 s against 0.1-0.5 s unpruned, observed 2026-11-27, method: `t515-warm.sh` (`warm-results.txt`). The scratchpad half (a landed task's `t<N>-*` scratch worlds) is not built here: filed as T517.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a live profile's stale units and incremental directories taken, its newest of each kind and what a no-op build read kept; a dead build directory's listed once | red first: `the_cleanup_prunes_a_live_profile_s_stale_builds_keeping_its_newest_and_what_a_no_op_build_read` (`disk/tests.rs`; 2 failed, 6 passed on the old code) | n/a: tooling | none | n/a |
+| a build elsewhere holds no prune, one in the profile holds it all; an entry read since the plan kept at removal | red first: `a_build_elsewhere_holds_no_prune_and_one_in_the_profile_holds_it_all` (`disk/tests.rs`) | n/a: tooling | none | n/a |
+| deep profiles, a live gate's run record, unreadable entries, a unit across its stores by kind, the knob's floor, an artifact kept at removal once its fingerprint was read | `sweep/prune/tests.rs` (7 tests) | n/a: tooling | none | n/a |
+| the eviction held by a build keeps its hourly stamp | `a_build_holds_the_eviction_s_cache_share_but_not_its_age_shares_or_the_prune` (`disk/low/tests.rs`) | n/a: tooling | none | n/a |
+
+### T515 Approach (checklist part A)
+
+1. **The goal, in the world.** A tree reused for every builder keeps only what its recent builds read; the disk stops filling with old hashes no build will read again, and no warm build turns cold.
+2. **The constraints.** T515's line; T158's "no loss of performance" (a warm build stays warm); T285's ruling that the budget never takes a pool tree's PROFILE (this takes none); never anything a live cargo holds (`cargo::in_use`); no file outside a fixture deleted in tests or measurements.
+3. **Where each comes from.** G: the GM 2026-11-27 (request.md, "since we are reusing builder worktrees..."); R: T158, T245, T285's plan sections; O: the measurements above.
+4. **Do they describe the world here?** Yes: the real cache read by stat alone (`results.md`), the hold read in `make disk-audit`'s last line ("evict: a build runs"), the processes holding cache paths read from `/proc/*/exe`.
+5. **The order.** After T245/T246 (the eviction and leftovers it sits beside); before T517 (the scratchpad half), then T518 (the budget still unheld, priced on what T515 and T517 leave).
+6. **The exits.** Green: the two red-first tests green and the warm build on the pruned copy all fresh. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none: one share added beside the variants rule, which stays (it still takes a crate's variants past sixteen whatever their reads).
+8. **The budget.** One landing.
+9. **Done, measured.** The would-take figure per tree (85.0 GB, observed 2026-11-27, method: `t515-measure.sh`) and the pruned copy's warm build (0 compiled, observed 2026-11-27, method: `t515-warm.sh`).
+10. **Before moving a constant.** n/a: a new knob, `L7R_CACHE_STALE_HOURS` (48, GUESS), its alternatives priced (30 h 111.6 GB, 72 h 76.5 GB, against now rather than the profile's last use 92.2 GB, observed 2026-11-27, method: `t515-measure.sh`).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The disk: about 85 GB of build cache freed at the next sweep, eviction or `make cache-clean`, observed 2026-11-27, method: `t515-measure.sh`; `make cache-clean` and the eviction now say a build elsewhere held only "the rest".
+
+**Found and left?**
+- The cache stays about 162 GB against its 100 GB budget after the prune (observed 2026-11-27, method: `make disk-audit` less `t515-measure.sh`), and a pool tree's coverage profiles idle for days are taken by nothing (the eviction skips pool trees; the prune judges a profile against its own last use). Not fixed here: a pool tree's whole profile is T285's ruling to reopen, priced apart. Filed as T518; lands after T517, which needs nothing of it.
+- A landed task's scratch worlds under the session scratchpad (21.8 GB, observed 2026-11-27, method: `make disk-audit`) are not taken at its landing. Not fixed here: a separate share of the sweep, the brief's second job. Filed as T517; lands before T518.
+
+**Performance work?** no
+
+
+### T517 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T515 Approach (checklist part A)
+### T517 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T518 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T518 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

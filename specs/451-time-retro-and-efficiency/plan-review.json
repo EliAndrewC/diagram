@@ -4620,6 +4620,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T515 (the disk back over 80% with the build cache at 246.9 GB against its 100 GB budget and the low-disk eviction freeing 0.0 GB, observed 2026-11-27, method: `make disk-audit`)": {
+   "sha256": "31d3c69cb69b5c98dd881095f57ed99c3c133449700fd2dc5832c79a87c6e910",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T515 Approach (checklist part A)": {
+   "sha256": "38c89f22bd0ac292b366510fe598710b5bd7cee0c609dfc8de5524b336f9ff8c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -42511,6 +42523,140 @@
      "why": "The narrowing is removed, not kept. Everything the earlier BLOCKED verdict asked for is now in D4."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T515 (the disk back over 80% with the build cache at 246.9 GB against its 100 GB budget and the low-disk eviction freeing 0.0 GB, observed 2026-11-27, method: `make disk-audit`)",
+    "### T515 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T515-prune",
+     "summary": "A new sweep share prunes inside every live profile (pool trees and mirror included): units and incremental directories unread for L7R_CACHE_STALE_HOURS before the profile's own last use, never the newest of their kind; the variants rule stays.",
+     "class": "within",
+     "why": "The GM's 2026-11-27 words ask why the disk is back over 80% and guess that reused builder worktrees never reach the cleanup; pruning stale hashes inside the trees that are reused is that hole closed. It keeps to his 2026-11-26 principle (time saved before disk): the newest of each kind and whatever a no-op build reads are kept, and a warm build on a pruned copy measured 0 units compiled."
+    },
+    {
+     "id": "T515-last-use",
+     "summary": "Last use is the newest mtime in an entry and the newest atime of any non-.json file in it, chosen by measurement against mtime only and against all atimes.",
+     "class": "within",
+     "why": "A design choice of how to tell staleness, measured on the real cache; it narrows nothing the GM asked for."
+    },
+    {
+     "id": "T515-knob",
+     "summary": "L7R_CACHE_STALE_HOURS = 48, a GUESS, floored at 25 for relatime, with 30 h and 72 h priced.",
+     "class": "within",
+     "why": "A new knob labeled GUESS with its alternatives priced; a parameter of the requested cleanup, not a limit on it."
+    },
+    {
+     "id": "T515-hold",
+     "summary": "Only a build in the same profile (or a live run record naming a member) holds the prune; a build elsewhere does not, and the removal re-checks each entry's own last use. The cache's other shares still wait for any build.",
+     "class": "within",
+     "why": "This answers the measured cause of the eviction freeing 0.0 GB (some build is always running), and it guards the in-use profile, which keeps to the principle. No part of the request is narrowed."
+    },
+    {
+     "id": "T515-scratch-split",
+     "summary": "The scratchpad half (a landed task's t<N>-* scratch worlds, 21.8 GB) is not built in T515 but filed as T517.",
+     "class": "within",
+     "why": "Nothing the GM asked for is dropped. The scratch worlds are carried by a filed task in the same feature, with its reason (a separate share of the sweep) and its order. Deciding which task carries which part is scheduling, not a carve-out. One note: the order is self-contradictory (the first found-and-left item says T518 lands before T517, the second says T517 lands before T518), so one of them has to be corrected for FR-009's order to mean anything."
+    },
+    {
+     "id": "T515-pool-profiles-left",
+     "summary": "The cache stays about 162 GB against its 100 GB budget after the prune. A pool tree's whole idle coverage profile is taken by nothing, deferred to T518 as T285's ruling to reopen and price.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Leaving an idle but whole profile in place is already implied by the GM's own words of 2026-11-26: 'If things rarely use that one coverage, but then it saves us a ton of time when they do, then we probably don't want to clean it just because it's been idle for a bit ... time saved is more important than disk usage.' The prune still stops the slow fill inside those profiles (stale hashes are taken there too), so the purpose of the request (tooling that stops the disk filling) is not gutted. The over-budget level is filed as T518 with its reason, to be priced against that principle rather than taken blind."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T515 (the disk back over 80% with the build cache at 246.9 GB against its 100 GB budget and the low-disk eviction freeing 0.0 GB, observed 2026-11-27, method: `make disk-audit`)",
+    "### T515 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T515-keep-at-removal",
+     "summary": "At removal, a unit's deps/ or build/ path is kept once its fingerprint was read since the plan (a freshness check reads the fingerprint, not the artifacts).",
+     "class": "within",
+     "why": "A race guard so the prune never takes the artifacts of a unit a build just checked as fresh; it serves T158's 'no loss of performance' and the GM's 2026-11-26 principle that time saved outranks disk ('we definitely don't want to clean things up if it is going to cost us time later'). It narrows nothing the GM asked to have taken: only entries a build is using right now stay."
+    },
+    {
+     "id": "T515-eviction-stamp",
+     "summary": "The low-disk eviction keeps its hourly stamp when a build held the rest of the cache share, rather than retrying at every prompt.",
+     "class": "within",
+     "why": "The automatic trigger the GM asked for (2026-11-25, 'trigger something automatically if our disk space ever drops below a certain percentage') still runs, and the prune inside it still runs under a build elsewhere. Only the retry rate is set: every prompt would mean another full walk of the cache (19.9 s on the dry run). Keeping the existing hourly cadence is a scheduling choice inside the request, and it favors time over disk as the 2026-11-26 principle asks. It leaves no defect: the disk is still reclaimed at the next hourly run."
+    },
+    {
+     "id": "T515-order",
+     "summary": "T515, then T517 (the scratchpad half), then T518 (the budget still unheld, priced on what T515 and T517 leave). This replaces the earlier text, which said T518 'lands before T517' in one place and T517 'lands before T518' in another.",
+     "class": "within",
+     "why": "It resolves a contradiction between the plan's own two statements. All three tasks still land, so none of the GM's 'holes in our cleaning up' is dropped."
+    },
+    {
+     "id": "T515-tests",
+     "summary": "Seven prune tests (one new: an artifact kept at removal once its fingerprint was read) and a new row pinning the eviction's stamp under a build.",
+     "class": "within",
+     "why": "Enforcement of the behavior above. A test that fails only when the planned behavior is missing serves the request (GM 2026-09-20)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T515 (the disk back over 80% with the build cache at 246.9 GB against its 100 GB budget and the low-disk eviction freeing 0.0 GB, observed 2026-11-27, method: `make disk-audit`)",
+    "### T515 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T515-D1 prune inside live profiles",
+     "summary": "A new sweep share prunes, inside every live profile (pool trees and the mirror included), a unit or incremental directory unread in L7R_CACHE_STALE_HOURS before the profile's own last use and not the newest of its kind.",
+     "class": "within",
+     "why": "The GM 2026-11-27 (request.md line 501): cleanup that happens only when a builder worktree is removed never happens on reused trees, and 'our current tooling is not preventing' the disk filling. Pruning inside the reused trees' live profiles answers that guess directly. Line 413 says time saved outranks disk, so nothing may be cleaned that costs time later. The rule keeps the newest of each kind and whatever a no-op build read, and it judges a profile only against its own last use, so an idle profile is never touched. The class rests on the warm-build measurement (0 units compiled on the pruned copy), which was taken on the mirror's tool profile; most of the 83.3 GB comes from the clone and the landing tree."
+    },
+    {
+     "id": "T515-D2 last-use definition",
+     "summary": "Last use is the newest mtime in the entry and the newest atime of any non-.json file in it, chosen over mtime alone and over every atime.",
+     "class": "within",
+     "why": "This is a measured design choice for how the prune in line 501 finds stale entries. Each alternative was priced on the real cache: mtime alone takes units that no-op builds still read, which line 413 forbids, and .json atimes are moved by a scan. It narrows nothing the GM asked."
+    },
+    {
+     "id": "T515-D3 stale-hours knob",
+     "summary": "L7R_CACHE_STALE_HOURS is 48 h (GUESS), floored at 25 h for relatime, with 30 h and 72 h priced.",
+     "class": "within",
+     "why": "A tuning constant inside the requested cleanup. It is labeled GUESS with its alternatives priced. The 25 h floor keeps relatime from making a read entry look unread, which serves line 413."
+    },
+    {
+     "id": "T515-D4 hold by build location",
+     "summary": "A build running elsewhere no longer holds the prune. A live process or a live gate member in the profile holds that profile whole, and take re-checks an entry's last use at removal. The cache's other shares still wait for any build.",
+     "class": "within",
+     "why": "'Never under a running build' at request.md line 229 is marked as the coordinating session's build, not the GM's words. The GM's words (lines 227, 501) ask for cleanup that actually happens, and a hold by any build anywhere is one way it never does. Nothing a live cargo holds is taken: the profile is skipped whole, and an artifact whose fingerprint was read since the plan is kept."
+    },
+    {
+     "id": "T515-D5 held eviction keeps its hourly stamp",
+     "summary": "When a build holds the rest of the low-disk eviction, the eviction still writes its hourly stamp instead of retrying at every prompt.",
+     "class": "within",
+     "why": "Line 227 asks for an automatic trigger below a free-space percentage. The trigger stays, and the prune share still runs under it. Retrying at every prompt would repeat a cache walk of about 20 s each time, and line 413 says time outranks disk. The held shares wait up to an hour, and the trigger is not dropped."
+    },
+    {
+     "id": "T515-D6 scratchpad half filed as T517",
+     "summary": "A landed task's t<N>-* scratch worlds (21.8 GB) are not taken here. T517 is filed for them and lands before T518.",
+     "class": "within",
+     "why": "This is sequencing, not an exception. The work is unconditional and owned: filed, ordered before T518, and stated in the found-and-left form that the accepted spec's FR-009 prescribes (why, filed id, order). Nothing in line 501 is dropped or made conditional. The larger share (about 85 GB) lands first."
+    },
+    {
+     "id": "T515-D7 budget and idle pool-tree profiles left to T518",
+     "summary": "After the prune the cache stays about 162 GB against its 100 GB budget. A pool tree's coverage profiles idle for days are taken by nothing, and taking them is to be priced in T518, which lands after T517.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves part of the over-budget cache in place, which narrows line 501's 'leaving things around'. The ground is that the GM's own words already imply it. Line 413: 'If things rarely use that one coverage, but then it saves us a ton of time when they do, then we probably don't want to clean it just because it's been idle for a bit ... we definitely don't want to clean things up if it is going to cost us time later.' Taking an idle pool profile without first pricing what its rebuild costs is exactly what that forbids. The 100 GB figure is the session's build (line 229), not the GM's. The residual is filed and ordered (FR-009 form). This ruling covers only the pricing-first deferral: T518 must still decide on the measured cost, and no ruling here exempts the residual permanently."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -63010,6 +63156,57 @@
      "summary": "No red test, nothing built; the tree's sources unchanged.",
      "class": "within",
      "why": "FR-012's red-first tests are for refusals; this task adds none and changes no source."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T515": {
+   "section_sha256": "80587b6ddc9596cf289ea643719583cc6f72e7e57633499563596530dc751071",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T515-D1 prune inside live profiles",
+     "summary": "A new sweep share prunes, inside every live profile (pool trees and the mirror included), a unit or incremental directory unread in L7R_CACHE_STALE_HOURS before the profile's own last use and not the newest of its kind.",
+     "class": "within",
+     "why": "The GM 2026-11-27 (request.md line 501): cleanup that happens only when a builder worktree is removed never happens on reused trees, and 'our current tooling is not preventing' the disk filling. Pruning inside the reused trees' live profiles answers that guess directly. Line 413 says time saved outranks disk, so nothing may be cleaned that costs time later. The rule keeps the newest of each kind and whatever a no-op build read, and it judges a profile only against its own last use, so an idle profile is never touched. The class rests on the warm-build measurement (0 units compiled on the pruned copy), which was taken on the mirror's tool profile; most of the 83.3 GB comes from the clone and the landing tree."
+    },
+    {
+     "id": "T515-D2 last-use definition",
+     "summary": "Last use is the newest mtime in the entry and the newest atime of any non-.json file in it, chosen over mtime alone and over every atime.",
+     "class": "within",
+     "why": "This is a measured design choice for how the prune in line 501 finds stale entries. Each alternative was priced on the real cache: mtime alone takes units that no-op builds still read, which line 413 forbids, and .json atimes are moved by a scan. It narrows nothing the GM asked."
+    },
+    {
+     "id": "T515-D3 stale-hours knob",
+     "summary": "L7R_CACHE_STALE_HOURS is 48 h (GUESS), floored at 25 h for relatime, with 30 h and 72 h priced.",
+     "class": "within",
+     "why": "A tuning constant inside the requested cleanup. It is labeled GUESS with its alternatives priced. The 25 h floor keeps relatime from making a read entry look unread, which serves line 413."
+    },
+    {
+     "id": "T515-D4 hold by build location",
+     "summary": "A build running elsewhere no longer holds the prune. A live process or a live gate member in the profile holds that profile whole, and take re-checks an entry's last use at removal. The cache's other shares still wait for any build.",
+     "class": "within",
+     "why": "'Never under a running build' at request.md line 229 is marked as the coordinating session's build, not the GM's words. The GM's words (lines 227, 501) ask for cleanup that actually happens, and a hold by any build anywhere is one way it never does. Nothing a live cargo holds is taken: the profile is skipped whole, and an artifact whose fingerprint was read since the plan is kept."
+    },
+    {
+     "id": "T515-D5 held eviction keeps its hourly stamp",
+     "summary": "When a build holds the rest of the low-disk eviction, the eviction still writes its hourly stamp instead of retrying at every prompt.",
+     "class": "within",
+     "why": "Line 227 asks for an automatic trigger below a free-space percentage. The trigger stays, and the prune share still runs under it. Retrying at every prompt would repeat a cache walk of about 20 s each time, and line 413 says time outranks disk. The held shares wait up to an hour, and the trigger is not dropped."
+    },
+    {
+     "id": "T515-D6 scratchpad half filed as T517",
+     "summary": "A landed task's t<N>-* scratch worlds (21.8 GB) are not taken here. T517 is filed for them and lands before T518.",
+     "class": "within",
+     "why": "This is sequencing, not an exception. The work is unconditional and owned: filed, ordered before T518, and stated in the found-and-left form that the accepted spec's FR-009 prescribes (why, filed id, order). Nothing in line 501 is dropped or made conditional. The larger share (about 85 GB) lands first."
+    },
+    {
+     "id": "T515-D7 budget and idle pool-tree profiles left to T518",
+     "summary": "After the prune the cache stays about 162 GB against its 100 GB budget. A pool tree's coverage profiles idle for days are taken by nothing, and taking them is to be priced in T518, which lands after T517.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves part of the over-budget cache in place, which narrows line 501's 'leaving things around'. The ground is that the GM's own words already imply it. Line 413: 'If things rarely use that one coverage, but then it saves us a ton of time when they do, then we probably don't want to clean it just because it's been idle for a bit ... we definitely don't want to clean things up if it is going to cost us time later.' Taking an idle pool profile without first pricing what its rebuild costs is exactly what that forbids. The 100 GB figure is the session's build (line 229), not the GM's. The residual is filed and ordered (FR-009 form). This ruling covers only the pricing-first deferral: T518 must still decide on the measured cost, and no ruling here exempts the residual permanently."
     }
    ],
    "verdict": "CLEAR"

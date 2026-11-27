@@ -3,8 +3,8 @@
 //! `L7R_DISK_FREE_PCT` free it starts `--scratch-sweep evict`, detached, at most once an hour (`EVERY`: a disk with nothing the eviction
 //! may take would otherwise walk the 180 GB cache on every prompt). The eviction takes what `make cache-clean` takes, and live trees'
 //! idle profiles (`sweep/evict.rs`) until the cache is within its budget and the disk back at the share free, whichever asks more; it
-//! writes one line of what it freed, which the next prompt says and removes. A build running anywhere holds it, its stamp removed so
-//! the next prompt tries again.
+//! writes one line of what it freed, which the next prompt says and removes. A build running anywhere holds all of it but the prune
+//! inside live profiles (451 T515, `sweep/prune.rs`), which runs; the rest is tried at the next eviction, an hour on.
 
 use std::fs::File;
 use std::path::PathBuf;
@@ -99,12 +99,12 @@ pub(in super::super) fn evict(c: &Config, now: SystemTime, dry: bool) -> Reply {
         };
         let mut items = removed(sweep::aged_plan(c, now));
         let verb = if dry { "would remove" } else { "removed" }.to_owned();
-        match sweep::cache_plan(c, cutoff, now, short) {
-            Ok(plan) => {
-                items.extend(removed(plan));
-                (items, Ok(verb))
-            }
-            Err(build) => (items, Err(build)),
+        // the prune inside live profiles (451 T515) is taken beside a build elsewhere; the rest of the cache's share waits for it
+        let (plan, build) = sweep::cache_plan(c, cutoff, now, short);
+        items.extend(removed(plan));
+        match build {
+            None => (items, Ok(verb)),
+            Some(build) => (items, Err(build)),
         }
     };
     let result = if dry { Some(run()) } else { locked_by(c, run) };
@@ -144,10 +144,8 @@ pub(in super::super) fn evict(c: &Config, now: SystemTime, dry: bool) -> Reply {
             (super::super::report(&items, &verb) + &line + "\n", 0)
         }
         Some((items, Err(build))) => {
-            // a build holds the cache's share: tried again at the next prompt, not in an hour
-            if !dry {
-                let _ = std::fs::remove_file(stamp(c));
-            }
+            // a build held the rest of the cache's share, but the prune inside live profiles ran (451 T515): tried again in an hour,
+            // as any eviction - retried at every prompt, each would walk the whole cache again (`EVERY`)
             let aged = if items.is_empty() {
                 String::new()
             } else {
@@ -155,7 +153,8 @@ pub(in super::super) fn evict(c: &Config, now: SystemTime, dry: bool) -> Reply {
             };
             (
                 format!(
-                    "{aged}evict: a build runs ({build}); nothing of the build cache removed\n"
+                    "{aged}evict: a build runs ({build}); of the build cache only the stale builds in live profiles {}\n",
+                    if dry { "would go" } else { "taken" }
                 ),
                 1,
             )

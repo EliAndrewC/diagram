@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-27T16:14:09Z",
+  "target": "plan-gate decide-defer 451-time-retro-and-efficiency T515",
+  "commit": "ce2629203b",
+  "why": "T518 is the last of the disk tasks, no open task follows it"
+}
