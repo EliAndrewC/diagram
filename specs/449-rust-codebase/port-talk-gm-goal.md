@@ -229,3 +229,16 @@ register (`dev/audits/`) already holds several of its fields for an adopted opti
 a cadence and a last-audited date. The review rounds and arbiter he names today: a check's third round on one subject is a tripwire
 owing the `round-arbiter`'s ruling (root CLAUDE.md, "Development workflow"; features 375 and 432); who edits is today the writer, the
 reviewer only judging.
+
+## His thirteenth message (2026-11-27, the afternoon after): a LABEL for each process decision, named where it applies, its record in one place
+
+<!-- SOURCE: GM NOTES -->
+> One thing that probably is worth adapting from our formal research is the convention of having our processes or decisions or names or, you know, just like anything that has an associated research record be labeled or ID'd or whatever, such that in the code itself, you know, we don't want to repeat all of the information, but, you know, If we have a name or ident or label for the review round limits, you know, like maybe it's literally just `REVIEW_ROUNDS_LIMIT` then that string could show up in the comments of the code or CLAUDE.md files or wherever it is that it gets mentioned, and then that is the way in which, when we are reviewing things, we find the previous decisions and measurements and informal research into best practices and what have you. I mean, otherwise we might end up just re-explaining everything in a bunch of places, which violates the dry principle and means that we don't have a single source of truth and all of that, whereas having this kind of label that has an implicit meaning that tells us where it is that we can look to find that information in its one canonical source of truth that is able to be kept up to date because it follows the dry principle, then that is probably a good thing to do. So please add this to the process reviewer notes. Thank you.
+<!-- END SOURCE -->
+
+What exists today that is close (2026-11-27; a starting point, not a design): the audit register names each knob it covers by its
+constant (`covers: STALE_HOURS`), and the push refuses a new knob no entry covers, so a constant already leads to its record, one
+way only - the code's comment does not name the entry; the round arbiter's rulings are cited in code and plans by key
+(`ask:449-phase4-slices`); a measured figure in a spec cites `m:<key>` into `measurements.json`. Much of the code still re-explains
+a decision in its doc comment (the measurement, the GM's words, the alternatives) in place of naming one record - the duplication
+he describes.
