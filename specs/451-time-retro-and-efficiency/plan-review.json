@@ -3541,14 +3541,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T426 (<why: the finding or measurement that files it>)": {
-   "sha256": "1597c947558e66deb4fbec5a547ecfeadfb54d3bac5a9705f6f6034288252a77",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T426 Approach (checklist part A)": {
-   "sha256": "b0ad9fb4ed28462956c4bde39820316e6c6309d6be1d80c736e2cb0525b529b4",
+   "sha256": "70a3350529b8023a8c029eb52137de15a207b31f11dd6464ca28a8cf1a385908",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3873,6 +3867,12 @@
   },
   "### T392 (found by T383, `dev/measurements/2026-11-26/edit-hook/t383-results.md`: after T383's screen an Edit's `event-log-hooks` was still 78.3 / 107.8 ms of a pool worktree's 89.8 / 109.0 ms hook and 81.0 of the clone's 204.2, measured 2026-11-26 (T383's record), the read of the whole 41.9 MB log into one string, growing with the log)": {
    "sha256": "de292de46e55c40ea05a9612c1c5cb4a79f35793d9d13e293f73a9c7c1c31e65",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T426 (found by T420: 221.9 of the 283.5 s T367's record counted as `slot-wait` from 00:20Z to 03:30Z were T355's `lint-wait.sh` holding the wide slots of a SCRATCH slot directory, and `make task-time` booked them as waiting on a build slot, measured 2026-11-27 (the event logs' `slot-wait` lines, `dev/measurements/2026-11-27/slot-waits/results.md`))": {
+   "sha256": "a652bd6f6925aedcc36e317c876e05c340b4810ca704b5ee62fb2462d793019f",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -34863,6 +34863,67 @@
      "summary": "Keeps T383's screen word for word; precedes the derived index that would reuse candidate and Kept.",
      "class": "within",
      "why": "Sequencing inside the feature's own tasks; narrows nothing the request or spec asks."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T426 (found by T420: 221.9 of the 283.5 s T367's record counted as `slot-wait` from 00:20Z to 03:30Z were T355's `lint-wait.sh` holding the wide slots of a SCRATCH slot directory, and `make task-time` booked them as waiting on a build slot, measured 2026-11-27 (the event logs' `slot-wait` lines, `dev/measurements/2026-11-27/slot-waits/results.md`))",
+    "### T426 Approach (checklist part A)",
+    "### T435 (<why: the finding or measurement that files it>)",
+    "### T435 Approach (checklist part A)",
+    "### T438 (<why: the finding or measurement that files it>)",
+    "### T438 Approach (checklist part A)",
+    "(removed) ### T426 (<why: the finding or measurement that files it>)",
+    "(removed) ### T427 (<why: the finding or measurement that files it>)",
+    "(removed) ### T427 Approach (checklist part A)",
+    "(removed) ### T428 (<why: the finding or measurement that files it>)",
+    "(removed) ### T428 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T426-mark",
+     "summary": "The writer (rustc crate) marks a slot-wait / slot-small line with \"scratch\": true where L7R_BUILD_SLOT_DIR names a directory other than the home's default; set in Slots::of, written by phase.rs, no call line of slot.rs changed",
+     "class": "within",
+     "why": "Fixes a wrong outcome in the task time breakdown the GM asked for (2026-11-25: where our time goes, minutes and blocking per category; T347's line asks for make task-time's minutes waiting on a build slot to be right before and after): a measurement script's hold on a scratch slot directory was booked as waiting on the machine's build slots. Marking the line is the data-collection context clue the GM's (l) invites."
+    },
+    {
+     "id": "T426-known-scratch",
+     "summary": "KNOWN_SCRATCH names the one past unmarked run (tree diagram-backlog-t270, 01:48:50-02:01:30Z 2026-11-27, T355's lint-wait.sh) so the readers tell its four lines as scratch",
+     "class": "within",
+     "why": "Corrects the already-recorded window the misreading came from, so the breakdown over existing logs reads right; a fixed past run, not a tunable, and it narrows nothing the request asked for."
+    },
+    {
+     "id": "T426-booking",
+     "summary": "Readers (where_time/columns.rs, shared by where-time and task-time) keep a scratch line's span apart and book it to its run's own bucket, taken out before every category so it is neither waiting on a build slot nor compile; grand total unchanged; task-time's footnote and where-time's runs line name the count and minutes, only when nonzero; task-time counts the window's lines, not BACK= read-back",
+     "class": "within",
+     "why": "Every minute stays booked and the moved minutes are named with what they are (the session's recorded amendment (c): never a silent other); totals and blocking unchanged; this is the requested breakdown made correct, not a narrowing."
+    },
+    {
+     "id": "T426-fixed-here-runs-column",
+     "summary": "where-time's runs table gains the missing 'waiting on a build slot' column (absent since T284, so every slot wait split out of a run fell in no column), with the tests pinning that table widened by its cell",
+     "class": "within",
+     "why": "A wrong outcome (minutes missing from the table) found while re-measuring, fixed in this task as the fix-as-we-go rule requires; widening the pinned rows is the test following the fix, not a new exactness demand."
+    },
+    {
+     "id": "T426-checklist",
+     "summary": "Checklist part A: goal, constraints (T284's slot unchanged for real calls, totals unchanged, T425's carry unhindered), order after T420 beside T425, exits, done-measured 5.3 -> 1.6 min with a 4-wait (3.7 min) footnote, performance work yes as a measurement task",
+     "class": "within",
+     "why": "Restates the approach's own decisions; classing a measurement task as performance work is the GM's 2026-11-20 words (FR-013). Figures carry a dated one-shot method label."
+    },
+    {
+     "id": "T435-T438-templates",
+     "summary": "T435 and T438 sections and checklists are the unfilled template",
+     "class": "within",
+     "why": "Placeholders only; they decide nothing."
+    },
+    {
+     "id": "removed-T426-T427-T428-templates",
+     "summary": "The unfilled template blocks of T426 (replaced by the filled section above), T427 and T428 are removed",
+     "class": "within",
+     "why": "Their earlier text was the bare template with no decision in it, so removing them withdraws nothing decided and narrows nothing asked."
     }
    ]
   }

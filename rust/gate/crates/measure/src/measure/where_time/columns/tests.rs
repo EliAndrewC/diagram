@@ -361,7 +361,9 @@ fn each_phase_is_booked_to_its_category() {
     assert_eq!(got, [660.0, 150.0, 210.0, 151.0, 89.0, 1800.0, 600.0]);
     assert_eq!((r.loose, r.detached.len()), ((0, 0.0), 2));
     let text = render(&r, &[]);
-    let header = text.contains("| tests | compile | hook suites | map generation | gate |");
+    let header = text.contains(
+        "| tests | compile | waiting on a build slot | hook suites | map generation | gate |",
+    );
     assert!(header, "{text}");
 }
 

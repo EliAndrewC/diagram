@@ -346,3 +346,48 @@ fn waited_on_work_blocking_no_task_is_named_apart() {
                 - research and page sessions 10.0 - plan review: agents 2.0.\n";
     assert!(text.contains(want));
 }
+
+/// Feature 451 T426: a measurement's wait on a scratch slot directory is booked to no category - not `waiting on a build slot`, not
+/// the compile whose span holds it - and the footnote counts the window's, a line in the read-back left out of that count.
+#[test]
+fn a_scratch_slot_wait_is_left_out_and_counted_in_the_footnote() {
+    let (d, root) = world();
+    let (projects, clones) = (d.join("home"), d.join("clones"));
+    let log = d.join("root/.git/l7r-events/451-x.jsonl");
+    let wait = |t0: &str, t1: &str| {
+        json!({"t": t1, "ev": "Phase", "src": "rust", "step": "slot-wait", "t0": t0, "t1": t1, "make": "static", "sid": "s",
+            "scratch": true})
+    };
+    let mut text = std::fs::read_to_string(&log).unwrap();
+    for w in [
+        wait("2026-11-25T10:00:45Z", "2026-11-25T10:00:55Z"),
+        wait("2026-11-25T09:59:00Z", "2026-11-25T09:59:30Z"),
+    ] {
+        let _ = writeln!(text, "{w}");
+    }
+    std::fs::write(&log, text).unwrap();
+    let now = ts("2026-11-25T10:30:00Z").unwrap();
+    let r = cli(
+        &args(&[
+            "--root",
+            &root,
+            "--since",
+            "2026-11-25T10:00:00Z",
+            "--until",
+            "2026-11-25T10:06:50Z",
+        ]),
+        &projects,
+        &clones,
+        now,
+    );
+    assert_eq!(r.code, 0, "{}", r.stderr);
+    let out = r.stdout;
+    for want in [
+        "| make static | tests | 1 | 1.0 | ",
+        "waits on a scratch slot directory (451 T426): 1 in the window (0.2 min), booked to no category",
+        "Unbooked, named: 0 Bash calls refused before running (no run); 0 phases tied to no run",
+    ] {
+        assert!(out.contains(want), "{want}\n---\n{out}");
+    }
+    assert!(!out.contains("| waiting on a build slot |"), "{out}");
+}

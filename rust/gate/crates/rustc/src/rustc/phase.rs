@@ -9,7 +9,8 @@
 //! and its second build as `link-heal`, inside its `build` line's span: the readers book it to no category, so its seconds stay the
 //! build's and its lines are there to count. A test build's telling (feature 451 T347, `kept/alone.rs`) writes `slot-tell`, and a
 //! build that took the small lane `slot-small` (`slot.rs`), its span its wait for the lane, its code 2 where the lane was held and
-//! it took a free wide slot instead (feature 451 T425): booked to no category either.
+//! it took a free wide slot instead (feature 451 T425): booked to no category either. Either slot
+//! line taken on a scratch slot directory says `"scratch": true` (feature 451 T426), and its wait is booked to no category.
 
 use std::path::Path;
 use std::time::SystemTime;
@@ -17,7 +18,7 @@ use std::time::SystemTime;
 use l7r_shared::guards::event_log_hooks::{append_row_with, phase_row};
 use serde_json::json;
 
-use super::{shown, World};
+use super::{shown, slot, World};
 
 /// The run's make target (plan D4): the outermost `make`'s first goal, read from its command line (the run lock's `run_what`) as the
 /// event log's writer reads a Bash call's (D1); with no `make` above, the gate's own form, `rust-<cmd>`, as D1 reads
@@ -64,5 +65,9 @@ pub(super) fn wrote<P: AsRef<Path>>(
         &world.root,
     );
     row.insert("crates".into(), json!(crates));
+    // a wait on a scratch slot directory is a measurement's own (feature 451 T426, `slot.rs`): marked, so the readers leave it out
+    if world.slots.scratch && (step == slot::STEP || step == slot::USE) {
+        row.insert("scratch".into(), json!(true));
+    }
     let _ = append_row_with(&world.root, None, row, world.root.reader());
 }

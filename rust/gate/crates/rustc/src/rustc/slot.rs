@@ -18,7 +18,10 @@
 //! stderr. `L7R_BUILD_SLOTS=0` is no slot at all.
 //!
 //! THE WAIT IS BOOKED: a call that waited writes one `Phase` line, `slot-wait`, which `make task-time` books as `waiting on a build
-//! slot` ahead of the compile it precedes, and says so on stderr each minute it lasts.
+//! slot` ahead of the compile it precedes, and says so on stderr each minute it lasts. A wait on a SCRATCH directory - `L7R_BUILD_SLOT_DIR`
+//! set away from `~/.cache/l7r-build-slots`, as a measurement script sets it to hold slots on purpose - is marked `"scratch": true`, on
+//! its `slot-small` line too, and booked to no category (feature 451 T426: 221.9 of 283.5 s booked as waiting from 2026-11-27 00:20Z
+//! to 03:30Z were T355's scripted holds, `dev/measurements/2026-11-27/slot-waits/results.md`).
 //!
 //! THE SMALL LANE (feature 451 T347). A builder's test build of one crate after a body edit waited its turn behind coverage builds:
 //! four runs of `rust/gate/crates/reviews` waited 57.3, 18.2, 2.5 and 34.9 s for a slot for compiles of 2.3 to 4.0 s. Measured
@@ -107,6 +110,10 @@ pub(super) struct Slots {
     pub(super) stem: &'static str,
     /// The knob that counts them, which a waiter's line names.
     pub(super) knob: &'static str,
+    /// A SCRATCH directory (feature 451 T426): `L7R_BUILD_SLOT_DIR` set away from the home's default, as a measurement script sets it
+    /// to hold slots on purpose (451 T355's `lint-wait.sh`). Its waits are the script's, not the machine's: the `slot-wait` and
+    /// `slot-small` lines say `"scratch": true` (`phase.rs`), and the readers book them to no category.
+    pub(super) scratch: bool,
 }
 
 impl Slots {
@@ -127,6 +134,7 @@ impl Slots {
             clock: Box::new(Wall(Instant::now())),
             stem: "slot",
             knob: COUNT,
+            scratch: false,
         }
     }
 
@@ -158,12 +166,15 @@ impl Slots {
         let count = set(COUNT)
             .and_then(|v| v.trim().parse().ok())
             .unwrap_or(DEFAULT);
-        let dir = set(DIR).map_or_else(|| home.join(".cache/l7r-build-slots"), PathBuf::from);
+        let default = home.join(".cache/l7r-build-slots");
+        let dir = set(DIR).map_or_else(|| default.clone(), PathBuf::from);
+        let scratch = dir != default;
         let ceiling = set(CEILING)
             .and_then(|v| v.trim().parse().ok())
             .unwrap_or(CEILING_S);
         Self {
             ceiling: Duration::from_secs(ceiling),
+            scratch,
             ..Self::at(dir, count)
         }
     }

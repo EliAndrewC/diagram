@@ -524,7 +524,7 @@ pub fn render(
     tables(&mut out, &c, &tg, (all, work));
     out.push_str("## The whole window\n\n");
     tables(&mut out, &all_c, &all_t, (all, work));
-    footnote(&mut out, landed, (from, starts), runs);
+    footnote(&mut out, landed, (from, starts), runs, window.0);
     out
 }
 
@@ -534,6 +534,7 @@ fn footnote(
     landed: &[(f64, Key)],
     (from, starts): (f64, &BTreeMap<Key, f64>),
     runs: &columns::Runs,
+    since: f64,
 ) {
     // round 3 of its review: the read-back stops at `from`, so a landed task started before it, or with no start recorded, is named
     let cut: Vec<String> = landed
@@ -554,14 +555,15 @@ fn footnote(
          nothing in flight is `{} - <class>`, its class what came just before and after it, one not yet classed `unexplained` with the \
          line that followed it; with only a monitor and no page session `{}`; a builder's time inside its span no line of its accounts for \
          `{}`; a command no transcript holds `{}`. Wait loops do no work: their minutes are the time they were held open, and their blocking \
-         is booked to what they waited on. (feature 451 T243, the task time breakdown)",
+         is booked to what they waited on{}. (feature 451 T243, the task time breakdown)",
         runs.refused,
         runs.loose.0,
         m(runs.loose.1),
         book::NOTHING,
         book::MONITOR,
         book::UNLINED,
-        book::UNREAD
+        book::UNREAD,
+        columns::scratch_note(&runs.scratch, since)
     );
 }
 

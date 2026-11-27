@@ -46,9 +46,12 @@ use super::super::events::{
 use super::task_at;
 
 /// The runs table's buckets, in the guard's table's order, compile after tests, the hook suites and map generation after it (451 T153).
-pub const RUN_COLUMNS: [&str; 10] = [
+pub const RUN_COLUMNS: [&str; 11] = [
     "tests",
     "compile",
+    // a wait on a build slot is split out of its run as compile is (feature 451 T284); until 451 T426 it had no column here, so its
+    // seconds were in no column and missing from the table's minutes
+    SLOT_WAIT,
     "hook suites",
     "map generation",
     "gate",
@@ -338,6 +341,38 @@ impl Run {
 /// task-time` shows what the slot costs beside the compile it spreads out.
 pub const SLOT_WAIT: &str = "waiting on a build slot";
 
+/// THE UNMARKED SCRATCH HOLDS the record names (feature 451 T426): before the writer marked a wait on a scratch slot directory, its
+/// lines read like a real one. 451 T420's record (`dev/measurements/2026-11-27/slot-waits/results.md`) names the one known run - T355's
+/// `lint-wait.sh`, in the pool tree `diagram-backlog-t270`, 01:48:50 to 02:01:30Z on 2026-11-27 - whose four waits (221.9 s) are the
+/// only `slot-wait` lines of that tree and span. (the tree's name, the first and last start, UTC)
+const KNOWN_SCRATCH: [(&str, &str, &str); 1] = [(
+    "diagram-backlog-t270",
+    "2026-11-27T01:48:50Z",
+    "2026-11-27T02:01:30Z",
+)];
+
+/// A `slot-wait` line that a measurement's own scripted hold wrote (feature 451 T426): marked `"scratch": true` by the writer
+/// (`rustc/slot.rs`), or one of [`KNOWN_SCRATCH`]. Such a wait is booked to no category: neither waiting nor the compile whose span
+/// holds it, so its seconds are its run's own; the runs table's note and the task time breakdown's footnote count it.
+#[must_use]
+pub fn scratch_wait(p: &Event) -> bool {
+    if !(is(p, "src", "rust") && is(p, "step", "slot-wait")) {
+        return false;
+    }
+    if matches!(get(p, "scratch"), Value::Bool(true)) {
+        return true;
+    }
+    let (tree, t0) = (or_s(p, "clone"), or_s(p, "t0"));
+    let name = Path::new(&tree).file_name().unwrap_or_default();
+    KNOWN_SCRATCH.iter().any(|(n, lo, hi)| {
+        name == *n
+            && ts(&t0).is_ok_and(|t| ts(lo).is_ok_and(|a| a <= t) && ts(hi).is_ok_and(|b| t <= b))
+    })
+}
+
+/// The spans of a run's scratch waits, which [`Split::of`] takes out before every category.
+const SCRATCH: &str = "a measurement's scratch slot hold";
+
 /// THE CATEGORIES A PHASE IS BOOKED TO (feature 451 T153; the GM 2026-11-22: "we want everything measured so we know where our time goes,
 /// especially for compiling, running tests, and generating maps"), first first: a second two phases hold goes to the first - compile
 /// before all (D4: a hook suite or a map run that compiles is compiling), the hook suites and map generation before the tests that hold
@@ -398,7 +433,13 @@ impl Split {
     /// Each category's phases, each made disjoint from those of every category before it.
     #[must_use]
     pub fn of(held: &[(&'static str, Vec<(f64, f64)>)]) -> Self {
-        let mut taken: Vec<(f64, f64)> = Vec::new();
+        // a scratch wait (feature 451 T426) is taken out first and booked to none: its seconds stay the run's own
+        let mut taken = union(
+            held.iter()
+                .filter(|(c, _)| *c == SCRATCH)
+                .flat_map(|(_, s)| s.iter().copied())
+                .collect(),
+        );
         let mut parts = Vec::new();
         for col in PHASE_COLUMNS {
             let spans: Vec<(f64, f64)> = held
@@ -448,6 +489,8 @@ pub struct Runs {
     /// The page sessions' phases (task, category, seconds): a detached runner's, held by no Bash run by construction, so booked under
     /// their task directly (451 T153), never counted loose.
     pub detached: Vec<(String, &'static str, f64)>,
+    /// The scratch waits' spans ([`scratch_wait`], feature 451 T426), every one read, the reports counting their window's.
+    pub scratch: Vec<(f64, f64)>,
 }
 
 /// What the runs are cut and ended by.
@@ -568,7 +611,8 @@ pub fn runs(
 fn tie(out: &mut Runs, aside: &[Event], starts: &[(f64, String)], end: f64) -> Result<(), Raised> {
     let mut held: Vec<Parts> = vec![Vec::new(); out.runs.len()];
     for p in aside.iter().filter(|p| is(p, "ev", "Phase")) {
-        let Some(col) = category(p) else {
+        let scratch = scratch_wait(p);
+        let Some(col) = (if scratch { Some(SCRATCH) } else { category(p) }) else {
             continue;
         };
         let span = |k: &str| match get(p, k) {
@@ -579,6 +623,9 @@ fn tie(out: &mut Runs, aside: &[Event], starts: &[(f64, String)], end: f64) -> R
         if a >= end {
             // after the window: the logs are read to their end, its runs cut at the window's
             continue;
+        }
+        if scratch {
+            out.scratch.push((a, b));
         }
         let (make, task) = (or_s(p, "make"), or_s(p, "task"));
         if is(p, "src", "page-session") {
@@ -610,7 +657,7 @@ fn tie(out: &mut Runs, aside: &[Event], starts: &[(f64, String)], end: f64) -> R
             .map(|(i, _)| i);
         if let Some(i) = best {
             held[i].push((col, vec![(a, b)]));
-        } else {
+        } else if !scratch {
             out.loose.0 += 1;
             out.loose.1 += b - a;
         }
@@ -730,13 +777,36 @@ pub fn render(runs: &Runs, order: &[String]) -> String {
         text,
         "\nruns: {} Bash calls of every session and agent ({bg} in the background, {open} open at the window's end), booked by their `make` \
          target through the guard's table (feature 451 T08); machine minutes, which overlap, never the wall clock; {} refused before \
-         running; phases tied to no run: {} ({} min)\n",
+         running; phases tied to no run: {} ({} min){}\n",
         runs.runs.len(),
         runs.refused,
         runs.loose.0,
-        fixed(runs.loose.1 / 60.0, 1)
+        fixed(runs.loose.1 / 60.0, 1),
+        scratch_note(&runs.scratch, f64::NEG_INFINITY)
     );
     text
+}
+
+/// The note on the scratch waits from `from` on (feature 451 T426), as a clause to append: how many and their minutes, and where
+/// they went; nothing where there were none, so a report with none reads as it did.
+#[must_use]
+pub fn scratch_note(spans: &[(f64, f64)], from: f64) -> String {
+    let inside: Vec<&(f64, f64)> = spans.iter().filter(|(a, _)| *a >= from).collect();
+    if inside.is_empty() {
+        return String::new();
+    }
+    let secs = inside.iter().fold(0.0, |n, (a, b)| n + (b - a));
+    let what = if from.is_finite() {
+        " in the window"
+    } else {
+        ""
+    };
+    format!(
+        "; waits on a scratch slot directory (451 T426): {}{what} ({} min), booked to no category - a measurement's own scripted holds \
+         (`L7R_BUILD_SLOT_DIR` away from the default), their seconds their run's own, never `{SLOT_WAIT}`",
+        inside.len(),
+        fixed(secs / 60.0, 1)
+    )
 }
 
 mod flight;
@@ -748,6 +818,9 @@ mod tests;
 
 #[cfg(test)]
 mod waits_tests;
+
+#[cfg(test)]
+mod scratch_tests;
 
 #[cfg(test)]
 mod spent_tests;

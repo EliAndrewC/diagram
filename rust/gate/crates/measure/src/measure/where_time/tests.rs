@@ -487,12 +487,12 @@ fn a_background_end_and_a_phase_line_leave_the_tables_as_they_were() {
     // T08 reads the build phase inside b1: 29 of its 60 s are compile (the runs table; the wall-clock table's minutes round alike)
     let row = |x: &str| {
         format!(
-            "| {x} | 1 | 1.0 | 0.5 | 0.5 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |"
+            "| {x} | 1 | 1.0 | 0.5 | 0.5 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |"
         )
     };
     let was = |x: &str| {
         format!(
-            "| {x} | 1 | 1.0 | 1.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |"
+            "| {x} | 1 | 1.0 | 1.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |"
         )
     };
     // the session-less `test` phase is booked to a category since T153, so, held by no run, it is counted loose
@@ -640,10 +640,10 @@ fn the_columns_book_make_runs_compile_and_until() {
         // `a1`, whose own lines with no start line logged are a span of it (451 T382), an agent of no known kind
         "| T05 | 20 | 1 | 2 | 4 | 0 | 0 | 0 | 0 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 | 0 | 0 | 0 | 0 |",
         "a background shell 5 min, an agent 7 min, a monitor alone 0 min, none 0 min (feature 451 T09)",
-        "| task | runs | minutes | tests | compile | hook suites | map generation | gate | land | review | docs | spec-kit step | other | in the background |",
-        "| T05 | 3 | 14.5 | 4.8 | 4.0 | 0.0 | 0.0 | 0.0 | 5.7 | 0.0 | 0.0 | 0.0 | 0.0 | 8.5 |",
-        "| T06 | 7 | 16.5 | 15.0 | 1.0 | 0.0 | 0.0 | 0.2 | 0.0 | 0.3 | 0.0 | 0.0 | 0.0 | 13.5 |",
-        "| all | 10 | 31.0 | 19.8 | 5.0 | 0.0 | 0.0 | 0.2 | 5.7 | 0.3 | 0.0 | 0.0 | 0.0 | 22.0 |",
+        "| task | runs | minutes | tests | compile | waiting on a build slot | hook suites | map generation | gate | land | review | docs | spec-kit step | other | in the background |",
+        "| T05 | 3 | 14.5 | 4.8 | 4.0 | 0.0 | 0.0 | 0.0 | 0.0 | 5.7 | 0.0 | 0.0 | 0.0 | 0.0 | 8.5 |",
+        "| T06 | 7 | 16.5 | 15.0 | 1.0 | 0.0 | 0.0 | 0.0 | 0.2 | 0.0 | 0.3 | 0.0 | 0.0 | 0.0 | 13.5 |",
+        "| all | 10 | 31.0 | 19.8 | 5.0 | 0.0 | 0.0 | 0.0 | 0.2 | 5.7 | 0.3 | 0.0 | 0.0 | 0.0 | 22.0 |",
         "runs: 10 Bash calls of every session and agent (4 in the background, 1 open at the window's end)",
         "; 1 refused before running; phases tied to no run: 1 (1.0 min)",
     ] {
@@ -796,9 +796,9 @@ fn a_pool_tree_s_phase_is_tied_to_its_holder_s_run() {
     assert_eq!(r.code, 0, "{}", r.stderr);
     let out = &r.stdout;
     for want in [
-        "| T05 | 1 | 3.0 | 0.0 | 1.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 2.0 | 0.0 |",
-        "| T06 | 1 | 2.5 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 2.5 | 0.0 |",
-        "| all | 2 | 5.5 | 0.0 | 1.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 4.5 | 0.0 |",
+        "| T05 | 1 | 3.0 | 0.0 | 1.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 2.0 | 0.0 |",
+        "| T06 | 1 | 2.5 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 2.5 | 0.0 |",
+        "| all | 2 | 5.5 | 0.0 | 1.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 4.5 | 0.0 |",
     ] {
         assert!(out.contains(want), "{want}\n{out}");
     }

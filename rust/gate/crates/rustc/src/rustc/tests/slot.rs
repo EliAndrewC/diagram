@@ -14,7 +14,7 @@ use super::runlock::Stepped;
 use super::{calls, two_crates, world_with, World};
 use crate::checks::scratch;
 use crate::rustc::runlock::{Clock, Wall};
-use crate::rustc::slot::{around, take, Slots, CEILING, COUNT, DIR, MARK, STEP};
+use crate::rustc::slot::{around, around_small, take, Slots, CEILING, COUNT, DIR, MARK, STEP};
 use crate::rustc::{cargo, cargo_in};
 
 pub(super) fn quiet(_: &str) {}
@@ -337,4 +337,58 @@ fn a_call_that_waited_writes_its_wait_as_a_phase_line_and_one_that_did_not_write
     let lines = phases(&root);
     assert_eq!(lines.len(), 2, "{lines:?}");
     assert_eq!(lines[1]["code"], 0);
+}
+
+/// Feature 451 T426: a wait on a SCRATCH slot directory - `L7R_BUILD_SLOT_DIR` set away from the home's default, as a measurement
+/// script sets it to hold slots on purpose - writes its `slot-wait` and `slot-small` lines marked `scratch`, so the readers leave
+/// them out of the waiting; the default directory, named or not, marks none.
+#[test]
+fn a_wait_on_a_scratch_slot_directory_is_marked_and_one_on_the_default_is_not() {
+    let (root, a, _) = two_crates();
+    let home = scratch("slot-scratch-home");
+    let args = ["test".to_owned(), "--no-run".to_owned()];
+    let marks = |dir: &Path| {
+        let shown = dir.display().to_string();
+        let env = |k: &str| match k {
+            DIR => Some(shown.clone()),
+            CEILING => Some("0".to_owned()),
+            COUNT => Some("1".to_owned()),
+            _ => None,
+        };
+        let world = world_with(&root, "exit 0").map(|w| World {
+            slots: Slots::of(&env, &home),
+            small: Slots::small(&env, &home),
+            ..w
+        });
+        let before = phases(&root).len();
+        // every slot of both sets held, so each call waits to its ceiling (none) and runs without
+        let wide = take(&quick(dir, 1), "holder\n", &mut quiet).hold;
+        let lane = take(
+            &Slots {
+                stem: "small",
+                ..quick(dir, 1)
+            },
+            "holder\n",
+            &mut quiet,
+        )
+        .hold;
+        assert!(wide.is_some() && lane.is_some());
+        let mut env = BTreeMap::new();
+        assert!(around(&world, &args, &mut env).is_none());
+        assert!(around_small(&world, &a, &args, &mut env).is_none());
+        phases(&root)[before..]
+            .iter()
+            .map(|l| format!("{} {}", l["step"].as_str().unwrap(), l["scratch"]))
+            .collect::<Vec<_>>()
+    };
+    let away = scratch("slot-scratch-dir");
+    assert_eq!(
+        marks(&away),
+        ["slot-wait true", "slot-wait true", "slot-small true"]
+    );
+    let default = home.join(".cache/l7r-build-slots");
+    assert_eq!(
+        marks(&default),
+        ["slot-wait null", "slot-wait null", "slot-small null"]
+    );
 }

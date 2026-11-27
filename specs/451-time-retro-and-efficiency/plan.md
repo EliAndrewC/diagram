@@ -6070,31 +6070,35 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 **Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the builders' loop faster). Of 87.4 s of real lane waits in 3.61 h, 85.7 s had a wide slot free, measured 2026-11-27 (the event logs, `dev/measurements/2026-11-27/slot-waits/waits.py`), about 570 s a day at that rate (a GUESS scaling, x 6.65); those waits now end at once where a wide slot is free. No engine speed, so no checklist.
 
 
-### T426 (<why: the finding or measurement that files it>)
+### T426 (found by T420: 221.9 of the 283.5 s T367's record counted as `slot-wait` from 00:20Z to 03:30Z were T355's `lint-wait.sh` holding the wide slots of a SCRATCH slot directory, and `make task-time` booked them as waiting on a build slot, measured 2026-11-27 (the event logs' `slot-wait` lines, `dev/measurements/2026-11-27/slot-waits/results.md`))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the writer marks the line, the readers leave it out. WRITER (`rust/gate/crates/rustc`): `Slots` gains `scratch`, set in `Slots::of` where `L7R_BUILD_SLOT_DIR` names a directory other than the home's `~/.cache/l7r-build-slots` (the default named outright is not scratch; `Slots::small` inherits it through `..wide`); `phase.rs`'s `wrote` adds `"scratch": true` to a `slot-wait` or `slot-small` line where the run's slots are scratch, so no call line of `slot.rs` changes and T425's `around_small` (done, not yet carried) merges beside it with its lines marked for free. READERS (`rust/gate/crates/measure`, `where_time/columns.rs`, which both `make where-time` and `make task-time` book phases through: `task_time/book/cats.rs` books no `slot-wait` of its own): `scratch_wait` tells a marked line, or one of `KNOWN_SCRATCH`, the record's one unmarked run - tree `diagram-backlog-t270`, starts 01:48:50 to 02:01:30Z on 2026-11-27, T355's `lint-wait.sh` (the record's own window) - whose four lines (55.5, 49.9, 56.4, 60.0 s) are the only `slot-wait` lines of that tree and span, measured 2026-11-27 by listing the window's 20 `slot-wait` lines from the clone's event logs. `tie` keeps such a line's span in `Runs::scratch`, never `loose`, and hands it to its run as a hidden part that `Split::of` takes out BEFORE every category: so its seconds are neither `waiting on a build slot` nor the compile whose `build` span may hold it, but its run's own bucket (T355's runs were a script's: wait loops and shell reads), the grand total unchanged. The notes: `make task-time`'s footnote and `make where-time`'s runs line gain `waits on a scratch slot directory (451 T426): N [in the window] (M min), booked to no category ...`, only where there were any (task-time counts the window's, from its start: a line in the `BACK=` read-back is not counted).
+  - **Fixed here, found while re-measuring:** `make where-time`'s runs table had no `waiting on a build slot` column (`RUN_COLUMNS`), so since T284 every slot wait split out of a run fell in no column and was missing from the table's minutes - 1.3 min of real waits in the window's 451 runs and the 3.7 min of scratch holds, measured 2026-11-27 (task-time and where-time over the clone's logs, before and after). The column is added after compile, and the tests pinning that table's rows (`where_time/tests.rs`, `where_time/columns/tests.rs`) are widened by its cell.
+  - **Re-measured, read-only, 2026-11-27** (`l7r-gate.sh measure task-time --root /diagram/.clones/diagram-backlog --since 2026-11-27T00:20:00Z --until 2026-11-27T04:00:00Z`, and `measure where-time ... 451`, before and after, never `SINCE=last`): task-time's whole window, `waiting on a build slot` 5.3 min before and 1.6 after, measured 2026-11-27 (task-time and where-time over the clone's logs, before and after). The 3.7 min (4 lines) went to wait loops (22.4 -> 25.2 min) and shell reads and file edits (271.2 -> 272.0 min), the runs' own buckets, with minutes 926.6 and blocking 143.1 unchanged, and the footnote says `4 in the window (3.7 min)`, measured 2026-11-27 (task-time and where-time over the clone's logs, before and after). Where-time's runs table: `all` 289.9 -> 294.9 min (the missing slot-wait column's 1.3 min of real waits now counted, the 3.7 min of scratch in `other`), T355's row 27.4 -> 31.1 min, measured 2026-11-27 (task-time and where-time over the clone's logs, before and after).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a scratch wait marked and booked to no category | red on the old code, measured 2026-11-27: `rustc/tests/slot.rs` `a_wait_on_a_scratch_slot_directory_is_marked_and_one_on_the_default_is_not` (130 passed, 1 failed of 131, `make rust-test CRATE=rust/gate/crates/rustc`); `where_time/columns/scratch_tests.rs` `a_scratch_slot_wait_is_booked_to_no_category_and_counted` and `task_time/tests.rs` `a_scratch_slot_wait_is_left_out_and_counted_in_the_footnote` (278 passed, 2 failed of 280, `make rust-test CRATE=rust/gate/crates/measure`); then green with `a_scratch_line_is_told_by_its_mark_or_the_record_s_known_holds`, 131 and 281 passed in `make builder-checks CRATE="rust/gate/crates/rustc rust/gate/crates/measure"` | n/a: tooling | none | none |
 
 ### T426 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make task-time`'s and `make where-time`'s `waiting on a build slot` holds only waits for the machine's own slots; a measurement's scripted hold on a scratch slot directory is counted apart and booked to no category.
+2. **The constraints.** T284's slot unchanged for every real call (the mark is only a field on the line); the readers' totals unchanged (the seconds move to their run's own bucket, never vanish); T425's carry unhindered (no call line of `slot.rs` changes).
+3. **Where each comes from.** O: T420's record (`dev/measurements/2026-11-27/slot-waits/results.md`: the four waits, T355's `lint-wait.sh`, its tree and window). O: the window's `slot-wait` lines, 20 of them, the four in t270 01:48:50-02:01:30Z the only ones there, measured 2026-11-27 (listed from the clone's event logs).
+4. **Do they describe the world here?** Yes: the re-measure above finds exactly those four, 3.7 min, in the real logs, measured 2026-11-27 (task-time and where-time over the clone's logs, before and after).
+5. **The order.** After T420; beside T425 (its `slot.rs` edits in other lines; its `slot-small` lines marked by `phase.rs` with no change of its own).
+6. **The exits.** Green: the two crates' tests and lint and the re-measure's row, measured 2026-11-27 (`make builder-checks`, and the re-measure above). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The fixtures green, and over 2026-11-27 00:20Z to 04:00Z the whole window's `waiting on a build slot` 5.3 -> 1.6 min with the footnote counting 4 scratch waits (3.7 min), the total minutes unchanged.
+10. **Before moving a constant.** n/a: no knob moves; `KNOWN_SCRATCH` is the record's past run, not a tunable.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The next task's brief reads `waiting on a build slot` without a measurement's own holds in it (T367's record and T420's brief were misled by 221.9 s of them, measured 2026-11-27 by T420's `waits.py`).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `make where-time`'s runs table dropped every slot wait from its minutes (no column since T284): fixed here.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
 
 ### T417, T352 (bundle) (the GM 2026-11-27 on the cap's abrupt cutoff: on 2026-11-26/27 three of about 35 builders reached the 300k cap, T315's at 308k and T325's at 310k refused only the mechanical end of their stop points; and the cap's one exit refused the handoff names the briefs give, found by T334 2026-11-26)
 
