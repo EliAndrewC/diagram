@@ -286,3 +286,16 @@ but four trees were held about 420 of the 780 minutes and three about 220; memor
 three) and no OOM kill; median load 14.3 against 12.5 on 22 cores; CPU stall about 1.04 s a sample with four against 0.69 with
 three. Whether four landed more work is not measurable from that night: integration was the bottleneck. Filed as feature 461's
 task to measure three against four over like windows once the lane runs, and settle the knob there.
+
+## His seventeenth message (2026-11-27, the afternoon after): A FEATURE'S RECORDS OUTGROWING A SESSION'S CONTEXT - split them, and warn the sessions that come back
+
+<!-- SOURCE: GM NOTES -->
+> Okay, that sounds good. And yeah, it sounds like we should both make sure that this general kind of thing is something that our process reviewer knows to look at and also that we address it soon. And while I don't usually put that much effort into going back and cleaning up old features that have already closed, this might end up being a case where we need to do something like that, because we landed so many hundreds of tasks as a result of this feature that it is not unlikely that future sessions will come back and look at what we did. And if they end up naively just opening these very large files and then blowing through their own context windows, then that is the kind of thing that is likely to ruin a future session's efficiency. So I wonder if we should preemptively do some things like mechanically split up the large files into smaller files that exist in notes explaining what we did and why, and cautioning future sessions that look here to be careful to avoid like wrecking their context usage, because even doing something like grepping for what you need could turn up just so much context that I actually wonder if this might be a key part of why so many of our builders were hitting their 300 K token context window size, you know?
+<!-- END SOURCE -->
+
+What the session measured (2026-11-27, a script over the 148 builder transcripts from 02:00Z, each tool call whose input named one
+of 451's records and the size of its result): plan.md 1,416 calls, 3.68M characters returned (2.6k a call); tasks.md 381 calls,
+2.65M (7.0k a call - its task lines are long); plan-done.md 138 calls, 0.66M; the feature's event log 103 calls, 0.22M;
+plan-review.json 188 calls, 0.13M; tasks-done.md 0.09M; checks-open.json 0.07M - about 7.5M characters in all, near 50k (some 13k
+tokens) a builder. So the records are a real but small share of a builder's 300k context, not its main cause, by that measure;
+what a read costs over the turns that follow it (it is re-read from cache every turn after) is not in that figure.
