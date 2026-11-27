@@ -4190,7 +4190,7 @@
    "declared": "spec-fidelity"
   },
   "### T475 Approach (checklist part A)": {
-   "sha256": "6b67b7e200273b2c3ac3436c09f3bba7da7cdc878c8c57f656762ac95ac400cc",
+   "sha256": "3cad61483e4cf04223536293e44dcbe5e11c7fcc639b24ba82ec77c24ea58004",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -40308,6 +40308,40 @@
      "why": "The removed text held only placeholders and decided nothing; deleting it narrows nothing asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T475 (failed message-check BREVITY on 2026-11-27: the shared escape helper's no-reason refusal, one wording for every token at 519-555 characters, BASELINE in dev/guard-messages.tsv, judged on 451 T451's CLOSING_BARE_OK unit ebf269213127bfc4)",
+    "### T475 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T475-D1",
+     "summary": "The shared no-reason refusal shows one form, TOKEN=\"<why this case is legitimate>\", in place of the comment form; the reason reader still accepts both.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-23 ask for hook output with fewer tokens and no loss of fidelity: the assignment form fits every kind of input the helper's callers pass (command, prompt, summary, Stop message), matches the form other guards already print, and nothing the session could do before is refused now. The reason floor (feature 170) is unchanged."
+    },
+    {
+     "id": "T475-D2",
+     "summary": "The workaround rationale, the CI-is-down example, the TOKEN: ok sentence and the GM 2026-08-30 history are cut from the rendered text (history kept in a WHY comment); the header 'TOKEN with no reason given' is kept.",
+     "class": "within",
+     "why": "This is the brevity the GM asked for (2026-11-23, 'the same thing with no loss of fidelity and fewer tokens') and the BREVITY finding asked for. What the reader needs stays: the token, the two-word and eight-character bar, where it goes, that make audit shows it, and its form. message-check judged the 14 re-rendered wordings FIDELITY and BREVITY PASS. The history is kept in the source, not lost."
+    },
+    {
+     "id": "T475-order",
+     "summary": "Lands after T482 in this tree.",
+     "class": "within",
+     "why": "Ordering only. It narrows nothing that was asked."
+    },
+    {
+     "id": "T475-red-first",
+     "summary": "A red-first test pins the short refusal (at most 260 characters, names the bar and the form, carries no history), and the old test's assertion of 'GATE_OK: ok' is moved to the header.",
+     "class": "within",
+     "why": "A test whose only job is to make the requested brevity happen and keep happening is enforcement of the request, not added scope (GM 2026-09-20)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -60508,33 +60542,27 @@
    "decisions": [
     {
      "id": "T475-D1",
-     "summary": "The no-reason refusal shows one form, TOKEN=\"<why this case is legitimate>\", in place of the comment form '<your command>  # TOKEN: <why>'; both forms are still accepted, and the text says 'where the token is' because the helper's callers pass commands, prompts, summaries and Stop messages.",
+     "summary": "The shared no-reason refusal shows one form, TOKEN=\"<why this case is legitimate>\", in place of the comment form; the reason reader still accepts both.",
      "class": "within",
-     "why": "The GM's 2026-11-23 hook-output request asks for the same thing in fewer tokens with no loss of fidelity. Which form a message shows is a wording choice inside that request. No accepted form is removed, the reason floor is unchanged, and the one form shown works for every caller, so the reader loses nothing it needs."
+     "why": "Serves the GM's 2026-11-23 ask for hook output with fewer tokens and no loss of fidelity: the assignment form fits every kind of input the helper's callers pass (command, prompt, summary, Stop message), matches the form other guards already print, and nothing the session could do before is refused now. The reason floor (feature 170) is unchanged."
     },
     {
      "id": "T475-D2",
-     "summary": "The workaround rationale, the 'CI is down' example, the 'TOKEN: ok' sentence and the GM 2026-08-30 history are cut from the text, and the history moves to a WHY comment. The header 'TOKEN with no reason given' stays, because builder_stop_hooks/tests.rs pins it.",
+     "summary": "The workaround rationale, the CI-is-down example, the TOKEN: ok sentence and the GM 2026-08-30 history are cut from the rendered text (history kept in a WHY comment); the header 'TOKEN with no reason given' is kept.",
      "class": "within",
-     "why": "This is the brevity the 2026-11-23 request asks for. It answers the message-check BREVITY finding, and message-check found FIDELITY PASS on all 14 re-rendered wordings. What the reader acts on stays in the text: the token, the bar of two words and eight characters (which already rules out 'ok'), where the reason goes, that make audit shows it, and the form. The history is kept, in the source. No requirement is narrowed."
-    },
-    {
-     "id": "T475-test",
-     "summary": "A red-first test escape::tests::the_no_reason_refusal_names_the_token_the_bar_and_the_form_briefly pins the text: at most 260 characters, 'two words or more', the GATE_OK=\"<why form, and neither '# GATE_OK:' nor the history. The old assertion on 'GATE_OK: ok' now asserts the header.",
-     "class": "within",
-     "why": "Enforcement of the requested brevity and fidelity, and of 451 T170's per-message budget and verdict. With the cut removed from the spec, the test would have nothing left to check. It serves the request."
-    },
-    {
-     "id": "T475-rerender",
-     "summary": "The eleven guard suites whose recorded wordings held the old text are re-run with the tree's message store, then make guard-messages records 14 new wordings (176-200 characters against the 1,800 budget), with message-check's PASS on each.",
-     "class": "within",
-     "why": "This keeps the message store and its reviewed verdicts true to the new text, as T170 and the 2026-11-23 subagent brevity and fidelity check require. It adds no behavior. The set of suites comes from the recorded store's rows, and the 30 call sites carry their grep, so the census states its search space."
+     "why": "This is the brevity the GM asked for (2026-11-23, 'the same thing with no loss of fidelity and fewer tokens') and the BREVITY finding asked for. What the reader needs stays: the token, the two-word and eight-character bar, where it goes, that make audit shows it, and its form. message-check judged the 14 re-rendered wordings FIDELITY and BREVITY PASS. The history is kept in the source, not lost."
     },
     {
      "id": "T475-order",
-     "summary": "The task lands after T482 in this tree, as T477's found-and-left line orders it.",
+     "summary": "Lands after T482 in this tree.",
      "class": "within",
-     "why": "Sequencing only. It changes nothing about what is built."
+     "why": "Ordering only. It narrows nothing that was asked."
+    },
+    {
+     "id": "T475-red-first",
+     "summary": "A red-first test pins the short refusal (at most 260 characters, names the bar and the form, carries no history), and the old test's assertion of 'GATE_OK: ok' is moved to the header.",
+     "class": "within",
+     "why": "A test whose only job is to make the requested brevity happen and keep happening is enforcement of the request, not added scope (GM 2026-09-20)."
     }
    ],
    "verdict": "CLEAR"
