@@ -85,6 +85,9 @@ pub(crate) struct Env {
     pub sampler: Vec<String>,
     /// `L7R_LANE_TREE`: the lane's tree, a path or a name beside the clone; empty for `<clone>-land` (feature 461 D1).
     pub lane_tree: String,
+    /// The program and arguments that apply a done commit onto a handed-out tree uncommitted - the gate binary's `land --carry
+    /// --no-commit` (461 T05's door), given `""` and the sha, run in the tree; empty where the binary is not known (461 T09, D14).
+    pub apply: Vec<String>,
 }
 
 impl Env {
@@ -110,6 +113,7 @@ impl Env {
             prewarm: var("L7R_PREWARM") != "0",
             sampler: sampler_words(std::env::current_exe().ok(), &var("L7R_SAMPLER")),
             lane_tree: var("L7R_LANE_TREE"),
+            apply: apply_words(std::env::current_exe().ok()),
         }
     }
 }
@@ -124,6 +128,17 @@ fn sampler_words(exe: Option<PathBuf>, knob: &str) -> Vec<String> {
     [&exe.to_string_lossy(), "measure", "sampler", "start"]
         .map(str::to_owned)
         .to_vec()
+}
+
+/// The words that apply a done commit onto a tree uncommitted: the gate binary `exe` with `land --carry --no-commit`; none where
+/// the binary is not known.
+fn apply_words(exe: Option<PathBuf>) -> Vec<String> {
+    exe.map(|exe| {
+        [&exe.to_string_lossy(), "land", "--carry", "--no-commit"]
+            .map(str::to_owned)
+            .to_vec()
+    })
+    .unwrap_or_default()
 }
 
 /// The clone a command runs in: its git common directory, its main worktree and that tree's HEAD.
@@ -458,8 +473,9 @@ fn take(p: &Pool, tasks: &[String], feature: &str, env: &Env) -> Reply {
             0,
         );
     }
-    // the task's own done commit not yet carried: its next builder would start without it (451 T398)
-    if let Some(why) = crate::builder_done::handout_waits(p, tasks, feature) {
+    // the task's own done commit not yet carried: the handout builds on it (461 T09, D14, `builder_done::build_on`), or with no
+    // apply program known its next builder would start without it, and waits (451 T398)
+    if let Some(why) = crate::builder_done::handout_waits(p, tasks, feature, env) {
         return refused(why);
     }
     let mut notes = String::new();
@@ -512,7 +528,14 @@ fn take(p: &Pool, tasks: &[String], feature: &str, env: &Env) -> Reply {
             p.head.get(..10).unwrap_or(&p.head)
         );
         notes.push_str(&save(p, &trees));
+        let holder = trees[i].holder();
         drop(turn);
+        // outside the registry's turn (an apply can take longer than a waiting command's), before the pre-warm reads the tree
+        let built = crate::builder_done::build_on(p, &tree, tasks, feature, &holder, env);
+        if let Err(why) = built.map(|said| notes.push_str(&said)) {
+            let _ = release(p, tasks, feature, env);
+            return refused(format!("{notes}{why}"));
+        }
         let base = last_handout(&tree, &was, &p.head);
         notes.push_str(&prewarm(p, &tree, &base, env));
         return reply(format!("{}\n", tree.display()), notes, 0);

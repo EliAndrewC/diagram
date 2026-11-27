@@ -718,32 +718,79 @@ engine speed, so the performance checklist does not apply.
 <!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T07 to T07 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T08 to T08 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T09 (<why: the finding or measurement that files it>)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+### T09 (D14, the handout half: a closing half no longer waits for its build half's carry)
+
+- **Approach**: built in pool tree `diagram-backlog-t271`, in the task crate only (`builder_tree.rs` keeps T13's edits whole: the
+  call site in `take`, one `Env` field and its words).
+  - **The handout builds on the commit** (`builder_done::build_on`, new): in `take`, after the hold is saved and the registry's
+    turn given back (an apply can outlast a waiting command's 100 tenths), and before the pre-warm reads the tree, each of
+    `to_carry`'s commits of the tasks (one a bundle, oldest first, the land's own reading) is applied onto the tree - just brought
+    to the clone's HEAD - by T05's command door, `l7r-gate land --carry --no-commit "" <sha>` run IN the tree (`Env.apply`, the
+    gate binary's words from `current_exe` as the sampler's are; `L7R_GATE_TREE` removed as the pre-warm removes it, since `land`
+    reads its root from the working directory). Each applied commit writes a `builds-on` line to the pool's log (the tree, the
+    holder, the commit), and the handout says `builder-tree: it builds on <ref> (<sha>, "<subject>"), not yet carried: applied onto
+    the clone's HEAD uncommitted - the builder's done supersedes it`. Why a command and not in process: T05's section - `task`
+    cannot build on `land`.
+  - **The hand-in half: one ref.** `Found::unready` (so `make builder-done` and T07's hand-in alike) reads the hold's
+    `builds-on` lines since its take (`built_on`, over the shared `since_held` that `briefs` now uses) and `waits` passes over a
+    done commit so built on; `kept_in` then writes the hold's commit over that ref - one ref, its commit holding both halves on
+    the handout's base. A done commit NOT built on by the tree's handout (a ref written by hand, a tree held some other way) is
+    still refused, never written over (`a_done_commit_not_yet_carried_is_never_written_over`, unchanged). The `superseded` line
+    of the lane's log, and the open-batch rule, are T14's (D14's other half).
+  - **Decision: an apply that does not end verified refuses the handout** (exit 2, a conflict no rule resolves; exit 1, its end
+    not verified; a program that does not start): the tree is put back clean at the clone's HEAD (`reset --hard`, `clean -fd`:
+    the handout had brought it there with nothing held), the hold released, nothing logged as built on, and the refusal names the
+    apply's own words and the carry to run first - today's wait. The record is silent on a handout's conflict; the algorithmically
+    easier route is taken (the root CLAUDE.md's rule): a conflicted tree handed to a fresh builder, its pre-warm compiling markers,
+    was the other. Label: the easier route.
+  - **Decision: with no apply program known (`Env.apply` empty) the handout waits as before** (`handout_waits`, 451 T398's
+    refusal kept): the live `Env` always has the binary, so this is the tests' fixture and a binary-less caller's backstop.
+  - **Words that became false, restated**: `make builder-done`'s two NEXT lines (a closing half "is dispatched after the commit is
+    carried" / "waits for this commit") now say its handout builds on the commit; `builder_done.rs`'s module doc step 1;
+    `hand_in.rs`'s step 1; `rust/gate/CLAUDE.md`'s task row; `scripts/container/builder-brief.md`'s "THE ONE EXCEPTION to
+    dispatch-first" paragraph.
+  - **Red first** (observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/task ONLY="builder_done::tests"`, the new
+    test `a_closing_half_handed_out_before_its_build_half_s_carry_builds_on_it_and_its_done_leaves_one_ref` written with only the
+    `Env.apply` field added): 15 passed, 1 failed - the handout refused with 451 T398's carry line. After: green, with
+    `a_handout_whose_apply_does_not_end_verified_is_refused_with_the_tree_put_back_free` (exit 2, exit 1 and a missing program,
+    each: refused, the tree clean at HEAD and free, no `builds-on` line) and `apply_words` asserted beside `sampler_words`; the
+    old handout test kept as `with_no_apply_program_...`. The door's words are asserted exactly (the tree it ran in, `land --carry
+    --no-commit "" <sha>`), so the stand-in stays tied to T05's sha-alone test
+    (`a_commit_the_clone_holds_is_applied_by_its_sha_alone_and_its_done_ref_kept`, the land crate).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the handout's apply and the done's supersede | n/a - no map | n/a | none | n/a |
 
 ### T09 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A task's closing half is handed its tree while its build half's done commit still waits on its
+   carry, the build half's work in the tree uncommitted, and its done leaves one done ref whose commit holds both halves.
+2. **The constraints.** D14 (the handout half), D3's no-commit form reused through T05's command door, T07's hand-in reading
+   `Found::unready`, D15 (no lane code here), T13's `builder_tree.rs` edits kept whole; no history rewritten.
+3. **Where each comes from.** G: the GM's request behind FR-002 (spec.md); R: D14, T05's and T07's sections; O: the scratch-clone
+   tests above (2026-11-27).
+4. **Do they describe the world here?** Yes: the tests take a real pool tree, a linked worktree of the fixture's clone, as
+   `make builder-tree` does (observed 2026-11-27, method: the crate's `world` fixture, as T07's).
+5. **The order.** After T05 and T07; before T16 (a repair's handout applies its ejected commit the same way) and T14.
+6. **The exits.** Green: the task and land crates' tests and `make builder-checks` as below; coverage is the gate's, at the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE="rust/gate/crates/task rust/gate/crates/land"` green, the task crate 156 passed
+   (154 + 2) and the land crate 219, 0 failed (observed 2026-11-27, method: that command, its log's tail).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a - not a defect fix: a new behavior D14 decides (a closing half's tree idle until a carry).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The queue still reads a closing half as `waiting` on its own task's carry (`rust/guard/shared/src/builder_queue.rs`, `state()`,
+  item 5; observed 2026-11-27, method: reading `state()`), so `make builder-next`, `make builder-done`'s next dispatch and the
+  pool-idle guard never name the entry this handout now serves: the visible effect, a closing half not offered until the carry.
+  Not fixed here: a guard crate's edit, outside this task's one job and crate. Filed as T48; lands before T16.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no - its line carries no `[perf]` tag; it removes a wait in the builders' loop as D14 decides, measured by
+phase 5, not by this task.
 
 ### T10 (<why: the finding or measurement that files it>)
 
@@ -1631,6 +1678,32 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 |---|---|---|---|---|
 
 ### T47 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T48 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T48 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

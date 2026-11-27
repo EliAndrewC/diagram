@@ -30,6 +30,7 @@ fn env(dir: &Path) -> Env {
         prewarm: false,
         sampler: Vec::new(),
         lane_tree: String::new(),
+        apply: Vec::new(),
     }
 }
 

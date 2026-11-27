@@ -107,10 +107,10 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
   carry before the dispatch: measured 2026-11-27, the three warm trees stood idle 23% of an eight-hour window with the queue never
   short, because the tree waited on the carry, its conflicts, the gate and the landing
   (`dev/measurements/2026-11-27/tree-idle/results.md`). `make builder-trees` lists every done commit not yet carried, each with
-  its carry. THE ONE EXCEPTION to dispatch-first: the SAME task's next builder (its closing half) is dispatched AFTER its carry -
-  a handout brings the tree to the clone's HEAD, so before the carry it would start without the build half's work: `make builder-tree`
-  (and so `make builder-brief`) refuses that handout with the carry to run (451 T398), and a task's second `make builder-done`
-  is refused until its first commit is carried. A done commit is also carried by `make carry COMMIT=<sha>` alone (451 T397).
+  its carry. The SAME task's next builder (its closing half) needs no carry first either (461 T09, plan D14; 451 T398 made it wait):
+  its handout applies the task's done commit onto the clone's HEAD uncommitted (the no-commit carry, `make builder-tree` saying
+  `it builds on`), and its `make builder-done` supersedes that ref - one ref, one commit of both halves. An apply that does not end
+  verified (a conflict) hands no tree out and names the carry to run first. A done commit is also carried by `make carry COMMIT=<sha>` alone (451 T397).
 - THE QUEUE IS A FILE, AND THE TOOLING NAMES THE NEXT TASK (451 T313, T395, T297): `specs/<feature>/queue.txt` holds one entry a
   line, in the order to hand out - `<task[,task]> <kind> [jobs=] [measures=] [load=1] crates=<dirs|-> files=<paths|-> [waits=<T<n>,GM,alone>]
   [note=...]` - written by `make queue-add` or a plain edit. `make queue` lists it with each state computed (landed, built, in

@@ -1,7 +1,7 @@
 //! `make builder-done` on a real repository and its pool (feature 451 T394): a builder's tree committed, kept under its ref and
 //! released in one call, the commit outliving the tree's next handout; each refusal with nothing done; a guard file with and
-//! without `GUARD=`; a bundle; a done ref never written over while its commit waits on its carry, and its task handed no tree until
-//! then (451 T398).
+//! without `GUARD=`; a bundle; a done ref never written over while its commit waits on its carry, but by a hold whose handout built
+//! on it (461 T09), and its task's next handout building on it - or, with no apply program, handed no tree until then (451 T398).
 
 use std::path::{Path, PathBuf};
 
@@ -334,7 +334,7 @@ fn a_bundle_is_one_commit_under_a_ref_for_each_task() {
 fn a_done_commit_not_yet_carried_is_never_written_over() {
     let (_dir, root, e, b1) = held("done-twice", "T01");
     // a done commit of T01 the clone's HEAD does not hold, while T01 holds the tree: a ref written by hand, as a tree held some
-    // other way than a handout would leave it (the handout itself is refused, the next test)
+    // other way than a handout would leave it (a handout builds on the commit and logs it, 461 T09: this hold logged none)
     // (its subject its own: a commit is told carried by its author's second and its subject, and the fixture's commits share both)
     put(&b1, "scripts/n.py", "n = 1\n");
     git(&b1, &["add", "-A"]);
@@ -396,8 +396,10 @@ fn another_tasks_done_keeps_the_ref_of_a_commit_that_waits_and_deletes_a_carried
     assert!(list(&root, &e).contains(&format!("  {}  9001-T01  9001 T01: waits\n", &first[..10])));
 }
 
+/// With no apply program known (`env.apply` empty, the gate binary not found) a handout cannot build on the task's own done commit,
+/// so it waits for the carry, as before 461 T09 (451 T398).
 #[test]
-fn a_task_is_handed_no_tree_while_its_own_done_commit_waits_on_its_carry() {
+fn with_no_apply_program_a_task_is_handed_no_tree_while_its_own_done_commit_waits_on_its_carry() {
     let (_dir, root, e, b1) = held("done-handout", "T01");
     put(&b1, "scripts/n.py", "n = 1\n");
     assert_eq!(
@@ -439,6 +441,123 @@ fn a_task_is_handed_no_tree_while_its_own_done_commit_waits_on_its_carry() {
     assert_eq!(took.code, 0);
     assert_eq!(Path::new(took.stdout.trim()), b1);
     assert!(b1.join("scripts/n.py").exists());
+}
+
+/// A stand-in for the no-commit carry's door (`l7r-gate land --carry --no-commit "" <sha>`, 461 T05), its words for the `Env`: it
+/// writes the tree it ran in and its arguments to `apply.sh.args` beside it, then runs `body`.
+fn applier(dir: &Path, body: &str) -> Vec<String> {
+    let at = dir.join("apply.sh");
+    write_executable(
+        &at,
+        &format!("#!/bin/sh\nprintf '%s\\n' \"$(git rev-parse --show-toplevel)\" \"$@\" > \"$0.args\"\n{body}\n"),
+    );
+    [&*at.to_string_lossy(), "land", "--carry", "--no-commit"]
+        .map(str::to_owned)
+        .to_vec()
+}
+
+/// 461 T09 (plan D14): a task's next builder is handed its tree while its earlier done commit waits on its carry - the commit
+/// applied onto the clone's HEAD uncommitted - and its done supersedes the earlier ref: one ref, one commit of both halves.
+#[test]
+fn a_closing_half_handed_out_before_its_build_half_s_carry_builds_on_it_and_its_done_leaves_one_ref(
+) {
+    let (dir, root, mut e, b1) = held("done-builds-on", "T01");
+    e.apply = applier(&dir, "exec git cherry-pick -n \"$5\"");
+    put(&b1, "scripts/n.py", "n = 1\n");
+    assert_eq!(
+        done(&root, &e, "T01", "9001 T01: the build half", "").code,
+        0
+    );
+    let first = git(&root, &["rev-parse", "refs/l7r/done/9001-T01"]);
+    // the clone moves on before the closing half's handout: its base is the clone's HEAD, the build half applied on it
+    commit(&root, "scripts/m.py", "m = 1\n");
+    let head = git(&root, &["rev-parse", "HEAD"]);
+    let took = builder_tree::run(&words(&["take", "T01", "9001"]), &root, &e);
+    assert_eq!(took.code, 0, "{}", took.stderr);
+    assert_eq!(Path::new(took.stdout.trim()), b1);
+    assert!(took.stderr.contains(&format!(
+        "builder-tree: it builds on refs/l7r/done/9001-T01 ({}, \"9001 T01: the build half\"), not yet carried: applied onto the clone's HEAD uncommitted - the builder's done supersedes it\n",
+        &first[..10]
+    )));
+    assert_eq!(git(&b1, &["rev-parse", "HEAD"]), head);
+    assert_eq!(git(&b1, &["status", "--porcelain"]), "A  scripts/n.py");
+    assert!(b1.join("scripts/m.py").exists());
+    // the door as T05 built it: run in the tree, the commit by its sha alone
+    let args = std::fs::read_to_string(dir.join("apply.sh.args")).unwrap();
+    let at = b1.canonicalize().unwrap();
+    assert_eq!(
+        args,
+        format!("{}\nland\n--carry\n--no-commit\n\n{first}\n", at.display())
+    );
+    // the closing half's done: one commit of both halves on the handout's base, the one ref moved to it
+    put(&b1, "scripts/o.py", "o = 1\n");
+    let said = done(&root, &e, "T01", "9001 T01: the closing half", "");
+    assert_eq!(said.code, 0, "{}", said.stderr);
+    assert_eq!(refs(&root), "refs/l7r/done/9001-T01");
+    let second = git(&root, &["rev-parse", "refs/l7r/done/9001-T01"]);
+    assert_ne!(second, first);
+    assert_eq!(git(&root, &["log", "-1", "--format=%P", &second]), head);
+    assert_eq!(
+        git(&root, &["show", "--name-only", "--format=", &second]),
+        "scripts/n.py\nscripts/o.py"
+    );
+    assert!(!list(&root, &e).contains(&first[..10]));
+}
+
+/// 461 T09: an apply that does not end verified (its conflict, its failed end, a program that does not start) hands no tree out -
+/// the tree put back clean at the clone's HEAD and free, the carry named - and logs nothing it built on.
+#[test]
+fn a_handout_whose_apply_does_not_end_verified_is_refused_with_the_tree_put_back_free() {
+    let (dir, root, mut e, b1) = held("done-apply-fails", "T01");
+    put(&b1, "scripts/n.py", "n = 1\n");
+    assert_eq!(
+        done(&root, &e, "T01", "9001 T01: the build half", "").code,
+        0
+    );
+    let first = git(&root, &["rev-parse", "refs/l7r/done/9001-T01"]);
+    let head = git(&root, &["rev-parse", "HEAD"]);
+    let named = format!(
+        "builder-tree: refused - no tree handed out: the handout could not build on refs/l7r/done/9001-T01 ({}, \"9001 T01: the build half\"), not yet carried: its no-commit apply onto the clone's HEAD did not end verified - ",
+        &first[..10]
+    );
+    let carry = format!(
+        "\n  the tree is put back at the clone's HEAD and free; carry it first: make carry FROM={} COMMIT={first}\n",
+        b1.display()
+    );
+    let stubs = [
+        (
+            "git cherry-pick -n \"$5\" >/dev/null 2>&1\necho 'carry: 1 path(s) unmerged' >&2\nexit 2",
+            "it exited 2:\ncarry: 1 path(s) unmerged",
+        ),
+        (
+            "git cherry-pick -n \"$5\" >/dev/null 2>&1\necho NOT VERIFIED\nexit 1",
+            "it exited 1:\nNOT VERIFIED",
+        ),
+    ];
+    for (body, why) in stubs {
+        e.apply = applier(&dir, body);
+        let took = builder_tree::run(&words(&["take", "T01", "9001"]), &root, &e);
+        assert_eq!((took.code, took.stdout.as_str()), (2, ""));
+        assert!(
+            took.stderr.ends_with(&format!("{named}{why}{carry}")),
+            "{}",
+            took.stderr
+        );
+        assert!(pool_of(&root)[0].free());
+        assert_eq!(git(&b1, &["rev-parse", "HEAD"]), head);
+        assert_eq!(git(&b1, &["status", "--porcelain"]), "");
+    }
+    e.apply = vec!["/no/such/apply".to_owned()];
+    let took = builder_tree::run(&words(&["take", "T01", "9001"]), &root, &e);
+    assert_eq!(took.code, 2);
+    assert!(took
+        .stderr
+        .contains(&format!("{named}it did not start (/no/such/apply: ")));
+    assert!(took.stderr.ends_with(&carry));
+    assert!(pool_of(&root)[0].free());
+    let log = std::fs::read_to_string(root.join(".git/builder-pool.log")).unwrap();
+    assert!(!log.contains("\"builds-on\""));
+    assert_eq!(refs(&root), "refs/l7r/done/9001-T01");
 }
 
 #[test]

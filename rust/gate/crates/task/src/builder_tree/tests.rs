@@ -27,6 +27,7 @@ pub(crate) fn env(dir: &Path) -> Env {
         prewarm: true,
         sampler: Vec::new(),
         lane_tree: String::new(),
+        apply: Vec::new(),
     }
 }
 
@@ -575,6 +576,12 @@ fn a_handout_asks_for_the_clone_s_sampler_and_never_fails_on_it() {
     assert_eq!(super::sampler_words(gate(), "1"), asked);
     assert!(super::sampler_words(gate(), "0").is_empty());
     assert!(super::sampler_words(None, "").is_empty());
+    // the apply's words (461 T09): the gate binary's no-commit carry, T05's door; none with no binary known
+    assert_eq!(
+        super::apply_words(gate()),
+        words(&["/x/l7r-gate", "land", "--carry", "--no-commit"])
+    );
+    assert!(super::apply_words(None).is_empty());
 }
 
 #[test]

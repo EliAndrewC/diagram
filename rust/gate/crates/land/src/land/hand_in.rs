@@ -7,7 +7,8 @@
 //! environment):
 //!
 //! 1. today's refusals are asked (`Found::unready`: an unfinished operation, an unmerged path, a conflict's markers, nothing to
-//!    commit, a guard file with no `GUARD=`, the task's earlier done commit not yet carried), nothing done on any;
+//!    commit, a guard file with no `GUARD=`, the task's earlier done commit not yet carried
+//!    and not built on by the tree's handout, 461 T09), nothing done on any;
 //! 2. the base is found FIRST - `HAND_IN_BASE` (a GUESS knob, `dev/audits/hand-in-base.md`): `clone` (the default, phase 1) the
 //!    clone's HEAD, `origin` (phase 2) `origin/main` after `git fetch origin` - so a fetch that fails refuses with nothing done (the
 //!    plan's step 3 fetches after the scratch commit; fetching first changes nothing else and leaves no scratch commit to undo). The

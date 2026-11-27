@@ -396,6 +396,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T09 (D14, the handout half: a closing half no longer waits for its build half's carry)": {
+   "sha256": "7ace004d51722834651e3c8133224f277092063e8da33d800a0625b718070107",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T09 Approach (checklist part A)": {
+   "sha256": "92704dc406182c481e021827042ef068d0fbe84265bafb77f1eb1992f03fa381",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2234,6 +2246,65 @@
      "summary": "The Makefile's builder-tree-adopt help line and docs/make-targets.html do not yet name the lane's adoption or `builder-tree lane`; filed as T46, to land before T22.",
      "class": "within",
      "why": "Documentation sequenced to the task that holds the Makefile (T12); no requested behavior is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T09 (D14, the handout half: a closing half no longer waits for its build half's carry)",
+    "### T09 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T09-handout-builds-on",
+     "summary": "In `take`, each of the task's not-yet-carried done commits is applied onto the tree uncommitted through T05's command door (`l7r-gate land --carry --no-commit`), logged as `builds-on`, so a closing half is handed its tree without waiting for its build half's carry.",
+     "class": "within",
+     "why": "Serves the GM's 'the entire point of the second tier was to make what happens in the second tier not block anything' and the sketch's builders-not-blocked loop. The block says it implements D14, whose text is not in the bundle; the ruling rests on the request and the spec (FR-003's lane unchanged, FR-008: the change still lands only through the same gate and push), not on D14. It reuses the land's own carry door and adds no gate, push or coverage step."
+    },
+    {
+     "id": "T09-one-ref",
+     "summary": "The hand-in reads the hold's `builds-on` lines and writes the hold's commit (both halves) over the built-on done ref; a done commit not built on by this handout is still refused, never written over.",
+     "class": "within",
+     "why": "The other side of the same mechanism: one done ref per task holding both halves, landed through the unchanged gate (FR-003, FR-008). Keeping the refusal for refs not built on by the handout preserves existing safety, not behavior the GM asked to change."
+    },
+    {
+     "id": "T09-apply-unverified-refuses",
+     "summary": "An apply that conflicts (exit 2), does not end verified (exit 1) or cannot start refuses the handout: tree reset clean at HEAD, hold released, nothing logged, refusal names the apply's words and the carry to run first (today's wait).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged as an exception, each case separately, and NOT on the block's own stated ground ('the easier route', which does not legitimise an exception). (a) The apply program does not start: building on the commit is physically impossible, so the handout cannot do it. (b) Exit 1, the apply's end not verified: handing out a tree whose state is unknown defeats the purpose of building on the commit - the closing half would build on work it cannot trust, and its done would supersede the build half's ref with it. (c) Exit 2, a conflict no rule resolves: the sketch the GM called 'very sensible', item 2, puts conflicts with 'the builder that has the context'; a fresh closing-half builder handed conflict markers is not that builder. In all three the refusal falls back to today's wait (no regression) and names the carry to run, and the rule leaves every handout whose apply succeeds unblocked, so it does not gut the request's purpose."
+    },
+    {
+     "id": "T09-no-apply-program-waits",
+     "summary": "With `Env.apply` empty the handout waits as before (451 T398's refusal kept); the live Env always carries the gate binary, so this is the tests' fixture and a binary-less caller's backstop.",
+     "class": "within",
+     "why": "Not reached by the live path (the binary is always known from `current_exe`), so it narrows nothing the builders see; it keeps a safe refusal for a caller that cannot run the apply at all."
+    },
+    {
+     "id": "T09-words-restated",
+     "summary": "`make builder-done`'s NEXT lines, the module docs of builder_done.rs and hand_in.rs, rust/gate/CLAUDE.md's task row and builder-brief.md's 'ONE EXCEPTION to dispatch-first' paragraph restated to say the handout builds on the commit.",
+     "class": "within",
+     "why": "Removes text that the behavior change makes false; no new scope."
+    },
+    {
+     "id": "T09-exits-no-coverage",
+     "summary": "Exits are the task and land crates' tests and `make builder-checks`; coverage is the gate's, at the landing.",
+     "class": "within",
+     "why": "Matches FR-002 ('It runs no coverage') and the spec's strike of the sketch's 'coverage for its own crates'."
+    },
+    {
+     "id": "T09-queue-state-left-to-T48",
+     "summary": "The queue's `state()` (guard crate) still reads a closing half as `waiting` on its own task's carry, so builder-next, builder-done's next dispatch and the pool-idle guard do not yet offer the entry; not fixed here, filed as T48, ordered before T16.",
+     "class": "within",
+     "why": "Not a defect left: with T09 alone nothing answers wrongly that answered rightly before - the queue's behavior is today's, the closing half simply not yet offered until the carry, as now. The block says the remainder is filed as T48 in this feature and lands before T16 (T48 is not in the bundle). A sequencing split, not a reduction of what was asked. Noted: checklist item 1's goal - a closing half handed its tree before its build half's carry, as the builders' loop sees it - is not reached in the world until T48 lands, so T48 must not be dropped or narrowed."
+    },
+    {
+     "id": "T09-not-perf-tagged",
+     "summary": "No `[perf]` tag; the removed wait is measured by phase 5, not by this task.",
+     "class": "within",
+     "why": "Measurement against a like window is FR-006/FR-010/SC-005's phase; this task does not claim a figure it has not measured."
     }
    ]
   }

@@ -12,8 +12,10 @@
 //! 1. REFUSES WITH NOTHING DONE where the tree holds an operation git left unfinished (a cherry-pick, merge, revert, rebase), an
 //!    unmerged path, a conflict's markers in a changed file (`conflict_marker_hooks::has_conflict`, its exemption kept), nothing
 //!    to commit, a changed guard file with no `GUARD=` (the refusal prints the exact re-run), or a done commit of one of the tasks
-//!    that is not yet carried (the ref is never written over while its commit waits; `make builder-tree` refuses that task's next
-//!    handout first, [`handout_waits`], 451 T398, so this is the backstop for a tree held some other way);
+//!    that is not yet carried and that the tree's handout did not build on (the ref is never written over while its commit waits;
+//!    since 461 T09, plan D14, `make builder-tree` applies such a commit onto the task's next tree uncommitted, [`build_on`], logged
+//!    `builds-on`, and that hold's commit supersedes the ref; with no apply program it refuses the handout, [`handout_waits`], 451
+//!    T398 - so this is the backstop for a tree held some other way);
 //! 2. removes the stray `default_*.profraw` files an instrumented binary dropped;
 //! 3. stages everything not ignored and commits it through `git commit -F <file>`: `MSG` the subject, a `GUARD_EDIT_OK:` line when
 //!    `GUARD=` is given, the co-author trailer;
@@ -68,6 +70,8 @@ pub(crate) const TRAILER: &str = "Co-Authored-By: Claude Fable 5.2 <noreply@anth
 pub const REFS: &str = l7r_shared::builder_queue::DONE_REFS;
 /// The file of the tree's own git directory the commit's message is written to.
 const MESSAGE: &str = "builder-done-message";
+/// The pool log's event for a done commit a handout applied onto its tree uncommitted (461 T09).
+const BUILDS_ON: &str = "builds-on";
 /// What git leaves in a tree's git directory while an operation stands unfinished, and its name.
 const OPS: [(&str, &str); 6] = [
     ("CHERRY_PICK_HEAD", "cherry-pick"),
@@ -218,8 +222,8 @@ fn tree_of(p: &Pool, sha: &str) -> PathBuf {
         .unwrap_or_else(|| p.clone.clone())
 }
 
-/// The `brief` lines the pool's log holds for `tree` and `holder` since the tree was last taken, made or adopted, oldest first.
-fn briefs(p: &Pool, tree: &Path, holder: &str) -> Vec<Value> {
+/// The `event` lines the pool's log holds for `tree` and `holder` since the tree was last taken, made or adopted, oldest first.
+fn since_held(p: &Pool, tree: &Path, holder: &str, event: &str) -> Vec<Value> {
     let log = std::fs::read_to_string(p.common.join("builder-pool.log")).unwrap_or_default();
     let ours: Vec<Value> = log
         .lines()
@@ -230,8 +234,22 @@ fn briefs(p: &Pool, tree: &Path, holder: &str) -> Vec<Value> {
     let from = ours.iter().rposition(|e| held(&e)).unwrap_or(0);
     ours[from..]
         .iter()
-        .filter(|e| e["event"] == "brief" && e["detail"] == holder)
+        .filter(|e| e["event"] == event && e["detail"] == holder)
         .cloned()
+        .collect()
+}
+
+/// The `brief` lines of `tree`'s hold by `holder` ([`since_held`]).
+fn briefs(p: &Pool, tree: &Path, holder: &str) -> Vec<Value> {
+    since_held(p, tree, holder, "brief")
+}
+
+/// The done commits `tree`'s handout to `holder` applied onto its base uncommitted (461 T09, a `builds-on` line each): the work
+/// this hold's commit holds, so its done supersedes their refs.
+fn built_on(p: &Pool, tree: &Path, holder: &str) -> Vec<String> {
+    since_held(p, tree, holder, BUILDS_ON)
+        .iter()
+        .filter_map(|e| e["commit"].as_str().map(str::to_owned))
         .collect()
 }
 
@@ -322,8 +340,9 @@ fn changed(tree: &Path) -> Vec<(String, String)> {
         .collect()
 }
 
-/// Why `tree` is not committed, nothing done; none where it is ready.
-fn unready(p: &Pool, tree: &Path, a: &Ask, dones: &[Done]) -> Option<String> {
+/// Why `tree` is not committed, nothing done; none where it is ready. `on`: the done commits its handout built on, which wait on no
+/// carry - this commit holds their work and supersedes their refs (461 T09, D14).
+fn unready(p: &Pool, tree: &Path, a: &Ask, dones: &[Done], on: &[String]) -> Option<String> {
     let at = tree.display();
     let git_dir = builder_tree::tree_git_dir(tree);
     if let Some((marker, name)) = OPS.iter().find(|(m, _)| git_dir.join(m).exists()) {
@@ -350,15 +369,23 @@ fn unready(p: &Pool, tree: &Path, a: &Ask, dones: &[Done]) -> Option<String> {
     if a.guard.is_empty() && !guards.is_empty() {
         return Some(format!("builder-done: refused - nothing done: the commit changes a guard file ({}), and its message owes a GUARD_EDIT_OK: line with the reason. Run it again with GUARD=:\n  {} GUARD=\"<what the guard-file edit does, and why it is legitimate>\"\n", guards.join(", "), a.command()));
     }
-    waits(p, dones, a.tasks, a.feature)
+    waits(p, dones, a.tasks, a.feature, on)
         .map(|w| format!("builder-done: refused - nothing done: {w}\n"))
 }
 
 /// The done commit of one of `tasks` that is not yet carried, in a refusal's words: its ref, its commit and the carry to run first.
-fn waits(p: &Pool, dones: &[Done], tasks: &[String], feature: &str) -> Option<String> {
+fn waits(
+    p: &Pool,
+    dones: &[Done],
+    tasks: &[String],
+    feature: &str,
+    on: &[String],
+) -> Option<String> {
     let names: Vec<String> = tasks.iter().map(|t| format!("{feature}-{t}")).collect();
     let waiting = uncarried(&p.clone, dones);
-    let waits = waiting.iter().find(|d| names.contains(&d.name))?;
+    let waits = waiting
+        .iter()
+        .find(|d| names.contains(&d.name) && !on.contains(&d.sha))?;
     Some(format!(
         "{REFS}{} ({}, \"{}\") is done and not yet carried - carry it first: {}",
         waits.name,
@@ -392,11 +419,84 @@ pub fn to_carry(tree: &Path, feature: &str, tasks: &[String]) -> Vec<(String, Ve
 
 /// Why `tasks` are handed no tree yet (`make builder-tree`, 451 T398): one of them has a done commit the clone's HEAD does not hold,
 /// and a handout brings its tree to that HEAD - so the task's next builder (a closing half) would start without the work it closes.
-/// None where nothing of theirs waits. The carry it names always ends the wait: it deletes the ref at its verified end, also where
+/// None where nothing of theirs waits, or where an apply program is known (`env.apply`), with which the handout builds on it. The carry it names always ends the wait: it deletes the ref at its verified end, also where
 /// the pick came out empty (451 T397).
-pub(crate) fn handout_waits(p: &Pool, tasks: &[String], feature: &str) -> Option<String> {
-    let w = waits(p, &dones(&p.clone), tasks, feature)?;
+pub(crate) fn handout_waits(
+    p: &Pool,
+    tasks: &[String],
+    feature: &str,
+    env: &Env,
+) -> Option<String> {
+    if !env.apply.is_empty() {
+        // the handout builds on it instead ([`build_on`], 461 T09)
+        return None;
+    }
+    let w = waits(p, &dones(&p.clone), tasks, feature, &[])?;
     Some(format!("builder-tree: refused - no tree handed out: {w}\n  a handout starts at the clone's HEAD, so this task's next builder would start without that commit's work\n"))
+}
+
+/// A HANDOUT BUILDS ON ITS TASKS' OWN DONE COMMITS NOT YET CARRIED (461 T09, plan D14): each of [`to_carry`]'s commits, oldest first,
+/// applied onto `tree` - just brought to the clone's HEAD and held for `holder` - uncommitted, by the no-commit carry's door
+/// (`env.apply`, T05's `l7r-gate land --carry --no-commit "" <sha>` run in the tree), and a `builds-on` line logged for each, which
+/// [`Found::unready`] reads so the hold's done supersedes those refs. What to say of it; or, where an apply does not end verified,
+/// the refusal: the tree is put back clean at its HEAD for the caller to release, and the carry named as the way on (the record is
+/// silent on a handout's conflict; the easier route, today's wait, is taken).
+pub(crate) fn build_on(
+    p: &Pool,
+    tree: &Path,
+    tasks: &[String],
+    feature: &str,
+    holder: &str,
+    env: &Env,
+) -> Result<String, String> {
+    let mut said = String::new();
+    for (sha, refs) in to_carry(&p.clone, feature, tasks) {
+        let subject = text(
+            git(&p.clone, &["log", "-1", "--format=%s", &sha])
+                .1
+                .as_bytes(),
+        );
+        let named = format!(
+            "{} ({}, \"{subject}\"), not yet carried",
+            refs.join(", "),
+            sha.get(..10).unwrap_or(&sha)
+        );
+        // (an empty `apply` never reaches here with a commit: [`handout_waits`] refused the handout first)
+        let (program, args) = env
+            .apply
+            .split_first()
+            .map_or(("", &[][..]), |(p, a)| (p.as_str(), a));
+        let applied = Command::new(program)
+            .args(args)
+            .args(["", sha.as_str()])
+            .current_dir(tree)
+            // the tree's own gate, as the pre-warm runs it: an inherited gate tree would read another tree's scripts
+            .env_remove("L7R_GATE_TREE")
+            .stdin(std::process::Stdio::null())
+            .output()
+            .map_err(|e| format!("it did not start ({program}: {e})"));
+        let failed = match applied {
+            Ok(o) if o.status.success() => None,
+            Ok(o) => Some(format!(
+                "it exited {}:\n{}{}",
+                o.status.code().unwrap_or(-1),
+                String::from_utf8_lossy(&o.stdout),
+                String::from_utf8_lossy(&o.stderr)
+            )),
+            Err(why) => Some(why),
+        };
+        if let Some(why) = failed {
+            git(tree, &["reset", "-q", "--hard"]);
+            git(tree, &["clean", "-fdq"]);
+            return Err(format!("builder-tree: refused - no tree handed out: the handout could not build on {named}: its no-commit apply onto the clone's HEAD did not end verified - {}\n  the tree is put back at the clone's HEAD and free; carry it first: {}\n", why.trim_end(), carry_command(p, &sha)));
+        }
+        builder_tree::log_line(
+            p,
+            &json!({"utc": env.now, "event": BUILDS_ON, "tree": tree, "detail": holder, "commit": sha}),
+        );
+        let _ = writeln!(said, "builder-tree: it builds on {named}: applied onto the clone's HEAD uncommitted - the builder's done supersedes it");
+    }
+    Ok(said)
 }
 
 /// The stray profile files of `tree` (`default_*.profraw`, ignored), removed.
@@ -495,7 +595,8 @@ impl Found {
     /// Why the tree is not committed, nothing done (the module's doc, step 1); none where it is ready.
     #[must_use]
     pub fn unready(&self) -> Option<String> {
-        unready(&self.p, &self.tree, &self.ask(), &self.dones)
+        let on = built_on(&self.p, &self.tree, &self.holder());
+        unready(&self.p, &self.tree, &self.ask(), &self.dones, &on)
     }
 
     /// The commit's message: the subject, the `GUARD_EDIT_OK:` line where `GUARD=` was given, the co-author trailer.
@@ -560,7 +661,7 @@ impl Found {
         // step 6, `contracts/lane-cli.md`)
         let out = if handed_in {
             format!(
-                "builder-done: {} committed as {} (\"{}\"), kept at {}\n{}builder-done: NEXT - the next dispatch (the tree is free now; ONLY these tasks' own next builder, a closing half, waits for this commit to reach the clone's HEAD - its tree starts there):\n  1. {next}handed in to the lane (make lane for its place)\n",
+                "builder-done: {} committed as {} (\"{}\"), kept at {}\n{}builder-done: NEXT - the next dispatch (the tree is free now; these tasks' own next builder, a closing half, too: its handout builds on this commit, 461 T09):\n  1. {next}handed in to the lane (make lane for its place)\n",
                 tree.display(),
                 sha.get(..10).unwrap_or(sha),
                 a.subject,
@@ -569,7 +670,7 @@ impl Found {
             )
         } else {
             format!(
-            "builder-done: {} committed as {} (\"{}\"), kept at {}\n{}builder-done: NEXT, in this order - the next dispatch FIRST, the landing after it (the tree is free now; the landing carries this commit and can run while the next builder works; ONLY these tasks' own next builder, a closing half, is dispatched after the commit is carried by `make carry`, before any landing - its tree starts at the clone's HEAD):\n  1. {next}  2. make land F={} T=\"{}\" NOTE=\"<what was verified>\" - it carries this commit first (by hand, or where a carry stopped: {})\n",
+            "builder-done: {} committed as {} (\"{}\"), kept at {}\n{}builder-done: NEXT, in this order - the next dispatch FIRST, the landing after it (the tree is free now; the landing carries this commit and can run while the next builder works; these tasks' own next builder, a closing half, needs no carry first: its handout builds on this commit, 461 T09):\n  1. {next}  2. make land F={} T=\"{}\" NOTE=\"<what was verified>\" - it carries this commit first (by hand, or where a carry stopped: {})\n",
             tree.display(),
             sha.get(..10).unwrap_or(sha),
             a.subject,

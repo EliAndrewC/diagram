@@ -113,3 +113,5 @@ coordinator (US1, US3); phase 3 the whole red path (US4, US5); phase 4 makes the
       research: rendering
 - [ ] T47 The stall watchdog's long-run warning would nudge the coordinator over its own backgrounded make lane-wait past 30 minutes (rust/guard/src/guards/stall_watchdog_hooks/pass.rs long_run/make_in, LONG_RUN 1800 s): exempt make lane-wait while the clone's lane runner lives (pass.rs lane_works, 461 T12), else each long batch costs one wake FR-005 does not list (540k-966k tokens a wake, D9). Lands with or after T20.
       research: rendering
+- [ ] T48 Phase 1: the queue offers a closing half before its build half's carry - rust/guard/shared/src/builder_queue.rs state() (lines 372-393) still reads an entry whose own task's done commit is uncarried as waiting on the carry (item 5), so make builder-next, make builder-done's next dispatch and the pool-idle Stop guard never name the closing half that T09's handout now builds on; the entry's own tasks' carry no longer waits it (a waits= task's still does). Verify: red first in the shared crate's builder_queue tests; make rust-test CRATE=rust/guard
+      research: rendering
