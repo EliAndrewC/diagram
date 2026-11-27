@@ -153,7 +153,9 @@ fn gate_asked(script: &Path, args: &[&str], run: impl FnOnce(Command, &[&str]) -
         Some("rust" | "browser" | "embed" | "mode-a" | "hamlet")
     );
     let mut bash = command("bash");
-    let exported = crate::env::opt("L7R_GATE_FRESH").is_some_and(|v| !v.is_empty());
+    let exported = !crate::env::opt("L7R_GATE_FRESH")
+        .unwrap_or_default()
+        .is_empty();
     let known = GATE_FRESH.with(|f| f.borrow().clone());
     if let Some((_, bin)) = known.filter(|(s, _)| plain && !exported && s == script) {
         bash.env("L7R_GATE_FRESH", bin);
