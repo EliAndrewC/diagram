@@ -127,7 +127,7 @@ for that batch with the conflict or the gate's output - never a standing integra
   Workflow tool (research C2) - and takes it where it fits (the GM: "I don't want to completely reinvent the wheel ... I would even
   download somebody's skill or whatever if that helped").
 - **FR-010** A LIKE WINDOW is one of eight hours or more of builder work (US1) whose concurrency is close to the window it is
-  compared with: trees held, time-weighted from the pool's log (the night of 2026-11-27: three pool trees, busy 93%, 98% and 83% - a one-shot observation, 2026-11-27, method: the session's tree-idle.py run about 14:40Z, as the Why says),
+  compared with: trees held, time-weighted from the pool's log (the night of 2026-11-27: three pool trees, busy 93%, 98% and 83% - observed 2026-11-27, method: the session's tree-idle.py run about 14:40Z, as the Why says),
   and the machine's load. Every before-and-after figure is stated with the concurrency it was measured under, and where the two
   windows' concurrency differs both are stated beside the figure, so a window of one builder is never compared bare with one of
   four (the GM's seventh process-reviewer message, 2026-11-27, in `specs/449-rust-codebase/port-talk-gm-goal.md`).
