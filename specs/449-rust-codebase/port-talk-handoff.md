@@ -85,6 +85,19 @@ old container: the sessions' transcripts under `~/.claude/projects/` (the measur
 result tables beside them in `dev/measurements/`) and the build caches. Read this, then `specs/449-rust-codebase/port-talk-agenda.md` (the 14 items with their measurements)
 and `docs/process-decisions.md` (what is already decided, and declined, with the numbers and what would reopen each).
 
+## While the GM was out, 2026-11-27 evening (the session's summary, kept current)
+
+- 461 (the landing lane): phase 0 and phase 1 landed (the builder's hand-in, run by the builder itself); phase 2 under way - the
+  lane crate, its log, its runner, its tree (adopted, guarded, its own drop and re-make), the tripwire's stand-down for its own runs
+  and a batch run end to end are carried or landed; building: T15 (the red path), T20 (`make lane-wait`), T51 (the runner's start).
+  Next: T16, T18, T19, T21, then T22 (hand-ins onto origin/main, the lane running for real) and T23 (the first real batch).
+- 451: 11 of its 12 closing tasks landed; T537 (the split of plan-done.md and tasks-done.md into an indexed archive, every reader
+  repointed) is in its closing half, which writes 451's feature report; then `make archive-split F=451` and the close.
+  plan-review.json's split is 462 T545.
+- 462 (the efficiency backlog, 105 tasks): opened; its queue starts with the disk tasks (T533, T301, T374, T278, T371), taken when
+  no 461 task can run.
+- Disk: 64%. Main green after every landing; two reds today, each ruled `continue` by the round arbiter.
+
 ## To pick up in a new container
 
 1. Clone into `/diagram/.clones/<session-name>` as `docs/session-clones.md` says; `scripts/sync-with-main.sh sync-in`.
