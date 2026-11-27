@@ -40,7 +40,7 @@ Its state, the first that holds:
 | field | meaning |
 |---|---|
 | `batch` | `<feature>-<n>`, n counting up per feature |
-| `changes` | the hand-ins it holds, oldest first (at most `LANE_MAX`) |
+| `changes` | the oldest waiting hand-in and the waiting hand-ins of its feature that come straight after it in hand-in order, cut at the first of another feature, at one held behind an open batch, or at `LANE_MAX` (`plan.md` D5) |
 | `runs` | each gate attempt: its `set` (the short shas run), its attempt file, its exit, its minutes |
 | `landed`, `ejected` | the changes so far |
 
@@ -51,7 +51,11 @@ read as closed (`superseded`). Phase 2 has no halving: a red the record cannot p
 repair entry (`plan.md` D6, "By phase").
 
 Its states: `forming` -> `carrying` -> `gating <n>` -> (`halving` -> `gating <n+1>` ...) -> `pushing` -> `landed`, or `stopped`
-(a US5 case: the arbiter owed, a set red twice, the runner killed, a push failed twice).
+(a US5 case: the arbiter owed - a task's second pinned red, `plan.md` D6 step 4 - or the runner killed). A green batch whose push
+failed twice is not `stopped`: it files one `integrate` repair entry (`why` `push`) and ends.
+
+A task's PINS are its `eject` lines with `why` `red`, `inferred` or `unplaced`, any batch; a red half pins nothing, a `conflict`
+ejection pins nothing. At a task's second pin the lane files no repair: the batch stops and the round arbiter is owed.
 
 ## A repair entry (`l7r-lane/repairs.jsonl`, one JSON line)
 
@@ -62,7 +66,10 @@ Its states: `forming` -> `carrying` -> `gating <n>` -> (`halving` -> `gating <n+
 ```
 
 `why` is `red` (the gate placed it), `inferred` (the last left after the halving), `unplaced` (phase 2: a whole batch whose red
-the gate's record cannot place, ejected as one entry), or `conflict` (the lane's carry stopped; `units` are the conflicting files). The queue reads an entry as READY until a hand-in names it in `repair_of`, then as built; the queue's
+the gate's record cannot place, ejected as one entry), `conflict` (the lane's carry stopped; `units` are the conflicting files),
+`push` (kind `integrate`: a green batch whose push failed twice; `tasks` every change of the set, `attempt` the push's output), or
+`arbiter` (filed once the round arbiter's ruling on a task's second pin is recorded; `attempt` names the ruling). Every entry is
+taken by a fresh builder the coordinator dispatches (`plan.md` D7's table). The queue reads an entry as READY until a hand-in names it in `repair_of`, then as built; the queue's
 own states otherwise (`builder_queue/repairs.rs`).
 
 ## The log line (`l7r-lane/lane.jsonl`, one JSON line a transition)

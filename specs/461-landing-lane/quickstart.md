@@ -11,8 +11,11 @@ Load this file when: coordinating builders with the lane, building as a builder 
 3. The wake-up: `make lane-wait` with `run_in_background: true`. When it returns, read its lines (one per landed batch, or a stop
    that needs you). The Stop guard refuses your stop while the lane has work and no `make lane-wait` runs, printing the command, so
    re-arming is the tooling's; the prompt hook prints any lane line you missed.
-4. Never carry, land or repair. A stop line names what it needs: a round-arbiter ruling (`make arbiter-ask`), or the lane dead
-   (`make lane-start`). `make lane` shows where everything stands.
+4. Never carry, land, push or repair. Every line that needs integration work names a fresh agent for you to dispatch (`plan.md`
+   D7's table): a repair entry (a red, a conflict, a push failed twice) goes to a fresh builder through `make builder-next`; an
+   arbiter owed (a task red a second time) goes to the `round-arbiter` agent on the bundle the lane's `make arbiter-ask` wrote,
+   and its ruling comes back as a repair entry. The lane dead needs only `make lane-start`. `make lane` shows where everything
+   stands.
 
 ## A builder
 
@@ -34,9 +37,11 @@ Load this file when: coordinating builders with the lane, building as a builder 
 - **End to end, on a scratch world**: the lane crate's integration test builds a clone, a bare `origin` and two pool trees, hands
   in two tasks, runs one batch, and checks: one push, both ticked on `origin/main`, both done refs deleted, one `owed` line. Its
   red variants: a change breaking one crate's test is attributed and ejected with one further run; a red the record cannot place is
-  halved within ceil(log2 n) + 1 runs; a conflict with main becomes a repair entry.
+  halved within ceil(log2 n) + 1 runs; a conflict with main becomes a repair entry; a green batch whose push fails twice becomes
+  one `integrate` repair entry; the tripwire by task fires when a repaired task is red again and stays quiet through a halving.
 - **On real work** (phases 2 and 3): hand in two of this feature's own tasks, then read `make lane` and
   `<common>/l7r-lane/lane.jsonl`: the batch's runs, minutes and push; `make task-time SINCE=<the batch's start>` shows the landing's
   Phase lines filed under the lane's tree.
 - **The comparison** (phase 5): the D12 script over a like window, each figure beside the night's from `research.md` R3 and
-  `baseline-task-time.txt`, with both windows' concurrency.
+  `baseline-task-time.txt`, with both windows' concurrency: the window chosen by D12's likeness test (trees held and the load band,
+  each a GUESS knob), both windows' trees held and median load stated beside each figure where they differ.
