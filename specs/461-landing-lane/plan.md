@@ -732,31 +732,96 @@ engine speed, so the performance checklist does not apply.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T05 (<why: the finding or measurement that files it>)
+### T05 (phase 1's first task: the XIII baseline, D3's no-commit form and its own verified end, D4's flight question)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: built in two builders (a build half and this closing half), in pool tree `diagram-backlog-t270` at base 054d48a41c.
+  - **The XIII baseline** (observed 2026-11-27, method: the runs below in the pool tree itself, clean at 054d48a41c before any
+    edit). DEPARTURE, accepted by the session: the line's `git worktree add --detach` was not made - the brief forbade making a
+    worktree and a hand `git worktree add` is refused (451 T285) - so the clean pool tree stood in for the detached worktree.
+    `make rust-test CRATE=rust/gate/crates/land` 175 passed, `.../task` 147, `.../tree` 59, `rust/guard` 616, each 0 failed, one
+    crate a call (the line's one four-crate call exits 2 on a joined manifest path: T32). `make hooks-test HOOKS_ALL=1`: 64 guard
+    suites green, guard-messages 366 wordings - run ONCE as the task's baseline measurement, against the CHECKS line's bar on it as a
+    builder's check; the session accepted it as a measurement, not a check.
+  - **The no-commit form** (`rust/gate/crates/land/src/land/carry/apply.rs`, new): `carry::apply::apply(root, sha) -> Applied`
+    (`Verified { files, resolved }`, `Conflict`, `Refused`, `NotVerified`) runs `git cherry-pick -n` with the carry's rules whole
+    (`resolve_all`), and `carry::apply::verified(root, sha, kept)` is its own verified end, askable alone: nothing in progress
+    (`unfinished::refusals` but its staged and unmerged lines), nothing unmerged (in this form's words: "committing nothing", never the
+    carry's "and commit", which would move HEAD off the base), and each non-spec file of `sha` held by the WORKING TREE - changed there
+    against HEAD, or at the commit's blob (`git hash-object`), a file the commit deletes held where the tree lacks it too, a file a rule
+    resolved held whatever its text. HEAD never moves; nothing calls `--continue`, `--skip` or `spent()`, so no done ref is deleted.
+    A conflict no rule resolves leaves EVERY unmerged path in the tree (the rules' all or none), each named, those a rule would
+    resolve marked so. In `carry.rs`: `enum Form { Commit, NoCommit }`, `missing(.., form)`, the failed page regeneration's hand step
+    by form (`Form::then`), the commit lookup shared as `located()`.
+  - **A defect of the new form fixed** (fixed here): `resolve_all` restored a cleanly merged tasks.md's boxes from
+    `CHERRY_PICK_HEAD`, which a `-n` pick never writes (probed 2026-11-27, method: `git cherry-pick -n` in scratch repositories), and
+    `git()` ignores exit codes, so the error text went in as a side and a bare box stayed bare. It now names the picked sha; in the
+    commit form that sha is `CHERRY_PICK_HEAD`, so the carry is unchanged.
+  - **The `--no-commit` flag is KEPT** (`l7r-gate land --carry --no-commit <tree> [<commit>]`, and `"" <sha>` for a commit the
+    clone's objects hold): T07 is in the land crate and calls `apply` in process, but T09's handout is in the `task` crate, which
+    `land` builds on, so `task` cannot call it in process. Moving the form below `task` would carry the carry's rules with it, which
+    build on `cohort` (`make_docs::write`), a crate `task` does not build on; the command form is T09's door, and `task` already runs
+    `l7r-gate` as a command (`builder_tree`'s `measure sampler start`). Tested through `carry::cli` in five of the form's tests, and by
+    `a_commit_the_clone_holds_is_applied_by_its_sha_alone_and_its_done_ref_kept` (the sha-alone form T09 would call: applied, HEAD
+    unmoved, the done ref kept). No Makefile target: none was asked for.
+  - **D4's flight question, answered by a test**: YES - `land::inproc::tests::a_claims_round_marked_in_a_builder_s_tree_is_in_flight_from_the_lane_s_tree`
+    writes the mark where `make claims-bundle` writes it from a pool tree (the tree's `--git-common-dir`/claims-in-flight) and
+    `Inproc::Real.in_flight` sees it from a second linked worktree (the lane's) and from the clone; a separate clone does not. The pool
+    trees and `diagram-backlog-land` are linked worktrees of the clone (observed 2026-11-27, method: `git worktree list`).
+  - **Red first** (observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/land`, the form's tests `carry::tests::no_commit`):
+    with the carry's own end, 3 passed and 5 failed (NotVerified on the staged paths); with the filter, 7 and 1 (the tasks.md read
+    from `CHERRY_PICK_HEAD`); with the sha, 8 and 0. The conflict refusal naming only the paths no rule resolves: 7 and 1, then 8.
+    The flight mark in the builder tree's private git dir: 2 and 1, then 3 with the common dir. The two tests written after their
+    fix - the unmerged wording of `verified()` and the delete where the base already lacks the file - were shown red by breaking each
+    line (the wording back to "and commit"; the absent file read as `(0, "")`): 6 passed, 2 failed, the two tests, then restored
+    (observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/land ONLY="land::carry::tests::no_commit"` on the broken lines).
+    After: the land crate 185 passed (175 + 10); `make builder-checks CRATE=rust/gate/crates/land` green. The brief's CHECKS line also
+    had this builder run the crate's coverage, which named no line; it is no exit of this task (FR-002, SC-002: a builder runs no
+    coverage), the gate's coverage at the landing is.
+  - **For T07** (left to T07, nothing of it built here):
+    - T07 must `git add` EVERYTHING before its commit: the verified end reads the working tree, not the index, so an unstaged file
+      would verify and then be left out of the commit.
+    - At a resume `verified(root, sha, &[])` cannot tell a file a rule resolved back to the base's own text (a regenerated page, records
+      the base already held) from one missing: both read as unchanged against HEAD at a blob not the commit's. The resume comes in two
+      shapes. (a) After a verified apply whose first pass (step 4) refused: the apply's `resolved` list is gone with its process. T07
+      writes it at the apply to a file in the tree's own git dir - `<git dir>/l7r-hand-in/<feature>-<task>.resolved`, one `path (rule)`
+      line each, written beside the scratch ref and deleted with it at step 6 - and passes its lines as `kept` to `verified()`. (b) After
+      a conflict: nothing was resolved (all or none), so there is no list yet; the paths the refusal marks "its rule would resolve it"
+      need not be resolved by hand - T07 can run `resolve_all` at the resume on the paths still unmerged (its rules read the index's
+      stages, which an unmerged path keeps), write what it resolved to the same file, and pass it as `kept`. If T07 takes (b), the
+      Conflict wording ("resolve each") should then tell the builder to resolve only the paths with no rule.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the baseline, the no-commit form, the flight test | n/a - no map | n/a | none | n/a |
 
 ### T05 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder's scratch commit can be applied onto a base with the carry's rules and left uncommitted,
+   with an end that says whether it held, so T07's hand-in can run the first pass and commit; T09 can reach it as a command; and a
+   claims round marked from a builder's tree is seen from the lane's.
+2. **The constraints.** D3 (the no-commit form and its own verified end), D4 (the flight question), D14 (a done ref superseded by its
+   successor's hand-in, so the form deletes none), FR-002; constitution XIII (the baseline before the feature's first code edit).
+3. **Where each comes from.** G: the GM's request behind FR-002 (spec.md); R: `carry.rs`'s own doc on its end; O: the scratch-repository
+   probes of `git cherry-pick -n` and the tests above (2026-11-27).
+4. **Do they describe the world here?** Yes: the probes ran on the container's git, and the flight test builds linked worktrees as
+   the pool's are (observed 2026-11-27, method: `git worktree list` in the clone).
+5. **The order.** First of phase 1, after the baseline; before T06-T10.
+6. **The exits.** Green: the land crate's tests and `make builder-checks` as above; coverage is the gate's, at the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make rust-test CRATE=rust/gate/crates/land` 185 passed, 0 failed, and `make builder-checks
+   CRATE=rust/gate/crates/land` green (observed 2026-11-27, method: the two commands).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The `CHERRY_PICK_HEAD` read: a hand-in whose tasks.md merged cleanly beside another conflict would have left a
+   box bare, its research line lost - the defect the test pins.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `make rust-test CRATE="<several crates>"` exits 2 on a manifest path of the crates joined (observed 2026-11-27, method: T05's
+  four-crate baseline call in pool tree `diagram-backlog-t270`), so any Verify line naming several crates fails as written.
+  Not fixed here: a Makefile and `rustc` crate change outside the land crate, not this task's. Filed as T32; lands before T12.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T06 (<why: the finding or measurement that files it>)
@@ -1442,6 +1507,33 @@ engine speed, so the performance checklist does not apply.
 |---|---|---|---|---|
 
 ### T31 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T32 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T32 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

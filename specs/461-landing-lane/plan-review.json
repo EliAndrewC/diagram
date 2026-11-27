@@ -180,6 +180,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T05 (phase 1's first task: the XIII baseline, D3's no-commit form and its own verified end, D4's flight question)": {
+   "sha256": "e09da8270e98a4c257d2404a3078bab0cb5312f039f49181eed3357984825349",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "8ae32daf879dc841d0fada4b39aba752847c96824e8e13f46d35b7db9c9d2bf3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1045,6 +1057,148 @@
      "summary": "Runs before T02 and before any phase 1 edit",
      "class": "within",
      "why": "A before figure must be taken before the change it is a before of, and while the night's transcripts exist."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T05 (phase 1's first task: the XIII baseline, D3's no-commit form and its own verified end, D4's flight question)",
+    "### T05 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T05-coverage-exit",
+     "summary": "T05's exits (part A item 6: 'Green: the land crate's tests and coverage') and its done line (item 9: 'its coverage naming no line') make a builder-run `l7r-gate.sh rust cover --crate rust/gate/crates/land` a criterion the builder meets before handing in.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "request.md records that 'coverage for its own crates' before hand-in is struck because it reinstates the closing step's coverage the GM questioned, reversed 2026-11-26 with its reopening condition unmet; FR-002 and SC-002 both say the hand-in 'runs no coverage'. The 2026-11-26 decision text is not in the bundle, so this rules from request.md's statement of it. That FR-002 names only `make builder-done` is a word-level defense: the purpose of the strike is that a builder does not run coverage at its close, and making coverage T05's green exit and done measure is that closing coverage, by hand. Nothing is impossible without it (the gate runs coverage at landing). Fix: take coverage out of item 6's green exit and item 9's done line, and leave it to the gate; the done measure is the land crate's tests (185 passed, 0 failed) and `make builder-checks`."
+    },
+    {
+     "id": "T05-baseline-worktree-standin",
+     "summary": "DEPARTURE: the XIII baseline ran in the clean pool tree at 054d48a41c before any edit, not in a `git worktree add --detach` worktree.",
+     "class": "within",
+     "why": "No requirement in the request or spec (spec-index.md) governs where the baseline runs. The line's form cannot be followed (a hand `git worktree add` is refused, 451 T285, and the brief forbade making a worktree), and the baseline's purpose - the tree's state measured before the feature's first code edit - survives in a tree clean at the base. Recorded here as an independent check, since the block's own word is that the session accepted it."
+    },
+    {
+     "id": "T05-baseline-hooks-test",
+     "summary": "`make hooks-test HOOKS_ALL=1` run once as the baseline measurement despite the CHECKS line's bar on it as a builder's check.",
+     "class": "within",
+     "why": "Nothing in the request or spec governs it, so it narrows nothing asked. The CHECKS line's bar is not in the bundle and is not adjudicated here; this ruling does not endorse the 'a measurement, not a check' relabel, only finds it outside what the GM asked for in this feature."
+    },
+    {
+     "id": "T05-baseline-one-crate-a-call",
+     "summary": "The baseline's rust tests run one crate a call (land 175, task 147, tree 59, guard 616) because the line's four-crate call exits 2 (T32).",
+     "class": "within",
+     "why": "Same measurement, a workable form; each figure carries an observed-and-method label."
+    },
+    {
+     "id": "T05-no-commit-form",
+     "summary": "D3's no-commit form: carry::apply::apply (cherry-pick -n with resolve_all whole, Verified/Conflict/Refused/NotVerified) and verified() as its own end - HEAD never moves, no --continue/--skip/spent(), so no done ref is deleted; a conflict no rule resolves leaves every unmerged path; Form { Commit, NoCommit } in carry.rs.",
+     "class": "within",
+     "why": "Implements D3 as named, holds D14 (no done ref deleted) and serves FR-002/FR-003's hand-in; FR-008's checks are untouched."
+    },
+    {
+     "id": "T05-cherry-pick-head-fix",
+     "summary": "resolve_all read a cleanly merged tasks.md's boxes from CHERRY_PICK_HEAD, which a -n pick never writes; it now names the picked sha (the commit form's sha is CHERRY_PICK_HEAD, so the carry is unchanged).",
+     "class": "within",
+     "why": "A wrong outcome (a box left bare, a research line lost) in the new form, fixed with a red-first test; fixing a defect found is what is asked, and the existing carry's behavior is unchanged."
+    },
+    {
+     "id": "T05-no-commit-flag",
+     "summary": "Keep `l7r-gate land --carry --no-commit <tree> [<commit>]` (and the sha-alone form) as T09's door because the task crate cannot call land in process; no Makefile target.",
+     "class": "within",
+     "why": "An implementation route for T09's handout, forced by the crate graph and stated with its reason; it adds no behavior the spec does not ask for and declines a target nobody asked for."
+    },
+    {
+     "id": "T05-D4-flight",
+     "summary": "D4 answered YES by a test: a claims round marked in a builder tree's --git-common-dir is in flight from a second linked worktree (the lane's) and from the clone, not from a separate clone; pool trees and diagram-backlog-land are linked worktrees (observed via git worktree list).",
+     "class": "within",
+     "why": "Answers the plan's own D4 by measurement rather than assumption."
+    },
+    {
+     "id": "T05-T07-handoffs",
+     "summary": "Left to T07: git add everything before its commit (verified() reads the working tree); at a resume, write the apply's resolved list to <git dir>/l7r-hand-in/<feature>-<task>.resolved and pass it as kept, or after a conflict run resolve_all on the still-unmerged paths, rewording Conflict if so.",
+     "class": "within",
+     "why": "Constraints on the next task's design, named and handed on, nothing built or dropped; they narrow no requirement."
+    },
+    {
+     "id": "T05-found-and-left-T32",
+     "summary": "`make rust-test CRATE=\"<several crates>\"` exits 2 on a joined manifest path; not fixed here, filed as T32, lands before T16.",
+     "class": "within",
+     "why": "Outside what this feature asked (a Makefile and rustc crate change), filed with a landing order and worked round by one crate a call; the fix-before-the-next-step rule is written for the port's steps. The bundle does not show T06-T15's Verify lines, so whether any names several crates before T32 lands is not checked here."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T05 (phase 1's first task: the XIII baseline, D3's no-commit form and its own verified end, D4's flight question)",
+    "### T05 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T05-coverage-exit",
+     "summary": "The crate's coverage is no exit of T05; Green is the land crate's tests and make builder-checks, coverage being the gate's at the landing (Approach 6 and 9, the Red-first paragraph).",
+     "class": "within",
+     "why": "This is the change since the BLOCKED verdict and it brings the blocks into line with FR-002/SC-002 (a builder runs no coverage) and with the GM-questioned, reversed closing-step coverage the request records as struck. The one coverage run the brief's CHECKS line caused is recorded as history, not kept as an exit."
+    },
+    {
+     "id": "T05-baseline-tree",
+     "summary": "The XIII baseline was measured in the clean pool tree at 054d48a41c instead of a detached worktree from git worktree add --detach.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The plan line's literal method cannot be carried out: the brief forbade making a worktree, and a hand git worktree add is refused by a guard (451 T285). The baseline is there to measure the tests on the base before any edit, and a clean tree at that base before the first edit does exactly that. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T05-baseline-per-crate",
+     "summary": "Baseline run one crate per call because the four-crate call exits 2 (T32).",
+     "class": "within",
+     "why": "The same baseline, measured on the same crates; it only works around a defect that has been filed."
+    },
+    {
+     "id": "T05-hooks-baseline",
+     "summary": "make hooks-test HOOKS_ALL=1 run once as the baseline measurement, not as a builder's check.",
+     "class": "within",
+     "why": "It belongs to the XIII baseline measurement and is not a hand-in check or coverage, so FR-002 is not touched."
+    },
+    {
+     "id": "T05-no-commit-form",
+     "summary": "carry::apply::apply and verified(): cherry-pick -n with the carry's rules whole, its own verified end against the working tree, HEAD never moves, no done ref deleted, conflicts leave every unmerged path named; Form {Commit, NoCommit} in carry.rs.",
+     "class": "within",
+     "why": "This is D3 and D14 as the spec settles them, the no-commit apply that lets FR-002's hand-in run the first pass before it commits. It adds no reach."
+    },
+    {
+     "id": "T05-cherry-pick-head-fix",
+     "summary": "resolve_all read CHERRY_PICK_HEAD, which a -n pick never writes; it now names the picked sha, and the commit form is unchanged.",
+     "class": "within",
+     "why": "A wrong outcome (a bare box and a lost research line) in the new form, fixed as it was found. Fix as we go."
+    },
+    {
+     "id": "T05-no-commit-flag",
+     "summary": "l7r-gate land --carry --no-commit kept as the command door for T09's task crate; no Makefile target.",
+     "class": "within",
+     "why": "A crate-dependency constraint forces the command form so that T09 can reach the form. Adding no Makefile target keeps the scope tight."
+    },
+    {
+     "id": "T05-flight-test",
+     "summary": "D4 answered YES by a test: a claims mark from a pool tree's common git dir is seen from the lane's linked worktree and the clone.",
+     "class": "within",
+     "why": "Answers D4, the spec's own question, by measurement."
+    },
+    {
+     "id": "T05-for-T07",
+     "summary": "T07 must git add everything; at a resume it persists or recomputes the resolved list as kept (shapes a and b), and the Conflict wording changes if it takes b.",
+     "class": "within",
+     "why": "Notes passed on to T07 with nothing built here. They neither decide nor narrow T07's scope."
+    },
+    {
+     "id": "T05-T32-left",
+     "summary": "The multi-crate make rust-test exit 2 is left out of T05, filed as T32, and now lands before T12 (was T16).",
+     "class": "within",
+     "why": "A known defect outside the land crate, filed and scheduled within the feature before the first task that depends on it. Moving it earlier tightens the schedule rather than carrying the defect forward."
     }
    ]
   }

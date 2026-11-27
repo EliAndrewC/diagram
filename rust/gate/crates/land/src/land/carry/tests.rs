@@ -11,7 +11,7 @@ use serde_json::{json, Value};
 use super::super::tests::has;
 use super::super::unfinished::tests::{repo, TASKS};
 use super::super::unfinished::{self, refusals};
-use super::{cli, end, keep_both, missing, Kind, Said};
+use super::{cli, end, keep_both, missing, Form, Kind, Said};
 
 const REVIEW: &str = "specs/451-x/plan-review.json";
 const TASKS_MD: &str = "specs/451-x/tasks.md";
@@ -471,7 +471,7 @@ fn the_end_refuses_a_carry_whose_files_head_does_not_hold() {
     let head = git(&root, &["rev-parse", "HEAD"]);
     // T270's landing: the commit's code not in HEAD, nothing moved since `before`
     assert_eq!(
-        missing(&root, &sha, &head, &[]),
+        missing(&root, &sha, &head, &[], Form::Commit),
         Ok((1, vec!["rust/held.rs".to_owned()]))
     );
     let mut said = Said {
@@ -487,7 +487,10 @@ fn the_end_refuses_a_carry_whose_files_head_does_not_hold() {
     // the same content already committed here under another commit: held, though the carry moved nothing
     commit(&root, "by hand", &[("rust/held.rs", "fn held() {}\n")]);
     let head = git(&root, &["rev-parse", "HEAD"]);
-    assert_eq!(missing(&root, &sha, &head, &[]), Ok((1, Vec::new())));
+    assert_eq!(
+        missing(&root, &sha, &head, &[], Form::Commit),
+        Ok((1, Vec::new()))
+    );
 }
 
 /// `tasks` hold `tree` in the clone's pool, as a handout writes it.
@@ -660,12 +663,13 @@ fn the_arguments_are_checked() {
         vec![String::new()],
         vec![String::new(), String::new()],
         vec!["a".to_owned(), "b".to_owned(), "c".to_owned()],
+        vec!["--no-commit".to_owned()],
     ] {
         let said = cli(&args, &root);
         assert_eq!(said.code, 2);
         assert!(said
             .stderr
-            .starts_with("usage: l7r-gate land --carry <tree> [<commit>]"));
+            .starts_with("usage: l7r-gate land --carry [--no-commit] <tree> [<commit>]"));
     }
     let said = cli(
         &[builder.to_string_lossy().into_owned(), "no-such".to_owned()],
@@ -682,5 +686,6 @@ fn the_arguments_are_checked() {
 }
 
 mod files;
+mod no_commit;
 mod record;
 mod spec;

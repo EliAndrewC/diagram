@@ -93,6 +93,46 @@ mod tests {
         let _ = Real.scope_split(&dir, "", &[], &[]);
     }
 
+    /// 461 T05 (plan D4): a claims round dispatched from a BUILDER's pool tree is seen in flight by the landing asked from another
+    /// tree of the same clone - the lane's tree, the clone itself - because `make claims-bundle` marks it under `--root` its own
+    /// toplevel and the mark lives in that tree's `git rev-parse --git-common-dir` (`claims/flight.rs`'s `dir`), which every linked
+    /// worktree of a clone shares; a separate clone does not see it. The pool trees and the `-land` worktree are linked worktrees of the
+    /// session clone (observed 2026-11-27, method: `git worktree list` in /diagram/.clones/diagram-backlog). RED FIRST: with the mark
+    /// written in the builder tree's own `--git-dir` (a worktree's private directory) the lane's ask sees nothing, 2026-11-27.
+    #[test]
+    fn a_claims_round_marked_in_a_builder_s_tree_is_in_flight_from_the_lane_s_tree() {
+        use l7r_gate_core::ci::fixtures::git;
+        let dir = repo("inproc-flight");
+        put(&dir, "a", "a\n");
+        git(&dir, &["add", "-A"]);
+        git(&dir, &["commit", "-qm", "base"]);
+        let builder = dir.join("pool-tree");
+        let lane = dir.join("lane-tree");
+        for tree in [&builder, &lane] {
+            git(
+                &dir,
+                &["worktree", "add", "-q", "--detach", &tree.to_string_lossy()],
+            );
+        }
+        let common = std::path::PathBuf::from(git(
+            &builder,
+            &["rev-parse", "--path-format=absolute", "--git-common-dir"],
+        ));
+        let marks = common.join("claims-in-flight");
+        std::fs::create_dir_all(&marks).unwrap();
+        let now = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_secs_f64();
+        let mark = format!("{{\"bundle\": \"/tmp/l7r-claims/t05\", \"at\": {now}}}");
+        std::fs::write(marks.join("0123456789abcdef.json"), mark).unwrap();
+        let seen = Ok(vec!["/tmp/l7r-claims/t05".to_owned()]);
+        assert_eq!(Real.in_flight(&lane), seen);
+        assert_eq!(Real.in_flight(&dir), seen);
+        let other = repo("inproc-flight-other");
+        assert_eq!(Real.in_flight(&other), Ok(Vec::new()));
+    }
+
     /// 451 T157: the first pass's own ask (`cheap.rs`'s `--refuse --landing --tasks`), through the real ledger, lands past a record
     /// pass of another started task (449-x T2, named by its bundle) and still refuses one naming the landing's own T1.
     #[test]
