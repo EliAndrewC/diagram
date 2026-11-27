@@ -118,6 +118,10 @@ for that batch with the conflict or the gate's output - never a standing integra
   landed task - builders, repair builders, fresh integration agents, review agents and the coordinator together, by kind (output,
   fresh input, cache read; 451 T512) - is measured over a like window before and after, and must not rise. A cost moved from the
   coordinator to builders counts where it lands.
+- **FR-010** A LIKE WINDOW is one with the same number of builder trees held (rebuilt from the pool's log, second by second) and
+  every before-and-after figure is stated with the concurrency it was measured under - trees held, the machine's load - so a window
+  of one builder is never compared bare with one of four (the GM's seventh process-reviewer message, 2026-11-27, in
+  `specs/449-rust-codebase/port-talk-gm-goal.md`).
 - **FR-007** Every per-task figure is read beside the task's size (451 T512's lines, test and non-test), never alone: a figure
   that improves because tasks were cut smaller is not an improvement (the GM's fourth process-reviewer message: no single metric is
   the target).
@@ -135,7 +139,7 @@ moved when this feature's tasks are written, each closed in 451 with a pointer h
 - **T302 parts 1 and 4** (only a session's own clone uses land-alone; a landing refuses an unclean clone and land-alone retires)
   - US3, FR-003. Its parts 2 (pool trees for page sessions) and 3 (a guard confining each builder to its tree) stay in 451.
 - **T307 parts 1, 2 and 3** (the gate-write guard's reach; the push refusing after the gate, every push check also in the first
-  pass - the cause of the night's 3 refused at the tick; what a landing waits on that it need not) - FR-001, FR-003, FR-008, US3.
+  pass; one gate run for several ready tasks) - FR-001, FR-003, FR-008, US3.
 - **T308** (two tiers of checking: the fast one in the builder's tree, the full gate once where work reaches main) - its two-tier
   split and its measurements, US2 and US3. Two of its clauses are replaced, not taken: a gate failure repaired "by whoever is
   cheapest", the coordinating session among them (replaced by US1, US4 and FR-004: a fresh builder, never the coordinator), and the

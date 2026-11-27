@@ -38,3 +38,10 @@ The session's message he answered, its proposal section as sent:
 "Coverage for its own crates" in item 2 is struck by the spec (spec-fidelity, 2026-11-27): it reinstates the closing step's coverage
 the GM questioned and that was reversed on 2026-11-26 (`docs/process-decisions.md`, around line 191), and the reopening condition
 there is not met.
+
+2026-11-27, on comparing measurements (his seventh process-reviewer message, kept whole in
+`specs/449-rust-codebase/port-talk-gm-goal.md`; this feature's FR-010):
+
+<!-- SOURCE: GM NOTES -->
+> we don't want to do anything silly like capture performance metrics when only one builder is running, and then capture performance metrics when four builders are running, and then compare them without noting how much was happening at the time, because that sort of thing could cause us to think that things are getting better or worse when actually all that's happening is that we are looking at the system when it is implementing different numbers of tasks.
+<!-- END SOURCE -->
