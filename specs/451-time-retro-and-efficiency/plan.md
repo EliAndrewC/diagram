@@ -3336,6 +3336,48 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 **Performance work?** no: a second carry that ends, and a commit that is not refused; nothing is made faster.
 
+### T304 part B (the remainder: the suite and gate stamps that worktrees overwrite in the common git directory, measured 2026-11-27)
+
+- **Approach**: each suite's stamp (`tests/hooks/hookrun.sh`, the `hooks-test` recipe in the `Makefile`, `rust/guard/src/suite_tools/trace.rs`) and each gate area's stamp (`rust/gate/crates/tree/src/stamp.rs`) keep a bounded set of keys, one per content they vouch for, where they kept one. `semantic-id-cache-2.json` is left as it is, because the measurement below shows no tree invalidates another's entries.
+  - **Measured: the suites**, 2026-11-27. Method: the `Phase` lines with `"step":"suite"` in `/diagram/.clones/diagram-backlog/.git/l7r-events/*.jsonl` from 2026-11-23, 17,170 runs, read without writing, measured 2026-11-27 (a jq and awk pass over the event log). Each run is ordered by `t1`, and only a green run (`code` 0) counts as a stamp's writer. A run is called "after another tree's" when its tree had run the suite before and the suite's last green writer was a different tree. Before the two-tier trial (to 2026-11-26T19Z): 5,961 runs after another tree's write, 8,468 after the same tree's, 1,669 first in their tree, measured 2026-11-27 (that pass). Under the two tiers (from 2026-11-26T19Z, the clone and its landing tree alone): 194 of 1,072 suite runs (18%) after another tree's write, measured 2026-11-27 (that pass). These are UPPER bounds, because a rerun the tree owed anyway, its own content having moved, is counted too. The same-tree count shows how often that happens.
+  - **Measured: the content the trees hold**, 2026-11-27. Method: `l7r-guard deps --keys` over the roster in each tree, read only. The keys of 66 to 67 of the 69 suites differ between the clone and each of `-land`, `-review` and `-t271`, measured 2026-11-27 (the keys joined by suite). So with one key a suite, two trees run in turn rerun every suite whose trace has also moved.
+  - **Measured: the gate**, 2026-11-27. Method: the gate's `Phase` lines from 2026-11-20, each run cut at `preflight`, and whether a `hooks-test` step followed it (the step is skipped when `stamp --fresh hooks` holds). hooks-test reran in 32 of 37 gate runs that followed another tree's gate, against 72 of 134 that followed the same tree's. Since 2026-11-26 the figure is 4 of 4. The numbers are small. `tool-usage.jsonl`'s `gate-stamp` "refused" count lumps `--fresh` misses together with push refusals and names no tree, so it cannot carry this measurement.
+  - **Measured: `semantic-id-cache-2.json`**, 2026-11-27 (`rust/gate/crates/core/src/codeid.rs`, read). It holds 13,412 entries keyed by a file's raw blob id, measured 2026-11-27 (`jq length` on the file), so an entry is content-keyed already. `Cache::save` re-reads the file and merges before it renames, so a tree's write adds entries and replaces none another tree reads. A race between the read and the rename can drop an entry, and that entry is recomputed at the next read. It is no defect, and it is not changed.
+  - **The fix: the suites.** A suite's stamp `hooks-test/<guard>` is one line a kept key, newest first: `<key>`, or `<key> <shard>...` for a split suite, which replaces `<guard>.jobs`. hookrun.sh's `stamp_key` writes it whole and moves it into place, bounded by `HOOKS_STAMP_KEEP`, a GUESS knob of 6: one for each tree that runs suites at once (the clone, its landing and review trees, three pool trees). A key past the bound reruns its suite once. Each key keeps its own rendering (`rendered/<id>@<key>.jsonl`, the oldest past the bound removed) and its own trace (`hooks-test/traces/<guard>@<key>.json`, `trace stamp <gitdir> <guard> <key> <keep> <log> <root>`). `trace fresh` names, for each guard, the key of its newest fresh trace, so the recipe skips on that key and gathers that key's rendering (T281's invariant). The recipe's key path skips at any kept key that has its rendering. The stamp written before T304 (one key, no newline) is read as one key. The one trace and the one `.jobs` file of before go at the guard's next stamp, so the first run after the change reruns, once, a split suite or a suite whose trace alone kept it fresh. `<id>.s` (the order the next run starts suites in) and `missing-program-hook` (a stamp of the user's own hook, which every tree shares) stay single-valued: neither one's overwrite makes a tree rerun anything.
+  - **The fix: the gate.** `gate-green-<area>` is one key a line, newest first, bounded by `STAMP_KEEP` (6, the same GUESS). `--write` puts the key first and drops it from where it stood. The new file is written beside the old and renamed into place, and a failed rename removes the new file. `--fresh` and `--check` pass on any kept key. It stays a file, which `test-l7r-gate.1.sh`, `test-sync-with-main.sh` and the unwritable-stamp test read. No message changes.
+  - **Red first**, measured 2026-11-27:
+    - `tests/hooks/test-parts.3.sh`, a new A-B-A case: B's state-sync suite differs from A's by one comment line, and the real `make hooks-test` runs in a fixture repository with a linked worktree. On the old code: 20 passed, 2 failed ("the other tree, unchanged, does not rerun it for that tree's stamp", "... nor the first tree, for the other's run between"). With the fix: 22 of 22. The case "the other tree, at the old wording, reruns the suite" asserted the defect, so it is restated: A at its old wording now skips at its own kept key.
+    - `trees_of_different_content_keep_each_others_green_keys` in `stamp/tests.rs`: red on HEAD's `stamp.rs` (58 passed, 1 failed, `make rust-test CRATE=rust/gate/crates/tree`), 59 of 59 with the fix.
+    - `trees_of_different_content_keep_each_others_traces` in `trace/tests.rs` pins the trace path: two contents in turn are each fresh at their own key, the oldest key past the bound reruns, the trace from before T304 goes, and an unreadable trace or a stray file is never fresh. It cannot be red on the old code, whose `stamp` takes no key.
+    - `test-parts.2.sh` pins the set: the order, a key stamped again moving to the front, the bound on renderings, and a knob that is not a count keeping 6.
+  - **Checks**: `make builder-checks CRATE="rust/guard rust/gate/crates/tree"` green (569 and 59 tests, lint, format), measured 2026-11-27 (its run in the builder's tree). The changed guard's suite, run directly (never `make hooks-test` in a pool tree, which writes the shared state measured above): parts.1 6 of 6, parts.2 43 of 43, parts.3 22 of 22.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a suite's stamp keeps a key per content, so two trees of different content run in turn each skip at their own | `test-parts.3.sh`'s A-B-A case, red on HEAD's recipe and runner | n/a: tooling | none | n/a |
+| a suite's trace kept a key each, fresh at its own key | `trees_of_different_content_keep_each_others_traces` | n/a: tooling | none | n/a |
+| a gate area's stamp keeps a key per content | `trees_of_different_content_keep_each_others_green_keys`, red on HEAD's `stamp.rs` | n/a: tooling | none | n/a |
+
+### T304 part B Approach (checklist part A)
+
+1. **The goal, in the world.** A tree whose content went green does not rerun its suites, or the gate's hooks-test step, because another tree of other content went green in between.
+2. **The constraints.** 451 T281 (a skipped suite's renderings are those at the key it skipped on; every tree has its own store); 451 T20 (a split suite is stamped only when every shard is green); feature 383 amendment 3 (the trace path); constitution XIV (a defect is a wrong outcome: a rerun that is owed nothing is one).
+3. **Where each comes from.** G: the task line and the brief of 2026-11-27. O: the event log's Phase lines, the trees' keys and the cache file, all read 2026-11-27.
+4. **Do they describe the world here?** Yes: the clone's event log and its worktrees, read 2026-11-27 (above).
+5. **The order.** Before T302. Part 2 of the remainder, the guards' work-tree `git diff` calls and the index lock, is T446, filed by this builder. With it filed, this landing ticks T304.
+6. **The exits.** Green: the first tier green in the builder's tree; the full gate and coverage are the landing's. Red: what failed is recorded and the task set down.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** Two trees of different content run in turn: 0 reruns of the unchanged suite after the other tree's run, against 1 each on HEAD (`test-parts.3.sh`, 2026-11-27); a gate key kept beside another tree's write passes `--fresh` and `--check`, red on HEAD.
+10. **Before moving a constant.** `HOOKS_STAMP_KEEP` and `STAMP_KEEP` are new GUESS knobs (6), labeled at their definitions.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The findings: 194 of 1,072 suite runs under the two tiers, and 32 of 37 gate runs' hooks-test steps, followed another tree's write (upper bounds); observed 2026-11-27, by the method above. No map changes.
+
+**Found and left?**
+- The guards' work-tree `git diff` calls take the index lock whatever `GIT_OPTIONAL_LOCKS` says (`static_runs_hooks.rs` `delta_crates`, `shared/src/checks/rounds/freeze.rs` `changed_lines`, `ledger_hooks.rs` `stages_ledger`, `conflict_marker_hooks.rs` and its `git add --dry-run`), and the gate's and scripts' `git status` calls are not yet read for which tree they ask. Visible effect: a session's commit can still die on `index.lock`. `suite_tools/trace.rs`'s `git diff --name-only` (`Now::of`) was read, 2026-11-27: it asks `HOOKS_ROOT`, the suite's own tree, never the session clone. Not fixed here: the brief's order puts part 1 whole first, and part 2 is several sites, each to be measured. Filed as T446; lands before T302.
+
+**Performance work?** yes: under the two tiers, 194 of 1,072 suite runs (18%, an upper bound, measured 2026-11-27 (the event log's suite Phase lines)) and the gate's hooks-test step reran after another tree's write, and a builder or a landing waits on each such rerun.
+
 
 <!-- plan-archive: T305 to T284 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T305 to T305 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
@@ -6866,4 +6908,30 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
    time with the host's load - evidence, not a pass>
 6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+
+### T446 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T446 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 

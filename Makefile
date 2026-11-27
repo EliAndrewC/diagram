@@ -327,7 +327,9 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --path-format=absolute --git-common-dir); fail=""; n=0; skipped=0; \
 	work=$$(mktemp -d); trap 'rm -rf "$$work"' EXIT; \
 	roster=$$(for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/cohort-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/closing-checks.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/state-sync.sh $$root/scripts/hooks/l7r-guard.sh $$root/tests/hooks/parts.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do basename $$h; done | sort -u); \
-	traced=" $$(if [ -z "$(HOOKS_ALL)" ]; then "$$root/scripts/hooks/l7r-guard.sh" trace fresh "$$gitdir" "$$root" $$roster 2>/dev/null; fi | tr '\n' ' ') "; \
+	: "A SUITE'S STAMP IS A SET OF KEYS (feature 451 T304): one key a suite in the common git directory let each tree's green run replace the key another tree's content went green at, so trees run in turn reran each other's suites; its stamp is one line a kept key, newest first (hookrun.sh, HOOKS_STAMP_KEEP), a fresh trace names the key it was kept at, and a suite is skipped at any kept key with its rendering"; \
+	traced=$$(if [ -z "$(HOOKS_ALL)" ]; then "$$root/scripts/hooks/l7r-guard.sh" trace fresh "$$gitdir" "$$root" $$roster 2>/dev/null; fi); \
+	kept_at() { [ -n "$$1" ] || return 1; for f in "$$gitdir/hooks-test/rendered/$$b@$$1.jsonl" "$$gitdir/hooks-test/rendered/$$b".[0-9]*"@$$1.jsonl"; do [ -f "$$f" ] && return 0; done; return 1; }; \
 	export HOOKS_SHIM="$$("$$root/scripts/hooks/l7r-guard.sh" trace shim "$$gitdir" 2>/dev/null)" HOOKS_ROOT="$$root"; \
 	: "THE LAUNCHERS' BINARIES BUILT AND CHECKED ONCE A RUN (feature 449 T205): each call of l7r-gate.sh or l7r-guard.sh walked its Rust sources to see whether to build, about 1,400 and 2,000 paths, and under the read recorder each path was a line of the suite's log - sync-with-main's run wrote 1,260,877 lines; with the fresh binaries named here a call skips the walk and hookrun.sh records the sources once a suite (an empty name, where a build failed, leaves every call to walk as before)"; \
 	export L7R_GATE_FRESH="$$(L7R_GATE_PRINT_FRESH=1 "$$root/scripts/gates/l7r-gate.sh" 2>/dev/null </dev/null)" L7R_GUARD_FRESH="$$(L7R_GUARD_PRINT_FRESH=1 "$$root/scripts/hooks/l7r-guard.sh" 2>/dev/null </dev/null)"; \
@@ -351,12 +353,12 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	  fi; \
 	  : "A SUITE IS SKIPPED ONLY WITH ITS MESSAGES KEPT (feature 451 T170): the budget check reads each suite's last green renderings, so a suite with none reruns"; \
 	  : "... AND KEPT AT THE KEY ITS STAMP HOLDS (feature 451 T281): the stamps are every worktree's, the store of renderings each tree's own (one store in the common git directory let a tree's run replace another's renderings, and judged a tree on a guard only another holds), so a skipped suite's renderings are the ones a green job left beside the stamp, named by its key (hookrun.sh), which messages gather copies into this tree's store after the fan-out"; \
-	  st=$$(cat "$$gitdir/hooks-test/$$b" 2>/dev/null); kept=; for f in "$$gitdir/hooks-test/rendered/$$b@$$st.jsonl" "$$gitdir/hooks-test/rendered/$$b".[0-9]*"@$$st.jsonl"; do [ -n "$$st" ] && [ -f "$$f" ] && kept=1; done; \
-	  case "$$traced" in *" $$b "*) if [ -n "$$kept" ] && { [ "$$jobs" = "$$t" ] || [ "$$(cat "$$gitdir/hooks-test/$$b.jobs" 2>/dev/null | tr '\n' ' ')" = "$$jobs " ]; }; then skipped=$$((skipped+1)); printf '%s %s\n' "$$b" "$$st" >> "$$work/held"; continue; fi ;; esac; \
+	  stf="$$gitdir/hooks-test/$$b"; st=$$(printf '%s\n' "$$traced" | awk -v b="$$b" '$$1 == b { print $$2; exit }'); \
+	  if [ -n "$$st" ] && kept_at "$$st" && { [ "$$jobs" = "$$t" ] || [ "$$(awk -v k="$$st" '$$1 == k { $$1 = ""; print substr($$0, 2); exit }' "$$stf" 2>/dev/null)" = "$$jobs" ]; }; then skipped=$$((skipped+1)); printf '%s %s\n' "$$b" "$$st" >> "$$work/held"; continue; fi; \
 	  sha=$$(printf '%s\n' "$$keys" | awk -v b="$$b" '$$1 == b { print $$2 }'); mkdir -p "$$gitdir/hooks-test"; \
 	  [ -n "$$sha" ] || sha=unkeyed-$$RANDOM; \
 	  if [ "$$jobs" != "$$t" ]; then sha=$$( { echo "$$sha"; for j in $$jobs; do printf '%s\n' "$$keys" | awk -v b="$$j" '$$1 == b { print $$2 }'; done; } | sha256sum | cut -c1-16); fi; \
-	  if [ -z "$(HOOKS_ALL)" ] && [ -n "$$kept" ] && [ "$$st" = "$$sha" ]; then skipped=$$((skipped+1)); printf '%s %s\n' "$$b" "$$st" >> "$$work/held"; continue; fi; \
+	  if [ -z "$(HOOKS_ALL)" ] && kept_at "$$sha" && awk -v k="$$sha" '$$1 == k { f = 1 } END { exit !f }' "$$stf" 2>/dev/null; then skipped=$$((skipped+1)); printf '%s %s\n' "$$b" "$$sha" >> "$$work/held"; continue; fi; \
 	  printf '%s\n' "$$b" >> "$$work/held"; \
 	  n=$$((n+1)); for j in $$jobs; do printf '%s %s %s\n' "$$b" "$$j" "$$sha" >> "$$work/todo"; done; \
 	  [ "$$jobs" = "$$t" ] || printf '%s %s %s\n' "$$b" "$$sha" "$$jobs" >> "$$work/close"; \

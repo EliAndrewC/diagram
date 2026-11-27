@@ -115,8 +115,16 @@ check "a shard that never ran keeps the suite unstamped" '[ "$code" = 1 ] && [ !
 : > "$S/green"
 run "$S/w" "$S/g" fx.sh test-fx.2.sh k1
 run --close "$S/w" "$S/g" fx.sh k1 test-fx.1.sh test-fx.2.sh
-check "every shard green stamps the suite" '[ "$(cat "$S/g/hooks-test/fx.sh")" = k1 ]'
-check "the stamp keeps its shard list" '[ "$(cat "$S/g/hooks-test/fx.sh.jobs" | tr "\n" " ")" = "test-fx.1.sh test-fx.2.sh " ]'
+check "every shard green stamps the suite, its key's line keeping its shard list" '[ "$(cat "$S/g/hooks-test/fx.sh")" = "k1 test-fx.1.sh test-fx.2.sh" ]'
+# feature 451 T304: the stamp is a SET of keys, newest first, a key's rendering kept beside each, bounded by HOOKS_STAMP_KEEP; a key
+# stamped again moves to the front, and a stamp of the form before T304 (one key, no newline, its shard list in <guard>.jobs) is read as one
+printf '#!/bin/sh\nexit 0\n' > "$S/test-one.sh"; chmod +x "$S/test-one.sh"
+printf 'k0' > "$S/g/hooks-test/one.sh"; : > "$S/g/hooks-test/one.sh.jobs"
+for k in k1 k2 k1 k3; do HOOKS_STAMP_KEEP=3 run "$S/w" "$S/g" one.sh test-one.sh "$k"; sleep 0.02; done
+check "each tree's key is kept, newest first, a key stamped again moved to the front" '[ "$(cat "$S/g/hooks-test/one.sh" | tr "\n" " ")" = "k3 k1 k2 " ] && [ ! -e "$S/g/hooks-test/one.sh.jobs" ]'
+check "a rendering is kept a key, the oldest past the bound removed" '[ "$(cd "$S/g/hooks-test/rendered" && ls one.sh@* | sort | tr "\n" " ")" = "one.sh@k1.jsonl one.sh@k2.jsonl one.sh@k3.jsonl " ]'
+HOOKS_STAMP_KEEP=x run "$S/w" "$S/g" one.sh test-one.sh k4
+check "a knob that is no count keeps six" '[ "$(wc -l < "$S/g/hooks-test/one.sh")" = 4 ]'
 # --jobs: each suite's job files, one line a suite - its shards in order, or the suite; none is the suite alone, the suite beside its
 # shards `<suite> !` with the fix
 printf '#!/bin/sh\nexit 0\n' > "$S/test-fx.10.sh"

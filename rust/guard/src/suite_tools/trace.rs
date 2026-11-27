@@ -6,6 +6,7 @@
 use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::path::{Component, Path, PathBuf};
 use std::process::Command;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde_json::{json, Map, Value};
 
@@ -206,14 +207,53 @@ impl Now {
     }
 }
 
-fn trace_file(gitdir: &Path, guard: &str) -> PathBuf {
-    gitdir.join(format!("hooks-test/{guard}.trace.json"))
+/// A suite's trace at one of its kept keys (feature 451 T304): one trace a suite, `<guard>.trace.json` in the COMMON git directory, was
+/// replaced by each tree's green run, so trees of different content, run in turn, reran each other's suites; a trace is now kept a key
+/// each, the oldest past the bound (`HOOKS_STAMP_KEEP`, `hookrun.sh`'s knob, handed in) removed.
+fn trace_file(gitdir: &Path, guard: &str, key: &str) -> PathBuf {
+    gitdir.join(format!("hooks-test/traces/{guard}@{key}.json"))
 }
 
-/// Keep a green suite's reads; nothing is kept where it cannot be traced, and the suite keeps the `deps` key.
-pub fn stamp(repo: &Path, gitdir: &Path, guard: &str, log: &Path, root: &Path) {
-    let target = trace_file(gitdir, guard);
+/// A guard's kept traces, newest first.
+fn traces(gitdir: &Path, guard: &str) -> Vec<PathBuf> {
+    let head = format!("{guard}@");
+    let mine = |e: &std::fs::DirEntry| {
+        let name = e.file_name().to_string_lossy().into_owned();
+        name.strip_prefix(&head)
+            .and_then(|k| k.strip_suffix(".json"))
+            .is_some()
+    };
+    let mut found: Vec<(SystemTime, PathBuf)> = std::fs::read_dir(gitdir.join("hooks-test/traces"))
+        .into_iter()
+        .flatten()
+        .flatten()
+        .filter(mine)
+        .map(|e| {
+            (
+                e.metadata()
+                    .and_then(|m| m.modified())
+                    .unwrap_or(UNIX_EPOCH),
+                e.path(),
+            )
+        })
+        .collect();
+    found.sort_by(|a, b| b.cmp(a));
+    found.into_iter().map(|(_, p)| p).collect()
+}
+
+/// Keep a green suite's reads at its key, and at most `keep` of its traces; nothing is kept where it cannot be traced, and the suite keeps the `deps` key.
+pub fn stamp(
+    repo: &Path,
+    gitdir: &Path,
+    guard: &str,
+    key: &str,
+    keep: usize,
+    log: &Path,
+    root: &Path,
+) {
+    let target = trace_file(gitdir, guard, key);
     let _ = std::fs::remove_file(&target);
+    let _ = std::fs::remove_file(gitdir.join(format!("hooks-test/{guard}.trace.json"))); // the one trace a suite before T304
     let Some((files, dirs)) = reads(log, root).filter(|(files, _)| !files.is_empty()) else {
         return;
     };
@@ -233,6 +273,9 @@ pub fn stamp(repo: &Path, gitdir: &Path, guard: &str, log: &Path, root: &Path) {
         json!({"recorder": recorder_version(repo), "files": file_states, "dirs": dir_states});
     let _ = target.parent().map(std::fs::create_dir_all);
     let _ = std::fs::write(target, kept.to_string());
+    for old in traces(gitdir, guard).into_iter().skip(keep.max(1)) {
+        let _ = std::fs::remove_file(old);
+    }
 }
 
 fn unchanged(kept: &Value, key: &str, state: &dyn Fn(&str) -> String) -> bool {
@@ -242,30 +285,38 @@ fn unchanged(kept: &Value, key: &str, state: &dyn Fn(&str) -> String) -> bool {
     })
 }
 
-/// The guards whose kept reads are all unchanged.
+/// The guards with a kept trace whose reads are all unchanged, each with the key of its newest such trace.
 #[must_use]
-pub fn fresh(repo: &Path, gitdir: &Path, root: &Path, guards: &[String]) -> Vec<String> {
-    let parse = |g: &String| {
-        let text = std::fs::read_to_string(trace_file(gitdir, g)).ok()?;
-        Some((g.clone(), serde_json::from_str::<Value>(&text).ok()?))
-    };
-    let kept: Vec<(String, Value)> = guards.iter().filter_map(parse).collect();
+pub fn fresh(repo: &Path, gitdir: &Path, root: &Path, guards: &[String]) -> Vec<(String, String)> {
+    let kept: Vec<(&String, Vec<PathBuf>)> = guards
+        .iter()
+        .map(|g| (g, traces(gitdir, g)))
+        .filter(|(_, t)| !t.is_empty())
+        .collect();
     if kept.is_empty() {
         return Vec::new();
     }
     let (now, recorder) = (Now::of(root), recorder_version(repo));
-    let same = |k: &Value| {
+    let same = |path: &&PathBuf| {
+        let k: Value = std::fs::read_to_string(path)
+            .ok()
+            .and_then(|t| serde_json::from_str(&t).ok())
+            .unwrap_or_default();
         k["recorder"].as_str() == Some(recorder.as_str())
-            && unchanged(k, "files", &|r| now.file_state(r))
-            && unchanged(k, "dirs", &|r| now.dir_state(r))
+            && unchanged(&k, "files", &|r| now.file_state(r))
+            && unchanged(&k, "dirs", &|r| now.dir_state(r))
     };
-    kept.iter()
-        .filter(|(_, k)| same(k))
-        .map(|(g, _)| g.clone())
+    let key = |g: &str, path: &Path| {
+        let name = path.file_name().unwrap_or_default().to_string_lossy();
+        name[g.len() + 1..name.len() - ".json".len()].to_owned()
+    };
+    kept.into_iter()
+        .filter_map(|(g, t)| t.iter().find(same).map(|p| (g.clone(), key(g, p))))
         .collect()
 }
 
-/// `l7r-guard trace`: `shim <gitdir>`, `stamp <gitdir> <guard> <log> <root>`, `fresh <gitdir> <root> <guard>...`.
+/// `l7r-guard trace`: `shim <gitdir>`, `stamp <gitdir> <guard> <key> <keep> <log> <root>`, `fresh <gitdir> <root> <guard>...` (a line
+/// a fresh guard, `<guard> <key>`).
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
     answer(&tool_root(), args, "gcc")
@@ -280,12 +331,18 @@ pub(crate) fn answer(repo: &Path, args: &[String], compiler: &str) -> Reply {
     let arg = |n: usize| Path::new(&args[n]);
     match (args.first().map_or("", String::as_str), args.len()) {
         ("shim", 2..) => say(shim(repo, arg(1), compiler) + "\n"),
-        ("stamp", 5) => {
-            stamp(repo, arg(1), &args[2], arg(3), arg(4));
+        ("stamp", 7) => {
+            let keep = args[4].parse().unwrap_or(6);
+            stamp(repo, arg(1), &args[2], &args[3], keep, arg(5), arg(6));
             say(String::new())
         }
-        ("fresh", 3..) => say(fresh(repo, arg(1), arg(2), &args[3..]).join("\n") + "\n"),
-        _ => Reply { stdout: String::new(), stderr: "usage: l7r-guard trace shim <gitdir> | stamp <gitdir> <guard> <log> <root> | fresh <gitdir> <root> <guard>...\n".to_owned(), code: 2 },
+        ("fresh", 3..) => say(
+            fresh(repo, arg(1), arg(2), &args[3..])
+                .iter()
+                .map(|(g, k)| [g.as_str(), " ", k, "\n"].concat())
+                .collect(),
+        ),
+        _ => Reply { stdout: String::new(), stderr: "usage: l7r-guard trace shim <gitdir> | stamp <gitdir> <guard> <key> <keep> <log> <root> | fresh <gitdir> <root> <guard>...\n".to_owned(), code: 2 },
     }
 }
 

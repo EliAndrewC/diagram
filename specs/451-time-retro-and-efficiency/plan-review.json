@@ -3912,6 +3912,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T304 part B (the remainder: the suite and gate stamps that worktrees overwrite in the common git directory, measured 2026-11-27)": {
+   "sha256": "4d166a60f0a9c2e8dac542799f2f8490b5f3703291f9dcc1dac81032d3caa1c8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T304 part B Approach (checklist part A)": {
+   "sha256": "d622957d761a55b1b6af99a2b63620ca0925c900f0cc96d9509bc1697e0d15ec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T446 (<why: the finding or measurement that files it>)": {
+   "sha256": "3e9dddf6a619699d13136561916287dfa7ba5f5b419b118a6dfc3e9e666ba41a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T446 Approach (checklist part A)": {
+   "sha256": "f151262785cd772f04acbe146c760f3e86c535b4f3304093ac7324b7ee094efc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -35133,6 +35157,78 @@
      "summary": "The template placeholder section heading '### T288 (<why: ...>)' is removed, replaced by the filled section under its real heading.",
      "class": "within",
      "why": "The placeholder carried no decision; its content is superseded by the filled section, so removing it drops nothing that was approved."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T304 part B (the remainder: the suite and gate stamps that worktrees overwrite in the common git directory, measured 2026-11-27)",
+    "### T304 part B Approach (checklist part A)",
+    "### T446 (<why: the finding or measurement that files it>)",
+    "### T446 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T304-B.1 suite stamps keep a key set",
+     "summary": "hooks-test/<guard> holds a bounded newest-first list of content keys (with shards for a split suite, replacing <guard>.jobs), each key with its own rendering and trace; the recipe skips at any kept key that has its rendering",
+     "class": "within",
+     "why": "This is the fix the task exists for: a tree whose content went green no longer reruns because another tree of other content went green between. It serves the 2026-11-27 go-ahead for the worktree and parallel-building tasks and FR-013's performance-first ordering, and it keeps 451 T281's invariant (renderings gathered at the key skipped on)."
+    },
+    {
+     "id": "T304-B.2 gate area stamps keep a key set",
+     "summary": "gate-green-<area> becomes one key a line, newest first, bounded by STAMP_KEEP; --write moves the key to the front; atomic rename; --fresh and --check pass on any kept key; still a file; no message changes",
+     "class": "within",
+     "why": "The same fix for the gate's hooks-test step. --check passing on any kept key stays sound because each key vouches for one content: a key that matches was green at that very content, so the push path is not loosened to content that was not green."
+    },
+    {
+     "id": "T304-B.3 bound of 6 (HOOKS_STAMP_KEEP, STAMP_KEEP)",
+     "summary": "both sets are bounded at 6, a labeled GUESS knob; a key past the bound reruns its suite once",
+     "class": "within",
+     "why": "A labeled GUESS knob on a cost-only trade. Eviction causes a rerun, which is the old behavior, and never a wrong verdict. Under the two tiers the measured writers are the clone and its landing tree, well inside 6, and the knob can be tuned against the event log. It narrows nothing the GM asked."
+    },
+    {
+     "id": "T304-B.4 semantic-id-cache-2.json left as it is",
+     "summary": "measured to be content-keyed by blob id, and merged on save, so no tree invalidates another's entries; a read-rename race can drop an entry, which is recomputed at the next read",
+     "class": "within",
+     "why": "Measured, not assumed (file read, jq length 13,412). A dropped entry is recomputed, which is no wrong outcome, so under constitution XIV it is not a defect and is correctly left alone."
+    },
+    {
+     "id": "T304-B.5 <id>.s and missing-program-hook stay single-valued",
+     "summary": "the suite start order and the user's own-hook stamp keep one value",
+     "class": "within",
+     "why": "Overwriting either makes no tree rerun anything, so neither touches the goal. Leaving them is not a narrowing."
+    },
+    {
+     "id": "T304-B.6 one-time transition rerun",
+     "summary": "the pre-T304 single-key stamp is read as one key; the old single trace and .jobs file go at the guard's next stamp, so the first run after the change can rerun a split suite or a trace-fresh suite once",
+     "class": "within",
+     "why": "A one-off cost of the migration that gives no wrong outcome and leaves no lasting gap."
+    },
+    {
+     "id": "T304-B.7 test-parts.3.sh case restated",
+     "summary": "the case 'the other tree, at the old wording, reruns the suite' asserted the defect and is restated: A at its old wording skips at its own kept key",
+     "class": "within",
+     "why": "The test pinned the defective behavior the task removes. Restating it follows from the fix and loosens no requested guarantee. Red-first evidence is given: 20 of 22 on the old code, 22 of 22 with the fix."
+    },
+    {
+     "id": "T304-B.8 T304 ticks with part 2 deferred to T446",
+     "summary": "the guards' work-tree git diff calls that take the index lock (delta_crates, changed_lines, stages_ledger, conflict_marker_hooks and its git add --dry-run), a known defect whose visible effect is a commit dying on index.lock, are filed as T446, landing before T302; T304 ticks at this landing",
+     "class": "within",
+     "why": "Nothing the GM asked goes undone or lands later than his words order. His 2026-11-27 go-ahead asks for all the load-bearing and refinement tasks before the orchestrator talk, and the 2026-11-18 rule asks for known defects to be fixed before the next port step. T446 is filed in D15's form (a why, a filed id, 'lands before T302'), inside the same pre-port batch. The stated why leans partly on 'the brief's order', which is the coordinating session's brief, not the GM's words, and is not credited as his. The split stands on its other ground: several sites, each to be measured. That T446 and T302 are open boxes is checked mechanically by make decide."
+    },
+    {
+     "id": "T304-B.9 git status calls not yet read",
+     "summary": "the gate's and scripts' git status calls are not yet read for which tree they ask, and are carried to T446",
+     "class": "within",
+     "why": "Adjudicated apart from B.8: this is an unmeasured question, not a known defect, so carrying the reading into the task that measures part 2 leaves no known defect unfixed."
+    },
+    {
+     "id": "T446 blocks",
+     "summary": "both T446 blocks are the unfilled task-add template",
+     "class": "within",
+     "why": "They decide nothing, so no ruling is owed. They are owed review when filled, since their digests will change."
     }
    ]
   }

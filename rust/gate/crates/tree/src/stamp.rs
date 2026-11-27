@@ -273,10 +273,41 @@ fn stamp_path(root: &Path, area: &Area) -> Option<PathBuf> {
     codeid::common_git_dir(root).map(|d| d.join(format!("gate-green-{}", area.name)))
 }
 
+/// How many green keys an area's stamp keeps (feature 451 T304), a GUESS knob: one for each tree that gates at once - the clone, its
+/// landing and review trees, three pool trees. The stamp held ONE key in the COMMON git directory, so a tree's green gate replaced the
+/// key another tree's content had gone green at: of the gate runs from 2026-11-20 to 11-27, hooks-test reran in 32 of 37 that followed
+/// another tree's gate, against 72 of 134 that followed the same tree's (the event log's gate Phase lines). A key past it gates again.
+const STAMP_KEEP: usize = 6;
+
+/// The keys an area's stamp keeps, newest first: one a line (a stamp written before T304 is its one key).
+fn kept_keys(root: &Path, area: &Area) -> Option<Vec<String>> {
+    let text = std::fs::read_to_string(stamp_path(root, area)?).ok()?;
+    Some(
+        text.lines()
+            .map(str::trim)
+            .filter(|l| !l.is_empty())
+            .map(str::to_owned)
+            .collect(),
+    )
+}
+
 fn write_stamp(root: &Path, area: &Area) -> Result<(), String> {
     let key = area_key(root, area)?;
     let path = stamp_path(root, area).ok_or("no git directory to record into")?;
-    stated(std::fs::write(&path, key), &path.to_string_lossy())
+    let mut keys = vec![key.clone()];
+    keys.extend(
+        kept_keys(root, area)
+            .unwrap_or_default()
+            .into_iter()
+            .filter(|k| *k != key),
+    );
+    keys.truncate(STAMP_KEEP);
+    let tmp = path.with_extension(format!("{}.tmp", std::process::id()));
+    let what = path.to_string_lossy();
+    stated(std::fs::write(&tmp, keys.join("\n") + "\n"), &what)?;
+    stated(std::fs::rename(&tmp, &path), &what).inspect_err(|_| {
+        let _ = std::fs::remove_file(&tmp);
+    })
 }
 
 /// Refuse an area whose gated code changed since `base` with no matching stamp; the lines to print.
@@ -304,11 +335,11 @@ fn refusals(root: &Path, base: &str) -> Result<Vec<String>, String> {
             "page" => "make page-check",
             _ => "make done",
         };
-        let kept = stamp_path(root, area).and_then(|p| std::fs::read_to_string(p).ok());
+        let kept = kept_keys(root, area);
         let want = area_key(root, area)?;
         match kept {
             None => bad.push(format!("{}: no green gate has been recorded at all ({gate} stamps it)", area.name)),
-            Some(have) if have.trim() != want => bad.push(format!("{}: the last green gate ran against DIFFERENT code than you are pushing ({gate} again)", area.name)),
+            Some(have) if !have.contains(&want) => bad.push(format!("{}: the last green gate ran against DIFFERENT code than you are pushing ({gate} again)", area.name)),
             Some(_) => {}
         }
     }
@@ -459,8 +490,8 @@ fn answer(args: &[String], top: Option<&Path>, stdin: &mut dyn Read) -> crate::R
             Err(why) => say(String::new(), format!("gate-stamp: {why}\n"), 1),
         },
         (Some("--fresh"), Some(area)) => {
-            let kept = stamp_path(root, area).and_then(|p| std::fs::read_to_string(p).ok());
-            let same = kept.is_some_and(|k| area_key(root, area).is_ok_and(|want| k.trim() == want));
+            let kept = kept_keys(root, area);
+            let same = kept.is_some_and(|k| area_key(root, area).is_ok_and(|want| k.contains(&want)));
             say(String::new(), String::new(), i32::from(!same))
         }
         (Some("--selftest"), _) => selftest_reply(selftest(root)),

@@ -317,6 +317,48 @@ fn a_python_file_is_keyed_by_its_bytes() {
     assert_ne!(before, after);
 }
 
+/// Feature 451 T304: two trees of different content gating in turn keep each other's green keys - the stamp held one, so each
+/// tree's gate replaced the other's and the other's next `make done` reran hooks-test; a key past the bound is gated again, and a stamp
+/// of the form before T304 (one key, no newline) is read as one.
+#[test]
+fn trees_of_different_content_keep_each_others_green_keys() {
+    let dir = repo("two-trees");
+    put(&dir, "a.py", "x = 1\n");
+    commit(&dir);
+    git(&dir, &["branch", "base"]);
+    put(&dir, "a.py", "x = 2\n");
+    commit(&dir);
+    let stamp = dir.join(".git/gate-green-diagram");
+    let first = call(&dir, &["--key", "diagram"]).stdout.trim().to_owned();
+    std::fs::write(&stamp, &first).unwrap();
+    assert_eq!(call(&dir, &["--fresh", "diagram"]).code, 0);
+    put(&dir, "a.py", "x = 3\n");
+    assert_eq!(call(&dir, &["--write", "diagram"]).code, 0);
+    put(&dir, "a.py", "x = 2\n");
+    assert_eq!(call(&dir, &["--fresh", "diagram"]).code, 0);
+    assert_eq!(call(&dir, &["--check", "base"]).code, 0);
+    assert_eq!(call(&dir, &["--write", "diagram"]).code, 0);
+    let kept = std::fs::read_to_string(&stamp).unwrap();
+    assert_eq!(
+        (kept.lines().count(), kept.lines().next()),
+        (2, Some(first.as_str()))
+    );
+    for n in 4..=9 {
+        put(&dir, "a.py", &format!("x = {n}\n"));
+        assert_eq!(call(&dir, &["--write", "diagram"]).code, 0);
+    }
+    assert_eq!(
+        std::fs::read_to_string(&stamp).unwrap().lines().count(),
+        super::STAMP_KEEP
+    );
+    put(&dir, "a.py", "x = 2\n");
+    assert_eq!(call(&dir, &["--fresh", "diagram"]).code, 1);
+    assert!(!std::fs::read_dir(dir.join(".git"))
+        .unwrap()
+        .flatten()
+        .any(|e| e.file_name().to_string_lossy().ends_with(".tmp")));
+}
+
 #[test]
 fn a_stamp_that_cannot_be_written_is_a_failure() {
     let dir = repo("unwritable");

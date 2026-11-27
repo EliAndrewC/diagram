@@ -26,7 +26,7 @@ set -uo pipefail
 # nothing else of that name; each shard is a job of its own, so one long suite no longer holds every run's wall time:
 # l7r-gate.sh 38.3 s and entry-gate.sh 34.0 s of a 40.8 s full run, measured 2026-11-20 (HOOKS_ALL=1 make hooks-test, its "ran" line).
 # A shard's job writes only its own .rc, .log, .s and .reads under `<guard>.<k>`; `--close`, after the fan-out, stamps the suite - its
-# sha, its trace and its shard list - only when every shard's job is ok: one stamp a suite, as `trace stamp` rewrites its trace whole.
+# sha, its trace and its shard list - only when every shard's job is ok: one line of the suite's stamp, and its key's trace written whole (451 T304).
 # No fork per name: `make hooks-test` asks --jobs for every suite before the fan-out, so one call takes them all;
 # one call per suite cost 6.9 s for 57 suites on a loaded host, measured 2026-11-20 (57 single-suite --jobs calls beside a full run).
 # ONCE A RUN, NOT ONCE A SUITE (feature 451 T372): the glob below reads the whole temp directory - 16.5 ms a suite under a /tmp of 5,443
@@ -67,6 +67,18 @@ bound_failed() { # <gitdir>
   ls "$dir" | grep -E '^[0-9]{8}T[0-9.]+Z-.+\.log$' | sort | head -n "-$keep" | while IFS= read -r f; do rm -f "$dir/$f"; done
   return 0
 }
+# THE STAMPS ARE A SET, KEYED BY CONTENT (feature 451 T304): a suite's stamp `hooks-test/<guard>` held ONE key in the COMMON git directory,
+# so a tree's green run replaced the key another tree's content had gone green at, and trees run in turn reran each other's suites (60
+# of 63 stamps rewritten within an hour with three builders live, 2026-11-26). It is now one line a kept key, newest first - `<key>` or,
+# for a split suite, `<key> <shard>...` (its shard list, where `<guard>.jobs` held one list) - and its renderings and traces are kept a
+# key each beside it. HOOKS_STAMP_KEEP, a GUESS knob: 6 keys a suite, one for each tree that runs suites at once (the clone, its landing
+# and review trees, three pool trees); a key past it reruns its suite once.
+stamp_keep() { local k=${HOOKS_STAMP_KEEP:-6}; case $k in '' | *[!0-9]* | 0) k=6 ;; esac; printf '%s' "$k"; }
+stamp_key() { # <gitdir> <guard> <key> [<shard>...]: the key first with its shards, the guard's other kept keys after it, bounded
+  local f=$1/hooks-test/$2 key=$3 line; shift 3
+  line=$key; [ "$#" -eq 0 ] || line="$key $*"
+  mkdir -p "${f%/*}" && { printf '%s\n' "$line"; if [ -f "$f" ]; then cat "$f"; echo; fi; } | awk -v k="$key" -v n="$(stamp_keep)" 'NF && (NR == 1 || $1 != k) && ++c <= n' > "$f.$$.part" && mv -f "$f.$$.part" "$f" && rm -f "$f.jobs"   # the one shard list before T304
+}
 shard_k() { SK=${1%.sh}; SK=${SK##*.}; case $SK in '' | *[!0-9]*) return 1 ;; esac; }
 shards_of() { local f; local -a by=(); for f in "$1/${2%.sh}".*.sh; do [ -f "$f" ] && shard_k "$f" && by[10#$SK]=${f##*/}; done; SH="${by[*]}"; }
 case ${1:-} in
@@ -103,10 +115,10 @@ case ${1:-} in
   WORK=${2:?work dir}; GITDIR=${3:?gitdir}; GUARD=${4:?guard}; SHA=${5:?sha}; shift 5
   [ "$#" -gt 0 ] || exit 1
   for s in "$@"; do shard_k "$s" && [ "$(cat "$WORK/$GUARD.$SK.rc" 2>/dev/null)" = ok ] || exit 1; done
-  mkdir -p "$GITDIR/hooks-test" && printf '%s' "$SHA" > "$GITDIR/hooks-test/$GUARD" && printf '%s\n' "$@" > "$GITDIR/hooks-test/$GUARD.jobs"
+  stamp_key "$GITDIR" "$GUARD" "$SHA" "$@" || exit 1
   if [ -n "${HOOKS_SHIM:-}" ]; then
     for s in "$@"; do shard_k "$s" && cat "$WORK/$GUARD.$SK.reads" 2>/dev/null; done > "$WORK/$GUARD.reads"
-    "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../scripts/hooks/l7r-guard.sh" trace stamp "$GITDIR" "$GUARD" "$WORK/$GUARD.reads" "$HOOKS_ROOT" >/dev/null 2>&1
+    "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../scripts/hooks/l7r-guard.sh" trace stamp "$GITDIR" "$GUARD" "$SHA" "$(stamp_keep)" "$WORK/$GUARD.reads" "$HOOKS_ROOT" >/dev/null 2>&1
   fi
   exit 0 ;;
 --sweep) sweep_gone; [ -z "${2:-}" ] || bound_failed "$2"; exit 0 ;;
@@ -188,10 +200,11 @@ if [ "$rc" -eq 0 ]; then
   M=${HOOKS_MESSAGES:-$GITDIR/hooks-test/messages}; R=$GITDIR/hooks-test/rendered
   mkdir -p "$M" "$R" && cat "$WORK/$ID.messages/messages.jsonl" > "$M/$ID.jsonl" 2>/dev/null || : > "$M/$ID.jsonl"
   cp "$M/$ID.jsonl" "$R/.$ID.$$.part" && mv -f "$R/.$ID.$$.part" "$R/$ID@$SHA.jsonl"
-  for f in "$R/$ID@"*.jsonl; do [ "$f" = "$R/$ID@$SHA.jsonl" ] || rm -f "$f"; done
+  # a rendering a kept key (451 T304), the oldest past the bound removed
+  ls -t -- "$R/$ID@"*.jsonl | awk -v n="$(stamp_keep)" 'NR > n' | while IFS= read -r f; do rm -f "$f"; done
   # a shard stamps nothing: its suite is stamped by --close once every shard is green
-  [ -n "$K" ] || { mkdir -p "$GITDIR/hooks-test" && printf '%s' "$SHA" > "$GITDIR/hooks-test/$GUARD"; }
-  [ -z "$K" ] && [ -n "${HOOKS_SHIM:-}" ] && "$HERE/../../scripts/hooks/l7r-guard.sh" trace stamp "$GITDIR" "$GUARD" "$WORK/$ID.reads" "$HOOKS_ROOT" >/dev/null 2>&1
+  [ -n "$K" ] || stamp_key "$GITDIR" "$GUARD" "$SHA"
+  [ -z "$K" ] && [ -n "${HOOKS_SHIM:-}" ] && "$HERE/../../scripts/hooks/l7r-guard.sh" trace stamp "$GITDIR" "$GUARD" "$SHA" "$(stamp_keep)" "$WORK/$ID.reads" "$HOOKS_ROOT" >/dev/null 2>&1
   printf 'ok' > "$WORK/$ID.rc"
 else
   printf 'FAIL' > "$WORK/$ID.rc"

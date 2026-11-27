@@ -46,7 +46,7 @@ uk=$(cat "$HOME/.claude/hooks/test-missing-program-hook.sh" "$HOME/.claude/hooks
 mkdir -p "$A/.git/hooks-test" && printf '%s' "$uk" > "$A/.git/hooks-test/missing-program-hook"
 # the recipes, as a session's shell runs them: none of the outer run's make state, and never every suite forced
 mk() { ( cd "$1" && env -u MAKEFLAGS -u MAKELEVEL -u MFLAGS -u HOOKS_ALL make --no-print-directory -f "$ROOT/Makefile" "${@:2}" 2>&1 ); }
-runs() { wc -l < "$1/runs-$2" 2>/dev/null || echo 0; }
+runs() { if [ -f "$1/runs-$2" ]; then wc -l < "$1/runs-$2"; else echo 0; fi; }
 owed() { printf '%s\n' "$1" | grep -c "NOT REVIEWED: $2 "; }
 
 # the main tree's first run renders every suite; each wording is then recorded reviewed (the list-growing messages' worst cases too)
@@ -73,7 +73,7 @@ suite "$B" fx-hooks "a NEW wording of fx, written in the linked tree"
 out=$(mk "$B" hooks-test)
 check "the changed wording fails its tree's run" '[ "$(owed "$out" fx-hooks)" = 1 ]'
 out=$(mk "$A" hooks-test)
-check "the other tree, at the old wording, reruns the suite and is green" '[ "$(runs "$A" fx-hooks)" = 2 ] && case $out in *"hooks area stamped"*) true ;; *) echo "$out"; false ;; esac'
+check "the other tree, at the old wording, skips the suite at its own kept key and is green (451 T304; it reran on B's stamp before)" '[ "$(runs "$A" fx-hooks)" = 1 ] && case $out in *"hooks area stamped"*) true ;; *) echo "$out"; false ;; esac'
 out=$(mk "$B" guard-messages)
 check "(a) another tree's run leaves this tree's unreviewed wording owed" '[ "$(owed "$out" fx-hooks)" = 1 ]'
 
@@ -94,6 +94,19 @@ check "a suite another tree stamped at this tree's content is skipped" '[ "$(run
 check "... and its rendering at that stamp's key is the one judged, not the tree's stale one" '[ "$(owed "$out" fx-hooks)" = 1 ]'
 check "(b) the run is not judged on another tree's guard" '[ "$(owed "$out" only-b-hooks)" = 0 ]'
 check "a rendering of a guard the tree does not hold is not judged, and goes" '[ "$(owed "$out" gone-hooks)" = 0 ] && [ ! -e "$A/.git/hooks-test/messages/gone-hooks.sh.jsonl" ]'
+
+# feature 451 T304: TWO TREES OF DIFFERENT CONTENT KEEP EACH OTHER'S STAMPS. A suite's stamp held ONE key, so a tree's green run at its
+# content replaced the key another tree's content had gone green at, and the trees, run in turn, reran each other's suites (60 of 63
+# stamps rewritten within an hour with three builders live, 2026-11-26). B's state-sync suite now differs from A's by a comment alone:
+# B reruns it once, then neither tree reruns it, whichever ran last.
+printf '# a comment only the linked tree holds\n' >> "$B/tests/hooks/test-state-sync.sh"
+a0=$(runs "$A" state-sync); b0=$(runs "$B" state-sync)
+mk "$B" hooks-test > /dev/null
+check "the tree whose suite changed reruns it once" '[ "$(runs "$B" state-sync)" = $((b0 + 1)) ]'
+mk "$A" hooks-test > /dev/null
+check "the other tree, unchanged, does not rerun it for that tree's stamp" '[ "$(runs "$A" state-sync)" = "$a0" ]'
+mk "$B" hooks-test > /dev/null
+check "... nor the first tree, for the other's run between" '[ "$(runs "$B" state-sync)" = $((b0 + 1)) ]'
 
 # feature 451 T414: A RED SUITE'S LOG OUTLIVES THE RUN, in the COMMON git directory (a linked tree's failure under the main tree's .git),
 # named by the run's FAIL line and handed to the event line's writer; the run's green suites keep none. The gate's launcher here records
