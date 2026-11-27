@@ -118,10 +118,6 @@ for that batch with the conflict or the gate's output - never a standing integra
   landed task - builders, repair builders, fresh integration agents, review agents and the coordinator together, by kind (output,
   fresh input, cache read; 451 T512) - is measured over a like window before and after, and must not rise. A cost moved from the
   coordinator to builders counts where it lands.
-- **FR-010** A LIKE WINDOW is one with the same number of builder trees held (rebuilt from the pool's log, second by second) and
-  every before-and-after figure is stated with the concurrency it was measured under - trees held, the machine's load - so a window
-  of one builder is never compared bare with one of four (the GM's seventh process-reviewer message, 2026-11-27, in
-  `specs/449-rust-codebase/port-talk-gm-goal.md`).
 - **FR-007** Every per-task figure is read beside the task's size (451 T512's lines, test and non-test), never alone: a figure
   that improves because tasks were cut smaller is not an improvement (the GM's fourth process-reviewer message: no single metric is
   the target).
@@ -130,6 +126,11 @@ for that batch with the conflict or the gate's output - never a standing integra
   published merge-queue script or bors-style bisect, Gas Town's Refinery, Claude Code's own background agents, worktrees and
   Workflow tool (research C2) - and takes it where it fits (the GM: "I don't want to completely reinvent the wheel ... I would even
   download somebody's skill or whatever if that helped").
+- **FR-010** A LIKE WINDOW is one of eight hours or more of builder work (US1) whose concurrency is close to the window it is
+  compared with: trees held, time-weighted from the pool's log (the night of 2026-11-27: three pool trees, busy 93%, 98% and 83%),
+  and the machine's load. Every before-and-after figure is stated with the concurrency it was measured under, and where the two
+  windows' concurrency differs both are stated beside the figure, so a window of one builder is never compared bare with one of
+  four (the GM's seventh process-reviewer message, 2026-11-27, in `specs/449-rust-codebase/port-talk-gm-goal.md`).
 
 ## Taken over from feature 451
 
