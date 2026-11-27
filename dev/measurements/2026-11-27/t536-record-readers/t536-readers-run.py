@@ -21,6 +21,8 @@ EDIR = f"{REPO}/.git/l7r-events/"
 GUARD = f"{S}/target/l7r-guard.good"
 GATE = f"{S}/target/tool/l7r-gate"
 RUNS = int(os.environ.get("RUNS", "5"))
+# the open task the section and decide cases name: T536 for T536's own run; T537's after figure named T537, by then 451's one open task
+OPEN = os.environ.get("T536_OPEN", "T536")
 ENV = dict(os.environ, CLAUDE_PROJECT_DIR=REPO, L7R_GATE_TARGET=f"{S}/target", L7R_GUARD_TARGET=f"{S}/target",
            L7R_GATE_CARGO="/bin/false", L7R_GUARD_CARGO="/bin/false", L7R_EVENTS_DIR=EDIR.rstrip("/"),
            SPECIFY_FEATURE=FEAT, SPECIFY_FEATURE_DIRECTORY=f"specs/{FEAT}", CLONE_MAIN=REPO)
@@ -56,8 +58,8 @@ CASES = [
     ("hook SubagentStart", [GUARD, "SubagentStart"], payload("SubagentStart")),
     ("hook SessionStart", [GUARD, "SessionStart"], payload("SessionStart", source="startup")),
     ("hook Stop", [GUARD, "Stop"], payload("Stop", stop_hook_active=False)),
-    ("make plan-section T=T536", [GATE, "plan", "section", FEAT, "T536"], ""),
-    ("make decide F=451 T=T536", [GATE, "plan", "decide", "451", "T536"], ""),
+    (f"make plan-section T={OPEN}", [GATE, "plan", "section", FEAT, OPEN], ""),
+    (f"make decide F=451 T={OPEN}", [GATE, "plan", "decide", "451", OPEN], ""),
     ("make plan-delta F=451", [GATE, "plan", "delta", "451"], ""),
     ("make queue F=451", [GATE, "queue", "451"], ""),
     ("make builder-next F=451", [GATE, "builder-next", "451"], ""),

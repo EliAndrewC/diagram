@@ -39,6 +39,7 @@ use serde_json::Value;
 
 use crate::py_text::{split, strip, SPACE_CLASS};
 
+pub mod archive;
 pub mod marks;
 pub mod tasks;
 pub mod touch;

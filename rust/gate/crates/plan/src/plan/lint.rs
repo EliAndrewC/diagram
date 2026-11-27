@@ -458,7 +458,7 @@ fn missing_red_exits(section: &str) -> Vec<(usize, String)> {
 /// In a plan whose tasks owe approach blocks, each open task with no `### Txx Approach` block in the plan or plan-done.md (D5); a bundle's
 /// block, `### T01, T02 Approach`, covers every task its heading lists (451 T141).
 fn tasks_without_approach(spec_dir: &Path, plan: &str) -> Vec<String> {
-    let done = std::fs::read_to_string(spec_dir.join("plan-done.md")).unwrap_or_default();
+    let done = l7r_shared::speckit::archive::plan_done(spec_dir);
     let joined = format!("{plan}\n{done}");
     let any = APPROACH_HEAD
         .is_match(&format!("{plan}{done}"))

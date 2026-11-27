@@ -77,7 +77,7 @@ pub fn built_inside(dir: &Path, task: &str) -> Option<Host> {
     // an archived section is read without history: its text moved byte for byte, so its recorded digest still holds
     for (text, history, archived) in [
         (read("plan.md"), Some(&history), false),
-        (read("plan-done.md"), None, true),
+        (l7r_shared::speckit::archive::plan_done(dir), None, true),
     ] {
         for (host, section) in task_sections(&text) {
             let Some((_, _, what)) = named(&section).into_iter().find(|(_, t, _)| t == task) else {
@@ -109,7 +109,10 @@ pub(super) fn decide_findings(
     members: &[String],
 ) -> Vec<((usize, usize), String)> {
     let read = |name: &str| std::fs::read_to_string(spec_dir.join(name)).unwrap_or_default();
-    let (plan, tasks) = (read("plan.md"), read("tasks.md") + &read("tasks-done.md"));
+    let (plan, tasks) = (
+        read("plan.md"),
+        read("tasks.md") + &l7r_shared::speckit::tasks::done_text(spec_dir).unwrap_or_default(),
+    );
     let mut out = Vec::new();
     for (at, task, what) in named(section) {
         let shown = format!("Built here: {task} - {what}");

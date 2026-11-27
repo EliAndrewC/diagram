@@ -43,6 +43,7 @@ use l7r_gate_plan::plan::template::{PERFORMANCE, RED_EXIT, TEMPLATE};
 use l7r_shared::escape::enough;
 use l7r_shared::log::Entry;
 use l7r_shared::py_text::{strip, SPACE_CLASS};
+use l7r_shared::speckit::archive;
 use serde_json::Value;
 
 use crate::tick::text::re;
@@ -81,6 +82,26 @@ fn next_id(d: &Path) -> Result<String, String> {
                 text += &String::from_utf8_lossy(&out);
             }
         }
+    }
+    // a split archive's ids from its index alone, never its parts (451 T537): here and on the two refs
+    let index = |r: Option<&str>| {
+        let at = |rel: &str| match r {
+            None => std::fs::read_to_string(d.join(rel)).ok(),
+            Some(r) => {
+                let (code, out) = crate::git(d, &["show", &format!("{r}:./{rel}")]);
+                (code == Some(0)).then(|| String::from_utf8_lossy(&out).into_owned())
+            }
+        };
+        archive::RECORDS
+            .iter()
+            .flat_map(|record| archive::ids(&at, record))
+            .fold(String::new(), |mut out, id| {
+                _ = writeln!(out, "- [x] {id}");
+                out
+            })
+    };
+    for r in [None, Some("main"), Some("origin/main")] {
+        text += &index(r);
     }
     let top = ID
         .captures_iter(&text)

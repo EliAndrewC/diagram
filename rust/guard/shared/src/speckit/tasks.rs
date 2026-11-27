@@ -53,6 +53,10 @@ fn text_if_file(path: &Path) -> Result<String, String> {
 /// # Errors
 /// A tasks-done.md that cannot be read.
 pub fn done_text(d: &Path) -> Result<String, String> {
+    if d.join(super::archive::DIR).is_dir() {
+        // split into parts (451 T537): every part, then the flat tail
+        return Ok(super::archive::text(&super::archive::files(d), DONE));
+    }
     text_if_file(&d.join(DONE))
 }
 
@@ -247,7 +251,10 @@ pub fn archive(d: &Path) -> Result<Vec<String>, String> {
         return Ok(Vec::new());
     }
     let name = super::py_name(d);
-    let Some((open, done, ids)) = archive_text(&read_text(&path)?, &done_text(d)?, &name) else {
+    // the flat tail alone: a split feature's parts are folded, never rewritten (451 T537)
+    let Some((open, done, ids)) =
+        archive_text(&read_text(&path)?, &text_if_file(&d.join(DONE))?, &name)
+    else {
         return Ok(Vec::new());
     };
     let write =

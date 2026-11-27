@@ -598,9 +598,16 @@ fn started_answers(
             r"(?m)^- \[[xX]\] {}\b",
             fancy_regex::escape(&task)
         ));
-        if ["tasks.md", "tasks-done.md"]
-            .iter()
-            .any(|n| found(&ticked, &shown.get(&format!("{f}/{n}")).unwrap_or_default()))
+        // the archived tasks in either layout at the base: tasks-done.md, or its parts under archive/ (451 T537)
+        let done = {
+            let cell = std::cell::RefCell::new(&mut *shown);
+            let at = |rel: &str| cell.borrow_mut().get(&format!("{f}/{rel}"));
+            l7r_shared::speckit::archive::text(&at, l7r_shared::speckit::archive::TASKS_DONE)
+        };
+        if found(
+            &ticked,
+            &shown.get(&format!("{f}/tasks.md")).unwrap_or_default(),
+        ) || found(&ticked, &done)
         {
             return (
                 false,

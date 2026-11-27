@@ -142,3 +142,56 @@ a split record whole.
   same bundle the clone's HEAD builds.
 - To repeat this without those effects: `t536-readers-run.py` now leaves UserPromptSubmit out unless `T536_PROMPT=1`, and drops the
   stub plan-verdict and tick cases (both refused before any read); the other hook cases still write a few guard-log rows.
+
+## The AFTER figure (451 T537, observed 2026-11-27)
+
+Read with T536's own shim and readers script (`t536-readers-run.py`, given one knob, `T536_OPEN`, for the open task its section
+and decide cases name: T536 was ticked by then, so T537, 451's one open task), driven case by case by `t537-run-cases.sh`, summed by
+`t537-summary.py`. T536's snapshot was gone, so BEFORE and AFTER are both of ONE new copy, and no figure here is set against
+T536's tables above: the session clone's 451 records at 2026-11-27T22:17Z (clone HEAD de78f0197e; plan-done.md 3,661,843 bytes,
+tasks-done.md 605,800, plan-review.json 5,063,807, plan.md 276,641, tasks.md 32,787, the event log 54,828,539) on a
+`git clone --shared` of the pool tree at fa0c5e1bf8, with T537's built `l7r-gate` (it knows `plan split`). BEFORE ran on the flat
+records (`t537-before-flat.txt`); then `make archive-split F=451` ran IN THE COPY (72 parts: 62 of plan-done.md, 10 of
+tasks-done.md; the largest 65,652 bytes with its header line, the smallest 22,327) and AFTER ran on the split (`t537-after-split.txt`).
+3 runs a case for the wall median; the copy's tasks.md and plan.md put back after each case (task-add files a task).
+
+Checked on the same copy (`t537-eq.py` -> `t537-eq.txt`): each record's part bodies, joined, equal its flat file minus the title
+line, byte for byte; `make plan-section` of all 403 ids the plan-done index names, in one call, printed the same 3,672,642 bytes
+split and flat. `check spec-lint .` (every feature, the parts included), `check house-style-delta .`, `check question-size` and
+`check file-scale .` passed on the copy with the split committed.
+
+| case | plan-done.md: before / after (files read) | tasks-done.md: before / after (files) | index.json + INDEX.md, after | plan-review.json (unsplit, both) | wall ms before / after |
+|---|---|---|---|---|---|
+| make plan-section T=T537 (an open task) | 0 / 0 | 0 / 0 | 0 | 0 | 9 / 8 |
+| make plan-section T=T499 (a done task) | **3,661,843 (1) / 56,874 (1 part)** | 0 / 0 | 61,460 | 0 | **37 / 13** |
+| make decide F=451 T=T537 (refused at the stub) | 0 / 0 | 3,029,000 (1) / 3,035,605 (10) | 245,840 | 0 | 218 / 222 |
+| make plan-delta F=451 | 40,280,273 (1) / 40,377,403 (62) | 1,817,400 (1) / 1,821,363 (10) | 798,980 | 10,127,614 | 2,398 / 2,459 |
+| make queue F=451 | 0 / 0 | 605,800 (1) / 607,121 (10) | 61,460 | 0 | 20 / 24 |
+| make builder-next F=451 | 0 / 0 | 605,800 (1) / 607,121 (10) | 61,460 | 0 | 17 / 23 |
+| speckit-todo --holding (the push) | 0 / 0 | 0 / 0 | 0 | 0 | 8 / 7 |
+| make task-add F=451, split uncommitted | 3,661,843 (1) / 29,365,384 (62) | 7,875,400 (1) / 9,713,936 (10) | 904,048 | 0 | 2,739 / 2,807 |
+| make task-add F=451, split committed (`t537-after-taskadd-committed.txt`, n=1) | 3,661,843 (1) / 14,682,692 (62) | 7,875,400 (1) / 7,374,760 (10) | 658,208 | 0 | 2,739 / 3,729 (n=1) |
+
+Not rerun, and why: the hook cases (T536: no hook reads plan-done.md or tasks-done.md, and T537 moved no hook's reader; the plan
+review's dispatch reads plan-review.json, which is not split); `make task-time`, `make where-time` and `make feature-report` (the
+event log, which the split does not touch; feature-report reads tasks-done.md once, 0.6 MB, and its reader is repointed to the
+parts by this task, below).
+
+### Reading
+
+- **A reader of ONE task reads one part.** `make plan-section` of a done task read 56,874 bytes of one part where it read the
+  3,661,843-byte plan-done.md whole (64 times less), in 13 ms against 37. That is the case the GM named: a session after one task's
+  section, by the tool or by hand (the note `archive/INDEX.md` says how: `make plan-section`, else `index.json` to the one part).
+- **A reader of EVERY archived block or box still reads every part, as often as it read the flat file.** `make plan-delta` (plan-done
+  eleven times a call, 40.4 MB, and plan-review.json twice) is 462 T543's; `make decide` (tasks-done five times) and `make task-add`
+  (below) are filed as 462's (CANDIDATES of T537's report). They ask a question of the whole set (a block removed from anywhere, a
+  box anywhere), so the split cannot narrow them; their repeats are theirs to cut. `index.json` (61 KB) is read once more a whole
+  read, 4 times in decide and 13 in plan-delta.
+- **make task-add's quick reads more, on the copy only while the split is in the delta:** its checks read the plan-done parts four
+  times (14.7 MB with the split committed) where they read the flat plan-done.md not at all; traced (`t537-quick-trace.py`, each of
+  quick's checks under the read counter) to `check house-style-delta`, which reads a NEW file of the delta whole (each part once, 3.67
+  MB) - the parts are new against the copy's `origin/main`. It judged them clean. Once the split is on main, only a tick's new part
+  is in a delta, the text the tick would have appended to plan-done.md, which the check judged as added lines before. `check
+  spec-lint --delta` reads the tasks-done parts twice (1.2 MB), as it read tasks-done.md. The decide repeats are filed as 462 T547.
+- **SC-002 as T536 worded it ("no row marked whole reads a split record whole") holds for the per-task reader and not for the
+  whole-set readers above, nor for plan-review.json, which T537 leaves to 462 T545.**

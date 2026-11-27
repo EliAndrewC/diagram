@@ -1,0 +1,60 @@
+## make plan-section T=T537	exit 0	wall median 9 ms (n=3, min 8, max 9)
+  specs/451/plan.md	276,641 bytes	1 read calls	1 process(es)
+  output head: ==> T537 (plan.md) | ### T537 (<why: the finding or measurement that files it>)
+## make decide F=451 T=T537	exit 2	wall median 218 ms (n=3, min 218, max 219)
+  specs/451/plan.md	829,923 bytes	3 read calls	1 process(es)
+  specs/451/request.md	121,300 bytes	2 read calls	1 process(es)
+  specs/451/research.md	35,520 bytes	2 read calls	1 process(es)
+  specs/451/spec.md	113,238 bytes	6 read calls	1 process(es)
+  specs/451/tasks-done.md	3,029,000 bytes	5 read calls	1 process(es)
+  specs/451/tasks.md	196,722 bytes	6 read calls	1 process(es)
+  output head: decide: refused - 2 findings - every one of the section's, reported together: fix them all, then run it once more | (1) the task's own line of tasks.md quotes the GM with words request.md does not hold - a plan review judges the section aga
+## make plan-delta F=451	exit 0	wall median 2398 ms (n=3, min 2375, max 2843)
+  specs/451/plan-done.md	40,280,273 bytes	11 read calls	1 process(es)
+  specs/451/plan-review.json	10,127,614 bytes	2 read calls	1 process(es)
+  specs/451/plan.md	1,383,205 bytes	5 read calls	1 process(es)
+  specs/451/request.md	60,650 bytes	1 read calls	1 process(es)
+  specs/451/research.md	35,520 bytes	2 read calls	1 process(es)
+  specs/451/spec.md	132,111 bytes	7 read calls	1 process(es)
+  specs/451/tasks-done.md	1,817,400 bytes	3 read calls	1 process(es)
+  specs/451/tasks.md	131,148 bytes	4 read calls	1 process(es)
+  WRITE OUTSIDE SCRATCH: /tmp/l7r-check/plan-451-time-retro-and-efficiency-blocks-plan-3cf28c3c/MANIFEST.md
+  WRITE OUTSIDE SCRATCH: /tmp/l7r-check/plan-451-time-retro-and-efficiency-blocks-plan-3cf28c3c/blocks.md
+  WRITE OUTSIDE SCRATCH: /tmp/l7r-check/plan-451-time-retro-and-efficiency-blocks-plan-3cf28c3c/earlier.md
+  WRITE OUTSIDE SCRATCH: /tmp/l7r-check/plan-451-time-retro-and-efficiency-blocks-plan-3cf28c3c/request-index.md
+  WRITE OUTSIDE SCRATCH: /tmp/l7r-check/plan-451-time-retro-and-efficiency-blocks-plan-3cf28c3c/request.md
+  WRITE OUTSIDE SCRATCH: /tmp/l7r-check/plan-451-time-retro-and-efficiency-blocks-plan-3cf28c3c/rulings.md
+  WRITE OUTSIDE SCRATCH: /tmp/l7r-check/plan-451-time-retro-and-efficiency-blocks-plan-3cf28c3c/spec-cited.md
+  WRITE OUTSIDE SCRATCH: /tmp/l7r-check/plan-451-time-retro-and-efficiency-blocks-plan-3cf28c3c/spec-index.md
+  output head: MODE 4: PLAN REVIEW of 17 changed block(s) of feature 451-time-retro-and-efficiency's plan (feature 375 FR-043), on their bundle: read /tmp/l7r-check/plan-451-time-retro-and-efficiency-blocks-plan-3cf28c3c/MANIFEST.md and the files beside i
+## make queue F=451	exit 0	wall median 20 ms (n=3, min 17, max 20)
+  specs/451/plan.md	276,641 bytes	1 read calls	1 process(es)
+  specs/451/queue.txt	11,082 bytes	1 read calls	1 process(es)
+  specs/451/spec.md	18,873 bytes	1 read calls	1 process(es)
+  specs/451/tasks-done.md	605,800 bytes	1 read calls	1 process(es)
+  specs/451/tasks.md	98,361 bytes	3 read calls	1 process(es)
+  output head: queue: specs/451-time-retro-and-efficiency/queue.txt - 61 entries: 61 landed, 0 built, 0 in flight, 0 waiting, 0 READY |   line  14  T321           build-half    landed
+## make builder-next F=451	exit 0	wall median 17 ms (n=3, min 16, max 18)
+  specs/451/plan.md	276,641 bytes	1 read calls	1 process(es)
+  specs/451/queue.txt	11,082 bytes	1 read calls	1 process(es)
+  specs/451/spec.md	18,873 bytes	1 read calls	1 process(es)
+  specs/451/tasks-done.md	605,800 bytes	1 read calls	1 process(es)
+  specs/451/tasks.md	98,361 bytes	3 read calls	1 process(es)
+  output head: builder-next: no entry of specs/451-time-retro-and-efficiency/queue.txt to hand out - the queue is empty: each entry is landed, built or in flight | builder-next: 0 of 3 builders in flight (L7R_BUILDERS), 0 pool tree(s) free
+## speckit-todo --holding (the push)	exit 0	wall median 8 ms (n=3, min 8, max 8)
+  (none of 451's records read)
+  output head: 
+## make plan-section T=T499 (a done task's section, in plan-done.md)	exit 0	wall median 37 ms (n=3, min 34, max 38)
+  specs/451/plan-done.md	3,661,843 bytes	1 read calls	1 process(es)
+  specs/451/plan.md	276,641 bytes	1 read calls	1 process(es)
+  output head: ==> T499 (plan-done.md) | ### T499 (found by the GM's question of 2026-11-27, whether builders pull the 824,251-byte plan.md and 3,131,453-byte plan-done.md into context: no figure said)
+## make task-add F=451	exit 0	wall median 2739 ms (n=3, min 2635, max 2779)
+  events/451-time-retro-and-efficiency.jsonl	0 bytes	0 read calls	3 process(es)
+  specs/451/plan-done.md	3,661,843 bytes	1 read calls	1 process(es)
+  specs/451/plan.md	1,666,143 bytes	6 read calls	10 process(es)
+  specs/451/research.md	142,080 bytes	8 read calls	4 process(es)
+  specs/451/spec.md	452,952 bytes	24 read calls	4 process(es)
+  specs/451/tasks-done.md	7,875,400 bytes	13 read calls	17 process(es)
+  specs/451/tasks.md	459,564 bytes	14 read calls	14 process(es)
+  output head: task-add: T540 filed in specs/451-time-retro-and-efficiency/tasks.md, its section in specs/451-time-retro-and-efficiency/plan.md (the template: fill each <...>) | task-add: make quick is already red, and not by T540 - the same failures with
+END

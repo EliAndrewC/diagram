@@ -394,4 +394,12 @@ fn a_feature_whose_ticked_tasks_were_archived_reads_as_it_did() {
         super::at_rev(&at, "HEAD", "376-older").unwrap().state,
         "closed"
     );
+    // 451 T537: split into parts at the revision, it reads closed as it did flat
+    crate::speckit::archive::fold(std::path::Path::new(&d), true).unwrap();
+    assert!(!std::path::Path::new(&format!("{d}/tasks-done.md")).exists());
+    commit(&at, "split");
+    assert_eq!(
+        super::at_rev(&at, "HEAD", "376-older").unwrap().state,
+        "closed"
+    );
 }

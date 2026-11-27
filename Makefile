@@ -592,6 +592,10 @@ plan-archive:   ## [project] move a plan's finished sections (every task ticked,
 	@if [ -z "$(F)" ]; then printf 'make plan-archive: F=<feature> is required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan archive "$(F)"
 
+archive-split:  ## [project] cut a feature's plan-done.md and tasks-done.md into parts of at most 64 KiB under specs/<feature>/archive/, whole task by whole task, with index.json and the reader's note INDEX.md (451 T537); rerunnable, a flat tail written since folded in; the one way a feature is first split, after which the tick folds its tail on its own   F=<feature>
+	@if [ -z "$(F)" ]; then printf 'make archive-split: F=<feature> is required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan split "$(F)"
+
 check-closed:   ## [project] close the checks in flight on a page or pop-up whose agent went silent (the freeze names it)   SUBJECT=q:0105|modal:sheet/bath REASON="<why>" [AGENT=<id> a check you stopped yourself, closed though not silent]
 	@if [ -z "$$SUBJECT" ] || [ -z "$$REASON" ]; then printf 'make check-closed: SUBJECT=<q:NNNN or modal:<registry>/<slug>> and REASON="<why>" are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh checks-close "$$SUBJECT" "$$REASON" $(if $(AGENT),"$(AGENT)",)

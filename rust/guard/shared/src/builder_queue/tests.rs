@@ -385,6 +385,11 @@ fn the_facts_are_read_from_the_clone() {
     let bad = board(&clone, &common, &clone.join("specs/451-x"), &trees).unwrap_err();
     let named = bad.contains("specs/451-x/queue.txt line 1: 2 field(s) found");
     assert!(named, "{bad}");
+    // 451 T537: the archive split into parts, its box is still ticked
+    crate::speckit::archive::fold(&clone.join("specs/451-x"), true).unwrap();
+    assert!(!clone.join("specs/451-x/tasks-done.md").exists());
+    let split = facts(&clone, &common, &clone.join("specs/451-x"), &trees);
+    assert_eq!(split.ticked, set(&["T1", "T2", "T9"]));
 }
 
 #[test]

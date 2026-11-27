@@ -127,3 +127,47 @@ fn another_feature_s_number_carries_across_a_list_of_its_ids() {
     let skip = ["T100".to_owned()];
     assert_eq!(cited(text, "451", &skip), ["T96", "T97", "T98", "T99"]);
 }
+
+/// 451 T537: after `plan split`, an archived task's sections print as they did from the flat plan-done.md, read from its part alone;
+/// a second split folds a tail in; a split that cannot write names the file.
+#[test]
+fn a_split_archive_prints_an_archived_task_as_the_flat_file_did() {
+    let root = repo();
+    let dir = feature_at(&root, Some(PLAN), None, "451-x");
+    std::fs::write(dir.join("plan-done.md"), DONE).unwrap();
+    let flat = run(&root, &["section", "451", "T11,T05"]).stdout;
+    let split = run(&root, &["split", "451"]);
+    assert_eq!(split.code, 0, "{}", split.stderr);
+    assert!(
+        split.stdout.starts_with("split: 1 part(s) written under "),
+        "{}",
+        split.stdout
+    );
+    assert!(!dir.join("plan-done.md").exists() && dir.join("archive/INDEX.md").is_file());
+    assert_eq!(run(&root, &["section", "451", "T11,T05"]).stdout, flat);
+    // the tail a later tick writes is read beside the parts, then folded by the next split
+    std::fs::write(dir.join("plan-done.md"), "### T12 (late)\n\n- twelve\n").unwrap();
+    assert!(run(&root, &["section", "451", "T12"])
+        .stdout
+        .contains("- twelve"));
+    assert!(run(&root, &["split", "451"])
+        .stdout
+        .starts_with("split: 1 part(s)"));
+    assert!(run(&root, &["section", "451", "T12"])
+        .stdout
+        .contains("- twelve"));
+    std::fs::write(dir.join("plan-done.md"), "### T13 (later)\n").unwrap();
+    std::fs::remove_dir_all(dir.join("archive/plan-done")).unwrap();
+    std::fs::write(
+        dir.join("archive/plan-done"),
+        "a file where the directory goes",
+    )
+    .unwrap();
+    let refused = run(&root, &["split", "451"]);
+    assert_eq!(refused.code, 1);
+    assert!(
+        refused.stderr.starts_with("split: ") && refused.stderr.contains("archive/plan-done"),
+        "{}",
+        refused.stderr
+    );
+}

@@ -300,7 +300,7 @@ fn read(path: &Path) -> String {
 }
 
 fn plans_of(dir: &Path) -> String {
-    read(&dir.join("plan.md")) + &read(&dir.join("plan-done.md"))
+    read(&dir.join("plan.md")) + &l7r_shared::speckit::archive::plan_done(dir)
 }
 
 /// The line a cited id stands on when it is not found where it is named.

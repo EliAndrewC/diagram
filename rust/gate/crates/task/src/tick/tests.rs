@@ -258,6 +258,44 @@ fn a_tick_outside_the_root_or_of_a_tasks_md_it_cannot_write_raises() {
     assert_eq!(locked.code, 1, "{}", locked.stderr);
 }
 
+/// 451 T537: where the feature's records are split, what a tick archives is folded into a new part; a fold that cannot write is said
+/// and the tick done, its task in the flat tail.
+#[test]
+fn a_split_feature_s_tick_folds_its_archive_into_parts() {
+    let dir = repo("split");
+    let root = root_of(&dir);
+    let d = root.join("specs/9001-x");
+    std::fs::remove_file(d.join("plan.md")).unwrap();
+    std::fs::remove_file(root.join("docs/approach-checklist.md")).unwrap();
+    // a task left open, so no tick here closes the feature
+    let tasks = std::fs::read_to_string(d.join("tasks.md")).unwrap();
+    std::fs::write(d.join("tasks.md"), tasks + "- [ ] T04 left open\n").unwrap();
+    assert_eq!(tick(&ask(&root, &d, "T02", "n"), false, false).code, 0);
+    l7r_shared::speckit::archive::fold(&d, true).unwrap();
+    let said = tick(&ask(&root, &d, "T01", "n"), false, false);
+    assert_eq!(said.code, 0, "{}", said.stderr);
+    assert!(
+        said.stdout
+            .contains("tick: folded the archive into 1 part(s) under "),
+        "{}",
+        said.stdout
+    );
+    assert!(!d.join("tasks-done.md").exists());
+    let done = l7r_shared::speckit::tasks::done_text(&d).unwrap();
+    assert!(done.contains("- [x] T01 the first") && done.contains("- [x] T09 done"));
+    // the parts' directory a file: the fold fails, the tick stands
+    std::fs::remove_dir_all(d.join("archive/tasks-done")).unwrap();
+    std::fs::write(d.join("archive/tasks-done"), "in the way").unwrap();
+    let kept = tick(&ask(&root, &d, "T03", "n"), true, false);
+    assert_eq!(kept.code, 0, "{}", kept.stderr);
+    assert!(
+        kept.stderr.contains("tick: the archive stays flat - "),
+        "{}",
+        kept.stderr
+    );
+    assert!(d.join("tasks-done.md").is_file());
+}
+
 #[test]
 fn a_feature_with_no_plan_ticks_with_no_archive() {
     let dir = repo("no-plan");

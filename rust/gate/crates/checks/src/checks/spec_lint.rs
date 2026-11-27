@@ -426,6 +426,14 @@ fn lint(spec_dir: &Path, tree_root: &Path) -> Vec<String> {
         if done.is_file() {
             files.push(done);
         }
+        // a split archive's parts, each a file of the feature's tasks as tasks-done.md was (451 T537)
+        let at = l7r_shared::speckit::archive::files(spec_dir);
+        files.extend(
+            l7r_shared::speckit::archive::paths(&at)
+                .into_iter()
+                .filter(|p| p.starts_with("archive/tasks-done/"))
+                .map(|p| spec_dir.join(p)),
+        );
         bad.extend(check_figures(&spec));
         bad.extend(check_orphans(&spec));
         for f in &files {

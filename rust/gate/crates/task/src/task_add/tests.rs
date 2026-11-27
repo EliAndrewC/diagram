@@ -91,6 +91,22 @@ fn a_task_takes_the_next_id_and_its_box_and_section_land_in_place() {
         .contains("### T09 mine\n\n6. **The exits.** Green: done.\n\n## T04"));
 }
 
+/// 451 T537: a split archive's ids are read from its index - the tree's, and on `main` and `origin/main` once the tree's is gone.
+#[test]
+fn a_split_archive_s_ids_are_read_from_its_index_here_and_on_the_refs() {
+    let (_dir, root) = quick_repo("task-add-split");
+    let d = root.join("specs/9001-x");
+    put(&root, "specs/9001-x/tasks-done.md", "- [x] T20 archived\n");
+    l7r_shared::speckit::archive::fold(&d, true).unwrap();
+    assert!(!d.join("tasks-done.md").exists());
+    // the tree's index alone: neither ref holds one, so each show of it fails
+    assert_eq!(next_id(&d).unwrap(), "T21");
+    landed(&root);
+    std::fs::remove_dir_all(d.join("archive")).unwrap();
+    // the refs' index, the tree holding none
+    assert_eq!(next_id(&d).unwrap(), "T21");
+}
+
 #[test]
 fn the_box_and_the_section_go_at_the_end_with_no_anchor() {
     assert_eq!(

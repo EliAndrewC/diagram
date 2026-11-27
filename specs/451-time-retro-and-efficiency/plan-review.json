@@ -4716,6 +4716,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T537 (462 FR-004 and SC-002, the GM's go of 2026-11-27, \"doing the split that we discussed\", on future sessions \"naively just opening these very large files and then blowing through their own context windows\": 451's finished records cut into parts a reader of one task can open safely, every tool that reads them pointed at the new layout)": {
+   "sha256": "bebaa5b4238810efbe6b2b98889e5cd9d2694577ea01ba742ffae899410fc817",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "round-arbiter"
+  },
+  "### T537 Approach (checklist part A)": {
+   "sha256": "4fb47d1253617682eece7b795145650a924bfcd116b6b7bc20fc7416ee81c9b6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -44263,6 +44275,99 @@
      "why": "This is 462 FR-004's order and SC-002's 'before figure recorded before T537 lands', with the means to read the after figure the same way."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T537 (462 FR-004 and SC-002, the GM's go of 2026-11-27, \"doing the split that we discussed\", on future sessions \"naively just opening these very large files and then blowing through their own context windows\": 451's finished records cut into parts a reader of one task can open safely, every tool that reads them pointed at the new layout)",
+    "### T537 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T537-layout",
+     "summary": "The archive layout: archive/plan-done and archive/tasks-done parts each with a header, archive/index.json, and archive/INDEX.md, a reader's note saying what is where, how to find one task, and warning off whole reads, cat archive/* and broad greps; an unsplit feature reads its flat files as before.",
+     "class": "within",
+     "why": "This is the GM's 'mechanically split up the large files into smaller files' with notes 'cautioning future sessions ... to avoid like wrecking their context usage', and it names his grep worry. One gap: the GM asked for notes 'explaining what we did and why' as well as cautioning, and the block lists where things are, the lookup route and the warning, but not the why: that the split was made because sessions were blowing their context windows. One sentence in INDEX.md closes that. Not a narrowing of the request's purpose."
+    },
+    {
+     "id": "T537-cut",
+     "summary": "The cut: pieces at ## / ### headings and column-0 boxes, taken in runs in the record's own order, packed under BOUND = 65,536 bytes (a GUESS knob); a run larger than BOUND stands alone.",
+     "class": "within",
+     "why": "How the mechanical split is done, which the request and spec leave open. The record-order choice keeps make plan-section's output as before (observed by the plan, one-shot label). Aside, not a ruling: the goal line says 'at most 64 KiB' but the largest part is 65,652 bytes with its header, and a run larger than BOUND stands alone, so that line should say 'about 64 KiB' or name the exception."
+    },
+    {
+     "id": "T537-fold",
+     "summary": "The fold runs unforced at every tick and in make plan-archive, ONLY where archive/ already stands; no other feature is split unasked; a size trigger is left to 462 T546; a failed tick commit's put-back cleans the feature's archive/.",
+     "class": "within",
+     "why": "The GM spoke of 'this feature', meaning 451's records, and 462 FR-004 names 451's records. Folding new ticks into parts keeps the split records split. Splitting other features automatically was not asked, so leaving the size trigger to T546 narrows nothing."
+    },
+    {
+     "id": "T537-readers-repointed",
+     "summary": "Every reader of the flat records is repointed through archive.rs (done_text and its callers, plan_done, plan-section reading only the task's parts, task-add's next id from the index, builder-tree, the queue, the feature-approval guard, started-answers, spec-lint over the parts); some are left by judgment because they hold names, not reads, or never read the flat records.",
+     "class": "within",
+     "why": "'Every tool that reads them pointed at the new layout' is what the split needs to work. Keeping the readers' outputs as they were is what 'everything works' means here, and no exactness standard is applied."
+    },
+    {
+     "id": "T537-whole-set-readers-left",
+     "summary": "Readers whose job is the whole set (make plan-delta, make decide, stale-terms) are left reading every part as often as they read the flat file; their cost is filed in 462 as T543 and T547 and called a cost, not a defect.",
+     "class": "narrowing",
+     "why": "LEGITIMATE against SC-002's 'no reader named there reads a record whole'. A mechanical cut cannot make a reader whose job needs every task read less, so the literal rule is physically impossible for these readers. The bytes stay inside a tool process and do not reach a session's context window, which is the harm the GM named. Ruled on the plan's own statement of what these readers do; T536's named list is not in the bundle.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T537-task-add-quick-worse",
+     "summary": "make task-add's quick now reads the plan-done parts four times (14.7 MB) where it read the flat plan-done.md not at all; filed as 462 T547 and called a cost, not a defect.",
+     "class": "narrowing",
+     "why": "LEGITIMATE, but recorded. This is a read the split ADDS, not one it leaves. It contradicts block 1's statement that the readers left by judgment each read 'what it read before', and the plan should say which check now reads the parts and why. Under constitution XIV it is a cost, not a wrong outcome: the bytes stay in-process and do not reach a session's context, and it is filed. It does not block. If that check now RULES on archived text it used to skip (refusing or flagging good work), that would be a defect, and the plan should state that it does not.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T537-plan-review-json-deferred",
+     "summary": "The third of FR-004's records, plan-review.json (5.0 MB, observed 2026-11-27, the largest), is not split by T537 and is carried by 462 T545, because its readers parse it as one JSON record and a split changes the plan crate's record rather than cutting text. INDEX.md is not said to warn a session off it meanwhile.",
+     "class": "narrowing",
+     "why": "NOT LEGITIMATE. 462 FR-004 assigns the split of 451's large records to T537, and the plan itself counts three records and splits two. The stated reason, that its readers parse one JSON record so a split changes the plan crate, is 'harder to implement, needs more of the codebase changed'. That is on the not-legitimate list: a JSON record can be split, so it is not impossible. Nothing in the GM's words excludes it, and doing it literally does not defeat his purpose. On purpose, this is the largest file, exactly the one a future session 'naively just opening these very large files' would hit. A filed task in another feature is not a legitimizer, and T545's text and order are not in the bundle. Two things clear this: (a) T537 splits plan-review.json, or the third record is moved to 462 T545 by an amendment to 462's spec (FR-004's T537 assignment) or by an arbiter ruling; and in either case (b) INDEX.md, or a note beside plan-review.json, warns sessions off reading it whole NOW, which costs nothing and need not wait for the split.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T537-real-split-after-landing",
+     "summary": "The real 451 records are not split in T537's push. The session runs make archive-split F=451 once T537's code is on main and commits the flat files' deletions and archive/. The after figure is measured on a copy.",
+     "class": "narrowing",
+     "why": "LEGITIMATE as sequencing. The readers must be on main before the flat files go, or an older guard binary in the mirror reads a missing file. The records also keep changing until 451's closing set lands, so a deletion committed in the same push would conflict. This is a real ordering constraint, not a preference. The 'advisor's ruling' is given no weight; the ordering reason stands on its own. The split still happens. The plan should make that run a tracked step, a ticked task or the exit's green condition, rather than a sentence, so T537 cannot be ticked and the split forgotten.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T537-feature-report-fix",
+     "summary": "make feature-report's tasks_done and tick times, and make where-time's tick windows, read the split layout (done_text, and git log -p over archive/tasks-done beside the flat file); pinned in feature_report/sources/tests.rs.",
+     "class": "within",
+     "why": "A defect the split would cause, a wrong ticked count, fixed in the same task. That is the 'fix as we go' rule and part of 'every tool pointed at the new layout'."
+    },
+    {
+     "id": "T537-owed-tests",
+     "summary": "The owed tests (the tick's fold, plan-archive's fold Err, task-add's index closure, spec-lint over a part, started-answers and the feature-approval guard at a split base, builder-tree and the queue on a split dir, a part with no header, and a landing of a split feature) are written in the closing half.",
+     "class": "within",
+     "why": "Tests whose only effect is making the requested split work and keep working. That is enforcement of the request, not unrequested scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T537 (462 FR-004 and SC-002, the GM's go of 2026-11-27, \"doing the split that we discussed\", on future sessions \"naively just opening these very large files and then blowing through their own context windows\": 451's finished records cut into parts a reader of one task can open safely, every tool that reads them pointed at the new layout)",
+    "### T537 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T537-plan-review-json",
+     "class": "within",
+     "summary": "the round arbiter accepted T537's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T537"
+   ]
   }
  ],
  "tasks": {
@@ -65073,6 +65178,19 @@
      "summary": "Classed as performance work under 451 FR-013 (a measurement of where tokens go in the builders' loop).",
      "class": "within",
      "why": "FR-013 counts work that measures where the time goes in the builders' loop as performance work for ordering ('this kind of measurement task to be counted as a performance task'); a by-model token split of make task-time is such a reader."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T537": {
+   "section_sha256": "b3d9f5871e581022e3b201044f5784e69160e2dba611280cc21a9c5e19466ab9",
+   "reviewed": "2026-11-27",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T537-plan-review-json",
+     "class": "within",
+     "summary": "the round arbiter accepted T537's section as it stands"
     }
    ],
    "verdict": "CLEAR"

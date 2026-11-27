@@ -88,6 +88,19 @@ fn the_spec_tasks_and_starts_are_read() {
         ["T01", "T02", "T03"]
     );
     assert_eq!(tasks_done(&d.join("specs/901-s")).unwrap(), (3, 4));
+    // 451 T537: split, the parts count as tasks-done.md did, and a tick folded into a new part in its write is found there
+    let s = d.join("specs/901-s");
+    l7r_shared::speckit::archive::fold(&s, true).unwrap();
+    git(&d, "2026-11-01T14:00:00Z", &["add", "-A"]);
+    git(&d, "2026-11-01T14:00:00Z", &["commit", "-qm", "901 split"]);
+    assert_eq!(tasks_done(&s).unwrap(), (3, 4));
+    put(&d, "specs/901-s/tasks.md", "- [x] T01\n- [x] T02\n");
+    put(&d, "specs/901-s/tasks-done.md", "- [x] T04\n");
+    l7r_shared::speckit::archive::fold(&s, false).unwrap();
+    git(&d, "2026-11-01T15:00:00Z", &["add", "-A"]);
+    git(&d, "2026-11-01T15:00:00Z", &["commit", "-qm", "901 T04"]);
+    assert_eq!(task_ticks(&d, "901-s").unwrap().len(), 4);
+    assert_eq!(tasks_done(&s).unwrap(), (4, 4));
     let starts = task_starts(&d, "901-s").unwrap();
     assert_eq!(
         starts.iter().map(|s| s.0.as_str()).collect::<Vec<_>>(),

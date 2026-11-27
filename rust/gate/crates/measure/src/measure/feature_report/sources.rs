@@ -232,7 +232,8 @@ pub fn plan_blocks(root: &Path, name: &str, shas: &HashSet<&str>) -> Result<usiz
     Ok(n)
 }
 
-/// (ticked, boxes) of `tasks.md` and the ticked tasks archived in `tasks-done.md` (feature 449 T142) (`tasks_done`).
+/// (ticked, boxes) of `tasks.md` and the ticked tasks archived in `tasks-done.md` (feature 449 T142), or in its parts where the
+/// feature is split (451 T537: read flat, a split feature's report counted only the tail a tick wrote since) (`tasks_done`).
 ///
 /// # Errors
 ///
@@ -240,7 +241,7 @@ pub fn plan_blocks(root: &Path, name: &str, shas: &HashSet<&str>) -> Result<usiz
 pub fn tasks_done(d: &Path) -> Result<(usize, usize), Raised> {
     let text = l7r_shared::speckit::tasks::joined(
         &super::super::events::text_if_file(&d.join("tasks.md"))?,
-        &super::super::events::text_if_file(&d.join("tasks-done.md"))?,
+        &l7r_shared::speckit::tasks::done_text(d)?,
     );
     Ok((
         DONE.find_iter(&text).map_while(Result::ok).count(),
@@ -306,6 +307,8 @@ pub fn task_ticks(root: &Path, name: &str) -> Result<Vec<(String, f64)>, Raised>
             "--",
             &format!("specs/{name}/tasks.md"),
             &format!("specs/{name}/tasks-done.md"),
+            // a split feature's tick folds the task into a new part in the same write (451 T537)
+            &format!("specs/{name}/archive/tasks-done"),
         ],
     )?;
     let mut out: Vec<(String, f64)> = Vec::new();

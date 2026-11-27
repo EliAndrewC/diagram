@@ -265,7 +265,28 @@ fn check_7_a_task_id_taken_twice() {
     assert!(lint(&dir, &dir)
         .iter()
         .any(|b| b.contains("tasks-done.md:1: cites FR-404")));
-    std::fs::remove_file(dir.join("tasks-done.md")).unwrap();
+    // 451 T537: split into parts, each part is linted as tasks-done.md was, and an id filed again is taken there too
+    l7r_shared::speckit::archive::fold(&dir, true).unwrap();
+    std::fs::write(
+        dir.join("tasks.md"),
+        "- [ ] T93 a figure\n      research: rendering\n- [ ] T95 again\n",
+    )
+    .unwrap();
+    let split = lint(&dir, &dir);
+    let part = "archive/tasks-done/001-T95-T95.md:3: ";
+    assert!(
+        split
+            .iter()
+            .any(|b| b.contains(&format!("{part}cites FR-404"))),
+        "{split:?}"
+    );
+    assert!(
+        split
+            .iter()
+            .any(|b| b.contains(&format!("{part}task id T95 is taken"))),
+        "{split:?}"
+    );
+    std::fs::remove_dir_all(dir.join("archive")).unwrap();
     std::fs::write(
         dir.join("tasks.md"),
         "- [ ] T93 a figure\n- [ ] T93a its half\n",

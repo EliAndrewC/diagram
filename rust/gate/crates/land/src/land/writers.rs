@@ -164,9 +164,12 @@ impl Land {
                 "clean",
                 "-q",
                 "-f",
+                "-d",
                 "--",
                 &format!("{rel}/tasks-done.md"),
                 &format!("{rel}/plan-done.md"),
+                // the parts a tick's fold wrote (451 T537)
+                &format!("{rel}/archive"),
             ],
             &[],
         )?;

@@ -333,7 +333,7 @@ pub(super) fn refusal(spec_dir: &Path, root: &Path, task: &str) -> Option<String
         ));
     }
     // a bundle's part B stands with its first task's sections, which that task's tick may archive before the others' (451 T472)
-    let done = std::fs::read_to_string(spec_dir.join("plan-done.md")).unwrap_or_default();
+    let done = l7r_shared::speckit::archive::plan_done(spec_dir);
     let both = format!("{text}\n{done}");
     for row in owed_entries(root) {
         if row["feature"] != *name || row["task"] != task {

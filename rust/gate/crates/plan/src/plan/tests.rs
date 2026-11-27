@@ -517,6 +517,18 @@ fn archive_and_accept_verbs() {
     std::fs::create_dir(dir.join("tasks-done.md")).unwrap();
     assert_eq!(run(&root, &["archive", "375"]).code, 1);
     std::fs::remove_dir(dir.join("tasks-done.md")).unwrap();
+    // 451 T537: a split feature's archive folded into its parts, and a fold that cannot write is the verb's failure
+    std::fs::create_dir_all(dir.join("archive")).unwrap();
+    std::fs::write(dir.join("archive/tasks-done"), "in the way").unwrap();
+    let fold = run(&root, &["archive", "375"]);
+    assert_eq!(fold.code, 1);
+    assert!(
+        fold.stderr.starts_with("plan-archive: ") && fold.stderr.contains("archive/tasks-done"),
+        "{}",
+        fold.stderr
+    );
+    std::fs::remove_dir_all(dir.join("archive")).unwrap();
+    std::fs::remove_file(dir.join("tasks-done.md")).unwrap();
     std::fs::write(dir.join("tasks.md"), "- [ ] T06 the wells\n").unwrap();
     assert_eq!(run(&root, &["arbiter-accept", "999", "x"]).code, 2);
     let trigger = "round:spec-fidelity|plan:375-x#T06@3";

@@ -400,6 +400,9 @@ fn a_tree_whose_tasks_landed_by_any_route_is_free_at_the_next_handout() {
     // T09 is ticked in the fixture's tasks.md, as a land-batch or a hand tick leaves it, and nothing released its tree
     let first = run(&words(&["take", "T09", "9001"]), &root, &e);
     put(&root, "specs/9001-x/tasks-done.md", "- [X] T08 archived\n");
+    // 451 T537: the archive split into parts, T08 is read there
+    l7r_shared::speckit::archive::fold(&root.join("specs/9001-x"), true).unwrap();
+    assert!(!root.join("specs/9001-x/tasks-done.md").exists());
     let again = run(&words(&["take", "T02", "9001"]), &root, &e);
     assert_eq!(again.stdout, first.stdout);
     assert!(

@@ -586,7 +586,7 @@ static TASK_BOX: std::sync::LazyLock<fancy_regex::Regex> =
 /// log, named T377 - in neither 451's plan nor its plan-done - and was read as the whole plan's, recording 18 of 451's owed blocks CLEAR
 /// (observed 2026-11-23); the whole-plan reading of a task with no section stays for the feature's own tasks (T92's plan-stage review).
 fn accept_scope(spec_dir: &Path, trigger: &str, text: &str) -> Option<(Vec<String>, bool)> {
-    let done = std::fs::read_to_string(spec_dir.join("plan-done.md")).unwrap_or_default();
+    let done = l7r_shared::speckit::archive::plan_done(spec_dir);
     let named = named_tasks(trigger);
     let sections = task_sections(text);
     let tasks: Vec<String> = named

@@ -348,26 +348,28 @@ pub(super) fn push_held(
             continue;
         };
         // ...or a ticked task archived in tasks-done.md (feature 449 T142): a feature whose ticked tasks all moved still owes its review
+        // either layout at the reference: the flat files, or their parts under archive/ (451 T537)
+        let at = |rel: &str| {
+            show(root, reference, &format!("{feature}/{rel}"))
+                .map(|b| String::from_utf8_lossy(&b).into_owned())
+        };
         let archived =
-            show(root, reference, &format!("{feature}/tasks-done.md")).unwrap_or_default();
-        let tasks = l7r_shared::speckit::tasks::joined(
-            &String::from_utf8_lossy(&tasks),
-            &String::from_utf8_lossy(&archived),
-        );
+            l7r_shared::speckit::archive::text(&at, l7r_shared::speckit::archive::TASKS_DONE);
+        let tasks = l7r_shared::speckit::tasks::joined(&String::from_utf8_lossy(&tasks), &archived);
         if !has_ticked(&tasks) {
             continue;
         }
         let review = show(root, reference, &format!("{feature}/{RECORD}"))
             .map(|r| String::from_utf8_lossy(&r).into_owned());
         let plan = show(root, reference, &format!("{feature}/plan.md"));
-        let done = show(root, reference, &format!("{feature}/plan-done.md")).unwrap_or_default();
+        let done = l7r_shared::speckit::archive::text(&at, l7r_shared::speckit::archive::PLAN_DONE);
         let history = History::new(&root.join(&feature).join("plan.md"), reference);
         // the push answers for the ticked tasks' sections and the shared blocks, never an open task's (feature 451 T84)
         if let Some((rule, reason, blocks)) = judge_held(
             plan.as_deref(),
             review.as_deref(),
             Some(&history),
-            &String::from_utf8_lossy(&done),
+            &done,
             Some(&scope_of(&tasks, &[])),
         ) {
             out.push((feature, rule, reason, blocks));

@@ -328,8 +328,12 @@ fn landed(p: &Pool, tree: &Tree) -> bool {
             d.file_name()
                 .is_some_and(|n| n.to_string_lossy().starts_with(&prefix))
         })
-        .flat_map(|d| [d.join("tasks.md"), d.join("tasks-done.md")])
-        .map(|f| std::fs::read_to_string(f).unwrap_or_default())
+        .flat_map(|d| {
+            [
+                std::fs::read_to_string(d.join("tasks.md")).unwrap_or_default(),
+                l7r_shared::speckit::tasks::done_text(d).unwrap_or_default(),
+            ]
+        })
         .collect::<Vec<_>>()
         .join("\n");
     let ticked = |task: &String| {

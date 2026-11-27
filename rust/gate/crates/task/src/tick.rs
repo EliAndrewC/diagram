@@ -401,6 +401,22 @@ pub fn tick(ask: &Ask, boxes: bool, landing: bool) -> Reply {
             archived.join(", ")
         );
     }
+    // ...AND FOLDED INTO PARTS (451 T537, the GM 2026-11-27 on sessions "blowing through their own context windows"): where the
+    // feature's records are split (`make archive-split`), what this tick archived joins the parts
+    match l7r_shared::speckit::archive::fold(dir, false) {
+        Ok(parts) if !parts.is_empty() => {
+            let _ = writeln!(
+                out,
+                "tick: folded the archive into {} part(s) under {}/archive/",
+                parts.len(),
+                dir.display()
+            );
+        }
+        Ok(_) => {}
+        Err(why) => {
+            let _ = writeln!(err, "tick: the archive stays flat - {why}");
+        }
+    }
     // one step, the plan's archive and the tasks', recorded on every tick (before T142, only where a plan.md stood)
     let outcome = if moved.is_empty() && archived.is_empty() {
         "unchanged"

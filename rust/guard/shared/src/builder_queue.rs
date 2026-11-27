@@ -543,7 +543,8 @@ pub fn facts(clone: &Path, common: &Path, dir: &Path, trees: &[Tree]) -> Facts {
     let key = key_of(dir);
     // a ticked box is in `tasks.md` until the tick archives it to `tasks-done.md` (449 T142), where nearly every landed task is
     let read = |name: &str| std::fs::read_to_string(dir.join(name)).unwrap_or_default();
-    let tasks = read("tasks.md") + "\n" + &read("tasks-done.md");
+    let tasks =
+        read("tasks.md") + "\n" + &crate::speckit::tasks::done_text(dir).unwrap_or_default();
     let ticked = tasks
         .lines()
         .map(str::trim_start)

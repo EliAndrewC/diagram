@@ -776,6 +776,8 @@ fn run(
         // ...a tick the tick archived in the same write is in tasks-done.md's history (feature 449 T142)
         let rel = format!("specs/{name}/tasks.md");
         let done = format!("specs/{name}/tasks-done.md");
+        // ...or in a new part of a split feature's archive, folded in the same write (451 T537)
+        let parts = format!("specs/{name}/archive/tasks-done");
         let log_p = git(
             &root,
             &[
@@ -786,6 +788,7 @@ fn run(
                 "--",
                 &rel,
                 &done,
+                &parts,
             ],
         )?;
         let t0 = if since.is_empty() {

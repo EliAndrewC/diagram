@@ -13,20 +13,34 @@ use super::sections::{blocks, leading_tasks, strip_archive, task_sections, TASK_
 /// The files a task's sections are looked for in, in order: the live plan, then its archive.
 const FILES: [&str; 2] = ["plan.md", "plan-done.md"];
 
-/// Each file's sections, parsed on first need: plan-done.md (3.1 MB for 451) only for a task plan.md has no section of.
+/// Each file's sections, parsed on first need: plan-done.md only for a task plan.md has no section of, and of a split archive only the
+/// parts the index names for that task (451 T537: never the 3.6 MB whole).
 struct Plans<'a> {
     dir: &'a Path,
     parsed: [Option<BTreeMap<String, String>>; 2],
+}
+
+/// The text of `name` a reader of `task` opens: plan.md whole, plan-done.md's parts holding the task (or the flat file).
+fn text_for(dir: &Path, name: &str, task: &str) -> String {
+    if name == "plan.md" {
+        return std::fs::read_to_string(dir.join(name)).unwrap_or_default();
+    }
+    l7r_shared::speckit::archive::task_text(&l7r_shared::speckit::archive::files(dir), name, task)
 }
 
 impl Plans<'_> {
     /// (the file, the task's own section), or None where neither file holds a heading of the task's own. `task_sections` gives a task
     /// with no heading of its own the first heading that mentions it, which is another task's section, so that is no section here.
     fn find(&mut self, task: &str) -> Option<(&'static str, String)> {
-        for (name, slot) in FILES.iter().zip(self.parsed.iter_mut()) {
-            let sections = slot.get_or_insert_with(|| {
-                task_sections(&std::fs::read_to_string(self.dir.join(name)).unwrap_or_default())
-            });
+        for (i, (name, slot)) in FILES.iter().zip(self.parsed.iter_mut()).enumerate() {
+            let fresh;
+            let split = self.dir.join(l7r_shared::speckit::archive::DIR).is_dir();
+            let sections = if i == 0 || !split {
+                slot.get_or_insert_with(|| task_sections(&text_for(self.dir, name, task)))
+            } else {
+                fresh = task_sections(&text_for(self.dir, name, task));
+                &fresh
+            };
             let text = sections.get(task).map_or("", String::as_str);
             let title = text
                 .lines()

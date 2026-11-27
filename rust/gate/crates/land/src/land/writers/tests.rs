@@ -275,3 +275,37 @@ fn the_helpers_read_paths_tasks_and_git_s_words() {
     assert_eq!(super::first_line("", "git add", 128), "git add exited 128");
     assert_eq!(super::first_line("a\nb", "git add", 1), "git add: a");
 }
+
+/// 451 T537: a split feature (`make archive-split`) - its tick folds the task it archives into a new part, which the tick's commit
+/// carries, the flat tail gone; a tick whose commit fails is put back, the new part removed and the index as HEAD holds it.
+#[test]
+fn a_split_feature_s_tick_carries_its_new_part_and_a_failed_one_is_put_back() {
+    for (tag, refused) in [("writers-split", false), ("writers-split-back", true)] {
+        let fx = fx(tag);
+        let d = fx.root.join("specs/449-x");
+        put(&fx.root, "specs/449-x/tasks-done.md", "- [x] T0 before\n");
+        l7r_shared::speckit::archive::fold(&d, true).unwrap();
+        git(&fx.root, &["add", "-A"]);
+        git(&fx.root, &["commit", "-qm", "split"]);
+        let index = std::fs::read_to_string(d.join("archive/index.json")).unwrap();
+        let part = d.join("archive/tasks-done/002-T1-T1.md");
+        if refused {
+            refuse_the_tick(&fx, "fatal: the lock", 0);
+            assert_eq!(land(&fx), Ok(2));
+            let (status, staged, tasks, _) = left(&fx);
+            assert_eq!((status.as_str(), staged.as_str()), ("", ""));
+            assert_eq!(tasks, TASKS);
+            assert_eq!(
+                std::fs::read_to_string(d.join("archive/index.json")).unwrap(),
+                index
+            );
+            assert!(!part.exists());
+        } else {
+            assert_eq!(land(&fx), Ok(0));
+            assert_eq!(left(&fx).0, "");
+            let shown = git(&fx.root, &["show", "--name-only", "--format=", "HEAD"]);
+            has(&shown, "specs/449-x/archive/tasks-done/002-T1-T1.md");
+            assert!(part.is_file() && !d.join("tasks-done.md").exists());
+        }
+    }
+}

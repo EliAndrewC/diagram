@@ -94,7 +94,11 @@ pub(super) fn section_current(
         quiet_out(&section, plan),
     );
     let done = history
-        .and_then(|h| std::fs::read_to_string(h.path().with_file_name("plan-done.md")).ok())
+        .and_then(|h| {
+            h.path()
+                .parent()
+                .map(l7r_shared::speckit::archive::plan_done)
+        })
         .unwrap_or_default();
     typo_only(&was, &now) || typo_only(&repointed(&was, &now, task, &format!("{plan}{done}")), &now)
 }
@@ -401,7 +405,7 @@ pub(super) fn held_in(spec_dir: &Path, asked: &[&str], shared: Option<&Shared>) 
     let judged = || {
         let plan = std::fs::read(&plan_path).ok();
         let review = std::fs::read_to_string(spec_dir.join(RECORD)).ok();
-        let done = std::fs::read_to_string(spec_dir.join("plan-done.md")).unwrap_or_default();
+        let done = l7r_shared::speckit::archive::plan_done(spec_dir);
         base(plan.as_deref(), review.as_deref(), Some(&history), &done)
     };
     let owned;
@@ -413,8 +417,7 @@ pub(super) fn held_in(spec_dir: &Path, asked: &[&str], shared: Option<&Shared>) 
     };
     let tasks = l7r_shared::speckit::tasks::joined(
         &std::fs::read_to_string(spec_dir.join("tasks.md")).unwrap_or_default(),
-        &std::fs::read_to_string(spec_dir.join(l7r_shared::speckit::tasks::DONE))
-            .unwrap_or_default(),
+        &l7r_shared::speckit::tasks::done_text(spec_dir).unwrap_or_default(),
     );
     finish(base, Some(&history), Some(&scope_of(&tasks, asked)))
 }
@@ -528,7 +531,7 @@ pub(super) fn delta_keys(spec_dir: &Path, history: &History) -> Vec<String> {
         &sections,
         &ruled,
         Some(history),
-        &read("plan-done.md"),
+        &l7r_shared::speckit::archive::plan_done(spec_dir),
     );
     for key in blocked {
         if !keys.contains(&key) {
@@ -539,7 +542,7 @@ pub(super) fn delta_keys(spec_dir: &Path, history: &History) -> Vec<String> {
     let keys = written_only(keys, &text, &BTreeSet::new());
     let tasks = l7r_shared::speckit::tasks::joined(
         &read("tasks.md"),
-        &read(l7r_shared::speckit::tasks::DONE),
+        &l7r_shared::speckit::tasks::done_text(spec_dir).unwrap_or_default(),
     );
     let mut every = scope_of(&tasks, &[]);
     every.tasks.extend(sections.keys().cloned());
@@ -723,7 +726,7 @@ pub(super) fn owed(spec_dir: &Path) -> Option<(&'static str, String)> {
     let plan_path = spec_dir.join("plan.md");
     let plan = std::fs::read(&plan_path).ok();
     let review = std::fs::read_to_string(spec_dir.join(RECORD)).ok();
-    let done = std::fs::read_to_string(spec_dir.join("plan-done.md")).unwrap_or_default();
+    let done = l7r_shared::speckit::archive::plan_done(spec_dir);
     judge(
         plan.as_deref(),
         review.as_deref(),

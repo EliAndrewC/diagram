@@ -560,7 +560,7 @@ pub fn section_wording_only(section: &str) -> bool {
 }
 
 /// The verbs `answer` takes.
-pub(super) const USAGE: &str = "usage: l7r-gate plan owed <dir> | push [range] | merge-record <base> <ours> <theirs> | record | record-task | record-blocks | delta | archive | slim | decide | decided | section-sha | section <feature> <task[,task]> [--cited] | arbiter-accept | approach | door | engine-edit\n";
+pub(super) const USAGE: &str = "usage: l7r-gate plan owed <dir> | push [range] | merge-record <base> <ours> <theirs> | record | record-task | record-blocks | delta | archive | slim | decide | decided | section-sha | split <feature> | section <feature> <task[,task]> [--cited] | arbiter-accept | approach | door | engine-edit\n";
 
 #[expect(
     clippy::too_many_lines,
@@ -620,7 +620,7 @@ fn answer(
         ("record" | "record-blocks", 5) if words[3] == "--as" => record_verb(words, root),
         ("record-task", 6) if words[4] == "--as" => record_verb(words, root),
         ("section", 3 | 4) => show::cli(words, root),
-        ("slim" | "archive" | "delta", 2) => {
+        ("slim" | "archive" | "delta" | "split", 2) => {
             let Some(dir) = resolve(&words[1], root).filter(|d| d.join("plan.md").is_file()) else {
                 return fail(
                     format!(
@@ -632,6 +632,18 @@ fn answer(
             };
             match verb {
                 "slim" => slim(&dir),
+                // THE SPLIT (451 T537): the feature's plan-done.md and tasks-done.md cut into parts under archive/, rerunnable - a
+                // flat tail written since is folded in after the parts
+                "split" => match l7r_shared::speckit::archive::fold(&dir, true) {
+                    Ok(parts) => said(format!(
+                        "split: {} part(s) written under {}/archive/ (what is where: {}/{})\n",
+                        parts.len(),
+                        dir.display(),
+                        dir.display(),
+                        l7r_shared::speckit::archive::NOTE
+                    )),
+                    Err(why) => fail(format!("split: {why}\n"), 1),
+                },
                 "archive" => {
                     let ids = task::archive(&dir, None);
                     let list = if ids.is_empty() {
@@ -646,6 +658,10 @@ fn answer(
                         Ok(moved) => moved,
                         Err(why) => return fail(format!("plan-archive: {why}\n"), 1),
                     };
+                    // folded into parts as the tick folds (451 T537)
+                    if let Err(why) = l7r_shared::speckit::archive::fold(&dir, false) {
+                        return fail(format!("plan-archive: {why}\n"), 1);
+                    }
                     let tasks = if moved.is_empty() {
                         "none ticked".to_owned()
                     } else {

@@ -334,6 +334,38 @@ fn only_a_line_naming_the_started_task_answers_the_delta() {
     assert_eq!(check_declared(&r), None);
 }
 
+/// 451 T537: a started task ticked at the base in the archive's parts (the feature split, no tasks-done.md) answers nothing either.
+#[test]
+fn a_task_ticked_in_a_split_archive_at_the_base_answers_nothing() {
+    let r = repo("t537");
+    put(
+        &r,
+        "rust/phases/src/waterward.rs",
+        "pub fn strip(w: f64) -> f64 {\n    w\n}\n",
+    );
+    feature(
+        &r,
+        "449-r",
+        "- [ ] T236 the reed strip\n\n## Occasions\n\n- none: T234 - the sluice's frame\n",
+    );
+    put(&r, "specs/449-r/tasks-done.md", "- [x] T234 the sluice\n");
+    l7r_shared::speckit::archive::fold(&r.join("specs/449-r"), true).unwrap();
+    commit(&r, "base");
+    sh(&r, "git update-ref refs/remotes/origin/main HEAD");
+    swap(
+        &r,
+        "rust/phases/src/waterward.rs",
+        "    w\n",
+        "    w - 1.0\n",
+    );
+    started(&r, "449-r", "T234");
+    let refusal = check_declared(&r).unwrap();
+    assert!(
+        refusal.contains("the started task, specs/449-r T234, was ticked on main already"),
+        "{refusal}"
+    );
+}
+
 /// RED FIRST (449 T238 round 2): a declaration naming a map that is no pool map or sheet (`well on nowhere`) became a unit on no map and
 /// a problem line. A map's NAME is checkable with no redraw (the pool walk alone), so it is refused with its form, naming the pool's
 /// closest maps, and owes no unit; a tweak's commit line so formed is a problem line, never refused. An element not drawn on a real map
