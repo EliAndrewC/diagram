@@ -1763,33 +1763,72 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 
 **Performance work?** no
 
-### T51 (<why: the finding or measurement that files it>)
+### T51 (T14's start through the lane tree's launcher could say "holds no lock" of a runner still building; filed at T14's build half)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: `rust/gate/crates/lane/src/runner.rs`: `start` runs `prebuild(exe)` before the spawn - where `exe` is the launcher
+  (file name `l7r-gate.sh`, `LAUNCHER`, which `runner_exe` returns for the lane's tree), it is run once in the foreground as
+  `L7R_GATE_PRINT_FRESH=1 <exe>`, with the spawn's environment (`run::STRIPPED` removed) and without `L7R_GATE_STALE_OK` or
+  `L7R_GATE_NO_BUILD` (either would make it build nothing), and waited for whole; a non-zero exit returns code 1 with cargo's stderr
+  and spawns nothing; any other `exe` (the caller's binary, `runner_exe`'s fallback) builds nothing. The spawned launcher then finds
+  the binary fresh and `exec`s at once, so `START_WAIT_S` (unchanged, a GUESS knob) covers the spawn to the lock alone - its doc comment and
+  `dev/audits/lane-runner.md` say so. `start`'s signature and both callers (`lane.rs`, `on_hand_in`) are unchanged; the tests are a
+  module of their own (`runner/start_tests.rs`), away from T14's closing half's edits of `runner/tests.rs`.
+- **Measured** (method for each figure below: a `git clone --shared` of the lane tree at its commit efc35ccc4f in the scratchpad, a
+  copy of the lane tree's `tool/` build cache as `L7R_GATE_TARGET`, `/usr/bin/time` over `L7R_GATE_PRINT_FRESH=1
+  scripts/gates/l7r-gate.sh`, under a load average of 27 to 46 on 22 cores, measured 2026-11-27 (uptime)):
+  - at its own commit with every source's time new, as a tree made again by T50 is, a whole-workspace rebuild of 101.75 s, measured 2026-11-27 (the scratch timing), not the same-commit cost.
+  - Again at once, 0.05 s, measured 2026-11-27 (the scratch timing): fresh, no build.
+  - efc35cc to e343e50, a day's move of 401 files under `rust/`, 112.08 s, measured 2026-11-27 (the scratch timing).
+  - Across single landed commits, 15.02 s to 6174b208b5 (12 files), measured 2026-11-27 (the scratch timing).
+  - 2.25 s to 950b1ccd56 (10 files) and 2.24 s to e343e5021e (2 files), measured 2026-11-27 (the scratch timing).
+  - A touched file with no change 1.09 s, measured 2026-11-27 (the scratch timing).
+  - A comment added to the core crate 4.92 s, measured 2026-11-27 (the scratch timing).
+  - So every move past the smallest outlasts `START_WAIT_S`.
+- **Decision 1 - prebuild, not a wait on the spawned child.** The brief offered both. Waiting while the detached child lives would
+  need a new ceiling knob and would hide a failed build: the child's standard streams are `/dev/null` (T12's measured reason), so
+  the start could say only "it exited 1". The prebuild's stderr reaches the caller with the command that rebuilds it alone, and
+  the wait is the build's own end. Its cost: a source moved between the prebuild and the spawn (a reset in that instant) reopens
+  the `START_WAIT_S` window, which only the runner resets, and it resets after it holds the lock. Label: the algorithmically easier route,
+  the record silent (tooling, no research question).
+- **Decision 2 - the start's callers wait out the build in the foreground.** `make lane-start` and, from T22's base, a hand-in's
+  `on_hand_in` now block for the rebuild (up to the 112 s measured 2026-11-27, the scratch timing) where before they returned at `START_WAIT_S` with a false failure; for
+  `make builder-done` that sits near a builder's 2-minute tool timeout. Dormant until T22 (Decision 6 of T12). Not fixed here: a
+  background start or a prebuild at the lane tree's reset is a design choice for the hand-in path, outside the start path this
+  brief scopes. Filed as T54; lands before T22.
+- Red first, measured 2026-11-27 (make rust-test): `runner::start_tests` against the old `start`, 0 passed, 2 failed - the stale launcher's start returned
+  "lane: started `.../gates/l7r-gate.sh lane --work ...`, but it holds no lock after 0.3 s" (the bug's own words; measured 2026-11-27 (make rust-test), a 0.6 s fake
+  build against a 0.3 s wait), and the failing build's start returned 0 (the runner came up regardless). After, measured 2026-11-27 (make rust-test): 2 of 2, the lane
+  crate 38 of 38, and `make builder-checks CRATE="rust/gate/crates/lane"` clean (test, lint, format).
 
 ### T51 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make lane-start` (and a hand-in's start) says "started" of a runner that comes up after the lane
+   tree's rebuild, and says why when that build fails, never "holds no lock" of a healthy runner.
+2. **The constraints.** T12's start (the lock the truth, the runner detached with `/dev/null` streams, `START_WAIT_S`), T14's
+   runner program (the lane tree's `scripts/gates/l7r-gate.sh`, `run::STRIPPED`), the launcher's `L7R_GATE_PRINT_FRESH`, the
+   crate's own-tests coverage (rust/gate/CLAUDE.md), the brief's scope (the start path in runner.rs).
+3. **Where each comes from.** R: plan.md T12 and T14, tasks.md T51, `scripts/gates/l7r-gate.sh`. O: the rebuild timings above
+   (2026-11-27).
+4. **Do they describe the world here?** Yes: the timings ran the lane tree's own commit and build cache through the real launcher;
+   the tests drive `start` through `setsid` with a launcher stand-in that builds and takes the lock as the runner does.
+5. **The order.** After T14's build half (the launcher as the runner's program); before T22 (the base flipped, which makes every
+   hand-in start the runner); beside T14's closing half, whose edits are in `runner/tests.rs` and `run.rs`.
+6. **The exits.** Green: the tests above and the lane crate whole. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one branch before the spawn.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `runner::start_tests` 2 of 2 after 0 of 2 on the old code, the lane crate 38 of 38, measured 2026-11-27 (make rust-test).
+10. **Before moving a constant.** n/a: `START_WAIT_S` keeps its value (a GUESS), its doc saying what it now covers.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes: a lane start that reported a false failure (and a hand-in's start line saying so) now
+    reports the runner it started, or the build's error.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+- A hand-in's start (`on_hand_in`) now waits in `make builder-done`'s foreground for the lane tree's rebuild, up to the 112 s
+  measured 2026-11-27 (the scratch timing), near a builder's 2-minute tool timeout (Decision 2). Not fixed here: the hand-in path's design (a background start, or
+  a prebuild at the lane tree's reset) is outside this start-path fix and dormant until T22. Filed as T54; lands before T22.
 
-
+**Performance work?** no
 ### T52 (T14's build half, its decision 1: `make land`'s carry of the done refs read live carried a later hand-in into a lane batch)
 
 - **Approach**: `carry_done` (`rust/gate/crates/land/src/land/carry_done.rs`) still reads the done refs live
@@ -1852,6 +1891,32 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 |---|---|---|---|---|
 
 ### T53 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T54 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T54 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

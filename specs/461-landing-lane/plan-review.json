@@ -546,6 +546,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T51 (T14's start through the lane tree's launcher could say \"holds no lock\" of a runner still building; filed at T14's build half)": {
+   "sha256": "ac9571c6b0db870477c9e21278eb51b9a9e0c2e468b2bbf47476b553a0ee58a3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T51 Approach (checklist part A)": {
+   "sha256": "0c8c0b768a631a2a973d5bb9cb19b963fcdb0a6c463ee53957944d3a61d1dc37",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3314,6 +3326,45 @@
      "summary": "Runs after T12, T13, T49 and T50 (T12 holds the Makefile) and before T22",
      "class": "within",
      "why": "Sequencing only; describes the lane after its parts land, narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T16 (<why: the finding or measurement that files it>)",
+    "### T16 Approach (checklist part A)",
+    "### T47 (<why: the finding or measurement that files it>)",
+    "### T47 Approach (checklist part A)",
+    "### T51 (T14's start through the lane tree's launcher could say \"holds no lock\" of a runner still building; filed at T14's build half)",
+    "### T51 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T51 Decision 1",
+     "summary": "start() prebuilds the lane tree's launcher in the foreground (L7R_GATE_PRINT_FRESH=1, spawn env, no STALE_OK/NO_BUILD), returns 1 with cargo's stderr on failure and spawns nothing; non-launcher exe builds nothing; chosen over waiting on the detached child",
+     "class": "within",
+     "why": "A fix of a wrong outcome (a healthy runner reported as 'holds no lock', a failed build reported as started) in the lane runner FR-003 asks for; the lock stays the truth, the gate and push checks are untouched (FR-008), and the residual race (a source moved between prebuild and spawn) is reachable only by a reset the runner does after holding the lock. Choice of mechanism is design, not scope."
+    },
+    {
+     "id": "T51 START_WAIT_S unchanged",
+     "summary": "START_WAIT_S keeps its value and its doc comment and dev/audits/lane-runner.md are restated to say it now covers spawn-to-lock only",
+     "class": "within",
+     "why": "No constant moves; restating what an unchanged knob covers is the claim following the code, not a narrowing."
+    },
+    {
+     "id": "T51 tests module",
+     "summary": "Tests live in runner/start_tests.rs, apart from T14's closing half's runner/tests.rs; start's signature and both callers unchanged",
+     "class": "within",
+     "why": "Layout and coordination with a concurrent task; settles nothing the request or spec leaves to a ruling."
+    },
+    {
+     "id": "T51 Decision 2 / Found and left",
+     "summary": "make lane-start and (from T22) on_hand_in in make builder-done now block for the rebuild, up to 112 s near a builder's 2-minute tool timeout; the hand-in path's design (background start or prebuild at reset) is not fixed here, filed as T54, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows this task's fix to the start path and leaves a foreground wait that, live, would run against the request's purpose (the second tier's work should not block anything) and could break builder-done (FR-002) at the tool timeout. It is legitimate because the effect is dormant until T22 flips the base, and the deferral is in the required form - filed as an open task T54 that lands before T22 - so no builder ever meets it; the feature's scope is not narrowed, only the order of its work. Were T54 not to land before T22 this would be a defect carried into a live path."
     }
    ]
   }

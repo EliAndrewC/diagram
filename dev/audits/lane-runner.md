@@ -22,5 +22,8 @@ covers: TAKE_S
 at the next hand-in, a running idle one a sleeping process. The idle clock runs from the newest hand-in the runner saw (or a
 batch it ran), never from "nothing waiting", so a runner over a hand-in it cannot yet batch (before T14) still idles out. POLL_S
 = 5 s bounds how long a hand-in waits to be seen, against gates of minutes. START_WAIT_S = 5 s and STOP_WAIT_S = 10 s are bounds on
-a wait for a lock to change hands. Weighed in the plan (D2) and not taken: the Workflow tool and a loop of the coordinator's turns
+a wait for a lock to change hands. Since 461 T51 START_WAIT_S covers the spawn to the lock alone: a start through the lane tree's
+`scripts/gates/l7r-gate.sh` first runs it as `L7R_GATE_PRINT_FRESH=1` in the foreground and waits for that build whole (2.2 s and
+15.0 s across single landed commits, 112 s across a day's, 102 s for a tree whose every source was new; a scratch clone with a copy
+of the lane tree's build cache, load 27 to 46 on 22 cores, 2026-11-27), a failed build's words returned and no runner spawned. Weighed in the plan (D2) and not taken: the Workflow tool and a loop of the coordinator's turns
 (each step a turn); Gas Town's Refinery (a standing agent).

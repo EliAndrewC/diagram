@@ -47,8 +47,11 @@ pub const LANE_IDLE_S: f64 = 3600.0;
 /// GUESS knob (`LANE_POLL_S`): the loop's period. A hand-in waits at most this long to be seen, against a gate of minutes; each tick
 /// reads the pool's log, the done refs and the lane's log.
 pub const POLL_S: f64 = 5.0;
-/// GUESS: how long a start waits for the runner it spawned to hold the lock before it says it failed.
+/// GUESS: how long a start waits for the runner it spawned to hold the lock before it says it failed - from the spawn to the lock
+/// only: the launcher's rebuild of a stale `l7r-gate` runs before the spawn and is waited for whole ([`prebuild`], 461 T51).
 pub const START_WAIT_S: f64 = 5.0;
+/// The launcher's file name (`scripts/gates/l7r-gate.sh`): a runner program so named is built before the spawn ([`prebuild`]).
+pub const LAUNCHER: &str = "l7r-gate.sh";
 /// How long the runner tries for its lock before it leaves to the runner holding it: a probe of [`held`] (a start's, a stop's)
 /// takes the lock for an instant when it is free, so a single try could lose to it and leave no runner (a GUESS bound, past any
 /// probe's few milliseconds).
@@ -189,8 +192,44 @@ pub fn runner_exe(common: &Path, fallback: &Path) -> PathBuf {
         .unwrap_or_else(|| fallback.to_path_buf())
 }
 
+/// THE BUILD BEFORE THE SPAWN (461 T51): where `exe` is the launcher ([`LAUNCHER`], [`runner_exe`]'s choice), it is run first as
+/// `L7R_GATE_PRINT_FRESH=1 <exe>`, in the foreground, with the spawn's environment ([`run::STRIPPED`] removed) and neither
+/// `L7R_GATE_STALE_OK` nor `L7R_GATE_NO_BUILD` (each would make it build nothing), so it builds the lane tree's `l7r-gate` where
+/// stale and the spawned launcher finds it fresh and `exec`s at once. Why: the launcher rebuilds that binary after every reset of
+/// the lane's tree that moved its sources - measured 2026-11-27 on a scratch clone with a copy of the lane tree's build cache, under a
+/// load of 27 to 46 on 22 cores: 2.2 s and 15.0 s across single landed commits, 112 s across a day's commits, 102 s for a tree
+/// whose every source was new (as a tree made again is) - while the start waited [`START_WAIT_S`] (5 s) from the spawn and then said
+/// "holds no lock" of a runner that came up after its build. Waiting on the detached child instead would hide a failed build, its
+/// standard streams `/dev/null`; here cargo's words reach the caller. Any other `exe` (the caller's binary) builds nothing. `Err` is
+/// the reply's stderr.
+fn prebuild(exe: &Path) -> Result<(), String> {
+    if exe.file_name().and_then(|n| n.to_str()) != Some(LAUNCHER) {
+        return Ok(());
+    }
+    let mut c = std::process::Command::new(exe);
+    c.env("L7R_GATE_PRINT_FRESH", "1")
+        .env_remove("L7R_GATE_STALE_OK")
+        .env_remove("L7R_GATE_NO_BUILD")
+        .stdin(std::process::Stdio::null());
+    for k in run::STRIPPED {
+        c.env_remove(k);
+    }
+    let out = c
+        .output()
+        .map_err(|e| format!("lane: {}: {e}\n", exe.display()))?;
+    if out.status.success() {
+        return Ok(());
+    }
+    Err(format!(
+        "lane: the runner's program could not be built (exit {}), so no runner started - fix what it says and run make lane-start again (`L7R_GATE_PRINT_FRESH=1 {}` builds it alone):\n{}",
+        out.status.code().unwrap_or(-1),
+        exe.display(),
+        String::from_utf8_lossy(&out.stderr)
+    ))
+}
+
 /// `make lane-start`: the runner of `common` started detached through `launcher`, or the one running named. Exit 0 either way; 1
-/// where the spawn failed or the runner took no lock within `wait_s`.
+/// where the runner's program could not be built ([`prebuild`]), the spawn failed or the runner took no lock within `wait_s`.
 #[must_use]
 pub fn start(common: &Path, exe: &Path, launcher: &str, wait_s: f64) -> Reply {
     if let Some(pid) = holder(common) {
@@ -199,6 +238,9 @@ pub fn start(common: &Path, exe: &Path, launcher: &str, wait_s: f64) -> Reply {
             String::new(),
             0,
         );
+    }
+    if let Err(e) = prebuild(exe) {
+        return reply(String::new(), e, 1);
     }
     let _ = std::fs::create_dir_all(common.join(log::DIR));
     close_inherited();
@@ -512,3 +554,6 @@ pub fn on_hand_in(
 
 #[cfg(test)]
 mod tests;
+
+#[cfg(test)]
+mod start_tests;
