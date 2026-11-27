@@ -297,6 +297,21 @@ fn sections_merged_takes_each_side_s_change_and_stops_on_a_choice() {
 }
 
 #[test]
+fn a_section_appended_after_text_with_no_blank_line_at_its_end_gets_one() {
+    // the clone's last section ends at its last line, as a plan whose file ends there does; the builder left it alone and wrote T2
+    // after it: the merge takes the clone's text and puts the blank line a heading needs before the appended section
+    let base = "# Plan\n\n### T1 (a)\n\none\n";
+    let theirs = format!("{base}\n### T2 (b)\n\ntwo\n");
+    assert_eq!(sections::merged(base, base, &theirs).unwrap(), theirs);
+    // the same where the clone changed its section: its words, then the blank line, then the builder's section
+    let ours = base.replace("one", "more");
+    assert_eq!(
+        sections::merged(base, &ours, &theirs).unwrap(),
+        "# Plan\n\n### T1 (a)\n\nmore\n\n### T2 (b)\n\ntwo\n"
+    );
+}
+
+#[test]
 fn a_bare_open_box_takes_back_the_lines_a_side_holds_under_it() {
     let full = boxes(&["1", "2"], &[]);
     let physical = full.replace(RESEARCH, "      research: physical\n      - [ ] searched\n");

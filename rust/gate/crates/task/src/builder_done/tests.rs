@@ -363,6 +363,37 @@ fn a_done_commit_not_yet_carried_is_never_written_over() {
 }
 
 #[test]
+fn another_tasks_done_keeps_the_ref_of_a_commit_that_waits_and_deletes_a_carried_ones() {
+    let (_dir, root, e, b1) = held("done-waits", "T01");
+    // (each commit's subject its own: a commit is told carried by its author's second and its subject)
+    put(&b1, "scripts/n.py", "n = 1\n");
+    assert_eq!(done(&root, &e, "T01", "9001 T01: waits", "").code, 0);
+    let first = git(&root, &["rev-parse", "refs/l7r/done/9001-T01"]);
+    // T02's done while T01's commit waits on its carry: T01's ref is kept beside T02's
+    let done_in_turn = |task: &str, file: &str, subject: &str| {
+        let took = builder_tree::run(&words(&["take", task, "9001"]), &root, &e);
+        assert_eq!(Path::new(took.stdout.trim()), b1);
+        put(&b1, file, "o = 1\n");
+        assert_eq!(done(&root, &e, task, subject, "").code, 0);
+    };
+    done_in_turn("T02", "scripts/o.py", "9001 T02: carried next");
+    assert_eq!(
+        refs(&root),
+        "refs/l7r/done/9001-T01\nrefs/l7r/done/9001-T02"
+    );
+    // T02's commit carried, T01's still not: T03's done deletes T02's ref and keeps T01's, at the commit it named
+    let second = git(&root, &["rev-parse", "refs/l7r/done/9001-T02"]);
+    git(&root, &["cherry-pick", &second]);
+    done_in_turn("T03", "scripts/p.py", "9001 T03: the last");
+    assert_eq!(
+        refs(&root),
+        "refs/l7r/done/9001-T01\nrefs/l7r/done/9001-T03"
+    );
+    assert_eq!(git(&root, &["rev-parse", "refs/l7r/done/9001-T01"]), first);
+    assert!(list(&root, &e).contains(&format!("  {}  9001-T01  9001 T01: waits\n", &first[..10])));
+}
+
+#[test]
 fn a_task_is_handed_no_tree_while_its_own_done_commit_waits_on_its_carry() {
     let (_dir, root, e, b1) = held("done-handout", "T01");
     put(&b1, "scripts/n.py", "n = 1\n");
