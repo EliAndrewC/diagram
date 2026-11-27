@@ -5186,85 +5186,8 @@ parallelizing and is ordered by time saved, never by disk freed.
    time with the host's load - evidence, not a pass>
 6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 
-### T367, T411 (bundle) (found by 451 T347 and T355: the small lane's key of a test build and of each lint pass is written only by a passing wide build of the checks, and the pre-warm built `cargo test --no-run` only, keeping no key and running no clippy, so a builder's first test build and first lint of each crate after a handout took a wide build slot; measured 2026-11-27 from the clone's event log, 00:20Z to 03:30Z: 28 of 29 first test builds after a handout told wide (`dev/measurements/2026-11-27/prewarm-keys/tellings.py`))
-
-- **Approach**: the pre-warm (`rust/gate/crates/rustc/src/rustc/prewarm.rs`) keeps the small lane's key of each build it runs that passes, and after the test builds it runs each lint pass of each moved crate, so the builder's first `make builder-checks` of a crate after a handout is told alone at its test build and at every lint pass. Reused, not copied: `Told` (`kept/alone.rs`) gained `keeping`, the key-keeping half of `cargo_with` (written beside itself, the build run, moved into place where it passed, nothing where told alone or told nothing), which `cargo_with` now calls; `lint.rs` exposes `passes`, `DENY` and `told` (a pass's key name and keyed words), which its own `pass` calls; `kept.rs`'s `binary_args` is `pub(super)`. The record: `dev/measurements/2026-11-27/prewarm-keys/` (`results.md`, `tellings.py` and its output `tellings.txt`, the hand run `demo.txt`).
-  - **D1, the telling is the checks' own.** Measured, not chosen: a key holds the build's words, and the builder's test build is told by the binary key's words (`binary_args("test")`, `--message-format=json` among them), so the pre-warm tells its `cargo test --no-run --quiet` by those words, under the name `test`, and its passes by `lint::told`. The content ids are read as a test run reads them (`Kept::read` with `test`, so a dependency's `include_str!` file is in the key, as `alone.rs`'s fixture's `data/table.tsv` is); `moved` asks `reads_any` with `prewarm` as before, so what is built does not change. A key built otherwise would never stand: the red test's fixture compiles a table in, and a `prewarm`-read key left it out.
-  - **D2, its own name beside the key.** CONVENTION: the pre-warm joins no run lock, so a run's wide build of the same crate can start while the pre-warm's is in flight; each writes beside the key by its own suffix (`.new` the checks', `.prewarm` the pre-warm's), so neither renames the other's file into place.
-  - **D3, the lint after every test build; a red pass its crate's last.** The order the brief names: every moved crate's test build first (fewest dependencies first), then each crate's passes in `lint::passes`' order (three for a crate that names itself, 451 T325), each pass a job of its own under the test builds' rules - a slot only while another is spare, never cut, one `prewarm` `Phase` line a cargo call, one log line a pass. A red pass drops its crate's later passes, as `lint::linted` stops, and keeps no key (T355-D3). `L7R_PREWARM_LINT=0` warms the test builds alone (GUESS, a knob, default on: its cost is seconds nobody waits on).
-  - **D4, the log's words.** A line a lint pass (`prewarm: <crate> - its lint pass <words> is warm (<s> s)`, or `cargo clippy <words> exited <n>; its later passes left to the builder's own lint, which says why`); the ending lines keep their crate count of test builds and add `, and <n> lint pass(es) with them` / `not run` where passes are left; a slot is signed `cargo <its words>`. The `slot-tell` lines the pre-warm's tellings write carry make target `prewarm`, so a count of a builder's tellings leaves them out.
-  - **Measured first** (job 1, read-only, `tellings.py` over every log of the clone and the pool's log, 00:20Z to 03:30:03Z on 2026-11-27, 14 handouts): test-build tellings in pool trees 29 first after a handout (28 wide, 1 alone) and 129 later (39 wide, 90 alone); so the first builds are 28 of the 67 wide test tellings (42%), measured 2026-11-27 (`tellings.py`). Lint tellings (since T355, about 01:53Z): of the passes of a crate's first lint after a handout 4 wide and 5 alone (a key the tree's previous task left), 6 wide and 10 alone later. THE WAITS ARE SMALL: of 13 `slot-wait` lines, 283.5 s, one (4.0 s) was in a first test build after a handout and none in a lint since T355, the other 279.5 s in later builds and lints, measured 2026-11-27 (`tellings.py`). The task lines gate the fix on the first builds being most of the wide waits left; by count of wide tellings they are 42%, by seconds waited 1.4% of that window, measured 2026-11-27 (`tellings.py`). Built because the brief orders it: the first build of a crate no longer takes a wide slot whatever the load, which is what decides whether it waits.
-  - **Measured on a real handout** (job 2 and the hand run, 2026-11-27, this tree, `demo.txt`): the three `l7r-alone` keys of `rust/gate/crates/rustc` removed and one code edit made to it (`POLL` 500 to 501 ms, put back after), the pre-warm run by hand as `make builder-tree` starts it (`scripts/gates/l7r-gate.sh rust prewarm --since cdac6355` with `L7R_GATE_TREE`, `CARGO_TARGET_DIR` and the make variables unset): 23.7 s of wall, 3.0 s of test builds (warmed already at the handout) and 17.3 s of lint passes (`rust/guard` 6.1 + 0.5, `rustc` 1.5 + 0.5, `rust/gate` 7.6 + 1.1; the clippy units of `rust/guard` and `rust/gate` last built by the tree's previous task, `rustc`'s by this builder's own lint before the edit). Then `make builder-checks CRATE=rust/gate/crates/rustc`: the test build `slot-tell 0`, `slot-small 0`, its build 0.13 s, and both lint passes `slot-tell 0`, `slot-small 0`, the lint 0.3 s, measured 2026-11-27 (`demo.txt`).
-  - **NOT warmed, said**: the counting build (`test-counters`) and its key, and a coverage build, as before.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| the pre-warm keeps the test build's and each lint pass's key, so the builder's first test build and lint take the lane with both wide slots held | red first 2026-11-27 (item 9); pinned by `the_pre_warm_keeps_the_keys_a_builders_first_test_build_and_lint_are_told_alone_by` | n/a: tooling | none | n/a |
-| a red build or pass keeps no key and leaves nothing beside it; a red pass is its crate's last; a pre-warm told alone leaves the key's time | red first 2026-11-27 (item 9); pinned by `a_red_build_or_pass_keeps_no_key_and_a_pre_warm_told_alone_leaves_its_key_as_it_was` | n/a: tooling | none | n/a |
-| all three passes of a crate that names itself; no key with no lane; `L7R_PREWARM_LINT=0` runs no clippy | red first 2026-11-27 (item 9); pinned by `a_crate_that_names_itself_is_warmed_at_all_three_passes_and_the_lint_is_off_at_its_knob` | n/a: tooling | none | n/a |
-
-### T367, T411 Approach (checklist part A)
-
-1. **The goal, in the world.** A builder's first `make builder-checks` of a crate after a handout starts its test build and each lint pass in the small lane, never behind the long builds that hold the two wide slots.
-2. **The constraints.** The two task lines; T347's lane and key and T355's pass keys as built (`kept/alone.rs`, `lint.rs`); T336's never-cut rule and T316's yield-between-crates (`prewarm.rs`); the brief: measure first, read-only; reuse the key's writing, do not copy it; the passes with the words and key `lint.rs` uses; the lint after the test builds, under the same rules; its cost measured on a real handout and the knob weighed.
-3. **Where each comes from.** G: none - the task lines quote no words of the GM. O: T347's and T355's findings (the heading), the event-log count and the hand run (the Approach).
-4. **Do they describe the world here?** Yes for the tellings: 28 of 29 first test builds after a handout were told wide, measured 2026-11-27 (`tellings.py`). Weakly for the waits: one of 13 wide waits, 4.0 of 283.5 s, lay in such a build in the window, measured 2026-11-27 (`tellings.py`).
-5. **The order.** After T347, T355 and T336, whose mechanisms it reuses. Independent of T380 (the lane's first day read).
-6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/rustc rust/gate/crates/task"` in the builder's tree, then the landing's gate with its coverage. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none.
-8. **The budget.** One landing.
-9. **Done, measured.** RED FIRST, observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/rustc` with the three new tests and the code as it was: 121 passed, 3 failed - the first on the builder's first test build told wide (`left: ["slot-tell 1", "slot-wait 1"]`), the second on a red build's line, the third on no clippy asked; after, 124 passed. Four older tests of the pre-warm moved with the lint's passes and were restated, not run red: their `prewarm` line counts (1 to 3, `[0, 0]` to six, `[1, 1]` to four, a red first pass each crate's last) and the real-run line's end (`, and 4 lint pass(es) with them`). THE FIRST TIER, observed 2026-11-27: `make builder-checks CRATE="rust/gate/crates/rustc rust/gate/crates/task"` green. THE HAND RUN: the Approach's.
-10. **Before moving a constant.** n/a: none moved; one knob added, `L7R_PREWARM_LINT`, a GUESS.
-11. **Before fitting things into room.** n/a.
-12. **Before any fix.** Not a defect of a map: no map changes. The outcome it answers: a builder's first test build or lint of a crate after a handout in a wide slot, 28 of 29 first test builds measured 2026-11-27 (`tellings.py`), and a first lint compiling 2.5 to 28.9 s there (451 T355's record, `dev/measurements/2026-11-27/lint-memory/lint-runs.txt`, the `w` rows).
-
-**Found and left?** none
-
-**Performance work?** yes: a `[perf]` task of the builders' loop, not of the engine. A builder's first test build and lint of a crate after a handout were told wide 28 of 29 times (tests) and 4 of 9 passes (lint) between 00:20Z and 03:30Z on 2026-11-27, and after the change both are told alone on a real handout (`slot-tell 0` at the test build and both passes; the build 0.13 s, the lint 0.3 s) at a cost of 17.3 s of lint passes added to that handout's pre-warm, which nobody waited on, measured 2026-11-27 (`dev/measurements/2026-11-27/prewarm-keys/`). The wide waits the first builds could save were small in the window: one of 13, 4.0 of 283.5 s, measured 2026-11-27 (`tellings.py`).
-
-
-### T367 part B (2026-11-27T04:14Z)
-
-Owed by red-gate@2026-11-27T04:09:16Z, ruled continue by the round arbiter (`arbiter.jsonl`): the batch gate of 451 T367, T411
-and T414 was red at about 04:03Z (observed 2026-11-27, method: the landing's log) on the pipe-race check and on a pre-warm
-test, and its second run was refused by the tripwire before it ran. Of this task: the pre-warm test covers the loop this bundle changed.
-
-1. **What exactly is refusing?** The batch gate: the pipe-race check on a line of `tests/hooks/test-parts.3.sh` that piped
-   into `grep -q` (fixed with a here-string), and `rustc::tests::prewarm::it_never_waits_in_the_slots_queue_and_stops_at_its_ceiling`,
-   red once under the coverage run and green alone with FRESH=1 on each of the next runs (observed 2026-11-27, method: three
-   `make rust-test` runs).
-2. **A3 again.** The goal and the options stand as the section has them.
-3. **A4 again.** The section's figures are unchanged by it.
-4. **Moving something earlier for something later?** No.
-5. **Tuning or changing?** The test line's form only; the pre-warm test's cause is 451 T424's to find.
-6. **The one-sentence test.** "Why is T367 owed this?" - it is a task of the batch whose gate was red twice.
-7. **The next step is a measurement.** The gate once more as the batch stands (the arbiter's ruling); red only on that pre-warm
-   test, T367 and T411 are taken out and T414 lands alone, and they wait for T424's fix.
-8. **Every route measured?** The pipe-race line is clean under the check and its suite green (observed 2026-11-27, method:
-   `l7r-gate check pipe-race` and the suite run); the pre-warm test is T424's.
-9. **After a ruling:** continue, recorded in `arbiter.jsonl`.
-
-### T411 part B (2026-11-27T04:14Z)
-
-Owed by red-gate@2026-11-27T04:09:16Z, ruled continue by the round arbiter (`arbiter.jsonl`): the batch gate of 451 T367, T411
-and T414 was red at about 04:03Z (observed 2026-11-27, method: the landing's log) on the pipe-race check and on a pre-warm
-test, and its second run was refused by the tripwire before it ran. Of this task: the pre-warm test covers the loop this bundle changed.
-
-1. **What exactly is refusing?** The batch gate: the pipe-race check on a line of `tests/hooks/test-parts.3.sh` that piped
-   into `grep -q` (fixed with a here-string), and `rustc::tests::prewarm::it_never_waits_in_the_slots_queue_and_stops_at_its_ceiling`,
-   red once under the coverage run and green alone with FRESH=1 on each of the next runs (observed 2026-11-27, method: three
-   `make rust-test` runs).
-2. **A3 again.** The goal and the options stand as the section has them.
-3. **A4 again.** The section's figures are unchanged by it.
-4. **Moving something earlier for something later?** No.
-5. **Tuning or changing?** The test line's form only; the pre-warm test's cause is 451 T424's to find.
-6. **The one-sentence test.** "Why is T411 owed this?" - it is a task of the batch whose gate was red twice.
-7. **The next step is a measurement.** The gate once more as the batch stands (the arbiter's ruling); red only on that pre-warm
-   test, T367 and T411 are taken out and T414 lands alone, and they wait for T424's fix.
-8. **Every route measured?** The pipe-race line is clean under the check and its suite green (observed 2026-11-27, method:
-   `l7r-gate check pipe-race` and the suite run); the pre-warm test is T424's.
-9. **After a ruling:** continue, recorded in `arbiter.jsonl`.
-
+<!-- plan-archive: T367 to T355 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+<!-- plan-archive: T367 to T367 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 ### T368 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -6017,61 +5940,8 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T414 (a red hook suite inside a batch gate left no record of which case failed: the red state-sync run of 2026-11-26 18:27 UTC left one event line - its name, 94.7 s, exit 1, observed 2026-11-26, method: the task line's reading of that event line - and nothing else, its log in the run's mktemp work directory, printed once and removed, the land log overwritten by the next landing, so 451 T314 could not tell which case had failed)
-
-- **Approach**: `tests/hooks/hookrun.sh` keeps each RED job's whole log (after the LEAK line is appended) in the clone's COMMON git directory, `l7r-hooks-failed/<utc>-<job>-p<pid>.log` (T414-D1), and leaves its name, relative to that directory, in the work directory's `<job>.kept`; a green job keeps none and removes a stale `.kept`. The `hooks-test` recipe names the kept log in the suite's FAIL line (`HOOK TESTS FAILED: <suite> (whole log kept: <path>)`, appended, the line's head unchanged) and hands it to the event line's writer as a sixth span field, `suite:<t0>:<t1>:<rc>:<job>:<log>`, which `l7r-gate measure event-log phase` writes as the Phase line's `log` (`rust/gate/crates/measure/src/measure/event_log/phase.rs`). The user-level self-test's FAIL line, which lost its log the same way, keeps it through `hookrun.sh --keep` (fixed here). The kept logs are bounded to the last `HOOKS_FAILED_KEEP` (T414-D2), once a run, by `hookrun.sh --sweep <gitdir>` before the fan-out (T414-D3); T372's one sweep and the jobs' `--swept` stay as they were.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| a red job's log kept, its name left; a green job's not | `test-parts.2.sh`: "a red suite's job names its kept log", "the kept log is the suite's whole log", "a green suite keeps no log and names none", "a red shard's log is kept under its own job", "--keep keeps a log no job wrote", each red on the old code | n/a: tooling | none | none |
-| the bound, once a run | `test-parts.2.sh`: "a job of a swept run removes no kept log", "the run's one sweep keeps the newest HOOKS_FAILED_KEEP logs", "the bound touches nothing but kept logs", "a job run by hand bounds them itself", red on the old code | n/a: tooling | none | none |
-| the FAIL line and the event line name it, in the common git directory | `test-parts.3.sh` (the real recipe in a fixture clone, the failure in its LINKED tree): "the FAIL line names the kept log, in the common git directory", "the kept log holds the suite's whole log", "only the red suite's log is kept", "the event line's span carries the kept log"; `phase::tests::a_span_carries_its_kept_log` - each red on the old code | n/a: tooling | none | none |
-
-- **T414-D1, the name** (CONVENTION): the brief offered `<git common dir>/l7r-hooks-failed/<utc>-<suite>.log`, the task line `.git/hooks-test/failed/<suite>@<utc>.log`. Taken: the brief's directory, beside `l7r-events` and `l7r-handoffs`, not inside `hooks-test/`, which holds what runs REUSE (stamps, seconds, renderings) - a reader's log kept apart from them is what makes the bound safe (D3). The name is `<utc to the nanosecond>-<job>-p<pid>.log`: the time first, so the names' order is their age (the bound sorts by name); the job, so a shard's log (`<guard>.<k>`) is its own; the runner's pid, because the common git directory is every worktree's and two trees can fail one suite in one second. It holds no colon or space, so it rides as a span field (the door splits on colons, and the recipe passes its spans unquoted - one unreadable span drops every Phase line of the run).
-- **T414-D2, the bound** (GUESS knob, `HOOKS_FAILED_KEEP`, 50): about one fully red run's worth of the 70 suite files; a value that is not a number reads as 50. Nothing a later run reuses is removed: no runner, stamp, key or check reads `l7r-hooks-failed/` (grep of `tests/`, `scripts/`, `rust/` and the Makefile, 2026-11-27), so a removed log is only a reader's - only files named as kept logs are removed.
-- **T414-D3, when the bound runs**: once a run, in `--sweep <gitdir>` before any job keeps a log, as T372 moved the temp sweep - a job bounding after keeping could remove a log another job of the same run is about to name, a run's red jobs can outnumber the bound. So after a run the directory holds at most the bound plus that run's failures, brought back to the bound by the next run's sweep. A job run by hand (no `--swept`) bounds after keeping its own, the newest, as it sweeps.
-
-### T414 Approach (checklist part A)
-
-1. **The goal, in the world.** A red hook suite inside a batch gate leaves its whole log where a later reader finds it, named by the run's FAIL line and its event line.
-2. **The constraints.** The task line and the brief: the log under the common git directory, named in the FAIL line and the event line, a passed suite's not kept, the directory bounded; T372's one sweep and `--swept` kept working; a FAIL line's head unchanged for any reader of it.
-3. **Where each comes from.** O: this task's line (the 2026-11-26 18:27 UTC run, 451 T314); G: the brief's directory and knob; O: the recipe and runner read (the log in `$work`, removed by the recipe's `trap`).
-4. **Do they describe the world here?** Yes, measured 2026-11-27 (the fixture run of `test-parts.3.sh`): it drives the real recipe in a clone with a linked worktree, and its red suite's log lands under the main tree's `.git`.
-5. **The order.** Independent of the queue; lands with any batch.
-6. **The exits.** Green: `test-parts.2.sh`, `test-parts.3.sh` and the measure crate's tests. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** Red first on the old code, 2026-11-27: `test-parts.2.sh` 30 passed, 11 failed; `test-parts.3.sh` 15 passed, 4 failed; the measure crate 276 passed, 1 failed (`a_span_carries_its_kept_log`). On the new code: 41 passed, 0 failed; 19 passed, 0 failed; 277 passed, 0 failed (`make builder-checks CRATE=rust/gate/crates/measure`: test, lint, format clean); `tests/hooks/test-make-only-hooks.sh` 144 passed, 0 failed.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-12. **Before any fix.** A red suite's failing case can be read after the run: the FAIL line names a file that holds the suite's whole log, and the event line carries its name.
-
-**Found and left?**
-- The user-level self-test's FAIL line (`missing-program-hook`) lost its log the same way, from the same work directory: fixed here, through `hookrun.sh --keep`.
-
-**Performance work?** no - a defect's evidence kept: it makes nothing faster and measures no time.
-
-### T414 part B (2026-11-27T04:14Z)
-
-Owed by red-gate@2026-11-27T04:09:16Z, ruled continue by the round arbiter (`arbiter.jsonl`): the batch gate of 451 T367, T411
-and T414 was red at about 04:03Z (observed 2026-11-27, method: the landing's log) on the pipe-race check and on a pre-warm
-test, and its second run was refused by the tripwire before it ran. Of this task: the pipe-race line was its own test.
-
-1. **What exactly is refusing?** The batch gate: the pipe-race check on a line of `tests/hooks/test-parts.3.sh` that piped
-   into `grep -q` (fixed with a here-string), and `rustc::tests::prewarm::it_never_waits_in_the_slots_queue_and_stops_at_its_ceiling`,
-   red once under the coverage run and green alone with FRESH=1 on each of the next runs (observed 2026-11-27, method: three
-   `make rust-test` runs).
-2. **A3 again.** The goal and the options stand as the section has them.
-3. **A4 again.** The section's figures are unchanged by it.
-4. **Moving something earlier for something later?** No.
-5. **Tuning or changing?** The test line's form only; the pre-warm test's cause is 451 T424's to find.
-6. **The one-sentence test.** "Why is T414 owed this?" - it is a task of the batch whose gate was red twice.
-7. **The next step is a measurement.** The gate once more as the batch stands (the arbiter's ruling); red only on that pre-warm
-   test, T367 and T411 are taken out and T414 lands alone, and they wait for T424's fix.
-8. **Every route measured?** The pipe-race line is clean under the check and its suite green (observed 2026-11-27, method:
-   `l7r-gate check pipe-race` and the suite run); the pre-warm test is T424's.
-9. **After a ruling:** continue, recorded in `arbiter.jsonl`.
-
+<!-- plan-archive: T414 to T314 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+<!-- plan-archive: T414 to T414 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 ### T413 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
