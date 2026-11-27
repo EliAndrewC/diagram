@@ -33,7 +33,7 @@
 //! `landed` line that lands nothing. An ejected change's done ref is kept: its repair's hand-in supersedes it (D7, D14).
 //!
 //! THE SEAMS LEFT: a carry that stops ends the step with an error after its line, and a `make` that cannot start (exit -1, no
-//! change's fault) after its `owed` line, the batch left OPEN - the runner stops (`error: ...`) rather than form or run again every
+//! change's fault) or a first pass that refused with a row naming no change of the batch (461 T15's plan review) after its `owed` line, the batch left OPEN - the runner stops (`error: ...`) rather than form or run again every
 //! poll, and the next `make lane-start` resumes it as a new attempt. A carry conflict's repair entry is phase 3's (T25), a failed
 //! push's T19's, the halving that replaces the whole-batch ejection T24's, the tripwire by task T18's.
 
@@ -46,7 +46,7 @@ use l7r_gate_task::builder_done::{held_by, REFS};
 use l7r_shared::guards::event_log_hooks::{log_path_in, now_stamp};
 use serde_json::{json, Value};
 
-use crate::attribute::{self, Change, Verdict};
+use crate::attribute::{self, Change, Refusal, Verdict};
 use crate::log::{self, Batch, HandIn, World};
 use crate::{batch, repairs};
 
@@ -364,6 +364,8 @@ struct Redden {
     attempt: String,
     units: Vec<String>,
     verdict: Verdict,
+    /// The changes an unplaced verdict ejects, by their indices: every change, or those a first-pass refusal names.
+    unplaced: Vec<usize>,
 }
 
 /// Step 3: `make land` in `tree` over `todo`, attempt `n`; its `run` line, and its `push` line where it pushed (None); a red attempt
@@ -435,12 +437,14 @@ fn land(
         let reds = attribute::reds(&events, (&t0, &t1), tree, &output);
         let changes: Vec<Change> = todo.iter().map(|h| change_of(tree, h)).collect();
         let verdict = attribute::attribute(&reds, &changes);
+        let refused = attribute::refusal(&reds, &changes);
         (
             reds.into_iter().map(|r| r.unit).collect::<Vec<_>>(),
             verdict,
+            refused,
         )
     });
-    let units = red.as_ref().map_or(Vec::new(), |(u, _)| u.clone());
+    let units = red.as_ref().map_or(Vec::new(), |(u, _, _)| u.clone());
     l.append(
         "run",
         &json!({"batch": id, "n": n, "set": set, "code": code, "minutes": minutes, "attempt": at, "red": units}),
@@ -449,12 +453,27 @@ fn land(
         l.append("push", &json!({"batch": id, "set": set, "code": code}))?;
         return Ok(None);
     }
-    let Some((units, verdict)) = red else {
-        let line = format!(
-            "lane: batch {id}: make land ended with no exit code at attempt {n} (it could not start, or was killed) - the runner stopped, the batch open: {at}"
+    let Some((units, verdict, refused)) = red else {
+        return stopped(
+            l,
+            id,
+            format!("lane: batch {id}: make land ended with no exit code at attempt {n} (it could not start, or was killed) - the runner stopped, the batch open: {at}"),
         );
-        l.append("owed", &json!({"batch": id, "line": line}))?;
-        return Err(line);
+    };
+    // A FIRST-PASS REFUSAL NAMING NO CHANGE EJECTS NOTHING (461 T15's plan review, round 1): a hold, a lock or an owed round is no
+    // change's fault and refuses their repairs again, so the runner stops with the batch open, as at exit -1; a refusal whose every
+    // row names one change of the batch ejects those changes as any placed red does
+    if let Refusal::Unnamed(rows) = &refused {
+        return stopped(
+            l,
+            id,
+            format!("lane: batch {id}: make land's first pass refused at attempt {n}, a row naming no change of the batch ({}) - the runner stopped, the batch open, nothing ejected: {at}", rows.join("; ")),
+        );
+    }
+    // a refusal naming several changes ejects those it names as one entry, the rest run again (round 2); every change else
+    let unplaced = match refused {
+        Refusal::Named(named) => named,
+        Refusal::None | Refusal::Unnamed(_) => (0..todo.len()).collect(),
     };
     Ok(Some(Redden {
         n,
@@ -462,7 +481,18 @@ fn land(
         attempt: at,
         units,
         verdict,
+        unplaced,
     }))
+}
+
+/// The runner stopped with batch `id` open: its own `owed` line, `"stopped": true` so no death line follows it (`wake::dead`), and
+/// the line as the step's error.
+fn stopped<T>(l: &Lane, id: &str, line: String) -> Result<T, String> {
+    l.append(
+        "owed",
+        &json!({"batch": id, crate::wake::STOPPED: true, "line": line}),
+    )?;
+    Err(line)
 }
 
 /// A change as attribution reads it: the paths its commit touches against its parent, and its tasks.
@@ -492,7 +522,11 @@ fn change_of(tree: &Path, h: &HandIn) -> Change {
 /// `eject` lines (`repairs`' doc), then one `owed` line an entry, naming it and the attempt file. The ejected commits, returned.
 fn eject(l: &Lane, id: &str, todo: &[&HandIn], red: &Redden) -> Result<Vec<String>, String> {
     let groups: Vec<(Vec<&HandIn>, Vec<String>, &str)> = match &red.verdict {
-        Verdict::Unplaced => vec![(todo.to_vec(), red.units.clone(), "unplaced")],
+        Verdict::Unplaced => vec![(
+            red.unplaced.iter().map(|&i| todo[i]).collect(),
+            red.units.clone(),
+            "unplaced",
+        )],
         Verdict::Placed(placed) => placed
             .iter()
             .map(|(i, units)| (vec![todo[*i]], units.clone(), "red"))

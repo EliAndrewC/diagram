@@ -21,12 +21,15 @@ use crate::repairs;
 const PHASE: &str = r#"{"ev":"Phase","src":"rust","step":"test","t0":"@T@","t1":"@T@","code":101,"clone":"@TREE@","crates":["lib/two"]}"#;
 
 /// A task's `phase-<task>` file in the common directory: its line written to the feature's event log as the checks write theirs,
-/// stamped now and in the tree the landing runs in, and the landing red; a `kill` file: `make` itself killed, so no exit code.
+/// stamped now and in the tree the landing runs in, and the landing red; a `kill` file: `make` itself killed, so no exit code; a
+/// `refuse` file: the first pass's refusal, its text printed and the landing red (with `refuse-once`, at the first attempt alone).
 const RED_LINES: &str = concat!(
     "\t",
     r#"@c=$$(git rev-parse --path-format=absolute --git-common-dir); fail=; for t in $(T); do if [ -f "$$c/phase-$$t" ]; then mkdir -p "$$c/l7r-events"; now=$$(date -u +%Y-%m-%dT%H:%M:%S.%N | cut -c1-23)Z; sed "s|@TREE@|$$(pwd)|; s|@T@|$$now|g" "$$c/phase-$$t" >> "$$c/l7r-events/$$SPECIFY_FEATURE.jsonl"; fail=1; fi; done; [ -z "$$fail" ]"#,
     "\n\t",
     r#"@if [ -f "$$(git rev-parse --git-common-dir)/kill" ]; then kill -9 $$PPID; fi"#,
+    "\n\t",
+    r#"@c=$$(git rev-parse --git-common-dir); if [ -f "$$c/refuse" ]; then cat "$$c/refuse"; if [ -f "$$c/refuse-once" ]; then rm "$$c/refuse" "$$c/refuse-once"; fi; exit 1; fi"#,
     "\n"
 );
 
@@ -360,8 +363,189 @@ fn a_make_killed_mid_landing_stops_the_runner_with_the_batch_open_and_ejects_not
     assert_eq!(w.events(), ["batch", "carry", "run", "owed"]);
     assert_eq!(w.lane()[2]["code"], -1);
     assert_eq!(w.lane()[3]["line"], err);
+    // the runner's own word that it stopped with the batch open, so `make lane-wait` writes no death line after it (461 T15)
+    assert_eq!(w.lane()[3][crate::wake::STOPPED], true);
     assert!(repairs::read(&w.common).is_empty());
     assert!(open(&w).open());
+    // the batch open: no step forms or runs again, every poll, and none writes a line - though a hand-in waits
+    std::fs::remove_file(w.common.join("kill")).unwrap();
+    w.hand_in("461", "T02", "b.txt", "b\n");
+    let before = w.lane().len();
+    assert_eq!(step(&l), Ok(false));
+    assert_eq!(w.lane().len(), before);
+}
+
+/// A runner killed after a repair entry was filed and before all its `eject` lines were written (461 T15, the decision this labels):
+/// the resume runs what the log has not ejected as a new attempt, so a change the entry lists may land. The entry is then no open
+/// repair of that change: only an `eject` line naming the entry's id makes a change the entry's, which T16's queue must read.
+#[test]
+fn a_kill_between_a_repair_entry_and_its_eject_lines_resumes_what_the_log_has_not_ejected() {
+    let w = world("lane-run-entry-kill");
+    let one = w.hand_in("461", "T01", "a.txt", "a\n");
+    let two = w.hand_in("461", "T02", "b.txt", "b\n");
+    let l = lane_of(&w);
+    let entry = repairs::Entry {
+        feature: "461-x".into(),
+        tasks: vec!["T01".into(), "T02".into()],
+        kind: "fix".into(),
+        ejected: vec![one.clone(), two.clone()],
+        batch: "461-1".into(),
+        why: "unplaced".into(),
+        units: Vec::new(),
+        attempt: "a.log".into(),
+    };
+    assert_eq!(repairs::file(&w.common, "t", &entry), Ok("r1".into()));
+    for (event, fields) in [
+        ("batch", json!({"batch": "461-1", "changes": [one, two]})),
+        ("run", json!({"batch": "461-1", "n": 1, "code": 2})),
+        (
+            "attribute",
+            json!({"batch": "461-1", "candidates": [one, two], "how": "none"}),
+        ),
+        (
+            "eject",
+            json!({"batch": "461-1", "change": one, "repair": "r1", "why": "unplaced"}),
+        ),
+    ] {
+        log::append(&w.common, "t", event, &fields).unwrap();
+    }
+    let b = open(&w);
+    let left = crate::runner::remaining(&b, &std::collections::BTreeSet::new());
+    assert_eq!(left, [two.clone()]);
+    resume(&l, &b, &left).unwrap();
+    let lines = w.lane();
+    let end = lines.iter().rev().find(|x| x["event"] == "landed").unwrap();
+    assert_eq!(end["landed"], json!([two]));
+    assert_eq!(end["ejected"], json!([one]));
+    assert_eq!(w.origin_holds("b.txt"), "b");
+    // no second entry; the one entry names both, but only T01's `eject` line makes it T01's repair
+    assert_eq!(repairs::read(&w.common).len(), 1);
+    assert_eq!(log::repairs_open(&lines, &[]), ["r1"]);
+    let ejected: Vec<&Value> = lines.iter().filter(|x| x["event"] == "eject").collect();
+    assert_eq!(ejected.len(), 1);
+}
+
+/// WHERE THE GATE'S OWN WRITER FILES A CHECK'S LINE IN THE LANE'S TREE (461 T15's closing half): a `Phase` line written through
+/// `append_row_with` with no task and no feature of its own, under the runner's `SPECIFY_FEATURE` and with a stale `feature.json`
+/// naming another feature, lands in the log the attribution reads - the registry's lane tree is no pool tree, so no holder files it.
+#[test]
+fn a_check_s_phase_line_in_the_lane_s_tree_is_filed_where_the_attribution_reads_it() {
+    use l7r_shared::guards::event_log_hooks::{append_row_with, log_path_in, now_stamp, phase_row};
+    let w = world("lane-run-filed");
+    let land = w.dir.path().join("repo-land");
+    put(&land, "specs/999-other/tasks.md", "- [ ] T01 x\n");
+    put(
+        &land,
+        ".specify/feature.json",
+        r#"{"feature_directory": "specs/999-other"}"#,
+    );
+    let env = |k: &str| (k == "SPECIFY_FEATURE").then(|| "461-x".to_owned());
+    let t0 = now_stamp(std::time::SystemTime::now());
+    let began = std::time::SystemTime::now();
+    let mut row = phase_row(
+        "rust",
+        "test",
+        (began, std::time::SystemTime::now()),
+        101,
+        "done",
+        &land,
+    );
+    row.insert("crates".into(), json!(["lib/two"]));
+    let filed = append_row_with(&land, None, row, &env).unwrap();
+    let read = log_path_in(&land, "461-x", &env);
+    assert_eq!(filed, read);
+    let t1 = now_stamp(std::time::SystemTime::now() + std::time::Duration::from_millis(5));
+    let units: Vec<String> = crate::attribute::reds(&log::lines_of(&read), (&t0, &t1), &land, "")
+        .into_iter()
+        .map(|r| r.unit)
+        .collect();
+    assert_eq!(units, ["lib/two test"]);
+}
+
+/// 461 T15's plan review: a first-pass refusal naming no change of the batch (a hold, a lock) ejects nothing - the runner stops with
+/// the batch open, its line the runner's own `stopped` one; a refusal whose row names a task of the batch ejects that change alone.
+#[test]
+fn a_first_pass_refusal_naming_no_change_ejects_nothing_and_one_naming_a_task_ejects_its_change() {
+    let refusal = "land: refused before anything ran - nothing landed, nothing ticked. Every refusal:\n  @ROW@\n";
+    let w = world("lane-run-refused");
+    w.hand_in("461", "T01", "a.txt", "a\n");
+    w.hand_in("461", "T02", "b.txt", "b\n");
+    let row = "another landing holds the clone's lock (pid 42)";
+    std::fs::write(w.common.join("refuse"), refusal.replace("@ROW@", row)).unwrap();
+    let l = lane_of(&w);
+    let err = step(&l).unwrap_err();
+    assert!(
+        err.contains("first pass refused at attempt 1, a row naming no change"),
+        "{err}"
+    );
+    assert!(err.contains(row), "{err}");
+    assert_eq!(w.events(), ["batch", "carry", "run", "owed"]);
+    assert_eq!(w.lane()[3][crate::wake::STOPPED], true);
+    assert!(repairs::read(&w.common).is_empty());
+    assert!(open(&w).open());
+
+    let w = world("lane-run-refused-task");
+    let one = w.hand_in("461", "T01", "a.txt", "a\n");
+    let two = w.hand_in("461", "T02", "b.txt", "b\n");
+    let named = refusal.replace("@ROW@", "T02: owes its claims round");
+    std::fs::write(w.common.join("refuse"), named).unwrap();
+    let l = lane_of(&w);
+    // the refusal names T02, whose change is ejected; the next attempt, refused again, names no change left, so the runner stops
+    let err = step(&l).unwrap_err();
+    assert!(err.contains("first pass refused at attempt 2"), "{err}");
+    let lines = w.lane();
+    let eject = lines.iter().find(|x| x["event"] == "eject").unwrap();
+    assert_eq!(eject["change"], json!(two));
+    assert_eq!(eject["why"], "red");
+    let units = repairs::read(&w.common)[0]["units"].clone();
+    assert_eq!(units, json!(["first-pass T02: owes its claims round"]));
+    let b = open(&w);
+    let left = crate::runner::remaining(&b, &std::collections::BTreeSet::new());
+    assert_eq!(left, [one]);
+}
+
+/// 461 T15's plan review, round 2: a first-pass row naming two changes of the batch ejects those two as one entry and the rest runs
+/// again; a row naming one beside a row naming none stops the batch, nothing ejected.
+#[test]
+fn a_first_pass_row_naming_two_changes_ejects_both_and_the_rest_lands() {
+    let refusal = "land: refused before anything ran - nothing landed, nothing ticked. Every refusal:\n  @ROW@\n";
+    let w = world("lane-run-refused-two");
+    let one = w.hand_in("461", "T01", "a.txt", "a\n");
+    let two = w.hand_in("461", "T02", "b.txt", "b\n");
+    let three = w.hand_in("461", "T03", "c.txt", "c\n");
+    let row = refusal.replace("@ROW@", "T01, T02: owe their claims round");
+    std::fs::write(w.common.join("refuse"), &row).unwrap();
+    // the refusal is the first attempt's alone: the stand-in's own rule drops it once a run reads it
+    std::fs::write(w.common.join("refuse-once"), "").unwrap();
+    let l = lane_of(&w);
+    assert_eq!(step(&l), Ok(true));
+    let lines = w.lane();
+    let ejected: Vec<&Value> = lines
+        .iter()
+        .filter(|x| x["event"] == "eject")
+        .map(|x| &x["change"])
+        .collect();
+    assert_eq!(ejected, [&json!(one), &json!(two)]);
+    let entries = repairs::read(&w.common);
+    assert_eq!(entries.len(), 1);
+    assert_eq!(entries[0]["ejected"], json!([one, two]));
+    assert_eq!(entries[0]["why"], "unplaced");
+    let end = lines.iter().rev().find(|x| x["event"] == "landed").unwrap();
+    assert_eq!(end["landed"], json!([three]));
+
+    let w = world("lane-run-refused-mixed");
+    w.hand_in("461", "T01", "a.txt", "a\n");
+    let mixed = refusal.replace(
+        "@ROW@",
+        "T01: owes its claims round\n  the clone's lock is held (pid 42)",
+    );
+    std::fs::write(w.common.join("refuse"), mixed).unwrap();
+    let err = step(&lane_of(&w)).unwrap_err();
+    assert!(
+        err.contains("(first-pass the clone's lock is held (pid 42))"),
+        "{err}"
+    );
+    assert!(repairs::read(&w.common).is_empty());
 }
 
 #[test]

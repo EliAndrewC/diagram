@@ -139,16 +139,20 @@ fn a_red_run_s_own_line_tells_the_death_so_one_red_wakes_once() {
         "batch",
         &json!({"batch": "461-1", "changes": ["a1b2c3d4e5"]}),
     );
-    // T14's red stand-in: one owed line for the batch, then the runner stops with the batch open
-    owed(c, "lane: batch 461-1 red at attempt 1 (make land exit 2) - the runner stopped, the batch open");
+    // the runner's own line that it stopped with the batch open (461 T15: a `make` with no exit code), then its stop
+    line(
+        c,
+        "owed",
+        &json!({"batch": "461-1", "stopped": true, "line": "lane: batch 461-1: make land ended with no exit code at attempt 1 (it could not start, or was killed) - the runner stopped, the batch open: a.log"}),
+    );
     line(
         c,
         "stop",
         &json!({"pid": 7, "why": "error: lane: batch 461-1 red"}),
     );
     let (got, _) = run(c, false, &nothing);
-    assert!(got.unwrap()[0].contains("red at attempt 1"));
-    // the re-armed wait, far past the grace, says no death: the red line told it
+    assert!(got.unwrap()[0].contains("no exit code at attempt 1"));
+    // the re-armed wait, far past the grace, says no death: the runner's line told it
     let (got, sleeps) = run(c, false, &|n| {
         if n == 20 {
             owed(c, "lane: batch 461-1 landed");
@@ -159,6 +163,31 @@ fn a_red_run_s_own_line_tells_the_death_so_one_red_wakes_once() {
         (vec!["lane: batch 461-1 landed".to_owned()], 20)
     );
     assert!(!log::read(c).iter().any(|l| l["why"] == DEAD));
+}
+
+/// 461 T15: a red attempt's ejection owes its line while the runner goes on to the next attempt, so it tells no death - a runner
+/// killed after it leaves the batch open, and that death is said once.
+#[test]
+fn an_ejection_s_line_tells_no_death_so_a_runner_killed_after_it_is_said() {
+    let t = TempDir::new("lane-wake-ejected");
+    let c = t.path();
+    line(c, "start", &json!({"pid": 7, "why": "make lane-start"}));
+    line(
+        c,
+        "batch",
+        &json!({"batch": "461-1", "changes": ["a1b2c3d4e5", "f6a7b8c9d0"]}),
+    );
+    owed(c, "lane: batch 461-1 red at attempt 1 - 461 T02 ejected as repair r1 (red: lib/two test) - make builder-next hands it to a fresh builder: a.log");
+    let (got, _) = run(c, false, &nothing);
+    assert!(got.unwrap()[0].contains("ejected as repair r1"));
+    // far past the grace a line of its own ends a wait that said nothing, so the old rule's silence is a red, not a hang
+    let (got, _) = run(c, false, &|n| {
+        if n == 50 {
+            owed(c, "past the grace");
+        }
+    });
+    assert!(got.unwrap()[0].starts_with("lane: the runner is not running and batch 461-1 is open"));
+    assert_eq!(log::read(c).iter().filter(|l| l["why"] == DEAD).count(), 1);
 }
 
 #[test]

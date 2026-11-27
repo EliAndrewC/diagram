@@ -618,6 +618,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T15 (phase 2's red path: a red batch attributed from the gate's own record, its changes ejected as repair entries, the rest run again)": {
+   "sha256": "8827588c35d3aba62265dab6695fadccc69163c2500a7a13988b061aafb247b0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T15 Approach (checklist part A)": {
+   "sha256": "1f766dc6db284f5a6fe0d88495e99f3c2c1d14eeb463ac6247e03e6fb677d56e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3791,6 +3803,276 @@
      "why": "451 FR-013 counts measurement of where the time goes as performance work; exits and budget decide nothing the spec left open in a way that narrows it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T15 (phase 2's red path: a red batch attributed from the gate's own record, its changes ejected as repair entries, the rest run again)",
+    "### T15 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Phase 2: a red unit naming no change or several, or no unit read, ejects the whole batch as one `unplaced` entry",
+     "class": "within",
+     "why": "Interim stage of FR-004's 'attribute, else bisect': the block states T24 replaces attribute() with D6's halving over candidates, so the request's 'bisects and ejects the failing change. The rest of the batch lands' is delivered by phase 3. Within ONLY on that premise; if phase 3 does not replace this path, whole-batch ejection of innocent changes would be a narrowing of the request."
+    },
+    {
+     "id": "D2",
+     "summary": "A crate is its directory; dependents not counted; a dependent's red is unplaced until phase 3 halving",
+     "class": "within",
+     "why": "Conservative: a dependent's red yields unplaced (no innocent change named) and the phase 3 halving places it; nothing of the request narrowed."
+    },
+    {
+     "id": "D3",
+     "summary": "A Phase line naming several crates is one unit over all of them (a family cover-build red no longer ejects an innocent change)",
+     "class": "within",
+     "why": "Fixes a wrong outcome (an innocent change ejected as red) toward the request's 'ejects the failing change'. Open question for the author, not ruled: the line prints the first 3 crates and '(+<k> more)'; the block does not say how a line with k>0 is read. If read as naming only the 3, a change touching a named crate is still ejected for a culprit in a hidden one - the same defect this decision fixes. State it (e.g. k>0 reads as unplaced, or the lane's NAMED is set to name all)."
+    },
+    {
+     "id": "D4",
+     "summary": "A hook suite maps to a delta path by the guard file name and the guard and shared-guard sources",
+     "class": "within",
+     "why": "Attribution mapping detail serving FR-004's attribute step; a missed map falls to unplaced, never to an innocent ejection."
+    },
+    {
+     "id": "D5",
+     "summary": "A first-pass row maps by a delta path in its text or its leading task list",
+     "class": "within",
+     "why": "Attribution mapping detail serving FR-004; a row with no match is not attributed to a change."
+    },
+    {
+     "id": "D6a",
+     "summary": "Any non-zero exit (not -1) is red, so a first-pass refusal naming no change - a hold, a lock, an owed claims round - ejects the whole batch `unplaced` and files a repair entry for every task, where T14 stopped the runner",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request: 'On a red result it bisects and ejects the failing change. The rest of the batch lands, and the ejected task returns to the queue as a repair entry.' Here no change fails and the block says so ('though none is at fault'), yet every change is ejected and sent to a fresh builder, and none lands. Grounds: not physically impossible (T14 stopped the runner in this case, so a non-ejecting path exists); not implied by the GM's words; the literal rule does not defeat the purpose - this decision does, since repair builders with nothing to repair are pure token cost (FR-006 counts repair builders) and a persisting hold or lock refuses the resubmissions again. Its stated reason, 'the algorithmically easier route', is the not-legitimate kind. It also contradicts the block's own Decision 3, which calls ejecting an innocent change a defect. Taken case by case: a lock and a hold are environmental and name no change, so ejecting is NOT LEGITIMATE for each; an owed claims round that belongs to a batch task is attributable, so map it to that task (Decision 5's task-list route) rather than eject the batch, and if it cannot be mapped it is not a change's failure either. Unlike D1, this rule sits in the runner's red classification, and nothing in the block says T24 replaces it. What it should say instead: a refusal naming no change ejects nothing; the runner stops with the batch open (as T14, or as exit -1 below) or waits and retries, and wakes the coordinator only as FR-005 and US5 allow."
+    },
+    {
+     "id": "D6b",
+     "summary": "Exit -1 (make could not start or was killed) ejects nothing; the runner stops with the batch open, its owed line carrying stopped: true",
+     "class": "within",
+     "why": "Ejects no innocent change and lands nothing unchecked (FR-008); a stop on an infrastructure failure is not a narrowing."
+    },
+    {
+     "id": "D6c",
+     "summary": "Only a non-zero exit 'not on origin/main' counts as red (a red already present on main is not blamed on the batch)",
+     "class": "within",
+     "why": "Read as: a red reproduced on origin/main is not the batch's change's fault, so nothing is ejected for it; that serves 'ejects the failing change'."
+    },
+    {
+     "id": "D7",
+     "summary": "A kill between filing an entry and its eject lines resumes as a new attempt; an entry is a change's repair only where an eject line names it",
+     "class": "within",
+     "why": "Crash-recovery detail; the consumer rule (T16 reads repairs by eject lines) keeps any change the resume lands from being repaired, so no request clause is narrowed. Its cost is an entry's `ejected` field that can overstate, and the block states that cost."
+    },
+    {
+     "id": "D8",
+     "summary": "Only the runner's own stopped: true line tells a death (T20's rule revisited)",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a runner killed after an ejection never said to the coordinator), serving FR-005's wake. 'Narrowed' here describes the death signal, not the request."
+    },
+    {
+     "id": "D9",
+     "summary": "The attribution reads Phase lines where the gate's writer files them (pool holder, then feature_of via SPECIFY_FEATURE); the real lane-tree observation deferred to T23",
+     "class": "within",
+     "why": "Implementation reading pinned by a test with the real writer; deferring the real-tree observation to the lane's first real batch narrows nothing asked."
+    },
+    {
+     "id": "D10",
+     "summary": "Suite and row readers read the attempt file; the --src hooks Phase-line fallback is not built",
+     "class": "within",
+     "why": "Implementation reading of where the output lands; an unbuilt fallback the request never named narrows nothing."
+    },
+    {
+     "id": "U1",
+     "summary": "Each ejection writes one `owed` line for each entry and the runner goes on (unlabeled; Approach)",
+     "class": "within",
+     "why": "Bookkeeping for repair entries (FR-004). Whether an owed line wakes the coordinator against FR-005's 'once per landed batch, otherwise only for US5's cases' cannot be settled from this bundle (US5 not supplied); D8 makes only the stopped line a death, so it is taken as not an extra wake."
+    }
+   ],
+   "tasks": [
+    "T15"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T15 (phase 2's red path: a red batch attributed from the gate's own record, its changes ejected as repair entries, the rest run again)",
+    "### T15 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T15 Decision 1",
+     "summary": "In phase 2, a red unit that names no change or more than one, or no unit read at all, is UNPLACED and ejects the batch as one repair entry (why unplaced); phase 3's halving (T24) replaces attribute().",
+     "class": "within",
+     "why": "The request's sketch says 'it bisects and ejects the failing change', and FR-004 says 'attribute, else bisect'. T15 is the attribute half. The block says phase 3's halving (T24) replaces attribute(), inside this feature. Until then the else-branch hands the batch to a fresh builder as a queue entry, not to the coordinator, so SC-003's 'no batch is repaired whole by the coordinator' holds. This is the order of delivery, not a carve-out from the end state. It becomes a narrowing if T24 is dropped or deferred out of the feature."
+    },
+    {
+     "id": "T15 Decision 2",
+     "summary": "A crate is its directory; dependents are not counted, so a core change that reddens lane's tests is unplaced and left to phase 3's halving.",
+     "class": "within",
+     "why": "The block labels this D6's literal 'a crate by its directory'; D6's text is not in the bundle. On the request and FR-004 alone, it is within: attribution is a best-effort first step with bisect behind it, and this rule never ejects an innocent change, it only falls through to the fallback."
+    },
+    {
+     "id": "T15 Decision 3",
+     "summary": "A Phase line naming several crates is one unit over all of them (a family cover-build is one compile); only the printed form is cut, using a GUESS display knob.",
+     "class": "within",
+     "why": "It fixes a wrong outcome: reading one crate at a time ejected an innocent change as red, which goes against 'ejects the failing change'. It is pinned by a named test. The NAMED knob only shortens a printed line and decides no behavior."
+    },
+    {
+     "id": "T15 Decision 4",
+     "summary": "A hook suite maps to a delta path matching tests/hooks/test-<stem>.*, and for a *-hooks stem also the guard sources in rust/guard/src/guards and rust/guard/shared/src/guards.",
+     "class": "within",
+     "why": "The block labels this D6's map; D6 is not in the bundle. Within on the request: including the shared crate only widens what a suite reaches, and an ambiguous result is unplaced and goes to the fallback. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T15 Decision 5",
+     "summary": "A first-pass refusal row maps to a change by a delta path its text contains, or by its leading task list.",
+     "class": "within",
+     "why": "The block labels this D6's 'a row by its file', plus the first pass's own row form. It is mechanism inside the attribution FR-004 asks for. What happens to a row that maps to SEVERAL changes is ruled under 6c."
+    },
+    {
+     "id": "T15 Decision 6a",
+     "summary": "Exit -1 (make could not start, or was killed) ejects nothing: the runner stops with the batch open and an owed line carrying stopped:true, and the next lane-start resumes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is an exception to 'a non-zero exit is a red that ejects', judged separately from 6b to 6d. The GM's rule is 'on a red result it bisects and ejects the failing change'. An exit -1 is no result of any change: the checks did not run, or ran to no verdict. There is no failing change to name, so the literal rule cannot be applied, and ejecting on no evidence would eject innocent changes, defeating the rule's purpose of letting the rest land. Stopping keeps the batch. The wake this adds is not a per-landed-batch wake. FR-005 allows other wakes only for US5's cases, and US5's text is not in the bundle. On the request, though, it is the 'rare case that needs judgment' that the sketch's item 3 leaves to the coordinator."
+    },
+    {
+     "id": "T15 Decision 6b",
+     "summary": "A first-pass refusal whose every row names NO change of the batch (a hold, a lock, an owed round of no task of the batch) ejects nothing and stops the runner with the batch open; the next lane-start resumes it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Scoped to the stated class only: every row names no change of the batch. The request's object is 'the failing change', and a refusal caused by something outside the batch has none, so the literal rule cannot be applied. The request's purpose, that the rest of the batch lands, cannot be reached either: the same refusal blocks the rest and would refuse every repair of any ejected change. This also reverses the whole-batch ejection that round 1 ruled NOT LEGITIMATE. On the wake it adds, see 6a: US5 is not in the bundle, and the request's ground is the sketch's item 3."
+    },
+    {
+     "id": "T15 Decision 6c (unlabeled; found in Decision 6's trigger)",
+     "summary": "A first-pass refusal with a row that names MORE THAN ONE change of the batch, for example Decision 5's leading task list 'T13, T14: ...' with the two tasks in different hand-ins. Decision 6's trigger is 'the attempt's units hold a first-pass row and the verdict is unplaced', and Decision 1 makes a unit naming more than one change unplaced. The eject path covers only 'a refusal whose every row names one change'. As written, this refusal therefore stops the runner and ejects nothing, and the stop message says 'naming no change of the batch', which is false here.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is an exception to 'ejects the failing change. The rest of the batch lands', and the block gives it no argument of its own. Neither of Decision 6's two justifications holds for it. A change did fail: the row names it. Nothing says its repair would be refused again, since the same kind of row naming ONE change is ejected as red. Applying the rule is not impossible here, because the failing changes are named. The only way into this case is the mechanism's wording, not a reason. It is a wrong outcome: the runner stops a batch it could handle, wakes the coordinator with a false message, and lands nothing. What the plan should say instead: a first-pass row naming several changes of the batch ejects those named changes (as red, or as one entry like Decision 1's), and the rest is run again. The stop, and the 'naming no change' message, are limited to refusals whose rows name no change of the batch (6b) or that also carry such a row (6d). Pin it with a test of a two-change row."
+    },
+    {
+     "id": "T15 Decision 6d (unlabeled; mixed rows)",
+     "summary": "A first-pass refusal in which one row names a change of the batch and another row names none (a hold or lock of no batch task). As written it is unplaced, so it stops the runner with nothing ejected.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged separately from 6c. The row that names no change of the batch blocks the rest of the batch whatever is ejected, and would refuse the repairs too, so 'the rest of the batch lands' cannot be reached while it holds. Nothing is lost: on resume, once the hold clears, the named change's row refuses again and is ejected by the rule. The plan should state this case explicitly, and its stop message should not say 'naming no change' when a row names one."
+    },
+    {
+     "id": "T15 Decision 7",
+     "summary": "A kill between filing a repair entry and writing its eject lines resumes as a new attempt. An entry is a change's repair only where an eject line names it, and T16's queue reads by that rule. Finishing the interrupted ejection at resume is priced and not taken.",
+     "class": "within",
+     "why": "This is crash-recovery mechanism. With the rule that an entry is a change's repair only where an eject line names it, a change the resumed attempt lands is never returned as a repair, so the request's 'the ejected task returns to the queue as a repair entry' holds exactly for the changes actually ejected. The cost is stated and handed to T16 explicitly."
+    },
+    {
+     "id": "T15 Decision 8",
+     "summary": "T20's wake::dead rule is revisited: only the runner's own stopped:true line tells a death, not any owed line of the open batch.",
+     "class": "within",
+     "why": "It fixes a wrong outcome: since T15, an owed line no longer means the runner stopped, so a runner killed in a later attempt was never reported to the coordinator. Restoring a wake the design already owes widens nothing. The wake itself is the death case of 6a and 6b, and FR-005's 'US5's cases' could not be checked because US5 is not in the bundle."
+    },
+    {
+     "id": "T15 Decision 9",
+     "summary": "The attribution reads a check's Phase line where the gate's writer files it: the pool-holder chain and feature_of through the SPECIFY_FEATURE that make land exports. The real lane-tree line is left to T23 to observe.",
+     "class": "within",
+     "why": "This is where the gate's own record is read, as FR-004's attribute step requires. It is pinned by a test with the real writer. Saying that no lane-tree line exists yet, and handing its measurement to T23, is honest scoping and takes nothing out of the request."
+    },
+    {
+     "id": "T15 Decision 10",
+     "summary": "One owed line per repair entry, naming the entry, its units and the attempt file. One attempt's lines are written together, so one lane-wait returns them as one wake.",
+     "class": "within",
+     "why": "FR-005 says 'once per landed batch ... otherwise only for US5's cases'. A red attempt's owed lines are a wake that is not per landed batch, and US5's text is not in the bundle, so how it fits FR-005 is not confirmed here. On the request it is within: the sketch gives the coordinator dispatching ('I'd dispatch, read short reports'), and the ejected task 'returns to the queue as a repair entry' for a fresh builder. Telling the coordinator, in one wake per attempt, that there are repairs to dispatch is that role, and integration work stays out of its context (SC-004). It narrows nothing the GM asked for. The block labels the fresh-builder route D7's; D7 is not in the bundle."
+    },
+    {
+     "id": "T15 Decision 11",
+     "summary": "The suite and row readers read the attempt file, which make land's inherited stdout and stderr go to. The --src hooks Phase lines stay an unbuilt fallback.",
+     "class": "within",
+     "why": "This is a measured reading of where the output actually lands, with the code paths named. It chooses where to read the gate's own record and changes nothing in scope."
+    }
+   ],
+   "tasks": [
+    "T15"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T15 (phase 2's red path: a red batch attributed from the gate's own record, its changes ejected as repair entries, the rest run again)",
+    "### T15 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T15 Decision 1",
+     "summary": "Phase 2: a red unit naming no change or several, or no unit read, ejects the batch as one 'unplaced' entry; phase 3 (T24) replaces attribute() with D6's halving.",
+     "class": "within",
+     "why": "This is the order the work is built in, not a carve-out from it. FR-004 ('attribute, else bisect') and the request's 'bisects and ejects the failing change. The rest of the batch lands' are met by phases 2 and 3 together, and the block names the task that replaces this route. It would be a narrowing only if T24 were dropped or the feature closed without it. Ejecting the batch as one repair entry for a fresh builder still keeps the coordinator out of the repair (SC-003)."
+    },
+    {
+     "id": "T15 Decision 2",
+     "summary": "A crate is its directory, its dependents are not counted; a change to core that reddens lane's tests is unplaced and phase 3's halving places it.",
+     "class": "within",
+     "why": "D6's own wording. A case it cannot place falls to Decision 1 and then to the bisect the request asks for. It narrows no outcome."
+    },
+    {
+     "id": "T15 Decision 3",
+     "summary": "A Phase line naming several crates is one unit over all of them; only its printed form is cut, with a NAMED knob.",
+     "class": "within",
+     "why": "A defect fix: reading a family cover-build one crate at a time ejected an innocent change, which is the opposite of 'ejects the failing change'. The display knob is only the owed line's length and changes no outcome."
+    },
+    {
+     "id": "T15 Decision 4",
+     "summary": "A hook suite maps to a delta path by its guard file name and the guard sources, the shared crate included.",
+     "class": "within",
+     "why": "How D6's map is carried out. It decides how a failing change is found and drops nothing the request asked for."
+    },
+    {
+     "id": "T15 Decision 5",
+     "summary": "A first-pass row maps by a delta path in its text or by its leading task list.",
+     "class": "within",
+     "why": "How D6's 'a row by its file' is carried out, with the first pass's own form used. It narrows nothing."
+    },
+    {
+     "id": "T15 Decision 6",
+     "summary": "Exit -1, or a first-pass refusal with a row naming no change of the batch (a hold, a lock, an owed round of no task in it), ejects nothing: the runner stops with the batch open and a stopped owed line, and lane-start resumes it. A row naming one change ejects that change; a row naming several ejects them as one entry, and the rest runs again.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows 'on a red result it ... ejects the failing change. The rest of the batch lands': in two cases nothing is ejected and nothing lands. Taken one case at a time. (a) Exit -1: make did not start or was killed, so no change failed and there is no 'failing change' to eject. Ejecting on no evidence would eject innocent changes and defeat the request's purpose, which is that only the failing change leaves. (b) A refusal naming no change of the batch: no change of the batch caused it, and while the hold stands it refuses every first pass, the rest of the batch and every repair included. Landing the rest is physically impossible until it clears. (c) A row naming no change next to a row naming one: the hold still refuses any landing, so the named change being ejected on the resume rather than now loses nothing. The coordinator hears of the stop through the stopped line (Decision 8), so the stop is not silent. Rows that do name changes eject only those changes, and the rest lands, as asked."
+    },
+    {
+     "id": "T15 Decision 7",
+     "summary": "A kill between filing an entry and its eject lines resumes as a new attempt; an entry is a change's repair only where an eject line names it; entries are filed once per batch and set.",
+     "class": "within",
+     "why": "Crash recovery inside the red path. The cost it names, an entry's 'ejected' list naming a change that later lands, produces no wrong outcome, because T16 reads a repair from the eject lines. Nothing the request asked for is cut."
+    },
+    {
+     "id": "T15 Decision 8",
+     "summary": "Only the runner's own stopped line tells a death; an ejection's owed line no longer counts as one.",
+     "class": "within",
+     "why": "A defect fix, shown red first: a runner killed after an ejection was never reported to the coordinator. It now reports more deaths, not fewer."
+    },
+    {
+     "id": "T15 Decision 9",
+     "summary": "The attribution reads a check's Phase line where the gate's writer files it, through the pool holder and feature_of, under the runner's SPECIFY_FEATURE.",
+     "class": "within",
+     "why": "Where the gate's own record is read from. It decides no scope, and a test pins it."
+    },
+    {
+     "id": "T15 Decision 10",
+     "summary": "One owed line per repair entry; one attempt's lines are written together, so one lane-wait returns them as one wake.",
+     "class": "within",
+     "why": "Each line is a dispatch the coordinator owes (a fresh builder per D7). That is the 'I'd dispatch, read short reports' of the sketch the GM called 'very sensible', not integration work. Grouping an attempt's lines into one wake keeps wakes few, in line with FR-005."
+    },
+    {
+     "id": "T15 Decision 11",
+     "summary": "The suite and row readers read the attempt file, which make land's stdout and stderr go to; the --src hooks Phase lines stay an unbuilt fallback.",
+     "class": "within",
+     "why": "Which record the attribution reads, measured by reading the code. It narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4457,6 +4739,81 @@
      "summary": "Green/red exits (red through make arbiter-ask), one-landing budget, tagged performance work as a measurement under 451 FR-013.",
      "class": "within",
      "why": "451 FR-013 counts measurement of where the time goes as performance work; exits and budget decide nothing the spec left open in a way that narrows it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T15": {
+   "section_sha256": "10c4f6bd21d694897ea2d2d519333f091c855f115af89bb3e0cced6e007763c1",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T15 Decision 1",
+     "summary": "Phase 2: a red unit naming no change or several, or no unit read, ejects the batch as one 'unplaced' entry; phase 3 (T24) replaces attribute() with D6's halving.",
+     "class": "within",
+     "why": "This is the order the work is built in, not a carve-out from it. FR-004 ('attribute, else bisect') and the request's 'bisects and ejects the failing change. The rest of the batch lands' are met by phases 2 and 3 together, and the block names the task that replaces this route. It would be a narrowing only if T24 were dropped or the feature closed without it. Ejecting the batch as one repair entry for a fresh builder still keeps the coordinator out of the repair (SC-003)."
+    },
+    {
+     "id": "T15 Decision 2",
+     "summary": "A crate is its directory, its dependents are not counted; a change to core that reddens lane's tests is unplaced and phase 3's halving places it.",
+     "class": "within",
+     "why": "D6's own wording. A case it cannot place falls to Decision 1 and then to the bisect the request asks for. It narrows no outcome."
+    },
+    {
+     "id": "T15 Decision 3",
+     "summary": "A Phase line naming several crates is one unit over all of them; only its printed form is cut, with a NAMED knob.",
+     "class": "within",
+     "why": "A defect fix: reading a family cover-build one crate at a time ejected an innocent change, which is the opposite of 'ejects the failing change'. The display knob is only the owed line's length and changes no outcome."
+    },
+    {
+     "id": "T15 Decision 4",
+     "summary": "A hook suite maps to a delta path by its guard file name and the guard sources, the shared crate included.",
+     "class": "within",
+     "why": "How D6's map is carried out. It decides how a failing change is found and drops nothing the request asked for."
+    },
+    {
+     "id": "T15 Decision 5",
+     "summary": "A first-pass row maps by a delta path in its text or by its leading task list.",
+     "class": "within",
+     "why": "How D6's 'a row by its file' is carried out, with the first pass's own form used. It narrows nothing."
+    },
+    {
+     "id": "T15 Decision 6",
+     "summary": "Exit -1, or a first-pass refusal with a row naming no change of the batch (a hold, a lock, an owed round of no task in it), ejects nothing: the runner stops with the batch open and a stopped owed line, and lane-start resumes it. A row naming one change ejects that change; a row naming several ejects them as one entry, and the rest runs again.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows 'on a red result it ... ejects the failing change. The rest of the batch lands': in two cases nothing is ejected and nothing lands. Taken one case at a time. (a) Exit -1: make did not start or was killed, so no change failed and there is no 'failing change' to eject. Ejecting on no evidence would eject innocent changes and defeat the request's purpose, which is that only the failing change leaves. (b) A refusal naming no change of the batch: no change of the batch caused it, and while the hold stands it refuses every first pass, the rest of the batch and every repair included. Landing the rest is physically impossible until it clears. (c) A row naming no change next to a row naming one: the hold still refuses any landing, so the named change being ejected on the resume rather than now loses nothing. The coordinator hears of the stop through the stopped line (Decision 8), so the stop is not silent. Rows that do name changes eject only those changes, and the rest lands, as asked."
+    },
+    {
+     "id": "T15 Decision 7",
+     "summary": "A kill between filing an entry and its eject lines resumes as a new attempt; an entry is a change's repair only where an eject line names it; entries are filed once per batch and set.",
+     "class": "within",
+     "why": "Crash recovery inside the red path. The cost it names, an entry's 'ejected' list naming a change that later lands, produces no wrong outcome, because T16 reads a repair from the eject lines. Nothing the request asked for is cut."
+    },
+    {
+     "id": "T15 Decision 8",
+     "summary": "Only the runner's own stopped line tells a death; an ejection's owed line no longer counts as one.",
+     "class": "within",
+     "why": "A defect fix, shown red first: a runner killed after an ejection was never reported to the coordinator. It now reports more deaths, not fewer."
+    },
+    {
+     "id": "T15 Decision 9",
+     "summary": "The attribution reads a check's Phase line where the gate's writer files it, through the pool holder and feature_of, under the runner's SPECIFY_FEATURE.",
+     "class": "within",
+     "why": "Where the gate's own record is read from. It decides no scope, and a test pins it."
+    },
+    {
+     "id": "T15 Decision 10",
+     "summary": "One owed line per repair entry; one attempt's lines are written together, so one lane-wait returns them as one wake.",
+     "class": "within",
+     "why": "Each line is a dispatch the coordinator owes (a fresh builder per D7). That is the 'I'd dispatch, read short reports' of the sketch the GM called 'very sensible', not integration work. Grouping an attempt's lines into one wake keeps wakes few, in line with FR-005."
+    },
+    {
+     "id": "T15 Decision 11",
+     "summary": "The suite and row readers read the attempt file, which make land's stdout and stderr go to; the --src hooks Phase lines stay an unbuilt fallback.",
+     "class": "within",
+     "why": "Which record the attribution reads, measured by reading the code. It narrows nothing."
     }
    ],
    "verdict": "CLEAR"

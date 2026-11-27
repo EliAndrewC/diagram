@@ -38,8 +38,11 @@ fn a_red_phase_line_in_the_attempt_s_span_and_tree_names_its_crates_once() {
             "/lane",
             &["rust/gate/crates/land", "rust/guard"],
         ),
-        // the same unit twice, kept once
+        // one crate of it alone is a unit of its own, and the same unit twice is kept once
         phase("test", 101, a, b, "/lane", &["rust/gate/crates/land"]),
+        phase("test", 101, a, b, "/lane", &["rust/gate/crates/land"]),
+        // a line naming no crate is no unit
+        phase("build", 101, a, b, "/lane", &[]),
         phase("lint", 1, a, b, "/lane", &["rust/gate/crates/lane/"]),
         // green, another tree's, before the span, after it, a step that names no crate's red, not a Phase line
         phase("test", 0, a, b, "/lane", &["rust/gate/crates/green"]),
@@ -67,10 +70,49 @@ fn a_red_phase_line_in_the_attempt_s_span_and_tree_names_its_crates_once() {
     assert_eq!(
         units(&events, ""),
         [
+            "rust/gate/crates/land rust/guard test",
             "rust/gate/crates/land test",
-            "rust/guard test",
             "rust/gate/crates/lane/ lint"
         ]
+    );
+}
+
+/// A red `cover-build` is one compile of a crate family: its red names the family, never a change under each crate of it, so two
+/// changes under two of its crates are unplaced, and a change under one of them alone is placed with the one unit.
+#[test]
+fn a_red_line_naming_several_crates_is_one_unit_over_all_of_them() {
+    let (a, b) = ("2026-11-28T03:01:00.000Z", "2026-11-28T03:02:00.000Z");
+    let family = [phase(
+        "cover-build",
+        101,
+        a,
+        b,
+        "/lane",
+        &["rust/a", "rust/b", "rust/c", "rust/d", "rust/e"],
+    )];
+    let read = reds(&family, SPAN, Path::new("/lane"), "");
+    let shown: Vec<&str> = read.iter().map(|r| r.unit.as_str()).collect();
+    assert_eq!(shown, ["rust/a rust/b rust/c (+2 more) cover-build"]);
+    let under_a = change(&["rust/a/src/x.rs"], &["T01"]);
+    let under_e = change(&["rust/e/src/y.rs"], &["T02"]);
+    let elsewhere = change(&["docs/z.md"], &["T03"]);
+    assert_eq!(
+        attribute(&read, &[under_a.clone(), under_e.clone()]),
+        Verdict::Unplaced
+    );
+    assert_eq!(
+        attribute(&read, &[elsewhere, under_e]),
+        Verdict::Placed(vec![(
+            1,
+            vec!["rust/a rust/b rust/c (+2 more) cover-build".to_owned()]
+        )])
+    );
+    let two = [phase("test", 101, a, b, "/lane", &["rust/a", "rust/b"])];
+    let read = reds(&two, SPAN, Path::new("/lane"), "");
+    assert_eq!(read[0].unit, "rust/a rust/b test");
+    assert_eq!(
+        attribute(&read, &[under_a]),
+        Verdict::Placed(vec![(0, vec!["rust/a rust/b test".to_owned()])])
     );
 }
 
@@ -119,7 +161,7 @@ fn each_unit_naming_one_change_places_that_change_with_its_units() {
     let r = reds(&events, SPAN, Path::new("/lane"), output);
     let changes = [
         change(&["docs/y.md"], &["T01"]),
-        // `rust/gate/crates/land/` and `rust/gate/` both hold it: two units, one change
+        // `rust/gate/crates/land/` and `rust/gate/` both hold it: one unit of the line's two crates, and the lint's, one change
         change(&["rust/gate/crates/land/src/a.rs"], &["T02"]),
         change(
             &["rust/guard/shared/src/guards/agent_model_hooks/x.rs"],
@@ -135,8 +177,7 @@ fn each_unit_naming_one_change_places_that_change_with_its_units() {
             (
                 1,
                 vec![
-                    "rust/gate/crates/land test".to_owned(),
-                    "rust/gate test".to_owned(),
+                    "rust/gate/crates/land rust/gate test".to_owned(),
                     "rust/gate/crates/land lint".to_owned()
                 ]
             ),

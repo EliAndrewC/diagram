@@ -36,6 +36,8 @@ pub const WAIT_POLL_S: f64 = 5.0;
 pub const DEAD_GRACE_S: f64 = 30.0;
 /// The `why` of the `owed` line the wait writes for a dead runner, the key of "said once a death".
 pub const DEAD: &str = "runner";
+/// The field of the runner's own `owed` line that says it stopped with its batch open (461 T15), so no death line follows it.
+pub const STOPPED: &str = "stopped";
 
 /// What one wait reads and calls, handed in so a test drives it on a clock of its own.
 pub struct Wait<'a> {
@@ -50,10 +52,11 @@ pub struct Wait<'a> {
 }
 
 /// The open batch a dead runner left, where the wait owes the coordinator that line (asked only once no runner holds the lock): the
-/// log's last batch open, and no `owed` line since the last `start` that names it - a [`DEAD`] line, or the runner's own line for
-/// that batch. The second is T14's red stand-in (`run.rs`): a red run owes ONE line saying `the runner stopped, the batch open`
-/// and then stops, so a death line after it would wake the coordinator twice for one red, a wake FR-005 does not list (461 T20's
-/// plan review). It goes with T15, whose red path no longer stops the runner.
+/// log's last batch open, and no `owed` line since the last `start` that tells its death - a [`DEAD`] line, or the runner's own line
+/// for that batch that it stopped with the batch open ([`STOPPED`]: today a `make land` with no exit code, `run.rs`), after which a
+/// death line would wake the coordinator twice for one stop, a wake FR-005 does not list (461 T20's plan review). WHY that field and
+/// not any line of the batch (T20's rule, written for T14's red stand-in, which stopped the runner): since T15 a red attempt's
+/// ejection owes its line and the runner goes on to the next attempt, so a runner killed after it left an open batch no line said.
 #[must_use]
 pub fn dead(lane: &[serde_json::Value]) -> Option<Batch> {
     let since = lane
@@ -61,9 +64,10 @@ pub fn dead(lane: &[serde_json::Value]) -> Option<Batch> {
         .rposition(|l| l["event"] == "start")
         .map_or(0, |i| i + 1);
     let open = log::batches(lane).pop().filter(Batch::open)?;
-    let told = lane[since..]
-        .iter()
-        .any(|l| l["event"] == "owed" && (l["why"] == DEAD || l["batch"] == open.id.as_str()));
+    let told = lane[since..].iter().any(|l| {
+        l["event"] == "owed"
+            && (l["why"] == DEAD || (l["batch"] == open.id.as_str() && l[STOPPED] == true))
+    });
     (!told).then_some(open)
 }
 

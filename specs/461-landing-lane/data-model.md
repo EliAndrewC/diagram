@@ -73,6 +73,11 @@ the gate's record cannot place, ejected as one entry), `conflict` (the lane's ca
 `arbiter` (filed once the round arbiter's ruling on a task's second pin is recorded; `attempt` names the ruling). Every entry is
 taken by a fresh builder the coordinator dispatches (`plan.md` D7's table). The queue reads an entry as READY until a hand-in names it in `repair_of`, then as built; the queue's
 own states otherwise (`builder_queue/repairs.rs`).
+AN ENTRY IS A CHANGE'S REPAIR ONLY WHERE AN `eject` LINE NAMES IT (461 T15): the runner files the entry before its `eject`
+lines, and a runner killed between them resumes what the log has not ejected as a new attempt, which may land a change the entry
+lists - so the queue hands out an entry only once a lane `eject` line carries its id (`log::repairs_open`), and the repair's changes
+are those `eject` lines' `change`s, never the entry's `ejected` alone. A unit of `units` is `<crate dir> <step>`, or for a Phase line
+naming several crates (a `cover-build` of a family) one unit over all of them, `<dir> <dir> <dir> (+<k> more) <step>`.
 
 ## The log line (`l7r-lane/lane.jsonl`, one JSON line a transition)
 
@@ -91,7 +96,7 @@ own states otherwise (`builder_queue/repairs.rs`).
 | `push` | a set is pushed | `set`, `code` (0, 3 merged, other) |
 | `eject` | a change leaves the batch | `change`, `repair`, `why` |
 | `landed` | the batch is done | `landed`, `ejected`, `runs`, `minutes` |
-| `owed` | the coordinator is owed a line | `line` (the status `make lane-wait` prints) |
+| `owed` | the coordinator is owed a line | `line` (the status `make lane-wait` prints); `stopped: true` on the runner's own line that it stopped with the batch open (461 T15), which no death line follows |
 
 `make lane-wait` prints the `line` of every `owed` event past `l7r-lane/read-mark` (a byte offset into the log) and moves the
 mark. `make task-time` keeps reading the landing's own Phase and `end` lines, which `make land` in the lane's tree still writes
