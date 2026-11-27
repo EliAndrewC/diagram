@@ -80,14 +80,27 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
 - A builder ENDS at its report and is not kept for follow-up (the GM 2026-11-26): what a successor needs is in its plan
   section, its commit and its report, and a later fix - a gate failure, even a design that proved wrong - goes to a fresh
   agent briefed from those. A message to a builder is for a question it asked before it reported.
-- AT A BUILDER'S END, your steps in this order (451 T394): `make builder-done T=<task(s)> F=<feature> MSG="<the commit's subject>"
-  [GUARD="<guard-edit reason>"]` - the HAND-IN since 461 T08: it applies the builder's tree (found in the pool's registry) onto the
-  clone's HEAD, asks the landing's first pass there (a conflict or a refusal is the builder's to answer, and it runs it again),
-  commits it, keeps the commit under `refs/l7r/done/<feature>-<task>`, releases the tree and prints the next dispatch and `handed in
-  to the lane`; THEN THE NEXT DISPATCH (`make builder-brief` for the queue's next task no tree holds), and only then - in phase 1,
-  until the lane runs it - the landing, `make land F= T=`, which
+- THE BUILDER HANDS IN ITSELF (461 T43, US2: "A refusal a builder can answer is answered by the builder that has the context"): a
+  `fix` or `closing-half` builder's last step, once its plan review is CLEAR, is `make builder-done T=<task(s)> F=<feature>
+  MSG="<the commit's subject>" [GUARD="<guard-edit reason>"]` - the HAND-IN since 461 T08: it applies the tree (found in the pool's
+  registry) onto the clone's HEAD, asks the landing's first pass there, commits it, keeps the commit under
+  `refs/l7r/done/<feature>-<task>`, releases the tree and prints the next dispatch and `handed in to the lane`. A conflict no rule
+  resolves is left in the tree with its paths named: the builder resolves them, `git add`s those paths - the one hand `git add` in a
+  pool tree - and runs it again; a first-pass refusal it answers in its tree (each prints its fixing command) and runs it again; one
+  that is the session's (an owed claims round, which a builder never dispatches) it reports verbatim and stops, the tree held. It
+  never lands or pushes, touches the tree no more after `handed in`, and reports the outcome, the done ref and the next dispatch the
+  command printed. WHY: since T08 the session ran it after the report, so a conflict or a refusal reached the coordinator, who had to
+  re-read what the builder already knew (found by T08's builder). Past the context cap the wrap-up band lets `make builder-done`
+  through (`context_cap_hooks/band.rs`'s `MAKE`) but no edit: a conflict there goes to the handoff. A `build-half` or a
+  `measurement` builder writes no plan section, and the hand-in's first pass asks its task's tick check, whose approach refusal
+  refuses a stub's Approach block, so its block still says "Do NOT stage, commit" and the session hands it in - refused the same way
+  until 461 T44 gives the hand-in a mode for those kinds.
+- AT A BUILDER'S END, your steps in this order (451 T394): where the builder has not handed in (a build half, a measurement, a
+  builder stopped short), `make builder-done T=<task(s)> F=<feature> MSG="<the commit's subject>" [GUARD="<guard-edit reason>"]`,
+  as above; THEN THE NEXT DISPATCH (`make builder-brief` for the queue's next task no tree holds, the one `make builder-done` printed,
+  or `make builder-next`), and only then - in phase 1, until the lane runs it - the landing, `make land F= T=`, which
   carries the commit itself (`make carry FROM=<the tree> COMMIT=<the commit>` by hand, or after a carry stopped), while the next
-  builder works. Never a hand `git add`/`git commit` in a pool tree, and never the
+  builder works. Never a hand `git commit` in a pool tree (nor a hand `git add` but a hand-in's conflict's paths), and never the
   carry before the dispatch: measured 2026-11-27, the three warm trees stood idle 23% of an eight-hour window with the queue never
   short, because the tree waited on the carry, its conflicts, the gate and the landing
   (`dev/measurements/2026-11-27/tree-idle/results.md`). `make builder-trees` lists every done commit not yet carried, each with

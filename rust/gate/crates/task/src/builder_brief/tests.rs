@@ -142,14 +142,23 @@ fn each_kind_s_block_opens_with_its_marker_and_stays_short() {
         let r = run(&words(a), &root, &e, "");
         assert_eq!(r.code, 0, "{}", r.stderr);
         // shorter than the block `agent-prefix-hooks` refuses a repeat of (its `SHARED`, 2,000 characters)
-        assert!(r.stdout.chars().count() < 2000,);
+        let n = r.stdout.chars().count();
+        assert!(n < 2000, "{n}");
         // `context_cap_hooks/split.rs` knows a code builder by this line
         assert!(r.stdout.lines().any(|l| l.starts_with("STOP POINT (")),);
-        assert!(r
-            .stdout
-            .ends_with("Do NOT stage, commit, land or push; never rewrite history.\n"));
+        // 461 T43: a fix and a closing half hand in themselves, through `make builder-done` alone; the other kinds commit nothing
+        let own = a[2] == "fix" || a[2] == "closing-half";
+        let end = if own {
+            "Commit only by `make builder-done`; never land or push; never rewrite history.\n"
+        } else {
+            "Do NOT stage, commit, land or push; never rewrite history.\n"
+        };
+        assert!(r.stdout.ends_with(end), "{}", r.stdout);
+        assert_eq!(r.stdout.contains("HAND IN"), own);
         r
     };
+    // the hand-in line (461 T43, US2: "A refusal a builder can answer is answered by the builder that has the context")
+    let hand_in = "HAND IN last, review CLEAR: `make builder-done T=T01 F=9001 MSG=\"<subject>\"` [GUARD=\"<why>\"]. A conflict: resolve it, `git add`, rerun; a refusal: answer it and rerun, or report a claims one verbatim. Report the outcome and the done ref.\n";
     let marker = |kind: &str, jobs: usize| Marker {
         feature: "9001".to_owned(),
         task: "T01".to_owned(),
@@ -176,6 +185,7 @@ fn each_kind_s_block_opens_with_its_marker_and_stays_short() {
         "Test every new line as if coverage ran (a closure passed to max_by, filter or any counts); an assertion's message stays on the assertion's own line or is left out.\n".to_owned(),
         "FILE what you find and leave, from your tree: `make task-add F=9001 TITLE=\"<title, paths, figures>\"`; its id goes in your report's CANDIDATES.\n".to_owned(),
         "Report in the fixed format of scripts/container/builder-report-format.md, read at your stop point.".to_owned(),
+        hand_in.to_owned(),
     ] {
         assert!(fix.stdout.contains(&words), "{words}\n{}", fix.stdout);
     }
@@ -213,6 +223,7 @@ fn each_kind_s_block_opens_with_its_marker_and_stays_short() {
     let closing = ask(&["T01", "9001", "closing-half", "", "", "rust/guard"]);
     assert!(!closing.stderr.contains("NOTE"), "{}", closing.stderr);
     assert!(closing.stdout.contains(&format!("STOP POINT (closing half): read {} first. Then the tests it lists as owed, the plan section,", handoff.display())), "{}", closing.stdout);
+    assert!(closing.stdout.contains(hand_in), "{}", closing.stdout);
     // TWO TIERS (451 T308): the closing half runs the first tier like every kind, and no coverage - the second tier's alone
     assert!(closing.stdout.contains("CHECKS, the first tier only: `make builder-checks CRATE=\"rust/guard\"` and a changed guard's own suite - not closing-checks, static, hooks-test or a coverage run (the one exception: a brief whose JOB is the coverage repair of a red batch gate runs `make crate-checks` on the crates it names).\n"), "{}", closing.stdout);
     let was = ["real coverage", "(tests, lint, format, coverage)"];

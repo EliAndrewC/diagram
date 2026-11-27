@@ -24,7 +24,9 @@
 //! 6. prints, last, the two commands the session runs next, IN THIS ORDER: the next dispatch, then `make land` of these tasks, which
 //!    carries their done commits itself (451 T397 part (c), the land crate's `carry_done.rs`), `make carry` named beside it for a
 //!    carry by hand or one a landing stopped on (451 T450); after a hand-in (`l7r-gate land --hand-in`, 461 T08) the second is
-//!    `handed in to the lane (make lane for its place)`. It never carries, lands or pushes.
+//!    `handed in to the lane (make lane for its place)`. It never carries, lands or pushes. Since 461 T43 a fix or closing-half
+//!    builder runs it itself at its stop point (`builder_brief.rs`'s HAND IN line), so it is the builder that reads these lines
+//!    and its report relays the next dispatch; the session runs it for a build half or a measurement.
 //!
 //! THE GUARD-FILE RULE IS ASKED HERE, IN PROCESS: the guards are hooks on a tool call, and a `git commit` this command runs is none,
 //! so nothing else would hold the commit to its `GUARD_EDIT_OK:` line. [`guard_file`] is a COPY of the guard's list

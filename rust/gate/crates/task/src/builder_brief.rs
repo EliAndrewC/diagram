@@ -213,7 +213,20 @@ fn block(a: &Ask, key: &str, name: &str, tree: &Path, handoff: &Path) -> String 
     if a.kind != "measurement" {
         out.push_str("Test every new line as if coverage ran (a closure passed to max_by, filter or any counts); an assertion's message stays on the assertion's own line or is left out.\n");
     }
-    let _ = writeln!(out, "FILE what you find and leave, from your tree: `make task-add F={key} TITLE=\"<title, paths, figures>\"`; its id goes in your report's CANDIDATES.\nReport in the fixed format of scripts/container/builder-report-format.md, read at your stop point. Do NOT stage, commit, land or push; never rewrite history.");
+    // 461 T43 (US2: "A refusal a builder can answer is answered by the builder that has the context"): a fix and a closing half hand
+    // in themselves, last, so a conflict or a first-pass refusal reaches the builder that holds the context. A build half and a
+    // measurement leave their Approach block a stub, which the hand-in's first pass refuses (the tick check's approach refusal), so
+    // the session hands those in, as before, until 461 T44 gives the hand-in a mode for them.
+    let own = matches!(a.kind, "fix" | "closing-half");
+    if own {
+        let _ = writeln!(out, "HAND IN last, review CLEAR: `make builder-done T={} F={key} MSG=\"<subject>\"` [GUARD=\"<why>\"]. A conflict: resolve it, `git add`, rerun; a refusal: answer it and rerun, or report a claims one verbatim. Report the outcome and the done ref.", a.task);
+    }
+    let end = if own {
+        "Commit only by `make builder-done`; never land or push"
+    } else {
+        "Do NOT stage, commit, land or push"
+    };
+    let _ = writeln!(out, "FILE what you find and leave, from your tree: `make task-add F={key} TITLE=\"<title, paths, figures>\"`; its id goes in your report's CANDIDATES.\nReport in the fixed format of scripts/container/builder-report-format.md, read at your stop point. {end}; never rewrite history.");
     out
 }
 

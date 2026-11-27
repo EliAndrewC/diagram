@@ -348,6 +348,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T43 (phase 1: the builder runs its own hand-in, US2; found by T08's builder)": {
+   "sha256": "3dd835e5d037903fd69360cda495a6bafc7d7f3ff1761a018d39b5d198e5b43a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T43 Approach (checklist part A)": {
+   "sha256": "45f1c9162ab8d238a5ffb4d262251412cce9139beee6e3cd58431218660a16d9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1978,6 +1990,59 @@
      "why": "Template placeholders decide nothing; there is no decision in them to rule on."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T43 (phase 1: the builder runs its own hand-in, US2; found by T08's builder)",
+    "### T43 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T43-D1 hand-in for a fix and a closing half only",
+     "summary": "Only fix and closing-half builders run make builder-done; build halves and measurements keep 'Do NOT stage, commit, land or push' and the session hands them in as before; the gap is filed as T44, landing before T10.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The approved sketch (item 2) and US2 say builders hand in their own work, and this task leaves two kinds of task out. The literal rule cannot be met for those kinds right now. The hand-in's first pass runs the tick check's approach_refusal, which refuses a stub Approach block. A build half always has one and a measurement writes no plan section, so their hand-in is refused whoever runs it, and a builder told to run it would only get the refusal. The carve-out does not defeat the request's purpose of having refusals met by the builder with the context. It is temporary and tracked: T44 is filed in this feature and must land before T10, so the known defect is fixed before the next step and is not carried past it. The block's own label of 'easier' is not what justifies it. The impossibility does."
+    },
+    {
+     "id": "T43-D2 the block's new HAND IN line and last line",
+     "summary": "fix and closing-half blocks gain the make builder-done line (conflict resolved in the tree, refusal answered and rerun, outcome and done ref reported); the last line becomes 'Commit only by make builder-done; never land or push; never rewrite history.'; the other lines are kept within the 2,000-character cap.",
+     "class": "within",
+     "why": "This is US2 and FR-002 as written: builders hand in once ready and fix conflicts and refusals in their own tree. Landing and pushing stay with the lane and session (FR-003), and the brief's other rules are kept."
+    },
+    {
+     "id": "T43-D3 a claims refusal reported verbatim, not answered",
+     "summary": "The builder answers a refusal and reruns, except a claims refusal, which it reports verbatim.",
+     "class": "within",
+     "why": "The sketch hands 'conflicts and bookkeeping refusals' to the builder. A claims refusal is neither, and the brief's existing claims exit is kept rather than changed. Nothing that was asked is withheld."
+    },
+    {
+     "id": "T43-D4 builder-done added to the wrap-up band; a conflict past the cap goes to the handoff",
+     "summary": "The context-cap band lets a builder past 300k run make builder-done. A conflict there needs an edit the band refuses, so it goes to the handoff.",
+     "class": "within",
+     "why": "This enforces the requested hand-in for a capped builder (the probe found the band refusing it). Keeping the band's existing refusal of edits only preserves behavior the GM did not ask to change."
+    },
+    {
+     "id": "T43-D5 the one git add a pool tree allows",
+     "summary": "Builders may git add only a hand-in conflict's paths.",
+     "class": "within",
+     "why": "Without it the builder cannot resolve its own conflicts (US2). The allowance is limited to that case."
+    },
+    {
+     "id": "T43-D6 docs and report format",
+     "summary": "builder-brief.md gains THE BUILDER HANDS IN ITSELF; the report's STATE carries the hand-in outcome and COMMIT the next-dispatch line; builder_done.rs step 6 and the efficiency-tooling row say who runs it.",
+     "class": "within",
+     "why": "These document the requested behavior and fix a stale row. No new scope."
+    },
+    {
+     "id": "T43-D7 no coverage at hand-in; coverage stays the gate's at landing",
+     "summary": "The exits run the crates' tests and make builder-checks. Coverage runs at the landing.",
+     "class": "within",
+     "why": "FR-002 says so verbatim, following the struck 'coverage for its own crates'."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2113,6 +2178,57 @@
      "summary": "Tagged [perf] as a measurement task (451 FR-013); performance checklist not applied since no engine speed changes",
      "class": "within",
      "why": "451 FR-013 explicitly counts work that measures where time goes as performance work for ordering; not applying a speed checklist to a task that changes no speed narrows nothing asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T43": {
+   "section_sha256": "80930507e36217acf449b1f8c68e2d92382c1b4fae28c6a903a2434081965ce0",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T43-D1 hand-in for a fix and a closing half only",
+     "summary": "Only fix and closing-half builders run make builder-done; build halves and measurements keep 'Do NOT stage, commit, land or push' and the session hands them in as before; the gap is filed as T44, landing before T10.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The approved sketch (item 2) and US2 say builders hand in their own work, and this task leaves two kinds of task out. The literal rule cannot be met for those kinds right now. The hand-in's first pass runs the tick check's approach_refusal, which refuses a stub Approach block. A build half always has one and a measurement writes no plan section, so their hand-in is refused whoever runs it, and a builder told to run it would only get the refusal. The carve-out does not defeat the request's purpose of having refusals met by the builder with the context. It is temporary and tracked: T44 is filed in this feature and must land before T10, so the known defect is fixed before the next step and is not carried past it. The block's own label of 'easier' is not what justifies it. The impossibility does."
+    },
+    {
+     "id": "T43-D2 the block's new HAND IN line and last line",
+     "summary": "fix and closing-half blocks gain the make builder-done line (conflict resolved in the tree, refusal answered and rerun, outcome and done ref reported); the last line becomes 'Commit only by make builder-done; never land or push; never rewrite history.'; the other lines are kept within the 2,000-character cap.",
+     "class": "within",
+     "why": "This is US2 and FR-002 as written: builders hand in once ready and fix conflicts and refusals in their own tree. Landing and pushing stay with the lane and session (FR-003), and the brief's other rules are kept."
+    },
+    {
+     "id": "T43-D3 a claims refusal reported verbatim, not answered",
+     "summary": "The builder answers a refusal and reruns, except a claims refusal, which it reports verbatim.",
+     "class": "within",
+     "why": "The sketch hands 'conflicts and bookkeeping refusals' to the builder. A claims refusal is neither, and the brief's existing claims exit is kept rather than changed. Nothing that was asked is withheld."
+    },
+    {
+     "id": "T43-D4 builder-done added to the wrap-up band; a conflict past the cap goes to the handoff",
+     "summary": "The context-cap band lets a builder past 300k run make builder-done. A conflict there needs an edit the band refuses, so it goes to the handoff.",
+     "class": "within",
+     "why": "This enforces the requested hand-in for a capped builder (the probe found the band refusing it). Keeping the band's existing refusal of edits only preserves behavior the GM did not ask to change."
+    },
+    {
+     "id": "T43-D5 the one git add a pool tree allows",
+     "summary": "Builders may git add only a hand-in conflict's paths.",
+     "class": "within",
+     "why": "Without it the builder cannot resolve its own conflicts (US2). The allowance is limited to that case."
+    },
+    {
+     "id": "T43-D6 docs and report format",
+     "summary": "builder-brief.md gains THE BUILDER HANDS IN ITSELF; the report's STATE carries the hand-in outcome and COMMIT the next-dispatch line; builder_done.rs step 6 and the efficiency-tooling row say who runs it.",
+     "class": "within",
+     "why": "These document the requested behavior and fix a stale row. No new scope."
+    },
+    {
+     "id": "T43-D7 no coverage at hand-in; coverage stays the gate's at landing",
+     "summary": "The exits run the crates' tests and make builder-checks. Coverage runs at the landing.",
+     "class": "within",
+     "why": "FR-002 says so verbatim, following the struck 'coverage for its own crates'."
     }
    ],
    "verdict": "CLEAR"

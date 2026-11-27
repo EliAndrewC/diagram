@@ -1641,14 +1641,81 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 <!-- plan-archive: T41 to T37 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T42 to T34 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
-### T43 (<why: the finding or measurement that files it>)
+### T43 (phase 1: the builder runs its own hand-in, US2; found by T08's builder)
+
+- **Approach**: in pool tree `diagram-backlog-t269`, on T08 as landed there.
+  - **The block** (`rust/gate/crates/task/src/builder_brief.rs` `block`): a `fix` or `closing-half` block gains one line before
+    the FILE line - `HAND IN last, review CLEAR: make builder-done T=<task> F=<feature> MSG="<subject>" [GUARD="<why>"]`, a
+    conflict resolved in the tree, its paths `git add`ed and the command rerun, a refusal answered and rerun or a claims one
+    reported verbatim, the outcome and the done ref reported - and its last line reads `Commit only by make builder-done; never
+    land or push; never rewrite history.` in place of `Do NOT stage, commit, land or push; never rewrite history.` Every other
+    line of the old wording is kept, and the 2,000-character cap holds (the longest block 2,019 characters on the first wording,
+    cut until the test passed; observed 2026-11-27, method: the test's count).
+  - **Decision: the hand-in for a fix and a closing half only.** The hand-in's first pass asks each task's tick check
+    (`hand_in.rs` step 6, `cheap.rs` `first_pass`), whose `approach_refusal` (`tick/refusal.rs` `refusal`) refuses a task whose
+    Approach block is its stub - a build half's always is (its closing half writes it) and a measurement writes no plan section
+    (observed 2026-11-27, method: reading those three files; not run). Their blocks keep `Do NOT stage, commit, land or push`, and
+    the session hands them in, as before. Label: the algorithmically easier route, the gap filed (T44).
+  - **The wrap-up band** (`rust/guard/src/guards/context_cap_hooks/band.rs` `MAKE`, through `make guard-edit`): `builder-done`
+    added, so a builder past the 300k cap can still run its stop point's last step; a conflict there needs an edit the band
+    refuses, so it goes to the handoff (the doc says so). The band's refusal text lists it (`context_cap_hooks/tests.rs`).
+  - **The docs**: `scripts/container/builder-brief.md` - a new bullet, THE BUILDER HANDS IN ITSELF, with its why, the one hand
+    `git add` a pool tree allows (a hand-in conflict's paths), the claims exit and the band; AT A BUILDER'S END now the session's
+    steps where the builder has not handed in. `scripts/container/builder-report-format.md` - STATE carries the hand-in's outcome
+    (`handed in: <ref> <commit>` | `refused:` | `conflict:`), COMMIT the next-dispatch line it printed. `builder_done.rs`'s step 6
+    and `docs/efficiency-tooling.md`'s row (stale since T08: it still named `make carry` as printed) say who runs it.
+  - **The guards, probed** (observed 2026-11-27, method: the real dispatcher `/diagram/scripts/hooks/l7r-guard.sh PreToolUse`
+    fed a synthetic Bash event, cwd this pool tree, an `agent_id`, no transcript): `cd <tree> && export ... && make builder-done
+    T=T43 F=461 MSG="..."`, the same with `GUARD="..."`, and `cd <tree> && git add <path>` - each exit 0, no output. The
+    builder-brief guard judges only an Agent or Workflow dispatch, never a Bash call; the guard-file guard's shell route judges
+    the files a command writes, and `make builder-done` names none (its own in-process copy of the list asks `GUARD=`); the
+    repo-safety guard judges git at a command position, a force push, a rewrite or the mount, none of which `make builder-done`
+    is. The one guard that refused it was the wrap-up band (above), past the cap only.
+  - **Red first** (observed 2026-11-27, method: `make rust-test CRATE=... ONLY=...`): `builder_brief::tests` with the new
+    assertions on the old code, 5 passed, 1 failed (`each_kind_s_block_opens_with_its_marker_and_stays_short`); after, 6 passed.
+    `guards::context_cap_hooks` with `builder-done` asserted let through and listed, 27 passed, 2 failed
+    (`each_stop_point_step_is_let_through`, `the_bands_answers_and_records`); after, 29 passed.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the builder's own hand-in | n/a - no map | n/a | none | n/a |
+
+### T43 Approach (checklist part A)
+
+1. **The goal, in the world.** A fix or closing-half builder ends by handing its own work in, so a conflict or a first-pass
+   refusal meets the builder that has the context (US2), and the session carries and lands.
+2. **The constraints.** US2, FR-002 (no coverage at hand-in), D3 and D4, T08's wiring; the block's 2,000-character cap
+   (`agent-prefix-hooks`); the brief's other rules kept whole; the wrap-up band (451 T417).
+3. **Where each comes from.** G: US2's words (spec.md); R: D3, D4, T08's section; O: the probes and tests above (2026-11-27).
+4. **Do they describe the world here?** Yes: the probes ran the live dispatcher on this pool tree; the band's test drives its
+   judge.
+5. **The order.** After T08; before T10.
+6. **The exits.** Green: the task and guard crates' tests and `make builder-checks`; coverage is the gate's, at the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** `make builder-checks CRATE="rust/gate/crates/task rust/guard"` green (observed 2026-11-27, method: that
+   command, its log's tail).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** the band refused a capped builder's `make builder-done`, its stop point's new last step: fixed here.
+
+**Found and left?**
+- A build half's or a measurement's hand-in is refused by its own first pass: the tick check's `approach_refusal` refuses a stub
+  Approach block, which those kinds always have, so since T08 neither can hand in, whoever runs it (observed 2026-11-27, method:
+  reading `hand_in.rs`, `cheap.rs` and `tick/refusal.rs`; not run). Not fixed here: it needs a hand-in mode of its own, a
+  mechanism outside this task's one job. Filed as T44; lands before T10.
+
+**Performance work?** no - it moves who meets a hand-in's refusals, and measures no time.
+
+
+### T44 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T43 Approach (checklist part A)
+### T44 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

@@ -34,8 +34,8 @@ use crate::shared::tree::{command_head, commands, shown, walk};
 pub const CEILING_TOKENS: u64 = 340_000;
 
 /// The make targets of a stop point: the decision and its review, the claims triage and its list, filing and withdrawing a task found,
-/// the first tier's checks.
-pub(super) const MAKE: [&str; 8] = [
+/// the first tier's checks, and (461 T43) the hand-in, `make builder-done`, which a fix or a closing half runs last.
+pub(super) const MAKE: [&str; 9] = [
     "decide",
     "plan-delta",
     "plan-verdict",
@@ -44,6 +44,7 @@ pub(super) const MAKE: [&str; 8] = [
     "task-add",
     "task-withdraw",
     "builder-checks",
+    "builder-done",
 ];
 
 /// The programs a band command may run but `make` and `git`: the brief's own prefix (`pushd` as `cd`) and the reads.

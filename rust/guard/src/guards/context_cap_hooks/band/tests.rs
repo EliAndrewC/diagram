@@ -96,6 +96,8 @@ fn each_stop_point_step_is_let_through() {
         "make builder-checks CRATE=\"rust/guard\" 2>&1 | grep -E 'FAILED|result' | head -20",
         "make task-add F=451 TITLE=\"the band; found by T1, see `make decide`\"",
         "make decide F=451 T=T1 # then the review",
+        // 461 T43: a fix or closing half hands in itself, the stop point's last step
+        "cd /t && make builder-done T=T1 F=451 MSG=\"451 T1: the band\" GUARD=\"451 T1 the band edit\"",
         "T=T1",
     ] {
         assert!(allowed(&bash(cmd)), "{cmd}");

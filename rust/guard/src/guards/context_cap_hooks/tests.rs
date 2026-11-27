@@ -449,7 +449,7 @@ fn the_bands_answers_and_records() {
     let kept = [
         "BLOCKED: this builder's context is 320000 tokens, past the cap of 300000: in its wrap-up band, up to 340000",
         "Refused: make quick.\nStill allowed:",
-        "make decide, plan-delta, plan-verdict, claims-triage, claims-owed, task-add, task-withdraw, builder-checks",
+        "make decide, plan-delta, plan-verdict, claims-triage, claims-owed, task-add, task-withdraw, builder-checks, builder-done",
         "git status or git diff",
         "MODE 4: PLAN REVIEW",
         &handoff.display().to_string(),
