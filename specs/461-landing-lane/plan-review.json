@@ -204,6 +204,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T06 (phase 1: the first pass in its hand-in mode, D4)": {
+   "sha256": "5c14eaa2f865662e8774e4c170ace9f15ac4b3d722932149c293a4729d1195f1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "b13a8dca3f5bdfdde469defb46377219d6277abb0708145d2c10e0bc9ccd27d2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1339,6 +1351,64 @@
      "summary": "Tagged [perf] as a measurement task (451 FR-013); performance checklist not applied since no engine speed changes",
      "class": "within",
      "why": "451 FR-013 explicitly counts work that measures where time goes as performance work for ordering; not applying a speed checklist to a task that changes no speed narrows nothing asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T06 (phase 1: the first pass in its hand-in mode, D4)",
+    "### T06 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T06-mode",
+     "summary": "A Pass enum (Landing / HandIn{base}) taken by cheap_refusals; the base supplied by the caller (the knob is T07's), held in Land::hand_in for the pass so no lower signature changes; the four gates' loop split into gate_refusals.",
+     "class": "within",
+     "why": "Mechanism for FR-002's 'runs the landing's cheap first pass' at hand-in; a design choice, no scope change."
+    },
+    {
+     "id": "T06-readers",
+     "summary": "At hand-in the delta is the working tree against the base, the named files are read from the applied tree (ls-files) rather than HEAD, and records are left uncommitted for the hand-in's one commit.",
+     "class": "within",
+     "why": "Makes the landing's checks judge the builder's work as it stands before its commit (FR-002 'before it commits'); reading HEAD at hand-in would falsely refuse a task naming a new file. No check dropped."
+    },
+    {
+     "id": "T06-pathspec",
+     "summary": "The carries' and known drifts' pathspec-less git commit routed through record_commit, in both forms.",
+     "class": "within",
+     "why": "Fixes a defect (on a hand-in tree it would commit the builder's whole work as a records commit); the landing still commits the records."
+    },
+    {
+     "id": "T06-left-column",
+     "summary": "At hand-in: tick check, phase checklist, open claims, named files, stale coverage-exempt entry, ledger rows owed, the four gates (review/plan gates given the base as range) and the push's table; each stop names its fixing command and says 'run make builder-done again'. Closes 451 T307 part 2 in the hand-in form too.",
+     "class": "within",
+     "why": "FR-002: the landing's first pass at hand-in, a refusal naming the fixing command; the GM's sketch item 2, bookkeeping refusals fixed by the builder in its own tree."
+    },
+    {
+     "id": "T06-claims-route",
+     "summary": "At hand-in an owed claim with no check in flight is the builder's stop (cure: make claims-bundle OWED=1); one with a round in flight is the lane's (to deferred, else quiet); any other claims refusal is the builder's.",
+     "class": "within",
+     "why": "Splits only by who can cure it: a round in flight is not the builder's to fix, and the landing still asks it (FR-008, nothing dropped). Not a carve-out from FR-002: the builder still meets every refusal it can act on."
+    },
+    {
+     "id": "T06-right-column",
+     "summary": "writer_refusal, the mark's hold and the red-gate tripwire not asked at hand-in; stamp rows skipped in both forms as before; no coverage.",
+     "class": "within",
+     "why": "Applies D4's already-judged table and FR-002 'It runs no coverage'; all three still run at landing (FR-008)."
+    },
+    {
+     "id": "T06-kept-both",
+     "summary": "unrelated_history and others_in_progress, in neither of D4's columns, kept in both forms; others_in_progress reads the hand-in delta.",
+     "class": "within",
+     "why": "The plain reading of 'the landing's first pass': only what D4 turns off is off. Asks more at hand-in, not less."
+    },
+    {
+     "id": "T06-found-and-left",
+     "summary": "Three checks outside the land crate (push table delta, record-owed via entry-gate.sh, claims gate) take their delta from merge-base with origin/main, so in phase 1 a hand-in may be refused for another task's record, claim or push row; not fixed in T06, filed as T34 to land before T10, with phase 1's acceptance left to a ruling.",
+     "class": "within",
+     "why": "A sequencing deferral of a recorded defect to a filed task, not a decision to accept it; no requirement is narrowed by this block. Should T34 instead rule that phase 1 accepts these false refusals, that acceptance is a narrowing of FR-002 (a refusal the builder cannot cure) and is owed its own MODE 1 check; and T34 should land before builders meet the mode live (T08 wires it), not only before T10."
     }
    ]
   }

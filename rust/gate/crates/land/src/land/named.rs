@@ -198,10 +198,15 @@ pub(super) fn refusal(files: &[String]) -> String {
 }
 
 impl Land {
-    /// The landing tree's HEAD, read once a landing.
+    /// The landing tree's HEAD, read once a landing - at hand-in the tree as applied, its files staged or not (461 T06: HEAD is the
+    /// base there, which lacks every file the work adds).
     pub(super) fn held(&self) -> Result<Held, String> {
-        let (rc, out) =
-            super::unfinished::git(&self.root, &["ls-tree", "-r", "--name-only", "-z", "HEAD"])?;
+        let args: &[&str] = if self.hand_in.borrow().is_some() {
+            &["ls-files", "-z", "-co", "--exclude-standard"]
+        } else {
+            &["ls-tree", "-r", "--name-only", "-z", "HEAD"]
+        };
+        let (rc, out) = super::unfinished::git(&self.root, args)?;
         if rc != 0 {
             return Err(format!("git ls-tree HEAD: {out}"));
         }

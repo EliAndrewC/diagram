@@ -10,7 +10,9 @@ use super::tasks;
 /// The first pass of `T` over the fixture's feature.
 fn first_pass(fx: &Fx, t: &[&str]) -> Vec<String> {
     let d = fx.root.join("specs/449-x");
-    fx.land.cheap_refusals(&d, &tasks(t), NOTE, None).unwrap()
+    fx.land
+        .cheap_refusals(&d, &tasks(t), NOTE, &crate::land::Pass::Landing, None)
+        .unwrap()
 }
 
 /// THE PUSH'S `refuse_unrelated_history`: a clone on a history main no longer shares (feature 301's scrub) is refused in the first

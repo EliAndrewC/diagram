@@ -30,7 +30,10 @@ fn t270s_landing_without_its_new_module_is_refused_in_the_first_pass() {
     git(&fx.root, &["add", "-A"]);
     git(&fx.root, &["commit", "-qm", "the tasks"]);
     let tasks = vec!["T1".to_owned()];
-    let stops = fx.land.cheap_refusals(&d, &tasks, NOTE, None).unwrap();
+    let stops = fx
+        .land
+        .cheap_refusals(&d, &tasks, NOTE, &crate::land::Pass::Landing, None)
+        .unwrap();
     let said = format!("T1: its Occasions line or plan section names `{HELD}` that the landing tree's HEAD does not hold");
     assert!(stops.iter().any(|s| s.starts_with(&said)), "{stops:?}");
     let carry = stops.iter().any(|s| s.contains("`make builder-trees`"));
@@ -39,7 +42,10 @@ fn t270s_landing_without_its_new_module_is_refused_in_the_first_pass() {
     put(&fx.root, HELD, "fn held() {}\n");
     git(&fx.root, &["add", "-A"]);
     git(&fx.root, &["commit", "-qm", "451 T1: the carry"]);
-    let stops = fx.land.cheap_refusals(&d, &tasks, NOTE, None).unwrap();
+    let stops = fx
+        .land
+        .cheap_refusals(&d, &tasks, NOTE, &crate::land::Pass::Landing, None)
+        .unwrap();
     let named = stops.iter().any(|s| s.contains("plan section names"));
     assert!(!named);
 }

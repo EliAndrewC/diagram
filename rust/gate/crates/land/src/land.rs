@@ -43,6 +43,8 @@ mod stop;
 pub mod unfinished;
 mod writers;
 
+pub use cheap::Pass;
+
 use l7r_shared::env::Rooted;
 use std::cell::RefCell;
 use std::fmt::Write as _;
@@ -140,6 +142,9 @@ pub struct Land {
     ended: std::cell::Cell<bool>,
     /// The first pass ruled the landing's tasks ready beside the mark's task (451 T101, [`ready`]): the push is told so.
     ready: std::cell::Cell<bool>,
+    /// The hand-in base while the first pass runs in its hand-in mode ([`Pass::HandIn`], 461 T06): the delta is the working tree
+    /// against it, and the records the pass writes are left uncommitted in the tree. `None` outside that pass.
+    hand_in: RefCell<Option<String>>,
 }
 
 impl Land {
@@ -177,6 +182,7 @@ impl Land {
             began: std::cell::Cell::new(None),
             ended: std::cell::Cell::new(false),
             ready: std::cell::Cell::new(false),
+            hand_in: RefCell::new(None),
         }
     }
 
@@ -266,14 +272,17 @@ impl Land {
         Ok(strip(&self.run(&cmd, &[])?.1).to_owned())
     }
 
-    /// Every path the delta against origin/main changes.
+    /// Every path the delta against origin/main changes - at hand-in, the working tree against the hand-in base (461 T06, D4).
     fn delta_names(&self) -> Result<Vec<String>, String> {
         if !self.fetched.replace(true) {
             self.run(&["git", "fetch", "-q", "origin"], &[])?;
         }
-        let out = self
-            .run(&["git", "diff", "--name-only", "origin/main...HEAD"], &[])?
-            .1;
+        let range = self
+            .hand_in
+            .borrow()
+            .clone()
+            .unwrap_or_else(|| "origin/main...HEAD".to_owned());
+        let out = self.run(&["git", "diff", "--name-only", &range], &[])?.1;
         Ok(l7r_shared::py_text::split(&out)
             .into_iter()
             .map(str::to_owned)
@@ -307,18 +316,24 @@ impl Land {
     fn commit_escape_records(&self) -> Result<(), String> {
         if !self.dirty(&["dev/bypass-log"])?.is_empty() {
             self.run(&["git", "add", "--", "dev/bypass-log"], &[])?;
-            self.run(
-                &[
-                    "git",
-                    "commit",
-                    "-q",
-                    "-m",
-                    "the landing's escape records (make land, 408)",
-                    "--",
-                    "dev/bypass-log",
-                ],
-                &[],
-            )?;
+            self.record_commit(&[
+                "git",
+                "commit",
+                "-q",
+                "-m",
+                "the landing's escape records (make land, 408)",
+                "--",
+                "dev/bypass-log",
+            ])?;
+        }
+        Ok(())
+    }
+
+    /// A record the landing writes for itself, committed - but at hand-in left in the tree uncommitted, so the hand-in's own commit
+    /// takes it with the work and HEAD stays the base (461 T06, D4): the first pass's commits there would conclude the applied work.
+    fn record_commit(&self, cmd: &[&str]) -> Result<(), String> {
+        if self.hand_in.borrow().is_none() {
+            self.run(cmd, &[])?;
         }
         Ok(())
     }
@@ -350,7 +365,7 @@ impl Land {
         let mut claims: Vec<String> = Vec::new();
         let mut stops: Vec<String> = Vec::new();
         self.phase("cheap", || {
-            stops = self.cheap_refusals(d, tasks, note, Some(&mut claims))?;
+            stops = self.cheap_refusals(d, tasks, note, &Pass::Landing, Some(&mut claims))?;
             Ok(if stops.is_empty() { 0 } else { 2 })
         })?;
         if !stops.is_empty() {

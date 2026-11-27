@@ -36,6 +36,26 @@ const GATES: [&str; 4] = [
     "entry-gate.sh",
 ];
 
+/// The gates of [`GATES`] that take a range as their first argument (`origin/main...HEAD` unset), given the hand-in base at hand-in.
+const RANGED: [&str; 2] = ["review-gate.sh", "plan-gate.sh"];
+
+/// The first pass's two modes (461 T06, D4): the landing's, and the hand-in's in a builder's tree, whose delta is the working tree
+/// against `base` (the hand-in base: the clone's HEAD in phase 1, `origin/main` from phase 2, D3), whose records are written into the
+/// tree uncommitted, and which asks what the builder can answer - each task's tick check, the phase checklist, open claims, the named
+/// files, the stale coverage-exempt entry, the ledger rows owed, the four gates and the push's table - and not what is the lane's:
+/// another writer's changes, the mark's hold, the red-gate tripwire (the gate's stamp rows are the landing's skip in both). No
+/// coverage runs in either (FR-002).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Pass {
+    /// `make land`'s first pass.
+    Landing,
+    /// The hand-in's, over a tree applied onto `base` and not yet committed.
+    HandIn {
+        /// The commit the work was applied onto.
+        base: String,
+    },
+}
+
 /// The rows of the push's table (`cohort`'s `push::CHECKS`) the first pass cannot ask before its gate: the green-gate stamp, which
 /// the gate itself writes (and the landing's second pass reads, `long_runs`).
 pub(super) const AFTER_GATE: [&str; 2] = ["gate-stamp selftest", "gate-stamp"];
@@ -91,18 +111,15 @@ impl Land {
             &ticks,
         ]);
         if !self.dirty(&["dev/review-ledger.md"])?.is_empty() {
-            self.run(
-                &[
-                    "git",
-                    "commit",
-                    "-q",
-                    "-m",
-                    "the review passes' ledger rows, written at landing (make land)",
-                    "--",
-                    "dev/review-ledger.md",
-                ],
-                &[],
-            )?;
+            self.record_commit(&[
+                "git",
+                "commit",
+                "-q",
+                "-m",
+                "the review passes' ledger rows, written at landing (make land)",
+                "--",
+                "dev/review-ledger.md",
+            ])?;
         }
         Ok(())
     }
@@ -157,7 +174,7 @@ impl Land {
             let message = format!(
                 "{name}: claims findings outside the change filed as a task (make land, 405 T36)"
             );
-            self.run(&["git", "commit", "-q", "-m", &message], &[])?;
+            self.record_commit(&["git", "commit", "-q", "-m", &message])?;
         }
         Ok(())
     }
@@ -174,16 +191,13 @@ impl Land {
             cmd.extend(self.each_spec("tasks.md"));
             let cmd: Vec<&str> = cmd.iter().map(String::as_str).collect();
             self.run(&cmd, &[])?;
-            self.run(
-                &[
-                    "git",
-                    "commit",
-                    "-q",
-                    "-m",
-                    "known drifts recorded for the GM's review (make land, feature 430 T06)",
-                ],
-                &[],
-            )?;
+            self.record_commit(&[
+                "git",
+                "commit",
+                "-q",
+                "-m",
+                "known drifts recorded for the GM's review (make land, feature 430 T06)",
+            ])?;
         }
         Ok(())
     }
@@ -231,13 +245,43 @@ impl Land {
 
     /// Pass 1: every refusal the landing would meet that costs seconds to ask, all of them - but the claims gate's, which goes to
     /// `deferred` when given (405 T50, D23: the claims round runs beside the gate, and the landing waits for it before the push).
+    /// In its hand-in mode ([`Pass::HandIn`], 461 T06) it asks what the builder can answer and not what is the lane's (D4).
     pub(super) fn cheap_refusals(
         &self,
         d: &Path,
         tasks: &[String],
         note: &str,
-        mut deferred: Option<&mut Vec<String>>,
+        pass: &Pass,
+        deferred: Option<&mut Vec<String>>,
     ) -> Result<Vec<String>, String> {
+        let base = match pass {
+            Pass::Landing => None,
+            Pass::HandIn { base } => Some(base.clone()),
+        };
+        let prior = self.hand_in.replace(base);
+        let out = self.first_pass(d, tasks, note, deferred);
+        let hand_in = self.hand_in.replace(prior).is_some();
+        // a builder runs `make builder-done` again, never `make land` (each cure's last words)
+        Ok(out?
+            .into_iter()
+            .map(|s| {
+                if hand_in {
+                    s.replace("run make land again", "run make builder-done again")
+                } else {
+                    s
+                }
+            })
+            .collect())
+    }
+
+    fn first_pass(
+        &self,
+        d: &Path,
+        tasks: &[String],
+        note: &str,
+        deferred: Option<&mut Vec<String>>,
+    ) -> Result<Vec<String>, String> {
+        let base = self.hand_in.borrow().clone();
         // A CLONE ON A HISTORY MAIN NO LONGER SHARES (the push's `refuse_unrelated_history`, 451 T413, [`super::parity`]): said alone,
         // before the pass commits anything - every other answer reads a delta that has no merge base, and the cure is a re-clone
         let unrelated = self.unrelated_history()?;
@@ -289,17 +333,24 @@ impl Land {
         if !stale.is_empty() {
             stops.push(stale);
         }
-        // ANOTHER WRITER'S CHANGES, NAMED (451 T242), with an open builder handoff naming the clone; asked again before the ticks
-        let writer = self.writer_refusal(tasks)?;
-        if !writer.is_empty() {
-            stops.push(writer);
+        // ANOTHER WRITER'S CHANGES, NAMED (451 T242), with an open builder handoff naming the clone; asked again before the ticks -
+        // but not at hand-in, where the tree is the builder's own (461 D4's right column, as the mark's hold and the tripwire below)
+        if base.is_none() {
+            let writer = self.writer_refusal(tasks)?;
+            if !writer.is_empty() {
+                stops.push(writer);
+            }
         }
         let owed = self.ledger_refusal(d, tasks);
         if !owed.is_empty() {
             stops.push(owed);
         }
-        // the mark's task holds, unless each task landed is ready beside it (451 T101, `ready.rs`)
-        let held = self.hold(d, tasks)?;
+        // the mark's task holds, unless each task landed is ready beside it (451 T101, `ready.rs`); at hand-in the lane's ordering
+        let held = if base.is_none() {
+            self.hold(d, tasks)?
+        } else {
+            String::new()
+        };
         if !held.is_empty() {
             stops.push(format!("held by {held}"));
         }
@@ -307,7 +358,7 @@ impl Land {
         stops.extend(self.others_in_progress(d)?);
         let ticks = tasks.join(" ");
         // A RED-GATE TRIPWIRE HOLDS THE LANDING'S GATE (feature 405 T44, D18): asked here with the others, on a landing that runs one
-        if !self.arbiter_ok && self.engine_delta()? {
+        if base.is_none() && !self.arbiter_ok && self.engine_delta()? {
             let (rc, out) = self.run(&[&self.gate(), "arbiter", "gate-held"], &[])?;
             if rc != 0 {
                 let out = strip(&out);
@@ -318,11 +369,31 @@ impl Land {
                 );
             }
         }
+        self.gate_refusals(base.as_deref(), &ticks, deferred, &mut stops)?;
+        let pushed = self.push_refusal(d, &ticks)?;
+        if !pushed.is_empty() {
+            stops.push(pushed);
+        }
+        Ok(stops)
+    }
+
+    /// The four gates of the first pass, each refusal a stop - but the claims gate's that a round in flight may answer, which goes to
+    /// `deferred` (and at hand-in, with none given, is the lane's and quiet).
+    fn gate_refusals(
+        &self,
+        base: Option<&str>,
+        ticks: &str,
+        mut deferred: Option<&mut Vec<String>>,
+        stops: &mut Vec<String>,
+    ) -> Result<(), String> {
         for gate in GATES {
-            let (rc, out) = self.run(
-                &[&self.script(&format!("gates/{gate}"))],
-                &[("L7R_LAND_TICKS", &ticks)],
-            )?;
+            let path = self.script(&format!("gates/{gate}"));
+            let mut cmd = vec![path.as_str()];
+            // the two gates that take a range read the hand-in's: the working tree against its base (461 D4)
+            if let Some(base) = base.filter(|_| RANGED.contains(&gate)) {
+                cmd.push(base);
+            }
+            let (rc, out) = self.run(&cmd, &[("L7R_LAND_TICKS", ticks)])?;
             if rc == 0 {
                 continue;
             }
@@ -330,21 +401,24 @@ impl Land {
             // ...BUT A CLAIMS REFUSAL NO WAIT CAN CURE IS A STOP NOW (feature 440 T01, the GM 2026-10-27): an owed claim with no check
             // in flight, or an introduced finding, cannot be answered while the gate runs - feature 438's landing ran its whole gate
             // (about 19 min) and then refused on a claim never dispatched
-            let (to_defer, why) = if gate == "claims-gate.sh" && deferred.is_some() {
-                super::claims_wait::claims_route(&out, &said, &self.in_flight()?)
-            } else {
-                (false, said)
-            };
+            // ...and at hand-in only an owed claim with a round in flight is the lane's to wait on (D4): said to `deferred` if given,
+            // else quiet; any other claims refusal is the builder's
+            let (to_defer, why) =
+                if gate == "claims-gate.sh" && (deferred.is_some() || base.is_some()) {
+                    let flight = self.in_flight()?;
+                    let (wait, why) = super::claims_wait::claims_route(&out, &said, &flight);
+                    let lane_s = !flight.is_empty() && out.contains("owed (");
+                    (wait && (base.is_none() || lane_s), why)
+                } else {
+                    (false, said)
+                };
             match deferred.as_deref_mut() {
                 Some(later) if to_defer => later.push(why),
+                _ if to_defer => {}
                 _ => stops.push(why),
             }
         }
-        let pushed = self.push_refusal(d, &ticks)?;
-        if !pushed.is_empty() {
-            stops.push(pushed);
-        }
-        Ok(stops)
+        Ok(())
     }
 
     /// THE PUSH'S OWN TABLE, ASKED BEFORE THE GATE (451 T307 part 2). WHY: the push ran `l7r-gate push-checks` after the landing's
@@ -380,18 +454,15 @@ impl Land {
         // exit was, and the commit below then finds nothing to take
         if l7r_gate_cohort::make_docs::check(&self.root).code != 0 {
             let _ = l7r_gate_cohort::make_docs::write(&self.root);
-            self.run(
-                &[
-                    "git",
-                    "commit",
-                    "-q",
-                    "-m",
-                    "docs/make-targets.html regenerated at landing (make land, 405 T46)",
-                    "--",
-                    "docs/make-targets.html",
-                ],
-                &[],
-            )?;
+            self.record_commit(&[
+                "git",
+                "commit",
+                "-q",
+                "-m",
+                "docs/make-targets.html regenerated at landing (make land, 405 T46)",
+                "--",
+                "docs/make-targets.html",
+            ])?;
         }
         // A MOVED UNIT KEEPS ITS CLAIMS' ROWS (405 T58): a file split into a package at the 1,000-line bar re-keys them, owing nothing;
         // and a PORTED one (feature 449 T166, Q10): the rows carried onto the port the map names, the deferred list re-keyed with them
@@ -425,7 +496,7 @@ impl Land {
                 "--",
             ];
             cmd.extend(moved);
-            self.run(&cmd, &[])?;
+            self.record_commit(&cmd)?;
         }
         // A FINDING OUTSIDE THE CHANGE IS FILED, NOT REFUSED (feature 405 T36, D10): the carry files every carried claims finding as an
         // open task of this feature - what `make claims-carry` does by hand - and the box lands with the work

@@ -28,7 +28,13 @@ fn a_refusal_shared_by_tasks_is_said_once_naming_them_all() {
     let mut later = Vec::new();
     let stops = fx
         .land
-        .cheap_refusals(&d, &tasks(&["T1", "T2", "T3"]), NOTE, Some(&mut later))
+        .cheap_refusals(
+            &d,
+            &tasks(&["T1", "T2", "T3"]),
+            NOTE,
+            &crate::land::Pass::Landing,
+            Some(&mut later),
+        )
         .unwrap();
     assert_eq!(stops.len(), 2, "{stops:?}");
     assert!(stops[0].starts_with("T1, T2: tick: refused - the round arbiter's tooling fix is open"));
@@ -46,13 +52,13 @@ fn the_tick_check_is_asked_in_process_and_its_raise_is_the_landing_s() {
     std::fs::write(d.join("plan.md"), [0xff]).unwrap();
     assert!(fx
         .land
-        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, &crate::land::Pass::Landing, None)
         .is_err());
     std::fs::remove_file(d.join("plan.md")).unwrap();
     std::fs::write(d.join("tasks.md"), [0xff]).unwrap();
     assert!(fx
         .land
-        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, &crate::land::Pass::Landing, None)
         .is_err());
 }
 
@@ -74,7 +80,13 @@ fn the_gates_refuse_and_a_claims_refusal_is_deferred_only_where_a_wait_may_cure_
     let mut later = Vec::new();
     let stops = fx
         .land
-        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, Some(&mut later))
+        .cheap_refusals(
+            &d,
+            &tasks(&["T1"]),
+            NOTE,
+            &crate::land::Pass::Landing,
+            Some(&mut later),
+        )
         .unwrap();
     assert!(stops[0].starts_with("claims-gate.sh: a claim is owed a check and none is in flight"));
     assert_eq!(stops[1], "plan-gate.sh: ");
@@ -91,20 +103,32 @@ fn an_owed_claim_with_a_check_in_flight_waits_and_an_unreadable_flight_mark_rais
     fx.answers.flight.borrow_mut().push("b".to_owned());
     let stops = fx
         .land
-        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, Some(&mut later))
+        .cheap_refusals(
+            &d,
+            &tasks(&["T1"]),
+            NOTE,
+            &crate::land::Pass::Landing,
+            Some(&mut later),
+        )
         .unwrap();
     assert_eq!((stops.len(), later.len()), (1, 1));
     // no wait at all: said as it is
     let stops = fx
         .land
-        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, &crate::land::Pass::Landing, None)
         .unwrap();
     assert_eq!(stops[0], "claims-gate.sh: owed (impl-drift) k");
     // a flight mark that cannot be read is the landing's raise
     *fx.answers.flight_fails.borrow_mut() = true;
     assert!(fx
         .land
-        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, Some(&mut later))
+        .cheap_refusals(
+            &d,
+            &tasks(&["T1"]),
+            NOTE,
+            &crate::land::Pass::Landing,
+            Some(&mut later)
+        )
         .is_err());
 }
 
@@ -125,13 +149,13 @@ fn a_red_gate_tripwire_holds_an_engine_landing_unless_escaped() {
     let d = fx.root.join("specs/449-x");
     let stops = fx
         .land
-        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, &crate::land::Pass::Landing, None)
         .unwrap();
     assert_eq!(stops, vec!["the tripwire holds"]);
     fx.land.arbiter_ok = true;
     assert!(fx
         .land
-        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, &crate::land::Pass::Landing, None)
         .unwrap()
         .is_empty());
 }
@@ -170,7 +194,7 @@ fn the_first_pass_commits_its_own_records() {
     put(&fx.root, "specs/449-x/gm-review.jsonl", "{}\n");
     let stops = fx
         .land
-        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, &crate::land::Pass::Landing, None)
         .unwrap();
     assert!(stops.is_empty());
     assert!(fx
@@ -388,7 +412,7 @@ fn a_phase_task_s_refusals_and_a_stale_exempt_entry_join_the_first_pass() {
     );
     let stops = fx
         .land
-        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, &crate::land::Pass::Landing, None)
         .unwrap();
     assert_eq!(stops.len(), 2);
     assert!(stops[0].starts_with("T1: phase seat: no checklist at specs/444-x/phases/seat.md"));
@@ -421,7 +445,7 @@ fn the_push_s_table_and_the_record_gate_are_asked_in_the_first_pass() {
     fx.answer(&tool("gates/entry-gate.sh"), "out", "an entry drifted\n");
     let stops = fx
         .land
-        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, &crate::land::Pass::Landing, None)
         .unwrap();
     assert_eq!(stops.len(), 2, "{stops:?}");
     assert_eq!(stops[0], "entry-gate.sh: an entry drifted");
@@ -433,7 +457,7 @@ fn the_push_s_table_and_the_record_gate_are_asked_in_the_first_pass() {
     let escaped = [("CLOSE_OK", "its report is carried by 450")];
     fx.land.root = l7r_shared::env::Rooted::with(fx.root.clone(), &escaped);
     fx.land
-        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, &crate::land::Pass::Landing, None)
         .unwrap();
     assert!(fx.log().contains("--skip ledger-owed --skip closing\n"));
     // the rows left to the push are rows of its table, and only the gate's own stamp and the ledger's
@@ -472,4 +496,5 @@ fn every_refusing_row_of_the_push_s_table_is_said_whole() {
     );
 }
 
+mod hand_in;
 mod push_parity;
