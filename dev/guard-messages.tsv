@@ -161,8 +161,8 @@ key	verdict	chars	guard	kind	by	over	head
 5fe2b4f2b330c7dc	BASELINE	546	download-copy-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: DOWNLOAD_COPY_OK with no reason given. An escape is a workaround, and
 60fc1c63e58dc2d6	PASS	479	workflow-hooks	refuse	ac1df8d661090ad85		BLOCKED: an ad-hoc agent() call names the model `opus`: agent('is it right',
 620d58f5cd97d279	BASELINE	733	repo-safety-hooks	refuse	unreviewed - repo-safety's host-repo write refusal: 0 shown a session - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		BLOCKED: a git write against <path> That is the GM's own repo,
-652a9a5cf6df9eda	PASS	186	main-tree-hooks	refuse	message-check a4beff929301454d7		BLOCKED: MAIN_TREE_OK with no reason given. Give one where the token is,
 622fe5e0a2e348e2	PASS	710	pool-idle-hooks	block	message-check a9eb507eecf4af447		pool-idle: <path> is free and N TN is READY, overlapping no task
+652a9a5cf6df9eda	PASS	186	main-tree-hooks	refuse	message-check a4beff929301454d7		BLOCKED: MAIN_TREE_OK with no reason given. Give one where the token is,
 65fecf80488e61d5	BASELINE	583	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `record-format` dispatch points the agent at files IN the repository.
 66cdd2ffdf3f7a88	BASELINE	798	claims-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: the research claims sheet is not opened by hand (Read). Ask
 67371de9470425aa	BASELINE	795	shell-check-hooks	refuse	unreviewed - shell-check's co-author refusal, a family of 2 keys: 0 shown a session - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		BLOCKED: a co-author trailer addressed to 'other@example.com'. The co-author address is <noreply@anthropic.com>.
@@ -217,6 +217,7 @@ key	verdict	chars	guard	kind	by	over	head
 841aaf40600ada1c	BASELINE	586	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this settlement-review would spend its round on work that has not
 843b85117e9bb145	PASS	434	no-poll-hooks	notice	ad-hoc sonnet message-check a47c24f9aada2922f (round 2), 2026-11-23		A PROOF-OF-LIFE check was added to the loop:
 84a572fa2e883c5d	BASELINE	508	clone-sync-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: <path> has a clean tree (a new work unit) but its
+85a8d6ebc0b31900	PASS	462	workflow-hooks	refuse	message-check acdfaddc20e398476		BLOCKED (builder-brief): this dispatch works in a pool tree and its prompt
 8610b31a460c8a13	PASS	811	context-cap-hooks	refuse	ab68d9b26b82fb555		BLOCKED: resuming builder N: its context is N tokens, past the cap
 8651270283b39d9f	BASELINE	609	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `translation-check` dispatch points the agent at files IN the repository.
 86e790018bda63ed	BASELINE	268	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an engine entry point run outside make - `make switches` cannot
