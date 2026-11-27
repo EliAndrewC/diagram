@@ -52,13 +52,12 @@ fn tally(stdout: &str) -> (u64, u64) {
     (ran, out)
 }
 
-/// A filtered run's crate judged: a green one's line said, and one that ran none of its tests made its crate's failure.
+/// A green filtered run's crate judged (its caller passes no red one): its line said, and one that ran none of its tests made its
+/// crate's failure.
 pub(super) fn judge(world: &World, shown: &str, done: &mut Ran, stdout: &mut String) {
-    if done.code == 0 {
-        match summary(world, shown, &done.stdout) {
-            Ok(line) => stdout.push_str(&line),
-            Err(why) => (done.code, done.stderr) = (1, why + &done.stderr),
-        }
+    match summary(world, shown, &done.stdout) {
+        Ok(line) => stdout.push_str(&line),
+        Err(why) => (done.code, done.stderr) = (1, why + &done.stderr),
     }
 }
 

@@ -99,12 +99,11 @@ fn lines(key: &Finder, text: &[u8], whole: bool, on: &mut impl FnMut(&[u8], bool
     let mut done = 0;
     // a memchr search, not a regex - it cannot err - through memmem's free function, which the regex-scan check does not read as a scan
     for at in memchr::memmem::find_iter(text, key.needle()) {
-        if at < done {
-            continue;
+        if at >= done {
+            let start = memchr::memrchr(b'\n', &text[..at]).map_or(0, |i| i + 1);
+            done = memchr::memchr(b'\n', &text[at..]).map_or(text.len(), |i| at + i);
+            on(&text[start..done], whole);
         }
-        let start = memchr::memrchr(b'\n', &text[..at]).map_or(0, |i| i + 1);
-        done = memchr::memchr(b'\n', &text[at..]).map_or(text.len(), |i| at + i);
-        on(&text[start..done], whole);
     }
 }
 

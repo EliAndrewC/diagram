@@ -109,7 +109,7 @@ impl LeftOut {
                 continue;
             }
             let mut by = slugs.clone();
-            by.sort_by(|a, b| b.1.cmp(&a.1).then_with(|| a.0.cmp(&b.0)));
+            by.sort_by(|a, b| b.1.cmp(&a.1).then(a.0.cmp(&b.0)));
             let each: Vec<String> = by.iter().map(|(s, n)| format!("{s} {n}")).collect();
             parts.push(format!(
                 "{guard} naming a feature with no specs/ directory {} ({})",

@@ -226,7 +226,12 @@ fn lacks_red_exit(section: &str) -> bool {
 /// `l7r-gate task-add ...` from `cwd`, `title` what `TASK_TITLE` says; `QUICK_OK` from the environment.
 #[must_use]
 pub fn cli(words: &[String], cwd: &Path, title: &str) -> Reply {
-    cli_with(words, cwd, title, &|k| std::env::var(k).ok())
+    cli_with(words, cwd, title, &process_env)
+}
+
+/// The process's environment, as the production entry reads it.
+fn process_env(k: &str) -> Option<String> {
+    std::env::var(k).ok()
 }
 
 /// One guard-log entry of quick's refusal or its escape (`make guard-log GUARD=task-add`, `make audit`); never fails.

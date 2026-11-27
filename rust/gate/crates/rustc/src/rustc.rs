@@ -681,9 +681,12 @@ fn caller_reads(world: &World, cmd: &str, manifest: &Path, inputs: Option<&Kept>
 /// A green test run's line for its crate: the first binary's summary, or a filtered run's count, a filter that ran no test made
 /// its crate's failure (`only.rs`, feature 451 T435).
 fn test_line(world: &World, cmd: &str, shown: &str, done: &mut Ran, stdout: &mut String) {
+    if done.code != 0 {
+        return;
+    }
     if !world.only.is_empty() {
         only::judge(world, shown, done, stdout);
-    } else if done.code == 0 && cmd.starts_with("test") {
+    } else if cmd.starts_with("test") {
         if let Some(summary) = done.stdout.lines().find(|l| l.starts_with("test result:")) {
             let _ = writeln!(stdout, "rust-checks: {cmd} on {shown}: {summary}");
         }

@@ -717,4 +717,5 @@ fn two_worktrees_filing_at_once_take_two_ids_each_in_its_own_tree() {
 fn the_entry_refuses_a_call_with_no_feature() {
     let d = std::env::temp_dir();
     assert_ne!(super::cli(&[], &d, "").code, 0);
+    assert_eq!(super::process_env("L7R_NO_SUCH_VARIABLE_T444"), None);
 }

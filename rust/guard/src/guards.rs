@@ -54,11 +54,7 @@ pub(crate) fn linked_worktree(base: &std::path::Path) -> (std::path::PathBuf, st
             .env_remove("GIT_WORK_TREE")
             .output()
             .unwrap();
-        assert!(
-            done.status.success(),
-            "{}",
-            String::from_utf8_lossy(&done.stderr)
-        );
+        assert!(done.status.success());
     };
     git(&["init".as_ref(), "-q".as_ref(), clone.as_os_str()]);
     git(&[
