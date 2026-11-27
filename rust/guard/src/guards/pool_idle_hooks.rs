@@ -158,6 +158,8 @@ fn held(i: &Idle) -> String {
     if !i.command.is_empty() {
         let then = if i.unlisted.is_empty() { "" } else { "Then " };
         let _ = write!(out, "{then}{} is READY, overlapping no task in flight. Hand it out before this turn ends:\n  {}\n", i.tasks, i.command);
+        // GUARD_EDIT_OK: feature 451 T481 - a fix command make builder-brief refuses is said with make queue's flag under it
+        out.push_str(&i.flag);
     }
     out + &format!(
         "Or start a line of your final message with: {TOKEN}: <why not, two words or more>\n"

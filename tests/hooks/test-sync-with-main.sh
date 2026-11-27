@@ -264,7 +264,12 @@ OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the
 expect_out "holds: T01 open"
 expect_out "make land F=140 T=T01"
 case "$OUT" in *"conflict-markers:"*) no_ "the holding rule ran after l7r-gate push-checks (405 T34: cheap questions first)" ;; *) yes_ ;; esac
-OUT=$(L7R_LAND_TICKS="T01" CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: make land names the task it ticks -> lands" 0 $?
+# 451 T479: the ticks are the landed feature's alone, the one make land names in SPECIFY_FEATURE beside them: another feature's
+# landing of a task of the same id, or ticks naming no feature, leave this one's started T01 holding
+OUT=$(L7R_LAND_TICKS="T01" SPECIFY_FEATURE="141-z" CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: another feature's landing of a task of the same id exempts none of this one's hold (451 T479) -> refused" 1 $?
+expect_out "holds: T01 open"
+OUT=$(unset SPECIFY_FEATURE; L7R_LAND_TICKS="T01" CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: ticks naming no feature exempt nothing (451 T479) -> refused" 1 $?
+OUT=$(L7R_LAND_TICKS="T01" SPECIFY_FEATURE="140-x" CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: make land names the task it ticks -> lands" 0 $?
 # feature 451 T101: a landing of another task than the active one is held, unless make land ruled it ready beside it (started, its
 # plan section CLEAR, its files its own) and said so in L7R_LAND_READY - the push asks the hold again, so it reads that ruling
 ( cd "$D/main/.clones/c" && echo m6b > note.md && echo "another task's report line" >> specs/140-x/report.md && git add -A && git commit -qm "another task's landing" )

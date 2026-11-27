@@ -777,6 +777,53 @@ pub fn offer<'a>(boards: &'a [Board], prefer: &str) -> Option<(&'a Board, usize)
         .or_else(|| first(&|_| true))
 }
 
+/// THE FLAG ON A FIX ENTRY ITS BRIEF WOULD REFUSE (451 T412): `make builder-brief` refuses `KIND=fix` for a task whose line names a
+/// new mechanism, so such an entry read READY and the commands named a brief that is refused (T302 and T296, found by hand). Each
+/// of `e`'s tasks' lines (`line_of`: its open box, whole) is asked the brief's own test, [`crate::builder_brief::mechanism`], and
+/// the first that names one is said, `pad` before each line: what the test read, the `KIND=build-half` command for the feature keyed
+/// `key`, and the route a misread line takes. Nothing for another kind, or where no line names one. Here, not in the gate, so the
+/// pool-idle Stop block says the same flag under the command it names (451 T481).
+///
+/// WHY A NOTICE AND NEVER A SKIP: the test misfires (it took T437, T412 and T431 on 2026-11-27 for a quoted refusal phrase and a
+/// `make -C`; 451 T431 mends the `make -` half). A flag that hid or retyped the entry would hold back a task the brief takes with
+/// `SIZING_OK=`; this one leaves the state and the pick alone and quotes what it read, so a misread is told at a glance and costs a
+/// line, and a true one names the command that runs. It goes quiet for a misread when T431's fix lands, since it asks the one test.
+#[must_use]
+pub fn flag(
+    e: &Entry,
+    key: &str,
+    line_of: &dyn Fn(&String) -> Option<String>,
+    known: &BTreeSet<String>,
+    pad: &str,
+) -> String {
+    let read = |t: &String| {
+        Some((
+            t.clone(),
+            crate::builder_brief::mechanism(&line_of(t)?, known)?,
+        ))
+    };
+    let Some((t, what)) = e.tasks.iter().find_map(read).filter(|_| e.kind == "fix") else {
+        return String::new();
+    };
+    let half = Entry {
+        kind: "build-half".to_owned(),
+        ..e.clone()
+    };
+    format!("{pad}FLAG: {} (line {}) is typed fix, but {t}'s line names a new mechanism ({what}), which make builder-brief refuses KIND=fix for: retype the line build-half and add its closing-half line after it, then\n{pad}  {}\n{pad}  or, where the test misreads the line (a quoted refusal phrase, `make -C`), the fix command as printed with SIZING_OK=\"<reason>\"\n", e.name(), e.line, half.command(key))
+}
+
+/// [`flag`] for entry `i` of `b`, read from its open boxes; only an entry not yet in flight, built or landed is flagged.
+#[must_use]
+pub fn flagged(b: &Board, i: usize, known: &BTreeSet<String>, pad: &str) -> String {
+    let line_of = |t: &String| Some(format!("- [ ] {t} {}", b.facts.open.get(t)?));
+    let open = matches!(b.states[i], State::Ready | State::Waiting(_));
+    if open {
+        flag(&b.entries[i], &b.key, &line_of, known, pad)
+    } else {
+        String::new()
+    }
+}
+
 /// The settled builder count: `L7R_BUILDERS`, else [`BUILDERS`].
 #[must_use]
 pub fn builders() -> usize {
@@ -791,6 +838,9 @@ pub struct Idle {
     /// The entry as a reader names it: `451 T313`.
     pub tasks: String,
     pub command: String,
+    /// [`flagged`]'s lines under the command, two spaces before each: the command is a fix `make builder-brief` refuses (451 T481);
+    /// empty where it is not.
+    pub flag: String,
     pub unlisted: Vec<Unlisted>,
 }
 
@@ -836,20 +886,27 @@ pub fn idle(clone: &Path, builders: usize) -> Verdict {
         }
     }
     let unlisted = unlisted(clone, &common, "");
+    // GUARD_EDIT_OK: feature 451 T481 - the entry's fix flag, as make queue and make builder-next say it, so the block never names a
+    // command make builder-brief refuses without saying so
+    let known = crate::builder_brief::targets(
+        &std::fs::read_to_string(clone.join("Makefile")).unwrap_or_default(),
+    );
     let pick = offer(&boards, "").map(|(b, i)| {
         (
             format!("{} {}", b.key, b.entries[i].name()),
             b.entries[i].command(&b.key),
+            flagged(b, i, &known, "  "),
         )
     });
     if pick.is_none() && unlisted.is_empty() {
         return unread.map_or(Verdict::Quiet, Verdict::Unread);
     }
-    let (tasks, command) = pick.unwrap_or_default();
+    let (tasks, command, flag) = pick.unwrap_or_default();
     Verdict::Idle(Idle {
         tree: free.tree.clone(),
         tasks,
         command,
+        flag,
         unlisted,
     })
 }

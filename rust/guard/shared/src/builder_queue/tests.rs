@@ -401,6 +401,7 @@ fn a_free_tree_with_a_ready_entry_under_the_count_is_idle() {
         tasks: "451 T3".to_owned(),
         command: "make builder-brief T=T3 F=451 KIND=fix JOBS=1 CRATE=\"rust/guard\" ENTRY=1"
             .to_owned(),
+        flag: String::new(),
         unlisted: Vec::new(),
     };
     assert_eq!(idle(&clone, 3), Verdict::Idle(idles.clone()));
@@ -510,6 +511,7 @@ fn the_idle_rule_names_a_performance_entry_of_any_queue_first() {
         tree: dir.join("c-b1"),
         tasks: "452 T4".to_owned(),
         command: "make builder-brief T=T4 F=452 KIND=fix ENTRY=1".to_owned(),
+        flag: String::new(),
         unlisted: Vec::new(),
     };
     assert_eq!(idle(&clone, 3), Verdict::Idle(want));
@@ -605,6 +607,7 @@ fn an_open_performance_task_with_no_queue_line_is_named_with_the_command_that_wr
         tree: dir.join("c-b1"),
         tasks: String::new(),
         command: String::new(),
+        flag: String::new(),
         unlisted: unlisted(&clone, &common, ""),
     };
     assert_eq!(idle(&clone, 3), Verdict::Idle(want));
@@ -664,4 +667,41 @@ fn the_offer_across_queues_is_performance_first_then_the_preferred_queue() {
     );
     assert_eq!(picked("451").as_deref(), Some("452 T4"));
     assert_eq!(offer(&[], "451"), None);
+}
+
+/// 451 T481: the flag on a fix entry its brief would refuse, in its one copy here (the gate's four commands and the pool-idle Stop
+/// block say it): a fix entry whose task line names a mechanism is flagged with its build-half command, a bundle naming the task
+/// whose line it is; another kind, a line naming none, a task with no open box and an entry no longer open are not.
+#[test]
+fn a_fix_entry_whose_line_names_a_mechanism_is_flagged_and_no_other() {
+    let q = parse("T5 fix files=-\nT6,T7 fix files=-\nT8 build-half files=-\n").unwrap();
+    let mut facts = facts_of(&[], Vec::new(), &[], &[]);
+    for (t, title) in [
+        ("T5", "a new guard"),
+        ("T6", "plain"),
+        ("T7", "a new command"),
+        ("T8", "a new guard"),
+    ] {
+        facts.open.insert(t.to_owned(), title.to_owned());
+    }
+    let mut b = Board {
+        key: "451".to_owned(),
+        entries: q,
+        states: vec![State::Ready, State::Waiting("T1".to_owned()), State::Ready],
+        facts,
+        next: Next::default(),
+    };
+    let known = BTreeSet::new();
+    let five = flagged(&b, 0, &known, "  ");
+    assert!(five.starts_with(
+        "  FLAG: T5 (line 1) is typed fix, but T5's line names a new mechanism (\"a new guard\")"
+    ));
+    assert!(five.contains("\n    make builder-brief T=T5 F=451 KIND=build-half ENTRY=1\n"));
+    assert!(flagged(&b, 1, &known, "")
+        .starts_with("FLAG: T6,T7 (line 2) is typed fix, but T7's line names"));
+    assert_eq!(flagged(&b, 2, &known, ""), "");
+    b.facts.open.remove("T5");
+    assert_eq!(flagged(&b, 0, &known, ""), "");
+    b.states[1] = State::Landed;
+    assert_eq!(flagged(&b, 1, &known, ""), "");
 }

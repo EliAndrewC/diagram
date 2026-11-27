@@ -393,7 +393,7 @@ fn mechanisms(tag: &str) -> (l7r_shared::tempdir::TempDir, PathBuf) {
 
 const FLAG10: &str = "FLAG: T10 (line 2) is typed fix, but T10's line names a new mechanism (\"a new guard\"), which make builder-brief refuses KIND=fix for: retype the line build-half and add its closing-half line after it, then";
 const HALF10: &str = "make builder-brief T=T10 F=9001 KIND=build-half ENTRY=1";
-const MISREAD: &str = "or, where the test misreads the line (a quoted refusal phrase, `make -C`: 451 T431), the fix command as printed with SIZING_OK=\"<reason>\"";
+const MISREAD: &str = "or, where the test misreads the line (a quoted refusal phrase, `make -C`), the fix command as printed with SIZING_OK=\"<reason>\"";
 
 /// 451 T412: `make queue` and `make builder-next` flag a fix entry `make builder-brief` would refuse, by the brief's own mechanism
 /// test, naming what it read, the build-half command and the escape a misread line takes; the entry stays READY and is still named.

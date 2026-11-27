@@ -47,12 +47,9 @@ impl Land {
     }
 
     /// The push's in-progress rule over every other spec directory the delta touches and the feature pointer: one refusal for each
-    /// held - a landing ruled ready too, since `L7R_LAND_READY` exempts the landed feature's hold alone (451 T432).
-    pub(super) fn others_in_progress(
-        &self,
-        d: &Path,
-        tasks: &[String],
-    ) -> Result<Vec<String>, String> {
+    /// held - a landing ruled ready too, since `L7R_LAND_READY` exempts the landed feature's hold alone (451 T432), and one ticking
+    /// a task of the same id, since `L7R_LAND_TICKS` are the landed feature's ticks alone (451 T479).
+    pub(super) fn others_in_progress(&self, d: &Path) -> Result<Vec<String>, String> {
         let own = rel_of(&self.root, d);
         let mut dirs: Vec<String> = self
             .delta_names()?
@@ -68,7 +65,7 @@ impl Land {
         dirs.push(self.pointer());
         dirs.sort();
         dirs.dedup();
-        let (ticks, number) = (tasks.join(" "), name_of(d));
+        let number = name_of(d);
         let number = number.split('-').next().unwrap_or_default();
         let mut out = Vec::new();
         for rel in dirs.iter().filter(|r| !r.is_empty() && **r != own) {
@@ -76,9 +73,9 @@ impl Land {
             if !dir.join("tasks.md").is_file() {
                 continue;
             }
-            let held = self
-                .inproc
-                .holding(&dir.to_string_lossy(), &ticks, &self.root);
+            // the landing's ticks are its own feature's: another feature's started task of the same id still holds, as the push asks
+            // it under `SPECIFY_FEATURE` (451 T479)
+            let held = self.inproc.holding(&dir.to_string_lossy(), "", &self.root);
             let said = strip(&(held.stdout + &held.stderr)).to_owned();
             if held.code == 0 && said.is_empty() {
                 continue;

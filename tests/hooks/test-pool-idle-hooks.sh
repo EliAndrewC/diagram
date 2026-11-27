@@ -101,6 +101,12 @@ expect_block 'with the command that writes its line' 'make queue-add F=451 T=T6 
 queue 'T3 fix files=docs/a.md waits=GM\nT6 fix files=- waits=GM\n'
 expect_allow 'its line with waits= quiets it'
 rm "$C/.git/task-starts.jsonl"
+# --- 451 T481: a READY fix entry whose task line names a new mechanism is a command make builder-brief refuses: the block says
+# make queue's flag under it, with the build-half command
+printf -- '- [ ] T3 a new guard over the queue\n' > "$C/specs/451-x/tasks.md"
+queue 'T3 fix files=docs/a.md\n'
+expect_block 'a refused fix command is flagged' "FLAG: T3 (line 1) is typed fix, but T3's line names a new mechanism"
+expect_block 'with the build-half command' 'make builder-brief T=T3 F=451 KIND=build-half ENTRY=1'
 rm "$C/specs/451-x/queue.txt"
 expect_allow 'no queue'
 printf '{}' | "$HOOK" stop >/dev/null 2>&1

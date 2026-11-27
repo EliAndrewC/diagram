@@ -326,7 +326,9 @@ fn this_trees_started_task_holds_and_another_trees_only_by_the_edits_the_push_ca
     edited(&at, &at, "007-x", "T7701", "a.rs");
     assert_eq!(holding(&d).unwrap(), own);
     crate::env::set("L7R_LAND_TICKS", "T7700 T7701");
+    crate::env::set("SPECIFY_FEATURE", "007-x");
     assert!(holding(&d).unwrap().is_empty());
+    crate::env::unset("SPECIFY_FEATURE");
     crate::env::unset("L7R_LAND_TICKS");
     // 451 T101: a landing of another task is held by it, unless the landing ruled every task it ticks ready beside it
     assert_eq!(holding_with(&d, "T7703").unwrap().len(), 1);
@@ -410,6 +412,38 @@ fn this_trees_started_task_holds_and_another_trees_only_by_the_edits_the_push_ca
     mark(&at, &at, "draft-y", "T7706", "2026-11-25T13:00:00Z");
     edited(&at, &at, "draft-y", "T7706", "b.rs");
     assert!(holding(&n).unwrap()[0].ends_with("F=draft-y T=T7706"));
+}
+
+/// RED FIRST (451 T479): a landing's ticks are the LANDED feature's alone (`SPECIFY_FEATURE`, which make land exports beside
+/// `L7R_LAND_TICKS`), so feature 008's landing of T7708 leaves feature 007's started T7708 holding; a push naming no feature exempts none.
+#[test]
+fn a_landings_ticks_exempt_no_other_features_started_task_of_the_same_id() {
+    let (_d, at) = repo("colliding-tick");
+    let (seven, eight) = (at.join("specs/007-x"), at.join("specs/008-y"));
+    put(&seven, "tasks.md", "- [ ] T7708 seven's\n");
+    put(&eight, "tasks.md", "- [ ] T7708 eight's\n");
+    git(&at, &["add", "-A"]);
+    commit_all(&at, "base");
+    git(&at, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    mark(&at, &at, "007-x", "T7708", "2026-11-27T10:00:00Z");
+    mark(&at, &at, "008-y", "T7708", "2026-11-27T10:00:01Z");
+    crate::env::set("L7R_LAND_TICKS", "T7708");
+    crate::env::set("SPECIFY_FEATURE", "008-y");
+    let held = (
+        holding(&seven).unwrap().len(),
+        holding(&eight).unwrap().len(),
+    );
+    crate::env::unset("SPECIFY_FEATURE");
+    let unnamed = (
+        holding(&seven).unwrap().len(),
+        holding(&eight).unwrap().len(),
+    );
+    crate::env::unset("L7R_LAND_TICKS");
+    assert_eq!((held, unnamed), ((1, 0), (1, 1)));
+    // in process: the ticks handed in are the named feature's, and `holding_with` the directory's own
+    assert_eq!(holding_for(&seven, "T7708", "008-y").unwrap().len(), 1);
+    assert!(holding_for(&seven, "T7708", "007-x").unwrap().is_empty());
+    assert!(holding_with(&eight, "T7708").unwrap().is_empty());
 }
 
 #[test]

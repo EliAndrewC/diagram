@@ -14,7 +14,7 @@
 //!
 //! WHAT HOLDS A LANDING (feature 405 T32, D4; the GM, 2026-10-20: "I do not want each landing to owe a lands open line"). A feature in
 //! progress holds a landing only through the tasks being worked - the started task of the pushing tree (`make task-start`, its own
-//! mark, [`marks`], 451 T254), and another tree's started task only where the push's delta carries its edits ([`touch`]) - while that task is open and the landing does not tick it (`L7R_LAND_TICKS`, the ids `make land` sets). A task nobody has started holds
+//! mark, [`marks`], 451 T254), and another tree's started task only where the push's delta carries its edits ([`touch`]) - while that task is open and the landing does not tick it (`L7R_LAND_TICKS`, the ids `make land` sets, ticks of the feature `SPECIFY_FEATURE` names alone: another feature's task of the same id still holds, 451 T479). A task nobody has started holds
 //! nothing, nor does the GM-review box. NOR DOES IT HOLD A LANDING THAT RULED ITS OWN TASKS READY (feature 451 T101): with builders
 //! rolling (T88) the mark names whichever task started last, so a finished task was refused "held by" a task started after it - T81,
 //! T88 and T93, each CLEAR, at 18:32:27Z on 2026-11-21, the mark moved by hand to land them and back after. `make land` rules each of
@@ -506,8 +506,8 @@ pub fn gm_rows(d: &Path) -> Result<usize, String> {
 
 /// The open boxes that hold the landing: each started task of this feature (a mark of any tree still there, [`marks::all`] but
 /// [`marks::gone`], 451 T437), open, not ticked by
-/// the landing (`L7R_LAND_TICKS`) nor ruled ready beside them (`L7R_LAND_READY`, 451 T101, where `SPECIFY_FEATURE` names this
-/// feature, 451 T432) - this tree's own whatever the delta
+/// the landing (`L7R_LAND_TICKS`, where `SPECIFY_FEATURE` names this feature, 451 T479) nor ruled ready beside them
+/// (`L7R_LAND_READY`, 451 T101, where `SPECIFY_FEATURE` names this feature, 451 T432) - this tree's own whatever the delta
 /// carries (feature 405 D4), another tree's only where the push's delta carries its edits ([`touch`], 451 T254); every other open
 /// box holds nothing.
 ///
@@ -515,15 +515,30 @@ pub fn gm_rows(d: &Path) -> Result<usize, String> {
 /// A file that cannot be read, or an active-task mark that is not an object.
 pub fn holding(d: &Path) -> Result<Vec<String>, String> {
     // `shared::env`: a test's own environment, never a landing's export (feature 451 T32)
-    holding_with(d, &crate::env::var("L7R_LAND_TICKS"))
+    holding_for(
+        d,
+        &crate::env::var("L7R_LAND_TICKS"),
+        &crate::env::var("SPECIFY_FEATURE"),
+    )
 }
 
-/// [`holding`], the landing's tasks handed in rather than read from `L7R_LAND_TICKS`: the Rust land asks it in process (feature 449
-/// T121), where `land.py` set the variable on the one command it ran, never in its own environment.
+/// [`holding`], the landing's tasks handed in rather than read from `L7R_LAND_TICKS`, and taken as THIS feature's: the Rust land asks
+/// it in process of the landed feature's own directory (feature 449 T121), where `land.py` set the variable on the one command it ran,
+/// never in its own environment; another feature's directory is asked with no ticks (451 T479).
 ///
 /// # Errors
 /// A file that cannot be read, or an active-task mark that is not an object.
 pub fn holding_with(d: &Path, ticks: &str) -> Result<Vec<String>, String> {
+    holding_for(d, ticks, &py_name(d))
+}
+
+/// [`holding`], the landing's `ticks` handed in with the feature `landed` they are ticked in: they exempt this feature's started tasks
+/// only where `landed` names it, so feature 449's landing of T5 leaves feature 451's started T5 holding (451 T479, as T432 scoped the
+/// ready ruling); a landing naming no feature exempts none.
+///
+/// # Errors
+/// A file that cannot be read, or an active-task mark that is not an object.
+pub fn holding_for(d: &Path, ticks: &str, landed: &str) -> Result<Vec<String>, String> {
     let tasks = d.join("tasks.md");
     if !tasks.is_file() {
         return Ok(Vec::new());
@@ -534,14 +549,15 @@ pub fn holding_with(d: &Path, ticks: &str) -> Result<Vec<String>, String> {
         return Ok(Vec::new());
     };
     let name = py_name(d);
-    let ticked = split(ticks);
+    // the ticks are the landed feature's: another feature's task of the same id is no task this landing ticks (451 T479)
+    let ticked = split(if landed == name { ticks } else { "" });
     // ...the landing ruled every task it ticks ready beside the started ones (451 T101): its own rule, made in `l7r-gate land` - and
     // for ITS OWN feature alone, the one `make land` names to the push in `SPECIFY_FEATURE`; another feature the delta carries keeps
     // its hold, and a ruling naming no feature exempts none (451 T432)
     let ready = crate::env::var("L7R_LAND_READY");
     let ready = split(&ready);
-    let landed = crate::env::var("SPECIFY_FEATURE") == name;
-    if landed && !ticked.is_empty() && ticked.iter().all(|t| ready.contains(t)) {
+    let named = crate::env::var("SPECIFY_FEATURE") == name;
+    if named && !ticked.is_empty() && ticked.iter().all(|t| ready.contains(t)) {
         return Ok(Vec::new());
     }
     let all = marks::all(&common);

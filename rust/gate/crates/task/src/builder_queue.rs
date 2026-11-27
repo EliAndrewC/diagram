@@ -15,7 +15,8 @@
 //!   the queue does not list, and the pool's count against `L7R_BUILDERS`; with no entry to hand out, why.
 //! - [`dispatch`] is that entry as `make builder-done`'s step 1, where a placeholder stood while the queue was prose (451 T394).
 //! - A fix entry `make builder-brief` would refuse - one of its tasks' lines names a new mechanism by the brief's own test,
-//!   `l7r_shared::builder_brief::mechanism` - is FLAGGED by each of the four ([`flag`], 451 T412), never skipped: see there.
+//!   `l7r_shared::builder_brief::mechanism` - is FLAGGED by each of the four (`l7r_shared::builder_queue::flag`, 451 T412, which the
+//!   pool-idle Stop block says too, 451 T481), never skipped: see there.
 //! - With no feature named, a `queue.txt` that does not parse is PASSED OVER, a line on stderr each (451 T418): another feature may
 //!   hold a file of that name in another form (the page sessions' queues of features 269 and 280), as the Stop guard's walk passes it.
 
@@ -24,9 +25,9 @@ use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
 use l7r_gate_core::Reply;
-use l7r_shared::builder_brief::{mechanism, targets};
+use l7r_shared::builder_brief::targets;
 use l7r_shared::builder_pool;
-use l7r_shared::builder_queue::{self as queue, Board, State};
+use l7r_shared::builder_queue::{self as queue, flag, flagged, Board, State};
 
 use crate::builder_brief::feature_dir;
 use crate::builder_tree::{self, feature_key, refused, Pool};
@@ -90,45 +91,6 @@ fn boards(p: &Pool, feature: &str) -> Result<(Vec<(Board, String)>, String), Str
 /// The make targets of the clone's Makefile, which the mechanism test reads a `make <target>` against.
 fn known(p: &Pool) -> BTreeSet<String> {
     targets(&std::fs::read_to_string(p.clone.join("Makefile")).unwrap_or_default())
-}
-
-/// THE FLAG ON A FIX ENTRY ITS BRIEF WOULD REFUSE (451 T412): `make builder-brief` refuses `KIND=fix` for a task whose line names a
-/// new mechanism, so such an entry read READY and the commands named a brief that is refused (T302 and T296, found by hand). Each
-/// of `e`'s tasks' lines (`line_of`: its open box, whole) is asked the brief's own test, [`mechanism`], and the first that names one
-/// is said, `pad` before each line: what the test read, the `KIND=build-half` command for the feature keyed `key`, and the route a
-/// misread line takes. Nothing for another kind, or where no line names one.
-///
-/// WHY A NOTICE AND NEVER A SKIP: the test misfires (it took T437, T412 and T431 on 2026-11-27 for a quoted refusal phrase and a
-/// `make -C`; 451 T431 mends the `make -` half). A flag that hid or retyped the entry would hold back a task the brief takes with
-/// `SIZING_OK=`; this one leaves the state and the pick alone and quotes what it read, so a misread is told at a glance and costs a
-/// line, and a true one names the command that runs. It goes quiet for a misread when T431's fix lands, since it asks the one test.
-fn flag(
-    e: &queue::Entry,
-    key: &str,
-    line_of: &dyn Fn(&String) -> Option<String>,
-    known: &BTreeSet<String>,
-    pad: &str,
-) -> String {
-    let read = |t: &String| Some((t.clone(), mechanism(&line_of(t)?, known)?));
-    let Some((t, what)) = e.tasks.iter().find_map(read).filter(|_| e.kind == "fix") else {
-        return String::new();
-    };
-    let half = queue::Entry {
-        kind: "build-half".to_owned(),
-        ..e.clone()
-    };
-    format!("{pad}FLAG: {} (line {}) is typed fix, but {t}'s line names a new mechanism ({what}), which make builder-brief refuses KIND=fix for: retype the line build-half and add its closing-half line after it, then\n{pad}  {}\n{pad}  or, where the test misreads the line (a quoted refusal phrase, `make -C`: 451 T431), the fix command as printed with SIZING_OK=\"<reason>\"\n", e.name(), e.line, half.command(key))
-}
-
-/// [`flag`] for entry `i` of `b`, read from its open boxes; only an entry not yet in flight, built or landed is flagged.
-fn flagged(b: &Board, i: usize, known: &BTreeSet<String>, pad: &str) -> String {
-    let line_of = |t: &String| Some(format!("- [ ] {t} {}", b.facts.open.get(t)?));
-    let open = matches!(b.states[i], State::Ready | State::Waiting(_));
-    if open {
-        flag(&b.entries[i], &b.key, &line_of, known, pad)
-    } else {
-        String::new()
-    }
 }
 
 fn word(s: &State) -> String {

@@ -4254,6 +4254,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T479 (found by 451 T432, 2026-11-27, by reading: a landing's ticks exempted every feature's started task of the same id)": {
+   "sha256": "47fc1548ab214e4847d3cc2a65ff1b84397e503de5dc00f79afd091c70decd72",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T479 Approach (checklist part A)": {
+   "sha256": "3b9fa1a4b75b060fa77f0d637b86d628aac73be34fb71a33cd6ed871e8658c31",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T481 (left by 451 T412: the pool-idle Stop block named a fix command `make builder-brief` refuses, unflagged)": {
+   "sha256": "c4d30c2fb1ba90a25988940013dc2f806629b060803aee63b1a2a75bf6fe02d5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T481 Approach (checklist part A)": {
+   "sha256": "1d295ef1b6493c1192d72da0def397b311076daed43ebded2731d373892fc8a2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -39809,6 +39833,80 @@
      "why": "Sequencing only. It changes nothing about what is built."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T479 (found by 451 T432, 2026-11-27, by reading: a landing's ticks exempted every feature's started task of the same id)",
+    "### T479 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T479 Approach",
+     "summary": "Fix the defect where a landing's ticks (L7R_LAND_TICKS) exempted a started task of the same id in EVERY feature, so another feature's half-done task could reach main; the exemption is scoped to the landed feature at the push and in the first pass.",
+     "class": "within",
+     "why": "A check that passes bad work is a defect (constitution XIV), and the GM asked for the parallel-building tooling's defects to be fixed as part of this tasking before the port resumes ('we should make sure to fix all of this as part of our tasking...', 2026-11-26; the go-ahead of 2026-11-27). The fix restores feature 133's in-progress rule. It does not narrow anything that was asked."
+    },
+    {
+     "id": "T479-D1",
+     "summary": "New holding_for(d, ticks, landed): ticks apply only where landed names the asked directory. holding (push and CI merge) passes SPECIFY_FEATURE, which make land exports, and a push with ticks but no feature named exempts nothing (fails closed). The in-process callers inside l7r-gate land keep holding_with(d, ticks) meaning the directory's own ticks, because the session's SPECIFY_FEATURE may name another feature.",
+     "class": "within",
+     "why": "This is how the fix is built, following T432's scoping of L7R_LAND_READY. Failing closed is stricter than before and only refuses an unscoped push. It removes no exemption the request or spec grants. Keeping holding_with for the in-process callers rests on the plan's own reading of every caller (labeled O, no search command given). That is a premise for the builder's tests to bear out, not a narrowing."
+    },
+    {
+     "id": "T479-D2",
+     "summary": "speckit-todo --holding reads SPECIFY_FEATURE beside L7R_LAND_TICKS and asks holding_for; the in-process holding_reply keeps holding_with.",
+     "class": "within",
+     "why": "The same scoping, applied to the CLI that sync-with-main.sh asks for each touched feature. Nothing asked for is narrowed."
+    },
+    {
+     "id": "T479-D3",
+     "summary": "others_in_progress asks another feature's directory with no ticks, as the push now does; its unused tasks parameter is dropped; push_parity's pin changes from [T1] to [].",
+     "class": "within",
+     "why": "It keeps the first pass refusing what the push refuses (451 T413). The changed pin pinned the defective behavior, so moving it is part of the fix and not a loosened check."
+    },
+    {
+     "id": "T479 checklist",
+     "summary": "Constraints (no guard message changes, 100% new-line coverage), exits (red is recorded, and any can't-be-done claim goes through make arbiter-ask), done = the named tests and builder-checks green, found-and-left none.",
+     "class": "within",
+     "why": "Standard procedure. Nothing is deferred and no requested behavior is left out."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T481 (left by 451 T412: the pool-idle Stop block named a fix command `make builder-brief` refuses, unflagged)",
+    "### T481 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T481-D1",
+     "summary": "The gate's fix-entry flag functions (flag, flagged) move whole into l7r_shared::builder_queue and the gate imports them, so the Stop block and make queue / make builder-next say one text from one copy, under T431's mechanism test.",
+     "class": "within",
+     "why": "Serves T313's request that the tooling keep the pool full (request.md 2026-11-26, 'something that we want our tooling to actually enforce') and T334's dispatch-through-the-tooling: a Stop block naming a command make builder-brief refuses, unflagged, is a wrong outcome (a tool answering wrongly), so fixing it is owed by the fix-as-we-go rule. One shared copy instead of a guard-side duplicate is a means, narrows nothing asked."
+    },
+    {
+     "id": "T481-D2",
+     "summary": "Idle gains a flag field: idle reads the clone's Makefile targets and keeps flagged(...) beside the command; held writes it under the command line; empty for any other kind or a line naming no mechanism, so other blocks are unchanged.",
+     "class": "within",
+     "why": "The mechanism that carries D1's flag into the pool-idle block; scoping it to exactly the case the flag exists for (a fix entry whose line names a new mechanism) leaves no requested behavior out - every other block was already correct. T313's 'Stop rule kept thin' is respected: no new rule, one conditional line."
+    },
+    {
+     "id": "T481-msg",
+     "summary": "The guard-message change taken through 451 T338's route; the brevity cut ('make -C: 451 T431)' to 'make -C)') applied in the one shared flag, so make queue's text shortens too and the gate's MISREAD pin with it; 'T3's line names' and T313's 'Hand it out before this turn ends' kept.",
+     "class": "within",
+     "why": "A wording change to an output that still does its job, reviewed PASS (round 2, 710 of 1800 characters) under the GM's hook-output-length concern (2026-11-23); a differing text is not a regression under the no-exactness standard, and keeping the task name in the line is needed for bundle entries. Nothing asked is dropped."
+    },
+    {
+     "id": "T481-order",
+     "summary": "Lands after T412 and T431 (landed), independent of T479; found-and-left none; not performance work.",
+     "class": "within",
+     "why": "Sequencing and classing only. The gap is the one known defect and it is fixed in this task, so nothing is carried into later work; a guard message's gap is not performance or measurement work under FR-013 or the 2026-11-20 measurement amendment."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -60036,6 +60134,76 @@
      "summary": "The task lands after T482 in this tree, as T477's found-and-left line orders it.",
      "class": "within",
      "why": "Sequencing only. It changes nothing about what is built."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T479": {
+   "section_sha256": "12efd2a0e4cfeb7d6073758e3219bcaae11622fd083e41ea8b83f25b31010b7f",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T479 Approach",
+     "summary": "Fix the defect where a landing's ticks (L7R_LAND_TICKS) exempted a started task of the same id in EVERY feature, so another feature's half-done task could reach main; the exemption is scoped to the landed feature at the push and in the first pass.",
+     "class": "within",
+     "why": "A check that passes bad work is a defect (constitution XIV), and the GM asked for the parallel-building tooling's defects to be fixed as part of this tasking before the port resumes ('we should make sure to fix all of this as part of our tasking...', 2026-11-26; the go-ahead of 2026-11-27). The fix restores feature 133's in-progress rule. It does not narrow anything that was asked."
+    },
+    {
+     "id": "T479-D1",
+     "summary": "New holding_for(d, ticks, landed): ticks apply only where landed names the asked directory. holding (push and CI merge) passes SPECIFY_FEATURE, which make land exports, and a push with ticks but no feature named exempts nothing (fails closed). The in-process callers inside l7r-gate land keep holding_with(d, ticks) meaning the directory's own ticks, because the session's SPECIFY_FEATURE may name another feature.",
+     "class": "within",
+     "why": "This is how the fix is built, following T432's scoping of L7R_LAND_READY. Failing closed is stricter than before and only refuses an unscoped push. It removes no exemption the request or spec grants. Keeping holding_with for the in-process callers rests on the plan's own reading of every caller (labeled O, no search command given). That is a premise for the builder's tests to bear out, not a narrowing."
+    },
+    {
+     "id": "T479-D2",
+     "summary": "speckit-todo --holding reads SPECIFY_FEATURE beside L7R_LAND_TICKS and asks holding_for; the in-process holding_reply keeps holding_with.",
+     "class": "within",
+     "why": "The same scoping, applied to the CLI that sync-with-main.sh asks for each touched feature. Nothing asked for is narrowed."
+    },
+    {
+     "id": "T479-D3",
+     "summary": "others_in_progress asks another feature's directory with no ticks, as the push now does; its unused tasks parameter is dropped; push_parity's pin changes from [T1] to [].",
+     "class": "within",
+     "why": "It keeps the first pass refusing what the push refuses (451 T413). The changed pin pinned the defective behavior, so moving it is part of the fix and not a loosened check."
+    },
+    {
+     "id": "T479 checklist",
+     "summary": "Constraints (no guard message changes, 100% new-line coverage), exits (red is recorded, and any can't-be-done claim goes through make arbiter-ask), done = the named tests and builder-checks green, found-and-left none.",
+     "class": "within",
+     "why": "Standard procedure. Nothing is deferred and no requested behavior is left out."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T481": {
+   "section_sha256": "9037672e070f4a54c7f1320c468c94759ef6528a9053011973f06cca75cfc0fe",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T481-D1",
+     "summary": "The gate's fix-entry flag functions (flag, flagged) move whole into l7r_shared::builder_queue and the gate imports them, so the Stop block and make queue / make builder-next say one text from one copy, under T431's mechanism test.",
+     "class": "within",
+     "why": "Serves T313's request that the tooling keep the pool full (request.md 2026-11-26, 'something that we want our tooling to actually enforce') and T334's dispatch-through-the-tooling: a Stop block naming a command make builder-brief refuses, unflagged, is a wrong outcome (a tool answering wrongly), so fixing it is owed by the fix-as-we-go rule. One shared copy instead of a guard-side duplicate is a means, narrows nothing asked."
+    },
+    {
+     "id": "T481-D2",
+     "summary": "Idle gains a flag field: idle reads the clone's Makefile targets and keeps flagged(...) beside the command; held writes it under the command line; empty for any other kind or a line naming no mechanism, so other blocks are unchanged.",
+     "class": "within",
+     "why": "The mechanism that carries D1's flag into the pool-idle block; scoping it to exactly the case the flag exists for (a fix entry whose line names a new mechanism) leaves no requested behavior out - every other block was already correct. T313's 'Stop rule kept thin' is respected: no new rule, one conditional line."
+    },
+    {
+     "id": "T481-msg",
+     "summary": "The guard-message change taken through 451 T338's route; the brevity cut ('make -C: 451 T431)' to 'make -C)') applied in the one shared flag, so make queue's text shortens too and the gate's MISREAD pin with it; 'T3's line names' and T313's 'Hand it out before this turn ends' kept.",
+     "class": "within",
+     "why": "A wording change to an output that still does its job, reviewed PASS (round 2, 710 of 1800 characters) under the GM's hook-output-length concern (2026-11-23); a differing text is not a regression under the no-exactness standard, and keeping the task name in the line is needed for bundle entries. Nothing asked is dropped."
+    },
+    {
+     "id": "T481-order",
+     "summary": "Lands after T412 and T431 (landed), independent of T479; found-and-left none; not performance work.",
+     "class": "within",
+     "why": "Sequencing and classing only. The gap is the one known defect and it is fixed in this task, so nothing is carried into later work; a guard message's gap is not performance or measurement work under FR-013 or the 2026-11-20 measurement amendment."
     }
    ],
    "verdict": "CLEAR"

@@ -42,6 +42,7 @@ fn a_stop_over_a_free_tree_and_a_ready_entry_is_held_with_the_one_command() {
         tree: dir.join("c-b1"),
         tasks: "451 T3".to_owned(),
         command: "make builder-brief T=T3 F=451 KIND=fix CRATE=\"rust/guard\" ENTRY=1".to_owned(),
+        flag: String::new(),
         unlisted: Vec::new(),
     };
     assert_eq!(said, Said::Held(idle));
@@ -191,4 +192,25 @@ fn an_open_performance_task_with_no_queue_line_is_named_first() {
         "T3 fix files=- waits=GM\nT7 fix files=- waits=GM\nT6 fix files=- waits=GM\n",
     );
     assert_eq!(judge(&stop("done"), Some(&clone), 3), Said::Quiet);
+}
+
+/// RED FIRST (451 T481): a READY fix entry whose task line names a new mechanism is a command `make builder-brief` refuses, so the
+/// block says the flag `make queue` and `make builder-next` say (451 T412) under it - the build-half command and the misread route;
+/// an entry of another kind, or a line naming none, is said as before.
+#[test]
+fn a_ready_fix_entry_whose_line_names_a_mechanism_is_flagged_in_the_block() {
+    let (dir, clone) = world("flag", "T3 fix crates=rust/guard files=-\n");
+    put(
+        &clone.join("specs/451-x/tasks.md"),
+        "- [ ] T3 a new guard over the queue\n",
+    );
+    let block = refusal(&judge(&stop("done"), Some(&clone), 3)).unwrap();
+    let want = format!("pool-idle: {} is free and 451 T3 is READY, overlapping no task in flight. Hand it out before this turn ends:\n  make builder-brief T=T3 F=451 KIND=fix CRATE=\"rust/guard\" ENTRY=1\n  FLAG: T3 (line 1) is typed fix, but T3's line names a new mechanism (\"a new guard\"), which make builder-brief refuses KIND=fix for: retype the line build-half and add its closing-half line after it, then\n    make builder-brief T=T3 F=451 KIND=build-half CRATE=\"rust/guard\" ENTRY=1\n    or, where the test misreads the line (a quoted refusal phrase, `make -C`), the fix command as printed with SIZING_OK=\"<reason>\"\nOr start a line of your final message with: POOL_IDLE_OK: <why not, two words or more>\n", dir.join("c-b1").display());
+    assert_eq!(block, want);
+    put(
+        &clone.join("specs/451-x/queue.txt"),
+        "T3 build-half crates=rust/guard files=-\n",
+    );
+    let block = refusal(&judge(&stop("done"), Some(&clone), 3)).unwrap();
+    assert!(!block.contains("FLAG"), "{block}");
 }

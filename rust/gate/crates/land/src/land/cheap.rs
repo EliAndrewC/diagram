@@ -304,7 +304,7 @@ impl Land {
             stops.push(format!("held by {held}"));
         }
         // ...and, as the push asks, every other spec directory the delta touches and the feature pointer (451 T413, `parity.rs`)
-        stops.extend(self.others_in_progress(d, tasks)?);
+        stops.extend(self.others_in_progress(d)?);
         let ticks = tasks.join(" ");
         // A RED-GATE TRIPWIRE HOLDS THE LANDING'S GATE (feature 405 T44, D18): asked here with the others, on a landing that runs one
         if !self.arbiter_ok && self.engine_delta()? {

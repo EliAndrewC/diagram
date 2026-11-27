@@ -36,8 +36,8 @@ use std::path::Path;
 
 use l7r_gate_core::record::args::{parse, Spec};
 use l7r_shared::speckit::{
-    affects, closed_by_status, features, holding_with, py_path, state, state_given_vocabulary,
-    vocabulary, Feature, Vocabulary, STAGES,
+    affects, closed_by_status, features, holding_for, holding_with, py_path, state,
+    state_given_vocabulary, vocabulary, Feature, Vocabulary, STAGES,
 };
 
 use crate::Reply;
@@ -121,19 +121,21 @@ pub fn cli(args: &[String], cwd: &Path) -> Reply {
     }
 }
 
-/// `--holding <dir>`'s lines, the landing's tasks handed in.
-fn holding_text(dir: &str, ticks: &str) -> Result<String, String> {
-    Ok(holding_with(&py_path(dir), ticks)?
-        .into_iter()
-        .map(|l| l + "\n")
-        .collect())
+/// `--holding <dir>`'s lines, the landing's tasks handed in, of the feature `landed` names (451 T479); with none, the directory's own.
+fn holding_text(dir: &str, ticks: &str, landed: Option<&str>) -> Result<String, String> {
+    let d = py_path(dir);
+    let held = match landed {
+        Some(f) => holding_for(&d, ticks, f),
+        None => holding_with(&d, ticks),
+    };
+    Ok(held?.into_iter().map(|l| l + "\n").collect())
 }
 
 /// `speckit-todo --holding <dir>` as the landing asks it, in process since feature 449 T121 (`ask:449-T83-scope`: the Rust land calls
 /// `speckit-todo` in process): the same reply and the same usage line as the command `land.py` ran, its `L7R_LAND_TICKS` handed in.
 #[must_use]
 pub fn holding_reply(dir: &str, ticks: &str, cwd: &Path) -> Reply {
-    match holding_text(dir, ticks) {
+    match holding_text(dir, ticks, None) {
         Ok(out) => {
             record(cwd, 0);
             reply(out, String::new(), 0)
@@ -185,7 +187,13 @@ struct Flags<'a> {
 fn answer(root: &str, f: &Flags) -> Result<Reply, String> {
     if !f.holding.is_empty() {
         let ticks = std::env::var("L7R_LAND_TICKS").unwrap_or_default();
-        return Ok(reply(holding_text(f.holding, &ticks)?, String::new(), 0));
+        // the push's ticks are the feature make land exports beside them: another feature's task of the same id holds (451 T479)
+        let landed = std::env::var("SPECIFY_FEATURE").unwrap_or_default();
+        return Ok(reply(
+            holding_text(f.holding, &ticks, Some(&landed))?,
+            String::new(),
+            0,
+        ));
     }
     if !f.closed_by_status.is_empty() {
         let yes = closed_by_status(&py_path(f.closed_by_status))?;

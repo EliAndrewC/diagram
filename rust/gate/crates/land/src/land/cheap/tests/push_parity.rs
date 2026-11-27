@@ -35,8 +35,9 @@ fn a_clone_whose_history_shares_no_commit_with_main_s_is_refused_before_anything
 }
 
 /// THE PUSH'S IN-PROGRESS RULE OVER EVERY TOUCHED SPEC DIRECTORY: another feature the delta touches with a task holding it refuses the
-/// push, asked with the landing's ticks as the push's environment carries them; a status line that closes it holds nothing, and a
-/// holding answer that fails holds, as the push fails closed.
+/// push, asked with none of the landing's ticks (here T1), which the push's environment names the landed feature's alone (451 T479:
+/// feature 449's landing of T5 leaves 450's started T5 holding); a status line that closes it holds nothing, and a holding answer that
+/// fails holds, as the push fails closed.
 #[test]
 fn another_feature_in_progress_that_the_delta_touches_is_refused_unless_its_status_closes_it() {
     let fx = fx("parity-other");
@@ -53,7 +54,7 @@ fn another_feature_in_progress_that_the_delta_touches_is_refused_unless_its_stat
     let asked = fx.answers.asked.borrow().join("\n");
     has(
         &asked,
-        &format!("holding {}/specs/450-y [T1]", fx.root.display()),
+        &format!("holding {}/specs/450-y []", fx.root.display()),
     );
     drop(asked);
     // a spec directory with no tasks.md asks nothing
