@@ -1556,31 +1556,77 @@ engine speed, so the performance checklist does not apply.
 
 **Performance work?** no.
 
-### T37 (<why: the finding or measurement that files it>)
+### T37 (T34's Found and left: the push table's delta-scoped rows read their own merge base at hand-in)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: built in pool tree `diagram-backlog-t270` on T34's 77423b3b2d. Each row T37 names now asks
+  `l7r_gate_core::delta_base::named(root)` (T34's reader) first and keeps its old merge base as the fallback, its own empty-base
+  handling unchanged. There is no second reader and no shared fallback.
+  - spec-lint `--delta` (`checks` `spec_lint.rs`): `touched_spec_dirs`, and the base `introduced` is measured against.
+  - audit-register `--delta` (`audit_register.rs` `base`).
+  - gm-attributions (`gm_attributions.rs` `base_ids`): the baseline is held to the base's copy.
+  - gm-questions (`reviews` `gm_review.rs` `owed_in_delta`).
+  - The rows' `delta:` gate (`tree` `checks.rs` `needs`, which `needs_run` reads).
+  - closing (`cohort`): the row drops its literal `origin/main...HEAD`, and `close-check --push` with no range asks `push_range`. That
+    is the range named, else the base the hand-in names, else `origin/main...HEAD`. At hand-in the work stands uncommitted on the
+    base, so the range is the bare base: the working tree against it, as `gate_refusals` hands the ranged gates. `<base>...HEAD`
+    would be empty and pass everything.
+  - The variable reaches every row: `push-checks` spawns its rows with the environment it was given (no `env_clear`, `push.rs`
+    `row_command`), and `make land`'s hand-in pass hands it the base (T34).
+  - **Red first** (observed 2026-11-27, method: `make rust-test CRATE=<crate> ONLY=<test>` with the tests written and the old code in
+    place). Each fixture puts another task's staged commit, holding a finding, between origin/main and the hand-in base. Each asserts
+    that the old base still refuses it, that the hand-in base does not, and that the work's own finding, uncommitted on the base, is
+    refused:
+
+    | row | crate, ONLY | passed, failed | red at |
+    |---|---|---|---|
+    | the `delta:` gate | tree, `checks::tests::at_a_hand_in` | 0, 1 | the staged batch's file starting the row |
+    | closing | cohort, `close_check::tests::at_a_hand_in` | 0, 1 | the staged batch's closed feature refused |
+    | spec-lint, audit-register, gm-attributions | checks, the three `at_a_hand_in` tests | 0, 3 (observed 2026-11-27, method: the run above) | each the staged batch's finding refused |
+    | gm-questions | reviews, `gm_review::tests::at_a_hand_in` | 0, 1 | the staged batch's owed question refused |
+
+    After the fix each module's tests pass: tree `checks::tests` 3 of 3; cohort `close_check::tests push::tests` 30 of 30; checks, the
+    three modules, 48 of 48; reviews `gm_review::tests` 12 of 12 (observed 2026-11-27, method: the same `make rust-test` runs).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the push table's delta-scoped rows read the hand-in base | n/a - no map | n/a | none | n/a |
 
 ### T37 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** At hand-in, every delta-scoped row of the push's table judges the builder's work alone, not every batch
+   staged in the clone below it.
+2. **The constraints.** FR-002 (a builder's tree meets the refusals the builder can cure), D3's base by phase, D4. T34's one reader.
+   Constitution XIII: with the variable unset or empty, every row reads the merge base as before, and every existing test passes.
+3. **Where each comes from.** G: the GM's request behind FR-002 (spec.md). R: plan D3, D4 and T34's section. O: the red-first table.
+4. **Do they describe the world here?** Yes: each fixture stands as a phase-1 hand-in tree does, a staged commit below the base and the
+   work uncommitted on it. For closing the work is staged in the index, as T07's no-commit carry leaves it.
+5. **The order.** After T34, before T08.
+6. **The exits.** Green: the tests and `make builder-checks` of tree, cohort, checks and reviews. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The red-first table above, and `make builder-checks` over tree, cohort, checks and reviews.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The rows judge less only where a hand-in names its base. At every landing and push the variable is unset or
+   empty, and nothing changes. Before the fix, a hand-in could be refused for another staged task's spec-lint finding, audit entry,
+   attribution, GM question or closing.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The claims gate's form-problem delta still reads `origin/main...HEAD`: `claims` `report.rs` `delta_form_problems`, which
+  `commands.rs` `gate_cmd` asks. The claims crate's `stale.rs` and `counters.rs` still read the merge base. In phase 1 the gate may
+  refuse a hand-in for another staged task's form problem and miss the work's own uncommitted one (observed 2026-11-27, method: grep
+  of `"merge-base"` and `origin/main...` under `rust/gate/crates` after this fix). Not fixed here: the claims crate is not one of
+  this task's rows. Filed as T41; lands before T08.
+- Two of the four gates still read the merge base below T34's reader. `review-gate.sh` asks `reviews owed`, whose `owed.rs`
+  `base_of` reads it: the gate's range reaches only its own `git diff` lines. `entry-gate.sh` asks `record-owed`, whose entry half
+  (`owed` `entry.rs` `base_of`) reads it too. In phase 1 a hand-in may be refused for another staged task's owed review unit or owed
+  entry (observed 2026-11-27, method: reading each gate's calls after the grep above). Not fixed here: neither is a push-table row,
+  and each needs a fixture of its own. Filed as T42; lands before T08.
+- The sweep's other readers are not reached by the hand-in's first pass. `house-style-delta` and `question-size` run under
+  `make quick` and `make static`. `speckit_todo` `unlanded` lists clones. `land`, `core` `build.rs` and `tree` `delta.rs` take a
+  base of their own. Not a defect: none refuses a hand-in, so none is filed.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T38 (<why: the finding or measurement that files it>)
@@ -1645,6 +1691,59 @@ engine speed, so the performance checklist does not apply.
 |---|---|---|---|---|
 
 ### T40 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T41 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T41 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T42 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T42 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

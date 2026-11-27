@@ -207,9 +207,11 @@ fn row(f: &Found) -> String {
         + "\n"
 }
 
-/// The merge base's baseline, where the base has one.
+/// The merge base's baseline, where the base has one; at a hand-in, the baseline of the base it names (`l7r_gate_core::delta_base`,
+/// 461 T37).
 fn base_ids(root: &Path) -> Option<BTreeSet<(String, String)>> {
-    let base = git_text(root, &["merge-base", "HEAD", "origin/main"]);
+    let base = l7r_gate_core::delta_base::named(root)
+        .unwrap_or_else(|| git_text(root, &["merge-base", "HEAD", "origin/main"]));
     let spec = format!("{}:{BASELINE}", base.trim());
     if base.trim().is_empty() || git_text(root, &["cat-file", "-t", &spec]).trim() != "blob" {
         return None;

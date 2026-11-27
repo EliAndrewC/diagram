@@ -535,7 +535,8 @@ fn feature(root: &Path, f: &str) -> R<PathBuf> {
 }
 
 /// The questions still owed escalation-check in the features this push changes (`specs/<f>/gm-review.jsonl` in the delta against
-/// `origin/main`, committed or not): a feature does not land with one unjudged (feature 432, FR-002).
+/// `origin/main`, committed or not; at a hand-in, against the base it names, `l7r_gate_core::delta_base`, 461 T37): a feature does not
+/// land with one unjudged (feature 432, FR-002).
 fn owed_in_delta(root: &Path) -> R<Vec<String>> {
     let git = |args: &[&str]| {
         Command::new("git")
@@ -547,7 +548,9 @@ fn owed_in_delta(root: &Path) -> R<Vec<String>> {
             .filter(|o| o.status.success())
             .map(|o| String::from_utf8_lossy(&o.stdout).into_owned())
     };
-    let base = git(&["merge-base", "HEAD", "origin/main"]).unwrap_or_default();
+    let base = l7r_gate_core::delta_base::named(root)
+        .or_else(|| git(&["merge-base", "HEAD", "origin/main"]))
+        .unwrap_or_default();
     let base = base.trim();
     let mut paths: Vec<String> = Vec::new();
     if !base.is_empty() {

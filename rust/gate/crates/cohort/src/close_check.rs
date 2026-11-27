@@ -5,7 +5,8 @@
 //!
 //! ```text
 //! close-check <feature dir>              the reasons it may not close, one a line (none: it may)
-//! close-check --push [<range>]           the same, for every touched feature that reads closed (origin/main...HEAD by default)
+//! close-check --push [<range>]           the same, for every touched feature that reads closed (origin/main...HEAD by default; at
+//!                                        a hand-in the working tree against the base it names, 461 T37)
 //! close-check --carries                  every carry
 //! close-check --write-grandfathered      the features closed now, written to scripts/gates/closed-before-375.txt
 //! close-check --reasons-json DIR SPECS   the reasons of DIR as JSON, its carries read under SPECS (`make tick`'s last tick until
@@ -119,15 +120,21 @@ fn write_grandfathered(tools: &Tools, specs: &Path) -> Result<usize, String> {
     Ok(names.len())
 }
 
+/// The range `--push` asks: the one named, else at a hand-in the base it names (`l7r_gate_core::delta_base`, 461 T37) - the work
+/// applied on it is in the working tree, so the diff is the tree's against that base, as the ranged gates read it - else
+/// `origin/main...HEAD`.
+fn push_range(args: &[String], root: &Path) -> String {
+    args.get(1)
+        .cloned()
+        .or_else(|| l7r_gate_core::delta_base::named(root))
+        .unwrap_or_else(|| "origin/main...HEAD".to_owned())
+}
+
 /// `main`: what it prints and its exit, or what it raised.
 fn main(args: &[String], tools: &Tools, cwd: &Path) -> Result<Reply, String> {
     let root = resolve(".", cwd);
     let found = match args.first().map(String::as_str) {
-        Some("--push") => push_reasons(
-            tools,
-            &root,
-            args.get(1).map_or("origin/main...HEAD", String::as_str),
-        )?,
+        Some("--push") => push_reasons(tools, &root, &push_range(args, &root))?,
         Some("--carries") => {
             let mut listed = String::new();
             for (decl, sc, n, key) in carries(&root.join("specs"))? {

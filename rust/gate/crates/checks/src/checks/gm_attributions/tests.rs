@@ -215,6 +215,35 @@ fn an_entry_the_merge_base_lacks_is_refused() {
     assert!(gone.lines().count() == 2);
 }
 
+/// 461 T37: at a hand-in the baseline is held to the copy at the base it names - an entry a staged batch below that base added is
+/// not the work's, and one the work adds, uncommitted on the base, is.
+#[test]
+fn at_a_hand_in_the_baseline_is_held_to_the_base_it_names() {
+    let root = tree("gma-hand-in");
+    assert_eq!(run(&root, &["--seed"]).code, 0);
+    commit(&root);
+    based(&root);
+    let grow = |rel: &str| {
+        put(
+            &root,
+            rel,
+            "///     square - CANON: the GM's ruling of 2026-07-26\n",
+        );
+        std::fs::remove_file(root.join(BASELINE)).unwrap();
+        assert_eq!(run(&root, &["--seed"]).code, 0);
+    };
+    grow("rust/phases/src/staged.rs");
+    commit(&root);
+    let base = l7r_gate_core::record::repo::git(&root, &["rev-parse", "HEAD"]);
+    let at = || l7r_gate_core::delta_base::with(base.trim(), || run(&root, &[]));
+    assert_eq!(run(&root, &[]).code, 1);
+    assert_eq!(at().code, 0);
+    grow("rust/phases/src/work.rs");
+    let out = at();
+    assert_eq!(out.code, 1);
+    assert!(out.stderr.contains("work.rs") && !out.stderr.contains("staged.rs"));
+}
+
 #[test]
 fn a_bad_command_line_and_an_unwritable_baseline_are_told() {
     let root = tree("gma-usage");

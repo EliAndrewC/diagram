@@ -335,6 +335,29 @@ fn the_base_is_origin_mains_and_an_empty_scope_holds_no_constant() {
     assert!(said.stderr.contains("new_hooks.rs"));
 }
 
+/// 461 T37: at a hand-in the delta is read from the base it names - a staged batch's guard below that base is not the work's, and
+/// the work's own, uncommitted on the base, is.
+#[test]
+fn at_a_hand_in_the_delta_is_read_from_the_base_it_names() {
+    let dir = base("hand-in");
+    let git = |args: &[&str]| l7r_gate_core::record::repo::git(&dir, args);
+    git(&["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    put(
+        &dir,
+        "rust/guard/src/guards/staged_hooks.rs",
+        "//! staged\n",
+    );
+    commit(&dir);
+    let at_base = git(&["rev-parse", "HEAD"]);
+    let at = || l7r_gate_core::delta_base::with(at_base.trim(), || judged(&dir));
+    assert_eq!(judged(&dir).code, 1);
+    assert_eq!(at().code, 0);
+    put(&dir, "rust/guard/src/guards/new_hooks.rs", "//! new\n");
+    let said = at();
+    assert_eq!(said.code, 1);
+    assert!(said.stderr.contains("new_hooks.rs") && !said.stderr.contains("staged_hooks.rs"));
+}
+
 #[test]
 fn a_landing_step_newly_named_is_refused() {
     let dir = base("steps");

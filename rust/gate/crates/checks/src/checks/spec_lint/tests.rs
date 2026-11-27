@@ -386,6 +386,43 @@ fn a_landed_spec_is_judged_on_what_the_push_introduces() {
     assert_eq!(touched_spec_dirs(&root).len(), 1);
 }
 
+/// 461 T37: at a hand-in the delta and what it introduced are read from the base it names - a staged batch's finding below that base
+/// is not the work's, and the work's own, uncommitted on the base, is.
+#[test]
+fn at_a_hand_in_a_spec_is_judged_on_what_the_work_introduces() {
+    let root = scratch("spec-lint-hand-in");
+    let spec = "specs/200-landed/spec.md";
+    put(
+        &root,
+        "specs/200-landed/tasks.md",
+        "- [x] T01 do the thing (FR-001)\n",
+    );
+    put(
+        &root,
+        spec,
+        "# x\n\n## Functional requirements\n\n**FR-001** A thing.\n",
+    );
+    git(&root, &["init", "-q", "-b", "main"]);
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "landed"]);
+    git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    let grow = |line: &str| {
+        let text = std::fs::read_to_string(root.join(spec)).unwrap();
+        put(&root, spec, &(text + line));
+    };
+    grow("\n**FR-003** Staged, named by nothing.\n");
+    git(&root, &["commit", "-qam", "another task's staged batch"]);
+    let base = l7r_gate_core::record::repo::git(&root, &["rev-parse", "HEAD"]);
+    let args = owned(&["--delta", &root.display().to_string()]);
+    let at = || l7r_gate_core::delta_base::with(base.trim(), || cli(&args));
+    assert_eq!(cli(&args).code, 1);
+    assert_eq!((at().code, at().stdout), (0, String::new()));
+    grow("\n**FR-004** The work's, named by nothing.\n");
+    let done = at();
+    assert_eq!(done.code, 1);
+    assert!(done.stdout.contains("FR-004") && !done.stdout.contains("FR-003"));
+}
+
 #[test]
 fn the_command_line_names_directories_a_self_test_and_the_one_figure() {
     assert!(cli(&owned(&["--selftest"])).stdout.contains("selftest ok"));

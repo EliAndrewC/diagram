@@ -149,6 +149,26 @@ fn the_push_asks_every_touched_feature_that_reads_closed() {
         .contains("speckit-todo --each-state"));
 }
 
+/// 461 T37: at a hand-in the push asks the features the work applied on the base it names touches - a feature a staged batch below
+/// that base closed is not the work's, and one the work closes, staged on the base uncommitted, is.
+#[test]
+fn at_a_hand_in_the_push_asks_the_features_the_work_touches() {
+    let root = repo("close-hand-in");
+    put(&root, "specs/200-a/tasks.md", "- [x] T1\n");
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "another task's staged batch"]);
+    let base = l7r_gate_core::record::repo::git(&root, &["rev-parse", "HEAD"]);
+    let at = |w: &[&str]| l7r_gate_core::delta_base::with(base.trim(), || run(&root, w));
+    assert_eq!(run(&root, &["--push"]).code, 1);
+    assert_eq!(at(&["--push"]).code, 0);
+    put(&root, "specs/203-d/tasks.md", "- [x] T1\n");
+    git(&root, &["add", "-A"]);
+    let want = "203-d has no report.md - `make feature-report F=203 WRITE=1` writes it (FR-009)\n";
+    assert_eq!(at(&["--push"]).stdout, want);
+    // ...and a range named is the range asked
+    assert_eq!(at(&["--push", "origin/main...HEAD"]).code, 1);
+}
+
 #[test]
 fn the_grandfathered_list_is_written_from_the_closed_features() {
     let root = repo("close-old");

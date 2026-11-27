@@ -138,3 +138,21 @@ fn needs_run_is_needs_exit_zero_and_the_top_is_the_repository() {
     assert!(super::needs_run("function-cap", &dir));
     assert!(crate::top().join("rust").is_dir());
 }
+
+/// 461 T37: at a hand-in a row is started by the work applied on the base it names, not by a staged batch below that base.
+#[test]
+fn at_a_hand_in_a_row_is_started_by_the_work_on_the_base_it_names() {
+    let dir = repo("needs-hand-in");
+    put(&dir, "rust/a.rs", "fn f() {}\n");
+    commit(&dir);
+    based(&dir);
+    put(&dir, "pyproject.toml", "");
+    commit(&dir);
+    let base = l7r_gate_core::record::repo::git(&dir, &["rev-parse", "HEAD"]);
+    let at = |f: &dyn Fn() -> i32| l7r_gate_core::delta_base::with(base.trim(), f);
+    assert_eq!(needs("function-cap", &dir), 0);
+    assert_eq!(at(&|| needs("function-cap", &dir)), 1);
+    // ...and the work's own file, uncommitted on the base, starts it
+    put(&dir, "scripts/a.py", "");
+    assert_eq!(at(&|| needs("function-cap", &dir)), 0);
+}

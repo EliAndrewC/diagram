@@ -53,10 +53,12 @@ pub fn needs_run(check: &str, root: &Path) -> bool {
     needs(check, root) == 0
 }
 
-/// Does this change hold a file `check` reads? Exit 0 to run it, and when there is no base to compare with.
+/// Does this change hold a file `check` reads? Exit 0 to run it, and when there is no base to compare with. At a hand-in the base is
+/// the one it names (`l7r_gate_core::delta_base`, 461 T37), so the work applied on it starts a row, not every staged batch.
 #[must_use]
 pub fn needs(check: &str, root: &Path) -> i32 {
-    let base = git_text(root, &["merge-base", "HEAD", "origin/main"]);
+    let base = l7r_gate_core::delta_base::named(root)
+        .unwrap_or_else(|| git_text(root, &["merge-base", "HEAD", "origin/main"]));
     if base.trim().is_empty() {
         return 0; // no base to compare with: cannot tell, so it runs
     }

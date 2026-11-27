@@ -241,12 +241,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T04 (<why: the finding or measurement that files it>)": {
-   "sha256": "54011ef793b7c46a6c9d5a7fe864be05b5b2da56ee0167e59505a2b146659fe9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T34 (T06's plan reviewer, 2026-11-27: three hand-in checks read their own delta from the merge base with origin/main)": {
    "sha256": "c25c5d150269ec499147ab08124d91e7a5ca01fbdd9795afc30fb27e066d4fee",
    "verdict": "CLEAR",
@@ -255,6 +249,18 @@
   },
   "### T34 Approach (checklist part A)": {
    "sha256": "39656cff09a8cf6cba91a4dfb56a7ac853c182a243d51dfb20d31a5c508f8dd5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T37 (T34's Found and left: the push table's delta-scoped rows read their own merge base at hand-in)": {
+   "sha256": "e5c2f4fb71462a9e0ea0103fd843484c4fd8cced863ec4797bd5a9d4be8486b1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T37 Approach (checklist part A)": {
+   "sha256": "47389de19cbfd6c95639460df39955e220e6da67f345957e2714357c555a7604",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -1549,6 +1555,71 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "Same ground as T37. The defect (the carry filing another staged task's findings into the builder's tree in phase 1) is reachable only once T08 wires the hand-in, and T38 is ordered before T08. The fix needs a change to the in-process claims door's signature, which is outside the three sites this task names. It is filed and ordered, not left."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T37 (T34's Found and left: the push table's delta-scoped rows read their own merge base at hand-in)",
+    "### T37 Approach (checklist part A)",
+    "(removed) ### T04 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T37-rows",
+     "summary": "Each delta-scoped push-table row (spec-lint --delta, audit-register --delta, gm-attributions, gm-questions, the delta: gate, closing) asks T34's delta_base::named reader first and keeps its old merge base as fallback; no second reader.",
+     "class": "within",
+     "why": "Implements FR-002 (a hand-in meets the refusals the builder can cure, i.e. its own work, not other staged batches') and the GM's sketch item 2 (builder runs the landing's first pass in its own tree). One reader, per T34."
+    },
+    {
+     "id": "T37-closing-range",
+     "summary": "close-check --push with no range asks push_range: named range, else the hand-in base as a bare base (working tree against it), else origin/main...HEAD.",
+     "class": "within",
+     "why": "Same purpose as the rows; the bare base is chosen because <base>...HEAD would be empty and pass everything, so it keeps the check judging the work rather than weakening it (FR-008)."
+    },
+    {
+     "id": "T37-unset-unchanged",
+     "summary": "With the variable unset or empty every row reads the merge base as before; at every landing and push nothing changes.",
+     "class": "within",
+     "why": "FR-008: nothing of the existing checks is dropped; the landing and push keep today's checks in full."
+    },
+    {
+     "id": "T37-red-first",
+     "summary": "Fixtures per row: a staged commit with a finding between origin/main and the hand-in base; old base refuses, hand-in base does not, the work's own uncommitted finding is refused.",
+     "class": "within",
+     "why": "Tests that only fail when the requested behavior is absent - enforcement of FR-002, not added scope. Figures dated with method."
+    },
+    {
+     "id": "T37-left-claims-T41",
+     "summary": "The claims gate's form-problem delta and claims stale/counters still read origin/main...HEAD; filed as T41, lands before T08.",
+     "class": "within",
+     "why": "A real defect (may refuse another task's form problem, miss the work's own) but not left in the feature: it is filed as a task that lands before the next step (T08), satisfying fix-as-we-go. Splitting the work across tasks does not narrow FR-002."
+    },
+    {
+     "id": "T37-left-gates-T42",
+     "summary": "review-gate.sh (reviews owed, owed.rs base_of) and entry-gate.sh (record-owed, entry.rs base_of) still read the merge base; filed as T42, lands before T08.",
+     "class": "within",
+     "why": "Same as T41: a known defect scheduled to be fixed before the next step, not carried past it; FR-002 is not narrowed."
+    },
+    {
+     "id": "T37-left-sweep",
+     "summary": "house-style-delta, question-size, speckit_todo unlanded, land, core build.rs and tree delta.rs left as they are: none runs in the hand-in's first pass or refuses a hand-in.",
+     "class": "within",
+     "why": "Not a defect by the stated reading (none refuses a hand-in), so no wrong outcome is left; a difference from the other readers is not a narrowing."
+    },
+    {
+     "id": "T37-order",
+     "summary": "After T34, before T08; budget one landing.",
+     "class": "within",
+     "why": "Sequencing, settles nothing the request constrains."
+    },
+    {
+     "id": "T04-removed",
+     "summary": "The T04 block, an unfilled template stub (placeholders only), is deleted.",
+     "class": "within",
+     "why": "Its earlier text holds no approach, step or requirement - only template placeholders - so removing it drops no work the request or spec asks for."
     }
    ]
   }

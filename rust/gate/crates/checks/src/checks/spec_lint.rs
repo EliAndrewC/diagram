@@ -489,10 +489,12 @@ fn at_base(root: &Path, base: &str, spec_dir: &Path) -> Option<Vec<String>> {
     Some(found)
 }
 
-/// Every `specs/NNN-*/` the delta against the merge base touches, untracked ones too.
+/// Every `specs/NNN-*/` the delta against the merge base touches, untracked ones too; at a hand-in, the delta against the base it
+/// names (`l7r_gate_core::delta_base`, 461 T37).
 fn touched_spec_dirs(root: &Path) -> Vec<PathBuf> {
     let top = std::fs::canonicalize(root).unwrap_or_default();
-    let base = git_text(&top, &["merge-base", "HEAD", "origin/main"]);
+    let base = l7r_gate_core::delta_base::named(&top)
+        .unwrap_or_else(|| git_text(&top, &["merge-base", "HEAD", "origin/main"]));
     let base = if base.trim().is_empty() {
         "HEAD"
     } else {
@@ -658,8 +660,10 @@ pub(super) fn cli(args: &[String]) -> Outcome {
         .ok()
         .and_then(|p| p.parent()?.parent().map(Path::to_owned))
         .unwrap_or_default();
+    // what the delta introduced, against the base it was read from (461 T37)
     let merged = if delta {
-        git_text(root, &["merge-base", "HEAD", "origin/main"])
+        l7r_gate_core::delta_base::named(root)
+            .unwrap_or_else(|| git_text(root, &["merge-base", "HEAD", "origin/main"]))
     } else {
         String::new()
     };

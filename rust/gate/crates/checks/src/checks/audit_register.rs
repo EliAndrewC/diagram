@@ -329,9 +329,11 @@ fn judge(items: Vec<Item>, entries: &[Entry]) -> Result<usize, String> {
     }
 }
 
-/// The merge base the push judges against (HEAD where there is none).
+/// The merge base the push judges against (HEAD where there is none); at a hand-in, the base it names (`l7r_gate_core::delta_base`,
+/// 461 T37).
 fn base(root: &Path) -> String {
-    let base = git(root, &["merge-base", "HEAD", "origin/main"]);
+    let base = l7r_gate_core::delta_base::named(root)
+        .unwrap_or_else(|| git(root, &["merge-base", "HEAD", "origin/main"]));
     let base = base.trim();
     if base.is_empty() {
         "HEAD".to_owned()

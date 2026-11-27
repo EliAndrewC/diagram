@@ -581,6 +581,31 @@ fn the_push_refuses_a_question_still_owed() {
     assert_eq!(rs, vec![json!({})]);
 }
 
+/// 461 T37: at a hand-in the push asks the features the work changes on the base it names - a question a staged batch below that
+/// base left owed is not the work's, and one the work adds, uncommitted on the base, is.
+#[test]
+fn at_a_hand_in_the_push_asks_the_questions_the_work_adds() {
+    let d = dir("gm-owed-hand-in");
+    sh(
+        &d,
+        "git init -q -b main && git config user.email x@y && git config user.name x",
+    );
+    put(&d, "specs/540-a/tasks.md", "x\n");
+    commit(&d, "base");
+    sh(&d, "git update-ref refs/remotes/origin/main HEAD");
+    let owed = |q: &str| jl(&[json!({"kind": "question", "status": "owed", "question": q})]);
+    put(&d, "specs/540-a/gm-review.jsonl", &owed("staged"));
+    commit(&d, "another task's staged batch");
+    let base = l7r_gate_core::record::repo::git(&d, &["rev-parse", "HEAD"]);
+    let at = || l7r_gate_core::delta_base::with(base.trim(), || run(&d, &["owed-check"]));
+    assert_eq!(run(&d, &["owed-check"]).code, 1);
+    assert_eq!((at().code, at().stderr), (0, String::new()));
+    put(&d, "specs/541-b/gm-review.jsonl", &owed("the work's"));
+    let got = at();
+    assert_eq!(got.code, 1);
+    assert!(got.stderr.contains("541#0: the work's") && !got.stderr.contains("staged"));
+}
+
 #[test]
 fn a_broken_queue_or_ranking_fails_where_the_python_raised() {
     let d = dir("gm-broken");
