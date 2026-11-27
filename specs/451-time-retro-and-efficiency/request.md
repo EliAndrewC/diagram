@@ -503,3 +503,7 @@ The GM on disk space, 2026-11-27 (the afternoon after), the words that file T515
 The GM on what T515 leaves, 2026-11-27:
 
 > I'm actually somewhat surprised to hear that you think it will only clear about 83 gigabytes. Because that will still leave over 250 gigabytes of disk space in use, of which I think something close to 200 would be just this container, and that is more than what I would have expected.
+
+The GM on T512's percentages, 2026-11-27, after asking what "15 (55.6%)" test runs meant (test runs of test runs and compiles together):
+
+> Overall, I don't know that it's useful to see percentages for counts the way that it is to see percentages for time, if that makes sense.
