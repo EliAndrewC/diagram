@@ -74,7 +74,7 @@ fn a_pool_tree_and_its_build_cache_are_not_removed_by_hand() {
         assert_eq!(ask(&cmd, &main), Some(REMOVE), "{cmd}");
     }
     for cmd in [
-        // not the pool's: the landing's tree, another cache, a file inside the cache
+        // not in the registry: a `-land` tree no lane adopted (membership is the registry), another cache, a file inside the cache
         format!("git -C {m}/.clones/c worktree remove --force {m}/.clones/c-land"),
         "rm -rf ~/.cache/l7r-cargo-target/c-land".to_owned(),
         "rm -f ~/.cache/l7r-cargo-target/c-t269/guard.failed".to_owned(),
@@ -132,6 +132,30 @@ fn the_guard_answers_logs_and_takes_its_escape_with_a_reason() {
         &run("rm -rf /elsewhere/c-t269", &m)[..],
         [Answer::Refuse(_)]
     ));
+}
+
+/// 461 T45: the lane's tree, held by `lane` (461 T13), is the registry's too: a hand removal or move of it, or an `rm` of its warm
+/// cache, is refused as a builder's tree is - `pools` leaves it out of the builders' counting, the guard reads the registry whole.
+#[test]
+fn the_lane_s_tree_and_its_warm_cache_are_not_removed_by_hand() {
+    let (_d, main) = world("lane");
+    let m = main.to_string_lossy();
+    let lane = Tree {
+        tree: main.join(".clones/c-land"),
+        feature: String::new(),
+        tasks: vec![crate::shared::builder_pool::LANE.to_owned()],
+        since: String::new(),
+    };
+    write(&main.join(".clones/c/.git"), &[lane]).unwrap();
+    for cmd in [
+        format!("git -C {m}/.clones/c worktree remove --force {m}/.clones/c-land"),
+        format!("git worktree move {m}/.clones/c-land {m}/.clones/c-b1"),
+        format!("rm -rf {m}/.clones/c-land"),
+        "rm -rf ~/.cache/l7r-cargo-target/c-land".to_owned(),
+    ] {
+        assert_eq!(ask(&cmd, &main), Some(REMOVE), "{cmd}");
+    }
+    assert_eq!(ask("rm -rf ~/.cache/l7r-cargo-target/c-t269", &main), None);
 }
 
 /// What a command's head does to a tree: a worktree verb that changes none is no verb, and a head the shell's quoting rules

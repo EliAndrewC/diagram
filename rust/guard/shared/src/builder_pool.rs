@@ -119,14 +119,28 @@ pub fn write(common: &Path, trees: &[Tree]) -> Result<(), String> {
         .map_err(|e| format!("{}: {e}", path.display()))
 }
 
-/// Every pool tree of every clone under the clones directory (`<clones>/*/.git/builder-pool.json`): what the guard asks.
+/// Every builder's pool tree of every clone under the clones directory (`<clones>/*/.git/builder-pool.json`), the lanes' left out
+/// ([`read`]): what the brief and workflow guards count.
 #[must_use]
 pub fn pools(clones: &Path) -> Vec<Tree> {
+    across(clones, read)
+}
+
+/// Every tree every clone's registry names, the lanes' in their places ([`read_all`]): what the removal guard protects (461 T45 - a
+/// hand removal of `<clone>-land` or its warm cache passed while it read [`pools`]).
+// GUARD_EDIT_OK: feature 461 T45 - the removal guard reads the registry whole, so the lane's tree and cache are kept
+#[must_use]
+pub fn pools_all(clones: &Path) -> Vec<Tree> {
+    across(clones, read_all)
+}
+
+/// `reader` over each clone's git directory under `clones`, in name order.
+fn across(clones: &Path, reader: fn(&Path) -> Vec<Tree>) -> Vec<Tree> {
     let mut dirs: Vec<PathBuf> = std::fs::read_dir(clones)
         .map(|d| d.filter_map(Result::ok).map(|e| e.path()).collect())
         .unwrap_or_default();
     dirs.sort();
-    dirs.iter().flat_map(|d| read(&d.join(".git"))).collect()
+    dirs.iter().flat_map(|d| reader(&d.join(".git"))).collect()
 }
 
 /// The build cache of `tree` under the cache's root: named for the tree's directory.
@@ -191,6 +205,7 @@ mod tests {
         assert_eq!(read_all(&common), vec![lane.clone(), held.clone()]);
         assert_eq!(read(&common), vec![held.clone()]);
         assert_eq!(pools(&dir), vec![held.clone()]);
+        assert_eq!(pools_all(&dir), vec![lane.clone(), held.clone()]);
         assert!(lane.lane() && !held.lane() && !free.lane() && lane.holder() == "lane");
         // a registry that cannot be written says where
         let err = write(&dir.join("gone"), &[]).unwrap_err();

@@ -13,7 +13,8 @@
 //! - `git worktree remove` or `move` of a pool tree (a move chills its cache as a removal does: measured 2026-11-26, 0.11 s to
 //!   66.5 s), and an `rm` whose operand is a pool tree, its build cache or a directory holding either.
 //!
-//! A pool tree is one a clone's registry names (`shared::builder_pool`, `<clone>/.git/builder-pool.json`), never a name's shape.
+//! A pool tree is one a clone's registry names (`shared::builder_pool`, `<clone>/.git/builder-pool.json`), never a name's shape -
+//! the lane's tree (held by `lane`, 461 T13) among them, though the builders' reading of the pool leaves it out (461 T45).
 //! The command is read by the shared walk (`shared::tree::walk`: each write with where it lands, its variables and `cd`s followed),
 //! so a mention - a `grep`, an `echo`, a commit message - is no invocation. `BUILDER_TREE_OK` with a reason of two words or more is
 //! the escape, checked first.
@@ -78,7 +79,8 @@ pub(crate) fn refusal(
     cache: &Path,
 ) -> Option<&'static str> {
     let clones = main.join(".clones");
-    let pool = builder_pool::pools(&clones);
+    // the registry whole: the lane's tree and its cache are kept as a builder's are (461 T45)
+    let pool = builder_pool::pools_all(&clones);
     walk(cmd, Some(dir), &main.to_string_lossy(), home)
         .targets
         .iter()
@@ -164,3 +166,4 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
 #[cfg(test)]
 mod tests;
 // GUARD_EDIT_OK: feature 451 T285 - adding a guard, the builder pool's
+// GUARD_EDIT_OK: feature 461 T45 - the guard reads the registry whole, so the lane's tree and its warm cache are kept

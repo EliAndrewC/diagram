@@ -1734,31 +1734,51 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 
 <!-- plan-archive: T43 to T08 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T44 to T43 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T45 (<why: the finding or measurement that files it>)
+### T45 (T13's found-and-left: the lane's tree and its warm cache unguarded against a hand removal)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: `shared::builder_pool` gains `pools_all` - every clone's registry read whole (`read_all`), the lane's tree in its
+  place - beside `pools`, which stays the builders' reading (`read`); both walk the clones directory through one private `across`.
+  `builder_pool_hooks::refusal` reads `pools_all` for what it protects, so a hand `git worktree remove`/`move` of `<clone>-land`,
+  an `rm` of it, or an `rm` of `~/.cache/l7r-cargo-target/<clone>-land` (39 GB, measured 2026-11-27 (du), D1's table) is refused
+  with the guard's existing REMOVE message (unchanged). The other readers of `pools` - `builder_brief_hooks` (the brief's tree must
+  be the pool's for its task) and `workflow_hooks` (the same verdict for a Workflow's agent) - count builders' trees and keep `pools`
+  (observed 2026-11-27, method: `grep -rn "pools(" rust`, three callers, the guard the only one that protects). Membership stays the
+  registry: a `-land` tree no clone's registry names still passes, as before.
+- Red first (2026-11-27, on the old code): `make rust-test CRATE=rust/guard ONLY=guards::builder_pool_hooks::tests` 5 passed, 1
+  failed (`the_lane_s_tree_and_its_warm_cache_are_not_removed_by_hand`: the lane tree's `worktree remove` passed); the suite
+  `tests/hooks/test-builder-pool-hooks.sh` 17 passed, 2 failed (a lane tree's removal and its cache's `rm`, both rc=0). Green: 6 of
+  6 and 19 of 19; the shared registry test asserts `pools_all` returns the lane and the held tree where `pools` returns the held one.
 
 ### T45 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The lane's tree and its warm cache are kept as a builder's tree is: no hand removal, move or `rm`
+   passes the guard without its escape, while every count of builders' trees still leaves the lane out.
+2. **The constraints.** D1 (the lane's tree kept, its cache warm); T13's split of `read` (builders) and `read_all` (the registry
+   whole); the guard's rule that membership is the registry, never a name's shape (451 T285).
+3. **Where each comes from.** R: plan.md D1, tasks.md T45's line, T13's found-and-left item; O: the readers of `pools`, by grep
+   2026-11-27.
+4. **Do they describe the world here?** Yes: the red tests above show the lane's tree passed the guard; T13 writes it held by
+   `lane` (`Tree::lane`).
+5. **The order.** After T13 (the `lane` holder and `read_all`); before T22.
+6. **The exits.** Green: the guard's unit tests and its suite above, `make builder-checks CRATE="rust/guard/shared rust/guard"`.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one grep found the three callers of `pools` (observed 2026-11-27, method: `grep -rn "pools(" rust`), each judged.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The lane test and the suite's two lane cases green; after the landing `git worktree remove` of the adopted
+   `/diagram/.clones/diagram-backlog-land` is refused by the guard.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A cold rebuild of the lane's 39 GB cache (measured 2026-11-27 (du), D1's table) at its next gate after a hand
+    removal, no longer possible without the escape, and no refusal message changed.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The REMOVE message names `make builder-tree-drop TREE=<path>` as the way to remove a pool tree for real, but `drop_tree`
+  (`rust/gate/crates/task/src/builder_tree.rs`) refuses any held tree with `make builder-tree-release T=lane first`, which T13
+  refuses: a session retiring the lane's tree is sent to a dead end and left only the `BUILDER_TREE_OK` escape (observed 2026-11-27,
+  method: read `drop_tree`'s held check). Not fixed here: a gate crate's command and its tests are a job past this brief's one.
+  Filed as T49; lands before T22.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T46 (<why: the finding or measurement that files it>)
@@ -1862,4 +1882,31 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 **Found and left?** none.
 
 **Performance work?** no - its line carries no `[perf]` tag; it removes a wait in the builders' loop as D14 decides.
+
+
+### T49 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T49 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 

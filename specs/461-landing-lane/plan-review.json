@@ -450,6 +450,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T45 (T13's found-and-left: the lane's tree and its warm cache unguarded against a hand removal)": {
+   "sha256": "1c4039dbbfe3d0ce30c6eaea00978b152d36268cabc6ddb1d789b85744960242",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T45 Approach (checklist part A)": {
+   "sha256": "36a78979106301e36ce83c19bfa126a1d40066ded947911e1d3e3194c4dc2782",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2759,6 +2771,123 @@
      "why": "Not a defect carried forward: make lane-wait is T20's command and does not exist, so the wake FR-005 forbids cannot happen until T20, and T47 is scheduled to land with T20 and before T22 so no coordinator waits on the lane without it. Leaving it to that task neither narrows FR-005 nor carries a live defect into a step where it manifests."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T45 (T13's found-and-left: the lane's tree and its warm cache unguarded against a hand removal)",
+    "### T45 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T45-a",
+     "summary": "The builder-pool removal guard protects every registry entry (new pools_all over read_all), so a hand worktree remove/move/rm of the lane's tree <clone>-land, or an rm of its warm cargo cache, is refused with the guard's existing message and escape.",
+     "class": "within",
+     "why": "The request's item 1 (FR-003) is a landing lane running in its own worktree, and D1 keeps that tree and its cache warm. Losing the tree or the 39 GB cache to a hand removal defeats both. This extends an existing guard to cover the lane's own tree and nothing else. It refuses only the removal of the thing the feature builds, and it stops nothing the GM asked for."
+    },
+    {
+     "id": "T45-b",
+     "summary": "The other two readers of pools (builder_brief_hooks, workflow_hooks) keep the builders-only reading, so every count of builders' trees still leaves the lane out.",
+     "class": "within",
+     "why": "Those readers judge whether a tree is a builder's tree for its task. The lane is not a builder, so leaving it out keeps the behavior they had and narrows nothing the GM asked for. The search space is stated (grep -rn \"pools(\" rust, three callers, each judged)."
+    },
+    {
+     "id": "T45-c",
+     "summary": "Membership stays the registry: a -land tree that no clone's registry names is not protected.",
+     "class": "within",
+     "why": "This keeps the guard's standing rule (451 T285: membership is the registry, never a name's shape) rather than carving out a case. T13 registers the lane's tree under the lane holder, so the tree the feature builds is covered. The GM's request asks for no name-based protection, so nothing asked for is narrowed."
+    },
+    {
+     "id": "T45-d",
+     "summary": "The refusal message is unchanged, and the lane's protection takes the same escape as a builder's tree.",
+     "class": "within",
+     "why": "This reuses existing behavior and adds no new refusal text or new bypass. FR-008 (no existing check dropped) holds."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T45 (T13's found-and-left: the lane's tree and its warm cache unguarded against a hand removal)",
+    "### T45 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T45-1",
+     "summary": "shared::builder_pool gains pools_all (every clone's registry read whole via read_all, the lane's tree included) beside pools; builder_pool_hooks::refusal reads pools_all, so a hand worktree remove/move or rm of <clone>-land, or an rm of its warm cargo cache, is refused with the existing REMOVE message and escape",
+     "class": "within",
+     "why": "Keeps the landing lane's own worktree and warm cache standing (the GM's sketch item 1, FR-003, plan D1). It narrows nothing the GM asked for. It only lets the existing hand-removal guard reach one more registered tree, and the escape and message are unchanged."
+    },
+    {
+     "id": "T45-2",
+     "summary": "builder_brief_hooks and workflow_hooks keep pools (builders' trees only), so every count of builders' trees still leaves the lane out",
+     "class": "within",
+     "why": "Leaves the existing behavior of those readers as it is. The lane is not a builder (sketch items 1-2, FR-003), and excluding it from builder counts narrows no clause of the request."
+    },
+    {
+     "id": "T45-3",
+     "summary": "Membership stays the registry: a -land-named tree no clone's registry names still passes the guard",
+     "class": "within",
+     "why": "Keeps the guard's standing rule (451 T285: membership is the registry, never a name's shape). The lane's real tree is registered by T13 and protected, so the GM's lane is fully covered, and an unregistered tree is not the lane the request describes."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T45 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T45-found-and-left-T49",
+     "summary": "The guard's REMOVE message sends a session retiring the lane's tree to `make builder-tree-drop`, which refuses a held tree and points to a release T13 refuses (a dead end); T45 leaves the message unchanged and files the fix as T49, landing before T22.",
+     "class": "within",
+     "why": "The dead end is a real defect, a tool that directs to a command that refuses, and the feature's own T13/T45 hold on the lane tree created it. It is not dropped or carried past the step: it is filed inside this feature as T49 and ordered before T22, the same boundary T45 itself lands before. Nothing the GM asked for (the landing lane, builders handing in ready changes, the thin coordinator, FR-001..FR-010) is narrowed: T45's own goal of keeping the lane's tree and its warm cache, and its unchanged-message constraint in item 12, stand as they were judged CLEAR. Moving the fix to its own task, because it belongs to a gate crate's command and tests, is a sequencing choice and narrows no scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T45 (T13's found-and-left: the lane's tree and its warm cache unguarded against a hand removal)",
+    "### T45 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T45-pools_all",
+     "summary": "shared::builder_pool gains pools_all (every clone's registry read whole via read_all, the lane's tree included) beside pools (read, builders only), both through one private across; builder_pool_hooks::refusal protects pools_all, so a hand worktree remove/move/rm of <clone>-land or rm of its warm cache is refused",
+     "class": "within",
+     "why": "Enforces D1 (the lane's tree kept, its cache warm), which serves FR-003 (the lane runs in its own worktree) and the request's item 1; a guard that blocks only hand removal of the exact tree and cache the lane needs is enforcement of what was asked, with no reach to other agents, commands or defaults."
+    },
+    {
+     "id": "T45-other-readers-keep-pools",
+     "summary": "builder_brief_hooks and workflow_hooks keep reading pools, so every count of builders' trees still leaves the lane out",
+     "class": "within",
+     "why": "Leaves the brief and Workflow verdicts as they are; the lane is not a builder's tree, so including it there would change behavior nobody asked to change. Search space stated (grep -rn \"pools(\" rust, three callers, each judged)."
+    },
+    {
+     "id": "T45-membership-is-registry",
+     "summary": "Membership stays the registry: a -land tree no clone's registry names still passes",
+     "class": "within",
+     "why": "The lane's tree is registered (T13, Tree::lane), so it is protected; an unregistered tree that merely has the name's shape is not the lane's tree, and keeping membership on the registry follows the standing rule (451 T285). Nothing the request or D1 asks for is cut."
+    },
+    {
+     "id": "T45-message-unchanged",
+     "summary": "The refusal reuses the guard's existing REMOVE message unchanged",
+     "class": "within",
+     "why": "No new behavior or wording; the same escape as for a builder's tree."
+    },
+    {
+     "id": "T45-found-and-left-T49",
+     "summary": "The REMOVE message's make builder-tree-drop is a dead end for the held lane tree (drop_tree refuses held trees, T13 refuses releasing lane); not fixed here, filed as T49, landing before T22, BUILDER_TREE_OK escape meanwhile",
+     "class": "within",
+     "why": "A real defect, but it is scheduled inside this feature as its own task and lands before the next dependent task (T22), so it is not carried into the next step; the escape keeps the lane's tree removable in the interim. Splitting a gate crate's command out of a guard brief narrows nothing the GM asked for."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -3109,6 +3238,44 @@
      "summary": "The watchdog's 1800 s long-run warning would nudge a coordinator waiting on make lane-wait past 30 minutes; not fixed here, filed as T47 to land with T20 and before T22.",
      "class": "within",
      "why": "Not a defect carried forward: make lane-wait is T20's command and does not exist, so the wake FR-005 forbids cannot happen until T20, and T47 is scheduled to land with T20 and before T22 so no coordinator waits on the lane without it. Leaving it to that task neither narrows FR-005 nor carries a live defect into a step where it manifests."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T45": {
+   "section_sha256": "52fddbabbae9207e7a1b70278191b0076f3538f0dd399739315eea6e4752fd46",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T45-pools_all",
+     "summary": "shared::builder_pool gains pools_all (every clone's registry read whole via read_all, the lane's tree included) beside pools (read, builders only), both through one private across; builder_pool_hooks::refusal protects pools_all, so a hand worktree remove/move/rm of <clone>-land or rm of its warm cache is refused",
+     "class": "within",
+     "why": "Enforces D1 (the lane's tree kept, its cache warm), which serves FR-003 (the lane runs in its own worktree) and the request's item 1; a guard that blocks only hand removal of the exact tree and cache the lane needs is enforcement of what was asked, with no reach to other agents, commands or defaults."
+    },
+    {
+     "id": "T45-other-readers-keep-pools",
+     "summary": "builder_brief_hooks and workflow_hooks keep reading pools, so every count of builders' trees still leaves the lane out",
+     "class": "within",
+     "why": "Leaves the brief and Workflow verdicts as they are; the lane is not a builder's tree, so including it there would change behavior nobody asked to change. Search space stated (grep -rn \"pools(\" rust, three callers, each judged)."
+    },
+    {
+     "id": "T45-membership-is-registry",
+     "summary": "Membership stays the registry: a -land tree no clone's registry names still passes",
+     "class": "within",
+     "why": "The lane's tree is registered (T13, Tree::lane), so it is protected; an unregistered tree that merely has the name's shape is not the lane's tree, and keeping membership on the registry follows the standing rule (451 T285). Nothing the request or D1 asks for is cut."
+    },
+    {
+     "id": "T45-message-unchanged",
+     "summary": "The refusal reuses the guard's existing REMOVE message unchanged",
+     "class": "within",
+     "why": "No new behavior or wording; the same escape as for a builder's tree."
+    },
+    {
+     "id": "T45-found-and-left-T49",
+     "summary": "The REMOVE message's make builder-tree-drop is a dead end for the held lane tree (drop_tree refuses held trees, T13 refuses releasing lane); not fixed here, filed as T49, landing before T22, BUILDER_TREE_OK escape meanwhile",
+     "class": "within",
+     "why": "A real defect, but it is scheduled inside this feature as its own task and lands before the next dependent task (T22), so it is not carried into the next step; the escape keeps the lane's tree removable in the interim. Splitting a gate crate's command out of a guard brief narrows nothing the GM asked for."
     }
    ],
    "verdict": "CLEAR"
