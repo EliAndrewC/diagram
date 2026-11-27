@@ -19,7 +19,7 @@ use super::{
     default_root, findall, head, py_path, py_repr, pyre, remove_tree, rstrip, shown, today, write,
     Run,
 };
-use crate::arbiter::bundle::marks::{transcript_of, transcripts};
+use crate::arbiter::bundle::marks::{transcript_of, transcripts_base};
 use crate::record::args::{parse_with, Parsed, Spec};
 use crate::record::modals::{
     self, Modal, DEPICTION_CHECK, FORM_CHECK, MODAL_DIRS, ORDER, RESEARCH_AGENT, RESEARCH_CHECKS,
@@ -381,7 +381,7 @@ pub fn prepass(root: &Path, m: &Modal) -> String {
 /// The wording `modal-research` rounds fixed on the pop-up `uid` that still stands in `text` (343's border-court ruling): `record apply-edits` (`apply_edits.rs`) refuses a modal-form EDIT that drops one.
 #[must_use]
 pub fn research_held(root: &Path, uid: &str, text: &str) -> Vec<String> {
-    research_held_in(root, uid, text, &transcripts())
+    research_held_in(root, uid, text, &transcripts_base())
 }
 
 /// [`research_held`], the transcripts under `base`.

@@ -119,6 +119,8 @@ fn replies_files_and_edits() {
         ]
     );
     assert!(transcripts().ends_with(".claude/projects"));
+    // 451 T312: a test reads no machine's transcripts - red with an `agent-none-such.jsonl` planted under a scratch HOME before
+    assert_eq!(transcripts_base(), PathBuf::new());
 }
 
 #[test]

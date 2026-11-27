@@ -251,6 +251,17 @@ pub fn transcripts() -> PathBuf {
     crate::measure::home().join(".claude").join("projects")
 }
 
+/// Where [`reply_of`] and `research_held` read the transcripts: [`transcripts`]; in this crate's test build the empty path, which holds
+/// nothing, so no test reads the machine's (451 T312, as the arbiter crate's `transcripts_base`, 451 T309) - a test that wants one names
+/// its base to [`reply_in`] or `research_held_in`.
+#[must_use]
+pub fn transcripts_base() -> PathBuf {
+    #[cfg(test)]
+    return PathBuf::new();
+    #[cfg(not(test))]
+    transcripts()
+}
+
 /// `sorted(TRANSCRIPTS.glob("*/*/subagents/agent-<aid>.jsonl"))`'s first, a wave agent's `*/*/subagents/workflows/*/agent-<aid>.jsonl` among them.
 #[must_use]
 pub fn transcript_of(base: &Path, aid: &str) -> Option<PathBuf> {
@@ -281,7 +292,7 @@ pub fn transcript_of(base: &Path, aid: &str) -> Option<PathBuf> {
 /// `StructuredOutput` call (334 of 341 kept wave replies), so the next round's earlier-round file held a truncated manifest, not round 1's reply.
 #[must_use]
 pub fn reply_of(v: &Value) -> String {
-    reply_in(v, &transcripts())
+    reply_in(v, &transcripts_base())
 }
 
 /// [`reply_of`], the transcripts under `base`.

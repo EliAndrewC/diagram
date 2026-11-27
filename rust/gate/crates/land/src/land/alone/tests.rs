@@ -117,7 +117,9 @@ fn world(tag: &str) -> (l7r_shared::tempdir::TempDir, std::path::PathBuf) {
     let c = dir.join("c");
     sh(
         &dir,
-        "git init -q --bare -b main origin.git && git init -q -b main c",
+        // the clone's own identity, which the landing worktree shares: `land-alone.sh`'s `git commit-tree` read the machine's
+        // `~/.gitconfig` before, three tests red under an empty HOME (451 T312)
+        "git init -q --bare -b main origin.git && git init -q -b main c && git -C c config user.name t && git -C c config user.email t@t",
     );
     put(&c, "specs/451-x/plan.md", PLAN_TEXT);
     put(&c, "specs/451-x/tasks.md", "- [ ] T1 one\n- [ ] T2 two\n");

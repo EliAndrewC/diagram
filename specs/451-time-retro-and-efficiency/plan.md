@@ -3579,31 +3579,40 @@ parallelizing and is ordered by time saved, never by disk freed.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T312 (<why: the finding or measurement that files it>)
+### T312 (left by 451 T309, 2026-11-26, by grep and not run: the bundle crate's `marks::reply_of` and `record/bundle/modal.rs`'s `research_held` default to the live transcripts under `~/.claude/projects`; the task crate's `task_add/quick/tests.rs` reads `~/.claude/guard-log`; the land, plan and task crates set `GUARD_LOG_DIR` process-wide)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: each named site measured first by running its crate's tests with `HOME` pointed at a scratch directory, then given a test default that reads nothing of the machine, as the arbiter crate's `transcripts_base()` does (451 T309).
+  - **The census**, read-only, measured 2026-11-27 (`grep -rn` over `rust/gate` for `HOME`, `~/.claude`, `.claude/projects`, `.claude/guard-log`, `guard-log`, `set_var`, `remove_var`, `GUARD_LOG_DIR` and `home()`, 183 lines, unfiltered). In the four crates, observed 2026-11-27, method: that grep's lines read in place: bundle, `marks::transcripts()` is read by `reply_of` (callers `earlier.rs`, and the record crate's `apply_edits/settled.rs`) and by `modal.rs`'s `research_held` (callers `modal.rs`'s bundle, and the record crate's `apply_edits.rs` `held_of`, whose tests set its `HELD` seam); task, `task_add/quick/tests.rs` read `$HOME/.claude/guard-log`, `set_down.rs`'s usage-cap path and `builder_tree.rs`'s cache path read `HOME` (their tests name `HOME=/nonexistent` or never reach the read); land, `land.rs`'s memwatch path reads `HOME` through the `Rooted` reader; land, plan and task each set `GUARD_LOG_DIR` once a process (`quiet_census`, a `OnceLock`). Outside them: the arbiter crate's `checks_door/tests.rs` sets it the same way (451 T309), the shared crate's `log::quiet()` likewise for the guard, and `land/alone/tests/takeback.rs` already gives `L7R_PROJECTS_DIR` a fixture.
+  - **What reached the machine, measured 2026-11-27** (method: `scripts/gates/l7r-gate.sh rust test` over the four crates with `L7R_RUST_FRESH=1`, `HOME` a scratch directory and `RUSTUP_HOME`, `CARGO_HOME`, `CARGO_TARGET_DIR` and `L7R_BUILD_SLOT_DIR` the account's own). With an EMPTY `HOME`, measured 2026-11-27 (that command): bundle 87 of 87, task 133 of 133, plan 204 of 204, land 159 of 162 - three red, `Author identity unknown` from `land-alone.sh`'s `git commit-tree`, the `world` fixture's clone having no identity of its own and the machine's `~/.gitconfig` supplying it; no `.claude/` was written under the scratch `HOME`, so no guard-log write of the four crates left the census. With a PLANTED `HOME` (`agent-a1.jsonl` and `agent-none-such.jsonl` holding an EDIT under `.claude/projects/x/y/subagents/`): bundle 86 of 87, `marks::tests::replies_files_and_edits` red at `reply_of(&json!({"aid": "none-such"}))` reading the planted reply. The other `aid`-bearing fixtures (`modal/tests.rs`, `earlier/tests.rs`) held on the planted reply, so their dependence is real and unseen.
+  - **The fix.** `marks::transcripts_base()`: in the bundle crate's test build the empty path, which holds nothing, else `transcripts()`; `reply_of` and `research_held` read it, their signatures kept, so the record and arbiter crates' callers are unchanged. A test that wants transcripts names a base to `reply_in` or `research_held_in`, as the crate's tests already did. `land/alone/tests.rs`'s `world` writes `user.name` and `user.email` into the clone's own config, which the landing worktree shares. `task_add/quick/tests.rs` no longer reads `$HOME/.claude/guard-log`: the pin is that the log `write` writes to is the census before anything records, and that the escape is found there.
+  - **DECISION, `GUARD_LOG_DIR` stays set once a process in the land, plan and task crates' tests** (label: tooling convention; a deviation from the brief's "replace process-wide `set_var` ... with a value passed in", with its reason). The value is what child processes inherit: the scripts the land tests run (`scripts/sync-with-main.sh`'s `guard_log`, through `scripts/hooks/lib/guardlog.sh`) write the guard log from the environment, so a value passed into the Rust calls would leave them on the live log unless every spawn carried it. Passing it in the Rust alone was priced, observed 2026-11-27, method: the callers by grep: `plan::tick_gate` (one production caller, `task/tick/refusal.rs`, and 10 test calls), `plan.rs`'s and `defer.rs`'s `guard_log`, `defer::decided_under`, `task_add.rs`'s and `task_start.rs`'s `record` - none but `defer` and `task_add` holds an environment reader, so the change reaches every tick's signature across plan, task and land. The `OnceLock` sets one value once before the fixture is built, Rust's own environment reads and spawns take std's environment lock, and the empty-`HOME` run above found no write that escaped it. Not a defect on this evidence (constitution XIV): the claim "a process-wide variable races" is restated as "set once, one value, before any fixture".
+  - **The empty-HOME cache question** (the line's last clause), measured 2026-11-27: a bare empty `HOME` does not build at all (rustup finds no toolchain, and the target directory moves under `HOME`); with the four variables above it reuses the warm cache, the four crates' tests running in 27.4 s of wall time on the old code and 8.0 s after with no crate rebuilt, measured 2026-11-27 (`time` around the command, the load average 44, so not a timing comparison). Nothing built for it. Its one leak, the Rust checks' run lock and kept results written under the scratch `HOME`, is Found and left (T440).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a bundle test reads no machine's transcripts | `replies_files_and_edits` (`transcripts_base()` the empty path); red under the planted `HOME` without it | n/a: tooling | none | n/a |
+| land-alone's tests commit with the fixture's identity | `two_tasks_sections_in_one_plan_land_only_the_landing_task_s` and two more of `land::alone`, red under the empty `HOME` without it | n/a: tooling | none | n/a |
+| the quick test reads no live guard log | `an_escape_taken_by_a_test_lands_in_the_scratch_log_and_not_the_real_one` | n/a: tooling | none | n/a |
 
 ### T312 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The bundle, task, land and plan crates' tests give one answer whatever the machine's home directory holds, and read none of its transcripts, guard log or git identity.
+2. **The constraints.** 100% line coverage from each crate's own tests; 451 T309's model (`transcripts_base()`); 451 T94 and T207 (a test's guard log is never the live one); the binary's behavior unchanged; no guard message changed; `l7r_shared`'s `test-env` held to the guard's family (`checks`' `feature_sets.rs`, `APART`).
+3. **Where each comes from.** G: the task line and the coordinating session's brief of 2026-11-27. O: the census and the empty and planted `HOME` runs above.
+4. **Do they describe the world here?** In part: the transcripts dependence is real (red under a planted `HOME`); the guard-log one is not (no write escaped under an empty `HOME`); a dependence the line did not name, the git identity, is (three red).
+5. **The order.** No dependency.
+6. **The exits.** Green: `make builder-checks` over the bundle, task, land and plan crates green, and their tests green under the empty and the planted `HOME` with nothing written in either. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 2026-11-27, the same command as above after the fix: under the empty `HOME` 586 of 586 (bundle 87, task 133, land 162, plan 204), no `.claude/` written; under the planted `HOME` bundle 87 of 87.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: tests whose verdict depends on the machine - one red under a planted transcript, three red on a machine without a git identity. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The Rust checks' run lock and kept results (`rust-checks-run.lock`, `rust-checks-run.json`) are written under `$HOME/.cache/l7r-cargo-target/<tree>/` even with `CARGO_TARGET_DIR` set, so a run with another `HOME` shares the warm cache but not the live run's lock, observed 2026-11-27, method: `find` over the scratch `HOME` after the empty-`HOME` run. Not fixed here: the rustc crate, outside this task's crates, and its lock's placement wants measuring first. Filed as T440; lands before T302.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - test isolation, a defect.
 
 
 ### T313 (the GM, 2026-11-26, on the session handing each freed pool tree to the next task by hand: "what you are doing sounds like something that we want our tooling to actually enforce. Because otherwise you just have to remember to keep our tasks in flight"; and the measurement of 2026-11-27, `dev/measurements/2026-11-27/tree-idle/results.md`: the three warm pool trees stood idle 336 of 1,440 tree-minutes (23%) from 2026-11-26T17:00Z to 2026-11-27T01:00Z with the queue never short, measured 2026-11-27 (`tree-idle.py`))
@@ -6583,6 +6592,33 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 |---|---|---|---|---|
 
 ### T439 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T440 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T440 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

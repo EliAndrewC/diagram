@@ -2659,14 +2659,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T312 (<why: the finding or measurement that files it>)": {
-   "sha256": "30b2710860ef2b3b7d64fec44d7bee0ac620b9ab7b5368b00267492af8c6ea46",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T312 Approach (checklist part A)": {
-   "sha256": "9b0b0efe2de9a063c7a3fb443f677d9ad426efad2ab690ecd8dcb14ad962e71b",
+   "sha256": "6bd02257c12716a5fc568a31b0cf935298d9c485258211e17de7ece63447b941",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3571,30 +3565,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T427 (<why: the finding or measurement that files it>)": {
-   "sha256": "5282aaeaa61d980b84d51acf8adb1f34a041c81d8600a626266f9612b1cb29fa",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T427 Approach (checklist part A)": {
-   "sha256": "4329f759e3f38f54d7d5d9d31c09e1626be1aad03b056975d4e3a57741c41bdc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T428 (<why: the finding or measurement that files it>)": {
-   "sha256": "d66388613a56caeaff98b555649a1657275d522bbe3069f356dac167d75dec8e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T428 Approach (checklist part A)": {
-   "sha256": "5afa7f96c689a25970e4e62ae427982ae120e3eed1348d5f1e13bf81b473221b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T409, T406 (bundle) (two gaps in the gate-write guard and the walk it reads, found by 451 T307 by reading, no firing observed: the walk read no `make -C`, so `make -C <another tree> tick` was placed where its shell stood, and the guard asked only whether a gate ran in the tree its own process stood in, so `git -C <the gated clone> commit` sent from a pool tree passed while the clone's gate ran (observed 2026-11-26, method: read from `rust/guard/shared/src/tree.rs`'s make branch and `gate_write_hooks.rs`'s `decide` and `running`))": {
    "sha256": "15d1523bc1508673971d3e70dcfb6d3c0df97c00f6140991ffd4130ef9f1e9ab",
    "verdict": "CLEAR",
@@ -3837,6 +3807,48 @@
   },
   "### T425 (found by T420, 2026-11-27: of the 13 real waits for the small lane from 00:20Z to 03:56Z, 87.4 s, a wide build slot stood free for 85.7 s, measured 2026-11-27 (the event logs' `slot-wait` and `slot-small` lines, `dev/measurements/2026-11-27/slot-waits/waits.py`))": {
    "sha256": "4fb24ecb254aceb33452d7346cba561fdec22a0b0bdf1563b55768a8ec8c1f57",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T312 (left by 451 T309, 2026-11-26, by grep and not run: the bundle crate's `marks::reply_of` and `record/bundle/modal.rs`'s `research_held` default to the live transcripts under `~/.claude/projects`; the task crate's `task_add/quick/tests.rs` reads `~/.claude/guard-log`; the land, plan and task crates set `GUARD_LOG_DIR` process-wide)": {
+   "sha256": "5755fad1c016adb8419eaf328ee7f56fb23ca898280c65cdbda6d46824bec377",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T435 (<why: the finding or measurement that files it>)": {
+   "sha256": "cc1f855ac1eddceccf987d73cd0c9c16ef3fb05fca3d5e41b43f4b4564724b36",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T435 Approach (checklist part A)": {
+   "sha256": "26711309cfd9f433e8213e0f6083d237939f65f133548b2701201e5a04a11f4f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T438 (<why: the finding or measurement that files it>)": {
+   "sha256": "72b3cccb2344202ac7182943a0c35bf1e0c447aea28c87cf766e7c6f6a5423fd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T438 Approach (checklist part A)": {
+   "sha256": "07bd77fb11b21c30bfec7125e381950611e6a772c530825f80802833cf63ea70",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T440 (<why: the finding or measurement that files it>)": {
+   "sha256": "7ebf37c925be43d2b3475f9ff516ab95d2e6fdd728aca36e38ee5c769b43ba24",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T440 Approach (checklist part A)": {
+   "sha256": "ce11017b749416fc45c46c512b56177fb3adb85143b7b88a205c595f6e63ab99",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -34616,6 +34628,81 @@
      "summary": "Filed as a [perf] task under FR-013; no engine-speed checklist.",
      "class": "within",
      "why": "FR-013 names 'the builders' loop faster' as performance work; this is exactly that."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T312 (left by 451 T309, 2026-11-26, by grep and not run: the bundle crate's `marks::reply_of` and `record/bundle/modal.rs`'s `research_held` default to the live transcripts under `~/.claude/projects`; the task crate's `task_add/quick/tests.rs` reads `~/.claude/guard-log`; the land, plan and task crates set `GUARD_LOG_DIR` process-wide)",
+    "### T312 Approach (checklist part A)",
+    "### T435 (<why: the finding or measurement that files it>)",
+    "### T435 Approach (checklist part A)",
+    "### T438 (<why: the finding or measurement that files it>)",
+    "### T438 Approach (checklist part A)",
+    "### T440 (<why: the finding or measurement that files it>)",
+    "### T440 Approach (checklist part A)",
+    "(removed) ### T312 (<why: the finding or measurement that files it>)",
+    "(removed) ### T427 (<why: the finding or measurement that files it>)",
+    "(removed) ### T427 Approach (checklist part A)",
+    "(removed) ### T428 (<why: the finding or measurement that files it>)",
+    "(removed) ### T428 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T312-transcripts-base",
+     "summary": "marks::transcripts_base() returns the empty path in the bundle crate's test build, else transcripts(); reply_of and research_held read it with signatures kept; tests wanting transcripts name a base to reply_in / research_held_in",
+     "class": "within",
+     "why": "Fixes the dependence the task line names (bundle tests reading live ~/.claude/projects), measured real (replies_files_and_edits red under a planted HOME), on 451 T309's model; the binary's behavior unchanged. Exactly the task."
+    },
+    {
+     "id": "T312-fixture-git-identity",
+     "summary": "land/alone/tests.rs's world fixture writes user.name and user.email into the clone's own config",
+     "class": "within",
+     "why": "A machine dependence of the same class the task exists to remove, measured (three land tests red under an empty HOME). Fixed in the task by default (request item 4: briefs default to fixing in the task); widens nothing the GM limited."
+    },
+    {
+     "id": "T312-quick-test-no-live-log",
+     "summary": "task_add/quick/tests.rs no longer reads $HOME/.claude/guard-log; it pins that write's log is the census and the escape is found there",
+     "class": "within",
+     "why": "Removes the live guard-log read the task line names; the test still checks the escape is recorded, so its job is kept."
+    },
+    {
+     "id": "T312-guard-log-dir-once",
+     "summary": "GUARD_LOG_DIR stays set once a process (OnceLock) in the land, plan and task crates' tests rather than passed in as a value; the claim restated as 'set once, one value, before any fixture'",
+     "class": "within",
+     "why": "The plan labels it a deviation from the coordinating session's brief, but that brief is not the GM's words: request.md holds nothing from the GM on how GUARD_LOG_DIR is set. The task line filed it by grep and not run; the empty-HOME run measured no write escaping, and child scripts read the log location from the environment, so passing it into the Rust calls alone would not cover them. No wrong outcome was found, so by constitution XIV (the GM 2026-11-19) it is a difference and not a defect, and restating the claim is the required treatment. Leaving it as it is narrows nothing the GM asked."
+    },
+    {
+     "id": "T312-empty-home-cache",
+     "summary": "Nothing built for the empty-HOME cache question: with RUSTUP_HOME, CARGO_HOME, CARGO_TARGET_DIR and L7R_BUILD_SLOT_DIR kept, an empty HOME reuses the warm cache",
+     "class": "within",
+     "why": "Answers the task line's clause by measurement (dated, method stated); a scratch HOME needs nothing new in order to work."
+    },
+    {
+     "id": "T312-lock-leak-deferred-T440",
+     "summary": "The Rust checks' run lock and kept results land under $HOME/.cache even with CARGO_TARGET_DIR set; not fixed here, filed as T440, lands before T302",
+     "class": "within",
+     "why": "Found while measuring, in the rustc crate, which is outside the four crates the task names. Deferred in FR-009/D15's form: a reason, a filed open task (T440's block is present) and an order. That form is a deferral the spec provides for, not a carve-out from the request. The defect reaches only runs made under a substitute HOME, and it is filed before the next work, so no known defect is carried silently."
+    },
+    {
+     "id": "T312-perf",
+     "summary": "Performance work? no - test isolation",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster or measures where time goes; test isolation does neither, so leaving it unmarked is correct."
+    },
+    {
+     "id": "T435-T438-T440-templates",
+     "summary": "Unfilled template blocks for T435, T438 and T440",
+     "class": "within",
+     "why": "Placeholders only; they decide nothing."
+    },
+    {
+     "id": "removed-templates",
+     "summary": "Removed blocks: T312's unfilled template (replaced by its filled, renamed header), and the unfilled T427 and T428 template blocks",
+     "class": "within",
+     "why": "The earlier text of each was an empty template that decided nothing, so removing it removes no decision."
     }
    ]
   }

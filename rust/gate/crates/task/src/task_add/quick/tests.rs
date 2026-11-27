@@ -120,7 +120,8 @@ fn a_file_that_cannot_be_put_back_raises() {
 
 /// The tests' escapes go to the crate's scratch log, never the real one (451 T19: a probe of `QUICK_OK` on the real tree left two rows
 /// for T37 in `~/.claude/guard-log`; a test that recorded there would leave one at every run). The log is the crate's census BEFORE
-/// anything records, the escape lands there, and no file this process wrote in `$HOME/.claude/guard-log` holds it.
+/// anything records and the escape lands there; the test reads no `$HOME/.claude/guard-log` (451 T312: the machine's log is no test's to
+/// read - the census being the log `write` writes to is the pin).
 #[test]
 fn an_escape_taken_by_a_test_lands_in_the_scratch_log_and_not_the_real_one() {
     let (_dir, root) = quick_repo("task-add-quick-log");
@@ -134,22 +135,14 @@ fn an_escape_taken_by_a_test_lands_in_the_scratch_log_and_not_the_real_one() {
         &env_of(&[("QUICK_OK", why)]),
     );
     assert_eq!(taken.code, 0, "{}", taken.stderr);
-    let holds = |dir: &std::path::Path, own: &dyn Fn(&str) -> bool| {
-        std::fs::read_dir(dir)
-            .into_iter()
-            .flatten()
-            .flatten()
-            .any(|e| {
-                own(&e.file_name().to_string_lossy())
-                    && std::fs::read_to_string(e.path())
-                        .unwrap_or_default()
-                        .contains(why)
-            })
-    };
-    assert!(holds(&quiet_census(), &|_| true), "not in the scratch log");
-    let pid = format!("-{}.json", std::process::id());
-    let real =
-        std::path::Path::new(&std::env::var("HOME").unwrap_or_default()).join(".claude/guard-log");
-    let leaked = holds(&real, &|n| n.ends_with(&pid));
-    assert!(!leaked, "the real guard log holds a test's escape");
+    let logged = std::fs::read_dir(quiet_census())
+        .into_iter()
+        .flatten()
+        .flatten()
+        .any(|e| {
+            std::fs::read_to_string(e.path())
+                .unwrap_or_default()
+                .contains(why)
+        });
+    assert!(logged, "not in the scratch log");
 }
