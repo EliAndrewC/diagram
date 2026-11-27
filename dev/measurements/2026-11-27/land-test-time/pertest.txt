@@ -1,0 +1,58 @@
+run  rc  load1 before/after  wall s  user s  sys s  cpu/wall  sum of tests s
+  1  0     8.9/  8.9         1.92    9.67   17.49    14.1     32.6
+  2  0     8.3/  8.7         4.15    9.92   19.39     7.1     45.1
+  3  0     8.2/  8.2         2.05    9.69   17.71    13.4     34.2
+  4  0     8.7/ 10.3         2.31    9.60   17.85    11.9     40.7
+  5  0     9.7/  9.7         1.97    9.90   17.67    14.0     33.0
+  6  0     9.0/  8.5         1.97    9.66   17.79    13.9     33.7
+  7  0     8.0/  8.0         1.98    9.77   17.76    13.9     33.6
+  8  0     7.5/  7.5         1.97    9.89   17.56    13.9     33.5
+  9  0     7.1/  9.0         2.14    9.95   18.85    13.5     36.4
+ 10  0     9.0/  9.0         2.59   10.34   18.50    11.1     45.3
+ 11  0     8.4/ 11.2         2.31   10.04   18.48    12.3     39.8
+ 12  0    10.4/ 10.4         2.09    9.71   17.99    13.3     35.5
+ 13  0    10.1/ 12.2         5.63   16.45   29.47     8.2     97.3
+ 14  0    11.7/ 13.0         2.45   11.52   21.49    13.5     41.6
+ 15  0    12.4/ 12.4         2.37   10.54   19.09    12.5     39.1
+ 16  0    11.8/ 13.1         2.70   12.42   22.74    13.0     45.3
+ 17  0    12.4/ 12.4         2.45   11.10   19.96    12.7     40.4
+ 18  0    11.6/ 13.7         2.30   10.27   18.08    12.3     39.7
+ 19  0    12.8/ 12.8         2.35   10.30   18.67    12.3     39.7
+ 20  0    11.9/ 13.6         2.47   10.65   19.12    12.1     42.4
+ 21  0    13.4/ 13.4         2.95   13.94   25.05    13.2     52.7
+ 22  0    12.7/ 15.4         4.35   14.74   25.45     9.2     80.8
+ 23  0    14.6/ 21.1         9.81   18.28   32.30     5.2    177.0
+ 24  0    21.5/ 22.3         5.88   11.78   22.39     5.8     95.4
+ 25  0    21.1/ 28.0        12.30   19.18   34.30     4.3    217.4
+ 26  0    27.9/ 28.1         3.87   15.15   26.91    10.9     71.7
+ 27  0    26.2/ 26.1         4.93   15.18   27.34     8.6     93.0
+ 28  0    24.4/ 24.4         2.97   12.09   22.76    11.7     51.2
+ 29  0    23.2/ 24.1         3.95   12.61   23.87     9.2     72.6
+ 30  0    24.2/ 28.7         8.81   17.52   31.97     5.6    162.8
+
+fast half: runs [1, 3, 4, 5, 6, 7, 8, 9, 11, 12, 14, 15, 17, 18, 19]; slowest three: runs [30, 23, 25]
+
+the 20 slowest tests by their mean in the slowest three runs (s): fast-half median, slow-three mean, max over all runs, ratio
+   1.728   8.114   9.358    4.7  land::alone::tests::takeback::a_file_the_task_edited_and_put_back_is_not_its_own
+   1.484   7.822   8.628    5.3  land::alone::tests::the_script_refuses_its_own_uncommitted_files_and_moves_nothing_on_a_conflict
+   1.494   7.679   8.889    5.1  land::alone::tests::takeback::an_append_only_log_appended_on_both_sides_keeps_both
+   1.225   6.092   7.940    5.0  land::alone::tests::takeback::a_replace_all_edit_put_back_is_not_its_own
+   1.124   5.984   7.862    5.3  land::alone::tests::the_script_lands_the_clone_s_head_alone_and_the_clone_takes_the_tip
+   0.942   5.196   5.965    5.5  land::alone::tests::two_tasks_sections_in_one_plan_land_only_the_landing_task_s
+   0.869   4.712   6.293    5.4  land::alone::tests::take::the_clone_takes_a_landing_that_wrote_its_rows_and_archived_beside_its_edits
+   0.802   4.685   6.895    5.8  land::alone::tests::the_script_names_its_tasks_shell_written_files
+   0.825   4.625   5.757    5.6  land::carry::tests::a_done_commit_is_carried_by_its_ref_after_its_tree_went_to_the_next_task
+   0.810   4.496   5.883    5.5  land::alone::tests::takeback::an_archive_mark_the_clone_changed_only_by_a_blank_line_is_taken_from_main
+   0.786   4.487   5.423    5.7  land::alone::tests::take::t113_s_landing_is_taken_beside_the_clone_s_new_sections
+   0.819   4.464   6.042    5.5  land::alone::tests::take::a_section_both_sides_changed_otherwise_still_gives_up_naming_it
+   0.639   3.643   4.776    5.7  land::alone::tests::filed::a_filed_task_lands_its_line_but_never_its_builder_s_section_or_verdict
+   0.776   3.357   3.937    4.3  land::tests::bundle::a_three_task_bundle_starts_closes_decides_and_lands_as_one
+   0.557   3.001   3.672    5.4  land::carry::tests::a_tasks_conflict_that_is_not_both_sides_adding_stops
+   0.549   2.700   2.831    4.9  land::carry_done::tests::done_commits_are_carried_oldest_first_and_a_held_one_is_left
+   0.420   2.670   3.263    6.4  land::alone::tests::booked::a_builders_edit_is_its_briefs_task_not_the_marks
+   0.426   2.381   3.634    5.6  land::carry::tests::a_pick_that_cannot_start_or_continue_is_stopped_with_gits_words
+   0.367   2.288   3.340    6.2  land::carry::tests::a_carry_outside_the_clone_keeps_the_done_ref_the_clone_still_waits_on
+   0.431   2.208   2.444    5.1  land::carry::tests::two_trees_filed_tasks_are_carried_with_both_boxes_and_both_stubs
+
+ratio slow/fast over tests with a fast median > 5 ms: median 5.1, max 7.5, n 143
+tests whose max over all runs exceeds 10 s: none

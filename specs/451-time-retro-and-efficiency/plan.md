@@ -7697,31 +7697,38 @@ batch; the red was not in its change.
 **Performance work?** Yes, a `[perf]` task (451 FR-013): a red run of the checks' rustc suite ends in seconds, where before the fix it took 70 s, measured 2026-11-27 (the red-first run above). That is not engine speed, so the performance checklist does not apply.
 
 
-### T455 (<why: the finding or measurement that files it>)
+### T455 (found by 451 T445, dev/measurements/2026-11-27/hung-test-runs/results.md section 4: six green test phases of the `land` crate ran 61.0 to 101.8 s against a median of 4.04 s, 2026-11-26T01:11Z to 2026-11-27T06:16Z, observed 2026-11-27, method: `hangs.py` over every test phase of the event log - the line asks which tests take the time, before any change)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a measurement, no source changed. Its record is `dev/measurements/2026-11-27/land-test-time/results.md`, measured 2026-11-27 07:38Z to 08:05Z in `diagram-backlog-b1` at HEAD 98b632638d on the machine's own load (load1 4 to 29, 22 cores). It drew, measured 2026-11-27 (the record's section 1 to 4), on the event log's land test phases and the memory sampler (`phases.py`), 30 direct runs of the test binary with libtest's per-test times (`runs.sh`, `--report-time` unlocked by `RUSTC_BOOTSTRAP=1` on the stable toolchain; `pertest.py`), each test alone with a git shim and the pid counter (`procs.sh`; strace is refused here, no ptrace), 40 runs through `make rust-test` (`makeruns.sh`), and a passive `/proc` watcher (`watch.sh`). No load generator ran (feature 460).
+  - **Not load alone**, measured 2026-11-27 (the record's section 1, `phases.py`): each named slow run is 58.2 to 92.7 s over the median of the other land phases started within 10 min of it. At 05:32Z the clone's land run, started 30 s after t271's at load1 77 to 85, took 23.7 s where t271's took 101.8 s, measured 2026-11-27 (the record's section 1). The 06:16Z run took 64.6 s at load1 22 to 29 with 148 us/s of memory stall, measured 2026-11-27 (the record's section 1). No sampled signal separates the slow phases from fast ones at the same load.
+  - **What load does**, measured 2026-11-27 (the record's section 2, 30 runs): wall 1.92 to 12.30 s at load1 7 to 29; user+sys 27 to 53 s, mostly system time (17.5 to 34.3 s), measured 2026-11-27 (the record's section 2); parallelism down from 14.1 to 4.3 processor seconds a wall second. Every test grows alike: a median of 5.1x and at most 7.5x over 143 tests, the slowest three runs against the fast half, measured 2026-11-27 (the record's section 2). The `alone` tests, which run the real `scripts/land-alone.sh`, lead in every run, and no test passed 10 s, measured 2026-11-27 (the record's section 2).
+  - **Processes**, measured 2026-11-27 (the record's section 3, each test alone): 4,394 git calls through the shim and 9,347 pids over the pass (an idle baseline of about 1,100), 29.3 s of serial wall. The most git calls are `land::carry::tests::a_done_commit_is_carried_by_its_ref_after_its_tree_went_to_the_next_task` (137) and `land::tests::bundle::a_three_task_bundle_starts_closes_decides_and_lands_as_one` (128). No test alone passes 1.2 s or waits on a lock, measured 2026-11-27 (the record's section 3).
+  - **Not reproduced**, measured 2026-11-27 (the record's section 4): 70 runs, at most 12.30 s; the 40 through make took 2.61 to 9.26 s, measured 2026-11-27 (the record's section 4). The watcher caught no land binary from any tree alive past 20 s, measured 2026-11-27 (the record's section 4). The excess clusters near 30, 60 and 90 s, INFERRED to fit a fixed 30 s wait, measured 2026-11-27 (the record's section 1). The crate's only 30 s children are in `land::stop::tests`, where `a_running_landing_is_sent_term` ends on an unasserted `child.wait()` of a TERMed `sleep 30`, observed 2026-11-27, method: the code read at HEAD. That is a lead, not shown.
+  - **The finding**: load explains the 5 to 25 s tail, by stretching every test alike, measured 2026-11-27 (the record's section 2). The 58 to 93 s excess is inside the binary, its test unnamed, measured 2026-11-27 (the record's section 1). Catching the next one alive is filed as T463.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the slow runs set against same-time controls, load's per-test scaling, per-test git and pid counts, and 70 runs recorded, measured 2026-11-27 (the record's section 1 to 4) | n/a: a measurement, no code (`dev/measurements/2026-11-27/land-test-time/results.md`) | n/a: tooling | none | n/a |
 
 ### T455 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The session knows whether the land crate's 61 to 100 s green test runs (measured 2026-11-27 (the record's section 1)) come from load or from a test, which tests carry the time, and what to build next.
+2. **The constraints.** T455's line (measure before any change, a measurement); 451 FR-013 (performance work, measured first); feature 460 (no load generator); the brief's read-only scope.
+3. **Where each comes from.** G: the GM's words of 2026-11-20 counting a measurement task as performance work. O: the record's sections 1 to 4, measured 2026-11-27.
+4. **Do they describe the world here?** Yes, measured 2026-11-27: the record's sections 1 to 4 use the real binary, the real event log (250 land phases) and the slow runs' own make path (40 runs), on the machine's ordinary load (load1 4 to 29).
+5. **The order.** After T445, which found the slow runs; before T463, the instrument it files, and before T435.
+6. **The exits.** Green: the record written and the next step filed (T463). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** Seventy runs and the watcher did not catch a slow run, measured 2026-11-27 (the record's section 4). The cause is not reproduced on demand, so the next step is an instrument, not more runs.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 2026-11-27: the record rules out load alone on same-time controls (58.2 to 92.7 s excess), measures load's scaling across every test (5.1x median), counts git calls and pids for each test, and records 70 runs that did not reproduce it; T463 is filed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: a measurement, no defect fixed here, no map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- Six green land test runs (2026-11-26T01:11Z to 2026-11-27T06:16Z) cost a builder 58 to 93 s each beyond what load explains, cause unnamed, observed 2026-11-27, method: `phases.py`'s same-time controls over every land test phase of the event log (the record's section 1). Not fixed here: not reproduced in 70 runs, measured 2026-11-27 (the record's section 4), and no test is named. Filed as T463; lands before T435.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself.
 
 ### T452 (<why: the finding or measurement that files it>)
 
@@ -7924,6 +7931,32 @@ batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T465 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T463 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T463 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

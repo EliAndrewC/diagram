@@ -4010,7 +4010,7 @@
    "declared": "spec-fidelity"
   },
   "### T455 Approach (checklist part A)": {
-   "sha256": "796be7e2f61d84b974ceef60e6d4a3a55716b65ad05650daef4fe21cca8087af",
+   "sha256": "cdeb11a2c1e9586666ed111561e27481da1df79b90a53a250830c2cf24bc2eaf",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4107,6 +4107,12 @@
   },
   "### T446 (451 T304's remainder, part 2: the guards' work-tree `git diff` calls took the index lock whatever `GIT_OPTIONAL_LOCKS` says, 142 of 200 commits refused beside three such loops, measured 2026-11-26 (T304's loop))": {
    "sha256": "012215fbb1c57920b8eed590a4fea29ffd0e1ec954813df1f6760f3d928cc978",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T455 (found by 451 T445, dev/measurements/2026-11-27/hung-test-runs/results.md section 4: six green test phases of the `land` crate ran 61.0 to 101.8 s against a median of 4.04 s, 2026-11-26T01:11Z to 2026-11-27T06:16Z, observed 2026-11-27, method: `hangs.py` over every test phase of the event log - the line asks which tests take the time, before any change)": {
+   "sha256": "2021018fb936359cfa432c874ddcf98c9bf43024b3932638733f22100fa6ad83",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -36963,6 +36969,59 @@
      "why": "Every instance the stated search found was changed or shown to take no lock; no defect is deferred."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T455 (found by 451 T445, dev/measurements/2026-11-27/hung-test-runs/results.md section 4: six green test phases of the `land` crate ran 61.0 to 101.8 s against a median of 4.04 s, 2026-11-26T01:11Z to 2026-11-27T06:16Z, observed 2026-11-27, method: `hangs.py` over every test phase of the event log - the line asks which tests take the time, before any change)",
+    "### T455 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 approach",
+     "summary": "T455 is a measurement only: no source changed, its record dev/measurements/2026-11-27/land-test-time/results.md",
+     "class": "within",
+     "why": "The task line asks which tests take the time before any change; FR-013 and the GM's 2026-11-20 words (request.md line 46) count such a measurement as the work itself."
+    },
+    {
+     "id": "D2 method",
+     "summary": "Event-log phases against same-time controls, 30 direct runs with libtest per-test times (RUSTC_BOOTSTRAP=1 for --report-time), each test alone with a git shim and pid counter, 40 runs through make rust-test, a passive /proc watcher; no load generator (feature 460)",
+     "class": "within",
+     "why": "Instrument choices for the measurement the line asks for; nothing changed in the source, and declining a load generator follows a standing rule rather than narrowing the question."
+    },
+    {
+     "id": "D3 finding",
+     "summary": "Load explains the 5 to 25 s tail by stretching every test alike; the 58 to 93 s excess is inside the binary and its test is unnamed; the 30 s wait in land::stop::tests is recorded as a lead, not shown",
+     "class": "within",
+     "why": "This is the answer the measurement produced, with the inference labeled INFERRED and the lead labeled unshown rather than presented as the cause."
+    },
+    {
+     "id": "D4 defer naming the excess",
+     "summary": "The test behind the 58 to 93 s excess is left unnamed in T455; catching a slow run alive is filed as T463, ordered to land before T435",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The line asks which tests take the time, and for the excess the section does not say. It was not reproduced on demand: 70 runs (40 through the slow runs' own make path) and the watcher caught no slow run, and each test alone, the lead's test among them, stayed under 1.2 s. Acting on the unshown lead with a code change would break the line's own rule, measure before any change. The deferral carries its reason, its filed task and its order (FR-009's shape), and T463 carries the same question forward, ordered before T435, rather than dropping it. No passage of request.md (the GM on measuring test time 2026-11-22, on T104, T315, T394) asks for this slow run's cause to be named or fixed in the same step."
+    },
+    {
+     "id": "D5 order",
+     "summary": "After T445, which found the slow runs; before T463 and T435",
+     "class": "within",
+     "why": "Sequencing that follows from the task's source and its filed follow-up; nothing asked for is moved later."
+    },
+    {
+     "id": "D6 performance work",
+     "summary": "Tagged performance work for scheduling, though it speeds nothing itself",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 words: a measurement task counts as a performance task for scheduling."
+    },
+    {
+     "id": "D7 exits and budget",
+     "summary": "Green: record written and T463 filed; red: failure recorded and the task set down, an impossibility claim ruled through make arbiter-ask; budget one landing",
+     "class": "within",
+     "why": "Process bounds of the task; they do not narrow what is asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -56210,6 +56269,57 @@
      "summary": "Found and left: none.",
      "class": "within",
      "why": "Every instance the stated search found was changed or shown to take no lock; no defect is deferred."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T455": {
+   "section_sha256": "70c661d18d66f6699219ce1617776d180dc3e18a62f69fed703d3d53006a34d4",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 approach",
+     "summary": "T455 is a measurement only: no source changed, its record dev/measurements/2026-11-27/land-test-time/results.md",
+     "class": "within",
+     "why": "The task line asks which tests take the time before any change; FR-013 and the GM's 2026-11-20 words (request.md line 46) count such a measurement as the work itself."
+    },
+    {
+     "id": "D2 method",
+     "summary": "Event-log phases against same-time controls, 30 direct runs with libtest per-test times (RUSTC_BOOTSTRAP=1 for --report-time), each test alone with a git shim and pid counter, 40 runs through make rust-test, a passive /proc watcher; no load generator (feature 460)",
+     "class": "within",
+     "why": "Instrument choices for the measurement the line asks for; nothing changed in the source, and declining a load generator follows a standing rule rather than narrowing the question."
+    },
+    {
+     "id": "D3 finding",
+     "summary": "Load explains the 5 to 25 s tail by stretching every test alike; the 58 to 93 s excess is inside the binary and its test is unnamed; the 30 s wait in land::stop::tests is recorded as a lead, not shown",
+     "class": "within",
+     "why": "This is the answer the measurement produced, with the inference labeled INFERRED and the lead labeled unshown rather than presented as the cause."
+    },
+    {
+     "id": "D4 defer naming the excess",
+     "summary": "The test behind the 58 to 93 s excess is left unnamed in T455; catching a slow run alive is filed as T463, ordered to land before T435",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The line asks which tests take the time, and for the excess the section does not say. It was not reproduced on demand: 70 runs (40 through the slow runs' own make path) and the watcher caught no slow run, and each test alone, the lead's test among them, stayed under 1.2 s. Acting on the unshown lead with a code change would break the line's own rule, measure before any change. The deferral carries its reason, its filed task and its order (FR-009's shape), and T463 carries the same question forward, ordered before T435, rather than dropping it. No passage of request.md (the GM on measuring test time 2026-11-22, on T104, T315, T394) asks for this slow run's cause to be named or fixed in the same step."
+    },
+    {
+     "id": "D5 order",
+     "summary": "After T445, which found the slow runs; before T463 and T435",
+     "class": "within",
+     "why": "Sequencing that follows from the task's source and its filed follow-up; nothing asked for is moved later."
+    },
+    {
+     "id": "D6 performance work",
+     "summary": "Tagged performance work for scheduling, though it speeds nothing itself",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 words: a measurement task counts as a performance task for scheduling."
+    },
+    {
+     "id": "D7 exits and budget",
+     "summary": "Green: record written and T463 filed; red: failure recorded and the task set down, an impossibility claim ruled through make arbiter-ask; budget one landing",
+     "class": "within",
+     "why": "Process bounds of the task; they do not narrow what is asked."
     }
    ],
    "verdict": "CLEAR"
