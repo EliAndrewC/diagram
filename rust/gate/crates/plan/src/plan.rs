@@ -34,6 +34,7 @@ use serde_json::{json, Value};
 use history::History;
 use record::Stop;
 use sections::{blocks, digest, task_sections, wording_only};
+pub use status::Shared;
 use status::{block_status, owed, ruled_tasks, RECORD};
 use task::resolve;
 pub use task::touched_features;
@@ -143,7 +144,20 @@ pub fn tick_gate(
     escaped: Option<&str>,
     task: &str,
 ) -> (bool, String) {
-    let Some((rule, reason, blocks)) = status::held_for(spec_dir, &[task]) else {
+    tick_gate_in(spec_dir, root, escaped, task, None)
+}
+
+/// [`tick_gate`], the plan's task-free judgment kept in `shared` for every task asked through it (451 T464: a landing's first pass
+/// judges its feature's plan once, not once a task); what each task is told, and what the gate logs and records for it, unchanged.
+#[must_use]
+pub fn tick_gate_in(
+    spec_dir: &Path,
+    root: &Path,
+    escaped: Option<&str>,
+    task: &str,
+    shared: Option<&Shared>,
+) -> (bool, String) {
+    let Some((rule, reason, blocks)) = status::held_in(spec_dir, &[task], shared) else {
         // AN ESCAPE THE GATE HAS NOTHING TO HONOR IS DROPPED, NEVER RECORDED (feature 451 T262): the tick proceeds on the gate's own
         // answer, so no reason is asked of it and nothing is written to the guard log or dev/bypass-log/
         let said = escaped

@@ -103,6 +103,7 @@ pub(crate) fn ask<'a>(root: &'a Path, dir: &'a Path, task: &'a str, note: &'a st
         tree: root.to_path_buf(),
         landing: Vec::new(),
         env: &no_env,
+        shared: None,
     }
 }
 

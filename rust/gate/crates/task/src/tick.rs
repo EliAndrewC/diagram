@@ -112,6 +112,8 @@ pub fn checks(
 ) -> Raise<Vec<Checked>> {
     let text = read_strict(&dir.join("tasks.md"))?;
     let deferred = l7r_shared::switches::research(root).deferred();
+    // the plan judged once for the pass, on its first task to reach the gate (451 T464): nothing below writes what it reads
+    let shared = l7r_gate_plan::plan::Shared::default();
     let mut out = Vec::new();
     for task in tasks {
         let box_open = !text::boxes_refusal(&text, task, false, deferred).is_empty();
@@ -125,6 +127,7 @@ pub fn checks(
             Ok(_) => {
                 let mut ask = Ask::with_env(root, dir, task, note, env);
                 ask.landing = tasks.to_vec();
+                ask.shared = Some(&shared);
                 Checked {
                     task: task.clone(),
                     tick: String::new(),

@@ -38,6 +38,9 @@ pub struct Ask<'a> {
     pub landing: Vec<String>,
     /// What the process's environment says, kept for the event log's line of a task built inside another (451 T307 part 2).
     pub env: Env<'a>,
+    /// The plan's task-free judgment, kept across the tasks of one first pass ([`super::checks`], 451 T464); None for a tick, which
+    /// writes what the judgment reads.
+    pub shared: Option<&'a l7r_gate_plan::plan::Shared>,
 }
 
 impl<'a> Ask<'a> {
@@ -62,6 +65,7 @@ impl<'a> Ask<'a> {
             tree,
             landing: Vec::new(),
             env,
+            shared: None,
         }
     }
 }
@@ -294,7 +298,7 @@ pub fn refusal(ask: &Ask, landed: bool, boxes: bool) -> Raise<(String, String)> 
     let host = l7r_gate_plan::plan::built_inside(dir, task);
     let gated = host.as_ref().map_or(task, |h| h.task.as_str());
     let (permitted, message) =
-        l7r_gate_plan::plan::tick_gate(dir, root, ask.escaped.as_deref(), gated);
+        l7r_gate_plan::plan::tick_gate_in(dir, root, ask.escaped.as_deref(), gated, ask.shared);
     let plan = dir.join("plan.md");
     let plan_text = if plan.is_file() {
         read_strict(&plan)?

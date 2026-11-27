@@ -357,22 +357,68 @@ pub(super) fn owed_for(spec_dir: &Path, asked: &[&str]) -> Option<(&'static str,
 
 /// [`owed_for`] with the blocks the judgment listed ([`judge_held`]), which an honored escape's record carries (feature 451 T262).
 pub(super) fn held_for(spec_dir: &Path, asked: &[&str]) -> Option<Held> {
+    held_in(spec_dir, asked, None)
+}
+
+/// The part of a tick's plan judgment that no task changes - the plan, its review record and plan-done.md read and judged
+/// ([`Base`]) - kept for every tick asked through it (451 T464). WHY: the first pass of a landing (`tick::checks` in the task
+/// crate) judged the whole plan again for each of its tasks, about 2.4 s a task over a 1 MB plan.md of 675 blocks: 92 s of the 06:43Z
+/// batch's 35 tasks, measured 2026-11-27 (an Instant trace per call over a scratch clone of diagram-backlog). One is made for one
+/// `checks` call, which writes nothing the judgment reads, and dropped with it; a tick that writes (the tick itself, its archive)
+/// asks without one, so a judgment never outlives the files it read.
+#[derive(Default)]
+pub struct Shared(std::cell::OnceCell<Base>);
+
+/// [`held_for`], the task-free judgment taken from `shared` where one is given and made there on its first ask.
+pub(super) fn held_in(spec_dir: &Path, asked: &[&str], shared: Option<&Shared>) -> Option<Held> {
     let plan_path = spec_dir.join("plan.md");
-    let plan = std::fs::read(&plan_path).ok();
-    let review = std::fs::read_to_string(spec_dir.join(RECORD)).ok();
-    let done = std::fs::read_to_string(spec_dir.join("plan-done.md")).unwrap_or_default();
+    let history = History::new(&plan_path, "HEAD");
+    let judged = || {
+        let plan = std::fs::read(&plan_path).ok();
+        let review = std::fs::read_to_string(spec_dir.join(RECORD)).ok();
+        let done = std::fs::read_to_string(spec_dir.join("plan-done.md")).unwrap_or_default();
+        base(plan.as_deref(), review.as_deref(), Some(&history), &done)
+    };
+    let owned;
+    let base = if let Some(s) = shared {
+        s.0.get_or_init(judged)
+    } else {
+        owned = judged();
+        &owned
+    };
     let tasks = l7r_shared::speckit::tasks::joined(
         &std::fs::read_to_string(spec_dir.join("tasks.md")).unwrap_or_default(),
         &std::fs::read_to_string(spec_dir.join(l7r_shared::speckit::tasks::DONE))
             .unwrap_or_default(),
     );
-    judge_held(
-        plan.as_deref(),
-        review.as_deref(),
-        Some(&History::new(&plan_path, "HEAD")),
-        &done,
-        Some(&scope_of(&tasks, asked)),
-    )
+    finish(base, Some(&history), Some(&scope_of(&tasks, asked)))
+}
+
+/// What [`in_scope`] reads of a plan and its record whatever the scope (451 T464): the recorded blocks, each task section's place and
+/// whether it is its task's own (its first heading opens with the id) or a heading that only names it, and each block's offset.
+pub(super) struct Layout {
+    have: Map<String, Value>,
+    spans: Vec<(String, bool, (usize, usize))>,
+    offsets: BTreeMap<String, usize>,
+}
+
+impl Layout {
+    fn of(review: &Value, plan: &str) -> Self {
+        let spans = task_sections(plan)
+            .into_iter()
+            .filter_map(|(t, s)| {
+                let first = heading_text(s.lines().next().unwrap_or_default());
+                let own = leading_tasks(&first).contains(&t.as_str());
+                span_of(plan, &s).map(|at| (t, own, at))
+            })
+            .collect();
+        let offsets = blocks(plan).into_iter().map(|(k, _, at)| (k, at)).collect();
+        Self {
+            have: reviewed_blocks(review),
+            spans,
+            offsets,
+        }
+    }
 }
 
 /// The keys a judgment `scope` answers for (feature 451 T84, D60's blocks read per task): a block outside every task's section always;
@@ -386,29 +432,22 @@ pub(super) fn held_for(spec_dir: &Path, asked: &[&str]) -> Option<Held> {
 fn in_scope(
     keys: Vec<String>,
     review: &Value,
-    plan: &str,
+    layout: &Layout,
     held: &Scope,
     history: Option<&History>,
 ) -> Vec<String> {
     let scope = &held.tasks;
-    let have = reviewed_blocks(review);
+    let Layout {
+        have,
+        spans,
+        offsets,
+    } = layout;
     // was the removed block a block of the task's unfilled stub (`template::stub_block`, the test `make task-withdraw` removes a
     // section by)? Its earlier text unread - no kept text, no history at its digest - it is not known to be one, and is owed
     let stub_of = |gone: &str, t: &str| {
         let was = have.get(gone).and_then(|e| earlier_text(e, gone, history));
         was.is_some_and(|text| super::template::stub_block(t, &text))
     };
-    // each section's place, and whether it is its task's own (its first heading opens with the id) or a heading that only names it
-    let spans: Vec<(String, bool, (usize, usize))> = task_sections(plan)
-        .into_iter()
-        .filter_map(|(t, s)| {
-            let first = heading_text(s.lines().next().unwrap_or_default());
-            let own = leading_tasks(&first).contains(&t.as_str());
-            span_of(plan, &s).map(|at| (t, own, at))
-        })
-        .collect();
-    let offsets: BTreeMap<String, usize> =
-        blocks(plan).into_iter().map(|(k, _, at)| (k, at)).collect();
     let cleared = |t: &str| {
         review
             .get("tasks")
@@ -471,18 +510,44 @@ pub(super) fn judge_held(
     done: &str,
     scope: Option<&Scope>,
 ) -> Option<Held> {
+    finish(&base(plan, review_text, history, done), history, scope)
+}
+
+/// What a judgment reads before its scope: a plan or record missing (its answer whatever the scope), or the record, the plan's
+/// text and the blocks owed and BLOCKED over the whole plan ([`ruled_tasks`], [`block_status`]), which no task changes.
+pub(super) enum Base {
+    Missing(Held),
+    Judged {
+        review: Value,
+        text: String,
+        owed: Vec<String>,
+        blocked: Vec<String>,
+        /// made on the first scoped ask, kept for the rest
+        layout: std::cell::OnceCell<Layout>,
+    },
+}
+
+/// [`Base`] of a plan, its record and plan-done.md.
+fn base(
+    plan: Option<&[u8]>,
+    review_text: Option<&str>,
+    history: Option<&History>,
+    done: &str,
+) -> Base {
+    #[cfg(test)]
+    JUDGED.with(|n| n.set(n.get() + 1));
     let Some(plan) = plan else {
-        return Some(("plan-missing", format!("no plan.md - the plan stage is owed before its review can be (spec D5); then {HOW}"), Vec::new()));
+        return Base::Missing(("plan-missing", format!("no plan.md - the plan stage is owed before its review can be (spec D5); then {HOW}"), Vec::new()));
     };
     let Some(review_text) = review_text else {
-        return Some((
+        return Base::Missing((
             "plan-review-missing",
             format!("no {RECORD} - {HOW}"),
             Vec::new(),
         ));
     };
     let Ok(mut review) = serde_json::from_str::<Value>(review_text) else {
-        return Some((
+        return Base::Missing((
             "plan-review-missing",
             format!("{RECORD} is not JSON - {HOW}"),
             Vec::new(),
@@ -501,14 +566,36 @@ pub(super) fn judge_held(
         review["blocks"] = Value::Object(whole);
     }
     let ruled = ruled_tasks(&review, &text, history);
-    let (mut owed_keys, mut blocked) = block_status(&review, &text, &ruled, history, done);
-    // an unwritten section is owed by no judgment but its own task's (451 T462)
+    let (owed, blocked) = block_status(&review, &text, &ruled, history, done);
+    Base::Judged {
+        review,
+        text,
+        owed,
+        blocked,
+        layout: std::cell::OnceCell::new(),
+    }
+}
+
+/// A judgment's answer from its [`Base`], the blocks read only as far as `scope` reaches.
+fn finish(base: &Base, history: Option<&History>, scope: Option<&Scope>) -> Option<Held> {
+    let (review, text, layout, mut owed_keys, mut blocked) = match base {
+        Base::Missing(held) => return Some(held.clone()),
+        Base::Judged {
+            review,
+            text,
+            owed,
+            blocked,
+            layout,
+        } => (review, text.as_str(), layout, owed.clone(), blocked.clone()),
+    };
+    // an unwritten section is owed by no judgment but its own task's (451 T462): judged per scope, so after the shared base (451 T464)
     let kept = scope.map_or_else(BTreeSet::new, |s| s.tasks.clone());
-    owed_keys = written_only(owed_keys, &text, &kept);
-    blocked = written_only(blocked, &text, &kept);
+    owed_keys = written_only(owed_keys, text, &kept);
+    blocked = written_only(blocked, text, &kept);
     if let Some(scope) = scope {
-        owed_keys = in_scope(owed_keys, &review, &text, scope, history);
-        blocked = in_scope(blocked, &review, &text, scope, history);
+        let layout = layout.get_or_init(|| Layout::of(review, text));
+        owed_keys = in_scope(owed_keys, review, layout, scope, history);
+        blocked = in_scope(blocked, review, layout, scope, history);
     }
     if !owed_keys.is_empty() {
         let shown: Vec<String> = owed_keys
@@ -524,7 +611,7 @@ pub(super) fn judge_held(
         return Some(("plan-review-stale", format!("{} block(s) of plan.md changed since their review by more than a typo (feature 375 FR-043): {}{more} - `make plan-delta F=<n>` builds the review of those blocks alone", owed_keys.len(), shown.join(", ")), owed_keys));
     }
     let whole_not_clear = !matches!(review.get("verdict"), None | Some(Value::Null))
-        && text_of(&review, "verdict") != Some("CLEAR")
+        && text_of(review, "verdict") != Some("CLEAR")
         && !review.get("blocks").is_some_and(Value::is_object);
     if !blocked.is_empty() || whole_not_clear {
         let rows = review
@@ -559,6 +646,17 @@ pub(super) fn owed(spec_dir: &Path) -> Option<(&'static str, String)> {
         Some(&History::new(&plan_path, "HEAD")),
         &done,
     )
+}
+
+/// How many whole-plan judgments ([`Base`]) this thread has made, for the tests (451 T464).
+#[cfg(test)]
+pub(super) fn judged() -> usize {
+    JUDGED.with(std::cell::Cell::get)
+}
+
+#[cfg(test)]
+thread_local! {
+    static JUDGED: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
 }
 
 /// Every block of the section carries a CLEAR verdict at its digest, or at a text it differs from by a typo only (405 T81, D57).

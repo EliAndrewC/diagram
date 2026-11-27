@@ -7927,32 +7927,36 @@ T462-D1 - **A process-fault on a WRITTEN section still records its verdict** (th
 
 **Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the landings faster). The 35-task first pass's tick checks went from 1,252 s to 92 s and `plan push` from 35.6 s to 6.7 s, measured 2026-11-27 (the scratch clone). Not an engine-speed task: no checklist answers owed.
 
-### T464 (<why: the finding or measurement that files it>)
+### T464 (after T457 a landing's tick checks still cost about 2.4 s a task outside plan.md's history: 92 s for the 35 tasks of the 06:43Z batch, 9.4 s of it in History, measured 2026-11-27, method: T457's traced runs over a scratch clone of diagram-backlog at 98b632638d)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the cause measured first, then the task-free part of the plan gate's judgment made once a first pass, in `rust/gate/crates/plan/src/plan/status.rs` and `plan.rs`, handed through `rust/gate/crates/task/src/tick.rs` and `tick/refusal.rs`.
+  - **(1) The cause, measured 2026-11-27** (an Instant trace around each step of `tick::checks` and `refusal::refusal`, and around `ruled_tasks`, `block_status` and `in_scope` in `judge_held`, through `l7r-gate tick --land-check` over T457's scratch clone with the 06:43Z batch's 35 tasks; load average 9.3 to 14.9). The run took 118.1 s, 102.1 s of it user CPU, measured 2026-11-27 (`/usr/bin/time` over the traced run). Of it, the plan gate (`tick_gate`, through `held_for`) took 111.9 s: `ruled_tasks` 88.8 s, `block_status` 13.4 s and `in_scope` 8.4 s, measured 2026-11-27 (the traced run). The rest was small: `approach_refusal` 4.0 s, `built_inside` 1.4 s, every other refusal under 0.3 s together, measured 2026-11-27 (the traced run). Each of the 35 tasks judged the whole plan again, about 1.8 s of `ruled_tasks` and 0.2 s of `block_status` a task once the first had read the history, measured 2026-11-27 (the traced run), although neither takes the task: only `in_scope` narrows the judgment to the task and the tasks ticked before it.
+  - **(2) The task-free judgment made once a first pass.** `judge_held` is split in two. `base` reads the plan, its review record and plan-done.md and judges them (`ruled_tasks`, `block_status`, the old record's whole-plan fill-in), or names the plan or record missing. `finish` narrows that to the scope and words the answer, as before. A `Shared` (a `OnceCell` of the base) is made by `tick::checks` for its one call and handed to each task's `Ask`; `tick_gate_in` and `held_in` take it, and `tick_gate` and `held_for` pass none, so a tick, a push and a decide judge afresh. `in_scope`'s task-free reading (the recorded blocks, each section's span and owner, each block's offset) rides in the base too, made on its first scoped ask; it was made twice a task. What stays per task: the scope (tasks.md and tasks-done.md read each ask), the history at HEAD, and the gate's guard-log line and bypass record. Nothing `checks` runs writes plan.md, plan-review.json or plan-done.md (the tick's write and its archive are in `tick`, which asks without a `Shared`), so every answer is the one a fresh judgment gives.
+  - **(3) After, the same run** (measured 2026-11-27, untraced, load average 9.4 to 10.6): the 35-task tick checks took 12.0 s, 10.7 s user CPU and 80 MB at most, from 118.1 s, and the output was byte-identical to the before-run's (`cmp`). No guard-log line was written in either run: no task of the batch is held by the plan gate. The traced after-run showed `ruled_tasks` and `block_status` called once, measured 2026-11-27 (the traced run). Of what is left, about 8 s of `ruled_tasks` (with the one history indexing, about 5 s, T465) is paid once, and `approach_refusal` and `built_inside` about 0.12 s a task, measured 2026-11-27 (the traced after-run).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the plan judged once a first pass | `plan/tests/shared.rs` `a_landing_judges_its_plan_once_and_tells_each_task_what_it_was_told_alone`: three ticks (T05, T06, T05) through one `Shared` against three alone, T06's section edited after its review so one is held. Red on the old code (the shared path judging afresh), 3 judgments against 1, the plan crate's tests 206 passed and 1 failed, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/plan ONLY=plan::tests::shared`). Green after, 207 passed and 0 failed, measured 2026-11-27 (`make builder-checks`). The same test pins a new `Shared` made after a block outside every section changed: it judges again and holds T05 | n/a: tooling | none | none |
 
 ### T464 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A landing's first pass judges its feature's plan once, whatever the size of its batch. Every task is told what it would be told alone.
+2. **The constraints.** 451 FR-013: a performance task makes the landings faster. Each tick's answer stays the one a fresh judgment gives. The judgment is shared only where nothing between the asks writes what it reads.
+3. **Where each comes from.** O: the traced runs of (1) and (3). R: `status.rs`'s `judge_held` and `in_scope`, and `tick.rs`'s `checks` and `tick`.
+4. **Do they describe the world here?** Yes. The runs were made over a copy of the clone's own plan.md, its history and its review record, with the 35-task batch whose first pass T457 measured, measured 2026-11-27 (T457's scratch clone).
+5. **The order.** After T457, which took the history's re-reads. Beside T465, the history's one indexing pass, and T466, `ruled_tasks`' own re-parse, filed here.
+6. **The exits.** Green: the red test green, the 35-task output byte-identical, and the run timed before and after. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The 35-task tick checks take 12.0 s, from 118.1 s, with byte-identical output, measured 2026-11-27 (T457's scratch clone, load 9 to 15). The whole plan is judged once a first pass, from once a task.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A batch landing's first pass takes about 12 s where it took about 2 minutes, measured 2026-11-27 (the timed runs), and no plan verdict changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `ruled_tasks` still parses plan.md's task sections again for each task it judges (`task_current` calls `task_sections(plan)` once a section): about 1.8 s a whole-plan judgment, observed 2026-11-27, method: the before-run's trace of `ruled_tasks` from its third call on. A first pass now pays it once, but every `plan push`, `make decide`, push table's plan row and tick's archive (`task.rs`'s `owed_for`) still pays it. Not fixed here: it changes how every other caller judges a plan, a job beyond this brief's one. Filed as T466; lands before T22.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the landings faster). The 35-task first pass's tick checks went from 118.1 s to 12.0 s, measured 2026-11-27 (the scratch clone, load 9 to 15). Not an engine-speed task: no checklist answers owed.
 
 ### T465 (<why: the finding or measurement that files it>)
 
@@ -7988,6 +7992,33 @@ T462-D1 - **A process-fault on a WRITTEN section still records its verdict** (th
 |---|---|---|---|---|
 
 ### T463 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T466 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T466 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
