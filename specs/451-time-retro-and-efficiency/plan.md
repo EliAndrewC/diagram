@@ -4501,44 +4501,6 @@ Built here: T421 - an open performance task the queue has no line for
 <!-- plan-archive: T339 to T315 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T340 to T315 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 
-### T341 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T341 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-### T341 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
-
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
-
-
 ### T342 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -4798,44 +4760,6 @@ Built here: T421 - an open performance task the queue has no line for
 **Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
-### T364 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T364 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-### T364 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
-
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 
 
 ### T365 (<why: the finding or measurement that files it>)
@@ -6538,6 +6462,64 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 |---|---|---|---|---|
 
 ### T438 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T364, T341 (bundle) (found by T340 and T315, 2026-11-26: a test run of the checks' tool waited for the end of its output pipe, not for the test binary's exit, which cost 3.1 s while a process a test left behind held the pipe, measured 2026-11-26 (T340, the binary by hand into a pipe), and after a one-line edit of a guard crate the tool spent about 2.0 s on one thread before its first cargo build, measured 2026-11-26 (T315, the process list sampled every 50 ms))
+
+- **Approach**: two changes in the checks' tool, `l7r-rust` (`rust/gate/crates/rustc`).
+  - **(a) A run ends at its program's exit** (T364, `rustc/drain.rs`, and `run_in` in `rustc.rs`): `Command::output` is replaced by a spawn. Each pipe is read on a thread of its own and the run waits on the child. Once the child has exited, the readers get `DRAIN` = 250 ms (a GUESS knob) to reach the pipe's end. A pipe still open after that is cut only where another process holds it: the run takes what was read so far and goes on. Where no other process holds it, the only writer has exited and the reader is merely late on a loaded machine, so the run waits for the pipe's end and loses no output (a cut there would drop the output's tail, a test build's last `executable` lines among it, and the crate would run fewer binaries). At the exit each pipe holds at most its buffer, so the bound is slack for scheduling, and it is what a leak now costs, a tenth of the 3.1 s that T340's leak cost, measured 2026-11-26 (T340, the binary by hand into a pipe). A pipe still held is named. `holders` reads `/proc/*/fd` for every process but this one with a descriptor on the pipe's inode, and writes one line, `rust-checks: HELD: <program> exited, but its output is still held by pid N (<its command line>) ...; fix: kill and wait what the test starts (451 T363)`, at the end of the run's stderr. `answer` also prints that line for a green crate (`drain::held_on`), whose stderr it does not otherwise show. This is the naming half of T363, a few lines, built here. T363's other half stays open as its own task: failing the crate, ending the leftover processes, and checking the run's process group.
+  - **(b) A touch keeps the code views** (T341, `rustc/kept.rs`, `this_binary`, `code_ids_kept_by`). Measured first, with temporary step lines removed before the fix (`dev/measurements/2026-11-27/checks-start/results.md`, three runs before and three after). The time between `git ls-files` and the first build was the code views: all 1,504 Rust files read and hashed again, 5.8 to 6.5 s at load 45, measured 2026-11-27 (step lines, `dev/measurements/2026-11-27/checks-start/`). That happened because the views cache was stamped with the binary's size and modification time. `scripts/gates/l7r-gate.sh` runs a cargo build whenever any file under `rust/guard` is newer than `l7r-rust`, then `touch`es the binary, even though the tool builds from `rust/guard/shared` alone and from none of `rust/guard`'s other sources. The new stamp adds the binary's content id. A matching size and time is this binary's without reading anything. A moved time is still this binary's where the content id matches, and the new time is written back. A rebuilt binary is another binary, as before.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a run ends at the exit | `a_run_ends_at_the_exit_though_a_process_it_left_holds_the_pipe` red on the old code (5.008 s against its 2 s bound, measured 2026-11-27 (`make rust-test`), 126 passed, 1 failed), then green; `a_run_reads_past_the_pipe_s_buffer_and_keeps_the_exit_code`, `a_run_killed_by_a_signal_fails`, `a_late_reader_with_no_holder_is_waited_for_not_cut` (red on this task's first build, which cut it), `a_green_crate_whose_run_left_a_holder_names_it` (`rustc/tests/drain.rs`) | n/a: tooling | none | none |
+| a touch keeps the views | `a_touched_binary_keeps_its_views_and_a_rebuilt_one_does_not` (`rustc/tests/kept.rs`) red with the content check off (129 passed, 1 failed), then green (130 passed) | n/a: tooling | none | none |
+
+### T364, T341 Approach (checklist part A)
+
+1. **The goal, in the world.** A test run's phase ends when its binary exits, whatever the binary left behind, and the leak is said. A one-line edit of a guard crate starts its build in about 0.3 s, not 2 s, measured 2026-11-27 (step lines, `dev/measurements/2026-11-27/checks-start/`).
+2. **The constraints.** T101's leak pin is unchanged (`leak_checked` reads TMPDIR after the run, as before). Every byte a program writes before its exit is still read. A rebuilt tool never reads another binary's views.
+3. **Where each comes from.** O: T340's measurement in T364's line (binary exit 2.00 to 2.04 s, pipe end 5.16 to 5.18 s, measured 2026-11-26 (T340, the binary by hand into a pipe)). O: T315's figures in T341's line. O: the step lines of 2026-11-27 (`checks-start/`). O: `l7r-gate.sh` line 166, read.
+4. **Do they describe the world here?** Yes. Both were reproduced in this tree: the red test took 5.008 s on the old `run_in`, measured 2026-11-27 (`make rust-test`), and before the fix the step lines showed the views recomputed on every edited run.
+5. **The order.** After T340. Before T363, whose failing half reads the same holders.
+6. **The exits.** Green: the rustc crate's tests (130) and the after-runs. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None. The guess in T341's line (the kept key over the guard's sources and declared reads) was measured and is not the cost: the verdict key and the telling took 0.02 to 0.2 s, measured 2026-11-27 (step lines, `dev/measurements/2026-11-27/checks-start/`).
+8. **The budget.** One landing.
+9. **Done, measured.** A held pipe costs at most `DRAIN` (250 ms, a GUESS knob) past the exit, where it cost the holder's whole life. An edited `rust/guard` run reaches its build at 0.30 to 0.33 s (load 9 to 10), where it took 6.95 to 7.66 s at load 45, measured 2026-11-27 (step lines, `dev/measurements/2026-11-27/checks-start/`), and the full recompute it skips is 1.93 s at load 12, measured 2026-11-27 (step lines, `dev/measurements/2026-11-27/checks-start/`).
+10. **Before moving a constant.** `DRAIN` is new, a GUESS knob (above).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A builder's `make rust-test` of a crate whose test leaves a process behind ends at the binary's exit and names the process. An edited guard crate's run re-reads only the files whose content moved.
+
+**Found and left?**
+- A real rebuild of `l7r-rust` (after an edit of `rust/guard/shared`, `core`, `tree` or `rustc`) still recomputes all 1,504 files' code views, 1.9 s at load 12 on top of the 2.0 s rebuild, measured 2026-11-27 (step lines), because the views are keyed by the whole binary; observed 2026-11-27, method: the step lines' first run after the fix's own rebuild. Not fixed here: keying the views by the code that computes them needs a test that holds that key to every function the views call, which is a mechanism of its own. Filed as T434; lands before T365.
+- A green `cover` run does not show the `HELD` line: `cover_ran` rebuilds its result from the lines missed, so the tests' stderr is dropped (`rustc/cover.rs`, `run_one`); the cut still saves the time; observed 2026-11-27, method: `run_in`'s callers read (`side.rs`, `cover.rs`, `times.rs`, `cargo_in`), the other three keeping stderr into `answer`. Not fixed here: T363's failing half makes a held pipe a red crate through `leak_checked`, which the cover run also takes, and a red cover run shows its stderr. Filed as T363; lands before T365.
+
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the checks faster). T364: a leaked process's hold on the pipe, 3.1 s in T340's case (measured 2026-11-26 (T340, the binary by hand into a pipe)), is cut to at most 250 ms (`DRAIN`, a GUESS knob). T341: the pre-build window of an edited guard crate went from 6.95 / 7.66 / 7.50 s (load 44.8 / 45.4 / 44.6) to 0.30 / 0.30 / 0.33 s (load 9.3 / 9.9 / 10.5), measured 2026-11-27 (step lines, `dev/measurements/2026-11-27/checks-start/`), and the work removed, the 1,504-file views recompute, is 1.93 s at load 12, measured 2026-11-27 (step lines, `dev/measurements/2026-11-27/checks-start/`). No engine speed, so no checklist.
+
+### T434 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T434 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

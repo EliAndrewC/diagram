@@ -13,7 +13,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
-use std::process::Command;
+use std::process::{Command, Stdio};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
@@ -23,6 +23,7 @@ use crate::Reply;
 
 mod assertline;
 mod cover;
+mod drain;
 mod fmtfile;
 mod kept;
 mod lint;
@@ -96,18 +97,30 @@ fn run_in(
     if let Some(dir) = dir {
         command.current_dir(dir);
     }
-    // a crate's own tests read this tree-from-wrapper variable, and it is this run's, not theirs
-    match command
+    // a crate's own tests read this tree-from-wrapper variable, and it is this run's, not theirs; the run ends at the program's exit,
+    // not at its pipes' end, which a process it left behind can hold (451 T364, `drain.rs`)
+    let started = command
         .args(args)
         .envs(env)
         .env_remove("L7R_GATE_TREE")
-        .output()
-    {
-        Ok(o) => Ran {
-            code: o.status.code().unwrap_or(1),
-            stdout: String::from_utf8_lossy(&o.stdout).into_owned(),
-            stderr: String::from_utf8_lossy(&o.stderr).into_owned(),
-        },
+        .stdin(Stdio::null())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn();
+    match started {
+        Ok(mut child) => {
+            let out =
+                drain::Reader::start(child.stdout.take().unwrap_or_else(|| unreachable!("piped")));
+            let err =
+                drain::Reader::start(child.stderr.take().unwrap_or_else(|| unreachable!("piped")));
+            let status = child.wait();
+            let (stdout, stderr) = drain::ended(program, &out, &err);
+            Ran {
+                code: status.ok().and_then(|s| s.code()).unwrap_or(1),
+                stdout,
+                stderr,
+            }
+        }
         Err(e) => Ran {
             code: 127,
             stdout: String::new(),
@@ -729,6 +742,8 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
             };
             let _ = writeln!(stderr, "{said}\n{}{}", done.stdout, done.stderr);
         } else {
+            // a pipe a leftover process held past its program's exit is said on a green crate too (451 T364, `drain.rs`)
+            stderr.push_str(&drain::held_on(&shown, &done.stderr));
             keep_green(
                 world,
                 cmd,

@@ -1,0 +1,248 @@
+diff --git a/rust/gate/crates/rustc/src/rustc.rs b/rust/gate/crates/rustc/src/rustc.rs
+index ecd31faacb..395aec014f 100644
+--- a/rust/gate/crates/rustc/src/rustc.rs
++++ b/rust/gate/crates/rustc/src/rustc.rs
+@@ -13,7 +13,7 @@
+ use std::collections::{BTreeMap, BTreeSet};
+ use std::fmt::Write as _;
+ use std::path::{Path, PathBuf};
+-use std::process::Command;
++use std::process::{Command, Stdio};
+ use std::sync::LazyLock;
+ 
+ use fancy_regex::Regex;
+@@ -23,6 +23,7 @@ use crate::Reply;
+ 
+ mod assertline;
+ mod cover;
++mod drain;
+ mod fmtfile;
+ mod kept;
+ mod lint;
+@@ -96,18 +97,30 @@ fn run_in(
+     if let Some(dir) = dir {
+         command.current_dir(dir);
+     }
+-    // a crate's own tests read this tree-from-wrapper variable, and it is this run's, not theirs
+-    match command
++    // a crate's own tests read this tree-from-wrapper variable, and it is this run's, not theirs; the run ends at the program's exit,
++    // not at its pipes' end, which a process it left behind can hold (451 T364, `drain.rs`)
++    let started = command
+         .args(args)
+         .envs(env)
+         .env_remove("L7R_GATE_TREE")
+-        .output()
+-    {
+-        Ok(o) => Ran {
+-            code: o.status.code().unwrap_or(1),
+-            stdout: String::from_utf8_lossy(&o.stdout).into_owned(),
+-            stderr: String::from_utf8_lossy(&o.stderr).into_owned(),
+-        },
++        .stdin(Stdio::null())
++        .stdout(Stdio::piped())
++        .stderr(Stdio::piped())
++        .spawn();
++    match started {
++        Ok(mut child) => {
++            let out =
++                drain::Reader::start(child.stdout.take().unwrap_or_else(|| unreachable!("piped")));
++            let err =
++                drain::Reader::start(child.stderr.take().unwrap_or_else(|| unreachable!("piped")));
++            let status = child.wait();
++            let (stdout, stderr) = drain::ended(program, out, err);
++            Ran {
++                code: status.ok().and_then(|s| s.code()).unwrap_or(1),
++                stdout,
++                stderr,
++            }
++        }
+         Err(e) => Ran {
+             code: 127,
+             stdout: String::new(),
+@@ -659,6 +672,7 @@ fn caller_reads(world: &World, cmd: &str, manifest: &Path, inputs: Option<&Kept>
+ 
+ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) -> Reply {
+     let found = crates(&world.root, named);
++    crate::rustc::t341_step("found"); // T341STEP
+     let (mut stdout, mut stderr) = (String::new(), String::new());
+     if found.is_empty() {
+         return Reply {
+@@ -675,6 +689,7 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
+         }
+     }
+     let inputs = reads.map(|r| Kept::read(world, cmd, r, &found));
++    crate::rustc::t341_step("kept-read"); // T341STEP
+     let (mut bad, mut apart) = (0, 0);
+     // every crate's kept result asked first, so the coverage the rest owe is built together (T105) and run side by side (T108)
+     let asked: Vec<(&PathBuf, Option<(Verdict, bool)>)> = found
+@@ -691,6 +706,7 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
+         })
+         .collect();
+     let mut together = owed_together(world, cmd, &asked);
++    crate::rustc::t341_step("together"); // T341STEP
+     for (manifest, ask) in asked {
+         let shown = shown(world, manifest);
+         let Some((verdict, stands)) = ask else {
+@@ -729,6 +745,10 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
+             };
+             let _ = writeln!(stderr, "{said}\n{}{}", done.stdout, done.stderr);
+         } else {
++            // a pipe a leftover process held past its program's exit is said on a green crate too (451 T364, `drain.rs`)
++            for held in done.stderr.lines().filter(|l| l.starts_with(drain::HELD)) {
++                let _ = writeln!(stderr, "{shown}: {held}");
++            }
+             keep_green(
+                 world,
+                 cmd,
+@@ -893,6 +913,7 @@ fn locked_dispatch(world: &World, args: &[String], taker: &runlock::Taker) -> Re
+     });
+     match held {
+         Ok(_held) => dispatch(world, args),
++
+         Err(why) => Reply {
+             stdout: String::new(),
+             stderr: why,
+@@ -905,14 +926,16 @@ fn locked_dispatch(world: &World, args: &[String], taker: &runlock::Taker) -> Re
+ #[must_use]
+ pub fn cli(args: &[String]) -> Reply {
+     let cmd = args.first().map_or("", String::as_str);
+-    // the pre-warm (feature 451 T316, `prewarm.rs`) is no run of the checks: it joins no run's lock - a real run in its tree is what
+-    // ends it - and its phase lines name it, never the `make builder-tree` that started it and is gone
++    crate::rustc::t341_step("cli"); // T341STEP
++                                    // the pre-warm (feature 451 T316, `prewarm.rs`) is no run of the checks: it joins no run's lock - a real run in its tree is what
++                                    // ends it - and its phase lines name it, never the `make builder-tree` that started it and is gone
+     if cmd == prewarm::STEP {
+         let world = world_here(prewarm::STEP.to_owned());
+         return prewarm::run(&world, &args[1..], &prewarm::Knobs::of(&world));
+     }
+     let taker = runlock::Taker::here();
+     let world = world_here(phase::run_target(&taker.run_what, cmd));
++    crate::rustc::t341_step("world"); // T341STEP
+     let reply = locked_dispatch(&world, args, &taker);
+     crate::stamp::record_for(
+         &world.root,
+@@ -922,5 +945,13 @@ pub fn cli(args: &[String]) -> Reply {
+     reply
+ }
+ 
++pub(crate) fn t341_step(what: &str) {
++    /* T341STEP */
++    static T0: LazyLock<std::time::Instant> = LazyLock::new(std::time::Instant::now); // T341STEP
++    if std::env::var_os("T341_STEPS").is_some() {
++        eprintln!("T341 {:.3} {what}", T0.elapsed().as_secs_f64());
++    } // T341STEP
++} // T341STEP
++
+ #[cfg(test)]
+ mod tests;
+diff --git a/rust/gate/crates/rustc/src/rustc/kept.rs b/rust/gate/crates/rustc/src/rustc/kept.rs
+index d7fcdd0f14..08b084f37c 100644
+--- a/rust/gate/crates/rustc/src/rustc/kept.rs
++++ b/rust/gate/crates/rustc/src/rustc/kept.rs
+@@ -561,9 +561,11 @@ fn binary_key(
+     let (all, ids, compiler) = (&kept.all, &kept.ids, &kept.compiler);
+     let args = binary_args(cmd);
+     let began = std::time::SystemTime::now();
+-    // in the lane it was told: a build of this crate alone takes the small lane, never a wide slot (feature 451 T347)
++    // in the lane it was told
++    crate::rustc::t341_step("build-start"); // T341STEP: a build of this crate alone takes the small lane, never a wide slot (feature 451 T347)
+     let built = told.cargo(world, &args, manifest);
+     super::phase::wrote(world, "build", &[manifest], began, built.code);
++    crate::rustc::t341_step("build-end"); // T341STEP
+     *passed = built.code == 0;
+     let exes = executables(&built.stdout);
+     let order = test_targets(&built.stdout);
+@@ -735,6 +737,7 @@ pub(super) struct Kept {
+ impl Kept {
+     pub(super) fn read(world: &World, cmd: &str, reads: Reads, found: &[PathBuf]) -> Self {
+         let mut all = crates(&world.root, &[]);
++        crate::rustc::t341_step("all-crates"); // T341STEP
+         all.extend(
+             found
+                 .iter()
+@@ -743,8 +746,10 @@ impl Kept {
+                 .collect::<Vec<_>>(),
+         );
+         let ids = content_ids(&world.root);
++        crate::rustc::t341_step("content-ids"); // T341STEP
+         let git_dir = crate::plan::git_line(&world.root, &["rev-parse", "--absolute-git-dir"]);
+-        // only the checks a comment cannot change read the views (`BY_CODE`): a format or dead key reads the whole text (T160)
++        crate::rustc::t341_step("git-dir"); // T341STEP
++                                            // only the checks a comment cannot change read the views (`BY_CODE`): a format or dead key reads the whole text (T160)
+         let (code, interface, includes) = if BY_CODE.contains(&cmd) {
+             let cache =
+                 (!git_dir.is_empty()).then(|| Path::new(&git_dir).join("rust-checks/code-views"));
+@@ -752,18 +757,23 @@ impl Kept {
+         } else {
+             (BTreeMap::new(), BTreeMap::new(), Includes::new())
+         };
++        crate::rustc::t341_step("code-views"); // T341STEP
++        let cl = comment_lints(&world.root, &ids);
++        crate::rustc::t341_step("comment-lints"); // T341STEP
++        let compiler = run(&world.cargo, &own(&["--version"]), &BTreeMap::new())
++            .stdout
++            .trim()
++            .to_owned();
++        crate::rustc::t341_step("compiler"); // T341STEP
+         Kept {
+             reads,
+             git_dir,
+-            comment_lints: comment_lints(&world.root, &ids),
++            comment_lints: cl,
+             code,
+             interface,
+             includes,
+             ids,
+-            compiler: run(&world.cargo, &own(&["--version"]), &BTreeMap::new())
+-                .stdout
+-                .trim()
+-                .to_owned(),
++            compiler,
+             all,
+         }
+     }
+@@ -835,6 +845,7 @@ impl Verdict {
+                     .filter(|_| !(cmd == "lint" && k.comment_lints)),
+             )
+         });
++        crate::rustc::t341_step("verdict-key"); // T341STEP
+         let mut verdict = Verdict {
+             kept: kept_lines(at.as_deref()),
+             at,
+@@ -850,12 +861,14 @@ impl Verdict {
+             return (verdict, false);
+         }
+         if verdict.kept.iter().any(|l| Some(l) == verdict.key.as_ref()) {
++            crate::rustc::t341_step("kept-lines"); // T341STEP
+             return (verdict, true);
+         }
+         if cmd.starts_with("test") {
+             if let Some(k) = k {
+                 verdict.told = Told::of(world, cmd, manifest, k, &binary_args(cmd));
+             }
++            crate::rustc::t341_step("told"); // T341STEP
+             if let Some((binary, exes)) = k.and_then(|k| {
+                 binary_key(world, cmd, manifest, k, &verdict.told, &mut verdict.built)
+             }) {
+diff --git a/rust/gate/crates/rustc/src/rustc/tests.rs b/rust/gate/crates/rustc/src/rustc/tests.rs
+index ccaeefaa17..23d5bf973b 100644
+--- a/rust/gate/crates/rustc/src/rustc/tests.rs
++++ b/rust/gate/crates/rustc/src/rustc/tests.rs
+@@ -7,7 +7,8 @@ use std::process::Command;
+ use super::cover::{cover_dir, uncovered_each};
+ use super::{
+     answer, check, content_ids, crates, dead_public, declared_reads, dispatch, features_but,
+-    kept_reads, lcov_missed, parse, relative, run, tail, undeclared, verdict_key, Reads, World,
++    kept_reads, lcov_missed, own, parse, relative, run, tail, undeclared, verdict_key, Reads,
++    World,
+ };
+ use crate::checks::scratch;
+ use l7r_shared::tempdir::{Held, TempDir};
+@@ -16,6 +17,7 @@ mod alone;
+ mod assertline;
+ mod caller;
+ mod cover;
++mod drain;
+ mod fmtfile;
+ mod kept;
+ mod lint;

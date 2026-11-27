@@ -7,7 +7,8 @@ use std::process::Command;
 use super::cover::{cover_dir, uncovered_each};
 use super::{
     answer, check, content_ids, crates, dead_public, declared_reads, dispatch, features_but,
-    kept_reads, lcov_missed, parse, relative, run, tail, undeclared, verdict_key, Reads, World,
+    kept_reads, lcov_missed, own, parse, relative, run, tail, undeclared, verdict_key, Reads,
+    World,
 };
 use crate::checks::scratch;
 use l7r_shared::tempdir::{Held, TempDir};
@@ -16,6 +17,7 @@ mod alone;
 mod assertline;
 mod caller;
 mod cover;
+mod drain;
 mod fmtfile;
 mod kept;
 mod lint;

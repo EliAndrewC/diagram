@@ -784,3 +784,46 @@ fn the_code_views_are_kept_by_content_and_read_again_where_it_moved() {
     assert_eq!(kept.lines().count(), 2, "{kept}");
     assert!(kept.contains("rust/a/src/lib.rs id2\t") && !kept.contains(" id1\t"));
 }
+
+/// A touch keeps the kept views (feature 451 T341): the launcher touches `l7r-rust` after each build it asks, and a cache stamped by
+/// the binary's time alone was read again whole, every Rust file, on the next run; a binary whose content moved is another.
+#[test]
+fn a_touched_binary_keeps_its_views_and_a_rebuilt_one_does_not() {
+    let (root, _, _) = two_crates();
+    let (cache, exe, lib) = (
+        root.join("views"),
+        root.join("l7r-rust"),
+        "rust/a/src/lib.rs",
+    );
+    std::fs::write(&exe, "one build").unwrap();
+    std::fs::write(root.join(lib), "fn f() {}\n").unwrap();
+    let ids = BTreeMap::from([(lib.to_owned(), "id1".to_owned())]);
+    let by = |exe: &Path| super::super::kept::code_ids_kept_by(&root, &ids, Some(&cache), exe);
+    let first = by(&exe);
+    let stamp = || {
+        std::fs::read_to_string(&cache)
+            .unwrap()
+            .lines()
+            .next()
+            .unwrap()
+            .to_owned()
+    };
+    let before = stamp();
+    // the file gone, so only the kept views can answer; the binary touched an hour on
+    std::fs::remove_file(root.join(lib)).unwrap();
+    let later = std::time::SystemTime::now() + std::time::Duration::from_secs(3600);
+    std::fs::File::options()
+        .write(true)
+        .open(&exe)
+        .unwrap()
+        .set_modified(later)
+        .unwrap();
+    assert_eq!(by(&exe), first);
+    // restamped with the new time, so the next run reads no binary
+    let after = stamp();
+    assert!(after != before && after.rsplit(' ').next() == before.rsplit(' ').next());
+    assert_eq!(by(&exe), first);
+    // a rebuilt binary of the same size is another: nothing kept answers
+    std::fs::write(&exe, "two build").unwrap();
+    assert!(by(&exe).0.is_empty());
+}
