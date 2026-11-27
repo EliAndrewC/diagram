@@ -7,8 +7,8 @@
 //!
 //! THE RUNNER DEAD has no writer of its own: a killed runner writes nothing, and a runner that stopped on an error (a stopped carry, a
 //! refused landing) writes its `stop` line but owes nothing, so a wait reading only `owed` lines would block for ever over a stranded
-//! batch. So the wait writes that line itself ([`dead`]): no runner holds the lock, the log's last batch is open, and no such line was
-//! written since the runner's last `start` - said once a death, so a re-armed wait blocks until the next start's lines - and held for
+//! batch. So the wait writes that line itself ([`dead`]): no runner holds the lock, the log's last batch is open, and no `owed` line
+//! naming it (such a line, or the runner's own red line) was written since the runner's last `start` - said once a death, so a re-armed wait blocks until the next start's lines - and held for
 //! [`DEAD_GRACE_S`] first, so a runner a hand-in is still starting is not called dead. Its `owed` line carries `"why": "runner"`, the
 //! key of "said once". A lane with no open batch is quiet whatever the runner does: an `idle` or `make lane-stop` end, and phase 1's
 //! waiting hand-ins with no runner (the coordinator lands them by hand), wake no one. Label: the easier route (D9's "the runner dead",
@@ -50,20 +50,21 @@ pub struct Wait<'a> {
 }
 
 /// The open batch a dead runner left, where the wait owes the coordinator that line (asked only once no runner holds the lock): the
-/// log's last batch open, and no [`DEAD`] line since the last `start`.
+/// log's last batch open, and no `owed` line since the last `start` that names it - a [`DEAD`] line, or the runner's own line for
+/// that batch. The second is T14's red stand-in (`run.rs`): a red run owes ONE line saying `the runner stopped, the batch open`
+/// and then stops, so a death line after it would wake the coordinator twice for one red, a wake FR-005 does not list (461 T20's
+/// plan review). It goes with T15, whose red path no longer stops the runner.
 #[must_use]
 pub fn dead(lane: &[serde_json::Value]) -> Option<Batch> {
     let since = lane
         .iter()
         .rposition(|l| l["event"] == "start")
         .map_or(0, |i| i + 1);
+    let open = log::batches(lane).pop().filter(Batch::open)?;
     let told = lane[since..]
         .iter()
-        .any(|l| l["event"] == "owed" && l["why"] == DEAD);
-    if told {
-        return None;
-    }
-    log::batches(lane).pop().filter(Batch::open)
+        .any(|l| l["event"] == "owed" && (l["why"] == DEAD || l["batch"] == open.id.as_str()));
+    (!told).then_some(open)
 }
 
 /// The line a dead runner's batch owes: the batch, its changes, the runner's last stop (none where it was killed) and the command.

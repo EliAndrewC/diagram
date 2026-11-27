@@ -594,6 +594,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T20 (D9, FR-005: phase 2's coordinator wake-up, the lines T14's runner owes printed once; lands after T14)": {
+   "sha256": "29f01161f0703f94c3b758b4db90d5b8d03e4885719fb174dda218a6eafbb31b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T20 Approach (checklist part A)": {
+   "sha256": "f2326a34a670a07891443cc6b150fb0e97f1d7d3567dcf47cd29960c51257e19",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3523,6 +3535,192 @@
      "why": "Exit and in-use check for the fix itself; nothing deferred is a known defect left (Found and left: none)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T20 (D9, FR-005: phase 2's coordinator wake-up, the lines T14's runner owes printed once; lands after T14)",
+    "### T20 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "One unread-mark reader in l7r_shared::lane_wake (take_unread under a flock, mark moved past the last complete line by rename; lock-free unread test; LOCK_S timeout takes nothing), called by both make lane-wait and the prompt hook.",
+     "class": "within",
+     "why": "Placement and mechanics of D9's mark; serves FR-005's once-per-line wake and narrows nothing asked."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "Whichever reader comes first (wait or prompt hook) moves the mark, serialized by the mark's lock, so each line is shown once.",
+     "class": "within",
+     "why": "Directly carries FR-005: a hook that printed without moving the mark would produce a second wake FR-005 does not list."
+    },
+    {
+     "id": "Decision 3",
+     "summary": "The wait writes a single runner-dead owed line when no runner holds the lock over an open last batch for DEAD_GRACE_S, then prints it through the mark; quiet with no open batch.",
+     "class": "within",
+     "why": "US5's text is not in the bundle, so this does not rest on calling a dead runner a US5 case. It rests on purpose: without it a stranded batch leaves the coordinator's wait blocked for ever with no line ever coming, which is the blocking the request exists to end, and the line is written once per death, so it adds no repeated wake."
+    },
+    {
+     "id": "Decision 4",
+     "summary": "The prompt hook prints unread lane lines before solo::alone's only-session return.",
+     "class": "within",
+     "why": "D9's prompt-hook reading; the coordinator whose builders are subagents is exactly the only session the lines are owed to, so the return would otherwise defeat FR-005 for its own reader."
+    },
+    {
+     "id": "Decision 5",
+     "summary": "Flagless verb with knobs from the environment (matching T12's waits_on_lane argv), exit codes 0/2/1, WAIT_POLL_S 5 s, DEAD_GRACE_S 30 s, LOCK_S 5 s labeled GUESS and audited, no ceiling per D9.",
+     "class": "within",
+     "why": "Wiring and tunables inside D9; numbers labeled GUESS beside their constants and in dev/audits/lane-wake.md; nothing asked is narrowed."
+    },
+    {
+     "id": "Accepted, temporary: double wake on a red run until T15",
+     "summary": "With T14's red stand-in, a red run wakes the coordinator twice for one batch (the red owed line, then DEAD_GRACE_S after the re-arm the runner-dead line); left until T15 replaces the red path, the priced four-line alternative not taken.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The block itself calls this a wake FR-005 does not list and 'a wrong outcome left on purpose', i.e. a known defect left; FR-005 is 'once per landed batch ... otherwise only for US5's cases'. None of the legitimizers holds: FR-005 is not impossible here (the block prices a fix at about four lines and one test), nothing in the GM's words implies a second wake, and literal compliance defeats no stated purpose. The reasons given are 'dead weight once T15 lands' (cost/elegance, not a fidelity reason) and 'the coordinating session's brief chose to accept' (a session's brief is not the GM). At purpose level it cuts against the GM's token goal held equal to throughput (FR-006): the block's own measure is 540k-966k tokens a wake. The one fact that would make the defect unreachable - T15 landing before any real red run (T23, the first real batch) - is not stated: the order line (item 5) does not name T15. Two ways out: take the priced alternative (wake::dead counts any owed line naming the open batch since the last start as having told the death), or state in the order and Found-and-left that T15 lands before T23 so no real batch runs on T14's red stand-in, as the block already does for T56."
+    },
+    {
+     "id": "Found and left: unserved WAITING hand-in -> T56",
+     "summary": "A waiting hand-in no runner serves is not called dead by wake::dead (reads only an open batch), so the wait could block; not fixed here, filed as T56, lands with T22 before T23.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unlike the double wake, the block states the ordering that keeps the defect from any reader: it lands with T22 (the base flip that first creates the state on the lane path) and before T23, the first real batch; and in phase 1 such hand-ins are landed by hand and must stay quiet, so fixing it now would make the wait wrong for phase 1. The defect is fixed within the feature before the step that could expose it, so nothing asked is given up."
+    },
+    {
+     "id": "Not here: T47 and T21 split",
+     "summary": "The watchdog's long-run exemption (T47) and the Stop rule keeping the wait armed (T21, needing its own l7r_shared reading) are separate tasks.",
+     "class": "within",
+     "why": "Task partition inside the same feature; T47 is ordered with this task and T21 after it; nothing asked is dropped."
+    }
+   ],
+   "tasks": [
+    "T20"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T20 (D9, FR-005: phase 2's coordinator wake-up, the lines T14's runner owes printed once; lands after T14)",
+    "### T20 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "one mark reader, take_unread/unread in l7r_shared::lane_wake, shared by make lane-wait and the prompt hook",
+     "class": "within",
+     "why": "Where the read mark lives and how it is locked is implementation of D9's mark; it serves FR-005 (one rule for what is unread) and narrows nothing the GM asked."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "whichever reader comes first (wait or prompt hook) moves the mark, under its lock",
+     "class": "within",
+     "why": "Makes each owed line shown once, which is what FR-005's once-per-batch wake needs; without it a re-armed wait would re-wake on a line the prompt already showed."
+    },
+    {
+     "id": "Decision 3",
+     "summary": "the wait writes one runner-dead owed line when no runner holds the lane over an open last batch past DEAD_GRACE_S",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Classed narrowing because it adds a wake to FR-005's list and US5's text is not in the bundle, so I do not claim it is a US5 case. It passes the purpose test, concretely: a killed runner writes nothing and a stopped one owes nothing, so with no such line the coordinator's armed wait blocks for ever over a stranded batch. The lane never lands and the coordinator is never told, which defeats FR-003 and FR-005 together. It fires once per death, and only where no other line can come, so it is the rare case that needs judgment in the GM's sketch item 3."
+    },
+    {
+     "id": "Decision 4",
+     "summary": "the prompt hook prints unread lane lines before solo::alone's only-session return",
+     "class": "within",
+     "why": "D9 has the prompt hook print unread lines. A coordinator whose builders are subagents is the only session, so printing after that return would drop the lines for the session they are owed to."
+    },
+    {
+     "id": "Decision 5",
+     "summary": "flagless verb with knobs from the environment (WAIT_POLL_S 5, DEAD_GRACE_S 30, LOCK_S 5, all GUESS and audited), exit codes, no ceiling",
+     "class": "within",
+     "why": "The flagless argv is forced by T12's watchdog match. The numbers are labeled GUESS and audited. No ceiling is D9's. None of it narrows the request."
+    },
+    {
+     "id": "Accepted, temporary: two wakes for one red run until T15",
+     "summary": "under T14's red stand-in a red run wakes the coordinator twice (the red line, then the runner-dead line 30 s after the re-arm), accepted until T15 replaces the red path",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is a wake FR-005 does not list. The block calls it 'a wrong outcome left on purpose', and each wake costs 540k-966k tokens against FR-006's token goal. It meets none of the three tests. It is not impossible: the block prices the fix at about four lines and one test, where wake::dead counts any owed line naming the open batch since the last start as having told the death, and T14's red line already says the runner stopped and the batch is open. It is not implied by the GM's words. And the literal rule does not defeat the purpose. The reason given for leaving it, 'dead weight once T15 lands', is a code-economy argument, and that does not make an exception legitimate. The rescue offered, 'no real batch meets it', rests on an ordering the block asserts but does not show. T23 landing after T14-T22 does not establish that T22's base flip sends no real hand-in to the lane before T15. Fix: take the alternative the block already priced (or end the second wake some other way) in this task. It can be removed with T15."
+    },
+    {
+     "id": "Found and left: a waiting hand-in no runner serves (T56)",
+     "summary": "wake::dead reads only an open batch, so a WAITING hand-in with no runner is not called dead; filed as T56, lands before T23 with T22",
+     "class": "within",
+     "why": "This is a deferral to its own filed task, not a narrowing. Its reason is different in kind from the double wake: in phase 1 such hand-ins are landed by hand and must stay quiet, so calling them dead now would wake the coordinator wrongly. The case becomes reachable only with T22's base flip, and T56 lands with it."
+    },
+    {
+     "id": "Not here: T47 and T21",
+     "summary": "watchdog exemption and the Stop rule left to their own tasks; T21 needs its own l7r_shared reading",
+     "class": "within",
+     "why": "Scope is split across tasks already in the plan, and nothing the GM asked is dropped."
+    }
+   ],
+   "tasks": [
+    "T20"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T20 (D9, FR-005: phase 2's coordinator wake-up, the lines T14's runner owes printed once; lands after T14)",
+    "### T20 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "one mark reader (take_unread/unread) in l7r_shared::lane_wake, shared by make lane-wait and the prompt hook",
+     "class": "within",
+     "why": "Where the code lives is an implementation choice. Having one rule for what counts as unread is how FR-005's once-per-line wake is met. Nothing asked for is narrowed."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "whichever reader comes first (wait or prompt hook) moves the mark, serialized by the mark's lock",
+     "class": "within",
+     "why": "It serves FR-005 directly. A hook that printed without moving the mark would make the re-armed wait wake again on a line already shown, which is a wake FR-005 does not list."
+    },
+    {
+     "id": "Decision 3",
+     "summary": "the wait writes one runner-dead owed line when no runner holds the lock over an open last batch for DEAD_GRACE_S",
+     "class": "within",
+     "why": "This is a new kind of wake. FR-005 allows wakes only for US5's cases, and US5's text is not in the bundle, so whether US5 names a dead runner could not be checked. It is still not a narrowing: without it a stranded batch would block the coordinator's wait for ever with nothing coming (a hang), and the GM's sketch keeps for the coordinator exactly 'the rare case that needs judgment'. It stays quiet in the cases that need no one (an idle end, a lane-stop after a landing, phase 1's hand-ins landed by hand)."
+    },
+    {
+     "id": "Decision 4",
+     "summary": "the prompt hook prints unread lane lines before solo::alone's only-session return",
+     "class": "within",
+     "why": "A coordinator whose builders are subagents is the only session. Returning before printing would drop the lines for the session FR-005 says they are owed to."
+    },
+    {
+     "id": "Decision 5",
+     "summary": "a flagless verb with its knobs from the environment, matching T12's waits_on_lane argv; WAIT_POLL_S 5 s, DEAD_GRACE_S 30 s, LOCK_S 5 s labeled GUESS and audited; no ceiling",
+     "class": "within",
+     "why": "Wiring and new constants, labeled GUESS and audited. Having no ceiling follows D9. Nothing asked for is narrowed."
+    },
+    {
+     "id": "Decision 6",
+     "summary": "wake::dead treats any owed line naming the open batch since the last start as having already told the death, so one red run wakes once",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows when Decision 3 reports a death: no runner-dead line is written if an owed line already names the open batch. That is FR-005's own limit. Under T14's red stand-in, the red line already says the runner stopped and the batch is open, so a second wake for the same red is one FR-005 does not list. Round 3 ruled accepting that double wake NOT LEGITIMATE, and this decision removes it. A new start followed by a kill is still reported. Caveat: the rule is phrased wider than its reason, since any owed line naming the open batch counts. That is sound only while the red line is the one owed line that can name a still-open batch. T15, which changes the red path, has to revisit it."
+    },
+    {
+     "id": "Not here",
+     "summary": "T47 (the watchdog exemption) and T21 (the Stop rule keeping the wait armed, with its own l7r_shared reading) left to their own filed tasks",
+     "class": "within",
+     "why": "Work is split across tasks that are already filed. Nothing asked for is dropped."
+    },
+    {
+     "id": "Found and left (T56)",
+     "summary": "a WAITING hand-in with no runner serving it is not called dead (only an open batch is); deferred to T56, which lands with T22 before T23",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In phase 2 this is a hang, so it is a defect. It is not live in phase 1: such hand-ins are landed by hand there, and staying quiet is correct, because calling them dead would add wakes FR-005 does not list. The defect only appears once T22 flips the base. The block files T56 to land with T22, before T23 runs the real batch. Legitimate on that ordering condition: T56 must land no later than T22."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4075,6 +4273,64 @@
      "summary": "Runs after T12, T13, T49 and T50 (T12 holds the Makefile) and before T22",
      "class": "within",
      "why": "Sequencing only; describes the lane after its parts land, narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T20": {
+   "section_sha256": "ddfec29372e2fb1bd49b45aa9cfda146b26bfe5123b96abd249f4ce44a30b6fd",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "one mark reader (take_unread/unread) in l7r_shared::lane_wake, shared by make lane-wait and the prompt hook",
+     "class": "within",
+     "why": "Where the code lives is an implementation choice. Having one rule for what counts as unread is how FR-005's once-per-line wake is met. Nothing asked for is narrowed."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "whichever reader comes first (wait or prompt hook) moves the mark, serialized by the mark's lock",
+     "class": "within",
+     "why": "It serves FR-005 directly. A hook that printed without moving the mark would make the re-armed wait wake again on a line already shown, which is a wake FR-005 does not list."
+    },
+    {
+     "id": "Decision 3",
+     "summary": "the wait writes one runner-dead owed line when no runner holds the lock over an open last batch for DEAD_GRACE_S",
+     "class": "within",
+     "why": "This is a new kind of wake. FR-005 allows wakes only for US5's cases, and US5's text is not in the bundle, so whether US5 names a dead runner could not be checked. It is still not a narrowing: without it a stranded batch would block the coordinator's wait for ever with nothing coming (a hang), and the GM's sketch keeps for the coordinator exactly 'the rare case that needs judgment'. It stays quiet in the cases that need no one (an idle end, a lane-stop after a landing, phase 1's hand-ins landed by hand)."
+    },
+    {
+     "id": "Decision 4",
+     "summary": "the prompt hook prints unread lane lines before solo::alone's only-session return",
+     "class": "within",
+     "why": "A coordinator whose builders are subagents is the only session. Returning before printing would drop the lines for the session FR-005 says they are owed to."
+    },
+    {
+     "id": "Decision 5",
+     "summary": "a flagless verb with its knobs from the environment, matching T12's waits_on_lane argv; WAIT_POLL_S 5 s, DEAD_GRACE_S 30 s, LOCK_S 5 s labeled GUESS and audited; no ceiling",
+     "class": "within",
+     "why": "Wiring and new constants, labeled GUESS and audited. Having no ceiling follows D9. Nothing asked for is narrowed."
+    },
+    {
+     "id": "Decision 6",
+     "summary": "wake::dead treats any owed line naming the open batch since the last start as having already told the death, so one red run wakes once",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows when Decision 3 reports a death: no runner-dead line is written if an owed line already names the open batch. That is FR-005's own limit. Under T14's red stand-in, the red line already says the runner stopped and the batch is open, so a second wake for the same red is one FR-005 does not list. Round 3 ruled accepting that double wake NOT LEGITIMATE, and this decision removes it. A new start followed by a kill is still reported. Caveat: the rule is phrased wider than its reason, since any owed line naming the open batch counts. That is sound only while the red line is the one owed line that can name a still-open batch. T15, which changes the red path, has to revisit it."
+    },
+    {
+     "id": "Not here",
+     "summary": "T47 (the watchdog exemption) and T21 (the Stop rule keeping the wait armed, with its own l7r_shared reading) left to their own filed tasks",
+     "class": "within",
+     "why": "Work is split across tasks that are already filed. Nothing asked for is dropped."
+    },
+    {
+     "id": "Found and left (T56)",
+     "summary": "a WAITING hand-in with no runner serving it is not called dead (only an open batch is); deferred to T56, which lands with T22 before T23",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In phase 2 this is a hang, so it is a defect. It is not live in phase 1: such hand-ins are landed by hand there, and staying quiet is correct, because calling them dead would add wakes FR-005 does not list. The defect only appears once T22 flips the base. The block files T56 to land with T22, before T23 runs the real batch. Legitimate on that ordering condition: T56 must land no later than T22."
     }
    ],
    "verdict": "CLEAR"

@@ -1044,31 +1044,101 @@ engine speed, so the performance checklist does not apply.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T20 (<why: the finding or measurement that files it>)
+### T20 (D9, FR-005: phase 2's coordinator wake-up, the lines T14's runner owes printed once; lands after T14)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: `rust/guard/shared/src/lane_wake.rs` (new, with `lane_wake/tests.rs`) is the read mark; `rust/gate/crates/lane/src/wake.rs`
+  (new, with `wake/tests.rs`) is `l7r-gate lane wait`, the verb `["wait"]` in `lane.rs` and the Makefile's `lane-wait` (its help
+  line names the knobs; `docs/make-targets.html` regenerated); the prompt hook `clone_sync_hooks.rs` `prompt()` prints the unread
+  lines. `log.rs`'s `DIR`/`FILE` now point at `lane_wake`'s; `runner::knob` became `pub(crate)`. `dev/audits/lane-wake.md` covers
+  `WAIT_POLL_S`, `DEAD_GRACE_S` and `LOCK_S`; the lane crate's row in `rust/gate/CLAUDE.md` names `wake.rs`. Built in two halves
+  (2026-11-27); the build half's handoff is `<clone git dir>/l7r-handoffs/T20-build.md`.
+- **Decision 1 - one mark reader, in `l7r_shared::lane_wake`.** `take_unread(common)` returns the `line` of every `owed` event past
+  `l7r-lane/read-mark` (a byte offset into `lane.jsonl`) and moves the mark past the last COMPLETE line (a torn tail is read again
+  once whole), under `read-mark.lock` by flock, let go by `flock -u` before the close (T14's reason: a forked child holds a copy of
+  the descriptor), the mark written by a rename; a mark past the log's end or no number reads from 0; with no log nothing is taken
+  and nothing created; a lock not got within `LOCK_S` takes nothing (the holder is showing the lines). `unread(common)` is a
+  lock-free length-against-mark test, so a poll with nothing new spawns no flock. Both `make lane-wait` and the prompt hook call it,
+  so one rule says what is unread. Why here: the guard depends only on `l7r_shared` (the checks' `guard_deps`), and a hook shelling
+  out to the gate binary would pay a launcher start each prompt. Label: the easier route.
+- **Decision 2 - whichever reader comes first moves the mark, the hook included.** A hook that printed without moving it would have
+  each re-armed wait print at once what the prompt already showed: a wake FR-005 does not list. The read, the take and the move are
+  serialized by the mark's lock, so a line is shown once, by the prompt or by the wait, never both. Label: the easier route of D9's
+  "prints any unread lane lines, so a wake-up command killed early loses nothing".
+- **Decision 3 - the runner-dead line is written by the wait.** A killed runner writes nothing, and a runner stopped on an error
+  (T14's stopped carry or refused landing) writes `stop` but owes nothing, so a wait reading only `owed` lines would block for ever
+  over a stranded batch. Rule (`wake::dead`): no runner holds the lane's lock, the log's LAST batch is open, and no `owed` line with
+  `why: "runner"` since the last `start` line (said once a death); held `LANE_DEAD_GRACE_S` continuously (reset whenever the runner
+  is seen or nothing is stranded), so a runner a hand-in is starting is not called dead. The wait then appends ONE `owed` line
+  `{"batch", "why": "runner", "line"}` naming the batch, its changes, the runner's last stop (or `killed`) and `make lane-start`,
+  and loops, so it prints that line through the mark like any other. Quiet with no open batch: an `idle` end, `make lane-stop` after
+  a landing, and phase 1's waiting hand-ins with no runner (landed by hand). Label: the easier route (a stranded batch is the one
+  case in which no other line will come).
+- **Decision 4 - the prompt hook prints before `solo::alone`'s return.** `prompt()` extends its lines with
+  `take_unread(<clone>/.git)` after the feature.json notice and before the only-session return, because a coordinator whose
+  builders are subagents IS the only session, and the return would otherwise drop the lane's lines for exactly the session they
+  are owed to. This changes the hook's rendering: an unread lane line now appears among its prompt lines. Label: the easier route.
+- **Decision 5 - the wiring and the knobs.** The verb takes no flags, its knobs from the environment, because the stall watchdog's
+  `waits_on_lane` (T12) matches exactly `<dir>/l7r-gate lane wait` (confirmed live below). `wait_cli` exits 0 with each line
+  printed, 2 on a knob that is no number, 1 on a dead line it cannot write. `WAIT_POLL_S` 5 s (the runner's own `POLL_S`),
+  `DEAD_GRACE_S` 30 s (past `START_WAIT_S` and a short rebuild, T51), `LOCK_S` 5 s: all GUESS, each beside its constant and in
+  `dev/audits/lane-wake.md`. No ceiling (D9's `LANE_WAIT_MAX`: none). Label: GUESS for the numbers; convention (the watchdog's
+  argv) for the flagless verb.
+- **Decision 6 - one red run wakes once: the runner's own line for the batch tells the death.** With T14's red stand-in a red run
+  writes its ONE `owed` line (`... - the runner stopped, the batch open; ...: <attempt file>`), THEN the runner stops with `error:`
+  and leaves the batch open. Under Decision 3 alone the coordinator's re-armed wait would see no runner over that open batch and,
+  `DEAD_GRACE_S` after the re-arm, write and print a runner-dead line for the same batch: a second wake for one red, one FR-005 does
+  not list (540k-966k tokens a wake, measured 2026-11-27 (the transcript's usage fields), as D9 records). So `wake::dead` counts any
+  `owed` line naming the open batch since the last `start` - a `why: "runner"` line or the runner's own - as having told it. Nothing
+  is lost: that red line already says the runner stopped; a runner started again (a new `start`) and killed is a new death, said.
+  The rule can go with T15, whose red path no longer stops the runner. Label: the easier route. The build half's handoff had
+  accepted the double wake until T15; the plan review (round 3, 2026-11-27) ruled that NOT LEGITIMATE under FR-005, so it is fixed
+  here.
+- **Not here.** T47 (the watchdog's long-run exemption of `make lane-wait`, `pass.rs`) and T21 (the Stop rule that keeps the wait
+  armed) are their own tasks. T21's "the lane holds a waiting hand-in or an open batch" reading is not exposed by this task: the
+  guard cannot reach the lane crate, so T21 needs its own reading in `l7r_shared` (as `lane_wake` is).
+- Red first (2026-11-27, the build half): `l7r_shared` `lane_wake::tests` against stubs (`unread` false, `take_unread` empty), 1
+  passed, 4 failed; after, 5 of 5. The lane crate's `wake::tests` against a stub `wait` returning no lines, 0 passed, 6 failed;
+  after, 6 of 6 (a seventh, the command sleeping on the real clock until a thread writes the line, added after for `wait_cli`'s real
+  sleep, written green). Decision 6 (2026-11-27, the closing half): `wake::tests::a_red_run_s_own_line_tells_the_death_so_one_red_wakes_once`
+  under the old `dead`, 6 passed, 1 failed; after, 7 of 7. The guard's `clone_sync_hooks::tests::an_unread_lane_line_is_printed_once_and_marked` without the hook's
+  line, 0 passed, 1 failed (left "", right the line); after, 1 of 1, the module 33 of 33. `tests/hooks/test-clone-sync-hooks.sh`
+  68 ok with its two new cases (an unread line printed on the prompt, then not again); not run red (the Rust test is the red one).
+  Live (2026-11-27, a scratch repository whose Makefile calls this tree's `scripts/gates/l7r-gate.sh lane wait`):
+  `/proc/<pid>/cmdline` read `.../tool/l7r-gate|lane|wait|`, an appended owed line ended it printing `lane: live line`, exit 0,
+  `read-mark` 42 = the log's 42 bytes, observed 2026-11-27, method: that live run. Nothing run against the real clone's lane (it has no `l7r-lane/`).
 
 ### T20 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A coordinator that runs `make lane-wait` in the background is woken once for each line the lane owes
+   it - a landed batch's status, a repair, an arbiter owed, a stranded batch's dead runner - and never twice for one line, whether
+   the wait or its next prompt shows it first; a wait killed early loses nothing.
+2. **The constraints.** D9 (one background command, the mark, no ceiling, the prompt hook's unread lines), FR-005 ("once per landed
+   batch with a short status, and otherwise only for US5's cases"), D8 (the log a JSON line a transition), T12's `waits_on_lane`
+   argv, T14's owed line and its red stand-in, data-model.md ("The log line").
+3. **Where each comes from.** G: FR-005's words. R: plan.md D8, D9; data-model.md; T12's and T14's plan sections; the build half's
+   handoff. O: the red-first counts and the live run above.
+4. **Do they describe the world here?** Yes for a scratch repository: the live run's real `l7r-gate lane wait` was matched by its
+   argv and ended by an appended line, the mark at the log's end. Not yet for the real clone's lane, which has no `l7r-lane/`:
+   T23 runs the real batch.
+5. **The order.** After T14 (the owed lines) and T53; with T47 (the watchdog exemption); before T15 (which may drop Decision 6's red-line rule), T21 (the Stop rule), T22 (the base
+   flipped, with T56) and T23.
+6. **The exits.** Green: the changed crates' tests and `make builder-checks` clean, the clone-sync suite green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One: the runner dead has no writer (Decision 3), found by reading T14's stop path; and the double wake it
+   left over a red, fixed red-first (Decision 6).
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The tests above green, 2026-11-27; the first tier green again at the closing half.
+10. **Before moving a constant.** n/a: `WAIT_POLL_S`, `DEAD_GRACE_S` and `LOCK_S` are new, labeled GUESS and audited.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** New code; one wrong outcome of the build half fixed in it: a red run woke the coordinator twice (Decision 6).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+- A WAITING hand-in that no runner serves (from phase 2's base, a runner start that failed past `START_WAIT_S`, T51's rebuild) is
+  not called dead by `wake::dead`, which reads only an open batch, so the coordinator's wait - which T21's Stop rule keeps armed -
+  blocks with nothing ever coming. Not fixed here: in phase 1 such hand-ins are landed by hand and must stay quiet, and the base
+  flips in T22. Filed as T56; lands before T23 (with T22).
+
+**Performance work?** no
 
 
 ### T21 (<why: the finding or measurement that files it>)

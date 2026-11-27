@@ -130,6 +130,38 @@ fn a_dead_runner_over_an_open_batch_is_said_once_a_death_after_the_grace() {
 }
 
 #[test]
+fn a_red_run_s_own_line_tells_the_death_so_one_red_wakes_once() {
+    let t = TempDir::new("lane-wake-red");
+    let c = t.path();
+    line(c, "start", &json!({"pid": 7, "why": "make lane-start"}));
+    line(
+        c,
+        "batch",
+        &json!({"batch": "461-1", "changes": ["a1b2c3d4e5"]}),
+    );
+    // T14's red stand-in: one owed line for the batch, then the runner stops with the batch open
+    owed(c, "lane: batch 461-1 red at attempt 1 (make land exit 2) - the runner stopped, the batch open");
+    line(
+        c,
+        "stop",
+        &json!({"pid": 7, "why": "error: lane: batch 461-1 red"}),
+    );
+    let (got, _) = run(c, false, &nothing);
+    assert!(got.unwrap()[0].contains("red at attempt 1"));
+    // the re-armed wait, far past the grace, says no death: the red line told it
+    let (got, sleeps) = run(c, false, &|n| {
+        if n == 20 {
+            owed(c, "lane: batch 461-1 landed");
+        }
+    });
+    assert_eq!(
+        (got.unwrap(), sleeps),
+        (vec!["lane: batch 461-1 landed".to_owned()], 20)
+    );
+    assert!(!log::read(c).iter().any(|l| l["why"] == DEAD));
+}
+
+#[test]
 fn a_live_runner_or_no_open_batch_is_quiet() {
     let t = TempDir::new("lane-wake-quiet");
     let c = t.path();
