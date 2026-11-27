@@ -392,10 +392,7 @@ fn the_cleanup_prunes_a_live_profile_s_stale_builds_keeping_its_newest_and_what_
         );
     }
     let dry = cache(&c, now(), true).stdout;
-    assert!(
-        dry.contains("t42-scratch (") && !dry.contains("t42-scratch/debug/"),
-        "{dry}"
-    );
+    assert!(dry.contains("t42-scratch (") && !dry.contains("t42-scratch/debug/"));
     for s in STALE {
         assert!(dry.contains(&format!("pool-tree/debug/{s}")), "{s}\n{dry}");
     }
@@ -415,13 +412,9 @@ fn a_build_elsewhere_holds_no_prune_and_one_in_the_profile_holds_it_all() {
     std::fs::create_dir_all(&elsewhere).unwrap();
     std::os::unix::fs::symlink(&elsewhere, c.proc.join("9/cwd")).unwrap();
     let dry = cache(&c, now(), true);
-    assert!(
-        dry.stdout
-            .contains("pool-tree/debug/.fingerprint/foo-aaaa ("),
-        "{}{}",
-        dry.stdout,
-        dry.stderr
-    );
+    assert!(dry
+        .stdout
+        .contains("pool-tree/debug/.fingerprint/foo-aaaa ("));
     assert!(dry.stderr.contains("a build runs"), "{}", dry.stderr);
     // taken while that build runs, unless a build read it since the plan
     let item = |p: PathBuf| crate::guards::scratch_sweep_hooks::sweep::Item {
